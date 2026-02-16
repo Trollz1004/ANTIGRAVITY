@@ -1,2 +1,4 @@
-
 logs/
+GEMINI-STATUS.md
+.vault/
+*.env
