@@ -6,7 +6,9 @@
       "WebFetch(domain:youandinotai.com)",
       "Bash(xxd:*)",
       "Bash(npx:*)",
-      "mcp__claude_ai_Netlify__netlify-deploy-services-reader"
+      "mcp__claude_ai_Netlify__netlify-deploy-services-reader",
+      "Bash(python -m json.tool:*)",
+      "Bash(ls:*)"
     ]
   }
 }
