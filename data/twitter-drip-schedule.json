@@ -1,0 +1,77 @@
+{
+  "strategy": "7-Day Twitter City Drip Campaign",
+  "created": "2026-02-16",
+  "start_date": "2026-02-17",
+  "posts_per_day": 5,
+  "stagger_hours": 3,
+  "daily_post_times": ["09:00", "12:00", "15:00", "18:00", "21:00"],
+  "utm": "?utm_source=twitter&utm_medium=organic&utm_campaign=city-drip",
+  "templates": {
+    "A": "{city}, {state} — dating profiles are full of bots. YouAndINotAI verifies every human w/ V8 Cloud + Plaid. Founding members: $14.99/mo locked forever. youandinotai.com #{city_tag} #NoBots #DatingApp",
+    "B": "Attention {city} singles — Tired of bots? YouAndINotAI uses 8-layer verification (Plaid-powered). Only 100 founding spots at $14.99/forever. youandinotai.com #{city_tag} #RealDating",
+    "C": "{city} dating scene got a bot problem? Not anymore. V8 Cloud Verification on every profile. $14.99 founding member = locked forever. youandinotai.com #{city_tag} #HumanVerified"
+  },
+  "schedule": {
+    "day1_feb17": {
+      "cities": [
+        {"city": "Madison", "state": "WI", "template": "A"},
+        {"city": "Durham", "state": "NC", "template": "B"},
+        {"city": "Savannah", "state": "GA", "template": "C"},
+        {"city": "Charleston", "state": "SC", "template": "A"},
+        {"city": "Knoxville", "state": "TN", "template": "B"}
+      ]
+    },
+    "day2_feb18": {
+      "cities": [
+        {"city": "Chattanooga", "state": "TN", "template": "C"},
+        {"city": "Little Rock", "state": "AR", "template": "A"},
+        {"city": "Springfield", "state": "MO", "template": "B"},
+        {"city": "Huntsville", "state": "AL", "template": "C"},
+        {"city": "Grand Rapids", "state": "MI", "template": "A"}
+      ]
+    },
+    "day3_feb19": {
+      "cities": [
+        {"city": "Des Moines", "state": "IA", "template": "B"},
+        {"city": "Tallahassee", "state": "FL", "template": "C"},
+        {"city": "Baton Rouge", "state": "LA", "template": "A"},
+        {"city": "Providence", "state": "RI", "template": "B"},
+        {"city": "Spokane", "state": "WA", "template": "C"}
+      ]
+    },
+    "day4_feb20": {
+      "cities": [
+        {"city": "Tacoma", "state": "WA", "template": "A"},
+        {"city": "Greensboro", "state": "NC", "template": "B"},
+        {"city": "Winston Salem", "state": "NC", "template": "C"},
+        {"city": "Dayton", "state": "OH", "template": "A"},
+        {"city": "Akron", "state": "OH", "template": "B"}
+      ]
+    },
+    "day5_feb21": {
+      "cities": [
+        {"city": "Tulsa", "state": "OK", "template": "C"},
+        {"city": "Wichita", "state": "KS", "template": "A"},
+        {"city": "Laredo", "state": "TX", "template": "B"},
+        {"city": "Lubbock", "state": "TX", "template": "C"},
+        {"city": "Corpus Christi", "state": "TX", "template": "A"}
+      ]
+    },
+    "day6_feb22": {
+      "cities": [
+        {"city": "Reno", "state": "NV", "template": "B"},
+        {"city": "Fayetteville", "state": "AR", "template": "C"},
+        {"city": "Columbia", "state": "SC", "template": "A"},
+        {"city": "Augusta", "state": "GA", "template": "B"},
+        {"city": "Macon", "state": "GA", "template": "C"}
+      ]
+    },
+    "day7_feb23": {
+      "cities": [
+        {"city": "Jackson", "state": "MS", "template": "A"},
+        {"city": "Sioux Falls", "state": "SD", "template": "B"},
+        {"city": "Fargo", "state": "ND", "template": "C"}
+      ]
+    }
+  }
+}
