@@ -76,11 +76,11 @@
 - [!] 58. TikTok video (needs video)
 - [!] 59. Pinterest pin (needs image)
 - [!] 60. YouTube community post (needs 500+ subs)
-- [ ] 61. Facebook city post - NYC
-- [ ] 62. Facebook city post - LA
-- [ ] 63. Facebook city post - Miami
-- [ ] 64. Facebook city post - Chicago
-- [ ] 65. Facebook city post - Houston
+- [x] 61. Facebook city post - NYC | posted
+- [x] 62. Facebook city post - LA | posted
+- [x] 63. Facebook city post - Miami | posted
+- [x] 64. Facebook city post - Chicago | posted
+- [x] 65. Facebook city post - Houston | posted
 
 ## BATCH 5: Second Account Engagement (66-80)
 - [ ] 66. Comment on NYC tweet (2nd acct)
