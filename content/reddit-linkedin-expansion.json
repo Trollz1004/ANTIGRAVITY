@@ -10,7 +10,7 @@
     },
     {
       "subreddit": "r/dating",
-      "title": "47% of dating profiles are bots — I built an app that verifies every user through Plaid (bank-level identity verification)",
+      "title": "60% of dating app users have matched with suspected bots (Norton 2025) — I built an app that verifies every user through Plaid (bank-level identity verification)",
       "body": "After years of wasting time on fake profiles, I built YouAndINotAI.\n\nThe key difference: V8 Cloud Verification. It runs 8 separate identity checks using Plaid's Identity API — the same technology banks use to verify who you are.\n\nNo one gets on the platform without being confirmed as a real, living human.\n\n- $14.99/mo for founding members (locked forever)\n- Only 100 founding spots\n- Zero bots guaranteed\n\nyouandinotai.com\n\nBuilt this out of frustration. Figured others here might feel the same way.",
       "flair": "Advice"
     },
@@ -47,7 +47,7 @@
     {
       "subreddit": "r/startups",
       "title": "Launching a verified-humans-only dating app. Using Plaid Identity API for 8-layer verification. Looking for founding members.",
-      "body": "TL;DR: Built a dating app where every profile is identity-verified through bank-grade tech. Not photo-verified. Identity-verified.\n\nProblem: 47% of dating profiles are bots.\nSolution: V8 Cloud Verification (Plaid-powered, 8 separate checks).\nModel: $14.99/mo subscription. First 100 at locked founding price.\n\nBackground: I'm an electrician who taught himself to code. No VC funding. Just bootstrapping a real solution.\n\nyouandinotai.com\n\nHappy to discuss the tech, the business model, or the challenges of building outside the tech industry.",
+      "body": "TL;DR: Built a dating app where every profile is identity-verified through bank-grade tech. Not photo-verified. Identity-verified.\n\nProblem: 60% of dating app users have matched with suspected bots (Norton 2025).\nSolution: V8 Cloud Verification (Plaid-powered, 8 separate checks).\nModel: $14.99/mo subscription. First 100 at locked founding price.\n\nBackground: I'm an electrician who taught himself to code. No VC funding. Just bootstrapping a real solution.\n\nyouandinotai.com\n\nHappy to discuss the tech, the business model, or the challenges of building outside the tech industry.",
       "flair": "Share Your Startup"
     },
     {
@@ -64,7 +64,7 @@
     }
   ],
   "linkedin_post": {
-    "text": "I'm an electrician who taught himself to code.\n\nWhy? Because 47% of dating profiles are bots, and nobody was fixing it.\n\nSo I built YouAndINotAI — a dating platform where every single user is identity-verified through V8 Cloud Verification, powered by Plaid's Identity API.\n\nNot email verification.\nNot photo verification.\nActual identity verification. Bank-grade.\n\n8 layers of checks. Zero bots on the platform.\n\nWe're onboarding our first 100 founding members at $14.99/month, locked at that price forever.\n\nThis isn't a Silicon Valley play. It's a real solution from a real person who was tired of the same problem everyone talks about.\n\nyouandinotai.com\n\n#StartupLife #DatingApp #CyberSecurity #PlaidAPI #SelfTaughtDeveloper #Entrepreneurship #NoBots"
+    "text": "I'm an electrician who taught himself to code.\n\nWhy? Because 60% of dating app users report matching with suspected bots (Norton 2025), and nobody was fixing it.\n\nSo I built YouAndINotAI — a dating platform where every single user is identity-verified through V8 Cloud Verification, powered by Plaid's Identity API.\n\nNot email verification.\nNot photo verification.\nActual identity verification. Bank-grade.\n\n8 layers of checks. Zero bots on the platform.\n\nWe're onboarding our first 100 founding members at $14.99/month, locked at that price forever.\n\nThis isn't a Silicon Valley play. It's a real solution from a real person who was tired of the same problem everyone talks about.\n\nyouandinotai.com\n\n#StartupLife #DatingApp #CyberSecurity #PlaidAPI #SelfTaughtDeveloper #Entrepreneurship #NoBots"
   },
   "quora_answers": [
     {
@@ -73,14 +73,14 @@
     },
     {
       "question_topic": "What percentage of dating app profiles are bots?",
-      "answer": "Studies estimate around 47% of dating profiles are bots or fake accounts. That's nearly half.\n\nThis is why new platforms like YouAndINotAI are using V8 Cloud Verification (powered by Plaid, the same identity API banks use) to verify every single user as a real human before they can create a profile. It's an 8-layer check system that bots simply cannot pass.\n\nThe industry is slowly moving toward mandatory identity verification, but most mainstream apps still only do email or phone verification, which bots easily bypass."
+      "answer": "Studies estimate around 60% of dating app users suspect they've matched with AI bots (Norton 2025 Cyber Safety Report). That's nearly half.\n\nThis is why new platforms like YouAndINotAI are using V8 Cloud Verification (powered by Plaid, the same identity API banks use) to verify every single user as a real human before they can create a profile. It's an 8-layer check system that bots simply cannot pass.\n\nThe industry is slowly moving toward mandatory identity verification, but most mainstream apps still only do email or phone verification, which bots easily bypass."
     }
   ],
   "medium_article": {
     "title": "I'm an Electrician Who Built a Bot-Free Dating App. Here's Why.",
-    "subtitle": "V8 Cloud Verification, Plaid Identity API, and why 47% of dating profiles being fake was the last straw.",
+    "subtitle": "V8 Cloud Verification, Plaid Identity API, and why 60% of dating app users matching with suspected bots was the last straw.",
     "outline": [
-      "The Problem: 47% of dating profiles are bots",
+      "The Problem: 60% of users match with suspected AI bots (Norton 2025)",
       "Why I taught myself to code (electrician background)",
       "V8 Cloud Verification: 8 layers explained",
       "Why Plaid Identity API (same tech banks use)",
