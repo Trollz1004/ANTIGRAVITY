@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__claude_ai_Netlify__netlify-project-services-reader",
+      "Bash(curl:*)",
+      "WebFetch(domain:youandinotai.com)",
+      "Bash(xxd:*)",
+      "Bash(npx:*)",
+      "mcp__claude_ai_Netlify__netlify-deploy-services-reader"
+    ]
+  }
+}
