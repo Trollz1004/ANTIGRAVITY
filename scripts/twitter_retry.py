@@ -37,7 +37,7 @@ BRAND = {
 }
 
 TWEET_TEMPLATES = [
-    "{city}, {state} — 47% of dating profiles are bots. YouAndINotAI verifies every human w/ V8 Cloud + Plaid. Founding members: {price} locked forever. {url} #{city_tag} #NoBots #DatingApp",
+    "{city}, {state} — 60% of dating app users have matched with suspected bots (Norton 2025). YouAndINotAI verifies every human w/ V8 Cloud + Plaid. Founding members: {price} locked forever. {url} #{city_tag} #NoBots #DatingApp",
     "Attention {city} singles 🚨 Tired of bots? YouAndINotAI uses 8-layer verification (Plaid-powered). Only 100 founding spots at {price}/forever. {url} #{city_tag} #RealDating",
     "{city} dating scene got a bot problem? Not anymore. V8 Cloud Verification on every profile. {price} founding member = locked forever. {url} #{city_tag} #HumanVerified",
 ]

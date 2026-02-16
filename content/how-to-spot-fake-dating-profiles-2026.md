@@ -1,13 +1,13 @@
 ---
 title: "How to Spot Fake Dating Profiles in 2026 (And the App That Eliminates Them)"
-meta_description: "47% of dating profiles are fake. Learn how to identify bots and discover YouAndINotAI — the only dating app with V8 Cloud Verification powered by Plaid."
+meta_description: "60% of dating app users suspect theyve matched with AI bots. Learn how to identify bots and discover YouAndINotAI — the only dating app with V8 Cloud Verification powered by Plaid."
 keywords: ["fake dating profiles", "dating app bots", "how to spot catfish", "verified dating app", "YouAndINotAI"]
 url: youandinotai.com/blog/how-to-spot-fake-dating-profiles-2026
 ---
 
 # How to Spot Fake Dating Profiles in 2026 (And the App That Eliminates Them)
 
-Nearly **47% of dating profiles are bots or fake accounts**. If you've ever matched with someone who turned out to be fake, you're not alone — you're in the majority.
+Nearly **60% of dating app users suspect theyve matched with AI bots (Norton 2025 Cyber Safety Report)**. If you've ever matched with someone who turned out to be fake, you're not alone — you're in the majority.
 
 ## The Growing Bot Problem
 
