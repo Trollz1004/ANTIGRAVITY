@@ -86,7 +86,7 @@ TIER3_CITIES = [
 TEMPLATES = [
     "{city}'s dating scene just changed. {usp} = zero bots, real connections. {price}/mo founding price locked forever. Only 100 spots left.\n\n{domain}\n\n{tags} #DatingApp ",
     "{city}, are you tired of fake profiles? V8 Cloud Verified. Real humans only. 100 founding members at {price}/mo forever.\n\n{domain}\n\n{tags} #DatingApp ",
-    "{city} deserves real connections. 47% of dating apps are bots—not us. {usp} + {price}/mo founding price (locked).\n\n{domain}\n\n{tags} #DatingApp ",
+    "{city} deserves real connections. 60% of dating app matches are suspected bots—not us. {usp} + {price}/mo founding price (locked).\n\n{domain}\n\n{tags} #DatingApp ",
     "{city} singles: What if your dating app actually verified real humans? V8 Cloud tech. 100 founding spots at {price}/mo forever.\n\n{domain}\n\n{tags} #DatingApp ",
     "{city}, stop swiping on bots. Join 100 founding members with {usp}. Real humans only. {price}/mo locked forever.\n\n{domain}\n\n{tags} #DatingApp ",
     "Only 100 founding spots left in {city}. Real humans. {usp}. {price}/mo price locked forever. No bots. No games.\n\n{domain}\n\n{tags} #DatingApp ",

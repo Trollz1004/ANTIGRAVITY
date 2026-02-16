@@ -1,0 +1,286 @@
+[
+  {
+    "city": "El Paso",
+    "state": "TX",
+    "tweet_id": "2023260886631072001",
+    "url": "https://x.com/AiCollab4Kids/status/2023260886631072001",
+    "posted": "2026-02-15T23:59:21.019089"
+  },
+  {
+    "city": "Detroit",
+    "state": "MI",
+    "tweet_id": "2023260971322487150",
+    "url": "https://x.com/AiCollab4Kids/status/2023260971322487150",
+    "posted": "2026-02-15T23:59:41.199478"
+  },
+  {
+    "city": "Fresno",
+    "state": "CA",
+    "tweet_id": "2023261055971926468",
+    "url": "https://x.com/AiCollab4Kids/status/2023261055971926468",
+    "posted": "2026-02-16T00:00:01.405812"
+  },
+  {
+    "city": "Mesa",
+    "state": "AZ",
+    "tweet_id": "2023261140730400904",
+    "url": "https://x.com/AiCollab4Kids/status/2023261140730400904",
+    "posted": "2026-02-16T00:00:21.629963"
+  },
+  {
+    "city": "Bakersfield",
+    "state": "CA",
+    "tweet_id": "2023261225530892408",
+    "url": "https://x.com/AiCollab4Kids/status/2023261225530892408",
+    "posted": "2026-02-16T00:00:41.819062"
+  },
+  {
+    "city": "Aurora",
+    "state": "CO",
+    "tweet_id": "2023261310218088864",
+    "url": "https://x.com/AiCollab4Kids/status/2023261310218088864",
+    "posted": "2026-02-16T00:01:01.993709"
+  },
+  {
+    "city": "Stockton",
+    "state": "CA",
+    "tweet_id": "2023261394850795850",
+    "url": "https://x.com/AiCollab4Kids/status/2023261394850795850",
+    "posted": "2026-02-16T00:01:22.174557"
+  },
+  {
+    "city": "Henderson",
+    "state": "NV",
+    "tweet_id": "2023261479479222513",
+    "url": "https://x.com/AiCollab4Kids/status/2023261479479222513",
+    "posted": "2026-02-16T00:01:42.346350"
+  },
+  {
+    "city": "Newark",
+    "state": "NJ",
+    "tweet_id": "2023261564074139658",
+    "url": "https://x.com/AiCollab4Kids/status/2023261564074139658",
+    "posted": "2026-02-16T00:02:02.536113"
+  },
+  {
+    "city": "Rochester",
+    "state": "NY",
+    "tweet_id": "2023261648782331954",
+    "url": "https://x.com/AiCollab4Kids/status/2023261648782331954",
+    "posted": "2026-02-16T00:02:22.726157"
+  },
+  {
+    "city": "Toledo",
+    "state": "OH",
+    "tweet_id": "2023261733452759184",
+    "url": "https://x.com/AiCollab4Kids/status/2023261733452759184",
+    "posted": "2026-02-16T00:02:42.907591"
+  },
+  {
+    "city": "Buffalo",
+    "state": "NY",
+    "tweet_id": "2023261818123173943",
+    "url": "https://x.com/AiCollab4Kids/status/2023261818123173943",
+    "posted": "2026-02-16T00:03:03.151045"
+  },
+  {
+    "city": "Anchorage",
+    "state": "AK",
+    "tweet_id": "2023261903078711519",
+    "url": "https://x.com/AiCollab4Kids/status/2023261903078711519",
+    "posted": "2026-02-16T00:03:23.350994"
+  },
+  {
+    "city": "Lexington",
+    "state": "KY",
+    "tweet_id": "2023261988139266270",
+    "url": "https://x.com/AiCollab4Kids/status/2023261988139266270",
+    "posted": "2026-02-16T00:03:43.640218"
+  },
+  {
+    "city": "Plano",
+    "state": "TX",
+    "tweet_id": "2023262072943870121",
+    "url": "https://x.com/AiCollab4Kids/status/2023262072943870121",
+    "posted": "2026-02-16T00:04:03.892315"
+  },
+  {
+    "city": "Chandler",
+    "state": "AZ",
+    "tweet_id": "2023262157798805546",
+    "url": "https://x.com/AiCollab4Kids/status/2023262157798805546",
+    "posted": "2026-02-16T00:04:24.077965"
+  },
+  {
+    "city": "Scottsdale",
+    "state": "AZ",
+    "tweet_id": "2023262242460901397",
+    "url": "https://x.com/AiCollab4Kids/status/2023262242460901397",
+    "posted": "2026-02-16T00:04:44.267822"
+  },
+  {
+    "city": "Madison",
+    "state": "WI",
+    "error": "429 Too Many Requests\nToo Many Requests"
+  },
+  {
+    "city": "Durham",
+    "state": "NC",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Savannah",
+    "state": "GA",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Charleston",
+    "state": "SC",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Knoxville",
+    "state": "TN",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Chattanooga",
+    "state": "TN",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Little Rock",
+    "state": "AR",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Springfield",
+    "state": "MO",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Huntsville",
+    "state": "AL",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Grand Rapids",
+    "state": "MI",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Des Moines",
+    "state": "IA",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Tallahassee",
+    "state": "FL",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Baton Rouge",
+    "state": "LA",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Providence",
+    "state": "RI",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Spokane",
+    "state": "WA",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Tacoma",
+    "state": "WA",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Greensboro",
+    "state": "NC",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Winston Salem",
+    "state": "NC",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Dayton",
+    "state": "OH",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Akron",
+    "state": "OH",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Tulsa",
+    "state": "OK",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Wichita",
+    "state": "KS",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Laredo",
+    "state": "TX",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Lubbock",
+    "state": "TX",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Corpus Christi",
+    "state": "TX",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Reno",
+    "state": "NV",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Fayetteville",
+    "state": "AR",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Columbia",
+    "state": "SC",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Augusta",
+    "state": "GA",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Macon",
+    "state": "GA",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Jackson",
+    "state": "MS",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Sioux Falls",
+    "state": "SD",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  {
+    "city": "Fargo",
+    "state": "ND",
+    "error": "HTTPSConnectionPool(host='api.twitter.com', port=443): Max retries exceeded with url: /2/tweets (Caused by NameResolutionError(\"HTTPSConnection(host='api.twitter.com', port=443): Failed to resolve 'api.twitter.com' ([Errno 11001] getaddrinfo failed)\"))"
+  }
+]

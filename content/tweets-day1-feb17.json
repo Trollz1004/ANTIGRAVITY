@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-02-16T15:45:00-05:00",
+  "stat_source": "Norton 2025 Cyber Safety Report",
+  "day1_cities": ["Madison WI", "Durham NC", "Savannah GA", "Charleston SC", "Knoxville TN"],
+  "tweets": [
+    {
+      "city": "Madison",
+      "state": "WI",
+      "time": "9:00 AM EST",
+      "variants": [
+        "Madison singles — 60% of dating app users suspect they've matched with AI bots (Norton 2025). YouAndINotAI verifies every human with Plaid. Founding members: $14.99/mo locked forever. youandinotai.com #Madison #WisconsinSingles #RealDating",
+        "Real connections in Madison start with real people. YouAndINotAI — every profile identity-verified through V8 Cloud. $14.99/mo founding members. youandinotai.com #MadisonWI #NoBots #DatingApp",
+        "What if every person on your dating app was actually verified as human? That's YouAndINotAI. Bank-level identity checks via Plaid. 100 founding spots. youandinotai.com #Madison #WisconsinDating",
+        "Madison, WI — 60% of users have matched with suspected bots on dating apps. We built YouAndINotAI to fix that. Every profile verified. $14.99/mo founders price locked forever. youandinotai.com #MadisonWI #VerifiedDating",
+        "Dating in Madison shouldn't mean dodging bots. YouAndINotAI verifies every user through Plaid (same tech your bank uses). Founding member spots open. youandinotai.com #MadisonSingles #RealHumans"
+      ]
+    },
+    {
+      "city": "Durham",
+      "state": "NC",
+      "time": "12:00 PM EST",
+      "variants": [
+        "Durham singles — tired of fake profiles? YouAndINotAI verifies every human with V8 Cloud + Plaid. 60% of dating app users report matching with suspected bots. Not here. youandinotai.com #Durham #NCDating #RealDating",
+        "Real connections in Durham start with real people. YouAndINotAI — every profile identity-verified. $14.99/mo founding members. youandinotai.com #DurhamNC #NoBots #DatingApp",
+        "Durham, NC — dating apps have a bot problem. We have a solution. V8 Cloud Verification checks every user through Plaid. 100 founding spots at $14.99/mo. youandinotai.com #DurhamSingles #VerifiedDating",
+        "What if every match in Durham was guaranteed real? That's YouAndINotAI. Bank-level identity verification on every profile. youandinotai.com #Durham #NorthCarolina #HumanVerified",
+        "60% of dating app users suspect bot matches (Norton 2025). Durham deserves better. YouAndINotAI — every profile Plaid-verified. youandinotai.com #DurhamNC #RealHumans"
+      ]
+    },
+    {
+      "city": "Savannah",
+      "state": "GA",
+      "time": "3:00 PM EST",
+      "variants": [
+        "Savannah singles — 60% of dating app users have matched with suspected bots. YouAndINotAI verifies every human with Plaid. Founding members lock in $14.99/mo forever. youandinotai.com #Savannah #GeorgiaDating #RealDating",
+        "Real connections in Savannah start with real people. YouAndINotAI — every profile identity-verified through V8 Cloud. youandinotai.com #SavannahGA #NoBots #DatingApp",
+        "Savannah, GA — your dating matches should be real humans. YouAndINotAI uses bank-level verification (Plaid) on every profile. 100 founding spots. youandinotai.com #SavannahSingles #VerifiedDating",
+        "Dating in Savannah shouldn't mean swiping on bots. V8 Cloud Verification. 8 identity checks. Zero fakes. $14.99/mo founders. youandinotai.com #Savannah #Georgia #HumanVerified",
+        "What if every profile in your Savannah dating pool was verified real? YouAndINotAI. Bank-grade identity checks via Plaid. youandinotai.com #SavannahGA #RealHumans"
+      ]
+    },
+    {
+      "city": "Charleston",
+      "state": "SC",
+      "time": "6:00 PM EST",
+      "variants": [
+        "Charleston singles — 60% of dating app users suspect they've matched with AI bots (Norton 2025). YouAndINotAI verifies every human with Plaid. $14.99/mo founding members. youandinotai.com #Charleston #SCDating #RealDating",
+        "Real connections in Charleston start with real people. YouAndINotAI — every profile identity-verified. youandinotai.com #CharlestonSC #NoBots #DatingApp",
+        "Charleston, SC — done with fake profiles? V8 Cloud Verification checks every user through 8 identity layers powered by Plaid. youandinotai.com #CharlestonSingles #VerifiedDating",
+        "Dating in Charleston should mean real humans only. YouAndINotAI uses bank-level verification on every profile. 100 founding spots open. youandinotai.com #Charleston #SouthCarolina #HumanVerified",
+        "Charleston deserves real dating. 60% of users match with suspected bots on other apps — not on YouAndINotAI. Every profile verified via Plaid. youandinotai.com #CharlestonSC #RealHumans"
+      ]
+    },
+    {
+      "city": "Knoxville",
+      "state": "TN",
+      "time": "9:00 PM EST",
+      "variants": [
+        "Knoxville singles — 60% of dating app users have matched with suspected bots. YouAndINotAI verifies every human with Plaid. $14.99/mo founding members locked forever. youandinotai.com #Knoxville #TennesseeDating #RealDating",
+        "Real connections in Knoxville start with real people. YouAndINotAI — every profile identity-verified through V8 Cloud. youandinotai.com #KnoxvilleTN #NoBots #DatingApp",
+        "Knoxville, TN — your matches should be real. V8 Cloud Verification uses Plaid to confirm every user is human. 100 founding spots at $14.99/mo. youandinotai.com #KnoxvilleSingles #VerifiedDating",
+        "Dating in Knoxville shouldn't mean dodging bots. Bank-level identity verification on every profile. That's YouAndINotAI. youandinotai.com #Knoxville #Tennessee #HumanVerified",
+        "What if every person on your dating app was verified real? That's YouAndINotAI. Plaid-powered identity checks. Knoxville founding spots open. youandinotai.com #KnoxvilleTN #RealHumans"
+      ]
+    }
+  ]
+}
