@@ -104,7 +104,7 @@ def load_env():
         print(f"    TWITTER_ACCESS_SECRET=...")
         sys.exit(1)
 
-    with open(ENV_FILE) as f:
+    with open(ENV_FILE, encoding="utf-8", errors="ignore") as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith("#") and "=" in line:
