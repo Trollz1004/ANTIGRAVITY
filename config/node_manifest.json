@@ -1,0 +1,13 @@
+﻿{
+    "nodes":  [
+                  {
+                      "name":  "SABRETOOTH",
+                      "role":  "dev-orchestrator",
+                      "driveLetter":  "E",
+                      "opusRoot":  "E:\\OPUSONLY",
+                      "nodeFolder":  "E:\\OPUSONLY\\nodes\\SABRETOOTH"
+                  }
+              ],
+    "generatedOn":  "2026-02-08T11:04:09-05:00",
+    "hostMachine":  "DATEAPPSABRETOO"
+}

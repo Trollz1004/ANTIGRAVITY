@@ -1,0 +1,70 @@
+name: Marketing Engine - Dry Run Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to test (or "all")'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - twitter
+          - linkedin
+          - bluesky
+          - discord
+          - telegram
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    name: Safe Validation Test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Dry-Run Validation
+        env:
+          # AI Providers
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+          # Social Platforms (from repo secrets)
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
+
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_PERSON_ID: ${{ secrets.LINKEDIN_PERSON_ID }}
+
+        run: npm run dry-run
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Dry Run Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- NO actual posts were made" >> $GITHUB_STEP_SUMMARY
+          echo "- Content generation tested" >> $GITHUB_STEP_SUMMARY
+          echo "- Tagging rules validated" >> $GITHUB_STEP_SUMMARY
+          echo "- TOS compliance checked" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,16 @@
+{
+    "node_name": "SABRETOOTH",
+    "node_role": "MASTER_ORCHESTRATOR",
+    "local_ip": "192.168.0.8",
+    "assistant_id": "ACCOMPLISH",
+    "mission": "VALENTINE_LAUNCH_2026",
+    "ground_truth_root": "E:\\Enigma\\OPUSONLY\\accomplish\\",
+    "network_share": "\\\\DATEAPPSABRETOO\\Users\\joshl",
+    "doctrine": {
+        "charity_split": 0.60,
+        "infra_split": 0.30,
+        "founder_split": 0.10,
+        "merit_first_marketing": true,
+        "protocol_omega": "ACTIVE"
+    }
+}
