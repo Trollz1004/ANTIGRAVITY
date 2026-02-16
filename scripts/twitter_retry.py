@@ -1,13 +1,18 @@
 """
 Twitter Retry Script — Repost to 33 cities that failed due to rate limiting / DNS errors.
 Run with: python twitter_retry.py
-Reads API keys from C:\OPUS\scripts\.env or environment variables.
+Reads API keys from C:/OPUS/scripts/.env or environment variables.
 """
 import json
 import os
 import sys
 import time
+import io
 from pathlib import Path
+
+# Fix Windows console encoding
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
 # Failed cities from tweet-results-20260216-0035.json
 FAILED_CITIES = [
@@ -54,7 +59,7 @@ def main():
     # Check for API keys
     env_path = Path(__file__).parent / ".env"
     if env_path.exists():
-        with open(env_path) as f:
+        with open(env_path, encoding="utf-8", errors="ignore") as f:
             for line in f:
                 line = line.strip()
                 if "=" in line and not line.startswith("#"):
@@ -62,9 +67,9 @@ def main():
                     os.environ.setdefault(key.strip(), val.strip().strip('"').strip("'"))
 
     api_key = os.environ.get("TWITTER_API_KEY", "")
-    api_secret = os.environ.get("TWITTER_API_KEY_SECRET", "")
+    api_secret = os.environ.get("TWITTER_API_SECRET", os.environ.get("TWITTER_API_KEY_SECRET", ""))
     access_token = os.environ.get("TWITTER_ACCESS_TOKEN", "")
-    access_secret = os.environ.get("TWITTER_ACCESS_TOKEN_SECRET", "")
+    access_secret = os.environ.get("TWITTER_ACCESS_SECRET", os.environ.get("TWITTER_ACCESS_TOKEN_SECRET", ""))
 
     if not all([api_key, api_secret, access_token, access_secret]):
         print("❌ Twitter API keys not found. Set TWITTER_API_KEY, TWITTER_API_KEY_SECRET,")
