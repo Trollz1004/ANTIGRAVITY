@@ -1,0 +1,69 @@
+﻿{
+    "projects":  [
+                     {
+                         "name":  ".claude",
+                         "driveLetter":  "E",
+                         "fullPath":  "E:\\.claude",
+                         "node":  "SABRETOOTH",
+                         "typeGuess":  "generic-project"
+                     },
+                     {
+                         "name":  ".pnpm-store",
+                         "driveLetter":  "E",
+                         "fullPath":  "E:\\.pnpm-store",
+                         "node":  "SABRETOOTH",
+                         "typeGuess":  "generic-project"
+                     },
+                     {
+                         "name":  "CLAWDBOT",
+                         "driveLetter":  "E",
+                         "fullPath":  "E:\\CLAWDBOT",
+                         "node":  "SABRETOOTH",
+                         "typeGuess":  "generic-project"
+                     },
+                     {
+                         "name":  "DateApp",
+                         "driveLetter":  "E",
+                         "fullPath":  "E:\\DateApp",
+                         "node":  "SABRETOOTH",
+                         "typeGuess":  "generic-project"
+                     },
+                     {
+                         "name":  "Enigma",
+                         "driveLetter":  "E",
+                         "fullPath":  "E:\\Enigma",
+                         "node":  "SABRETOOTH",
+                         "typeGuess":  "generic-project"
+                     },
+                     {
+                         "name":  "OPUS",
+                         "driveLetter":  "E",
+                         "fullPath":  "E:\\OPUS",
+                         "node":  "SABRETOOTH",
+                         "typeGuess":  "generic-project"
+                     },
+                     {
+                         "name":  "OPUSONLY",
+                         "driveLetter":  "E",
+                         "fullPath":  "E:\\OPUSONLY",
+                         "node":  "SABRETOOTH",
+                         "typeGuess":  "opus-root"
+                     },
+                     {
+                         "name":  "Screen shots of ssh network",
+                         "driveLetter":  "E",
+                         "fullPath":  "E:\\Screen shots of ssh network",
+                         "node":  "SABRETOOTH",
+                         "typeGuess":  "generic-project"
+                     },
+                     {
+                         "name":  "tmp",
+                         "driveLetter":  "E",
+                         "fullPath":  "E:\\tmp",
+                         "node":  "SABRETOOTH",
+                         "typeGuess":  "generic-project"
+                     }
+                 ],
+    "generatedOn":  "2026-02-08T11:04:13-05:00",
+    "hostMachine":  "DATEAPPSABRETOO"
+}
