@@ -9,11 +9,24 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
-$PythonPath = "python"
+
+# Auto-detect Python
+$PythonExe = "python"
+try {
+    $PythonExe = (Get-Command python).Source
+} catch {
+    # Fallback paths for 9020/Sabretooth
+    if (Test-Path "C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe") {
+        $PythonExe = "C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe"
+    } elseif (Test-Path "C:\Program Files (x86)\Google\Cloud SDK\google-cloud-sdk\platform\bundledpython\python.exe") {
+        $PythonExe = "C:\Program Files (x86)\Google\Cloud SDK\google-cloud-sdk\platform\bundledpython\python.exe"
+    }
+}
+
 $NodePath = "node"
-$ScriptsDir = "C:\OPUS\scripts"
+$ScriptsDir = "$PSScriptRoot"
 $KrakenDir = "C:\REVENUE-CORE\Kraken_Assist_Local_Disk_9020\marketing-engine"
-$LogDir = "C:\OPUS\logs"
+$LogDir = "$PSScriptRoot\..\logs"
 
 # Create log directory
 if (-not (Test-Path $LogDir)) { New-Item -ItemType Directory -Path $LogDir -Force }
@@ -23,7 +36,7 @@ $Tasks = @(
     @{
         Name = "OPUS-Orchestrator-Hourly"
         Description = "Master orchestrator - hourly cycle (content generation + posting queue)"
-        Command = "$PythonPath `"$ScriptsDir\master_orchestrator.py`" --run-once"
+        Command = "$PythonExe `"$ScriptsDir\master_orchestrator.py`" --run-once"
         Trigger = "Hourly"
         IntervalMinutes = 60
     },
@@ -37,14 +50,14 @@ $Tasks = @(
     @{
         Name = "OPUS-Status-Report"
         Description = "Generate status report every 6 hours"
-        Command = "$PythonPath `"$ScriptsDir\master_orchestrator.py`" --status"
+        Command = "$PythonExe `"$ScriptsDir\master_orchestrator.py`" --status"
         Trigger = "Hourly"
         IntervalMinutes = 360  # Every 6 hours
     },
     @{
         Name = "OPUS-Countdown-Update"
         Description = "Generate fresh countdown image daily"
-        Command = "$PythonPath `"$ScriptsDir\countdown_generator.py`" --spots 97"
+        Command = "$PythonExe `"$ScriptsDir\countdown_generator.py`" --spots 97"
         Trigger = "Daily"
         TimeOfDay = "08:00"
     }
@@ -95,8 +108,10 @@ function Register-Tasks {
         }
 
         try {
-            $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c $($task.Command) >> `"$LogDir\$($task.Name).log`" 2>&1"
-
+            $user = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+            $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$($task.Command)`" >> `"$LogDir\$($task.Name).log`" 2>&1"
+            
+            $trigger = $null
             if ($task.Trigger -eq "Hourly") {
                 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(5) `
                     -RepetitionInterval (New-TimeSpan -Minutes $task.IntervalMinutes) `
@@ -118,7 +133,7 @@ function Register-Tasks {
                 -Action $action `
                 -Trigger $trigger `
                 -Settings $settings `
-                -User "SYSTEM" `
+                -User $user `
                 -RunLevel Highest
 
             Write-Host "  [OK] $($task.Name) registered" -ForegroundColor Green
