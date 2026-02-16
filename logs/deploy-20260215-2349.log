@@ -1,0 +1,22 @@
+2026-02-15 23:49:38,315 [INFO] ============================================================
+2026-02-15 23:49:38,315 [INFO] YouAndINotAI Auto Deploy System
+2026-02-15 23:49:38,315 [INFO] Platform: instagram
+2026-02-15 23:49:38,315 [INFO] Time: 2026-02-15T23:49:38.315907
+2026-02-15 23:49:38,316 [INFO] ============================================================
+2026-02-15 23:49:38,316 [INFO] IG Feed: 15 images
+2026-02-15 23:49:38,316 [INFO] IG Stories: 10 images
+2026-02-15 23:49:38,316 [INFO] TikTok: 5 images
+2026-02-15 23:49:38,316 [INFO] Pinterest: 8 images
+2026-02-15 23:49:38,316 [INFO] Variations: 15 images
+2026-02-15 23:49:38,317 [INFO] Countdown: 4 images
+2026-02-15 23:49:38,317 [INFO] ====== WebDriver manager ======
+2026-02-15 23:49:56,729 [INFO] Get LATEST chromedriver version for google-chrome
+2026-02-15 23:49:57,616 [INFO] Get LATEST chromedriver version for google-chrome
+2026-02-15 23:49:58,072 [INFO] There is no [win64] chromedriver "145.0.7632.76" for browser google-chrome "145.0.7632" in cache
+2026-02-15 23:49:58,072 [INFO] Get LATEST chromedriver version for google-chrome
+2026-02-15 23:49:59,222 [INFO] WebDriver version 145.0.7632.76 selected
+2026-02-15 23:49:59,228 [INFO] Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/145.0.7632.76/win32/chromedriver-win32.zip
+2026-02-15 23:49:59,228 [INFO] About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/145.0.7632.76/win32/chromedriver-win32.zip
+2026-02-15 23:49:59,674 [INFO] Driver downloading response is 200
+2026-02-15 23:49:59,914 [INFO] Get LATEST chromedriver version for google-chrome
+2026-02-15 23:50:00,632 [INFO] Driver has been saved in cache [C:\Users\joshl\.wdm\drivers\chromedriver\win64\145.0.7632.76]
