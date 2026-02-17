@@ -35,16 +35,18 @@
 | Bot Name | @AiSolutionsForTheKids_bot |
 | Bot Token | 8313006115:AAH5xv4ol7RoScmuM3SAUJgt_93IS6rpblQ |
 
-## OpenClaw (being replaced with custom code)
+## OpenClaw (WORKING as of 2026-02-17)
 
 | Credential | Path |
 |------------|------|
 | Config | C:\Users\joshl\.openclaw\openclaw.json |
 | Auth Profiles | C:\Users\joshl\.openclaw\agents\main\agent\auth-profiles.json |
 | Models | C:\Users\joshl\.openclaw\agents\main\agent\models.json |
-| OAuth | C:\Users\joshl\.openclaw\credentials\oauth.json |
+| Auth Type | token (sk-ant-oat01-... OAT from claude setup-token) |
+| Token Expires | ~May 2026 (90 days from 2026-02-17) |
 | Gateway Token | opus-9020-2026 |
 | Gateway Port | 18789 |
+| Renewal | See Claude Code memory/openclaw-setup.md for full procedure |
 
 ## Cloudflare
 
