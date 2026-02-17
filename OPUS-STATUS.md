@@ -1,58 +1,51 @@
-# 🎭 OPUS CLI STATUS
+# OPUS STATUS
 
-**Node:** 9020 | **Role:** Memory Orchestrator + Browser Automation  
-**Last Updated:** 2026-02-16 6:15 PM EST
+**Node:** 9020 | **Role:** Memory Orchestrator + Marketing Ops
+**Last Updated:** 2026-02-17 4:01 PM EST
 
-## Current State: ✅ ACTIVE — MISSION CRITICAL RECOVERY COMPLETE
+## Session: Feb 17 2026 — 9020
 
-### Completed
+### Social Accounts (COMMERCIAL ONLY)
+- Twitter/X: @YouAndiNotAi (was @AiCollab4Kids — rebranded, 380 existing posts under new handle)
+- Snapchat: YouAndiNotAi
+- WhatsApp Business: 1-352-973-5909
+- Website: youandinotai.com
+- Square $1 Bot-Shield: verified working
+- Square $14.99 Founding: verified working
 
-- ✅ Twitter Blitz: 68 city tweets posted (Tiers 1-3)
-- ✅ Facebook: 5 posts live
-- ✅ LinkedIn: Posted
-- ✅ Discord + Telegram: Posted
-- ✅ Post tracker: marketing-automation/post-tracker.json (21 tracked)
-- ✅ Content pipeline + auto-deploy scripts built
-- ✅ Killed 47% unverified stat → 60% Norton 2025 across all files
-- ✅ Strategic pivot: stopped Reddit spam, proposed 7-day organic plan
-- ✅ Square Checkout FIXED: `square.link` migration successful
-- ✅ Plausible Analytics: Live with zero-tracking script
-- ✅ OpenClaw Gateway: Process stopped, Scheduled Task disabled
-- ✅ Cleanup: Purged all one-time diagnostic and recovery scripts
-- ✅ MCP/Settings Lock: bypassPermissions + new servers configured
+### Completed This Session
+- OG meta tags FIXED and deployed to Netlify production
+  - og:title: "YouAndINotAI — Verified Human Dating"
+  - og:description: "The only dating app with V8 Cloud Verification. No bots. Real humans. $1 to prove you're real."
+  - og:image: deployed (logo-og-image-1200x630.png)
+  - twitter:card: fixed, removed "Join the revolution" (brand voice violation)
+  - twitter:site: @YouAndiNotAi added
+- Plausible analytics: VERIFIED present in HTML head, script loading on live site
+- MCP config: fixed filesystem paths, removed dead opus-memory SSE tunnel
+- OpenClaw: installed globally (v2.1.42 CLI), config directory intact
+- Memory files: all read and indexed for session continuity
 
-### Strategic Decisions Made
+### Blockers
+- Anthropic API key: zero credit balance — API calls return 400. CLI (Max sub) works fine. API-dependent features (OpenClaw orchestration via API) blocked until credits purchased.
+- 68 tweets live, zero organic engagement — possible shadowban or new account suppression
+- Instagram/TikTok: assets ready, API creds still missing for automated posting
 
-1. **NO Reddit carpet-bombing** — 1 post on r/SideProject only
-2. **Twitter via browser** — API rate-limited, browser posting works better
-3. **7-day drip** — 5 cities/day instead of 33 at once
-4. **Reddit organic** — 5-7 days of helpful comments before any links
-5. **Norton 2025 stat** — "60% of dating app users suspect AI bot matches"
+### Active Campaign
+- 7-day Twitter drip: Day 1 (Madison WI posted), Durham/Savannah/Charleston/Knoxville pending
+- 75+ visual assets generated across all platforms
+- 55+ text posts live (Twitter, Facebook, LinkedIn, Discord, Telegram)
+- Discord intro drafted for Anthropic community
 
-### Immediate Tasks
+### Next Steps
+- Content sub-agents: Week 2 tweet variants, Snapchat overlays, email sequence, WhatsApp broadcasts
+- Instagram manual upload fallback (15 feed + 10 stories ready)
+- Monitor engagement for shadowban indicators
+- Durham NC tweet execution (late)
 
-1. 🟢 **Post LinkedIn founder story** (content ready, zero risk)
-2. 🟢 **Monitor Square dashboard** for founding member signups
-3. ✅ **Urgency counter live** on landing page
-4. 🟢 **Draft Reddit r/SideProject post** for Joshua review
+### Node Status
 
-### Post-Max Continuity
-
-When Claude session expires:
-
-- Orchestration → Gemini Antigravity
-- Content generation → Ollama (free, local)
-- All content files on local drives — nothing lost
-- Brand voice + prompts preserved in content/ and memory/
-
-### Error Log
-
-| Error                  | Status   | Fix                       |
-| ---------------------- | -------- | ------------------------- |
-| Twitter 429 rate limit | ⚠️ Known | Use browser, not API      |
-| tweepy missing         | ✅ Fixed | Installed v4.16.0         |
-| 47% uncited stat       | ✅ Fixed | Replaced with Norton 2025 |
-| Playwright $HOME       | ✅ Fixed | Set env var system-wide   |
-| Square checkout 404    | ✅ Fixed | New square.link URLs live |
-| No analytics           | ✅ Fixed | Plausible added to head   |
-| Square token expired   | ✅ Fixed | New production token set  |
+| Node       | Status    | Running                        |
+| ---------- | --------- | ------------------------------ |
+| 9020       | ACTIVE    | CLI Opus, marketing ops        |
+| Sabretooth | ACTIVE    | Monitoring daemon              |
+| T5500      | PENDING   | Needs prompt paste + setup     |
