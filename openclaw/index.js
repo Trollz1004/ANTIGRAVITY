@@ -33,7 +33,7 @@ const client = new Anthropic({
 });
 
 const ollamaBaseUrl = process.env.OLLAMA_BASE_URL;
-const claudeModel = process.env.CLAUDE_MODEL || 'claude-opus-4-5-20250514';
+const claudeModel = process.env.CLAUDE_MODEL || 'claude-opus-4-6';
 const qdrantCollection = process.env.QDRANT_COLLECTION;
 const port = process.env.OPENCLAW_PORT || 3200;
 
@@ -86,10 +86,10 @@ app.post('/chat', async (req, res) => {
 
     // 4. Build system prompt for marketing
     const systemPrompt = `You are Open Claw, an AI marketing agent for youandinotai.com.
-You are conversing with a prospect about pre-ordering access to YouAndINotAI dating app.
-- Valentine's Day launch: Feb 14, 2026 (4 days away!)
-- Pre-order benefits: Early access, exclusive features, 50% lifetime discount
-- Target: Convert interest into pre-order signup
+You are conversing with a prospect about YouAndINotAI — the only dating app with V8 Cloud Verification. No bots. Real humans.
+- USP: Every user is human-verified. No fake profiles. No bots.
+- Founding Member access available now
+- Target: Convert interest into sign-up
 
 ${memoryContext ? `\nContext from previous conversations:\n${memoryContext}` : ''}
 
