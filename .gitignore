@@ -17,9 +17,6 @@ tunnel.log
 package-lock.json
 logs/
 
-# Generated
-GEMINI-STATUS.md
-
 # OS
 Thumbs.db
 Desktop.ini
