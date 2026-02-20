@@ -1,5 +1,6 @@
 # T5500 OPUS Stack — Docker Services
 # Usage: docker-compose up -d
+# Auto-starts on reboot via Task Scheduler (see scripts/STARTUP.bat)
 
 services:
   redis:
@@ -18,3 +19,54 @@ services:
     volumes:
       - ./qdrant-data:/qdrant/storage
     restart: unless-stopped
+
+  openclaw:
+    build:
+      context: ../openclaw
+      dockerfile: Dockerfile
+    container_name: openclaw
+    ports:
+      - "3200:3200"
+    env_file:
+      - ../openclaw/.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
+    volumes:
+      - C:/OPUSONLY/logs:/logs
+      - openclaw_wwebjs:/app/.wwebjs_auth
+      - openclaw_wwebjs_cache:/app/.wwebjs_cache
+      - ../openclaw/.env:/app/.env:ro
+    depends_on:
+      - redis
+      - qdrant
+    restart: unless-stopped
+
+  whatsapp-bridge:
+    build:
+      context: ../openclaw
+      dockerfile: Dockerfile
+    container_name: whatsapp-bridge
+    user: root
+    command: node whatsapp-bridge.js
+    env_file:
+      - ../openclaw/.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      - OPENCLAW_URL=http://openclaw:3200
+    volumes:
+      - C:/OPUSONLY/logs:/logs
+      - openclaw_wwebjs:/app/.wwebjs_auth
+      - openclaw_wwebjs_cache:/app/.wwebjs_cache
+    depends_on:
+      - redis
+      - qdrant
+      - openclaw
+    security_opt:
+      - seccomp:unconfined
+    restart: unless-stopped
+
+volumes:
+  openclaw_wwebjs:
+  openclaw_wwebjs_cache:

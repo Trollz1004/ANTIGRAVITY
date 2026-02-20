@@ -13,17 +13,21 @@ const logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: 'C:\\OPUSONLY\\logs\\whatsapp-bridge.log' })
+    new winston.transports.File({ filename: '/logs/whatsapp-bridge.log' })
   ]
 });
 
 const client = new Client({
   authStrategy: new LocalAuth({
-    dataPath: 'C:\\OPUSONLY\\openclaw\\.wwebjs_auth'
-  })
+    dataPath: '/app/.wwebjs_auth'
+  }),
+  puppeteer: {
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+  }
 });
 
-const OPENCLAW_URL = 'http://localhost:3200';
+const OPENCLAW_URL = process.env.OPENCLAW_URL || 'http://localhost:3200';
 
 // QR code display
 client.on('qr', (qr) => {
