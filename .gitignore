@@ -1,4 +1,26 @@
-logs/
-GEMINI-STATUS.md
+# Secrets
 .vault/
 *.env
+.env*
+!.env.example
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Runtime
+.wwebjs_auth/
+qdrant-data/
+*.log
+tunnel.log
+package-lock.json
+logs/
+
+# Generated
+GEMINI-STATUS.md
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
