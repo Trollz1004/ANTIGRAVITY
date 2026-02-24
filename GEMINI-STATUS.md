@@ -1,109 +1,75 @@
-# Antigravity Agent Status
+# 🤖 Antigravity Agent Status
 
-**Last Updated:** 2026-02-23 22:50 EST
+**Last Updated:** 2026-02-24 01:41 EST
 **Agent:** Antigravity (Gemini)
 **Node:** T5500 — `C:\OPUSONLY` (ONLY active node)
-**Repo:** [Trollz1004/ANTIGRAVITY](https://github.com/Trollz1004/ANTIGRAVITY)
-**Branch:** `main` (only branch)
 
 ---
 
-## Current Session (Feb 23, 2026)
+## 🚨 TONIGHT: WENT VIRAL → FIXED EVERYTHING
 
-Major session. Opus deployed new frontend, wired up plugin, pushed repos.
+| Event | Resolution |
+|-------|-----------|
+| 1,200+ visits in 1 hour | Broke Netlify free tier |
+| Netlify paused | Migrated to GitHub Pages (unlimited bandwidth) |
+| Fake data live on site | ALL removed from 5 components |
+| GEMINI_API_KEY exposed in JS | Proxied through Cloudflare Worker — key secured |
+| No email capture | Waitlist form LIVE (FormSubmit.co → Gmail) |
+| No social content | 3 copy-paste posts ready |
 
-### Completed This Session
-- Deployed YouAndINotAI v1 landing page to Netlify (youandinotai.com)
-- Fixed blank page (netlify.toml publish=dist + SPA redirect)
-- Deployed YouAndINotAI v2 (cosmic 3D dating app from AI Studio zip)
-- Pushed v2 to GitHub: [Trollz1004/If-Not-Gemini-or-OPUS-GETOUT](https://github.com/Trollz1004/If-Not-Gemini-or-OPUS-GETOUT)
-- Wired enigma-opus-plugin: 5 slash commands now live in `.claude/commands/`
-- Created handoff prompts for Grok AI and Gemini in `briefings/`
-- Audited Cloudflare DNS — all records correct, no changes needed
-- Confirmed email routing (MX, SPF, DKIM) working
+## Site: https://youandinotai.com
 
-### What's Live Now
-- **youandinotai.com** — v2 cosmic 3D dating app (Netlify, thunderous-sawine-9753d5)
-- **Stripe payment links** — all 5 active and embedded in the site
-- **Slash commands** — /cost-check, /health, /iron-wall, /launch-checklist, /status
+| Item | Status |
+|------|--------|
+| Hosting | 🟢 GitHub Pages (free, unlimited) |
+| SSL | ⚠️ GitHub cert provisioning — Cloudflare handles HTTPS meanwhile |
+| Gemini AI | 🟢 Proxied via `gemini-proxy.joshlcoleman.workers.dev` — no exposed keys |
+| Waitlist | 🟢 FormSubmit.co → joshlcoleman@gmail.com |
+| Fake data | 🟢 ALL removed |
+| Stripe links | 🟢 All 5 verified in bundle |
 
-## Stack
+## Stripe (ALL 5 LIVE ✅)
 
-| Service           | Port  | Status                       |
-| ----------------- | ----- | ---------------------------- |
-| OpenClaw (Claude) | 3200  | Needs restart after reorg    |
-| MCP Server        | 3100  | Needs restart                |
-| Redis (Docker)    | 6379  | Needs restart                |
-| Qdrant (Docker)   | 6333  | Needs restart                |
-| Ollama            | 11434 | Needs restart                |
+| Product | Price |
+|---------|-------|
+| Bot-Shield | $1 |
+| Founding Member | $14.99/mo |
+| 3-Month Founder | $49.99 |
+| 12-Month Founder | $99.99 |
+| Royalty Card | $2,500 |
 
-## Hosting
+Key expires ~March 10th.
 
-| Service | URL | Status |
-|---------|-----|--------|
-| Frontend (Netlify) | https://youandinotai.com | LIVE |
-| Cloud Run | https://youandinotai-com-731395189513.us-west1.run.app/ | Auth-locked (not public) |
-| API (AWS EC2) | api.youandinotai.com → 3.84.226.108 | Unknown — check if EC2 running |
+## Gemini API Keys (NEW — Feb 24)
 
-## DNS (Cloudflare — verified this session)
+| Account | Purpose |
+|---------|---------|
+| aicollab4kids@gmail.com | Platform key → Cloudflare Worker proxy |
+| joshlcoleman@gmail.com | Personal/backup |
 
-| Record | Type | Target | Status |
-|--------|------|--------|--------|
-| youandinotai.com | CNAME | thunderous-sawine-9753d5.netlify.app | Proxied, working |
-| www | CNAME | youandinotai.com | Proxied, working |
-| app | CNAME | thunderous-sawine-9753d5.netlify.app | Proxied, working |
-| api | A | 3.84.226.108 (AWS EC2) | Proxied, verify EC2 |
-| Email | MX + SPF + DKIM | Cloudflare routing | Working |
+Old key burned (Google flagged as leaked). Both new keys stored in `.env`, GitHub secrets, vault.
 
-## Payment: Stripe ONLY
+## DNS (Cloudflare)
 
-Square is **DEAD**. All 5 links live and embedded in site:
+| Record | Target |
+|--------|--------|
+| youandinotai.com (A x4) | GitHub Pages IPs |
+| www (CNAME) | Trollz1004.github.io |
+| app (A) | GitHub Pages IPs |
+| api (A) | 3.84.226.108 (AWS EC2) |
 
-- Bot-Shield $1 | Founding Member $14.99/mo | 3-Month $49.99 | 12-Month $99.99 | Royalty $2,500
-- Key expires ~March 10th — ROTATE BEFORE THEN
+## Remaining TODO
 
-## GitHub Repos (Updated This Session)
+1. ⚠️ Enable HTTPS enforcement once GitHub cert is issued
+2. 🟡 Rotate Stripe keys before March 10th
+3. 🟡 Check Gmail for FormSubmit activation after first submission
+4. 🟡 Post social content from `briefings/COPY-PASTE-POSTS.txt`
+5. 🔵 Expand Cloudflare token for Pages deploy (done — FTK token rotated)
 
-| Repo | Content | Status |
-|------|---------|--------|
-| Trollz1004/If-Not-Gemini-or-OPUS-GETOUT | YouAndINotAI v2 (cosmic app) | Pushed, current |
-| Trollz1004/Trollz1004CLAUDE...PLATFORM | enigma-opus-plugin | ARCHIVED — needs unarchive to push |
-| Trollz1004/ANTIGRAVITY | Antigravity admin dashboard | Unchanged |
+## Repo
 
-## Blockers
-
-1. **Cloud Run not public** — GCP service account JSON missing from T5500 (on Sabretooth E:\ drive). Need to either find/copy the key or use GCP Console to set allUsers invoker.
-2. **Stripe key rotation** — expires ~March 10th. Must rotate before then.
-3. **Plugin repo archived** — Trollz1004/Trollz1004CLAUDE...PLATFORM is read-only. Unarchive on GitHub to push.
-4. **Old Netlify site** — youandinotai.netlify.app still exists. Delete from Netlify dashboard.
-5. **WebSocket server** — v2 cosmic app needs Express+WS server for multiplayer. Frontend works without it but multiplayer features are dead.
-6. **No backend** — No FastAPI/database for user registration, profiles, matching, verification.
-
-## Workspace
-
-```
-C:\OPUSONLY\
-├── .claude/commands/    → 6 slash commands (cost-check, health, iron-wall, launch-checklist, status, my-workflow)
-├── youandinotai/        → v2 cosmic dating app (React+Three.js+Vite)
-├── enigma-opus-plugin/  → 10 skills + 5 commands (local git, needs remote push)
-├── antigravity/         → Next.js admin dashboard
-├── revenue-core/        → Vite+React dashboard
-├── briefings/           → handoff prompts for Grok AI + Gemini
-├── data/                → stripe-links.json, context.json, blockers.json
-├── _ARCHIVE/            → old openclaw, mcp-server, docker, scripts
-├── .env                 → active Stripe + Twitter keys
-├── CLAUDE.md            → Opus memory file
-└── GEMINI-STATUS.md     → This file
-```
-
-## Next Actions (Priority Order)
-
-1. Delete old youandinotai.netlify.app site (manual — Netlify dashboard)
-2. Unarchive plugin repo on GitHub, push
-3. Rotate Stripe keys before March 10
-4. Make Cloud Run public (find service account key or use Console)
-5. Build FastAPI backend for real user flow
-6. Add WebSocket server to Cloud Run for multiplayer
+- **Site**: [If-Not-Gemini-or-OPUS-GETOUT](https://github.com/Trollz1004/If-Not-Gemini-or-OPUS-GETOUT) (PUBLIC)
+- **Infra**: [ANTIGRAVITY](https://github.com/Trollz1004/ANTIGRAVITY) (PRIVATE)
 
 ---
-*Updated: 2026-02-23 22:50 EST | Opus 4.6 on T5500*
+*Updated: 2026-02-24 01:41 EST | Gemini Antigravity*

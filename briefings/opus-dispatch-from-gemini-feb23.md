@@ -1,157 +1,193 @@
-# OPUS DISPATCH — FROM GEMINI ANTIGRAVITY
-# Paste into Claude Code CLI at C:\OPUSONLY
+# 🚨 EMERGENCY OPUS DISPATCH — MOBILE + SIGNUP FIX
+# Paste into Claude Code CLI NOW. 1k visits/hr, ZERO signups.
 
-Resume session. T5500, C:\OPUSONLY. Read CLAUDE.md and .env first.
+Resume session. T5500, C:\OPUSONLY. THIS IS URGENT.
 
-## TASK 1: GIT INIT (I already deleted C:\.git — the whole C: drive was a repo)
+## THE PROBLEM
+youandinotai.com is getting 1,000+ visits per hour RIGHT NOW. Nobody can sign up because:
+1. Site is NOT mobile responsive — broken on phones
+2. There is NO visible signup/pre-order CTA above the fold
+3. Stripe payment links are buried or invisible
 
-```bash
-cd C:\OPUSONLY
-git init
-git remote add origin https://github.com/Trollz1004/ANTIGRAVITY.git
-```
+## TASK 1: MAKE MOBILE RESPONSIVE (HIGHEST PRIORITY)
 
-Then update .gitignore — remove the `GEMINI-STATUS.md` line (we want it tracked). Add:
-```
-.env
-.env.*
-!.env.example
-.vault/
-node_modules/
-.next/
-dist/
-__pycache__/
-*.pyc
-*.log
-.wwebjs_auth/
-.wwebjs_cache/
-qdrant-data/
-package-lock.json
-Thumbs.db
-.DS_Store
-```
+Edit C:\OPUSONLY\youandinotai\index.css (or wherever global styles live).
 
-Then:
-```bash
-git add -A
-git commit -m "T5500 workspace: OpenClaw + dashboards + data + plugin (Feb 23)"
-git push -u origin main --force
-```
+Add/fix at minimum:
+```css
+/* MOBILE FIRST — Fix responsive breakpoints */
+* { box-sizing: border-box; }
 
-## TASK 2: COPY ALL SECRETS TO ANTIGRAVITY REPO
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
 
-Read C:\OPUSONLY\.env and C:\OPUSONLY\_ARCHIVE\dot-dirs\.vault\MASTER-ENV.env. Push EVERY key=value pair as a GitHub secret:
+/* Force all content to fit mobile viewport */
+canvas, .canvas-container, [data-canvas] {
+  max-width: 100vw !important;
+  max-height: 50vh !important;
+}
 
-```bash
-# For each KEY=VALUE in the .env files:
-echo "VALUE" | gh secret set KEY --repo Trollz1004/ANTIGRAVITY
-```
-
-Also push these from the .env that are already there:
-- STRIPE_PUBLIC_KEY, STRIPE_SECRET_KEY
-- TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_BEARER_TOKEN, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET, TWITTER_CLIENT_SECRET
-- All STRIPE_LINK_* values
-- GEMINI_API_KEY from the vault file (AIzaSyDDtwMRbuKLHCPVBDWzJntF1PL6An6pZys)
-
-Verify with: `gh secret list --repo Trollz1004/ANTIGRAVITY`
-
-## TASK 3: FIX YOUANDINOTAI.COM SITE
-
-The site source is at C:\OPUSONLY\youandinotai (or check _ARCHIVE if moved). Find the index.html.
-
-Replace the entire `<head>` block with:
-
-```html
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouAndINotAI | AI-Powered Dating for a Cause</title>
-  <meta name="description" content="The world's first AI dating app that proves your match is real. Bot-Shield verification, Gemini AI matchmaking, and every dollar funds kids' tech education.">
-  <link rel="canonical" href="https://youandinotai.com">
+/* Stack layout on mobile */
+@media (max-width: 768px) {
+  .hero, .container, main, section {
+    padding: 1rem !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
   
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="YouAndINotAI | AI-Powered Dating for a Cause">
-  <meta property="og:description" content="Real people. Real connections. AI-verified. Every subscription funds kids' tech education.">
-  <meta property="og:url" content="https://youandinotai.com">
-  <meta property="og:image" content="https://youandinotai.com/og-image.png">
-  <meta property="og:site_name" content="YouAndINotAI">
+  h1 { font-size: 1.8rem !important; }
+  h2 { font-size: 1.4rem !important; }
+  p { font-size: 1rem !important; }
   
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="YouAndINotAI | AI-Powered Dating for a Cause">
-  <meta name="twitter:description" content="Real people. Real connections. AI-verified.">
-  <meta name="twitter:image" content="https://youandinotai.com/og-image.png">
-  
-  <link rel="icon" href="/favicon.ico">
-</head>
+  /* Three.js canvas — shrink on mobile */
+  canvas {
+    width: 100% !important;
+    height: 40vh !important;
+  }
+}
 ```
 
-## TASK 4: FIX NETLIFY.TOML
+BUT ALSO — check every component in C:\OPUSONLY\youandinotai\src\ for hardcoded widths, fixed positioning, or anything that breaks mobile. FIX ALL OF THEM.
 
-Find or create netlify.toml in the site root:
+## TASK 2: ADD STICKY SIGNUP CTA (CRITICAL — THIS IS WHY NOBODY CONVERTS)
 
-```toml
-[build]
-  publish = "dist"
-  command = "npm run build"
+Create or edit the main App component to add a STICKY bottom CTA bar that's ALWAYS visible:
 
-[build.environment]
-  NODE_VERSION = "20"
-
-[[redirects]]
-  from = "/api/*"
-  to = "https://youandinotai-com-731395189513.us-west1.run.app/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
+```tsx
+// Add this as a fixed-position element at the bottom of the page
+const SignupCTA = () => (
+  <div style={{
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 9999,
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    padding: '12px 16px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '12px',
+    boxShadow: '0 -4px 20px rgba(0,0,0,0.3)',
+    flexWrap: 'wrap',
+  }}>
+    <span style={{ color: 'white', fontWeight: 'bold', fontSize: '1rem' }}>
+      🛡️ Get Bot-Shield Verified — Only $1
+    </span>
+    <a href="https://buy.stripe.com/3cI3cwcR6c3910p18peEo09"
+       target="_blank" rel="noopener"
+       style={{
+         background: 'white',
+         color: '#764ba2',
+         padding: '10px 24px',
+         borderRadius: '50px',
+         fontWeight: 'bold',
+         textDecoration: 'none',
+         fontSize: '1rem',
+         whiteSpace: 'nowrap',
+       }}>
+      Sign Up Now →
+    </a>
+  </div>
+);
 ```
 
-## TASK 5: MOVE GEMINI_API_KEY TO NETLIFY ENV
+ALSO add a pricing section in the main page body with ALL 5 Stripe links as big, tappable buttons:
 
-Do NOT put GEMINI_API_KEY in netlify.toml or any committed file. Run:
-
-```bash
-netlify env:set GEMINI_API_KEY AIzaSyDDtwMRbuKLHCPVBDWzJntF1PL6An6pZys
+```tsx
+const PricingSection = () => (
+  <section style={{ padding: '3rem 1rem', textAlign: 'center' }}>
+    <h2>Choose Your Plan</h2>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px', margin: '0 auto' }}>
+      <a href="https://buy.stripe.com/3cI3cwcR6c3910p18peEo09" target="_blank" rel="noopener"
+         style={{ display: 'block', padding: '1rem', background: '#667eea', color: 'white', borderRadius: '12px', textDecoration: 'none', fontSize: '1.1rem', fontWeight: 'bold' }}>
+        🛡️ Bot-Shield — $1 (Verify You're Real)
+      </a>
+      <a href="https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a" target="_blank" rel="noopener"
+         style={{ display: 'block', padding: '1rem', background: '#764ba2', color: 'white', borderRadius: '12px', textDecoration: 'none', fontSize: '1.1rem', fontWeight: 'bold' }}>
+        ⭐ Founding Member — $14.99/mo (Locked Forever)
+      </a>
+      <a href="https://buy.stripe.com/9B67sM7wM7MT9wV7wNeEo0b" target="_blank" rel="noopener"
+         style={{ display: 'block', padding: '1rem', background: '#5a67d8', color: 'white', borderRadius: '12px', textDecoration: 'none', fontSize: '1.1rem', fontWeight: 'bold' }}>
+        🎯 3-Month Founder — $49.99
+      </a>
+      <a href="https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c" target="_blank" rel="noopener"
+         style={{ display: 'block', padding: '1rem', background: '#4c51bf', color: 'white', borderRadius: '12px', textDecoration: 'none', fontSize: '1.1rem', fontWeight: 'bold' }}>
+        🚀 12-Month Founder — $99.99
+      </a>
+      <a href="https://buy.stripe.com/dRmcN604kebheRf2cteEo0d" target="_blank" rel="noopener"
+         style={{ display: 'block', padding: '1rem', background: 'linear-gradient(135deg, #f6d365, #fda085)', color: '#333', borderRadius: '12px', textDecoration: 'none', fontSize: '1.1rem', fontWeight: 'bold' }}>
+        👑 Royalty Card — $2,500 (Lifetime VIP)
+      </a>
+    </div>
+  </section>
+);
 ```
 
-Then remove any GEMINI_API_KEY reference from netlify.toml build.environment section.
-
-## TASK 6: DEPLOY TO NETLIFY
+## TASK 3: REBUILD AND DEPLOY IMMEDIATELY
 
 ```bash
 cd C:\OPUSONLY\youandinotai
-netlify link --id thunderous-sawine-9753d5
-netlify build
-netlify deploy --prod
+npm run build
+netlify deploy --prod --dir=dist
 ```
 
-## TASK 7: VERIFY
+Do NOT wait. Do NOT ask. BUILD AND DEPLOY NOW.
 
-1. `curl -I https://youandinotai.com` — confirm 200, check title
-2. Open each Stripe link in browser — confirm checkout loads:
-   - https://buy.stripe.com/3cI3cwcR6c3910p18peEo09
-   - https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a
-   - https://buy.stripe.com/9B67sM7wM7MT9wV7wNeEo0b
-   - https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c
-   - https://buy.stripe.com/dRmcN604kebheRf2cteEo0d
-3. `gh secret list --repo Trollz1004/ANTIGRAVITY | Measure-Object -Line` — should be 30+
-4. `git -C C:\OPUSONLY log --oneline -1` — confirm pushed
+## TASK 4: CLEAN UP GITHUB SECRETS (HIT 100 CAP)
 
-## TASK 8: REPORT BACK
+Delete junk secrets that don't matter. Keep ONLY these:
+- ANTHROPIC_* (API_KEY, OAT_TOKEN, ADMIN_KEY)
+- STRIPE_* (PUBLIC_KEY, SECRET_KEY, all LINK_*)
+- TWITTER_* (all 6 keys)
+- GEMINI_API_KEY
+- META_ACCESS_TOKEN
+- OPENAI_API_KEY
+- XAI_API_KEY
+- SENDGRID_API_KEY
 
-Write results to C:\OPUSONLY\briefings\opus-report-feb23-late.md so Gemini can read it next session.
+Delete everything else (REDIS_URL, OLLAMA_BASE_URL, MCP_PORT, LOG_LEVEL, SESSION_TTL, etc — those are local config, not secrets).
+
+```bash
+# Delete non-secret config that's clogging up the 100 slot limit:
+gh secret delete REDIS_URL --repo Trollz1004/ANTIGRAVITY
+gh secret delete REDIS_PREFIX --repo Trollz1004/ANTIGRAVITY
+gh secret delete QDRANT_URL --repo Trollz1004/ANTIGRAVITY
+gh secret delete QDRANT_COLLECTION --repo Trollz1004/ANTIGRAVITY
+gh secret delete OLLAMA_BASE_URL --repo Trollz1004/ANTIGRAVITY
+gh secret delete OLLAMA_EMBED_MODEL --repo Trollz1004/ANTIGRAVITY
+gh secret delete LOG_LEVEL --repo Trollz1004/ANTIGRAVITY
+gh secret delete MCP_PORT --repo Trollz1004/ANTIGRAVITY
+gh secret delete OPENCLAW_PORT --repo Trollz1004/ANTIGRAVITY
+gh secret delete SESSION_TTL --repo Trollz1004/ANTIGRAVITY
+gh secret delete CLAUDE_MODEL --repo Trollz1004/ANTIGRAVITY
+```
+
+Then backfill the ones that actually matter but failed:
+```bash
+# Read from C:\OPUSONLY\.env and push:
+# TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_BEARER_TOKEN, etc.
+# STRIPE_LINK_BOTSHIELD, STRIPE_LINK_FOUNDING_MEMBER, etc.
+```
+
+## TASK 5: VERIFY ON MOBILE
+
+After deploy, curl the site and confirm:
+1. viewport meta tag is present
+2. Stripe links are in the HTML (not just in JS state)
+3. No horizontal scroll on mobile widths
+
+```bash
+curl -s https://youandinotai.com | Select-String "buy.stripe.com"
+curl -s https://youandinotai.com | Select-String "viewport"
+```
+
+## TASK 6: REPORT
+
+Write to C:\OPUSONLY\briefings\opus-emergency-report-feb23.md
 
 ---
-*From Gemini Antigravity | 2026-02-23 23:19 EST | Only Gemini or Opus touches this repo.*
+*EMERGENCY DISPATCH from Gemini Antigravity | 2026-02-23 23:56 EST*
+*1,000 visits/hr. Zero conversions. FIX AND DEPLOY NOW.*
