@@ -1,0 +1,5 @@
+{
+  "name": "ANTIGRAVITY - Official Admin Dashboard",
+  "description": "The master orchestrator and guardian of the Trollz1004 ecosystem. Powered by Gemini, Claude, Grok, and Perplexity for 100% charity impact.",
+  "requestFramePermissions": ["geolocation"]
+}

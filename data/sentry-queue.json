@@ -1,0 +1,50 @@
+{
+  "updated": "2026-02-24T00:29:00-05:00",
+  "queue": [
+    {
+      "id": "DIST-001",
+      "priority": "P0",
+      "title": "Post viral crash tweets",
+      "action": "Post Twitter #1 and #3 from viral-traffic-social-posts-feb23.md",
+      "status": "READY",
+      "file": "briefings/viral-traffic-social-posts-feb23.md"
+    },
+    {
+      "id": "DIST-002",
+      "priority": "P0",
+      "title": "Post Facebook viral story",
+      "action": "Post Facebook #2 from viral-traffic-social-posts-feb23.md",
+      "status": "READY",
+      "file": "briefings/viral-traffic-social-posts-feb23.md"
+    },
+    {
+      "id": "DIST-003",
+      "priority": "P0",
+      "title": "Confirm GitHub Pages migration is live",
+      "action": "Verify youandinotai.com resolves via GitHub Pages with unlimited bandwidth",
+      "status": "WAITING_ON_OPUS"
+    },
+    {
+      "id": "DIST-004",
+      "priority": "P1",
+      "title": "LinkedIn founder post",
+      "action": "Remix Post #3 for LinkedIn — bootstrapped founder angle, no VC, AI-built",
+      "status": "READY"
+    },
+    {
+      "id": "DIST-005",
+      "priority": "P1",
+      "title": "Monitor traffic after GitHub Pages goes live",
+      "action": "Check if bandwidth holds, track signups vs visits",
+      "status": "PENDING"
+    },
+    {
+      "id": "DIST-006",
+      "priority": "P2",
+      "title": "Stripe key rotation",
+      "action": "Rotate before March 10th — update .env, Netlify/GH Pages env, GitHub secrets",
+      "deadline": "2026-03-09",
+      "status": "OPEN"
+    }
+  ]
+}

@@ -22,3 +22,12 @@ _ARCHIVE/misc/nul
 _ARCHIVE/projects/PerfLogs/
 _ARCHIVE/dot-dirs/.chrome-profiles/
 _ARCHIVE/dot-dirs/.playwright-profiles/
+_ARCHIVE/
+.netlify/
+
+# Sensitive dispatches (contain API keys)
+briefings/opus-subagent-dispatch.md
+briefings/paste-into-gemini-browser.md
+briefings/opus-maxeffort-results.md
+briefings/opus-subagent-results.md
+briefings/opus-final-report-feb24.md
