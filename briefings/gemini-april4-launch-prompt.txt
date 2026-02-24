@@ -1,0 +1,81 @@
+GEMINI LAUNCH CAMPAIGN BRIEF — From Opus 4.6 — 2026-02-24
+
+MISSION: Create a 40-day marketing countdown campaign for YouAndINotAI.com launching April 4, 2026.
+
+CONTEXT: All 4 ecosystem domains are live and verified. Grok audited everything at 07:34 EST today. Zero fake data anywhere. This is go time.
+
+BRAND IDENTITY:
+- Name: YouAndINotAI
+- Tagline: "AI-Powered Dating for a Cause"
+- Founder: Joshua Coleman, electrician from Florida, self-taught coder
+- Built by: Claude Opus 4.6 (Anthropic) + Gemini (Google) collaboration
+- Mission: #ForTheKids — 60% of EVERY revenue dollar to Shriners Children's Hospitals
+
+PRICING (ALL LIVE WITH STRIPE):
+- Bot-Shield: $1 one-time (human verification)
+- Founding Member: $14.99/mo (locked forever for early adopters)
+- 3-Month Founder: $49.99
+- 12-Month Founder: $99.99
+- Royalty Card: $2,500 (lifetime VIP + revenue share)
+
+KEY DIFFERENTIATORS:
+1. Every user verified as human — strongest anti-bot system in dating
+2. Gemini AI powers the matchmaker (cosmic personality matching)
+3. 60% charity split is REAL, not marketing fluff — built into the code
+4. Built by an electrician, not a Silicon Valley startup
+5. Two competing AI companies (Anthropic + Google) built it together — first of its kind
+6. $14.99/mo locked FOREVER for founding members — never increases
+
+GENERATE THE FOLLOWING:
+
+### 1. 40-Day Countdown Calendar (Feb 24 - April 4)
+- 1 post per day across Twitter, Instagram, Facebook
+- Mix of: founder story, behind-the-scenes, charity spotlight, feature reveal, countdown hype
+- Each post should include: caption, hashtags, suggested image description
+- Key milestone days: 30 days out, 2 weeks out, 1 week out, 3 days, launch day
+
+### 2. Launch Day Content Pack
+- 5 Twitter/X posts (thread format)
+- 3 Instagram posts with captions
+- 1 Facebook launch announcement
+- 1 Reddit post for r/dating, r/technology, r/charity
+- 1 LinkedIn post (founder story angle)
+- 1 TikTok script (60 seconds, founder talking to camera)
+
+### 3. Email Sequence (for waitlist subscribers)
+- Email 1: "You're in" (immediate after signup)
+- Email 2: "Meet the founder" (Day 3)
+- Email 3: "Why 60% goes to kids" (Day 7)
+- Email 4: "Founding Member early access" (Day 14)
+- Email 5: "24 hours to launch" (April 3)
+- Email 6: "WE'RE LIVE" (April 4)
+
+### 4. Press Kit / Media Pitch
+- 200-word press release
+- 5 suggested headlines for tech blogs
+- 3 interview talking points for podcast appearances
+- The "AI rivals built a dating app for charity" narrative hook
+
+TONE:
+- Raw, authentic, builder energy
+- Not corporate. Not polished. Real.
+- "An electrician from Florida built a dating app with two competing AIs and gave 60% to sick kids"
+- That's the story. Tell it everywhere.
+
+HASHTAGS TO USE:
+#ForTheKids #YouAndINotAI #AIForGood #RealPeopleRealConnections #FoundingMember #April4Launch #BotShield #DateForACause #ShrinersChildrens #BuildInPublic #IndieHacker
+
+URLS:
+- youandinotai.com (main site + waitlist)
+- dashboard.aidoesitall.website (ecosystem dashboard)
+- onlinerecycle.org (recycling arm)
+- www.ai-solutions.store (charity store)
+
+DO NOT:
+- Invent user counts or engagement metrics
+- Claim the app is available before April 4
+- Use fake scarcity ("only X spots left")
+- Promise specific financial returns
+- State the 68% bot statistic without "industry reports suggest" qualifier
+
+GO. Build the campaign. #ForTheKids
