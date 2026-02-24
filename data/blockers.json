@@ -1,0 +1,67 @@
+{
+  "updated": "2026-02-23T23:11:00-05:00",
+  "blockers": [
+    {
+      "id": 1,
+      "severity": "HIGH",
+      "title": "Stripe key rotation before March 10th",
+      "detail": "Current live Stripe keys expire ~March 10th 2026.",
+      "action": "Rotate keys in Stripe dashboard. Update .env, Netlify env vars, GitHub secrets.",
+      "status": "OPEN",
+      "deadline": "2026-03-09"
+    },
+    {
+      "id": 2,
+      "severity": "HIGH",
+      "title": "Move GEMINI_API_KEY out of netlify.toml",
+      "detail": "API key is baked into JS bundle via build config. Security risk.",
+      "action": "Set GEMINI_API_KEY as Netlify environment variable in dashboard instead of netlify.toml.",
+      "status": "OPEN",
+      "deadline": "ASAP"
+    },
+    {
+      "id": 3,
+      "severity": "MEDIUM",
+      "title": "Delete old Netlify site",
+      "detail": "youandinotai.netlify.app still exists as orphaned site.",
+      "action": "Netlify dashboard → youandinotai project → Settings → Delete.",
+      "status": "OPEN",
+      "deadline": "Soon"
+    },
+    {
+      "id": 4,
+      "severity": "MEDIUM",
+      "title": "Cloud Run not public",
+      "detail": "GCP service account JSON on Sabretooth E:\\ drive, not on T5500.",
+      "action": "Run gcloud IAM command to add allUsers invoker, or copy service account key from D: drive.",
+      "status": "OPEN",
+      "deadline": "Before launch (April 4)"
+    },
+    {
+      "id": 5,
+      "severity": "MEDIUM",
+      "title": "api.youandinotai.com → verify EC2",
+      "detail": "DNS points to AWS EC2 3.84.226.108. Need to verify EC2 instance is running.",
+      "status": "OPEN",
+      "deadline": "Before launch (April 4)"
+    },
+    {
+      "id": 6,
+      "severity": "LOW",
+      "title": "WebSocket server for multiplayer",
+      "detail": "v2 cosmic app needs Express+WS server on Cloud Run for multiplayer features.",
+      "action": "Deploy server.ts from repo to Cloud Run.",
+      "status": "OPEN",
+      "deadline": "Before launch (April 4)"
+    },
+    {
+      "id": 7,
+      "severity": "LOW",
+      "title": "FastAPI backend for user flow",
+      "detail": "No backend yet for user registration, profiles, matching, verification, Stripe webhooks.",
+      "action": "Build and deploy FastAPI backend.",
+      "status": "OPEN",
+      "deadline": "Before launch (April 4)"
+    }
+  ]
+}
