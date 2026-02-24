@@ -1,0 +1,54 @@
+{
+  "updated": "2026-02-23T18:45:00-05:00",
+  "stripe_account": "acct_1T3DVxIO6LWQSQoI",
+  "key_expires": "2026-03-10",
+  "success_url": "https://youandinotai.com/success",
+  "cancel_url": "https://youandinotai.com",
+  "payment_links": [
+    {
+      "id": "botshield",
+      "name": "Bot-Shield",
+      "price": 1.00,
+      "type": "one_time",
+      "description": "$1 verification badge — proves you're human",
+      "url": "https://buy.stripe.com/3cI3cwcR6c3910p18peEo09",
+      "env_key": "STRIPE_LINK_BOTSHIELD"
+    },
+    {
+      "id": "founding_member",
+      "name": "Founding Member",
+      "price": 14.99,
+      "type": "subscription_monthly",
+      "description": "$14.99/mo — locked forever at founder price",
+      "url": "https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a",
+      "env_key": "STRIPE_LINK_FOUNDING_MEMBER"
+    },
+    {
+      "id": "3month_founder",
+      "name": "3-Month Founder Pass",
+      "price": 49.99,
+      "type": "one_time",
+      "description": "$49.99 — 3 months of founder access",
+      "url": "https://buy.stripe.com/9B67sM7wM7MT9wV7wNeEo0b",
+      "env_key": "STRIPE_LINK_3MONTH"
+    },
+    {
+      "id": "12month_founder",
+      "name": "12-Month Founder Pass",
+      "price": 99.99,
+      "type": "one_time",
+      "description": "$99.99 — full year of founder access",
+      "url": "https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c",
+      "env_key": "STRIPE_LINK_12MONTH"
+    },
+    {
+      "id": "royalty_card",
+      "name": "Royalty Card",
+      "price": 2500.00,
+      "type": "one_time",
+      "description": "$2,500 — lifetime VIP + revenue share",
+      "url": "https://buy.stripe.com/dRmcN604kebheRf2cteEo0d",
+      "env_key": "STRIPE_LINK_ROYALTY"
+    }
+  ]
+}

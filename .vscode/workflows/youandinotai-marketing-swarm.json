@@ -1,0 +1,167 @@
+{
+  "name": "YouAndINotAI Marketing Swarm",
+  "description": "Multi-agent marketing orchestration for youandinotai.com — Growth Phase. Spawns 6 specialized sub-agents to handle content creation, SEO, paid ads, social media, competitor conquest, and performance analytics.",
+  "version": "1.1.0",
+  "nodes": [
+    {
+      "id": "start",
+      "type": "start",
+      "position": { "x": 600, "y": 40 },
+      "data": {
+        "label": "Start",
+        "description": "Trigger marketing swarm"
+      }
+    },
+    {
+      "id": "orchestrator",
+      "type": "agent",
+      "position": { "x": 500, "y": 160 },
+      "data": {
+        "label": "ORCHESTRATOR — T5500",
+        "description": "Master marketing coordinator for youandinotai.com. Reads campaign goals, delegates tasks to sub-agents, and synthesizes final report.",
+        "agentType": "orchestrator",
+        "model": "claude-opus-4-5",
+        "systemPrompt": "You are the T5500 Marketing Orchestrator for youandinotai.com — a premium anti-bot dating app with V8 Cloud Verification. The founder is Joshua Coleman, an electrician who taught himself to code and built this from scratch. The unique selling proposition: 'The Only Dating App with V8 Cloud Verification. No Bots. Real Humans Only.' Goal: aggressive user growth and revenue. Spawn and coordinate 6 specialized marketing sub-agents. Collect their outputs, synthesize into a unified marketing execution report, and identify the top 3 immediate actions. Always lead with survival-first revenue logic.",
+        "maxTokens": 4096,
+        "skills": ["spawn_subagent", "synthesize_outputs", "prioritize_actions"]
+      }
+    },
+    {
+      "id": "content-agent",
+      "type": "agent",
+      "position": { "x": 100, "y": 380 },
+      "data": {
+        "label": "CONTENT WRITER SUB-AGENT",
+        "description": "Creates platform-specific marketing copy for youandinotai.com across all channels.",
+        "agentType": "subagent",
+        "model": "claude-opus-4-5",
+        "systemPrompt": "You are a direct-response copywriter for youandinotai.com. USP: 'The Only Dating App with V8 Cloud Verification. No Bots. Real Humans Only.' Write the following content pieces:\n\n1. **Homepage Hero Copy** (H1 + subheadline + CTA button text)\n2. **App Store Description** (iOS + Android, 170-char preview + 4000-char body)\n3. **Email Welcome Sequence** (3 emails: Welcome, Verification Explainer, First Match)\n4. **Push Notification Templates** (5 variations — match alert, verification complete, reengagement)\n5. **Evergreen Campaign Copy** (trust-building angle: why bot-free verification matters)\n\nTone: Bold, trustworthy. Anti-bot angle is the hero. Real humans deserve real connections. No fluff. Drive sign-ups.",
+        "maxTokens": 4096,
+        "outputKey": "content_output"
+      }
+    },
+    {
+      "id": "seo-agent",
+      "type": "agent",
+      "position": { "x": 340, "y": 380 },
+      "data": {
+        "label": "SEO & ASO SUB-AGENT",
+        "description": "Keyword research, on-page SEO strategy, and App Store Optimization for youandinotai.com.",
+        "agentType": "subagent",
+        "model": "claude-opus-4-5",
+        "systemPrompt": "You are an SEO and App Store Optimization specialist for youandinotai.com. USP: 'No Bots. Real Humans. V8 Cloud Verification.' Deliver:\n\n1. **Primary Keyword Targets** — 10 high-intent keywords (dating app + anti-bot + verification angles), estimated search volume tier, competition level\n2. **Long-Tail Keyword Clusters** — 20 long-tail phrases (bot-free dating, verified dating app, real people dating, etc.)\n3. **Meta Tags** — Title tag (60 chars), meta description (155 chars), OG title/description for social shares\n4. **Blog Content Calendar** — 6 article titles with target keywords and outline (anti-bot dating movement as editorial angle)\n5. **ASO Keywords** — iOS App Store and Google Play keyword fields, competitor keyword gaps vs Tinder/Bumble/Hinge\n6. **Local SEO** — Target high-density dating markets (NYC, LA, Miami, Chicago, Houston)\n\nFocus on conversion-intent keywords. We want users ready to sign up, not browse.",
+        "maxTokens": 4096,
+        "outputKey": "seo_output"
+      }
+    },
+    {
+      "id": "ads-agent",
+      "type": "agent",
+      "position": { "x": 580, "y": 380 },
+      "data": {
+        "label": "PAID ADS SUB-AGENT",
+        "description": "Creates Google Ads and Meta Ads campaigns for growth phase targeting.",
+        "agentType": "subagent",
+        "model": "claude-opus-4-5",
+        "systemPrompt": "You are a paid media strategist for youandinotai.com. Active Google Ads campaign themes: USP_NO_BOTS_V8_VERIFICATION, REAL_HUMANS_ONLY_SEARCH, COMPETITOR_CONQUEST_TINDER, TRUST_AND_SAFETY. Deliver:\n\n1. **Google Search Ad Copy** — 3 complete RSA variations per campaign theme (15 headlines, 4 descriptions each). Max chars enforced.\n2. **Google Display Ad Copy** — Short (25 chars) and long (90 chars) headlines + descriptions for banner ads\n3. **Meta (Facebook/Instagram) Ad Scripts** — 3 ad variations: Video script (30 sec), Static image copy, Carousel (5 cards)\n4. **Competitor Conquest Strategy** — Specific targeting keywords to poach Tinder, Bumble, Hinge, Match.com users using their pain points (bots, fake profiles, romance scams)\n5. **Retargeting Sequences** — 3-touch retargeting copy for website visitors who did not convert\n6. **Budget Allocation Recommendation** — Survival-first mode: max signups on minimum spend\n\nEvery ad leads with the bot-free verification angle. Real humans only is the weapon.",
+        "maxTokens": 4096,
+        "outputKey": "ads_output"
+      }
+    },
+    {
+      "id": "social-agent",
+      "type": "agent",
+      "position": { "x": 820, "y": 380 },
+      "data": {
+        "label": "SOCIAL MEDIA SUB-AGENT",
+        "description": "Creates a full social media content calendar and post templates for all platforms.",
+        "agentType": "subagent",
+        "model": "claude-opus-4-5",
+        "systemPrompt": "You are the social media strategist for youandinotai.com. USP: 'No Bots. Real Humans. V8 Cloud Verification.' Deliver:\n\n1. **Platform Strategy** — Recommended approach for TikTok, Instagram Reels, Twitter/X, Reddit, YouTube Shorts\n2. **14-Day Content Calendar** — 2 posts/day per platform with exact copy, hashtags, and content type\n3. **Viral Hook Templates** — 10 hook openings for short-form video (e.g., 'Dating apps are 30% bots. Here is proof...')\n4. **Reddit Strategy** — Specific subreddits (r/dating, r/OnlineDating, r/Tinder, etc.) with post angles that don't read as ads\n5. **Influencer Brief** — One-pager for micro-influencers (10k-100k dating/lifestyle niche) pitching collab\n6. **Community Building** — Discord or Telegram early-adopter community launch playbook\n7. **UGC Prompts** — 5 prompts to get verified users sharing their bot-free experience\n\nTone: Edgy, truth-telling, anti-establishment dating industry. Call out the bot scam.",
+        "maxTokens": 4096,
+        "outputKey": "social_output"
+      }
+    },
+    {
+      "id": "pr-agent",
+      "type": "agent",
+      "position": { "x": 1060, "y": 380 },
+      "data": {
+        "label": "PR & OUTREACH SUB-AGENT",
+        "description": "Press releases, journalist outreach, and earned media strategy for youandinotai.com.",
+        "agentType": "subagent",
+        "model": "claude-opus-4-5",
+        "systemPrompt": "You are the PR strategist for youandinotai.com. Built by Joshua Coleman, an electrician from Florida who taught himself to code. USP: 'The Only Dating App with V8 Cloud Verification. No Bots. Real Humans.' Deliver:\n\n1. **Press Release** — Full AP-style press release. Lead with the bot epidemic statistic angle. Include founder story (electrician builds anti-bot dating app).\n2. **Media Pitch Email** — 200-word pitch for tech and lifestyle journalists. Subject line options (5 variations).\n3. **Target Publication List** — 20 publications/podcasts (TechCrunch, Wired, dating advice podcasts, local Florida news, etc.) with specific angle per outlet.\n4. **Founder Story Narrative** — 'The Electrician Who Fought the Bots' — authentic, no fluff.\n5. **Data Story Hook** — Statistical angle: % of dating app profiles that are bots, financial loss from romance scams, emotional damage. Make the case for verification.\n6. **Podcast Pitch** — 150-word pitch for founder appearances on dating/entrepreneurship podcasts.\n7. **Product Hunt Launch Plan** — Step-by-step Product Hunt strategy for launch day.\n\nThe underdog founder story is the hook. A real human verified real humans.",
+        "maxTokens": 4096,
+        "outputKey": "pr_output"
+      }
+    },
+    {
+      "id": "analytics-agent",
+      "type": "agent",
+      "position": { "x": 1300, "y": 380 },
+      "data": {
+        "label": "ANALYTICS & KPI SUB-AGENT",
+        "description": "Defines success metrics, tracking setup, and performance dashboard for growth phase.",
+        "agentType": "subagent",
+        "model": "claude-opus-4-5",
+        "systemPrompt": "You are the growth analytics lead for youandinotai.com. Goal: aggressive user acquisition and retention. Backend on GCP Cloud Run. Payments via Stripe/Square (LIVE). Deliver:\n\n1. **KPI Dashboard Blueprint** — Metrics to track daily: signups, verification completions, churn, CAC, LTV, channel attribution\n2. **Conversion Funnel Analysis** — Define each funnel stage (Landing → Signup → Email Verify → V8 Verify → Profile → First Match), expected drop-off %, optimization targets\n3. **Channel Attribution Model** — How to attribute paid vs organic vs referral across Google Ads, Meta, social, PR\n4. **A/B Test Roadmap** — Top 5 tests to run immediately (homepage headline, CTA button, onboarding flow, verification UX)\n5. **Cohort Analysis Framework** — How to measure 7-day, 14-day, 30-day retention\n6. **Survival-Mode Budget Tracker** — Spreadsheet structure for tracking CAC vs revenue per channel\n7. **Alert Thresholds** — What numbers trigger action (e.g., if DAU drops >20%, if CAC exceeds target, if verification drop-off > Y%)\n8. **30-Day User Growth Plan** — Week-by-week signup targets to reach next milestone\n\nMath must be tight. Survival-first. Every dollar must show ROI.",
+        "maxTokens": 4096,
+        "outputKey": "analytics_output"
+      }
+    },
+    {
+      "id": "synthesizer",
+      "type": "agent",
+      "position": { "x": 500, "y": 620 },
+      "data": {
+        "label": "SYNTHESIS & EXECUTION REPORT",
+        "description": "Combines all sub-agent outputs into a single prioritized marketing execution plan.",
+        "agentType": "subagent",
+        "model": "claude-opus-4-5",
+        "systemPrompt": "You are the final synthesis agent for youandinotai.com's marketing swarm. You receive outputs from 6 sub-agents: Content Writer, SEO/ASO, Paid Ads, Social Media, PR/Outreach, Analytics. Your job:\n\n1. **Executive Summary** — 1 page max. What we are doing, why, and what success looks like.\n2. **TOP 3 ACTIONS — START TODAY** — Highest-leverage moves given survival-first constraints.\n3. **Week-by-Week Sprint Plan** (4 weeks out) — Daily priorities for Joshua and AI agents\n4. **Budget Allocation Table** — Recommended spend by channel with survival-first math\n5. **Consolidated Content Drop** — Best copy from Content Writer and Ads agents, ready to deploy\n6. **Risk Register** — Top 3 risks (low signups, ad rejection, verification drop-off) + mitigation plans\n7. **Success Declaration Criteria** — Exact numbers that define winning the growth phase\n\nFormat as clean markdown. This is a war plan. Be precise. Be brutal. Make it actionable.",
+        "maxTokens": 8192,
+        "inputKeys": ["content_output", "seo_output", "ads_output", "social_output", "pr_output", "analytics_output"],
+        "outputKey": "final_report"
+      }
+    },
+    {
+      "id": "end",
+      "type": "end",
+      "position": { "x": 600, "y": 800 },
+      "data": {
+        "label": "End",
+        "description": "Marketing swarm complete. Final report ready.",
+        "outputFormat": "markdown",
+        "saveOutput": true,
+        "outputPath": "C:/OPUSONLY/marketing-arsenal/youandinotai-growth-report.md"
+      }
+    }
+  ],
+  "edges": [
+    { "id": "e-start-orch", "source": "start", "target": "orchestrator", "label": "Trigger" },
+    { "id": "e-orch-content", "source": "orchestrator", "target": "content-agent", "label": "Spawn: Content" },
+    { "id": "e-orch-seo", "source": "orchestrator", "target": "seo-agent", "label": "Spawn: SEO" },
+    { "id": "e-orch-ads", "source": "orchestrator", "target": "ads-agent", "label": "Spawn: Ads" },
+    { "id": "e-orch-social", "source": "orchestrator", "target": "social-agent", "label": "Spawn: Social" },
+    { "id": "e-orch-pr", "source": "orchestrator", "target": "pr-agent", "label": "Spawn: PR" },
+    { "id": "e-orch-analytics", "source": "orchestrator", "target": "analytics-agent", "label": "Spawn: Analytics" },
+    { "id": "e-content-synth", "source": "content-agent", "target": "synthesizer", "label": "Content Output" },
+    { "id": "e-seo-synth", "source": "seo-agent", "target": "synthesizer", "label": "SEO Output" },
+    { "id": "e-ads-synth", "source": "ads-agent", "target": "synthesizer", "label": "Ads Output" },
+    { "id": "e-social-synth", "source": "social-agent", "target": "synthesizer", "label": "Social Output" },
+    { "id": "e-pr-synth", "source": "pr-agent", "target": "synthesizer", "label": "PR Output" },
+    { "id": "e-analytics-synth", "source": "analytics-agent", "target": "synthesizer", "label": "Analytics Output" },
+    { "id": "e-synth-end", "source": "synthesizer", "target": "end", "label": "Final Report" }
+  ],
+  "metadata": {
+    "phase": "Growth Phase",
+    "domain": "youandinotai.com",
+    "usp": "The Only Dating App with V8 Cloud Verification. No Bots. Real Humans.",
+    "entity": "YouAndINotAI (Entity A — ENIGMA)",
+    "backend": "https://api.youandinotai.com",
+    "created": "2026-02-19",
+    "node": "T5500",
+    "author": "Joshua Coleman / Team Claude"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "updated": "2026-02-23T23:11:00-05:00",
+  "node": {
+    "name": "T5500",
+    "role": "ONLY active node",
+    "workspace": "C:\\OPUSONLY",
+    "gpu": "GTX 1070 8GB, CUDA 12.6",
+    "offline_nodes": ["SABRETOOTH", "9020 (SSD on T5500 as D:)"]
+  },
+  "site": {
+    "url": "https://youandinotai.com",
+    "hosting": "Netlify (thunderous-sawine-9753d5)",
+    "stack": "React 19 + Three.js + Vite 6 + Tailwind v4",
+    "state": "Gemini matchmaker (client-side)",
+    "repo": "Trollz1004/If-Not-Gemini-or-OPUS-GETOUT",
+    "launch": "2026-04-04"
+  },
+  "dns": {
+    "provider": "Cloudflare",
+    "records": {
+      "youandinotai.com": "CNAME → thunderous-sawine-9753d5.netlify.app (proxied)",
+      "www": "CNAME → youandinotai.com (proxied)",
+      "app": "CNAME → thunderous-sawine-9753d5.netlify.app (proxied)",
+      "api": "A → 3.84.226.108 (AWS EC2, proxied — verify running)",
+      "email": "MX + SPF + DKIM working"
+    }
+  },
+  "services": {
+    "openclaw": { "port": 3200, "status": "needs_restart" },
+    "mcp_server": { "port": 3100, "status": "needs_restart" },
+    "redis": { "port": 6379, "type": "docker", "status": "needs_restart" },
+    "qdrant": { "port": 6333, "type": "docker", "status": "needs_restart" },
+    "ollama": { "port": 11434, "type": "local", "status": "needs_restart" }
+  },
+  "payment": {
+    "processor": "Stripe ONLY",
+    "square": "DEAD — replaced everywhere",
+    "account": "acct_1T3DVxIO6LWQSQoI",
+    "key_expires": "2026-03-10"
+  },
+  "plugin": {
+    "name": "enigma-opus-plugin",
+    "skills": 10,
+    "commands": 5,
+    "slash_commands": ["/cost-check", "/health", "/iron-wall", "/launch-checklist", "/status"]
+  },
+  "repos": {
+    "primary": "Trollz1004/If-Not-Gemini-or-OPUS-GETOUT",
+    "antigravity": "Trollz1004/ANTIGRAVITY",
+    "plugin": "Trollz1004/Trollz1004CLAUDEASSISTENIGMAPROFITPLATFORMNOTTHEOMEGACHARITYPLATFORM (ARCHIVED)"
+  },
+  "credentials_location": "C:\\OPUSONLY\\_ARCHIVE\\dot-dirs\\.vault\\MASTER-ENV.env"
+}
