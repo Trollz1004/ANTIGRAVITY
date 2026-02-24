@@ -25,7 +25,10 @@
       "Bash(git commit:*)",
       "WebFetch(domain:onlinerecycle.pages.dev)",
       "WebFetch(domain:ai-solutions-store.pages.dev)",
-      "WebFetch(domain:fc0b3e81.ai-solutions-store.pages.dev)"
+      "WebFetch(domain:fc0b3e81.ai-solutions-store.pages.dev)",
+      "Bash(git worktree:*)",
+      "Bash(git branch:*)",
+      "Bash(gh api:*)"
     ]
   }
 }

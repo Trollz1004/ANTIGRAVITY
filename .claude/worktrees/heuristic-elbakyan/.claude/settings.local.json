@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:onlinerecycle.org)",
+      "WebFetch(domain:www.ai-solutions.store)",
+      "WebFetch(domain:youandinotai.com)",
+      "Bash(CLOUDFLARE_ACCOUNT_ID=516a3a855f44f5ad8453636d163ae25d npx wrangler pages project list:*)",
+      "Bash(CLOUDFLARE_ACCOUNT_ID=516a3a855f44f5ad8453636d163ae25d npx wrangler pages deploy:*)"
+    ]
+  }
+}
