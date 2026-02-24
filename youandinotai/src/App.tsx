@@ -6,7 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import { CosmicCanvas } from './components/CosmicCanvas';
 import { useGameStore } from './store/useGameStore';
-import { Users, Heart, Sparkles, Rocket, Trophy, PenTool, Flame, Mic, ShieldCheck, ShieldAlert, Recycle, Mail, Check } from 'lucide-react';
+import { Users, Heart, Sparkles, Rocket, Trophy, PenTool, Flame, Mic, ShieldCheck, ShieldAlert, Recycle, Mail, Check, LayoutDashboard } from 'lucide-react';
 import { GeminiMatchmaker } from './components/GeminiMatchmaker';
 import { CosmicContest } from './components/CosmicContest';
 import { CosmicWall } from './components/CosmicWall';
