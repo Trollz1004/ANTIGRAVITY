@@ -168,7 +168,7 @@ export function CharitySection() {
             icon={ShoppingBag}
             name="The Square Store"
             tagline="Donation Portal"
-            url="https://onlinerecycler.square.site"
+            url="https://onlinerecycle.square.site"
             description="Our official storefront and donation portal. Linked directly to eBay charity listings benefiting Shriners Hospitals for Children. Shop with purpose, give with heart."
             color="from-green-500 to-green-800"
           />

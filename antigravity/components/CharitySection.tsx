@@ -77,9 +77,9 @@ export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) 
       icon: <Recycle className="w-8 h-8 text-emerald-500" />
     },
     {
-      name: 'onlinerecycler.square.site',
+      name: 'onlinerecycle.square.site',
       tagline: 'The Square storefront & donation portal linked to eBay charity listings for Shriners.',
-      url: 'https://onlinerecycler.square.site',
+      url: 'https://onlinerecycle.square.site',
       icon: <ShoppingBag className="w-8 h-8 text-emerald-500" />
     }
   ];
