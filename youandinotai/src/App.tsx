@@ -114,7 +114,7 @@ function PricingSection() {
         <h2 className="text-3xl md:text-4xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">
           Choose Your Plan
         </h2>
-        <p className="text-gray-400 mb-8 text-sm">Join the first human-only dating platform</p>
+        <p className="text-gray-400 mb-8 text-sm">Dating with the strongest human-verification system available</p>
         <div className="flex flex-col gap-3">
           {plans.map((plan) => (
             <a
@@ -331,7 +331,7 @@ export default function App() {
                   {[1, 2, 3, 4, 5].map(i => <Heart key={i} size={10} className="fill-pink-500 text-pink-500" />)}
                 </div>
                 <p className="text-xs italic text-gray-300">
-                  "The first dating app that proves everyone is real. No bots. No catfish. Just humans."
+                  "A dating app with real human verification. Bot-Shield keeps the fakes out — report any suspected bot and we investigate within 24 hours."
                 </p>
                 <div className="text-[10px] text-gray-500 mt-2">— Founding Member Preview</div>
               </div>
