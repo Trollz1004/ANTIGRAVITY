@@ -6,6 +6,23 @@
 
 This contains everything you need to run your app locally.
 
+## Operator Quick Start (Non-Dev)
+
+From PowerShell:
+
+```powershell
+Set-Location C:\OPUSONLY
+.\ops-sync-main.ps1
+```
+
+Primary operational docs:
+- `AGENT-SYNC-RUNBOOK.md`
+- `SECRETS-ALIAS-MAP.md`
+- `GEMINI-STATUS.md`
+- `CODEX-STATUS.md`
+- `OPUS-STATUS.md`
+- `JULES-STATUS.md`
+
 View your app in AI Studio: https://ai.studio/apps/2c8050ad-ec52-410c-822c-c083db458203
 
 ## Run Locally
