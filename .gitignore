@@ -25,6 +25,9 @@ _ARCHIVE/dot-dirs/.playwright-profiles/
 _ARCHIVE/
 .netlify/
 
+# Build outputs (deploy via CI, not git)
+antigravity/out/
+
 # Sensitive dispatches (contain API keys)
 briefings/opus-subagent-dispatch.md
 briefings/paste-into-gemini-browser.md
