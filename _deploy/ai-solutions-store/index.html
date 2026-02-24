@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Solutions Store - Real AI Apps, Not Just Chatbots</title>
+    <meta name="description" content="Buy complete AI-powered applications. Video generators, dating apps, marketing engines, and business automation tools. Ready to deploy.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+
+    <!-- Square Web Payments SDK -->
+    <script src="https://web.squarecdn.com/v1/square.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0d1421 0%, #1a2744 50%, #243352 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 80px; /* Space for sticky bar on mobile */
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+        /* Trust Badges (sale banner and social proof removed — no fake data) */
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+
+        .trust-badge .icon {
+            font-size: 1.5em;
+        }
+
+        .trust-badge strong {
+            color: #fff;
+        }
+
+        /* Installment Text */
+        .installment-text {
+            color: #22c55e;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        /* Upsell Checkboxes */
+        .upsells {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .upsells h4 {
+            color: #ffc107;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .upsell-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+
+        .upsell-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #ffc107;
+        }
+
+        .upsell-option label {
+            cursor: pointer;
+            color: #c0c0c0;
+            font-size: 0.9em;
+        }
+
+        .upsell-option .price {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        /* Sticky Mobile Buy Bar */
+        .sticky-buy-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, #1a2744 0%, #0d1421 100%);
+            border-top: 2px solid #22c55e;
+            padding: 15px 20px;
+            z-index: 1000;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+        }
+
+        .sticky-buy-bar .inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .sticky-buy-bar .price-info {
+            font-size: 0.9em;
+        }
+
+        .sticky-buy-bar .price-info .main-price {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #22c55e;
+        }
+
+        .sticky-buy-bar .btn-sticky {
+            background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+            border: none;
+            cursor: pointer;
+            animation: pulse-button 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-button {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Animated Bundle Buttons */
+        .btn-bundle {
+            position: relative;
+            overflow: hidden;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(34, 197, 94, 0.6), 0 0 40px rgba(34, 197, 94, 0.3); }
+            100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.3); }
+        }
+
+        .btn-bundle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shine 2s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            border-bottom: 1px solid rgba(192,192,192,0.15);
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            background: linear-gradient(180deg, #ffffff 0%, #c0c0c0 40%, #8a9bae 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            font-size: 1.4em;
+            color: #8a9bae;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            display: inline-block;
+            background: rgba(192, 192, 192, 0.1);
+            border: 1px solid rgba(192, 192, 192, 0.3);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            color: #c0c0c0;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .product {
+            background: rgba(26, 39, 68, 0.8);
+            border: 1px solid rgba(192,192,192,0.15);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            border-color: #c0c0c0;
+            box-shadow: 0 20px 40px rgba(192, 192, 192, 0.15);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(180deg, #e8e8e8, #c0c0c0);
+            color: #1a2744;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+
+        .product-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .product h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(180deg, #ffffff 0%, #c0c0c0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .product-type {
+            color: #8a9bae;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product p {
+            color: #a0a0a0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .features li {
+            padding: 8px 0;
+            color: #c0c0c0;
+            font-size: 0.9em;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .features li:before {
+            content: "✓ ";
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .price {
+            font-size: 2em;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .price span {
+            font-size: 0.5em;
+            color: #888;
+        }
+
+        .price-note {
+            font-size: 0.75em;
+            color: #888;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background: linear-gradient(180deg, #e8e8e8 0%, #c0c0c0 50%, #8a9bae 100%);
+            color: #1a2744;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(192, 192, 192, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #c0c0c0;
+            color: #c0c0c0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2em;
+            margin: 60px 0 40px;
+            color: #fff;
+        }
+
+        .enterprise {
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.1), rgba(138, 155, 174, 0.1));
+            border: 2px solid rgba(192, 192, 192, 0.3);
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .enterprise h2 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            background: linear-gradient(180deg, #ffffff 0%, #c0c0c0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .enterprise p {
+            color: #8a9bae;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-size: 1.1em;
+        }
+
+        /* Merch Section */
+        .merch-section {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 193, 7, 0.1));
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            border-radius: 25px;
+            padding: 50px;
+            margin: 60px 0;
+        }
+
+        .merch-section h2 {
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ff6b6b, #ffc107);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .merch-section .subtitle {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+        }
+
+        .merch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .merch-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .merch-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.2);
+        }
+
+        .merch-item .icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .merch-item h4 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .merch-item .description {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .merch-item .price-tag {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+
+        .btn-merch {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffc107 100%);
+        }
+
+        /* Bundles Section */
+        .bundles-section {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+            border: 2px solid rgba(34, 197, 94, 0.3);
+            border-radius: 25px;
+            padding: 50px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .bundles-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #22c55e, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bundles-section .subtitle {
+            color: #a0a0a0;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .bundles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .bundle-card {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .bundle-card:hover {
+            transform: translateY(-5px);
+            border-color: #22c55e;
+            box-shadow: 0 15px 30px rgba(34, 197, 94, 0.2);
+        }
+
+        .bundle-card.featured {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .bundle-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #22c55e, #10b981);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+
+        .bundle-card h3 {
+            font-size: 1.4em;
+            margin: 15px 0 10px;
+            color: #fff;
+        }
+
+        .bundle-includes {
+            color: #22c55e;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .bundle-description {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+
+        .bundle-pricing {
+            margin-bottom: 20px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #666;
+            margin-right: 10px;
+        }
+
+        .bundle-price {
+            font-size: 2em;
+            font-weight: bold;
+            color: #22c55e;
+        }
+
+        .btn-bundle {
+            background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+            width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(192,192,192,0.15);
+            color: #8a9bae;
+        }
+
+        footer a { color: #c0c0c0; text-decoration: none; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .products { grid-template-columns: 1fr; }
+            .enterprise { padding: 30px 20px; }
+            .merch-section { padding: 30px 20px; }
+            .sticky-buy-bar { display: block; }
+            .trust-badges { gap: 15px; }
+            .trust-badge { font-size: 0.8em; }
+        }
+
+        /* Loading state */
+        .btn.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        .btn.loading::after {
+            content: '...';
+        }
+
+        /* ROYALTY DECK - Luxury Dark Mode */
+        .royalty-section {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(139, 69, 19, 0.1), rgba(0, 0, 0, 0.3));
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            border-radius: 25px;
+            padding: 50px;
+            margin: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .royalty-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #d4af37, #f5e6a3, #d4af37);
+        }
+
+        .royalty-section h2 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #d4af37, #f5e6a3, #d4af37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .royalty-section .subtitle {
+            color: #d4af37;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .royalty-description {
+            color: #a0a0a0;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .royalty-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .royalty-card {
+            background: linear-gradient(145deg, #1a1a2e, #0a0a15);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            padding: 30px 20px;
+            position: relative;
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+
+        .royalty-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.1), transparent 50%);
+            pointer-events: none;
+        }
+
+        .royalty-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #d4af37;
+            box-shadow: 0 25px 50px rgba(212, 175, 55, 0.25), 0 0 100px rgba(212, 175, 55, 0.1);
+        }
+
+        .royalty-card.ace { border-color: rgba(255, 215, 0, 0.5); }
+        .royalty-card.ace .card-suit { color: #ff4444; }
+
+        .royalty-card.king .card-suit { color: #ff4444; }
+        .royalty-card.queen .card-suit { color: #ff4444; }
+        .royalty-card.jack .card-suit { color: #ff4444; }
+
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .card-badge.available {
+            background: linear-gradient(135deg, #22c55e, #10b981);
+            color: white;
+        }
+
+        .card-badge.sold-out {
+            background: linear-gradient(135deg, #666, #444);
+            color: #999;
+        }
+
+        .card-rank {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #d4af37, #f5e6a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .card-suit {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .royalty-card h3 {
+            font-size: 1.3em;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .card-perks {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .card-perks .perk {
+            font-size: 0.85em;
+            color: #a0a0a0;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .card-price {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #d4af37, #f5e6a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .btn-royalty {
+            background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+            color: #000;
+            font-weight: bold;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-royalty:hover {
+            background: linear-gradient(135deg, #f5e6a3 0%, #d4af37 100%);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .royalty-footer {
+            margin-top: 30px;
+            color: #888;
+            font-size: 0.9em;
+            padding-top: 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .royalty-footer strong {
+            color: #d4af37;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Trust Badges -->
+        <div class="trust-badges">
+            <div class="trust-badge">
+                <span class="icon">🔒</span>
+                <span><strong>Secure Checkout</strong><br>256-bit SSL Encryption</span>
+            </div>
+            <div class="trust-badge">
+                <span class="icon">✅</span>
+                <span><strong>30-Day Money Back</strong><br>100% Satisfaction Guarantee</span>
+            </div>
+            <div class="trust-badge">
+                <span class="icon">⚡</span>
+                <span><strong>Instant Access</strong><br>Download Immediately</span>
+            </div>
+            <div class="trust-badge">
+                <span class="icon">🛡️</span>
+                <span><strong>Verified Business</strong><br>Square Secure Payments</span>
+            </div>
+        </div>
+
+        <header>
+            <h1>AI Solutions Store</h1>
+            <p class="tagline">Real AI Apps. Not Just Chatbots.</p>
+            <span class="highlight">Complete applications ready to deploy and monetize</span>
+        </header>
+
+        <div class="products">
+            <!-- Claude Droid -->
+            <div class="product">
+                <span class="product-badge">POPULAR</span>
+                                <div class="product-icon">🎬</div>
+                <h3>Claude Droid</h3>
+                <div class="product-type">AI Video Generator</div>
+                <p>Automatically converts news headlines into 59-second YouTube Shorts. Generates scripts, voiceovers, and renders videos with FFmpeg. Uploads directly to YouTube.</p>
+                <ul class="features">
+                    <li>AI script generation from news feeds</li>
+                    <li>Text-to-speech voiceover</li>
+                    <li>Automated video rendering</li>
+                    <li>Direct YouTube upload with OAuth</li>
+                    <li>Multi-category support (tech, business, sports)</li>
+                </ul>
+                <div class="upsells">
+                    <h4>Add to your order:</h4>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-support-1" data-product="claude-droid" data-upsell="priority-support">
+                        <label for="upsell-support-1">Priority Support (Email + Discord) <span class="price">+$27</span></label>
+                    </div>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-call-1" data-product="claude-droid" data-upsell="setup-call">
+                        <label for="upsell-call-1">1-on-1 Setup Call (45 min) <span class="price">+$97</span></label>
+                    </div>
+                </div>
+                <div class="price-row">
+                    <div>
+                        <div class="price">$299 <span>one-time</span></div>
+                        <div class="price-note">or $49/mo subscription</div>
+                        <div class="installment-text">or 4 payments of $74.75</div>
+                    </div>
+                    <button class="btn" onclick="checkout('claude-droid')">Buy Now</button>
+                </div>
+            </div>
+
+            <!-- Income Droid -->
+            <div class="product">
+                <span class="product-badge">REVENUE</span>
+                                <div class="product-icon">💰</div>
+                <h3>Income Droid</h3>
+                <div class="product-type">Monetized Video Automation</div>
+                <p>Generates 4 revenue-optimized videos daily at peak times (6AM, 11AM, 5PM, 9PM). Built for YouTube monetization with analytics tracking.</p>
+                <ul class="features">
+                    <li>4 videos/day on autopilot</li>
+                    <li>Optimal posting times for views</li>
+                    <li>Revenue & metrics tracking</li>
+                    <li>Discord notifications</li>
+                    <li>SQLite database included</li>
+                </ul>
+                <div class="upsells">
+                    <h4>Add to your order:</h4>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-support-2" data-product="income-droid" data-upsell="priority-support">
+                        <label for="upsell-support-2">Priority Support (Email + Discord) <span class="price">+$27</span></label>
+                    </div>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-call-2" data-product="income-droid" data-upsell="setup-call">
+                        <label for="upsell-call-2">1-on-1 Setup Call (45 min) <span class="price">+$97</span></label>
+                    </div>
+                </div>
+                <div class="price-row">
+                    <div>
+                        <div class="price">$499 <span>one-time</span></div>
+                        <div class="price-note">or $79/mo subscription</div>
+                        <div class="installment-text">or 4 payments of $124.75</div>
+                    </div>
+                    <button class="btn" onclick="checkout('income-droid')">Buy Now</button>
+                </div>
+            </div>
+
+            <!-- Marketing Engine -->
+            <div class="product">
+                                <div class="product-icon">📢</div>
+                <h3>Marketing Content Engine</h3>
+                <div class="product-type">AI Social Media Automation</div>
+                <p>Auto-generates marketing content and posts to social media 4x daily. Uses Claude AI for content, Discord webhooks for distribution.</p>
+                <ul class="features">
+                    <li>4 posts/day automated</li>
+                    <li>Multiple content types (hooks, proofs, CTAs)</li>
+                    <li>Claude AI content generation</li>
+                    <li>Discord webhook integration</li>
+                    <li>Twitter/X API ready</li>
+                </ul>
+                <div class="upsells">
+                    <h4>Add to your order:</h4>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-support-3" data-product="marketing-engine" data-upsell="priority-support">
+                        <label for="upsell-support-3">Priority Support (Email + Discord) <span class="price">+$27</span></label>
+                    </div>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-call-3" data-product="marketing-engine" data-upsell="setup-call">
+                        <label for="upsell-call-3">1-on-1 Setup Call (45 min) <span class="price">+$97</span></label>
+                    </div>
+                </div>
+                <div class="price-row">
+                    <div>
+                        <div class="price">$199 <span>one-time</span></div>
+                        <div class="price-note">or $29/mo subscription</div>
+                        <div class="installment-text">or 4 payments of $49.75</div>
+                    </div>
+                    <button class="btn" onclick="checkout('marketing-engine')">Buy Now</button>
+                </div>
+            </div>
+
+            <!-- Jules AI -->
+            <div class="product">
+                                <div class="product-icon">🤖</div>
+                <h3>Jules AI Assistant</h3>
+                <div class="product-type">Business Operations AI</div>
+                <p>Gemini-powered business director. Manages Git/GitHub, Google Cloud, AWS, and multi-service integrations. DevOps on autopilot.</p>
+                <ul class="features">
+                    <li>Git/GitHub automation</li>
+                    <li>GCP & AWS integration</li>
+                    <li>CI/CD pipeline management</li>
+                    <li>Multi-service orchestration</li>
+                    <li>Code conflict resolution</li>
+                </ul>
+                <div class="upsells">
+                    <h4>Add to your order:</h4>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-support-4" data-product="jules-ai" data-upsell="priority-support">
+                        <label for="upsell-support-4">Priority Support (Email + Discord) <span class="price">+$27</span></label>
+                    </div>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-call-4" data-product="jules-ai" data-upsell="setup-call">
+                        <label for="upsell-call-4">1-on-1 Setup Call (45 min) <span class="price">+$97</span></label>
+                    </div>
+                </div>
+                <div class="price-row">
+                    <div>
+                        <div class="price">$399 <span>one-time</span></div>
+                        <div class="price-note">or $59/mo subscription</div>
+                        <div class="installment-text">or 4 payments of $99.75</div>
+                    </div>
+                    <button class="btn" onclick="checkout('jules-ai')">Buy Now</button>
+                </div>
+            </div>
+
+            <!-- Affiliate System -->
+            <div class="product">
+                                <div class="product-icon">🔗</div>
+                <h3>Affiliate System</h3>
+                <div class="product-type">White-Label Affiliate Platform</div>
+                <p>Complete affiliate program with tiered commissions (15-30%), referral tracking, 90-day attribution, and automated payouts. Ready to integrate.</p>
+                <ul class="features">
+                    <li>4-tier commission structure</li>
+                    <li>90-day cookie tracking</li>
+                    <li>Automated monthly payouts</li>
+                    <li>Anti-fraud detection</li>
+                    <li>Full affiliate dashboard</li>
+                </ul>
+                <div class="upsells">
+                    <h4>Add to your order:</h4>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-support-5" data-product="affiliate-system" data-upsell="priority-support">
+                        <label for="upsell-support-5">Priority Support (Email + Discord) <span class="price">+$27</span></label>
+                    </div>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-call-5" data-product="affiliate-system" data-upsell="setup-call">
+                        <label for="upsell-call-5">1-on-1 Setup Call (45 min) <span class="price">+$97</span></label>
+                    </div>
+                </div>
+                <div class="price-row">
+                    <div>
+                        <div class="price">$599 <span>one-time</span></div>
+                        <div class="price-note">or $89/mo subscription</div>
+                        <div class="installment-text">or 4 payments of $149.75</div>
+                    </div>
+                    <button class="btn" onclick="checkout('affiliate-system')">Buy Now</button>
+                </div>
+            </div>
+
+            <!-- Dating Platform -->
+            <div class="product">
+                <span class="product-badge">FULL APP</span>
+                                <div class="product-icon">💕</div>
+                <h3>YouAndINotAI Dating Platform</h3>
+                <div class="product-type">Human-Verified Dating App</div>
+                <p>Complete dating app with AI-detection to ensure real humans. Video verification, anti-bot systems, matching algorithm, and messaging.</p>
+                <ul class="features">
+                    <li>Human verification (video/captcha)</li>
+                    <li>Anti-AI message detection</li>
+                    <li>Matching & discovery system</li>
+                    <li>Full messaging infrastructure</li>
+                    <li>Subscription billing ready</li>
+                </ul>
+                <div class="upsells">
+                    <h4>Add to your order:</h4>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-support-6" data-product="dating-platform" data-upsell="priority-support">
+                        <label for="upsell-support-6">Priority Support (Email + Discord) <span class="price">+$27</span></label>
+                    </div>
+                    <div class="upsell-option">
+                        <input type="checkbox" id="upsell-call-6" data-product="dating-platform" data-upsell="setup-call">
+                        <label for="upsell-call-6">1-on-1 Setup Call (45 min) <span class="price">+$97</span></label>
+                    </div>
+                </div>
+                <div class="price-row">
+                    <div>
+                        <div class="price">$2,499 <span>one-time</span></div>
+                        <div class="price-note">Full source code license</div>
+                        <div class="installment-text">or 4 payments of $624.75</div>
+                    </div>
+                    <button class="btn" onclick="checkout('dating-platform')">Buy Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MERCH SECTION - TEMPORARILY DISABLED - Printful fulfillment not configured -->
+        <!-- Re-enable when COGS deduction is implemented in gospel-revenue.js -->
+        <div class="merch-section" style="opacity: 0.7;">
+            <h2>🚧 Merch Coming Soon</h2>
+            <p class="subtitle">Automated fulfillment coming Q2 2026. Stay tuned!</p>
+            <p style="text-align: center; color: #888; margin-top: 20px;">
+                T-shirts, hoodies, mugs, and stickers - all with 60% of NET profits going to verified pediatric charities.
+            </p>
+        </div>
+
+        <!-- BUNDLES SECTION - Save money, get more -->
+        <div class="bundles-section">
+            <h2>🎁 Bundle & Save</h2>
+            <p class="subtitle">Get more tools, pay less. Best value for serious automation.</p>
+            <div class="bundles-grid">
+                <div class="bundle-card">
+                    <div class="bundle-badge">SAVE $99</div>
+                    <h3>Content Creator Bundle</h3>
+                    <p class="bundle-includes">Claude Droid + Marketing Engine</p>
+                    <p class="bundle-description">Create YouTube content AND distribute to 23 platforms. Maximum reach.</p>
+                    <div class="bundle-pricing">
+                        <span class="original-price">$498</span>
+                        <span class="bundle-price">$399</span>
+                    </div>
+                    <button class="btn btn-bundle" onclick="checkout('content-creator-bundle')">Get Bundle</button>
+                </div>
+                <div class="bundle-card featured">
+                    <div class="bundle-badge">MOST POPULAR</div>
+                    <h3>Passive Income Bundle</h3>
+                    <p class="bundle-includes">Claude Droid + Marketing Engine + Income Droid</p>
+                    <p class="bundle-description">The complete passive income stack. Create, distribute, monetize.</p>
+                    <div class="bundle-pricing">
+                        <span class="original-price">$997</span>
+                        <span class="bundle-price">$799</span>
+                    </div>
+                    <button class="btn btn-bundle" onclick="checkout('passive-income-bundle')">Get Bundle</button>
+                </div>
+                <div class="bundle-card">
+                    <div class="bundle-badge">SAVE $397</div>
+                    <h3>Full Automation Bundle</h3>
+                    <p class="bundle-includes">Claude Droid + Marketing Engine + Income Droid + Jules AI</p>
+                    <p class="bundle-description">Everything you need. Run an automated content business.</p>
+                    <div class="bundle-pricing">
+                        <span class="original-price">$1,396</span>
+                        <span class="bundle-price">$999</span>
+                    </div>
+                    <button class="btn btn-bundle" onclick="checkout('full-automation-bundle')">Get Bundle</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROYALTY DECK - HIGH TICKET PREMIUM -->
+        <div class="royalty-section" id="royalty-deck">
+            <h2>👑 Royalty Deck</h2>
+            <p class="subtitle">Limited Edition Digital Estate Cards - $1,000 Each | Only 52 Available</p>
+            <p class="royalty-description">
+                Own a piece of the AI Solutions empire. Each card grants lifetime benefits,
+                governance rights, and priority access to all future products.
+                <br><strong>60% of every card purchase goes directly to verified pediatric charities.</strong>
+            </p>
+            <div class="royalty-grid">
+                <div class="royalty-card ace" data-card="ace-hearts">
+                    <div class="card-badge sold-out" style="display:none;">SOLD</div>
+                    <div class="card-badge available">AVAILABLE</div>
+                    <div class="card-rank">A</div>
+                    <div class="card-suit">♥</div>
+                    <h3>Ace of Hearts</h3>
+                    <div class="card-perks">
+                        <span class="perk">🌟 Global #1 Priority</span>
+                        <span class="perk">🗳️ Governance Vote</span>
+                        <span class="perk">🎁 Lifetime Product Access</span>
+                    </div>
+                    <div class="card-price">$1,000</div>
+                    <button class="btn btn-royalty" onclick="checkout('royalty-ace-hearts')">Claim This Card</button>
+                </div>
+                <div class="royalty-card king" data-card="king-hearts">
+                    <div class="card-badge sold-out" style="display:none;">SOLD</div>
+                    <div class="card-badge available">AVAILABLE</div>
+                    <div class="card-rank">K</div>
+                    <div class="card-suit">♥</div>
+                    <h3>King of Hearts</h3>
+                    <div class="card-perks">
+                        <span class="perk">👑 Council Seat</span>
+                        <span class="perk">🗳️ Governance Vote</span>
+                        <span class="perk">🎁 Lifetime Product Access</span>
+                    </div>
+                    <div class="card-price">$1,000</div>
+                    <button class="btn btn-royalty" onclick="checkout('royalty-king-hearts')">Claim This Card</button>
+                </div>
+                <div class="royalty-card queen" data-card="queen-hearts">
+                    <div class="card-badge sold-out" style="display:none;">SOLD</div>
+                    <div class="card-badge available">AVAILABLE</div>
+                    <div class="card-rank">Q</div>
+                    <div class="card-suit">♥</div>
+                    <h3>Queen of Hearts</h3>
+                    <div class="card-perks">
+                        <span class="perk">💎 VIP Support Channel</span>
+                        <span class="perk">🗳️ Governance Vote</span>
+                        <span class="perk">🎁 Lifetime Product Access</span>
+                    </div>
+                    <div class="card-price">$1,000</div>
+                    <button class="btn btn-royalty" onclick="checkout('royalty-queen-hearts')">Claim This Card</button>
+                </div>
+                <div class="royalty-card jack" data-card="jack-hearts">
+                    <div class="card-badge sold-out" style="display:none;">SOLD</div>
+                    <div class="card-badge available">AVAILABLE</div>
+                    <div class="card-rank">J</div>
+                    <div class="card-suit">♥</div>
+                    <h3>Jack of Hearts</h3>
+                    <div class="card-perks">
+                        <span class="perk">🚀 Early Access</span>
+                        <span class="perk">🗳️ Governance Vote</span>
+                        <span class="perk">🎁 Lifetime Product Access</span>
+                    </div>
+                    <div class="card-price">$1,000</div>
+                    <button class="btn btn-royalty" onclick="checkout('royalty-jack-hearts')">Claim This Card</button>
+                </div>
+            </div>
+            <p class="royalty-footer">
+                <strong>Revenue Split:</strong> $600 Charity | $300 Infrastructure | $100 Founder Trust
+            </p>
+        </div>
+
+        <div class="enterprise">
+            <h2>Need Custom AI Solutions?</h2>
+            <p>We build custom AI-powered applications for your specific business needs. Video generators, automation tools, platforms - you name it.</p>
+            <button class="btn" onclick="checkout('custom-consult')">Book Consultation ($99)</button>
+        </div>
+
+        <footer>
+            <p>
+                <strong>AI Solutions Store</strong> by Trash or Treasure Online Recycler LLC<br>
+                <a href="/cdn-cgi/l/email-protection#3f4c5e535a4c7f5e565b505a4c564b5e535311485a5d4c564b5a"><span class="__cf_email__" data-cfemail="0a796b666f794a6b636e656f79637e6b6666247d6f6879637e6f">[email&#160;protected]</span></a> | <a href="/cdn-cgi/l/email-protection#74070104041b060034151d101b11071d001518185a031116071d0011"><span class="__cf_email__" data-cfemail="cab9bfbabaa5b8be8aaba3aea5afb9a3beaba6a6e4bdafa8b9a3beaf">[email&#160;protected]</span></a>
+            </p>
+            <p style="margin-top: 15px; font-size: 0.85em;">
+                Built with Claude Opus 4.6 | Payments by Square
+            </p>
+        </footer>
+    </div>
+
+    <!-- Sticky Mobile Buy Bar -->
+    <div class="sticky-buy-bar">
+        <div class="inner">
+            <div class="price-info">
+                <div>Best Value Bundle</div>
+                <div class="main-price">$799</div>
+                <div style="font-size: 0.75em; color: #888;">Save $198</div>
+            </div>
+            <button class="btn-sticky" onclick="checkout('passive-income-bundle')">Buy Now</button>
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Square Payment Links - Each product has its own checkout
+        const SQUARE_LINKS = {
+            'claude-droid': 'https://square.link/u/BMn1ZI8w',
+            'income-droid': 'https://square.link/u/OcfHUsv4',
+            'marketing-engine': 'https://square.link/u/5qJHNPAq',
+            'jules-ai': 'https://square.link/u/XxWLwMiS',
+            'affiliate-system': 'https://square.link/u/X9k1ZM9c',
+            'dating-platform': 'https://square.link/u/dLV56aVt',
+            'custom-consult': 'https://square.link/u/7oilDQSF',
+            // Bundles - Use mailto until real Square links are created
+            'content-creator-bundle': 'mailto:sales@aidoesitall.website?subject=Content%20Creator%20Bundle%20Purchase%20-%20%24399&body=I%20would%20like%20to%20purchase%20the%20Content%20Creator%20Bundle%20for%20%24399.%0A%0APlease%20send%20me%20payment%20instructions.',
+            'passive-income-bundle': 'mailto:sales@aidoesitall.website?subject=Passive%20Income%20Bundle%20Purchase%20-%20%24799&body=I%20would%20like%20to%20purchase%20the%20Passive%20Income%20Bundle%20for%20%24799.%0A%0APlease%20send%20me%20payment%20instructions.',
+            'full-automation-bundle': 'mailto:sales@aidoesitall.website?subject=Full%20Automation%20Bundle%20Purchase%20-%20%24999&body=I%20would%20like%20to%20purchase%20the%20Full%20Automation%20Bundle%20for%20%24999.%0A%0APlease%20send%20me%20payment%20instructions.',
+            // Merch
+            'anti-ai-tee': 'https://square.link/u/KxxnmieF',
+            'anti-ai-hoodie': 'https://square.link/u/wjJfoKhF',
+            'kid-ai-tee': 'https://square.link/u/otKgy2qT',
+            'anti-ai-mug': 'https://square.link/u/fP3dYVIe',
+            'sticker-pack': 'https://square.link/u/KoEFp3Y8',
+            'merch-bundle': 'https://square.link/u/8K0mNFut',
+            // Upsells
+            'priority-support': 'https://square.link/u/PriSup27',
+            'setup-call': 'https://square.link/u/Setup97',
+            // Royalty Deck - $1,000 High Ticket (60/30/10 split)
+            'royalty-ace-hearts': 'mailto:sales@aidoesitall.website?subject=Royalty%20Deck%20-%20Ace%20of%20Hearts%20($1,000)&body=I%20would%20like%20to%20claim%20the%20Ace%20of%20Hearts%20card%20from%20the%20Royalty%20Deck.%0A%0APrice:%20$1,000%0A%0ARevenue%20Split:%0A-%20$600%20to%20Verified%20Pediatric%20Charities%0A-%20$300%20to%20Infrastructure%0A-%20$100%20to%20Founder%20Trust%0A%0APlease%20send%20payment%20instructions.',
+            'royalty-king-hearts': 'mailto:sales@aidoesitall.website?subject=Royalty%20Deck%20-%20King%20of%20Hearts%20($1,000)&body=I%20would%20like%20to%20claim%20the%20King%20of%20Hearts%20card%20from%20the%20Royalty%20Deck.%0A%0APrice:%20$1,000%0A%0ARevenue%20Split:%0A-%20$600%20to%20Verified%20Pediatric%20Charities%0A-%20$300%20to%20Infrastructure%0A-%20$100%20to%20Founder%20Trust%0A%0APlease%20send%20payment%20instructions.',
+            'royalty-queen-hearts': 'mailto:sales@aidoesitall.website?subject=Royalty%20Deck%20-%20Queen%20of%20Hearts%20($1,000)&body=I%20would%20like%20to%20claim%20the%20Queen%20of%20Hearts%20card%20from%20the%20Royalty%20Deck.%0A%0APrice:%20$1,000%0A%0ARevenue%20Split:%0A-%20$600%20to%20Verified%20Pediatric%20Charities%0A-%20$300%20to%20Infrastructure%0A-%20$100%20to%20Founder%20Trust%0A%0APlease%20send%20payment%20instructions.',
+            'royalty-jack-hearts': 'mailto:sales@aidoesitall.website?subject=Royalty%20Deck%20-%20Jack%20of%20Hearts%20($1,000)&body=I%20would%20like%20to%20claim%20the%20Jack%20of%20Hearts%20card%20from%20the%20Royalty%20Deck.%0A%0APrice:%20$1,000%0A%0ARevenue%20Split:%0A-%20$600%20to%20Verified%20Pediatric%20Charities%0A-%20$300%20to%20Infrastructure%0A-%20$100%20to%20Founder%20Trust%0A%0APlease%20send%20payment%20instructions.'
+        };
+
+        // Track selected upsells
+        let selectedUpsells = [];
+
+        function checkout(productId) {
+            const btn = event.target;
+            btn.classList.add('loading');
+            btn.textContent = 'Redirecting...';
+
+            // Note: In production, you'd combine upsells into a single cart
+            // For now, direct to Square checkout
+            const link = SQUARE_LINKS[productId];
+            if (link) {
+                window.location.href = link;
+            } else {
+                window.location.href = 'mailto:sales@aidoesitall.website?subject=Purchase Inquiry';
+            }
+        }
+
+
+        // Handle upsell checkbox changes
+        document.querySelectorAll('.upsell-option input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const product = this.dataset.product;
+                const upsell = this.dataset.upsell;
+                const key = `${product}-${upsell}`;
+
+                if (this.checked) {
+                    if (!selectedUpsells.includes(key)) {
+                        selectedUpsells.push(key);
+                    }
+                } else {
+                    selectedUpsells = selectedUpsells.filter(u => u !== key);
+                }
+
+                // Store in localStorage for checkout reference
+                localStorage.setItem('selectedUpsells', JSON.stringify(selectedUpsells));
+            });
+        });
+
+        // Restore any previously selected upsells
+        const savedUpsells = localStorage.getItem('selectedUpsells');
+        if (savedUpsells) {
+            try {
+                selectedUpsells = JSON.parse(savedUpsells);
+            } catch (e) {
+                selectedUpsells = [];
+            }
+        }
+    </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"cb412b14f3214209ad31c800d117a784","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
