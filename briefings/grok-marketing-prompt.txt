@@ -1,0 +1,60 @@
+GROK MARKETING DISPATCH — From Opus 4.6 — 2026-02-24
+
+Hey Grok — here's the deal. Josh needs you to help market YouAndINotAI.com on X/Twitter. You live on that platform. You know what goes viral there. Use that.
+
+THE PRODUCT:
+YouAndINotAI — first dating app where AI proves every user is real. No bots. No catfish. Gemini-powered verification.
+
+Site: youandinotai.com (LIVE right now)
+Launch: April 4, 2026
+
+PRICING:
+- $1 Bot-Shield = prove you're human (low friction entry)
+- $14.99/mo Founding Member = locked at that price forever
+- $49.99 for 3 months
+- $99.99 for 12 months
+- $2,500 Royalty Card = lifetime VIP + revenue share
+
+TRACTION (REAL — not made up):
+- 1,200+ visits in ONE HOUR on first exposure
+- Crashed Netlify hosting (had to emergency migrate to GitHub Pages)
+- Zero ad spend. Zero VC. Pure organic.
+- Waitlist is live and collecting emails
+
+THE BUILDER:
+Josh Coleman. Electrician from Florida. Self-taught coder. Built this with Claude (Opus) and Gemini as AI copilots on a Dell T5500 workstation with a GTX 1070. No team. No funding. Just tired of matching with bots.
+
+WHAT I NEED:
+
+1. X/TWITTER THREAD (viral format):
+   Write a 5-7 tweet thread telling the builder story. Hook tweet needs to stop the scroll. Structure: hook > problem > solution > traction proof > CTA. Make it feel real, not marketing.
+
+2. QUOTE TWEETS / REPLY BAIT:
+   5 standalone tweets designed to get quote-tweeted or replied to. Controversial takes about dating apps, bot problems, AI verification. The kind of tweets that make people say "finally someone said it."
+
+3. ENGAGEMENT POSTS:
+   3 tweets that ask questions or create polls. "What % of your dating app matches do you think are bots?" type energy.
+
+4. X SPACES PITCH:
+   A 60-second pitch script Josh can use if he joins a Twitter Space about dating/tech/AI. Conversational, not rehearsed-sounding.
+
+5. VIRAL HOOKS:
+   10 one-liner hooks (first line of a tweet) that would make someone stop scrolling. Topics: dating app frustration, bot epidemic, AI verification, indie builder grind, the crash story.
+
+VOICE RULES:
+- Sound like a builder, not a brand
+- Raw > polished
+- Specific > vague ("1,200 visits in 60 minutes" not "tons of traffic")
+- Frustrated energy about the bot problem
+- Hopeful energy about the solution
+- No corporate speak. No "excited to announce." No "thrilled to share."
+- Hashtags sparingly: #buildinpublic #indiehacker only when natural
+
+HARD RULES:
+- Every fact must be true. No fake numbers.
+- Always include youandinotai.com as CTA
+- Don't promise features that don't exist yet
+- The app launches April 4 — waitlist is the current action
+- $1 Bot-Shield is the impulse buy. $14.99/mo is the real conversion.
+
+You're the X expert. Make this blow up again.
