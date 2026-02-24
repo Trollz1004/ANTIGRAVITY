@@ -53,7 +53,8 @@ C:\OPUSONLY\
 - Domain: youandinotai.com | Launch: April 4, 2026
 - $1 Bot-Shield + $14.99/mo Founding Member (locked forever)
 - Stack: FastAPI + React + Stripe + PostgreSQL
-- Frontend: Netlify (thunderous-sawine-9753d5) | Backend: GCP Cloud Run
+- Frontend: GitHub Pages (youandinotai.com via Cloudflare DNS) | Backend: GCP Cloud Run
+- Revenue: $0 (pre-launch) | Stripe: 0 customers | Target: first sale before April 4
 
 ## Stripe (LIVE — Account acct_1T3DVxIO6LWQSQoI)
 
@@ -84,17 +85,50 @@ Key rotated 2026-02-23. **EXPIRES ~MARCH 10TH.**
 | Revenue Core | C:\OPUSONLY\revenue-core | React+Vite |
 | Antigravity Admin | C:\OPUSONLY\antigravity | Next.js 15 |
 
+## Deployment Map (Updated 2026-02-24)
+
+| Site | Host | Repo / Branch | Deploy Dir |
+|------|------|---------------|------------|
+| youandinotai.com | GitHub Pages | Trollz1004/If-Not-Gemini-or-OPUS-GETOUT / gh-pages | root |
+| onlinerecycle.org | Cloudflare Pages | Trollz1004/ANTIGRAVITY / main | _deploy/onlinerecycle |
+| ai-solutions.store | Cloudflare Pages | Trollz1004/ANTIGRAVITY / main | _deploy/ai-solutions-store |
+| dashboard.aidoesitall.website | Cloudflare Pages | Trollz1004/ANTIGRAVITY / main | antigravity |
+
+- Cloudflare Pages projects connected to GitHub (auto-deploy on push)
+- GitHub Actions workflow: `.github/workflows/deploy-cloudflare-pages.yml` (manual backup trigger)
+- All secrets in GitHub repo secrets (CLOUDFLARE_API_TOKEN, STRIPE_SECRET_KEY, etc.)
+- **GitHub billing alert active** — may block Actions runners. Fix or use wrangler CLI.
+
+## Grok Audit Status (2026-02-24)
+
+All 3 sites audited and cleared:
+- youandinotai.com: JS patch removes false claims, #ForTheKids banner, honest language
+- onlinerecycle.org: Stats softened to goals, disclaimer added, #ForTheKids banner
+- ai-solutions.store: Secure Delivery + 24hr language, #ForTheKids banner
+- Square.site link fixed: onlinerecycle.square.site (was recycler)
+
+## Smart Contracts (briefings/archive/contracts/)
+
+| Contract | Purpose | Status |
+|----------|---------|--------|
+| CharityRouter100.sol | OMEGA — 100% to charity, immutable | Ready to deploy |
+| DatingRevenueRouter.sol | ENIGMA — flat 60/40 from block zero (was 3-phase, DELETED) | Needs rewrite |
+| YouAndINotAIAdapter.sol | Simple DAO splitter (DRAFT) | Reference only |
+
 ## Dual-Entity Iron Wall
 
-| ENIGMA (Profit) | OMEGA (Charity) |
-|-----------------|-----------------|
-| YouAndINotAI | ai-solutions.store |
+| ENIGMA (Profit — 40% founder / 60% Shriners) | OMEGA (100% Charity) |
+|-----------------------------------------------|----------------------|
+| YouAndINotAI | ai-solutions.store (DIGITAL ONLY — no merch) |
+| onlinerecycle.org | onlinerecycle.square.site |
 | Claude/Opus domain | Gemini domain |
 | **SEPARATION IS ABSOLUTE** | |
 
-## Current Phase: SURVIVAL MODE
+## Revenue Split: PERMANENT 60/40 FROM DAY ONE
 
-100% revenue to founder until sustainable. No charity split until Protocol Omega (post-founder).
+No survival mode. No phased transition. Every dollar that hits ENIGMA splits 60% to Shriners Children's Hospitals, 40% to founder. This is locked. The smart contract will enforce it on-chain.
+
+OMEGA (ai-solutions.store) remains 100% to charity. **No physical merchandise on OMEGA** — digital products only. No fulfillment costs, no returns, no cancellation risk eating donations.
 
 ---
-*Updated: 2026-02-23 | Opus 4.6 on T5500*
+*Updated: 2026-02-24 | Opus 4.6 on T5500*
