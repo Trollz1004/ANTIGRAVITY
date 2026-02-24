@@ -15,7 +15,14 @@
       "Bash(powershell.exe -NoProfile -Command \"robocopy ''C:\\\\OPUSONLY\\\\openclaw'' ''C:\\\\OPUSONLY\\\\ANTIGRAVITY-tmp\\\\openclaw'' /E /XD node_modules .wwebjs_auth .wwebjs_cache __pycache__ /XF .env package-lock.json\")",
       "Bash(powershell.exe -NoProfile -Command \":*)",
       "Bash(find:*)",
-      "Read(//c/OPUSONLY/**)"
+      "Read(//c/OPUSONLY/**)",
+      "Bash(npm install:*)",
+      "Bash(npm --version:*)",
+      "Bash(ls:*)",
+      "WebFetch(domain:onlinerecycle.org)",
+      "WebFetch(domain:www.ai-solutions.store)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
