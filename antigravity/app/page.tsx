@@ -220,7 +220,7 @@ export default function Dashboard() {
                 <div className={`rounded-2xl p-6 border text-center transition-transform hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
                   <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Year 1 MRR Target</h3>
                   <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-purple-600 mt-6">$100k+</p>
-                  <p className={`text-sm mt-4 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Across all revenue streams</p>
+                  <p className={`text-sm mt-4 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Year 1 Goal — across all revenue streams</p>
                 </div>
                 <div className={`rounded-2xl p-6 border text-center transition-transform hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
                   <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Tech Stack</h3>
