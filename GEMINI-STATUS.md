@@ -20,6 +20,7 @@ Repository: https://github.com/Trollz1004/ANTIGRAVITY
 - Source: `youandinotai/` subdirectory in ANTIGRAVITY repo
 - Build: `cd youandinotai && npm run build`
 - Deploy: `echo "youandinotai.com" > dist/CNAME && cp dist/index.html dist/404.html && npx gh-pages -d dist --dotfiles`
+- **Grok audit fix**: Added #ForTheKids charity banner (60% to Shriners Children's Hospitals)
 - Gemini API: Proxied through Cloudflare Worker (gemini-proxy.joshlcoleman.workers.dev)
 - API key: Server-side only (Worker secret). ZERO keys in client bundle.
 - Waitlist: LIVE (FormSubmit.co → joshlcoleman@gmail.com, ACTIVATED)
@@ -32,6 +33,7 @@ Repository: https://github.com/Trollz1004/ANTIGRAVITY
 - Framework: Next.js 15 static export
 - Features: 15 tabs (overview, metrics, chat, designer, platforms, architecture, etc.)
 - All 12 components operational (AgeGate, AgentDesigner, AntiGravity, CharitySection, etc.)
+- **Grok audit fix**: MRR target now says "Year 1 Goal"
 - Status: **100% ACCURATE — SAFE FOR MARKETING**
 
 ### 3. onlinerecycle.org — CrossLister AI Platform
@@ -50,6 +52,7 @@ Repository: https://github.com/Trollz1004/ANTIGRAVITY
 - Merch: Coming Q2 2026 (placeholder, honest messaging)
 - CLEANED: Removed fake countdown timer, fake viewer counts, expired dates
 - Updated: "Built with Claude Opus 4.6"
+- **Grok audit fix**: "Instant Access" → "Secure Delivery within 24h", merch text updated
 - Status: **100% ACCURATE — SAFE FOR MARKETING**
 
 ## Opus Session Summary (2026-02-24 ~05:00-07:00 EST)
@@ -96,3 +99,4 @@ Repository: https://github.com/Trollz1004/ANTIGRAVITY
 - Deploy youandinotai from ANTIGRAVITY repo gh-pages branch (no --repo flag needed anymore)
 - Old repo If-Not-Gemini-or-OPUS-GETOUT is ARCHIVED — do not use
 - onlinerecycle.org Worker routes were deleted — do NOT re-create
+- All domains now explicitly state 60% charity split where relevant. No fake dates or absolute guarantees.

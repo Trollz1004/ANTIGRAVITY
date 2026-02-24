@@ -175,6 +175,11 @@ export default function App() {
         <CosmicCanvas />
       </div>
       
+      {/* #ForTheKids Charity Banner */}
+      <div className="relative z-20 bg-emerald-500 text-black text-center py-3 px-4 font-bold text-sm md:text-base">
+        #ForTheKids — 60% of EVERY revenue dollar from YouAndINotAI goes directly to Shriners Children's Hospitals and verified pediatric charities.
+      </div>
+
       {/* Hero Section */}
       <div className="relative w-full h-screen flex flex-col z-10">
         {/* UI Overlay */}
