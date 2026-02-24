@@ -1,23 +1,25 @@
 # GEMINI STATUS (Public Safe)
 
-Last Updated: 2026-02-24 07:00 EST
+Last Updated: 2026-02-24 07:30 EST
 Workspace: C:\OPUSONLY (ANTIGRAVITY mono-repo)
 Repository: https://github.com/Trollz1004/ANTIGRAVITY
 
 ## Current State
 
-- Repo visibility: PUBLIC
-- Default and only branch: `main`
+- **ONE REPO**: Trollz1004/ANTIGRAVITY (PUBLIC) — ALL source + GitHub Pages
+- Default branch: `main` (source code)
+- gh-pages branch: serves youandinotai.com via GitHub Pages
+- All other repos ARCHIVED (20 repos)
 - Structure: mono-repo (antigravity + youandinotai + revenue-core + briefings)
 
 ## ALL 4 DOMAINS VERIFIED LIVE ✓
 
 ### 1. youandinotai.com — Dating Platform
 - Title: "YouAndINotAI | AI-Powered Dating for a Cause"
-- Hosting: GitHub Pages (Trollz1004/If-Not-Gemini-or-OPUS-GETOUT, gh-pages branch)
+- Hosting: GitHub Pages (ANTIGRAVITY repo, gh-pages branch) — CONSOLIDATED
 - Source: `youandinotai/` subdirectory in ANTIGRAVITY repo
 - Build: `cd youandinotai && npm run build`
-- Deploy: `npx gh-pages -d dist --dotfiles --repo https://github.com/Trollz1004/If-Not-Gemini-or-OPUS-GETOUT.git`
+- Deploy: `echo "youandinotai.com" > dist/CNAME && cp dist/index.html dist/404.html && npx gh-pages -d dist --dotfiles`
 - Gemini API: Proxied through Cloudflare Worker (gemini-proxy.joshlcoleman.workers.dev)
 - API key: Server-side only (Worker secret). ZERO keys in client bundle.
 - Waitlist: LIVE (FormSubmit.co → joshlcoleman@gmail.com, ACTIVATED)
@@ -61,6 +63,9 @@ Repository: https://github.com/Trollz1004/ANTIGRAVITY
 7. Fixed onlinerecycle.org — deleted Worker routes that were serving YouAndINotAI content
 8. Cleaned ai-solutions.store — stripped all fake data (countdown, viewers, expired dates)
 9. Verified all 4 domains serve accurate, marketing-safe content
+10. Consolidated to 1 repo — youandinotai.com now deploys from ANTIGRAVITY gh-pages branch
+11. Archived 3 extra repos (If-Not-Gemini-or-OPUS-GETOUT, aidoesitall-dashboard, Gemini-Opus-Dao)
+12. Notion project page updated by Comet (Sonnet 4.6): fixed pricing, tech stack, milestones, action items
 
 ## Marketing Prompts Ready
 
@@ -88,5 +93,6 @@ Repository: https://github.com/Trollz1004/ANTIGRAVITY
 
 - `.env`, `.env.*`, `.vault/` excluded via .gitignore
 - Use GitHub Secrets as source of truth for runtime config
-- Deploy youandinotai to If-Not-Gemini repo, NOT this ANTIGRAVITY repo
+- Deploy youandinotai from ANTIGRAVITY repo gh-pages branch (no --repo flag needed anymore)
+- Old repo If-Not-Gemini-or-OPUS-GETOUT is ARCHIVED — do not use
 - onlinerecycle.org Worker routes were deleted — do NOT re-create
