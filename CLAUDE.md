@@ -64,7 +64,7 @@ Key rotated 2026-02-23. **EXPIRES ~MARCH 10TH.**
 |---------|------|
 | Bot-Shield $1 | https://buy.stripe.com/3cI3cwcR6c3910p18peEo09 |
 | Founding Member $14.99/mo | https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a |
-| 3-Month Founder $49.99 | https://buy.stripe.com/9B67sM7wM7MT9wV7wNeEo0b |
+| 3-Month Founder $39.99 | https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j |
 | 12-Month Founder $99.99 | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
 | Royalty Card $2,500 | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
 

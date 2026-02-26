@@ -1,0 +1,85 @@
+============================================================
+FOOTER FIXES — YouAndINotAI
+Generated: February 24, 2026
+
+These are specific find-and-replace text changes for the live site.
+============================================================
+
+
+FIX 1: FOOTER TAGLINE
+--------------------------------------------------------------
+FIND:
+  The world's first human-verified dating platform
+
+REPLACE WITH:
+  A human-verified dating platform
+
+WHY: "World's first" is an unverified claim. Keep it honest.
+
+
+FIX 2: TRUST BADGE — GDPR → PRIVACY FOCUSED
+--------------------------------------------------------------
+FIND:
+  GDPR Compliant
+
+REPLACE WITH:
+  Privacy Focused
+
+WHY: Full GDPR compliance has not been verified. "Privacy Focused"
+is accurate without making a legal claim we can't back up.
+
+NOTE: If the trust badge has an icon, keep whatever icon is there
+(lock icon, shield icon, etc). Only change the text.
+
+
+FIX 3: FOOTER SAFETY NOTICE — REFERENCE REFUND POLICY
+--------------------------------------------------------------
+FIND (look for text similar to):
+  7-day refund policy
+  or: refund within 7 days
+  or: 7 day money back
+
+REPLACE WITH:
+  See our Refund Policy for details on refunds by product type
+
+(or, if there's a clickable link version):
+  <a href="#" onclick="openRefundModal(); return false;" style="color:#DC143C; text-decoration:none;">See our Refund Policy</a> for details on refunds by product type
+
+WHY: The actual refund terms vary by product (Bot-Shield is non-refundable,
+monthly has no partial refund, prepaid plans have 14-day full refund window
+plus prorated after). Saying "7 days" across the board is inaccurate.
+
+
+FIX 4: META DESCRIPTION (if applicable in index.html <head>)
+--------------------------------------------------------------
+FIND:
+  The world's first AI dating app that proves
+
+REPLACE WITH:
+  A dating app with the strongest human-verification that
+
+NOTE: The patchClaims() script in the deployed dist/index.html already
+handles this text replacement at runtime. This fix is for any additional
+instances (e.g., og:description, twitter:description, or the React source).
+
+
+============================================================
+SUMMARY OF ALL TEXT CHANGES:
+============================================================
+
+1. "The world's first human-verified dating platform"
+   → "A human-verified dating platform"
+
+2. "GDPR Compliant"
+   → "Privacy Focused"
+
+3. "7-day refund policy" (or similar)
+   → "See our Refund Policy for details on refunds by product type"
+
+4. Add "Refund Policy" link to footer Legal section
+   (see footer-legal-update.html for the HTML)
+
+5. Add refundModal to the page
+   (see legal-modals.html for the full modal HTML + JS)
+
+============================================================

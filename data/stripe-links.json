@@ -26,10 +26,10 @@
     {
       "id": "3month_founder",
       "name": "3-Month Founder Pass",
-      "price": 49.99,
+      "price": 39.99,
       "type": "one_time",
-      "description": "$49.99 — 3 months of founder access",
-      "url": "https://buy.stripe.com/9B67sM7wM7MT9wV7wNeEo0b",
+      "description": "$39.99 — 3 months of founder access",
+      "url": "https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j",
       "env_key": "STRIPE_LINK_3MONTH"
     },
     {

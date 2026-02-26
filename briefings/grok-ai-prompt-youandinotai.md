@@ -21,7 +21,7 @@ Joshua Coleman (Trollz1004), owner of Trash Or Treasure Online Recycler LLC (Flo
 ### What The Frontend Has
 - Landing page with hero, stats, features grid
 - Bot-Shield $1 verification flow (Stripe link)
-- 4-tier pricing: $14.99/mo, $49.99/3mo, $99.99/12mo, $2,500 Royalty Card
+- 4-tier pricing: $14.99/mo, $39.99/3mo, $99.99/12mo, $2,500 Royalty Card
 - Dating app UI (mockup — no backend yet)
 - Signup page
 - Merch store section
@@ -79,7 +79,7 @@ Payment links are live but need webhook processing:
 |---------|-------------|
 | Bot-Shield $1 | https://buy.stripe.com/3cI3cwcR6c3910p18peEo09 |
 | Founding Member $14.99/mo | https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a |
-| 3-Month $49.99 | https://buy.stripe.com/9B67sM7wM7MT9wV7wNeEo0b |
+| 3-Month $39.99 | https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j |
 | 12-Month $99.99 | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
 | Royalty Card $2,500 | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
 
