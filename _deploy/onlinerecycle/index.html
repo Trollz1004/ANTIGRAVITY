@@ -1,196 +1,386 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OnlineRecycle.org // CrossLister AI Platform</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnlineRecycle.org // Trash Or Treasure Online Recycler LLC</title>
+    <meta name="description" content="Trash Or Treasure Online Recycler LLC — e-waste recycling, refurbishment, and responsible parts reclamation. Donate electronics, shop our eBay and Square stores.">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/framer-motion@latest/dist/framer-motion.js"></script>
     <style>
-      :root {
-        --primary: #10b981;
-        --primary-dark: #059669;
-        --background: #020617;
-        --surface: #0f172a;
-      }
-      body {
-        background-color: var(--background);
-        color: #f8fafc;
-        font-family: "Outfit", sans-serif;
-        overflow-x: hidden;
-      }
-      .mono {
-        font-family: "JetBrains Mono", monospace;
-      }
-      .glass {
-        background: rgba(15, 23, 42, 0.6);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-      }
-      .gradient-text {
-        background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      .hero-glow {
-        position: absolute;
-        top: -10%;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80%;
-        height: 60%;
-        background: radial-gradient(
-          circle,
-          rgba(16, 185, 129, 0.15) 0%,
-          rgba(59, 130, 246, 0.05) 50%,
-          transparent 100%
-        );
-        z-index: -1;
-        filter: blur(80px);
-      }
-      .hover-lift {
-        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      }
-      .hover-lift:hover {
-        transform: translateY(-8px);
-      }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #070110;
+            color: #fff;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+        }
+        .animate-spin-slow { animation: spin 10s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.8s ease-out; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0) translateX(-50%); } 50% { transform: translateY(-10px) translateX(-50%); } }
+        .animate-bounce-custom { animation: bounce 2s ease-in-out infinite; }
+        @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+        .animate-ping { animation: ping 1s cubic-bezier(0,0,0.2,1) infinite; }
     </style>
-  </head>
-  <body>
-    <div style="background:#000;color:#fff;padding:12px;text-align:center;font-weight:bold;position:relative;z-index:9999;">#ForTheKids — 60% of EVERY revenue dollar to Shriners Children's Hospitals</div>
-    <div class="hero-glow"></div>
+</head>
+<body>
+    <!-- #ForTheKids Banner -->
+    <div style="background:#000;color:#fff;padding:12px;text-align:center;font-weight:bold;position:fixed;top:0;left:0;right:0;z-index:9999;">
+        #ForTheKids — 60% of EVERY revenue dollar to Shriners Children's Hospitals
+    </div>
 
     <!-- Navigation -->
-    <nav class="glass fixed top-8 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-2xl flex items-center gap-8">
-      <div class="flex items-center gap-2">
-        <span class="text-primary font-black text-xl">OnlineRecycle</span><span class="text-white/40">.org</span>
-      </div>
-      <div class="hidden md:flex items-center gap-6 text-sm text-white/60">
-        <a href="#features" class="hover:text-white transition-colors">Platform</a>
-        <a href="#ecosystem" class="hover:text-white transition-colors">Ecosystem</a>
-        <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
-      </div>
-      <a href="#" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-xl text-sm font-semibold transition-colors">Launch App</a>
+    <nav class="fixed top-[44px] w-full z-50 bg-[#070110]/80 backdrop-blur-md border-b border-green-500/20">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                    <i data-lucide="recycle" class="text-white w-6 h-6 animate-spin-slow"></i>
+                </div>
+                <span class="text-lg font-black tracking-tighter uppercase text-green-400">Trash Or Treasure</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 text-xs font-black uppercase tracking-widest text-green-100/60">
+                <a href="#mission" class="hover:text-green-400 transition-colors">Mission</a>
+                <a href="#donations" class="hover:text-green-400 transition-colors">Donations</a>
+                <a href="#storefronts" class="hover:text-green-400 transition-colors">Shop</a>
+                <a href="#contact" class="hover:text-green-400 transition-colors">Dial In</a>
+            </div>
+        </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20">
-      <div class="inline-flex items-center gap-2 glass px-4 py-2 rounded-full text-sm text-primary mb-8">
-        <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-        Powered by Gemini 2.0
-      </div>
-
-      <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
-        E-Commerce <br />
-        <span class="gradient-text">Redefined.</span>
-      </h1>
-
-      <p class="text-xl text-white/60 max-w-2xl mb-10">
-        The ultimate AI-driven CrossLister. Automate listings, optimize profit margins, and scale your inventory across every major marketplace.
-      </p>
-
-      <div class="flex gap-4 flex-wrap justify-center">
-        <a href="#" class="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all hover:scale-105">Get Started Free</a>
-        <a href="#" class="glass text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-white/10 transition-all">View Demo</a>
-      </div>
-
-      <div class="flex gap-8 mt-16 flex-wrap justify-center opacity-40">
-        <span class="mono text-sm">eBay</span>
-        <span class="mono text-sm">Shopify</span>
-        <span class="mono text-sm">Amazon</span>
-        <span class="mono text-sm">Poshmark</span>
-        <span class="mono text-sm">Mercari</span>
-        <span class="mono text-sm">Etsy</span>
-      </div>
-    </section>
-
-    <!-- Features -->
-    <section id="features" class="py-24 px-4">
-      <div class="max-w-6xl mx-auto">
-        <div class="grid md:grid-cols-3 gap-6">
-          <div class="glass p-8 rounded-3xl hover-lift">
-            <h3 class="text-xl font-bold mb-3 text-primary">Smart Cross-Listing</h3>
-            <p class="text-white/60">Upload once. Sync everywhere. Our AI optimizes titles, descriptions, and categories for each specific platform's SEO.</p>
-          </div>
-          <div class="glass p-8 rounded-3xl hover-lift">
-            <h3 class="text-xl font-bold mb-3 text-primary">Profit Optimization</h3>
-            <p class="text-white/60">Real-time market analysis. Our algorithms suggest the perfect price points to maximize profit while maintaining high sell-through rates.</p>
-          </div>
-          <div class="glass p-8 rounded-3xl hover-lift">
-            <h3 class="text-xl font-bold mb-3 text-primary">Inventory Protection</h3>
-            <p class="text-white/60">Automatic delisting. When an item sells on one platform, it is instantly removed from all others to minimize duplicate sales.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Ecosystem -->
-    <section id="ecosystem" class="py-24 px-4 bg-surface/30">
-      <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-4xl font-black mb-6">
-          E-Commerce <br>
-          <span class="gradient-text">Efficiency at Scale.</span>
-        </h2>
-        <p class="text-white/60 text-lg mb-12">OnlineRecycle.org isn't just a tool; it's the financial engine of the Antigravity ecosystem. We turn inventory into miracles.</p>
-
-        <div class="flex flex-wrap justify-center gap-4 mb-16">
-          <div class="glass px-6 py-3 rounded-full text-sm font-semibold text-primary">100% Automated Inventory Sync</div>
-          <div class="glass px-6 py-3 rounded-full text-sm font-semibold text-primary">Infinite Marketplace Integration</div>
-          <div class="glass px-6 py-3 rounded-full text-sm font-semibold text-primary">Real-time ROI Dashboard</div>
+    <section class="relative pt-52 pb-24 px-6 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-full">
+            <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,_rgba(34,197,94,0.15),_transparent_70%)]"></div>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div class="glass p-6 rounded-2xl">
-            <div class="text-3xl font-black text-primary mb-1">Growing</div>
-            <div class="text-white/40 text-sm">Revenue Pipeline</div>
-          </div>
-          <div class="glass p-6 rounded-2xl">
-            <div class="text-3xl font-black text-primary mb-1">Scaling</div>
-            <div class="text-white/40 text-sm">Active Listings</div>
-          </div>
-          <div class="glass p-6 rounded-2xl">
-            <div class="text-3xl font-black text-primary mb-1">Target</div>
-            <div class="text-white/40 text-sm">Uptime Goal</div>
-          </div>
-          <div class="glass p-6 rounded-2xl">
-            <div class="text-3xl font-black text-primary mb-1">Min.</div>
-            <div class="text-white/40 text-sm">Duplicate Sales</div>
-          </div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-[10px] font-black uppercase tracking-[0.2em] mb-8 animate-fade-in shadow-[0_0_20px_rgba(34,197,94,0.2)]">
+                <i data-lucide="globe" class="w-3 h-3"></i>
+                Recycling for a Greener Tomorrow
+            </div>
+            <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9] text-transparent bg-clip-text bg-gradient-to-b from-white via-green-100 to-green-900/40">
+                ELECTRONIC<br>RENAISSANCE
+            </h1>
+            <p class="text-xl text-green-100/60 max-w-2xl mx-auto font-medium mb-12">
+                Trash Or Treasure Online Recycler LLC is dedicated to preventing e-waste
+                through meticulous refurbishment and responsible parts reclamation.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <a href="#donations" class="px-8 py-4 bg-green-600 hover:bg-green-500 text-black font-black uppercase tracking-widest rounded-2xl transition-all shadow-[0_0_30px_rgba(34,197,94,0.3)] hover:shadow-[0_0_50px_rgba(34,197,94,0.5)] hover:scale-105">
+                    Donate Equipment
+                </a>
+                <a href="https://ebay.us/m/olZpXe" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-green-500/30 font-black uppercase tracking-widest rounded-2xl transition-all flex items-center gap-3 text-green-100 hover:border-green-400">
+                    Shop Our eBay <i data-lucide="external-link" class="w-4 h-4"></i>
+                </a>
+            </div>
         </div>
-        <p class="text-white/30 text-xs mt-4">Platform in active development. Stats reflect goals, not verified historical data.</p>
-      </div>
+
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce-custom opacity-20 text-green-500">
+            <i data-lucide="chevron-down" class="w-8 h-8"></i>
+        </div>
     </section>
 
-    <!-- CTA -->
-    <section class="py-24 px-4 text-center">
-      <div class="max-w-2xl mx-auto">
-        <h2 class="text-4xl font-black mb-6">Ready to scale?</h2>
-        <blockquote class="text-white/60 text-lg italic mb-10">"We aren't just selling products. We are recycling resources into a better future for the kids."</blockquote>
-        <a href="#" class="bg-primary hover:bg-primary-dark text-white px-10 py-4 rounded-2xl font-semibold text-lg transition-all hover:scale-105 inline-block">Get Started with CrossLister AI</a>
-      </div>
+    <!-- Mission Section -->
+    <section id="mission" class="py-24 px-6 border-y border-green-900/30 bg-green-900/[0.05]">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl font-black uppercase tracking-tighter mb-6 text-green-50">Our Core Mission</h2>
+                    <div class="space-y-6 text-green-100/70 text-lg leading-relaxed font-medium">
+                        <p>
+                            Every year, millions of tons of functional electronics are discarded. Our mission is
+                            to bridge the gap between "trash" and "treasure" by intercepting hardware before
+                            it reaches a landfill.
+                        </p>
+                        <p>
+                            By refurbishing servers, laptops, and specialized components, we extend the
+                            lifecycle of technology. This reduces the demand for new resource extraction and
+                            lowers the carbon footprint of the tech industry.
+                        </p>
+                        <div class="p-6 rounded-3xl bg-green-950/40 border border-green-500/20 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-green-600 flex items-center justify-center shrink-0 shadow-lg">
+                                <i data-lucide="heart" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-black text-green-100 uppercase tracking-tighter mb-1">Giving Back</h4>
+                                <p class="text-sm">
+                                    Sustainability is our goal, but social impact is our soul. Portions of every
+                                    sale proceed go toward verified charity platforms built directly into our sales channels.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="aspect-square bg-gradient-to-br from-green-500/10 to-green-900/10 rounded-[4rem] border border-green-500/20 flex items-center justify-center overflow-hidden shadow-[0_0_100px_rgba(34,197,94,0.1)]">
+                        <i data-lucide="recycle" class="w-48 h-48 text-green-500/20 animate-spin-slow"></i>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="grid grid-cols-2 gap-4 p-8">
+                                <div class="p-8 bg-[#0a0212] border border-green-500/20 rounded-3xl shadow-2xl group hover:border-green-400 transition-colors">
+                                    <i data-lucide="server" class="w-10 h-10 text-green-400 mb-4"></i>
+                                    <div class="text-xs font-black uppercase tracking-widest text-green-100">Servers</div>
+                                </div>
+                                <div class="p-8 bg-[#0a0212] border border-green-500/20 rounded-3xl shadow-2xl group hover:border-green-400 transition-colors">
+                                    <i data-lucide="laptop" class="w-10 h-10 text-green-400 mb-4"></i>
+                                    <div class="text-xs font-black uppercase tracking-widest text-green-100">Laptops</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
+
+    <!-- Donations Section -->
+    <section id="donations" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-black uppercase tracking-tighter mb-4 text-white">Accepting Donations</h2>
+                <p class="text-green-100/60 max-w-2xl mx-auto font-medium">
+                    We accept a wide range of hardware for recycling and refurbishment.
+                    Contact us to arrange a drop-off or pickup for enterprise volume.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="group p-8 rounded-[2.5rem] bg-white/5 border border-white/10 hover:border-green-500 transition-all hover:bg-green-900/20 cursor-default">
+                    <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border border-green-500/20 group-hover:bg-green-500">
+                        <i data-lucide="laptop" class="w-7 h-7 text-green-400 group-hover:text-black transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-black uppercase tracking-tighter mb-3 text-green-50">Laptops</h3>
+                    <p class="text-sm text-green-100/50 leading-relaxed font-medium group-hover:text-green-100/80">Any age or condition. We refurbish or responsibly harvest parts.</p>
+                </div>
+                <div class="group p-8 rounded-[2.5rem] bg-white/5 border border-white/10 hover:border-green-500 transition-all hover:bg-green-900/20 cursor-default">
+                    <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border border-green-500/20 group-hover:bg-green-500">
+                        <i data-lucide="server" class="w-7 h-7 text-green-400 group-hover:text-black transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-black uppercase tracking-tighter mb-3 text-green-50">Servers & Networking</h3>
+                    <p class="text-sm text-green-100/50 leading-relaxed font-medium group-hover:text-green-100/80">Enterprise-grade equipment and infrastructure hardware.</p>
+                </div>
+                <div class="group p-8 rounded-[2.5rem] bg-white/5 border border-white/10 hover:border-green-500 transition-all hover:bg-green-900/20 cursor-default">
+                    <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border border-green-500/20 group-hover:bg-green-500">
+                        <i data-lucide="cpu" class="w-7 h-7 text-green-400 group-hover:text-black transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-black uppercase tracking-tighter mb-3 text-green-50">PC Components</h3>
+                    <p class="text-sm text-green-100/50 leading-relaxed font-medium group-hover:text-green-100/80">GPUs, CPUs, RAM, and vintage circuit boards.</p>
+                </div>
+                <div class="group p-8 rounded-[2.5rem] bg-white/5 border border-white/10 hover:border-green-500 transition-all hover:bg-green-900/20 cursor-default">
+                    <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border border-green-500/20 group-hover:bg-green-500">
+                        <i data-lucide="smartphone" class="w-7 h-7 text-green-400 group-hover:text-black transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-black uppercase tracking-tighter mb-3 text-green-50">Mobile Devices</h3>
+                    <p class="text-sm text-green-100/50 leading-relaxed font-medium group-hover:text-green-100/80">Smartphones, tablets, and handheld electronics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Storefronts Section -->
+    <section id="storefronts" class="py-24 px-6 bg-gradient-to-b from-transparent to-green-900/10">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <a href="https://ebay.us/m/olZpXe" target="_blank" rel="noopener noreferrer" class="group p-10 rounded-[3rem] bg-white/5 border border-white/10 flex flex-col justify-between hover:scale-[1.02] transition-all hover:shadow-[0_0_60px_rgba(34,197,94,0.15)] hover:border-green-500/40 overflow-hidden relative">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-600 blur-[100px] opacity-10 group-hover:opacity-30 transition-opacity"></div>
+                    <div>
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/5 group-hover:border-green-500/30 transition-colors">
+                                <i data-lucide="shopping-bag" class="w-8 h-8 text-green-100"></i>
+                            </div>
+                            <i data-lucide="external-link" class="w-6 h-6 text-white/20 group-hover:text-green-400 transition-colors"></i>
+                        </div>
+                        <h3 class="text-3xl font-black uppercase tracking-tighter mb-4 text-white">eBay Store</h3>
+                        <p class="text-green-100/50 text-lg font-medium leading-relaxed max-w-sm">
+                            Our primary marketplace for vintage and tech treasures.
+                        </p>
+                    </div>
+                    <div class="mt-12 flex items-center gap-2 text-sm font-black uppercase tracking-[0.2em] group-hover:gap-4 transition-all text-green-400">
+                        Visit Store <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </div>
+                </a>
+                <a href="https://onlinerecycle.square.site/" target="_blank" rel="noopener noreferrer" class="group p-10 rounded-[3rem] bg-white/5 border border-white/10 flex flex-col justify-between hover:scale-[1.02] transition-all hover:shadow-[0_0_60px_rgba(34,197,94,0.15)] hover:border-green-500/40 overflow-hidden relative">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gray-900 blur-[100px] opacity-10 group-hover:opacity-30 transition-opacity"></div>
+                    <div>
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/5 group-hover:border-green-500/30 transition-colors">
+                                <i data-lucide="shopping-bag" class="w-8 h-8 text-green-100"></i>
+                            </div>
+                            <i data-lucide="external-link" class="w-6 h-6 text-white/20 group-hover:text-green-400 transition-colors"></i>
+                        </div>
+                        <h3 class="text-3xl font-black uppercase tracking-tighter mb-4 text-white">Square Shop</h3>
+                        <p class="text-green-100/50 text-lg font-medium leading-relaxed max-w-sm">
+                            Direct purchasing and local pickup options.
+                        </p>
+                    </div>
+                    <div class="mt-12 flex items-center gap-2 text-sm font-black uppercase tracking-[0.2em] group-hover:gap-4 transition-all text-green-400">
+                        Visit Store <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 px-6 relative">
+        <div id="contact-glow" class="absolute inset-0 bg-green-600/5 transition-opacity duration-1000 pointer-events-none opacity-0"></div>
+
+        <div class="max-w-7xl mx-auto">
+            <div class="rounded-[4rem] bg-gradient-to-br from-[#0a1f0d] to-[#0a0212] border border-green-500/30 p-12 md:p-20 relative overflow-hidden shadow-[0_0_100px_rgba(34,197,94,0.15)]">
+                <div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_100%_0%,_rgba(34,197,94,0.2),_transparent_60%)]"></div>
+
+                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <div id="signal-dot" class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <span id="signal-text" class="text-green-500 font-mono text-xs uppercase tracking-widest">Signal: WAITING...</span>
+                        </div>
+                        <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-8 leading-none text-white">
+                            Get <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-green-600">Dialed In</span>
+                        </h2>
+                        <p class="text-green-100/60 text-lg font-medium mb-12 max-w-md">
+                            Have e-waste to donate? Questions about a specific treasure?
+                            Reach out to the Trash Or Treasure team.
+                        </p>
+
+                        <div class="space-y-8">
+                            <div class="flex items-center gap-6 group">
+                                <div class="w-12 h-12 rounded-2xl bg-green-900/30 flex items-center justify-center border border-green-500/30 group-hover:bg-green-500 transition-all">
+                                    <i data-lucide="mail" class="w-5 h-5 text-green-400 group-hover:text-black"></i>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] font-black uppercase tracking-widest text-green-500/50">Email</div>
+                                    <a href="mailto:joshlcoleman@gmail.com" class="text-lg font-bold hover:text-green-400 transition-colors text-white">joshlcoleman@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-6 group">
+                                <div class="w-12 h-12 rounded-2xl bg-green-900/30 flex items-center justify-center border border-green-500/30 group-hover:bg-green-500 transition-all">
+                                    <i data-lucide="map-pin" class="w-5 h-5 text-green-400 group-hover:text-black"></i>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] font-black uppercase tracking-widest text-green-500/50">Location</div>
+                                    <div class="text-lg font-bold text-white">Florida — Local pickup available</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-6 opacity-50">
+                                <div class="w-12 h-12 rounded-2xl bg-green-900/30 flex items-center justify-center border border-green-500/30">
+                                    <i data-lucide="phone" class="w-5 h-5 text-green-400"></i>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] font-black uppercase tracking-widest text-green-500/50">Secure Line</div>
+                                    <div class="text-lg font-bold text-white">Encrypted Voice Relay</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/40 border border-green-500/20 rounded-[2.5rem] p-8 md:p-10 backdrop-blur-xl">
+                        <form id="contact-form" action="https://formsubmit.co/joshlcoleman@gmail.com" method="POST" class="space-y-6">
+                            <input type="hidden" name="_subject" value="OnlineRecycle.org Contact">
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_next" value="https://onlinerecycle.org">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black uppercase tracking-widest text-green-500/60 ml-4">Full Name</label>
+                                    <input type="text" name="name" required class="w-full bg-green-900/10 border border-green-500/20 rounded-2xl px-6 py-4 focus:border-green-500 outline-none font-medium text-green-100 placeholder-green-900/50 transition-all focus:bg-green-900/20">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black uppercase tracking-widest text-green-500/60 ml-4">Email Address</label>
+                                    <input type="email" name="email" required class="w-full bg-green-900/10 border border-green-500/20 rounded-2xl px-6 py-4 focus:border-green-500 outline-none font-medium text-green-100 placeholder-green-900/50 transition-all focus:bg-green-900/20">
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-green-500/60 ml-4">Your Message</label>
+                                <textarea rows="4" name="message" required class="w-full bg-green-900/10 border border-green-500/20 rounded-2xl px-6 py-4 focus:border-green-500 outline-none font-medium text-green-100 resize-none placeholder-green-900/50 transition-all focus:bg-green-900/20"></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-5 bg-green-600 text-black font-black uppercase tracking-widest rounded-2xl hover:bg-green-400 hover:shadow-[0_0_30px_rgba(34,197,94,0.4)] transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="wifi" class="w-4 h-4"></i> Transmit Data
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <div class="text-center py-4 px-6 text-green-500/40 text-xs font-medium">
+        Platform in active development. Trash Or Treasure Online Recycler LLC, Florida.
+    </div>
 
     <!-- Footer -->
-    <footer class="glass py-8 px-4 text-center">
-      <div class="flex items-center justify-center gap-2 mb-4">
-        <span class="text-primary font-black text-lg">OnlineRecycle</span><span class="text-white/40">.org</span>
-      </div>
-      <div class="flex gap-6 justify-center text-sm text-white/40 mb-4">
-        <a href="#" class="hover:text-white transition-colors">Privacy</a>
-        <a href="#" class="hover:text-white transition-colors">Terms</a>
-        <a href="#" class="hover:text-white transition-colors">Contact</a>
-        <a href="#" class="hover:text-white transition-colors">API</a>
-      </div>
-      <p class="text-white/20 text-sm">&copy; 2026 Trollz1004 Org. All Rights Reserved.</p>
+    <footer class="py-12 px-6 border-t border-green-900/20 text-center bg-[#05010a]">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-3">
+                <i data-lucide="recycle" class="w-5 h-5 text-green-500"></i>
+                <span class="text-sm font-black uppercase tracking-widest text-green-100">Trash Or Treasure Online Recycler LLC</span>
+            </div>
+            <div class="text-[10px] font-black uppercase tracking-[0.2em] text-green-500/30">
+                &copy; 2026 // ONLINERECYCLE.ORG
+            </div>
+        </div>
     </footer>
 
+    <!-- Modem Sound + Intersection Observer -->
     <script>
-      lucide.createIcons();
+        lucide.createIcons();
+
+        function playModemSound() {
+            try {
+                var AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) return;
+                var ctx = new AC();
+                var t = ctx.currentTime;
+
+                var osc = ctx.createOscillator();
+                var gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.frequency.setValueAtTime(1600, t);
+                osc.frequency.exponentialRampToValueAtTime(2100, t + 0.5);
+                gain.gain.setValueAtTime(0.05, t);
+                gain.gain.linearRampToValueAtTime(0.05, t + 1.5);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 2.0);
+                osc.start(t); osc.stop(t + 2.0);
+
+                var bufferSize = ctx.sampleRate * 1.5;
+                var buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                var data = buffer.getChannelData(0);
+                for (var i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+                var noise = ctx.createBufferSource(); noise.buffer = buffer;
+                var noiseGain = ctx.createGain();
+                var noiseFilter = ctx.createBiquadFilter();
+                noiseFilter.type = 'bandpass'; noiseFilter.frequency.value = 1000; noiseFilter.Q.value = 1;
+                noise.connect(noiseFilter); noiseFilter.connect(noiseGain); noiseGain.connect(ctx.destination);
+                noiseGain.gain.setValueAtTime(0, t);
+                noiseGain.gain.linearRampToValueAtTime(0.08, t + 0.6);
+                noiseGain.gain.linearRampToValueAtTime(0, t + 1.8);
+                noise.start(t + 0.5);
+
+                var lfo = ctx.createOscillator(); lfo.type = 'square'; lfo.frequency.value = 30;
+                var dataOsc = ctx.createOscillator(); dataOsc.type = 'square'; dataOsc.frequency.value = 1200;
+                var dataGain = ctx.createGain(); dataGain.gain.value = 0.03;
+                lfo.connect(dataGain.gain); dataOsc.connect(dataGain); dataGain.connect(ctx.destination);
+                dataOsc.start(t + 1.0); lfo.start(t + 1.0);
+                dataOsc.stop(t + 2.5); lfo.stop(t + 2.5);
+            } catch (e) { /* Audio not supported */ }
+        }
+
+        var hasPlayed = false;
+        var contactSection = document.getElementById('contact');
+        if (contactSection) {
+            var observer = new IntersectionObserver(function(entries) {
+                if (entries[0].isIntersecting && !hasPlayed) {
+                    playModemSound();
+                    hasPlayed = true;
+                    document.getElementById('contact-glow').style.opacity = '1';
+                    document.getElementById('signal-dot').classList.add('animate-ping');
+                    document.getElementById('signal-text').textContent = 'Signal: CONNECTED 56K';
+                }
+            }, { threshold: 0.4 });
+            observer.observe(contactSection);
+        }
     </script>
-  </body>
+</body>
 </html>

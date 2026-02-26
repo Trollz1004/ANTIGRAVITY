@@ -17,10 +17,9 @@
     },
     {
       "name": "youandinotai",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3000,
-      "cwd": "youandinotai"
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["C:\\Users\\joshl\\AppData\\Roaming\\npm\\node_modules\\serve\\build\\main.js", "youandinotai-app/client", "-l", "3001", "--no-clipboard"],
+      "port": 3001
     },
     {
       "name": "briefings",
