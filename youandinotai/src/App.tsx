@@ -6,7 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import { CosmicCanvas } from './components/CosmicCanvas';
 import { useGameStore } from './store/useGameStore';
-import { Users, Heart, Sparkles, Rocket, Trophy, PenTool, Flame, Mic, ShieldCheck, ShieldAlert, Recycle, Mail, Check, LayoutDashboard } from 'lucide-react';
+import { Users, Heart, Sparkles, Rocket, Trophy, PenTool, Flame, Mic, ShieldCheck, ShieldAlert, Recycle, Mail, Check, LayoutDashboard, X } from 'lucide-react';
 import { GeminiMatchmaker } from './components/GeminiMatchmaker';
 import { CosmicContest } from './components/CosmicContest';
 import { CosmicWall } from './components/CosmicWall';
@@ -37,6 +37,82 @@ function SignupCTA() {
   );
 }
 
+function CountdownTimer() {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
+
+  useEffect(() => {
+    const launch = new Date('2026-04-04T00:00:00-04:00').getTime();
+    const tick = () => {
+      const diff = launch - Date.now();
+      if (diff <= 0) return;
+      setTimeLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        mins: Math.floor((diff % 3600000) / 60000),
+        secs: Math.floor((diff % 60000) / 1000),
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const units = [
+    { value: timeLeft.days, label: 'Days' },
+    { value: timeLeft.hours, label: 'Hours' },
+    { value: timeLeft.mins, label: 'Minutes' },
+    { value: timeLeft.secs, label: 'Seconds' },
+  ];
+
+  return (
+    <section className="relative z-10 py-10 px-4 bg-black/40 backdrop-blur-sm border-y border-white/5">
+      <h2 className="text-center text-xs uppercase tracking-[0.2em] text-gray-500 font-bold mb-4">Launching In</h2>
+      <div className="flex justify-center gap-3 md:gap-4 flex-wrap">
+        {units.map((u) => (
+          <div key={u.label} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 min-w-[70px] md:min-w-[90px] text-center">
+            <span className="block text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-pink-400 to-purple-500">{u.value}</span>
+            <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">{u.label}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function HowItWorks() {
+  const steps = [
+    { num: 1, title: 'Pay $1 Bot-Shield', desc: 'One-time verification fee. Proves you\'re a real human, not a bot or catfish.' },
+    { num: 2, title: 'Verify Your Identity', desc: 'Quick selfie + ID check. Takes under 2 minutes. Your data stays private.' },
+    { num: 3, title: 'Meet Real People', desc: 'Everyone you match with is verified. No bots. No catfish. Just humans looking for connection.' },
+  ];
+
+  return (
+    <section className="relative z-10 py-14 px-4">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-center text-2xl md:text-3xl font-black mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+          How It Works
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {steps.map((s) => (
+            <div key={s.num} className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center backdrop-blur-sm hover:border-pink-500/30 transition-colors">
+              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-lg mb-3">
+                {s.num}
+              </div>
+              <h3 className="text-white font-bold text-base mb-2">{s.title}</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center gap-6 mt-8 flex-wrap">
+          <span className="text-gray-500 text-xs flex items-center gap-1.5">🔒 Privacy Focused</span>
+          <span className="text-gray-500 text-xs flex items-center gap-1.5">✅ Identity Verified</span>
+          <span className="text-gray-500 text-xs flex items-center gap-1.5">❤️ 18+ Only</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function WaitlistForm() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -47,7 +123,7 @@ function WaitlistForm() {
     if (!email.trim() || loading) return;
     setLoading(true);
     try {
-      await fetch('https://formsubmit.co/ajax/joshlcoleman@gmail.com', {
+      await fetch('https://formsubmit.co/ajax/contact@youandinotai.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ email, _subject: 'YouAndINotAI Waitlist Signup', _template: 'table' }),
@@ -103,7 +179,7 @@ function PricingSection() {
   const plans = [
     { name: 'Bot-Shield Verification', price: '$1', desc: 'Prove you\'re real', link: 'https://buy.stripe.com/3cI3cwcR6c3910p18peEo09', bg: 'from-indigo-500 to-purple-600' },
     { name: 'Founding Member', price: '$14.99/mo', desc: 'Locked forever at this rate', link: 'https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a', bg: 'from-purple-600 to-pink-600' },
-    { name: '3-Month Founder', price: '$49.99', desc: 'Save $5 vs monthly', link: 'https://buy.stripe.com/9B67sM7wM7MT9wV7wNeEo0b', bg: 'from-blue-600 to-indigo-600' },
+    { name: '3-Month Founder', price: '$39.99', desc: 'Save $5 vs monthly', link: 'https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j', bg: 'from-blue-600 to-indigo-600' },
     { name: '12-Month Founder', price: '$99.99', desc: 'Best value — save $80', link: 'https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c', bg: 'from-indigo-700 to-blue-700' },
     { name: 'Royalty Card', price: '$2,500', desc: 'Lifetime VIP + revenue share', link: 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d', bg: 'from-amber-400 to-orange-500' },
   ];
@@ -139,6 +215,144 @@ function PricingSection() {
   );
 }
 
+const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
+  terms: {
+    title: 'Terms of Service',
+    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. HUMAN VERIFICATION — Bot-Shield verification is required. Fraudulent verification attempts result in permanent ban.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations result in immediate account termination.\n4. PAYMENTS — All payments processed through Stripe. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. CHARITY — 60% of all revenue goes to Shriners Children's Hospitals. This is a permanent commitment enforced by smart contract.\n\nLast updated: February 2026. Contact: contact@youandinotai.com`,
+  },
+  privacy: {
+    title: 'Privacy Policy',
+    body: `YouAndINotAI values your privacy.\n\nDATA WE COLLECT — Email address, verification selfie (processed and discarded), profile information you provide.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Stripe (payments), FormSubmit (waitlist), Cloudflare (hosting). Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data encrypted in transit (TLS) and at rest.\n\nLast updated: February 2026.`,
+  },
+  age: {
+    title: 'Age Policy',
+    body: `YouAndINotAI is strictly for users aged 18 and older.\n\nWe verify age through our Bot-Shield verification process which includes government ID verification. Users found to be under 18 will have their accounts immediately terminated and all data deleted.\n\nIf you believe a minor is using the Platform, report it immediately to contact@youandinotai.com.\n\nWe comply with COPPA and do not knowingly collect data from minors.`,
+  },
+  refund: {
+    title: 'Refund Policy',
+    body: `Refund eligibility varies by product:\n\nBOT-SHIELD ($1) — Non-refundable. One-time verification fee.\nFOUNDING MEMBER ($14.99/mo) — Cancel anytime. No refunds for partial months. You keep access until the billing period ends.\n3-MONTH FOUNDER ($39.99) — Refundable within 7 days if you haven't used matching features. After 7 days or first match, non-refundable.\n12-MONTH FOUNDER ($99.99) — Refundable within 14 days if you haven't used matching features. After 14 days or first match, non-refundable.\nROYALTY CARD ($2,500) — Refundable within 30 days. After 30 days, non-refundable due to lifetime benefits activation.\n\nAll refunds processed through Stripe within 5-10 business days.\nContact: contact@youandinotai.com`,
+  },
+};
+
+function LegalModal({ type, onClose }: { type: string; onClose: () => void }) {
+  const content = LEGAL_CONTENT[type];
+  if (!content) return null;
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        className="bg-gray-900 border border-white/10 rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-bold text-white">{content.title}</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+            <X size={20} />
+          </button>
+        </div>
+        <div className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">{content.body}</div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function Footer({ onLegal }: { onLegal: (type: string) => void }) {
+  const plans = [
+    { name: 'Bot-Shield — $1', link: 'https://buy.stripe.com/3cI3cwcR6c3910p18peEo09' },
+    { name: 'Founding Member — $14.99/mo', link: 'https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a' },
+    { name: '3-Month Founder — $39.99', link: 'https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j' },
+    { name: '12-Month Founder — $99.99', link: 'https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c' },
+    { name: 'Royalty Card — $2,500', link: 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d' },
+  ];
+
+  return (
+    <footer className="relative z-10 border-t border-white/10 bg-black/60 backdrop-blur-md mt-8">
+      <div className="max-w-5xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Brand */}
+        <div>
+          <h4 className="text-white font-bold text-lg mb-3">YouAndINotAI</h4>
+          <p className="text-gray-400 text-sm leading-relaxed">
+            A human-verified dating platform. No bots. No catfish. Just real people looking for real connection.
+          </p>
+        </div>
+
+        {/* Products */}
+        <div>
+          <h4 className="text-white font-bold text-lg mb-3">Products</h4>
+          <ul className="space-y-2">
+            {plans.map((p) => (
+              <li key={p.name}>
+                <a href={p.link} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-400 text-sm no-underline transition-colors">
+                  {p.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Legal */}
+        <div>
+          <h4 className="text-white font-bold text-lg mb-3">Legal</h4>
+          <ul className="space-y-2">
+            {(['terms', 'privacy', 'age', 'refund'] as const).map((key) => (
+              <li key={key}>
+                <button onClick={() => onLegal(key)} className="text-gray-400 hover:text-pink-400 text-sm transition-colors bg-transparent border-none cursor-pointer p-0">
+                  {LEGAL_CONTENT[key].title}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Contact */}
+        <div>
+          <h4 className="text-white font-bold text-lg mb-3">Contact</h4>
+          <ul className="space-y-2">
+            <li>
+              <a href="mailto:contact@youandinotai.com" className="text-gray-400 hover:text-pink-400 text-sm no-underline transition-colors">
+                contact@youandinotai.com
+              </a>
+            </li>
+            <li>
+              <a href="https://twitter.com/youandinotai" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-400 text-sm no-underline transition-colors">
+                @youandinotai
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="border-t border-white/5 py-4 px-6">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+          <div className="flex flex-wrap justify-center gap-2 text-xs">
+            {(['terms', 'privacy', 'age', 'refund'] as const).map((key, i) => (
+              <React.Fragment key={key}>
+                {i > 0 && <span className="text-gray-600">&middot;</span>}
+                <button onClick={() => onLegal(key)} className="text-gray-500 hover:text-gray-300 transition-colors bg-transparent border-none cursor-pointer p-0 text-xs">
+                  {LEGAL_CONTENT[key].title.replace(' Policy', '').replace(' of Service', '')}
+                </button>
+              </React.Fragment>
+            ))}
+          </div>
+          <p className="text-gray-600 text-xs">&copy; 2026 Trash Or Treasure Online Recycler LLC. All rights reserved.</p>
+        </div>
+        <p className="text-center text-xs text-gray-600 mt-2">
+          See our <button onClick={() => onLegal('refund')} className="text-red-400 hover:text-red-300 transition-colors bg-transparent border-none cursor-pointer p-0 text-xs">Refund Policy</button> for details on refunds by product type.
+        </p>
+      </div>
+    </footer>
+  );
+}
+
 export default function App() {
   const connect = useGameStore((state) => state.connect);
   const disconnect = useGameStore((state) => state.disconnect);
@@ -153,6 +367,7 @@ export default function App() {
   const [showShriners, setShowShriners] = useState(false);
   const [showTerminal, setShowTerminal] = useState(false);
   const [showEcosystem, setShowEcosystem] = useState(false);
+  const [legalModal, setLegalModal] = useState<string | null>(null);
 
   useEffect(() => {
     connect();
@@ -340,14 +555,40 @@ export default function App() {
         </div>
       </div>
 
-      {/* Waitlist */}
-      <WaitlistForm />
+      {/* Countdown */}
+      <CountdownTimer />
+
+      {/* How It Works */}
+      <HowItWorks />
 
       {/* Pricing Section */}
       <PricingSection />
 
+      {/* Waitlist */}
+      <WaitlistForm />
+
       {/* Charity Section */}
       <CharitySection />
+
+      {/* QR Code Share */}
+      <section className="relative z-10 py-12 px-4 text-center">
+        <div className="max-w-md mx-auto">
+          <h2 className="text-2xl md:text-3xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">
+            Share YouAndINotAI
+          </h2>
+          <p className="text-gray-400 text-sm mb-6">Scan to visit — or share with someone who deserves real love.</p>
+          <img
+            src="/qrcode.png"
+            alt="Scan to visit youandinotai.com"
+            width={200}
+            height={200}
+            className="mx-auto rounded-2xl border-2 border-white/10 bg-white p-2 shadow-lg"
+          />
+        </div>
+      </section>
+
+      {/* Footer */}
+      <Footer onLegal={(type) => setLegalModal(type)} />
 
       {/* Sticky CTA */}
       <SignupCTA />
@@ -385,6 +626,9 @@ export default function App() {
         )}
         {showEcosystem && (
           <EcosystemStats onClose={() => setShowEcosystem(false)} />
+        )}
+        {legalModal && (
+          <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />
         )}
       </AnimatePresence>
     </div>

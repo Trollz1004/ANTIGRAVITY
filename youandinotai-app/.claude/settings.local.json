@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git push:*)",
+      "Bash(nvidia-smi:*)",
+      "Bash(docker compose restart:*)",
+      "Bash(docker compose:*)",
+      "Bash(docker compose rm:*)",
+      "Bash(docker run:*)",
+      "Bash(docker compose up:*)",
+      "Bash(curl:*)",
+      "Bash(robocopy:*)",
+      "Bash(powershell.exe -NoProfile -Command \"robocopy ''F:\\\\OPUS\\\\openclaw'' ''C:\\\\OPUSONLY\\\\openclaw'' /E /XD node_modules .wwebjs_auth .wwebjs_cache __pycache__ /XF .env\")",
+      "Bash(python -c:*)",
+      "Bash(powershell.exe -NoProfile -Command \"robocopy ''C:\\\\OPUSONLY\\\\openclaw'' ''C:\\\\OPUSONLY\\\\ANTIGRAVITY-tmp\\\\openclaw'' /E /XD node_modules .wwebjs_auth .wwebjs_cache __pycache__ /XF .env package-lock.json\")",
+      "Bash(powershell.exe -NoProfile -Command \":*)",
+      "Bash(find:*)",
+      "Read(//c/OPUSONLY/**)"
+    ]
+  }
+}

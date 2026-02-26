@@ -1,0 +1,29 @@
+{
+  "manifest_version": "2.0",
+  "doctrine": "60/30/10 Split (Charity/Infra/OpusTrust)",
+  "nodes": {
+    "SABRETOOTH": {
+      "ip": "192.168.0.104",
+      "role": "Marketing (Loudmouth) + Dev Staging"
+    },
+    "T5500": {
+      "ip": "192.168.0.101",
+      "role": "Production (Brain) + Payment Routing"
+    },
+    "AWS_EC2": {
+      "ip": "3.84.226.108",
+      "role": "Cloud Backend (Nginx/FastAPI)"
+    }
+  },
+  "endpoints": {
+    "frontend": "https://youandinotai.com",
+    "api_base": "https://api.youandinotai.com",
+    "dashboard": "https://jules-dashboard.pages.dev",
+    "gemini_proxy": "https://gemini-proxy.joshlcoleman.workers.dev"
+  },
+  "mission": {
+    "target": "$19,990",
+    "deadline": "2026-04-04",
+    "focus": "YouAndiNotAi (Dating + Social Hub)"
+  }
+}

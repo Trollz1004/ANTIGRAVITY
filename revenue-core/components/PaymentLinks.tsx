@@ -38,11 +38,11 @@ const PRODUCTS: Product[] = [
   {
     id: '3-month-founder',
     name: '3-Month Founder',
-    price: '$49.99',
+    price: '$39.99',
     interval: 'one-time',
     description: '3 months of Founding Member access. Save $5 vs monthly.',
     icon: <Calendar size={24} />,
-    stripeUrl: 'https://buy.stripe.com/9B67sM7wM7MT9wV7wNeEo0b',
+    stripeUrl: 'https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j',
   },
   {
     id: '12-month-founder',
