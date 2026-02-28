@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   ShoppingBag,
   Truck,
   ShieldCheck,
   Heart,
-  ArrowRight,
   ExternalLink,
 } from "lucide-react";
 import { motion } from "motion/react";
@@ -15,16 +14,16 @@ const MERCH_ITEMS = [
     name: "Anti-AI Human-Only Tee",
     price: "$35",
     desc: "Heavyweight cotton street-wear. Prove you were here before the singularity.",
-    link: "https://square.link/u/wjJfoKhF", // Extracted from ai-solutions-store
-    image: "https://placehold.co/400x400/1a1a1a/ffffff?text=Human+Only+Tee",
+    link: "https://square.link/u/wjJfoKhF",
+    image: "",
   },
   {
     id: "anti-ai-hoodie",
     name: "Identity Shield Hoodie",
     price: "$65",
-    desc: "Premium fleece for the digital resistance. 60% of profits to pediatric care.",
-    link: "https://square.link/u/wjJfoKhF", // Re-using link for placeholder if needed, update with specific if found
-    image: "https://placehold.co/400x400/1a1a1a/ffffff?text=Identity+Hoodie",
+    desc: "Premium fleece for the digital resistance. 60% of revenue to pediatric care.",
+    link: "https://square.link/u/wjJfoKhF",
+    image: "",
   },
 ];
 
@@ -58,8 +57,8 @@ export const MerchStore: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           </div>
           <p className="text-zinc-400 text-sm max-w-md">
             Wear the mission.{" "}
-            <span className="text-pink-400 font-bold">60% of NET proceeds</span>{" "}
-            go directly to Shriners Children's Hospitals.
+            <span className="text-pink-400 font-bold">60% of revenue</span>{" "}
+            goes to Shriners Children's Hospitals.
           </p>
         </div>
 
@@ -70,12 +69,12 @@ export const MerchStore: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               key={item.id}
               className="group bg-black/40 border border-white/5 rounded-3xl overflow-hidden hover:border-pink-500/30 transition-all"
             >
-              <div className="aspect-square bg-zinc-800 relative">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
+              <div className="aspect-square bg-gradient-to-br from-zinc-800 to-zinc-900 relative flex items-center justify-center">
+                <div className="text-center group-hover:scale-110 transition-transform duration-500">
+                  <ShoppingBag size={48} className="text-pink-500/30 mx-auto mb-3" />
+                  <div className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Coming Q2 2026</div>
+                  <div className="text-sm font-bold text-zinc-400 mt-1">{item.name}</div>
+                </div>
                 <div className="absolute top-4 left-4 bg-emerald-500 text-black text-[10px] font-black px-2 py-1 rounded">
                   #FORTHEKIDS
                 </div>
