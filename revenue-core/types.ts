@@ -4,6 +4,8 @@ export enum View {
   HIVE = 'HIVE',
   BROWSER = 'BROWSER',
   INTELLIGENCE = 'INTELLIGENCE',
+  ADS = 'ADS',
+  ROYALTY = 'ROYALTY',
   SETTINGS = 'SETTINGS'
 }
 
@@ -31,13 +33,16 @@ export interface ResearchItem {
 export interface Agent {
   id: string;
   name: string;
-  role: 'Research' | 'Poster' | 'Engager' | 'Analyst';
-  status: 'Active' | 'Idle' | 'Healing' | 'Error' | 'Paused';
+  role: 'Commander' | 'Builder' | 'Researcher' | 'Analyst' | 'Poster' | 'Engager';
+  status: 'Active' | 'Idle' | 'Standby' | 'Error' | 'Paused';
   health: number;
   task: string;
   dependencies?: string[];
   workflowStage: number;
   load: number;
+  model?: string;
+  provider?: string;
+  node?: string;
 }
 
 export interface ContentDraft {
@@ -49,9 +54,17 @@ export interface ContentDraft {
   tags: string[];
 }
 
+export interface StripeMetrics {
+  revenue: number;
+  customers: number;
+  subscriptions: number;
+  lastPayment: string | null;
+  products: { name: string; sales: number; revenue: number }[];
+}
+
 export interface ApiConfig {
   geminiKey: string;
-  simulationMode: boolean;
+  stripeKey?: string;
   redditClientId?: string;
   youtubeApiKey?: string;
   twitterApiKey?: string;

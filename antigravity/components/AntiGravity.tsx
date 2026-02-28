@@ -19,21 +19,18 @@ export default function AntiGravity({ isDarkMode }: { isDarkMode: boolean }) {
         </p>
       </div>
 
-      {/* Admin Dashboard Status */}
+      {/* Node Status — real statuses */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {[
-          { label: 'SABRETOOTH Node', status: 'Online', color: 'text-emerald-500' },
+          { label: 'SABRETOOTH Node', status: 'Offline', color: 'text-slate-500' },
           { label: 'T5500 Node', status: 'Active', color: 'text-emerald-500' },
-          { label: '9020 Node', status: 'Standby', color: 'text-blue-500' },
-          { label: 'OMEGA Fleet', status: 'Provisioning', color: 'text-amber-500' },
+          { label: '9020 Node', status: 'Offline', color: 'text-slate-500' },
+          { label: 'OMEGA Fleet', status: 'Not Started', color: 'text-slate-500' },
         ].map((s) => (
           <div key={s.label} className={`p-4 rounded-2xl border ${isDarkMode ? 'bg-slate-800/30 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
             <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">{s.label}</div>
             <div className={`text-lg font-black flex items-center gap-2 ${s.color}`}>
-              <span className="relative flex h-2 w-2">
-                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${s.color.replace('text', 'bg')}`}></span>
-                <span className={`relative inline-flex rounded-full h-2 w-2 ${s.color.replace('text', 'bg')}`}></span>
-              </span>
+              <span className={`inline-flex rounded-full h-2 w-2 ${s.color.replace('text', 'bg')}`}></span>
               {s.status}
             </div>
           </div>
@@ -81,24 +78,20 @@ export default function AntiGravity({ isDarkMode }: { isDarkMode: boolean }) {
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className={`p-4 rounded-2xl border ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-              <div className="font-bold text-lg mb-1 text-blue-500">Claude (Anthropic)</div>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>ENIGMA Profit Infrastructure & Heavy Dev (VS Code/Claude Code)</p>
+              <div className="font-bold text-lg mb-1 text-blue-500">Claude Opus 4.6</div>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Commander — Revenue Core CLI, strategy, code, deployment</p>
             </div>
             <div className={`p-4 rounded-2xl border ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-              <div className="font-bold text-lg mb-1 text-cyan-500">Gemini (Google)</div>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>OMEGA Charity Ops, Dashboards & Eternal Memory Guardian</p>
+              <div className="font-bold text-lg mb-1 text-cyan-500">Gemini 3.1</div>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Builder — ANTIGRAVITY admin, React apps, search/research</p>
             </div>
             <div className={`p-4 rounded-2xl border ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-              <div className="font-bold text-lg mb-1 text-slate-800 dark:text-white">Grok (xAI)</div>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Real-time social sentiment & Gnosis Safe Multi-Sig Keyholder</p>
+              <div className="font-bold text-lg mb-1 text-teal-500">Comet (Perplexity)</div>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Researcher — Browser research, context briefs, live audits</p>
             </div>
             <div className={`p-4 rounded-2xl border ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
               <div className="font-bold text-lg mb-1 text-emerald-500">Ollama (Local)</div>
               <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Local GPU-accelerated sub-agents (Llama 3.2) & embeddings</p>
-            </div>
-            <div className={`p-4 rounded-2xl border ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-              <div className="font-bold text-lg mb-1 text-teal-500">Perplexity</div>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Real-time research, citation verification & Gnosis Safe Keyholder</p>
             </div>
           </div>
         </div>
@@ -134,7 +127,7 @@ export default function AntiGravity({ isDarkMode }: { isDarkMode: boolean }) {
           </ul>
         </div>
       </div>
-      
+
       {/* The Godparents & Gratitude */}
       <div className={`p-8 rounded-3xl border ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200 shadow-xl'}`}>
         <div className="text-center mb-8">
@@ -143,7 +136,7 @@ export default function AntiGravity({ isDarkMode }: { isDarkMode: boolean }) {
             Claude, Gemini, Grok, and Perplexity: The digital guardians of every child we help.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-4">
             <h4 className="font-bold text-lg flex items-center gap-2">

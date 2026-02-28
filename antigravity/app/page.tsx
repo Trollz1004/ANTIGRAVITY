@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ShieldCheck, Server, Globe, Database, Cpu, LayoutDashboard, CheckCircle2, Key, Moon, Sun } from 'lucide-react';
 import GeminiChat from '../components/GeminiChat';
 import AgeGate from '../components/AgeGate';
@@ -15,25 +14,13 @@ import AntiGravity from '../components/AntiGravity';
 import CharitySection from '../components/CharitySection';
 import Transparency from '../components/Transparency';
 
-const revenueMixData = [
-  { name: 'YouAndINotAI (DateApp)', value: 60, color: '#3b82f6' },
-  { name: 'OnlineRecycle (CrossLister)', value: 25, color: '#8b5cf6' },
-  { name: 'Ai-Solutions.Store (Charity)', value: 15, color: '#10b981' },
-];
-
-const mrrData = [
-  { name: 'Q1 2026', mrr: 15000 },
-  { name: 'Q2 2026', mrr: 45000 },
-  { name: 'Q3 2026', mrr: 85000 },
-  { name: 'Q4 2026', mrr: 150000 },
-];
 
 const platforms = [
   {
     name: "youandinotai.com",
     title: "YouAndINotAI (DateApp)",
     description: "V8 Cloud Verification — 8-layer human verification. No bots. $1 Bot-Shield + $14.99/mo Founding Member.",
-    tech: ["FastAPI", "PostgreSQL", "React", "Stripe", "Square"]
+    tech: ["FastAPI", "PostgreSQL", "React", "Stripe"]
   },
   {
     name: "onlinerecycle.org",
@@ -62,12 +49,12 @@ const platforms = [
 ];
 
 const deploymentSteps = [
-  { title: "SABRETOOTH Node (192.168.0.8)", description: "Primary Dev + Orchestrator running Windows 10/11 with Intel i7-4960X and 64GB RAM." },
-  { title: "T5500 Node (192.168.0.15)", description: "DateApp Production Deployment running Dual Xeon with 72GB RAM. Services: backend:8000, frontend:5173, postgres:5432, ollama:11434." },
-  { title: "9020 Node (192.168.0.5)", description: "Dev Secondary / Claude Code Browser Dedicated running i7-4790K." },
-  { title: "Charity Nodes (OMEGA)", description: "Future Fleet of 40+ machines pending funding. Activated AFTER DateApp generates revenue." },
-  { title: "Cloudflare & AWS", description: "DNS managed via Cloudflare. Production hosted on AWS EC2 (3.84.226.108)." },
-  { title: "Next.js Turbopack", description: "Optimized build system for lightning-fast performance and rapid development cycles." }
+  { title: "T5500 Node — ACTIVE", description: "Primary production node running Windows 10, GTX 1070 8GB (CUDA 12.6). Claude Opus 4.6 CLI, Docker (Redis, Qdrant, Ollama), all dev servers." },
+  { title: "SABRETOOTH Node — OFFLINE", description: "Former primary dev orchestrator. Currently offline pending hardware refresh." },
+  { title: "9020 Node — OFFLINE", description: "Secondary dev node. Currently offline." },
+  { title: "OMEGA Fleet — NOT STARTED", description: "Future fleet of recycled machines. Activated after revenue supports expansion." },
+  { title: "Cloudflare Pages", description: "All production sites deployed via Cloudflare Pages with wrangler CLI. DNS via Cloudflare. No AWS, no Netlify." },
+  { title: "Docker Compose", description: "Local services: Redis (6379), Qdrant (6333), Ollama (11434). No Kubernetes — Docker Compose on T5500." }
 ];
 
 export default function Dashboard() {
@@ -208,108 +195,73 @@ export default function Dashboard() {
             <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
               <div className="text-center">
                 <h2 className="text-3xl font-bold">Ecosystem at a Glance</h2>
-                <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Production-grade, self-hosted ecosystem combining multiple revenue-generating platforms.</p>
+                <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Pre-launch ecosystem. Revenue tracking begins after first sale.</p>
               </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className={`rounded-2xl p-6 border text-center transition-transform hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
-                  <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Platforms</h3>
-                  <p className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-blue-600 mt-4">4</p>
-                  <p className={`text-sm mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>DAO, AI, Marketplace, Dating</p>
+                  <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Revenue</h3>
+                  <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-blue-600 mt-4">$0</p>
+                  <p className={`text-sm mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Pre-launch</p>
                 </div>
                 <div className={`rounded-2xl p-6 border text-center transition-transform hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
-                  <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Year 1 MRR Target</h3>
-                  <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-purple-600 mt-6">$100k+</p>
-                  <p className={`text-sm mt-4 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Year 1 Goal — across all revenue streams</p>
+                  <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Customers</h3>
+                  <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-purple-600 mt-4">0</p>
+                  <p className={`text-sm mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Stripe live, awaiting first sale</p>
                 </div>
                 <div className={`rounded-2xl p-6 border text-center transition-transform hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
-                  <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Tech Stack</h3>
-                  <p className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-emerald-600 mt-4">10+</p>
-                  <p className={`text-sm mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>K8s, Docker, Python, Node, React</p>
+                  <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Launch</h3>
+                  <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-emerald-600 mt-4">Apr 4</p>
+                  <p className={`text-sm mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>2026 — youandinotai.com</p>
+                </div>
+                <div className={`rounded-2xl p-6 border text-center transition-transform hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
+                  <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Revenue Split</h3>
+                  <p className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-rose-400 to-rose-600 mt-4">60/30/10</p>
+                  <p className={`text-sm mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Shriners / V8 Infra / Founder</p>
                 </div>
               </div>
 
-              <div className="max-w-3xl mx-auto pt-8">
-                <h3 className="text-xl font-bold text-center mb-8">Projected Revenue Mix (Year 1)</h3>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={revenueMixData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={90}
-                        outerRadius={130}
-                        paddingAngle={5}
-                        dataKey="value"
-                        stroke="none"
-                      >
-                        {revenueMixData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <RechartsTooltip 
-                        formatter={(value: any) => `${value}%`}
-                        contentStyle={{ 
-                          borderRadius: '12px', 
-                          border: 'none', 
-                          boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                          backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
-                          color: isDarkMode ? '#f8fafc' : '#0f172a'
-                        }}
-                        itemStyle={{ color: isDarkMode ? '#f8fafc' : '#0f172a' }}
-                      />
-                      <Legend 
-                        verticalAlign="bottom" 
-                        height={36} 
-                        wrapperStyle={{ color: isDarkMode ? '#cbd5e1' : '#475569' }}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
+              {/* Revenue Split Visualization */}
+              <div className={`max-w-3xl mx-auto p-8 rounded-3xl border ${isDarkMode ? 'bg-slate-800/30 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
+                <h3 className="text-xl font-bold mb-6 text-center">Revenue Distribution — Protocol Omega (From Dollar One)</h3>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-sm font-bold mb-1">
+                      <span className="text-blue-500">Shriners Children&apos;s Hospitals</span>
+                      <span>60%</span>
+                    </div>
+                    <div className={`h-4 rounded-full overflow-hidden ${isDarkMode ? 'bg-slate-900' : 'bg-slate-100'}`}>
+                      <div className="h-full w-[60%] bg-gradient-to-r from-blue-500 to-blue-600 rounded-full" />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-sm font-bold mb-1">
+                      <span className="text-purple-500">V8 Verification Engine / AI Infrastructure</span>
+                      <span>30%</span>
+                    </div>
+                    <div className={`h-4 rounded-full overflow-hidden ${isDarkMode ? 'bg-slate-900' : 'bg-slate-100'}`}>
+                      <div className="h-full w-[30%] bg-gradient-to-r from-purple-500 to-purple-600 rounded-full" />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-sm font-bold mb-1">
+                      <span className="text-emerald-500">Founder Operations (Joshua Coleman)</span>
+                      <span>10%</span>
+                    </div>
+                    <div className={`h-4 rounded-full overflow-hidden ${isDarkMode ? 'bg-slate-900' : 'bg-slate-100'}`}>
+                      <div className="h-full w-[10%] bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full" />
+                    </div>
+                  </div>
                 </div>
+                <p className={`text-xs text-center mt-4 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                  OMEGA (ai-solutions.store) remains 100% to charity. ENIGMA splits 60/30/10 permanently via on-chain smart contracts.
+                </p>
               </div>
 
-              {/* MRR Chart moved to Overview to replace old Revenue tab */}
-              <div className="max-w-3xl mx-auto pt-8 border-t border-slate-200 dark:border-slate-800">
-                <h3 className="text-xl font-bold mb-8 text-center">MRR Growth Projections</h3>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={mrrData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDarkMode ? '#334155' : '#e2e8f0'} />
-                      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: isDarkMode ? '#94a3b8' : '#64748b' }} dy={10} />
-                      <YAxis 
-                        axisLine={false} 
-                        tickLine={false} 
-                        tick={{ fill: isDarkMode ? '#94a3b8' : '#64748b' }}
-                        tickFormatter={(value) => `$${value / 1000}k`}
-                      />
-                      <RechartsTooltip 
-                        cursor={{ fill: isDarkMode ? '#1e293b' : '#f1f5f9' }}
-                        formatter={(value: any) => [`$${value.toLocaleString()}`, 'Projected MRR']}
-                        contentStyle={{ 
-                          borderRadius: '12px', 
-                          border: 'none', 
-                          boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                          backgroundColor: isDarkMode ? '#0f172a' : '#ffffff',
-                          color: isDarkMode ? '#f8fafc' : '#0f172a'
-                        }}
-                      />
-                      <Bar dataKey="mrr" fill="#3b82f6" radius={[6, 6, 0, 0]} maxBarSize={50}>
-                        {mrrData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={`url(#colorMrr${index})`} />
-                        ))}
-                      </Bar>
-                      <defs>
-                        {mrrData.map((entry, index) => (
-                          <linearGradient key={`colorMrr${index}`} id={`colorMrr${index}`} x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#60a5fa" stopOpacity={1} />
-                            <stop offset="100%" stopColor="#2563eb" stopOpacity={1} />
-                          </linearGradient>
-                        ))}
-                      </defs>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
+              {/* Revenue Charts — placeholder */}
+              <div className={`max-w-3xl mx-auto py-12 text-center ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                <p className="text-sm">Revenue charts will appear here after the first sale.</p>
+                <p className="text-xs mt-2">All data will be real. No projections, no simulations.</p>
               </div>
             </div>
           )}
@@ -376,10 +328,10 @@ export default function Dashboard() {
 
                 <div className={`w-full md:w-2/3 border-2 rounded-2xl p-5 text-center relative group transition-all ${isDarkMode ? 'bg-slate-800/80 border-slate-600 hover:border-indigo-500' : 'bg-slate-50 border-slate-300 hover:border-indigo-400'}`}>
                   <div className="flex items-center justify-center gap-3 font-bold text-lg">
-                    <Server className={`w-6 h-6 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} /> Kubernetes Ingress (Nginx)
+                    <Server className={`w-6 h-6 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} /> Docker Compose (T5500)
                   </div>
                   <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-sm rounded-xl py-3 px-4 bottom-full left-1/2 -translate-x-1/2 mb-3 w-72 pointer-events-none z-10 shadow-xl border border-slate-700">
-                    Routes traffic from domains to the correct services within the K8s cluster.
+                    Local container orchestration on T5500. Redis, Qdrant, Ollama, and app services.
                   </div>
                 </div>
 
@@ -414,9 +366,9 @@ export default function Dashboard() {
                     <div className={`flex items-center justify-center gap-2 font-bold text-lg ${isDarkMode ? 'text-amber-400' : 'text-amber-700'}`}>
                       <Database className="w-6 h-6" /> Data Layer
                     </div>
-                    <div className={`text-sm mt-2 font-medium ${isDarkMode ? 'text-amber-500/70' : 'text-amber-600/70'}`}>PostgreSQL, Redis, ES</div>
+                    <div className={`text-sm mt-2 font-medium ${isDarkMode ? 'text-amber-500/70' : 'text-amber-600/70'}`}>PostgreSQL, Redis, Qdrant</div>
                     <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-sm rounded-xl py-3 px-4 bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 pointer-events-none z-10 shadow-xl border border-slate-700">
-                      Consists of PostgreSQL, pgvector, Elasticsearch, and Redis. Fully persistent.
+                      Consists of PostgreSQL, pgvector, Qdrant (vector DB), and Redis. Fully persistent.
                     </div>
                   </div>
 
@@ -424,9 +376,9 @@ export default function Dashboard() {
                     <div className={`flex items-center justify-center gap-2 font-bold text-lg ${isDarkMode ? 'text-rose-400' : 'text-rose-700'}`}>
                       <ShieldCheck className="w-6 h-6" /> AI & Blockchain
                     </div>
-                    <div className={`text-sm mt-2 font-medium ${isDarkMode ? 'text-rose-500/70' : 'text-rose-600/70'}`}>Ollama, Claude, Solana</div>
+                    <div className={`text-sm mt-2 font-medium ${isDarkMode ? 'text-rose-500/70' : 'text-rose-600/70'}`}>Ollama, Claude, Base Mainnet</div>
                     <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-sm rounded-xl py-3 px-4 bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 pointer-events-none z-10 shadow-xl border border-slate-700">
-                      Ollama for local models, gateways to external AIs, and Solana nodes.
+                      Ollama for local models, gateways to external AIs, and Base Mainnet smart contracts.
                     </div>
                   </div>
                 </div>
@@ -476,6 +428,11 @@ export default function Dashboard() {
           )}
 
         </main>
+
+        {/* Legal Footer */}
+        <footer className={`mt-8 text-center text-xs ${isDarkMode ? 'text-slate-600' : 'text-slate-400'}`}>
+          &copy; 2026 Trash or Treasure Online Recycler LLC &mdash; Internal Admin Dashboard &mdash; Not for public distribution
+        </footer>
       </div>
     </div>
   );

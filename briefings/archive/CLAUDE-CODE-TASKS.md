@@ -64,7 +64,7 @@ Before executing ANY task, read `C:\OPUSONLY\briefings\archive\AI-CONTEXT-BRIEFI
 2. Include these products:
    - Bot-Shield Verification: $1.00
    - Founding Member Monthly: $14.99/mo
-   - 3-Month Founder Membership: $49.99
+   - 3-Month Founder Membership: $39.99
    - 12-Month Founder Membership: $99.99
    - Royalty Card: $2,500
 3. Each product should have a "PAY NOW" button linking to the Stripe checkout URL

@@ -1,0 +1,48 @@
+Gemini handoff - archive cleanup and infrastructure audit (2026-02-26)
+
+Codex completed cleanup/audit tooling and archived outputs in C:\OPUSONLY.
+
+What was done
+1. Personal-records archive audit tool created:
+   - C:\OPUSONLY\scripts\audit-personal-records.ps1
+2. Storage target audit tool created (Docker/WSL/network style):
+   - C:\OPUSONLY\scripts\audit-storage-targets.ps1
+3. Safe launcher template created from OPUS-ASSISTANT.bat:
+   - C:\OPUSONLY\scripts\OPUS-ASSISTANT-SAFE.bat
+   - hardcoded token removed
+   - blanket taskkill removed
+   - infinite monitor loop removed
+
+Archived outputs
+1. Personal records audit summary:
+   - C:\OPUSONLY\memory\PERSONAL-RECORDS-AUDIT-2026-02-26.md
+2. Personal records cleanup summary + prompt:
+   - C:\OPUSONLY\memory\PERSONAL-RECORDS-CLEANUP-SUMMARY-2026-02-26.md
+   - C:\OPUSONLY\memory\GEMINI-HANDOFF-PROMPT-PERSONAL-RECORDS-2026-02-26.txt
+3. Docker folders audit artifacts:
+   - C:\OPUSONLY\_ARCHIVE\audit-docker-folders-2026-02-26\manifest.json
+   - C:\OPUSONLY\_ARCHIVE\audit-docker-folders-2026-02-26\secret-findings.txt
+   - C:\OPUSONLY\_ARCHIVE\audit-docker-folders-2026-02-26\summary.md
+   - C:\OPUSONLY\memory\STORAGE-AUDIT-SUMMARY-docker-folders-2026-02-26.md
+   - C:\OPUSONLY\memory\GEMINI-HANDOFF-PROMPT-docker-folders-2026-02-26.txt
+
+Docker audit results
+- Roots scanned:
+  - C:\Users\joshl\.docker
+  - C:\Users\joshl\AppData\Roaming\Docker
+  - C:\Users\joshl\AppData\Local\Docker
+  - C:\ProgramData\DockerDesktop
+- Candidate files scanned: 62
+- Files with secret markers: 1
+- Flagged path:
+  - C:\Users\joshl\.docker\mcp\catalogs\docker-mcp.yaml
+
+Requested targets status
+- Network drives: none mapped on this host
+- Ubuntu WSL path: not mounted (only docker-desktop distro present)
+- Docker folders: audited and archived as above
+
+Operational policy
+1. Keep secret-bearing files archive-only.
+2. Do not ingest raw .env/secret-bearing dumps into live prompts.
+3. Use sanitized memory summaries as the assistant context baseline.

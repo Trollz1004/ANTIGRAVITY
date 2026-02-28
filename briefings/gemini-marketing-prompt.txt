@@ -11,7 +11,7 @@ PRODUCT FACTS (verified, real data only):
 - Pricing:
   - Bot-Shield Verification: $1 (one-time, proves you're human)
   - Founding Member: $14.99/mo (locked at this price forever)
-  - 3-Month Founder: $49.99
+  - 3-Month Founder: $39.99
   - 12-Month Founder: $99.99
   - Royalty Card: $2,500 (lifetime VIP + revenue share)
 - AI: Powered by Gemini (matchmaking, verification, safety features)
