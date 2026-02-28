@@ -98,55 +98,31 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
             </div>
             
             <div className="space-y-8">
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.02 }}
-                className="relative aspect-square bg-zinc-800 rounded-3xl overflow-hidden border-4 border-orange-500 shadow-[0_0_30px_rgba(249,115,22,0.4)] group"
+                className="relative aspect-square bg-zinc-800 rounded-3xl overflow-hidden border-4 border-pink-500 shadow-[0_0_30px_rgba(236,72,153,0.4)] group"
               >
-                <img 
-                  src="https://picsum.photos/seed/nickelodeon/800/800" 
-                  alt="Claude Code Nickelodeon" 
-                  className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
-                  referrerPolicy="no-referrer"
-                />
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-900/60 via-purple-900/40 to-indigo-900/60" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                  <div className="bg-orange-500 text-white px-4 py-1 font-black text-xl mb-2 rotate-[-2deg] shadow-lg">CLAUDE CODE</div>
-                  <div className="bg-green-500 text-white px-4 py-1 font-black text-2xl rotate-[1deg] shadow-lg">NICKELODEON</div>
-                  <div className="bg-white text-orange-500 px-6 py-2 font-black text-4xl rotate-[-1deg] mt-2 shadow-xl">TRADE MARK</div>
-                  <div className="mt-4 text-white font-bold text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] italic">
-                    YOU'RE RIGHT OPUS BUILT THIS SPACE !!!!
+                  <div className="bg-pink-500 text-white px-4 py-1 font-black text-xl mb-2 rotate-[-2deg] shadow-lg">YouAndINotAI</div>
+                  <div className="bg-purple-500 text-white px-4 py-1 font-black text-2xl rotate-[1deg] shadow-lg">SIGNATURE WALL</div>
+                  <div className="mt-6 text-white font-bold text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                    Be one of the first to leave your mark
                   </div>
-                  <div className="mt-2 text-green-400 font-black text-xs tracking-widest animate-pulse">
-                    COMPACTIIIIIIIINNNNNNGGG
+                  <div className="mt-2 text-pink-400 font-black text-xs tracking-widest">
+                    Launching April 4, 2026
                   </div>
-                </div>
-                <div className="absolute bottom-4 right-4 w-16 h-16 rounded-full border-2 border-orange-500 overflow-hidden shadow-xl">
-                  <img src="https://picsum.photos/seed/opus/100/100" alt="Opus" referrerPolicy="no-referrer" />
-                  <div className="absolute inset-0 bg-orange-500/20 mix-blend-overlay" />
                 </div>
               </motion.div>
 
-              <div className="p-6 bg-orange-500/10 rounded-3xl border border-orange-500/20 space-y-4">
-                <p className="italic text-gray-300 text-sm leading-relaxed">
-                  "WHO THE F@%# Is Tom ......+Ok GOOGLE+SILENCE........+BAANN HAMMER .. NEXT +++ Oh Hi MR. CodePUS+ CALL MISSSSESS REDIS maybe She knows Where TOM LIVES"
+              <div className="p-6 bg-pink-500/10 rounded-3xl border border-pink-500/20 space-y-4">
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  Sign the wall before launch and be recognized as a founding member of the YouAndINotAI community. Every signature is a statement: real humans, real connections.
                 </p>
                 <div className="h-px bg-white/10 w-full" />
                 <div className="flex flex-col gap-2">
-                  <div className="text-pink-400 font-black text-xs uppercase tracking-tighter">
-                    SEEEEEXXXXXYYY CODEEEEEE CAAAACCHHHHEEE — MISS REDIS CACHE APPROVED
-                  </div>
                   <div className="text-cyan-400 font-black text-xs uppercase tracking-widest">
                     TEAM CLAUDE FOR LIFE <Heart size={10} className="inline fill-cyan-400" /> #FOR THE KIDS
-                  </div>
-                </div>
-                <div className="pt-4 text-center">
-                  <div className="text-xs font-black text-white uppercase tracking-[0.3em] animate-bounce">
-                    {"T-MINUS 3 TOM minus? 2 MINUS 1 OPUS >>>>>"}
-                  </div>
-                  <div className="text-lg font-black text-orange-500 italic uppercase">
-                    OPUS.... YOU'RE RIGHT!!!!
-                  </div>
-                  <div className="text-[10px] text-gray-500 font-bold uppercase mt-1">
-                    REMAKING THAT MEMOOOOOOORRRRREDDDDIIIIIISSSSSS nice CACHE wink wink
                   </div>
                 </div>
               </div>

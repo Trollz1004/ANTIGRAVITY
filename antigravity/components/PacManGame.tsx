@@ -241,15 +241,15 @@ export default function PacManGame({ isDarkMode }: { isDarkMode: boolean }) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="mb-4 flex justify-between w-full max-w-[420px]">
+      <div className="mb-4 flex justify-between w-full" style={{ maxWidth: 'min(420px, 100%)' }}>
         <div className="text-xl font-bold text-yellow-500">SCORE: {score}</div>
         {gameOver && <div className="text-xl font-bold text-red-500 animate-pulse">GAME OVER</div>}
       </div>
-      <div className={`p-2 rounded-xl ${isDarkMode ? 'bg-slate-800' : 'bg-slate-200'} shadow-inner`}>
-        <canvas 
-          ref={canvasRef} 
+      <div className={`p-2 rounded-xl ${isDarkMode ? 'bg-slate-800' : 'bg-slate-200'} shadow-inner`} style={{ maxWidth: 'min(420px, 100%)' }}>
+        <canvas
+          ref={canvasRef}
           className="rounded-lg shadow-lg"
-          style={{ width: '420px', height: '420px' }}
+          style={{ width: 'min(420px, 100%)', height: 'auto', aspectRatio: '1 / 1' }}
         />
       </div>
       <p className={`mt-4 text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>

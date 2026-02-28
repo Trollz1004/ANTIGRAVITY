@@ -1,0 +1,26 @@
+﻿Gemini handoff - storage audit complete
+
+Codex completed a non-destructive storage audit on 2026-02-26.
+
+Target label: docker-folders
+Existing roots scanned:
+- C:\Users\joshl\.docker
+- C:\Users\joshl\AppData\Roaming\Docker
+- C:\Users\joshl\AppData\Local\Docker
+- C:\ProgramData\DockerDesktop
+
+Missing requested roots:
+- None
+
+Results:
+- Candidate files scanned: 62
+- Files with secret markers: 1
+
+Artifacts:
+- C:\OPUSONLY\_ARCHIVE\audit-docker-folders-2026-02-26\manifest.json
+- C:\OPUSONLY\_ARCHIVE\audit-docker-folders-2026-02-26\secret-findings.txt
+- C:\OPUSONLY\_ARCHIVE\audit-docker-folders-2026-02-26\summary.md
+
+Operational rule:
+- Treat flagged files as archive-only.
+- Use sanitized summaries instead of raw secret-bearing content.

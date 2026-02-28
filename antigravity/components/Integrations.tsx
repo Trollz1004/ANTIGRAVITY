@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreditCard, Wallet, DollarSign, Building2, CheckCircle2 } from 'lucide-react';
+import { CreditCard, DollarSign, CheckCircle2 } from 'lucide-react';
 
 export default function Integrations({ isDarkMode }: { isDarkMode: boolean }) {
   const integrations = [
@@ -11,23 +11,9 @@ export default function Integrations({ isDarkMode }: { isDarkMode: boolean }) {
       color: "indigo"
     },
     {
-      name: "Plaid",
-      icon: <Building2 className="w-8 h-8 text-emerald-500" />,
-      description: "Bank account linking for direct ACH transfers and identity verification.",
-      status: "Configured",
-      color: "emerald"
-    },
-    {
-      name: "Google Pay",
-      icon: <Wallet className="w-8 h-8 text-blue-500" />,
-      description: "One-click checkout enabled for mobile and web users.",
-      status: "Active",
-      color: "blue"
-    },
-    {
       name: "Square",
       icon: <DollarSign className="w-8 h-8 text-slate-500" />,
-      description: "Point of sale and alternative payment processing backup.",
+      description: "Used for onlinerecycle.square.site only. Not part of the YouAndINotAI platform.",
       status: "Connected",
       color: "slate"
     }
@@ -58,7 +44,10 @@ export default function Integrations({ isDarkMode }: { isDarkMode: boolean }) {
             <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{int.description}</p>
             
             <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
-              <button className={`w-full py-2 rounded-lg text-sm font-semibold transition-colors ${isDarkMode ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-800'}`}>
+              <button
+                onClick={() => alert('Configuration managed via Stripe Dashboard')}
+                className={`w-full py-2 rounded-lg text-sm font-semibold transition-colors ${isDarkMode ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-800'}`}
+              >
                 Manage Configuration
               </button>
             </div>

@@ -20,7 +20,9 @@
       "mcp__92eec91f-cf49-4367-be36-a099dae42261__*",
       "mcp__Claude_in_Chrome__*",
       "mcp__Claude_Preview__*",
-      "mcp__mcp-registry__*"
+      "mcp__mcp-registry__*",
+      "mcp__omega-sentry__*"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": true
 }

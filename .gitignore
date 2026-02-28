@@ -24,6 +24,7 @@ _ARCHIVE/dot-dirs/.chrome-profiles/
 _ARCHIVE/dot-dirs/.playwright-profiles/
 _ARCHIVE/
 .netlify/
+.mcp.json
 
 # Build outputs (deploy via CI, not git)
 antigravity/out/

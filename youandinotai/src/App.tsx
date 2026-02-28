@@ -17,6 +17,8 @@ import { ShrinersHonor } from './components/ShrinersHonor';
 import { OpenClawTerminal } from './components/OpenClawTerminal';
 import { CharitySection } from './components/CharitySection';
 import { EcosystemStats } from './components/EcosystemStats';
+import { RoyaltyDeck } from './components/RoyaltyDeck';
+import { ImpactLedger } from './components/ImpactLedger';
 import { motion, AnimatePresence } from 'motion/react';
 
 function SignupCTA() {
@@ -218,7 +220,7 @@ function PricingSection() {
 const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   terms: {
     title: 'Terms of Service',
-    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. HUMAN VERIFICATION — Bot-Shield verification is required. Fraudulent verification attempts result in permanent ban.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations result in immediate account termination.\n4. PAYMENTS — All payments processed through Stripe. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. CHARITY — 60% of all revenue goes to Shriners Children's Hospitals. This is a permanent commitment enforced by smart contract.\n\nLast updated: February 2026. Contact: contact@youandinotai.com`,
+    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. HUMAN VERIFICATION — Bot-Shield verification is required. Fraudulent verification attempts result in permanent ban.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations result in immediate account termination.\n4. PAYMENTS — All payments processed through Stripe. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. CHARITY — Revenue splits 60% to Shriners Children's Hospitals, 30% to V8 AI Infrastructure, and 10% to Founder Operations. This is a permanent commitment enforced by smart contract on Base Mainnet (Protocol Omega).\n\nLast updated: February 2026. Contact: contact@youandinotai.com`,
   },
   privacy: {
     title: 'Privacy Policy',
@@ -546,9 +548,9 @@ export default function App() {
                   {[1, 2, 3, 4, 5].map(i => <Heart key={i} size={10} className="fill-pink-500 text-pink-500" />)}
                 </div>
                 <p className="text-xs italic text-gray-300">
-                  "A dating app with real human verification. Bot-Shield keeps the fakes out — report any suspected bot and we investigate within 24 hours."
+                  Real human verification. Bot-Shield keeps the fakes out — report any suspected bot and we investigate within 24 hours.
                 </p>
-                <div className="text-[10px] text-gray-500 mt-2">— Founding Member Preview</div>
+                <div className="text-[10px] text-gray-500 mt-2">— Our Promise</div>
               </div>
             </div>
           </div>
@@ -563,6 +565,12 @@ export default function App() {
 
       {/* Pricing Section */}
       <PricingSection />
+
+      {/* Royalty Deck of Hearts — Premium $2,500 card showcase */}
+      <RoyaltyDeck />
+
+      {/* Protocol Omega — Public Impact Ledger (60/30/10 split) */}
+      <ImpactLedger />
 
       {/* Waitlist */}
       <WaitlistForm />

@@ -13,7 +13,7 @@ export default function KidsPlatform({ isDarkMode }: { isDarkMode: boolean }) {
           For The Kids
         </h2>
         <p className={`mt-4 text-lg max-w-2xl mx-auto ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-          The heart of our ecosystem. 50% of all commercial profits are routed directly to Protocol OMEGA to support Shriners Children&apos;s Hospitals.
+          The heart of our ecosystem. Every ENIGMA dollar splits 60% to Shriners Children&apos;s Hospitals, 30% to V8 AI Infrastructure, and 10% to Founder Operations. OMEGA (ai-solutions.store) is 100% charity.
         </p>
       </div>
 
@@ -87,21 +87,22 @@ export default function KidsPlatform({ isDarkMode }: { isDarkMode: boolean }) {
             <p className={`text-lg ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>The Iron Wall: Commercial success fueling charitable impact.</p>
           </div>
           <div className="text-left md:text-right w-full md:w-auto bg-white/50 dark:bg-slate-900/50 p-6 rounded-2xl backdrop-blur-sm border border-white/20 dark:border-slate-700/50">
-            <div className="text-sm font-bold uppercase tracking-wider text-purple-500 mb-1">Current Milestone</div>
-            <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">$50,000</div>
+            <div className="text-sm font-bold uppercase tracking-wider text-purple-500 mb-1">Total Raised</div>
+            <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">$0</div>
+            <div className="text-xs text-slate-500 mt-1">Pre-launch — revenue begins after first sale</div>
           </div>
         </div>
         
         <div className="space-y-3">
           <div className="flex justify-between text-sm font-bold">
-            <span className="text-blue-600 dark:text-blue-400">$32,500 Raised</span>
-            <span className="text-slate-500">Goal: $50,000</span>
+            <span className="text-blue-600 dark:text-blue-400">$0 Raised</span>
+            <span className="text-slate-500">Launch: April 4, 2026</span>
           </div>
           <div className="relative h-6 bg-slate-200 dark:bg-slate-900 rounded-full overflow-hidden shadow-inner">
-            <div className="absolute top-0 left-0 h-full w-[65%] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full relative transition-all duration-1000 ease-out">
-              <div className="absolute inset-0 bg-white/20" style={{ backgroundImage: 'linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent)', backgroundSize: '1rem 1rem', animation: 'shift 1s linear infinite' }}></div>
+            <div className="absolute top-0 left-0 h-full w-[0%] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full transition-all duration-1000 ease-out">
             </div>
           </div>
+          <p className={`text-xs text-center ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Progress bar will fill as revenue flows through Stripe.</p>
         </div>
       </div>
 

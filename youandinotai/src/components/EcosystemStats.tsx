@@ -25,9 +25,9 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
     { 
       name: 'OnlineRecycle', 
       title: 'CrossLister AI', 
-      status: 'Revenue Active', 
+      status: 'Pre-Launch',
       url: 'https://onlinerecycle.org',
-      metrics: 'Efficiency: 99.9%' 
+      metrics: 'E-Waste Recycling Program' 
     },
     { 
       name: 'AI Solutions', 
@@ -37,10 +37,10 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
       metrics: '100% Proceeds to Shriners' 
     },
     { 
-      name: 'Mission Control', 
-      title: 'Admin Console', 
-      status: 'Live', 
-      url: 'https://antigravity-official-admin-dashboard-731395189513.us-west1.run.app',
+      name: 'Mission Control',
+      title: 'Admin Console',
+      status: 'Live',
+      url: 'https://dashboard.aidoesitall.website',
       metrics: 'Orchestrating 3 Nodes' 
     },
   ];

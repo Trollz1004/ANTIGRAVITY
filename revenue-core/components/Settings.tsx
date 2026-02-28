@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Save, Lock, Shield, Eye, EyeOff, Server, AlertTriangle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Save, Lock, Shield, Eye, EyeOff, Server } from 'lucide-react';
 import { ApiConfig } from '../types';
 
-interface SettingsProps {
-  config: ApiConfig;
-  onSave: (newConfig: ApiConfig) => void;
-}
+const STORAGE_KEY = 'revenue-core-config';
 
-const Settings: React.FC<SettingsProps> = ({ config, onSave }) => {
-  const [localConfig, setLocalConfig] = useState<ApiConfig>(config);
+const loadConfig = (): ApiConfig => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return { geminiKey: '' };
+};
+
+const Settings: React.FC = () => {
+  const [localConfig, setLocalConfig] = useState<ApiConfig>(loadConfig);
   const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
   const [isSaved, setIsSaved] = useState(false);
 
@@ -16,13 +21,13 @@ const Settings: React.FC<SettingsProps> = ({ config, onSave }) => {
     setShowKeys(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const handleChange = (field: keyof ApiConfig, value: any) => {
+  const handleChange = (field: keyof ApiConfig, value: string) => {
     setLocalConfig(prev => ({ ...prev, [field]: value }));
     setIsSaved(false);
   };
 
   const handleSave = () => {
-    onSave(localConfig);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(localConfig));
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
   };
@@ -50,14 +55,14 @@ const Settings: React.FC<SettingsProps> = ({ config, onSave }) => {
             <div>
               <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">Google Gemini API Key</label>
               <div className="relative">
-                <input 
+                <input
                   type={showKeys['gemini'] ? "text" : "password"}
                   value={localConfig.geminiKey}
                   onChange={(e) => handleChange('geminiKey', e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-4 pr-10 py-3 text-white focus:outline-none focus:border-primary transition-colors"
                   placeholder="AIzaSy..."
                 />
-                <button 
+                <button
                   onClick={() => toggleShowKey('gemini')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
                 >
@@ -66,37 +71,44 @@ const Settings: React.FC<SettingsProps> = ({ config, onSave }) => {
               </div>
               <p className="text-[10px] text-slate-500 mt-2">Required for Content Studio and Agent logic.</p>
             </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">Stripe Secret Key (Revenue)</label>
+              <div className="relative">
+                <input
+                  type={showKeys['stripe'] ? "text" : "password"}
+                  value={localConfig.stripeKey || ''}
+                  onChange={(e) => handleChange('stripeKey', e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-4 pr-10 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                  placeholder="sk_live_..."
+                />
+                <button
+                  onClick={() => toggleShowKey('stripe')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
+                >
+                  {showKeys['stripe'] ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              <p className="text-[10px] text-slate-500 mt-2">For live revenue dashboard. Key expires ~March 10.</p>
+            </div>
           </div>
         </div>
 
-        {/* Global Settings */}
+        {/* Operational Status */}
         <div className="bg-surface p-6 rounded-xl border border-slate-700">
           <div className="flex items-center gap-2 mb-6 text-emerald-400">
             <Shield size={20} />
-            <h3 className="font-bold text-lg">Operational Mode</h3>
+            <h3 className="font-bold text-lg">Operational Status</h3>
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-slate-900 rounded-lg border border-slate-700">
-            <div>
-              <h4 className="text-white font-medium">Simulation Mode</h4>
-              <p className="text-xs text-slate-400">Use mock data instead of real API calls. Prevents accidental billing or rate limits.</p>
+          <div className="p-4 bg-slate-900 rounded-lg border border-slate-700">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
+              <div>
+                <h4 className="text-white font-medium">Live Mode</h4>
+                <p className="text-xs text-slate-400">All API calls hit real endpoints. No simulation layer.</p>
+              </div>
             </div>
-            <button 
-              onClick={() => handleChange('simulationMode', !localConfig.simulationMode)}
-              className={`w-12 h-6 rounded-full p-1 transition-colors ${localConfig.simulationMode ? 'bg-emerald-500' : 'bg-slate-600'}`}
-            >
-              <div className={`w-4 h-4 rounded-full bg-white transition-transform ${localConfig.simulationMode ? 'translate-x-6' : 'translate-x-0'}`} />
-            </button>
           </div>
-
-          {!localConfig.simulationMode && (
-             <div className="mt-4 p-3 bg-rose-500/10 border border-rose-500/30 rounded-lg flex gap-3 items-start">
-               <AlertTriangle className="text-rose-500 shrink-0" size={16} />
-               <p className="text-xs text-rose-200">
-                 <strong>Live Mode Active:</strong> Ensure you comply with the Terms of Service for all connected platforms. Automation frequency should be kept to human-like levels.
-               </p>
-             </div>
-          )}
         </div>
 
         {/* Social APIs */}

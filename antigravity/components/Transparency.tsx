@@ -139,8 +139,8 @@ export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {
         <Lock className="w-10 h-10 text-blue-500 mx-auto mb-4" />
         <h3 className="text-2xl font-bold mb-2">Immutable Distribution</h3>
         <p className={`max-w-2xl mx-auto ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-          DAO smart contracts on Base Mainnet enforce perpetual fund distribution: 
-          <strong> 60% Kids in need</strong>, 30% AI Infrastructure, 10% Founder Trust.
+          ENIGMA revenue splits <strong>60% to Shriners Children&apos;s Hospitals</strong>, <strong>30% to V8 AI Infrastructure</strong>, and <strong>10% to Founder Operations</strong> from day one. Locked permanently via on-chain smart contracts (Base Mainnet).
+          OMEGA (ai-solutions.store) is 100% to charity — no exceptions.
         </p>
       </div>
     </div>

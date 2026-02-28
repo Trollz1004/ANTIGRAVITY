@@ -14,7 +14,7 @@ BRAND IDENTITY:
 PRICING (ALL LIVE WITH STRIPE):
 - Bot-Shield: $1 one-time (human verification)
 - Founding Member: $14.99/mo (locked forever for early adopters)
-- 3-Month Founder: $49.99
+- 3-Month Founder: $39.99
 - 12-Month Founder: $99.99
 - Royalty Card: $2,500 (lifetime VIP + revenue share)
 

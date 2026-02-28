@@ -135,8 +135,8 @@ export function CharitySection() {
             <div className="p-3 bg-rose-500/10 rounded-2xl text-rose-400">
               <Heart size={24} />
             </div>
-            <div className="text-3xl font-black text-white">100%</div>
-            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Proceeds to Shriners</div>
+            <div className="text-3xl font-black text-white">60%</div>
+            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Revenue to Shriners</div>
           </div>
           <div className="flex flex-col items-center text-center space-y-2">
             <div className="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400">

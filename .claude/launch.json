@@ -2,38 +2,38 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "antigravity",
-      "runtimeExecutable": "node",
-      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev"],
-      "port": 3000,
-      "cwd": "antigravity"
-    },
-    {
       "name": "revenue-core",
-      "runtimeExecutable": "npm.cmd",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--port", "3000"],
       "port": 3000,
       "cwd": "revenue-core"
     },
     {
-      "name": "youandinotai",
+      "name": "antigravity",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["C:\\Users\\joshl\\AppData\\Roaming\\npm\\node_modules\\serve\\build\\main.js", "youandinotai-app/client", "-l", "3001", "--no-clipboard"],
-      "port": 3001
+      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev", "-p", "3001"],
+      "port": 3001,
+      "cwd": "antigravity"
     },
     {
       "name": "briefings",
-      "runtimeExecutable": "npm.cmd",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3000,
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--port", "3002"],
+      "port": 3002,
       "cwd": "briefings"
     },
     {
       "name": "workspace",
-      "runtimeExecutable": "npm.cmd",
-      "runtimeArgs": ["run", "dev"],
-      "port": 5173,
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--port", "3003"],
+      "port": 3003,
       "cwd": "workspace"
+    },
+    {
+      "name": "youandinotai",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["C:\\Users\\joshl\\AppData\\Roaming\\npm\\node_modules\\serve\\build\\main.js", "youandinotai-app/client", "-l", "3004", "--no-clipboard"],
+      "port": 3004
     }
   ]
 }

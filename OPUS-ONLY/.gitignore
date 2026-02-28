@@ -1,0 +1,72 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.coverage
+htmlcov/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Backups
+backups/
+*.sql.gz
+
+# Logs
+logs/
+*.log
+
+# SSL certificates (local development)
+ssl/
+!ssl/.gitkeep
+/etc/letsencrypt
+
+# Node modules (if frontend bundled)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Database
+*.db
+*.sqlite3
+
+# Temporary files
+*.tmp
+.tmp/
