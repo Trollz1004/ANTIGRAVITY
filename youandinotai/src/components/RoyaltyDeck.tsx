@@ -10,7 +10,7 @@
 
 import { useState, useRef } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'motion/react';
-import { Crown, Heart, Shield, Star, Gem, Infinity, Zap } from 'lucide-react';
+import { Crown, Heart, Shield, Star, Gem, Infinity as InfinityIcon, Zap } from 'lucide-react';
 
 const ROYALTY_LINK = 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d';
 
@@ -70,7 +70,7 @@ function HolographicCard() {
   };
 
   const benefits = [
-    { icon: Infinity, text: 'Lifetime VIP access — never pay again' },
+    { icon: InfinityIcon, text: 'Lifetime VIP access — never pay again' },
     { icon: Shield, text: 'Priority matching & dedicated support' },
     { icon: Star, text: 'Exclusive Royalty badge on your profile' },
     { icon: Zap, text: 'Early access to every new feature' },

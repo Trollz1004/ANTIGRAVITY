@@ -280,7 +280,10 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
       <div className="max-w-5xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Brand */}
         <div>
-          <h4 className="text-white font-bold text-lg mb-3">YouAndINotAI</h4>
+          <div className="flex items-center gap-3 mb-3">
+            <img src="/logo.png" alt="YouAndINotAI" className="w-10 h-10 rounded-full" />
+            <h4 className="text-white font-bold text-lg">YouAndINotAI</h4>
+          </div>
           <p className="text-gray-400 text-sm leading-relaxed">
             A human-verified dating platform. No bots. No catfish. Just real people looking for real connection.
           </p>
@@ -407,9 +410,12 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               className="space-y-2"
             >
-              <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 italic">
-                YouandInotai.Com
-              </h1>
+              <div className="flex items-center gap-4">
+                <img src="/logo.png" alt="YouAndINotAI" className="w-14 h-14 md:w-20 md:h-20 rounded-full shadow-lg shadow-purple-500/30" />
+                <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 italic">
+                  YouAndINotAI
+                </h1>
+              </div>
               <p className="text-lg text-gray-300 max-w-md leading-tight font-light">
                 Find your cosmic twin in a galaxy of possibilities. <br/>
                 <span className="text-pink-400 font-semibold italic">Out of this world</span> dating, powered by Gemini.
@@ -562,6 +568,26 @@ export default function App() {
 
       {/* How It Works */}
       <HowItWorks />
+
+      {/* Moonlight Marketing Banner */}
+      <section className="relative z-10 py-0 overflow-hidden">
+        <div className="relative w-full max-h-[500px] overflow-hidden">
+          <img
+            src="/dateappwatermoonlight.jpg"
+            alt="You And I Not AI — Real connections under the moonlight"
+            className="w-full h-auto object-cover opacity-80"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/60" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+            <p className="text-white/90 text-xl md:text-3xl font-black tracking-tight drop-shadow-lg">
+              Real People. Real Connection.
+            </p>
+            <p className="text-pink-300 text-sm md:text-lg mt-2 font-medium drop-shadow-md">
+              Every dollar funds children's hospitals.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Pricing Section */}
       <PricingSection />

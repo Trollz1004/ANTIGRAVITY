@@ -87,14 +87,14 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="flex-1 flex overflow-hidden">
-          {/* Left Side: Meme Board */}
+          {/* Left Side: Community Wall */}
           <div className="w-1/2 border-r border-white/5 p-8 overflow-y-auto bg-black/20">
             <div className="mb-8 flex items-center justify-between">
-              <h3 className="text-sm font-black uppercase tracking-widest text-orange-500 flex items-center gap-2">
+              <h3 className="text-sm font-black uppercase tracking-widest text-pink-400 flex items-center gap-2">
                 <ImageIcon size={16} />
-                Nick-Opus Meme Board
+                Community Wall
               </h3>
-              <span className="text-[10px] text-orange-600 font-bold">CLAUDE CODE™ NICKELODEON EDITION</span>
+              <span className="text-[10px] text-pink-600 font-bold">YOUANDINOTAI — FOUNDING MEMBERS</span>
             </div>
             
             <div className="space-y-8">
