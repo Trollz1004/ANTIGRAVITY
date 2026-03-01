@@ -221,6 +221,19 @@ Everything is live. Payments work. The product exists. Marketing execution is wh
 
 ---
 
+## Future: Merch Store Charity Logic (SPEC ONLY)
+
+Full spec: `briefings/MERCH-CHARITY-LOGIC.md`
+
+- Merch store does NOT exist yet — future implementation after launch
+- Charity donations from **net profit only** (after COGS, shipping, taxes, fees, refunds, chargebacks)
+- Split: **60/30/10** (Protocol Omega), NOT 50/50 (old Perplexity docs had wrong split)
+- **No-clawback rule**: Once sent to Shriners, money never comes back. Late chargebacks reduce future business share.
+- Settlement: 30-day delay after period end to allow refund/CB window to close
+- Source: Perplexity/Comet analysis 2026-02-28, corrected and archived
+
+---
+
 ## Hard Constraints (Josh Enforces These)
 
 - NO git push/pull without explicit ask
