@@ -2,11 +2,11 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "revenue-core",
+      "name": "youandinotai",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--port", "3000"],
+      "runtimeArgs": ["node_modules/tsx/dist/cli.mjs", "server.ts"],
       "port": 3000,
-      "cwd": "revenue-core"
+      "cwd": "youandinotai"
     },
     {
       "name": "antigravity",
@@ -16,24 +16,18 @@
       "cwd": "antigravity"
     },
     {
+      "name": "revenue-core",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--host", "--port", "3002"],
+      "port": 3002,
+      "cwd": "revenue-core"
+    },
+    {
       "name": "briefings",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--port", "3002"],
-      "port": 3002,
-      "cwd": "briefings"
-    },
-    {
-      "name": "workspace",
-      "runtimeExecutable": "node",
-      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--port", "3003"],
+      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--host", "--port", "3003"],
       "port": 3003,
-      "cwd": "workspace"
-    },
-    {
-      "name": "youandinotai",
-      "runtimeExecutable": "node",
-      "runtimeArgs": ["C:\\Users\\joshl\\AppData\\Roaming\\npm\\node_modules\\serve\\build\\main.js", "youandinotai-app/client", "-l", "3004", "--no-clipboard"],
-      "port": 3004
+      "cwd": "briefings"
     }
   ]
 }
