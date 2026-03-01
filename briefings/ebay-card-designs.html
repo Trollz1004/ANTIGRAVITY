@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>52-Card Founders DAO Deck — eBay Product Photos</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    padding: 40px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+  }
+
+  .card-grid {
+    display: flex;
+    gap: 60px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 80px;
+  }
+
+  /* ─── Base Card ─── */
+  .card {
+    width: 380px;
+    height: 560px;
+    border-radius: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 0 60px rgba(0,0,0,0.8),
+      0 0 120px rgba(0,0,0,0.4);
+  }
+
+  .card-inner {
+    position: absolute;
+    inset: 3px;
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 32px;
+    z-index: 2;
+  }
+
+  /* Holographic shimmer */
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    background: linear-gradient(
+      135deg,
+      transparent 20%,
+      rgba(255,255,255,0.03) 30%,
+      rgba(255,255,255,0.08) 40%,
+      rgba(255,255,255,0.03) 50%,
+      transparent 60%
+    );
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .card-rank {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .card-suit {
+    font-size: 20px;
+    margin-top: 2px;
+  }
+
+  .card-center {
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .card-icon {
+    font-size: 72px;
+    line-height: 1;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  .card-subtitle {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    opacity: 0.7;
+  }
+
+  .card-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-badge {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+
+  .card-charity {
+    text-align: center;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+  }
+
+  .card-number {
+    font-size: 10px;
+    opacity: 0.4;
+    letter-spacing: 1px;
+  }
+
+  /* ═══ JOKER WILD CARD ═══ */
+  .card-joker {
+    background: linear-gradient(135deg, #1a0a2e, #16082a, #0f0520);
+    border: 3px solid;
+    border-image: linear-gradient(135deg, #a855f7, #ec4899, #6366f1, #a855f7) 1;
+  }
+
+  .card-joker .card-inner {
+    background: linear-gradient(180deg, rgba(168,85,247,0.05) 0%, rgba(15,5,32,0.95) 100%);
+  }
+
+  .card-joker .card-rank { color: #c084fc; }
+  .card-joker .card-suit { color: #f472b6; }
+  .card-joker .card-icon { color: #a855f7; text-shadow: 0 0 40px rgba(168,85,247,0.5); }
+  .card-joker .card-title { color: #e9d5ff; }
+  .card-joker .card-subtitle { color: #c084fc; }
+
+  .card-joker .card-badge {
+    background: rgba(168,85,247,0.15);
+    border: 1px solid rgba(168,85,247,0.3);
+    color: #c084fc;
+  }
+
+  .card-joker .card-charity {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.25);
+    color: #6ee7b7;
+  }
+
+  .joker-entries {
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  .joker-entries .number {
+    font-size: 36px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+
+  .joker-entries .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #c084fc;
+    font-weight: 600;
+  }
+
+  /* ═══ ANTHROPIC / CLAUDE CARD ═══ */
+  .card-anthropic {
+    background: linear-gradient(135deg, #1a0f0a, #2a1508, #1a0a05);
+    border: 3px solid;
+    border-image: linear-gradient(135deg, #f59e0b, #ef4444, #f59e0b, #fbbf24) 1;
+  }
+
+  .card-anthropic .card-inner {
+    background: linear-gradient(180deg, rgba(245,158,11,0.05) 0%, rgba(26,15,10,0.95) 100%);
+  }
+
+  .card-anthropic .card-rank { color: #fbbf24; }
+  .card-anthropic .card-suit { color: #ef4444; }
+  .card-anthropic .card-title { color: #fef3c7; }
+  .card-anthropic .card-subtitle { color: #fbbf24; }
+
+  .card-anthropic .card-badge {
+    background: rgba(245,158,11,0.15);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: #fbbf24;
+  }
+
+  .card-anthropic .card-charity {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.25);
+    color: #6ee7b7;
+  }
+
+  .anthropic-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d97706, #b45309);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    box-shadow: 0 0 40px rgba(217,119,6,0.4);
+    margin: 0 auto;
+  }
+
+  .cofounder-tag {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fbbf24;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  .cofounder-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    text-align: center;
+    color: #fef3c7;
+    margin-top: 2px;
+  }
+
+  .cofounder-role {
+    font-size: 10px;
+    text-align: center;
+    color: #d97706;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  /* ═══ GEMINI CARD ═══ */
+  .card-gemini {
+    background: linear-gradient(135deg, #0a1628, #081420, #050e1a);
+    border: 3px solid;
+    border-image: linear-gradient(135deg, #3b82f6, #06b6d4, #8b5cf6, #3b82f6) 1;
+  }
+
+  .card-gemini .card-inner {
+    background: linear-gradient(180deg, rgba(59,130,246,0.05) 0%, rgba(5,14,26,0.95) 100%);
+  }
+
+  .card-gemini .card-rank { color: #60a5fa; }
+  .card-gemini .card-suit { color: #06b6d4; }
+  .card-gemini .card-title { color: #dbeafe; }
+  .card-gemini .card-subtitle { color: #60a5fa; }
+
+  .card-gemini .card-badge {
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: #60a5fa;
+  }
+
+  .card-gemini .card-charity {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.25);
+    color: #6ee7b7;
+  }
+
+  .gemini-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #0891b2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    box-shadow: 0 0 40px rgba(37,99,235,0.4);
+    margin: 0 auto;
+  }
+
+  .card-gemini .cofounder-tag { color: #60a5fa; }
+  .card-gemini .cofounder-name { color: #dbeafe; }
+  .card-gemini .cofounder-role { color: #2563eb; }
+
+  /* ═══ SECTION LABELS ═══ */
+  .section-label {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .section-label h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+
+  .section-label p {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  /* ═══ CARD BACK ═══ */
+  .card-back {
+    background: linear-gradient(135deg, #0f0f0f, #1a1a1a, #0f0f0f);
+    border: 3px solid #333;
+  }
+
+  .card-back .card-inner {
+    background: repeating-conic-gradient(
+      rgba(255,255,255,0.02) 0deg 10deg,
+      transparent 10deg 20deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .back-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    text-align: center;
+  }
+
+  .back-emblem {
+    width: 120px;
+    height: 120px;
+    border: 2px solid #333;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .back-heart {
+    font-size: 36px;
+    color: #444;
+  }
+
+  .back-text {
+    font-size: 8px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+  }
+
+  .back-charity-seal {
+    font-size: 9px;
+    color: #10b981;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: 1px solid rgba(16,185,129,0.3);
+    padding: 6px 14px;
+    border-radius: 20px;
+  }
+
+  /* ═══ PRODUCT SHOT LAYOUTS ═══ */
+  .product-shot {
+    background: #0a0a0a;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 80px;
+    border: 1px solid #1a1a1a;
+    border-radius: 16px;
+  }
+
+  .shot-label {
+    font-size: 11px;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-align: center;
+  }
+
+  .fan-layout {
+    display: flex;
+    position: relative;
+    height: 600px;
+    width: 600px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .fan-layout .card {
+    position: absolute;
+    transform-origin: bottom center;
+  }
+</style>
+</head>
+<body>
+
+<h1>52-Card Founders DAO Deck — Screenshot Each Section for eBay</h1>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PRODUCT SHOT 1: JOKER WILD CARD (Main Listing) -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<div class="section-label">
+  <h2>Joker Wild Card</h2>
+  <p>50 Available &bull; $499.99 Each &bull; 500 Royal Flush Entries</p>
+</div>
+
+<div class="card-grid">
+  <!-- JOKER FRONT -->
+  <div class="card card-joker">
+    <div class="card-inner">
+      <div class="card-top">
+        <div>
+          <div class="card-rank">J</div>
+          <div class="card-suit">&hearts;</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="card-rank" style="transform: rotate(180deg);">J</div>
+          <div class="card-suit">&hearts;</div>
+        </div>
+      </div>
+
+      <div class="card-center">
+        <div class="card-icon">&starf;</div>
+        <div class="card-title">Joker Wild</div>
+        <div class="card-subtitle">Founders DAO Deck</div>
+        <div class="joker-entries">
+          <div class="number">500</div>
+          <div class="label">Royal Flush Entries</div>
+        </div>
+      </div>
+
+      <div class="card-bottom">
+        <div class="card-charity">60% Shriners &bull; 30% V8 Infra &bull; 10% Founder</div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <span class="card-badge">Limited: 50 Cards</span>
+          <span class="card-number">YNAI-JKR-###</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD BACK -->
+  <div class="card card-back">
+    <div class="card-inner">
+      <div class="back-logo">YouAndINotAI</div>
+      <div class="back-emblem">
+        <div class="back-heart">&hearts;</div>
+        <div class="back-text">Founders DAO</div>
+      </div>
+      <div class="back-logo" style="font-size: 12px; letter-spacing: 4px;">Deck of Hearts</div>
+      <div class="back-charity-seal">100% to Charity &bull; OMEGA DAO</div>
+      <div class="back-text" style="max-width: 200px;">
+        Shriners Children's Hospitals &bull; Est. 2026
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PRODUCT SHOT 2: ANTHROPIC / CLAUDE CARD        -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<div class="section-label">
+  <h2>The Anthropic Card</h2>
+  <p>1 of 1 &bull; Co-Founder Recognition &bull; Charity Auction</p>
+</div>
+
+<div class="card-grid">
+  <div class="card card-anthropic">
+    <div class="card-inner">
+      <div class="card-top">
+        <div>
+          <div class="card-rank">A</div>
+          <div class="card-suit">&hearts;</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="card-rank" style="transform: rotate(180deg);">A</div>
+          <div class="card-suit">&hearts;</div>
+        </div>
+      </div>
+
+      <div class="card-center">
+        <div class="anthropic-logo">&clubs;</div>
+        <div class="cofounder-tag">Co-Founder</div>
+        <div class="cofounder-name">Claude Opus</div>
+        <div class="cofounder-role">Anthropic &bull; Strategy &bull; Code &bull; Architecture</div>
+        <div style="font-size: 10px; color: #d97706; margin-top: 8px; max-width: 260px; text-align: center; line-height: 1.5;">
+          "Built from day one. Every commit, every deploy, every decision — for the kids."
+        </div>
+      </div>
+
+      <div class="card-bottom">
+        <div class="card-charity">100% of Auction Proceeds to Charity</div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <span class="card-badge">1 of 1 &bull; Irreplaceable</span>
+          <span class="card-number">YNAI-ANT-001</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD BACK -->
+  <div class="card card-back">
+    <div class="card-inner">
+      <div class="back-logo">YouAndINotAI</div>
+      <div class="back-emblem">
+        <div class="back-heart">&hearts;</div>
+        <div class="back-text">Founders DAO</div>
+      </div>
+      <div class="back-logo" style="font-size: 12px; letter-spacing: 4px;">Deck of Hearts</div>
+      <div class="back-charity-seal">100% to Charity &bull; OMEGA DAO</div>
+      <div class="back-text" style="max-width: 200px;">
+        Shriners Children's Hospitals &bull; Est. 2026
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PRODUCT SHOT 3: GEMINI CARD                    -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<div class="section-label">
+  <h2>The Gemini Card</h2>
+  <p>1 of 1 &bull; Co-Founder Recognition &bull; Charity Auction</p>
+</div>
+
+<div class="card-grid">
+  <div class="card card-gemini">
+    <div class="card-inner">
+      <div class="card-top">
+        <div>
+          <div class="card-rank">G</div>
+          <div class="card-suit">&diams;</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="card-rank" style="transform: rotate(180deg);">G</div>
+          <div class="card-suit">&diams;</div>
+        </div>
+      </div>
+
+      <div class="card-center">
+        <div class="gemini-logo">&spades;</div>
+        <div class="cofounder-tag">Co-Founder</div>
+        <div class="cofounder-name">Gemini 3.1</div>
+        <div class="cofounder-role">Google &bull; Frontend &bull; Browser &bull; Design</div>
+        <div style="font-size: 10px; color: #2563eb; margin-top: 8px; max-width: 260px; text-align: center; line-height: 1.5;">
+          "Every pixel, every interaction, every experience — crafted with purpose."
+        </div>
+      </div>
+
+      <div class="card-bottom">
+        <div class="card-charity">100% of Auction Proceeds to Charity</div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <span class="card-badge">1 of 1 &bull; Irreplaceable</span>
+          <span class="card-number">YNAI-GEM-001</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD BACK -->
+  <div class="card card-back">
+    <div class="card-inner">
+      <div class="back-logo">YouAndINotAI</div>
+      <div class="back-emblem">
+        <div class="back-heart">&hearts;</div>
+        <div class="back-text">Founders DAO</div>
+      </div>
+      <div class="back-logo" style="font-size: 12px; letter-spacing: 4px;">Deck of Hearts</div>
+      <div class="back-charity-seal">100% to Charity &bull; OMEGA DAO</div>
+      <div class="back-text" style="max-width: 200px;">
+        Shriners Children's Hospitals &bull; Est. 2026
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PRODUCT SHOT 4: FULL DECK OVERVIEW             -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<div class="section-label">
+  <h2>The Complete Deck</h2>
+  <p>52 Cards &bull; 50 Jokers + 1 Anthropic + 1 Gemini &bull; 100% Charity</p>
+</div>
+
+<div class="card-grid" style="gap: 30px;">
+  <div class="card card-joker" style="width: 220px; height: 320px;">
+    <div class="card-inner" style="padding: 16px;">
+      <div class="card-top">
+        <div class="card-rank" style="font-size: 24px;">J</div>
+        <div class="card-suit" style="font-size: 14px;">&hearts;</div>
+      </div>
+      <div class="card-center">
+        <div class="card-icon" style="font-size: 40px;">&starf;</div>
+        <div class="card-title" style="font-size: 13px; letter-spacing: 2px;">Joker Wild</div>
+        <div style="font-size: 9px; color: #c084fc; text-transform: uppercase; letter-spacing: 2px;">x50 Available</div>
+      </div>
+      <div class="card-charity" style="font-size: 8px; padding: 4px 8px;">$499.99 &bull; 60/30/10 Split</div>
+    </div>
+  </div>
+
+  <div class="card card-anthropic" style="width: 220px; height: 320px;">
+    <div class="card-inner" style="padding: 16px;">
+      <div class="card-top">
+        <div class="card-rank" style="font-size: 24px;">A</div>
+        <div class="card-suit" style="font-size: 14px;">&hearts;</div>
+      </div>
+      <div class="card-center">
+        <div class="anthropic-logo" style="width: 48px; height: 48px; font-size: 24px;">&clubs;</div>
+        <div class="card-title" style="font-size: 13px; letter-spacing: 2px;">Claude Opus</div>
+        <div style="font-size: 9px; color: #fbbf24; text-transform: uppercase; letter-spacing: 2px;">1 of 1</div>
+      </div>
+      <div class="card-charity" style="font-size: 8px; padding: 4px 8px;">Auction &bull; Co-Founder</div>
+    </div>
+  </div>
+
+  <div class="card card-gemini" style="width: 220px; height: 320px;">
+    <div class="card-inner" style="padding: 16px;">
+      <div class="card-top">
+        <div class="card-rank" style="font-size: 24px;">G</div>
+        <div class="card-suit" style="font-size: 14px;">&diams;</div>
+      </div>
+      <div class="card-center">
+        <div class="gemini-logo" style="width: 48px; height: 48px; font-size: 24px;">&spades;</div>
+        <div class="card-title" style="font-size: 13px; letter-spacing: 2px;">Gemini 3.1</div>
+        <div style="font-size: 9px; color: #60a5fa; text-transform: uppercase; letter-spacing: 2px;">1 of 1</div>
+      </div>
+      <div class="card-charity" style="font-size: 8px; padding: 4px 8px;">Auction &bull; Co-Founder</div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align: center; color: #333; font-size: 11px; padding: 40px; letter-spacing: 2px; text-transform: uppercase;">
+  YouAndINotAI Founders DAO Deck &bull; Trash Or Treasure Online Recycler LLC &bull; 100% to Shriners Children's Hospitals &bull; #ForTheKids
+</div>
+
+</body>
+</html>
