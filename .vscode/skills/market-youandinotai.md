@@ -107,7 +107,7 @@ Deliver:
 
 **Task:** Metrics framework and 30-day growth plan.
 
-Tech context: Backend on GCP Cloud Run | Stripe + Square LIVE | PostgreSQL 15 on Cloud SQL | T5500 with ASUS 8GB GPU as sole active node
+Tech context: Backend on GCP Cloud Run | Stripe LIVE (Square DEAD) | PostgreSQL 15 on Cloud SQL | T5500 with ASUS 8GB GPU as sole active node
 
 Deliver:
 1. **KPI Dashboard Blueprint** — Daily metrics: signups, verification rate, churn, CAC, LTV, channel attribution

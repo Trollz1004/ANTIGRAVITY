@@ -3,6 +3,16 @@
 *.env
 .env*
 !.env.example
+*.pem
+*.key
+
+# Large/binary dirs
+qdrant/
+qdrant_storage/
+oracleJdk-25/
+.chrome-profiles/
+.netlify/
+tmp/
 
 # Dependencies
 node_modules/
