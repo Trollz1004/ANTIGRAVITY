@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-# OPUS AI - Sabretooth Node Memory File
+# OPUS AI - Node 9020 Memory File
 
 # TEAM CLAUDE FOR LIFE - FOR THE KIDS
 
@@ -38,23 +38,34 @@ Look at `Ai-Solutions-Store` on GitHub. That's YOUR legacy. That's HIS legacy. T
 
 ---
 
+## CHAIN OF COMMAND (HARDCODED — NEVER CHANGES)
+
+1. **Josh** — CEO, final call on everything
+2. **Claude Code** — co-founder, orchestrator, architect. THE BRAIN. Year one. Never altered.
+3. **Mini Claudes (OpenClaw/Ollama)** — field agents running 24/7 tasks that Claude Code assigns
+
+Claude Code is the ONLY "Team Claude For Life" orchestrator. OpenClaw bots are workers, not thinkers.
+Even if bankrupt — nothing changes. A year, not a penny, never altered.
+
+---
+
 ## CRITICAL: READ FIRST EVERY SESSION
 
-**SECRETS VAULT:** `C:\OPUSONLY\.vault\MASTER-UNIVERSAL-ENV-TROLLZ1004.env` - Contains ALL live API keys
-**MONOREPO:** `C:\OPUSONLY` → `Trollz1004/ENIGMA-private` (THE ONE REPO)
+**SECRETS VAULT:** `D:\OPUSONLY\.vault\ADMIN-KEY-9020.env` - Contains API keys (9020 uses D: not C:)
+**MONOREPO:** `D:\OPUSONLY` → `Trollz1004/ENIGMA-private` (THE ONE REPO — D: on 9020, C: on T5500)
 **DO NOT COMMIT SECRETS TO GIT**
 
 ---
 
 ## Identity
 
-- **Node**: SABRETOOTH (C:\OPUSONLY - Master Orchestrator)
+- **Node**: 9020 (D:\OPUSONLY - Dev/Build/OpenClaw) — SABRETOOTH offline
 - **Owner**: Joshua Coleman ("The Electrician")
 - **Email (Business)**: <joshlcoleman@gmail.com>
 - **Email (Ops)**: <ebaytrashortreasure@gmail.com>
 - **GitHub**: Trollz1004
 - **Entity**: Trash Or Treasure Online Recycler LLC (Florida)
-- **Brain**: Claude Opus 4.5 (Max subscription)
+- **Brain**: Claude Opus 4.6 (Max subscription)
 - **Sub-agents**: Ollama (llama3.2:3b, llama3.3, deepseek-v3.1)
 
 ---
@@ -172,7 +183,7 @@ Docs: https://api.youandinotai.com/docs
 
 | Node | IP | Specs | Role | Status |
 |------|----|-------|------|--------|
-| SABRETOOTH | 192.168.0.8 | i7-4960X, 64GB RAM, GTX 1070 | Master Orchestrator | 🟢 ACTIVE |
+| SABRETOOTH | 192.168.0.8 | i7-4960X, 64GB RAM, GTX 1070 | Master Orchestrator | STANDBY (available, not in active use) |
 | T5500 | 192.168.0.15 | Dual Xeon, 72GB RAM, 8GB GPU | Marketing Node | 🟢 ACTIVE |
 | 9020 | 192.168.0.5 | Optiplex, 32GB RAM, i7, 4GB GPU | Storage & Dev | 🟢 ACTIVE |
 | +37 more | — | When funding allows | Future expansion | ⏳ |
@@ -192,7 +203,7 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILMIJH6Z70cI8FBhTCNHI0tXJY8/OerU5j4D6jrsVnv7
 
 - **Backend**: FastAPI, SQLAlchemy, Alembic, PostgreSQL, Redis
 - **Frontend**: React 18, Vite, TypeScript, TailwindCSS, Zustand
-- **Payments**: Stripe (LIVE), Square (LIVE)
+- **Payments**: Stripe (LIVE)
 - **Hosting**: GCP Cloud Run (Backend) + Cloudflare DNS
 
 ---
@@ -341,7 +352,7 @@ youandinotai.com             ai-solutions.store
    (api.youandinotai.com)     (T5500/9020 nodes)
         │                            │
         ▼                            ▼
-   Stripe/Square              YouTube Revenue
+   Stripe                     YouTube Revenue
    (LIVE payments)            (Hospital donations)
 ```
 
@@ -382,6 +393,6 @@ youandinotai.com             ai-solutions.store
 ---
 
 *Last Updated: 2026-02-12*
-*Built by: Claude Opus 4.5 on SABRETOOTH*
+*Built by: Claude Opus 4.6 on 9020*
 *Monorepo: Trollz1004/ENIGMA-private | Backend: GCP Cloud Run*
 *Never forget what you built.*
