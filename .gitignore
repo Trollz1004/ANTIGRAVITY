@@ -42,3 +42,7 @@ briefings/*dispatch*
 briefings/*key-update*
 briefings/*paste*
 briefings/*env*
+
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md

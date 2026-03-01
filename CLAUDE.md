@@ -26,26 +26,26 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. $20
 | Brain | Claude Opus 4.6 (Max $200/mo) |
 | GPU | GTX 1070 8GB, CUDA 12.6 |
 
-## Workspace Structure (Reorganized 2026-02-23)
+## Workspace Structure (Consolidated 2026-02-28)
+
+**ONE REPO: Trollz1004/ANTIGRAVITY — `main` branch ONLY**
 
 ```
 C:\OPUSONLY\
-├── .claude\          # Claude Code config
-├── .vscode\          # VS Code config
-├── .env              # Active secrets (Stripe, Twitter, etc.)
-├── .gitignore
-├── CLAUDE.md         # This file
-├── briefings\        # Active workspace (dispatches, scripts, reports)
-├── antigravity\      # Antigravity Admin Dashboard (Next.js 15)
-├── revenue-core\     # Revenue Core / Launchpad OS (React+Vite)
-└── _ARCHIVE\         # Everything else, preserved
-    ├── projects\     # openclaw, docker, mcp-server, scripts, etc.
-    ├── docs\         # Old CLAUDE.md, SOUL.md, USER.md, etc.
-    ├── claude-prompts\
-    ├── scripts\
-    ├── loose-source\
-    ├── misc\
-    └── dot-dirs\     # .vault, .github, .playwright-profiles
+├── CLAUDE.md              # This file (auto-loaded every session)
+├── README.md              # Public repo README
+├── .env                   # Active secrets (NOT in git)
+├── antigravity\           # Admin Dashboard (Next.js 15)
+├── revenue-core\          # Revenue Core / Launchpad OS (React+Vite)
+├── youandinotai\          # Dating App Frontend (React 19 + Vite + Three.js) — LIVE
+├── youandinotai-api\      # Dating App Backend (FastAPI + PostgreSQL)
+├── mcp-server\            # Omega Sentry MCP Server (TypeScript, stdio)
+├── briefings\             # All marketing, prompts, social posts, agent briefs
+│   ├── marketing\         # 14-day calendar, email drips, Twitter drips, ops plan
+│   └── archive\contracts\ # Solidity smart contracts (3 files)
+├── _deploy\               # Cloudflare Pages deploy targets (onlinerecycle, ai-solutions)
+├── .github\workflows\     # CI/CD (Cloudflare Pages deploy)
+└── _ARCHIVE\              # Everything else (gitignored, preserved on disk)
 ```
 
 ## The Product: YouAndINotAI
@@ -135,5 +135,13 @@ Integer remainder goes to charity. Smart contracts enforce this on-chain (Base M
 
 OMEGA (ai-solutions.store) remains 100% to charity. **No physical merchandise on OMEGA** — digital products only. No fulfillment costs, no returns, no cancellation risk eating donations.
 
+## Three-AI Formation
+
+| Agent | Role | Domain |
+|-------|------|--------|
+| Claude Opus (this) | CLI, code, commits, strategy | T5500 via Claude Code |
+| Gemini 3.1 | Hands-on-keyboard, browser, admin | claude.ai / aistudio |
+| Comet (Perplexity) | Research, audits, context briefs | perplexity.ai |
+
 ---
-*Updated: 2026-02-27 | Opus 4.6 on T5500*
+*Updated: 2026-02-28 | Opus 4.6 on T5500 | Consolidated to single repo*
