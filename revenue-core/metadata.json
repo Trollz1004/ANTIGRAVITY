@@ -1,0 +1,8 @@
+{
+  "name": "REVENUE-CORE | LaunchPad OS",
+  "description": "High-performance revenue orchestration and pre-order scaling dashboard. Protocol: Profit First. Optimized for 9020 Node deployment.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
