@@ -233,6 +233,53 @@ Everything is live. Payments work. The product exists. Marketing execution is wh
 - Sub-agent model: **Sonnet** (not Haiku)
 - Permissions are WIDE OPEN — Josh trusts Opus
 - memory-lancedb plugin: DISABLED (Windows native binary issue)
+- STOP reminding Josh about Stripe key expiry. He knows.
+
+---
+
+## MCP Tooling — Claude Code CLI
+
+### Coworker/Registry MCPs (cloud-connected, auto-permissions in settings.local.json)
+
+| MCP | UUID | Purpose |
+|-----|------|---------|
+| **Omega Sentry** | omega-sentry | Stripe revenue, content bank, protocol info, launch status |
+| **Cloudflare** | e4b319c9 | Workers, D1, KV, R2, Pages — ALL deploy targets |
+| **Gmail** | f53c6229 | Email search, read, draft — Josh's inbox |
+| **Notion** | 6e0e0cb6 | Workspace search, pages, databases, comments |
+| **Amplitude** | c635df2e | Analytics, charts, dashboards, experiments |
+| **Claude in Chrome** | Claude_in_Chrome | Browser automation, screenshots, DOM, clicks |
+| **Claude Preview** | Claude_Preview | Dev server preview, snapshots, inspect, click |
+| **Desktop Commander** | Desktop_Commander | File ops, process management, search, PDF/Excel |
+| **Context7** | 92eec91f | Library docs lookup (DUPLICATE — also in plugins) |
+| **MCP Registry** | mcp-registry | Discover and suggest new MCP connectors |
+| **Netlify** | d04aec17 | **DEAD — should be disconnected** |
+
+### Claude Desktop App MCPs (claude_desktop_config.json)
+
+| MCP | Transport | Purpose |
+|-----|-----------|---------|
+| **OpenClaw** | stdio (node mcp-server/index.js) | OpenClaw API gateway, port 3100 |
+| **MCP Docker** | docker mcp gateway | Docker container MCP bridge |
+
+### Plugins (settings.json — 36 enabled)
+
+**External Services:** GitHub, Greptile, Notion, Stripe, Slack, Pinecone, Context7, Firebase, Firecrawl, Superpowers
+
+**Development:** frontend-design, semgrep, 7x LSPs (pyright, typescript, gopls, rust-analyzer, swift, clangd, csharp/php/jdtls)
+
+**Workflow:** commit-commands, agent-sdk-dev, security-guidance, pr-review-toolkit, feature-dev, code-review, code-simplifier
+
+**Meta:** ralph-loop, learning-output-style, claude-code-setup, hookify, claude-md-management, skill-creator
+
+### Known Issues
+- **Context7 DUPLICATE**: Exists as both plugin AND coworker MCP (UUID 92eec91f). Works but wasteful.
+- **Netlify DEAD**: UUID d04aec17 still connected via MCP registry. Netlify account is locked/dead. Disconnect it.
+- **Unknown UUID e3cb363b**: In permissions but no visible tools. May be stale — investigate or remove.
+
+### Quick Launch (Win+R)
+- Type `opus` → opens PowerShell 7.5 blue terminal → Claude CLI `--dangerously-skip-permissions` in C:\OPUSONLY
+- Task Scheduler `OPUS-CLI-AutoStart` fires on logon (upgrade to admin: `scripts/upgrade-opus-task-admin.ps1`)
 
 ---
 
