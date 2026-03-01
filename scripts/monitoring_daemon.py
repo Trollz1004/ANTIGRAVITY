@@ -26,8 +26,8 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
 SITE_URL = "https://youandinotai.com"
-TELEGRAM_BOT_TOKEN = "8313006115:AAH5xv4ol7RoScmuM3SAUJgt93IS6rpblQ"
-TELEGRAM_CHAT_ID = "3529735909"
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
 
 def check_site_uptime():
