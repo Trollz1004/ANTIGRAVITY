@@ -1,0 +1,39 @@
+PROMPT FOR GEMINI (Antigravity Agent) — Cloudflare Pages deploy verification
+=============================================================================
+
+Context: Opus (Browser Claude) completed repo cleanup on ANTIGRAVITY mono-repo.
+Source HTML for Cloudflare-hosted sites lives in git but has NO auto-deploy pipeline.
+Changes on main do NOT auto-deploy to Cloudflare Pages.
+
+CURRENT STATE OF CLOUDFLARE-HOSTED DOMAINS:
+
+1. onlinerecycle.org — Cloudflare Pages project "onlinerecycle"
+   - Source of truth: _deploy/onlinerecycle/index.html (on main branch, commit 877f133+)
+   - Has #ForTheKids banner, clean CrossLister AI branding, no unverified stats
+   - Old stale file onlinerecycle-landing.html was DELETED from repo (pre-audit, no banner)
+   - VERIFY: Is the LIVE site at onlinerecycle.org serving the version WITH the #ForTheKids banner?
+   - If NOT: redeploy from _deploy/onlinerecycle/index.html via Cloudflare Pages dashboard or wrangler
+
+2. ai-solutions.store — Cloudflare Pages project "ai-solutions-store"
+   - Source of truth: ai-solutions-store-download.html (on main branch)
+   - Fake countdown REMOVED, fake viewer counts REMOVED, "Instant Access" → "Secure Delivery within 24 business hours"
+   - "January 2025" → "Q2 2026", "Opus 4.5" → "Opus 4.6"
+   - VERIFY: Is the LIVE site at www.ai-solutions.store serving the cleaned version?
+   - If NOT: redeploy
+
+3. dashboard.aidoesitall.website — Cloudflare Pages project "jules-dashboard"
+   - Source of truth: antigravity/ directory (Next.js 15 static export)
+   - MRR shows "$100k+" with qualifier "Year 1 Goal — across all revenue streams"
+   - VERIFY: Is dashboard live and serving correct content?
+
+ACTIONS NEEDED:
+- Fetch each URL and verify the LIVE content matches the audited source
+- If any site is stale, redeploy using wrangler or Cloudflare dashboard
+- Report back which domains are current and which needed redeployment
+- Check that all Cloudflare Worker routes are correct (the onlinerecycle.org worker route
+  was previously deleted because it was serving wrong content)
+
+ALSO CHECK:
+- DNS records for all 4 domains are pointing correctly
+- SSL certificates are valid and not expiring soon
+- No stale Worker routes interfering with Pages deployments
