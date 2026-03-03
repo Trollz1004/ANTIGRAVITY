@@ -17,6 +17,34 @@ $UserProfile = $env:USERPROFILE
 $ComputerName = $env:COMPUTERNAME
 $OpusPath = (Get-Location).Path
 
+function Resolve-GitHubToken {
+    if (-not [string]::IsNullOrWhiteSpace($env:GITHUB_PERSONAL_ACCESS_TOKEN)) {
+        return $env:GITHUB_PERSONAL_ACCESS_TOKEN
+    }
+    if (-not [string]::IsNullOrWhiteSpace($env:GITHUB_TOKEN)) {
+        return $env:GITHUB_TOKEN
+    }
+    if (-not [string]::IsNullOrWhiteSpace($env:GH_TOKEN)) {
+        return $env:GH_TOKEN
+    }
+
+    $ghCmd = Get-Command gh -ErrorAction SilentlyContinue
+    if ($null -eq $ghCmd) {
+        return $null
+    }
+
+    try {
+        $token = (gh auth token 2>$null).Trim()
+        if (-not [string]::IsNullOrWhiteSpace($token)) {
+            return $token
+        }
+    } catch {
+        # Ignore and continue without a token.
+    }
+
+    return $null
+}
+
 Write-Host "`n📍 Node: $ComputerName"
 Write-Host "📁 User: $UserProfile"
 Write-Host "📂 OPUS: $OpusPath"
@@ -45,6 +73,20 @@ $Config = $Template -replace "__OPUS_PATH__", ($OpusPath -replace "\\", "\\\\")
 $ConfigObj = $Config | ConvertFrom-Json
 foreach ($server in $ConfigObj.mcpServers.PSObject.Properties) {
     $server.Value.env | Add-Member -NotePropertyName "HOME" -NotePropertyValue $UserProfile -Force
+}
+
+$githubToken = Resolve-GitHubToken
+if (-not $ConfigObj.mcpServers.github.env) {
+    $ConfigObj.mcpServers.github | Add-Member -NotePropertyName "env" -NotePropertyValue ([PSCustomObject]@{}) -Force
+}
+if (-not [string]::IsNullOrWhiteSpace($githubToken)) {
+    $ConfigObj.mcpServers.github.env | Add-Member -NotePropertyName "GITHUB_PERSONAL_ACCESS_TOKEN" -NotePropertyValue $githubToken -Force
+    Write-Host "  ✅ GitHub MCP token configured from env/keyring"
+} else {
+    if ($ConfigObj.mcpServers.github.env.PSObject.Properties.Name -contains "GITHUB_PERSONAL_ACCESS_TOKEN") {
+        $ConfigObj.mcpServers.github.env.PSObject.Properties.Remove("GITHUB_PERSONAL_ACCESS_TOKEN")
+    }
+    Write-Host "  ⚠️  GitHub MCP token not found in env/keyring (github MCP may be limited)" -ForegroundColor Yellow
 }
 
 $FinalConfig = $ConfigObj | ConvertTo-Json -Depth 5
