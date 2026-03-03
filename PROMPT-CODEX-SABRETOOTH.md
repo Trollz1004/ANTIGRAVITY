@@ -28,14 +28,18 @@ Joshua Coleman. Electrician from Sorrento, FL. Owner of Trash Or Treasure Online
 - Marketing engine — that's OpenClaw on 9020
 - OMEGA repos — iron wall
 
-## Shared Machine — NO STEPPING ON TOES
+## Drive Isolation — NO STEPPING ON TOES
 
-You share SABRETOOTH with **KRAKKEN** (Claude Code). Rules:
-- Your workspace: `C:\Users\joshl\CodeX\`
-- Your secrets: `C:\Users\joshl\CodeX\env\local.env`
-- Your repo mirror: `C:\Users\joshl\CodeX\repos\Trollz1004CLAUDEASSISTENIGMAPROFITPLATFORMNOTTHEOMEGACHARITYPLATFORM`
-- KRAKKEN's workspace: `C:\OPUSONLY\ANTIGRAVITY\` and `C:\Users\joshl\ENIGMA4Profit\`
-- Master env vault (read-only for you): `C:\OPUSONLY\ANTIGRAVITY\.env.Master-UNIVERSAL NODE SPECIFIC- MUST SEPERATE.Env`
+You share SABRETOOTH with **KRAKKEN** (Claude Code) but on **separate drives**:
+- **YOUR drive: E:** — your entire workspace, repo clone, secrets, everything
+- **KRAKKEN's drive: C:** — `C:\OPUSONLY\ANTIGRAVITY\` — DO NOT TOUCH
+- This isolation protects both agents. If one hallucinates or gets prompt-injected, the other's work is safe.
+
+Your workspace on E: drive:
+- Your repo clone: `E:\ANTIGRAVITY\` (or wherever you set it up on E:)
+- Your secrets: `E:\CodeX\env\local.env`
+- Your workspace: `E:\CodeX\`
+- Master env vault copy: keep your own copy on E:
 
 **KRAKKEN uses ports 9999 (backend) and 5173 (dashboard). Don't use those ports.**
 
