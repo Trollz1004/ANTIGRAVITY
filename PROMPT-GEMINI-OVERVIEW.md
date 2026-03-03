@@ -35,11 +35,12 @@ OMEGA (charity side via ai-solutions.store) = 100% to charity, digital products 
 ## 3-Node Architecture
 
 ### SABRETOOTH (192.168.0.8)
-- **Hardware:** Intel i7-4960X, 64GB RAM, GTX 1070 8GB, 447GB SSD
+- **Hardware:** Intel i7-4960X, 64GB RAM, GTX 1070 8GB, 2x SSDs
 - **OS:** Windows 10 Pro
-- **Agents:**
-  - **KRAKKEN** (Claude Code) — Crosslister dashboard, aidoesitall.website, eBay/Square/Mercari integrations
-  - **CodeX** (ChatGPT Codex) — onlinerecycle.org customer service, e-waste drop-off scheduling
+- **Drive Isolation (blast radius containment):**
+  - **C: drive** = KRAKKEN (Claude Code) — crosslister, dashboard, aidoesitall.website
+  - **E: drive** = CodeX (ChatGPT Codex) — onlinerecycle.org only
+  - Separate SSDs prevent one agent's hallucination/prompt injection from corrupting the other
 - **Services:** Backend API (9999), Dashboard (5173), Ollama (11434), Clawdbot (18789)
 - **Auto-start:** `start-aidoesitall.bat` in Windows Startup folder
 
