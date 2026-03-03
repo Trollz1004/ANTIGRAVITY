@@ -101,7 +101,7 @@ payments (user_id, stripe_session_id, product, amount, status)
 - Twitter/X integration (API keys available)
 
 ## Available Credentials
-All keys are in the vault at `C:\OPUSONLY\_ARCHIVE\dot-dirs\.vault\MASTER-ENV.env`. Key ones:
+All keys are in the vault at `C:\ANTIGRAVITY\_ARCHIVE\dot-dirs\.vault\MASTER-ENV.env`. Key ones:
 - Stripe live keys (pk_live, sk_live)
 - Cloudflare API token
 - Twitter API keys (for social automation)

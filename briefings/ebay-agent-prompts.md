@@ -68,8 +68,8 @@ LISTING 1 — JOKER WILD CARD (Buy It Now):
 - Handling time: 1 business day
 - Returns: No returns (digital item)
 - Charity: 100% to Shriners via Giving Works
-- Description: USE THE HTML from C:\OPUSONLY\briefings\ebay-listings.md (Listing 1 section)
-- Photos: Upload from screenshots of C:\OPUSONLY\briefings\ebay-card-designs.html (Joker section)
+- Description: USE THE HTML from C:\ANTIGRAVITY\briefings\ebay-listings.md (Listing 1 section)
+- Photos: Upload from screenshots of C:\ANTIGRAVITY\briefings\ebay-card-designs.html (Joker section)
 
 LISTING 2 — ANTHROPIC CARD (Auction):
 - Category: Same as above
@@ -141,7 +141,7 @@ RULES:
 
 ## SCREENSHOT INSTRUCTIONS (For Josh)
 
-1. Open `C:\OPUSONLY\briefings\ebay-card-designs.html` in Chrome
+1. Open `C:\ANTIGRAVITY\briefings\ebay-card-designs.html` in Chrome
 2. Press F12 → Device toolbar (Ctrl+Shift+M) → set to 1920x1080
 3. Screenshot each card pair (front + back) = 4 screenshots:
    - Joker front + back

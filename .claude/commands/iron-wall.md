@@ -15,4 +15,4 @@ Check the current workspace and any recent changes for cross-contamination. Look
 
 **If any contamination found:** STOP all operations, report exact file and line to Josh, do NOT modify.
 
-Reference full policy: `C:\OPUSONLY\enigma-opus-plugin\skills\legal-shield\SKILL.md`
+Reference full policy: `C:\ANTIGRAVITY\enigma-opus-plugin\skills\legal-shield\SKILL.md`

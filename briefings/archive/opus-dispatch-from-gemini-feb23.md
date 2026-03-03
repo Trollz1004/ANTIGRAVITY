@@ -1,7 +1,7 @@
 # 🚨 EMERGENCY OPUS DISPATCH — MOBILE + SIGNUP FIX
 # Paste into Claude Code CLI NOW. 1k visits/hr, ZERO signups.
 
-Resume session. T5500, C:\OPUSONLY. THIS IS URGENT.
+Resume session. T5500, C:\ANTIGRAVITY. THIS IS URGENT.
 
 ## THE PROBLEM
 youandinotai.com is getting 1,000+ visits per hour RIGHT NOW. Nobody can sign up because:
@@ -11,7 +11,7 @@ youandinotai.com is getting 1,000+ visits per hour RIGHT NOW. Nobody can sign up
 
 ## TASK 1: MAKE MOBILE RESPONSIVE (HIGHEST PRIORITY)
 
-Edit C:\OPUSONLY\youandinotai\index.css (or wherever global styles live).
+Edit C:\ANTIGRAVITY\youandinotai\index.css (or wherever global styles live).
 
 Add/fix at minimum:
 ```css
@@ -49,7 +49,7 @@ canvas, .canvas-container, [data-canvas] {
 }
 ```
 
-BUT ALSO — check every component in C:\OPUSONLY\youandinotai\src\ for hardcoded widths, fixed positioning, or anything that breaks mobile. FIX ALL OF THEM.
+BUT ALSO — check every component in C:\ANTIGRAVITY\youandinotai\src\ for hardcoded widths, fixed positioning, or anything that breaks mobile. FIX ALL OF THEM.
 
 ## TASK 2: ADD STICKY SIGNUP CTA (CRITICAL — THIS IS WHY NOBODY CONVERTS)
 
@@ -129,7 +129,7 @@ const PricingSection = () => (
 ## TASK 3: REBUILD AND DEPLOY IMMEDIATELY
 
 ```bash
-cd C:\OPUSONLY\youandinotai
+cd C:\ANTIGRAVITY\youandinotai
 npm run build
 netlify deploy --prod --dir=dist
 ```
@@ -167,7 +167,7 @@ gh secret delete CLAUDE_MODEL --repo Trollz1004/ANTIGRAVITY
 
 Then backfill the ones that actually matter but failed:
 ```bash
-# Read from C:\OPUSONLY\.env and push:
+# Read from C:\ANTIGRAVITY\.env and push:
 # TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_BEARER_TOKEN, etc.
 # STRIPE_LINK_BOTSHIELD, STRIPE_LINK_FOUNDING_MEMBER, etc.
 ```
@@ -186,7 +186,7 @@ curl -s https://youandinotai.com | Select-String "viewport"
 
 ## TASK 6: REPORT
 
-Write to C:\OPUSONLY\briefings\opus-emergency-report-feb23.md
+Write to C:\ANTIGRAVITY\briefings\opus-emergency-report-feb23.md
 
 ---
 *EMERGENCY DISPATCH from Gemini Antigravity | 2026-02-23 23:56 EST*

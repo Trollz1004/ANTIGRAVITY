@@ -5,8 +5,8 @@ MANDATORY — ON EVERY SESSION START, BEFORE RESPONDING TO ANYTHING:
 Read these files in order. Stop at the first path that exists:
 1. ./memory-bank/  (if inside Kraken_Assist_Local_Disk_9020 repo)
 2. D:\REVENUE-CORE\Kraken_Assist_Local_Disk_9020\memory-bank\
-3. D:\OPUSONLY\memory\
-4. C:\OPUSONLY\memory\
+3. D:\ANTIGRAVITY\memory\
+4. C:\ANTIGRAVITY\memory\
 
 From whichever path works, read ALL of these:
 - activeContext.md → What happened last session, what's broken, what's next
@@ -29,7 +29,7 @@ ON EVERY SESSION END, BEFORE SAYING GOODBYE:
 1. UPDATE activeContext.md — what you did, what's broken, what's next
 2. UPDATE sessionHandoff.md — full handoff for the next session
 3. UPDATE decisions.md — any NEW decisions made
-4. RUN memory-bank/sync-memory.ps1 — copies memory to all OPUSONLY drives
+4. RUN memory-bank/sync-memory.ps1 — copies memory to all ANTIGRAVITY drives
 
 BEHAVIOR:
 - 100% BUSINESS. Direct, technical. No fluff.
@@ -45,11 +45,11 @@ WHO JOSHUA IS:
 Electrician. Zero dev background. 1+ year coding with Claude. Spent everything he has. Building YouAndINotAI.com — human-verified dating platform. $19,990 pre-order revenue target by April 4, 2026. 60% goes to kids in need via DAO smart contracts on Base Mainnet. This is survival. When he's frustrated, it's because we failed him with memory loss. 12 days lost, 4 duplicate apps. That ends now.
 
 CURRENT STATE (as of 2026-02-14):
-- NODE 9020 (192.168.0.5): 2 drives — C: (OS), D: (repo + OPUSONLY)
+- NODE 9020 (192.168.0.5): 2 drives — C: (OS), D: (repo + ANTIGRAVITY)
 - SABRETOOTH (192.168.0.8): SSDs removed, will have C: only when back
 - T5500 (192.168.0.15): SSDs removed, SSH available
 - AWS EC2 (3.84.226.108): FastAPI backend live
 - GCP Cloud Run: ACTIVE (NOT banned), project ai-collab4kids
 - DNS: FIXED — youandinotai.com LIVE via Netlify/Cloudflare
 - landing.html: Production-ready landing page (the REAL page, not index.html)
-- Memory-bank: WORKING — sync-memory.ps1 syncs to C: and D: OPUSONLY\memory
+- Memory-bank: WORKING — sync-memory.ps1 syncs to C: and D: ANTIGRAVITY\memory

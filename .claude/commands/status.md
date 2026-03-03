@@ -8,5 +8,5 @@ If no status file exists, check the task list and summarize. If nothing exists, 
 
 Keep it under 10 lines. No novel.
 
-Reference identity: `C:\OPUSONLY\enigma-opus-plugin\skills\opus-identity\SKILL.md`
-Reference memory system: `C:\OPUSONLY\enigma-opus-plugin\skills\productivity-memory\SKILL.md`
+Reference identity: `C:\ANTIGRAVITY\enigma-opus-plugin\skills\opus-identity\SKILL.md`
+Reference memory system: `C:\ANTIGRAVITY\enigma-opus-plugin\skills\productivity-memory\SKILL.md`

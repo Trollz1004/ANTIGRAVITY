@@ -7,6 +7,6 @@ Review the YouAndINotAI April 4, 2026 launch checklist. Check each category:
 
 Report as checklist with DONE/NOT DONE/BLOCKED for each item. Flag top 3 priorities.
 
-Reference full roadmap: `C:\OPUSONLY\enigma-opus-plugin\skills\product-roadmap\SKILL.md`
-Reference marketing plan: `C:\OPUSONLY\enigma-opus-plugin\skills\marketing-engine\SKILL.md`
-Reference sales strategy: `C:\OPUSONLY\enigma-opus-plugin\skills\sales-outreach\SKILL.md`
+Reference full roadmap: `C:\ANTIGRAVITY\enigma-opus-plugin\skills\product-roadmap\SKILL.md`
+Reference marketing plan: `C:\ANTIGRAVITY\enigma-opus-plugin\skills\marketing-engine\SKILL.md`
+Reference sales strategy: `C:\ANTIGRAVITY\enigma-opus-plugin\skills\sales-outreach\SKILL.md`

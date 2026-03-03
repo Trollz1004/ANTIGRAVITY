@@ -44,7 +44,7 @@ Across all projects, the goal is to design durable, transparent, and ToS-complia
 ## Operator Quick Start (Non-Dev)
 
 ```powershell
-Set-Location C:\OPUSONLY
+Set-Location C:\ANTIGRAVITY
 .\ops-sync-main.ps1
 ```
 

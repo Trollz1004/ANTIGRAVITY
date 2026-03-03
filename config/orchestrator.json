@@ -32,11 +32,11 @@
   },
 
   "paths": {
-    "logs": "E:\\OPUSONLY\\logs",
-    "status_opus": "E:\\OPUSONLY\\STATUS-OPUS.md",
-    "status_gemini": "E:\\OPUSONLY\\STATUS-GEMINI.md",
-    "task_queue": "E:\\OPUSONLY\\TASK-QUEUE-100.md",
-    "marketing": "E:\\OPUSONLY\\toolbox\\marketing"
+    "logs": "E:\\ANTIGRAVITY\\logs",
+    "status_opus": "E:\\ANTIGRAVITY\\STATUS-OPUS.md",
+    "status_gemini": "E:\\ANTIGRAVITY\\STATUS-GEMINI.md",
+    "task_queue": "E:\\ANTIGRAVITY\\TASK-QUEUE-100.md",
+    "marketing": "E:\\ANTIGRAVITY\\toolbox\\marketing"
   },
 
   "secrets": {
