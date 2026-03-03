@@ -100,7 +100,7 @@ ENIGMA and OMEGA **never cross**. Separate wallets, separate infrastructure, sep
 
 ### Structure (post-consolidation, 2026-02-28)
 ```
-C:\OPUSONLY\
+C:\ANTIGRAVITY\
 ├── CLAUDE.md           # Claude Opus instructions
 ├── antigravity\        # Admin dashboard (Next.js 15)
 ├── revenue-core\       # Revenue dashboard (React + Vite)

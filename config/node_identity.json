@@ -4,7 +4,7 @@
     "local_ip": "192.168.0.8",
     "assistant_id": "ACCOMPLISH",
     "mission": "VALENTINE_LAUNCH_2026",
-    "ground_truth_root": "E:\\Enigma\\OPUSONLY\\accomplish\\",
+    "ground_truth_root": "E:\\Enigma\\ANTIGRAVITY\\accomplish\\",
     "network_share": "\\\\DATEAPPSABRETOO\\Users\\joshl",
     "doctrine": {
         "charity_split": 0.60,

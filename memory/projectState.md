@@ -30,9 +30,9 @@ Joshua has built the SAME date app 4 times across different platforms because Cl
 
 | Node       | IP           | Role                            | Drive                                          | Status                                                |
 | ---------- | ------------ | ------------------------------- | ---------------------------------------------- | ----------------------------------------------------- |
-| SABRETOOTH | 192.168.0.8  | Master Orchestrator / Dev       | C:\OPUSONLY (when SSDs back in)                | Primary dev machine — SSDs removed, will have C: only |
-| 9020       | 192.168.0.5  | Secondary Dev / Network Storage | C: (OS 465GB), D: (OPUSONLY 447GB)             | CURRENT MACHINE — 2 drives only                       |
-| T5500      | 192.168.0.15 | Marketing + Ollama              | C: (OS only, will have C:\OPUSONLY when setup) | SSDs removed, ready for setup                         |
+| SABRETOOTH | 192.168.0.8  | Master Orchestrator / Dev       | C:\ANTIGRAVITY (when SSDs back in)                | Primary dev machine — SSDs removed, will have C: only |
+| 9020       | 192.168.0.5  | Secondary Dev / Network Storage | C: (OS 465GB), D: (ANTIGRAVITY 447GB)             | CURRENT MACHINE — 2 drives only                       |
+| T5500      | 192.168.0.15 | Marketing + Ollama              | C: (OS only, will have C:\ANTIGRAVITY when setup) | SSDs removed, ready for setup                         |
 | AWS-EC2    | 3.84.226.108 | Cloud Backend                   | -                                              | FastAPI on port 8000, PM2 managed                     |
 
 ## Domains

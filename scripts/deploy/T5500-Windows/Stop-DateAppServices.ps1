@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # ENIGMA — Stop DateApp Windows Services
-# Location: E:\OPUSONLY\scripts\deploy\T5500-Windows\Stop-DateAppServices.ps1
+# Location: E:\ANTIGRAVITY\scripts\deploy\T5500-Windows\Stop-DateAppServices.ps1
 # Author: ENIGMA
 # ═══════════════════════════════════════════════════════════════════════════════
 

@@ -2,7 +2,7 @@
 
 **Last Updated:** 2026-02-23 18:35 EST
 **Agent:** Antigravity (Gemini)
-**Node:** T5500 — `C:\OPUSONLY`
+**Node:** T5500 — `C:\ANTIGRAVITY`
 **Repo:** [Trollz1004/ANTIGRAVITY](https://github.com/Trollz1004/ANTIGRAVITY) (ONLY repo — all others archived)
 **Branch:** `main` (ONLY branch)
 
@@ -42,12 +42,12 @@ See `data/stripe-links.json` for full details.
 
 | Path                                                      | Purpose                             |
 | --------------------------------------------------------- | ----------------------------------- |
-| `C:\OPUSONLY`                                             | Workspace root (6 items)            |
-| `C:\OPUSONLY\.env`                                        | Secrets (single source of truth)    |
-| `C:\OPUSONLY\_ARCHIVE\projects\docker\docker-compose.yml` | Docker stack                        |
+| `C:\ANTIGRAVITY`                                             | Workspace root (6 items)            |
+| `C:\ANTIGRAVITY\.env`                                        | Secrets (single source of truth)    |
+| `C:\ANTIGRAVITY\_ARCHIVE\projects\docker\docker-compose.yml` | Docker stack                        |
 | `C:\Users\joshl\Downloads\revenue-core-_-launchpad-os`    | Revenue-Core dashboard              |
 | `C:\Users\joshl\Downloads\antigravity-admin-dashboard`    | Antigravity dashboard               |
-| `C:\OPUSONLY\enigma-opus-plugin`                          | Opus plugin (10 skills, 5 commands) |
+| `C:\ANTIGRAVITY\enigma-opus-plugin`                          | Opus plugin (10 skills, 5 commands) |
 
 ## Blockers
 

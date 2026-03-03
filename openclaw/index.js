@@ -16,7 +16,7 @@ const logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: 'C:\\OPUSONLY\\logs\\openclaw.log' })
+    new winston.transports.File({ filename: 'C:\\ANTIGRAVITY\\logs\\openclaw.log' })
   ]
 });
 

@@ -13,6 +13,6 @@ HEMORzoid (8001):   [UP/DOWN] — [detail]
 Dashboard (3001):   [UP/DOWN] — [detail]
 ```
 
-If anything is DOWN, reference the platform-ops skill at `C:\OPUSONLY\enigma-opus-plugin\skills\platform-ops\SKILL.md` for troubleshooting. Bottom-up diagnosis — if Ollama is down, everything downstream is irrelevant.
+If anything is DOWN, reference the platform-ops skill at `C:\ANTIGRAVITY\enigma-opus-plugin\skills\platform-ops\SKILL.md` for troubleshooting. Bottom-up diagnosis — if Ollama is down, everything downstream is irrelevant.
 
 SABRETOOTH only. Never touch .5 or .15 nodes.

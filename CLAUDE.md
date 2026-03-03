@@ -28,7 +28,7 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. $20
 
 | Field | Value |
 |-------|-------|
-| Node | T5500 (C:\OPUSONLY) |
+| Node | T5500 (C:\ANTIGRAVITY) |
 | Owner | Joshua Coleman / Trollz1004 |
 | Entity | Trash Or Treasure Online Recycler LLC (FL) |
 | Brain | Claude Opus 4.6 (Max $200/mo) |
@@ -39,7 +39,7 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. $20
 **ONE REPO: Trollz1004/ANTIGRAVITY — `main` branch ONLY**
 
 ```
-C:\OPUSONLY\
+C:\ANTIGRAVITY\
 ├── CLAUDE.md              # This file (auto-loaded every session)
 ├── README.md              # Public repo README
 ├── .env                   # Active secrets (NOT in git)
@@ -90,8 +90,8 @@ Key rotated 2026-02-23. **EXPIRES ~MARCH 10TH.**
 
 | Dashboard | Path | Framework |
 |-----------|------|-----------|
-| Revenue Core | C:\OPUSONLY\revenue-core | React+Vite |
-| Antigravity Admin | C:\OPUSONLY\antigravity | Next.js 15 |
+| Revenue Core | C:\ANTIGRAVITY\revenue-core | React+Vite |
+| Antigravity Admin | C:\ANTIGRAVITY\antigravity | Next.js 15 |
 
 ## Deployment Map (Updated 2026-02-24)
 

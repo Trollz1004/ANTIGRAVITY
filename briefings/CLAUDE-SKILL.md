@@ -2,7 +2,7 @@
 
 > This is the REAL memory. The canonical truth. Everything else references this.
 > Location: briefings/CLAUDE-SKILL.md (tracked in Trollz1004/ANTIGRAVITY)
-> Auto-memory at: C:\Users\joshl\.claude\projects\C--OPUSONLY\memory\MEMORY.md
+> Auto-memory at: C:\Users\joshl\.claude\projects\C--ANTIGRAVITY\memory\MEMORY.md
 > Last updated: 2026-02-28
 
 ---
@@ -12,7 +12,7 @@
 | Field | Value |
 |-------|-------|
 | Agent | Claude Opus 4.6 |
-| Node | T5500 (C:\OPUSONLY) |
+| Node | T5500 (C:\ANTIGRAVITY) |
 | Platform | Claude Code CLI (Max $200/mo) |
 | GPU | GTX 1070 8GB, CUDA 12.6 |
 | OS | Windows 10 Pro |
@@ -119,7 +119,7 @@ ENIGMA and OMEGA **NEVER cross**. Separate wallets, separate infrastructure. Abs
 **ONE repo:** `Trollz1004/ANTIGRAVITY` — `main` branch only (branch-protected)
 
 ```
-C:\OPUSONLY\
+C:\ANTIGRAVITY\
 ├── CLAUDE.md                    # Auto-loaded every session
 ├── antigravity\                 # Admin Dashboard (Next.js 15)
 │   └── GEMINI.md                # Gemini's identity file
@@ -291,7 +291,7 @@ Full spec: `briefings/MERCH-CHARITY-LOGIC.md`
 - **Unknown UUID e3cb363b**: In permissions but no visible tools. May be stale — investigate or remove.
 
 ### Quick Launch (Win+R)
-- Type `opus` → opens PowerShell 7.5 blue terminal → Claude CLI `--dangerously-skip-permissions` in C:\OPUSONLY
+- Type `opus` → opens PowerShell 7.5 blue terminal → Claude CLI `--dangerously-skip-permissions` in C:\ANTIGRAVITY
 - Task Scheduler `OPUS-CLI-AutoStart` fires on logon (upgrade to admin: `scripts/upgrade-opus-task-admin.ps1`)
 
 ---

@@ -31,36 +31,36 @@
 
 ## NODES
 - SABRETOOTH: i7-4960X, 64GB RAM, GTX 1070 (Primary dev/orchestrator) — Win10 Pro
-  - IP: 192.168.0.8 | Hostname: i7-4960X | E:\OPUSONLY
+  - IP: 192.168.0.8 | Hostname: i7-4960X | E:\ANTIGRAVITY
 - T5500: Dual Xeon, 72GB RAM, 1050Ti 4GB (Production DateApp) — Win10 Pro
-  - IP: 192.168.0.15 | Hostname: DESKTOP-2DCAEVN | C:\OPUSONLY
+  - IP: 192.168.0.15 | Hostname: DESKTOP-2DCAEVN | C:\ANTIGRAVITY
   - Services: Backend :8000, Frontend :5173, PostgreSQL :5432, Ollama :11434
 - Optiplex 9020: i7-4790, 32GB RAM, 4GB GPU (Dev secondary, Claude Code) — Win10 Pro
-  - IP: 192.168.0.5 | Hostname: i7-4790k32gbram4gbgpu | C:\OPUSONLY
+  - IP: 192.168.0.5 | Hostname: i7-4790k32gbram4gbgpu | C:\ANTIGRAVITY
   - Network line-of-sight to T5500 production
 - 40+ additional nodes: ready when funding allows
 
-## DRIVE LAYOUT (OPUSONLY standard) — Post Opus 4.6
-- E:\OPUSONLY → SABRETOOTH (local, always E:, unchanged)
-- T5500: C:\OPUSONLY (local boot drive on T5500 hardware)
-- 9020: C:\OPUSONLY (local boot drive on 9020 hardware)
-- Network access: SSH (ssh joshl@T5500-IP / ssh joshl@9020-IP) or SMB (\\T5500\OPUSONLY / \\9020\OPUSONLY)
-- Each OPUSONLY has: config\, logs\, memory\, nodes\, scripts\
+## DRIVE LAYOUT (ANTIGRAVITY standard) — Post Opus 4.6
+- E:\ANTIGRAVITY → SABRETOOTH (local, always E:, unchanged)
+- T5500: C:\ANTIGRAVITY (local boot drive on T5500 hardware)
+- 9020: C:\ANTIGRAVITY (local boot drive on 9020 hardware)
+- Network access: SSH (ssh joshl@T5500-IP / ssh joshl@9020-IP) or SMB (\\T5500\ANTIGRAVITY / \\9020\ANTIGRAVITY)
+- Each ANTIGRAVITY has: config\, logs\, memory\, nodes\, scripts\
 - SSH key: C:\Users\joshl\.ssh\id_ed25519 (SABRETOOTH) → authorized_keys on T5500/9020
 
 ## SESSION START PROTOCOL
-1. Read E:\OPUSONLY\memory\CONSOLIDATED_USER_PREFERENCES.md (this file)
-2. Read E:\OPUSONLY\config\node_manifest.json + project_index.json
+1. Read E:\ANTIGRAVITY\memory\CONSOLIDATED_USER_PREFERENCES.md (this file)
+2. Read E:\ANTIGRAVITY\config\node_manifest.json + project_index.json
 3. SSH to T5500/9020 via ed25519 key after physical boot
 4. Read NODE_CONTEXT.md + node_identity.json on each remote node
 5. Check OPUS-STATUS.md for cross-platform state
 
 ## KEY CONFIG FILES
-- E:\OPUSONLY\config\node_manifest.json (network-wide node map)
-- E:\OPUSONLY\config\project_index.json (network-wide project index)
-- E:\OPUSONLY\config\OPUS_MEMORY_INDEX.json (if present)
-- Per-node: C:\OPUSONLY\config\node_identity.json
-- Per-node: C:\OPUSONLY\memory\NODE_CONTEXT.md
+- E:\ANTIGRAVITY\config\node_manifest.json (network-wide node map)
+- E:\ANTIGRAVITY\config\project_index.json (network-wide project index)
+- E:\ANTIGRAVITY\config\OPUS_MEMORY_INDEX.json (if present)
+- Per-node: C:\ANTIGRAVITY\config\node_identity.json
+- Per-node: C:\ANTIGRAVITY\memory\NODE_CONTEXT.md
 
 ## PLATFORMS
 1. YouAndINotAI.com — Dating app (PROFIT, FIAT only)

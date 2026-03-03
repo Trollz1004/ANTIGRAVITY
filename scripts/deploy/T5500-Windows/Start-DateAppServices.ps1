@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # ENIGMA — Start DateApp Windows Services
-# Location: E:\OPUSONLY\scripts\deploy\T5500-Windows\Start-DateAppServices.ps1
+# Location: E:\ANTIGRAVITY\scripts\deploy\T5500-Windows\Start-DateAppServices.ps1
 # Author: ENIGMA
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -12,7 +12,7 @@ Write-Host "══════════════════════�
 Write-Host " ENIGMA — Starting DateApp Services" -ForegroundColor Cyan
 Write-Host "═══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
 
-$logDir = "E:\OPUSONLY\logs"
+$logDir = "E:\ANTIGRAVITY\logs"
 $logFile = Join-Path $logDir "startup-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
 
 function Write-Log {

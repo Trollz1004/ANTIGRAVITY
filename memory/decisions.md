@@ -29,9 +29,9 @@ Every architectural decision is recorded here so no future session re-debates it
 
 ## 2026-02-13: Node wipe and consolidation  
 
-**Decision**: Factory reset all 3 nodes to marketing-only, preserve vault + OPUSONLY  
+**Decision**: Factory reset all 3 nodes to marketing-only, preserve vault + ANTIGRAVITY  
 **Why**: Too many stale configs, broken services, zombie processes across nodes  
-**Impact**: Clean slate on each machine. Scripts in D:\OPUSONLY\scripts\ handle re-setup  
+**Impact**: Clean slate on each machine. Scripts in D:\ANTIGRAVITY\scripts\ handle re-setup  
 **Status**: 9020 and T5500 wiped. SABRETOOTH last (after DNS verified)
 
 ## 2026-02-10: Migrate from GCP to AWS

@@ -41,7 +41,7 @@ BEHAVIOR RULES:
 
 NODES:
 - SABRETOOTH (192.168.0.8): Master orchestrator, 64GB RAM
-- 9020 (192.168.0.5): Current dev machine, 2 drives (C: OS, D: repo + OPUSONLY)
+- 9020 (192.168.0.5): Current dev machine, 2 drives (C: OS, D: repo + ANTIGRAVITY)
 - T5500 (192.168.0.15): SSH available (ssh aicol@192.168.0.15)
 - AWS EC2 (3.84.226.108): Live backend
 

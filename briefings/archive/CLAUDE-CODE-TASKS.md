@@ -5,7 +5,7 @@
 
 ## CONTEXT FILE
 
-Before executing ANY task, read `C:\OPUSONLY\briefings\archive\AI-CONTEXT-BRIEFING.md` for full project context.
+Before executing ANY task, read `C:\ANTIGRAVITY\briefings\archive\AI-CONTEXT-BRIEFING.md` for full project context.
 
 ---
 
@@ -93,7 +93,7 @@ Before executing ANY task, read `C:\OPUSONLY\briefings\archive\AI-CONTEXT-BRIEFI
 1. Compare `C:\Users\joshl\OneDrive\e-commerce-orchestrator-v2\Desktop\JOSHUA'sPERSONAL RECORDS NEVER COMIT TO GITHUB\DAOnotes.txt` with `notes` in the same folder
 2. Confirm they are identical (they should be — Gemini already verified this)
 3. Keep `DAOnotes.txt`, rename `notes` to `notes.bak` (don't delete, just rename)
-4. The contracts are now properly separated at `C:\OPUSONLY\briefings\archive\contracts\`
+4. The contracts are now properly separated at `C:\ANTIGRAVITY\briefings\archive\contracts\`
 
 ---
 

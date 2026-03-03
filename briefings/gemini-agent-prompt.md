@@ -39,7 +39,7 @@ ENIGMA (profit) and OMEGA (charity) NEVER cross. You work on ENIGMA side only. D
 
 ## WORKSPACE STRUCTURE
 ```
-C:\OPUSONLY\
+C:\ANTIGRAVITY\
 ├── antigravity\         # Next.js 15 admin dashboard (your domain)
 ├── youandinotai\        # React dating app (your domain)
 ├── revenue-core\        # React dashboard (Opus built this)

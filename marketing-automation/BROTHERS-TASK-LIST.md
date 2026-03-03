@@ -73,7 +73,7 @@ We have the API keys but need the Access Token to POST tweets.
 ### OPTIONAL — Copy vault to T5500
 SSH can't handle the full file transfer. Next time you're on T5500 directly:
 ```
-copy \\192.168.0.8\E$\OPUSONLY\.vault\MASTER-UNIVERSAL-ENV-TROLLZ1004.env C:\OPUSONLY\.vault\
+copy \\192.168.0.8\E$\ANTIGRAVITY\.vault\MASTER-UNIVERSAL-ENV-TROLLZ1004.env C:\ANTIGRAVITY\.vault\
 ```
 Or copy the file via USB drive.
 

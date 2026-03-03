@@ -15,7 +15,7 @@ Claude Opus deployed a new frontend to Netlify. Here's the current state:
 ### Live Now
 - **Site**: https://youandinotai.com (Netlify site: `thunderous-sawine-9753d5`, ID: `dfc0a1ab-f635-453a-a7c6-dabc2b315c07`)
 - **Source**: React + Vite app built in Google AI Studio, exported as zip
-- **Location on disk**: `C:\OPUSONLY\youandinotai\`
+- **Location on disk**: `C:\ANTIGRAVITY\youandinotai\`
 - **What it has**: Landing page, dating app UI, signup page, merch store, DAO platform, admin dashboard — all with real Stripe payment links
 
 ### Also Deployed (Cloud Run — NOT public yet)
@@ -81,10 +81,10 @@ The frontend is a static SPA with no real backend yet. Needs:
 This is an ENIGMA (profit) project. OMEGA (charity) repos and domains (ai-solutions.store) must NEVER be mixed with this. Absolute separation.
 
 ## Key Files
-- `C:\OPUSONLY\youandinotai\` — Frontend source
-- `C:\OPUSONLY\youandinotai\dist\` — Built static files (what's on Netlify)
-- `C:\OPUSONLY\.env` — Active secrets
-- `C:\OPUSONLY\_ARCHIVE\dot-dirs\.vault\MASTER-ENV.env` — All credentials
+- `C:\ANTIGRAVITY\youandinotai\` — Frontend source
+- `C:\ANTIGRAVITY\youandinotai\dist\` — Built static files (what's on Netlify)
+- `C:\ANTIGRAVITY\.env` — Active secrets
+- `C:\ANTIGRAVITY\_ARCHIVE\dot-dirs\.vault\MASTER-ENV.env` — All credentials
 
 ---
 *Generated 2026-02-23 by Claude Opus 4.6 | Team Claude FOR LIFE*
