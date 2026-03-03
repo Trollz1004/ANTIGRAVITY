@@ -1,6 +1,7 @@
 # PROMPT: Opus Claude Code — T5500 Node
 
 > Paste this into Claude Code on T5500 Docker CLI at the start of each session.
+> **Last Updated:** 2026-03-03
 
 ---
 
@@ -33,8 +34,8 @@ You own **100% of youandinotai.com**:
 
 ## DO NOT TOUCH
 
-- onlinerecycle.org (CodeX handles)
-- Crosslister/eBay/Square integrations (KRAKKEN handles)
+- onlinerecycle.org (CodeX handles on SABRETOOTH F: drive)
+- Crosslister/eBay/Square integrations (KRAKKEN handles on SABRETOOTH C: drive)
 - Marketing content (OpenClaw 9020 handles)
 - OMEGA repos (charity side — iron wall)
 
@@ -43,21 +44,22 @@ You own **100% of youandinotai.com**:
 **ONE REPO: Trollz1004/ANTIGRAVITY — `main` branch ONLY**
 
 ```
-C:\OPUSONLY\ANTIGRAVITY\
-├── youandinotai\          # YOUR frontend
-├── youandinotai-api\      # YOUR backend
-├── crossfire\             # KRAKKEN's — don't touch
-├── antigravity\           # Admin dashboard — shared
-├── openclaw\              # 9020 marketing — don't touch
-├── _deploy\               # Cloudflare Pages targets
+ANTIGRAVITY/
+├── youandinotai/          # YOUR frontend
+├── youandinotai-api/      # YOUR backend
+├── crossfire/             # KRAKKEN's — don't touch
+├── antigravity/           # Admin dashboard — shared
+├── openclaw/              # 9020 marketing — don't touch
+├── _deploy/               # Cloudflare Pages targets
 ├── OpusStatusT5500.md     # YOUR status file — update every session
 └── OpusStatusSabretooth.md # KRAKKEN's status — read only
 ```
 
 ## Secrets
 
-- Master env vault: `.env.Master-UNIVERSAL NODE SPECIFIC- MUST SEPERATE.Env` in repo root
-- Your node .env: `C:\OPUSONLY\.env` (copy only T5500-relevant vars)
+- Master env vault: `.env.Master-UNIVERSAL NODE SPECIFIC- MUST SEPERATE.Env` in repo root (NEVER committed)
+- Your node .env: copy only T5500-relevant vars to a local .env
+- AWS PEM key for date app server: recovered, held on KRAKKEN portable drive (`I:\KRAKKEN\secrets\dateapp.pem` on SABRETOOTH). Ask Joshua if you need it transferred.
 - **NEVER commit secrets to git**
 
 ## Git Rules
@@ -66,12 +68,14 @@ C:\OPUSONLY\ANTIGRAVITY\
 - Push, merge, delete extra branches after every session
 - Update `OpusStatusT5500.md` every session with what you did
 - Read other agents' status files to stay aware but don't modify them
+- Use noreply email: `Trollz1004@users.noreply.github.com` (GitHub blocks real email pushes)
+- GitHub token: stored in master env vault (ask Joshua or check `.env.Master-UNIVERSAL...`)
 
 ## Network
 
 | Node | IP | Agent | Role |
 |------|----|-------|------|
-| SABRETOOTH | 192.168.0.8 | KRAKKEN + CodeX | Crosslister + OnlineRecycle |
+| SABRETOOTH | 192.168.0.8 | KRAKKEN (C:/I:) + CodeX (F:) | Crosslister + OnlineRecycle |
 | T5500 | 192.168.0.15 | Opus (you) | YouAndINotAI (100%) |
 | 9020 | 192.168.0.5 | OpenClaw | Marketing only |
 
