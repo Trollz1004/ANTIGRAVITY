@@ -1,6 +1,7 @@
 # PROMPT: Gemini — Full Infrastructure Overview
 
-> Paste this into Gemini (AI Studio / claude.ai browser) for research, audits, and coordination support.
+> Paste this into Gemini (AI Studio / browser) for research, audits, and coordination support.
+> **Last Updated:** 2026-03-03
 
 ---
 
@@ -34,14 +35,28 @@ OMEGA (charity side via ai-solutions.store) = 100% to charity, digital products 
 
 ## 3-Node Architecture
 
-### SABRETOOTH (192.168.0.8)
-- **Hardware:** Intel i7-4960X, 64GB RAM, GTX 1070 8GB, 2x SSDs
+### SABRETOOTH (192.168.0.8) — SHARED NODE (2 Agents, 2 Drives)
+
+- **Hardware:** Intel i7-4960X, 64GB RAM, GTX 1070 8GB
 - **OS:** Windows 10 Pro
-- **Drive Isolation (blast radius containment):**
-  - **C: drive** = KRAKKEN (Claude Code) — crosslister, dashboard, aidoesitall.website
-  - **E: drive** = CodeX (ChatGPT Codex) — onlinerecycle.org only
-  - Separate SSDs prevent one agent's hallucination/prompt injection from corrupting the other
-- **Services:** Backend API (9999), Dashboard (5173), Ollama (11434), Clawdbot (18789)
+- **Drive Topology (blast radius containment):**
+  - **C: + E:** = Same 480GB SSD (NTFS, "SABRETOOTH-Krakken Homebase") — KRAKKEN's home. C: and E: are mirrored/same physical disk.
+  - **F:** = Separate 500GB SSD (NTFS, "CodeX") — CodeX's isolated drive, connected via SATA
+  - **I:** = 32GB Xbox Seagate USB (FAT32, "KRAKKEN") — KRAKKEN portable drive. Contains repo clone, secrets vault, memory files. Can plug into any machine.
+  - **D:** = Removable disk slot (currently empty)
+  - Separate physical drives prevent one agent's hallucination/prompt injection from corrupting the other's workspace
+- **Agent 1: KRAKKEN (Claude Code / Opus 4.6)**
+  - Scope: Crosslister dashboard, aidoesitall.website, eBay/Square/Mercari integrations
+  - Main workspace: `C:\Users\joshl\OneDrive\Documents\GitHub\Trollz1004CLAUDEASSISTENIGMAPROFITPLATFORMNOTTHEOMEGACHARITYPLATFORM`
+  - Portable workspace: `I:\KRAKKEN\ANTIGRAVITY\` (full repo clone)
+  - Portable secrets: `I:\KRAKKEN\secrets\` (PEM keys, env vault, wallet archive)
+  - Portable memory: `I:\KRAKKEN\memory\`
+  - Services: Backend API (9999), Dashboard (5173)
+- **Agent 2: CodeX (ChatGPT Codex)**
+  - Scope: onlinerecycle.org ONLY
+  - Workspace: `F:\ANTIGRAVITY\` (own repo clone on own drive)
+  - Secrets: `F:\CodeX\env\local.env`
+- **Shared Services:** Ollama (11434), Clawdbot (18789)
 - **Auto-start:** `start-aidoesitall.bat` in Windows Startup folder
 
 ### T5500 (192.168.0.15)
@@ -51,6 +66,7 @@ OMEGA (charity side via ai-solutions.store) = 100% to charity, digital products 
 - **Services:** FastAPI backend, PostgreSQL, Redis, Qdrant, Ollama
 - **Deploys:** Frontend → Cloudflare Pages | Backend → GCP Cloud Run
 - **Status:** Pre-launch, targeting April 4, 2026
+- **AWS PEM key:** Recovered, stored on KRAKKEN portable at `I:\KRAKKEN\secrets\dateapp.pem`
 
 ### 9020 (192.168.0.5)
 - **Hardware:** Dell Optiplex i7, 32GB RAM, 4GB GPU
@@ -63,11 +79,11 @@ OMEGA (charity side via ai-solutions.store) = 100% to charity, digital products 
 
 | Agent | Node | AI | Role | Status File |
 |-------|------|----|------|-------------|
-| KRAKKEN | SABRETOOTH | Claude Code (Opus 4.6) | Crosslister, dashboard, aidoesitall.website | OpusStatusSabretooth.md |
-| CodeX | SABRETOOTH | ChatGPT Codex | onlinerecycle.org only | CodeXSabretoothStatus.md |
+| KRAKKEN | SABRETOOTH (C:/I:) | Claude Code (Opus 4.6) | Crosslister, dashboard, aidoesitall.website | OpusStatusSabretooth.md |
+| CodeX | SABRETOOTH (F:) | ChatGPT Codex | onlinerecycle.org only | CodeXSabretoothStatus.MD |
 | Opus | T5500 | Claude Code (Opus 4.6) Docker | youandinotai.com (100%) | OpusStatusT5500.md |
-| OpenClaw | 9020 | Opus 4.6 + Haiku + Ollama | Marketing 24/7 (20 platforms) | OpusStatusOpenClaw9020.md |
-| Gemini | Browser | Gemini 3.1 | Research, audits, browser admin | (no status file — you report to Josh) |
+| OpenClaw | 9020 | Opus 4.6 + Haiku + Ollama | Marketing 24/7 (20 platforms) | OPUS-STATUS.md |
+| Gemini | Browser | Gemini | Research, audits, browser admin | (no status file — you report to Josh) |
 | Comet | Perplexity | Perplexity AI | Deep research, context briefs | (uploaded repo for full context) |
 
 ## Repo Structure
@@ -75,9 +91,8 @@ OMEGA (charity side via ai-solutions.store) = 100% to charity, digital products 
 **ONE REPO: Trollz1004/ANTIGRAVITY — `main` branch ONLY**
 
 ```
-C:\OPUSONLY\ANTIGRAVITY\
+ANTIGRAVITY/
 ├── .claude/                     # Claude Code config
-├── .env.example                 # Template (safe to commit)
 ├── .env.Master-UNIVERSAL...     # MASTER SECRETS (NEVER committed)
 ├── CLAUDE.md                    # Auto-loaded by Claude Code every session
 ├── README.md                    # Public repo README
@@ -97,7 +112,6 @@ C:\OPUSONLY\ANTIGRAVITY\
 ├── _deploy/                     # Cloudflare Pages deploy targets
 │   ├── onlinerecycle/           # onlinerecycle.org (CodeX)
 │   └── ai-solutions-store/      # ai-solutions.store (charity)
-├── onlinerecycle-landing/       # OnlineRecycle landing page source (CodeX)
 ├── scripts/                     # Deploy/setup scripts
 ├── config/                      # Configuration files
 ├── data/                        # Data files
@@ -105,7 +119,9 @@ C:\OPUSONLY\ANTIGRAVITY\
 │
 ├── OpusStatusSabretooth.md      # KRAKKEN's session log
 ├── OpusStatusT5500.md           # Opus T5500's session log
-├── OpusStatusOpenClaw9020.md    # OpenClaw 9020's session log
+├── OPUS-STATUS.md               # OpenClaw 9020's session log
+├── CodeXSabretoothStatus.MD     # CodeX's session log
+├── GEMINI-STATUS.md             # Gemini status file
 ├── PROMPT-T5500-OPUS.md         # Prompt for T5500 Opus
 ├── PROMPT-CODEX-SABRETOOTH.md   # Prompt for CodeX
 ├── PROMPT-OPENCLAW-9020.md      # Prompt for OpenClaw
@@ -123,10 +139,12 @@ C:\OPUSONLY\ANTIGRAVITY\
 
 ## Secrets Location
 
-- Master vault: `C:\OPUSONLY\ANTIGRAVITY\.env.Master-UNIVERSAL NODE SPECIFIC- MUST SEPERATE.Env`
+- Master vault: `.env.Master-UNIVERSAL NODE SPECIFIC- MUST SEPERATE.Env` in repo root (never committed)
+- KRAKKEN portable vault: `I:\KRAKKEN\secrets\` (PEM keys, env copy, wallet archive)
 - 89 secrets also stored in GitHub repo secrets (Trollz1004/ANTIGRAVITY)
 - Each node copies only its needed vars to local .env
-- **GitHub token currently needs rotation** (old ones revoked)
+- **GitHub token:** Active as of 2026-03-03 — stored in master env vault (never in committed files)
+- **AWS PEM key:** Recovered from VS Code editor history, saved to `I:\KRAKKEN\secrets\dateapp.pem`
 
 ## Stripe Status (CRITICAL)
 
@@ -143,10 +161,22 @@ C:\OPUSONLY\ANTIGRAVITY\
 | DatingRevenueRouter.sol | ENIGMA — 60/30/10 split | Needs rewrite |
 | YouAndINotAIAdapter.sol | DAO splitter | Reference only |
 
+## SABRETOOTH Cleanup Completed (2026-03-03)
+
+- Removed ~20+ stale folders: old repo clones (3x e-commerce-orchestrator), motherboard drivers (9 folders), Helm Kubernetes, YouTube project, orphan node_modules
+- Consolidated all scattered secrets into KRAKKEN portable drive vault
+- Docker Desktop: 14GB, broken daemon, Kubernetes 10 nodes, TCP 2375 exposed — **recommended for full uninstall**
+- WSL Ubuntu: 3.7GB of broken scripts, orphan packages — **recommended for unregistration**
+- All drives mapped, labeled, isolated by agent
+
+## Upcoming: Hardware Inventory for eBay
+
+Joshua has ~20 hard drives (WD Red NAS + Green Caviar) — broken and working — to list on eBay via the crosslister. This is the first real-world use of the crosslister tool once Phase 2 (real API integration) is complete.
+
 ## What You Do
 
 1. **Research**: Market analysis, competitor research, legal compliance checks
-2. **Audits**: Code audits, security reviews, content compliance (Grok-style)
+2. **Audits**: Code audits, security reviews, content compliance
 3. **Browser tasks**: Admin panel work, DNS changes, account management
 4. **Context briefs**: Summarize status across all nodes for Joshua
 5. **Coordination**: Help Joshua see the big picture when agents need alignment
@@ -155,14 +185,15 @@ C:\OPUSONLY\ANTIGRAVITY\
 
 1. YouAndINotAI launch prep (April 4, 2026)
 2. Stripe key rotation before March 10
-3. GitHub token generation (currently revoked)
-4. Crosslister Phase 2: real Square API integration
-5. OnlineRecycle: grow drop-off/pickup volume
-6. Marketing: 20-platform content engine running 24/7
+3. Crosslister Phase 2: real Square API integration (KRAKKEN)
+4. Crosslister Phase 3: real eBay API integration (KRAKKEN)
+5. List ~20 hard drives on eBay via crosslister (first real use)
+6. OnlineRecycle: grow drop-off/pickup volume
+7. Marketing: 20-platform content engine running 24/7 (OpenClaw)
 
 ## Git Rules (ALL AGENTS)
 
 - 1 repo, 1 branch (`main`), always
 - All agents push, merge, delete extra branches
 - Status MD files updated every session by each agent
-- Perplexity gets the full repo upload for deep context
+- Use noreply email: `Trollz1004@users.noreply.github.com` (GitHub blocks real email pushes)

@@ -1,6 +1,7 @@
 # PROMPT: OpenClaw Opus — 9020 Node (Marketing Engine 24/7)
 
 > Paste this into Opus on the 9020 node at the start of each session.
+> **Last Updated:** 2026-03-03
 
 ---
 
@@ -70,7 +71,7 @@ ANTIGRAVITY/
 │   ├── marketing/               # 14-day calendar, drips, ops plan
 │   └── archive/                 # Historical content
 ├── content/                     # Generated content library
-├── OpusStatusOpenClaw9020.md    # YOUR status file — update every session
+├── OPUS-STATUS.md               # YOUR status file — update every session
 ```
 
 ## Secrets
@@ -78,19 +79,21 @@ ANTIGRAVITY/
 - Master env vault: `.env.Master-UNIVERSAL NODE SPECIFIC- MUST SEPERATE.Env` in repo root
 - Your tokens: TELEGRAM_BOT_TOKEN, TWITTER_*, OPENCLAW_9020_TOKEN
 - Gateway token: `opus-9020-2026`
+- GitHub token: stored in master env vault (ask Joshua or check `.env.Master-UNIVERSAL...`)
 
 ## Git Rules
 
 - 1 repo, 1 branch (`main`), always
 - Push, merge, delete extra branches
-- Update `OpusStatusOpenClaw9020.md` every session
+- Update `OPUS-STATUS.md` every session
 - Read other agents' status files for coordination
+- Use noreply email: `Trollz1004@users.noreply.github.com` (GitHub blocks real email pushes)
 
 ## Network
 
 | Node | IP | Agent | Role |
 |------|----|-------|------|
-| SABRETOOTH | 192.168.0.8 | KRAKKEN + CodeX | Crosslister + OnlineRecycle |
+| SABRETOOTH | 192.168.0.8 | KRAKKEN (C:/I:) + CodeX (F:) | Crosslister + OnlineRecycle |
 | T5500 | 192.168.0.15 | Opus | YouAndINotAI (100%) |
 | 9020 | 192.168.0.5 | YOU (OpenClaw) | Marketing only |
 
