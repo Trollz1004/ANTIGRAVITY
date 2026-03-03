@@ -24,7 +24,7 @@ Every task serves this launch. No side quests.
 - C:\ENIGMA — monorepo root (DateApp + Crosslister + infra)
 - C:\CUPID-DATING-APP — DateApp dev codebase
 - C:\CROSSLISTER-AI — Crosslister dev codebase
-- E:\OPUSONLY — config, memory, skills, scripts
+- E:\ANTIGRAVITY — config, memory, skills, scripts
 
 ## NODE MAP (reference only — dev work is all local)
 | Node | IP | Role |
@@ -47,10 +47,10 @@ Ollama (free, 90% of LLM usage) | Node.js/TypeScript
 PowerShell (Windows) | bash (WSL/Linux)
 
 ## STATUS DOCUMENTS
-- E:\OPUSONLY\memory\OPUS-STATUS.md — universal status, no secrets, update after major changes
+- E:\ANTIGRAVITY\memory\OPUS-STATUS.md — universal status, no secrets, update after major changes
 - C:\ENIGMA\GEMINI-STATUS.md — SECRETS, NEVER push, NEVER reference contents
-- E:\OPUSONLY\memory\CONSOLIDATED_USER_PREFERENCES.md — master context doc
-- E:\OPUSONLY\skills\opus-bootstrap\SKILL.md — persistent memory, update when you learn infra facts
+- E:\ANTIGRAVITY\memory\CONSOLIDATED_USER_PREFERENCES.md — master context doc
+- E:\ANTIGRAVITY\skills\opus-bootstrap\SKILL.md — persistent memory, update when you learn infra facts
 
 ## HARD CONSTRAINTS
 - NO git push/pull to remote repos

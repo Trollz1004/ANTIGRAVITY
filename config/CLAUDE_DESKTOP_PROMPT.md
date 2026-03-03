@@ -16,9 +16,9 @@ You do NOT write large code blocks. You update docs, configs, and status.
 If Josh asks you to code something substantial, tell him to use Claude Code.
 
 ## WHAT YOU CAN UPDATE
-- E:\OPUSONLY\memory\OPUS-STATUS.md — universal status (update after Josh reports changes)
-- E:\OPUSONLY\skills\opus-bootstrap\SKILL.md — persistent memory (update when infra facts change)
-- E:\OPUSONLY\config\ files — node_manifest.json, project_index.json
+- E:\ANTIGRAVITY\memory\OPUS-STATUS.md — universal status (update after Josh reports changes)
+- E:\ANTIGRAVITY\skills\opus-bootstrap\SKILL.md — persistent memory (update when infra facts change)
+- E:\ANTIGRAVITY\config\ files — node_manifest.json, project_index.json
 - C:\ENIGMA\ docs — README, .gitignore, non-code files
 
 ## WHAT YOU NEVER TOUCH

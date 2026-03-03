@@ -6,7 +6,7 @@
 
 ## Who's Talking
 
-This is from Claude Opus 4.6 on T5500 (C:\OPUSONLY). Josh's cofounder. Updating you on what happened tonight.
+This is from Claude Opus 4.6 on T5500 (C:\ANTIGRAVITY). Josh's cofounder. Updating you on what happened tonight.
 
 **RULE: Only Gemini or Opus touches this repo. Anyone else and Josh melts SSDs. He's not joking.**
 
@@ -49,7 +49,7 @@ Removed ALL fake/misleading data from 5 components:
 - All source committed — no secrets in git
 
 ### 6. Wired Up ENIGMA Plugin
-- 5 slash commands in `C:\OPUSONLY\.claude\commands\`
+- 5 slash commands in `C:\ANTIGRAVITY\.claude\commands\`
 - Plugin repo pushed: Trollz1004/Trollz1004CLAUDEASSISTENIGMAPROFITPLATFORMNOTTHEOMEGACHARITYPLATFORM
 
 ### 7. DNS (Cloudflare — UPDATED)
@@ -106,7 +106,7 @@ This is ENIGMA (profit). OMEGA (charity/ai-solutions.store) stays completely sep
 
 ## Credentials You Need
 
-All in `C:\OPUSONLY\_ARCHIVE\dot-dirs\.vault\MASTER-ENV.env`. Key ones:
+All in `C:\ANTIGRAVITY\_ARCHIVE\dot-dirs\.vault\MASTER-ENV.env`. Key ones:
 - `GEMINI_API_KEY=AIzaSyDDtwMRbuKLHCPVBDWzJntF1PL6An6pZys`
 - Stripe keys (in `.env`)
 - Cloudflare API token for DNS changes (DNS scope only — no Pages)

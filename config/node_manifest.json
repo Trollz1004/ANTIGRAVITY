@@ -4,8 +4,8 @@
                       "name":  "SABRETOOTH",
                       "role":  "dev-orchestrator",
                       "driveLetter":  "E",
-                      "opusRoot":  "E:\\OPUSONLY",
-                      "nodeFolder":  "E:\\OPUSONLY\\nodes\\SABRETOOTH"
+                      "opusRoot":  "E:\\ANTIGRAVITY",
+                      "nodeFolder":  "E:\\ANTIGRAVITY\\nodes\\SABRETOOTH"
                   }
               ],
     "generatedOn":  "2026-02-08T11:04:09-05:00",

@@ -26,10 +26,10 @@ Do these tasks in order. Commit after each.
 
 ---
 
-## 🎭 CLAUDE OPUS CLI PROMPT (paste into claude CLI in C:\OPUSONLY)
+## 🎭 CLAUDE OPUS CLI PROMPT (paste into claude CLI in C:\ANTIGRAVITY)
 
 ```
-CONTEXT: You are Claude Opus on T5500 (C:\OPUSONLY). Read CLAUDE.md first. 4 domains live. Launch: April 4, 2026. Revenue: $0. Target: first sale ASAP. Stripe links in CLAUDE.md. OpenClaw is building the revenue API and email templates in its workspace. You focus on the dating app and marketing.
+CONTEXT: You are Claude Opus on T5500 (C:\ANTIGRAVITY). Read CLAUDE.md first. 4 domains live. Launch: April 4, 2026. Revenue: $0. Target: first sale ASAP. Stripe links in CLAUDE.md. OpenClaw is building the revenue API and email templates in its workspace. You focus on the dating app and marketing.
 
 MISSION: Build and market youandinotai.com. Use sub-agents if available. Execute in order:
 

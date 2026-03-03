@@ -8,8 +8,8 @@
 
 | Vault | Path | Contains |
 |-------|------|----------|
-| ADMIN-KEY-9020.env | D:\OPUSONLY\.vault\ADMIN-KEY-9020.env | ANTHROPIC_ADMIN_KEY, ANTHROPIC_API_KEY, OPENAI_API_KEY |
-| MASTER-ENV (SABRETOOTH) | C:\OPUSONLY\.vault\MASTER-UNIVERSAL-ENV-TROLLZ1004.env (when SSD back in SABRETOOTH) | All keys |
+| ADMIN-KEY-9020.env | D:\ANTIGRAVITY\.vault\ADMIN-KEY-9020.env | ANTHROPIC_ADMIN_KEY, ANTHROPIC_API_KEY, OPENAI_API_KEY |
+| MASTER-ENV (SABRETOOTH) | C:\ANTIGRAVITY\.vault\MASTER-UNIVERSAL-ENV-TROLLZ1004.env (when SSD back in SABRETOOTH) | All keys |
 
 ## Claude / Anthropic
 
@@ -17,8 +17,8 @@
 |------------|----------|
 | Claude Code OAuth | C:\Users\joshl\.claude\.credentials.json |
 | Subscription | Max (rateLimitTier: default_claude_max_20x) |
-| Admin Key | D:\OPUSONLY\.vault\ADMIN-KEY-9020.env → ANTHROPIC_ADMIN_KEY |
-| API Key | D:\OPUSONLY\.vault\ADMIN-KEY-9020.env → ANTHROPIC_API_KEY |
+| Admin Key | D:\ANTIGRAVITY\.vault\ADMIN-KEY-9020.env → ANTHROPIC_ADMIN_KEY |
+| API Key | D:\ANTIGRAVITY\.vault\ADMIN-KEY-9020.env → ANTHROPIC_API_KEY |
 
 ## Google / Gemini
 

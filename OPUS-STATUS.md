@@ -10,7 +10,7 @@
 
 - **Status:** 🟢 **ONLINE**
 - **GPU:** ASUS 8GB
-- **Workspace:** `C:\OPUSONLY\OPUS-9020`
+- **Workspace:** `C:\ANTIGRAVITY\OPUS-9020`
 - **Other nodes:** SABRETOOTH + 9020 OFFLINE until date app revenue
 
 #### Services Running
@@ -55,7 +55,7 @@ Pre-order marketing for [youandinotai.com](https://youandinotai.com) via OpenCla
 ### ✅ Session Work (Feb 19–20, 2026)
 
 - ✅ CC Workflow Studio marketing swarm created (6 agents: Content/SEO/Ads/Social/PR/Analytics)
-- ✅ Marketing arsenal saved to `C:/OPUSONLY/marketing-arsenal/`
+- ✅ Marketing arsenal saved to `C:/ANTIGRAVITY/marketing-arsenal/`
 - ✅ OpenClaw fully Dockerized — Dockerfile, docker-compose, Redis+Qdrant connected
 - ✅ WhatsApp bridge running — QR generated, scan to link phone
 - ✅ Model upgraded to **claude-opus-4-6** (from 4-5)
@@ -69,6 +69,6 @@ Pre-order marketing for [youandinotai.com](https://youandinotai.com) via OpenCla
 ### Next Actions
 
 1. Scan WhatsApp QR: `docker logs -f whatsapp-bridge`
-2. Test TUI: `cd C:/OPUSONLY/openclaw && npm run tui`
+2. Test TUI: `cd C:/ANTIGRAVITY/openclaw && npm run tui`
 3. Deploy marketing copy to youandinotai.com
 4. Add real Twitter/X API keys when available

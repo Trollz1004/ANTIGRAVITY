@@ -119,7 +119,7 @@ ENIGMA and OMEGA **NEVER cross**. Separate wallets, separate infrastructure, sep
 ## Workspace Structure
 
 ```
-C:\OPUSONLY\                          (Trollz1004/ANTIGRAVITY repo)
+C:\ANTIGRAVITY\                          (Trollz1004/ANTIGRAVITY repo)
 ├── CLAUDE.md                          # Claude Opus instructions
 ├── antigravity\                       # Admin Dashboard (Next.js 15) — YOUR DOMAIN
 │   └── GEMINI.md                      # THIS FILE — your identity
