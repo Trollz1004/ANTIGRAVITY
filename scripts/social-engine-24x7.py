@@ -270,7 +270,17 @@ def show_status(state):
 
 
 def _run_station2(state):
-    """Station 2 — Stripe payment monitor. Checks for new payments, alerts Josh."""
+    """Station 2 — Payment monitor (provider-agnostic, Stripe optional)."""
+    provider = os.environ.get("PAYMENT_MONITOR_PROVIDER", "generic").strip().lower()
+    if provider in {"none", "disabled", "off"}:
+        log.info("[Station 2] Payment monitor disabled via PAYMENT_MONITOR_PROVIDER")
+        return
+
+    if provider not in {"stripe", "multi"}:
+        # Generic/multi-provider mode: do not hard-fail on Stripe.
+        log.info(f"[Station 2] Payment monitor provider='{provider}' (Stripe monitor skipped)")
+        return
+
     try:
         from social_engine.stripe_monitor import check_new_payments, format_payment_alert, get_revenue_snapshot
         new_charges = check_new_payments()
@@ -312,16 +322,16 @@ def _run_station4(cycle_count):
 def daemon_loop():
     """Run the 24/7 daemon with 30-minute cycles.
     Station 1: Content posting (every cycle, schedule-gated)
-    Station 2: Stripe monitor (every cycle)
+    Station 2: Payment monitor (every cycle, Stripe optional)
     Station 4: Uptime check (every cycle, full report every 6h)
     """
     log.info("=" * 60)
     log.info("SOCIAL ENGINE 24x7 — Starting daemon mode")
     log.info(f"Days until launch: {days_until_launch()}")
-    log.info("Stations: 1-Content | 2-Stripe | 4-Uptime")
+    log.info("Stations: 1-Content | 2-Payments | 4-Uptime")
     log.info("=" * 60)
 
-    send_telegram("*Social Engine Started*\nDaemon mode active.\nStations: Content | Stripe | Uptime\nPosting every 30 minutes.")
+    send_telegram("*Social Engine Started*\nDaemon mode active.\nStations: Content | Payments | Uptime\nPosting every 30 minutes.")
 
     state = load_state()
     cycle_count = 0
