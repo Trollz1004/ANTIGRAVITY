@@ -24,5 +24,8 @@
       "mcp__omega-sentry__*"
     ]
   },
-  "enableAllProjectMcpServers": true
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "omega-sentry"
+  ]
 }
