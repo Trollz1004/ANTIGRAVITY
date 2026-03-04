@@ -51,7 +51,7 @@ for i, tmpl in enumerate(all_variations):
     # Move to variations dir
     src = Path(path)
     dst = VARIATIONS_DIR / f"variation-{i+1:02d}-{tmpl['id']}.png"
-    src.rename(dst)
+    src.replace(dst)
     generated.append(str(dst))
     print(f"  ✅ {dst.name}")
 

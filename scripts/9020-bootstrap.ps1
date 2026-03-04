@@ -164,3 +164,4 @@ Write-Host "  Ollama: http://192.168.0.X:11434" -ForegroundColor DarkCyan
 Write-Host "  (set OLLAMA_HOST=0.0.0.0 to allow LAN access)" -ForegroundColor DarkCyan
 Write-Host ""
 Write-Host "  DONE. Reboot, then run steps above." -ForegroundColor Green
+
