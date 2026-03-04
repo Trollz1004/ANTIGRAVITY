@@ -1,10 +1,11 @@
 """
 Station 4 — Uptime & Payment Link Monitor.
-Checks site and Stripe payment links are alive.
-Alerts Josh via Telegram if anything is down.
+Checks site and payment links are alive.
+Stripe-specific alerts are optional and controlled by env vars.
 """
 import logging
 import os
+import json
 from datetime import datetime
 
 import requests
@@ -17,7 +18,7 @@ SITES = [
     {"name": "ai-solutions.store", "url": "https://ai-solutions.store", "critical": False},
 ]
 
-PAYMENT_LINKS = [
+DEFAULT_PAYMENT_LINKS = [
     {"name": "Bot-Shield $1", "url": "https://buy.stripe.com/3cI3cwcR6c3910p18peEo09"},
     {"name": "Founding Member $14.99/mo", "url": "https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a"},
     {"name": "3-Month $39.99", "url": "https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j"},
@@ -27,6 +28,20 @@ PAYMENT_LINKS = [
 
 # Track consecutive failures to avoid spam
 _fail_counts = {}
+
+
+def _load_payment_links():
+    """Load payment links from env (JSON) or fall back to defaults."""
+    raw = os.environ.get("PAYMENT_LINKS_JSON", "").strip()
+    if not raw:
+        return DEFAULT_PAYMENT_LINKS
+    try:
+        data = json.loads(raw)
+        if isinstance(data, list) and all(isinstance(x, dict) and "name" in x and "url" in x for x in data):
+            return data
+    except Exception:
+        log.warning("Invalid PAYMENT_LINKS_JSON; using default payment links")
+    return DEFAULT_PAYMENT_LINKS
 
 
 def check_url(name, url, timeout=15):
@@ -47,6 +62,7 @@ def run_uptime_check():
     """Check all sites and payment links. Returns (all_ok, alerts_list, summary_dict)."""
     alerts = []
     summary = {"sites": {}, "payment_links": {}, "checked_at": datetime.now().isoformat()}
+    payment_links = _load_payment_links()
 
     # Check sites
     for site in SITES:
@@ -66,7 +82,7 @@ def run_uptime_check():
             _fail_counts[key] = 0
 
     # Check payment links (less frequently — only if Stripe key expiry is near)
-    for link in PAYMENT_LINKS:
+    for link in payment_links:
         ok, status, ms = check_url(link["name"], link["url"])
         summary["payment_links"][link["name"]] = {"ok": ok, "status": status, "ms": ms}
 
@@ -80,14 +96,19 @@ def run_uptime_check():
                 alerts.append(f"RECOVERED: {link['name']} payment link OK")
             _fail_counts[key] = 0
 
-    # Check Stripe key expiry
-    from .schedule_config import days_until_launch
-    now = datetime.now()
-    stripe_expiry = datetime(2026, 3, 10)
-    days_to_expiry = (stripe_expiry - now).days
-    if days_to_expiry <= 7:
-        alerts.append(f"STRIPE KEY EXPIRES IN {days_to_expiry} DAYS — rotate NOW at dashboard.stripe.com")
-        summary["stripe_key_warning"] = f"{days_to_expiry} days until expiry"
+    # Optional Stripe-specific expiry warning
+    provider = os.environ.get("PAYMENT_MONITOR_PROVIDER", "generic").strip().lower()
+    expiry_raw = os.environ.get("STRIPE_EXPIRY_DATE", "").strip()
+    if provider in {"stripe", "multi"} and expiry_raw:
+        try:
+            stripe_expiry = datetime.fromisoformat(expiry_raw)
+            now = datetime.now()
+            days_to_expiry = (stripe_expiry - now).days
+            if days_to_expiry <= 7:
+                alerts.append(f"STRIPE KEY EXPIRES IN {days_to_expiry} DAYS — rotate NOW at dashboard.stripe.com")
+                summary["stripe_key_warning"] = f"{days_to_expiry} days until expiry"
+        except Exception:
+            log.warning("Invalid STRIPE_EXPIRY_DATE format; expected YYYY-MM-DD")
 
     all_ok = len(alerts) == 0
     return all_ok, alerts, summary
