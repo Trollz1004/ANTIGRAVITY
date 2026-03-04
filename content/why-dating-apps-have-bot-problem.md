@@ -15,7 +15,7 @@ Bots inflate user counts. They create the illusion of a larger dating pool. And 
 
 ## The Numbers
 
-- **60%** of dating app users suspect theyve matched with AI bots (Norton 2025)
+- **60%** of dating app users suspect they've matched with AI bots (Norton 2025 Cyber Safety Report)
 - **$300M+** lost annually by users to romance scams originating from dating apps
 - **Average user** encounters 3-5 fake profiles per session
 

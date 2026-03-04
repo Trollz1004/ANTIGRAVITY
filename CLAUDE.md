@@ -34,7 +34,7 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. $20
 | Brain | Claude Opus 4.6 (Max $200/mo) |
 | GPU | GTX 1070 8GB, CUDA 12.6 |
 
-## Workspace Structure (Consolidated 2026-02-28)
+## Workspace Structure (Reorganized 2026-03-04)
 
 **ONE REPO: Trollz1004/ANTIGRAVITY — `main` branch ONLY**
 
@@ -43,15 +43,23 @@ C:\ANTIGRAVITY\
 ├── CLAUDE.md              # This file (auto-loaded every session)
 ├── README.md              # Public repo README
 ├── .env                   # Active secrets (NOT in git)
+├── youandinotai\          # Dating App Frontend (React 19 + Vite) — LIVE
+├── youandinotai-api\      # Dating App Backend (FastAPI + PostgreSQL)
 ├── antigravity\           # Admin Dashboard (Next.js 15)
 ├── revenue-core\          # Revenue Core / Launchpad OS (React+Vite)
-├── youandinotai\          # Dating App Frontend (React 19 + Vite + Three.js) — LIVE
-├── youandinotai-api\      # Dating App Backend (FastAPI + PostgreSQL)
+├── scripts\               # ALL automation lives here
+│   ├── social-engine-24x7.py  # 24/7 Marketing Daemon (22 platforms)
+│   ├── social_engine\         # Engine package (content, posters, browser mgr)
+│   ├── twitter-blitz.py       # City-targeted Twitter campaigns
+│   ├── monitoring_daemon.py   # Uptime + Telegram alerts
+│   └── generate_*.py          # Image/content generators
+├── content\               # Captions, SEO articles, tweet drips, email sequences
+├── data\                  # State files, post queue, browser sessions
+├── assets\                # Images: social/, logo/, variations/
+├── briefings\             # Marketing ops plan, 14-day calendar, contracts
 ├── mcp-server\            # Omega Sentry MCP Server (TypeScript, stdio)
-├── briefings\             # All marketing, prompts, social posts, agent briefs
-│   ├── marketing\         # 14-day calendar, email drips, Twitter drips, ops plan
-│   └── archive\contracts\ # Solidity smart contracts (3 files)
-├── _deploy\               # Cloudflare Pages deploy targets (onlinerecycle, ai-solutions)
+├── openclaw\              # OpenClaw agent code
+├── _deploy\               # Cloudflare Pages deploy targets
 ├── .github\workflows\     # CI/CD (Cloudflare Pages deploy)
 └── _ARCHIVE\              # Everything else (gitignored, preserved on disk)
 ```
@@ -76,15 +84,13 @@ Key rotated 2026-02-23. **EXPIRES ~MARCH 10TH.**
 | 12-Month Founder $99.99 | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
 | Royalty Card $2,500 | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
 
-## Services (Docker — restart after reorg)
+## Services
 
-| Service | Port | Compose |
-|---------|------|---------|
-| OpenClaw API | 3200 | _ARCHIVE/projects/docker/docker-compose.yml |
-| MCP Server | 3100 | _ARCHIVE/projects/mcp-server/ |
-| Redis | 6379 | Docker |
-| Qdrant | 6333 | Docker |
-| Ollama | 11434 | Local |
+| Service | Port | Status |
+|---------|------|--------|
+| Social Engine 24x7 | — | scripts/social-engine-24x7.py (22 platforms) |
+| Ollama | 11434 | Local (qwen2.5:7b) |
+| Monitoring Daemon | — | scripts/monitoring_daemon.py |
 
 ## Dashboards
 
