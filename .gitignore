@@ -71,3 +71,19 @@ tmp/
 # CodeX task sentry runtime artifacts
 data/codex-task-output-*.txt
 data/codex-task-sentry-state.json
+
+# Marketing daemon runtime (9020 node)
+data/browser-sessions/
+data/post-queue.json
+data/pipeline-queue.json
+data/social-engine-state.json
+data/orchestrator-state.json
+data/hashtag-comments.json
+data/tweet-results-*.json
+data/reddit-engagement-log.json
+data/twitter-drip-schedule.json
+data/*.png
+assets/social/generated/
+.qdrant-initialized
+docker-compose.9020.yml
+mcp-server/tunnel.log
