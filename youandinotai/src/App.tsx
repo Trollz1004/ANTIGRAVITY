@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import {
-  Heart, Sparkles, Rocket, Trophy, PenTool, Flame, Mic,
+  Heart, Rocket, Trophy, PenTool,
   ShieldCheck, ShieldAlert, Recycle, Mail, Check,
   LayoutDashboard, X,
 } from 'lucide-react';
@@ -17,12 +17,9 @@ import { ImpactLedger } from './components/ImpactLedger';
 import { motion, AnimatePresence } from 'motion/react';
 
 /* ─── Lazy-load modal components ─── */
-const GeminiMatchmaker = lazy(() => import('./components/GeminiMatchmaker').then(m => ({ default: m.GeminiMatchmaker })));
+/* Removed: GeminiMatchmaker, SolarFlareSOS, VoiceSOS — Gemini API costs money */
 const CosmicContest = lazy(() => import('./components/CosmicContest').then(m => ({ default: m.CosmicContest })));
 const CosmicWall = lazy(() => import('./components/CosmicWall').then(m => ({ default: m.CosmicWall })));
-const TrollzAnimation = lazy(() => import('./components/TrollzAnimation').then(m => ({ default: m.TrollzAnimation })));
-const SolarFlareSOS = lazy(() => import('./components/SolarFlareSOS').then(m => ({ default: m.SolarFlareSOS })));
-const VoiceSOS = lazy(() => import('./components/VoiceSOS').then(m => ({ default: m.VoiceSOS })));
 const ShrinersHonor = lazy(() => import('./components/ShrinersHonor').then(m => ({ default: m.ShrinersHonor })));
 const OpenClawTerminal = lazy(() => import('./components/OpenClawTerminal').then(m => ({ default: m.OpenClawTerminal })));
 const EcosystemStats = lazy(() => import('./components/EcosystemStats').then(m => ({ default: m.EcosystemStats })));
@@ -432,11 +429,8 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
 
 /* ─── Feature Data ─── */
 const FEATURES = [
-  { key: 'matchmaker', icon: Sparkles, name: 'Gemini Matchmaker', desc: 'AI-powered matching', gradient: 'from-pink-500 to-purple-600' },
   { key: 'contest', icon: Trophy, name: 'Launch Contest', desc: 'Win launch prizes', gradient: 'from-yellow-400 to-orange-500' },
   { key: 'wall', icon: PenTool, name: 'Signature Wall', desc: 'Leave your mark', gradient: 'from-pink-400 to-rose-500' },
-  { key: 'sos', icon: Flame, name: 'Solar SOS', desc: 'Solar flare alerts', gradient: 'from-orange-400 to-red-500' },
-  { key: 'voice', icon: Mic, name: 'Voice SOS', desc: 'Voice alerts', gradient: 'from-blue-400 to-indigo-500' },
   { key: 'shriners', icon: ShieldCheck, name: 'Mars Hall Pass', desc: 'Shriners honor', gradient: 'from-red-400 to-rose-600' },
   { key: 'terminal', icon: ShieldAlert, name: 'CODE RED', desc: 'OpenClaw terminal', gradient: 'from-red-600 to-red-800' },
   { key: 'ecosystem', icon: LayoutDashboard, name: 'Ecosystem', desc: 'System status', gradient: 'from-indigo-400 to-purple-500' },
@@ -450,12 +444,10 @@ type FeatureKey = typeof FEATURES[number]['key'];
 
 export default function App() {
   const [activeModal, setActiveModal] = useState<FeatureKey | null>(null);
-  const [showTrollz, setShowTrollz] = useState(false);
   const [legalModal, setLegalModal] = useState<string | null>(null);
 
   const closeAllModals = () => {
     setActiveModal(null);
-    setShowTrollz(false);
     setLegalModal(null);
   };
 
@@ -659,17 +651,6 @@ export default function App() {
       {/* ─── Modals ─── */}
       <ModalErrorBoundary onReset={closeAllModals}>
         <AnimatePresence>
-          {activeModal === 'matchmaker' && (
-            <Suspense fallback={<ModalLoader />}>
-              <GeminiMatchmaker
-                onClose={() => setActiveModal(null)}
-                onMatch={() => {
-                  setActiveModal(null);
-                  setShowTrollz(true);
-                }}
-              />
-            </Suspense>
-          )}
           {activeModal === 'contest' && (
             <Suspense fallback={<ModalLoader />}>
               <CosmicContest onClose={() => setActiveModal(null)} />
@@ -678,21 +659,6 @@ export default function App() {
           {activeModal === 'wall' && (
             <Suspense fallback={<ModalLoader />}>
               <CosmicWall onClose={() => setActiveModal(null)} />
-            </Suspense>
-          )}
-          {showTrollz && (
-            <Suspense fallback={<ModalLoader />}>
-              <TrollzAnimation onComplete={() => setShowTrollz(false)} />
-            </Suspense>
-          )}
-          {activeModal === 'sos' && (
-            <Suspense fallback={<ModalLoader />}>
-              <SolarFlareSOS onClose={() => setActiveModal(null)} />
-            </Suspense>
-          )}
-          {activeModal === 'voice' && (
-            <Suspense fallback={<ModalLoader />}>
-              <VoiceSOS onClose={() => setActiveModal(null)} />
             </Suspense>
           )}
           {activeModal === 'shriners' && (

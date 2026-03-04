@@ -6,7 +6,6 @@ import {
   Zap, Navigation, MessageSquare, Heart
 } from 'lucide-react';
 import { GoogleGenAI, ThinkingLevel, Modality } from "@google/genai";
-import { useGameStore } from '../store/useGameStore';
 
 interface SOSFeature {
   id: string;
@@ -25,8 +24,6 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
   const [prompt, setPrompt] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const myColor = useGameStore((state) => state.myColor);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
