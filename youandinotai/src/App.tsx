@@ -63,24 +63,9 @@ function ModalLoader() {
   );
 }
 
-/* ─── Animated Background ─── */
-function CosmicBackground() {
-  return (
-    <div className="fixed inset-0 z-0 bg-black overflow-hidden">
-      <div
-        className="absolute -top-20 -left-20 w-[400px] h-[400px] rounded-full blur-[128px] opacity-25 bg-purple-600"
-        style={{ animation: 'orb-drift-1 15s ease-in-out infinite' }}
-      />
-      <div
-        className="absolute top-1/2 -right-20 w-[350px] h-[350px] rounded-full blur-[100px] opacity-20 bg-pink-600"
-        style={{ animation: 'orb-drift-2 20s ease-in-out infinite' }}
-      />
-      <div
-        className="absolute bottom-0 left-1/3 w-[300px] h-[300px] rounded-full blur-[90px] opacity-15 bg-indigo-600"
-        style={{ animation: 'orb-drift-3 25s ease-in-out infinite' }}
-      />
-    </div>
-  );
+/* ─── Static Stars Background (CSS only, zero animation) ─── */
+function StarsBackground() {
+  return <div className="fixed inset-0 z-0 stars-bg" />;
 }
 
 /* ─── Sticky CTA ─── */
@@ -457,8 +442,8 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-black text-white font-sans scroll-smooth pb-cta">
-      {/* Animated Background */}
-      <CosmicBackground />
+      {/* Static Stars Background */}
+      <StarsBackground />
 
       {/* Fixed Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
@@ -493,11 +478,7 @@ export default function App() {
       {/* Hero Section */}
       <section className="relative z-10 pt-16 pb-16 px-4 text-center">
         <div className="max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <div>
             <img
               src="/logo.png"
               alt="YouAndINotAI"
@@ -514,14 +495,9 @@ export default function App() {
             <p className="text-sm text-gray-500 mb-8">
               Bot-Shield verified. No catfish. No bots. Just real people.
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-3 justify-center mb-6"
-          >
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
             <a
               href="https://buy.stripe.com/3cI3cwcR6c3910p18peEo09"
               target="_blank"
@@ -537,7 +513,7 @@ export default function App() {
             >
               View Plans
             </a>
-          </motion.div>
+          </div>
 
           <div className="flex justify-center gap-4 md:gap-6 text-xs text-gray-500 flex-wrap">
             <span>🔒 Privacy First</span>
