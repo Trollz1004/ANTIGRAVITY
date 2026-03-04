@@ -1,0 +1,2 @@
+intake_id,ebay_item_id,sale_date,buyer_total_usd,shipping_collected_usd,gross_inflow_usd,ebay_fees_usd,shipping_cost_usd,packing_cost_usd,refurb_cost_usd,net_proceeds_usd,charity_share_pct,charity_amount_usd,ops_amount_usd,reserve_amount_usd,charity_destination,donation_date,donation_reference,impact_note
+EW-20260304-0001,123456789012,2026-03-12,249.99,24.99,274.98,35.75,21.80,2.10,0.00,215.33,60,129.20,64.60,21.53,Shriners Children's,2026-03-15,DON-2026-03-15-001,"Sold in 8 days; donor follow-up sent"

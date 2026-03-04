@@ -67,3 +67,7 @@ qdrant_storage/
 oracleJdk-25/
 .chrome-profiles/
 tmp/
+
+# CodeX task sentry runtime artifacts
+data/codex-task-output-*.txt
+data/codex-task-sentry-state.json
