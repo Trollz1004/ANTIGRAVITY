@@ -31,6 +31,7 @@ const DEFAULTS = {
   ollamaModel: process.env.OLLAMA_MODEL || "llama3.2",
   intervalMinutes: 5,
   maxResultChars: 4000,
+  fallbackExecutor: process.env.CODEX_SENTRY_FALLBACK_EXECUTOR || "codex",
 };
 
 const VALID_STATUSES = new Set(["pending", "in_progress", "done", "failed"]);
@@ -668,13 +669,41 @@ async function runOneCycle(options, logger) {
   nextTask.updated_at = utcNow();
   saveQueue(options.queueFile, queue);
 
-  const dispatch = await dispatchTask(
+  let dispatch = await dispatchTask(
     nextTask,
     options.forceExecutor,
     options.openclawUrl,
     options.ollamaUrl,
     options.maxResultChars
   );
+
+  if (!dispatch.ok && options.fallbackExecutor && dispatch.executor !== options.fallbackExecutor) {
+    logger.warn(
+      `Primary executor '${dispatch.executor}' failed for ${taskId}; trying fallback '${options.fallbackExecutor}'.`
+    );
+    const fallbackDispatch = await dispatchTask(
+      nextTask,
+      options.fallbackExecutor,
+      options.openclawUrl,
+      options.ollamaUrl,
+      options.maxResultChars
+    );
+    if (fallbackDispatch.ok) {
+      dispatch = {
+        ok: true,
+        executor: `${dispatch.executor}->${fallbackDispatch.executor}`,
+        result: `[fallback via ${fallbackDispatch.executor}]\n${fallbackDispatch.result}`,
+      };
+    } else {
+      dispatch = {
+        ok: false,
+        executor: `${dispatch.executor}->${fallbackDispatch.executor}`,
+        result:
+          `Primary (${dispatch.executor}) failed: ${dispatch.result}\n\n` +
+          `Fallback (${fallbackDispatch.executor}) failed: ${fallbackDispatch.result}`,
+      };
+    }
+  }
 
   nextTask.executor_used = dispatch.executor;
   nextTask.updated_at = utcNow();
@@ -718,6 +747,7 @@ function parseArgs(argv) {
     loop: false,
     exportMarkdown: false,
     forceExecutor: null,
+    fallbackExecutor: DEFAULTS.fallbackExecutor,
   });
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -750,6 +780,11 @@ function parseArgs(argv) {
     }
     if (arg === "--force-executor" && next) {
       opts.forceExecutor = next.toLowerCase();
+      i += 1;
+      continue;
+    }
+    if (arg === "--fallback-executor" && next) {
+      opts.fallbackExecutor = next.toLowerCase();
       i += 1;
       continue;
     }
@@ -791,6 +826,12 @@ function parseArgs(argv) {
 
   if (!["codex", "openclaw", "ollama", null].includes(opts.forceExecutor)) {
     throw new Error("--force-executor must be one of: codex, openclaw, ollama");
+  }
+  if (opts.fallbackExecutor === "none") {
+    opts.fallbackExecutor = null;
+  }
+  if (!["codex", "openclaw", "ollama", null].includes(opts.fallbackExecutor)) {
+    throw new Error("--fallback-executor must be one of: codex, openclaw, ollama, none");
   }
   if (!Number.isFinite(opts.intervalMinutes) || opts.intervalMinutes <= 0) {
     opts.intervalMinutes = DEFAULTS.intervalMinutes;

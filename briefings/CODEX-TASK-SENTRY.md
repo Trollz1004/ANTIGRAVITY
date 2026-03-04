@@ -37,6 +37,12 @@ Run one cycle:
 node scripts/codex-task-sentry.js --run-once --export-markdown
 ```
 
+Run one cycle with explicit fallback:
+
+```powershell
+node scripts/codex-task-sentry.js --run-once --export-markdown --fallback-executor codex
+```
+
 Run loop:
 
 ```powershell
@@ -68,6 +74,5 @@ pwsh -ExecutionPolicy Bypass -File scripts/upgrade-codex-task-sentry-admin.ps1 -
 ## Notes
 
 - Codex tasks default to full-access execution (`CODEX_SENTRY_FULL_ACCESS=1` behavior).
-- OpenClaw/Ollama tasks retry until `max_retries` is exceeded.
+- OpenClaw/Ollama failures can automatically fallback to another executor (`--fallback-executor codex`).
 - Task follow-ups are declared per-task in `spawn_on_done`.
-
