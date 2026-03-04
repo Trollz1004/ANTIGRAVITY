@@ -1,18 +1,20 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Mic, MicOff, Volume2, VolumeX, Loader2, Sparkles, Ghost } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { motion } from 'motion/react';
+import { X, Mic, MicOff, Volume2, VolumeX, Ghost, AlertTriangle } from 'lucide-react';
 import { GoogleGenAI, LiveServerMessage, Modality } from "@google/genai";
 
 export function VoiceSOS({ onClose }: { onClose: () => void }) {
-  const [isConnected, setIsConnected] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'connecting' | 'connected' | 'error'>('idle');
   const [isRecording, setIsRecording] = useState(false);
-  const [transcription, setTranscription] = useState('');
   const [aiResponse, setAiResponse] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const sessionRef = useRef<any>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
   const startSession = async () => {
+    setStatus('connecting');
+    setErrorMsg('');
     try {
       const ai = new GoogleGenAI({ apiKey: 'PROXY', httpOptions: { baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev' } });
       const session = await ai.live.connect({
@@ -28,28 +30,31 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
         },
         callbacks: {
           onopen: () => {
-            setIsConnected(true);
-            startMic();
+            setStatus('connected');
           },
           onmessage: async (message: LiveServerMessage) => {
             if (message.serverContent?.modelTurn?.parts[0]?.inlineData?.data) {
-              const base64Audio = message.serverContent.modelTurn.parts[0].inlineData.data;
-              playAudio(base64Audio);
+              playAudio(message.serverContent.modelTurn.parts[0].inlineData.data);
             }
             if (message.serverContent?.modelTurn?.parts[0]?.text) {
               setAiResponse(prev => prev + message.serverContent?.modelTurn?.parts[0]?.text);
             }
           },
           onclose: () => {
-            setIsConnected(false);
+            setStatus('idle');
             stopMic();
           },
-          onerror: (e) => console.error(e),
+          onerror: () => {
+            setStatus('error');
+            setErrorMsg('Connection lost. The solar storm is too strong.');
+          },
         }
       });
       sessionRef.current = session;
     } catch (e) {
       console.error(e);
+      setStatus('error');
+      setErrorMsg('Could not connect to the Voice Channel. The cosmic relay may be offline.');
     }
   };
 
@@ -58,7 +63,7 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
       setIsRecording(true);
-      
+
       const audioContext = new AudioContext({ sampleRate: 16000 });
       audioContextRef.current = audioContext;
       const source = audioContext.createMediaStreamSource(stream);
@@ -82,6 +87,7 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
       processor.connect(audioContext.destination);
     } catch (e) {
       console.error(e);
+      setErrorMsg('Microphone access denied. Allow mic permissions to use Voice SOS.');
     }
   };
 
@@ -90,35 +96,39 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
       streamRef.current.getTracks().forEach(t => t.stop());
     }
     if (audioContextRef.current) {
-      audioContextRef.current.close();
+      audioContextRef.current.close().catch(() => {});
     }
     setIsRecording(false);
   };
 
   const playAudio = (base64: string) => {
-    const binary = atob(base64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    const pcm = new Int16Array(bytes.buffer);
-    const float32 = new Float32Array(pcm.length);
-    for (let i = 0; i < pcm.length; i++) float32[i] = pcm[i] / 0x7FFF;
+    try {
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const pcm = new Int16Array(bytes.buffer);
+      const float32 = new Float32Array(pcm.length);
+      for (let i = 0; i < pcm.length; i++) float32[i] = pcm[i] / 0x7FFF;
 
-    const ctx = new AudioContext({ sampleRate: 24000 });
-    const buffer = ctx.createBuffer(1, float32.length, 24000);
-    buffer.getChannelData(0).set(float32);
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-    source.connect(ctx.destination);
-    source.start();
+      const ctx = new AudioContext({ sampleRate: 24000 });
+      const buffer = ctx.createBuffer(1, float32.length, 24000);
+      buffer.getChannelData(0).set(float32);
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(ctx.destination);
+      source.start();
+    } catch {
+      // Audio playback failed silently — not critical
+    }
   };
 
-  useEffect(() => {
-    startSession();
-    return () => {
-      if (sessionRef.current) sessionRef.current.close();
-      stopMic();
-    };
-  }, []);
+  const handleClose = () => {
+    if (sessionRef.current) {
+      try { sessionRef.current.close(); } catch {}
+    }
+    stopMic();
+    onClose();
+  };
 
   return (
     <motion.div
@@ -140,10 +150,12 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
             </div>
             <div>
               <h2 className="text-xl font-black italic tracking-tighter uppercase">Voice SOS Channel</h2>
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Gemini Live API Active</p>
+              <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">
+                {status === 'connected' ? 'Gemini Live Active' : status === 'connecting' ? 'Establishing Uplink...' : 'Awaiting Connection'}
+              </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors">
+          <button onClick={handleClose} className="p-2 hover:bg-white/5 rounded-full transition-colors">
             <X size={20} />
           </button>
         </div>
@@ -159,23 +171,46 @@ export function VoiceSOS({ onClose }: { onClose: () => void }) {
 
           <div className="w-full space-y-4 text-center">
             <div className="text-xs font-bold uppercase tracking-[0.3em] text-blue-400">
-              {isConnected ? 'Connected to Orbit' : 'Establishing Uplink...'}
+              {status === 'connected' ? 'Connected to Orbit' : status === 'connecting' ? 'Establishing Uplink...' : status === 'error' ? 'Connection Failed' : 'Ready to Connect'}
             </div>
+
+            {errorMsg && (
+              <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-400">
+                <AlertTriangle size={14} className="shrink-0" />
+                {errorMsg}
+              </div>
+            )}
+
             <div className="min-h-[60px] p-4 bg-black/40 rounded-2xl border border-white/5 text-sm text-gray-300 italic">
               {aiResponse || "Speak now, cosmic traveler. I am listening to your frequency..."}
             </div>
           </div>
 
           <div className="flex gap-4 w-full">
-            <button 
-              onClick={() => isRecording ? stopMic() : startMic()}
-              className={`flex-1 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 transition-all ${
-                isRecording ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'
-              }`}
-            >
-              {isRecording ? <VolumeX size={16} /> : <Volume2 size={16} />}
-              {isRecording ? 'Mute Channel' : 'Open Channel'}
-            </button>
+            {status === 'idle' || status === 'error' ? (
+              <button
+                onClick={startSession}
+                className="flex-1 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+              >
+                <Volume2 size={16} />
+                Connect to Voice Channel
+              </button>
+            ) : status === 'connecting' ? (
+              <div className="flex-1 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 bg-blue-500/50 text-white/70">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Connecting...
+              </div>
+            ) : (
+              <button
+                onClick={() => isRecording ? stopMic() : startMic()}
+                className={`flex-1 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 transition-all ${
+                  isRecording ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'
+                }`}
+              >
+                {isRecording ? <VolumeX size={16} /> : <Volume2 size={16} />}
+                {isRecording ? 'Mute Channel' : 'Open Channel'}
+              </button>
+            )}
           </div>
         </div>
 
