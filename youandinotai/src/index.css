@@ -1,56 +1,31 @@
 @import "tailwindcss";
 
-/* MOBILE FIRST — Emergency responsive fix */
+/* MOBILE FIRST — global resets */
 * { box-sizing: border-box; }
 
 html, body {
   overflow-x: hidden;
   width: 100%;
   -webkit-overflow-scrolling: touch;
+  background: #000;
 }
 
-/* Three.js canvas — contain on all screens */
-canvas {
-  max-width: 100vw !important;
-  touch-action: pan-y;
+/* Floating orb background animations */
+@keyframes orb-drift-1 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(60px, -40px); }
+  66% { transform: translate(-30px, 30px); }
 }
 
-@media (max-width: 768px) {
-  canvas {
-    height: 50vh !important;
-  }
+@keyframes orb-drift-2 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(-50px, 50px); }
+  66% { transform: translate(40px, -60px); }
+}
 
-  h1 {
-    font-size: 1.8rem !important;
-    line-height: 1.1 !important;
-  }
-
-  /* Fix button overflow on mobile */
-  .flex-wrap {
-    gap: 0.5rem !important;
-  }
-
-  .flex-wrap > button,
-  .flex-wrap > a {
-    font-size: 0.8rem !important;
-    padding: 0.5rem 1rem !important;
-  }
-
-  /* Bottom stats — stack vertically on mobile */
-  .flex.gap-8 {
-    flex-direction: column !important;
-    gap: 0.5rem !important;
-  }
-
-  /* Testimonial card — hide on very small screens */
-  .max-w-xs {
-    display: none !important;
-  }
-
-  /* User avatars row */
-  .flex.-space-x-2 {
-    display: none !important;
-  }
+@keyframes orb-drift-3 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(25px, -25px); }
 }
 
 /* Padding for sticky CTA bar at bottom */
