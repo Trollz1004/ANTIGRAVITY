@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-03-04T21:26:06Z",
+  "updated_at": "2026-03-04T21:32:23Z",
   "tasks": [
     {
       "id": "EW-INTAKE-20260304",
@@ -123,15 +123,15 @@
           "prompt": "Write concise outreach templates to request donated e-waste from businesses and schools. Tone must be transparent, respectful, and focused on helping kids in medical need."
         }
       ],
-      "status": "pending",
+      "status": "done",
       "retries": 1,
       "max_retries": 2,
       "created_at": "2026-03-04T21:22:32Z",
-      "updated_at": "2026-03-04T21:23:35Z",
-      "started_at": "2026-03-04T21:23:35Z",
-      "executor_used": "openclaw",
-      "last_error": "OpenClaw request failed: connect ECONNREFUSED 127.0.0.1:3200",
-      "last_result": "OpenClaw request failed: connect ECONNREFUSED 127.0.0.1:3200"
+      "updated_at": "2026-03-04T21:32:23Z",
+      "started_at": "2026-03-04T21:31:46Z",
+      "executor_used": "openclaw->codex",
+      "last_result": "[fallback via codex]\n**Desktop Template**\n- Title pattern: `{Brand} {Model} Desktop {CPU} {RAM} {Storage} {OS} {Form Factor}`\n- Alternate: `{Brand} {Model} SFF/Mini PC {CPU} {RAM} {SSD} Wi-Fi {OS}`\n- Condition language: `Pulled from a donated environment. Powers on and boots to {BIOS/OS}. Tested: {USB, video out, network, storage read/write}. Cosmetic wear from normal prior use (see photos).`\n- Shipping notes: `Ships in {1-2} business days, packed with anti-static wrap and foam. Tracking included. No PO Boxes for oversized systems.`\n- Charity-impact line: `Your purchase helps fund {job training / community tech access} through our nonprofit.`\n\n**Laptop Template**\n- Title pattern: `{Brand} {Model} {Screen Size}\" Laptop {CPU} {RAM} {SSD} {OS}`\n- Alternate: `{Brand} {Model} Laptop {CPU} {RAM} {Storage} {Webcam/Backlit KB} {Condition Tag}`\n- Condition language: `Fully tested for power, keyboard, trackpad, display, Wi-Fi, and ports. Battery holds a charge, but exact battery life is not guaranteed unless stated. Normal signs of prior use shown in photos.`\n- Shipping notes: `Ships in {1-2} business days in protective packaging. Charger included: {Yes/No}. Signature confirmation on higher-value orders.`\n- Charity-impact line: `Every order supports our nonprofit’s local programs.`\n\n**Server Template**\n- Title pattern: `{Brand} {Model} {1U/2U} Server {CPU Config} {RAM} {Drive Bays/Storage} {Rails/PSUs}`\n- Alternate: `{Brand} {Model} Rack Server {CPU} {RAM} {RAID/NIC} {No HDD/With HDD}`\n- Condition language: `Powers on and reaches {BIOS/iDRAC/POST}. Tested only for {boot, memory detect, fan/PSU status}. If drives are not listed, none are included. Sold as {Used / For parts or not working} based on testing level.`\n- Shipping notes: `Ships in reinforced packaging with foam protection. Carrier: {FedEx/UPS Ground}. No PO Boxes. Local pickup available for heavy units.`\n- Charity-impact line: `Proceeds from this sale directly support our charitable mission.`\n\n**Policy-safe add-on lines (use where accurate)**\n- `Serial numbers are recorded for asset tracking and fraud prevention.`\n- `Only items shown in photos and listed in “What’s Included” are included.`\n- `If we could not test a function, we state that clearly above.`\n\n[stdout]\n**Desktop Template**\n- Title pattern: `{Brand} {Model} Desktop {CPU} {RAM} {Storage} {OS} {Form Factor}`\n- Alternate: `{Brand} {Model} SFF/Mini PC {CPU} {RAM} {SSD} Wi-Fi {OS}`\n- Condition language: `Pulled from a donated environment. Powers on and boots to {BIOS/OS}. Tested: {USB, video out, network, storage read/write}. Cosmetic wear from normal prior use (see photos).`\n- Shipping notes: `Ships in {1-2} business days, packed with anti-static wrap and foam. Tracking included. No PO Boxes for oversized systems.`\n- Charity-impact line: `Your purchase helps fund {job training / community tech access} through our nonprofit.`\n\n**Laptop Template**\n- Title pattern: `{Brand} {Model} {Screen Size}\" Laptop {CPU} {RAM} {SSD} {OS}`\n- Alternate: `{Brand} {Model} Laptop {CPU} {RAM} {Storage} {Webcam/Backlit KB} {Condition Tag}`\n- Condition language: `Fully tested for power, keyboard, trackpad, display, Wi-Fi, and ports. Battery holds a charge, but exact battery life is not guaranteed unless stated. Normal signs of prior use shown in photos.`\n- Shipping notes: `Ships in {1-2} business days in protective packaging. Charger included: {Yes/No}. Signature confirmation on higher-value orders.`\n- C...\n\n[stderr]\nOpenAI Codex v0.107.0 (research preview)\n--------\nworkdir: E:\\ANTIGRAVITY\nmodel: gpt-5.3-codex\nprovider: openai\napproval: never\nsandbox: danger-full-access\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 019cbac3-9896-70e2-b507-693308fa4246\n--------\nuser\nCreate high-converting but policy-safe ebay listing templates for donated desktops, laptops, and servers. Include concise title patterns, honest condition language, shipping notes, and a short charity-impact line.\nmcp: codex_apps starting\nmcp: codex_apps ready\nmcp startup: ready: code...",
+      "completed_at": "2026-03-04T21:32:23Z"
     },
     {
       "id": "EW-QA-20260304",
@@ -184,6 +184,25 @@
       "max_retries": 2,
       "created_at": "2026-03-04T21:22:32Z",
       "updated_at": "2026-03-04T21:22:32Z"
+    },
+    {
+      "id": "EW-OUTREACH-20260304",
+      "title": "Create donation outreach messages to source more e-waste",
+      "description": "Write outreach templates for businesses, schools, and community groups.",
+      "executor": "openclaw",
+      "priority": 75,
+      "tags": [
+        "ewaste",
+        "outreach",
+        "donation"
+      ],
+      "prompt": "Write concise outreach templates to request donated e-waste from businesses and schools. Tone must be transparent, respectful, and focused on helping kids in medical need.",
+      "status": "pending",
+      "retries": 0,
+      "max_retries": 2,
+      "created_at": "2026-03-04T21:32:23Z",
+      "updated_at": "2026-03-04T21:32:23Z",
+      "spawn_on_done": []
     }
   ]
 }
