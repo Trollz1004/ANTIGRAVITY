@@ -18,11 +18,11 @@ WHAT OPUS DID THIS SESSION:
 
 1. GEMINI API KEY SECURED
    - Deployed Cloudflare Worker at gemini-proxy.joshlcoleman.workers.dev
-   - Platform key (AIzaSyB9-Fs16v645FGjdlfudk0X2zABUlTxo0M) stored as Worker secret
+   - Platform key ([REDACTED-ROTATED]) stored as Worker secret
    - All 3 frontend components (GeminiMatchmaker, SolarFlareSOS, VoiceSOS) now use httpOptions.baseUrl to route through proxy
    - Removed GEMINI_API_KEY from vite.config.ts build injection
    - VERIFIED: Zero API keys in client JS bundle (0 matches for "AIzaSy")
-   - Old key (AIzaSyDDtwMRbuKLHCPVBDWzJntF1PL6An6pZys) was flagged as leaked by Google — burned
+   - Old key ([BURNED-REDACTED]) was flagged as leaked by Google — burned
 
 2. FALSE DATA REMOVED (5 files)
    - CharitySection: fake $842K donated, 12,450 devices, 5,200 trees -> honest mission statements
