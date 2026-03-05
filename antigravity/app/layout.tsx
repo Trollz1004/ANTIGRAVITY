@@ -1,4 +1,4 @@
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 import './globals.css'; // Global styles
 
 export const metadata: Metadata = {
@@ -6,10 +6,15 @@ export const metadata: Metadata = {
   description: 'Antigravity ecosystem dashboard — platforms, metrics, and mission control for YouAndINotAI, OnlineRecycle, and AI-Solutions.',
 };
 
-export default function RootLayout({children}: {children: React.ReactNode}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <div className="bg-emerald-500 text-black text-center py-2 px-4 font-bold text-xs md:text-sm relative z-[100]">
+          #ForTheKids — 60% Shriners / 30% V8 / 10% Founder Split — Enforced by Protocol Omega
+        </div>
+        {children}
+      </body>
     </html>
   );
 }
