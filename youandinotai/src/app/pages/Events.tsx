@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Calendar, MapPin, Users, Plus, Check } from 'lucide-react';
+import { Calendar, MapPin, Users, Plus, Check, Clock } from 'lucide-react';
 import { api } from '../../lib/api';
 
 interface EventData {
@@ -57,67 +57,100 @@ export function Events() {
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center"><div className="text-gray-400 animate-pulse">Loading events...</div></div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center animate-fade-in">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 flex items-center justify-center mx-auto mb-4">
+            <Calendar size={24} className="text-orange-400 animate-pulse" />
+          </div>
+          <p className="text-gray-400 font-medium">Loading events...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen p-4 md:p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-black text-white">Events & Meetups</h1>
+      <div className="flex items-center justify-between mb-6 animate-fade-in">
+        <div>
+          <h1 className="text-2xl font-black text-white tracking-tight">Events & Meetups</h1>
+          <p className="text-gray-500 text-sm mt-0.5">Find your people IRL</p>
+        </div>
         <button
           onClick={() => setShowCreate(!showCreate)}
-          className="flex items-center gap-2 px-4 py-2 bg-orange-500 rounded-full text-white text-sm font-bold"
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl text-white text-sm font-bold hover:shadow-lg hover:shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
         >
           <Plus size={16} /> Create Event
         </button>
       </div>
 
       {showCreate && (
-        <div className="bg-gray-800 rounded-2xl p-6 border border-white/10 mb-6 space-y-3">
-          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event title" className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500" />
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="What's this event about?" rows={3} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none" />
+        <div className="glass-strong rounded-3xl p-6 glass-highlight mb-6 space-y-4 animate-scale-in">
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event title" className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/40 input-glow transition-all duration-300" />
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="What's this event about?" rows={3} className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/40 input-glow transition-all duration-300 resize-none" />
           <div className="grid grid-cols-2 gap-3">
-            <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" className="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500" />
-            <input type="datetime-local" value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-orange-500" />
+            <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" className="px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/40 input-glow transition-all duration-300" />
+            <input type="datetime-local" value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white focus:outline-none focus:border-orange-500/40 input-glow transition-all duration-300" />
           </div>
-          <input type="number" value={maxAttendees} onChange={(e) => setMaxAttendees(e.target.value)} placeholder="Max attendees (optional)" className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500" />
-          <button onClick={createEvent} className="px-6 py-2 bg-orange-500 rounded-full text-white text-sm font-bold">Create Event</button>
+          <input type="number" value={maxAttendees} onChange={(e) => setMaxAttendees(e.target.value)} placeholder="Max attendees (optional)" className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/40 input-glow transition-all duration-300" />
+          <button onClick={createEvent} className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl text-white text-sm font-bold hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-200">Create Event</button>
         </div>
       )}
 
       {events.length === 0 ? (
-        <div className="text-center py-16">
-          <Calendar size={48} className="text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400">No events yet. Create one and bring people together!</p>
+        <div className="text-center py-20 animate-scale-in">
+          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-orange-500/20 animate-float">
+            <Calendar size={44} className="text-white" />
+          </div>
+          <h2 className="text-2xl font-black text-white mb-2">No Events Yet</h2>
+          <p className="text-gray-400 max-w-sm mx-auto">Create one and bring people together!</p>
         </div>
       ) : (
-        <div className="space-y-4">
-          {events.map((event) => (
-            <div key={event.id} className="bg-gray-800/50 rounded-2xl p-6 border border-white/5">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <h3 className="text-white font-bold text-lg">{event.title}</h3>
-                  <p className="text-gray-400 text-sm mt-1">{event.description}</p>
-                  <div className="flex flex-wrap gap-4 mt-3 text-xs text-gray-500">
-                    <span className="flex items-center gap-1"><Calendar size={12} /> {new Date(event.event_date).toLocaleDateString()}</span>
-                    {event.location && <span className="flex items-center gap-1"><MapPin size={12} /> {event.location}</span>}
-                    <span className="flex items-center gap-1"><Users size={12} /> {event.attendee_count}{event.max_attendees ? `/${event.max_attendees}` : ''} going</span>
+        <div className="space-y-4 stagger-children">
+          {events.map((event) => {
+            const isPast = new Date(event.event_date) < new Date();
+            return (
+              <div key={event.id} className={`glass rounded-3xl p-6 glass-highlight hover:bg-white/[0.04] transition-all duration-200 ${isPast ? 'opacity-60' : ''}`}>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-white font-bold text-lg">{event.title}</h3>
+                      {isPast && <span className="text-[10px] font-bold text-gray-500 glass rounded-full px-2 py-0.5 uppercase">Past</span>}
+                    </div>
+                    <p className="text-gray-400 text-sm mt-1 leading-relaxed">{event.description}</p>
+                    <div className="flex flex-wrap gap-3 mt-4">
+                      <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
+                        <Clock size={12} className="text-orange-400" />
+                        {new Date(event.event_date).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
+                      </span>
+                      {event.location && (
+                        <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
+                          <MapPin size={12} className="text-orange-400" /> {event.location}
+                        </span>
+                      )}
+                      <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
+                        <Users size={12} className="text-orange-400" />
+                        {event.attendee_count}{event.max_attendees ? `/${event.max_attendees}` : ''} going
+                      </span>
+                    </div>
                   </div>
+                  {!isPast && (
+                    <button
+                      onClick={() => handleRsvp(event.id)}
+                      disabled={rsvpd.has(event.id)}
+                      className={`px-5 py-2.5 rounded-2xl text-sm font-bold flex-shrink-0 transition-all duration-200 ${
+                        rsvpd.has(event.id)
+                          ? 'glass text-emerald-400 border-emerald-500/20'
+                          : 'bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:shadow-lg hover:shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98]'
+                      }`}
+                    >
+                      {rsvpd.has(event.id) ? <span className="flex items-center gap-1.5"><Check size={14} /> Going</span> : 'RSVP'}
+                    </button>
+                  )}
                 </div>
-                <button
-                  onClick={() => handleRsvp(event.id)}
-                  disabled={rsvpd.has(event.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-bold flex-shrink-0 ${
-                    rsvpd.has(event.id)
-                      ? 'bg-green-500/20 text-green-400'
-                      : 'bg-orange-500 text-white hover:scale-105 transition-transform'
-                  }`}
-                >
-                  {rsvpd.has(event.id) ? <><Check size={14} /> Going</> : 'RSVP'}
-                </button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
