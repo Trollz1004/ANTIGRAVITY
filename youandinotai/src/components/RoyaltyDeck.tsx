@@ -201,10 +201,10 @@ function HolographicCard() {
           {/* Charity callout */}
           <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 mb-6 text-center">
             <p className="text-emerald-400 text-sm font-bold">
-              💚 60% instantly funds Shriners Children's Hospitals
+              💚 60% automatically routed to Shriners Children's Hospitals on-chain
             </p>
             <p className="text-emerald-400/60 text-xs mt-0.5">
-              $1,500 of your Royalty Card goes directly to the kids
+              $1,500 of your Royalty Card disbursed via Protocol Omega smart contract
             </p>
           </div>
 
