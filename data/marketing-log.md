@@ -82,6 +82,24 @@
 
 ---
 
+### Twitter/X (@YouAndiNotAi)
+- **FOLLOW-BACKS** (4): Amy Blissheart (@Jashvantsharma5), emoji (@iE0zWuQ6e2eSp1w), Eliza (@Vaoho048189), Amy (@Jentaculaw2nb)
+
+### Facebook (Josh Coleman)
+- **FRIEND CONFIRMS** (3): Kelly Linda, Tammy Windhouse, +1 other
+- **FRIEND ADDS** (6): Ahimsa Hodari, Prayfor Luck, Daphne Hayes, PJ Schomaeker, Mike Williams, Johansen Sabillon
+
+### LinkedIn (Josh Coleman)
+- **CONNECTION** (1): Syed Azhar (Auravolve)
+
+### Nextdoor (Josh Coleman, Mount Plymouth)
+- **ENGAGEMENT**: Liked Judy Brown's post, checked 26 notifications
+
+### Threads (1manstrashistreasure)
+- **STATUS**: 15 followers, all followed back. OnlineRecycle cross-post from Instagram auto-shared.
+
+---
+
 ## Issues Tracked
 - MCP Chrome extension disconnects during long type actions — workaround: use JavaScript injection for text input
 - MCP tab group reset once during session — recovered after reconnect
