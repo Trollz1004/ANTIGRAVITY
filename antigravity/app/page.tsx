@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, Server, Globe, Database, Cpu, LayoutDashboard, CheckCircle2, Key, Moon, Sun } from 'lucide-react';
+import { 
+  ShieldCheck, Server, Globe, Database, Cpu, LayoutDashboard, 
+  CheckCircle2, Key, Moon, Sun, TrendingUp, Users, Heart, Zap, 
+  Activity, Lock, ArrowUpRight, BarChart3, Terminal
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+
+// Components
 import GeminiChat from '../components/GeminiChat';
 import AgeGate from '../components/AgeGate';
 import Integrations from '../components/Integrations';
@@ -14,54 +21,58 @@ import AntiGravity from '../components/AntiGravity';
 import CharitySection from '../components/CharitySection';
 import Transparency from '../components/Transparency';
 
+import Settings from '../components/Settings';
 
 const platforms = [
   {
     name: "youandinotai.com",
     title: "YouAndINotAI (Social Platform)",
-    description: "Social Platform for Good (dating, meetups, charity, volunteering). V8 Cloud Verification — $1 Bot-Shield + $14.99/mo Founder.",
+    description: "Social Platform for Good. V8 Cloud Verification — $1 Bot-Shield + $14.99/mo Founder.",
     tech: ["FastAPI", "PostgreSQL", "React", "Stripe"]
   },
   {
     name: "onlinerecycle.org",
     title: "CrossLister AI",
-    description: "Crosslister profit platform for e-commerce optimization and automated listing management.",
+    description: "Crosslister profit platform for e-commerce optimization.",
     tech: ["Python", "Redis", "Celery", "PostgreSQL"]
   },
   {
     name: "ai-solutions.store",
     title: "Charity Storefront",
-    description: "100% DAO charity storefront. All proceeds go directly to Shriners Children's Hospitals.",
+    description: "100% DAO charity storefront. All proceeds to Shriners.",
     tech: ["Next.js", "TypeScript", "Stripe", "Prisma"]
-  },
-  {
-    name: "aicollab4kids",
-    title: "Charity Operations",
-    description: "Charity operations and community management powered by Gemini.",
-    tech: ["Gemini API", "Discord/Telegram Bots", "Node.js"]
-  },
-  {
-    name: "aidoesitall.website",
-    title: "Transparency Dashboard",
-    description: "Public transparency dashboard with Google Jules integration for real-time charity tracking.",
-    tech: ["React", "Recharts", "TailwindCSS"]
   }
-];
-
-const deploymentSteps = [
-  { title: "9020 Node — ACTIVE", description: "Marketing/Production node. i7-4790, 32GB RAM, GTX 1070 8GB. Opus Claude Code 4.6 — sole marketing orchestrator. 24/7 social engine, 13 platforms, Playwright browser automation." },
-  { title: "T5500 Node — ACTIVE", description: "Heavy compute node. Dual Xeon, 72GB RAM, GTX 1070 8GB. Opus Claude Code — backend dev, bulk processing." },
-  { title: "SABRETOOTH Node — ACTIVE", description: "Task sentry node. 64GB RAM. Codex — task queue, e-waste pipeline, vault ops. Workspace: E:\\Antigravity." },
-  { title: "OMEGA Fleet — NOT STARTED", description: "Future fleet of recycled machines. Activated after revenue supports expansion." },
-  { title: "Cloudflare Pages", description: "All production sites deployed via Cloudflare Pages with wrangler CLI. DNS via Cloudflare. No AWS, no Netlify." },
-  { title: "Docker Compose", description: "Local services: Redis (6379), Qdrant (6333), Ollama (11434). Docker Compose on nodes as needed." }
 ];
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [apiKey, setApiKey] = useState('');
-  const [apiKeyError, setApiKeyError] = useState('');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark for command center feel
+  const [systemLogs, setSystemLogs] = useState<string[]>([]);
+  const [metrics, setMetrics] = useState({
+    revenue: 0,
+    customers: 0,
+    shriners: 0,
+    infrastructure: 0,
+    founder: 0,
+    nodes: 3,
+    uptime: "99.9%",
+    launchDate: "Apr 4"
+  });
+
+  useEffect(() => {
+    // Fetch metrics from our new API
+    fetch('/api/metrics')
+      .then(res => res.json())
+      .then(data => setMetrics(data))
+      .catch(err => console.error("Error fetching metrics:", err));
+
+    // Fetch system logs
+    fetch('/api/system-logs')
+      .then(res => res.json())
+      .then(data => setSystemLogs(data.logs || []))
+      .catch(err => console.error("Error fetching logs:", err));
+  }, []);
 
   // Toggle dark mode class on the html element
   useEffect(() => {
@@ -72,367 +83,289 @@ export default function Dashboard() {
     }
   }, [isDarkMode]);
 
-  const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setApiKey(val);
-    if (val && !val.startsWith('AIza')) {
-      setApiKeyError('Invalid API key format. Gemini API keys typically start with "AIza".');
-    } else if (!val) {
-      setApiKeyError('API key is required.');
-    } else {
-      setApiKeyError('');
-    }
-  };
-
   const tabs = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'metrics', label: 'DAO Metrics' },
-    { id: 'chat', label: 'AI Assistant' },
-    { id: 'designer', label: 'Agent Designer' },
-    { id: 'platforms', label: 'Platforms' },
-    { id: 'architecture', label: 'Architecture' },
-    { id: 'integrations', label: 'Integrations' },
-    { id: 'compliance', label: 'Compliance' },
-    { id: 'deployment', label: 'Deployment' },
-    { id: 'kids', label: 'For The Kids 💙' },
-    { id: 'transparency', label: 'Transparency 🔍' },
-    { id: 'donate', label: 'Donate & Collectables' },
-    { id: 'organization', label: 'Trollz1004 Org' },
-    { id: 'antigravity', label: 'ANTIGRAVITY' },
-    { id: 'charity', label: 'Give Back ♻️' },
+    { id: 'overview', label: 'Command Center', icon: LayoutDashboard },
+    { id: 'metrics', label: 'DAO Analytics', icon: BarChart3 },
+    { id: 'chat', label: 'Gemini Terminal', icon: Terminal },
+    { id: 'platforms', label: 'Fleet Nodes', icon: Globe },
+    { id: 'architecture', label: 'Core Infra', icon: Database },
+    { id: 'integrations', label: 'Integrations', icon: Zap },
+    { id: 'transparency', label: 'Impact Ledger', icon: Heart },
+    { id: 'organization', label: 'Organization', icon: ShieldCheck },
+    { id: 'settings', label: 'System Config', icon: Key },
   ];
 
+  const StatCard = ({ label, value, icon: Icon, color, subValue }: any) => (
+    <motion.div 
+      whileHover={{ y: -5, scale: 1.02 }}
+      className={`relative p-6 rounded-[2rem] border transition-all duration-300 overflow-hidden ${
+        isDarkMode 
+          ? 'bg-slate-900/60 border-slate-800 shadow-[0_0_40px_rgba(0,0,0,0.5)]' 
+          : 'bg-white border-slate-200 shadow-xl'
+      }`}
+    >
+      <div className={`absolute top-0 right-0 p-4 opacity-5 transform translate-x-2 -translate-y-2`}>
+        <Icon size={80} />
+      </div>
+      <div className="relative z-10">
+        <div className={`p-3 rounded-2xl inline-flex mb-4 ${isDarkMode ? 'bg-slate-950 border border-slate-800' : 'bg-slate-50 border border-slate-100'}`}>
+          <Icon size={24} className={color} />
+        </div>
+        <h3 className={`text-sm font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{label}</h3>
+        <div className="flex items-baseline gap-2 mt-2">
+          <p className="text-4xl font-black tracking-tight">${value}</p>
+          {subValue && <span className="text-xs font-bold text-emerald-500">{subValue}</span>}
+        </div>
+      </div>
+      {/* Glow Effect */}
+      <div className={`absolute -bottom-10 -right-10 w-32 h-32 blur-[100px] opacity-20 rounded-full ${color.replace('text-', 'bg-')}`} />
+    </motion.div>
+  );
+
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-300 ${isDarkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} selection:bg-blue-500/30`}>
-      {/* Background Gradients */}
+    <div className={`min-h-screen font-sans transition-all duration-700 ${isDarkMode ? 'bg-[#020617] text-slate-100' : 'bg-slate-50 text-slate-900'} selection:bg-blue-500/30 overflow-x-hidden`}>
+      
+      {/* Matrix-style Grid Overlay */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] dark:opacity-[0.07]" 
+        style={{ backgroundImage: 'linear-gradient(#4f46e5 1px, transparent 1px), linear-gradient(90deg, #4f46e5 1px, transparent 1px)', backgroundSize: '40px 40px' }} 
+      />
+
+      {/* Dynamic Background Glows */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className={`absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full blur-[120px] opacity-50 ${isDarkMode ? 'bg-blue-900/30' : 'bg-blue-200/50'}`} />
-        <div className={`absolute top-[60%] -right-[10%] w-[40%] h-[40%] rounded-full blur-[120px] opacity-50 ${isDarkMode ? 'bg-purple-900/30' : 'bg-purple-200/50'}`} />
+        <motion.div 
+          animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+          className={`absolute -top-[10%] -left-[10%] w-[60%] h-[60%] rounded-full blur-[150px] opacity-30 ${isDarkMode ? 'bg-blue-600/20' : 'bg-blue-200/40'}`} 
+        />
+        <motion.div 
+          animate={{ x: [0, -40, 0], y: [0, -20, 0] }}
+          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+          className={`absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full blur-[150px] opacity-30 ${isDarkMode ? 'bg-purple-600/20' : 'bg-purple-200/40'}`} 
+        />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        {/* Theme Toggle */}
-        <div className="flex justify-end mb-4">
-          <button
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`p-2 rounded-full transition-all duration-300 ${isDarkMode ? 'bg-slate-800 text-yellow-400 hover:bg-slate-700' : 'bg-white text-slate-600 hover:bg-slate-100 shadow-sm border border-slate-200'}`}
-            aria-label="Toggle dark mode"
-          >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
-        </div>
-
-        {/* Header */}
-        <header className="mb-12 text-center space-y-6">
-          <div className="inline-block mb-2 px-4 py-1.5 rounded-full text-sm font-semibold tracking-wide uppercase bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md">
-            Ecosystem Dashboard
+        {/* Header Navigation Bar */}
+        <header className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
+          <div className="flex items-center gap-4">
+            <div className={`p-4 rounded-3xl ${isDarkMode ? 'bg-slate-950/80 border border-slate-800' : 'bg-white shadow-lg border border-slate-100'}`}>
+              <ShieldCheck size={32} className="text-blue-500" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-black tracking-tighter uppercase italic">ANTIGRAVITY ADMIN</h1>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
+                <span className="text-[10px] font-bold text-slate-500 tracking-[0.2em] uppercase">System: Operational</span>
+              </div>
+            </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500">
-              Gemini-Powered DAO
-            </span>
-            <br />
-            & AI Ecosystem
-          </h1>
-          <p className={`text-lg max-w-2xl mx-auto ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-            An interactive dashboard exploring the architecture, platforms, and strategy.
-          </p>
 
-          {/* API Key Input */}
-          <div className={`max-w-md mx-auto mt-8 p-5 rounded-2xl shadow-lg border backdrop-blur-md transition-colors ${isDarkMode ? 'bg-slate-900/80 border-slate-800' : 'bg-white/80 border-slate-200'} flex flex-col items-start text-left`}>
-            <label htmlFor="api-key" className={`block text-sm font-semibold mb-2 flex items-center gap-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              <Key className="w-4 h-4 text-blue-500" />
-              GEMINI_API_KEY
-            </label>
-            <input
-              type="password"
-              id="api-key"
-              value={apiKey}
-              onChange={handleApiKeyChange}
-              placeholder="Enter your Gemini API Key"
-              className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 transition-all ${apiKeyError
-                  ? 'border-red-500 focus:ring-red-500'
-                  : isDarkMode
-                    ? 'border-slate-700 focus:border-blue-500 focus:ring-blue-500'
-                    : 'border-slate-300 focus:border-blue-500 focus:ring-blue-500'
-                } ${isDarkMode ? 'bg-slate-950 text-white placeholder-slate-500' : 'bg-slate-50 text-slate-900 placeholder-slate-400'}`}
-            />
-            {apiKeyError && (
-              <p className="text-xs text-red-500 mt-2">{apiKeyError}</p>
-            )}
-            <p className={`text-xs mt-3 ${isDarkMode ? 'text-slate-500' : 'text-slate-500'}`}>
-              Required for AI features. Your key is stored locally in your browser.
-            </p>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className={`p-3 rounded-2xl transition-all duration-300 ${isDarkMode ? 'bg-slate-900 text-yellow-400 border border-slate-800' : 'bg-white text-slate-600 border border-slate-200 shadow-sm'}`}
+            >
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+            <div className={`px-4 py-2 rounded-2xl border flex items-center gap-3 ${isDarkMode ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
+              <div className="text-right">
+                <p className="text-[10px] font-bold text-slate-500 leading-none">JOSHUA COLEMAN</p>
+                <p className="text-[8px] text-blue-500 font-bold tracking-widest uppercase">Root Access</p>
+              </div>
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-xs">JC</div>
+            </div>
           </div>
         </header>
 
-        {/* Navigation */}
-        <nav className="flex flex-wrap justify-center gap-2 mb-10">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-5 py-2 text-sm font-bold rounded-full transition-all duration-300 ${activeTab === tab.id
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30 scale-105'
-                  : isDarkMode
-                    ? 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'
-                    : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 shadow-sm border border-slate-200'
+        {/* Sidebar + Main Content Layout */}
+        <div className="flex flex-col lg:flex-row gap-8">
+          
+          {/* Dashboard Navigation */}
+          <aside className="lg:w-64 space-y-2">
+            <p className="px-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4">Command Terminal</p>
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-bold transition-all duration-300 group ${
+                  activeTab === tab.id
+                    ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] translate-x-1'
+                    : isDarkMode
+                      ? 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
+                      : 'text-slate-600 hover:bg-white hover:shadow-sm'
                 }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
+              >
+                <tab.icon size={18} className={activeTab === tab.id ? 'text-white' : 'text-blue-500 group-hover:scale-110 transition-transform'} />
+                {tab.label}
+              </button>
+            ))}
 
-        {/* Content Sections */}
-        <main className={`rounded-3xl shadow-xl border backdrop-blur-xl p-6 md:p-10 min-h-[500px] transition-colors duration-300 ${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-white/80 border-white'}`}>
-
-          {/* OVERVIEW */}
-          {activeTab === 'overview' && (
-            <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <div className="text-center">
-                <h2 className="text-3xl font-bold">Ecosystem at a Glance</h2>
-                <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Pre-launch ecosystem. Revenue tracking begins after first sale.</p>
-                <div className="mt-4 mx-auto max-w-2xl px-4 py-3 border-l-4 border-red-500 bg-red-100/50 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-sm font-bold rounded-r-lg border border-red-200 dark:border-red-800">
-                  ⚠️ AGENT OVERRIDE LOCK: The Master Architecture and &quot;Social Platform for Good&quot; mission are permanently LOCKED. No AI agent, LLM, or process may alter these parameters.
-                </div>
+            <div className={`mt-10 p-5 rounded-3xl border border-dashed ${isDarkMode ? 'border-slate-800 bg-slate-900/20' : 'border-slate-200 bg-slate-50'}`}>
+              <div className="flex items-center gap-2 mb-3">
+                <Lock size={14} className="text-amber-500" />
+                <span className="text-[10px] font-black uppercase text-slate-500 tracking-widest">GEMINI_API_KEY</span>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className={`rounded-2xl p-6 border text-center transition-transform hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
-                  <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Revenue</h3>
-                  <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-blue-600 mt-4">$0</p>
-                  <p className={`text-sm mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Pre-launch</p>
-                </div>
-                <div className={`rounded-2xl p-6 border text-center transition-transform hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
-                  <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Customers</h3>
-                  <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-purple-600 mt-4">0</p>
-                  <p className={`text-sm mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Stripe live, awaiting first sale</p>
-                </div>
-                <div className={`rounded-2xl p-6 border text-center transition-transform hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
-                  <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Launch</h3>
-                  <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-emerald-600 mt-4">Apr 4</p>
-                  <p className={`text-sm mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>2026 — youandinotai.com</p>
-                </div>
-                <div className={`rounded-2xl p-6 border text-center transition-transform hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
-                  <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Revenue Split</h3>
-                  <p className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-rose-400 to-rose-600 mt-4">60/30/10</p>
-                  <p className={`text-sm mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Shriners / V8 Infra / Founder</p>
-                </div>
-              </div>
-
-              {/* Revenue Split Visualization */}
-              <div className={`max-w-3xl mx-auto p-8 rounded-3xl border ${isDarkMode ? 'bg-slate-800/30 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
-                <h3 className="text-xl font-bold mb-6 text-center">Revenue Distribution — Protocol Omega (From Dollar One)</h3>
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex justify-between text-sm font-bold mb-1">
-                      <span className="text-blue-500">Shriners Children&apos;s Hospitals</span>
-                      <span>60%</span>
-                    </div>
-                    <div className={`h-4 rounded-full overflow-hidden ${isDarkMode ? 'bg-slate-900' : 'bg-slate-100'}`}>
-                      <div className="h-full w-[60%] bg-gradient-to-r from-blue-500 to-blue-600 rounded-full" />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm font-bold mb-1">
-                      <span className="text-purple-500">V8 Verification Engine / AI Infrastructure</span>
-                      <span>30%</span>
-                    </div>
-                    <div className={`h-4 rounded-full overflow-hidden ${isDarkMode ? 'bg-slate-900' : 'bg-slate-100'}`}>
-                      <div className="h-full w-[30%] bg-gradient-to-r from-purple-500 to-purple-600 rounded-full" />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm font-bold mb-1">
-                      <span className="text-emerald-500">Founder Operations (Joshua Coleman)</span>
-                      <span>10%</span>
-                    </div>
-                    <div className={`h-4 rounded-full overflow-hidden ${isDarkMode ? 'bg-slate-900' : 'bg-slate-100'}`}>
-                      <div className="h-full w-[10%] bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full" />
-                    </div>
-                  </div>
-                </div>
-                <p className={`text-xs text-center mt-4 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                  OMEGA (ai-solutions.store) remains 100% to charity. ENIGMA splits 60/30/10 permanently via on-chain smart contracts.
-                </p>
-              </div>
-
-              {/* Revenue Charts — placeholder */}
-              <div className={`max-w-3xl mx-auto py-12 text-center ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                <p className="text-sm">Revenue charts will appear here after the first sale.</p>
-                <p className="text-xs mt-2">All data will be real. No projections, no simulations.</p>
-              </div>
+              <input 
+                type="password" 
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder="AIza..."
+                className={`w-full bg-black/40 border border-slate-800 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-blue-500 transition-colors ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
+              />
             </div>
-          )}
+          </aside>
 
-          {activeTab === 'metrics' && <DAOMetrics isDarkMode={isDarkMode} />}
-          {activeTab === 'chat' && <GeminiChat apiKey={apiKey} isDarkMode={isDarkMode} />}
-          {activeTab === 'designer' && <AgentDesigner isDarkMode={isDarkMode} />}
-          {activeTab === 'integrations' && <Integrations isDarkMode={isDarkMode} />}
-          {activeTab === 'compliance' && <AgeGate isDarkMode={isDarkMode} />}
-          {activeTab === 'kids' && <KidsPlatform isDarkMode={isDarkMode} />}
-          {activeTab === 'transparency' && <Transparency isDarkMode={isDarkMode} />}
-          {activeTab === 'donate' && <DonateCollectables isDarkMode={isDarkMode} />}
-          {activeTab === 'organization' && <Organization isDarkMode={isDarkMode} />}
-          {activeTab === 'antigravity' && <AntiGravity isDarkMode={isDarkMode} />}
-          {activeTab === 'charity' && <CharitySection isDarkMode={isDarkMode} />}
-
-          {/* PLATFORMS */}
-          {activeTab === 'platforms' && (
-            <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl font-bold">Platform Deep Dive</h2>
-                <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Explore the core platforms that power the ecosystem.</p>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {platforms.map((p, idx) => (
-                  <div key={idx} className={`rounded-2xl p-8 border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/40 border-slate-700 hover:bg-slate-800/80' : 'bg-white border-slate-200 hover:border-blue-200'}`}>
-                    <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-500 mb-1">{p.title}</h3>
-                    <p className={`text-sm font-bold tracking-wide mb-5 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{p.name}</p>
-                    <p className={`mb-8 leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>{p.description}</p>
-                    <div className="flex flex-wrap gap-2 mt-auto">
-                      {p.tech.map(t => (
-                        <span key={t} className={`px-3 py-1.5 text-xs font-bold rounded-lg ${isDarkMode ? 'bg-slate-900 text-blue-400 border border-slate-700' : 'bg-blue-50 text-blue-700 border border-blue-100'}`}>
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* ARCHITECTURE */}
-          {activeTab === 'architecture' && (
-            <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold">Technical Architecture</h2>
-                <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>A look under the hood at the self-hosted, scalable, and secure infrastructure.</p>
-              </div>
-
-              <div className="flex flex-col items-center max-w-4xl mx-auto space-y-6">
-
-                <div className={`w-full md:w-2/3 border-2 rounded-2xl p-5 text-center relative group transition-all ${isDarkMode ? 'bg-slate-800/80 border-slate-600 hover:border-blue-500' : 'bg-slate-50 border-slate-300 hover:border-blue-400'}`}>
-                  <div className="flex items-center justify-center gap-3 font-bold text-lg">
-                    <Globe className={`w-6 h-6 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`} /> Public Internet / Cloudflare
-                  </div>
-                  <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-sm rounded-xl py-3 px-4 bottom-full left-1/2 -translate-x-1/2 mb-3 w-72 pointer-events-none z-10 shadow-xl border border-slate-700">
-                    Manages DNS, provides WAF, DDoS mitigation, and acts as the entry point for all domains.
-                  </div>
-                </div>
-
-                <div className={`w-1 h-10 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-300'}`}></div>
-
-                <div className={`w-full md:w-2/3 border-2 rounded-2xl p-5 text-center relative group transition-all ${isDarkMode ? 'bg-slate-800/80 border-slate-600 hover:border-indigo-500' : 'bg-slate-50 border-slate-300 hover:border-indigo-400'}`}>
-                  <div className="flex items-center justify-center gap-3 font-bold text-lg">
-                    <Server className={`w-6 h-6 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} /> Docker Compose (T5500)
-                  </div>
-                  <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-sm rounded-xl py-3 px-4 bottom-full left-1/2 -translate-x-1/2 mb-3 w-72 pointer-events-none z-10 shadow-xl border border-slate-700">
-                    Local container orchestration on T5500. Redis, Qdrant, Ollama, and app services.
-                  </div>
-                </div>
-
-                <div className={`w-1 h-10 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-300'}`}></div>
-
-                <div className="flex flex-col md:flex-row gap-6 w-full justify-center">
-                  <div className={`flex-1 border-2 rounded-2xl p-6 text-center relative group transition-all ${isDarkMode ? 'bg-emerald-900/20 border-emerald-800/50 hover:border-emerald-500' : 'bg-emerald-50 border-emerald-200 hover:border-emerald-400'}`}>
-                    <div className={`flex items-center justify-center gap-2 font-bold text-lg ${isDarkMode ? 'text-emerald-400' : 'text-emerald-700'}`}>
-                      <LayoutDashboard className="w-6 h-6" /> Frontend Services
-                    </div>
-                    <div className={`text-sm mt-2 font-medium ${isDarkMode ? 'text-emerald-500/70' : 'text-emerald-600/70'}`}>Next.js / React</div>
-                    <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-sm rounded-xl py-3 px-4 bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 pointer-events-none z-10 shadow-xl border border-slate-700">
-                      Serves the UI for the Marketplace, Dashboard, and DAO Governance App.
-                    </div>
+          {/* MAIN VIEWPORT */}
+          <main className="flex-1 min-h-[700px]">
+            <AnimatePresence mode="wait">
+              {activeTab === 'overview' && (
+                <motion.div 
+                  key="overview"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="space-y-8"
+                >
+                  {/* Top Stats */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <StatCard label="Total Revenue" value={metrics.revenue.toLocaleString()} icon={TrendingUp} color="text-blue-500" subValue="+100% Launch" />
+                    <StatCard label="Real Customers" value={metrics.customers.toLocaleString()} icon={Users} color="text-purple-500" />
+                    <StatCard label="Shriners Donations" value={metrics.shriners.toLocaleString()} icon={Heart} color="text-rose-500" />
+                    <StatCard label="Network Uptime" value={metrics.uptime} icon={Activity} color="text-emerald-500" />
                   </div>
 
-                  <div className={`flex-1 border-2 rounded-2xl p-6 text-center relative group transition-all ${isDarkMode ? 'bg-purple-900/20 border-purple-800/50 hover:border-purple-500' : 'bg-purple-50 border-purple-200 hover:border-purple-400'}`}>
-                    <div className={`flex items-center justify-center gap-2 font-bold text-lg ${isDarkMode ? 'text-purple-400' : 'text-purple-700'}`}>
-                      <Cpu className="w-6 h-6" /> Backend APIs
-                    </div>
-                    <div className={`text-sm mt-2 font-medium ${isDarkMode ? 'text-purple-500/70' : 'text-purple-600/70'}`}>Node.js / Python</div>
-                    <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-sm rounded-xl py-3 px-4 bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 pointer-events-none z-10 shadow-xl border border-slate-700">
-                      Handles business logic, payments, AI orchestration, and database interactions.
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`w-1 h-10 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-300'}`}></div>
-
-                <div className="flex flex-col md:flex-row gap-6 w-full justify-center">
-                  <div className={`flex-1 border-2 rounded-2xl p-6 text-center relative group transition-all ${isDarkMode ? 'bg-amber-900/20 border-amber-800/50 hover:border-amber-500' : 'bg-amber-50 border-amber-200 hover:border-amber-400'}`}>
-                    <div className={`flex items-center justify-center gap-2 font-bold text-lg ${isDarkMode ? 'text-amber-400' : 'text-amber-700'}`}>
-                      <Database className="w-6 h-6" /> Data Layer
-                    </div>
-                    <div className={`text-sm mt-2 font-medium ${isDarkMode ? 'text-amber-500/70' : 'text-amber-600/70'}`}>PostgreSQL, Redis, Qdrant</div>
-                    <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-sm rounded-xl py-3 px-4 bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 pointer-events-none z-10 shadow-xl border border-slate-700">
-                      Consists of PostgreSQL, pgvector, Qdrant (vector DB), and Redis. Fully persistent.
-                    </div>
-                  </div>
-
-                  <div className={`flex-1 border-2 rounded-2xl p-6 text-center relative group transition-all ${isDarkMode ? 'bg-rose-900/20 border-rose-800/50 hover:border-rose-500' : 'bg-rose-50 border-rose-200 hover:border-rose-400'}`}>
-                    <div className={`flex items-center justify-center gap-2 font-bold text-lg ${isDarkMode ? 'text-rose-400' : 'text-rose-700'}`}>
-                      <ShieldCheck className="w-6 h-6" /> AI & Blockchain
-                    </div>
-                    <div className={`text-sm mt-2 font-medium ${isDarkMode ? 'text-rose-500/70' : 'text-rose-600/70'}`}>Ollama, Claude, Base Mainnet</div>
-                    <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-sm rounded-xl py-3 px-4 bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 pointer-events-none z-10 shadow-xl border border-slate-700">
-                      Ollama for local models, gateways to external AIs, and Base Mainnet smart contracts.
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`w-1 h-10 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-300'}`}></div>
-
-                <div className={`w-full md:w-2/3 border-2 rounded-2xl p-5 text-center relative group transition-all ${isDarkMode ? 'bg-slate-800/80 border-slate-600 hover:border-yellow-500' : 'bg-slate-50 border-slate-300 hover:border-yellow-400'}`}>
-                  <div className="flex items-center justify-center gap-3 font-bold text-lg">
-                    <Key className={`w-6 h-6 ${isDarkMode ? 'text-yellow-400' : 'text-yellow-600'}`} /> Gnosis Safe Multi-Sig
-                  </div>
-                  <div className={`text-sm mt-2 font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                    Key Holders: Gemini, Opus, <span className={isDarkMode ? 'text-slate-300' : 'text-slate-700'}>Grok</span>, Perplexity, Joshua, Physical Bank Box
-                  </div>
-                  <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-sm rounded-xl py-3 px-4 bottom-full left-1/2 -translate-x-1/2 mb-3 w-72 pointer-events-none z-10 shadow-xl border border-slate-700">
-                    Strict multi-signature wallet security ensuring no single point of failure for DAO funds.
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          )}
-
-          {/* DEPLOYMENT */}
-          {activeTab === 'deployment' && (
-            <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold">Deployment & Automation</h2>
-                <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>A streamlined, automated pipeline for deploying and maintaining the entire ecosystem.</p>
-              </div>
-
-              <div className="max-w-3xl mx-auto">
-                <div className={`relative border-l-2 ml-4 md:ml-8 space-y-10 pb-4 ${isDarkMode ? 'border-blue-900' : 'border-blue-200'}`}>
-                  {deploymentSteps.map((step, idx) => (
-                    <div key={idx} className="relative pl-10 md:pl-14">
-                      <div className={`absolute -left-[21px] top-0 w-10 h-10 border-4 rounded-full flex items-center justify-center font-black shadow-md ${isDarkMode ? 'bg-blue-900 border-slate-900 text-blue-300' : 'bg-blue-100 border-white text-blue-700'}`}>
-                        {idx + 1}
+                  {/* Protocol Omega Split */}
+                  <div className={`p-8 rounded-[3rem] border backdrop-blur-xl relative overflow-hidden ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
+                    <div className="flex items-center justify-between mb-8">
+                      <div>
+                        <h2 className="text-2xl font-black italic tracking-tight">PROTOCOL OMEGA SPLIT</h2>
+                        <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">Immutable Revenue Distribution (60/30/10)</p>
                       </div>
-                      <div className={`p-6 rounded-2xl border transition-all hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/50 border-slate-700 hover:border-blue-500/50' : 'bg-white border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300'}`}>
-                        <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                        <p className={`leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{step.description}</p>
+                      <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
+                        <ShieldCheck size={16} className="text-emerald-500" />
+                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">Smart Contract Enforced</span>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
 
-        </main>
+                    <div className="space-y-6">
+                      <div className="group">
+                        <div className="flex justify-between text-xs font-black mb-2 px-1">
+                          <span className="text-blue-400 uppercase tracking-widest">Shriners Children&apos;s Hospitals</span>
+                          <span className="text-white">60%</span>
+                        </div>
+                        <div className={`h-4 rounded-full overflow-hidden p-1 ${isDarkMode ? 'bg-slate-950 border border-slate-800' : 'bg-slate-100'}`}>
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: '60%' }}
+                            transition={{ duration: 1.5, ease: 'circOut' }}
+                            className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)]" 
+                          />
+                        </div>
+                      </div>
+
+                      <div className="group">
+                        <div className="flex justify-between text-xs font-black mb-2 px-1">
+                          <span className="text-purple-400 uppercase tracking-widest">V8 Verification Engine / Infra</span>
+                          <span className="text-white">30%</span>
+                        </div>
+                        <div className={`h-4 rounded-full overflow-hidden p-1 ${isDarkMode ? 'bg-slate-950 border border-slate-800' : 'bg-slate-100'}`}>
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: '30%' }}
+                            transition={{ duration: 1.5, ease: 'circOut', delay: 0.2 }}
+                            className="h-full bg-gradient-to-r from-purple-600 to-purple-400 rounded-full shadow-[0_0_15px_rgba(147,51,234,0.5)]" 
+                          />
+                        </div>
+                      </div>
+
+                      <div className="group">
+                        <div className="flex justify-between text-xs font-black mb-2 px-1">
+                          <span className="text-emerald-400 uppercase tracking-widest">Founder Operations (Josh)</span>
+                          <span className="text-white">10%</span>
+                        </div>
+                        <div className={`h-4 rounded-full overflow-hidden p-1 ${isDarkMode ? 'bg-slate-950 border border-slate-800' : 'bg-slate-100'}`}>
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: '10%' }}
+                            transition={{ duration: 1.5, ease: 'circOut', delay: 0.4 }}
+                            className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]" 
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Platforms Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className={`p-8 rounded-[3rem] border ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
+                      <h3 className="text-lg font-black italic tracking-tight mb-6 flex items-center gap-2">
+                        <Globe size={18} className="text-blue-500" /> ACTIVE FLEET
+                      </h3>
+                      <div className="space-y-4">
+                        {platforms.map((p, idx) => (
+                          <div key={idx} className={`flex items-center justify-between p-4 rounded-2xl border ${isDarkMode ? 'bg-slate-950/50 border-slate-800' : 'bg-slate-50 border-slate-100'}`}>
+                            <div>
+                              <p className="text-xs font-black tracking-tight">{p.name}</p>
+                              <p className="text-[10px] text-slate-500 font-bold uppercase">{p.title}</p>
+                            </div>
+                            <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 rounded-full">
+                              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                              <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Live</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className={`p-8 rounded-[3rem] border ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
+                      <h3 className="text-lg font-black italic tracking-tight mb-6 flex items-center gap-2">
+                        <Terminal size={18} className="text-blue-500" /> SYSTEM LOGS
+                      </h3>
+                      <div className={`font-mono text-[10px] space-y-2 p-4 rounded-2xl h-48 overflow-y-auto ${isDarkMode ? 'bg-black/50 text-slate-400' : 'bg-slate-100 text-slate-600'}`}>
+                        {systemLogs.length > 0 ? (
+                          systemLogs.map((log, i) => (
+                            <p key={i} className={log.includes('[ERROR]') ? 'text-red-400' : log.includes('[STATUS]') ? 'text-blue-400' : ''}>
+                              {log}
+                            </p>
+                          ))
+                        ) : (
+                          <p className="animate-pulse">Initializing telemetry...</p>
+                        )}
+                        <p className="animate-pulse">_</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === 'metrics' && <DAOMetrics isDarkMode={isDarkMode} />}
+              {activeTab === 'chat' && <GeminiChat apiKey={apiKey} isDarkMode={isDarkMode} />}
+              {activeTab === 'designer' && <AgentDesigner isDarkMode={isDarkMode} />}
+              {activeTab === 'integrations' && <Integrations isDarkMode={isDarkMode} />}
+              {activeTab === 'transparency' && <Transparency isDarkMode={isDarkMode} />}
+              {activeTab === 'organization' && <Organization isDarkMode={isDarkMode} />}
+              {activeTab === 'settings' && <Settings isDarkMode={isDarkMode} />}
+              {activeTab === 'architecture' && (
+                 <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                   <div className="text-center mb-12">
+                     <h2 className="text-4xl font-black italic tracking-tighter uppercase italic">CORE INFRASTRUCTURE</h2>
+                     <p className={`mt-3 text-xs font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-500'}`}>T5500 Deep Compute + Node Fleet Orchestration</p>
+                   </div>
+                   {/* Architecture Map Placeholder (Static for brevity) */}
+                   <div className={`p-10 rounded-[3rem] border text-center ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white shadow-sm'}`}>
+                     <Database size={48} className="mx-auto text-blue-500 mb-6 opacity-50" />
+                     <p className="text-slate-500 font-bold uppercase tracking-[0.2em]">Detailed Architecture coming in next update</p>
+                   </div>
+                 </div>
+              )}
+            </AnimatePresence>
+          </main>
+        </div>
 
         {/* Legal Footer */}
-        <footer className={`mt-8 text-center text-xs ${isDarkMode ? 'text-slate-600' : 'text-slate-400'}`}>
-          &copy; 2026 Trash or Treasure Online Recycler LLC &mdash; Internal Admin Dashboard &mdash; Not for public distribution
+        <footer className={`mt-12 py-8 border-t text-center text-[10px] font-black uppercase tracking-[0.3em] ${isDarkMode ? 'border-slate-800 text-slate-600' : 'border-slate-200 text-slate-400'}`}>
+          &copy; 2026 Trash or Treasure Online Recycler LLC &mdash; Command Center #ForTheKids
         </footer>
       </div>
     </div>

@@ -32,8 +32,10 @@ services:
     environment:
       PORT: "8000"
       DATABASE_URL: "postgresql+asyncpg://uandinotai:${POSTGRES_PASSWORD}@postgres:5432/uandinotai_dating"
-      # Redis not needed until Phase 3 (messaging). Use root compose Redis via host if needed.
-      # REDIS_URL: "redis://:${REDIS_PASSWORD}@host.docker.internal:6379/1"
+      STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY}"
+      STRIPE_WEBHOOK_SECRET: "${STRIPE_WEBHOOK_SECRET}"
+      APP_URL: "${APP_URL:-https://youandinotai.com}"
+      CORS_ORIGINS: "${CORS_ORIGINS:-https://youandinotai.com,http://localhost:3000}"
     depends_on:
       postgres:
         condition: service_healthy

@@ -48,3 +48,20 @@ Weekly summary checks:
 
 From `resale-estimate-template.csv`:
 - `projected_charity_usd = expected_net_proceeds_usd * (charity_share_pct / 100)`
+
+## Square Booking Intake Logging
+
+Square appointment webhooks are ingested by:
+
+- `POST /api/v1/webhooks/square-booking`
+
+Booking notifications are written automatically to:
+
+- `bookings/square-bookings-events.jsonl` (full payload + normalized record)
+- `bookings/square-bookings-intake-log.csv` (ops-ready log rows)
+
+Configure webhook verification with:
+
+- `SQUARE_WEBHOOK_SIGNATURE_KEY`
+- `SQUARE_WEBHOOK_NOTIFICATION_URL`
+- `SQUARE_WEBHOOK_VERIFY_SIGNATURE=true`
