@@ -2,8 +2,14 @@
 
 from __future__ import annotations
 
+import base64
+import csv
+import hashlib
+import hmac
 import json
 import logging
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
@@ -23,6 +29,27 @@ logger = logging.getLogger(__name__)
 MAX_WEBHOOK_PAYLOAD_BYTES = 512_000
 BOT_SHIELD_CENTS = 100
 ROYALTY_CARD_CENTS = 250_000
+REPO_ROOT = Path(__file__).resolve().parents[3]
+CONTAINER_EWASTE_MOUNT = Path("/app/ewaste-intake-data")
+SQUARE_EVENT_ID_INDEX = "square-booking-event-ids.txt"
+SQUARE_EVENT_JSONL = "square-bookings-events.jsonl"
+SQUARE_EVENT_CSV = "square-bookings-intake-log.csv"
+SQUARE_CSV_FIELDS = [
+    "received_at_utc",
+    "event_id",
+    "event_type",
+    "event_created_at",
+    "merchant_id",
+    "booking_id",
+    "booking_status",
+    "start_at",
+    "location_id",
+    "customer_id",
+    "customer_phone",
+    "customer_email",
+    "customer_note",
+    "source",
+]
 
 
 def _normalize_tier(raw_tier: str | None) -> str | None:
@@ -86,6 +113,184 @@ async def _get_user_by_customer_id(
     if not customer_id:
         return None
     return await db.scalar(select(User).where(User.stripe_customer_id == customer_id))
+
+
+def _utc_now_iso() -> str:
+    return (
+        datetime.now(timezone.utc)
+        .isoformat(timespec="seconds")
+        .replace("+00:00", "Z")
+    )
+
+
+def _resolve_square_log_dir(settings: Any) -> Path:
+    configured = str(getattr(settings, "square_booking_log_dir", "") or "").strip()
+    if configured:
+        configured_path = Path(configured)
+        if configured_path.is_absolute():
+            return configured_path
+        return REPO_ROOT / configured_path
+    if CONTAINER_EWASTE_MOUNT.exists():
+        return CONTAINER_EWASTE_MOUNT / "bookings"
+    return REPO_ROOT / "data" / "ewaste-intake" / "bookings"
+
+
+def _verify_square_signature(
+    payload: bytes,
+    square_signature: str | None,
+    settings: Any,
+) -> None:
+    if not settings.square_webhook_verify_signature:
+        return
+
+    signature_key = str(settings.square_webhook_signature_key or "").strip()
+    notification_url = str(settings.square_webhook_notification_url or "").strip()
+
+    if not signature_key or not notification_url:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Square webhook signature verification is enabled but not configured.",
+        )
+
+    if not square_signature:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Missing x-square-hmacsha256-signature header.",
+        )
+
+    body_text = payload.decode("utf-8", errors="replace")
+    signed_payload = (notification_url + body_text).encode("utf-8")
+    digest = hmac.new(
+        signature_key.encode("utf-8"),
+        signed_payload,
+        hashlib.sha256,
+    ).digest()
+    expected_signature = base64.b64encode(digest).decode("utf-8")
+    provided_signature = square_signature.strip()
+
+    if not hmac.compare_digest(expected_signature, provided_signature):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid Square webhook signature.",
+        )
+
+
+def _load_square_booking(payload_json: dict[str, Any]) -> dict[str, Any]:
+    data = payload_json.get("data")
+    if isinstance(data, dict):
+        obj = data.get("object")
+        if isinstance(obj, dict):
+            booking = obj.get("booking")
+            if isinstance(booking, dict):
+                return booking
+            if any(
+                key in obj
+                for key in ("id", "status", "start_at", "location_id", "customer_id")
+            ):
+                return obj
+        booking = data.get("booking")
+        if isinstance(booking, dict):
+            return booking
+    booking = payload_json.get("booking")
+    if isinstance(booking, dict):
+        return booking
+    return {}
+
+
+def _append_square_logs(
+    event_id: str,
+    payload_json: dict[str, Any],
+    log_dir: Path,
+) -> None:
+    log_dir.mkdir(parents=True, exist_ok=True)
+
+    booking = _load_square_booking(payload_json)
+    customer_details = booking.get("customer_details")
+    if not isinstance(customer_details, dict):
+        customer_details = {}
+
+    record = {
+        "received_at_utc": _utc_now_iso(),
+        "event_id": event_id,
+        "event_type": str(
+            payload_json.get("type")
+            or payload_json.get("event_type")
+            or payload_json.get("name")
+            or "unknown"
+        ),
+        "event_created_at": str(
+            payload_json.get("created_at")
+            or payload_json.get("event_created_at")
+            or ""
+        ),
+        "merchant_id": str(payload_json.get("merchant_id") or ""),
+        "booking_id": str(booking.get("id") or ""),
+        "booking_status": str(booking.get("status") or ""),
+        "start_at": str(booking.get("start_at") or ""),
+        "location_id": str(
+            booking.get("location_id")
+            or payload_json.get("location_id")
+            or ""
+        ),
+        "customer_id": str(
+            booking.get("customer_id")
+            or customer_details.get("customer_id")
+            or ""
+        ),
+        "customer_phone": str(
+            customer_details.get("phone")
+            or booking.get("customer_phone")
+            or ""
+        ),
+        "customer_email": str(
+            customer_details.get("email_address")
+            or booking.get("customer_email")
+            or ""
+        ),
+        "customer_note": str(
+            booking.get("customer_note")
+            or booking.get("notes")
+            or ""
+        ),
+        "source": "square_webhook",
+    }
+
+    event_jsonl = log_dir / SQUARE_EVENT_JSONL
+    with event_jsonl.open("a", encoding="utf-8") as f:
+        f.write(json.dumps({"record": record, "payload": payload_json}) + "\n")
+
+    event_csv = log_dir / SQUARE_EVENT_CSV
+    csv_exists = event_csv.exists()
+    with event_csv.open("a", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=SQUARE_CSV_FIELDS)
+        if not csv_exists:
+            writer.writeheader()
+        writer.writerow(record)
+
+
+def _is_duplicate_square_event(event_id: str, log_dir: Path) -> bool:
+    if not event_id:
+        return False
+    index_file = log_dir / SQUARE_EVENT_ID_INDEX
+    if not index_file.exists():
+        return False
+    try:
+        with index_file.open("r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip() == event_id:
+                    return True
+    except OSError:
+        return False
+    return False
+
+
+def _mark_square_event_processed(event_id: str, log_dir: Path) -> None:
+    if not event_id:
+        return
+    log_dir.mkdir(parents=True, exist_ok=True)
+    index_file = log_dir / SQUARE_EVENT_ID_INDEX
+    with index_file.open("a", encoding="utf-8") as f:
+        f.write(f"{event_id}\n")
 
 
 @router.post("/stripe", response_model=WebhookAckResponse)
@@ -202,5 +407,45 @@ async def stripe_webhook(
     except IntegrityError:
         await db.rollback()
         return WebhookAckResponse(event_id=event_id, processed=True, duplicate=True)
+
+    return WebhookAckResponse(event_id=event_id, processed=True, duplicate=False)
+
+
+@router.post("/square-booking", response_model=WebhookAckResponse)
+async def square_booking_webhook(
+    request: Request,
+    square_signature: str | None = Header(
+        default=None, alias="x-square-hmacsha256-signature"
+    ),
+) -> WebhookAckResponse:
+    settings = get_settings()
+    payload = await request.body()
+
+    if len(payload) > MAX_WEBHOOK_PAYLOAD_BYTES:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail="Webhook payload exceeds size limit.",
+        )
+
+    _verify_square_signature(payload, square_signature, settings)
+
+    try:
+        payload_json = json.loads(payload.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Webhook payload must be valid JSON.",
+        ) from exc
+
+    event_id = str(payload_json.get("event_id") or payload_json.get("id") or "").strip()
+    if not event_id:
+        event_id = f"square-{hashlib.sha256(payload).hexdigest()[:20]}"
+
+    log_dir = _resolve_square_log_dir(settings)
+    if _is_duplicate_square_event(event_id, log_dir):
+        return WebhookAckResponse(event_id=event_id, processed=True, duplicate=True)
+
+    _append_square_logs(event_id, payload_json, log_dir)
+    _mark_square_event_processed(event_id, log_dir)
 
     return WebhookAckResponse(event_id=event_id, processed=True, duplicate=False)
