@@ -21,6 +21,8 @@ import AntiGravity from '../components/AntiGravity';
 import CharitySection from '../components/CharitySection';
 import Transparency from '../components/Transparency';
 
+import Settings from '../components/Settings';
+
 const platforms = [
   {
     name: "youandinotai.com",
@@ -46,6 +48,7 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [apiKey, setApiKey] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark for command center feel
+  const [systemLogs, setSystemLogs] = useState<string[]>([]);
   const [metrics, setMetrics] = useState({
     revenue: 0,
     customers: 0,
@@ -63,6 +66,12 @@ export default function Dashboard() {
       .then(res => res.json())
       .then(data => setMetrics(data))
       .catch(err => console.error("Error fetching metrics:", err));
+
+    // Fetch system logs
+    fetch('/api/system-logs')
+      .then(res => res.json())
+      .then(data => setSystemLogs(data.logs || []))
+      .catch(err => console.error("Error fetching logs:", err));
   }, []);
 
   // Toggle dark mode class on the html element
@@ -83,6 +92,7 @@ export default function Dashboard() {
     { id: 'integrations', label: 'Integrations', icon: Zap },
     { id: 'transparency', label: 'Impact Ledger', icon: Heart },
     { id: 'organization', label: 'Organization', icon: ShieldCheck },
+    { id: 'settings', label: 'System Config', icon: Key },
   ];
 
   const StatCard = ({ label, value, icon: Icon, color, subValue }: any) => (
@@ -313,11 +323,15 @@ export default function Dashboard() {
                         <Terminal size={18} className="text-blue-500" /> SYSTEM LOGS
                       </h3>
                       <div className={`font-mono text-[10px] space-y-2 p-4 rounded-2xl h-48 overflow-y-auto ${isDarkMode ? 'bg-black/50 text-slate-400' : 'bg-slate-100 text-slate-600'}`}>
-                        <p className="text-blue-400">[SYSTEM] Authentication successful: Root User</p>
-                        <p>[NETWORK] 3 Nodes active: 9020, T5500, SABRETOOTH</p>
-                        <p>[DATABASE] Connected to PostgreSQL via Prisma</p>
-                        <p>[STRIPE] Webhook listener active on /api/webhook/stripe</p>
-                        <p className="text-emerald-500">[WEBHOOK] Status 200: Listener ready for April 4</p>
+                        {systemLogs.length > 0 ? (
+                          systemLogs.map((log, i) => (
+                            <p key={i} className={log.includes('[ERROR]') ? 'text-red-400' : log.includes('[STATUS]') ? 'text-blue-400' : ''}>
+                              {log}
+                            </p>
+                          ))
+                        ) : (
+                          <p className="animate-pulse">Initializing telemetry...</p>
+                        )}
                         <p className="animate-pulse">_</p>
                       </div>
                     </div>
@@ -331,6 +345,7 @@ export default function Dashboard() {
               {activeTab === 'integrations' && <Integrations isDarkMode={isDarkMode} />}
               {activeTab === 'transparency' && <Transparency isDarkMode={isDarkMode} />}
               {activeTab === 'organization' && <Organization isDarkMode={isDarkMode} />}
+              {activeTab === 'settings' && <Settings isDarkMode={isDarkMode} />}
               {activeTab === 'architecture' && (
                  <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
                    <div className="text-center mb-12">
