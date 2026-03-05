@@ -11,7 +11,7 @@ settings = get_settings()
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
-    description="REST backend for registration, Stripe webhooks, and matching.",
+    description="REST backend for registration, payment webhooks (Stripe/Square), and matching.",
     docs_url="/api/v1/docs",
     openapi_url="/api/v1/openapi.json",
 )

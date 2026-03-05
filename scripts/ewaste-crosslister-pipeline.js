@@ -7,6 +7,51 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const INTAKE_DIR = path.join(ROOT, "data", "ewaste-intake");
 const OUTPUT_DIR = path.join(INTAKE_DIR, "output");
+const DEFAULT_BATCH_SIZE = 5;
+
+const PRIMARY_PROFILE = {
+  id: "primary",
+  format: null,
+  title_suffix: "Tested Charity",
+  description_blurb:
+    "Configured for fastest transparent resale while preserving charity impact reporting.",
+  price_multiplier: 1.0,
+};
+
+const VARIANT_PROFILES = [
+  {
+    id: "best-offer",
+    format: "buy_it_now",
+    title_suffix: "Best Offer Enabled",
+    description_blurb:
+      "Use this variant when enabling Best Offer to improve sell-through while keeping disclosures unchanged.",
+    price_multiplier: 1.05,
+  },
+  {
+    id: "auction-7d",
+    format: "auction_7_day",
+    title_suffix: "7-Day Auction",
+    description_blurb:
+      "Use this auction variant only when rapid cashflow is needed and market comps support bidding demand.",
+    price_multiplier: 0.88,
+  },
+  {
+    id: "local-pickup",
+    format: "buy_it_now_local_pickup",
+    title_suffix: "Local Pickup Option",
+    description_blurb:
+      "Use this variant for local pickup and reduced shipping overhead where geography allows.",
+    price_multiplier: 0.96,
+  },
+  {
+    id: "price-drop",
+    format: "buy_it_now",
+    title_suffix: "Quick Sale Pricing",
+    description_blurb:
+      "Use this variant after 5-7 days unsold to accelerate conversion without changing the condition disclosure.",
+    price_multiplier: 0.92,
+  },
+];
 
 function readFile(p) {
   return fs.readFileSync(p, "utf8");
@@ -108,7 +153,8 @@ function loadByIntake(fileName) {
 }
 
 function main() {
-  const batchSize = Number(process.argv[2] || 1);
+  const parsedBatchSize = Number(process.argv[2] || DEFAULT_BATCH_SIZE);
+  const batchSize = Number.isFinite(parsedBatchSize) ? Math.max(1, parsedBatchSize) : DEFAULT_BATCH_SIZE;
   const intakePath = path.join(INTAKE_DIR, "intake-inventory-template.csv");
   if (!fs.existsSync(intakePath)) {
     throw new Error(`Missing inventory file: ${intakePath}`);
@@ -130,12 +176,31 @@ function main() {
     return;
   }
 
-  const selected = eligible.slice(0, Math.max(1, batchSize));
+  const primaryRows = eligible.slice(0, batchSize);
+  const selectionPlan = primaryRows.map((row) => ({
+    row,
+    profile: PRIMARY_PROFILE,
+  }));
+
+  if (selectionPlan.length < batchSize) {
+    for (const row of eligible) {
+      for (const profile of VARIANT_PROFILES) {
+        if (selectionPlan.length >= batchSize) {
+          break;
+        }
+        selectionPlan.push({ row, profile });
+      }
+      if (selectionPlan.length >= batchSize) {
+        break;
+      }
+    }
+  }
+
   const now = new Date();
   const ts = now.toISOString().replace(/[:.]/g, "-");
   const batchId = `CODEX-EBAY-REVENUE-20260304-${now.getUTCFullYear()}${String(now.getUTCMonth() + 1).padStart(2, "0")}${String(now.getUTCDate()).padStart(2, "0")}`;
 
-  const listings = selected.map((r, idx) => {
+  const listings = selectionPlan.map(({ row: r, profile }, idx) => {
     const g = grades.get(r.intake_id) || {};
     const t = tests.get(r.intake_id) || {};
     const v = values.get(r.intake_id) || {};
@@ -151,11 +216,11 @@ function main() {
       cpu,
       ram,
       storage,
-      "Tested",
-      "Charity"
+      profile.title_suffix
     ]);
 
-    const recommendedPrice = num(v.recommended_start_or_bin_usd || v.expected_sale_price_usd || 0, 0);
+    const basePrice = num(v.recommended_start_or_bin_usd || v.expected_sale_price_usd || 0, 0);
+    const recommendedPrice = Number((basePrice * Number(profile.price_multiplier || 1)).toFixed(2));
     const charityPct = num(v.charity_share_pct, 60);
     const charityUsd = num(v.projected_charity_usd, 0);
     const grade = g.grade || "Used";
@@ -190,6 +255,8 @@ function main() {
       `</ul>`,
       `<p><strong>Shipping:</strong> Ships in 1-2 business days, anti-static packed, tracking included, no PO boxes for oversized hardware.</p>`,
       `<p><strong>Charity impact:</strong> ${charityPct}% of net proceeds allocated to kids in medical need. Projected charity from this item: $${charityUsd.toFixed(2)}.</p>`,
+      `<p><strong>Listing strategy:</strong> ${escHtml(profile.description_blurb)}</p>`,
+      `<p><strong>Inventory control:</strong> Publish only one active listing variant per physical unit (${escHtml(r.asset_tag || r.intake_id)}) at a time.</p>`,
       `<p><em>Policy note:</em> Serials are asset-tracked; only items shown/listed are included; any untested function is explicitly disclosed.</p>`
     ].join("\n");
 
@@ -199,7 +266,8 @@ function main() {
       intake_id: r.intake_id,
       asset_tag: r.asset_tag,
       channel: "ebay",
-      listing_format: v.recommended_listing_format || "buy_it_now",
+      listing_variant: profile.id,
+      listing_format: profile.format || v.recommended_listing_format || "buy_it_now",
       suggested_price_usd: recommendedPrice,
       title,
       category_hint: `${r.device_type || "electronics"} > ${r.make || ""}`.trim(),
@@ -243,6 +311,7 @@ function main() {
   for (const item of listings) {
     mdLines.push(`## ${item.intake_id} - ${item.title}`);
     mdLines.push("");
+    mdLines.push(`- Variant: ${item.listing_variant}`);
     mdLines.push(`- Suggested Price: $${Number(item.suggested_price_usd || 0).toFixed(2)}`);
     mdLines.push(`- Format: ${item.listing_format}`);
     mdLines.push(`- Condition: ${item.condition_grade} - ${item.condition_summary}`);
