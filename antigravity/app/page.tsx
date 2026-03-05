@@ -49,12 +49,12 @@ const platforms = [
 ];
 
 const deploymentSteps = [
-  { title: "T5500 Node — ACTIVE", description: "Primary production node running Windows 10, GTX 1070 8GB (CUDA 12.6). Claude Opus 4.6 CLI, Docker (Redis, Qdrant, Ollama), all dev servers." },
-  { title: "SABRETOOTH Node — OFFLINE", description: "Former primary dev orchestrator. Currently offline pending hardware refresh." },
-  { title: "9020 Node — OFFLINE", description: "Secondary dev node. Currently offline." },
+  { title: "9020 Node — ACTIVE", description: "Marketing/Production node. i7-4790, 32GB RAM, GTX 1070 8GB. Opus Claude Code 4.6 — sole marketing orchestrator. 24/7 social engine, 13 platforms, Playwright browser automation." },
+  { title: "T5500 Node — ACTIVE", description: "Heavy compute node. Dual Xeon, 72GB RAM, GTX 1070 8GB. Opus Claude Code — backend dev, bulk processing." },
+  { title: "SABRETOOTH Node — ACTIVE", description: "Task sentry node. 64GB RAM. Codex — task queue, e-waste pipeline, vault ops. Workspace: E:\\Antigravity." },
   { title: "OMEGA Fleet — NOT STARTED", description: "Future fleet of recycled machines. Activated after revenue supports expansion." },
   { title: "Cloudflare Pages", description: "All production sites deployed via Cloudflare Pages with wrangler CLI. DNS via Cloudflare. No AWS, no Netlify." },
-  { title: "Docker Compose", description: "Local services: Redis (6379), Qdrant (6333), Ollama (11434). No Kubernetes — Docker Compose on T5500." }
+  { title: "Docker Compose", description: "Local services: Redis (6379), Qdrant (6333), Ollama (11434). Docker Compose on nodes as needed." }
 ];
 
 export default function Dashboard() {
