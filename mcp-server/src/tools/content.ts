@@ -43,7 +43,7 @@ const CONTENT_BANK: Post[] = [
     platform: "reddit",
     subreddit: "r/SideProject",
     title: "I built a dating app that donates 60% of revenue to children's hospitals",
-    body: "Hey everyone — electrician from Florida here. Self-taught coder.\n\nI built YouAndINotAI, a dating app with a $1 entry fee that keeps bots out. 60% of every dollar goes to Shriners Children's Hospital. The split is enforced on-chain so I can't change it even if I wanted to.\n\nStack: React + FastAPI + Stripe + PostgreSQL. Deployed on Cloudflare Pages.\n\nNo VC money. No data harvesting. Launching April 4.\n\nWould love feedback on the concept and landing page: youandinotai.com",
+    body: "Hey everyone — electrician from Florida here. Self-taught coder.\n\nI built YouAndINotAI, a dating app with a $1 entry fee that keeps bots out. 60% of every dollar goes to Shriners Children's Hospital. The split is enforced on-chain via smart contract on Base blockchain — I can't change it even if I wanted to.\n\nStack: React + FastAPI + Square + PostgreSQL. Deployed on Cloudflare Pages.\n\nNo VC money. No data harvesting. Launching April 4.\n\nWould love feedback on the concept and landing page: youandinotai.com",
     notes: "Include link in body. This sub allows it.",
   },
   {

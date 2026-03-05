@@ -82,9 +82,9 @@ ENIGMA and OMEGA **never cross**. Separate wallets, separate infrastructure, sep
 | Frontend | React 19 + Vite + Three.js (Gemini built it) |
 | Hosting | Cloudflare Pages (unlimited bandwidth) |
 | Backend (planned) | FastAPI + PostgreSQL on GCP Cloud Run |
-| Payments | Stripe Checkout (live, 5 links working) |
+| Payments | Square Checkout (live, 5 links, merchant LY5GN09F5AN83) |
 | DNS/SSL | Cloudflare (Full strict SSL) |
-| Smart Contracts | Solidity on Base Mainnet (CharityRouter100, DatingRevenueRouter) |
+| Smart Contracts | GospelDonation.sol on Base Mainnet (verified: 0x9855B75061D4c841791382998f0CE8B2BCC965A4) |
 | CLI/Code | Claude Opus via Claude Code on T5500 |
 
 ### Hosting — Cloudflare Pages ONLY
@@ -260,7 +260,7 @@ When partners, sponsors, or investors approach the project, Claude and Gemini ru
 
 ### Sponsor Profit Share Model
 - Sponsors get profit share at **operational LLC level** BEFORE DAO sweep
-- This NEVER touches the 60/30/10 split — that's immutable on-chain
+- This NEVER touches the 60/30/10 split — that's immutable on-chain (GospelDonation.sol)
 - Think of it as: revenue → LLC expenses (including sponsor profit share) → remaining profit → 60/30/10 DAO split
 
 ---

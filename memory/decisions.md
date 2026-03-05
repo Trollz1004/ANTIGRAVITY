@@ -46,7 +46,7 @@ Every architectural decision is recorded here so no future session re-debates it
 **Decision**: Deploy perpetual DAO on Base Mainnet  
 **Why**: Ensure mission survives regardless of what happens to Joshua  
 **Impact**: 60/30/10 split enforced by smart contract, not humans  
-**Status**: Deployed and locked
+**Status**: Deployed and locked. GospelDonation.sol verified at 0x9855B75061D4c841791382998f0CE8B2BCC965A4 on Base Mainnet. Gnosis Safe 2-of-2 multisig on Charity + Infra wallets.
 
 ## Earlier: Dual-purpose index.html
 

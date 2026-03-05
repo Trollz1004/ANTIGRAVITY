@@ -47,14 +47,14 @@
 | API Token | Cloudflare dashboard (Profile > API Tokens) |
 | Login | joshlcoleman@gmail.com (Google sign-in) |
 
-## Crypto / DAO (Base Mainnet, Chain 8453)
+## Crypto / DAO (Base Mainnet, Chain 8453) — GospelDonation.sol DEPLOYED
 
-| Wallet | Address |
-|--------|---------|
-| DAO Treasury | 0xa87874d5320555c8639670645F1A2B4f82363a7c |
-| Dating Revenue | 0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121 |
-| Charity Revenue | 0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B |
-| Ops Wallet | 0xc043F5D516ee024d1dB812cb81fB64302b0Fe2B4 |
+| Wallet | Address | Type |
+|--------|---------|------|
+| GospelDonation Contract | 0x9855B75061D4c841791382998f0CE8B2BCC965A4 | Verified on BaseScan |
+| Charity Fund (60%) | 0x8d3dEADbE2b4B857A43331D459270B5eedC7084e | Gnosis Safe 2-of-2 |
+| Infrastructure/Dev (30%) | 0xe0a42f83900af719019eBeD3D9473BE8E8f2920b | Gnosis Safe 2-of-2 |
+| Founder/Ops (10%) | 0x7c3E283119718395Ef5EfBAC4F52738C2018daA7 | Phantom Wallet |
 
 > Wallet addresses are PUBLIC by design (on-chain). These are NOT secrets.
 
