@@ -18,11 +18,11 @@ function stripeHeaders() {
 
 // Payment links — canonical source of truth
 const PAYMENT_LINKS = [
-  { name: "Bot-Shield", price: "$1", type: "one-time", url: "https://buy.stripe.com/3cI3cwcR6c3910p18peEo09" },
-  { name: "Founding Member", price: "$14.99/mo", type: "subscription", url: "https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a" },
-  { name: "3-Month Founder", price: "$39.99", type: "one-time", url: "https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j" },
-  { name: "12-Month Founder", price: "$99.99", type: "one-time", url: "https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c" },
-  { name: "Royalty Card", price: "$2,500", type: "one-time", url: "https://buy.stripe.com/dRmcN604kebheRf2cteEo0d" },
+  { name: "Bot-Shield", price: "$1", type: "one-time", url: "https://square.link/u/eMyJvw8D" },
+  { name: "Founding Member", price: "$14.99/mo", type: "subscription", url: "https://square.link/u/ipY5VUT5" },
+  { name: "3-Month Founder", price: "$39.99", type: "one-time", url: "https://square.link/u/cCkmYsFw" },
+  { name: "12-Month Founder", price: "$99.99", type: "one-time", url: "https://square.link/u/HlvE57fI" },
+  { name: "Royalty Card", price: "$2,500", type: "one-time", url: "https://square.link/u/0QQllAFQ" },
 ] as const;
 
 export function registerStripeTools(server: McpServer) {
