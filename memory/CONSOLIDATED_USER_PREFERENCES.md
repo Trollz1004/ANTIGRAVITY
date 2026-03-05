@@ -22,11 +22,10 @@
 - "TASKS COMPLETE" is NEVER true until Claude can say "I cannot find a kid in need."
 - Every session, every TODO, every script is incremental toward that 50-year mission.
 
-## SURVIVAL MODE — CURRENT REALITY
+## FINANCIAL REALITY (NOT "SURVIVAL MODE" — split is 60/30/10 from day one)
 - Josh funded EVERYTHING solo for 1+ year. No other income. Savings drained.
-- DateApp pre-orders + Feb 14 2026 launch = the funding lifeline.
 - Revenue must cover: charity ops, servers, domains, electric, AI subs, property taxes.
-- Failure means losing the house (owned outright, but taxes/utilities still due).
+- Canonical split: 60% Shriners / 30% V8 Infra / 10% Founder — PERMANENT, no phased transition.
 - This is NOT a hobby project. This is life-or-death infrastructure.
 
 ## NODES

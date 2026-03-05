@@ -36,7 +36,7 @@ INCLUDES:
 - Next.js 14 transparency dashboard
 - Full documentation and runbooks
 
-Gospel V1.4.1 SURVIVAL MODE
+Gospel V1.4.1 [SURVIVAL MODE label ARCHIVED — canonical is 60/30/10 from day one]
 "Until no kid is in need"
 ```
 

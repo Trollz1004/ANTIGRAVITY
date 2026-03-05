@@ -7,7 +7,7 @@
 ## TASK 1: UPDATE GEMINI PROXY WORKER
 **Status: DONE**
 
-- Updated Worker secret with platform key `AIzaSyB9-Fs16v645FGjdlfudk0X2zABUlTxo0M`
+- Updated Worker secret with platform key `[REDACTED-ROTATED]`
 - Rewrote proxy to be transparent SDK passthrough (strips client key, injects real key)
 - Tested: `curl -X POST .../v1beta/models/gemini-2.0-flash:generateContent` → 200 OK, working
 - Worker URL: `https://gemini-proxy.joshlcoleman.workers.dev`
@@ -35,7 +35,7 @@
 | .env.local (youandinotai) | Both Gemini keys (local dev only) |
 | Cloudflare Worker Secret | Platform key on `gemini-proxy` worker |
 
-Old burned key `AIzaSyDDtwMRbuKLHCPVBDWzJntF1PL6An6pZys` documented as leaked in vault.
+Old burned key `[BURNED-REDACTED]` documented as leaked in vault.
 
 ## TASK 4: HTTPS CERT
 **Status: STILL PENDING**
@@ -59,8 +59,8 @@ Old burned key `AIzaSyDDtwMRbuKLHCPVBDWzJntF1PL6An6pZys` documented as leaked in
 
 | Token | Value | Permissions |
 |-------|-------|-------------|
-| FTK Bearer Token | `X0hAJjrzTrtLlZGDbpzuPw_FL2AP52wXb6U1T0Bt` | Zone.Zone, Workers Routes, DNS |
-| Global API Key | `c79e1a66ce1aaef6ccbd32e598ebc0f6082cd` | Full admin (all services) |
+| FTK Bearer Token | `[REDACTED-ROTATED]` | Zone.Zone, Workers Routes, DNS |
+| Global API Key | `[REDACTED-ROTATED]` | Full admin (all services) |
 
 Both stored in vault + GitHub secrets on both repos.
 

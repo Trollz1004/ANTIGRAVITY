@@ -9,19 +9,21 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 /**
  * @title DatingRevenueRouter
- * @author FOR THE KIDS Platform - Gospel V1.4.1 SURVIVAL MODE
- * @notice Revenue router for dating app with three-phase transition model
- * @dev UUPS Upgradeable contract with the following phases:
+ * @author FOR THE KIDS Platform
+ * @notice ARCHIVED — This contract is NOT DEPLOYED. The phased model below is SUPERSEDED.
+ * @dev ARCHIVED: Canonical split is 60/30/10 from day one (Protocol Omega).
+ *      The survival mode / phased model was never deployed.
+ *      See briefings/CLAUDE-SKILL.md for current truth.
  *
- *      SURVIVAL MODE (Phase 1):
+ *      [LEGACY — NOT CURRENT] SURVIVAL MODE (Phase 1):
  *      - 100% to founder for platform sustainability
  *
- *      TRANSITION MODE (Phase 2):
+ *      [LEGACY — NOT CURRENT] TRANSITION MODE (Phase 2):
  *      - Gradual shift toward charity allocation
  *      - Changes require 7-30 day timelock
  *      - Democratic governance via GOVERNOR_ROLE
  *
- *      PERMANENT MODE (Phase 3):
+ *      [LEGACY — NOT CURRENT] PERMANENT MODE (Phase 3):
  *      - IRREVERSIBLE - cannot go back to earlier phases
  *      - Founder capped at maximum 10%
  *      - DAO and Charity receive the rest permanently
