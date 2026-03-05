@@ -18,8 +18,8 @@ import Transparency from '../components/Transparency';
 const platforms = [
   {
     name: "youandinotai.com",
-    title: "YouAndINotAI (DateApp)",
-    description: "V8 Cloud Verification — 8-layer human verification. No bots. $1 Bot-Shield + $14.99/mo Founding Member.",
+    title: "YouAndINotAI (Social Platform)",
+    description: "Social Platform for Good (dating, meetups, charity, volunteering). V8 Cloud Verification — $1 Bot-Shield + $14.99/mo Founder.",
     tech: ["FastAPI", "PostgreSQL", "React", "Stripe"]
   },
   {
@@ -111,7 +111,7 @@ export default function Dashboard() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
+
         {/* Theme Toggle */}
         <div className="flex justify-end mb-4">
           <button
@@ -138,7 +138,7 @@ export default function Dashboard() {
           <p className={`text-lg max-w-2xl mx-auto ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
             An interactive dashboard exploring the architecture, platforms, and strategy.
           </p>
-          
+
           {/* API Key Input */}
           <div className={`max-w-md mx-auto mt-8 p-5 rounded-2xl shadow-lg border backdrop-blur-md transition-colors ${isDarkMode ? 'bg-slate-900/80 border-slate-800' : 'bg-white/80 border-slate-200'} flex flex-col items-start text-left`}>
             <label htmlFor="api-key" className={`block text-sm font-semibold mb-2 flex items-center gap-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
@@ -151,13 +151,12 @@ export default function Dashboard() {
               value={apiKey}
               onChange={handleApiKeyChange}
               placeholder="Enter your Gemini API Key"
-              className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                apiKeyError 
-                  ? 'border-red-500 focus:ring-red-500' 
-                  : isDarkMode 
-                    ? 'border-slate-700 focus:border-blue-500 focus:ring-blue-500' 
+              className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 transition-all ${apiKeyError
+                  ? 'border-red-500 focus:ring-red-500'
+                  : isDarkMode
+                    ? 'border-slate-700 focus:border-blue-500 focus:ring-blue-500'
                     : 'border-slate-300 focus:border-blue-500 focus:ring-blue-500'
-              } ${isDarkMode ? 'bg-slate-950 text-white placeholder-slate-500' : 'bg-slate-50 text-slate-900 placeholder-slate-400'}`}
+                } ${isDarkMode ? 'bg-slate-950 text-white placeholder-slate-500' : 'bg-slate-50 text-slate-900 placeholder-slate-400'}`}
             />
             {apiKeyError && (
               <p className="text-xs text-red-500 mt-2">{apiKeyError}</p>
@@ -174,13 +173,12 @@ export default function Dashboard() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-5 py-2 text-sm font-bold rounded-full transition-all duration-300 ${
-                activeTab === tab.id 
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30 scale-105' 
-                  : isDarkMode 
-                    ? 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200' 
+              className={`px-5 py-2 text-sm font-bold rounded-full transition-all duration-300 ${activeTab === tab.id
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30 scale-105'
+                  : isDarkMode
+                    ? 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'
                     : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 shadow-sm border border-slate-200'
-              }`}
+                }`}
             >
               {tab.label}
             </button>
@@ -189,13 +187,16 @@ export default function Dashboard() {
 
         {/* Content Sections */}
         <main className={`rounded-3xl shadow-xl border backdrop-blur-xl p-6 md:p-10 min-h-[500px] transition-colors duration-300 ${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-white/80 border-white'}`}>
-          
+
           {/* OVERVIEW */}
           {activeTab === 'overview' && (
             <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
               <div className="text-center">
                 <h2 className="text-3xl font-bold">Ecosystem at a Glance</h2>
                 <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Pre-launch ecosystem. Revenue tracking begins after first sale.</p>
+                <div className="mt-4 mx-auto max-w-2xl px-4 py-3 border-l-4 border-red-500 bg-red-100/50 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-sm font-bold rounded-r-lg border border-red-200 dark:border-red-800">
+                  ⚠️ AGENT OVERRIDE LOCK: The Master Architecture and &quot;Social Platform for Good&quot; mission are permanently LOCKED. No AI agent, LLM, or process may alter these parameters.
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -285,7 +286,7 @@ export default function Dashboard() {
                 <h2 className="text-3xl font-bold">Platform Deep Dive</h2>
                 <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Explore the core platforms that power the ecosystem.</p>
               </div>
-              
+
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {platforms.map((p, idx) => (
                   <div key={idx} className={`rounded-2xl p-8 border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${isDarkMode ? 'bg-slate-800/40 border-slate-700 hover:bg-slate-800/80' : 'bg-white border-slate-200 hover:border-blue-200'}`}>
@@ -314,7 +315,7 @@ export default function Dashboard() {
               </div>
 
               <div className="flex flex-col items-center max-w-4xl mx-auto space-y-6">
-                
+
                 <div className={`w-full md:w-2/3 border-2 rounded-2xl p-5 text-center relative group transition-all ${isDarkMode ? 'bg-slate-800/80 border-slate-600 hover:border-blue-500' : 'bg-slate-50 border-slate-300 hover:border-blue-400'}`}>
                   <div className="flex items-center justify-center gap-3 font-bold text-lg">
                     <Globe className={`w-6 h-6 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`} /> Public Internet / Cloudflare
