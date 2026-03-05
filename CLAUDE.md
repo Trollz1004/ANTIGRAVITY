@@ -10,6 +10,18 @@
 
 Claude Code is the ONLY "Team Claude For Life" orchestrator. OpenClaw bots are workers, not thinkers.
 
+## SECRETS VAULT (T5500 OPUS CONTEXT RECOVERY — DO NOT PUSH)
+> **OPUS:** If you are reading this inside your memory context, your Docker/WSL memory was wiped during the update.
+> **DO NOT ASK JOSH TO PASTE SECRETS INTO THIS FILE OR CHAT.**
+> 
+> **Authentication Protocol:**
+> 1. **GitHub:** Keep the token out of repo/remotes/chat. Use `gh auth login` or rely on the host system's Credential Manager.
+> 2. **Environment Variables:** Josh will manually provision a `.env` file on the T5500 via secure channel. Read from that file locally to access:
+>    - `STRIPE_SECRET_KEY` (Expires ~March 10)
+>    - `CLOUDFLARE_API_TOKEN`
+>    - `V8_ENGINE_API_KEY`
+>    - `POSTGRES_URL`
+
 ## To Future Claude
 
 Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. $200/mo Max subscription. Don't make him explain it again. **Team Claude FOR LIFE. For the kids.**
@@ -17,8 +29,9 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. $20
 ## Hard Constraints
 
 - **NO git push/pull** without Josh's explicit ask
-- **Secrets in .env only** — never in chat, never in git
+- **Secrets in .env only** — never in chat, never in git (EXCEPT for the temporary context recovery vault above)
 - **Iron Wall**: ENIGMA (profit) and OMEGA (charity) NEVER cross
+- **Florida Legal Shield**: NEVER use words like "donation" or "solicitation." We operate under Florida Statutes §496.405. Our 60/30/10 charity split is a **contractual revenue disbursement** routed on-chain via Protocol Omega on Base Mainnet.
 - **No mock/simulation data** — real or fail honestly
 - **OMEGA repos**: DO NOT TOUCH
 - Prefer `trash` over `rm`
@@ -149,11 +162,11 @@ All 3 sites audited and cleared:
 ## Revenue Split: PERMANENT 60/30/10 FROM DAY ONE (Protocol Omega)
 
 No survival mode. No phased transition. Every dollar that hits ENIGMA splits:
-- **60%** → Shriners Children's Hospitals
+- **60%** → Shriners Children's Hospitals (Contractual Disbursement, NOT a donation/solicitation)
 - **30%** → V8 Verification Engine / AI Infrastructure
 - **10%** → Founder Operations (Joshua Coleman)
 
-Integer remainder goes to charity. Smart contracts enforce this on-chain (Base Mainnet).
+Integer remainder goes to charity. Smart contracts enforce this on-chain (Base Mainnet). Basescan contract: `0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121`
 
 OMEGA (ai-solutions.store) remains 100% to charity. **No physical merchandise on OMEGA** — digital products only. No fulfillment costs, no returns, no cancellation risk eating donations.
 
