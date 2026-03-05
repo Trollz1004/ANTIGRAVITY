@@ -85,6 +85,8 @@ class MatchResponse(BaseModel):
     photos: list[str]
     matched_at: datetime
     last_message_at: datetime | None
+    verified: bool = False
+    subscription_active: bool = False
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -96,6 +98,8 @@ class DiscoverProfileResponse(BaseModel):
     photos: list[str]
     interests: list[str]
     location: str | None
+    verified: bool = False
+    subscription_active: bool = False
     model_config = ConfigDict(from_attributes=True)
 
 

@@ -13,6 +13,8 @@ interface Profile {
   photos: string[];
   interests: string[];
   location: string | null;
+  verified?: boolean;
+  subscription_active?: boolean;
 }
 
 export function Discover() {

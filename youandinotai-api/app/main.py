@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 from app.config import get_settings
-from app.routers import auth, boards, events, health, messages, profiles, swipe, volunteering, webhooks
+from app.routers import auth, boards, events, health, messages, metrics, profiles, swipe, verify, volunteering, webhooks
 
 settings = get_settings()
 
@@ -36,6 +36,8 @@ app.include_router(boards.router, prefix="/api/v1", tags=["boards"])
 app.include_router(events.router, prefix="/api/v1", tags=["events"])
 app.include_router(volunteering.router, prefix="/api/v1", tags=["volunteering"])
 app.include_router(webhooks.router, prefix="/api/v1", tags=["webhooks"])
+app.include_router(verify.router, prefix="/api/v1", tags=["verification"])
+app.include_router(metrics.router, prefix="/api/v1", tags=["metrics"])
 
 # Static file serving for uploads
 uploads_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")

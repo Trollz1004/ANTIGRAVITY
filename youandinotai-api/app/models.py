@@ -259,3 +259,25 @@ class VolunteerSignup(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
+
+class VerificationEvent(Base):
+    """Tracks liveness verification attempts and their outcomes."""
+    __tablename__ = "verification_events"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    challenge_type: Mapped[str] = mapped_column(String(50), nullable=False)  # 'liveness', 'email', 'payment'
+    challenge_token: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    status: Mapped[str] = mapped_column(String(20), default="pending", nullable=False)  # pending, passed, failed, expired
+    trust_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    stripe_checkout_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    amount_cents: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

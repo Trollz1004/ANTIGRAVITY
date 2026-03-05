@@ -98,6 +98,8 @@ async def get_matches(
                 photos=(other_profile.photos or []) if other_profile else [],
                 matched_at=match.matched_at,
                 last_message_at=match.last_message_at,
+                verified=(other_profile.verified if other_profile else False),
+                subscription_active=(other_user.subscription_active if other_user else False),
             )
         )
     return results
@@ -139,6 +141,8 @@ async def discover(
                 photos=profile.photos or [],
                 interests=profile.interests or [],
                 location=profile.location,
+                verified=profile.verified,
+                subscription_active=profile_user.subscription_active,
             )
         )
     return results
