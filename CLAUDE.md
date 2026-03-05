@@ -79,17 +79,18 @@ C:\ANTIGRAVITY\
 - **Gemini & CodeX (Sabretooth E Drive):** Gemini is structuring platforms, marketing, and nodes for immediate income generation. CodeX is handling the task queue.
 - **Claude:** If doing CLI/code operations, you run on the C Drive (T5500). Focus entirely on "social platform for good" features (volunteering, meetups) and monetization.
 
-## Stripe (LIVE — Account acct_1T3DVxIO6LWQSQoI)
+## Payments (Square PRIMARY — Stripe legacy, expires ~March 10)
 
-Key rotated 2026-02-23. **EXPIRES ~MARCH 10TH.**
+| Product | Square (PRIMARY) | Stripe (LEGACY) |
+|---------|-----------------|-----------------|
+| Bot-Shield $1 | https://square.link/u/eMyJvw8D | https://buy.stripe.com/3cI3cwcR6c3910p18peEo09 |
+| Founding Member $14.99/mo | https://square.link/u/ipY5VUT5 | https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a |
+| 3-Month Founder $39.99 | TBD (create in Square) | https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j |
+| 12-Month Founder $99.99 | TBD (create in Square) | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
+| Royalty Card $2,500 | TBD (create in Square) | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
 
-| Product | Link |
-|---------|------|
-| Bot-Shield $1 | https://buy.stripe.com/3cI3cwcR6c3910p18peEo09 |
-| Founding Member $14.99/mo | https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a |
-| 3-Month Founder $39.99 | https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j |
-| 12-Month Founder $99.99 | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
-| Royalty Card $2,500 | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
+Square account: ebaytrashortreasure@gmail.com (Merchant ML3C7FMTQS5KX, bank attached)
+Stripe key rotated 2026-03-05 — restricted key, 7-day expiry. Square has no key expiry.
 
 ## Services
 
