@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { 
-  ShieldCheck, Server, Globe, Database, Cpu, LayoutDashboard, 
-  CheckCircle2, Key, Moon, Sun, TrendingUp, Users, Heart, Zap, 
-  Activity, Lock, ArrowUpRight, BarChart3, Terminal
+import {
+  ShieldCheck, Server, Globe, Database, Cpu, LayoutDashboard,
+  CheckCircle2, Key, Moon, Sun, TrendingUp, Users, Heart, Zap,
+  Activity, Lock, ArrowUpRight, BarChart3, Terminal, Gift
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -15,7 +15,7 @@ import Integrations from '../components/Integrations';
 import DAOMetrics from '../components/DAOMetrics';
 import AgentDesigner from '../components/AgentDesigner';
 import KidsPlatform from '../components/KidsPlatform';
-import DonateCollectables from '../components/DonateCollectables';
+import SupportCollectables from '../components/SupportCollectables';
 import Organization from '../components/Organization';
 import AntiGravity from '../components/AntiGravity';
 import CharitySection from '../components/CharitySection';
@@ -86,6 +86,7 @@ export default function Dashboard() {
   const tabs = [
     { id: 'overview', label: 'Command Center', icon: LayoutDashboard },
     { id: 'metrics', label: 'DAO Analytics', icon: BarChart3 },
+    { id: 'support', label: 'Support & Collectables', icon: Gift },
     { id: 'chat', label: 'Gemini Terminal', icon: Terminal },
     { id: 'platforms', label: 'Fleet Nodes', icon: Globe },
     { id: 'architecture', label: 'Core Infra', icon: Database },
@@ -96,13 +97,12 @@ export default function Dashboard() {
   ];
 
   const StatCard = ({ label, value, icon: Icon, color, subValue }: any) => (
-    <motion.div 
+    <motion.div
       whileHover={{ y: -5, scale: 1.02 }}
-      className={`relative p-6 rounded-[2rem] border transition-all duration-300 overflow-hidden ${
-        isDarkMode 
-          ? 'bg-slate-900/60 border-slate-800 shadow-[0_0_40px_rgba(0,0,0,0.5)]' 
-          : 'bg-white border-slate-200 shadow-xl'
-      }`}
+      className={`relative p-6 rounded-[2rem] border transition-all duration-300 overflow-hidden ${isDarkMode
+        ? 'bg-slate-900/60 border-slate-800 shadow-[0_0_40px_rgba(0,0,0,0.5)]'
+        : 'bg-white border-slate-200 shadow-xl'
+        }`}
     >
       <div className={`absolute top-0 right-0 p-4 opacity-5 transform translate-x-2 -translate-y-2`}>
         <Icon size={80} />
@@ -124,23 +124,23 @@ export default function Dashboard() {
 
   return (
     <div className={`min-h-screen font-sans transition-all duration-700 ${isDarkMode ? 'bg-[#020617] text-slate-100' : 'bg-slate-50 text-slate-900'} selection:bg-blue-500/30 overflow-x-hidden`}>
-      
+
       {/* Matrix-style Grid Overlay */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] dark:opacity-[0.07]" 
-        style={{ backgroundImage: 'linear-gradient(#4f46e5 1px, transparent 1px), linear-gradient(90deg, #4f46e5 1px, transparent 1px)', backgroundSize: '40px 40px' }} 
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] dark:opacity-[0.07]"
+        style={{ backgroundImage: 'linear-gradient(#4f46e5 1px, transparent 1px), linear-gradient(90deg, #4f46e5 1px, transparent 1px)', backgroundSize: '40px 40px' }}
       />
 
       {/* Dynamic Background Glows */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <motion.div 
+        <motion.div
           animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-          className={`absolute -top-[10%] -left-[10%] w-[60%] h-[60%] rounded-full blur-[150px] opacity-30 ${isDarkMode ? 'bg-blue-600/20' : 'bg-blue-200/40'}`} 
+          className={`absolute -top-[10%] -left-[10%] w-[60%] h-[60%] rounded-full blur-[150px] opacity-30 ${isDarkMode ? 'bg-blue-600/20' : 'bg-blue-200/40'}`}
         />
-        <motion.div 
+        <motion.div
           animate={{ x: [0, -40, 0], y: [0, -20, 0] }}
           transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-          className={`absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full blur-[150px] opacity-30 ${isDarkMode ? 'bg-purple-600/20' : 'bg-purple-200/40'}`} 
+          className={`absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full blur-[150px] opacity-30 ${isDarkMode ? 'bg-purple-600/20' : 'bg-purple-200/40'}`}
         />
       </div>
 
@@ -180,7 +180,7 @@ export default function Dashboard() {
 
         {/* Sidebar + Main Content Layout */}
         <div className="flex flex-col lg:flex-row gap-8">
-          
+
           {/* Dashboard Navigation */}
           <aside className="lg:w-64 space-y-2">
             <p className="px-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4">Command Terminal</p>
@@ -188,13 +188,12 @@ export default function Dashboard() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-bold transition-all duration-300 group ${
-                  activeTab === tab.id
-                    ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] translate-x-1'
-                    : isDarkMode
-                      ? 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
-                      : 'text-slate-600 hover:bg-white hover:shadow-sm'
-                }`}
+                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-bold transition-all duration-300 group ${activeTab === tab.id
+                  ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] translate-x-1'
+                  : isDarkMode
+                    ? 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
+                    : 'text-slate-600 hover:bg-white hover:shadow-sm'
+                  }`}
               >
                 <tab.icon size={18} className={activeTab === tab.id ? 'text-white' : 'text-blue-500 group-hover:scale-110 transition-transform'} />
                 {tab.label}
@@ -206,8 +205,8 @@ export default function Dashboard() {
                 <Lock size={14} className="text-amber-500" />
                 <span className="text-[10px] font-black uppercase text-slate-500 tracking-widest">GEMINI_API_KEY</span>
               </div>
-              <input 
-                type="password" 
+              <input
+                type="password"
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder="AIza..."
@@ -220,7 +219,7 @@ export default function Dashboard() {
           <main className="flex-1 min-h-[700px]">
             <AnimatePresence mode="wait">
               {activeTab === 'overview' && (
-                <motion.div 
+                <motion.div
                   key="overview"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -255,11 +254,11 @@ export default function Dashboard() {
                           <span className="text-white">60%</span>
                         </div>
                         <div className={`h-4 rounded-full overflow-hidden p-1 ${isDarkMode ? 'bg-slate-950 border border-slate-800' : 'bg-slate-100'}`}>
-                          <motion.div 
+                          <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: '60%' }}
                             transition={{ duration: 1.5, ease: 'circOut' }}
-                            className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)]" 
+                            className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)]"
                           />
                         </div>
                       </div>
@@ -270,11 +269,11 @@ export default function Dashboard() {
                           <span className="text-white">30%</span>
                         </div>
                         <div className={`h-4 rounded-full overflow-hidden p-1 ${isDarkMode ? 'bg-slate-950 border border-slate-800' : 'bg-slate-100'}`}>
-                          <motion.div 
+                          <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: '30%' }}
                             transition={{ duration: 1.5, ease: 'circOut', delay: 0.2 }}
-                            className="h-full bg-gradient-to-r from-purple-600 to-purple-400 rounded-full shadow-[0_0_15px_rgba(147,51,234,0.5)]" 
+                            className="h-full bg-gradient-to-r from-purple-600 to-purple-400 rounded-full shadow-[0_0_15px_rgba(147,51,234,0.5)]"
                           />
                         </div>
                       </div>
@@ -285,11 +284,11 @@ export default function Dashboard() {
                           <span className="text-white">10%</span>
                         </div>
                         <div className={`h-4 rounded-full overflow-hidden p-1 ${isDarkMode ? 'bg-slate-950 border border-slate-800' : 'bg-slate-100'}`}>
-                          <motion.div 
+                          <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: '10%' }}
                             transition={{ duration: 1.5, ease: 'circOut', delay: 0.4 }}
-                            className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]" 
+                            className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]"
                           />
                         </div>
                       </div>
@@ -340,6 +339,7 @@ export default function Dashboard() {
               )}
 
               {activeTab === 'metrics' && <DAOMetrics isDarkMode={isDarkMode} />}
+              {activeTab === 'support' && <SupportCollectables isDarkMode={isDarkMode} />}
               {activeTab === 'chat' && <GeminiChat apiKey={apiKey} isDarkMode={isDarkMode} />}
               {activeTab === 'designer' && <AgentDesigner isDarkMode={isDarkMode} />}
               {activeTab === 'integrations' && <Integrations isDarkMode={isDarkMode} />}
@@ -347,17 +347,17 @@ export default function Dashboard() {
               {activeTab === 'organization' && <Organization isDarkMode={isDarkMode} />}
               {activeTab === 'settings' && <Settings isDarkMode={isDarkMode} />}
               {activeTab === 'architecture' && (
-                 <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                   <div className="text-center mb-12">
-                     <h2 className="text-4xl font-black italic tracking-tighter uppercase italic">CORE INFRASTRUCTURE</h2>
-                     <p className={`mt-3 text-xs font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-500'}`}>T5500 Deep Compute + Node Fleet Orchestration</p>
-                   </div>
-                   {/* Architecture Map Placeholder (Static for brevity) */}
-                   <div className={`p-10 rounded-[3rem] border text-center ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white shadow-sm'}`}>
-                     <Database size={48} className="mx-auto text-blue-500 mb-6 opacity-50" />
-                     <p className="text-slate-500 font-bold uppercase tracking-[0.2em]">Detailed Architecture coming in next update</p>
-                   </div>
-                 </div>
+                <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                  <div className="text-center mb-12">
+                    <h2 className="text-4xl font-black italic tracking-tighter uppercase italic">CORE INFRASTRUCTURE</h2>
+                    <p className={`mt-3 text-xs font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-500'}`}>T5500 Deep Compute + Node Fleet Orchestration</p>
+                  </div>
+                  {/* Architecture Map Placeholder (Static for brevity) */}
+                  <div className={`p-10 rounded-[3rem] border text-center ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white shadow-sm'}`}>
+                    <Database size={48} className="mx-auto text-blue-500 mb-6 opacity-50" />
+                    <p className="text-slate-500 font-bold uppercase tracking-[0.2em]">Detailed Architecture coming in next update</p>
+                  </div>
+                </div>
               )}
             </AnimatePresence>
           </main>

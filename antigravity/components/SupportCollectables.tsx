@@ -6,8 +6,8 @@ export default function DonateCollectables({ isDarkMode }: { isDarkMode: boolean
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="text-center mb-12">
         <h2 className="text-3xl font-bold flex items-center justify-center gap-3">
-          <Heart className="w-8 h-8 text-rose-500" />
-          Give Back & Collectables
+          <Gift className="w-8 h-8 text-rose-500" />
+          Support & Collectables
         </h2>
         <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
           Support Shriners Children&apos;s Hospitals or purchase exclusive digital collectables. 100% of proceeds disbursed to charity.
@@ -30,7 +30,7 @@ export default function DonateCollectables({ isDarkMode }: { isDarkMode: boolean
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center w-full py-3 px-6 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold transition-colors gap-2"
           >
-            Visit Shriners <ExternalLink className="w-4 h-4" />
+            Go to Shriners <ExternalLink className="w-4 h-4" />
           </a>
         </div>
 

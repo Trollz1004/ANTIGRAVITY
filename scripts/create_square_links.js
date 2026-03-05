@@ -24,7 +24,7 @@ const createLink = (name, desc, priceCents, isSub) => {
             },
             checkout_options: {
                 ask_for_shipping_address: false,
-                redirect_url: 'https://youandinotai.com/'
+                redirect_url: 'https://youandinotai.com/?status=success'
             }
         });
 
@@ -64,7 +64,7 @@ async function run() {
             { name: 'Royalty Card', price: 250000, desc: 'Lifetime VIP + revenue share' }
         ];
 
-        console.log(`Generating links for location: ${LOCATION_ID}`);
+        console.log(`Generating links with success redirect for location: ${LOCATION_ID}`);
         for (const plan of plans) {
             const link = await createLink(plan.name, plan.desc, plan.price);
             if (link.payment_link && link.payment_link.url) {
