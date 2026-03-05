@@ -18,3 +18,8 @@ View your app in AI Studio: https://ai.studio/apps/2c8050ad-ec52-410c-822c-c083d
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+---
+> "AI for kids in need, not adults with greed."
+> 
+> **Until no kid is in need. #FORtheKIDS 🚀**

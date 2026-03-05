@@ -105,3 +105,8 @@ python generate_social_post.py \
 ## 🚀 Status
 
 **MISSION COMPLETE** — 56 assets generated and ready for deployment.
+
+---
+> "AI for kids in need, not adults with greed."
+> 
+> **Until no kid is in need. #FORtheKIDS 🚀**

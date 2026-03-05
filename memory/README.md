@@ -27,3 +27,8 @@ When context resets, this is what survives.
 - **Timestamp every update** with ISO format
 - **Claude Code MUST update activeContext.md** at end of every session
 - **sessionHandoff.md** gets rewritten at end of every session
+
+---
+> "AI for kids in need, not adults with greed."
+> 
+> **Until no kid is in need. #FORtheKIDS 🚀**

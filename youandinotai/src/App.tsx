@@ -21,7 +21,6 @@ import { motion, AnimatePresence } from 'motion/react';
 const CosmicContest = lazy(() => import('./components/CosmicContest').then(m => ({ default: m.CosmicContest })));
 const CosmicWall = lazy(() => import('./components/CosmicWall').then(m => ({ default: m.CosmicWall })));
 const ShrinersHonor = lazy(() => import('./components/ShrinersHonor').then(m => ({ default: m.ShrinersHonor })));
-const OpenClawTerminal = lazy(() => import('./components/OpenClawTerminal').then(m => ({ default: m.OpenClawTerminal })));
 const EcosystemStats = lazy(() => import('./components/EcosystemStats').then(m => ({ default: m.EcosystemStats })));
 
 /* ─── Error Boundary for lazy modals ─── */
@@ -417,7 +416,6 @@ const FEATURES = [
   { key: 'contest', icon: Trophy, name: 'Launch Contest', desc: 'Win launch prizes', gradient: 'from-yellow-400 to-orange-500' },
   { key: 'wall', icon: PenTool, name: 'Signature Wall', desc: 'Leave your mark', gradient: 'from-pink-400 to-rose-500' },
   { key: 'shriners', icon: ShieldCheck, name: 'Mars Hall Pass', desc: 'Shriners honor', gradient: 'from-red-400 to-rose-600' },
-  { key: 'terminal', icon: ShieldAlert, name: 'CODE RED', desc: 'OpenClaw terminal', gradient: 'from-red-600 to-red-800' },
   { key: 'ecosystem', icon: LayoutDashboard, name: 'Ecosystem', desc: 'System status', gradient: 'from-indigo-400 to-purple-500' },
 ] as const;
 
@@ -640,11 +638,6 @@ export default function App() {
           {activeModal === 'shriners' && (
             <Suspense fallback={<ModalLoader />}>
               <ShrinersHonor onClose={() => setActiveModal(null)} />
-            </Suspense>
-          )}
-          {activeModal === 'terminal' && (
-            <Suspense fallback={<ModalLoader />}>
-              <OpenClawTerminal onClose={() => setActiveModal(null)} />
             </Suspense>
           )}
           {activeModal === 'ecosystem' && (
