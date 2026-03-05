@@ -71,7 +71,8 @@
 - **FIX**: First attempt failed (JS injection state mismatch). Second attempt used keyboard `type` action on fresh new-story — saved and published successfully.
 
 ### Pinterest (1manstrashistreasure)
-- **ISSUE**: Requires image to create pin — text-only not supported
+- **PIN**: "Turn Your E-Waste Into Impact | OnlineRecycle.org" — OnlineRecycle Shriners image, description with hashtags, link to onlinerecycle.org
+- **FIX**: Image upload via pyautogui (same approach as Instagram)
 
 ### TikTok
 - **ISSUE**: Requires video to post — text-only not supported
