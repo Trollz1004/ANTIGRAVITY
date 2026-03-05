@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OnlineRecycle.org | Drop-Off & Pickup Intake</title>
+  <meta name="description" content="Schedule e-waste drop-off or pickup, submit intake details, and track charity impact through OnlineRecycle.org." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070110;
+      --panel: #101722;
+      --text: #f7fafc;
+      --muted: #9fb3c8;
+      --accent: #22c55e;
+      --accent-2: #16a34a;
+      --line: #203248;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #0f1d2a 0%, var(--bg) 55%);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.45;
+    }
+    .banner {
+      background: #000;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 10px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 99;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 24px; }
+    h1, h2, h3 { margin: 0 0 12px; letter-spacing: -0.02em; }
+    h1 { font-size: clamp(2rem, 4vw, 3.2rem); }
+    h2 { font-size: clamp(1.4rem, 2.4vw, 2rem); }
+    p { color: var(--muted); margin: 0 0 14px; }
+    .hero {
+      border: 1px solid var(--line);
+      background: linear-gradient(140deg, rgba(34,197,94,0.14), rgba(16,23,34,0.92));
+      border-radius: 22px;
+      padding: 28px;
+      margin-top: 18px;
+    }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 14px;
+      padding: 12px 16px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+    .btn-primary { background: var(--accent); color: #07140b; }
+    .btn-primary:hover { background: #31d46a; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--line);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: rgba(16, 23, 34, 0.84);
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .booking-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .booking-links a {
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      text-decoration: none;
+      color: var(--text);
+      background: #0c1623;
+    }
+    .booking-links a:hover { border-color: var(--accent); }
+    form { margin-top: 12px; }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .field { margin-bottom: 10px; }
+    label {
+      display: block;
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9ac6aa;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #07121e;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.14);
+    }
+    .helper {
+      font-size: 0.83rem;
+      color: #9fb3c8;
+      margin-top: 6px;
+    }
+    .footer {
+      margin: 20px 0 6px;
+      font-size: 0.83rem;
+      color: #8ea0b3;
+      text-align: center;
+    }
+    @media (max-width: 760px) {
+      .field-row { grid-template-columns: 1fr; }
+      .wrap { padding: 16px; }
+      .hero { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">#ForTheKids — 60% of net proceeds support children in medical need</div>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>OnlineRecycle Intake + Square Booking</h1>
+      <p>
+        Submit your device intake details first, then book your drop-off or pickup slot in Square.
+        This is the live production intake path for OnlineRecycle.org.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services" target="_blank" rel="noopener noreferrer">Book Drop-Off Slot</a>
+        <a class="btn btn-primary" href="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services" target="_blank" rel="noopener noreferrer">Book Pickup Slot</a>
+        <a class="btn btn-secondary" href="https://onlinerecycle.square.site/" target="_blank" rel="noopener noreferrer">Open Square Store</a>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="intake forms">
+      <article class="card">
+        <h2>Drop-Off Intake Form</h2>
+        <p>Use for local donor drop-offs in Florida. After submit, book a drop-off time in Square.</p>
+        <form action="https://formsubmit.co/joshlcoleman@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="OnlineRecycle Drop-Off Intake" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://onlinerecycle.org/?intake=dropoff-received" />
+          <input type="hidden" name="intake_type" value="dropoff" />
+          <input type="hidden" name="square_booking_flow" value="https://book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services" />
+
+          <div class="field-row">
+            <div class="field">
+              <label for="drop_name">Full Name</label>
+              <input id="drop_name" name="full_name" type="text" required />
+            </div>
+            <div class="field">
+              <label for="drop_email">Email</label>
+              <input id="drop_email" name="email" type="email" required />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="drop_phone">Phone</label>
+              <input id="drop_phone" name="phone" type="tel" required />
+            </div>
+            <div class="field">
+              <label for="drop_org">Business / Org (if any)</label>
+              <input id="drop_org" name="organization" type="text" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="drop_qty">Estimated Device Count</label>
+              <input id="drop_qty" name="device_count" type="number" min="1" required />
+            </div>
+            <div class="field">
+              <label for="drop_window">Preferred Drop-Off Window</label>
+              <input id="drop_window" name="preferred_window" type="text" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="drop_list">Device List (Make/Model/Condition)</label>
+            <textarea id="drop_list" name="device_list" required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="drop_notes">Security / Data Wipe Notes</label>
+            <textarea id="drop_notes" name="security_notes"></textarea>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Submit Drop-Off Intake</button>
+          <p class="helper">After submit, click “Book Drop-Off Slot” above to lock appointment in Square.</p>
+        </form>
+      </article>
+
+      <article class="card">
+        <h2>Pickup Intake Form</h2>
+        <p>Use for business or residential pickup requests. After submit, book pickup in Square.</p>
+        <form action="https://formsubmit.co/joshlcoleman@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="OnlineRecycle Pickup Intake" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://onlinerecycle.org/?intake=pickup-received" />
+          <input type="hidden" name="intake_type" value="pickup" />
+          <input type="hidden" name="square_booking_flow" value="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services" />
+
+          <div class="field-row">
+            <div class="field">
+              <label for="pick_name">Full Name</label>
+              <input id="pick_name" name="full_name" type="text" required />
+            </div>
+            <div class="field">
+              <label for="pick_email">Email</label>
+              <input id="pick_email" name="email" type="email" required />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="pick_phone">Phone</label>
+              <input id="pick_phone" name="phone" type="tel" required />
+            </div>
+            <div class="field">
+              <label for="pick_org">Business / Org (if any)</label>
+              <input id="pick_org" name="organization" type="text" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="pick_address">Pickup Address</label>
+            <input id="pick_address" name="pickup_address" type="text" required />
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="pick_city">City</label>
+              <input id="pick_city" name="city" type="text" required />
+            </div>
+            <div class="field">
+              <label for="pick_zip">ZIP</label>
+              <input id="pick_zip" name="zip" type="text" required />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="pick_qty">Estimated Device Count</label>
+              <input id="pick_qty" name="device_count" type="number" min="1" required />
+            </div>
+            <div class="field">
+              <label for="pick_window">Preferred Pickup Window</label>
+              <input id="pick_window" name="preferred_window" type="text" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="pick_list">Device List (Make/Model/Condition)</label>
+            <textarea id="pick_list" name="device_list" required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="pick_notes">Loading / Access Notes</label>
+            <textarea id="pick_notes" name="access_notes"></textarea>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Submit Pickup Intake</button>
+          <p class="helper">After submit, click “Book Pickup Slot” above to lock appointment in Square.</p>
+        </form>
+      </article>
+    </section>
+
+    <section class="card" style="margin-top: 18px;">
+      <h3>How this flow works</h3>
+      <p>
+        1) Submit intake details here for triage and chain-of-custody records.<br>
+        2) Book your time in Square for confirmed drop-off or pickup scheduling.<br>
+        3) Receive confirmation by email with follow-up from the OnlineRecycle team.
+      </p>
+      <div class="booking-links">
+        <a href="https://book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services" target="_blank" rel="noopener noreferrer"><strong>Drop-Off Booking (Square)</strong><br><span class="helper">book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services</span></a>
+        <a href="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services" target="_blank" rel="noopener noreferrer"><strong>Pickup Booking (Square)</strong><br><span class="helper">book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services</span></a>
+      </div>
+    </section>
+
+    <p class="footer">OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida</p>
+  </main>
+</body>
+</html>
