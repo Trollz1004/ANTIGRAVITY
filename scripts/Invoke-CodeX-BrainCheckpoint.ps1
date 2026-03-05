@@ -127,6 +127,37 @@ function Find-MissionProcesses {
     return @($mission)
 }
 
+function Find-DockerMissionState {
+    param(
+        [string]$ContainerName = $(if ($env:CODEX_DOCKER_CONTAINER) { $env:CODEX_DOCKER_CONTAINER } else { "codex-sabretooth" })
+    )
+
+    $state = [ordered]@{
+        container = $ContainerName
+        docker_available = $false
+        engine_healthy = $false
+        running = $false
+    }
+
+    if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+        return $state
+    }
+
+    $state.docker_available = $true
+    & docker info 1>$null 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        return $state
+    }
+
+    $state.engine_healthy = $true
+    $runningContainer = (& docker ps --filter "name=^/$ContainerName$" --filter "status=running" --format "{{.Names}}" 2>$null | Select-Object -First 1)
+    if (-not [string]::IsNullOrWhiteSpace($runningContainer)) {
+        $state.running = $true
+    }
+
+    return $state
+}
+
 function Get-TaskSnapshot {
     param([string[]]$TaskNames)
 
@@ -212,6 +243,8 @@ $taskSnapshot = Get-TaskSnapshot -TaskNames @(
 )
 
 $missionProcesses = Find-MissionProcesses
+$dockerMission = Find-DockerMissionState
+$missionRunning = ($missionProcesses.Count -gt 0 -or $dockerMission.running)
 
 $snapshot = [ordered]@{
     generated_at = $now.ToString("yyyy-MM-dd HH:mm:ss zzz")
@@ -224,9 +257,10 @@ $snapshot = [ordered]@{
         recent_commits = $recentCommits
     }
     mission_process = [ordered]@{
-        running = ($missionProcesses.Count -gt 0)
+        running = $missionRunning
         count = $missionProcesses.Count
         processes = $missionProcesses
+        docker = $dockerMission
     }
     scheduled_tasks = $taskSnapshot
     memory_files = $memorySnapshot
@@ -279,7 +313,7 @@ Facts:
 - Timestamp: $($now.ToString("yyyy-MM-dd HH:mm:ss zzz"))
 - Repo: $RepoRoot
 - Branch: $branch
-- Mission terminal running: $($missionProcesses.Count -gt 0)
+- Mission terminal running: $missionRunning
 
 Git status:
 $statusPreview
@@ -336,11 +370,11 @@ $fallbackSummary = @"
 ## Current Reality
 - Repo root: $RepoRoot
 - Branch: $branch
-- Mission terminal running: $($missionProcesses.Count -gt 0)
+- Mission terminal running: $missionRunning
 - Checkpoint file: $checkpointPath
 
 ## Immediate Next Actions (Top 5)
-1. Start or confirm `CodeX Mission` terminal is open.
+1. Confirm `CodeX Mission` is running in Docker isolation mode.
 2. Review `memory/activeContext.md` and `memory/sessionHandoff.md` for latest priorities.
 3. Resolve current git working tree delta before new feature work.
 4. Run critical health scripts/tasks and confirm they are `Ready`.
@@ -353,7 +387,8 @@ $fallbackSummary = @"
 
 ## Recovery Commands
 ~~~powershell
-pwsh -NoExit -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\Launch-CodeX-Mission.ps1
+pwsh -NoExit -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\Launch-CodeX-Mission.ps1 -Runtime docker
+pwsh -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\upgrade-codex-mission-task-admin.ps1 -MissionMode docker
 pwsh -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\Invoke-CodeX-BrainCheckpoint.ps1
 Get-ScheduledTask -TaskName CodeX-Mission-Guardian,CodeX-Brain-Checkpoint
 ~~~
