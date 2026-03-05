@@ -23,7 +23,8 @@ Here is the immutable truth and the current sitrep.
 - **YouAndINotAI.com:** A human-only dating platform. No bots. Everyone pays $1 for Bot-Shield verification (economic proof-of-work + biometric liveness via V8 engine).
 - **OnlineRecycle.org:** "Trash or Treasure" Florida e-waste recycling. Free electronics drop-off/pickup. Old laptops fund the 60/30/10 charity split. It just got a massive localized Florida SEO injection to dominate the Spring cleaning rush.
 - **dashboard.aidoesitall.website:** Next.js 15 central command dashboard tracking the ecosystem, node statuses, and Stripe health.
-- **Audit Target 2:** Assess the friction of a $1 entry fee for a dating app as a bot-deterrent. Is it enough? Does the e-waste-to-hospital-donation pipeline sound coherent, or does it sound like a scam? Be brutal.
+- **The #ForTheKids Banner:** We have deployed a mandatory emerald-green banner at the top of every live domain explicitly stating the 60/30/10 split.
+- **Audit Target 2:** Assess the friction of a $1 entry fee for a dating app as a bot-deterrent. Is it enough? Does the e-waste-to-hospital-donation pipeline sound coherent, or does it sound like a scam? Check the site banners — do they provide enough transparency or do they look like desperate marketing? Be brutal.
 
 ### 3. SECURITY & ARCHITECTURE 
 - **The "No Doors Locked" Policy:** All legacy classic GitHub tokens have been nuked. We run on a highly restricted, node-distributed "Master Key" architecture across three physical nodes (T5500, 9020, Sabretooth).
