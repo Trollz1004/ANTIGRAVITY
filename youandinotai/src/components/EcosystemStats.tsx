@@ -11,7 +11,7 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
     { label: 'Ecosystem Status', value: 'Live', growth: '3 Nodes', color: 'text-emerald-500' },
     { label: 'Traffic Event', value: 'Viral', growth: 'Active', color: 'text-blue-500' },
     { label: 'Waitlist', value: 'Active', growth: 'Activated', color: 'text-purple-500' },
-    { label: 'Charity Store', value: 'Beta', growth: 'Shriners', color: 'text-pink-500' },
+    { label: 'Revenue Impact', value: 'Live', growth: 'Shriners', color: 'text-pink-500' },
   ];
 
   const platforms = [
