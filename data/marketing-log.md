@@ -58,8 +58,13 @@
 - **POST**: OnlineRecycle.org launch — 60/30/10 breakdown, onlinerecycle.org link
 
 ### Instagram (1manstrashistreasure)
-- **FOLLOWS** (6): alexis_renee, ATABEC, Bozorov Shermat, Invasion_, xoxakbap, helena.holm
-- **ISSUE**: Instagram requires image/video for posts — text-only not supported. Need to create visual content.
+- **POST**: OnlineRecycle Shriners impact image (onlinerecycle_impact_shriners.png) — "just launched onlinerecycle.org — got old electronics collecting dust? book a free e-waste drop-off. your stuff gets refurbished and sold. 60% of net proceeds automatically route to Shriners Children's Hospitals via smart contract on Base. fully on-chain, fully verifiable, no middlemen." + onlinerecycle.org link
+- **HASHTAG COMMENT**: #Recycling #EWaste #Florida #GreenLiving #ShrinersChildrens #Sustainability #TechForGood #ForTheKids #OnlineRecycle #CircularEconomy #ReduceReuseRecycle #BlockchainForGood
+- **CROSS-POST**: Auto-shared to Threads (1manstrashistreasure)
+- **FOLLOWS** (6 prior): alexis_renee, ATABEC, Bozorov Shermat, Invasion_, xoxakbap, helena.holm
+- **FOLLOW-BACKS** (8 prior session): odiy_203, sport_nick04, daler.sakhiy, eddie_telly_, pankajbade142, ll_king_a_302, g_o_o_d_b_o_y_2_, 01__atul__4950
+- **FOLLOW-BACKS** (12): makset352, kumar120amresh, seytqazi, xumora4988, dhirajthakur8005, razhabov7141, rustam42592, bihdu.devi, murodbekpanaifkadamuch, dz__mahesh__babu_143, chande_mabegikariakoo, dils.hod5787
+- **FIX**: Image upload required OS-level pyautogui automation — MCP Chrome can't trigger native file dialogs. Solution: pyautogui tab-cycles to Instagram, clicks "Select from computer", fills Windows Open dialog via Alt+N + clipboard paste.
 
 ### Medium (TrashOrTreasure Online Recycler LLC)
 - **POST**: "Your Old Tech Can Fund Children's Hospitals" — full OnlineRecycle.org story with 60/30/10 breakdown, onlinerecycle.org link. Topics: E Waste, Charity. Published via keyboard type method (JS injection failed on first attempt).
@@ -81,4 +86,5 @@
 - MCP tab group reset once during session — recovered after reconnect
 - r/OnlineDating requires established reputation/karma — can't post yet
 - Medium editor won't save JS-injected content — FIXED: use keyboard `type` action on fresh new-story instead.
-- Instagram/Pinterest/TikTok/YouTube require image/video content — text-only posts not supported
+- Instagram image upload: RESOLVED — use pyautogui OS-level automation (tab cycle to find IG tab, click "Select from computer", Alt+N to focus filename field in Open dialog, clipboard paste path, Enter). MCP Chrome cannot trigger native file dialogs.
+- Pinterest/TikTok/YouTube require image/video content — text-only posts not supported
