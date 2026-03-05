@@ -130,7 +130,7 @@ export function Volunteering() {
         <div>
           <h1 className="text-2xl font-black text-white tracking-tight">Volunteering Hub</h1>
           <p className="text-gray-500 text-sm mt-0.5 flex items-center gap-1">
-            Local charity impact <Heart size={12} className="text-pink-400" fill="currentColor" />
+            Local community impact <Heart size={12} className="text-pink-400" fill="currentColor" />
           </p>
         </div>
         <button

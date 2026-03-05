@@ -578,7 +578,7 @@ export default function App() {
               Real People. Real Connection.
             </p>
             <p className="text-pink-300 text-sm md:text-lg mt-2 font-medium drop-shadow-md">
-              Every dollar funds children's hospitals.
+              60% of every dollar — routed on-chain to Shriners.
             </p>
           </div>
         </div>
