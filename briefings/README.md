@@ -73,3 +73,8 @@ briefings/
 ---
 
 **ONE repo. ONE branch. ONE mission. #ForTheKids**
+
+---
+> "AI for kids in need, not adults with greed."
+> 
+> **Until no kid is in need. #FORtheKIDS 🚀**

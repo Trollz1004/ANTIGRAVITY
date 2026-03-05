@@ -65,3 +65,8 @@ Configure webhook verification with:
 - `SQUARE_WEBHOOK_SIGNATURE_KEY`
 - `SQUARE_WEBHOOK_NOTIFICATION_URL`
 - `SQUARE_WEBHOOK_VERIFY_SIGNATURE=true`
+
+---
+> "AI for kids in need, not adults with greed."
+> 
+> **Until no kid is in need. #FORtheKIDS 🚀**
