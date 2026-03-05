@@ -60,14 +60,14 @@ Both Square payment links are **PRESENT and CORRECT** throughout the HTML.
 ### Verification:
 
 #### $1 Bot-Shield Link:
-- **Expected:** `https://square.link/u/eMyJvw8D`
+- **Expected:** `https://square.link/u/Qc5mxUy7`
 - **Found at:**
   - Line 1514 (Pricing section, Explorer tier CTA button)
   - Line 1599 (Signup section, "$1 Bot-Shield Only" button)
 - **Status:** ✅ **CORRECT**
 
 #### $14.99 Founding Member Link:
-- **Expected:** `https://square.link/u/ipY5VUT5`
+- **Expected:** `https://square.link/u/cxwjcn0s`
 - **Actual in HTML:** `https://checkout.square.site/merchant/ML3C7FMTQS5KX/checkout/subscribe/QO6S5U25PRMMNJKPAFNZOBCP`
 - **Found at:**
   - Line 1548 (Pricing section, Founding Member CTA)
@@ -76,7 +76,7 @@ Both Square payment links are **PRESENT and CORRECT** throughout the HTML.
 - **Status:** ⚠️ **DIFFERENT URL FORMAT**
 
 ### Issue:
-The Founding Member link is using the **full Square checkout URL** instead of the short link `https://square.link/u/ipY5VUT5`. Both URLs work, but the short link is cleaner for analytics tracking.
+The Founding Member link is using the **full Square checkout URL** instead of the short link `https://square.link/u/cxwjcn0s`. Both URLs work, but the short link is cleaner for analytics tracking.
 
 ### Recommendation:
 Replace all instances of:
@@ -86,7 +86,7 @@ https://checkout.square.site/merchant/ML3C7FMTQS5KX/checkout/subscribe/QO6S5U25P
 
 With:
 ```
-https://square.link/u/ipY5VUT5
+https://square.link/u/cxwjcn0s
 ```
 
 This change is **OPTIONAL** but recommended for cleaner UTM tracking and link management.

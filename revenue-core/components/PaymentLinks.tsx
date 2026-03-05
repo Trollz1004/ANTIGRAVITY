@@ -24,7 +24,7 @@ const PRODUCTS: Product[] = [
     interval: 'one-time',
     description: 'V8 Cloud Verification — Prove you\'re human. One-time fee.',
     icon: <Shield size={24} />,
-    stripeUrl: 'https://square.link/u/eMyJvw8D',
+    stripeUrl: 'https://square.link/u/Qc5mxUy7',
   },
   {
     id: 'founding-member',
@@ -33,7 +33,7 @@ const PRODUCTS: Product[] = [
     interval: '/mo',
     description: 'Locked-in founding rate. Regular price $24.99/mo after launch.',
     icon: <Crown size={24} />,
-    stripeUrl: 'https://square.link/u/ipY5VUT5',
+    stripeUrl: 'https://square.link/u/cxwjcn0s',
   },
   {
     id: '3-month-founder',
@@ -42,7 +42,7 @@ const PRODUCTS: Product[] = [
     interval: 'one-time',
     description: '3 months of Founding Member access. Save $5 vs monthly.',
     icon: <Calendar size={24} />,
-    stripeUrl: 'https://square.link/u/cCkmYsFw',
+    stripeUrl: 'https://square.link/u/oY7qEfRM',
   },
   {
     id: '12-month-founder',
@@ -51,7 +51,7 @@ const PRODUCTS: Product[] = [
     interval: 'one-time',
     description: 'Full year of Founding Member access. Best value — save $80.',
     icon: <Star size={24} />,
-    stripeUrl: 'https://square.link/u/HlvE57fI',
+    stripeUrl: 'https://square.link/u/6GHpbvvl',
   },
   {
     id: 'royalty-card',
@@ -60,7 +60,7 @@ const PRODUCTS: Product[] = [
     interval: 'one-time',
     description: '5 exclusive Founder Cards. Link to RoyaltyDeck for details.',
     icon: <CreditCard size={24} />,
-    stripeUrl: 'https://square.link/u/0QQllAFQ',
+    stripeUrl: 'https://square.link/u/CafhorUS',
     isRoyalty: true,
   },
 ];
