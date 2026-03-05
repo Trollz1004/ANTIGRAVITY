@@ -27,6 +27,7 @@ briefings/
 │   ├── PRODUCT.md               # Product details, pricing, revenue model, Stripe links
 │   ├── MARKETING-LOCK.md        # Marketing lock directive — 9020 ONLY
 │   ├── SECURITY-ISOLATION-LOCK.md # Docker isolation + drive ownership + sensitive ops guardrails
+│   ├── LOW-COST-OPS-PROMPTS.md  # Prompt pack for Haiku/local-first orchestration
 │   ├── MERCH-CHARITY-LOGIC.md   # Merch store charity donation logic (spec only)
 │   ├── ebay-listings.md         # 52-Card Founders DAO Deck eBay listings
 │   ├── ebay-agent-prompts.md    # Agent prompts for eBay listing execution
