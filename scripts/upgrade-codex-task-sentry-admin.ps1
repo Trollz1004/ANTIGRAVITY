@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
     [string]$RepoRoot = "E:\ANTIGRAVITY",
+    [string]$CodeXRoot = "E:\ANTIGRAVITY\CodeX",
     [string]$UserName = $env:USERNAME,
     [int]$IntervalMinutes = 5,
     [string]$TaskName = "CodeX-Task-Sentry"
@@ -16,6 +17,9 @@ $nodeScript = Join-Path $RepoRoot "scripts\codex-task-sentry.js"
 if (-not (Test-Path -LiteralPath $nodeScript)) {
     throw "Missing sentry script: $nodeScript"
 }
+if (-not (Test-Path -LiteralPath $CodeXRoot)) {
+    throw "Missing CodeX root: $CodeXRoot"
+}
 
 $nodeCmd = Get-Command node -ErrorAction SilentlyContinue
 if ($null -eq $nodeCmd) {
@@ -30,7 +34,7 @@ Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false -ErrorAction Silent
 $action = New-ScheduledTaskAction `
     -Execute $execute `
     -Argument $args `
-    -WorkingDirectory $RepoRoot
+    -WorkingDirectory $CodeXRoot
 
 $triggerBoot = New-ScheduledTaskTrigger -AtStartup
 $triggerLogon = New-ScheduledTaskTrigger -AtLogOn -User $UserName

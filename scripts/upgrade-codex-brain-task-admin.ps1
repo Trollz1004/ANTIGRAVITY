@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
     [string]$RepoRoot = "E:\ANTIGRAVITY",
+    [string]$CodeXRoot = "E:\ANTIGRAVITY\CodeX",
     [string]$UserName = $env:USERNAME,
     [string]$ModelName = "qwen2.5:3b",
     [int]$IntervalMinutes = 20,
@@ -13,6 +14,9 @@ $checkpointScript = Join-Path $RepoRoot "scripts\Invoke-CodeX-BrainCheckpoint.ps
 
 if (-not (Test-Path -LiteralPath $checkpointScript)) {
     throw "Missing checkpoint script: $checkpointScript"
+}
+if (-not (Test-Path -LiteralPath $CodeXRoot)) {
+    throw "Missing CodeX root: $CodeXRoot"
 }
 
 if (-not (Get-Command ollama -ErrorAction SilentlyContinue)) {
@@ -35,7 +39,7 @@ Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction Silent
 $action = New-ScheduledTaskAction `
     -Execute "pwsh.exe" `
     -Argument "-NoLogo -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$checkpointScript`" -ModelName `"$ModelName`"" `
-    -WorkingDirectory $RepoRoot
+    -WorkingDirectory $CodeXRoot
 
 $triggerBoot = New-ScheduledTaskTrigger -AtStartup
 $triggerLogon = New-ScheduledTaskTrigger -AtLogOn -User $UserName

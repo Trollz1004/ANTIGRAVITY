@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
     [string]$RepoRoot = "E:\ANTIGRAVITY",
+    [string]$CodeXRoot = "E:\ANTIGRAVITY\CodeX",
     [string]$UserName = $env:USERNAME,
     [ValidateSet("docker", "host", "off")]
     [string]$MissionMode = "docker",
@@ -19,6 +20,9 @@ if ($IntervalMinutes -lt 1) {
 if (-not (Test-Path -LiteralPath $ensureScript)) {
     throw "Missing guardian script: $ensureScript"
 }
+if (-not (Test-Path -LiteralPath $CodeXRoot)) {
+    throw "Missing CodeX root: $CodeXRoot"
+}
 
 Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
 
@@ -28,7 +32,7 @@ $arguments = "-NoLogo -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionP
 $action = New-ScheduledTaskAction `
     -Execute "pwsh.exe" `
     -Argument $arguments `
-    -WorkingDirectory $RepoRoot
+    -WorkingDirectory $CodeXRoot
 
 $triggerBoot = New-ScheduledTaskTrigger -AtStartup
 $triggerLogon = New-ScheduledTaskTrigger -AtLogOn -User $UserName
