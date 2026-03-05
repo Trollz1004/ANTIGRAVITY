@@ -19,6 +19,7 @@ import { Events } from './app/pages/Events';
 import { Volunteering } from './app/pages/Volunteering';
 import { ProfileSetup } from './app/pages/ProfileSetup';
 import { Chat } from './app/pages/Chat';
+import { Verify } from './app/pages/Verify';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
@@ -41,6 +42,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/app/volunteer" element={<Volunteering />} />
             <Route path="/app/profile" element={<ProfileSetup />} />
             <Route path="/app/chat/:matchId" element={<Chat />} />
+            <Route path="/app/verify" element={<Verify />} />
           </Route>
         </Route>
       </Routes>
