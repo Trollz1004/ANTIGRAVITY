@@ -1,5 +1,6 @@
 import { MapPin, Heart, X, Sparkles } from 'lucide-react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'motion/react';
+import { VerifiedDot } from './VerifiedBadge';
 
 interface Profile {
   user_id: string;
@@ -9,6 +10,8 @@ interface Profile {
   photos: string[];
   interests: string[];
   location: string | null;
+  verified?: boolean;
+  subscription_active?: boolean;
 }
 
 interface SwipeCardProps {
@@ -96,12 +99,13 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
 
             {/* Profile info — glass panel at bottom */}
             <div className="absolute bottom-0 left-0 right-0 p-6">
-              {/* Name + age */}
-              <div className="flex items-baseline gap-3 mb-1.5">
+              {/* Name + age + verified badge */}
+              <div className="flex items-center gap-3 mb-1.5">
                 <h2 className="text-2xl font-black text-white tracking-tight">{profile.display_name}</h2>
                 {profile.age && (
                   <span className="text-xl text-gray-400 font-light">{profile.age}</span>
                 )}
+                <VerifiedDot tier={profile.subscription_active ? 'platinum' : profile.verified ? 'gold' : 'unverified'} />
               </div>
 
               {/* Location */}
