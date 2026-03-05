@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     kimi_model: str = "kimi-2.6"
 
     jwt_secret: str = Field(default="change-me-in-production")
+    metrics_api_key: str = ""  # Separate key for /metrics — NOT the JWT secret
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
 
