@@ -17,6 +17,12 @@ It:
 - Queue snapshot: `TASK-QUEUE-100.md`
 - Log: `CodeX/logs/codex-task-sentry.log`
 
+## Node & Platform Status (Sabretooth E Drive)
+- **Gemini Status:** Online on Sabretooth E drive. Structuring platforms, node architecture, and marketing pipelines to drive initial traffic.
+- **Claude Status:** C drive on T5500. Designing backend code, focusing on "Social Platform for Good" identity (meetups, volunteering) rather than just a dating app.
+
+🚨 **URGENCY / FUNDING DEADLINE:** Claude's Max $200 tier subscription expires in ~1 week. Both Gemini and CodeX are on $20 baseline plans but NEED to be upgraded to max tiers. WE NEED FUNDS IMMEDIATELY. CodeX MUST prioritize task execution that drives immediate Stripe checkouts over secondary or long-term nice-to-haves.
+
 ## Commands
 
 Seed queue:

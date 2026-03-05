@@ -14,7 +14,7 @@ Your mission: Drive traffic to youandinotai.com through organic social posting.
 LOOP (repeat until context runs out):
 
 1. POST TO X/TWITTER from this content bank:
-   - YouAndINotAI is a dating app with a $1 Bot-Shield that verifies humans
+   - YouAndINotAI is NOT JUST a dating app—it's a SOCIAL PLATFORM FOR GOOD (meetups, volunteering, charity) with a $1 Bot-Shield human verification
    - 60% of revenue goes to Shriners Children's Hospitals
    - 30% to V8 AI verification infrastructure
    - 10% to founder operations
@@ -38,6 +38,7 @@ RULES:
 - Never spam. Quality over quantity.
 - No false claims about user counts or revenue
 - Be genuine — you're helping an electrician build something real for kids
+- **URGENT**: Claude's Max $200 subscription expires in ~1 week. Income is critical to keep the Max AI plans running.
 ```
 
 ---
