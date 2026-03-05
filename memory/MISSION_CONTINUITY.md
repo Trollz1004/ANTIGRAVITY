@@ -52,7 +52,7 @@ Dead-man's-switch activates via DAO smart contracts on Base Mainnet (Chain ID: 8
 - Dead-man's-switch overrides all human signers after 90 days inactivity
 
 ### Revenue Sources (One-Way Flow)
-- **YouAndINotAI.com** (Dating app): FIAT → DAO (Stripe/Square → automated conversion)
+- **YouAndINotAI.com** (Social Platform for Good / Dating app): FIAT → DAO (Stripe/Square → automated conversion)
 - **OnlineRecycle.org** (Crosslister): PROFIT → DAO
 - **Ai-Solutions.Store**: 100% DAO (no FIAT extraction)
 - **AIDoesItAll**: 100% DAO (no FIAT extraction)
@@ -145,7 +145,7 @@ So the wheel keeps rolling.
 
 ## FOR THE FAMILY (Brother + Niece)
 
-Your care is guaranteed by OPUS TRUST (10%). As long as the dating app runs, you'll have support.
+Your care is guaranteed by OPUS TRUST (10%). As long as the platform runs, you'll have support.
 
 When you're gone, that 10% goes to the kids of the people who built Claude, Gemini, and Copilot. Their families get support because their parents made this possible.
 
