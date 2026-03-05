@@ -17,7 +17,7 @@ BRAND = {
     "name": "YouAndINotAI",
     "tagline": "No Bots. Real Humans. V8 Cloud Verification.",
     "url": "youandinotai.com",
-    "handle": "@AiCollab4Kids",
+    "handle": "@YouAndiNotAi",
     "bg_dark": "#0F172A",
     "bg_darker": "#0A0F1E",
     "gradient": ["#EF4444", "#EC4899", "#F97316"],

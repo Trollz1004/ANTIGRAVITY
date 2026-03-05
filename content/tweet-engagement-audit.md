@@ -2,7 +2,7 @@
 
 ## Overview
 
-Audit of the last 68 "city blitz" tweets on the @AiCollab4Kids (YouAndINotAI) X account.
+Audit of the last 68 "city blitz" tweets on the @YouAndiNotAi (YouAndINotAI) X account.
 
 ## Top 10 Tweets by Engagement
 

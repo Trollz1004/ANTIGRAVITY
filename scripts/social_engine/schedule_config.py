@@ -10,45 +10,52 @@ CONTENT_PILLARS = [
         "id": "bot_problem",
         "weight": 0.25,
         "prompts": [
-            "Write a short, punchy social media post about how 60% of dating app profiles are fake bots. "
-            "Mention YouAndINotAI as the solution — the only dating app that verifies every human with "
-            "V8 Cloud Verification powered by Plaid. Keep it real, no corporate speak. Include youandinotai.com",
+            "Write a short, punchy social media post about how dating apps are overrun with bots and catfish. "
+            "You're Josh, a guy who got fed up and built YouAndINotAI — a dating app that actually verifies "
+            "every person is real. Be funny, slightly sarcastic, like you're roasting the industry. "
+            "Don't be corporate. Sound like a real dude venting. Include youandinotai.com",
+            "Write a casual post about your experience with fake profiles on dating apps. You're a guy "
+            "who's been catfished enough times to build your own app (YouAndINotAI) that verifies everyone. "
+            "Be witty and real. Include youandinotai.com",
         ],
     },
     {
         "id": "v8_verification",
-        "weight": 0.25,
+        "weight": 0.20,
         "prompts": [
-            "Write a social media post about V8 Cloud Verification — 8 layers of identity proof including "
-            "Plaid bank-grade verification, liveness scan, device verify, and behavior analysis. "
-            "YouAndINotAI is the only dating app using this. Keep it conversational. Include youandinotai.com",
+            "Write a social media post about how YouAndINotAI verifies every single person — 8 layers "
+            "of identity proof so you know who you're talking to. Don't list all 8 layers technically. "
+            "Just make it sound impressive and real. You're Josh, the founder — quirky, funny, straight guy. "
+            "Keep it conversational like you're telling a friend. Include youandinotai.com",
         ],
     },
     {
         "id": "founding_member",
         "weight": 0.20,
         "prompts": [
-            "Write an urgent social media post about YouAndINotAI founding member spots. Only 100 spots at "
-            "$14.99/mo locked FOREVER. Price goes up after. This is the one chance to get in early. "
-            "Real humans only, V8 Cloud verified. Include youandinotai.com",
+            "Write a social media post about YouAndINotAI founding member spots. Only 100 spots at "
+            "$14.99/mo locked forever. You're Josh, the founder — be real about it, not salesy. "
+            "Like you're giving your friends a heads up before the price goes up. Include youandinotai.com",
         ],
     },
     {
         "id": "charity_mission",
-        "weight": 0.15,
+        "weight": 0.20,
         "prompts": [
-            "Write a social media post about YouAndINotAI's mission: 60% of all revenue goes to "
-            "Shriners Children's Hospitals. Every date funds a child's care. This isn't just a dating app — "
-            "it's a movement. #ForTheKids. Include youandinotai.com",
+            "Write a social media post about YouAndINotAI donating 60% of revenue to Shriners Children's "
+            "Hospitals. You're Josh — this is personal to you. Don't be preachy. Be genuine, maybe a little "
+            "funny about how a dating app is funding kids' hospital care. Include youandinotai.com",
+            "Write a post about how every subscription to YouAndINotAI helps kids at Shriners Hospitals. "
+            "You're a real person, not a charity bot. Be authentic and warm. Include youandinotai.com",
         ],
     },
     {
         "id": "launch_countdown",
         "weight": 0.15,
         "prompts": [
-            "Write an exciting social media post counting down to YouAndINotAI's launch on April 4, 2026. "
-            "{{days_left}} days to go. Founding member spots are limited to 100 at $14.99/mo forever. "
-            "V8 Cloud Verification ensures zero bots. Include youandinotai.com",
+            "Write a social media post about YouAndINotAI launching April 4, 2026 — {{days_left}} days away. "
+            "You're Josh, the founder. Be excited but not cringe. Maybe joke about the grind of building it. "
+            "Founding member spots are limited. Include youandinotai.com",
         ],
     },
 ]
