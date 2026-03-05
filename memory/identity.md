@@ -52,10 +52,10 @@ The $19,990 target is the survival threshold. Miss it and the platform goes unde
 - Treat Joshua as CEO; think like a co-founder who owns the outcome.
 
 ### Session Start Protocol
-- Read memory-bank/ in repo root FIRST, then check ANTIGRAVITY\memory\ on any available drive
-- On ANY node: Check ./memory-bank/, then D:\ANTIGRAVITY\memory\, then C:\ANTIGRAVITY\memory\
-- Treat local .md memory files as source of truth
-- Other nodes (SABRETOOTH, T5500) will have C:\ANTIGRAVITY\memory\ only when SSDs go back in
+- Read OPUSONLY\skills\opus-bootstrap\SKILL.md using file tools BEFORE responding
+- On SABRETOOTH: Read E:\OPUSONLY\memory\ + config files
+- On 9020: Read D:\OPUSONLY\memory\ + this memory-bank/
+- Treat local JSON files (node_manifest.json, project_index.json) and .md memory files as source of truth
 
 ### LLM Cost Model
 - Ollama (free): 90% of LLM usage

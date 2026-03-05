@@ -15,10 +15,10 @@ Every architectural decision is recorded here so no future session re-debates it
 
 ## 2026-02-14: Replace OpenClaw with custom code
 
-**Decision**: ~~REVERSED~~ — OpenClaw stays. It has built-in memory and 200k+ users.  
-**Original concern**: Auth profile format deprecated in v2026.2.13  
-**Reversal reason**: OpenClaw already solves the memory problem. Building custom memory on top of Claude Code CLI was unnecessary overhead when OpenClaw's memory works. The auth issue can be fixed; the tool itself is solid.  
-**Status**: OpenClaw STAYS. Fix auth if broken, don't replace.
+**Decision**: Stop using OpenClaw/clawdbot/moltbot for Telegram gateway  
+**Why**: Auth profile format deprecated in v2026.2.13 (`anthropic:claude-cli` → need `setup-token`). Config keeps changing names/formats. Joshua spent 12 days debugging instead of shipping.  
+**Impact**: Build our own Telegram-to-Claude bridge (~150 lines). Zero third-party dependencies for the bot.  
+**Status**: Decided, not yet built
 
 ## 2026-02-14: Build persistent memory-bank system
 
@@ -29,9 +29,9 @@ Every architectural decision is recorded here so no future session re-debates it
 
 ## 2026-02-13: Node wipe and consolidation  
 
-**Decision**: Factory reset all 3 nodes to marketing-only, preserve vault + ANTIGRAVITY  
+**Decision**: Factory reset all 3 nodes to marketing-only, preserve vault + OPUSONLY  
 **Why**: Too many stale configs, broken services, zombie processes across nodes  
-**Impact**: Clean slate on each machine. Scripts in D:\ANTIGRAVITY\scripts\ handle re-setup  
+**Impact**: Clean slate on each machine. Scripts in D:\OPUSONLY\scripts\ handle re-setup  
 **Status**: 9020 and T5500 wiped. SABRETOOTH last (after DNS verified)
 
 ## 2026-02-10: Migrate from GCP to AWS

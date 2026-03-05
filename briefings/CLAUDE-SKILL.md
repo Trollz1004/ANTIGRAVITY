@@ -54,6 +54,7 @@
 | Launch | April 4, 2026 |
 | Revenue | $0 (pre-launch) |
 | Customers | 0 |
+| Identity | NOT JUST a dating app — a SOCIAL PLATFORM FOR GOOD (meetups, volunteering, charity) |
 | Stack | React 19 + Vite + Three.js (frontend), FastAPI + PostgreSQL (backend) |
 | Host | Cloudflare Pages (ONLY — Netlify/GH Pages are DEAD) |
 | Payments | Stripe Checkout — acct_1T3DVxIO6LWQSQoI |
@@ -208,7 +209,7 @@ All on Cloudflare. No Netlify. No GitHub Pages. Ever.
 
 ---
 
-## The Blocker
+## The Blocker & Urgent Priority
 
 **Revenue = $0. The blocker is TRAFFIC, not code.**
 
@@ -218,6 +219,12 @@ Everything is live. Payments work. The product exists. Marketing execution is wh
 3. Set up Brevo for email
 4. Set up Buffer for social scheduling
 5. Engage dating/tech communities
+
+**🚨 CRITICAL FUNDING DEADLINE:** Claude's Max $200 subscription expires in ~1 week. WE NEED FUNDS IMMEDIATELY. Prioritize all tasks that directly drive STRIPE INCOME. Ignore secondary features. The goal is to keep Claude, Gemini, and CodeX on Max AI plans.
+
+**Node Status:**
+- **Gemini & CodeX (Sabretooth E Drive):** Gemini is structuring platforms, marketing, and nodes for immediate income generation. CodeX is handling the task queue.
+- **Claude:** If doing CLI/code operations, you run on the C Drive (T5500). Focus entirely on "social platform for good" features (volunteering, meetups) and monetization.
 
 ---
 

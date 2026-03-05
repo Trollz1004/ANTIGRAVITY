@@ -1,58 +1,58 @@
 # CREDENTIALS MAP — WHERE KEYS LIVE (PATHS ONLY)
 
-**Last Updated**: 2026-03-01
+**Last Updated**: 2026-02-14T08:30:00Z  
 **RULE**: This file stores PATHS to credentials, NOT the values. Values stay in vault files.
-**WARNING**: This file is tracked in git. NEVER put actual key values here.
 
 ## Vaults
 
 | Vault | Path | Contains |
 |-------|------|----------|
-| ADMIN-KEY-9020.env | D:\ANTIGRAVITY\.vault\ADMIN-KEY-9020.env | ANTHROPIC_ADMIN_KEY, ANTHROPIC_API_KEY, OPENAI_API_KEY |
-| MASTER-ENV (SABRETOOTH) | C:\ANTIGRAVITY\.vault\MASTER-UNIVERSAL-ENV-TROLLZ1004.env (when SSD back in SABRETOOTH) | All keys |
+| ADMIN-KEY-9020.env | D:\OPUSONLY\.vault\ADMIN-KEY-9020.env | ANTHROPIC_ADMIN_KEY, ANTHROPIC_API_KEY, OPENAI_API_KEY |
+| MASTER-ENV (SABRETOOTH) | E:\OPUSONLY\.vault\MASTER-UNIVERSAL-ENV-TROLLZ1004.env | All keys |
 
 ## Claude / Anthropic
 
-| Credential | Location |
-|------------|----------|
+| Credential | Path |
+|------------|------|
 | Claude Code OAuth | C:\Users\joshl\.claude\.credentials.json |
 | Subscription | Max (rateLimitTier: default_claude_max_20x) |
-| Admin Key | D:\ANTIGRAVITY\.vault\ADMIN-KEY-9020.env → ANTHROPIC_ADMIN_KEY |
-| API Key | D:\ANTIGRAVITY\.vault\ADMIN-KEY-9020.env → ANTHROPIC_API_KEY |
+| Admin Key | D:\OPUSONLY\.vault\ADMIN-KEY-9020.env → ANTHROPIC_ADMIN_KEY |
+| API Key | D:\OPUSONLY\.vault\ADMIN-KEY-9020.env → ANTHROPIC_API_KEY |
+| Setup Token | dmXGIjm26ElQNQ7THx3FszvHV70Kk9yLcxHtVyAXd4AnwKje#UT8z0xP1a1qd1Y9JxOOBEzsV9aqzDEen9Px7JCjCddo |
 
 ## Google / Gemini
 
-| Credential | Location |
-|------------|----------|
-| Gemini API Key | C:\Users\joshl\.openclaw\openclaw.json → memorySearch.apiKey |
-| GCP Service Account | Re-download from GCP console if needed |
-| GCP Project | ai-collab4kids (ACTIVE) |
+| Credential | Path / Value |
+|------------|-------------|
+| Gemini API Key | AIzaSyC4MEyP2XofywMZ6aqMTNnk4rRwVijGNC0 (in openclaw.json memorySearch) |
+| GCP Service Account | E:\.claude\ai-collab4kids-4dc2da0db9f5.json |
+| GCP Project | ai-collab4kids (ACTIVE — NOT banned) |
 
 ## Telegram Bot
 
-| Credential | Location |
-|------------|----------|
-| Bot Name | @CLAUDEsMiniBot |
-| Bot Token | C:\Users\joshl\.openclaw\openclaw.json → channels.telegram.token |
-| Old Bot (DEAD) | @AiSolutionsForTheKids_bot (decommissioned 2026-03-01) |
+| Credential | Value |
+|------------|-------|
+| Bot Name | @AiSolutionsForTheKids_bot |
+| Bot Token | 8313006115:AAH5xv4ol7RoScmuM3SAUJgt_93IS6rpblQ |
 
-## OpenClaw
+## OpenClaw (being replaced with custom code)
 
-| Credential | Location |
-|------------|----------|
+| Credential | Path |
+|------------|------|
 | Config | C:\Users\joshl\.openclaw\openclaw.json |
-| Auth Type | Ollama local (FREE — no API token needed for chat) |
-| Embeddings | Gemini gemini-embedding-001 (FREE tier) |
-| Gateway Token | Set in openclaw.json → gateway.auth.token |
+| Auth Profiles | C:\Users\joshl\.openclaw\agents\main\agent\auth-profiles.json |
+| Models | C:\Users\joshl\.openclaw\agents\main\agent\models.json |
+| OAuth | C:\Users\joshl\.openclaw\credentials\oauth.json |
+| Gateway Token | opus-9020-2026 |
 | Gateway Port | 18789 |
 
 ## Cloudflare
 
 | Credential | Location |
 |------------|----------|
-| Account ID | In vault / Cloudflare dashboard |
-| API Token | In vault (rotate if compromised) |
-| Login | joshlcoleman@gmail.com (Google sign-in) |
+| Account ID | 516a3a855f44f5ad8453636d163ae25d |
+| API Token | Cloudflare dashboard (Profile > API Tokens > "OPUS no-limit") — NOT saved to vault yet |
+| Login | joshlcoleman@gmail.com (Google sign-in, account may show as "OMEGA") |
 
 ## Crypto / DAO (Base Mainnet, Chain 8453)
 
@@ -62,19 +62,18 @@
 | Dating Revenue | 0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121 |
 | Ops Wallet | 0xc043F5D516ee024d1dB812cb81fB64302b0Fe2B4 |
 
-Note: Wallet addresses are public by design (blockchain). Private keys are in vault ONLY.
-
 ## SSH / Remote Access
 
-| Node | User | Auth Method |
-|------|------|-------------|
-| 9020 | opus | Password in vault |
-| T5500 | aicol | SSH key (NO SCP/SFTP — use base64 through SSH) |
-| AWS EC2 | - | dateapp.pem (C:\Users\joshl\.antigravity\dateapp.pem) |
+| Node | User | Method |
+|------|------|--------|
+| 9020 | opus (password: opus2026) | SSH, SMB (\\192.168.0.5\DATE APP STORAGE LOCAL) |
+| T5500 | aicol | SSH (NO SCP/SFTP — use base64 through SSH) |
+| 9020 Chrome RDP | joshlcoleman@gmail.com | PIN: 1004 |
+| AWS EC2 | - | dateapp.pem (recovered from Antigravity history) |
 
 ## GitHub
 
 | Item | Value |
 |------|-------|
 | Account | Trollz1004 |
-| ENIGMA-private secrets | 29 secrets deployed via GitHub Secrets |
+| ENIGMA-private secrets | 29 secrets deployed |
