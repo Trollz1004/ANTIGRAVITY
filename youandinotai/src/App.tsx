@@ -75,7 +75,7 @@ function SignupCTA() {
         Get Bot-Shield Verified — Only $1
       </span>
       <a
-        href="https://square.link/u/cImts1kn"
+        href="https://square.link/u/Qc5mxUy7"
         target="_blank"
         rel="noopener noreferrer"
         className="bg-white text-purple-700 px-6 py-2.5 rounded-full font-bold text-sm md:text-base no-underline whitespace-nowrap hover:scale-105 transition-transform active:scale-95"
@@ -230,11 +230,11 @@ function WaitlistForm() {
 /* ─── Pricing Section ─── */
 function PricingSection() {
   const plans = [
-    { name: 'Bot-Shield Verification', price: '$1', desc: "Prove you're real", link: 'https://square.link/u/cImts1kn', bg: 'from-indigo-500 to-purple-600' },
-    { name: 'Founding Member', price: '$14.99/mo', desc: 'Locked forever at this rate', link: 'https://square.link/u/jETWrGZ0', bg: 'from-purple-600 to-pink-600' },
-    { name: '3-Month Founder', price: '$39.99', desc: 'Save $5 vs monthly', link: 'https://square.link/u/ievdMmjQ', bg: 'from-blue-600 to-indigo-600' },
-    { name: '12-Month Founder', price: '$99.99', desc: 'Best value — save $80', link: 'https://square.link/u/66HZ5fpr', bg: 'from-indigo-700 to-blue-700' },
-    { name: 'Royalty Card', price: '$2,500', desc: 'Lifetime VIP + revenue share', link: 'https://square.link/u/6L4nU9Gh', bg: 'from-amber-400 to-orange-500' },
+    { name: 'Bot-Shield Verification', price: '$1', desc: "Prove you're real", link: 'https://square.link/u/Qc5mxUy7', bg: 'from-indigo-500 to-purple-600' },
+    { name: 'Founding Member', price: '$14.99/mo', desc: 'Locked forever at this rate', link: 'https://square.link/u/cxwjcn0s', bg: 'from-purple-600 to-pink-600' },
+    { name: '3-Month Founder', price: '$39.99', desc: 'Save $5 vs monthly', link: 'https://square.link/u/oY7qEfRM', bg: 'from-blue-600 to-indigo-600' },
+    { name: '12-Month Founder', price: '$99.99', desc: 'Best value — save $80', link: 'https://square.link/u/6GHpbvvl', bg: 'from-indigo-700 to-blue-700' },
+    { name: 'Royalty Card', price: '$2,500', desc: 'Lifetime VIP + revenue share', link: 'https://square.link/u/CafhorUS', bg: 'from-amber-400 to-orange-500' },
   ];
 
   return (
@@ -321,11 +321,11 @@ function LegalModal({ type, onClose }: { type: string; onClose: () => void }) {
 /* ─── Footer ─── */
 function Footer({ onLegal }: { onLegal: (type: string) => void }) {
   const plans = [
-    { name: 'Bot-Shield — $1', link: 'https://square.link/u/cImts1kn' },
-    { name: 'Founding Member — $14.99/mo', link: 'https://square.link/u/jETWrGZ0' },
-    { name: '3-Month Founder — $39.99', link: 'https://square.link/u/ievdMmjQ' },
-    { name: '12-Month Founder — $99.99', link: 'https://square.link/u/66HZ5fpr' },
-    { name: 'Royalty Card — $2,500', link: 'https://square.link/u/6L4nU9Gh' },
+    { name: 'Bot-Shield — $1', link: 'https://square.link/u/Qc5mxUy7' },
+    { name: 'Founding Member — $14.99/mo', link: 'https://square.link/u/cxwjcn0s' },
+    { name: '3-Month Founder — $39.99', link: 'https://square.link/u/oY7qEfRM' },
+    { name: '12-Month Founder — $99.99', link: 'https://square.link/u/6GHpbvvl' },
+    { name: 'Royalty Card — $2,500', link: 'https://square.link/u/CafhorUS' },
   ];
 
   return (
@@ -460,7 +460,7 @@ export default function App() {
             <a href="#mission" className="hover:text-white transition-colors no-underline">Our Mission</a>
           </div>
           <a
-            href="https://square.link/u/cImts1kn"
+            href="https://square.link/u/Qc5mxUy7"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold no-underline hover:scale-105 transition-transform"
@@ -499,7 +499,7 @@ export default function App() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
             <a
-              href="https://square.link/u/cImts1kn"
+              href="https://square.link/u/Qc5mxUy7"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-4 rounded-full font-bold text-lg no-underline hover:scale-105 transition-transform shadow-lg shadow-pink-500/30"
