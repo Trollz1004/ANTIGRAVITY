@@ -123,6 +123,37 @@
 
 ---
 
+## 2026-03-05 — Engagement Cycle #3
+
+### Instagram (1manstrashistreasure)
+- **FOLLOW-BACKS** (10): raiyvicky, shodmonkhuzhanberdiev, shox_bloge1r, u_tair, devil_roshan_07, toxa.2200, razmerovashidbek, cramebig, pereval8080, +1 more
+- **NOTE**: 18+ more Follow Back still pending — deferred for anti-ban pacing
+
+### Twitter/X (@YouAndiNotAi)
+- **LIKES** (3): Elon Musk (Grok post), Perplexity (Voice Mode in Perplexity Computer), Google DeepMind (Gemini 3.1 Flash-Lite)
+
+### Facebook (Josh Coleman)
+- **NOTIFICATIONS**: Tatiana Seguel Leon accepted, Lee Anglo accepted, Britt Ho accepted, Doris Hernandez accepted. Multiple tag notifications (たぽ かの, UW Pediatric Oncology, Mary Lemon, Barbara Shklar, ShaDawn Adams, Brad Bartling, Mercadito Cuatro Caminos)
+- **FRIEND ADDS** (6): Jireh Roofing Mansfield, Anthony Cabrera Reyes, Elizabeth Rose, Ouija Man, Caleb Fiske Doranz, Jonathan Singh
+- **LIKES**: Facebook Dating post
+
+### LinkedIn (Josh Coleman)
+- **NOTIFICATIONS**: 76 appearances this week. OnlineRecycle.org post: 2 impressions + 1 comment. YouAndINotAI post: 2 impressions.
+- **LIKES** (3): Arielle Berlinsky (marketing/International Women's Day), Jocelyn Rivera (event management), Andrew Giusto (NYT new position)
+- **CONNECTIONS** (5): Antonio Hernandez, Paige Boyles, Tiffany Bayley, Richie Fortunato, Anthony Guzman
+
+### Threads (1manstrashistreasure)
+- **LIKES** (2): bitchyblonde24 (Bird approval), juliahornify (Anyone in Orlando looking for a real DATE?)
+- **FOLLOWS** (4): Jordan Uhl, Captain Mark Kelly, kerrie healthy, Maddie
+
+### Quora (Trollz)
+- **UPVOTES** (3): Rao Naveed police story, Geomorphological Features Black history, Film Buff Hub heart transplant surgery
+
+### Nextdoor (Josh Coleman, Mount Plymouth)
+- **LIKES**: Valerie Graves speed table post (hearted)
+
+---
+
 ## Issues Tracked
 - MCP Chrome extension disconnects during long type actions — workaround: use JavaScript injection for text input
 - MCP tab group reset once during session — recovered after reconnect
