@@ -31,10 +31,12 @@ const DEFAULTS = {
   ollamaModel: process.env.OLLAMA_MODEL || "llama3.2",
   intervalMinutes: 5,
   maxResultChars: 4000,
-  fallbackExecutor: process.env.CODEX_SENTRY_FALLBACK_EXECUTOR || "codex",
+  fallbackChainRaw: process.env.CODEX_SENTRY_FALLBACK_CHAIN || "ollama,codex",
+  allowCodexFallback: process.env.CODEX_SENTRY_ALLOW_CODEX_FALLBACK !== "0",
 };
 
 const VALID_STATUSES = new Set(["pending", "in_progress", "done", "failed"]);
+const VALID_EXECUTORS = new Set(["codex", "openclaw", "ollama"]);
 
 function utcNow() {
   return new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
@@ -510,6 +512,38 @@ async function dispatchTask(task, forceExecutor, openclawUrl, ollamaUrl, maxResu
   return { ok: false, result: `Unknown executor '${executor}'.`, executor };
 }
 
+function buildFallbackChain(raw, allowCodexFallback, strict) {
+  if (raw === null || raw === undefined) {
+    return [];
+  }
+  const value = String(raw).trim().toLowerCase();
+  if (!value || value === "none") {
+    return [];
+  }
+
+  const items = value
+    .split(",")
+    .map((x) => x.trim().toLowerCase())
+    .filter(Boolean);
+
+  const chain = [];
+  for (const item of items) {
+    if (!VALID_EXECUTORS.has(item)) {
+      if (strict) {
+        throw new Error(`Unknown fallback executor '${item}'. Valid: codex, openclaw, ollama`);
+      }
+      continue;
+    }
+    if (item === "codex" && !allowCodexFallback) {
+      continue;
+    }
+    if (!chain.includes(item)) {
+      chain.push(item);
+    }
+  }
+  return chain;
+}
+
 function spawnFollowups(task, queue) {
   if (!Array.isArray(task.spawn_on_done) || task.spawn_on_done.length === 0) {
     return 0;
@@ -677,30 +711,41 @@ async function runOneCycle(options, logger) {
     options.maxResultChars
   );
 
-  if (!dispatch.ok && options.fallbackExecutor && dispatch.executor !== options.fallbackExecutor) {
-    logger.warn(
-      `Primary executor '${dispatch.executor}' failed for ${taskId}; trying fallback '${options.fallbackExecutor}'.`
-    );
-    const fallbackDispatch = await dispatchTask(
-      nextTask,
-      options.fallbackExecutor,
-      options.openclawUrl,
-      options.ollamaUrl,
-      options.maxResultChars
-    );
-    if (fallbackDispatch.ok) {
+  if (!dispatch.ok && Array.isArray(options.fallbackChain) && options.fallbackChain.length > 0) {
+    const attempts = [dispatch];
+    for (const fallbackExec of options.fallbackChain) {
+      if (!fallbackExec) {
+        continue;
+      }
+      if (attempts.some((a) => a.executor === fallbackExec)) {
+        continue;
+      }
+      logger.warn(`Executor '${attempts[attempts.length - 1].executor}' failed for ${taskId}; trying '${fallbackExec}'.`);
+      const fallbackAttempt = await dispatchTask(
+        nextTask,
+        fallbackExec,
+        options.openclawUrl,
+        options.ollamaUrl,
+        options.maxResultChars
+      );
+      attempts.push(fallbackAttempt);
+      if (fallbackAttempt.ok) {
+        break;
+      }
+    }
+
+    const successful = attempts.find((a) => a.ok);
+    if (successful) {
       dispatch = {
         ok: true,
-        executor: `${dispatch.executor}->${fallbackDispatch.executor}`,
-        result: `[fallback via ${fallbackDispatch.executor}]\n${fallbackDispatch.result}`,
+        executor: attempts.map((a) => a.executor).join("->"),
+        result: attempts.length > 1 ? `[fallback via ${successful.executor}]\n${successful.result}` : successful.result,
       };
-    } else {
+    } else if (attempts.length > 1) {
       dispatch = {
         ok: false,
-        executor: `${dispatch.executor}->${fallbackDispatch.executor}`,
-        result:
-          `Primary (${dispatch.executor}) failed: ${dispatch.result}\n\n` +
-          `Fallback (${fallbackDispatch.executor}) failed: ${fallbackDispatch.result}`,
+        executor: attempts.map((a) => a.executor).join("->"),
+        result: attempts.map((a, idx) => `Attempt ${idx + 1} (${a.executor}) failed: ${a.result}`).join("\n\n"),
       };
     }
   }
@@ -747,7 +792,10 @@ function parseArgs(argv) {
     loop: false,
     exportMarkdown: false,
     forceExecutor: null,
-    fallbackExecutor: DEFAULTS.fallbackExecutor,
+    fallbackExecutor: null, // legacy single-fallback option
+    fallbackChainRaw: DEFAULTS.fallbackChainRaw,
+    fallbackChain: [],
+    noCodexFallback: false,
   });
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -786,6 +834,15 @@ function parseArgs(argv) {
     if (arg === "--fallback-executor" && next) {
       opts.fallbackExecutor = next.toLowerCase();
       i += 1;
+      continue;
+    }
+    if (arg === "--fallback-chain" && next) {
+      opts.fallbackChainRaw = next;
+      i += 1;
+      continue;
+    }
+    if (arg === "--no-codex-fallback") {
+      opts.noCodexFallback = true;
       continue;
     }
     if (arg === "--interval-minutes" && next) {
@@ -827,12 +884,19 @@ function parseArgs(argv) {
   if (!["codex", "openclaw", "ollama", null].includes(opts.forceExecutor)) {
     throw new Error("--force-executor must be one of: codex, openclaw, ollama");
   }
-  if (opts.fallbackExecutor === "none") {
-    opts.fallbackExecutor = null;
-  }
-  if (!["codex", "openclaw", "ollama", null].includes(opts.fallbackExecutor)) {
+  if (opts.fallbackExecutor !== null && !["codex", "openclaw", "ollama", "none"].includes(opts.fallbackExecutor)) {
     throw new Error("--fallback-executor must be one of: codex, openclaw, ollama, none");
   }
+
+  const allowCodexFallback = DEFAULTS.allowCodexFallback && !opts.noCodexFallback;
+  if (opts.fallbackExecutor && opts.fallbackExecutor !== "none") {
+    opts.fallbackChain = buildFallbackChain(opts.fallbackExecutor, allowCodexFallback, true);
+  } else if (opts.fallbackExecutor === "none") {
+    opts.fallbackChain = [];
+  } else {
+    opts.fallbackChain = buildFallbackChain(opts.fallbackChainRaw, allowCodexFallback, false);
+  }
+
   if (!Number.isFinite(opts.intervalMinutes) || opts.intervalMinutes <= 0) {
     opts.intervalMinutes = DEFAULTS.intervalMinutes;
   }
@@ -850,6 +914,8 @@ function printHelp() {
   console.log("  node scripts/codex-task-sentry.js --init-ewaste --export-markdown");
   console.log("  node scripts/codex-task-sentry.js --status");
   console.log("  node scripts/codex-task-sentry.js --run-once --export-markdown");
+  console.log("  node scripts/codex-task-sentry.js --run-once --fallback-chain ollama,codex");
+  console.log("  node scripts/codex-task-sentry.js --run-once --fallback-chain ollama --no-codex-fallback");
   console.log("  node scripts/codex-task-sentry.js --loop --interval-minutes 5 --export-markdown");
 }
 
