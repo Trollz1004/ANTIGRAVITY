@@ -1,0 +1,63 @@
+name: CI Validate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'youandinotai/**'
+      - 'revenue-core/**'
+      - 'antigravity/**'
+      - 'mcp-server/**'
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Build youandinotai frontend
+      - name: Build YouAndINotAI
+        working-directory: youandinotai
+        run: |
+          npm ci
+          npm run build
+
+      # Verify no Stripe links in built output
+      - name: Check for stale Stripe links
+        run: |
+          if grep -r "buy\.stripe\.com" youandinotai/dist/ 2>/dev/null; then
+            echo "::error::Found Stripe links in built output — should be Square"
+            exit 1
+          fi
+          echo "No Stripe links found in dist/"
+
+      # Florida §496.405 language scan
+      - name: Scan for donation language violations
+        run: |
+          VIOLATIONS=$(grep -rn --include="*.tsx" --include="*.ts" --include="*.html" \
+            -iE '\bdonat(e|ion|ions|ing)\b' \
+            youandinotai/src/ antigravity/components/ antigravity/app/ \
+            revenue-core/components/ _deploy/ mcp-server/src/ 2>/dev/null \
+            | grep -ivE 'not.*(charit|donat)|not a.*(donat|solicitat)|donate\.lovetotherescue' || true)
+          if [ -n "$VIOLATIONS" ]; then
+            echo "::warning::§496.405 — Found donation language that may need review:"
+            echo "$VIOLATIONS"
+          else
+            echo "No §496.405 violations found"
+          fi
+
+      # Iron Wall check — ENIGMA must not reference OMEGA
+      - name: Iron Wall scan
+        run: |
+          if grep -rn "ai-solutions\.store\|CharityRouter100\|omega_charity" \
+            youandinotai/src/ youandinotai-api/app/ 2>/dev/null; then
+            echo "::error::Iron Wall violation — ENIGMA code references OMEGA paths"
+            exit 1
+          fi
+          echo "Iron Wall intact"
