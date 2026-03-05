@@ -23,9 +23,16 @@ jobs:
           CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           echo "Listing Cloudflare Pages projects..."
-          curl -s "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT/pages/projects" \
+          response=$(curl -s "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT/pages/projects" \
             -H "Authorization: Bearer $CF_TOKEN" \
-            -H "Content-Type: application/json" | jq '.result[] | {name, subdomain, latest_deployment: .latest_deployment.url}'
+            -H "Content-Type: application/json")
+          echo "$response" | jq '.'
+          success=$(echo "$response" | jq -r '.success // false')
+          if [ "$success" = "true" ]; then
+            echo "$response" | jq '.result[]? | {name, subdomain, latest_deployment: .latest_deployment.url}'
+          else
+            echo "Cloudflare list API returned success=false; continuing to deploy trigger for explicit response."
+          fi
 
       - name: Trigger deployment
         env:
@@ -42,6 +49,11 @@ jobs:
               -H "Authorization: Bearer $CF_TOKEN" \
               -H "Content-Type: application/json")
             echo "$response" | jq '.'
+            success=$(echo "$response" | jq -r '.success // false')
+            if [ "$success" != "true" ]; then
+              echo "Deployment trigger failed for project: $project_name"
+              exit 1
+            fi
           }
 
           if [ "$PROJECT" = "all" ]; then
