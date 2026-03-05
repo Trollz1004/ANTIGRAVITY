@@ -25,7 +25,7 @@ const SPLITS = [
     textClass: 'text-emerald-400',
     barClass: 'from-emerald-400 to-emerald-600',
     Icon: Heart,
-    detail: 'Every revenue dollar — not profit, revenue — splits the moment it arrives. 60 cents of every dollar goes directly to Shriners Children\'s Hospitals. No delays. No overhead deductions first.',
+    detail: 'Every revenue dollar — not profit, revenue — splits the moment it arrives. 60 cents of every dollar goes directly to Shriners Children\'s Hospitals Gnosis Safe (0x8d3dEADbE2b4B857A43331D459270B5eedC7084e). No delays. No overhead deductions first.',
   },
   {
     label: 'Infrastructure & AI',
@@ -276,10 +276,10 @@ export function ImpactLedger() {
               <Shield size={11} className="text-indigo-400" />
               Gnosis Safe multisig
             </span>
-            <span className="flex items-center gap-1.5">
+            <a href="https://basescan.org/address/0x9855B75061D4c841791382998f0CE8B2BCC965A4" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-purple-400 transition-colors">
               <ExternalLink size={11} className="text-purple-400" />
               Auditable on-chain
-            </span>
+            </a>
           </div>
           <p className="text-gray-600 text-xs max-w-md mx-auto leading-relaxed">
             Protocol Omega is deployed on Base Mainnet. Every transaction is publicly verifiable.

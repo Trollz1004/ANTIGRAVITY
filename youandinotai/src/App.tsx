@@ -318,6 +318,49 @@ function LegalModal({ type, onClose }: { type: string; onClose: () => void }) {
   );
 }
 
+function SuccessModal({ onClose }: { onClose: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[10001] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, y: 20, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        exit={{ scale: 0.9, y: 20, opacity: 0 }}
+        className="bg-gray-900 border border-emerald-500/50 rounded-3xl max-w-sm w-full p-8 text-center shadow-2xl relative overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Success Confetti Effect */}
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 via-green-500 to-emerald-400" />
+
+        <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/30">
+          <ShieldCheck size={40} className="text-emerald-400" />
+        </div>
+
+        <h3 className="text-2xl font-black text-white mb-2">Bot-Shield Verified</h3>
+        <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+          Your verification is complete! 60% of your payment has been routed to Shriners. Check your email for a receipt from Square.
+        </p>
+
+        <button
+          onClick={onClose}
+          className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-black font-black rounded-2xl transition-all shadow-lg active:scale-95"
+        >
+          Let's Go!
+        </button>
+
+        <p className="mt-6 text-[10px] text-gray-600 font-mono uppercase tracking-widest">
+          #FORtheKIDS — Smart Contract Verified
+        </p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 /* ─── Footer ─── */
 function Footer({ onLegal }: { onLegal: (type: string) => void }) {
   const plans = [
@@ -401,10 +444,10 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
               </React.Fragment>
             ))}
           </div>
-          <p className="text-gray-600 text-xs">&copy; 2026 Trash Or Treasure Online Recycler LLC. All rights reserved.</p>
+          <p className="text-gray-600 text-xs">&copy; 2026 <a href="https://search.sunbiz.org/Inquiry/CorporationSearch/SearchResultDetail?inquiryType=EntityName&searchTerm=TRASH%20OR%20TREASURE%20ONLINE%20RECYCLER%20LLC&listNameOrder=TRASHORTREASUREONLINERECYCLER%20L250001584010" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400">Trash Or Treasure Online Recycler LLC</a>. All rights reserved.</p>
         </div>
         <p className="max-w-4xl mx-auto text-center text-[10px] text-gray-600 mt-6 leading-relaxed">
-          YouAndINotAI.com and OnlineRecycle.org are for-profit platforms. Revenue disbursements to Shriners Children&apos;s Hospitals are executed automatically via smart contract (Protocol Omega, Base Mainnet). These disbursements are contractual revenue splits, not charitable donations or solicitations under Florida Statutes §496.405. Shriners Children&apos;s Hospitals is an independent 501(c)(3) organization and does not endorse or sponsor these platforms.
+          YouAndINotAI.com is a for-profit platform. Revenue disbursements to Shriners Children&apos;s Hospitals are executed automatically via smart contract (Protocol Omega, Base Mainnet). These disbursements are contractual revenue splits, not charitable donations or disbursements under Florida Statutes §496.405. Shriners Children&apos;s Hospitals is an independent 501(c)(3) organization and does not endorse or sponsor this platform.
           <br />
           Verify on-chain: <a href="https://basescan.org/address/0x9855B75061D4c841791382998f0CE8B2BCC965A4" target="_blank" rel="noopener noreferrer" className="text-gray-500 underline decoration-gray-700">Protocol Omega Contract</a>
         </p>
@@ -418,7 +461,7 @@ const FEATURES = [
   { key: 'contest', icon: Trophy, name: 'Launch Contest', desc: 'Win launch prizes', gradient: 'from-yellow-400 to-orange-500' },
   { key: 'wall', icon: PenTool, name: 'Signature Wall', desc: 'Leave your mark', gradient: 'from-pink-400 to-rose-500' },
   { key: 'shriners', icon: ShieldCheck, name: 'Mars Hall Pass', desc: 'Shriners honor', gradient: 'from-red-400 to-rose-600' },
-  { key: 'ecosystem', icon: LayoutDashboard, name: 'Ecosystem', desc: 'System status', gradient: 'from-indigo-400 to-purple-500' },
+  { key: 'ecosystem', icon: LayoutDashboard, name: 'Transparency', desc: 'Real-time proof', gradient: 'from-indigo-400 to-purple-500' },
 ] as const;
 
 type FeatureKey = typeof FEATURES[number]['key'];
@@ -430,10 +473,22 @@ type FeatureKey = typeof FEATURES[number]['key'];
 export default function App() {
   const [activeModal, setActiveModal] = useState<FeatureKey | null>(null);
   const [legalModal, setLegalModal] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    // Check for success status or transaction ID in URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('status') === 'success' || params.get('transactionId')) {
+      setShowSuccess(true);
+      // Clean URL without refreshing
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
 
   const closeAllModals = () => {
     setActiveModal(null);
     setLegalModal(null);
+    setShowSuccess(false);
   };
 
   const scrollToCharity = () => {
@@ -472,7 +527,7 @@ export default function App() {
 
       {/* #ForTheKids Charity Banner */}
       <div className="relative z-10 pt-14 bg-emerald-500 text-black text-center py-3 px-4 font-bold text-sm md:text-base">
-        #ForTheKids — 60% of net proceeds → Shriners Children&apos;s Hospitals (on-chain, verifiable). Not a solicitation.
+        #ForTheKids — 60% of net proceeds → Shriners Children&apos;s Hospitals (on-chain, verifiable).
       </div>
 
       {/* Hero Section */}
@@ -649,6 +704,9 @@ export default function App() {
           )}
           {legalModal && (
             <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />
+          )}
+          {showSuccess && (
+            <SuccessModal onClose={() => setShowSuccess(false)} />
           )}
         </AnimatePresence>
       </ModalErrorBoundary>
