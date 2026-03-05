@@ -1,19 +1,120 @@
 """Pydantic schemas for request and response payloads."""
 
 import uuid
+from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
-class UserRegisterRequest(BaseModel):
+# ── Auth ──
+
+class AuthRegisterRequest(BaseModel):
     email: EmailStr
+    password: str = Field(min_length=8, max_length=128)
     display_name: str = Field(min_length=1, max_length=100)
 
 
-class UserRegisterResponse(BaseModel):
-    user_id: uuid.UUID
-    session_token: str
+class AuthLoginRequest(BaseModel):
+    email: EmailStr
+    password: str
 
+
+class AuthTokenResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    user_id: uuid.UUID
+
+
+class AuthRefreshRequest(BaseModel):
+    refresh_token: str
+
+
+class UserMeResponse(BaseModel):
+    user_id: uuid.UUID
+    email: str
+    display_name: str
+    bot_shield_verified: bool
+    subscription_tier: str | None
+    subscription_active: bool
+    has_profile: bool
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ── Profile ──
+
+class ProfileUpdateRequest(BaseModel):
+    bio: str | None = Field(None, max_length=500)
+    age: int | None = Field(None, ge=18, le=120)
+    gender: str | None = Field(None, max_length=50)
+    looking_for: str | None = Field(None, max_length=50)
+    location: str | None = Field(None, max_length=200)
+    interests: list[str] = Field(default_factory=list, max_length=20)
+
+
+class ProfileResponse(BaseModel):
+    user_id: uuid.UUID
+    display_name: str
+    bio: str | None
+    age: int | None
+    gender: str | None
+    looking_for: str | None
+    location: str | None
+    photos: list[str]
+    interests: list[str]
+    verified: bool
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ── Swipe / Match ──
+
+class SwipeRequest(BaseModel):
+    target_id: uuid.UUID
+    direction: str = Field(pattern="^(like|pass)$")
+
+
+class SwipeResponse(BaseModel):
+    matched: bool
+    match_id: uuid.UUID | None = None
+
+
+class MatchResponse(BaseModel):
+    match_id: uuid.UUID
+    user_id: uuid.UUID
+    display_name: str
+    photos: list[str]
+    matched_at: datetime
+    last_message_at: datetime | None
+    model_config = ConfigDict(from_attributes=True)
+
+
+class DiscoverProfileResponse(BaseModel):
+    user_id: uuid.UUID
+    display_name: str
+    bio: str | None
+    age: int | None
+    photos: list[str]
+    interests: list[str]
+    location: str | None
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ── Messages ──
+
+class MessageSendRequest(BaseModel):
+    content: str = Field(min_length=1, max_length=2000)
+
+
+class MessageResponse(BaseModel):
+    id: uuid.UUID
+    sender_id: uuid.UUID
+    content: str
+    read_at: datetime | None
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ── Webhooks ──
 
 class WebhookAckResponse(BaseModel):
     received: bool = True
@@ -22,31 +123,94 @@ class WebhookAckResponse(BaseModel):
     duplicate: bool = False
 
 
-class MatchPreferences(BaseModel):
-    age_range: str | None = None
-    interests: list[str] = Field(default_factory=list)
-    location_radius: int | None = None
-
-
-class MatchRequest(BaseModel):
-    user_id: uuid.UUID
-    preferences: MatchPreferences = Field(default_factory=MatchPreferences)
-
-
-class MatchResult(BaseModel):
-    user_id: uuid.UUID
-    compatibility_score: float
-    match_reason: str = Field(min_length=1, max_length=240)
-
-
-class MatchResponse(BaseModel):
-    matches: list[MatchResult]
-
+# ── Health ──
 
 class HealthResponse(BaseModel):
     status: str
     db_connected: bool
     stripe_connected: bool
     user_count: int
+    model_config = ConfigDict(from_attributes=True)
 
+
+# ── Boards ──
+
+class PostCreateRequest(BaseModel):
+    title: str = Field(min_length=1, max_length=200)
+    body: str = Field(min_length=1, max_length=5000)
+
+
+class PostResponse(BaseModel):
+    id: uuid.UUID
+    board_slug: str
+    author_id: uuid.UUID
+    author_name: str
+    title: str
+    body: str
+    like_count: int
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+class CommentCreateRequest(BaseModel):
+    body: str = Field(min_length=1, max_length=2000)
+
+
+class CommentResponse(BaseModel):
+    id: uuid.UUID
+    author_id: uuid.UUID
+    author_name: str
+    body: str
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ── Events ──
+
+class EventCreateRequest(BaseModel):
+    title: str = Field(min_length=1, max_length=200)
+    description: str = Field(min_length=1, max_length=5000)
+    location: str | None = Field(None, max_length=300)
+    event_date: datetime
+    max_attendees: int | None = Field(None, ge=1)
+    category: str = "general"
+
+
+class EventResponse(BaseModel):
+    id: uuid.UUID
+    organizer_id: uuid.UUID
+    organizer_name: str
+    title: str
+    description: str
+    location: str | None
+    event_date: datetime
+    max_attendees: int | None
+    attendee_count: int
+    category: str
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ── Volunteering ──
+
+class VolunteerCreateRequest(BaseModel):
+    title: str = Field(min_length=1, max_length=200)
+    organization: str = Field(min_length=1, max_length=200)
+    description: str = Field(min_length=1, max_length=5000)
+    location: str | None = Field(None, max_length=300)
+    event_date: datetime | None = None
+    spots: int | None = Field(None, ge=1)
+
+
+class VolunteerResponse(BaseModel):
+    id: uuid.UUID
+    created_by: uuid.UUID
+    title: str
+    organization: str
+    description: str
+    location: str | None
+    event_date: datetime | None
+    spots: int | None
+    signup_count: int
+    created_at: datetime
     model_config = ConfigDict(from_attributes=True)
