@@ -38,7 +38,10 @@ async def _ensure_boards(db: AsyncSession) -> None:
 
 
 @router.get("")
-async def list_boards(db: AsyncSession = Depends(get_db)):
+async def list_boards(
+    _user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     await _ensure_boards(db)
     boards = (await db.scalars(select(Board).order_by(Board.name))).all()
     return [{"slug": b.slug, "name": b.name, "description": b.description} for b in boards]

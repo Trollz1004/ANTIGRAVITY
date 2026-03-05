@@ -67,7 +67,7 @@ def _calculate_split(total_cents: int) -> RevenueSplitResponse:
 def _verify_metrics_key(x_metrics_key: str | None = Header(default=None, alias="X-Metrics-Key")) -> str:
     """Simple API key auth for dashboard access. Not user JWT."""
     settings = get_settings()
-    expected = settings.jwt_secret  # reuse jwt_secret as metrics key for now
+    expected = settings.metrics_api_key or settings.jwt_secret  # prefer dedicated key, fallback to jwt
     if not x_metrics_key or x_metrics_key != expected:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid metrics key")
     return x_metrics_key
