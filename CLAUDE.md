@@ -45,14 +45,14 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. Dis
 
 | Product | Square Link (PRIMARY) |
 |---------|----------------------|
-| Bot-Shield $1 | https://square.link/u/eMyJvw8D |
-| Founding Member $14.99/mo | https://square.link/u/ipY5VUT5 |
-| 3-Month Founder $39.99 | https://square.link/u/cCkmYsFw |
-| 12-Month Founder $99.99 | https://square.link/u/HlvE57fI |
-| Royalty Card $2,500 | https://square.link/u/0QQllAFQ |
+| Bot-Shield $1 | https://square.link/u/Qc5mxUy7 |
+| Founding Member $14.99/mo | https://square.link/u/cxwjcn0s |
+| 3-Month Founder $39.99 | https://square.link/u/oY7qEfRM |
+| 12-Month Founder $99.99 | https://square.link/u/6GHpbvvl |
+| Royalty Card $2,500 | https://square.link/u/CafhorUS |
 
 - Square account: ebaytrashortreasure@gmail.com (bank attached, no key expiry)
-- Square locations: L24ZX5WRA41TH (YouAndINotAI), LY5GN09F5AN83 (Trash Or Treasure)
+- Square locations: LY5GN09F5AN83 (Trash Or Treasure - ACTIVE), L24ZX5WRA41TH (YouAndINotAI - No Card Processing Yet)
 - Stripe: LEGACY ONLY — restricted key expires ~March 10. Being phased out.
 - Master env vault: `briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env` (gitignored)
 

@@ -2,7 +2,7 @@ const https = require('https');
 const crypto = require('crypto');
 
 const TOKEN = '***SQUARE_TOKEN_REDACTED***';
-const LOCATION_ID = 'L24ZX5WRA41TH'; // From CLAUDE.md
+const LOCATION_ID = 'LY5GN09F5AN83'; // Trash Or Treasure (ACTIVE FOR CARDS)
 
 const createLink = (name, desc, priceCents, isSub) => {
     return new Promise((resolve, reject) => {
@@ -64,8 +64,8 @@ async function run() {
             { name: 'Royalty Card', price: 250000, desc: 'Lifetime VIP + revenue share' }
         ];
 
+        console.log(`Generating links for location: ${LOCATION_ID}`);
         for (const plan of plans) {
-            console.log(`Creating link for ${plan.name}...`);
             const link = await createLink(plan.name, plan.desc, plan.price);
             if (link.payment_link && link.payment_link.url) {
                 console.log(`${plan.name} => ${link.payment_link.url}`);
