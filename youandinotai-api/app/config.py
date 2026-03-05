@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     """Runtime configuration for the FastAPI backend."""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=("../.env", ".env"),
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
@@ -30,7 +30,11 @@ class Settings(BaseSettings):
     kimi_api_key: str = ""
     kimi_model: str = "kimi-2.6"
 
-    cors_origins: str = "https://youandinotai.com,http://localhost:3000"
+    jwt_secret: str = Field(default="change-me-in-production")
+    access_token_expire_minutes: int = 30
+    refresh_token_expire_days: int = 7
+
+    cors_origins: str = "https://youandinotai.com,http://localhost:3000,http://localhost:5173"
     registration_rate_limit_per_minute: int = 10
     match_top_k: int = 5
     match_candidate_limit: int = 50

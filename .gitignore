@@ -7,6 +7,9 @@ logs/
 !.env.example
 .vault/
 node_modules/
+.venv/
+__pycache__/
+*.pyc
 .next/
 dist/
 __pycache__/
