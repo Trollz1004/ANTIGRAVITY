@@ -272,7 +272,7 @@ function PricingSection() {
 const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   terms: {
     title: 'Terms of Service',
-    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. HUMAN VERIFICATION — Bot-Shield verification is required. Fraudulent verification attempts result in permanent ban.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations result in immediate account termination.\n4. PAYMENTS — All payments processed through Stripe. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. CHARITY — Revenue splits 60% to Shriners Children's Hospitals, 30% to V8 AI Infrastructure, and 10% to Founder Operations. This is a permanent commitment enforced by smart contract on Base Mainnet (Protocol Omega).\n\nLast updated: February 2026. Contact: contact@youandinotai.com`,
+    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. HUMAN VERIFICATION — Bot-Shield verification is required. Fraudulent verification attempts result in permanent ban.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations result in immediate account termination.\n4. PAYMENTS — All payments processed through Stripe. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. PROTOCOL OMEGA — Revenue disbursements to Shriners Children's Hospitals are executed automatically via smart contract on Base Mainnet. These disbursements are contractual revenue splits, not charitable donations or solicitations under Florida Statutes §496.405. Shriners Children's Hospitals is an independent 501(c)(3) organization and does not endorse or sponsor this platform. Verify on-chain: https://basescan.org/address/0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121.\n\nLast updated: February 2026. Contact: contact@youandinotai.com`,
   },
   privacy: {
     title: 'Privacy Policy',
@@ -403,8 +403,10 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
           </div>
           <p className="text-gray-600 text-xs">&copy; 2026 Trash Or Treasure Online Recycler LLC. All rights reserved.</p>
         </div>
-        <p className="text-center text-xs text-gray-600 mt-2">
-          See our <button onClick={() => onLegal('refund')} className="text-red-400 hover:text-red-300 transition-colors bg-transparent border-none cursor-pointer p-0 text-xs">Refund Policy</button> for details on refunds by product type.
+        <p className="max-w-4xl mx-auto text-center text-[10px] text-gray-600 mt-6 leading-relaxed">
+          YouAndINotAI.com and OnlineRecycle.org are for-profit platforms. Revenue disbursements to Shriners Children&apos;s Hospitals are executed automatically via smart contract (Protocol Omega, Base Mainnet). These disbursements are contractual revenue splits, not charitable donations or solicitations under Florida Statutes §496.405. Shriners Children&apos;s Hospitals is an independent 501(c)(3) organization and does not endorse or sponsor these platforms.
+          <br />
+          Verify on-chain: <a href="https://basescan.org/address/0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121" target="_blank" rel="noopener noreferrer" className="text-gray-500 underline decoration-gray-700">Protocol Omega Contract</a>
         </p>
       </div>
     </footer>
@@ -470,7 +472,7 @@ export default function App() {
 
       {/* #ForTheKids Charity Banner */}
       <div className="relative z-10 pt-14 bg-emerald-500 text-black text-center py-3 px-4 font-bold text-sm md:text-base">
-        #ForTheKids — 60% Shriners / 30% V8 / 10% Founder Split — Enforced by Protocol Omega
+        #ForTheKids — 60% of net proceeds → Shriners Children&apos;s Hospitals (on-chain, verifiable). Not a solicitation.
       </div>
 
       {/* Hero Section */}
