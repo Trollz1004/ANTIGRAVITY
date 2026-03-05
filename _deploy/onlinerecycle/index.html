@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- PRIMARY SEO META TAGS -->
   <title>Florida E-Waste & Electronics Recycling | Free Drop-Off & Pickup | OnlineRecycle.org</title>
 
-  <meta name="description" content="Florida's charity-first e-waste recycler. Free electronics drop-off & pickup in Sorrento, Lake County & Central Florida. 60% of every dollar goes to Shriners Children's Hospitals. Recycle your old devices for the kids. #ForTheKids">
+  <meta name="description"
+    content="Florida's charity-first e-waste recycler. Free electronics drop-off & pickup in Sorrento, Lake County & Central Florida. 60% of every dollar goes to Shriners Children's Hospitals. Recycle your old devices for the kids. #ForTheKids">
 
-  <meta name="keywords" content="Florida electronics recycling, e-waste drop off Florida, free e-waste pickup Florida, electronics recycling Sorrento FL, Lake County e-waste, Central Florida electronics recycling, recycle old computers Florida, charity electronics recycling, kids charity recycling Florida">
+  <meta name="keywords"
+    content="Florida electronics recycling, e-waste drop off Florida, free e-waste pickup Florida, electronics recycling Sorrento FL, Lake County e-waste, Central Florida electronics recycling, recycle old computers Florida, charity electronics recycling, kids charity recycling Florida">
 
   <!-- GEO TARGETING -->
   <meta name="geo.region" content="US-FL">
@@ -18,7 +21,8 @@
 
   <!-- OPEN GRAPH (Facebook/Pinterest) -->
   <meta property="og:title" content="Recycle Electronics. Help Florida Kids. | OnlineRecycle.org">
-  <meta property="og:description" content="Drop off your old electronics in Central Florida and 60% goes directly to Shriners Children's Hospitals. Free pickup available. Until no kid is in need.">
+  <meta property="og:description"
+    content="Drop off your old electronics in Central Florida and 60% goes directly to Shriners Children's Hospitals. Free pickup available. Until no kid is in need.">
   <meta property="og:url" content="https://onlinerecycle.org">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://onlinerecycle.org/og-image.jpg">
@@ -27,7 +31,8 @@
   <!-- TWITTER CARD -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Florida E-Waste Recycling That Fights For Kids | OnlineRecycle.org">
-  <meta name="twitter:description" content="Free electronics drop-off & pickup in Central Florida. 60% of every dollar to Shriners Children's Hospitals. #ForTheKids #FreeRecycling">
+  <meta name="twitter:description"
+    content="Free electronics drop-off & pickup in Central Florida. 60% of every dollar to Shriners Children's Hospitals. #ForTheKids #FreeRecycling">
 
   <!-- CANONICAL -->
   <link rel="canonical" href="https://onlinerecycle.org/">
@@ -44,7 +49,11 @@
       --accent-2: #16a34a;
       --line: #203248;
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       background: radial-gradient(circle at top, #0f1d2a 0%, var(--bg) 55%);
@@ -52,6 +61,7 @@
       font-family: 'Outfit', sans-serif;
       line-height: 1.45;
     }
+
     .banner {
       background: #000;
       text-align: center;
@@ -62,19 +72,48 @@
       top: 0;
       z-index: 99;
     }
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 24px; }
-    h1, h2, h3 { margin: 0 0 12px; letter-spacing: -0.02em; }
-    h1 { font-size: clamp(2rem, 4vw, 3.2rem); }
-    h2 { font-size: clamp(1.4rem, 2.4vw, 2rem); }
-    p { color: var(--muted); margin: 0 0 14px; }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+    }
+
+    h2 {
+      font-size: clamp(1.4rem, 2.4vw, 2rem);
+    }
+
+    p {
+      color: var(--muted);
+      margin: 0 0 14px;
+    }
+
     .hero {
       border: 1px solid var(--line);
-      background: linear-gradient(140deg, rgba(34,197,94,0.14), rgba(16,23,34,0.92));
+      background: linear-gradient(140deg, rgba(34, 197, 94, 0.14), rgba(16, 23, 34, 0.92));
       border-radius: 22px;
       padding: 28px;
       margin-top: 18px;
     }
-    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -88,32 +127,48 @@
       cursor: pointer;
       transition: 160ms ease;
     }
-    .btn-primary { background: var(--accent); color: #07140b; }
-    .btn-primary:hover { background: #31d46a; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #07140b;
+    }
+
+    .btn-primary:hover {
+      background: #31d46a;
+    }
+
     .btn-secondary {
       background: transparent;
       color: var(--text);
       border-color: var(--line);
     }
-    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 18px;
       margin-top: 18px;
     }
+
     .card {
       border: 1px solid var(--line);
       background: rgba(16, 23, 34, 0.84);
       border-radius: 18px;
       padding: 18px;
     }
+
     .booking-links {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 12px;
       margin-top: 12px;
     }
+
     .booking-links a {
       display: block;
       border: 1px solid var(--line);
@@ -123,14 +178,25 @@
       color: var(--text);
       background: #0c1623;
     }
-    .booking-links a:hover { border-color: var(--accent); }
-    form { margin-top: 12px; }
+
+    .booking-links a:hover {
+      border-color: var(--accent);
+    }
+
+    form {
+      margin-top: 12px;
+    }
+
     .field-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-    .field { margin-bottom: 10px; }
+
+    .field {
+      margin-bottom: 10px;
+    }
+
     label {
       display: block;
       font-size: 0.74rem;
@@ -140,7 +206,10 @@
       margin-bottom: 6px;
       font-weight: 700;
     }
-    input, select, textarea {
+
+    input,
+    select,
+    textarea {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 12px;
@@ -150,32 +219,51 @@
       font-family: inherit;
       font-size: 0.95rem;
     }
-    textarea { min-height: 110px; resize: vertical; }
-    input:focus, select:focus, textarea:focus {
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(34,197,94,0.14);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.14);
     }
+
     .helper {
       font-size: 0.83rem;
       color: #9fb3c8;
       margin-top: 6px;
     }
+
     .footer {
       margin: 20px 0 6px;
       font-size: 0.83rem;
       color: #8ea0b3;
       text-align: center;
     }
+
     @media (max-width: 760px) {
-      .field-row { grid-template-columns: 1fr; }
-      .wrap { padding: 16px; }
-      .hero { padding: 20px; }
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+
+      .wrap {
+        padding: 16px;
+      }
+
+      .hero {
+        padding: 20px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="banner">#ForTheKids — 60% of net proceeds support children in medical need</div>
+  <div class="banner">#ForTheKids — 60% Shriners / 30% V8 / 10% Founder Split — Enforced by Protocol Omega</div>
 
   <main class="wrap">
     <section class="hero">
@@ -187,16 +275,19 @@
 
       <!-- MISSION STATEMENT -->
       <p>
-        When you recycle your old electronics with OnlineRecycle.org, 
-        <strong>60% of every dollar goes directly to Shriners Children's Hospitals</strong> — 
+        When you recycle your old electronics with OnlineRecycle.org,
+        <strong>60% of every dollar goes directly to Shriners Children's Hospitals</strong> —
         because your old laptop should help a kid, not a landfill.
         Free drop-off. Free pickup. Zero excuses not to do good.
       </p>
 
       <div class="cta-row">
-        <a class="btn btn-primary" href="https://book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services" target="_blank" rel="noopener noreferrer">Book Drop-Off Slot</a>
-        <a class="btn btn-primary" href="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services" target="_blank" rel="noopener noreferrer">Book Pickup Slot</a>
-        <a class="btn btn-secondary" href="https://onlinerecycle.square.site/" target="_blank" rel="noopener noreferrer">Open Square Store</a>
+        <a class="btn btn-primary" href="https://book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services"
+          target="_blank" rel="noopener noreferrer">Book Drop-Off Slot</a>
+        <a class="btn btn-primary" href="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services"
+          target="_blank" rel="noopener noreferrer">Book Pickup Slot</a>
+        <a class="btn btn-secondary" href="https://onlinerecycle.square.site/" target="_blank"
+          rel="noopener noreferrer">Open Square Store</a>
       </div>
     </section>
 
@@ -209,7 +300,8 @@
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_next" value="https://onlinerecycle.org/?intake=dropoff-received" />
           <input type="hidden" name="intake_type" value="dropoff" />
-          <input type="hidden" name="square_booking_flow" value="https://book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services" />
+          <input type="hidden" name="square_booking_flow"
+            value="https://book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services" />
 
           <div class="field-row">
             <div class="field">
@@ -267,7 +359,8 @@
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_next" value="https://onlinerecycle.org/?intake=pickup-received" />
           <input type="hidden" name="intake_type" value="pickup" />
-          <input type="hidden" name="square_booking_flow" value="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services" />
+          <input type="hidden" name="square_booking_flow"
+            value="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services" />
 
           <div class="field-row">
             <div class="field">
@@ -342,8 +435,12 @@
         3) Receive confirmation by email with follow-up from the OnlineRecycle team.
       </p>
       <div class="booking-links">
-        <a href="https://book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services" target="_blank" rel="noopener noreferrer"><strong>Drop-Off Booking (Square)</strong><br><span class="helper">book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services</span></a>
-        <a href="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services" target="_blank" rel="noopener noreferrer"><strong>Pickup Booking (Square)</strong><br><span class="helper">book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services</span></a>
+        <a href="https://book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services" target="_blank"
+          rel="noopener noreferrer"><strong>Drop-Off Booking (Square)</strong><br><span
+            class="helper">book.squareup.com/appointments/buyer/widget/ML3C7FMTQS5KX/services</span></a>
+        <a href="https://book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services" target="_blank"
+          rel="noopener noreferrer"><strong>Pickup Booking (Square)</strong><br><span
+            class="helper">book.squareup.com/appointments/buyer/widget/LY5GN09F5AN83/services</span></a>
       </div>
     </section>
 
@@ -353,43 +450,43 @@
       <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-top:20px;">
         <h3 itemprop="name">Where can I recycle electronics for free in Florida?</h3>
         <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          <p itemprop="text">OnlineRecycle.org offers free electronics drop-off and free pickup 
-          throughout Central Florida including Sorrento, Lake County, Orange County, and 
-          Seminole County. Schedule online and we come to you — no cost, ever.</p>
+          <p itemprop="text">OnlineRecycle.org offers free electronics drop-off and free pickup
+            throughout Central Florida including Sorrento, Lake County, Orange County, and
+            Seminole County. Schedule online and we come to you — no cost, ever.</p>
         </div>
       </div>
 
       <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-top:20px;">
         <h3 itemprop="name">What electronics can I recycle in Central Florida?</h3>
         <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          <p itemprop="text">We accept computers, laptops, phones, tablets, TVs, printers, 
-          gaming consoles, cables, batteries, and most other consumer electronics. 
-          If it plugs in or has a battery, we take it.</p>
+          <p itemprop="text">We accept computers, laptops, phones, tablets, TVs, printers,
+            gaming consoles, cables, batteries, and most other consumer electronics.
+            If it plugs in or has a battery, we take it.</p>
         </div>
       </div>
 
       <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-top:20px;">
         <h3 itemprop="name">Does my electronics recycling actually help kids?</h3>
         <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          <p itemprop="text">Yes — 60% of all net proceeds from OnlineRecycle.org go directly 
-          to Shriners Children's Hospitals via our Protocol Omega revenue split, 
-          verified on-chain. Until no kid is in need. #ForTheKids</p>
+          <p itemprop="text">Yes — 60% of all net proceeds from OnlineRecycle.org go directly
+            to Shriners Children's Hospitals via our Protocol Omega revenue split,
+            verified on-chain. Until no kid is in need. #ForTheKids</p>
         </div>
       </div>
 
       <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-top:20px;">
         <h3 itemprop="name">Is there an electronics recycling drop-off near Sorrento, FL?</h3>
         <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          <p itemprop="text">Yes. OnlineRecycle.org is based in Sorrento, Florida and serves 
-          all of Lake County and surrounding Central Florida counties. 
-          Drop-off and pickup scheduling available at onlinerecycle.org.</p>
+          <p itemprop="text">Yes. OnlineRecycle.org is based in Sorrento, Florida and serves
+            all of Lake County and surrounding Central Florida counties.
+            Drop-off and pickup scheduling available at onlinerecycle.org.</p>
         </div>
       </div>
     </section>
 
     <p class="footer">OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida</p>
   </main>
-  
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -443,4 +540,5 @@
   }
   </script>
 </body>
+
 </html>
