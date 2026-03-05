@@ -2,6 +2,8 @@
 import { NextResponse } from 'next/server';
 // import { prisma } from '@/lib/prisma'; // Uncomment when DB is ready
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     // FALLBACK FOR PRE-LAUNCH (Hardcoded but structured to be replaced by real DB queries)

@@ -1,33 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-// Initialize Stripe with the secret key from environment variables
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2025-01-27-acacia' as any, // Use the latest stable version
-});
-
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-/**
- * Protocol Omega Revenue Split Logic (60/30/10)
- * 60% -> Shriners Children's Hospitals
- * 30% -> V8 Verification Engine / AI Infrastructure
- * 10% -> Founder Operations (Joshua Coleman)
- */
-function calculateSplit(amountInCents: number) {
-  const shriners = Math.floor(amountInCents * 0.60);
-  const infrastructure = Math.floor(amountInCents * 0.30);
-  const founder = amountInCents - shriners - infrastructure; // Ensures no rounding loss
-
-  return {
-    shriners: shriners / 100,
-    infrastructure: infrastructure / 100,
-    founder: founder / 100,
-    total: amountInCents / 100,
-  };
-}
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
+  // Initialize Stripe inside the handler to ensure it only runs when needed
+  // and has access to environment variables at runtime.
+  const stripeSecret = process.env.STRIPE_SECRET_KEY as string;
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  if (!stripeSecret) {
+    return NextResponse.json({ error: "Missing STRIPE_SECRET_KEY" }, { status: 500 });
+  }
+
+  const stripe = new Stripe(stripeSecret, {
+    apiVersion: '2025-01-27-acacia' as any,
+  });
+
   const payload = await req.text();
   const sig = req.headers.get('stripe-signature');
 
@@ -43,6 +32,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
 
+  /**
+   * Protocol Omega Revenue Split Logic (60/30/10)
+   */
+  const calculateSplit = (amountInCents: number) => {
+    const shriners = Math.floor(amountInCents * 0.60);
+    const infrastructure = Math.floor(amountInCents * 0.30);
+    const founder = amountInCents - shriners - infrastructure;
+
+    return {
+      shriners: shriners / 100,
+      infrastructure: infrastructure / 100,
+      founder: founder / 100,
+      total: amountInCents / 100,
+    };
+  };
+
   // Handle the event
   switch (event.type) {
     case 'checkout.session.completed':
@@ -56,14 +61,8 @@ export async function POST(req: NextRequest) {
         console.log('⚙️ Infrastructure Share (30%):', split.infrastructure);
         console.log('👤 Founder Share (10%):', split.founder);
 
-        // TODO: Store this transaction in the database (PostgreSQL via Prisma/Drizzle)
-        // TODO: Trigger on-chain split via Protocol Omega smart contract (Base Mainnet)
+        // TODO: Store this transaction in the database
       }
-      break;
-
-    case 'payment_intent.succeeded':
-      const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      // Handle direct payment intents if necessary
       break;
 
     default:
