@@ -25,7 +25,7 @@ BRAND = {
     "domain": "youandinotai.com",
     "usp": "V8 Cloud Verification",
     "price": "$14.99/mo",
-    "handle": "@AiCollab4Kids",
+    "handle": "@YouAndiNotAi",
 }
 
 # Tier 3 cities (not yet posted)

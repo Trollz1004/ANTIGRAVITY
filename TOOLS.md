@@ -17,7 +17,7 @@
 
 | Drive | Label   | Size   | Free   | Use                          |
 | ----- | ------- | ------ | ------ | ---------------------------- |
-| C:    | 9020    | 465 GB | 311 GB | OS, workspace (C:\OPUS)      |
+| C:    | 9020    | 465 GB | 311 GB | OS, workspace (C:\\Antigravity)      |
 | D:    | STORAGE | 447 GB | 447 GB | Services data, backups, logs |
 
 ## Auto-Start (9020)
@@ -28,7 +28,7 @@
 | Ollama + Qdrant  | Startup shortcut → start-stack.ps1 | Runs at login                                  |
 | OpenClaw Gateway | Scheduled task "OpenClaw Gateway"  | At logon                                       |
 
-## Scripts (C:\OPUS\scripts\)
+## Scripts (C:\\Antigravity\\scripts\\)
 
 | Script               | Purpose                                                        |
 | -------------------- | -------------------------------------------------------------- |

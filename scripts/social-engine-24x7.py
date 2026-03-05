@@ -203,8 +203,9 @@ def run_cycle(state, platforms_filter=None):
 
             log.info(f"[{platform}] Generated ({source}/{pillar}): {text[:80]}...")
 
-            # Add human-like jitter delay
-            jitter = random.uniform(5, 45)
+            # Human-like delay between platforms (2-5 min) to avoid bot detection
+            jitter = random.uniform(120, 300)
+            log.info(f"[{platform}] Human pacing: waiting {jitter:.0f}s before posting")
             time.sleep(jitter)
 
             # Post
