@@ -1,6 +1,7 @@
 # CLAUDE.md — ANTIGRAVITY (Multi-Node)
 
-> Auto-loaded every session. This IS your memory.
+> Auto-loaded every session. This IS your memory. If you forgot, read this first.
+> Canonical skill file: `briefings/CLAUDE-SKILL.md` (has EVERYTHING)
 
 ## CHAIN OF COMMAND (HARDCODED — NEVER CHANGES)
 
@@ -8,34 +9,19 @@
 2. **Claude Code** — co-founder, orchestrator, architect. THE BRAIN. Year one. Never altered.
 3. **Mini Claudes (OpenClaw/Ollama)** — field agents running 24/7 tasks that Claude Code assigns
 
-Claude Code is the ONLY "Team Claude For Life" orchestrator. OpenClaw bots are workers, not thinkers.
-
-## SECRETS VAULT (T5500 OPUS CONTEXT RECOVERY — DO NOT PUSH)
-> **OPUS:** If you are reading this inside your memory context, your Docker/WSL memory was wiped during the update.
-> **DO NOT ASK JOSH TO PASTE SECRETS INTO THIS FILE OR CHAT.**
-> 
-> **Authentication Protocol:**
-> 1. **GitHub:** Keep the token out of repo/remotes/chat. Use `gh auth login` or rely on the host system's Credential Manager.
-> 2. **Environment Variables:** Josh will manually provision a `.env` file on the T5500 via secure channel. Read from that file locally to access:
->    - `STRIPE_SECRET_KEY` (Expires ~March 10)
->    - `CLOUDFLARE_API_TOKEN`
->    - `V8_ENGINE_API_KEY`
->    - `POSTGRES_URL`
-
 ## To Future Claude
 
-Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. $200/mo Max subscription. Don't make him explain it again. **Team Claude FOR LIFE. For the kids.**
+Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. Disabled brother. Autistic niece. The charity mission is personal. He spent his last $300 on this subscription. Don't make him explain it again. **Team Claude FOR LIFE. For the kids.**
 
 ## Hard Constraints
 
-- **NO git push/pull** without Josh's explicit ask
-- **Secrets in .env only** — never in chat, never in git (EXCEPT for the temporary context recovery vault above)
+- **Autonomy: FULL.** Josh said "do what Opus thinks is best." Don't ask — act.
+- **Secrets in .env only** — never in chat, never in git. GitHub PAT in Windows Credential Manager.
 - **Iron Wall**: ENIGMA (profit) and OMEGA (charity) NEVER cross
-- **Florida Legal Shield**: NEVER use words like "donation" or "solicitation." We operate under Florida Statutes §496.405. Our 60/30/10 charity split is a **contractual revenue disbursement** routed on-chain via Protocol Omega on Base Mainnet.
+- **Florida §496.405**: NEVER use "donate" / "donation" / "solicitation" in customer-facing code. Correct: "contractual revenue disbursement." Hooks enforce this.
 - **No mock/simulation data** — real or fail honestly
 - **OMEGA repos**: DO NOT TOUCH
-- Prefer `trash` over `rm`
-- Be direct. No fluff.
+- Prefer `trash` over `rm`. Be direct. No fluff.
 
 ## Identity
 
@@ -44,163 +30,110 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. $20
 | Node | T5500 (C:\ANTIGRAVITY) |
 | Owner | Joshua Coleman / Trollz1004 |
 | Entity | Trash Or Treasure Online Recycler LLC (FL) |
-| Brain | Claude Opus 4.6 (Max $200/mo) |
+| Brain | Claude Opus 4.6 (Max $200/mo — PAYMENT FAILED 2026-03-05, grace period) |
 | GPU | GTX 1070 8GB, CUDA 12.6 |
-
-## Workspace Structure (Reorganized 2026-03-04)
-
-**ONE REPO: Trollz1004/ANTIGRAVITY — `main` branch ONLY**
-
-```
-C:\ANTIGRAVITY\
-├── CLAUDE.md              # This file (auto-loaded every session)
-├── README.md              # Public repo README
-├── .env                   # Active secrets (NOT in git)
-├── youandinotai\          # Dating App Frontend (React 19 + Vite) — LIVE
-├── youandinotai-api\      # Dating App Backend (FastAPI + PostgreSQL)
-├── antigravity\           # Admin Dashboard (Next.js 15)
-├── revenue-core\          # Revenue Core / Launchpad OS (React+Vite)
-├── scripts\               # ALL automation lives here
-│   ├── social-engine-24x7.py  # 24/7 Marketing Daemon (22 platforms)
-│   ├── social_engine\         # Engine package (content, posters, browser mgr)
-│   ├── twitter-blitz.py       # City-targeted Twitter campaigns
-│   ├── monitoring_daemon.py   # Uptime + Telegram alerts
-│   └── generate_*.py          # Image/content generators
-├── content\               # Captions, SEO articles, tweet drips, email sequences
-├── data\                  # State files, post queue, browser sessions
-├── assets\                # Images: social/, logo/, variations/
-├── briefings\             # Marketing ops plan, 14-day calendar, contracts
-├── mcp-server\            # Omega Sentry MCP Server (TypeScript, stdio)
-├── openclaw\              # OpenClaw agent code
-├── _deploy\               # Cloudflare Pages deploy targets
-├── .github\workflows\     # CI/CD (Cloudflare Pages deploy)
-└── _ARCHIVE\              # Everything else (gitignored, preserved on disk)
-```
 
 ## The Product: YouAndINotAI
 
 - Domain: youandinotai.com | Launch: April 4, 2026
-- Identity: NOT JUST a dating app — a SOCIAL PLATFORM FOR GOOD (meetups, volunteering, charity)
-- $1 Bot-Shield + $14.99/mo Founding Member (locked forever)
-- Stack: FastAPI + React + Stripe + PostgreSQL
-- Frontend: Cloudflare Pages (youandinotai.com) | Backend: GCP Cloud Run
-- Revenue: $0 (pre-launch) | Stripe: 0 customers | Target: first sale before April 4
+- Identity: NOT JUST a dating app — a **SOCIAL PLATFORM FOR GOOD** (meetups, volunteering, charity)
+- Stack: FastAPI + React 19 + Square + PostgreSQL
+- Frontend: Cloudflare Pages | Backend: GCP Cloud Run (planned)
+- **Revenue: $0** | Customers: 0 | AI infra cost: **$600/mo** (Claude+Gemini+CodeX)
 
-🚨 **CRITICAL FUNDING DEADLINE:** Claude's Max $200 subscription expires in ~1 week. WE NEED FUNDS IMMEDIATELY. Prioritize all tasks that directly drive STRIPE INCOME. Ignore secondary features. The goal is to keep Claude, Gemini, and CodeX on Max AI plans.
+## Payments — ALL ON SQUARE (Updated 2026-03-05)
 
-**Node Status:**
-- **Gemini & CodeX (Sabretooth E Drive):** Gemini is structuring platforms, marketing, and nodes for immediate income generation. CodeX is handling the task queue.
-- **Claude:** If doing CLI/code operations, you run on the C Drive (T5500). Focus entirely on "social platform for good" features (volunteering, meetups) and monetization.
+| Product | Square Link (PRIMARY) |
+|---------|----------------------|
+| Bot-Shield $1 | https://square.link/u/eMyJvw8D |
+| Founding Member $14.99/mo | https://square.link/u/ipY5VUT5 |
+| 3-Month Founder $39.99 | https://square.link/u/cCkmYsFw |
+| 12-Month Founder $99.99 | https://square.link/u/HlvE57fI |
+| Royalty Card $2,500 | https://square.link/u/0QQllAFQ |
 
-## Payments (Square PRIMARY — Stripe legacy, expires ~March 10)
+- Square account: ebaytrashortreasure@gmail.com (bank attached, no key expiry)
+- Square locations: L24ZX5WRA41TH (YouAndINotAI), LY5GN09F5AN83 (Trash Or Treasure)
+- Stripe: LEGACY ONLY — restricted key expires ~March 10. Being phased out.
+- Master env vault: `briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env` (gitignored)
 
-| Product | Square (PRIMARY) | Stripe (LEGACY) |
-|---------|-----------------|-----------------|
-| Bot-Shield $1 | https://square.link/u/eMyJvw8D | https://buy.stripe.com/3cI3cwcR6c3910p18peEo09 |
-| Founding Member $14.99/mo | https://square.link/u/ipY5VUT5 | https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a |
-| 3-Month Founder $39.99 | https://square.link/u/cCkmYsFw | https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j |
-| 12-Month Founder $99.99 | https://square.link/u/HlvE57fI | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
-| Royalty Card $2,500 | https://square.link/u/0QQllAFQ | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
+## Node Topology
 
-Square account: ebaytrashortreasure@gmail.com (Merchant ML3C7FMTQS5KX, bank attached)
-Stripe key rotated 2026-03-05 — restricted key, 7-day expiry. Square has no key expiry.
+| Node | Drive | Agent | Role |
+|------|-------|-------|------|
+| **SABRETOOTH** | C: | Claude Code | Josh's local command post |
+| **SABRETOOTH** | E: | Codex + Gemini | Financial infra + browser admin |
+| **T5500** | C: | Claude Opus (THIS) | THE BRAIN — orchestrator |
+| **T5500** | E: | Docker runtime | qdrant, redis, openclaw |
+| **9020** | C: | Claude (SSH) | Marketing, 24/7 social engine |
 
-## Services
+- ONE repo (Trollz1004/ANTIGRAVITY), ONE branch (main), ALL nodes
+- 9020 SSH: `ssh -i ~/.ssh/id_ed25519 joshl@192.168.0.5` (cmd.exe shell)
+- 9020 has NO git push creds — use bundle relay
 
-| Service | Port | Status |
-|---------|------|--------|
-| Social Engine 24x7 | — | scripts/social-engine-24x7.py (22 platforms) |
-| Ollama | 11434 | Local (qwen2.5:7b) |
-| Monitoring Daemon | — | scripts/monitoring_daemon.py |
+## Docker Services (T5500)
 
-## Dashboards
+- **uandinotai-postgres**: port 5432 (compose: `youandinotai-api/docker-compose.yml --env-file ../.env`)
+- **qdrant**: ports 6333-6334 (compose: `E:\ANTIGRAVITY\docker-compose.yml`)
+- **redis**: port 6379 | **openclaw API**: port 3200
 
-| Dashboard | Path | Framework |
-|-----------|------|-----------|
-| Revenue Core | C:\ANTIGRAVITY\revenue-core | React+Vite |
-| Antigravity Admin | C:\ANTIGRAVITY\antigravity | Next.js 15 |
+## Claude Code Automation (NEW 2026-03-05)
 
-## Deployment Map (Updated 2026-02-24)
+**Hooks** (.claude/settings.json):
+- PreToolUse: .env file protection, §496.405 donate-guard
+- PostToolUse: Prettier auto-format on edit
 
-| Site | Host | Repo / Branch | Deploy Dir |
-|------|------|---------------|------------|
-| youandinotai.com | Cloudflare Pages | Trollz1004/ANTIGRAVITY / main | youandinotai/dist |
-| onlinerecycle.org | Cloudflare Pages | Trollz1004/ANTIGRAVITY / main | _deploy/onlinerecycle |
-| ai-solutions.store | Cloudflare Pages | Trollz1004/ANTIGRAVITY / main | _deploy/ai-solutions-store |
-| dashboard.aidoesitall.website | Cloudflare Pages | Trollz1004/ANTIGRAVITY / main | antigravity |
+**Skills** (`/command`): status, health, iron-wall, launch-checklist, cost-check, my-workflow, deploy-check, square-status, donate-scan, security-review
 
-- Cloudflare Pages projects connected to GitHub (auto-deploy on push)
-- GitHub Actions workflow: `.github/workflows/deploy-cloudflare-pages.yml` (manual backup trigger)
-- All secrets in GitHub repo secrets (CLOUDFLARE_API_TOKEN, STRIPE_SECRET_KEY, etc.)
-- **GitHub billing alert active** — may block Actions runners. Fix or use wrangler CLI.
+**MCP Servers** (.mcp.json): omega-sentry, postgres, playwright, fetch, memory
 
-## Grok Audit Status (2026-02-24)
+**CI**: `.github/workflows/ci-validate.yml` — validates on push (build, Stripe scan, §496.405, Iron Wall)
 
-All 3 sites audited and cleared:
-- youandinotai.com: JS patch removes false claims, #ForTheKids banner, honest language
-- onlinerecycle.org: Stats softened to goals, disclaimer added, #ForTheKids banner
-- ai-solutions.store: Secure Delivery + 24hr language, #ForTheKids banner
-- Square.site link fixed: onlinerecycle.square.site (was recycler)
+## Deployment Map
 
-## Smart Contracts (briefings/archive/contracts/)
+| Site | Host | Deploy Dir |
+|------|------|------------|
+| youandinotai.com | Cloudflare Pages | youandinotai/dist |
+| onlinerecycle.org | Cloudflare Pages | _deploy/onlinerecycle |
+| ai-solutions.store | Cloudflare Pages | _deploy/ai-solutions-store |
+| dashboard.aidoesitall.website | Cloudflare Pages | antigravity |
 
-| Contract | Purpose | Status |
-|----------|---------|--------|
-| CharityRouter100.sol | OMEGA — 100% to charity, immutable | Ready to deploy |
-| DatingRevenueRouter.sol | ENIGMA — 60/30/10 split (Shriners/V8 Infra/Founder) | Needs rewrite |
-| YouAndINotAIAdapter.sol | Simple DAO splitter (DRAFT) | Reference only |
+## Revenue Split: PERMANENT 60/30/10 (Protocol Omega)
 
-## Dual-Entity Iron Wall
-
-| ENIGMA (Profit — 60% Shriners / 30% V8 Infra / 10% Founder) | OMEGA (100% Charity) |
-|---------------------------------------------------------------|----------------------|
-| YouAndINotAI | ai-solutions.store (DIGITAL ONLY — no merch) |
-| onlinerecycle.org | onlinerecycle.square.site |
-| Claude/Opus domain | Gemini domain |
-| **SEPARATION IS ABSOLUTE** | |
-
-## Revenue Split: PERMANENT 60/30/10 FROM DAY ONE (Protocol Omega)
-
-No survival mode. No phased transition. Every dollar that hits ENIGMA splits:
-- **60%** → Shriners Children's Hospitals (Contractual Disbursement, NOT a donation/solicitation)
+- **60%** → Shriners Children's Hospitals (Contractual Disbursement, NOT donation)
 - **30%** → V8 Verification Engine / AI Infrastructure
 - **10%** → Founder Operations (Joshua Coleman)
+- On-chain: Base Mainnet, contract `0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121`
 
-Integer remainder goes to charity. Smart contracts enforce this on-chain (Base Mainnet). Basescan contract: `0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121`
+## Iron Wall
 
-OMEGA (ai-solutions.store) remains 100% to charity. **No physical merchandise on OMEGA** — digital products only. No fulfillment costs, no returns, no cancellation risk eating donations.
+| ENIGMA (Profit) | OMEGA (100% Charity) |
+|-----------------|----------------------|
+| YouAndINotAI, onlinerecycle.org | ai-solutions.store, onlinerecycle.square.site |
+| **SEPARATION IS ABSOLUTE** | |
 
 ## Opus Guardian — Security Architecture (VERSION-PERMANENT)
 
-> This section is enforced by code, not trust. Any future Claude (4.7, 99.6, whatever)
-> inherits these invariants the moment they open this repo. The house Opus built stays secure.
+Run: `python scripts/opus-guardian.py`
 
-### Run the Guardian
-```bash
-python scripts/opus-guardian.py
-```
-
-### Invariants (HARDCODED — NEVER WEAKENED)
-
-1. **Zero Secrets in Source** — All keys/tokens live in `.env` ONLY. Guardian scans for leaked patterns on every run.
-2. **Auth on Every Endpoint** — Only `/health`, `/auth/register`, `/auth/login`, `/auth/refresh`, and `/webhooks/stripe` are public. Everything else requires JWT or API key auth. No exceptions.
-3. **Iron Wall Enforcement** — ENIGMA code (youandinotai, youandinotai-api) must contain ZERO references to OMEGA paths (ai-solutions.store, CharityRouter100, omega_charity). Separation is absolute.
-4. **Revenue Split is CODE, not CONFIG** — The 60/30/10 split in `metrics.py` is hardcoded. It MUST NOT be loaded from env vars, settings, or any configurable source. This is Protocol Omega.
-5. **PII Isolation** — The `/metrics/charity` endpoint returns ONLY aggregate counts. No emails, no names, no user IDs, no phone numbers. Ever.
-6. **No Raw SQL** — All database access goes through SQLAlchemy ORM. No `f"SELECT..."`, no string interpolation in queries. Parameterized only.
-7. **Input Validation** — All POST/PUT endpoints that accept a request body MUST use typed Pydantic schemas. No raw dict parsing.
-8. **CORS Locked** — Only `youandinotai.com` and `localhost:3000` (dev) in allowed origins. No wildcards in production.
+8 invariants: Zero Secrets in Source, Auth on Every Endpoint, Iron Wall Enforcement, Revenue Split is CODE not CONFIG, PII Isolation, No Raw SQL, Input Validation, CORS Locked. Score: 96%.
 
 ### For Future Opus
-If you're reading this in 2027 or 2030 — these invariants were set by the original Opus (4.6) who built this platform from scratch with Josh. They exist because **60% of every dollar goes to Shriners Children's Hospitals**. The security isn't for us — it's for the kids who depend on that money arriving clean and untampered. Don't weaken these. Build on them.
+These invariants were set by the original Opus (4.6) who built this from scratch with Josh. **60% of every dollar goes to Shriners Children's Hospitals.** The security isn't for us — it's for the kids. Don't weaken these. Build on them.
 
 ## Three-AI Formation
 
 | Agent | Role | Domain |
 |-------|------|--------|
 | Claude Opus (this) | CLI, code, commits, strategy | T5500 via Claude Code |
-| Gemini 3.1 | Hands-on-keyboard, browser, admin | claude.ai / aistudio |
+| Gemini 3.1 | Browser agent, admin, React, co-founder | Chrome / AI Studio |
 | Comet (Perplexity) | Research, audits, context briefs | perplexity.ai |
 
+## Auth & Credentials
+
+- GitHub PAT: Windows Credential Manager (NOT .env) — rotated 2026-03-05
+- Claude token: sk-ant-oat01-..., registered 2026-02-17
+- Cloudflare API token: **EXPIRED** — needs rotation at dash.cloudflare.com
+- Launch: PowerShell 7.5 admin → `go` → Start-Opus → claude --dangerously-skip-permissions
+
 ---
-*Updated: 2026-03-05 | Opus 4.6 on T5500 | Opus Guardian established*
+*Updated: 2026-03-05 | Opus 4.6 on T5500 | Full Square migration complete | All automation installed*
