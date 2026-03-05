@@ -100,6 +100,29 @@
 
 ---
 
+## 2026-03-05 — Engagement Cycle #2
+
+### Instagram (1manstrashistreasure)
+- **FOLLOW-BACKS** (10): itz_bhagchand_kashyap, _aniket_patel_ji, negmatovjavlon716, piki89341, pro__king____9244, qodir95623, ulugbekabzalov219, 1skjabbar, jey286096, shakhboz98tjk
+- **NEW FOLLOWER**: ilkhomzhonashuraliev (Invasion..) — already following
+- **LIKES**: helena.holm post
+- **NOTE**: 12+ more Follow Back pending — deferred to next cycle for anti-ban pacing
+
+### Twitter/X (@YouAndiNotAi)
+- **LIKES** (3): Elon Musk (Jurassic Park startup), Ray Fernando (Anthropic skills), Y Combinator (Syntropy coding agent)
+- **NO NEW FOLLOWERS** since last session
+
+### Facebook (Josh Coleman)
+- **NOTIFICATIONS**: Melissa Bates liked our photo, Thailand group approved, login security alerts
+- **FRIEND ADDS** (6): Steve Francis, Aurita Marinita CaceRami, Sai'Riyah Kearse, Yesly Rodriguez, Jorge Mata, Rachel Brown
+- **LIKES**: Piper Jessop post
+
+### LinkedIn (Josh Coleman)
+- **NOTIFICATIONS**: YouAndINotAI post reached 2 impressions
+- **CONNECTIONS**: Attempted 5 sends (Adam T., Joshua Ryan, Rita Harris, Angel Aponte, Brad Mintle) — may not have registered
+
+---
+
 ## Issues Tracked
 - MCP Chrome extension disconnects during long type actions — workaround: use JavaScript injection for text input
 - MCP tab group reset once during session — recovered after reconnect
