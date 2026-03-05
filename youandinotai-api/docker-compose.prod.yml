@@ -10,6 +10,10 @@ services:
       - DATABASE_URL=postgresql://uandinotai:${POSTGRES_PASSWORD}@postgres:5432/uandinotai_dating
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - SQUARE_WEBHOOK_SIGNATURE_KEY=${SQUARE_WEBHOOK_SIGNATURE_KEY:-}
+      - SQUARE_WEBHOOK_NOTIFICATION_URL=${SQUARE_WEBHOOK_NOTIFICATION_URL:-}
+      - SQUARE_WEBHOOK_VERIFY_SIGNATURE=${SQUARE_WEBHOOK_VERIFY_SIGNATURE:-true}
+      - SQUARE_BOOKING_LOG_DIR=${SQUARE_BOOKING_LOG_DIR:-/app/ewaste-intake-data/bookings}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
       - APP_URL=https://youandinotai.com
@@ -20,6 +24,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    volumes:
+      - ../data/ewaste-intake:/app/ewaste-intake-data
     networks:
       - uandinotai-network
     restart: always

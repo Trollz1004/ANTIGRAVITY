@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     )
     stripe_secret_key: str = ""
     stripe_webhook_secret: str = ""
+    square_webhook_signature_key: str = ""
+    square_webhook_notification_url: str = ""
+    square_webhook_verify_signature: bool = True
+    square_booking_log_dir: str = ""
     gemini_api_key: str = ""
     gemini_model: str = "gemini-2.5-pro"
     kimi_api_key: str = ""
