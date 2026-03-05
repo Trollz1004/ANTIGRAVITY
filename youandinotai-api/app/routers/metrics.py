@@ -50,7 +50,7 @@ class PlatformMetricsResponse(BaseModel):
 
 
 def _calculate_split(total_cents: int) -> RevenueSplitResponse:
-    """Protocol Omega: 60/30/10 — integer remainder goes to charity."""
+    """Protocol Omega: 60/30/10 contractual revenue disbursement — integer remainder to Shriners."""
     shriners = (total_cents * 60) // 100
     v8_infra = (total_cents * 30) // 100
     founder = (total_cents * 10) // 100
