@@ -237,6 +237,8 @@ class VolunteerOpportunity(Base):
     organization: Mapped[str] = mapped_column(String(200), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
     location: Mapped[str | None] = mapped_column(String(300), nullable=True)
+    category: Mapped[str] = mapped_column(String(50), default="general", nullable=False)
+    hours_estimate: Mapped[float | None] = mapped_column(Float, nullable=True)
     event_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     spots: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(

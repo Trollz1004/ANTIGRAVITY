@@ -197,11 +197,19 @@ class EventResponse(BaseModel):
 
 # ── Volunteering ──
 
+VOLUNTEER_CATEGORIES = [
+    "general", "children", "elderly", "environment", "animals",
+    "food_bank", "education", "healthcare", "disaster_relief", "community",
+]
+
+
 class VolunteerCreateRequest(BaseModel):
     title: str = Field(min_length=1, max_length=200)
     organization: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1, max_length=5000)
     location: str | None = Field(None, max_length=300)
+    category: str = "general"
+    hours_estimate: float | None = Field(None, ge=0.5, le=100)
     event_date: datetime | None = None
     spots: int | None = Field(None, ge=1)
 
@@ -209,12 +217,39 @@ class VolunteerCreateRequest(BaseModel):
 class VolunteerResponse(BaseModel):
     id: uuid.UUID
     created_by: uuid.UUID
+    creator_name: str = ""
     title: str
     organization: str
     description: str
     location: str | None
+    category: str = "general"
+    hours_estimate: float | None = None
     event_date: datetime | None
     spots: int | None
     signup_count: int
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
+
+
+class VolunteerImpactResponse(BaseModel):
+    """Aggregate community impact — shown on the volunteering hub dashboard."""
+    total_opportunities: int
+    total_signups: int
+    total_hours_committed: float
+    unique_organizations: int
+    unique_volunteers: int
+    category_breakdown: dict[str, int]  # category → signup count
+    top_organizations: list[dict]  # [{name, signups, hours}]
+    local_opportunities: int  # filtered by location if provided
+
+
+class MySignupResponse(BaseModel):
+    signup_id: uuid.UUID
+    opportunity_id: uuid.UUID
+    title: str
+    organization: str
+    location: str | None
+    category: str
+    hours_estimate: float | None
+    event_date: datetime | None
+    signed_up_at: datetime
