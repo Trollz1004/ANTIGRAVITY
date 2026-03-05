@@ -51,7 +51,11 @@ def _build_prompt(pillar, platform_spec, days_left):
         f"Platform: {platform_spec.get('tone', 'casual')}\n"
         f"Max length: {platform_spec.get('max_chars', 280)} characters\n"
         f"Hashtag style: {platform_spec.get('hashtag_style', 'none')}, max {platform_spec.get('max_hashtags', 0)} hashtags\n"
-        f"Brand: YouAndINotAI | Handle: @AiCollab4Kids | URL: youandinotai.com\n"
+        f"Brand: YouAndINotAI | Handle: @YouAndiNotAi | URL: youandinotai.com\n"
+        f"VOICE: You are Josh, a male founder (Trollz1004). Quirky, funny, slightly trollish humor. "
+        f"Write like a real person — not corporate, not AI-sounding. "
+        f"Think 'guy who roasts dating apps while building one.' "
+        f"NEVER write from a female perspective or imply matching with men. "
         f"Do NOT use markdown formatting. Write plain text only. "
         f"Do NOT add any preamble or explanation — just output the post text."
     )

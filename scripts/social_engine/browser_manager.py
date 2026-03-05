@@ -148,7 +148,8 @@ def login_interactive(platform, url):
 
 
 def login_all():
-    """Open all platform login pages in sequence for one-time setup."""
+    """Open ALL platform login pages at once in separate tabs.
+    Tabs stay open until user presses Enter. Sessions persist forever."""
     PLATFORM_URLS = {
         "twitter": "https://x.com/login",
         "facebook": "https://www.facebook.com/login",
@@ -166,23 +167,26 @@ def login_all():
     }
     _ensure_playwright()
     print("\n" + "=" * 60)
-    print("  ONE-TIME LOGIN SETUP — Log in to each platform")
-    print("  Sessions persist forever after this.")
+    print("  ONE-TIME LOGIN SETUP — All tabs open at once")
+    print("  Log in to each tab. Sessions persist forever.")
     print("=" * 60)
 
+    pages = []
     for platform, url in PLATFORM_URLS.items():
-        print(f"\n--- {platform.upper()} ---")
+        print(f"  Opening {platform}...")
         page = _context.new_page()
-        page.goto(url, wait_until="domcontentloaded")
-        print(f">>> Log in to {platform} at {url}")
-        resp = input(">>> Press Enter when done (or 's' to skip): ").strip().lower()
-        if resp != "s":
-            print(f">>> {platform} session saved!")
         try:
-            page.close()
-        except Exception:
-            pass
+            page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        except Exception as e:
+            print(f"  Warning: {platform} slow to load ({e})")
+        pages.append((platform, page))
 
     print("\n" + "=" * 60)
-    print("  ALL LOGINS COMPLETE — Daemon is ready to run!")
+    print(f"  {len(pages)} tabs open. Log in to each one now.")
+    print("  Take your time. Tabs stay open.")
+    print("  Press Enter here ONLY when you're done with ALL logins.")
     print("=" * 60)
+    input()
+
+    print("\n  All sessions saved! Daemon will use these sessions.")
+    print("  You can close this terminal — sessions persist on disk.")
