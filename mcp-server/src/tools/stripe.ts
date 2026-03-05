@@ -18,11 +18,11 @@ function stripeHeaders() {
 
 // Payment links — canonical source of truth
 const PAYMENT_LINKS = [
-  { name: "Bot-Shield", price: "$1", type: "one-time", url: "https://square.link/u/eMyJvw8D" },
-  { name: "Founding Member", price: "$14.99/mo", type: "subscription", url: "https://square.link/u/ipY5VUT5" },
-  { name: "3-Month Founder", price: "$39.99", type: "one-time", url: "https://square.link/u/cCkmYsFw" },
-  { name: "12-Month Founder", price: "$99.99", type: "one-time", url: "https://square.link/u/HlvE57fI" },
-  { name: "Royalty Card", price: "$2,500", type: "one-time", url: "https://square.link/u/0QQllAFQ" },
+  { name: "Bot-Shield", price: "$1", type: "one-time", url: "https://square.link/u/Qc5mxUy7" },
+  { name: "Founding Member", price: "$14.99/mo", type: "subscription", url: "https://square.link/u/cxwjcn0s" },
+  { name: "3-Month Founder", price: "$39.99", type: "one-time", url: "https://square.link/u/oY7qEfRM" },
+  { name: "12-Month Founder", price: "$99.99", type: "one-time", url: "https://square.link/u/6GHpbvvl" },
+  { name: "Royalty Card", price: "$2,500", type: "one-time", url: "https://square.link/u/CafhorUS" },
 ] as const;
 
 export function registerStripeTools(server: McpServer) {
