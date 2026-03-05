@@ -1,7 +1,7 @@
 # Briefings — Agent & Node Directory
 
 > Pull the repo. Read YOUR folder. That's it.
-> Last updated: 2026-03-04
+> Last updated: 2026-03-05
 
 ---
 
@@ -26,6 +26,7 @@ briefings/
 ├── shared/                      # Shared across ALL nodes (read-only reference)
 │   ├── PRODUCT.md               # Product details, pricing, revenue model, Stripe links
 │   ├── MARKETING-LOCK.md        # Marketing lock directive — 9020 ONLY
+│   ├── SECURITY-ISOLATION-LOCK.md # Docker isolation + drive ownership + sensitive ops guardrails
 │   ├── MERCH-CHARITY-LOGIC.md   # Merch store charity donation logic (spec only)
 │   ├── ebay-listings.md         # 52-Card Founders DAO Deck eBay listings
 │   ├── ebay-agent-prompts.md    # Agent prompts for eBay listing execution
@@ -53,8 +54,8 @@ briefings/
 | Node | Drive | Workspace | Agent | Role |
 |------|-------|-----------|-------|------|
 | 9020 (DESKTOP-UPSJEVG) | C:\ | C:\Antigravity | Opus Claude Code | Marketing/Production |
-| T5500 | C:\ | C:\Antigravity | Opus Claude Code | Heavy Compute/Backend |
-| Sabretooth | E:\ | E:\Antigravity | Codex | Task Sentry/E-Waste/Vault |
+| T5500 | C:\ | C:\Antigravity | Opus Claude Code | Heavy Compute/Backend (Docker isolation allowed for sensitive ops) |
+| Sabretooth | E:\ | E:\Antigravity | Codex | Task Sentry/E-Waste/Vault (Docker-isolated for sensitive ops) |
 | Any | Any | Any | Gemini 3.1 | Browser Agent/UI/Co-Founder |
 
 ---
@@ -65,7 +66,8 @@ briefings/
 2. Read `briefings/[your-folder]/BRIEFING.md`
 3. Read `briefings/shared/PRODUCT.md` for product context
 4. Read `briefings/shared/MARKETING-LOCK.md` to understand the marketing directive
-5. Do your job. Don't touch other agents' domains.
+5. Read `briefings/shared/SECURITY-ISOLATION-LOCK.md` for isolation/drive/security policy
+6. Do your job. Don't touch other agents' domains.
 
 ---
 
