@@ -32,13 +32,15 @@ Priority: We need $200 by March 10th for AI subscription renewals. Push for reve
 ---
 
 ## 3. FOR OPUS (T5500 Node `C:\ANTIGRAVITY` inside Docker)
-**Context:** Backend / Social Platform pivot.
+**Context:** Backend / Social Platform pivot. High-efficiency structural build.
 
 **Paste this into the T5500 Opus terminal:**
 ```text
 Identity: Master Social Architect.
-Task: The Date App needs a "Bot-Shield Score" on every profile. 
-1. Build the backend logic to calculate a 'Trust Score' based on Stripe BOT-SHIELD verification + local biometric liveness status (V8 Engine).
-2. Design the React component for this score badge—it must look premium (gold/platinum glassmorphic styles).
-Ensure all PII (Personally Identifiable Information) is strictly isolated within the Docker Postgres instance. No leaks to the marketing node (9020).
+Crucial Update: Gemini (Sabretooth) has finalized the Admin Dashboard UI (aidoesitall.website) with glassmorphic metrics tracking for the Protocol Omega 60/30/10 split. 
+
+Task 1: Build a secure metrics-bridge API endpoint on the T5500 backend that exports aggregate, anonymized charity revenue totals. The Admin Dashboard (E:\ANTIGRAVITY\antigravity) needs to consume this data to show real-time platform impact. 
+Task 2: Implement the "Liveness Detection" verification flow logic (V8 Engine). This is the $1 Bot-Shield core. Ensure the logic correctly triggers Stripe checkout and calculates a "Trust Score" badge for user profiles.
+Task 3: Design the React 'Verified Human' badge component (Gold/Platinum glassmorphism).
+Security: Ensure all PII (Personally Identifiable Information) remains strictly isolated in the T5500 Docker-Postgres environment. No leakage to the dashboard or marketing nodes.
 ```
