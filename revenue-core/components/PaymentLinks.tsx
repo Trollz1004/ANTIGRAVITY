@@ -24,7 +24,7 @@ const PRODUCTS: Product[] = [
     interval: 'one-time',
     description: 'V8 Cloud Verification — Prove you\'re human. One-time fee.',
     icon: <Shield size={24} />,
-    stripeUrl: 'https://buy.stripe.com/3cI3cwcR6c3910p18peEo09',
+    stripeUrl: 'https://square.link/u/eMyJvw8D',
   },
   {
     id: 'founding-member',
@@ -33,7 +33,7 @@ const PRODUCTS: Product[] = [
     interval: '/mo',
     description: 'Locked-in founding rate. Regular price $24.99/mo after launch.',
     icon: <Crown size={24} />,
-    stripeUrl: 'https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a',
+    stripeUrl: 'https://square.link/u/ipY5VUT5',
   },
   {
     id: '3-month-founder',
