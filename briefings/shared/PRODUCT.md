@@ -61,7 +61,7 @@ All payments via **Stripe Checkout** (account: acct_1T3DVxIO6LWQSQoI).
 - **30%** → V8 Verification Engine / AI Infrastructure
 - **10%** → Founder Operations (Joshua Coleman)
 - Integer remainder → charity
-- Enforced on-chain: Base Mainnet (Chain 8453), Gnosis Safe 3-of-5 multisig
+- Enforced on-chain: Base Mainnet (Chain 8453), GospelDonation.sol at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`, Gnosis Safe 2-of-2 multisig
 
 ### OMEGA (Charity Side) — 100% to Charity
 - Digital products only
@@ -77,8 +77,7 @@ ENIGMA and OMEGA **NEVER cross.** Separate wallets, separate infrastructure. Abs
 - Ops: 0xc043...
 
 ### Smart Contracts
-- CharityRouter100.sol — OMEGA, 100% charity, immutable
-- DatingRevenueRouter.sol — ENIGMA, 60/30/10, UUPS upgradeable + timelock
+- GospelDonation.sol — 60/30/10, immutable, DEPLOYED on Base Mainnet at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
 
 ---
 

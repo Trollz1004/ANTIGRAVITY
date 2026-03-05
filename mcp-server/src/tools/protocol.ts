@@ -16,21 +16,19 @@ const PROTOCOL = {
     owner: "Joshua Coleman",
   },
   wallets: {
-    dao_treasury: "0xa87874d5320555c8639670645F1A2B4f82363a7c",
-    dating_revenue: "0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121",
-    charity_revenue: "0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B",
-    ops_wallet: "0xc043F5D516ee024d1dB812cb81fB64302b0Fe2B4",
+    gospel_contract: "0x9855B75061D4c841791382998f0CE8B2BCC965A4",
+    charity_fund_60: "0x8d3dEADbE2b4B857A43331D459270B5eedC7084e",
+    infrastructure_30: "0xe0a42f83900af719019eBeD3D9473BE8E8f2920b",
+    founder_ops_10: "0x7c3E283119718395Ef5EfBAC4F52738C2018daA7",
   },
   contracts: {
-    charity_router: {
-      name: "CharityRouter100.sol",
-      purpose: "OMEGA — 100% to charity, immutable",
-      status: "Ready to deploy",
-    },
-    dating_revenue_router: {
-      name: "DatingRevenueRouter.sol",
-      purpose: "ENIGMA — 60/30/10 split (Shriners/V8 Infra/Founder) from block zero",
-      status: "Needs rewrite",
+    gospel_donation: {
+      name: "GospelDonation.sol",
+      address: "0x9855B75061D4c841791382998f0CE8B2BCC965A4",
+      network: "Base Mainnet (Chain 8453)",
+      purpose: "Immutable 60/30/10 revenue router — deployed and verified on BaseScan",
+      status: "DEPLOYED — set in stone",
+      multisig: "Gnosis Safe 2-of-2 (3rd fiduciary signer pending for 2-of-3)",
     },
   },
   splits: {
