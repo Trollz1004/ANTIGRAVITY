@@ -1,0 +1,2 @@
+intake_id,asset_tag,current_stage,listing_status,final_qa_pass,square_live_ok,square_bookings_logged,last_square_event_at,notes
+EW-20260304-0001,AG-EW-0001,intake_complete,ready,yes,no,0,,No Square booking log rows found yet; run live booking/webhook test.
