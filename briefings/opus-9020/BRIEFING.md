@@ -103,7 +103,7 @@ See `briefings/shared/MARKETING-LOCK.md` for the full lock directive.
 - **$19,990** pre-order target by April 4, 2026
 - **30 days** until launch
 - Marketing must run 24/7 autonomously
-- Zero revenue after 1 year of building — survival mode
+- Zero revenue after 1 year of building — canonical split is 60/30/10 from day one
 
 ---
 

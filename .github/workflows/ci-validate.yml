@@ -61,3 +61,32 @@ jobs:
             exit 1
           fi
           echo "Iron Wall intact"
+
+      # Wallet consistency check
+      - name: Wallet consistency
+        run: bash scripts/wallet-consistency-check.sh
+
+      # Split consistency check
+      - name: Split consistency
+        run: bash scripts/split-consistency-check.sh
+
+      # Secret scanner — block committed secrets
+      - name: Secret scan
+        run: |
+          SECRETS_FOUND=0
+          # Check tracked files for secret patterns
+          PATTERNS='AIza[0-9A-Za-z_-]{20,}|[0-9]{8,10}:[A-Za-z0-9_-]{35}|sk_live_[A-Za-z0-9]{16,}|ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}'
+          HITS=$(grep -rn --include="*.md" --include="*.ts" --include="*.tsx" --include="*.json" --include="*.txt" \
+            -E "$PATTERNS" \
+            memory/ briefings/ mcp-server/ youandinotai/ antigravity/ revenue-core/ 2>/dev/null \
+            | grep -v "REDACTED" | grep -v "\.env\.example" | grep -v "\.githooks" | grep -v "scripts/opus-guardian" \
+            | grep -v "security-review\.md" | grep -v "placeholder" | grep -v 'sk_live_\.\.\.' || true)
+          if [ -n "$HITS" ]; then
+            echo "::error::Secret-shaped values found in tracked files:"
+            echo "$HITS"
+            SECRETS_FOUND=1
+          fi
+          if [ "$SECRETS_FOUND" -eq 1 ]; then
+            exit 1
+          fi
+          echo "No secrets found in tracked files"

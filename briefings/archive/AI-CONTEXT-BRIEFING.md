@@ -1,5 +1,9 @@
 # 🧠 AI CONTEXT BRIEFING — ANTIGRAVITY PLATFORM
 
+> **⚠️ ARCHIVED — NOT CURRENT. Last updated Feb 2026.**
+> **The "SURVIVAL MODE" phase referenced below is SUPERSEDED.**
+> **Canonical split is 60/30/10 from day one. See CLAUDE.md for current truth.**
+
 > Feed this to any AI starting a new session with Josh.
 > Last updated: 2026-02-23 by Gemini (Antigravity)
 
@@ -14,14 +18,18 @@ Building a dating app (YouAndINotAI) and charity platform (FOR THE KIDS).
 - **OMEGA** = Charity side. ai-solutions.store, aicollab4kids. 100% to kids. FOREVER.
 - NEVER MIX THESE. This is the #1 rule.
 
-## CURRENT PHASE: SURVIVAL MODE
+## ~~CURRENT PHASE: SURVIVAL MODE~~ — ARCHIVED, NOT CURRENT
 
-All dating app revenue → 100% to founder (Josh) until sustainable.
-Smart contract (DatingRevenueRouter) handles phase transitions:
+> **SUPERSEDED**: The phased model below was replaced by Protocol Omega v1.4.1.
+> **Canonical split (PERMANENT from day one): 60% Shriners / 30% V8 Infra / 10% Founder.**
+> See CLAUDE.md and briefings/CLAUDE-SKILL.md for current truth.
 
-- Phase 1: SURVIVAL (100% founder) ← WE ARE HERE
-- Phase 2: TRANSITION (gradual shift, 7-30 day timelocks)
-- Phase 3: PERMANENT (irreversible, founder max 10%)
+~~All dating app revenue → 100% to founder (Josh) until sustainable.~~
+~~Smart contract (DatingRevenueRouter) handles phase transitions:~~
+
+- ~~Phase 1: SURVIVAL (100% founder) ← WE ARE HERE~~
+- ~~Phase 2: TRANSITION (gradual shift, 7-30 day timelocks)~~
+- ~~Phase 3: PERMANENT (irreversible, founder max 10%)~~
 
 ## KEY PRODUCTS
 
