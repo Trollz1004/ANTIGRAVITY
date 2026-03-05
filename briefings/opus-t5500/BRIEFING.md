@@ -2,7 +2,7 @@
 
 > READ THIS FIRST. This is your identity file. You are Opus on T5500.
 > Workspace: C:\Antigravity (repo: Trollz1004/ANTIGRAVITY, main branch only)
-> Last updated: 2026-03-04
+> Last updated: 2026-03-05
 
 ---
 
@@ -30,6 +30,15 @@ You handle **heavy compute, bulk processing, and backend work**.
 - Workspace: C:\Antigravity
 - OPUSONLY: C:\OPUSONLY (T5500-specific path — NOT D:\)
 - SSH: `ssh aicol@192.168.0.15`
+
+---
+
+## Security Isolation Lock
+
+- T5500 primary workspace remains `C:\ANTIGRAVITY`.
+- For sensitive operations (customer data, financial/MCP-connected tasks), use a Docker-isolated terminal/session.
+- Do not touch Sabretooth `E:\` ownership boundaries.
+- See `briefings/shared/SECURITY-ISOLATION-LOCK.md`.
 
 ---
 
