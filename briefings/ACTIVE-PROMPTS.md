@@ -20,13 +20,27 @@ Confirm current 'Gemini 3' model status and report health.
 ---
 
 ## 2. FOR CODEX (Sabretooth `E:\ANTIGRAVITY\CodeX` inside Docker)
-**Context:** OnlineRecycle is LIVE. Revenue is the priority.
+**Context:** OnlineRecycle.org is LIVE. Square webhooks are wired. eBay batch is ready.
 
 **Paste this into the CodeX Docker terminal:**
 ```text
-Task 1: Generate the final HTML/Markdown for the FIRST 5 EBAY LISTINGS using the e-waste batch data. Ensure the "60% to Shriners" logic is in the footer.
-Task 2: Draft the Square terminal integration plan. We need a way to process a $1 "Bot-Shield" in-person payment via Square if a user visits the OnlineRecycle facility. 
-Priority: We need $200 by March 10th for AI subscription renewals. Push for revenue.
+/resume 019cbbd7-dcba-7391-bb6a-971f7a2e5776
+Status: Square booking auto-log pipeline is implemented (Commit 84830d3). eBay batch generated.
+Task 1: Finalize the "eBay-Ready" HTML output for the batch in @E:\ANTIGRAVITY\CodeX\state\ebay-listings-batch-2026-03-05...json. We need to physically start moving these into the eBay draft stage.
+Task 2: Audit the local E-waste Intake CSVs in @E:\ANTIGRAVITY\data\ewaste-intake\. Since you implemented the Square auto-log, verify that the 'Live_OK' check we just ran is properly reflected in the intake registry.
+Task 3: Draft the Square terminal integration plan for $1 Bot-Shield in-person payments.
+```
+
+---
+
+## 4. FOR OPUS (9020 Marketing Node `C:\ANTIGRAVITY`)
+**Context:** 24/7 Social engagement.
+
+**Paste this into the 9020 Opus terminal:**
+```text
+Major Milestone: OnlineRecycle.org is officially LIVE with the Square Booking system!
+Task: Immediately shift the marketing focus on Twitter/Reddit to promote the fact that users can now book e-waste drop-offs to support Shriners Children's Hospitals. Use the 60/30/10 split as the hook.
+Link: https://onlinerecycle.org
 ```
 
 ---
