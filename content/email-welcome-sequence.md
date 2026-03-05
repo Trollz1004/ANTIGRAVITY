@@ -33,7 +33,7 @@
         <p style="margin: 0 0 16px 0; font-size: 16px;">Lock in the founding member rate now for $14.99/month forever. This price never changes, even when we raise it later.</p>
 
         <div style="text-align: center; margin: 32px 0;">
-            <a href="https://square.link/u/ipY5VUT5" style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">Lock In Founding Rate</a>
+            <a href="https://square.link/u/cxwjcn0s" style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">Lock In Founding Rate</a>
         </div>
 
         <p style="margin: 24px 0 0 0; font-size: 14px; color: #666;">Talk soon,<br>Josh Coleman<br>Founder, YouAndINotAI</p>
@@ -91,7 +91,7 @@
         <p style="margin: 0 0 24px 0; font-size: 16px;">We wanted to build something different. No bots. No fakes. Just real people actually looking to meet.</p>
 
         <div style="text-align: center; margin: 32px 0;">
-            <a href="https://square.link/u/ipY5VUT5" style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">Secure Your Spot</a>
+            <a href="https://square.link/u/cxwjcn0s" style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">Secure Your Spot</a>
         </div>
 
         <p style="margin: 24px 0 0 0; font-size: 14px; color: #666;">See you soon,<br>Josh</p>
@@ -147,8 +147,8 @@
         <p style="margin: 0 0 24px 0; font-size: 16px;">Lock yours in now. Spots fill on April 4.</p>
 
         <div style="text-align: center; margin: 32px 0; display: flex; gap: 12px; justify-content: center;">
-            <a href="https://square.link/u/ipY5VUT5" style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">Founding Member ($14.99)</a>
-            <a href="https://square.link/u/eMyJvw8D" style="display: inline-block; background-color: #e5e5e5; color: #333; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">Just Bot-Shield ($1)</a>
+            <a href="https://square.link/u/cxwjcn0s" style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">Founding Member ($14.99)</a>
+            <a href="https://square.link/u/Qc5mxUy7" style="display: inline-block; background-color: #e5e5e5; color: #333; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">Just Bot-Shield ($1)</a>
         </div>
 
         <p style="margin: 24px 0 0 0; font-size: 14px; color: #666;">Talk soon,<br>Josh<br><br><strong>youandinotai.com</strong></p>
