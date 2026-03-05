@@ -16,10 +16,10 @@ const PROTOCOL = {
     owner: "Joshua Coleman",
   },
   wallets: {
-    dao_treasury: "0xa878b2E14B7874a17027E05FA976102e9431d3E8",
-    dating_revenue: "0xbe5778BF4e3D73cFaa53caFf148897C7D7c15fBe",
-    charity_revenue: "0x222a10D60b8122f32F225dd48C2aA5FbE94e1560",
-    ops_wallet: "0xc043Ed93C3A0f07eb88CBb48aE9977FBB35d1F3e",
+    dao_treasury: "0xa87874d5320555c8639670645F1A2B4f82363a7c",
+    dating_revenue: "0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121",
+    charity_revenue: "0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B",
+    ops_wallet: "0xc043F5D516ee024d1dB812cb81fB64302b0Fe2B4",
   },
   contracts: {
     charity_router: {

@@ -68,7 +68,7 @@ Removed ALL fake/misleading data from 5 components:
 
 ### P1: Before March 10
 5. **Rotate Stripe keys** — current keys expire ~March 10
-6. **GEMINI_API_KEY is baked into the JS bundle** — this is a security concern. The key `AIzaSyDDtwMRbuKLHCPVBDWzJntF1PL6An6pZys` is visible in client-side code. Consider proxying Gemini calls through backend.
+6. **GEMINI_API_KEY is baked into the JS bundle** — this is a security concern. The key `[BURNED-REDACTED]` is visible in client-side code. Consider proxying Gemini calls through backend.
 
 ### P2: Backend (Big Lift)
 7. **Deploy Express+WebSocket server** — `server.ts` handles multiplayer. Frontend works without it but multiplayer is dead.
@@ -107,7 +107,7 @@ This is ENIGMA (profit). OMEGA (charity/ai-solutions.store) stays completely sep
 ## Credentials You Need
 
 All in `C:\ANTIGRAVITY\_ARCHIVE\dot-dirs\.vault\MASTER-ENV.env`. Key ones:
-- `GEMINI_API_KEY=AIzaSyDDtwMRbuKLHCPVBDWzJntF1PL6An6pZys`
+- `GEMINI_API_KEY=[BURNED-REDACTED]`
 - Stripe keys (in `.env`)
 - Cloudflare API token for DNS changes (DNS scope only — no Pages)
 - GCP project: ai-collab4kids
