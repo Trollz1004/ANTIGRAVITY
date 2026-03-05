@@ -7,29 +7,29 @@ import { Shield, ExternalLink, Wallet, Globe, Lock, Eye, CheckCircle2 } from 'lu
 export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {
   const wallets = [
     {
-      name: "DAO Treasury",
-      address: "0xa87874d5320555c8639670645F1A2B4f82363a7c",
-      description: "Main treasury for OMEGA Charity operations.",
+      name: "GospelDonation Contract",
+      address: "0x9855B75061D4c841791382998f0CE8B2BCC965A4",
+      description: "Immutable 60/30/10 revenue router (verified on BaseScan).",
       network: "Base Mainnet"
     },
     {
-      name: "Dating Revenue",
-      address: "0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121",
-      addressLabel: "youandinotai.com Revenue",
-      description: "Incoming profits from the dating platform.",
+      name: "Charity Fund (60%)",
+      address: "0x8d3dEADbE2b4B857A43331D459270B5eedC7084e",
+      addressLabel: "Gnosis Safe 2-of-2",
+      description: "60% of all revenue — Shriners Children's Hospitals.",
       network: "Base Mainnet"
     },
     {
-      name: "Charity Revenue",
-      address: "0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B",
-      addressLabel: "ai-solutions.store Revenue",
-      description: "Direct proceeds from the charity storefront.",
+      name: "Infrastructure/Dev (30%)",
+      address: "0xe0a42f83900af719019eBeD3D9473BE8E8f2920b",
+      addressLabel: "Gnosis Safe 2-of-2",
+      description: "30% — V8 Verification Engine and AI infrastructure.",
       network: "Base Mainnet"
     },
     {
-      name: "Ops Wallet",
-      address: "0xc043F5D516ee024d1dB812cb81fB64302b0Fe2B4",
-      description: "Operational funds for infrastructure maintenance.",
+      name: "Founder/Ops (10%)",
+      address: "0x7c3E283119718395Ef5EfBAC4F52738C2018daA7",
+      description: "10% — Founder operational sustainability.",
       network: "Base Mainnet"
     }
   ];

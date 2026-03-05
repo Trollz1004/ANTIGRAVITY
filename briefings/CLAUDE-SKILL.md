@@ -92,7 +92,7 @@ Biometric liveness detection + $1 economic Proof of Work. The dollar isn't a fee
 - **30%** → V8 Verification Engine / AI Infrastructure
 - **10%** → Founder Operations (Joshua Coleman)
 - Integer remainder → charity
-- Enforced on-chain: Base Mainnet, contract `0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121`
+- Enforced on-chain: Base Mainnet, GospelDonation.sol at `0x9855B75061D4c841791382998f0CE8B2BCC965A4` (verified on BaseScan)
 
 ### OMEGA (Charity Side)
 - 100% to charity. Digital products only. No physical merchandise.
