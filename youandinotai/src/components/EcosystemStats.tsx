@@ -29,12 +29,12 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
       url: 'https://onlinerecycle.org',
       metrics: 'E-Waste Recycling Program' 
     },
-    { 
-      name: 'AI Solutions', 
-      title: 'Charity Store', 
-      status: 'Beta', 
-      url: 'https://ai-solutions.store',
-      metrics: '100% Proceeds to Shriners' 
+    {
+      name: 'Shriners Impact',
+      title: 'Charity Tracker',
+      status: 'Live',
+      url: 'https://youandinotai.com',
+      metrics: '60% Revenue → Shriners'
     },
     { 
       name: 'Mission Control',
