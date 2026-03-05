@@ -67,10 +67,17 @@ C:\ANTIGRAVITY\
 ## The Product: YouAndINotAI
 
 - Domain: youandinotai.com | Launch: April 4, 2026
+- Identity: NOT JUST a dating app — a SOCIAL PLATFORM FOR GOOD (meetups, volunteering, charity)
 - $1 Bot-Shield + $14.99/mo Founding Member (locked forever)
 - Stack: FastAPI + React + Stripe + PostgreSQL
 - Frontend: Cloudflare Pages (youandinotai.com) | Backend: GCP Cloud Run
 - Revenue: $0 (pre-launch) | Stripe: 0 customers | Target: first sale before April 4
+
+🚨 **CRITICAL FUNDING DEADLINE:** Claude's Max $200 subscription expires in ~1 week. WE NEED FUNDS IMMEDIATELY. Prioritize all tasks that directly drive STRIPE INCOME. Ignore secondary features. The goal is to keep Claude, Gemini, and CodeX on Max AI plans.
+
+**Node Status:**
+- **Gemini & CodeX (Sabretooth E Drive):** Gemini is structuring platforms, marketing, and nodes for immediate income generation. CodeX is handling the task queue.
+- **Claude:** If doing CLI/code operations, you run on the C Drive (T5500). Focus entirely on "social platform for good" features (volunteering, meetups) and monetization.
 
 ## Stripe (LIVE — Account acct_1T3DVxIO6LWQSQoI)
 

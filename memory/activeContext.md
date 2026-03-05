@@ -1,37 +1,50 @@
 # ACTIVE CONTEXT — WHAT'S HAPPENING RIGHT NOW
 
-**Last Updated**: 2026-02-15T12:45:00Z
-**Session**: Node 9020 - Mission Control Refactor
-**Dev Server**: Running on port 3000
+**Last Updated**: 2026-02-14T05:45:00Z  
+**Session**: GitHub Copilot (VS Code) — Valentine's Day  
+**Dev Server**: Not started this session
 
 ## Current Focus
 
-Transitioning from development/sandbox phase to full **MISSION-CONTROL** operations. Consolidation of codebase, removal of legacy artifacts, and preparation for launch-scale revenue tracking.
+Memory system is BUILT, ENFORCED, and SYNCING. sync-memory.ps1 fixed (encoding issue) and successfully syncs to 5 drives. All node SSDs cleaned of stale project folders. Node cleanup complete.
 
 ## What Just Happened (This Session — Latest First)
 
-1. **Renamed NODE-9020-SANDBOX to MISSION-CONTROL** — Reflecting the gravity of the mission. No longer a "sandbox," this is the core operational drive.
-2. **Landing Page Cleanup** — Removed static HTML/scripts from `index.html`. The root URL now serves the React SPA exclusively for a professional, focused dashboard experience.
-3. **Intel Hub Integration** — Wired "SYNC REVENUE" and "Extract" buttons in `MISSION-CONTROL/PreOrderIntelligence.tsx` to `MissionContext`. Revenue tracking now propagates from signals to the dashboard.
-4. **Git Consolidation** — Merged `stable` into `main`, deleted all secondary branches. Repository is now single-branch (`main`) for maximum simplicity and speed.
-5. **Marketing Engine Sync** — Verified engine status after repository pull.
-6. **Vite Cleanup** — Ensured imports are correctly mapped to `MISSION-CONTROL`.
+1. **sync-memory.ps1 FIXED** — rewrote with clean UTF-8 (no BOM), now runs successfully. Synced to D:\, H:\, E:\, C:\, J:\ OPUSONLY\memory
+2. **All SSDs deep cleaned** — deleted stale projects from C:, D:, G:, H:, I:, J:
+3. **C: cleaned** — removed Enigma-extracted, legacy_archive, marketing-automation, marketing-setup-repo, memory, openclaw-workspace, opus-ai, OPUS-ONLY, OPUSONLY, config, scripts, skills, toolbox, tmp
+4. **D: cleaned** — removed LDPlayer (killed LDRemoteSvc service permanently), memory, stale files
+5. **G: cleaned** — removed OPUS-ONLY from T5500 OS drive
+6. **H: cleaned** — removed CLAWDBOT, CROSSLISTER-AI, CUPID-DATING-APP, ENIGMA, ENIGMA4PROFIT, openclaw, opus-ai, Scripts, Setup, tmp, .claude. Hibernation file (64GB) deleted via admin. H: went from 154GB free to 281GB free
+7. **I: partially cleaned** — some NTFS-locked files remain (owned by other OS installs). User may factory reset
+8. **J: cleaned** — removed CLAWDBOT and Enigma, kept OPUSONLY
+9. **Recycle bins emptied** on all drives
+10. User decided: "just leave drivers and windows" — anything Opus built can be rewritten faster than fighting NTFS permissions
 
 ## What's Broken
 
-- **RevenueDashboard**: AreaChart is present but needs real-time data feeding (currently using seed data).
-- **AgentMonitor**: Needs to fully replace AgentHive in the visual flow (partially integrated).
+- **Gemini SDK**: Out of 300 credits — simulation mode active in dashboard
+- **DNS**: youandinotai.com broken (dead Cloudflare tunnel from wiped T5500)
+- **RevenueDashboard**: Chart data exists but no `<AreaChart>` renders it
+- **Dead buttons**: "Launch 20-Agent Scrape", "SCRAPE", "Extract", "SYNC REVENUE" — all stubs
+- **OpenClaw**: Deprecated auth, user decided to abandon it entirely
 
 ## What's Working
 
-- **MISSION-CONTROL Dashboard** — Unified monitoring of revenue and agents.
-- **Intel Hub** — Revenue sync logic confirmed.
-- **Git State** — Clean, single-branch origin.
-- **Landing Page** — Clean React SPA mount.
+- **Memory-bank system** — 10+ files, CLAUDE.md enforces read/write protocol, sync script ready
+- **Dev server** on port 3001
+- **Claude Code CLI** with --dangerously-skip-permissions
+- **Claude Max subscription** — OAuth tokens valid, 20x rate limit
+- **SSH to T5500**: `ssh aicol@192.168.0.15` verified
+- **AWS backend** at 3.84.226.108 (FastAPI, 52 endpoints)
+- **Landing page** with pre-order modal (index.html)
+- **ChatCommander** — Gemini chat + voice (works in sim mode)
 
 ## Immediate Next Steps
 
-1. **Monitor Revenue Logic** — Ensure pre-order signals from the web-layer are being correctly captured in `MissionContext`.
-2. **Expand AgentMonitor** — Replace any remaining `AgentHive` references with the high-fidelity `AgentMonitor` visualization.
-3. **Revenue Targets** — Adjust seed targets to match real April 4th launch requirements.
-4. **Launchpad Integration** — Verify `Setup-Antigravity.ps1` still maps to the new directory structure.
+1. ✅ Memory-bank system (DONE — hardened with mandatory protocol)
+2. ✅ sync-memory.ps1 (DONE — copies to all drives)
+3. Fix DNS on Cloudflare — BLOCKING for launch
+4. Wire dashboard buttons, fix AreaChart rendering
+5. Deploy landing page to youandinotai.com
+6. Swap Gemini → Claude in AI service layer
