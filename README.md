@@ -4,7 +4,7 @@
 
 # ANTIGRAVITY — Joshua Coleman Ecosystem (Feb 2026)
 
-I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler LLC** (Florida). I run an AI-powered ecosystem where revenue from apps, a dating platform, and electronics recycling funds kids' charities (**#ForTheKids**), with reputation, legality, kid-safety, and platform ToS compliance taking priority over growth.
+I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler LLC** (Florida). I operate an AI-powered ecosystem designed for transparency and social impact. Through **Protocol Omega**, 60% of net proceeds from our platforms are automatically routed via smart contract to Shriners Children's Hospitals. This is a direct on-chain revenue disbursement, prioritizing kids' charities (**#ForTheKids**), legal compliance, and platform integrity.
 
 ## Core Principles
 
