@@ -154,22 +154,22 @@ export function CharitySection() {
             name="AiDoesItAll.website"
             tagline="AI for Good"
             url="https://AiDoesItAll.website"
-            description="Our flagship AI platform where 100% of all subscription revenue is directly allocated to children's hospitals. Harnessing the power of Gemini to fund medical breakthroughs."
+            description="Our flagship AI platform where 100% of subscription revenue is contractually routed to Shriners Children's Hospitals via Protocol Omega smart contract on Base Mainnet."
           />
           <CharityCard 
             icon={Recycle}
             name="OnlineRecycle.org"
             tagline="Trash or Treasure"
             url="https://OnlineRecycle.org"
-            description="Responsible e-waste recycling. Ship your old electronics to us; we recycle them and donate all proceeds to Shriners Children's Hospital. Turning old tech into new hope."
+            description="Responsible e-waste recycling. Ship your old electronics to us; we recycle them and route all proceeds to Shriners Children's Hospitals via on-chain revenue disbursement. Old tech, new hope."
             color="from-emerald-400 to-teal-600"
           />
           <CharityCard 
             icon={ShoppingBag}
             name="The Square Store"
-            tagline="Donation Portal"
+            tagline="Revenue Portal"
             url="https://onlinerecycle.square.site"
-            description="Our official storefront and donation portal. Linked directly to eBay charity listings benefiting Shriners Hospitals for Children. Shop with purpose, give with heart."
+            description="Our official storefront and revenue portal. Linked directly to eBay listings benefiting Shriners Children's Hospitals. Shop with purpose — every purchase triggers an automatic on-chain disbursement."
             color="from-green-500 to-green-800"
           />
         </div>
@@ -182,7 +182,7 @@ export function CharitySection() {
             </div>
             <div className="text-left">
               <div className="text-sm font-bold text-white uppercase tracking-tight">Transparency First</div>
-              <div className="text-xs text-gray-400">All donations are verified and tracked publicly for total accountability.</div>
+              <div className="text-xs text-gray-400">All disbursements are on-chain, verifiable, and tracked publicly for total accountability.</div>
             </div>
           </div>
         </div>

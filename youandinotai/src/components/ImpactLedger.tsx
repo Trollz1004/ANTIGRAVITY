@@ -15,7 +15,7 @@ import { Heart, Server, User, Lock, ExternalLink, Shield } from 'lucide-react';
 /* ─── Split Data ─── */
 const SPLITS = [
   {
-    label: 'Pediatric Charity',
+    label: 'Pediatric Impact',
     sub: 'Shriners Children\'s Hospitals',
     pct: 60,
     color: '#10b981',       // emerald-500
