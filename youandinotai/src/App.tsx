@@ -470,7 +470,7 @@ export default function App() {
 
       {/* #ForTheKids Charity Banner */}
       <div className="relative z-10 pt-14 bg-emerald-500 text-black text-center py-3 px-4 font-bold text-sm md:text-base">
-        #ForTheKids — 60% of EVERY revenue dollar from YouAndINotAI goes directly to Shriners Children's Hospitals and verified pediatric charities.
+        #ForTheKids — 60% Shriners / 30% V8 / 10% Founder Split — Enforced by Protocol Omega
       </div>
 
       {/* Hero Section */}
