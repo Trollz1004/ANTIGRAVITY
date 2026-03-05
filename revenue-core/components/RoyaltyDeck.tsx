@@ -100,7 +100,7 @@ const FOUNDER_CARDS: Card[] = [
   },
 ];
 
-const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d';
+const STRIPE_CHECKOUT_URL = 'https://square.link/u/0QQllAFQ';
 
 const HeartIcon: React.FC<{ size?: number; className?: string }> = ({ size = 24, className }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
