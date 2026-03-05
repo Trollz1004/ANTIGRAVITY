@@ -12,7 +12,7 @@ import { useState, useRef } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'motion/react';
 import { Crown, Heart, Shield, Star, Gem, Infinity as InfinityIcon, Zap } from 'lucide-react';
 
-const ROYALTY_LINK = 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d';
+const ROYALTY_LINK = 'https://square.link/u/0QQllAFQ';
 
 /* ─── Floating Hearts Background ─── */
 function FloatingHearts() {

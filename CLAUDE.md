@@ -98,9 +98,9 @@ C:\ANTIGRAVITY\
 |---------|-----------------|-----------------|
 | Bot-Shield $1 | https://square.link/u/eMyJvw8D | https://buy.stripe.com/3cI3cwcR6c3910p18peEo09 |
 | Founding Member $14.99/mo | https://square.link/u/ipY5VUT5 | https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a |
-| 3-Month Founder $39.99 | TBD (create in Square) | https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j |
-| 12-Month Founder $99.99 | TBD (create in Square) | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
-| Royalty Card $2,500 | TBD (create in Square) | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
+| 3-Month Founder $39.99 | https://square.link/u/cCkmYsFw | https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j |
+| 12-Month Founder $99.99 | https://square.link/u/HlvE57fI | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
+| Royalty Card $2,500 | https://square.link/u/0QQllAFQ | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
 
 Square account: ebaytrashortreasure@gmail.com (Merchant ML3C7FMTQS5KX, bank attached)
 Stripe key rotated 2026-03-05 — restricted key, 7-day expiry. Square has no key expiry.

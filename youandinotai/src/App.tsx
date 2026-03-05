@@ -232,9 +232,9 @@ function PricingSection() {
   const plans = [
     { name: 'Bot-Shield Verification', price: '$1', desc: 'Prove you\'re real', link: 'https://square.link/u/eMyJvw8D', bg: 'from-indigo-500 to-purple-600' },
     { name: 'Founding Member', price: '$14.99/mo', desc: 'Locked forever at this rate', link: 'https://square.link/u/ipY5VUT5', bg: 'from-purple-600 to-pink-600' },
-    { name: '3-Month Founder', price: '$39.99', desc: 'Save $5 vs monthly', link: 'https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j', bg: 'from-blue-600 to-indigo-600' },
-    { name: '12-Month Founder', price: '$99.99', desc: 'Best value — save $80', link: 'https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c', bg: 'from-indigo-700 to-blue-700' },
-    { name: 'Royalty Card', price: '$2,500', desc: 'Lifetime VIP + revenue share', link: 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d', bg: 'from-amber-400 to-orange-500' },
+    { name: '3-Month Founder', price: '$39.99', desc: 'Save $5 vs monthly', link: 'https://square.link/u/cCkmYsFw', bg: 'from-blue-600 to-indigo-600' },
+    { name: '12-Month Founder', price: '$99.99', desc: 'Best value — save $80', link: 'https://square.link/u/HlvE57fI', bg: 'from-indigo-700 to-blue-700' },
+    { name: 'Royalty Card', price: '$2,500', desc: 'Lifetime VIP + revenue share', link: 'https://square.link/u/0QQllAFQ', bg: 'from-amber-400 to-orange-500' },
   ];
 
   return (
@@ -323,9 +323,9 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
   const plans = [
     { name: 'Bot-Shield — $1', link: 'https://square.link/u/eMyJvw8D' },
     { name: 'Founding Member — $14.99/mo', link: 'https://square.link/u/ipY5VUT5' },
-    { name: '3-Month Founder — $39.99', link: 'https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j' },
-    { name: '12-Month Founder — $99.99', link: 'https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c' },
-    { name: 'Royalty Card — $2,500', link: 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d' },
+    { name: '3-Month Founder — $39.99', link: 'https://square.link/u/cCkmYsFw' },
+    { name: '12-Month Founder — $99.99', link: 'https://square.link/u/HlvE57fI' },
+    { name: 'Royalty Card — $2,500', link: 'https://square.link/u/0QQllAFQ' },
   ];
 
   return (

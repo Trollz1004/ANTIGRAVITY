@@ -231,7 +231,7 @@ export default function Dashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <StatCard label="Total Revenue" value={metrics.revenue.toLocaleString()} icon={TrendingUp} color="text-blue-500" subValue="+100% Launch" />
                     <StatCard label="Real Customers" value={metrics.customers.toLocaleString()} icon={Users} color="text-purple-500" />
-                    <StatCard label="Shriners Donations" value={metrics.shriners.toLocaleString()} icon={Heart} color="text-rose-500" />
+                    <StatCard label="Shriners Disbursements" value={metrics.shriners.toLocaleString()} icon={Heart} color="text-rose-500" />
                     <StatCard label="Network Uptime" value={metrics.uptime} icon={Activity} color="text-emerald-500" />
                   </div>
 

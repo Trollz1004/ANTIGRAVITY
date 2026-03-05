@@ -42,7 +42,7 @@ const PRODUCTS: Product[] = [
     interval: 'one-time',
     description: '3 months of Founding Member access. Save $5 vs monthly.',
     icon: <Calendar size={24} />,
-    stripeUrl: 'https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j',
+    stripeUrl: 'https://square.link/u/cCkmYsFw',
   },
   {
     id: '12-month-founder',
@@ -51,7 +51,7 @@ const PRODUCTS: Product[] = [
     interval: 'one-time',
     description: 'Full year of Founding Member access. Best value — save $80.',
     icon: <Star size={24} />,
-    stripeUrl: 'https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c',
+    stripeUrl: 'https://square.link/u/HlvE57fI',
   },
   {
     id: 'royalty-card',
@@ -60,7 +60,7 @@ const PRODUCTS: Product[] = [
     interval: 'one-time',
     description: '5 exclusive Founder Cards. Link to RoyaltyDeck for details.',
     icon: <CreditCard size={24} />,
-    stripeUrl: 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d',
+    stripeUrl: 'https://square.link/u/0QQllAFQ',
     isRoyalty: true,
   },
 ];
