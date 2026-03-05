@@ -110,15 +110,16 @@ NEVER use "donate", "donation", "solicitation" in customer-facing code. Our reve
 
 | Product | Square Link (PRIMARY) | Stripe (LEGACY — expires ~March 10) |
 |---------|----------------------|--------------------------------------|
-| Bot-Shield $1 | https://square.link/u/eMyJvw8D | https://buy.stripe.com/3cI3cwcR6c3910p18peEo09 |
-| Founding Member $14.99/mo | https://square.link/u/ipY5VUT5 | https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a |
-| 3-Month Founder $39.99 | https://square.link/u/cCkmYsFw | https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j |
-| 12-Month Founder $99.99 | https://square.link/u/HlvE57fI | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
-| Royalty Card $2,500 | https://square.link/u/0QQllAFQ | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
+| Bot-Shield $1 | https://square.link/u/Qc5mxUy7 | https://buy.stripe.com/3cI3cwcR6c3910p18peEo09 |
+| Founding Member $14.99/mo | https://square.link/u/cxwjcn0s | https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a |
+| 3-Month Founder $39.99 | https://square.link/u/oY7qEfRM | https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j |
+| 12-Month Founder $99.99 | https://square.link/u/6GHpbvvl | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
+| Royalty Card $2,500 | https://square.link/u/CafhorUS | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
 
 - Square account: ebaytrashortreasure@gmail.com (Merchant ML3C7FMTQS5KX, bank attached)
 - Square App ID: sq0idp-WGWVVrakoH65L9jg6Vx59w
-- Square locations: L24ZX5WRA41TH (YouAndINotAI), LY5GN09F5AN83 (Trash Or Treasure)
+- Square active location: LY5GN09F5AN83 (Trash Or Treasure — all checkout links route here)
+- Square inactive location: L24ZX5WRA41TH (YouAndINotAI — old, not used)
 - All frontend code uses Square links (zero Stripe refs in any .tsx/.ts)
 - Stripe: restricted key, 7-day expiry, being phased out entirely
 
