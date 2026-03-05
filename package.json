@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "name": "antigravity-monorepo",
+  "description": "ANTIGRAVITY monorepo — YouAndINotAI platform",
+  "devDependencies": {
+    "prettier": "^3.4.0"
+  }
+}
