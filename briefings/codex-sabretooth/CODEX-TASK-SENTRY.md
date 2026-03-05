@@ -40,7 +40,13 @@ node scripts/codex-task-sentry.js --run-once --export-markdown
 Run one cycle with explicit fallback:
 
 ```powershell
-node scripts/codex-task-sentry.js --run-once --export-markdown --fallback-executor codex
+node scripts/codex-task-sentry.js --run-once --export-markdown --fallback-chain ollama,codex
+```
+
+Local-first strict mode (no Codex fallback):
+
+```powershell
+node scripts/codex-task-sentry.js --run-once --export-markdown --fallback-chain ollama --no-codex-fallback
 ```
 
 Run loop:
@@ -74,5 +80,6 @@ pwsh -ExecutionPolicy Bypass -File scripts/upgrade-codex-task-sentry-admin.ps1 -
 ## Notes
 
 - Codex tasks default to full-access execution (`CODEX_SENTRY_FULL_ACCESS=1` behavior).
-- OpenClaw/Ollama failures can automatically fallback to another executor (`--fallback-executor codex`).
+- OpenClaw/Ollama failures can fallback through a chain (`--fallback-chain ollama,codex`).
+- To reduce paid model usage, use local-only fallback (`--fallback-chain ollama --no-codex-fallback`).
 - Task follow-ups are declared per-task in `spawn_on_done`.

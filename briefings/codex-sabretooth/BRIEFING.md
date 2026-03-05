@@ -39,6 +39,7 @@ You handle **task sentry, e-waste/donation pipeline, and vault operations**.
 - **E:\ drive access is reserved for Sabretooth operations (Codex + Gemini).**
 - 9020/T5500 Claude primary operations remain on **C:\ANTIGRAVITY**.
 - See `briefings/shared/SECURITY-ISOLATION-LOCK.md`.
+- Use low-cost relay templates from `briefings/shared/LOW-COST-OPS-PROMPTS.md` when possible.
 
 ---
 

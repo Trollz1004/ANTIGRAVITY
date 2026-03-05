@@ -23,7 +23,7 @@ if ($null -eq $nodeCmd) {
 }
 
 $execute = "node"
-$args = "`"$nodeScript`" --run-once --export-markdown --fallback-executor codex"
+$args = "`"$nodeScript`" --run-once --export-markdown --fallback-chain ollama,codex"
 
 Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false -ErrorAction SilentlyContinue
 
