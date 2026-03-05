@@ -63,7 +63,7 @@
 - Per-node: C:\ANTIGRAVITY\memory\NODE_CONTEXT.md
 
 ## PLATFORMS
-1. YouAndINotAI.com — Dating app (PROFIT, FIAT only)
+1. YouAndINotAI.com — Social Platform for Good / Dating app (PROFIT, FIAT only)
    - Dev: C:\ENIGMA\youandinotai\ (monorepo workspace on SABRETOOTH)
    - Prod: T5500 — C:\DateApp\ (backend:8000, frontend:5173, db:5432, ollama:11434)
    - Launch: Feb 14, 2026 (7 days)
