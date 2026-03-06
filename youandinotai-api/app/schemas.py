@@ -132,7 +132,7 @@ class WebhookAckResponse(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     db_connected: bool
-    stripe_connected: bool
+    square_active: bool
     user_count: int
     model_config = ConfigDict(from_attributes=True)
 

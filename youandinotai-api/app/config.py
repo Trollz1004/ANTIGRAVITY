@@ -51,4 +51,10 @@ class Settings(BaseSettings):
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    return Settings()
+    s = Settings()
+    if s.app_env == "production" and s.jwt_secret == "change-me-in-production":
+        raise RuntimeError(
+            "FATAL: JWT_SECRET is still the default value. "
+            "Set a strong, unique JWT_SECRET env var before running in production."
+        )
+    return s

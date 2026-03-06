@@ -3,9 +3,10 @@
 Flow:
 1. POST /verify/challenge — generates a liveness challenge (math + timing)
 2. POST /verify/submit — validates the challenge response, calculates trust score
-3. POST /verify/checkout — creates Stripe checkout session for $1 Bot-Shield payment
-4. GET /verify/status — returns current verification status + trust score
-5. POST /verify/confirm — called by Stripe webhook after $1 payment succeeds
+3. GET /verify/status — returns current verification status + trust score
+4. POST /verify/confirm — called by Square webhook after $1 payment succeeds
+
+Payment: Square payment link (https://square.link/u/Qc5mxUy7) — no Stripe.
 
 Trust Score (0-100):
 - Email verified: 20 pts (auto — they registered with email)
@@ -19,14 +20,14 @@ import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
-from app.config import get_settings
 from app.database import get_db
+from app.rate_limit import verify_limiter
 from app.models import Match, Message, Post, User, VerificationEvent
 
 router = APIRouter(prefix="/verify")
@@ -64,11 +65,6 @@ class VerificationStatus(BaseModel):
     bot_shield_paid: bool
     subscription_active: bool
     checks_completed: int
-
-
-class CheckoutResponse(BaseModel):
-    checkout_url: str
-    session_id: str
 
 
 def _generate_math_challenge() -> tuple[str, str]:
@@ -132,10 +128,12 @@ async def _calculate_trust_score(user: User, db: AsyncSession) -> float:
 
 @router.post("/challenge", response_model=ChallengeResponse)
 async def create_challenge(
+    request: Request,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> ChallengeResponse:
     """Start a V8 liveness challenge. Returns a math question with a time window."""
+    verify_limiter.check(request)
 
     # Check if already verified
     if user.bot_shield_verified:
@@ -170,11 +168,13 @@ async def create_challenge(
 
 @router.post("/submit", response_model=ChallengeResult)
 async def submit_challenge(
+    request: Request,
     req: ChallengeSubmitRequest,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> ChallengeResult:
     """Submit the answer to a liveness challenge. Returns trust score + checkout URL on pass."""
+    verify_limiter.check(request)
 
     event = await db.scalar(
         select(VerificationEvent)
@@ -224,40 +224,8 @@ async def submit_challenge(
     event.trust_score = trust
     await db.commit()
 
-    # Build Stripe checkout URL
-    settings = get_settings()
-    checkout_url = None
-    if settings.stripe_secret_key:
-        import stripe
-        stripe.api_key = settings.stripe_secret_key
-        try:
-            session = stripe.checkout.Session.create(
-                mode="payment",
-                line_items=[{
-                    "price_data": {
-                        "currency": "usd",
-                        "unit_amount": BOT_SHIELD_AMOUNT_CENTS,
-                        "product_data": {
-                            "name": "Bot-Shield Verification",
-                            "description": "V8 Human Verification — 60% goes to Shriners Children's Hospitals",
-                        },
-                    },
-                    "quantity": 1,
-                }],
-                metadata={
-                    "user_id": str(user.id),
-                    "verification_event_id": str(event.id),
-                    "tier": "bot_shield",
-                },
-                customer_email=user.email,
-                success_url=f"{settings.cors_origin_list[0]}/app?verified=1",
-                cancel_url=f"{settings.cors_origin_list[0]}/app?verified=0",
-            )
-            checkout_url = session.url
-            event.stripe_checkout_id = session.id
-            await db.commit()
-        except Exception:
-            pass  # Stripe not configured — still pass the challenge
+    # Square payment link for Bot-Shield $1 — no Stripe dependency
+    checkout_url = "https://square.link/u/Qc5mxUy7"
 
     return ChallengeResult(
         passed=True,
@@ -303,20 +271,49 @@ async def confirm_verification(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    """Called after Stripe payment succeeds (client-side confirmation).
-    The real verification happens via Stripe webhook, but this updates
-    the user's profile.verified flag immediately for UX."""
+    """Called after Square payment succeeds (via webhook or polling).
+    Requires BOTH a passed liveness challenge AND a confirmed payment
+    event in webhook_events for this user. Cannot be gamed by calling
+    this endpoint directly without paying."""
 
-    # Check if there's a passed liveness event
-    passed = await db.scalar(
+    # 1. Must have passed liveness
+    passed_event = await db.scalar(
         select(VerificationEvent)
         .where(VerificationEvent.user_id == user.id)
         .where(VerificationEvent.status == "passed")
         .where(VerificationEvent.challenge_type == "liveness")
         .order_by(VerificationEvent.created_at.desc())
     )
-    if not passed:
+    if not passed_event:
         raise HTTPException(status_code=400, detail="No passed liveness challenge found")
+
+    # 2. Must have a confirmed payment — either via Square webhook
+    #    setting bot_shield_verified, or a processed webhook event
+    #    matching this user's Stripe customer ID (legacy).
+    #    If the user is already verified (set by webhook handler), allow.
+    if not user.bot_shield_verified:
+        # Check if webhook handler already flagged payment
+        if user.stripe_customer_id:
+            from app.models import WebhookEvent
+            payment_confirmed = await db.scalar(
+                select(WebhookEvent)
+                .where(WebhookEvent.event_type == "checkout.session.completed")
+                .where(WebhookEvent.processed.is_(True))
+                .where(
+                    WebhookEvent.payload["data"]["object"]["customer"].as_string()
+                    == user.stripe_customer_id
+                )
+            )
+            if not payment_confirmed:
+                raise HTTPException(
+                    status_code=402,
+                    detail="Payment not yet confirmed. Complete the $1 Bot-Shield payment first.",
+                )
+        else:
+            raise HTTPException(
+                status_code=402,
+                detail="Payment not yet confirmed. Complete the $1 Bot-Shield payment first.",
+            )
 
     user.bot_shield_verified = True
     if user.profile:
