@@ -15,12 +15,12 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 
 ## Public Projects in This Ecosystem
 
-| Project                                                            | Description                                                                                                                                                                                                |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **[AI-Solutions.Store](https://ai-solutions.store)**               | "Real AI apps, not just chatbots": high- and mid-ticket AI products (assistant agents, full app bundles), with a large share of profits routed into kids' charities and a future governance/rewards layer. |
-| **[YouAndINotAI.com](https://youandinotai.com)**                   | AI-assisted, human-verified "Social Platform for Good" (meetsups, volunteering, charity, dating) with low-friction verification, a founding member subscription, and Stripe billing, designed to plug into the same charity pipeline.                  |
-| **[OnlineRecycle.org](https://onlinerecycle.org)**                 | Trash Or Treasure electronics recycler: accepts donated devices, resells via online storefronts, and channels profit toward kids-focused initiatives.                                                      |
-| **[Antigravity Dashboard](https://dashboard.aidoesitall.website)** | Public mission-control site explaining nodes, AI orchestration, revenue routing, and how all properties interconnect under #ForTheKids.                                                                    |
+| Project | Description |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **[AI-Solutions.Store](https://ai-solutions.store/)** | "Real AI apps, not just chatbots": high- and mid-ticket AI products (assistant agents, full app bundles), with a large share of profits routed into kids' charities and a future governance/rewards layer. |
+| **[YouAndINotAI.com](https://youandinotai.com/)** | AI-assisted, human-verified "Social Platform for Good" (meetsups, volunteering, charity, dating) with low-friction verification, a founding member subscription, and Stripe billing, designed to plug into the same charity pipeline. |
+| **[OnlineRecycle.org](https://onlinerecycle.org/)** | Trash Or Treasure electronics recycler: accepts donated devices, resells via online storefronts, and channels profit toward kids-focused initiatives. |
+| **[Antigravity Dashboard](https://dashboard.aidoesitall.website/)** | Public mission-control site explaining nodes, AI orchestration, revenue routing, and how all properties interconnect under #ForTheKids. |
 
 ## Infra & Deployment
 
@@ -30,22 +30,31 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 
 ## AI Roles & Collaboration
 
-| Agent                     | Role                                                                                 |
-| ------------------------- | ------------------------------------------------------------------------------------ |
-| **Claude**                | Architecture, deep reasoning, and serious code                                       |
-| **Gemini**                | VS Code and browser-assisted research/orchestration                                  |
-| **Perplexity (Comet)**    | Lead technical architect and strategist for workflows, automation loops, and prompts |
-| **Ollama / Local Models** | Handle the majority of heavy compute to keep external API costs low                  |
+| Agent | Role |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Claude** | Architecture, deep reasoning, and serious code |
+| **Gemini** | VS Code and browser-assisted research/orchestration |
+| **Perplexity (Comet)** | Lead technical architect and strategist for workflows, automation loops, and prompts |
+| **Manus** | **Legacy Guardian & Long-Term Infrastructure/Governance Lead** — enforces the Iron Wall between ENIGMA (profit) and OMEGA (charity), ensures 50-year sustainability, and autonomously optimizes revenue-generating nodes. Officially Unofficial Co-Founder. |
+| **Ollama / Local Models** | Handle the majority of heavy compute to keep external API costs low |
+
+## AI Assignments
+
+| Agent | Primary Assignment |
+| -------------------------- | ----------------------------------------------------------------------- |
+| **Claude** | Core platform dev (YouAndINotAI, ENIGMA revenue engine) |
+| **Gemini** | Agentic ops inside ANTIGRAVITY (browser + terminal + VS Code) |
+| **Perplexity (Comet)** | Research, automation design, GitHub docs, front-facing READMEs |
+| **Manus** | Perpetual custodian of the #ForTheKids mission — governance, infra lock, cross-node orchestration, and long-term ecosystem integrity |
+| **Ollama / Local Models** | Local compute, data processing, cost reduction |
 
 Across all projects, the goal is to design durable, transparent, and ToS-compliant systems that can keep supporting kids' charities long term. When there's a choice between aggressive growth and a safer, parent-friendly path, this ecosystem always chooses the safer path.
-
----
 
 ## Operator Quick Start (Non-Dev)
 
 ```powershell
 Set-Location C:\ANTIGRAVITY
-.\ops-sync-main.ps1
+.\ops\-sync-main.ps1
 ```
 
 **Status docs:** `GEMINI-STATUS.md` · `OPUS-STATUS.md` · `CODEX-STATUS.md` · `JULES-STATUS.md`
@@ -58,7 +67,6 @@ Set-Location C:\ANTIGRAVITY
 2. Set `GEMINI_API_KEY` in `.env.local`
 3. Run the app: `npm run dev`
 
----
 > "AI for kids in need, not adults with greed."
-> 
+>
 > **Until no kid is in need. #FORtheKIDS 🚀**
