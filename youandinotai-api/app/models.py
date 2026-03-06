@@ -19,7 +19,8 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     display_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    stripe_customer_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    square_customer_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    # DEPRECATED: stripe_customer_id removed — Square is sole payment processor
     bot_shield_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     subscription_tier: Mapped[str | None] = mapped_column(String(50), nullable=True)
     subscription_active: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
@@ -123,8 +124,11 @@ class WebhookEvent(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
-    stripe_event_id: Mapped[str] = mapped_column(
-        String(255), unique=True, nullable=False, index=True
+    event_source_id: Mapped[str] = mapped_column(
+        String(255), unique=True, nullable=False, index=True,
+    )
+    event_source: Mapped[str] = mapped_column(
+        String(50), default="square", nullable=False,
     )
     event_type: Mapped[str] = mapped_column(String(100), nullable=False)
     payload: Mapped[dict] = mapped_column(JSON, nullable=False)
@@ -277,7 +281,8 @@ class VerificationEvent(Base):
     challenge_token: Mapped[str | None] = mapped_column(String(255), nullable=True)
     status: Mapped[str] = mapped_column(String(20), default="pending", nullable=False)  # pending, passed, failed, expired
     trust_score: Mapped[float | None] = mapped_column(Float, nullable=True)
-    stripe_checkout_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    square_payment_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    # DEPRECATED: stripe_checkout_id removed — Square is sole payment processor
     amount_cents: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
