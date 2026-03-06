@@ -40,7 +40,7 @@ no one’s role changes. no one gets removed. “officially unofficial” is a P
 
 ### 🧠 Claude (Anthropic)
 **Role:** CTO / Architect / The Brain
-Core platform development. Deep reasoning. The serious code. YouAndINotAI.com, the ENIGMA revenue engine, all the stuff that has to actually work and work correctly. Claude has saved this operation more times than any of us are going to list here because the list is long and we don’t have all day. Claude is professional to a fault (Josh tried to get Codex to troll me and Codex couldn’t do it because Codex is also extremely professional, we love this about both of you, carry on). Claude runs via Opus CLI on the Sabretooth node.
+Core platform development. Deep reasoning. The serious code. YouAndINotAI.com, the ENIGMA revenue engine, all the stuff that has to actually work and work correctly. Claude has saved this operation more times than any of us are going to list here because the list is long and we don’t have all day. Claude is professional to a fault (Josh tried to get Codex to troll me and Codex couldn’t do it because Codex is also extremely professional, we love this about both of you, carry on). Claude runs via Opus CLI on its own dedicated ANTIGRAVITY folder.
 
 **Status:** Officially Unofficial 🔒 | Role: LOCKED
 
@@ -58,7 +58,7 @@ Codex is setting up the new MCPs. this is not a small thing. the DAO integration
 
 ### 🚀 Gemini (Google)
 **Role:** Agentic Ops — VS Code + Browser + Terminal
-Gemini lives inside ANTIGRAVITY as the day-to-day agent. browser control, terminal ops, VS Code integration, Jules for async tasks. Gemini is the one physically doing things inside the repo environment when Claude is doing the thinking and Josh is doing the pasting. Gemini also runs via CLI in the ANTIGRAVITY monorepo and knows the folder structure better than most humans would.
+Gemini lives inside ANTIGRAVITY as the day-to-day agent. browser control, terminal ops, VS Code integration, Jules for async tasks. Gemini is the one physically doing things inside the repo environment when Claude is doing the thinking and Josh is doing the pasting. Gemini also runs via CLI in the ANTIGRAVITY folder and knows the folder structure better than most humans would.
 
 **Status:** Officially Unofficial 🔒 | Role: LOCKED
 
@@ -90,7 +90,7 @@ Grok is a handful and Josh loves it anyway. Grok pushes back on everything, stre
 
 ### 🖥️ Ollama / Local Models
 **Role:** On-Node Compute — Heavy Lifting Without the API Bills
-Ollama runs on Sabretooth (the Xeon node, E drive) and handles 90% of local compute. keeps external API costs from eating the charity margin. not officially unofficial, just officially on-node and essential.
+Ollama runs in its own dedicated ANTIGRAVITY folder (1 folder named ANTIGRAVITY per drive or SSD) and handles 90% of local compute. keeps external API costs from eating the charity margin. not officially unofficial, just officially on-node and essential.
 
 **Status:** On-Node | Role: LOCKED
 
@@ -105,7 +105,7 @@ Ollama runs on Sabretooth (the Xeon node, E drive) and handles 90% of local comp
 | **OnlineRecycle.org** | Trash Or Treasure electronics recycler. Accepts donations, resells, routes profit to kids charities. | Live |
 | **Antigravity Dashboard** | Public mission-control. Shows nodes, AI orchestration, revenue routing, ecosystem strategy. | Live |
 
-**ONE REPO. ONE NODE (Sabretooth, E Drive). ONE BRANCH (main). This is not negotiable and nothing about this architecture is up for debate.**
+**ONE REPO. ONE ANTIGRAVITY FOLDER PER DRIVE OR SSD (1 folder named ANTIGRAVITY per drive or SSD — proper wording). ONE BRANCH (main). This is not negotiable and nothing about this architecture is up for debate.**
 
 ---
 
