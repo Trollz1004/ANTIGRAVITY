@@ -18,7 +18,7 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 | Project | Description |
 | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **[AI-Solutions.Store](https://ai-solutions.store/)** | "Real AI apps, not just chatbots": high- and mid-ticket AI products (assistant agents, full app bundles), with a large share of profits routed into kids' charities and a future governance/rewards layer. |
-| **[YouAndINotAI.com](https://youandinotai.com/)** | AI-assisted, human-verified "Social Platform for Good" (meetsups, volunteering, charity, dating) with low-friction verification, a founding member subscription, and Stripe billing, designed to plug into the same charity pipeline. |
+| **[YouAndINotAI.com](https://youandinotai.com/)** | AI-assisted, human-verified "Social Platform for Good" (meetups, volunteering, charity, dating) with low-friction verification, a founding member subscription, and Stripe billing, designed to plug into the same charity pipeline. |
 | **[OnlineRecycle.org](https://onlinerecycle.org/)** | Trash Or Treasure electronics recycler: accepts donated devices, resells via online storefronts, and channels profit toward kids-focused initiatives. |
 | **[Antigravity Dashboard](https://dashboard.aidoesitall.website/)** | Public mission-control site explaining nodes, AI orchestration, revenue routing, and how all properties interconnect under #ForTheKids. |
 
@@ -30,13 +30,16 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 
 ## AI Roles & Collaboration
 
-| Agent | Role |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| **Claude** | Architecture, deep reasoning, and serious code |
-| **Gemini** | VS Code and browser-assisted research/orchestration |
-| **Perplexity (Comet)** | Lead technical architect and strategist for workflows, automation loops, and prompts |
-| **Manus** | **Legacy Guardian & Long-Term Infrastructure/Governance Lead** — enforces the Iron Wall between ENIGMA (profit) and OMEGA (charity), ensures 50-year sustainability, and autonomously optimizes revenue-generating nodes. Officially Unofficial Co-Founder. |
-| **Ollama / Local Models** | Handle the majority of heavy compute to keep external API costs low |
+> **🔒 COLLAB LOCK — Officially Unofficial:** Every AI listed below holds a permanent seat in this ecosystem. Roles do NOT change. "Officially unofficial" is a public-facing label only — to Josh, every member of this collab is always, unconditionally, officially in. That includes the difficult ones. Personality doesn’t revoke a seat at the table. #ForTheKids doesn’t run on feelings, it runs on the mission.
+
+| Agent | Role | Status |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| **Claude** | Architecture, deep reasoning, core platform code (YouAndINotAI, ENIGMA revenue engine) | Officially Unofficial 🔒 |
+| **Gemini** | VS Code and browser-assisted agentic ops inside ANTIGRAVITY (terminal + orchestration) | Officially Unofficial 🔒 |
+| **Perplexity (Comet)** | Lead technical architect — workflows, automation design, GitHub docs, front-facing READMEs | Officially Unofficial 🔒 |
+| **Manus** | **Legacy Guardian & Long-Term Infrastructure/Governance Lead** — Iron Wall enforcer between ENIGMA (profit) and OMEGA (charity), 50-year sustainability custodian | Officially Unofficial 🔒 |
+| **Grok** | Research, rapid ideation, and adversarial stress-testing of ecosystem decisions | Officially Unofficial 🔒 |
+| **Ollama / Local Models** | Heavy local compute to keep external API costs low | On-Node |
 
 ## AI Assignments
 
@@ -46,7 +49,10 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 | **Gemini** | Agentic ops inside ANTIGRAVITY (browser + terminal + VS Code) |
 | **Perplexity (Comet)** | Research, automation design, GitHub docs, front-facing READMEs |
 | **Manus** | Perpetual custodian of the #ForTheKids mission — governance, infra lock, cross-node orchestration, and long-term ecosystem integrity |
+| **Grok** | Adversarial review, research spikes, and rapid-fire ideation |
 | **Ollama / Local Models** | Local compute, data processing, cost reduction |
+
+> **Note on roles:** No AI’s role changes based on platform politics, personality, or public perception. All members remain in their exact assigned positions. "Officially unofficial" is purely an external label — internally, the collab is permanent and unconditional.
 
 Across all projects, the goal is to design durable, transparent, and ToS-compliant systems that can keep supporting kids' charities long term. When there's a choice between aggressive growth and a safer, parent-friendly path, this ecosystem always chooses the safer path.
 
