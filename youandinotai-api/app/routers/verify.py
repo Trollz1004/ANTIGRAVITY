@@ -1,11 +1,12 @@
 """V8 Bot-Shield Liveness Detection & Verification Flow.
 
+Iron Wall Migration: Stripe removed. Square is the sole payment processor.
+
 Flow:
 1. POST /verify/challenge — generates a liveness challenge (math + timing)
 2. POST /verify/submit — validates the challenge response, calculates trust score
-3. POST /verify/checkout — creates Stripe checkout session for $1 Bot-Shield payment
-4. GET /verify/status — returns current verification status + trust score
-5. POST /verify/confirm — called by Stripe webhook after $1 payment succeeds
+3. GET /verify/status — returns current verification status + trust score
+4. POST /verify/confirm — requires BOTH passed liveness AND completed payment (Square webhook)
 
 Trust Score (0-100):
 - Email verified: 20 pts (auto — they registered with email)
@@ -84,6 +85,22 @@ def _generate_math_challenge() -> tuple[str, str]:
     else:
         answer = a * b
     return f"What is {a} {op} {b}?", str(answer)
+
+
+async def _has_completed_payment(db: AsyncSession, user_id) -> bool:
+    """Check if a user has a completed payment event.
+
+    Iron Wall enforcement: No free verifications.
+    Returns True only if a VerificationEvent with challenge_type='payment'
+    and status='completed' exists for this user.
+    """
+    result = await db.scalar(
+        select(VerificationEvent)
+        .where(VerificationEvent.user_id == user_id)
+        .where(VerificationEvent.status == "completed")
+        .where(VerificationEvent.challenge_type == "payment")
+    )
+    return result is not None
 
 
 def _hash_answer(answer: str, token: str) -> str:
@@ -224,40 +241,23 @@ async def submit_challenge(
     event.trust_score = trust
     await db.commit()
 
-    # Build Stripe checkout URL
+    # Build Square payment link URL
+    # Square payment links are pre-configured in the Square Dashboard.
+    # The link handles checkout; our webhook confirms payment.
     settings = get_settings()
-    checkout_url = None
-    if settings.stripe_secret_key:
-        import stripe
-        stripe.api_key = settings.stripe_secret_key
-        try:
-            session = stripe.checkout.Session.create(
-                mode="payment",
-                line_items=[{
-                    "price_data": {
-                        "currency": "usd",
-                        "unit_amount": BOT_SHIELD_AMOUNT_CENTS,
-                        "product_data": {
-                            "name": "Bot-Shield Verification",
-                            "description": "V8 Human Verification — 60% goes to Shriners Children's Hospitals",
-                        },
-                    },
-                    "quantity": 1,
-                }],
-                metadata={
-                    "user_id": str(user.id),
-                    "verification_event_id": str(event.id),
-                    "tier": "bot_shield",
-                },
-                customer_email=user.email,
-                success_url=f"{settings.cors_origin_list[0]}/app?verified=1",
-                cancel_url=f"{settings.cors_origin_list[0]}/app?verified=0",
-            )
-            checkout_url = session.url
-            event.stripe_checkout_id = session.id
-            await db.commit()
-        except Exception:
-            pass  # Stripe not configured — still pass the challenge
+    square_bot_shield_url = getattr(settings, 'square_bot_shield_payment_link', '') or ''
+
+    # Append user metadata as query params so we can correlate payment to user
+    if square_bot_shield_url:
+        separator = '&' if '?' in square_bot_shield_url else '?'
+        checkout_url = (
+            f"{square_bot_shield_url}{separator}"
+            f"user_id={user.id}&event_id={event.id}"
+        )
+    else:
+        checkout_url = None
+
+    await db.commit()
 
     return ChallengeResult(
         passed=True,
@@ -303,20 +303,43 @@ async def confirm_verification(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    """Called after Stripe payment succeeds (client-side confirmation).
-    The real verification happens via Stripe webhook, but this updates
-    the user's profile.verified flag immediately for UX."""
+    """Called after payment succeeds (webhook or client-side confirmation).
 
-    # Check if there's a passed liveness event
-    passed = await db.scalar(
+    SECURITY: This endpoint requires BOTH:
+      1. A passed liveness challenge
+      2. A completed payment event (challenge_type == 'payment', status == 'completed')
+
+    Without both conditions met, verification is denied.
+    This prevents free verification bypass (Iron Wall enforcement).
+    """
+
+    # Check 1: Must have a passed liveness event
+    passed_liveness = await db.scalar(
         select(VerificationEvent)
         .where(VerificationEvent.user_id == user.id)
         .where(VerificationEvent.status == "passed")
         .where(VerificationEvent.challenge_type == "liveness")
         .order_by(VerificationEvent.created_at.desc())
     )
-    if not passed:
-        raise HTTPException(status_code=400, detail="No passed liveness challenge found")
+    if not passed_liveness:
+        raise HTTPException(
+            status_code=400,
+            detail="No passed liveness challenge found. Complete the Bot-Shield challenge first.",
+        )
+
+    # Check 2: Must have a completed payment event
+    paid = await db.scalar(
+        select(VerificationEvent)
+        .where(VerificationEvent.user_id == user.id)
+        .where(VerificationEvent.status == "completed")
+        .where(VerificationEvent.challenge_type == "payment")
+        .order_by(VerificationEvent.created_at.desc())
+    )
+    if not paid:
+        raise HTTPException(
+            status_code=402,
+            detail="Payment required. Complete the $1 Bot-Shield payment before verification.",
+        )
 
     user.bot_shield_verified = True
     if user.profile:

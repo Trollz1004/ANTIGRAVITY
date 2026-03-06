@@ -1,4 +1,12 @@
-"""Stripe webhook router with signature verification and audit logging."""
+"""Square webhook router with signature verification and audit logging.
+
+Iron Wall Migration: Stripe removed. Square is the sole payment processor.
+All payment webhooks now flow through Square.
+
+Webhook endpoints:
+  POST /webhooks/square-payment  — Bot-Shield $1 payments + subscription purchases
+  POST /webhooks/square-booking  — E-waste booking events (OnlineRecycle.org)
+"""
 
 from __future__ import annotations
 
@@ -13,14 +21,13 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
-import stripe
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.database import get_db
-from app.models import User, WebhookEvent
+from app.models import User, VerificationEvent, WebhookEvent
 from app.schemas import WebhookAckResponse
 
 router = APIRouter(prefix="/webhooks")
@@ -52,67 +59,7 @@ SQUARE_CSV_FIELDS = [
 ]
 
 
-def _normalize_tier(raw_tier: str | None) -> str | None:
-    if not raw_tier:
-        return None
-    normalized = raw_tier.strip().lower().replace("-", "_")
-    aliases = {
-        "botshield": "bot_shield",
-        "bot_shield": "bot_shield",
-        "royalty": "royalty",
-        "royalty_card": "royalty",
-        "founding_member": "founding_member",
-        "foundingmember": "founding_member",
-        "3_month": "3_month",
-        "12_month": "12_month",
-    }
-    return aliases.get(normalized)
-
-
-def _extract_checkout_tier(session_obj: dict[str, Any]) -> str | None:
-    metadata = session_obj.get("metadata") or {}
-    if isinstance(metadata, dict):
-        explicit_tier = _normalize_tier(
-            metadata.get("subscription_tier") or metadata.get("tier")
-        )
-        if explicit_tier:
-            return explicit_tier
-
-    mode = session_obj.get("mode")
-    if mode == "subscription":
-        return "founding_member"
-
-    amount_cents = session_obj.get("amount_total")
-    if amount_cents is None:
-        amount_cents = session_obj.get("amount_subtotal")
-
-    if amount_cents == BOT_SHIELD_CENTS:
-        return "bot_shield"
-    if amount_cents == ROYALTY_CARD_CENTS:
-        return "royalty"
-
-    return None
-
-
-def _extract_subscription_tier(subscription_obj: dict[str, Any]) -> str:
-    metadata = subscription_obj.get("metadata") or {}
-    if isinstance(metadata, dict):
-        explicit_tier = _normalize_tier(
-            metadata.get("subscription_tier") or metadata.get("tier")
-        )
-        if explicit_tier:
-            return explicit_tier
-
-    return "founding_member"
-
-
-async def _get_user_by_customer_id(
-    db: AsyncSession,
-    customer_id: str | None,
-) -> User | None:
-    if not customer_id:
-        return None
-    return await db.scalar(select(User).where(User.stripe_customer_id == customer_id))
+# ── Shared Utilities ──
 
 
 def _utc_now_iso() -> str:
@@ -123,23 +70,12 @@ def _utc_now_iso() -> str:
     )
 
 
-def _resolve_square_log_dir(settings: Any) -> Path:
-    configured = str(getattr(settings, "square_booking_log_dir", "") or "").strip()
-    if configured:
-        configured_path = Path(configured)
-        if configured_path.is_absolute():
-            return configured_path
-        return REPO_ROOT / configured_path
-    if CONTAINER_EWASTE_MOUNT.exists():
-        return CONTAINER_EWASTE_MOUNT / "bookings"
-    return REPO_ROOT / "data" / "ewaste-intake" / "bookings"
-
-
 def _verify_square_signature(
     payload: bytes,
     square_signature: str | None,
     settings: Any,
 ) -> None:
+    """Verify Square webhook HMAC-SHA256 signature."""
     if not settings.square_webhook_verify_signature:
         return
 
@@ -173,6 +109,306 @@ def _verify_square_signature(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid Square webhook signature.",
         )
+
+
+def _normalize_tier(raw_tier: str | None) -> str | None:
+    """Normalize subscription tier names to canonical form."""
+    if not raw_tier:
+        return None
+    normalized = raw_tier.strip().lower().replace("-", "_")
+    aliases = {
+        "botshield": "bot_shield",
+        "bot_shield": "bot_shield",
+        "royalty": "royalty",
+        "royalty_card": "royalty",
+        "founding_member": "founding_member",
+        "foundingmember": "founding_member",
+        "3_month": "3_month",
+        "12_month": "12_month",
+    }
+    return aliases.get(normalized)
+
+
+# ── Square Payment Webhook (Bot-Shield + Subscriptions) ──
+
+
+def _extract_square_payment_tier(payment_obj: dict[str, Any]) -> str | None:
+    """Extract the subscription tier from a Square payment event.
+
+    Checks:
+      1. note field for tier keywords
+      2. amount_money for known price points ($1 = bot_shield, $14.99 = founding_member)
+      3. order metadata if available
+    """
+    # Check note/description for tier keywords
+    note = str(payment_obj.get("note") or payment_obj.get("description") or "").lower()
+    for keyword, tier in [
+        ("bot-shield", "bot_shield"),
+        ("bot shield", "bot_shield"),
+        ("botshield", "bot_shield"),
+        ("founding member", "founding_member"),
+        ("founding_member", "founding_member"),
+        ("subscription", "founding_member"),
+        ("royalty", "royalty"),
+    ]:
+        if keyword in note:
+            return tier
+
+    # Check amount for known price points
+    amount_money = payment_obj.get("amount_money") or {}
+    amount_cents = amount_money.get("amount")
+    if amount_cents is not None:
+        if amount_cents == BOT_SHIELD_CENTS:
+            return "bot_shield"
+        if amount_cents == 1499:  # $14.99 Founding Member
+            return "founding_member"
+        if amount_cents == ROYALTY_CARD_CENTS:
+            return "royalty"
+
+    # Check order reference metadata
+    order_id = payment_obj.get("order_id")
+    if order_id:
+        # Order metadata would need a Square API call to resolve
+        # For now, fall back to amount-based detection
+        pass
+
+    return None
+
+
+def _extract_square_customer_email(payment_obj: dict[str, Any]) -> str | None:
+    """Extract customer email from Square payment event."""
+    # Check buyer_email_address first (most common)
+    email = payment_obj.get("buyer_email_address")
+    if email:
+        return str(email).strip().lower()
+
+    # Check receipt_url for email parameter
+    receipt_url = payment_obj.get("receipt_url") or ""
+    if "email=" in receipt_url:
+        try:
+            from urllib.parse import parse_qs, urlparse
+            parsed = urlparse(receipt_url)
+            params = parse_qs(parsed.query)
+            if "email" in params:
+                return str(params["email"][0]).strip().lower()
+        except Exception:
+            pass
+
+    return None
+
+
+async def _get_user_by_email(
+    db: AsyncSession,
+    email: str | None,
+) -> User | None:
+    """Look up user by email address."""
+    if not email:
+        return None
+    return await db.scalar(
+        select(User).where(User.email == email.strip().lower())
+    )
+
+
+async def _get_user_by_square_customer_id(
+    db: AsyncSession,
+    customer_id: str | None,
+) -> User | None:
+    """Look up user by Square customer ID."""
+    if not customer_id:
+        return None
+    return await db.scalar(
+        select(User).where(User.square_customer_id == customer_id)
+    )
+
+
+@router.post("/square-payment", response_model=WebhookAckResponse)
+async def square_payment_webhook(
+    request: Request,
+    square_signature: str | None = Header(
+        default=None, alias="x-square-hmacsha256-signature"
+    ),
+    db: AsyncSession = Depends(get_db),
+) -> WebhookAckResponse:
+    """Handle Square payment webhooks for Bot-Shield and subscription purchases.
+
+    Processes:
+      - payment.completed → Bot-Shield $1 verification + subscription purchases
+      - payment.updated → Status changes
+      - subscription.created → New subscriptions
+      - subscription.updated → Subscription changes (cancellation, renewal)
+
+    Iron Wall enforcement:
+      - Creates a 'payment' VerificationEvent on successful Bot-Shield payment
+      - Updates user.bot_shield_verified and subscription_active flags
+      - Same tier logic that Stripe handler had, now wired to Square
+    """
+    settings = get_settings()
+    payload = await request.body()
+
+    if len(payload) > MAX_WEBHOOK_PAYLOAD_BYTES:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail="Webhook payload exceeds size limit.",
+        )
+
+    _verify_square_signature(payload, square_signature, settings)
+
+    try:
+        payload_json = json.loads(payload.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Webhook payload must be valid JSON.",
+        ) from exc
+
+    event_id = str(
+        payload_json.get("event_id")
+        or payload_json.get("id")
+        or ""
+    ).strip()
+    if not event_id:
+        event_id = f"square-pay-{hashlib.sha256(payload).hexdigest()[:20]}"
+
+    event_type = str(
+        payload_json.get("type")
+        or payload_json.get("event_type")
+        or "unknown"
+    )
+
+    # Deduplicate
+    duplicate = await db.scalar(
+        select(WebhookEvent).where(WebhookEvent.event_source_id == event_id)
+    )
+    if duplicate:
+        return WebhookAckResponse(event_id=event_id, processed=True, duplicate=True)
+
+    # Extract payment object from Square event structure
+    data = payload_json.get("data") or {}
+    obj = data.get("object") or {}
+    payment_obj = obj.get("payment") or obj
+
+    # Log the webhook event
+    webhook_event = WebhookEvent(
+        event_source_id=event_id,
+        event_source="square",
+        event_type=event_type,
+        payload=payload_json,
+        processed=False,
+    )
+    db.add(webhook_event)
+
+    # Resolve user from Square customer ID or email
+    customer_id = str(payment_obj.get("customer_id") or "").strip() or None
+    buyer_email = _extract_square_customer_email(payment_obj)
+    user = await _get_user_by_square_customer_id(db, customer_id)
+    if not user and buyer_email:
+        user = await _get_user_by_email(db, buyer_email)
+
+    # Link Square customer ID to user for future lookups
+    if user and customer_id and not user.square_customer_id:
+        user.square_customer_id = customer_id
+
+    # Process based on event type
+    if event_type in ("payment.completed", "payment.created"):
+        payment_status = str(payment_obj.get("status") or "").upper()
+        if payment_status == "COMPLETED":
+            tier = _extract_square_payment_tier(payment_obj)
+
+            if user and tier:
+                if tier in {"bot_shield", "royalty"}:
+                    # Mark user as Bot-Shield verified
+                    user.bot_shield_verified = True
+                    user.subscription_tier = tier
+
+                    # Create a 'payment' VerificationEvent so /verify/confirm works
+                    payment_event = VerificationEvent(
+                        user_id=user.id,
+                        challenge_type="payment",
+                        status="completed",
+                        amount_cents=payment_obj.get("amount_money", {}).get("amount", BOT_SHIELD_CENTS),
+                        square_payment_id=str(payment_obj.get("id") or event_id),
+                    )
+                    db.add(payment_event)
+
+                    logger.info(
+                        "Bot-Shield payment completed: user=%s tier=%s event=%s",
+                        user.id, tier, event_id,
+                    )
+
+                elif tier in {"founding_member", "3_month", "12_month"}:
+                    # Activate subscription
+                    user.subscription_tier = tier
+                    user.subscription_active = True
+
+                    # Also create payment verification event
+                    payment_event = VerificationEvent(
+                        user_id=user.id,
+                        challenge_type="payment",
+                        status="completed",
+                        amount_cents=payment_obj.get("amount_money", {}).get("amount"),
+                        square_payment_id=str(payment_obj.get("id") or event_id),
+                    )
+                    db.add(payment_event)
+
+                    logger.info(
+                        "Subscription payment completed: user=%s tier=%s event=%s",
+                        user.id, tier, event_id,
+                    )
+
+            elif not user:
+                logger.warning(
+                    "Square payment.completed for unknown customer: "
+                    "customer_id=%s email=%s event_id=%s",
+                    customer_id, buyer_email, event_id,
+                )
+
+    elif event_type == "subscription.created":
+        if user:
+            user.subscription_active = True
+            user.subscription_tier = "founding_member"
+            logger.info(
+                "Square subscription created: user=%s event=%s",
+                user.id, event_id,
+            )
+
+    elif event_type in ("subscription.updated",):
+        # Check if subscription was cancelled
+        subscription = obj.get("subscription") or obj
+        sub_status = str(subscription.get("status") or "").upper()
+        if user:
+            if sub_status in ("CANCELED", "DEACTIVATED", "PAUSED"):
+                user.subscription_active = False
+                logger.info(
+                    "Square subscription deactivated: user=%s status=%s event=%s",
+                    user.id, sub_status, event_id,
+                )
+            elif sub_status == "ACTIVE":
+                user.subscription_active = True
+
+    webhook_event.processed = True
+
+    try:
+        await db.commit()
+    except IntegrityError:
+        await db.rollback()
+        return WebhookAckResponse(event_id=event_id, processed=True, duplicate=True)
+
+    return WebhookAckResponse(event_id=event_id, processed=True, duplicate=False)
+
+
+# ── Square Booking Webhook (E-Waste / OnlineRecycle.org) ──
+
+
+def _resolve_square_log_dir(settings: Any) -> Path:
+    configured = str(getattr(settings, "square_booking_log_dir", "") or "").strip()
+    if configured:
+        configured_path = Path(configured)
+        if configured_path.is_absolute():
+            return configured_path
+        return REPO_ROOT / configured_path
+    if CONTAINER_EWASTE_MOUNT.exists():
+        return CONTAINER_EWASTE_MOUNT / "bookings"
+    return REPO_ROOT / "data" / "ewaste-intake" / "bookings"
 
 
 def _load_square_booking(payload_json: dict[str, Any]) -> dict[str, Any]:
@@ -293,124 +529,6 @@ def _mark_square_event_processed(event_id: str, log_dir: Path) -> None:
         f.write(f"{event_id}\n")
 
 
-@router.post("/stripe", response_model=WebhookAckResponse)
-async def stripe_webhook(
-    request: Request,
-    stripe_signature: str | None = Header(default=None, alias="Stripe-Signature"),
-    db: AsyncSession = Depends(get_db),
-) -> WebhookAckResponse:
-    settings = get_settings()
-
-    if not settings.stripe_secret_key or not settings.stripe_webhook_secret:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Stripe webhook is not configured.",
-        )
-
-    if not stripe_signature:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Missing Stripe-Signature header.",
-        )
-
-    payload = await request.body()
-    if len(payload) > MAX_WEBHOOK_PAYLOAD_BYTES:
-        raise HTTPException(
-            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-            detail="Webhook payload exceeds size limit.",
-        )
-
-    stripe.api_key = settings.stripe_secret_key
-
-    try:
-        event = stripe.Webhook.construct_event(
-            payload=payload,
-            sig_header=stripe_signature,
-            secret=settings.stripe_webhook_secret,
-        )
-    except ValueError as exc:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
-    except stripe.error.SignatureVerificationError as exc:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
-
-    try:
-        payload_json = json.loads(payload.decode("utf-8"))
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Webhook payload must be valid JSON.",
-        ) from exc
-
-    event_id = str(event.get("id") or "")
-    if not event_id:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Webhook event missing required id.",
-        )
-
-    event_type = event.get("type", "unknown")
-    obj = (event.get("data") or {}).get("object") or {}
-
-    duplicate = await db.scalar(
-        select(WebhookEvent).where(WebhookEvent.stripe_event_id == event_id)
-    )
-    if duplicate:
-        return WebhookAckResponse(event_id=event_id, processed=True, duplicate=True)
-
-    webhook_event = WebhookEvent(
-        stripe_event_id=event_id,
-        event_type=event_type,
-        payload=payload_json,
-        processed=False,
-    )
-    db.add(webhook_event)
-
-    customer_id = obj.get("customer")
-    user = await _get_user_by_customer_id(db, customer_id)
-
-    if event_type == "checkout.session.completed":
-        checkout_tier = _extract_checkout_tier(obj)
-        if user and checkout_tier:
-            if checkout_tier in {"bot_shield", "royalty"}:
-                user.bot_shield_verified = True
-                user.subscription_tier = checkout_tier
-            elif checkout_tier in {"founding_member", "3_month", "12_month"}:
-                user.subscription_tier = checkout_tier
-                user.subscription_active = True
-        elif customer_id:
-            logger.warning(
-                "checkout.session.completed for unknown customer_id=%s event_id=%s",
-                customer_id,
-                event_id,
-            )
-
-    elif event_type == "customer.subscription.created":
-        subscription_tier = _extract_subscription_tier(obj)
-        if user:
-            user.subscription_tier = subscription_tier
-            user.subscription_active = True
-        elif customer_id:
-            logger.warning(
-                "customer.subscription.created for unknown customer_id=%s event_id=%s",
-                customer_id,
-                event_id,
-            )
-
-    elif event_type in {"customer.subscription.deleted", "invoice.payment_failed"}:
-        if user:
-            user.subscription_active = False
-
-    webhook_event.processed = True
-
-    try:
-        await db.commit()
-    except IntegrityError:
-        await db.rollback()
-        return WebhookAckResponse(event_id=event_id, processed=True, duplicate=True)
-
-    return WebhookAckResponse(event_id=event_id, processed=True, duplicate=False)
-
-
 @router.post("/square-booking", response_model=WebhookAckResponse)
 async def square_booking_webhook(
     request: Request,
@@ -418,6 +536,7 @@ async def square_booking_webhook(
         default=None, alias="x-square-hmacsha256-signature"
     ),
 ) -> WebhookAckResponse:
+    """Handle Square booking webhooks for e-waste pickups (OnlineRecycle.org)."""
     settings = get_settings()
     payload = await request.body()
 
