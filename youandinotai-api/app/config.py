@@ -23,8 +23,12 @@ class Settings(BaseSettings):
     database_url: str = Field(
         default="postgresql+asyncpg://postgres:postgres@localhost:5432/youandinotai"
     )
-    stripe_secret_key: str = ""
-    stripe_webhook_secret: str = ""
+    # DEPRECATED: Stripe removed — Square is the sole payment processor.
+    # stripe_secret_key: str = ""  # REMOVED — Iron Wall migration to Square
+    # stripe_webhook_secret: str = ""  # REMOVED — Iron Wall migration to Square
+    square_access_token: str = ""
+    square_bot_shield_payment_link: str = ""  # Pre-configured Square payment link for $1 Bot-Shield
+    square_subscription_payment_link: str = ""  # Pre-configured Square payment link for subscriptions
     square_webhook_signature_key: str = ""
     square_webhook_notification_url: str = ""
     square_webhook_verify_signature: bool = True
@@ -34,7 +38,10 @@ class Settings(BaseSettings):
     kimi_api_key: str = ""
     kimi_model: str = "kimi-2.6"
 
-    jwt_secret: str = Field(default="change-me-in-production")
+    jwt_secret: str = Field(
+        default="",
+        description="REQUIRED. JWT signing secret. Must be set via JWT_SECRET env var. No fallback.",
+    )
     metrics_api_key: str = ""  # Separate key for /metrics — NOT the JWT secret
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
@@ -51,4 +58,18 @@ class Settings(BaseSettings):
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    return Settings()
+    s = Settings()
+    # SECURITY: Fail-fast if JWT_SECRET is not set or is the old insecure default.
+    # The Iron Wall demands no backdoors.
+    if not s.jwt_secret or s.jwt_secret in ("change-me-in-production", ""):
+        raise RuntimeError(
+            "FATAL: JWT_SECRET environment variable is not set or uses an insecure default. "
+            "The application WILL NOT start without a secure JWT secret. "
+            "Set JWT_SECRET in your .env file or environment variables."
+        )
+    if len(s.jwt_secret) < 32:
+        raise RuntimeError(
+            "FATAL: JWT_SECRET must be at least 32 characters long for security. "
+            "Generate one with: python -c 'import secrets; print(secrets.token_urlsafe(64))'"
+        )
+    return s
