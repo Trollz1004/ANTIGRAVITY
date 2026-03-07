@@ -1,10 +1,17 @@
 # DECISIONS LOG — WHY WE DID WHAT WE DID
 
-**Last Updated**: 2026-03-07T13:22:15-05:00
+**Last Updated**: 2026-03-07T14:06:00-05:00
 
 Every architectural decision is recorded here so no future session re-debates it.
 
 ---
+
+## 2026-03-07: Promote the Sabretooth ops stack into `main` instead of keeping it as local-only glue
+
+**Decision**: Track the real Sabretooth/C-side operational scripts and runbooks in git once they are verified, instead of leaving them only in one dirty local checkout.  
+**Why**: `codex-doctor`, continuity export/restore/test, Sabretooth cleanup/finalize helpers, and the OnlineRecycle worker path are part of the actual operating model now. Leaving them untracked guarantees future drift, repeated rediscovery, and fragile disaster recovery.  
+**Impact**: `AGENTS.md`, continuity tooling, Sabretooth cleanup helpers, and the OnlineRecycle low-cost worker path now belong in the promoted repo path. Future cleanup should keep moving by reviewed slices, not by giant overlay commits or blind resets.  
+**Status**: Active
 
 ## 2026-03-07: Keep the live YouAndINotAI backend and harden it surgically instead of rewriting it
 
