@@ -8,7 +8,7 @@
 
 ## What Is ClawX?
 
-ClawX is the unified command center for the **#ForTheKids** ecosystem. It provides a single interface to interact with every AI on the team — Claude (Opus), Gemini, Perplexity (Comet), Grok, Ollama, and Manus — while enforcing decentralized governance through the **JoshuaCLAW** voting system.
+ClawX is the unified command center for the **#ForTheKids** ecosystem. It provides a single interface to interact with every AI on the team — Claude (Opus), Gemini, Perplexity (Comet), Grok, Codex (OpenAI), and Manus — while enforcing decentralized governance through the **JoshuaCLAW** voting system.
 
 This is not a wrapper. This is not a chatbot aggregator. This is a **production governance platform** where no single entity — human or AI — can make unilateral critical decisions about the mission's future.
 
@@ -74,7 +74,7 @@ Send a single prompt to one AI or broadcast it to all six simultaneously. Each r
 
 ### Usage Analytics
 
-Track token consumption, response times, and estimated costs per AI model. The dashboard shows which providers are being used most heavily and where API tokens can be conserved by routing to Ollama (local, free) instead of cloud providers.
+Track token consumption, response times, and estimated costs per AI model. The dashboard shows which providers are being used most heavily and where API tokens can be conserved.
 
 ### Provider Fleet Status
 
@@ -96,7 +96,7 @@ ClawX is built on the Manus platform stack:
 | **Backend** | Express 4, tRPC 11, TypeScript |
 | **Database** | MySQL (Drizzle ORM) |
 | **Auth** | Manus OAuth |
-| **AI Providers** | Claude API, Gemini API, Perplexity API, Grok API, Ollama (local), Manus LLM (built-in) |
+| **AI Providers** | Claude API, Gemini API, Perplexity API, Grok API, Codex (OpenAI) API, Manus LLM (built-in) |
 
 ### Database Schema
 
