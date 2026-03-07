@@ -40,9 +40,7 @@ class TestVerifyConfirmPaymentEnforcement:
         user_id = uuid.uuid4()
 
         import asyncio
-        result = asyncio.get_event_loop().run_until_complete(
-            _has_completed_payment(mock_db, user_id)
-        )
+        result = asyncio.run(_has_completed_payment(mock_db, user_id))
         assert result is False
 
     def test_confirm_with_payment_event_is_accepted(self):
@@ -60,9 +58,7 @@ class TestVerifyConfirmPaymentEnforcement:
         user_id = uuid.uuid4()
 
         import asyncio
-        result = asyncio.get_event_loop().run_until_complete(
-            _has_completed_payment(mock_db, user_id)
-        )
+        result = asyncio.run(_has_completed_payment(mock_db, user_id))
         assert result is True
 
 

@@ -2,7 +2,7 @@
 
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -16,6 +16,7 @@ from app.auth import (
 )
 from app.database import get_db
 from app.models import Profile, User
+from app.rate_limit import auth_limiter
 from app.schemas import (
     AuthLoginRequest,
     AuthRefreshRequest,
@@ -29,9 +30,11 @@ router = APIRouter(prefix="/auth")
 
 @router.post("/register", response_model=AuthTokenResponse, status_code=status.HTTP_201_CREATED)
 async def register(
+    request: Request,
     payload: AuthRegisterRequest,
     db: AsyncSession = Depends(get_db),
 ) -> AuthTokenResponse:
+    auth_limiter.check(request)
     existing = await db.scalar(select(User).where(User.email == payload.email.lower()))
     if existing:
         raise HTTPException(status_code=409, detail="Email already registered")
@@ -55,9 +58,11 @@ async def register(
 
 @router.post("/login", response_model=AuthTokenResponse)
 async def login(
+    request: Request,
     payload: AuthLoginRequest,
     db: AsyncSession = Depends(get_db),
 ) -> AuthTokenResponse:
+    auth_limiter.check(request)
     user = await db.scalar(select(User).where(User.email == payload.email.lower()))
     if not user or not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid email or password")

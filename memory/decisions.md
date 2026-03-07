@@ -1,10 +1,80 @@
 # DECISIONS LOG — WHY WE DID WHAT WE DID
 
-**Last Updated**: 2026-02-14T08:30:00Z
+**Last Updated**: 2026-03-07T13:22:15-05:00
 
 Every architectural decision is recorded here so no future session re-debates it.
 
 ---
+
+## 2026-03-07: Keep the live YouAndINotAI backend and harden it surgically instead of rewriting it
+
+**Decision**: Treat Claude review branches as patch sources, not merge targets, and keep the live `youandinotai-api` codebase moving through small verified fixes instead of a full rewrite.  
+**Why**: The reviewed branch `origin/claude/review-changes-mmeucm90aurnm0ht-3sxI9` contained useful ideas, but it also lagged the current repo and would have regressed newer work if merged wholesale. The real backend issues were localized: stale Square/health wiring, missing endpoint throttling, and leftover backend Stripe dependency drift. Those are cheaper and safer to correct in place than to rebuild the service.  
+**Impact**: The live backend now uses explicit Square readiness checks, auth/verify rate limiting with trusted-proxy handling, and a reduced dependency set. Focused backend tests pass under `uv` + Python 3.12. Default path remains incremental hardening, not rewrite theatre.  
+**Status**: Active
+
+## 2026-03-07: OnlineRecycle daily worker is deterministic, local drafts are template-first
+
+**Decision**: Use a deterministic daily revenue worker for OnlineRecycle cashflow tasks, and reserve Ollama for low-cost fallback drafting and structured intake reply generation.  
+**Why**: The business needs a cheap path that finishes every time. Deterministic daily packs are more reliable than waiting on local model generation, while template-first local drafting still reduces paid-token usage for real intake responses.  
+**Impact**: `scripts/run-onlinerecycle-revenue-worker.ps1` now produces the daily marketing pack, response templates, cashflow checklist, and eBay export reliably. `scripts/Run-OnlineRecycle-LocalWorker.ps1` and `scripts/onlinerecycle-local-worker.js` remain the local drafting path, with `qwen2.5:7b` as the default Sabretooth fallback model.  
+**Status**: Done
+
+## 2026-03-07: Use browser automation for inbox and web audits, not for replacing the deterministic OnlineRecycle core
+
+**Decision**: Keep the deterministic OnlineRecycle core local and cheap, and aim browser-side automation at inbox polling, Square/storefront audits, and lead research instead of more generative copy loops.  
+**Why**: The current bottleneck is web/inbox handling and live copy drift, not lack of text generation. More Ollama/OpenClaw-style generation adds noise, while browser-side automation can actually close leads and catch public drift.  
+**Impact**: Best next automations are Gmail/FormSubmit intake parsing, Square drift checks, and local lead-source research. Treat OpenBrowser/OpenClaw-style browser tooling as ops automation, not the primary content engine.  
+**Status**: Active
+
+## 2026-03-07: All three Windows nodes should boot lean unless a task directly supports the current operating model
+
+**Decision**: Remove or disable stale startup launchers and scheduled tasks across Sabretooth, `T5500`, and `9020`, keeping only the minimal node-specific services that still support the current Codex/Ollama workflow.  
+**Why**: The old OPUS/OpenClaw/Docker/Chrome auto-start layer creates repeated confusion, background cost, and false recovery behavior after reboot. The current operating model is desktop-app-first on Sabretooth, Ollama-ready on the worker nodes, and explicit opt-in for anything heavier.  
+**Impact**: Sabretooth keeps the live `CodeX-*` tasks only. `T5500` now has no custom boot automation, no custom Startup entries, and only `OneDrive` left in `HKCU\...\Run`; `OpenClaw Gateway` and broken `OPUS-CLI-AutoStart` were removed entirely. `9020` now has no custom boot automation, no custom Startup entries, only `OneDrive` left in `HKCU\...\Run`, and `Redis` changed to `Manual`; `OPUS-Marketing-Watchdog` and `OPUS Auto Start` were removed entirely. Remote `Ollama` is now opt-in, not always-on.  
+**Status**: Active
+
+## 2026-03-07: Drive boundary was an operational phase, not a permanent religion
+
+**Decision**: The old Claude-vs-Codex drive split is no longer canonical. `C:\ANTIGRAVITY` is now the live Codex base on Sabretooth, and the old `E:` isolation can be retired once the fresh `C:` thread is confirmed.  
+**Why**: The user explicitly dropped the old ownership boundary and wants one primary home instead of duplicate repo copies across SSDs. The runtime tasks and MCP setup now point to `C:`.  
+**Impact**: Stop preserving the old drive split in new operational docs. Treat `E:` as a retirement candidate, not the live home.  
+**Status**: Active
+
+## 2026-03-07: Keep `E:` primary, but allow Codex overflow onto `C:` when it is materially useful
+
+**Decision**: Keep `E:\ANTIGRAVITY` and `E:\ANTIGRAVITY\CodeX` as the primary Codex house, but allow Codex to use `C:` for caches, backups, mirrors, or bulky working data when that actually helps operations.  
+**Why**: Joshua explicitly removed the old "don't touch other drives" constraint. At the same time, `E:` is not under storage pressure right now, so moving data just to move it would create churn without benefit.  
+**Impact**: Default to `E:` for active repo work. Use `C:` deliberately for overflow or space management when needed. Do not relocate repo data blindly.  
+**Status**: Superseded by the `C:` home cutover
+
+## 2026-03-07: Sabretooth should boot lean
+
+**Decision**: Strip Sabretooth startup down to the Codex-relevant baseline and archive the stale ENIGMA/social/browser auto-launch junk instead of letting it run on boot.  
+**Why**: Sabretooth is now the main Codex seat. Auto-starting old dashboards, Facebook PWAs, Comet, and Chrome background launch just wastes boot time and muddies the operational state.  
+**Impact**: `Comet.lnk`, `Facebook.lnk`, and the Startup copy of `start-aidoesitall.bat` were removed from Startup, Chrome auto-launch was removed from `HKCU\...\Run`, and the Desktop source of `start-aidoesitall.bat` was archived under `C:\Users\joshl\OneDrive\Desktop\_archive\codex-cleanup-2026-03-07`. Keep `Ollama.lnk` and `OneDrive` only. `Clawdbot Gateway` still needs an elevated session if it is to be disabled.  
+**Status**: Active
+
+## 2026-03-07: Verification-first between Claude and Codex
+
+**Decision**: Prefer direct verification via git, SSH, files, and service health instead of assuming the other house is current.  
+**Why**: Both Claude and Codex now touch real infra and real repo state. Secondhand summaries are useful, but they should collapse to evidence whenever verification is possible.  
+**Impact**: Shared handoffs should stay concise and include commit positions, ops health, local deltas, and current risks.  
+**Status**: Active
+
+## 2026-03-07: Disable dead legacy OPUS tasks on Sabretooth
+
+**Decision**: Disable the old `OPUS-*` scheduled tasks on Sabretooth that point at missing files.  
+**Why**: They were firing against deleted paths and generating background failure noise that obscured the live `CodeX-*` stack.  
+**Impact**: Keep `CodeX-*` tasks as the active scheduler layer on Sabretooth. Treat legacy OPUS tasks as retired unless explicitly rebuilt.  
+**Status**: Done
+
+## 2026-03-07: Codex continuity pack with split public/secret backup
+
+**Decision**: Add a continuity export/test/restore flow for Codex that sends public/state recovery material to Kraken USB and OneDrive, while keeping secret continuity separate and encryption-ready.  
+**Why**: Code continuity without secret continuity is not enough, but secret continuity cannot be pushed offsite safely without an explicit backup passphrase.  
+**Impact**: Disaster-recovery status is now `GREEN`: public/state continuity is backed up locally and offsite, and encrypted secret continuity exists beyond local drives.  
+**Status**: Done
 
 ## 2026-02-14: Switch AI from Gemini to Claude
 

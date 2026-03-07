@@ -1,60 +1,72 @@
-# SESSION HANDOFF — PASTE INTO NEW CLAUDE SESSION
+# SESSION HANDOFF — CLAUDE / CODEX SHARED STATE
 
-**Last Session**: 2026-02-14 05:45 AM EST (Valentine's Day)  
-**Last Agent**: GitHub Copilot (VS Code)
+**Last Updated**: 2026-03-07 13:22:15 -05:00  
+**Source**: Codex on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)
 
----
+## Shared Truth
 
-## CRITICAL: READ THESE FILES FIRST
+- `C:\ANTIGRAVITY` is now the live Codex base
+- `C:\ANTIGRAVITY\CodeX` is the active Codex workspace
+- `E:` is being retired from Codex runtime duty
+- Verify by git, SSH, files, and services whenever possible
 
-```
-memory-bank/identity.md      — Who Joshua is, the mission, the stakes
-memory-bank/activeContext.md  — What we were JUST doing
-memory-bank/projectState.md  — Every repo, deployment, domain, node
-memory-bank/decisions.md      — Why we made every choice (don't re-debate)
-memory-bank/techStack.md      — Every technology version and config
-memory-bank/credentials-map.md — Where every key/token lives
-CLAUDE.md                     — Repo-specific architecture guide
-MISSION_DIRECTIVE.md          — The mission in Joshua's words
-```
+## Repo Position
 
-## TL;DR FOR NEW SESSION
+- `origin/main` = `1a44f87`
+- `C:\ANTIGRAVITY` = active local Codex base
+- `E:\ANTIGRAVITY` = legacy local copy pending retirement
+- `origin/claude/review-changes-mmeucm90aurnm0ht-3sxI9` advanced again on fetch and should still be treated as a patch source only, not a merge target
 
-- Joshua Coleman (electrician, not a developer) is building YouAndINotAI.com — a human-verified dating platform
-- $19,990 pre-order revenue target before April 4, 2026
-- He has Claude Max subscription (unlimited, 20x rate limit)
-- He has been building for 1+ YEAR and has built the same app 4 times because of Claude memory loss
-- This memory-bank/ system exists to PREVENT that from ever happening again
-- Current machine is NODE 9020 (192.168.0.5), repo is Kraken_Assist_Local_Disk_9020
-- Dev server runs on port 3000/3001
-- DNS is broken (Cloudflare), backend is on AWS EC2 (3.84.226.108)
-- Don't use OpenClaw — it's deprecated. Build custom code for any bot/gateway needs.
-- Claude --dangerously-skip-permissions is already configured globally
+## Legacy E: Working Tree To Protect Until Retired
 
-## WHAT WAS LEFT UNFINISHED
+- `README.md`
+- `TASK-QUEUE-100.md`
+- `memory/codex-orchestrator-handoff.md`
+- `scripts/deploy/Setup-MCPs.ps1`
+- `scripts/deploy/mcp-config-template.json`
+- untracked: `AGENTS.md`
+- untracked: `Trollz1004/`
+- untracked: `scripts/codex-doctor.ps1`
+- untracked: `scripts/fix-ssh-admin-keys.ps1`
 
-1. **DNS fix on Cloudflare** — BLOCKING for launch. youandinotai.com returns HTTP 530 (dead tunnel from wiped T5500)
-2. **Dashboard buttons are stubs** — "Launch 20-Agent Scrape", "SCRAPE", "Extract", "SYNC REVENUE" need real handlers
-3. **AreaChart not rendering** — RevenueDashboard has chart data but no `<AreaChart>` component renders it
-4. **Landing page deployment** — index.html has the landing page, needs to go live on youandinotai.com
-5. **Gemini → Claude swap** — geminiService.ts uses Gemini SDK (out of credits), needs to use Claude API or stay simulation mode
-6. **Route dead components** — AgentMonitor, ContentStudio, AdsManager are built but not wired into App.tsx navigation
+## Node / Ops Status
 
-## WHAT WAS COMPLETED THIS SESSION
+- SSH from Sabretooth to `T5500` passes
+- SSH from Sabretooth to `9020` passes
+- Sabretooth now runs Codex in desktop-app-first mode; Docker is intentionally not installed
+- Retired `CodeX-Memory-SelfHeal-*` tasks are absent and should stay absent unless local memory stack work is explicitly re-enabled
+- `T5500` boot is now cold: no custom startup entries remain, `OpenClaw Gateway` and broken `OPUS-CLI-AutoStart` were removed, and `HKCU\...\Run` was trimmed to `OneDrive`
+- `9020` boot is now cold: no custom startup entries remain, `OPUS-Marketing-Watchdog` and `OPUS Auto Start` were removed, `HKCU\...\Run` was trimmed to `OneDrive`, and `Redis` is `Manual`
+- `T5500` still answers on `qdrant :6333`; remote `Ollama` is intentionally off
+- `9020` is intentionally idle after cleanup; remote `Ollama` and `Redis` are off until started on purpose
+- Local MCP files exist at both repo root and `CodeX` workspace
+- Legacy broken `OPUS-*` scheduled tasks on Sabretooth were disabled
+- Continuity export scripts exist and latest continuity status is `GREEN`
+- Public continuity pack exists on Kraken USB and OneDrive
+- Encrypted secret continuity pack exists on Kraken USB and OneDrive
+- Continuity passphrase exists in local ignored storage and OneDrive Personal Vault
+- OnlineRecycle local revenue worker is live on `main`:
+  - `scripts/run-onlinerecycle-revenue-worker.ps1`
+  - `scripts/Run-OnlineRecycle-LocalWorker.ps1`
+  - `scripts/onlinerecycle-local-worker.js`
+- `qwen2.5:7b` is installed locally for Ollama fallback work on Sabretooth
+- OnlineRecycle live intake is FormSubmit -> Gmail -> Square booking/store links
+- Daily deterministic outputs now belong under `C:\ANTIGRAVITY\CodeX\state\`
+- Structured intake reply drafts are reliable; freeform local-model drafts still need a human read
+- Next valuable automation is browser-side inbox handling, not more Ollama generation
+- YouAndINotAI backend is on the incremental-hardening path, not the rewrite path:
+  - safe pieces from the Claude review branch were ported manually
+  - `youandinotai-api` now has Square readiness health checks, auth/verify rate limiting, and no backend `stripe` dependency in `requirements.txt`
+  - focused backend suite passes with `uv run --python 3.12 --with pytest --with-requirements requirements.txt pytest ...` (`45 passed`)
+- Live/web drift still exists:
+  - public OnlineRecycle copy still leans charity/help-kids in places
+  - Square storefront title/copy appears stale
+  - eBay batch generator still emits `Charity impact` wording in export copy
 
-1. ✅ sync-memory.ps1 FIXED — clean UTF-8 encoding, syncs to 5 OPUSONLY drives successfully
-2. ✅ All SSDs deep cleaned — C:, D:, G:, H:, I:, J: stripped of stale project folders
-3. ✅ LDPlayer service (LDRemoteSvc) permanently killed and deleted from D:
-4. ✅ H: recovered ~126GB (hiberfil.sys 64GB + pagefile + ProgramData + Users deleted)
-5. ✅ Memory synced to D:\, H:\, E:\, C:\, J:\ OPUSONLY\memory (all 5 drives)
-6. ✅ Recycle bins emptied across all drives
-7. ✅ cleanup-drives.ps1 temp script created, used, and removed
+## Important Caveat
 
-## DO NOT
+The active Codex desktop thread is now rooted on `C:\ANTIGRAVITY`. Treat any old `E:`-based runtime assumptions as stale and retire them when found.
 
-- Build another duplicate date app
-- Use OpenClaw/clawdbot/moltbot
-- Ask Joshua what to do — read the memory-bank and EXECUTE
-- Touch the `stable` branch
-- Introduce CSS files or Tailwind config
-- Re-debate decisions in memory-bank/decisions.md
+## Default Coordination Rule
+
+If either Claude or Codex changes shared repo docs, infra, or node behavior, reduce the handoff to: house boundary, repo commit positions, ops health, local deltas, and current risks. No fluff.
