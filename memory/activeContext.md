@@ -1,12 +1,12 @@
 # ACTIVE CONTEXT — WHAT'S HAPPENING RIGHT NOW
 
-**Last Updated**: 2026-03-07T14:06:00-05:00  
+**Last Updated**: 2026-03-07T14:43:00-05:00  
 **Session**: Codex Desktop on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)  
 **Dev Server**: Not part of current priority
 
 ## Current Focus
 
-Sabretooth is the active Codex base on `C:`. The immediate priority is keeping the repo, SSH trust, MCP config, continuity tooling, and the low-cost OnlineRecycle revenue worker aligned and usable from the Windows desktop app, while hardening the live YouAndINotAI backend incrementally instead of rewriting it and promoting the real C-side ops stack into `main` instead of leaving it trapped in a dirty local overlay.
+Sabretooth is the active Codex base on `C:`. The immediate priority is keeping the repo, SSH trust, MCP config, continuity tooling, and the low-cost OnlineRecycle revenue worker aligned and usable from the Windows desktop app, while hardening the live YouAndINotAI backend incrementally instead of rewriting it, promoting the real C-side ops stack into `main`, and replacing the old multi-platform browser autoposter with a legal-safe node automation model.
 
 ## Verified State
 
@@ -51,6 +51,17 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - continuity export/test/restore/init scripts and runbook are tracked
    - cleanup/finalize helpers for Sabretooth are tracked
    - the OnlineRecycle deterministic worker + local draft worker are tracked
+21. Node-side social automation is now policy-gated:
+   - X and Facebook are `Perplexity only`
+   - Reddit is `Devvit / Opus / Perplexity only`
+   - LinkedIn is `draft only`
+   - the old `social-engine-24x7` path is now compatibility-only and all live post platforms are disabled by default
+   - the replacement jobs write draft packs and audits into `CodeX\state\marketing`
+22. Safe node automation scripts now exist in git:
+   - `scripts/generate-safe-marketing-drafts.py`
+   - `scripts/Run-Safe-NodeAutomation.ps1`
+   - `scripts/install-safe-node-automation-tasks.ps1`
+   - `briefings/LEGAL-SAFE-NODE-AUTOMATIONS.md`
 
 ## House Rules
 
@@ -72,6 +83,7 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 10. If remote inference is needed again on `T5500` or `9020`, it must now be started intentionally; cold boot is the default
 11. Treat old Claude review branches as surgical patch sources unless direct diff verification proves they match the current tree
 12. Promote verified operational tooling into git; do not leave core recovery/ops scripts marooned in one dirty checkout
+13. Do not re-enable browser-based social autoposting from the nodes without a separately reviewed allowlist change in `scripts/social_engine/platform_policy.py`
 
 ## Immediate Next Steps
 
@@ -84,3 +96,4 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 7. Use browser-side tools for inbox polling, Square drift audits, and lead research before adding more local-model generation
 8. Keep backend security/payment fixes incremental and test-locked; do not trigger a full rewrite without a stronger reason than stale branch drift
 9. Continue reducing the remaining dirty overlay in reviewed slices instead of trying to mass-commit or mass-reset it
+10. Keep node automation scoped to drafts, reports, and owned-property workflows unless official API review changes the policy file first
