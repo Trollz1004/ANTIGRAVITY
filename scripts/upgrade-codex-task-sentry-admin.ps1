@@ -1,13 +1,20 @@
 [CmdletBinding()]
 param(
-    [string]$RepoRoot = "E:\ANTIGRAVITY",
-    [string]$CodeXRoot = "E:\ANTIGRAVITY\CodeX",
+    [string]$RepoRoot,
+    [string]$CodeXRoot,
     [string]$UserName = $env:USERNAME,
     [int]$IntervalMinutes = 5,
     [string]$TaskName = "CodeX-Task-Sentry"
 )
 
 $ErrorActionPreference = "Stop"
+
+if (-not $RepoRoot) {
+    $RepoRoot = Split-Path -Parent $PSScriptRoot
+}
+if (-not $CodeXRoot) {
+    $CodeXRoot = Join-Path $RepoRoot "CodeX"
+}
 
 if ($IntervalMinutes -lt 1) {
     throw "IntervalMinutes must be at least 1."

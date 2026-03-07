@@ -6,14 +6,14 @@ Keep a persistent orchestrator handoff so session/token limits never wipe workin
 
 ## Files Generated
 
-- `E:\ANTIGRAVITY\CodeX\brain\checkpoints\codex-checkpoint-YYYYMMDD-HHMMSS.json`
-- `E:\ANTIGRAVITY\memory\codex-orchestrator-handoff.md`
-- `E:\ANTIGRAVITY\CodeX\logs\codex-brain-guard.log`
+- `C:\ANTIGRAVITY\CodeX\brain\checkpoints\codex-checkpoint-YYYYMMDD-HHMMSS.json`
+- `C:\ANTIGRAVITY\memory\codex-orchestrator-handoff.md`
+- `C:\ANTIGRAVITY\CodeX\logs\codex-brain-guard.log`
 
 ## One-Time Setup (Admin PowerShell)
 
 ```powershell
-pwsh -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\upgrade-codex-brain-task-admin.ps1 -ModelName qwen2.5:3b
+pwsh -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\upgrade-codex-brain-task-admin.ps1 -ModelName qwen2.5:3b
 ```
 
 This creates scheduled task `CodeX-Brain-Checkpoint`:
@@ -24,13 +24,13 @@ This creates scheduled task `CodeX-Brain-Checkpoint`:
 ## Manual Checkpoint
 
 ```powershell
-pwsh -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\Invoke-CodeX-BrainCheckpoint.ps1
+pwsh -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\Invoke-CodeX-BrainCheckpoint.ps1
 ```
 
 ## No-Ollama Mode (fallback summary only)
 
 ```powershell
-pwsh -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\Invoke-CodeX-BrainCheckpoint.ps1 -SkipOllama
+pwsh -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\Invoke-CodeX-BrainCheckpoint.ps1 -SkipOllama
 ```
 
 ## Verify Tasks

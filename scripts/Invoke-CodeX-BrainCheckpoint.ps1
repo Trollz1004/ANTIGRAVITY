@@ -1,14 +1,24 @@
 [CmdletBinding()]
 param(
-    [string]$RepoRoot = "E:\ANTIGRAVITY",
-    [string]$MemoryRoot = "E:\ANTIGRAVITY\memory",
-    [string]$BrainRoot = "E:\ANTIGRAVITY\CodeX\brain",
+    [string]$RepoRoot,
+    [string]$MemoryRoot,
+    [string]$BrainRoot,
     [string]$ModelName = "qwen2.5:3b",
     [switch]$SkipOllama,
     [switch]$NoSync
 )
 
 $ErrorActionPreference = "Stop"
+
+if (-not $RepoRoot) {
+    $RepoRoot = Split-Path -Parent $PSScriptRoot
+}
+if (-not $MemoryRoot) {
+    $MemoryRoot = Join-Path $RepoRoot "memory"
+}
+if (-not $BrainRoot) {
+    $BrainRoot = Join-Path $RepoRoot "CodeX\brain"
+}
 
 $checkpointDir = Join-Path $BrainRoot "checkpoints"
 $logDir = Join-Path $RepoRoot "CodeX\logs"
@@ -237,9 +247,8 @@ foreach ($name in $trackedMemoryFiles) {
 
 $taskSnapshot = Get-TaskSnapshot -TaskNames @(
     "CodeX-Mission-Guardian",
-    "CodeX-Memory-SelfHeal-Startup",
-    "CodeX-Memory-SelfHeal-15m",
-    "CodeX-Brain-Checkpoint"
+    "CodeX-Brain-Checkpoint",
+    "CodeX-Task-Sentry"
 )
 
 $missionProcesses = Find-MissionProcesses
@@ -374,7 +383,7 @@ $fallbackSummary = @"
 - Checkpoint file: $checkpointPath
 
 ## Immediate Next Actions (Top 5)
-1. Confirm `CodeX Mission` is running in Docker isolation mode.
+1. Confirm the Codex desktop app or optional host mission terminal is healthy.
 2. Review `memory/activeContext.md` and `memory/sessionHandoff.md` for latest priorities.
 3. Resolve current git working tree delta before new feature work.
 4. Run critical health scripts/tasks and confirm they are `Ready`.
@@ -387,10 +396,10 @@ $fallbackSummary = @"
 
 ## Recovery Commands
 ~~~powershell
-pwsh -NoExit -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\Launch-CodeX-Mission.ps1 -Runtime docker
-pwsh -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\upgrade-codex-mission-task-admin.ps1 -MissionMode docker
-pwsh -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\Invoke-CodeX-BrainCheckpoint.ps1
-Get-ScheduledTask -TaskName CodeX-Mission-Guardian,CodeX-Brain-Checkpoint
+pwsh -NoProfile -ExecutionPolicy Bypass -File $(Join-Path $RepoRoot "scripts\codex-doctor.ps1")
+pwsh -NoExit -ExecutionPolicy Bypass -File $(Join-Path $RepoRoot "scripts\Launch-CodeX-Mission.ps1") -Runtime host
+pwsh -ExecutionPolicy Bypass -File $(Join-Path $RepoRoot "scripts\Invoke-CodeX-BrainCheckpoint.ps1")
+Get-ScheduledTask -TaskName CodeX-Mission-Guardian,CodeX-Brain-Checkpoint,CodeX-Task-Sentry
 ~~~
 "@
 
