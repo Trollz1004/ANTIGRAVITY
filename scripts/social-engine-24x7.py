@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-SOCIAL ENGINE 24x7 — YouAndINotAI Marketing Daemon
-====================================================
-Automated 24/7 marketing across 23 platforms + eBay.
-Content via Ollama (free) -> Haiku fallback -> Caption bank.
-Posts via API (Group 1) or Playwright browser (Group 2).
+SOCIAL ENGINE 24x7 — Legacy compatibility wrapper
+=================================================
+The old multi-platform browser autoposter is retained for repository continuity,
+but CodeX node policy now disables live posting to third-party platforms by
+default. The active node automations generate draft packs and handoff queues
+instead of publishing directly.
 
 Usage:
   python social-engine-24x7.py                    # Single cycle
@@ -64,6 +65,12 @@ from social_engine.state_manager import (
 from social_engine.content_engine import generate_post, generate_article
 from social_engine.reporter import send_daily_summary, send_error_alert, send_telegram
 from social_engine.platforms.base_poster import NOT_LOGGED_IN
+from social_engine.platform_policy import (
+    LEGAL_SAFE_NODE_POLICY_VERSION,
+    get_policy,
+    live_post_allowed,
+    live_post_platforms,
+)
 
 # ── Platform Registry ──
 _posters = {}
@@ -108,11 +115,18 @@ def _load_posters():
     ]:
         try:
             poster = cls()
+            if not live_post_allowed(poster.name):
+                poster.enabled = False
             _posters[poster.name] = poster
         except Exception as e:
             log.warning(f"Failed to load poster {cls.__name__}: {e}")
 
-    log.info(f"Loaded {len(_posters)} platform posters: {list(_posters.keys())}")
+    log.info(
+        "Loaded %s platform posters under policy %s. Live-post enabled: %s",
+        len(_posters),
+        LEGAL_SAFE_NODE_POLICY_VERSION,
+        live_post_platforms(),
+    )
     return _posters
 
 
@@ -164,7 +178,19 @@ def run_cycle(state, platforms_filter=None):
     reset_daily_counts(state)
     days_left = days_until_launch()
 
-    platforms_to_run = platforms_filter or list(PLATFORM_SCHEDULE.keys())
+    if platforms_filter:
+        platforms_to_run = [platform for platform in platforms_filter if live_post_allowed(platform)]
+    else:
+        platforms_to_run = list(live_post_platforms())
+    if not platforms_to_run:
+        log.info(
+            "No live-post platforms are enabled under policy %s. "
+            "Use scripts/generate-safe-marketing-drafts.py for active node automation.",
+            LEGAL_SAFE_NODE_POLICY_VERSION,
+        )
+        save_state(state)
+        return 0, 0, 0
+
     # Sort by priority (P0 first)
     platforms_to_run.sort(key=lambda p: PLATFORM_SCHEDULE.get(p, {}).get("priority", 99))
 
@@ -265,7 +291,11 @@ def show_status(state):
         total = pstate.get("total", 0)
         fails = pstate.get("consecutive_fails", 0)
         method = PLATFORM_SCHEDULE.get(name, {}).get("method", "?")
-        status = f"  {name:18s} [{enabled:3s}] {method:7s} today:{today:2d}  total:{total:4d}  fails:{fails}"
+        mode = get_policy(name).get("mode", "blocked")
+        status = (
+            f"  {name:18s} [{enabled:3s}] {method:7s} mode:{mode:18s} "
+            f"today:{today:2d}  total:{total:4d}  fails:{fails}"
+        )
         print(status)
     print()
 

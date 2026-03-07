@@ -1,6 +1,6 @@
 # SESSION HANDOFF — CLAUDE / CODEX SHARED STATE
 
-**Last Updated**: 2026-03-07 14:06:00 -05:00  
+**Last Updated**: 2026-03-07 14:43:00 -05:00  
 **Source**: Codex on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)
 
 ## Shared Truth
@@ -57,6 +57,24 @@
 - Daily deterministic outputs now belong under `C:\ANTIGRAVITY\CodeX\state\`
 - Structured intake reply drafts are reliable; freeform local-model drafts still need a human read
 - Next valuable automation is browser-side inbox handling, not more Ollama generation
+- Legal-safe node marketing automation is now the approved path:
+  - `scripts/generate-safe-marketing-drafts.py`
+  - `scripts/Run-Safe-NodeAutomation.ps1`
+  - `scripts/install-safe-node-automation-tasks.ps1`
+  - `briefings/LEGAL-SAFE-NODE-AUTOMATIONS.md`
+- Live social posting from the nodes is now disabled by policy:
+  - X and Facebook are Perplexity-only
+  - Reddit is Devvit/Opus/Perplexity-only
+  - LinkedIn is draft-only
+  - `scripts/social_engine/platform_policy.py` is the allowlist gate
+- The legacy browser autopost path remains only as a compatibility shim:
+  - `scripts/social-engine-24x7.py`
+  - `scripts/daemon-start.py`
+  - `scripts/daemon-login.py`
+  - `scripts/social-engine-boot.bat`
+  - `scripts/social-engine-login.bat`
+  - `scripts/opus-marketing-watchdog.ps1`
+  - `scripts/register-watchdog-task.ps1`
 - YouAndINotAI backend is on the incremental-hardening path, not the rewrite path:
   - safe pieces from the Claude review branch were ported manually
   - `youandinotai-api` now has Square readiness health checks, auth/verify rate limiting, and no backend `stripe` dependency in `requirements.txt`

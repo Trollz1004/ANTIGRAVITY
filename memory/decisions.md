@@ -1,10 +1,17 @@
 # DECISIONS LOG — WHY WE DID WHAT WE DID
 
-**Last Updated**: 2026-03-07T14:06:00-05:00
+**Last Updated**: 2026-03-07T14:43:00-05:00
 
 Every architectural decision is recorded here so no future session re-debates it.
 
 ---
+
+## 2026-03-07: Node social automation is draft-first and human-gated, not autoposted
+
+**Decision**: Replace the old browser-based multi-platform posting daemon with a legal-safe node automation layer that only generates draft packs, handoff queues, owned-site queues, and audits.  
+**Why**: The repo still contained a 24x7 browser autoposter for X, Facebook, Reddit, LinkedIn, and many other third-party platforms. That is the wrong default for the current operating model and creates needless terms-of-service and safety risk.  
+**Impact**: `scripts/social_engine/platform_policy.py` now disables live posting by default for every third-party platform. X and Facebook are explicitly Perplexity-gated, Reddit is Devvit/Opus/Perplexity-gated, LinkedIn is draft-only, and the new `Run-Safe-NodeAutomation.ps1` / `generate-safe-marketing-drafts.py` path becomes the approved node automation surface.  
+**Status**: Active
 
 ## 2026-03-07: Promote the Sabretooth ops stack into `main` instead of keeping it as local-only glue
 
