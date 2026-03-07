@@ -1,14 +1,14 @@
 # CODEX ORCHESTRATOR HANDOFF
 
-Generated: 2026-03-05 15:58:17 -05:00  
-Checkpoint JSON: E:\ANTIGRAVITY\CodeX\brain\checkpoints\codex-checkpoint-20260305-155817.json  
+Generated: 2026-03-07 03:38:17 -05:00  
+Checkpoint JSON: E:\ANTIGRAVITY\CodeX\brain\checkpoints\codex-checkpoint-20260307-033817.json  
 Ollama model: qwen2.5:3b (fallback used)
 
 ## Current Reality
 - Repo root: E:\ANTIGRAVITY
 - Branch: main
 - Mission terminal running: False
-- Checkpoint file: E:\ANTIGRAVITY\CodeX\brain\checkpoints\codex-checkpoint-20260305-155817.json
+- Checkpoint file: E:\ANTIGRAVITY\CodeX\brain\checkpoints\codex-checkpoint-20260307-033817.json
 
 ## Immediate Next Actions (Top 5)
 1. Confirm CodeX Mission is running in Docker isolation mode.
@@ -31,38 +31,35 @@ Get-ScheduledTask -TaskName CodeX-Mission-Guardian,CodeX-Brain-Checkpoint
 ~~~
 
 ## Git Delta Snapshot
--  M CLAUDE.md
+-  M README.md
 -  M TASK-QUEUE-100.md
--  M _deploy/onlinerecycle/index.html
--  M antigravity/app/page.tsx
--  D antigravity/components/DonateCollectables.tsx
 -  M memory/codex-orchestrator-handoff.md
--  M scripts/create_square_links.js
--  M youandinotai/src/App.tsx
-- ?? antigravity/components/SupportCollectables.tsx
-- ?? briefings/AGENT-ENTOURAGE.md
-- ?? briefings/GEMINI-BRUTAL-AUDIT.md
-- ?? briefings/TASK-ROUTING.md
+-  M scripts/deploy/Setup-MCPs.ps1
+-  M scripts/deploy/mcp-config-template.json
+- ?? AGENTS.md
+- ?? Trollz1004/
+- ?? scripts/codex-doctor.ps1
+- ?? scripts/fix-ssh-admin-keys.ps1
 
 ## Scheduled Task Snapshot
-- CodeX-Mission-Guardian: Ready (lastResult=0, lastRun=03/05/2026 15:57:57)
-- CodeX-Memory-SelfHeal-Startup: Ready (lastResult=0, lastRun=03/05/2026 11:41:41)
-- CodeX-Memory-SelfHeal-15m: Ready (lastResult=0, lastRun=03/05/2026 15:47:47)
-- CodeX-Brain-Checkpoint: Running (lastResult=267009, lastRun=03/05/2026 15:58:58)
+- CodeX-Mission-Guardian: Ready (lastResult=0, lastRun=03/07/2026 03:37:37)
+- CodeX-Memory-SelfHeal-Startup: Ready (lastResult=0, lastRun=03/07/2026 01:30:30)
+- CodeX-Memory-SelfHeal-15m: Ready (lastResult=0, lastRun=03/07/2026 03:32:32)
+- CodeX-Brain-Checkpoint: Running (lastResult=267009, lastRun=03/07/2026 03:38:38)
 
 ## Recent Commits
-- 13d5fd8 fix(payments): switch to active Square merchant location (LY5GN09F5AN83) for card processing #FORtheKIDS
-- b873a2a chore: sync and update task queue and handoff documents #FORtheKIDS
-- 3c09c0f feat: live Square links + link generation script #FORtheKIDS
-- 644de81 marketing: log engagement cycle #3 across all platforms
-- 8dbce92 docs: full brain dump to CLAUDE.md + CLAUDE-SKILL.md ΓÇö session-proof memory #FORtheKIDS
+- dfc1a8f docs: add Grok + Collab Lock note ΓÇö all AI roles permanent, officially unofficial #ForTheKids
+- 03f6f56 docs: add Manus as Legacy Guardian & Governance Lead to AI Roles + AI Assignments #ForTheKids
+- 14ae1c1 Gemini Audit Fixes: Standardized 60% Split, Added Sunbiz LLC Verification, and Protocol Omega On-Chain Links. Enforced 1 Repo/Branch Architecture.
+- b64fa3d feat: sync to deployed GospelDonation.sol on Base Mainnet (0x9855...65A4)
+- e152d10 fix(omega): remove merch section + fix Royalty Deck split on ai-solutions.store
 
 ## Memory Files Tracked
 - activeContext.md | hash: EB9AB4A8403C9B272CA9EEAFFD7E529F399D79E4AF99CF7FE877E88A9015B370 | lastWrite: 03/04/2026 17:50:26
 - projectState.md | hash: 361E69B0230CE0A77926C4E7A0995F31250986A25C250443E46596C4AB269754 | lastWrite: 03/04/2026 17:50:26
-- decisions.md | hash: 9188130402D6D62CB170A820BC9F2246CEE72E3CD98C95DFD02BE95EE8F85CD5 | lastWrite: 03/04/2026 17:50:26
+- decisions.md | hash: 62BD4446A581298ECE79DA23517DC125E89F0655E6D4DAF90EE43A2451197725 | lastWrite: 03/05/2026 16:01:53
 - sessionHandoff.md | hash: B8060D40F20DFD4082F18C9C774FFDA18AFC657CC08DBC0E3C24D921830BF131 | lastWrite: 03/04/2026 17:50:26
 - identity.md | hash: D31D77EB594B598F0625ECF787D9B788A8FE506547004B932B63CE11E965FBE9 | lastWrite: 03/04/2026 17:50:26
 - techStack.md | hash: 26FAB569CA8038C67E6ED583FEFECFC2E2777CD33C6915809420EA72BDC09A9A | lastWrite: 03/03/2026 02:23:22
-- CONSOLIDATED_USER_PREFERENCES.md | hash: 74775096E9194E4CCE6466431D0376421774140BDB51E1B1832EA5D049C1D7FB | lastWrite: 03/04/2026 20:32:42
+- CONSOLIDATED_USER_PREFERENCES.md | hash: 438D8B2DAB394DF6F176B9CE24946B6ABA5EF2E82A3875A98D36204C0BDBE56C | lastWrite: 03/05/2026 16:01:53
 
