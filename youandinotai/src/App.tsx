@@ -75,7 +75,7 @@ function SignupCTA() {
         Get Bot-Shield Verified — Only $1
       </span>
       <a
-        href="https://buy.stripe.com/3cI3cwcR6c3910p18peEo09"
+        href="https://square.link/u/Qc5mxUy7"
         target="_blank"
         rel="noopener noreferrer"
         className="bg-white text-purple-700 px-6 py-2.5 rounded-full font-bold text-sm md:text-base no-underline whitespace-nowrap hover:scale-105 transition-transform active:scale-95"
@@ -230,11 +230,11 @@ function WaitlistForm() {
 /* ─── Pricing Section ─── */
 function PricingSection() {
   const plans = [
-    { name: 'Bot-Shield Verification', price: '$1', desc: "Prove you're real", link: 'https://buy.stripe.com/3cI3cwcR6c3910p18peEo09', bg: 'from-indigo-500 to-purple-600' },
-    { name: 'Founding Member', price: '$14.99/mo', desc: 'Locked forever at this rate', link: 'https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a', bg: 'from-purple-600 to-pink-600' },
-    { name: '3-Month Founder', price: '$39.99', desc: 'Save $5 vs monthly', link: 'https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j', bg: 'from-blue-600 to-indigo-600' },
-    { name: '12-Month Founder', price: '$99.99', desc: 'Best value — save $80', link: 'https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c', bg: 'from-indigo-700 to-blue-700' },
-    { name: 'Royalty Card', price: '$2,500', desc: 'Lifetime VIP + revenue share', link: 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d', bg: 'from-amber-400 to-orange-500' },
+    { name: 'Bot-Shield Verification', price: '$1', desc: "Prove you're real", link: 'https://square.link/u/Qc5mxUy7', bg: 'from-indigo-500 to-purple-600' },
+    { name: 'Founding Member', price: '$14.99/mo', desc: 'Locked forever at this rate', link: 'https://square.link/u/cxwjcn0s', bg: 'from-purple-600 to-pink-600' },
+    { name: '3-Month Founder', price: '$39.99', desc: 'Save $5 vs monthly', link: 'https://square.link/u/oY7qEfRM', bg: 'from-blue-600 to-indigo-600' },
+    { name: '12-Month Founder', price: '$99.99', desc: 'Best value — save $80', link: 'https://square.link/u/6GHpbvvl', bg: 'from-indigo-700 to-blue-700' },
+    { name: 'Royalty Card', price: '$2,500', desc: 'Lifetime VIP + revenue share', link: 'https://square.link/u/CafhorUS', bg: 'from-amber-400 to-orange-500' },
   ];
 
   return (
@@ -272,11 +272,11 @@ function PricingSection() {
 const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   terms: {
     title: 'Terms of Service',
-    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. HUMAN VERIFICATION — Bot-Shield verification is required. Fraudulent verification attempts result in permanent ban.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations result in immediate account termination.\n4. PAYMENTS — All payments processed through Stripe. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. PROTOCOL OMEGA — Revenue disbursements to Shriners Children's Hospitals are executed automatically via smart contract on Base Mainnet. These disbursements are contractual revenue splits, not charitable donations or solicitations under Florida Statutes §496.405. Shriners Children's Hospitals is an independent 501(c)(3) organization and does not endorse or sponsor this platform. Verify on-chain: https://basescan.org/address/0x9855B75061D4c841791382998f0CE8B2BCC965A4.\n\nLast updated: February 2026. Contact: contact@youandinotai.com`,
+    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. HUMAN VERIFICATION — Bot-Shield verification is required. Fraudulent verification attempts result in permanent ban.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations result in immediate account termination.\n4. PAYMENTS — All payments are processed through Square-hosted checkout links. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. PROTOCOL OMEGA — Revenue disbursements to Shriners Children's Hospitals are executed automatically via smart contract on Base Mainnet. These disbursements are contractual revenue splits under Florida Statutes §496.405. Shriners Children's Hospitals is an independent 501(c)(3) organization and does not endorse or sponsor this platform. Verify on-chain: https://basescan.org/address/0x9855B75061D4c841791382998f0CE8B2BCC965A4.\n\nLast updated: February 2026. Contact: contact@youandinotai.com`,
   },
   privacy: {
     title: 'Privacy Policy',
-    body: `YouAndINotAI values your privacy.\n\nDATA WE COLLECT — Email address, verification selfie (processed and discarded), profile information you provide.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Stripe (payments), FormSubmit (waitlist), Cloudflare (hosting). Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data encrypted in transit (TLS) and at rest.\n\nLast updated: February 2026.`,
+    body: `YouAndINotAI values your privacy.\n\nDATA WE COLLECT — Email address, verification selfie (processed and discarded), profile information you provide.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Square (payments), FormSubmit (waitlist), Cloudflare (hosting). Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data encrypted in transit (TLS) and at rest.\n\nLast updated: February 2026.`,
   },
   age: {
     title: 'Age Policy',
@@ -284,7 +284,7 @@ const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   },
   refund: {
     title: 'Refund Policy',
-    body: `Refund eligibility varies by product:\n\nBOT-SHIELD ($1) — Non-refundable. One-time verification fee.\nFOUNDING MEMBER ($14.99/mo) — Cancel anytime. No refunds for partial months. You keep access until the billing period ends.\n3-MONTH FOUNDER ($39.99) — Refundable within 7 days if you haven't used matching features. After 7 days or first match, non-refundable.\n12-MONTH FOUNDER ($99.99) — Refundable within 14 days if you haven't used matching features. After 14 days or first match, non-refundable.\nROYALTY CARD ($2,500) — Refundable within 30 days. After 30 days, non-refundable due to lifetime benefits activation.\n\nAll refunds processed through Stripe within 5-10 business days.\nContact: contact@youandinotai.com`,
+    body: `Refund eligibility varies by product:\n\nBOT-SHIELD ($1) — Non-refundable. One-time verification fee.\nFOUNDING MEMBER ($14.99/mo) — Cancel anytime. No refunds for partial months. You keep access until the billing period ends.\n3-MONTH FOUNDER ($39.99) — Refundable within 7 days if you haven't used matching features. After 7 days or first match, non-refundable.\n12-MONTH FOUNDER ($99.99) — Refundable within 14 days if you haven't used matching features. After 14 days or first match, non-refundable.\nROYALTY CARD ($2,500) — Refundable within 30 days. After 30 days, non-refundable due to lifetime benefits activation.\n\nAll refunds processed through Square within 5-10 business days.\nContact: contact@youandinotai.com`,
   },
 };
 
@@ -343,7 +343,7 @@ function SuccessModal({ onClose }: { onClose: () => void }) {
 
         <h3 className="text-2xl font-black text-white mb-2">Bot-Shield Verified</h3>
         <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-          Your verification is complete! 60% of your payment has been routed to Shriners. Check your email for a receipt from Square.
+          Your verification is complete! The matching 60/30/10 revenue allocation for this purchase is tracked under Protocol Omega. Check your email for a receipt from Square.
         </p>
 
         <button
@@ -364,11 +364,11 @@ function SuccessModal({ onClose }: { onClose: () => void }) {
 /* ─── Footer ─── */
 function Footer({ onLegal }: { onLegal: (type: string) => void }) {
   const plans = [
-    { name: 'Bot-Shield — $1', link: 'https://buy.stripe.com/3cI3cwcR6c3910p18peEo09' },
-    { name: 'Founding Member — $14.99/mo', link: 'https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a' },
-    { name: '3-Month Founder — $39.99', link: 'https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j' },
-    { name: '12-Month Founder — $99.99', link: 'https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c' },
-    { name: 'Royalty Card — $2,500', link: 'https://buy.stripe.com/dRmcN604kebheRf2cteEo0d' },
+    { name: 'Bot-Shield — $1', link: 'https://square.link/u/Qc5mxUy7' },
+    { name: 'Founding Member — $14.99/mo', link: 'https://square.link/u/cxwjcn0s' },
+    { name: '3-Month Founder — $39.99', link: 'https://square.link/u/oY7qEfRM' },
+    { name: '12-Month Founder — $99.99', link: 'https://square.link/u/6GHpbvvl' },
+    { name: 'Royalty Card — $2,500', link: 'https://square.link/u/CafhorUS' },
   ];
 
   return (
@@ -447,7 +447,7 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
           <p className="text-gray-600 text-xs">&copy; 2026 <a href="https://search.sunbiz.org/Inquiry/CorporationSearch/SearchResultDetail?inquiryType=EntityName&searchTerm=TRASH%20OR%20TREASURE%20ONLINE%20RECYCLER%20LLC&listNameOrder=TRASHORTREASUREONLINERECYCLER%20L250001584010" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400">Trash Or Treasure Online Recycler LLC</a>. All rights reserved.</p>
         </div>
         <p className="max-w-4xl mx-auto text-center text-[10px] text-gray-600 mt-6 leading-relaxed">
-          YouAndINotAI.com is a for-profit platform. Revenue disbursements to Shriners Children&apos;s Hospitals are executed automatically via smart contract (Protocol Omega, Base Mainnet). These disbursements are contractual revenue splits, not charitable donations or disbursements under Florida Statutes §496.405. Shriners Children&apos;s Hospitals is an independent 501(c)(3) organization and does not endorse or sponsor this platform.
+          YouAndINotAI.com is a for-profit platform. Revenue disbursements to Shriners Children&apos;s Hospitals are executed automatically via smart contract (Protocol Omega, Base Mainnet). These disbursements are contractual revenue splits under Florida Statutes §496.405. Shriners Children&apos;s Hospitals is an independent 501(c)(3) organization and does not endorse or sponsor this platform.
           <br />
           Verify on-chain: <a href="https://basescan.org/address/0x9855B75061D4c841791382998f0CE8B2BCC965A4" target="_blank" rel="noopener noreferrer" className="text-gray-500 underline decoration-gray-700">Protocol Omega Contract</a>
         </p>
@@ -515,7 +515,7 @@ export default function App() {
             <a href="#mission" className="hover:text-white transition-colors no-underline">Our Mission</a>
           </div>
           <a
-            href="https://buy.stripe.com/3cI3cwcR6c3910p18peEo09"
+            href="https://square.link/u/Qc5mxUy7"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold no-underline hover:scale-105 transition-transform"
@@ -527,7 +527,7 @@ export default function App() {
 
       {/* #ForTheKids Charity Banner */}
       <div className="relative z-10 pt-14 bg-emerald-500 text-black text-center py-3 px-4 font-bold text-sm md:text-base">
-        #ForTheKids — 60% of net proceeds → Shriners Children&apos;s Hospitals (on-chain, verifiable).
+        #ForTheKids — Protocol Omega tracks the 60/30/10 revenue split on-chain.
       </div>
 
       {/* Hero Section */}
@@ -554,7 +554,7 @@ export default function App() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
             <a
-              href="https://buy.stripe.com/3cI3cwcR6c3910p18peEo09"
+              href="https://square.link/u/Qc5mxUy7"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-4 rounded-full font-bold text-lg no-underline hover:scale-105 transition-transform shadow-lg shadow-pink-500/30"
@@ -633,7 +633,7 @@ export default function App() {
               Real People. Real Connection.
             </p>
             <p className="text-pink-300 text-sm md:text-lg mt-2 font-medium drop-shadow-md">
-              60% of every dollar — routed on-chain to Shriners.
+              Protocol Omega tracks the 60/30/10 split on-chain.
             </p>
           </div>
         </div>
