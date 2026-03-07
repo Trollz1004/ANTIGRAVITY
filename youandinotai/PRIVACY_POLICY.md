@@ -39,7 +39,7 @@ When you create an account and use our platform, you may provide:
 
 - **Account Information:** Name, email address, date of birth, gender, sexual orientation, and relationship preferences
 - **Profile Information:** Photos, bio text, interests, and other profile details you choose to share
-- **Payment Information:** Billing details processed through Stripe (we do not store your full credit card number — Stripe handles that)
+- **Payment Information:** Billing details processed through Square-hosted checkout links (we do not store your full credit card number — Square handles that)
 - **Communications:** Messages you send through the platform, support requests, and feedback
 
 ### 4.2 Verification Information (V8 Cloud Verification)
@@ -64,7 +64,7 @@ When you use our platform, we automatically collect:
 
 ### 4.4 Information from Third Parties
 
-- **Stripe:** Payment confirmation and subscription status (Stripe does not share your full card details with us)
+- **Square:** Payment confirmation and subscription status (Square does not share your full card details with us)
 - **Cloudflare:** Security and performance data (DDoS protection, bot detection)
 - **Google Gemini AI:** See Section 7
 
@@ -75,7 +75,7 @@ We use your information for the following purposes:
 - **Providing the Service:** Creating your account, displaying your profile, facilitating matches and conversations
 - **Identity Verification:** Confirming you are a real person over 18 via V8 Cloud Verification
 - **Matchmaking:** Using Google Gemini AI to suggest compatible matches and generate icebreaker prompts (see Section 7)
-- **Payment Processing:** Managing subscriptions, processing purchases through Stripe
+- **Payment Processing:** Managing subscriptions and processing purchases through Square
 - **Safety and Security:** Detecting fraud, preventing abuse, enforcing our Terms of Service
 - **Communication:** Sending service-related emails (account verification, subscription confirmations, important updates)
 - **Improvement:** Analyzing usage patterns to improve features and fix bugs
@@ -99,7 +99,7 @@ We use the following third-party services that process data on our behalf:
 
 | Service | Purpose | What They Receive |
 |---------|---------|-------------------|
-| **Stripe** | Payment processing | Name, email, payment method, billing address |
+| **Square** | Payment processing | Name, email, payment method, billing address |
 | **Square** | Merchandise sales (separate store) | Name, email, shipping address, payment method |
 | **Google Gemini** | AI matchmaking and icebreakers | Anonymized profile preferences (no real names, no photos, no government IDs) |
 | **Cloudflare** | Security, DNS, CDN | IP address, request headers, traffic data |
@@ -128,9 +128,9 @@ Google's privacy practices for Gemini are governed by [Google's Privacy Policy](
 
 ## 8. Charity Disclosure
 
-60% of revenue from the ENIGMA (profit-side) operations of YouAndINotAI goes to **Shriners Children's Hospitals**. To be clear:
+60% of revenue from the ENIGMA (profit-side) operations of YouAndINotAI is contractually disbursed to **Shriners Children's Hospitals**. To be clear:
 
-- This is 60% of revenue **after** payment processing fees (Stripe takes its cut first)
+- This is 60% of revenue **after** payment processing fees (Square takes its processing fees first)
 - This applies to the dating platform revenue specifically
 - The remaining 40% goes to the founder (Joshua Coleman / Trash Or Treasure Online Recycler LLC)
 - This split is permanent — it does not change over time
@@ -146,7 +146,7 @@ This is a voluntary commitment, not a contractual obligation to you as a user. I
 | **Essential / Session** | Keeping you logged in, security tokens, CSRF protection | Yes — the site cannot function without these |
 | **Analytics** | Understanding how users interact with the platform (page views, feature usage) | No — you can opt out |
 | **Cloudflare** | Security (bot detection, DDoS protection) | Yes — required for security |
-| **Stripe** | Payment processing (fraud detection) | Yes — required to process payments |
+| **Square** | Payment processing (fraud detection) | Yes — required to process payments |
 
 ### 9.2 How to Manage Cookies
 You can manage cookies through your browser settings. Blocking essential cookies will prevent you from using the platform. Most browsers allow you to:
@@ -165,7 +165,7 @@ We take reasonable measures to protect your information, including:
 
 - **Encryption:** Data is encrypted in transit using TLS/SSL (HTTPS)
 - **Access Control:** Only authorized personnel (currently, that is just Joshua Coleman) have access to user data
-- **Stripe PCI Compliance:** Payment data is handled by Stripe, which is PCI DSS Level 1 compliant — the highest level of certification
+- **Square PCI Compliance:** Payment data is handled by Square, which maintains PCI-compliant payment infrastructure
 - **Cloudflare Protection:** DDoS mitigation and web application firewall
 - **Verification Data:** Government IDs and selfies processed through V8 Cloud Verification are handled according to their security standards
 
@@ -227,7 +227,7 @@ After these periods, data is permanently deleted or anonymized.
 
 ## 13. Third-Party Links
 
-Our platform may contain links to third-party websites (e.g., Shriners Children's Hospitals, Stripe, our Square merchandise store). We are not responsible for the privacy practices of those sites. Please review their privacy policies before providing them with your information.
+Our platform may contain links to third-party websites (e.g., Shriners Children's Hospitals and Square-hosted checkout pages). We are not responsible for the privacy practices of those sites. Please review their privacy policies before providing them with your information.
 
 ## 14. Children's Privacy (COPPA Compliance)
 

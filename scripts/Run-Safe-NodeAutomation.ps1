@@ -67,8 +67,10 @@ function Invoke-NodeScript {
 }
 
 $draftScript = Join-Path $RepoRoot "scripts\generate-safe-marketing-drafts.py"
+$copyAuditScript = Join-Path $RepoRoot "scripts\scan-public-copy-policy.py"
 $auditScript = Join-Path $RepoRoot "scripts\ewaste-intake-live-ok-audit.js"
 $localWorker = Join-Path $RepoRoot "scripts\Run-OnlineRecycle-LocalWorker.ps1"
+$revenueWorker = Join-Path $RepoRoot "scripts\run-onlinerecycle-revenue-worker.ps1"
 
 switch ($Profile) {
     "9020-content" {
@@ -76,22 +78,33 @@ switch ($Profile) {
     }
     "t5500-audit" {
         Invoke-PythonScript -ScriptPath $draftScript -Arguments @("--profile", "t5500-audit")
+        if (Test-Path $copyAuditScript) {
+            Invoke-PythonScript -ScriptPath $copyAuditScript
+        }
         if (Test-Path $auditScript) {
             Invoke-NodeScript -ScriptPath $auditScript
         }
     }
     "t5500-revenue-pack" {
-        if (-not (Test-Path $localWorker)) {
-            throw "Missing worker script: $localWorker"
-        }
-
-        & pwsh -NoProfile -ExecutionPolicy Bypass -File $localWorker -Mode marketing-pack
-        if ($LASTEXITCODE -ne 0) {
-            throw "OnlineRecycle local worker failed."
+        if (Test-Path $revenueWorker) {
+            & pwsh -NoProfile -ExecutionPolicy Bypass -File $revenueWorker -RepoRoot $RepoRoot
+            if ($LASTEXITCODE -ne 0) {
+                throw "Deterministic revenue worker failed."
+            }
+        } elseif (Test-Path $localWorker) {
+            & pwsh -NoProfile -ExecutionPolicy Bypass -File $localWorker -Mode marketing-pack
+            if ($LASTEXITCODE -ne 0) {
+                throw "OnlineRecycle local worker failed."
+            }
+        } else {
+            throw "Missing revenue worker scripts."
         }
     }
     "sabretooth-control" {
         Invoke-PythonScript -ScriptPath $draftScript -Arguments @("--profile", "sabretooth-control")
+        if (Test-Path $copyAuditScript) {
+            Invoke-PythonScript -ScriptPath $copyAuditScript
+        }
     }
 }
 
