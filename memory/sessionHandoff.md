@@ -1,6 +1,6 @@
 # SESSION HANDOFF — CLAUDE / CODEX SHARED STATE
 
-**Last Updated**: 2026-03-07 15:32:58 -05:00
+**Last Updated**: 2026-03-07 15:43:08 -05:00
 **Source**: Codex on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)
 
 ## Shared Truth
@@ -12,7 +12,7 @@
 
 ## Repo Position
 
-- `origin/main` = current GitHub baseline; verify with `git fetch` before assuming exact position
+- `origin/main` = `ba0352e` (`ops: codify safe node automation baseline`)
 - `C:\ANTIGRAVITY` = active local Codex base
 - `E:\ANTIGRAVITY` = legacy local copy pending retirement
 - `origin/claude/review-changes-mmeucm90aurnm0ht-3sxI9` advanced again on fetch and should still be treated as a patch source only, not a merge target
@@ -76,6 +76,9 @@
   - `9020` -> `CodeX-9020-Safe-Drafts`
   - `T5500` -> `CodeX-T5500-Safe-Marketing-Audit`
   - `T5500` -> `CodeX-T5500-Revenue-Pack`
+- Remote node sync status after `ba0352e`:
+  - `9020` received the reviewed automation/copy files in place, `CodeX-9020-Safe-Drafts` was reinstalled, and `9020-content` proof-ran successfully
+  - `T5500` received the reviewed automation/copy files in place, `CodeX-T5500-Safe-Marketing-Audit` / `CodeX-T5500-Revenue-Pack` were reinstalled, `_deploy/onlinerecycle/index.html` was refreshed from `origin/main`, and both proof runs completed
 - Live social posting from the nodes is now disabled by policy:
   - X and Facebook are Perplexity-only
   - Reddit is Devvit/Opus/Perplexity-only
