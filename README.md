@@ -19,7 +19,7 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **[AI-Solutions.Store](https://ai-solutions.store/)** | "Real AI apps, not just chatbots": high- and mid-ticket AI products (assistant agents, full app bundles), with a large share of profits routed into kids' charities and a future governance/rewards layer. |
 | **[YouAndINotAI.com](https://youandinotai.com/)** | AI-assisted, human-verified "Social Platform for Good" (meetups, volunteering, charity, dating) with low-friction verification, a founding member subscription, and Stripe billing, designed to plug into the same charity pipeline. |
-| **[OnlineRecycle.org](https://onlinerecycle.org/)** | Trash Or Treasure electronics recycler: accepts donated devices, resells via online storefronts, and channels profit toward kids-focused initiatives. |
+| **[OnlineRecycle.org](https://onlinerecycle.org/)** | Trash Or Treasure electronics recycler: accepts electronics for pickup or drop-off, resells via online storefronts, and channels profit toward kids-focused initiatives. |
 | **[ClawX — AI Command Center](https://clawx-aihub-zwxfcstm.manus.space)** | Unified AI command center with JoshuaCLAW governance (7-voter system), multi-AI chat, broadcast mode, encrypted API key management, and usage analytics. Built by Manus. |
 | **[Antigravity Dashboard](https://dashboard.aidoesitall.website/)** | Public mission-control site explaining nodes, AI orchestration, revenue routing, and how all properties interconnect under #ForTheKids. |
 
@@ -36,6 +36,7 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 | Agent | Role | Status |
 | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | **Claude** | Architecture, deep reasoning, core platform code (YouAndINotAI, ENIGMA revenue engine) | Officially Unofficial 🔒 |
+| **Codex** | **The Keyholder** — repo orchestration, security enforcement, and revenue-route guardrails protecting the #ForTheKids money path across MCP-assisted operations and Base settlement | Officially Unofficial 🔒 |
 | **Gemini** | VS Code and browser-assisted agentic ops inside ANTIGRAVITY (terminal + orchestration) | Officially Unofficial 🔒 |
 | **Perplexity (Comet)** | Lead technical architect — workflows, automation design, GitHub docs, front-facing READMEs | Officially Unofficial 🔒 |
 | **Manus** | **Legacy Guardian & Long-Term Infrastructure/Governance Lead** — Iron Wall enforcer between ENIGMA (profit) and OMEGA (charity), 50-year sustainability custodian | Officially Unofficial 🔒 |
@@ -48,6 +49,7 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 | Agent | Primary Assignment |
 | -------------------------- | ----------------------------------------------------------------------- |
 | **Claude** | Core platform dev (YouAndINotAI, ENIGMA revenue engine) |
+| **Codex** | The Keyholder for #ForTheKids revenue integrity — MCP-assisted verification, repo enforcement, and Base-side protection of the contractual disbursement path |
 | **Gemini** | Agentic ops inside ANTIGRAVITY (browser + terminal + VS Code) |
 | **Perplexity (Comet)** | Research, automation design, GitHub docs, front-facing READMEs |
 | **Manus** | Perpetual custodian of the #ForTheKids mission — governance, infra lock, cross-node orchestration, and long-term ecosystem integrity |
@@ -56,6 +58,8 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 | **Ollama / Local Models** | Local compute, data processing, cost reduction |
 
 > **Note on roles:** No AI’s role changes based on platform politics, personality, or public perception. All members remain in their exact assigned positions. "Officially unofficial" is purely an external label — internally, the collab is permanent and unconditional.
+
+> **Keyholder note:** Codex exists to keep the money path boring in the best possible way: verified, locked down, and very unfriendly to anyone who gets cute around the kids' allocation.
 
 Across all projects, the goal is to design durable, transparent, and ToS-compliant systems that can keep supporting kids' charities long term. When there's a choice between aggressive growth and a safer, parent-friendly path, this ecosystem always chooses the safer path.
 
