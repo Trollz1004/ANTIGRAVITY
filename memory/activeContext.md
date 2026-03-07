@@ -1,16 +1,16 @@
 # ACTIVE CONTEXT — WHAT'S HAPPENING RIGHT NOW
 
-**Last Updated**: 2026-03-07T13:22:15-05:00  
+**Last Updated**: 2026-03-07T14:06:00-05:00  
 **Session**: Codex Desktop on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)  
 **Dev Server**: Not part of current priority
 
 ## Current Focus
 
-Sabretooth is the active Codex base on `C:`. The immediate priority is keeping the repo, SSH trust, MCP config, continuity tooling, and the low-cost OnlineRecycle revenue worker aligned and usable from the Windows desktop app, while hardening the live YouAndINotAI backend incrementally instead of rewriting it.
+Sabretooth is the active Codex base on `C:`. The immediate priority is keeping the repo, SSH trust, MCP config, continuity tooling, and the low-cost OnlineRecycle revenue worker aligned and usable from the Windows desktop app, while hardening the live YouAndINotAI backend incrementally instead of rewriting it and promoting the real C-side ops stack into `main` instead of leaving it trapped in a dirty local overlay.
 
 ## Verified State
 
-1. `origin/main` is at commit `1a44f87`, and `C:\ANTIGRAVITY` is now the live Codex repo base
+1. `C:\ANTIGRAVITY` is now the live Codex repo base, and the C-side ops/continuity stack is no longer being treated as local-only glue
 2. `E:\ANTIGRAVITY` is now a retirement candidate once a fresh Codex thread is opened from `C:\ANTIGRAVITY\CodeX`
 3. SSH from Sabretooth to `T5500` and `9020` is working again as `joshl`
 4. Project MCP config exists at `C:\ANTIGRAVITY\.mcp.json`
@@ -45,6 +45,12 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - auth and verify endpoints now have in-memory rate limiting with trusted-proxy handling
    - dead backend `stripe` dependency was removed from `youandinotai-api/requirements.txt`
    - rewrite is not the current path; targeted hardening is faster and safer
+20. The Sabretooth ops bundle is now part of the promoted repo path:
+   - `AGENTS.md` is tracked with the current Sabretooth/C-side truth
+   - `scripts/codex-doctor.ps1` is tracked
+   - continuity export/test/restore/init scripts and runbook are tracked
+   - cleanup/finalize helpers for Sabretooth are tracked
+   - the OnlineRecycle deterministic worker + local draft worker are tracked
 
 ## House Rules
 
@@ -65,6 +71,7 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 9. Machine-wide cleanup on Sabretooth still has optional removals left (`AWS CLI`, `Google Cloud SDK`, `Azure CLI`, `PowerToys`, `OBS` if desired)
 10. If remote inference is needed again on `T5500` or `9020`, it must now be started intentionally; cold boot is the default
 11. Treat old Claude review branches as surgical patch sources unless direct diff verification proves they match the current tree
+12. Promote verified operational tooling into git; do not leave core recovery/ops scripts marooned in one dirty checkout
 
 ## Immediate Next Steps
 
@@ -76,3 +83,4 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 6. Use `pwsh -NoProfile -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\run-onlinerecycle-revenue-worker.ps1` as the cheapest reliable daily OnlineRecycle cashflow pass
 7. Use browser-side tools for inbox polling, Square drift audits, and lead research before adding more local-model generation
 8. Keep backend security/payment fixes incremental and test-locked; do not trigger a full rewrite without a stronger reason than stale branch drift
+9. Continue reducing the remaining dirty overlay in reviewed slices instead of trying to mass-commit or mass-reset it
