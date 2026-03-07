@@ -61,7 +61,7 @@ Register-ScheduledTask `
     -Trigger @($triggerBoot, $triggerLogon, $triggerLoop) `
     -Settings $settings `
     -Principal $principal `
-    -Description "Runs CodeX Task Sentry queue dispatcher for e-waste donation and charity operations." `
+    -Description "Runs CodeX Task Sentry queue dispatcher for e-waste intake, OnlineRecycle responses, and low-cost revenue operations." `
     -Force | Out-Null
 
 Start-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue

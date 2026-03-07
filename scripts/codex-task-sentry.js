@@ -28,7 +28,7 @@ const DEFAULTS = {
   markdownFile: path.join(PROJECT_DIR, "TASK-QUEUE-100.md"),
   openclawUrl: process.env.OPENCLAW_URL || "http://127.0.0.1:3200",
   ollamaUrl: process.env.OLLAMA_URL || process.env.OLLAMA_BASE_URL || "http://127.0.0.1:11434",
-  ollamaModel: process.env.OLLAMA_MODEL || "llama3.2",
+  ollamaModel: process.env.OLLAMA_MODEL || "qwen2.5:7b",
   intervalMinutes: 5,
   maxResultChars: 4000,
   fallbackChainRaw: process.env.CODEX_SENTRY_FALLBACK_CHAIN || "ollama,codex",
@@ -177,37 +177,48 @@ function seedEwasteTasks(queue) {
   const seedTasks = [
     {
       id: `EW-INTAKE-${day}`,
-      title: "Create e-waste intake and triage sheet for donated PCs/servers/laptops",
+      title: "Create e-waste intake and triage sheet for inbound PCs/servers/laptops",
       description: "Build reusable templates for inventory, grading, testing, and value estimates.",
       executor: "codex",
       priority: 100,
-      tags: ["ewaste", "intake", "donation", "ebay"],
+      tags: ["ewaste", "intake", "ebay", "cashflow"],
       prompt:
-        "In E:/ANTIGRAVITY, set up an operational intake workflow for donated e-waste devices (PCs, servers, laptops). " +
+        "In E:/ANTIGRAVITY, set up an operational intake workflow for inbound e-waste devices (PCs, servers, laptops). " +
         "Create practical templates under data/ or briefings/ for inventory intake, condition grading, testing status, " +
-        "estimated resale value, and ebay listing readiness. Keep it charity-impact oriented.",
+        "estimated resale value, and ebay listing readiness. Keep it revenue-first, #ForTheKids compliant, and ready for fast resale.",
       spawn_on_done: [
         {
           id: `EW-LISTINGS-${day}`,
-          title: "Generate eBay listing templates with charity-safe messaging",
+          title: "Generate eBay listing templates with mission-safe messaging",
           description: "Prepare title/description templates for desktop, laptop, and server listings.",
-          executor: "openclaw",
+          executor: "ollama",
           priority: 95,
           tags: ["ewaste", "ebay", "copy"],
           prompt:
-            "Create high-converting but policy-safe ebay listing templates for donated desktops, laptops, and servers. " +
-            "Include concise title patterns, honest condition language, shipping notes, and a short charity-impact line.",
+            "Create high-converting but policy-safe ebay listing templates for inbound desktops, laptops, and servers. " +
+            "Include concise title patterns, honest condition language, shipping notes, and a short #ForTheKids impact line.",
           spawn_on_done: [
             {
               id: `EW-OUTREACH-${day}`,
-              title: "Create donation outreach messages to source more e-waste",
+              title: "Create business outreach messages to source more e-waste inventory",
               description: "Write outreach templates for businesses, schools, and community groups.",
-              executor: "openclaw",
+              executor: "ollama",
               priority: 75,
-              tags: ["ewaste", "outreach", "donation"],
+              tags: ["ewaste", "outreach", "inventory"],
               prompt:
-                "Write concise outreach templates to request donated e-waste from businesses and schools. " +
-                "Tone must be transparent, respectful, and focused on helping kids in medical need.",
+                "Write concise outreach templates to source surplus e-waste from businesses and schools. " +
+                "Tone must be transparent, respectful, local, and focused on fast intake plus #ForTheKids impact without donation language.",
+            },
+            {
+              id: `EW-RESPONSES-${day}`,
+              title: "Draft OnlineRecycle intake reply templates",
+              description: "Prepare concise responses for drop-off, pickup, and bulk inventory leads.",
+              executor: "ollama",
+              priority: 78,
+              tags: ["ewaste", "responses", "onlinerecycle"],
+              prompt:
+                "Draft concise email reply templates for OnlineRecycle.org intake leads: drop-off confirmation, pickup lead confirmation, business bulk inventory response, scheduling follow-up, and decline/unsupported items. " +
+                "Keep them direct, respectful, local to Central Florida, and free of donation language. Mention Square booking only where useful.",
             },
           ],
         },
@@ -219,29 +230,29 @@ function seedEwasteTasks(queue) {
           priority: 90,
           tags: ["ewaste", "qa", "ebay"],
           prompt:
-            "Generate a practical checklist for testing donated PCs/servers/laptops before resale, plus a photo shot-list " +
+            "Generate a practical checklist for testing inbound PCs/servers/laptops before resale, plus a photo shot-list " +
             "that improves buyer trust on ebay.",
         },
         {
           id: `EW-LEDGER-${day}`,
-          title: "Build charity impact ledger for sold e-waste items",
-          description: "Map sold items to charity impact records.",
+          title: "Build impact ledger for sold e-waste items",
+          description: "Map sold items to impact and contractual revenue disbursement records.",
           executor: "codex",
           priority: 92,
-          tags: ["ewaste", "charity", "ledger"],
+          tags: ["ewaste", "impact", "ledger"],
           prompt:
-            "Set up a charity impact ledger format in this repo that maps sold ebay items to charitable impact. " +
+            "Set up an impact ledger format in this repo that maps sold ebay items to #ForTheKids impact and contractual revenue disbursement evidence. " +
             "Keep fields practical for weekly reporting and auditing.",
           spawn_on_done: [
             {
               id: `EW-WEEKLY-REPORT-${day}`,
-              title: "Draft weekly impact report template for donors and supporters",
-              description: "Summarize donations, sales, and charity outcomes.",
+              title: "Draft weekly impact report template for internal review and supporters",
+              description: "Summarize inbound inventory, sales, net proceeds, and impact outcomes.",
               executor: "codex",
               priority: 70,
-              tags: ["ewaste", "reporting", "charity"],
+              tags: ["ewaste", "reporting", "impact"],
               prompt:
-                "Create a weekly report template summarizing inbound donations, sold items, gross revenue, and charity impact for #ForTheKids.",
+                "Create a weekly report template summarizing inbound inventory, sold items, gross revenue, net proceeds, and #ForTheKids impact for OnlineRecycle.",
             },
           ],
         },

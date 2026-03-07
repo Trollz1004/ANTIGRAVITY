@@ -3,7 +3,7 @@ param(
     [string]$RepoRoot = "E:\ANTIGRAVITY",
     [string]$CodeXRoot = "E:\ANTIGRAVITY\CodeX",
     [string]$UserName = $env:USERNAME,
-    [string]$ModelName = "qwen2.5:3b",
+    [string]$ModelName = "qwen2.5:7b",
     [int]$IntervalMinutes = 20,
     [switch]$SkipModelPull
 )

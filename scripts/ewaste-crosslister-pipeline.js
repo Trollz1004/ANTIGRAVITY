@@ -12,9 +12,9 @@ const DEFAULT_BATCH_SIZE = 5;
 const PRIMARY_PROFILE = {
   id: "primary",
   format: null,
-  title_suffix: "Tested Charity",
+  title_suffix: "Tested Ready",
   description_blurb:
-    "Configured for fastest transparent resale while preserving charity impact reporting.",
+    "Configured for clean, transparent resale with clear testing notes and faster sell-through.",
   price_multiplier: 1.0,
 };
 
