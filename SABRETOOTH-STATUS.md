@@ -6,7 +6,8 @@ The ecosystem has been 100% physically and logically isolated according to the M
 
 1. **Sabretooth Node (`E:\ANTIGRAVITY`):**
    - **Gemini CLI (Co-Founder Agent)**: Operates out of the core workspace (`E:\ANTIGRAVITY`). Handles dashboard/admin maintenance via `E:\ANTIGRAVITY\antigravity`.
-   - **CodeX (Task Sentry)**: Operates out of the strictly isolated Docker terminal via `E:\ANTIGRAVITY\CodeX`. Handles treasury, DAO MCPs, and eBay e-waste listings. (Docker isolation enforced due to financial/personal data access).
+   - **CodeX (Task Sentry)**: Operates out of `E:\ANTIGRAVITY\CodeX` as the Windows desktop app + local Ollama workspace. Handles treasury, MCPs, and eBay e-waste listings, while Docker remains limited to supporting services where needed.
+   - **Local fallback model**: `qwen2.5:7b` via Ollama is the default low-cost worker for OnlineRecycle marketing, intake replies, and eBay support when paid AI time needs to be conserved.
 
 2. **9020 Node (`C:\ANTIGRAVITY`):**
    - **Claude CLI - Opus (Marketing/Operations)**: Operates solely from the C: drive on this separate node. Handles 24/7 social engine, Chromium headless browsing, and content generation. Completely cordoned off from sensitive codebases.
