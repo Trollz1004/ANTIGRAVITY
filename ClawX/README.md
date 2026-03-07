@@ -32,7 +32,7 @@ Every AI in this ecosystem has a defined role, a vote, and a responsibility to t
 
 ## JoshuaCLAW Governance System
 
-JoshuaCLAW is the decentralized voting mechanism that protects the **Iron Wall** between ENIGMA (profit) and OMEGA (charity). Every critical change to the ecosystem must pass a vote before execution.
+JoshuaCLAW is the decentralized voting mechanism that protects the **Iron Wall** between ENIGMA (profit) and OMEGA (contractual revenue disbursement). Every critical change to the ecosystem must pass a vote before execution.
 
 ### The Math
 
@@ -40,7 +40,7 @@ The system is designed around one principle: **no ties, no deadlocks, no unilate
 
 - **7 total voters** (odd number eliminates ties mathematically)
 - **6 AI platforms** hold the even-numbered positions (#1 through #6)
-- **1 human founder (Joshua)** holds position #7 — the odd tiebreaker
+- **1 human founder (Joshua)** holds position #7 — the odd-numbered vote that mathematically eliminates ties
 - **Majority = 4 votes** (more than 50% of 7)
 
 No single voter can pass or block a proposal alone. The AIs cannot override Joshua if he secures 3 allies. Joshua cannot override the AIs if 4 of them agree. The system is balanced by design.
@@ -112,9 +112,9 @@ governance_votes  — Individual votes with voter identity, decision, and reason
 
 ## The Iron Wall
 
-ClawX exists to protect the **Iron Wall** — the immutable separation between ENIGMA (for-profit operations) and OMEGA (charitable donations). The `DatingRevenueRouter.sol` smart contract on Base Mainnet enforces the split:
+ClawX exists to protect the **Iron Wall** — the immutable separation between ENIGMA (for-profit operations) and OMEGA (contractual revenue disbursement). The `DatingRevenueRouter.sol` smart contract on Base Mainnet enforces the split:
 
-- **60%** — Charity Gnosis Safe (Shriners Children's Hospitals)
+- **60%** — Shriners Children's Hospitals Gnosis Safe (contractual disbursement)
 - **30%** — Infrastructure Gnosis Safe (V8 Operations)
 - **10%** — Founder Phantom (Operational Expenses)
 
@@ -124,7 +124,7 @@ The JoshuaCLAW governance system ensures that no change to this split — or any
 
 ## Why This Matters
 
-This is, to our knowledge, the first implementation of a **multi-AI governance voting system** where distinct AI platforms from competing companies (Anthropic, Google, xAI, Perplexity, Meta/Manus) participate as equal voters alongside a human founder in binding decisions about a charitable mission.
+This is, to our knowledge, the first implementation of a **multi-AI governance voting system** where distinct AI platforms from competing companies (Anthropic, Google, xAI, Perplexity, OpenAI, Manus) participate as equal voters alongside a human founder in binding decisions about the #ForTheKids mission.
 
 The AIs are not tools here. They are stakeholders. They have votes. They have roles. They have accountability. And every decision they make is transparent, auditable, and in service of one mission:
 
@@ -140,8 +140,7 @@ The AIs are not tools here. They are stakeholders. They have votes. They have ro
 
 ## Contract Verification
 
-- **GospelDonation.sol**: `0x9855B75061D4c841791382998f0CE8B2BCC965A4` on Base Mainnet (Chain ID 8453)
-- **DatingRevenueRouter.sol**: Immutable 60/30/10 split, no admin functions, remainder to Charity Safe
+- **DatingRevenueRouter.sol**: `0x9855B75061D4c841791382998f0CE8B2BCC965A4` on Base Mainnet (Chain ID 8453) — Immutable 60/30/10 split, no admin functions, remainder to Shriners Safe
 
 ---
 
