@@ -1,12 +1,12 @@
 # ACTIVE CONTEXT — WHAT'S HAPPENING RIGHT NOW
 
-**Last Updated**: 2026-03-07T14:43:00-05:00  
+**Last Updated**: 2026-03-07T15:32:58-05:00
 **Session**: Codex Desktop on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)  
 **Dev Server**: Not part of current priority
 
 ## Current Focus
 
-Sabretooth is the active Codex base on `C:`. The immediate priority is keeping the repo, SSH trust, MCP config, continuity tooling, and the low-cost OnlineRecycle revenue worker aligned and usable from the Windows desktop app, while hardening the live YouAndINotAI backend incrementally instead of rewriting it, promoting the real C-side ops stack into `main`, and replacing the old multi-platform browser autoposter with a legal-safe node automation model.
+Sabretooth is the active Codex base on `C:`. The immediate priority is keeping the repo, SSH trust, MCP config, continuity tooling, and the low-cost OnlineRecycle revenue worker aligned and usable from the Windows desktop app, while locking in the legal-safe node automation model, keeping the repo clean, and using audit-driven cleanup instead of guesswork.
 
 ## Verified State
 
@@ -62,28 +62,43 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - `scripts/Run-Safe-NodeAutomation.ps1`
    - `scripts/install-safe-node-automation-tasks.ps1`
    - `briefings/LEGAL-SAFE-NODE-AUTOMATIONS.md`
+23. The node automation baseline is now explicit and self-reporting:
+   - `CodeX\state\marketing\node-automation-matrix-latest.md` documents exactly what each node automates and what it must not automate
+   - `CodeX\state\marketing\public-copy-policy-audit-latest.md` scans only public-facing / generated customer copy, not internal scripts or its own output
+24. Current approved scheduled tasks:
+   - `SABRETOOTH`: `CodeX-SABRETOOTH-Safe-Control`
+   - `9020`: `CodeX-9020-Safe-Drafts`
+   - `T5500`: `CodeX-T5500-Safe-Marketing-Audit`, `CodeX-T5500-Revenue-Pack`
+25. The latest local proof runs now pass for the automation boundary itself:
+   - `sabretooth-control` completed with `FINDINGS=0`
+   - `t5500-audit` completed with `FINDINGS=0`
+   - `t5500-revenue-pack` completed and refreshed the latest eBay batch + HTML export
+26. YouAndINotAI public checkout/copy drift was cleaned in the same pass:
+   - stale `Stripe` checkout links in `youandinotai/src/App.tsx` were replaced with the canonical `Square` links
+   - public policy/legal copy now references `Square`
+   - customer-facing “charity impact / projected charity / every dollar goes to” wording was removed from the live eBay batch and tightened in the app copy
 
 ## House Rules
 
 1. `C:\ANTIGRAVITY` and `C:\ANTIGRAVITY\CodeX` are the active Codex base
 2. `E:` is no longer the primary Codex workspace
 3. If any old docs or scripts still assume the previous drive split, update them instead of preserving stale boundaries
+4. Node automation policy lives in code and generated artifacts, not in memory alone:
+   - `scripts/social_engine/platform_policy.py`
+   - `CodeX\state\marketing\node-automation-matrix-latest.md`
+   - `briefings/LEGAL-SAFE-NODE-AUTOMATIONS.md`
 
 ## Current Risks
 
-1. `C:\ANTIGRAVITY` has a large working-tree overlay from the `E:` migration and should not be casually committed wholesale
-2. `Trollz1004\` is still cloned inside the old `E:\ANTIGRAVITY` tree and must never be accidentally staged into the main repo
-3. Old `E:`-rooted docs, scheduled tasks, or helper scripts can still surface and should be retired when found
-4. The continuity passphrase now exists locally and in OneDrive Personal Vault; keep that vault protected because it is part of disaster recovery
-5. OnlineRecycle public copy is still not fully cleaned on the live web side and Square side
-6. `scripts/ewaste-crosslister-pipeline.js` still emits stale `Charity impact` / `projected charity` wording and should be cleaned next
-7. There is still no real inbox automation for FormSubmit -> Gmail -> structured lead queue
-8. `D:` is not mounted/visible from Sabretooth right now, so any future overflow planning should assume only `C:` and `E:` until that changes
-9. Machine-wide cleanup on Sabretooth still has optional removals left (`AWS CLI`, `Google Cloud SDK`, `Azure CLI`, `PowerToys`, `OBS` if desired)
-10. If remote inference is needed again on `T5500` or `9020`, it must now be started intentionally; cold boot is the default
-11. Treat old Claude review branches as surgical patch sources unless direct diff verification proves they match the current tree
-12. Promote verified operational tooling into git; do not leave core recovery/ops scripts marooned in one dirty checkout
-13. Do not re-enable browser-based social autoposting from the nodes without a separately reviewed allowlist change in `scripts/social_engine/platform_policy.py`
+1. `E:` still exists as a legacy local copy and should never be treated as the live Codex home again
+2. The continuity passphrase now exists locally and in OneDrive Personal Vault; keep that vault protected because it is part of disaster recovery
+3. There is still no real inbox automation for FormSubmit -> Gmail -> structured lead queue
+4. `T5500` audit still reports `LIVE_OK=NO` for the e-waste intake live-ok check; that is an operational signal, not an automation failure
+5. `D:` is not mounted/visible from Sabretooth right now, so any future overflow planning should assume only `C:` and `E:` until that changes
+6. Machine-wide cleanup on Sabretooth still has optional removals left (`AWS CLI`, `Google Cloud SDK`, `Azure CLI`, `PowerToys`, `OBS` if desired)
+7. If remote inference is needed again on `T5500` or `9020`, it must now be started intentionally; cold boot is the default
+8. Treat old Claude review branches as surgical patch sources unless direct diff verification proves they match the current tree
+9. Do not re-enable browser-based social autoposting from the nodes without a separately reviewed allowlist change in `scripts/social_engine/platform_policy.py`
 
 ## Immediate Next Steps
 
@@ -95,5 +110,6 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 6. Use `pwsh -NoProfile -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\run-onlinerecycle-revenue-worker.ps1` as the cheapest reliable daily OnlineRecycle cashflow pass
 7. Use browser-side tools for inbox polling, Square drift audits, and lead research before adding more local-model generation
 8. Keep backend security/payment fixes incremental and test-locked; do not trigger a full rewrite without a stronger reason than stale branch drift
-9. Continue reducing the remaining dirty overlay in reviewed slices instead of trying to mass-commit or mass-reset it
+9. Push the current automation/matrix/copy-audit baseline, then sync the approved files and task definitions to `9020` and `T5500`
 10. Keep node automation scoped to drafts, reports, and owned-property workflows unless official API review changes the policy file first
+11. Build inbox automation next: FormSubmit/Gmail intake -> structured queue -> reply draft -> Square next-step link
