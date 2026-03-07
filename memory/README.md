@@ -27,6 +27,8 @@ When context resets, this is what survives.
 - **Timestamp every update** with ISO format
 - **Claude Code MUST update activeContext.md** at end of every session
 - **sessionHandoff.md** gets rewritten at end of every session
+- Shared tracked memory stays operational and secret-free
+- Put secret-bearing or node-local notes in `memory/local/` or `memory/private/` so they stay available on the machine but out of git
 
 ---
 > "AI for kids in need, not adults with greed."

@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
-    [string]$RepoRoot = "E:\ANTIGRAVITY",
-    [string]$CodeXRoot = "E:\ANTIGRAVITY\CodeX",
+    [string]$RepoRoot,
+    [string]$CodeXRoot,
     [string]$UserName = $env:USERNAME,
     [string]$ModelName = "qwen2.5:7b",
     [int]$IntervalMinutes = 20,
@@ -9,6 +9,13 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+
+if (-not $RepoRoot) {
+    $RepoRoot = Split-Path -Parent $PSScriptRoot
+}
+if (-not $CodeXRoot) {
+    $CodeXRoot = Join-Path $RepoRoot "CodeX"
+}
 $taskName = "CodeX-Brain-Checkpoint"
 $checkpointScript = Join-Path $RepoRoot "scripts\Invoke-CodeX-BrainCheckpoint.ps1"
 

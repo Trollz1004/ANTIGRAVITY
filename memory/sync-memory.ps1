@@ -8,10 +8,14 @@ Write-Host "========================================"  -ForegroundColor Cyan
 $targets = @(
     "D:\ANTIGRAVITY\memory",
     "H:\ANTIGRAVITY\memory",
-    "E:\ANTIGRAVITY\memory",
     "C:\ANTIGRAVITY\memory",
     "J:\ANTIGRAVITY\memory"
 )
+
+# The E: mirror is retired by default now that C: is the live Codex base.
+if ($env:MEMORY_SYNC_INCLUDE_RETIRED_E -eq "1") {
+    $targets += "E:\ANTIGRAVITY\memory"
+}
 
 # Optional legacy mirror targets. Set MEMORY_SYNC_INCLUDE_LEGACY_OPUSONLY=1 to keep writing them.
 if ($env:MEMORY_SYNC_INCLUDE_LEGACY_OPUSONLY -eq "1") {

@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
-    [string]$RepoRoot = "E:\ANTIGRAVITY",
-    [string]$CodeXRoot = "E:\ANTIGRAVITY\CodeX",
+    [string]$RepoRoot,
+    [string]$CodeXRoot,
     [string]$UserName = $env:USERNAME,
     [ValidateSet("docker", "host", "off")]
     [string]$MissionMode = "off",
@@ -10,6 +10,13 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+
+if (-not $RepoRoot) {
+    $RepoRoot = Split-Path -Parent $PSScriptRoot
+}
+if (-not $CodeXRoot) {
+    $CodeXRoot = Join-Path $RepoRoot "CodeX"
+}
 $taskName = "CodeX-Mission-Guardian"
 $ensureScript = Join-Path $RepoRoot "scripts\Ensure-CodeX-Mission.ps1"
 

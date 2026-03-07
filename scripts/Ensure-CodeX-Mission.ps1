@@ -1,16 +1,29 @@
 [CmdletBinding()]
 param(
-    [string]$RepoRoot = "E:\ANTIGRAVITY",
-    [string]$CodeXRoot = "E:\ANTIGRAVITY\CodeX",
-    [string]$LauncherPath = "E:\ANTIGRAVITY\scripts\Launch-CodeX-Mission.ps1",
-    [string]$LogPath = "E:\ANTIGRAVITY\CodeX\logs\codex-mission-guardian.log",
+    [string]$RepoRoot,
+    [string]$CodeXRoot,
+    [string]$LauncherPath,
+    [string]$LogPath,
     [ValidateSet("docker", "host", "off")]
-    [string]$Mode = $(if ($env:CODEX_MISSION_MODE) { $env:CODEX_MISSION_MODE } else { "docker" }),
+    [string]$Mode = $(if ($env:CODEX_MISSION_MODE) { $env:CODEX_MISSION_MODE } else { "off" }),
     [string]$DockerContainer = $(if ($env:CODEX_DOCKER_CONTAINER) { $env:CODEX_DOCKER_CONTAINER } else { "codex-sabretooth" }),
     [switch]$AllowHostLaunch
 )
 
 $ErrorActionPreference = "Stop"
+
+if (-not $RepoRoot) {
+    $RepoRoot = Split-Path -Parent $PSScriptRoot
+}
+if (-not $CodeXRoot) {
+    $CodeXRoot = Join-Path $RepoRoot "CodeX"
+}
+if (-not $LauncherPath) {
+    $LauncherPath = Join-Path $RepoRoot "scripts\Launch-CodeX-Mission.ps1"
+}
+if (-not $LogPath) {
+    $LogPath = Join-Path $RepoRoot "CodeX\logs\codex-mission-guardian.log"
+}
 
 function Write-GuardianLog {
     param([string]$Message)
@@ -42,16 +55,10 @@ $hostMissionProcess = Get-CimInstance Win32_Process -Filter "Name='pwsh.exe'" -E
     Select-Object -First 1
 
 if ($Mode -eq "docker") {
-    if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
-        Write-GuardianLog "Docker mode active but docker is not available in PATH. Host launch suppressed."
-        exit 0
-    }
+    if (-not (Get-Command docker -ErrorAction SilentlyContinue)) { exit 0 }
 
     & docker info 1>$null 2>$null
-    if ($LASTEXITCODE -ne 0) {
-        Write-GuardianLog "Docker mode active but Docker engine is unavailable. Host launch suppressed."
-        exit 0
-    }
+    if ($LASTEXITCODE -ne 0) { exit 0 }
 
     $containerName = (& docker ps --filter "name=^/$DockerContainer$" --filter "status=running" --format "{{.Names}}" 2>$null | Select-Object -First 1)
     if ([string]::IsNullOrWhiteSpace($containerName)) {
@@ -67,18 +74,13 @@ if ($Mode -eq "docker") {
     exit 0
 }
 
-if (-not $AllowHostLaunch) {
-    Write-GuardianLog "Host mode requested but host launch is blocked (AllowHostLaunch not set)."
-    exit 0
-}
-
 if ($null -ne $hostMissionProcess) {
     exit 0
 }
 
 Write-GuardianLog "CodeX Mission not detected. Launching a new mission terminal."
 Start-Process -FilePath "pwsh.exe" `
-    -ArgumentList @("-NoExit", "-ExecutionPolicy", "Bypass", "-File", $LauncherPath, "-Runtime", "host", "-AllowHostFallback") `
+    -ArgumentList @("-NoExit", "-ExecutionPolicy", "Bypass", "-File", $LauncherPath, "-Runtime", "host") `
     -WorkingDirectory $CodeXRoot `
     -WindowStyle Normal | Out-Null
 
