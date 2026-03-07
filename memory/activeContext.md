@@ -1,12 +1,12 @@
 # ACTIVE CONTEXT — WHAT'S HAPPENING RIGHT NOW
 
-**Last Updated**: 2026-03-07T15:32:58-05:00
+**Last Updated**: 2026-03-07T15:43:08-05:00
 **Session**: Codex Desktop on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)  
 **Dev Server**: Not part of current priority
 
 ## Current Focus
 
-Sabretooth is the active Codex base on `C:`. The immediate priority is keeping the repo, SSH trust, MCP config, continuity tooling, and the low-cost OnlineRecycle revenue worker aligned and usable from the Windows desktop app, while locking in the legal-safe node automation model, keeping the repo clean, and using audit-driven cleanup instead of guesswork.
+Sabretooth is the active Codex base on `C:`. The immediate priority is keeping the repo, SSH trust, MCP config, continuity tooling, and the low-cost OnlineRecycle revenue worker aligned and usable from the Windows desktop app, while keeping the legal-safe node automation model live on all three nodes and using audit-driven cleanup instead of guesswork.
 
 ## Verified State
 
@@ -77,6 +77,10 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - stale `Stripe` checkout links in `youandinotai/src/App.tsx` were replaced with the canonical `Square` links
    - public policy/legal copy now references `Square`
    - customer-facing “charity impact / projected charity / every dollar goes to” wording was removed from the live eBay batch and tightened in the app copy
+27. `origin/main` now includes the automation baseline at commit `ba0352e`
+28. The reviewed automation slice was synced in place to the remote nodes without wiping their unrelated local overlays:
+   - `9020` now has the current safe automation files, `CodeX-9020-Safe-Drafts` reinstalled, and `9020-content` proof-ran successfully
+   - `T5500` now has the current safe automation files, `CodeX-T5500-Safe-Marketing-Audit` / `CodeX-T5500-Revenue-Pack` reinstalled, `_deploy/onlinerecycle/index.html` refreshed from `origin/main`, and both audit/revenue proof runs completed
 
 ## House Rules
 
@@ -99,6 +103,7 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 7. If remote inference is needed again on `T5500` or `9020`, it must now be started intentionally; cold boot is the default
 8. Treat old Claude review branches as surgical patch sources unless direct diff verification proves they match the current tree
 9. Do not re-enable browser-based social autoposting from the nodes without a separately reviewed allowlist change in `scripts/social_engine/platform_policy.py`
+10. `9020` and `T5500` are still dirty outside the reviewed automation slice; future cleanup there should remain surgical, not blanket-reset
 
 ## Immediate Next Steps
 
@@ -110,6 +115,6 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 6. Use `pwsh -NoProfile -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\run-onlinerecycle-revenue-worker.ps1` as the cheapest reliable daily OnlineRecycle cashflow pass
 7. Use browser-side tools for inbox polling, Square drift audits, and lead research before adding more local-model generation
 8. Keep backend security/payment fixes incremental and test-locked; do not trigger a full rewrite without a stronger reason than stale branch drift
-9. Push the current automation/matrix/copy-audit baseline, then sync the approved files and task definitions to `9020` and `T5500`
-10. Keep node automation scoped to drafts, reports, and owned-property workflows unless official API review changes the policy file first
-11. Build inbox automation next: FormSubmit/Gmail intake -> structured queue -> reply draft -> Square next-step link
+9. Keep node automation scoped to drafts, reports, and owned-property workflows unless official API review changes the policy file first
+10. Build inbox automation next: FormSubmit/Gmail intake -> structured queue -> reply draft -> Square next-step link
+11. Use the generated node matrix and public-copy audit as the default go/no-go check before adding any new automation surface
