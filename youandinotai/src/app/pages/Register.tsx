@@ -128,7 +128,7 @@ export function Register() {
               <div>
                 <p className="text-emerald-400 font-bold text-sm">Bot-Shield Verified Community</p>
                 <p className="text-gray-500 text-xs mt-0.5">
-                  60% of every dollar goes to Shriners Children's Hospitals
+                  60% of platform revenue is contractually disbursed to Shriners Children's Hospitals
                 </p>
               </div>
             </div>

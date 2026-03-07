@@ -17,7 +17,7 @@ Sole Member: Joshua Coleman
 
 We want to be fair. This refund policy explains what is refundable, what is not, and how to request a refund. Each product type has different terms because each product works differently.
 
-All refunds are processed through **Stripe**, our payment processor. Refunds typically take 5-10 business days to appear on your statement, depending on your bank.
+All refunds are processed through **Square**, our payment processor. Refunds typically take 5-10 business days to appear on your statement, depending on your bank.
 
 ## 2. Refund Terms by Product
 
@@ -42,18 +42,18 @@ Exceptions:
 - There is no cancellation fee
 
 **How to cancel:**
-1. Use the subscription management link in your Stripe confirmation email, or
+1. Use the subscription management link in your Square confirmation email, or
 2. Email joshlcoleman@gmail.com with the subject "Cancel Subscription"
 
 **Founding Member rate lock:** If you cancel and later want to rejoin, you may be subject to the then-current pricing. Your locked $14.99/month rate is only guaranteed while your subscription remains active and uninterrupted.
 
-### 2.3 3-Month Founder Plan — $49.99
+### 2.3 3-Month Founder Plan — $39.99
 
 **Refundable within 14 days if no matches have been made. Prorated refund after 14 days.**
 
 - **Within 14 days of purchase:** If you have not been matched with any other users, you can request a full refund. If matches have been made (meaning the platform presented you with at least one mutual match), the service has been partially rendered and a full refund is not available — but you can still request a prorated refund.
-- **After 14 days:** You can request a prorated refund for the unused portion of your plan. The prorated amount is calculated based on the number of full days remaining in your 3-month period divided by the total days in the period, multiplied by $49.99.
-  - Example: If you cancel after 30 days of a 90-day plan, you have 60 days remaining. Refund = (60/90) x $49.99 = $33.33.
+- **After 14 days:** You can request a prorated refund for the unused portion of your plan. The prorated amount is calculated based on the number of full days remaining in your 3-month period divided by the total days in the period, multiplied by $39.99.
+  - Example: If you cancel after 30 days of a 90-day plan, you have 60 days remaining. Refund = (60/90) x $39.99 = $26.66.
 - **No refund after the 3-month period ends.** The plan expires naturally.
 
 ### 2.4 12-Month Founder Plan — $99.99
@@ -93,11 +93,11 @@ To request a refund, email **joshlcoleman@gmail.com** with the following informa
 - **Date of purchase**
 - **Reason for refund request** (optional but helpful)
 
-We will review your request and respond within **5 business days**. If approved, the refund will be processed through Stripe and returned to your original payment method.
+We will review your request and respond within **5 business days**. If approved, the refund will be processed through Square and returned to your original payment method.
 
 ## 4. Refund Processing
 
-- All refunds are processed through **Stripe** to your original payment method
+- All refunds are processed through **Square** to your original payment method
 - Refunds typically take **5-10 business days** to appear on your statement
 - The exact timing depends on your bank or credit card company
 - You will receive an email confirmation when your refund is processed
@@ -111,7 +111,7 @@ Filing a chargeback (disputing a charge with your bank or credit card company) w
 
 - Suspension of your account pending investigation
 - Loss of eligibility for future refunds
-- Additional fees that Stripe passes to us, which we may contest
+- Additional fees that our payment processor passes to us, which we may contest
 
 If you have a legitimate concern, we would much rather resolve it with you directly. That said, your right to dispute charges with your bank is a legal right and we will not retaliate against you for exercising it in good faith.
 
@@ -143,7 +143,7 @@ Merchandise purchased through our Square store (onlinerecycle.square.site) is ha
 
 ## 9. Charity Disclosure
 
-When we issue a refund, the corresponding charity donation (60% of ENIGMA revenue to Shriners Children's Hospitals) is also adjusted. In other words, we do not keep the charity portion of a refunded transaction — the full amount is returned to you.
+When we issue a refund, the corresponding contractual revenue disbursement allocation is also adjusted. In other words, we do not keep the 60% allocation tied to a refunded transaction — the full amount is returned to you.
 
 ## 10. Changes to This Policy
 
@@ -159,7 +159,7 @@ We may update this Refund Policy from time to time. When we do:
 |---------|-------|-------------|---------|
 | Bot-Shield | $1 | No | Service rendered at submission |
 | Monthly Subscription | $14.99/mo | No partial refund | Cancel anytime, access through end of period |
-| 3-Month Plan | $49.99 | 14-day full / prorated after | Full refund if no matches within 14 days |
+| 3-Month Plan | $39.99 | 14-day full / prorated after | Full refund if no matches within 14 days |
 | 12-Month Plan | $99.99 | 14-day full / prorated after | Full refund if no matches within 14 days |
 | Royalty Card | $2,500 | No | Limited edition, final sale |
 

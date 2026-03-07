@@ -221,9 +221,8 @@ function main() {
 
     const basePrice = num(v.recommended_start_or_bin_usd || v.expected_sale_price_usd || 0, 0);
     const recommendedPrice = Number((basePrice * Number(profile.price_multiplier || 1)).toFixed(2));
-    const charityPct = num(v.charity_share_pct, 60);
-    const charityUsd = num(v.projected_charity_usd, 0);
     const grade = g.grade || "Used";
+    const revenueNote = "Revenue allocation is handled internally after sale closeout under the OnlineRecycle policy.";
 
     const testedChecks = [
       ["BIOS POST", t.bios_post],
@@ -254,7 +253,7 @@ function main() {
       `<li><strong>Power adapter included:</strong> ${escHtml(r.power_adapter_included || "Unknown")}</li>`,
       `</ul>`,
       `<p><strong>Shipping:</strong> Ships in 1-2 business days, anti-static packed, tracking included, no PO boxes for oversized hardware.</p>`,
-      `<p><strong>Charity impact:</strong> ${charityPct}% of net proceeds allocated to kids in medical need. Projected charity from this item: $${charityUsd.toFixed(2)}.</p>`,
+      `<p><strong>Revenue note:</strong> ${escHtml(revenueNote)}</p>`,
       `<p><strong>Listing strategy:</strong> ${escHtml(profile.description_blurb)}</p>`,
       `<p><strong>Inventory control:</strong> Publish only one active listing variant per physical unit (${escHtml(r.asset_tag || r.intake_id)}) at a time.</p>`,
       `<p><em>Policy note:</em> Serials are asset-tracked; only items shown/listed are included; any untested function is explicitly disclosed.</p>`
@@ -285,7 +284,7 @@ function main() {
         battery_runtime_minutes: t.battery_runtime_minutes || ""
       },
       shipping_notes: "Ships in 1-2 business days with tracking. Anti-static + foam packaging. Heavy units ship UPS/FedEx Ground.",
-      charity_impact_line: `${charityPct}% of net proceeds supports children in medical need (#ForTheKids).`,
+      revenue_note: revenueNote,
       description_html: htmlDescription
     };
   });
@@ -317,7 +316,7 @@ function main() {
     mdLines.push(`- Condition: ${item.condition_grade} - ${item.condition_summary}`);
     mdLines.push(`- Test Summary: ${item.test_summary || "Functional checks completed"}`);
     mdLines.push(`- Shipping: ${item.shipping_notes}`);
-    mdLines.push(`- Charity Line: ${item.charity_impact_line}`);
+    mdLines.push(`- Revenue Note: ${item.revenue_note || "Revenue allocation tracked internally after sale closeout."}`);
     mdLines.push("");
     mdLines.push("### Description HTML");
     mdLines.push("");

@@ -1,10 +1,10 @@
 # eBay Crosslister Batch
 
-- Batch ID: CODEX-EBAY-REVENUE-20260304-20260305
-- Generated: 2026-03-05T05:02:09.993Z
+- Batch ID: CODEX-EBAY-REVENUE-20260304-20260307
+- Generated: 2026-03-07T20:30:33.570Z
 - Items: 5
 
-## EW-20260304-0001 - Dell Latitude 7420 laptop Intel i7-1185G7 16GB RAM 512GB NVMe SSD Tested Charity
+## EW-20260304-0001 - Dell Latitude 7420 laptop Intel i7-1185G7 16GB RAM 512GB NVMe SSD Tested Ready
 
 - Variant: primary
 - Suggested Price: $279.99
@@ -12,7 +12,7 @@
 - Condition: B - minor lid scratches, no cracks
 - Test Summary: BIOS POST, OS Boot, CPU Stress 15m, Memtest, Storage SMART, Network, USB Ports, Video Output, Keyboard/Trackpad
 - Shipping: Ships in 1-2 business days with tracking. Anti-static + foam packaging. Heavy units ship UPS/FedEx Ground.
-- Charity Line: 60% of net proceeds supports children in medical need (#ForTheKids).
+- Revenue Note: Revenue allocation is handled internally after sale closeout under the OnlineRecycle policy.
 
 ### Description HTML
 
@@ -28,8 +28,8 @@
 <li><strong>Power adapter included:</strong> yes</li>
 </ul>
 <p><strong>Shipping:</strong> Ships in 1-2 business days, anti-static packed, tracking included, no PO boxes for oversized hardware.</p>
-<p><strong>Charity impact:</strong> 60% of net proceeds allocated to kids in medical need. Projected charity from this item: $119.91.</p>
-<p><strong>Listing strategy:</strong> Configured for fastest transparent resale while preserving charity impact reporting.</p>
+<p><strong>Revenue note:</strong> Revenue allocation is handled internally after sale closeout under the OnlineRecycle policy.</p>
+<p><strong>Listing strategy:</strong> Configured for clean, transparent resale with clear testing notes and faster sell-through.</p>
 <p><strong>Inventory control:</strong> Publish only one active listing variant per physical unit (AG-EW-0001) at a time.</p>
 <p><em>Policy note:</em> Serials are asset-tracked; only items shown/listed are included; any untested function is explicitly disclosed.</p>
 ```
@@ -42,7 +42,7 @@
 - Condition: B - minor lid scratches, no cracks
 - Test Summary: BIOS POST, OS Boot, CPU Stress 15m, Memtest, Storage SMART, Network, USB Ports, Video Output, Keyboard/Trackpad
 - Shipping: Ships in 1-2 business days with tracking. Anti-static + foam packaging. Heavy units ship UPS/FedEx Ground.
-- Charity Line: 60% of net proceeds supports children in medical need (#ForTheKids).
+- Revenue Note: Revenue allocation is handled internally after sale closeout under the OnlineRecycle policy.
 
 ### Description HTML
 
@@ -58,7 +58,7 @@
 <li><strong>Power adapter included:</strong> yes</li>
 </ul>
 <p><strong>Shipping:</strong> Ships in 1-2 business days, anti-static packed, tracking included, no PO boxes for oversized hardware.</p>
-<p><strong>Charity impact:</strong> 60% of net proceeds allocated to kids in medical need. Projected charity from this item: $119.91.</p>
+<p><strong>Revenue note:</strong> Revenue allocation is handled internally after sale closeout under the OnlineRecycle policy.</p>
 <p><strong>Listing strategy:</strong> Use this variant when enabling Best Offer to improve sell-through while keeping disclosures unchanged.</p>
 <p><strong>Inventory control:</strong> Publish only one active listing variant per physical unit (AG-EW-0001) at a time.</p>
 <p><em>Policy note:</em> Serials are asset-tracked; only items shown/listed are included; any untested function is explicitly disclosed.</p>
@@ -72,7 +72,7 @@
 - Condition: B - minor lid scratches, no cracks
 - Test Summary: BIOS POST, OS Boot, CPU Stress 15m, Memtest, Storage SMART, Network, USB Ports, Video Output, Keyboard/Trackpad
 - Shipping: Ships in 1-2 business days with tracking. Anti-static + foam packaging. Heavy units ship UPS/FedEx Ground.
-- Charity Line: 60% of net proceeds supports children in medical need (#ForTheKids).
+- Revenue Note: Revenue allocation is handled internally after sale closeout under the OnlineRecycle policy.
 
 ### Description HTML
 
@@ -88,7 +88,7 @@
 <li><strong>Power adapter included:</strong> yes</li>
 </ul>
 <p><strong>Shipping:</strong> Ships in 1-2 business days, anti-static packed, tracking included, no PO boxes for oversized hardware.</p>
-<p><strong>Charity impact:</strong> 60% of net proceeds allocated to kids in medical need. Projected charity from this item: $119.91.</p>
+<p><strong>Revenue note:</strong> Revenue allocation is handled internally after sale closeout under the OnlineRecycle policy.</p>
 <p><strong>Listing strategy:</strong> Use this auction variant only when rapid cashflow is needed and market comps support bidding demand.</p>
 <p><strong>Inventory control:</strong> Publish only one active listing variant per physical unit (AG-EW-0001) at a time.</p>
 <p><em>Policy note:</em> Serials are asset-tracked; only items shown/listed are included; any untested function is explicitly disclosed.</p>
@@ -102,7 +102,7 @@
 - Condition: B - minor lid scratches, no cracks
 - Test Summary: BIOS POST, OS Boot, CPU Stress 15m, Memtest, Storage SMART, Network, USB Ports, Video Output, Keyboard/Trackpad
 - Shipping: Ships in 1-2 business days with tracking. Anti-static + foam packaging. Heavy units ship UPS/FedEx Ground.
-- Charity Line: 60% of net proceeds supports children in medical need (#ForTheKids).
+- Revenue Note: Revenue allocation is handled internally after sale closeout under the OnlineRecycle policy.
 
 ### Description HTML
 
@@ -118,7 +118,7 @@
 <li><strong>Power adapter included:</strong> yes</li>
 </ul>
 <p><strong>Shipping:</strong> Ships in 1-2 business days, anti-static packed, tracking included, no PO boxes for oversized hardware.</p>
-<p><strong>Charity impact:</strong> 60% of net proceeds allocated to kids in medical need. Projected charity from this item: $119.91.</p>
+<p><strong>Revenue note:</strong> Revenue allocation is handled internally after sale closeout under the OnlineRecycle policy.</p>
 <p><strong>Listing strategy:</strong> Use this variant for local pickup and reduced shipping overhead where geography allows.</p>
 <p><strong>Inventory control:</strong> Publish only one active listing variant per physical unit (AG-EW-0001) at a time.</p>
 <p><em>Policy note:</em> Serials are asset-tracked; only items shown/listed are included; any untested function is explicitly disclosed.</p>
@@ -132,7 +132,7 @@
 - Condition: B - minor lid scratches, no cracks
 - Test Summary: BIOS POST, OS Boot, CPU Stress 15m, Memtest, Storage SMART, Network, USB Ports, Video Output, Keyboard/Trackpad
 - Shipping: Ships in 1-2 business days with tracking. Anti-static + foam packaging. Heavy units ship UPS/FedEx Ground.
-- Charity Line: 60% of net proceeds supports children in medical need (#ForTheKids).
+- Revenue Note: Revenue allocation is handled internally after sale closeout under the OnlineRecycle policy.
 
 ### Description HTML
 
@@ -148,7 +148,7 @@
 <li><strong>Power adapter included:</strong> yes</li>
 </ul>
 <p><strong>Shipping:</strong> Ships in 1-2 business days, anti-static packed, tracking included, no PO boxes for oversized hardware.</p>
-<p><strong>Charity impact:</strong> 60% of net proceeds allocated to kids in medical need. Projected charity from this item: $119.91.</p>
+<p><strong>Revenue note:</strong> Revenue allocation is handled internally after sale closeout under the OnlineRecycle policy.</p>
 <p><strong>Listing strategy:</strong> Use this variant after 5-7 days unsold to accelerate conversion without changing the condition disclosure.</p>
 <p><strong>Inventory control:</strong> Publish only one active listing variant per physical unit (AG-EW-0001) at a time.</p>
 <p><em>Policy note:</em> Serials are asset-tracked; only items shown/listed are included; any untested function is explicitly disclosed.</p>

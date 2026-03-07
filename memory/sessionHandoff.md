@@ -1,6 +1,6 @@
 # SESSION HANDOFF — CLAUDE / CODEX SHARED STATE
 
-**Last Updated**: 2026-03-07 14:43:00 -05:00  
+**Last Updated**: 2026-03-07 15:32:58 -05:00
 **Source**: Codex on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)
 
 ## Shared Truth
@@ -62,6 +62,20 @@
   - `scripts/Run-Safe-NodeAutomation.ps1`
   - `scripts/install-safe-node-automation-tasks.ps1`
   - `briefings/LEGAL-SAFE-NODE-AUTOMATIONS.md`
+- The node automation boundary is now generated and inspectable:
+  - `CodeX\state\marketing\node-automation-matrix-latest.md`
+  - `CodeX\state\marketing\node-automation-matrix-latest.json`
+  - `CodeX\state\marketing\public-copy-policy-audit-latest.md`
+  - `CodeX\state\marketing\public-copy-policy-audit-latest.json`
+- Latest local proof state for the approved tasks:
+  - `sabretooth-control` -> `FINDINGS=0`
+  - `t5500-audit` -> `FINDINGS=0`
+  - `t5500-revenue-pack` -> refreshed the latest eBay batch + HTML export
+- Approved node task split:
+  - `SABRETOOTH` -> `CodeX-SABRETOOTH-Safe-Control`
+  - `9020` -> `CodeX-9020-Safe-Drafts`
+  - `T5500` -> `CodeX-T5500-Safe-Marketing-Audit`
+  - `T5500` -> `CodeX-T5500-Revenue-Pack`
 - Live social posting from the nodes is now disabled by policy:
   - X and Facebook are Perplexity-only
   - Reddit is Devvit/Opus/Perplexity-only
@@ -79,10 +93,11 @@
   - safe pieces from the Claude review branch were ported manually
   - `youandinotai-api` now has Square readiness health checks, auth/verify rate limiting, and no backend `stripe` dependency in `requirements.txt`
   - focused backend suite passes with `uv run --python 3.12 --with pytest --with-requirements requirements.txt pytest ...` (`45 passed`)
-- Live/web drift still exists:
-  - public OnlineRecycle copy still leans charity/help-kids in places
-  - Square storefront title/copy appears stale
-  - eBay batch generator still emits `Charity impact` wording in export copy
+- Public checkout/copy drift cleanup is now partially promoted:
+  - `youandinotai/src/App.tsx` uses the canonical Square links instead of stale Stripe links
+  - `youandinotai` public policy copy now references Square
+  - the eBay revenue pack now emits a neutral `Revenue note` instead of `Charity impact`
+  - the scoped public-copy policy audit is currently `0 findings`
 
 ## Important Caveat
 

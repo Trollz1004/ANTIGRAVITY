@@ -115,7 +115,7 @@ switch ($NodeProfile) {
                 (New-DailyTrigger -Time "13:00"),
                 (New-DailyTrigger -Time "19:00")
             ) `
-            -Description "Runs the legal-safe marketing policy audit and queue summary on T5500."
+            -Description "Runs the legal-safe marketing audit, node matrix refresh, public-copy policy scan, and queue summary on T5500."
 
         Register-CodeXTask `
             -TaskName "CodeX-T5500-Revenue-Pack" `
@@ -124,7 +124,7 @@ switch ($NodeProfile) {
                 (New-LogonTrigger),
                 (New-DailyTrigger -Time "08:30")
             ) `
-            -Description "Builds the local OnlineRecycle revenue and marketing pack on T5500."
+            -Description "Builds the deterministic OnlineRecycle revenue pack, reply templates, and eBay-ready output on T5500."
     }
     "sabretooth" {
         Register-CodeXTask `
@@ -134,7 +134,7 @@ switch ($NodeProfile) {
                 (New-LogonTrigger),
                 (New-DailyTrigger -Time "09:00")
             ) `
-            -Description "Refreshes the safe-node control pack on Sabretooth."
+            -Description "Refreshes the safe-node control pack, node matrix, and public-copy policy audit on Sabretooth."
     }
 }
 

@@ -30,7 +30,7 @@ function render(payload) {
     const variant = esc(item.listing_variant || "primary");
     const format = esc(item.listing_format || "buy_it_now");
     const price = Number(item.suggested_price_usd || 0).toFixed(2);
-    const charityLine = esc(item.charity_impact_line || "");
+    const revenueNote = esc(item.revenue_note || item.charity_impact_line || "");
     const htmlDescription = String(item.description_html || "").trim();
 
     return [
@@ -41,7 +41,7 @@ function render(payload) {
       `<li><strong>Variant:</strong> ${variant}</li>`,
       `<li><strong>Format:</strong> ${format}</li>`,
       `<li><strong>Suggested Price:</strong> $${price}</li>`,
-      `<li><strong>Charity Line:</strong> ${charityLine}</li>`,
+      `<li><strong>Revenue Note:</strong> ${revenueNote}</li>`,
       `</ul>`,
       `<h3>Copy/Paste Description HTML</h3>`,
       `<textarea readonly>${esc(htmlDescription)}</textarea>`,

@@ -61,6 +61,91 @@ PROFILE_META = {
     },
 }
 
+NODE_AUTOMATION_MATRIX = {
+    "SABRETOOTH": {
+        "task_name": "CodeX-SABRETOOTH-Safe-Control",
+        "schedule": ["At logon", "Daily 09:00"],
+        "automated": [
+            "Refresh the safe-node control pack in CodeX/state/marketing.",
+            "Publish the current node/platform matrix with automated vs not-automated boundaries.",
+            "Run the public-copy policy audit to catch banned donation-style wording and stale payment/copy drift.",
+            "Keep the Perplexity / Devvit / LinkedIn handoff files current for human-gated publishing.",
+        ],
+        "not_automated": [
+            "Any live posting to X, Facebook, Reddit, LinkedIn, or any third-party social platform.",
+            "Browser login flows, community replies, direct messages, or engagement loops.",
+            "Automatic changes to production sites or Square settings.",
+        ],
+        "outputs": [
+            "CodeX/state/marketing/safe-node-marketing-pack-latest.md",
+            "CodeX/state/marketing/node-automation-matrix-latest.md",
+            "CodeX/state/marketing/public-copy-policy-audit-latest.md",
+        ],
+    },
+    "9020": {
+        "task_name": "CodeX-9020-Safe-Drafts",
+        "schedule": ["At logon", "Daily 06:15", "Daily 12:15", "Daily 18:15"],
+        "automated": [
+            "Generate Perplexity handoff drafts for X and Facebook.",
+            "Generate Reddit/Devvit handoff prompts and LinkedIn draft copy.",
+            "Refresh the owned-content queue for sites and internal assets.",
+            "Refresh the node automation matrix and safe-node pack for the content node.",
+        ],
+        "not_automated": [
+            "Publishing to X, Facebook, Reddit, LinkedIn, Instagram, Threads, TikTok, or YouTube.",
+            "Opening browser sessions for posting or engagement.",
+            "Automated follows, likes, replies, comments, DMs, or growth loops.",
+        ],
+        "outputs": [
+            "CodeX/state/marketing/perplexity-handoff-latest.md",
+            "CodeX/state/marketing/reddit-devvit-handoff-latest.md",
+            "CodeX/state/marketing/linkedin-drafts-latest.md",
+            "CodeX/state/marketing/owned-content-queue-latest.md",
+        ],
+    },
+    "T5500": {
+        "task_name": "CodeX-T5500-Safe-Marketing-Audit",
+        "schedule": ["At logon", "Daily 07:00", "Daily 13:00", "Daily 19:00"],
+        "automated": [
+            "Run the safe automation audit and publish the current platform block list.",
+            "Run the public-copy policy audit against public/deployable and generated marketing copy.",
+            "Run the e-waste intake live-ok audit and refresh intake-registry.csv.",
+            "Refresh the node automation matrix for the compliance/audit node.",
+        ],
+        "not_automated": [
+            "Live posting to any third-party platform.",
+            "Direct edits to public copy; this node reports drift, it does not publish fixes by itself.",
+            "Inbox replies or customer scheduling actions on its own.",
+        ],
+        "outputs": [
+            "CodeX/state/marketing/safe-automation-audit-latest.md",
+            "CodeX/state/marketing/public-copy-policy-audit-latest.md",
+            "CodeX/state/ewaste-live-ok-audit-*.md",
+        ],
+    },
+    "T5500-REVENUE": {
+        "task_name": "CodeX-T5500-Revenue-Pack",
+        "schedule": ["At logon", "Daily 08:30"],
+        "automated": [
+            "Run the deterministic OnlineRecycle revenue worker.",
+            "Refresh the eBay-ready listing batch and HTML export.",
+            "Generate the OnlineRecycle marketing pack, response templates, and 7-day cashflow checklist.",
+            "Keep revenue-support output local and ready for manual publish/reply actions.",
+        ],
+        "not_automated": [
+            "Actually publishing eBay listings for you.",
+            "Sending outreach messages or customer replies automatically.",
+            "Changing prices or inventory status without a reviewed human step.",
+        ],
+        "outputs": [
+            "CodeX/state/onlinerecycle-marketing-pack.md",
+            "CodeX/state/onlinerecycle-response-templates.md",
+            "CodeX/state/onlinerecycle-cashflow-checklist.md",
+            "CodeX/state/ebay-ready-batch-latest.html",
+        ],
+    },
+}
+
 
 def ensure_output_dir() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -242,6 +327,48 @@ def build_owned_content_queue(articles: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def build_node_automation_matrix() -> tuple[str, dict]:
+    generated_at = now_iso()
+    manifest = {
+        "generated_at": generated_at,
+        "policy_version": LEGAL_SAFE_NODE_POLICY_VERSION,
+        "nodes": NODE_AUTOMATION_MATRIX,
+    }
+
+    lines = [
+        "# Node Automation Matrix",
+        "",
+        f"- Generated: {generated_at}",
+        f"- Policy version: {LEGAL_SAFE_NODE_POLICY_VERSION}",
+        "",
+        "This file is the explicit boundary between what the nodes are allowed to automate and what stays human-gated.",
+    ]
+
+    for node_name, payload in NODE_AUTOMATION_MATRIX.items():
+        lines.extend(
+            [
+                "",
+                f"## {node_name}",
+                f"- Task: {payload['task_name']}",
+                "- Schedule: " + ", ".join(payload["schedule"]),
+                "",
+                "### Automated",
+            ]
+        )
+        for item in payload["automated"]:
+            lines.append(f"- {item}")
+
+        lines.extend(["", "### Not Automated"])
+        for item in payload["not_automated"]:
+            lines.append(f"- {item}")
+
+        lines.extend(["", "### Outputs"])
+        for item in payload["outputs"]:
+            lines.append(f"- {item}")
+
+    return "\n".join(lines), manifest
+
+
 def build_audit(post_queue: dict) -> tuple[str, dict]:
     blocked_queue = {}
     for platform in blocked_live_post_platforms():
@@ -311,6 +438,12 @@ def build_master_pack(profile: str, articles: list[dict], manifest: dict) -> str
         "",
         "## Owned Automation Surface",
         "- Owned sites, internal queues, asset packaging, reporting, and revenue support packs",
+        "",
+        "## Active Node Tasks",
+        "- SABRETOOTH -> CodeX-SABRETOOTH-Safe-Control",
+        "- 9020 -> CodeX-9020-Safe-Drafts",
+        "- T5500 -> CodeX-T5500-Safe-Marketing-Audit",
+        "- T5500 -> CodeX-T5500-Revenue-Pack",
     ]
 
     if articles:
@@ -335,13 +468,16 @@ def main() -> int:
     post_queue = load_post_queue()
     articles = load_articles()
     audit_text, manifest = build_audit(post_queue)
+    matrix_text, matrix_manifest = build_node_automation_matrix()
 
     write_text("perplexity-handoff-latest.md", build_perplexity_handoff(articles))
     write_text("reddit-devvit-handoff-latest.md", build_reddit_handoff())
     write_text("linkedin-drafts-latest.md", build_linkedin_drafts(articles))
     write_text("owned-content-queue-latest.md", build_owned_content_queue(articles))
+    write_text("node-automation-matrix-latest.md", matrix_text)
     write_text("safe-automation-audit-latest.md", audit_text)
     write_text("safe-node-marketing-pack-latest.md", build_master_pack(args.profile, articles, manifest))
+    write_json("node-automation-matrix-latest.json", matrix_manifest)
     write_json("safe-node-marketing-manifest-latest.json", manifest)
 
     print(f"PROFILE={args.profile}")

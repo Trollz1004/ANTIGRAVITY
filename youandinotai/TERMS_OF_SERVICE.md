@@ -121,7 +121,7 @@ You are solely responsible for the content you post. We do not pre-screen all us
 All prices are in US dollars. Prices may change, but existing subscriptions will be honored at their original rate for as long as the subscription remains active and uninterrupted.
 
 ### 7.2 Payment Processing
-All payments are processed by **Stripe**. By making a purchase, you also agree to [Stripe's Terms of Service](https://stripe.com/legal). We do not store your full credit card information — Stripe handles that.
+All payments are processed by **Square** through Square-hosted checkout links. By making a purchase, you also agree to Square's applicable checkout and payment terms. We do not store your full credit card information — Square handles that.
 
 ### 7.3 Subscription Auto-Renewal
 The Founding Member monthly subscription ($14.99/month) **automatically renews** each month until you cancel. By subscribing, you authorize us to charge your payment method on file each billing cycle.
@@ -133,7 +133,7 @@ The Founding Member monthly subscription ($14.99/month) **automatically renews**
 ### 7.4 Cancellation
 You can cancel your subscription at any time by:
 
-1. Using the subscription management link in your Stripe confirmation email
+1. Using the subscription management link in your Square confirmation email
 2. Emailing joshlcoleman@gmail.com with the subject "Cancel Subscription"
 
 When you cancel:
@@ -164,17 +164,17 @@ The Royalty Card is a premium, limited-edition product. Only **5 Royalty Cards**
 ### 8.1 What You Get
 Royalty Card holders receive:
 
-- **0.5% revenue share** of YouAndINotAI dating app **gross revenue** (total revenue before expenses, fees, or charity split)
+- **0.5% revenue share** of YouAndINotAI dating app **gross revenue** (total revenue before expenses, fees, or the 60/30/10 revenue split)
 - Lifetime Founding Member access (no monthly fee)
 - All future premium features included at no additional cost
 - Recognition as a founding supporter
 
 ### 8.2 Revenue Share Details
-- The 0.5% is calculated on the dating app's gross revenue (all YouAndINotAI subscription and verification revenue processed through Stripe)
+- The 0.5% is calculated on the dating app's gross revenue (all YouAndINotAI subscription and verification revenue processed through Square)
 - Revenue share payments will be made quarterly
 - You will receive a statement showing gross revenue and your share
 - Minimum payout threshold: $10 (amounts below $10 roll over to the next quarter)
-- Revenue share does not include merchandise sales (Square store), donations, or revenue from other Trash Or Treasure Online Recycler LLC projects
+- Revenue share does not include merchandise sales, separate Square storefront sales, or revenue from other Trash Or Treasure Online Recycler LLC projects
 - Revenue share begins when the Royalty Card is purchased and continues for the lifetime of the dating app
 
 ### 8.3 Tax Responsibility
@@ -188,14 +188,14 @@ Royalty Cards are non-refundable. See our [Refund Policy](REFUND_POLICY.md).
 
 ## 9. Charity Disclosure
 
-60% of ENIGMA (profit-side) revenue from YouAndINotAI goes to **Shriners Children's Hospitals**. In plain terms:
+60% of ENIGMA (profit-side) revenue from YouAndINotAI is contractually disbursed to **Shriners Children's Hospitals**. In plain terms:
 
-- When you pay for a subscription or verification, Stripe takes its processing fees first
-- Of the remaining revenue, 60% goes to Shriners Children's Hospitals and 40% goes to the founder (Joshua Coleman / Trash Or Treasure Online Recycler LLC)
+- When you pay for a subscription or verification, Square takes its processing fees first
+- Of the remaining revenue, 60% is contractually disbursed to Shriners Children's Hospitals and 40% remains with the founder (Joshua Coleman / Trash Or Treasure Online Recycler LLC)
 - This split is permanent — it will not change
 - This is enforced by an on-chain smart contract for transparency
 
-This is our voluntary commitment. Your payment is for the dating platform service. The charity donation is something we do with our revenue — it is not a tax-deductible donation by you.
+This is our standing revenue policy. Your payment is for the dating platform service. Any later revenue disbursement is made by us under that policy; it is not a tax-deductible contribution by you.
 
 ## 10. Intellectual Property
 
@@ -239,7 +239,7 @@ To the maximum extent permitted by law:
 
 - **Trash Or Treasure Online Recycler LLC**, Joshua Coleman, and any affiliated parties shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill
 - Our total liability for any claim arising from your use of the platform shall not exceed the amount you have paid us in the **12 months** preceding the claim
-- We are not liable for the actions of other users, third-party services (Stripe, Google, V8 Cloud Verification, Cloudflare), or events beyond our reasonable control
+- We are not liable for the actions of other users, third-party services (Square, Google, V8 Cloud Verification, Cloudflare), or events beyond our reasonable control
 
 Some jurisdictions do not allow limitation of liability for certain types of damages. In those jurisdictions, our liability is limited to the maximum extent permitted by law.
 
