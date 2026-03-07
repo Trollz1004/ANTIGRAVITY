@@ -1,6 +1,6 @@
-"""V8 Bot-Shield Liveness Detection & Verification Flow.
+"""V8 Bot-Shield liveness detection and verification flow.
 
-Iron Wall Migration: Stripe removed. Square is the sole payment processor.
+Iron Wall migration: legacy checkout removed. Square is the sole payment processor.
 
 Flow:
 1. POST /verify/challenge — generates a liveness challenge (math + timing)
@@ -20,7 +20,7 @@ import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -29,6 +29,7 @@ from app.auth import get_current_user
 from app.config import get_settings
 from app.database import get_db
 from app.models import Match, Message, Post, User, VerificationEvent
+from app.rate_limit import verify_limiter
 
 router = APIRouter(prefix="/verify")
 
@@ -149,10 +150,12 @@ async def _calculate_trust_score(user: User, db: AsyncSession) -> float:
 
 @router.post("/challenge", response_model=ChallengeResponse)
 async def create_challenge(
+    request: Request,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> ChallengeResponse:
     """Start a V8 liveness challenge. Returns a math question with a time window."""
+    verify_limiter.check(request)
 
     # Check if already verified
     if user.bot_shield_verified:
@@ -187,11 +190,13 @@ async def create_challenge(
 
 @router.post("/submit", response_model=ChallengeResult)
 async def submit_challenge(
+    request: Request,
     req: ChallengeSubmitRequest,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> ChallengeResult:
     """Submit the answer to a liveness challenge. Returns trust score + checkout URL on pass."""
+    verify_limiter.check(request)
 
     event = await db.scalar(
         select(VerificationEvent)
