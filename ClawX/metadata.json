@@ -1,0 +1,9 @@
+{
+  "name": "AiCollabFortheKids Admin",
+  "description": "Full admin control dashboard for AiCollabFortheKids owned by joshlcoleman@gmail.com",
+  "requestFramePermissions": [
+    "microphone",
+    "geolocation",
+    "camera"
+  ]
+}
