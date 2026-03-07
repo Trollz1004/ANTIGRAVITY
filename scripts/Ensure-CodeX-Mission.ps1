@@ -30,7 +30,6 @@ if (-not (Test-Path -LiteralPath $LauncherPath)) {
 }
 
 if ($Mode -eq "off") {
-    Write-GuardianLog "Mission guardian mode is OFF. No launch action taken."
     exit 0
 }
 
@@ -56,7 +55,9 @@ if ($Mode -eq "docker") {
 
     $containerName = (& docker ps --filter "name=^/$DockerContainer$" --filter "status=running" --format "{{.Names}}" 2>$null | Select-Object -First 1)
     if ([string]::IsNullOrWhiteSpace($containerName)) {
-        Write-GuardianLog "Docker mode active but container '$DockerContainer' is not running. Host launch suppressed."
+        # Desktop-app-first operation on Sabretooth no longer relies on a dedicated Codex shell container.
+        # If the old mission container is absent, treat that as a normal state and stay quiet.
+        exit 0
     }
 
     if ($null -ne $hostMissionProcess) {

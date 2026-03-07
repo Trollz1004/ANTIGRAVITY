@@ -102,7 +102,7 @@ Ollama runs in its own dedicated ANTIGRAVITY folder (1 folder named ANTIGRAVITY 
 |---|---|---|
 | **YouAndINotAI.com** | AI-assisted human-verified Social Platform for Good. Dating, meetups, volunteer boards. $1 Bot-Shield verify. Human-Only USP. | Launch April 4, 2026 |
 | **AI-Solutions.Store** | Real AI apps not chatbots. High-ticket systems, bundles, Royalty Deck for early supporters. | Live |
-| **OnlineRecycle.org** | Trash Or Treasure electronics recycler. Accepts donations, resells, routes profit to kids charities. | Live |
+| **OnlineRecycle.org** | Trash Or Treasure electronics recycler. Handles drop-off and pickup intake, resells devices, routes profit to kids-focused initiatives. | Live |
 | **Antigravity Dashboard** | Public mission-control. Shows nodes, AI orchestration, revenue routing, ecosystem strategy. | Live |
 
 **ONE REPO. ONE ANTIGRAVITY FOLDER PER DRIVE OR SSD (1 folder named ANTIGRAVITY per drive or SSD — proper wording). ONE BRANCH (main). This is not negotiable and nothing about this architecture is up for debate.**
