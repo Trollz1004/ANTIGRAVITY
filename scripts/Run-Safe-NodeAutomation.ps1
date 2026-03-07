@@ -39,7 +39,7 @@ function Invoke-PythonScript {
         [string[]]$Arguments = @()
     )
 
-    $python = Resolve-PythonCommand
+    $python = @(Resolve-PythonCommand)
     if ($python.Length -gt 1) {
         & $python[0] $python[1..($python.Length - 1)] $ScriptPath @Arguments
     } else {
