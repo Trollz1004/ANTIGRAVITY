@@ -48,12 +48,23 @@ class Settings(BaseSettings):
 
     cors_origins: str = "https://youandinotai.com,http://localhost:3000,http://localhost:5173"
     registration_rate_limit_per_minute: int = 10
+    auth_rate_limit_per_minute: int = 10
+    verify_rate_limit_per_minute: int = 5
+    rate_limit_trusted_proxies: str = "127.0.0.1/32,::1/128"
     match_top_k: int = 5
     match_candidate_limit: int = 50
 
     @property
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
+    @property
+    def rate_limit_trusted_proxy_list(self) -> list[str]:
+        return [
+            proxy.strip()
+            for proxy in self.rate_limit_trusted_proxies.split(",")
+            if proxy.strip()
+        ]
 
 
 @lru_cache(maxsize=1)

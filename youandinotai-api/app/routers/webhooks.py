@@ -240,7 +240,7 @@ async def square_payment_webhook(
     Iron Wall enforcement:
       - Creates a 'payment' VerificationEvent on successful Bot-Shield payment
       - Updates user.bot_shield_verified and subscription_active flags
-      - Same tier logic that Stripe handler had, now wired to Square
+      - Same tier logic as the retired payment handler, now wired to Square
     """
     settings = get_settings()
     payload = await request.body()
