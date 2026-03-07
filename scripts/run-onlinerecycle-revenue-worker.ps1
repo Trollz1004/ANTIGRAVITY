@@ -1,11 +1,14 @@
 [CmdletBinding()]
 param(
-    [string]$RepoRoot = "E:\ANTIGRAVITY",
+    [string]$RepoRoot,
     [int]$BatchSize = 5
 )
 
 $ErrorActionPreference = "Stop"
 
+if (-not $RepoRoot) {
+    $RepoRoot = Split-Path -Parent $PSScriptRoot
+}
 $stateDir = Join-Path $RepoRoot "CodeX\state"
 $marketingOut = Join-Path $stateDir "onlinerecycle-marketing-pack.md"
 $replyOut = Join-Path $stateDir "onlinerecycle-response-templates.md"
