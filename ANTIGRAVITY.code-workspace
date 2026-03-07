@@ -1,7 +1,12 @@
 {
 	"folders": [
 		{
+			"name": "ANTIGRAVITY",
 			"path": "."
+		},
+		{
+			"name": "ForTheKids",
+			"path": "ForTheKids"
 		}
 	],
 	"settings": {}

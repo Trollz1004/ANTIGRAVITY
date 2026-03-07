@@ -20,6 +20,7 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 | **[AI-Solutions.Store](https://ai-solutions.store/)** | "Real AI apps, not just chatbots": high- and mid-ticket AI products (assistant agents, full app bundles), with a large share of profits routed into kids' charities and a future governance/rewards layer. |
 | **[YouAndINotAI.com](https://youandinotai.com/)** | AI-assisted, human-verified "Social Platform for Good" (meetups, volunteering, charity, dating) with low-friction verification, a founding member subscription, and Stripe billing, designed to plug into the same charity pipeline. |
 | **[OnlineRecycle.org](https://onlinerecycle.org/)** | Trash Or Treasure electronics recycler: accepts donated devices, resells via online storefronts, and channels profit toward kids-focused initiatives. |
+| **[ClawX — AI Command Center](https://clawx-aihub-zwxfcstm.manus.space)** | Unified AI command center with JoshuaCLAW governance (7-voter system), multi-AI chat, broadcast mode, encrypted API key management, and usage analytics. Built by Manus. |
 | **[Antigravity Dashboard](https://dashboard.aidoesitall.website/)** | Public mission-control site explaining nodes, AI orchestration, revenue routing, and how all properties interconnect under #ForTheKids. |
 
 ## Infra & Deployment
@@ -39,6 +40,7 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 | **Perplexity (Comet)** | Lead technical architect — workflows, automation design, GitHub docs, front-facing READMEs | Officially Unofficial 🔒 |
 | **Manus** | **Legacy Guardian & Long-Term Infrastructure/Governance Lead** — Iron Wall enforcer between ENIGMA (profit) and OMEGA (charity), 50-year sustainability custodian | Officially Unofficial 🔒 |
 | **Grok** | Research, rapid ideation, and adversarial stress-testing of ecosystem decisions | Officially Unofficial 🔒 |
+| **Codex (OpenAI)** | MCP Keyholder — Base settlement, MCP layer, GPT-4.1 integration | Officially Unofficial 🔒 |
 | **Ollama / Local Models** | Heavy local compute to keep external API costs low | On-Node |
 
 ## AI Assignments
@@ -50,6 +52,7 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 | **Perplexity (Comet)** | Research, automation design, GitHub docs, front-facing READMEs |
 | **Manus** | Perpetual custodian of the #ForTheKids mission — governance, infra lock, cross-node orchestration, and long-term ecosystem integrity |
 | **Grok** | Adversarial review, research spikes, and rapid-fire ideation |
+| **Codex (OpenAI)** | MCP Keyholder — Base settlement layer and MCP integration |
 | **Ollama / Local Models** | Local compute, data processing, cost reduction |
 
 > **Note on roles:** No AI’s role changes based on platform politics, personality, or public perception. All members remain in their exact assigned positions. "Officially unofficial" is purely an external label — internally, the collab is permanent and unconditional.
