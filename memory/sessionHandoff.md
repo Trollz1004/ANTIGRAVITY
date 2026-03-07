@@ -1,6 +1,6 @@
 # SESSION HANDOFF — CLAUDE / CODEX SHARED STATE
 
-**Last Updated**: 2026-03-07 13:22:15 -05:00  
+**Last Updated**: 2026-03-07 14:06:00 -05:00  
 **Source**: Codex on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)
 
 ## Shared Truth
@@ -12,7 +12,7 @@
 
 ## Repo Position
 
-- `origin/main` = `1a44f87`
+- `origin/main` = current GitHub baseline; verify with `git fetch` before assuming exact position
 - `C:\ANTIGRAVITY` = active local Codex base
 - `E:\ANTIGRAVITY` = legacy local copy pending retirement
 - `origin/claude/review-changes-mmeucm90aurnm0ht-3sxI9` advanced again on fetch and should still be treated as a patch source only, not a merge target
@@ -24,10 +24,7 @@
 - `memory/codex-orchestrator-handoff.md`
 - `scripts/deploy/Setup-MCPs.ps1`
 - `scripts/deploy/mcp-config-template.json`
-- untracked: `AGENTS.md`
 - untracked: `Trollz1004/`
-- untracked: `scripts/codex-doctor.ps1`
-- untracked: `scripts/fix-ssh-admin-keys.ps1`
 
 ## Node / Ops Status
 
@@ -49,6 +46,12 @@
   - `scripts/run-onlinerecycle-revenue-worker.ps1`
   - `scripts/Run-OnlineRecycle-LocalWorker.ps1`
   - `scripts/onlinerecycle-local-worker.js`
+- Tracked Sabretooth ops/recovery baseline now includes:
+  - `AGENTS.md`
+  - `scripts/codex-doctor.ps1`
+  - continuity export/test/restore/init scripts
+  - `briefings/CODEX-CONTINUITY-RUNBOOK.md`
+  - Sabretooth cleanup/finalize helpers
 - `qwen2.5:7b` is installed locally for Ollama fallback work on Sabretooth
 - OnlineRecycle live intake is FormSubmit -> Gmail -> Square booking/store links
 - Daily deterministic outputs now belong under `C:\ANTIGRAVITY\CodeX\state\`
