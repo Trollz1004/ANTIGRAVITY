@@ -55,6 +55,12 @@ briefings/*env*
 *.key
 desktop.ini
 
+# Private/local memory and data (never commit — secrets may live here)
+memory/local/
+memory/private/
+data/local/
+data/private/
+
 # Local CodeX runtime/state (do not commit)
 CodeX/
 data/codex-memory/
