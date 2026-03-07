@@ -75,6 +75,9 @@ foreach ($server in $ConfigObj.mcpServers.PSObject.Properties) {
     $server.Value.env | Add-Member -NotePropertyName "HOME" -NotePropertyValue $UserProfile -Force
 }
 
+# Codex project-local MCP file should stay token-free and local-only.
+$ProjectConfig = $ConfigObj | ConvertTo-Json -Depth 5
+
 $githubToken = Resolve-GitHubToken
 if (-not $ConfigObj.mcpServers.github.env) {
     $ConfigObj.mcpServers.github | Add-Member -NotePropertyName "env" -NotePropertyValue ([PSCustomObject]@{}) -Force
@@ -93,6 +96,10 @@ $FinalConfig = $ConfigObj | ConvertTo-Json -Depth 5
 $FinalConfig | Set-Content $GeminiMcpPath -Encoding UTF8
 Write-Host "  ✅ Saved: $GeminiMcpPath"
 
+$RepoMcpPath = Join-Path $OpusPath ".mcp.json"
+$ProjectConfig | Set-Content $RepoMcpPath -Encoding UTF8
+Write-Host "  ✅ Saved: $RepoMcpPath"
+
 # 3. Configure Cline/Claude MCP
 $ClineMcpPath = Join-Path $UserProfile "AppData\Roaming\Code\User\globalStorage\saoudrizwan.claude-dev\settings\cline_mcp_settings.json"
 $ClineDir = Split-Path $ClineMcpPath -Parent
@@ -108,7 +115,6 @@ if (Test-Path $ClineDir) {
 # 4. Pre-install MCP packages (cache for fast startup)
 Write-Host "`n[4/5] Pre-installing MCP packages (this takes ~2 min)..." -ForegroundColor Yellow
 $packages = @(
-    "@modelcontextprotocol/server-fetch",
     "@modelcontextprotocol/server-filesystem",
     "@modelcontextprotocol/server-github",
     "@modelcontextprotocol/server-memory",
@@ -124,7 +130,10 @@ foreach ($pkg in $packages) {
         $null = npm ls -g $pkg 2>&1
         $installed = $LASTEXITCODE -eq 0
         if (-not $installed) {
-            npm install -g $pkg --silent 2>&1 | Out-Null
+            $null = npm install -g $pkg --silent 2>&1
+            if ($LASTEXITCODE -ne 0) {
+                throw "npm install failed for $pkg"
+            }
         }
         Write-Host " ✅" -ForegroundColor Green
     } catch {
