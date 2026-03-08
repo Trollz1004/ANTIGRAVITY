@@ -37,10 +37,10 @@ The $19,990 target is the survival threshold. Miss it and the platform goes unde
 
 ## The Legacy
 
-- DAO smart contracts on Base Mainnet (Chain 8453) enforce the mission perpetually
-- Dead-man's switch: If Joshua dies, no human gets control — DAO runs forever for kids
-- DAO Treasury: `0xa87874d5320555c8639670645F1A2B4f82363a7c`
-- Gnosis Safe Multisig (3-of-5): No single human control
+- DAO smart contracts on Base Mainnet (Chain 8453) enforce the live 60/30/10 split
+- Dead-man's switch: UNVERIFIED in this file; do not treat as proven control logic
+- Live verified infrastructure wallet: `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
+- Gnosis Safe multisig threshold: UNVERIFIED in this file; do not treat 3-of-5 as confirmed
 
 ## Claude.ai User Preferences (from SABRETOOTH config)
 
