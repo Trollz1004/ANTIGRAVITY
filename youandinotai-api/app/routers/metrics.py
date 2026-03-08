@@ -90,11 +90,11 @@ async def charity_metrics(
         .where(VerificationEvent.status == "passed")
     ) or 0
 
-    # Also count subscription revenue from webhook events (checkout.session.completed)
-    # We count unique checkout events to avoid double-counting
+    # Also count subscription revenue from Square webhook events (payment.completed / payment.created)
+    # We count unique processed payment events to avoid double-counting
     webhook_revenue = await db.scalar(
         select(func.count(WebhookEvent.id))
-        .where(WebhookEvent.event_type == "checkout.session.completed")
+        .where(WebhookEvent.event_type.in_(["payment.completed", "payment.created"]))
         .where(WebhookEvent.processed == True)
     ) or 0
 
@@ -137,6 +137,7 @@ async def charity_metrics(
             "verified": verified_users,
             "with_profile": profiled_users,
             "subscribers": subscribers,
+            "square_payments_processed": webhook_revenue,
         },
         engagement={
             "matches": total_matches,

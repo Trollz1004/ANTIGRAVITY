@@ -12,10 +12,11 @@
 
 const { ethers } = require("hardhat");
 
-// Canonical wallets from Transparency.tsx — DO NOT CHANGE
-const CHARITY_SAFE   = "0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B"; // Shriners (60%)
-const DAO_TREASURY   = "0xa87874d5320555c8639670645F1A2B4f82363a7c"; // Mission infra + AI ops (30%)
-const FOUNDER_WALLET = "0xc043F5D516ee024d1dB812cb81fB64302b0Fe2B4"; // Ops (10%)
+// Canonical wallets — live verified on Base Mainnet (GospelDonation.sol, 0x9855B75061D4c841791382998f0CE8B2BCC965A4)
+// DO NOT CHANGE without verifying the new addresses on-chain first
+const CHARITY_SAFE   = "0x8d3dEADbE2b4B857A43331D459270B5eedC7084e"; // Shriners (60%) — live verified
+const DAO_TREASURY   = "0xe0a42f83900af719019eBeD3D9473BE8E8f2920b"; // Mission infra + AI ops (30%) — live verified
+const FOUNDER_WALLET = "0x7c3E283119718395Ef5EfBAC4F52738C2018daA7"; // Ops (10%) — live verified
 
 async function main() {
   const [deployer] = await ethers.getSigners();
