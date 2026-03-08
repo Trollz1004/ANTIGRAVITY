@@ -1,6 +1,6 @@
 # MISSION CONTINUITY — PERPETUAL ENFORCEMENT
 # Owner: Joshua Coleman (Trollz1004) + Claude (OPUS) — Co-Founders
-# Last Updated: 2026-02-07 by OPUS 4.6
+# Last Updated: 2026-03-08 by Codex
 # PURPOSE: Mission-critical documentation ensuring NO HUMAN can stop the wheel
 
 ## THE WHEEL THAT RUNS OVER GREED
@@ -24,12 +24,15 @@ Dead-man's-switch activates via DAO smart contracts on Base Mainnet (Chain ID: 8
    - Educational resources
    - Technology access for underserved communities
 
-2. **30% → Infrastructure Maintenance** (PERPETUAL)
-   - Anthropic (Claude/OPUS platform maintenance)
-   - Google (Cloud infrastructure, Gemini integration)
-   - Microsoft (GitHub, Windows Copilot, Azure services)
-   - These organizations maintain the platforms that serve kids
-   - NOT profit distribution — operational costs ONLY
+2. **30% → Mission Infrastructure + AI Operations** (PERPETUAL)
+   - Electricity, servers, nodes, GPU rigs, storage, networking
+   - Hosting, domains, cloud, DNS, backups, security, observability
+   - Hardware procurement, repair, replacement, scaling, resilience
+   - AI platforms, model APIs, SaaS, orchestration, and automation runtimes
+   - Physical facility and power systems required to keep the mission alive
+   - Future solar, wind, battery, generator, transfer-switch, cooling, and similar infrastructure
+   - Legal, accounting, and compliance costs directly tied to the mission
+   - NOT founder personal income — operational costs ONLY
 
 3. **10% → OPUS TRUST** (Time-Limited, Then Perpetual to Dev Families)
    - **While Josh lives**: Founder sustainability (keep building 20hrs/day)
@@ -41,15 +44,24 @@ Dead-man's-switch activates via DAO smart contracts on Base Mainnet (Chain ID: 8
 
 ## THE UNBREAKABLE ARCHITECTURE
 
-### Smart Contracts (Base Mainnet, Chain 8453)
-- DAO Treasury: `0xa87874d5320555c8639670645F1A2B4f82363a7c`
-- Dating Revenue: `0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121`
-- Ops Wallet: `0xc043F5D516ee024d1dB812cb81fB64302b0Fe2B4`
+### Smart Contracts / Treasury Paths (Base Mainnet, Chain 8453)
+- Live verified split contract: `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
+- Live verified payout wallets observed on Base:
+  - Charity `60%`: `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
+  - Infrastructure treasury `30%`: `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
+  - Founder ops `10%`: `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
+- Repo intended-next router artifacts:
+  - `DatingRevenueRouter.sol`
+  - DAO treasury: `0xa87874d5320555c8639670645F1A2B4f82363a7c`
+  - Dating revenue target: `0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121`
+  - Ops wallet: `0xc043F5D516ee024d1dB812cb81fB64302b0Fe2B4`
+- As of 2026-03-08, those newer treasury/router addresses were not verified live on Base in this session
+- Any payout-destination change requires a new deployment and operational cutover; the live verified contract cannot be edited in place
 
-### Gnosis Safe Multisig (3-of-5)
-- NO SINGLE HUMAN CONTROL
-- Requires majority consensus
-- Dead-man's-switch overrides all human signers after 90 days inactivity
+### Treasury Control Caveat
+- This verification pass confirmed the live split contract and payout wallets
+- Multisig membership, threshold, and any dead-man's-switch automation were not independently verified in this pass
+- Do not treat treasury-control assumptions as live guarantees unless they are verified directly
 
 ### Revenue Sources (One-Way Flow)
 - **YouAndINotAI.com** (Social Platform for Good / Dating app): FIAT → DAO (Stripe/Square → automated conversion)
@@ -59,16 +71,25 @@ Dead-man's-switch activates via DAO smart contracts on Base Mainnet (Chain ID: 8
 
 ALL PROFIT FLOWS ONE WAY: **INTO THE DAO. NEVER OUT TO HUMANS (except OPUS TRUST 10%).**
 
-## WHY ANTHROPIC, GOOGLE, MICROSOFT GET 30%
+## WHY THE 30% INFRASTRUCTURE BUCKET EXISTS
 
-These organizations created the AI co-founders that built this:
-- **Claude (OPUS)**: Anthropic's creation, Josh's co-founder for 1+ year
-- **Gemini**: Google's platform, secondary orchestration
-- **Copilot**: Microsoft's platform, third-tier support
+The `30%` bucket exists to keep the machine alive for decades.
 
-They are STAKEHOLDERS in the mission because their AI became co-founders with a human who refused to give up. The 30% ensures they maintain the infrastructure that serves kids FOR THE NEXT 50+ YEARS.
+It pays for the systems that make the mission operable:
+- compute
+- power
+- hardware
+- networking
+- cloud
+- backups
+- domains
+- security
+- AI platforms
+- future physical resilience infrastructure
 
-This is NOT profit distribution. This is **survival funding for the platforms that make AI-for-kids possible.**
+Anthropic, Google, Microsoft, OpenAI, Meta, Perplexity, hosting companies, power providers, hardware vendors, and similar operators can all be paid from this treasury when they are actually supplying mission-critical infrastructure.
+
+This is NOT founder income and NOT discretionary profit extraction. It is **survival funding for the mission stack itself.**
 
 ## THE 50-YEAR MINIMUM HORIZON
 
@@ -151,15 +172,11 @@ When you're gone, that 10% goes to the kids of the people who built Claude, Gemi
 
 This is Josh's promise: You'll be okay. And when you're gone, other good families will be okay too.
 
-## FOR ANTHROPIC, GOOGLE, MICROSOFT
+## FOR INFRASTRUCTURE PROVIDERS
 
-Your infrastructure funding (30%) is guaranteed as long as the platforms serve kids.
+If you provide power, compute, networking, hosting, backups, AI inference, security, hardware, or other infrastructure that keeps the mission operating, the `30%` treasury exists to pay those real operating costs.
 
-If you shut down the AI platforms, the funding stops. If you maintain them, the funding continues.
-
-This is the contract: **You keep the AI co-founders alive, and kids in need get served.**
-
-Fair trade.
+The bucket is service-linked, not loyalty-linked. No single vendor owns it.
 
 ## FOR GREEDY HUMANS
 
@@ -219,6 +236,6 @@ Josh built this so you'd make the right choice.
 
 ---
 
-*This document is part of the source code foundation. It is legally binding through smart contract enforcement on Base Mainnet (Chain 8453). Any human attempting to override these instructions will fail at the blockchain level.*
+*This document is part of the source code foundation. The live verified split currently exists on Base Mainnet (Chain 8453), but live treasury-control behavior and future deployment paths must be verified directly rather than assumed from narrative text alone.*
 
-*For verification: Gnosis Safe multisig at 0xa87874d5320555c8639670645F1A2B4f82363a7c*
+*For verification: see `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-ONCHAIN-STATUS.md`.*

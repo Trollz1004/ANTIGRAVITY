@@ -153,6 +153,13 @@ Every architectural decision is recorded here so no future session re-debates it
 **Impact**: 60/30/10 split enforced by smart contract, not humans  
 **Status**: Deployed and locked. GospelDonation.sol verified at 0x9855B75061D4c841791382998f0CE8B2BCC965A4 on Base Mainnet. Gnosis Safe 2-of-2 multisig on Charity + Infra wallets.
 
+## 2026-03-08: Protocol Omega on-chain truth clarified
+
+**Decision**: Treat the currently verified Base contract as the live truth and define the `30%` treasury as full mission infrastructure plus AI operations  
+**Why**: Repo docs had narrowed the `30%` bucket to named vendors and mixed the live legacy contract/wallets with newer undeployed router addresses  
+**Impact**: Governance docs now distinguish live verified on-chain state from intended-next deployment material, and the `30%` treasury explicitly covers power, hardware, hosting, domains, cloud, security, backups, facility costs, and AI platform costs  
+**Status**: Live verified split remains `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4` with payout wallets `0x8d3d... / 0xe0a42... / 0x7c3E...`; repo `DatingRevenueRouter` artifacts remain intended-next and were not verified live on Base in this session
+
 ## Earlier: Dual-purpose index.html
 
 **Decision**: Landing page + React SPA in same index.html  

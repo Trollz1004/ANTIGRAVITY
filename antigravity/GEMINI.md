@@ -98,10 +98,10 @@ The V8 engine is the core tech — biometric liveness detection + economic Proof
 ### ENIGMA (Profit Side) — 60/30/10 Split
 Every dollar that hits ENIGMA splits permanently from DAY ONE:
 - **60%** → Shriners Children's Hospitals
-- **30%** → V8 Verification Engine / AI Infrastructure
+- **30%** → Mission Infrastructure / AI Operations Treasury
 - **10%** → Founder Operations (Joshua Coleman)
 
-Integer remainder goes to charity. Smart contracts enforce this on Base Mainnet (Chain 8453). Gnosis Safe 3-of-5 multisig — no human can stop the charity distribution (dead-man's-switch).
+Integer remainder goes to charity. Smart contracts enforce the split on Base Mainnet (Chain 8453). The split contract and any treasury-control/dead-man's-switch setup must be verified separately; do not assume treasury-control behavior from narrative text alone.
 
 ### OMEGA (Charity Side) — 100% to Charity
 - Digital products only (no physical merchandise — no fulfillment costs eating donations)

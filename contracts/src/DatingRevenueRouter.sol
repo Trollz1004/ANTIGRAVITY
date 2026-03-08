@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 /**
  * @title DatingRevenueRouter
  * @author FOR THE KIDS Platform — Protocol Omega
- * @notice Immutable revenue splitter: 60% Shriners / 30% V8 Infrastructure / 10% Founder
+ * @notice Immutable revenue splitter: 60% charity / 30% mission infrastructure and AI operations / 10% founder
  * @dev No phases. No admin. No upgrades. 60/30/10 from deploy, forever.
  *      Integer remainder goes to charity (Shriners).
  *
@@ -24,12 +24,12 @@ contract DatingRevenueRouter {
 
     /// @notice Immutable split percentages (basis points)
     uint256 public constant PCT_CHARITY = 6000;  // 60% → Shriners Children's Hospitals
-    uint256 public constant PCT_DAO     = 3000;  // 30% → V8 Infrastructure / DAO Treasury
+    uint256 public constant PCT_DAO     = 3000;  // 30% → Mission Infrastructure / AI Operations Treasury
     uint256 public constant PCT_FOUNDER = 1000;  // 10% → Founder Operations
 
     /// @notice Immutable wallet addresses
     address public immutable charitySafe;    // Shriners
-    address public immutable daoTreasury;    // V8 Infra
+    address public immutable daoTreasury;    // Mission infra + AI ops
     address public immutable founderWallet;  // Ops
 
     /// @notice Total distributed (for transparency)

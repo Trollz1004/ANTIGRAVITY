@@ -101,12 +101,13 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. Dis
 ## Revenue Split: PERMANENT 60/30/10 (Protocol Omega)
 
 - **60%** → Shriners Children's Hospitals (Contractual Disbursement, NOT donation)
-- **30%** → V8 Verification Engine / AI Infrastructure
+- **30%** → Mission Infrastructure / AI Operations Treasury
 - **10%** → Founder Operations (Joshua Coleman)
-- On-chain: Base Mainnet, contract `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4` (verified on BaseScan)
-- Charity Fund (60%): `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e` (Gnosis Safe 2-of-2)
-- Infrastructure/Dev (30%): `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b` (Gnosis Safe 2-of-2)
-- Founder/Ops (10%): `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7` (Phantom Wallet)
+- Live verified on-chain split: Base Mainnet `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
+- Live charity fund (60%): `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
+- Live infrastructure treasury (30%): `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
+- Live founder/ops (10%): `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
+- Intended-next router exists in `contracts/src/DatingRevenueRouter.sol` and `contracts/scripts/deploy.js` but is not yet verified live; see `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
 
 ## Iron Wall
 
