@@ -81,6 +81,11 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 28. The reviewed automation slice was synced in place to the remote nodes without wiping their unrelated local overlays:
    - `9020` now has the current safe automation files, `CodeX-9020-Safe-Drafts` reinstalled, and `9020-content` proof-ran successfully
    - `T5500` now has the current safe automation files, `CodeX-T5500-Safe-Marketing-Audit` / `CodeX-T5500-Revenue-Pack` reinstalled, `_deploy/onlinerecycle/index.html` refreshed from `origin/main`, and both audit/revenue proof runs completed
+29. Protocol Omega split verification is now explicit:
+   - live verified Base split contract is still `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
+   - live verified payout wallets are `0x8d3d...` / `0xe0a42...` / `0x7c3E...`
+   - newer repo `DatingRevenueRouter` addresses are intended-next deployment material, not confirmed live on-chain truth
+   - the `30%` bucket now has explicit repo wording for full mission infrastructure and AI operations, not vendor-only language
 
 ## House Rules
 
@@ -104,6 +109,7 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 8. Treat old Claude review branches as surgical patch sources unless direct diff verification proves they match the current tree
 9. Do not re-enable browser-based social autoposting from the nodes without a separately reviewed allowlist change in `scripts/social_engine/platform_policy.py`
 10. `9020` and `T5500` are still dirty outside the reviewed automation slice; future cleanup there should remain surgical, not blanket-reset
+11. Treasury-control claims such as multisig threshold or dead-man's-switch behavior still need a separate direct verification pass if they will be relied on operationally
 
 ## Immediate Next Steps
 
@@ -118,3 +124,4 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 9. Keep node automation scoped to drafts, reports, and owned-property workflows unless official API review changes the policy file first
 10. Build inbox automation next: FormSubmit/Gmail intake -> structured queue -> reply draft -> Square next-step link
 11. Use the generated node matrix and public-copy audit as the default go/no-go check before adding any new automation surface
+12. Treat `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md` as the canonical chain-status note before making any DAO-language changes

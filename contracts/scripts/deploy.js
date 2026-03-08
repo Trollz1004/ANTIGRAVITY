@@ -1,6 +1,11 @@
 /**
  * Deploy DatingRevenueRouter to Base Mainnet
- * Protocol Omega: 60% Shriners / 30% V8 Infra / 10% Founder — IMMUTABLE
+ * Protocol Omega: 60% charity / 30% mission infrastructure + AI ops / 10% founder — IMMUTABLE
+ *
+ * NOTE:
+ * This is the intended-next router path in the repo.
+ * As of 2026-03-08, the currently verified live Base split remains the legacy
+ * GospelDonation contract at 0x9855B75061D4c841791382998f0CE8B2BCC965A4.
  *
  * Usage: DEPLOYER_PRIVATE_KEY=0x... npx hardhat run scripts/deploy.js --network base
  */
@@ -9,7 +14,7 @@ const { ethers } = require("hardhat");
 
 // Canonical wallets from Transparency.tsx — DO NOT CHANGE
 const CHARITY_SAFE   = "0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B"; // Shriners (60%)
-const DAO_TREASURY   = "0xa87874d5320555c8639670645F1A2B4f82363a7c"; // V8 Infra (30%)
+const DAO_TREASURY   = "0xa87874d5320555c8639670645F1A2B4f82363a7c"; // Mission infra + AI ops (30%)
 const FOUNDER_WALLET = "0xc043F5D516ee024d1dB812cb81fB64302b0Fe2B4"; // Ops (10%)
 
 async function main() {
@@ -25,7 +30,7 @@ async function main() {
   console.log("\n=== DEPLOYED ===");
   console.log("DatingRevenueRouter:", addr);
   console.log("Chain: Base Mainnet (8453)");
-  console.log("Split: 60% Shriners / 30% V8 / 10% Founder");
+  console.log("Split: 60% charity / 30% mission infra + AI ops / 10% founder");
   console.log("Charity:", CHARITY_SAFE);
   console.log("DAO:", DAO_TREASURY);
   console.log("Founder:", FOUNDER_WALLET);
