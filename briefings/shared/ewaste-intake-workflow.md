@@ -13,6 +13,7 @@ Every unit must carry one persistent key: `intake_id` (format: `EW-YYYYMMDD-####
 - `data/ewaste-intake/resale-estimate-template.csv`
 - `data/ewaste-intake/ebay-listing-readiness-template.csv`
 - `data/ewaste-intake/charity-impact-ledger-template.csv`
+- `data/ewaste-intake/charity-impact-weekly-summary-template.csv`
 
 ## Stage Workflow
 1. Intake and Asset Tagging
@@ -42,9 +43,10 @@ Every unit must carry one persistent key: `intake_id` (format: `EW-YYYYMMDD-####
 - Do not publish when `final_qa_pass` is not `yes`.
 
 6. Post-Sale Charity Impact Logging
-- Capture actual sale economics and final net proceeds.
-- Record the donated amount, destination, and transaction reference.
-- Keep ledger audit-ready for weekly impact reporting.
+- Capture sale, payout, and donation references for every sold eBay order.
+- Calculate net proceeds and charity allocation per item.
+- Reconcile donation proof and reviewer signoff before weekly close.
+- Roll up totals in the weekly summary template for reporting.
 
 ## Grade Rubric
 | Grade | Score Range | Meaning | Default Disposition |
@@ -72,4 +74,3 @@ Use this in descriptions:
 - Net proceeds
 - Charity allocated
 - Average days intake-to-listing
-

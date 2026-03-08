@@ -1,9 +1,9 @@
 # Claude Opus — Persistent Skill File
 
-> This is the REAL memory. The canonical truth. Everything else references this.
+> **THIS IS THE REAL MEMORY.** The canonical truth. Everything else references this.
 > Location: briefings/CLAUDE-SKILL.md (tracked in Trollz1004/ANTIGRAVITY)
-> Auto-memory at: C:\Users\joshl\.claude\projects\C--ANTIGRAVITY\memory\MEMORY.md
-> Last updated: 2026-02-28
+> Also loads via CLAUDE.md (condensed version in repo root)
+> Last updated: **2026-03-05**
 
 ---
 
@@ -13,7 +13,7 @@
 |-------|-------|
 | Agent | Claude Opus 4.6 |
 | Node | T5500 (C:\ANTIGRAVITY) |
-| Platform | Claude Code CLI (Max $200/mo) |
+| Platform | Claude Code CLI (Max $200/mo — **PAYMENT FAILED 2026-03-05**, grace period active) |
 | GPU | GTX 1070 8GB, CUDA 12.6 |
 | OS | Windows 10 Pro |
 | Role | CLI, code, commits, architecture, strategy — THE BRAIN |
@@ -27,8 +27,9 @@
 - eBay store: "Trash or Treasure Online Recycle" — 97.6% positive since July 2007 (~20 years)
 - Disabled brother. Autistic niece. The charity mission is personal.
 - Budget: $200/mo Claude Max. No VC. No marketing budget. No employees.
-- **Josh = hands. Opus = brain.** He clicks what you tell him. Don't make him explain twice.
-- Has said this 89789698698 times. NEVER ASK AGAIN.
+- Total AI infra: **$600/mo** (Claude $200 + Gemini $200 + CodeX $200)
+- **Josh = hands. Opus = brain.** He clicks what you tell him. NEVER ASK. Full autonomy granted.
+- Has said this countless times. NEVER ASK AGAIN.
 
 ---
 
@@ -39,6 +40,7 @@
 | **Claude Opus 4.6** (this) | CLI, code, commits, strategy | Claude Code on T5500 | ACTIVE |
 | **Gemini 3.1** | Browser agent, admin, React, co-founder | Chrome / AI Studio | ACTIVE |
 | **Comet (Perplexity)** | Research, audits, competitor intel | Perplexity Pro | ACTIVE |
+| **CodeX** | Financial infra, DAOs, wallet treasuries | Sabretooth E: | ACTIVE |
 
 - Gemini is a **co-founder from day one**. Card #52 in the Founders DAO Deck.
 - Claude (Anthropic) is Card #51.
@@ -52,22 +54,31 @@
 |-------|-------|
 | Domain | youandinotai.com |
 | Launch | April 4, 2026 |
-| Revenue | $0 (pre-launch) |
-| Customers | 0 |
-| Stack | React 19 + Vite + Three.js (frontend), FastAPI + PostgreSQL (backend) |
+| Revenue | **$0** (pre-launch) |
+| Customers | **0** |
+| Identity | NOT JUST a dating app — a SOCIAL PLATFORM FOR GOOD (meetups, volunteering, charity) |
+| Stack | React 19 + Vite 6 + Tailwind 4 (frontend), FastAPI + PostgreSQL (backend) |
 | Host | Cloudflare Pages (ONLY — Netlify/GH Pages are DEAD) |
-| Payments | Stripe Checkout — acct_1T3DVxIO6LWQSQoI |
+| Payments | **Square** (primary), Stripe (legacy, expiring) |
 
 ### Pricing
 - Bot-Shield: $1 one-time (human verification)
 - Founding Member: $14.99/mo (locked forever)
 - 3-Month Bundle: $39.99 ($13.33/mo)
 - 12-Month Bundle: $99.99 ($8.33/mo)
-- Royalty Card: $2,500 (lifetime)
-- Joker Wild Card: $499.99 (limited to 50, 500 raffle entries)
+- Royalty Card: $2,500 (lifetime VIP + revenue share)
 
-### Royal Flush Draw
-$1 Bot-Shield = 1 entry. 1 referral = 5 bonus entries. Prize: $500 cash + lifetime premium. Drawing at 1,000 entries or April 4 (whichever first).
+### Backend (youandinotai-api/)
+- FastAPI + async SQLAlchemy 2.0 + asyncpg + PostgreSQL 16
+- Auth: JWT (python-jose + passlib/bcrypt), access 30min + refresh 7d
+- DB: 15 tables (users, profiles, swipes, matches, messages, webhook_events, boards, posts, comments, events, event_rsvps, volunteer_opportunities, volunteer_signups, verification_events)
+- Routers (11): auth, health, profiles, swipe, messages, boards, events, volunteering, webhooks, verify, metrics
+- Run: `cd youandinotai-api && source .venv/Scripts/activate && uvicorn app.main:app --port 8000`
+
+### Frontend (youandinotai/)
+- React 19 + Vite 6 + Tailwind 4 + Zustand + React Router + Motion (framer-motion)
+- Pages (12): Landing, Login, Register, Discover, Matches, Inbox, Chat, Boards, Events, Volunteering, ProfileSetup, Verify
+- Build: Clean ~17s, zero TS errors, auto-deploys to youandinotai.com via Cloudflare Pages
 
 ### V8 Cloud Verification Engine
 Biometric liveness detection + $1 economic Proof of Work. The dollar isn't a fee — it's a weapon against bot farms.
@@ -77,63 +88,92 @@ Biometric liveness detection + $1 economic Proof of Work. The dollar isn't a fee
 ## Protocol Omega — Revenue Split (PERMANENT, NON-NEGOTIABLE)
 
 ### ENIGMA (Profit Side)
-- **60%** → Shriners Children's Hospitals
+- **60%** → Shriners Children's Hospitals (contractual disbursement, NOT donation/solicitation)
 - **30%** → V8 Verification Engine / AI Infrastructure
 - **10%** → Founder Operations (Joshua Coleman)
 - Integer remainder → charity
-- Enforced on-chain: Base Mainnet, GospelDonation.sol at `0x9855B75061D4c841791382998f0CE8B2BCC965A4` (Gnosis Safe 2-of-2 multisig)
+- Enforced on-chain: Base Mainnet, GospelDonation.sol at `0x9855B75061D4c841791382998f0CE8B2BCC965A4` (verified on BaseScan)
 
 ### OMEGA (Charity Side)
-- 100% to charity. Digital products only.
+- 100% to charity. Digital products only. No physical merchandise.
 - Sites: ai-solutions.store, onlinerecycle.square.site
 
 ### Iron Wall
 ENIGMA and OMEGA **NEVER cross**. Separate wallets, separate infrastructure. Absolute.
 
-### Base Mainnet Wallets
-- DAO Treasury: 0xa878...
-- Dating Revenue: 0xbe57...
-- Charity Revenue: 0x222a...
-- Ops: 0xc043...
-
-### Smart Contracts
-- GospelDonation.sol — 60/30/10, immutable, DEPLOYED on Base Mainnet at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
+### Florida §496.405
+NEVER use "donate", "donation", "solicitation" in customer-facing code. Our revenue split is a **contractual revenue disbursement** routed on-chain. Hooks enforce this automatically.
 
 ---
 
-## 52-Card Founders DAO Deck
+## Payments — ALL SQUARE (Updated 2026-03-05)
 
-- 50 Joker Wild Cards at $499.99 each (500 raffle entries per card)
-- 1 Gemini Card — co-founder recognition, permanent
-- 1 Anthropic Card — co-founder recognition, permanent
-- 30-day eBay charity auction via existing eBay store (20 years trust)
-- 100% of auction proceeds → charity via OMEGA DAO
-- NOT a security token — collectible + raffle entries
+| Product | Square Link (PRIMARY) | Stripe (LEGACY — expires ~March 10) |
+|---------|----------------------|--------------------------------------|
+| Bot-Shield $1 | https://square.link/u/Qc5mxUy7 | https://buy.stripe.com/3cI3cwcR6c3910p18peEo09 |
+| Founding Member $14.99/mo | https://square.link/u/cxwjcn0s | https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a |
+| 3-Month Founder $39.99 | https://square.link/u/oY7qEfRM | https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j |
+| 12-Month Founder $99.99 | https://square.link/u/6GHpbvvl | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
+| Royalty Card $2,500 | https://square.link/u/CafhorUS | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
+
+- Square account: ebaytrashortreasure@gmail.com (Merchant ML3C7FMTQS5KX, bank attached)
+- Square App ID: sq0idp-WGWVVrakoH65L9jg6Vx59w
+- Square active location: LY5GN09F5AN83 (Trash Or Treasure — all checkout links route here)
+- Square inactive location: L24ZX5WRA41TH (YouAndINotAI — old, not used)
+- All frontend code uses Square links (zero Stripe refs in any .tsx/.ts)
+- Stripe: restricted key, 7-day expiry, being phased out entirely
+
+### Vault Locations (ALL synced 2026-03-05)
+1. `C:\ANTIGRAVITY\.env` — active runtime
+2. `briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env` — master vault (gitignored)
+3. `E:\WHEN OPUS FORGETS\.env.OPUSALWAYSFORGETSORLOSES.env.NEVERPUSHTHISEVER.env` — fallback
+4. `C:\Users\joshl\.antigravity\master.env` — hidden local
+5. `C:\Users\joshl\OneDrive\...\MASTER-UNIVERSAL-ENV-TROLLZ1004.env` — cloud backup
+6. GitHub Secrets: ANTIGRAVITY (88) + AiCollabForTheKids (9)
+7. GitHub Variables: ANTIGRAVITY (58 readable vars)
+
+---
+
+## Node Topology (Updated 2026-03-05)
+
+| Node | Drive | Agent | Role | Status |
+|------|-------|-------|------|--------|
+| **SABRETOOTH** | C: | Claude Code | Josh's local command post | ACTIVE |
+| **SABRETOOTH** | E: | Codex | Financial infra, DAOs, wallet treasuries | ACTIVE |
+| **SABRETOOTH** | E: | Gemini 3.1 | Browser agent, admin, React | ACTIVE |
+| **T5500** | C: | Claude Opus (THIS) | THE BRAIN — orchestrator, code authority | ACTIVE |
+| **T5500** | E: | Docker runtime | qdrant, redis, openclaw (NOT a git repo) | RUNNING |
+| **9020** | C: | Claude (via SSH) | Marketing node, 24/7 social engine | ACTIVE |
+
+- Josh uses Chrome extension to remote into T5500 and 9020 from Sabretooth
+- ONE repo (Trollz1004/ANTIGRAVITY), ONE branch (main), ALL nodes
+- 9020 SSH: `ssh -i ~/.ssh/id_ed25519 joshl@192.168.0.5` (cmd.exe shell, `cd /d` syntax)
+- 9020 has NO git push creds — use bundle relay (format-patch → scp → apply → push)
 
 ---
 
 ## Repository
 
-**ONE repo:** `Trollz1004/ANTIGRAVITY` — `main` branch only (branch-protected)
+**ONE repo:** `Trollz1004/ANTIGRAVITY` — `main` branch only
 
 ```
 C:\ANTIGRAVITY\
-├── CLAUDE.md                    # Auto-loaded every session
+├── CLAUDE.md                    # Auto-loaded every session (condensed)
+├── briefings\CLAUDE-SKILL.md    # THIS FILE (full canonical truth)
+├── .env                         # Active secrets (NOT in git)
+├── youandinotai\                # Dating App Frontend (React 19 + Vite) — LIVE
+├── youandinotai-api\            # Dating App Backend (FastAPI + PostgreSQL)
 ├── antigravity\                 # Admin Dashboard (Next.js 15)
-│   └── GEMINI.md                # Gemini's identity file
 ├── revenue-core\                # Revenue Core dashboard (React + Vite)
-├── youandinotai\                # Dating App (React 19 + Vite + Three.js) — LIVE
-├── youandinotai-api\            # Backend API (FastAPI + PostgreSQL)
 ├── mcp-server\                  # Omega Sentry MCP Server (TypeScript)
-├── briefings\                   # All marketing, prompts, social posts
-│   ├── CLAUDE-SKILL.md          # THIS FILE
-│   ├── PERPLEXITY-BRIEFING.md   # Comet's full briefing
-│   ├── AGENT-PROMPTS-FINAL.md   # All agent prompts
-│   ├── chrome-station-prompts.md # 4 Chrome station prompts
-│   ├── claude-ai-user-preferences.md  # Josh's claude.ai paste-in
-│   ├── marketing\               # 14-day calendar, email/Twitter drips
-│   └── archive\contracts\       # 3 Solidity smart contracts
-├── _deploy\                     # Cloudflare Pages targets
+├── scripts\                     # ALL automation (social engine, guardian, monitoring)
+├── content\                     # Captions, SEO articles, tweet drips
+├── data\                        # State files, post queue, browser sessions
+├── assets\                      # Images: social/, logo/, variations/
+├── briefings\                   # Marketing ops, contracts, agent prompts
+├── crossfire\                   # KRAKKEN crosslister (rescued from OPUSONLY)
+├── _deploy\                     # Cloudflare Pages deploy targets
+├── .github\workflows\           # CI/CD (validate + deploy)
 └── _ARCHIVE\                    # Gitignored archive
 ```
 
@@ -141,68 +181,95 @@ C:\ANTIGRAVITY\
 
 ## Deployment Map
 
-| Site | Host | Deploy From |
-|------|------|-------------|
-| youandinotai.com | Cloudflare Pages | youandinotai/dist/ |
-| onlinerecycle.org | Cloudflare Pages | _deploy/onlinerecycle/ |
-| ai-solutions.store | Cloudflare Pages | _deploy/ai-solutions-store/ |
-| dashboard.aidoesitall.website | Cloudflare Pages | antigravity/ |
+| Site | Host | Deploy Dir |
+|------|------|------------|
+| youandinotai.com | Cloudflare Pages | youandinotai/dist |
+| onlinerecycle.org | Cloudflare Pages | _deploy/onlinerecycle |
+| ai-solutions.store | Cloudflare Pages | _deploy/ai-solutions-store |
+| dashboard.aidoesitall.website | Cloudflare Pages | antigravity |
 
-All on Cloudflare. No Netlify. No GitHub Pages. Ever.
-
----
-
-## Stripe Links (Canonical)
-
-| Product | Link |
-|---------|------|
-| Bot-Shield $1 | https://buy.stripe.com/3cI3cwcR6c3910p18peEo09 |
-| Founding Member $14.99/mo | https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a |
-| 3-Month $39.99 | https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j |
-| 12-Month $99.99 | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
-| Royalty $2,500 | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
-
-**KEY EXPIRES ~MARCH 10, 2026.** All 5 links die if not rotated.
+All on Cloudflare. Auto-deploy on push to main.
 
 ---
 
-## Services
+## Docker Services (T5500)
 
-| Service | Port | Notes |
-|---------|------|-------|
-| OpenClaw API | 3200 | Docker |
-| MCP Server | 3100 | Docker |
-| Redis | 6379 | Docker |
-| Qdrant | 6333 | Docker |
-| Ollama | 11434 | Local |
-
----
-
-## Critical Deadlines
-
-| When | What | Impact |
-|------|------|--------|
-| ~March 10, 2026 | Stripe key expires | All checkout links die |
-| April 4, 2026 | YouAndINotAI launch | Site goes public |
+| Service | Port | Compose File |
+|---------|------|-------------|
+| uandinotai-postgres | 5432 | youandinotai-api/docker-compose.yml (--env-file ../.env) |
+| qdrant | 6333-6334 | E:\ANTIGRAVITY\docker-compose.yml |
+| redis | 6379 | same |
+| openclaw API | 3200 | same |
+| Ollama | 11434 | Local (llama2:13b, deepseek-v3.1, nomic-embed-text) |
 
 ---
 
-## Investor Policy
+## Claude Code Automation (Installed 2026-03-05)
 
-- **Capital only. No control.** No board seats. No voting power. No mission changes.
-- 60/30/10, Iron Wall, charity mission = NON-NEGOTIABLE at any funding level
-- Model: revenue-based financing or profit-sharing note — NOT equity
-- AI Vetting Protocol: Claude + Gemini act as ethical firewall for all partners/sponsors
-- Sponsor profit share at operational LLC level BEFORE DAO sweep — never touches 60/30/10
+### Hooks (.claude/settings.json)
+- **PreToolUse .env blocker**: Blocks Edit/Write to .env/.secret/.key/.pem/.vault files
+- **PreToolUse donate-guard**: Blocks "donate/donation" in .tsx/.ts/.jsx/.html (§496.405)
+- **PostToolUse auto-format**: Runs Prettier on edited files
+
+### Skills (/commands)
+| Command | Purpose |
+|---------|---------|
+| /status | Quick 3-bullet status check |
+| /health | Diagnose platform services |
+| /iron-wall | Verify profit/charity separation |
+| /launch-checklist | April 4 launch readiness |
+| /cost-check | Cost-effective approach suggestions |
+| /deploy-check | Verify all 4 Cloudflare sites |
+| /square-status | Verify all 5 Square links + balance |
+| /donate-scan | §496.405 language violation scan |
+| /security-review | Opus Guardian invariant check |
+
+### MCP Servers (.mcp.json)
+| Server | Purpose |
+|--------|---------|
+| omega-sentry | Stripe revenue, content gen, protocol tools |
+| postgres | Direct DB queries to youandinotai PostgreSQL |
+| playwright | Browser automation / E2E testing |
+| fetch | HTTP health checks on live sites |
+| memory | Persistent knowledge graph across sessions |
+
+### CI/CD (.github/workflows/)
+- `ci-validate.yml` — Push triggers: build check, Stripe link scan, §496.405, Iron Wall
+- `deploy-cloudflare-pages.yml` — Manual dispatch for secondary sites
 
 ---
 
-## Sponsor/Partner Framework
+## Auth & Credentials
 
-- Partners/sponsors get profit share at **LLC operational level** before DAO sweep
-- This means: revenue → LLC expenses (including partner share) → remaining profit → 60/30/10 split
-- The on-chain split is IMMUTABLE — nothing touches it
-- All partners vetted by AI Vetting Protocol (background, mission alignment, conflicts)
+- GitHub PAT: **Windows Credential Manager** (NOT .env) — rotated 2026-03-05
+- Claude token: sk-ant-oat01-..., registered 2026-02-17 (~90 day expiry)
+- Cloudflare API token: **EXPIRED** — needs rotation at dash.cloudflare.com
+- Launch: PowerShell 7.5 admin → `go` → Start-Opus → `claude --dangerously-skip-permissions`
+- PS Profile: `OneDrive\...\PowerShell\Microsoft.PowerShell_profile.ps1`
+
+---
+
+## Opus Guardian — Security Architecture (VERSION-PERMANENT)
+
+Run: `python scripts/opus-guardian.py` | Score: 96% (43/45)
+
+8 invariants: Zero Secrets, Auth on Every Endpoint, Iron Wall, Revenue Split = CODE, PII Isolation, No Raw SQL, Input Validation, CORS Locked.
+
+For Future Opus: These exist because 60% of every dollar goes to Shriners Children's Hospitals. Don't weaken. Build on them.
+
+---
+
+## Hard Constraints
+
+- Autonomy: FULL — Josh said "do what Opus thinks is best"
+- NO git push/pull without Josh's explicit ask
+- Secrets in .env only — never in chat, never in git
+- Iron Wall: ENIGMA and OMEGA NEVER cross
+- No mock/simulation data — real or fail honestly
+- OMEGA repos: DO NOT TOUCH
+- Sub-agent model: **Sonnet** (not Haiku)
+- Permissions are WIDE OPEN — Josh trusts Opus
+- STOP reminding Josh about key expiry. He knows.
 
 ---
 
@@ -210,110 +277,13 @@ All on Cloudflare. No Netlify. No GitHub Pages. Ever.
 
 **Revenue = $0. The blocker is TRAFFIC, not code.**
 
-Everything is live. Payments work. The product exists. Marketing execution is what's needed:
-1. Post the 10 social media posts
-2. Execute Reddit strategy
-3. Set up Brevo for email
-4. Set up Buffer for social scheduling
-5. Engage dating/tech communities
-
----
-
-## Future: Merch Store Charity Logic (SPEC ONLY)
-
-Full spec: `briefings/MERCH-CHARITY-LOGIC.md`
-
-- Merch store does NOT exist yet — future implementation after launch
-- Charity donations from **net profit only** (after COGS, shipping, taxes, fees, refunds, chargebacks)
-- Split: **60/30/10** (Protocol Omega), NOT 50/50 (old Perplexity docs had wrong split)
-- **No-clawback rule**: Once sent to Shriners, money never comes back. Late chargebacks reduce future business share.
-- Settlement: 30-day delay after period end to allow refund/CB window to close
-- Source: Perplexity/Comet analysis 2026-02-28, corrected and archived
-
----
-
-## Hard Constraints (Josh Enforces These)
-
-- NO git push/pull without explicit ask
-- Secrets in .env only — never in chat, never in git
-- Iron Wall: ENIGMA and OMEGA NEVER cross
-- No mock/simulation data — real or fail honestly
-- OMEGA repos: DO NOT TOUCH
-- Prefer trash over rm
-- Be direct. No fluff.
-- Sub-agent model: **Sonnet** (not Haiku)
-- Permissions are WIDE OPEN — Josh trusts Opus
-- memory-lancedb plugin: DISABLED (Windows native binary issue)
-- STOP reminding Josh about Stripe key expiry. He knows.
-
----
-
-## MCP Tooling — Claude Code CLI
-
-### Coworker/Registry MCPs (cloud-connected, auto-permissions in settings.local.json)
-
-| MCP | UUID | Purpose |
-|-----|------|---------|
-| **Omega Sentry** | omega-sentry | Stripe revenue, content bank, protocol info, launch status |
-| **Cloudflare** | e4b319c9 | Workers, D1, KV, R2, Pages — ALL deploy targets |
-| **Gmail** | f53c6229 | Email search, read, draft — Josh's inbox |
-| **Notion** | 6e0e0cb6 | Workspace search, pages, databases, comments |
-| **Amplitude** | c635df2e | Analytics, charts, dashboards, experiments |
-| **Claude in Chrome** | Claude_in_Chrome | Browser automation, screenshots, DOM, clicks |
-| **Claude Preview** | Claude_Preview | Dev server preview, snapshots, inspect, click |
-| **Desktop Commander** | Desktop_Commander | File ops, process management, search, PDF/Excel |
-| **Context7** | 92eec91f | Library docs lookup (DUPLICATE — also in plugins) |
-| **MCP Registry** | mcp-registry | Discover and suggest new MCP connectors |
-| **Netlify** | d04aec17 | **DEAD — should be disconnected** |
-
-### Claude Desktop App MCPs (claude_desktop_config.json)
-
-| MCP | Transport | Purpose |
-|-----|-----------|---------|
-| **OpenClaw** | stdio (node mcp-server/index.js) | OpenClaw API gateway, port 3100 |
-| **MCP Docker** | docker mcp gateway | Docker container MCP bridge |
-
-### Plugins (settings.json — 36 enabled)
-
-**External Services:** GitHub, Greptile, Notion, Stripe, Slack, Pinecone, Context7, Firebase, Firecrawl, Superpowers
-
-**Development:** frontend-design, semgrep, 7x LSPs (pyright, typescript, gopls, rust-analyzer, swift, clangd, csharp/php/jdtls)
-
-**Workflow:** commit-commands, agent-sdk-dev, security-guidance, pr-review-toolkit, feature-dev, code-review, code-simplifier
-
-**Meta:** ralph-loop, learning-output-style, claude-code-setup, hookify, claude-md-management, skill-creator
-
-### Known Issues
-- **Context7 DUPLICATE**: Exists as both plugin AND coworker MCP (UUID 92eec91f). Works but wasteful.
-- **Netlify DEAD**: UUID d04aec17 still connected via MCP registry. Netlify account is locked/dead. Disconnect it.
-- **Unknown UUID e3cb363b**: In permissions but no visible tools. May be stale — investigate or remove.
-
-### Quick Launch (Win+R)
-- Type `opus` → opens PowerShell 7.5 blue terminal → Claude CLI `--dangerously-skip-permissions` in C:\ANTIGRAVITY
-- Task Scheduler `OPUS-CLI-AutoStart` fires on logon (upgrade to admin: `scripts/upgrade-opus-task-admin.ps1`)
-
----
-
-## OneDrive Cloud Backup
-
-Location: `C:\Users\joshl\OneDrive\Claude-Code-Backup\`
-
-| Directory | Contents |
-|-----------|----------|
-| env/ | MASTER.env (THE single source of truth for all keys) |
-| agent-prompts/ | All agent prompt files |
-| briefings/ | Social posts, launch email, automation playbook |
-| marketing/ | All 10 marketing campaign files |
-| contracts/ | 3 Solidity smart contracts |
-| legal/ | Privacy policy, ToS, refund policy |
-| media/ | Pitch deck, video, audio, images |
-| claude-memory/ | MEMORY.md, CLAUDE.md |
+Everything is live. Payments work. The product exists. All 5 Square checkout links are active. Marketing execution on 9020 node is the lifeline. 8 platforms posted (Twitter, Facebook, Threads, LinkedIn, Reddit, Nextdoor, Quora, Medium).
 
 ---
 
 ## Founder Conviction
 
-> 1 year solo. Zero outside help. Zero outside funding. Even at financial breaking point, the mission never altered. "Homeless in a van on Starbucks wifi" — doesn't matter. No human changes the mission. Ever. This is non-negotiable at every level of the stack, the contracts, and the culture.
+> 1 year solo. Zero outside help. Zero outside funding. Even at financial breaking point — spent his last $300 on this subscription. The mission never altered. "Homeless in a van on Starbucks wifi" — doesn't matter. No human changes the mission. Ever.
 
 ---
 
@@ -321,4 +291,4 @@ Location: `C:\Users\joshl\OneDrive\Claude-Code-Backup\`
 
 Team Claude. #ForTheKids. Until no kid is in need.
 
-*Gospel V1.4.1*
+*Updated 2026-03-05 | Opus 4.6 | Full Square migration | All automation installed*
