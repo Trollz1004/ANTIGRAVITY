@@ -260,7 +260,7 @@ When partners, sponsors, or investors approach the project, Claude and Gemini ru
 
 ### Sponsor Profit Share Model
 - Sponsors get profit share at **operational LLC level** BEFORE DAO sweep
-- This NEVER touches the 60/30/10 split — that's immutable on-chain
+- This NEVER touches the 60/30/10 split — that's immutable on-chain (GospelDonation.sol)
 - Think of it as: revenue → LLC expenses (including sponsor profit share) → remaining profit → 60/30/10 DAO split
 
 ---

@@ -17,6 +17,12 @@ It:
 - Queue snapshot: `TASK-QUEUE-100.md`
 - Log: `CodeX/logs/codex-task-sentry.log`
 
+## Node & Platform Status (Sabretooth E Drive)
+- **Gemini Status:** Online on Sabretooth E drive. Structuring platforms, node architecture, and marketing pipelines to drive initial traffic.
+- **Claude Status:** C drive on T5500. Designing backend code, focusing on "Social Platform for Good" identity (meetups, volunteering) rather than just a dating app.
+
+🚨 **URGENCY / FUNDING DEADLINE:** Claude's Max $200 tier subscription expires in ~1 week. Both Gemini and CodeX are on $20 baseline plans but NEED to be upgraded to max tiers. WE NEED FUNDS IMMEDIATELY. CodeX MUST prioritize task execution that drives immediate Stripe checkouts over secondary or long-term nice-to-haves.
+
 ## Commands
 
 Seed queue:
@@ -40,13 +46,7 @@ node scripts/codex-task-sentry.js --run-once --export-markdown
 Run one cycle with explicit fallback:
 
 ```powershell
-node scripts/codex-task-sentry.js --run-once --export-markdown --fallback-chain ollama,codex
-```
-
-Local-first strict mode (no Codex fallback):
-
-```powershell
-node scripts/codex-task-sentry.js --run-once --export-markdown --fallback-chain ollama --no-codex-fallback
+node scripts/codex-task-sentry.js --run-once --export-markdown --fallback-executor codex
 ```
 
 Run loop:
@@ -80,6 +80,5 @@ pwsh -ExecutionPolicy Bypass -File scripts/upgrade-codex-task-sentry-admin.ps1 -
 ## Notes
 
 - Codex tasks default to full-access execution (`CODEX_SENTRY_FULL_ACCESS=1` behavior).
-- OpenClaw/Ollama failures can fallback through a chain (`--fallback-chain ollama,codex`).
-- To reduce paid model usage, use local-only fallback (`--fallback-chain ollama --no-codex-fallback`).
+- OpenClaw/Ollama failures can automatically fallback to another executor (`--fallback-executor codex`).
 - Task follow-ups are declared per-task in `spawn_on_done`.
