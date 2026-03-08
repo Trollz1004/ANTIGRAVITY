@@ -61,5 +61,5 @@
 | Component | Detail |
 |-----------|--------|
 | Chain | Base (Chain ID: 8453) |
-| Contracts | DAO Treasury, Dating Revenue, Ops Wallet |
-| Governance | Gnosis Safe Multisig (3-of-5) |
+| Contracts | Live verified split at `0x9855B75061D4c841791382998f0CE8B2BCC965A4` |
+| Governance | Gnosis Safe multisig threshold UNVERIFIED in this file |
