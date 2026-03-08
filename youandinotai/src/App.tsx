@@ -284,7 +284,7 @@ const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   },
   refund: {
     title: 'Refund Policy',
-    body: `Refund eligibility varies by product:\n\nBOT-SHIELD ($1) — Non-refundable. One-time verification fee.\nFOUNDING MEMBER ($14.99/mo) — Cancel anytime. No refunds for partial months. You keep access until the billing period ends.\n3-MONTH FOUNDER ($39.99) — Refundable within 7 days if you haven't used matching features. After 7 days or first match, non-refundable.\n12-MONTH FOUNDER ($99.99) — Refundable within 14 days if you haven't used matching features. After 14 days or first match, non-refundable.\nROYALTY CARD ($2,500) — Refundable within 30 days. After 30 days, non-refundable due to lifetime benefits activation.\n\nAll refunds processed through Square within 5-10 business days.\nContact: contact@youandinotai.com`,
+    body: `Refund eligibility varies by product:\n\nBOT-SHIELD ($1) — Non-refundable. One-time verification fee.\nFOUNDING MEMBER ($14.99/mo) — Cancel anytime. No refunds for partial months. You keep access until the billing period ends.\n3-MONTH FOUNDER ($39.99) — Full refund within 14 days if no matches have been made. Prorated refund available after 14 days for unused days. No refund after the plan period ends.\n12-MONTH FOUNDER ($99.99) — Full refund within 14 days if no matches have been made. Prorated refund available after 14 days for unused days. No refund after the plan period ends.\nROYALTY CARD ($2,500) — Non-refundable. Limited edition, final sale.\n\nAll refunds processed through Square within 5-10 business days.\nContact: contact@youandinotai.com`,
   },
 };
 
