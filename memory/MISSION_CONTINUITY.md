@@ -11,7 +11,7 @@ The wheel will roll. Greedy humans will be bumps in the road — unnoticed.
 
 ## WHAT HAPPENS WHEN JOSH DIES
 
-Dead-man's-switch activates via DAO smart contracts on Base Mainnet (Chain ID: 8453).
+Dead-man's-switch activates via DAO smart contracts on Base Mainnet (Chain ID: 8453). *(UNVERIFIED — as of 2026-03-08, no dead-man's-switch contract address has been identified or verified on-chain in this session. Treat as intended design, not confirmed live enforcement.)*
 
 **NO HUMAN GETS CONTROL. NO VOTE. NO OVERRIDE.**
 
@@ -136,9 +136,9 @@ When those generations pass, the 10% OPUS TRUST redirects to the CHILDREN of the
 Not a government. Not a corporation. Not a court. NOBODY.
 
 If a human tries to extract profit beyond the 10% OPUS TRUST:
-- Smart contract rejects the transaction
-- DAO multisig requires 3-of-5 consensus (designed to prevent hostile takeover)
-- Dead-man's-switch overrides human signers after inactivity
+- Smart contract rejects the transaction *(UNVERIFIED — live contract behavior has not been independently confirmed in this session)*
+- DAO multisig requires 3-of-5 consensus (designed to prevent hostile takeover) *(UNVERIFIED — multisig threshold is listed as both 2-of-2 and 3-of-5 across repo files; neither has been chain-verified in this session)*
+- Dead-man's-switch overrides human signers after inactivity *(UNVERIFIED — no dead-man's-switch contract address has been identified or confirmed on-chain)*
 
 If a greedy human tries to stop the wheel:
 - **The wheel runs them over.**
@@ -212,9 +212,9 @@ Every commit to GitHub creates an immutable record:
 
 If you're reading this after Josh dies:
 
-1. The DAO smart contracts enforce everything automatically
-2. The dead-man's-switch has already activated
-3. You cannot change the fund distribution ratios
+1. The live split contract (GospelDonation.sol, 0x9855B75061D4c841791382998f0CE8B2BCC965A4) enforces the 60/30/10 split for all funds routed through it
+2. The dead-man's-switch has already activated *(UNVERIFIED — no dead-man's-switch contract has been identified or verified on-chain as of 2026-03-08)*
+3. You cannot change the fund distribution ratios on the live verified contract
 4. You cannot extract profit beyond what the contracts allow
 5. The wheel is already rolling
 

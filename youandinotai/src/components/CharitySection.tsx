@@ -103,7 +103,7 @@ export function CharitySection() {
             className="text-4xl md:text-7xl font-black tracking-tighter text-white leading-none"
           >
             Every Match. Every Device. <br/>
-            Every Dollar. <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">FOR THE KIDS. ♥</span>
+            60% <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">FOR THE KIDS. ♥</span>
           </motion.h2>
           
           <motion.p
@@ -151,17 +151,17 @@ export function CharitySection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <CharityCard 
             icon={Globe}
-            name="AiDoesItAll.website"
+            name="AI-Solutions.Store"
             tagline="AI for Good"
-            url="https://AiDoesItAll.website"
-            description="Our flagship AI platform where 100% of subscription revenue is contractually routed to Shriners Children's Hospitals via Protocol Omega smart contract on Base Mainnet."
+            url="https://ai-solutions.store"
+            description="Our flagship AI automation platform. 100% of revenue is contractually routed to Shriners Children's Hospitals via Protocol Omega on Base Mainnet — OMEGA: all charity, no exceptions."
           />
           <CharityCard 
             icon={Recycle}
             name="OnlineRecycle.org"
             tagline="Trash or Treasure"
             url="https://OnlineRecycle.org"
-            description="Responsible e-waste recycling. Ship your old electronics to us; we recycle them and route all proceeds to Shriners Children's Hospitals via on-chain revenue disbursement. Old tech, new hope."
+            description="Responsible e-waste recycling. Ship your old electronics to us; we recycle them and route 60% of proceeds to Shriners Children's Hospitals via Protocol Omega revenue disbursement. Old tech, new hope."
             color="from-emerald-400 to-teal-600"
           />
           <CharityCard 
@@ -169,7 +169,7 @@ export function CharitySection() {
             name="The Square Store"
             tagline="Revenue Portal"
             url="https://onlinerecycle.square.site"
-            description="Our official storefront and revenue portal. Linked directly to eBay listings benefiting Shriners Children's Hospitals. Shop with purpose — every purchase triggers an automatic on-chain disbursement."
+            description="Our official storefront and revenue portal. Linked directly to eBay listings benefiting Shriners Children's Hospitals. Shop with purpose — 60% of every purchase goes to Shriners Children's Hospitals through Protocol Omega."
             color="from-green-500 to-green-800"
           />
         </div>
