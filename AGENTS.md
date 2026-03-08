@@ -23,6 +23,22 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. Dis
 - **OMEGA repos**: DO NOT TOUCH
 - Prefer `trash` over `rm`. Be direct. No fluff.
 
+## Source of Truth — Anti-Drift Rule (HARDCODED)
+
+**AUTHORITATIVE** (use for all coding, payments, governance, and deployment decisions):
+- `C:\ANTIGRAVITY` — live repo root, only valid working directory
+- `origin/main` — canonical git truth
+- Canonical docs in the live repo: `AGENTS.md`, `CLAUDE.md`, `memory/`, `briefings/`
+
+**NON-AUTHORITATIVE by default** (recovery and forensics only — never default context):
+- `C:\OPUSONLY` — retired sparse workspace, no git, no live role
+- `E:\ANTIGRAVITY` — legacy clone, pending retirement, behind main
+- OneDrive backup copies (`Claude-Code-Backup/`, `ANTIGRAVITY_BACKUPS/`)
+- `.claude` project memory/history tied to non-live workspaces
+- Orphaned worktrees, archived briefings, stale node memory files
+
+**Rule:** If context was not loaded from `C:\ANTIGRAVITY` on `origin/main`, treat it as unverified. Do not act on it for code, payments, governance, or deployment without explicit recovery invocation from Josh.
+
 ## Identity
 
 | Field | Value |
