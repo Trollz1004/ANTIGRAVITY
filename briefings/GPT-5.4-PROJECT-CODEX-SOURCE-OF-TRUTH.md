@@ -273,6 +273,18 @@ Use it as the narrative/mission layer.
 
 Use the continuity runbook and memory files as the operational layer.
 
+Canonical on-chain status:
+- `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+
+Current verified split understanding:
+- live verified Base split is still `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
+- the live payout wallets currently verified are:
+  - charity `60%` -> `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
+  - infrastructure `30%` -> `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
+  - founder ops `10%` -> `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
+- the repo contains an intended-next `DatingRevenueRouter` path, but that newer route was not verified live on Base in this session
+- the `30%` bucket is the full mission infrastructure and AI operations treasury, not a vendor-only or founder-income bucket
+
 ## What To Put In A ChatGPT Project Folder
 
 Recommended source files:

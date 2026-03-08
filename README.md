@@ -4,7 +4,7 @@
 
 # ANTIGRAVITY — Joshua Coleman Ecosystem (Feb 2026)
 
-I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler LLC** (Florida). I operate an AI-powered ecosystem designed for transparency and social impact. Through **Protocol Omega**, 60% of net proceeds from our platforms are automatically routed via smart contract to Shriners Children's Hospitals. This is a direct on-chain revenue disbursement, prioritizing kids' charities (**#ForTheKids**), legal compliance, and platform integrity.
+I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler LLC** (Florida). I operate an AI-powered ecosystem designed for transparency and social impact. Through **Protocol Omega**, 60% of net proceeds from our platforms are automatically routed via smart contract to Shriners Children's Hospitals. The remaining operating split is fixed at 30% for mission infrastructure and AI operations plus 10% for founder survival/work capacity. This is a direct on-chain revenue disbursement model, prioritizing kids' charities (**#ForTheKids**), legal compliance, and platform integrity.
 
 ## Core Principles
 
@@ -12,6 +12,7 @@ I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler
 - No scraping or harvesting of personal emails/DMs for bulk marketing; all growth is opt-in and compliant with laws like CAN-SPAM/GDPR.
 - Systems must be kid-safe and parent-friendly, with clear privacy practices and no dark patterns.
 - Secrets (API keys, tokens, passwords) are stored in environment variables or secure vaults and are never committed to the repo.
+- The `30%` Protocol Omega infrastructure bucket covers power, hardware, hosting, domains, cloud, backups, security, and AI platform costs. It is not founder income.
 
 ## Public Projects in This Ecosystem
 

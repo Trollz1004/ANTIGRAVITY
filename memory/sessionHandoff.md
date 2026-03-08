@@ -1,6 +1,6 @@
 # SESSION HANDOFF — CLAUDE / CODEX SHARED STATE
 
-**Last Updated**: 2026-03-07 15:43:08 -05:00
+**Last Updated**: 2026-03-08 07:35:00 -05:00
 **Source**: Codex on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)
 
 ## Shared Truth
@@ -12,10 +12,15 @@
 
 ## Repo Position
 
-- `origin/main` = `ba0352e` (`ops: codify safe node automation baseline`)
+- `origin/main` = `c3f0036` (`docs: add GPT project source of truth`)
 - `C:\ANTIGRAVITY` = active local Codex base
 - `E:\ANTIGRAVITY` = legacy local copy pending retirement
 - `origin/claude/review-changes-mmeucm90aurnm0ht-3sxI9` advanced again on fetch and should still be treated as a patch source only, not a merge target
+- Protocol Omega current verified on-chain truth is still the legacy split contract:
+  - live verified Base contract `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
+  - live payout wallets `0x8d3d...` / `0xe0a42...` / `0x7c3E...`
+  - newer repo router `DatingRevenueRouter` / `0xa878...` / `0xbe571...` are intended-next only until a real redeploy/cutover happens
+  - `30%` means full mission infrastructure and AI operations, not founder income
 
 ## Legacy E: Working Tree To Protect Until Retired
 
@@ -53,6 +58,7 @@
   - `briefings/CODEX-CONTINUITY-RUNBOOK.md`
   - Sabretooth cleanup/finalize helpers
 - `qwen2.5:7b` is installed locally for Ollama fallback work on Sabretooth
+- `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md` now exists as the canonical note for live-vs-intended Protocol Omega state
 - OnlineRecycle live intake is FormSubmit -> Gmail -> Square booking/store links
 - Daily deterministic outputs now belong under `C:\ANTIGRAVITY\CodeX\state\`
 - Structured intake reply drafts are reliable; freeform local-model drafts still need a human read
@@ -101,6 +107,7 @@
   - `youandinotai` public policy copy now references Square
   - the eBay revenue pack now emits a neutral `Revenue note` instead of `Charity impact`
   - the scoped public-copy policy audit is currently `0 findings`
+- Dead-man's-switch / multisig assumptions were not independently verified during the Protocol Omega reconciliation pass and should be treated as unverified until checked directly
 
 ## Important Caveat
 
