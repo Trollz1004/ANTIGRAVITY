@@ -298,6 +298,63 @@
       text-decoration: underline;
     }
 
+    /* ── Cookie Consent Banner ── */
+    #cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 20px 24px;
+      z-index: 9999;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.25);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    #cookie-banner .cb-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    #cookie-banner .cb-text { flex: 1 1 400px; }
+    #cookie-banner .cb-text p { color: #cbd5e1; margin: 0 0 12px; font-size: 0.88rem; }
+    #cookie-banner .cb-text a { color: #86efac; }
+    #cookie-banner .cb-checks { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+    #cookie-banner .cb-checks label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      cursor: pointer;
+    }
+    #cookie-banner .cb-checks input[type=checkbox] {
+      width: 16px;
+      height: 16px;
+      accent-color: #16a34a;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    #cookie-banner .cb-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
+    #cookie-banner .cb-btn {
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 150ms;
+    }
+    #cookie-banner .cb-accept { background: #16a34a; color: #fff; }
+    #cookie-banner .cb-accept:hover { background: #15803d; }
+    #cookie-banner .cb-decline { background: transparent; color: #94a3b8; border: 1px solid #334155 !important; }
+    #cookie-banner .cb-decline:hover { background: #1e293b; color: #e2e8f0; }
+    #cookie-banner .cb-necessary-note { font-size: 0.78rem; color: #64748b; margin-top: 6px; }
+
     @media (max-width: 760px) {
       .wrap {
         padding: 30px 16px;
@@ -369,7 +426,7 @@
       <div class="card">
         <div class="step-number">3</div>
         <h3>We Securely Erase</h3>
-        <p>Your hardware is physically destroyed or wiped using industry-standard protocols. We dismantle, sort, and ethicaly recycle. The proceeds directly fund children's medical care.</p>
+        <p>Your hardware is physically destroyed or wiped using industry-standard protocols. We dismantle, sort, and ethically recycle. The proceeds directly fund children's medical care.</p>
       </div>
     </section>
 
@@ -486,6 +543,74 @@
       ]
     }
   }
+  </script>
+  <!-- COOKIE CONSENT BANNER -->
+  <div id="cookie-banner" role="dialog" aria-label="Cookie consent" aria-live="polite">
+    <div class="cb-inner">
+      <div class="cb-text">
+        <strong style="font-size:1rem;color:#f1f5f9;">We use cookies</strong>
+        <p style="margin-top:8px;">We use strictly necessary cookies to keep the site working. You can optionally allow analytics and functional cookies to help us improve the experience. We never use advertising cookies or sell your data. See our <a href="/privacy.html">Privacy Policy</a> and <a href="/disclaimer.html">Disclaimer</a>.</p>
+        <div class="cb-checks">
+          <label>
+            <input type="checkbox" id="cb-necessary" checked disabled>
+            <span><strong>Strictly Necessary</strong> — required for the site to function (always on)</span>
+          </label>
+          <label>
+            <input type="checkbox" id="cb-analytics">
+            <span><strong>Analytics</strong> — anonymous page-view data to improve the site</span>
+          </label>
+          <label>
+            <input type="checkbox" id="cb-functional">
+            <span><strong>Functional</strong> — remembers your preferences (e.g., this banner)</span>
+          </label>
+        </div>
+        <div class="cb-actions">
+          <button class="cb-btn cb-accept" id="cb-accept-btn">Accept Selected</button>
+          <button class="cb-btn cb-decline" id="cb-decline-btn">Necessary Only</button>
+        </div>
+        <p class="cb-necessary-note">Strictly necessary cookies cannot be disabled as they are required for core site functionality.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var CONSENT_KEY = 'or_cookie_consent';
+      var banner = document.getElementById('cookie-banner');
+      var acceptBtn = document.getElementById('cb-accept-btn');
+      var declineBtn = document.getElementById('cb-decline-btn');
+      var cbAnalytics = document.getElementById('cb-analytics');
+      var cbFunctional = document.getElementById('cb-functional');
+
+      // If consent already stored, hide banner immediately
+      try {
+        var stored = JSON.parse(localStorage.getItem(CONSENT_KEY));
+        if (stored && stored.decided) {
+          banner.style.display = 'none';
+          return;
+        }
+      } catch(e) {}
+
+      function saveConsent(analytics, functional) {
+        try {
+          localStorage.setItem(CONSENT_KEY, JSON.stringify({
+            decided: true,
+            analytics: analytics,
+            functional: functional,
+            timestamp: new Date().toISOString()
+          }));
+        } catch(e) {}
+        banner.style.display = 'none';
+      }
+
+      acceptBtn.addEventListener('click', function() {
+        saveConsent(cbAnalytics.checked, cbFunctional.checked);
+      });
+
+      declineBtn.addEventListener('click', function() {
+        saveConsent(false, false);
+      });
+    })();
   </script>
 </body>
 </html>
