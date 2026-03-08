@@ -299,6 +299,21 @@ Recommended source files:
 Do not put secret values into the project folder.
 Only include secret paths, recovery order, and operational rules.
 
+## Non-Authoritative Sources — Do Not Use As Default Context
+
+The following are backup, recovery, or legacy artifacts. They must **not** be used as authoritative context for coding, payments, governance, or deployment decisions unless explicitly invoked for recovery or forensic investigation:
+
+| Path / Source | Why Non-Authoritative |
+|---|---|
+| `C:\OPUSONLY` | Retired sparse workspace; no git; memory files cleaned and stale |
+| `E:\ANTIGRAVITY` | Legacy clone; behind `origin/main`; not the live runtime base |
+| `OneDrive\Claude-Code-Backup\` | Backup copies; may be days behind main |
+| `OneDrive\ANTIGRAVITY_BACKUPS\` | Continuity export snapshots; not live state |
+| `.claude` project memory for non-live workspaces | Stale governance, stale wallets, stale assignments |
+| Orphaned worktrees or archived briefings | Superseded; not synced to main |
+
+**Rule:** If a memory, briefing, or config file did not come from `C:\ANTIGRAVITY` on `origin/main`, it is unverified for operational use.
+
 ## Current Caveats
 
 - `E:\ANTIGRAVITY` still exists and should be treated as legacy only
