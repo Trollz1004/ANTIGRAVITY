@@ -1,6 +1,7 @@
 # T5500 OPUS Stack — Docker Services
 # Usage: docker-compose up -d
 # Auto-starts on reboot via Task Scheduler (see scripts/STARTUP.bat)
+# Note: ./logs directory is created automatically by Docker on first run.
 
 services:
   redis:
@@ -33,7 +34,7 @@ services:
       - REDIS_URL=redis://redis:6379
       - QDRANT_URL=http://qdrant:6333
     volumes:
-      - C:/ANTIGRAVITY/logs:/logs
+      - ./logs:/logs
       - openclaw_wwebjs:/app/.wwebjs_auth
       - openclaw_wwebjs_cache:/app/.wwebjs_cache
       - ../openclaw/.env:/app/.env:ro
@@ -56,7 +57,7 @@ services:
       - QDRANT_URL=http://qdrant:6333
       - OPENCLAW_URL=http://openclaw:3200
     volumes:
-      - C:/ANTIGRAVITY/logs:/logs
+      - ./logs:/logs
       - openclaw_wwebjs:/app/.wwebjs_auth
       - openclaw_wwebjs_cache:/app/.wwebjs_cache
     depends_on:

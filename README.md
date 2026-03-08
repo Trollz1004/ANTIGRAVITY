@@ -68,7 +68,7 @@ Set-Location C:\ANTIGRAVITY
 .\ops\-sync-main.ps1
 ```
 
-**Status docs:** `GEMINI-STATUS.md` · `OPUS-STATUS.md` · `CODEX-STATUS.md` · `JULES-STATUS.md`
+**Status docs:** `SABRETOOTH-STATUS.md`
 
 ## Run Locally
 

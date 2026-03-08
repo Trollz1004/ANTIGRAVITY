@@ -19,7 +19,7 @@ __pycache__/
 .wwebjs_auth/
 .wwebjs_cache/
 qdrant-data/
-package-lock.json
+/package-lock.json
 Thumbs.db
 .DS_Store
 temp-b64.txt
