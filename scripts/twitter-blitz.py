@@ -19,7 +19,7 @@ from datetime import datetime
 SCRIPT_DIR = Path(__file__).parent
 ENV_FILE = SCRIPT_DIR / ".env"
 TRACKER_FILE = SCRIPT_DIR.parent / "marketing-automation" / "post-tracker.json"
-QUEUE_FILE = SCRIPT_DIR.parent / "TASK-QUEUE-100.md"
+QUEUE_FILE = SCRIPT_DIR.parent / "CodeX" / "state" / "runtime" / "TASK-QUEUE-100.md"
 
 BRAND = {
     "domain": "youandinotai.com",

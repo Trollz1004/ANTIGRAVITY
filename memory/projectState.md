@@ -1,5 +1,13 @@
 # PROJECT STATE — COMPLETE SYSTEM MAP
 
+> 2026-03-10 guard rail: large parts of this file are historical and still contain pre-cutover `OPUSONLY`, Stripe-era, and dead-deployment context. Do not use this file by itself for live repo, node, backend, or payment decisions.
+>
+> Current live sources to trust first:
+> - `C:\ANTIGRAVITY\AGENTS.md`
+> - `C:\ANTIGRAVITY\memory\activeContext.md`
+> - `C:\ANTIGRAVITY\briefings\LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
+> - `C:\ANTIGRAVITY\briefings\GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
+
 **Last Updated**: 2026-02-14T08:30:00Z
 
 ## Active Repos

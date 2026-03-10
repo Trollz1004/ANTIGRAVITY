@@ -1,6 +1,6 @@
 # ACTIVE CONTEXT — WHAT'S HAPPENING RIGHT NOW
 
-**Last Updated**: 2026-03-07T15:43:08-05:00
+**Last Updated**: 2026-03-10T07:21:03-04:00
 **Session**: Codex Desktop on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)  
 **Dev Server**: Not part of current priority
 
@@ -86,6 +86,25 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - live verified payout wallets are `0x8d3d...` / `0xe0a42...` / `0x7c3E...`
    - newer repo `DatingRevenueRouter` addresses are intended-next deployment material, not confirmed live on-chain truth
    - the `30%` bucket now has explicit repo wording for full mission infrastructure and AI operations, not vendor-only language
+30. Live payment truth now has an explicit repo anchor:
+   - `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
+   - use it before relying on pasted chat history, old PR emails, or exported folders
+31. Current payment truth for YouAndINotAI:
+   - Square is the live code path
+   - the March 5, 2026 $1 Square Bot-Shield receipt proves the charge path worked
+   - Google Pay remains unproven until a Google Pay receipt is found
+32. Current payment engineering risk:
+   - the problem is identity binding, not whether Square can process the $1 charge
+   - `verify.py` appends `user_id` and `event_id`, while `webhooks.py` resolves users from Square customer ID or buyer email
+33. The current visible payment surface is now captured locally:
+   - public YouAndINotAI Square links in `youandinotai/src/App.tsx`
+   - merch Square link in `youandinotai/src/components/MerchStore.tsx`
+   - additional inventory evidence in `square_catalog.json`
+34. `ClawX\src\_manus-export\ai-solutions-store\paymentwall.service.ts` exists and can be mined for recovery ideas, but it is not live payment truth
+35. Direct orchestration with Gemini is preferred over passive handoff writing when payment or launch-state drift is being actively corrected in-thread
+36. Runtime queue/handoff outputs are no longer supposed to dirty tracked git paths:
+   - `CodeX\state\runtime\TASK-QUEUE-100.md`
+   - `CodeX\state\runtime\codex-orchestrator-handoff.md`
 
 ## House Rules
 
@@ -125,3 +144,6 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 10. Build inbox automation next: FormSubmit/Gmail intake -> structured queue -> reply draft -> Square next-step link
 11. Use the generated node matrix and public-copy audit as the default go/no-go check before adding any new automation surface
 12. Treat `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md` as the canonical chain-status note before making any DAO-language changes
+13. Keep `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md` current whenever payment links, webhook logic, or catalog understanding changes
+14. Test the live Square identity-binding path before reopening any discussion about replacing Square
+15. If a Google Pay receipt appears, classify it strictly as wallet evidence vs a separate processor path before changing any payment narrative
