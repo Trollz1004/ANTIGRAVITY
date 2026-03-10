@@ -6,6 +6,7 @@ import {
   CheckCircle2, Key, Moon, Sun, TrendingUp, Users, Heart, Zap,
   Activity, Lock, ArrowUpRight, BarChart3, Terminal, Gift
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 // Components
@@ -28,21 +29,56 @@ const platforms = [
     name: "youandinotai.com",
     title: "YouAndINotAI (Social Platform)",
     description: "Social Platform for Good. V8 Cloud Verification — $1 Bot-Shield + $14.99/mo Founder.",
-    tech: ["FastAPI", "PostgreSQL", "React", "Stripe"]
+    tech: ["FastAPI", "PostgreSQL", "React", "Square"]
   },
   {
     name: "onlinerecycle.org",
-    title: "CrossLister AI",
-    description: "Crosslister profit platform for e-commerce optimization.",
-    tech: ["Python", "Redis", "Celery", "PostgreSQL"]
+    title: "Green Recycling",
+    description: "Responsible e-waste recycling. Supporting the 60/30/10 mission structure.",
+    tech: ["Next.js", "TypeScript", "PostgreSQL"]
   },
   {
     name: "ai-solutions.store",
     title: "Charity Storefront",
     description: "100% DAO charity storefront. All proceeds to Shriners.",
-    tech: ["Next.js", "TypeScript", "Stripe", "Prisma"]
+    tech: ["Next.js", "TypeScript", "Prisma", "Base"]
   }
 ];
+
+interface StatCardProps {
+  label: string;
+  value: string;
+  icon: LucideIcon;
+  color: string;
+  subValue?: string;
+  isDarkMode: boolean;
+  prefix?: string;
+}
+
+const StatCard = ({ label, value, icon: Icon, color, subValue, isDarkMode, prefix = '' }: StatCardProps) => (
+  <motion.div
+    whileHover={{ y: -5, scale: 1.02 }}
+    className={`relative p-6 rounded-[2rem] border transition-all duration-300 overflow-hidden ${isDarkMode
+      ? 'bg-slate-900/60 border-slate-800 shadow-[0_0_40px_rgba(0,0,0,0.5)]'
+      : 'bg-white border-slate-200 shadow-xl'
+      }`}
+  >
+    <div className="absolute top-0 right-0 p-4 opacity-5 transform translate-x-2 -translate-y-2">
+      <Icon size={80} />
+    </div>
+    <div className="relative z-10">
+      <div className={`p-3 rounded-2xl inline-flex mb-4 ${isDarkMode ? 'bg-slate-950 border border-slate-800' : 'bg-slate-50 border border-slate-100'}`}>
+        <Icon size={24} className={color} />
+      </div>
+      <h3 className={`text-sm font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{label}</h3>
+      <div className="flex items-baseline gap-2 mt-2">
+        <p className="text-4xl font-black tracking-tight">{prefix}{value}</p>
+        {subValue && <span className="text-xs font-bold text-emerald-500">{subValue}</span>}
+      </div>
+    </div>
+    <div className={`absolute -bottom-10 -right-10 w-32 h-32 blur-[100px] opacity-20 rounded-full ${color.replace('text-', 'bg-')}`} />
+  </motion.div>
+);
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -95,32 +131,6 @@ export default function Dashboard() {
     { id: 'organization', label: 'Organization', icon: ShieldCheck },
     { id: 'settings', label: 'System Config', icon: Key },
   ];
-
-  const StatCard = ({ label, value, icon: Icon, color, subValue }: any) => (
-    <motion.div
-      whileHover={{ y: -5, scale: 1.02 }}
-      className={`relative p-6 rounded-[2rem] border transition-all duration-300 overflow-hidden ${isDarkMode
-        ? 'bg-slate-900/60 border-slate-800 shadow-[0_0_40px_rgba(0,0,0,0.5)]'
-        : 'bg-white border-slate-200 shadow-xl'
-        }`}
-    >
-      <div className={`absolute top-0 right-0 p-4 opacity-5 transform translate-x-2 -translate-y-2`}>
-        <Icon size={80} />
-      </div>
-      <div className="relative z-10">
-        <div className={`p-3 rounded-2xl inline-flex mb-4 ${isDarkMode ? 'bg-slate-950 border border-slate-800' : 'bg-slate-50 border border-slate-100'}`}>
-          <Icon size={24} className={color} />
-        </div>
-        <h3 className={`text-sm font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{label}</h3>
-        <div className="flex items-baseline gap-2 mt-2">
-          <p className="text-4xl font-black tracking-tight">${value}</p>
-          {subValue && <span className="text-xs font-bold text-emerald-500">{subValue}</span>}
-        </div>
-      </div>
-      {/* Glow Effect */}
-      <div className={`absolute -bottom-10 -right-10 w-32 h-32 blur-[100px] opacity-20 rounded-full ${color.replace('text-', 'bg-')}`} />
-    </motion.div>
-  );
 
   return (
     <div className={`min-h-screen font-sans transition-all duration-700 ${isDarkMode ? 'bg-[#020617] text-slate-100' : 'bg-slate-50 text-slate-900'} selection:bg-blue-500/30 overflow-x-hidden`}>
@@ -228,10 +238,10 @@ export default function Dashboard() {
                 >
                   {/* Top Stats */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <StatCard label="Total Revenue" value={metrics.revenue.toLocaleString()} icon={TrendingUp} color="text-blue-500" subValue="+100% Launch" />
-                    <StatCard label="Real Customers" value={metrics.customers.toLocaleString()} icon={Users} color="text-purple-500" />
-                    <StatCard label="Shriners Disbursements" value={metrics.shriners.toLocaleString()} icon={Heart} color="text-rose-500" />
-                    <StatCard label="Network Uptime" value={metrics.uptime} icon={Activity} color="text-emerald-500" />
+                    <StatCard label="Total Revenue" value={metrics.revenue.toLocaleString()} icon={TrendingUp} color="text-blue-500" subValue="+100% Launch" isDarkMode={isDarkMode} prefix="$" />
+                    <StatCard label="Real Customers" value={metrics.customers.toLocaleString()} icon={Users} color="text-purple-500" isDarkMode={isDarkMode} />
+                    <StatCard label="Shriners Disbursements" value={metrics.shriners.toLocaleString()} icon={Heart} color="text-rose-500" isDarkMode={isDarkMode} prefix="$" />
+                    <StatCard label="Network Uptime" value={metrics.uptime} icon={Activity} color="text-emerald-500" isDarkMode={isDarkMode} />
                   </div>
 
                   {/* Protocol Omega Split */}
