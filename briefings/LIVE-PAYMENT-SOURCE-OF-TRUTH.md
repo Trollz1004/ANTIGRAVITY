@@ -23,7 +23,7 @@ If a claim is not grounded in the files above, treat it as unverified until re-c
 - Live git truth: `origin/main`
 - Confirmed live payment rail for YouAndINotAI: Square
 - Confirmed live backend verification path: Square checkout plus Square webhook
-- Confirmed live receipt evidence so far: the March 5, 2026 $1 Square Bot-Shield charge path worked
+- Confirmed live receipt evidence so far: receipt `#9kBD` shows a March 5, 2026 `08:46 AM` $1.00 Square Bot-Shield payment completed successfully
 - Square merchant settings were re-checked live from T5500 on 2026-03-10:
   - Apple Pay enabled
   - Google Pay enabled
@@ -91,6 +91,13 @@ When auditing future payment bugs, check identity correlation before questioning
 - Cash App Pay is not configured in the current merchant-settings response, so do not promise it in user-facing copy.
 - Afterpay/Clearpay is currently disabled in the live Square merchant settings, so do not promise it in user-facing copy.
 - Apple Pay / Google Pay remain enabled-setting evidence, not receipt evidence.
+- The March 5, 2026 Bot-Shield receipt is card evidence specifically:
+  - merchant: `Online Recycle`
+  - item: `Bot-Shield Verification`
+  - total: `$1.00`
+  - processor receipt id: `#9kBD`
+  - tender evidence: `Visa 1246 (Keyed)`
+  - this proves the Square card charge path, not a wallet path such as Apple Pay or Google Pay
 
 ## T5500 Runtime Reality
 

@@ -128,6 +128,14 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - Google Pay is enabled
    - Afterpay/Clearpay is disabled
    - Cash App Pay was not configured in the merchant-settings response
+41a. The March 5, 2026 user receipt is now grounded as direct payment evidence:
+   - Square receipt `#9kBD`
+   - `08:46 AM` on March 5, 2026
+   - merchant `Online Recycle`
+   - item `Bot-Shield Verification`
+   - total `$1.00`
+   - tender `Visa 1246 (Keyed)`
+   - this proves the Square card charge path, not Google Pay or Apple Pay
 42. `T5500` runtime reality for the date app is now clearer:
    - `C:\DateApp` is not present there anymore
    - `C:\ANTIGRAVITY\.env` contains a valid Square token + location ID and `APP_URL`
