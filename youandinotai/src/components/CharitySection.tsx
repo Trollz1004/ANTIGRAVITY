@@ -149,10 +149,11 @@ export function CharitySection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <CharityCard
             icon={Globe}
-            name="AI-Solutions.Store"
-            tagline="AI for Good"
-            url="https://ai-solutions.store"
-            description="Our flagship AI automation platform. 100% of revenue is contractually routed to Shriners Children's Hospitals via Protocol Omega on Base Mainnet — OMEGA: all charity, no exceptions."
+            name="YouAndINotAI"
+            tagline="Verification First"
+            url="https://youandinotai.com"
+            description="Identity checks, Square-hosted Bot-Shield payment flow, and founder plans all stay on the live ENIGMA side of the platform."
+            color="from-indigo-400 to-purple-600"
           />
           <CharityCard
             icon={Recycle}
