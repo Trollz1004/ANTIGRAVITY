@@ -117,6 +117,11 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - stale Claude project-memory folders for `C--ANTIGRAVITY`, `C--ANTIGRAVITY-ForTheKids`, and `C--OPUSONLY-ANTIGRAVITY` were archived out of `C:\Users\joshl\.claude\projects`
    - archive path: `C:\Users\joshl\OneDrive\Claude-Code-Backup\retired-claude-project-memory\2026-03-10`
    - stale ignored repo prompt `briefings\CODEX-DIRECTIVE-2026-03-10.md` was deleted because it contradicted live Square truth
+40. Gemini CLI on Sabretooth is now aligned to the live repo:
+   - `gemini` resolves in the Codex app terminal
+   - trusted Gemini workspace is `C:\ANTIGRAVITY`
+   - repo-local `C:\ANTIGRAVITY\GEMINI.md` now defines same-workspace rules
+   - `Launch-Gemini.ps1` now points at `C:\ANTIGRAVITY` instead of the retired `E:\` model
 
 ## House Rules
 
@@ -161,3 +166,4 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 15. If a Google Pay receipt appears, classify it strictly as wallet evidence vs a separate processor path before changing any payment narrative
 16. Treat `main` push + clean status + passing required CI as the default definition of “task complete” on Sabretooth
 17. Before prompting Gemini from the shared Sabretooth workspace, prefer deleting or archiving stale local directive files and retired Claude project-memory folders if they contradict live repo truth
+18. Prefer launching Gemini from `C:\ANTIGRAVITY` with the repo-local `GEMINI.md` in effect, not from legacy drive-specific wrappers or split-house workspaces
