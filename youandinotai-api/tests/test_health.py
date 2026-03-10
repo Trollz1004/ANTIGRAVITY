@@ -20,6 +20,8 @@ def _settings(
     return SimpleNamespace(
         square_bot_shield_payment_link=payment_link,
         square_webhook_verify_signature=verify_signature,
+        square_payment_webhook_signature_key=signature_key,
+        square_payment_webhook_notification_url=notification_url,
         square_webhook_signature_key=signature_key,
         square_webhook_notification_url=notification_url,
     )
