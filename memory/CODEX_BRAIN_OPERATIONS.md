@@ -7,7 +7,8 @@ Keep a persistent orchestrator handoff so session/token limits never wipe workin
 ## Files Generated
 
 - `C:\ANTIGRAVITY\CodeX\brain\checkpoints\codex-checkpoint-YYYYMMDD-HHMMSS.json`
-- `C:\ANTIGRAVITY\memory\codex-orchestrator-handoff.md`
+- `C:\ANTIGRAVITY\CodeX\state\runtime\codex-orchestrator-handoff.md`
+- `C:\ANTIGRAVITY\CodeX\state\runtime\TASK-QUEUE-100.md`
 - `C:\ANTIGRAVITY\CodeX\logs\codex-brain-guard.log`
 
 ## One-Time Setup (Admin PowerShell)
