@@ -22,10 +22,11 @@ if (-not $BrainRoot) {
 
 $checkpointDir = Join-Path $BrainRoot "checkpoints"
 $logDir = Join-Path $RepoRoot "CodeX\logs"
+$runtimeStateDir = Join-Path $RepoRoot "CodeX\state\runtime"
 $logPath = Join-Path $logDir "codex-brain-guard.log"
-$handoffPath = Join-Path $MemoryRoot "codex-orchestrator-handoff.md"
+$handoffPath = Join-Path $runtimeStateDir "codex-orchestrator-handoff.md"
 
-foreach ($dir in @($checkpointDir, $logDir, $MemoryRoot)) {
+foreach ($dir in @($checkpointDir, $logDir, $MemoryRoot, $runtimeStateDir)) {
     if (-not (Test-Path -LiteralPath $dir)) {
         New-Item -ItemType Directory -Path $dir -Force | Out-Null
     }

@@ -25,8 +25,8 @@
 ## Legacy E: Working Tree To Protect Until Retired
 
 - `README.md`
-- `TASK-QUEUE-100.md`
-- `memory/codex-orchestrator-handoff.md`
+- `CodeX/state/runtime/TASK-QUEUE-100.md`
+- `CodeX/state/runtime/codex-orchestrator-handoff.md`
 - `scripts/deploy/Setup-MCPs.ps1`
 - `scripts/deploy/mcp-config-template.json`
 - untracked: `Trollz1004/`

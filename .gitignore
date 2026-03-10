@@ -104,3 +104,13 @@ assets/social/generated/
 .qdrant-initialized
 docker-compose.9020.yml
 mcp-server/tunnel.log
+
+# Local recovery sandboxes / workspace debris
+ClawX/.vscode/
+ClawX/deploy/
+ClawX/src/.gitignore
+ForTheKids/
+_deploy/onlinerecycle/THE WHEEL.txt
+_deploy/onlinerecycle/THE_WHEEL.html
+briefings/CODEX-DIRECTIVE-*.md
+scripts/sync-claude-token.sh

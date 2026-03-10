@@ -6,6 +6,20 @@ Every architectural decision is recorded here so no future session re-debates it
 
 ---
 
+## 2026-03-10: Payment truth must be verified from live repo files, not archaeology
+
+**Decision**: Treat live payment truth as whatever is currently implemented in `C:\ANTIGRAVITY` under the backend payment files, frontend payment links, and the canonical payment briefing, and treat old PR email archaeology or export folders as recovery-only unless re-verified.
+**Why**: Payment questions were drifting between old Stripe-era comments, dormant Paymentwall exports, and newer Square code. That is exactly the kind of memory loss that creates false architectural pivots.
+**Impact**: `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md` is now the first stop for payment questions. Future sessions should verify `verify.py`, `webhooks.py`, `config.py`, `health.py`, `App.tsx`, and `square_catalog.json` before accepting any historical claim.
+**Status**: Active
+
+## 2026-03-10: The live payment blocker is identity binding, not Square's ability to charge $1
+
+**Decision**: Stop re-debating whether Square can process the $1 Bot-Shield payment and focus payment debugging on user correlation between checkout and webhook confirmation.
+**Why**: The March 5, 2026 Square receipt proves the charge path worked, and the live backend already uses Square. The remaining operational risk is whether the webhook can deterministically bind the payer back to the right user and verification event.
+**Impact**: Payment work should prioritize validating the real Square webhook identity-binding path, while Google Pay remains a separate evidence question until a receipt is found.
+**Status**: Active
+
 ## 2026-03-07: Node social automation is draft-first and human-gated, not autoposted
 
 **Decision**: Replace the old browser-based multi-platform posting daemon with a legal-safe node automation layer that only generates draft packs, handoff queues, owned-site queues, and audits.

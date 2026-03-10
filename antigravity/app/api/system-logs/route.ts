@@ -9,9 +9,10 @@ export async function GET() {
   try {
     // Paths to the status files at the root of the workspace
     // Adjust based on the actual relative path from the Next.js app
-    const rootDir = path.resolve(process.cwd(), '..'); 
+    const rootDir = path.resolve(process.cwd(), '..');
     const statusPath = path.join(rootDir, 'SABRETOOTH-STATUS.md');
-    const queuePath = path.join(rootDir, 'TASK-QUEUE-100.md');
+    const runtimeQueuePath = path.join(rootDir, 'CodeX', 'state', 'runtime', 'TASK-QUEUE-100.md');
+    const legacyQueuePath = path.join(rootDir, 'TASK-QUEUE-100.md');
 
     let statusContent = "";
     let queueContent = "";
@@ -19,8 +20,10 @@ export async function GET() {
     if (fs.existsSync(statusPath)) {
       statusContent = fs.readFileSync(statusPath, 'utf-8');
     }
-    if (fs.existsSync(queuePath)) {
-      queueContent = fs.readFileSync(queuePath, 'utf-8');
+    if (fs.existsSync(runtimeQueuePath)) {
+      queueContent = fs.readFileSync(runtimeQueuePath, 'utf-8');
+    } else if (fs.existsSync(legacyQueuePath)) {
+      queueContent = fs.readFileSync(legacyQueuePath, 'utf-8');
     }
 
     // Extracting recent log-like lines

@@ -8,7 +8,7 @@
  * - Task queue lifecycle in JSON
  * - Dispatch to codex/openclaw/ollama
  * - Auto-spawn follow-up tasks
- * - Export TASK-QUEUE-100.md snapshot
+ * - Export runtime TASK-QUEUE-100.md snapshot
  */
 
 const fs = require("fs");
@@ -25,7 +25,7 @@ const LOGS_DIR = path.join(PROJECT_DIR, "CodeX", "logs");
 const DEFAULTS = {
   queueFile: path.join(DATA_DIR, "codex-task-queue.json"),
   stateFile: path.join(DATA_DIR, "codex-task-sentry-state.json"),
-  markdownFile: path.join(PROJECT_DIR, "TASK-QUEUE-100.md"),
+  markdownFile: path.join(PROJECT_DIR, "CodeX", "state", "runtime", "TASK-QUEUE-100.md"),
   openclawUrl: process.env.OPENCLAW_URL || "http://127.0.0.1:3200",
   ollamaUrl: process.env.OLLAMA_URL || process.env.OLLAMA_BASE_URL || "http://127.0.0.1:11434",
   ollamaModel: process.env.OLLAMA_MODEL || "qwen2.5:7b",

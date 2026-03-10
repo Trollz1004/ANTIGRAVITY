@@ -1,29 +1,27 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { 
-  Recycle, 
-  Heart, 
-  Globe, 
-  Cpu, 
-  ShoppingBag, 
-  ExternalLink, 
-  TreeDeciduous, 
-  DollarSign, 
-  Smartphone 
+import {
+  Recycle,
+  Heart,
+  Globe,
+  Cpu,
+  ExternalLink,
+  DollarSign,
+  Smartphone
 } from 'lucide-react';
 
-const CharityCard = ({ 
-  icon: Icon, 
-  name, 
-  tagline, 
-  url, 
+const CharityCard = ({
+  icon: Icon,
+  name,
+  tagline,
+  url,
   description,
   color = "from-green-400 to-green-600"
-}: { 
-  icon: any, 
-  name: string, 
-  tagline: string, 
-  url: string, 
+}: {
+  icon: any,
+  name: string,
+  tagline: string,
+  url: string,
   description: string,
   color?: string
 }) => (
@@ -41,9 +39,9 @@ const CharityCard = ({
       <p className="text-gray-400 text-sm leading-relaxed mb-8 flex-1">
         {description}
       </p>
-      <a 
-        href={url} 
-        target="_blank" 
+      <a
+        href={url}
+        target="_blank"
         rel="noopener noreferrer"
         className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center gap-2 text-white font-bold hover:bg-green-500 hover:border-green-400 transition-all group/btn"
       >
@@ -57,14 +55,14 @@ const CharityCard = ({
 const Particle = ({ delay }: { delay: number }) => (
   <motion.div
     initial={{ y: '100%', opacity: 0, x: Math.random() * 100 + '%' }}
-    animate={{ 
-      y: '-10%', 
+    animate={{
+      y: '-10%',
       opacity: [0, 1, 1, 0],
       x: (Math.random() * 100 - 50) + '%'
     }}
-    transition={{ 
-      duration: Math.random() * 10 + 10, 
-      repeat: Infinity, 
+    transition={{
+      duration: Math.random() * 10 + 10,
+      repeat: Infinity,
       delay,
       ease: "linear"
     }}
@@ -89,23 +87,23 @@ export function CharitySection() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-black uppercase tracking-[0.3em]"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-black uppercase tracking-[0.3em]"
           >
-            <Recycle size={14} />
-            Give Back & Go Green
+            <Cpu size={14} />
+            Powered by V8 Verification
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-7xl font-black tracking-tighter text-white leading-none"
+            className="text-4xl md:text-7xl font-black tracking-tighter text-white leading-none mb-6"
           >
-            Every Match. Every Device. <br/>
-            60% <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">FOR THE KIDS. ♥</span>
+            Real Matches. <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-600">ZERO B.S.</span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -113,7 +111,7 @@ export function CharitySection() {
             transition={{ delay: 0.2 }}
             className="text-gray-400 max-w-2xl mx-auto text-lg font-light"
           >
-            We're building a sustainable future where technology heals. Our ecosystem turns e-waste into miracles and AI revenue into children's smiles.
+            YouAndINotAI is built to eliminate fake profiles. Bot-Shield pairs identity verification with a $1 Square-hosted checkout so spam networks hit real friction before they ever reach the community.
           </motion.p>
         </div>
 
@@ -128,49 +126,41 @@ export function CharitySection() {
             <div className="p-3 bg-green-500/10 rounded-2xl text-green-400">
               <Smartphone size={24} />
             </div>
-            <div className="text-3xl font-black text-white">E-Waste</div>
-            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Device Recycling Program</div>
+            <div className="text-3xl font-black text-white">$1</div>
+            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Bot-Shield Verification</div>
           </div>
           <div className="flex flex-col items-center text-center space-y-2 border-x border-white/5">
             <div className="p-3 bg-rose-500/10 rounded-2xl text-rose-400">
-              <Heart size={24} />
+              <DollarSign size={24} />
             </div>
-            <div className="text-3xl font-black text-white">60%</div>
-            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Revenue to Shriners</div>
+            <div className="text-3xl font-black text-white">Square</div>
+            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Live Payment Rail</div>
           </div>
           <div className="flex flex-col items-center text-center space-y-2">
-            <div className="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400">
-              <TreeDeciduous size={24} />
+            <div className="p-3 bg-indigo-500/10 rounded-2xl text-indigo-400">
+              <Heart size={24} />
             </div>
-            <div className="text-3xl font-black text-white">Green</div>
-            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Sustainable Mission</div>
+            <div className="text-3xl font-black text-white">60/30/10</div>
+            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Revenue Split Model</div>
           </div>
         </motion.div>
 
         {/* Platforms Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <CharityCard 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <CharityCard
             icon={Globe}
             name="AI-Solutions.Store"
             tagline="AI for Good"
             url="https://ai-solutions.store"
             description="Our flagship AI automation platform. 100% of revenue is contractually routed to Shriners Children's Hospitals via Protocol Omega on Base Mainnet — OMEGA: all charity, no exceptions."
           />
-          <CharityCard 
+          <CharityCard
             icon={Recycle}
             name="OnlineRecycle.org"
             tagline="Trash or Treasure"
             url="https://OnlineRecycle.org"
             description="Responsible e-waste recycling. Ship your old electronics to us; we recycle them and route 60% of proceeds to Shriners Children's Hospitals via Protocol Omega revenue disbursement. Old tech, new hope."
             color="from-emerald-400 to-teal-600"
-          />
-          <CharityCard 
-            icon={ShoppingBag}
-            name="The Square Store"
-            tagline="Revenue Portal"
-            url="https://onlinerecycle.square.site"
-            description="Our official storefront and revenue portal. Linked directly to eBay listings benefiting Shriners Children's Hospitals. Shop with purpose — 60% of every purchase goes to Shriners Children's Hospitals through Protocol Omega."
-            color="from-green-500 to-green-800"
           />
         </div>
 

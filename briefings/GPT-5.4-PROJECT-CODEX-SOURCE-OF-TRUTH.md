@@ -109,9 +109,9 @@ Tracked shared memory files:
 - `C:\ANTIGRAVITY\memory\MISSION_CONTINUITY.md`
 - `C:\ANTIGRAVITY\memory\README.md`
 
-Generated tracked handoff/status material:
-- `C:\ANTIGRAVITY\memory\codex-orchestrator-handoff.md`
-- `C:\ANTIGRAVITY\TASK-QUEUE-100.md`
+Generated runtime handoff/status material:
+- `C:\ANTIGRAVITY\CodeX\state\runtime\codex-orchestrator-handoff.md`
+- `C:\ANTIGRAVITY\CodeX\state\runtime\TASK-QUEUE-100.md`
 
 Ignored/local-only memory locations:
 - `C:\ANTIGRAVITY\memory\local\`
@@ -317,6 +317,6 @@ The following are backup, recovery, or legacy artifacts. They must **not** be us
 ## Current Caveats
 
 - `E:\ANTIGRAVITY` still exists and should be treated as legacy only
-- `TASK-QUEUE-100.md` and `memory\codex-orchestrator-handoff.md` are generated files and may re-dirty during normal scheduled-task activity
+- `CodeX\state\runtime\TASK-QUEUE-100.md` and `CodeX\state\runtime\codex-orchestrator-handoff.md` are generated runtime files and should remain out of tracked git paths
 - `9020` and `T5500` still have unrelated local drift outside the reviewed automation slice
 - `T5500` can still report `LIVE_OK=NO` on the e-waste live-ok audit even when the automation stack itself is functioning
