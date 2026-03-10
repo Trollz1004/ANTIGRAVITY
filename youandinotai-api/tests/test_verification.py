@@ -9,8 +9,7 @@ Tests cover:
 
 import os
 import uuid
-from datetime import datetime, timezone
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
@@ -63,22 +62,49 @@ class TestVerifyConfirmPaymentEnforcement:
 
 
 class TestSquarePaymentLinkGeneration:
-    """Test that verify.py generates Square payment links (not Stripe)."""
+    """Test the live Bot-Shield checkout request and binding helpers."""
 
-    def test_square_link_includes_user_metadata(self):
-        """Square payment link must include user_id and event_id for correlation."""
-        base_url = "https://square.link/u/BOT_SHIELD"
+    def test_checkout_reference_round_trip(self):
+        from app.payment_truth import build_checkout_reference, parse_checkout_reference
+
         user_id = uuid.uuid4()
         event_id = uuid.uuid4()
+        secret = "test-secret-that-is-at-least-32-characters-long-for-security"
 
-        # Simulate the link generation logic from verify.py
-        separator = "&" if "?" in base_url else "?"
-        checkout_url = f"{base_url}{separator}user_id={user_id}&event_id={event_id}"
+        token = build_checkout_reference(
+            user_id=user_id,
+            event_id=event_id,
+            tier="bot_shield",
+            secret=secret,
+        )
+        parsed = parse_checkout_reference(token, secret=secret)
 
-        assert str(user_id) in checkout_url
-        assert str(event_id) in checkout_url
-        assert "stripe" not in checkout_url.lower()
-        assert "square.link" in checkout_url
+        assert parsed is not None
+        assert parsed["user_id"] == user_id
+        assert parsed["event_id"] == event_id
+        assert parsed["tier"] == "bot_shield"
+
+    def test_bot_shield_checkout_request_includes_binding_and_return_url(self):
+        from app.payment_truth import (
+            BOT_SHIELD_CENTS,
+            build_bot_shield_checkout_request,
+        )
+
+        checkout_ref = "v1.checkout.ref"
+        request_body = build_bot_shield_checkout_request(
+            app_url="https://youandinotai.com",
+            location_id="LY5GN09F5AN83",
+            buyer_email="josh@example.com",
+            checkout_ref=checkout_ref,
+        )
+
+        assert request_body["order"]["reference_id"] == f"agref:{checkout_ref}"
+        assert request_body["payment_note"].endswith(f"agref:{checkout_ref}")
+        assert request_body["order"]["line_items"][0]["base_price_money"]["amount"] == BOT_SHIELD_CENTS
+        assert request_body["pre_populated_data"]["buyer_email"] == "josh@example.com"
+        assert request_body["checkout_options"]["redirect_url"].startswith(
+            "https://youandinotai.com/app/verify?status=success"
+        )
 
     def test_no_stripe_references_in_verify(self):
         """verify.py must not contain any Stripe imports or references."""
@@ -102,34 +128,45 @@ class TestSquarePaymentLinkGeneration:
         )
 
 
-class TestTierNormalization:
-    """Test subscription tier normalization from webhook data."""
+class TestVerificationPromotion:
+    """Verification must only promote when liveness and payment both exist."""
 
-    def test_normalize_bot_shield_variants(self):
-        from app.routers.webhooks import _normalize_tier
+    def test_promote_user_requires_liveness_and_payment(self):
+        import asyncio
 
-        assert _normalize_tier("botshield") == "bot_shield"
-        assert _normalize_tier("bot_shield") == "bot_shield"
-        assert _normalize_tier("BotShield") == "bot_shield"
-        assert _normalize_tier("BOT_SHIELD") == "bot_shield"
+        from app.verification_service import promote_user_verification_if_ready
 
-    def test_normalize_founding_member_variants(self):
-        from app.routers.webhooks import _normalize_tier
+        user = MagicMock()
+        user.id = uuid.uuid4()
+        user.bot_shield_verified = False
+        user.profile = MagicMock()
+        user.profile.verified = False
 
-        assert _normalize_tier("founding_member") == "founding_member"
-        assert _normalize_tier("foundingmember") == "founding_member"
-        assert _normalize_tier("FoundingMember") == "founding_member"
+        mock_db = AsyncMock()
+        mock_db.scalar = AsyncMock(side_effect=[None, MagicMock()])
 
-    def test_normalize_royalty_variants(self):
-        from app.routers.webhooks import _normalize_tier
+        promoted = asyncio.run(promote_user_verification_if_ready(mock_db, user))
 
-        assert _normalize_tier("royalty") == "royalty"
-        assert _normalize_tier("royalty_card") == "royalty"
-        assert _normalize_tier("Royalty") == "royalty"
+        assert promoted is False
+        assert user.bot_shield_verified is False
+        assert user.profile.verified is False
 
-    def test_normalize_unknown_returns_none(self):
-        from app.routers.webhooks import _normalize_tier
+    def test_promote_user_succeeds_when_both_checks_exist(self):
+        import asyncio
 
-        assert _normalize_tier("unknown_tier") is None
-        assert _normalize_tier("") is None
-        assert _normalize_tier(None) is None
+        from app.verification_service import promote_user_verification_if_ready
+
+        user = MagicMock()
+        user.id = uuid.uuid4()
+        user.bot_shield_verified = False
+        user.profile = MagicMock()
+        user.profile.verified = False
+
+        mock_db = AsyncMock()
+        mock_db.scalar = AsyncMock(side_effect=[MagicMock(), MagicMock()])
+
+        promoted = asyncio.run(promote_user_verification_if_ready(mock_db, user))
+
+        assert promoted is True
+        assert user.bot_shield_verified is True
+        assert user.profile.verified is True

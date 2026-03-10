@@ -1,6 +1,6 @@
 # DECISIONS LOG — WHY WE DID WHAT WE DID
 
-**Last Updated**: 2026-03-07T15:32:58-05:00
+**Last Updated**: 2026-03-10T10:35:00-04:00
 
 Every architectural decision is recorded here so no future session re-debates it.
 
@@ -11,6 +11,20 @@ Every architectural decision is recorded here so no future session re-debates it
 **Decision**: Treat live payment truth as whatever is currently implemented in `C:\ANTIGRAVITY` under the backend payment files, frontend payment links, and the canonical payment briefing, and treat old PR email archaeology or export folders as recovery-only unless re-verified.
 **Why**: Payment questions were drifting between old Stripe-era comments, dormant Paymentwall exports, and newer Square code. That is exactly the kind of memory loss that creates false architectural pivots.
 **Impact**: `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md` is now the first stop for payment questions. Future sessions should verify `verify.py`, `webhooks.py`, `config.py`, `health.py`, `App.tsx`, and `square_catalog.json` before accepting any historical claim.
+**Status**: Active
+
+## 2026-03-10: Square merchant-settings evidence outranks stale Docker-era payment assumptions
+
+**Decision**: When payment-method questions come up, prefer a fresh Square merchant-settings check with the live token over stale T5500 Docker files or older memory claims.
+**Why**: The T5500 audit showed `C:\DateApp` is gone, Docker was not running, and the old `youandinotai-api/docker-compose.yml` still carried Stripe-era drift even though the Square merchant itself is active and reports Apple Pay / Google Pay enabled with Afterpay disabled.
+**Impact**: The live payment briefing, memory files, and user-facing payment-method copy now reflect the merchant-settings truth. Future sessions should not promise Cash App Pay or Afterpay unless a fresh merchant-settings check proves they are enabled.
+**Status**: Active
+
+## 2026-03-10: Bot-Shield should bind checkout to webhook with signed Square references
+
+**Decision**: Prefer per-user Square Checkout API links for Bot-Shield and bind checkout to the webhook path with a signed checkout reference that encodes the user, verification event, and tier.
+**Why**: Static shared payment links plus buyer-email fallback are too weak for a reliable human-verification product. The real issue was identity binding, not Square’s ability to take the payment.
+**Impact**: `youandinotai-api/app/payment_truth.py` now centralizes signed checkout refs and canonical tier inference, `verify.py` creates dynamic Bot-Shield links when Square token/location are present, and `webhooks.py` resolves the signed reference before weaker fallbacks and promotes verification only when both liveness and payment exist.
 **Status**: Active
 
 ## 2026-03-10: The live payment blocker is identity binding, not Square's ability to charge $1
