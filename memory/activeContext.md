@@ -1,6 +1,6 @@
 # ACTIVE CONTEXT — WHAT'S HAPPENING RIGHT NOW
 
-**Last Updated**: 2026-03-10T07:21:03-04:00
+**Last Updated**: 2026-03-10T10:35:00-04:00
 **Session**: Codex Desktop on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)  
 **Dev Server**: Not part of current priority
 
@@ -122,6 +122,23 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - trusted Gemini workspace is `C:\ANTIGRAVITY`
    - repo-local `C:\ANTIGRAVITY\GEMINI.md` now defines same-workspace rules
    - `Launch-Gemini.ps1` now points at `C:\ANTIGRAVITY` instead of the retired `E:\` model
+41. Live Square merchant settings were re-checked from `T5500` on 2026-03-10:
+   - merchant `ML3C7FMTQS5KX` is active
+   - Apple Pay is enabled
+   - Google Pay is enabled
+   - Afterpay/Clearpay is disabled
+   - Cash App Pay was not configured in the merchant-settings response
+42. `T5500` runtime reality for the date app is now clearer:
+   - `C:\DateApp` is not present there anymore
+   - `C:\ANTIGRAVITY\.env` contains a valid Square token + location ID and `APP_URL`
+   - payment-link and webhook env vars are not present in that root env
+   - Docker was not running during the audit
+   - the remote `youandinotai-api/docker-compose.yml` was still Stripe-era drift, so it is not authoritative payment truth
+43. Bot-Shield checkout hardening is now in the live repo:
+   - `youandinotai-api/app/payment_truth.py` centralizes signed checkout refs and tier inference
+   - `verify.py` now prefers per-user Square Checkout API links when token/location are available
+   - `webhooks.py` resolves signed checkout refs before customer/email fallback and only promotes verification when liveness + payment both exist
+   - `youandinotai-api/docker-compose*.yml` no longer claim Stripe runtime env wiring
 
 ## House Rules
 
@@ -167,3 +184,4 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 16. Treat `main` push + clean status + passing required CI as the default definition of “task complete” on Sabretooth
 17. Before prompting Gemini from the shared Sabretooth workspace, prefer deleting or archiving stale local directive files and retired Claude project-memory folders if they contradict live repo truth
 18. Prefer launching Gemini from `C:\ANTIGRAVITY` with the repo-local `GEMINI.md` in effect, not from legacy drive-specific wrappers or split-house workspaces
+19. Treat live Square merchant-settings checks from T5500 as stronger evidence than stale local Docker files when payment-method questions come up

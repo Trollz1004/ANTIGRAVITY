@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ShieldCheck, Zap, CheckCircle, XCircle, ExternalLink, ArrowRight } from 'lucide-react';
-import { api } from '../../lib/api';
+import { ApiError, api } from '../../lib/api';
 import { VerifiedBadge, TrustScoreRing } from '../components/VerifiedBadge';
 
 interface ChallengeData {
@@ -34,11 +34,85 @@ export function Verify() {
   const [result, setResult] = useState<ChallengeResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [syncingPayment, setSyncingPayment] = useState(false);
+  const [syncMessage, setSyncMessage] = useState<string | null>(null);
+
+  const refreshVerificationStatus = async () => {
+    const updated = await api.get<VerificationStatus>('/verify/status');
+    setStatus(updated);
+    return updated;
+  };
+
+  const clearPaymentReturnParams = () => {
+    const params = new URLSearchParams(window.location.search);
+    params.delete('status');
+    params.delete('checkout_ref');
+    const nextQuery = params.toString();
+    const nextUrl = `${window.location.pathname}${nextQuery ? `?${nextQuery}` : ''}`;
+    window.history.replaceState({}, document.title, nextUrl);
+  };
+
+  const checkVerificationAfterPayment = async (retries = 0) => {
+    setSyncingPayment(true);
+    try {
+      for (let attempt = 0; attempt <= retries; attempt += 1) {
+        try {
+          await api.post('/verify/confirm');
+          const updated = await refreshVerificationStatus();
+          setResult({
+            passed: true,
+            trust_score: updated.trust_score,
+            message: 'Payment confirmed. Your Verified Human badge is now active.',
+            checkout_url: null,
+          });
+          setSyncMessage('Payment confirmed.');
+          clearPaymentReturnParams();
+          return;
+        } catch (err) {
+          if (err instanceof ApiError && err.status === 402 && attempt < retries) {
+            setSyncMessage('Payment received. Waiting for Square webhook to finish syncing...');
+            await new Promise((resolve) => window.setTimeout(resolve, 2000));
+            continue;
+          }
+
+          if (err instanceof Error) {
+            setSyncMessage(err.message);
+          } else {
+            setSyncMessage('We could not confirm your payment yet. Try again in a few seconds.');
+          }
+          return;
+        }
+      }
+    } finally {
+      setSyncingPayment(false);
+    }
+  };
 
   useEffect(() => {
-    api.get<VerificationStatus>('/verify/status')
-      .then(setStatus)
-      .finally(() => setLoading(false));
+    let cancelled = false;
+
+    const bootstrap = async () => {
+      try {
+        const updated = await api.get<VerificationStatus>('/verify/status');
+        if (cancelled) return;
+        setStatus(updated);
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('status') === 'success') {
+          setSyncMessage('Checking your Square payment now...');
+          await checkVerificationAfterPayment(3);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    bootstrap();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const startChallenge = async () => {
@@ -63,8 +137,7 @@ export function Verify() {
       setResult(data);
       setChallenge(null);
       // Refresh status
-      const updated = await api.get<VerificationStatus>('/verify/status');
-      setStatus(updated);
+      await refreshVerificationStatus();
     } catch (err: any) {
       alert(err.message || 'Submission failed');
     } finally {
@@ -155,6 +228,12 @@ export function Verify() {
                   <span>Earn your Verified Human badge and boost your Trust Score</span>
                 </div>
               </div>
+              <div className="mt-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
+                <p className="text-white text-sm font-bold mb-2">Checkout methods</p>
+                <p className="text-gray-400 text-xs leading-relaxed">
+                  Square-hosted checkout always supports card entry. Apple Pay and Google Pay are currently enabled for the live merchant configuration and appear on supported devices and browsers. Cash App Pay is not configured right now, and Afterpay is currently disabled for this merchant.
+                </p>
+              </div>
             </div>
 
             {/* Challenge in progress */}
@@ -202,14 +281,23 @@ export function Verify() {
                 <p className="text-gray-400 text-sm mb-4">{result.message}</p>
 
                 {result.passed && result.checkout_url && (
-                  <a
-                    href={result.checkout_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full py-4 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-2xl font-bold text-white flex items-center justify-center gap-2 hover:shadow-xl hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 no-underline"
-                  >
-                    Pay $1 Bot-Shield <ExternalLink size={16} />
-                  </a>
+                  <div className="space-y-3">
+                    <a
+                      href={result.checkout_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-4 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-2xl font-bold text-white flex items-center justify-center gap-2 hover:shadow-xl hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 no-underline"
+                    >
+                      Pay $1 Bot-Shield <ExternalLink size={16} />
+                    </a>
+                    <button
+                      onClick={() => checkVerificationAfterPayment()}
+                      disabled={syncingPayment}
+                      className="w-full py-3 glass rounded-2xl font-bold text-white hover:bg-white/[0.04] transition-colors disabled:opacity-50"
+                    >
+                      {syncingPayment ? 'Checking payment...' : 'I Paid - Check My Badge'}
+                    </button>
+                  </div>
                 )}
 
                 {!result.passed && (
@@ -219,6 +307,10 @@ export function Verify() {
                   >
                     Try Again
                   </button>
+                )}
+
+                {syncMessage && (
+                  <p className="text-xs text-gray-400 mt-3">{syncMessage}</p>
                 )}
               </div>
             )}

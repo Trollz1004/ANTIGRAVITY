@@ -9,13 +9,8 @@ Tests cover:
   - Payload size limits
 """
 
-import base64
-import hashlib
-import hmac
 import json
 import os
-import uuid
-from datetime import datetime, timezone
 from unittest.mock import MagicMock
 
 import pytest
@@ -49,13 +44,13 @@ class TestSquareSignatureVerification:
             payload, self.SIGNATURE_KEY, self.NOTIFICATION_URL
         )
 
-        settings = MagicMock()
-        settings.square_webhook_verify_signature = True
-        settings.square_webhook_signature_key = self.SIGNATURE_KEY
-        settings.square_webhook_notification_url = self.NOTIFICATION_URL
-
         # Should not raise
-        _verify_square_signature(payload, signature, settings)
+        _verify_square_signature(
+            payload,
+            signature,
+            signature_key=self.SIGNATURE_KEY,
+            notification_url=self.NOTIFICATION_URL,
+        )
 
     def test_invalid_signature_raises(self):
         """A tampered payload must fail verification."""
@@ -64,13 +59,13 @@ class TestSquareSignatureVerification:
 
         payload = json.dumps({"event_id": "test123", "type": "payment.completed"}).encode()
 
-        settings = MagicMock()
-        settings.square_webhook_verify_signature = True
-        settings.square_webhook_signature_key = self.SIGNATURE_KEY
-        settings.square_webhook_notification_url = self.NOTIFICATION_URL
-
         with pytest.raises(HTTPException) as exc_info:
-            _verify_square_signature(payload, "invalid-signature", settings)
+            _verify_square_signature(
+                payload,
+                "invalid-signature",
+                signature_key=self.SIGNATURE_KEY,
+                notification_url=self.NOTIFICATION_URL,
+            )
         assert exc_info.value.status_code == 400
 
     def test_missing_signature_raises(self):
@@ -80,26 +75,14 @@ class TestSquareSignatureVerification:
 
         payload = b'{"test": true}'
 
-        settings = MagicMock()
-        settings.square_webhook_verify_signature = True
-        settings.square_webhook_signature_key = self.SIGNATURE_KEY
-        settings.square_webhook_notification_url = self.NOTIFICATION_URL
-
         with pytest.raises(HTTPException) as exc_info:
-            _verify_square_signature(payload, None, settings)
+            _verify_square_signature(
+                payload,
+                None,
+                signature_key=self.SIGNATURE_KEY,
+                notification_url=self.NOTIFICATION_URL,
+            )
         assert exc_info.value.status_code == 400
-
-    def test_verification_disabled_skips_check(self):
-        """When verification is disabled, any signature (or none) passes."""
-        from app.routers.webhooks import _verify_square_signature
-
-        payload = b'{"test": true}'
-
-        settings = MagicMock()
-        settings.square_webhook_verify_signature = False
-
-        # Should not raise even with no signature
-        _verify_square_signature(payload, None, settings)
 
     def test_missing_config_raises_503(self):
         """If verification is enabled but key/url not configured, return 503."""
@@ -108,14 +91,48 @@ class TestSquareSignatureVerification:
 
         payload = b'{"test": true}'
 
-        settings = MagicMock()
-        settings.square_webhook_verify_signature = True
-        settings.square_webhook_signature_key = ""
-        settings.square_webhook_notification_url = ""
-
         with pytest.raises(HTTPException) as exc_info:
-            _verify_square_signature(payload, "some-sig", settings)
+            _verify_square_signature(
+                payload,
+                "some-sig",
+                signature_key="",
+                notification_url="",
+            )
         assert exc_info.value.status_code == 503
+
+
+class TestSquareWebhookEndpointConfig:
+    def test_payment_endpoint_prefers_explicit_config(self):
+        from app.routers.webhooks import _resolve_square_signature_material
+
+        settings = MagicMock(
+            square_payment_webhook_signature_key="pay-key",
+            square_payment_webhook_notification_url="https://example.com/payment",
+            square_booking_webhook_signature_key="booking-key",
+            square_booking_webhook_notification_url="https://example.com/booking",
+            square_webhook_signature_key="legacy-key",
+            square_webhook_notification_url="https://example.com/legacy",
+        )
+
+        signature_key, notification_url = _resolve_square_signature_material(settings, "payment")
+
+        assert signature_key == "pay-key"
+        assert notification_url == "https://example.com/payment"
+
+    def test_booking_endpoint_falls_back_to_legacy_config(self):
+        from app.routers.webhooks import _resolve_square_signature_material
+
+        settings = MagicMock(
+            square_booking_webhook_signature_key="",
+            square_booking_webhook_notification_url="",
+            square_webhook_signature_key="legacy-key",
+            square_webhook_notification_url="https://example.com/legacy",
+        )
+
+        signature_key, notification_url = _resolve_square_signature_material(settings, "booking")
+
+        assert signature_key == "legacy-key"
+        assert notification_url == "https://example.com/legacy"
 
 
 class TestSquarePaymentTierExtraction:
@@ -151,6 +168,19 @@ class TestSquarePaymentTierExtraction:
         payment = {"note": "Royalty Card", "amount_money": {"amount": 250000}}
         assert _extract_square_payment_tier(payment) == "royalty"
 
+    def test_catalog_drift_plan_fails_closed(self):
+        from app.routers.webhooks import _extract_square_payment_tier
+
+        payment = {"note": "Basic Monthly Subscription", "amount_money": {"amount": 999}}
+        assert _extract_square_payment_tier(payment) is None
+
+    def test_order_reference_can_supply_checkout_binding_hint(self):
+        from app.routers.webhooks import _extract_square_payment_tier
+
+        payment = {"note": "", "amount_money": {"amount": 100}}
+        order = {"reference_id": "agref:v1.token", "line_items": [{"name": "Bot-Shield Verification"}]}
+        assert _extract_square_payment_tier(payment, order_obj=order) == "bot_shield"
+
     def test_unknown_amount_returns_none(self):
         from app.routers.webhooks import _extract_square_payment_tier
 
@@ -172,6 +202,14 @@ class TestSquareCustomerEmailExtraction:
 
         payment = {"note": "Bot-Shield"}
         assert _extract_square_customer_email(payment) is None
+
+
+class TestCheckoutReferenceExtraction:
+    def test_extract_checkout_reference_from_note(self):
+        from app.payment_truth import extract_checkout_reference
+
+        note = "bot_shield agref:v1.payload.signature"
+        assert extract_checkout_reference(note) == "v1.payload.signature"
 
 
 class TestSquarePaymentEventFactory:

@@ -13,13 +13,29 @@ router = APIRouter()
 settings = get_settings()
 
 
+def _payment_signature_key() -> str:
+    return str(
+        getattr(settings, "square_payment_webhook_signature_key", "")
+        or getattr(settings, "square_webhook_signature_key", "")
+        or ""
+    ).strip()
+
+
+def _payment_notification_url() -> str:
+    return str(
+        getattr(settings, "square_payment_webhook_notification_url", "")
+        or getattr(settings, "square_webhook_notification_url", "")
+        or ""
+    ).strip()
+
+
 def _square_health_ready() -> bool:
     payment_link_ready = bool(str(settings.square_bot_shield_payment_link or "").strip())
     if not settings.square_webhook_verify_signature:
         return payment_link_ready
 
-    signature_key_ready = bool(str(settings.square_webhook_signature_key or "").strip())
-    notification_url_ready = bool(str(settings.square_webhook_notification_url or "").strip())
+    signature_key_ready = bool(_payment_signature_key())
+    notification_url_ready = bool(_payment_notification_url())
     return payment_link_ready and signature_key_ready and notification_url_ready
 
 

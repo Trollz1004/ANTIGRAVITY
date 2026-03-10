@@ -16,12 +16,14 @@ Trust Score (0-100):
 """
 
 import hashlib
+import logging
 import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
-from pydantic import BaseModel, Field
+import httpx
+from fastapi import APIRouter, Depends, HTTPException, Request
+from pydantic import BaseModel
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -29,14 +31,24 @@ from app.auth import get_current_user
 from app.config import get_settings
 from app.database import get_db
 from app.models import Match, Message, Post, User, VerificationEvent
+from app.payment_truth import (
+    BOT_SHIELD_CENTS,
+    build_bot_shield_checkout_request,
+    build_checkout_reference,
+)
 from app.rate_limit import verify_limiter
+from app.verification_service import (
+    has_completed_payment,
+    has_passed_liveness,
+    promote_user_verification_if_ready,
+)
 
 router = APIRouter(prefix="/verify")
+logger = logging.getLogger(__name__)
 
 # Challenge config
 CHALLENGE_EXPIRY_SECONDS = 300  # 5 minutes
 MIN_SOLVE_TIME_SECONDS = 3  # must take at least 3s (bots solve instantly)
-BOT_SHIELD_AMOUNT_CENTS = 100
 
 
 class ChallengeResponse(BaseModel):
@@ -95,13 +107,80 @@ async def _has_completed_payment(db: AsyncSession, user_id) -> bool:
     Returns True only if a VerificationEvent with challenge_type='payment'
     and status='completed' exists for this user.
     """
-    result = await db.scalar(
-        select(VerificationEvent)
-        .where(VerificationEvent.user_id == user_id)
-        .where(VerificationEvent.status == "completed")
-        .where(VerificationEvent.challenge_type == "payment")
+    return await has_completed_payment(db, user_id)
+
+
+async def _build_square_checkout_url(
+    *,
+    user: User,
+    event: VerificationEvent,
+    settings,
+) -> str | None:
+    checkout_ref = build_checkout_reference(
+        user_id=user.id,
+        event_id=event.id,
+        tier="bot_shield",
+        secret=settings.jwt_secret,
     )
-    return result is not None
+
+    square_access_token = str(getattr(settings, "square_access_token", "") or "").strip()
+    square_location_id = str(getattr(settings, "square_location_id", "") or "").strip()
+    square_api_base_url = str(
+        getattr(settings, "square_api_base_url", "https://connect.squareup.com") or "https://connect.squareup.com"
+    ).rstrip("/")
+    square_api_version = str(getattr(settings, "square_api_version", "2026-01-22") or "2026-01-22")
+
+    if square_access_token and square_location_id:
+        request_body = build_bot_shield_checkout_request(
+            app_url=str(getattr(settings, "app_url", "https://youandinotai.com") or "https://youandinotai.com"),
+            location_id=square_location_id,
+            buyer_email=user.email,
+            checkout_ref=checkout_ref,
+        )
+        try:
+            async with httpx.AsyncClient(
+                base_url=square_api_base_url,
+                timeout=10.0,
+            ) as client:
+                response = await client.post(
+                    "/v2/online-checkout/payment-links",
+                    headers={
+                        "Authorization": f"Bearer {square_access_token}",
+                        "Square-Version": square_api_version,
+                        "Content-Type": "application/json",
+                    },
+                    json=request_body,
+                )
+            response.raise_for_status()
+            response_json = response.json()
+            payment_link = response_json.get("payment_link") or {}
+            checkout_url = str(payment_link.get("url") or "").strip()
+            if checkout_url:
+                return checkout_url
+            logger.warning(
+                "Square CreatePaymentLink returned no checkout url: user=%s event=%s",
+                user.id,
+                event.id,
+            )
+        except (httpx.HTTPError, ValueError) as exc:
+            logger.warning(
+                "Square dynamic checkout failed, falling back to static link: user=%s event=%s error=%s",
+                user.id,
+                event.id,
+                exc,
+            )
+
+    square_bot_shield_url = str(
+        getattr(settings, "square_bot_shield_payment_link", "") or ""
+    ).strip()
+    if not square_bot_shield_url:
+        return None
+
+    separator = "&" if "?" in square_bot_shield_url else "?"
+    return (
+        f"{square_bot_shield_url}{separator}"
+        f"user_id={user.id}&event_id={event.id}&checkout_ref={checkout_ref}"
+    )
 
 
 def _hash_answer(answer: str, token: str) -> str:
@@ -173,7 +252,7 @@ async def create_challenge(
         challenge_type="liveness",
         challenge_token=f"{token}:{answer_hash}",
         status="pending",
-        amount_cents=BOT_SHIELD_AMOUNT_CENTS,
+        amount_cents=BOT_SHIELD_CENTS,
     )
     db.add(event)
     await db.commit()
@@ -246,23 +325,12 @@ async def submit_challenge(
     event.trust_score = trust
     await db.commit()
 
-    # Build Square payment link URL
-    # Square payment links are pre-configured in the Square Dashboard.
-    # The link handles checkout; our webhook confirms payment.
     settings = get_settings()
-    square_bot_shield_url = getattr(settings, 'square_bot_shield_payment_link', '') or ''
-
-    # Append user metadata as query params so we can correlate payment to user
-    if square_bot_shield_url:
-        separator = '&' if '?' in square_bot_shield_url else '?'
-        checkout_url = (
-            f"{square_bot_shield_url}{separator}"
-            f"user_id={user.id}&event_id={event.id}"
-        )
-    else:
-        checkout_url = None
-
-    await db.commit()
+    checkout_url = await _build_square_checkout_url(
+        user=user,
+        event=event,
+        settings=settings,
+    )
 
     return ChallengeResult(
         passed=True,
@@ -319,37 +387,20 @@ async def confirm_verification(
     """
 
     # Check 1: Must have a passed liveness event
-    passed_liveness = await db.scalar(
-        select(VerificationEvent)
-        .where(VerificationEvent.user_id == user.id)
-        .where(VerificationEvent.status == "passed")
-        .where(VerificationEvent.challenge_type == "liveness")
-        .order_by(VerificationEvent.created_at.desc())
-    )
-    if not passed_liveness:
+    if not await has_passed_liveness(db, user.id):
         raise HTTPException(
             status_code=400,
             detail="No passed liveness challenge found. Complete the Bot-Shield challenge first.",
         )
 
     # Check 2: Must have a completed payment event
-    paid = await db.scalar(
-        select(VerificationEvent)
-        .where(VerificationEvent.user_id == user.id)
-        .where(VerificationEvent.status == "completed")
-        .where(VerificationEvent.challenge_type == "payment")
-        .order_by(VerificationEvent.created_at.desc())
-    )
-    if not paid:
+    if not await has_completed_payment(db, user.id):
         raise HTTPException(
             status_code=402,
             detail="Payment required. Complete the $1 Bot-Shield payment before verification.",
         )
 
-    user.bot_shield_verified = True
-    if user.profile:
-        user.profile.verified = True
-
+    await promote_user_verification_if_ready(db, user)
     trust = await _calculate_trust_score(user, db)
     await db.commit()
 
