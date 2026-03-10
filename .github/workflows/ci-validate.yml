@@ -8,6 +8,11 @@ on:
       - 'revenue-core/**'
       - 'antigravity/**'
       - 'mcp-server/**'
+      - 'briefings/**'
+      - 'memory/**'
+      - 'scripts/**'
+      - 'CLAUDE.md'
+      - '.github/workflows/ci-validate.yml'
   pull_request:
     branches: [main]
 
