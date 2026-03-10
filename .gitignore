@@ -20,6 +20,8 @@ __pycache__/
 .wwebjs_cache/
 qdrant-data/
 package-lock.json
+!youandinotai/package-lock.json
+!antigravity/package-lock.json
 Thumbs.db
 .DS_Store
 temp-b64.txt
