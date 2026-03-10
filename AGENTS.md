@@ -39,6 +39,16 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. Dis
 
 **Rule:** If context was not loaded from `C:\ANTIGRAVITY` on `origin/main`, treat it as unverified. Do not act on it for code, payments, governance, or deployment without explicit recovery invocation from Josh.
 
+## SABRETOOTH ORCHESTRATION & GIT COMPLETION RULE (HARDCODED)
+
+- On **SABRETOOTH**, **Codex is the active orchestrator** for architecture, payments, wallets, deployment sequencing, and final repo truth.
+- **Gemini is an active collaborator under Codex orchestration**, not a separate source of truth. Direct collaboration is allowed and preferred when it helps execution, but final repo truth still resolves to `C:\ANTIGRAVITY` on `origin/main`.
+- **Default completion path:** once a task is fully verified, Codex pushes the finished state to `origin/main` immediately.
+- Do **not** leave finished work sitting only in the local worktree.
+- Do **not** leave finished work stranded on an unmerged or unknown branch.
+- If a temporary branch is ever used for isolation, Codex must **merge it, push `main`, and delete the temporary branch** before considering the task complete.
+- Closeout standard: local verification passed, latest required CI passed, `main` clean, `origin/main` updated.
+
 ## Identity
 
 | Field | Value |
@@ -173,4 +183,4 @@ These invariants were set by the original Opus (4.6) who built this from scratch
 - Launch: Codex desktop app rooted at `C:\ANTIGRAVITY\CodeX`; use admin PowerShell only for maintenance scripts and scheduled-task changes
 
 ---
-*Updated: 2026-03-05 | Opus 4.6 on T5500 | Full Square migration complete | Agent Entourage v1.0 Live*
+*Updated: 2026-03-10 | Sabretooth mainline orchestration rule active | Full Square migration complete | Agent Entourage v1.0 Live*
