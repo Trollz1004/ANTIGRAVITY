@@ -20,6 +20,13 @@ Every architectural decision is recorded here so no future session re-debates it
 **Impact**: Payment work should prioritize validating the real Square webhook identity-binding path, while Google Pay remains a separate evidence question until a receipt is found.
 **Status**: Active
 
+## 2026-03-10: Sabretooth uses direct Codex orchestration and mainline completion by default
+
+**Decision**: On `C:\ANTIGRAVITY`, Codex is the orchestrator and final architectural authority, Gemini may collaborate directly under that orchestration, and completed verified work should be pushed straight to `origin/main` instead of being left local or stranded on side branches.
+**Why**: The user operates this system as one repo, one branch, one folder, one node-wide source of truth. Leaving verified work only local or on a branch creates the exact drift and uncertainty this cleanup was meant to eliminate.
+**Impact**: Future Codex sessions should treat `main` as the default finish line. If a temporary branch is ever needed for isolation, it must be merged, `main` pushed, and the temporary branch deleted before the task is considered complete.
+**Status**: Active
+
 ## 2026-03-07: Node social automation is draft-first and human-gated, not autoposted
 
 **Decision**: Replace the old browser-based multi-platform posting daemon with a legal-safe node automation layer that only generates draft packs, handoff queues, owned-site queues, and audits.
