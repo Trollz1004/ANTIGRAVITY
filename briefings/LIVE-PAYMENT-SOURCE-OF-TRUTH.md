@@ -22,9 +22,14 @@ If a claim is not grounded in the files above, treat it as unverified until re-c
 - Live repo root: `C:\ANTIGRAVITY`
 - Live git truth: `origin/main`
 - Confirmed live payment rail for YouAndINotAI: Square
-- Confirmed live backend verification path: Square payment link plus Square webhook
+- Confirmed live backend verification path: Square checkout plus Square webhook
 - Confirmed live receipt evidence so far: the March 5, 2026 $1 Square Bot-Shield charge path worked
-- Google Pay status: still separate and unproven until a Google Pay receipt is located
+- Square merchant settings were re-checked live from T5500 on 2026-03-10:
+  - Apple Pay enabled
+  - Google Pay enabled
+  - Afterpay/Clearpay disabled
+  - Cash App Pay not configured in the merchant-settings response
+- Apple Pay / Google Pay remain unproven as receipt evidence until a real wallet receipt is located
 
 ## Live Code Evidence
 
@@ -32,20 +37,22 @@ If a claim is not grounded in the files above, treat it as unverified until re-c
 
 - `youandinotai-api/app/config.py`
   - Stripe settings are commented as removed.
-  - Active runtime settings are `square_access_token`, `square_bot_shield_payment_link`, `square_subscription_payment_link`, `square_webhook_signature_key`, `square_webhook_notification_url`, and `square_webhook_verify_signature`.
+  - Active runtime settings now include endpoint-specific Square webhook config (`square_payment_webhook_*`, `square_booking_webhook_*`) with the legacy single webhook fields kept only as fallback.
+  - Dynamic Bot-Shield checkout requires `square_access_token`, `square_location_id`, and `app_url`.
 
 - `youandinotai-api/app/routers/verify.py`
   - Declares Square as the sole payment processor.
-  - Creates the Bot-Shield checkout URL from `square_bot_shield_payment_link`.
-  - Appends `user_id` and `event_id` query params to the checkout URL.
+  - Prefers a per-user Square Checkout API payment link for Bot-Shield.
+  - Signs a checkout reference that binds `user_id`, `event_id`, and tier into the Square order note/reference.
+  - Falls back to the static Bot-Shield payment link only when live Square API credentials are missing.
   - `/verify/confirm` requires both a passed liveness event and a completed payment event.
 
 - `youandinotai-api/app/routers/webhooks.py`
   - Implements `POST /webhooks/square-payment`.
-  - Verifies the Square webhook signature.
-  - Resolves the user from Square customer ID or buyer email.
-  - Creates a completed `VerificationEvent` for payments.
-  - Sets `user.bot_shield_verified = True` for Bot-Shield and Royalty flows.
+  - Verifies the Square payment and booking webhook signatures against endpoint-specific URL/key settings.
+  - Resolves the user from the signed Square checkout reference before falling back to Square customer ID or buyer email.
+  - Creates a completed `VerificationEvent` for payments and only promotes verification once liveness and payment both exist.
+  - Uses canonical tier inference that fails closed on stale catalog-only plan names like Basic/Premium/Elite monthly subscriptions.
 
 - `youandinotai-api/app/routers/health.py`
   - Marks Square health as ready only when the payment link is present and, when signature checking is enabled, the Square signature key and notification URL are also present.
@@ -70,11 +77,28 @@ That is already proven.
 
 The real operational dependency is clean identity binding:
 
-- the verification flow appends `user_id` and `event_id` to the Square checkout URL
-- the webhook currently resolves users from Square customer ID or buyer email
-- if Square does not reliably preserve enough user identity for the webhook path, verification can still drift even though payment succeeds
+- the verification flow now prefers a signed checkout reference embedded into the Square checkout order and payment note
+- the payment webhook resolves that signed reference before trying customer ID or buyer email fallback
+- user verification is no longer supposed to activate from payment alone; the webhook should only promote once both liveness and payment exist
 
 When auditing future payment bugs, check identity correlation before questioning the Square rail itself.
+
+## Current Payment Method Truth
+
+- Bot-Shield is still the easiest payment path: card entry works by default in Square-hosted checkout.
+- Apple Pay is currently enabled in the live Square merchant settings.
+- Google Pay is currently enabled in the live Square merchant settings.
+- Cash App Pay is not configured in the current merchant-settings response, so do not promise it in user-facing copy.
+- Afterpay/Clearpay is currently disabled in the live Square merchant settings, so do not promise it in user-facing copy.
+- Apple Pay / Google Pay remain enabled-setting evidence, not receipt evidence.
+
+## T5500 Runtime Reality
+
+- `T5500` is reachable over SSH.
+- `C:\DateApp` is not present on `T5500`.
+- `C:\ANTIGRAVITY\.env` on `T5500` contains a valid Square access token and location ID, but not the checkout-link or webhook env keys.
+- `C:\ANTIGRAVITY\youandinotai-api\docker-compose.yml` on `T5500` was still carrying stale Stripe-era environment wiring when re-checked on 2026-03-10.
+- Docker was not running on `T5500` during that check, so stale Docker files there were not the active live payment runtime.
 
 ## `square_catalog.json` Use Rules
 

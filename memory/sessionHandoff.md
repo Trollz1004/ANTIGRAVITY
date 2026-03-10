@@ -1,6 +1,6 @@
 # SESSION HANDOFF — CLAUDE / CODEX SHARED STATE
 
-**Last Updated**: 2026-03-08 07:35:00 -05:00
+**Last Updated**: 2026-03-10 10:35:00 -04:00
 **Source**: Codex on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)
 
 ## Shared Truth
@@ -35,6 +35,7 @@
 
 - SSH from Sabretooth to `T5500` passes
 - SSH from Sabretooth to `9020` passes
+- `T5500` no longer has `C:\DateApp`; current repo/root runtime evidence there is `C:\ANTIGRAVITY`
 - Sabretooth now runs Codex in desktop-app-first mode; Docker is intentionally not installed
 - Retired `CodeX-Memory-SelfHeal-*` tasks are absent and should stay absent unless local memory stack work is explicitly re-enabled
 - `T5500` boot is now cold: no custom startup entries remain, `OpenClaw Gateway` and broken `OPUS-CLI-AutoStart` were removed, and `HKCU\...\Run` was trimmed to `OneDrive`
@@ -102,6 +103,18 @@
   - safe pieces from the Claude review branch were ported manually
   - `youandinotai-api` now has Square readiness health checks, auth/verify rate limiting, and no backend `stripe` dependency in `requirements.txt`
   - focused backend suite passes with `uv run --python 3.12 --with pytest --with-requirements requirements.txt pytest ...` (`45 passed`)
+- Payment runtime truth was re-verified directly from `T5500`:
+  - root env on `T5500` has a valid Square token and location ID
+  - live Square merchant settings report Apple Pay `enabled`, Google Pay `enabled`, Afterpay/Clearpay `disabled`, Cash App Pay `not configured`
+  - endpoint-specific webhook env vars were absent from the remote root env
+  - Docker was not running on `T5500` during the check
+  - remote `youandinotai-api/docker-compose.yml` was still stale Stripe-era config and must not be treated as live truth
+- Payment hardening now in repo:
+  - signed checkout binding helpers live in `youandinotai-api/app/payment_truth.py`
+  - verification promotion is centralized in `youandinotai-api/app/verification_service.py`
+  - `verify.py` now prefers per-user Square Checkout API links when token/location are present
+  - `webhooks.py` resolves signed checkout refs before weaker customer/email fallback
+  - Docker compose files were updated to Square env wiring
 - Public checkout/copy drift cleanup is now partially promoted:
   - `youandinotai/src/App.tsx` uses the canonical Square links instead of stale Stripe links
   - `youandinotai` public policy copy now references Square
