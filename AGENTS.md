@@ -78,7 +78,7 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. Dis
 | Royalty Card $2,500 | https://square.link/u/CafhorUS |
 
 - Square account: ebaytrashortreasure@gmail.com (bank attached, no key expiry)
-- Square locations: LY5GN09F5AN83 (Trash Or Treasure - ACTIVE), L24ZX5WRA41TH (YouAndINotAI - No Card Processing Yet)
+- Square locations: LY5GN09F5AN83 (Trash Or Treasure - ACTIVE. Transaction name and logo updated.)
 - Stripe: LEGACY ONLY — restricted key expires ~March 10. Being phased out.
 - Master env vault: `briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env` (gitignored)
 

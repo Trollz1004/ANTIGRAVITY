@@ -58,7 +58,7 @@ const STATIC_PARTICLES = [...Array(15)].map(() => ({
 export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) {
   const stats = [
     { label: 'Devices Recycled', value: '0', icon: <Laptop className="w-5 h-5" /> },
-    { label: 'Donated to Shriners', value: '$0', icon: <DollarSign className="w-5 h-5" /> },
+    { label: 'Disbursed to Shriners', value: '$0', icon: <DollarSign className="w-5 h-5" /> },
   ];
 
   const platforms = [
