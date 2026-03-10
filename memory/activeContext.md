@@ -113,6 +113,10 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - do not leave fully verified work stranded on unknown branches
    - default finish is verified work pushed to `origin/main`
    - if a temporary branch is ever used, merge it, push `main`, then delete it before task closeout
+39. Local drift cleanup on `C:` was extended beyond git:
+   - stale Claude project-memory folders for `C--ANTIGRAVITY`, `C--ANTIGRAVITY-ForTheKids`, and `C--OPUSONLY-ANTIGRAVITY` were archived out of `C:\Users\joshl\.claude\projects`
+   - archive path: `C:\Users\joshl\OneDrive\Claude-Code-Backup\retired-claude-project-memory\2026-03-10`
+   - stale ignored repo prompt `briefings\CODEX-DIRECTIVE-2026-03-10.md` was deleted because it contradicted live Square truth
 
 ## House Rules
 
@@ -156,3 +160,4 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 14. Test the live Square identity-binding path before reopening any discussion about replacing Square
 15. If a Google Pay receipt appears, classify it strictly as wallet evidence vs a separate processor path before changing any payment narrative
 16. Treat `main` push + clean status + passing required CI as the default definition of “task complete” on Sabretooth
+17. Before prompting Gemini from the shared Sabretooth workspace, prefer deleting or archiving stale local directive files and retired Claude project-memory folders if they contradict live repo truth
