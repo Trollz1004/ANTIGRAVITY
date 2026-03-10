@@ -25,6 +25,11 @@ If a claim is not grounded in the files above, treat it as unverified until re-c
 - Confirmed live backend verification path: Square checkout plus Square webhook
 - Confirmed live receipt evidence so far: receipt `#9kBD` shows a March 5, 2026 `08:46 AM` $1.00 Square Bot-Shield payment completed successfully
 - Square merchant settings were re-checked live from T5500 on 2026-03-10:
+  - merchant business name now reports as `YouAndiNotAi`
+  - current T5500 env location id reports as `L24ZX5WRA41TH`
+  - Square still reports two active locations as of 2026-03-10:
+    - `LY5GN09F5AN83` / `Trash Or Treasure` / capability `CREDIT_CARD_PROCESSING`
+    - `L24ZX5WRA41TH` / `YouAndINotAI` / capability `AUTOMATIC_TRANSFERS`
   - Apple Pay enabled
   - Google Pay enabled
   - Afterpay/Clearpay disabled
@@ -104,6 +109,7 @@ When auditing future payment bugs, check identity correlation before questioning
 - `T5500` is reachable over SSH.
 - `C:\DateApp` is not present on `T5500`.
 - `C:\ANTIGRAVITY\.env` on `T5500` contains a valid Square access token and location ID, but not the checkout-link or webhook env keys.
+- The current root env location id on `T5500` is `L24ZX5WRA41TH`, but the Square API still shows card processing on `LY5GN09F5AN83`.
 - `C:\ANTIGRAVITY\youandinotai-api\docker-compose.yml` on `T5500` was still carrying stale Stripe-era environment wiring when re-checked on 2026-03-10.
 - Docker was not running on `T5500` during that check, so stale Docker files there were not the active live payment runtime.
 

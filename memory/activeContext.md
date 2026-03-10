@@ -123,7 +123,11 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - repo-local `C:\ANTIGRAVITY\GEMINI.md` now defines same-workspace rules
    - `Launch-Gemini.ps1` now points at `C:\ANTIGRAVITY` instead of the retired `E:\` model
 41. Live Square merchant settings were re-checked from `T5500` on 2026-03-10:
-   - merchant `ML3C7FMTQS5KX` is active
+   - merchant `ML3C7FMTQS5KX` is active and now reports business name `YouAndiNotAi`
+   - current T5500 env location id is `L24ZX5WRA41TH`
+   - Square still reports two active locations:
+     - `LY5GN09F5AN83` / `Trash Or Treasure` / `CREDIT_CARD_PROCESSING`
+     - `L24ZX5WRA41TH` / `YouAndINotAI` / `AUTOMATIC_TRANSFERS`
    - Apple Pay is enabled
    - Google Pay is enabled
    - Afterpay/Clearpay is disabled
