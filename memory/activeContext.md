@@ -105,6 +105,14 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 36. Runtime queue/handoff outputs are no longer supposed to dirty tracked git paths:
    - `CodeX\state\runtime\TASK-QUEUE-100.md`
    - `CodeX\state\runtime\codex-orchestrator-handoff.md`
+37. Sabretooth orchestration rule is now explicit:
+   - Codex is the orchestrator on `C:\ANTIGRAVITY`
+   - Gemini can collaborate directly under Codex orchestration without being treated as a competing source of truth
+38. Git completion rule is now explicit:
+   - do not leave fully verified work only local
+   - do not leave fully verified work stranded on unknown branches
+   - default finish is verified work pushed to `origin/main`
+   - if a temporary branch is ever used, merge it, push `main`, then delete it before task closeout
 
 ## House Rules
 
@@ -147,3 +155,4 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 13. Keep `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md` current whenever payment links, webhook logic, or catalog understanding changes
 14. Test the live Square identity-binding path before reopening any discussion about replacing Square
 15. If a Google Pay receipt appears, classify it strictly as wallet evidence vs a separate processor path before changing any payment narrative
+16. Treat `main` push + clean status + passing required CI as the default definition of “task complete” on Sabretooth
