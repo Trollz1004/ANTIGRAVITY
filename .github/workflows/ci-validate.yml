@@ -81,9 +81,10 @@ jobs:
           SECRETS_FOUND=0
           # Check tracked files for secret patterns
           PATTERNS='AIza[0-9A-Za-z_-]{20,}|[0-9]{8,10}:[A-Za-z0-9_-]{35}|sk_live_[A-Za-z0-9]{16,}|ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}'
-          HITS=$(grep -rn --include="*.md" --include="*.ts" --include="*.tsx" --include="*.json" --include="*.txt" \
-            -E "$PATTERNS" \
-            memory/ briefings/ mcp-server/ youandinotai/ antigravity/ revenue-core/ 2>/dev/null \
+          HITS=$(git ls-files \
+            memory/ briefings/ mcp-server/ youandinotai/ antigravity/ revenue-core/ CLAUDE.md AGENTS.md \
+            | grep -E '\.(md|ts|tsx|json|txt)$' \
+            | xargs grep -nE "$PATTERNS" 2>/dev/null \
             | grep -v "REDACTED" | grep -v "\.env\.example" | grep -v "\.githooks" | grep -v "scripts/opus-guardian" \
             | grep -v "security-review\.md" | grep -v "placeholder" | grep -v 'sk_live_\.\.\.' || true)
           if [ -n "$HITS" ]; then
