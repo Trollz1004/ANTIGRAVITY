@@ -221,7 +221,7 @@ export function Verify() {
                 </div>
                 <div className="flex gap-3">
                   <span className="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
-                  <span>Pay $1 Bot-Shield fee (60% goes to Shriners Children's Hospitals)</span>
+                  <span>Pay the $1 Bot-Shield fee through Square checkout</span>
                 </div>
                 <div className="flex gap-3">
                   <span className="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>

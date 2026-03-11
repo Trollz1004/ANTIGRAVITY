@@ -213,3 +213,40 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 17. Before prompting Gemini from the shared Sabretooth workspace, prefer deleting or archiving stale local directive files and retired Claude project-memory folders if they contradict live repo truth
 18. Prefer launching Gemini from `C:\ANTIGRAVITY` with the repo-local `GEMINI.md` in effect, not from legacy drive-specific wrappers or split-house workspaces
 19. Treat live Square merchant-settings checks from T5500 as stronger evidence than stale local Docker files when payment-method questions come up
+
+## CodeX Audit 2026-03-11
+
+1. PASS — Read `CLAUDE.md`, `AGENTS.md`, `memory/activeContext.md`, and `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`.
+2. PASS — Frontend audit in `youandinotai/`.
+   - Canonical Square links confirmed in launch code: `Qc5mxUy7`, `cxwjcn0s`, `oY7qEfRM`, `6GHpbvvl`, `CafhorUS`.
+   - No customer-facing Stripe references remain in `youandinotai/src` or `youandinotai/index.html`.
+   - Customer-facing launch copy was reduced to product-only messaging; `youandinotai/src` and `youandinotai/index.html` are clean for `donate` / `donation` / `solicitation`.
+   - `viewport`, Open Graph, and Twitter meta tags are present in `youandinotai/index.html`.
+   - FormSubmit waitlist POST returned HTTP `200`.
+   - `npm run build` passed in `C:\ANTIGRAVITY\youandinotai`.
+3. PASS — Backend audit in `youandinotai-api/`.
+   - `uv run --python 3.12 --with-requirements requirements.txt pytest tests/ -v` passed with `54 passed`.
+   - Non-public `/api/v1` routes are auth-guarded by test.
+   - Square is the authoritative webhook path; retired `/api/v1/webhooks/stripe` returns `410`.
+   - Rate limiting is active on auth and verify flows.
+   - Secret scan found only placeholder example values in `.env.example`; no live tracked secrets were found in source.
+   - Fixes applied: auth refresh limiter, verify confirm limiter, Square checkout fallback, webhook signature request-URL fallback, async-safe verification promotion, and launch-audit test coverage.
+4. PASS — `/iron-wall` for the date-app launch surface.
+   - `youandinotai/src` and `youandinotai/index.html` were stripped of customer-facing OMEGA / Shriners / charity launch copy.
+   - Launch surface now stays product-only.
+5. PASS — `/donate-scan` for the date-app launch surface.
+   - Customer-facing source is clean.
+   - Remaining safe legal wording is confined to markdown/legal docs, and `youandinotai/package-lock.json` still contains upstream dependency metadata noise (`"type": "donate"`) that is non-runtime.
+6. PASS — Feature gap check.
+   - Bot-Shield verification flow exists and is wired.
+   - Waitlist/email capture exists and is wired.
+   - Countdown to April 4, 2026 exists and is wired.
+   - Profile setup pages exist.
+   - Square webhook binds completed Bot-Shield payment to user verification.
+7. PASS — Cloudflare date-app DNS.
+   - `youandinotai.com` is the only active Pages custom domain and resolves through Cloudflare.
+   - A temporary `www.youandinotai.com` add was rolled back after confirming this shell does not have DNS-write credentials; no pending half-configured domain was left behind.
+8. Manual blockers Josh must handle.
+   - If `www.youandinotai.com` is required, add `CNAME www -> youandinotai.pages.dev` with DNS-write credentials from GitHub Secrets or Vault, then re-add the custom domain in Cloudflare Pages.
+   - Separate dashboard / `antigravity` work remains intentionally deferred to the other Sabretooth Codex pass.
+   - Preserved stash remains available: `temp-preserve-before-launch-audit-push-2026-03-11`.
