@@ -250,3 +250,17 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - If `www.youandinotai.com` is required, add `CNAME www -> youandinotai.pages.dev` with DNS-write credentials from GitHub Secrets or Vault, then re-add the custom domain in Cloudflare Pages.
    - Separate dashboard / `antigravity` work remains intentionally deferred to the other Sabretooth Codex pass.
    - Preserved stash remains available: `temp-preserve-before-launch-audit-push-2026-03-11`.
+
+## House Keys
+
+1. Cloudflare full-access admin path is not the local Wrangler OAuth alone.
+2. Approved non-chat locations confirmed on Sabretooth:
+   - GitHub repo secrets for `Trollz1004/ANTIGRAVITY` include `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_GLOBAL_API_KEY`, `CLOUDFLARE_ACCOUNT_ID`, and `CLOUDFLARE_ZONE_YOUANDINOTAI`.
+   - Gitignored local vault exists at `C:\ANTIGRAVITY\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env`.
+3. The local vault file currently exposes Cloudflare token key names only in this pass:
+   - `CLOUDFLARE_API_TOKEN`
+   - `CF_API_TOKEN`
+4. `.github/workflows/deploy-cloudflare-pages.yml` prefers `secrets.CLOUDFLARE_ADMIN_TOKEN` and falls back to `secrets.CLOUDFLARE_API_TOKEN`.
+5. Current repo secret inventory shows `CLOUDFLARE_GLOBAL_API_KEY` exists, but `CLOUDFLARE_ADMIN_TOKEN` is not currently listed by name in `Trollz1004/ANTIGRAVITY`.
+6. Operational rule for future Codex/Claude/Gemini passes:
+   - if Pages actions work but DNS write fails, use GitHub Secrets or Vault credentials instead of assuming the Wrangler OAuth token is sufficient.
