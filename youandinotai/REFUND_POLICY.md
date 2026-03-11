@@ -137,9 +137,9 @@ If **we** terminate your account for violating our Terms of Service:
 - We are not obligated to issue any refund
 - We may, at our sole discretion, issue a partial refund for prepaid plans depending on the circumstances
 
-## 8. Merchandise (Square Store)
+## 8. Merchandise (Separate Storefront)
 
-Merchandise purchased through our Square store (onlinerecycle.square.site) is handled separately from the dating app and is not covered by this refund policy. Square has its own refund and dispute processes. If you need to return merchandise, contact us at joshlcoleman@gmail.com and we will handle it directly.
+Merchandise purchased through any separate storefront operated outside the dating app is handled separately from the platform and is not covered by this refund policy. If you need help with a merchandise return, contact us at joshlcoleman@gmail.com and we will handle it directly.
 
 ## 9. Charity Disclosure
 

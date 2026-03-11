@@ -1,5 +1,6 @@
 """JWT authentication utilities."""
 
+import uuid
 from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, HTTPException, status
@@ -70,7 +71,12 @@ async def get_current_user(
     if not user_id:
         raise HTTPException(status_code=401, detail="Invalid token payload")
 
-    user = await db.scalar(select(User).where(User.id == user_id))
+    try:
+        parsed_user_id = uuid.UUID(str(user_id))
+    except ValueError as exc:
+        raise HTTPException(status_code=401, detail="Invalid token payload") from exc
+
+    user = await db.scalar(select(User).where(User.id == parsed_user_id))
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
     return user

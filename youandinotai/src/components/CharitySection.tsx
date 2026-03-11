@@ -1,96 +1,73 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import {
-  Recycle,
-  Heart,
-  Globe,
-  Cpu,
-  ExternalLink,
-  DollarSign,
-  Smartphone
-} from 'lucide-react';
+import { CalendarDays, DollarSign, Heart, ShieldCheck, Sparkles, Users } from 'lucide-react';
 
-const CharityCard = ({
-  icon: Icon,
-  name,
-  tagline,
-  url,
-  description,
-  color = "from-green-400 to-green-600"
-}: {
-  icon: any,
-  name: string,
-  tagline: string,
-  url: string,
-  description: string,
-  color?: string
-}) => (
-  <motion.div
-    whileHover={{ y: -10, scale: 1.02 }}
-    className="relative group"
-  >
-    <div className={`absolute -inset-1 bg-gradient-to-r ${color} rounded-[2.5rem] blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200`}></div>
-    <div className="relative p-8 bg-zinc-900/90 backdrop-blur-xl border border-white/10 rounded-[2.5rem] h-full flex flex-col">
-      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center mb-6 shadow-lg shadow-green-500/20`}>
-        <Icon className="text-white" size={32} />
-      </div>
-      <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">{name}</h3>
-      <p className="text-green-400 font-bold text-xs uppercase tracking-widest mb-4">{tagline}</p>
-      <p className="text-gray-400 text-sm leading-relaxed mb-8 flex-1">
-        {description}
-      </p>
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center gap-2 text-white font-bold hover:bg-green-500 hover:border-green-400 transition-all group/btn"
-      >
-        Visit Platform
-        <ExternalLink size={16} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
-      </a>
-    </div>
-  </motion.div>
-);
+const cards = [
+  {
+    icon: ShieldCheck,
+    title: 'Verified Humans Only',
+    body: 'Bot-Shield is built into the product flow from day one. Real people earn the badge, bots do not.',
+    href: '#pricing',
+    cta: 'See Bot-Shield',
+    color: 'from-emerald-400 to-teal-600',
+  },
+  {
+    icon: DollarSign,
+    title: 'Transparent Revenue Split',
+    body: 'Every paid plan follows the published 60/30/10 model and the ledger stays visible on the public mission surface.',
+    href: '#mission',
+    cta: 'View Ledger',
+    color: 'from-green-400 to-lime-600',
+  },
+  {
+    icon: Users,
+    title: 'Community Good',
+    body: 'Profiles, meetups, and volunteering are all part of the same product. The good happens inside YouAndINotAI, not on outside storefronts.',
+    href: '/register',
+    cta: 'Join Early',
+    color: 'from-rose-400 to-orange-500',
+  },
+];
 
-const Particle = ({ delay }: { delay: number }) => (
-  <motion.div
-    initial={{ y: '100%', opacity: 0, x: Math.random() * 100 + '%' }}
-    animate={{
-      y: '-10%',
-      opacity: [0, 1, 1, 0],
-      x: (Math.random() * 100 - 50) + '%'
-    }}
-    transition={{
-      duration: Math.random() * 10 + 10,
-      repeat: Infinity,
-      delay,
-      ease: "linear"
-    }}
-    className="absolute w-1 h-1 bg-green-400 rounded-full blur-[1px]"
-  />
-);
+const stats = [
+  { icon: ShieldCheck, label: 'Bot-Shield', value: '$1 Human Check' },
+  { icon: Heart, label: 'Launch Date', value: 'April 4, 2026' },
+  { icon: Sparkles, label: 'Waitlist', value: 'Live Now' },
+];
+
+function Particle({ delay }: { delay: number }) {
+  return (
+    <motion.div
+      initial={{ y: '100%', opacity: 0, x: Math.random() * 100 + '%' }}
+      animate={{ y: '-10%', opacity: [0, 1, 1, 0], x: `${Math.random() * 100}%` }}
+      transition={{ duration: Math.random() * 10 + 10, repeat: Infinity, delay, ease: 'linear' }}
+      className="absolute h-1 w-1 rounded-full bg-emerald-400 blur-[1px]"
+    />
+  );
+}
 
 export function CharitySection() {
   return (
-    <section id="charity-section" className="relative min-h-screen py-24 px-6 overflow-hidden bg-gradient-to-b from-black via-[#0a1a0f] to-[#051009]">
-      {/* Background Particles */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(30)].map((_, i) => (
-          <Particle key={i} delay={i * 0.5} />
+    <section
+      id="charity-section"
+      className="relative overflow-hidden bg-gradient-to-b from-black via-[#08150d] to-[#041109] px-6 py-24"
+    >
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {[...Array(30)].map((_, index) => (
+          <Particle key={index} delay={index * 0.45} />
         ))}
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="text-center mb-20 space-y-6">
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <div className="mb-20 space-y-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-black uppercase tracking-[0.3em]"
+            className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.3em] text-emerald-400"
           >
-            <Cpu size={14} />
-            Powered by V8 Verification
+            <Heart size={14} />
+            Impact Built In
           </motion.div>
 
           <motion.h2
@@ -98,10 +75,15 @@ export function CharitySection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-7xl font-black tracking-tighter text-white leading-none mb-6"
+            className="text-4xl font-black leading-none tracking-tighter text-white md:text-7xl"
           >
-            Real Matches. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-600">ZERO B.S.</span>
+            Verified Humans.
+            <br />
+            Transparent Revenue.
+            <br />
+            <span className="bg-gradient-to-r from-emerald-400 to-green-600 bg-clip-text text-transparent">
+              Real-World Good.
+            </span>
           </motion.h2>
 
           <motion.p
@@ -109,71 +91,63 @@ export function CharitySection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-gray-400 max-w-2xl mx-auto text-lg font-light"
+            className="mx-auto max-w-3xl text-lg font-light text-gray-400"
           >
-            YouAndINotAI is built to eliminate fake profiles. Bot-Shield pairs identity verification with a $1 Square-hosted checkout so spam networks hit real friction before they ever reach the community.
+            YouAndINotAI keeps its launch story inside the product: Bot-Shield verification, public revenue logic,
+            and community features that turn the platform into more than swipes.
           </motion.p>
         </div>
 
-        {/* Stats Bar */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 p-8 bg-zinc-900/50 backdrop-blur-md border border-white/5 rounded-[3rem]"
+          className="mb-20 grid grid-cols-1 gap-8 rounded-[3rem] border border-white/5 bg-zinc-900/50 p-8 backdrop-blur-md md:grid-cols-3"
         >
-          <div className="flex flex-col items-center text-center space-y-2">
-            <div className="p-3 bg-green-500/10 rounded-2xl text-green-400">
-              <Smartphone size={24} />
+          {stats.map((stat) => (
+            <div key={stat.label} className="flex flex-col items-center space-y-2 text-center">
+              <div className="rounded-2xl bg-emerald-500/10 p-3 text-emerald-400">
+                <stat.icon size={24} />
+              </div>
+              <div className="text-3xl font-black text-white">{stat.value}</div>
+              <div className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{stat.label}</div>
             </div>
-            <div className="text-3xl font-black text-white">$1</div>
-            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Bot-Shield Verification</div>
-          </div>
-          <div className="flex flex-col items-center text-center space-y-2 border-x border-white/5">
-            <div className="p-3 bg-rose-500/10 rounded-2xl text-rose-400">
-              <DollarSign size={24} />
-            </div>
-            <div className="text-3xl font-black text-white">Square</div>
-            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Live Payment Rail</div>
-          </div>
-          <div className="flex flex-col items-center text-center space-y-2">
-            <div className="p-3 bg-indigo-500/10 rounded-2xl text-indigo-400">
-              <Heart size={24} />
-            </div>
-            <div className="text-3xl font-black text-white">60/30/10</div>
-            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Revenue Split Model</div>
-          </div>
+          ))}
         </motion.div>
 
-        {/* Platforms Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <CharityCard
-            icon={Globe}
-            name="YouAndINotAI"
-            tagline="Verification First"
-            url="https://youandinotai.com"
-            description="Identity checks, Square-hosted Bot-Shield payment flow, and founder plans all stay on the live ENIGMA side of the platform."
-            color="from-indigo-400 to-purple-600"
-          />
-          <CharityCard
-            icon={Recycle}
-            name="OnlineRecycle.org"
-            tagline="Trash or Treasure"
-            url="https://OnlineRecycle.org"
-            description="Responsible e-waste recycling. Ship your old electronics to us; we recycle them and route 60% of proceeds to Shriners Children's Hospitals via Protocol Omega revenue disbursement. Old tech, new hope."
-            color="from-emerald-400 to-teal-600"
-          />
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          {cards.map((card) => (
+            <motion.div key={card.title} whileHover={{ y: -10, scale: 1.02 }} className="relative group">
+              <div
+                className={`absolute -inset-1 rounded-[2.5rem] bg-gradient-to-r ${card.color} opacity-25 blur transition duration-1000 group-hover:opacity-75 group-hover:duration-200`}
+              />
+              <div className="relative flex h-full flex-col rounded-[2.5rem] border border-white/10 bg-zinc-900/90 p-8 backdrop-blur-xl">
+                <div className={`mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${card.color} shadow-lg shadow-green-500/20`}>
+                  <card.icon className="text-white" size={32} />
+                </div>
+                <h3 className="mb-3 text-2xl font-black uppercase tracking-tight text-white">{card.title}</h3>
+                <p className="mb-8 flex-1 text-sm leading-relaxed text-gray-400">{card.body}</p>
+                <a
+                  href={card.href}
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 py-4 font-bold text-white no-underline transition-all hover:border-emerald-400 hover:bg-emerald-500"
+                >
+                  {card.cta}
+                </a>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
-        {/* Footer Note */}
         <div className="mt-20 text-center">
-          <div className="inline-flex items-center gap-4 p-6 bg-white/5 border border-white/10 rounded-3xl">
-            <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white">
-              <DollarSign size={24} />
+          <div className="inline-flex items-center gap-4 rounded-3xl border border-white/10 bg-white/5 p-6">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500 text-white">
+              <CalendarDays size={24} />
             </div>
             <div className="text-left">
-              <div className="text-sm font-bold text-white uppercase tracking-tight">Transparency First</div>
-              <div className="text-xs text-gray-400">All disbursements are on-chain, verifiable, and tracked publicly for total accountability.</div>
+              <div className="text-sm font-bold uppercase tracking-tight text-white">Launch Surface Only</div>
+              <div className="text-xs text-gray-400">
+                This section now stays inside YouAndINotAI: no outside charity stores, no separate property redirects.
+              </div>
             </div>
           </div>
         </div>

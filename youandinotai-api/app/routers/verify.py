@@ -31,6 +31,7 @@ from app.auth import get_current_user
 from app.config import get_settings
 from app.database import get_db
 from app.models import Match, Message, Post, User, VerificationEvent
+from app.payments import BOT_SHIELD_PAYMENT_LINK
 from app.payment_truth import (
     BOT_SHIELD_CENTS,
     build_bot_shield_checkout_request,
@@ -174,7 +175,7 @@ async def _build_square_checkout_url(
         getattr(settings, "square_bot_shield_payment_link", "") or ""
     ).strip()
     if not square_bot_shield_url:
-        return None
+        square_bot_shield_url = BOT_SHIELD_PAYMENT_LINK
 
     separator = "&" if "?" in square_bot_shield_url else "?"
     return (
@@ -373,6 +374,7 @@ async def verification_status(
 
 @router.post("/confirm")
 async def confirm_verification(
+    request: Request,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
@@ -385,6 +387,7 @@ async def confirm_verification(
     Without both conditions met, verification is denied.
     This prevents free verification bypass (Iron Wall enforcement).
     """
+    verify_limiter.check(request)
 
     # Check 1: Must have a passed liveness event
     if not await has_passed_liveness(db, user.id):

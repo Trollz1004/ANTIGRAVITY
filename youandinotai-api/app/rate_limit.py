@@ -94,6 +94,10 @@ class RateLimiter:
                 )
             self._hits[ip].append(now)
 
+    def reset(self) -> None:
+        with self._lock:
+            self._hits.clear()
+
 
 settings = get_settings()
 trusted_proxy_networks = _parse_trusted_proxy_networks(
@@ -110,3 +114,8 @@ verify_limiter = RateLimiter(
     window_seconds=60,
     trusted_proxy_networks=trusted_proxy_networks,
 )
+
+
+def reset_rate_limits() -> None:
+    auth_limiter.reset()
+    verify_limiter.reset()
