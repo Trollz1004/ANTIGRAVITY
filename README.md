@@ -6,6 +6,13 @@
 
 I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler LLC** (Florida). I operate an AI-powered ecosystem designed for transparency and social impact. Through **Protocol Omega**, 60% of net proceeds from our platforms are automatically routed via smart contract to Shriners Children's Hospitals. The remaining operating split is fixed at 30% for mission infrastructure and AI operations plus 10% for founder survival/work capacity. This is a direct on-chain revenue disbursement model, prioritizing kids' charities (**#ForTheKids**), legal compliance, and platform integrity.
 
+## 🏗️ What I'm Building — The #ForTheKids Mission
+
+> 💬 *"The richest man is not he who has the most — it is he who needs the least."*
+
+An AI-powered ecosystem where revenue from apps, a social platform, and electronics recycling funds kids' charities. Every project I ship 
+
+
 ## Core Principles
 
 - Always follow the Terms of Service of every platform involved (AI APIs, GitHub, Cloudflare, Meta/Facebook, WhatsApp, Stripe, email providers, hosts).
