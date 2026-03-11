@@ -52,6 +52,7 @@ services:
     volumes:
       - ./app:/app/app
       - ./uploads:/app/uploads
+      - ../data/ewaste-intake:/app/ewaste-intake-data
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
