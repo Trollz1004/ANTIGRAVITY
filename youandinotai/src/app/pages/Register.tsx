@@ -128,7 +128,7 @@ export function Register() {
               <div>
                 <p className="text-emerald-400 font-bold text-sm">Bot-Shield Verified Community</p>
                 <p className="text-gray-500 text-xs mt-0.5">
-                  60% of platform revenue is contractually disbursed to Shriners Children's Hospitals
+                  Every account runs through the same human-verification flow before matching begins
                 </p>
               </div>
             </div>

@@ -13,16 +13,16 @@ const cards = [
   },
   {
     icon: DollarSign,
-    title: 'Transparent Revenue Split',
-    body: 'Every paid plan follows the published 60/30/10 model and the ledger stays visible on the public mission surface.',
-    href: '#mission',
-    cta: 'View Ledger',
+    title: 'Clear Founder Pricing',
+    body: 'Bot-Shield, founder plans, and the Royalty Card are all live with fixed public pricing before launch day.',
+    href: '#pricing',
+    cta: 'View Plans',
     color: 'from-green-400 to-lime-600',
   },
   {
     icon: Users,
-    title: 'Community Good',
-    body: 'Profiles, meetups, and volunteering are all part of the same product. The good happens inside YouAndINotAI, not on outside storefronts.',
+    title: 'Profiles First',
+    body: 'Profiles, founder perks, and the waitlist all stay inside one product flow. No off-platform detours needed.',
     href: '/register',
     cta: 'Join Early',
     color: 'from-rose-400 to-orange-500',
@@ -49,7 +49,7 @@ function Particle({ delay }: { delay: number }) {
 export function CharitySection() {
   return (
     <section
-      id="charity-section"
+      id="mission"
       className="relative overflow-hidden bg-gradient-to-b from-black via-[#08150d] to-[#041109] px-6 py-24"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -67,7 +67,7 @@ export function CharitySection() {
             className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.3em] text-emerald-400"
           >
             <Heart size={14} />
-            Impact Built In
+            Launch Ready
           </motion.div>
 
           <motion.h2
@@ -79,10 +79,10 @@ export function CharitySection() {
           >
             Verified Humans.
             <br />
-            Transparent Revenue.
+            Clear Pricing.
             <br />
             <span className="bg-gradient-to-r from-emerald-400 to-green-600 bg-clip-text text-transparent">
-              Real-World Good.
+              Real Launch Momentum.
             </span>
           </motion.h2>
 
@@ -93,8 +93,8 @@ export function CharitySection() {
             transition={{ delay: 0.2 }}
             className="mx-auto max-w-3xl text-lg font-light text-gray-400"
           >
-            YouAndINotAI keeps its launch story inside the product: Bot-Shield verification, public revenue logic,
-            and community features that turn the platform into more than swipes.
+            YouAndINotAI keeps its launch story inside the product: Bot-Shield verification, public founder pricing,
+            and a prelaunch flow built to move from waitlist to profile setup without friction.
           </motion.p>
         </div>
 
@@ -146,7 +146,7 @@ export function CharitySection() {
             <div className="text-left">
               <div className="text-sm font-bold uppercase tracking-tight text-white">Launch Surface Only</div>
               <div className="text-xs text-gray-400">
-                This section now stays inside YouAndINotAI: no outside charity stores, no separate property redirects.
+                This section stays inside YouAndINotAI: one launch surface, one checkout path, one profile flow.
               </div>
             </div>
           </div>

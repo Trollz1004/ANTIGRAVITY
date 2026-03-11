@@ -7,7 +7,7 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import User, VerificationEvent
+from app.models import Profile, User, VerificationEvent
 
 
 async def has_passed_liveness(db: AsyncSession, user_id: uuid.UUID) -> bool:
@@ -44,6 +44,13 @@ async def promote_user_verification_if_ready(
         return False
 
     user.bot_shield_verified = True
-    if user.profile:
-        user.profile.verified = True
+    profile = None
+    if hasattr(user, "__dict__"):
+        profile = user.__dict__.get("profile")
+    if profile is None:
+        profile = await db.scalar(
+            select(Profile).where(Profile.user_id == user.id)
+        )
+    if profile:
+        profile.verified = True
     return True
