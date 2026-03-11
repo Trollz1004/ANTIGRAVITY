@@ -1,6 +1,6 @@
 # SESSION HANDOFF — CLAUDE / CODEX SHARED STATE
 
-**Last Updated**: 2026-03-10 10:35:00 -04:00
+**Last Updated**: 2026-03-11 13:04:25 -04:00
 **Source**: Codex on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)
 
 ## Shared Truth
@@ -12,15 +12,21 @@
 
 ## Repo Position
 
-- `origin/main` = `c3f0036` (`docs: add GPT project source of truth`)
+- `origin/main` = `4f61f02` (`Fix dashboard truth claims and add transparency route`)
 - `C:\ANTIGRAVITY` = active local Codex base
+- `C:\ANTIGRAVITY` local `main` is clean and pushed
 - `E:\ANTIGRAVITY` = legacy local copy pending retirement
-- `origin/claude/review-changes-mmeucm90aurnm0ht-3sxI9` advanced again on fetch and should still be treated as a patch source only, not a merge target
+- `main` is the only active local branch; there were no extra merged branches left to delete after closeout
 - Protocol Omega current verified on-chain truth is still the legacy split contract:
   - live verified Base contract `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
   - live payout wallets `0x8d3d...` / `0xe0a42...` / `0x7c3E...`
   - newer repo router `DatingRevenueRouter` / `0xa878...` / `0xbe571...` are intended-next only until a real redeploy/cutover happens
   - `30%` means full mission infrastructure and AI operations, not founder income
+- Current `aidoesitall.website` / `antigravity` truth after the 2026-03-11 push:
+  - public dashboard copy is now constrained to verified addresses, tracked zeroes, and file-backed logs
+  - `antigravity/app/api/transparency/route.ts` fetches live Base wallet balances and contract tx count from BaseScan
+  - `antigravity/app/api/metrics/route.ts` reports explicit zeroes plus `Untracked` where instrumentation is not wired
+  - `npm run build` passed in `C:\ANTIGRAVITY\antigravity` before the push
 
 ## Legacy E: Working Tree To Protect Until Retired
 
@@ -36,6 +42,8 @@
 - SSH from Sabretooth to `T5500` passes
 - SSH from Sabretooth to `9020` passes
 - `T5500` no longer has `C:\DateApp`; current repo/root runtime evidence there is `C:\ANTIGRAVITY`
+- `9020` repo fetch succeeded but local `C:\ANTIGRAVITY` there is dirty and behind `42`; do not pull until its local overlay is reviewed
+- `T5500` repo fetch succeeded but local `C:\ANTIGRAVITY` there is dirty and behind `57`; do not pull until its local overlay is reviewed
 - Sabretooth now runs Codex in desktop-app-first mode; Docker is intentionally not installed
 - Retired `CodeX-Memory-SelfHeal-*` tasks are absent and should stay absent unless local memory stack work is explicitly re-enabled
 - `T5500` boot is now cold: no custom startup entries remain, `OpenClaw Gateway` and broken `OPUS-CLI-AutoStart` were removed, and `HKCU\...\Run` was trimmed to `OneDrive`
