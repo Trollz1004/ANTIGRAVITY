@@ -77,8 +77,10 @@ async def login(
 @router.post("/refresh", response_model=AuthTokenResponse)
 async def refresh_token(
     payload: AuthRefreshRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> AuthTokenResponse:
+    auth_limiter.check(request)
     data = decode_token(payload.refresh_token)
     if data.get("type") != "refresh":
         raise HTTPException(status_code=401, detail="Not a refresh token")
