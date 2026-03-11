@@ -3,7 +3,7 @@
  *
  * Premium holographic card component showcasing the $2,500 Royalty Card.
  * 3D perspective tilt, holographic shimmer, floating hearts, and
- * Protocol Omega charity messaging.
+ * founder-tier launch messaging.
  *
  * @license Apache-2.0
  */
@@ -198,13 +198,13 @@ function HolographicCard() {
             ))}
           </div>
 
-          {/* Charity callout */}
+          {/* Founder callout */}
           <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 mb-6 text-center">
             <p className="text-emerald-400 text-sm font-bold">
-              💚 60% automatically routed to Shriners Children's Hospitals on-chain
+              Only 5 Royalty Cards will be issued at launch
             </p>
             <p className="text-emerald-400/60 text-xs mt-0.5">
-              $1,500 of your Royalty Card disbursed via Protocol Omega smart contract
+              Lifetime VIP access plus the published founder revenue-share terms
             </p>
           </div>
 
@@ -278,7 +278,7 @@ export function RoyaltyDeck() {
           </h2>
           <p className="text-gray-400 text-sm md:text-base max-w-md mx-auto leading-relaxed">
             The ultimate founding membership. Lifetime VIP status, revenue share,
-            and the knowledge that <span className="text-emerald-400 font-semibold">$1,500 goes directly to children's hospitals</span>.
+            and priority access to every premium feature that follows launch.
           </p>
         </motion.div>
 
@@ -299,7 +299,7 @@ export function RoyaltyDeck() {
           </span>
           <span className="flex items-center gap-1.5">
             <Heart size={12} className="text-red-400 fill-red-400" />
-            Protocol Omega verified
+            Founder terms locked
           </span>
           <span className="flex items-center gap-1.5">
             <Star size={12} className="text-amber-400" />

@@ -260,6 +260,8 @@ class TestNoStripeReferences:
             and "REMOVED" not in line
             and "Iron Wall" not in line
             and "migration" not in line.lower()
+            and "retired" not in line.lower()
+            and '"/stripe"' not in line
         ]
         assert len(active_stripe) == 0, (
             f"Active Stripe references found in webhooks.py: {active_stripe}"

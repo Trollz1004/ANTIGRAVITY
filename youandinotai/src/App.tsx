@@ -8,19 +8,17 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import {
   Heart, Rocket, Trophy, PenTool,
-  ShieldCheck, ShieldAlert, Recycle, Mail, Check,
+  ShieldAlert, Mail, Check,
   LayoutDashboard, X,
 } from 'lucide-react';
 import { CharitySection } from './components/CharitySection';
 import { RoyaltyDeck } from './components/RoyaltyDeck';
-import { ImpactLedger } from './components/ImpactLedger';
 import { motion, AnimatePresence } from 'motion/react';
 
 /* ─── Lazy-load modal components ─── */
 /* Removed: GeminiMatchmaker, SolarFlareSOS, VoiceSOS — Gemini API costs money */
 const CosmicContest = lazy(() => import('./components/CosmicContest').then(m => ({ default: m.CosmicContest })));
 const CosmicWall = lazy(() => import('./components/CosmicWall').then(m => ({ default: m.CosmicWall })));
-const ShrinersHonor = lazy(() => import('./components/ShrinersHonor').then(m => ({ default: m.ShrinersHonor })));
 const EcosystemStats = lazy(() => import('./components/EcosystemStats').then(m => ({ default: m.EcosystemStats })));
 
 /* ─── Error Boundary for lazy modals ─── */
@@ -275,7 +273,7 @@ function PricingSection() {
 const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   terms: {
     title: 'Terms of Service',
-    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. HUMAN VERIFICATION — Bot-Shield verification is required. Fraudulent verification attempts result in permanent ban.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations result in immediate account termination.\n4. PAYMENTS — All payments are processed through Square-hosted checkout links. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. PROTOCOL OMEGA — Revenue disbursements to Shriners Children's Hospitals are executed automatically via smart contract on Base Mainnet. These disbursements are contractual revenue splits under Florida Statutes §496.405. Shriners Children's Hospitals is an independent 501(c)(3) organization and does not endorse or sponsor this platform. Verify on-chain: https://basescan.org/address/0x9855B75061D4c841791382998f0CE8B2BCC965A4.\n\nLast updated: February 2026. Contact: contact@youandinotai.com`,
+    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. HUMAN VERIFICATION — Bot-Shield verification is required. Fraudulent verification attempts result in permanent ban.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations result in immediate account termination.\n4. PAYMENTS — All payments are processed through Square-hosted checkout links. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. BILLING — Bot-Shield verification requires both a passed liveness challenge and a completed Square payment before the verified badge is granted.\n\nLast updated: February 2026. Contact: contact@youandinotai.com`,
   },
   privacy: {
     title: 'Privacy Policy',
@@ -346,7 +344,7 @@ function SuccessModal({ onClose }: { onClose: () => void }) {
 
         <h3 className="text-2xl font-black text-white mb-2">Bot-Shield Verified</h3>
         <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-          Your verification is complete! The matching 60/30/10 revenue allocation for this purchase is tracked under Protocol Omega. Check your email for a receipt from Square.
+          Your verification is complete. Check your email for the Square receipt and head back in to finish your profile.
         </p>
 
         <button
@@ -357,7 +355,7 @@ function SuccessModal({ onClose }: { onClose: () => void }) {
         </button>
 
         <p className="mt-6 text-[10px] text-gray-600 font-mono uppercase tracking-widest">
-          #FORtheKIDS — Smart Contract Verified
+          Square Receipt Sent
         </p>
       </motion.div>
     </motion.div>
@@ -450,9 +448,7 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
           <p className="text-gray-600 text-xs">&copy; 2026 <a href="https://search.sunbiz.org/Inquiry/CorporationSearch/SearchResultDetail?inquiryType=EntityName&searchTerm=TRASH%20OR%20TREASURE%20ONLINE%20RECYCLER%20LLC&listNameOrder=TRASHORTREASUREONLINERECYCLER%20L250001584010" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400">Trash Or Treasure Online Recycler LLC</a>. All rights reserved.</p>
         </div>
         <p className="max-w-4xl mx-auto text-center text-[10px] text-gray-600 mt-6 leading-relaxed">
-          YouAndINotAI.com is a for-profit platform. Revenue disbursements to Shriners Children&apos;s Hospitals are executed automatically via smart contract (Protocol Omega, Base Mainnet). These disbursements are contractual revenue splits under Florida Statutes §496.405. Shriners Children&apos;s Hospitals is an independent 501(c)(3) organization and does not endorse or sponsor this platform.
-          <br />
-          Verify on-chain: <a href="https://basescan.org/address/0x9855B75061D4c841791382998f0CE8B2BCC965A4" target="_blank" rel="noopener noreferrer" className="text-gray-500 underline decoration-gray-700">Protocol Omega Contract</a>
+          YouAndINotAI.com is a for-profit platform. Bot-Shield verification requires a passed liveness challenge plus a completed Square checkout before the verified badge is awarded.
         </p>
       </div>
     </footer>
@@ -463,7 +459,6 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
 const FEATURES = [
   { key: 'contest', icon: Trophy, name: 'Launch Contest', desc: 'Win launch prizes', gradient: 'from-yellow-400 to-orange-500' },
   { key: 'wall', icon: PenTool, name: 'Signature Wall', desc: 'Leave your mark', gradient: 'from-pink-400 to-rose-500' },
-  { key: 'shriners', icon: ShieldCheck, name: 'Mars Hall Pass', desc: 'Shriners honor', gradient: 'from-red-400 to-rose-600' },
   { key: 'ecosystem', icon: LayoutDashboard, name: 'Transparency', desc: 'Real-time proof', gradient: 'from-indigo-400 to-purple-500' },
 ] as const;
 
@@ -494,10 +489,6 @@ export default function App() {
     setShowSuccess(false);
   };
 
-  const scrollToCharity = () => {
-    document.getElementById('charity-section')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <div className="relative min-h-screen bg-black text-white font-sans scroll-smooth pb-cta">
       {/* Static Stars Background */}
@@ -515,7 +506,7 @@ export default function App() {
           <div className="hidden md:flex items-center gap-6 text-sm text-gray-400">
             <a href="#features" className="hover:text-white transition-colors no-underline">Features</a>
             <a href="#pricing" className="hover:text-white transition-colors no-underline">Pricing</a>
-            <a href="#mission" className="hover:text-white transition-colors no-underline">Our Mission</a>
+            <a href="#mission" className="hover:text-white transition-colors no-underline">Why It Works</a>
           </div>
           <a
             href="https://square.link/u/Qc5mxUy7"
@@ -528,9 +519,9 @@ export default function App() {
         </div>
       </nav>
 
-      {/* #ForTheKids Charity Banner */}
+      {/* Launch Banner */}
       <div className="relative z-10 pt-14 bg-emerald-500 text-black text-center py-3 px-4 font-bold text-sm md:text-base">
-        #ForTheKids — Protocol Omega tracks the 60/30/10 revenue split on-chain.
+        Founder pricing is live now. Launch day is April 4, 2026.
       </div>
 
       {/* Hero Section */}
@@ -593,7 +584,7 @@ export default function App() {
           <h2 className="text-center text-2xl md:text-3xl font-black mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
             Explore Features
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {FEATURES.map((f) => (
               <button
                 key={f.key}
@@ -609,16 +600,6 @@ export default function App() {
             ))}
           </div>
 
-          {/* Give Back button */}
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={scrollToCharity}
-              className="px-6 py-3 bg-green-500/10 border border-green-500/30 backdrop-blur-md rounded-full font-bold text-green-500 hover:bg-green-500/20 transition-all flex items-center gap-2 cursor-pointer active:scale-95"
-            >
-              <Recycle size={18} />
-              Give Back
-            </button>
-          </div>
         </div>
       </section>
 
@@ -636,7 +617,7 @@ export default function App() {
               Real People. Real Connection.
             </p>
             <p className="text-pink-300 text-sm md:text-lg mt-2 font-medium drop-shadow-md">
-              Protocol Omega tracks the 60/30/10 split on-chain.
+              Bot-Shield keeps the bots out before the matching starts.
             </p>
           </div>
         </div>
@@ -648,16 +629,11 @@ export default function App() {
       {/* Royalty Deck */}
       <RoyaltyDeck />
 
-      {/* Impact Ledger */}
-      <div id="mission">
-        <ImpactLedger />
-      </div>
+      {/* Product Story */}
+      <CharitySection />
 
       {/* Waitlist */}
       <WaitlistForm />
-
-      {/* Charity Section */}
-      <CharitySection />
 
       {/* QR Code Share */}
       <section className="relative z-10 py-12 px-4 text-center">
@@ -693,11 +669,6 @@ export default function App() {
           {activeModal === 'wall' && (
             <Suspense fallback={<ModalLoader />}>
               <CosmicWall onClose={() => setActiveModal(null)} />
-            </Suspense>
-          )}
-          {activeModal === 'shriners' && (
-            <Suspense fallback={<ModalLoader />}>
-              <ShrinersHonor onClose={() => setActiveModal(null)} />
             </Suspense>
           )}
           {activeModal === 'ecosystem' && (
