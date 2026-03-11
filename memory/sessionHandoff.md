@@ -12,7 +12,7 @@
 
 ## Repo Position
 
-- `origin/main` = `4f61f02` (`Fix dashboard truth claims and add transparency route`)
+- Current `origin/main` includes the 2026-03-11 dashboard truth-fix push plus same-day continuity memory updates from Sabretooth
 - `C:\ANTIGRAVITY` = active local Codex base
 - `C:\ANTIGRAVITY` local `main` is clean and pushed
 - `E:\ANTIGRAVITY` = legacy local copy pending retirement

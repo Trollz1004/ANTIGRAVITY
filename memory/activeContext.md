@@ -151,9 +151,9 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - `verify.py` now prefers per-user Square Checkout API links when token/location are available
    - `webhooks.py` resolves signed checkout refs before customer/email fallback and only promotes verification when liveness + payment both exist
    - `youandinotai-api/docker-compose*.yml` no longer claim Stripe runtime env wiring
-44. `origin/main` was advanced on 2026-03-11 to `4f61f02`:
-   - commit: `Fix dashboard truth claims and add transparency route`
-   - the push was completed directly from Sabretooth on `main`
+44. `origin/main` was advanced again on 2026-03-11 from Sabretooth:
+   - feature push included `Fix dashboard truth claims and add transparency route`
+   - same-day continuity memory updates were pushed afterward so repo memory and external backup do not drift
 45. The public `antigravity` dashboard was reduced to truthful surface area before that push:
    - `antigravity/app/api/metrics/route.ts` now returns honest tracked zeroes and explicit `Untracked` status
    - `antigravity/app/api/transparency/route.ts` now reads Base wallet balances and contract transaction count from BaseScan
