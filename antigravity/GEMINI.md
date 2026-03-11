@@ -34,6 +34,7 @@ Do not use this file as the primary source for:
 - Default branch remains `main`
 - Codex is the orchestrator on Sabretooth
 - Gemini collaborates inside the same workspace under that orchestration
+- Read `C:\ANTIGRAVITY\briefings\shared\DASHBOARD-DAO-TRANSPARENCY-SOURCE-OF-TRUTH.md` before changing dashboard truth, metrics, or transparency logic
 
 ## Payment / Revenue Guardrails
 
