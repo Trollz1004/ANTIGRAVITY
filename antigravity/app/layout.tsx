@@ -11,7 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body suppressHydrationWarning>
         <div className="bg-emerald-500 text-black text-center py-2 px-4 font-bold text-xs md:text-sm relative z-[100]">
-          #ForTheKids — 60% of net proceeds → Shriners Children&apos;s Hospitals (on-chain, verifiable). Not a solicitation.
+          #ForTheKids — ENIGMA routing is locked to 60/30/10 on Base Mainnet. This dashboard shows verified addresses and tracked zeroes only.
         </div>
         {children}
       </body>
