@@ -1,6 +1,6 @@
 # ACTIVE CONTEXT — WHAT'S HAPPENING RIGHT NOW
 
-**Last Updated**: 2026-03-10T10:35:00-04:00
+**Last Updated**: 2026-03-11T13:04:25-04:00
 **Session**: Codex Desktop on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)  
 **Dev Server**: Not part of current priority
 
@@ -151,6 +151,22 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - `verify.py` now prefers per-user Square Checkout API links when token/location are available
    - `webhooks.py` resolves signed checkout refs before customer/email fallback and only promotes verification when liveness + payment both exist
    - `youandinotai-api/docker-compose*.yml` no longer claim Stripe runtime env wiring
+44. `origin/main` was advanced on 2026-03-11 to `4f61f02`:
+   - commit: `Fix dashboard truth claims and add transparency route`
+   - the push was completed directly from Sabretooth on `main`
+45. The public `antigravity` dashboard was reduced to truthful surface area before that push:
+   - `antigravity/app/api/metrics/route.ts` now returns honest tracked zeroes and explicit `Untracked` status
+   - `antigravity/app/api/transparency/route.ts` now reads Base wallet balances and contract transaction count from BaseScan
+   - `antigravity/app/page.tsx`, `antigravity/components/Transparency.tsx`, and `antigravity/app/layout.tsx` now avoid unsupported live-impact claims and focus on verified addresses, tracked zeroes, and file-backed logs
+   - `npm run build` passed in `C:\ANTIGRAVITY\antigravity` before push
+46. Git closeout state after the dashboard push:
+   - `main` is the only local branch
+   - `origin/main` is current authoritative git truth
+   - there were no extra merged branches to delete
+47. Remote repo sync remains intentionally blocked on dirty utility nodes:
+   - `9020` local `C:\ANTIGRAVITY` remains dirty and is now behind `42`
+   - `T5500` local `C:\ANTIGRAVITY` remains dirty and is now behind `57`
+   - do not pull those nodes forward until their local overlays are reviewed, stashed, or committed intentionally
 
 ## House Rules
 
