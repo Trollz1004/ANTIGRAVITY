@@ -82,6 +82,7 @@ def _verify_square_signature(
     *,
     signature_key: str,
     notification_url: str,
+    request_url: str | None = None,
 ) -> None:
     """Verify Square webhook HMAC-SHA256 signature."""
     if not signature_key or not notification_url:
@@ -97,20 +98,27 @@ def _verify_square_signature(
         )
 
     body_text = payload.decode("utf-8", errors="replace")
-    signed_payload = (notification_url + body_text).encode("utf-8")
-    digest = hmac.new(
-        signature_key.encode("utf-8"),
-        signed_payload,
-        hashlib.sha256,
-    ).digest()
-    expected_signature = base64.b64encode(digest).decode("utf-8")
     provided_signature = square_signature.strip()
+    candidate_urls = [notification_url]
+    request_url = (request_url or "").strip()
+    if request_url and request_url not in candidate_urls:
+        candidate_urls.append(request_url)
 
-    if not hmac.compare_digest(expected_signature, provided_signature):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid Square webhook signature.",
-        )
+    for candidate_url in candidate_urls:
+        signed_payload = (candidate_url + body_text).encode("utf-8")
+        digest = hmac.new(
+            signature_key.encode("utf-8"),
+            signed_payload,
+            hashlib.sha256,
+        ).digest()
+        expected_signature = base64.b64encode(digest).decode("utf-8")
+        if hmac.compare_digest(expected_signature, provided_signature):
+            return
+
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Invalid Square webhook signature.",
+    )
 
 
 def _resolve_square_signature_material(
@@ -308,6 +316,7 @@ def _extract_payment_proof_label(payment_obj: dict[str, Any]) -> str:
     return source_type or "unknown"
 
 
+@router.post("/square", response_model=WebhookAckResponse)
 @router.post("/square-payment", response_model=WebhookAckResponse)
 async def square_payment_webhook(
     request: Request,
@@ -348,6 +357,7 @@ async def square_payment_webhook(
             square_signature,
             signature_key=signature_key,
             notification_url=notification_url,
+            request_url=str(request.url).split("?", 1)[0],
         )
 
     try:
@@ -683,6 +693,7 @@ async def square_booking_webhook(
             square_signature,
             signature_key=signature_key,
             notification_url=notification_url,
+            request_url=str(request.url).split("?", 1)[0],
         )
 
     try:
@@ -705,3 +716,11 @@ async def square_booking_webhook(
     _mark_square_event_processed(event_id, log_dir)
 
     return WebhookAckResponse(event_id=event_id, processed=True, duplicate=False)
+
+
+@router.post("/stripe")
+async def stripe_webhook_retired() -> None:
+    raise HTTPException(
+        status_code=status.HTTP_410_GONE,
+        detail="Stripe webhooks are retired. Configure Square webhooks instead.",
+    )

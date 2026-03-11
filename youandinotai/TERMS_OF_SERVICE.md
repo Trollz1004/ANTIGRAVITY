@@ -79,7 +79,7 @@ You agree not to:
 - Use photos that are not of you (no catfishing)
 - Misrepresent your age, identity, or intentions
 - Impersonate another person or entity
-- Use the platform for commercial solicitation, scams, phishing, or spam
+- Use the platform for commercial pitches, scams, phishing, or spam
 
 ### 5.3 Technical Abuse
 - Use bots, scripts, or automated tools to access the platform
@@ -114,7 +114,7 @@ You are solely responsible for the content you post. We do not pre-screen all us
 |---------|-------|------|
 | Bot-Shield Verification | $1 (one-time) | Verification fee |
 | Founding Member | $14.99/month | Recurring subscription |
-| 3-Month Founder | $49.99 (one-time) | Prepaid subscription |
+| 3-Month Founder | $39.99 (one-time) | Prepaid subscription |
 | 12-Month Founder | $99.99 (one-time) | Prepaid subscription |
 | Royalty Card | $2,500 (one-time) | Limited edition (5 total) |
 

@@ -5,19 +5,46 @@ auth flows, verification flows, and webhook signature verification
 without requiring a live database or external services.
 """
 
+import asyncio
 import base64
 import hashlib
 import hmac
 import json
 import os
+import sys
 import uuid
 from datetime import datetime, timezone
+from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 # Set a valid JWT_SECRET before importing app modules
 os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-security"
+os.environ.setdefault("APP_ENV", "test")
+os.environ.setdefault("SQUARE_WEBHOOK_VERIFY_SIGNATURE", "true")
+os.environ.setdefault("SQUARE_BOT_SHIELD_PAYMENT_LINK", "https://square.link/u/Qc5mxUy7")
+os.environ.setdefault("SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY", "test-square-signature")
+os.environ.setdefault(
+    "SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL",
+    "http://testserver/api/v1/webhooks/square-payment",
+)
+os.environ.setdefault("SQUARE_BOOKING_WEBHOOK_SIGNATURE_KEY", "test-square-signature")
+os.environ.setdefault(
+    "SQUARE_BOOKING_WEBHOOK_NOTIFICATION_URL",
+    "http://testserver/api/v1/webhooks/square-booking",
+)
+os.environ.setdefault("CORS_ORIGINS", "http://testserver")
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from app.database import Base, get_db  # noqa: E402
+from app.main import app  # noqa: E402
+from app.rate_limit import reset_rate_limits  # noqa: E402
 
 
 # ── Mock User Factory ──
@@ -157,3 +184,39 @@ def make_square_booking_event(
             }
         },
     }
+
+
+@pytest.fixture()
+def db_session_factory(tmp_path):
+    db_path = tmp_path / "audit.db"
+    engine = create_async_engine(f"sqlite+aiosqlite:///{db_path.as_posix()}")
+    session_factory = async_sessionmaker(engine, expire_on_commit=False)
+
+    async def setup() -> None:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+
+    asyncio.run(setup())
+
+    yield session_factory
+
+    async def teardown() -> None:
+        await engine.dispose()
+
+    asyncio.run(teardown())
+
+
+@pytest.fixture()
+def client(db_session_factory):
+    async def override_get_db():
+        async with db_session_factory() as session:
+            yield session
+
+    app.dependency_overrides[get_db] = override_get_db
+    reset_rate_limits()
+
+    with TestClient(app) as test_client:
+        yield test_client
+
+    app.dependency_overrides.clear()
+    reset_rate_limits()
