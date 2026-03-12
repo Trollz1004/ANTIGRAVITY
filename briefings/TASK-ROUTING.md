@@ -1,66 +1,75 @@
-# TASK-ROUTING — ANTIGRAVITY Jarvis Brain
-> Last updated: 2026-03-05 | Version: 1.0 (Cheaper Edition)
+# TASK-ROUTING — ANTIGRAVITY
 
-This file defines the automated routing logic for all tasks entering the ANTIGRAVITY ecosystem. Jarvis (Claude Opus) reads this to dispatch tasks to the appropriate sub-agent.
+Last updated: 2026-03-12
+Workspace truth: `C:\ANTIGRAVITY` on `origin/main`
 
----
+This file defines who should do what across the current AI team.
 
-## 🚦 ROUTING TABLE
+## Authority Order
 
-| TASK TYPE | AGENT (ROLE) | EXECUTOR | PRIMARY PROMPT / BRIEF |
-|-----------|--------------|----------|-------------------------|
-| **Research / Intel** | Atlas | Comet (Perplexity) | `briefings/PERPLEXITY-BRIEFING.md` |
-| **Copywriting / Posts** | Scribe | Gemini 3.1 | `briefings/GEMINI-AGENT-PROMPT.md` |
-| **Trend Scouting** | Trendy | Comet (Perplexity) | `briefings/COMET-SYNC-PROMPT.md` |
-| **Image / Design** | Designer | Gemini 3.1 | `briefings/AGENT-PROMPTS-FINAL.md` |
-| **Hard Code / Arch** | Clawed | Claude Opus | `CLAUDE.md` |
-| **Code Review / QA** | Sentinel | Gemini 3.1 | `briefings/CODEX-TASK-SENTRY.md` |
-| **Video / Motion** | Motion | Claude + Remotion | `briefings/CLAUDE-SKILL.md` |
-| **Support / Admin** | Ryder | Gemini 3.1 | `briefings/AGENT-PROMPTS-FINAL.md` |
-| **Social Posting** | Dispatcher | Chrome Stations | `briefings/chrome-station-prompts.md` |
+1. Josh decides scope and priorities.
+2. Codex on Sabretooth is the orchestrator and final repo truth.
+3. Gemini, Comet, Claude, and local workers operate under Codex routing.
 
----
+If any tool, model, or exported note conflicts with the live repo:
+- `AGENTS.md` wins
+- `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md` wins next
+- `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md` and `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md` govern payment and chain truth
 
-## 🛠️ ROUTING RULES (SCORING)
+## Routing Table
 
-When a task enters the `TASK-QUEUE-100.md`, Jarvis scores it against these criteria to select the executor:
+| Task Type | Primary Agent | Executor | Required Briefs |
+|---|---|---|---|
+| Architecture, repo truth, git closeout, deployment sequencing | Codex | Codex Desktop on Sabretooth | `AGENTS.md`, `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md` |
+| Payment truth, checkout copy, webhook drift, product catalog truth | Codex | Codex Desktop on Sabretooth | `AGENTS.md`, `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md` |
+| Frontend UI polish, browser verification, bounded static-site work | Gemini | Gemini in `C:\ANTIGRAVITY` | `briefings/gemini/BRIEFING.md`, `briefings/gemini-agent-prompt.md` |
+| Research, competitor intel, policy/current-market lookups | Atlas | Comet / Perplexity | `briefings/COMET-SYNC-PROMPT.md` |
+| Audit, backend support, code review, isolated proof work | Claude | Claude on approved node/workspace | `briefings/claude-t5500/BRIEFING.md` |
+| Repeatable local support tasks, drafts, pack generation | Mini Claudes | OpenClaw / Ollama / local scripts | routed by Codex only |
 
-1. **Safety/Security (Sentinel Score)**:
-   - If task involves Stripe, Square, or smart contracts -> **Sentinel (Gemini)** MUST review.
-   - If core architecture -> **Jarvis (Opus)** handles.
+## Default Assignment Rules
 
-2. **Visual/Browser (Browser Score)**:
-   - If task requires visiting a URL, screenshotting, or dashboard interaction -> **Gemini 3.1** (Station 4).
+1. Anything that changes tracked repo truth ends with Codex.
+2. Anything that touches payments, wallets, deployment claims, or governance starts with Codex.
+3. Gemini is best used for:
+   - React/UI changes
+   - Cloudflare/browser validation
+   - static HTML/CSS/JS cleanup
+   - bounded moderation/safety UI work
+4. Claude is best used for:
+   - backend audits
+   - proof checks
+   - bounded implementation on non-overlapping files
+   - support work on remote nodes when explicitly assigned
+5. Comet is best used for:
+   - read-only research
+   - recommendation gathering
+   - current policy/platform rules
+6. Local workers do not set truth. They generate drafts, packs, and machine-local outputs only.
 
-3. **Inbound Content (Clipper/Scribe)**:
-   - YouTube URL -> **Clipper (9020 SSH Script)**.
-   - Research report -> **Scribe (Draft Posts)**.
+## Hard Guardrails
 
-## 📁 TARGET STRUCTURE
+- One repo, one branch, one live folder: `C:\ANTIGRAVITY`, `main`
+- OMEGA repos and 100% charity surfaces are off-limits from ENIGMA-side work
+- Square is the live payment rail
+- No mock data
+- No false live claims
+- No customer-facing `donate`, `donation`, or `solicitation`
+- If a temporary branch is ever used, Codex must merge, push `main`, and delete the branch before calling the task done
 
-- `data/codex-task-queue.json` — The durable state.
-- `TASK-QUEUE-100.md` — Human-readable view.
-- `scripts/codex_task_sentry.py` — The dispatcher engine.
+## Current Team Priorities
 
----
+1. Keep public surfaces truthful and legally safe
+2. Keep payment truth anchored to live Square behavior
+3. Use `CodeX-Fleet-Watcher` for the daily proof snapshot
+4. Tighten header/CSP posture on deployed public sites
+5. Keep `youandinotai.com` and `onlinerecycle.org` aligned with repo truth
 
-## 💰 COST OPTIMIZATION (THE "CHEAPER" PLAN)
+## Required Verification Pattern
 
-| Requested Agent | Post's Expensive Model | ANTIGRAVITY "Cheaper" Implementation | Monthly Est. |
-|-----------------|------------------------|---------------------------------------|--------------|
-| **Jarvis Brain** | Opus 4.6 ($200) | **Claude Opus** ($20 fixed) | $20 |
-| **Atlas Research**| Claude @ OAuth | **Perplexity Pro** ($20 fixed) | $20 |
-| **Scribe Copy** | GLM 5 (API) | **Gemini 3.1 (Me)** | **FREE** |
-| **Trendy Scout** | GLM 4.7 (API) | **Perplexity / Gemini Search** | **FREE** |
-| **Image Designer**| Nano Banana Pro | **Gemini 3.1 (generate_image)** | **FREE** |
-| **Video/Motion** | Higgs/Brok APIs | **Claude + Remotion (Self-hosted)** | **FREE** |
-| **Development** | Claude Code + Codex | **Claude Code (Opus)** | **FREE*** |
-| **Sentinel Review**| Separate LLM | **Gemini 3.1 (Me)** | **FREE** |
-| **Operations** | Poster API | **Chrome Extension Stations** | **FREE** |
-
-**TOTAL ESTIMATED MONTHLY COST: $40 — $60**
-(Reduced from $400/mo by 90% while keeping co-founder level intelligence)
-
-*Note: Free tools/tiers are used wherever possible to prioritize keeping the Claude Max subscription alive.*
-
-#ForTheKids 🚀
+Before closeout:
+1. relevant build/lint/test passes locally
+2. `main` is clean
+3. `origin/main` is updated
+4. required CI is green
+5. memory/briefings are updated if the operational truth changed
