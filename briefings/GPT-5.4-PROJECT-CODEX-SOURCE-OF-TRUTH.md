@@ -1,9 +1,9 @@
 # GPT-5.4 Project Source Of Truth
 
-Updated: 2026-03-08
+Updated: 2026-03-12
 Repo: `C:\ANTIGRAVITY`
 Primary branch: `main`
-Current promoted baseline: `6516008`
+Current promoted baseline: `b841fd4`
 
 ## Purpose
 
@@ -34,6 +34,7 @@ It intentionally contains paths, structure, and recovery logic, but not secret v
 - Docker: not required
 - Local fallback model: Ollama `qwen2.5:7b`
 - Active scheduled tasks:
+  - `CodeX-Fleet-Watcher`
   - `CodeX-Brain-Checkpoint`
   - `CodeX-Mission-Guardian`
   - `CodeX-Task-Sentry`
@@ -254,6 +255,7 @@ Current platform rule:
 
 - Public checkout path is now Square-first
 - Canonical Square links are recorded in `AGENTS.md`
+- Repo-local payment truth is pinned in `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
 - Backend Stripe dependency was removed from the live backend path
 - Public app/docs were cleaned to replace stale Stripe checkout references
 
@@ -320,3 +322,4 @@ The following are backup, recovery, or legacy artifacts. They must **not** be us
 - `CodeX\state\runtime\TASK-QUEUE-100.md` and `CodeX\state\runtime\codex-orchestrator-handoff.md` are generated runtime files and should remain out of tracked git paths
 - `9020` and `T5500` still have unrelated local drift outside the reviewed automation slice
 - `T5500` can still report `LIVE_OK=NO` on the e-waste live-ok audit even when the automation stack itself is functioning
+- Local watcher and repo briefing hardening are committed, but live Cloudflare Pages header rollout may lag until the latest deploy finishes on public surfaces

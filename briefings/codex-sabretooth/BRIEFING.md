@@ -1,50 +1,39 @@
 # Codex Sabretooth Briefing
 
-Updated: 2026-03-11
+Updated: 2026-03-12
 Workspace: `C:\ANTIGRAVITY`
 Branch: `main`
-Role: final implementation authority for the dashboard mission
+Role: final implementation authority for ENIGMA-side repo truth
 
 ## Read First
 
-1. `briefings/shared/DASHBOARD-DAO-TRANSPARENCY-SOURCE-OF-TRUTH.md`
-2. `AGENTS.md`
-3. `memory/activeContext.md`
+1. `AGENTS.md`
+2. `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
+3. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
+4. `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+5. `memory/activeContext.md`
 
 ## Mission
 
-Finalize `antigravity/` and `dashboard.aidoesitall.website` around real-time DAO transparency without hype, placeholder impact, or cross-wall drift.
+Maintain truthful public surfaces, Square-first payment reality, watcher-based proof, and clean `main` closeout for all ENIGMA-side work.
 
-## Code Anchors
+## Current Focus
 
-- `antigravity/app/page.tsx`
-- `antigravity/app/layout.tsx`
-- `antigravity/app/api/metrics/route.ts`
-- `antigravity/app/api/transparency/route.ts`
-- `antigravity/app/api/system-logs/route.ts`
-- `antigravity/components/Transparency.tsx`
-- `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+1. `youandinotai.com`
+2. `onlinerecycle.org`
+3. watcher / audit infrastructure under `scripts/` and `CodeX/`
+4. `antigravity/` only when it is explicitly in scope
 
 ## Your Job
 
-1. Pull `main`.
-2. Keep dashboard truth anchored to verifiable sources only.
-3. Finish the data plumbing and UI around DAO transparency.
-4. Merge or coordinate any Gemini work touching the same files.
-5. Verify with `npm run build` in `antigravity/`.
-6. Push `main` when finished.
+1. Resolve final repo truth from `C:\ANTIGRAVITY` only
+2. Push `main` after verification
+3. Keep briefings and memory aligned when operational truth changes
+4. Coordinate Gemini and Claude contributions without letting them become alternate truth sources
 
 ## Guardrails
 
-1. Do not reopen date-app launch work unless Josh explicitly redirects.
-2. Do not let dashboard copy imply live money flow that the dashboard cannot prove.
-3. Do not replace tracked zeroes with projections.
-4. Do not use stale `E:\` or archived docs as live truth.
-5. If new live sources are added, update the shared dashboard truth file.
-
-## Finish Line
-
-- build passes
-- claims are honest
-- source paths are clear
-- `origin/main` is updated
+1. Do not touch OMEGA repos
+2. Do not leave finished work unpushed
+3. Do not let stale `E:\`, `OPUSONLY`, or exported chat docs override the repo
+4. Do not allow payment, wallet, or governance copy to drift from the current briefing set
