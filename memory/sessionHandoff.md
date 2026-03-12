@@ -1,6 +1,6 @@
 # SESSION HANDOFF — CLAUDE / CODEX SHARED STATE
 
-**Last Updated**: 2026-03-11 13:04:25 -04:00
+**Last Updated**: 2026-03-12 00:10:00 -04:00
 **Source**: Codex on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)
 
 ## Shared Truth
@@ -12,9 +12,10 @@
 
 ## Repo Position
 
-- Current `origin/main` includes the 2026-03-11 dashboard truth-fix push plus same-day continuity memory updates from Sabretooth
+- Current `origin/main` includes the 2026-03-11 dashboard truth-fix push plus the 2026-03-12 date-app launch-surface truth pass from Sabretooth
 - `C:\ANTIGRAVITY` = active local Codex base
 - `C:\ANTIGRAVITY` local `main` is clean and pushed
+- current live repo tip: `480330b` (`Truth-pass date app launch surface`)
 - `E:\ANTIGRAVITY` = legacy local copy pending retirement
 - `main` is the only active local branch; there were no extra merged branches left to delete after closeout
 - Protocol Omega current verified on-chain truth is still the legacy split contract:
@@ -123,6 +124,14 @@
   - `verify.py` now prefers per-user Square Checkout API links when token/location are present
   - `webhooks.py` resolves signed checkout refs before weaker customer/email fallback
   - Docker compose files were updated to Square env wiring
+- Date-app launch/runtime status after the 2026-03-12 pass:
+  - `youandinotai.com` now serves the current Cloudflare Pages build from the live repo
+  - stale `T5500` local `vite preview` on `4173` was stopped
+  - `T5500` backend now runs via scheduled task `YouAndINotAI-API`
+  - `T5500` backend listens on `0.0.0.0:8000`
+  - `GET /api/v1/health` on `T5500` returns `200` with `db_connected=true` and `square_connected=false`
+  - public revenue path is live through Cloudflare Pages + Square links
+  - stable public routing to the current `/api/v1` backend is still not finished
 - Public checkout/copy drift cleanup is now partially promoted:
   - `youandinotai/src/App.tsx` uses the canonical Square links instead of stale Stripe links
   - `youandinotai` public policy copy now references Square

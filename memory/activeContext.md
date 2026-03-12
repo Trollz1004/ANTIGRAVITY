@@ -1,6 +1,6 @@
 # ACTIVE CONTEXT — WHAT'S HAPPENING RIGHT NOW
 
-**Last Updated**: 2026-03-11T13:04:25-04:00
+**Last Updated**: 2026-03-12T00:10:00-04:00
 **Session**: Codex Desktop on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)  
 **Dev Server**: Not part of current priority
 
@@ -167,6 +167,20 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - `9020` local `C:\ANTIGRAVITY` remains dirty and is now behind `42`
    - `T5500` local `C:\ANTIGRAVITY` remains dirty and is now behind `57`
    - do not pull those nodes forward until their local overlays are reviewed, stashed, or committed intentionally
+48. Date-app launch surface was truth-passed and pushed from Sabretooth on `2026-03-12`:
+   - `origin/main` advanced to commit `480330b`
+   - `youandinotai.com` now serves the current Cloudflare Pages build from the live repo
+   - fake public contest/signature-wall launch surface was removed from the landing flow
+   - public launch copy now stays aligned to Bot-Shield + Square instead of unsupported live-community claims
+49. `T5500` runtime was re-checked after that push:
+   - stale `vite preview` on `127.0.0.1:4173` was stopped
+   - `uandinotai-postgres` stayed healthy on `5432`
+   - the current FastAPI backend was started from `C:\ANTIGRAVITY\youandinotai-api` via a persistent scheduled task `YouAndINotAI-API`
+   - backend now listens on `0.0.0.0:8000` and `GET /api/v1/health` returns `200` with `db_connected=true`, `square_connected=false`, `user_count=2`
+50. Current date-app launch state is split but usable:
+   - public revenue path is live now through `youandinotai.com` + Square checkout links
+   - current canonical backend is running on `T5500` locally
+   - public API routing for the current `/api/v1` backend is still not exposed on a stable public hostname
 
 ## House Rules
 
