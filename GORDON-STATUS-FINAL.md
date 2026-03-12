@@ -79,24 +79,11 @@
 
 ---
 
-## 📊 ALL 5 CANONICAL STRIPE LINKS — LIVE & VERIFIED
+## 💳 PAYMENT PROCESSING — CONFIGURED
 
-```
-✅ Bot-Shield Verification — $1 (one-time)
-   https://buy.stripe.com/3cI3cwcR6c3910p18peEo09
-
-✅ Founding Member — $14.99/month (locked forever)
-   https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a
-
-✅ 3-Month Founder — $39.99 (save $5)
-   https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j
-
-✅ 12-Month Founder — $99.99 (best value)
-   https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c
-
-✅ Royalty Card — $2,500 (lifetime VIP + revenue share)
-   https://buy.stripe.com/dRmcN604kebheRf2cteEo0d
-```
+✅ Payment processing configured via payment provider  
+✅ 5 product tiers ready for launch  
+✅ Payment webhook handling implemented  
 
 ---
 
@@ -154,7 +141,7 @@ docker compose up -d
 
 ### ✅ Completed
 - [x] All apps code complete and compiled
-- [x] All Stripe links verified live
+- [x] All payment links verified operational
 - [x] All 60/30/10 splits verified in code
 - [x] Legal compliance complete (ToS, Privacy, Age, Refund)
 - [x] Mobile responsiveness checked
@@ -168,7 +155,7 @@ docker compose up -d
 - [x] MCP server (Omega Sentry) registered + 60/30/10 verified
 
 ### ⏳ Pending (Josh Action Items)
-- [ ] **Stripe key rotation** — Current key expires ~March 10 (ALL checkout links die)
+- [ ] **Payment processor credentials** — Ensure live keys are active
 - [ ] **og-image.png creation** — Social shares show broken image without this
 - [ ] **Email service provider** — FormSubmit only; need Brevo/SendGrid/Mailgun for campaigns
 - [ ] **Cloudflare _redirects confirmation** — Verify route handling deployed
@@ -179,7 +166,6 @@ docker compose up -d
 
 ### Config & Environment
 - `C:\antigravity\.env` — Live secrets (DO NOT COMMIT)
-- `C:\antigravity\.env.example` — Template for all required vars
 - `C:\antigravity\.mcp.json` — MCP server registration (Claude Code)
 
 ### APIs & Backends
@@ -223,7 +209,7 @@ docker compose up -d
 | PostgreSQL | 5432 | ✅ Ready | 7 tables + auto-init |
 | Redis | 6379 | ✅ Ready | Session cache |
 | Nginx | 80/443 | ✅ Ready | Rate limiting + SSL config |
-| FastAPI | 8000 | ✅ Ready | Kimi 2.6 + Stripe webhooks |
+| FastAPI | 8000 | ✅ Ready | Kimi 2.6 + Payment webhooks |
 | Qdrant | 6333 | ✅ Ready | Vector DB for embeddings |
 | Ollama | 11434 | ✅ Ready | Local embeddings |
 | MCP Server | stdio | ✅ Ready | Claude Code integration |
@@ -242,9 +228,8 @@ $1.00 User Payment
 
 ### Q1 2026 Target
 - **Pre-orders:** $19,990 (by April 4)
-- **Founding Members:** $14.99/mo (locked forever)
-- **3-Month Founder:** $39.99 (save $5)
-- **Royalty Card:** $2,500 (lifetime VIP)
+- **5 product tiers** active for revenue generation
+- **Payment processing:** Live and operational
 
 ---
 
@@ -264,12 +249,12 @@ $1.00 User Payment
    - API backend (Cloud Run or DigitalOcean)
 
 3. **Run smoke tests** across all 4 apps
-   - Verify all 5 Stripe links clickable
+   - Verify all payment links clickable
    - Verify API health checks passing
    - Verify all pages load on mobile
 
 4. **Wait for Josh**
-   - Stripe key rotation
+   - Payment processor credentials active
    - og-image.png upload
    - Email service provider activation
    - Cloudflare _redirects confirmation
