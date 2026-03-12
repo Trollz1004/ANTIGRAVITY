@@ -1,41 +1,39 @@
-# Briefings — Agent & Node Directory
+# Briefings — AI Team Index
 
-> Pull the repo. Read YOUR folder. That's it.
-> Last updated: 2026-03-11
+Last updated: 2026-03-12
 
----
+Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 
-## Key Pull Briefs
+## Read First
 
-```
-briefings/
-├── README.md                    # THIS FILE — directory index
-├── codex-sabretooth/
-│   └── BRIEFING.md              # Codex final dashboard implementation brief
-├── claude-t5500/
-│   └── BRIEFING.md              # Claude support/audit brief for dashboard work
-├── gemini/
-│   └── BRIEFING.md              # Gemini UI/browser dashboard brief
-└── shared/
-    └── DASHBOARD-DAO-TRANSPARENCY-SOURCE-OF-TRUTH.md
-```
+1. `AGENTS.md`
+2. `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
+3. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
+4. `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+5. `memory/activeContext.md`
 
----
+## Team Sync
 
-## Node Map
+- `briefings/AI-TEAM-SYNC-2026-03-12.md`
+- `briefings/TASK-ROUTING.md`
+- `briefings/AGENT-ENTOURAGE.md`
+- `briefings/CODEX-FLEET-WATCHER.md`
 
-| Node | Workspace | Agent | Pull Brief |
-|------|-----------|-------|------------|
-| Sabretooth | `C:\ANTIGRAVITY` | Codex | `briefings/codex-sabretooth/BRIEFING.md` |
-| T5500 | `C:\ANTIGRAVITY` | Claude | `briefings/claude-t5500/BRIEFING.md` |
-| Any local browser/VS Code session | `C:\ANTIGRAVITY` | Gemini | `briefings/gemini/BRIEFING.md` |
+## Model-Specific Briefs
 
----
+| Agent | Brief |
+|---|---|
+| Codex | `briefings/codex-sabretooth/BRIEFING.md` |
+| Gemini | `briefings/gemini/BRIEFING.md` |
+| Claude | `briefings/claude-t5500/BRIEFING.md` |
+| Comet / Perplexity | `briefings/COMET-SYNC-PROMPT.md` |
 
-## How To Use
+## Payment / Governance Truth
 
-1. Pull the repo: `git pull origin main`
-2. Read your model-specific briefing file
-3. Read `briefings/shared/DASHBOARD-DAO-TRANSPARENCY-SOURCE-OF-TRUTH.md`
-4. Stay in your lane unless Josh explicitly expands scope
-5. Push or hand off only after verification
+- `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
+- `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+- `briefings/BUSINESS-PROFILE-CANONICAL.md`
+
+## Current Default Rule
+
+If a briefing or memory file did not come from `C:\ANTIGRAVITY` on `origin/main`, treat it as recovery-only until verified.

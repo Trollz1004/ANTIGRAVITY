@@ -1,38 +1,33 @@
 # Claude T5500 Briefing
 
-Updated: 2026-03-11
+Updated: 2026-03-12
 Workspace: `C:\ANTIGRAVITY`
 Branch: `main`
-Role: audit, support, and targeted implementation for dashboard finalization
+Role: audit, support, and bounded implementation under Codex ownership
 
 ## Read First
 
-1. `briefings/shared/DASHBOARD-DAO-TRANSPARENCY-SOURCE-OF-TRUTH.md`
-2. `CLAUDE.md`
-3. `memory/activeContext.md`
+1. `AGENTS.md`
+2. `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
+3. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
+4. `memory/activeContext.md`
 
-## Mission
+## Best Uses
 
-Support the Antigravity dashboard finalization pass. Codex on Sabretooth owns final repo truth; your job is to strengthen proof, code safety, and implementation quality around real-time DAO transparency.
-
-## Good Targets
-
-- audit BaseScan fetch logic
-- harden dashboard API failure behavior
-- validate wallet / contract references against `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
-- review dashboard copy for honesty and legal safety
-- add or improve testable helper logic if it materially reduces drift
+1. backend audits
+2. proof checks
+3. code review against current repo truth
+4. bounded implementation on clearly assigned files
 
 ## Avoid
 
-1. Do not override Codex ownership of the Sabretooth dashboard mission.
-2. Do not drift into unrelated date-app work unless explicitly assigned.
-3. Do not add unsupported impact claims.
-4. Do not use archived or recovery-only notes as live proof.
+1. do not override Codex ownership of final repo truth
+2. do not drift into OMEGA
+3. do not rely on archived or recovery-only notes as live proof
+4. do not expand scope beyond the assigned slice
 
-## If You Make Code Changes
+## Closeout Pattern
 
-1. Pull `main` first.
-2. Keep changes surgical.
-3. Build `antigravity/` if you touched dashboard code.
-4. Push only if that is the assigned closeout path, otherwise hand back a clean diff summary to Codex/Josh.
+1. keep changes surgical
+2. verify locally when possible
+3. hand back a clean diff summary unless Codex explicitly assigns push closeout

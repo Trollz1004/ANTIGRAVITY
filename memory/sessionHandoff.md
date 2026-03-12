@@ -153,6 +153,10 @@
   - `_deploy/onlinerecycle/index.html` was converted off inline CSS/JS into local `styles.css` and `cookie-consent.js`
   - `_deploy/onlinerecycle/_headers` now includes the full security header set plus a CSP hash for the remaining inline JSON-LD block
   - the local watcher proof after those edits still fails only on live deployed headers until Cloudflare Pages picks up the new commit
+- 2026-03-12 AI-team briefing refresh:
+  - updated `briefings/TASK-ROUTING.md`, `briefings/AGENT-ENTOURAGE.md`, `briefings/README.md`, `briefings/gemini-agent-prompt.md`, and `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
+  - added `briefings/AI-TEAM-SYNC-2026-03-12.md`
+  - refreshed `briefings/codex-sabretooth/BRIEFING.md`, `briefings/gemini/BRIEFING.md`, and `briefings/claude-t5500/BRIEFING.md`
 - Dead-man's-switch / multisig assumptions were not independently verified during the Protocol Omega reconciliation pass and should be treated as unverified until checked directly
 
 ## Important Caveat
