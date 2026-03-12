@@ -193,6 +193,19 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 53. `api.youandinotai.com` is still an older cloud path and is not the current required public entrypoint:
    - it still returns a stale `404` path from older infrastructure
    - the live public app now uses `https://youandinotai.com/api/v1/*` instead
+54. Daily fleet-watch coverage on Sabretooth is now consolidated in tracked repo scripts:
+   - `scripts/codex-fleet-watcher.py`
+   - `scripts/Invoke-CodeX-FleetWatcher.ps1`
+   - `scripts/upgrade-codex-fleet-watcher-admin.ps1`
+   - `briefings/CODEX-FLEET-WATCHER.md`
+55. Current watcher scope:
+   - local git/main cleanliness
+   - `CodeX-Mission-Guardian`, `CodeX-Brain-Checkpoint`, `CodeX-Task-Sentry`, and `CodeX-SABRETOOTH-Safe-Control`
+   - SSH reachability for `t5500` and `9020`
+   - public header/CSP/SRI checks on ENIGMA-side domains
+   - optional Cloudflare zone checks via env token
+   - `opus-guardian.py` plus `scan-public-copy-policy.py`
+   - append-only NDJSON + latest summary under ignored `CodeX\logs` / `CodeX\state\runtime`
 
 ## House Rules
 
@@ -241,6 +254,7 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 17. Before prompting Gemini from the shared Sabretooth workspace, prefer deleting or archiving stale local directive files and retired Claude project-memory folders if they contradict live repo truth
 18. Prefer launching Gemini from `C:\ANTIGRAVITY` with the repo-local `GEMINI.md` in effect, not from legacy drive-specific wrappers or split-house workspaces
 19. Treat live Square merchant-settings checks from T5500 as stronger evidence than stale local Docker files when payment-method questions come up
+20. Use `pwsh -NoProfile -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\Invoke-CodeX-FleetWatcher.ps1 -NoSms` for the current consolidated daily-watch proof run
 
 ## CodeX Audit 2026-03-11
 
