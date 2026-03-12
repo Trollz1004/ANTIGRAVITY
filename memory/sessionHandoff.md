@@ -146,6 +146,13 @@
   - `briefings/CODEX-FLEET-WATCHER.md`
   - outputs land under ignored `CodeX\logs` and `CodeX\state\runtime`
   - first proof run showed real header/CSP gaps on current public surfaces, not fake task/SSH failures
+- 2026-03-12 watcher hardening follow-up:
+  - default watcher scope is now the canonical live customer domains only: `youandinotai.com` and `onlinerecycle.org`
+  - `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md` was added so payment-truth references no longer point at a missing repo file
+  - `youandinotai/public/_headers` now includes HSTS + CSP + tighter browser policy headers
+  - `_deploy/onlinerecycle/index.html` was converted off inline CSS/JS into local `styles.css` and `cookie-consent.js`
+  - `_deploy/onlinerecycle/_headers` now includes the full security header set plus a CSP hash for the remaining inline JSON-LD block
+  - the local watcher proof after those edits still fails only on live deployed headers until Cloudflare Pages picks up the new commit
 - Dead-man's-switch / multisig assumptions were not independently verified during the Protocol Omega reconciliation pass and should be treated as unverified until checked directly
 
 ## Important Caveat

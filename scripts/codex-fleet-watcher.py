@@ -50,17 +50,12 @@ ESCALATION_MD = RUNTIME_DIR / "codex-fleet-watch-escalation.md"
 
 DEFAULT_DOMAINS = [
     "https://youandinotai.com",
-    "https://www.youandinotai.com",
-    "https://youandinotai.online",
     "https://onlinerecycle.org",
-    "https://dashboard.aidoesitall.website",
 ]
 
 DEFAULT_ZONES = [
     "youandinotai.com",
-    "youandinotai.online",
     "onlinerecycle.org",
-    "aidoesitall.website",
 ]
 
 DEFAULT_TASKS = [

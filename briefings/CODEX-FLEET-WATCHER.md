@@ -23,10 +23,7 @@ It does **not** replace those tools. It audits them and raises escalation when t
 3. SSH reachability for `t5500` and `9020`
 4. Public headers/CSP/SRI on:
    - `youandinotai.com`
-   - `www.youandinotai.com`
-   - `youandinotai.online`
    - `onlinerecycle.org`
-   - `dashboard.aidoesitall.website`
 5. Optional Cloudflare zone status if a valid token exists
 6. Existing integrity audits:
    - `scripts/opus-guardian.py`
@@ -70,5 +67,6 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\Invoke-Code
 ## Notes
 
 - This is ENIGMA-safe only. It does not audit OMEGA repos or OMEGA public properties.
+- Default public-surface checks stay limited to the canonical live customer domains. Add extra domains explicitly through `CODEX_WATCHER_DOMAINS` or the `--domains` flag when they are intentionally live and maintained.
 - Missing or expired Cloudflare/Twilio env is treated as a warning, not a hard failure.
 - It is meant to give one daily truth snapshot, not to execute recovery work automatically.

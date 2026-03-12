@@ -202,10 +202,16 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - local git/main cleanliness
    - `CodeX-Mission-Guardian`, `CodeX-Brain-Checkpoint`, `CodeX-Task-Sentry`, and `CodeX-SABRETOOTH-Safe-Control`
    - SSH reachability for `t5500` and `9020`
-   - public header/CSP/SRI checks on ENIGMA-side domains
+   - public header/CSP/SRI checks on the canonical live customer domains: `youandinotai.com` and `onlinerecycle.org`
    - optional Cloudflare zone checks via env token
    - `opus-guardian.py` plus `scan-public-copy-policy.py`
    - append-only NDJSON + latest summary under ignored `CodeX\logs` / `CodeX\state\runtime`
+56. 2026-03-12 watcher hardening pass:
+   - `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md` now exists and is paired with `AGENTS.md` for live payment truth
+   - `youandinotai/public/_headers` now includes HSTS + CSP + stricter browser policy headers
+   - `_deploy/onlinerecycle/index.html` was refactored off inline CSS/JS into local `styles.css` and `cookie-consent.js`
+   - `_deploy/onlinerecycle/_headers` now includes the full security header set plus a CSP hash for the remaining JSON-LD block
+   - a local watcher proof after the repo edits still showed live header failures only because the deployed Pages surfaces had not yet picked up the new commit
 
 ## House Rules
 
