@@ -37,7 +37,7 @@ export function AppShell() {
             <span className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 tracking-tight">
               YouAndINotAI
             </span>
-            <span className="block text-[10px] text-gray-500 font-medium tracking-widest uppercase">For the kids</span>
+            <span className="block text-[10px] text-gray-500 font-medium tracking-widest uppercase">18+ only</span>
           </div>
         </div>
 
