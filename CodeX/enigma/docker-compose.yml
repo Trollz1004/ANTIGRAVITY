@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  enigma-agent:
+    build: .
+    container_name: enigma-agent
+    volumes:
+      - .:/opt/enigma
+      - C:\ANTIGRAVITY\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env:/opt/enigma/.env
+    ports:
+      - "8011:8011"
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    container_name: enigma-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - enigma-agent
+    restart: always
