@@ -1,6 +1,6 @@
 # ACTIVE CONTEXT — WHAT'S HAPPENING RIGHT NOW
 
-**Last Updated**: 2026-03-11T13:04:25-04:00
+**Last Updated**: 2026-03-12T00:58:00-04:00
 **Session**: Codex Desktop on SABRETOOTH (`C:\ANTIGRAVITY\CodeX`)  
 **Dev Server**: Not part of current priority
 
@@ -167,6 +167,32 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - `9020` local `C:\ANTIGRAVITY` remains dirty and is now behind `42`
    - `T5500` local `C:\ANTIGRAVITY` remains dirty and is now behind `57`
    - do not pull those nodes forward until their local overlays are reviewed, stashed, or committed intentionally
+48. Date-app launch surface was truth-passed and pushed from Sabretooth on `2026-03-12`:
+   - `origin/main` advanced to commit `480330b`
+   - `youandinotai.com` now serves the current Cloudflare Pages build from the live repo
+   - fake public contest/signature-wall launch surface was removed from the landing flow
+   - public launch copy now stays aligned to Bot-Shield + Square instead of unsupported live-community claims
+49. `T5500` runtime was re-checked after that push:
+   - stale `vite preview` on `127.0.0.1:4173` was stopped
+   - `uandinotai-postgres` stayed healthy on `5432`
+   - the current FastAPI backend was started from `C:\ANTIGRAVITY\youandinotai-api` via a persistent scheduled task `YouAndINotAI-API`
+   - backend now listens on `0.0.0.0:8000` and `GET /api/v1/health` returns `200` with `db_connected=true`, `square_connected=false`, `user_count=2`
+50. Current public date-app routing is now live and same-origin:
+   - `youandinotai/src/lib/api.ts` now defaults to `/api/v1` instead of `localhost`
+   - `youandinotai/public/_worker.js` proxies public `https://youandinotai.com/api/v1/*` requests to the older live Cloud Run backend while keeping the current React app on Cloudflare Pages
+   - current public launch path no longer depends on a localhost backend or the stale direct `api.youandinotai.com` route
+51. Current public app scope was narrowed to the features the live backend actually supports:
+   - app nav now ships only `Discover`, `Matches`, and `Messages`
+   - unsupported app routes (`/app/boards`, `/app/events`, `/app/volunteer`) now redirect back to `/app`
+   - `/app/verify` now redirects to `/` instead of pretending there is a live in-app verification flow
+52. Live smoke testing on the public domain passed:
+   - registration succeeded for `codex.smoke.20260312.0045@example.com`
+   - profile save succeeded and reached `/app`
+   - authenticated `Discover`, `Matches`, `Messages`, and `Sign Out` all worked on `https://youandinotai.com`
+   - anonymous `GET https://youandinotai.com/api/v1/auth/me` correctly returns `401`
+53. `api.youandinotai.com` is still an older cloud path and is not the current required public entrypoint:
+   - it still returns a stale `404` path from older infrastructure
+   - the live public app now uses `https://youandinotai.com/api/v1/*` instead
 
 ## House Rules
 
@@ -191,6 +217,7 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 9. Do not re-enable browser-based social autoposting from the nodes without a separately reviewed allowlist change in `scripts/social_engine/platform_policy.py`
 10. `9020` and `T5500` are still dirty outside the reviewed automation slice; future cleanup there should remain surgical, not blanket-reset
 11. Treasury-control claims such as multisig threshold or dead-man's-switch behavior still need a separate direct verification pass if they will be relied on operationally
+12. `api.youandinotai.com` still points at older infrastructure; do not treat it as the canonical public API while the same-origin Pages worker bridge is the live path
 
 ## Immediate Next Steps
 
@@ -203,7 +230,8 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
 7. Use browser-side tools for inbox polling, Square drift audits, and lead research before adding more local-model generation
 8. Keep backend security/payment fixes incremental and test-locked; do not trigger a full rewrite without a stronger reason than stale branch drift
 9. Keep node automation scoped to drafts, reports, and owned-property workflows unless official API review changes the policy file first
-10. Build inbox automation next: FormSubmit/Gmail intake -> structured queue -> reply draft -> Square next-step link
+10. If the separate `api.youandinotai.com` hostname is needed later, cut it over intentionally; the current launch path is `youandinotai.com` + same-origin `/api/v1`
+11. Build inbox automation next: FormSubmit/Gmail intake -> structured queue -> reply draft -> Square next-step link
 11. Use the generated node matrix and public-copy audit as the default go/no-go check before adding any new automation surface
 12. Treat `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md` as the canonical chain-status note before making any DAO-language changes
 13. Keep `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md` current whenever payment links, webhook logic, or catalog understanding changes
