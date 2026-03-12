@@ -212,6 +212,11 @@ Sabretooth is the active Codex base on `C:`. The immediate priority is keeping t
    - `_deploy/onlinerecycle/index.html` was refactored off inline CSS/JS into local `styles.css` and `cookie-consent.js`
    - `_deploy/onlinerecycle/_headers` now includes the full security header set plus a CSP hash for the remaining JSON-LD block
    - a local watcher proof after the repo edits still showed live header failures only because the deployed Pages surfaces had not yet picked up the new commit
+57. 2026-03-12 AI-team briefing refresh:
+   - updated `briefings/TASK-ROUTING.md`, `briefings/AGENT-ENTOURAGE.md`, and `briefings/README.md`
+   - added `briefings/AI-TEAM-SYNC-2026-03-12.md`
+   - refreshed `briefings/gemini-agent-prompt.md` and `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
+   - refreshed the model-specific briefs under `briefings/codex-sabretooth/`, `briefings/gemini/`, and `briefings/claude-t5500/`
 
 ## House Rules
 
