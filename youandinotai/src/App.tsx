@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import {
-  Heart, Rocket, Trophy, PenTool,
+  Heart, Rocket,
   ShieldAlert, Mail, Check,
   LayoutDashboard, X,
 } from 'lucide-react';
@@ -17,8 +17,6 @@ import { motion, AnimatePresence } from 'motion/react';
 
 /* ─── Lazy-load modal components ─── */
 /* Removed: GeminiMatchmaker, SolarFlareSOS, VoiceSOS — Gemini API costs money */
-const CosmicContest = lazy(() => import('./components/CosmicContest').then(m => ({ default: m.CosmicContest })));
-const CosmicWall = lazy(() => import('./components/CosmicWall').then(m => ({ default: m.CosmicWall })));
 const EcosystemStats = lazy(() => import('./components/EcosystemStats').then(m => ({ default: m.EcosystemStats })));
 
 /* ─── Error Boundary for lazy modals ─── */
@@ -130,13 +128,13 @@ function CountdownTimer() {
 /* ─── How It Works ─── */
 function HowItWorks() {
   const steps = [
-    { num: 1, title: 'Pay $1 Bot-Shield', desc: 'One-time verification fee. Proves you\'re a real human, not a bot or catfish.' },
-    { num: 2, title: 'Verify Your Identity', desc: 'Quick selfie + ID check. Takes under 2 minutes. Your data stays private.' },
-    { num: 3, title: 'Meet Real People', desc: 'Everyone you match with is verified. No bots. No catfish. Just humans looking for connection.' },
+    { num: 1, title: 'Start Bot-Shield', desc: 'The launch flow begins with a one-time $1 verification checkpoint tied to your account.' },
+    { num: 2, title: 'Pass the Human Check', desc: 'Complete the Bot-Shield liveness challenge and Square payment checkpoint to earn the badge.' },
+    { num: 3, title: 'Match with Confidence', desc: 'Verified badges show who completed the same human-check flow before jumping into conversation.' },
   ];
 
   return (
-    <section className="relative z-10 py-14 px-4">
+    <section id="verification" className="relative z-10 py-14 px-4">
       <div className="max-w-3xl mx-auto">
         <h2 className="text-center text-2xl md:text-3xl font-black mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
           How It Works
@@ -154,7 +152,7 @@ function HowItWorks() {
         </div>
         <div className="flex justify-center gap-6 mt-8 flex-wrap">
           <span className="text-gray-500 text-xs flex items-center gap-1.5">🔒 Privacy Focused</span>
-          <span className="text-gray-500 text-xs flex items-center gap-1.5">✅ Identity Verified</span>
+          <span className="text-gray-500 text-xs flex items-center gap-1.5">✅ Verification Flow</span>
           <span className="text-gray-500 text-xs flex items-center gap-1.5">❤️ 18+ Only</span>
         </div>
       </div>
@@ -241,7 +239,7 @@ function PricingSection() {
         <h2 className="text-3xl md:text-4xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">
           Choose Your Plan
         </h2>
-        <p className="text-gray-400 mb-8 text-sm">Dating with the strongest human-verification system available</p>
+        <p className="text-gray-400 mb-8 text-sm">Founder pricing paired with the current Bot-Shield launch flow</p>
         <div className="flex flex-col gap-3">
           {plans.map((plan) => (
             <a
@@ -273,19 +271,19 @@ function PricingSection() {
 const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   terms: {
     title: 'Terms of Service',
-    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. HUMAN VERIFICATION — Bot-Shield verification is required. Fraudulent verification attempts result in permanent ban.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations result in immediate account termination.\n4. PAYMENTS — All payments are processed through Square-hosted checkout links. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. BILLING — Bot-Shield verification requires both a passed liveness challenge and a completed Square payment before the verified badge is granted.\n\nLast updated: February 2026. Contact: contact@youandinotai.com`,
+    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. VERIFICATION FLOW — Bot-Shield verification may be required for protected features. Fraudulent verification attempts result in account action or removal.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations can result in immediate account termination.\n4. PAYMENTS — All payments are processed through Square-hosted checkout links. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. BILLING — The current Bot-Shield launch flow requires both a passed liveness challenge and a completed Square payment before the verified badge is granted.\n\nLast updated: March 2026. Contact: contact@youandinotai.com`,
   },
   privacy: {
     title: 'Privacy Policy',
-    body: `YouAndINotAI values your privacy.\n\nDATA WE COLLECT — Email address, verification selfie (processed and discarded), profile information you provide.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Square (payments), FormSubmit (waitlist), Cloudflare (hosting). Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data encrypted in transit (TLS) and at rest.\n\nLast updated: February 2026.`,
+    body: `YouAndINotAI values your privacy.\n\nDATA WE COLLECT — Email address, profile information you provide, verification-state events, and payment confirmation tied to your account.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Square (payments), FormSubmit (waitlist), and Cloudflare (hosting). Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data is encrypted in transit, and protected services use authenticated account access.\n\nLast updated: March 2026.`,
   },
   age: {
     title: 'Age Policy',
-    body: `YouAndINotAI is strictly for users aged 18 and older.\n\nWe verify age through our Bot-Shield verification process which includes government ID verification. Users found to be under 18 will have their accounts immediately terminated and all data deleted.\n\nIf you believe a minor is using the Platform, report it immediately to contact@youandinotai.com.\n\nWe comply with COPPA and do not knowingly collect data from minors.`,
+    body: `YouAndINotAI is strictly for users aged 18 and older.\n\nOur current launch flow does not claim government-ID verification in production. We require users to be 18+, and we reserve the right to remove accounts that appear to be underage or fraudulent.\n\nIf you believe a minor is using the Platform, report it immediately to contact@youandinotai.com.\n\nWe do not knowingly collect personal data from minors.`,
   },
   refund: {
     title: 'Refund Policy',
-    body: `Refund eligibility varies by product:\n\nBOT-SHIELD ($1) — Non-refundable. One-time verification fee.\nFOUNDING MEMBER ($14.99/mo) — Cancel anytime. No refunds for partial months. You keep access until the billing period ends.\n3-MONTH FOUNDER ($39.99) — Full refund within 14 days if no matches have been made. Prorated refund available after 14 days for unused days. No refund after the plan period ends.\n12-MONTH FOUNDER ($99.99) — Full refund within 14 days if no matches have been made. Prorated refund available after 14 days for unused days. No refund after the plan period ends.\nROYALTY CARD ($2,500) — Non-refundable. Limited edition, final sale.\n\nAll refunds processed through Square within 5-10 business days.\nContact: contact@youandinotai.com`,
+    body: `Refund eligibility varies by product:\n\nBOT-SHIELD ($1) — Non-refundable once the challenge and payment checkpoint have started.\nFOUNDING MEMBER ($14.99/mo) — Cancel anytime. No refunds for partial months. Access remains until the current billing period ends.\n3-MONTH FOUNDER ($39.99) — See the full refund policy for current eligibility.\n12-MONTH FOUNDER ($99.99) — See the full refund policy for current eligibility.\nROYALTY CARD ($2,500) — Final sale under the published product terms.\n\nAll refunds are processed through Square. Contact: contact@youandinotai.com`,
   },
 };
 
@@ -382,7 +380,7 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
             <h4 className="text-white font-bold text-lg">YouAndINotAI</h4>
           </div>
           <p className="text-gray-400 text-sm leading-relaxed">
-            A human-verified dating platform. No bots. No catfish. Just real people looking for real connection.
+            A human-first dating platform built to reward verified badges and deter automated signups.
           </p>
         </div>
 
@@ -456,13 +454,22 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
 }
 
 /* ─── Feature Data ─── */
-const FEATURES = [
-  { key: 'contest', icon: Trophy, name: 'Launch Contest', desc: 'Win launch prizes', gradient: 'from-yellow-400 to-orange-500' },
-  { key: 'wall', icon: PenTool, name: 'Signature Wall', desc: 'Leave your mark', gradient: 'from-pink-400 to-rose-500' },
-  { key: 'ecosystem', icon: LayoutDashboard, name: 'Transparency', desc: 'Real-time proof', gradient: 'from-indigo-400 to-purple-500' },
-] as const;
+interface FeatureCard {
+  key: 'verification' | 'pricing' | 'ecosystem';
+  icon: typeof ShieldAlert | typeof Rocket | typeof LayoutDashboard;
+  name: string;
+  desc: string;
+  gradient: string;
+  href?: string;
+}
 
-type FeatureKey = typeof FEATURES[number]['key'];
+const FEATURES: FeatureCard[] = [
+  { key: 'verification', icon: ShieldAlert, name: 'Verification Flow', desc: 'Current Bot-Shield steps', gradient: 'from-amber-400 to-orange-500', href: '#verification' },
+  { key: 'pricing', icon: Rocket, name: 'Founder Plans', desc: 'Public launch pricing', gradient: 'from-pink-400 to-rose-500', href: '#pricing' },
+  { key: 'ecosystem', icon: LayoutDashboard, name: 'Launch Board', desc: 'Current readiness', gradient: 'from-indigo-400 to-purple-500' },
+] ;
+
+type FeatureKey = 'ecosystem';
 
 /* ═══════════════════════════════════════════════════════════ */
 /*                        MAIN APP                            */
@@ -539,10 +546,10 @@ export default function App() {
               </span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-2 font-light max-w-xl mx-auto leading-relaxed">
-              The dating app where every match is a real human.
+              The dating app built for human-first matching.
             </p>
             <p className="text-sm text-gray-500 mb-8">
-              Bot-Shield verified. No catfish. No bots. Just real people.
+              Verified badges are earned through the Bot-Shield challenge and payment checkpoint.
             </p>
           </div>
 
@@ -566,7 +573,7 @@ export default function App() {
 
           <div className="flex justify-center gap-4 md:gap-6 text-xs text-gray-500 flex-wrap">
             <span>🔒 Privacy First</span>
-            <span>✅ Human Verified</span>
+            <span>✅ Bot-Shield Flow</span>
             <span>❤️ 18+ Only</span>
           </div>
         </div>
@@ -586,17 +593,31 @@ export default function App() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {FEATURES.map((f) => (
-              <button
-                key={f.key}
-                onClick={() => setActiveModal(f.key)}
-                className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-2xl hover:border-purple-500/30 transition-all text-center cursor-pointer active:scale-95"
-              >
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${f.gradient} flex items-center justify-center shadow-lg`}>
-                  <f.icon size={20} className="text-white" />
-                </div>
-                <span className="text-white font-bold text-sm">{f.name}</span>
-                <span className="text-gray-500 text-xs">{f.desc}</span>
-              </button>
+              f.href ? (
+                <a
+                  key={f.key}
+                  href={f.href}
+                  className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-2xl hover:border-purple-500/30 transition-all text-center no-underline active:scale-95"
+                >
+                  <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${f.gradient} flex items-center justify-center shadow-lg`}>
+                    <f.icon size={20} className="text-white" />
+                  </div>
+                  <span className="text-white font-bold text-sm">{f.name}</span>
+                  <span className="text-gray-500 text-xs">{f.desc}</span>
+                </a>
+              ) : (
+                <button
+                  key={f.key}
+                  onClick={() => setActiveModal('ecosystem')}
+                  className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-2xl hover:border-purple-500/30 transition-all text-center cursor-pointer active:scale-95"
+                >
+                  <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${f.gradient} flex items-center justify-center shadow-lg`}>
+                    <f.icon size={20} className="text-white" />
+                  </div>
+                  <span className="text-white font-bold text-sm">{f.name}</span>
+                  <span className="text-gray-500 text-xs">{f.desc}</span>
+                </button>
+              )
             ))}
           </div>
 
@@ -617,7 +638,7 @@ export default function App() {
               Real People. Real Connection.
             </p>
             <p className="text-pink-300 text-sm md:text-lg mt-2 font-medium drop-shadow-md">
-              Bot-Shield keeps the bots out before the matching starts.
+              Bot-Shield is built to screen out automated accounts before matching starts.
             </p>
           </div>
         </div>
@@ -661,16 +682,6 @@ export default function App() {
       {/* ─── Modals ─── */}
       <ModalErrorBoundary onReset={closeAllModals}>
         <AnimatePresence>
-          {activeModal === 'contest' && (
-            <Suspense fallback={<ModalLoader />}>
-              <CosmicContest onClose={() => setActiveModal(null)} />
-            </Suspense>
-          )}
-          {activeModal === 'wall' && (
-            <Suspense fallback={<ModalLoader />}>
-              <CosmicWall onClose={() => setActiveModal(null)} />
-            </Suspense>
-          )}
           {activeModal === 'ecosystem' && (
             <Suspense fallback={<ModalLoader />}>
               <EcosystemStats onClose={() => setActiveModal(null)} />

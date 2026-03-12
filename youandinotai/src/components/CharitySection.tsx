@@ -5,8 +5,8 @@ import { CalendarDays, DollarSign, Heart, ShieldCheck, Sparkles, Users } from 'l
 const cards = [
   {
     icon: ShieldCheck,
-    title: 'Verified Humans Only',
-    body: 'Bot-Shield is built into the product flow from day one. Real people earn the badge, bots do not.',
+    title: 'Verified Badge Flow',
+    body: 'Bot-Shield is built into the launch flow from day one. Accounts that complete the challenge and payment checkpoint earn the badge.',
     href: '#pricing',
     cta: 'See Bot-Shield',
     color: 'from-emerald-400 to-teal-600',
@@ -77,7 +77,7 @@ export function CharitySection() {
             transition={{ delay: 0.1 }}
             className="text-4xl font-black leading-none tracking-tighter text-white md:text-7xl"
           >
-            Verified Humans.
+            Verified Badge Flow.
             <br />
             Clear Pricing.
             <br />

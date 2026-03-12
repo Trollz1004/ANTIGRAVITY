@@ -295,7 +295,7 @@ export function RoyaltyDeck() {
         >
           <span className="flex items-center gap-1.5">
             <Shield size={12} className="text-emerald-500" />
-            30-day refund guarantee
+            Final sale terms
           </span>
           <span className="flex items-center gap-1.5">
             <Heart size={12} className="text-red-400 fill-red-400" />
@@ -303,7 +303,7 @@ export function RoyaltyDeck() {
           </span>
           <span className="flex items-center gap-1.5">
             <Star size={12} className="text-amber-400" />
-            Only {Math.floor(Math.random() * 8) + 3} remaining
+            5 cards total
           </span>
         </motion.div>
       </div>

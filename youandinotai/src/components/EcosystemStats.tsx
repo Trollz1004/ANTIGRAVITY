@@ -17,7 +17,7 @@ const systems = [
   {
     icon: Shield,
     title: 'Human Verification',
-    detail: 'Liveness challenge, payment checkpoint, and verified badge path stay tied to the same account flow.',
+    detail: 'Liveness challenge, payment checkpoint, and verification state stay tied to the same account flow.',
   },
   {
     icon: Wallet,
@@ -125,7 +125,7 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
-                  <span>Human verification stays tied to user identity</span>
+                  <span>Verification state stays tied to the same account</span>
                 </div>
               </div>
               <div className="border-t border-white/5 pt-6">
