@@ -34,6 +34,7 @@ export function ProfileSetup() {
     setLoading(true);
     try {
       await api.put('/profiles/me', {
+        display_name: user?.display_name || null,
         bio: bio || null,
         age: age ? parseInt(age) : null,
         gender: gender || null,
