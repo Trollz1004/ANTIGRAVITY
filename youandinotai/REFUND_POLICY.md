@@ -25,7 +25,7 @@ All refunds are processed through **Square**, our payment processor. Refunds typ
 
 **Non-refundable.**
 
-The $1 Bot-Shield fee pays for identity verification through V8 Cloud Verification. Once you submit your verification (government ID + selfie liveness check), the service has been rendered regardless of the outcome. This fee covers the cost of processing your verification, which is completed at the time of submission.
+The $1 Bot-Shield fee pays for the current launch verification flow. Once you start the Bot-Shield challenge and payment checkpoint, the service has been rendered regardless of the outcome. This fee covers challenge processing, payment handling, and verification-state updates tied to your account.
 
 Exceptions:
 - If our system charged you for verification but the verification process completely failed to run (technical error on our end, not a failed verification), we will refund the $1

@@ -27,9 +27,9 @@ To use YouAndINotAI, you must:
 - Be legally able to enter into a binding contract
 - Not be prohibited from using the service under applicable law
 - Not have been previously banned from the Platform
-- Complete identity verification through V8 Cloud Verification
+- Complete the current Bot-Shield verification flow before using protected features
 
-We verify age and identity through our V8 Cloud Verification process, which requires a government-issued photo ID and a live selfie. If we determine that you are under 18 or have provided fraudulent identification, your account will be immediately terminated.
+Our current pre-launch verification flow uses the Bot-Shield challenge system plus a completed Square payment checkpoint. It is designed to deter automated signups and badge completed accounts. If we later add document or selfie-based identity verification, we will update these terms before that flow goes live.
 
 ## 3. Account Registration and Security
 
@@ -43,24 +43,24 @@ Each person may only have one account. Creating multiple accounts is grounds for
 You are responsible for keeping your login credentials secure. Do not share your password. You are responsible for all activity on your account. If you believe your account has been compromised, contact us immediately at joshlcoleman@gmail.com.
 
 ### 3.4 Verification
-All users must complete V8 Cloud Verification, which includes:
+The current Bot-Shield flow includes:
 
-- Submitting a government-issued photo ID (driver's license, passport, or state ID)
-- Completing a selfie liveness check (a real-time photo confirming you are a real person)
-- Passing anti-bot screening
+- Completing the launch liveness challenge presented inside the Platform
+- Completing the linked Square payment checkpoint required for the badge
+- Passing anti-bot and abuse screening tied to your account activity
 
-> **Biometric Data Notice:** The verification process involves biometric-adjacent data collection (facial geometry analysis). By completing verification, you consent to this processing. See our Privacy Policy for full details, including your right to request deletion of this data.
+We record verification status, challenge state, and payment confirmation tied to your account. We do not currently claim a government-ID or selfie-based verification flow in production.
 
 ## 4. What YouAndINotAI Is (and Isn't)
 
 ### 4.1 What We Are
-YouAndINotAI is a dating platform that connects verified real people. We use AI (Google Gemini) to assist with matchmaking suggestions and conversation icebreakers.
+YouAndINotAI is a dating platform with a Bot-Shield verification flow and founder membership products. The Platform may include AI-assisted features such as suggestions or conversation tools when those features are made available.
 
 ### 4.2 What We Are Not
 - We are **not** a guarantee that you will find a partner, match, date, or relationship
-- We are **not** a background check service — verification confirms identity, not character
+- We are **not** a background check service — verification confirms completion of our Bot-Shield flow, not character
 - We are **not** responsible for the behavior of other users outside the platform
-- We do **not** create AI-generated fake profiles — every profile belongs to a verified real person
+- We do **not** intentionally create AI-generated fake profiles, and verified badges are only assigned after the Bot-Shield flow is completed
 - We do **not** provide relationship counseling, therapy, or professional advice
 
 ## 5. Prohibited Conduct
