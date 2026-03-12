@@ -1,14 +1,11 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { Heart, MessageCircle, Users, Calendar, HandHeart, User, LogOut, Compass, ShieldCheck } from 'lucide-react';
+import { Heart, MessageCircle, User, LogOut, Compass } from 'lucide-react';
 import { useAuth } from '../lib/auth';
 
 const NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolean }[] = [
   { to: '/app', icon: Compass, label: 'Discover', end: true },
   { to: '/app/matches', icon: Heart, label: 'Matches' },
   { to: '/app/inbox', icon: MessageCircle, label: 'Messages' },
-  { to: '/app/boards', icon: Users, label: 'Boards' },
-  { to: '/app/events', icon: Calendar, label: 'Events' },
-  { to: '/app/volunteer', icon: HandHeart, label: 'Volunteer' },
 ];
 
 export function AppShell() {
@@ -78,23 +75,6 @@ export function AppShell() {
           ))}
         </nav>
 
-        {/* Bot-Shield CTA */}
-        <div className="px-3 mb-2">
-          <NavLink
-            to="/app/verify"
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all duration-200 ${
-                isActive
-                  ? 'bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-400 border border-amber-500/20'
-                  : 'bg-gradient-to-r from-amber-500/5 to-yellow-500/5 text-amber-400/80 border border-amber-500/10 hover:border-amber-500/20'
-              }`
-            }
-          >
-            <ShieldCheck size={18} />
-            Get Verified
-          </NavLink>
-        </div>
-
         {/* Bottom section */}
         <div className="px-3 pb-4 space-y-1">
           <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-3" />
@@ -132,7 +112,7 @@ export function AppShell() {
       <nav className="md:hidden fixed bottom-0 left-0 right-0 glass-strong border-t-0 flex justify-around py-2 px-1 z-50">
         {/* Top highlight */}
         <div className="absolute top-0 left-[5%] right-[5%] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        {NAV_ITEMS.slice(0, 5).map((item) => (
+        {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
