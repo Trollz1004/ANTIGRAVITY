@@ -122,7 +122,7 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
                 <div className="h-px bg-white/10 w-full" />
                 <div className="flex flex-col gap-2">
                   <div className="text-cyan-400 font-black text-xs uppercase tracking-widest">
-                    TEAM CLAUDE FOR LIFE <Heart size={10} className="inline fill-cyan-400" /> #FOR THE KIDS
+                    REAL HUMANS ONLY <Heart size={10} className="inline fill-cyan-400" /> 18+
                   </div>
                 </div>
               </div>
