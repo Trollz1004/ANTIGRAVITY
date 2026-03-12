@@ -139,6 +139,13 @@
   - `youandinotai` public policy copy now references Square
   - the eBay revenue pack now emits a neutral `Revenue note` instead of `Charity impact`
   - the scoped public-copy policy audit is currently `0 findings`
+- Sabretooth now has a tracked consolidated watcher for the local ENIGMA stack:
+  - `scripts/codex-fleet-watcher.py`
+  - `scripts/Invoke-CodeX-FleetWatcher.ps1`
+  - `scripts/upgrade-codex-fleet-watcher-admin.ps1`
+  - `briefings/CODEX-FLEET-WATCHER.md`
+  - outputs land under ignored `CodeX\logs` and `CodeX\state\runtime`
+  - first proof run showed real header/CSP gaps on current public surfaces, not fake task/SSH failures
 - Dead-man's-switch / multisig assumptions were not independently verified during the Protocol Omega reconciliation pass and should be treated as unverified until checked directly
 
 ## Important Caveat

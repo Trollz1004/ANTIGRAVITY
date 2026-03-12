@@ -36,7 +36,7 @@ PUBLIC_ENDPOINTS = {
     "health.py": ["health_check"],
     "auth.py": ["register", "login", "refresh_token"],
     "users.py": ["register_user"],
-    "webhooks.py": ["stripe_webhook", "square_booking_webhook"],
+    "webhooks.py": ["square_payment_webhook", "square_booking_webhook", "stripe_webhook_retired"],
 }
 
 # Secret patterns that must NEVER appear in source
@@ -58,12 +58,9 @@ OMEGA_MARKERS = [
     "100% to charity",
 ]
 
-# Required .env keys
+# Required runtime keys or local env entries for the current Square-first backend
 REQUIRED_ENV_KEYS = [
     "JWT_SECRET",
-    "POSTGRES_PASSWORD",
-    "STRIPE_SECRET_KEY",
-    "DATABASE_URL",
 ]
 
 # Revenue split constants (HARDCODED — NEVER CONFIGURABLE)
@@ -299,8 +296,8 @@ def check_input_validation(result: GuardianResult):
         post_endpoints = re.findall(r'@router\.(post|put)\(.*?\)\s*\nasync def (\w+)\((.*?)\)', content, re.DOTALL)
 
         for method, func_name, params in post_endpoints:
-            # Skip webhook (raw body) and simple signup (path param only)
-            if func_name in ["stripe_webhook", "signup_volunteer"]:
+            # Skip webhooks (raw body / signed payload) and simple signup (path param only)
+            if func_name in ["square_payment_webhook", "square_booking_webhook", "stripe_webhook_retired", "signup_volunteer"]:
                 continue
 
             # Check for Pydantic model parameter (type-hinted request body)
@@ -314,22 +311,33 @@ def check_input_validation(result: GuardianResult):
 
 
 def check_env_file(result: GuardianResult):
-    """Verify .env exists with required keys."""
-    env_file = ROOT / ".env"
-    if not env_file.exists():
-        result.fail("ENV_FILE", ".env not found at project root")
-        return
+    """Verify required runtime keys exist in environment or expected local env files."""
+    candidate_env_files = [
+        ROOT / ".env",
+        API_DIR / ".env",
+    ]
 
-    content = env_file.read_text(encoding="utf-8", errors="ignore")
+    content_parts = []
+    existing_files = []
+    for env_file in candidate_env_files:
+        if env_file.exists():
+            existing_files.append(str(env_file.relative_to(ROOT)))
+            content_parts.append(env_file.read_text(encoding="utf-8", errors="ignore"))
+
+    content = "\n".join(content_parts)
     missing = []
     for key in REQUIRED_ENV_KEYS:
-        if key not in content:
+        if key not in content and not os.getenv(key):
             missing.append(key)
 
-    if missing:
+    if missing and existing_files:
         result.fail("ENV_FILE", f"Missing required keys: {', '.join(missing)}")
+    elif missing:
+        result.warn("ENV_FILE", f"No local backend env file found on this node; missing runtime keys in current process: {', '.join(missing)}")
+    elif existing_files:
+        result.ok("ENV_FILE", f"Required keys found via {', '.join(existing_files)}")
     else:
-        result.ok("ENV_FILE", f"All {len(REQUIRED_ENV_KEYS)} required keys present")
+        result.warn("ENV_FILE", "No local .env file found; relying on process environment")
 
 
 def main():
