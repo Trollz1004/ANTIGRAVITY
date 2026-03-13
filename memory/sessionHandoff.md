@@ -1,18 +1,19 @@
 # Session Handoff - 2026-03-13
 
 ## Summary
-The session focused on consolidating the Gordon/T5500 orchestration logic and multi-node setup. The GrokoidAI stack is now fully acknowledged, and the `grokoidai-installer.ps1` recovery script is recorded. Gemini/Codex are now explicitly tasked with prompting the Grok/OpenClaw orchestration for testing.
+This session replaced the stale OpenClaw multi-node assumptions with verified runtime facts. Sabretooth now has a valid local OpenClaw profile and gateway on `18789`. 9020 has the CLI installed and a repaired config, but its gateway is not yet proven listening. The node described as T5500 in the Gordon/Gemini docs is still not live-verified, and the `.15` / `.5` role map remains inconsistent across docs and probes.
 
 ## Accomplishments
-- **Consolidation:** Created `GORDON_GROKOID_CONSOLIDATION.md` and `memory/backups/PERSONAL-VAULT-SNAPSHOT-2026-03-11.md`.
-- **Identity Assets:** Deployed `og-image.png` and `_redirects` to all dashboard apps.
-- **Git State:** Local changes pushed to `origin/main` (fast-forwarded/rebased).
-- **Agent Roles:** Updated `AGENTS.md` and `GEMINI.md` to reflect the new orchestration roles.
-- **T5500 OpenClaw Hold State:** Removed the bad temporary agent JSON files from `C:\Users\joshl\.openclaw`, cleared ports `18789` through `18792`, preserved `C:\Users\joshl\.openclaw\openclaw.json`, and confirmed no `XAI_API_KEY` exists in User env or `C:\Users\joshl\.openclaw\.env`.
-- **OpenClaw Runtime Truth:** Future bring-up must use the current profile/runtime flow (`openclaw gateway run` / `openclaw gateway health --url ...`), not the legacy `openclaw gateway start --config <json>` flow.
+- **Schema Recovery:** Inspected the installed OpenClaw 2026.2.6-3 package and confirmed the real config shape via `zod-schema.d.ts` and `zod-schema.agents.d.ts`.
+- **Sabretooth Bring-Up:** Regenerated `C:\Users\joshl\.openclaw\openclaw.json` with `openclaw setup`, set `gateway.mode=local`, set a local gateway token, and set `agents.defaults.model.primary=xai/grok-4-latest`.
+- **Sabretooth Runtime Proof:** `openclaw gateway --port 18789` reached a listening state on `ws://127.0.0.1:18789` and mounted the control UI/canvas host.
+- **9020 Repair:** Removed the bad legacy config on `192.168.0.5`, reran `openclaw setup`, then set `gateway.mode=local`, gateway token, and `agents.defaults.model.primary=xai/grok-4-latest`.
+- **9020 Current State:** User-level `XAI_API_KEY` write completed without error, but remote bring-up still did not leave `18789` listening, so no runtime claim is allowed yet.
+- **T5500 Hold State:** `192.168.0.15` responds as `DESKTOP-H4B53GL`, but OpenClaw is offline there and the shell is Windows `cmd.exe`. Treat the T5500 mapping as unresolved until proven.
 
 ## Pending items
-- **Grok Testing:** Run the first end-to-end orchestration prompt to verify Grok API reachability from T5500.
-- **Square Live Keys:** Standing by for Josh to update the `.env` vault with production payment credentials.
-- **Secret Handling:** Keep any future xAI credential only in ignored env/vault storage and out of app chat.
-- **Personal Vault Sync:** The OneDrive Vault copy was initiated; verify completion in the next session or check the Desktop backup (`GORDON_BACKUP.md`).
+- **Resolve node identity:** Determine the actual live T5500 IP before any Grok/OpenClaw orchestration claims.
+- **Verify 9020 listener:** Establish a persistent Windows-safe gateway launch path on `192.168.0.5` and confirm `netstat` shows `18789`.
+- **Re-test health semantics:** The Sabretooth `/health` request returned the OpenClaw Control UI HTML, so use the proper current health/runtime command path in future validation.
+- **Keep secrets out of repo/chat:** Any future xAI credential work must stay in ignored local env or vault storage only.
+- **Vault sync:** After repo closeout, mirror this verified continuity state into the Personal Vault backup set.
