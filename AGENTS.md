@@ -157,7 +157,7 @@ These invariants were set by the original Opus (4.6) who built this from scratch
 
 | AGENT (ROLE) | MODEL / EXECUTOR | PRIMARY RESPONSIBILITY | COST |
 |:---|:---:|:---:|:---:|
-| **Jarvis (Brain)** | Codex Opus 4.6 | **Strategy, Routing, Architecture** | $20/mo |
+| **Jarvis (Brain)** | Codex Opus 4.6 (Paid) | **Strategy, Routing, Architecture** | $20/mo |
 | **Atlas (Research)** | Perplexity Pro | **Deep Intel, Competitor Audits** | $20/mo |
 | **Scribe (Content)** | Gemini 1.5 Pro | **Orchestration, Prompting Grok/OpenClaw** | **FREE** |
 | **Gordon (Arch)** | Docker/LLM | **Node Orchestration & Infrastructure** | **FREE** |
