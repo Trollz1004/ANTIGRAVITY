@@ -1,6 +1,7 @@
 # Active Context - 2026-03-13
 
 ## Current Focus
+- **Three-Node Clean Baseline:** Sabretooth, 9020, and T5500 have been re-synced to a shared clean `main` baseline so future drift can be attributed from this point forward.
 - **OpenClaw Orchestrator Stabilized:** Sabretooth now has the only live OpenClaw Telegram owner, a working local gateway, and a verified TUI launch path.
 - **Boot Persistence:** OpenClaw gateway is installed as the Windows Scheduled Task `OpenClaw Gateway` at logon, and local helper scripts now exist for both OpenClaw TUI and Claude dangerous-mode CLI.
 - **Team Briefing Refresh:** Shared team briefings now treat Grok as a Sabretooth-local OpenClaw-backed support agent under Codex, not a separate truth source.
@@ -16,8 +17,9 @@
 - **Mission Banner:** OpenClaw TUI startup and the local gateway launch file now print the mission guard message and point to `briefings/grok-openclaw/BRIEFING.md`.
 - **9020 (`192.168.0.5`):** `openclaw` and Node.js are installed. Reset the bad config with `openclaw setup`, then set `gateway.mode=local`, gateway token, and `agents.defaults.model.primary=xai/grok-4-latest`. User-level `XAI_API_KEY` write returned no error.
 - **9020 Telegram State:** Telegram config and env ownership were removed. 9020 is not allowed to poll the orchestrator bot.
-- **9020 Current Blocker:** Remote gateway start attempts did not leave `18789` listening after 5 seconds. Treat 9020 as configured-but-not-verified.
+- **9020 Clean Baseline:** Repo is now clean on `main`. Pre-clean drift was preserved in `stash@{0}` with label `codex-preclean-20260313-baseline`, and leftover `ClawX-main/` was moved to `C:\Users\joshl\Documents\ANTIGRAVITY-preclean-20260313\ClawX-main`.
 - **T5500 Candidate (`192.168.0.15` / `DESKTOP-H4B53GL`):** SSH responds. A stray manual `node.exe` had been polling Telegram on `127.0.0.1:18789`; Codex removed Telegram config there and killed that extra process. Treat T5500 identity/runtime as unresolved until the IP/role map is proven live.
+- **T5500 Clean Baseline:** Repo is now clean on `main` and fast-forwarded to the current Sabretooth baseline.
 
 ## Schema / Runtime Truth
 - **Valid Config Shape:** Per-agent identity belongs under `agents.list[]`; shared defaults belong under `agents.defaults`.
