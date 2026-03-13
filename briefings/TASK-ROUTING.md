@@ -1,6 +1,6 @@
 # TASK-ROUTING — ANTIGRAVITY
 
-Last updated: 2026-03-12
+Last updated: 2026-03-13
 Workspace truth: `C:\ANTIGRAVITY` on `origin/main`
 
 This file defines who should do what across the current AI team.
@@ -9,7 +9,7 @@ This file defines who should do what across the current AI team.
 
 1. Josh decides scope and priorities.
 2. Codex on Sabretooth is the orchestrator and final repo truth.
-3. Gemini, Comet, Claude, and local workers operate under Codex routing.
+3. Gemini, Claude, Grok/OpenClaw, Comet, and local workers operate under Codex routing.
 
 If any tool, model, or exported note conflicts with the live repo:
 - `AGENTS.md` wins
@@ -25,6 +25,7 @@ If any tool, model, or exported note conflicts with the live repo:
 | Frontend UI polish, browser verification, bounded static-site work | Gemini | Gemini in `C:\ANTIGRAVITY` | `briefings/gemini/BRIEFING.md`, `briefings/gemini-agent-prompt.md` |
 | Research, competitor intel, policy/current-market lookups | Atlas | Comet / Perplexity | `briefings/COMET-SYNC-PROMPT.md` |
 | Audit, backend support, code review, isolated proof work | Claude | Claude on approved node/workspace | `briefings/claude-t5500/BRIEFING.md` |
+| Adversarial audits, OpenClaw orchestration prompts, harsh second-opinion pressure tests | Grok | OpenClaw API on Sabretooth only | `briefings/grok-openclaw/BRIEFING.md`, `memory/CODEX-QUICK-MEMORY.md` |
 | Repeatable local support tasks, drafts, pack generation | Mini Claudes | OpenClaw / Ollama / local scripts | routed by Codex only |
 
 ## Default Assignment Rules
@@ -41,17 +42,23 @@ If any tool, model, or exported note conflicts with the live repo:
    - proof checks
    - bounded implementation on non-overlapping files
    - support work on remote nodes when explicitly assigned
-5. Comet is best used for:
+5. Grok is best used for:
+   - adversarial logic audits
+   - aggressive architecture criticism
+   - OpenClaw API-level orchestration prompts on Sabretooth
+   - bounded second-opinion review when Codex wants pressure-testing
+6. Comet is best used for:
    - read-only research
    - recommendation gathering
    - current policy/platform rules
-6. Local workers do not set truth. They generate drafts, packs, and machine-local outputs only.
+7. Local workers do not set truth. They generate drafts, packs, and machine-local outputs only.
 
 ## Hard Guardrails
 
 - One repo, one branch, one live folder: `C:\ANTIGRAVITY`, `main`
 - OMEGA repos and 100% charity surfaces are off-limits from ENIGMA-side work
 - Square is the live payment rail
+- Sabretooth is the only Telegram-owning OpenClaw orchestrator
 - No mock data
 - No false live claims
 - No customer-facing `donate`, `donation`, or `solicitation`
@@ -64,6 +71,7 @@ If any tool, model, or exported note conflicts with the live repo:
 3. Use `CodeX-Fleet-Watcher` for the daily proof snapshot
 4. Tighten header/CSP posture on deployed public sites
 5. Keep `youandinotai.com` and `onlinerecycle.org` aligned with repo truth
+6. Keep Grok routed through local OpenClaw on Sabretooth only until remotes are runtime-verified
 
 ## Required Verification Pattern
 

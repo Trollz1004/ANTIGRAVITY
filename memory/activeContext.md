@@ -3,6 +3,7 @@
 ## Current Focus
 - **OpenClaw Orchestrator Stabilized:** Sabretooth now has the only live OpenClaw Telegram owner, a working local gateway, and a verified TUI launch path.
 - **Boot Persistence:** OpenClaw gateway is installed as the Windows Scheduled Task `OpenClaw Gateway` at logon, and local helper scripts now exist for both OpenClaw TUI and Claude dangerous-mode CLI.
+- **Team Briefing Refresh:** Shared team briefings now treat Grok as a Sabretooth-local OpenClaw-backed support agent under Codex, not a separate truth source.
 - **Node Bring-Up Reality Check:** 9020 remains configured-but-not-runtime-verified, and T5500 remains held until the IP/role map is proven live.
 - **Continuity Sync:** Record only verified OpenClaw state in repo memory and Personal Vault backup.
 
@@ -21,6 +22,7 @@
 - **Valid Config Shape:** Per-agent identity belongs under `agents.list[]`; shared defaults belong under `agents.defaults`.
 - **Invalid Legacy Keys:** `agent`, `masterNode`, root-level `subAgents`, and `gateway.mode=server/agent` style assumptions from the old docs do not match the current CLI schema.
 - **Gateway Runtime:** The current CLI expects `gateway.mode=local` plus `gateway.auth.token` before local bring-up.
+- **Agent Teaming:** Grok is now documented in the team briefing layer as an OpenClaw-backed support agent routed by Codex on Sabretooth only.
 - **Secrets Rule:** Keep xAI and gateway secrets only in ignored local env or vault storage. Do not paste or persist secrets in repo files.
 
 ## Next Steps

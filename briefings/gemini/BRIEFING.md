@@ -1,6 +1,6 @@
 # Gemini Briefing
 
-Updated: 2026-03-12
+Updated: 2026-03-13
 Workspace: `C:\ANTIGRAVITY`
 Branch: `main`
 Role: UI, browser, and static-surface collaborator under Codex orchestration
@@ -10,7 +10,8 @@ Role: UI, browser, and static-surface collaborator under Codex orchestration
 1. `AGENTS.md`
 2. `briefings/gemini-agent-prompt.md`
 3. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
-4. `briefings/RANDOM-TXT-SALVAGE-2026-03-12.md`
+4. `briefings/AI-TEAM-SYNC-2026-03-13.md`
+5. `briefings/RANDOM-TXT-SALVAGE-2026-03-12.md`
 
 ## Best Uses
 
@@ -25,6 +26,7 @@ Role: UI, browser, and static-surface collaborator under Codex orchestration
 2. keep copy truthful
 3. keep payment references Square-first
 4. hand back exact file changes and verification notes
+5. treat Grok/OpenClaw as a Codex-routed support lane, not as a separate truth source
 
 ## Do Not
 
@@ -33,3 +35,4 @@ Role: UI, browser, and static-surface collaborator under Codex orchestration
 3. do not reintroduce unsupported live-impact claims
 4. do not use RANDOM salvage as operational truth
 5. do not drift into OMEGA
+6. do not assume OpenClaw remotes are live unless Codex has verified them

@@ -1,6 +1,6 @@
 # AGENT ENTOURAGE — ANTIGRAVITY
 
-Last updated: 2026-03-12
+Last updated: 2026-03-13
 Workspace truth: `C:\ANTIGRAVITY`
 
 This is the current AI team structure for ENIGMA-side work.
@@ -13,13 +13,15 @@ This is the current AI team structure for ENIGMA-side work.
 | Gemini | Gemini in `C:\ANTIGRAVITY` | UI work, browser validation, bounded copy/design cleanup | Collaborator under Codex |
 | Comet | Perplexity / Comet | Research, competitor intel, policy/current-web lookups | Research-only |
 | Claude | Claude CLI/Desktop when assigned | Audit, backend support, proof work, bounded implementation | Support-only unless explicitly delegated |
+| Grok | OpenClaw API via Sabretooth local gateway | Adversarial audit, orchestration prompt execution, harsh second-opinion pressure testing | Support-only under Codex |
 | Mini Claudes | OpenClaw / Ollama workers | Draft packs, local-only tasks, scheduled support jobs | No repo truth authority |
 
 ## Operating Model
 
 - Codex owns `main`
-- Gemini and Claude can contribute, but repo truth still resolves to Codex on Sabretooth
+- Gemini, Claude, and Grok can contribute, but repo truth still resolves to Codex on Sabretooth
 - Comet informs decisions with fresh research, but does not set implementation truth
+- Grok operates through the Sabretooth OpenClaw gateway, not as an independent repo authority
 - Local workers generate drafts, packs, and queue support only
 
 ## Current Automation Layer
@@ -30,6 +32,7 @@ Scheduled local proofs on Sabretooth:
 - `CodeX-Mission-Guardian`
 - `CodeX-Task-Sentry`
 - `CodeX-SABRETOOTH-Safe-Control`
+- `OpenClaw Gateway` (local orchestrator runtime)
 
 Remote approved tasks:
 - `CodeX-9020-Safe-Drafts`
@@ -42,6 +45,7 @@ Remote approved tasks:
 2. Keep `onlinerecycle.org` operationally honest and security-hardened
 3. Keep watcher-based proof and daily drift detection running from Sabretooth
 4. Keep payment and chain claims anchored to the live repo briefing set
+5. Keep Grok/OpenClaw local, truthful, and single-owner on Telegram
 
 ## Mandatory Briefing Set
 
@@ -59,3 +63,4 @@ Every agent should anchor to these first:
 - No Stripe-first decisions
 - No invented metrics
 - No “live” claims that the current runtime cannot prove
+- No remote Telegram polling outside Sabretooth

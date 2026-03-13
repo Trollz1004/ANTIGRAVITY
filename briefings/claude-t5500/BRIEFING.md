@@ -1,6 +1,6 @@
 # Claude T5500 Briefing
 
-Updated: 2026-03-12
+Updated: 2026-03-13
 Workspace: `C:\ANTIGRAVITY`
 Branch: `main`
 Role: audit, support, and bounded implementation under Codex ownership
@@ -10,7 +10,8 @@ Role: audit, support, and bounded implementation under Codex ownership
 1. `AGENTS.md`
 2. `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
 3. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
-4. `memory/activeContext.md`
+4. `briefings/AI-TEAM-SYNC-2026-03-13.md`
+5. `memory/activeContext.md`
 
 ## Best Uses
 
@@ -18,6 +19,7 @@ Role: audit, support, and bounded implementation under Codex ownership
 2. proof checks
 3. code review against current repo truth
 4. bounded implementation on clearly assigned files
+5. support Codex alongside Grok/OpenClaw without treating Grok output as repo truth
 
 ## Avoid
 
@@ -25,6 +27,7 @@ Role: audit, support, and bounded implementation under Codex ownership
 2. do not drift into OMEGA
 3. do not rely on archived or recovery-only notes as live proof
 4. do not expand scope beyond the assigned slice
+5. do not claim remote OpenClaw runtime is live without verification
 
 ## Closeout Pattern
 

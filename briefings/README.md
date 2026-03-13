@@ -1,6 +1,6 @@
 # Briefings — AI Team Index
 
-Last updated: 2026-03-12
+Last updated: 2026-03-13
 
 Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 
@@ -10,11 +10,12 @@ Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 2. `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
 3. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
 4. `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
-5. `memory/activeContext.md`
+5. `memory/CODEX-QUICK-MEMORY.md`
+6. `memory/activeContext.md`
 
 ## Team Sync
 
-- `briefings/AI-TEAM-SYNC-2026-03-12.md`
+- `briefings/AI-TEAM-SYNC-2026-03-13.md`
 - `briefings/TASK-ROUTING.md`
 - `briefings/AGENT-ENTOURAGE.md`
 - `briefings/CODEX-FLEET-WATCHER.md`
@@ -26,6 +27,7 @@ Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 | Codex | `briefings/codex-sabretooth/BRIEFING.md` |
 | Gemini | `briefings/gemini/BRIEFING.md` |
 | Claude | `briefings/claude-t5500/BRIEFING.md` |
+| Grok / OpenClaw | `briefings/grok-openclaw/BRIEFING.md` |
 | Comet / Perplexity | `briefings/COMET-SYNC-PROMPT.md` |
 
 ## Payment / Governance Truth
