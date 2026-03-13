@@ -10,6 +10,7 @@ This session replaced the stale OpenClaw multi-node assumptions with verified ru
 - **Telegram Ownership Fix:** Configured Telegram only on Sabretooth and verified a live DM send through OpenClaw. Removed Telegram token/config from `192.168.0.5` and `192.168.0.15` so the orchestrator is the sole bot poller.
 - **Paired User Approval:** Approved Telegram user `6244456983` via `openclaw pairing approve telegram` so direct OpenClaw user access is live again.
 - **Boot / Operator Helpers:** Added `scripts/Start-OpenClaw-TUI.ps1` and `scripts/Start-Claude-Danger.ps1`, plus `octui` / `claudelive` helper functions in `scripts/startup-pwsh-admin.ps1`.
+- **Mission Guard Banner:** OpenClaw startup now prints a mission-first warning and points operators to `briefings/grok-openclaw/BRIEFING.md`.
 - **Gateway Persistence:** Verified `openclaw status` shows `Gateway service: Scheduled Task installed · registered · running` and `Telegram: ON / OK / accounts 1/1`.
 - **Security Cleanup:** Tightened ACLs under `C:\Users\joshl\.openclaw` so the OpenClaw security audit is down to `0 critical`, with only the local-only reverse proxy warning remaining.
 - **Briefing Refresh:** Added `memory/CODEX-QUICK-MEMORY.md`, created a dedicated Grok/OpenClaw briefing, and refreshed the shared team briefing set so all agents see the same authority order and OpenClaw reality.
