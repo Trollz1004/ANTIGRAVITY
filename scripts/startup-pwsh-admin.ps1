@@ -22,6 +22,14 @@ Clear-Host
 # Set working directory to ANTIGRAVITY
 Set-Location 'C:\ANTIGRAVITY'
 
+function octui {
+    & 'C:\ANTIGRAVITY\scripts\Start-OpenClaw-TUI.ps1' @args
+}
+
+function claudelive {
+    & 'C:\ANTIGRAVITY\scripts\Start-Claude-Danger.ps1' @args
+}
+
 # Load internal environment vars
 if (Test-Path 'C:\ANTIGRAVITY\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env') {
     Get-Content 'C:\ANTIGRAVITY\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env' |
@@ -37,4 +45,6 @@ Write-Host ''
 Write-Host 'PowerShell 7.5 Admin terminal loaded.' -ForegroundColor Cyan
 Write-Host "Repo: C:\ANTIGRAVITY" -ForegroundColor Green
 Write-Host 'Protocol Omega 60/30/10 active.' -ForegroundColor Green
+Write-Host 'OpenClaw TUI helper: octui' -ForegroundColor Cyan
+Write-Host 'Claude dangerous-mode helper: claudelive' -ForegroundColor Cyan
 Write-Host ''
