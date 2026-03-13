@@ -1,15 +1,17 @@
 # Active Context - 2026-03-13
 
 ## Current Focus
-- **OpenClaw Schema Validation:** Rebuilt the local Sabretooth OpenClaw profile using the real 2026.2.6-3 schema instead of the stale multi-node docs.
-- **Telegram Ownership Correction:** Sabretooth is now the only OpenClaw Telegram owner. Remote nodes were stripped of Telegram config to stop `getUpdates` conflicts.
-- **Node Bring-Up Reality Check:** Verified Sabretooth locally, partially configured 9020, and held T5500 until the IP/role map is proven live.
+- **OpenClaw Orchestrator Stabilized:** Sabretooth now has the only live OpenClaw Telegram owner, a working local gateway, and a verified TUI launch path.
+- **Boot Persistence:** OpenClaw gateway is installed as the Windows Scheduled Task `OpenClaw Gateway` at logon, and local helper scripts now exist for both OpenClaw TUI and Claude dangerous-mode CLI.
+- **Node Bring-Up Reality Check:** 9020 remains configured-but-not-runtime-verified, and T5500 remains held until the IP/role map is proven live.
 - **Continuity Sync:** Record only verified OpenClaw state in repo memory and Personal Vault backup.
 
 ## Verified OpenClaw State
 - **Sabretooth (`192.168.0.8`):** `openclaw` and Node.js are installed. Local gateway now starts on `ws://127.0.0.1:18789` with `gateway.mode=local`, a local token, and `agents.defaults.model.primary=xai/grok-4-latest`.
 - **Sabretooth Telegram:** `@Grok4thekidsbot` is configured only on Sabretooth. A live Telegram DM send succeeded from the Sabretooth orchestrator on 2026-03-13.
-- **Sabretooth Health Path:** `curl http://127.0.0.1:18789/health` returns the OpenClaw Control UI HTML, not JSON health output.
+- **Sabretooth Health Path:** `curl http://127.0.0.1:18789/health` returns the OpenClaw Control UI HTML, not JSON health output. `openclaw status` is the authoritative local runtime check.
+- **Sabretooth Service State:** `openclaw status` shows Gateway reachable, Gateway service `Scheduled Task installed · registered · running`, Telegram `ON / OK / accounts 1/1`, and security audit `0 critical · 1 warn · 1 info`.
+- **Sabretooth Launch Helpers:** Repo scripts `scripts/Start-OpenClaw-TUI.ps1` and `scripts/Start-Claude-Danger.ps1` work locally. Admin startup script `scripts/startup-pwsh-admin.ps1` exposes `octui` and `claudelive` helper commands.
 - **9020 (`192.168.0.5`):** `openclaw` and Node.js are installed. Reset the bad config with `openclaw setup`, then set `gateway.mode=local`, gateway token, and `agents.defaults.model.primary=xai/grok-4-latest`. User-level `XAI_API_KEY` write returned no error.
 - **9020 Telegram State:** Telegram config and env ownership were removed. 9020 is not allowed to poll the orchestrator bot.
 - **9020 Current Blocker:** Remote gateway start attempts did not leave `18789` listening after 5 seconds. Treat 9020 as configured-but-not-verified.
@@ -26,4 +28,4 @@
 2. **Finish 9020 bring-up:** Start OpenClaw on 9020 with a persistent Windows-safe launch path and confirm `18789` is listening without Telegram enabled there.
 3. **Only then test multi-node orchestration:** Do not claim T5500/9020 sub-agent routing until both remote nodes are live and verified.
 4. **Keep Telegram single-owner:** Only the Sabretooth orchestrator should own the Telegram bot token/config. Remote nodes stay Telegram-free unless Josh explicitly changes the architecture.
-5. **Keep launch work separated:** OpenClaw exploration is infra validation, not proof that any product deployment or Grok orchestration is production-ready.
+5. **Treat reverse-proxy warning as non-blocking:** `gateway.trustedProxies` is still unset, but that is acceptable while the Control UI remains local-only on loopback.
