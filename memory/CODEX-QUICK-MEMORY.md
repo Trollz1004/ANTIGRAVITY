@@ -17,7 +17,9 @@ Updated: 2026-03-13
 - Gemini and Claude are bounded collaborators
 - Comet is research-only
 - Grok is now available as a Sabretooth-local OpenClaw-backed agent under Codex routing
-- OpenClaw Telegram ownership stays on Sabretooth only
+- Sabretooth owns the primary OpenClaw Telegram orchestrator
+- T5500 may run a separate backup Telegram bot
+- 9020 has no messaging channels configured by default
 
 ## OpenClaw Runtime
 
@@ -27,6 +29,7 @@ Updated: 2026-03-13
 - `octui` opens the OpenClaw TUI
 - `claudelive` launches Claude Code CLI in bypass-permissions mode
 - `gemini` in the ANTIGRAVITY startup shell launches via the clean wrapper script because Gemini CLI fails if it inherits the Codex terminal `\\?\` provider path
+- T5500 WhatsApp is disabled; keep backup messaging Telegram-only unless Josh explicitly changes that
 - 9020 and T5500 are not yet approved as live OpenClaw sub-agent runtime nodes
 
 ## Node Baseline
@@ -40,7 +43,8 @@ Updated: 2026-03-13
 
 - Do not let recovery docs override repo truth
 - Do not claim multi-node OpenClaw is live until remotes are verified
-- Do not re-enable Telegram polling on remote nodes
+- Do not let remote backup bots become implied primaries in repo truth
+- Do not re-enable WhatsApp on T5500 unless Josh explicitly asks for that backup lane
 - After every push on Sabretooth, immediately check and fast-forward `C:\ANTIGRAVITY` on 9020 and T5500 if those worktrees are clean
 - Do not leave finished work unpushed
 - If any temp branch/worktree exists, merge/push/delete before closeout
