@@ -5,7 +5,7 @@
 - **OpenClaw Orchestrator Stabilized:** Sabretooth now has the only live OpenClaw Telegram owner, a working local gateway, and a verified TUI launch path.
 - **Boot Persistence:** OpenClaw gateway is installed as the Windows Scheduled Task `OpenClaw Gateway` at logon, and local helper scripts now exist for both OpenClaw TUI and Claude dangerous-mode CLI.
 - **Team Briefing Refresh:** Shared team briefings now treat Grok as a Sabretooth-local OpenClaw-backed support agent under Codex, not a separate truth source.
-- **Node Bring-Up Reality Check:** 9020 remains configured-but-not-runtime-verified, and T5500 remains held until the IP/role map is proven live.
+- **Node Bring-Up Reality Check:** 9020 now has a live `18789` listener via the `OpenClaw Gateway` scheduled task, and T5500 IP has been re-confirmed as `192.168.0.15` / `DESKTOP-H4B53GL`.
 - **Continuity Sync:** Record only verified OpenClaw state in repo memory and Personal Vault backup.
 
 ## Verified OpenClaw State
@@ -16,12 +16,13 @@
 - **Sabretooth Launch Helpers:** Repo scripts `scripts/Start-OpenClaw-TUI.ps1` and `scripts/Start-Claude-Danger.ps1` work locally. Admin startup script `scripts/startup-pwsh-admin.ps1` exposes `octui` and `claudelive` helper commands.
 - **Gemini CLI Launch Path:** In the Codex embedded PowerShell terminal, Gemini CLI can fail if it inherits the `\\?\` provider-qualified path. Use the repo wrapper `scripts/Start-Gemini-Clean.ps1` or the startup-shell `gemini` helper to force a normal `C:\ANTIGRAVITY` launch path.
 - **Mission Banner:** OpenClaw TUI startup and the local gateway launch file now print the mission guard message and point to `briefings/grok-openclaw/BRIEFING.md`.
-- **9020 (`192.168.0.5`):** `openclaw` and Node.js are installed. Reset the bad config with `openclaw setup`, then set `gateway.mode=local`, gateway token, and normalize the OpenClaw model baseline to `xai/grok-4`.
+- **9020 (`192.168.0.5`):** `openclaw` and Node.js are installed. Reset the bad config with `openclaw setup`, then set `gateway.mode=local`, gateway token, normalize the OpenClaw model baseline to `xai/grok-4`, and restore the `OpenClaw Gateway` scheduled task so `127.0.0.1:18789` is listening again.
 - **9020 Telegram State:** Telegram config and env ownership were removed. 9020 is not allowed to poll the orchestrator bot.
 - **9020 Clean Baseline:** Repo is now clean on `main`. Pre-clean drift was preserved in `stash@{0}` with label `codex-preclean-20260313-baseline`, and leftover `ClawX-main/` was moved to `C:\Users\joshl\Documents\ANTIGRAVITY-preclean-20260313\ClawX-main`.
-- **T5500 Candidate (`192.168.0.15` / `DESKTOP-H4B53GL`):** SSH responds. A stray manual `node.exe` had been polling Telegram on `127.0.0.1:18789`; Codex removed Telegram config there and killed that extra process. Treat T5500 identity/runtime as unresolved until the IP/role map is proven live.
+- **T5500 (`192.168.0.15` / `DESKTOP-H4B53GL`):** SSH responds and the candidate scan re-confirmed `.15` as the live T5500 IP. A stray manual `node.exe` had been polling Telegram on `127.0.0.1:18789`; Codex removed Telegram config there and killed that extra process.
 - **T5500 Clean Baseline:** Repo is now clean on `main` and fast-forwarded to the current Sabretooth baseline.
 - **Three-Node Model Fix:** Sabretooth, 9020, and T5500 OpenClaw configs were normalized to `xai/grok-4` after `grok-4-latest` failed in practice.
+- **Square Binding Truth:** Dynamic Bot-Shield checkout creation uses a signed `checkout_ref` in Square `reference_id` / `payment_note`, and webhook verification trusts only the parsed signed reference. The old unsigned static-link fallback has been removed so the flow now fails closed if secure checkout creation is unavailable.
 
 ## Schema / Runtime Truth
 - **Valid Config Shape:** Per-agent identity belongs under `agents.list[]`; shared defaults belong under `agents.defaults`.
@@ -31,8 +32,7 @@
 - **Secrets Rule:** Keep xAI and gateway secrets only in ignored local env or vault storage. Do not paste or persist secrets in repo files.
 
 ## Next Steps
-1. **Resolve the real T5500 IP/role:** Prove whether `.15` is T5500 or whether the docs are stale and T5500 is elsewhere.
-2. **Finish 9020 bring-up:** Start OpenClaw on 9020 with a persistent Windows-safe launch path and confirm `18789` is listening without Telegram enabled there.
-3. **Only then test multi-node orchestration:** Do not claim T5500/9020 sub-agent routing until both remote nodes are live and verified.
-4. **Keep Telegram single-owner:** Only the Sabretooth orchestrator should own the Telegram bot token/config. Remote nodes stay Telegram-free unless Josh explicitly changes the architecture.
-5. **Treat reverse-proxy warning as non-blocking:** `gateway.trustedProxies` is still unset, but that is acceptable while the Control UI remains local-only on loopback.
+1. **Keep 9020 listener under observation:** The `OpenClaw Gateway` task is running and `127.0.0.1:18789` is listening, but remote sub-agent routing is still not approved as live production orchestration.
+2. **Keep Telegram single-owner:** Only the Sabretooth orchestrator should own the Telegram bot token/config. Remote nodes stay Telegram-free unless Josh explicitly changes the architecture.
+3. **Treat reverse-proxy warning as non-blocking:** `gateway.trustedProxies` is still unset, but that is acceptable while the Control UI remains local-only on loopback.
+4. **Require signed Square binding for Bot-Shield:** Do not restore unsigned `square.link` fallback behavior in the verification flow.
