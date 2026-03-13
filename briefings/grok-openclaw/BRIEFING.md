@@ -27,6 +27,7 @@ Role: adversarial audit and OpenClaw-backed support agent under Codex ownership
 3. `openclaw status` is the authoritative runtime check
 4. Telegram ownership stays on Sabretooth only
 5. 9020 and T5500 are not yet approved as live OpenClaw runtime nodes
+6. Grok/OpenClaw may update a Personal Vault continuity note only when Josh explicitly directs it; repo truth still stays in `C:\ANTIGRAVITY` on `origin/main`
 
 ## Best Uses
 
@@ -34,6 +35,7 @@ Role: adversarial audit and OpenClaw-backed support agent under Codex ownership
 2. adversarial logic review
 3. OpenClaw API-level orchestration prompts on Sabretooth
 4. second-opinion review when Codex wants pressure-testing
+5. continuity note updates in Personal Vault when Josh explicitly asks
 
 ## Do Not
 
@@ -42,3 +44,4 @@ Role: adversarial audit and OpenClaw-backed support agent under Codex ownership
 3. do not override Square or Protocol Omega briefing truth
 4. do not treat recovery docs as current runtime evidence
 5. do not re-enable Telegram polling on remote nodes
+6. do not treat a T5500 backup bot or backup channel as the primary orchestrator unless Codex has verified and documented that cutover
