@@ -18,6 +18,7 @@
 - **Sabretooth Launch Helpers:** Repo scripts `scripts/Start-OpenClaw-TUI.ps1` and `scripts/Start-Claude-Danger.ps1` work locally. Admin startup script `scripts/startup-pwsh-admin.ps1` exposes `octui` and `claudelive` helper commands.
 - **Gemini CLI Launch Path:** In the Codex embedded PowerShell terminal, Gemini CLI can fail if it inherits the `\\?\` provider-qualified path. Use the repo wrapper `scripts/Start-Gemini-Clean.ps1` or the startup-shell `gemini` helper to force a normal `C:\ANTIGRAVITY` launch path.
 - **Mission Banner:** OpenClaw TUI startup and the local gateway launch file now print the mission guard message and point to `briefings/grok-openclaw/BRIEFING.md`.
+- **Sabretooth Session Reset:** The local `master-sabretooth` OpenClaw session store was reset after stale direct-chat history started leaking bad assumptions (fake auditor skill, fake backup note, wrong Telegram metadata). Current status is a clean session baseline with `Sessions: 0 active`.
 - **9020 (`192.168.0.5`):** `openclaw` and Node.js are installed. The repaired `OpenClaw Gateway` scheduled task now keeps `127.0.0.1:18789` / `[::1]:18789` listening on loopback only.
 - **9020 Telegram State:** 9020 has no messaging channels configured by default. It is not allowed to poll the primary Sabretooth orchestrator bot.
 - **9020 Clean Baseline:** Repo is now clean on `main`. Pre-clean drift was preserved in `stash@{0}` with label `codex-preclean-20260313-baseline`, and leftover `ClawX-main/` was moved to `C:\Users\joshl\Documents\ANTIGRAVITY-preclean-20260313\ClawX-main`.
@@ -33,6 +34,7 @@
 - **Invalid Legacy Keys:** `agent`, `masterNode`, root-level `subAgents`, and `gateway.mode=server/agent` style assumptions from the old docs do not match the current CLI schema.
 - **Gateway Runtime:** The current CLI expects `gateway.mode=local` plus `gateway.auth.token` before local bring-up.
 - **Agent Teaming:** Grok is now documented in the team briefing layer as an OpenClaw-backed support agent routed by Codex on Sabretooth only.
+- **Memory Search Reality:** A Google provider stanza exists in Sabretooth local OpenClaw config, but `agents.defaults.memorySearch` is not configured. Do not treat memory embeddings/search as active until Codex verifies and documents that explicitly.
 - **Secrets Rule:** Keep xAI and gateway secrets only in ignored local env or vault storage. Do not paste or persist secrets in repo files.
 
 ## Next Steps

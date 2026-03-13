@@ -7,6 +7,7 @@ This session replaced the stale OpenClaw multi-node assumptions with verified ru
 - **Schema Recovery:** Inspected the installed OpenClaw 2026.2.6-3 package and confirmed the real config shape via `zod-schema.d.ts` and `zod-schema.agents.d.ts`.
 - **Sabretooth Bring-Up:** Regenerated `C:\Users\joshl\.openclaw\openclaw.json` with `openclaw setup`, set `gateway.mode=local`, set a local gateway token, and then normalized the working model baseline to `xai/grok-4`.
 - **Sabretooth Runtime Proof:** `openclaw gateway --port 18789` reached a listening state on `ws://127.0.0.1:18789` and mounted the control UI/canvas host.
+- **Sabretooth Session Cleanup:** Backed up and cleared the stale `master-sabretooth` OpenClaw session store after bad chat state leaked bogus claims (charity-auditor skill, expired Gemini key story, wrong Telegram origin metadata). Gateway was restarted clean and `openclaw status` now shows `sessions 0`.
 - **Telegram Ownership Fix:** Configured Telegram only on Sabretooth and verified a live DM send through OpenClaw. Removed Telegram token/config from `192.168.0.5` and `192.168.0.15` so the orchestrator is the sole bot poller.
 - **Paired User Approval:** Approved the Sabretooth Telegram pairing so direct OpenClaw user access is live again without storing the user id in tracked repo memory.
 - **Boot / Operator Helpers:** Added `scripts/Start-OpenClaw-TUI.ps1` and `scripts/Start-Claude-Danger.ps1`, plus `octui` / `claudelive` helper functions in `scripts/startup-pwsh-admin.ps1`.
@@ -28,5 +29,6 @@ This session replaced the stale OpenClaw multi-node assumptions with verified ru
 - **Re-test health semantics:** The Sabretooth `/health` request returned the OpenClaw Control UI HTML, so use `openclaw status` / `openclaw logs` / `openclaw security audit` as the proper local runtime path in future validation.
 - **Keep Telegram topology explicit:** Sabretooth is the primary orchestrator bot. T5500 may keep its own backup Telegram bot. 9020 should stay channel-free unless Josh explicitly changes the architecture.
 - **Keep T5500 WhatsApp disabled:** Do not restore the WhatsApp plugin on T5500 unless Josh explicitly wants that backup channel.
+- **Do not assume embeddings are live:** A local Google provider entry alone does not mean OpenClaw memory search is configured. Verify `agents.defaults.memorySearch` before trusting any claim about embedding-backed recall.
 - **Keep secrets out of repo/chat:** Any future xAI credential work must stay in ignored local env or vault storage only.
 - **Future repo router cutover is still separate:** The intended-next repo router remains not-live; keep distinguishing that from the currently verified legacy `GospelDonation.sol` deployment.

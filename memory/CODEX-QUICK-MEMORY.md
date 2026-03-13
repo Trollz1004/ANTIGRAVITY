@@ -30,6 +30,7 @@ Updated: 2026-03-13
 - `claudelive` launches Claude Code CLI in bypass-permissions mode
 - `gemini` in the ANTIGRAVITY startup shell launches via the clean wrapper script because Gemini CLI fails if it inherits the Codex terminal `\\?\` provider path
 - T5500 WhatsApp is disabled; keep backup messaging Telegram-only unless Josh explicitly changes that
+- Sabretooth OpenClaw session drift can come from local `.openclaw` session history; if chat behavior goes off-mission, verify `openclaw status` and reset the local session store instead of trusting the stale chat context
 - 9020 and T5500 are not yet approved as live OpenClaw sub-agent runtime nodes
 
 ## Node Baseline
