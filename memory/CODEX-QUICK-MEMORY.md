@@ -22,6 +22,7 @@ Updated: 2026-03-13
 ## OpenClaw Runtime
 
 - Sabretooth local gateway: `ws://127.0.0.1:18789`
+- OpenClaw model baseline on Sabretooth, 9020, and T5500: `xai/grok-4`
 - Use `openclaw status` as the runtime truth check
 - `octui` opens the OpenClaw TUI
 - `claudelive` launches Claude Code CLI in bypass-permissions mode

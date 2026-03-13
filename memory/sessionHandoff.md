@@ -5,7 +5,7 @@ This session replaced the stale OpenClaw multi-node assumptions with verified ru
 
 ## Accomplishments
 - **Schema Recovery:** Inspected the installed OpenClaw 2026.2.6-3 package and confirmed the real config shape via `zod-schema.d.ts` and `zod-schema.agents.d.ts`.
-- **Sabretooth Bring-Up:** Regenerated `C:\Users\joshl\.openclaw\openclaw.json` with `openclaw setup`, set `gateway.mode=local`, set a local gateway token, and set `agents.defaults.model.primary=xai/grok-4-latest`.
+- **Sabretooth Bring-Up:** Regenerated `C:\Users\joshl\.openclaw\openclaw.json` with `openclaw setup`, set `gateway.mode=local`, set a local gateway token, and then normalized the working model baseline to `xai/grok-4`.
 - **Sabretooth Runtime Proof:** `openclaw gateway --port 18789` reached a listening state on `ws://127.0.0.1:18789` and mounted the control UI/canvas host.
 - **Telegram Ownership Fix:** Configured Telegram only on Sabretooth and verified a live DM send through OpenClaw. Removed Telegram token/config from `192.168.0.5` and `192.168.0.15` so the orchestrator is the sole bot poller.
 - **Paired User Approval:** Approved Telegram user `6244456983` via `openclaw pairing approve telegram` so direct OpenClaw user access is live again.
@@ -14,10 +14,11 @@ This session replaced the stale OpenClaw multi-node assumptions with verified ru
 - **Gateway Persistence:** Verified `openclaw status` shows `Gateway service: Scheduled Task installed · registered · running` and `Telegram: ON / OK / accounts 1/1`.
 - **Security Cleanup:** Tightened ACLs under `C:\Users\joshl\.openclaw` so the OpenClaw security audit is down to `0 critical`, with only the local-only reverse proxy warning remaining.
 - **Briefing Refresh:** Added `memory/CODEX-QUICK-MEMORY.md`, created a dedicated Grok/OpenClaw briefing, and refreshed the shared team briefing set so all agents see the same authority order and OpenClaw reality.
-- **9020 Repair:** Removed the bad legacy config on `192.168.0.5`, reran `openclaw setup`, then set `gateway.mode=local`, gateway token, and `agents.defaults.model.primary=xai/grok-4-latest`.
+- **9020 Repair:** Removed the bad legacy config on `192.168.0.5`, reran `openclaw setup`, then set `gateway.mode=local`, gateway token, and normalized the model to `xai/grok-4`.
 - **9020 Baseline Cleanup:** Preserved the dirty 9020 repo in `stash@{0}` (`codex-preclean-20260313-baseline`), moved leftover `ClawX-main/` out of the repo, then fast-forwarded the worktree to clean `main`.
 - **T5500 Hold State:** `192.168.0.15` responds as `DESKTOP-H4B53GL`. A stray manual `node.exe` was listening on `127.0.0.1:18789` there and causing Telegram `getUpdates` conflicts; Codex killed it and removed Telegram config. Treat the T5500 mapping as unresolved until proven.
 - **T5500 Baseline Cleanup:** Fast-forwarded the clean T5500 repo to the same `main` baseline as Sabretooth.
+- **Three-Node Model Normalization:** After `grok-4-latest` failed in practice, Codex updated Sabretooth, 9020, and T5500 OpenClaw configs to `xai/grok-4`.
 
 ## Pending items
 - **Resolve node identity:** Determine the actual live T5500 IP before any Grok/OpenClaw orchestration claims.

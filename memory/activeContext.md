@@ -9,17 +9,18 @@
 - **Continuity Sync:** Record only verified OpenClaw state in repo memory and Personal Vault backup.
 
 ## Verified OpenClaw State
-- **Sabretooth (`192.168.0.8`):** `openclaw` and Node.js are installed. Local gateway now starts on `ws://127.0.0.1:18789` with `gateway.mode=local`, a local token, and `agents.defaults.model.primary=xai/grok-4-latest`.
+- **Sabretooth (`192.168.0.8`):** `openclaw` and Node.js are installed. Local gateway runs on `ws://127.0.0.1:18789` with `gateway.mode=local`, a local token, and the working model baseline `xai/grok-4`.
 - **Sabretooth Telegram:** `@Grok4thekidsbot` is configured only on Sabretooth. A live Telegram DM send succeeded from the Sabretooth orchestrator on 2026-03-13.
 - **Sabretooth Health Path:** `curl http://127.0.0.1:18789/health` returns the OpenClaw Control UI HTML, not JSON health output. `openclaw status` is the authoritative local runtime check.
 - **Sabretooth Service State:** `openclaw status` shows Gateway reachable, Gateway service `Scheduled Task installed · registered · running`, Telegram `ON / OK / accounts 1/1`, and security audit `0 critical · 1 warn · 1 info`.
 - **Sabretooth Launch Helpers:** Repo scripts `scripts/Start-OpenClaw-TUI.ps1` and `scripts/Start-Claude-Danger.ps1` work locally. Admin startup script `scripts/startup-pwsh-admin.ps1` exposes `octui` and `claudelive` helper commands.
 - **Mission Banner:** OpenClaw TUI startup and the local gateway launch file now print the mission guard message and point to `briefings/grok-openclaw/BRIEFING.md`.
-- **9020 (`192.168.0.5`):** `openclaw` and Node.js are installed. Reset the bad config with `openclaw setup`, then set `gateway.mode=local`, gateway token, and `agents.defaults.model.primary=xai/grok-4-latest`. User-level `XAI_API_KEY` write returned no error.
+- **9020 (`192.168.0.5`):** `openclaw` and Node.js are installed. Reset the bad config with `openclaw setup`, then set `gateway.mode=local`, gateway token, and normalize the OpenClaw model baseline to `xai/grok-4`.
 - **9020 Telegram State:** Telegram config and env ownership were removed. 9020 is not allowed to poll the orchestrator bot.
 - **9020 Clean Baseline:** Repo is now clean on `main`. Pre-clean drift was preserved in `stash@{0}` with label `codex-preclean-20260313-baseline`, and leftover `ClawX-main/` was moved to `C:\Users\joshl\Documents\ANTIGRAVITY-preclean-20260313\ClawX-main`.
 - **T5500 Candidate (`192.168.0.15` / `DESKTOP-H4B53GL`):** SSH responds. A stray manual `node.exe` had been polling Telegram on `127.0.0.1:18789`; Codex removed Telegram config there and killed that extra process. Treat T5500 identity/runtime as unresolved until the IP/role map is proven live.
 - **T5500 Clean Baseline:** Repo is now clean on `main` and fast-forwarded to the current Sabretooth baseline.
+- **Three-Node Model Fix:** Sabretooth, 9020, and T5500 OpenClaw configs were normalized to `xai/grok-4` after `grok-4-latest` failed in practice.
 
 ## Schema / Runtime Truth
 - **Valid Config Shape:** Per-agent identity belongs under `agents.list[]`; shared defaults belong under `agents.defaults`.
