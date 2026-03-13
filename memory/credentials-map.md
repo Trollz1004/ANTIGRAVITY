@@ -36,8 +36,9 @@
 
 | Credential | Location |
 |------------|----------|
-| Bot Name | @AiSolutionsForTheKids_bot |
-| Bot Token | .env → TELEGRAM_BOT_TOKEN (rotate if exposed) |
+| Primary Bot | Sabretooth local OpenClaw config / local env only |
+| Backup Bot | T5500 local OpenClaw config only |
+| Bot Tokens | Local env or local OpenClaw config only (rotate if exposed) |
 
 ## Cloudflare
 
