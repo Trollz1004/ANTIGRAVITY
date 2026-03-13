@@ -12,7 +12,6 @@ from sqlalchemy import select
 
 from app.auth import get_current_user
 from app.models import Profile, User, VerificationEvent
-from app.payments import BOT_SHIELD_PAYMENT_LINK
 from app.routers.metrics import _verify_metrics_key
 
 
@@ -137,7 +136,8 @@ def test_verify_submit_returns_square_checkout_link(client, db_session_factory, 
     assert submit_response.status_code == 200, submit_response.text
     payload = submit_response.json()
     assert payload["passed"] is True
-    assert payload["checkout_url"].startswith(BOT_SHIELD_PAYMENT_LINK)
+    assert payload["checkout_url"] is None
+    assert "secure Square checkout is temporarily unavailable" in payload["message"]
 
 
 def test_square_webhook_binds_bot_shield_to_user(client, db_session_factory):
