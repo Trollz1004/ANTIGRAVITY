@@ -14,6 +14,7 @@
 - **Sabretooth Health Path:** `curl http://127.0.0.1:18789/health` returns the OpenClaw Control UI HTML, not JSON health output. `openclaw status` is the authoritative local runtime check.
 - **Sabretooth Service State:** `openclaw status` shows Gateway reachable, Gateway service `Scheduled Task installed · registered · running`, Telegram `ON / OK / accounts 1/1`, and security audit `0 critical · 1 warn · 1 info`.
 - **Sabretooth Launch Helpers:** Repo scripts `scripts/Start-OpenClaw-TUI.ps1` and `scripts/Start-Claude-Danger.ps1` work locally. Admin startup script `scripts/startup-pwsh-admin.ps1` exposes `octui` and `claudelive` helper commands.
+- **Gemini CLI Launch Path:** In the Codex embedded PowerShell terminal, Gemini CLI can fail if it inherits the `\\?\` provider-qualified path. Use the repo wrapper `scripts/Start-Gemini-Clean.ps1` or the startup-shell `gemini` helper to force a normal `C:\ANTIGRAVITY` launch path.
 - **Mission Banner:** OpenClaw TUI startup and the local gateway launch file now print the mission guard message and point to `briefings/grok-openclaw/BRIEFING.md`.
 - **9020 (`192.168.0.5`):** `openclaw` and Node.js are installed. Reset the bad config with `openclaw setup`, then set `gateway.mode=local`, gateway token, and normalize the OpenClaw model baseline to `xai/grok-4`.
 - **9020 Telegram State:** Telegram config and env ownership were removed. 9020 is not allowed to poll the orchestrator bot.

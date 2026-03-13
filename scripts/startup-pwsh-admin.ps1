@@ -20,7 +20,8 @@ $host.UI.RawUI.ForegroundColor = 'White'
 Clear-Host
 
 # Set working directory to ANTIGRAVITY
-Set-Location 'C:\ANTIGRAVITY'
+[System.Environment]::CurrentDirectory = 'C:\ANTIGRAVITY'
+Set-Location -LiteralPath 'C:\ANTIGRAVITY'
 
 function octui {
     & 'C:\ANTIGRAVITY\scripts\Start-OpenClaw-TUI.ps1' @args
@@ -28,6 +29,14 @@ function octui {
 
 function claudelive {
     & 'C:\ANTIGRAVITY\scripts\Start-Claude-Danger.ps1' @args
+}
+
+function gemini {
+    & 'C:\ANTIGRAVITY\scripts\Start-Gemini-Clean.ps1' @args
+}
+
+function gemraw {
+    & gemini.cmd @args
 }
 
 # Load internal environment vars
@@ -47,4 +56,6 @@ Write-Host "Repo: C:\ANTIGRAVITY" -ForegroundColor Green
 Write-Host 'Protocol Omega 60/30/10 active.' -ForegroundColor Green
 Write-Host 'OpenClaw TUI helper: octui' -ForegroundColor Cyan
 Write-Host 'Claude dangerous-mode helper: claudelive' -ForegroundColor Cyan
+Write-Host 'Gemini clean-launch helper: gemini' -ForegroundColor Cyan
+Write-Host 'Gemini raw CLI helper: gemraw' -ForegroundColor DarkCyan
 Write-Host ''
