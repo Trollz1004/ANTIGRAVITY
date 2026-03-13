@@ -14,6 +14,7 @@ When context resets, this is what survives.
 | File | Purpose |
 |------|---------|
 | `activeContext.md` | What you're working on RIGHT NOW |
+| `CODEX-QUICK-MEMORY.md` | Fast re-anchor file for Codex and agent routing truth |
 | `projectState.md` | Complete state of every repo, deployment, domain |
 | `decisions.md` | Every architectural decision + WHY |
 | `credentials-map.md` | Where every key/token/secret lives (paths only, no values) |
