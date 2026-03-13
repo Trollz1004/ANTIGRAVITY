@@ -159,8 +159,8 @@ These invariants were set by the original Opus (4.6) who built this from scratch
 |:---|:---:|:---:|:---:|
 | **Jarvis (Brain)** | Codex Opus 4.6 | **Strategy, Routing, Architecture** | $20/mo |
 | **Atlas (Research)** | Perplexity Pro | **Deep Intel, Competitor Audits** | $20/mo |
-| **Scribe (Content)** | Gemini 3.1 (Me) | **Copywriting, Drip Emails, Posts** | **FREE** |
-| **Trendy (Scout)** | Perplexity / Gemini | **X/Reddit Trend Scanning** | **FREE** |
+| **Scribe (Content)** | Gemini 1.5 Pro | **Orchestration, Prompting Grok/OpenClaw** | **FREE** |
+| **Gordon (Arch)** | Docker/LLM | **Node Orchestration & Infrastructure** | **FREE** |
 | **Designer (Images)** | Gemini 3.1 (Me) | **AI Images / UI Assets / Mockups** | **FREE** |
 | **Motion (Video)** | Codex + Remotion | **Motion Graphics / Video as Code** | **FREE** |
 | **Clawed (Dev)** | Codex + Opus | **Hardcore Code, Feature Ships** | **FREE** |
