@@ -1,7 +1,7 @@
 # Session Handoff - 2026-03-13
 
 ## Summary
-This session replaced the stale OpenClaw multi-node assumptions with verified runtime facts, added a usable local operator workflow, and ended with a three-node clean repo baseline. Sabretooth now has a valid local OpenClaw profile and gateway on `18789`, owns the only live Telegram bot config, successfully sent a Telegram DM through OpenClaw, and has working local launch helpers for both OpenClaw TUI and Claude dangerous-mode CLI. The repo briefing layer now also treats Grok as a Sabretooth-local OpenClaw-backed support agent under Codex routing. 9020 and T5500 were both resynced to clean `main`, with 9020's old drift preserved before cleanup.
+This session replaced the stale OpenClaw multi-node assumptions with verified runtime facts, added a usable local operator workflow, hardened verification concurrency, re-verified Protocol Omega on-chain, and ended with a three-node clean repo baseline. Sabretooth now has a valid local OpenClaw profile and gateway on `18789`, owns the only live Telegram bot config, successfully sent a Telegram DM through OpenClaw, and has working local launch helpers for both OpenClaw TUI and Claude dangerous-mode CLI. The repo briefing layer now also treats Grok as a Sabretooth-local OpenClaw-backed support agent under Codex routing. 9020 and T5500 were both resynced to clean `main`, with 9020's old drift preserved before cleanup.
 
 ## Accomplishments
 - **Schema Recovery:** Inspected the installed OpenClaw 2026.2.6-3 package and confirmed the real config shape via `zod-schema.d.ts` and `zod-schema.agents.d.ts`.
@@ -16,14 +16,16 @@ This session replaced the stale OpenClaw multi-node assumptions with verified ru
 - **Briefing Refresh:** Added `memory/CODEX-QUICK-MEMORY.md`, created a dedicated Grok/OpenClaw briefing, and refreshed the shared team briefing set so all agents see the same authority order and OpenClaw reality.
 - **9020 Repair:** Removed the bad legacy config on `192.168.0.5`, reran `openclaw setup`, then set `gateway.mode=local`, gateway token, and normalized the model to `xai/grok-4`.
 - **9020 Baseline Cleanup:** Preserved the dirty 9020 repo in `stash@{0}` (`codex-preclean-20260313-baseline`), moved leftover `ClawX-main/` out of the repo, then fast-forwarded the worktree to clean `main`.
-- **T5500 Hold State:** `192.168.0.15` responds as `DESKTOP-H4B53GL`. A stray manual `node.exe` was listening on `127.0.0.1:18789` there and causing Telegram `getUpdates` conflicts; Codex killed it and removed Telegram config. Treat the T5500 mapping as unresolved until proven.
+- **T5500 Recovery:** `192.168.0.15` responds as `DESKTOP-H4B53GL`. A stray manual `node.exe` had been listening on `127.0.0.1:18789` there and causing Telegram `getUpdates` conflicts; Codex removed Telegram config, killed the stray process, and later repaired the scheduled gateway task so the node is back to a clean loopback-only OpenClaw baseline.
 - **T5500 Baseline Cleanup:** Fast-forwarded the clean T5500 repo to the same `main` baseline as Sabretooth.
 - **Three-Node Model Normalization:** After `grok-4-latest` failed in practice, Codex updated Sabretooth, 9020, and T5500 OpenClaw configs to `xai/grok-4`.
+- **Atomic Verification Fix:** `/verify/confirm` now reacquires the user with `FOR UPDATE`, then checks liveness + payment and commits promotion from inside that locked path so concurrent confirms cannot race into multiple promotion attempts.
+- **T5500 Gateway Repair:** Reinstalled the broken `OpenClaw Gateway` scheduled task on `192.168.0.15` and re-verified a loopback-only listener on `127.0.0.1:18789` / `[::1]:18789`.
+- **Protocol Omega Re-Verification:** Re-verified live Base bytecode and BaseScan transaction evidence for the legacy `GospelDonation.sol` contract at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`, including observed `60/30/10` internal split transfers.
+- **Fail-Soft Draft:** Added `scripts/Recovery-Sabretooth-Down.ps1` so 9020 can generate a git bundle relay plus continuity/vault sync artifacts if Sabretooth is offline.
 
 ## Pending items
-- **Resolve node identity:** Determine the actual live T5500 IP before any Grok/OpenClaw orchestration claims.
-- **Verify 9020 listener:** Establish a persistent Windows-safe gateway launch path on `192.168.0.5` and confirm `netstat` shows `18789` without Telegram ownership there.
 - **Re-test health semantics:** The Sabretooth `/health` request returned the OpenClaw Control UI HTML, so use `openclaw status` / `openclaw logs` / `openclaw security audit` as the proper local runtime path in future validation.
 - **Keep Telegram single-owner:** Do not re-enable Telegram on `.5` or `.15` unless Josh explicitly wants a different bot topology.
 - **Keep secrets out of repo/chat:** Any future xAI credential work must stay in ignored local env or vault storage only.
-- **Vault sync:** After repo closeout, mirror this verified continuity state into the Personal Vault backup set.
+- **Future repo router cutover is still separate:** The intended-next repo router remains not-live; keep distinguishing that from the currently verified legacy `GospelDonation.sol` deployment.

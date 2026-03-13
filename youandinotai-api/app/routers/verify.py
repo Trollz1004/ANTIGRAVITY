@@ -38,6 +38,7 @@ from app.payment_truth import (
 )
 from app.rate_limit import verify_limiter
 from app.verification_service import (
+    lock_user_for_verification,
     has_completed_payment,
     has_passed_liveness,
     promote_user_verification_if_ready,
@@ -386,26 +387,41 @@ async def confirm_verification(
     """
     verify_limiter.check(request)
 
-    # Check 1: Must have a passed liveness event
-    if not await has_passed_liveness(db, user.id):
-        raise HTTPException(
-            status_code=400,
-            detail="No passed liveness challenge found. Complete the Bot-Shield challenge first.",
-        )
+    try:
+        # Re-read and lock the user row so concurrent confirm requests cannot
+        # race each other into multiple promotion attempts.
+        locked_user = await lock_user_for_verification(db, user.id)
+        if not locked_user:
+            raise HTTPException(status_code=404, detail="User not found")
 
-    # Check 2: Must have a completed payment event
-    if not await has_completed_payment(db, user.id):
-        raise HTTPException(
-            status_code=402,
-            detail="Payment required. Complete the $1 Bot-Shield payment before verification.",
-        )
+        # Check 1: Must have a passed liveness event
+        if not await has_passed_liveness(db, locked_user.id):
+            raise HTTPException(
+                status_code=400,
+                detail="No passed liveness challenge found. Complete the Bot-Shield challenge first.",
+            )
 
-    await promote_user_verification_if_ready(db, user)
-    trust = await _calculate_trust_score(user, db)
-    await db.commit()
+        # Check 2: Must have a completed payment event
+        if not await has_completed_payment(db, locked_user.id):
+            raise HTTPException(
+                status_code=402,
+                detail="Payment required. Complete the $1 Bot-Shield payment before verification.",
+            )
+
+        await promote_user_verification_if_ready(db, locked_user)
+        trust = await _calculate_trust_score(locked_user, db)
+        await db.commit()
+    except HTTPException:
+        if db.in_transaction():
+            await db.rollback()
+        raise
+    except Exception:
+        if db.in_transaction():
+            await db.rollback()
+        raise
 
     return {
         "verified": True,
         "trust_score": trust,
-        "tier": "platinum" if user.subscription_active else "gold",
+        "tier": "platinum" if locked_user.subscription_active else "gold",
     }

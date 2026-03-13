@@ -12,6 +12,7 @@ import uuid
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
+from sqlalchemy.dialects import postgresql
 
 os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-security"
 
@@ -130,6 +131,20 @@ class TestSquarePaymentLinkGeneration:
 
 class TestVerificationPromotion:
     """Verification must only promote when liveness and payment both exist."""
+
+    def test_user_verification_lock_statement_uses_for_update(self):
+        from app.verification_service import build_user_verification_lock_stmt
+
+        user_id = uuid.uuid4()
+        stmt = build_user_verification_lock_stmt(user_id)
+        compiled = str(
+            stmt.compile(
+                dialect=postgresql.dialect(),
+                compile_kwargs={"literal_binds": True},
+            )
+        )
+
+        assert "FOR UPDATE" in compiled
 
     def test_promote_user_requires_liveness_and_payment(self):
         import asyncio
