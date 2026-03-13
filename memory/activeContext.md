@@ -8,6 +8,7 @@
 - **Node Bring-Up Reality Check:** 9020 now has a live `18789` listener via the `OpenClaw Gateway` scheduled task, and T5500 IP has been re-confirmed as `192.168.0.15` / `DESKTOP-H4B53GL`.
 - **Hardening Pass:** `/verify/confirm` now reacquires the `User` row under a database lock before promoting verification, T5500's broken OpenClaw task was repaired, and Protocol Omega was re-verified live from Base Mainnet evidence.
 - **Continuity Sync:** Record only verified OpenClaw state in repo memory and Personal Vault backup.
+- **Post-Push Node Sync Rule:** After each Sabretooth push, Codex must immediately check 9020 and T5500 and fast-forward `C:\ANTIGRAVITY` there if the remote worktrees are clean.
 
 ## Verified OpenClaw State
 - **Sabretooth (`192.168.0.8`):** `openclaw` and Node.js are installed. Local gateway runs on `ws://127.0.0.1:18789` with `gateway.mode=local`, a local token, and the working model baseline `xai/grok-4`.
