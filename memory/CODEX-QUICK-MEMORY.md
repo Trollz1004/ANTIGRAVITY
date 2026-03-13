@@ -41,5 +41,7 @@ Updated: 2026-03-13
 - Do not let recovery docs override repo truth
 - Do not claim multi-node OpenClaw is live until remotes are verified
 - Do not re-enable Telegram polling on remote nodes
+- After every push on Sabretooth, immediately check and fast-forward `C:\ANTIGRAVITY` on 9020 and T5500 if those worktrees are clean
 - Do not leave finished work unpushed
 - If any temp branch/worktree exists, merge/push/delete before closeout
+- Grok/OpenClaw may update a Personal Vault continuity note only when Josh explicitly asks; the vault never overrides repo truth
