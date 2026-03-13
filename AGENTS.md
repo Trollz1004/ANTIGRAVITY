@@ -61,6 +61,8 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. Dis
 - Do **not** leave finished work sitting only in the local worktree.
 - Do **not** leave finished work stranded on an unmerged or unknown branch.
 - If a temporary branch is ever used for isolation, Codex must **merge it, push `main`, and delete the temporary branch** before considering the task complete.
+- After every successful push to `origin/main`, Codex must SSH to `9020` and `T5500` and fast-forward `C:\ANTIGRAVITY` there when the remote worktrees are clean.
+- If `9020` or `T5500` is dirty, Codex must preserve the drift and stop instead of forcing the sync.
 - Closeout standard: local verification passed, latest required CI passed, `main` clean, `origin/main` updated.
 
 ## Identity
