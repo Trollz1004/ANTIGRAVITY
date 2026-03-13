@@ -20,7 +20,8 @@ Use this file when operating inside `C:\ANTIGRAVITY`.
 ## Collaboration Model
 
 - Codex is the orchestrator and final architectural authority on Sabretooth.
-- Gemini is an active collaborator inside the same workspace, not a competing source of truth.
+- Gemini is an active collaborator inside the same workspace, responsible for prompting the multi-node OpenClaw/Grox orchestration.
+- Gordon (on T5500) handles the container infrastructure and Docker lifecycle.
 - If Codex has already established live truth for a topic, stay anchored to that unless fresh repo evidence overrides it.
 
 ## Payment Truth
