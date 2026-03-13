@@ -12,13 +12,15 @@ from app.routers import health
 
 def _settings(
     *,
-    payment_link: str = "https://square.link/u/Qc5mxUy7",
+    access_token: str = "square-access-token",
+    location_id: str = "LY5GN09F5AN83",
     verify_signature: bool = True,
     signature_key: str = "sig-key",
     notification_url: str = "https://api.youandinotai.com/api/v1/webhooks/square-payment",
 ):
     return SimpleNamespace(
-        square_bot_shield_payment_link=payment_link,
+        square_access_token=access_token,
+        square_location_id=location_id,
         square_webhook_verify_signature=verify_signature,
         square_payment_webhook_signature_key=signature_key,
         square_payment_webhook_notification_url=notification_url,
@@ -27,8 +29,8 @@ def _settings(
     )
 
 
-def test_square_health_ready_requires_payment_link(monkeypatch):
-    monkeypatch.setattr(health, "settings", _settings(payment_link=""))
+def test_square_health_ready_requires_dynamic_square_credentials(monkeypatch):
+    monkeypatch.setattr(health, "settings", _settings(access_token=""))
     assert health._square_health_ready() is False
 
 

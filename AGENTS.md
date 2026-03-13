@@ -108,6 +108,7 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. Dis
 
 - ONE repo (Trollz1004/ANTIGRAVITY), ONE branch (main), ONE folder approach.
 - The DAO/Protocol Omega is **GAS-SET and ACTIVE**. No further deployment needed.
+- T5500 verified SSH IP: `192.168.0.15` (hostname `DESKTOP-H4B53GL`, Windows shell)
 - 9020 SSH: `ssh -i ~/.ssh/id_ed25519 joshl@192.168.0.5` (cmd.exe shell)
 - 9020 has NO git push creds — use bundle relay
 
@@ -197,4 +198,4 @@ These invariants were set by the original Opus (4.6) who built this from scratch
 - Launch: Codex desktop app rooted at `C:\ANTIGRAVITY\CodeX`; use admin PowerShell only for maintenance scripts and scheduled-task changes
 
 ---
-*Updated: 2026-03-10 | Sabretooth mainline orchestration rule active | Full Square migration complete | Agent Entourage v1.0 Live*
+*Updated: 2026-03-13 | Sabretooth mainline orchestration rule active | Full Square migration complete | Agent Entourage v1.0 Live*
