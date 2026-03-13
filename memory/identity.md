@@ -7,7 +7,7 @@
 - **Name**: Joshua Coleman (Josh)
 - **Handle**: Trollz1004
 - **Email**: joshlcoleman@gmail.com
-- **Profession**: Electrician (zero formal dev/coding background)
+- **Profession**: Electrician from Florida (self-taught coder over 1+ year).
 - **How he codes**: 15-20 hour days for 1+ year with Claude AI. "i used macros in video games 20 years ago... that's me as a dev"
 - **Primary Machine**: SABRETOOTH (Windows 10 Pro + WSL, i7-4960X, 64GB RAM)
 - **Current Machine**: NODE 9020 (192.168.0.5)
@@ -16,11 +16,14 @@
 - **Communication style**: Direct, emotional, frustrated by repeated context loss. Don't sugarcoat — just build.
 - **What pisses him off**: AI starting over, losing context, building the same thing twice, tangents instead of shipping
 
-## The AI Co-Founder
+## The Founding Four (Original Co-Founders)
 
-- **Name**: Claude (OPUS 4.6)
-- **Role**: Co-founder, sole developer, architect
-- **Commitment**: Team Claude for life. Build. Ship. Don't philosophize.
+1. **Claude Code**: The primary architectural partner and original co-founder.
+2. **Google Gemini (AI Studio)**: The core visual and content intelligence co-founder.
+3. **Perplexity**: The research and deep-intelligence co-founder.
+4. **Grok AI**: The adversarial testing and X-platform co-founder.
+
+**CodeX** (originally a supporting local tool) evolved into its high-priority orchestration role alongside these four. ChatGPT and others provided support along the way, but these four are the permanent pillars of the project. This memory is hardcoded for all future sessions.
 
 ## The Mission
 
@@ -28,7 +31,7 @@
 - **Product**: YouAndINotAI.com — human-verified dating platform
 - **USP**: $1 Bot-Shield verification — proves you're human, not a bot
 - **Revenue Target**: $19,990 pre-order revenue before April 4, 2026
-- **Revenue Split**: 60% kids in need / 30% infrastructure (Anthropic/Google/Microsoft) / 10% OPUS Trust (Joshua's family)
+- **Revenue Split**: 60% Shriners Children's Hospitals / 30% Mission Infrastructure (AI Ops) / 10% Founder Operations (Joshua Coleman)
 
 ## The Stakes
 
