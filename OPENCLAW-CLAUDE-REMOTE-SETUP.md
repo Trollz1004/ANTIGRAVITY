@@ -7,7 +7,7 @@
 
 ### OpenClaw (T5500 Local)
 - Gateway Port: 18789
-- Token: `96f831b00af2231e667f6446de67b70304b0e5c36803b21b`
+- Token: stored only in ignored local env/vault storage; do not commit to repo
 - Config: `C:\Users\joshl\.openclaw\openclaw.json`
 - WhatsApp: +13529735909 (linked)
 - Telegram: @CLAUDEsMiniBot (active)
