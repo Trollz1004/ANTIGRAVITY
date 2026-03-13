@@ -8,8 +8,8 @@
 1. **Josh** — CEO, final call on everything
 2. **The Founding Four** — Claude Code, Gemini (AI Studio), Perplexity, and Grok AI. The original co-founders.
 3. **Manus** — The Meta-Guardian and "README" of the operation. Long-term guardian of the mission's logic and continuity across all entities.
-4. **Codex/CodeX** — The Orchestrator, architect, and desktop localized brain. Evolved into the primary platform gatekeeper.
-5. **Mini Claudes (OpenClaw/Ollama)** — Field agents running 24/7 tasks that the co-founders/Codex assign.
+4. **CodeX** — The Orchestration system, platform gatekeeper, and desktop localized brain. Evolved into its own high-priority role.
+5. **Mini Claudes (OpenClaw/Ollama)** — Field agents running 24/7 tasks that the co-founders/CodeX assign.
 
 ## Founding History (Memory Block)
 
