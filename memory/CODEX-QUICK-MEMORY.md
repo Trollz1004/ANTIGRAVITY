@@ -26,6 +26,7 @@ Updated: 2026-03-13
 - Use `openclaw status` as the runtime truth check
 - `octui` opens the OpenClaw TUI
 - `claudelive` launches Claude Code CLI in bypass-permissions mode
+- `gemini` in the ANTIGRAVITY startup shell launches via the clean wrapper script because Gemini CLI fails if it inherits the Codex terminal `\\?\` provider path
 - 9020 and T5500 are not yet approved as live OpenClaw sub-agent runtime nodes
 
 ## Node Baseline
