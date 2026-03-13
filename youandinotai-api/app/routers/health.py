@@ -30,7 +30,9 @@ def _payment_notification_url() -> str:
 
 
 def _square_health_ready() -> bool:
-    payment_link_ready = bool(str(settings.square_bot_shield_payment_link or "").strip())
+    payment_link_ready = bool(str(settings.square_access_token or "").strip()) and bool(
+        str(settings.square_location_id or "").strip()
+    )
     if not settings.square_webhook_verify_signature:
         return payment_link_ready
 

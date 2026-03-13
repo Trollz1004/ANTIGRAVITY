@@ -31,7 +31,6 @@ from app.auth import get_current_user
 from app.config import get_settings
 from app.database import get_db
 from app.models import Match, Message, Post, User, VerificationEvent
-from app.payments import BOT_SHIELD_PAYMENT_LINK
 from app.payment_truth import (
     BOT_SHIELD_CENTS,
     build_bot_shield_checkout_request,
@@ -170,18 +169,12 @@ async def _build_square_checkout_url(
                 event.id,
                 exc,
             )
-
-    square_bot_shield_url = str(
-        getattr(settings, "square_bot_shield_payment_link", "") or ""
-    ).strip()
-    if not square_bot_shield_url:
-        square_bot_shield_url = BOT_SHIELD_PAYMENT_LINK
-
-    separator = "&" if "?" in square_bot_shield_url else "?"
-    return (
-        f"{square_bot_shield_url}{separator}"
-        f"user_id={user.id}&event_id={event.id}&checkout_ref={checkout_ref}"
+    logger.error(
+        "Secure Bot-Shield checkout unavailable: signed Square CreatePaymentLink could not be created for user=%s event=%s",
+        user.id,
+        event.id,
     )
+    return None
 
 
 def _hash_answer(answer: str, token: str) -> str:
@@ -336,7 +329,11 @@ async def submit_challenge(
     return ChallengeResult(
         passed=True,
         trust_score=trust,
-        message="Liveness verified! Complete the $1 Bot-Shield payment to earn your badge.",
+        message=(
+            "Liveness verified! Complete the $1 Bot-Shield payment to earn your badge."
+            if checkout_url
+            else "Liveness verified, but secure Square checkout is temporarily unavailable. Please try again shortly."
+        ),
         checkout_url=checkout_url,
     )
 
