@@ -1,6 +1,6 @@
 /*
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; connect-src 'self' https://youandinotai.com https://api.youandinotai.com wss://youandinotai.com wss://api.youandinotai.com; font-src 'self' data:; form-action 'self' https://square.link https://book.squareup.com https://*.square.site; frame-ancestors 'none'; img-src 'self' data: blob: https:; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; connect-src 'self' https://youandinotai.com https://api.youandinotai.com https://youandinotai-backend-731395189513.us-east1.run.app wss://youandinotai.com wss://api.youandinotai.com wss://youandinotai-backend-731395189513.us-east1.run.app; font-src 'self' data:; form-action 'self' https://square.link https://book.squareup.com https://*.square.site; frame-ancestors 'none'; img-src 'self' data: blob: https:; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; upgrade-insecure-requests
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

@@ -28,6 +28,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.database import get_db
+from app.email_service import send_welcome_email
 from app.models import User, VerificationEvent, WebhookEvent
 from app.payment_truth import (
     extract_checkout_reference,
@@ -269,6 +270,21 @@ async def _get_user_by_square_customer_id(
     )
 
 
+async def _get_existing_payment_verification_event(
+    db: AsyncSession,
+    *,
+    payment_id: str | None,
+) -> VerificationEvent | None:
+    if not payment_id:
+        return None
+    return await db.scalar(
+        select(VerificationEvent)
+        .where(VerificationEvent.challenge_type == "payment")
+        .where(VerificationEvent.square_payment_id == payment_id)
+        .order_by(VerificationEvent.created_at.desc())
+    )
+
+
 async def _get_user_by_checkout_reference(
     db: AsyncSession,
     checkout_ref: str | None,
@@ -430,9 +446,11 @@ async def square_payment_webhook(
         user.square_customer_id = customer_id
 
     # Process based on event type
-    if event_type in ("payment.completed", "payment.created"):
+    if event_type in ("payment.completed", "payment.created", "payment.updated"):
         payment_status = str(payment_obj.get("status") or "").upper()
         if payment_status == "COMPLETED":
+            payment_amount_cents = payment_obj.get("amount_money", {}).get("amount")
+            payment_id = str(payment_obj.get("id") or event_id)
             tier = _extract_square_payment_tier(
                 payment_obj,
                 order_obj=order_obj,
@@ -441,15 +459,20 @@ async def square_payment_webhook(
             proof_label = _extract_payment_proof_label(payment_obj)
 
             if user and tier:
-                payment_event = VerificationEvent(
-                    user_id=user.id,
-                    challenge_type="payment",
-                    challenge_token=checkout_ref,
-                    status="completed",
-                    amount_cents=payment_obj.get("amount_money", {}).get("amount"),
-                    square_payment_id=str(payment_obj.get("id") or event_id),
+                existing_payment_event = await _get_existing_payment_verification_event(
+                    db,
+                    payment_id=payment_id,
                 )
-                db.add(payment_event)
+                if not existing_payment_event:
+                    payment_event = VerificationEvent(
+                        user_id=user.id,
+                        challenge_type="payment",
+                        challenge_token=checkout_ref,
+                        status="completed",
+                        amount_cents=payment_amount_cents,
+                        square_payment_id=payment_id,
+                    )
+                    db.add(payment_event)
 
                 if tier == "royalty":
                     user.subscription_tier = tier
@@ -478,11 +501,23 @@ async def square_payment_webhook(
                         bool(liveness_event),
                     )
 
-                await promote_user_verification_if_ready(db, user)
+                was_verified = user.bot_shield_verified
+                promoted = await promote_user_verification_if_ready(db, user)
+                if (
+                    tier == "bot_shield"
+                    and payment_amount_cents == 100
+                    and promoted
+                    and not was_verified
+                ):
+                    await send_welcome_email(
+                        recipient_email=user.email,
+                        display_name=user.display_name,
+                        settings=settings,
+                    )
 
             elif not user:
                 logger.warning(
-                    "Square payment.completed for unknown customer: "
+                    "Square completed payment for unknown customer: "
                     "customer_id=%s email=%s event_id=%s checkout_ref=%s order_id=%s",
                     customer_id,
                     buyer_email,
@@ -492,9 +527,9 @@ async def square_payment_webhook(
                 )
             else:
                 logger.warning(
-                    "Square payment.completed could not map tier: user=%s amount=%s event_id=%s hints=%s",
+                    "Square completed payment could not map tier: user=%s amount=%s event_id=%s hints=%s",
                     user.id,
-                    payment_obj.get("amount_money", {}).get("amount"),
+                    payment_amount_cents,
                     event_id,
                     list(iter_text_hints((payment_obj.get("note"), order_obj))),
                 )
