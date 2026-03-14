@@ -9,6 +9,7 @@ if (!targetPath || !kind || !modelRef || !modelId || !hostPort) {
 
 const provider = {
   baseUrl: `http://${hostPort}/v1`,
+  apiKey: "ollama-local",
   api: "openai-completions",
   models: [
     {
