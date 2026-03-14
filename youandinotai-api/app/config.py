@@ -41,6 +41,15 @@ class Settings(BaseSettings):
     square_api_base_url: str = "https://connect.squareup.com"
     square_api_version: str = "2026-01-22"
     app_url: str = "https://youandinotai.com"
+    email_from_address: str = ""
+    email_from_name: str = "YouAndINotAI"
+    email_reply_to: str = ""
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_username: str = ""
+    smtp_password: str = ""
+    smtp_use_ssl: bool = False
+    smtp_use_starttls: bool = True
     gemini_api_key: str = ""
     gemini_model: str = "gemini-2.5-pro"
     kimi_api_key: str = ""
