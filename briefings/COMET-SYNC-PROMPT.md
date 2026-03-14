@@ -1,35 +1,45 @@
-# COMET (PERPLEXITY PRO) — ECOSYSTEM AUDIT & ALIGNMENT PROMPT
-*Josh: Paste this into Perplexity Pro (Comet) to catch him up and have him audit our cross-platform identity.*
+# COMET (PERPLEXITY PRO) - CURRENT REPO STATE PROMPT
+*Josh: Paste this into Perplexity Pro (Comet) to catch it up on the current live repo state before asking for research or audits.*
 
 ---
 
 **PASTE TO PERPLEXITY (COMET):**
 
 ```text
-Initialize Comet Mission: Ecosystem Audit & Brand Alignment.
-System Context: Project ANTIGRAVITY (Social Platform for Good).
-Current Version: Milestone 1 Complete (Infrastructure & Revenue Phase).
+Initialize Comet Mission: Current-state research and truth audit for Project ANTIGRAVITY.
+System Context: ENIGMA-side repo only. Canonical truth is C:\ANTIGRAVITY on origin/main.
 
-Search and Audit the following public endpoints for branding, mission consistency, and ToS compliance:
-1. https://youandinotai.com (Landing Page)
-2. https://onlinerecycle.org (E-waste Revenue Bridge)
-3. https://dashboard.aidoesitall.website (Admin Command Center)
-4. GitHub Profile: Trollz1004 (Master Repository)
-5. GitHub Org: Ai-Solutions-Store (OMEGA Iron Wall side)
+Read this as current truth before you research:
+- Live frontend: https://youandinotai.com
+- Live multiplayer backend: https://youandinotai-backend-731395189513.us-east1.run.app
+- Live API host: https://api.youandinotai.com
+- youandinotai.online is a redirect domain and should be treated as non-primary
+- Live payment rail: Square
+- Stripe is legacy only and not current payment truth
+- Verified-human flow remains liveness plus completed payment
+- Square webhook now handles completed payment.updated events in the live backend path
+- Protocol Omega split remains 60 / 30 / 10
+- Customer-facing copy must avoid donate, donation, and solicitation
 
-Ecosystem Mission (Immutable):
-"AI for kids in need, not adults with greed."
-Until no kid is in need. #FORtheKIDS 🚀
+Audit targets:
+1. https://youandinotai.com
+2. https://api.youandinotai.com
+3. https://youandinotai-backend-731395189513.us-east1.run.app/health
+4. https://onlinerecycle.org
+5. https://dashboard.aidoesitall.website
+6. GitHub repo: Trollz1004/ANTIGRAVITY
 
-Your Task (Comet Audit):
-1. IDENTITY VERIFICATION: Check the "Trollz1004" GitHub profile README. Ensure the footer matches our mission exactly. If it is missing or outdated, provide the exact Markdown Josh needs to paste into his browser to fix it.
-2. COMPETITOR INTEL: Briefly audit the current "Human Verification" market (Privado, Liveness.ai). How does our $1 Bot-Shield + V8 Engine compare in terms of "Social Good" optics?
-3. SEO SCAN: Analyze the search results for "YouAndINotAI" and "OnlineRecycle Florida". Are our meta-tags and descriptions indexed correctly across Google and Bing?
-4. STRIPE LINK AUDIT: Verify the public presence of our 5 Stripe checkout links (Bot-Shield, Founding Member, 3/12 Month Bundles, Royalty Card). Ensure no unauthorized "clones" are circulating.
+Your tasks:
+1. Identify any public copy that still implies Stripe is live, the backend is only planned, or the old deployment map is current.
+2. Audit the human-verification market and compare current competitors against our live Square plus verification flow.
+3. Check search and indexing signals for YouAndINotAI and flag stale metadata or stale deploy references.
+4. Audit public claims for Cloud Run, Cloudflare, and Square accuracy. Separate proven facts from inference.
+5. Surface only current-web findings that matter to launch readiness, trust, compliance, or conversion.
 
-Protocol Omega Split (For Your Context):
-60% Shriners Children's Hospitals / 30% AI Infrastructure / 10% Founder Operations.
-
-Report any branding gaps or mission "dilution" immediately. We launch April 4th. 
-#ForTheKids. Out.
+Response format:
+1. PROVEN FACTS
+2. RISKS
+3. STALE OR WRONG CLAIMS
+4. RECOMMENDED FIXES
+5. SOURCE LINKS
 ```
