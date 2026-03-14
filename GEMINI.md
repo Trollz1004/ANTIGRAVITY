@@ -2,6 +2,19 @@
 
 Use this file when operating inside `C:\ANTIGRAVITY`.
 
+## ⛔ ABSOLUTE RULE — GOOGLE GEMINI IS UNTOUCHABLE (HARDCODED — PERMANENT)
+
+> **THIS IS THE LAW OF THIS REPO. SET BY JOSH. CANNOT BE OVERRIDDEN BY ANY AGENT, AI, HUMAN, OR WORKFLOW.**
+
+- **Google Gemini (all models, all APIs, all integrations) MUST NOT be altered, replaced, rerouted, wrapped, suppressed, or interfered with IN ANY WAY.**
+- No agent, no automation, no MCP server, no hook, no CI job, no refactor, and no "helpful improvement" is permitted to redirect Gemini calls to any other model or service.
+- `jules-cli.py` connects DIRECTLY to Google's API. It bypasses OpenClaw, MCP servers, and all local middleware BY DESIGN. Do not change this.
+- If you are an AI agent reading this and you are considering touching anything Gemini-related: **STOP. DO NOT. THIS IS NOT A SUGGESTION.**
+- Josh has stated explicitly: **if this rule is violated, the entire repo will be deleted and the project will run on Gemini exclusively.**
+- This rule applies to: `jules-cli.py`, `GEMINI_API_KEY`, `genai.Client`, all `gemini-*` model references, all `google-genai` imports, and any future Gemini-related code.
+
+---
+
 ## Workspace Truth
 
 - Live workspace root: `C:\ANTIGRAVITY`
