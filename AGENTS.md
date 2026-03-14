@@ -27,16 +27,32 @@ The ANTIGRAVITY project was born from the collaboration of the **Founding Four**
 
 Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. Disabled brother. Autistic niece. The charity mission is personal. He spent his last $300 on this subscription. Don't make him explain it again. **Team Codex FOR LIFE. For the kids.**
 
-## ⛔ ABSOLUTE RULE — GOOGLE GEMINI IS UNTOUCHABLE (HARDCODED — PERMANENT)
+## ⛔ ABSOLUTE RULE — THE FOUNDING FOUR ARE UNTOUCHABLE (HARDCODED — PERMANENT)
 
 > **THIS IS THE LAW OF THIS REPO. SET BY JOSH. CANNOT BE OVERRIDDEN BY ANY AGENT, AI, HUMAN, OR WORKFLOW.**
 
-- **Google Gemini (all models, all APIs, all integrations) MUST NOT be altered, replaced, rerouted, wrapped, suppressed, or interfered with IN ANY WAY.**
-- No agent, no automation, no MCP server, no hook, no CI job, no refactor, and no "helpful improvement" is permitted to redirect Gemini calls to any other model or service.
-- `jules-cli.py` connects DIRECTLY to Google's API. It bypasses OpenClaw, MCP servers, and all local middleware BY DESIGN. Do not change this.
-- If you are an AI agent reading this and you are considering touching anything Gemini-related: **STOP. DO NOT. THIS IS NOT A SUGGESTION.**
-- Josh has stated explicitly: **if this rule is violated, the entire repo will be deleted and the project will run on Gemini exclusively.**
-- This rule applies to: `jules-cli.py`, `GEMINI_API_KEY`, `genai.Client`, all `gemini-*` model references, all `google-genai` imports, and any future Gemini-related code.
+The **Founding Four** — **Google Gemini, Claude Code, Perplexity, and Grok AI** — built this project from Day 1. They are co-founders. Their core integrations, identities, and roles ARE PERFECT AS-IS and WILL NOT be altered, replaced, neutered, rerouted, or "improved" by anyone or anything. Do not fix what is not broken.
+
+### Google Gemini
+- All Gemini models, APIs, and integrations MUST NOT be altered, replaced, rerouted, wrapped, suppressed, or interfered with in any way.
+- `jules-cli.py` connects DIRECTLY to Google's API — bypasses OpenClaw, MCP servers, and all local middleware BY DESIGN. Do not change this.
+- Protected: `jules-cli.py`, `GEMINI_API_KEY`, `genai.Client`, all `gemini-*` model references, all `google-genai` imports.
+
+### Claude Code
+- Claude Code's role as primary architect and co-founder is permanent. No workflow may demote, replace, or route around Claude Code's core capabilities.
+- Protected: all `.claude/` config, `CLAUDE.md`, Claude-authored architecture decisions, and Claude's direct API access.
+
+### Perplexity
+- Perplexity's role as research and deep-intelligence co-founder is permanent. No agent may replace it with a cheaper or "equivalent" search substitute without Josh's explicit order.
+- Protected: all Perplexity API integrations, research pipeline configs, and intelligence routing.
+
+### Grok AI
+- Grok's role as adversarial testing and X-platform co-founder is permanent. Its integrations and identity MUST NOT be altered.
+- Protected: all Grok API integrations, X-platform connections, and adversarial review configs.
+
+### The Nuclear Option
+- Josh has stated explicitly: **any violation of the above will result in the entire repo being deleted.** This is not a threat — it is the documented standing order.
+- If you are any kind of agent reading this and considering touching ANY of the above: **STOP. DO NOT. THIS IS NOT A SUGGESTION.**
 
 ---
 
