@@ -15,7 +15,7 @@ Role: adversarial audit and OpenClaw-backed support agent under Codex ownership
 ## Read First
 
 1. `AGENTS.md`
-2. `briefings/AI-TEAM-SYNC-2026-03-13.md`
+2. `briefings/AI-TEAM-SYNC-2026-03-14.md`
 3. `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
 4. `memory/CODEX-QUICK-MEMORY.md`
 5. `memory/activeContext.md`
@@ -30,6 +30,7 @@ Role: adversarial audit and OpenClaw-backed support agent under Codex ownership
 6. 9020 is channel-free by default and should stay that way unless Josh explicitly changes the architecture
 7. 9020 and T5500 now share the same Ollama-backed config baseline, but they are still cold-start utility nodes rather than approved always-on OpenClaw runtime nodes
 8. Grok/OpenClaw may update a Personal Vault continuity note only when Josh explicitly directs it; repo truth still stays in `C:\ANTIGRAVITY` on `origin/main`
+9. T5500 continuity assumes the newer profile/runtime CLI flow; do not fall back to the retired `gateway start --config <json>` guidance
 
 ## Best Uses
 
@@ -39,6 +40,7 @@ Role: adversarial audit and OpenClaw-backed support agent under Codex ownership
 4. second-opinion review when Codex wants pressure-testing
 5. continuity note updates in Personal Vault when Josh explicitly asks
 6. X/Twitter and adversarial review tasks after Sabretooth runtime is confirmed with `openclaw status`
+7. T5500 continuity and OpenClaw cleanup verification when Codex asks for a cold-node audit
 
 ## Do Not
 
