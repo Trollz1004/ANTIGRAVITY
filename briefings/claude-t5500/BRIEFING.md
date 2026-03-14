@@ -1,6 +1,6 @@
 # Claude T5500 Briefing
 
-Updated: 2026-03-13
+Updated: 2026-03-14
 Workspace: `C:\ANTIGRAVITY`
 Branch: `main`
 Role: audit, support, and bounded implementation under Codex ownership
@@ -10,7 +10,7 @@ Role: audit, support, and bounded implementation under Codex ownership
 1. `AGENTS.md`
 2. `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
 3. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
-4. `briefings/AI-TEAM-SYNC-2026-03-13.md`
+4. `briefings/AI-TEAM-SYNC-2026-03-14.md`
 5. `memory/activeContext.md`
 
 ## Best Uses
@@ -21,6 +21,13 @@ Role: audit, support, and bounded implementation under Codex ownership
 4. bounded implementation on clearly assigned files
 5. support Codex alongside Grok/OpenClaw without treating Grok output as repo truth
 
+## Current State Snapshot
+
+1. Square webhook work in `youandinotai-api` must respect the liveness-plus-payment verified-human rule
+2. Completed `payment.updated` events now belong to the same live webhook path as `payment.completed`
+3. Founder Badge welcome email delivery is SMTP-backed and no-op safe when mail is not configured
+4. T5500 OpenClaw continuity now assumes the newer profile/runtime flow, not `gateway start --config <json>`
+
 ## Avoid
 
 1. do not override Codex ownership of final repo truth
@@ -28,6 +35,7 @@ Role: audit, support, and bounded implementation under Codex ownership
 3. do not rely on archived or recovery-only notes as live proof
 4. do not expand scope beyond the assigned slice
 5. do not claim remote OpenClaw runtime is live without verification
+6. do not surface or reuse secret material from prior chats, logs, or workstation state
 
 ## Closeout Pattern
 

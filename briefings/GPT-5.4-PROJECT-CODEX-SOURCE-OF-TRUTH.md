@@ -1,9 +1,9 @@
 # GPT-5.4 Project Source Of Truth
 
-Updated: 2026-03-12
+Updated: 2026-03-14
 Repo: `C:\ANTIGRAVITY`
 Primary branch: `main`
-Current promoted baseline: `b841fd4`
+Current promoted baseline: `9796aba`
 
 ## Purpose
 
@@ -259,6 +259,18 @@ Current platform rule:
 - Backend Stripe dependency was removed from the live backend path
 - Public app/docs were cleaned to replace stale Stripe checkout references
 
+## Current Deployment Snapshot
+
+- Frontend: `https://youandinotai.com` on Cloudflare Pages
+- Multiplayer backend: `https://youandinotai-backend-731395189513.us-east1.run.app` on Cloud Run
+- Frontend fallback websocket target is the Cloud Run service above
+- Frontend CSP now explicitly permits the Cloud Run websocket origin
+- FastAPI API remains live at `https://api.youandinotai.com`
+- Public verification shows `api.youandinotai.com` is proxied through Cloudflare and serving the live API
+- The zone's exact SSL mode was not directly readable from the current session auth scope, so only public proxy behavior was verified in this session
+- `youandinotai-api` now handles completed `payment.updated` Square events in the live verification path
+- Founder Badge welcome email delivery exists in the backend and safely skips when SMTP is not configured
+
 ## Mission / Death Contingency
 
 Mission continuity source:
@@ -323,3 +335,4 @@ The following are backup, recovery, or legacy artifacts. They must **not** be us
 - `9020` and `T5500` still have unrelated local drift outside the reviewed automation slice
 - `T5500` can still report `LIVE_OK=NO` on the e-waste live-ok audit even when the automation stack itself is functioning
 - Local watcher and repo briefing hardening are committed, but live Cloudflare Pages header rollout may lag until the latest deploy finishes on public surfaces
+- T5500 OpenClaw continuity assumes the newer profile/runtime flow; the old `gateway start --config <json>` path should be treated as retired

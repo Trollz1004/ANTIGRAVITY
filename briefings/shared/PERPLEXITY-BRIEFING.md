@@ -1,6 +1,7 @@
 # Perplexity / Comet — Full Project Briefing
-> Upload this to a Perplexity Space. It replaces all previous briefing files.
-> Last updated: 2026-02-28
+> 2026-03-14 guard rail: this file is legacy longform context, not the fastest live-truth entrypoint.
+> Use `briefings/COMET-SYNC-PROMPT.md`, `briefings/AI-TEAM-SYNC-2026-03-14.md`, `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`, and `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md` for current operational truth.
+> Current live payment rail is Square. Multiplayer backend is live on Cloud Run. FastAPI API is live behind `https://api.youandinotai.com`. Treat older Stripe or "backend planned" language below as historical context only.
 
 ---
 
