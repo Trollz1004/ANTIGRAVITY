@@ -283,6 +283,7 @@ function Update-ModelsJson {
 $modelRef = "ollama/$ModelId"
 $providerDef = @{
     baseUrl = "http://$OllamaHost/v1"
+    apiKey = "ollama-local"
     api = "openai-completions"
     models = @(
         @{
