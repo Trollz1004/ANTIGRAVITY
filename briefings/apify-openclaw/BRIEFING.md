@@ -1,6 +1,6 @@
 # Apify + OpenClaw Integration Briefing
 
-Updated: 2026-03-14
+Updated: 2026-03-14 (account active)
 Workspace: `C:\ANTIGRAVITY`
 Branch: `main`
 Role: Cost-efficient data intelligence layer — replaces Grok API for trend research and content seeding
@@ -131,10 +131,23 @@ Persistent=true
 
 ---
 
+---
+
+## ✅ Account Status: ACTIVE (GitHub OAuth — Josh signed in 2026-03-14)
+
+> **⚡ NEXT STEP (blocking everything else):**
+> 1. Go to [console.apify.com/settings/integrations](https://console.apify.com/settings/integrations)
+> 2. Click **"Create new token"** → name it `ANTIGRAVITY`
+> 3. Add `APIFY_TOKEN=<your_token>` to `C:\ANTIGRAVITY\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env`
+> 4. Set `APIFY_TOKEN` in your Sabretooth shell environment before opening VS Code / OpenClaw
+> 5. Run: `python scripts/apify_content_scout.py --dry-run` to verify it works
+
+---
+
 ## Setup Checklist
 
-1. [ ] Create free Apify account at [console.apify.com](https://console.apify.com)
-2. [ ] Generate API token → add as `APIFY_TOKEN` to master vault
+1. [x] Create Apify account — **DONE** (GitHub OAuth, 2026-03-14)
+2. [ ] Generate API token → add as `APIFY_TOKEN` to master vault ← **DO THIS NEXT**
 3. [ ] `npx @apify/actors-mcp-server` — test MCP connection from Claude Code
 4. [ ] `python scripts/apify_content_scout.py --dry-run` — test scrape without posting
 5. [ ] `python scripts/apify_content_scout.py` — run full scout, inspect `data/post-queue.json`
