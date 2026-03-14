@@ -6,6 +6,7 @@ import inspect
 import json
 import uuid
 from datetime import datetime, timedelta, timezone
+from unittest.mock import AsyncMock
 
 from fastapi.routing import APIRoute, APIWebSocketRoute
 from sqlalchemy import select
@@ -212,6 +213,85 @@ def test_square_webhook_binds_bot_shield_to_user(client, db_session_factory):
     assert len(payment_events) == 1
     assert payment_events[0].status == "completed"
     assert payment_events[0].amount_cents == 100
+
+
+def test_square_payment_updated_sends_founder_badge_email(client, db_session_factory, monkeypatch):
+    from app.routers import webhooks
+
+    send_welcome_email = AsyncMock(return_value=True)
+    monkeypatch.setattr(webhooks, "send_welcome_email", send_welcome_email)
+
+    _register(client, "square-updated@example.com")
+    token = _login(client, "square-updated@example.com")["access_token"]
+
+    profile_response = client.put(
+        "/api/v1/profiles/me",
+        headers=_auth_headers(token),
+        json={"bio": "Ready", "age": 31, "gender": "male", "looking_for": "relationship", "location": "Orlando, FL", "interests": ["Music"]},
+    )
+    assert profile_response.status_code == 200, profile_response.text
+
+    async def insert_liveness_event() -> None:
+        async with db_session_factory() as session:
+            user = await session.scalar(select(User).where(User.email == "square-updated@example.com"))
+            session.add(
+                VerificationEvent(
+                    user_id=user.id,
+                    challenge_type="liveness",
+                    challenge_token="test-liveness-pass",
+                    status="passed",
+                    amount_cents=100,
+                )
+            )
+            await session.commit()
+
+    _run(insert_liveness_event())
+
+    payload = {
+        "event_id": "evt_square_updated_1",
+        "type": "payment.updated",
+        "created_at": "2026-03-11T12:00:00Z",
+        "data": {
+            "object": {
+                "payment": {
+                    "id": "payment_updated_1",
+                    "status": "COMPLETED",
+                    "amount_money": {"amount": 100, "currency": "USD"},
+                    "buyer_email_address": "square-updated@example.com",
+                }
+            }
+        },
+    }
+    signature = _square_signature("http://testserver/api/v1/webhooks/square-payment", payload)
+
+    webhook_response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={"x-square-hmacsha256-signature": signature, "Content-Type": "application/json"},
+        content=json.dumps(payload, separators=(",", ":")),
+    )
+
+    assert webhook_response.status_code == 200, webhook_response.text
+    assert webhook_response.json()["processed"] is True
+
+    async def fetch_state():
+        async with db_session_factory() as session:
+            user = await session.scalar(select(User).where(User.email == "square-updated@example.com"))
+            profile = await session.scalar(select(Profile).where(Profile.user_id == user.id))
+            payment_events = (
+                await session.scalars(
+                    select(VerificationEvent)
+                    .where(VerificationEvent.user_id == user.id)
+                    .where(VerificationEvent.challenge_type == "payment")
+                )
+            ).all()
+            return user, profile, payment_events
+
+    user, profile, payment_events = _run(fetch_state())
+    assert user.bot_shield_verified is True
+    assert profile.verified is True
+    assert len(payment_events) == 1
+    send_welcome_email.assert_awaited_once()
+    assert send_welcome_email.await_args.kwargs["recipient_email"] == "square-updated@example.com"
 
 
 def test_stripe_webhook_endpoint_is_retired(client):
