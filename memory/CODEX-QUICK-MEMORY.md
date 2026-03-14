@@ -1,6 +1,6 @@
 # CODEX QUICK MEMORY
 
-Updated: 2026-03-13
+Updated: 2026-03-14
 
 ## Hard Truth
 
@@ -16,7 +16,7 @@ Updated: 2026-03-13
 - Codex is final repo truth and push closeout owner
 - Gemini and Claude are bounded collaborators
 - Comet is research-only
-- Grok is now available as a Sabretooth-local OpenClaw-backed agent under Codex routing
+- Grok remains a support lane under Codex routing, but the stable OpenClaw baseline is now local Ollama instead of API-model drift
 - Sabretooth owns the primary OpenClaw Telegram orchestrator
 - T5500 may run a separate backup Telegram bot
 - 9020 has no messaging channels configured by default
@@ -24,14 +24,17 @@ Updated: 2026-03-13
 ## OpenClaw Runtime
 
 - Sabretooth local gateway: `ws://127.0.0.1:18789`
-- OpenClaw model baseline on Sabretooth, 9020, and T5500: `xai/grok-4`
+- Stable OpenClaw model baseline on Sabretooth, 9020, and T5500: `ollama/qwen2.5:7b`
 - Use `openclaw status` as the runtime truth check
 - `octui` opens the OpenClaw TUI
 - `claudelive` launches Claude Code CLI in bypass-permissions mode
 - `gemini` in the ANTIGRAVITY startup shell launches via the clean wrapper script because Gemini CLI fails if it inherits the Codex terminal `\\?\` provider path
 - T5500 WhatsApp is disabled; keep backup messaging Telegram-only unless Josh explicitly changes that
 - Sabretooth OpenClaw session drift can come from local `.openclaw` session history; if chat behavior goes off-mission, verify `openclaw status` and reset the local session store instead of trusting the stale chat context
-- 9020 and T5500 are not yet approved as live OpenClaw sub-agent runtime nodes
+- Sabretooth now runs `Sessions: 0 active` after a full local session-store reset
+- 9020 and T5500 were normalized to the same Ollama model/config, but remain cold-start utility nodes rather than always-on OpenClaw runtime nodes
+- Legacy duplicate OpenClaw roots on `E:` were removed on Sabretooth, 9020, and T5500
+- Expect OpenClaw to auto-recreate a minimal `~\\.openclaw\\agents\\main` scratch store after some CLI commands; treat that as internal scratch, not a second real deployment
 
 ## Node Baseline
 
