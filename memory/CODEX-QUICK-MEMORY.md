@@ -28,7 +28,10 @@ Updated: 2026-03-14
 - Use `openclaw status` as the runtime truth check
 - `octui` opens the OpenClaw TUI
 - `claudelive` launches Claude Code CLI in bypass-permissions mode
-- `gemini` in the ANTIGRAVITY startup shell launches via the clean wrapper script because Gemini CLI fails if it inherits the Codex terminal `\\?\` provider path
+- In the Codex embedded PowerShell terminal, launch Gemini with `& 'C:\ANTIGRAVITY\scripts\Start-Gemini-Clean.ps1'`
+- `gemini` in the ANTIGRAVITY startup shell is already wired to that same clean wrapper script
+- `gemraw` in the startup shell calls the raw `gemini.cmd` path and should be used only when the shell already has a normal `C:\ANTIGRAVITY` cwd
+- Gemini CLI fails if it inherits the Codex terminal `\\?\` provider path, so the wrapper must stay the default launch path inside the app
 - T5500 WhatsApp is disabled; keep backup messaging Telegram-only unless Josh explicitly changes that
 - Sabretooth OpenClaw session drift can come from local `.openclaw` session history; if chat behavior goes off-mission, verify `openclaw status` and reset the local session store instead of trusting the stale chat context
 - Sabretooth now runs `Sessions: 0 active` after a full local session-store reset

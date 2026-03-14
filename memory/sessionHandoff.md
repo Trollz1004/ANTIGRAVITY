@@ -12,6 +12,7 @@ This session finished the OpenClaw cleanup by cutting the stable model baseline 
 - **Telegram Ownership Fix:** Configured Telegram only on Sabretooth and verified a live DM send through OpenClaw. Removed Telegram token/config from `192.168.0.5` and `192.168.0.15` so the orchestrator is the sole bot poller.
 - **Paired User Approval:** Approved the Sabretooth Telegram pairing so direct OpenClaw user access is live again without storing the user id in tracked repo memory.
 - **Boot / Operator Helpers:** Added `scripts/Start-OpenClaw-TUI.ps1` and `scripts/Start-Claude-Danger.ps1`, plus `octui` / `claudelive` helper functions in `scripts/startup-pwsh-admin.ps1`.
+- **Gemini in Codex Terminal:** Gemini CLI must be launched through `scripts/Start-Gemini-Clean.ps1` from the Codex embedded PowerShell terminal because the raw CLI can choke on the inherited `\\?\C:\ANTIGRAVITY` provider path. In the admin startup shell, the `gemini` helper already points at the clean wrapper and `gemraw` is the raw fallback.
 - **Mission Guard Banner:** OpenClaw startup now prints a mission-first warning and points operators to `briefings/grok-openclaw/BRIEFING.md`.
 - **Gateway Persistence:** Verified `openclaw status` shows `Gateway service: Scheduled Task installed · registered · running` and `Telegram: ON / OK / accounts 1/1`.
 - **Security Cleanup:** Tightened ACLs under `C:\Users\joshl\.openclaw` so the OpenClaw security audit is down to `0 critical`, with only the local-only reverse proxy warning remaining.
