@@ -8,8 +8,12 @@ import { createServer as createViteServer } from 'vite';
 import { WebSocketServer, WebSocket } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
 import http from 'http';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const PORT = 3000;
+const PORT = Number(process.env.PORT || 8080);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Types
 type Vector3 = { x: number; y: number; z: number };
@@ -166,6 +170,10 @@ async function startServer() {
   }, 50);
 
   // API routes
+  app.get('/health', (req, res) => {
+    res.json({ status: 'ok', players: players.size });
+  });
+
   app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', players: players.size });
   });
@@ -178,11 +186,20 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static('dist'));
+    const distDir = path.join(__dirname, 'dist');
+    app.use(express.static(distDir));
+
+    app.get('*', (req, res, next) => {
+      if (req.path.startsWith('/api/')) {
+        next();
+        return;
+      }
+      res.sendFile(path.join(distDir, 'index.html'));
+    });
   }
 
   server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
   });
 }
 
