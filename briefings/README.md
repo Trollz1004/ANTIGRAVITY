@@ -1,6 +1,6 @@
 # Briefings — AI Team Index
 
-Last updated: 2026-03-13
+Last updated: 2026-03-14
 
 Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 
@@ -15,7 +15,7 @@ Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 
 ## Team Sync
 
-- `briefings/AI-TEAM-SYNC-2026-03-13.md`
+- `briefings/AI-TEAM-SYNC-2026-03-14.md`
 - `briefings/TASK-ROUTING.md`
 - `briefings/AGENT-ENTOURAGE.md`
 - `briefings/CODEX-FLEET-WATCHER.md`
@@ -29,6 +29,11 @@ Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 | Claude | `briefings/claude-t5500/BRIEFING.md` |
 | Grok / OpenClaw | `briefings/grok-openclaw/BRIEFING.md` |
 | Comet / Perplexity | `briefings/COMET-SYNC-PROMPT.md` |
+
+Current deployment shorthand:
+- frontend: `https://youandinotai.com`
+- multiplayer backend: `https://youandinotai-backend-731395189513.us-east1.run.app`
+- API: `https://api.youandinotai.com`
 
 ## Payment / Governance Truth
 

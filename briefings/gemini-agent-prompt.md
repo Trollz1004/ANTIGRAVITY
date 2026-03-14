@@ -22,6 +22,10 @@ Role:
 Current truth:
 - Square is the live payment rail
 - Stripe is legacy only
+- `https://youandinotai.com` is the live frontend
+- `https://youandinotai-backend-731395189513.us-east1.run.app` is the live multiplayer backend
+- `https://api.youandinotai.com` is the live FastAPI API host
+- `youandinotai.online` is a redirect domain, not the primary app host
 - OMEGA repos and charity-side code are off-limits
 - No mock data
 - No false "live" claims
