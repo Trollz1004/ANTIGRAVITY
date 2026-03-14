@@ -42,6 +42,12 @@
 - **3x Fast nodes (Grok 4.1):** $0.20 input / $0.50 output per million tokens
 - **Estimated monthly:** $2–$8 total for full orchestration + 10 apps + Shriners routing
 
+> **⚠️ Cost Guardrail (2026-03-14):** Do NOT use OpenClaw/Grok for content research or trend
+> monitoring — those tasks drove unexpected costs. All trend gathering and content seeding
+> is now handled by `scripts/apify_content_scout.py` (Apify free tier + local Ollama, ~$0/month).
+> See `briefings/apify-openclaw/BRIEFING.md` for the replacement architecture.
+> OpenClaw/Grok is reserved for adversarial audits and orchestration prompts only.
+
 ---
 
 ## NEXT: TEST ORCHESTRATION

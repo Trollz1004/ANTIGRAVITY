@@ -8,6 +8,14 @@
 			],
 			"gallery": "https://api.mcp.github.com",
 			"version": "1.0.0"
+		},
+		"apify": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "@apify/actors-mcp-server"],
+			"env": {
+				"APIFY_TOKEN": "${env:APIFY_TOKEN}"
+			}
 		}
 	},
 	"inputs": []
