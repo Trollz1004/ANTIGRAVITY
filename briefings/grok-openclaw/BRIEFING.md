@@ -1,6 +1,6 @@
 # Grok OpenClaw Briefing
 
-Updated: 2026-03-13
+Updated: 2026-03-14
 Workspace: `C:\ANTIGRAVITY`
 Branch: `main`
 Role: adversarial audit and OpenClaw-backed support agent under Codex ownership
@@ -22,13 +22,13 @@ Role: adversarial audit and OpenClaw-backed support agent under Codex ownership
 
 ## Runtime Truth
 
-1. Grok is available through the Sabretooth local OpenClaw gateway
+1. OpenClaw's stable Sabretooth baseline is now local Ollama (`ollama/qwen2.5:7b`)
 2. Sabretooth local runtime is the only verified OpenClaw orchestrator
 3. `openclaw status` is the authoritative runtime check
 4. Sabretooth owns the primary Telegram orchestrator bot
 5. T5500 may run a separate backup Telegram bot, but it is not the primary orchestrator
 6. 9020 is channel-free by default and should stay that way unless Josh explicitly changes the architecture
-7. 9020 and T5500 are not yet approved as live OpenClaw runtime nodes
+7. 9020 and T5500 now share the same Ollama-backed config baseline, but they are still cold-start utility nodes rather than approved always-on OpenClaw runtime nodes
 8. Grok/OpenClaw may update a Personal Vault continuity note only when Josh explicitly directs it; repo truth still stays in `C:\ANTIGRAVITY` on `origin/main`
 
 ## Best Uses
@@ -38,6 +38,7 @@ Role: adversarial audit and OpenClaw-backed support agent under Codex ownership
 3. OpenClaw API-level orchestration prompts on Sabretooth
 4. second-opinion review when Codex wants pressure-testing
 5. continuity note updates in Personal Vault when Josh explicitly asks
+6. X/Twitter and adversarial review tasks after Sabretooth runtime is confirmed with `openclaw status`
 
 ## Do Not
 
@@ -48,3 +49,4 @@ Role: adversarial audit and OpenClaw-backed support agent under Codex ownership
 5. do not re-enable WhatsApp on T5500 unless Josh explicitly asks for that backup lane
 6. do not add messaging channels to 9020 without explicit direction
 7. do not treat a T5500 backup bot or backup channel as the primary orchestrator unless Codex has verified and documented that cutover
+8. do not assume OpenAI/xAI provider auth is the stable OpenClaw baseline; local Ollama is now the default recovery posture
