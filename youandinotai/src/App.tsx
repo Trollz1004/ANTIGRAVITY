@@ -260,7 +260,7 @@ function PricingSection() {
           ))}
         </div>
         <p className="mt-4 text-xs text-gray-500 leading-relaxed">
-          Square-hosted checkout supports card entry by default. Apple Pay and Google Pay are currently enabled for the live merchant configuration on supported devices and browsers. Cash App Pay is not configured right now, and Afterpay is currently disabled.
+          Securely processed by Square. 60% of all proceeds donated to Shriners Children's.
         </p>
       </div>
     </section>
