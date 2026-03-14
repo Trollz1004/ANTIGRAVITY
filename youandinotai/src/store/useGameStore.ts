@@ -5,6 +5,17 @@
 
 import { create } from 'zustand';
 
+const DEFAULT_MULTIPLAYER_URL = 'https://youandinotai-backend-731395189513.us-east1.run.app';
+
+function getWebSocketUrl() {
+  const target = new URL(import.meta.env.VITE_MULTIPLAYER_URL || DEFAULT_MULTIPLAYER_URL);
+  target.protocol = target.protocol === 'https:' ? 'wss:' : 'ws:';
+  target.pathname = '/';
+  target.search = '';
+  target.hash = '';
+  return target.toString();
+}
+
 export type Vector3 = { x: number; y: number; z: number };
 
 export interface Player {
@@ -47,9 +58,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       return;
     }
 
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.host;
-    const ws = new WebSocket(`${protocol}//${host}`);
+    const ws = new WebSocket(getWebSocketUrl());
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
