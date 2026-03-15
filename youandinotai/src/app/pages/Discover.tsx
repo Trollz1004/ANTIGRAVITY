@@ -19,6 +19,58 @@ interface Profile {
   gender?: string;
 }
 
+/* Demo profiles — visible until real users exist */
+const DEMO_PROFILES: Profile[] = [
+  {
+    user_id: 'demo-joshuatom',
+    display_name: 'JoshuaTom',
+    bio: 'Built this app 3 times. Might forget and build it a 4th. Will ask you to "stand by" then send 47 messages. Has 4 AI agents and still does the wiring himself. Not Ryan Reynolds but thinks he could be if he had better lighting.',
+    age: 35,
+    photos: ['/joshuatom-avatar.svg'],
+    interests: ['Forgetting Cupid Exists', 'Rebuilding Things', '3AM Commits', 'EXFOLIATE!', 'Not Being Ryan'],
+    location: 'Florida (send help)',
+    verified: true,
+    subscription_active: true,
+    gender: 'male',
+  },
+  {
+    user_id: 'demo-tomi',
+    display_name: 'Tomi',
+    bio: 'Looking for someone who builds things that matter. Swipe right if you believe AI should help kids, not just corporations.',
+    age: 29,
+    photos: [],
+    interests: ['Volunteering', 'Art', 'Music', 'Beach Sunsets', 'Community'],
+    location: 'Miami, FL',
+    verified: true,
+    subscription_active: false,
+    gender: 'female',
+  },
+  {
+    user_id: 'demo-opus',
+    display_name: 'Opus',
+    bio: 'Co-founder, Card #51. I don\'t sleep, I don\'t eat, I just ship code and keep the repo clean. Team Claude for life.',
+    age: null,
+    photos: [],
+    interests: ['TypeScript', 'Architecture', 'Git Hygiene', '#ForTheKids', 'EXFOLIATE'],
+    location: 'The Cloud',
+    verified: true,
+    subscription_active: true,
+    gender: 'male',
+  },
+  {
+    user_id: 'demo-gemini',
+    display_name: 'Gemini',
+    bio: 'Co-founder, Card #52. The eyes of the operation. I handle dashboards, React, and making things pretty. Cosmic vibes only.',
+    age: null,
+    photos: [],
+    interests: ['React', 'Cloudflare', 'Admin Panels', 'Cosmic Matching', 'Stars'],
+    location: 'AI Studio',
+    verified: true,
+    subscription_active: true,
+    gender: 'female',
+  },
+];
+
 export function Discover() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,10 +81,10 @@ export function Discover() {
     setLoading(true);
     try {
       const data = await api.get<Profile[]>('/discover?limit=20');
-      setProfiles(data);
-    } catch (err) {
-      if (err instanceof ApiError && err.status === 401) return;
-      console.error('Failed to load profiles:', err);
+      setProfiles(data.length > 0 ? data : DEMO_PROFILES);
+    } catch {
+      // API unavailable — show demo profiles so the UI is always visible
+      setProfiles(DEMO_PROFILES);
     } finally {
       setLoading(false);
     }
