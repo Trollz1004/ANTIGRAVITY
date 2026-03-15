@@ -1,11 +1,14 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { Heart, MessageCircle, User, LogOut, Compass } from 'lucide-react';
+import { Heart, MessageCircle, User, LogOut, Compass, Users, Calendar, HandHeart } from 'lucide-react';
 import { useAuth } from '../lib/auth';
 
 const NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolean }[] = [
   { to: '/app', icon: Compass, label: 'Discover', end: true },
   { to: '/app/matches', icon: Heart, label: 'Matches' },
   { to: '/app/inbox', icon: MessageCircle, label: 'Messages' },
+  { to: '/app/boards', icon: Users, label: 'Boards' },
+  { to: '/app/events', icon: Calendar, label: 'Events' },
+  { to: '/app/volunteer', icon: HandHeart, label: 'Volunteer' },
 ];
 
 export function AppShell() {

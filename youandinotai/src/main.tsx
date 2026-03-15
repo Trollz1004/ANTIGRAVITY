@@ -16,6 +16,9 @@ import { Matches } from './app/pages/Matches';
 import { Inbox } from './app/pages/Inbox';
 import { ProfileSetup } from './app/pages/ProfileSetup';
 import { Chat } from './app/pages/Chat';
+import { Boards } from './app/pages/Boards';
+import { Events } from './app/pages/Events';
+import { Volunteering } from './app/pages/Volunteering';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
@@ -35,9 +38,9 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/app/inbox" element={<Inbox />} />
             <Route path="/app/profile" element={<ProfileSetup />} />
             <Route path="/app/chat/:matchId" element={<Chat />} />
-            <Route path="/app/boards" element={<Navigate to="/app" replace />} />
-            <Route path="/app/events" element={<Navigate to="/app" replace />} />
-            <Route path="/app/volunteer" element={<Navigate to="/app" replace />} />
+            <Route path="/app/boards" element={<Boards />} />
+            <Route path="/app/events" element={<Events />} />
+            <Route path="/app/volunteer" element={<Volunteering />} />
             <Route path="/app/verify" element={<Navigate to="/" replace />} />
           </Route>
         </Route>
