@@ -30,12 +30,14 @@ export function AppShell() {
 
         {/* Logo section */}
         <div className="flex items-center gap-3 px-6 py-6 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg shadow-pink-500/20">
-            <Heart size={20} className="text-white" fill="white" />
-          </div>
+          <img
+            src="/fingerprint-heart.jpg"
+            alt="YouAndiNotAi"
+            className="w-10 h-10 rounded-full object-cover shadow-[0_0_15px_rgba(236,72,153,0.5)]"
+          />
           <div>
             <span className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 tracking-tight">
-              YouAndINotAI
+              You&amp;i
             </span>
             <span className="block text-[10px] text-gray-500 font-medium tracking-widest uppercase">18+ only</span>
           </div>

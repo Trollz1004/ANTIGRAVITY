@@ -104,7 +104,7 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-900/60 via-purple-900/40 to-indigo-900/60" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                  <div className="bg-pink-500 text-white px-4 py-1 font-black text-xl mb-2 rotate-[-2deg] shadow-lg">YouAndINotAI</div>
+                  <div className="bg-pink-500 text-white px-4 py-1 font-black text-xl mb-2 rotate-[-2deg] shadow-lg">YouAndiNotAi</div>
                   <div className="bg-purple-500 text-white px-4 py-1 font-black text-2xl rotate-[1deg] shadow-lg">SIGNATURE WALL</div>
                   <div className="mt-6 text-white font-bold text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                     Be one of the first to leave your mark
@@ -117,7 +117,7 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
 
               <div className="p-6 bg-pink-500/10 rounded-3xl border border-pink-500/20 space-y-4">
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  Sign the wall before launch and be recognized as a founding member of the YouAndINotAI community. Every signature is a statement: real humans, real connections.
+                  Sign the wall before launch and be recognized as a founding member of the YouAndiNotAi community. Every signature is a statement: real humans, real connections.
                 </p>
                 <div className="h-px bg-white/10 w-full" />
                 <div className="flex flex-col gap-2">

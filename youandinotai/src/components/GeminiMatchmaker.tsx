@@ -73,13 +73,13 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm pointer-events-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 via-purple-900/20 to-black backdrop-blur-sm pointer-events-auto"
     >
       <motion.div
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 20 }}
-        className="w-full max-w-lg bg-zinc-900 border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[600px]"
+        className="w-full max-w-lg bg-white/5 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden shadow-2xl flex flex-col h-[600px]"
       >
         {/* Header */}
         <div className="p-6 border-bottom border-white/5 bg-gradient-to-r from-pink-500/10 to-indigo-500/10 flex justify-between items-center">
@@ -156,7 +156,7 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
             <button
               onClick={handleSend}
               disabled={isLoading || !input.trim()}
-              className="absolute right-2 p-2 bg-pink-500 text-white rounded-xl hover:bg-pink-600 disabled:opacity-50 disabled:hover:bg-pink-500 transition-all active:scale-90"
+              className="absolute right-2 p-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white rounded-xl shadow-[0_0_10px_rgba(219,39,119,0.5)] disabled:opacity-50 transition-all active:scale-90"
             >
               <Send size={18} />
             </button>

@@ -93,7 +93,7 @@ export function CharitySection() {
             transition={{ delay: 0.2 }}
             className="mx-auto max-w-3xl text-lg font-light text-gray-400"
           >
-            YouAndINotAI keeps its launch story inside the product: Bot-Shield verification, public founder pricing,
+            YouAndiNotAi keeps its launch story inside the product: Bot-Shield verification, public founder pricing,
             and a prelaunch flow built to move from waitlist to profile setup without friction.
           </motion.p>
         </div>
@@ -146,7 +146,7 @@ export function CharitySection() {
             <div className="text-left">
               <div className="text-sm font-bold uppercase tracking-tight text-white">Launch Surface Only</div>
               <div className="text-xs text-gray-400">
-                This section stays inside YouAndINotAI: one launch surface, one checkout path, one profile flow.
+                This section stays inside YouAndiNotAi: one launch surface, one checkout path, one profile flow.
               </div>
             </div>
           </div>
