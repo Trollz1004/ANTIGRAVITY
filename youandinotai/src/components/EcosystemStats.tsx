@@ -55,7 +55,7 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
           <div>
             <div className="mb-1 flex items-center gap-2 text-blue-400">
               <Zap size={20} className="animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest">YouAndINotAI Launch Board</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">YouAndiNotAi Launch Board</span>
             </div>
             <h2 className="text-3xl font-black tracking-tighter text-white md:text-4xl">Readiness Snapshot</h2>
           </div>
@@ -113,7 +113,7 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
               <div className="space-y-4 text-sm font-medium">
                 <div className="flex items-center gap-3">
                   <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
-                  <span>Commercial surface stays inside YouAndINotAI</span>
+                  <span>Commercial surface stays inside YouAndiNotAi</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
@@ -142,7 +142,7 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
         </div>
 
         <div className="border-t border-white/5 p-6 text-center text-[10px] font-black uppercase tracking-widest text-gray-600 md:p-10">
-          YouAndINotAI launch board • one product surface • one checkout path
+          YouAndiNotAi launch board • one product surface • one checkout path
         </div>
       </motion.div>
     </motion.div>

@@ -1,5 +1,5 @@
 /**
- * YouAndINotAI — Landing Page
+ * YouAndiNotAi — Landing Page
  * Mobile-first, no WebGL dependency. Works on every device.
  *
  * @license Apache-2.0
@@ -174,7 +174,7 @@ function WaitlistForm() {
       await fetch('https://formsubmit.co/ajax/contact@youandinotai.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ email, _subject: 'YouAndINotAI Waitlist Signup', _template: 'table' }),
+        body: JSON.stringify({ email, _subject: 'YouAndiNotAi Waitlist Signup', _template: 'table' }),
       });
       setSubmitted(true);
     } catch {
@@ -271,15 +271,15 @@ function PricingSection() {
 const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   terms: {
     title: 'Terms of Service',
-    body: `By using YouAndINotAI ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. VERIFICATION FLOW — Bot-Shield verification may be required for protected features. Fraudulent verification attempts result in account action or removal.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations can result in immediate account termination.\n4. PAYMENTS — All payments are processed through Square-hosted checkout links. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndINotAI a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. BILLING — The current Bot-Shield launch flow requires both a passed liveness challenge and a completed Square payment before the verified badge is granted.\n\nLast updated: March 2026. Contact: contact@youandinotai.com`,
+    body: `By using YouAndiNotAi ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. VERIFICATION FLOW — Bot-Shield verification may be required for protected features. Fraudulent verification attempts result in account action or removal.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations can result in immediate account termination.\n4. PAYMENTS — All payments are processed through Square-hosted checkout links. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndiNotAi a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. BILLING — The current Bot-Shield launch flow requires both a passed liveness challenge and a completed Square payment before the verified badge is granted.\n\nLast updated: March 2026. Contact: contact@youandinotai.com`,
   },
   privacy: {
     title: 'Privacy Policy',
-    body: `YouAndINotAI values your privacy.\n\nDATA WE COLLECT — Email address, profile information you provide, verification-state events, and payment confirmation tied to your account.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Square (payments), FormSubmit (waitlist), and Cloudflare (hosting). Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data is encrypted in transit, and protected services use authenticated account access.\n\nLast updated: March 2026.`,
+    body: `YouAndiNotAi values your privacy.\n\nDATA WE COLLECT — Email address, profile information you provide, verification-state events, and payment confirmation tied to your account.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Square (payments), FormSubmit (waitlist), and Cloudflare (hosting). Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data is encrypted in transit, and protected services use authenticated account access.\n\nLast updated: March 2026.`,
   },
   age: {
     title: 'Age Policy',
-    body: `YouAndINotAI is strictly for users aged 18 and older.\n\nOur current launch flow does not claim government-ID verification in production. We require users to be 18+, and we reserve the right to remove accounts that appear to be underage or fraudulent.\n\nIf you believe a minor is using the Platform, report it immediately to contact@youandinotai.com.\n\nWe do not knowingly collect personal data from minors.`,
+    body: `YouAndiNotAi is strictly for users aged 18 and older.\n\nOur current launch flow does not claim government-ID verification in production. We require users to be 18+, and we reserve the right to remove accounts that appear to be underage or fraudulent.\n\nIf you believe a minor is using the Platform, report it immediately to contact@youandinotai.com.\n\nWe do not knowingly collect personal data from minors.`,
   },
   refund: {
     title: 'Refund Policy',
@@ -376,8 +376,8 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
         {/* Brand */}
         <div>
           <div className="flex items-center gap-3 mb-3">
-            <img src="/logo.png" alt="YouAndINotAI" className="w-10 h-10 rounded-full" />
-            <h4 className="text-white font-bold text-lg">YouAndINotAI</h4>
+            <img src="/fingerprint-heart.jpg" alt="YouAndiNotAi" className="w-10 h-10 rounded-full object-cover shadow-[0_0_15px_rgba(236,72,153,0.5)]" />
+            <h4 className="text-white font-bold text-lg">YouAndiNotAi</h4>
           </div>
           <p className="text-gray-400 text-sm leading-relaxed">
             A human-first dating platform built to reward verified badges and deter automated signups.
@@ -446,7 +446,7 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
           <p className="text-gray-600 text-xs">&copy; 2026 <a href="https://search.sunbiz.org/Inquiry/CorporationSearch/SearchResultDetail?inquiryType=EntityName&searchTerm=TRASH%20OR%20TREASURE%20ONLINE%20RECYCLER%20LLC&listNameOrder=TRASHORTREASUREONLINERECYCLER%20L250001584010" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400">Trash Or Treasure Online Recycler LLC</a>. All rights reserved.</p>
         </div>
         <p className="max-w-4xl mx-auto text-center text-[10px] text-gray-600 mt-6 leading-relaxed">
-          YouAndINotAI.com is a for-profit platform. Bot-Shield verification requires a passed liveness challenge plus a completed Square checkout before the verified badge is awarded.
+          YouAndiNotAi.com is a for-profit platform. Bot-Shield verification requires a passed liveness challenge plus a completed Square checkout before the verified badge is awarded.
         </p>
       </div>
     </footer>
@@ -505,9 +505,9 @@ export default function App() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="YouAndINotAI" className="w-8 h-8 rounded-full" />
+            <img src="/fingerprint-heart.jpg" alt="YouAndiNotAi" className="w-8 h-8 rounded-full object-cover shadow-[0_0_15px_rgba(236,72,153,0.5)]" />
             <span className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
-              YouAndINotAI
+              You&amp;i
             </span>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-gray-400">
@@ -536,13 +536,13 @@ export default function App() {
         <div className="max-w-3xl mx-auto">
           <div>
             <img
-              src="/logo.png"
-              alt="YouAndINotAI"
-              className="w-20 h-20 md:w-28 md:h-28 rounded-full mx-auto mb-6 shadow-lg shadow-purple-500/30"
+              src="/fingerprint-heart.jpg"
+              alt="YouAndiNotAi"
+              className="w-20 h-20 md:w-28 md:h-28 rounded-full object-cover mx-auto mb-6 shadow-[0_0_20px_rgba(236,72,153,0.5)]"
             />
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-4">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500">
-                YouAndINotAI
+                YouAndiNotAi
               </span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-2 font-light max-w-xl mx-auto leading-relaxed">
@@ -660,7 +660,7 @@ export default function App() {
       <section className="relative z-10 py-12 px-4 text-center">
         <div className="max-w-md mx-auto">
           <h2 className="text-2xl md:text-3xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">
-            Share YouAndINotAI
+            Share YouAndiNotAi
           </h2>
           <p className="text-gray-400 text-sm mb-6">Scan to visit — or share with someone who deserves real love.</p>
           <img

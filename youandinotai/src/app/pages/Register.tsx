@@ -46,7 +46,7 @@ export function Register() {
             </div>
           </Link>
           <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 tracking-tight">
-            Join YouAndINotAI
+            Join YouAndiNotAi
           </h1>
           <p className="text-gray-400 text-sm mt-2 font-medium">Real people. Real connections. For the kids.</p>
         </div>
@@ -144,7 +144,7 @@ export function Register() {
 
         <div className="text-center mt-4">
           <Link to="/" className="text-gray-600 text-xs hover:text-gray-400 transition-colors inline-flex items-center gap-1">
-            <Heart size={12} /> Back to YouAndINotAI
+            <Heart size={12} /> Back to YouAndiNotAi
           </Link>
         </div>
       </div>
