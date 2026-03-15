@@ -115,7 +115,7 @@ function CountdownTimer() {
       <h2 className="text-center text-xs uppercase tracking-[0.2em] text-gray-500 font-bold mb-4">Launching In</h2>
       <div className="flex justify-center gap-3 md:gap-4 flex-wrap">
         {units.map((u) => (
-          <div key={u.label} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 min-w-[70px] md:min-w-[90px] text-center">
+          <div key={u.label} className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-xl px-4 py-3 min-w-[70px] md:min-w-[90px] text-center shadow-[inset_0_0_20px_rgba(255,255,255,0.05)] hover:scale-105 transition-transform">
             <span className="block text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-pink-400 to-purple-500">{u.value}</span>
             <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">{u.label}</span>
           </div>
@@ -141,7 +141,7 @@ function HowItWorks() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {steps.map((s) => (
-            <div key={s.num} className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center backdrop-blur-sm hover:border-pink-500/30 transition-colors">
+            <div key={s.num} className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-center hover:border-pink-500/30 hover:scale-[1.03] transition-all duration-300 shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]">
               <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-lg mb-3">
                 {s.num}
               </div>
@@ -247,7 +247,7 @@ function PricingSection() {
               href={plan.link}
               target="_blank"
               rel="noopener noreferrer"
-              className={`block p-4 bg-gradient-to-r ${plan.bg} rounded-2xl no-underline text-white hover:scale-[1.02] transition-transform active:scale-[0.98] shadow-lg`}
+              className={`block p-4 bg-gradient-to-r ${plan.bg} rounded-2xl no-underline text-white hover:scale-[1.03] transition-all duration-300 active:scale-[0.98] shadow-[0_0_20px_rgba(139,92,246,0.15),inset_0_0_20px_rgba(255,255,255,0.1)] border border-white/10 backdrop-blur-sm`}
             >
               <div className="flex justify-between items-center">
                 <div className="text-left">
@@ -597,7 +597,7 @@ export default function App() {
                 <a
                   key={f.key}
                   href={f.href}
-                  className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-2xl hover:border-purple-500/30 transition-all text-center no-underline active:scale-95"
+                  className="flex flex-col items-center gap-2 p-4 bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl hover:border-purple-500/30 hover:scale-[1.05] transition-all duration-300 text-center no-underline active:scale-95 shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]"
                 >
                   <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${f.gradient} flex items-center justify-center shadow-lg`}>
                     <f.icon size={20} className="text-white" />
@@ -609,7 +609,7 @@ export default function App() {
                 <button
                   key={f.key}
                   onClick={() => setActiveModal('ecosystem')}
-                  className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-2xl hover:border-purple-500/30 transition-all text-center cursor-pointer active:scale-95"
+                  className="flex flex-col items-center gap-2 p-4 bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl hover:border-purple-500/30 hover:scale-[1.05] transition-all duration-300 text-center cursor-pointer active:scale-95 shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]"
                 >
                   <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${f.gradient} flex items-center justify-center shadow-lg`}>
                     <f.icon size={20} className="text-white" />
