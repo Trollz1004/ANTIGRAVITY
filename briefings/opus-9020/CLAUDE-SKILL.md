@@ -235,7 +235,7 @@ All on Cloudflare. Auto-deploy on push to main.
 
 ### CI/CD (.github/workflows/)
 - `ci-validate.yml` — Push triggers: build check, Stripe link scan, §496.405, Iron Wall
-- `deploy-cloudflare-pages.yml` — Manual dispatch for secondary sites
+- Cloudflare Pages auto-deploys from `git push` to `main` via native git integration (no manual workflow needed)
 
 ---
 

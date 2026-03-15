@@ -94,8 +94,7 @@ Key rotated 2026-02-23. **EXPIRES ~MARCH 10TH.**
 | ai-solutions.store | Cloudflare Pages | Trollz1004/ANTIGRAVITY / main | _deploy/ai-solutions-store |
 | dashboard.aidoesitall.website | Cloudflare Pages | Trollz1004/ANTIGRAVITY / main | antigravity |
 
-- Cloudflare Pages projects connected to GitHub (auto-deploy on push)
-- GitHub Actions workflow: `.github/workflows/deploy-cloudflare-pages.yml` (manual backup trigger)
+- Cloudflare Pages projects connected to GitHub (auto-deploy on push to `main` — no manual workflow needed)
 - All secrets in GitHub repo secrets (CLOUDFLARE_API_TOKEN, STRIPE_SECRET_KEY, etc.)
 - **GitHub billing alert active** — may block Actions runners. Fix or use wrangler CLI.
 
