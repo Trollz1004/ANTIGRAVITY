@@ -1,6 +1,6 @@
 # TASK-ROUTING — ANTIGRAVITY
 
-Last updated: 2026-03-13
+Last updated: 2026-03-14
 Workspace truth: `C:\ANTIGRAVITY` on `origin/main`
 
 This file defines who should do what across the current AI team.
@@ -25,7 +25,8 @@ If any tool, model, or exported note conflicts with the live repo:
 | Frontend UI polish, browser verification, bounded static-site work | Gemini | Gemini in `C:\ANTIGRAVITY` | `briefings/gemini/BRIEFING.md`, `briefings/gemini-agent-prompt.md` |
 | Research, competitor intel, policy/current-market lookups | Atlas | Comet / Perplexity | `briefings/COMET-SYNC-PROMPT.md` |
 | Audit, backend support, code review, isolated proof work | Claude | Claude on approved node/workspace | `briefings/claude-t5500/BRIEFING.md` |
-| Adversarial audits, OpenClaw orchestration prompts, harsh second-opinion pressure tests | Grok | OpenClaw API on Sabretooth only | `briefings/grok-openclaw/BRIEFING.md`, `memory/CODEX-QUICK-MEMORY.md` |
+| **Trend scraping, social media data gathering, content seeding** | **Apify Scout** | **`scripts/apify_content_scout.py` + Ollama local** | **`briefings/apify-openclaw/BRIEFING.md`** |
+| Adversarial audits, OpenClaw orchestration prompts, harsh second-opinion pressure tests | Grok | OpenClaw API on Sabretooth only — **adversarial use only, not content research** | `briefings/grok-openclaw/BRIEFING.md`, `memory/CODEX-QUICK-MEMORY.md` |
 | Repeatable local support tasks, drafts, pack generation | Mini Claudes | OpenClaw / Ollama / local scripts | routed by Codex only |
 
 ## Default Assignment Rules
@@ -47,7 +48,13 @@ If any tool, model, or exported note conflicts with the live repo:
    - aggressive architecture criticism
    - OpenClaw API-level orchestration prompts on Sabretooth
    - bounded second-opinion review when Codex wants pressure-testing
-6. Comet is best used for:
+   - **NOT for content research or trend monitoring — use Apify Scout instead**
+6. Apify Scout (`scripts/apify_content_scout.py`) is used for:
+   - social media trend scraping (X, Reddit, Google Trends)
+   - seeding `data/post-queue.json` with trend-aware posts
+   - replacing any Grok API calls that were used for marketing content research
+   - runs daily via scheduler, costs ~$0/month (Apify free tier + Ollama local)
+7. Comet is best used for:
    - read-only research
    - recommendation gathering
    - current policy/platform rules

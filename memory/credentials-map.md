@@ -1,6 +1,6 @@
 # CREDENTIALS MAP — WHERE KEYS LIVE (PATHS ONLY)
 
-**Last Updated**: 2026-03-05
+**Last Updated**: 2026-03-14
 **RULE**: This file stores PATHS to credentials, NEVER the values themselves. Values stay in vault files only.
 
 ## Vaults
@@ -74,3 +74,14 @@
 | Account | Trollz1004 |
 | PAT | Windows Credential Manager (NOT .env) |
 | Secrets | github.com/Trollz1004/ANTIGRAVITY/settings/secrets |
+
+## Apify (web scraping — trend research + content seeding)
+
+| Credential | Location |
+|------------|----------|
+| Account | console.apify.com (GitHub OAuth — signed in 2026-03-14) |
+| API Token | Vault file → `APIFY_TOKEN` ← **needs to be generated and added** |
+| Token path | Settings → Integrations → "Create new token" → name: ANTIGRAVITY |
+| Used by | `scripts/apify_content_scout.py`, `.vscode/mcp.json` (Apify MCP server) |
+| Free tier | $5/month credits, no card required |
+| Briefing | `briefings/apify-openclaw/BRIEFING.md` |
