@@ -3,6 +3,10 @@ Content Engine — Posts content from Opus-generated queue.
 Architecture: Opus (Claude Code) generates all content during sessions.
 Daemon reads from queue and posts it. Caption bank as emergency fallback.
 NO Ollama. NO Haiku. NO API calls. OPUS BRAIN ONLY.
+
+Queue can also be filled automatically by scripts/apify_content_scout.py
+(Apify trend scraping + Ollama local generation, ~$0/month).
+Run the scout daily to keep the queue full between Opus sessions.
 """
 import json
 import logging
