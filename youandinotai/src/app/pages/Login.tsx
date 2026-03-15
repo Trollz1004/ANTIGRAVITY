@@ -111,7 +111,7 @@ export function Login() {
 
         <div className="text-center mt-4">
           <Link to="/" className="text-gray-600 text-xs hover:text-gray-400 transition-colors inline-flex items-center gap-1">
-            <Heart size={12} /> Back to YouAndINotAI
+            <Heart size={12} /> Back to YouAndiNotAi
           </Link>
         </div>
       </div>
