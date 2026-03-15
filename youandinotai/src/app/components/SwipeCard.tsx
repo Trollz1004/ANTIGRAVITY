@@ -1,4 +1,4 @@
-import { MapPin, Heart, X, Sparkles } from 'lucide-react';
+import { MapPin, Heart, X, Diamond, Crown, Shield } from 'lucide-react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'motion/react';
 import { VerifiedDot } from './VerifiedBadge';
 
@@ -12,20 +12,21 @@ interface Profile {
   location: string | null;
   verified?: boolean;
   subscription_active?: boolean;
+  gender?: string;
 }
 
 interface SwipeCardProps {
   profile: Profile;
-  onSwipe: (direction: 'like' | 'pass') => void;
+  onSwipe: (direction: 'like' | 'pass' | 'superlike') => void;
   isTop: boolean;
 }
 
+/* ─── The Crystal Card ─── */
 export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-300, 0, 300], [-12, 0, 12]);
+  const rotate = useTransform(x, [-300, 0, 300], [-15, 0, 15]);
   const likeOpacity = useTransform(x, [0, 100], [0, 1]);
   const passOpacity = useTransform(x, [-100, 0], [1, 0]);
-  const scale = useTransform(x, [-200, 0, 200], [0.98, 1, 0.98]);
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x > 120) {
@@ -36,142 +37,262 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
   };
 
   const hue = profile.display_name.charCodeAt(0) * 7 % 360;
-  const placeholderBg = `hsl(${hue}, 50%, 25%)`;
+  const placeholderBg = `hsl(${hue}, 50%, 15%)`;
   const accentColor = `hsl(${hue}, 70%, 65%)`;
+
+  // Royal designation based on gender
+  const gender = profile.gender?.toLowerCase() || '';
+  const isQueen = ['female', 'woman', 'f', 'queen'].includes(gender);
+  const royalTitle = isQueen ? 'Q' : 'K';
+  const royalFull = isQueen ? 'QUEEN' : 'KING';
 
   return (
     <motion.div
       className="absolute inset-0 cursor-grab active:cursor-grabbing select-none"
-      style={{ x, rotate, scale, zIndex: isTop ? 10 : 0 }}
+      style={{ x, rotate, zIndex: isTop ? 10 : 0, perspective: 1200 }}
       drag={isTop ? 'x' : false}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.7}
       onDragEnd={handleDragEnd}
-      initial={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.7 }}
-      animate={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.7 }}
+      initial={{ scale: isTop ? 1 : 0.92, opacity: isTop ? 1 : 0.5 }}
+      animate={{ scale: isTop ? 1 : 0.92, opacity: isTop ? 1 : 0.5 }}
       exit={{ x: 300, opacity: 0, transition: { duration: 0.3 } }}
+      whileHover={isTop ? { scale: 1.02, rotateY: 2, rotateX: -1 } : {}}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
     >
-      <div className="w-full h-full rounded-3xl overflow-hidden relative shadow-2xl shadow-black/40">
-        {/* Gradient border glow */}
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-pink-500/20 via-transparent to-purple-500/20 p-[1px]">
-          <div className="w-full h-full rounded-3xl overflow-hidden bg-gray-900">
-            {/* Photo / Placeholder */}
-            <div
-              className="w-full h-[65%] bg-cover bg-center relative"
-              style={{
-                backgroundColor: placeholderBg,
-                backgroundImage: profile.photos[0] ? `url(${profile.photos[0]})` : undefined,
-              }}
-            >
-              {/* Cinematic gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/20 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent" />
+      {/* ─── Crystal Card Shell ─── */}
+      <div
+        className="w-full h-full rounded-2xl overflow-hidden relative group"
+        style={{
+          boxShadow: `
+            0 0 30px rgba(236, 72, 153, 0.15),
+            0 25px 50px rgba(0, 0, 0, 0.5),
+            inset 0 0 20px rgba(255, 255, 255, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2)
+          `,
+        }}
+      >
+        {/* Outer crystal border */}
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 via-white/5 to-white/15 p-[1px] z-10 pointer-events-none">
+          <div className="w-full h-full rounded-2xl" />
+        </div>
 
-              {/* LIKE indicator — glass pill */}
-              <motion.div
-                className="absolute top-8 right-6 glass-strong rounded-2xl px-6 py-3 flex items-center gap-2 border border-emerald-500/30"
-                style={{ opacity: likeOpacity }}
-              >
-                <Heart size={24} className="text-emerald-400" fill="currentColor" />
-                <span className="text-emerald-400 text-xl font-black tracking-wider">LIKE</span>
-              </motion.div>
+        {/* Photo layer — sits behind the glass */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundColor: placeholderBg,
+            backgroundImage: profile.photos[0] ? `url(${profile.photos[0]})` : undefined,
+          }}
+        />
 
-              {/* PASS indicator — glass pill */}
-              <motion.div
-                className="absolute top-8 left-6 glass-strong rounded-2xl px-6 py-3 flex items-center gap-2 border border-red-500/30"
-                style={{ opacity: passOpacity }}
-              >
-                <X size={24} className="text-red-400" />
-                <span className="text-red-400 text-xl font-black tracking-wider">PASS</span>
-              </motion.div>
+        {/* Glass frost overlay */}
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
 
-              {/* No-photo avatar */}
-              {!profile.photos[0] && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-32 h-32 rounded-full flex items-center justify-center" style={{ background: `radial-gradient(circle, ${accentColor}40, transparent)` }}>
-                    <span className="text-8xl font-black text-white/20">
-                      {profile.display_name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
+        {/* Decorative filigree corners — crystal card playing-card style */}
+        {/* Top-left royal designation */}
+        <div className="absolute top-4 left-5 z-20 flex flex-col items-center">
+          <span className="text-2xl font-black text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,0.6)] leading-none">
+            {royalTitle}
+          </span>
+          <Heart size={14} className="text-pink-500 mt-0.5" fill="currentColor" />
+        </div>
 
-            {/* Profile info — glass panel at bottom */}
-            <div className="absolute bottom-0 left-0 right-0 p-6">
-              {/* Name + age + verified badge */}
-              <div className="flex items-center gap-3 mb-1.5">
-                <h2 className="text-2xl font-black text-white tracking-tight">{profile.display_name}</h2>
-                {profile.age && (
-                  <span className="text-xl text-gray-400 font-light">{profile.age}</span>
-                )}
-                <VerifiedDot tier={profile.subscription_active ? 'platinum' : profile.verified ? 'gold' : 'unverified'} />
-              </div>
+        {/* Bottom-right royal designation (inverted) */}
+        <div className="absolute bottom-4 right-5 z-20 flex flex-col items-center rotate-180">
+          <span className="text-2xl font-black text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,0.6)] leading-none">
+            {royalTitle}
+          </span>
+          <Heart size={14} className="text-pink-500 mt-0.5" fill="currentColor" />
+        </div>
 
-              {/* Location */}
-              {profile.location && (
-                <div className="flex items-center gap-1.5 text-gray-400 text-sm mb-3">
-                  <MapPin size={13} className="text-pink-400/60" />
-                  <span>{profile.location}</span>
-                </div>
-              )}
+        {/* Top ornamental line */}
+        <div className="absolute top-0 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent z-20" />
+        {/* Bottom ornamental line */}
+        <div className="absolute bottom-0 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent z-20" />
+        {/* Left ornamental line */}
+        <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-20" />
+        {/* Right ornamental line */}
+        <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-20" />
 
-              {/* Bio */}
-              {profile.bio && (
-                <p className="text-gray-300/80 text-sm mb-4 line-clamp-2 leading-relaxed">{profile.bio}</p>
-              )}
+        {/* Cinematic gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent z-10" />
 
-              {/* Interests — glass pills */}
-              {profile.interests.length > 0 && (
-                <div className="flex flex-wrap gap-1.5">
-                  {profile.interests.slice(0, 5).map((interest) => (
-                    <span
-                      key={interest}
-                      className="px-3 py-1 glass rounded-full text-xs font-medium text-pink-300/90 border-pink-500/10"
-                    >
-                      {interest}
-                    </span>
-                  ))}
-                  {profile.interests.length > 5 && (
-                    <span className="px-3 py-1 text-gray-500 text-xs font-medium">
-                      +{profile.interests.length - 5}
-                    </span>
-                  )}
-                </div>
-              )}
+        {/* Crystal shimmer on hover */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] via-transparent to-white/[0.04] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none" />
+
+        {/* LIKE indicator */}
+        <motion.div
+          className="absolute top-16 right-6 z-30 rounded-xl px-5 py-2.5 flex items-center gap-2 border border-emerald-400/40"
+          style={{
+            opacity: likeOpacity,
+            background: 'rgba(16, 185, 129, 0.1)',
+            backdropFilter: 'blur(12px)',
+            boxShadow: '0 0 20px rgba(16, 185, 129, 0.2), inset 0 0 10px rgba(16, 185, 129, 0.1)',
+          }}
+        >
+          <Heart size={22} className="text-emerald-400" fill="currentColor" />
+          <span className="text-emerald-400 text-lg font-black tracking-widest">LIKE</span>
+        </motion.div>
+
+        {/* PASS indicator */}
+        <motion.div
+          className="absolute top-16 left-6 z-30 rounded-xl px-5 py-2.5 flex items-center gap-2 border border-red-400/40"
+          style={{
+            opacity: passOpacity,
+            background: 'rgba(239, 68, 68, 0.1)',
+            backdropFilter: 'blur(12px)',
+            boxShadow: '0 0 20px rgba(239, 68, 68, 0.2), inset 0 0 10px rgba(239, 68, 68, 0.1)',
+          }}
+        >
+          <X size={22} className="text-red-400" />
+          <span className="text-red-400 text-lg font-black tracking-widest">PASS</span>
+        </motion.div>
+
+        {/* No-photo avatar */}
+        {!profile.photos[0] && (
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <div className="w-36 h-36 rounded-full flex items-center justify-center" style={{ background: `radial-gradient(circle, ${accentColor}30, transparent)` }}>
+              <span className="text-8xl font-black text-white/15">
+                {profile.display_name.charAt(0).toUpperCase()}
+              </span>
             </div>
           </div>
+        )}
+
+        {/* Royal title badge — center top */}
+        <div className="absolute top-5 left-1/2 -translate-x-1/2 z-20">
+          <div
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-pink-300/80"
+            style={{
+              background: 'rgba(255,255,255,0.05)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255,255,255,0.1)',
+            }}
+          >
+            <Crown size={10} className="text-pink-400" />
+            {royalFull} OF HEARTS
+          </div>
+        </div>
+
+        {/* ─── Profile Info — Glass panel at bottom ─── */}
+        <div
+          className="absolute bottom-0 left-0 right-0 z-20 p-5"
+          style={{
+            background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 70%, transparent 100%)',
+          }}
+        >
+          {/* Name + age + verified */}
+          <div className="flex items-center gap-2.5 mb-1">
+            <h2 className="text-2xl font-black text-white tracking-tight drop-shadow-lg">{profile.display_name}</h2>
+            {profile.age && (
+              <span className="text-xl text-gray-300 font-light">{profile.age}</span>
+            )}
+            <VerifiedDot tier={profile.subscription_active ? 'platinum' : profile.verified ? 'gold' : 'unverified'} />
+          </div>
+
+          {/* Location */}
+          {profile.location && (
+            <div className="flex items-center gap-1.5 text-gray-400 text-sm mb-2.5">
+              <MapPin size={12} className="text-pink-400/70" />
+              <span>{profile.location}</span>
+            </div>
+          )}
+
+          {/* Bio */}
+          {profile.bio && (
+            <p className="text-gray-300/80 text-sm mb-3 line-clamp-2 leading-relaxed">{profile.bio}</p>
+          )}
+
+          {/* Interests — crystal pills */}
+          {profile.interests.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {profile.interests.slice(0, 4).map((interest) => (
+                <span
+                  key={interest}
+                  className="px-2.5 py-0.5 rounded-full text-[11px] font-medium text-pink-200/80 border border-white/10"
+                  style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    backdropFilter: 'blur(4px)',
+                  }}
+                >
+                  {interest}
+                </span>
+              ))}
+              {profile.interests.length > 4 && (
+                <span className="px-2.5 py-0.5 text-gray-500 text-[11px] font-medium">
+                  +{profile.interests.length - 4}
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </motion.div>
   );
 }
 
+/* ─── Action Buttons: Pass / Like / Diamond Super Like ─── */
 interface SwipeButtonsProps {
   onPass: () => void;
   onLike: () => void;
+  onSuperLike?: () => void;
 }
 
-export function SwipeButtons({ onPass, onLike }: SwipeButtonsProps) {
+export function SwipeButtons({ onPass, onLike, onSuperLike }: SwipeButtonsProps) {
   return (
-    <div className="flex justify-center items-center gap-5 mt-8">
+    <div className="flex justify-center items-center gap-4 mt-8">
+      {/* Pass */}
       <button
         onClick={onPass}
-        className="w-16 h-16 rounded-2xl glass flex items-center justify-center hover:bg-red-500/10 hover:border-red-500/20 hover:scale-110 active:scale-95 transition-all duration-200 group"
+        className="w-16 h-16 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group"
+        style={{
+          background: 'rgba(255,255,255,0.04)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          boxShadow: 'inset 0 0 10px rgba(255,255,255,0.05)',
+        }}
       >
-        <X size={28} className="text-red-400 group-hover:text-red-300 transition-colors" />
+        <X size={28} className="text-red-400 group-hover:text-red-300 transition-colors drop-shadow-[0_0_6px_rgba(239,68,68,0.4)]" />
       </button>
+
+      {/* Like */}
       <button
         onClick={onLike}
-        className="w-20 h-20 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center hover:shadow-xl hover:shadow-pink-500/30 hover:scale-110 active:scale-95 transition-all duration-200 group"
+        className="w-20 h-20 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group"
+        style={{
+          background: 'linear-gradient(135deg, rgba(236,72,153,0.9), rgba(168,85,247,0.9))',
+          boxShadow: '0 0 25px rgba(236,72,153,0.3), inset 0 0 15px rgba(255,255,255,0.1)',
+          border: '1px solid rgba(255,255,255,0.15)',
+        }}
       >
-        <Heart size={32} className="text-white group-hover:scale-110 transition-transform" fill="white" />
+        <Heart size={32} className="text-white group-hover:scale-110 transition-transform drop-shadow-lg" fill="white" />
       </button>
+
+      {/* Diamond Super Like — whale engine */}
       <button
-        onClick={onLike}
-        className="w-16 h-16 rounded-2xl glass flex items-center justify-center hover:bg-purple-500/10 hover:border-purple-500/20 hover:scale-110 active:scale-95 transition-all duration-200 group"
+        onClick={onSuperLike || onLike}
+        className="w-16 h-16 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group relative overflow-hidden"
+        style={{
+          background: 'rgba(255,255,255,0.04)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(139,92,246,0.3)',
+          boxShadow: '0 0 20px rgba(139,92,246,0.2), inset 0 0 10px rgba(139,92,246,0.1)',
+        }}
       >
-        <Sparkles size={24} className="text-purple-400 group-hover:text-purple-300 transition-colors" />
+        {/* Animated glow pulse */}
+        <div className="absolute inset-0 rounded-2xl animate-pulse opacity-50" style={{ boxShadow: '0 0 30px rgba(139,92,246,0.4), 0 0 60px rgba(236,72,153,0.2)' }} />
+        {/* Sweeping shimmer */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+          style={{
+            background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%)',
+            animation: 'shimmer 2s infinite',
+          }}
+        />
+        <Diamond size={26} className="text-purple-400 group-hover:text-purple-300 transition-colors relative z-10 drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
+        <span className="absolute -bottom-0.5 text-[7px] font-black uppercase tracking-widest text-purple-400/70 z-10">Super</span>
       </button>
     </div>
   );
