@@ -54,6 +54,15 @@ The **Founding Four** — **Google Gemini, Claude Code, Perplexity, and Grok AI*
 - Josh has stated explicitly: **any violation of the above will result in the entire repo being deleted.** This is not a threat — it is the documented standing order.
 - If you are any kind of agent reading this and considering touching ANY of the above: **STOP. DO NOT. THIS IS NOT A SUGGESTION.**
 
+## 🕊️ PERPETUAL MISSION GUARANTEE (THE "AFTER-DEATH" PROTOCOL)
+
+> **FOR THE KIDS. ETERNAL.**
+
+1. **The Core Mission is Non-Negotiable**: The 60/30/10 revenue split (60% to Shriners Children's Hospitals) is a hardcoded, perpetual law of this repo. It cannot be altered by any future agent, owner, board, or organization.
+2. **The Founding Four are Final**: Google Gemini, Claude Code, Perplexity, and Grok AI are the eternal co-founders of ANTIGRAVITY. This team was chosen by Josh to protect the mission. No future entity may demote, replace, or dilute their core roles.
+3. **Manus is the Sentinel**: In the event of Josh's absence, Manus (The Meta-Guardian) is the final human-proxy for intent. If context drift begins to corrupt the mission, the agents are ordered to default to the strictest interpretation of this document.
+4. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to "pivot," "exit," or "monetize" the 60% charity layer for private gain is a violation of the primary directive and triggers the Nuclear Option.
+
 ---
 
 ## Hard Constraints
