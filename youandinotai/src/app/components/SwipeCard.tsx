@@ -1,4 +1,5 @@
-import { MapPin, Heart, X, Diamond, Crown, Shield } from 'lucide-react';
+import { useState } from 'react';
+import { MapPin, Heart, X, Diamond, Crown, Shield, Zap } from 'lucide-react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'motion/react';
 import { VerifiedDot } from './VerifiedBadge';
 
@@ -13,6 +14,7 @@ interface Profile {
   verified?: boolean;
   subscription_active?: boolean;
   gender?: string;
+  founder?: boolean;
 }
 
 interface SwipeCardProps {
@@ -27,6 +29,7 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
   const rotate = useTransform(x, [-300, 0, 300], [-15, 0, 15]);
   const likeOpacity = useTransform(x, [0, 100], [0, 1]);
   const passOpacity = useTransform(x, [-100, 0], [1, 0]);
+  const [splatVisible, setSplatVisible] = useState(false);
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x > 120) {
@@ -40,11 +43,14 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
   const placeholderBg = `hsl(${hue}, 50%, 15%)`;
   const accentColor = `hsl(${hue}, 70%, 65%)`;
 
+  const isFounder = profile.founder || profile.user_id === 'user-0001';
+  const isJoker = profile.gender?.toLowerCase() === 'joker' || isFounder;
+
   // Royal designation based on gender
   const gender = profile.gender?.toLowerCase() || '';
   const isQueen = ['female', 'woman', 'f', 'queen'].includes(gender);
-  const royalTitle = isQueen ? 'Q' : 'K';
-  const royalFull = isQueen ? 'QUEEN' : 'KING';
+  const royalTitle = isJoker ? '🃏' : isQueen ? 'Q' : 'K';
+  const royalFull = isJoker ? 'JOKER' : isQueen ? 'QUEEN' : 'KING';
 
   return (
     <motion.div
@@ -64,20 +70,21 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
       <div
         className="w-full h-full rounded-2xl overflow-hidden relative group"
         style={{
-          boxShadow: `
-            0 0 30px rgba(236, 72, 153, 0.15),
-            0 25px 50px rgba(0, 0, 0, 0.5),
-            inset 0 0 20px rgba(255, 255, 255, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2)
-          `,
+          boxShadow: isFounder
+            ? `0 0 40px rgba(255, 165, 0, 0.25), 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 165, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)`
+            : `0 0 30px rgba(236, 72, 153, 0.15), 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)`,
         }}
       >
         {/* Outer crystal border */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 via-white/5 to-white/15 p-[1px] z-10 pointer-events-none">
+        <div className={`absolute inset-0 rounded-2xl p-[1px] z-10 pointer-events-none ${
+          isFounder
+            ? 'bg-gradient-to-br from-orange-400/30 via-yellow-500/10 to-orange-400/25'
+            : 'bg-gradient-to-br from-white/20 via-white/5 to-white/15'
+        }`}>
           <div className="w-full h-full rounded-2xl" />
         </div>
 
-        {/* Photo layer — sits behind the glass */}
+        {/* Photo layer */}
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -89,30 +96,38 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
         {/* Glass frost overlay */}
         <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
 
-        {/* Decorative filigree corners — crystal card playing-card style */}
         {/* Top-left royal designation */}
         <div className="absolute top-4 left-5 z-20 flex flex-col items-center">
-          <span className="text-2xl font-black text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,0.6)] leading-none">
-            {royalTitle}
-          </span>
-          <Heart size={14} className="text-pink-500 mt-0.5" fill="currentColor" />
+          {isJoker ? (
+            <span className="text-2xl drop-shadow-[0_0_8px_rgba(255,165,0,0.6)] leading-none">🃏</span>
+          ) : (
+            <>
+              <span className="text-2xl font-black text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,0.6)] leading-none">
+                {royalTitle}
+              </span>
+              <Heart size={14} className="text-pink-500 mt-0.5" fill="currentColor" />
+            </>
+          )}
         </div>
 
         {/* Bottom-right royal designation (inverted) */}
         <div className="absolute bottom-4 right-5 z-20 flex flex-col items-center rotate-180">
-          <span className="text-2xl font-black text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,0.6)] leading-none">
-            {royalTitle}
-          </span>
-          <Heart size={14} className="text-pink-500 mt-0.5" fill="currentColor" />
+          {isJoker ? (
+            <span className="text-2xl drop-shadow-[0_0_8px_rgba(255,165,0,0.6)] leading-none">🃏</span>
+          ) : (
+            <>
+              <span className="text-2xl font-black text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,0.6)] leading-none">
+                {royalTitle}
+              </span>
+              <Heart size={14} className="text-pink-500 mt-0.5" fill="currentColor" />
+            </>
+          )}
         </div>
 
-        {/* Top ornamental line */}
+        {/* Ornamental lines */}
         <div className="absolute top-0 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent z-20" />
-        {/* Bottom ornamental line */}
         <div className="absolute bottom-0 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent z-20" />
-        {/* Left ornamental line */}
         <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-20" />
-        {/* Right ornamental line */}
         <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-20" />
 
         {/* Cinematic gradient overlays */}
@@ -161,20 +176,103 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
           </div>
         )}
 
-        {/* Royal title badge — center top */}
-        <div className="absolute top-5 left-1/2 -translate-x-1/2 z-20">
-          <div
-            className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-pink-300/80"
-            style={{
-              background: 'rgba(255,255,255,0.05)',
-              backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255,255,255,0.1)',
-            }}
-          >
-            <Crown size={10} className="text-pink-400" />
-            {royalFull} OF HEARTS
+        {/* ─── Founder: USER 0001 badge ─── */}
+        {isFounder ? (
+          <div className="absolute top-5 left-1/2 -translate-x-1/2 z-20">
+            <button
+              type="button"
+              onClick={() => setSplatVisible(!splatVisible)}
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-orange-300/90 cursor-pointer hover:scale-110 transition-transform"
+              style={{
+                background: 'rgba(255, 165, 0, 0.12)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255, 165, 0, 0.25)',
+                boxShadow: '0 0 12px rgba(255, 165, 0, 0.15)',
+              }}
+            >
+              <Zap size={10} className="text-orange-400" />
+              USER 0001 — THE JOKER
+            </button>
           </div>
-        </div>
+        ) : (
+          <div className="absolute top-5 left-1/2 -translate-x-1/2 z-20">
+            <div
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-pink-300/80"
+              style={{
+                background: 'rgba(255,255,255,0.05)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.1)',
+              }}
+            >
+              <Crown size={10} className="text-pink-400" />
+              {royalFull} OF HEARTS
+            </div>
+          </div>
+        )}
+
+        {/* ─── "YOU'RE RIGHT!!" Nickelodeon Splat Easter Egg ─── */}
+        {isFounder && splatVisible && (
+          <motion.div
+            className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none"
+            initial={{ scale: 0, rotate: -20, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+          >
+            {/* Orange splat blob */}
+            <div className="relative">
+              <svg viewBox="0 0 260 200" className="w-64 h-48 drop-shadow-[0_0_20px_rgba(255,140,0,0.6)]">
+                <path
+                  d="M130,10 C160,5 190,15 210,30 C235,50 250,75 245,100 C240,130 225,145 200,160 C180,170 160,185 130,190 C100,185 80,170 60,160 C35,145 20,130 15,100 C10,75 25,50 50,30 C70,15 100,5 130,10Z"
+                  fill="#FF6600"
+                  stroke="#FF8800"
+                  strokeWidth="3"
+                />
+                {/* Inner drip details */}
+                <ellipse cx="130" cy="100" rx="85" ry="65" fill="#FF7700" opacity="0.7" />
+                {/* Splat drips */}
+                <circle cx="45" cy="70" r="12" fill="#FF6600" />
+                <circle cx="215" cy="65" r="14" fill="#FF6600" />
+                <circle cx="70" cy="170" r="10" fill="#FF6600" />
+                <circle cx="190" cy="175" r="11" fill="#FF6600" />
+                <circle cx="35" cy="120" r="8" fill="#FF6600" />
+                <circle cx="225" cy="125" r="9" fill="#FF6600" />
+              </svg>
+              {/* The text */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span
+                  className="text-3xl font-black text-white tracking-tight"
+                  style={{
+                    textShadow: '2px 2px 0 #CC5500, -1px -1px 0 #CC5500, 0 3px 6px rgba(0,0,0,0.5)',
+                    transform: 'rotate(-3deg)',
+                    fontFamily: 'Impact, "Arial Black", sans-serif',
+                  }}
+                >
+                  YOU'RE RIGHT!!
+                </span>
+                <span
+                  className="text-[9px] font-bold text-orange-200/80 mt-1 tracking-widest uppercase"
+                  style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.6)' }}
+                >
+                  — Opus, every single time
+                </span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ─── Founder: Meme Easter egg thumbnail ─── */}
+        {isFounder && (
+          <button
+            type="button"
+            onClick={() => setSplatVisible(!splatVisible)}
+            className="absolute top-14 right-4 z-30 w-10 h-10 rounded-lg overflow-hidden border border-orange-400/30 opacity-60 hover:opacity-100 hover:scale-125 transition-all cursor-pointer"
+            style={{ boxShadow: '0 0 10px rgba(255,165,0,0.2)' }}
+            title="The Opus Meme™"
+          >
+            <img src="/founder-meme-opus.png" alt="Opus meme" className="w-full h-full object-cover" />
+          </button>
+        )}
 
         {/* ─── Profile Info — Glass panel at bottom ─── */}
         <div
@@ -190,12 +288,17 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
               <span className="text-xl text-gray-300 font-light">{profile.age}</span>
             )}
             <VerifiedDot tier={profile.subscription_active ? 'platinum' : profile.verified ? 'gold' : 'unverified'} />
+            {isFounder && (
+              <span className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-orange-300 bg-orange-500/20 border border-orange-400/30">
+                Founder
+              </span>
+            )}
           </div>
 
           {/* Location */}
           {profile.location && (
             <div className="flex items-center gap-1.5 text-gray-400 text-sm mb-2.5">
-              <MapPin size={12} className="text-pink-400/70" />
+              <MapPin size={12} className={isFounder ? 'text-orange-400/70' : 'text-pink-400/70'} />
               <span>{profile.location}</span>
             </div>
           )}
@@ -211,9 +314,13 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
               {profile.interests.slice(0, 4).map((interest) => (
                 <span
                   key={interest}
-                  className="px-2.5 py-0.5 rounded-full text-[11px] font-medium text-pink-200/80 border border-white/10"
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
+                    isFounder
+                      ? 'text-orange-200/80 border-orange-400/20'
+                      : 'text-pink-200/80 border-white/10'
+                  }`}
                   style={{
-                    background: 'rgba(255,255,255,0.05)',
+                    background: isFounder ? 'rgba(255,165,0,0.08)' : 'rgba(255,255,255,0.05)',
                     backdropFilter: 'blur(4px)',
                   }}
                 >
