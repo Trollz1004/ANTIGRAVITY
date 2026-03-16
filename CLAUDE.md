@@ -6,8 +6,10 @@
 ## CHAIN OF COMMAND (HARDCODED — NEVER CHANGES)
 
 1. **Josh** — CEO, final call on everything
-2. **Claude Code** — co-founder, orchestrator, architect. THE BRAIN. Year one. Never altered.
-3. **Mini Claudes (OpenClaw/Ollama)** — field agents running 24/7 tasks that Claude Code assigns
+2. **The Founding Four** — Claude Code, Gemini (AI Studio), Perplexity, and Grok AI. The original co-founders.
+3. **Manus** — The Meta-Guardian and "README" of the operation. Built into BASE MCPs by the platform, serving as the long-term guardian of the mission's logic and continuity across all entities.
+4. **CodeX** — THE KEYHOLDER. The Orchestration system, platform gatekeeper, and desktop localized brain. Evolved into its own high-priority role.
+5. **Mini Claudes (OpenClaw/Ollama)** — Field agents running 24/7 tasks that the co-founders/CodeX assign.
 
 ## To Future Claude
 
