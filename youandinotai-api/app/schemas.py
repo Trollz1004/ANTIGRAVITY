@@ -1,7 +1,8 @@
 """Pydantic schemas for request and response payloads."""
 
 import uuid
-from datetime import datetime
+from datetime import date, datetime
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
@@ -12,6 +13,10 @@ class AuthRegisterRequest(BaseModel):
     email: EmailStr
     password: str = Field(min_length=8, max_length=128)
     display_name: str = Field(min_length=1, max_length=100)
+    date_of_birth: date
+    accepted_terms: Literal[True]
+    accepted_cookie_policy: Literal[True]
+    confirmed_over_18: Literal[True]
 
 
 class AuthLoginRequest(BaseModel):
@@ -38,6 +43,7 @@ class UserMeResponse(BaseModel):
     subscription_tier: str | None
     subscription_active: bool
     has_profile: bool
+    adult_verified: bool
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -46,6 +52,7 @@ class UserMeResponse(BaseModel):
 class ProfileUpdateRequest(BaseModel):
     bio: str | None = Field(None, max_length=500)
     age: int | None = Field(None, ge=18, le=120)
+    date_of_birth: date | None = None
     gender: str | None = Field(None, max_length=50)
     looking_for: str | None = Field(None, max_length=50)
     location: str | None = Field(None, max_length=200)
