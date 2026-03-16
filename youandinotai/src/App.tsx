@@ -58,9 +58,14 @@ function ModalLoader() {
   );
 }
 
-/* ─── Static Stars Background (CSS only, zero animation) ─── */
-function StarsBackground() {
-  return <div className="fixed inset-0 z-0 stars-bg" />;
+/* ─── Hero Background (OG cosmic heart image, fixed) ─── */
+function HeroBackground() {
+  return (
+    <>
+      <div className="fixed inset-0 z-0 hero-bg" />
+      <div className="fixed inset-0 z-0 hero-bg-overlay" />
+    </>
+  );
 }
 
 /* ─── Sticky CTA ─── */
@@ -498,8 +503,8 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-black text-white font-sans scroll-smooth pb-cta">
-      {/* Static Stars Background */}
-      <StarsBackground />
+      {/* Hero Background — Cosmic Heart OG Image */}
+      <HeroBackground />
 
       {/* Fixed Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">

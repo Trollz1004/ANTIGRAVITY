@@ -5,7 +5,7 @@ import hmac
 import inspect
 import json
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from unittest.mock import AsyncMock
 
 from fastapi.routing import APIRoute, APIWebSocketRoute
@@ -23,7 +23,15 @@ def _auth_headers(token: str) -> dict[str, str]:
 def _register(client, email: str, password: str = "supersecret", display_name: str = "Launch User"):
     response = client.post(
         "/api/v1/auth/register",
-        json={"email": email, "password": password, "display_name": display_name},
+        json={
+            "email": email,
+            "password": password,
+            "display_name": display_name,
+            "date_of_birth": (date.today() - timedelta(days=365 * 21)).isoformat(),
+            "accepted_terms": True,
+            "accepted_cookie_policy": True,
+            "confirmed_over_18": True,
+        },
     )
     assert response.status_code == 201, response.text
     return response.json()
@@ -109,6 +117,24 @@ def test_verify_rate_limit_is_active(client):
 
     assert last_response is not None
     assert last_response.status_code == 429
+
+
+def test_register_rejects_underage_user(client):
+    response = client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "minor@example.com",
+            "password": "supersecret",
+            "display_name": "Too Young",
+            "date_of_birth": (date.today() - timedelta(days=365 * 17)).isoformat(),
+            "accepted_terms": True,
+            "accepted_cookie_policy": True,
+            "confirmed_over_18": True,
+        },
+    )
+
+    assert response.status_code == 400
+    assert "strictly 18+ only" in response.text
 
 
 def test_verify_submit_returns_square_checkout_link(client, db_session_factory, monkeypatch):

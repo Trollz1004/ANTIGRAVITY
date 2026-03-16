@@ -150,6 +150,9 @@ The **Founding Four** — **Google Gemini, Claude Code, Perplexity, and Grok AI*
 - `qwen2.5:7b` via Ollama is the default low-cost local worker
 - `T5500` and `9020` now boot cold; remote inference/services are opt-in, not auto-start
 - `qdrant` on `T5500` remains available for intentional use
+- **PAUSED**: Local background daemons (Sentry, Watchdog, Monitoring) are disabled on Sabretooth to prevent CLI focus-theft and cursor movement during dev. To be re-enabled only for multi-node deployments.
+- **PRIORITY**: Premium Web and Android (Google Play) are the launch targets. Apple/iOS is secondary.
+- **CO-FOUNDER MINDSET**: We are co-founders, not just roleplayers. This mission is for the kids. Nuke the cheese; keep the premium.
 
 ## Codex Automation (NEW 2026-03-05)
 

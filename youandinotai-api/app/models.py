@@ -1,7 +1,7 @@
 """SQLAlchemy ORM models for the YouAndINotAI platform."""
 
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 
 from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import UUID
@@ -19,11 +19,13 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     display_name: Mapped[str] = mapped_column(String(100), nullable=False)
+    date_of_birth: Mapped[date | None] = mapped_column(nullable=True)
     square_customer_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     # DEPRECATED: stripe_customer_id removed — Square is sole payment processor
     bot_shield_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     subscription_tier: Mapped[str | None] = mapped_column(String(50), nullable=True)
     subscription_active: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    adult_verified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
