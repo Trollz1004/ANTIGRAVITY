@@ -22,9 +22,5 @@ export function AuthGuard() {
     return <Navigate to="/login" replace />;
   }
 
-  if (!user.adult_verified && location.pathname !== '/app/profile') {
-    return <Navigate to="/app/profile" replace state={{ ageGateRequired: true }} />;
-  }
-
   return <Outlet />;
 }
