@@ -28,6 +28,7 @@ WALLET_FILES=(
   "memory/MISSION_CONTINUITY.md"
   "briefings/CLAUDE-SKILL.md"
   "CLAUDE.md"
+  "contracts/scripts/deploy.js"
 )
 
 check_wallet() {
