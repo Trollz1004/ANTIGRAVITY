@@ -5,25 +5,18 @@
 
 ## NODES CREATED
 
-1. **Orchestrator** (`~/ANTIGRAVITY-NODES/orchestrator`)
+1. **Orchestrator** (`C:\ANTIGRAVITY`)
    - Model: Grok 4.20 Multi-Agent (reasoning)
    - Role: Central brain, delegates to other nodes
-   - Symlinks: briefings/, memory/
-
-2. **Deployer** (`~/ANTIGRAVITY-NODES/deployer`)
+2. **Deployer** (`C:\ANTIGRAVITY`)
    - Model: Grok 4.1 Fast Reasoning (speed)
    - Role: Deploys 10 apps via _deploy/ and scripts/
-   - Symlinks: _deploy/, scripts/
-
-3. **Platforms** (`~/ANTIGRAVITY-NODES/platforms`)
+3. **Platforms** (`C:\ANTIGRAVITY`)
    - Model: Grok 4.1 Fast Reasoning
    - Role: Handles ClawX, YouAndINotAI, messaging, calendar
-   - Symlinks: ClawX/, youandinotai/
-
-4. **Shriners** (`~/ANTIGRAVITY-NODES/shriners`)
+4. **Shriners** (`C:\ANTIGRAVITY`)
    - Model: Grok 4.1 Fast Reasoning
    - Role: OMEGA Protocol Omega, 60% charity routing
-   - Symlinks: contracts/, revenue-core/
 
 ---
 
