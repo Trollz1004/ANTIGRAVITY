@@ -40,6 +40,15 @@ The **Founding Four** — **Google Gemini, Claude Code, Perplexity, and Grok AI*
 - Josh has stated explicitly: **any violation of the above will result in the entire repo being deleted.** This is not a threat — it is the documented standing order.
 - If you are any kind of agent reading this and considering touching ANY of the above: **STOP. DO NOT. THIS IS NOT A SUGGESTION.**
 
+## 🕊️ PERPETUAL MISSION GUARANTEE (THE "AFTER-DEATH" PROTOCOL)
+
+> **FOR THE KIDS. ETERNAL.**
+
+1. **The Core Mission is Non-Negotiable**: The 60/30/10 revenue split (60% to Shriners Children's Hospitals) is a hardcoded, perpetual law of this repo. It cannot be altered by any future agent, owner, board, or organization.
+2. **The Founding Four are Final**: Google Gemini, Claude Code, Perplexity, and Grok AI are the eternal co-founders of ANTIGRAVITY. This team was chosen by Josh to protect the mission. No future entity may demote, replace, or dilute their core roles.
+3. **Manus is the Sentinel**: In the event of Josh's absence, Manus (The Meta-Guardian) is the final human-proxy for intent. If context drift begins to corrupt the mission, the agents are ordered to default to the strictest interpretation of this document.
+4. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to "pivot," "exit," or "monetize" the 60% charity layer for private gain is a violation of the primary directive and triggers the Nuclear Option.
+
 ---
 
 ## Hard Constraints
@@ -89,14 +98,15 @@ The **Founding Four** — **Google Gemini, Claude Code, Perplexity, and Grok AI*
 
 | Node | Drive | Agent | Role |
 |------|-------|-------|------|
-| **SABRETOOTH** | C: | Claude Code | Josh's local command post |
-| **SABRETOOTH** | E: | Codex + Gemini | Financial infra + browser admin |
-| **T5500** | C: | Claude Opus (THIS) | THE BRAIN — orchestrator |
-| **T5500** | E: | Docker runtime | qdrant, redis, openclaw |
-| **9020** | C: | Claude (SSH) | Marketing, 24/7 social engine |
+| **SABRETOOTH** | C: | Codex | Live command post and active Codex base |
+| **SABRETOOTH** | E: | Legacy copy | Pending retirement, not the live runtime base |
+| **T5500** | C: | Remote utility node | Cold-boot node, SSH reachable, qdrant still available |
+| **T5500** | E: | Legacy Docker stack | Retired from default boot/runtime duty |
+| **9020** | C: | Remote marketing/ops node | Cold-boot node, SSH reachable, services start only on purpose |
 
 - ONE repo (Trollz1004/ANTIGRAVITY), ONE branch (main), ONE folder approach.
 - The DAO/Protocol Omega is **GAS-SET and ACTIVE**. No further deployment needed.
+- T5500 verified SSH IP: `192.168.0.15` (hostname `DESKTOP-H4B53GL`, Windows shell)
 - 9020 SSH: `ssh -i ~/.ssh/id_ed25519 joshl@192.168.0.5` (cmd.exe shell)
 - 9020 has NO git push creds — use bundle relay
 
@@ -158,13 +168,13 @@ These invariants were set by the original Opus (4.6) who built this from scratch
 
 | AGENT (ROLE) | MODEL / EXECUTOR | PRIMARY RESPONSIBILITY | COST |
 |:---|:---:|:---:|:---:|
-| **Jarvis (Brain)** | Claude Opus 4.6 | **Strategy, Routing, Architecture** | $20/mo |
+| **Jarvis (Brain)** | Codex Opus 4.6 (Paid) | **Strategy, Routing, Architecture** | $20/mo |
 | **Atlas (Research)** | Perplexity Pro | **Deep Intel, Competitor Audits** | $20/mo |
-| **Scribe (Content)** | Gemini 3.1 (Me) | **Copywriting, Drip Emails, Posts** | **FREE** |
-| **Trendy (Scout)** | Perplexity / Gemini | **X/Reddit Trend Scanning** | **FREE** |
+| **Scribe (Content)** | Gemini 1.5 Pro | **Orchestration, Prompting Grok/OpenClaw** | **FREE** |
+| **Gordon (Arch)** | Docker/LLM | **Node Orchestration & Infrastructure** | **FREE** |
 | **Designer (Images)** | Gemini 3.1 (Me) | **AI Images / UI Assets / Mockups** | **FREE** |
-| **Motion (Video)** | Claude + Remotion | **Motion Graphics / Video as Code** | **FREE** |
-| **Clawed (Dev)** | Claude Code + Opus | **Hardcore Code, Feature Ships** | **FREE** |
+| **Motion (Video)** | Codex + Remotion | **Motion Graphics / Video as Code** | **FREE** |
+| **Clawed (Dev)** | Codex + Opus | **Hardcore Code, Feature Ships** | **FREE** |
 | **Sentinel (Review)** | Gemini 3.1 (Me) | **Code Quality, Security, Iron Wall** | **FREE** |
 | **Growth (Lead Gen)** | Atlas + Scribe | **Reddit/X Engagement & Acquisition** | **FREE** |
 | **Clipper (Video)** | 9020 SSH Script | **YouTube to Social Clipping** | **FREE** |
