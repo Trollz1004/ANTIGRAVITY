@@ -276,10 +276,10 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
             >
               {/* Troll avatar — the bait */}
               <div
-                className="w-9 h-9 rounded-full overflow-hidden border-2 border-orange-400/50 group-hover:border-orange-400 group-hover:scale-110 transition-all"
+                className="w-10 h-10 rounded-lg overflow-hidden border-2 border-orange-400/50 group-hover:border-orange-400 group-hover:scale-110 transition-all flex-shrink-0"
                 style={{ boxShadow: '0 0 12px rgba(255,165,0,0.3)' }}
               >
-                <img src="/trollz-discord.png" alt="" className="w-full h-full object-cover object-top scale-150" />
+                <img src="/trollz-discord.png" alt="" className="w-full h-full object-cover" />
               </div>
 
               {/* Chat bubble with thinking dots */}
