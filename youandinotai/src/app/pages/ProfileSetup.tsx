@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Camera, MapPin, Sparkles, Check, ShieldAlert } from 'lucide-react';
+import { User, Camera, MapPin, Sparkles, Check } from 'lucide-react';
 import { api } from '../../lib/api';
 import { useAuth } from '../../lib/auth';
 import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
@@ -23,12 +23,6 @@ export function ProfileSetup() {
   const [lookingFor, setLookingFor] = useState('');
   const [location, setLocation] = useState('');
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-  const requiresAgeVerification = !user?.adult_verified;
-  const calculateAge = (value: string) => calculateAgeUtc(value);
-  const derivedAgeDisplay = (() => {
-    const birthDateIso = toIsoDate(dateOfBirth);
-    return birthDateIso ? `${calculateAge(birthDateIso)}` : '18+';
-  })();
 
   const toggleInterest = (interest: string) => {
     setSelectedInterests((prev) =>
@@ -41,21 +35,17 @@ export function ProfileSetup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (requiresAgeVerification && !dateOfBirth) {
-      setError('Date of birth is required before you can use the platform');
-      return;
-    }
     const birthDateIso = dateOfBirth ? toIsoDate(dateOfBirth) : null;
     if (dateOfBirth && !birthDateIso) {
       setError('Enter date of birth as MM / DD / YYYY');
       return;
     }
-    if (birthDateIso && calculateAge(birthDateIso) < 18) {
+    if (birthDateIso && calculateAgeUtc(birthDateIso) < 18) {
       setError('YouAndINotAI is strictly 18+ only');
       return;
     }
 
-    const derivedAge = birthDateIso ? calculateAge(birthDateIso) : null;
+    const derivedAge = birthDateIso ? calculateAgeUtc(birthDateIso) : null;
     setLoading(true);
     try {
       await api.put('/profiles/me', {
@@ -98,22 +88,6 @@ export function ProfileSetup() {
             </div>
           )}
 
-          {requiresAgeVerification && (
-            <div className="glass-strong rounded-3xl border border-amber-500/20 p-5">
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5 rounded-2xl bg-amber-500/10 p-2">
-                  <ShieldAlert size={18} className="text-amber-300" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-amber-200">18+ verification required</p>
-                  <p className="mt-1 text-sm text-gray-300">
-                    Add your date of birth now. You will stay gated to profile setup until the 18+ check is complete.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Bio */}
           <div className="glass-strong rounded-3xl p-6 glass-highlight space-y-5">
             <div>
@@ -153,7 +127,7 @@ export function ProfileSetup() {
                   max={120}
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
-                  placeholder={derivedAgeDisplay}
+                  placeholder="18+"
                   className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300"
                 />
               </div>

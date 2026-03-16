@@ -79,6 +79,7 @@ function buildCurrentUser(authUser, profile) {
     subscription_tier: authUser?.is_premium ? 'premium' : null,
     subscription_active: Boolean(authUser?.is_premium),
     has_profile: Boolean(profile),
+    adult_verified: Boolean(profile?.birth_date),
   };
 }
 
