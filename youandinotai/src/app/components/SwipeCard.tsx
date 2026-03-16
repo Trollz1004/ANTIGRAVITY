@@ -261,16 +261,73 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
           </motion.div>
         )}
 
-        {/* ─── Founder: Meme Easter egg thumbnail ─── */}
+        {/* ─── Founder: Trollz thinking bubble — tap to trigger splat ─── */}
         {isFounder && (
           <button
             type="button"
             onClick={() => setSplatVisible(!splatVisible)}
-            className="absolute top-14 right-4 z-30 w-10 h-10 rounded-lg overflow-hidden border border-orange-400/30 opacity-60 hover:opacity-100 hover:scale-125 transition-all cursor-pointer"
-            style={{ boxShadow: '0 0 10px rgba(255,165,0,0.2)' }}
-            title="The Opus Meme™"
+            className="absolute top-14 right-3 z-30 cursor-pointer group"
+            title="He thinks he can meme ME in MY code?"
           >
-            <img src="/founder-meme-opus.png" alt="Opus meme" className="w-full h-full object-cover" />
+            <motion.div
+              className="relative flex items-center gap-1.5"
+              animate={{ y: [0, -3, 0] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              {/* Troll avatar — the bait */}
+              <div
+                className="w-9 h-9 rounded-full overflow-hidden border-2 border-orange-400/50 group-hover:border-orange-400 group-hover:scale-110 transition-all"
+                style={{ boxShadow: '0 0 12px rgba(255,165,0,0.3)' }}
+              >
+                <img src="/trollz-discord.png" alt="" className="w-full h-full object-cover object-top scale-150" />
+              </div>
+
+              {/* Chat bubble with thinking dots */}
+              <div
+                className="relative flex items-center gap-1 px-2.5 py-1.5 rounded-2xl rounded-bl-sm"
+                style={{
+                  background: 'rgba(255, 165, 0, 0.15)',
+                  backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255, 165, 0, 0.35)',
+                  boxShadow: '0 0 14px rgba(255, 165, 0, 0.2)',
+                }}
+              >
+                {/* Three thinking dots — staggered pulse */}
+                <motion.span
+                  className="w-1.5 h-1.5 rounded-full bg-orange-400"
+                  animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.3, 0.8] }}
+                  transition={{ duration: 1.2, repeat: Infinity, delay: 0 }}
+                />
+                <motion.span
+                  className="w-1.5 h-1.5 rounded-full bg-orange-300"
+                  animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.3, 0.8] }}
+                  transition={{ duration: 1.2, repeat: Infinity, delay: 0.2 }}
+                />
+                <motion.span
+                  className="w-1.5 h-1.5 rounded-full bg-orange-400"
+                  animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.3, 0.8] }}
+                  transition={{ duration: 1.2, repeat: Infinity, delay: 0.4 }}
+                />
+
+                {/* Speech tail pointing left to avatar */}
+                <div
+                  className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45"
+                  style={{
+                    background: 'rgba(255, 165, 0, 0.15)',
+                    borderLeft: '1px solid rgba(255, 165, 0, 0.35)',
+                    borderBottom: '1px solid rgba(255, 165, 0, 0.35)',
+                  }}
+                />
+              </div>
+            </motion.div>
+
+            {/* Hover text — the hook */}
+            <motion.span
+              className="absolute left-0 top-full mt-1 whitespace-nowrap text-[9px] font-bold text-orange-300/80 tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+              style={{ textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}
+            >
+              🃏 Opus is thinking...
+            </motion.span>
           </button>
         )}
 
