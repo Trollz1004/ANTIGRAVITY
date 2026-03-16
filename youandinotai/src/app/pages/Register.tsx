@@ -1,12 +1,57 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, Mail, Lock, User, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Heart, Mail, Lock, User, ArrowRight, ShieldCheck, CalendarDays } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
+
+function formatDateInput(value: string): string {
+  const digits = value.replace(/\D/g, '').slice(0, 8);
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 4) return `${digits.slice(0, 2)} / ${digits.slice(2)}`;
+  return `${digits.slice(0, 2)} / ${digits.slice(2, 4)} / ${digits.slice(4)}`;
+}
+
+function toIsoDate(dateOfBirth: string): string | null {
+  const digits = dateOfBirth.replace(/\D/g, '');
+  if (digits.length !== 8) return null;
+
+  const month = Number(digits.slice(0, 2));
+  const day = Number(digits.slice(2, 4));
+  const year = Number(digits.slice(4, 8));
+  const candidate = new Date(Date.UTC(year, month - 1, day));
+
+  if (
+    Number.isNaN(candidate.getTime()) ||
+    candidate.getUTCFullYear() !== year ||
+    candidate.getUTCMonth() !== month - 1 ||
+    candidate.getUTCDate() !== day
+  ) {
+    return null;
+  }
+
+  return `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+}
+
+function calculateAge(dateOfBirthIso: string): number {
+  const today = new Date();
+  const birthDate = new Date(dateOfBirthIso);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDelta = today.getMonth() - birthDate.getMonth();
+
+  if (monthDelta < 0 || (monthDelta === 0 && today.getDate() < birthDate.getDate())) {
+    age -= 1;
+  }
+
+  return age;
+}
 
 export function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [acceptedCookiePolicy, setAcceptedCookiePolicy] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [confirmedOver18, setConfirmedOver18] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
@@ -19,9 +64,34 @@ export function Register() {
       setError('Password must be at least 8 characters');
       return;
     }
+    if (!dateOfBirth) {
+      setError('Date of birth is required');
+      return;
+    }
+    const birthDateIso = toIsoDate(dateOfBirth);
+    if (!birthDateIso) {
+      setError('Enter date of birth as MM / DD / YYYY');
+      return;
+    }
+    if (calculateAge(birthDateIso) < 18) {
+      setError('YouAndINotAI is strictly 18+ only');
+      return;
+    }
+    if (!acceptedCookiePolicy || !acceptedTerms || !confirmedOver18) {
+      setError('All required consent boxes must be checked before you can register');
+      return;
+    }
     setLoading(true);
     try {
-      await register(email, password, displayName);
+      await register({
+        email,
+        password,
+        displayName,
+        dateOfBirth: birthDateIso,
+        acceptedCookiePolicy,
+        acceptedTerms,
+        confirmedOver18,
+      });
       navigate('/app/profile');
     } catch (err: any) {
       setError(err.message || 'Registration failed');
@@ -87,6 +157,54 @@ export function Register() {
               </div>
 
               <div className="relative group">
+                <CalendarDays size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-pink-400 transition-colors" />
+                <input
+                  type="text"
+                  required
+                  value={dateOfBirth}
+                  onChange={(e) => setDateOfBirth(formatDateInput(e.target.value))}
+                  inputMode="numeric"
+                  maxLength={14}
+                  placeholder="MM / DD / YYYY"
+                  className="w-full pl-12 pr-4 py-4 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/50 input-glow transition-all duration-300"
+                />
+              </div>
+
+              <div className="space-y-3 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-pink-300">Required before account creation</p>
+
+                <label className="flex items-start gap-3 text-sm text-gray-300">
+                  <input
+                    type="checkbox"
+                    checked={acceptedCookiePolicy}
+                    onChange={(e) => setAcceptedCookiePolicy(e.target.checked)}
+                    className="mt-1 h-4 w-4 accent-pink-500"
+                  />
+                  <span>I agree to the required cookie policy for sign-in, safety, and fraud protection on this device.</span>
+                </label>
+
+                <label className="flex items-start gap-3 text-sm text-gray-300">
+                  <input
+                    type="checkbox"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                    className="mt-1 h-4 w-4 accent-pink-500"
+                  />
+                  <span>I accept the platform rules, privacy terms, and understand minors are not allowed to use YouAndINotAI.</span>
+                </label>
+
+                <label className="flex items-start gap-3 text-sm text-gray-300">
+                  <input
+                    type="checkbox"
+                    checked={confirmedOver18}
+                    onChange={(e) => setConfirmedOver18(e.target.checked)}
+                    className="mt-1 h-4 w-4 accent-pink-500"
+                  />
+                  <span>I confirm I am at least 18 years old and that my date of birth is accurate.</span>
+                </label>
+              </div>
+
+              <div className="relative group">
                 <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-pink-400 transition-colors" />
                 <input
                   type="password"
@@ -128,7 +246,7 @@ export function Register() {
               <div>
                 <p className="text-emerald-400 font-bold text-sm">Bot-Shield Verified Community</p>
                 <p className="text-gray-500 text-xs mt-0.5">
-                  Every account runs through the same human-verification flow before matching begins
+                  Every account runs through the same human-verification flow before matching begins, and every member must be 18+
                 </p>
               </div>
             </div>

@@ -1,8 +1,36 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Camera, MapPin, Sparkles, Check } from 'lucide-react';
+import { User, Camera, MapPin, Sparkles, Check, ShieldAlert } from 'lucide-react';
 import { api } from '../../lib/api';
 import { useAuth } from '../../lib/auth';
+
+function formatDateInput(value: string): string {
+  const digits = value.replace(/\D/g, '').slice(0, 8);
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 4) return `${digits.slice(0, 2)} / ${digits.slice(2)}`;
+  return `${digits.slice(0, 2)} / ${digits.slice(2, 4)} / ${digits.slice(4)}`;
+}
+
+function toIsoDate(value: string): string | null {
+  const digits = value.replace(/\D/g, '');
+  if (digits.length !== 8) return null;
+
+  const month = Number(digits.slice(0, 2));
+  const day = Number(digits.slice(2, 4));
+  const year = Number(digits.slice(4, 8));
+  const candidate = new Date(Date.UTC(year, month - 1, day));
+
+  if (
+    Number.isNaN(candidate.getTime()) ||
+    candidate.getUTCFullYear() !== year ||
+    candidate.getUTCMonth() !== month - 1 ||
+    candidate.getUTCDate() !== day
+  ) {
+    return null;
+  }
+
+  return `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+}
 
 const INTEREST_OPTIONS = [
   'Travel', 'Music', 'Cooking', 'Fitness', 'Reading', 'Gaming',
@@ -14,12 +42,30 @@ export function ProfileSetup() {
   const { user, fetchUser } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [bio, setBio] = useState('');
   const [age, setAge] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('');
   const [lookingFor, setLookingFor] = useState('');
   const [location, setLocation] = useState('');
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const requiresAgeVerification = !user?.adult_verified;
+  const derivedAgeDisplay = (() => {
+    const birthDateIso = toIsoDate(dateOfBirth);
+    return birthDateIso ? `${calculateAge(birthDateIso)}` : '18+';
+  })();
+
+  const calculateAge = (value: string) => {
+    const today = new Date();
+    const birthDate = new Date(value);
+    let years = today.getFullYear() - birthDate.getFullYear();
+    const monthDelta = today.getMonth() - birthDate.getMonth();
+    if (monthDelta < 0 || (monthDelta === 0 && today.getDate() < birthDate.getDate())) {
+      years -= 1;
+    }
+    return years;
+  };
 
   const toggleInterest = (interest: string) => {
     setSelectedInterests((prev) =>
@@ -31,12 +77,29 @@ export function ProfileSetup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    if (requiresAgeVerification && !dateOfBirth) {
+      setError('Date of birth is required before you can use the platform');
+      return;
+    }
+    const birthDateIso = dateOfBirth ? toIsoDate(dateOfBirth) : null;
+    if (dateOfBirth && !birthDateIso) {
+      setError('Enter date of birth as MM / DD / YYYY');
+      return;
+    }
+    if (birthDateIso && calculateAge(birthDateIso) < 18) {
+      setError('YouAndINotAI is strictly 18+ only');
+      return;
+    }
+
+    const derivedAge = birthDateIso ? calculateAge(birthDateIso) : null;
     setLoading(true);
     try {
       await api.put('/profiles/me', {
         display_name: user?.display_name || null,
         bio: bio || null,
-        age: age ? parseInt(age) : null,
+        age: age ? parseInt(age, 10) : derivedAge,
+        date_of_birth: birthDateIso,
         gender: gender || null,
         looking_for: lookingFor || null,
         location: location || null,
@@ -45,7 +108,7 @@ export function ProfileSetup() {
       await fetchUser();
       navigate('/app');
     } catch (err: any) {
-      alert(err.message || 'Failed to save profile');
+      setError(err.message || 'Failed to save profile');
     } finally {
       setLoading(false);
     }
@@ -66,6 +129,28 @@ export function ProfileSetup() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="glass rounded-xl px-4 py-3 border-red-500/20 animate-slide-up">
+              <p className="text-red-400 text-sm font-medium">{error}</p>
+            </div>
+          )}
+
+          {requiresAgeVerification && (
+            <div className="glass-strong rounded-3xl border border-amber-500/20 p-5">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 rounded-2xl bg-amber-500/10 p-2">
+                  <ShieldAlert size={18} className="text-amber-300" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-amber-200">18+ verification required</p>
+                  <p className="mt-1 text-sm text-gray-300">
+                    Add your date of birth now. You will stay gated to profile setup until the 18+ check is complete.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Bio */}
           <div className="glass-strong rounded-3xl p-6 glass-highlight space-y-5">
             <div>
@@ -83,8 +168,20 @@ export function ProfileSetup() {
               </div>
             </div>
 
-            {/* Age + Gender */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Date of birth + Age + Gender */}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <div>
+                <label className="text-sm font-bold text-gray-300 mb-2 block">Date of Birth</label>
+                <input
+                  type="text"
+                  value={dateOfBirth}
+                  onChange={(e) => setDateOfBirth(formatDateInput(e.target.value))}
+                  inputMode="numeric"
+                  maxLength={14}
+                  placeholder="MM / DD / YYYY"
+                  className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300"
+                />
+              </div>
               <div>
                 <label className="text-sm font-bold text-gray-300 mb-2 block">Age</label>
                 <input
@@ -93,7 +190,7 @@ export function ProfileSetup() {
                   max={120}
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
-                  placeholder="18+"
+                  placeholder={derivedAgeDisplay}
                   className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300"
                 />
               </div>

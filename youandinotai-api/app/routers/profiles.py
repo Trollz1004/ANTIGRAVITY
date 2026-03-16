@@ -1,12 +1,14 @@
 """Profile CRUD router."""
 
 import uuid
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
+from app.age_gate import ensure_adult
 from app.database import get_db
 from app.models import Profile, User
 from app.schemas import ProfileResponse, ProfileUpdateRequest
@@ -53,6 +55,13 @@ async def update_my_profile(
         profile.bio = payload.bio
     if payload.age is not None:
         profile.age = payload.age
+    if payload.date_of_birth is not None:
+        if user.date_of_birth is not None and payload.date_of_birth != user.date_of_birth:
+            raise HTTPException(status_code=409, detail="Date of birth is locked after verification")
+        profile.age = ensure_adult(payload.date_of_birth)
+        user.date_of_birth = payload.date_of_birth
+        if user.adult_verified_at is None:
+            user.adult_verified_at = datetime.now(timezone.utc)
     if payload.gender is not None:
         profile.gender = payload.gender
     if payload.looking_for is not None:

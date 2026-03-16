@@ -19,6 +19,7 @@ import { Chat } from './app/pages/Chat';
 import { Boards } from './app/pages/Boards';
 import { Events } from './app/pages/Events';
 import { Volunteering } from './app/pages/Volunteering';
+import { CookieConsentBanner } from './components/CookieConsentBanner';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
@@ -45,6 +46,7 @@ createRoot(document.getElementById('root')!).render(
           </Route>
         </Route>
       </Routes>
+      <CookieConsentBanner />
     </BrowserRouter>
   </StrictMode>,
 );

@@ -8,6 +8,8 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     display_name VARCHAR(100) NOT NULL,
     password_hash VARCHAR(255),
+    date_of_birth DATE,
+    adult_verified_at TIMESTAMPTZ,
     stripe_customer_id VARCHAR(255),
     bot_shield_verified BOOLEAN DEFAULT FALSE,
     bot_shield_verified_at TIMESTAMPTZ,

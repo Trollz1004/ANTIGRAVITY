@@ -10,32 +10,19 @@ html, body {
   background: #000;
 }
 
-/* Static stars background — pure CSS, zero animation, zero lag */
-.stars-bg {
-  background-color: #05051a;
-  background-image:
-    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(1px 1px at 70% 25%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 85% 45%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 15% 70%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 30% 85%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(1px 1px at 50% 40%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 65% 75%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 80% 90%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 95% 55%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(1px 1px at 5% 50%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 20% 95%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 45% 20%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 60% 5%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(1px 1px at 75% 65%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 90% 30%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 33% 48%, rgba(200,180,255,0.4), transparent),
-    radial-gradient(2px 2px at 67% 82%, rgba(200,180,255,0.3), transparent),
-    radial-gradient(2px 2px at 12% 28%, rgba(180,200,255,0.4), transparent),
-    radial-gradient(2px 2px at 88% 12%, rgba(255,200,200,0.3), transparent);
+/* Hero background — OG cosmic heart image, fixed across all pages */
+.hero-bg {
+  background-image: url('/hero-bg.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Dark overlay on top of hero-bg for content readability */
+.hero-bg-overlay {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
 }
 
 /* Padding for sticky CTA bar at bottom */

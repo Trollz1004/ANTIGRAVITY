@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../lib/auth';
 
 export function AuthGuard() {
   const { user, loading, fetchUser } = useAuth();
+  const location = useLocation();
 
   useEffect(() => {
     fetchUser();
@@ -19,6 +20,10 @@ export function AuthGuard() {
 
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (!user.adult_verified && location.pathname !== '/app/profile') {
+    return <Navigate to="/app/profile" replace state={{ ageGateRequired: true }} />;
   }
 
   return <Outlet />;

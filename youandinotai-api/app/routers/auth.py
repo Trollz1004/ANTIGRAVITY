@@ -1,6 +1,7 @@
 """Authentication router — register, login, refresh, me."""
 
 import uuid
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import select
@@ -14,6 +15,7 @@ from app.auth import (
     hash_password,
     verify_password,
 )
+from app.age_gate import ensure_adult
 from app.database import get_db
 from app.models import Profile, User
 from app.rate_limit import auth_limiter
@@ -44,7 +46,10 @@ async def register(
         email=payload.email.lower(),
         password_hash=hash_password(payload.password),
         display_name=payload.display_name.strip(),
+        date_of_birth=payload.date_of_birth,
+        adult_verified_at=datetime.now(timezone.utc),
     )
+    ensure_adult(payload.date_of_birth)
     db.add(user)
     await db.commit()
     await db.refresh(user)
@@ -111,4 +116,5 @@ async def get_me(
         subscription_tier=user.subscription_tier,
         subscription_active=user.subscription_active,
         has_profile=profile is not None,
+        adult_verified=user.date_of_birth is not None,
     )
