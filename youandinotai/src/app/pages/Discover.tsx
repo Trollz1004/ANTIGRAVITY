@@ -17,21 +17,23 @@ interface Profile {
   verified?: boolean;
   subscription_active?: boolean;
   gender?: string;
+  founder?: boolean;
 }
 
 /* Demo profiles — visible until real users exist */
 const DEMO_PROFILES: Profile[] = [
   {
-    user_id: 'demo-joshuatom',
-    display_name: 'JoshuaTom',
-    bio: 'Built this app 3 times. Might forget and build it a 4th. Will ask you to "stand by" then send 47 messages. Has 4 AI agents and still does the wiring himself. Not Ryan Reynolds but thinks he could be if he had better lighting.',
+    user_id: 'user-0001',
+    display_name: 'Joshua "Tom" Opus',
+    bio: "I'm a busy guy. Not much free time — trying to find Claude's code and filter out bots on other sites. Built this 3 times. Electrician by trade, coder by 3AM. 60% of every dollar here goes to Shriners Children's Hospitals. #ForTheKids",
     age: 35,
-    photos: ['/joshuatom-avatar.svg'],
-    interests: ['Forgetting Cupid Exists', 'Rebuilding Things', '3AM Commits', 'EXFOLIATE!', 'Not Being Ryan'],
-    location: 'Florida (send help)',
+    photos: ['/founder-josh.jpg'],
+    interests: ['#ForTheKids', 'Human Validated', '3AM Commits', 'EXFOLIATE!', 'Not A Bot'],
+    location: '📍 <MYSPACE>',
     verified: true,
     subscription_active: true,
-    gender: 'male',
+    gender: 'joker',
+    founder: true,
   },
   {
     user_id: 'demo-tomi',
