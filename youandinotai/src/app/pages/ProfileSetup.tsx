@@ -3,34 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { User, Camera, MapPin, Sparkles, Check, ShieldAlert } from 'lucide-react';
 import { api } from '../../lib/api';
 import { useAuth } from '../../lib/auth';
-
-function formatDateInput(value: string): string {
-  const digits = value.replace(/\D/g, '').slice(0, 8);
-  if (digits.length <= 2) return digits;
-  if (digits.length <= 4) return `${digits.slice(0, 2)} / ${digits.slice(2)}`;
-  return `${digits.slice(0, 2)} / ${digits.slice(2, 4)} / ${digits.slice(4)}`;
-}
-
-function toIsoDate(value: string): string | null {
-  const digits = value.replace(/\D/g, '');
-  if (digits.length !== 8) return null;
-
-  const month = Number(digits.slice(0, 2));
-  const day = Number(digits.slice(2, 4));
-  const year = Number(digits.slice(4, 8));
-  const candidate = new Date(Date.UTC(year, month - 1, day));
-
-  if (
-    Number.isNaN(candidate.getTime()) ||
-    candidate.getUTCFullYear() !== year ||
-    candidate.getUTCMonth() !== month - 1 ||
-    candidate.getUTCDate() !== day
-  ) {
-    return null;
-  }
-
-  return `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-}
+import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 
 const INTEREST_OPTIONS = [
   'Travel', 'Music', 'Cooking', 'Fitness', 'Reading', 'Gaming',
@@ -51,21 +24,11 @@ export function ProfileSetup() {
   const [location, setLocation] = useState('');
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const requiresAgeVerification = !user?.adult_verified;
+  const calculateAge = (value: string) => calculateAgeUtc(value);
   const derivedAgeDisplay = (() => {
     const birthDateIso = toIsoDate(dateOfBirth);
     return birthDateIso ? `${calculateAge(birthDateIso)}` : '18+';
   })();
-
-  const calculateAge = (value: string) => {
-    const today = new Date();
-    const birthDate = new Date(value);
-    let years = today.getFullYear() - birthDate.getFullYear();
-    const monthDelta = today.getMonth() - birthDate.getMonth();
-    if (monthDelta < 0 || (monthDelta === 0 && today.getDate() < birthDate.getDate())) {
-      years -= 1;
-    }
-    return years;
-  };
 
   const toggleInterest = (interest: string) => {
     setSelectedInterests((prev) =>

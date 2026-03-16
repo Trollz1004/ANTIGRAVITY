@@ -1,0 +1,54 @@
+{
+  "customer_support_assets": [
+    {
+      "name": "FAQ response library",
+      "path": "content\\faq-responses.json",
+      "type": "responses",
+      "notes": "Draft response bank for common public/customer questions."
+    },
+    {
+      "name": "Welcome email sequence (HTML)",
+      "path": "content\\email-welcome-sequence.md",
+      "type": "email_templates",
+      "notes": "Three-part onboarding and conversion sequence."
+    },
+    {
+      "name": "Welcome email sequence (text)",
+      "path": "content\\email-welcome-sequence-text.md",
+      "type": "email_templates",
+      "notes": "Plain-text variant of the onboarding sequence."
+    },
+    {
+      "name": "Transactional email service",
+      "path": "youandinotai-api\\app\\email_service.py",
+      "type": "backend_service",
+      "notes": "SMTP-backed email implementation for Founder Badge and onboarding workflows."
+    }
+  ],
+  "local_discovery_candidates": [
+    {
+      "name": "OpenClaw Ollama migration briefing",
+      "path": "briefings\\CODEX-OPENCLAW-OLLAMA-MIGRATION.md",
+      "type": "ops_briefing",
+      "notes": "Support-stack continuity note for moving agent operations to local Ollama."
+    },
+    {
+      "name": "OpenClaw Ollama JSON normalizer",
+      "path": "scripts\\normalize-openclaw-ollama-json.js",
+      "type": "ops_script",
+      "notes": "Helper for normalizing local model configuration during support/agent migration work."
+    },
+    {
+      "name": "Jules secure admin CLI",
+      "path": "jules-cli.py",
+      "type": "admin_cli",
+      "notes": "Direct Gemini/Jules admin entrypoint that may matter for support/admin recovery workflows."
+    }
+  ],
+  "pending_discovery": [
+    "Copilot 365 customer-support exports",
+    "Ollama support automation files outside the current repo-local candidates",
+    "Jules dashboard support documentation",
+    "Historical support assets relocated into external archives, OneDrive, or private repos"
+  ]
+}

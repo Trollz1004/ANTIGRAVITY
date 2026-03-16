@@ -2,47 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Heart, Mail, Lock, User, ArrowRight, ShieldCheck, CalendarDays } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
-
-function formatDateInput(value: string): string {
-  const digits = value.replace(/\D/g, '').slice(0, 8);
-  if (digits.length <= 2) return digits;
-  if (digits.length <= 4) return `${digits.slice(0, 2)} / ${digits.slice(2)}`;
-  return `${digits.slice(0, 2)} / ${digits.slice(2, 4)} / ${digits.slice(4)}`;
-}
-
-function toIsoDate(dateOfBirth: string): string | null {
-  const digits = dateOfBirth.replace(/\D/g, '');
-  if (digits.length !== 8) return null;
-
-  const month = Number(digits.slice(0, 2));
-  const day = Number(digits.slice(2, 4));
-  const year = Number(digits.slice(4, 8));
-  const candidate = new Date(Date.UTC(year, month - 1, day));
-
-  if (
-    Number.isNaN(candidate.getTime()) ||
-    candidate.getUTCFullYear() !== year ||
-    candidate.getUTCMonth() !== month - 1 ||
-    candidate.getUTCDate() !== day
-  ) {
-    return null;
-  }
-
-  return `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-}
-
-function calculateAge(dateOfBirthIso: string): number {
-  const today = new Date();
-  const birthDate = new Date(dateOfBirthIso);
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDelta = today.getMonth() - birthDate.getMonth();
-
-  if (monthDelta < 0 || (monthDelta === 0 && today.getDate() < birthDate.getDate())) {
-    age -= 1;
-  }
-
-  return age;
-}
+import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 
 export function Register() {
   const [email, setEmail] = useState('');
@@ -73,7 +33,7 @@ export function Register() {
       setError('Enter date of birth as MM / DD / YYYY');
       return;
     }
-    if (calculateAge(birthDateIso) < 18) {
+    if (calculateAgeUtc(birthDateIso) < 18) {
       setError('YouAndINotAI is strictly 18+ only');
       return;
     }
