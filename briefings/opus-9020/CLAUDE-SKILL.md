@@ -117,7 +117,7 @@ NEVER use "donate", "donation", "solicitation" in customer-facing code. Our reve
 | Royalty Card $2,500 | https://square.link/u/CafhorUS | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
 
 - Square account: ebaytrashortreasure@gmail.com (Merchant ML3C7FMTQS5KX, bank attached)
-- Square App ID: ***SQUARE_APPID_REDACTED***
+- Square App ID: (in .env vault — NEVER in source)
 - Square active location: LY5GN09F5AN83 (Trash Or Treasure — all checkout links route here)
 - Square inactive location: L24ZX5WRA41TH (YouAndINotAI — old, not used)
 - All frontend code uses Square links (zero Stripe refs in any .tsx/.ts)
