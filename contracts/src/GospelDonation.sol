@@ -49,7 +49,7 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
     /// @notice Founder percentage (10%) - CONTINUED INNOVATION - ETHICS OVERRIDE -10%
     uint256 public constant FOUNDER_PERCENT = 10;
 
-    /// @notice Basis points denominator for percentage calculations
+    /// @notice Percentage denominator (100 = whole-percent math, NOT basis points)
     uint256 public constant PERCENT_DENOMINATOR = 100;
 
     // ═══════════════════════════════════════════════════════════════════════

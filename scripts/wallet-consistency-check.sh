@@ -45,8 +45,15 @@ check_wallet() {
   if grep -q "$expected" "$full_path" 2>/dev/null; then
     echo "  OK: $name in $file"
   else
-    # Check if file has any 0x address at all for this wallet type
-    if grep -qi "$name" "$full_path" 2>/dev/null; then
+    # Check if file mentions this wallet type (or common aliases)
+    local aliases="$name"
+    case "$name" in
+      Infrastructure) aliases="Infrastructure|infra|DAO.Treasury|DAO_TREASURY" ;;
+      Charity)        aliases="Charity|CHARITY_SAFE|charityWallet" ;;
+      Founder)        aliases="Founder|FOUNDER_WALLET|founderWallet" ;;
+      Gospel)         aliases="Gospel|GospelDonation|DatingRevenueRouter" ;;
+    esac
+    if grep -qiE "$aliases" "$full_path" 2>/dev/null; then
       echo "  FAIL: $name in $file — address mismatch or missing!"
       ERRORS=$((ERRORS + 1))
     fi
