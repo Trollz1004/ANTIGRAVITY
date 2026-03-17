@@ -168,14 +168,15 @@ export function Discover() {
       {/* Settings toggle */}
       <button
         onClick={() => setSettingsOpen(true)}
-        className="absolute top-4 right-4 z-30 p-3 rounded-xl transition-all hover:scale-105 active:scale-95"
+        className="absolute top-4 right-4 z-30 px-4 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2 group"
         style={{
-          background: 'rgba(255,255,255,0.05)',
+          background: 'rgba(236,72,153,0.12)',
           backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255,255,255,0.1)',
+          border: '1px solid rgba(236,72,153,0.3)',
         }}
       >
-        <Sliders size={18} className="text-gray-400" />
+        <Sliders size={22} className="text-pink-400 group-hover:text-pink-300" />
+        <span className="text-pink-400 group-hover:text-pink-300 text-sm font-semibold">Options</span>
       </button>
 
       {/* Settings Panel */}
