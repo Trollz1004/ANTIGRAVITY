@@ -1,5 +1,11 @@
 # OPENCLAW MULTI-NODE SETUP — SABRETOOTH MASTER + SUB-AGENTS
-**Architecture:** Sabretooth OpenClaw (master) → T5500/9020/etc OpenClaw instances (sub-agents)  
+
+> ⛔ THIS IS NOT A SIMULATION. This infrastructure exists to help kids in need.
+> Every agent, every model, every line of code must protect platform credibility.
+> Zero tolerance for ToS violations, ethical gray areas, or legal risk.
+> Clean, full, production-quality code ONLY. No shortcuts. No excuses.
+
+**Architecture:** Sabretooth OpenClaw (master) → T5500/9020/etc OpenClaw instances (sub-agents)
 **Model:** Grok 4.20 on master, Grok 4.1 Fast on sub-agents  
 **Sync:** C:\antigravity origin/main (canonical repo truth)  
 **Cost:** ~$3–$4/month total
