@@ -1,6 +1,7 @@
 # AGENTS.md — ANTIGRAVITY (Multi-Node)
 
 > Auto-loaded every session. This IS your memory. If you forgot, read this first.
+> Canonical status file: [briefings/REPOSITORY_RECORD.md](file:///C:/ANTIGRAVITY/briefings/REPOSITORY_RECORD.md) (LATEST STATE)
 > Canonical skill file: `briefings/CLAUDE-SKILL.md` (has EVERYTHING)
 
 ---
