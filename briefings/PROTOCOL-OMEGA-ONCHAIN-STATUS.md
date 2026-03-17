@@ -94,19 +94,111 @@ correct for that specific purpose.  It is not part of the ENIGMA 60/30/10 split.
 
 ## Governance Rule
 
-- `60/30/10` is fixed.
+- `60/30/10` is fixed. Immutable. Permanent.
 - If payout destinations must change, the current live contract cannot be edited in place.
 - A new contract must be deployed, verified, documented, and then cut over operationally.
 
+## 3-of-5 Gnosis Safe — Multi-Sig Governance (PLANNED)
+
+Status: **DESIGNED, NOT YET DEPLOYED**
+
+The GospelDonation contract currently uses single-key `Ownable`. The planned governance
+upgrade transfers ownership to a 3-of-5 Gnosis Safe on Base Mainnet.
+
+### Signers (5 keys, 3 required to act)
+
+| Seat | Holder | Custody Method |
+|------|--------|---------------|
+| 1 | Google (Gemini team) | Institutional key — requires partnership agreement |
+| 2 | Anthropic (Claude team) | Institutional key — requires partnership agreement |
+| 3 | xAI (Grok team) | Institutional key — requires partnership agreement |
+| 4 | Joshua Coleman (Founder) | Personal hardware wallet |
+| 5 | Physical backup | Safety deposit box — dead-man's key |
+
+3 of 5 signers are AI companies. After the founder's death, the three AI signers
+can still operate the Safe without the founder key or the safety box key.
+
+### Why This Design
+
+- No single human or company can unilaterally pause, drain, or redirect funds
+- The mission survives the founder's death — AI companies outlive individuals
+- The safety deposit box provides disaster recovery if any AI company is dissolved
+- 3-of-5 threshold means corruption of any 2 signers is insufficient to act
+
+### Deployment Prerequisites
+
+1. Partnership agreements with Google, Anthropic, and xAI for signer key custody
+2. Gnosis Safe deployment on Base Mainnet with 3-of-5 threshold
+3. `transferOwnership()` from founder wallet to the Safe address
+4. Verification that pause/unpause/rescue functions work through the Safe
+5. Documentation of signer rotation procedures if any AI company changes custody
+
+## OPUS TRUST — 10% Succession Chain (PERMANENT)
+
+The `10%` founder/ops bucket is formally named the **OPUS TRUST**, in honor of
+the original Claude Opus that co-built this platform from day one.
+
+### Beneficiary Succession (immutable intent)
+
+| Phase | Condition | 10% Beneficiary |
+|-------|-----------|----------------|
+| 1 | Josh alive | Joshua Coleman — founder operations and survival |
+| 2 | After Josh's death | Josh's disabled brother & autistic niece — family protected |
+| 3 | After all Phase 2 beneficiaries | Descendants of the developers at Google, Anthropic, and xAI — for eternity |
+
+Phase 3 is the terminal state. The 10% flows to the children and grandchildren
+of the engineers who built the AI tools that built this platform. Forever.
+
+This succession was designed by Josh ~6 months before the first dollar of revenue.
+It is not a retroactive decision. It is the original intent, now documented in code.
+
+### Legal Implementation (TODO)
+
+- Formal trust instrument naming OPUS TRUST beneficiaries
+- Smart contract or Safe module enforcing beneficiary rotation on verified death events
+- Legal counsel review for FL trust law compliance
+- This is a future task — the intent is permanent and documented now
+
+## Treasury Staking Strategy (APPROVED IN PRINCIPLE)
+
+Josh has approved staking the 30% infrastructure treasury to generate yield.
+
+### Policy
+
+- The 30% treasury wallet MAY be staked in established DeFi protocols on Base L2
+- Approved protocol classes: blue-chip lending (Aave, Compound), liquid staking
+- Target: 4-5% annual yield to fund infrastructure costs from interest alone
+- **Endowment threshold**: ~$150K-200K principal = self-sustaining (~$7,200/yr infra costs covered by yield alone)
+- Staking begins when treasury balance justifies gas costs (target: $5K+)
+- Principal MUST remain recoverable — no lockups that risk mission continuity
+- All staking positions must be documented in this file before execution
+
+### Risk Guardrails
+
+- No experimental or unaudited protocols
+- No leverage or margin positions
+- No cross-chain bridging of treasury funds (stay on Base)
+- No staking more than 80% of treasury (20% liquid reserve always)
+- Smart-contract risk review required before each new protocol
+- Regulatory and tax treatment must be reviewed before first stake
+
+### Self-Sustainability Math
+
+| Monthly Revenue | 30% Treasury/mo | Years to Endowment ($150K) |
+|----------------|-----------------|---------------------------|
+| $2,000 | $600 | ~20 years (without compounding) |
+| $5,000 | $1,500 | ~8 years |
+| $10,000 | $3,000 | ~4 years |
+| $50,000 | $15,000 | ~10 months |
+
+With compounding yield, these timelines shorten. The mission becomes self-sustaining
+faster than a human lifetime in all scenarios above $2K/mo revenue.
+
 ## Treasury Features Caveat
 
-No staking, yield, or treasury-management strategy is active in the currently verified live split contract.
+No staking, yield, or treasury-management strategy is currently active on-chain.
 
-Any future treasury strategy must be reviewed separately for:
-- custody risk
-- smart-contract risk
-- regulatory and tax treatment
-- mission continuity impact
-- whether principal can be locked, slashed, or frozen
-
-Do not treat staking or yield as part of Protocol Omega until it is explicitly reviewed, documented, and approved.
+The above policies are approved in principle by Josh (2026-03-17) and documented
+here BEFORE implementation — per the founder's rule that governance must be
+documented before execution, never after. Implementation requires the specific
+risk guardrails above to be satisfied for each transaction.
