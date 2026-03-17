@@ -1,4 +1,10 @@
 # OPENCLAW + CLAUDE.AI REMOTE SETUP
+
+> ⛔ THIS IS NOT A SIMULATION. This infrastructure exists to help kids in need.
+> Every agent, every model, every line of code must protect platform credibility.
+> Zero tolerance for ToS violations, ethical gray areas, or legal risk.
+> Clean, full, production-quality code ONLY. No shortcuts. No excuses.
+
 **Date:** February 27, 2026 | **Status:** 🟢 Ready for remote integration
 
 ---
