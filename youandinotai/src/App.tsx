@@ -265,7 +265,7 @@ function PricingSection() {
           ))}
         </div>
         <p className="mt-4 text-xs text-gray-500 leading-relaxed">
-          Securely processed by Square. 60% of all proceeds donated to Shriners Children's.
+          Securely processed by Square. 60% of all proceeds go to Shriners Children's.
         </p>
       </div>
     </section>
