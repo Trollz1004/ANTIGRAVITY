@@ -10,6 +10,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# PAUSED on Sabretooth per AGENTS.md standing order — re-enable for multi-node only
+exit 0
+
 if (-not $RepoRoot) {
     $RepoRoot = Split-Path -Parent $PSScriptRoot
 }
