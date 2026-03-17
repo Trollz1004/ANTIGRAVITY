@@ -1,4 +1,4 @@
-# OPENCLAW + CLAUDE.AI REMOTE SETUP
+ # OPENCLAW + CLAUDE.AI REMOTE SETUP
 
 > ⛔ THIS IS NOT A SIMULATION. This infrastructure exists to help kids in need.
 > Every agent, every model, every line of code must protect platform credibility.
@@ -11,13 +11,12 @@
 
 ## CURRENT STATE
 
-### OpenClaw (T5500 Local)
+### OpenClaw (Sabretooth Master)
 - Gateway Port: 18789
-- Token: stored only in ignored local env/vault storage; do not commit to repo
-- Config: `C:\Users\joshl\.openclaw\openclaw.json`
-- WhatsApp: +13529735909 (linked)
-- Telegram: @CLAUDEsMiniBot (active)
-- Status: Ready for remote access
+- Token: stored in your local vault/env; do not commit
+- Config: `C:\Users\joshl\.openclaw\openclaw.json` (Synced to origin/main)
+- Node Topology: Master on Sabretooth, cold-boot sub-agents on T5500/9020
+- Status: Ready for remote integration
 
 ### MCP Servers (Currently Local)
 1. **omega-sentry** — Kimi 2.6 + Protocol Omega tools (stdio)
@@ -98,7 +97,7 @@ In **claude.ai → Settings → Integrations → MCP Servers**:
       "command": "cmd",
       "args": [
         "/c", "npx", "-y", "@modelcontextprotocol/server-postgres",
-        "postgresql://postgres:PASSWORD@remote-host:5432/youandinotai"
+        "postgresql://postgres:PASSWORD@localhost:5432/youandinotai"
       ],
       "type": "stdio"
     }
@@ -273,4 +272,4 @@ cloudflared tunnel run antigravity-mcp --url http://127.0.0.1:3100
 
 ---
 
-*Assisted by Gordon — Remote OpenClaw setup ready* ✅
+*Assisted by Gordon — Sabretooth Master OpenClaw ready* ✅
