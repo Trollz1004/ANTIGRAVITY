@@ -36,9 +36,11 @@ export function Login() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-block group">
-            <div className="w-18 h-18 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center mx-auto mb-5 shadow-2xl shadow-pink-500/25 group-hover:shadow-pink-500/40 transition-shadow duration-300 w-[72px] h-[72px]">
-              <Heart size={32} className="text-white" fill="white" />
-            </div>
+            <img
+              src="/heart-fingerprint.png"
+              alt="YouAndINotAI"
+              className="w-20 h-20 mx-auto mb-5 drop-shadow-[0_0_20px_rgba(0,255,255,0.4)] group-hover:drop-shadow-[0_0_30px_rgba(0,255,255,0.6)] transition-all duration-300 group-hover:scale-105"
+            />
           </Link>
           <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 tracking-tight">
             Welcome Back
