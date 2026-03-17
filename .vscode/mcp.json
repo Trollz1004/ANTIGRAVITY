@@ -16,6 +16,9 @@
 			"env": {
 				"APIFY_TOKEN": "${env:APIFY_TOKEN}"
 			}
+		},
+		"square": {
+			"url": "https://mcp.squareup.com/sse"
 		}
 	},
 	"inputs": []
