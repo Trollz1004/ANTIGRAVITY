@@ -1,8 +1,11 @@
 const https = require('https');
 const crypto = require('crypto');
 
-const TOKEN = '***SQUARE_TOKEN_REDACTED***';
-const LOCATION_ID = 'LY5GN09F5AN83'; // Trash Or Treasure (ACTIVE FOR CARDS)
+// Load from .env — NEVER hardcode tokens
+require('dotenv').config({ path: require('path').resolve(__dirname, '..', '.env') });
+const TOKEN = process.env.SQUARE_ACCESS_TOKEN;
+const LOCATION_ID = process.env.SQUARE_LOCATION_ID || 'LY5GN09F5AN83';
+if (!TOKEN) { console.error('ERROR: SQUARE_ACCESS_TOKEN not set in .env'); process.exit(1); }
 
 const createLink = (name, desc, priceCents, isSub) => {
     return new Promise((resolve, reject) => {

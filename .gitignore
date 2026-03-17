@@ -116,3 +116,20 @@ _deploy/onlinerecycle/THE WHEEL.txt
 _deploy/onlinerecycle/THE_WHEEL.html
 briefings/CODEX-DIRECTIVE-*.md
 scripts/sync-claude-token.sh
+
+youandinotai.zip
+
+# Personal/reference files in .claude
+.claude/*.png
+.claude/*.jpg
+.claude/*.html
+.claude/*YouTube*
+.claude/FullSizeRender*
+.claude/Simplified*
+.claude/USE THIS*
+.claude/smaller*
+.claude/DISCORD*
+.claude/Screenshot*
+
+# Temp preview files
+youandinotai/public/preview-*.html
