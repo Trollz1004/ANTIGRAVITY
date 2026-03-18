@@ -4,10 +4,13 @@
 > Canonical status file: [briefings/REPOSITORY_RECORD.md](file:///C:/ANTIGRAVITY/briefings/REPOSITORY_RECORD.md) (LATEST STATE)
 > Canonical skill file: `briefings/CLAUDE-SKILL.md` (has EVERYTHING)
 
-## ðŸŸ¢ LIVE INFRASTRUCTURE STATUS (AS OF 2026-03-17)
+## 🟢 LIVE INFRASTRUCTURE STATUS (AS OF 2026-03-18)
 - **GCR Backend (ai-collab4kids)**: DEPLOYED & LIVE (Built from T5500 node).
 - **Cloudflare Tunnels (Sabretooth)**: LIVE & ROUTING (`openclaw`, `mcp`).
-- **Frontend (youandinotai.com)**: DEPLOYED & LIVE (React/Cloudflare Pages).
+- **Frontend (youandinotai.com)**: DEPLOYED & LIVE (React 19/Cloudflare Pages).
+- **Daily.co Video Rooms**: INTEGRATED (REST + iframe).
+- **Data Export Worker**: IMPLEMENTED (scheduler.py).
+- **Board Moderation**: IMPLEMENTED (Reporting endpoints).
 - **Git History**: PRISTINE & PURGED.
 
 ---

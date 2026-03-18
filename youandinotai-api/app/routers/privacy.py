@@ -58,6 +58,7 @@ async def export_data(
         id=uuid.uuid4(),
         user_id=user.id,
         action="export_requested",
+        status="pending",
         created_at=datetime.now(timezone.utc),
     )
     db.add(log)
@@ -77,6 +78,7 @@ async def delete_account(
         id=uuid.uuid4(),
         user_id=user.id,
         action="delete_requested",
+        status="pending",
         created_at=datetime.now(timezone.utc),
     )
     db.add(log)

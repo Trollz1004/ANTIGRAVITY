@@ -176,6 +176,10 @@ class CommentResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class PostReportRequest(BaseModel):
+    reason: str = Field(min_length=1, max_length=500)
+
+
 # ── Events ──
 
 class EventCreateRequest(BaseModel):
@@ -198,6 +202,15 @@ class EventResponse(BaseModel):
     max_attendees: int | None
     attendee_count: int
     category: str
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+class EventRSVPResponse(BaseModel):
+    id: uuid.UUID
+    event_id: uuid.UUID
+    user_id: uuid.UUID
+    status: str
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
@@ -298,3 +311,7 @@ class DoubleDateSessionResponse(BaseModel):
     status: str
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
+
+
+class DoubleDateCreateRequest(BaseModel):
+    match_id: uuid.UUID

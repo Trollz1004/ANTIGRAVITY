@@ -54,6 +54,7 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-2.5-pro"
     kimi_api_key: str = ""
     kimi_model: str = "kimi-2.6"
+    daily_api_key: str = ""
 
     jwt_secret: str = Field(
         default="",
