@@ -51,8 +51,8 @@ WHAT OPUS DID THIS SESSION:
    - briefings/COPY-PASTE-POSTS.txt — 3 plain text posts for browser copy-paste
 
 7. CLOUDFLARE TOKENS ROTATED
-   - FTK Bearer: X0hAJjrzTrtLlZGDbpzuPw_FL2AP52wXb6U1T0Bt (DNS + Workers Routes)
-   - Global API Key: c79e1a66ce1aaef6ccbd32e598ebc0f6082cd (full admin)
+   - FTK Bearer: [REDACTED] (DNS + Workers Routes)
+   - Global API Key: [REDACTED] (full admin)
    - Both stored in vault + GitHub secrets on ANTIGRAVITY + If-Not-Gemini repos
 
 8. GITHUB SECRETS CLEANED
