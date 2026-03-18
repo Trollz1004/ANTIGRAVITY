@@ -315,3 +315,15 @@ class DoubleDateSessionResponse(BaseModel):
 
 class DoubleDateCreateRequest(BaseModel):
     match_id: uuid.UUID
+
+
+# ── User Registration ──
+
+class UserRegisterRequest(BaseModel):
+    email: EmailStr
+    display_name: str = Field(min_length=1, max_length=100)
+
+
+class UserRegisterResponse(BaseModel):
+    user_id: uuid.UUID
+    session_token: str
