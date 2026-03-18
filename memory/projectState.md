@@ -1,72 +1,43 @@
-# PROJECT STATE — COMPLETE SYSTEM MAP
+# PROJECT STATE — LIVE BASELINE
 
-> 2026-03-10 guard rail: large parts of this file are historical and still contain pre-cutover `OPUSONLY`, Stripe-era, and dead-deployment context. Do not use this file by itself for live repo, node, backend, or payment decisions.
->
-> Current live sources to trust first:
-> - `C:\ANTIGRAVITY\AGENTS.md`
-> - `C:\ANTIGRAVITY\memory\activeContext.md`
-> - `C:\ANTIGRAVITY\briefings\LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
-> - `C:\ANTIGRAVITY\briefings\GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
+**Last Updated:** 2026-03-18
 
-**Last Updated**: 2026-02-14T08:30:00Z
+This file is the short-form current state. For canonical repo truth, use:
 
-## Active Repos
+- `C:\ANTIGRAVITY\AGENTS.md`
+- `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`
+- `C:\ANTIGRAVITY\memory\activeContext.md`
+- `C:\ANTIGRAVITY\briefings\LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
 
-| Repo | Owner | Purpose | Status |
-|------|-------|---------|--------|
-| Kraken_Assist_Local_Disk_9020 | Trollz1004 | REVENUE-CORE dashboard (React SPA) | ACTIVE — main branch |
-| ENIGMA-private | Trollz1004 | Internal ops, scripts, opus-ai tools | ACTIVE |
-| youandinotai | youandinotai | DateApp platform code | PRIVATE |
-| onlinerecycle | onlinerecycle | Crosslister for bridge funding | PRIVATE |
-| ai-solutions-store | Ai-Solutions-Store | Charity storefront | PRIVATE |
-| aicollab4kids | aicollab4kids | Charity ops | PRIVATE |
-| aidoesitall-dashboard | aicollabforkids | Public transparency | PUBLIC |
-| Finding-ClaudeMo | Trollz1004 | Pinned tribute repo | PRESERVED |
+## Current Live Repo
 
-## The 4 Duplicate Date Apps (THE MEMORY PROBLEM)
+| Field | Value |
+|-------|-------|
+| Authoritative root | `C:\ANTIGRAVITY` |
+| Branch | `main` |
+| Worktree | Clean on March 18, 2026 |
+| Frontend | Cloudflare Pages |
+| Backend | FastAPI + PostgreSQL |
+| Payments | Square |
+| OpenClaw | Local Sabretooth gateway on `127.0.0.1:18789` |
+| Ollama | Local on `127.0.0.1:11434` |
 
-Joshua has built the SAME date app 4 times across different platforms because Claude loses context:
-1. **GCP Cloud Run** — FastAPI backend, Cloud SQL PostgreSQL (ACTIVE — was thought banned, confirmed NOT banned)
-2. **AWS EC2** — Backup backend (3.84.226.108, Nginx+FastAPI)  
-3. **Railway** — Dead deployment (API CNAME pointed here, now broken)
-4. **This repo (Kraken/9020)** — React SPA dashboard, no backend, client-side only
+## Product Truth
 
-**THIS MUST NEVER HAPPEN AGAIN. The memory-bank prevents it.**
+- **YouAndINotAI** is the primary active product in this repo.
+- **Cloudflare Pages** frontend deploy succeeded on March 18, 2026.
+- **Backend test suite** passed with `61` tests on March 18, 2026.
+- **Privacy / video / double-date** flows are present in both backend and frontend code.
 
-## Node Architecture
+## Operational Truth
 
-| Node | IP | Role | Drive | Status |
-|------|-----|------|-------|--------|
-| SABRETOOTH | 192.168.0.8 | Master Orchestrator / Dev | E:\OPUSONLY | Primary dev machine |
-| 9020 | 192.168.0.5 | Secondary Dev / Network Storage | D:\OPUSONLY, D:\ (480GB SSD) | CURRENT MACHINE |
-| T5500 | 192.168.0.15 | Marketing + Ollama | C:\OPUSONLY | Wiped, ready for setup |
-| AWS-EC2 | 3.84.226.108 | Cloud Backend | - | FastAPI on port 8000, PM2 managed |
+- Sabretooth is the authoritative live node and current command post.
+- The OpenClaw scheduled task calls `C:\Users\joshl\.openclaw\gateway.cmd`.
+- Personal Vault remains the continuity backup location for `.env`-class secrets and memory snapshots.
+- `chat.txt` currently lives at `C:\ANTIGRAVITY\chat.txt` and is intentionally ignored by git.
 
-## Domains
+## Known Gaps
 
-| Domain | DNS | Current State |
-|--------|-----|---------------|
-| youandinotai.com | Cloudflare | HTTP 530 — dead tunnel origin (T5500 was wiped) |
-| api.youandinotai.com | Cloudflare CNAME | DEAD — points to Railway, MUST change to Cloud Run |
-| www.youandinotai.com | Cloudflare | Broken — same as root |
-| youandinotai.online | Cloudflare | Redirect domain — leave alone |
-
-**Cloudflare Account ID**: 516a3a855f44f5ad8453636d163ae25d  
-**Dead Tunnel to DELETE**: e7de7653-980c-49fc-a116-4a05871025ae
-
-## Backend (What Actually Works)
-
-- **Cloud Run URL**: https://dateapp-backend-io5tscl75a-ue.a.run.app (HTTP 200, 52 endpoints)  
-  GCP project `ai-collab4kids` is ACTIVE (NOT banned)
-- **AWS EC2**: 3.84.226.108 (FastAPI port 8000, PM2: `dateapp-backend`)
-- **Database**: Cloud SQL `dateapp-db` (PostgreSQL 15, 6 tables: users, profiles, matches, messages, subscriptions, payments)
-- **Stripe**: $1 AuthHold for human verification (void after verify)
-
-## This Repo (Kraken_Assist_Local_Disk_9020)
-
-- **Purpose**: REVENUE-CORE command dashboard
-- **Stack**: React 19 + TypeScript + Vite 6 + Tailwind CDN
-- **Port**: 3000 (or 3001 if occupied)
-- **Branch**: main (active), stable (NUCLEAR REVERT — DO NOT TOUCH)
-- **AI**: Was Gemini SDK (out of 300 credits), switching to Claude
-- **State**: Client-side SPA, localStorage persistence, simulation mode by default
+1. `CLOUDFLARE_API_TOKEN` in `.env` still fails verify and needs a real replacement token.
+2. Square webhook signature recovery is still incomplete.
+3. Docker is not available in the current Sabretooth shell.

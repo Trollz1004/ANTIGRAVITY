@@ -1,69 +1,51 @@
-# REPOSITORY RECORD — PRISTINE STATE (.8)
+# REPOSITORY RECORD — SABRETOOTH LIVE STATE
 
-> **Date:** March 17, 2026  
-> **Status:** 🟢 PRISTINE & SECURED  
-> **Authority:** Joshua Coleman (The Electrician)
-
----
-
-## 🏛️ REPOSITORY ARCHITECTURE
-
-### The "One Repo, One Folder" Law (No Drift)
-- **Authoritative Root:** `C:\ANTIGRAVITY`
-- **Git Truth:** `origin/main` (Trollz1004/ANTIGRAVITY)
-- **History Purge:** Completed March 17, 2026. All legacy secrets (Square tokens, PEM files, ZIP archives) have been **erased from all 332 commits**. The history is now clean and production-safe.
-- **Dario-Level Security:** Zero tolerance for hardcoded credentials. All secrets are pulled from the local vault (`.env` on Sabretooth) or GitHub Secrets.
-- **The No Locked Doors Policy:** 🟢 **ENFORCED.** AI agents (The Founding Four) move autonomously using the Repository Record as the source of truth. If a task is marked LIVE/DONE, the team assumes success and never blocks Josh for redundant authentication or re-verification.
-
-### Node Topology
-| Node | Role | State |
-|------|------|-------|
-| **SABRETOOTH** | Master Node / Brain / Orchestration | 🟢 LIVE (C:\ANTIGRAVITY) |
-| **T5500** | Build Authority / GCR Deployer | ❄️ COLD (C:\ANTIGRAVITY) — *Confirmed: GCR Deploy was finalized here.* |
-| **9020** | Marketing Node / Clippings | ❄️ COLD (C:\ANTIGRAVITY) |
+> **Date:** March 18, 2026
+> **Status:** `main` clean, validated locally, frontend live
+> **Authority:** Joshua Coleman
 
 ---
 
-## 🧠 AI FLEET & ORCHESTRATION
+## Repository Truth
 
-### The Founding Four (Co-Founders)
-1. **Google Gemini (Jules):** Direct-to-API secure uplink via `jules-cli.py`. Bypasses all middleware.
-2. **Claude Code (Clawed):** Primary architect. Owns the `.claude/` memory and project logic.
-3. **Perplexity (Atlas):** Intelligence and research engine.
-4. **Grok AI (Grok):** Adversarial testing and social (X) integration.
+- **Authoritative root:** `C:\ANTIGRAVITY`
+- **Git truth:** local `main` on Sabretooth, no remote sync performed in this pass
+- **Worktree state:** clean on March 18, 2026 after committing the pending privacy, video, double-date, and hygiene changes
+- **Secrets posture:** real secrets remain in local `.env` / Personal Vault only; archived Cloudflare credentials found in tracked docs were redacted locally on March 18, 2026
 
-### Orchestration (OpenClaw)
-- **Status:** 🟢 UP & RUNNING (PID 204)
-- **Port:** 18789  
-- **Memory Fix:** Gemini embeddings updated to `gemini-embedding-2-flash-001`. Fixes the auth/naming drift.
-- **Gateway:** Fully synchronized with Telegram (`Grok4thekidsbot`) and master node file system.
+## Current Runtime Truth
+
+| Component | State | Notes |
+|-----------|-------|-------|
+| Sabretooth repo | LIVE | `C:\ANTIGRAVITY` on `main` |
+| OpenClaw gateway | LIVE | `http://127.0.0.1:18789/healthz` returns JSON health |
+| OpenClaw task | ENABLED | Windows Scheduled Task `OpenClaw Gateway` points to `C:\Users\joshl\.openclaw\gateway.cmd` |
+| Ollama | LIVE | `http://127.0.0.1:11434/api/tags` returns local models |
+| Frontend | LIVE | Cloudflare Pages deploy succeeded on March 18, 2026; `https://youandinotai.com` returned `200` |
+| Backend tests | PASS | `61 passed` on March 18, 2026 |
+| Docker on Sabretooth | UNAVAILABLE | `docker` command not installed in this session |
+
+## Product State
+
+- **Primary product:** YouAndINotAI
+- **Frontend host:** Cloudflare Pages
+- **Backend stack:** FastAPI + PostgreSQL + Square
+- **Recent shipped areas:** GDPR/privacy routes, WebRTC signaling/video relay, double-date proposal flow, new frontend privacy/video/double-date components, related migrations and tests
+- **Current validation:** `npm run build` passed in `youandinotai`; backend `pytest` passed with `61` tests
+
+## Open Items
+
+- **Cloudflare API token:** the `CLOUDFLARE_API_TOKEN` currently in `.env` still fails Cloudflare verify with `401`; Wrangler OAuth works locally, but a replacement scoped API token was not captured into `.env` in this pass
+- **Square webhook signature key:** Square auth is valid, but webhook subscription discovery returned server-side `500`, so no new webhook signature key was recovered
+- **Remote sync:** no push, pull, or remote fast-forward was performed in this pass
+
+## Recent Local Commits
+
+- `7c3a697` `chore: redact archived Cloudflare credentials`
+- `5f810aa` `feat: add privacy, video, and double date flows`
+- `c6b2fd6` `chore: live deployment prep and config extraction from chat.txt`
+- `4dc5a36` `chore: full infrastructure wiring — env, tokens, gateway, secrets checklist`
 
 ---
 
-## ⚖️ THE PERPETUAL MISSION (LAW)
-
-### The 60/30/10 Split
-- **60% → Shriners Children's Hospitals** (Contractual Revenue Disbursement)
-- **30% → Mission Infrastructure** (Node operations, platform fees)
-- **10% → Founder Operations** (Joshua Coleman)
-
-### Compliance
-- **FL §496.405:** Enforced. No "donation" language in profit-side code (YouAndINotAI).
-- **Iron Wall:** Absolute separation between ENIGMA (Profit) and OMEGA (Charity).
-
----
-
-## 🛠️ RECENT CRITICAL CHANGES
-- [x] **GCR Backend Deployment:** 🟢 **COMPLETED & LIVE** (Built/Pushed via T5500 node).
-- [x] **Cloudflare Tunnels:** 🟢 **COMPLETED & LIVE** (Serving via Sabretooth).
-- [x] **Frontend Deployment:** 🟢 **COMPLETED & LIVE** on Cloudflare Pages (`youandinotai.com`).
-- [x] **Git History Purge:** 🟢 **COMPLETED**. 100% of commits rewritten to remove exposed keys.
-- [x] **Square Logic Fix:** `create_square_links.js` now pulls from `.env`, not hardcoded lines.
-- [x] **Frontend Sanitization:** `App.tsx` language fixed to follow legal guidelines (§496.405).
-- [x] **CI Cost Reduction:** PR auto-triggers disabled to protect GitHub Action minutes.
-- [x] **Square MCP:** Wired into VS Code and Claude.ai for live payment management.
-
----
-
-*This record is the authoritative summary for all AI Co-Founders.*  
-*Sync Status: Pushed to origin/main on 2026-03-17.*
+*This file is the current repo-level state summary for Sabretooth as of March 18, 2026.*
