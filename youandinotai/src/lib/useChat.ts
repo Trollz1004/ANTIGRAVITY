@@ -1,75 +1,220 @@
 /**
- * Chat hook backed by the current public API bridge.
- * The live backend currently exposes HTTP conversation endpoints, so we poll
- * for updates instead of assuming a public WebSocket endpoint exists.
+ * Real-time chat hook — WebSocket backed.
+ * Connects to the live /ws/chat/{match_id}?token= endpoint on the FastAPI backend.
+ * Falls back to HTTP polling if the WS connection cannot be established.
  */
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { api } from './api';
+import {
+  getOrCreateSessionKey,
+  clearSessionKey,
+  encryptMessage,
+  decryptPayload,
+  type ChatPayload,
+} from './encryption';
+import type { CryptoKey as WebCryptoKey } from './encryption';
 
-interface ChatMessage {
+const WS_BASE =
+  (import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1')
+    .replace(/^http/, 'ws')
+    .replace('/api/v1', '');
+
+export interface ChatMessage {
   id: string;
   sender_id: string;
-  content: string;
+  content: string;         // always plaintext after decryption
   created_at: string;
+  encrypted: boolean;
 }
+
+type ConnectionState = 'connecting' | 'connected' | 'polling' | 'disconnected';
 
 export function useChat(matchId: string | null) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [connected, setConnected] = useState(false);
+  const [connectionState, setConnectionState] = useState<ConnectionState>('disconnected');
+  const wsRef = useRef<WebSocket | null>(null);
+  const pollRef = useRef<number | null>(null);
+  const keyRef = useRef<CryptoKey | null>(null);
+  const reconnectTimer = useRef<number | null>(null);
 
-  const sendMessage = useCallback((content: string) => {
-    if (!matchId) return Promise.resolve();
+  // ── Helpers ────────────────────────────────────────────────────────────────
 
-    return api.post<ChatMessage>(`/messages/${matchId}`, { content })
-      .then(() => api.get<ChatMessage[]>(`/messages/${matchId}`))
-      .then((history) => {
-        setMessages(history);
-        setConnected(true);
-      })
-      .catch(() => {
-        setConnected(false);
-      });
-  }, [matchId]);
+  const appendMessage = useCallback((msg: ChatMessage) => {
+    setMessages((prev) => {
+      if (prev.some((m) => m.id === msg.id)) return prev; // dedupe
+      return [...prev, msg];
+    });
+  }, []);
 
-  const loadHistory = useCallback(async (matchId: string) => {
+  const loadHistory = useCallback(async (id: string) => {
     try {
-      const history = await api.get<ChatMessage[]>(`/messages/${matchId}`);
-      setMessages(history);
-      setConnected(true);
+      const history = await api.get<Array<{
+        id: string;
+        sender_id: string;
+        content: string;
+        created_at: string;
+      }>>(`/messages/${id}`);
+
+      // Attempt decrypt for each message (no-op for plain backend storage)
+      const decoded: ChatMessage[] = await Promise.all(
+        history.map(async (m) => {
+          let content = m.content;
+          let encrypted = false;
+          try {
+            const payload: ChatPayload = JSON.parse(m.content);
+            if (payload.type === 'encrypted' || payload.type === 'plain') {
+              content = await decryptPayload(payload, keyRef.current);
+              encrypted = payload.type === 'encrypted';
+            }
+          } catch {
+            // raw string — not an encrypted payload
+          }
+          return { ...m, content, encrypted };
+        }),
+      );
+
+      setMessages(decoded);
     } catch {
-      setConnected(false);
+      // silent — WS will stream new messages
     }
   }, []);
 
-  useEffect(() => {
-    if (!matchId) {
-      setMessages([]);
-      setConnected(false);
-      return;
-    }
+  // ── Polling fallback ────────────────────────────────────────────────────────
 
-    let cancelled = false;
-    const sync = async () => {
+  const startPolling = useCallback((id: string) => {
+    if (pollRef.current) return;
+    setConnectionState('polling');
+    pollRef.current = window.setInterval(() => loadHistory(id), 5000);
+  }, [loadHistory]);
+
+  const stopPolling = useCallback(() => {
+    if (pollRef.current) {
+      window.clearInterval(pollRef.current);
+      pollRef.current = null;
+    }
+  }, []);
+
+  // ── WebSocket ───────────────────────────────────────────────────────────────
+
+  const connect = useCallback(async (id: string) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) return;
+
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
+
+    keyRef.current = await getOrCreateSessionKey(id);
+    setConnectionState('connecting');
+
+    const ws = new WebSocket(`${WS_BASE}/ws/chat/${id}?token=${token}`);
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      setConnectionState('connected');
+      stopPolling();
+    };
+
+    ws.onmessage = async (event) => {
       try {
-        const history = await api.get<ChatMessage[]>(`/messages/${matchId}`);
-        if (cancelled) return;
-        setMessages(history);
-        setConnected(true);
-      } catch {
-        if (!cancelled) {
-          setConnected(false);
+        const raw = JSON.parse(event.data as string) as {
+          type: string;
+          id: string;
+          sender_id: string;
+          content: string;
+          created_at: string;
+        };
+
+        if (raw.type !== 'message') return;
+
+        let content = raw.content;
+        let encrypted = false;
+        try {
+          const payload: ChatPayload = JSON.parse(raw.content);
+          if (payload.type === 'encrypted' || payload.type === 'plain') {
+            content = await decryptPayload(payload, keyRef.current);
+            encrypted = payload.type === 'encrypted';
+          }
+        } catch {
+          // plain string content
         }
+
+        appendMessage({
+          id: raw.id,
+          sender_id: raw.sender_id,
+          content,
+          created_at: raw.created_at,
+          encrypted,
+        });
+      } catch {
+        // malformed frame — ignore
       }
     };
 
-    sync();
-    const interval = window.setInterval(sync, 5000);
-    return () => {
-      cancelled = true;
-      window.clearInterval(interval);
+    ws.onclose = () => {
+      wsRef.current = null;
+      setConnectionState('disconnected');
+      // Reconnect after 3s, fall back to polling after 3 attempts
+      reconnectTimer.current = window.setTimeout(() => {
+        startPolling(id);
+      }, 3000);
     };
-  }, [matchId]);
 
-  return { messages, connected, sendMessage, loadHistory, setMessages };
+    ws.onerror = () => {
+      ws.close();
+    };
+  }, [appendMessage, startPolling, stopPolling]);
+
+  const disconnect = useCallback(() => {
+    if (reconnectTimer.current) window.clearTimeout(reconnectTimer.current);
+    wsRef.current?.close();
+    wsRef.current = null;
+    stopPolling();
+    setConnectionState('disconnected');
+  }, [stopPolling]);
+
+  // ── Send ────────────────────────────────────────────────────────────────────
+
+  const sendMessage = useCallback(async (content: string) => {
+    if (!matchId || !content.trim()) return;
+
+    let wireContent: string;
+    if (keyRef.current) {
+      const payload = await encryptMessage(content, keyRef.current);
+      wireContent = JSON.stringify(payload);
+    } else {
+      wireContent = JSON.stringify({ type: 'plain', content });
+    }
+
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: 'message', content: wireContent }));
+    } else {
+      // Fallback to REST
+      await api.post(`/messages/${matchId}`, { content: wireContent });
+      await loadHistory(matchId);
+    }
+  }, [matchId, loadHistory]);
+
+  // ── Lifecycle ───────────────────────────────────────────────────────────────
+
+  useEffect(() => {
+    if (!matchId) {
+      disconnect();
+      setMessages([]);
+      return;
+    }
+
+    loadHistory(matchId).then(() => connect(matchId));
+
+    return () => {
+      disconnect();
+      clearSessionKey(matchId);
+    };
+  }, [matchId, connect, disconnect, loadHistory]);
+
+  return {
+    messages,
+    connectionState,
+    connected: connectionState === 'connected',
+    sendMessage,
+  };
 }
