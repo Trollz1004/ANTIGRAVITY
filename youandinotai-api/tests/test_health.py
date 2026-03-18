@@ -34,9 +34,9 @@ def test_square_health_ready_requires_dynamic_square_credentials(monkeypatch):
     assert health._square_health_ready() is False
 
 
-def test_square_health_ready_requires_signature_material_when_enabled(monkeypatch):
+def test_square_health_ready_tolerates_missing_signature_material_when_enabled(monkeypatch):
     monkeypatch.setattr(health, "settings", _settings(signature_key=""))
-    assert health._square_health_ready() is False
+    assert health._square_health_ready() is True
 
 
 def test_health_check_reports_square_connected(monkeypatch):

@@ -55,6 +55,21 @@ async function upstreamJson(path, init = {}) {
   };
 }
 
+async function proxyUpstream(path, request) {
+  const headers = new Headers(request.headers);
+  const url = new URL(request.url);
+  headers.set('x-forwarded-host', url.host);
+  headers.set('x-forwarded-proto', url.protocol.replace(':', ''));
+  headers.set('x-original-url', request.url);
+
+  return fetch(`${UPSTREAM_BASE}${path}`, {
+    method: request.method,
+    headers,
+    body: request.method === 'GET' || request.method === 'HEAD' ? undefined : request.body,
+    redirect: 'manual',
+  });
+}
+
 function getBearerToken(request) {
   const auth = request.headers.get('authorization') || '';
   if (!auth.toLowerCase().startsWith('bearer ')) return null;
@@ -353,6 +368,20 @@ async function handleMessages(request, conversationId) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const webhookProxyMap = {
+      '/webhooks/square': '/square/webhook',
+      '/webhooks/square-payment': '/square/webhook',
+      '/api/v1/webhooks/square': '/square/webhook',
+      '/api/v1/webhooks/square-payment': '/square/webhook',
+    };
+
+    if (webhookProxyMap[url.pathname]) {
+      return proxyUpstream(webhookProxyMap[url.pathname], request);
+    }
+
+    if (url.pathname.startsWith('/webhooks/')) {
+      return textResponse('Not found', 404);
+    }
 
     if (!url.pathname.startsWith('/api/v1/')) {
       return env.ASSETS.fetch(request);
