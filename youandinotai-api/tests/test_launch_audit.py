@@ -63,6 +63,7 @@ def test_protected_http_routes_require_auth():
         ("/", "GET"),
         ("/api/v1/health", "GET"),
         ("/api/v1/auth/register", "POST"),
+        ("/api/v1/users/register", "POST"),
         ("/api/v1/auth/login", "POST"),
         ("/api/v1/auth/refresh", "POST"),
         ("/api/v1/webhooks/stripe", "POST"),
