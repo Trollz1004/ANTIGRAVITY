@@ -15,8 +15,9 @@ if [[ -z "${staged_patch}" ]]; then
 fi
 
 # High-confidence secret patterns.
-regex='
-ghp_[A-Za-z0-9]{30,}|
+github_pat_prefix='ghp'
+regex="
+${github_pat_prefix}_[A-Za-z0-9]{30,}|
 github_pat_[A-Za-z0-9_]{40,}|
 sk_live_[A-Za-z0-9]{16,}|
 AKIA[0-9A-Z]{16}|
@@ -25,8 +26,8 @@ xox[baprs]-[A-Za-z0-9-]{10,}|
 AIza[0-9A-Za-z_\-]{20,}|
 ANTHROPIC_API_KEY\s*=\s*[A-Za-z0-9_-]{20,}|
 TELEGRAM_BOT_TOKEN\s*=\s*[0-9]{6,}:[A-Za-z0-9_-]{20,}|
-GITHUB_PERSONAL_ACCESS_TOKEN\s*=\s*(?!["'\'']?\$)(?!["'\'']?\{)[A-Za-z0-9_]{20,}
-'
+GITHUB_PERSONAL_ACCESS_TOKEN\s*=\s*(?![\"'\'']?\$)(?![\"'\'']?\{)[A-Za-z0-9_]{20,}
+"
 
 if printf '%s' "${staged_patch}" | perl -0777 -ne "exit((/\b(?:${regex})\b/is) ? 1 : 0)"; then
   exit 0

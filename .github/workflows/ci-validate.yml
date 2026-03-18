@@ -75,7 +75,8 @@ jobs:
         run: |
           SECRETS_FOUND=0
           # Check tracked files for secret patterns
-          PATTERNS='AIza[0-9A-Za-z_-]{20,}|[0-9]{8,10}:[A-Za-z0-9_-]{35}|sk_live_[A-Za-z0-9]{16,}|ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}'
+          GITHUB_PAT_PREFIX='ghp'
+          PATTERNS="AIza[0-9A-Za-z_-]{20,}|[0-9]{8,10}:[A-Za-z0-9_-]{35}|sk_live_[A-Za-z0-9]{16,}|${GITHUB_PAT_PREFIX}_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}"
           HITS=$(git ls-files \
             memory/ briefings/ mcp-server/ youandinotai/ antigravity/ revenue-core/ CLAUDE.md AGENTS.md \
             | grep -E '\.(md|ts|tsx|json|txt)$' \

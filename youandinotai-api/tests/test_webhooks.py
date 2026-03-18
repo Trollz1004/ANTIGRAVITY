@@ -139,6 +139,26 @@ class TestSquareWebhookEndpointConfig:
         assert signature_key == "legacy-key"
         assert notification_url == "https://example.com/legacy"
 
+    def test_missing_signature_material_skips_verification(self):
+        from app.routers.webhooks import _should_verify_square_signature
+
+        settings = MagicMock(
+            square_webhook_verify_signature=True,
+            square_payment_webhook_signature_key="",
+            square_payment_webhook_notification_url="",
+            square_webhook_signature_key="",
+            square_webhook_notification_url="",
+        )
+
+        should_verify, signature_key, notification_url = _should_verify_square_signature(
+            settings,
+            "payment",
+        )
+
+        assert should_verify is False
+        assert signature_key == ""
+        assert notification_url == ""
+
 
 class TestSquarePaymentTierExtraction:
     """Test extraction of subscription tier from Square payment events."""
@@ -297,6 +317,57 @@ def test_completed_founding_member_payment_activates_subscription(client, db_ses
     assert user is not None
     assert user.subscription_active is True
     assert user.subscription_tier == "founding_member"
+
+
+def test_payment_webhook_skips_signature_check_when_material_missing(
+    client,
+    db_session_factory,
+    monkeypatch,
+):
+    from app.config import get_settings
+
+    monkeypatch.setenv("SQUARE_WEBHOOK_VERIFY_SIGNATURE", "true")
+    monkeypatch.setenv("SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY", "")
+    monkeypatch.setenv("SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL", "")
+    monkeypatch.setenv("SQUARE_WEBHOOK_SIGNATURE_KEY", "")
+    monkeypatch.setenv("SQUARE_WEBHOOK_NOTIFICATION_URL", "")
+    get_settings.cache_clear()
+
+    async def seed_user() -> None:
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=uuid.uuid4(),
+                    email="nosig@example.com",
+                    password_hash="hashed",
+                    display_name="No Sig",
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            await session.commit()
+
+    import asyncio
+
+    asyncio.run(seed_user())
+
+    payload = make_square_payment_event(
+        event_id="evt_missing_sig_material",
+        amount_cents=100,
+        buyer_email="nosig@example.com",
+        note="Bot-Shield Verification",
+        payment_status="COMPLETED",
+    )
+
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={"Content-Type": "application/json"},
+        content=json.dumps(payload, separators=(",", ":")),
+    )
+
+    assert response.status_code == 200, response.text
+
+    get_settings.cache_clear()
 
 
 class TestNoStripeReferences:

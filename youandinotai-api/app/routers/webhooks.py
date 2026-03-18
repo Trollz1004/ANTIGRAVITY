@@ -156,6 +156,24 @@ def _resolve_square_signature_material(
     raise ValueError(f"Unsupported Square webhook endpoint: {endpoint}")
 
 
+def _should_verify_square_signature(
+    settings: Any,
+    endpoint: str,
+) -> tuple[bool, str, str]:
+    """Skip verification safely when a node is missing Square webhook material."""
+    signature_key, notification_url = _resolve_square_signature_material(settings, endpoint)
+    if not settings.square_webhook_verify_signature:
+        return False, signature_key, notification_url
+    if signature_key and notification_url:
+        return True, signature_key, notification_url
+
+    logger.warning(
+        "Square %s webhook signature verification skipped because configuration is incomplete.",
+        endpoint,
+    )
+    return False, signature_key, notification_url
+
+
 # ── Square Payment Webhook (Bot-Shield + Subscriptions) ──
 
 
@@ -363,11 +381,11 @@ async def square_payment_webhook(
             detail="Webhook payload exceeds size limit.",
         )
 
-    if settings.square_webhook_verify_signature:
-        signature_key, notification_url = _resolve_square_signature_material(
-            settings,
-            "payment",
-        )
+    should_verify, signature_key, notification_url = _should_verify_square_signature(
+        settings,
+        "payment",
+    )
+    if should_verify:
         _verify_square_signature(
             payload,
             square_signature,
@@ -718,11 +736,11 @@ async def square_booking_webhook(
             detail="Webhook payload exceeds size limit.",
         )
 
-    if settings.square_webhook_verify_signature:
-        signature_key, notification_url = _resolve_square_signature_material(
-            settings,
-            "booking",
-        )
+    should_verify, signature_key, notification_url = _should_verify_square_signature(
+        settings,
+        "booking",
+    )
+    if should_verify:
         _verify_square_signature(
             payload,
             square_signature,

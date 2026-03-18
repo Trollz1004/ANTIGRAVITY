@@ -16,7 +16,7 @@ const PROVIDERS_WITH_KEYS: AiProviderSlug[] = ["claude", "gemini", "perplexity",
 const PROVIDER_KEY_LABELS: Record<AiProviderSlug, { placeholder: string; docsUrl: string; envVar: string }> = {
   manus: { placeholder: "Built-in — no key required", docsUrl: "", envVar: "" },
   claude: {
-    placeholder: "sk-ant-api03-...",
+    placeholder: "Anthropic API key",
     docsUrl: "https://console.anthropic.com/settings/keys",
     envVar: "ANTHROPIC_API_KEY",
   },

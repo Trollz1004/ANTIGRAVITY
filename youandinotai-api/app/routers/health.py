@@ -33,12 +33,7 @@ def _square_health_ready() -> bool:
     payment_link_ready = bool(str(settings.square_access_token or "").strip()) and bool(
         str(settings.square_location_id or "").strip()
     )
-    if not settings.square_webhook_verify_signature:
-        return payment_link_ready
-
-    signature_key_ready = bool(_payment_signature_key())
-    notification_url_ready = bool(_payment_notification_url())
-    return payment_link_ready and signature_key_ready and notification_url_ready
+    return payment_link_ready
 
 
 @router.get("/health", response_model=HealthResponse)

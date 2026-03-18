@@ -36,6 +36,22 @@ _ARCHIVE/dot-dirs/.playwright-profiles/
 _ARCHIVE/
 .netlify/
 .mcp.json
+.wrangler/
+
+# OpenClaw runtime/auth/cache (local only, never commit)
+.openclaw/
+openclaw*.json
+openclaw*.json.bak*
+openclaw*.log
+openclaw*.pid
+openclaw*.token
+openclaw*.env
+gateway.local.cmd
+gateway-*.cmd
+gateway-*.log
+gateway-*.pid
+gateway-*.json
+gateway-*.env
 
 # Build outputs (deploy via CI, not git)
 antigravity/out/
