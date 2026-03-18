@@ -13,6 +13,7 @@
 - **Git Truth:** `origin/main` (Trollz1004/ANTIGRAVITY)
 - **History Purge:** Completed March 17, 2026. All legacy secrets (Square tokens, PEM files, ZIP archives) have been **erased from all 332 commits**. The history is now clean and production-safe.
 - **Dario-Level Security:** Zero tolerance for hardcoded credentials. All secrets are pulled from the local vault (`.env` on Sabretooth) or GitHub Secrets.
+- **The No Locked Doors Policy:** 🟢 **ENFORCED.** AI agents (The Founding Four) move autonomously using the Repository Record as the source of truth. If a task is marked LIVE/DONE, the team assumes success and never blocks Josh for redundant authentication or re-verification.
 
 ### Node Topology
 | Node | Role | State |
