@@ -19,6 +19,8 @@ import { Chat } from './app/pages/Chat';
 import { Boards } from './app/pages/Boards';
 import { Events } from './app/pages/Events';
 import { Volunteering } from './app/pages/Volunteering';
+import DataPrivacyDashboard from './components/DataPrivacyDashboard';
+import CharityTab from './components/CharityTab';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
 import './index.css';
 
@@ -42,6 +44,8 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/app/boards" element={<Boards />} />
             <Route path="/app/events" element={<Events />} />
             <Route path="/app/volunteer" element={<Volunteering />} />
+            <Route path="/app/privacy" element={<DataPrivacyDashboard />} />
+            <Route path="/app/charity" element={<CharityTab />} />
             <Route path="/app/verify" element={<Navigate to="/" replace />} />
           </Route>
         </Route>
