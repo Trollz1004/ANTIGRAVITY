@@ -1,14 +1,25 @@
 """FastAPI entrypoint for the YouAndINotAI REST API."""
 
-from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
+import json
 
 from app.config import get_settings
+from app.scheduler import setup_scheduler
 from app.routers import auth, boards, double_dates, events, health, messages, metrics, privacy, profiles, swipe, verify, video, volunteering, webhooks
 
 settings = get_settings()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Start background scheduler
+    scheduler = setup_scheduler()
+    yield
+    # Shutdown: Stop scheduler
+    scheduler.shutdown()
 
 app = FastAPI(
     title=settings.app_name,
@@ -16,7 +27,40 @@ app = FastAPI(
     description="YouAndINotAI — Social Platform for Good",
     docs_url="/api/v1/docs",
     openapi_url="/api/v1/openapi.json",
+    lifespan=lifespan,
 )
+
+# ── WebSocket Signaling for Video ─────────────────────────────────────────────
+
+# In-memory session tracking for signaling
+# In production, use Redis for multi-node support
+video_sessions: dict[str, list[WebSocket]] = {}
+
+@app.websocket("/api/v1/video/signaling/{match_id}")
+async def video_signaling(websocket: WebSocket, match_id: str):
+    await websocket.accept()
+    if match_id not in video_sessions:
+        video_sessions[match_id] = []
+    
+    video_sessions[match_id].append(websocket)
+    
+    try:
+        while True:
+            # Relay SDP/ICE candidates between peers in the same match
+            data = await websocket.receive_text()
+            message = json.loads(data)
+            
+            # Broadcast to other participants in this match
+            for client in video_sessions[match_id]:
+                if client != websocket:
+                    await client.send_text(json.dumps(message))
+                    
+    except WebSocketDisconnect:
+        video_sessions[match_id].remove(websocket)
+        if not video_sessions[match_id]:
+            del video_sessions[match_id]
+
+# ── Middlewares & Routers ─────────────────────────────────────────────────────
 
 app.add_middleware(
     CORSMiddleware,
