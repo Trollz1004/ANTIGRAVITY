@@ -1,6 +1,6 @@
 /**
  * CharityTab — Displays community impact metrics and mission details.
- * Fetches data from /api/v1/metrics/impact.
+ * Fetches data from /api/v1/volunteer/impact.
  */
 
 import { useState, useEffect } from 'react';
@@ -15,7 +15,7 @@ export default function CharityTab() {
   useEffect(() => {
     const fetchImpact = async () => {
       try {
-        const data = await api.get<VolunteerImpactResponse>('/metrics/impact');
+        const data = await api.get<VolunteerImpactResponse>('/volunteer/impact');
         setImpact(data);
       } catch (err) {
         console.error('Failed to fetch impact metrics:', err);

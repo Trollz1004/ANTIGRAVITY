@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { Heart, MessageCircle, User, LogOut, Compass, Users, Calendar, HandHeart } from 'lucide-react';
+import { Heart, MessageCircle, User, LogOut, Compass, Users, Calendar, HandHeart, Sparkles, Shield } from 'lucide-react';
 import { useAuth } from '../lib/auth';
 
 const NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolean }[] = [
@@ -9,6 +9,7 @@ const NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolea
   { to: '/app/boards', icon: Users, label: 'Boards' },
   { to: '/app/events', icon: Calendar, label: 'Events' },
   { to: '/app/volunteer', icon: HandHeart, label: 'Volunteer' },
+  { to: '/app/charity', icon: Sparkles, label: 'For The Kids' },
 ];
 
 export function AppShell() {
@@ -95,6 +96,19 @@ export function AppShell() {
               <User size={18} className="text-blue-400" />
             </div>
             {user?.display_name || 'Profile'}
+          </NavLink>
+          <NavLink
+            to="/app/privacy"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                isActive ? 'bg-white/[0.06] text-white' : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
+              }`
+            }
+          >
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center">
+              <Shield size={18} className="text-emerald-400" />
+            </div>
+            Data &amp; Privacy
           </NavLink>
           <button
             onClick={handleLogout}
