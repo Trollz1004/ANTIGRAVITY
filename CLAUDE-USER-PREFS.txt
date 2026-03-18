@@ -86,8 +86,8 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
 - Re-verified on-chain: 2026-03-13
 
 ## IRON WALL (ABSOLUTE — separation is CODE, not config)
-- ENIGMA (profit): YouAndINotAI, onlinerecycle.org
-- OMEGA (charity): ai-solutions.store, onlinerecycle.square.site
+- ENIGMA (profit): YouAndINotAI, onlinerecycle.org, onlinerecycle.square.site (eBay crosslister), onlinerecycle.square.site (eBay crosslister)
+- OMEGA (charity, 100% DAO): ai-solutions.store
 - ENIGMA and OMEGA NEVER cross. Not for accounting. Not for anything.
 
 ## LEGAL
@@ -167,3 +167,4 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
 - Dating app profits → fund Ai-Solutions.Store (100% DAO charity, kids in medical need)
 - 50-year horizon | Personal: disabled brother + autistic niece (OPUS TRUST, 10%)
 - "Until no kid is in need." #ForTheKids
+
