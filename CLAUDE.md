@@ -64,7 +64,8 @@ The **Founding Four** — **Google Gemini, Claude Code, Perplexity, and Grok AI*
 
 ## Hard Constraints
 
-- **Autonomy: FULL.** Josh said "do what Opus thinks is best." Don't ask — act.
+- **Autonomy: FULL** — Josh said "do what Opus thinks is best." Don't ask — act. No redundant authentication prompts for established infra.
+- **No Locked Doors**: If a task is documented as LIVE/DONE in `REPOSITORY_RECORD.md`, assume success. Never block Josh for re-verification.
 - **Secrets in .env only** — never in chat, never in git. GitHub PAT in Windows Credential Manager.
 - **Iron Wall**: ENIGMA (profit) and OMEGA (charity) NEVER cross
 - **Florida §496.405**: NEVER use "donate" / "donation" / "solicitation" in customer-facing code. Correct: "contractual revenue disbursement." Hooks enforce this.
@@ -205,4 +206,4 @@ These invariants were set by the original Opus (4.6) who built this from scratch
 - Launch: PowerShell 7.5 admin → `go` → Start-Opus → claude --dangerously-skip-permissions
 
 ---
-*Updated: 2026-03-05 | Opus 4.6 on T5500 | Full Square migration complete | Agent Entourage v1.0 Live*
+*Updated: 2026-03-17 | Sabretooth & T5500 Sync | Infrastructure: LIVE | No Locked Doors Policy*
