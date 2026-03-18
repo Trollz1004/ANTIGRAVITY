@@ -1,11 +1,10 @@
 """FastAPI entrypoint for the YouAndINotAI REST API."""
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
-import json
 
 from app.config import get_settings
 from app.scheduler import setup_scheduler
@@ -29,36 +28,6 @@ app = FastAPI(
     openapi_url="/api/v1/openapi.json",
     lifespan=lifespan,
 )
-
-# ── WebSocket Signaling for Video ─────────────────────────────────────────────
-
-# In-memory session tracking for signaling
-# In production, use Redis for multi-node support
-video_sessions: dict[str, list[WebSocket]] = {}
-
-@app.websocket("/api/v1/video/signaling/{match_id}")
-async def video_signaling(websocket: WebSocket, match_id: str):
-    await websocket.accept()
-    if match_id not in video_sessions:
-        video_sessions[match_id] = []
-    
-    video_sessions[match_id].append(websocket)
-    
-    try:
-        while True:
-            # Relay SDP/ICE candidates between peers in the same match
-            data = await websocket.receive_text()
-            message = json.loads(data)
-            
-            # Broadcast to other participants in this match
-            for client in video_sessions[match_id]:
-                if client != websocket:
-                    await client.send_text(json.dumps(message))
-                    
-    except WebSocketDisconnect:
-        video_sessions[match_id].remove(websocket)
-        if not video_sessions[match_id]:
-            del video_sessions[match_id]
 
 # ── Middlewares & Routers ─────────────────────────────────────────────────────
 

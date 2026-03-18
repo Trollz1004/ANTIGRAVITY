@@ -4,7 +4,7 @@ import asyncio
 import json
 import logging
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
 import aiofiles
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -39,14 +39,15 @@ os.makedirs(EXPORTS_DIR, exist_ok=True)
 
 async def purge_deleted_accounts():
     """Permanent deletion of accounts marked for deletion > 30 days ago."""
-    cutoff = datetime.now(timezone.utc) - timedelta(days=30)
+    now = datetime.now(timezone.utc)
     
     async with SessionLocal() as db:
         # Find logs for deletion requests older than 30 days that are still pending
         query = select(DataPrivacyLog).where(
             DataPrivacyLog.action == "delete_requested",
             DataPrivacyLog.status == "pending",
-            DataPrivacyLog.created_at <= cutoff
+            DataPrivacyLog.scheduled_for.is_not(None),
+            DataPrivacyLog.scheduled_for <= now,
         )
         logs = (await db.scalars(query)).all()
         

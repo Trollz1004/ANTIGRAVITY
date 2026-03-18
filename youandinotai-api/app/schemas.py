@@ -277,16 +277,43 @@ class MySignupResponse(BaseModel):
 
 # ── Privacy ──
 
-class PrivacyStatusResponse(BaseModel):
+class PrivacyProfileSummary(BaseModel):
+    bio: str | None
+    age: int | None
+    gender: str | None
+    looking_for: str | None
+    location: str | None
+    interests: list[str]
+    verified: bool
+    location_enabled: bool
+
+
+class PrivacyRequestResponse(BaseModel):
+    id: uuid.UUID
+    action: str
+    status: str
+    created_at: datetime
+    scheduled_for: datetime | None = None
+    model_config = ConfigDict(from_attributes=True)
+
+
+class PrivacyMyDataResponse(BaseModel):
+    user_id: uuid.UUID
     email: str
     display_name: str
+    created_at: datetime
+    profile: PrivacyProfileSummary | None = None
     message_count: int
     match_count: int
-    signup_count: int
+    photos_count: int
+    pending_requests: list[PrivacyRequestResponse]
 
 
-class PrivacyLocationUpdate(BaseModel):
-    enabled: bool
+class PrivacyActionResponse(BaseModel):
+    status: str
+    action: str
+    request_id: uuid.UUID
+    scheduled_for: datetime | None = None
 
 
 # ── Video Calls ──
@@ -304,17 +331,33 @@ class VideoCallResponse(BaseModel):
 
 # ── Double Dates ──
 
+class DoubleDateParticipantResponse(BaseModel):
+    user_id: uuid.UUID
+    display_name: str
+    photo_url: str | None = None
+    model_config = ConfigDict(from_attributes=True)
+
+
+class DoubleDateCoupleResponse(BaseModel):
+    match_id: uuid.UUID
+    members: list[DoubleDateParticipantResponse]
+
+
 class DoubleDateSessionResponse(BaseModel):
     id: uuid.UUID
     match_a_id: uuid.UUID
     match_b_id: uuid.UUID
     status: str
     created_at: datetime
+    accepted_match_ids: list[uuid.UUID] = Field(default_factory=list)
+    couple_a: DoubleDateCoupleResponse | None = None
+    couple_b: DoubleDateCoupleResponse | None = None
     model_config = ConfigDict(from_attributes=True)
 
 
-class DoubleDateCreateRequest(BaseModel):
-    match_id: uuid.UUID
+class DoubleDateProposeRequest(BaseModel):
+    match_a_id: uuid.UUID
+    match_b_id: uuid.UUID
 
 
 # ── User Registration ──

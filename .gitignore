@@ -124,6 +124,7 @@ youandinotai.zip
 .claude/*.png
 .claude/*.jpg
 .claude/*.html
+.claude/*.env.txt
 .claude/*YouTube*
 .claude/FullSizeRender*
 .claude/Simplified*
@@ -134,3 +135,6 @@ youandinotai.zip
 
 # Temp preview files
 youandinotai/public/preview-*.html
+
+# Local session snapshots
+memory/SESSION_BACKUP_*.md

@@ -1,68 +1,190 @@
-"""Double Date orchestration router."""
+"""Double-date proposal router."""
 
 import uuid
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
 from app.database import get_db
-from app.models import DoubleDateAcceptance, DoubleDateSession, Match, User
-from app.schemas import DoubleDateSessionResponse
-
-from app.schemas import DoubleDateCreateRequest, DoubleDateSessionResponse
+from app.models import DoubleDateAcceptance, DoubleDateSession, Match, Profile, User
+from app.schemas import (
+    DoubleDateCoupleResponse,
+    DoubleDateParticipantResponse,
+    DoubleDateProposeRequest,
+    DoubleDateSessionResponse,
+)
 
 router = APIRouter(prefix="/double-dates")
 
 
-@router.post("/initiate", response_model=DoubleDateSessionResponse)
-async def initiate_double_date(
-    payload: DoubleDateCreateRequest,
+def _user_in_match(match: Match | None, user_id: uuid.UUID) -> bool:
+    if not match:
+        return False
+    return user_id in {match.user_a, match.user_b}
+
+
+async def _build_couple_response(
+    db: AsyncSession,
+    match: Match | None,
+) -> DoubleDateCoupleResponse | None:
+    if not match:
+        return None
+
+    members: list[DoubleDateParticipantResponse] = []
+    for member_id in (match.user_a, match.user_b):
+        user = await db.get(User, member_id)
+        if not user:
+            continue
+        profile = await db.scalar(select(Profile).where(Profile.user_id == member_id))
+        primary_photo = None
+        if profile and profile.photos:
+            primary_photo = str(profile.photos[0])
+        members.append(
+            DoubleDateParticipantResponse(
+                user_id=user.id,
+                display_name=user.display_name,
+                photo_url=primary_photo,
+            )
+        )
+
+    return DoubleDateCoupleResponse(match_id=match.id, members=members)
+
+
+async def _serialize_session(
+    db: AsyncSession,
+    session: DoubleDateSession,
+) -> DoubleDateSessionResponse:
+    acceptances = (
+        await db.scalars(
+            select(DoubleDateAcceptance).where(
+                DoubleDateAcceptance.session_id == session.id,
+                DoubleDateAcceptance.accepted.is_(True),
+            )
+        )
+    ).all()
+    accepted_match_ids = [acceptance.match_id for acceptance in acceptances]
+
+    match_a = await db.get(Match, session.match_a_id)
+    match_b = await db.get(Match, session.match_b_id)
+
+    return DoubleDateSessionResponse(
+        id=session.id,
+        match_a_id=session.match_a_id,
+        match_b_id=session.match_b_id,
+        status=session.status,
+        created_at=session.created_at,
+        accepted_match_ids=accepted_match_ids,
+        couple_a=await _build_couple_response(db, match_a),
+        couple_b=await _build_couple_response(db, match_b),
+    )
+
+
+async def _get_user_match_id(
+    db: AsyncSession,
+    session: DoubleDateSession,
+    user_id: uuid.UUID,
+) -> uuid.UUID | None:
+    match_a = await db.get(Match, session.match_a_id)
+    match_b = await db.get(Match, session.match_b_id)
+
+    if _user_in_match(match_a, user_id):
+        return session.match_a_id
+    if _user_in_match(match_b, user_id):
+        return session.match_b_id
+    return None
+
+
+@router.post("/propose", response_model=DoubleDateSessionResponse, status_code=201)
+async def propose_double_date(
+    payload: DoubleDateProposeRequest,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-) -> DoubleDateSession:
-    """Initiate a double date session between two matched couples."""
-    # Find the match involving the current user and the target match
-    # 1. Current user's match
-    my_match = await db.scalar(
-        select(Match).where(
-            ((Match.user_a == user.id) | (Match.user_b == user.id)) &
-            (Match.status == "active")
+) -> DoubleDateSessionResponse:
+    if payload.match_a_id == payload.match_b_id:
+        raise HTTPException(status_code=400, detail="Choose two different match IDs")
+
+    match_a = await db.get(Match, payload.match_a_id)
+    match_b = await db.get(Match, payload.match_b_id)
+    if not match_a or match_a.status != "active" or not match_b or match_b.status != "active":
+        raise HTTPException(status_code=404, detail="One or both matches are not active")
+
+    if not (_user_in_match(match_a, user.id) or _user_in_match(match_b, user.id)):
+        raise HTTPException(status_code=403, detail="You must belong to one of the couples")
+
+    existing = await db.scalar(
+        select(DoubleDateSession).where(
+            or_(
+                and_(
+                    DoubleDateSession.match_a_id == payload.match_a_id,
+                    DoubleDateSession.match_b_id == payload.match_b_id,
+                ),
+                and_(
+                    DoubleDateSession.match_a_id == payload.match_b_id,
+                    DoubleDateSession.match_b_id == payload.match_a_id,
+                ),
+            ),
+            DoubleDateSession.status.in_(("pending", "active")),
         )
     )
-    if not my_match:
-        raise HTTPException(status_code=400, detail="You must be in an active match to start a double date.")
+    if existing:
+        raise HTTPException(status_code=409, detail="A proposal already exists for these couples")
 
-    # 2. Target match
-    target_match = await db.get(Match, payload.match_id)
-    if not target_match or target_match.status != "active":
-        raise HTTPException(status_code=404, detail="Target match not found or inactive.")
-
-    # Create session
     session = DoubleDateSession(
         id=uuid.uuid4(),
-        match_a_id=my_match.id,
-        match_b_id=target_match.id,
+        match_a_id=payload.match_a_id,
+        match_b_id=payload.match_b_id,
         status="pending",
         created_at=datetime.now(timezone.utc),
     )
     db.add(session)
-    
-    # Auto-accept for the initiator's side
-    acceptance = DoubleDateAcceptance(
-        id=uuid.uuid4(),
-        session_id=session.id,
-        match_id=my_match.id,
-        accepted=True,
-        created_at=datetime.now(timezone.utc),
+
+    initiator_match_id = payload.match_a_id if _user_in_match(match_a, user.id) else payload.match_b_id
+    db.add(
+        DoubleDateAcceptance(
+            id=uuid.uuid4(),
+            session_id=session.id,
+            match_id=initiator_match_id,
+            accepted=True,
+            created_at=datetime.now(timezone.utc),
+        )
     )
-    db.add(acceptance)
-    
+
     await db.commit()
     await db.refresh(session)
-    return session
+    return await _serialize_session(db, session)
+
+
+@router.get("", response_model=list[DoubleDateSessionResponse])
+async def list_double_dates(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> list[DoubleDateSessionResponse]:
+    user_match_ids = (
+        await db.scalars(
+            select(Match.id).where(or_(Match.user_a == user.id, Match.user_b == user.id))
+        )
+    ).all()
+    if not user_match_ids:
+        return []
+
+    sessions = (
+        await db.scalars(
+            select(DoubleDateSession)
+            .where(
+                or_(
+                    DoubleDateSession.match_a_id.in_(user_match_ids),
+                    DoubleDateSession.match_b_id.in_(user_match_ids),
+                ),
+                DoubleDateSession.status.in_(("pending", "active")),
+            )
+            .order_by(DoubleDateSession.created_at.desc())
+        )
+    ).all()
+
+    return [await _serialize_session(db, session) for session in sessions]
 
 
 @router.post("/{session_id}/accept", response_model=DoubleDateSessionResponse)
@@ -70,59 +192,53 @@ async def accept_double_date(
     session_id: uuid.UUID,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-) -> DoubleDateSession:
-    """Record acceptance from a couple side. If both sides accept, confirm session."""
+) -> DoubleDateSessionResponse:
     session = await db.get(DoubleDateSession, session_id)
     if not session:
-        raise HTTPException(status_code=404, detail="Session not found")
+        raise HTTPException(status_code=404, detail="Double-date proposal not found")
+    if session.status == "declined":
+        raise HTTPException(status_code=409, detail="This proposal has already been declined")
 
-    # Determine which match the user belongs to
-    match_a = await db.get(Match, session.match_a_id)
-    match_b = await db.get(Match, session.match_b_id)
+    user_match_id = await _get_user_match_id(db, session, user.id)
+    if not user_match_id:
+        raise HTTPException(status_code=403, detail="You are not part of this proposal")
 
-    current_match_id = None
-    if match_a and user.id in [match_a.user_a, match_a.user_b]:
-        current_match_id = session.match_a_id
-    elif match_b and user.id in [match_b.user_a, match_b.user_b]:
-        current_match_id = session.match_b_id
-
-    if not current_match_id:
-        raise HTTPException(status_code=403, detail="User not part of this session")
-
-    # Record acceptance for this match/couple
-    existing_acceptance = await db.scalar(
+    acceptance = await db.scalar(
         select(DoubleDateAcceptance).where(
             DoubleDateAcceptance.session_id == session_id,
-            DoubleDateAcceptance.match_id == current_match_id,
+            DoubleDateAcceptance.match_id == user_match_id,
         )
     )
-
-    if not existing_acceptance:
-        acceptance = DoubleDateAcceptance(
-            id=uuid.uuid4(),
-            session_id=session_id,
-            match_id=current_match_id,
-            accepted=True,
-            created_at=datetime.now(timezone.utc),
+    if acceptance:
+        acceptance.accepted = True
+    else:
+        db.add(
+            DoubleDateAcceptance(
+                id=uuid.uuid4(),
+                session_id=session.id,
+                match_id=user_match_id,
+                accepted=True,
+                created_at=datetime.now(timezone.utc),
+            )
         )
-        db.add(acceptance)
 
-    # Check if both matches have now accepted
-    other_match_id = session.match_b_id if current_match_id == session.match_a_id else session.match_a_id
-    other_acceptance = await db.scalar(
-        select(DoubleDateAcceptance).where(
-            DoubleDateAcceptance.session_id == session_id,
-            DoubleDateAcceptance.match_id == other_match_id,
-            DoubleDateAcceptance.accepted == True,  # noqa: E712
-        )
+    accepted_match_ids = set(
+        (
+            await db.scalars(
+                select(DoubleDateAcceptance.match_id).where(
+                    DoubleDateAcceptance.session_id == session_id,
+                    DoubleDateAcceptance.accepted.is_(True),
+                )
+            )
+        ).all()
     )
-
-    if other_acceptance:
-        session.status = "confirmed"
+    accepted_match_ids.add(user_match_id)
+    if session.match_a_id in accepted_match_ids and session.match_b_id in accepted_match_ids:
+        session.status = "active"
 
     await db.commit()
     await db.refresh(session)
-    return session
+    return await _serialize_session(db, session)
 
 
 @router.post("/{session_id}/decline", response_model=DoubleDateSessionResponse)
@@ -130,25 +246,35 @@ async def decline_double_date(
     session_id: uuid.UUID,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-) -> DoubleDateSession:
-    """Decline the double date session."""
+) -> DoubleDateSessionResponse:
     session = await db.get(DoubleDateSession, session_id)
     if not session:
-        raise HTTPException(status_code=404, detail="Session not found")
+        raise HTTPException(status_code=404, detail="Double-date proposal not found")
 
-    # Check authorization
-    match_a = await db.get(Match, session.match_a_id)
-    match_b = await db.get(Match, session.match_b_id)
+    user_match_id = await _get_user_match_id(db, session, user.id)
+    if not user_match_id:
+        raise HTTPException(status_code=403, detail="You are not part of this proposal")
 
-    is_part_of_session = (
-        (match_a and user.id in [match_a.user_a, match_a.user_b])
-        or (match_b and user.id in [match_b.user_a, match_b.user_b])
+    acceptance = await db.scalar(
+        select(DoubleDateAcceptance).where(
+            DoubleDateAcceptance.session_id == session_id,
+            DoubleDateAcceptance.match_id == user_match_id,
+        )
     )
-
-    if not is_part_of_session:
-        raise HTTPException(status_code=403, detail="Access denied")
+    if acceptance:
+        acceptance.accepted = False
+    else:
+        db.add(
+            DoubleDateAcceptance(
+                id=uuid.uuid4(),
+                session_id=session.id,
+                match_id=user_match_id,
+                accepted=False,
+                created_at=datetime.now(timezone.utc),
+            )
+        )
 
     session.status = "declined"
     await db.commit()
     await db.refresh(session)
-    return session
+    return await _serialize_session(db, session)

@@ -1,59 +1,120 @@
-"""Data Privacy and Account Management router."""
+"""Data privacy router for self-service data access requests."""
 
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
 from app.database import get_db
-from app.models import DataPrivacyLog, Match, Message, User, VolunteerSignup
-from app.schemas import PrivacyLocationUpdate, PrivacyStatusResponse
+from app.models import DataPrivacyLog, Match, Message, Profile, User
+from app.schemas import (
+    PrivacyActionResponse,
+    PrivacyMyDataResponse,
+    PrivacyProfileSummary,
+    PrivacyRequestResponse,
+)
 
 router = APIRouter(prefix="/privacy")
 
 
-@router.get("", response_model=PrivacyStatusResponse)
-async def get_privacy_status(
-    user: User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db),
-) -> PrivacyStatusResponse:
-    """Returns basic privacy and activity stats for the current user."""
-
-    # Count messages sent by user
-    message_count = await db.scalar(
-        select(func.count(Message.id)).where(Message.sender_id == user.id)
-    ) or 0
-
-    # Count matches where user is either participant A or B
-    match_count = await db.scalar(
-        select(func.count(Match.id)).where(
-            (Match.user_a == user.id) | (Match.user_b == user.id)
+async def _get_existing_pending_request(
+    db: AsyncSession,
+    user_id: uuid.UUID,
+    action: str,
+) -> DataPrivacyLog | None:
+    return await db.scalar(
+        select(DataPrivacyLog)
+        .where(
+            DataPrivacyLog.user_id == user_id,
+            DataPrivacyLog.action == action,
+            DataPrivacyLog.status == "pending",
         )
-    ) or 0
-
-    # Count volunteer signups
-    signup_count = await db.scalar(
-        select(func.count(VolunteerSignup.id)).where(VolunteerSignup.user_id == user.id)
-    ) or 0
-
-    return PrivacyStatusResponse(
-        email=user.email,
-        display_name=user.display_name,
-        message_count=message_count,
-        match_count=match_count,
-        signup_count=signup_count,
+        .order_by(DataPrivacyLog.created_at.desc())
     )
 
 
-@router.post("/export")
-async def export_data(
+@router.get("/my-data", response_model=PrivacyMyDataResponse)
+async def get_my_data(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
-    """Log a request for data export."""
+) -> PrivacyMyDataResponse:
+    profile = await db.scalar(select(Profile).where(Profile.user_id == user.id))
+
+    match_ids_stmt = select(Match.id).where(
+        or_(Match.user_a == user.id, Match.user_b == user.id)
+    )
+
+    message_count = (
+        await db.scalar(
+            select(func.count(Message.id)).where(Message.match_id.in_(match_ids_stmt))
+        )
+    ) or 0
+    match_count = (
+        await db.scalar(
+            select(func.count(Match.id)).where(
+                or_(Match.user_a == user.id, Match.user_b == user.id)
+            )
+        )
+    ) or 0
+
+    pending_logs = (
+        await db.scalars(
+            select(DataPrivacyLog)
+            .where(
+                DataPrivacyLog.user_id == user.id,
+                DataPrivacyLog.status == "pending",
+            )
+            .order_by(DataPrivacyLog.created_at.desc())
+        )
+    ).all()
+
+    profile_summary = None
+    photos_count = 0
+    if profile:
+        photos_count = len(profile.photos or [])
+        profile_summary = PrivacyProfileSummary(
+            bio=profile.bio,
+            age=profile.age,
+            gender=profile.gender,
+            looking_for=profile.looking_for,
+            location=profile.location,
+            interests=list(profile.interests or []),
+            verified=profile.verified,
+            location_enabled=profile.location_enabled,
+        )
+
+    return PrivacyMyDataResponse(
+        user_id=user.id,
+        email=user.email,
+        display_name=user.display_name,
+        created_at=user.created_at,
+        profile=profile_summary,
+        message_count=message_count,
+        match_count=match_count,
+        photos_count=photos_count,
+        pending_requests=[
+            PrivacyRequestResponse.model_validate(log) for log in pending_logs
+        ],
+    )
+
+
+@router.post("/export", response_model=PrivacyActionResponse, status_code=202)
+async def request_data_export(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> PrivacyActionResponse:
+    existing = await _get_existing_pending_request(db, user.id, "export_requested")
+    if existing:
+        return PrivacyActionResponse(
+            status=existing.status,
+            action=existing.action,
+            request_id=existing.id,
+            scheduled_for=existing.scheduled_for,
+        )
+
     log = DataPrivacyLog(
         id=uuid.uuid4(),
         user_id=user.id,
@@ -63,39 +124,75 @@ async def export_data(
     )
     db.add(log)
     await db.commit()
-    return {"status": "export_queued"}
+    await db.refresh(log)
+
+    return PrivacyActionResponse(
+        status=log.status,
+        action=log.action,
+        request_id=log.id,
+        scheduled_for=log.scheduled_for,
+    )
 
 
-@router.post("/delete-account")
-async def delete_account(
+@router.post("/delete", response_model=PrivacyActionResponse, status_code=202)
+async def request_account_deletion(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
-    """Mark account as inactive and log deletion request."""
-    user.is_active = False
+) -> PrivacyActionResponse:
+    existing = await _get_existing_pending_request(db, user.id, "delete_requested")
+    if existing:
+        return PrivacyActionResponse(
+            status=existing.status,
+            action=existing.action,
+            request_id=existing.id,
+            scheduled_for=existing.scheduled_for,
+        )
 
+    scheduled_for = datetime.now(timezone.utc) + timedelta(days=30)
     log = DataPrivacyLog(
         id=uuid.uuid4(),
         user_id=user.id,
         action="delete_requested",
         status="pending",
+        scheduled_for=scheduled_for,
         created_at=datetime.now(timezone.utc),
     )
     db.add(log)
     await db.commit()
-    return {"status": "delete_scheduled", "effective_days": 30}
+    await db.refresh(log)
+
+    return PrivacyActionResponse(
+        status=log.status,
+        action=log.action,
+        request_id=log.id,
+        scheduled_for=log.scheduled_for,
+    )
 
 
-@router.put("/location")
-async def update_location_sharing(
-    payload: PrivacyLocationUpdate,
+@router.post("/location/disable", response_model=PrivacyActionResponse)
+async def disable_location_tracking(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
-    """Toggle location sharing in user profile."""
-    if not user.profile:
+) -> PrivacyActionResponse:
+    profile = await db.scalar(select(Profile).where(Profile.user_id == user.id))
+    if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
 
-    user.profile.location_enabled = payload.enabled
+    profile.location_enabled = False
+    log = DataPrivacyLog(
+        id=uuid.uuid4(),
+        user_id=user.id,
+        action="location_disabled",
+        status="completed",
+        created_at=datetime.now(timezone.utc),
+    )
+    db.add(log)
     await db.commit()
-    return {"location_sharing": payload.enabled}
+    await db.refresh(log)
+
+    return PrivacyActionResponse(
+        status=log.status,
+        action=log.action,
+        request_id=log.id,
+        scheduled_for=log.scheduled_for,
+    )

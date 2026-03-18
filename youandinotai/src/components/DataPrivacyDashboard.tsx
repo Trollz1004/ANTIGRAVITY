@@ -1,253 +1,327 @@
-/**
- * DataPrivacyDashboard — GDPR-style data controls for users.
- * Wires to privacy.py backend:
- *   GET   /api/v1/privacy              (data summary)
- *   POST  /api/v1/privacy/export       (request data export)
- *   POST  /api/v1/privacy/delete-account (schedule account deletion)
- *   PATCH /api/v1/privacy/location     (toggle location sharing)
- */
+import { useEffect, useState } from 'react';
 
-import { useState, useEffect, useCallback } from 'react';
 import { api } from '../lib/api';
 
-interface PrivacyStatus {
+interface PrivacyProfileSummary {
+  bio: string | null;
+  age: number | null;
+  gender: string | null;
+  looking_for: string | null;
+  location: string | null;
+  interests: string[];
+  verified: boolean;
+  location_enabled: boolean;
+}
+
+interface PrivacyRequest {
+  id: string;
+  action: string;
+  status: string;
+  created_at: string;
+  scheduled_for: string | null;
+}
+
+interface PrivacyMyDataResponse {
+  user_id: string;
   email: string;
   display_name: string;
+  created_at: string;
+  profile: PrivacyProfileSummary | null;
   message_count: number;
   match_count: number;
-  signup_count: number;
+  photos_count: number;
+  pending_requests: PrivacyRequest[];
+}
+
+interface PrivacyActionResponse {
+  status: string;
+  action: string;
+  request_id: string;
+  scheduled_for: string | null;
+}
+
+const actionLabels: Record<string, string> = {
+  export_requested: 'Data export',
+  delete_requested: 'Account deletion',
+  location_disabled: 'Location tracking disabled',
+};
+
+function formatDateTime(value: string | null | undefined): string {
+  if (!value) return 'Not scheduled';
+  return new Date(value).toLocaleString();
 }
 
 export default function DataPrivacyDashboard() {
-  const [data, setData] = useState<PrivacyStatus | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<PrivacyMyDataResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [locationEnabled, setLocationEnabled] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [requestState, setRequestState] = useState({
+    export: false,
+    delete: false,
+    location: false,
+  });
+  const [confirmation, setConfirmation] = useState<string | null>(null);
 
-  // Action states
-  const [exporting, setExporting] = useState(false);
-  const [exported, setExported] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteScheduled, setDeleteScheduled] = useState(false);
-  const [togglingLocation, setTogglingLocation] = useState(false);
-
-  // ── Fetch data ───────────────────────────────────────────────────────────
-
-  const fetchData = useCallback(async () => {
+  async function loadMyData() {
     setLoading(true);
+    setError(null);
     try {
-      const result = await api.get<PrivacyStatus>('/privacy');
-      setData(result);
-    } catch {
-      setError('Failed to load privacy data.');
+      const response = await api.get<PrivacyMyDataResponse>('/privacy/my-data');
+      setData(response);
+    } catch (err) {
+      console.error(err);
+      setError('Unable to load your privacy data right now.');
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  useEffect(() => { fetchData(); }, [fetchData]);
-
-  // ── Export ────────────────────────────────────────────────────────────────
-
-  const handleExport = async () => {
-    setExporting(true);
-    setError(null);
-    try {
-      await api.post('/privacy/export');
-      setExported(true);
-    } catch {
-      setError('Export request failed.');
-    } finally {
-      setExporting(false);
-    }
-  };
-
-  // ── Delete ───────────────────────────────────────────────────────────────
-
-  const handleDelete = async () => {
-    setDeleting(true);
-    setError(null);
-    try {
-      await api.post('/privacy/delete-account');
-      setDeleteScheduled(true);
-      setShowDeleteConfirm(false);
-    } catch {
-      setError('Delete request failed.');
-    } finally {
-      setDeleting(false);
-    }
-  };
-
-  // ── Location toggle ──────────────────────────────────────────────────────
-
-  const toggleLocation = async () => {
-    setTogglingLocation(true);
-    try {
-      await api.put('/privacy/location', { enabled: !locationEnabled });
-      setLocationEnabled(!locationEnabled);
-    } catch {
-      setError('Failed to update location setting.');
-    } finally {
-      setTogglingLocation(false);
-    }
-  };
-
-  // ── Render ───────────────────────────────────────────────────────────────
-
-  if (loading) {
-    return (
-      <div className="max-w-lg mx-auto px-4 py-6 space-y-4">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="glass rounded-xl p-5 animate-pulse">
-            <div className="h-4 bg-gray-800 rounded w-1/3 mb-3" />
-            <div className="h-3 bg-gray-800 rounded w-2/3" />
-          </div>
-        ))}
-      </div>
-    );
   }
 
+  useEffect(() => {
+    void loadMyData();
+  }, []);
+
+  async function handleAction(
+    key: 'export' | 'delete' | 'location',
+    endpoint: string,
+    successMessage: (response: PrivacyActionResponse) => string,
+  ) {
+    setRequestState((current) => ({ ...current, [key]: true }));
+    setError(null);
+    setConfirmation(null);
+
+    try {
+      const response = await api.post<PrivacyActionResponse>(endpoint);
+      setConfirmation(successMessage(response));
+      await loadMyData();
+    } catch (err) {
+      console.error(err);
+      setError('That privacy request could not be completed.');
+    } finally {
+      setRequestState((current) => ({ ...current, [key]: false }));
+    }
+  }
+
+  const hasPendingExport = data?.pending_requests.some((request) => request.action === 'export_requested');
+  const hasPendingDelete = data?.pending_requests.some((request) => request.action === 'delete_requested');
+  const locationDisabled = data?.profile?.location_enabled === false;
+
   return (
-    <div className="max-w-lg mx-auto px-4 py-6 space-y-5">
-      {/* Header */}
-      <div>
-        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-          <span className="text-2xl">🔒</span> Data & Privacy
-        </h2>
-        <p className="text-xs text-gray-500 mt-0.5">Your data, your control. Always.</p>
+    <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[28px] border border-slate-800 bg-slate-950 px-5 py-6 text-slate-100 shadow-[0_30px_120px_rgba(2,6,23,0.55)] sm:px-8">
+      <div className="flex flex-col gap-3 rounded-[24px] border border-cyan-900/50 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.18),_transparent_42%),linear-gradient(180deg,rgba(15,23,42,0.98),rgba(2,6,23,0.98))] p-6">
+        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">Privacy Center</span>
+        <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 className="font-serif text-3xl text-white">Control what stays, what moves, and what stops.</h2>
+            <p className="mt-2 max-w-2xl text-sm text-slate-400">
+              Review your stored profile data, request an export, schedule deletion, or disable location tracking from one place.
+            </p>
+          </div>
+          {data && (
+            <div className="rounded-2xl border border-slate-800 bg-black/30 px-4 py-3 text-sm text-slate-300">
+              <div>{data.display_name}</div>
+              <div className="text-slate-500">{data.email}</div>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Error */}
       {error && (
-        <div className="bg-red-900/30 border border-red-800/50 text-red-300 rounded-lg px-4 py-2.5 text-sm flex items-center justify-between">
-          <span>{error}</span>
-          <button className="text-red-400 hover:text-red-200 text-xs ml-3" onClick={() => setError(null)}>
-            Dismiss
-          </button>
+        <div className="rounded-2xl border border-rose-900 bg-rose-950/60 px-4 py-3 text-sm text-rose-200">
+          {error}
         </div>
       )}
 
-      {/* Data summary cards */}
-      {data && (
-        <div className="glass glass-highlight rounded-xl p-5 space-y-4">
-          <h3 className="text-sm font-bold text-gray-300">Your Data Summary</h3>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="glass rounded-lg p-3 text-center">
-              <div className="text-xl font-black text-white">{data.message_count}</div>
-              <div className="text-[10px] text-gray-400 mt-0.5">Messages</div>
-            </div>
-            <div className="glass rounded-lg p-3 text-center">
-              <div className="text-xl font-black text-pink-400">{data.match_count}</div>
-              <div className="text-[10px] text-gray-400 mt-0.5">Matches</div>
-            </div>
-            <div className="glass rounded-lg p-3 text-center">
-              <div className="text-xl font-black text-emerald-400">{data.signup_count}</div>
-              <div className="text-[10px] text-gray-400 mt-0.5">Volunteer Signups</div>
-            </div>
-          </div>
-          <div className="space-y-1 text-xs text-gray-500">
-            <p>📧 {data.email}</p>
-            <p>👤 {data.display_name}</p>
-          </div>
+      {confirmation && (
+        <div className="rounded-2xl border border-emerald-900 bg-emerald-950/60 px-4 py-3 text-sm text-emerald-200">
+          {confirmation}
         </div>
       )}
 
-      {/* Location sharing toggle */}
-      <div className="glass rounded-xl p-5 flex items-center justify-between">
-        <div>
-          <h3 className="text-sm font-bold text-white">Location Sharing</h3>
-          <p className="text-xs text-gray-500 mt-0.5">Allow nearby meetup & event discovery</p>
+      {loading || !data ? (
+        <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+          <div className="min-h-[220px] animate-pulse rounded-[24px] border border-slate-800 bg-slate-900/70" />
+          <div className="min-h-[220px] animate-pulse rounded-[24px] border border-slate-800 bg-slate-900/70" />
         </div>
-        <button
-          id="privacy-location-toggle"
-          onClick={toggleLocation}
-          disabled={togglingLocation}
-          className={`relative w-12 h-6 rounded-full transition-all duration-300 ${
-            locationEnabled ? 'bg-purple-600' : 'bg-gray-700'
-          }`}
-        >
-          <div
-            className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 ${
-              locationEnabled ? 'translate-x-6' : 'translate-x-0.5'
-            }`}
-          />
-        </button>
-      </div>
+      ) : (
+        <>
+          <div className="grid gap-4 lg:grid-cols-[1.3fr_0.7fr]">
+            <article className="rounded-[24px] border border-slate-800 bg-slate-900/70 p-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Stored Account Snapshot</h3>
+                  <p className="mt-1 text-sm text-slate-500">
+                    Account created {new Date(data.created_at).toLocaleDateString()}.
+                  </p>
+                </div>
+                <span className="rounded-full border border-cyan-900/80 bg-cyan-950/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+                  User ID {data.user_id.slice(0, 8)}
+                </span>
+              </div>
 
-      {/* Export data */}
-      <div className="glass rounded-xl p-5 space-y-3">
-        <div>
-          <h3 className="text-sm font-bold text-white">Export Your Data</h3>
-          <p className="text-xs text-gray-500 mt-0.5">Download a copy of everything we store about you.</p>
-        </div>
-        {exported ? (
-          <div className="bg-green-900/20 border border-green-800/30 text-green-400 rounded-lg px-4 py-2.5 text-sm">
-            ✓ Export queued — you'll receive it via email.
-          </div>
-        ) : (
-          <button
-            id="privacy-export-btn"
-            onClick={handleExport}
-            disabled={exporting}
-            className="bg-gray-800 hover:bg-gray-700 text-white text-sm px-5 py-2.5 rounded-lg border border-gray-700 transition-all duration-200 flex items-center gap-2 disabled:opacity-40"
-          >
-            {exporting && (
-              <span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            )}
-            📦 Request Export
-          </button>
-        )}
-      </div>
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+                  <div className="text-3xl font-semibold text-white">{data.message_count}</div>
+                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">Messages</div>
+                </div>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+                  <div className="text-3xl font-semibold text-white">{data.match_count}</div>
+                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">Matches</div>
+                </div>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+                  <div className="text-3xl font-semibold text-white">{data.photos_count}</div>
+                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">Photos</div>
+                </div>
+              </div>
 
-      {/* Delete account */}
-      <div className="glass rounded-xl p-5 space-y-3 border border-red-900/20">
-        <div>
-          <h3 className="text-sm font-bold text-red-400">Delete Account</h3>
-          <p className="text-xs text-gray-500 mt-0.5">Permanently remove your account and all data. This takes effect after 30 days.</p>
-        </div>
-        {deleteScheduled ? (
-          <div className="bg-red-900/20 border border-red-800/30 text-red-300 rounded-lg px-4 py-2.5 text-sm">
-            ⚠️ Account deletion scheduled. Effective in 30 days. Log in within that time to cancel.
-          </div>
-        ) : showDeleteConfirm ? (
-          <div className="space-y-3">
-            <p className="text-sm text-red-300">Are you sure? This cannot be undone after 30 days.</p>
-            <div className="flex gap-3">
-              <button
-                id="privacy-delete-confirm"
-                onClick={handleDelete}
-                disabled={deleting}
-                className="bg-red-600 hover:bg-red-500 text-white text-sm px-5 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 disabled:opacity-40"
-              >
-                {deleting && (
-                  <span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <dl className="mt-6 grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
+                <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
+                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">Bio</dt>
+                  <dd className="mt-2">{data.profile?.bio || 'No bio saved.'}</dd>
+                </div>
+                <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
+                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">Looking For</dt>
+                  <dd className="mt-2">{data.profile?.looking_for || 'Not specified.'}</dd>
+                </div>
+                <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
+                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">Location</dt>
+                  <dd className="mt-2">{data.profile?.location || 'Not shared.'}</dd>
+                </div>
+                <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
+                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">Interests</dt>
+                  <dd className="mt-2">{data.profile?.interests?.join(', ') || 'None saved.'}</dd>
+                </div>
+              </dl>
+            </article>
+
+            <aside className="rounded-[24px] border border-slate-800 bg-[linear-gradient(180deg,rgba(15,23,42,0.92),rgba(15,23,42,0.72))] p-6">
+              <h3 className="text-lg font-semibold text-white">Pending Requests</h3>
+              <p className="mt-1 text-sm text-slate-500">Any export or deletion request will appear here until processed.</p>
+
+              <div className="mt-5 space-y-3">
+                {data.pending_requests.length === 0 ? (
+                  <div className="rounded-2xl border border-dashed border-slate-800 px-4 py-5 text-sm text-slate-500">
+                    No pending privacy actions.
+                  </div>
+                ) : (
+                  data.pending_requests.map((request) => (
+                    <div key={request.id} className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="text-sm font-medium text-white">
+                          {actionLabels[request.action] ?? request.action}
+                        </span>
+                        <span className="rounded-full border border-amber-700/70 bg-amber-950/70 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-300">
+                          {request.status}
+                        </span>
+                      </div>
+                      <div className="mt-2 text-xs text-slate-500">
+                        Requested {formatDateTime(request.created_at)}
+                      </div>
+                      {request.scheduled_for && (
+                        <div className="mt-1 text-xs text-slate-500">
+                          Scheduled for {formatDateTime(request.scheduled_for)}
+                        </div>
+                      )}
+                    </div>
+                  ))
                 )}
-                Yes, Delete My Account
-              </button>
+              </div>
+            </aside>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-3">
+            <button
+              type="button"
+              disabled={requestState.export || Boolean(hasPendingExport)}
+              onClick={() =>
+                handleAction('export', '/privacy/export', () => 'Data export requested. We will keep it queued until it is ready.')
+              }
+              className="rounded-[24px] border border-cyan-900/80 bg-cyan-950/30 p-5 text-left transition hover:border-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <div className="text-xs uppercase tracking-[0.2em] text-cyan-300">Download My Data</div>
+              <div className="mt-2 text-lg font-semibold text-white">Queue a full export</div>
+              <p className="mt-2 text-sm text-slate-400">
+                {hasPendingExport
+                  ? 'An export is already pending.'
+                  : 'Request a copy of your current profile, matches, and stored activity summary.'}
+              </p>
+            </button>
+
+            <button
+              type="button"
+              disabled={requestState.location || locationDisabled}
+              onClick={() =>
+                handleAction(
+                  'location',
+                  '/privacy/location/disable',
+                  () => 'Location tracking has been disabled for your profile.',
+                )
+              }
+              className="rounded-[24px] border border-slate-800 bg-slate-900/70 p-5 text-left transition hover:border-slate-600 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Disable Location Tracking</div>
+              <div className="mt-2 text-lg font-semibold text-white">Stop future location sharing</div>
+              <p className="mt-2 text-sm text-slate-400">
+                {locationDisabled
+                  ? 'Location tracking is already disabled.'
+                  : 'Turns off location-based discovery and stores a completed privacy log entry.'}
+              </p>
+            </button>
+
+            <button
+              type="button"
+              disabled={requestState.delete || Boolean(hasPendingDelete)}
+              onClick={() => setShowDeleteModal(true)}
+              className="rounded-[24px] border border-rose-900/80 bg-rose-950/30 p-5 text-left transition hover:border-rose-500 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <div className="text-xs uppercase tracking-[0.2em] text-rose-300">Delete Account</div>
+              <div className="mt-2 text-lg font-semibold text-white">Start the 30-day deletion clock</div>
+              <p className="mt-2 text-sm text-slate-400">
+                {hasPendingDelete
+                  ? 'An account deletion request is already pending.'
+                  : 'Your account is queued for deletion 30 days after you confirm the request.'}
+              </p>
+            </button>
+          </div>
+        </>
+      )}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 px-4">
+          <div className="w-full max-w-lg rounded-[28px] border border-rose-900 bg-slate-950 p-6 shadow-2xl">
+            <div className="text-xs uppercase tracking-[0.24em] text-rose-300">Delete Account</div>
+            <h3 className="mt-3 text-2xl font-semibold text-white">This starts a 30-day waiting period.</h3>
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Your account will be scheduled for deletion 30 days from confirmation. During that window, the request remains pending and can be reviewed before the final purge job runs.
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
               <button
-                onClick={() => setShowDeleteConfirm(false)}
-                className="text-gray-400 hover:text-white text-sm px-4 py-2.5 rounded-lg transition-colors"
+                type="button"
+                onClick={() => setShowDeleteModal(false)}
+                className="rounded-2xl border border-slate-700 px-4 py-3 text-sm text-slate-300 transition hover:border-slate-500"
               >
                 Cancel
               </button>
+              <button
+                type="button"
+                disabled={requestState.delete}
+                onClick={async () => {
+                  setShowDeleteModal(false);
+                  await handleAction(
+                    'delete',
+                    '/privacy/delete',
+                    (response) =>
+                      `Deletion requested. The account is scheduled for ${formatDateTime(response.scheduled_for)}.`,
+                  );
+                }}
+                className="rounded-2xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-500 disabled:opacity-60"
+              >
+                Confirm Deletion Request
+              </button>
             </div>
           </div>
-        ) : (
-          <button
-            id="privacy-delete-btn"
-            onClick={() => setShowDeleteConfirm(true)}
-            className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors"
-          >
-            Delete my account →
-          </button>
-        )}
-      </div>
-
-      {/* Footer */}
-      <p className="text-[10px] text-gray-600 text-center">
-        Your data is stored on our PostgreSQL instance only. No third-party analytics. No selling your data. Ever.
-      </p>
-    </div>
+        </div>
+      )}
+    </section>
   );
 }
