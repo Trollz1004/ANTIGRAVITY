@@ -1,24 +1,24 @@
-# CLOUDFLARE API TOKEN ROTATION GUIDE (2026)
+﻿# CLOUDFLARE API TOKEN ROTATION GUIDE (2026)
 
 > **FOR THE KIDS.** Platform credibility depends on secure, active deployments.
 
-### ⚠️ STATUS: TOKEN EXPIRED
+### âš ï¸ STATUS: TOKEN EXPIRED
 The current `CLOUDFLARE_API_TOKEN` is stale. GitHub Actions is flagged for overuse, so we are shifting to **DIRECT DEPLOY** and **NAMED TUNNELS** from Sabretooth.
 
 ---
 
 ### STEP 1: CREATE NEW TOKEN
 1. Log in to [dash.cloudflare.com](https://dash.cloudflare.com/).
-2. Go to **My Profile** (top right) → **API Tokens** → **Create Token**.
+2. Go to **My Profile** (top right) â†’ **API Tokens** â†’ **Create Token**.
 3. Select **"Edit Cloudflare Workers"** (or Custom Token).
 4. **Permissions needed:**
-   - **Account** → **Cloudflare Pages** → **Edit**
-   - **Zone** → **DNS** → **Edit** (for `youandinotai.com`)
-   - **Zone** → **Cache Purge** → **Purge**
-   - **Zone** → **Workers Scripts** → **Edit**
+   - **Account** â†’ **Cloudflare Pages** â†’ **Edit**
+   - **Zone** â†’ **DNS** â†’ **Edit** (for `youandinotai.com`)
+   - **Zone** â†’ **Cache Purge** â†’ **Purge**
+   - **Zone** â†’ **Workers Scripts** â†’ **Edit**
 5. **Zone Resources:**
-   - **Include** → **Specific Zone** → `youandinotai.com`
-6. Click **Continue to summary** → **Create Token**.
+   - **Include** â†’ **Specific Zone** â†’ `youandinotai.com`
+6. Click **Continue to summary** â†’ **Create Token**.
 7. **COPY THE TOKEN IMMEDIATELY.** (You only see it once).
 
 ---
@@ -40,4 +40,5 @@ Notify **Claude Code** or **Grok** that the token is rotated. They will then pro
 
 ---
 
-*Status: ⏳ Waiting for Josh to rotate token.*
+*Status: â³ Waiting for Josh to rotate token.*
+
