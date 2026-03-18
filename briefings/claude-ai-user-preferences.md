@@ -124,7 +124,7 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
 - Cloudflare Tunnels (openclaw, mcp): LIVE & ROUTING via Sabretooth
 - youandinotai.com: DEPLOYED & LIVE (Cloudflare Pages)
 - Git history: PURGED & CLEAN — 332 commits rewritten, no secrets
-- !! CLOUDFLARE API TOKEN: EXPIRED — GEMINI BROKEN (20 calls/day failing) — rotate NOW at dash.cloudflare.com !!
+- Cloudflare: Wrangler OAuth (joshlcoleman@gmail.com) ACTIVE. Full permissions. Old API token in master vault is stale but unused - not a blocker.
 - !! Claude subscription: PAYMENT FAILED 2026-03-05 — grace period !!
 - Local daemons (Sentry, Watchdog): PAUSED on Sabretooth — re-enable for multi-node deploys only
 
@@ -167,3 +167,4 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
 - Dating app profits → fund Ai-Solutions.Store (100% DAO charity, kids in medical need)
 - 50-year horizon | Personal: disabled brother + autistic niece (OPUS TRUST, 10%)
 - "Until no kid is in need." #ForTheKids
+
