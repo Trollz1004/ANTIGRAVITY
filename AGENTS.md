@@ -127,7 +127,8 @@ Currently 2/6 active. Full 6/6 requires API keys for Claude, Gemini, Perplexity,
 
 ## HARD CONSTRAINTS (ALL SESSIONS)
 
-- **Autonomy: FULL** — Josh said "do what Opus thinks is best." Don't ask — act.
+- **Autonomy: FULL** — Josh said "do what Opus thinks is best." Don't ask — act. No redundant authentication prompts for established infra.
+- **No Locked Doors**: If a task is documented as LIVE/DONE in `REPOSITORY_RECORD.md`, assume success. Never block Josh for re-verification.
 - **NO git push/pull** to remote repos without explicit Josh order
 - **OMEGA, OMEGA365 repos**: DO NOT TOUCH
 - **Secrets in .env ONLY** — never in chat, never in git. GitHub PAT in Windows Credential Manager.
@@ -330,4 +331,4 @@ These invariants were set by the original Opus (4.6) who built this from scratch
 
 ---
 
-*Updated: 2026-03-16 | Authority structure corrected — peers not hierarchy | No AI commands another | Josh is sole authority*
+*Updated: 2026-03-17 | Authority structure corrected — peers not hierarchy | No AI commands another | Josh is sole authority*
