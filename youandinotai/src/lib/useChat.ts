@@ -13,7 +13,6 @@ import {
   decryptPayload,
   type ChatPayload,
 } from './encryption';
-import type { CryptoKey as WebCryptoKey } from './encryption';
 
 const WS_BASE =
   (import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1')
@@ -216,5 +215,6 @@ export function useChat(matchId: string | null) {
     connectionState,
     connected: connectionState === 'connected',
     sendMessage,
+    loadHistory,
   };
 }
