@@ -1,178 +1,294 @@
-/**
- * DoubleDateMatcher — propose, accept, and decline group dates.
- * Wires to double_dates.py backend:
- *   GET  /api/v1/double-dates                     (list sessions)
- *   POST /api/v1/double-dates/{session_id}/accept
- *   POST /api/v1/double-dates/{session_id}/decline
- *
- * Note: POST /double-dates/propose is not yet implemented in backend —
- * the UI form is ready but disabled until the endpoint exists.
- */
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useState, useEffect, useCallback } from 'react';
 import { api } from '../lib/api';
+
+interface DoubleDateParticipant {
+  user_id: string;
+  display_name: string;
+  photo_url: string | null;
+}
+
+interface DoubleDateCouple {
+  match_id: string;
+  members: DoubleDateParticipant[];
+}
 
 interface DoubleDateSession {
   id: string;
   match_a_id: string;
   match_b_id: string;
-  status: string;
+  status: 'pending' | 'active' | 'declined';
   created_at: string;
+  accepted_match_ids: string[];
+  couple_a: DoubleDateCouple | null;
+  couple_b: DoubleDateCouple | null;
 }
 
 interface DoubleDateMatcherProps {
-  matchId: string;
+  onLaunchGroupVideo?: (session: DoubleDateSession) => void;
 }
 
-const STATUS_BADGE: Record<string, { bg: string; text: string; label: string }> = {
-  pending: { bg: 'bg-amber-600/20', text: 'text-amber-400', label: 'Pending' },
-  confirmed: { bg: 'bg-green-600/20', text: 'text-green-400', label: 'Confirmed' },
-  declined: { bg: 'bg-red-600/20', text: 'text-red-400', label: 'Declined' },
+const statusStyles: Record<DoubleDateSession['status'], string> = {
+  pending: 'border-amber-700/70 bg-amber-950/60 text-amber-300',
+  active: 'border-emerald-700/70 bg-emerald-950/60 text-emerald-300',
+  declined: 'border-rose-700/70 bg-rose-950/60 text-rose-300',
 };
 
-export default function DoubleDateMatcher({ matchId }: DoubleDateMatcherProps) {
+function fallbackAvatar(name: string): string {
+  return `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name)}`;
+}
+
+function CoupleCard({ label, couple }: { label: string; couple: DoubleDateCouple | null }) {
+  return (
+    <div className="rounded-[24px] border border-slate-800 bg-slate-950/70 p-4">
+      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">{label}</div>
+      <div className="mt-3 space-y-3">
+        {couple?.members?.length ? (
+          couple.members.map((member) => (
+            <div key={member.user_id} className="flex items-center gap-3">
+              <img
+                src={member.photo_url || fallbackAvatar(member.display_name)}
+                alt={member.display_name}
+                className="h-12 w-12 rounded-2xl border border-slate-700 object-cover"
+              />
+              <div>
+                <div className="text-sm font-medium text-white">{member.display_name}</div>
+                <div className="text-xs text-slate-500">{couple.match_id}</div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="text-sm text-slate-500">No couple data returned yet.</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function DoubleDateMatcher({ onLaunchGroupVideo }: DoubleDateMatcherProps) {
   const [sessions, setSessions] = useState<DoubleDateSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [actingOn, setActingOn] = useState<string | null>(null);
+  const [proposal, setProposal] = useState({ matchAId: '', matchBId: '' });
 
-  // ── Fetch sessions ───────────────────────────────────────────────────────
-
-  const fetchSessions = useCallback(async () => {
+  async function loadSessions() {
     setLoading(true);
+    setError(null);
     try {
-      const data = await api.get<DoubleDateSession[]>('/double-dates');
-      setSessions(data);
-    } catch {
-      setError('Failed to load double date sessions.');
+      const response = await api.get<DoubleDateSession[]>('/double-dates');
+      setSessions(response);
+    } catch (err) {
+      console.error(err);
+      setError('Unable to load double-date proposals.');
     } finally {
       setLoading(false);
     }
+  }
+
+  useEffect(() => {
+    void loadSessions();
   }, []);
 
-  useEffect(() => { fetchSessions(); }, [fetchSessions]);
-
-  // ── Actions ──────────────────────────────────────────────────────────────
-
-  const handleAccept = async (sessionId: string) => {
-    setActionLoading(sessionId);
-    try {
-      const updated = await api.post<DoubleDateSession>(`/double-dates/${sessionId}/accept`);
-      setSessions((prev) => prev.map((s) => (s.id === sessionId ? updated : s)));
-    } catch {
-      setError('Failed to accept. Try again.');
-    } finally {
-      setActionLoading(null);
+  async function submitProposal(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!proposal.matchAId.trim() || !proposal.matchBId.trim()) {
+      setError('Enter both match IDs to propose a double date.');
+      return;
     }
-  };
 
-  const handleDecline = async (sessionId: string) => {
-    setActionLoading(sessionId);
+    setSubmitting(true);
+    setError(null);
+
     try {
-      const updated = await api.post<DoubleDateSession>(`/double-dates/${sessionId}/decline`);
-      setSessions((prev) => prev.map((s) => (s.id === sessionId ? updated : s)));
-    } catch {
-      setError('Failed to decline. Try again.');
+      const created = await api.post<DoubleDateSession>('/double-dates/propose', {
+        match_a_id: proposal.matchAId.trim(),
+        match_b_id: proposal.matchBId.trim(),
+      });
+      setSessions((current) => [created, ...current.filter((session) => session.id !== created.id)]);
+      setProposal({ matchAId: '', matchBId: '' });
+    } catch (err) {
+      console.error(err);
+      setError('The proposal could not be created.');
     } finally {
-      setActionLoading(null);
+      setSubmitting(false);
     }
-  };
+  }
 
-  // ── Render ───────────────────────────────────────────────────────────────
+  async function updateSession(sessionId: string, action: 'accept' | 'decline') {
+    setActingOn(sessionId);
+    setError(null);
+
+    try {
+      const updated = await api.post<DoubleDateSession>(`/double-dates/${sessionId}/${action}`);
+      setSessions((current) => current.map((session) => (session.id === sessionId ? updated : session)));
+    } catch (err) {
+      console.error(err);
+      setError(`Unable to ${action} this proposal.`);
+    } finally {
+      setActingOn(null);
+    }
+  }
+
+  const activeSessions = useMemo(
+    () => sessions.filter((session) => session.status === 'active'),
+    [sessions],
+  );
+
+  const launchGroupVideo = useCallback(
+    (session: DoubleDateSession) => {
+      if (onLaunchGroupVideo) {
+        onLaunchGroupVideo(session);
+        return;
+      }
+
+      window.dispatchEvent(new CustomEvent('double-date-video-launch', { detail: session }));
+    },
+    [onLaunchGroupVideo],
+  );
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-6 space-y-5">
-      {/* Header */}
-      <div>
-        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-          <span className="text-2xl">💑</span> Double Dates
-        </h2>
-        <p className="text-xs text-gray-500 mt-0.5">Match up couples for group outings</p>
+    <section className="mx-auto flex w-full max-w-6xl flex-col gap-6 rounded-[32px] border border-slate-800 bg-slate-950 p-5 text-slate-100 shadow-[0_35px_120px_rgba(2,6,23,0.55)] md:p-7">
+      <div className="flex flex-col gap-3 rounded-[26px] border border-fuchsia-900/50 bg-[radial-gradient(circle_at_top_right,_rgba(236,72,153,0.14),_transparent_36%),linear-gradient(180deg,rgba(15,23,42,0.96),rgba(2,6,23,0.96))] p-6">
+        <div className="text-xs font-semibold uppercase tracking-[0.3em] text-fuchsia-300">Double Dates</div>
+        <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 className="text-3xl font-semibold text-white">Pair two couples before the meetup happens.</h2>
+            <p className="mt-2 max-w-3xl text-sm text-slate-400">
+              Propose a double date using two match IDs, review live proposals, and jump into a group-call handoff when both couples accept.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-800 bg-black/25 px-4 py-3 text-sm text-slate-400">
+            Active sessions: <span className="font-semibold text-white">{activeSessions.length}</span>
+          </div>
+        </div>
       </div>
 
-      {/* Error */}
       {error && (
-        <div className="bg-red-900/30 border border-red-800/50 text-red-300 rounded-lg px-4 py-2.5 text-sm flex items-center justify-between">
-          <span>{error}</span>
-          <button className="text-red-400 hover:text-red-200 text-xs ml-3" onClick={() => setError(null)}>
-            Dismiss
-          </button>
+        <div className="rounded-2xl border border-rose-900 bg-rose-950/70 px-4 py-3 text-sm text-rose-200">
+          {error}
         </div>
       )}
 
-      {/* Session list */}
+      <form
+        onSubmit={submitProposal}
+        className="grid gap-4 rounded-[28px] border border-slate-800 bg-slate-900/65 p-5 md:grid-cols-[1fr_1fr_auto]"
+      >
+        <label className="flex flex-col gap-2">
+          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Your couple match ID</span>
+          <input
+            type="text"
+            value={proposal.matchAId}
+            onChange={(event) => setProposal((current) => ({ ...current, matchAId: event.target.value }))}
+            className="rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-fuchsia-500"
+            placeholder="11111111-1111-1111-1111-111111111111"
+          />
+        </label>
+        <label className="flex flex-col gap-2">
+          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Other couple match ID</span>
+          <input
+            type="text"
+            value={proposal.matchBId}
+            onChange={(event) => setProposal((current) => ({ ...current, matchBId: event.target.value }))}
+            className="rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-fuchsia-500"
+            placeholder="22222222-2222-2222-2222-222222222222"
+          />
+        </label>
+        <button
+          type="submit"
+          disabled={submitting}
+          className="rounded-2xl bg-fuchsia-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fuchsia-500 disabled:opacity-60"
+        >
+          {submitting ? 'Sending...' : 'Propose double date'}
+        </button>
+      </form>
+
       {loading ? (
-        <div className="space-y-3">
-          {[1, 2].map((i) => (
-            <div key={i} className="glass rounded-xl p-5 animate-pulse">
-              <div className="h-4 bg-gray-800 rounded w-1/2 mb-3" />
-              <div className="h-3 bg-gray-800 rounded w-1/3" />
-            </div>
-          ))}
+        <div className="grid gap-4">
+          <div className="h-56 animate-pulse rounded-[28px] border border-slate-800 bg-slate-900/60" />
+          <div className="h-56 animate-pulse rounded-[28px] border border-slate-800 bg-slate-900/60" />
         </div>
       ) : sessions.length === 0 ? (
-        <div className="text-center py-16 space-y-3">
-          <p className="text-4xl">👫👫</p>
-          <p className="text-gray-400">No double dates yet.</p>
-          <p className="text-gray-600 text-sm">When a couple proposes a double date with your match, it'll appear here.</p>
+        <div className="rounded-[28px] border border-dashed border-slate-800 px-5 py-12 text-center">
+          <div className="text-lg font-medium text-white">No proposals yet.</div>
+          <p className="mt-2 text-sm text-slate-500">
+            Once a couple proposes a double date, it will show up here with acceptance controls.
+          </p>
         </div>
       ) : (
-        <div className="space-y-3 stagger-children">
+        <div className="grid gap-4">
           {sessions.map((session) => {
-            const badge = STATUS_BADGE[session.status] || STATUS_BADGE.pending;
             const isPending = session.status === 'pending';
-            const isLoading = actionLoading === session.id;
+            const isActive = session.status === 'active';
+            const busy = actingOn === session.id;
 
             return (
-              <div
+              <article
                 key={session.id}
-                className="glass glass-highlight rounded-xl p-5 transition-all duration-300"
+                className="rounded-[30px] border border-slate-800 bg-[linear-gradient(180deg,rgba(15,23,42,0.96),rgba(15,23,42,0.78))] p-5"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-semibold text-white text-sm">Double Date Session</h3>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full ${badge.bg} ${badge.text} border border-current/20 font-bold`}>
-                        {badge.label}
-                      </span>
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">Proposal {session.id.slice(0, 8)}</div>
+                      <h3 className="mt-1 text-xl font-semibold text-white">Two-couple meetup coordination</h3>
+                      <p className="mt-2 text-sm text-slate-500">
+                        Created {new Date(session.created_at).toLocaleString()}
+                      </p>
                     </div>
-                    <div className="text-xs text-gray-500 space-y-0.5">
-                      <p>Created: {new Date(session.created_at).toLocaleDateString()}</p>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${statusStyles[session.status]}`}>
+                        {session.status}
+                      </span>
+                      {isActive && (
+                        <button
+                          type="button"
+                          onClick={() => launchGroupVideo(session)}
+                          className="rounded-2xl bg-cyan-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-cyan-500"
+                        >
+                          Launch group video call
+                        </button>
+                      )}
                     </div>
                   </div>
 
-                  {/* Actions for pending sessions */}
-                  {isPending && (
-                    <div className="flex gap-2 shrink-0">
-                      <button
-                        id={`dd-accept-${session.id}`}
-                        onClick={() => handleAccept(session.id)}
-                        disabled={isLoading}
-                        className="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition-all duration-200 disabled:opacity-40"
-                      >
-                        {isLoading ? '...' : '✓ Accept'}
-                      </button>
-                      <button
-                        id={`dd-decline-${session.id}`}
-                        onClick={() => handleDecline(session.id)}
-                        disabled={isLoading}
-                        className="bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs px-3 py-1.5 rounded-lg font-medium transition-colors disabled:opacity-40 border border-gray-700"
-                      >
-                        ✕ Decline
-                      </button>
-                    </div>
-                  )}
+                  <div className="grid gap-4 lg:grid-cols-2">
+                    <CoupleCard label="Couple A" couple={session.couple_a} />
+                    <CoupleCard label="Couple B" couple={session.couple_b} />
+                  </div>
 
-                  {/* Confirmed checkmark */}
-                  {session.status === 'confirmed' && (
-                    <span className="text-green-400 text-sm font-medium">✓ Confirmed</span>
-                  )}
+                  <div className="flex flex-col gap-3 border-t border-slate-800 pt-4 md:flex-row md:items-center md:justify-between">
+                    <div className="text-sm text-slate-400">
+                      Accepted match IDs: {session.accepted_match_ids.length ? session.accepted_match_ids.join(', ') : 'none yet'}
+                    </div>
+                    {isPending && (
+                      <div className="flex flex-wrap gap-3">
+                        <button
+                          type="button"
+                          disabled={busy}
+                          onClick={() => updateSession(session.id, 'accept')}
+                          className="rounded-2xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-500 disabled:opacity-60"
+                        >
+                          Accept
+                        </button>
+                        <button
+                          type="button"
+                          disabled={busy}
+                          onClick={() => updateSession(session.id, 'decline')}
+                          className="rounded-2xl border border-slate-700 px-4 py-2.5 text-sm font-semibold text-slate-200 transition hover:border-slate-500 disabled:opacity-60"
+                        >
+                          Decline
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
       )}
-    </div>
+    </section>
   );
 }
