@@ -86,12 +86,12 @@ async def create_event(
     )
 
 
-@router.post("/{event_id}/rsvp")
+@router.post("/{event_id}/rsvp", response_model=EventRSVPResponse)
 async def rsvp_event(
     event_id: uuid.UUID,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> EventRSVP:
     event = await db.get(Event, event_id)
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
@@ -109,7 +109,8 @@ async def rsvp_event(
         if count >= event.max_attendees:
             raise HTTPException(status_code=400, detail="Event is full")
 
-    rsvp = EventRSVP(id=uuid.uuid4(), event_id=event_id, user_id=user.id)
+    rsvp = EventRSVP(id=uuid.uuid4(), event_id=event_id, user_id=user.id, status="going")
     db.add(rsvp)
     await db.commit()
-    return {"status": "going", "event_id": str(event_id)}
+    await db.refresh(rsvp)
+    return rsvp

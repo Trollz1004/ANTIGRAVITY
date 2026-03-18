@@ -12,7 +12,57 @@ from app.database import get_db
 from app.models import DoubleDateAcceptance, DoubleDateSession, Match, User
 from app.schemas import DoubleDateSessionResponse
 
+from app.schemas import DoubleDateCreateRequest, DoubleDateSessionResponse
+
 router = APIRouter(prefix="/double-dates")
+
+
+@router.post("/initiate", response_model=DoubleDateSessionResponse)
+async def initiate_double_date(
+    payload: DoubleDateCreateRequest,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> DoubleDateSession:
+    """Initiate a double date session between two matched couples."""
+    # Find the match involving the current user and the target match
+    # 1. Current user's match
+    my_match = await db.scalar(
+        select(Match).where(
+            ((Match.user_a == user.id) | (Match.user_b == user.id)) &
+            (Match.status == "active")
+        )
+    )
+    if not my_match:
+        raise HTTPException(status_code=400, detail="You must be in an active match to start a double date.")
+
+    # 2. Target match
+    target_match = await db.get(Match, payload.match_id)
+    if not target_match or target_match.status != "active":
+        raise HTTPException(status_code=404, detail="Target match not found or inactive.")
+
+    # Create session
+    session = DoubleDateSession(
+        id=uuid.uuid4(),
+        match_a_id=my_match.id,
+        match_b_id=target_match.id,
+        status="pending",
+        created_at=datetime.now(timezone.utc),
+    )
+    db.add(session)
+    
+    # Auto-accept for the initiator's side
+    acceptance = DoubleDateAcceptance(
+        id=uuid.uuid4(),
+        session_id=session.id,
+        match_id=my_match.id,
+        accepted=True,
+        created_at=datetime.now(timezone.utc),
+    )
+    db.add(acceptance)
+    
+    await db.commit()
+    await db.refresh(session)
+    return session
 
 
 @router.post("/{session_id}/accept", response_model=DoubleDateSessionResponse)

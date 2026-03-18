@@ -5,10 +5,11 @@
  *   POST /api/v1/video/call/{callId}/end
  *   GET  /api/v1/video/call/{matchId}/history
  *
- * No actual WebRTC yet — this is the UI shell + REST state management.
+ * Integrated with Daily.co WebRTC via /video/rooms/{matchId} endpoint.
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import DailyIframe from '@daily-co/daily-js';
 import { api } from '../lib/api';
 
 interface VideoCallData {
@@ -19,6 +20,12 @@ interface VideoCallData {
   duration_seconds: number | null;
   started_at: string;
   ended_at: string | null;
+}
+
+interface VideoRoomData {
+  room_url: string;
+  room_name: string;
+  is_mock?: boolean;
 }
 
 interface VideoChatProps {
@@ -50,7 +57,11 @@ export default function VideoChat({ matchId, onClose }: VideoChatProps) {
   const [history, setHistory] = useState<VideoCallData[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [roomUrl, setRoomUrl] = useState<string | null>(null);
+  
   const timerRef = useRef<number | null>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
+  const callFrameRef = useRef<any>(null);
 
   // ── Fetch call history ───────────────────────────────────────────────────
 
@@ -79,21 +90,77 @@ export default function VideoChat({ matchId, onClose }: VideoChatProps) {
     };
   }, [callStatus]);
 
+  // ── Daily.co Event Handlers ──────────────────────────────────────────────
+
+  const handleJoinedMeeting = useCallback(() => {
+    setCallStatus('connected');
+    setElapsed(0);
+  }, []);
+
+  const handleLeftMeeting = useCallback(() => {
+    setCallStatus('ended');
+    setRoomUrl(null);
+  }, []);
+
   // ── Start call ───────────────────────────────────────────────────────────
 
   const startCall = async () => {
     setError(null);
     setCallStatus('calling');
     try {
+      // 1. Get/Create Daily.co room
+      const room = await api.post<VideoRoomData>(`/video/rooms/${matchId}`);
+      setRoomUrl(room.room_url);
+
+      // 2. Initiate call state in backend
       const call = await api.post<VideoCallData>(`/video/call/${matchId}/initiate`);
       setActiveCallId(call.id);
-      // Simulate connection after 2s (no real WebRTC yet)
-      setTimeout(() => {
+
+      // 3. Initialize Daily.co iframe
+      if (videoContainerRef.current) {
+        const frame = DailyIframe.createFrame(videoContainerRef.current, {
+          iframeStyle: {
+            width: '100%',
+            height: '100%',
+            border: '0',
+            borderRadius: '1rem',
+          },
+          showLeaveButton: true,
+          theme: {
+            colors: {
+              accent: '#9333ea',
+              accentText: '#ffffff',
+              background: '#111827',
+              backgroundAccent: '#1f2937',
+              baseText: '#ffffff',
+              border: '#374151',
+              mainAreaBg: '#111827',
+              mainAreaBgAccent: '#1f2937',
+              mainAreaText: '#ffffff',
+              supportiveText: '#9ca3af',
+            },
+          },
+        });
+        
+        callFrameRef.current = frame;
+        
+        frame.on('joined-meeting', handleJoinedMeeting);
+        frame.on('left-meeting', handleLeftMeeting);
+        frame.on('error', (e) => {
+          console.error('Daily error:', e);
+          setError('Video connection error.');
+        });
+
+        await frame.join({ url: room.room_url });
+      } else {
+        // Fallback if ref is missing
         setCallStatus('connected');
         setElapsed(0);
-      }, 2000);
-    } catch {
-      setError('Failed to start call.');
+      }
+
+    } catch (err: any) {
+      console.error('Start call error:', err);
+      setError('Failed to start call. Check Daily.co API configuration.');
       setCallStatus('idle');
     }
   };
@@ -101,17 +168,35 @@ export default function VideoChat({ matchId, onClose }: VideoChatProps) {
   // ── End call ─────────────────────────────────────────────────────────────
 
   const endCall = async () => {
-    if (!activeCallId) return;
-    try {
-      await api.post(`/video/call/${activeCallId}/end`);
-    } catch {
-      // best-effort
+    if (callFrameRef.current) {
+      await callFrameRef.current.leave();
+      await callFrameRef.current.destroy();
+      callFrameRef.current = null;
     }
+
+    if (activeCallId) {
+      try {
+        await api.post(`/video/call/${activeCallId}/end`);
+      } catch {
+        // best-effort
+      }
+    }
+
     setCallStatus('ended');
     setActiveCallId(null);
+    setRoomUrl(null);
     if (timerRef.current) window.clearInterval(timerRef.current);
     fetchHistory();
   };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (callFrameRef.current) {
+        callFrameRef.current.destroy();
+      }
+    };
+  }, []);
 
   // ── Render ───────────────────────────────────────────────────────────────
 
@@ -131,48 +216,38 @@ export default function VideoChat({ matchId, onClose }: VideoChatProps) {
         </button>
       </div>
 
-      {/* Video frames */}
-      <div className="relative aspect-video glass-strong rounded-2xl overflow-hidden">
-        {/* Remote video placeholder */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          {callStatus === 'idle' ? (
-            <div className="text-center space-y-3">
-              <p className="text-4xl">📞</p>
-              <p className="text-gray-400 text-sm">Ready to connect</p>
-            </div>
-          ) : callStatus === 'calling' ? (
-            <div className="text-center space-y-3 animate-pulse">
-              <p className="text-4xl">🔔</p>
-              <p className="text-purple-400 text-sm font-medium">Calling...</p>
-            </div>
-          ) : callStatus === 'connected' ? (
-            <div className="text-center space-y-3">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center mx-auto shadow-xl shadow-purple-600/30">
-                <span className="text-3xl">👤</span>
+      {/* Video frames container */}
+      <div 
+        ref={videoContainerRef}
+        className="relative aspect-video glass-strong rounded-2xl overflow-hidden"
+      >
+        {/* Placeholder UI when not connected */}
+        {(callStatus === 'idle' || callStatus === 'calling' || callStatus === 'ended') && !roomUrl && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            {callStatus === 'idle' ? (
+              <div className="text-center space-y-3">
+                <p className="text-4xl">📞</p>
+                <p className="text-gray-400 text-sm">Ready to connect via Daily.co</p>
               </div>
-              <p className="text-white text-sm font-medium">Connected</p>
-              <p className="text-purple-400 text-lg font-mono font-bold">{formatDuration(elapsed)}</p>
-            </div>
-          ) : (
-            <div className="text-center space-y-3">
-              <p className="text-4xl">✅</p>
-              <p className="text-gray-400 text-sm">Call ended — {formatDuration(elapsed)}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Self video placeholder (PiP) */}
-        {(callStatus === 'connected' || callStatus === 'calling') && (
-          <div className="absolute bottom-3 right-3 w-24 h-32 glass rounded-xl flex items-center justify-center border border-white/10">
-            <span className="text-sm">🤳</span>
+            ) : callStatus === 'calling' ? (
+              <div className="text-center space-y-3 animate-pulse">
+                <p className="text-4xl">🔔</p>
+                <p className="text-purple-400 text-sm font-medium">Initializing Room...</p>
+              </div>
+            ) : (
+              <div className="text-center space-y-3">
+                <p className="text-4xl">✅</p>
+                <p className="text-gray-400 text-sm">Call ended — {formatDuration(elapsed)}</p>
+              </div>
+            )}
           </div>
         )}
 
-        {/* Connected indicator */}
+        {/* Connected indicator overlaid on iframe if possible, or shown via status */}
         {callStatus === 'connected' && (
-          <div className="absolute top-3 left-3 flex items-center gap-1.5 glass rounded-full px-3 py-1">
+          <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 glass rounded-full px-3 py-1">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-[10px] text-green-400 font-medium">LIVE</span>
+            <span className="text-[10px] text-green-400 font-medium">LIVE • {formatDuration(elapsed)}</span>
           </div>
         )}
       </div>
