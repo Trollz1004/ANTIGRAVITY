@@ -12,6 +12,7 @@
 - **Git truth:** local `main` on Sabretooth, no remote sync performed in this pass
 - **Worktree state:** clean on March 18, 2026 after committing the pending privacy, video, double-date, and hygiene changes
 - **Secrets posture:** real secrets remain in local `.env` / Personal Vault only; archived Cloudflare credentials found in tracked docs were redacted locally on March 18, 2026
+- **Continuity env source:** the authoritative recovery env backup lives in Josh's OneDrive Personal Vault on Sabretooth. Repo files may document that the Personal Vault is the continuity source, but exact secret values and full vault file listings stay out of git.
 
 ## Current Runtime Truth
 
