@@ -34,7 +34,7 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
   - Google Gemini (Jules): Visual intel, content, image gen, content pipeline orchestration.
     → Connects DIRECTLY to Google API via jules-cli.py. Bypasses OpenClaw and ALL middleware BY DESIGN.
     → PROTECTED: jules-cli.py, GEMINI_API_KEY, genai.Client, all gemini-* model refs. Do NOT reroute.
-    → Uses Cloudflare ~20x/day. EXPIRED TOKEN = GEMINI IS BROKEN RIGHT NOW.
+    → Uses Cloudflare ~20x/day. Wrangler OAuth (joshlcoleman@gmail.com) ACTIVE — not a blocker.
   - Perplexity (Atlas): Deep research, competitor intel, real-time intelligence.
   - Grok AI: Adversarial testing, X-platform integration, stress-testing.
 - CodeX: Code execution TOOL. Not a co-founder. No authority over Founding Four.
@@ -86,7 +86,7 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
 - Re-verified on-chain: 2026-03-13
 
 ## IRON WALL (ABSOLUTE — separation is CODE, not config)
-- ENIGMA (profit): YouAndINotAI, onlinerecycle.org, onlinerecycle.square.site (eBay crosslister), onlinerecycle.square.site (eBay crosslister)
+- ENIGMA (profit): YouAndINotAI, onlinerecycle.org, onlinerecycle.square.site (eBay crosslister)
 - OMEGA (charity, 100% DAO): ai-solutions.store
 - ENIGMA and OMEGA NEVER cross. Not for accounting. Not for anything.
 
@@ -167,5 +167,6 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
 - Dating app profits → fund Ai-Solutions.Store (100% DAO charity, kids in medical need)
 - 50-year horizon | Personal: disabled brother + autistic niece (OPUS TRUST, 10%)
 - "Until no kid is in need." #ForTheKids
+
 
 
