@@ -6,6 +6,8 @@ logs/
 .env.*
 !.env.example
 chat.txt
+UNIVERSAL-NODE*.env
+UNIVERSAL-NODE-MANIFEST.md
 .vault/
 node_modules/
 .venv/
