@@ -13,15 +13,19 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import SessionLocal
 from app.models import (
+    Comment,
     DataPrivacyLog,
     DoubleDateAcceptance,
     DoubleDateSession,
+    Event,
     EventRSVP,
     Match,
     Message,
+    Post,
     Profile,
     Swipe,
     User,
+    VerificationEvent,
     VideoCall,
     VolunteerSignup,
 )

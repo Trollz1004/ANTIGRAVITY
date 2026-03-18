@@ -14,6 +14,7 @@ from app.schemas import (
     CommentResponse,
     PostCreateRequest,
     PostResponse,
+    PostReportRequest,
 )
 
 router = APIRouter(prefix="/boards")
