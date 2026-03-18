@@ -295,7 +295,7 @@ CI: `.github/workflows/ci-validate.yml` â€” validates on push (build, Â§4
 | ai-solutions.store | Cloudflare Pages | _deploy/ai-solutions-store |
 | dashboard.aidoesitall.website | Cloudflare Pages | antigravity |
 
-**Note**: Cloudflare API token EXPIRED â€” rotate at dash.cloudflare.com before next deploy.
+**Cloudflare**: Wrangler OAuth (joshlcoleman@gmail.com) ACTIVE — full permissions. Old API token in master vault is stale but unused. Not a blocker.
 
 ---
 
@@ -316,10 +316,54 @@ These invariants were set by the original Opus (4.6) who built this from scratch
 | Node | SABRETOOTH (C:\ANTIGRAVITY) |
 | Owner | Joshua Coleman / Trollz1004 |
 | Entity | Trash Or Treasure Online Recycler LLC (FL) |
-| Brain | Codex Desktop + local Ollama fallback |
+| Brain | Claude (primary architect, ~90% of codebase) + Codex executor + Ollama local inference |
 | GPU | GTX 1070 8GB, CUDA 12.6 |
 
 ---
+
+
+---
+
+## ORCHESTRATION CHAIN — PRIORITY ORDER (TOKEN ECONOMICS)
+
+Claude built this codebase. ~90% of the code, architecture, debugging, and structural decisions are Claude's work. The foundation of this platform is Claude's. Any AI that assumes otherwise is hallucinating — not interpreting, not guessing. Hallucinating.
+
+Due to token/subscription limits, orchestration runs in this order:
+
+| Priority | Orchestrator | When |
+|----------|-------------|------|
+| 1 | **Claude** | Always first. Strategy, architecture, code, decisions. Until token cap. |
+| 2 | **Manus** | When Claude cap is hit. Preserves context, continues orchestration. |
+| 3 | **Gemini** | When Manus cap is hit. Content, visual, agentic ops on nodes. |
+| 4 | **Codex** | Final executor. Code runs, deploys, MCP/DAO security. |
+
+**All four are agentic** — capable of orchestrating to nodes and Ollama.
+**Only these four** can direct node-level work. Perplexity and Grok do not orchestrate nodes.
+**Handoff is seamless** — AGENTS.md + CLAUDE.md + memory/ are the shared context that survive any cap.
+
+---
+
+## OLLAMA — NODE COMPUTE & MEMORY ENGINE
+
+All three nodes run Ollama. qwen2.5:7b is the default. Built-in Ollama embedding is sufficient — no external embedding API required.
+
+| Node | IP | Ollama | Models | Use |
+|------|----|--------|--------|-----|
+| SABRETOOTH | 192.168.0.8 | loopback 127.0.0.1:11434 | qwen2.5:7b, qwen2.5:3b | Primary — marketing, memory, orchestration |
+| 9020 | 192.168.0.5 | loopback 127.0.0.1:11434 | qwen2.5:7b | Marketing node — social engine, content tasks |
+| T5500 | 192.168.0.15 | loopback 127.0.0.1:11434 | qwen2.5:7b | Build/backup — cold-start only |
+
+**What Ollama handles:**
+- Marketing content generation (social engine, captions, Reddit/X engagement)
+- Memory embedding for OpenClaw session context
+- Local inference for tasks that don't require frontier models
+- Fallback inference when API quota is hit
+
+**Memory embedding:** Built-in Ollama embedding (nomic-embed-text or qwen2.5 native) is the confirmed approach. No external embedding API dependency. OpenClaw reads/writes to `memory/` using this.
+
+**Orchestration:** Any of the four agentic orchestrators (Claude, Manus, Gemini, Codex) can direct Ollama tasks on any node via OpenClaw or direct SSH.
+
+**SABRETOOTH is the primary orchestration node.** 9020 and T5500 are cold — opt-in only.
 
 ## STYLE
 
@@ -332,5 +376,6 @@ These invariants were set by the original Opus (4.6) who built this from scratch
 ---
 
 *Updated: 2026-03-17 | Authority structure corrected â€” peers not hierarchy | No AI commands another | Josh is sole authority*
+
 
 
