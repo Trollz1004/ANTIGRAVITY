@@ -1,316 +1,366 @@
-/**
- * VideoChat — video call UI shell for matched users.
- * Wires to video.py backend:
- *   POST /api/v1/video/call/{matchId}/initiate
- *   POST /api/v1/video/call/{callId}/end
- *   GET  /api/v1/video/call/{matchId}/history
- *
- * Integrated with Daily.co WebRTC via /video/rooms/{matchId} endpoint.
- */
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import DailyIframe from '@daily-co/daily-js';
-import { api } from '../lib/api';
-
-interface VideoCallData {
-  id: string;
-  match_id: string;
-  initiator_id: string;
-  status: string;
-  duration_seconds: number | null;
-  started_at: string;
-  ended_at: string | null;
-}
-
-interface VideoRoomData {
-  room_url: string;
-  room_name: string;
-  is_mock?: boolean;
-}
+type CallState = 'connecting' | 'waiting' | 'connected' | 'ended';
 
 interface VideoChatProps {
-  matchId: string;
-  onClose: () => void;
+  callId: string;
+  initiator: boolean;
+  onHangUp?: () => void;
 }
 
-type CallStatus = 'idle' | 'calling' | 'connected' | 'ended';
+function buildWebSocketUrl(callId: string, token: string): string {
+  const configuredApiBase = import.meta.env.VITE_API_URL || `${window.location.origin}/api/v1`;
+  const absoluteApiBase = configuredApiBase.startsWith('http')
+    ? configuredApiBase
+    : `${window.location.origin}${configuredApiBase.startsWith('/') ? '' : '/'}${configuredApiBase}`;
 
-function formatDuration(seconds: number): string {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  return `${absoluteApiBase.replace(/^http/, 'ws')}/ws/video/${callId}?token=${encodeURIComponent(token)}`;
 }
 
-function formatTime(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  });
-}
+export default function VideoChat({ callId, initiator, onHangUp }: VideoChatProps) {
+  const localVideoRef = useRef<HTMLVideoElement | null>(null);
+  const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
+  const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
+  const localStreamRef = useRef<MediaStream | null>(null);
+  const remoteStreamRef = useRef<MediaStream | null>(null);
+  const socketRef = useRef<WebSocket | null>(null);
 
-export default function VideoChat({ matchId, onClose }: VideoChatProps) {
-  const [callStatus, setCallStatus] = useState<CallStatus>('idle');
-  const [activeCallId, setActiveCallId] = useState<string | null>(null);
-  const [elapsed, setElapsed] = useState(0);
-  const [history, setHistory] = useState<VideoCallData[]>([]);
-  const [loadingHistory, setLoadingHistory] = useState(true);
+  const [callState, setCallState] = useState<CallState>('connecting');
+  const [micEnabled, setMicEnabled] = useState(true);
+  const [cameraEnabled, setCameraEnabled] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [roomUrl, setRoomUrl] = useState<string | null>(null);
-  
-  const timerRef = useRef<number | null>(null);
-  const videoContainerRef = useRef<HTMLDivElement>(null);
-  const callFrameRef = useRef<any>(null);
+  const [remoteReady, setRemoteReady] = useState(false);
 
-  // ── Fetch call history ───────────────────────────────────────────────────
-
-  const fetchHistory = useCallback(async () => {
-    setLoadingHistory(true);
-    try {
-      const data = await api.get<VideoCallData[]>(`/video/call/${matchId}/history`);
-      setHistory(data);
-    } catch {
-      // silent
-    } finally {
-      setLoadingHistory(false);
+  const stopLocalMedia = useCallback(() => {
+    localStreamRef.current?.getTracks().forEach((track) => track.stop());
+    localStreamRef.current = null;
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = null;
     }
-  }, [matchId]);
-
-  useEffect(() => { fetchHistory(); }, [fetchHistory]);
-
-  // ── Timer ────────────────────────────────────────────────────────────────
-
-  useEffect(() => {
-    if (callStatus === 'connected') {
-      timerRef.current = window.setInterval(() => setElapsed((e) => e + 1), 1000);
-    }
-    return () => {
-      if (timerRef.current) window.clearInterval(timerRef.current);
-    };
-  }, [callStatus]);
-
-  // ── Daily.co Event Handlers ──────────────────────────────────────────────
-
-  const handleJoinedMeeting = useCallback(() => {
-    setCallStatus('connected');
-    setElapsed(0);
   }, []);
 
-  const handleLeftMeeting = useCallback(() => {
-    setCallStatus('ended');
-    setRoomUrl(null);
-  }, []);
-
-  // ── Start call ───────────────────────────────────────────────────────────
-
-  const startCall = async () => {
-    setError(null);
-    setCallStatus('calling');
-    try {
-      // 1. Get/Create Daily.co room
-      const room = await api.post<VideoRoomData>(`/video/rooms/${matchId}`);
-      setRoomUrl(room.room_url);
-
-      // 2. Initiate call state in backend
-      const call = await api.post<VideoCallData>(`/video/call/${matchId}/initiate`);
-      setActiveCallId(call.id);
-
-      // 3. Initialize Daily.co iframe
-      if (videoContainerRef.current) {
-        const frame = DailyIframe.createFrame(videoContainerRef.current, {
-          iframeStyle: {
-            width: '100%',
-            height: '100%',
-            border: '0',
-            borderRadius: '1rem',
-          },
-          showLeaveButton: true,
-          theme: {
-            colors: {
-              accent: '#9333ea',
-              accentText: '#ffffff',
-              background: '#111827',
-              backgroundAccent: '#1f2937',
-              baseText: '#ffffff',
-              border: '#374151',
-              mainAreaBg: '#111827',
-              mainAreaBgAccent: '#1f2937',
-              mainAreaText: '#ffffff',
-              supportiveText: '#9ca3af',
-            },
-          },
-        });
-        
-        callFrameRef.current = frame;
-        
-        frame.on('joined-meeting', handleJoinedMeeting);
-        frame.on('left-meeting', handleLeftMeeting);
-        frame.on('error', (e) => {
-          console.error('Daily error:', e);
-          setError('Video connection error.');
-        });
-
-        await frame.join({ url: room.room_url });
-      } else {
-        // Fallback if ref is missing
-        setCallStatus('connected');
-        setElapsed(0);
+  const closeConnections = useCallback(
+    (notifyPeer: boolean, triggerCallback: boolean) => {
+      if (notifyPeer && socketRef.current?.readyState === WebSocket.OPEN) {
+        socketRef.current.send(JSON.stringify({ type: 'hang_up' }));
       }
 
-    } catch (err: any) {
-      console.error('Start call error:', err);
-      setError('Failed to start call. Check Daily.co API configuration.');
-      setCallStatus('idle');
-    }
-  };
+      socketRef.current?.close();
+      socketRef.current = null;
 
-  // ── End call ─────────────────────────────────────────────────────────────
+      peerConnectionRef.current?.close();
+      peerConnectionRef.current = null;
 
-  const endCall = async () => {
-    if (callFrameRef.current) {
-      await callFrameRef.current.leave();
-      await callFrameRef.current.destroy();
-      callFrameRef.current = null;
-    }
+      remoteStreamRef.current?.getTracks().forEach((track) => track.stop());
+      remoteStreamRef.current = null;
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = null;
+      }
 
-    if (activeCallId) {
+      stopLocalMedia();
+      setCallState('ended');
+      if (triggerCallback) {
+        onHangUp?.();
+      }
+    },
+    [onHangUp, stopLocalMedia],
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function startCall() {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        setError('A valid session is required to start video chat.');
+        setCallState('ended');
+        return;
+      }
+
       try {
-        await api.post(`/video/call/${activeCallId}/end`);
-      } catch {
-        // best-effort
+        const localStream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: true,
+        });
+        if (cancelled) {
+          localStream.getTracks().forEach((track) => track.stop());
+          return;
+        }
+
+        localStreamRef.current = localStream;
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = localStream;
+        }
+
+        const remoteStream = new MediaStream();
+        remoteStreamRef.current = remoteStream;
+        if (remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = remoteStream;
+        }
+
+        const peerConnection = new RTCPeerConnection({
+          iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+        });
+        peerConnectionRef.current = peerConnection;
+
+        localStream.getTracks().forEach((track) => {
+          peerConnection.addTrack(track, localStream);
+        });
+
+        peerConnection.ontrack = (event) => {
+          const [stream] = event.streams;
+          if (stream) {
+            stream.getTracks().forEach((track) => {
+              if (!remoteStream.getTracks().some((existingTrack) => existingTrack.id === track.id)) {
+                remoteStream.addTrack(track);
+              }
+            });
+          } else {
+            remoteStream.addTrack(event.track);
+          }
+          setRemoteReady(true);
+          setCallState('connected');
+        };
+
+        peerConnection.onicecandidate = (event) => {
+          if (event.candidate && socketRef.current?.readyState === WebSocket.OPEN) {
+            socketRef.current.send(
+              JSON.stringify({
+                type: 'ice_candidate',
+                candidate: event.candidate.toJSON(),
+              }),
+            );
+          }
+        };
+
+        peerConnection.onconnectionstatechange = () => {
+          if (peerConnection.connectionState === 'connected') {
+            setCallState('connected');
+          }
+
+          if (peerConnection.connectionState === 'failed' || peerConnection.connectionState === 'disconnected') {
+            setError('The peer-to-peer connection dropped.');
+            closeConnections(false, true);
+          }
+        };
+
+        const socket = new WebSocket(buildWebSocketUrl(callId, token));
+        socketRef.current = socket;
+
+        socket.onopen = async () => {
+          setCallState(initiator ? 'waiting' : 'connecting');
+          if (!initiator) {
+            return;
+          }
+
+          const offer = await peerConnection.createOffer();
+          await peerConnection.setLocalDescription(offer);
+          socket.send(
+            JSON.stringify({
+              type: 'sdp_offer',
+              sdp: offer,
+            }),
+          );
+        };
+
+        socket.onmessage = async (event) => {
+          const message = JSON.parse(event.data as string) as {
+            type: string;
+            sdp?: RTCSessionDescriptionInit;
+            candidate?: RTCIceCandidateInit;
+          };
+
+          if (!peerConnectionRef.current) {
+            return;
+          }
+
+          switch (message.type) {
+            case 'sdp_offer': {
+              if (!message.sdp) {
+                return;
+              }
+              await peerConnectionRef.current.setRemoteDescription(message.sdp);
+              const answer = await peerConnectionRef.current.createAnswer();
+              await peerConnectionRef.current.setLocalDescription(answer);
+              socketRef.current?.send(
+                JSON.stringify({
+                  type: 'sdp_answer',
+                  sdp: answer,
+                }),
+              );
+              setCallState('waiting');
+              break;
+            }
+            case 'sdp_answer': {
+              if (!message.sdp) {
+                return;
+              }
+              await peerConnectionRef.current.setRemoteDescription(message.sdp);
+              break;
+            }
+            case 'ice_candidate': {
+              if (!message.candidate) {
+                return;
+              }
+              await peerConnectionRef.current.addIceCandidate(message.candidate);
+              break;
+            }
+            case 'hang_up': {
+              closeConnections(false, true);
+              break;
+            }
+            default:
+              break;
+          }
+        };
+
+        socket.onerror = () => {
+          setError('WebSocket signaling failed to connect.');
+        };
+
+        socket.onclose = () => {
+          if (!cancelled && callState !== 'ended') {
+            setCallState('ended');
+          }
+        };
+      } catch (err) {
+        console.error(err);
+        setError('Unable to access camera or microphone.');
+        closeConnections(false, false);
       }
     }
 
-    setCallStatus('ended');
-    setActiveCallId(null);
-    setRoomUrl(null);
-    if (timerRef.current) window.clearInterval(timerRef.current);
-    fetchHistory();
-  };
+    void startCall();
 
-  // Cleanup on unmount
-  useEffect(() => {
     return () => {
-      if (callFrameRef.current) {
-        callFrameRef.current.destroy();
-      }
+      cancelled = true;
+      closeConnections(false, false);
     };
-  }, []);
+  }, [callId, closeConnections, initiator]);
 
-  // ── Render ───────────────────────────────────────────────────────────────
+  const toggleAudio = useCallback(() => {
+    const nextEnabled = !micEnabled;
+    localStreamRef.current?.getAudioTracks().forEach((track) => {
+      track.enabled = nextEnabled;
+    });
+    setMicEnabled(nextEnabled);
+  }, [micEnabled]);
+
+  const toggleVideo = useCallback(() => {
+    const nextEnabled = !cameraEnabled;
+    localStreamRef.current?.getVideoTracks().forEach((track) => {
+      track.enabled = nextEnabled;
+    });
+    setCameraEnabled(nextEnabled);
+  }, [cameraEnabled]);
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-6 space-y-5">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-          <span className="text-2xl">📹</span> Video Call
-        </h2>
-        <button
-          id="video-close"
-          onClick={onClose}
-          className="text-gray-500 hover:text-white text-sm transition-colors"
-        >
-          Close
-        </button>
+    <section className="mx-auto flex w-full max-w-6xl flex-col gap-5 rounded-[32px] border border-slate-800 bg-slate-950 p-5 text-slate-100 shadow-[0_35px_140px_rgba(2,6,23,0.6)] md:p-7">
+      <div className="flex flex-col gap-3 rounded-[26px] border border-slate-800 bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.15),_transparent_38%),linear-gradient(180deg,rgba(15,23,42,0.96),rgba(2,6,23,0.96))] p-5 md:flex-row md:items-center md:justify-between">
+        <div>
+          <div className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-300">Live Video</div>
+          <h2 className="mt-2 text-3xl font-semibold text-white">Peer-to-peer WebRTC call</h2>
+          <p className="mt-2 text-sm text-slate-400">
+            Signal exchange runs over the matched-user WebSocket relay. Media stays on the peer connection.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-800 bg-black/30 px-4 py-3 text-sm">
+          <div className="text-slate-400">Call ID</div>
+          <div className="mt-1 font-mono text-xs text-slate-200">{callId}</div>
+        </div>
       </div>
 
-      {/* Video frames container */}
-      <div 
-        ref={videoContainerRef}
-        className="relative aspect-video glass-strong rounded-2xl overflow-hidden"
-      >
-        {/* Placeholder UI when not connected */}
-        {(callStatus === 'idle' || callStatus === 'calling' || callStatus === 'ended') && !roomUrl && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            {callStatus === 'idle' ? (
-              <div className="text-center space-y-3">
-                <p className="text-4xl">📞</p>
-                <p className="text-gray-400 text-sm">Ready to connect via Daily.co</p>
-              </div>
-            ) : callStatus === 'calling' ? (
-              <div className="text-center space-y-3 animate-pulse">
-                <p className="text-4xl">🔔</p>
-                <p className="text-purple-400 text-sm font-medium">Initializing Room...</p>
-              </div>
-            ) : (
-              <div className="text-center space-y-3">
-                <p className="text-4xl">✅</p>
-                <p className="text-gray-400 text-sm">Call ended — {formatDuration(elapsed)}</p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Connected indicator overlaid on iframe if possible, or shown via status */}
-        {callStatus === 'connected' && (
-          <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 glass rounded-full px-3 py-1">
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-[10px] text-green-400 font-medium">LIVE • {formatDuration(elapsed)}</span>
-          </div>
-        )}
-      </div>
-
-      {/* Controls */}
-      <div className="flex justify-center gap-4">
-        {callStatus === 'idle' || callStatus === 'ended' ? (
-          <button
-            id="video-start-call"
-            onClick={startCall}
-            className="bg-purple-600 hover:bg-purple-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-all duration-200 hover:shadow-lg hover:shadow-purple-600/20 flex items-center gap-2"
-          >
-            📹 Start Video Call
-          </button>
-        ) : (
-          <button
-            id="video-end-call"
-            onClick={endCall}
-            className="bg-red-600 hover:bg-red-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-all duration-200 hover:shadow-lg hover:shadow-red-600/20 flex items-center gap-2"
-          >
-            📵 End Call
-          </button>
-        )}
-      </div>
-
-      {/* Error */}
       {error && (
-        <div className="bg-red-900/30 border border-red-800/50 text-red-300 rounded-lg px-4 py-2.5 text-sm">
+        <div className="rounded-2xl border border-rose-900 bg-rose-950/70 px-4 py-3 text-sm text-rose-200">
           {error}
         </div>
       )}
 
-      {/* Call history */}
-      <div>
-        <h3 className="text-sm font-bold text-gray-400 mb-3">Recent Calls</h3>
-        {loadingHistory ? (
-          <div className="space-y-2">
-            {[1, 2].map((i) => (
-              <div key={i} className="glass rounded-lg p-3 animate-pulse">
-                <div className="h-3 bg-gray-800 rounded w-1/2" />
-              </div>
-            ))}
+      <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="rounded-[28px] border border-slate-800 bg-slate-900/70 p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-white">Local video</div>
+              <div className="text-xs text-slate-500">{initiator ? 'Offer initiator' : 'Answerer'}</div>
+            </div>
+            <span className="rounded-full border border-slate-700 bg-slate-950 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-slate-400">
+              muted output
+            </span>
           </div>
-        ) : history.length === 0 ? (
-          <p className="text-gray-600 text-sm">No call history yet.</p>
-        ) : (
-          <div className="space-y-2">
-            {history.map((call) => (
-              <div key={call.id} className="glass rounded-lg px-4 py-2.5 flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm">
-                  <span className={call.status === 'ended' ? 'text-gray-400' : 'text-purple-400'}>
-                    {call.status === 'ended' ? '📞' : '📵'}
-                  </span>
-                  <span className="text-gray-300">{formatTime(call.started_at)}</span>
+          <div className="overflow-hidden rounded-[24px] border border-slate-800 bg-black">
+            <video
+              ref={localVideoRef}
+              autoPlay
+              playsInline
+              muted
+              className="aspect-video w-full object-cover"
+            />
+          </div>
+        </div>
+
+        <div className="rounded-[28px] border border-slate-800 bg-slate-900/70 p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-white">Remote video</div>
+              <div className="text-xs text-slate-500">
+                {remoteReady ? 'Peer connected' : 'Waiting for the other matched user'}
+              </div>
+            </div>
+            <span className="rounded-full border border-teal-900/80 bg-teal-950/70 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-teal-300">
+              {callState}
+            </span>
+          </div>
+          <div className="relative overflow-hidden rounded-[24px] border border-slate-800 bg-black">
+            <video
+              ref={remoteVideoRef}
+              autoPlay
+              playsInline
+              className="aspect-video w-full object-cover"
+            />
+            {!remoteReady && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/75 text-center">
+                <div className="text-lg font-medium text-white">
+                  {callState === 'waiting' ? 'Offer sent. Waiting for answer.' : 'Waiting for peer media.'}
                 </div>
-                <span className="text-xs text-gray-500">
-                  {call.duration_seconds ? formatDuration(call.duration_seconds) : call.status}
-                </span>
+                <p className="mt-2 max-w-sm text-sm text-slate-400">
+                  The signaling channel is connected. Once the second user joins this call, the remote stream appears here.
+                </p>
               </div>
-            ))}
+            )}
           </div>
-        )}
+        </div>
       </div>
-    </div>
+
+      <div className="flex flex-col gap-3 rounded-[26px] border border-slate-800 bg-slate-900/60 p-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={toggleAudio}
+            className={`rounded-2xl px-4 py-3 text-sm font-medium transition ${
+              micEnabled ? 'bg-slate-800 text-white hover:bg-slate-700' : 'bg-amber-500 text-slate-950 hover:bg-amber-400'
+            }`}
+          >
+            {micEnabled ? 'Mute mic' : 'Unmute mic'}
+          </button>
+          <button
+            type="button"
+            onClick={toggleVideo}
+            className={`rounded-2xl px-4 py-3 text-sm font-medium transition ${
+              cameraEnabled ? 'bg-slate-800 text-white hover:bg-slate-700' : 'bg-amber-500 text-slate-950 hover:bg-amber-400'
+            }`}
+          >
+            {cameraEnabled ? 'Turn camera off' : 'Turn camera on'}
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => closeConnections(true, true)}
+          className="rounded-2xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-500"
+        >
+          Hang up
+        </button>
+      </div>
+    </section>
   );
 }
