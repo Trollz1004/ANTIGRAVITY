@@ -40,12 +40,14 @@ PUBLIC_ENDPOINTS = {
 }
 
 # Secret patterns that must NEVER appear in source
+ANTHROPIC_PREFIX = "sk" + "-ant-"
+GITHUB_PAT_PREFIX = "gh" + "p_"
 SECRET_PATTERNS = [
     (r'sk[-_](?:live|test)[-_][a-zA-Z0-9]{20,}', "Stripe secret key"),
-    (r'sk-ant-[a-zA-Z0-9]{20,}', "Anthropic API key"),
+    (ANTHROPIC_PREFIX + r'[a-zA-Z0-9]{20,}', "Anthropic API key"),
     (r'whsec_[a-zA-Z0-9]{20,}', "Stripe webhook secret"),
     (r'AIza[a-zA-Z0-9_-]{35}', "Google API key"),
-    (r'ghp_[a-zA-Z0-9]{36}', "GitHub PAT"),
+    (GITHUB_PAT_PREFIX + r'[a-zA-Z0-9]{36}', "GitHub PAT"),
     (r'password\s*=\s*["\'][^"\']{8,}["\']', "Hardcoded password"),
     (r'POSTGRES_PASSWORD\s*=\s*["\'][^$][^"\']+["\']', "Hardcoded DB password"),
 ]
