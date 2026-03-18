@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { HandHeart, MapPin, Calendar, Users, Plus, Check, Heart, Clock, Award, Building2, TrendingUp } from 'lucide-react';
 import { api } from '../../lib/api';
+import VolunteerHub from '../../components/VolunteerHub';
 
 interface VolunteerData {
   id: string;
@@ -70,6 +71,7 @@ export function Volunteering() {
   const [spots, setSpots] = useState('');
   const [signedUp, setSignedUp] = useState<Set<string>>(new Set());
   const [filterCategory, setFilterCategory] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'all' | 'my-impact'>('all');
 
   const load = async () => {
     const params = new URLSearchParams();
@@ -140,6 +142,40 @@ export function Volunteering() {
           <Plus size={16} /> Create Opportunity
         </button>
       </div>
+
+      {/* View mode tabs */}
+      <div className="flex bg-gray-900/60 rounded-2xl p-1 gap-1 mb-6 animate-fade-in">
+        <button
+          id="volunteer-view-all"
+          onClick={() => setViewMode('all')}
+          className={`flex-1 text-sm py-2.5 rounded-xl font-bold transition-all duration-200 ${
+            viewMode === 'all'
+              ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-400 border border-emerald-500/15'
+              : 'text-gray-400 hover:text-white'
+          }`}
+        >
+          All Opportunities
+        </button>
+        <button
+          id="volunteer-view-impact"
+          onClick={() => setViewMode('my-impact')}
+          className={`flex-1 text-sm py-2.5 rounded-xl font-bold transition-all duration-200 ${
+            viewMode === 'my-impact'
+              ? 'bg-gradient-to-r from-purple-500/20 to-violet-500/20 text-purple-400 border border-purple-500/15'
+              : 'text-gray-400 hover:text-white'
+          }`}
+        >
+          My Signups
+        </button>
+      </div>
+
+      {/* My Impact view */}
+      {viewMode === 'my-impact' ? (
+        <div className="animate-scale-in">
+          <VolunteerHub />
+        </div>
+      ) : (
+      <>
 
       {/* Impact Dashboard */}
       {impact && (
@@ -315,6 +351,8 @@ export function Volunteering() {
             );
           })}
         </div>
+      )}
+      </>
       )}
     </div>
   );

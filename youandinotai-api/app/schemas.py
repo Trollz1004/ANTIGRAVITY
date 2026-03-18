@@ -260,3 +260,41 @@ class MySignupResponse(BaseModel):
     hours_estimate: float | None
     event_date: datetime | None
     signed_up_at: datetime
+
+
+# ── Privacy ──
+
+class PrivacyStatusResponse(BaseModel):
+    email: str
+    display_name: str
+    message_count: int
+    match_count: int
+    signup_count: int
+
+
+class PrivacyLocationUpdate(BaseModel):
+    enabled: bool
+
+
+# ── Video Calls ──
+
+class VideoCallResponse(BaseModel):
+    id: uuid.UUID
+    match_id: uuid.UUID
+    initiator_id: uuid.UUID
+    status: str
+    duration_seconds: int | None = None
+    started_at: datetime
+    ended_at: datetime | None = None
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ── Double Dates ──
+
+class DoubleDateSessionResponse(BaseModel):
+    id: uuid.UUID
+    match_a_id: uuid.UUID
+    match_b_id: uuid.UUID
+    status: str
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
