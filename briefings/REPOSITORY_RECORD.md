@@ -17,9 +17,9 @@
 ### Node Topology
 | Node | Role | State |
 |------|------|-------|
-| **SABRETOOTH** | Master Node / Brain | 🟢 LIVE (C:\ANTIGRAVITY) |
-| **T5500** | Sub-Agent (Deployer) | ❄️ COLD (C:\ANTIGRAVITY) |
-| **9020** | Sub-Agent (Marketing) | ❄️ COLD (C:\ANTIGRAVITY) |
+| **SABRETOOTH** | Master Node / Brain / Orchestration | 🟢 LIVE (C:\ANTIGRAVITY) |
+| **T5500** | Build Authority / GCR Deployer | ❄️ COLD (C:\ANTIGRAVITY) — *Confirmed: GCR Deploy was finalized here.* |
+| **9020** | Marketing Node / Clippings | ❄️ COLD (C:\ANTIGRAVITY) |
 
 ---
 
@@ -53,9 +53,12 @@
 ---
 
 ## 🛠️ RECENT CRITICAL CHANGES
-- [x] **Git History Purge:** 100% of commits rewritten to remove exposed keys.
+- [x] **GCR Backend Deployment:** 🟢 **COMPLETED & LIVE** (Built/Pushed via T5500 node).
+- [x] **Cloudflare Tunnels:** 🟢 **COMPLETED & LIVE** (Serving via Sabretooth).
+- [x] **Frontend Deployment:** 🟢 **COMPLETED & LIVE** on Cloudflare Pages (`youandinotai.com`).
+- [x] **Git History Purge:** 🟢 **COMPLETED**. 100% of commits rewritten to remove exposed keys.
 - [x] **Square Logic Fix:** `create_square_links.js` now pulls from `.env`, not hardcoded lines.
-- [x] **Frontend Sanitization:** App.tsx language fixed to follow legal guidelines.
+- [x] **Frontend Sanitization:** `App.tsx` language fixed to follow legal guidelines (§496.405).
 - [x] **CI Cost Reduction:** PR auto-triggers disabled to protect GitHub Action minutes.
 - [x] **Square MCP:** Wired into VS Code and Claude.ai for live payment management.
 
