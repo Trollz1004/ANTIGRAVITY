@@ -11,12 +11,17 @@ Tests cover:
 
 import json
 import os
+import uuid
+from datetime import datetime, timezone
 from unittest.mock import MagicMock
 
 import pytest
 
 os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-security"
 
+from sqlalchemy import select
+
+from app.models import User
 from tests.conftest import (
     generate_square_signature,
     make_square_booking_event,
@@ -238,6 +243,60 @@ class TestSquarePaymentEventFactory:
         booking = event["data"]["object"]["booking"]
         assert booking["status"] == "ACCEPTED"
         assert booking["customer_details"]["email_address"] == "pickup@example.com"
+
+
+def test_completed_founding_member_payment_activates_subscription(client, db_session_factory):
+    async def seed_user() -> None:
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=uuid.uuid4(),
+                    email="founder@example.com",
+                    password_hash="hashed",
+                    display_name="Founder",
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            await session.commit()
+
+    import asyncio
+
+    asyncio.run(seed_user())
+
+    payload = make_square_payment_event(
+        event_id="evt_founding_member_1",
+        amount_cents=1499,
+        buyer_email="founder@example.com",
+        note="Founding Member subscription",
+        payment_status="COMPLETED",
+    )
+
+    signature = generate_square_signature(
+        json.dumps(payload, separators=(",", ":")).encode("utf-8"),
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=json.dumps(payload, separators=(",", ":")),
+    )
+
+    assert response.status_code == 200, response.text
+
+    async def fetch_user() -> User | None:
+        async with db_session_factory() as session:
+            return await session.scalar(select(User).where(User.email == "founder@example.com"))
+
+    user = asyncio.run(fetch_user())
+    assert user is not None
+    assert user.subscription_active is True
+    assert user.subscription_tier == "founding_member"
 
 
 class TestNoStripeReferences:

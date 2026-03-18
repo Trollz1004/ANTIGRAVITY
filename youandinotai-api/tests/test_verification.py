@@ -107,6 +107,54 @@ class TestSquarePaymentLinkGeneration:
             "https://youandinotai.com/app/verify?status=success"
         )
 
+    def test_build_square_checkout_url_returns_payment_link(self):
+        from app.routers.verify import _build_square_checkout_url
+
+        user = MagicMock()
+        user.id = uuid.uuid4()
+        user.email = "josh@example.com"
+
+        event = MagicMock()
+        event.id = uuid.uuid4()
+
+        settings = MagicMock(
+            jwt_secret="test-secret-that-is-at-least-32-characters-long-for-security",
+            square_access_token="sq0atp-test",
+            square_location_id="LY5GN09F5AN83",
+            square_api_base_url="https://connect.squareup.com",
+            square_api_version="2026-01-22",
+            app_url="https://youandinotai.com",
+        )
+
+        mock_response = MagicMock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.json.return_value = {
+            "payment_link": {"url": "https://square.link/u/mock-bot-shield"}
+        }
+
+        mock_client = AsyncMock()
+        mock_client.post.return_value = mock_response
+
+        class MockAsyncClient:
+            def __init__(self, *args, **kwargs):
+                pass
+
+            async def __aenter__(self):
+                return mock_client
+
+            async def __aexit__(self, exc_type, exc, tb):
+                return False
+
+        import asyncio
+        from unittest.mock import patch
+
+        with patch("app.routers.verify.httpx.AsyncClient", MockAsyncClient):
+            checkout_url = asyncio.run(
+                _build_square_checkout_url(user=user, event=event, settings=settings)
+            )
+
+        assert checkout_url == "https://square.link/u/mock-bot-shield"
+
     def test_no_stripe_references_in_verify(self):
         """verify.py must not contain any Stripe imports or references."""
         import inspect
