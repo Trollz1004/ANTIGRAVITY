@@ -12,6 +12,11 @@ const NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolea
   { to: '/app/charity', icon: Sparkles, label: 'For The Kids' },
 ];
 
+const MOBILE_NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolean }[] = [
+  ...NAV_ITEMS,
+  { to: '/app/privacy', icon: Shield, label: 'Privacy' },
+];
+
 export function AppShell() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -133,7 +138,7 @@ export function AppShell() {
       <nav className="md:hidden fixed bottom-0 left-0 right-0 glass-strong border-t-0 flex justify-around py-2 px-1 z-50">
         {/* Top highlight */}
         <div className="absolute top-0 left-[5%] right-[5%] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        {NAV_ITEMS.map((item) => (
+        {MOBILE_NAV_ITEMS.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
