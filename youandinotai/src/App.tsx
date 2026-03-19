@@ -444,6 +444,7 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
     { name: '12-Month Founder — $99.99', link: 'https://square.link/u/6GHpbvvl' },
     { name: 'Royalty Card — $2,500', link: 'https://square.link/u/CafhorUS' },
   ];
+  const legalKeys = ['terms', 'privacy', 'age', 'refund'] as const;
 
   return (
     <footer className="relative z-10 border-t border-white/10 bg-black/60 backdrop-blur-md mt-8">
@@ -477,13 +478,18 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
         <div>
           <h4 className="text-white font-bold text-lg mb-3">Legal</h4>
           <ul className="space-y-2">
-            {(['terms', 'privacy', 'age', 'refund'] as const).map((key) => (
+            {legalKeys.map((key) => (
               <li key={key}>
                 <button onClick={() => onLegal(key)} className="text-gray-400 hover:text-pink-400 text-sm transition-colors bg-transparent border-none cursor-pointer p-0">
                   {LEGAL_CONTENT[key].title}
                 </button>
               </li>
             ))}
+            <li>
+              <a href="/support" className="text-gray-400 hover:text-pink-400 text-sm no-underline transition-colors">
+                Support
+              </a>
+            </li>
           </ul>
         </div>
 
@@ -509,7 +515,7 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
       <div className="border-t border-white/5 py-4 px-6">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div className="flex flex-wrap justify-center gap-2 text-xs">
-            {(['terms', 'privacy', 'age', 'refund'] as const).map((key, i) => (
+            {legalKeys.map((key, i) => (
               <React.Fragment key={key}>
                 {i > 0 && <span className="text-gray-600">&middot;</span>}
                 <button onClick={() => onLegal(key)} className="text-gray-500 hover:text-gray-300 transition-colors bg-transparent border-none cursor-pointer p-0 text-xs">
@@ -517,6 +523,10 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
                 </button>
               </React.Fragment>
             ))}
+            <span className="text-gray-600">&middot;</span>
+            <a href="/support" className="text-gray-500 hover:text-gray-300 transition-colors no-underline text-xs">
+              Support
+            </a>
           </div>
           <p className="text-gray-600 text-xs">&copy; 2026 <a href="https://search.sunbiz.org/Inquiry/CorporationSearch/SearchResultDetail?inquiryType=EntityName&searchTerm=TRASH%20OR%20TREASURE%20ONLINE%20RECYCLER%20LLC&listNameOrder=TRASHORTREASUREONLINERECYCLER%20L250001584010" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400">Trash Or Treasure Online Recycler LLC</a>. All rights reserved.</p>
         </div>
@@ -525,6 +535,90 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
         </p>
       </div>
     </footer>
+  );
+}
+
+export function PublicSupportPage() {
+  const [legalModal, setLegalModal] = useState<string | null>(null);
+
+  return (
+    <div className="min-h-screen relative overflow-hidden">
+      <HeroBackground />
+      <div className="relative z-10 flex min-h-screen flex-col">
+        <main className="flex-1 px-6 py-12 sm:px-8 sm:py-16">
+          <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <a href="/" className="text-sm font-medium text-pink-300 no-underline transition-colors hover:text-pink-200">
+                Back to Home
+              </a>
+              <div className="rounded-full border border-white/10 bg-black/40 px-4 py-2 text-xs uppercase tracking-[0.28em] text-gray-300">
+                Support
+              </div>
+            </div>
+
+            <section className="rounded-[32px] border border-white/10 bg-black/60 p-6 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-md sm:p-8">
+              <div className="max-w-3xl">
+                <p className="text-sm font-semibold uppercase tracking-[0.32em] text-cyan-300">YouAndiNotAi Support</p>
+                <h1 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl">
+                  Help for receipts, verification, privacy, and account issues.
+                </h1>
+                <p className="mt-4 text-base leading-7 text-gray-300 sm:text-lg">
+                  Signed-in members can use the in-app support center to chat with the support assistant, escalate to a human ticket,
+                  and review prior tickets. If you are not signed in yet, use the email contact below or sign in to reach the full support queue.
+                </p>
+              </div>
+
+              <div className="mt-8 grid gap-4 md:grid-cols-2">
+                <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
+                  <h2 className="text-lg font-semibold text-white">Account Support</h2>
+                  <p className="mt-2 text-sm leading-6 text-gray-300">
+                    Use the support center after sign-in for payment receipts, Bot-Shield verification, privacy requests, and account troubleshooting.
+                  </p>
+                </div>
+                <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
+                  <h2 className="text-lg font-semibold text-white">Direct Contact</h2>
+                  <p className="mt-2 text-sm leading-6 text-gray-300">
+                    For general support or login issues, email the support inbox and include the address tied to your account when possible.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href="/login"
+                  className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-3 text-sm font-semibold text-slate-950 no-underline transition-transform hover:scale-[1.02]"
+                >
+                  Sign In for Support
+                </a>
+                <a
+                  href="/register"
+                  className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white no-underline transition-colors hover:border-pink-300 hover:text-pink-200"
+                >
+                  Create Account
+                </a>
+                <a
+                  href="mailto:contact@youandinotai.com?subject=YouAndiNotAi%20Support"
+                  className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white no-underline transition-colors hover:border-pink-300 hover:text-pink-200"
+                >
+                  Email Support
+                </a>
+                <a
+                  href="/app/support"
+                  className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white no-underline transition-colors hover:border-pink-300 hover:text-pink-200"
+                >
+                  Open Member Support
+                </a>
+              </div>
+            </section>
+          </div>
+        </main>
+        <Footer onLegal={(type) => setLegalModal(type)} />
+      </div>
+
+      <AnimatePresence>
+        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
+      </AnimatePresence>
+    </div>
   );
 }
 
