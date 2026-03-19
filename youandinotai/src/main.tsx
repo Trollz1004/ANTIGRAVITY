@@ -6,7 +6,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import LandingPage from './App';
+import LandingPage, { PublicSupportPage } from './App';
 import { Login } from './app/pages/Login';
 import { Register } from './app/pages/Register';
 import { AuthGuard } from './app/AuthGuard';
@@ -31,6 +31,7 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/support" element={<PublicSupportPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
