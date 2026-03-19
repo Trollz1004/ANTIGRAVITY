@@ -1,7 +1,7 @@
 # REPOSITORY RECORD — SABRETOOTH LIVE STATE
 
-> **Date:** March 18, 2026
-> **Status:** `main` clean, validated locally, frontend live
+> **Date:** March 19, 2026
+> **Status:** `main` clean, `origin/main` updated, frontend and backend live
 > **Authority:** Joshua Coleman
 
 ---
@@ -9,44 +9,57 @@
 ## Repository Truth
 
 - **Authoritative root:** `C:\ANTIGRAVITY`
-- **Git truth:** local `main` on Sabretooth, no remote sync performed in this pass
-- **Worktree state:** clean on March 18, 2026 after committing the pending privacy, video, double-date, and hygiene changes
-- **Secrets posture:** real secrets remain in local `.env` / Personal Vault only; archived Cloudflare credentials found in tracked docs were redacted locally on March 18, 2026
-- **Continuity env source:** the authoritative recovery env backup lives in Josh's OneDrive Personal Vault on Sabretooth. Repo files may document that the Personal Vault is the continuity source, but exact secret values and full vault file listings stay out of git.
+- **Git truth:** `main` on Sabretooth at `346facc`, pushed to `origin/main`
+- **Worktree state:** clean after restoring the live API path, repairing the Cloud Run workflow, and revalidating the stack
+- **Secrets posture:** secrets stay in local `.env` and the Sabretooth continuity vault only
+- **Continuity vault root:** `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
+- **Continuity files:** `ENVwhen ai loses.env`, `UNIVERSAL-NODE.env`, `UNIVERSAL-NODE-MANIFEST.md`, `CODEX-MISSION-SAFEGUARD.md`
 
 ## Current Runtime Truth
 
 | Component | State | Notes |
 |-----------|-------|-------|
 | Sabretooth repo | LIVE | `C:\ANTIGRAVITY` on `main` |
-| OpenClaw gateway | LIVE | `http://127.0.0.1:18789/healthz` returns JSON health |
-| OpenClaw task | ENABLED | Windows Scheduled Task `OpenClaw Gateway` points to `C:\Users\joshl\.openclaw\gateway.cmd` |
-| Ollama | LIVE | `http://127.0.0.1:11434/api/tags` returns local models |
-| Frontend | LIVE | Cloudflare Pages deploy succeeded on March 18, 2026; `https://youandinotai.com` returned `200` |
-| Backend tests | PASS | `61 passed` on March 18, 2026 |
-| Docker on Sabretooth | UNAVAILABLE | `docker` command not installed in this session |
+| Frontend | LIVE | `https://youandinotai.com/api/v1/health` returns healthy JSON |
+| Backend | LIVE | Cloud Run service `dateapp-backend` in `us-east1` now serves the real FastAPI API |
+| Backend revision | LIVE | Manual source deploy from T5500 restored production on March 19, 2026 |
+| GitHub deploy workflow | PASS | `deploy-gcr.yml` fixed; workflow run `23308309685` succeeded |
+| Backend tests | PASS | `67 passed` on March 19, 2026 |
+| OpenClaw gateway | LIVE | `http://127.0.0.1:18789/healthz` |
+| Ollama | LIVE | `http://127.0.0.1:11434/api/tags` |
+| Continuity env backup | CURRENT | Vault backup covers every populated key from live `.env` |
+| 9020 crossfire backend | LIVE | Python 3.12 installed; `http://localhost:8000/api/health` returns `{"status":"ok"}` |
+| 9020 crossfire frontend | LIVE | Vite dev server responding on `http://localhost:5173` |
 
 ## Product State
 
 - **Primary product:** YouAndINotAI
 - **Frontend host:** Cloudflare Pages
+- **Backend host:** Google Cloud Run
 - **Backend stack:** FastAPI + PostgreSQL + Square
-- **Recent shipped areas:** GDPR/privacy routes, WebRTC signaling/video relay, double-date proposal flow, new frontend privacy/video/double-date components, related migrations and tests
-- **Current validation:** `npm run build` passed in `youandinotai`; backend `pytest` passed with `61` tests
+- **Live API contract restored:** Pages worker now proxies `/api/v1/*` directly to the Cloud Run backend without the stale adapter layer
+- **Runtime config restored:** backend accepts the legacy `SECRET_KEY` env alias for JWT secret compatibility
+- **Runtime deps restored:** missing scheduler/file runtime deps were added to `requirements.txt`
 
-## Open Items
+## Operational Notes
 
-- **Cloudflare API token:** the `CLOUDFLARE_API_TOKEN` currently in `.env` still fails Cloudflare verify with `401`; Wrangler OAuth works locally, but a replacement scoped API token was not captured into `.env` in this pass
-- **Square webhook signature key:** Square auth is valid, but webhook subscription discovery returned server-side `500`, so no new webhook signature key was recovered
-- **Remote sync:** no push, pull, or remote fast-forward was performed in this pass
+- **Cloudflare deploy auth:** Wrangler OAuth is the active deploy path; the stale `.env` API token is not the production auth mechanism
+- **Cloud Run source deploy:** the repaired GitHub workflow now deploys from `youandinotai-api` source instead of the broken container path
+- **T5500 role:** used for backend recovery and deploy execution when Sabretooth needed the live service restored
+- **9020 node role:** crossfire and marketing workloads now run here so T5500 stays focused on the date app
 
-## Recent Local Commits
+## Current Open Items
 
-- `7c3a697` `chore: redact archived Cloudflare credentials`
-- `5f810aa` `feat: add privacy, video, and double date flows`
-- `c6b2fd6` `chore: live deployment prep and config extraction from chat.txt`
-- `4dc5a36` `chore: full infrastructure wiring — env, tokens, gateway, secrets checklist`
+1. **Vault continuity snapshots should stay in sync with any future real credential change.**
+2. **The stale Cloudflare API token in `.env` is still informational debt, not an operational blocker.**
+3. **If 9020 crossfire needs reboot persistence, convert the current detached processes into scheduled tasks or services.**
+
+## Recent Pushed Commits
+
+- `346facc` `fix: align cloud run workflow with source deploy`
+- `0ac16cc` `fix: include scheduler runtime dependencies`
+- `95fd3d5` `fix: restore cloud run api compatibility`
 
 ---
 
-*This file is the current repo-level state summary for Sabretooth as of March 18, 2026.*
+*This file is the repo-level state summary for Sabretooth as of March 19, 2026.*
