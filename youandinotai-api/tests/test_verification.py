@@ -233,3 +233,27 @@ class TestVerificationPromotion:
         assert promoted is True
         assert user.bot_shield_verified is True
         assert user.profile.verified is True
+
+
+class TestVerificationStatusTruth:
+    def test_status_reports_actual_payment_state_not_badge_flag(self, monkeypatch):
+        import asyncio
+
+        from app.routers import verify
+
+        user = MagicMock()
+        user.id = uuid.uuid4()
+        user.bot_shield_verified = False
+        user.subscription_active = False
+
+        mock_db = AsyncMock()
+        mock_db.scalar = AsyncMock(return_value=2)
+
+        monkeypatch.setattr(verify, "_calculate_trust_score", AsyncMock(return_value=60.0))
+        monkeypatch.setattr(verify, "has_completed_payment", AsyncMock(return_value=True))
+
+        response = asyncio.run(verify.verification_status(user=user, db=mock_db))
+
+        assert response.verified is False
+        assert response.bot_shield_paid is True
+        assert response.tier == "unverified"

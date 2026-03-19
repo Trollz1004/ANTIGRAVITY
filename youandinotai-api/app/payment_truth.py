@@ -25,6 +25,7 @@ BOT_SHIELD_PRODUCT_NAME = "Bot-Shield Verification"
 BOT_SHIELD_CHECKOUT_DESCRIPTION = "YouAndINotAI Bot-Shield verification checkout"
 CHECKOUT_REF_RE = re.compile(r"agref:([A-Za-z0-9._-]+)")
 NORMALIZE_TEXT_RE = re.compile(r"[^a-z0-9]+")
+WALLET_PROOF_PREFIX = "wallet:"
 
 
 @dataclass(frozen=True)
@@ -205,20 +206,11 @@ def infer_payment_tier(
     if any(drift_hint in combined for drift_hint in CATALOG_DRIFT_HINTS):
         return None
 
-    best_tier: str | None = None
-    best_score = 0
-
     for product in LIVE_PAYMENT_PRODUCTS:
-        score = 0
         if amount_cents == product.amount_cents:
-            score += 3
-        if any(hint in combined for hint in product.hint_texts):
-            score += 10
-        if score > best_score:
-            best_tier = product.tier
-            best_score = score
+            return product.tier
 
-    return best_tier if best_score > 0 else None
+    return None
 
 
 def build_bot_shield_checkout_request(
@@ -259,3 +251,36 @@ def build_bot_shield_checkout_request(
         },
         "payment_note": build_checkout_reference_note("bot_shield", checkout_ref),
     }
+
+
+def extract_payment_proof_label(payment_obj: dict[str, object]) -> str:
+    """Summarize the observed payment rail for audit and health reporting."""
+    if payment_obj.get("cash_details"):
+        return "cash"
+    if payment_obj.get("bank_account_details"):
+        return "bank_account"
+
+    card_details = payment_obj.get("card_details") or {}
+    if not isinstance(card_details, dict):
+        card_details = {}
+    card = card_details.get("card") or {}
+    if not isinstance(card, dict):
+        card = {}
+    wallet_details = card_details.get("wallet_details") or {}
+    if not isinstance(wallet_details, dict):
+        wallet_details = {}
+
+    if wallet_details.get("status"):
+        wallet_type = str(
+            wallet_details.get("brand") or wallet_details.get("type") or "wallet"
+        ).strip()
+        return f"{WALLET_PROOF_PREFIX}{wallet_type or 'wallet'}"
+    if card.get("card_brand"):
+        return f"card:{card.get('card_brand')}"
+
+    source_type = str(payment_obj.get("source_type") or "").strip().lower()
+    return source_type or "unknown"
+
+
+def proof_label_is_wallet(label: str | None) -> bool:
+    return str(label or "").strip().lower().startswith(WALLET_PROOF_PREFIX)

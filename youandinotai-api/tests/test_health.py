@@ -39,16 +39,46 @@ def test_square_health_ready_tolerates_missing_signature_material_when_enabled(m
     assert health._square_health_ready() is True
 
 
+def test_square_signature_configured_requires_key_and_url(monkeypatch):
+    monkeypatch.setattr(health, "settings", _settings(signature_key="", notification_url=""))
+    assert health._square_signature_configured() is False
+
+
 def test_health_check_reports_square_connected(monkeypatch):
     mock_db = AsyncMock()
     mock_db.scalar = AsyncMock(return_value=7)
 
     monkeypatch.setattr(health, "settings", _settings())
     monkeypatch.setattr(health, "check_db_health", AsyncMock(return_value=True))
+    monkeypatch.setattr(health, "_runtime_payment_proof_labels", AsyncMock(return_value=[]))
 
     response = asyncio.run(health.health_check(mock_db))
 
     assert response.status == "ok"
     assert response.db_connected is True
     assert response.square_connected is True
+    assert response.square_signature_configured is True
+    assert response.wallet_rails_proven is False
+    assert response.wallet_rails_status == "unproven"
+    assert response.payment_proof_labels == []
     assert response.user_count == 7
+
+
+def test_health_check_reports_wallet_runtime_proof(monkeypatch):
+    mock_db = AsyncMock()
+    mock_db.scalar = AsyncMock(return_value=3)
+
+    monkeypatch.setattr(health, "settings", _settings())
+    monkeypatch.setattr(health, "check_db_health", AsyncMock(return_value=True))
+    monkeypatch.setattr(
+        health,
+        "_runtime_payment_proof_labels",
+        AsyncMock(return_value=["wallet:apple_pay", "card:visa"]),
+    )
+
+    response = asyncio.run(health.health_check(mock_db))
+
+    assert response.status == "ok"
+    assert response.wallet_rails_proven is True
+    assert response.wallet_rails_status == "proven"
+    assert response.payment_proof_labels == ["wallet:apple_pay", "card:visa"]
