@@ -1,0 +1,37 @@
+# Yesterday's News Today - Task Scheduler Setup
+# Run this on 9020 to create scheduled tasks
+# Authority: Josh Coleman
+# Date: 2026-03-19
+
+$TaskName = "YesterdayNewsToday"
+$ScriptPath = "C:\Antigravity\scripts\yesterday-news-today.py"
+$LogPath = "C:\Antigravity\logs\yesterday-news-today.log"
+
+# Ensure log directory exists
+New-Item -ItemType Directory -Force -Path "C:\Antigravity\logs" | Out-Null
+
+# Create the scheduled task
+$Action = New-ScheduledTaskAction -Execute "python.exe" -Argument "$ScriptPath --mode generate" -WorkingDirectory "C:\Antigravity\scripts"
+
+# Trigger: Daily at 6:00 AM
+$Trigger = New-ScheduledTaskTrigger -Daily -At "06:00"
+
+# Settings
+$Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -RunOnlyIfNetworkAvailable
+
+# Principal (run as current user)
+$Principal = New-ScheduledTaskPrincipal -UserId "$env:USERNAME" -LogonType Interactive
+
+# Register the task
+Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger $Trigger -Settings $Settings -Principal $Principal -Force
+
+Write-Host "Task '$TaskName' created successfully" -ForegroundColor Green
+Write-Host "Schedule: Daily at 6:00 AM" -ForegroundColor Cyan
+Write-Host "Script: $ScriptPath" -ForegroundColor Gray
+Write-Host "Log: $LogPath" -ForegroundColor Gray
+Write-Host ""
+Write-Host "To manage the task:" -ForegroundColor Yellow
+Write-Host "  Start: Start-ScheduledTask -TaskName '$TaskName'" -ForegroundColor Gray
+Write-Host "  Stop: Stop-ScheduledTask -TaskName '$TaskName'" -ForegroundColor Gray
+Write-Host "  Disable: Disable-ScheduledTask -TaskName '$TaskName'" -ForegroundColor Gray
+Write-Host "  Remove: Unregister-ScheduledTask -TaskName '$TaskName' -Confirm:$false" -ForegroundColor Gray
