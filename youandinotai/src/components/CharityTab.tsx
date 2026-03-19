@@ -1,6 +1,6 @@
 /**
- * CharityTab — Displays community impact metrics and mission details.
- * Fetches data from /api/v1/volunteer/impact.
+ * CharityTab — Displays volunteer impact and the mission context behind it.
+ * Fetches volunteer metrics from /api/v1/volunteer/impact.
  */
 
 import { useState, useEffect } from 'react';
@@ -42,11 +42,11 @@ export default function CharityTab() {
       <div className="text-center space-y-4">
         <h1 className="text-3xl font-extrabold text-white">For The Kids</h1>
         <p className="text-xl text-purple-400 font-medium">
-          60% of all YouAndINotAI revenue goes directly to children's charities.
+          Volunteer action and mission context, in one place.
         </p>
         <p className="max-w-2xl mx-auto text-gray-400 text-sm leading-relaxed">
-          Through Protocol Omega, our contractual revenue disbursement model ensures that more than half of every dollar 
-          spent on our platform supports Shriners Children's Hospitals and critical pediatric care.
+          These live cards track community volunteering activity: hours committed, signups, and organizations supported.
+          Financial disbursements follow the separate 60/30/10 governance model and are not represented by the volunteer totals below.
         </p>
       </div>
 
@@ -58,7 +58,7 @@ export default function CharityTab() {
             {impact?.total_hours_committed.toLocaleString() || '0'}
           </p>
           <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">
-            Hours Committed
+            Volunteer Hours
           </p>
         </div>
 
@@ -78,7 +78,7 @@ export default function CharityTab() {
             {impact?.unique_organizations.toLocaleString() || '0'}
           </p>
           <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">
-            Organizations Supported
+            Active Organizations
           </p>
         </div>
       </div>
@@ -97,15 +97,15 @@ export default function CharityTab() {
             <div className="space-y-3">
               <h3 className="text-purple-400 font-bold text-sm uppercase">The Iron Wall</h3>
               <p className="text-gray-300 text-sm leading-relaxed">
-                We maintain absolute separation between our social mission and corporate operations. 
-                Our 60/30/10 split is hardcoded into our governance, ensuring perpetual support for children's medicine.
+                We maintain absolute separation between our social mission and corporate operations.
+                The 60/30/10 split is a governance rule for revenue disbursement, separate from the volunteer metrics shown above.
               </p>
             </div>
             <div className="space-y-3">
               <h3 className="text-purple-400 font-bold text-sm uppercase">Real-World Action</h3>
               <p className="text-gray-300 text-sm leading-relaxed">
-                Beyond financial support, our community directly connects volunteers with local non-profits. 
-                Matches on YouAndINotAI aren't just for dating—they're for doing good.
+                Beyond financial support, the community directly connects volunteers with local non-profits.
+                Matches on YouAndINotAI are meant to create measurable local action, not just in-app engagement.
               </p>
             </div>
           </div>

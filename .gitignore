@@ -153,6 +153,8 @@ youandinotai.zip
 
 # Temp preview files
 youandinotai/public/preview-*.html
+assets/usercards.jpg
+assets/5aa863e8a0ecf7b98ed000cc73e1d98d.jpg
 
 # Local session snapshots
 memory/SESSION_BACKUP_*.md
