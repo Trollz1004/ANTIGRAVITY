@@ -21,7 +21,8 @@ os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-
 
 from sqlalchemy import select
 
-from app.models import User
+from app.models import User, VerificationEvent
+from app.payment_truth import build_checkout_reference
 from tests.conftest import (
     generate_square_signature,
     make_square_booking_event,
@@ -317,6 +318,253 @@ def test_completed_founding_member_payment_activates_subscription(client, db_ses
     assert user is not None
     assert user.subscription_active is True
     assert user.subscription_tier == "founding_member"
+
+
+def test_completed_bot_shield_payment_requires_checkout_binding(
+    client,
+    db_session_factory,
+):
+    async def seed_user_and_liveness() -> uuid.UUID:
+        user_id = uuid.uuid4()
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=user_id,
+                    email="bound-check@example.com",
+                    password_hash="hashed",
+                    display_name="Bound Check",
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            session.add(
+                VerificationEvent(
+                    user_id=user_id,
+                    challenge_type="liveness",
+                    status="passed",
+                    amount_cents=100,
+                )
+            )
+            await session.commit()
+        return user_id
+
+    import asyncio
+
+    user_id = asyncio.run(seed_user_and_liveness())
+
+    payload = make_square_payment_event(
+        event_id="evt_missing_checkout_binding",
+        amount_cents=100,
+        buyer_email="bound-check@example.com",
+        note="Bot-Shield Verification",
+        payment_status="COMPLETED",
+    )
+
+    signature = generate_square_signature(
+        json.dumps(payload, separators=(",", ":")).encode("utf-8"),
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=json.dumps(payload, separators=(",", ":")),
+    )
+
+    assert response.status_code == 200, response.text
+
+    async def fetch_state() -> tuple[User | None, list[VerificationEvent]]:
+        async with db_session_factory() as session:
+            user = await session.scalar(select(User).where(User.id == user_id))
+            events = list(
+                (
+                    await session.scalars(
+                        select(VerificationEvent).where(VerificationEvent.user_id == user_id)
+                    )
+                ).all()
+            )
+            return user, events
+
+    user, events = asyncio.run(fetch_state())
+    assert user is not None
+    assert user.bot_shield_verified is False
+    assert not any(event.challenge_type == "payment" for event in events)
+
+
+def test_payment_updated_is_not_authoritative_for_bot_shield_completion(
+    client,
+    db_session_factory,
+):
+    async def seed_user_and_liveness() -> tuple[uuid.UUID, uuid.UUID]:
+        user_id = uuid.uuid4()
+        event_id = uuid.uuid4()
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=user_id,
+                    email="non-authoritative@example.com",
+                    password_hash="hashed",
+                    display_name="Non Authoritative",
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            session.add(
+                VerificationEvent(
+                    id=event_id,
+                    user_id=user_id,
+                    challenge_type="liveness",
+                    status="passed",
+                    amount_cents=100,
+                )
+            )
+            await session.commit()
+        return user_id, event_id
+
+    import asyncio
+
+    user_id, event_id = asyncio.run(seed_user_and_liveness())
+    checkout_ref = build_checkout_reference(
+        user_id=user_id,
+        event_id=event_id,
+        tier="bot_shield",
+        secret="test-secret-that-is-at-least-32-characters-long-for-security",
+    )
+
+    payload = make_square_payment_event(
+        event_id="evt_payment_updated_completed",
+        event_type="payment.updated",
+        amount_cents=100,
+        buyer_email="non-authoritative@example.com",
+        note=f"Bot-Shield Verification agref:{checkout_ref}",
+        payment_status="COMPLETED",
+    )
+
+    signature = generate_square_signature(
+        json.dumps(payload, separators=(",", ":")).encode("utf-8"),
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=json.dumps(payload, separators=(",", ":")),
+    )
+
+    assert response.status_code == 200, response.text
+
+    async def fetch_state() -> tuple[User | None, list[VerificationEvent]]:
+        async with db_session_factory() as session:
+            user = await session.scalar(select(User).where(User.id == user_id))
+            events = list(
+                (
+                    await session.scalars(
+                        select(VerificationEvent).where(VerificationEvent.user_id == user_id)
+                    )
+                ).all()
+            )
+            return user, events
+
+    user, events = asyncio.run(fetch_state())
+    assert user is not None
+    assert user.bot_shield_verified is False
+    assert not any(event.challenge_type == "payment" for event in events)
+
+
+def test_completed_bot_shield_payment_with_valid_binding_promotes_user(
+    client,
+    db_session_factory,
+):
+    async def seed_user_and_liveness() -> tuple[uuid.UUID, uuid.UUID]:
+        user_id = uuid.uuid4()
+        event_id = uuid.uuid4()
+        async with db_session_factory() as session:
+            session.add(
+                User(
+                    id=user_id,
+                    email="verified@example.com",
+                    password_hash="hashed",
+                    display_name="Verified User",
+                    created_at=datetime.now(timezone.utc),
+                    updated_at=datetime.now(timezone.utc),
+                )
+            )
+            session.add(
+                VerificationEvent(
+                    id=event_id,
+                    user_id=user_id,
+                    challenge_type="liveness",
+                    status="passed",
+                    amount_cents=100,
+                )
+            )
+            await session.commit()
+        return user_id, event_id
+
+    import asyncio
+
+    user_id, event_id = asyncio.run(seed_user_and_liveness())
+    checkout_ref = build_checkout_reference(
+        user_id=user_id,
+        event_id=event_id,
+        tier="bot_shield",
+        secret="test-secret-that-is-at-least-32-characters-long-for-security",
+    )
+
+    payload = make_square_payment_event(
+        event_id="evt_payment_completed_bound",
+        amount_cents=100,
+        buyer_email="verified@example.com",
+        note=f"Bot-Shield Verification agref:{checkout_ref}",
+        payment_status="COMPLETED",
+    )
+
+    signature = generate_square_signature(
+        json.dumps(payload, separators=(",", ":")).encode("utf-8"),
+        "test-square-signature",
+        "http://testserver/api/v1/webhooks/square-payment",
+    )
+
+    response = client.post(
+        "/api/v1/webhooks/square-payment",
+        headers={
+            "x-square-hmacsha256-signature": signature,
+            "Content-Type": "application/json",
+        },
+        content=json.dumps(payload, separators=(",", ":")),
+    )
+
+    assert response.status_code == 200, response.text
+
+    async def fetch_state() -> tuple[User | None, list[VerificationEvent]]:
+        async with db_session_factory() as session:
+            user = await session.scalar(select(User).where(User.id == user_id))
+            events = list(
+                (
+                    await session.scalars(
+                        select(VerificationEvent).where(VerificationEvent.user_id == user_id)
+                    )
+                ).all()
+            )
+            return user, events
+
+    user, events = asyncio.run(fetch_state())
+    assert user is not None
+    assert user.bot_shield_verified is True
+    assert any(
+        event.challenge_type == "payment"
+        and event.status == "completed"
+        and event.challenge_token == checkout_ref
+        for event in events
+    )
 
 
 def test_payment_webhook_skips_signature_check_when_material_missing(

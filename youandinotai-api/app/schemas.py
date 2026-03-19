@@ -144,6 +144,10 @@ class HealthResponse(BaseModel):
     status: str
     db_connected: bool
     square_connected: bool
+    square_signature_configured: bool
+    wallet_rails_proven: bool
+    wallet_rails_status: str
+    payment_proof_labels: list[str] = Field(default_factory=list)
     user_count: int
     model_config = ConfigDict(from_attributes=True)
 

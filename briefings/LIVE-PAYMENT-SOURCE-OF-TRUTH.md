@@ -1,6 +1,6 @@
 # LIVE PAYMENT SOURCE OF TRUTH
 
-Last updated: 2026-03-12
+Last updated: 2026-03-19
 
 ## Authority
 
@@ -17,6 +17,35 @@ If any older doc, node note, export, or backup conflicts with this file:
 - Square account: `ebaytrashortreasure@gmail.com`
 - Active Square location: `LY5GN09F5AN83`
 - Customer-facing payment copy must stay business-first and must not use `donate`, `donation`, or `solicitation`
+
+## Verification-Grade Payment Truth
+
+- Bot-Shield verification promotion is **fail-closed**
+- Verification-grade payment completion is only authoritative on Square `payment.completed`
+- Bot-Shield requires a valid signed `checkout_ref` that binds the same user and the same passed liveness event
+- Email lookup, customer lookup, or loose payment matching may support bookkeeping or operator logging only
+- Email lookup, customer lookup, or loose payment matching must **never** create a verification `challenge_type="payment"` event
+- If `checkout_ref` is missing, invalid, expired, tampered, mismatched, or detached from the bound liveness event, the webhook may be recorded but verification must not be promoted
+
+## Catalog Drift Guard
+
+- Live YouAndINotAI tier mapping is restricted to these exact payment amounts:
+  - `1.00`
+  - `14.99`
+  - `39.99`
+  - `99.99`
+  - `2500.00`
+- Stale Square catalog artifacts such as `9.99`, `19.99`, and `29.99` remain drift indicators, not live tier truth
+- `square_catalog.json` was refreshed from a real live Square export on 2026-03-19, but it remains informational only and does not override runtime tier guards
+
+## Health / Readiness Truth
+
+- Health output must distinguish:
+  - Square API/config readiness
+  - Square webhook signature verification configured
+  - wallet rails proven in this runtime
+  - wallet rails unproven in this runtime
+- Wallet rails must not be reported as proven unless runtime evidence exists from observed payment proof labels
 
 ## YouAndINotAI Checkout Links
 

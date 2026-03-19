@@ -31,6 +31,7 @@ from app.database import get_db
 from app.email_service import send_welcome_email
 from app.models import User, VerificationEvent, WebhookEvent
 from app.payment_truth import (
+    extract_payment_proof_label,
     extract_checkout_reference,
     infer_payment_tier,
     iter_text_hints,
@@ -332,22 +333,20 @@ async def _get_user_by_checkout_reference(
     return user, verification_event, checkout_data
 
 
-def _extract_payment_proof_label(payment_obj: dict[str, Any]) -> str:
-    """Summarize the observed payment rail evidence for audit logging."""
-    if payment_obj.get("cash_details"):
-        return "cash"
-    if payment_obj.get("bank_account_details"):
-        return "bank_account"
-    card_details = payment_obj.get("card_details") or {}
-    card = card_details.get("card") or {}
-    wallet_details = card_details.get("wallet_details") or {}
-    if wallet_details.get("status"):
-        wallet_type = str(wallet_details.get("brand") or wallet_details.get("type") or "wallet").strip()
-        return f"wallet:{wallet_type or 'wallet'}"
-    if card.get("card_brand"):
-        return f"card:{card.get('card_brand')}"
-    source_type = str(payment_obj.get("source_type") or "").strip().lower()
-    return source_type or "unknown"
+def _bot_shield_binding_is_valid(
+    *,
+    checkout_data: dict[str, Any] | None,
+    liveness_event: VerificationEvent | None,
+) -> bool:
+    if not checkout_data or not liveness_event:
+        return False
+    if checkout_data.get("tier") != "bot_shield":
+        return False
+    if liveness_event.challenge_type != "liveness":
+        return False
+    if liveness_event.status != "passed":
+        return False
+    return True
 
 
 @router.post("/square", response_model=WebhookAckResponse)
@@ -464,7 +463,7 @@ async def square_payment_webhook(
         user.square_customer_id = customer_id
 
     # Process based on event type
-    if event_type in ("payment.completed", "payment.created", "payment.updated"):
+    if event_type == "payment.completed":
         payment_status = str(payment_obj.get("status") or "").upper()
         if payment_status == "COMPLETED":
             payment_amount_cents = payment_obj.get("amount_money", {}).get("amount")
@@ -474,24 +473,9 @@ async def square_payment_webhook(
                 order_obj=order_obj,
                 extra_hints=(checkout_data or {}, obj),
             )
-            proof_label = _extract_payment_proof_label(payment_obj)
+            proof_label = extract_payment_proof_label(payment_obj)
 
             if user and tier:
-                existing_payment_event = await _get_existing_payment_verification_event(
-                    db,
-                    payment_id=payment_id,
-                )
-                if not existing_payment_event:
-                    payment_event = VerificationEvent(
-                        user_id=user.id,
-                        challenge_type="payment",
-                        challenge_token=checkout_ref,
-                        status="completed",
-                        amount_cents=payment_amount_cents,
-                        square_payment_id=payment_id,
-                    )
-                    db.add(payment_event)
-
                 if tier == "royalty":
                     user.subscription_tier = tier
                     logger.info(
@@ -510,7 +494,24 @@ async def square_payment_webhook(
                         event_id,
                         proof_label,
                     )
-                else:
+                elif _bot_shield_binding_is_valid(
+                    checkout_data=checkout_data,
+                    liveness_event=liveness_event,
+                ) and payment_amount_cents == 100:
+                    existing_payment_event = await _get_existing_payment_verification_event(
+                        db,
+                        payment_id=payment_id,
+                    )
+                    if not existing_payment_event:
+                        payment_event = VerificationEvent(
+                            user_id=user.id,
+                            challenge_type="payment",
+                            challenge_token=checkout_ref,
+                            status="completed",
+                            amount_cents=payment_amount_cents,
+                            square_payment_id=payment_id,
+                        )
+                        db.add(payment_event)
                     logger.info(
                         "Bot-Shield payment completed: user=%s event=%s proof=%s checkout_ref_bound=%s",
                         user.id,
@@ -519,18 +520,26 @@ async def square_payment_webhook(
                         bool(liveness_event),
                     )
 
-                was_verified = user.bot_shield_verified
-                promoted = await promote_user_verification_if_ready(db, user)
-                if (
-                    tier == "bot_shield"
-                    and payment_amount_cents == 100
-                    and promoted
-                    and not was_verified
-                ):
-                    await send_welcome_email(
-                        recipient_email=user.email,
-                        display_name=user.display_name,
-                        settings=settings,
+                    was_verified = user.bot_shield_verified
+                    promoted = await promote_user_verification_if_ready(db, user)
+                    if (
+                        payment_amount_cents == 100
+                        and promoted
+                        and not was_verified
+                    ):
+                        await send_welcome_email(
+                            recipient_email=user.email,
+                            display_name=user.display_name,
+                            settings=settings,
+                        )
+                else:
+                    logger.warning(
+                        "Bot-Shield payment ignored because checkout binding failed: user=%s event_id=%s payment_id=%s checkout_ref=%s liveness_bound=%s",
+                        user.id,
+                        event_id,
+                        payment_id,
+                        bool(checkout_ref),
+                        bool(liveness_event),
                     )
 
             elif not user:
@@ -551,6 +560,12 @@ async def square_payment_webhook(
                     event_id,
                     list(iter_text_hints((payment_obj.get("note"), order_obj))),
                 )
+    elif event_type in ("payment.created", "payment.updated"):
+        logger.info(
+            "Ignoring non-authoritative Square payment event for completion state: event_type=%s event_id=%s",
+            event_type,
+            event_id,
+        )
 
     elif event_type == "subscription.created":
         if user:

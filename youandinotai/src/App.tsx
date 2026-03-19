@@ -335,7 +335,7 @@ function PricingSection() {
           ))}
         </div>
         <p className="mt-4 text-xs text-gray-500 leading-relaxed">
-          Securely processed by Square. 60% of all proceeds go to Shriners Children's.
+          Securely processed by Square. Revenue disbursement follows the published 60/30/10 policy.
         </p>
       </div>
     </section>
@@ -417,7 +417,7 @@ function SuccessModal({ onClose }: { onClose: () => void }) {
 
         <h3 className="text-2xl font-black text-white mb-2">Bot-Shield Verified</h3>
         <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-          Your verification is complete. Check your email for the Square receipt and head back in to finish your profile.
+          Your verification is complete. Square-hosted checkout is finished, and any receipt delivery is handled by Square for the payment email used at checkout.
         </p>
 
         <button
@@ -428,7 +428,7 @@ function SuccessModal({ onClose }: { onClose: () => void }) {
         </button>
 
         <p className="mt-6 text-[10px] text-gray-600 font-mono uppercase tracking-widest">
-          Square Receipt Sent
+          Square Checkout Complete
         </p>
       </motion.div>
     </motion.div>

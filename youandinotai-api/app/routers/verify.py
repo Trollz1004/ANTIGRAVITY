@@ -347,6 +347,7 @@ async def verification_status(
     """Get current verification status and trust score."""
 
     trust = await _calculate_trust_score(user, db)
+    bot_shield_paid = await has_completed_payment(db, user.id)
     checks = await db.scalar(
         select(func.count(VerificationEvent.id))
         .where(VerificationEvent.user_id == user.id)
@@ -364,7 +365,7 @@ async def verification_status(
         verified=user.bot_shield_verified,
         trust_score=trust,
         tier=tier,
-        bot_shield_paid=user.bot_shield_verified,
+        bot_shield_paid=bot_shield_paid,
         subscription_active=user.subscription_active,
         checks_completed=checks,
     )
