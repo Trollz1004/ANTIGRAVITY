@@ -9,7 +9,7 @@
 ## Repository Truth
 
 - **Authoritative root:** `C:\ANTIGRAVITY`
-- **Git truth:** `main` on Sabretooth at `346facc`, pushed to `origin/main`
+- **Git truth:** `main` on Sabretooth at `610560e`, pushed to `origin/main`
 - **Worktree state:** clean after restoring the live API path, repairing the Cloud Run workflow, and revalidating the stack
 - **Secrets posture:** secrets stay in local `.env` and the Sabretooth continuity vault only
 - **Continuity vault root:** `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
@@ -30,6 +30,7 @@
 | Continuity env backup | CURRENT | Vault backup covers every populated key from live `.env` |
 | 9020 crossfire backend | LIVE | Python 3.12 installed; `http://localhost:8000/api/health` returns `{"status":"ok"}` |
 | 9020 crossfire frontend | LIVE | Vite dev server responding on `http://localhost:5173` |
+| 9020 SupportClaw | LIVE | Isolated support gateway at `http://192.168.0.5:18895` with Telegram disabled and state outside the repo |
 
 ## Product State
 
@@ -45,17 +46,19 @@
 
 - **Cloudflare deploy auth:** Wrangler OAuth is the active deploy path; the stale `.env` API token is not the production auth mechanism
 - **Cloud Run source deploy:** the repaired GitHub workflow now deploys from `youandinotai-api` source instead of the broken container path
-- **T5500 role:** used for backend recovery and deploy execution when Sabretooth needed the live service restored
-- **9020 node role:** crossfire and marketing workloads now run here so T5500 stays focused on the date app
+- **T5500 role:** used for backend recovery and deploy execution when Sabretooth needed the live service restored; its temporary support container is now offline so the box can stay available for heavier media/build work
+- **9020 node role:** crossfire, marketing workloads, and the isolated date-app SupportClaw now run here
+- **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
 
 ## Current Open Items
 
 1. **Vault continuity snapshots should stay in sync with any future real credential change.**
 2. **The stale Cloudflare API token in `.env` is still informational debt, not an operational blocker.**
-3. **If 9020 crossfire needs reboot persistence, convert the current detached processes into scheduled tasks or services.**
+3. **`crossfire` on 9020 still uses detached processes; convert those to scheduled tasks or services if reboot persistence is required.**
 
 ## Recent Pushed Commits
 
+- `610560e` `feat: add guided live support lanes`
 - `346facc` `fix: align cloud run workflow with source deploy`
 - `0ac16cc` `fix: include scheduler runtime dependencies`
 - `95fd3d5` `fix: restore cloud run api compatibility`
