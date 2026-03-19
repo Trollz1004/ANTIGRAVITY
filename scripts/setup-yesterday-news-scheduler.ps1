@@ -5,10 +5,13 @@
 
 $TaskName = "YesterdayNewsToday"
 $ScriptPath = "C:\Antigravity\scripts\yesterday-news-today.py"
-$LogPath = "C:\Antigravity\logs\yesterday-news-today.log"
+$RuntimeRoot = Join-Path $env:USERPROFILE "Documents\ANTIGRAVITY-RUNTIME"
+$LogPath = Join-Path $RuntimeRoot "logs\yesterday-news-today.log"
 
 # Ensure log directory exists
-New-Item -ItemType Directory -Force -Path "C:\Antigravity\logs" | Out-Null
+New-Item -ItemType Directory -Force -Path (Join-Path $RuntimeRoot "logs") | Out-Null
+New-Item -ItemType Directory -Force -Path (Join-Path $RuntimeRoot "yesterday-news\content") | Out-Null
+New-Item -ItemType Directory -Force -Path (Join-Path $RuntimeRoot "yesterday-news\archive") | Out-Null
 
 # Create the scheduled task
 $Action = New-ScheduledTaskAction -Execute "python.exe" -Argument "$ScriptPath --mode generate" -WorkingDirectory "C:\Antigravity\scripts"
@@ -29,6 +32,7 @@ Write-Host "Task '$TaskName' created successfully" -ForegroundColor Green
 Write-Host "Schedule: Daily at 6:00 AM" -ForegroundColor Cyan
 Write-Host "Script: $ScriptPath" -ForegroundColor Gray
 Write-Host "Log: $LogPath" -ForegroundColor Gray
+Write-Host "Runtime root: $RuntimeRoot" -ForegroundColor Gray
 Write-Host "Requires: NEWSAPI_KEY in C:\Antigravity\.env for NewsAPI, otherwise RSS fallback is used" -ForegroundColor Gray
 Write-Host ""
 Write-Host "To manage the task:" -ForegroundColor Yellow
