@@ -21,13 +21,13 @@ This bot generates daily "Yesterday's News Today" content for YouTube. It:
 ## File Structure
 
 ```
-C:\Antigravity\scripts\yesterday-news-today.py          # Main bot
-C:\Antigravity\scripts\start-yesterday-news.bat        # Manual startup
-C:\Antigravity\scripts\setup-yesterday-news-scheduler.ps1  # Task scheduler setup
-C:\Antigravity\logs\yesterday-news-today.log           # Execution log
-C:\Antigravity\data\yesterday-news\content\           # Generated content
-C:\Antigravity\data\yesterday-news\archive\             # Archived content
-C:\Antigravity\data\yesterday-news\state.json           # Bot state
+C:\Antigravity\scripts\yesterday-news-today.py              # Main bot (repo)
+C:\Antigravity\scripts\start-yesterday-news.bat            # Manual startup (repo)
+C:\Antigravity\scripts\setup-yesterday-news-scheduler.ps1  # Task scheduler setup (repo)
+C:\Users\<user>\Documents\ANTIGRAVITY-RUNTIME\logs\yesterday-news-today.log   # Execution log
+C:\Users\<user>\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content\          # Generated content
+C:\Users\<user>\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\archive\          # Archived content
+C:\Users\<user>\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\state.json        # Bot state
 ```
 
 ---
@@ -52,7 +52,7 @@ scp C:\ANTIGRAVITY\scripts\setup-yesterday-news-scheduler.ps1 9020:C:\Antigravit
 ### Step 2: Create directories on 9020
 
 ```powershell
-ssh 9020 "mkdir C:\Antigravity\logs 2>nul & mkdir C:\Antigravity\data\yesterday-news\content 2>nul & mkdir C:\Antigravity\data\yesterday-news\archive 2>nul"
+ssh 9020 "mkdir %USERPROFILE%\Documents\ANTIGRAVITY-RUNTIME\logs 2>nul & mkdir %USERPROFILE%\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\content 2>nul & mkdir %USERPROFILE%\Documents\ANTIGRAVITY-RUNTIME\yesterday-news\archive 2>nul"
 ```
 
 ### Step 3: Set up scheduled task (run on 9020)
@@ -108,6 +108,12 @@ Add this to `C:\ANTIGRAVITY\.env` on the node that runs the bot:
 
 ```env
 NEWSAPI_KEY=
+```
+
+Optional override:
+
+```env
+ANTIGRAVITY_RUNTIME_ROOT=C:\Custom\Runtime\Path
 ```
 
 ### Schedule

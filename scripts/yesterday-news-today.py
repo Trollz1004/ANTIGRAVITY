@@ -19,9 +19,15 @@ from urllib.request import urlopen
 import xml.etree.ElementTree as ET
 
 # Paths
-BASE_DIR = Path("C:/Antigravity")
-LOG_DIR = BASE_DIR / "logs"
-DATA_DIR = BASE_DIR / "data" / "yesterday-news"
+REPO_DIR = Path(__file__).resolve().parents[1]
+RUNTIME_ROOT = Path(
+    os.getenv(
+        "ANTIGRAVITY_RUNTIME_ROOT",
+        str(Path.home() / "Documents" / "ANTIGRAVITY-RUNTIME"),
+    )
+)
+LOG_DIR = RUNTIME_ROOT / "logs"
+DATA_DIR = RUNTIME_ROOT / "yesterday-news"
 CONTENT_DIR = DATA_DIR / "content"
 ARCHIVE_DIR = DATA_DIR / "archive"
 STATE_FILE = DATA_DIR / "state.json"
@@ -61,7 +67,7 @@ def load_local_env(env_path: Path) -> None:
             os.environ[key] = value
 
 
-load_local_env(BASE_DIR / ".env")
+load_local_env(REPO_DIR / ".env")
 
 
 class YesterdayNewsBot:
@@ -288,7 +294,7 @@ class YesterdayNewsBot:
         """Post content to YouTube community tab or upload video."""
         try:
             # Import the poster from social_engine
-            sys.path.insert(0, str(BASE_DIR / "scripts" / "social_engine"))
+            sys.path.insert(0, str(REPO_DIR / "scripts" / "social_engine"))
             from platforms.youtube_poster import YouTubePoster
             
             poster = YouTubePoster()
