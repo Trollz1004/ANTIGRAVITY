@@ -8,7 +8,7 @@ import os
 
 from app.config import get_settings
 from app.scheduler import setup_scheduler
-from app.routers import auth, boards, double_dates, events, health, messages, metrics, privacy, profiles, swipe, users, verify, video, video_rooms, volunteering, webhooks
+from app.routers import auth, boards, double_dates, events, health, messages, metrics, privacy, profiles, support, swipe, users, verify, video, video_rooms, volunteering, webhooks
 
 settings = get_settings()
 
@@ -52,6 +52,7 @@ app.include_router(webhooks.router, prefix="/api/v1", tags=["webhooks"])
 app.include_router(verify.router, prefix="/api/v1", tags=["verification"])
 app.include_router(metrics.router, prefix="/api/v1", tags=["metrics"])
 app.include_router(privacy.router, prefix="/api/v1", tags=["privacy"])
+app.include_router(support.router, prefix="/api/v1", tags=["support"])
 app.include_router(video.router, prefix="/api/v1", tags=["video"])
 app.include_router(video_rooms.router, prefix="/api/v1", tags=["video-rooms"])
 app.include_router(double_dates.router, prefix="/api/v1", tags=["double-dates"])

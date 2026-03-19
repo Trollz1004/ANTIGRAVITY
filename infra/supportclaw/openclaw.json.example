@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "profile": "supportclaw-t5500"
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "ollama": {
+        "baseUrl": "http://host.docker.internal:11434",
+        "apiKey": "ollama-local",
+        "api": "ollama",
+        "models": [
+          {
+            "id": "qwen2.5:7b",
+            "name": "qwen2.5:7b",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 32768,
+            "maxTokens": 8192
+          },
+          {
+            "id": "nomic-embed-text",
+            "name": "nomic-embed-text",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 8192,
+            "maxTokens": 1024
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "/var/lib/supportclaw/workspace",
+      "model": {
+        "primary": "ollama/qwen2.5:7b"
+      },
+      "memorySearch": {
+        "enabled": true,
+        "provider": "ollama",
+        "model": "nomic-embed-text",
+        "fallback": "none"
+      },
+      "maxConcurrent": 1
+    },
+    "list": [
+      {
+        "id": "supportclaw-t5500",
+        "name": "SupportClaw T5500",
+        "model": {
+          "primary": "ollama/qwen2.5:7b"
+        }
+      }
+    ]
+  },
+  "gateway": {
+    "mode": "local",
+    "auth": {
+      "token": "REPLACE_WITH_SUPPORTCLAW_TOKEN"
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": false
+    }
+  }
+}
