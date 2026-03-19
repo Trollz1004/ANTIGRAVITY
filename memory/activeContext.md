@@ -1,43 +1,46 @@
-# Active Context - 2026-03-18
+# Active Context - 2026-03-19
 
 ## Current Focus
 
-- **Clean Sabretooth baseline:** `C:\ANTIGRAVITY` on `main` is clean again after committing the pending privacy, video, double-date, deployment-prep, and security-redaction work.
-- **Frontend is live:** Cloudflare Pages deploy succeeded on March 18, 2026 and `https://youandinotai.com` returned `200`.
-- **OpenClaw is stable on Sabretooth:** the real gateway path is `C:\Users\joshl\.openclaw\gateway.cmd`, the scheduled task is enabled, and `http://127.0.0.1:18789/healthz` is the current health check.
-- **Ollama remains the local baseline:** Sabretooth local models include `qwen2.5:7b` and `qwen2.5:3b` on `127.0.0.1:11434`.
-- **Continuity copy updated:** repo memory is being refreshed to match March 18 truth and mirrored into Personal Vault with a dated snapshot.
+- **Production date app is restored:** `https://youandinotai.com/api/v1/health` now returns healthy backend JSON again.
+- **`origin/main` is caught up:** Sabretooth `main` at `346facc` is pushed and clean.
+- **Cloud Run deploy path is repaired:** GitHub workflow `deploy-gcr.yml` now works, and workflow run `23308309685` succeeded.
+- **Continuity vault is current:** the live continuity root is `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`.
+- **9020 is now handling crossfire:** backend and frontend are running there so T5500 remains focused on YouAndINotAI/backend work.
 
 ## Verified State
 
 - **Repo root:** `C:\ANTIGRAVITY`
 - **Branch:** `main`
+- **HEAD:** `346facc`
 - **Worktree:** clean
-- **Backend validation:** `61 passed`
 - **Frontend validation:** `npm run build` passed
-- **Scheduled task:** `OpenClaw Gateway` is enabled and points to `C:\Users\joshl\.openclaw\gateway.cmd`
-- **Gateway health:** `http://127.0.0.1:18789/healthz` returns JSON live health
-- **Ollama health:** `http://127.0.0.1:11434/api/tags` returns local models
+- **Backend validation:** `67 passed`
+- **Live frontend/API:** `https://youandinotai.com/api/v1/health` returns healthy JSON
+- **Cloud Run workflow:** latest run completed successfully on March 19, 2026
+- **OpenClaw health:** `http://127.0.0.1:18789/healthz`
+- **Ollama health:** `http://127.0.0.1:11434/api/tags`
+- **9020 crossfire backend:** `http://localhost:8000/api/health` returns `{"status":"ok"}`
+- **9020 crossfire frontend:** `http://localhost:5173` serves the Vite app shell
 
 ## Recently Finished
 
-- Added privacy/GDPR API routes and frontend dashboard wiring
-- Added WebRTC signaling relay and frontend video chat component
-- Added double-date proposal flow, migrations, and backend tests
-- Created production `.env` from template + vault values with the required local overrides
-- Repaired the missing OpenClaw gateway launcher and enabled the Windows scheduled task
-- Deployed the frontend to Cloudflare Pages from Sabretooth
-- Redacted archived Cloudflare credentials from tracked repo history/files
+- Replaced the stale Cloudflare Pages worker adapter with a direct `/api/v1/*` proxy
+- Restored backend JWT config compatibility via legacy `SECRET_KEY` alias support
+- Added missing runtime dependencies required by the live backend
+- Repaired GitHub Cloud Run deployment automation and verified a successful run
+- Rebuilt and redeployed the frontend
+- Synced the vault continuity env with the current live `.env`
 
 ## Current Risks / Open Items
 
-1. **Cloudflare API token in `.env` is still invalid.** Wrangler OAuth works locally, but the scoped API token value in `.env` still fails verify with `401`.
-2. **Square webhook signature key is still unresolved.** Square access token is valid, but subscription discovery returned `500`, so no fresh signature key was recovered.
-3. **Docker is unavailable on Sabretooth.** Container-based backend smoke tests cannot run here until Docker is installed or restored.
+1. **Continuity files now live in `Personal Vault-Sabretooth`, not the older `Personal Vault` path.**
+2. **The `.env` Cloudflare token remains stale, but Wrangler OAuth is the real operational auth path.**
+3. **Crossfire on 9020 is currently process-based; convert to scheduled startup if you want reboot persistence.**
 
 ## Rules To Preserve
 
 1. Treat Sabretooth as the authoritative live repo and orchestration node.
-2. Keep secrets in local `.env` or Personal Vault only.
+2. Keep secrets in local `.env` or the Sabretooth continuity vault only.
 3. Keep ENIGMA and OMEGA fully separated.
-4. Do not reintroduce hardcoded credentials into repo files.
+4. Keep the continuity vault out of `.openclaw` paths, mounts, and runtime config.

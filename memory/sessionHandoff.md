@@ -1,36 +1,43 @@
-# Session Handoff - 2026-03-18
+# Session Handoff - 2026-03-19
 
 ## Summary
 
-Sabretooth is back to a clean `main` baseline after finishing the privacy/video/double-date feature set, deployment prep, and a final tracked-file security cleanup. The frontend was rebuilt and deployed to Cloudflare Pages, the backend test suite passed, OpenClaw is healthy on `127.0.0.1:18789`, and the repo worktree is clean.
+Sabretooth `main` is clean and pushed through commit `346facc`. The live YouAndINotAI stack was repaired end to end: the Pages worker now proxies the correct API path, Cloud Run is serving the real FastAPI backend again, the backend test suite passed with `67` tests, the GitHub Cloud Run workflow is fixed and passing, and crossfire is now up on 9020.
 
 ## Accomplishments
 
-- Created the live repo `.env` from `.env.example` plus Personal Vault values with local driver/link overrides
-- Repaired `C:\Users\joshl\.openclaw\gateway.cmd` and re-enabled the `OpenClaw Gateway` Windows Scheduled Task
-- Verified OpenClaw health at `http://127.0.0.1:18789/healthz`
-- Verified Ollama health at `http://127.0.0.1:11434/api/tags`
-- Added privacy, video, and double-date backend/frontend flows plus migrations/tests
-- Fixed the stale public-register launch audit test
-- Added deployment-prep docs and chat extraction summary
-- Redacted archived Cloudflare credentials from tracked repo files
-- Restored a clean git worktree on `main`
+- Restored production API routing by replacing the stale worker adapter with a direct `/api/v1/*` proxy
+- Restored backend JWT env compatibility by accepting legacy `SECRET_KEY`
+- Added missing runtime dependencies required for live backend startup
+- Rebuilt the frontend and redeployed Pages
+- Deployed the backend from T5500 to Cloud Run and confirmed healthy live responses
+- Fixed `.github/workflows/deploy-gcr.yml` and verified successful workflow run `23308309685`
+- Refreshed continuity env backups under `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
+- Added a vault safeguard note keeping continuity files out of OpenClaw runtime paths
+- Installed Python 3.12 on 9020
+- Installed crossfire backend/frontend dependencies on 9020
+- Brought up crossfire backend on `:8000` and frontend on `:5173` on 9020
+- Added `/api/health` alias for crossfire backend compatibility
 
-## Local Validation
+## Local / Live Validation
 
 - `npm run build` in `C:\ANTIGRAVITY\youandinotai` — PASS
-- `uv run --python 3.12 --with-requirements requirements.txt --with aiofiles --with apscheduler pytest` in `C:\ANTIGRAVITY\youandinotai-api` — `61 passed`
-- `https://youandinotai.com` — returned `200` after the March 18, 2026 Cloudflare Pages deploy
+- `uv run --python 3.12 --with-requirements requirements.txt pytest -q` in `C:\ANTIGRAVITY\youandinotai-api` — `67 passed`
+- `https://youandinotai.com/api/v1/health` — healthy JSON
+- `gh run list --workflow deploy-gcr.yml --limit 1` — latest run success
+- `http://localhost:8000/api/health` on 9020 — `{"status":"ok"}`
+- `http://localhost:5173` on 9020 — Vite HTML app shell
 
 ## Important Current Truth
 
-- The real OpenClaw launcher path for the scheduled task is `C:\Users\joshl\.openclaw\gateway.cmd`
-- Repo copy `C:\ANTIGRAVITY\gateway.cmd` exists as a versioned mirror/reference, but the scheduled task does not call it directly
-- `chat.txt` was moved to `C:\ANTIGRAVITY\chat.txt` and is ignored via `.gitignore`
-- Docker is not available in the current Sabretooth shell
+- `origin/main` now includes the March 19 production repair commits
+- The live continuity vault path on Sabretooth is `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
+- `ENVwhen ai loses.env` and `UNIVERSAL-NODE.env` cover every populated live `.env` key
+- OpenClaw and Ollama remain healthy on Sabretooth
+- The unlocked `C:\Users\joshl\OneDrive\Personal Vault` path still does not resolve as a real folder on this machine
 
 ## Pending Items
 
-1. Replace the invalid `CLOUDFLARE_API_TOKEN` stored in `.env` with a real working scoped token and mirror it into Personal Vault.
-2. Recover or recreate the Square webhook subscription/signature key and store it in `.env` / Personal Vault.
-3. Push or fast-forward other nodes only when Josh explicitly wants remote sync performed.
+1. Keep vault continuity files synchronized after any future secret or deployment change.
+2. Do not route the continuity vault through OpenClaw config, mounts, or runtime access.
+3. Convert the 9020 crossfire runtime into scheduled startup if reboot persistence is required.
