@@ -30,6 +30,7 @@ interface AuthState {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  betaAccess: (code: string) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
   logout: () => void;
   fetchUser: () => Promise<void>;
@@ -49,6 +50,19 @@ export const useAuth = create<AuthState>((set) => ({
     localStorage.setItem('refresh_token', data.refresh_token);
     const user = await api.get<User>('/auth/me');
     set({ user });
+  },
+
+  betaAccess: async (code) => {
+    const data = await api.post<{
+      access_token: string;
+      refresh_token: string;
+      user_id: string;
+    }>('/auth/beta-access', { code });
+    localStorage.setItem('access_token', data.access_token);
+    localStorage.setItem('refresh_token', data.refresh_token);
+    localStorage.removeItem('beta_access_code');
+    const user = await api.get<User>('/auth/me');
+    set({ user, loading: false });
   },
 
   register: async ({ email, password, displayName, dateOfBirth, acceptedTerms, acceptedCookiePolicy, confirmedOver18 }) => {
@@ -74,6 +88,7 @@ export const useAuth = create<AuthState>((set) => ({
   logout: () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('beta_access_code');
     set({ user: null });
   },
 
