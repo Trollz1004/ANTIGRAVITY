@@ -1,5 +1,6 @@
 """Authentication router — register, login, refresh, me."""
 
+import hashlib
 import uuid
 from datetime import datetime, timezone
 
@@ -11,15 +12,18 @@ from app.auth import (
     create_access_token,
     create_refresh_token,
     decode_token,
+    ensure_active_user,
     get_current_user,
     hash_password,
     verify_password,
 )
 from app.age_gate import ensure_adult
+from app.config import get_settings
 from app.database import get_db
 from app.models import Profile, User
 from app.rate_limit import auth_limiter
 from app.schemas import (
+    AuthBetaAccessRequest,
     AuthLoginRequest,
     AuthRefreshRequest,
     AuthRegisterRequest,
@@ -28,6 +32,19 @@ from app.schemas import (
 )
 
 router = APIRouter(prefix="/auth")
+
+
+def _normalize_beta_code(code: str) -> str:
+    return code.strip().upper()
+
+
+def _beta_identity(code: str, secret: str) -> tuple[str, str, str]:
+    normalized = _normalize_beta_code(code)
+    digest = hashlib.sha256(f"{secret}:{normalized}".encode("utf-8")).hexdigest()
+    email = f"beta-{digest[:12]}@youandinotai.com"
+    password_seed = hashlib.sha256(f"beta-password:{secret}:{normalized}".encode("utf-8")).hexdigest()
+    display_name = "Beta Tester"
+    return email, password_seed, display_name
 
 
 @router.post("/register", response_model=AuthTokenResponse, status_code=status.HTTP_201_CREATED)
@@ -71,6 +88,53 @@ async def login(
     user = await db.scalar(select(User).where(User.email == payload.email.lower()))
     if not user or not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid email or password")
+    ensure_active_user(user)
+
+    return AuthTokenResponse(
+        access_token=create_access_token(str(user.id)),
+        refresh_token=create_refresh_token(str(user.id)),
+        user_id=user.id,
+    )
+
+
+@router.post("/beta-access", response_model=AuthTokenResponse)
+async def beta_access(
+    payload: AuthBetaAccessRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+) -> AuthTokenResponse:
+    auth_limiter.check(request)
+    normalized_code = _normalize_beta_code(payload.code)
+    allowed_codes = get_settings().beta_access_code_list
+    if not allowed_codes or normalized_code not in allowed_codes:
+        raise HTTPException(status_code=401, detail="Invalid beta access code")
+
+    email, password_seed, display_name = _beta_identity(normalized_code, get_settings().jwt_secret)
+    user = await db.scalar(select(User).where(User.email == email))
+
+    if not user:
+        user = User(
+            id=uuid.uuid4(),
+            email=email,
+            password_hash=hash_password(password_seed),
+            display_name=display_name,
+            date_of_birth=datetime(2000, 1, 1, tzinfo=timezone.utc).date(),
+            adult_verified_at=datetime.now(timezone.utc),
+            bot_shield_verified=True,
+            subscription_tier="beta",
+            subscription_active=True,
+            is_active=True,
+        )
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+    elif not user.is_active:
+        user.is_active = True
+        user.subscription_active = True
+        if not user.subscription_tier:
+            user.subscription_tier = "beta"
+        await db.commit()
+        await db.refresh(user)
 
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
@@ -91,9 +155,15 @@ async def refresh_token(
         raise HTTPException(status_code=401, detail="Not a refresh token")
 
     user_id = data.get("sub")
-    user = await db.scalar(select(User).where(User.id == user_id))
+    try:
+        parsed_user_id = uuid.UUID(str(user_id))
+    except ValueError as exc:
+        raise HTTPException(status_code=401, detail="Invalid token payload") from exc
+
+    user = await db.scalar(select(User).where(User.id == parsed_user_id))
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
+    ensure_active_user(user)
 
     return AuthTokenResponse(
         access_token=create_access_token(str(user.id)),
