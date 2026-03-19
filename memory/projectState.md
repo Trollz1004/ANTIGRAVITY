@@ -15,12 +15,12 @@ This file is the short-form current state. For canonical repo truth, use:
 |-------|-------|
 | Authoritative root | `C:\ANTIGRAVITY` |
 | Branch | `main` |
-| Head | `610560e` |
+| Head | `main` (see git for current commit) |
 | Worktree | Clean on March 19, 2026 |
 | Frontend | Cloudflare Pages |
 | Backend | FastAPI + PostgreSQL on Cloud Run |
 | Payments | Square |
-| OpenClaw | Local Sabretooth gateway on `127.0.0.1:18789` |
+| OpenClaw | Local Sabretooth gateway on `127.0.0.1:18789` with Ollama-only model routing |
 | Ollama | Local on `127.0.0.1:11434` |
 
 ## Product Truth
@@ -37,6 +37,7 @@ This file is the short-form current state. For canonical repo truth, use:
 - Sabretooth is the authoritative live node and current command post.
 - The continuity backup root on this machine is `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`.
 - The continuity env backups fully cover the populated keys in the live `.env`.
+- The live OpenClaw configs on Sabretooth, 9020, and T5500 are now self-hosted only for model inference.
 - T5500 was used to execute the backend recovery deploy.
 - 9020 is now the active node for crossfire, marketing workloads, and isolated date-app support.
 - T5500 no longer carries the temporary support runtime and is free for heavier media/video workloads.

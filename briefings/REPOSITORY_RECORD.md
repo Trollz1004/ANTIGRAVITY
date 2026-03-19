@@ -9,7 +9,7 @@
 ## Repository Truth
 
 - **Authoritative root:** `C:\ANTIGRAVITY`
-- **Git truth:** `main` on Sabretooth at `610560e`, pushed to `origin/main`
+- **Git truth:** `main` on Sabretooth, pushed to `origin/main`
 - **Worktree state:** clean after restoring the live API path, repairing the Cloud Run workflow, and revalidating the stack
 - **Secrets posture:** secrets stay in local `.env` and the Sabretooth continuity vault only
 - **Continuity vault root:** `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
@@ -26,6 +26,7 @@
 | GitHub deploy workflow | PASS | `deploy-gcr.yml` fixed; workflow run `23308309685` succeeded |
 | Backend tests | PASS | `67 passed` on March 19, 2026 |
 | OpenClaw gateway | LIVE | `http://127.0.0.1:18789/healthz` |
+| OpenClaw model runtime | LIVE | Sabretooth, 9020, and T5500 configs are self-hosted only (Ollama/local inference; no cloud model providers) |
 | Ollama | LIVE | `http://127.0.0.1:11434/api/tags` |
 | Continuity env backup | CURRENT | Vault backup covers every populated key from live `.env` |
 | 9020 crossfire backend | LIVE | Python 3.12 installed; `http://localhost:8000/api/health` returns `{"status":"ok"}` |
@@ -45,6 +46,7 @@
 ## Operational Notes
 
 - **Cloudflare deploy auth:** Wrangler OAuth is the active deploy path; the stale `.env` API token is not the production auth mechanism
+- **OpenClaw model baseline:** Sabretooth now runs `qwen2.5:7b` primary, `qwen2.5:3b` fallback, and `nomic-embed-text` for memory search with no cloud model providers in the live config
 - **Cloud Run source deploy:** the repaired GitHub workflow now deploys from `youandinotai-api` source instead of the broken container path
 - **T5500 role:** used for backend recovery and deploy execution when Sabretooth needed the live service restored; its temporary support container is now offline so the box can stay available for heavier media/build work
 - **9020 node role:** crossfire, marketing workloads, and the isolated date-app SupportClaw now run here
@@ -58,6 +60,7 @@
 
 ## Recent Pushed Commits
 
+- `9d9e92d` `chore: clean repo clutter and externalize news runtime`
 - `610560e` `feat: add guided live support lanes`
 - `346facc` `fix: align cloud run workflow with source deploy`
 - `0ac16cc` `fix: include scheduler runtime dependencies`

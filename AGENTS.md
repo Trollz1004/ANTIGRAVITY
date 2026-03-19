@@ -4,13 +4,14 @@
 > Canonical status file: [briefings/REPOSITORY_RECORD.md](file:///C:/ANTIGRAVITY/briefings/REPOSITORY_RECORD.md) (LATEST STATE)
 > Canonical skill file: `briefings/CLAUDE-SKILL.md` (has EVERYTHING)
 
-## 🟢 LIVE INFRASTRUCTURE STATUS (AS OF 2026-03-18)
+## 🟢 LIVE INFRASTRUCTURE STATUS (AS OF 2026-03-19)
 - **GCR Backend (ai-collab4kids)**: DEPLOYED & LIVE (Built from T5500 node).
 - **Cloudflare Tunnels (Sabretooth)**: LIVE & ROUTING (`openclaw`, `mcp`).
 - **Frontend (youandinotai.com)**: DEPLOYED & LIVE (React 19/Cloudflare Pages).
 - **Daily.co Video Rooms**: INTEGRATED (REST + iframe).
 - **Data Export Worker**: IMPLEMENTED (scheduler.py).
 - **Board Moderation**: IMPLEMENTED (Reporting endpoints).
+- **OpenClaw runtime (Sabretooth / 9020 / T5500)**: SELF-HOSTED ONLY â€” active configs use Ollama/local inference only. No cloud model providers in the live OpenClaw path.
 - **Git History**: PRISTINE & PURGED.
 
 ---
@@ -214,9 +215,9 @@ Backup copies, vault mirrors, remote SSD copies, and exported notes may exist fo
 |------|-------|------|
 | SABRETOOTH | C: | Live command post â€” primary |
 | SABRETOOTH | E: | Legacy copy â€” pending retirement |
-| T5500 | C: | Remote utility â€” SSH reachable (192.168.0.15) |
+| T5500 | C: | Remote utility / heavy media-build node â€” SSH reachable (192.168.0.15) |
 | T5500 | E: | Legacy Docker â€” retired |
-| 9020 | C: | Remote marketing/ops â€” SSH reachable (192.168.0.5) |
+| 9020 | C: | Remote marketing/ops/support â€” SSH reachable (192.168.0.5) |
 
 - 9020 SSH: `ssh -i ~/.ssh/id_ed25519 joshl@192.168.0.5` (cmd.exe shell)
 - 9020 has NO git push creds â€” use bundle relay
@@ -269,6 +270,7 @@ Total Monthly Cost: ~$40.00
 
 - Sabretooth is desktop-app-first. Docker NOT required.
 - `qwen2.5:7b` via Ollama is default low-cost local worker.
+- OpenClaw model routing is self-hosted only on all active nodes. Messaging channels may still exist, but cloud model providers are not part of the live OpenClaw runtime.
 - T5500 and 9020 boot cold â€” opt-in only, not auto-start.
 - Local background daemons (Sentry, Watchdog) PAUSED on Sabretooth â€” re-enable only for multi-node deployments.
 - Priority launch targets: **Web + Android (Google Play)**. iOS is secondary.
@@ -349,12 +351,13 @@ Due to token/subscription limits, orchestration runs in this order:
 ## OLLAMA — NODE COMPUTE & MEMORY ENGINE
 
 All three nodes run Ollama. qwen2.5:7b is the default. Built-in Ollama embedding is sufficient — no external embedding API required.
+As of 2026-03-19, the active OpenClaw configs on Sabretooth, 9020, and T5500 are self-hosted only for model inference. No OpenAI, Google, or xAI model provider is part of the live OpenClaw path.
 
 | Node | IP | Ollama | Models | Use |
 |------|----|--------|--------|-----|
-| SABRETOOTH | 192.168.0.8 | loopback 127.0.0.1:11434 | qwen2.5:7b, qwen2.5:3b | Primary — marketing, memory, orchestration |
-| 9020 | 192.168.0.5 | loopback 127.0.0.1:11434 | qwen2.5:7b | Marketing node — social engine, content tasks |
-| T5500 | 192.168.0.15 | loopback 127.0.0.1:11434 | qwen2.5:7b | Build/backup — cold-start only |
+| SABRETOOTH | 192.168.0.8 | loopback 127.0.0.1:11434 | qwen2.5:7b, qwen2.5:3b, nomic-embed-text | Primary — marketing, memory, orchestration |
+| 9020 | 192.168.0.5 | loopback 127.0.0.1:11434 | qwen2.5:7b | Marketing/support node — social engine, content tasks, isolated SupportClaw |
+| T5500 | 192.168.0.15 | loopback 127.0.0.1:11434 | qwen2.5:7b | Build/media node — cold-start only |
 
 **What Ollama handles:**
 - Marketing content generation (social engine, captions, Reddit/X engagement)
@@ -362,7 +365,7 @@ All three nodes run Ollama. qwen2.5:7b is the default. Built-in Ollama embedding
 - Local inference for tasks that don't require frontier models
 - Fallback inference when API quota is hit
 
-**Memory embedding:** Built-in Ollama embedding (nomic-embed-text or qwen2.5 native) is the confirmed approach. No external embedding API dependency. OpenClaw reads/writes to `memory/` using this.
+**Memory embedding:** Built-in Ollama embedding (nomic-embed-text or qwen2.5 native) is the confirmed approach. No external embedding API dependency in the live Sabretooth OpenClaw path.
 
 **Orchestration:** Any of the four agentic orchestrators (Claude, Manus, Gemini, Codex) can direct Ollama tasks on any node via OpenClaw or direct SSH.
 
