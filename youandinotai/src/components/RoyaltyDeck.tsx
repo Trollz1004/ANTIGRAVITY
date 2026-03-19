@@ -3,14 +3,18 @@
  *
  * Premium holographic card component showcasing the $2,500 Royalty Card.
  * 3D perspective tilt, holographic shimmer, floating hearts, and
- * founder-tier launch messaging.
+ * founder-tier launch messaging with SPECIFIED revenue share terms.
+ *
+ * Revenue Share: Each Royalty Card holder receives 1% of net platform
+ * revenue (from the 10% Founder Operations slice of the 60/30/10 split).
+ * 5 cards max = 5% of founder slice allocated to Royalty holders.
  *
  * @license Apache-2.0
  */
 
 import { useState, useRef } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'motion/react';
-import { Crown, Heart, Shield, Star, Gem, Infinity as InfinityIcon, Zap } from 'lucide-react';
+import { Crown, Heart, Shield, Star, Gem, Infinity as InfinityIcon, Zap, FileText, TrendingUp } from 'lucide-react';
 
 const ROYALTY_LINK = 'https://square.link/u/CafhorUS';
 
@@ -74,7 +78,7 @@ function HolographicCard() {
     { icon: Shield, text: 'Priority matching & dedicated support' },
     { icon: Star, text: 'Exclusive Royalty badge on your profile' },
     { icon: Zap, text: 'Early access to every new feature' },
-    { icon: Gem, text: 'Revenue share from platform growth' },
+    { icon: TrendingUp, text: '1% net revenue share — paid quarterly' },
   ];
 
   return (
@@ -91,9 +95,15 @@ function HolographicCard() {
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         className="relative rounded-3xl overflow-hidden cursor-pointer group"
       >
-        {/* Card base with gold gradient border */}
+        {/* Card base — ace card background imagery with gold gradient border */}
         <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-amber-400 via-yellow-300 to-orange-500 p-[2px]">
-          <div className="w-full h-full rounded-3xl bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950" />
+          <div className="w-full h-full rounded-3xl bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 relative overflow-hidden">
+            {/* Subtle ace card background texture */}
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-[0.04]"
+              style={{ backgroundImage: 'url(/ace-hearts-crystal.jpg)' }}
+            />
+          </div>
         </div>
 
         {/* Holographic shimmer overlay */}
@@ -180,7 +190,7 @@ function HolographicCard() {
           </div>
 
           {/* Benefits */}
-          <div className="space-y-2.5 mb-6">
+          <div className="space-y-2.5 mb-5">
             {benefits.map((b, i) => (
               <motion.div
                 key={i}
@@ -198,13 +208,37 @@ function HolographicCard() {
             ))}
           </div>
 
+          {/* Revenue Share Terms — SPECIFIED */}
+          <div className="bg-gradient-to-br from-amber-500/[0.08] to-amber-600/[0.04] border border-amber-400/20 rounded-xl p-4 mb-5">
+            <div className="flex items-center gap-2 mb-2">
+              <FileText size={14} className="text-amber-400" />
+              <span className="text-amber-300 text-xs font-black uppercase tracking-wider">Revenue Share Terms</span>
+            </div>
+            <div className="space-y-1.5 text-xs text-gray-400 leading-relaxed">
+              <p>
+                Each Royalty Card holder receives <span className="text-amber-300 font-bold">1% of net platform revenue</span>,
+                paid <span className="text-white/80 font-semibold">quarterly</span> via the method of their choice.
+              </p>
+              <p>
+                Revenue share is drawn from the 10% Founder Operations portion of the
+                platform's <span className="text-white/80 font-semibold">60/30/10 split</span> (60% Shriners Children's Hospitals,
+                30% infrastructure, 10% founder operations).
+              </p>
+              <p>
+                Maximum <span className="text-amber-300 font-bold">5 cards</span> will be issued. This is a contractual
+                revenue disbursement — <span className="text-white/80 font-semibold">not equity</span>. Terms are perpetual
+                and bound to the platform for as long as it generates revenue.
+              </p>
+            </div>
+          </div>
+
           {/* Founder callout */}
-          <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 mb-6 text-center">
+          <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 mb-5 text-center">
             <p className="text-emerald-400 text-sm font-bold">
               Only 5 Royalty Cards will be issued at launch
             </p>
             <p className="text-emerald-400/60 text-xs mt-0.5">
-              Lifetime VIP access plus the published founder revenue-share terms
+              1% net revenue share each • Quarterly payments • Lifetime VIP
             </p>
           </div>
 
@@ -277,7 +311,7 @@ export function RoyaltyDeck() {
             The Royalty Deck of Hearts
           </h2>
           <p className="text-gray-400 text-sm md:text-base max-w-md mx-auto leading-relaxed">
-            The ultimate founding membership. Lifetime VIP status, revenue share,
+            The ultimate founding membership. Lifetime VIP status, 1% quarterly net revenue share,
             and priority access to every premium feature that follows launch.
           </p>
         </motion.div>
@@ -299,7 +333,7 @@ export function RoyaltyDeck() {
           </span>
           <span className="flex items-center gap-1.5">
             <Heart size={12} className="text-red-400 fill-red-400" />
-            Founder terms locked
+            1% net revenue • quarterly
           </span>
           <span className="flex items-center gap-1.5">
             <Star size={12} className="text-amber-400" />

@@ -199,3 +199,113 @@ html, body {
   background: linear-gradient(180deg, #ec4899, #a855f7);
   box-shadow: 0 0 8px rgba(236, 72, 153, 0.5);
 }
+
+/* ═══════════════════════════════════════════════
+   PREMIUM APP SHELL BACKGROUND
+   Ace-of-Hearts themed dark luxury
+   ═══════════════════════════════════════════════ */
+
+/* App shell background — ace card imagery with dark overlay */
+.app-bg-premium {
+  position: relative;
+  background: #050510;
+}
+.app-bg-premium::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('/ace-hearts-crystal.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+.app-bg-premium::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 30%, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 70%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating particle effect for swipe cards page */
+@keyframes card-particle-drift {
+  0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100vh) translateX(30px) scale(0.5); opacity: 0; }
+}
+
+/* Subtle animated gradient mesh for discover page */
+.discover-mesh {
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(236, 72, 153, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(14, 165, 233, 0.03) 0%, transparent 60%);
+}
+
+/* Premium card shimmer edge effect */
+.card-edge-glow {
+  position: relative;
+}
+.card-edge-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(236, 72, 153, 0.4),
+    rgba(168, 85, 247, 0.2),
+    rgba(59, 130, 246, 0.3),
+    rgba(236, 72, 153, 0.4)
+  );
+  background-size: 400% 400%;
+  animation: gradient-shift 8s ease infinite;
+  z-index: -1;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  padding: 2px;
+  opacity: 0.6;
+}
+.card-edge-glow:hover::before {
+  opacity: 1;
+  animation-duration: 3s;
+}
+
+/* Crystalline inner glow for cards */
+.crystal-inner {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 30px rgba(236, 72, 153, 0.03),
+    0 0 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Premium heading text shimmer */
+@keyframes text-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(236, 72, 153, 1) 0%,
+    rgba(168, 85, 247, 1) 25%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(168, 85, 247, 1) 75%,
+    rgba(236, 72, 153, 1) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 4s linear infinite;
+}
