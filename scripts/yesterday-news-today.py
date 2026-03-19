@@ -12,30 +12,56 @@ import json
 import logging
 import asyncio
 from datetime import datetime, timedelta
+from email.utils import parsedate_to_datetime
 from pathlib import Path
+from urllib.parse import urlencode
+from urllib.request import urlopen
+import xml.etree.ElementTree as ET
+
+# Paths
+BASE_DIR = Path("C:/Antigravity")
+LOG_DIR = BASE_DIR / "logs"
+DATA_DIR = BASE_DIR / "data" / "yesterday-news"
+CONTENT_DIR = DATA_DIR / "content"
+ARCHIVE_DIR = DATA_DIR / "archive"
+STATE_FILE = DATA_DIR / "state.json"
+
+# Ensure directories exist before logging starts
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+CONTENT_DIR.mkdir(parents=True, exist_ok=True)
+ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Setup logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
-        logging.FileHandler("C:/Antigravity/logs/yesterday-news-today.log"),
+        logging.FileHandler(LOG_DIR / "yesterday-news-today.log"),
         logging.StreamHandler()
     ]
 )
 log = logging.getLogger("yesterday-news-today")
 
-# Paths
-BASE_DIR = Path("C:/Antigravity")
-DATA_DIR = BASE_DIR / "data" / "yesterday-news"
-CONTENT_DIR = DATA_DIR / "content"
-ARCHIVE_DIR = DATA_DIR / "archive"
-STATE_FILE = DATA_DIR / "state.json"
 
-# Ensure directories exist
-DATA_DIR.mkdir(parents=True, exist_ok=True)
-CONTENT_DIR.mkdir(parents=True, exist_ok=True)
-ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
+def load_local_env(env_path: Path) -> None:
+    """Load simple KEY=VALUE pairs from a local .env file if present."""
+    if not env_path.exists():
+        return
+
+    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+load_local_env(BASE_DIR / ".env")
 
 
 class YesterdayNewsBot:
@@ -78,7 +104,117 @@ class YesterdayNewsBot:
             "file": yesterday.strftime("%Y%m%d"),
             "short": yesterday.strftime("%b %d")
         }
-    
+
+    def _normalize_news_item(self, title: str, summary: str, source: str, published_at: str | None = None):
+        return {
+            "title": title.strip(),
+            "summary": summary.strip(),
+            "source": source.strip(),
+            "published_at": published_at or "",
+        }
+
+    def _fetch_newsapi(self, limit: int = 5):
+        """Fetch yesterday's news from NewsAPI if NEWSAPI_KEY is configured."""
+        api_key = os.getenv("NEWSAPI_KEY", "").strip()
+        if not api_key:
+            log.info("NEWSAPI_KEY missing. Falling back to RSS feeds.")
+            return []
+
+        date = self.get_yesterday_date()
+        query = urlencode(
+            {
+                "domains": "apnews.com,reuters.com,bbc.com,theverge.com,techcrunch.com",
+                "language": "en",
+                "sortBy": "publishedAt",
+                "from": f"{date['iso']}T00:00:00",
+                "to": f"{date['iso']}T23:59:59",
+                "pageSize": max(limit * 2, 10),
+                "apiKey": api_key,
+            }
+        )
+        url = f"https://newsapi.org/v2/everything?{query}"
+
+        try:
+            with urlopen(url, timeout=20) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except Exception as exc:
+            log.warning(f"NewsAPI request failed: {exc}")
+            return []
+
+        if payload.get("status") != "ok":
+            log.warning(f"NewsAPI returned non-ok status: {payload.get('status')}")
+            return []
+
+        items = []
+        for article in payload.get("articles", []):
+            title = (article.get("title") or "").strip()
+            description = (article.get("description") or article.get("content") or "").strip()
+            source = (article.get("source") or {}).get("name") or "NewsAPI"
+            published_at = article.get("publishedAt") or ""
+            if not title or not description:
+                continue
+            items.append(self._normalize_news_item(title, description, source, published_at))
+            if len(items) >= limit:
+                break
+
+        if items:
+            log.info(f"Fetched {len(items)} news items from NewsAPI")
+        else:
+            log.warning("NewsAPI returned no usable articles")
+        return items
+
+    def _fetch_rss(self, limit: int = 5):
+        """Fallback news fetch using public RSS feeds."""
+        feeds = [
+            ("Reuters World", "https://feeds.reuters.com/Reuters/worldNews"),
+            ("BBC World", "http://feeds.bbci.co.uk/news/world/rss.xml"),
+            ("AP Top News", "https://apnews.com/hub/ap-top-news?output=rss"),
+        ]
+        target_day = self.get_yesterday_date()["iso"]
+        items = []
+
+        for source_name, feed_url in feeds:
+            try:
+                with urlopen(feed_url, timeout=20) as response:
+                    xml_bytes = response.read()
+            except Exception as exc:
+                log.warning(f"RSS fetch failed for {source_name}: {exc}")
+                continue
+
+            try:
+                root = ET.fromstring(xml_bytes)
+            except ET.ParseError as exc:
+                log.warning(f"RSS parse failed for {source_name}: {exc}")
+                continue
+
+            for item in root.findall(".//item"):
+                title = (item.findtext("title") or "").strip()
+                summary = (item.findtext("description") or "").strip()
+                published_raw = (item.findtext("pubDate") or "").strip()
+                if not title or not summary:
+                    continue
+
+                if published_raw:
+                    try:
+                        published_dt = parsedate_to_datetime(published_raw)
+                        if published_dt.strftime("%Y-%m-%d") != target_day:
+                            continue
+                    except Exception:
+                        pass
+
+                items.append(self._normalize_news_item(title, summary, source_name, published_raw))
+                if len(items) >= limit:
+                    break
+
+            if len(items) >= limit:
+                break
+
+        if items:
+            log.info(f"Fetched {len(items)} news items from RSS fallback")
+        else:
+            log.warning("RSS fallback returned no usable articles")
+        return items
+
     def generate_content(self, news_items):
         """Generate YouTube video content from news items."""
         date = self.get_yesterday_date()
@@ -116,37 +252,13 @@ class YesterdayNewsBot:
     
     def fetch_news(self):
         """
-        Fetch yesterday's news from various sources.
-        Placeholder - integrate with news APIs or RSS feeds.
+        Fetch yesterday's news from NewsAPI with RSS fallback.
         """
-        # This is a placeholder. In production, integrate with:
-        # - NewsAPI.org
-        # - RSS feeds (BBC, Reuters, AP)
-        # - Apify scraping
-        
         log.info("Fetching yesterday's news...")
-        
-        # Placeholder news items
-        # Replace with actual news fetching logic
-        placeholder_news = [
-            {
-                "title": "Tech Industry Update",
-                "summary": "Latest developments in technology and AI.",
-                "source": "placeholder"
-            },
-            {
-                "title": "Global Market Report",
-                "summary": "Financial markets showed mixed signals.",
-                "source": "placeholder"
-            },
-            {
-                "title": "Science Breakthrough",
-                "summary": "New research findings announced.",
-                "source": "placeholder"
-            }
-        ]
-        
-        return placeholder_news
+        news_items = self._fetch_newsapi(limit=5)
+        if news_items:
+            return news_items
+        return self._fetch_rss(limit=5)
     
     def create_video_project(self, content):
         """Create video project files for editing."""
