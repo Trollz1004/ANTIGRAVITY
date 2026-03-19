@@ -262,9 +262,12 @@ async def _ask_support_openclaw(
             )
         response.raise_for_status()
         payload = response.json()
-        raw = str(payload.get("response") or "").strip()
-        parsed = json.loads(raw)
-    except (httpx.HTTPError, ValueError, json.JSONDecodeError) as exc:
+        if isinstance(payload, dict) and payload.get("reply"):
+            parsed = payload
+        else:
+            raw = str(payload.get("response") or "").strip()
+            parsed = json.loads(raw)
+    except (httpx.HTTPError, ValueError, json.JSONDecodeError, AttributeError) as exc:
         logger.warning("Support OpenClaw reply failed: %s", exc)
         return None
 
