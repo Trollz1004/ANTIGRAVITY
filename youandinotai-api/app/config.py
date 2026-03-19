@@ -2,7 +2,7 @@
 
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -58,6 +58,7 @@ class Settings(BaseSettings):
 
     jwt_secret: str = Field(
         default="",
+        validation_alias=AliasChoices("JWT_SECRET", "SECRET_KEY"),
         description="REQUIRED. JWT signing secret. Must be set via JWT_SECRET env var. No fallback.",
     )
     metrics_api_key: str = ""  # Separate key for /metrics — NOT the JWT secret
