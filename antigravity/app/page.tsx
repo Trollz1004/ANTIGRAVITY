@@ -30,6 +30,23 @@ interface MetricsState {
   lastUpdated?: string;
 }
 
+interface NodeWatchCard {
+  name: string;
+  status: 'live' | 'degraded' | 'down';
+  detail: string;
+  meta?: string[];
+}
+
+interface NodeWatchState {
+  cards: NodeWatchCard[];
+  summary: {
+    liveCount: number;
+    total: number;
+    status: 'green' | 'mostly-green' | 'attention';
+    lastUpdated: string;
+  };
+}
+
 const DEFAULT_METRICS: MetricsState = {
   revenue: 0,
   customers: 0,
@@ -39,6 +56,16 @@ const DEFAULT_METRICS: MetricsState = {
   nodes: 3,
   uptime: 'Untracked',
   launchDate: '2026-04-04',
+};
+
+const DEFAULT_NODE_WATCH: NodeWatchState = {
+  cards: [],
+  summary: {
+    liveCount: 0,
+    total: 0,
+    status: 'attention',
+    lastUpdated: '',
+  },
 };
 
 const PLATFORMS = [
@@ -100,6 +127,8 @@ export default function Dashboard() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [metrics, setMetrics] = useState<MetricsState>(DEFAULT_METRICS);
   const [systemLogs, setSystemLogs] = useState<string[]>([]);
+  const [nodeWatch, setNodeWatch] = useState<NodeWatchState>(DEFAULT_NODE_WATCH);
+  const [nodeWatchError, setNodeWatchError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/metrics', { cache: 'no-store' })
@@ -111,6 +140,29 @@ export default function Dashboard() {
       .then((res) => res.json())
       .then((data) => setSystemLogs(Array.isArray(data.logs) ? data.logs : []))
       .catch((err) => console.error('Error fetching logs:', err));
+
+    const loadNodeWatch = () => {
+      fetch('/api/node-watch', { cache: 'no-store' })
+        .then((res) => res.json())
+        .then((data) => {
+          setNodeWatch({
+            cards: Array.isArray(data.cards) ? data.cards : [],
+            summary: data.summary ?? DEFAULT_NODE_WATCH.summary,
+          });
+          setNodeWatchError(null);
+        })
+        .catch((err) => {
+          console.error('Error fetching node watch:', err);
+          setNodeWatchError('Node watch is unavailable right now.');
+        });
+    };
+
+    loadNodeWatch();
+    const nodeWatchInterval = window.setInterval(loadNodeWatch, 30_000);
+
+    return () => {
+      window.clearInterval(nodeWatchInterval);
+    };
   }, []);
 
   useEffect(() => {
@@ -212,6 +264,72 @@ export default function Dashboard() {
             note="Operational uptime is not instrumented here yet, so it stays explicitly untracked."
             isDarkMode={isDarkMode}
           />
+        </section>
+
+        <section className={`p-8 rounded-[3rem] border ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <Activity size={22} className="text-blue-500" />
+              <div>
+                <h2 className="text-2xl font-black italic tracking-tight">CLAWX NODE WATCH</h2>
+                <p className={`text-sm mt-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                  Sabretooth command post, OpenClaw session, 9020 crossfire lane, and live production health in one view.
+                </p>
+              </div>
+            </div>
+            <div className={`px-4 py-3 rounded-2xl border text-sm ${isDarkMode ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+              <div className="font-black uppercase tracking-[0.2em] text-[10px] text-slate-500">Status</div>
+              <div className="mt-1 font-bold">
+                {nodeWatch.summary.liveCount}/{nodeWatch.summary.total} green
+              </div>
+              <div className={`text-xs mt-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                {nodeWatch.summary.lastUpdated
+                  ? `Last checked ${new Date(nodeWatch.summary.lastUpdated).toLocaleTimeString()}`
+                  : 'Waiting for first check'}
+              </div>
+            </div>
+          </div>
+
+          {nodeWatchError && (
+            <p className="text-sm text-amber-500 mb-4">{nodeWatchError}</p>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {nodeWatch.cards.map((card) => (
+              <div
+                key={card.name}
+                className={`p-5 rounded-2xl border ${isDarkMode ? 'bg-slate-950/50 border-slate-800' : 'bg-slate-50 border-slate-200'}`}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-black tracking-[0.2em] uppercase text-slate-500">{card.name}</p>
+                    <p className={`text-sm mt-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{card.detail}</p>
+                  </div>
+                  <span
+                    className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] ${
+                      card.status === 'live'
+                        ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                        : card.status === 'degraded'
+                          ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
+                          : 'bg-red-500/10 text-red-500 border border-red-500/20'
+                    }`}
+                  >
+                    {card.status}
+                  </span>
+                </div>
+
+                {card.meta && card.meta.length > 0 && (
+                  <div className={`mt-4 space-y-2 text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                    {card.meta.map((line) => (
+                      <p key={`${card.name}-${line}`} className="font-mono break-all">
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">

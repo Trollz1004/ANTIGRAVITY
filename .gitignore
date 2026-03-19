@@ -55,6 +55,7 @@ gateway-*.env
 
 # Build outputs (deploy via CI, not git)
 antigravity/out/
+antigravity/dashboard.err
 
 # Sensitive dispatches (contain API keys)
 briefings/opus-subagent-dispatch.md
