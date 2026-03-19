@@ -9,7 +9,7 @@ import React, { useEffect, useState, lazy, Suspense } from 'react';
 import {
   Heart, Rocket,
   ShieldAlert, Mail, Check,
-  LayoutDashboard, X,
+  LayoutDashboard, X, KeyRound,
 } from 'lucide-react';
 import { CharitySection } from './components/CharitySection';
 import { RoyaltyDeck } from './components/RoyaltyDeck';
@@ -83,6 +83,73 @@ function SignupCTA() {
       >
         Sign Up Now
       </a>
+    </div>
+  );
+}
+
+/* ─── Beta Code Entry (Landing Page) ─── */
+function BetaCodeEntry() {
+  const [showInput, setShowInput] = useState(false);
+  const [code, setCode] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+
+  // Valid beta codes — matches AuthGuard
+  const BETA_CODES = new Set(['FORTHEKIDS', 'JOKER0001', 'TWINPOWER']);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    const normalized = code.toUpperCase().trim();
+    if (BETA_CODES.has(normalized)) {
+      localStorage.setItem('beta_access_code', normalized);
+      setSuccess(true);
+      setTimeout(() => {
+        window.location.href = '/app';
+      }, 600);
+    } else {
+      setError('Invalid code');
+    }
+  };
+
+  if (success) {
+    return (
+      <div className="flex items-center justify-center gap-2 text-emerald-400 font-bold py-3 animate-scale-in">
+        <Check size={18} />
+        <span>Access granted — entering app...</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-6">
+      {!showInput ? (
+        <button
+          onClick={() => setShowInput(true)}
+          className="inline-flex items-center gap-2 text-purple-300/70 hover:text-purple-300 text-xs font-medium transition-colors"
+        >
+          <KeyRound size={12} />
+          Beta Tester? Enter access code
+        </button>
+      ) : (
+        <form onSubmit={handleSubmit} className="flex gap-2 justify-center max-w-xs mx-auto animate-slide-up">
+          <input
+            type="text"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            placeholder="Access code"
+            className="flex-1 px-4 py-2.5 bg-white/[0.06] border border-purple-500/30 rounded-xl text-white placeholder-gray-500 text-sm font-mono uppercase tracking-wider focus:outline-none focus:border-purple-400/60 transition-all"
+            autoFocus
+          />
+          <button
+            type="submit"
+            className="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl font-bold text-sm text-white hover:scale-105 active:scale-95 transition-transform"
+          >
+            Go
+          </button>
+        </form>
+      )}
+      {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
     </div>
   );
 }
@@ -541,9 +608,9 @@ export default function App() {
         <div className="max-w-3xl mx-auto">
           <div>
             <img
-              src="/fingerprint-heart.jpg"
+              src="/ace-hearts-crystal.jpg"
               alt="YouAndiNotAi"
-              className="w-20 h-20 md:w-28 md:h-28 rounded-full object-cover mx-auto mb-6 shadow-[0_0_20px_rgba(236,72,153,0.5)]"
+              className="w-24 h-24 md:w-32 md:h-32 rounded-2xl object-cover mx-auto mb-6 shadow-[0_0_30px_rgba(236,72,153,0.5)] border border-white/15"
             />
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-4">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500">
@@ -581,6 +648,9 @@ export default function App() {
             <span>✅ Bot-Shield Flow</span>
             <span>❤️ 18+ Only</span>
           </div>
+
+          {/* Beta tester quick access */}
+          <BetaCodeEntry />
         </div>
       </section>
 

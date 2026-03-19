@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, Mail, Lock, ArrowRight } from 'lucide-react';
+import { Heart, Mail, Lock, ArrowRight, KeyRound, Sparkles } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
+import { BETA_CODES } from '../AuthGuard';
 
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [betaCode, setBetaCode] = useState('');
+  const [betaError, setBetaError] = useState('');
+  const [showBeta, setShowBeta] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -25,6 +29,18 @@ export function Login() {
     }
   };
 
+  const handleBetaCode = (e: React.FormEvent) => {
+    e.preventDefault();
+    setBetaError('');
+    const code = betaCode.toUpperCase().trim();
+    if (BETA_CODES.has(code)) {
+      localStorage.setItem('beta_access_code', code);
+      navigate('/app');
+    } else {
+      setBetaError('Invalid access code');
+    }
+  };
+
   return (
     <div className="min-h-screen mesh-gradient flex items-center justify-center p-4 relative overflow-hidden">
       {/* Floating ambient orbs */}
@@ -33,13 +49,13 @@ export function Login() {
       <div className="absolute top-1/2 right-1/3 w-32 h-32 bg-blue-500/6 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '4s' }} />
 
       <div className="w-full max-w-md animate-scale-in relative z-10">
-        {/* Logo */}
+        {/* Logo — using the ace crystal heart for crisp quality */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-block group">
             <img
-              src="/heart-fingerprint.png"
+              src="/ace-hearts-crystal.jpg"
               alt="YouAndINotAI"
-              className="w-20 h-20 mx-auto mb-5 drop-shadow-[0_0_20px_rgba(0,255,255,0.4)] group-hover:drop-shadow-[0_0_30px_rgba(0,255,255,0.6)] transition-all duration-300 group-hover:scale-105"
+              className="w-24 h-24 mx-auto mb-5 rounded-2xl object-cover shadow-[0_0_30px_rgba(236,72,153,0.4)] group-hover:shadow-[0_0_40px_rgba(236,72,153,0.6)] transition-all duration-300 group-hover:scale-105 border border-white/10"
             />
           </Link>
           <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 tracking-tight">
@@ -102,6 +118,53 @@ export function Login() {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
             </button>
           </form>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-5">
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="text-gray-600 text-xs uppercase tracking-wider font-bold">or</span>
+            <div className="flex-1 h-px bg-white/10" />
+          </div>
+
+          {/* Beta Access Code Section */}
+          <div>
+            <button
+              type="button"
+              onClick={() => setShowBeta(!showBeta)}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-medium text-purple-300 hover:text-white bg-purple-500/[0.06] border border-purple-500/20 hover:border-purple-500/40 transition-all duration-200"
+            >
+              <KeyRound size={16} />
+              Have a Beta Tester Code?
+              <Sparkles size={12} className="text-purple-400" />
+            </button>
+
+            {showBeta && (
+              <form onSubmit={handleBetaCode} className="mt-3 animate-slide-up">
+                {betaError && (
+                  <p className="text-red-400 text-xs font-medium mb-2 text-center">{betaError}</p>
+                )}
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <KeyRound size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-400/50" />
+                    <input
+                      type="text"
+                      value={betaCode}
+                      onChange={(e) => setBetaCode(e.target.value)}
+                      placeholder="Enter access code"
+                      className="w-full pl-10 pr-4 py-3 bg-purple-500/[0.06] border border-purple-500/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-400/50 text-sm font-mono uppercase tracking-wider transition-all"
+                      autoFocus
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="px-5 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl font-bold text-sm text-white hover:scale-105 active:scale-95 transition-transform whitespace-nowrap"
+                  >
+                    Enter
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
         </div>
 
         <p className="text-center text-gray-500 text-sm mt-6">

@@ -160,10 +160,12 @@ export function Discover() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative">
-      {/* Ambient background glow */}
-      <div className="fixed top-1/4 left-1/3 w-96 h-96 bg-pink-500/[0.04] rounded-full blur-3xl pointer-events-none" />
-      <div className="fixed bottom-1/4 right-1/3 w-64 h-64 bg-purple-500/[0.04] rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative discover-mesh">
+      {/* Ambient background glow — ace card themed */}
+      <div className="fixed top-1/4 left-1/4 w-[500px] h-[500px] bg-pink-500/[0.04] rounded-full blur-[120px] pointer-events-none" />
+      <div className="fixed bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-500/[0.04] rounded-full blur-[100px] pointer-events-none" />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-500/[0.02] rounded-full blur-[80px] pointer-events-none" />
+      <div className="fixed bottom-1/3 left-1/6 w-[200px] h-[200px] bg-rose-500/[0.03] rounded-full blur-[60px] pointer-events-none" />
 
       {/* Settings toggle */}
       <button
