@@ -29,6 +29,7 @@ Write-Host "Task '$TaskName' created successfully" -ForegroundColor Green
 Write-Host "Schedule: Daily at 6:00 AM" -ForegroundColor Cyan
 Write-Host "Script: $ScriptPath" -ForegroundColor Gray
 Write-Host "Log: $LogPath" -ForegroundColor Gray
+Write-Host "Requires: NEWSAPI_KEY in C:\Antigravity\.env for NewsAPI, otherwise RSS fallback is used" -ForegroundColor Gray
 Write-Host ""
 Write-Host "To manage the task:" -ForegroundColor Yellow
 Write-Host "  Start: Start-ScheduledTask -TaskName '$TaskName'" -ForegroundColor Gray

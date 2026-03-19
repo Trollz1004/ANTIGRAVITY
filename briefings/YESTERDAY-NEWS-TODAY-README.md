@@ -99,12 +99,15 @@ Edit `yesterday-news-today.py` and update the `fetch_news()` method:
 
 ```python
 def fetch_news(self):
-    # Add your news API integration here
-    # Options:
-    # - NewsAPI.org (free tier available)
-    # - RSS feeds (BBC, Reuters, AP)
-    # - Apify scraping
-    pass
+    # Current behavior:
+    # 1. NewsAPI via NEWSAPI_KEY in C:\ANTIGRAVITY\.env
+    # 2. RSS fallback (Reuters / BBC / AP)
+```
+
+Add this to `C:\ANTIGRAVITY\.env` on the node that runs the bot:
+
+```env
+NEWSAPI_KEY=
 ```
 
 ### Schedule
@@ -142,9 +145,9 @@ Requires browser login session for YouTube (run `daemon-login.py` first).
 | Manual runner | ✅ Ready to deploy |
 | Deployed to 9020 | ⏳ Pending |
 | Scheduled task | ⏳ Pending |
-| News API integration | ⏳ Needs API key |
+| News API integration | ✅ NewsAPI + RSS fallback wired |
 
----
+--- 
 
 ## Next Steps
 
