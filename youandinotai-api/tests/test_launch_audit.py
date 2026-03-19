@@ -13,6 +13,7 @@ from sqlalchemy import select
 
 from app.auth import get_current_user
 from app.models import Profile, User, VerificationEvent
+from app.payment_truth import build_checkout_reference
 from app.routers.metrics import _verify_metrics_key
 
 
@@ -180,11 +181,14 @@ def test_square_webhook_binds_bot_shield_to_user(client, db_session_factory):
     )
     assert profile_response.status_code == 200, profile_response.text
 
+    challenge_id = uuid.uuid4()
+
     async def insert_liveness_event() -> None:
         async with db_session_factory() as session:
             user = await session.scalar(select(User).where(User.email == "square-bind@example.com"))
             session.add(
                 VerificationEvent(
+                    id=challenge_id,
                     user_id=user.id,
                     challenge_type="liveness",
                     challenge_token="test-liveness-pass",
@@ -195,6 +199,18 @@ def test_square_webhook_binds_bot_shield_to_user(client, db_session_factory):
             await session.commit()
 
     _run(insert_liveness_event())
+
+    async def rebuild_checkout_ref() -> str:
+        async with db_session_factory() as session:
+            user = await session.scalar(select(User).where(User.email == "square-bind@example.com"))
+            return build_checkout_reference(
+                user_id=user.id,
+                event_id=challenge_id,
+                tier="bot_shield",
+                secret="test-secret-that-is-at-least-32-characters-long-for-security",
+            )
+
+    checkout_ref = _run(rebuild_checkout_ref())
 
     payload = {
         "event_id": "evt_square_bind_1",
@@ -207,6 +223,7 @@ def test_square_webhook_binds_bot_shield_to_user(client, db_session_factory):
                     "status": "COMPLETED",
                     "amount_money": {"amount": 100, "currency": "USD"},
                     "buyer_email_address": "square-bind@example.com",
+                    "note": f"Bot-Shield Verification agref:{checkout_ref}",
                 }
             }
         },
@@ -259,11 +276,14 @@ def test_square_payment_updated_sends_founder_badge_email(client, db_session_fac
     )
     assert profile_response.status_code == 200, profile_response.text
 
+    challenge_id = uuid.uuid4()
+
     async def insert_liveness_event() -> None:
         async with db_session_factory() as session:
             user = await session.scalar(select(User).where(User.email == "square-updated@example.com"))
             session.add(
                 VerificationEvent(
+                    id=challenge_id,
                     user_id=user.id,
                     challenge_type="liveness",
                     challenge_token="test-liveness-pass",
@@ -275,9 +295,21 @@ def test_square_payment_updated_sends_founder_badge_email(client, db_session_fac
 
     _run(insert_liveness_event())
 
+    async def build_ref() -> str:
+        async with db_session_factory() as session:
+            user = await session.scalar(select(User).where(User.email == "square-updated@example.com"))
+            return build_checkout_reference(
+                user_id=user.id,
+                event_id=challenge_id,
+                tier="bot_shield",
+                secret="test-secret-that-is-at-least-32-characters-long-for-security",
+            )
+
+    checkout_ref = _run(build_ref())
+
     payload = {
         "event_id": "evt_square_updated_1",
-        "type": "payment.updated",
+        "type": "payment.completed",
         "created_at": "2026-03-11T12:00:00Z",
         "data": {
             "object": {
@@ -286,6 +318,7 @@ def test_square_payment_updated_sends_founder_badge_email(client, db_session_fac
                     "status": "COMPLETED",
                     "amount_money": {"amount": 100, "currency": "USD"},
                     "buyer_email_address": "square-updated@example.com",
+                    "note": f"Bot-Shield Verification agref:{checkout_ref}",
                 }
             }
         },
