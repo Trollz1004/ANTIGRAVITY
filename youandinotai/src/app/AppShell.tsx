@@ -22,10 +22,12 @@ export function AppShell() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex">
-      {/* Ambient orbs — visible through glass sidebar */}
-      <div className="fixed top-20 left-0 w-32 h-32 bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="fixed bottom-40 left-8 w-24 h-24 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen app-bg-premium text-white flex">
+      {/* Ambient orbs — ace card themed glow */}
+      <div className="fixed top-20 left-0 w-40 h-40 bg-pink-500/10 rounded-full blur-[80px] pointer-events-none z-0" />
+      <div className="fixed bottom-40 left-8 w-32 h-32 bg-purple-500/8 rounded-full blur-[60px] pointer-events-none z-0" />
+      <div className="fixed top-1/3 right-0 w-48 h-48 bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none z-0" />
+      <div className="fixed bottom-20 right-1/4 w-24 h-24 bg-rose-500/6 rounded-full blur-[50px] pointer-events-none z-0" />
 
       {/* Desktop Sidebar — Glassmorphism */}
       <aside className="hidden md:flex flex-col w-72 glass-strong fixed h-full border-r-0 z-40">
