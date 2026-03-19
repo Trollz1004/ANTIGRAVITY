@@ -24,6 +24,10 @@ class AuthLoginRequest(BaseModel):
     password: str
 
 
+class AuthBetaAccessRequest(BaseModel):
+    code: str = Field(min_length=4, max_length=64)
+
+
 class AuthTokenResponse(BaseModel):
     access_token: str
     refresh_token: str

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Heart, Mail, Lock, ArrowRight, KeyRound, Sparkles } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
-import { BETA_CODES } from '../AuthGuard';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -11,8 +10,9 @@ export function Login() {
   const [loading, setLoading] = useState(false);
   const [betaCode, setBetaCode] = useState('');
   const [betaError, setBetaError] = useState('');
+  const [betaLoading, setBetaLoading] = useState(false);
   const [showBeta, setShowBeta] = useState(false);
-  const { login } = useAuth();
+  const { login, betaAccess } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,15 +29,17 @@ export function Login() {
     }
   };
 
-  const handleBetaCode = (e: React.FormEvent) => {
+  const handleBetaCode = async (e: React.FormEvent) => {
     e.preventDefault();
     setBetaError('');
-    const code = betaCode.toUpperCase().trim();
-    if (BETA_CODES.has(code)) {
-      localStorage.setItem('beta_access_code', code);
+    setBetaLoading(true);
+    try {
+      await betaAccess(betaCode);
       navigate('/app');
-    } else {
-      setBetaError('Invalid access code');
+    } catch (err: any) {
+      setBetaError(err.message || 'Invalid access code');
+    } finally {
+      setBetaLoading(false);
     }
   };
 
@@ -157,9 +159,10 @@ export function Login() {
                   </div>
                   <button
                     type="submit"
+                    disabled={betaLoading}
                     className="px-5 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl font-bold text-sm text-white hover:scale-105 active:scale-95 transition-transform whitespace-nowrap"
                   >
-                    Enter
+                    {betaLoading ? '...' : 'Enter'}
                   </button>
                 </div>
               </form>
