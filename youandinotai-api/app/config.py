@@ -61,6 +61,7 @@ class Settings(BaseSettings):
         description="REQUIRED. JWT signing secret. Must be set via JWT_SECRET env var. No fallback.",
     )
     metrics_api_key: str = ""  # Separate key for /metrics — NOT the JWT secret
+    beta_access_codes: str = ""
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
 
@@ -82,6 +83,14 @@ class Settings(BaseSettings):
             proxy.strip()
             for proxy in self.rate_limit_trusted_proxies.split(",")
             if proxy.strip()
+        ]
+
+    @property
+    def beta_access_code_list(self) -> list[str]:
+        return [
+            code.strip().upper()
+            for code in self.beta_access_codes.split(",")
+            if code.strip()
         ]
 
 

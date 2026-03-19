@@ -14,6 +14,7 @@ import {
 import { CharitySection } from './components/CharitySection';
 import { RoyaltyDeck } from './components/RoyaltyDeck';
 import { motion, AnimatePresence } from 'motion/react';
+import { useAuth } from './lib/auth';
 
 /* ─── Lazy-load modal components ─── */
 /* Removed: GeminiMatchmaker, SolarFlareSOS, VoiceSOS — Gemini API costs money */
@@ -89,26 +90,27 @@ function SignupCTA() {
 
 /* ─── Beta Code Entry (Landing Page) ─── */
 function BetaCodeEntry() {
+  const { betaAccess } = useAuth();
   const [showInput, setShowInput] = useState(false);
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Valid beta codes — matches AuthGuard
-  const BETA_CODES = new Set(['FORTHEKIDS', 'JOKER0001', 'TWINPOWER']);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    const normalized = code.toUpperCase().trim();
-    if (BETA_CODES.has(normalized)) {
-      localStorage.setItem('beta_access_code', normalized);
+    setLoading(true);
+    try {
+      await betaAccess(code);
       setSuccess(true);
       setTimeout(() => {
         window.location.href = '/app';
       }, 600);
-    } else {
+    } catch {
       setError('Invalid code');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -143,9 +145,10 @@ function BetaCodeEntry() {
           />
           <button
             type="submit"
+            disabled={loading}
             className="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl font-bold text-sm text-white hover:scale-105 active:scale-95 transition-transform"
           >
-            Go
+            {loading ? '...' : 'Go'}
           </button>
         </form>
       )}

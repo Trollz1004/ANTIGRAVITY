@@ -62,6 +62,14 @@ def decode_token(token: str) -> dict:
         )
 
 
+def ensure_active_user(user: User) -> None:
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Account is inactive",
+        )
+
+
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: AsyncSession = Depends(get_db),
@@ -79,4 +87,5 @@ async def get_current_user(
     user = await db.scalar(select(User).where(User.id == parsed_user_id))
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
+    ensure_active_user(user)
     return user
