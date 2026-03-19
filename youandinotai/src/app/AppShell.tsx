@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { Heart, MessageCircle, User, LogOut, Compass, Users, Calendar, HandHeart, Sparkles, Shield } from 'lucide-react';
+import { Heart, MessageCircle, User, LogOut, Compass, Users, Calendar, HandHeart, Sparkles, Shield, Headset } from 'lucide-react';
 import { useAuth } from '../lib/auth';
 
 const NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolean }[] = [
@@ -9,6 +9,7 @@ const NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolea
   { to: '/app/boards', icon: Users, label: 'Boards' },
   { to: '/app/events', icon: Calendar, label: 'Events' },
   { to: '/app/volunteer', icon: HandHeart, label: 'Volunteer' },
+  { to: '/app/support', icon: Headset, label: 'Support' },
   { to: '/app/charity', icon: Sparkles, label: 'For The Kids' },
 ];
 
