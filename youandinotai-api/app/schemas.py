@@ -364,6 +364,42 @@ class DoubleDateProposeRequest(BaseModel):
     match_b_id: uuid.UUID
 
 
+# ── Support ──
+
+class SupportChatMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(min_length=1, max_length=2000)
+
+
+class SupportChatRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=2000)
+    transcript: list[SupportChatMessage] = Field(default_factory=list)
+    force_ticket: bool = False
+
+
+class SupportTicketResponse(BaseModel):
+    id: uuid.UUID
+    status: str
+    category: str
+    subject: str
+    customer_email: str
+    customer_message: str
+    bot_response: str | None = None
+    escalation_reason: str | None = None
+    transcript: list[SupportChatMessage] = Field(default_factory=list)
+    created_at: datetime
+    updated_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+class SupportChatResponse(BaseModel):
+    reply: str
+    escalated: bool
+    category: str
+    preset_key: str | None = None
+    ticket: SupportTicketResponse | None = None
+
+
 # ── User Registration ──
 
 class UserRegisterRequest(BaseModel):

@@ -50,6 +50,14 @@ class Settings(BaseSettings):
     smtp_password: str = ""
     smtp_use_ssl: bool = False
     smtp_use_starttls: bool = True
+    telegram_bot_token: str = ""
+    telegram_chat_id: str = ""
+    support_operator_emails: str = ""
+    support_openclaw_url: str = ""
+    support_openclaw_timeout_seconds: float = 15.0
+    support_ollama_base_url: str = ""
+    support_ollama_model: str = "qwen2.5:7b"
+    support_ollama_timeout_seconds: float = 10.0
     gemini_api_key: str = ""
     gemini_model: str = "gemini-2.5-pro"
     kimi_api_key: str = ""
@@ -92,6 +100,14 @@ class Settings(BaseSettings):
             code.strip().upper()
             for code in self.beta_access_codes.split(",")
             if code.strip()
+        ]
+
+    @property
+    def support_operator_email_list(self) -> list[str]:
+        return [
+            email.strip().lower()
+            for email in self.support_operator_emails.split(",")
+            if email.strip()
         ]
 
 
