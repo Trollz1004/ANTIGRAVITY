@@ -159,3 +159,13 @@ assets/5aa863e8a0ecf7b98ed000cc73e1d98d.jpg
 
 # Local session snapshots
 memory/SESSION_BACKUP_*.md
+
+# Local news / node WIP that should stay outside the main repo
+data/yesterday-news/
+scripts/deploy-to-9020.bat
+scripts/deploy-to-9020.sh
+scripts/news-approval-workflow.py
+scripts/setup-news-scheduler-v2.ps1
+scripts/yesterday-news-today-v2.py
+projects.txt
+log.txt
