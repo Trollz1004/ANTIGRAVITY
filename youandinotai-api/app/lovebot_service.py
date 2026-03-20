@@ -1,16 +1,7 @@
 """LoveBot service for premium love consultation features."""
 
 import random
-import uuid
-from dataclasses import dataclass
 from datetime import date
-from typing import Any
-
-@dataclass(slots=True)
-class LoveBotResponse:
-    reply: str
-    category: str
-    preset_key: str | None = None
 
 class LoveBotService:
     def __init__(self):

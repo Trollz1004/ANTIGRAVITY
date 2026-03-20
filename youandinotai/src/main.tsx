@@ -20,6 +20,7 @@ import { Boards } from './app/pages/Boards';
 import { Events } from './app/pages/Events';
 import { Volunteering } from './app/pages/Volunteering';
 import { Support } from './app/pages/Support';
+import { LoveBotPage } from './app/pages/LoveBotPage';
 import DataPrivacyDashboard from './components/DataPrivacyDashboard';
 import CharityTab from './components/CharityTab';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
@@ -39,6 +40,7 @@ createRoot(document.getElementById('root')!).render(
         <Route element={<AuthGuard />}>
           <Route element={<AppShell />}>
             <Route path="/app" element={<Discover />} />
+            <Route path="/app/lovebot" element={<LoveBotPage />} />
             <Route path="/app/matches" element={<Matches />} />
             <Route path="/app/inbox" element={<Inbox />} />
             <Route path="/app/profile" element={<ProfileSetup />} />
