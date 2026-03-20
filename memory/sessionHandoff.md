@@ -48,6 +48,7 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - 9020 now carries crossfire, marketing, and the isolated support gateway
 - T5500 no longer carries support and is available for heavier media/build workloads
 - The unlocked `C:\Users\joshl\OneDrive\Personal Vault` path still does not resolve as a real folder on this machine
+- Old DAO/platform repos and briefs remain recovery-library inputs only; live reuse must be ported intentionally into `C:\ANTIGRAVITY` and is now guided by `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`
 
 ## Pending Items
 

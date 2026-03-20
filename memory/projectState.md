@@ -41,6 +41,7 @@ This file is the short-form current state. For canonical repo truth, use:
 - T5500 was used to execute the backend recovery deploy.
 - 9020 is now the active node for crossfire, marketing workloads, and isolated date-app support.
 - T5500 no longer carries the temporary support runtime and is free for heavier media/video workloads.
+- Legacy DAO/platform repos are design recovery sources only, not live implementation truth; approved recovery candidates are tracked in `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`.
 
 ## Known Gaps
 
