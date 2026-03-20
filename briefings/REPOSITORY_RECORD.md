@@ -51,6 +51,7 @@
 - **T5500 role:** used for backend recovery and deploy execution when Sabretooth needed the live service restored; its temporary support container is now offline so the box can stay available for heavier media/build work
 - **9020 node role:** crossfire, marketing workloads, and the isolated date-app SupportClaw now run here
 - **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
+- **Legacy DAO/platform material:** old repos and archived briefs are recovery-library inputs only; reusable elements must be ported intentionally into the current repo baseline. See `briefings/DAO-RECOVERY-CANDIDATES.md`.
 
 ## Current Open Items
 
