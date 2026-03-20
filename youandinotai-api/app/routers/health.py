@@ -3,14 +3,15 @@
 from collections.abc import Iterable
 
 from fastapi import APIRouter, Depends
-from sqlalchemy import desc, func, select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.database import check_db_health, get_db
-from app.models import User, WebhookEvent
+from app.models import User
 from app.payment_truth import extract_payment_proof_label, proof_label_is_wallet
 from app.schemas import HealthResponse
+from app.webhook_event_store import recent_processed_payment_payloads
 
 router = APIRouter()
 settings = get_settings()
@@ -56,18 +57,10 @@ def _iter_payment_objects(payload: object) -> Iterable[dict]:
 
 
 async def _runtime_payment_proof_labels(db: AsyncSession) -> list[str]:
-    rows = await db.scalars(
-        select(WebhookEvent)
-        .where(WebhookEvent.event_source == "square")
-        .where(WebhookEvent.event_type == "payment.completed")
-        .where(WebhookEvent.processed.is_(True))
-        .order_by(desc(WebhookEvent.created_at))
-        .limit(25)
-    )
     labels: list[str] = []
     seen: set[str] = set()
-    for event in rows:
-        for payment_obj in _iter_payment_objects(event.payload):
+    for payload in await recent_processed_payment_payloads(db):
+        for payment_obj in _iter_payment_objects(payload):
             label = extract_payment_proof_label(payment_obj)
             if label and label not in seen:
                 seen.add(label)

@@ -29,7 +29,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import get_settings
 from app.database import get_db
 from app.email_service import send_welcome_email
-from app.models import User, VerificationEvent, WebhookEvent
+from app.models import User, VerificationEvent
 from app.payment_truth import (
     extract_payment_proof_label,
     extract_checkout_reference,
@@ -39,6 +39,11 @@ from app.payment_truth import (
 )
 from app.schemas import WebhookAckResponse
 from app.verification_service import promote_user_verification_if_ready
+from app.webhook_event_store import (
+    create_webhook_event,
+    mark_webhook_event_processed,
+    webhook_event_exists,
+)
 
 router = APIRouter(prefix="/webhooks")
 logger = logging.getLogger(__name__)
@@ -416,10 +421,7 @@ async def square_payment_webhook(
     )
 
     # Deduplicate
-    duplicate = await db.scalar(
-        select(WebhookEvent).where(WebhookEvent.event_source_id == event_id)
-    )
-    if duplicate:
+    if await webhook_event_exists(db, event_id):
         return WebhookAckResponse(event_id=event_id, processed=True, duplicate=True)
 
     # Extract payment object from Square event structure
@@ -430,14 +432,14 @@ async def square_payment_webhook(
     order_obj = await _fetch_square_order(order_id, settings)
 
     # Log the webhook event
-    webhook_event = WebhookEvent(
-        event_source_id=event_id,
-        event_source="square",
+    await create_webhook_event(
+        db,
+        event_id=event_id,
         event_type=event_type,
         payload=payload_json,
         processed=False,
+        event_source="square",
     )
-    db.add(webhook_event)
 
     # Resolve user from signed checkout ref first, then Square customer/email fallbacks.
     checkout_ref = extract_checkout_reference(
@@ -590,7 +592,7 @@ async def square_payment_webhook(
             elif sub_status == "ACTIVE":
                 user.subscription_active = True
 
-    webhook_event.processed = True
+    await mark_webhook_event_processed(db, event_id)
 
     try:
         await db.commit()
