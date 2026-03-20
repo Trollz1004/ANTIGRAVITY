@@ -162,6 +162,10 @@ Currently 2/6 active. Full 6/6 requires API keys for Claude, Gemini, Perplexity,
 **Rule**: If context was not loaded from `C:\ANTIGRAVITY` on `origin/main`, treat it as unverified.
 Backup copies, vault mirrors, remote SSD copies, and exported notes may exist for resilience, but they do not become live truth until reconciled into this repo on `main`.
 
+**Sandbox Rule**: Any future brainstorming, experimental platform, speculative automation, draft DAO package, or unapproved new product idea must go to a separate `SandBoxONLY` repo first.
+`C:\ANTIGRAVITY` stays launch-grade and green for the current approved domains and products until sandbox work is explicitly reviewed, ported, and merged into `main`.
+The sandbox repo remains the permanent place for future testing and ideation; it does not become live truth by default.
+
 ---
 
 ## MEMORY / BRIEFING EDIT RULE (HARDCODED)
