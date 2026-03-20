@@ -45,6 +45,13 @@ This file is the short-form current state. For canonical repo truth, use:
 - Legacy DAO/platform repos are design recovery sources only, not live implementation truth; approved recovery candidates are tracked in `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`.
 - Future brainstorming, experimental platforms, and unapproved new product work now start in the dedicated sandbox repo, not in `C:\ANTIGRAVITY`.
 
+## Account Routing Note
+
+- `ebaytrashortreasure@gmail.com` is reserved for the live date-app payment lane only. Current approved uses: YouAndINotAI Square and YouAndINotAI PayPal.
+- `joshlcoleman@gmail.com` is the primary ops identity for Codex/OpenAI and the non-date-app commerce lanes, including OnlineRecycle, the crosslister, eBay, Facebook, and future non-date-app Square work.
+- `aicollab4kids@gmail.com` is the current Google Business / Claude-side identity.
+- Passwords, password patterns, and other secrets must never be written into repo memory files or chat history; continuity copies stay in the vault and credential manager only.
+
 ## Known Gaps
 
 1. The stale `CLOUDFLARE_API_TOKEN` in `.env` remains documentation debt, but not a live deploy blocker.
