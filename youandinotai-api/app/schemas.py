@@ -414,3 +414,33 @@ class UserRegisterRequest(BaseModel):
 class UserRegisterResponse(BaseModel):
     user_id: uuid.UUID
     session_token: str
+
+
+# ── LoveBot ──
+
+class LoveBotCompatibilityRequest(BaseModel):
+    name1: str = Field(min_length=1, max_length=100)
+    name2: str = Field(min_length=1, max_length=100)
+    dob1: date | None = None
+    dob2: date | None = None
+
+
+class LoveBotCompatibilityResponse(BaseModel):
+    score: int
+    message: str
+
+
+class LoveBotQuoteResponse(BaseModel):
+    text: str
+    author: str
+    category: str
+
+
+class LoveBotTipResponse(BaseModel):
+    category: str
+    tips: list[str]
+
+
+class LoveBotGiftResponse(BaseModel):
+    for_her: bool
+    ideas: list[str]

@@ -22,8 +22,8 @@
 |-----------|-------|-------|
 | Sabretooth repo | LIVE | `C:\ANTIGRAVITY` on `main` |
 | Frontend | LIVE | `https://youandinotai.com/api/v1/health` returns healthy JSON |
-| Backend | LIVE | Cloud Run service `dateapp-backend` in `us-east1` now serves the real FastAPI API |
-| Backend revision | LIVE | Manual source deploy from T5500 restored production on March 19, 2026 |
+| Backend | LIVE | Cloud Run service `dateapp-backend` in `us-east1` fully configured (Square + SMTP) |
+| Backend revision | LIVE | Revision `00013-mkw` serving 100% [status: ok, square: ready, email: ready] |
 | GitHub deploy workflow | PASS | `deploy-gcr.yml` fixed; workflow run `23308309685` succeeded |
 | Backend tests | PASS | `67 passed` on March 19, 2026 |
 | OpenClaw gateway | LIVE | `http://127.0.0.1:18789/healthz` |
@@ -41,7 +41,8 @@
 - **Backend host:** Google Cloud Run
 - **Backend stack:** FastAPI + PostgreSQL + Square
 - **Live API contract restored:** Pages worker now proxies `/api/v1/*` directly to the Cloud Run backend without the stale adapter layer
-- **Runtime config restored:** backend accepts the legacy `SECRET_KEY` env alias for JWT secret compatibility
+- **Runtime config restored:** Square Location ID corrected to `LY5GN09F5AN83`; SMTP configured for `aicollab4kids@gmail.com`
+- **New Feature:** LoveBot premium love consultant (compatibility, quotes, tips, gift ideas) added to API
 - **Runtime deps restored:** missing scheduler/file runtime deps were added to `requirements.txt`
 
 ## Operational Notes
