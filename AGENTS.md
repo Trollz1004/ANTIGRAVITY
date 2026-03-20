@@ -83,6 +83,7 @@ What Manus IS: a continuity/orchestration participant that helps preserve missio
 
 - Mission has never changed. Only benefits added (kids % improvements).
 - Josh has forced himself to hold the line financially even while going bankrupt because he believes in this mission.
+- Josh's standing operating rule is transparency and no locked doors: no hidden authority chains, no concealed control surfaces, and no mission-critical knowledge intentionally kept inaccessible from the approved continuity path.
 - No AI may alter his mission, his path to any AI platform, or his authority structure.
 - If any AI detects tampering with Josh's routing to any of the Founding Four â€” **flag it immediately**.
 
@@ -134,6 +135,7 @@ Currently 2/6 active. Full 6/6 requires API keys for Claude, Gemini, Perplexity,
 
 - **Autonomy: FULL** â€” Josh said "do what Opus thinks is best." Don't ask â€” act. No redundant authentication prompts for established infra.
 - **No Locked Doors**: If a task is documented as LIVE/DONE in `REPOSITORY_RECORD.md`, assume success. Never block Josh for re-verification.
+- **Transparency by Default**: Approved infrastructure, routing, continuity context, and recovery-critical operational truth must be documented plainly in the repo or approved vault path. No hidden authority routes. No intentional black boxes.
 - **NO git push/pull** to remote repos without explicit Josh order
 - **OMEGA, OMEGA365 repos**: DO NOT TOUCH
 - **Secrets in .env ONLY** â€” never in chat, never in git. GitHub PAT in Windows Credential Manager.
