@@ -8,7 +8,7 @@ import os
 
 from app.config import get_settings
 from app.scheduler import setup_scheduler
-from app.routers import auth, boards, double_dates, events, health, messages, metrics, privacy, profiles, support, swipe, users, verify, video, video_rooms, volunteering, webhooks
+from app.routers import auth, boards, double_dates, events, health, lovebot, messages, metrics, privacy, profiles, support, swipe, users, verify, video, video_rooms, volunteering, webhooks
 
 settings = get_settings()
 
@@ -41,6 +41,7 @@ app.add_middleware(
 
 # Core routers
 app.include_router(health.router, prefix="/api/v1", tags=["health"])
+app.include_router(lovebot.router, prefix="/api/v1", tags=["lovebot"])
 app.include_router(auth.router, prefix="/api/v1", tags=["auth"])
 app.include_router(profiles.router, prefix="/api/v1", tags=["profiles"])
 app.include_router(swipe.router, prefix="/api/v1", tags=["swipe"])
