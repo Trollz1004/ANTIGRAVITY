@@ -8,7 +8,7 @@ It complements the existing local stack:
 - `scripts/codex_task_sentry.py`
 - `scripts/opus-guardian.py`
 - `scripts/install-safe-node-automation-tasks.ps1`
-- `scripts/Invoke-CodeX-BrainCheckpoint.ps1`
+- `scripts/clawx-control/Invoke-CodeX-BrainCheckpoint.ps1`
 
 It does **not** replace those tools. It audits them and raises escalation when they drift.
 

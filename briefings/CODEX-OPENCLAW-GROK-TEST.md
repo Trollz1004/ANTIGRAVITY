@@ -60,7 +60,7 @@ Create `memory/openclaw-test-result.md` with:
 
 ## OpenClaw Config Reference
 - Config: `C:\Users\joshl\.openclaw\openclaw-agents-config.json` (on T5500)
-- 4-node setup: `C:\ANTIGRAVITY\4-NODE-OPENCLAW-DEPLOYMENT.md`
+- 4-node setup: `C:\ANTIGRAVITY\briefings\archive\root-cleanup-2026-03-20\4-NODE-OPENCLAW-DEPLOYMENT.md`
 - Token: stored only in ignored local env/vault storage; do not commit to repo
 
 ## SSH Key

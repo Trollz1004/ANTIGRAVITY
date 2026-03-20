@@ -922,12 +922,12 @@ function printHelp() {
   console.log("CodeX Task Sentry (Node)");
   console.log("");
   console.log("Usage:");
-  console.log("  node scripts/codex-task-sentry.js --init-ewaste --export-markdown");
-  console.log("  node scripts/codex-task-sentry.js --status");
-  console.log("  node scripts/codex-task-sentry.js --run-once --export-markdown");
-  console.log("  node scripts/codex-task-sentry.js --run-once --fallback-chain ollama,codex");
-  console.log("  node scripts/codex-task-sentry.js --run-once --fallback-chain ollama --no-codex-fallback");
-  console.log("  node scripts/codex-task-sentry.js --loop --interval-minutes 5 --export-markdown");
+  console.log("  node scripts/clawx-control/codex-task-sentry.js --init-ewaste --export-markdown");
+  console.log("  node scripts/clawx-control/codex-task-sentry.js --status");
+  console.log("  node scripts/clawx-control/codex-task-sentry.js --run-once --export-markdown");
+  console.log("  node scripts/clawx-control/codex-task-sentry.js --run-once --fallback-chain ollama,codex");
+  console.log("  node scripts/clawx-control/codex-task-sentry.js --run-once --fallback-chain ollama --no-codex-fallback");
+  console.log("  node scripts/clawx-control/codex-task-sentry.js --loop --interval-minutes 5 --export-markdown");
 }
 
 async function main() {

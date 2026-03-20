@@ -144,7 +144,7 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
 - Hooks (.claude/settings.json): PreToolUse (.env guard, §496.405 guard), PostToolUse (Prettier)
 - CI: .github/workflows/ci-validate.yml (PR auto-trigger DISABLED to protect GitHub minutes)
 - Launch: scripts/Start-OpenClaw-TUI.ps1 | Claude: scripts/Start-Claude-Danger.ps1
-- Admin startup: scripts/startup-pwsh-admin.ps1
+- Admin startup: scripts/clawx-control/startup-pwsh-admin.ps1
 
 ## DEPLOYMENT MAP
 - youandinotai.com               → Cloudflare Pages (youandinotai/dist)
