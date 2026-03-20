@@ -1,6 +1,6 @@
 # REPOSITORY RECORD — SABRETOOTH LIVE STATE
 
-> **Date:** March 19, 2026
+> **Date:** March 20, 2026
 > **Status:** `main` clean, `origin/main` updated, frontend and backend live
 > **Authority:** Joshua Coleman
 
@@ -14,6 +14,7 @@
 - **Secrets posture:** secrets stay in local `.env` and the Sabretooth continuity vault only
 - **Continuity vault root:** `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
 - **Continuity files:** `ENVwhen ai loses.env`, `UNIVERSAL-NODE.env`, `UNIVERSAL-NODE-MANIFEST.md`, `CODEX-MISSION-SAFEGUARD.md`
+- **Sandbox repo for new/unapproved work:** `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git`
 
 ## Current Runtime Truth
 
@@ -52,6 +53,7 @@
 - **9020 node role:** crossfire, marketing workloads, and the isolated date-app SupportClaw now run here
 - **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
 - **Legacy DAO/platform material:** old repos and archived briefs are recovery-library inputs only; reusable elements must be ported intentionally into the current repo baseline. See `briefings/DAO-RECOVERY-CANDIDATES.md`.
+- **Sandbox policy:** future experimental or brainstorming work starts in the sandbox repo, not in `C:\ANTIGRAVITY`.
 
 ## Current Open Items
 
@@ -69,4 +71,4 @@
 
 ---
 
-*This file is the repo-level state summary for Sabretooth as of March 19, 2026.*
+*This file is the repo-level state summary for Sabretooth as of March 20, 2026.*

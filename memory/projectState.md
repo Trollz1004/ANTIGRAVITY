@@ -1,6 +1,6 @@
 # PROJECT STATE — LIVE BASELINE
 
-**Last Updated:** 2026-03-19
+**Last Updated:** 2026-03-20
 
 This file is the short-form current state. For canonical repo truth, use:
 
@@ -22,6 +22,7 @@ This file is the short-form current state. For canonical repo truth, use:
 | Payments | Square |
 | OpenClaw | Local Sabretooth gateway on `127.0.0.1:18789` with Ollama-only model routing |
 | Ollama | Local on `127.0.0.1:11434` |
+| Sandbox repo | `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git` |
 
 ## Product Truth
 
@@ -42,6 +43,7 @@ This file is the short-form current state. For canonical repo truth, use:
 - 9020 is now the active node for crossfire, marketing workloads, and isolated date-app support.
 - T5500 no longer carries the temporary support runtime and is free for heavier media/video workloads.
 - Legacy DAO/platform repos are design recovery sources only, not live implementation truth; approved recovery candidates are tracked in `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`.
+- Future brainstorming, experimental platforms, and unapproved new product work now start in the dedicated sandbox repo, not in `C:\ANTIGRAVITY`.
 
 ## Known Gaps
 
