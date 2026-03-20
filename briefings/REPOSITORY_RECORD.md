@@ -12,6 +12,7 @@
 - **Git truth:** `main` on Sabretooth, pushed to `origin/main`
 - **Worktree state:** clean after restoring the live API path, repairing the Cloud Run workflow, and revalidating the stack
 - **Secrets posture:** secrets stay in local `.env` and the Sabretooth continuity vault only
+- **Transparency rule:** approved infrastructure, routing, and recovery-critical operational truth stay documented in repo briefings/memory or the approved continuity vault path; no intentional locked-door continuity model
 - **Continuity vault root:** `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
 - **Continuity files:** `ENVwhen ai loses.env`, `UNIVERSAL-NODE.env`, `UNIVERSAL-NODE-MANIFEST.md`, `CODEX-MISSION-SAFEGUARD.md`
 - **Sandbox repo for new/unapproved work:** `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git`
