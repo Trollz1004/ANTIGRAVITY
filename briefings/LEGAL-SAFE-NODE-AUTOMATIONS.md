@@ -43,7 +43,7 @@ Schedule:
 - 18:15
 
 What it does:
-- runs `scripts/Run-Safe-NodeAutomation.ps1 -Profile 9020-content`
+- runs `scripts/clawx-control/Run-Safe-NodeAutomation.ps1 -Profile 9020-content`
 - writes draft packs and handoff queues to `CodeX/state/marketing`
 - does not open browsers or publish directly
 

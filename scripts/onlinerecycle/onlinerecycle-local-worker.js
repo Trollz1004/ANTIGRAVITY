@@ -35,8 +35,8 @@ Hard rules:
 
 function usage() {
   console.log("Usage:");
-  console.log("  node scripts/onlinerecycle-local-worker.js marketing-pack [--model MODEL]");
-  console.log("  node scripts/onlinerecycle-local-worker.js reply-draft --kind general|dropoff|pickup --source FILE [--model MODEL]");
+  console.log("  node scripts/onlinerecycle/onlinerecycle-local-worker.js marketing-pack [--model MODEL]");
+  console.log("  node scripts/onlinerecycle/onlinerecycle-local-worker.js reply-draft --kind general|dropoff|pickup --source FILE [--model MODEL]");
 }
 
 function parseArgs(argv) {

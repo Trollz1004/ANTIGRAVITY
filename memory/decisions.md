@@ -87,7 +87,7 @@ Every architectural decision is recorded here so no future session re-debates it
 
 **Decision**: Use a deterministic daily revenue worker for OnlineRecycle cashflow tasks, and reserve Ollama for low-cost fallback drafting and structured intake reply generation.
 **Why**: The business needs a cheap path that finishes every time. Deterministic daily packs are more reliable than waiting on local model generation, while template-first local drafting still reduces paid-token usage for real intake responses.
-**Impact**: `scripts/run-onlinerecycle-revenue-worker.ps1` now produces the daily marketing pack, response templates, cashflow checklist, and eBay export reliably. `scripts/Run-OnlineRecycle-LocalWorker.ps1` and `scripts/onlinerecycle-local-worker.js` remain the local drafting path, with `qwen2.5:7b` as the default Sabretooth fallback model.
+**Impact**: `scripts/onlinerecycle/run-onlinerecycle-revenue-worker.ps1` now produces the daily marketing pack, response templates, cashflow checklist, and eBay export reliably. `scripts/onlinerecycle/Run-OnlineRecycle-LocalWorker.ps1` and `scripts/onlinerecycle/onlinerecycle-local-worker.js` remain the local drafting path, with `qwen2.5:7b` as the default Sabretooth fallback model.
 **Status**: Done
 
 ## 2026-03-07: Use browser automation for inbox and web audits, not for replacing the deterministic OnlineRecycle core
