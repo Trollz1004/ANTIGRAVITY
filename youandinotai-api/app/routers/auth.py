@@ -121,7 +121,7 @@ async def beta_access(
             date_of_birth=datetime(2000, 1, 1, tzinfo=timezone.utc).date(),
             adult_verified_at=datetime.now(timezone.utc),
             bot_shield_verified=True,
-            subscription_tier="beta",
+            subscription_tier="founding_member",
             subscription_active=True,
             is_active=True,
         )
@@ -131,8 +131,8 @@ async def beta_access(
     elif not user.is_active:
         user.is_active = True
         user.subscription_active = True
-        if not user.subscription_tier:
-            user.subscription_tier = "beta"
+        if not user.subscription_tier or user.subscription_tier == "beta":
+            user.subscription_tier = "founding_member"
         await db.commit()
         await db.refresh(user)
 
