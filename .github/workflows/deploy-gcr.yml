@@ -31,13 +31,20 @@ jobs:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ secrets.GCP_REGION }}
           SERVICE: ${{ secrets.GCR_SERVICE_NAME }}
+          BETA_ACCESS_CODES: ${{ vars.BETA_ACCESS_CODES }}
         run: |
+          EXTRA_ENV_ARGS=()
+          if [ -n "$BETA_ACCESS_CODES" ]; then
+            EXTRA_ENV_ARGS+=(--update-env-vars "^@^BETA_ACCESS_CODES=$BETA_ACCESS_CODES")
+          fi
+
           gcloud run deploy "$SERVICE" \
             --project "$PROJECT_ID" \
             --region "$REGION" \
             --source youandinotai-api \
             --allow-unauthenticated \
             --port 8000 \
+            "${EXTRA_ENV_ARGS[@]}" \
             --quiet
 
       - name: Show URL
