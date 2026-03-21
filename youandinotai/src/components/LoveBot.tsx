@@ -12,7 +12,7 @@ import {
 import { ApiError, api } from '../lib/api';
 
 type LoveBotTab = 'compatibility' | 'quotes' | 'tips' | 'gifts';
-type TipCategory = 'pick_up_girls' | 'pick_up_men' | 'first_kiss';
+type TipCategory = 'attracting_partners_neutral' | 'attracting_partners_feminine' | 'attracting_partners_masculine' | 'first_kiss';
 
 interface User {
   display_name: string;
@@ -36,7 +36,7 @@ interface TipResponse {
 }
 
 interface GiftResponse {
-  for_her: boolean;
+  recipient: string;
   ideas: string[];
 }
 
@@ -50,8 +50,9 @@ type LoveBotResult =
 const FOUNDING_MEMBER_LINK = 'https://square.link/u/cxwjcn0s';
 
 const TIP_CATEGORY_OPTIONS: Array<{ value: TipCategory; label: string }> = [
-  { value: 'pick_up_girls', label: 'Dating Women' },
-  { value: 'pick_up_men', label: 'Dating Men' },
+  { value: 'attracting_partners_neutral', label: 'Soulmate Connection' },
+  { value: 'attracting_partners_feminine', label: 'Feminine Energy' },
+  { value: 'attracting_partners_masculine', label: 'Masculine Energy' },
   { value: 'first_kiss', label: 'First Kiss' },
 ];
 
@@ -76,7 +77,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<LoveBotResult>(null);
   const [error, setError] = useState<string | null>(null);
-  const [tipCategory, setTipCategory] = useState<TipCategory>('pick_up_girls');
+  const [tipCategory, setTipCategory] = useState<TipCategory>('attracting_partners_neutral');
   const [names, setNames] = useState({
     name1: user.display_name || 'You',
     name2: '',
@@ -138,8 +139,8 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
             <Heart className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white">Cupid LoveBot</h2>
-            <p className="text-xs text-pink-300">Premium relationship tools inside your account</p>
+            <h2 className="text-xl font-bold text-white tracking-widest uppercase">LoveBot</h2>
+            <p className="text-xs text-pink-300/80 font-medium">Because love is blind to gender.</p>
           </div>
         </div>
         <div className="flex gap-2">
@@ -258,7 +259,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
 
         {activeTab === 'tips' && (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
               {TIP_CATEGORY_OPTIONS.map((option) => (
                 <button
                   key={option.value}
@@ -308,24 +309,33 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
 
         {activeTab === 'gifts' && (
           <div className="space-y-6">
-            <div className="flex gap-2">
+            <div className="flex gap-2 text-center">
               <button
                 onClick={() =>
-                  runRequest(() => api.get<GiftResponse>('/lovebot/gifts?for_her=true'))
+                  runRequest(() => api.get<GiftResponse>('/lovebot/gifts?recipient=neutral'))
                 }
-                className="flex flex-1 flex-col items-center gap-1 rounded-xl border border-pink-500/20 bg-pink-900/40 py-3 text-pink-300 transition-colors hover:bg-pink-900/60"
+                className="flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-purple-500/30 bg-purple-900/20 py-4 shadow-[0_0_15px_rgba(168,85,247,0.15)] text-purple-300 transition-all hover:bg-purple-900/40 hover:scale-[1.02]"
               >
-                <span className="text-xs uppercase tracking-tighter">Ideas for</span>
-                <span className="font-bold uppercase tracking-widest text-white">Her</span>
+                <span className="text-[10px] uppercase tracking-widest opacity-80">Ideas for</span>
+                <span className="font-black uppercase tracking-[0.2em] text-white">Partner</span>
               </button>
               <button
                 onClick={() =>
-                  runRequest(() => api.get<GiftResponse>('/lovebot/gifts?for_her=false'))
+                  runRequest(() => api.get<GiftResponse>('/lovebot/gifts?recipient=feminine'))
                 }
-                className="flex flex-1 flex-col items-center gap-1 rounded-xl border border-blue-500/20 bg-blue-900/40 py-3 text-blue-300 transition-colors hover:bg-blue-900/60"
+                className="flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-pink-500/30 bg-pink-900/20 py-4 shadow-[0_0_15px_rgba(236,72,153,0.15)] text-pink-300 transition-all hover:bg-pink-900/40 hover:scale-[1.02]"
               >
-                <span className="text-xs uppercase tracking-tighter">Ideas for</span>
-                <span className="font-bold uppercase tracking-widest text-white">Him</span>
+                <span className="text-[10px] uppercase tracking-widest opacity-80">Ideas for</span>
+                <span className="font-black uppercase tracking-[0.2em] text-white">Her</span>
+              </button>
+              <button
+                onClick={() =>
+                  runRequest(() => api.get<GiftResponse>('/lovebot/gifts?recipient=masculine'))
+                }
+                className="flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl border border-blue-500/30 bg-blue-900/20 py-4 shadow-[0_0_15px_rgba(59,130,246,0.15)] text-blue-300 transition-all hover:bg-blue-900/40 hover:scale-[1.02]"
+              >
+                <span className="text-[10px] uppercase tracking-widest opacity-80">Ideas for</span>
+                <span className="font-black uppercase tracking-[0.2em] text-white">Him</span>
               </button>
             </div>
 
