@@ -52,6 +52,29 @@ jobs:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ secrets.GCP_REGION }}
           SERVICE: ${{ secrets.GCR_SERVICE_NAME }}
+          BETA_ACCESS_CODES: ${{ vars.BETA_ACCESS_CODES }}
         run: |
           URL=$(gcloud run services describe "$SERVICE" --project "$PROJECT_ID" --region "$REGION" --format='value(status.url)')
           echo "Deployed to $URL"
+
+          FIRST_BETA_CODE="${BETA_ACCESS_CODES%%,*}"
+          if [ -n "$FIRST_BETA_CODE" ]; then
+            HTTP_CODE=$(curl -sS -o /tmp/beta-access-response.txt -w '%{http_code}' \
+              -X POST \
+              -H 'Content-Type: application/json' \
+              -d "{\"code\":\"$FIRST_BETA_CODE\"}" \
+              "$URL/api/v1/auth/beta-access")
+
+            if [ "$HTTP_CODE" != "200" ]; then
+              echo "Beta access smoke test failed with HTTP $HTTP_CODE"
+              cat /tmp/beta-access-response.txt || true
+              echo "Recent Cloud Run errors:"
+              gcloud logging read \
+                "resource.type=cloud_run_revision AND resource.labels.service_name=$SERVICE AND severity>=ERROR" \
+                --project "$PROJECT_ID" \
+                --limit 20 \
+                --freshness=15m \
+                --format='value(textPayload)'
+              exit 1
+            fi
+          fi
