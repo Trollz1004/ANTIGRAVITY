@@ -64,11 +64,11 @@ jobs:
 
       # Wallet consistency check
       - name: Wallet consistency
-        run: bash scripts/wallet-consistency-check.sh
+        run: bash scripts/youandinotai/wallet-consistency-check.sh
 
       # Split consistency check
       - name: Split consistency
-        run: bash scripts/split-consistency-check.sh
+        run: bash scripts/youandinotai/split-consistency-check.sh
 
       # Secret scanner — block committed secrets
       - name: Secret scan
