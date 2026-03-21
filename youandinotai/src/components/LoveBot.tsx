@@ -103,7 +103,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
       } else if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('LoveBot could not complete that request right now.');
+        setError('Concierge could not complete that request right now.');
       }
     } finally {
       setLoading(false);
@@ -114,9 +114,9 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
     return (
       <div className="rounded-2xl border border-pink-500/20 bg-gray-900/50 p-8 text-center backdrop-blur-sm">
         <Heart className="mx-auto mb-4 h-16 w-16 animate-pulse text-pink-500" />
-        <h2 className="mb-2 text-2xl font-bold text-white">Unlock LoveBot</h2>
+        <h2 className="mb-2 text-2xl font-bold text-white">Unlock Concierge</h2>
         <p className="mx-auto mb-6 max-w-md text-gray-400">
-          LoveBot is reserved for Founding Member accounts with active premium access.
+          Concierge is reserved for Founding Member accounts with active premium access.
           Compatibility tools, romance prompts, dating tips, and gift ideas all unlock there.
         </p>
         <a
@@ -139,7 +139,7 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
             <Heart className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white tracking-widest uppercase">LoveBot</h2>
+            <h2 className="text-xl font-bold text-white tracking-widest uppercase">Concierge</h2>
             <p className="text-xs text-pink-300/80 font-medium">Because love is blind to gender.</p>
           </div>
         </div>
