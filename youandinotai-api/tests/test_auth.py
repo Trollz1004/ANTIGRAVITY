@@ -49,6 +49,9 @@ class TestPasswordHashing:
         hash2 = hash_password("same_password")
         assert hash1 != hash2  # Different salts
 
+    def test_verify_password_invalid_hash_fails_closed(self):
+        assert verify_password("anything", "not-a-bcrypt-hash") is False
+
 
 class TestJWTTokens:
     """Test JWT token creation and decoding."""
