@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 from app.config import get_settings
+from app.database import reconcile_legacy_schema
 from app.scheduler import setup_scheduler
 from app.routers import auth, boards, double_dates, events, health, lovebot, messages, metrics, privacy, profiles, support, swipe, users, verify, video, video_rooms, volunteering, webhooks
 
@@ -14,6 +15,7 @@ settings = get_settings()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    await reconcile_legacy_schema()
     # Startup: Start background scheduler
     scheduler = setup_scheduler()
     yield

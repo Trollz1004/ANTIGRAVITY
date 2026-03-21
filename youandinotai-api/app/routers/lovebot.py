@@ -54,7 +54,7 @@ async def get_love_quotes(
 
 @router.get("/tips", response_model=LoveBotTipResponse)
 async def get_dating_tips(
-    category: str = "pick_up_girls",
+    category: str = "attracting_partners_neutral",
     user: User = Depends(get_premium_user)
 ) -> LoveBotTipResponse:
     """Get expert dating tips and lessons."""
@@ -68,12 +68,12 @@ async def get_dating_tips(
 
 @router.get("/gifts", response_model=LoveBotGiftResponse)
 async def get_gift_ideas(
-    for_her: bool = True,
+    recipient: str = "neutral",
     user: User = Depends(get_premium_user)
 ) -> LoveBotGiftResponse:
     """Get personalized gift ideas for your soulmate."""
-    ideas = lovebot_service.get_gift_ideas(for_her)
+    ideas = lovebot_service.get_gift_ideas(recipient)
     return LoveBotGiftResponse(
-        for_her=for_her,
+        recipient=recipient,
         ideas=ideas
     )

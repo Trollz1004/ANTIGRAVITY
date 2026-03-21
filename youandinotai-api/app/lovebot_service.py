@@ -22,17 +22,23 @@ class LoveBotService:
         ]
         
         self.tips = {
-            "pick_up_girls": [
+            "attracting_partners_feminine": [
                 "Be yourself and be confident, but not arrogant.",
                 "Listen more than you talk.",
                 "Originality is better than common pickup lines.",
                 "Focus on shared interests."
             ],
-            "pick_up_men": [
+            "attracting_partners_masculine": [
                 "Show genuine interest in his passions.",
                 "Be direct but maintain a bit of mystery.",
                 "Smile and make eye contact.",
                 "Ask open-ended questions."
+            ],
+            "attracting_partners_neutral": [
+                "Respect boundaries and prioritize clear communication.",
+                "Show genuine curiosity in what makes them unique.",
+                "Emotional availability is the ultimate aphrodisiac.",
+                "Authenticity always wins over performing."
             ],
             "first_kiss": [
                 "Watch for body language cues.",
@@ -79,8 +85,8 @@ class LoveBotService:
             "message": "Astrological alignment analysis complete." if score > 50 else "The stars suggest a journey of discovery."
         }
 
-    def get_gift_ideas(self, for_her: bool = True) -> list[str]:
-        if for_her:
+    def get_gift_ideas(self, recipient: str = "neutral") -> list[str]:
+        if recipient == "feminine":
             return [
                 "A personalized photo album of shared memories.",
                 "A spa day or relaxation kit.",
@@ -88,12 +94,20 @@ class LoveBotService:
                 "A surprise weekend getaway.",
                 "A handwritten letter expressing your feelings."
             ]
+        elif recipient == "masculine":
+            return [
+                "A high-quality watch or tech gadget.",
+                "A custom leather wallet or bag.",
+                "Tickets to a game or concert.",
+                "A cooking or hobby-related workshop experience.",
+                "A framed map of where you first met."
+            ]
         return [
-            "A high-quality watch or tech gadget he's been wanting.",
-            "A custom leather wallet or bag.",
-            "Tickets to a game or concert he loves.",
-            "A cooking or hobby-related workshop experience.",
-            "A framed map of where you first met."
+            "An interactive experience class (cooking, pottery, art).",
+            "A customized star map of a significant date.",
+            "High-end matching comfort wear (like luxury robes).",
+            "A surprise weekend getaway trip.",
+            "An adventure or concert you can both enjoy."
         ]
 
 lovebot_service = LoveBotService()

@@ -36,3 +36,59 @@ async def check_db_health() -> bool:
         return True
     except Exception:
         return False
+
+
+async def reconcile_legacy_schema() -> None:
+    """Backfill legacy production columns that newer code now depends on.
+
+    Cloud Run deploys currently ship source code without running Alembic, so the
+    live database can lag behind the ORM. These idempotent ALTERs close the gap
+    for the specific columns that block auth, payments, and profile setup.
+    """
+
+    if settings.app_env.lower() == "test":
+        return
+
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.create_all)
+
+        if connection.dialect.name != "postgresql":
+            return
+
+        statements = (
+            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255)",
+            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS square_customer_id VARCHAR(255)",
+            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS date_of_birth DATE",
+            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS adult_verified_at TIMESTAMPTZ",
+            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE NOT NULL",
+            "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS location_enabled BOOLEAN DEFAULT TRUE NOT NULL",
+            "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS square_payment_id VARCHAR(255)",
+            "ALTER TABLE IF EXISTS webhook_events ADD COLUMN IF NOT EXISTS event_source_id VARCHAR(255)",
+            "ALTER TABLE IF EXISTS webhook_events ADD COLUMN IF NOT EXISTS event_source VARCHAR(50) DEFAULT 'square' NOT NULL",
+            "CREATE INDEX IF NOT EXISTS ix_users_square_customer_id ON users(square_customer_id)",
+        )
+
+        for statement in statements:
+            await connection.execute(text(statement))
+
+        await connection.execute(
+            text(
+                """
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1
+                        FROM information_schema.columns
+                        WHERE table_schema = 'public'
+                          AND table_name = 'webhook_events'
+                          AND column_name = 'stripe_event_id'
+                    ) THEN
+                        UPDATE webhook_events
+                        SET event_source_id = stripe_event_id
+                        WHERE event_source_id IS NULL;
+                    END IF;
+                END
+                $$;
+                """
+            )
+        )

@@ -60,10 +60,10 @@ def test_lovebot_gifts_returns_ideas_for_premium_user(client):
 
     app.dependency_overrides[get_current_user] = override_current_user
     try:
-        response = client.get("/api/v1/lovebot/gifts?for_her=false")
+        response = client.get("/api/v1/lovebot/gifts?recipient=masculine")
         assert response.status_code == 200, response.text
         payload = response.json()
-        assert payload["for_her"] is False
+        assert payload["recipient"] == "masculine"
         assert isinstance(payload["ideas"], list)
         assert len(payload["ideas"]) >= 3
     finally:
