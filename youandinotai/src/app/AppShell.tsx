@@ -4,7 +4,7 @@ import { useAuth } from '../lib/auth';
 
 const NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolean }[] = [
   { to: '/app', icon: Compass, label: 'Discover', end: true },
-  { to: '/app/lovebot', icon: Sparkles, label: 'LoveBot' },
+  { to: '/app/lovebot', icon: Sparkles, label: 'Concierge' },
   { to: '/app/matches', icon: Heart, label: 'Matches' },
   { to: '/app/inbox', icon: MessageCircle, label: 'Messages' },
   { to: '/app/boards', icon: Users, label: 'Boards' },
