@@ -43,6 +43,7 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - `origin/main` now includes the March 19 production repair commits
 - The live continuity vault path on Sabretooth is `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
 - `ENVwhen ai loses.env` and `UNIVERSAL-NODE.env` cover every populated live `.env` key
+- A separate imported credential bundle now lives at `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\GLOBALNODE-CREDENTIALS-2026-03-21.env` for node/GCR/admin/Codex service material moved out of `C:\Downloads`
 - OpenClaw and Ollama remain healthy on Sabretooth
 - Sabretooth OpenClaw now uses local `qwen2.5:7b` primary, local `qwen2.5:3b` fallback, and `nomic-embed-text` memory search with no cloud model providers
 - 9020 now carries crossfire, marketing, and the isolated support gateway

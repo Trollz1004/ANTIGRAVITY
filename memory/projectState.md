@@ -38,6 +38,7 @@ This file is the short-form current state. For canonical repo truth, use:
 - Sabretooth is the authoritative live node and current command post.
 - The continuity backup root on this machine is `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`.
 - The continuity env backups fully cover the populated keys in the live `.env`.
+- Imported node/GCR/Codex credentials from `C:\Downloads` were moved into the approved vault holding file at `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\GLOBALNODE-CREDENTIALS-2026-03-21.env`; the loose Downloads copy was removed.
 - Josh's standing operating principle is transparency and no locked doors: approved infrastructure, routing, and recovery-critical truth should remain documented and recoverable through the repo and approved vault path, not hidden in private agent context.
 - The live OpenClaw configs on Sabretooth, 9020, and T5500 are now self-hosted only for model inference.
 - T5500 was used to execute the backend recovery deploy.
