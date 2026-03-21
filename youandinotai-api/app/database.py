@@ -56,6 +56,7 @@ async def reconcile_legacy_schema() -> None:
             return
 
         statements = (
+            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS display_name VARCHAR(100) DEFAULT 'User' NOT NULL",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255)",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS square_customer_id VARCHAR(255)",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS date_of_birth DATE",
