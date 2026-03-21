@@ -115,51 +115,45 @@ async def beta_access(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> AuthTokenResponse:
-    try:
-        auth_limiter.check(request)
-        normalized_code = _normalize_beta_code(payload.code)
-        allowed_codes = get_settings().beta_access_code_list
-        if not allowed_codes or normalized_code not in allowed_codes:
-            raise HTTPException(status_code=401, detail="Invalid beta access code")
+    auth_limiter.check(request)
+    normalized_code = _normalize_beta_code(payload.code)
+    allowed_codes = get_settings().beta_access_code_list
+    if not allowed_codes or normalized_code not in allowed_codes:
+        raise HTTPException(status_code=401, detail="Invalid beta access code")
 
-        settings = get_settings()
-        email, password_seed, display_name = _beta_identity(normalized_code, settings.jwt_secret)
-        user = await db.scalar(select(User).where(User.email == email))
+    settings = get_settings()
+    email, password_seed, display_name = _beta_identity(normalized_code, settings.jwt_secret)
+    user = await db.scalar(select(User).where(User.email == email))
 
-        if not user:
-            user = User(
-                id=uuid.uuid4(),
-                email=email,
-                password_hash=_beta_password_hash(password_seed, settings.jwt_secret, normalized_code),
-                display_name=display_name,
-                date_of_birth=datetime(2000, 1, 1, tzinfo=timezone.utc).date(),
-                adult_verified_at=datetime.now(timezone.utc),
-                bot_shield_verified=True,
-                subscription_tier="founding_member",
-                subscription_active=True,
-                is_active=True,
-            )
-            db.add(user)
-            await db.commit()
-            await db.refresh(user)
-        elif not user.is_active:
-            user.is_active = True
-            user.subscription_active = True
-            if not user.subscription_tier or user.subscription_tier == "beta":
-                user.subscription_tier = "founding_member"
-            await db.commit()
-            await db.refresh(user)
-
-        return AuthTokenResponse(
-            access_token=create_access_token(str(user.id)),
-            refresh_token=create_refresh_token(str(user.id)),
-            user_id=user.id,
+    if not user:
+        user = User(
+            id=uuid.uuid4(),
+            email=email,
+            password_hash=_beta_password_hash(password_seed, settings.jwt_secret, normalized_code),
+            display_name=display_name,
+            date_of_birth=datetime(2000, 1, 1, tzinfo=timezone.utc).date(),
+            adult_verified_at=datetime.now(timezone.utc),
+            bot_shield_verified=True,
+            subscription_tier="founding_member",
+            subscription_active=True,
+            is_active=True,
         )
-    except HTTPException:
-        raise
-    except Exception as e:
-        import traceback
-        raise HTTPException(status_code=500, detail=traceback.format_exc())
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+    elif not user.is_active:
+        user.is_active = True
+        user.subscription_active = True
+        if not user.subscription_tier or user.subscription_tier == "beta":
+            user.subscription_tier = "founding_member"
+        await db.commit()
+        await db.refresh(user)
+
+    return AuthTokenResponse(
+        access_token=create_access_token(str(user.id)),
+        refresh_token=create_refresh_token(str(user.id)),
+        user_id=user.id,
+    )
 
 
 @router.post("/refresh", response_model=AuthTokenResponse)
