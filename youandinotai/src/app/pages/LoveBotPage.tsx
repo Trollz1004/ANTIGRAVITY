@@ -11,7 +11,7 @@ export function LoveBotPage() {
     <div className="p-4 md:p-8 h-full max-w-5xl mx-auto stagger-children">
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tight">
-          Love Consultant
+          Romance Concierge
         </h1>
         <p className="text-gray-400">
           Premium-only compatibility tools, romance prompts, dating advice, and gift ideas.
