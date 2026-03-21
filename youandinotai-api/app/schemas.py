@@ -442,5 +442,5 @@ class LoveBotTipResponse(BaseModel):
 
 
 class LoveBotGiftResponse(BaseModel):
-    for_her: bool
+    recipient: str
     ideas: list[str]
