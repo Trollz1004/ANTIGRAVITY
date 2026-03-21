@@ -86,6 +86,31 @@ async def reconcile_legacy_schema() -> None:
                         SELECT 1
                         FROM information_schema.columns
                         WHERE table_schema = 'public'
+                          AND table_name = 'users'
+                          AND column_name = 'hashed_password'
+                    ) THEN
+                        UPDATE users
+                        SET password_hash = COALESCE(password_hash, hashed_password)
+                        WHERE password_hash IS NULL;
+
+                        ALTER TABLE users
+                        ALTER COLUMN hashed_password DROP NOT NULL;
+                    END IF;
+                END
+                $$;
+                """
+            )
+        )
+
+        await connection.execute(
+            text(
+                """
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1
+                        FROM information_schema.columns
+                        WHERE table_schema = 'public'
                           AND table_name = 'webhook_events'
                           AND column_name = 'stripe_event_id'
                     ) THEN
