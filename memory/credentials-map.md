@@ -1,6 +1,6 @@
 # CREDENTIALS MAP — WHERE KEYS LIVE (PATHS ONLY)
 
-**Last Updated**: 2026-03-14
+**Last Updated**: 2026-03-21
 **RULE**: This file stores PATHS to credentials, NEVER the values themselves. Values stay in vault files only.
 
 ## Vaults
@@ -12,6 +12,7 @@
 | Fallback vault | E:\WHEN OPUS FORGETS\ | Emergency backup (never push) |
 | Hidden local | C:\Users\joshl\.antigravity\master.env | Local copy |
 | Cloud backup | OneDrive\...\MASTER-UNIVERSAL-ENV-TROLLZ1004.env | Cloud sync |
+| Imported node/GCR bundle | C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\GLOBALNODE-CREDENTIALS-2026-03-21.env | Separate holding file for imported node, GCR admin, and Codex service credentials |
 | GitHub Secrets | Trollz1004/ANTIGRAVITY | 88 secrets |
 | GitHub Variables | Trollz1004/ANTIGRAVITY | 58 readable vars |
 
@@ -30,6 +31,7 @@
 |------------|----------|
 | Gemini API Key | .env → GEMINI_API_KEY (rotate if exposed) |
 | GCP Service Account | E:\.claude\*.json |
+| Imported GCR/Admin env bundle | C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\GLOBALNODE-CREDENTIALS-2026-03-21.env |
 | GCP Project | ai-collab4kids |
 
 ## Telegram Bot
