@@ -62,6 +62,7 @@
 - **9020 node role:** crossfire, marketing workloads, the isolated date-app SupportClaw on `C:`, and the openclaw/support sandbox lane on `D:`
 - **T5500 secondary-drive role:** `E:\ANTIGRAVITY-CLAWBOTS` is the isolated Manus / Crossfire / media sandbox root
 - **T5500 Manus dashboard validation note:** build passed with analytics placeholder warnings in `index.html`; after clearing a stale `EADDRINUSE` condition, `node dist/index.js` stayed healthy and served local HTTP `200` on port `3000`
+- **Manus provider connector note:** the Manus account under `joshlcoleman@gmail.com` now has OpenAI connected alongside Anthropic, Gemini, Perplexity, and Grok; OpenAI uses the standard API base URL and the key remains outside repo memory
 - **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
 - **Legacy DAO/platform material:** old repos and archived briefs are recovery-library inputs only; reusable elements must be ported intentionally into the current repo baseline. See `briefings/DAO-RECOVERY-CANDIDATES.md`.
 - **Sandbox policy:** future experimental or brainstorming work starts in the sandbox repo, not in `C:\ANTIGRAVITY`.

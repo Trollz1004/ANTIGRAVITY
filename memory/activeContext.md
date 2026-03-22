@@ -7,6 +7,7 @@
 - **Node lanes are isolated:** Claude Dispatch stays on Sabretooth `E:`, 9020 owns the `D:` sandbox lane, and T5500 owns the `E:\ANTIGRAVITY-CLAWBOTS` Manus lane.
 - **Continuity vault is current:** the live continuity root is `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`.
 - **Current sandbox validation focus:** T5500 now has the new Manus dashboard scaffold installed, built, and locally serving on port `3000`.
+- **Manus provider stack:** OpenAI is now connected alongside Anthropic, Gemini, Perplexity, and Grok on the Manus account lane.
 
 ## Verified State
 
