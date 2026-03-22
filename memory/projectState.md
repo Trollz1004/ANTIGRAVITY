@@ -45,7 +45,7 @@ This file is the short-form current state. For canonical repo truth, use:
 - Sabretooth `E:` is now reserved for the Claude Dispatch / coworker lane at `E:\claudes-claw`.
 - 9020 is now the active node for crossfire, marketing workloads, isolated date-app support on `C:`, and the sandboxed openclaw/support lane on `D:`.
 - T5500 no longer carries the temporary support runtime and is free for heavier media/video workloads; its `E:\ANTIGRAVITY-CLAWBOTS` root is now the Manus / Crossfire / media sandbox lane.
-- The new Manus dashboard scaffold was imported on T5500, and `corepack pnpm install --frozen-lockfile`, `pnpm check`, and `pnpm build` all passed there.
+- The new Manus dashboard scaffold was imported on T5500, `corepack pnpm install --frozen-lockfile`, `pnpm check`, and `pnpm build` all passed there, and `node dist/index.js` served `http://127.0.0.1:3000/` with HTTP `200` after clearing a stray old process.
 - Legacy DAO/platform repos are design recovery sources only, not live implementation truth; approved recovery candidates are tracked in `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`.
 - Future brainstorming, experimental platforms, and unapproved new product work now start in the dedicated sandbox repo, not in `C:\ANTIGRAVITY`.
 - 9020 stale scheduled-task relaunch points are now disabled; the sandbox lane remains populated and support/date-app paths were left untouched.
@@ -62,4 +62,4 @@ This file is the short-form current state. For canonical repo truth, use:
 1. The stale `CLOUDFLARE_API_TOKEN` in `.env` remains documentation debt, but not a live deploy blocker.
 2. Docker is not part of the current Sabretooth baseline.
 3. `crossfire` on 9020 still relies on detached processes rather than a service manager.
-4. T5500 Manus dashboard build is proven, but a full clean runtime boot is not yet fully captured.
+4. T5500 Manus dashboard is runnable locally, but its analytics placeholders still need real values if you want those warnings gone.
