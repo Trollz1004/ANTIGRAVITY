@@ -36,7 +36,7 @@
 | 9020 SupportClaw | LIVE | Isolated support gateway at `http://192.168.0.5:18895` with Telegram disabled and state outside the repo |
 | 9020 sandbox lane | ISOLATED | `D:\claws\openclaw-9020` populated from sanitized Sabretooth export; stale relaunch tasks disabled in the elevated admin pass |
 | T5500 Manus lane | ISOLATED | `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian` materially restored from sanitized Sabretooth export |
-| T5500 Manus dashboard | VALIDATED | new scaffold imported; `corepack pnpm install --frozen-lockfile`, `pnpm check`, and `pnpm build` all passed |
+| T5500 Manus dashboard | RUNNABLE | new scaffold imported; install/check/build passed and `node dist/index.js` served `http://127.0.0.1:3000/` with `200` after clearing a stray old process |
 | Sabretooth Claude lane | ISOLATED | `E:\claudes-claw` remains the Claude Dispatch / coworker lane |
 
 ## Product State
@@ -61,7 +61,7 @@
 - **Sabretooth secondary-drive role:** `E:\claudes-claw` is reserved for Claude Dispatch / coworker work only
 - **9020 node role:** crossfire, marketing workloads, the isolated date-app SupportClaw on `C:`, and the openclaw/support sandbox lane on `D:`
 - **T5500 secondary-drive role:** `E:\ANTIGRAVITY-CLAWBOTS` is the isolated Manus / Crossfire / media sandbox root
-- **T5500 Manus dashboard validation note:** build passed with analytics placeholder warnings in `index.html`; runtime boot looks possible but was not fully proven beyond a short non-failing process start
+- **T5500 Manus dashboard validation note:** build passed with analytics placeholder warnings in `index.html`; after clearing a stale `EADDRINUSE` condition, `node dist/index.js` stayed healthy and served local HTTP `200` on port `3000`
 - **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
 - **Legacy DAO/platform material:** old repos and archived briefs are recovery-library inputs only; reusable elements must be ported intentionally into the current repo baseline. See `briefings/DAO-RECOVERY-CANDIDATES.md`.
 - **Sandbox policy:** future experimental or brainstorming work starts in the sandbox repo, not in `C:\ANTIGRAVITY`.
@@ -73,7 +73,7 @@
 1. **Vault continuity snapshots should stay in sync with any future real credential change.**
 2. **The stale Cloudflare API token in `.env` is still informational debt, not an operational blocker.**
 3. **`crossfire` on 9020 still uses detached processes; convert those to scheduled tasks or services if reboot persistence is required.**
-4. **T5500 Manus dashboard now builds, but runtime boot is only partially verified and analytics placeholders still warn until real values are supplied.**
+4. **T5500 Manus dashboard is runnable locally, but analytics placeholders still warn until real values are supplied.**
 
 ## Recent Pushed Commits
 
