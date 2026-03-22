@@ -1,6 +1,6 @@
 # Briefings — AI Team Index
 
-Last updated: 2026-03-14
+Last updated: 2026-03-22
 
 Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 
@@ -34,6 +34,12 @@ Current deployment shorthand:
 - frontend: `https://youandinotai.com`
 - multiplayer backend: `https://youandinotai-backend-731395189513.us-east1.run.app`
 - API: `https://api.youandinotai.com`
+
+## Historical Briefings
+
+- Older dated snapshots and superseded sync notes now live in `briefings/archive/`.
+- Keep current source-of-truth files in the top-level `briefings/` folder.
+- Do not move files that are still referenced by active prompts, scripts, or automation without updating those references.
 
 ## Payment / Governance Truth
 

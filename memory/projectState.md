@@ -1,6 +1,6 @@
 # PROJECT STATE — LIVE BASELINE
 
-**Last Updated:** 2026-03-20
+**Last Updated:** 2026-03-22
 
 This file is the short-form current state. For canonical repo truth, use:
 
@@ -16,7 +16,7 @@ This file is the short-form current state. For canonical repo truth, use:
 | Authoritative root | `C:\ANTIGRAVITY` |
 | Branch | `main` |
 | Head | `main` (see git for current commit) |
-| Worktree | Clean on March 19, 2026 |
+| Worktree | Clean on March 22, 2026 |
 | Frontend | Cloudflare Pages |
 | Backend | FastAPI + PostgreSQL on Cloud Run |
 | Payments | Square |
@@ -42,10 +42,12 @@ This file is the short-form current state. For canonical repo truth, use:
 - Josh's standing operating principle is transparency and no locked doors: approved infrastructure, routing, and recovery-critical truth should remain documented and recoverable through the repo and approved vault path, not hidden in private agent context.
 - The live OpenClaw configs on Sabretooth, 9020, and T5500 are now self-hosted only for model inference.
 - T5500 was used to execute the backend recovery deploy.
-- 9020 is now the active node for crossfire, marketing workloads, and isolated date-app support.
-- T5500 no longer carries the temporary support runtime and is free for heavier media/video workloads.
+- Sabretooth `E:` is now reserved for the Claude Dispatch / coworker lane at `E:\claudes-claw`.
+- 9020 is now the active node for crossfire, marketing workloads, isolated date-app support on `C:`, and the sandboxed openclaw/support lane on `D:`.
+- T5500 no longer carries the temporary support runtime and is free for heavier media/video workloads; its `E:\ANTIGRAVITY-CLABOTS` root is now the Manus / Crossfire / media sandbox lane.
 - Legacy DAO/platform repos are design recovery sources only, not live implementation truth; approved recovery candidates are tracked in `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`.
 - Future brainstorming, experimental platforms, and unapproved new product work now start in the dedicated sandbox repo, not in `C:\ANTIGRAVITY`.
+- 9020 still has five stale scheduled tasks that need one elevated admin disable pass; the lane itself is already populated and support/date-app paths were left untouched.
 
 ## Account Routing Note
 

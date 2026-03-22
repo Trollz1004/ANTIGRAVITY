@@ -1,7 +1,7 @@
 # REPOSITORY RECORD — SABRETOOTH LIVE STATE
 
-> **Date:** March 20, 2026
-> **Status:** `main` clean, `origin/main` updated, frontend and backend live
+> **Date:** March 22, 2026
+> **Status:** `main` clean, frontend/backend live, node sandbox lanes isolated
 > **Authority:** Joshua Coleman
 
 ---
@@ -24,9 +24,9 @@
 | Sabretooth repo | LIVE | `C:\ANTIGRAVITY` on `main` |
 | Frontend | LIVE | `https://youandinotai.com/api/v1/health` returns healthy JSON |
 | Backend | LIVE | Cloud Run service `dateapp-backend` in `us-east1` fully configured (Square + SMTP) |
-| Backend revision | LIVE | Revision `00013-mkw` serving 100% [status: ok, square: ready, email: ready] |
+| Backend revision | LIVE | Revision `dateapp-backend-00028-zsk` serving the repaired beta-access flow |
 | GitHub deploy workflow | PASS | `deploy-gcr.yml` fixed; workflow run `23308309685` succeeded |
-| Backend tests | PASS | `67 passed` on March 19, 2026 |
+| Backend tests | PASS | Targeted live auth/payment suite `22 passed` after the March 22 repair |
 | OpenClaw gateway | LIVE | `http://127.0.0.1:18789/healthz` |
 | OpenClaw model runtime | LIVE | Sabretooth, 9020, and T5500 configs are self-hosted only (Ollama/local inference; no cloud model providers) |
 | Ollama | LIVE | `http://127.0.0.1:11434/api/tags` |
@@ -34,6 +34,9 @@
 | 9020 crossfire backend | LIVE | Python 3.12 installed; `http://localhost:8000/api/health` returns `{"status":"ok"}` |
 | 9020 crossfire frontend | LIVE | Vite dev server responding on `http://localhost:5173` |
 | 9020 SupportClaw | LIVE | Isolated support gateway at `http://192.168.0.5:18895` with Telegram disabled and state outside the repo |
+| 9020 sandbox lane | ISOLATED | `D:\claws\openclaw-9020` populated from sanitized Sabretooth export; stale admin-only tasks still need one elevated disable pass |
+| T5500 Manus lane | ISOLATED | `E:\ANTIGRAVITY-CLABOTS\manus-claw\ForTheKids-Guardian` materially restored from sanitized Sabretooth export |
+| Sabretooth Claude lane | ISOLATED | `E:\claudes-claw` remains the Claude Dispatch / coworker lane |
 
 ## Product State
 
@@ -45,6 +48,7 @@
 - **Runtime config restored:** Square Location ID corrected to `LY5GN09F5AN83`; SMTP configured for `aicollab4kids@gmail.com`
 - **New Feature:** LoveBot premium love consultant (compatibility, quotes, tips, gift ideas) added to API
 - **Runtime deps restored:** missing scheduler/file runtime deps were added to `requirements.txt`
+- **Live auth flow restored:** beta access codes and authenticated `/api/v1/auth/me` now work live again
 
 ## Operational Notes
 
@@ -52,7 +56,9 @@
 - **OpenClaw model baseline:** Sabretooth now runs `qwen2.5:7b` primary, `qwen2.5:3b` fallback, and `nomic-embed-text` for memory search with no cloud model providers in the live config
 - **Cloud Run source deploy:** the repaired GitHub workflow now deploys from `youandinotai-api` source instead of the broken container path
 - **T5500 role:** used for backend recovery and deploy execution when Sabretooth needed the live service restored; its temporary support container is now offline so the box can stay available for heavier media/build work
-- **9020 node role:** crossfire, marketing workloads, and the isolated date-app SupportClaw now run here
+- **Sabretooth secondary-drive role:** `E:\claudes-claw` is reserved for Claude Dispatch / coworker work only
+- **9020 node role:** crossfire, marketing workloads, the isolated date-app SupportClaw on `C:`, and the openclaw/support sandbox lane on `D:`
+- **T5500 secondary-drive role:** `E:\ANTIGRAVITY-CLABOTS` is the isolated Manus / Crossfire / media sandbox root
 - **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
 - **Legacy DAO/platform material:** old repos and archived briefs are recovery-library inputs only; reusable elements must be ported intentionally into the current repo baseline. See `briefings/DAO-RECOVERY-CANDIDATES.md`.
 - **Sandbox policy:** future experimental or brainstorming work starts in the sandbox repo, not in `C:\ANTIGRAVITY`.
@@ -64,6 +70,7 @@
 1. **Vault continuity snapshots should stay in sync with any future real credential change.**
 2. **The stale Cloudflare API token in `.env` is still informational debt, not an operational blocker.**
 3. **`crossfire` on 9020 still uses detached processes; convert those to scheduled tasks or services if reboot persistence is required.**
+4. **9020 still has five stale scheduled tasks that require one truly elevated admin pass to disable cleanly.**
 
 ## Recent Pushed Commits
 
@@ -75,4 +82,4 @@
 
 ---
 
-*This file is the repo-level state summary for Sabretooth as of March 20, 2026.*
+*This file is the repo-level state summary for Sabretooth as of March 22, 2026.*

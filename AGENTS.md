@@ -196,19 +196,25 @@ composition may not be altered, reduced, or replaced without Josh's explicit ord
 
 ---
 
-## REPO ISOLATION & E DRIVE POLICY (AS OF 2026-03-21)
+## REPO ISOLATION & DRIVE POLICY (AS OF 2026-03-22)
 
 **C:\ANTIGRAVITY (main repo)** = production-quality, approved code only.
 Nothing merges to main without 100% checks passing AND Josh's explicit approval.
 
-**E drive / isolated repos** = holding area for anything not yet ready for main:
+**Secondary drives / isolated repos** = holding area for anything not yet ready for main:
 - Untested LLM setups (openclaw configs, model routing experiments, local inference configs)
 - Any LLM infrastructure or model configuration that hasn't been validated with confidence
 - Experimental AI integrations not yet proven stable enough for production
 
 **Rule:** LLM infrastructure setups, openclaw configurations, and experimental model routing
-stay on E drive or in a dedicated sandbox repo until Josh decides they're ready to graduate.
+stay on a node's secondary drive or in a dedicated sandbox repo until Josh decides they're ready to graduate.
 They do not automatically become part of the live codebase.
+
+**Current isolated node lanes:**
+- **Sabretooth `E:`** -> `E:\claudes-claw` = Claude Dispatch / coworker lane only
+- **9020 `D:`** -> `D:\claws\openclaw-9020` and `D:\sandbox-repos\...` = openclaw/support sandbox lane only
+- **T5500 `E:`** -> `E:\ANTIGRAVITY-CLABOTS\manus-claw\ForTheKids-Guardian` plus `dispatch`, `memory`, and media folders = Manus / Crossfire / media sandbox lane only
+- **Do not put these lanes on node `C:` drives** except for the existing live support/date-app installs that are already intentionally on `C:`
 
 **Sandbox repo:** `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git`
 New ideas, experimental platforms, and speculative automation go here first.
@@ -287,10 +293,11 @@ New ideas, experimental platforms, and speculative automation go here first.
 | Node | Drive | Role |
 |------|-------|------|
 | SABRETOOTH | C: | Live command post — primary |
-| SABRETOOTH | E: | LLM/experimental isolation — NOT live runtime base |
+| SABRETOOTH | E: | Claude Dispatch / coworker lane — isolated sandbox only |
 | T5500 | C: | Remote utility / heavy media-build node — SSH reachable (192.168.0.15) |
-| T5500 | E: | Legacy Docker — retired |
-| 9020 | C: | Remote marketing/ops/support — SSH reachable (192.168.0.5) |
+| T5500 | E: | Manus / Crossfire / media sandbox lane (`E:\ANTIGRAVITY-CLABOTS`) |
+| 9020 | C: | Remote marketing/ops/support — SSH reachable (192.168.0.5); live support/date-app paths stay here |
+| 9020 | D: | OpenClaw/support sandbox lane (`D:\claws`, `D:\sandbox-repos`) |
 
 - 9020 SSH: `ssh -i ~/.ssh/id_ed25519 joshl@192.168.0.5` (cmd.exe shell)
 - 9020 has NO git push creds — use bundle relay
