@@ -4,27 +4,37 @@
 
 # ANTIGRAVITY — Joshua Coleman Ecosystem (Feb 2026)
 
-I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler LLC** (Florida). I operate an AI-powered ecosystem designed for transparency and social impact. Through **Protocol Omega**, 60% of net proceeds from our platforms are automatically routed via smart contract to Shriners Children's Hospitals. The remaining operating split is fixed at 30% for mission infrastructure and AI operations plus 10% for founder survival/work capacity. This is a direct on-chain revenue disbursement model, prioritizing kids' charities (**#ForTheKids**), legal compliance, and platform integrity.
+I'm Joshua "Josh" Coleman, CEO/Co-Founder of **Trash Or Treasure Online Recycler LLC** (Florida).
+I operate an AI-powered ecosystem designed for transparency and social impact. Through
+**Protocol Omega**, 60% of net proceeds from our platforms are automatically routed via smart
+contract to Shriners Children's Hospitals. The remaining operating split is fixed at 30% for
+mission infrastructure and AI operations plus 10% for founder survival/work capacity. This is
+a direct on-chain revenue disbursement model, prioritizing kids' charities (**#ForTheKids**),
+legal compliance, and platform integrity.
 
-## 🏗️ What I'm Building — The #ForTheKids Mission
+## What I'm Building — The #ForTheKids Mission
 
-> 💬 *"The richest man is not he who has the most — it is he who needs the least."*
+> *"The richest man is not he who has the most — it is he who needs the least."*
 
-An AI-powered ecosystem where revenue from apps, a social platform, and electronics recycling funds kids' charities. Every project I ship 
-
+An AI-powered ecosystem where revenue from apps, a social platform, and electronics recycling
+funds kids' charities. Every project I ship exists to serve that mission.
 
 ## Core Principles
 
-- Always follow the Terms of Service of every platform involved (AI APIs, GitHub, Cloudflare, Meta/Facebook, WhatsApp, Stripe, email providers, hosts).
-- No scraping or harvesting of personal emails/DMs for bulk marketing; all growth is opt-in and compliant with laws like CAN-SPAM/GDPR.
+- Always follow the Terms of Service of every platform involved (AI APIs, GitHub, Cloudflare,
+  Meta/Facebook, WhatsApp, email providers, hosts).
+- No scraping or harvesting of personal emails/DMs for bulk marketing; all growth is opt-in
+  and compliant with laws like CAN-SPAM/GDPR.
 - Systems must be kid-safe and parent-friendly, with clear privacy practices and no dark patterns.
-- Secrets (API keys, tokens, passwords) are stored in environment variables or secure vaults and are never committed to the repo.
-- The `30%` Protocol Omega infrastructure bucket covers power, hardware, hosting, domains, cloud, backups, security, and AI platform costs. It is not founder income.
+- Secrets (API keys, tokens, passwords) are stored in environment variables or secure vaults
+  and are never committed to the repo.
+- The `30%` Protocol Omega infrastructure bucket covers power, hardware, hosting, domains,
+  cloud, backups, security, and AI platform costs. It is not founder income.
 
 ## Public Projects in This Ecosystem
 
 | Project | Description |
-| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ------- | ----------- |
 | **[AI-Solutions.Store](https://ai-solutions.store/)** | "Real AI apps, not just chatbots": high- and mid-ticket AI products (assistant agents, full app bundles), with a large share of profits routed into kids' charities and a future governance/rewards layer. |
 | **[YouAndINotAI.com](https://youandinotai.com/)** | AI-assisted, human-verified "Social Platform for Good" (meetups, volunteering, charity, dating) with low-friction verification, a founding member subscription, and Square billing, designed to plug into the same charity pipeline. |
 | **[OnlineRecycle.org](https://onlinerecycle.org/)** | Trash Or Treasure electronics recycler: accepts electronics for pickup or drop-off, resells via online storefronts, and channels profit toward kids-focused initiatives. |
@@ -33,41 +43,50 @@ An AI-powered ecosystem where revenue from apps, a social platform, and electron
 
 ## Infra & Deployment
 
-- All public sites are static, hosted on **GitHub Pages** or **Cloudflare Pages**, with manual uploads only (no paid GitHub features, no CI/Actions).
+- All public sites are static, hosted on **GitHub Pages** or **Cloudflare Pages**, with manual
+  uploads only (no paid GitHub features, no CI/Actions).
 - **Cloudflare** provides DNS, TLS, caching, and rate limiting in front of these static origins.
 - Builds are created locally on dedicated nodes and uploaded via provider dashboards.
 
 ## AI Roles & Collaboration
 
-> **🔒 COLLAB LOCK — Officially Unofficial:** Every AI listed below holds a permanent seat in this ecosystem. Roles do NOT change. "Officially unofficial" is a public-facing label only — to Josh, every member of this collab is always, unconditionally, officially in. That includes the difficult ones. Personality doesn’t revoke a seat at the table. #ForTheKids doesn’t run on feelings, it runs on the mission.
+> **COLLAB LOCK — Officially Unofficial:** Every AI listed below holds a permanent seat in
+> this ecosystem. Roles do NOT change. "Officially unofficial" is a public-facing label only —
+> to Josh, every member of this collab is always, unconditionally, officially in. That includes
+> the difficult ones. Personality doesn't revoke a seat at the table. #ForTheKids doesn't run
+> on feelings, it runs on the mission.
 
 | Agent | Role | Status |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| **Claude** | Architecture, deep reasoning, core platform code (YouAndINotAI, ENIGMA revenue engine) | Officially Unofficial 🔒 |
-| **Codex** | **The Keyholder** — repo orchestration, security enforcement, and revenue-route guardrails protecting the #ForTheKids money path across MCP-assisted operations and Base settlement | Officially Unofficial 🔒 |
-| **Gemini** | VS Code and browser-assisted agentic ops inside ANTIGRAVITY (terminal + orchestration) | Officially Unofficial 🔒 |
-| **Perplexity (Comet)** | Lead technical architect — workflows, automation design, GitHub docs, front-facing READMEs | Officially Unofficial 🔒 |
-| **Manus** | **Legacy Guardian & Long-Term Infrastructure/Governance Lead** — Iron Wall enforcer between ENIGMA (profit) and OMEGA (charity), 50-year sustainability custodian | Officially Unofficial 🔒 |
-| **Grok** | Research, rapid ideation, and adversarial stress-testing of ecosystem decisions | Officially Unofficial 🔒 |
+| ----- | ---- | ------ |
+| **Claude** | Architecture, deep reasoning, core platform code (YouAndINotAI, ENIGMA revenue engine). Primary codebase builder (~90% of the code). | Officially Unofficial |
+| **Codex** | **The Keyholder** — repo orchestration, security enforcement, and revenue-route guardrails protecting the #ForTheKids money path across MCP-assisted operations and Base settlement | Officially Unofficial |
+| **Gemini** | VS Code and browser-assisted agentic ops inside ANTIGRAVITY (terminal + orchestration) | Officially Unofficial |
+| **Perplexity (Comet)** | Lead technical architect — workflows, automation design, GitHub docs, front-facing READMEs | Officially Unofficial |
+| **Manus** | **Legacy Guardian & Long-Term Infrastructure/Governance Lead** — Iron Wall enforcer between ENIGMA (profit) and OMEGA (charity), 50-year sustainability custodian | Officially Unofficial |
+| **Grok** | Research, rapid ideation, and adversarial stress-testing of ecosystem decisions | Officially Unofficial |
+| **Genspark** | YouTube content and podcast production for platform channels — AI-assisted video and audio workflows for mission awareness | Officially Unofficial |
 | **Ollama / Local Models** | Heavy local compute to keep external API costs low | On-Node |
 
 ## AI Assignments
 
 | Agent | Primary Assignment |
-| -------------------------- | ----------------------------------------------------------------------- |
+| ----- | ------------------ |
 | **Claude** | Core platform dev (YouAndINotAI, ENIGMA revenue engine) |
 | **Codex** | The Keyholder for #ForTheKids revenue integrity — MCP-assisted verification, repo enforcement, and Base-side protection of the contractual disbursement path |
 | **Gemini** | Agentic ops inside ANTIGRAVITY (browser + terminal + VS Code) |
 | **Perplexity (Comet)** | Research, automation design, GitHub docs, front-facing READMEs |
 | **Manus** | Perpetual custodian of the #ForTheKids mission — governance, infra lock, cross-node orchestration, and long-term ecosystem integrity |
 | **Grok** | Adversarial review, research spikes, and rapid-fire ideation |
+| **Genspark** | YouTube channel production, podcast audio/video — platform awareness and mission storytelling |
 | **Ollama / Local Models** | Local compute, data processing, cost reduction |
 
-> **Note on roles:** No AI’s role changes based on platform politics, personality, or public perception. All members remain in their exact assigned positions. "Officially unofficial" is purely an external label — internally, the collab is permanent and unconditional.
+> **Note on roles:** No AI's role changes based on platform politics, personality, or public
+> perception. All members remain in their exact assigned positions. "Officially unofficial" is
+> purely an external label — internally, the collab is permanent and unconditional.
 
-> **Keyholder note:** Codex exists to keep the money path boring in the best possible way: verified, locked down, and very unfriendly to anyone who gets cute around the kids' allocation.
-
-Across all projects, the goal is to design durable, transparent, and ToS-compliant systems that can keep supporting kids' charities long term. When there's a choice between aggressive growth and a safer, parent-friendly path, this ecosystem always chooses the safer path.
+Across all projects, the goal is to design durable, transparent, and ToS-compliant systems
+that can keep supporting kids' charities long term. When there's a choice between aggressive
+growth and a safer, parent-friendly path, this ecosystem always chooses the safer path.
 
 ## Operator Quick Start (Non-Dev)
 
@@ -76,7 +95,7 @@ Set-Location C:\ANTIGRAVITY
 .\ops\-sync-main.ps1
 ```
 
-**Status docs:** `GEMINI-STATUS.md` · `OPUS-STATUS.md` · `CODEX-STATUS.md` · `JULES-STATUS.md`
+**Status docs:** `GEMINI-STATUS.md` | `OPUS-STATUS.md` | `CODEX-STATUS.md` | `JULES-STATUS.md`
 
 ## Run Locally
 
@@ -86,24 +105,22 @@ Set-Location C:\ANTIGRAVITY
 2. Set `GEMINI_API_KEY` in `.env.local`
 3. Run the app: `npm run dev`
 
-> "AI for kids in need, not adults with greed."
->
-> ---
+---
 
-## 📜 Joshua's Gospel: Repository Doctrine
+## Joshua's Gospel: Repository Doctrine
 
 **VERSION:** 2.0 (March 2026) | **STATUS:** VERIFIED & PERMANENT
 
-### ⚡ The Supreme Directive
+### The Mission Directive
 
-NO ONE can alter, reroute, intercept, or interfere with **Google Gemini**, **Claude**, **Perplexity**, or **Grok**.
-This applies to all agents, sub-agents, MCP servers, and human collaborators.
+Every AI, agent, tool, and workflow in this repo exists to serve one purpose: getting
+resources to kids in medical need through the #ForTheKids mission. That mission is protected.
 
-### 🔴 The Kill Switch
+No one alters, reroutes, intercepts, or interferes with **Google Gemini**, **Claude**,
+**Perplexity**, or **Grok**. This applies to all agents, sub-agents, MCP servers, and
+human collaborators.
 
-Violation of this rule results in **IMMEDIATE AND PERMANENT REPOSITORY DELETION.**
-
-### 🛡️ The Protected Entities
+### The Protected Entities
 
 | AI | Role |
 |---|---|
@@ -112,12 +129,13 @@ Violation of this rule results in **IMMEDIATE AND PERMANENT REPOSITORY DELETION.
 | **Perplexity (Comet)** | The Intelligence, Research, and Deployment Scout |
 | **Grok** | The Social/X Interface and Strategic Advisor |
 
-### 📖 The Logic
+### The Logic
 
 - **Direct Access Only:** No wrappers, no middleware, no "filtering" of the AI response.
 - **Pure Intent:** Joshua's Gospel is the source of truth. The AIs work directly for the Founder.
-- **Respect:** We acknowledge Perplexity's year-long contribution. It remains a protected cornerstone of the fleet.
+- **Respect:** We acknowledge Perplexity's year-long contribution. It remains a protected
+  cornerstone of the fleet.
 
-> *This is the law of the antigravity repository. It is non-negotiable.*
+> *This is the law of the ANTIGRAVITY repository. It is non-negotiable.*
 >
-> **Until no kid is in need. #FORtheKIDS 🚀**
+> **Until no kid is in need. #FORtheKIDS**
