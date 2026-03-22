@@ -213,7 +213,7 @@ They do not automatically become part of the live codebase.
 **Current isolated node lanes:**
 - **Sabretooth `E:`** -> `E:\claudes-claw` = Claude Dispatch / coworker lane only
 - **9020 `D:`** -> `D:\claws\openclaw-9020` and `D:\sandbox-repos\...` = openclaw/support sandbox lane only
-- **T5500 `E:`** -> `E:\ANTIGRAVITY-CLABOTS\manus-claw\ForTheKids-Guardian` plus `dispatch`, `memory`, and media folders = Manus / Crossfire / media sandbox lane only
+- **T5500 `E:`** -> `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian` plus `dispatch`, `memory`, and media folders = Manus / Crossfire / media sandbox lane only
 - **Do not put these lanes on node `C:` drives** except for the existing live support/date-app installs that are already intentionally on `C:`
 
 **Sandbox repo:** `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git`
@@ -295,7 +295,7 @@ New ideas, experimental platforms, and speculative automation go here first.
 | SABRETOOTH | C: | Live command post — primary |
 | SABRETOOTH | E: | Claude Dispatch / coworker lane — isolated sandbox only |
 | T5500 | C: | Remote utility / heavy media-build node — SSH reachable (192.168.0.15) |
-| T5500 | E: | Manus / Crossfire / media sandbox lane (`E:\ANTIGRAVITY-CLABOTS`) |
+| T5500 | E: | Manus / Crossfire / media sandbox lane (`E:\ANTIGRAVITY-CLAWBOTS`) |
 | 9020 | C: | Remote marketing/ops/support — SSH reachable (192.168.0.5); live support/date-app paths stay here |
 | 9020 | D: | OpenClaw/support sandbox lane (`D:\claws`, `D:\sandbox-repos`) |
 

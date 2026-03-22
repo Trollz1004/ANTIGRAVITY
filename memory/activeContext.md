@@ -1,27 +1,28 @@
-# Active Context - 2026-03-19
+# Active Context - 2026-03-22
 
 ## Current Focus
 
-- **Production date app is restored:** `https://youandinotai.com/api/v1/health` now returns healthy backend JSON again.
-- **`origin/main` is caught up:** Sabretooth `main` at `346facc` is pushed and clean.
-- **Cloud Run deploy path is repaired:** GitHub workflow `deploy-gcr.yml` now works, and workflow run `23308309685` succeeded.
+- **Production date app is restored:** `https://youandinotai.com/api/v1/health` returns healthy backend JSON and beta-access auth is live again.
+- **`origin/main` is caught up:** Sabretooth `main` is pushed and clean.
+- **Node lanes are isolated:** Claude Dispatch stays on Sabretooth `E:`, 9020 owns the `D:` sandbox lane, and T5500 owns the `E:\ANTIGRAVITY-CLAWBOTS` Manus lane.
 - **Continuity vault is current:** the live continuity root is `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`.
-- **9020 is now handling crossfire:** backend and frontend are running there so T5500 remains focused on YouAndINotAI/backend work.
+- **Current sandbox validation focus:** T5500 now has the new Manus dashboard scaffold installed and building; full runtime boot proof is still pending.
 
 ## Verified State
 
 - **Repo root:** `C:\ANTIGRAVITY`
 - **Branch:** `main`
-- **HEAD:** `346facc`
+- **HEAD:** see git for current commit
 - **Worktree:** clean
 - **Frontend validation:** `npm run build` passed
-- **Backend validation:** `67 passed`
+- **Backend validation:** targeted auth/lovebot suite `22 passed`
 - **Live frontend/API:** `https://youandinotai.com/api/v1/health` returns healthy JSON
 - **Cloud Run workflow:** latest run completed successfully on March 19, 2026
 - **OpenClaw health:** `http://127.0.0.1:18789/healthz`
 - **Ollama health:** `http://127.0.0.1:11434/api/tags`
 - **9020 crossfire backend:** `http://localhost:8000/api/health` returns `{"status":"ok"}`
 - **9020 crossfire frontend:** `http://localhost:5173` serves the Vite app shell
+- **T5500 Manus dashboard validation:** install/check/build passed after importing the updated scaffold zip
 
 ## Recently Finished
 
@@ -31,12 +32,15 @@
 - Repaired GitHub Cloud Run deployment automation and verified a successful run
 - Rebuilt and redeployed the frontend
 - Synced the vault continuity env with the current live `.env`
+- Disabled stale 9020 task relaunch points after populating the node sandbox lane
+- Imported the updated Manus dashboard scaffold on T5500 and validated install/check/build
 
 ## Current Risks / Open Items
 
 1. **Continuity files now live in `Personal Vault-Sabretooth`, not the older `Personal Vault` path.**
 2. **The `.env` Cloudflare token remains stale, but Wrangler OAuth is the real operational auth path.**
 3. **Crossfire on 9020 is currently process-based; convert to scheduled startup if you want reboot persistence.**
+4. **T5500 Manus dashboard build is proven, but a fully captured runtime boot is still pending.**
 
 ## Rules To Preserve
 

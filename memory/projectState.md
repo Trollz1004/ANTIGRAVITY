@@ -29,7 +29,7 @@ This file is the short-form current state. For canonical repo truth, use:
 - **YouAndINotAI** remains the primary active product in this repo.
 - **Cloudflare Pages** frontend is live and again reaches the real backend through the fixed worker proxy.
 - **Cloud Run backend** was restored on March 19, 2026 and now serves the correct FastAPI application.
-- **Backend test suite** passed with `67` tests on March 19, 2026.
+- **Targeted backend auth/lovebot suite** passed with `22` tests after the March 22 live repair.
 - **Crossfire on 9020** now runs with a local FastAPI backend on port `8000` and Vite frontend on port `5173`.
 - **SupportClaw on 9020** now runs outside the repo at `C:\SUPPORTCLAW-9020` and answers on `http://192.168.0.5:18895`.
 
@@ -44,10 +44,11 @@ This file is the short-form current state. For canonical repo truth, use:
 - T5500 was used to execute the backend recovery deploy.
 - Sabretooth `E:` is now reserved for the Claude Dispatch / coworker lane at `E:\claudes-claw`.
 - 9020 is now the active node for crossfire, marketing workloads, isolated date-app support on `C:`, and the sandboxed openclaw/support lane on `D:`.
-- T5500 no longer carries the temporary support runtime and is free for heavier media/video workloads; its `E:\ANTIGRAVITY-CLABOTS` root is now the Manus / Crossfire / media sandbox lane.
+- T5500 no longer carries the temporary support runtime and is free for heavier media/video workloads; its `E:\ANTIGRAVITY-CLAWBOTS` root is now the Manus / Crossfire / media sandbox lane.
+- The new Manus dashboard scaffold was imported on T5500, and `corepack pnpm install --frozen-lockfile`, `pnpm check`, and `pnpm build` all passed there.
 - Legacy DAO/platform repos are design recovery sources only, not live implementation truth; approved recovery candidates are tracked in `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`.
 - Future brainstorming, experimental platforms, and unapproved new product work now start in the dedicated sandbox repo, not in `C:\ANTIGRAVITY`.
-- 9020 still has five stale scheduled tasks that need one elevated admin disable pass; the lane itself is already populated and support/date-app paths were left untouched.
+- 9020 stale scheduled-task relaunch points are now disabled; the sandbox lane remains populated and support/date-app paths were left untouched.
 
 ## Account Routing Note
 
@@ -61,3 +62,4 @@ This file is the short-form current state. For canonical repo truth, use:
 1. The stale `CLOUDFLARE_API_TOKEN` in `.env` remains documentation debt, but not a live deploy blocker.
 2. Docker is not part of the current Sabretooth baseline.
 3. `crossfire` on 9020 still relies on detached processes rather than a service manager.
+4. T5500 Manus dashboard build is proven, but a full clean runtime boot is not yet fully captured.
