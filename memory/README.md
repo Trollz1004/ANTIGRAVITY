@@ -22,6 +22,8 @@ When context resets, this is what survives.
 | `techStack.md` | Every technology, version, config across all nodes |
 | `sessionHandoff.md` | Last session's final state — copy-paste for new sessions |
 
+Historical one-off backups and snapshots belong in `memory/archive/` so the top-level memory lane stays readable.
+
 ## RULES
 
 - **NEVER delete files** — append or update
