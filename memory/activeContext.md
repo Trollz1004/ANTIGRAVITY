@@ -6,7 +6,7 @@
 - **`origin/main` is caught up:** Sabretooth `main` is pushed and clean.
 - **Node lanes are isolated:** Claude Dispatch stays on Sabretooth `E:`, 9020 owns the `D:` sandbox lane, and T5500 owns the `E:\ANTIGRAVITY-CLAWBOTS` Manus lane.
 - **Continuity vault is current:** the live continuity root is `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`.
-- **Current sandbox validation focus:** T5500 now has the new Manus dashboard scaffold installed and building; full runtime boot proof is still pending.
+- **Current sandbox validation focus:** T5500 now has the new Manus dashboard scaffold installed, built, and locally serving on port `3000`.
 
 ## Verified State
 
@@ -22,7 +22,7 @@
 - **Ollama health:** `http://127.0.0.1:11434/api/tags`
 - **9020 crossfire backend:** `http://localhost:8000/api/health` returns `{"status":"ok"}`
 - **9020 crossfire frontend:** `http://localhost:5173` serves the Vite app shell
-- **T5500 Manus dashboard validation:** install/check/build passed after importing the updated scaffold zip
+- **T5500 Manus dashboard validation:** install/check/build passed after importing the updated scaffold zip, and `node dist/index.js` served local HTTP `200`
 
 ## Recently Finished
 
@@ -33,14 +33,14 @@
 - Rebuilt and redeployed the frontend
 - Synced the vault continuity env with the current live `.env`
 - Disabled stale 9020 task relaunch points after populating the node sandbox lane
-- Imported the updated Manus dashboard scaffold on T5500 and validated install/check/build
+- Imported the updated Manus dashboard scaffold on T5500 and validated install/check/build/runtime
 
 ## Current Risks / Open Items
 
 1. **Continuity files now live in `Personal Vault-Sabretooth`, not the older `Personal Vault` path.**
 2. **The `.env` Cloudflare token remains stale, but Wrangler OAuth is the real operational auth path.**
 3. **Crossfire on 9020 is currently process-based; convert to scheduled startup if you want reboot persistence.**
-4. **T5500 Manus dashboard build is proven, but a fully captured runtime boot is still pending.**
+4. **T5500 Manus dashboard still emits analytics placeholder warnings until real values are supplied.**
 
 ## Rules To Preserve
 
