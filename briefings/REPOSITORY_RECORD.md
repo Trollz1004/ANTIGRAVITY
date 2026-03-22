@@ -34,8 +34,9 @@
 | 9020 crossfire backend | LIVE | Python 3.12 installed; `http://localhost:8000/api/health` returns `{"status":"ok"}` |
 | 9020 crossfire frontend | LIVE | Vite dev server responding on `http://localhost:5173` |
 | 9020 SupportClaw | LIVE | Isolated support gateway at `http://192.168.0.5:18895` with Telegram disabled and state outside the repo |
-| 9020 sandbox lane | ISOLATED | `D:\claws\openclaw-9020` populated from sanitized Sabretooth export; stale admin-only tasks still need one elevated disable pass |
-| T5500 Manus lane | ISOLATED | `E:\ANTIGRAVITY-CLABOTS\manus-claw\ForTheKids-Guardian` materially restored from sanitized Sabretooth export |
+| 9020 sandbox lane | ISOLATED | `D:\claws\openclaw-9020` populated from sanitized Sabretooth export; stale relaunch tasks disabled in the elevated admin pass |
+| T5500 Manus lane | ISOLATED | `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian` materially restored from sanitized Sabretooth export |
+| T5500 Manus dashboard | VALIDATED | new scaffold imported; `corepack pnpm install --frozen-lockfile`, `pnpm check`, and `pnpm build` all passed |
 | Sabretooth Claude lane | ISOLATED | `E:\claudes-claw` remains the Claude Dispatch / coworker lane |
 
 ## Product State
@@ -49,6 +50,7 @@
 - **New Feature:** LoveBot premium love consultant (compatibility, quotes, tips, gift ideas) added to API
 - **Runtime deps restored:** missing scheduler/file runtime deps were added to `requirements.txt`
 - **Live auth flow restored:** beta access codes and authenticated `/api/v1/auth/me` now work live again
+- **Manus dashboard scaffold restored:** T5500 imported the updated dashboard zip, replaced the incomplete flat export, and built the project successfully
 
 ## Operational Notes
 
@@ -58,7 +60,8 @@
 - **T5500 role:** used for backend recovery and deploy execution when Sabretooth needed the live service restored; its temporary support container is now offline so the box can stay available for heavier media/build work
 - **Sabretooth secondary-drive role:** `E:\claudes-claw` is reserved for Claude Dispatch / coworker work only
 - **9020 node role:** crossfire, marketing workloads, the isolated date-app SupportClaw on `C:`, and the openclaw/support sandbox lane on `D:`
-- **T5500 secondary-drive role:** `E:\ANTIGRAVITY-CLABOTS` is the isolated Manus / Crossfire / media sandbox root
+- **T5500 secondary-drive role:** `E:\ANTIGRAVITY-CLAWBOTS` is the isolated Manus / Crossfire / media sandbox root
+- **T5500 Manus dashboard validation note:** build passed with analytics placeholder warnings in `index.html`; runtime boot looks possible but was not fully proven beyond a short non-failing process start
 - **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
 - **Legacy DAO/platform material:** old repos and archived briefs are recovery-library inputs only; reusable elements must be ported intentionally into the current repo baseline. See `briefings/DAO-RECOVERY-CANDIDATES.md`.
 - **Sandbox policy:** future experimental or brainstorming work starts in the sandbox repo, not in `C:\ANTIGRAVITY`.
@@ -70,7 +73,7 @@
 1. **Vault continuity snapshots should stay in sync with any future real credential change.**
 2. **The stale Cloudflare API token in `.env` is still informational debt, not an operational blocker.**
 3. **`crossfire` on 9020 still uses detached processes; convert those to scheduled tasks or services if reboot persistence is required.**
-4. **9020 still has five stale scheduled tasks that require one truly elevated admin pass to disable cleanly.**
+4. **T5500 Manus dashboard now builds, but runtime boot is only partially verified and analytics placeholders still warn until real values are supplied.**
 
 ## Recent Pushed Commits
 
