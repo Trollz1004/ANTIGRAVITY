@@ -248,7 +248,7 @@ All on Cloudflare. Auto-deploy on push to main.
 
 - GitHub PAT: **Windows Credential Manager** (NOT .env) — rotated 2026-03-05
 - Claude token: sk-ant-oat01-..., registered 2026-02-17 (~90 day expiry)
-- Cloudflare API token: **EXPIRED** — needs rotation at dash.cloudflare.com
+- Cloudflare API token: rotated on 2026-03-23 to the current no-expiry token; consume it through local `.env` / GitHub secrets only and never hardcode values into repo files
 - Launch: PowerShell 7.5 admin → `go` → Start-Opus → `claude --dangerously-skip-permissions`
 - PS Profile: `OneDrive\...\PowerShell\Microsoft.PowerShell_profile.ps1`
 

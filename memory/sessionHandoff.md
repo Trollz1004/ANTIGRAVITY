@@ -38,10 +38,11 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - Disabled public dashboard `.env` writes by changing `antigravity/app/api/settings/route.ts` to return `403`
 - Removed public internal node/log/wallet-detail leakage from `antigravity` API routes and added a clean `_deploy/onlinerecycle/404.html` to reduce cross-brand/404 contamination after redeploy
 - Extended `.github/workflows/deploy-cloudflare-pages.yml` so GitHub can trigger both `onlinerecycle` and `jules-dashboard` Pages rebuilds
-- Added Cloudflare Global API Key fallback to `.github/workflows/deploy-cloudflare-pages.yml` after confirming the repo bearer token path was stale
+- Added Cloudflare Global API Key fallback to `.github/workflows/deploy-cloudflare-pages.yml` after confirming the pre-rotation repo bearer token path was stale
 - Confirmed the current direct Pages-trigger API path still fails because Cloudflare now expects a `manifest` body for that deployment endpoint
 - Deleted all `deploy-cloudflare-pages` GitHub actions entirely to prevent runaway CI minute usage, defaulting specifically to the Cloudflare GitHub App integration.
 - Extracted and safely isolated fresh deployment keys into `manus.env.txt` specifically hosted out-of-repo and away from Sabretooth OpenClaw loops via the Personal Vault.
+- Rotated the active Cloudflare API credential on 2026-03-23 to a no-expiry token, mirrored it into local Sabretooth `.env` and GitHub repo secrets for both `ANTIGRAVITY` and the sandbox repo, and kept token values out of git.
 - Seeded `_deploy/onlinerecycle/wrangler.toml` indicating the Cloudflare target directory for manual Cloudflare Pages Dashboard pipeline generation by Manus.
 - Synced `C:\ANTIGRAVITY` on 9020 and T5500 to `14aee75` after the public-surface hardening push
 
@@ -81,6 +82,7 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - The new T5500 Manus dashboard scaffold is materially complete enough to install, type-check, build, and serve locally on port `3000`
 - Repo-controlled public-surface hardening is pushed and no longer local-only
 - The current Cloudflare Pages blocker is no longer just auth drift: the manual GitHub workflow is hitting the wrong API shape for direct deployments
+- Sabretooth Wrangler OAuth may still be stale, but the active Cloudflare API token is now rotated in local `.env` and mirrored into GitHub secrets
 - The current hardened commit also triggered a failing Cloudflare GitHub App build (`Workers Builds: snowy-wave-bf78`), so live Pages recovery still requires Cloudflare-side build-log review or a corrected Wrangler deploy path
 - `aidoesitall.website` root-surface source was not identified in this repo during the March 23 hardening pass; only the `dashboard.aidoesitall.website` repo-controlled source was updated
 - The unlocked `C:\Users\joshl\OneDrive\Personal Vault` path still does not resolve as a real folder on this machine
@@ -98,5 +100,5 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 2. Do not route the continuity vault through OpenClaw config, mounts, or runtime access.
 3. Convert the 9020 crossfire runtime into scheduled startup if reboot persistence is required.
 4. If desired later, supply real analytics placeholder values so the T5500 Manus dashboard build becomes warning-free.
-5. `onlinerecycle` deployment requires one manual link via Cloudflare dashboard using `_deploy/onlinerecycle/wrangler.toml` configuration because local CLI credentials expired and expensive GitHub actions were deleted to preserve funding.
+5. Keep claw/coworker/sandbox configs consuming Cloudflare through local `.env`, GitHub secrets, or platform connectors only; do not duplicate the rotated token into repo files or hardcoded config values.
 6. Vault payload (`manus.env.txt`) securely pre-filled and sent to Manus for final Cloudflare configuration step.
