@@ -38,8 +38,9 @@
 | T5500 Manus lane | ISOLATED | `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian` materially restored from sanitized Sabretooth export |
 | T5500 Manus dashboard | RUNNABLE | new scaffold imported; install/check/build passed and `node dist/index.js` served `http://127.0.0.1:3000/` with `200` after clearing a stray old process |
 | Sabretooth Claude lane | ISOLATED | `E:\claudes-claw` remains the Claude Dispatch / coworker lane |
+| Sabretooth sandbox mirror | LIVE | `E:\sandbox-repo` now carries unified sandbox lanes for `claudes-claw`, `genspark`, `manus-claw`, `manus-meta-guardian`, and `openclaw-9020` |
 | Pages source hardening | PUSHED | repo-controlled hardening is live on `origin/main` |
-| Pages redeploy | RESOLVED | expensive GH actions deleted; next.js dashboard natively builds using edge runtime via Cloudflare App deploy |
+| Pages redeploy | SHIFTED | expensive GH actions deleted; dashboard source is Cloudflare-App-ready, but live post-hardening verification still depends on Cloudflare-side deploy completion |
 | onlinerecycle deploy | STAGED | `wrangler.toml` pre-configured in `_deploy/onlinerecycle` for manual Cloudflare Pages Dashboard binding |
 
 ## Product State
@@ -62,8 +63,10 @@
 - **Cloud Run source deploy:** the repaired GitHub workflow now deploys from `youandinotai-api` source instead of the broken container path
 - **T5500 role:** used for backend recovery and deploy execution when Sabretooth needed the live service restored; its temporary support container is now offline so the box can stay available for heavier media/build work
 - **Sabretooth secondary-drive role:** `E:\claudes-claw` is reserved for Claude Dispatch / coworker work only
+- **Sabretooth sandbox mirror note:** `E:\sandbox-repo` is the local unified sandbox mirror for claw/coworker work; loose `E:\` env/archive files still need cleanup into the approved vault path before that drive is considered fully consolidated
 - **9020 node role:** crossfire, marketing workloads, the isolated date-app SupportClaw on `C:`, and the openclaw/support sandbox lane on `D:`
 - **T5500 secondary-drive role:** `E:\ANTIGRAVITY-CLAWBOTS` is the isolated Manus / Crossfire / media sandbox root
+- **Gemini guidance note:** `GEMINI.md` was added by user direction as Gemini-specific repo guidance expressing a first-party platform trust boundary for `C:`/main; `AGENTS.md` remains the canonical repo authority file because Josh is still the sole authority
 - **T5500 Manus dashboard validation note:** build passed with analytics placeholder warnings in `index.html`; after clearing a stale `EADDRINUSE` condition, `node dist/index.js` stayed healthy and served local HTTP `200` on port `3000`
 - **Manus provider connector note:** the Manus account under `joshlcoleman@gmail.com` now has OpenAI connected alongside Anthropic, Gemini, Perplexity, and Grok; OpenAI uses the standard API base URL and the key remains outside repo memory
 - **Public-surface hardening note:** repo-controlled public copy was reduced on `README.md`, `_deploy/onlinerecycle/*`, and `antigravity/`; public dashboard source no longer exposes internal node watch, task logs, wallet details, or public `.env` write paths
@@ -81,6 +84,7 @@
 3. **T5500 Manus dashboard is runnable locally, but analytics placeholders still warn until real values are supplied.**
 4. **`aidoesitall.website` root-surface source was not identified in this repo during the hardening pass; only `dashboard.aidoesitall.website` repo-controlled source was hardened.**
 5. **Sabretooth Wrangler OAuth may still be stale, but the active Cloudflare API token is rotated and mirrored into local `.env` plus GitHub secrets; do not duplicate token values into claw configs or repo files.**
+6. **Loose env/archive files still remain at Sabretooth `E:\` root and should be moved into the approved vault path so `E:\sandbox-repo` becomes the only intended sandbox root on this node.**
 
 ## Recent Pushed Commits
 

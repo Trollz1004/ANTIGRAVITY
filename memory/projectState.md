@@ -44,12 +44,14 @@ This file is the short-form current state. For canonical repo truth, use:
 - The live OpenClaw configs on Sabretooth, 9020, and T5500 are now self-hosted only for model inference.
 - T5500 was used to execute the backend recovery deploy.
 - Sabretooth `E:` is now reserved for the Claude Dispatch / coworker lane at `E:\claudes-claw`.
+- Sabretooth also now carries a unified sandbox mirror at `E:\sandbox-repo` containing `claudes-claw`, `genspark`, `manus-claw`, `manus-meta-guardian`, and `openclaw-9020` for isolated claw/coworker work outside `C:\ANTIGRAVITY`.
 - 9020 is now the active node for crossfire, marketing workloads, isolated date-app support on `C:`, and the sandboxed openclaw/support lane on `D:`.
 - T5500 no longer carries the temporary support runtime and is free for heavier media/video workloads; its `E:\ANTIGRAVITY-CLAWBOTS` root is now the Manus / Crossfire / media sandbox lane.
 - The new Manus dashboard scaffold was imported on T5500, `corepack pnpm install --frozen-lockfile`, `pnpm check`, and `pnpm build` all passed there, and `node dist/index.js` served `http://127.0.0.1:3000/` with HTTP `200` after clearing a stray old process.
 - The Manus account under `joshlcoleman@gmail.com` now has the OpenAI connector enabled in addition to Anthropic, Gemini, Perplexity, and Grok; connector secrets remain only in the Manus UI / approved vault path, not in repo memory.
 - Repo-controlled public exposure was reduced on `README.md`, `_deploy/onlinerecycle/*`, and `antigravity/`; the public dashboard source no longer exposes internal node watch, task logs, wallet detail, or public `.env` writes.
 - Repo-controlled public-surface hardening was pushed to `origin/main` on March 23, 2026 and remote `C:\ANTIGRAVITY` worktrees on 9020 and T5500 were fast-forwarded cleanly.
+- `GEMINI.md` was added on March 23, 2026 by user-directed Gemini work as supplemental Gemini-specific repo guidance; `AGENTS.md` remains the canonical cross-agent authority file for `C:\ANTIGRAVITY`.
 - `onlinerecycle` deployment uses a Cloudflare dashboard hook targeting `_deploy/onlinerecycle/wrangler.toml`. All manual GitHub action deployment scripts were intentionally purged.
 - Sabretooth `.env` local Cloudflare bearer tokens were successfully rotated (2026-03-23) to sync with Manus continuity files stashed securely in the Personal Vault.
 - The active Cloudflare API credential is now a no-expiry token rotated on 2026-03-23 and mirrored into local Sabretooth `.env` plus GitHub Actions secrets for both `Trollz1004/ANTIGRAVITY` and `Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY`; claws should consume only the secret names/env lookup path, never hardcoded values.
@@ -71,3 +73,4 @@ This file is the short-form current state. For canonical repo truth, use:
 3. T5500 Manus dashboard is runnable locally, but its analytics placeholders still need real values if you want those warnings gone.
 4. The source for the root `aidoesitall.website` surface was not identified in this repo during the hardening pass; only the `dashboard.aidoesitall.website` repo-controlled source was updated.
 5. Sabretooth Wrangler OAuth may still be stale, but the active Cloudflare API token is rotated and mirrored into local `.env` plus GitHub secrets; keep using env/secret-manager access only and do not duplicate token material into claw configs or repo files.
+6. Loose env/archive files still remain at the Sabretooth `E:\` root and should be cleaned into the approved vault path before treating that drive as fully consolidated.
