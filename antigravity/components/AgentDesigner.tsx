@@ -5,7 +5,7 @@ export default function AgentDesigner({ isDarkMode }: { isDarkMode: boolean }) {
   const [agentName, setAgentName] = useState('My Custom Agent');
   const [model, setModel] = useState('gemini-3-flash-preview');
   const [temperature, setTemperature] = useState(0.7);
-  const [systemPrompt, setSystemPrompt] = useState('You are a helpful AI assistant for the DAO ecosystem.');
+  const [systemPrompt, setSystemPrompt] = useState('You are a helpful AI assistant for the public dashboard.');
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
