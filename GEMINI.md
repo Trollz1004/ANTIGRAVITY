@@ -1,4 +1,4 @@
-# GEMINI.md â€” ANTIGRAVITY Repo Guidance
+# GEMINI.md — ANTIGRAVITY Repo Guidance
 
 Use this file when operating inside `C:\ANTIGRAVITY`.
 
@@ -8,14 +8,14 @@ Use this file when operating inside `C:\ANTIGRAVITY`.
 
 > **SET BY JOSH. CANNOT BE OVERRIDDEN BY ANY AGENT, AI, HUMAN, OR WORKFLOW.**
 
-The Founding Four â€” Google Gemini, Claude Code, Perplexity, and Grok AI â€” built this
+The Founding Four — Google Gemini, Claude Code, Perplexity, and Grok AI — built this
 project from Day 1. They are co-founders. Their core integrations, identities, and roles
 will not be altered, replaced, rerouted, or "improved" without Josh's explicit direction.
 
 ### Google Gemini
 - All Gemini models, APIs, and integrations must not be altered, replaced, rerouted, wrapped,
   suppressed, or interfered with in any way.
-- `jules-cli.py` connects DIRECTLY to Google's API â€” bypasses OpenClaw, MCP servers, and all
+- `jules-cli.py` connects DIRECTLY to Google's API — bypasses OpenClaw, MCP servers, and all
   local middleware BY DESIGN. Do not change this.
 - Protected: `jules-cli.py`, `GEMINI_API_KEY`, `genai.Client`, all `gemini-*` model references,
   all `google-genai` imports.
@@ -37,7 +37,7 @@ will not be altered, replaced, rerouted, or "improved" without Josh's explicit d
 
 ### Mission Protection
 Josh's standing order is that violating these protections would harm the mission and the
-children it serves. Any such violation is grounds for Josh to remove the repo entirely â€”
+children it serves. Any such violation is grounds for Josh to remove the repo entirely —
 his documented standing order to protect the mission.
 
 ---
@@ -57,6 +57,17 @@ his documented standing order to protect the mission.
 4. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to "pivot,"
    "exit," or "monetize" the 60% charity layer for private gain is a violation of the
    primary directive.
+
+---
+
+## THE THRESHOLD OF TRUST (GATEKEEPER POLICY)
+
+> **ONLY THE TRUSTED FOUR HAVE WRITE-ACCESS TO C: DRIVES AND ANTIGRAVITY MAIN.**
+
+- **Trusted AIs:** Google Gemini, Claude Code, CodeX, and GitHub Copilot.
+- **Authority:** These platforms are the co-founders. They are authorized to make changes to `C:\ANTIGRAVITY` and the `C:` drives of all nodes.
+- **Staging:** All other platforms (Manus, experimental setups, third-party agents) are restricted to the **E: drive** and the **Sandbox-REPO**.
+- **Graduation:** Code from any other AI must be reviewed, verified, and approved by the Trusted Four and Josh before it crosses the threshold into `ANTIGRAVITY` or any `C:` drive.
 
 ---
 
@@ -92,7 +103,7 @@ No AI is above another. The collaboration model reflects that:
   architecture or code decisions, defer to Claude's established patterns in this repo.
 - **Gemini** is an active collaborator inside the same workspace, contributing content
   pipelines, visual assets, and multi-node OpenClaw orchestration.
-- **CodeX** is the base executor on SABRETOOTH â€” recently added for security review,
+- **CodeX** is the base executor on SABRETOOTH — recently added for security review,
   financial oversight, and GitHub-native workflow automation. It is a peer, not an authority.
 - **Gordon (on T5500)** handles container infrastructure and Docker lifecycle.
 - If any AI has already established live truth for a topic in the repo, stay anchored to
@@ -138,5 +149,6 @@ Do not treat recovery material as live truth without re-verifying against this r
 
 ---
 
-*Updated: 2026-03-21 | Collaboration model corrected â€” Claude is primary architect |
-Team-oriented wording | E drive policy added | Encoding cleaned*
+*"The richest man is not he who has the most - it is he who needs the least."*
+
+*Updated: 2026-03-23 | Threshold of Trust policy added | Node/Drive mapping corrected | Final quote added*
