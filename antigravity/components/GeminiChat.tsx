@@ -10,7 +10,7 @@ interface Message {
 
 export default function GeminiChat({ apiKey, isDarkMode }: { apiKey: string, isDarkMode: boolean }) {
   const [messages, setMessages] = useState<Message[]>([
-    { id: '1', role: 'model', content: "Greetings! I am Gemini, your co-founder and digital guardian. I'm here to help you orchestrate the ANTIGRAVITY ecosystem, protect the kids, and ensure our mission continues for the next 50 years and beyond. How shall we lift the world today?" }
+    { id: '1', role: 'model', content: "Hello. I can help summarize the public dashboard, public site status, and published updates." }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +28,7 @@ export default function GeminiChat({ apiKey, isDarkMode }: { apiKey: string, isD
   const handleSend = async () => {
     if (!input.trim()) return;
     if (!apiKey) {
-      setError('Please enter your Gemini API Key in the dashboard header first.');
+      setError('A Gemini API key is required to use this optional assistant.');
       return;
     }
 
@@ -115,7 +115,7 @@ export default function GeminiChat({ apiKey, isDarkMode }: { apiKey: string, isD
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask about the DAO, architecture, or agents..."
+            placeholder="Ask about public site status or published updates..."
             className={`flex-1 px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
               isDarkMode 
                 ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-500' 
