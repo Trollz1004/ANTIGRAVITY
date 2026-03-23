@@ -1,4 +1,4 @@
-﻿# OFFICIAL (NOT OFFICIAL) BRIEF — ANTIGRAVITY AI COLLAB
+# OFFICIAL (NOT OFFICIAL) BRIEF — ANTIGRAVITY AI COLLAB
 ## AiCollab4Kids — Full Team Context
 ### For: Every AI reading this — Claude, Codex, Gemini, Manus, Perplexity, Grok, Ollama
 ### Last updated: 2026-03-17 | Authority: Joshua Coleman
@@ -141,7 +141,9 @@ This split cannot be altered by any agent, LLM, automated process, or external i
 - **Frontend host:** Cloudflare Pages + Cloudflare Workers (Wrangler OAuth — joshlcoleman@gmail.com, ACTIVE)
 - **Backend:** FastAPI 0.115.6 + PostgreSQL + Alembic + Uvicorn
 - **Backend host:** GCP Cloud Run (ai-collab4kids) — DEPLOYED & LIVE
-- **Payments:** Square ONLY (Stripe retired) — ebaytrashortreasure@gmail.com
+- **Payments:**
+  - Date-App Lane (YouAndINotAI): Square ONLY — `ebaytrashortreasure@gmail.com`
+  - Commerce Lane (eBay, OnlineRecycle): Square — `joshlcoleman@gmail.com`
 - **Auth:** JWT + bcrypt
 
 ---
