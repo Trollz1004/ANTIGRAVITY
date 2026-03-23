@@ -1,7 +1,7 @@
 # REPOSITORY RECORD — SABRETOOTH LIVE STATE
 
-> **Date:** March 22, 2026
-> **Status:** `main` clean, frontend/backend live, node sandbox lanes isolated
+> **Date:** March 23, 2026
+> **Status:** `main` clean, frontend/backend live, node sandbox lanes isolated, public-surface hardening staged
 > **Authority:** Joshua Coleman
 
 ---
@@ -63,6 +63,8 @@
 - **T5500 secondary-drive role:** `E:\ANTIGRAVITY-CLAWBOTS` is the isolated Manus / Crossfire / media sandbox root
 - **T5500 Manus dashboard validation note:** build passed with analytics placeholder warnings in `index.html`; after clearing a stale `EADDRINUSE` condition, `node dist/index.js` stayed healthy and served local HTTP `200` on port `3000`
 - **Manus provider connector note:** the Manus account under `joshlcoleman@gmail.com` now has OpenAI connected alongside Anthropic, Gemini, Perplexity, and Grok; OpenAI uses the standard API base URL and the key remains outside repo memory
+- **Public-surface hardening note:** repo-controlled public copy was reduced on `README.md`, `_deploy/onlinerecycle/*`, and `antigravity/`; public dashboard source no longer exposes internal node watch, task logs, wallet details, or public `.env` write paths
+- **Pages deploy workflow note:** `.github/workflows/deploy-cloudflare-pages.yml` now supports `jules-dashboard` in addition to `onlinerecycle`
 - **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
 - **Legacy DAO/platform material:** old repos and archived briefs are recovery-library inputs only; reusable elements must be ported intentionally into the current repo baseline. See `briefings/DAO-RECOVERY-CANDIDATES.md`.
 - **Sandbox policy:** future experimental or brainstorming work starts in the sandbox repo, not in `C:\ANTIGRAVITY`.
@@ -75,6 +77,7 @@
 2. **The stale Cloudflare API token in `.env` is still informational debt, not an operational blocker.**
 3. **`crossfire` on 9020 still uses detached processes; convert those to scheduled tasks or services if reboot persistence is required.**
 4. **T5500 Manus dashboard is runnable locally, but analytics placeholders still warn until real values are supplied.**
+5. **`aidoesitall.website` root-surface source was not identified in this repo during the hardening pass; only `dashboard.aidoesitall.website` repo-controlled source was hardened.**
 
 ## Recent Pushed Commits
 

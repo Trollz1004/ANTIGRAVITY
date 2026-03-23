@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css'; // Global styles
 
 export const metadata: Metadata = {
-  title: 'Antigravity Dashboard — #ForTheKids | AI-Powered Ecosystem',
-  description: 'Antigravity ecosystem dashboard — platforms, metrics, and mission control for YouAndINotAI, OnlineRecycle, and AI-Solutions.',
+  title: 'Antigravity Status Dashboard',
+  description: 'Public-facing status board for live sites and verified updates only.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -11,7 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body suppressHydrationWarning>
         <div className="bg-emerald-500 text-black text-center py-2 px-4 font-bold text-xs md:text-sm relative z-[100]">
-          #ForTheKids — ENIGMA routing is locked to 60/30/10 on Base Mainnet. This dashboard shows verified addresses and tracked zeroes only.
+          Public status board: verified links and tracked updates only. Internal admin controls are not exposed here.
         </div>
         {children}
       </body>
