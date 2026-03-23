@@ -12,6 +12,7 @@
 - **Cloudflare secret path is current:** a no-expiry Cloudflare API token was rotated on 2026-03-23 into local Sabretooth `.env` and mirrored into GitHub repo secrets; claws should use env/secret-manager lookup only.
 - **Sabretooth sandbox mirror is present:** `E:\sandbox-repo` now carries unified sandbox lanes for `claudes-claw`, `genspark`, `manus-claw`, `manus-meta-guardian`, and `openclaw-9020`.
 - **Platform-trust boundary is explicit:** the user-directed `GEMINI.md` addition means the approved first-party platforms (Gemini, Claude Code, Codex, Copilot) may touch `C:`/main, while third-party or experimental platforms stay on sandbox drives; `AGENTS.md` remains the canonical repo authority file because Josh is still sole authority.
+- **BRAIN MCP is now scaffolded:** the Sabretooth sidecar exists at `C:\ANTIGRAVITY\brain-mcp` with spec, tools, resources, auth-ready registry wiring, and local audit storage.
 
 ## Verified State
 
@@ -42,6 +43,7 @@
 - Imported the updated Manus dashboard scaffold on T5500 and validated install/check/build/runtime
 - Pushed the March 23 public-surface hardening pass and synced 9020/T5500 `C:\ANTIGRAVITY` worktrees to `14aee75`
 - Confirmed the current manual Pages-trigger workflow is not enough because the Cloudflare direct deployment endpoint now expects a `manifest` body
+- Built and locally smoke-tested the BRAIN MCP sidecar with stdio and authenticated HTTP modes, including session enter/action/exit logging
 
 ## Current Risks / Open Items
 
@@ -51,6 +53,7 @@
 4. **T5500 Manus dashboard still emits analytics placeholder warnings until real values are supplied.**
 5. **Cloudflare GitHub App builds are also failing on the hardened commit, so live Pages recovery now depends on Cloudflare build-log review or a corrected Wrangler-based deploy flow.**
 6. **Loose env/archive files still remain at Sabretooth `E:\` root and should be moved into the approved vault path before that drive is considered fully consolidated.**
+7. **BRAIN MCP is auth-ready, but approved clients still need their final session-participation rollout to get full drift visibility.**
 
 ## Rules To Preserve
 

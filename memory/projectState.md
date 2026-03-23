@@ -55,6 +55,8 @@ This file is the short-form current state. For canonical repo truth, use:
 - `onlinerecycle` deployment uses a Cloudflare dashboard hook targeting `_deploy/onlinerecycle/wrangler.toml`. All manual GitHub action deployment scripts were intentionally purged.
 - Sabretooth `.env` local Cloudflare bearer tokens were successfully rotated (2026-03-23) to sync with Manus continuity files stashed securely in the Personal Vault.
 - The active Cloudflare API credential is now a no-expiry token rotated on 2026-03-23 and mirrored into local Sabretooth `.env` plus GitHub Actions secrets for both `Trollz1004/ANTIGRAVITY` and `Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY`; claws should consume only the secret names/env lookup path, never hardcoded values.
+- The BRAIN MCP sidecar is now scaffolded in `C:\ANTIGRAVITY\brain-mcp` with a formal spec at `C:\ANTIGRAVITY\briefings\BRAIN-MCP-SPEC.md`; it provides shared repo truth, lane visibility, session enter/heartbeat/exit logging, SQLite audit state, and JSONL append-only logs.
+- The BRAIN local auth registry now lives outside git at `C:\BRAIN-MCP\platform-registry.json`, and raw BRAIN bearer tokens are stored only in local ignored `C:\ANTIGRAVITY\brain-mcp\.env`; the registry keeps hashes only.
 - Legacy DAO/platform repos are design recovery sources only, not live implementation truth; approved recovery candidates are tracked in `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`.
 - Future brainstorming, experimental platforms, and unapproved new product work now start in the dedicated sandbox repo, not in `C:\ANTIGRAVITY`.
 - 9020 stale scheduled-task relaunch points are now disabled; the sandbox lane remains populated and support/date-app paths were left untouched.
@@ -74,3 +76,4 @@ This file is the short-form current state. For canonical repo truth, use:
 4. The source for the root `aidoesitall.website` surface was not identified in this repo during the hardening pass; only the `dashboard.aidoesitall.website` repo-controlled source was updated.
 5. Sabretooth Wrangler OAuth may still be stale, but the active Cloudflare API token is rotated and mirrored into local `.env` plus GitHub secrets; keep using env/secret-manager access only and do not duplicate token material into claw configs or repo files.
 6. Loose env/archive files still remain at the Sabretooth `E:\` root and should be cleaned into the approved vault path before treating that drive as fully consolidated.
+7. BRAIN MCP is built and auth-ready locally, but the approved clients still need to adopt its session check-in/out flow to get full drift visibility.
