@@ -52,6 +52,7 @@ This file is the short-form current state. For canonical repo truth, use:
 - Repo-controlled public-surface hardening was pushed to `origin/main` on March 23, 2026 and remote `C:\ANTIGRAVITY` worktrees on 9020 and T5500 were fast-forwarded cleanly.
 - `onlinerecycle` deployment uses a Cloudflare dashboard hook targeting `_deploy/onlinerecycle/wrangler.toml`. All manual GitHub action deployment scripts were intentionally purged.
 - Sabretooth `.env` local Cloudflare bearer tokens were successfully rotated (2026-03-23) to sync with Manus continuity files stashed securely in the Personal Vault.
+- The active Cloudflare API credential is now a no-expiry token rotated on 2026-03-23 and mirrored into local Sabretooth `.env` plus GitHub Actions secrets for both `Trollz1004/ANTIGRAVITY` and `Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY`; claws should consume only the secret names/env lookup path, never hardcoded values.
 - Legacy DAO/platform repos are design recovery sources only, not live implementation truth; approved recovery candidates are tracked in `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`.
 - Future brainstorming, experimental platforms, and unapproved new product work now start in the dedicated sandbox repo, not in `C:\ANTIGRAVITY`.
 - 9020 stale scheduled-task relaunch points are now disabled; the sandbox lane remains populated and support/date-app paths were left untouched.
@@ -69,4 +70,4 @@ This file is the short-form current state. For canonical repo truth, use:
 2. `crossfire` on 9020 still relies on detached processes rather than a service manager.
 3. T5500 Manus dashboard is runnable locally, but its analytics placeholders still need real values if you want those warnings gone.
 4. The source for the root `aidoesitall.website` surface was not identified in this repo during the hardening pass; only the `dashboard.aidoesitall.website` repo-controlled source was updated.
-5. `onlinerecycle` deployment relies on a manual link via Cloudflare dashboard using `_deploy/onlinerecycle/wrangler.toml` configuration because local CLI credentials expired and expensive GitHub actions were deleted to preserve funding.
+5. Sabretooth Wrangler OAuth may still be stale, but the active Cloudflare API token is rotated and mirrored into local `.env` plus GitHub secrets; keep using env/secret-manager access only and do not duplicate token material into claw configs or repo files.
