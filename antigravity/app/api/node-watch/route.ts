@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 type ServiceState = 'live' | 'degraded' | 'down';
 
