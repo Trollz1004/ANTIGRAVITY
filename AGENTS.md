@@ -282,7 +282,8 @@ New ideas, experimental platforms, and speculative automation go here first.
 | 12-Month Founder $99.99 | https://square.link/u/6GHpbvvl |
 | Royalty Card $2,500 | https://square.link/u/CafhorUS |
 
-- Square account: ebaytrashortreasure@gmail.com (bank attached, no key expiry)
+- Date-app Square account: ebaytrashortreasure@gmail.com (YouAndINotAI payment lane; bank attached, no key expiry)
+- eBay / OnlineRecycle / non-date-app Square lane: joshlcoleman@gmail.com
 - Square location: LY5GN09F5AN83 (Trash Or Treasure - ACTIVE)
 - Stripe: LEGACY ONLY — being phased out
 
