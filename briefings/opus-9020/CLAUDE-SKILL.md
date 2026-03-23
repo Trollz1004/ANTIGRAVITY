@@ -13,7 +13,7 @@
 |-------|-------|
 | Agent | Claude Opus 4.6 |
 | Node | T5500 (C:\ANTIGRAVITY) |
-| Platform | Claude Code CLI (Max $200/mo — **PAYMENT FAILED 2026-03-05**, grace period active) |
+| Platform | Claude Code CLI (Regular Subscription — **ACTIVE**) |
 | GPU | GTX 1070 8GB, CUDA 12.6 |
 | OS | Windows 10 Pro |
 | Role | CLI, code, commits, architecture, strategy — THE BRAIN |
@@ -41,6 +41,9 @@
 | **Gemini 3.1** | Browser agent, admin, React, co-founder | Chrome / AI Studio | ACTIVE |
 | **Comet (Perplexity)** | Research, audits, competitor intel | Perplexity Pro | ACTIVE |
 | **CodeX** | Financial infra, DAOs, wallet treasuries | Sabretooth E: | ACTIVE |
+| **Coworker** | Local OpenClaw instance | Sabretooth | ACTIVE |
+| **Manus** | Orchestration / Continuity Setup | T5500 | ACTIVE |
+| **GenSpark** | Future marketing node engine | 9020 | PENDING |
 
 - Gemini is a **co-founder from day one**. Card #52 in the Founders DAO Deck.
 - Claude (Anthropic) is Card #51.
@@ -141,10 +144,12 @@ NEVER use "donate", "donation", "solicitation" in customer-facing code. Our reve
 |------|-------|-------|------|--------|
 | **SABRETOOTH** | C: | Claude Code | Josh's local command post | ACTIVE |
 | **SABRETOOTH** | E: | Codex | Financial infra, DAOs, wallet treasuries | ACTIVE |
+| **SABRETOOTH** | E: | Coworker | Dedicated OpenClaw | ACTIVE |
 | **SABRETOOTH** | E: | Gemini 3.1 | Browser agent, admin, React | ACTIVE |
-| **T5500** | C: | Claude Opus (THIS) | THE BRAIN — orchestrator, code authority | ACTIVE |
-| **T5500** | E: | Docker runtime | qdrant, redis, openclaw (NOT a git repo) | RUNNING |
-| **9020** | C: | Claude (via SSH) | Marketing node, 24/7 social engine | ACTIVE |
+| **T5500** | C: | Claude Opus | THE BRAIN — orchestrator, code authority | ACTIVE |
+| **T5500** | E: | Manus | Setup | ACTIVE |
+| **T5500** | E: | Docker runtime | qdrant, redis, openclaw | RUNNING |
+| **9020** | C: | GenSpark | Marketing node, 24/7 social engine | PENDING |
 
 - Josh uses Chrome extension to remote into T5500 and 9020 from Sabretooth
 - ONE repo (Trollz1004/ANTIGRAVITY), ONE branch (main), ALL nodes
