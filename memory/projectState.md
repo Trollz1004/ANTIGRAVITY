@@ -27,6 +27,7 @@ This file is the short-form current state. For canonical repo truth, use:
 ## Product Truth
 
 - **YouAndINotAI** remains the primary active product in this repo.
+- **Frontend/Dashboards:** Cloudflare Pages Native GitHub Integration. GitHub Action workflows for deploy trigger are DELETED to preserve funds. Next.js `antigravity` uses edge runtime.
 - **Cloudflare Pages** frontend is live and again reaches the real backend through the fixed worker proxy.
 - **Cloud Run backend** was restored on March 19, 2026 and now serves the correct FastAPI application.
 - **Targeted backend auth/lovebot suite** passed with `22` tests after the March 22 live repair.
