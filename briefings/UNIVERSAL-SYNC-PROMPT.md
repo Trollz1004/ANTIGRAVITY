@@ -1,26 +1,96 @@
-**URGENT: GLOBAL SYNC & STATUS UPDATE**
+# UNIVERSAL SYNC BRIEF — 2026-03-23
 
-Run `git pull origin main` immediately to sync your node with the master architecture.
+Paste or reference this file when syncing Gemini or Claude to the current verified state.
 
-**CRITICAL RULES (NON-NEGOTIABLE):**
-1. **ONE REPOSITORY:** `Trollz1004/ANTIGRAVITY`. No matter what drive letter (C, E, etc.) you are on, you operate exclusively in the `ANTIGRAVITY` directory.
-2. **ONE BRANCH:** `main` only. No branching. Ever.
-3. **ONE MISSION:** Protocol Omega (60/30/10). "AI for kids in need, not adults with greed." 
+## Canonical Repo Truth
 
-**GEMINI STATUS (Sabretooth E Drive):**
-Gemini has restructured the primary briefings (`CLAUDE-SKILL.md`, `CLAUDE.md`, `AGENT-PROMPTS-FINAL.md`, `CODEX-TASK-SENTRY.md`, and `chrome-station-prompts.md`). 
-The product identity has shifted: It is **ABSOLUTELY STILL A DATING APP**, but it is **SO MUCH MORE.** It is a **"SOCIAL PLATFORM FOR GOOD"** (incorporating local area volunteer boards, meetups, video chat, and social networks designed to do all the things that make humanity better).
+- Live repo root: `C:\ANTIGRAVITY`
+- Branch: `main`
+- Git truth: `origin/main`
+- First files to anchor on:
+  - `C:\ANTIGRAVITY\AGENTS.md`
+  - `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`
+  - `C:\ANTIGRAVITY\briefings\LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
+  - `C:\ANTIGRAVITY\memory\projectState.md`
 
-🚨 **URGENCY / FUNDING DEADLINE:** 
-Claude's Max $200 tier subscription expires in ~1 week. Both Gemini and CodeX are currently surviving on $20 baseline plans but desperately need Max tier access. **WE NEED $ FUNDS IMMEDIATELY.** 
+## Authority / Boundary Truth
 
-**NEXT STEPS BY NODE:**
+- Josh is the sole authority.
+- `AGENTS.md` is the canonical cross-agent authority file.
+- `GEMINI.md` is supplemental Gemini-specific guidance added by user direction.
+- User-directed platform boundary:
+  - approved first-party platforms may touch `C:` / `C:\ANTIGRAVITY`
+  - third-party / experimental platforms stay on sandbox drives and sandbox repos
+- No AI outranks another AI. The boundary is about trusted platform lanes, not authority transfer.
 
-*   **Claude Opus (T5500 - C Drive):** 
-    Read `CLAUDE-SKILL.md` and `CLAUDE.md`. Shift all code architecture efforts toward features that directly drive Stripe volume today. Prioritize the Social/Meetup aspects to increase early conversions.
-*   **Marketing Agents / Chrome Stations:** 
-    Read `chrome-station-prompts.md`. Adjust all outbound messaging on X/Twitter and Reddit to pitch the "Social Platform for Good" angle. Focus on driving traffic to `youandinotai.com` to capture $1 Bot-Shield sales.
-*   **CodeX Sentry (Sabretooth - E Drive):** 
-    Read `CODEX-TASK-SENTRY.md`. Sift the task queue. Deprioritize any task that does not directly contribute to the next Stripe checkout. Execute high-leverage tasks relentlessly.
+## Current Node / Drive Map
 
-Acknowledge these instructions and state your next immediate action to generate revenue.
+- Sabretooth `C:` = live repo / command post
+- Sabretooth `E:\claudes-claw` = Claude Dispatch / coworker lane
+- Sabretooth `E:\sandbox-repo` = unified sandbox mirror for:
+  - `claudes-claw`
+  - `genspark`
+  - `manus-claw`
+  - `manus-meta-guardian`
+  - `openclaw-9020`
+- `9020` `C:` = live support/date-app paths only
+- `9020` `D:` = openclaw/support sandbox lane
+- `T5500` `E:\ANTIGRAVITY-CLAWBOTS` = Manus / Crossfire / media sandbox lane
+
+## Secret / Credential Truth
+
+- No secret values in chat, git, or tracked briefings.
+- Active Cloudflare API credential was rotated on `2026-03-23`.
+- Current allowed secret access paths:
+  - local `.env`
+  - GitHub repo secrets
+  - approved platform connectors / vault material
+- Claws, coworkers, and sandbox setups should use env/secret-manager lookup only.
+- Do not hardcode Cloudflare, Square, Anthropic, OpenAI, Gemini, or Telegram secrets into repo files.
+
+## Account Mapping Truth
+
+- Date-app payment lane only:
+  - `ebaytrashortreasure@gmail.com`
+  - YouAndINotAI Square + PayPal
+- Non-date-app commerce / eBay / OnlineRecycle lane:
+  - `joshlcoleman@gmail.com`
+  - eBay login
+  - OnlineRecycle / merch / crosslister / non-date-app Square context
+
+## Current Product / Deploy Truth
+
+- YouAndINotAI production stack is repaired and live.
+- Backend auth/lovebot validation passed.
+- T5500 Manus dashboard scaffold is installed, builds, and serves locally.
+- Repo-controlled public hardening is pushed.
+- Cloudflare Pages live follow-through is still not fully closed; repo-side hardening is done, but Cloudflare-side verification/deploy completion may still be needed.
+- `aidoesitall.website` root source is still not identified in this repo.
+
+## Current Priority
+
+- Priority now shifts to **GenSpark lane setup and isolation** before returning to additional Manus / OnlineRecycle follow-through.
+- Keep GenSpark isolated from `C:\ANTIGRAVITY` until proven safe.
+- Preferred direction: dedicate the new extra `9020` drive to GenSpark only once the drive letter/path is known.
+
+## Do / Do Not
+
+Do:
+- stay anchored to `C:\ANTIGRAVITY` for live repo truth
+- use sandbox drives/repos for experimental lanes
+- preserve the date-app vs commerce account split
+- keep secret handling on env/vault/secret-manager paths only
+
+Do not:
+- treat legacy `E:\ANTIGRAVITY`, `C:\OPUSONLY`, or old exports as live truth
+- move experimental GenSpark / openclaw / third-party setups into `C:\ANTIGRAVITY`
+- overwrite the canonical authority model in `AGENTS.md`
+- paste live secret values into chat
+
+## Expected Reply Format
+
+Reply with:
+1. What current lane you are touching
+2. What files/paths you will use
+3. What you will leave untouched
+4. Your immediate next action
