@@ -1,7 +1,7 @@
 # REPOSITORY RECORD — SABRETOOTH LIVE STATE
 
 > **Date:** March 23, 2026
-> **Status:** `main` clean, frontend/backend live, node sandbox lanes isolated, public-surface hardening pushed; Pages redeploy still blocked
+> **Status:** frontend/backend live, node sandbox lanes isolated, BRAIN MCP scaffolded on Sabretooth, public-surface hardening pushed; Pages redeploy still blocked
 > **Authority:** Joshua Coleman
 
 ---
@@ -9,8 +9,8 @@
 ## Repository Truth
 
 - **Authoritative root:** `C:\ANTIGRAVITY`
-- **Git truth:** `main` on Sabretooth, pushed to `origin/main` at `14aee75`
-- **Worktree state:** clean after restoring the live API path, repairing the Cloud Run workflow, and revalidating the stack
+- **Git truth:** `main` on Sabretooth; see git for the current pushed commit
+- **Worktree state:** see git for current local state
 - **Secrets posture:** secrets stay in local `.env` and the Sabretooth continuity vault only
 - **Transparency rule:** approved infrastructure, routing, and recovery-critical operational truth stay documented in repo briefings/memory or the approved continuity vault path; no intentional locked-door continuity model
 - **Continuity vault root:** `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
@@ -39,6 +39,7 @@
 | T5500 Manus dashboard | RUNNABLE | new scaffold imported; install/check/build passed and `node dist/index.js` served `http://127.0.0.1:3000/` with `200` after clearing a stray old process |
 | Sabretooth Claude lane | ISOLATED | `E:\claudes-claw` remains the Claude Dispatch / coworker lane |
 | Sabretooth sandbox mirror | LIVE | `E:\sandbox-repo` now carries unified sandbox lanes for `claudes-claw`, `genspark`, `manus-claw`, `manus-meta-guardian`, and `openclaw-9020` |
+| BRAIN MCP scaffold | READY | formal spec in `briefings/BRAIN-MCP-SPEC.md` and runnable sidecar in `C:\ANTIGRAVITY\brain-mcp` |
 | Pages source hardening | PUSHED | repo-controlled hardening is live on `origin/main` |
 | Pages redeploy | SHIFTED | expensive GH actions deleted; dashboard source is Cloudflare-App-ready, but live post-hardening verification still depends on Cloudflare-side deploy completion |
 | onlinerecycle deploy | STAGED | `wrangler.toml` pre-configured in `_deploy/onlinerecycle` for manual Cloudflare Pages Dashboard binding |
@@ -67,6 +68,8 @@
 - **9020 node role:** crossfire, marketing workloads, the isolated date-app SupportClaw on `C:`, and the openclaw/support sandbox lane on `D:`
 - **T5500 secondary-drive role:** `E:\ANTIGRAVITY-CLAWBOTS` is the isolated Manus / Crossfire / media sandbox root
 - **Gemini guidance note:** `GEMINI.md` was added by user direction as Gemini-specific repo guidance expressing a first-party platform trust boundary for `C:`/main; `AGENTS.md` remains the canonical repo authority file because Josh is still the sole authority
+- **BRAIN MCP note:** the Sabretooth sidecar is now scaffolded as a shared operational memory/audit layer only; it does not replace platform memory, does not proxy inference, and treats `AGENTS.md` as canonical
+- **BRAIN auth note:** the local auth-ready registry now lives outside git at `C:\BRAIN-MCP\platform-registry.json`; raw BRAIN bearer tokens are stored only in local ignored `C:\ANTIGRAVITY\brain-mcp\.env`, while the registry stores token hashes only
 - **T5500 Manus dashboard validation note:** build passed with analytics placeholder warnings in `index.html`; after clearing a stale `EADDRINUSE` condition, `node dist/index.js` stayed healthy and served local HTTP `200` on port `3000`
 - **Manus provider connector note:** the Manus account under `joshlcoleman@gmail.com` now has OpenAI connected alongside Anthropic, Gemini, Perplexity, and Grok; OpenAI uses the standard API base URL and the key remains outside repo memory
 - **Public-surface hardening note:** repo-controlled public copy was reduced on `README.md`, `_deploy/onlinerecycle/*`, and `antigravity/`; public dashboard source no longer exposes internal node watch, task logs, wallet details, or public `.env` write paths
@@ -85,6 +88,7 @@
 4. **`aidoesitall.website` root-surface source was not identified in this repo during the hardening pass; only `dashboard.aidoesitall.website` repo-controlled source was hardened.**
 5. **Sabretooth Wrangler OAuth may still be stale, but the active Cloudflare API token is rotated and mirrored into local `.env` plus GitHub secrets; do not duplicate token values into claw configs or repo files.**
 6. **Loose env/archive files still remain at Sabretooth `E:\` root and should be moved into the approved vault path so `E:\sandbox-repo` becomes the only intended sandbox root on this node.**
+7. **BRAIN MCP still needs real client adoption on Claude/Gemini/Copilot/other approved lanes; the sidecar is built and auth-ready, but broader session participation is still the next rollout step.**
 
 ## Recent Pushed Commits
 

@@ -25,6 +25,7 @@ qdrant-data/
 package-lock.json
 !youandinotai/package-lock.json
 !antigravity/package-lock.json
+!brain-mcp/package-lock.json
 Thumbs.db
 .DS_Store
 temp-b64.txt
