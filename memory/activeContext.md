@@ -10,6 +10,8 @@
 - **Manus provider stack:** OpenAI is now connected alongside Anthropic, Gemini, Perplexity, and Grok on the Manus account lane.
 - **March 23 public hardening is pushed:** `README.md`, `_deploy/onlinerecycle/*`, and `antigravity` source hardening are on `origin/main` commit `14aee75`, and 9020/T5500 repo mirrors were fast-forwarded cleanly.
 - **Cloudflare secret path is current:** a no-expiry Cloudflare API token was rotated on 2026-03-23 into local Sabretooth `.env` and mirrored into GitHub repo secrets; claws should use env/secret-manager lookup only.
+- **Sabretooth sandbox mirror is present:** `E:\sandbox-repo` now carries unified sandbox lanes for `claudes-claw`, `genspark`, `manus-claw`, `manus-meta-guardian`, and `openclaw-9020`.
+- **Platform-trust boundary is explicit:** the user-directed `GEMINI.md` addition means the approved first-party platforms (Gemini, Claude Code, Codex, Copilot) may touch `C:`/main, while third-party or experimental platforms stay on sandbox drives; `AGENTS.md` remains the canonical repo authority file because Josh is still sole authority.
 
 ## Verified State
 
@@ -48,6 +50,7 @@
 3. **Crossfire on 9020 is currently process-based; convert to scheduled startup if you want reboot persistence.**
 4. **T5500 Manus dashboard still emits analytics placeholder warnings until real values are supplied.**
 5. **Cloudflare GitHub App builds are also failing on the hardened commit, so live Pages recovery now depends on Cloudflare build-log review or a corrected Wrangler-based deploy flow.**
+6. **Loose env/archive files still remain at Sabretooth `E:\` root and should be moved into the approved vault path before that drive is considered fully consolidated.**
 
 ## Rules To Preserve
 
