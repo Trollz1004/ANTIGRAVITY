@@ -45,6 +45,8 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - Rotated the active Cloudflare API credential on 2026-03-23 to a no-expiry token, mirrored it into local Sabretooth `.env` and GitHub repo secrets for both `ANTIGRAVITY` and the sandbox repo, and kept token values out of git.
 - Seeded `_deploy/onlinerecycle/wrangler.toml` indicating the Cloudflare target directory for manual Cloudflare Pages Dashboard pipeline generation by Manus.
 - Synced `C:\ANTIGRAVITY` on 9020 and T5500 to `14aee75` after the public-surface hardening push
+- Verified that Sabretooth `E:\sandbox-repo` now carries unified sandbox lanes for `claudes-claw`, `genspark`, `manus-claw`, `manus-meta-guardian`, and `openclaw-9020`
+- Recorded the user-directed Gemini platform-trust boundary as a first-party platform gate for `C:`/main while keeping Josh as sole authority and `AGENTS.md` as the canonical repo authority file
 
 ## Local / Live Validation
 
@@ -85,6 +87,7 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - Sabretooth Wrangler OAuth may still be stale, but the active Cloudflare API token is now rotated in local `.env` and mirrored into GitHub secrets
 - The current hardened commit also triggered a failing Cloudflare GitHub App build (`Workers Builds: snowy-wave-bf78`), so live Pages recovery still requires Cloudflare-side build-log review or a corrected Wrangler deploy path
 - `aidoesitall.website` root-surface source was not identified in this repo during the March 23 hardening pass; only the `dashboard.aidoesitall.website` repo-controlled source was updated
+- Sabretooth `E:\sandbox-repo` is now the local sandbox mirror for unified claw/coworker lanes, but loose env/archive files still remain at the `E:\` root and should be moved into the approved vault path before treating that drive as fully consolidated
 - The unlocked `C:\Users\joshl\OneDrive\Personal Vault` path still does not resolve as a real folder on this machine
 - Old DAO/platform repos and briefs remain recovery-library inputs only; live reuse must be ported intentionally into `C:\ANTIGRAVITY` and is now guided by `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`
 - The approved sandbox repo for all future unapproved or experimental work is `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git`
@@ -102,3 +105,4 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 4. If desired later, supply real analytics placeholder values so the T5500 Manus dashboard build becomes warning-free.
 5. Keep claw/coworker/sandbox configs consuming Cloudflare through local `.env`, GitHub secrets, or platform connectors only; do not duplicate the rotated token into repo files or hardcoded config values.
 6. Vault payload (`manus.env.txt`) securely pre-filled and sent to Manus for final Cloudflare configuration step.
+7. Clean the loose Sabretooth `E:\` env/archive files into the approved vault path when convenient so `E:\sandbox-repo` becomes the only intended sandbox root on this node.
