@@ -9,6 +9,7 @@
 - **Current sandbox validation focus:** T5500 now has the new Manus dashboard scaffold installed, built, and locally serving on port `3000`.
 - **Manus provider stack:** OpenAI is now connected alongside Anthropic, Gemini, Perplexity, and Grok on the Manus account lane.
 - **March 23 public hardening is pushed:** `README.md`, `_deploy/onlinerecycle/*`, and `antigravity` source hardening are on `origin/main` commit `14aee75`, and 9020/T5500 repo mirrors were fast-forwarded cleanly.
+- **Cloudflare secret path is current:** a no-expiry Cloudflare API token was rotated on 2026-03-23 into local Sabretooth `.env` and mirrored into GitHub repo secrets; claws should use env/secret-manager lookup only.
 
 ## Verified State
 
@@ -43,7 +44,7 @@
 ## Current Risks / Open Items
 
 1. **Continuity files now live in `Personal Vault-Sabretooth`, not the older `Personal Vault` path.**
-2. **The `.env` Cloudflare bearer tokens are stale, and the manual Pages-trigger workflow is using the wrong API shape for a direct deployment.**
+2. **Sabretooth Wrangler OAuth may still be stale, but the active Cloudflare API token is now rotated in local `.env` and GitHub secrets; keep claws using env/secret-manager access only and not hardcoded token values.**
 3. **Crossfire on 9020 is currently process-based; convert to scheduled startup if you want reboot persistence.**
 4. **T5500 Manus dashboard still emits analytics placeholder warnings until real values are supplied.**
 5. **Cloudflare GitHub App builds are also failing on the hardened commit, so live Pages recovery now depends on Cloudflare build-log review or a corrected Wrangler-based deploy flow.**

@@ -36,7 +36,7 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
   - Google Gemini (Jules): Visual intel, content, image gen, content pipeline orchestration.
     → Connects DIRECTLY to Google API via jules-cli.py. Bypasses OpenClaw and ALL middleware BY DESIGN.
     → PROTECTED: jules-cli.py, GEMINI_API_KEY, genai.Client, all gemini-* model refs. Do NOT reroute.
-    → Uses Cloudflare ~20x/day. Wrangler OAuth (joshlcoleman@gmail.com) ACTIVE — not a blocker.
+    → Cloudflare credential truth: the active no-expiry API token was rotated on 2026-03-23 into local `.env` and GitHub repo secrets. Use env/secret-manager lookup only; do not copy token values into repo files or chat.
   - Perplexity (Atlas): Deep research, competitor intel, real-time intelligence.
   - Grok AI: Adversarial testing, X-platform integration, stress-testing.
 - CodeX: Code execution TOOL. Not a co-founder. No authority over Founding Four.
@@ -127,7 +127,7 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
 - Cloudflare Tunnels (openclaw, mcp): LIVE & ROUTING via Sabretooth
 - youandinotai.com: DEPLOYED & LIVE (Cloudflare Pages)
 - Git history: PURGED & CLEAN — 332 commits rewritten, no secrets
-- Cloudflare: Wrangler OAuth (joshlcoleman@gmail.com) ACTIVE. Full permissions. Old API token in master vault is stale but unused - not a blocker.
+- Cloudflare: active no-expiry API token rotated on 2026-03-23 into local `.env` and GitHub repo secrets. If Wrangler OAuth drifts, prefer the current env/secret-manager path rather than reintroducing hardcoded tokens anywhere.
 - !! Claude subscription: PAYMENT FAILED 2026-03-05 — grace period !!
 - Local daemons (Sentry, Watchdog): PAUSED on Sabretooth — re-enable for multi-node deploys only
 

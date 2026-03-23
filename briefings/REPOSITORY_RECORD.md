@@ -57,7 +57,7 @@
 
 ## Operational Notes
 
-- **Cloudflare deploy auth:** the local `.env` bearer tokens are stale; GitHub still has `CLOUDFLARE_GLOBAL_API_KEY` and `CLOUDFLARE_ACCOUNT_ID`, and the workflow now falls back to that auth path
+- **Cloudflare deploy auth:** the active Cloudflare API credential was rotated on 2026-03-23 to a no-expiry token and mirrored into local Sabretooth `.env` plus GitHub repo secrets; keep claws and sandbox lanes consuming secret names/env lookup only
 - **OpenClaw model baseline:** Sabretooth now runs `qwen2.5:7b` primary, `qwen2.5:3b` fallback, and `nomic-embed-text` for memory search with no cloud model providers in the live config
 - **Cloud Run source deploy:** the repaired GitHub workflow now deploys from `youandinotai-api` source instead of the broken container path
 - **T5500 role:** used for backend recovery and deploy execution when Sabretooth needed the live service restored; its temporary support container is now offline so the box can stay available for heavier media/build work
@@ -80,7 +80,7 @@
 2. **`crossfire` on 9020 still uses detached processes; convert those to scheduled tasks or services if reboot persistence is required.**
 3. **T5500 Manus dashboard is runnable locally, but analytics placeholders still warn until real values are supplied.**
 4. **`aidoesitall.website` root-surface source was not identified in this repo during the hardening pass; only `dashboard.aidoesitall.website` repo-controlled source was hardened.**
-5. **`onlinerecycle` requires a one-time manual link via Cloudflare dashboard using Manus since local CLI credentials expired.**
+5. **Sabretooth Wrangler OAuth may still be stale, but the active Cloudflare API token is rotated and mirrored into local `.env` plus GitHub secrets; do not duplicate token values into claw configs or repo files.**
 
 ## Recent Pushed Commits
 
