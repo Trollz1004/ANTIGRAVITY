@@ -3,9 +3,9 @@ import { Activity, Users, Coins, Zap } from 'lucide-react';
 
 export default function DAOMetrics({ isDarkMode }: { isDarkMode: boolean }) {
   const metrics = [
-    { label: "Active Proposals", value: "0", icon: <Activity className="w-5 h-5 text-blue-500" />, note: "Pre-launch" },
-    { label: "Total Members", value: "0", icon: <Users className="w-5 h-5 text-purple-500" />, note: "Pre-launch" },
-    { label: "Treasury Balance", value: "$0", icon: <Coins className="w-5 h-5 text-amber-500" />, note: "Pre-launch" },
+    { label: "Active Plans", value: "0", icon: <Activity className="w-5 h-5 text-blue-500" />, note: "Pre-launch" },
+    { label: "Tracked Accounts", value: "0", icon: <Users className="w-5 h-5 text-purple-500" />, note: "Pre-launch" },
+    { label: "Tracked Balance", value: "$0", icon: <Coins className="w-5 h-5 text-amber-500" />, note: "Pre-launch" },
     { label: "Revenue", value: "$0", icon: <Zap className="w-5 h-5 text-emerald-500" />, note: "Launch: Apr 4" },
   ];
 
@@ -13,7 +13,7 @@ export default function DAOMetrics({ isDarkMode }: { isDarkMode: boolean }) {
     <div className="space-y-8">
       <div className="text-center mb-10">
         <h2 className="text-3xl font-bold flex items-center justify-center gap-3">
-          DAO Metrics
+          Status Metrics
         </h2>
         <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
           Real data only. All values will update when revenue starts flowing.

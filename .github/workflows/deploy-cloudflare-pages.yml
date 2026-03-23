@@ -9,6 +9,7 @@ on:
         type: choice
         options:
           - onlinerecycle
+          - jules-dashboard
           - ai-solutions-store
           - all
 
@@ -58,6 +59,7 @@ jobs:
 
           if [ "$PROJECT" = "all" ]; then
             trigger_deploy "onlinerecycle"
+            trigger_deploy "jules-dashboard"
             trigger_deploy "ai-solutions-store"
           else
             trigger_deploy "$PROJECT"

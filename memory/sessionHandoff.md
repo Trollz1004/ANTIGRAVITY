@@ -1,8 +1,8 @@
-# Session Handoff - 2026-03-22
+# Session Handoff - 2026-03-23
 
 ## Summary
 
-Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired end to end, the beta-access auth flow is live again, Claude Dispatch stays isolated on Sabretooth `E:`, 9020 now has its sandboxed openclaw lane on `D:` with stale relaunch tasks disabled, and T5500 now carries the isolated Manus / Crossfire / media lane on `E:\ANTIGRAVITY-CLAWBOTS` with the updated dashboard scaffold imported, built, and locally serving on port `3000`.
+Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired end to end, the beta-access auth flow is live again, Claude Dispatch stays isolated on Sabretooth `E:`, 9020 now has its sandboxed openclaw lane on `D:` with stale relaunch tasks disabled, T5500 now carries the isolated Manus / Crossfire / media lane on `E:\ANTIGRAVITY-CLAWBOTS` with the updated dashboard scaffold imported, built, and locally serving on port `3000`, and a March 23 public-surface hardening pass reduced repo-controlled overexposure on the public README, OnlineRecycle static site, and `antigravity` dashboard source.
 
 ## Accomplishments
 
@@ -34,6 +34,10 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - Imported the updated `manus-meta-guardian-dashboard.zip` on T5500, backed up the incomplete export, validated the new scaffold with `corepack pnpm install --frozen-lockfile`, `pnpm check`, and `pnpm build`, then proved local runtime by serving `http://127.0.0.1:3000/` with HTTP `200`
 - Confirmed the Manus account provider stack now includes OpenAI, Anthropic, Gemini, Perplexity, and Grok under the `joshlcoleman@gmail.com` account lane without storing connector secrets in repo memory
 - Kept SupportClaw and every live date-app path on `C:` untouched while building the node sandbox lanes
+- Reduced repo-controlled public exposure by rewriting `README.md`, customer-facing `_deploy/onlinerecycle/*` pages, and `antigravity` public dashboard copy toward service-first/status-only language
+- Disabled public dashboard `.env` writes by changing `antigravity/app/api/settings/route.ts` to return `403`
+- Removed public internal node/log/wallet-detail leakage from `antigravity` API routes and added a clean `_deploy/onlinerecycle/404.html` to reduce cross-brand/404 contamination after redeploy
+- Extended `.github/workflows/deploy-cloudflare-pages.yml` so GitHub can trigger both `onlinerecycle` and `jules-dashboard` Pages rebuilds
 
 ## Local / Live Validation
 
@@ -65,6 +69,7 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - 9020 now carries crossfire, marketing, the isolated support gateway on `C:`, and the openclaw/support sandbox lane on `D:`
 - T5500 no longer carries support and is available for heavier media/build workloads; `E:\ANTIGRAVITY-CLAWBOTS` is the Manus / Crossfire / media sandbox root
 - The new T5500 Manus dashboard scaffold is materially complete enough to install, type-check, build, and serve locally on port `3000`
+- `aidoesitall.website` root-surface source was not identified in this repo during the March 23 hardening pass; only the `dashboard.aidoesitall.website` repo-controlled source was updated
 - The unlocked `C:\Users\joshl\OneDrive\Personal Vault` path still does not resolve as a real folder on this machine
 - Old DAO/platform repos and briefs remain recovery-library inputs only; live reuse must be ported intentionally into `C:\ANTIGRAVITY` and is now guided by `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`
 - The approved sandbox repo for all future unapproved or experimental work is `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git`
@@ -80,3 +85,4 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 2. Do not route the continuity vault through OpenClaw config, mounts, or runtime access.
 3. Convert the 9020 crossfire runtime into scheduled startup if reboot persistence is required.
 4. If desired later, supply real analytics placeholder values so the T5500 Manus dashboard build becomes warning-free.
+5. Follow the March 23 push by redeploying `onlinerecycle` and `jules-dashboard`, then re-scan live pages to confirm old indexed copy is gone.

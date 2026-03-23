@@ -1,25 +1,25 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Antigravity Dashboard
 
-# Run and deploy your AI Studio app
+Next.js app for the public ANTIGRAVITY status dashboard.
 
-This contains everything you need to run your app locally.
+## Purpose
 
-View your app in AI Studio: https://ai.studio/apps/188b33a2-32a9-4446-836f-430d2ef81847
+This app is intended to expose only:
 
-## Run Locally
+- verified public links
+- explicitly tracked public metrics
+- general status notes that are safe for a public audience
 
-**Prerequisites:**  Node.js
+It is not an internal admin panel.
 
+## Local development
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+```powershell
+Set-Location C:\ANTIGRAVITY\antigravity
+npm install
+npm run dev
+```
 
----
-> "AI for kids in need, not adults with greed."
-> 
-> **Until no kid is in need. #FORtheKIDS 🚀**
+## Public-surface rule
+
+Internal node topology, task logs, credential entry, and private configuration changes do not belong in this app.
