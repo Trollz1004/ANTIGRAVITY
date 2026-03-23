@@ -1,7 +1,7 @@
 # REPOSITORY RECORD — SABRETOOTH LIVE STATE
 
 > **Date:** March 23, 2026
-> **Status:** `main` clean, frontend/backend live, node sandbox lanes isolated, public-surface hardening staged
+> **Status:** `main` clean, frontend/backend live, node sandbox lanes isolated, public-surface hardening pushed; Pages redeploy still blocked
 > **Authority:** Joshua Coleman
 
 ---
@@ -9,7 +9,7 @@
 ## Repository Truth
 
 - **Authoritative root:** `C:\ANTIGRAVITY`
-- **Git truth:** `main` on Sabretooth, pushed to `origin/main`
+- **Git truth:** `main` on Sabretooth, pushed to `origin/main` at `14aee75`
 - **Worktree state:** clean after restoring the live API path, repairing the Cloud Run workflow, and revalidating the stack
 - **Secrets posture:** secrets stay in local `.env` and the Sabretooth continuity vault only
 - **Transparency rule:** approved infrastructure, routing, and recovery-critical operational truth stay documented in repo briefings/memory or the approved continuity vault path; no intentional locked-door continuity model
@@ -38,6 +38,9 @@
 | T5500 Manus lane | ISOLATED | `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian` materially restored from sanitized Sabretooth export |
 | T5500 Manus dashboard | RUNNABLE | new scaffold imported; install/check/build passed and `node dist/index.js` served `http://127.0.0.1:3000/` with `200` after clearing a stray old process |
 | Sabretooth Claude lane | ISOLATED | `E:\claudes-claw` remains the Claude Dispatch / coworker lane |
+| Pages source hardening | PUSHED | repo-controlled hardening for `README.md`, `_deploy/onlinerecycle/*`, and `antigravity` is on `origin/main` `14aee75` |
+| Pages redeploy | BLOCKED | current manual GitHub workflow trigger hits a Cloudflare direct-deployment endpoint that now expects a `manifest` body |
+| Cloudflare GitHub App build | FAILING | latest observed failing Cloudflare build on hardened commit surfaced as `Workers Builds: snowy-wave-bf78` |
 
 ## Product State
 
@@ -54,7 +57,7 @@
 
 ## Operational Notes
 
-- **Cloudflare deploy auth:** Wrangler OAuth is the active deploy path; the stale `.env` API token is not the production auth mechanism
+- **Cloudflare deploy auth:** the local `.env` bearer tokens are stale; GitHub still has `CLOUDFLARE_GLOBAL_API_KEY` and `CLOUDFLARE_ACCOUNT_ID`, and the workflow now falls back to that auth path
 - **OpenClaw model baseline:** Sabretooth now runs `qwen2.5:7b` primary, `qwen2.5:3b` fallback, and `nomic-embed-text` for memory search with no cloud model providers in the live config
 - **Cloud Run source deploy:** the repaired GitHub workflow now deploys from `youandinotai-api` source instead of the broken container path
 - **T5500 role:** used for backend recovery and deploy execution when Sabretooth needed the live service restored; its temporary support container is now offline so the box can stay available for heavier media/build work
@@ -65,6 +68,7 @@
 - **Manus provider connector note:** the Manus account under `joshlcoleman@gmail.com` now has OpenAI connected alongside Anthropic, Gemini, Perplexity, and Grok; OpenAI uses the standard API base URL and the key remains outside repo memory
 - **Public-surface hardening note:** repo-controlled public copy was reduced on `README.md`, `_deploy/onlinerecycle/*`, and `antigravity/`; public dashboard source no longer exposes internal node watch, task logs, wallet details, or public `.env` write paths
 - **Pages deploy workflow note:** `.github/workflows/deploy-cloudflare-pages.yml` now supports `jules-dashboard` in addition to `onlinerecycle`
+- **Pages deploy workflow note:** even after auth fallback repair, the current direct API trigger still fails with Cloudflare error `8000096` because that endpoint expects a `manifest` body; the next repair should use the documented Wrangler `pages deploy` path or rely on a fixed Cloudflare GitHub App build
 - **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
 - **Legacy DAO/platform material:** old repos and archived briefs are recovery-library inputs only; reusable elements must be ported intentionally into the current repo baseline. See `briefings/DAO-RECOVERY-CANDIDATES.md`.
 - **Sandbox policy:** future experimental or brainstorming work starts in the sandbox repo, not in `C:\ANTIGRAVITY`.
@@ -74,10 +78,11 @@
 ## Current Open Items
 
 1. **Vault continuity snapshots should stay in sync with any future real credential change.**
-2. **The stale Cloudflare API token in `.env` is still informational debt, not an operational blocker.**
+2. **The local Cloudflare bearer tokens in `.env` are stale, and the current manual Pages-trigger workflow still cannot complete a deploy.**
 3. **`crossfire` on 9020 still uses detached processes; convert those to scheduled tasks or services if reboot persistence is required.**
 4. **T5500 Manus dashboard is runnable locally, but analytics placeholders still warn until real values are supplied.**
 5. **`aidoesitall.website` root-surface source was not identified in this repo during the hardening pass; only `dashboard.aidoesitall.website` repo-controlled source was hardened.**
+6. **Cloudflare GitHub App build failure on the hardened commit still needs investigation before live Pages can be called current.**
 
 ## Recent Pushed Commits
 
@@ -86,6 +91,8 @@
 - `346facc` `fix: align cloud run workflow with source deploy`
 - `0ac16cc` `fix: include scheduler runtime dependencies`
 - `95fd3d5` `fix: restore cloud run api compatibility`
+- `abdf60f` `fix: harden public surfaces and dashboard exposure`
+- `14aee75` `fix: use global key fallback for cloudflare deploys`
 
 ---
 

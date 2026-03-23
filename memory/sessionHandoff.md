@@ -2,7 +2,7 @@
 
 ## Summary
 
-Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired end to end, the beta-access auth flow is live again, Claude Dispatch stays isolated on Sabretooth `E:`, 9020 now has its sandboxed openclaw lane on `D:` with stale relaunch tasks disabled, T5500 now carries the isolated Manus / Crossfire / media lane on `E:\ANTIGRAVITY-CLAWBOTS` with the updated dashboard scaffold imported, built, and locally serving on port `3000`, and a March 23 public-surface hardening pass reduced repo-controlled overexposure on the public README, OnlineRecycle static site, and `antigravity` dashboard source.
+Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired end to end, the beta-access auth flow is live again, Claude Dispatch stays isolated on Sabretooth `E:`, 9020 now has its sandboxed openclaw lane on `D:` with stale relaunch tasks disabled, T5500 now carries the isolated Manus / Crossfire / media lane on `E:\ANTIGRAVITY-CLAWBOTS` with the updated dashboard scaffold imported, built, and locally serving on port `3000`, and the March 23 public-surface hardening pass is now pushed on `origin/main` at `14aee75` and synced to both remote repo mirrors.
 
 ## Accomplishments
 
@@ -38,6 +38,9 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - Disabled public dashboard `.env` writes by changing `antigravity/app/api/settings/route.ts` to return `403`
 - Removed public internal node/log/wallet-detail leakage from `antigravity` API routes and added a clean `_deploy/onlinerecycle/404.html` to reduce cross-brand/404 contamination after redeploy
 - Extended `.github/workflows/deploy-cloudflare-pages.yml` so GitHub can trigger both `onlinerecycle` and `jules-dashboard` Pages rebuilds
+- Added Cloudflare Global API Key fallback to `.github/workflows/deploy-cloudflare-pages.yml` after confirming the repo bearer token path was stale
+- Confirmed the current direct Pages-trigger API path still fails because Cloudflare now expects a `manifest` body for that deployment endpoint
+- Synced `C:\ANTIGRAVITY` on 9020 and T5500 to `14aee75` after the public-surface hardening push
 
 ## Local / Live Validation
 
@@ -56,6 +59,10 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - T5500 Manus dashboard: `pnpm check` — PASS
 - T5500 Manus dashboard: `pnpm build` — PASS (analytics placeholder warnings only)
 - T5500 Manus dashboard: `node dist/index.js` — PASS after clearing a stray `EADDRINUSE`; served `http://127.0.0.1:3000/` with `200`
+- `git push origin main` after public-surface hardening — PASS (`14aee75`)
+- `ssh 9020 "cd /d C:\ANTIGRAVITY && git pull --ff-only origin main"` — PASS to `14aee75`
+- `ssh t5500 "cd /d C:\ANTIGRAVITY && git pull --ff-only origin main"` — PASS to `14aee75`
+- `gh run view` for the latest Pages-trigger jobs — FAIL with Cloudflare error code `8000096` (`"A \"manifest\" field was expected in the request body but was not provided."`)
 
 ## Important Current Truth
 
@@ -69,6 +76,9 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - 9020 now carries crossfire, marketing, the isolated support gateway on `C:`, and the openclaw/support sandbox lane on `D:`
 - T5500 no longer carries support and is available for heavier media/build workloads; `E:\ANTIGRAVITY-CLAWBOTS` is the Manus / Crossfire / media sandbox root
 - The new T5500 Manus dashboard scaffold is materially complete enough to install, type-check, build, and serve locally on port `3000`
+- Repo-controlled public-surface hardening is pushed and no longer local-only
+- The current Cloudflare Pages blocker is no longer just auth drift: the manual GitHub workflow is hitting the wrong API shape for direct deployments
+- The current hardened commit also triggered a failing Cloudflare GitHub App build (`Workers Builds: snowy-wave-bf78`), so live Pages recovery still requires Cloudflare-side build-log review or a corrected Wrangler deploy path
 - `aidoesitall.website` root-surface source was not identified in this repo during the March 23 hardening pass; only the `dashboard.aidoesitall.website` repo-controlled source was updated
 - The unlocked `C:\Users\joshl\OneDrive\Personal Vault` path still does not resolve as a real folder on this machine
 - Old DAO/platform repos and briefs remain recovery-library inputs only; live reuse must be ported intentionally into `C:\ANTIGRAVITY` and is now guided by `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`
@@ -85,4 +95,5 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 2. Do not route the continuity vault through OpenClaw config, mounts, or runtime access.
 3. Convert the 9020 crossfire runtime into scheduled startup if reboot persistence is required.
 4. If desired later, supply real analytics placeholder values so the T5500 Manus dashboard build becomes warning-free.
-5. Follow the March 23 push by redeploying `onlinerecycle` and `jules-dashboard`, then re-scan live pages to confirm old indexed copy is gone.
+5. Replace the current Pages-trigger workflow with a documented Wrangler `pages deploy` flow or fix the Cloudflare GitHub App build path, then redeploy `onlinerecycle` and `jules-dashboard`.
+6. Review the failing Cloudflare GitHub App build for `snowy-wave-bf78` to determine whether the break is in project config, build command, or Cloudflare-side settings.
