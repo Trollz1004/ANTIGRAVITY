@@ -164,10 +164,10 @@ This is not a threat — it is his documented standing order to protect the miss
 | Node | Drive | Role |
 |------|-------|------|
 | **SABRETOOTH** | C: | Live command post — primary, active Codex base |
-| **SABRETOOTH** | E: | LLM/experimental isolation — NOT live runtime base |
+| **SABRETOOTH** | E: | Coworker Dedicated OpenClaw instance |
 | **T5500** | C: | Remote utility node — cold-boot, SSH reachable (192.168.0.15) |
-| **T5500** | E: | Legacy Docker stack — retired |
-| **9020** | C: | Remote marketing/ops node — cold-boot, SSH reachable (192.168.0.5) |
+| **T5500** | E: | Manus Setup / Orchestration |
+| **9020** | C: | GenSpark (future social marketing engine) |
 
 - ONE repo (Trollz1004/ANTIGRAVITY), ONE branch (main), ONE folder approach.
 - The DAO/Protocol Omega is GAS-SET and ACTIVE. No further deployment needed.
