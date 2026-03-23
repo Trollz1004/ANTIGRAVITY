@@ -294,10 +294,10 @@ New ideas, experimental platforms, and speculative automation go here first.
 | Node | Drive | Role |
 |------|-------|------|
 | SABRETOOTH | C: | Live command post — primary |
-| SABRETOOTH | E: | Claude Dispatch / coworker lane — isolated sandbox only |
+| SABRETOOTH | E: | Coworker instance isolated sandbox only |
 | T5500 | C: | Remote utility / heavy media-build node — SSH reachable (192.168.0.15) |
-| T5500 | E: | Manus / Crossfire / media sandbox lane (`E:\ANTIGRAVITY-CLAWBOTS`) |
-| 9020 | C: | Remote marketing/ops/support — SSH reachable (192.168.0.5); live support/date-app paths stay here |
+| T5500 | E: | Manus orchestration setup / media sandbox lane |
+| 9020 | C: | GenSpark (future social marketing engine) / Remote ops — SSH reachable (192.168.0.5) |
 | 9020 | D: | OpenClaw/support sandbox lane (`D:\claws`, `D:\sandbox-repos`) |
 
 - 9020 SSH: `ssh -i ~/.ssh/id_ed25519 joshl@192.168.0.5` (cmd.exe shell)
