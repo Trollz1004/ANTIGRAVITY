@@ -1,4 +1,4 @@
-# Active Context - 2026-03-22
+# Active Context - 2026-03-23
 
 ## Current Focus
 
@@ -8,6 +8,7 @@
 - **Continuity vault is current:** the live continuity root is `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`.
 - **Current sandbox validation focus:** T5500 now has the new Manus dashboard scaffold installed, built, and locally serving on port `3000`.
 - **Manus provider stack:** OpenAI is now connected alongside Anthropic, Gemini, Perplexity, and Grok on the Manus account lane.
+- **March 23 public hardening is pushed:** `README.md`, `_deploy/onlinerecycle/*`, and `antigravity` source hardening are on `origin/main` commit `14aee75`, and 9020/T5500 repo mirrors were fast-forwarded cleanly.
 
 ## Verified State
 
@@ -24,6 +25,7 @@
 - **9020 crossfire backend:** `http://localhost:8000/api/health` returns `{"status":"ok"}`
 - **9020 crossfire frontend:** `http://localhost:5173` serves the Vite app shell
 - **T5500 Manus dashboard validation:** install/check/build passed after importing the updated scaffold zip, and `node dist/index.js` served local HTTP `200`
+- **Cloudflare deploy status:** repo changes are pushed, but live Pages redeploy is still blocked by Cloudflare-specific issues rather than repo drift
 
 ## Recently Finished
 
@@ -35,13 +37,16 @@
 - Synced the vault continuity env with the current live `.env`
 - Disabled stale 9020 task relaunch points after populating the node sandbox lane
 - Imported the updated Manus dashboard scaffold on T5500 and validated install/check/build/runtime
+- Pushed the March 23 public-surface hardening pass and synced 9020/T5500 `C:\ANTIGRAVITY` worktrees to `14aee75`
+- Confirmed the current manual Pages-trigger workflow is not enough because the Cloudflare direct deployment endpoint now expects a `manifest` body
 
 ## Current Risks / Open Items
 
 1. **Continuity files now live in `Personal Vault-Sabretooth`, not the older `Personal Vault` path.**
-2. **The `.env` Cloudflare token remains stale, but Wrangler OAuth is the real operational auth path.**
+2. **The `.env` Cloudflare bearer tokens are stale, and the manual Pages-trigger workflow is using the wrong API shape for a direct deployment.**
 3. **Crossfire on 9020 is currently process-based; convert to scheduled startup if you want reboot persistence.**
 4. **T5500 Manus dashboard still emits analytics placeholder warnings until real values are supplied.**
+5. **Cloudflare GitHub App builds are also failing on the hardened commit, so live Pages recovery now depends on Cloudflare build-log review or a corrected Wrangler-based deploy flow.**
 
 ## Rules To Preserve
 
