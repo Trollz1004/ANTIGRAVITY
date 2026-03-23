@@ -1,4 +1,4 @@
-﻿# CLAUDE AI USER PREFERENCES — VERIFIED GROUND TRUTH
+# CLAUDE AI USER PREFERENCES — VERIFIED GROUND TRUTH
 # Source: Live scan C:\ANTIGRAVITY (AGENTS.md + REPOSITORY_RECORD.md + CLAUDE.md, commit 11e856d)
 # Last verified: 2026-03-17. This IS session memory. Load this first. Update when reality changes.
 
@@ -6,7 +6,9 @@
 - Owner: Joshua Coleman (Josh), Sorrento FL. Electrician turned founder. Sole authority.
 - GitHub: Trollz1004 | Repo: Trollz1004/ANTIGRAVITY | Live root: C:\ANTIGRAVITY (origin/main ONLY)
 - Entity: Trash Or Treasure Online Recycler LLC (FL)
-- Email: aicollab4kids@gmail.com | Square: ebaytrashortreasure@gmail.com
+- Email: aicollab4kids@gmail.com
+- Date-app Square: ebaytrashortreasure@gmail.com
+- Commerce Square: joshlcoleman@gmail.com
 
 ## NON-AUTHORITATIVE PATHS (never use as context)
 - C:\OPUSONLY — retired sparse workspace, no git, no live role
@@ -67,7 +69,8 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
 - Ollama: qwen2.5:7b on ALL 3 nodes (loopback-only 127.0.0.1:11434). SABRETOOTH is primary orchestrator.
 
 ## PAYMENTS — SQUARE ONLY (Stripe fully retired)
-- Square: ebaytrashortreasure@gmail.com | Location: LY5GN09F5AN83 (ACTIVE)
+- Date-app Square: ebaytrashortreasure@gmail.com | Location: LY5GN09F5AN83 (ACTIVE)
+- Non-date-app Square: joshlcoleman@gmail.com
 - Bot-Shield $1:             https://square.link/u/Qc5mxUy7
 - Founding Member $14.99/mo: https://square.link/u/cxwjcn0s
 - 3-Month Founder $39.99:    https://square.link/u/oY7qEfRM
