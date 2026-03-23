@@ -16,7 +16,7 @@ This file is the short-form current state. For canonical repo truth, use:
 | Authoritative root | `C:\ANTIGRAVITY` |
 | Branch | `main` |
 | Head | `main` (see git for current commit) |
-| Worktree | Clean on March 22, 2026 |
+| Worktree | Clean on March 23, 2026 |
 | Frontend | Cloudflare Pages |
 | Backend | FastAPI + PostgreSQL on Cloud Run |
 | Payments | Square |
@@ -48,7 +48,8 @@ This file is the short-form current state. For canonical repo truth, use:
 - The new Manus dashboard scaffold was imported on T5500, `corepack pnpm install --frozen-lockfile`, `pnpm check`, and `pnpm build` all passed there, and `node dist/index.js` served `http://127.0.0.1:3000/` with HTTP `200` after clearing a stray old process.
 - The Manus account under `joshlcoleman@gmail.com` now has the OpenAI connector enabled in addition to Anthropic, Gemini, Perplexity, and Grok; connector secrets remain only in the Manus UI / approved vault path, not in repo memory.
 - Repo-controlled public exposure was reduced on `README.md`, `_deploy/onlinerecycle/*`, and `antigravity/`; the public dashboard source no longer exposes internal node watch, task logs, wallet detail, or public `.env` writes.
-- `.github/workflows/deploy-cloudflare-pages.yml` now supports triggering the `jules-dashboard` Pages project alongside `onlinerecycle`.
+- Repo-controlled public-surface hardening was pushed to `origin/main` on March 23, 2026 and remote `C:\ANTIGRAVITY` worktrees on 9020 and T5500 were fast-forwarded cleanly.
+- `.github/workflows/deploy-cloudflare-pages.yml` now supports triggering the `jules-dashboard` Pages project alongside `onlinerecycle` and can fall back to the Cloudflare Global API Key when the bearer token path is stale.
 - Legacy DAO/platform repos are design recovery sources only, not live implementation truth; approved recovery candidates are tracked in `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`.
 - Future brainstorming, experimental platforms, and unapproved new product work now start in the dedicated sandbox repo, not in `C:\ANTIGRAVITY`.
 - 9020 stale scheduled-task relaunch points are now disabled; the sandbox lane remains populated and support/date-app paths were left untouched.
@@ -62,8 +63,10 @@ This file is the short-form current state. For canonical repo truth, use:
 
 ## Known Gaps
 
-1. The stale `CLOUDFLARE_API_TOKEN` in `.env` remains documentation debt, but not a live deploy blocker.
+1. The local `.env` Cloudflare bearer tokens (`CLOUDFLARE_API_TOKEN` / `CF_API_TOKEN`) are stale and fail Cloudflare token verification.
 2. Docker is not part of the current Sabretooth baseline.
 3. `crossfire` on 9020 still relies on detached processes rather than a service manager.
 4. T5500 Manus dashboard is runnable locally, but its analytics placeholders still need real values if you want those warnings gone.
 5. The source for the root `aidoesitall.website` surface was not identified in this repo during the hardening pass; only the `dashboard.aidoesitall.website` repo-controlled source was updated.
+6. The manual Cloudflare Pages workflow still does not complete a deploy because the direct deployment endpoint now expects a `manifest` request body; the current GitHub Action is not yet using the documented Wrangler `pages deploy` path.
+7. Cloudflare GitHub App builds are also failing on the current hardened commit; the latest observed failing Cloudflare build surfaced as `Workers Builds: snowy-wave-bf78`, so live Pages recovery now depends on Cloudflare-side build-log review or a corrected Wrangler-based deploy path.
