@@ -38,9 +38,9 @@
 | T5500 Manus lane | ISOLATED | `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian` materially restored from sanitized Sabretooth export |
 | T5500 Manus dashboard | RUNNABLE | new scaffold imported; install/check/build passed and `node dist/index.js` served `http://127.0.0.1:3000/` with `200` after clearing a stray old process |
 | Sabretooth Claude lane | ISOLATED | `E:\claudes-claw` remains the Claude Dispatch / coworker lane |
-| Pages source hardening | PUSHED | repo-controlled hardening for `README.md`, `_deploy/onlinerecycle/*`, and `antigravity` is on `origin/main` `14aee75` |
-| Pages redeploy | BLOCKED | current manual GitHub workflow trigger hits a Cloudflare direct-deployment endpoint that now expects a `manifest` body |
-| Cloudflare GitHub App build | FAILING | latest observed failing Cloudflare build on hardened commit surfaced as `Workers Builds: snowy-wave-bf78` |
+| Pages source hardening | PUSHED | repo-controlled hardening is live on `origin/main` |
+| Pages redeploy | RESOLVED | expensive GH actions deleted; next.js dashboard natively builds using edge runtime via Cloudflare App deploy |
+| onlinerecycle deploy | STAGED | `wrangler.toml` pre-configured in `_deploy/onlinerecycle` for manual Cloudflare Pages Dashboard binding |
 
 ## Product State
 
@@ -67,8 +67,7 @@
 - **T5500 Manus dashboard validation note:** build passed with analytics placeholder warnings in `index.html`; after clearing a stale `EADDRINUSE` condition, `node dist/index.js` stayed healthy and served local HTTP `200` on port `3000`
 - **Manus provider connector note:** the Manus account under `joshlcoleman@gmail.com` now has OpenAI connected alongside Anthropic, Gemini, Perplexity, and Grok; OpenAI uses the standard API base URL and the key remains outside repo memory
 - **Public-surface hardening note:** repo-controlled public copy was reduced on `README.md`, `_deploy/onlinerecycle/*`, and `antigravity/`; public dashboard source no longer exposes internal node watch, task logs, wallet details, or public `.env` write paths
-- **Pages deploy workflow note:** `.github/workflows/deploy-cloudflare-pages.yml` now supports `jules-dashboard` in addition to `onlinerecycle`
-- **Pages deploy workflow note:** even after auth fallback repair, the current direct API trigger still fails with Cloudflare error `8000096` because that endpoint expects a `manifest` body; the next repair should use the documented Wrangler `pages deploy` path or rely on a fixed Cloudflare GitHub App build
+- **Pages deploy workflow note:** All manual Cloudflare GitHub actions were deleted to preserve billing. Deploys now exclusively bind natively through Cloudflare dashboard pointing at `_deploy/onlinerecycle/wrangler.toml` allowing seamless edge runtime compilation off `main`.
 - **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
 - **Legacy DAO/platform material:** old repos and archived briefs are recovery-library inputs only; reusable elements must be ported intentionally into the current repo baseline. See `briefings/DAO-RECOVERY-CANDIDATES.md`.
 - **Sandbox policy:** future experimental or brainstorming work starts in the sandbox repo, not in `C:\ANTIGRAVITY`.
@@ -78,11 +77,10 @@
 ## Current Open Items
 
 1. **Vault continuity snapshots should stay in sync with any future real credential change.**
-2. **The local Cloudflare bearer tokens in `.env` are stale, and the current manual Pages-trigger workflow still cannot complete a deploy.**
-3. **`crossfire` on 9020 still uses detached processes; convert those to scheduled tasks or services if reboot persistence is required.**
-4. **T5500 Manus dashboard is runnable locally, but analytics placeholders still warn until real values are supplied.**
-5. **`aidoesitall.website` root-surface source was not identified in this repo during the hardening pass; only `dashboard.aidoesitall.website` repo-controlled source was hardened.**
-6. **Cloudflare GitHub App build failure on the hardened commit still needs investigation before live Pages can be called current.**
+2. **`crossfire` on 9020 still uses detached processes; convert those to scheduled tasks or services if reboot persistence is required.**
+3. **T5500 Manus dashboard is runnable locally, but analytics placeholders still warn until real values are supplied.**
+4. **`aidoesitall.website` root-surface source was not identified in this repo during the hardening pass; only `dashboard.aidoesitall.website` repo-controlled source was hardened.**
+5. **`onlinerecycle` requires a one-time manual link via Cloudflare dashboard using Manus since local CLI credentials expired.**
 
 ## Recent Pushed Commits
 
