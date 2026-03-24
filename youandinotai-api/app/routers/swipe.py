@@ -100,6 +100,7 @@ async def get_matches(
                 last_message_at=match.last_message_at,
                 verified=(other_profile.verified if other_profile else False),
                 subscription_active=(other_user.subscription_active if other_user else False),
+                breeze_bypass_enabled=match.breeze_bypass_enabled,
             )
         )
     return results
@@ -143,6 +144,25 @@ async def discover(
                 location=profile.location,
                 verified=profile.verified,
                 subscription_active=profile_user.subscription_active,
+                mission_impact_score=profile_user.mission_impact_score,
+                intent_badge=profile_user.intent_badge,
             )
         )
     return results
+
+
+@router.patch("/matches/{match_id}/breeze-bypass")
+async def toggle_breeze_bypass(
+    match_id: uuid.UUID,
+    enabled: bool,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Breeze Bypass: Toggle zero-chat handshake mode for a specific match."""
+    match = await db.get(Match, match_id)
+    if not match or user.id not in (match.user_a, match.user_b):
+        raise HTTPException(status_code=404, detail="Match not found")
+    
+    match.breeze_bypass_enabled = enabled
+    await db.commit()
+    return {"match_id": match_id, "breeze_bypass_enabled": enabled}
