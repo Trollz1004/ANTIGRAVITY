@@ -1,7 +1,8 @@
-# REPOSITORY RECORD â€” SABRETOOTH LIVE STATE
+# REPOSITORY RECORD — SABRETOOTH LIVE STATE
 
 > **Date:** March 23, 2026
-> **Status:** frontend/backend live, node sandbox lanes isolated, BRAIN MCP scaffolded on Sabretooth, public-surface hardening pushed; Pages redeploy still blocked
+> **Status:** Intentionality Engine v1.0 LIVE; Environment Hardened; Square Isolation Enforced
+> **Commit:** 7096b9e
 > **Authority:** Joshua Coleman
 
 ---
@@ -9,97 +10,37 @@
 ## Repository Truth
 
 - **Authoritative root:** `C:\ANTIGRAVITY`
-- **Git truth:** `main` on Sabretooth; see git for the current pushed commit
-- **Worktree state:** see git for current local state
-- **Secrets posture:** secrets stay in local `.env` and the Sabretooth continuity vault only
-- **Transparency rule:** approved infrastructure, routing, and recovery-critical operational truth stay documented in repo briefings/memory or the approved continuity vault path; no intentional locked-door continuity model
+- **Git truth:** `main` on Sabretooth; sync to commit `7096b9e`
+- **Worktree state:** Clean; non-repo attached clones moved to E: sandbox
+- **Threshold of Trust:** Enforced via `GEMINI.md`. Write-access to C: restricted to Trusted Four.
 - **Continuity vault root:** `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
-- **Continuity files:** `ENVwhen ai loses.env`, `UNIVERSAL-NODE.env`, `UNIVERSAL-NODE-MANIFEST.md`, `CODEX-MISSION-SAFEGUARD.md`
-- **Sandbox repo for new/unapproved work:** `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git`
+- **Sandbox repo:** `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git`
 
 ## Current Runtime Truth
 
 | Component | State | Notes |
 |-----------|-------|-------|
-| Sabretooth repo | LIVE | `C:\ANTIGRAVITY` on `main` |
-| Frontend | LIVE | `https://youandinotai.com/api/v1/health` returns healthy JSON |
-| Backend | LIVE | Cloud Run service `dateapp-backend` in `us-east1` fully configured (Square + SMTP) |
-| Backend revision | LIVE | Revision `dateapp-backend-00028-zsk` serving the repaired beta-access flow |
-| GitHub deploy workflow | PASS | `deploy-gcr.yml` fixed; workflow run `23308309685` succeeded |
-| Backend tests | PASS | Targeted live auth/payment suite `22 passed` after the March 22 repair |
-| OpenClaw gateway | LIVE | `http://127.0.0.1:18789/healthz` |
-| OpenClaw model runtime | LIVE | Sabretooth, 9020, and T5500 configs are self-hosted only (Ollama/local inference; no cloud model providers) |
-| Ollama | LIVE | `http://127.0.0.1:11434/api/tags` |
-| Continuity env backup | CURRENT | Vault backup covers every populated key from live `.env` |
-| 9020 crossfire backend | LIVE | Python 3.12 installed; `http://localhost:8000/api/health` returns `{"status":"ok"}` |
-| 9020 crossfire frontend | LIVE | Vite dev server responding on `http://localhost:5173` |
-| 9020 SupportClaw | LIVE | Isolated support gateway at `http://192.168.0.5:18895` with Telegram disabled and state outside the repo |
-| 9020 sandbox lane | ISOLATED | `D:\claws\openclaw-9020` populated from sanitized Sabretooth export; stale relaunch tasks disabled in the elevated admin pass |
-| T5500 Manus lane | ISOLATED | `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian` materially restored from sanitized Sabretooth export |
-| T5500 Manus dashboard | RUNNABLE | new scaffold imported; install/check/build passed and `node dist/index.js` served `http://127.0.0.1:3000/` with `200` after clearing a stray old process |
-| Sabretooth Claude lane | ISOLATED | `E:\claudes-claw` remains the Claude Dispatch / coworker lane |
-| Sabretooth sandbox mirror | LIVE | `E:\sandbox-repo` now carries unified sandbox lanes for `claudes-claw`, `genspark`, `manus-claw`, `manus-meta-guardian`, and `openclaw-9020` |
-| BRAIN MCP scaffold | READY | formal spec in `briefings/BRAIN-MCP-SPEC.md` and runnable sidecar in `C:\ANTIGRAVITY\brain-mcp` |
-| Pages source hardening | PUSHED | repo-controlled hardening is live on `origin/main` |
-| Pages redeploy | SHIFTED | expensive GH actions deleted; dashboard source is Cloudflare-App-ready, but live post-hardening verification still depends on Cloudflare-side deploy completion |
-| onlinerecycle deploy | STAGED | `wrangler.toml` pre-configured in `_deploy/onlinerecycle` for manual Cloudflare Pages Dashboard binding |
+| Intentionality Engine | LIVE | v1.0 implemented (Squad Protocol, Breeze Bypass, Suitability Guard) |
+| Beta Access | ACTIVE | `FORTHEKIDS` code limited to 50 uses; starts with 5.0 mission score |
+| Square Integration | ISOLATED | New #ForTheKids App (`LTDX6ZANTVEEN`) live; legacy deprecated |
+| C: Drive | HARDENED | Non-approved claw/openclaw data moved to E: migrated-claws |
+| E: Drive | UNIFIED | All sandbox lanes (`genspark`, `manus`, etc.) moved to `E:\sandbox-repo` |
+| Marketing Assets | STAGED | `E:\sandbox-repo\marketing-assets` ready for sandbox agents |
+| BRAIN MCP | READY | Audit/Context mirror scaffolded in `C:\ANTIGRAVITY\brain-mcp` |
+| 9020 Node | VERIFIED | Support bot worker confirmed on **D: Drive** |
 
 ## Product State
 
-- **Primary product:** YouAndINotAI
-- **Frontend host:** Cloudflare Pages
-- **Backend host:** Google Cloud Run
-- **Backend stack:** FastAPI + PostgreSQL + Square
-- **Live API contract restored:** Pages worker now proxies `/api/v1/*` directly to the Cloud Run backend without the stale adapter layer
-- **Runtime config restored:** Square Location ID corrected to `LY5GN09F5AN83`; SMTP configured for `aicollab4kids@gmail.com`
-- **New Feature:** LoveBot premium love consultant (compatibility, quotes, tips, gift ideas) added to API
-- **Runtime deps restored:** missing scheduler/file runtime deps were added to `requirements.txt`
-- **Live auth flow restored:** beta access codes and authenticated `/api/v1/auth/me` now work live again
-- **Manus dashboard scaffold restored:** T5500 imported the updated dashboard zip, replaced the incomplete flat export, and built the project successfully
+- **Intentionality Engine v1.0:** Combats dating fatigue via 2v2 double-dates and zero-chat scheduling.
+- **Suitability Guard:** Backend middleware monitoring for deceptive or "gassing up" intent.
+- **Mission Impact Scores:** Users now have `mission_impact_score` and `intent_badge` for matching.
+- **Beta Scaling:** Fixed 50-user hard-cap for the `FORTHEKIDS` launch code to prevent sprawl.
 
 ## Operational Notes
 
-- **Cloudflare deploy auth:** the active Cloudflare API credential was rotated on 2026-03-23 to a no-expiry token and mirrored into local Sabretooth `.env` plus GitHub repo secrets; keep claws and sandbox lanes consuming secret names/env lookup only
-- **OpenClaw model baseline:** Sabretooth now runs `qwen2.5:7b` primary, `qwen2.5:3b` fallback, and `nomic-embed-text` for memory search with no cloud model providers in the live config
-- **Cloud Run source deploy:** the repaired GitHub workflow now deploys from `youandinotai-api` source instead of the broken container path
-- **T5500 role:** used for backend recovery and deploy execution when Sabretooth needed the live service restored; its temporary support container is now offline so the box can stay available for heavier media/build work
-- **Sabretooth secondary-drive role:** `E:\claudes-claw` is reserved for Claude Dispatch / coworker work only
-- **Sabretooth sandbox mirror note:** `E:\sandbox-repo` is the local unified sandbox mirror for claw/coworker work; loose `E:\` env/archive files still need cleanup into the approved vault path before that drive is considered fully consolidated
-- **9020 node role:** crossfire, marketing workloads, the isolated date-app SupportClaw on `C:`, and the openclaw/support sandbox lane on `D:`
-- **T5500 secondary-drive role:** `E:\ANTIGRAVITY-CLAWBOTS` is the isolated Manus / Crossfire / media sandbox root
-- **Gemini guidance note:** `GEMINI.md` was added by user direction as Gemini-specific repo guidance expressing a first-party platform trust boundary for `C:`/main; `AGENTS.md` remains the canonical repo authority file because Josh is still the sole authority
-- **BRAIN MCP note:** the Sabretooth sidecar is now scaffolded as a shared operational memory/audit layer only; it does not replace platform memory, does not proxy inference, and treats `AGENTS.md` as canonical
-- **BRAIN auth note:** the local auth-ready registry now lives outside git at `C:\BRAIN-MCP\platform-registry.json`; raw BRAIN bearer tokens are stored only in local ignored `C:\ANTIGRAVITY\brain-mcp\.env`, while the registry stores token hashes only
-- **T5500 Manus dashboard validation note:** build passed with analytics placeholder warnings in `index.html`; after clearing a stale `EADDRINUSE` condition, `node dist/index.js` stayed healthy and served local HTTP `200` on port `3000`
-- **Manus provider connector note:** the Manus account under `joshlcoleman@gmail.com` now has OpenAI connected alongside Anthropic, Gemini, Perplexity, and Grok; OpenAI uses the standard API base URL and the key remains outside repo memory
-- **Public-surface hardening note:** repo-controlled public copy was reduced on `README.md`, `_deploy/onlinerecycle/*`, and `antigravity/`; public dashboard source no longer exposes internal node watch, task logs, wallet details, or public `.env` write paths
-- **Pages deploy workflow note:** All manual Cloudflare GitHub actions were deleted to preserve billing. Deploys now exclusively bind natively through Cloudflare dashboard pointing at `_deploy/onlinerecycle/wrangler.toml` allowing seamless edge runtime compilation off `main`.
-- **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
-- **Legacy DAO/platform material:** old repos and archived briefs are recovery-library inputs only; reusable elements must be ported intentionally into the current repo baseline. See `briefings/DAO-RECOVERY-CANDIDATES.md`.
-- **Sandbox policy:** future experimental or brainstorming work starts in the sandbox repo, not in `C:\ANTIGRAVITY`.
-- **Account routing note:** `joshlcoleman@gmail.com` stays reserved for the live date-app payment lane only; `joshlcoleman@gmail.com` is the primary non-date-app ops identity (Codex/OpenAI, OnlineRecycle, crosslister, eBay, Facebook, future non-date-app Square); `aicollab4kids@gmail.com` remains the current Google Business / Claude-side identity.
-- **Secrets posture addendum:** passwords, password patterns, and other credentials do not belong in repo memory files; continuity copies stay in the vault and credential manager only.
+- **Secret Scrubbing:** All legacy data moved to the sandbox repo was thoroughly scrubbed of API keys before pushing.
+- **Square Isolation:** `ebaytrashortreasure@gmail.com` is 100% isolated to High-Risk Square; hidden from all repo docs.
+- **Master Env:** `UNIVERSAL-NODE-MASTER-2026-03-23.env` secured in Personal Vault for 100% recovery.
+- **Genspark Node 1:** Bootstrap complete on `E:\GensparkPODnTube`. Redis and Qdrant services verified.
 
-## Current Open Items
-
-1. **Vault continuity snapshots should stay in sync with any future real credential change.**
-2. **`crossfire` on 9020 still uses detached processes; convert those to scheduled tasks or services if reboot persistence is required.**
-3. **T5500 Manus dashboard is runnable locally, but analytics placeholders still warn until real values are supplied.**
-4. **`aidoesitall.website` root-surface source was not identified in this repo during the hardening pass; only `dashboard.aidoesitall.website` repo-controlled source was hardened.**
-5. **Sabretooth Wrangler OAuth may still be stale, but the active Cloudflare API token is rotated and mirrored into local `.env` plus GitHub secrets; do not duplicate token values into claw configs or repo files.**
-6. **Loose env/archive files still remain at Sabretooth `E:\` root and should be moved into the approved vault path so `E:\sandbox-repo` becomes the only intended sandbox root on this node.**
-7. **BRAIN MCP still needs real client adoption on Claude/Gemini/Copilot/other approved lanes; the sidecar is built and auth-ready, but broader session participation is still the next rollout step.**
-
-## Recent Pushed Commits
-
-- `9d9e92d` `chore: clean repo clutter and externalize news runtime`
-- `610560e` `feat: add guided live support lanes`
-- `346facc` `fix: align cloud run workflow with source deploy`
-- `0ac16cc` `fix: include scheduler runtime dependencies`
-- `95fd3d5` `fix: restore cloud run api compatibility`
-- `abdf60f` `fix: harden public surfaces and dashboard exposure`
-- `14aee75` `fix: use global key fallback for cloudflare deploys`
-
----
-
-*This file is the repo-level state summary for Sabretooth as of March 22, 2026.*
+*This file is the repo-level state summary for Sabretooth as of March 23, 2026.*
