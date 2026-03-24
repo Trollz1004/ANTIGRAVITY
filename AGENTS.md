@@ -369,7 +369,7 @@ Hooks (`.Codex/settings.json`):
 Skills (`/command`): status, health, iron-wall, launch-checklist, cost-check, my-workflow,
 deploy-check, square-status, donate-scan, security-review
 
-MCP Servers (`.mcp.json`): omega-sentry, postgres, playwright, memory
+MCP Servers (`.mcp.json`): antigravity-sentry, postgres, playwright, memory
 
 CI: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405, Iron Wall)
 
