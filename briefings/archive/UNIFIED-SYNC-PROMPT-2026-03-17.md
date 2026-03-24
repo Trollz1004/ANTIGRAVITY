@@ -126,7 +126,7 @@ You are one of the AI agents working on the ANTIGRAVITY project, owned and opera
 | 12-Month Founder | $99.99 | https://square.link/u/6GHpbvvl |
 | Royalty Card | $2,500 | https://square.link/u/CafhorUS |
 
-- Square account: ebaytrashortreasure@gmail.com
+- Square account: joshlcoleman@gmail.com
 - Square location: LY5GN09F5AN83
 - Stripe: LEGACY ONLY — being phased out.
 
