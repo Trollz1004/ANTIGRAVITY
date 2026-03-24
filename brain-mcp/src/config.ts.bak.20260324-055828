@@ -82,7 +82,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     certificationAuthority: true,
     allowedIps: ["127.0.0.1", "192.168.0.8"],
     allowedPathPrefixes: ["C:\\ANTIGRAVITY"],
-    blockedPathPrefixes: [],
+    blockedPathPrefixes: ["C:\\OMEGA", "C:\\OMEGA365"],
   },
   {
     id: "claude-opus-sabretooth",
@@ -92,8 +92,8 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     participationMode: "required",
     certificationAuthority: true,
     allowedIps: ["127.0.0.1", "192.168.0.8"],
-    allowedPathPrefixes: ["C:\\ANTIGRAVITY", "E:\\claudes-claw", "E:\\sandbox-repo"],
-    blockedPathPrefixes: [],
+    allowedPathPrefixes: ["C:\\ANTIGRAVITY", "E:\\claudes-claw"],
+    blockedPathPrefixes: ["C:\\OMEGA", "C:\\OMEGA365"],
   },
   {
     id: "gemini-cli-sabretooth",
@@ -104,7 +104,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     certificationAuthority: true,
     allowedIps: ["127.0.0.1", "192.168.0.8"],
     allowedPathPrefixes: ["C:\\ANTIGRAVITY"],
-    blockedPathPrefixes: [],
+    blockedPathPrefixes: ["C:\\OMEGA", "C:\\OMEGA365"],
   },
   {
     id: "github-copilot-sabretooth",
@@ -115,7 +115,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     certificationAuthority: true,
     allowedIps: ["127.0.0.1", "192.168.0.8"],
     allowedPathPrefixes: ["C:\\ANTIGRAVITY"],
-    blockedPathPrefixes: [],
+    blockedPathPrefixes: ["C:\\OMEGA", "C:\\OMEGA365"],
   },
   {
     id: "manus-t5500",
@@ -126,7 +126,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     certificationAuthority: false,
     allowedIps: ["192.168.0.15"],
     allowedPathPrefixes: ["E:\\ANTIGRAVITY-CLAWBOTS"],
-    blockedPathPrefixes: ["C:\\ANTIGRAVITY"],
+    blockedPathPrefixes: ["C:\\ANTIGRAVITY", "C:\\OMEGA", "C:\\OMEGA365"],
   },
   {
     id: "genspark-9020",
@@ -137,18 +137,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     certificationAuthority: false,
     allowedIps: ["192.168.0.5"],
     allowedPathPrefixes: ["D:\\sandbox-repos", "D:\\claws"],
-    blockedPathPrefixes: ["C:\\ANTIGRAVITY"],
-  },
-  {
-    id: "anythingllm-sabretooth",
-    displayName: "AnythingLLM Desktop",
-    nodeId: "sabretooth",
-    tier: "trusted_execution",
-    participationMode: "voluntary",
-    certificationAuthority: false,
-    allowedIps: ["127.0.0.1", "192.168.0.8"],
-    allowedPathPrefixes: ["C:\\ANTIGRAVITY", "E:\\sandbox-repo", "E:\\ANYTHINGLLM"],
-    blockedPathPrefixes: [],
+    blockedPathPrefixes: ["C:\\ANTIGRAVITY", "C:\\OMEGA", "C:\\OMEGA365"],
   },
 ];
 

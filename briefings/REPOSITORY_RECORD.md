@@ -25,6 +25,8 @@
 | Square Integration | ISOLATED | `ebaytrashortreasure@gmail.com` stays reserved for YouAndINotAI Square/PayPal; `joshlcoleman@gmail.com` handles the non-date-app Square lane |
 | E: Drive | STAGED | loose env files are not present at the root; sandbox mirror remains at `E:\sandbox-repo` and GenSpark staging remains at `E:\GensparkPODnTube` |
 | BRAIN MCP | READY | Audit/Context mirror scaffolded in `C:\ANTIGRAVITY\brain-mcp` |
+|
+| Unified Bridge | LIVE | AnythingLLM + BRAIN MCP + Ollama wired; launcher on Desktop |
 | 9020 Node | VERIFIED | Support bot worker confirmed on **D: Drive** and repo mirror fast-forwarded to `89123cc` |
 | T5500 Node | VERIFIED | repo mirror fast-forwarded cleanly to `89123cc` |
 
