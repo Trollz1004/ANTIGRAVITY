@@ -51,7 +51,7 @@ Paste or reference this file when syncing Gemini or Claude to the current verifi
 ## Account Mapping Truth
 
 - Date-app payment lane only:
-  - `ebaytrashortreasure@gmail.com`
+  - `joshlcoleman@gmail.com`
   - YouAndINotAI Square + PayPal
 - Non-date-app commerce / eBay / OnlineRecycle lane:
   - `joshlcoleman@gmail.com`

@@ -7,7 +7,7 @@
 - GitHub: Trollz1004 | Repo: Trollz1004/ANTIGRAVITY | Live root: C:\ANTIGRAVITY (origin/main ONLY)
 - Entity: Trash Or Treasure Online Recycler LLC (FL)
 - Email: aicollab4kids@gmail.com
-- Date-app Square: ebaytrashortreasure@gmail.com
+- Date-app Square: joshlcoleman@gmail.com
 - Commerce Square: joshlcoleman@gmail.com
 
 ## NON-AUTHORITATIVE PATHS (never use as context)
@@ -69,7 +69,7 @@ RULE: If context was not loaded from C:\ANTIGRAVITY on origin/main — treat it 
 - Ollama: qwen2.5:7b on ALL 3 nodes (loopback-only 127.0.0.1:11434). SABRETOOTH is primary orchestrator.
 
 ## PAYMENTS — SQUARE ONLY (Stripe fully retired)
-- Date-app Square: ebaytrashortreasure@gmail.com | Location: LY5GN09F5AN83 (ACTIVE)
+- Date-app Square: joshlcoleman@gmail.com | Location: LY5GN09F5AN83 (ACTIVE)
 - Non-date-app Square: joshlcoleman@gmail.com
 - Bot-Shield $1:             https://square.link/u/Qc5mxUy7
 - Founding Member $14.99/mo: https://square.link/u/cxwjcn0s
