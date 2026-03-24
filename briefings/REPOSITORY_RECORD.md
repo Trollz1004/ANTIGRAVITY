@@ -2,7 +2,7 @@
 
 > **Date:** March 24, 2026
 > **Status:** backend repaired, payment truth normalized, sandbox mirror intact
-> **Commit:** see git for current pushed commit
+> **Commit:** `89123cc`
 > **Authority:** Joshua Coleman
 
 ---
@@ -10,8 +10,8 @@
 ## Repository Truth
 
 - **Authoritative root:** `C:\ANTIGRAVITY`
-- **Git truth:** `main` on Sabretooth; see git for the current pushed commit
-- **Worktree state:** verify with git at closeout; this record does not override git
+- **Git truth:** `main` on Sabretooth at `89123cc`
+- **Worktree state:** clean at closeout
 - **Threshold of Trust:** enforced as an operational boundary, while `AGENTS.md` remains the canonical authority file
 - **Continuity vault root:** `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
 - **Sandbox repo:** `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git`
@@ -25,7 +25,8 @@
 | Square Integration | ISOLATED | `ebaytrashortreasure@gmail.com` stays reserved for YouAndINotAI Square/PayPal; `joshlcoleman@gmail.com` handles the non-date-app Square lane |
 | E: Drive | STAGED | loose env files are not present at the root; sandbox mirror remains at `E:\sandbox-repo` and GenSpark staging remains at `E:\GensparkPODnTube` |
 | BRAIN MCP | READY | Audit/Context mirror scaffolded in `C:\ANTIGRAVITY\brain-mcp` |
-| 9020 Node | VERIFIED | Support bot worker confirmed on **D: Drive** |
+| 9020 Node | VERIFIED | Support bot worker confirmed on **D: Drive** and repo mirror fast-forwarded to `89123cc` |
+| T5500 Node | VERIFIED | repo mirror fast-forwarded cleanly to `89123cc` |
 
 ## Product State
 
