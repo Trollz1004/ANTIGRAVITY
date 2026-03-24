@@ -33,6 +33,8 @@ def test_beta_access_issues_real_tokens(client, db_session_factory, monkeypatch)
     assert user.bot_shield_verified is True
     assert user.subscription_active is True
     assert user.subscription_tier == "founding_member"
+    assert user.mission_impact_score == 5.0
+    assert user.intent_badge == "Intentional"
 
     get_settings.cache_clear()
 

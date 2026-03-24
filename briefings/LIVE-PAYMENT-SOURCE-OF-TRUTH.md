@@ -14,7 +14,7 @@ If any older doc, node note, export, or backup conflicts with this file:
 ## Current Live Rail
 
 - Primary live payment rail: **Square only**
-- Date-app Square account: `joshlcoleman@gmail.com`
+- Date-app Square account: `ebaytrashortreasure@gmail.com`
 - Commerce / Non-date-app Square account: `joshlcoleman@gmail.com`
 - Active Square location: `LY5GN09F5AN83`
 - Customer-facing payment copy must stay business-first and must not use `donate`, `donation`, or `solicitation`
