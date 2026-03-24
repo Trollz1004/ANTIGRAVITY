@@ -32,7 +32,7 @@ class User(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
     )
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)`n    mission_impact_score: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)`n    intent_badge: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
     profile: Mapped["Profile | None"] = relationship(back_populates="user", uselist=False)
 
@@ -97,7 +97,7 @@ class Match(Base):
     )
     compatibility_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     status: Mapped[str] = mapped_column(String(50), default="active", nullable=False)
-    matched_at: Mapped[datetime] = mapped_column(
+    breeze_bypass_enabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)`n    matched_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
     last_message_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
@@ -390,3 +390,4 @@ class DoubleDateAcceptance(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+

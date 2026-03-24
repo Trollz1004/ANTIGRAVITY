@@ -15,6 +15,7 @@ from app.schemas import (
     DoubleDateParticipantResponse,
     DoubleDateProposeRequest,
     DoubleDateSessionResponse,
+    DoubleDateSquadRecommendation,
 )
 
 router = APIRouter(prefix="/double-dates")
@@ -278,3 +279,33 @@ async def decline_double_date(
     await db.commit()
     await db.refresh(session)
     return await _serialize_session(db, session)
+
+
+@router.get("/squad-recommendations", response_model=list[DoubleDateSquadRecommendation])
+async def get_squad_recommendations(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> list[DoubleDateSquadRecommendation]:
+    """Squad Protocol: Recommend matches for double-dates based on Mission Impact Score."""
+    all_matches = (await db.scalars(
+        select(Match).where(
+            or_(Match.user_a == user.id, Match.user_b == user.id),
+            Match.status == "active"
+        )
+    )).all()
+    recommended = []
+    for m in all_matches:
+        target_id = m.user_b if m.user_a == user.id else m.user_a
+        target_user = await db.get(User, target_id)
+        if not target_user:
+            continue
+        target_profile = await db.scalar(select(Profile).where(Profile.user_id == target_id))
+        photo = str(target_profile.photos[0]) if target_profile and target_profile.photos else None
+        recommended.append(DoubleDateSquadRecommendation(
+            match_id=m.id,
+            display_name=target_user.display_name,
+            photo_url=photo,
+            mission_score=target_user.mission_impact_score,
+            intent_badge=target_user.intent_badge
+        ))
+    return sorted(recommended, key=lambda x: x.mission_score, reverse=True)[:10]
