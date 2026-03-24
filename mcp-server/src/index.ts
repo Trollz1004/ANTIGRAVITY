@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Omega Sentry MCP Server
+ * ANTIGRAVITY Sentry MCP Server
+ * Content and protocol tools for Claude Code & Gemini
  * Transport: stdio (Claude Code) or http (claude.ai remote connector)
  * Set TRANSPORT=http and MCP_HTTP_PORT=3100 for remote access
  */
@@ -11,13 +12,11 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { createServer, IncomingMessage, ServerResponse } from "node:http";
 import "dotenv/config";
 
-import { registerStripeTools } from "./tools/stripe.js";
 import { registerContentTools } from "./tools/content.js";
 import { registerProtocolTools } from "./tools/protocol.js";
 
 function createMcpServer(): McpServer {
-  const s = new McpServer({ name: "omega-sentry", version: "1.0.0" });
-  registerStripeTools(s);
+  const s = new McpServer({ name: "antigravity-sentry", version: "1.0.1" });
   registerContentTools(s);
   registerProtocolTools(s);
   return s;
@@ -69,7 +68,7 @@ if (process.env.TRANSPORT === "http") {
       }
     }
   }).listen(PORT, "127.0.0.1", () => {
-    process.stderr.write(`omega-sentry MCP HTTP server on port ${PORT}\n`);
+    process.stderr.write(`antigravity-sentry MCP HTTP server on port ${PORT}\n`);
   });
 } else {
   // Default: stdio for Claude Code

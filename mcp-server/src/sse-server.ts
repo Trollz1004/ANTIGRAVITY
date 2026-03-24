@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Omega Sentry MCP Server — SSE Transport
+ * ANTIGRAVITY Sentry MCP Server — SSE Transport
  * Runs on port 3100, exposed via Cloudflare tunnel.
  * Connect from claude.ai or any MCP client via SSE.
  */
@@ -10,7 +10,6 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import "dotenv/config";
 
-import { registerStripeTools } from "./tools/stripe.js";
 import { registerContentTools } from "./tools/content.js";
 import { registerProtocolTools } from "./tools/protocol.js";
 
@@ -36,7 +35,7 @@ const httpServer = http.createServer(async (req, res) => {
   // Health check
   if (url.pathname === "/health") {
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ status: "ok", server: "omega-sentry", transport: "sse" }));
+    res.end(JSON.stringify({ status: "ok", server: "antigravity-sentry", transport: "sse" }));
     return;
   }
 
@@ -44,8 +43,7 @@ const httpServer = http.createServer(async (req, res) => {
   if (url.pathname === "/sse" && req.method === "GET") {
     console.log(`[MCP] New SSE connection from ${req.socket.remoteAddress}`);
 
-    const server = new McpServer({ name: "omega-sentry", version: "1.0.0" });
-    registerStripeTools(server);
+    const server = new McpServer({ name: "antigravity-sentry", version: "1.0.1" });
     registerContentTools(server);
     registerProtocolTools(server);
 
@@ -81,8 +79,8 @@ const httpServer = http.createServer(async (req, res) => {
 });
 
 httpServer.listen(PORT, () => {
-  console.log(`[MCP] Omega Sentry SSE server running on port ${PORT}`);
+  console.log(`[MCP] ANTIGRAVITY Sentry SSE server running on port ${PORT}`);
   console.log(`[MCP] SSE endpoint: http://localhost:${PORT}/sse`);
   console.log(`[MCP] Health: http://localhost:${PORT}/health`);
-  console.log(`[MCP] Tools: Stripe revenue, content bank, protocol info`);
+  console.log(`[MCP] Tools: content bank, protocol info`);
 });
