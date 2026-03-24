@@ -1,59 +1,41 @@
-# Active Context - 2026-03-23
+# Active Context - 2026-03-24
 
 ## Current Focus
 
-- **Production date app is restored:** `https://youandinotai.com/api/v1/health` returns healthy backend JSON and beta-access auth is live again.
-- **`origin/main` is caught up:** Sabretooth `main` is pushed and clean.
-- **Node lanes are isolated:** Claude Dispatch stays on Sabretooth `E:`, 9020 owns the `D:` sandbox lane, and T5500 owns the `E:\ANTIGRAVITY-CLAWBOTS` Manus lane.
-- **Continuity vault is current:** the live continuity root is `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`.
-- **Current sandbox validation focus:** T5500 now has the new Manus dashboard scaffold installed, built, and locally serving on port `3000`.
-- **Manus provider stack:** OpenAI is now connected alongside Anthropic, Gemini, Perplexity, and Grok on the Manus account lane.
-- **March 23 public hardening is pushed:** `README.md`, `_deploy/onlinerecycle/*`, and `antigravity` source hardening are on `origin/main` commit `14aee75`, and 9020/T5500 repo mirrors were fast-forwarded cleanly.
-- **Cloudflare secret path is current:** a no-expiry Cloudflare API token was rotated on 2026-03-23 into local Sabretooth `.env` and mirrored into GitHub repo secrets; claws should use env/secret-manager lookup only.
-- **Sabretooth sandbox mirror is present:** `E:\sandbox-repo` now carries unified sandbox lanes for `claudes-claw`, `genspark`, `manus-claw`, `manus-meta-guardian`, and `openclaw-9020`.
-- **Platform-trust boundary is explicit:** the user-directed `GEMINI.md` addition means the approved first-party platforms (Gemini, Claude Code, Codex, Copilot) may touch `C:`/main, while third-party or experimental platforms stay on sandbox drives; `AGENTS.md` remains the canonical repo authority file because Josh is still sole authority.
-- **BRAIN MCP is now scaffolded:** the Sabretooth sidecar exists at `C:\ANTIGRAVITY\brain-mcp` with spec, tools, resources, auth-ready registry wiring, and local audit storage.
+- **Clean fallback point is locked:** Sabretooth `main` is clean and pushed at `89123cc`.
+- **Remote repo mirrors are aligned:** `9020` and `T5500` were fast-forwarded cleanly to `89123cc`.
+- **Date-app backend repair is complete:** the Intentionality Engine patch was repaired back to a compile-clean, test-passing state.
+- **Payment/account truth is back in alignment:** `ebaytrashortreasure@gmail.com` stays isolated for the date-app Square/PayPal lane, and `joshlcoleman@gmail.com` stays on the non-date-app commerce lane.
+- **Node lanes remain isolated:** Claude Dispatch stays on Sabretooth `E:`, 9020 owns the `D:` sandbox lane, and T5500 owns the `E:\ANTIGRAVITY-CLAWBOTS` Manus lane.
+- **Sabretooth sandbox staging is intact:** `E:\sandbox-repo` remains the unified sandbox mirror and `E:\GensparkPODnTube` remains separate GenSpark staging.
+- **BRAIN MCP is built and auth-ready:** the sidecar exists at `C:\ANTIGRAVITY\brain-mcp` with local auth registry wiring and audit storage.
 
 ## Verified State
 
 - **Repo root:** `C:\ANTIGRAVITY`
 - **Branch:** `main`
-- **HEAD:** see git for current commit
+- **HEAD:** `89123cc`
 - **Worktree:** clean
-- **Frontend validation:** `npm run build` passed
-- **Backend validation:** targeted auth/lovebot suite `22 passed`
-- **Live frontend/API:** `https://youandinotai.com/api/v1/health` returns healthy JSON
-- **Cloud Run workflow:** latest run completed successfully on March 19, 2026
-- **OpenClaw health:** `http://127.0.0.1:18789/healthz`
-- **Ollama health:** `http://127.0.0.1:11434/api/tags`
-- **9020 crossfire backend:** `http://localhost:8000/api/health` returns `{"status":"ok"}`
-- **9020 crossfire frontend:** `http://localhost:5173` serves the Vite app shell
-- **T5500 Manus dashboard validation:** install/check/build passed after importing the updated scaffold zip, and `node dist/index.js` served local HTTP `200`
-- **Cloudflare deploy status:** repo changes are pushed, but live Pages redeploy is still blocked by Cloudflare-specific issues rather than repo drift
+- **Backend validation:** `uv run --python 3.13 --with-requirements requirements.txt pytest tests/test_auth.py tests/test_auth_routes.py tests/test_double_dates_routes.py` -> `20 passed`
+- **Backend compile check:** `uv run --python 3.13 --with-requirements requirements.txt python -m compileall app` passed
+- **Sandbox repo:** `E:\sandbox-repo` is clean
+- **9020 repo mirror:** clean on `89123cc`
+- **T5500 repo mirror:** clean on `89123cc`
 
 ## Recently Finished
 
-- Replaced the stale Cloudflare Pages worker adapter with a direct `/api/v1/*` proxy
-- Restored backend JWT config compatibility via legacy `SECRET_KEY` alias support
-- Added missing runtime dependencies required by the live backend
-- Repaired GitHub Cloud Run deployment automation and verified a successful run
-- Rebuilt and redeployed the frontend
-- Synced the vault continuity env with the current live `.env`
-- Disabled stale 9020 task relaunch points after populating the node sandbox lane
-- Imported the updated Manus dashboard scaffold on T5500 and validated install/check/build/runtime
-- Pushed the March 23 public-surface hardening pass and synced 9020/T5500 `C:\ANTIGRAVITY` worktrees to `14aee75`
-- Confirmed the current manual Pages-trigger workflow is not enough because the Cloudflare direct deployment endpoint now expects a `manifest` body
-- Built and locally smoke-tested the BRAIN MCP sidecar with stdio and authenticated HTTP modes, including session enter/action/exit logging
+- Repaired the broken Gemini-touched date-app backend patch
+- Added schema reconciliation for mission-score / intent-badge / breeze-bypass columns
+- Added `greenlet` to backend requirements so async SQLAlchemy tests run cleanly on Windows
+- Restored consistent Square/account truth across repo briefings and memory files
+- Pushed the clean fallback commit `89123cc` and synced `9020` plus `T5500`
 
 ## Current Risks / Open Items
 
-1. **Continuity files now live in `Personal Vault-Sabretooth`, not the older `Personal Vault` path.**
-2. **Sabretooth Wrangler OAuth may still be stale, but the active Cloudflare API token is now rotated in local `.env` and GitHub secrets; keep claws using env/secret-manager access only and not hardcoded token values.**
-3. **Crossfire on 9020 is currently process-based; convert to scheduled startup if you want reboot persistence.**
+1. **BRAIN MCP is auth-ready, but approved clients still need their session-participation rollout to get full drift visibility.**
+2. **Cloudflare Pages recovery still depends on Cloudflare-side deploy/build correction rather than repo drift.**
+3. **Crossfire on 9020 is still process-based if reboot persistence matters later.**
 4. **T5500 Manus dashboard still emits analytics placeholder warnings until real values are supplied.**
-5. **Cloudflare GitHub App builds are also failing on the hardened commit, so live Pages recovery now depends on Cloudflare build-log review or a corrected Wrangler-based deploy flow.**
-6. **Loose env/archive files still remain at Sabretooth `E:\` root and should be moved into the approved vault path before that drive is considered fully consolidated.**
-7. **BRAIN MCP is auth-ready, but approved clients still need their final session-participation rollout to get full drift visibility.**
 
 ## Rules To Preserve
 

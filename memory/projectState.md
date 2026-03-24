@@ -7,7 +7,7 @@
 | Field | Value |
 |-------|-------|
 | Authoritative root | `C:\ANTIGRAVITY` |
-| Commit | see git for current pushed commit |
+| Commit | `89123cc` |
 | Status | Backend repaired / clean fallback point |
 | Trust Policy | Threshold of Trust Enforced (C: Drive Isolated) |
 | Sandbox repo | `Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY` |
@@ -22,6 +22,7 @@
 ## Operational Truth
 
 - **C: Drive Hardening:** production repo remains at `C:\ANTIGRAVITY`; unapproved claw/platform work stays off the live repo.
+- **Fallback Point:** `main` is clean at `89123cc`, and `9020` plus `T5500` were fast-forwarded cleanly to the same commit.
 - **Personal Vault:** Updated with `UNIVERSAL-NODE-MASTER-2026-03-23.env` and full sync records.
 - **GitHub Secrets:** Synchronized Square and Cloudflare credentials across both main and sandbox repos.
 - **Marketing Data:** Staged logos, visuals, and catalog data in the E: sandbox for worker agents.
