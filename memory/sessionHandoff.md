@@ -92,7 +92,7 @@ Sabretooth `main` is clean and pushed, the live YouAndINotAI stack is repaired e
 - Old DAO/platform repos and briefs remain recovery-library inputs only; live reuse must be ported intentionally into `C:\ANTIGRAVITY` and is now guided by `C:\ANTIGRAVITY\briefings\DAO-RECOVERY-CANDIDATES.md`
 - The approved sandbox repo for all future unapproved or experimental work is `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git`
 - Email/account routing as of March 20, 2026:
-  - `ebaytrashortreasure@gmail.com` = live date-app payment lane only (`YouAndINotAI` Square + PayPal)
+  - `joshlcoleman@gmail.com` = live date-app payment lane only (`YouAndINotAI` Square + PayPal)
   - `joshlcoleman@gmail.com` = primary ops identity for Codex/OpenAI plus OnlineRecycle, crosslister, eBay, Facebook, and future non-date-app Square work
   - `aicollab4kids@gmail.com` = current Google Business / Claude-side identity
 - Do not store passwords, password patterns, or other secrets in repo memory; keep them only in the vault and credential manager.

@@ -77,7 +77,7 @@
 - **Node repo state:** Sabretooth, 9020, and T5500 are all back on `main` at the same GitHub commit
 - **Legacy DAO/platform material:** old repos and archived briefs are recovery-library inputs only; reusable elements must be ported intentionally into the current repo baseline. See `briefings/DAO-RECOVERY-CANDIDATES.md`.
 - **Sandbox policy:** future experimental or brainstorming work starts in the sandbox repo, not in `C:\ANTIGRAVITY`.
-- **Account routing note:** `ebaytrashortreasure@gmail.com` stays reserved for the live date-app payment lane only; `joshlcoleman@gmail.com` is the primary non-date-app ops identity (Codex/OpenAI, OnlineRecycle, crosslister, eBay, Facebook, future non-date-app Square); `aicollab4kids@gmail.com` remains the current Google Business / Claude-side identity.
+- **Account routing note:** `joshlcoleman@gmail.com` stays reserved for the live date-app payment lane only; `joshlcoleman@gmail.com` is the primary non-date-app ops identity (Codex/OpenAI, OnlineRecycle, crosslister, eBay, Facebook, future non-date-app Square); `aicollab4kids@gmail.com` remains the current Google Business / Claude-side identity.
 - **Secrets posture addendum:** passwords, password patterns, and other credentials do not belong in repo memory files; continuity copies stay in the vault and credential manager only.
 
 ## Current Open Items

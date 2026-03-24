@@ -151,7 +151,7 @@ This is not a threat — it is his documented standing order to protect the miss
 | 12-Month Founder $99.99 | https://square.link/u/6GHpbvvl |
 | Royalty Card $2,500 | https://square.link/u/CafhorUS |
 
-- Date-app Square account: ebaytrashortreasure@gmail.com (bank attached, no key expiry)
+- Date-app Square account: joshlcoleman@gmail.com (bank attached, no key expiry)
 - Non-date-app / Commerce Square account: joshlcoleman@gmail.com
 - Square location: LY5GN09F5AN83 (YouAndINotAI / Trash Or Treasure - ACTIVE)
 - Stripe: LEGACY ONLY — being phased out
