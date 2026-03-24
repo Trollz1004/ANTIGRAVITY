@@ -1,4 +1,4 @@
-# Session Handoff - 2026-03-23
+# Session Handoff - 2026-03-24
 
 ## Summary
 The ecosystem is hardened and synchronized enough for a clean fallback point. The **Intentionality Engine v1.0** backend patch was repaired, the **E:** root no longer has loose env files, and the payment/account truth is back in alignment. Secrets remain outside git and synchronized through the approved secret paths.
@@ -15,12 +15,12 @@ The ecosystem is hardened and synchronized enough for a clean fallback point. Th
 - **Personal Vault:** Created `UNIVERSAL-NODE-MASTER-2026-03-23.env` for full recovery.
 
 ## Important Current Truth
-- **Commit:** see git for the current pushed commit
+- **Commit:** `89123cc`
 - **Backbone:** Only Gemini, Claude, CodeX, and Copilot touch `C:\ANTIGRAVITY`.
 - **Sandbox:** All third-party platforms are locked to `E:\sandbox-repo`.
 - **Isolation:** `ebaytrashortreasure` is for High-Risk Square only; `joshlcoleman` is for everything else.
+- **Node Sync:** `9020` and `T5500` were fast-forwarded cleanly to `89123cc`.
 
 ## Pending Items
 1. client adoption of BRAIN MCP for session logging.
-2. keep BRAIN MCP client adoption moving so session logging becomes real, not just available.
-3. verify Cloudflare Pages build completion for `onlinerecycle.org`.
+2. verify Cloudflare Pages build completion for `onlinerecycle.org`.
