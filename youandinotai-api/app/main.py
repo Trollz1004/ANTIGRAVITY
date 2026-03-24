@@ -1,12 +1,12 @@
 """FastAPI entrypoint for the YouAndINotAI REST API."""
 
-import os
 import json
+import os
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.config import get_settings
 from app.database import reconcile_legacy_schema
@@ -15,26 +15,28 @@ from app.routers import auth, boards, double_dates, events, health, lovebot, mes
 
 settings = get_settings()
 
-class SuitabilityGuardMiddleware(BaseHTTPMiddleware):
-    """Suitability Guard: Middleware to detect and log deceptive or toxic intent."""
-    async def dispatch(self, request: Request, call_next):
-        if request.method == "POST" and "/api/v1/messages/" in request.url.path:
-            # MVP: Simple keyword-based detection for "gassing up" or deception
-            TOXIC_KEYWORDS = ["guaranteed", "trust me", "never lied", "promise", "action", "marriage speedrun"]
-            try:
-                body = await request.body()
-                payload = json.loads(body)
-                content = payload.get("content", "").lower()
-                for kw in TOXIC_KEYWORDS:
-                    if kw in content:
-                        print(f"[GUARD] Suitability Flag detected: '{kw}' in message from IP {request.client.host}")
-                        # In Phase 2, this would log to BRAIN MCP or trigger an audit
-                        break
-            except Exception:
-                pass
-        
-        response = await call_next(request)
-        return response
+TOXIC_KEYWORDS = ("guaranteed", "trust me", "never lied", "promise", "action", "marriage speedrun")
+
+
+def _is_messages_post(request: Request) -> bool:
+    return request.method == "POST" and request.url.path.startswith("/api/v1/messages")
+
+
+def _log_suitability_flags(request: Request, body: bytes) -> None:
+    try:
+        payload = json.loads(body)
+    except Exception:
+        return
+    content = payload.get("content", "")
+    if not isinstance(content, str):
+        return
+    lowered = content.lower()
+    for keyword in TOXIC_KEYWORDS:
+        if keyword in lowered:
+            host = request.client.host if request.client else "unknown"
+            print(f"[GUARD] Suitability flag detected: '{keyword}' in message from IP {host}")
+            break
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -48,15 +50,25 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
-    description="YouAndINotAI — Social Platform for Good",
+    description="YouAndINotAI - Social Platform for Good",
     docs_url="/api/v1/docs",
     openapi_url="/api/v1/openapi.json",
     lifespan=lifespan,
 )
 
-# —— Middlewares & Routers —————————————————————————————————————————————————————
+@app.middleware("http")
+async def suitability_guard(request: Request, call_next):
+    if not _is_messages_post(request):
+        return await call_next(request)
 
-app.add_middleware(SuitabilityGuardMiddleware)
+    body = await request.body()
+    _log_suitability_flags(request, body)
+
+    async def receive():
+        return {"type": "http.request", "body": body, "more_body": False}
+
+    replay_request = Request(request.scope, receive)
+    return await call_next(replay_request)
 
 app.add_middleware(
     CORSMiddleware,
