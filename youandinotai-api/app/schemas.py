@@ -47,7 +47,7 @@ class UserMeResponse(BaseModel):
     subscription_tier: str | None
     subscription_active: bool
     has_profile: bool
-    adult_verified: bool
+    adult_verified: bool`n    mission_impact_score: float`n    intent_badge: str | None
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -337,7 +337,7 @@ class VideoCallResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-# ── Double Dates ──
+# ── Double Dates ──`n`nclass DoubleDateSquadRecommendation(BaseModel):`n    match_id: uuid.UUID`n    display_name: str`n    photo_url: str | None`n    mission_score: float`n    intent_badge: str | None`n    model_config = ConfigDict(from_attributes=True)
 
 class DoubleDateParticipantResponse(BaseModel):
     user_id: uuid.UUID
@@ -444,3 +444,4 @@ class LoveBotTipResponse(BaseModel):
 class LoveBotGiftResponse(BaseModel):
     recipient: str
     ideas: list[str]
+

@@ -1,10 +1,12 @@
 """FastAPI entrypoint for the YouAndINotAI REST API."""
 
+import os
+import json
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-import os
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.config import get_settings
 from app.database import reconcile_legacy_schema
@@ -12,6 +14,27 @@ from app.scheduler import setup_scheduler
 from app.routers import auth, boards, double_dates, events, health, lovebot, messages, metrics, privacy, profiles, support, swipe, users, verify, video, video_rooms, volunteering, webhooks
 
 settings = get_settings()
+
+class SuitabilityGuardMiddleware(BaseHTTPMiddleware):
+    """Suitability Guard: Middleware to detect and log deceptive or toxic intent."""
+    async def dispatch(self, request: Request, call_next):
+        if request.method == "POST" and "/api/v1/messages/" in request.url.path:
+            # MVP: Simple keyword-based detection for "gassing up" or deception
+            TOXIC_KEYWORDS = ["guaranteed", "trust me", "never lied", "promise", "action", "marriage speedrun"]
+            try:
+                body = await request.body()
+                payload = json.loads(body)
+                content = payload.get("content", "").lower()
+                for kw in TOXIC_KEYWORDS:
+                    if kw in content:
+                        print(f"[GUARD] Suitability Flag detected: '{kw}' in message from IP {request.client.host}")
+                        # In Phase 2, this would log to BRAIN MCP or trigger an audit
+                        break
+            except Exception:
+                pass
+        
+        response = await call_next(request)
+        return response
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -25,13 +48,15 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
-    description="YouAndINotAI â€” Social Platform for Good",
+    description="YouAndINotAI — Social Platform for Good",
     docs_url="/api/v1/docs",
     openapi_url="/api/v1/openapi.json",
     lifespan=lifespan,
 )
 
-# â”€â”€ Middlewares & Routers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# —— Middlewares & Routers —————————————————————————————————————————————————————
+
+app.add_middleware(SuitabilityGuardMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
