@@ -65,6 +65,8 @@ async def reconcile_legacy_schema() -> None:
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS bot_shield_verified BOOLEAN DEFAULT FALSE NOT NULL",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS subscription_tier VARCHAR(50)",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS subscription_active BOOLEAN DEFAULT FALSE NOT NULL",
+            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS mission_impact_score FLOAT DEFAULT 0 NOT NULL",
+            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS intent_badge VARCHAR(50)",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS bio TEXT",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS age INTEGER",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS gender VARCHAR(50)",
@@ -81,6 +83,7 @@ async def reconcile_legacy_schema() -> None:
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS amount_cents INTEGER",
             "ALTER TABLE IF EXISTS webhook_events ADD COLUMN IF NOT EXISTS event_source_id VARCHAR(255)",
             "ALTER TABLE IF EXISTS webhook_events ADD COLUMN IF NOT EXISTS event_source VARCHAR(50) DEFAULT 'square' NOT NULL",
+            "ALTER TABLE IF EXISTS matches ADD COLUMN IF NOT EXISTS breeze_bypass_enabled BOOLEAN DEFAULT FALSE NOT NULL",
             "CREATE INDEX IF NOT EXISTS ix_users_square_customer_id ON users(square_customer_id)",
         )
 

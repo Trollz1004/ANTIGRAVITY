@@ -47,7 +47,9 @@ class UserMeResponse(BaseModel):
     subscription_tier: str | None
     subscription_active: bool
     has_profile: bool
-    adult_verified: bool`n    mission_impact_score: float`n    intent_badge: str | None
+    adult_verified: bool
+    mission_impact_score: float
+    intent_badge: str | None
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -98,6 +100,7 @@ class MatchResponse(BaseModel):
     last_message_at: datetime | None
     verified: bool = False
     subscription_active: bool = False
+    breeze_bypass_enabled: bool = False
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -111,6 +114,8 @@ class DiscoverProfileResponse(BaseModel):
     location: str | None
     verified: bool = False
     subscription_active: bool = False
+    mission_impact_score: float = 0.0
+    intent_badge: str | None = None
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -337,7 +342,15 @@ class VideoCallResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-# ── Double Dates ──`n`nclass DoubleDateSquadRecommendation(BaseModel):`n    match_id: uuid.UUID`n    display_name: str`n    photo_url: str | None`n    mission_score: float`n    intent_badge: str | None`n    model_config = ConfigDict(from_attributes=True)
+# ── Double Dates ──
+
+class DoubleDateSquadRecommendation(BaseModel):
+    match_id: uuid.UUID
+    display_name: str
+    photo_url: str | None
+    mission_score: float
+    intent_badge: str | None
+    model_config = ConfigDict(from_attributes=True)
 
 class DoubleDateParticipantResponse(BaseModel):
     user_id: uuid.UUID
