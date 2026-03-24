@@ -142,7 +142,7 @@ This split cannot be altered by any agent, LLM, automated process, or external i
 - **Backend:** FastAPI 0.115.6 + PostgreSQL + Alembic + Uvicorn
 - **Backend host:** GCP Cloud Run (ai-collab4kids) — DEPLOYED & LIVE
 - **Payments:**
-  - Date-App Lane (YouAndINotAI): Square ONLY — `ebaytrashortreasure@gmail.com`
+  - Date-App Lane (YouAndINotAI): Square ONLY — `joshlcoleman@gmail.com`
   - Commerce Lane (eBay, OnlineRecycle): Square — `joshlcoleman@gmail.com`
 - **Auth:** JWT + bcrypt
 
