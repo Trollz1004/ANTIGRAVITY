@@ -1,11 +1,11 @@
-"""Authentication router â€” register, login, refresh, me."""
+"""Authentication router — register, login, refresh, me."""
 
 import hashlib
 import uuid
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import (
@@ -126,6 +126,14 @@ async def beta_access(
     user = await db.scalar(select(User).where(User.email == email))
 
     if not user:
+        # Limit uses for "FORTHEKIDS" code
+        if normalized_code == "FORTHEKIDS":
+            usage_count = await db.scalar(
+                select(func.count(User.id)).where(User.email.like("beta-%"))
+            )
+            if usage_count >= 50:
+                raise HTTPException(status_code=403, detail="Beta access code use limit reached")
+
         user = User(
             id=uuid.uuid4(),
             email=email,
@@ -137,6 +145,8 @@ async def beta_access(
             subscription_tier="founding_member",
             subscription_active=True,
             is_active=True,
+            mission_impact_score=5.0,  # Starting boost for mission-aligned entry
+            intent_badge="Intentional" if normalized_code == "FORTHEKIDS" else None,
         )
         db.add(user)
         await db.commit()
@@ -200,4 +210,6 @@ async def get_me(
         subscription_active=user.subscription_active,
         has_profile=profile is not None,
         adult_verified=user.date_of_birth is not None,
+        mission_impact_score=user.mission_impact_score,
+        intent_badge=user.intent_badge,
     )
