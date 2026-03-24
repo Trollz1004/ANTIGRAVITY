@@ -75,3 +75,20 @@ If any older doc, node note, export, or backup conflicts with this file:
 - No raw payment secrets in git
 - Revenue split truth belongs to `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
 - Customer-facing payment claims must stay truthful to the currently live Square flow
+
+
+
+## ACTIVE SQUARE APPLICATIONS (Updated 2026-03-23)
+
+- **PRIMARY (joshlcoleman):** #ForTheKids (sq0idp-Carv59GQKuQHoIydJ1Wanw)
+  - Status: ACTIVE & AUTHORIZED
+  - Purpose: OnlineRecycle.org, Ai-Collab4Kids, Merch Shop
+  - Location: Trash or Treasure (LTDX6ZANTVEEN)
+
+- **ISOLATED (ebaytrashortreasure):** Dating App Support
+  - Status: ACTIVE & ISOLATED
+  - Purpose: YouAndINotAI (High-Risk)
+
+- **BLACKLISTED / DO NOT USE:**
+  - u-annd-a-i-not-a-i.online (sq0idp-O4K4lNKXVSQoWdfgczv17Q)
+  - Status: DEPRECATED - DO NOT ROUTE TRAFFIC
