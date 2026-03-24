@@ -119,7 +119,7 @@ NEVER use "donate", "donation", "solicitation" in customer-facing code. Our reve
 | 12-Month Founder $99.99 | https://square.link/u/6GHpbvvl | https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c |
 | Royalty Card $2,500 | https://square.link/u/CafhorUS | https://buy.stripe.com/dRmcN604kebheRf2cteEo0d |
 
-- Date-app Square account: joshlcoleman@gmail.com (Merchant ML3C7FMTQS5KX, bank attached)
+- Date-app Square account: ebaytrashortreasure@gmail.com (isolated YouAndINotAI lane; bank attached)
 - Commerce / Non-date-app Square account: joshlcoleman@gmail.com
 - Square App ID: (in .env vault — NEVER in source)
 - Square active location: LY5GN09F5AN83 (Trash Or Treasure — all checkout links route here)

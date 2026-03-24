@@ -282,7 +282,7 @@ New ideas, experimental platforms, and speculative automation go here first.
 | 12-Month Founder $99.99 | https://square.link/u/6GHpbvvl |
 | Royalty Card $2,500 | https://square.link/u/CafhorUS |
 
-- Date-app Square account: joshlcoleman@gmail.com (YouAndINotAI payment lane; bank attached, no key expiry)
+- Date-app Square account: ebaytrashortreasure@gmail.com (YouAndINotAI payment lane; bank attached, no key expiry)
 - eBay / OnlineRecycle / non-date-app Square lane: joshlcoleman@gmail.com
 - Square location: LY5GN09F5AN83 (Trash Or Treasure - ACTIVE)
 - Stripe: LEGACY ONLY — being phased out
@@ -484,8 +484,8 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 
 ---
 ### FINAL SESSION SYNC - 2026-03-24 01:43:47
-- **Intentionality Engine v1.0:** Squad Protocol, Breeze Bypass, and Suitability Guard LIVE in prod.
-- **Beta Access:** Code FORTHEKIDS locked to 50 uses; users start with 5.0 mission score.
-- **E: Drive Hardening:** 100% clean of loose files. All sandbox lanes consolidated in E:\sandbox-repo.
-- **Secrets & Trust:** Threshold of Trust enforced. ebaytrashortreasure isolated. GitHub secrets synced.
+- **Intentionality Engine v1.0:** Squad Protocol, Breeze Bypass, and Suitability Guard repaired in repo; focused backend validation is passing.
+- **Beta Access:** `FORTHEKIDS` seeds a 5.0 mission score and `Intentional` badge on the deterministic beta-access path.
+- **E: Drive Hardening:** loose env files are not present at the E:\ root; the sandbox mirror remains at E:\sandbox-repo and GenSpark staging remains separate at E:\GensparkPODnTube.
+- **Secrets & Trust:** Threshold of Trust enforced. `ebaytrashortreasure@gmail.com` remains isolated for the date-app Square/PayPal lane. GitHub secrets synced.
 - **Master Recovery:** UNIVERSAL-NODE-MASTER-2026-03-23.env secured in Personal Vault.
