@@ -14,21 +14,18 @@ from app.lovebot_service import lovebot_service
 
 router = APIRouter(prefix="/lovebot", tags=["LoveBot"])
 
-async def get_premium_user(user: User = Depends(get_current_user)) -> User:
-    """Dependency to ensure user is a founding member or has an active subscription."""
-    if not user.subscription_active:
+@router.post("/compatibility", response_model=LoveBotCompatibilityResponse)
+async def check_compatibility(
+    payload: LoveBotCompatibilityRequest,
+    user: User = Depends(get_current_user)
+) -> LoveBotCompatibilityResponse:
+    """Check name and optional birthday compatibility."""
+    if not user or not user.subscription_active:
         raise HTTPException(
             status_code=403,
             detail="LoveBot features require a Founding Member or Premium subscription."
         )
-    return user
 
-@router.post("/compatibility", response_model=LoveBotCompatibilityResponse)
-async def check_compatibility(
-    payload: LoveBotCompatibilityRequest,
-    user: User = Depends(get_premium_user)
-) -> LoveBotCompatibilityResponse:
-    """Check name and optional birthday compatibility."""
     if payload.dob1 and payload.dob2:
         result = lovebot_service.calculate_birthday_match(payload.dob1, payload.dob2)
     else:
@@ -42,9 +39,14 @@ async def check_compatibility(
 @router.get("/quotes", response_model=LoveBotQuoteResponse)
 async def get_love_quotes(
     category: str | None = None,
-    user: User = Depends(get_premium_user)
+    user: User = Depends(get_current_user)
 ) -> LoveBotQuoteResponse:
     """Get a random love quote or pickup line."""
+    if not user or not user.subscription_active:
+        raise HTTPException(
+            status_code=403,
+            detail="LoveBot features require a Founding Member or Premium subscription."
+        )
     quote = lovebot_service.get_random_quote(category)
     return LoveBotQuoteResponse(
         text=quote["text"],
@@ -55,9 +57,14 @@ async def get_love_quotes(
 @router.get("/tips", response_model=LoveBotTipResponse)
 async def get_dating_tips(
     category: str = "attracting_partners_neutral",
-    user: User = Depends(get_premium_user)
+    user: User = Depends(get_current_user)
 ) -> LoveBotTipResponse:
     """Get expert dating tips and lessons."""
+    if not user or not user.subscription_active:
+        raise HTTPException(
+            status_code=403,
+            detail="LoveBot features require a Founding Member or Premium subscription."
+        )
     if category not in lovebot_service.tips:
         raise HTTPException(status_code=400, detail="Invalid tip category")
     
@@ -69,9 +76,14 @@ async def get_dating_tips(
 @router.get("/gifts", response_model=LoveBotGiftResponse)
 async def get_gift_ideas(
     recipient: str = "neutral",
-    user: User = Depends(get_premium_user)
+    user: User = Depends(get_current_user)
 ) -> LoveBotGiftResponse:
     """Get personalized gift ideas for your soulmate."""
+    if not user or not user.subscription_active:
+        raise HTTPException(
+            status_code=403,
+            detail="LoveBot features require a Founding Member or Premium subscription."
+        )
     ideas = lovebot_service.get_gift_ideas(recipient)
     return LoveBotGiftResponse(
         recipient=recipient,

@@ -30,6 +30,7 @@ interface AuthState {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  googleLogin: (idToken: string) => Promise<void>;
   betaAccess: (code: string) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
   logout: () => void;
@@ -46,6 +47,18 @@ export const useAuth = create<AuthState>((set) => ({
       refresh_token: string;
       user_id: string;
     }>('/auth/login', { email, password });
+    localStorage.setItem('access_token', data.access_token);
+    localStorage.setItem('refresh_token', data.refresh_token);
+    const user = await api.get<User>('/auth/me');
+    set({ user });
+  },
+
+  googleLogin: async (idToken) => {
+    const data = await api.post<{
+      access_token: string;
+      refresh_token: string;
+      user_id: string;
+    }>('/auth/google', { id_token: idToken });
     localStorage.setItem('access_token', data.access_token);
     localStorage.setItem('refresh_token', data.refresh_token);
     const user = await api.get<User>('/auth/me');
