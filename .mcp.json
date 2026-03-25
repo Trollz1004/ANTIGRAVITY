@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "brain-mcp": {
+      "command": "node",
+      "args": [
+        "C:\\\\ANTIGRAVITY/brain-mcp/dist/index.js"
+      ],
+      "env": {
+        "HOME": "C:\\Users\\joshl"
+      }
+    },
+    "antigravity-sentry": {
+      "command": "node",
+      "args": [
+        "C:\\\\ANTIGRAVITY/mcp-server/dist/index.js"
+      ],
+      "env": {
+        "HOME": "C:\\Users\\joshl"
+      }
+    },
+    "social-command-center": {
+      "command": "node",
+      "args": [
+        "C:\\\\ANTIGRAVITY/social-command-center/dist/server.js"
+      ],
+      "env": {
+        "HOME": "C:\\Users\\joshl"
+      }
+    }
+  }
+}

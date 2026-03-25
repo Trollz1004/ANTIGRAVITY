@@ -39,6 +39,11 @@ class AuthRefreshRequest(BaseModel):
     refresh_token: str
 
 
+class GoogleLoginRequest(BaseModel):
+    id_token: str
+
+
+
 class UserMeResponse(BaseModel):
     user_id: uuid.UUID
     email: str
