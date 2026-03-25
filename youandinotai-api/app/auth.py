@@ -10,6 +10,9 @@ from passlib.context import CryptContext
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from google.auth.transport import requests as google_requests
+from google.oauth2 import id_token
+
 from app.config import get_settings
 from app.database import get_db
 from app.models import User
@@ -97,7 +100,7 @@ async def get_current_user(
 def verify_google_token(token: str) -> dict:
     try:
         id_info = id_token.verify_oauth2_token(
-            token, requests.Request(), settings.google_client_id
+            token, google_requests.Request(), settings.google_client_id
         )
         return id_info
     except ValueError as e:

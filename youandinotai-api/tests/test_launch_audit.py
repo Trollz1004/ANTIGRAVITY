@@ -67,6 +67,7 @@ def test_protected_http_routes_require_auth():
         ("/api/v1/auth/beta-access", "POST"),
         ("/api/v1/users/register", "POST"),
         ("/api/v1/auth/login", "POST"),
+        ("/api/v1/auth/google", "POST"),
         ("/api/v1/auth/refresh", "POST"),
         ("/api/v1/webhooks/stripe", "POST"),
         ("/api/v1/webhooks/square", "POST"),
