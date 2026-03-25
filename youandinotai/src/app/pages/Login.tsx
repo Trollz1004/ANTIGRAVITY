@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Heart, Mail, Lock, ArrowRight, KeyRound, Sparkles } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
+import { GoogleSignInButton } from '../../components/auth/GoogleSignInButton';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -127,6 +128,8 @@ export function Login() {
             <span className="text-gray-600 text-xs uppercase tracking-wider font-bold">or</span>
             <div className="flex-1 h-px bg-white/10" />
           </div>
+
+          <GoogleSignInButton />
 
           {/* Beta Access Code Section */}
           <div>

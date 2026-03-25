@@ -21,6 +21,7 @@ class User(Base):
     display_name: Mapped[str] = mapped_column(String(100), nullable=False)
     date_of_birth: Mapped[date | None] = mapped_column(nullable=True)
     square_customer_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    google_id: Mapped[str | None] = mapped_column(String(255), unique=True, nullable=True)
     # DEPRECATED: stripe_customer_id removed — Square is sole payment processor
     bot_shield_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     subscription_tier: Mapped[str | None] = mapped_column(String(50), nullable=True)

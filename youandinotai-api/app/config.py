@@ -63,6 +63,8 @@ class Settings(BaseSettings):
     kimi_api_key: str = ""
     kimi_model: str = "kimi-2.6"
     daily_api_key: str = ""
+    google_client_id: str = ""
+    google_client_secret: str = ""
 
     jwt_secret: str = Field(
         default="",

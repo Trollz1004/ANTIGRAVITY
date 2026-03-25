@@ -92,3 +92,16 @@ async def get_current_user(
         raise HTTPException(status_code=401, detail="User not found")
     ensure_active_user(user)
     return user
+
+
+def verify_google_token(token: str) -> dict:
+    try:
+        id_info = id_token.verify_oauth2_token(
+            token, requests.Request(), settings.google_client_id
+        )
+        return id_info
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Invalid Google token: {e}",
+        )

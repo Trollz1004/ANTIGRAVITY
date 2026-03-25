@@ -1,8 +1,6 @@
-# Dependencies
-node_modules/
-
-# Build output
+# Build artifacts
 dist/
+node_modules/
 
 # Runtime data (file-backed feed persistence)
 data/

@@ -16,6 +16,7 @@ from app.auth import (
     get_current_user,
     hash_password,
     verify_password,
+    verify_google_token,
 )
 from app.age_gate import ensure_adult
 from app.config import get_settings
@@ -29,6 +30,7 @@ from app.schemas import (
     AuthRegisterRequest,
     AuthTokenResponse,
     UserMeResponse,
+    GoogleLoginRequest,
 )
 
 router = APIRouter(prefix="/auth")
@@ -107,6 +109,53 @@ async def login(
         refresh_token=create_refresh_token(str(user.id)),
         user_id=user.id,
     )
+
+
+@router.post("/google", response_model=AuthTokenResponse)
+async def google_login(
+    request: Request,
+    payload: GoogleLoginRequest,
+    db: AsyncSession = Depends(get_db),
+) -> AuthTokenResponse:
+    auth_limiter.check(request)
+    try:
+        id_info = verify_google_token(payload.id_token)
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Invalid Google token: {e}")
+
+    email = id_info.get("email")
+    if not email:
+        raise HTTPException(status_code=400, detail="Email not present in Google token")
+
+    user = await db.scalar(select(User).where(User.email == email.lower()))
+
+    if not user:
+        # Create a new user
+        user = User(
+            id=uuid.uuid4(),
+            email=email.lower(),
+            password_hash=hash_password(str(uuid.uuid4())),  # Create a random password
+            display_name=id_info.get("name", "New User"),
+            google_id=id_info.get("sub"),
+            adult_verified_at=datetime.now(timezone.utc),
+        )
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+    elif not user.google_id:
+        # Link existing user to Google account
+        user.google_id = id_info.get("sub")
+        await db.commit()
+        await db.refresh(user)
+
+    ensure_active_user(user)
+
+    return AuthTokenResponse(
+        access_token=create_access_token(str(user.id)),
+        refresh_token=create_refresh_token(str(user.id)),
+        user_id=user.id,
+    )
+
 
 
 @router.post("/beta-access", response_model=AuthTokenResponse)
