@@ -17,13 +17,13 @@ async def get_test_db():
     async with TestingSessionLocal() as session:
         yield session
 
-app.dependency_overrides[get_db] = get_test_db
-
 @pytest_asyncio.fixture(scope="function")
 async def async_client():
+    app.dependency_overrides[get_db] = get_test_db
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         yield client
+    app.dependency_overrides.pop(get_db, None)
 
 @pytest_asyncio.fixture(scope="function", autouse=True)
 async def setup_db():
