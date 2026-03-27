@@ -29,8 +29,6 @@ FOUNDING_MEMBER_TEMPLATE = {
         "- Bot-Shield verification included ($1 value)\n\n"
         "After purchase, you'll receive a digital access code and onboarding link "
         "to activate your Founding Member account at youandinotai.com.\n\n"
-        "60% of all revenue goes directly to Shriners Children's Hospitals.\n"
-        "#ForTheKids\n\n"
         "Visit: https://youandinotai.com"
     ),
 }
@@ -46,16 +44,14 @@ ROYALTY_CARD_TEMPLATE = {
         "digital + physical collectible for true believers in human connection.\n\n"
         "What you get:\n"
         "- Physical Royalty Card (numbered, shipped worldwide)\n"
-        "- Digital NFT certificate on Base Mainnet\n"
+        "- Digital collector certificate\n"
         "- Lifetime Founding Member access (never pay monthly again)\n"
         "- Royalty Card holder badge — visible to all users\n"
         "- Exclusive Royalty Card holder events and meetups\n"
         "- Direct line to the founder (Joshua Coleman)\n"
         "- Name engraved in the YouAndINotAI Hall of Founders\n\n"
         "Only a handful will ever be minted. This is the ultimate show of support "
-        "for a platform built on honesty, real people, and giving back.\n\n"
-        "60% of all revenue goes directly to Shriners Children's Hospitals.\n"
-        "#ForTheKids\n\n"
+        "for a platform built on honesty and real people.\n\n"
         "Visit: https://youandinotai.com"
     ),
 }
