@@ -108,6 +108,7 @@ function buildSyncPayload(args: {
     certification_authority: args.platform.certificationAuthority,
     active_sessions: args.state.listActiveSessions(),
     required_reads: args.config.requiredReads,
+    live_repo_write_scope: args.config.liveRepoWriteScope,
     trusted_execution_backbone: args.config.trustedExecutionBackbone,
     secret_catalog: Object.keys(args.config.secretRefs).sort(),
   };
