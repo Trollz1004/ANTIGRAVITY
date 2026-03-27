@@ -2,20 +2,25 @@
 
 Public monorepo for the YouAndINotAI platform and related web properties operated by Trash Or Treasure Online Recycler LLC.
 
-## Public products
+## Ecosystem projects
 
-| Project | Purpose |
-| ------- | ------- |
-| [YouAndINotAI](https://youandinotai.com/) | Human-focused social platform with verification, moderation, and subscription flows. |
-| [OnlineRecycle](https://onlinerecycle.org/) | Central Florida electronics recycling, secure device intake, and resale. |
-| [AI-Solutions Store](https://ai-solutions.store/) | Separate storefront for digital products and automation offers. |
-| [Antigravity Dashboard](https://dashboard.aidoesitall.website/) | Public status surface for verified site state and published updates. |
+| Project | Visibility | Surface | Purpose |
+| ------- | ---------- | ------- | ------- |
+| [YouAndINotAI](https://youandinotai.com/) | Public | Live product | Human-focused social platform with verification, moderation, and subscription flows. |
+| [OnlineRecycle](https://onlinerecycle.org/) | Public | Live product | Central Florida electronics recycling, secure device intake, pickup, drop-off, and resale. |
+| [AI-Solutions Store](https://ai-solutions.store/) | Public | Live product | Separate storefront for digital products and automation offers. |
+| [Antigravity Dashboard](https://dashboard.aidoesitall.website/) | Public | Live dashboard | Public status surface for verified site state and published updates. |
+| [AIDoesItAll.website](https://www.aidoesitall.website/) | Public | Live web surface | Public-facing umbrella site for the broader ANTIGRAVITY ecosystem. |
+| [ClawX](https://clawx-aihub-zwxfcstm.manus.space/) | Public | Live external dashboard | Separate multi-AI governance and coordination surface hosted outside this monorepo. |
+| Command Center | Private | Separate private repo | Private admin dashboard for approvals, media workflow, and internal operator views. |
+| Social Command Center | Internal | MCP/dashboard utility | Read-only internal dashboard for platform and agent visibility. |
 
 ## What this public README covers
 
 - high-level product and stack context
 - local development entry points
-- the public deployment surfaces tied to this repo
+- the major product and dashboard surfaces tied to this repo
+- the names of related private or internal surfaces at a high level
 
 ## What it intentionally does not cover
 
@@ -24,6 +29,7 @@ Public monorepo for the YouAndINotAI platform and related web properties operate
 - credential handling
 - unpublished reporting or recovery procedures
 - provider-specific orchestration doctrine
+- private repo internals beyond simple project identification
 
 ## Stack
 
