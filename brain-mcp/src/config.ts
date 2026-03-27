@@ -54,6 +54,7 @@ export interface BrainConfig {
   authorityNotice: string;
   sessionTtlMs: number;
   requiredReads: RequiredRead[];
+  liveRepoWriteScope: string[];
   trustedExecutionBackbone: string[];
   nodes: NodeDefinition[];
   platforms: PlatformDefinition[];
@@ -101,17 +102,6 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     nodeId: "sabretooth",
     tier: "trusted_execution",
     participationMode: "voluntary",
-    certificationAuthority: true,
-    allowedIps: ["127.0.0.1", "192.168.0.8"],
-    allowedPathPrefixes: ["C:\\ANTIGRAVITY"],
-    blockedPathPrefixes: [],
-  },
-  {
-    id: "github-copilot-sabretooth",
-    displayName: "GitHub Copilot",
-    nodeId: "sabretooth",
-    tier: "trusted_execution",
-    participationMode: "required",
     certificationAuthority: true,
     allowedIps: ["127.0.0.1", "192.168.0.8"],
     allowedPathPrefixes: ["C:\\ANTIGRAVITY"],
@@ -260,6 +250,12 @@ export function loadBrainConfig(): BrainConfig {
         label: "projectState.md",
         path: path.join(canonicalRepoRoot, "memory", "projectState.md"),
       },
+    ],
+    liveRepoWriteScope: [
+      "OpenAI Codex",
+      "Claude Code Opus",
+      "Gemini CLI",
+      "GitHub-approved repo workflows",
     ],
     trustedExecutionBackbone: platforms
       .filter((platform) => platform.certificationAuthority)
