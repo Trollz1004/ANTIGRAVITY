@@ -387,6 +387,7 @@ CI: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405,
 | dashboard.aidoesitall.website | Cloudflare Pages | antigravity |
 
 **Cloudflare**: direct-upload Pages projects should use the verified Cloudflare API/upload-token flow; do not treat local Sabretooth Wrangler OAuth as the canonical deploy path for Pages.
+**Domain routing rule**: if Josh owns the domain, keep DNS on Cloudflare and preserve routing to the owned public domain and its intended redirects. Do not treat preview URLs or temporary upload URLs as the final public destination.
 
 ---
 

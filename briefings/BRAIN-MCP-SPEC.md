@@ -120,6 +120,7 @@ Work sitting on sandbox drives is not ANTIGRAVITY:
 - BRAIN may expose secret references only, never secret values.
 - BRAIN reports facts. It does not issue directives.
 - BRAIN never auto-pulls, auto-resets, auto-merges, or auto-reverts.
+- Owned domains stay on Cloudflare DNS. Live public edits must preserve routing to the owned public domain and its intended redirects rather than treating preview URLs or temporary upload URLs as the final destination.
 
 ## MVP Scope
 
