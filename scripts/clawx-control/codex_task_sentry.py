@@ -192,40 +192,40 @@ def seed_ewaste_tasks(queue: dict[str, Any]) -> int:
     seed_tasks = [
         {
             "id": f"EW-INTAKE-{day}",
-            "title": "Create e-waste intake and triage sheet for donated PCs/servers/laptops",
+            "title": "Create e-waste intake and triage sheet for inbound PCs/servers/laptops",
             "description": "Build a reusable intake workflow and file templates for inventory, grading, and value estimates.",
             "executor": "codex",
             "priority": 100,
-            "tags": ["ewaste", "intake", "donation", "ebay"],
+            "tags": ["ewaste", "intake", "inventory", "ebay"],
             "prompt": (
-                "In E:/ANTIGRAVITY, set up an operational intake workflow for donated e-waste devices "
+                "In E:/sandbox-repo, set up an operational intake workflow for inbound e-waste devices "
                 "(PCs, servers, laptops). Create practical templates under data/ or briefings/ for: "
                 "inventory intake, condition grading, testing status, estimated resale value, and ebay listing readiness. "
-                "Keep everything compliant and focused on charity-impact tracking."
+                "Keep everything compliant and focused on service-safe resale tracking."
             ),
             "spawn_on_done": [
                 {
                     "id": f"EW-LISTINGS-{day}",
-                    "title": "Generate eBay listing templates with charity-safe messaging",
+                    "title": "Generate eBay listing templates with service-safe messaging",
                     "description": "Prepare listing titles, descriptions, and condition disclosures for common hardware categories.",
                     "executor": "openclaw",
                     "priority": 95,
                     "tags": ["ewaste", "ebay", "copy"],
                     "prompt": (
-                        "Create high-converting but policy-safe ebay listing templates for donated desktops, laptops, and servers. "
-                        "Include concise title patterns, honest condition language, shipping notes, and a short charity-impact line."
+                        "Create high-converting but policy-safe ebay listing templates for inbound desktops, laptops, and servers. "
+                        "Include concise title patterns, honest condition language, shipping notes, and a short service-support line."
                     ),
                     "spawn_on_done": [
                         {
                             "id": f"EW-OUTREACH-{day}",
-                            "title": "Create donation outreach messages to source more e-waste",
+                            "title": "Create outreach messages to source more e-waste",
                             "description": "Produce compliant outreach copy for local businesses and community groups.",
                             "executor": "openclaw",
                             "priority": 75,
-                            "tags": ["ewaste", "outreach", "donation"],
+                            "tags": ["ewaste", "outreach", "inventory"],
                             "prompt": (
-                                "Write concise outreach templates to request donated e-waste from businesses and schools. "
-                                "Tone must be transparent, respectful, and focused on how proceeds support kids in medical need."
+                                "Write concise outreach templates to request surplus e-waste from businesses and schools. "
+                                "Tone must be transparent, respectful, and focused on responsible recycling and fast intake."
                             ),
                         }
                     ],
@@ -238,32 +238,32 @@ def seed_ewaste_tasks(queue: dict[str, Any]) -> int:
                     "priority": 90,
                     "tags": ["ewaste", "qa", "ebay"],
                     "prompt": (
-                        "Generate a practical checklist for testing donated PCs/servers/laptops before resale, "
+                        "Generate a practical checklist for testing inbound PCs/servers/laptops before resale, "
                         "plus a photo shot-list that improves buyer trust on ebay."
                     ),
                 },
                 {
                     "id": f"EW-LEDGER-{day}",
-                    "title": "Build charity impact ledger for sold e-waste items",
-                    "description": "Create a simple ledger structure linking each sold item to charity impact reporting.",
+                    "title": "Build operational ledger for sold e-waste items",
+                    "description": "Create a simple ledger structure linking each sold item to intake, resale, and reporting status.",
                     "executor": "codex",
                     "priority": 92,
-                    "tags": ["ewaste", "charity", "ledger"],
+                    "tags": ["ewaste", "operations", "ledger"],
                     "prompt": (
-                        "Set up a charity impact ledger format in this repo that can map sold ebay items to charitable impact. "
+                        "Set up an operational ledger format in this repo that can map sold ebay items to intake, resale, and reporting status. "
                         "Keep fields practical for weekly reporting and auditability."
                     ),
                     "spawn_on_done": [
                         {
                             "id": f"EW-WEEKLY-REPORT-{day}",
-                            "title": "Draft weekly impact report template for donors and supporters",
-                            "description": "Turn sales + donations into clear weekly reporting.",
+                            "title": "Draft weekly operational report template for internal review",
+                            "description": "Turn intake and sales activity into clear weekly reporting.",
                             "executor": "codex",
                             "priority": 70,
-                            "tags": ["ewaste", "reporting", "charity"],
+                            "tags": ["ewaste", "reporting", "operations"],
                             "prompt": (
-                                "Create a weekly report template that summarizes inbound donations, sold items, "
-                                "gross revenue, and the charity impact narrative for #ForTheKids."
+                                "Create a weekly report template that summarizes inbound inventory, sold items, "
+                                "gross revenue, net proceeds, and operational notes for OnlineRecycle."
                             ),
                         }
                     ],

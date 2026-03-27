@@ -183,9 +183,9 @@ function seedEwasteTasks(queue) {
       priority: 100,
       tags: ["ewaste", "intake", "ebay", "cashflow"],
       prompt:
-        "In E:/ANTIGRAVITY, set up an operational intake workflow for inbound e-waste devices (PCs, servers, laptops). " +
+        "In E:/sandbox-repo, set up an operational intake workflow for inbound e-waste devices (PCs, servers, laptops). " +
         "Create practical templates under data/ or briefings/ for inventory intake, condition grading, testing status, " +
-        "estimated resale value, and ebay listing readiness. Keep it revenue-first, #ForTheKids compliant, and ready for fast resale.",
+        "estimated resale value, and ebay listing readiness. Keep it revenue-first, service-safe, and ready for fast resale.",
       spawn_on_done: [
         {
           id: `EW-LISTINGS-${day}`,
@@ -196,7 +196,7 @@ function seedEwasteTasks(queue) {
           tags: ["ewaste", "ebay", "copy"],
           prompt:
             "Create high-converting but policy-safe ebay listing templates for inbound desktops, laptops, and servers. " +
-            "Include concise title patterns, honest condition language, shipping notes, and a short #ForTheKids impact line.",
+            "Include concise title patterns, honest condition language, shipping notes, and a short service-support line when useful.",
           spawn_on_done: [
             {
               id: `EW-OUTREACH-${day}`,
@@ -207,7 +207,7 @@ function seedEwasteTasks(queue) {
               tags: ["ewaste", "outreach", "inventory"],
               prompt:
                 "Write concise outreach templates to source surplus e-waste from businesses and schools. " +
-                "Tone must be transparent, respectful, local, and focused on fast intake plus #ForTheKids impact without donation language.",
+                "Tone must be transparent, respectful, local, and focused on fast intake plus responsible recycling without donation language.",
             },
             {
               id: `EW-RESPONSES-${day}`,
@@ -236,12 +236,12 @@ function seedEwasteTasks(queue) {
         {
           id: `EW-LEDGER-${day}`,
           title: "Build impact ledger for sold e-waste items",
-          description: "Map sold items to impact and contractual revenue disbursement records.",
+          description: "Map sold items to intake, resale, and internal reporting records.",
           executor: "codex",
           priority: 92,
           tags: ["ewaste", "impact", "ledger"],
           prompt:
-            "Set up an impact ledger format in this repo that maps sold ebay items to #ForTheKids impact and contractual revenue disbursement evidence. " +
+            "Set up an operational ledger format in this repo that maps sold ebay items to intake, resale, and service-reporting evidence. " +
             "Keep fields practical for weekly reporting and auditing.",
           spawn_on_done: [
             {
@@ -252,7 +252,7 @@ function seedEwasteTasks(queue) {
               priority: 70,
               tags: ["ewaste", "reporting", "impact"],
               prompt:
-                "Create a weekly report template summarizing inbound inventory, sold items, gross revenue, net proceeds, and #ForTheKids impact for OnlineRecycle.",
+                "Create a weekly report template summarizing inbound inventory, sold items, gross revenue, net proceeds, and operational status for OnlineRecycle.",
             },
           ],
         },

@@ -20,56 +20,56 @@ const CONTENT_BANK: Post[] = [
   // X / Twitter posts
   {
     platform: "x",
-    body: "I built a dating app where bots literally can't exist.\n\n$1 to prove you're human. 60% of every dollar goes to Shriners Children's Hospital.\n\nNo VC money. No data harvesting. Just real humans connecting.\n\nyouandinotai.com",
-    hashtags: ["#ForTheKids", "#YouAndINotAI", "#DatingApp"],
+    body: "I built a dating app where bots can't hide behind burner profiles.\n\n$1 to verify you're human. Real identity checks. Real people.\n\nyouandinotai.com",
+    hashtags: ["#YouAndINotAI", "#DatingApp", "#RealPeopleOnly"],
   },
   {
     platform: "x",
-    body: "Every dating app sells your data. We charge $1 to keep bots out and send 60% to kids' hospitals.\n\nThat's the whole business model. On-chain. Auditable.\n\nyouandinotai.com",
-    hashtags: ["#ForTheKids", "#YouAndINotAI"],
+    body: "Every dating app says it wants real connections. We start by verifying the person behind the profile.\n\n$1. Real identity checks. No bot farm energy.\n\nyouandinotai.com",
+    hashtags: ["#YouAndINotAI", "#RealDating"],
   },
   {
     platform: "x",
-    body: "Founding Members: $14.99/mo locked forever. First 100 get that price for life.\n\nYour subscription funds real healthcare for real kids. Every receipt shows the split.\n\nyouandinotai.com #ForTheKids",
-    hashtags: ["#ForTheKids", "#YouAndINotAI"],
+    body: "Founding Members lock in $14.99/mo. First 100 keep that rate for life.\n\nIf you wanted in before the noise shows up, this is the window.\n\nyouandinotai.com",
+    hashtags: ["#YouAndINotAI", "#FoundingMember"],
   },
   {
     platform: "x",
-    body: "I'm an electrician from Florida who taught himself to code.\n\nBuilt an AI-powered dating app that donates 60% of revenue to Shriners Children's Hospital.\n\nNo investors. No board. Just a dad who thinks tech should help kids.\n\nyouandinotai.com",
-    hashtags: ["#ForTheKids", "#IndieHacker"],
+    body: "I'm an electrician from Florida who got tired of fake profiles and built the thing I wanted to use.\n\nReal checks. Real people. No investor-scripted nonsense.\n\nyouandinotai.com",
+    hashtags: ["#IndieHacker", "#YouAndINotAI"],
   },
   // Reddit posts
   {
     platform: "reddit",
     subreddit: "r/SideProject",
-    title: "I built a dating app that donates 60% of revenue to children's hospitals",
-    body: "Hey everyone — electrician from Florida here. Self-taught coder.\n\nI built YouAndINotAI, a dating app with a $1 entry fee that keeps bots out. 60% of every dollar goes to Shriners Children's Hospital. The split is enforced on-chain via smart contract on Base blockchain — I can't change it even if I wanted to.\n\nStack: React + FastAPI + Square + PostgreSQL. Deployed on Cloudflare Pages.\n\nNo VC money. No data harvesting. Launching April 4.\n\nWould love feedback on the concept and landing page: youandinotai.com",
+    title: "I built a dating app that starts with identity checks instead of fake engagement loops",
+    body: "Hey everyone — electrician from Florida here. Self-taught coder.\n\nI built YouAndINotAI, a dating app with a $1 verification step that keeps obvious bots and burner-profile spam out before people start matching.\n\nStack: React + FastAPI + Square + PostgreSQL. Launching April 4.\n\nNo VC money. No data-harvesting pitch deck. Just trying to build something that feels more honest than the usual swipe casino.\n\nWould love feedback on the concept and landing page: youandinotai.com",
     notes: "Include link in body. This sub allows it.",
   },
   {
     platform: "reddit",
     subreddit: "r/OnlineDating",
     title: "Tired of matching with bots? I built something different",
-    body: "Every dating app I tried was full of bots. So I built one where you pay $1 to prove you're human. That dollar goes to Shriners Children's Hospital (60% of all revenue).\n\nNo swiping algorithms designed to keep you addicted. No premium tiers that gate basic features. Just real people who proved they're real.\n\nLaunching April 4. Early members lock in $14.99/mo for life.",
+    body: "Every dating app I tried was full of bots. So I built one where you pay $1 to prove you're human before you get into the community.\n\nNo fake-profile treadmill. No endless paywalls just to figure out whether the person exists. Just real people who cleared the checks.\n\nLaunching April 4. Early members lock in $14.99/mo for life.",
     notes: "Story-first approach. URL in comments only if sub rules require it.",
   },
   {
     platform: "reddit",
     subreddit: "r/GoodNews",
-    title: "Dating app donates 60% of all revenue to Shriners Children's Hospital — launching April 4",
-    body: "My name is Josh. I'm an electrician from Florida who taught himself to code. I built YouAndINotAI — a dating app where $1 proves you're human and keeps bots out.\n\n60% of every dollar goes directly to Shriners Children's Hospital. It's not a marketing gimmick — the split is enforced by a smart contract on Base blockchain. I literally cannot change it.\n\nLaunching April 4, 2026. youandinotai.com",
-    notes: "Charity angle leads. Keep it genuine.",
+    title: "Dating app built around real-human verification launches April 4",
+    body: "My name is Josh. I'm an electrician from Florida who taught himself to code. I built YouAndINotAI — a dating app where $1 proves you're human and helps keep fake profiles out before the matching starts.\n\nThe focus is simple: real people, cleaner onboarding, and a safer starting point than the usual swipe apps.\n\nLaunching April 4, 2026. youandinotai.com",
+    notes: "Lead with verification and builder story, not finance claims.",
   },
   // TikTok scripts
   {
     platform: "tiktok",
-    body: "[HOOK] Every dating app is full of bots. So I built one where they literally can't exist.\n\n[BODY] It costs $1 to join. That dollar proves you're human. And 60 cents of every dollar goes to Shriners Children's Hospital.\n\nI'm an electrician from Florida. No VC money. No tech bro vibes. Just a dad who thinks dating apps should actually work.\n\n[CTA] Link in bio. Launching April 4. First 100 members lock in $14.99/mo for life.\n\n#ForTheKids #DatingApp #IndieHacker #YouAndINotAI",
+    body: "[HOOK] Every dating app says it hates bots. I built one that starts by checking whether you're real.\n\n[BODY] It costs $1 to verify you're human. Real identity checks. Real people. Way less fake-profile nonsense.\n\nI'm an electrician from Florida. No VC script. No tech-bro theater. Just trying to build a dating app that feels normal again.\n\n[CTA] Link in bio. Launching April 4. First 100 members lock in $14.99/mo for life.\n\n#DatingApp #IndieHacker #YouAndINotAI #RealPeopleOnly",
     notes: "30-45 seconds. Face to camera. Authentic energy.",
   },
   // LinkedIn
   {
     platform: "linkedin",
-    body: "I'm an electrician from Florida who taught himself to code.\n\nI built YouAndINotAI — a dating app that charges $1 to prove you're human (keeping bots out) and donates 60% of all revenue to Shriners Children's Hospital.\n\nThe revenue split is enforced on-chain. Auditable. Immutable. I can't change it even if I wanted to.\n\nNo VC funding. No board of directors. No exit strategy. Just a product that does what it says.\n\nLaunching April 4, 2026. Founding Members who join early lock in $14.99/mo forever.\n\nyouandinotai.com\n\n#ForTheKids #YouAndINotAI #IndieHacker #StartupLife",
+    body: "I'm an electrician from Florida who taught himself to code.\n\nI built YouAndINotAI — a dating app that charges $1 to verify you're human before you join the community.\n\nThe point is straightforward: fewer fake profiles, less wasted time, and a better starting point for real people trying to connect.\n\nNo VC funding. No boardroom script. Just a product solving the problem that pushed me to build it.\n\nLaunching April 4, 2026. Founding Members who join early lock in $14.99/mo forever.\n\nyouandinotai.com\n\n#YouAndINotAI #IndieHacker #StartupLife #ConsumerApps",
     notes: "Professional tone but still Josh's voice.",
   },
 ];
