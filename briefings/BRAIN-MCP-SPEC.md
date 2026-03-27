@@ -35,7 +35,7 @@ BRAIN MCP is not governance, not a hierarchy, and not a replacement for any plat
 - not a replacement for `AGENTS.md`
 - not a proxy in the LLM inference path
 - not a secret store
-- not a controller for Claude, Gemini, Codex, Copilot, or any other platform
+- not a controller for Claude, Gemini, Codex, GitHub-approved repo workflows, or any other platform
 
 Every BRAIN response must carry this authority notice:
 
@@ -51,16 +51,24 @@ Platform and continuity memory remain where they already live:
 
 BRAIN only synchronizes shared operational state and audit visibility.
 
-## Trusted Execution Backbone
+## Live Repo Write Scope
 
-The trusted execution backbone currently trusted to certify ANTIGRAVITY readiness is:
+The current live write scope for `C:\ANTIGRAVITY` is:
 
 - OpenAI Codex
 - Claude Code Opus
 - Gemini CLI
-- GitHub Copilot
+- GitHub-approved repo workflows
 
-These four are the platforms trusted to validate, green-light, and help certify what is ready to count as ANTIGRAVITY production truth.
+These four are the only lanes currently allowed to write directly to the live repo.
+
+BRAIN tracks the interactive clients directly:
+
+- OpenAI Codex
+- Claude Code Opus
+- Gemini CLI
+
+GitHub-approved repo workflows remain part of the live write scope, but they are repository-side automation rather than an interactive BRAIN client session.
 
 Other platforms are still valued and may contribute in sandbox, continuity, research, and isolated lanes, but they do not currently certify production-ready ANTIGRAVITY state.
 
@@ -73,7 +81,7 @@ Work is only ANTIGRAVITY when it is:
 1. on `C:\ANTIGRAVITY`
 2. on `main`
 3. green-checked
-4. validated by the trusted execution backbone
+4. validated inside the approved live write scope
 5. approved by Josh
 6. pushed and deployed as final live truth
 
@@ -250,4 +258,3 @@ Every BRAIN response must plainly preserve the boundary:
 - `AGENTS.md` is canonical
 - Josh is sole authority
 - BRAIN is telemetry and shared operational context only
-
