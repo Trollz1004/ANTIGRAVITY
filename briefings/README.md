@@ -1,17 +1,18 @@
 # Briefings — AI Team Index
 
-Last updated: 2026-03-22
+Last updated: 2026-03-27
 
 Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 
 ## Read First
 
 1. `AGENTS.md`
-2. `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
-3. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
-4. `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
-5. `memory/CODEX-QUICK-MEMORY.md`
-6. `memory/activeContext.md`
+2. `briefings/REPOSITORY_RECORD.md`
+3. `briefings/UNIVERSAL-SYNC-PROMPT.md`
+4. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
+5. `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+6. `memory/CODEX-QUICK-MEMORY.md`
+7. `memory/activeContext.md`
 
 ## Team Sync
 
@@ -32,6 +33,8 @@ Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 
 Current deployment shorthand:
 - frontend: `https://youandinotai.com`
+- onlinerecycle: `https://onlinerecycle.org` (service-first Pages deploy verified on March 27, 2026)
+- public dashboard: `https://dashboard.aidoesitall.website` (direct-upload Pages project; source mapping still needs explicit confirmation before redeploy)
 - multiplayer backend: `https://youandinotai-backend-731395189513.us-east1.run.app`
 - API: `https://api.youandinotai.com`
 

@@ -384,7 +384,7 @@ CI: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405,
 | ai-solutions.store | Cloudflare Pages | _deploy/ai-solutions-store |
 | dashboard.aidoesitall.website | Cloudflare Pages | antigravity |
 
-**Cloudflare**: Wrangler OAuth (joshlcoleman@gmail.com) ACTIVE - full permissions.
+**Cloudflare**: direct-upload Pages projects should use the verified Cloudflare API/upload-token flow; do not treat local Sabretooth Wrangler OAuth as the canonical deploy path for Pages.
 
 ---
 
@@ -498,3 +498,13 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 - **BRAIN MCP:** Live on port :3900; AnytingLLM wired as trusted platform.
 - **Model Upgrade:** AnythingLLM upgraded to qwen2.5:7b; qwen2.5-coder:7b pulled for dev tasks.
 - **Launcher:** Unified launch-bridge.bat created on Desktop for one-click ecosystem start.
+
+
+
+---
+### DOC / DEPLOY SYNC - 2026-03-27 07:24:10
+- **Repo Baseline:** `main` clean and pushed at `2d1dc6d`; public repo README now lists the current public ecosystem surfaces and the related private/internal dashboard names at a high level.
+- **Public Copy Hardening:** repo-side public copy generators and Square catalog messaging were hardened at `dd584a1`.
+- **OnlineRecycle Deploy:** `onlinerecycle.org` direct-upload Pages deploy completed and verified live with service-first copy from `_deploy/onlinerecycle`.
+- **Node Sync:** `9020` and `T5500` repo mirrors were fast-forwarded cleanly to `2d1dc6d`.
+- **Still Open:** `dashboard.aidoesitall.website` and `www.aidoesitall.website` still need explicit source mapping before any direct-upload redeploy.

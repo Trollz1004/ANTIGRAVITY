@@ -1,4 +1,4 @@
-# UNIVERSAL SYNC BRIEF — 2026-03-23
+# UNIVERSAL SYNC BRIEF — 2026-03-27
 
 Paste or reference this file when syncing Gemini or Claude to the current verified state.
 
@@ -7,6 +7,7 @@ Paste or reference this file when syncing Gemini or Claude to the current verifi
 - Live repo root: `C:\ANTIGRAVITY`
 - Branch: `main`
 - Git truth: `origin/main`
+- Current clean commit: `2d1dc6d`
 - First files to anchor on:
   - `C:\ANTIGRAVITY\AGENTS.md`
   - `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`
@@ -41,6 +42,8 @@ Paste or reference this file when syncing Gemini or Claude to the current verifi
 
 - No secret values in chat, git, or tracked briefings.
 - Active Cloudflare API credential was rotated on `2026-03-23`.
+- Local Sabretooth Wrangler OAuth should not be treated as the canonical Pages deploy path for direct-upload projects.
+- Verified Cloudflare deploy path on March 27, 2026 used the Cloudflare API/upload-token flow for a direct-upload Pages project.
 - Current allowed secret access paths:
   - local `.env`
   - GitHub repo secrets
@@ -51,7 +54,7 @@ Paste or reference this file when syncing Gemini or Claude to the current verifi
 ## Account Mapping Truth
 
 - Date-app payment lane only:
-  - `joshlcoleman@gmail.com`
+  - `ebaytrashortreasure@gmail.com`
   - YouAndINotAI Square + PayPal
 - Non-date-app commerce / eBay / OnlineRecycle lane:
   - `joshlcoleman@gmail.com`
@@ -61,17 +64,19 @@ Paste or reference this file when syncing Gemini or Claude to the current verifi
 ## Current Product / Deploy Truth
 
 - YouAndINotAI production stack is repaired and live.
-- Backend auth/lovebot validation passed.
+- Backend validation passed at the clean fallback point.
 - T5500 Manus dashboard scaffold is installed, builds, and serves locally.
-- Repo-controlled public hardening is pushed.
-- Cloudflare Pages live follow-through is still not fully closed; repo-side hardening is done, but Cloudflare-side verification/deploy completion may still be needed.
+- Public copy generators and Square catalog messaging were hardened in repo at `dd584a1`.
+- `onlinerecycle.org` was redeployed and verified live on March 27, 2026 with the service-first Pages copy from `_deploy/onlinerecycle`.
+- Repo README now lists the full current ecosystem surface set at a high level, including the public dashboards and the separate private/internal dashboard names.
+- `dashboard.aidoesitall.website` remains a direct-upload Pages project whose exact repo-source mapping still needs explicit confirmation before redeploy.
 - `aidoesitall.website` root source is still not identified in this repo.
 
 ## Current Priority
 
-- Priority now shifts to **GenSpark lane setup and isolation** before returning to additional Manus / OnlineRecycle follow-through.
+- Keep the repo clean fallback at `2d1dc6d` intact for recovery and zip/export use.
 - Keep GenSpark isolated from `C:\ANTIGRAVITY` until proven safe.
-- Preferred direction: dedicate the new extra `9020` drive to GenSpark only once the drive letter/path is known.
+- Only redeploy other direct-upload Pages projects after their local source mapping is confirmed.
 
 ## Do / Do Not
 
