@@ -187,6 +187,8 @@ composition may not be altered, reduced, or replaced without Josh's explicit ord
 - **NO git push/pull** to remote repos without explicit Josh order
 - **OMEGA, OMEGA365 repos**: DO NOT TOUCH
 - **Secrets in .env ONLY** — never in chat, never in git. GitHub PAT in Windows Credential Manager.
+- **Live repo write scope**: Only Codex, Claude, Gemini, and GitHub-approved repo workflows may write directly to `C:\ANTIGRAVITY`.
+  All other platforms must work through sandbox lanes and the sandbox repo first.
 - **Worker count max**: 10
 - **Iron Wall**: ENIGMA (profit) and OMEGA (charity) NEVER cross
 - **FL §496.405**: NEVER use "donate" / "donation" / "solicitation" in customer-facing code.
@@ -478,7 +480,7 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 - **Square Primary (joshlcoleman):** #ForTheKids (sq0idp-Carv59GQKuQHoIydJ1Wanw) - ACTIVE
 - **Square Location:** Trash or Treasure (LTDX6ZANTVEEN)
 - **Status:** All secrets synchronized to GitHub (ANTIGRAVITY & Sandbox).
-- **Threshold of Trust:** Enforced. Write-access to C: restricted to Trusted Four.
+- **Threshold of Trust:** Enforced. Write-access to `C:\ANTIGRAVITY` restricted to Codex, Claude, Gemini, and GitHub-approved repo workflows.
 
 
 
