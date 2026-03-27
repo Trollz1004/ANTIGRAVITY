@@ -247,7 +247,7 @@ def build_perplexity_handoff(articles: list[dict]) -> str:
             "## Guardrails",
             "- Keep tone human and non-spammy.",
             "- Avoid automation-looking reply chains or duplicate blasts.",
-            "- Keep any 60/30/10 mention factual and avoid donation wording.",
+            "- Avoid revenue-split, charity, blockchain, or governance claims in public marketing drafts unless a specific review requires them.",
         ]
     )
     return "\n".join(lines)

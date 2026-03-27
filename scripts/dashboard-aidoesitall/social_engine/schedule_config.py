@@ -39,14 +39,15 @@ CONTENT_PILLARS = [
         ],
     },
     {
-        "id": "charity_mission",
+        "id": "mission_clarity",
         "weight": 0.20,
         "prompts": [
-            "Write a social media post about YouAndINotAI donating 60% of revenue to Shriners Children's "
-            "Hospitals. You're Josh — this is personal to you. Don't be preachy. Be genuine, maybe a little "
-            "funny about how a dating app is funding kids' hospital care. Include youandinotai.com",
-            "Write a post about how every subscription to YouAndINotAI helps kids at Shriners Hospitals. "
-            "You're a real person, not a charity bot. Be authentic and warm. Include youandinotai.com",
+            "Write a social media post about why YouAndINotAI was built around real-human verification instead "
+            "of addictive swipe mechanics. You're Josh — direct, honest, slightly funny, not corporate. Include "
+            "youandinotai.com",
+            "Write a post about building a social platform that starts with trust, real identity, and better "
+            "community behavior. You're a real person, not a brand deck. Be authentic and warm. Include "
+            "youandinotai.com",
         ],
     },
     {

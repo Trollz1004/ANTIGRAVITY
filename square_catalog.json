@@ -9,8 +9,8 @@
       "is_deleted": false,
       "present_at_all_locations": true,
       "item_data": {
-        "name": "Support OnlineRecycle — E-Waste Resale & Revenue Disbursement",
-        "description": "Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically disbursed via Protocol Omega smart contract on Base Mainnet: 60% to Shriners Children's Hospitals, 30% operations, 10% reinvestment. This is a contractual revenue split, not a charitable solicitation. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai",
+        "name": "OnlineRecycle Pickup / Drop-Off Support",
+        "description": "Schedule a pickup or reserve a drop-off window for electronics, laptops, phones, tablets, media, and other accepted e-waste. OnlineRecycle is a Florida recycling and resale service operated by Trash Or Treasure Online Recycler LLC. Clear intake, clear pricing, secure handling.",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -184,9 +184,9 @@
             }
           }
         ],
-        "product_type": "DONATION",
+        "product_type": "REGULAR",
         "skip_modifier_screen": true,
-        "ecom_uri": "https://onlinerecycle.square.site/product/donate-to-help-our-mission-to-recycle-online-for-charity-/797",
+        "ecom_uri": "https://onlinerecycle.square.site/product/onlinerecycle-pickup-drop-off-support/797",
         "ecom_image_uris": [
           "https://onlinerecycle.square.site/uploads/1/5/2/7/152793008/s689372832412502406_p797_i1_w808.png"
         ],
@@ -201,15 +201,15 @@
             "ordinal": -2251799813685248
           }
         ],
-        "description_html": "<p>Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically disbursed via Protocol Omega smart contract on Base Mainnet: 60% to Shriners Children&#39;s Hospitals, 30% operations, 10% reinvestment. This is a contractual revenue split, not a charitable solicitation. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai</p>",
-        "description_plaintext": "Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically disbursed via Protocol Omega smart contract on Base Mainnet: 60% to Shriners Children's Hospitals, 30% operations, 10% reinvestment. This is a contractual revenue split, not a charitable solicitation. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai",
+        "description_html": "<p>Schedule a pickup or reserve a drop-off window for electronics, laptops, phones, tablets, media, and other accepted e-waste. OnlineRecycle is a Florida recycling and resale service operated by Trash Or Treasure Online Recycler LLC. Clear intake, clear pricing, secure handling.</p>",
+        "description_plaintext": "Schedule a pickup or reserve a drop-off window for electronics, laptops, phones, tablets, media, and other accepted e-waste. OnlineRecycle is a Florida recycling and resale service operated by Trash Or Treasure Online Recycler LLC. Clear intake, clear pricing, secure handling.",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
         ],
         "is_archived": false,
         "ecom_seo_data": {
-          "page_description": "Help support our mission of Recycle online for Charity fundraising! "
+          "page_description": "Schedule an electronics pickup or drop-off with OnlineRecycle in Florida."
         },
         "reporting_category": {
           "id": "R24DGZV7LPULZCRH7DJONYGK",
@@ -236,8 +236,8 @@
         "LY5GN09F5AN83"
       ],
       "item_data": {
-        "name": "Donation",
-        "description": "Donate to Support Recycling Online For Charity",
+        "name": "Service Support",
+        "description": "Optional service support for OnlineRecycle pickup, intake, and electronics recycling operations.",
         "abbreviation": "Do",
         "label_color": "F25B3D",
         "is_taxable": false,
@@ -268,7 +268,7 @@
               "ordinal": 0,
               "pricing_type": "VARIABLE_PRICING",
               "service_duration": 0,
-              "price_description": "Thank you! ",
+              "price_description": "Service support",
               "available_for_booking": true,
               "sellable": true,
               "stockable": true,
@@ -446,8 +446,8 @@
             "ordinal": -2251731094208512
           }
         ],
-        "description_html": "<p>Donate to Support Recycling Online For Charity</p>",
-        "description_plaintext": "Donate to Support Recycling Online For Charity",
+        "description_html": "<p>Optional service support for OnlineRecycle pickup, intake, and electronics recycling operations.</p>",
+        "description_plaintext": "Optional service support for OnlineRecycle pickup, intake, and electronics recycling operations.",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -468,8 +468,8 @@
       "is_deleted": false,
       "present_at_all_locations": true,
       "item_data": {
-        "name": "Drop off Donations",
-        "description": "Embark on a heartwarming journey of giving back with our convenient drop-off donation service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your donation drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your donations spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
+        "name": "Electronics Drop-Off Appointment",
+        "description": "Book a drop-off appointment for electronics, laptops, phones, tablets, media, and other accepted items. Reserve a time that keeps intake organized and speeds up processing.",
         "abbreviation": "Recycle",
         "label_color": "00B23B",
         "is_taxable": false,
@@ -553,8 +553,8 @@
         "skip_modifier_screen": false,
         "ecom_available": false,
         "ecom_visibility": "UNAVAILABLE",
-        "description_html": "Embark on a heartwarming journey of giving back with our convenient drop-off donation service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your donation drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your donations spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
-        "description_plaintext": "Embark on a heartwarming journey of giving back with our convenient drop-off donation service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your donation drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your donations spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
+        "description_html": "Book a drop-off appointment for electronics, laptops, phones, tablets, media, and other accepted items. Reserve a time that keeps intake organized and speeds up processing.",
+        "description_plaintext": "Book a drop-off appointment for electronics, laptops, phones, tablets, media, and other accepted items. Reserve a time that keeps intake organized and speeds up processing.",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -581,8 +581,8 @@
       },
       "present_at_all_locations": true,
       "item_data": {
-        "name": "Cash Donations",
-        "description": "Experience the convenience and security of making cash donations through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your donation appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your donation is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
+        "name": "In-Person Intake Payment",
+        "description": "Schedule an in-person or online payment for pickup, drop-off, or recycling intake support. Use this when you want to prepay or settle service costs through the Square booking flow.",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -598,11 +598,11 @@
             "present_at_all_locations": true,
             "item_variation_data": {
               "item_id": "5TTNJLFAP6RMBNBOZSIRA7KF",
-              "name": "In Person Cash Donation",
+              "name": "In-Person Payment",
               "ordinal": 0,
               "pricing_type": "VARIABLE_PRICING",
               "service_duration": 0,
-              "price_description": "Support",
+              "price_description": "Service payment",
               "available_for_booking": true,
               "sellable": true,
               "stockable": true,
@@ -625,7 +625,7 @@
             "present_at_all_locations": true,
             "item_variation_data": {
               "item_id": "5TTNJLFAP6RMBNBOZSIRA7KF",
-              "name": "Online Donation",
+              "name": "Online Payment",
               "ordinal": 1,
               "pricing_type": "FIXED_PRICING",
               "price_money": {
@@ -652,8 +652,8 @@
         "image_ids": [
           "W3P26ADFNIYLL3FZUKCVXLTB"
         ],
-        "description_html": "Experience the convenience and security of making cash donations through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your donation appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your donation is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
-        "description_plaintext": "Experience the convenience and security of making cash donations through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your donation appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your donation is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
+        "description_html": "Schedule an in-person or online payment for pickup, drop-off, or recycling intake support. Use this when you want to prepay or settle service costs through the Square booking flow.",
+        "description_plaintext": "Schedule an in-person or online payment for pickup, drop-off, or recycling intake support. Use this when you want to prepay or settle service costs through the Square booking flow.",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -1105,7 +1105,7 @@
       ],
       "item_data": {
         "name": "Bright Disco Light For All Cell Phone Types 672125094020",
-        "description": "Get the mini disco party USB light for cellphones with 3 phone adapters for Apple, Android micro and  Type C,. Support a great cause by purchasing from our eBay store dedicated to recycled items for Shriners Hospitals for Children!",
+        "description": "Get the mini disco party USB light for cellphones with 3 phone adapters for Apple, Android micro, and Type C. Shop recycled and resale-ready finds from Trash Or Treasure Online Recycler LLC.",
         "abbreviation": "USB disco",
         "label_color": "FF9F40",
         "is_taxable": true,
@@ -1202,8 +1202,8 @@
             "ordinal": -2251524935778304
           }
         ],
-        "description_html": "<p>Get the mini disco party USB light for cellphones with 3 phone adapters for Apple, Android micro and  Type C,. Support a great cause by purchasing from our eBay store dedicated to recycled items for Shriners Hospitals for Children!</p>",
-        "description_plaintext": "Get the mini disco party USB light for cellphones with 3 phone adapters for Apple, Android micro and  Type C,. Support a great cause by purchasing from our eBay store dedicated to recycled items for Shriners Hospitals for Children!",
+        "description_html": "<p>Get the mini disco party USB light for cellphones with 3 phone adapters for Apple, Android micro, and Type C. Shop recycled and resale-ready finds from Trash Or Treasure Online Recycler LLC.</p>",
+        "description_plaintext": "Get the mini disco party USB light for cellphones with 3 phone adapters for Apple, Android micro, and Type C. Shop recycled and resale-ready finds from Trash Or Treasure Online Recycler LLC.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC"
@@ -3911,7 +3911,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI 3-Month Founder Preorder",
-        "description": "3 months Premium access at launch + Joker drawing entry. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "3 months Premium access at launch plus Joker drawing entry.",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -3946,8 +3946,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>3 months Premium access at launch + Joker drawing entry. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "3 months Premium access at launch + Joker drawing entry. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>3 months Premium access at launch plus Joker drawing entry.</p>",
+        "description_plaintext": "3 months Premium access at launch plus Joker drawing entry.",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -3965,7 +3965,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI 12-Month Founder Preorder",
-        "description": "Full year Premium + Exclusive Founder Badge + 5x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "Full year Premium plus an exclusive Founder badge and 5 Joker entries.",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -4000,8 +4000,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>Full year Premium + Exclusive Founder Badge + 5x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "Full year Premium + Exclusive Founder Badge + 5x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>Full year Premium plus an exclusive Founder badge and 5 Joker entries.</p>",
+        "description_plaintext": "Full year Premium plus an exclusive Founder badge and 5 Joker entries.",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -4019,7 +4019,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI Diamond Founder",
-        "description": "Premium for LIFE + Diamond Badge + 10x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "Premium for life plus a Diamond badge and 10 Joker entries.",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -4054,8 +4054,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>Premium for LIFE + Diamond Badge + 10x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "Premium for LIFE + Diamond Badge + 10x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>Premium for life plus a Diamond badge and 10 Joker entries.</p>",
+        "description_plaintext": "Premium for life plus a Diamond badge and 10 Joker entries.",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -4073,7 +4073,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI Platinum Founder",
-        "description": "Everything + Early Beta Access + Platinum Badge + 25x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "Everything plus early beta access, a Platinum badge, and 25 Joker entries.",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -4108,8 +4108,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>Everything + Early Beta Access + Platinum Badge + 25x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "Everything + Early Beta Access + Platinum Badge + 25x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>Everything plus early beta access, a Platinum badge, and 25 Joker entries.</p>",
+        "description_plaintext": "Everything plus early beta access, a Platinum badge, and 25 Joker entries.",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -4127,7 +4127,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI Elite Founder",
-        "description": "VIP Matching + Concierge Service + Elite Badge + 50x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "VIP matching, concierge service, an Elite badge, and 50 Joker entries.",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -4162,8 +4162,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>VIP Matching + Concierge Service + Elite Badge + 50x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "VIP Matching + Concierge Service + Elite Badge + 50x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>VIP matching, concierge service, an Elite badge, and 50 Joker entries.</p>",
+        "description_plaintext": "VIP matching, concierge service, an Elite badge, and 50 Joker entries.",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -4181,7 +4181,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI Royalty Founder Card",
-        "description": "One of 5 exclusive Royalty Cards - Premium FREE FOR LIFE + All perks + Governance rights. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "One of 5 exclusive Royalty Cards with premium access for life, all perks, and governance rights.",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -4216,8 +4216,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>One of 5 exclusive Royalty Cards - Premium FREE FOR LIFE + All perks + Governance rights. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "One of 5 exclusive Royalty Cards - Premium FREE FOR LIFE + All perks + Governance rights. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>One of 5 exclusive Royalty Cards with premium access for life, all perks, and governance rights.</p>",
+        "description_plaintext": "One of 5 exclusive Royalty Cards with premium access for life, all perks, and governance rights.",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -4250,7 +4250,7 @@
         "online_visibility": true,
         "ecom_seo_data": {
           "page_title": "Donate to Support Online Recycling for Charity Fundraising",
-          "page_description": "Support for a greener environment and a good cause. Funds are for day to day operations and Shriners Childrens Hospital. ",
+          "page_description": "Recycled electronics, resale finds, and local pickup or drop-off support from OnlineRecycle.",
           "permalink": ""
         }
       }
@@ -4270,7 +4270,7 @@
       ],
       "present_at_all_locations": true,
       "category_data": {
-        "name": "eBay Store For Recycled Items to Raise funds for Shriners Hospitals for Children",
+        "name": "eBay Store for Recycled Items and Resale Finds",
         "abbreviation": "Ebay",
         "label_color": "F25B3D",
         "image_ids": [
