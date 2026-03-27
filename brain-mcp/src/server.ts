@@ -98,6 +98,7 @@ function buildSyncPayload(args: {
 
   return {
     authority_notice: args.config.authorityNotice,
+    public_domain_routing_rule: args.config.publicDomainRoutingRule,
     canonical_repo_root: args.config.canonicalRepoRoot,
     repo_head_sha: repoTruth.repoHeadSha,
     repo_status: repoTruth.repoStatus,
@@ -241,6 +242,7 @@ export function createBrainServer(
     async () =>
       jsonContent({
         authority_notice: config.authorityNotice,
+        public_domain_routing_rule: config.publicDomainRoutingRule,
         active_sessions: state.listActiveSessions(),
         recent_audit: state.recentAudit(20),
       }),
@@ -266,6 +268,7 @@ export function createBrainServer(
 
       return jsonContent({
         authority_notice: config.authorityNotice,
+        public_domain_routing_rule: config.publicDomainRoutingRule,
         secret_name,
         references: config.secretRefs[secret_name] ?? [],
       });
@@ -386,6 +389,7 @@ export function createBrainServer(
 
       return jsonContent({
         authority_notice: config.authorityNotice,
+        public_domain_routing_rule: config.publicDomainRoutingRule,
         session_id: session.sessionId,
         status: session.status,
         last_heartbeat_at: session.lastHeartbeatAt,
@@ -429,6 +433,7 @@ export function createBrainServer(
 
       return jsonContent({
         authority_notice: config.authorityNotice,
+        public_domain_routing_rule: config.publicDomainRoutingRule,
         session_id: updated.sessionId,
         status: updated.status,
         last_heartbeat_at: updated.lastHeartbeatAt,
@@ -495,6 +500,7 @@ export function createBrainServer(
 
       return jsonContent({
         authority_notice: config.authorityNotice,
+        public_domain_routing_rule: config.publicDomainRoutingRule,
         session_id: closed.sessionId,
         status: closed.status,
         ended_at: closed.endedAt,
