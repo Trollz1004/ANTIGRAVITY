@@ -15,6 +15,7 @@ export interface RepoTruthSummary {
   canonicalRepoRoot: string;
   repoHeadSha: string;
   repoStatus: "clean" | "dirty" | "unknown";
+  liveRepoWriteScope: string[];
   trustedExecutionBackbone: string[];
   requiredReads: { label: string; path: string }[];
   nodes: BrainConfig["nodes"];
@@ -132,6 +133,7 @@ export function buildRepoTruthSummary(config: BrainConfig): RepoTruthSummary {
     canonicalRepoRoot: config.canonicalRepoRoot,
     repoHeadSha: getRepoHeadSha(config.repoRoot),
     repoStatus: getRepoStatus(config.repoRoot),
+    liveRepoWriteScope: config.liveRepoWriteScope,
     trustedExecutionBackbone: config.trustedExecutionBackbone,
     requiredReads: config.requiredReads,
     nodes: config.nodes,
