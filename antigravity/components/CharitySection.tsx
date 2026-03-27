@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'motion/react';
-import { Recycle, Heart, Globe, Laptop, TrendingUp, DollarSign } from 'lucide-react';
+import { Recycle, Heart, Globe, Laptop, TrendingUp } from 'lucide-react';
 
 interface CharityCardProps {
   icon: React.ReactNode;
@@ -57,20 +57,20 @@ const STATIC_PARTICLES = [...Array(15)].map(() => ({
 
 export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) {
   const stats = [
-    { label: 'Devices Recycled', value: '0', icon: <Laptop className="w-5 h-5" /> },
-    { label: 'Disbursed to Shriners', value: '$0', icon: <DollarSign className="w-5 h-5" /> },
+    { label: 'Verified Public Links', value: '2', icon: <Laptop className="w-5 h-5" /> },
+    { label: 'Published Impact Totals', value: 'Pending', icon: <TrendingUp className="w-5 h-5" /> },
   ];
 
   const platforms = [
     {
       name: 'AI-Solutions.Store',
-      tagline: 'Digital Charity Storefront.',
+      tagline: 'Charity storefront kept separate from the revenue and recycling lanes.',
       url: 'https://ai-solutions.store',
       icon: <Heart className="w-8 h-8 text-emerald-500" />
     },
     {
       name: 'OnlineRecycle.org',
-      tagline: 'Green e-waste recycling platform. Responsible recycling that supports Shriners Children\'s Hospital.',
+      tagline: 'Florida electronics recycling, pickup, drop-off, and resale service.',
       url: 'https://OnlineRecycle.org',
       icon: <Recycle className="w-8 h-8 text-emerald-500" />
     }
@@ -114,14 +114,14 @@ export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) 
           className="relative z-10"
         >
           <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-widest bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-            <Recycle className="w-4 h-4 animate-spin-slow" /> Give Back & Go Green
+            <Recycle className="w-4 h-4 animate-spin-slow" /> Service & Mission Links
           </div>
           <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-6">
-            Transparent. Verifiable.<br />
+            Built Clean. Reported Honestly.<br />
             <span className="text-emerald-500">ZERO B.S. &hearts;</span>
           </h2>
           <p className={`text-xl max-w-3xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-            We start at zero and build from there. The documented revenue split and storefront links are meant to stay verifiable in code, not inflated in copy.
+            The public surface should stay simple: real links, clear lane separation, and no inflated counts or mission claims that have not been verified.
           </p>
         </motion.div>
       </div>
@@ -157,17 +157,17 @@ export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) 
         className={`p-10 rounded-[2.5rem] text-center border-2 border-dashed ${isDarkMode ? 'bg-slate-900/40 border-emerald-500/20' : 'bg-emerald-50/50 border-emerald-200'}`}
       >
         <Heart className="w-12 h-12 text-emerald-500 mx-auto mb-6 animate-pulse" />
-        <h3 className="text-2xl font-bold mb-4">Join the Mission</h3>
+        <h3 className="text-2xl font-bold mb-4">Keep It Verifiable</h3>
         <p className={`max-w-2xl mx-auto mb-8 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-          Trash or Treasure Online Recycler LLC responsibly processes your old electronics,
-          keeping the recycling side grounded in real inventory, real payouts, and public accountability.
+          Public copy should describe what is live, what is owned, and what has actually been verified.
+          If a number, claim, or routing path is not confirmed, it should stay out of customer-facing copy.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-500 text-sm font-bold">
-            <TrendingUp className="w-4 h-4" /> 100% Transparency
+            <TrendingUp className="w-4 h-4" /> Recorded Activity Only
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-500 text-sm font-bold">
-            <Heart className="w-4 h-4" /> Public Accountability
+            <Heart className="w-4 h-4" /> No Inflated Metrics
           </div>
         </div>
       </motion.div>

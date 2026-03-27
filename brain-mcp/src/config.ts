@@ -52,6 +52,7 @@ export interface BrainConfig {
   databasePath: string;
   auditDir: string;
   authorityNotice: string;
+  publicDomainRoutingRule: string;
   sessionTtlMs: number;
   requiredReads: RequiredRead[];
   liveRepoWriteScope: string[];
@@ -68,6 +69,8 @@ export interface BrainConfig {
 
 const authorityNotice =
   "AGENTS.md is canonical. Josh is sole authority. BRAIN is operational telemetry only.";
+const publicDomainRoutingRule =
+  "Owned domains use Cloudflare DNS. Live public edits must preserve routing to the owned public domain and its intended redirects; do not treat preview URLs or temporary upload URLs as the final destination.";
 
 const sourceDir = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(sourceDir, "..");
@@ -235,6 +238,7 @@ export function loadBrainConfig(): BrainConfig {
     databasePath: path.join(dataDir, "brain.db"),
     auditDir: path.join(dataDir, "audit"),
     authorityNotice,
+    publicDomainRoutingRule,
     sessionTtlMs: sessionTtlMinutes * 60 * 1000,
     requiredReads: [
       { label: "AGENTS.md", path: path.join(canonicalRepoRoot, "AGENTS.md") },
