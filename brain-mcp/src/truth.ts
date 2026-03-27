@@ -12,6 +12,7 @@ import { normalizePath } from "./config.js";
 
 export interface RepoTruthSummary {
   authorityNotice: string;
+  publicDomainRoutingRule: string;
   canonicalRepoRoot: string;
   repoHeadSha: string;
   repoStatus: "clean" | "dirty" | "unknown";
@@ -130,6 +131,7 @@ export function buildBaselineTag(
 export function buildRepoTruthSummary(config: BrainConfig): RepoTruthSummary {
   return {
     authorityNotice: config.authorityNotice,
+    publicDomainRoutingRule: config.publicDomainRoutingRule,
     canonicalRepoRoot: config.canonicalRepoRoot,
     repoHeadSha: getRepoHeadSha(config.repoRoot),
     repoStatus: getRepoStatus(config.repoRoot),
