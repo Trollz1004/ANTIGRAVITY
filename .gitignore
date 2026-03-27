@@ -133,6 +133,8 @@ ClawX/.vscode/
 ClawX/deploy/
 ClawX/src/.gitignore
 ForTheKids/
+command-center/
+antigravity-dashboard/
 _deploy/onlinerecycle/THE WHEEL.txt
 _deploy/onlinerecycle/THE_WHEEL.html
 briefings/CODEX-DIRECTIVE-*.md
@@ -160,6 +162,9 @@ assets/5aa863e8a0ecf7b98ed000cc73e1d98d.jpg
 
 # Local session snapshots
 memory/SESSION_BACKUP_*.md
+
+# Local AI workflow helpers
+.agents/workflows/
 
 # Local news / node WIP that should stay outside the main repo
 data/yesterday-news/
