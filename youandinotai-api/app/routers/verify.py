@@ -34,6 +34,7 @@ from app.payment_truth import (
     BOT_SHIELD_CENTS,
     build_bot_shield_checkout_request,
     build_checkout_reference,
+    email_supported_for_square_checkout,
 )
 from app.rate_limit import verify_limiter
 from app.square_checkout import create_square_payment_link
@@ -288,11 +289,14 @@ async def submit_challenge(
     await db.commit()
 
     settings = get_settings()
-    checkout_url = await _build_square_checkout_url(
-        user=user,
-        event=event,
-        settings=settings,
-    )
+    square_ready_email = email_supported_for_square_checkout(user.email)
+    checkout_url = None
+    if square_ready_email:
+        checkout_url = await _build_square_checkout_url(
+            user=user,
+            event=event,
+            settings=settings,
+        )
 
     return ChallengeResult(
         passed=True,
@@ -300,6 +304,8 @@ async def submit_challenge(
         message=(
             "Liveness verified! Complete the $1 Bot-Shield payment to earn your badge."
             if checkout_url
+            else "Liveness verified. Add a real email address to unlock Square checkout."
+            if not square_ready_email
             else "Liveness verified, but secure Square checkout is temporarily unavailable. Please try again shortly."
         ),
         checkout_url=checkout_url,
