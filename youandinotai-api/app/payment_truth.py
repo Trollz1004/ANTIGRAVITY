@@ -33,6 +33,13 @@ ROYALTY_CARD_CHECKOUT_DESCRIPTION = "YouAndINotAI royalty card checkout"
 CHECKOUT_REF_RE = re.compile(r"agref:([A-Za-z0-9._-]+)")
 NORMALIZE_TEXT_RE = re.compile(r"[^a-z0-9]+")
 WALLET_PROOF_PREFIX = "wallet:"
+SQUARE_BLOCKED_EMAIL_DOMAINS = {
+    "example.com",
+    "example.org",
+    "example.net",
+    "localhost",
+    "invalid",
+}
 
 
 @dataclass(frozen=True)
@@ -113,6 +120,13 @@ def iter_text_hints(values: Iterable[object]) -> Iterator[str]:
         normalized = _normalize_text(str(value))
         if normalized:
             yield normalized
+
+
+def email_supported_for_square_checkout(email: str | None) -> bool:
+    if not email or "@" not in email:
+        return False
+    domain = email.rsplit("@", 1)[-1].strip().lower().rstrip(".")
+    return domain not in SQUARE_BLOCKED_EMAIL_DOMAINS
 
 
 def build_checkout_reference(
