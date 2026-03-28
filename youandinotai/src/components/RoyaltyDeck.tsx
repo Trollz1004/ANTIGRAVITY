@@ -16,7 +16,7 @@ import { useState, useRef } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'motion/react';
 import { Crown, Heart, Shield, Star, Gem, Infinity as InfinityIcon, Zap, FileText, TrendingUp } from 'lucide-react';
 
-const ROYALTY_LINK = 'https://square.link/u/CafhorUS';
+const ROYALTY_LINK = '/app/checkout/royalty';
 
 /* ─── Floating Hearts Background ─── */
 function FloatingHearts() {

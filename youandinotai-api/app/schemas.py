@@ -51,6 +51,7 @@ class UserMeResponse(BaseModel):
     bot_shield_verified: bool
     subscription_tier: str | None
     subscription_active: bool
+    subscription_expires_at: datetime | None = None
     has_profile: bool
     adult_verified: bool
     mission_impact_score: float

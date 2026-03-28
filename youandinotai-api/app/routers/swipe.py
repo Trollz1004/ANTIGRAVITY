@@ -10,6 +10,7 @@ from app.auth import get_current_user
 from app.database import get_db
 from app.models import Match, Profile, Swipe, User
 from app.schemas import DiscoverProfileResponse, MatchResponse, SwipeRequest, SwipeResponse
+from app.subscriptions import user_has_active_subscription
 
 router = APIRouter()
 
@@ -99,7 +100,7 @@ async def get_matches(
                 matched_at=match.matched_at,
                 last_message_at=match.last_message_at,
                 verified=(other_profile.verified if other_profile else False),
-                subscription_active=(other_user.subscription_active if other_user else False),
+                subscription_active=(user_has_active_subscription(other_user) if other_user else False),
                 breeze_bypass_enabled=match.breeze_bypass_enabled,
             )
         )
@@ -143,7 +144,7 @@ async def discover(
                 interests=profile.interests or [],
                 location=profile.location,
                 verified=profile.verified,
-                subscription_active=profile_user.subscription_active,
+                subscription_active=user_has_active_subscription(profile_user),
                 mission_impact_score=profile_user.mission_impact_score,
                 intent_badge=profile_user.intent_badge,
             )

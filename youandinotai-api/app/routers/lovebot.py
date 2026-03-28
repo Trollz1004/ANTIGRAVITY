@@ -11,6 +11,7 @@ from app.schemas import (
     LoveBotGiftResponse
 )
 from app.lovebot_service import lovebot_service
+from app.subscriptions import user_has_active_subscription
 
 router = APIRouter(prefix="/lovebot", tags=["LoveBot"])
 
@@ -20,7 +21,7 @@ async def check_compatibility(
     user: User = Depends(get_current_user)
 ) -> LoveBotCompatibilityResponse:
     """Check name and optional birthday compatibility."""
-    if not user or not user.subscription_active:
+    if not user or not user_has_active_subscription(user):
         raise HTTPException(
             status_code=403,
             detail="LoveBot features require a Founding Member or Premium subscription."
@@ -42,7 +43,7 @@ async def get_love_quotes(
     user: User = Depends(get_current_user)
 ) -> LoveBotQuoteResponse:
     """Get a random love quote or pickup line."""
-    if not user or not user.subscription_active:
+    if not user or not user_has_active_subscription(user):
         raise HTTPException(
             status_code=403,
             detail="LoveBot features require a Founding Member or Premium subscription."
@@ -60,7 +61,7 @@ async def get_dating_tips(
     user: User = Depends(get_current_user)
 ) -> LoveBotTipResponse:
     """Get expert dating tips and lessons."""
-    if not user or not user.subscription_active:
+    if not user or not user_has_active_subscription(user):
         raise HTTPException(
             status_code=403,
             detail="LoveBot features require a Founding Member or Premium subscription."
@@ -79,7 +80,7 @@ async def get_gift_ideas(
     user: User = Depends(get_current_user)
 ) -> LoveBotGiftResponse:
     """Get personalized gift ideas for your soulmate."""
-    if not user or not user.subscription_active:
+    if not user or not user_has_active_subscription(user):
         raise HTTPException(
             status_code=403,
             detail="LoveBot features require a Founding Member or Premium subscription."

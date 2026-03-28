@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Heart, Mail, Lock, User, ArrowRight, ShieldCheck, CalendarDays } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
 import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
+import { getSafeNextPath } from '../../lib/navigation';
 
 export function Register() {
   const [email, setEmail] = useState('');
@@ -16,6 +17,8 @@ export function Register() {
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const nextPath = getSafeNextPath(location.search, '/app/profile');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +55,7 @@ export function Register() {
         acceptedTerms,
         confirmedOver18,
       });
-      navigate('/app/profile');
+      navigate(nextPath);
     } catch (err: any) {
       setError(err.message || 'Registration failed');
     } finally {
@@ -217,7 +220,10 @@ export function Register() {
 
         <p className="text-center text-gray-500 text-sm mt-6">
           Already have an account?{' '}
-          <Link to="/login" className="text-pink-400 hover:text-pink-300 font-semibold transition-colors">
+          <Link
+            to={`/login?next=${encodeURIComponent(nextPath)}`}
+            className="text-pink-400 hover:text-pink-300 font-semibold transition-colors"
+          >
             Sign In
           </Link>
         </p>

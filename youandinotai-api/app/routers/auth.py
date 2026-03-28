@@ -32,6 +32,7 @@ from app.schemas import (
     UserMeResponse,
     GoogleLoginRequest,
 )
+from app.subscriptions import user_has_active_subscription
 
 router = APIRouter(prefix="/auth")
 
@@ -248,7 +249,8 @@ async def get_me(
         display_name=user.display_name,
         bot_shield_verified=user.bot_shield_verified,
         subscription_tier=user.subscription_tier,
-        subscription_active=user.subscription_active,
+        subscription_active=user_has_active_subscription(user),
+        subscription_expires_at=user.subscription_expires_at,
         has_profile=profile is not None,
         adult_verified=user.date_of_birth is not None,
         mission_impact_score=user.mission_impact_score,

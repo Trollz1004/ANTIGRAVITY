@@ -33,7 +33,8 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     }
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    window.location.href = '/login';
+    const next = encodeURIComponent(`${window.location.pathname}${window.location.search}`);
+    window.location.href = `/login?next=${next}`;
     throw new ApiError(401, 'Session expired');
   }
 
