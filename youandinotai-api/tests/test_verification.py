@@ -100,7 +100,7 @@ class TestSquarePaymentLinkGeneration:
             checkout_ref=checkout_ref,
         )
 
-        assert request_body["order"]["reference_id"] == f"agref:{checkout_ref}"
+        assert "reference_id" not in request_body["order"]
         assert request_body["payment_note"].endswith(f"agref:{checkout_ref}")
         assert request_body["order"]["line_items"][0]["base_price_money"]["amount"] == BOT_SHIELD_CENTS
         assert request_body["pre_populated_data"]["buyer_email"] == "josh@example.com"

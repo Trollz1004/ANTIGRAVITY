@@ -282,7 +282,6 @@ def build_account_bound_checkout_request(
         "description": description,
         "order": {
             "location_id": location_id,
-            "reference_id": f"{CHECKOUT_REF_MARKER}{checkout_ref}",
             "line_items": [
                 {
                     "name": product_name,
