@@ -11,7 +11,6 @@ import time
 import uuid
 from dataclasses import dataclass
 from typing import Iterable, Iterator
-from urllib.parse import quote
 
 BOT_SHIELD_CENTS = 100
 FOUNDING_MEMBER_CENTS = 1499
@@ -234,7 +233,7 @@ def build_bot_shield_checkout_request(
         buyer_email=buyer_email,
         checkout_ref=checkout_ref,
         tier="bot_shield",
-        redirect_path=f"/app/verify?status=success&checkout_ref={quote(checkout_ref)}",
+        redirect_path="/app/verify?status=success",
     )
 
 
