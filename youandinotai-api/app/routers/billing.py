@@ -13,7 +13,11 @@ from app.auth import get_current_user
 from app.config import get_settings
 from app.database import get_db
 from app.models import User, VerificationEvent
-from app.payment_truth import build_account_bound_checkout_request, build_checkout_reference
+from app.payment_truth import (
+    build_account_bound_checkout_request,
+    build_checkout_reference,
+    email_supported_for_square_checkout,
+)
 from app.square_checkout import create_square_payment_link
 
 router = APIRouter(prefix="/billing")
@@ -35,6 +39,12 @@ async def create_checkout_link(
     db: AsyncSession = Depends(get_db),
 ) -> CheckoutLinkResponse:
     settings = get_settings()
+
+    if not email_supported_for_square_checkout(user.email):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Use a real email address to launch Square checkout.",
+        )
 
     checkout_event = VerificationEvent(
         user_id=user.id,
