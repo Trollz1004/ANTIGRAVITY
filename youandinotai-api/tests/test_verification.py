@@ -9,6 +9,7 @@ Tests cover:
 
 import os
 import uuid
+from datetime import datetime, timedelta, timezone
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
@@ -126,29 +127,13 @@ class TestSquarePaymentLinkGeneration:
             app_url="https://youandinotai.com",
         )
 
-        mock_response = MagicMock()
-        mock_response.raise_for_status.return_value = None
-        mock_response.json.return_value = {
-            "payment_link": {"url": "https://square.link/u/mock-bot-shield"}
-        }
-
-        mock_client = AsyncMock()
-        mock_client.post.return_value = mock_response
-
-        class MockAsyncClient:
-            def __init__(self, *args, **kwargs):
-                pass
-
-            async def __aenter__(self):
-                return mock_client
-
-            async def __aexit__(self, exc_type, exc, tb):
-                return False
-
         import asyncio
         from unittest.mock import patch
 
-        with patch("app.routers.verify.httpx.AsyncClient", MockAsyncClient):
+        with patch(
+            "app.routers.verify.create_square_payment_link",
+            AsyncMock(return_value="https://square.link/u/mock-bot-shield"),
+        ):
             checkout_url = asyncio.run(
                 _build_square_checkout_url(user=user, event=event, settings=settings)
             )
@@ -257,3 +242,26 @@ class TestVerificationStatusTruth:
         assert response.verified is False
         assert response.bot_shield_paid is True
         assert response.tier == "unverified"
+
+
+class TestSubscriptionTruth:
+    def test_prepaid_subscription_without_expiry_is_not_active(self):
+        from app.subscriptions import user_has_active_subscription
+
+        user = MagicMock()
+        user.subscription_active = True
+        user.subscription_tier = "3_month"
+        user.subscription_expires_at = None
+
+        assert user_has_active_subscription(user) is False
+
+    def test_prepaid_subscription_expires_after_term_end(self):
+        from app.subscriptions import sync_subscription_state
+
+        user = MagicMock()
+        user.subscription_active = True
+        user.subscription_tier = "12_month"
+        user.subscription_expires_at = datetime.now(timezone.utc) - timedelta(days=1)
+
+        assert sync_subscription_state(user) is False
+        assert user.subscription_active is False

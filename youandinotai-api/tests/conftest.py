@@ -57,6 +57,7 @@ def make_user(
     bot_shield_verified: bool = False,
     subscription_active: bool = False,
     subscription_tier: str | None = None,
+    subscription_expires_at: datetime | None = None,
     square_customer_id: str | None = None,
 ) -> MagicMock:
     """Create a mock User object for testing."""
@@ -68,6 +69,7 @@ def make_user(
     user.bot_shield_verified = bot_shield_verified
     user.subscription_active = subscription_active
     user.subscription_tier = subscription_tier
+    user.subscription_expires_at = subscription_expires_at
     user.square_customer_id = square_customer_id
     user.created_at = datetime(2025, 1, 1, tzinfo=timezone.utc)
     user.updated_at = datetime(2025, 1, 1, tzinfo=timezone.utc)

@@ -12,6 +12,7 @@ interface User {
   bot_shield_verified: boolean;
   subscription_tier: string | null;
   subscription_active: boolean;
+  subscription_expires_at?: string | null;
   has_profile: boolean;
   adult_verified: boolean;
 }

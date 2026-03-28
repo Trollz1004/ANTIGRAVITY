@@ -38,6 +38,7 @@ from app.payment_truth import (
     parse_checkout_reference,
 )
 from app.schemas import WebhookAckResponse
+from app.subscriptions import build_subscription_expiry, utc_now
 from app.verification_service import promote_user_verification_if_ready
 from app.webhook_event_store import (
     create_webhook_event,
@@ -447,7 +448,7 @@ async def square_payment_webhook(
         str(payment_obj.get("reference_id") or ""),
         str(order_obj.get("reference_id") or "") if isinstance(order_obj, dict) else "",
     )
-    user, liveness_event, checkout_data = await _get_user_by_checkout_reference(
+    user, bound_event, checkout_data = await _get_user_by_checkout_reference(
         db,
         checkout_ref,
         settings=settings,
@@ -476,10 +477,17 @@ async def square_payment_webhook(
                 extra_hints=(checkout_data or {}, obj),
             )
             proof_label = extract_payment_proof_label(payment_obj)
+            observed_at = utc_now()
 
             if user and tier:
                 if tier == "royalty":
+                    if bound_event and checkout_data and checkout_data.get("tier") == tier:
+                        bound_event.status = "completed"
+                        bound_event.completed_at = observed_at
+                        bound_event.square_payment_id = payment_id
+                        bound_event.amount_cents = payment_amount_cents
                     user.subscription_tier = tier
+                    user.subscription_expires_at = None
                     logger.info(
                         "Royalty payment completed: user=%s event=%s proof=%s",
                         user.id,
@@ -489,6 +497,15 @@ async def square_payment_webhook(
                 elif tier in {"founding_member", "3_month", "12_month"}:
                     user.subscription_tier = tier
                     user.subscription_active = True
+                    user.subscription_expires_at = build_subscription_expiry(
+                        tier,
+                        activated_at=observed_at,
+                    )
+                    if bound_event and checkout_data and checkout_data.get("tier") == tier:
+                        bound_event.status = "completed"
+                        bound_event.completed_at = observed_at
+                        bound_event.square_payment_id = payment_id
+                        bound_event.amount_cents = payment_amount_cents
                     logger.info(
                         "Subscription payment completed: user=%s tier=%s event=%s proof=%s",
                         user.id,
@@ -498,7 +515,7 @@ async def square_payment_webhook(
                     )
                 elif _bot_shield_binding_is_valid(
                     checkout_data=checkout_data,
-                    liveness_event=liveness_event,
+                    liveness_event=bound_event,
                 ) and payment_amount_cents == 100:
                     existing_payment_event = await _get_existing_payment_verification_event(
                         db,
@@ -519,7 +536,7 @@ async def square_payment_webhook(
                         user.id,
                         event_id,
                         proof_label,
-                        bool(liveness_event),
+                        bool(bound_event),
                     )
 
                     was_verified = user.bot_shield_verified
@@ -541,7 +558,7 @@ async def square_payment_webhook(
                         event_id,
                         payment_id,
                         bool(checkout_ref),
-                        bool(liveness_event),
+                        bool(bound_event),
                     )
 
             elif not user:
@@ -573,6 +590,7 @@ async def square_payment_webhook(
         if user:
             user.subscription_active = True
             user.subscription_tier = "founding_member"
+            user.subscription_expires_at = None
             logger.info(
                 "Square subscription created: user=%s event=%s",
                 user.id, event_id,
@@ -585,12 +603,14 @@ async def square_payment_webhook(
         if user:
             if sub_status in ("CANCELED", "DEACTIVATED", "PAUSED"):
                 user.subscription_active = False
+                user.subscription_expires_at = None
                 logger.info(
                     "Square subscription deactivated: user=%s status=%s event=%s",
                     user.id, sub_status, event_id,
                 )
             elif sub_status == "ACTIVE":
                 user.subscription_active = True
+                user.subscription_expires_at = None
 
     await mark_webhook_event_processed(db, event_id)
 

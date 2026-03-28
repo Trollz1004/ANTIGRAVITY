@@ -21,6 +21,8 @@ import { Events } from './app/pages/Events';
 import { Volunteering } from './app/pages/Volunteering';
 import { Support } from './app/pages/Support';
 import { LoveBotPage } from './app/pages/LoveBotPage';
+import { Verify } from './app/pages/Verify';
+import { CheckoutLaunch } from './app/pages/CheckoutLaunch';
 import DataPrivacyDashboard from './components/DataPrivacyDashboard';
 import CharityTab from './components/CharityTab';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
@@ -51,7 +53,8 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/app/support" element={<Support />} />
             <Route path="/app/privacy" element={<DataPrivacyDashboard />} />
             <Route path="/app/charity" element={<CharityTab />} />
-            <Route path="/app/verify" element={<Navigate to="/" replace />} />
+            <Route path="/app/verify" element={<Verify />} />
+            <Route path="/app/checkout/:tier" element={<CheckoutLaunch />} />
           </Route>
         </Route>
       </Routes>

@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, Header, HTTPException, status
 from pydantic import BaseModel
-from sqlalchemy import func, select
+from sqlalchemy import and_, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
@@ -27,6 +27,7 @@ from app.models import (
     VolunteerSignup,
     WebhookEvent,
 )
+from app.subscriptions import PREPAID_SUBSCRIPTION_DURATIONS, utc_now
 
 router = APIRouter(prefix="/metrics")
 
@@ -104,8 +105,22 @@ async def charity_metrics(
         select(func.count(User.id)).where(User.bot_shield_verified == True)
     ) or 0
     profiled_users = await db.scalar(select(func.count(Profile.id))) or 0
+    subscriber_now = utc_now()
+    prepaid_tiers = tuple(PREPAID_SUBSCRIPTION_DURATIONS.keys())
     subscribers = await db.scalar(
-        select(func.count(User.id)).where(User.subscription_active == True)
+        select(func.count(User.id)).where(
+            and_(
+                User.subscription_active == True,
+                or_(
+                    User.subscription_tier.is_(None),
+                    User.subscription_tier.notin_(prepaid_tiers),
+                    and_(
+                        User.subscription_expires_at.is_not(None),
+                        User.subscription_expires_at > subscriber_now,
+                    ),
+                ),
+            )
+        )
     ) or 0
 
     # Engagement metrics — counts only

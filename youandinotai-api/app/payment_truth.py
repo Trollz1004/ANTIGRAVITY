@@ -23,6 +23,14 @@ CHECKOUT_REF_VERSION = "v1"
 CHECKOUT_REF_MARKER = "agref:"
 BOT_SHIELD_PRODUCT_NAME = "Bot-Shield Verification"
 BOT_SHIELD_CHECKOUT_DESCRIPTION = "YouAndINotAI Bot-Shield verification checkout"
+FOUNDING_MEMBER_PRODUCT_NAME = "YouAndINotAI Founding Member"
+FOUNDING_MEMBER_CHECKOUT_DESCRIPTION = "YouAndINotAI founding member monthly checkout"
+THREE_MONTH_PRODUCT_NAME = "YouAndINotAI 3-Month Founder"
+THREE_MONTH_CHECKOUT_DESCRIPTION = "YouAndINotAI 3-month founder checkout"
+TWELVE_MONTH_PRODUCT_NAME = "YouAndINotAI 12-Month Founder"
+TWELVE_MONTH_CHECKOUT_DESCRIPTION = "YouAndINotAI 12-month founder checkout"
+ROYALTY_CARD_PRODUCT_NAME = "YouAndINotAI Royalty Card"
+ROYALTY_CARD_CHECKOUT_DESCRIPTION = "YouAndINotAI royalty card checkout"
 CHECKOUT_REF_RE = re.compile(r"agref:([A-Za-z0-9._-]+)")
 NORMALIZE_TEXT_RE = re.compile(r"[^a-z0-9]+")
 WALLET_PROOF_PREFIX = "wallet:"
@@ -220,22 +228,67 @@ def build_bot_shield_checkout_request(
     buyer_email: str,
     checkout_ref: str,
 ) -> dict[str, object]:
-    base_app_url = (app_url or "https://youandinotai.com").rstrip("/")
-    redirect_url = (
-        f"{base_app_url}/app/verify?status=success&checkout_ref={quote(checkout_ref)}"
+    return build_account_bound_checkout_request(
+        app_url=app_url,
+        location_id=location_id,
+        buyer_email=buyer_email,
+        checkout_ref=checkout_ref,
+        tier="bot_shield",
+        redirect_path=f"/app/verify?status=success&checkout_ref={quote(checkout_ref)}",
     )
+
+
+def build_account_bound_checkout_request(
+    *,
+    app_url: str,
+    location_id: str,
+    buyer_email: str,
+    checkout_ref: str,
+    tier: str,
+    redirect_path: str,
+) -> dict[str, object]:
+    product_name_map = {
+        "bot_shield": BOT_SHIELD_PRODUCT_NAME,
+        "founding_member": FOUNDING_MEMBER_PRODUCT_NAME,
+        "3_month": THREE_MONTH_PRODUCT_NAME,
+        "12_month": TWELVE_MONTH_PRODUCT_NAME,
+        "royalty": ROYALTY_CARD_PRODUCT_NAME,
+    }
+    description_map = {
+        "bot_shield": BOT_SHIELD_CHECKOUT_DESCRIPTION,
+        "founding_member": FOUNDING_MEMBER_CHECKOUT_DESCRIPTION,
+        "3_month": THREE_MONTH_CHECKOUT_DESCRIPTION,
+        "12_month": TWELVE_MONTH_CHECKOUT_DESCRIPTION,
+        "royalty": ROYALTY_CARD_CHECKOUT_DESCRIPTION,
+    }
+    amount_map = {
+        "bot_shield": BOT_SHIELD_CENTS,
+        "founding_member": FOUNDING_MEMBER_CENTS,
+        "3_month": THREE_MONTH_FOUNDER_CENTS,
+        "12_month": TWELVE_MONTH_FOUNDER_CENTS,
+        "royalty": ROYALTY_CARD_CENTS,
+    }
+
+    product_name = product_name_map.get(tier)
+    description = description_map.get(tier)
+    amount_cents = amount_map.get(tier)
+    if not product_name or not description or amount_cents is None:
+        raise ValueError(f"Unsupported checkout tier: {tier}")
+
+    base_app_url = (app_url or "https://youandinotai.com").rstrip("/")
+    redirect_url = f"{base_app_url}/{redirect_path.lstrip('/')}"
     return {
         "idempotency_key": str(uuid.uuid4()),
-        "description": BOT_SHIELD_CHECKOUT_DESCRIPTION,
+        "description": description,
         "order": {
             "location_id": location_id,
             "reference_id": f"{CHECKOUT_REF_MARKER}{checkout_ref}",
             "line_items": [
                 {
-                    "name": BOT_SHIELD_PRODUCT_NAME,
+                    "name": product_name,
                     "quantity": "1",
                     "base_price_money": {
-                        "amount": BOT_SHIELD_CENTS,
+                        "amount": amount_cents,
                         "currency": SQUARE_CURRENCY,
                     },
                 }
@@ -249,7 +302,7 @@ def build_bot_shield_checkout_request(
         "pre_populated_data": {
             "buyer_email": buyer_email,
         },
-        "payment_note": build_checkout_reference_note("bot_shield", checkout_ref),
+        "payment_note": build_checkout_reference_note(tier, checkout_ref),
     }
 
 

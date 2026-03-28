@@ -26,6 +26,7 @@ class User(Base):
     bot_shield_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     subscription_tier: Mapped[str | None] = mapped_column(String(50), nullable=True)
     subscription_active: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    subscription_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     adult_verified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
