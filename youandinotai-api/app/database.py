@@ -65,6 +65,7 @@ async def reconcile_legacy_schema() -> None:
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS bot_shield_verified BOOLEAN DEFAULT FALSE NOT NULL",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS subscription_tier VARCHAR(50)",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS subscription_active BOOLEAN DEFAULT FALSE NOT NULL",
+            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS subscription_expires_at TIMESTAMPTZ",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS mission_impact_score FLOAT DEFAULT 0 NOT NULL",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS intent_badge VARCHAR(50)",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255) UNIQUE",

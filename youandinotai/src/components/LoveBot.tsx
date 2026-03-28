@@ -47,7 +47,7 @@ type LoveBotResult =
   | GiftResponse
   | null;
 
-const FOUNDING_MEMBER_LINK = 'https://square.link/u/cxwjcn0s';
+const FOUNDING_MEMBER_LINK = '/app/checkout/founding_member';
 
 const TIP_CATEGORY_OPTIONS: Array<{ value: TipCategory; label: string }> = [
   { value: 'attracting_partners_neutral', label: 'Soulmate Connection' },
@@ -121,8 +121,6 @@ const LoveBot: React.FC<{ user: User }> = ({ user }) => {
         </p>
         <a
           href={FOUNDING_MEMBER_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
           className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-pink-600 to-purple-600 px-8 py-3 font-bold text-white no-underline transition-transform hover:scale-105"
         >
           Upgrade to Founding Member

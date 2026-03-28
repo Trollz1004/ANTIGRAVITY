@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Heart, Mail, Lock, ArrowRight, KeyRound, Sparkles } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
 import { GoogleSignInButton } from '../../components/auth/GoogleSignInButton';
+import { getSafeNextPath } from '../../lib/navigation';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -15,6 +16,9 @@ export function Login() {
   const [showBeta, setShowBeta] = useState(false);
   const { login, betaAccess } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const nextPath = getSafeNextPath(location.search, '/app');
+  const registerHref = `/register?next=${encodeURIComponent(nextPath)}`;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +26,7 @@ export function Login() {
     setLoading(true);
     try {
       await login(email, password);
-      navigate('/app');
+      navigate(nextPath);
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {
@@ -36,7 +40,7 @@ export function Login() {
     setBetaLoading(true);
     try {
       await betaAccess(betaCode);
-      navigate('/app');
+      navigate(nextPath);
     } catch (err: any) {
       setBetaError(err.message || 'Invalid access code');
     } finally {
@@ -175,7 +179,7 @@ export function Login() {
 
         <p className="text-center text-gray-500 text-sm mt-6">
           Don't have an account?{' '}
-          <Link to="/register" className="text-pink-400 hover:text-pink-300 font-semibold transition-colors">
+          <Link to={registerHref} className="text-pink-400 hover:text-pink-300 font-semibold transition-colors">
             Sign Up
           </Link>
         </p>
