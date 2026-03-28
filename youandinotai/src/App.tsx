@@ -16,6 +16,14 @@ import { RoyaltyDeck } from './components/RoyaltyDeck';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from './lib/auth';
 
+const SECURE_PLAN_LINKS = {
+  bot_shield: '/app/verify',
+  founding_member: '/app/checkout/founding_member',
+  '3_month': '/app/checkout/3_month',
+  '12_month': '/app/checkout/12_month',
+  royalty: '/app/checkout/royalty',
+} as const;
+
 /* ─── Lazy-load modal components ─── */
 /* Removed: GeminiMatchmaker, SolarFlareSOS, VoiceSOS — Gemini API costs money */
 const EcosystemStats = lazy(() => import('./components/EcosystemStats').then(m => ({ default: m.EcosystemStats })));
@@ -77,9 +85,7 @@ function SignupCTA() {
         Get Bot-Shield Verified — Only $1
       </span>
       <a
-        href="https://square.link/u/Qc5mxUy7"
-        target="_blank"
-        rel="noopener noreferrer"
+        href={SECURE_PLAN_LINKS.bot_shield}
         className="bg-white text-purple-700 px-6 py-2.5 rounded-full font-bold text-sm md:text-base no-underline whitespace-nowrap hover:scale-105 transition-transform active:scale-95"
       >
         Sign Up Now
@@ -301,11 +307,11 @@ function WaitlistForm() {
 /* ─── Pricing Section ─── */
 function PricingSection() {
   const plans = [
-    { name: 'Bot-Shield Verification', price: '$1', desc: "Prove you're real", link: 'https://square.link/u/Qc5mxUy7', bg: 'from-indigo-500 to-purple-600' },
-    { name: 'Founding Member', price: '$14.99/mo', desc: 'Locked forever at this rate', link: 'https://square.link/u/cxwjcn0s', bg: 'from-purple-600 to-pink-600' },
-    { name: '3-Month Founder', price: '$39.99', desc: 'Save $5 vs monthly', link: 'https://square.link/u/oY7qEfRM', bg: 'from-blue-600 to-indigo-600' },
-    { name: '12-Month Founder', price: '$99.99', desc: 'Best value — save $80', link: 'https://square.link/u/6GHpbvvl', bg: 'from-indigo-700 to-blue-700' },
-    { name: 'Royalty Card', price: '$2,500', desc: 'Lifetime VIP + revenue share', link: 'https://square.link/u/CafhorUS', bg: 'from-amber-400 to-orange-500' },
+    { name: 'Bot-Shield Verification', price: '$1', desc: "Prove you're real", link: SECURE_PLAN_LINKS.bot_shield, bg: 'from-indigo-500 to-purple-600' },
+    { name: 'Founding Member', price: '$14.99/mo', desc: 'Locked forever at this rate', link: SECURE_PLAN_LINKS.founding_member, bg: 'from-purple-600 to-pink-600' },
+    { name: '3-Month Founder', price: '$39.99', desc: 'Save $5 vs monthly', link: SECURE_PLAN_LINKS['3_month'], bg: 'from-blue-600 to-indigo-600' },
+    { name: '12-Month Founder', price: '$99.99', desc: 'Best value — save $80', link: SECURE_PLAN_LINKS['12_month'], bg: 'from-indigo-700 to-blue-700' },
+    { name: 'Royalty Card', price: '$2,500', desc: 'Lifetime VIP + revenue share', link: SECURE_PLAN_LINKS.royalty, bg: 'from-amber-400 to-orange-500' },
   ];
 
   return (
@@ -320,8 +326,6 @@ function PricingSection() {
             <a
               key={plan.name}
               href={plan.link}
-              target="_blank"
-              rel="noopener noreferrer"
               className={`block p-4 bg-gradient-to-r ${plan.bg} rounded-2xl no-underline text-white hover:scale-[1.03] transition-all duration-300 active:scale-[0.98] shadow-[0_0_20px_rgba(139,92,246,0.15),inset_0_0_20px_rgba(255,255,255,0.1)] border border-white/10 backdrop-blur-sm`}
             >
               <div className="flex justify-between items-center">
@@ -346,7 +350,7 @@ function PricingSection() {
 const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   terms: {
     title: 'Terms of Service',
-    body: `By using YouAndiNotAi ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. VERIFICATION FLOW — Bot-Shield verification may be required for protected features. Fraudulent verification attempts result in account action or removal.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations can result in immediate account termination.\n4. PAYMENTS — All payments are processed through Square-hosted checkout links. Subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndiNotAi a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. BILLING — The current Bot-Shield launch flow requires both a passed liveness challenge and a completed Square payment before the verified badge is granted.\n\nLast updated: March 2026. Contact: contact@youandinotai.com`,
+      body: `By using YouAndiNotAi ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. VERIFICATION FLOW — Bot-Shield verification may be required for protected features. Fraudulent verification attempts result in account action or removal.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations can result in immediate account termination.\n4. PAYMENTS — All payments are processed through secure account-bound Square checkout. Recurring subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndiNotAi a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. BILLING — The current Bot-Shield launch flow requires both a passed liveness challenge and a completed Square payment before the verified badge is granted.\n\nLast updated: March 2026. Contact: contact@youandinotai.com`,
   },
   privacy: {
     title: 'Privacy Policy',
@@ -438,11 +442,11 @@ function SuccessModal({ onClose }: { onClose: () => void }) {
 /* ─── Footer ─── */
 function Footer({ onLegal }: { onLegal: (type: string) => void }) {
   const plans = [
-    { name: 'Bot-Shield — $1', link: 'https://square.link/u/Qc5mxUy7' },
-    { name: 'Founding Member — $14.99/mo', link: 'https://square.link/u/cxwjcn0s' },
-    { name: '3-Month Founder — $39.99', link: 'https://square.link/u/oY7qEfRM' },
-    { name: '12-Month Founder — $99.99', link: 'https://square.link/u/6GHpbvvl' },
-    { name: 'Royalty Card — $2,500', link: 'https://square.link/u/CafhorUS' },
+    { name: 'Bot-Shield — $1', link: SECURE_PLAN_LINKS.bot_shield },
+    { name: 'Founding Member — $14.99/mo', link: SECURE_PLAN_LINKS.founding_member },
+    { name: '3-Month Founder — $39.99', link: SECURE_PLAN_LINKS['3_month'] },
+    { name: '12-Month Founder — $99.99', link: SECURE_PLAN_LINKS['12_month'] },
+    { name: 'Royalty Card — $2,500', link: SECURE_PLAN_LINKS.royalty },
   ];
   const legalKeys = ['terms', 'privacy', 'age', 'refund'] as const;
 
@@ -685,9 +689,7 @@ export default function App() {
             <a href="#mission" className="hover:text-white transition-colors no-underline">Why It Works</a>
           </div>
           <a
-            href="https://square.link/u/Qc5mxUy7"
-            target="_blank"
-            rel="noopener noreferrer"
+            href={SECURE_PLAN_LINKS.bot_shield}
             className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold no-underline hover:scale-105 transition-transform"
           >
             Get Verified — $1
@@ -724,9 +726,7 @@ export default function App() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
             <a
-            href="https://square.link/u/Qc5mxUy7"
-              target="_blank"
-              rel="noopener noreferrer"
+              href={SECURE_PLAN_LINKS.bot_shield}
               className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-4 rounded-full font-bold text-lg no-underline hover:scale-105 transition-transform shadow-lg shadow-pink-500/30"
             >
               <img src="/bot-shield-logo.png" alt="Bot-Shield Verified" className="w-6 h-6 rounded-md object-contain bg-black" />

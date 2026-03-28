@@ -16,6 +16,7 @@ from google.oauth2 import id_token
 from app.config import get_settings
 from app.database import get_db
 from app.models import User
+from app.subscriptions import sync_subscription_state
 
 settings = get_settings()
 
@@ -94,6 +95,10 @@ async def get_current_user(
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
     ensure_active_user(user)
+    prior_state = user.subscription_active
+    sync_subscription_state(user)
+    if user.subscription_active != prior_state:
+        await db.commit()
     return user
 
 

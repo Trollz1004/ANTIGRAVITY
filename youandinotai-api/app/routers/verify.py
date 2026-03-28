@@ -21,7 +21,6 @@ import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
 
-import httpx
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy import func, select
@@ -37,6 +36,8 @@ from app.payment_truth import (
     build_checkout_reference,
 )
 from app.rate_limit import verify_limiter
+from app.square_checkout import create_square_payment_link
+from app.subscriptions import user_has_active_subscription
 from app.verification_service import (
     lock_user_for_verification,
     has_completed_payment,
@@ -124,52 +125,18 @@ async def _build_square_checkout_url(
         secret=settings.jwt_secret,
     )
 
-    square_access_token = str(getattr(settings, "square_access_token", "") or "").strip()
-    square_location_id = str(getattr(settings, "square_location_id", "") or "").strip()
-    square_api_base_url = str(
-        getattr(settings, "square_api_base_url", "https://connect.squareup.com") or "https://connect.squareup.com"
-    ).rstrip("/")
-    square_api_version = str(getattr(settings, "square_api_version", "2026-01-22") or "2026-01-22")
-
-    if square_access_token and square_location_id:
-        request_body = build_bot_shield_checkout_request(
-            app_url=str(getattr(settings, "app_url", "https://youandinotai.com") or "https://youandinotai.com"),
-            location_id=square_location_id,
-            buyer_email=user.email,
-            checkout_ref=checkout_ref,
-        )
-        try:
-            async with httpx.AsyncClient(
-                base_url=square_api_base_url,
-                timeout=10.0,
-            ) as client:
-                response = await client.post(
-                    "/v2/online-checkout/payment-links",
-                    headers={
-                        "Authorization": f"Bearer {square_access_token}",
-                        "Square-Version": square_api_version,
-                        "Content-Type": "application/json",
-                    },
-                    json=request_body,
-                )
-            response.raise_for_status()
-            response_json = response.json()
-            payment_link = response_json.get("payment_link") or {}
-            checkout_url = str(payment_link.get("url") or "").strip()
-            if checkout_url:
-                return checkout_url
-            logger.warning(
-                "Square CreatePaymentLink returned no checkout url: user=%s event=%s",
-                user.id,
-                event.id,
-            )
-        except (httpx.HTTPError, ValueError) as exc:
-            logger.warning(
-                "Square dynamic checkout failed, falling back to static link: user=%s event=%s error=%s",
-                user.id,
-                event.id,
-                exc,
-            )
+    request_body = build_bot_shield_checkout_request(
+        app_url=str(getattr(settings, "app_url", "https://youandinotai.com") or "https://youandinotai.com"),
+        location_id=str(getattr(settings, "square_location_id", "") or "").strip(),
+        buyer_email=user.email,
+        checkout_ref=checkout_ref,
+    )
+    checkout_url = await create_square_payment_link(
+        request_body=request_body,
+        settings=settings,
+    )
+    if checkout_url:
+        return checkout_url
     logger.error(
         "Secure Bot-Shield checkout unavailable: signed Square CreatePaymentLink could not be created for user=%s event=%s",
         user.id,
@@ -354,7 +321,8 @@ async def verification_status(
     ) or 0
 
     # Tier logic
-    if user.subscription_active and user.bot_shield_verified:
+    subscription_active = user_has_active_subscription(user)
+    if subscription_active and user.bot_shield_verified:
         tier = "platinum"
     elif user.bot_shield_verified:
         tier = "gold"
@@ -366,7 +334,7 @@ async def verification_status(
         trust_score=trust,
         tier=tier,
         bot_shield_paid=bot_shield_paid,
-        subscription_active=user.subscription_active,
+        subscription_active=subscription_active,
         checks_completed=checks,
     )
 
@@ -424,5 +392,5 @@ async def confirm_verification(
     return {
         "verified": True,
         "trust_score": trust,
-        "tier": "platinum" if locked_user.subscription_active else "gold",
+        "tier": "platinum" if user_has_active_subscription(locked_user) else "gold",
     }

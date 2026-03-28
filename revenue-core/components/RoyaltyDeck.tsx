@@ -21,7 +21,7 @@ const FOUNDER_CARDS: Card[] = [
     perks: [
       'Lifetime premium membership',
       'Founding member badge (permanent)',
-      'Revenue share: 0.5% of dating app gross',
+      'Revenue share: 1% of net platform revenue',
       'Quarterly founder calls with Josh',
       'Name on smart contract (Base Mainnet)',
       'First access to all new features',
@@ -38,7 +38,7 @@ const FOUNDER_CARDS: Card[] = [
     perks: [
       'Lifetime premium membership',
       'Founding member badge (permanent)',
-      'Revenue share: 0.5% of dating app gross',
+      'Revenue share: 1% of net platform revenue',
       'Direct Slack channel with founder',
       'Name on smart contract (Base Mainnet)',
       'Feature request priority queue',
@@ -55,7 +55,7 @@ const FOUNDER_CARDS: Card[] = [
     perks: [
       'Lifetime premium membership',
       'Founding member badge (permanent)',
-      'Revenue share: 0.5% of dating app gross',
+      'Revenue share: 1% of net platform revenue',
       'DAO governance voting rights',
       'Name on smart contract (Base Mainnet)',
       'Charity match: your purchase doubles impact',
@@ -72,7 +72,7 @@ const FOUNDER_CARDS: Card[] = [
     perks: [
       'Lifetime premium membership',
       'Founding member badge (permanent)',
-      'Revenue share: 0.5% of dating app gross',
+      'Revenue share: 1% of net platform revenue',
       'Beta tester priority access',
       'Name on smart contract (Base Mainnet)',
       'Annual founder dinner (virtual or in-person)',
