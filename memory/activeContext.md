@@ -1,41 +1,43 @@
-# Active Context - 2026-03-27
+# Active Context - 2026-03-29
 
 ## Current Focus
 
-- **Clean fallback point is locked:** Sabretooth `main` is clean and pushed at `2d1dc6d`.
-- **Remote repo mirrors are aligned:** `9020` and `T5500` were fast-forwarded cleanly to `2d1dc6d`.
+- **Clean live baseline is locked:** Sabretooth `main` is clean at `131c455` before the March 29 briefing refresh.
+- **Sandbox repo is promoted:** `E:\sandbox-repo` now carries the pushed PaperClip pilot at `5ba57f1`.
 - **Public repo docs are aligned:** README now names the full current public ecosystem surface set at a high level, including the dashboard surfaces and the related private/internal dashboard names.
 - **OnlineRecycle is redeployed live:** the Cloudflare Pages direct-upload deploy was completed and verified on March 27, 2026.
+- **Date-app payment path is hardened:** internal checkout creation is verified live for Bot-Shield, founder tiers, and royalty checkout.
 - **Payment/account truth is back in alignment:** `ebaytrashortreasure@gmail.com` stays isolated for the date-app Square/PayPal lane, and `joshlcoleman@gmail.com` stays on the non-date-app commerce lane.
 - **Node lanes remain isolated:** Claude Dispatch stays on Sabretooth `E:`, 9020 owns the `D:` sandbox lane, and T5500 owns the `E:\ANTIGRAVITY-CLAWBOTS` Manus lane.
 - **Sabretooth sandbox staging is intact:** `E:\sandbox-repo` remains the unified sandbox mirror and `E:\GensparkPODnTube` remains separate GenSpark staging.
 - **BRAIN MCP is built and auth-ready:** the sidecar exists at `C:\ANTIGRAVITY\brain-mcp` with local auth registry wiring and audit storage.
+- **PaperClip stays off the live repo:** runtime/source is in `E:\sandbox-repo\paperclip`; pilot state is in `E:\sandbox-repo\paperclip-antigravity`; it is still sandbox-only and voluntary in BRAIN.
 
 ## Verified State
 
 - **Repo root:** `C:\ANTIGRAVITY`
 - **Branch:** `main`
-- **HEAD:** `2d1dc6d`
+- **HEAD before this briefing refresh:** `131c455`
 - **Worktree:** clean
 - **OnlineRecycle live check:** `https://onlinerecycle.org` verified live with service-first copy on March 27, 2026.
-- **Sandbox repo:** `E:\sandbox-repo` is clean
-- **9020 repo mirror:** clean on `2d1dc6d`
-- **T5500 repo mirror:** clean on `2d1dc6d`
+- **Sandbox repo:** `E:\sandbox-repo` is pushed on `main` at `5ba57f1`
+- **9020 repo mirror:** last verified aligned to the live baseline before this March 29 refresh
+- **T5500 repo mirror:** last verified aligned to the live baseline before this March 29 refresh
 
 ## Recently Finished
 
 - Hardened public copy generators and Square catalog messaging at `dd584a1`
 - Redeployed `onlinerecycle.org` using the verified direct-upload Cloudflare Pages flow
-- Expanded the public repo README to reflect the current ecosystem surface list at `2d1dc6d`
-- Refreshed the canonical briefings, memory files, and continuity vault copies to the new clean baseline
-- Synced `9020` plus `T5500` to `2d1dc6d`
+- Archived the last three local bundle helpers out of `C:\ANTIGRAVITY` so the live repo went clean again
+- Pushed the PaperClip sandbox pilot and env-safe AnythingLLM bridge updates to the sandbox repo at `5ba57f1`
+- Refreshed the canonical briefings, memory files, and continuity vault copies to the March 29 state
 
 ## Current Risks / Open Items
 
 1. **BRAIN MCP is auth-ready, but approved clients still need their session-participation rollout to get full drift visibility.**
 2. **`dashboard.aidoesitall.website` is still a direct-upload Pages project with unresolved repo-source mapping.**
 3. **`www.aidoesitall.website` root source is still not identified in this repo.**
-4. **Crossfire on 9020 is still process-based if reboot persistence matters later.**
+4. **AnythingLLM bridge health depends on the local desktop app actually running; the repo now handles secrets safely, but the app process is still opt-in.**
 
 ## Rules To Preserve
 
