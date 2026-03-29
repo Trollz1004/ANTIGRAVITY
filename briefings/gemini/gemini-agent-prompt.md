@@ -27,7 +27,7 @@ Current truth:
 - https://youandinotai-backend-731395189513.us-east1.run.app is the live multiplayer backend
 - https://api.youandinotai.com is the live FastAPI API host
 - youandinotai.online is a redirect domain, not the primary app host
-- OMEGA repos and charity-side code are off-limits
+- OMEGA platform code and charity-side logic are off-limits from ENIGMA work — both live in the ONE `ANTIGRAVITY` repo but code must never cross-reference
 - No mock data
 - No false live claims
 - No customer-facing use of donate, donation, or solicitation

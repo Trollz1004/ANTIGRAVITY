@@ -66,7 +66,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\Invoke-Code
 
 ## Notes
 
-- This is ENIGMA-safe only. It does not audit OMEGA repos or OMEGA public properties.
+- This is ENIGMA-safe only. It does not audit OMEGA platforms or OMEGA public properties. (Note: ENIGMA and OMEGA both live in the ONE `ANTIGRAVITY` repo — the Iron Wall is a code-level boundary.)
 - Default public-surface checks stay limited to the canonical live customer domains. Add extra domains explicitly through `CODEX_WATCHER_DOMAINS` or the `--domains` flag when they are intentionally live and maintained.
 - Missing or expired Cloudflare/Twilio env is treated as a warning, not a hard failure.
 - It is meant to give one daily truth snapshot, not to execute recovery work automatically.

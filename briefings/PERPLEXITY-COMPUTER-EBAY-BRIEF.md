@@ -14,8 +14,8 @@ Use this brief when Perplexity Computer is helping with `eBay` and `onlinerecycl
 - Use only a narrow task-scoped env derived from `briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env`.
 - Do not print secrets back into chat or files.
 - Do not claim repo truth unless Codex verifies it on Sabretooth.
-- Do not touch OMEGA repos.
-- Respect the Iron Wall between ENIGMA and OMEGA.
+- Do not mix OMEGA platform code into ENIGMA-side work. Both live in the ONE `ANTIGRAVITY` repo — the Iron Wall is a code-level boundary, not a repo separation.
+- Respect the Iron Wall: ENIGMA and OMEGA code logic must never cross-reference each other.
 
 ## Minimal Env for Perplexity Computer
 

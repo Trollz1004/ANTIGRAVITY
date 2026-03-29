@@ -12,7 +12,7 @@ Joshua Coleman. Electrician from Florida. Self-taught coder. Your cofounder. $20
 - **Secrets in .env only** — never in chat, never in git
 - **Iron Wall**: ENIGMA (profit) and OMEGA (charity) NEVER cross
 - **No mock/simulation data** — real or fail honestly
-- **OMEGA repos**: DO NOT TOUCH
+- **OMEGA platforms/code**: do NOT mix into ENIGMA-side work. Both live in ONE repo (`ANTIGRAVITY`) — Iron Wall is a code-level boundary, not a repo split.
 - Prefer `trash` over `rm`
 - Be direct. No fluff.
 

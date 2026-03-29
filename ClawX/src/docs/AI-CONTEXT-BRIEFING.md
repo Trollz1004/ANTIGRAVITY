@@ -71,7 +71,7 @@ Smart contract (DatingRevenueRouter) handles phase transitions:
 
 - No git push/pull to remote without explicit permission
 - Secrets in .env files only, never committed
-- OMEGA repos are PROTECTED — DO NOT TOUCH without permission
+- OMEGA platform code is PROTECTED — do not mix into ENIGMA-side work. Both live in ONE repo (`ANTIGRAVITY`) — Iron Wall is a code-level boundary, not a repo split.
 - 50-year charity commitment after founder's passing
 - Post-death split: 60% kids / 30% AI partners / 10% OPUS Trust
 

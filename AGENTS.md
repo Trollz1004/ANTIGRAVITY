@@ -185,7 +185,7 @@ composition may not be altered, reduced, or replaced without Josh's explicit ord
   recovery-critical operational truth must be documented plainly in the repo or approved
   vault path. No hidden authority routes. No intentional black boxes.
 - **NO git push/pull** to remote repos without explicit Josh order
-- **OMEGA, OMEGA365 repos**: DO NOT TOUCH
+- **OMEGA platforms/code**: do NOT mix OMEGA logic into ENIGMA-side work. Both live inside the ONE `ANTIGRAVITY` repo — Iron Wall is a code-level boundary, not a repo split.
 - **Secrets in .env ONLY** — never in chat, never in git. GitHub PAT in Windows Credential Manager.
 - **Worker count max**: 10
 - **Iron Wall**: ENIGMA (profit) and OMEGA (charity) NEVER cross
@@ -320,10 +320,13 @@ New ideas, experimental platforms, and speculative automation go here first.
 
 ## IRON WALL
 
+> Both ENIGMA and OMEGA live inside the ONE repo (`Trollz1004/ANTIGRAVITY`), ONE folder (`C:\ANTIGRAVITY`).
+> The Iron Wall is a **code-level logic boundary** — not a repo separation.
+
 | ENIGMA (Profit) | OMEGA (100% Charity) |
 |-----------------|----------------------|
 | YouAndINotAI, onlinerecycle.org, onlinerecycle.square.site (eBay crosslister) | ai-solutions.store |
-| **SEPARATION IS ABSOLUTE** | |
+| **CODE LOGIC STAYS SEPARATED — same repo, zero cross-contamination** | |
 
 ---
 

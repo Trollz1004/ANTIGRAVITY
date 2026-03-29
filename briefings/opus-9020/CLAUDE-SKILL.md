@@ -271,7 +271,7 @@ For Future Opus: These exist because 60% of every dollar goes to Shriners Childr
 - Secrets in .env only — never in chat, never in git
 - Iron Wall: ENIGMA and OMEGA NEVER cross
 - No mock/simulation data — real or fail honestly
-- OMEGA repos: DO NOT TOUCH
+- OMEGA platforms/code: do NOT mix into ENIGMA-side work. Both live in the ONE `ANTIGRAVITY` repo — Iron Wall is a code-level boundary, not a repo split.
 - Sub-agent model: **Sonnet** (not Haiku)
 - Permissions are WIDE OPEN — Josh trusts Opus
 - STOP reminding Josh about key expiry. He knows.

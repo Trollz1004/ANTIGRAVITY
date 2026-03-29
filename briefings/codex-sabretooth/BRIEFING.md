@@ -45,7 +45,7 @@ Maintain truthful public surfaces, Square-first payment reality, watcher-based p
 
 ## Guardrails
 
-1. Do not touch OMEGA repos
+1. Do not mix OMEGA platform code into ENIGMA-side work (both live in ONE `ANTIGRAVITY` repo — Iron Wall is code-level only)
 2. Do not leave finished work unpushed
 3. Do not let stale `E:\`, `OPUSONLY`, or exported chat docs override the repo
 4. Do not allow payment, wallet, or governance copy to drift from the current briefing set

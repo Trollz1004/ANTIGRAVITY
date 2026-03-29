@@ -65,7 +65,7 @@ If any tool, model, or exported note conflicts with the live repo:
 
 - One repo, one branch, one live folder: `C:\ANTIGRAVITY`, `main`
 - One GitHub source for accepted truth: `Trollz1004/ANTIGRAVITY`
-- OMEGA repos and 100% charity surfaces are off-limits from ENIGMA-side work
+- OMEGA platforms/code (ai-solutions.store, charity rails) are off-limits from ENIGMA-side work — both live in the same `ANTIGRAVITY` repo but code logic must never cross
 - Square is the live payment rail
 - Sabretooth is the only Telegram-owning OpenClaw orchestrator
 - No mock data

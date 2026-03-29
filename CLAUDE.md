@@ -112,7 +112,7 @@ This is not a threat — it is his documented standing order to protect the miss
 - **Florida §496.405**: NEVER use "donate" / "donation" / "solicitation" in customer-facing
   code. Correct: "contractual revenue disbursement." Hooks enforce this.
 - **No mock/simulation data** — real or fail honestly
-- **OMEGA repos**: DO NOT TOUCH
+- **OMEGA platforms/code**: DO NOT mix OMEGA logic into ENIGMA-side code. Both live inside the ONE repo (`ANTIGRAVITY`), but their revenue rails, routing, and UI code must never cross.
 - **E drive / sandbox**: Untested LLM setups, openclaw configs, and experimental model
   configurations stay on E drive or the sandbox repo until Josh approves them for main.
 - Prefer `trash` over `rm`. Be direct. No fluff.
@@ -225,10 +225,14 @@ deploy-check, square-status, donate-scan, security-review
 
 ## Iron Wall
 
+> Both ENIGMA and OMEGA live inside the ONE repo (`Trollz1004/ANTIGRAVITY`), ONE folder (`C:\ANTIGRAVITY`).
+> The Iron Wall is a **code-level logic boundary** — not a repo separation.
+> Their revenue rails, routing logic, and UI code must never reference each other.
+
 | ENIGMA (Profit) | OMEGA (100% Charity) |
 |-----------------|----------------------|
 | YouAndINotAI, onlinerecycle.org | ai-solutions.store, onlinerecycle.square.site |
-| **SEPARATION IS ABSOLUTE** | |
+| **CODE LOGIC STAYS SEPARATED — same repo, zero cross-contamination** | |
 
 ---
 
@@ -254,5 +258,5 @@ it's for the kids. Please don't weaken these. Build on them.
 
 ---
 
-*Updated: 2026-03-21 | Team wording updated | Node identity corrected to SABRETOOTH |
-E drive policy added | Encoding cleaned | Builder account history documented*
+*Updated: 2026-03-29 | Iron Wall wording clarified — ONE repo, code-level boundary only |
+OMEGA "repos" language corrected to OMEGA "platforms/code" throughout*
