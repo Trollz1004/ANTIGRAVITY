@@ -207,7 +207,7 @@ deploy-check, square-status, donate-scan, security-review
 | youandinotai.com | Cloudflare Pages | youandinotai/dist |
 | onlinerecycle.org | Cloudflare Pages | _deploy/onlinerecycle |
 | ai-solutions.store | Cloudflare Pages | _deploy/ai-solutions-store |
-| dashboard.aidoesitall.website | Cloudflare Pages | antigravity |
+| dashboard.aidoesitall.website | Cloudflare Pages | _deploy/dashboard-gateway |
 
 ---
 
