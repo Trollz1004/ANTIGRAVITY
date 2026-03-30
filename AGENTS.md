@@ -384,7 +384,7 @@ CI: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405,
 | youandinotai.com | Cloudflare Pages | youandinotai/dist |
 | onlinerecycle.org | Cloudflare Pages | _deploy/onlinerecycle |
 | ai-solutions.store | Cloudflare Pages | _deploy/ai-solutions-store |
-| dashboard.aidoesitall.website | Cloudflare Pages | antigravity |
+| dashboard.aidoesitall.website | Cloudflare Pages | _deploy/dashboard-gateway |
 
 **Cloudflare**: direct-upload Pages projects should use the verified Cloudflare API/upload-token flow; do not treat local Sabretooth Wrangler OAuth as the canonical deploy path for Pages.
 **Domain routing rule**: if Josh owns the domain, keep DNS on Cloudflare and preserve routing to the owned public domain and its intended redirects. Do not treat preview URLs or temporary upload URLs as the final public destination.
@@ -511,3 +511,10 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 - **OnlineRecycle Deploy:** `onlinerecycle.org` direct-upload Pages deploy completed and verified live with service-first copy from `_deploy/onlinerecycle`.
 - **Node Sync:** `9020` and `T5500` repo mirrors were fast-forwarded cleanly to `2d1dc6d`.
 - **Still Open:** `dashboard.aidoesitall.website` and `www.aidoesitall.website` still need explicit source mapping before any direct-upload redeploy.
+
+---
+### DASHBOARD GATEWAY SYNC - 2026-03-30 16:10:00
+- **Dashboard Mapping:** resolved. `dashboard.aidoesitall.website` is confirmed on Cloudflare Pages project `jules-dashboard`.
+- **Dashboard Replacement:** `_deploy/dashboard-gateway` is live and replaces the old public dashboard with a no-index business-access gateway.
+- **Auth Handoff:** the gateway routes trusted users to the authenticated PaperClip workspace at `https://mcp.youandinotai.com`.
+- **Still Open:** `www.aidoesitall.website` source mapping remains unresolved in this repo.
