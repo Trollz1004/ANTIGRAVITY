@@ -47,6 +47,7 @@
 ## Product State
 
 - **YouAndINotAI:** repaired backend baseline remains the clean fallback point for production work, and the first-payment path now depends on the bound internal checkout flow instead of raw public Square links.
+- **YouAndINotAI Public Landing:** reskinned on March 30, 2026 to the new brutalist public shell with product-first copy, account-bound Bot-Shield positioning, and no public `10%`, `Protocol Omega`, or `donate` language.
 - **OnlineRecycle:** public site remains back on service-first language and no longer relies on the prior overexposed transparency copy.
 - **Repo README:** remains aligned to the current public ecosystem surfaces at a high level.
 - **PaperClip:** intentionally remains off `C:\ANTIGRAVITY`; the live public-facing integration is now an authenticated gateway entrypoint, while the runtime itself stays in the sandbox lane.
