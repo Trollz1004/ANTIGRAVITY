@@ -53,7 +53,7 @@ if (Test-Path 'C:\ANTIGRAVITY\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env') {
 Write-Host ''
 Write-Host 'PowerShell 7.5 Admin terminal loaded.' -ForegroundColor Cyan
 Write-Host "Repo: C:\ANTIGRAVITY" -ForegroundColor Green
-Write-Host 'Protocol Omega 60/30/10 active.' -ForegroundColor Green
+Write-Host 'Current 10% mission-cap policy active.' -ForegroundColor Green
 Write-Host 'OpenClaw TUI helper: octui' -ForegroundColor Cyan
 Write-Host 'Claude dangerous-mode helper: claudelive' -ForegroundColor Cyan
 Write-Host 'Gemini clean-launch helper: gemini' -ForegroundColor Cyan

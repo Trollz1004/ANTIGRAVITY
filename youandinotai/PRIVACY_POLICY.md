@@ -4,7 +4,7 @@
 Operated by Trash Or Treasure Online Recycler LLC, a Florida single-member LLC
 Sole Member: Joshua Coleman
 
-**Last Updated:** March 8, 2026
+**Last Updated:** March 30, 2026
 **Contact:** joshlcoleman@gmail.com
 
 ---
@@ -126,16 +126,17 @@ We use **Google Gemini** to power matchmaking suggestions and generate conversat
 
 Google's privacy practices for Gemini are governed by [Google's Privacy Policy](https://policies.google.com/privacy). We encourage you to review it.
 
-## 8. Charity Disclosure
+## 8. Mission-Linked Revenue Policy
 
-60% of revenue from the ENIGMA (profit-side) operations of YouAndINotAI is contractually disbursed to **Shriners Children's Hospitals**. To be clear:
+YouAndINotAI is a for-profit platform. Your payment is for platform access, verification, or membership products.
 
-- This is 60% of revenue **after** payment processing fees (Square takes its processing fees first)
-- This applies to the dating platform revenue specifically
-- The remaining 40% goes to the founder (Joshua Coleman / Trash Or Treasure Online Recycler LLC)
-- This split is permanent — it does not change over time
+Our current founder-directed operating rule is conservative:
 
-This is a voluntary commitment, not a contractual obligation to you as a user. It is enforced by an on-chain smart contract for transparency.
+- charitable support sourced from current LLC platform operations is capped at **10%**
+- the remainder stays available for taxes, platform costs, retained cash, and lawful business operations
+- your payment is **not** a charitable contribution by you
+
+If we publish a different formal structure later, we will update this policy before describing it as current live practice.
 
 ## 9. Cookies and Tracking Technologies
 

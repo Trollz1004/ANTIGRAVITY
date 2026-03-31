@@ -14,6 +14,7 @@
 
 ## Product Truth
 
+- **Financial Doctrine:** current LLC operations use a founder-directed conservative **10% charitable cap**. Legacy 60/30/10 and 100% charity language are not current operating truth for live revenue.
 - **Intentionality Engine:** Squad Protocol (2v2), Breeze Bypass (Zero-Chat), and Suitability Guard remain in the repaired backend baseline.
 - **Beta Access:** `FORTHEKIDS` seeds the deterministic beta-access path with a `5.0` mission score and `Intentional` badge.
 - **Date-App Payments:** first-payment flows are bound through internal checkout creation; live Square session creation is verified for Bot-Shield, founder tiers, and royalty checkout.
@@ -28,6 +29,7 @@
 
 - **C: Drive Hardening:** production repo remains at `C:\ANTIGRAVITY`; unapproved claw/platform work stays off the live repo.
 - **Fallback Point:** `main` is clean at `131c455` before this March 29 briefing refresh.
+- **Legacy On-Chain Reference:** Base Mainnet `GospelDonation.sol` remains historical/on-chain context, not the current safe operating doctrine for live LLC-controlled revenue.
 - **Cloudflare Deploy Path:** direct-upload Pages projects should use the verified API/upload-token flow; local Sabretooth Wrangler OAuth is not the canonical truth for those Pages deploys.
 - **Open Items:** `www.aidoesitall.website` still needs explicit local source mapping before redeploy. `dashboard.aidoesitall.website` mapping is resolved and moved to a gateway model.
 - **Personal Vault:** continuity snapshots were refreshed again on March 29, 2026; no secret values were added to git or chat.

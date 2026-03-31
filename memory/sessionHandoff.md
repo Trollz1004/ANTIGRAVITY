@@ -1,7 +1,7 @@
 # Session Handoff - 2026-03-30
 
 ## Summary
-The live repo now carries the dashboard gateway replacement while the sandbox repo continues to carry the PaperClip pilot on `0f1786f`. The PaperClip runtime remains isolated on `E:` only, the public dashboard hostname now serves an authenticated gateway, and the continuity layer is refreshed to the March 30 state.
+The live repo now carries the dashboard gateway replacement while the sandbox repo continues to carry the PaperClip pilot on `0f1786f`. The PaperClip runtime remains isolated on `E:` only, the public dashboard hostname now serves an authenticated gateway, the continuity layer is refreshed to the March 30 state, and the repo doctrine now reflects the founder-directed conservative 10% charitable cap for current LLC operations.
 
 ## Accomplishments
 
@@ -19,6 +19,7 @@ The live repo now carries the dashboard gateway replacement while the sandbox re
 - **Sandbox commit:** `0f1786f`
 - **Backbone:** Only Codex, Claude, Gemini, and GitHub-approved workflows touch `C:\ANTIGRAVITY`.
 - **Sandbox:** third-party and experimental platforms stay off the live repo and use sandbox lanes.
+- **Financial Doctrine:** live LLC operations are now documented with a conservative 10% charitable cap. Historical 60/30/10 and 100% charity language are legacy, not current operating truth.
 - **Isolation:** `ebaytrashortreasure@gmail.com` remains the date-app Square/PayPal lane; `joshlcoleman@gmail.com` remains the non-date-app commerce lane.
 - **Node Sync:** `9020` and `T5500` were last verified aligned to the clean live baseline before this March 29 briefing refresh; sync forward again after the next live push.
 - **Live deploy truth:** `onlinerecycle.org` remains verified live, and `dashboard.aidoesitall.website` is now explicitly mapped to `jules-dashboard` for controlled redeploy as an auth gateway.
