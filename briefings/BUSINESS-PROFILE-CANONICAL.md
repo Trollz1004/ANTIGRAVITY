@@ -1,6 +1,6 @@
 # #ForTheKids / OnlineRecycle.org — Canonical Business Profile
 
-> Verified by Perplexity · Codex-compliant · Last updated 2026-03-08
+> Verified by Perplexity · Codex-compliant · Last updated 2026-03-30
 > This is the single source of truth for all public-facing copy, partnership proposals, and AI team context.
 
 ---
@@ -125,4 +125,4 @@ Do not add back:
 - Old repo references (OPUSONLY, OneDrive, stale branches)
 - Vague "6 AI platforms integrated" claims unless operationally defined
 - Sabretooth/T5500 hardware naming in public-facing copy
-- Shriners Children's Hospitals as a named contracted beneficiary when no such contracted relationship is documented
+- Any named beneficiary when no documented contracted relationship exists
