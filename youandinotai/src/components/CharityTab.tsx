@@ -46,7 +46,7 @@ export default function CharityTab() {
         </p>
         <p className="max-w-2xl mx-auto text-gray-400 text-sm leading-relaxed">
           These live cards track community volunteering activity: hours committed, signups, and organizations supported.
-          Financial disbursements follow the separate 60/30/10 governance model and are not represented by the volunteer totals below.
+          Any charitable support follows the separate founder-directed operating policy and is not represented by the volunteer totals below.
         </p>
       </div>
 
@@ -98,7 +98,7 @@ export default function CharityTab() {
               <h3 className="text-purple-400 font-bold text-sm uppercase">The Iron Wall</h3>
               <p className="text-gray-300 text-sm leading-relaxed">
                 We maintain absolute separation between our social mission and corporate operations.
-                The 60/30/10 split is a governance rule for revenue disbursement, separate from the volunteer metrics shown above.
+                Volunteer activity, product revenue, and any later charitable support are tracked separately so the platform does not make fake or unsupported claims.
               </p>
             </div>
             <div className="space-y-3">

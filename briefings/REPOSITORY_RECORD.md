@@ -1,7 +1,7 @@
 # REPOSITORY RECORD - SABRETOOTH LIVE STATE
 
 > **Date:** March 30, 2026
-> **Status:** live repo updated with dashboard gateway replacement, sandbox repo pushed with PaperClip pilot, continuity refreshed
+> **Status:** live repo updated with dashboard gateway replacement, sandbox repo pushed with PaperClip pilot, continuity refreshed, financial doctrine pivoted to current 10% operating cap
 > **Verified Live Baseline Before This Refresh:** `131c455`
 > **Sandbox Repo Commit:** `0f1786f`
 > **Authority:** Joshua Coleman
@@ -37,6 +37,13 @@
 | 9020 Node | VERIFIED | repo mirror was last confirmed clean and aligned to the live baseline before this March 29 refresh |
 | T5500 Node | VERIFIED | repo mirror was last confirmed clean and aligned to the live baseline before this March 29 refresh |
 
+## Current Financial Doctrine
+
+- **Founder-directed rule:** current LLC operations use a conservative **10% charitable cap** until Josh explicitly changes it after formal legal/tax review or a documented partner/co-venture structure.
+- **Not current doctrine:** `60/30/10`, `100% charity`, and `100% DAO` claims for live LLC-controlled revenue.
+- **Legacy chain truth:** Base Mainnet `GospelDonation.sol` and the historical 60/30/10 wallets remain part of project history, not current safe operating doctrine for live revenue.
+- **Public copy rule:** lead with product/service value. If impact is mentioned, keep it factual, restrained, and non-solicitation.
+
 ## Product State
 
 - **YouAndINotAI:** repaired backend baseline remains the clean fallback point for production work, and the first-payment path now depends on the bound internal checkout flow instead of raw public Square links.
@@ -44,6 +51,7 @@
 - **Repo README:** remains aligned to the current public ecosystem surfaces at a high level.
 - **PaperClip:** intentionally remains off `C:\ANTIGRAVITY`; the live public-facing integration is now an authenticated gateway entrypoint, while the runtime itself stays in the sandbox lane.
 - **OMEGA / AI-Solutions:** untouched in this pass to preserve charity-side isolation.
+- **Mission Doctrine:** canonical docs now reflect the founder-directed 10% cap for current LLC operations instead of treating 60/30/10 as live operating truth.
 
 ## Operational Notes
 

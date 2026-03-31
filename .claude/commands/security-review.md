@@ -11,7 +11,7 @@ Run a security review on recently changed files.
    - **Zero Secrets in Source**: Scan for API keys, tokens, passwords (regex: `sk_live_`, `EAAAl`, `Bearer `, hardcoded URLs with keys)
    - **Auth on Every Endpoint**: If a new FastAPI router was added, verify it has auth dependency
    - **Iron Wall**: ENIGMA code must not reference OMEGA paths (ai-solutions.store, CharityRouter100, omega_charity)
-   - **Revenue Split**: If metrics.py was touched, verify 60/30/10 is hardcoded (not from env/config)
+   - **Revenue Policy**: If metrics.py was touched, verify the founder-directed 10% charitable cap is hardcoded (not from env/config)
    - **PII Isolation**: If /metrics/ endpoints changed, verify no emails/names/user IDs leak
    - **No Raw SQL**: Check for f-string SQL or string interpolation in queries
    - **Input Validation**: New POST/PUT endpoints must use Pydantic schemas

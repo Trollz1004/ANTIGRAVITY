@@ -49,10 +49,9 @@ def _build_founder_badge_text(
         "- Founder Badge on your account\n"
         "- Verified-human access for protected platform features\n"
         "- Early standing as the platform moves toward launch\n\n"
-        "Revenue split:\n"
-        "- 60% contractual revenue disbursement to Shriners Children's Hospitals\n"
-        "- 30% platform infrastructure and AI operations\n"
-        "- 10% founder operations\n\n"
+        "Platform note:\n"
+        "- Your payment is for platform access and verification\n"
+        "- Any later mission support follows the founder's current operating policy\n\n"
         f"Open the platform: {app_url}\n\n"
         "Josh Coleman\n"
         "Founder, YouAndINotAI\n"
@@ -89,10 +88,9 @@ def _build_founder_badge_html(
       </ul>
     </div>
     <div style="background:#fff1f2;border:1px solid #fbcfe8;border-radius:12px;padding:16px 18px;margin:20px 0;">
-      <div style="font-weight:700;margin-bottom:8px;">Revenue split</div>
-      <div>60% contractual revenue disbursement to Shriners Children's Hospitals</div>
-      <div>30% platform infrastructure and AI operations</div>
-      <div>10% founder operations</div>
+      <div style="font-weight:700;margin-bottom:8px;">Platform note</div>
+      <div>Your payment is for platform access and verification.</div>
+      <div>Any later mission support follows the founder's current operating policy.</div>
     </div>
     <p style="margin:20px 0;">
       <a href="{safe_url}" style="display:inline-block;background:#ec4899;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:700;">

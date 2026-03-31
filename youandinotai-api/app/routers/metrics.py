@@ -32,36 +32,32 @@ from app.subscriptions import PREPAID_SUBSCRIPTION_DURATIONS, utc_now
 router = APIRouter(prefix="/metrics")
 
 
-class RevenueSplitResponse(BaseModel):
-    """Protocol Omega: 60/30/10 split from day one."""
+class RevenuePolicyResponse(BaseModel):
+    """Current founder-directed operating policy for LLC revenue."""
     total_revenue_cents: int
-    shriners_children_cents: int  # 60%
-    v8_infrastructure_cents: int  # 30%
-    founder_operations_cents: int  # 10%
-    remainder_to_charity_cents: int  # integer remainder
+    charitable_cap_cents: int  # 10%
+    operating_reserve_cents: int  # 90%
+    charitable_cap_percent: int
 
 
 class PlatformMetricsResponse(BaseModel):
     """Aggregate platform health metrics — zero PII."""
     generated_at: str
-    revenue: RevenueSplitResponse
+    revenue: RevenuePolicyResponse
     users: dict  # total, verified, with_profile, subscribers
     engagement: dict  # matches, messages, posts, events, volunteer_signups
     verification: dict  # total_checks, passed, failed, pending
 
 
-def _calculate_split(total_cents: int) -> RevenueSplitResponse:
-    """Protocol Omega: 60/30/10 contractual revenue disbursement — integer remainder to Shriners."""
-    shriners = (total_cents * 60) // 100
-    v8_infra = (total_cents * 30) // 100
-    founder = (total_cents * 10) // 100
-    remainder = total_cents - shriners - v8_infra - founder
-    return RevenueSplitResponse(
+def _calculate_revenue_policy(total_cents: int) -> RevenuePolicyResponse:
+    """Founder-directed conservative 10% charitable cap for current LLC operations."""
+    charitable_cap = (total_cents * 10) // 100
+    operating_reserve = total_cents - charitable_cap
+    return RevenuePolicyResponse(
         total_revenue_cents=total_cents,
-        shriners_children_cents=shriners + remainder,
-        v8_infrastructure_cents=v8_infra,
-        founder_operations_cents=founder,
-        remainder_to_charity_cents=remainder,
+        charitable_cap_cents=charitable_cap,
+        operating_reserve_cents=operating_reserve,
+        charitable_cap_percent=10,
     )
 
 
@@ -146,7 +142,7 @@ async def charity_metrics(
 
     return PlatformMetricsResponse(
         generated_at=datetime.now(timezone.utc).isoformat(),
-        revenue=_calculate_split(revenue_total),
+        revenue=_calculate_revenue_policy(revenue_total),
         users={
             "total": total_users,
             "verified": verified_users,

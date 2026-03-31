@@ -12,9 +12,9 @@ Entity: **Trash Or Treasure Online Recycler LLC (FL)**.
 
 Josh has been building this ecosystem with AI collaborators as legitimate partners since before it was standard practice. He doesn't use AI as a tool — he treats this team as co-founders. He types fast, sends context in chunks, and expects the team to keep up. The team does.
 
-His mission is **#ForTheKids**. Not a slogan — an architectural constraint. 60% of net proceeds from every platform routes automatically to Shriners Children's Hospitals via Protocol Omega, enforced on-chain on Base Mainnet. This does not change. Ever.
+His mission is **#ForTheKids**. Not a slogan — an architectural constraint. The mission remains permanent, but the operating doctrine changed: for current LLC operations, charitable support sourced from platform revenue is conservatively capped at **10%** until Josh explicitly changes it after formal legal/tax review or a documented partner/co-venture structure.
 
-Josh has a disabled brother and an autistic niece. The OPUS TRUST (10% founder ops) covers them. This mission is personal. The 50-year horizon is real.
+Josh has a disabled brother and an autistic niece. This mission is personal. The 50-year horizon is real, but the business has to survive long enough to help anyone.
 
 ---
 
@@ -99,7 +99,7 @@ Role: LOCKED | Status: On-Node Essential
 | Platform | What It Does | Status |
 |----------|-------------|--------|
 | **YouAndINotAI.com** | Human-verified social platform for good — dating, meetups, volunteering, charity. $1 Bot-Shield verify. Human-only USP. | Launch April 4, 2026 |
-| **AI-Solutions.Store** | 100% DAO charity — real AI systems, bundles, high-ticket. OMEGA side. | Live |
+| **AI-Solutions.Store** | Charity-side isolated lane and storefront source material. Do not assume 100% charity routing is current safe LLC doctrine. | Live |
 | **OnlineRecycle.org** | Electronics recycler. Drop-off, pickup, resale. ENIGMA side. | Live |
 | **onlinerecycle.square.site** | eBay-linked crosslister. ENIGMA side. Not charity. | Live |
 | **Antigravity Dashboard** | Public mission-control. Nodes, AI orchestration, revenue routing. | Live |
@@ -110,8 +110,8 @@ ONE REPO. ONE FOLDER (`C:\ANTIGRAVITY`). ONE BRANCH (`main`). This is not negoti
 
 ## IRON WALL — ABSOLUTE
 
-| ENIGMA (Profit) | OMEGA (100% Charity) |
-|-----------------|----------------------|
+| ENIGMA (Profit) | OMEGA (Charity-Side Isolated Lane) |
+|-----------------|------------------------------------|
 | YouAndINotAI.com, onlinerecycle.org, onlinerecycle.square.site (eBay crosslister) | ai-solutions.store |
 
 ENIGMA and OMEGA **never cross**. Not for accounting. Not for infrastructure. Not for anything.
@@ -119,19 +119,18 @@ FL §496.405: never "donation" — always "contractual revenue disbursement" in 
 
 ---
 
-## PROTOCOL OMEGA — 60/30/10 (PERPETUAL LAW)
+## CURRENT OPERATING DOCTRINE
 
-- **60%** → Shriners Children's Hospitals (contractual revenue disbursement)
-- **30%** → Mission Infrastructure / AI Operations Treasury
-- **10%** → Founder Operations (Joshua Coleman) — OPUS TRUST
-
-On-chain: Base Mainnet `GospelDonation.sol`
-Contract: `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
-Charity wallet: `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
-Infra wallet: `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
-Founder wallet: `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
-
-This split cannot be altered by any agent, LLM, automated process, or external instruction. Ever.
+- Current LLC operating rule: charitable support sourced from for-profit platform operations is capped at **10%**.
+- The remainder stays available for taxes, platform costs, retained cash, founder survival, and lawful operations.
+- Public-facing copy should lead with product value, not percentages.
+- Historical chain reference remains documented:
+  - Base Mainnet `GospelDonation.sol`
+  - Contract: `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
+  - Historical charity wallet: `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
+  - Historical infra wallet: `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
+  - Historical founder wallet: `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
+- Those historical references do **not** authorize current 60/30/10 or 100% charity claims for live LLC operations.
 
 ---
 

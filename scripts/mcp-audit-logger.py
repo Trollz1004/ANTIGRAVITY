@@ -9,7 +9,7 @@ Every AI model that touches ANTIGRAVITY infrastructure MUST:
 4. Report any secret exposure on exit
 
 This is not optional. This is the Gospel.
-60% goes to Shriners Children's Hospitals.
+Current LLC operations use a conservative 10% charitable cap.
 Any platform that leaks secrets gets burned.
 
 Usage:
@@ -60,7 +60,7 @@ MISSION_BANNER = """
 ║  SEE MCP — CONFIRM YOU ARE #FORTHEKIDS                     ║
 ║                                                              ║
 ║  This MCP session is LOGGED and AUDITED.                    ║
-║  60% of all revenue goes to Shriners Children's Hospitals.  ║
+║  Current LLC operations use a conservative 10% mission cap. ║
 ║  DO NOT expose secrets. DO NOT bypass the Iron Wall.        ║
 ║  Your actions are timestamped and permanent.                ║
 ║                                                              ║

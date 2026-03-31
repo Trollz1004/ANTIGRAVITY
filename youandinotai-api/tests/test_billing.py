@@ -23,7 +23,7 @@ def test_billing_checkout_link_returns_bound_square_url(client, db_session_facto
             session.add(
                 User(
                     id=user_id,
-                    email="billing@example.com",
+                    email="billing@youandinotai-test.com",
                     password_hash="hashed",
                     display_name="Billing User",
                     created_at=datetime.now(timezone.utc),
@@ -72,7 +72,7 @@ def test_completed_prepaid_payment_sets_expiry(client, db_session_factory):
             session.add(
                 User(
                     id=user_id,
-                    email="three-month@example.com",
+                    email="three-month@youandinotai-test.com",
                     password_hash="hashed",
                     display_name="Three Month User",
                     created_at=datetime.now(timezone.utc),
@@ -102,7 +102,7 @@ def test_completed_prepaid_payment_sets_expiry(client, db_session_factory):
     payload = make_square_payment_event(
         event_id="evt_three_month_bound",
         amount_cents=3999,
-        buyer_email="three-month@example.com",
+        buyer_email="three-month@youandinotai-test.com",
         note=f"3-Month Founder agref:{checkout_ref}",
         payment_status="COMPLETED",
     )
@@ -149,7 +149,7 @@ def test_auth_me_deactivates_expired_prepaid_subscription(client, db_session_fac
             session.add(
                 User(
                     id=user_id,
-                    email="expired@example.com",
+                    email="expired@youandinotai-test.com",
                     password_hash="hashed",
                     display_name="Expired User",
                     subscription_tier="3_month",

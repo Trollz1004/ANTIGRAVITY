@@ -4,7 +4,7 @@
 Operated by Trash Or Treasure Online Recycler LLC, a Florida single-member LLC
 Sole Member: Joshua Coleman
 
-**Last Updated:** March 8, 2026
+**Last Updated:** March 30, 2026
 **Contact:** joshlcoleman@gmail.com
 
 ---
@@ -75,7 +75,7 @@ The Royalty Card is a limited-edition product — only 5 will ever be issued. Be
 
 What you should know before purchasing:
 - Only 5 Royalty Cards exist. This is not a mass-market product.
-- The Royalty Card includes a 0.5% gross revenue share of the YouAndINotAI dating app, paid quarterly.
+- The Royalty Card includes a 1% net platform revenue share of the YouAndINotAI dating app, paid quarterly under the published Royalty Card terms.
 - The revenue share begins at purchase and continues for the lifetime of the dating app.
 - If the dating app has no revenue, your revenue share payment will be $0. We do not guarantee minimum revenue.
 - The Royalty Card is non-transferable at launch (transferability may be introduced in the future).
@@ -141,9 +141,9 @@ If **we** terminate your account for violating our Terms of Service:
 
 Merchandise purchased through any separate storefront operated outside the dating app is handled separately from the platform and is not covered by this refund policy. If you need help with a merchandise return, contact us at joshlcoleman@gmail.com and we will handle it directly.
 
-## 9. Charity Disclosure
+## 9. Mission-Linked Revenue Policy
 
-When we issue a refund, the corresponding contractual revenue disbursement allocation is also adjusted. In other words, we do not keep the 60% allocation tied to a refunded transaction — the full amount is returned to you.
+When we issue a refund, any internal charitable support allocation tied to that transaction is adjusted under our current operating policy. We do not treat a refunded transaction as a completed charitable support event.
 
 ## 10. Changes to This Policy
 
