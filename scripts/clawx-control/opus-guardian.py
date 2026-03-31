@@ -11,7 +11,7 @@ Checks:
     1. No hardcoded secrets in source files
     2. All API routes require authentication
     3. Iron Wall: ENIGMA/OMEGA separation
-    4. Revenue split is hardcoded 60/30/10
+    4. Current revenue policy is hardcoded to the founder-directed 10% charitable cap
     5. PII isolation in metrics
     6. Pydantic validation on all inputs
     7. No raw SQL (SQLAlchemy ORM only)
@@ -65,8 +65,8 @@ REQUIRED_ENV_KEYS = [
     "JWT_SECRET",
 ]
 
-# Revenue split constants (HARDCODED — NEVER CONFIGURABLE)
-EXPECTED_SPLIT = {"charity": 60, "infrastructure": 30, "founder": 10}
+# Revenue policy constants (HARDCODED — NEVER CONFIGURABLE)
+EXPECTED_POLICY = {"charitable_cap": 10}
 
 
 class GuardianResult:
@@ -216,27 +216,24 @@ def check_iron_wall(result: GuardianResult):
 
 
 def check_revenue_split(result: GuardianResult):
-    """Verify the 60/30/10 split is hardcoded, not configurable."""
+    """Verify the current 10% charitable cap policy is hardcoded, not configurable."""
     metrics_file = ROUTERS_DIR / "metrics.py"
     if not metrics_file.exists():
-        result.warn("REVENUE_SPLIT", "metrics.py not found — can't verify split")
+        result.warn("REVENUE_POLICY", "metrics.py not found — can't verify policy")
         return
 
     content = metrics_file.read_text(encoding="utf-8", errors="ignore")
 
-    # Check for hardcoded percentages
-    has_60 = "0.60" in content or "60" in content
-    has_30 = "0.30" in content or "30" in content
-    has_10 = "0.10" in content or "10" in content
+    has_cap = "charitable_cap_percent=10" in content or "charitable_cap = (total_cents * 10) // 100" in content
+    calc_block = content.split("_calculate_revenue_policy")[1].split("\n\n")[0] if "_calculate_revenue_policy" in content else ""
 
-    if has_60 and has_30 and has_10:
-        # Verify they're not loaded from env
-        if "os.getenv" not in content and "settings." not in content.split("_calculate_split")[1].split("\n\n")[0] if "_calculate_split" in content else True:
-            result.ok("REVENUE_SPLIT", "60/30/10 hardcoded — not configurable")
+    if has_cap:
+        if "os.getenv" not in calc_block and "settings." not in calc_block:
+            result.ok("REVENUE_POLICY", "10% charitable cap hardcoded — not configurable")
         else:
-            result.fail("REVENUE_SPLIT", "Split percentages loaded from config — MUST be hardcoded")
+            result.fail("REVENUE_POLICY", "Charitable cap loaded from config — MUST be hardcoded")
     else:
-        result.fail("REVENUE_SPLIT", "Expected 60/30/10 split not found in metrics.py")
+        result.fail("REVENUE_POLICY", "Expected 10% charitable cap policy not found in metrics.py")
 
 
 def check_pii_isolation(result: GuardianResult):

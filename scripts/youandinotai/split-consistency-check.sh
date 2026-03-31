@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Split Consistency Check — Ensures no contradictory revenue split claims
-# in production paths. Canonical: 60/30/10 (60% Shriners, 30% V8 Infra, 10% Founder).
+# Revenue Policy Consistency Check — Ensures no contradictory charitable-routing claims
+# in production paths. Canonical: founder-directed 10% charitable cap for current LLC operations.
 # Run: bash scripts/split-consistency-check.sh
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 ERRORS=0
 
-echo "=== Split Consistency Check ==="
-echo "Canonical: 60% Shriners / 30% V8 Infra / 10% Founder"
+echo "=== Revenue Policy Consistency Check ==="
+echo "Canonical: founder-directed 10% charitable cap"
 echo ""
 
 # Production paths — these MUST NOT contain contradictory split claims
@@ -23,18 +23,14 @@ PRODUCTION_PATHS=(
   "README.md"
 )
 
-# Forbidden patterns in production (contradicts 60/30/10)
+# Forbidden patterns in production
 FORBIDDEN_PATTERNS=(
-  "100% founder"
-  "100% to founder"
-  "SURVIVAL MODE"
-  "survival mode"
-  "80%.*charity"
-  "80%.*shriners"
-  "50%.*charity"
-  "50%.*founder"
-  "70%.*charity"
-  "Phase 1.*100%"
+  "60/30/10"
+  "60%.*Shriners"
+  "60%.*charity"
+  "100%.*charity"
+  "100%.*DAO"
+  "100% to kids"
 )
 
 echo "Scanning production paths for contradictory split claims..."
@@ -56,27 +52,27 @@ done
 echo ""
 
 # Verify canonical claims exist
-echo "Verifying canonical 60/30/10 claims exist..."
-CANON_FILES=("CLAUDE.md" "antigravity/components/Transparency.tsx" "mcp-server/src/tools/protocol.ts")
+echo "Verifying canonical 10% policy claims exist..."
+CANON_FILES=("AGENTS.md" "CLAUDE.md" "youandinotai/TERMS_OF_SERVICE.md")
 for f in "${CANON_FILES[@]}"; do
   full="$REPO_ROOT/$f"
   if [[ ! -f "$full" ]]; then
     echo "  WARN: $f not found"
     continue
   fi
-  if grep -q "60.*30.*10\|60%.*Shriners\|shriners.*60" "$full" 2>/dev/null; then
-    echo "  OK: $f contains canonical split reference"
+  if grep -q "10%.*cap\|conservative 10%\|charitable support.*10%" "$full" 2>/dev/null; then
+    echo "  OK: $f contains canonical policy reference"
   else
-    echo "  WARN: $f missing canonical 60/30/10 reference"
+    echo "  WARN: $f missing canonical 10% policy reference"
   fi
 done
 
 echo ""
 echo "=== RESULT ==="
 if [[ $ERRORS -eq 0 ]]; then
-  echo "PASS: No contradictory split claims in production paths."
+  echo "PASS: No contradictory revenue-policy claims in production paths."
   exit 0
 else
-  echo "FAIL: $ERRORS contradictory split claim(s) found. Fix before commit."
+  echo "FAIL: $ERRORS contradictory revenue-policy claim(s) found. Fix before commit."
   exit 1
 fi

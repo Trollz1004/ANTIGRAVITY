@@ -6,8 +6,8 @@
  * founder-tier launch messaging with SPECIFIED revenue share terms.
  *
  * Revenue Share: Each Royalty Card holder receives 1% of net platform
- * revenue (from the 10% Founder Operations slice of the 60/30/10 split).
- * 5 cards max = 5% of founder slice allocated to Royalty holders.
+ * revenue under the published Royalty Card terms.
+ * 5 cards max.
  *
  * @license Apache-2.0
  */
@@ -220,13 +220,12 @@ function HolographicCard() {
                 paid <span className="text-white/80 font-semibold">quarterly</span> via the method of their choice.
               </p>
               <p>
-                Revenue share is drawn from the 10% Founder Operations portion of the
-                platform's <span className="text-white/80 font-semibold">60/30/10 split</span> (60% Shriners Children's Hospitals,
-                30% infrastructure, 10% founder operations).
+                Revenue share follows the published Royalty Card terms and does not represent equity,
+                governance control, or ownership in Trash Or Treasure Online Recycler LLC.
               </p>
               <p>
                 Maximum <span className="text-amber-300 font-bold">5 cards</span> will be issued. This is a contractual
-                revenue disbursement — <span className="text-white/80 font-semibold">not equity</span>. Terms are perpetual
+                revenue share right — <span className="text-white/80 font-semibold">not equity</span>. Terms are perpetual
                 and bound to the platform for as long as it generates revenue.
               </p>
             </div>

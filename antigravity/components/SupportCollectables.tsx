@@ -10,7 +10,7 @@ export default function DonateCollectables({ isDarkMode }: { isDarkMode: boolean
           Support & Collectables
         </h2>
         <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-          Support Shriners Children&apos;s Hospitals or purchase exclusive digital collectables. 100% of proceeds disbursed to charity.
+          Support Shriners Children&apos;s Hospitals directly or explore exclusive digital collectables through controlled platform surfaces.
         </p>
       </div>
 
@@ -41,7 +41,7 @@ export default function DonateCollectables({ isDarkMode }: { isDarkMode: boolean
           </div>
           <h3 className="text-2xl font-bold mb-3">Digital Collectables</h3>
           <p className={`mb-6 leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Purchase exclusive AI-generated digital collectables (NFTs) on the Base network. 100% of the initial sale and all secondary royalties are routed to the OMEGA charity wallet.
+            Purchase exclusive AI-generated digital collectables (NFTs) on the Base network. Routing terms must match the current published policy for the specific surface instead of generic 100% claims.
           </p>
           <button className="inline-flex items-center justify-center w-full py-3 px-6 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold transition-colors gap-2">
             View Collection <CreditCard className="w-4 h-4" />

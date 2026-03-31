@@ -13,7 +13,7 @@ export default function KidsPlatform({ isDarkMode }: { isDarkMode: boolean }) {
           For The Kids
         </h2>
         <p className={`mt-4 text-lg max-w-2xl mx-auto ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-          The heart of our ecosystem. Every ENIGMA dollar splits 60% to Shriners Children&apos;s Hospitals, 30% to V8 AI Infrastructure, and 10% to Founder Operations. OMEGA (ai-solutions.store) is 100% charity.
+          The heart of our ecosystem. ENIGMA stays business-first, and any kid-focused support follows the current published operating policy instead of hard-coded percentage bragging.
         </p>
       </div>
 
@@ -84,7 +84,7 @@ export default function KidsPlatform({ isDarkMode }: { isDarkMode: boolean }) {
               Protocol OMEGA
               <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-purple-100 text-purple-700 rounded-full">Active</span>
             </h3>
-            <p className={`text-lg ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>The Iron Wall: Commercial success fueling charitable impact.</p>
+            <p className={`text-lg ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>The Iron Wall: commercial operations and charity-side work stay structurally separate.</p>
           </div>
           <div className="text-left md:text-right w-full md:w-auto bg-white/50 dark:bg-slate-900/50 p-6 rounded-2xl backdrop-blur-sm border border-white/20 dark:border-slate-700/50">
             <div className="text-sm font-bold uppercase tracking-wider text-purple-500 mb-1">Total Raised</div>
@@ -102,7 +102,7 @@ export default function KidsPlatform({ isDarkMode }: { isDarkMode: boolean }) {
             <div className="absolute top-0 left-0 h-full w-[0%] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full transition-all duration-1000 ease-out">
             </div>
           </div>
-          <p className={`text-xs text-center ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Progress bar will fill as revenue flows through Stripe.</p>
+          <p className={`text-xs text-center ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Progress bar will fill as verified revenue is recorded.</p>
         </div>
       </div>
 

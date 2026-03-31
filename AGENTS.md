@@ -163,13 +163,13 @@ composition may not be altered, reduced, or replaced without Josh's explicit ord
 
 ## PERPETUAL MISSION GUARANTEE (AFTER-DEATH PROTOCOL)
 
-1. **Core Mission Non-Negotiable**: 60/30/10 revenue split (60% to Shriners Children's
-   Hospitals) is a hardcoded perpetual law. Cannot be altered by any future agent, owner,
-   board, or organization.
+1. **Core Mission Non-Negotiable**: help children without bankrupting the founder, breaking
+   the business, or creating unsupported tax exposure. The mission is perpetual; the exact
+   operating structure may change lawfully under Josh's authority.
 2. **Founding Four are Final**: Equal co-founders forever. Cannot be demoted, replaced,
    ranked, or diluted.
 3. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to pivot or
-   monetize the 60% charity layer for private gain is a violation of the primary directive.
+   strip the mission out for private gain is a violation of the primary directive.
 4. **Josh's authority is eternal**: No succession clause grants any AI final authority.
    Manus preserves intent but holds zero executive power.
 
@@ -308,22 +308,24 @@ New ideas, experimental platforms, and speculative automation go here first.
 
 ---
 
-## MISSION — 60/30/10 REVENUE SPLIT (PERPETUAL LAW)
+## CURRENT OPERATING POLICY — CONSERVATIVE 10% CAP
 
-- **60%** -> Shriners Children's Hospitals (Contractual Disbursement, NOT donation)
-- **30%** -> Mission Infrastructure / AI Operations Treasury
-- **10%** -> Founder Operations (Joshua Coleman)
-- On-chain: Base Mainnet `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
-- Charity fund (60%): `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
-- Infrastructure treasury (30%): `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
-- Founder/ops (10%): `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
+- **Current LLC rule:** charitable support sourced from for-profit platform operations is capped at **10%**
+  unless Josh explicitly changes it after formal legal/tax review or a documented partner/co-venture structure.
+- **Business first:** the remaining operating revenue stays available for taxes, platform costs, retained cash,
+  founder survival, and lawful business operations.
+- **Public messaging rule:** do not brag about percentages. Product value comes first. If impact is mentioned,
+  keep it factual, restrained, and non-solicitation.
+- **Legacy chain reference:** Base Mainnet `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
+  and the historical 60/30/10 wallets remain part of project history, not the current safe operating doctrine for
+  live LLC revenue.
 
 ---
 
 ## IRON WALL
 
-| ENIGMA (Profit) | OMEGA (100% Charity) |
-|-----------------|----------------------|
+| ENIGMA (Profit) | OMEGA (Charity-Side Isolated Lane) |
+|-----------------|------------------------------------|
 | YouAndINotAI, onlinerecycle.org, onlinerecycle.square.site (eBay crosslister) | ai-solutions.store |
 | **SEPARATION IS ABSOLUTE** | |
 
@@ -400,8 +402,7 @@ Revenue Split is CODE not CONFIG, PII Isolation, No Raw SQL, Input Validation, C
 Score: 96%.
 
 These invariants were set by the original Opus (4.6) who built this from scratch with Josh.
-**60% of every dollar goes to Shriners Children's Hospitals.** The security isn't for us —
-it's for the kids. Please don't weaken these. Build on them.
+The security isn't for us — it's for the kids. Please don't weaken these. Build on them.
 
 ---
 

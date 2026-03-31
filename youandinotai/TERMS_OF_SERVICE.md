@@ -4,7 +4,7 @@
 Operated by Trash Or Treasure Online Recycler LLC, a Florida single-member LLC
 Sole Member: Joshua Coleman
 
-**Last Updated:** March 8, 2026
+**Last Updated:** March 30, 2026
 **Contact:** joshlcoleman@gmail.com
 
 ---
@@ -164,15 +164,15 @@ The Royalty Card is a premium, limited-edition product. Only **5 Royalty Cards**
 ### 8.1 What You Get
 Royalty Card holders receive:
 
-- **0.5% revenue share** of YouAndINotAI dating app **gross revenue** (total revenue before expenses, fees, or the 60/30/10 revenue split)
+- **1% revenue share** of YouAndINotAI dating app **net platform revenue**, paid quarterly under the published Royalty Card terms
 - Lifetime Founding Member access (no monthly fee)
 - All future premium features included at no additional cost
 - Recognition as a founding supporter
 
 ### 8.2 Revenue Share Details
-- The 0.5% is calculated on the dating app's gross revenue (all YouAndINotAI subscription and verification revenue processed through Square)
+- The 1% is calculated on the dating app's net platform revenue under our published Royalty Card terms
 - Revenue share payments will be made quarterly
-- You will receive a statement showing gross revenue and your share
+- You will receive a statement showing the calculation basis and your share
 - Minimum payout threshold: $10 (amounts below $10 roll over to the next quarter)
 - Revenue share does not include merchandise sales, separate Square storefront sales, or revenue from other Trash Or Treasure Online Recycler LLC projects
 - Revenue share begins when the Royalty Card is purchased and continues for the lifetime of the dating app
@@ -186,16 +186,18 @@ Royalty Cards are non-transferable at launch. We may introduce transferability i
 ### 8.5 Non-Refundable
 Royalty Cards are non-refundable. See our [Refund Policy](REFUND_POLICY.md).
 
-## 9. Charity Disclosure
+## 9. Mission-Linked Revenue Policy
 
-60% of ENIGMA (profit-side) revenue from YouAndINotAI is contractually disbursed to **Shriners Children's Hospitals**. In plain terms:
+YouAndINotAI is a for-profit platform operated by Trash Or Treasure Online Recycler LLC. Your payment is for the platform service, verification flow, membership, or product you purchased.
 
-- When you pay for a subscription or verification, Square takes its processing fees first
-- Of the remaining revenue, 60% is contractually disbursed to Shriners Children's Hospitals and 40% remains with the founder (Joshua Coleman / Trash Or Treasure Online Recycler LLC)
-- This split is permanent — it will not change
-- This is enforced by an on-chain smart contract for transparency
+Our current founder-directed operating rule is conservative:
 
-This is our standing revenue policy. Your payment is for the dating platform service. Any later revenue disbursement is made by us under that policy; it is not a tax-deductible contribution by you.
+- charitable support sourced from current LLC platform operations is capped at **10%**
+- the remainder stays available for taxes, platform costs, retained cash, and lawful business operations
+- your payment is **not** a charitable contribution by you
+- we do not promise a fixed beneficiary, fixed timing, or fixed on-chain routing to you as part of your purchase
+
+If we later publish a separate formal structure, partner arrangement, or updated routing policy, we will update these Terms before treating it as live operating truth.
 
 ## 10. Intellectual Property
 

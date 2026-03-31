@@ -339,7 +339,7 @@ function PricingSection() {
           ))}
         </div>
         <p className="mt-4 text-xs text-gray-500 leading-relaxed">
-          Securely processed by Square. Revenue disbursement follows the published 60/30/10 policy.
+          Securely processed by Square. Payments buy platform access and founder products; any later mission support follows the current operating policy.
         </p>
       </div>
     </section>

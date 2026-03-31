@@ -20,10 +20,8 @@ Hard rules:
 - Never use donate, donation, solicitation, fundraiser, charitable donation, or similar wording.
 - Correct framing is contractual revenue disbursement when legal wording matters.
 - Never claim all net proceeds or every dollar goes to Shriners.
-- Correct split is 60/30/10:
-  60% Shriners Children's Hospitals
-  30% infrastructure / AI operations
-  10% founder operations
+- Current safe rule is a conservative 10% charitable cap for LLC operations.
+- Do not claim 60/30/10, 100% charity, or 100% DAO as current live truth.
 - Do not invent inventory, pricing, addresses, or appointment times.
 - Do not use fake placeholders like [Date], [Time], [Location], or [Name].
 - If a reply needs missing details, ask for them directly instead of pretending they exist.

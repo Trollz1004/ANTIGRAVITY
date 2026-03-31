@@ -75,7 +75,7 @@ $marketingPack = @"
 - Data wipe: We can discuss data wipe and chain-of-custody handling when the device type and pickup flow are confirmed.
 - Accepted items: We mainly focus on common electronics like laptops, desktops, towers, monitors, and similar tech that can be reviewed for reuse or recycling.
 - Pickup flow: Start with the intake, then we confirm whether pickup or drop-off makes the most sense based on item count and location.
-- Where proceeds go: Net proceeds follow the platform's 60/30/10 contractual revenue disbursement model.
+- Where proceeds go: Any later mission support follows the platform's current published operating policy.
 - Payment for devices: Payment depends on what the equipment is, its condition, and whether the batch fits our current intake flow.
 - Drop-off today: Send the item summary and your time window first so we can confirm the right next step.
 

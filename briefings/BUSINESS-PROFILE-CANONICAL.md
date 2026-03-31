@@ -7,7 +7,7 @@
 
 ## Core Mission
 
-Building AI-powered infrastructure to fund medical care for children in need through e-waste resale operations. One-person operation, self-funded, with 60% of net proceeds allocated to children's medical care through a locked on-chain 60/30/10 split.
+Building AI-powered infrastructure and local e-waste resale operations that can help children sustainably without making unsupported tax or charity claims. One-person operation, self-funded, currently using a conservative founder-directed **10% charitable cap** for LLC operations.
 
 ---
 
@@ -32,14 +32,14 @@ Building AI-powered infrastructure to fund medical care for children in need thr
 
 ---
 
-## DAO Structure (Base Mainnet)
+## Historical On-Chain Reference (Base Mainnet)
 
-- **Live verified split contract:** `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
-- **60% → Children's Medical Care:** `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
-- **30% → Mission Infrastructure + AI Operations:** `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
-- **10% → Founder Operations:** `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
+- **Historical split contract:** `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
+- **Historical charity wallet:** `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
+- **Historical infrastructure wallet:** `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
+- **Historical founder wallet:** `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
 
-Percentages are fixed in the live verified contract and are not intended to change.
+These addresses remain part of project history. They are not the current public claim template for live LLC revenue.
 
 ---
 
@@ -73,7 +73,7 @@ Percentages are fixed in the live verified contract and are not intended to chan
 
 ## Current Development Status
 
-- Live 60/30/10 split contract verified on Base Mainnet
+- Historical Base Mainnet split contract remains documented
 - eBay operations active
 - Square booking/store flows live
 - AI-assisted pricing, listing, routing, and audit workflows active
@@ -89,7 +89,7 @@ Seeking infrastructure and distribution support to:
 - Reduce mission operating costs
 - Scale the local pickup and resale model
 - Expand catalog distribution responsibly
-- Strengthen public proof and transparency around the revenue split
+- Strengthen public proof and transparency around lawful business operations and documented charitable support
 
 ---
 
@@ -107,7 +107,7 @@ Seeking infrastructure and distribution support to:
 - $0 outside funding received
 - $0 founder stipend paid in Year 1
 - 2,271 items cataloged and listed
-- 1 production split contract live on Base Mainnet
+- 1 historical split contract documented on Base Mainnet
 
 ---
 
@@ -125,4 +125,4 @@ Do not add back:
 - Old repo references (OPUSONLY, OneDrive, stale branches)
 - Vague "6 AI platforms integrated" claims unless operationally defined
 - Sabretooth/T5500 hardware naming in public-facing copy
-- Shriners Children's Hospitals as named beneficiary (not contracted)
+- Shriners Children's Hospitals as a named contracted beneficiary when no such contracted relationship is documented

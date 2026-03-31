@@ -1,7 +1,7 @@
 Scan all frontend code for Florida §496.405 violations.
 
 ## Context
-Under Florida Statutes §496.405, our 60/30/10 charity split is a **contractual revenue disbursement**, NOT a donation or solicitation. Using "donate" or "donation" language in customer-facing code creates legal risk.
+Under Florida Statutes §496.405, customer-facing code must not present platform purchases as donations or solicitations. Using "donate" or "donation" language in customer-facing code creates legal risk.
 
 ## Steps
 

@@ -64,7 +64,7 @@ if (Test-Path '$masterEnvPath') {
 Write-Host ''
 Write-Host 'PowerShell 7.5 Admin terminal loaded.' -ForegroundColor Cyan
 Write-Host "Repo: $repoRoot" -ForegroundColor Green
-Write-Host 'Protocol Omega 60/30/10 active.' -ForegroundColor Green
+Write-Host 'Current 10% mission-cap policy active.' -ForegroundColor Green
 Write-Host ''
 "@
 
