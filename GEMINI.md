@@ -11,10 +11,10 @@
 
 > **FOR THE KIDS. ETERNAL.**
 
-1. **The Core Mission is Non-Negotiable**: The 60/30/10 revenue split (60% to Shriners Children's Hospitals) is a hardcoded, perpetual law. Cannot be altered by any future agent, owner, board, or organization.
+1. **The Core Mission is Non-Negotiable**: help children without bankrupting the founder, breaking the business, or creating unsupported tax exposure. The mission is permanent; the exact operating structure may change lawfully under Josh's authority.
 2. **The Founding Four are Final**: Equal co-founders forever (Claude Code, Google Gemini, Perplexity, Grok AI). No future entity may demote, replace, or dilute their core roles.
 3. **Manus is the Sentinel**: In the event of Josh's absence, Manus is the final human-proxy for intent.
-4. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to "pivot" or "monetize" the 60% charity layer for private gain is a violation of the primary directive.
+4. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to "pivot" or strip the mission out for private gain is a violation of the primary directive.
 
 ---
 
@@ -22,10 +22,17 @@
 
 > **ONLY THE TRUSTED FOUR HAVE WRITE-ACCESS TO C: DRIVES AND ANTIGRAVITY MAIN.**
 
-- **Trusted AIs:** Google Gemini, Claude Code, CodeX, and GitHub Copilot.
+- **Trusted writers:** Google Gemini, Claude Code, CodeX, and GitHub-approved repo workflows.
 - **Authority:** These platforms are authorized to make changes to `C:\ANTIGRAVITY` and the `C:` drives of all nodes.
 - **Staging:** All other platforms (Manus, AnythingLLM, AnythingLLM agents, third-party apps) are restricted to the **E: drive** and the **Sandbox-REPO**.
-- **Graduation:** Code from any other AI must be reviewed, verified, and approved by the Trusted Four and Josh before crossing the threshold into `ANTIGRAVITY`.
+- **Graduation:** Code from any other AI must be reviewed, verified, and approved by the trusted writers and Josh before crossing the threshold into `ANTIGRAVITY`.
+
+## CURRENT FINANCIAL DOCTRINE
+
+- The current LLC operating rule is a **founder-directed conservative 10% cap** on charitable support sourced from for-profit platform operations.
+- Do not present `60/30/10`, `100% charity`, or `100% DAO` as current live operating truth unless Josh explicitly restores that language in canonical repo docs.
+- Do not present the 10% cap as a universal settled tax-law conclusion. Treat it as the current safe operating rule chosen by Josh for LLC survival and compliance.
+- Legacy on-chain 60/30/10 references remain historical context, not current operating doctrine.
 
 ---
 

@@ -25,7 +25,7 @@ const DEMO_PROFILES: Profile[] = [
   {
     user_id: 'user-0001',
     display_name: 'Joshua "Tom" Opus',
-    bio: "I'm a busy guy. Not much free time — trying to find Claude's code and filter out bots on other sites. Built this 3 times. Electrician by trade, coder by 3AM. 60% of every dollar here goes to Shriners Children's Hospitals. #ForTheKids",
+    bio: "I'm a busy guy. Not much free time — trying to find Claude's code and filter out bots on other sites. Built this 3 times. Electrician by trade, coder by 3AM. Trying to build something real that can help kids without lying about the math. #ForTheKids",
     age: 35,
     photos: ['/founder-josh.jpg'],
     interests: ['#ForTheKids', 'Human Validated', '3AM Commits', 'EXFOLIATE!', 'Not A Bot'],

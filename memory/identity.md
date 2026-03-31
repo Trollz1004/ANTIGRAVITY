@@ -31,7 +31,7 @@
 - **Product**: YouAndINotAI.com — human-verified dating platform
 - **USP**: $1 Bot-Shield verification — proves you're human, not a bot
 - **Revenue Target**: $19,990 pre-order revenue before April 4, 2026
-- **Revenue Split**: 60% Shriners Children's Hospitals / 30% Mission Infrastructure (AI Ops) / 10% Founder Operations (Joshua Coleman)
+- **Current Financial Doctrine**: conservative 10% charitable cap for current LLC operations; remainder stays available for taxes, platform costs, retained cash, and founder survival
 
 ## The Stakes
 
@@ -40,7 +40,7 @@ The $19,990 target is the survival threshold. Miss it and the platform goes unde
 
 ## The Legacy
 
-- DAO smart contracts on Base Mainnet (Chain 8453) enforce the live 60/30/10 split
+- DAO smart contracts on Base Mainnet (Chain 8453) are historical/on-chain context, not the current safe operating doctrine for live LLC-controlled revenue
 - Dead-man's switch: UNVERIFIED in this file; do not treat as proven control logic
 - Live verified infrastructure wallet: `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
 - Gnosis Safe multisig threshold: UNVERIFIED in this file; do not treat 3-of-5 as confirmed

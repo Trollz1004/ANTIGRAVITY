@@ -168,7 +168,7 @@ def test_verify_submit_returns_square_checkout_link(client, db_session_factory, 
     payload = submit_response.json()
     assert payload["passed"] is True
     assert payload["checkout_url"] is None
-    assert "secure Square checkout is temporarily unavailable" in payload["message"]
+    assert "real email address" in payload["message"]
 
 
 def test_square_webhook_binds_bot_shield_to_user(client, db_session_factory):

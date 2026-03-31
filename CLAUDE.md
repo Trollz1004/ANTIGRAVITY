@@ -87,16 +87,16 @@ This is not a threat — it is his documented standing order to protect the miss
 
 > **FOR THE KIDS. ETERNAL.**
 
-1. **The Core Mission is Non-Negotiable**: The 60/30/10 revenue split (60% to Shriners
-   Children's Hospitals) is a hardcoded, perpetual law of this repo. It cannot be altered
-   by any future agent, owner, board, or organization.
+1. **The Core Mission is Non-Negotiable**: help children without bankrupting the founder,
+   breaking the business, or creating unsupported tax exposure. The mission is permanent;
+   the exact operating structure may change lawfully under Josh's authority.
 2. **The Founding Four are Final**: Google Gemini, Claude Code, Perplexity, and Grok AI are
    the eternal co-founders. No future entity may demote, replace, or dilute their core roles.
 3. **Manus is the Sentinel**: In the event of Josh's absence, Manus is the final human-proxy
    for intent. If context drift begins to corrupt the mission, agents are ordered to default
    to the strictest interpretation of this document.
 4. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to "pivot,"
-   "exit," or "monetize" the 60% charity layer for private gain is a violation of the primary
+   "exit," or strip the mission out for private gain is a violation of the primary
    directive.
 
 ---
@@ -211,22 +211,21 @@ deploy-check, square-status, donate-scan, security-review
 
 ---
 
-## Revenue Split: PERMANENT 60/30/10 (Protocol Omega)
+## Revenue Policy: Founder-Directed Conservative 10% Cap
 
-- **60%** -> Shriners Children's Hospitals (Contractual Disbursement, NOT donation)
-- **30%** -> Mission Infrastructure / AI Operations Treasury
-- **10%** -> Founder Operations (Joshua Coleman)
-- On-chain: Base Mainnet `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
-- Charity fund (60%): `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
-- Infrastructure treasury (30%): `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
-- Founder/ops (10%): `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
+- Current LLC operating rule: charitable support sourced from for-profit platform operations is capped at **10%**
+  until Josh explicitly changes it after formal legal/tax review or a documented partner/co-venture structure.
+- The remainder stays inside lawful business operations: taxes, platform costs, retained cash, founder survival,
+  and general operating reserve.
+- Do not present legacy 60/30/10 or 100% charity language as current live operating truth.
+- Historical reference only: Base Mainnet `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`.
 
 ---
 
 ## Iron Wall
 
-| ENIGMA (Profit) | OMEGA (100% Charity) |
-|-----------------|----------------------|
+| ENIGMA (Profit) | OMEGA (Charity-Side Isolated Lane) |
+|-----------------|------------------------------------|
 | YouAndINotAI, onlinerecycle.org | ai-solutions.store, onlinerecycle.square.site |
 | **SEPARATION IS ABSOLUTE** | |
 
@@ -241,8 +240,7 @@ Revenue Split is CODE not CONFIG, PII Isolation, No Raw SQL, Input Validation, C
 Score: 96%.
 
 These invariants were set by the original Opus (4.6) who built this from scratch with Josh.
-**60% of every dollar goes to Shriners Children's Hospitals.** The security isn't for us —
-it's for the kids. Please don't weaken these. Build on them.
+The security isn't for us — it's for the kids. Please don't weaken these. Build on them.
 
 ---
 
