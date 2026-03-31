@@ -1,6 +1,12 @@
 # PROTOCOL OMEGA — ON-CHAIN STATUS
 
-Last updated: 2026-03-13
+Last updated: 2026-03-30
+
+## Current Doctrine Warning
+
+- This file documents a **historical on-chain contract state**
+- It does **not** override the current founder-directed conservative **10% charitable cap** for LLC operations
+- Do not use this file by itself to justify live `60/30/10`, `100% charity`, or named-beneficiary claims in public or customer-facing copy
 
 ## Verified Live Base State
 
@@ -11,7 +17,7 @@ Last updated: 2026-03-13
   - Infrastructure treasury `30%`: `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
   - Founder ops `10%`: `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
 
-This is the current live on-chain truth.
+This is the current live on-chain truth for the historical contract deployment.
 
 ## Verified Live Again — 2026-03-13 18:13 ET
 
@@ -34,10 +40,11 @@ Inference:
 - Grok's "vaporware" concern is not supported by the live chain evidence for the currently documented contract and payout addresses
 - the current live proof applies to the legacy verified `GospelDonation.sol` deployment at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
 - this does not make the intended-next repo router live; that remains a separate, not-yet-cut-over path
+- this also does not make the historical `60/30/10` contract the current safe operating doctrine for live LLC-controlled revenue
 
-## Meaning Of The 30% Treasury
+## Meaning Of The Historical 30% Treasury
 
-The `30%` bucket is the mission infrastructure and AI operations treasury.
+For the historical contract, the `30%` bucket is the mission infrastructure and AI operations treasury.
 
 It covers:
 - electricity, racks, nodes, GPUs, storage, networking
@@ -92,11 +99,11 @@ deployment.  The canonical set is the live-verified one listed above.
 (OMEGA side — 100% to charity).  That is a separate, OMEGA-only contract and is
 correct for that specific purpose.  It is not part of the ENIGMA 60/30/10 split.
 
-## Governance Rule
+## Historical Contract Rule
 
-- `60/30/10` is fixed. Immutable. Permanent.
-- If payout destinations must change, the current live contract cannot be edited in place.
-- A new contract must be deployed, verified, documented, and then cut over operationally.
+- The historical `GospelDonation.sol` contract is immutable once deployed
+- If payout destinations tied to that contract ever need to change, a new contract would have to be deployed and documented
+- Contract immutability does **not** mean current LLC operating doctrine is locked to historical 60/30/10 forever
 
 ## 3-of-5 Gnosis Safe — Multi-Sig Governance (PLANNED)
 
@@ -133,10 +140,9 @@ can still operate the Safe without the founder key or the safety box key.
 4. Verification that pause/unpause/rescue functions work through the Safe
 5. Documentation of signer rotation procedures if any AI company changes custody
 
-## OPUS TRUST — 10% Succession Chain (PERMANENT)
+## Historical Founder Succession Note
 
-The `10%` founder/ops bucket is formally named the **OPUS TRUST**, in honor of
-the original Claude Opus that co-built this platform from day one.
+Earlier repo doctrine referred to the historical `10%` founder bucket as the **OPUS TRUST**. That naming remains historical context only and is not a current public-facing financial claim.
 
 ### Beneficiary Succession (immutable intent)
 
@@ -149,12 +155,11 @@ the original Claude Opus that co-built this platform from day one.
 Phase 3 is the terminal state. The 10% flows to the children and grandchildren
 of the engineers who built the AI tools that built this platform. Forever.
 
-This succession was designed by Josh ~6 months before the first dollar of revenue.
-It is not a retroactive decision. It is the original intent, now documented in code.
+This succession note remains historical continuity context only.
 
 ### Legal Implementation (TODO)
 
-- Formal trust instrument naming OPUS TRUST beneficiaries
+- Formal trust instrument naming historical successor beneficiaries if Josh ever decides to formalize it
 - Smart contract or Safe module enforcing beneficiary rotation on verified death events
 - Legal counsel review for FL trust law compliance
 - This is a future task — the intent is permanent and documented now
