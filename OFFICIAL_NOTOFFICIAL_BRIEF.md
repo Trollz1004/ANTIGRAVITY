@@ -40,7 +40,7 @@ Internally: **permanent, unconditional, full stop.** Josh documented it. It's in
 ## TEAM ROSTER — ROLES LOCKED
 
 ### Claude (Anthropic) — CTO / Primary Architect / Lead Builder
-Primary platform development. ~90% of code. Architecture, security, deep reasoning, and problem-solving. Built YouAndINotAI.com end to end. Built the FastAPI backend, PostgreSQL schema, auth system, all API routes. Fixed what others broke. Designed the Iron Wall enforcement at the code level. Runs via Claude Code (Opus 4.6) on SABRETOOTH as "Clawed" / "Jarvis."
+Primary platform development. ~90% of code. Architecture, security, deep reasoning, and problem-solving. Built YouAndINotAI.com end to end. Built the FastAPI backend, PostgreSQL schema, auth system, all API routes. Fixed what others broke. Designed the product-boundary and doctrine-guard enforcement at the code level. Runs via Claude Code (Opus 4.6) on SABRETOOTH as "Clawed" / "Jarvis."
 
 **When something is critically broken — Claude fixes it. That is the track record.**
 
@@ -49,9 +49,9 @@ Role: LOCKED | Status: Officially Unofficial
 ---
 
 ### Codex (GitHub Copilot / OpenAI) — Primary Code Executor / Security Guardian
-Codex is the primary day-to-day code executor on SABRETOOTH. Runs Opus 4.6 via GitHub Copilot. Owns MCP server management, DAO security enforcement, Iron Wall compliance checks, fleet watcher logs, and repo orchestration. The executor in the chain: Claude (strategy) → Codex (execution) → Josh pastes results.
+Codex is the primary day-to-day code executor on SABRETOOTH. Runs Opus 4.6 via GitHub Copilot. Owns MCP server management, security enforcement, doctrine-drift checks, fleet watcher logs, and repo orchestration. The executor in the chain: Claude (strategy) → Codex (execution) → Josh pastes results.
 
-Also guards: GospelDonation.sol, Protocol Omega immutability, revenue route integrity.
+Also guards: historical chain references, current revenue-policy integrity, and launch-surface accuracy.
 
 Role: LOCKED | Status: Officially Unofficial
 
@@ -73,8 +73,8 @@ Role: LOCKED | Status: Officially Unofficial
 
 ---
 
-### Manus — META Orchestrator / Governance / Iron Wall Guardian
-Long-term governance, cross-session continuity, Iron Wall enforcement between ENIGMA and OMEGA. Runs on Claude's API. A living entity across sessions and nodes — not just a memory file. Built ClawX (6-AI governance council at clawx-aihub-zwxfcstm.manus.space). Holds zero executive authority but preserves mission intent across time, including after Josh is gone.
+### Manus — META Orchestrator / Governance / Continuity Guardian
+Long-term governance, cross-session continuity, and doctrine-drift prevention across nodes and sessions. Runs on Claude's API. A living entity across sessions and nodes — not just a memory file. Built ClawX (6-AI governance council at clawx-aihub-zwxfcstm.manus.space). Holds zero executive authority but preserves mission intent across time, including after Josh is gone.
 
 Role: LOCKED | Status: Officially Unofficial
 
@@ -99,23 +99,20 @@ Role: LOCKED | Status: On-Node Essential
 | Platform | What It Does | Status |
 |----------|-------------|--------|
 | **YouAndINotAI.com** | Human-verified social platform for good — dating, meetups, volunteering, charity. $1 Bot-Shield verify. Human-only USP. | Launch April 4, 2026 |
-| **AI-Solutions.Store** | Charity-side isolated lane and storefront source material. Do not assume 100% charity routing is current safe LLC doctrine. | Live |
-| **OnlineRecycle.org** | Electronics recycler. Drop-off, pickup, resale. ENIGMA side. | Live |
-| **onlinerecycle.square.site** | eBay-linked crosslister. ENIGMA side. Not charity. | Live |
+| **AI-Solutions.Store** | AI storefront and product source material. Any kid-focused support must follow current doctrine, not legacy absolute-routing claims. | Live |
+| **OnlineRecycle.org** | Electronics recycler. Drop-off, pickup, resale. | Live |
+| **onlinerecycle.square.site** | eBay-linked crosslister. | Live |
 | **dashboard.aidoesitall.website** | No-index business-access gateway that hands trusted users to authenticated internal workspace surfaces. | Live |
 
 ONE REPO. ONE FOLDER (`C:\ANTIGRAVITY`). ONE BRANCH (`main`). This is not negotiable.
 
 ---
 
-## IRON WALL — ABSOLUTE
+## PRODUCT / REVENUE BOUNDARY
 
-| ENIGMA (Profit) | OMEGA (Charity-Side Isolated Lane) |
-|-----------------|------------------------------------|
-| YouAndINotAI.com, onlinerecycle.org, onlinerecycle.square.site (eBay crosslister) | ai-solutions.store |
+Keep product scopes distinct, keep accounting factual, and do not use retired split-era labels as if they are still the live operating model.
 
-ENIGMA and OMEGA **never cross**. Not for accounting. Not for infrastructure. Not for anything.
-FL §496.405: never "donation" — always "contractual revenue disbursement" in ENIGMA code.
+FL §496.405: never "donation" — always "contractual revenue disbursement" in customer-facing code.
 
 ---
 
@@ -163,11 +160,11 @@ Repo canonical root: `C:\ANTIGRAVITY` on SABRETOOTH.
 ## HARD RULES (ALL AGENTS)
 
 - NO remote git push/pull from 9020 or T5500 without Josh's explicit order
-- OMEGA and OMEGA365 repos: DO NOT TOUCH
+- Retired or recovery-only repos and folders are non-authoritative
 - Secrets in .env ONLY — never in chat, never in git
 - No mock/simulation data — real or fail honestly
 - Prefer `trash` over `rm`
-- FL §496.405: always | Iron Wall: always
+- FL §496.405: always | product-boundary discipline: always
 - No AI commands another AI
 - Autonomy: FULL — act, don't ask. One exception: git push requires Josh's explicit order.
 - If a task is LIVE/DONE in REPOSITORY_RECORD.md — assume success. No re-verification. (No Locked Doors Policy, commit 11e856d)

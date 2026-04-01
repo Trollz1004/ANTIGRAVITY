@@ -4,13 +4,13 @@
 
 This directory is the unified top-level home for AI-Solutions source material inside `C:\ANTIGRAVITY`.
 
-## CURRENT OMEGA POSITION
+## CURRENT POSITION
 
-**AI-Solutions.Store is the isolated OMEGA / charity-side lane. Do not treat this directory as proof that live LLC-controlled revenue can safely be marketed or routed as 100% charity.**
+**AI-Solutions.Store is an active product/storefront lane. Do not treat this directory as proof that live LLC-controlled revenue can safely be marketed or routed as 100% charity.**
 
 The following rules reflect current repo safety and separation rules:
 
-1. **ISOLATION FIRST** — AI-Solutions.Store remains on the OMEGA side of the Iron Wall. Do not mix it with ENIGMA revenue flows or customer-facing promises.
+1. **DOCTRINE FIRST** — AI-Solutions.Store must follow the same current factual operating doctrine as the rest of the repo. Do not revive split-era labels or absolute-routing promises from older material.
 
 2. **THE CODE CANNOT BE SOLD** — The AI-Solutions source code must never be sold, licensed, sublicensed, or transferred as a product outside of `ai-solutions.store`. It is sold only through that domain as products/services/access — never as raw source.
 
@@ -44,7 +44,7 @@ The following rules reflect current repo safety and separation rules:
 
 - Original archive path: `ClawX\src\_manus-export\ai-solutions-store\`
 - Live deploy source: `_deploy\ai-solutions-store\index.html`
-- Charity-side public context: `aicollab4kids/OMEGA4kidsCharity`
+- Historical charity-side context: archive or historical-reference paths only
 - Cloudflare deployment note: `briefings/archive/gemini-cloudflare-verify-prompt.txt`
 
 ## Historical note

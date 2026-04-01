@@ -22,14 +22,14 @@ In scope:
 
 - `antigravity/`
 - `dashboard.aidoesitall.website`
-- verifiable DAO / Protocol Omega transparency
+- verifiable historical on-chain context plus current live dashboard honesty
 - honest operational status
 
 Out of scope for this briefing:
 
 - `youandinotai/` launch work
 - Square checkout changes for the dating app
-- OMEGA storefront execution
+- legacy split-era storefront doctrine
 - marketing copy or social posting
 
 ## Current Truth
@@ -55,7 +55,7 @@ Out of scope for this briefing:
 - `antigravity/app/api/system-logs/route.ts`
 - `antigravity/components/Transparency.tsx`
 - `antigravity/GEMINI.md`
-- `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+- `briefings/HISTORICAL-ONCHAIN-STATUS.md`
 - `memory/activeContext.md`
 
 ## Hard Rules
@@ -64,7 +64,7 @@ Out of scope for this briefing:
 2. Do not invent revenue, customer, or disbursement metrics.
 3. If a metric is not wired to a real source, keep it zero or label it untracked.
 4. If a wallet or split claim is shown, it must be publicly verifiable.
-5. Keep ENIGMA / OMEGA separation clean.
+5. Do not reuse retired split-era labels as current live doctrine.
 6. Do not let dashboard wording outrun what the code can prove.
 
 ## Approved Real-Time Data Sources

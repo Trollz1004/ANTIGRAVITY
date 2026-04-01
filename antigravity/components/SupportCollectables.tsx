@@ -10,27 +10,27 @@ export default function DonateCollectables({ isDarkMode }: { isDarkMode: boolean
           Support & Collectables
         </h2>
         <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-          Support Shriners Children&apos;s Hospitals directly or explore exclusive digital collectables through controlled platform surfaces.
+          Review independent pediatric-care support options or explore exclusive digital collectables through controlled platform surfaces.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Shriners Direct Link */}
+        {/* External pediatric-care support options */}
         <div className={`p-8 rounded-3xl border relative overflow-hidden ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200 shadow-xl shadow-rose-900/5'}`}>
           <div className="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-6 shadow-inner">
             <Heart className="w-7 h-7" />
           </div>
-          <h3 className="text-2xl font-bold mb-3">Support Shriners Directly</h3>
+          <h3 className="text-2xl font-bold mb-3">Support Pediatric Care Directly</h3>
           <p className={`mb-6 leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Visit Shriners Children&apos;s Hospitals directly. They provide life-changing care to children regardless of the families&apos; ability to pay.
+            If you want to support pediatric care outside the platform, use a third-party charity directory and choose the organization you trust directly.
           </p>
           <a
-            href="https://donate.lovetotherescue.org/"
+            href="https://www.charitynavigator.org/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center w-full py-3 px-6 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold transition-colors gap-2"
           >
-            Go to Shriners <ExternalLink className="w-4 h-4" />
+            Review External Options <ExternalLink className="w-4 h-4" />
           </a>
         </div>
 
