@@ -88,6 +88,7 @@ export function Login() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
                   placeholder="Email"
                   className="w-full pl-12 pr-4 py-4 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/50 input-glow transition-all duration-300"
                 />
@@ -100,6 +101,7 @@ export function Login() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
                   placeholder="Password"
                   className="w-full pl-12 pr-4 py-4 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/50 input-glow transition-all duration-300"
                 />
@@ -159,6 +161,7 @@ export function Login() {
                       type="text"
                       value={betaCode}
                       onChange={(e) => setBetaCode(e.target.value)}
+                      autoComplete="one-time-code"
                       placeholder="Enter access code"
                       className="w-full pl-10 pr-4 py-3 bg-purple-500/[0.06] border border-purple-500/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-400/50 text-sm font-mono uppercase tracking-wider transition-all"
                       autoFocus

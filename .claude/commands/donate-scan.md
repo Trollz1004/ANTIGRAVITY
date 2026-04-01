@@ -15,7 +15,7 @@ Under Florida Statutes §496.405, customer-facing code must not present platform
 2. **For each match**, classify as:
    - **VIOLATION**: Word used in a way that implies WE are soliciting donations
    - **SAFE**: Word used in legal disclaimer context ("not a donation/solicitation")
-   - **EXTERNAL**: Link to Shriners' own donation page (their URL, their language)
+   - **EXTERNAL**: Link to a third-party charity's own page using that charity's own language, not ours
 
 3. **Also scan for related risky terms**:
    - "charitable contribution"

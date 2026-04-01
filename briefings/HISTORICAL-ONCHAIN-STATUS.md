@@ -79,6 +79,7 @@ The repo also contains a newer router path:
 - Founder ops: `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
 
 Treat `DatingRevenueRouter.sol` as intended-next deployment material, not current live state.
+As of 2026-04-01, `contracts/scripts/deploy.js` is explicitly guarded and will not run unless `ALLOW_HISTORICAL_SPLIT_DEPLOY=YES` is set.
 
 ## Two-Manus-Account Discrepancy (RESOLVED)
 
@@ -98,6 +99,7 @@ deployment.  The canonical set is the live-verified one listed above.
 `contracts/scripts/deploy-charity.js` for the `CharityRouter100.sol` deployment
 (historical dedicated charity-side contract). That is a separate historical path and is
 correct for that specific purpose. It is not part of the current LLC operating doctrine.
+As of 2026-04-01, `contracts/scripts/deploy-charity.js` is explicitly guarded and will not run unless `ALLOW_HISTORICAL_CHARITY_DEPLOY=YES` is set.
 
 ## Historical Contract Rule
 

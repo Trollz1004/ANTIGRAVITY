@@ -297,6 +297,7 @@ Current verified split understanding:
   - infrastructure `30%` -> `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
   - founder ops `10%` -> `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
 - the repo contains an intended-next `DatingRevenueRouter` path, but that newer route was not verified live on Base in this session
+- historical contract deploy scripts in `contracts/scripts/` are now guarded and must not be treated as current launch paths
 - the `30%` bucket is the full mission infrastructure and AI operations treasury, not a vendor-only or founder-income bucket
 
 ## What To Put In A ChatGPT Project Folder

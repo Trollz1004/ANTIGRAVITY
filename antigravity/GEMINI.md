@@ -43,11 +43,11 @@ Do not use this file as the primary source for:
 - Keep honest zeros where live metrics are zero
 - Do not introduce placeholder impact claims
 
-## Iron Wall
+## Product Boundary
 
-- Antigravity may reference the live ENIGMA-side operational truth
-- Do not mix OMEGA storefront/product changes into ENIGMA UI flows
-- Do not use this dashboard file to justify cross-wall product linking
+- Antigravity may reference current live operational truth from canonical repo docs
+- Do not use dashboard files to restore retired split-era labels or cross-product doctrine
+- Keep dashboard copy factual and aligned with the current 10% cap doctrine
 
 ## Deployment
 

@@ -93,7 +93,7 @@ export const ACCESS_POLICY = {
     "No third-party AI may access secrets, tokens, or API keys.",
     "E: drive sandbox repos get read-only MCP access.",
     "All write operations are logged with caller identity.",
-    "Iron Wall: ENIGMA (profit) and OMEGA (charity) never cross.",
+    "Retired split-era labels must not be reused as current operating doctrine.",
     "FL §496.405: Never use 'donate', 'donation', or 'solicitation' in customer-facing code.",
     "Manus preserves intent but holds zero executive power.",
     "Josh's standing orders are the tiebreaker when consensus fails.",

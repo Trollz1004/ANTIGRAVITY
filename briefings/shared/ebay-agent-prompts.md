@@ -12,6 +12,6 @@ Current rule:
 - rebuild any future eBay workflow from canonical docs only
 
 Use these sources instead:
-- `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`
+- `C:\ANTIGRAVITY\briefings\CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
 - `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
 - `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`

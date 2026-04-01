@@ -13,7 +13,7 @@ export default function KidsPlatform({ isDarkMode }: { isDarkMode: boolean }) {
           For The Kids
         </h2>
         <p className={`mt-4 text-lg max-w-2xl mx-auto ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-          The heart of our ecosystem. ENIGMA stays business-first, and any kid-focused support follows the current published operating policy instead of hard-coded percentage bragging.
+          The heart of our ecosystem. Kid-focused support follows the current published operating policy instead of retired split-era branding or hard-coded percentage bragging.
         </p>
       </div>
 
@@ -81,10 +81,10 @@ export default function KidsPlatform({ isDarkMode }: { isDarkMode: boolean }) {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-10">
           <div>
             <h3 className="text-3xl font-black mb-2 flex items-center gap-3">
-              Protocol OMEGA
+              Impact Policy
               <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-purple-100 text-purple-700 rounded-full">Active</span>
             </h3>
-            <p className={`text-lg ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>The Iron Wall: commercial operations and charity-side work stay structurally separate.</p>
+            <p className={`text-lg ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Commercial operations stay product-first, and any kid-focused support follows the current published doctrine.</p>
           </div>
           <div className="text-left md:text-right w-full md:w-auto bg-white/50 dark:bg-slate-900/50 p-6 rounded-2xl backdrop-blur-sm border border-white/20 dark:border-slate-700/50">
             <div className="text-sm font-bold uppercase tracking-wider text-purple-500 mb-1">Total Raised</div>

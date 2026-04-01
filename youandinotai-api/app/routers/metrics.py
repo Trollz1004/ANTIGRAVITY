@@ -2,7 +2,7 @@
 
 Security: NO PII exposed. Only aggregate counts and revenue totals.
 The dashboard at aidoesitall.website consumes this via API key (not user JWT).
-Iron Wall: ENIGMA revenue data only — OMEGA stays completely separate.
+Current doctrine: revenue reporting follows the live LLC policy, not retired split-era labels.
 """
 
 from datetime import datetime, timezone
