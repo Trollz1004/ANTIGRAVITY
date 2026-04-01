@@ -3,7 +3,7 @@
 CodeX Fleet Watcher
 ===================
 
-Daily ENIGMA-safe watcher for Sabretooth. It audits:
+Daily watcher for Sabretooth. It audits:
 - git/main cleanliness and branch drift
 - critical CodeX scheduled tasks
 - SSH reachability to T5500 / 9020 aliases
@@ -38,7 +38,7 @@ from typing import Any
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-ROOT = SCRIPT_DIR.parent
+ROOT = SCRIPT_DIR.parent.parent
 CODEX_DIR = ROOT / "CodeX"
 LOG_DIR = CODEX_DIR / "logs"
 RUNTIME_DIR = CODEX_DIR / "state" / "runtime"
@@ -77,7 +77,7 @@ HASH_TARGETS = [
     ROOT / "memory" / "activeContext.md",
     ROOT / "memory" / "sessionHandoff.md",
     ROOT / "briefings" / "LIVE-PAYMENT-SOURCE-OF-TRUTH.md",
-    ROOT / "briefings" / "PROTOCOL-OMEGA-ONCHAIN-STATUS.md",
+    ROOT / "briefings" / "HISTORICAL-ONCHAIN-STATUS.md",
 ]
 
 HEADER_RULES = [
@@ -457,7 +457,7 @@ class FleetWatcher:
 
         guardian = self.run_script_audit(
             "opus_guardian",
-            [sys.executable, str(ROOT / "scripts" / "opus-guardian.py")],
+            [sys.executable, str(ROOT / "scripts" / "clawx-control" / "opus-guardian.py")],
         )
         audits["opus_guardian"] = guardian
         if guardian["ok"]:

@@ -1,4 +1,4 @@
-# DEPLOY-ENIGMA.ps1
+# DEPLOY-DATEAPP.ps1
 # 1-Click deployment for the Enigma Agent (Gronk AI)
 
 $repoRoot = "C:\ANTIGRAVITY"

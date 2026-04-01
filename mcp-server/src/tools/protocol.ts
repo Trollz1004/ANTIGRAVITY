@@ -1,11 +1,11 @@
 /**
- * Protocol Tools — wallets, doctrine, historical chain context, and launch status
+ * Platform doctrine tools — current policy, historical chain context, and launch status
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
 const PROTOCOL = {
-  name: "Protocol Reference",
+  name: "Platform Reference",
   version: "1.5.0",
   doctrine: "Fact-only, product-first, no false claims",
   launch_date: "2026-04-04",
@@ -25,7 +25,7 @@ const PROTOCOL = {
       name: "GospelDonation.sol",
       address: "0x9855B75061D4c841791382998f0CE8B2BCC965A4",
       network: "Base Mainnet (Chain 8453)",
-      purpose: "Historical on-chain 60/30/10 reference",
+      purpose: "Historical on-chain routing reference",
       status: "DEPLOYED — historical chain context",
       note: "Do not treat this historical contract as current automatic LLC operating doctrine.",
     },
@@ -35,7 +35,7 @@ const PROTOCOL = {
       note: "Not current live state unless separately deployed, verified, and documented.",
     },
   },
-  splits: {
+  policy: {
     current_llc_policy: {
       charitable_cap_pct: 10,
       note: "Current founder-directed conservative operating doctrine for LLC-controlled revenue. Not universal legal advice.",
@@ -46,12 +46,12 @@ const PROTOCOL = {
       founder_pct: 10,
       note: "Historical on-chain split for GospelDonation.sol only.",
     },
-    omega_isolation: {
-      note: "OMEGA remains the charity-side isolated lane. Do not assume absolute charity-side routing unless separately documented as current safe doctrine.",
+    public_claim_boundary: {
+      note: "No active operational or customer-facing surface may claim automatic routing above the current conservative 10% cap without a new canonical legal update.",
     },
   },
   governance: {
-    iron_wall: "ENIGMA (profit) and OMEGA (charity-side isolated lane) NEVER cross.",
+    doctrine_boundary: "Current live LLC-controlled revenue is bounded by the documented conservative 10% charitable cap and fact-only public claims.",
     clawx: {
       status: "LIVE EXTERNAL DASHBOARD",
       url: "https://clawx-aihub-zwxfcstm.manus.space",
@@ -64,10 +64,10 @@ const PROTOCOL = {
   },
   chain: "Base Mainnet",
   sites: {
-    youandinotai: { url: "https://youandinotai.com", host: "Cloudflare Pages", lane: "ENIGMA" },
-    onlinerecycle: { url: "https://onlinerecycle.org", host: "Cloudflare Pages", lane: "ENIGMA" },
-    ai_solutions: { url: "https://ai-solutions.store", host: "Cloudflare Pages", lane: "OMEGA-side isolated lane" },
-    dashboard_gateway: { url: "https://dashboard.aidoesitall.website", host: "Cloudflare Pages", lane: "gateway" },
+    youandinotai: { url: "https://youandinotai.com", host: "Cloudflare Pages", role: "primary product" },
+    onlinerecycle: { url: "https://onlinerecycle.org", host: "Cloudflare Pages", role: "service platform" },
+    ai_solutions: { url: "https://ai-solutions.store", host: "Cloudflare Pages", role: "secondary commerce surface" },
+    dashboard_gateway: { url: "https://dashboard.aidoesitall.website", host: "Cloudflare Pages", role: "private gateway" },
   },
   commerce: {
     live_payment_rail: "Square",
@@ -80,8 +80,8 @@ const PROTOCOL = {
 
 export function registerProtocolTools(server: McpServer) {
   server.tool(
-    "omega_protocol_info",
-    "Return the current doctrine plus historical chain context for Protocol Omega / ENIGMA revenue references",
+    "platform_protocol_info",
+    "Return the current doctrine plus historical chain context for live platform revenue references",
     {},
     async () => ({
       content: [{
@@ -92,8 +92,8 @@ export function registerProtocolTools(server: McpServer) {
   );
 
   server.tool(
-    "omega_wallets",
-    "Return historical Protocol Omega Base Mainnet wallet references with current-doctrine warnings",
+    "platform_wallet_history",
+    "Return historical Base Mainnet wallet references with current-doctrine warnings",
     {},
     async () => ({
       content: [{
@@ -101,7 +101,7 @@ export function registerProtocolTools(server: McpServer) {
         text: JSON.stringify({
           chain: PROTOCOL.chain,
           wallets: PROTOCOL.wallets,
-          current_llc_policy: PROTOCOL.splits.current_llc_policy,
+          current_llc_policy: PROTOCOL.policy.current_llc_policy,
           warning: "Historical chain references do not by themselves define current LLC operating doctrine.",
         }, null, 2),
       }],
@@ -109,27 +109,26 @@ export function registerProtocolTools(server: McpServer) {
   );
 
   server.tool(
-    "omega_iron_wall",
-    "Return the current ENIGMA versus OMEGA separation rule and related doctrine notes",
+    "platform_policy_boundary",
+    "Return the current live policy boundary and related doctrine notes",
     {},
     async () => ({
       content: [{
         type: "text" as const,
         text: JSON.stringify({
-          status: "ENFORCED",
-          rule: PROTOCOL.governance.iron_wall,
-          enigma_sites: ["https://youandinotai.com", "https://onlinerecycle.org"],
-          omega_sites: ["https://ai-solutions.store"],
-          current_llc_policy: PROTOCOL.splits.current_llc_policy,
-          historical_gospel_donation: PROTOCOL.splits.historical_gospel_donation,
-          omega_isolation: PROTOCOL.splits.omega_isolation,
+          status: "ACTIVE",
+          rule: PROTOCOL.governance.doctrine_boundary,
+          public_surfaces: Object.values(PROTOCOL.sites).map((site) => site.url),
+          current_llc_policy: PROTOCOL.policy.current_llc_policy,
+          historical_gospel_donation: PROTOCOL.policy.historical_gospel_donation,
+          public_claim_boundary: PROTOCOL.policy.public_claim_boundary,
         }, null, 2),
       }],
     })
   );
 
   server.tool(
-    "omega_launch_status",
+    "platform_launch_status",
     "Return current launch-readiness metadata for the April 4, 2026 YouAndINotAI launch window",
     {},
     async () => {
@@ -158,8 +157,8 @@ export function registerProtocolTools(server: McpServer) {
   );
 
   server.tool(
-    "omega_sites",
-    "Return deployed public sites with their current lanes and hosting model",
+    "platform_sites",
+    "Return deployed public sites with their current roles and hosting model",
     {},
     async () => ({
       content: [{
@@ -174,7 +173,7 @@ export function registerProtocolTools(server: McpServer) {
   );
 
   server.tool(
-    "omega_node_status",
+    "platform_node_status",
     "Return the current high-level node formation status without inventing stale live-runtime claims",
     {},
     async () => ({
@@ -193,7 +192,7 @@ export function registerProtocolTools(server: McpServer) {
   );
 
   server.tool(
-    "omega_deadlines",
+    "platform_deadlines",
     "Return current tracked launch deadlines without stale Stripe-rotation claims",
     {},
     async () => {

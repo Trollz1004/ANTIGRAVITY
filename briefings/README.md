@@ -10,7 +10,7 @@ Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 2. `briefings/REPOSITORY_RECORD.md`
 3. `briefings/UNIVERSAL-SYNC-PROMPT.md`
 4. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
-5. `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+5. `briefings/HISTORICAL-ONCHAIN-STATUS.md`
 6. `memory/CODEX-QUICK-MEMORY.md`
 7. `memory/activeContext.md`
 
@@ -47,7 +47,7 @@ Current deployment shorthand:
 ## Payment / Governance Truth
 
 - `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
-- `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+- `briefings/HISTORICAL-ONCHAIN-STATUS.md`
 - `briefings/BUSINESS-PROFILE-CANONICAL.md`
 
 ## Current Default Rule

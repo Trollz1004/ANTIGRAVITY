@@ -67,7 +67,7 @@ Two Codex MCP config files are part of the live setup:
 - Workspace MCP config: `C:\ANTIGRAVITY\CodeX\.mcp.json`
 
 Configured MCP servers:
-- `omega-sentry`
+- `antigravity-sentry`
 - `filesystem`
 - `github`
 - `memory`
@@ -76,7 +76,7 @@ Configured MCP servers:
 - `context7`
 
 Important details:
-- `omega-sentry` runs from `C:\ANTIGRAVITY\mcp-server\dist\index.js`
+- `antigravity-sentry` runs from `C:\ANTIGRAVITY\mcp-server\dist\index.js`
 - `filesystem` is rooted at `C:\ANTIGRAVITY`
 - Gemini-side MCP config also exists at:
   - `C:\Users\joshl\.gemini\antigravity\mcp_config.json`
@@ -288,7 +288,7 @@ Use it as the narrative/mission layer.
 Use the continuity runbook and memory files as the operational layer.
 
 Canonical on-chain status:
-- `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+- `C:\ANTIGRAVITY\briefings\HISTORICAL-ONCHAIN-STATUS.md`
 
 Current verified split understanding:
 - live verified Base split is still `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4` as historical chain truth

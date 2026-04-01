@@ -4,15 +4,16 @@
 
 - **Live repo doctrine is aligned:** canonical docs, sync prompts, and handoff files now reflect the founder-directed conservative `10% charitable cap` doctrine for LLC-controlled revenue.
 - **Launch drift surface is reduced:** stale eBay, merch, crossfire, social, and 9020/legacy prompt files were superseded so the easiest files to grab no longer advertise legacy split language as current truth.
+- **Neutral briefing names are live:** canonical read-order now uses current neutral briefing names instead of the old split-era labels.
 - **Live code validation is complete:** Sabretooth passed the relevant build, lint, and backend test checks for the touched workspaces.
-- **Node lanes were rechecked:** 9020 support-lane post files were verified clean; T5500 Manus-lane docs and dashboard pages were cleaned and reverified against legacy split terms.
+- **Node lanes were rechecked:** 9020 support-lane post files were verified clean, its stale legacy sandbox notes were archived, and T5500 Manus-lane docs and dashboard pages were cleaned and reverified against legacy split terms.
 - **PaperClip remains sandbox-only:** `E:\sandbox-repo\paperclip` and `E:\sandbox-repo\paperclip-antigravity` remain isolated from the live repo.
 
 ## Verified State
 
 - **Repo root:** `C:\ANTIGRAVITY`
 - **Branch:** `main`
-- **Worktree:** modified during the March 31 final audit pass and ready for commit/push
+- **Worktree:** active doctrine and control-surface cleanup in progress
 - **YouAndINotAI frontend:** `npm run lint` passed; `npm run build` passed
 - **YouAndINotAI backend:** `201 passed` via `uv`-managed pytest run on Python 3.13
 - **MCP server:** `npm run build` passed
@@ -25,13 +26,13 @@
 
 ## Current Risks / Open Items
 
-1. **`www.aidoesitall.website` is now mapped to `_deploy/aidoesitall-www`, and `api.aidoesitall.website/*` is now mapped to the repo-tracked `for-the-kids-api` guard worker.**
+1. **`www.aidoesitall.website` is now mapped to `_deploy/aidoesitall-www`, and `api.aidoesitall.website/*` is now mapped to the repo-tracked `aidoesitall-api-guard` Worker.**
 2. **`E:\sandbox-repo` still has unrelated PaperClip script drift that is intentionally separate from the live repo.**
 3. **Historical contract artifacts remain in the repo by design and must continue to be treated as chain history, not current LLC doctrine.**
 
 ## Rules To Preserve
 
 1. Treat `C:\ANTIGRAVITY` on `main` as the only live coding source of truth.
-2. Keep ENIGMA and OMEGA fully separated.
+2. Keep canonical docs, MCPs, and automation surfaces aligned to the current conservative `10%` charitable-cap doctrine.
 3. Keep secondary-drive AI infrastructure and experiments in sandbox lanes until explicitly promoted.
 4. Ship only facts; any unverified claim remains out.

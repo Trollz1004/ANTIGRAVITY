@@ -52,7 +52,7 @@ The canonical profile (`BUSINESS-PROFILE-CANONICAL.md`) is the single source of 
 | "Automatic on sale" (Step 8) | "Tracked per on-chain split — bridge in development" | Square-to-chain bridge not yet built |
 | "One upload → 4 channels" | "Test batch first — then scale" | Channel sync not yet proven |
 | "Automatically routed via smart contract" | "Allocated per publicly verifiable DAO structure" | No live routing exists yet |
-| "Shriners Children's Hospitals" | "Children's medical care" | Specific beneficiary not contracted |
+| Specific pediatric beneficiary names | "Children's medical care" | Specific beneficiary not contracted |
 
 ---
 

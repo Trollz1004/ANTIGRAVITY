@@ -15,7 +15,7 @@ This file defines who should do what across the current AI team.
 If any tool, model, or exported note conflicts with the live repo:
 - `AGENTS.md` wins
 - `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md` wins next
-- `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md` and `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md` govern payment and chain truth
+- `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md` and `briefings/HISTORICAL-ONCHAIN-STATUS.md` govern payment and chain truth
 
 ## Routing Table
 
@@ -65,7 +65,7 @@ If any tool, model, or exported note conflicts with the live repo:
 
 - One repo, one branch, one live folder: `C:\ANTIGRAVITY`, `main`
 - One GitHub source for accepted truth: `Trollz1004/ANTIGRAVITY`
-- OMEGA repos and 100% charity surfaces are off-limits from ENIGMA-side work
+- retired repo assumptions and absolute-charity surfaces are off-limits from live repo work
 - Square is the live payment rail
 - Sabretooth is the only Telegram-owning OpenClaw orchestrator
 - No mock data

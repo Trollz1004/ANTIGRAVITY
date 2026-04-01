@@ -48,6 +48,7 @@ Refreshed in this sweep:
 - stale eBay / merch / crossfire / social / 9020 prompt surfaces superseded so they no longer present legacy routing as current truth
 - backup and contract folders labeled more explicitly as historical context
 - `scripts/youandinotai/split-consistency-check.sh` corrected so it scans the actual repo root and filters historical warnings correctly
+- canonical control surfaces scrubbed of retired split-separation doctrine so agent and MCP sessions inherit the current 10% operating truth
 
 Primary adjustment record:
 
@@ -66,6 +67,17 @@ Primary adjustment record:
 - Cloudflare Pages project `for-the-kids-contribute` now serves that replacement on production deployment `0e318f27`
 - stale Worker `for-the-kids-api` on route `api.aidoesitall.website/*` was replaced with the repo-tracked guard Worker at `infra/cloudflare/aidoesitall-api-guard`
 - verified live result: both `www.aidoesitall.website` and `api.aidoesitall.website` now avoid stale `60%` / `100% charity` public claims
+
+## April 1 Control-Surface Doctrine Cleanup
+
+- `AGENTS.md`, `CLAUDE.md`, canonical memory files, Brain/MCP config examples, and active OpenClaw/control scripts were normalized away from retired split-separation doctrine
+- current control surfaces now treat the conservative `10%` charitable cap as the only live LLC operating doctrine unless a future canonical legal update replaces it
+- historical chain and contract artifacts remain in explicitly historical files only and do not control current operational truth
+- canonical briefing names were normalized to:
+  - `briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
+  - `briefings/HISTORICAL-ONCHAIN-STATUS.md`
+- `9020` legacy sandbox notes carrying `Omega365` / split-era doctrine were archived out of the active support path
+- `T5500` Manus-lane docs and prompts were updated in place so they no longer seed retired split-era labels into current work
 
 ## Operational Notes
 

@@ -129,7 +129,7 @@ Every architectural decision is recorded here so no future session re-debates it
 
 ## 2026-03-07: Sabretooth should boot lean
 
-**Decision**: Strip Sabretooth startup down to the Codex-relevant baseline and archive the stale ENIGMA/social/browser auto-launch junk instead of letting it run on boot.
+**Decision**: Strip Sabretooth startup down to the Codex-relevant baseline and archive the stale split-era social/browser auto-launch junk instead of letting it run on boot.
 **Why**: Sabretooth is now the main Codex seat. Auto-starting old dashboards, Facebook PWAs, Comet, and Chrome background launch just wastes boot time and muddies the operational state.
 **Impact**: `Comet.lnk`, `Facebook.lnk`, and the Startup copy of `start-aidoesitall.bat` were removed from Startup, Chrome auto-launch was removed from `HKCU\...\Run`, and the Desktop source of `start-aidoesitall.bat` was archived under `C:\Users\joshl\OneDrive\Desktop\_archive\codex-cleanup-2026-03-07`. Keep `Ollama.lnk` and `OneDrive` only. `Clawdbot Gateway` still needs an elevated session if it is to be disabled.
 **Status**: Active

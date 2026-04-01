@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "omega-sentry": {
+    "antigravity-sentry": {
       "command": "node",
       "args": ["__OPUS_PATH__/mcp-server/dist/index.js"],
       "env": {}

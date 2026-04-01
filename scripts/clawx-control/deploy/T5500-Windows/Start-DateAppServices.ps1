@@ -1,7 +1,7 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# ENIGMA — Start DateApp Windows Services
+# DATE-APP — Start DateApp Windows Services
 # Location: E:\ANTIGRAVITY\scripts\deploy\T5500-Windows\Start-DateAppServices.ps1
-# Author: ENIGMA
+# Author: Joshua Coleman
 # ═══════════════════════════════════════════════════════════════════════════════
 
 param(
@@ -9,7 +9,7 @@ param(
 )
 
 Write-Host "═══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host " ENIGMA — Starting DateApp Services" -ForegroundColor Cyan
+Write-Host " DATE-APP — Starting DateApp Services" -ForegroundColor Cyan
 Write-Host "═══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
 
 $logDir = "E:\ANTIGRAVITY\logs"

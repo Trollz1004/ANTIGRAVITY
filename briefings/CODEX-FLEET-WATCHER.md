@@ -2,11 +2,11 @@
 
 ## Purpose
 
-`scripts/codex-fleet-watcher.py` is the consolidated ENIGMA-side daily watcher for Sabretooth.
+`scripts/codex-fleet-watcher.py` is the consolidated daily watcher for Sabretooth.
 
 It complements the existing local stack:
 - `scripts/codex_task_sentry.py`
-- `scripts/opus-guardian.py`
+- `scripts/clawx-control/opus-guardian.py`
 - `scripts/install-safe-node-automation-tasks.ps1`
 - `scripts/clawx-control/Invoke-CodeX-BrainCheckpoint.ps1`
 
@@ -26,7 +26,7 @@ It does **not** replace those tools. It audits them and raises escalation when t
    - `onlinerecycle.org`
 5. Optional Cloudflare zone status if a valid token exists
 6. Existing integrity audits:
-   - `scripts/opus-guardian.py`
+   - `scripts/clawx-control/opus-guardian.py`
    - `scripts/scan-public-copy-policy.py`
 7. Hashes for key source-of-truth files
 
@@ -66,7 +66,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\Invoke-Code
 
 ## Notes
 
-- This is ENIGMA-safe only. It does not audit OMEGA repos or OMEGA public properties.
+- This watcher audits the live repo and current public surfaces only. Archived or recovery-only properties stay out of scope unless explicitly added.
 - Default public-surface checks stay limited to the canonical live customer domains. Add extra domains explicitly through `CODEX_WATCHER_DOMAINS` or the `--domains` flag when they are intentionally live and maintained.
 - Missing or expired Cloudflare/Twilio env is treated as a warning, not a hard failure.
 - It is meant to give one daily truth snapshot, not to execute recovery work automatically.

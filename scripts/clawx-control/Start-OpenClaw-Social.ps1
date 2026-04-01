@@ -4,7 +4,7 @@
 # Date: 2026-03-19
 # Location: C:\ANTIGRAVITY\scripts\Start-OpenClaw-Social.ps1
 #
-# Purpose: Initialize OpenClaw for API-first ENIGMA social publishing
+# Purpose: Initialize OpenClaw for API-first local social publishing
 # Usage: Run from Sabretooth as primary orchestrator
 
 param(

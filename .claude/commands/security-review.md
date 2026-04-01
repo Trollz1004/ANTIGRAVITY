@@ -10,7 +10,7 @@ Run a security review on recently changed files.
 2. **For each changed file**, check against Opus Guardian invariants:
    - **Zero Secrets in Source**: Scan for API keys, tokens, passwords (regex: `sk_live_`, `EAAAl`, `Bearer `, hardcoded URLs with keys)
    - **Auth on Every Endpoint**: If a new FastAPI router was added, verify it has auth dependency
-   - **Iron Wall**: ENIGMA code must not reference OMEGA paths (ai-solutions.store, CharityRouter100, omega_charity)
+   - **Doctrine Boundary**: live code must not reintroduce retired split markers or unsupported charity-side routing claims
    - **Revenue Policy**: If metrics.py was touched, verify the founder-directed 10% charitable cap is hardcoded (not from env/config)
    - **PII Isolation**: If /metrics/ endpoints changed, verify no emails/names/user IDs leak
    - **No Raw SQL**: Check for f-string SQL or string interpolation in queries

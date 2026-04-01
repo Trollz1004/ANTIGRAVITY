@@ -1,4 +1,4 @@
-# PROTOCOL OMEGA — ON-CHAIN STATUS
+# HISTORICAL ON-CHAIN STATUS
 
 Last updated: 2026-03-30
 
@@ -91,13 +91,13 @@ Earlier versions of this file referenced a second set of wallet addresses:
 addresses not tied to the live GospelDonation deployment.  They were never used as
 constructor args for any deployed contract.
 
-**Resolution:** They are NOT canonical.  Do not use them for any Protocol Omega
+**Resolution:** They are NOT canonical. Do not use them for any live deployment or routing
 deployment.  The canonical set is the live-verified one listed above.
 
 **Exception:** `0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B` is used in
 `contracts/scripts/deploy-charity.js` for the `CharityRouter100.sol` deployment
-(OMEGA side — 100% to charity).  That is a separate, OMEGA-only contract and is
-correct for that specific purpose.  It is not part of the ENIGMA 60/30/10 split.
+(historical dedicated charity-side contract). That is a separate historical path and is
+correct for that specific purpose. It is not part of the current LLC operating doctrine.
 
 ## Historical Contract Rule
 

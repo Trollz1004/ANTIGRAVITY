@@ -72,7 +72,7 @@ $trackedCopies = @(
     "memory\CODEX-QUICK-MEMORY.md",
     "memory\activeContext.md",
     "memory\sessionHandoff.md",
-    "briefings\PROTOCOL-OMEGA-ONCHAIN-STATUS.md"
+    "briefings\HISTORICAL-ONCHAIN-STATUS.md"
 )
 
 foreach ($relativePath in $trackedCopies) {

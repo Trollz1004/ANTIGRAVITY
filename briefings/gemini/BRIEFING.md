@@ -43,7 +43,7 @@ Role: UI, browser, and static-surface collaborator under Codex orchestration
 2. do not use stale Stripe or old dashboard narratives
 3. do not reintroduce unsupported live-impact claims
 4. do not use RANDOM salvage as operational truth
-5. do not drift into OMEGA
+5. do not drift into retired split-separation doctrine
 6. do not assume OpenClaw remotes are live unless Codex has verified them
 7. do not add or change OpenClaw messaging channels without explicit Codex direction
 8. do not replace the Cloud Run multiplayer URL with another hostname unless Codex has verified that cutover

@@ -1,7 +1,7 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # SYSTEMD SERVICE: Marketing Engine (when running standalone without Docker)
 # Location: /etc/systemd/system/marketing-engine.service
-# Author: ENIGMA
+# Author: Joshua Coleman
 # ═══════════════════════════════════════════════════════════════════════════════
 
 [Unit]

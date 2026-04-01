@@ -30,7 +30,7 @@ Last Updated: 2026-03-31
 ## Current Financial Doctrine
 
 - Current LLC operations use a founder-directed conservative `10% charitable cap`
-- Historical `60/30/10` and `100% charity` references are legacy context, not current live doctrine for LLC-controlled revenue
+- Historical split-era and absolute-charity references are legacy context, not current live doctrine for LLC-controlled revenue
 - Customer purchases are not charitable contributions
 
 ## The Stakes

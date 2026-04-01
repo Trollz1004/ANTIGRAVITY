@@ -1,8 +1,8 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# ENIGMA PRODUCTION STACK — T5500 LINUX DEPLOYMENT
+# DATE-APP PRODUCTION STACK — T5500 LINUX DEPLOYMENT
 # YouAndINotAI Dating Platform + Marketing Engine
 # Location: /opt/dateapp/docker-compose.yml (on T5500 Linux)
-# Author: ENIGMA for Joshua Coleman (Trollz1004)
+# Author: Joshua Coleman (Trollz1004)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 version: '3.8'

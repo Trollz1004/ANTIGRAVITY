@@ -38,7 +38,7 @@ The continuity rule is conservative:
 
 1. Keep the live products operable
 2. Preserve the repo, records, and verified payment paths
-3. Keep ENIGMA and OMEGA separated
+3. Keep current live doctrine aligned to the documented conservative `10%` cap and fact-only public claims
 4. Do not escalate financial or legal claims beyond documented truth
 5. Default to the strictest factual reading of `AGENTS.md`, `REPOSITORY_RECORD.md`, and the current legal-constraints briefing
 
@@ -61,4 +61,4 @@ The current `10%` doctrine may change only when all of the following are true:
 
 ## Override Rule
 
-If an older file conflicts with this document, `AGENTS.md`, `briefings/REPOSITORY_RECORD.md`, or `briefings/PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`, treat the older file as legacy unless Josh explicitly restores it.
+If an older file conflicts with this document, `AGENTS.md`, `briefings/REPOSITORY_RECORD.md`, or `briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`, treat the older file as legacy unless Josh explicitly restores it.

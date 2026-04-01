@@ -54,7 +54,7 @@ Purpose: current shared continuity doc for repo truth, working style, and non-ne
 ## Hard Constraints
 
 - No secret values in chat, git, or tracked docs
-- No OMEGA repo work from ENIGMA-side tasks
+- No retired or recovery-only repo work from live tasks
 - No customer-facing `donate`, `donation`, `solicitation`, or `tax-deductible` language
 - No stale `E:\ANTIGRAVITY`, `C:\OPUSONLY`, or archived exports as live truth
 - No git drift left behind after a completed task

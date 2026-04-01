@@ -11,7 +11,7 @@ Paste or reference this file when syncing Claude, Gemini, Codex, or another trus
 - First files to anchor on:
   - `C:\ANTIGRAVITY\AGENTS.md`
   - `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`
-  - `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`
+  - `C:\ANTIGRAVITY\briefings\CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
   - `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
   - `C:\ANTIGRAVITY\memory\projectState.md`
 

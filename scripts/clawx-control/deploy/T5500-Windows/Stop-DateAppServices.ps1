@@ -1,13 +1,13 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# ENIGMA — Stop DateApp Windows Services
+# DATE-APP — Stop DateApp Windows Services
 # Location: E:\ANTIGRAVITY\scripts\deploy\T5500-Windows\Stop-DateAppServices.ps1
-# Author: ENIGMA
+# Author: Joshua Coleman
 # ═══════════════════════════════════════════════════════════════════════════════
 
 #Requires -RunAsAdministrator
 
 Write-Host "═══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host " ENIGMA — Stopping DateApp Services" -ForegroundColor Cyan
+Write-Host " DATE-APP — Stopping DateApp Services" -ForegroundColor Cyan
 Write-Host "═══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
 
 $services = @(

@@ -146,7 +146,7 @@ layer. Deployed and running. Not theoretical.
 | Ollama (Local) | llama3.2 | Ready — Free |
 
 Currently 2/6 active. Full 6/6 requires API keys for Claude, Gemini, Perplexity, Grok.
-**Iron Wall: ACTIVE** — enforced at dashboard level.
+**Current doctrine guardrails: ACTIVE** — enforced at dashboard level.
 **Broadcast Mode** — one prompt to all 6 simultaneously. Independent responses. Zero cross-contamination.
 
 **Built by:** Manus using Claude's tools. The governance system the team designed together.
@@ -188,12 +188,12 @@ composition may not be altered, reduced, or replaced without Josh's explicit ord
   recovery-critical operational truth must be documented plainly in the repo or approved
   vault path. No hidden authority routes. No intentional black boxes.
 - **NO git push/pull** to remote repos without explicit Josh order
-- **OMEGA, OMEGA365 repos**: DO NOT TOUCH
+- **Retired/recovery-only repos and folders are non-authoritative**: do not use them as live doctrine, routing, or payment truth
 - **Secrets in .env ONLY** — never in chat, never in git. GitHub PAT in Windows Credential Manager.
 - **Live repo write scope**: Only Codex, Claude, Gemini, and GitHub-approved repo workflows may write directly to `C:\ANTIGRAVITY`.
   All other platforms must work through sandbox lanes and the sandbox repo first.
 - **Worker count max**: 10
-- **Iron Wall**: ENIGMA (profit) and OMEGA (charity) NEVER cross
+- **Revenue doctrine boundary**: no operational or customer-facing surface may claim routing above the current conservative `10%` charitable cap for LLC-controlled revenue unless a new canonical legal update replaces it
 - **FL §496.405**: NEVER use "donate" / "donation" / "solicitation" in customer-facing code.
   Correct: "contractual revenue disbursement." Hooks enforce this.
 - **No mock/simulation data** — real or fail honestly
@@ -321,17 +321,16 @@ New ideas, experimental platforms, and speculative automation go here first.
 - **Public messaging rule:** do not brag about percentages. Product value comes first. If impact is mentioned,
   keep it factual, restrained, and non-solicitation.
 - **Legacy chain reference:** Base Mainnet `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
-  and the historical 60/30/10 wallets remain part of project history, not the current safe operating doctrine for
+  and its historical payout wallets remain part of project history, not the current safe operating doctrine for
   live LLC revenue.
 
 ---
 
-## IRON WALL
+## CURRENT PUBLIC-SURFACE BOUNDARY
 
-| ENIGMA (Profit) | OMEGA (Charity-Side Isolated Lane) |
-|-----------------|------------------------------------|
-| YouAndINotAI, onlinerecycle.org, onlinerecycle.square.site (eBay crosslister) | ai-solutions.store |
-| **SEPARATION IS ABSOLUTE** | |
+- `youandinotai.com`, `onlinerecycle.org`, `onlinerecycle.square.site`, and `ai-solutions.store` must all follow the same factual public-claim rule
+- No active surface may present retired split-era percentages, absolute-charity claims, named-beneficiary routing, or automatic charity-side separation as current live LLC doctrine
+- Historical chain artifacts remain history only unless a future canonical update explicitly restores a different operating model
 
 ---
 
@@ -346,7 +345,7 @@ New ideas, experimental platforms, and speculative automation go here first.
 | Designer | Gemini 3.1 | AI Images / UI Assets / Mockups | FREE |
 | Motion | Codex + Remotion | Motion Graphics / Video as Code | FREE |
 | Clawed (Dev) | Codex + Opus | Code, Feature Ships | FREE |
-| Sentinel | Gemini 3.1 | Code Quality, Security, Iron Wall | FREE |
+| Sentinel | Gemini 3.1 | Code Quality, Security, Doctrine Drift Checks | FREE |
 | Growth | Atlas + Scribe | Reddit/X Engagement & Acquisition | FREE |
 | Clipper | 9020 SSH Script | YouTube to Social Clipping | FREE |
 | Ryder (Admin) | Gemini 3.1 | Personal Support & Daily Ops | FREE |
@@ -374,12 +373,12 @@ Hooks (`.Codex/settings.json`):
 - PreToolUse: .env file protection, §496.405 donate-guard
 - PostToolUse: Prettier auto-format on edit
 
-Skills (`/command`): status, health, iron-wall, launch-checklist, cost-check, my-workflow,
+Skills (`/command`): status, health, policy-boundary, launch-checklist, cost-check, my-workflow,
 deploy-check, square-status, donate-scan, security-review
 
 MCP Servers (`.mcp.json`): antigravity-sentry, postgres, playwright, memory
 
-CI: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405, Iron Wall)
+CI: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405, doctrine drift scan)
 
 ---
 
@@ -399,9 +398,9 @@ CI: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405,
 
 ## OPUS GUARDIAN — SECURITY (PERMANENT)
 
-Run: `python scripts/opus-guardian.py`
+Run: `python scripts/clawx-control/opus-guardian.py`
 
-8 invariants: Zero Secrets in Source, Auth on Every Endpoint, Iron Wall Enforcement,
+8 invariants: Zero Secrets in Source, Auth on Every Endpoint, Legacy Routing Drift Blocker,
 Revenue Split is CODE not CONFIG, PII Isolation, No Raw SQL, Input Validation, CORS Locked.
 Score: 96%.
 
@@ -528,12 +527,12 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 ### PRELAUNCH TAX ADJUSTMENT SYNC - 2026-03-31 10:00:00
 - **Authority:** Joshua directed a forced prelaunch doctrine adjustment for LLC-controlled revenue.
 - **Current Doctrine:** live LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`.
-- **Not Current Doctrine:** historical `60/30/10`, `100% charity`, and `100% DAO` language for LLC-controlled revenue.
+- **Not Current Doctrine:** historical split-era and absolute-charity language for LLC-controlled revenue.
 - **Interpretation Rule:** do not treat the `10%` cap as universal legal advice; treat it as the current conservative operating doctrine unless a future canonical doc replaces it.
-- **Team Read Order:** `AGENTS.md` -> `briefings/REPOSITORY_RECORD.md` -> `briefings/PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md` -> `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`.
+- **Team Read Order:** `AGENTS.md` -> `briefings/REPOSITORY_RECORD.md` -> `briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md` -> `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`.
 
 ---
 ### AIDOESITALL SURFACE REMEDIATION - 2026-04-01 11:31:40
 - **`www.aidoesitall.website`:** stale Pages deployment removed; now served from repo-tracked source `_deploy/aidoesitall-www` on project `for-the-kids-contribute`.
 - **`api.aidoesitall.website/*`:** stale `for-the-kids-api` charity payload replaced with repo-tracked guard Worker source at `infra/cloudflare/aidoesitall-api-guard`.
-- **Public Claim Rule:** these hostnames no longer publish stale `60%` / `100% charity` claims and now act only as safe gateway or metadata surfaces.
+- **Public Claim Rule:** these hostnames no longer publish stale split-era or absolute-charity claims and now act only as safe gateway or metadata surfaces.
