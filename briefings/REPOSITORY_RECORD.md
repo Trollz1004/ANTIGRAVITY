@@ -1,65 +1,66 @@
 # REPOSITORY RECORD - SABRETOOTH LIVE STATE
 
-> **Date:** March 30, 2026
-> **Status:** live repo updated with dashboard gateway replacement, sandbox repo pushed with PaperClip pilot, continuity refreshed, financial doctrine pivoted to current 10% operating cap
-> **Verified Live Baseline Before This Refresh:** `131c455`
-> **Sandbox Repo Commit:** `0f1786f`
-> **Authority:** Joshua Coleman
-
----
+Date: March 31, 2026
+Authority: Joshua Coleman
+Status: authoritative repo refreshed after prelaunch doctrine audit, memory cleanup, sync-prompt cleanup, and governance-surface correction
 
 ## Repository Truth
 
-- **Authoritative root:** `C:\ANTIGRAVITY`
-- **Git truth:** `main` / `origin/main`
-- **Live worktree state before the March 29 sync refresh:** clean on `131c455`
-- **Threshold of Trust:** enforced as an operational boundary, while `AGENTS.md` remains the canonical authority file
-- **Continuity vault root:** `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
-- **Sandbox repo:** `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git` on `main` at `0f1786f`
+- Authoritative root: `C:\ANTIGRAVITY`
+- Git truth: `main` / `origin/main`
+- Current clean pre-audit baseline before this March 31 sweep: `3c2c096`
+- Continuity vault root: `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
+- Sandbox repo remains separate and non-authoritative for live repo truth
 
 ## Current Runtime Truth
 
 | Component | State | Notes |
 |-----------|-------|-------|
-| Repo Baseline | READY | clean live baseline on `131c455`; canonical briefings refreshed on March 29, 2026 |
-| Intentionality Engine | READY | Squad Protocol, Breeze Bypass, and Suitability Guard remain present in the repaired backend |
-| Beta Access | ACTIVE | `FORTHEKIDS` seeds the deterministic beta-access path with a `5.0` mission score and `Intentional` badge |
-| Date-App Payments | GREEN | Square session creation remains verified for Bot-Shield, founder tiers, and royalty checkout flows |
-| Square Integration | ISOLATED | `ebaytrashortreasure@gmail.com` stays reserved for YouAndINotAI Square/PayPal; `joshlcoleman@gmail.com` handles the non-date-app Square lane |
-| Public Copy Hardening | LIVE | public copy generators and Square catalog messaging were hardened at `dd584a1` |
-| OnlineRecycle | LIVE | direct-upload Cloudflare Pages deploy completed on March 27, 2026 and verified live from `_deploy/onlinerecycle` |
-| Dashboard Mapping | LIVE | `dashboard.aidoesitall.website` maps to Cloudflare Pages project `jules-dashboard`; `_deploy/dashboard-gateway` is deployed live and routes trusted users to the authenticated PaperClip workspace |
-| Root AIDoesItAll Mapping | OPEN | `www.aidoesitall.website` source is still not identified in this repo |
-| E: Drive | STAGED | sandbox mirror remains at `E:\sandbox-repo` and GenSpark staging remains at `E:\GensparkPODnTube` |
-| BRAIN MCP | READY | audit/context mirror scaffolded in `C:\ANTIGRAVITY\brain-mcp`; auth-ready with local registry wiring |
-| Unified Bridge | LIVE | AnythingLLM + BRAIN MCP + Ollama wired; launcher remains on Desktop |
-| PaperClip Pilot | SANDBOX ONLY | runtime/source lives in `E:\sandbox-repo\paperclip`; pilot state lives in `E:\sandbox-repo\paperclip-antigravity`; pushed in sandbox repo at `0f1786f` |
-| 9020 Node | VERIFIED | repo mirror was last confirmed clean and aligned to the live baseline before this March 29 refresh |
-| T5500 Node | VERIFIED | repo mirror was last confirmed clean and aligned to the live baseline before this March 29 refresh |
+| YouAndINotAI frontend | LIVE | Cloudflare Pages |
+| YouAndINotAI backend/API path | LIVE | Cloud Run / Cloudflare-backed API path remains the active backend surface |
+| Date-app payments | GREEN | Square checkout-session creation remains verified for Bot-Shield, founder tiers, and royalty checkout |
+| OnlineRecycle | LIVE | service-first public copy remains the live model |
+| Dashboard gateway | LIVE | `dashboard.aidoesitall.website` now serves the no-index auth gateway |
+| PaperClip runtime | SANDBOX / PRIVATE | sandboxed and not part of the live repo runtime |
+| Root AIDoesItAll mapping | OPEN | `www.aidoesitall.website` source still not identified in this repo |
 
 ## Current Financial Doctrine
 
-- **Founder-directed rule:** current LLC operations use a conservative **10% charitable cap** until Josh explicitly changes it after formal legal/tax review or a documented partner/co-venture structure.
-- **Not current doctrine:** `60/30/10`, `100% charity`, and `100% DAO` claims for live LLC-controlled revenue.
-- **Legacy chain truth:** Base Mainnet `GospelDonation.sol` and the historical 60/30/10 wallets remain part of project history, not current safe operating doctrine for live revenue.
-- **Public copy rule:** lead with product/service value. If impact is mentioned, keep it factual, restrained, and non-solicitation.
+- Live LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`
+- This is the current safe operating doctrine for repo, launch, copy, and audit work
+- It is not presented as universal legal advice or a blanket legal conclusion
+- Historical `60/30/10`, `100% charity`, and `100% DAO` language is legacy unless canonical docs explicitly restore it
+- Historical Base Mainnet `GospelDonation.sol` remains real chain history, not current automatic doctrine for live LLC-controlled revenue
 
-## Product State
+## March 31 Audit Sweep
 
-- **YouAndINotAI:** repaired backend baseline remains the clean fallback point for production work, and the first-payment path now depends on the bound internal checkout flow instead of raw public Square links.
-- **YouAndINotAI Public Landing:** reskinned on March 30, 2026 to the new brutalist public shell with product-first copy, account-bound Bot-Shield positioning, and no public `10%`, `Protocol Omega`, or `donate` language.
-- **OnlineRecycle:** public site remains back on service-first language and no longer relies on the prior overexposed transparency copy.
-- **Repo README:** remains aligned to the current public ecosystem surfaces at a high level.
-- **PaperClip:** intentionally remains off `C:\ANTIGRAVITY`; the live public-facing integration is now an authenticated gateway entrypoint, while the runtime itself stays in the sandbox lane.
-- **OMEGA / AI-Solutions:** untouched in this pass to preserve charity-side isolation.
-- **Mission Doctrine:** canonical docs now reflect the founder-directed 10% cap for current LLC operations instead of treating 60/30/10 as live operating truth.
+This refresh was performed so the AI team can pull the repo and see the forced prelaunch adjustment clearly instead of misreading it as compromise or drift.
+
+Refreshed in this sweep:
+
+- canonical memory files
+- AI sync prompts
+- ClawX repo-facing governance docs
+- MCP protocol metadata
+- date-app authenticated impact labeling
+- repo-level doctrine and continuity summaries
+
+Primary adjustment record:
+
+- `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
+
+## Public Copy Rule
+
+- lead with product and service value
+- do not market percentages
+- do not frame purchases as donations
+- keep impact claims factual, restrained, and non-solicitation
 
 ## Operational Notes
 
-- **Cloudflare Deploy Truth:** the verified working Pages path for direct-upload projects is the Cloudflare API/upload-token flow or authenticated Wrangler deploy against a known Pages project, not blind reliance on stale local mappings.
-- **Local Secret Handling:** no secret values were moved into git or tracked briefings; env/vault/secret-manager lookup remains the rule.
-- **Square Isolation:** `ebaytrashortreasure@gmail.com` remains isolated to the date-app Square/PayPal lane; `joshlcoleman@gmail.com` remains the primary non-date-app commerce identity.
-- **Sandbox Hygiene:** the PaperClip pilot package is now pushed without runtime state or inline tokens; bridge scripts were rewritten to use local env lookup instead of tracked secrets.
-- **Personal Vault:** continuity copies were refreshed again on March 29, 2026.
+- Square remains the live payment rail
+- `ebaytrashortreasure@gmail.com` remains the isolated date-app commerce lane
+- `joshlcoleman@gmail.com` remains the primary non-date-app commerce identity
+- direct-upload Cloudflare Pages deployments should continue to use the verified API/upload-token path or a known authenticated project path
 
-*This file is the repo-level state summary for Sabretooth as of March 30, 2026.*
+This file is the repo-level state summary for Sabretooth as of March 31, 2026.

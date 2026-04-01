@@ -228,7 +228,7 @@ After these periods, data is permanently deleted or anonymized.
 
 ## 13. Third-Party Links
 
-Our platform may contain links to third-party websites (e.g., Shriners Children's Hospitals and Square-hosted checkout pages). We are not responsible for the privacy practices of those sites. Please review their privacy policies before providing them with your information.
+Our platform may contain links to third-party websites (e.g., Square-hosted checkout pages and outside volunteer organizations). We are not responsible for the privacy practices of those sites. Please review their privacy policies before providing them with your information.
 
 ## 14. Children's Privacy (COPPA Compliance)
 

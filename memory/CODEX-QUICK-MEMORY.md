@@ -1,58 +1,49 @@
 # CODEX QUICK MEMORY
 
-Updated: 2026-03-14
+Updated: 2026-03-31
 
 ## Hard Truth
 
 - Canonical workspace is `C:\ANTIGRAVITY` on `origin/main`
-- One real branch: `main`
-- Authority order: Josh -> Codex -> all other agents
-- Square is the live payment rail
-- Protocol Omega live split remains `60 / 30 / 10`
-- Clean baseline was re-established across Sabretooth, 9020, and T5500 on 2026-03-13 after Codex cleaned remote drift and re-synced all nodes
+- Josh is the sole authority; no AI outranks another AI
+- `AGENTS.md` and `briefings/REPOSITORY_RECORD.md` are the first files to trust
+- Current live LLC operating doctrine is a founder-directed conservative `10% charitable cap`
+- Historical `60/30/10`, `100% charity`, and `100% DAO` language is legacy history unless canonical docs restore it
+- Square is the live payment rail; Stripe is legacy only
+- Customer purchases are not charitable contributions
+
+## Product Truth
+
+- `youandinotai.com` is the live public product on Cloudflare Pages
+- Current launch target remains April 4, 2026
+- Bot-Shield, founder monthly, 3-month founder, 12-month founder, and royalty checkout-session creation were verified live
+- `onlinerecycle.org` is live with service-first copy
+- `dashboard.aidoesitall.website` is now a gateway to the authenticated PaperClip workspace
+- PaperClip runtime stays sandboxed on `E:\sandbox-repo`
 
 ## Team Reality
 
-- Codex is final repo truth and push closeout owner
-- Gemini and Claude are bounded collaborators
-- Comet is research-only
-- Grok remains a support lane under Codex routing, but the stable OpenClaw baseline is now local Ollama instead of API-model drift
-- Sabretooth owns the primary OpenClaw Telegram orchestrator
-- T5500 may run a separate backup Telegram bot
-- 9020 has no messaging channels configured by default
+- Codex is repo executor, verifier, and closeout owner; not policy authority
+- Claude, Gemini, Perplexity, and Grok remain protected founding peers
+- Manus is continuity and orchestration support, not an authority layer
+- OpenClaw remains self-hosted and non-canonical for live repo truth
 
-## OpenClaw Runtime
+## Financial / Doctrine Guardrails
 
-- Sabretooth local gateway: `ws://127.0.0.1:18789`
-- Stable OpenClaw model baseline on Sabretooth, 9020, and T5500: `ollama/qwen2.5:7b`
-- Use `openclaw status` as the runtime truth check
-- `octui` opens the OpenClaw TUI
-- `claudelive` launches Claude Code CLI in bypass-permissions mode
-- In the Codex embedded PowerShell terminal, launch Gemini with `& 'C:\ANTIGRAVITY\scripts\Start-Gemini-Clean.ps1'`
-- `gemini` in the ANTIGRAVITY startup shell is already wired to that same clean wrapper script
-- `gemraw` in the startup shell calls the raw `gemini.cmd` path and should be used only when the shell already has a normal `C:\ANTIGRAVITY` cwd
-- Gemini CLI fails if it inherits the Codex terminal `\\?\` provider path, so the wrapper must stay the default launch path inside the app
-- T5500 WhatsApp is disabled; keep backup messaging Telegram-only unless Josh explicitly changes that
-- Sabretooth OpenClaw session drift can come from local `.openclaw` session history; if chat behavior goes off-mission, verify `openclaw status` and reset the local session store instead of trusting the stale chat context
-- Sabretooth now runs `Sessions: 0 active` after a full local session-store reset
-- 9020 and T5500 were normalized to the same Ollama model/config, but remain cold-start utility nodes rather than always-on OpenClaw runtime nodes
-- Legacy duplicate OpenClaw roots on `E:` were removed on Sabretooth, 9020, and T5500
-- Expect OpenClaw to auto-recreate a minimal `~\\.openclaw\\agents\\main` scratch store after some CLI commands; treat that as internal scratch, not a second real deployment
+- Do not present the current `10%` cap as universal legal advice or settled tax law
+- Do present it as the current founder-directed conservative operating doctrine for LLC-controlled revenue
+- Keep historical Base contract references clearly labeled as historical chain context
+- Do not imply staking, yield, dead-man's-switch control, multisig control, or automatic Square-to-chain routing unless directly verified
+- Do not use `donate`, `donation`, `solicitation`, or `tax-deductible` language in customer-facing surfaces
 
 ## Node Baseline
 
-- Sabretooth: clean on `main`
-- 9020: clean on `main`; pre-clean drift preserved in `stash@{0}` with label `codex-preclean-20260313-baseline`
-- 9020 offloaded leftover dir: `C:\Users\joshl\Documents\ANTIGRAVITY-preclean-20260313\ClawX-main`
-- T5500: clean on `main`
+- Sabretooth: primary live repo node
+- 9020: support / remote ops node, mirror only when clean
+- T5500: utility / build node, mirror only when clean
 
-## Guardrails
+## Closeout Rule
 
-- Do not let recovery docs override repo truth
-- Do not claim multi-node OpenClaw is live until remotes are verified
-- Do not let remote backup bots become implied primaries in repo truth
-- Do not re-enable WhatsApp on T5500 unless Josh explicitly asks for that backup lane
-- After every push on Sabretooth, immediately check and fast-forward `C:\ANTIGRAVITY` on 9020 and T5500 if those worktrees are clean
-- Do not leave finished work unpushed
-- If any temp branch/worktree exists, merge/push/delete before closeout
-- Grok/OpenClaw may update a Personal Vault continuity note only when Josh explicitly asks; the vault never overrides repo truth
+- No false claims ever
+- No finished work left unpushed after verification
+- After every push from Sabretooth, fast-forward `9020` and `T5500` only if their worktrees are clean

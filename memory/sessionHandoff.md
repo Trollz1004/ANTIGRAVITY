@@ -1,32 +1,34 @@
-# Session Handoff - 2026-03-30
+# Session Handoff - 2026-03-31
 
 ## Summary
-The live repo now carries the dashboard gateway replacement while the sandbox repo continues to carry the PaperClip pilot on `0f1786f`. The PaperClip runtime remains isolated on `E:` only, the public dashboard hostname now serves an authenticated gateway, the continuity layer is refreshed to the March 30 state, and the repo doctrine now reflects the founder-directed conservative 10% charitable cap for current LLC operations.
+
+The live repo has now been refreshed so the AI team can pull a factual baseline after the forced prelaunch doctrine adjustment. Canonical memory, sync prompts, governance docs, and protocol metadata now reflect the current conservative `10% charitable cap` doctrine for LLC-controlled revenue instead of letting legacy `60/30/10` and `100% DAO` language masquerade as current truth.
 
 ## Accomplishments
 
-- **Sandbox repo push:** PaperClip source plus the isolated `paperclip-antigravity` pilot package were sanitized, committed, and pushed on `main` at `0f1786f`.
-- **Dashboard hostname resolution:** Cloudflare Pages project `jules-dashboard` was confirmed as the live owner of `dashboard.aidoesitall.website`.
-- **Gateway replacement:** `_deploy/dashboard-gateway` was added as the replacement surface that routes trusted users to the authenticated PaperClip workspace.
-- **Secret cleanup:** inline AnythingLLM API key and inline OpenClaw token were removed from tracked sandbox files; local env lookup now drives those paths.
-- **Live repo cleanup:** the three leftover bundle helper scripts were archived out of `C:\ANTIGRAVITY`, returning the live worktree to a clean state.
-- **Canonical briefings refreshed:** `REPOSITORY_RECORD.md`, `UNIVERSAL-SYNC-PROMPT.md`, and the main memory files now reflect the March 29 split between live repo truth and sandbox pilot truth.
-- **Vault continuity:** the March 29 continuity snapshots were refreshed in the unlocked Personal Vault.
+- canonical memory files rewritten around current repo truth
+- AI sync prompts rewritten or superseded so they no longer push stale `60/30/10` doctrine
+- ClawX repo-facing docs corrected to stop overstating governance and legacy split claims
+- MCP protocol metadata normalized away from stale Stripe, node, and multisig assumptions
+- date-app authenticated impact navigation cleaned up
+- current adjustment recorded in `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
 
 ## Important Current Truth
 
-- **Live baseline before this refresh:** `131c455`
-- **Sandbox commit:** `0f1786f`
-- **Backbone:** Only Codex, Claude, Gemini, and GitHub-approved workflows touch `C:\ANTIGRAVITY`.
-- **Sandbox:** third-party and experimental platforms stay off the live repo and use sandbox lanes.
-- **Financial Doctrine:** live LLC operations are now documented with a conservative 10% charitable cap. Historical 60/30/10 and 100% charity language are legacy, not current operating truth.
-- **Isolation:** `ebaytrashortreasure@gmail.com` remains the date-app Square/PayPal lane; `joshlcoleman@gmail.com` remains the non-date-app commerce lane.
-- **Node Sync:** `9020` and `T5500` were last verified aligned to the clean live baseline before this March 29 briefing refresh; sync forward again after the next live push.
-- **Live deploy truth:** `onlinerecycle.org` remains verified live, and `dashboard.aidoesitall.website` is now explicitly mapped to `jules-dashboard` for controlled redeploy as an auth gateway.
-- **PaperClip truth:** runtime/source lives at `E:\sandbox-repo\paperclip`; pilot state lives at `E:\sandbox-repo\paperclip-antigravity`; BRAIN treats it as sandbox-only and non-certifying.
+- Canonical repo: `C:\ANTIGRAVITY` on `main`
+- Josh is the sole authority
+- no AI outranks another AI
+- live LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`
+- historical `60/30/10`, `100% charity`, and `100% DAO` references are legacy unless canonical docs restore them
+- Square remains the live payment rail
+- PaperClip remains sandboxed/private
+- `www.aidoesitall.website` source still needs explicit mapping
 
-## Pending Items
+## Next Reader Rule
 
-1. client adoption of BRAIN MCP for session logging.
-2. identify the repo source for `www.aidoesitall.website` before any root-domain redeploy.
-3. decide when the PaperClip sandbox pilot has earned a thin bridge/docs promotion into `C:\ANTIGRAVITY`.
+Read these first:
+
+1. `C:\ANTIGRAVITY\AGENTS.md`
+2. `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`
+3. `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`
+4. `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`

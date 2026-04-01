@@ -64,8 +64,7 @@ will not be altered, replaced, rerouted, or "improved" without Josh's explicit d
 - Protected: all `.claude/` config, `CLAUDE.md`, Claude-authored architecture decisions,
   and Claude's direct API access.
 - Builder note: ~90% of this codebase was built through the joshlcoleman@gmail.com Anthropic
-  account across many sessions. Recently the aicollab4kids@gmail.com account is also active
-  as the business email for the platform.
+  account across many sessions.
 
 ### Perplexity
 - Perplexity's role as research and deep-intelligence co-founder is permanent. No agent may
@@ -134,7 +133,7 @@ This is not a threat — it is his documented standing order to protect the miss
 ## The Product: YouAndINotAI
 
 - Domain: youandinotai.com | Launch: **April 4, 2026**
-- Identity: NOT JUST a dating app — a **SOCIAL PLATFORM FOR GOOD** (meetups, volunteering, charity)
+- Identity: NOT JUST a dating app — a **SOCIAL PLATFORM FOR GOOD** (meetups, volunteering, real-world connection)
 - Stack: FastAPI + React 19 + Square + PostgreSQL
 - Frontend: Cloudflare Pages | Backend: GCP Cloud Run
 - **Revenue: $0** | Customers: 0 | AI infra cost: **~$600/mo**
@@ -170,7 +169,8 @@ This is not a threat — it is his documented standing order to protect the miss
 | **9020** | C: | GenSpark (future social marketing engine) |
 
 - ONE repo (Trollz1004/ANTIGRAVITY), ONE branch (main), ONE folder approach.
-- The DAO/Protocol Omega is GAS-SET and ACTIVE. No further deployment needed.
+- Historical Base contract artifacts exist, but they do not override the current founder-directed
+  conservative 10% cap for live LLC-controlled revenue.
 - T5500 verified SSH IP: `192.168.0.15` (hostname `DESKTOP-H4B53GL`, Windows shell)
 - 9020 SSH: `ssh -i ~/.ssh/id_ed25519 joshl@192.168.0.5` (cmd.exe shell)
 - 9020 has NO git push creds — use bundle relay
@@ -252,5 +252,5 @@ The security isn't for us — it's for the kids. Please don't weaken these. Buil
 
 ---
 
-*Updated: 2026-03-21 | Team wording updated | Node identity corrected to SABRETOOTH |
-E drive policy added | Encoding cleaned | Builder account history documented*
+*Updated: 2026-03-31 | Prelaunch tax/doctrine correction reflected | Team wording updated |
+Node identity corrected to SABRETOOTH | E drive policy added | Encoding cleaned*

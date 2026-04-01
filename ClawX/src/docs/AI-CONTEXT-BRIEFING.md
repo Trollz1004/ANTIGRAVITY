@@ -1,5 +1,8 @@
 # 🧠 AI CONTEXT BRIEFING — ANTIGRAVITY PLATFORM
 
+> Historical briefing only. Do not use this file alone as current financial or deployment truth.
+> Current doctrine lives in `C:\ANTIGRAVITY\AGENTS.md`, `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`, and `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`.
+
 > Feed this to any AI starting a new session with Josh.
 > Last updated: 2026-02-23 by Gemini (Antigravity)
 
