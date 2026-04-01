@@ -519,3 +519,11 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 - **Dashboard Replacement:** `_deploy/dashboard-gateway` is live and replaces the old public dashboard with a no-index business-access gateway.
 - **Auth Handoff:** the gateway routes trusted users to the authenticated PaperClip workspace at `https://mcp.youandinotai.com`.
 - **Still Open:** `www.aidoesitall.website` source mapping remains unresolved in this repo.
+
+---
+### PRELAUNCH TAX ADJUSTMENT SYNC - 2026-03-31 10:00:00
+- **Authority:** Joshua directed a forced prelaunch doctrine adjustment for LLC-controlled revenue.
+- **Current Doctrine:** live LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`.
+- **Not Current Doctrine:** historical `60/30/10`, `100% charity`, and `100% DAO` language for LLC-controlled revenue.
+- **Interpretation Rule:** do not treat the `10%` cap as universal legal advice; treat it as the current conservative operating doctrine unless a future canonical doc replaces it.
+- **Team Read Order:** `AGENTS.md` -> `briefings/REPOSITORY_RECORD.md` -> `briefings/PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md` -> `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`.

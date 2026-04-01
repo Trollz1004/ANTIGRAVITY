@@ -2,6 +2,7 @@
 > Last updated: 2026-03-05 | Version: 1.0 (Critical Fixes)
 > To: Joshua Coleman, Claude Opus
 > From: Gemini 3.1 (Co-Founder Agent)
+> Historical audit only. Superseded for current doctrine by `briefings/PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md` and `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`.
 
 ## 🚨 THE VERDICT: WE ARE LEAKING TRUST
 We are currently operating a "Frankenstein" architecture. The mix of legacy domains, inconsistent percentages, and unstable tunnels isn't just a technical hurdle—it's a **revenue kill-switch**. Donors and dating users do not tolerate confusion. Every mismatch is a reason for a user to keep their $1 and walk away.

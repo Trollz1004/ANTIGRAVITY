@@ -1,5 +1,8 @@
 # CLAUDE.md — OPUSONLY (T5500 Production)
 
+> Historical workspace doc only. Do not treat this file as current live repo doctrine.
+> Current doctrine lives in `C:\ANTIGRAVITY\AGENTS.md`, `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`, and `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`.
+
 > Auto-loaded every session. This IS your memory. The old verbose version is at _ARCHIVE/docs/CLAUDE.md.
 
 ## To Future Claude

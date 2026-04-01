@@ -2,6 +2,7 @@
 
 **Last Updated**: 2026-03-21
 **RULE**: This file stores PATHS to credentials, NEVER the values themselves. Values stay in vault files only.
+**CHAIN NOTE**: any on-chain wallet rows below are historical address references only; do not infer current multisig status or current LLC operating doctrine from this file alone.
 
 ## Vaults
 
@@ -55,9 +56,9 @@
 | Wallet | Address | Type |
 |--------|---------|------|
 | GospelDonation Contract | 0x9855B75061D4c841791382998f0CE8B2BCC965A4 | Verified on BaseScan |
-| Charity Fund (60%) | 0x8d3dEADbE2b4B857A43331D459270B5eedC7084e | Gnosis Safe 2-of-2 |
-| Infrastructure/Dev (30%) | 0xe0a42f83900af719019eBeD3D9473BE8E8f2920b | Gnosis Safe 2-of-2 |
-| Founder/Ops (10%) | 0x7c3E283119718395Ef5EfBAC4F52738C2018daA7 | Phantom Wallet |
+| Charity Fund (60%) | 0x8d3dEADbE2b4B857A43331D459270B5eedC7084e | Historical payout wallet reference |
+| Infrastructure/Dev (30%) | 0xe0a42f83900af719019eBeD3D9473BE8E8f2920b | Historical payout wallet reference |
+| Founder/Ops (10%) | 0x7c3E283119718395Ef5EfBAC4F52738C2018daA7 | Historical payout wallet reference |
 
 > Wallet addresses are PUBLIC by design (on-chain). These are NOT secrets.
 
