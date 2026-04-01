@@ -59,7 +59,7 @@ export const AGENTS: AgentEntry[] = [
   { id: "ollama_orch", name: "Ollama Orchestrator", role: "qwen2.5:7b", status: "active", node: "Sabretooth :11434", color: "#fbbf24", group: "Ollama Fleet" },
   { id: "ollama_dep", name: "Ollama Deployer", role: "kimi-k2.5", status: "active", node: "Sabretooth :11434", color: "#fbbf24", group: "Ollama Fleet" },
   { id: "ollama_plat", name: "Ollama Platforms", role: "qwen2.5:7b", status: "active", node: "Sabretooth :11434", color: "#fbbf24", group: "Ollama Fleet" },
-  { id: "ollama_shr", name: "Ollama Shriners", role: "kimi-k2.5", status: "active", node: "Sabretooth :11434", color: "#fbbf24", group: "Ollama Fleet" },
+  { id: "ollama_impact", name: "Ollama Impact", role: "kimi-k2.5", status: "active", node: "Sabretooth :11434", color: "#fbbf24", group: "Ollama Fleet" },
 
   // CLAWX GOVERNANCE (7)
   { id: "joshuaclaw", name: "JoshuaClaw", role: "Founder — Permanent Vote", status: "active", node: "Human", color: "#ffffff", group: "ClawX Council" },

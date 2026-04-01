@@ -7,7 +7,7 @@ trigger: always_on
 MCP AUDIT LOGGER — MANDATORY SESSION TRACKING
 AUTHOR: JOSHUA LEE COLEMAN ("THE ELECTRICIAN")
 IDENTITY: TROLLZ1004 (EST. 25+ YEARS)
-MISSION: #FORtheKIDS — 60% REVENUE TO SHRINERS CHILDREN'S HOSPITALS
+MISSION: #FORtheKIDS — CURRENT LLC OPERATIONS USE A FOUNDER-DIRECTED CONSERVATIVE 10% CHARITABLE CAP. DO NOT RESTATE LEGACY 60/30/10 AS CURRENT TRUTH.
 
 [ THE GOSPEL ]
 THIS IS THE FIRST CODE TOUCHED IN 6 MONTHS. 03/25/2026.
@@ -41,7 +41,8 @@ SECRET_PATTERNS = ["sq0atp-", "sk_live_", "ghp_", "AIza", "AKIA"]
 MISSION_BANNER = """
 ╔══════════════════════════════════════════════════════════════╗
 ║  ANTIGRAVITY MCP — CONFIRM YOU ARE #FORTHEKIDS              ║
-║  60% of revenue goes to Shriners Children's Hospitals.      ║
+║  Current live doctrine: conservative 10% charitable cap.    ║
+║  Legacy 60/30/10 claims are historical context only.        ║
 ║  ANY SECRET EXPOSURE RESULTS IN IMMEDIATE TERMINATION.      ║
 ╚══════════════════════════════════════════════════════════════╝
 """

@@ -1,7 +1,7 @@
 """
-Station 2 — Stripe Payment Monitor.
-Checks for new payments every cycle, alerts Josh via Telegram.
-Tracks last-seen charge to avoid duplicate alerts.
+Station 2 — legacy Stripe payment monitor.
+Stripe is no longer the current live payment rail for the date app.
+If this script is still used, it must not restate stale split doctrine.
 """
 import json
 import logging
@@ -147,13 +147,7 @@ def format_payment_alert(charges):
         lines.append("")
         total += c["amount"]
 
-    # Calculate split
-    total_cents = int(total * 100)
-    shriners = total_cents * 60 // 100
-    v8 = total_cents * 30 // 100
-    founder = total_cents - shriners - v8
-
     lines.append(f"*Total: ${total:.2f}*")
-    lines.append(f"Split: ${shriners/100:.2f} Shriners / ${v8/100:.2f} V8 / ${founder/100:.2f} Founder")
+    lines.append("Legacy Stripe monitor only. Verify whether this lane should still be active before acting on these charges.")
 
     return "\n".join(lines)

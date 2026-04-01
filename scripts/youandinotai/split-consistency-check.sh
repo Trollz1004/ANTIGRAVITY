@@ -5,7 +5,8 @@ set -euo pipefail
 # in production paths. Canonical: founder-directed 10% charitable cap for current LLC operations.
 # Run: bash scripts/split-consistency-check.sh
 
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 ERRORS=0
 
@@ -40,7 +41,7 @@ for pattern in "${FORBIDDEN_PATTERNS[@]}"; do
     if [[ ! -e "$full_path" ]]; then continue; fi
 
     matches=$(grep -rni --include="*.tsx" --include="*.ts" --include="*.html" --include="*.md" --include="*.json" \
-      "$pattern" "$full_path" 2>/dev/null | grep -v "ARCHIVED" | grep -v "SUPERSEDED" | grep -v "NOT CURRENT" | grep -v "LEGACY" | grep -v "node_modules" || true)
+      "$pattern" "$full_path" 2>/dev/null | grep -Evi "ARCHIVED|SUPERSEDED|NOT CURRENT|LEGACY|historical|do not present|do not claim|not current doctrine|project history" | grep -v "node_modules" || true)
     if [[ -n "$matches" ]]; then
       echo "  FAIL: Found '$pattern' in production path $path:"
       echo "$matches" | head -3
@@ -53,7 +54,7 @@ echo ""
 
 # Verify canonical claims exist
 echo "Verifying canonical 10% policy claims exist..."
-CANON_FILES=("AGENTS.md" "CLAUDE.md" "youandinotai/TERMS_OF_SERVICE.md")
+CANON_FILES=("AGENTS.md" "CLAUDE.md" "briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md")
 for f in "${CANON_FILES[@]}"; do
   full="$REPO_ROOT/$f"
   if [[ ! -f "$full" ]]; then

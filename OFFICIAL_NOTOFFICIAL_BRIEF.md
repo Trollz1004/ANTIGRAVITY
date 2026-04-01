@@ -102,7 +102,7 @@ Role: LOCKED | Status: On-Node Essential
 | **AI-Solutions.Store** | Charity-side isolated lane and storefront source material. Do not assume 100% charity routing is current safe LLC doctrine. | Live |
 | **OnlineRecycle.org** | Electronics recycler. Drop-off, pickup, resale. ENIGMA side. | Live |
 | **onlinerecycle.square.site** | eBay-linked crosslister. ENIGMA side. Not charity. | Live |
-| **Antigravity Dashboard** | Public mission-control. Nodes, AI orchestration, revenue routing. | Live |
+| **dashboard.aidoesitall.website** | No-index business-access gateway that hands trusted users to authenticated internal workspace surfaces. | Live |
 
 ONE REPO. ONE FOLDER (`C:\ANTIGRAVITY`). ONE BRANCH (`main`). This is not negotiable.
 

@@ -1,47 +1,37 @@
-# Active Context - 2026-03-29
+# Active Context - 2026-03-31
 
 ## Current Focus
 
-- **Clean live baseline is locked:** Sabretooth `main` is clean at `131c455` before the March 29 briefing refresh.
-- **Sandbox repo is promoted:** `E:\sandbox-repo` now carries the pushed PaperClip pilot at `5ba57f1`.
-- **Public repo docs are aligned:** README now names the full current public ecosystem surface set at a high level, including the dashboard surfaces and the related private/internal dashboard names.
-- **OnlineRecycle is redeployed live:** the Cloudflare Pages direct-upload deploy was completed and verified on March 27, 2026.
-- **Date-app payment path is hardened:** internal checkout creation is verified live for Bot-Shield, founder tiers, and royalty checkout.
-- **Payment/account truth is back in alignment:** `ebaytrashortreasure@gmail.com` stays isolated for the date-app Square/PayPal lane, and `joshlcoleman@gmail.com` stays on the non-date-app commerce lane.
-- **Node lanes remain isolated:** Claude Dispatch stays on Sabretooth `E:`, 9020 owns the `D:` sandbox lane, and T5500 owns the `E:\ANTIGRAVITY-CLAWBOTS` Manus lane.
-- **Sabretooth sandbox staging is intact:** `E:\sandbox-repo` remains the unified sandbox mirror and `E:\GensparkPODnTube` remains separate GenSpark staging.
-- **BRAIN MCP is built and auth-ready:** the sidecar exists at `C:\ANTIGRAVITY\brain-mcp` with local auth registry wiring and audit storage.
-- **PaperClip stays off the live repo:** runtime/source is in `E:\sandbox-repo\paperclip`; pilot state is in `E:\sandbox-repo\paperclip-antigravity`; it is still sandbox-only and voluntary in BRAIN.
+- **Live repo doctrine is aligned:** canonical docs, sync prompts, and handoff files now reflect the founder-directed conservative `10% charitable cap` doctrine for LLC-controlled revenue.
+- **Launch drift surface is reduced:** stale eBay, merch, crossfire, social, and 9020/legacy prompt files were superseded so the easiest files to grab no longer advertise legacy split language as current truth.
+- **Live code validation is complete:** Sabretooth passed the relevant build, lint, and backend test checks for the touched workspaces.
+- **Node lanes were rechecked:** 9020 support-lane post files were verified clean; T5500 Manus-lane docs and dashboard pages were cleaned and reverified against legacy split terms.
+- **PaperClip remains sandbox-only:** `E:\sandbox-repo\paperclip` and `E:\sandbox-repo\paperclip-antigravity` remain isolated from the live repo.
 
 ## Verified State
 
 - **Repo root:** `C:\ANTIGRAVITY`
 - **Branch:** `main`
-- **HEAD before this briefing refresh:** `131c455`
-- **Worktree:** clean
-- **OnlineRecycle live check:** `https://onlinerecycle.org` verified live with service-first copy on March 27, 2026.
-- **Sandbox repo:** `E:\sandbox-repo` is pushed on `main` at `5ba57f1`
-- **9020 repo mirror:** last verified aligned to the live baseline before this March 29 refresh
-- **T5500 repo mirror:** last verified aligned to the live baseline before this March 29 refresh
-
-## Recently Finished
-
-- Hardened public copy generators and Square catalog messaging at `dd584a1`
-- Redeployed `onlinerecycle.org` using the verified direct-upload Cloudflare Pages flow
-- Archived the last three local bundle helpers out of `C:\ANTIGRAVITY` so the live repo went clean again
-- Pushed the PaperClip sandbox pilot and env-safe AnythingLLM bridge updates to the sandbox repo at `5ba57f1`
-- Refreshed the canonical briefings, memory files, and continuity vault copies to the March 29 state
+- **Worktree:** modified during the March 31 final audit pass and ready for commit/push
+- **YouAndINotAI frontend:** `npm run lint` passed; `npm run build` passed
+- **YouAndINotAI backend:** `201 passed` via `uv`-managed pytest run on Python 3.13
+- **MCP server:** `npm run build` passed
+- **Social Command Center:** `npm run build` passed
+- **Revenue Core:** local dependencies installed on Sabretooth and `npm run build` passed
+- **Antigravity Next app:** `npm run build` passed
+- **Revenue policy checker:** `scripts/youandinotai/split-consistency-check.sh` passed after its root-detection fix
+- **9020 lane:** `D:\claws\openclaw-9020\posts\rotation.json` and `queue_pending.json` verified
+- **T5500 lane:** `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian` docs and dashboard pages verified
 
 ## Current Risks / Open Items
 
-1. **BRAIN MCP is auth-ready, but approved clients still need their session-participation rollout to get full drift visibility.**
-2. **`dashboard.aidoesitall.website` is still a direct-upload Pages project with unresolved repo-source mapping.**
-3. **`www.aidoesitall.website` root source is still not identified in this repo.**
-4. **AnythingLLM bridge health depends on the local desktop app actually running; the repo now handles secrets safely, but the app process is still opt-in.**
+1. **`www.aidoesitall.website` source mapping is still unresolved in this repo.**
+2. **`E:\sandbox-repo` still has unrelated PaperClip script drift that is intentionally separate from the live repo.**
+3. **Historical contract artifacts remain in the repo by design and must continue to be treated as chain history, not current LLC doctrine.**
 
 ## Rules To Preserve
 
-1. Treat Sabretooth as the authoritative live repo and orchestration node.
-2. Keep secrets in local `.env` or the Sabretooth continuity vault only.
-3. Keep ENIGMA and OMEGA fully separated.
-4. Keep the continuity vault out of `.openclaw` paths, mounts, and runtime config.
+1. Treat `C:\ANTIGRAVITY` on `main` as the only live coding source of truth.
+2. Keep ENIGMA and OMEGA fully separated.
+3. Keep secondary-drive AI infrastructure and experiments in sandbox lanes until explicitly promoted.
+4. Ship only facts; any unverified claim remains out.

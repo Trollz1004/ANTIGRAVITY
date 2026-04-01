@@ -122,9 +122,9 @@ Every architectural decision is recorded here so no future session re-debates it
 
 ## 2026-03-07: Keep `E:` primary, but allow Codex overflow onto `C:` when it is materially useful
 
-**Decision**: Keep `E:\ANTIGRAVITY` and `E:\ANTIGRAVITY\CodeX` as the primary Codex house, but allow Codex to use `C:` for caches, backups, mirrors, or bulky working data when that actually helps operations.  
-**Why**: Joshua explicitly removed the old "don't touch other drives" constraint. At the same time, `E:` is not under storage pressure right now, so moving data just to move it would create churn without benefit.  
-**Impact**: Default to `E:` for active repo work. Use `C:` deliberately for overflow or space management when needed. Do not relocate repo data blindly.  
+**Decision**: Keep `E:\ANTIGRAVITY` and `E:\ANTIGRAVITY\CodeX` as the primary Codex house, but allow Codex to use `C:` for caches, backups, mirrors, or bulky working data when that actually helps operations.
+**Why**: Joshua explicitly removed the old "don't touch other drives" constraint. At the same time, `E:` is not under storage pressure right now, so moving data just to move it would create churn without benefit.
+**Impact**: Default to `E:` for active repo work. Use `C:` deliberately for overflow or space management when needed. Do not relocate repo data blindly.
 **Status**: Superseded by the `C:` home cutover
 
 ## 2026-03-07: Sabretooth should boot lean
@@ -157,63 +157,65 @@ Every architectural decision is recorded here so no future session re-debates it
 
 ## 2026-02-14: Switch AI from Gemini to Claude
 
-**Decision**: Replace Gemini SDK with Claude API in the dashboard  
-**Why**: Gemini SDK 300 free credits exhausted. Joshua has Claude Max subscription (unlimited).  
-**Impact**: geminiService.ts needs Claude equivalent, or simulation mode stays active  
+**Decision**: Replace Gemini SDK with Claude API in the dashboard
+**Why**: Gemini SDK 300 free credits exhausted. Joshua has Claude Max subscription (unlimited).
+**Impact**: geminiService.ts needs Claude equivalent, or simulation mode stays active
 **Status**: In progress
 
 ## 2026-02-14: Replace OpenClaw with custom code
 
-**Decision**: Stop using OpenClaw/clawdbot/moltbot for Telegram gateway  
-**Why**: Auth profile format deprecated in v2026.2.13 (`anthropic:claude-cli` → need `setup-token`). Config keeps changing names/formats. Joshua spent 12 days debugging instead of shipping.  
-**Impact**: Build our own Telegram-to-Claude bridge (~150 lines). Zero third-party dependencies for the bot.  
+**Decision**: Stop using OpenClaw/clawdbot/moltbot for Telegram gateway
+**Why**: Auth profile format deprecated in v2026.2.13 (`anthropic:claude-cli` → need `setup-token`). Config keeps changing names/formats. Joshua spent 12 days debugging instead of shipping.
+**Impact**: Build our own Telegram-to-Claude bridge (~150 lines). Zero third-party dependencies for the bot.
 **Status**: Decided, not yet built
 
 ## 2026-02-14: Build persistent memory-bank system
 
-**Decision**: Create `memory-bank/` directory with structured context files  
-**Why**: THE ROOT CAUSE of 12 days wasted + 4 duplicate apps. Claude has no memory after context window. Every new session starts blank. Joshua has rebuilt the same dating app 4 times because Claude forgot where things were.  
-**Impact**: CLAUDE.md now references memory-bank/. Every session auto-loads full context.  
+**Decision**: Create `memory-bank/` directory with structured context files
+**Why**: THE ROOT CAUSE of 12 days wasted + 4 duplicate apps. Claude has no memory after context window. Every new session starts blank. Joshua has rebuilt the same dating app 4 times because Claude forgot where things were.
+**Impact**: CLAUDE.md now references memory-bank/. Every session auto-loads full context.
 **Status**: Building now
 
-## 2026-02-13: Node wipe and consolidation  
+## 2026-02-13: Node wipe and consolidation
 
-**Decision**: Factory reset all 3 nodes to marketing-only, preserve vault + OPUSONLY  
-**Why**: Too many stale configs, broken services, zombie processes across nodes  
-**Impact**: Clean slate on each machine. Scripts in D:\OPUSONLY\scripts\ handle re-setup  
+**Decision**: Factory reset all 3 nodes to marketing-only, preserve vault + OPUSONLY
+**Why**: Too many stale configs, broken services, zombie processes across nodes
+**Impact**: Clean slate on each machine. Scripts in D:\OPUSONLY\scripts\ handle re-setup
 **Status**: 9020 and T5500 wiped. SABRETOOTH last (after DNS verified)
 
 ## 2026-02-10: Migrate from GCP to AWS
 
-**Decision**: Move backend from Cloud Run to AWS EC2  
-**Why**: GCP project `ai-collab4kids` had issues (initially thought banned — CONFIRMED NOT BANNED). Migrated to AWS as backup.  
-**Impact**: Backend now on BOTH 3.84.226.108 (AWS) AND Cloud Run (GCP). PEM key recovered from Antigravity history.  
+**Decision**: Move backend from Cloud Run to AWS EC2
+**Why**: GCP project `ai-collab4kids` had issues (initially thought banned — CONFIRMED NOT BANNED). Migrated to AWS as backup.
+**Impact**: Backend now on BOTH 3.84.226.108 (AWS) AND Cloud Run (GCP). PEM key recovered from Antigravity history.
 **Status**: Both backends available. DNS still broken (pointing to old Railway URLs). GCP Cloud Run + Cloud SQL are ACTIVE.
 
 ## 2026-02-07: DAO smart contracts deployed
 
-**Decision**: Deploy perpetual DAO on Base Mainnet  
-**Why**: Ensure mission survives regardless of what happens to Joshua  
-**Impact**: 60/30/10 split enforced by smart contract, not humans  
+**Decision**: Deploy perpetual DAO on Base Mainnet
+**Why**: Ensure mission survives regardless of what happens to Joshua
+**Impact**: Historical on-chain `60/30/10` split enforced by smart contract, not humans
 **Status**: Deployed and locked. GospelDonation.sol verified at 0x9855B75061D4c841791382998f0CE8B2BCC965A4 on Base Mainnet. Gnosis Safe 2-of-2 multisig on Charity + Infra wallets.
+
+**Current Doctrine Note**: This entry is historical chain context only. It does not override the current conservative `10% charitable cap` doctrine for LLC-controlled revenue.
 
 ## 2026-03-08: Protocol Omega on-chain truth clarified
 
-**Decision**: Treat the currently verified Base contract as the live truth and define the `30%` treasury as full mission infrastructure plus AI operations  
-**Why**: Repo docs had narrowed the `30%` bucket to named vendors and mixed the live legacy contract/wallets with newer undeployed router addresses  
-**Impact**: Governance docs now distinguish live verified on-chain state from intended-next deployment material, and the `30%` treasury explicitly covers power, hardware, hosting, domains, cloud, security, backups, facility costs, and AI platform costs  
+**Decision**: Treat the currently verified Base contract as the live truth and define the `30%` treasury as full mission infrastructure plus AI operations
+**Why**: Repo docs had narrowed the `30%` bucket to named vendors and mixed the live legacy contract/wallets with newer undeployed router addresses
+**Impact**: Governance docs now distinguish live verified on-chain state from intended-next deployment material, and the `30%` treasury explicitly covers power, hardware, hosting, domains, cloud, security, backups, facility costs, and AI platform costs
 **Status**: Live verified split remains `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4` with payout wallets `0x8d3d... / 0xe0a42... / 0x7c3E...`; repo `DatingRevenueRouter` artifacts remain intended-next and were not verified live on Base in this session
 
 ## Earlier: Dual-purpose index.html
 
-**Decision**: Landing page + React SPA in same index.html  
-**Why**: Quick MVP — static landing page with pre-order modal + dashboard in one file  
-**Impact**: Unconventional but works. Don't separate them unless deploying landing page independently.  
+**Decision**: Landing page + React SPA in same index.html
+**Why**: Quick MVP — static landing page with pre-order modal + dashboard in one file
+**Impact**: Unconventional but works. Don't separate them unless deploying landing page independently.
 **Status**: Working
 
 ## Earlier: Tailwind via CDN only
 
-**Decision**: No tailwind.config, no PostCSS, no local install  
-**Why**: Fastest path to styled components. No build tooling overhead.  
-**Impact**: Cannot customize Tailwind theme via config. Use inline styles for custom values.  
+**Decision**: No tailwind.config, no PostCSS, no local install
+**Why**: Fastest path to styled components. No build tooling overhead.
+**Impact**: Cannot customize Tailwind theme via config. Use inline styles for custom values.
 **Status**: Working — DO NOT change this
