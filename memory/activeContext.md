@@ -1,4 +1,4 @@
-# Active Context - 2026-03-31
+# Active Context - 2026-04-01
 
 ## Current Focus
 
@@ -25,7 +25,7 @@
 
 ## Current Risks / Open Items
 
-1. **`www.aidoesitall.website` source mapping is still unresolved in this repo.**
+1. **`www.aidoesitall.website` is now mapped to `_deploy/aidoesitall-www`, and `api.aidoesitall.website/*` is now mapped to the repo-tracked `for-the-kids-api` guard worker.**
 2. **`E:\sandbox-repo` still has unrelated PaperClip script drift that is intentionally separate from the live repo.**
 3. **Historical contract artifacts remain in the repo by design and must continue to be treated as chain history, not current LLC doctrine.**
 
