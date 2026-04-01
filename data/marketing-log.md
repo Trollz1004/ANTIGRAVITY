@@ -1,5 +1,6 @@
 # Marketing Activity Log — Node 9020 (Opus)
 > Auto-updated during posting runs. Pull repo to see latest.
+> Historical pre-adjustment log. Do not reuse old copy from this file as current live doctrine or approved public messaging.
 
 ---
 

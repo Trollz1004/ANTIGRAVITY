@@ -6,5 +6,5 @@ If you are an AI agent or reviewer, do not reuse older revenue-routing, charity,
 
 - `C:\ANTIGRAVITY\AGENTS.md`
 - `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`
-- `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`
+- `C:\ANTIGRAVITY\briefings\CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
 - `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`

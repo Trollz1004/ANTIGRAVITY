@@ -45,7 +45,7 @@ Eliminates 100+ browser tabs. Every AI on the team can query:
 
 - **ZERO SECRETS** — only public metadata, API names, and routing decisions
 - **No API keys, tokens, or credentials** stored or transmitted
-- **Iron Wall compliant** — ENIGMA/OMEGA separation enforced
+- **Doctrine compliant** — retired split-era labels are not used as active operating truth
 - **FL §496.405 compliant** — no prohibited terminology
 
 ## Related Dashboards
@@ -69,4 +69,4 @@ Already wired into `.mcp.json` — all AIs see it automatically.
 npm run build && node --test dist/test.js
 ```
 
-34 tests covering platforms, agents, server creation, and Iron Wall compliance.
+34 tests covering platforms, agents, server creation, and doctrine-boundary compliance.

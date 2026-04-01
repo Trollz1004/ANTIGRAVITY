@@ -1,12 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Wallet Consistency Check — Verifies all wallet addresses match the canonical source.
-# Canonical source: antigravity/components/Transparency.tsx
+# Wallet Consistency Check — Verifies the historical on-chain addresses stay consistent
+# only in the files that are still allowed to carry historical chain references.
 # Run: bash scripts/wallet-consistency-check.sh
 
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-CANONICAL_FILE="$REPO_ROOT/antigravity/components/Transparency.tsx"
+if [[ -n "${ANTIGRAVITY_REPO_ROOT:-}" ]]; then
+  REPO_ROOT="${ANTIGRAVITY_REPO_ROOT%/}"
+else
+  SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
+  if [[ "$SCRIPT_SOURCE" == "-" || "$SCRIPT_SOURCE" == "bash" || ! -e "$SCRIPT_SOURCE" ]]; then
+    REPO_ROOT="$(pwd)"
+  else
+    SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+    REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+  fi
+fi
+CANONICAL_FILE="$REPO_ROOT/briefings/HISTORICAL-ONCHAIN-STATUS.md"
 
 # Canonical wallet addresses — GospelDonation.sol on Base Mainnet (DEPLOYED)
 GOSPEL_CONTRACT="0x9855B75061D4c841791382998f0CE8B2BCC965A4"
@@ -17,17 +27,14 @@ FOUNDER_OPS="0x7c3E283119718395Ef5EfBAC4F52738C2018daA7"
 ERRORS=0
 
 echo "=== Wallet Consistency Check ==="
-echo "Canonical source: $CANONICAL_FILE"
+echo "Historical wallet reference source: $CANONICAL_FILE"
 echo ""
 
-# Files that MUST contain correct wallet addresses
+# Files that are still allowed to carry the historical wallet addresses
 WALLET_FILES=(
-  "antigravity/components/Transparency.tsx"
   "mcp-server/src/tools/protocol.ts"
   "memory/credentials-map.md"
-  "memory/MISSION_CONTINUITY.md"
-  "briefings/CLAUDE-SKILL.md"
-  "CLAUDE.md"
+  "briefings/HISTORICAL-ONCHAIN-STATUS.md"
   "contracts/scripts/deploy.js"
 )
 
@@ -100,7 +107,13 @@ for dir in "${PRODUCTION_PATHS[@]}"; do
 
   # Find all 0x addresses that are NOT in the canonical set and NOT USDC
   USDC="0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
-  rogue=$(grep -rhoP '0x[a-fA-F0-9]{40}' "$full_dir" 2>/dev/null | sort -u | \
+  rogue=$(find "$full_dir" \
+    -path '*/.git/*' -prune -o \
+    -path '*/node_modules/*' -prune -o \
+    -path '*/dist/*' -prune -o \
+    -path '*/build/*' -prune -o \
+    -path '*/.next/*' -prune -o \
+    -type f -print 2>/dev/null | xargs grep -hoP '0x[a-fA-F0-9]{40}' 2>/dev/null | sort -u | \
     grep -v "$GOSPEL_CONTRACT" | \
     grep -v "$CHARITY_FUND" | \
     grep -v "$INFRASTRUCTURE" | \

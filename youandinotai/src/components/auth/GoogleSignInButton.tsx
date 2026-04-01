@@ -9,9 +9,11 @@ declare global {
 
 export function GoogleSignInButton() {
   const { googleLogin, user } = useAuth();
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
   useEffect(() => {
-    if (user) return; // a user is already logged in
+    if (user || !googleClientId) return; // a user is already logged in or Google auth is not configured
+    let cancelled = false;
 
     const handleCredentialResponse = async (response: any) => {
       try {
@@ -23,32 +25,57 @@ export function GoogleSignInButton() {
     };
 
     const initializeGsi = () => {
-      if (!window.google) {
+      if (cancelled || !window.google?.accounts?.id) {
         console.error("Google Identity Services library not loaded.");
         return;
       }
-      
+
+      const buttonRoot = document.getElementById("google-signin-button");
+      if (!buttonRoot) return;
+      buttonRoot.innerHTML = "";
+
       window.google.accounts.id.initialize({
-        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        client_id: googleClientId,
         callback: handleCredentialResponse,
       });
 
       window.google.accounts.id.renderButton(
-        document.getElementById("google-signin-button"),
+        buttonRoot,
         { theme: "outline", size: "large" }
       );
     };
 
-    // Check if the GSI script is already loaded.
-    if (window.google) {
-      initializeGsi();
-    } else {
-      // If not, you might need to handle this case, 
-      // but the script is loaded in index.html with `async defer`
-      // so it should be available when this component mounts.
-    }
+    const loadGsi = async () => {
+      if (window.google?.accounts?.id) {
+        initializeGsi();
+        return;
+      }
 
-  }, [googleLogin, user]);
+      const existing = document.getElementById("google-gsi-client") as HTMLScriptElement | null;
+      if (existing) {
+        existing.addEventListener("load", initializeGsi, { once: true });
+        return;
+      }
 
+      const script = document.createElement("script");
+      script.id = "google-gsi-client";
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.addEventListener("load", initializeGsi, { once: true });
+      script.addEventListener("error", () => {
+        console.error("Google Identity Services library failed to load.");
+      }, { once: true });
+      document.head.appendChild(script);
+    };
+
+    void loadGsi();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [googleClientId, googleLogin, user]);
+
+  if (!googleClientId) return null;
   return <div id="google-signin-button"></div>;
 }
