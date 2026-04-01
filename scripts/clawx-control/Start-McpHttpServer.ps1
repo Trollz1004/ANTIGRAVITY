@@ -1,5 +1,5 @@
 # Start-McpHttpServer.ps1
-# Starts the omega-sentry MCP server in HTTP mode for claude.ai remote connector
+# Starts the antigravity-sentry MCP server in HTTP mode for claude.ai remote connector
 # Runs on port 3100 — expose via cloudflared tunnel for remote access
 # Usage: pwsh -File scripts\Start-McpHttpServer.ps1 [-Port 3100] [-AuthToken "yourtoken"]
 
@@ -25,7 +25,7 @@ $env:TRANSPORT       = "http"
 $env:MCP_HTTP_PORT   = "$Port"
 if ($AuthToken) { $env:MCP_AUTH_TOKEN = $AuthToken }
 
-Write-Host "Starting omega-sentry MCP server on http://127.0.0.1:$Port"
+Write-Host "Starting antigravity-sentry MCP server on http://127.0.0.1:$Port"
 Write-Host "Expose with: cloudflared tunnel --url http://127.0.0.1:$Port"
 
 node $distJs

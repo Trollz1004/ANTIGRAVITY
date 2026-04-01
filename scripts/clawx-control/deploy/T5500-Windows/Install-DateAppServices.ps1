@@ -1,8 +1,8 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# ENIGMA — Windows Service Installation Script
+# DATE-APP — Windows Service Installation Script
 # Installs DateApp backend as Windows services using NSSM
 # Location: E:\ANTIGRAVITY\scripts\deploy\T5500-Windows\Install-DateAppServices.ps1
-# Author: ENIGMA for Joshua Coleman (Trollz1004)
+# Author: Joshua Coleman (Trollz1004)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 #Requires -RunAsAdministrator
@@ -13,7 +13,7 @@ param(
 )
 
 Write-Host "═══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host " ENIGMA — DateApp Windows Service Installation" -ForegroundColor Cyan
+Write-Host " DATE-APP — DateApp Windows Service Installation" -ForegroundColor Cyan
 Write-Host "═══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
 
 # ─────────────────────────────────────────────────────────────────

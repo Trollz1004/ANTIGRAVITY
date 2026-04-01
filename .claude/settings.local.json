@@ -21,11 +21,11 @@
       "mcp__Claude_in_Chrome__*",
       "mcp__Claude_Preview__*",
       "mcp__mcp-registry__*",
-      "mcp__omega-sentry__*"
+      "mcp__antigravity-sentry__*"
     ]
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
-    "omega-sentry"
+    "antigravity-sentry"
   ]
 }

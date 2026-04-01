@@ -18,7 +18,7 @@ This doctrine correction happened close to the April 4 launch window. The AI tea
 
 1. `C:\ANTIGRAVITY\AGENTS.md`
 2. `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`
-3. `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`
+3. `C:\ANTIGRAVITY\briefings\CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
 4. `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
 
 ## Implementation Rule

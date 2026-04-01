@@ -31,7 +31,7 @@ Role: audit, support, and bounded implementation under Codex ownership
 ## Avoid
 
 1. do not override Codex ownership of final repo truth
-2. do not drift into OMEGA
+2. do not drift into retired split-separation doctrine
 3. do not rely on archived or recovery-only notes as live proof
 4. do not expand scope beyond the assigned slice
 5. do not claim remote OpenClaw runtime is live without verification

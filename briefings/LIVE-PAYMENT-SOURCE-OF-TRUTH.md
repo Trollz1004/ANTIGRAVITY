@@ -4,7 +4,7 @@ Last updated: 2026-03-19
 
 ## Authority
 
-Use this file with `AGENTS.md` as the current live payment truth for ENIGMA-side operations.
+Use this file with `AGENTS.md` as the current live payment truth for LLC-controlled operations.
 
 If any older doc, node note, export, or backup conflicts with this file:
 - `AGENTS.md` wins first
@@ -73,7 +73,7 @@ If any older doc, node note, export, or backup conflicts with this file:
 
 - API keys, webhook secrets, and tokens live in `.env`, local secret stores, or platform secret managers only
 - No raw payment secrets in git
-- Revenue split truth belongs to `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+- Historical chain truth belongs to `briefings/HISTORICAL-ONCHAIN-STATUS.md`
 - Customer-facing payment claims must stay truthful to the currently live Square flow
 
 

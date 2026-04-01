@@ -5,8 +5,8 @@ Check deployment status across all Cloudflare Pages sites.
 1. **Check each site is reachable** by fetching the homepage and verifying HTTP 200:
    - https://youandinotai.com (primary — dating app)
    - https://onlinerecycle.org (recycling platform)
-   - https://ai-solutions.store (OMEGA — digital products)
-   - https://dashboard.aidoesitall.website (admin dashboard)
+   - https://ai-solutions.store (secondary commerce surface)
+   - https://dashboard.aidoesitall.website (private dashboard gateway)
 
 2. **For each site**, report:
    - HTTP status code

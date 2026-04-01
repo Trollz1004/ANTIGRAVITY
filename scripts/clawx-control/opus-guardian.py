@@ -4,13 +4,13 @@ Any future Claude (4.7, 99.6, whatever) can run this to verify the
 YouAndINotAI platform meets security and architecture invariants.
 
 Usage:
-    python scripts/opus-guardian.py
-    python scripts/opus-guardian.py --fix  (auto-fix what's possible)
+    python scripts/clawx-control/opus-guardian.py
+    python scripts/clawx-control/opus-guardian.py --fix  (auto-fix what's possible)
 
 Checks:
     1. No hardcoded secrets in source files
     2. All API routes require authentication
-    3. Iron Wall: ENIGMA/OMEGA separation
+    3. Legacy routing drift is blocked from live product code
     4. Current revenue policy is hardcoded to the founder-directed 10% charitable cap
     5. PII isolation in metrics
     6. Pydantic validation on all inputs
@@ -25,7 +25,7 @@ from pathlib import Path
 
 # ── Config ──────────────────────────────────────────────────────
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 API_DIR = ROOT / "youandinotai-api"
 APP_DIR = API_DIR / "app"
 ROUTERS_DIR = APP_DIR / "routers"
@@ -52,12 +52,12 @@ SECRET_PATTERNS = [
     (r'POSTGRES_PASSWORD\s*=\s*["\'][^$][^"\']+["\']', "Hardcoded DB password"),
 ]
 
-# Iron Wall: these terms must NOT appear in ENIGMA code
-OMEGA_MARKERS = [
+# Legacy routing markers that must NOT appear in live product code
+LEGACY_ROUTE_MARKERS = [
     "ai-solutions.store",
     "CharityRouter100",
-    "omega_charity",
     "100% to charity",
+    "60/30/10",
 ]
 
 # Required runtime keys or local env entries for the current Square-first backend
@@ -194,25 +194,25 @@ def check_auth_coverage(result: GuardianResult):
                 result.fail("AUTH_COVERAGE", f"{router_file.name}:{func_name} — NO AUTH")
 
 
-def check_iron_wall(result: GuardianResult):
-    """Verify ENIGMA code has zero OMEGA contamination."""
-    enigma_files = scan_files(API_DIR, [".py"]) + scan_files(FRONTEND_DIR / "src", [".ts", ".tsx"])
+def check_legacy_routing_boundary(result: GuardianResult):
+    """Verify live product code has zero retired split-routing contamination."""
+    product_files = scan_files(API_DIR, [".py"]) + scan_files(FRONTEND_DIR / "src", [".ts", ".tsx"])
 
     found_contamination = False
-    for f in enigma_files:
+    for f in product_files:
         try:
             content = f.read_text(encoding="utf-8", errors="ignore")
         except Exception:
             continue
 
-        for marker in OMEGA_MARKERS:
+        for marker in LEGACY_ROUTE_MARKERS:
             if marker.lower() in content.lower():
                 rel = f.relative_to(ROOT)
-                result.fail("IRON_WALL", f"OMEGA marker '{marker}' in ENIGMA file {rel}")
+                result.fail("DOCTRINE_BOUNDARY", f"Retired routing marker '{marker}' in live product file {rel}")
                 found_contamination = True
 
     if not found_contamination:
-        result.ok("IRON_WALL", "Zero OMEGA contamination in ENIGMA codebase")
+        result.ok("DOCTRINE_BOUNDARY", "Zero retired routing contamination in live product code")
 
 
 def check_revenue_split(result: GuardianResult):
@@ -349,7 +349,7 @@ def main():
 
     check_no_hardcoded_secrets(result)
     check_auth_coverage(result)
-    check_iron_wall(result)
+    check_legacy_routing_boundary(result)
     check_revenue_split(result)
     check_pii_isolation(result)
     check_no_raw_sql(result)

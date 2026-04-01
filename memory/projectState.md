@@ -16,6 +16,7 @@ Last Updated: 2026-04-01
 
 - Financial Doctrine: current LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`
 - Historical `60/30/10`, `100% charity`, and `100% DAO` language is not current live doctrine for LLC-controlled revenue
+- Retired split-separation labels are not current operational doctrine for active repo control surfaces
 - YouAndINotAI public landing remains product-first and does not market `10%`, `Protocol Omega`, or donation language
 - Date-app payments remain bound to the internal checkout creation flow and verified for all five live checkout paths
 - OnlineRecycle remains live with service-first copy
