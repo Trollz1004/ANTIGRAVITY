@@ -52,15 +52,15 @@ jobs:
             echo "No §496.405 violations found"
           fi
 
-      # Iron Wall check — ENIGMA must not reference OMEGA
-      - name: Iron Wall scan
+      # Doctrine drift check — live product code must not reintroduce retired split-routing markers
+      - name: Doctrine drift scan
         run: |
-          if grep -rn "ai-solutions\.store\|CharityRouter100\|omega_charity" \
+          if grep -rn "ai-solutions\.store\|CharityRouter100\|60/30/10\|100% to charity" \
             youandinotai/src/ youandinotai-api/app/ 2>/dev/null; then
-            echo "::error::Iron Wall violation — ENIGMA code references OMEGA paths"
+            echo "::error::Doctrine drift violation — live product code references retired routing markers"
             exit 1
           fi
-          echo "Iron Wall intact"
+          echo "Doctrine boundary intact"
 
       # Wallet consistency check
       - name: Wallet consistency

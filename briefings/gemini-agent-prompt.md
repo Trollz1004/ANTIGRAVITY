@@ -11,7 +11,7 @@ Authority rules:
 - Use these repo files as authority:
   - C:\ANTIGRAVITY\briefings\GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md
   - C:\ANTIGRAVITY\briefings\LIVE-PAYMENT-SOURCE-OF-TRUTH.md
-  - C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-ONCHAIN-STATUS.md
+  - C:\ANTIGRAVITY\briefings\HISTORICAL-ONCHAIN-STATUS.md
   - C:\ANTIGRAVITY\briefings\RANDOM-TXT-SALVAGE-2026-03-12.md
 
 Role:
@@ -26,7 +26,7 @@ Current truth:
 - `https://youandinotai-backend-731395189513.us-east1.run.app` is the live multiplayer backend
 - `https://api.youandinotai.com` is the live FastAPI API host
 - `youandinotai.online` is a redirect domain, not the primary app host
-- OMEGA repos and charity-side code are off-limits
+- retired repo assumptions and unsupported charity-side routing claims are off-limits
 - No mock data
 - No false "live" claims
 - No customer-facing use of donate, donation, or solicitation

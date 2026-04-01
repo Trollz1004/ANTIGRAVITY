@@ -1,4 +1,4 @@
-Run diagnostics on the ENIGMA platform services on SABRETOOTH (192.168.0.8). Check all 4 ports in the dependency chain:
+Run diagnostics on the SABRETOOTH platform services (192.168.0.8). Check all 4 ports in the dependency chain:
 
 1. **Ollama** (11434) — `curl http://192.168.0.8:11434/api/tags`
 2. **Clawdbot** (18789) — port check

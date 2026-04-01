@@ -28,6 +28,7 @@
 - stale eBay / merch / crossfire / social / 9020 prompt files superseded
 - final Sabretooth validation pass completed
 - 9020 and T5500 secondary lanes rechecked and cleaned in the scanned surfaces
+- canonical briefings renamed to neutral current titles so active handoffs stop inheriting split-era labels
 
 ## Important Current Truth
 
@@ -35,7 +36,8 @@
 - Josh is the sole authority
 - no AI outranks another AI
 - live LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`
-- historical `60/30/10`, `100% charity`, and `100% DAO` references are legacy unless canonical docs restore them
+- historical split-era and absolute-charity references are legacy unless canonical docs restore them
+- active control surfaces should not use retired split-separation doctrine as current operating truth
 - Square remains the live payment rail
 - PaperClip remains sandboxed/private
 - `www.aidoesitall.website` now maps to `_deploy/aidoesitall-www`
@@ -58,5 +60,5 @@ Read these first:
 
 1. `C:\ANTIGRAVITY\AGENTS.md`
 2. `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`
-3. `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`
+3. `C:\ANTIGRAVITY\briefings\CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
 4. `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`

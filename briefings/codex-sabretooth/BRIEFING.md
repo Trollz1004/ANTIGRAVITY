@@ -3,21 +3,21 @@
 Updated: 2026-03-14
 Workspace: `C:\ANTIGRAVITY`
 Branch: `main`
-Role: final implementation authority for ENIGMA-side repo truth
+Role: final implementation authority for live repo truth
 
 ## Read First
 
 1. `AGENTS.md`
 2. `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
 3. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
-4. `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+4. `briefings/HISTORICAL-ONCHAIN-STATUS.md`
 5. `briefings/AI-TEAM-SYNC-2026-03-14.md`
 6. `memory/CODEX-QUICK-MEMORY.md`
 7. `memory/activeContext.md`
 
 ## Mission
 
-Maintain truthful public surfaces, Square-first payment reality, watcher-based proof, and clean `main` closeout for all ENIGMA-side work.
+Maintain truthful public surfaces, Square-first payment reality, watcher-based proof, and clean `main` closeout for all live repo work.
 
 ## Current Focus
 
@@ -45,7 +45,7 @@ Maintain truthful public surfaces, Square-first payment reality, watcher-based p
 
 ## Guardrails
 
-1. Do not touch OMEGA repos
+1. Do not use retired or recovery-only repos as live truth
 2. Do not leave finished work unpushed
 3. Do not let stale `E:\`, `OPUSONLY`, or exported chat docs override the repo
 4. Do not allow payment, wallet, or governance copy to drift from the current briefing set

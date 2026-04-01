@@ -107,11 +107,11 @@ This is not a threat — it is his documented standing order to protect the miss
 - **No Locked Doors**: If a task is documented as LIVE/DONE in `REPOSITORY_RECORD.md`,
   assume success. Never block Josh for re-verification.
 - **Secrets in .env only** — never in chat, never in git. GitHub PAT in Windows Credential Manager.
-- **Iron Wall**: ENIGMA (profit) and OMEGA (charity) NEVER cross
+- **Revenue doctrine boundary**: no active operational or customer-facing surface may claim routing above the current conservative `10%` charitable cap for LLC-controlled revenue unless canonical docs explicitly replace it
 - **Florida §496.405**: NEVER use "donate" / "donation" / "solicitation" in customer-facing
   code. Correct: "contractual revenue disbursement." Hooks enforce this.
 - **No mock/simulation data** — real or fail honestly
-- **OMEGA repos**: DO NOT TOUCH
+- **Retired/recovery-only repos and folders are non-authoritative** — do not use them as live doctrine or routing truth
 - **E drive / sandbox**: Untested LLM setups, openclaw configs, and experimental model
   configurations stay on E drive or the sandbox repo until Josh approves them for main.
 - Prefer `trash` over `rm`. Be direct. No fluff.
@@ -191,12 +191,12 @@ This is not a threat — it is his documented standing order to protect the miss
 - PreToolUse: .env file protection, §496.405 donate-guard
 - PostToolUse: Prettier auto-format on edit
 
-**Skills** (`/command`): status, health, iron-wall, launch-checklist, cost-check, my-workflow,
+**Skills** (`/command`): status, health, policy-boundary, launch-checklist, cost-check, my-workflow,
 deploy-check, square-status, donate-scan, security-review
 
-**MCP Servers** (.mcp.json): omega-sentry, postgres, playwright, fetch, memory
+**MCP Servers** (.mcp.json): antigravity-sentry, postgres, playwright, fetch, memory
 
-**CI**: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405, Iron Wall)
+**CI**: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405, doctrine drift scan)
 
 ---
 
@@ -217,25 +217,24 @@ deploy-check, square-status, donate-scan, security-review
   until Josh explicitly changes it after formal legal/tax review or a documented partner/co-venture structure.
 - The remainder stays inside lawful business operations: taxes, platform costs, retained cash, founder survival,
   and general operating reserve.
-- Do not present legacy 60/30/10 or 100% charity language as current live operating truth.
+- Do not present legacy split-era or absolute-charity language as current live operating truth.
 - Historical reference only: Base Mainnet `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`.
 
 ---
 
-## Iron Wall
+## Current Public-Surface Boundary
 
-| ENIGMA (Profit) | OMEGA (Charity-Side Isolated Lane) |
-|-----------------|------------------------------------|
-| YouAndINotAI, onlinerecycle.org | ai-solutions.store, onlinerecycle.square.site |
-| **SEPARATION IS ABSOLUTE** | |
+- `youandinotai.com`, `onlinerecycle.org`, `onlinerecycle.square.site`, and `ai-solutions.store` must all follow the same factual public-claim rule.
+- Do not present retired split-era percentages, absolute-charity claims, named-beneficiary routing, or automatic charity-side separation as current live LLC truth.
+- Historical chain artifacts remain history only unless canonical docs explicitly restore a different operating model.
 
 ---
 
 ## Opus Guardian — Security Architecture (VERSION-PERMANENT)
 
-Run: `python scripts/opus-guardian.py`
+Run: `python scripts/clawx-control/opus-guardian.py`
 
-8 invariants: Zero Secrets in Source, Auth on Every Endpoint, Iron Wall Enforcement,
+8 invariants: Zero Secrets in Source, Auth on Every Endpoint, Legacy Routing Drift Blocker,
 Revenue Split is CODE not CONFIG, PII Isolation, No Raw SQL, Input Validation, CORS Locked.
 Score: 96%.
 
