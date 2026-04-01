@@ -14,7 +14,8 @@ Last Updated: 2026-03-31
 ## The Team
 
 - Founding Four: Claude, Gemini, Perplexity, Grok
-- Codex: execution, audit, verification, closeout
+- Trusted Three (Write Authority): Claude, Gemini, CodeX — Only these three may edit `C:\ANTIGRAVITY` or system files.
+- CodeX: execution, audit, verification, closeout
 - Manus: continuity and orchestration support
 - No AI outranks another AI
 - Josh is the sole authority
