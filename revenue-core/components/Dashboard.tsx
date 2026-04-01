@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { DollarSign, Users, CreditCard, Activity, AlertTriangle, Clock, ExternalLink } from 'lucide-react';
+import { DollarSign, Users, Activity, Clock, ExternalLink } from 'lucide-react';
 import { Agent } from '../types';
 
 interface DashboardProps {
   agents: Agent[];
 }
 
-const STRIPE_DASHBOARD = 'https://dashboard.stripe.com';
+const SQUARE_DASHBOARD = 'https://squareup.com/dashboard';
 const LAUNCH_DATE = new Date('2026-04-04T00:00:00');
-const STRIPE_KEY_EXPIRES = new Date('2026-03-10T00:00:00');
 
 const Dashboard: React.FC<DashboardProps> = ({ agents }) => {
   const [now, setNow] = useState(new Date());
@@ -20,21 +19,8 @@ const Dashboard: React.FC<DashboardProps> = ({ agents }) => {
 
   const activeAgents = agents.filter(a => a.status === 'Active').length;
   const daysToLaunch = Math.ceil((LAUNCH_DATE.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  const daysToKeyExpiry = Math.ceil((STRIPE_KEY_EXPIRES.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Alerts */}
-      {daysToKeyExpiry <= 14 && (
-        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3">
-          <AlertTriangle className="text-amber-400 shrink-0 mt-0.5" size={20} />
-          <div>
-            <p className="text-amber-200 font-bold text-sm">Stripe API Key Expires in {daysToKeyExpiry} Days</p>
-            <p className="text-amber-300/70 text-xs mt-1">All 5 checkout links will break. Rotate key in Stripe Dashboard → Developers → API Keys.</p>
-          </div>
-        </div>
-      )}
-
       {/* KPI Row */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-surface p-4 rounded-xl border border-slate-700">
@@ -90,7 +76,7 @@ const Dashboard: React.FC<DashboardProps> = ({ agents }) => {
         </div>
       </div>
 
-      {/* Agent Status + Revenue Split */}
+      {/* Agent Status + Operating Policy */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Agent Cards */}
         <div className="lg:col-span-2 bg-surface p-6 rounded-xl border border-slate-700">
@@ -122,53 +108,41 @@ const Dashboard: React.FC<DashboardProps> = ({ agents }) => {
           </div>
         </div>
 
-        {/* Revenue Split */}
+        {/* Operating Policy */}
         <div className="bg-surface p-6 rounded-xl border border-slate-700">
-          <h3 className="text-lg font-bold text-white mb-4">Revenue Split — Protocol Omega</h3>
+          <h3 className="text-lg font-bold text-white mb-4">Current Operating Policy</h3>
           <div className="space-y-4">
             <div className="text-center py-4">
-              <div className="text-2xl font-bold font-mono text-white">60 / 30 / 10</div>
-              <p className="text-xs text-slate-500 mt-1">From dollar one. On-chain. Locked.</p>
+              <div className="text-2xl font-bold font-mono text-white">10% CAP</div>
+              <p className="text-xs text-slate-500 mt-1">Founder-directed conservative charitable cap for current LLC operations.</p>
             </div>
 
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-slate-300">Shriners Children's</span>
-                <span className="text-sm font-bold font-mono text-emerald-400">60%</span>
+                <span className="text-sm text-slate-300">Charitable Cap</span>
+                <span className="text-sm font-bold font-mono text-emerald-400">10%</span>
               </div>
               <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 rounded-full" style={{ width: '60%' }} />
+                <div className="h-full bg-emerald-500 rounded-full" style={{ width: '10%' }} />
               </div>
 
               <div className="flex justify-between items-center mt-3">
-                <span className="text-sm text-slate-300">V8 AI Infrastructure</span>
-                <span className="text-sm font-bold font-mono text-purple-400">30%</span>
+                <span className="text-sm text-slate-300">Operating Reserve</span>
+                <span className="text-sm font-bold font-mono text-purple-400">90%</span>
               </div>
               <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div className="h-full bg-purple-500 rounded-full" style={{ width: '30%' }} />
-              </div>
-
-              <div className="flex justify-between items-center mt-3">
-                <span className="text-sm text-slate-300">Founder Ops</span>
-                <span className="text-sm font-bold font-mono text-blue-400">10%</span>
-              </div>
-              <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-500 rounded-full" style={{ width: '10%' }} />
+                <div className="h-full bg-purple-500 rounded-full" style={{ width: '90%' }} />
               </div>
             </div>
 
             <div className="pt-4 border-t border-slate-800">
               <div className="flex justify-between text-xs text-slate-500">
-                <span>Shriners received</span>
+                <span>Historical chain</span>
                 <span className="font-mono text-white">$0.00</span>
               </div>
               <div className="flex justify-between text-xs text-slate-500 mt-1">
-                <span>V8 Infra received</span>
-                <span className="font-mono text-white">$0.00</span>
-              </div>
-              <div className="flex justify-between text-xs text-slate-500 mt-1">
-                <span>Founder received</span>
-                <span className="font-mono text-white">$0.00</span>
+                <span>Public copy rule</span>
+                <span className="font-mono text-white">product first</span>
               </div>
             </div>
           </div>
@@ -179,9 +153,9 @@ const Dashboard: React.FC<DashboardProps> = ({ agents }) => {
       <div className="bg-surface p-6 rounded-xl border border-slate-700">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-white">Live Products</h3>
-          <a href={STRIPE_DASHBOARD} target="_blank" rel="noopener noreferrer"
+          <a href={SQUARE_DASHBOARD} target="_blank" rel="noopener noreferrer"
             className="text-xs text-slate-400 hover:text-white flex items-center gap-1">
-            Stripe Dashboard <ExternalLink size={12} />
+            Square Dashboard <ExternalLink size={12} />
           </a>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3">

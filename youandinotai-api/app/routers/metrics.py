@@ -70,8 +70,9 @@ def _verify_metrics_key(x_metrics_key: str | None = Header(default=None, alias="
     return x_metrics_key
 
 
-@router.get("/charity", response_model=PlatformMetricsResponse)
-async def charity_metrics(
+@router.get("/impact", response_model=PlatformMetricsResponse)
+@router.get("/charity", response_model=PlatformMetricsResponse, deprecated=True)
+async def impact_metrics(
     _key: str = Depends(_verify_metrics_key),
     db: AsyncSession = Depends(get_db),
 ) -> PlatformMetricsResponse:

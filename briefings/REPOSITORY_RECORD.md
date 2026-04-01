@@ -2,7 +2,7 @@
 
 Date: March 31, 2026
 Authority: Joshua Coleman
-Status: authoritative repo refreshed after prelaunch doctrine audit, memory cleanup, sync-prompt cleanup, and governance-surface correction
+Status: authoritative repo refreshed after prelaunch doctrine audit, drift cleanup, node-lane verification, and final validation pass
 
 ## Repository Truth
 
@@ -44,6 +44,9 @@ Refreshed in this sweep:
 - MCP protocol metadata
 - date-app authenticated impact labeling
 - repo-level doctrine and continuity summaries
+- stale eBay / merch / crossfire / social / 9020 prompt surfaces superseded so they no longer present legacy routing as current truth
+- backup and contract folders labeled more explicitly as historical context
+- `scripts/youandinotai/split-consistency-check.sh` corrected so it scans the actual repo root and filters historical warnings correctly
 
 Primary adjustment record:
 
@@ -62,5 +65,28 @@ Primary adjustment record:
 - `ebaytrashortreasure@gmail.com` remains the isolated date-app commerce lane
 - `joshlcoleman@gmail.com` remains the primary non-date-app commerce identity
 - direct-upload Cloudflare Pages deployments should continue to use the verified API/upload-token path or a known authenticated project path
+
+## Final Validation Pass
+
+Verified on March 31, 2026:
+
+- `youandinotai`: `npm run lint` passed
+- `youandinotai`: `npm run build` passed
+- `mcp-server`: `npm run build` passed
+- `social-command-center`: `npm run build` passed
+- `revenue-core`: `npm install --no-package-lock` completed cleanly on Sabretooth, then `npm run build` passed
+- `antigravity`: `npm run build` passed
+- `youandinotai-api`: `uv run --python 3.13 --with-requirements requirements.txt --with pytest --with pytest-cov --with pytest-asyncio python -m pytest -q` passed with `201 passed`
+- `scripts/youandinotai/split-consistency-check.sh`: passed after root-path and filter fixes
+
+## Node Lane Verification
+
+- `9020` support lane verified clean for `D:\claws\openclaw-9020\posts\rotation.json` and `queue_pending.json`
+- `T5500` Manus lane verified at `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian`
+- stale legacy-split wording removed from:
+  - `docs-locked`
+  - `manus-meta-guardian-dashboard\client\src\pages\Dashboard.tsx`
+  - `manus-meta-guardian-dashboard\client\src\pages\CSVGuide.tsx`
+- sandbox repo on `E:\sandbox-repo` remains non-authoritative and still carries separate uncommitted PaperClip-script drift outside the live repo
 
 This file is the repo-level state summary for Sabretooth as of March 31, 2026.

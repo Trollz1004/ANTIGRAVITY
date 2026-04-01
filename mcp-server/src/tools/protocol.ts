@@ -47,7 +47,7 @@ const PROTOCOL = {
       note: "Historical on-chain split for GospelDonation.sol only.",
     },
     omega_isolation: {
-      note: "OMEGA remains the charity-side isolated lane. Do not assume 100% charity routing unless separately documented as current safe doctrine.",
+      note: "OMEGA remains the charity-side isolated lane. Do not assume absolute charity-side routing unless separately documented as current safe doctrine.",
     },
   },
   governance: {
