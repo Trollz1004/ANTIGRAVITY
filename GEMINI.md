@@ -40,7 +40,7 @@
 
 **MCP Servers (C:\ANTIGRAVITY\.mcp.json):**
 1. `brain-mcp` (Port 3900) — Repo truth and operational auditing.
-2. `antigravity-sentry` (Formerly omega-sentry) — Content and protocol enforcement. All OMEGA and Stripe drift has been eliminated.
+2. `antigravity-sentry` — Content and protocol enforcement. Legacy split-era drift and Stripe drift have been eliminated.
 3. `social-command-center` (New) — Read-only dashboard exposing 24 platforms and 34 agents to the AI Swarm. 
 
 **Third-Party Sandboxes (E:\.mcp.json):**
@@ -69,7 +69,7 @@
 ## OPERATIONAL RULES
 
 1. **One repo, one branch, one folder.** (`C:\ANTIGRAVITY` -> `main`)
-2. **Iron Wall Enforcement:** ENIGMA (Date App) and OMEGA (Charity) never cross.
+2. **Product Boundary Enforcement:** keep platform scopes distinct and do not restore retired split-era labels as live doctrine.
 3. **§496.405 Compliance:** Never use "donate" or "solicitation" in customer-facing code. It is a "contractual revenue disbursement."
 4. **Push to Main:** If a task is complete and verified, push it to `origin/main`. Do not leave local drift.
 

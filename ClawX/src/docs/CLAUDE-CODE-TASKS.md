@@ -113,5 +113,5 @@ Before executing ANY task, read `C:\OPUSONLY\briefings\archive\AI-CONTEXT-BRIEFI
 - Tasks 1-5 are revenue-critical — prioritize these
 - Tasks 6-7 are cleanup — do last
 - Do NOT push to any GitHub repo without explicit permission
-- Do NOT modify anything in OMEGA repos (aicollab4kids, ai-solutions-store)
+- Do NOT restore retired split-era repo doctrine or absolute-charity claims in any repo
 - All secrets stay in .env files, never hardcoded
