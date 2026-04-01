@@ -1,8 +1,8 @@
 # REPOSITORY RECORD - SABRETOOTH LIVE STATE
 
-Date: March 31, 2026
+Date: April 1, 2026
 Authority: Joshua Coleman
-Status: authoritative repo refreshed after prelaunch doctrine audit, drift cleanup, node-lane verification, and final validation pass
+Status: authoritative repo refreshed after prelaunch doctrine audit, drift cleanup, node-lane verification, final validation pass, and stale AIDoesItAll public-surface remediation
 
 ## Repository Truth
 
@@ -22,7 +22,8 @@ Status: authoritative repo refreshed after prelaunch doctrine audit, drift clean
 | OnlineRecycle | LIVE | service-first public copy remains the live model |
 | Dashboard gateway | LIVE | `dashboard.aidoesitall.website` now serves the no-index auth gateway |
 | PaperClip runtime | SANDBOX / PRIVATE | sandboxed and not part of the live repo runtime |
-| Root AIDoesItAll mapping | OPEN | `www.aidoesitall.website` source still not identified in this repo |
+| Root AIDoesItAll mapping | LIVE | `www.aidoesitall.website` now maps to `_deploy/aidoesitall-www` on Cloudflare Pages project `for-the-kids-contribute` |
+| AIDoesItAll API guard | LIVE | `api.aidoesitall.website/*` is now guarded by repo-tracked Worker source at `infra/cloudflare/aidoesitall-api-guard` |
 
 ## Current Financial Doctrine
 
@@ -58,6 +59,13 @@ Primary adjustment record:
 - do not market percentages
 - do not frame purchases as donations
 - keep impact claims factual, restrained, and non-solicitation
+
+## April 1 Public-Surface Remediation
+
+- `www.aidoesitall.website` stale Pages deployment was replaced with the safe repo-tracked handoff surface at `_deploy/aidoesitall-www`
+- Cloudflare Pages project `for-the-kids-contribute` now serves that replacement on production deployment `0e318f27`
+- stale Worker `for-the-kids-api` on route `api.aidoesitall.website/*` was replaced with the repo-tracked guard Worker at `infra/cloudflare/aidoesitall-api-guard`
+- verified live result: both `www.aidoesitall.website` and `api.aidoesitall.website` now avoid stale `60%` / `100% charity` public claims
 
 ## Operational Notes
 

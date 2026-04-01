@@ -1,4 +1,4 @@
-# Session Handoff - 2026-03-31 (Mini ASUS PC Setup)
+# Session Handoff - 2026-04-01
 
 ## Status Update
 - **Machine:** Mini ASUS PC (Windows)
@@ -17,6 +17,46 @@
 - Claude Code is ready for architecture and dev work.
 - CodeX is ready for repo validation and treasury checks.
 
-## Next Steps
-- Continue April 4 launch preparations for `youandinotai.com`.
-- Monitor for any doctrine drift during cross-node syncs.
+## Accomplishments
+
+- canonical memory files rewritten around current repo truth
+- AI sync prompts rewritten or superseded so they no longer push stale `60/30/10` doctrine
+- ClawX repo-facing docs corrected to stop overstating governance and legacy split claims
+- MCP protocol metadata normalized away from stale Stripe, node, and multisig assumptions
+- date-app authenticated impact navigation cleaned up
+- current adjustment recorded in `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
+- stale eBay / merch / crossfire / social / 9020 prompt files superseded
+- final Sabretooth validation pass completed
+- 9020 and T5500 secondary lanes rechecked and cleaned in the scanned surfaces
+
+## Important Current Truth
+
+- Canonical repo: `C:\ANTIGRAVITY` on `main`
+- Josh is the sole authority
+- no AI outranks another AI
+- live LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`
+- historical `60/30/10`, `100% charity`, and `100% DAO` references are legacy unless canonical docs restore them
+- Square remains the live payment rail
+- PaperClip remains sandboxed/private
+- `www.aidoesitall.website` now maps to `_deploy/aidoesitall-www`
+- `api.aidoesitall.website/*` now maps to the repo-tracked `infra/cloudflare/aidoesitall-api-guard` Worker source
+- ASUS mini PC is a trusted CLI node with local continuity and local RDP/PaperClip launchers outside OneDrive
+
+## Validation Snapshot
+
+- `youandinotai`: lint + build passed
+- `youandinotai-api`: `201 passed`
+- `mcp-server`: build passed
+- `social-command-center`: build passed
+- `revenue-core`: build passed on Sabretooth after local dependency install
+- `antigravity`: build passed
+- revenue-policy consistency check: passed
+
+## Next Reader Rule
+
+Read these first:
+
+1. `C:\ANTIGRAVITY\AGENTS.md`
+2. `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`
+3. `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`
+4. `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
