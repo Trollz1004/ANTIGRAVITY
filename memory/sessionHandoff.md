@@ -16,6 +16,8 @@
 - `jules-cli.py` is ready for direct Google API orchestration.
 - Claude Code is ready for architecture and dev work.
 - CodeX is ready for repo validation and treasury checks.
+- Auxiliary nodes such as the ASUS mini must treat their local clones as read-only mirrors for live repo truth.
+- Only the primary Sabretooth session may write or push `C:\ANTIGRAVITY`.
 
 ## Accomplishments
 
