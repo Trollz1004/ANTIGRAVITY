@@ -11,7 +11,7 @@ const NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolea
   { to: '/app/events', icon: Calendar, label: 'Events' },
   { to: '/app/volunteer', icon: HandHeart, label: 'Volunteer' },
   { to: '/app/support', icon: Headset, label: 'Support' },
-  { to: '/app/charity', icon: Sparkles, label: 'For The Kids' },
+  { to: '/app/impact', icon: Sparkles, label: 'Impact' },
 ];
 
 const MOBILE_NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolean }[] = [

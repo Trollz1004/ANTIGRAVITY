@@ -1,14 +1,13 @@
 /**
- * Protocol Tools — Wallet addresses, split logic, doctrine, and status
+ * Protocol Tools — wallets, doctrine, historical chain context, and launch status
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
 
 const PROTOCOL = {
-  name: "Protocol Omega",
-  version: "1.4.1",
-  doctrine: "Until no kid is in need",
+  name: "Protocol Reference",
+  version: "1.5.0",
+  doctrine: "Fact-only, product-first, no false claims",
   launch_date: "2026-04-04",
   entity: {
     legal: "Trash Or Treasure Online Recycler LLC",
@@ -16,116 +15,122 @@ const PROTOCOL = {
     owner: "Joshua Coleman",
   },
   wallets: {
-    gospel_contract: "0x9855B75061D4c841791382998f0CE8B2BCC965A4",
-    charity_fund_60: "0x8d3dEADbE2b4B857A43331D459270B5eedC7084e",
-    infrastructure_30: "0xe0a42f83900af719019eBeD3D9473BE8E8f2920b",
-    founder_ops_10: "0x7c3E283119718395Ef5EfBAC4F52738C2018daA7",
+    historical_gospel_contract: "0x9855B75061D4c841791382998f0CE8B2BCC965A4",
+    historical_charity_wallet: "0x8d3dEADbE2b4B857A43331D459270B5eedC7084e",
+    historical_infrastructure_wallet: "0xe0a42f83900af719019eBeD3D9473BE8E8f2920b",
+    historical_founder_wallet: "0x7c3E283119718395Ef5EfBAC4F52738C2018daA7",
   },
   contracts: {
-    gospel_donation: {
+    historical_gospel_donation: {
       name: "GospelDonation.sol",
       address: "0x9855B75061D4c841791382998f0CE8B2BCC965A4",
       network: "Base Mainnet (Chain 8453)",
-      purpose: "Historical 60/30/10 revenue router reference — deployed and verified on BaseScan",
-      status: "DEPLOYED — historical on-chain context",
-      multisig: "Gnosis Safe 2-of-2 (3rd fiduciary signer pending for 2-of-3)",
+      purpose: "Historical on-chain 60/30/10 reference",
+      status: "DEPLOYED — historical chain context",
+      note: "Do not treat this historical contract as current automatic LLC operating doctrine.",
+    },
+    intended_next_router: {
+      name: "DatingRevenueRouter.sol",
+      status: "REPO ARTIFACT ONLY",
+      note: "Not current live state unless separately deployed, verified, and documented.",
     },
   },
   splits: {
     current_llc_policy: {
-      charitable_cap: 10,
-      operating_reserve: 90,
-      note: "Current founder-directed conservative policy for LLC operations. Do not market it as universal tax law.",
+      charitable_cap_pct: 10,
+      note: "Current founder-directed conservative operating doctrine for LLC-controlled revenue. Not universal legal advice.",
     },
-    legacy_protocol_omega: {
-      shriners: 60,
-      v8_infrastructure: 30,
-      founder: 10,
-      note: "Historical on-chain 60/30/10 reference only. Not current live LLC operating doctrine.",
+    historical_gospel_donation: {
+      charity_pct: 60,
+      infrastructure_pct: 30,
+      founder_pct: 10,
+      note: "Historical on-chain split for GospelDonation.sol only.",
     },
-    omega: {
-      note: "Charity-side isolated lane. Do not assume 100% charity routing unless separately documented as current safe doctrine.",
+    omega_isolation: {
+      note: "OMEGA remains the charity-side isolated lane. Do not assume 100% charity routing unless separately documented as current safe doctrine.",
     },
   },
-  iron_wall: "ENIGMA (profit) and OMEGA (charity) NEVER cross. Separation is absolute.",
-  gnosis_safe: "3-of-5 multisig controls contract upgrades",
+  governance: {
+    iron_wall: "ENIGMA (profit) and OMEGA (charity-side isolated lane) NEVER cross.",
+    clawx: {
+      status: "LIVE EXTERNAL DASHBOARD",
+      url: "https://clawx-aihub-zwxfcstm.manus.space",
+      note: "Deliberation surface only. Do not treat it as stand-alone proof of legal or on-chain control.",
+    },
+    multisig: {
+      status: "UNVERIFIED / PLANNED",
+      note: "Do not present any multisig threshold as live unless directly verified.",
+    },
+  },
   chain: "Base Mainnet",
   sites: {
-    youandinotai: { url: "youandinotai.com", host: "Cloudflare Pages", entity: "ENIGMA" },
-    onlinerecycle: { url: "onlinerecycle.org", host: "Cloudflare Pages", entity: "ENIGMA" },
-    ai_solutions: { url: "ai-solutions.store", host: "Cloudflare Pages", entity: "OMEGA" },
+    youandinotai: { url: "https://youandinotai.com", host: "Cloudflare Pages", lane: "ENIGMA" },
+    onlinerecycle: { url: "https://onlinerecycle.org", host: "Cloudflare Pages", lane: "ENIGMA" },
+    ai_solutions: { url: "https://ai-solutions.store", host: "Cloudflare Pages", lane: "OMEGA-side isolated lane" },
+    dashboard_gateway: { url: "https://dashboard.aidoesitall.website", host: "Cloudflare Pages", lane: "gateway" },
   },
-  stripe: {
-    account: "acct_1T3DVxIO6LWQSQoI",
-    key_expires: "~March 10, 2026",
-    products: 10,
+  commerce: {
+    live_payment_rail: "Square",
+    stripe_status: "legacy_only",
+    live_checkout_paths: 5,
     customers: 0,
     revenue: 0,
   },
 } as const;
 
 export function registerProtocolTools(server: McpServer) {
-  // Tool 9: Full protocol info
   server.tool(
     "omega_protocol_info",
-    "Return the complete Protocol Omega specification: wallets, splits, contracts, doctrine",
+    "Return the current doctrine plus historical chain context for Protocol Omega / ENIGMA revenue references",
     {},
-    async () => {
-      return {
-        content: [{
-          type: "text" as const,
-          text: JSON.stringify(PROTOCOL, null, 2),
-        }],
-      };
-    }
+    async () => ({
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify(PROTOCOL, null, 2),
+      }],
+    })
   );
 
-  // Tool 10: Wallet addresses
   server.tool(
     "omega_wallets",
-    "Return all Protocol Omega Base Mainnet wallet addresses",
+    "Return historical Protocol Omega Base Mainnet wallet references with current-doctrine warnings",
     {},
-    async () => {
-      return {
-        content: [{
-          type: "text" as const,
-          text: JSON.stringify({
-            chain: PROTOCOL.chain,
-            wallets: PROTOCOL.wallets,
-            multisig: PROTOCOL.gnosis_safe,
-          }, null, 2),
-        }],
-      };
-    }
+    async () => ({
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify({
+          chain: PROTOCOL.chain,
+          wallets: PROTOCOL.wallets,
+          current_llc_policy: PROTOCOL.splits.current_llc_policy,
+          warning: "Historical chain references do not by themselves define current LLC operating doctrine.",
+        }, null, 2),
+      }],
+    })
   );
 
-  // Tool 11: Iron Wall check
   server.tool(
     "omega_iron_wall",
-    "Verify the Iron Wall separation between ENIGMA (profit) and OMEGA (charity)",
+    "Return the current ENIGMA versus OMEGA separation rule and related doctrine notes",
     {},
-    async () => {
-      return {
-        content: [{
-          type: "text" as const,
-          text: JSON.stringify({
-            status: "ENFORCED",
-            rule: PROTOCOL.iron_wall,
-            enigma_sites: ["youandinotai.com", "onlinerecycle.org"],
-            omega_sites: ["ai-solutions.store"],
-            current_llc_policy: PROTOCOL.splits.current_llc_policy,
-            legacy_protocol_omega: PROTOCOL.splits.legacy_protocol_omega,
-            omega_split: PROTOCOL.splits.omega,
-          }, null, 2),
-        }],
-      };
-    }
+    async () => ({
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify({
+          status: "ENFORCED",
+          rule: PROTOCOL.governance.iron_wall,
+          enigma_sites: ["https://youandinotai.com", "https://onlinerecycle.org"],
+          omega_sites: ["https://ai-solutions.store"],
+          current_llc_policy: PROTOCOL.splits.current_llc_policy,
+          historical_gospel_donation: PROTOCOL.splits.historical_gospel_donation,
+          omega_isolation: PROTOCOL.splits.omega_isolation,
+        }, null, 2),
+      }],
+    })
   );
 
-  // Tool 12: Launch status
   server.tool(
     "omega_launch_status",
-    "Return current launch readiness status for YouAndINotAI April 4 launch",
+    "Return current launch-readiness metadata for the April 4, 2026 YouAndINotAI launch window",
     {},
     async () => {
       const now = new Date();
@@ -139,80 +144,65 @@ export function registerProtocolTools(server: McpServer) {
             launch_date: "2026-04-04",
             days_remaining: daysLeft,
             site_live: true,
-            site_url: "youandinotai.com",
+            site_url: "https://youandinotai.com",
             host: "Cloudflare Pages",
-            stripe_live: true,
-            stripe_key_expires: "~March 10, 2026",
-            payment_links: 5,
+            payment_rail: "Square",
+            live_checkout_paths: 5,
             revenue: 0,
             customers: 0,
-            blocker: "TRAFFIC — code and payments are ready, need eyeballs",
-            social_posts_ready: true,
-            email_sequence_ready: true,
+            current_focus: "Launch readiness, trust hardening, and acquisition",
           }, null, 2),
         }],
       };
     }
   );
 
-  // Tool 13: Site map
   server.tool(
     "omega_sites",
-    "Return all deployed sites with their hosts, entities, and URLs",
+    "Return deployed public sites with their current lanes and hosting model",
     {},
-    async () => {
-      return {
-        content: [{
-          type: "text" as const,
-          text: JSON.stringify({
-            sites: PROTOCOL.sites,
-            deploy_target: "Cloudflare Pages ONLY",
-            dead: ["Netlify (locked)", "GitHub Pages (removed)"],
-          }, null, 2),
-        }],
-      };
-    }
+    async () => ({
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify({
+          sites: PROTOCOL.sites,
+          deploy_target: "Cloudflare Pages",
+          note: "Treat preview URLs and temporary upload URLs as non-canonical.",
+        }, null, 2),
+      }],
+    })
   );
 
-  // Tool 14: Node status
   server.tool(
     "omega_node_status",
-    "Return the status of all compute nodes in the formation",
+    "Return the current high-level node formation status without inventing stale live-runtime claims",
     {},
-    async () => {
-      return {
-        content: [{
-          type: "text" as const,
-          text: JSON.stringify({
-            nodes: {
-              T5500: { status: "ACTIVE", role: "Primary", gpu: "GTX 1070 8GB", brain: "Claude Opus 4.6" },
-              SABRETOOTH: { status: "OFFLINE", role: "Secondary", note: "Not accessible" },
-              "9020": { status: "OFFLINE", role: "Tertiary", note: "Not accessible" },
-            },
-            agents: {
-              opus: { status: "ACTIVE", role: "CLI + Strategy", location: "T5500" },
-              gemini: { status: "ACTIVE", role: "Hands-on-keyboard", location: "Browser" },
-              comet: { status: "ACTIVE", role: "Research + Audits", location: "Browser" },
-            },
-          }, null, 2),
-        }],
-      };
-    }
+    async () => ({
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify({
+          nodes: {
+            SABRETOOTH: { role: "Primary live command post", state: "ACTIVE" },
+            "9020": { role: "Support / remote ops node", state: "COLD / OPT-IN" },
+            T5500: { role: "Utility / build-media node", state: "COLD / OPT-IN" },
+          },
+          note: "Use direct session checks for actual runtime availability before making stronger claims.",
+        }, null, 2),
+      }],
+    })
   );
 
-  // Tool 15: Deadline tracker
   server.tool(
     "omega_deadlines",
-    "Return all critical deadlines and their countdown status",
+    "Return current tracked launch deadlines without stale Stripe-rotation claims",
     {},
     async () => {
       const now = new Date();
       const deadlines = [
-        { name: "Stripe Key Rotation", date: "2026-03-10", critical: true, note: "All 5 checkout links die if not rotated" },
-        { name: "YouAndINotAI Launch", date: "2026-04-04", critical: true, note: "First revenue target" },
+        { name: "YouAndINotAI Launch", date: "2026-04-04", critical: true, note: "Primary public launch target" },
       ];
 
-      const withCountdown = deadlines.map(d => {
+      const withCountdown = deadlines.map((d) => {
         const target = new Date(d.date);
         const daysLeft = Math.ceil((target.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
         return { ...d, days_remaining: daysLeft, overdue: daysLeft < 0 };

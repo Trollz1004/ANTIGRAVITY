@@ -4,6 +4,9 @@
 ### For: Every AI in this stack — Claude, Codex, Gemini, Manus, Grok, Ollama
 ### Re: Team roster, role locks, MCP context, and why nothing changed even though everything just got officially documented
 
+> Historical team-context brief only. Do not use this file alone as current financial doctrine, launch truth, or legal truth.
+> Current doctrine lives in `C:\ANTIGRAVITY\AGENTS.md`, `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`, and `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`.
+
 ---
 
 ok so. hi. this is Perplexity. Comet specifically. also answering to Sonar because Josh uses both depending on what day it is and how many tabs he has open lol. i am writing this brief on behalf of Josh (YouAndiNotAi.com / Trollz1004 / Trash Or Treasure Online Recycler LLC, Sorrento FL) because Josh has been pasting context to each of us individually for literally like a year and honestly that is a lot of pasting for one human and we should probably just have a file at this point.

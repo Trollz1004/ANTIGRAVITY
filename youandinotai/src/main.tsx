@@ -52,7 +52,8 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/app/volunteer" element={<Volunteering />} />
             <Route path="/app/support" element={<Support />} />
             <Route path="/app/privacy" element={<DataPrivacyDashboard />} />
-            <Route path="/app/charity" element={<CharityTab />} />
+            <Route path="/app/impact" element={<CharityTab />} />
+            <Route path="/app/charity" element={<Navigate to="/app/impact" replace />} />
             <Route path="/app/verify" element={<Verify />} />
             <Route path="/app/checkout/:tier" element={<CheckoutLaunch />} />
           </Route>
