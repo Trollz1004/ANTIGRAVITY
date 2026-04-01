@@ -531,3 +531,9 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 - **Not Current Doctrine:** historical `60/30/10`, `100% charity`, and `100% DAO` language for LLC-controlled revenue.
 - **Interpretation Rule:** do not treat the `10%` cap as universal legal advice; treat it as the current conservative operating doctrine unless a future canonical doc replaces it.
 - **Team Read Order:** `AGENTS.md` -> `briefings/REPOSITORY_RECORD.md` -> `briefings/PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md` -> `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`.
+
+---
+### AIDOESITALL SURFACE REMEDIATION - 2026-04-01 11:31:40
+- **`www.aidoesitall.website`:** stale Pages deployment removed; now served from repo-tracked source `_deploy/aidoesitall-www` on project `for-the-kids-contribute`.
+- **`api.aidoesitall.website/*`:** stale `for-the-kids-api` charity payload replaced with repo-tracked guard Worker source at `infra/cloudflare/aidoesitall-api-guard`.
+- **Public Claim Rule:** these hostnames no longer publish stale `60%` / `100% charity` claims and now act only as safe gateway or metadata surfaces.

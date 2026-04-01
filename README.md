@@ -10,7 +10,7 @@ Public monorepo for the YouAndINotAI platform and related web properties operate
 | [OnlineRecycle](https://onlinerecycle.org/) | Public | Live product | Central Florida electronics recycling, secure device intake, pickup, drop-off, and resale. |
 | [AI-Solutions Store](https://ai-solutions.store/) | Public | Live product | Separate storefront for digital products and automation offers. |
 | [Antigravity Dashboard](https://dashboard.aidoesitall.website/) | Public | Live auth gateway | Cloudflare-hosted entry page that routes trusted users into the authenticated PaperClip workspace. |
-| [AIDoesItAll.website](https://www.aidoesitall.website/) | Public | Live web surface | Public-facing umbrella site for the broader ANTIGRAVITY ecosystem. |
+| [AIDoesItAll.website](https://www.aidoesitall.website/) | Public | Live gateway surface | Safe public handoff surface that routes trusted users to the authenticated workspace and points public visitors to the active product sites. |
 | [ClawX](https://clawx-aihub-zwxfcstm.manus.space/) | Public | Live external dashboard | Separate multi-AI governance and coordination surface hosted outside this monorepo. |
 | Command Center | Private | Separate private repo | Private admin dashboard for approvals, media workflow, and internal operator views. |
 | Social Command Center | Internal | MCP/dashboard utility | Read-only internal dashboard for platform and agent visibility. |

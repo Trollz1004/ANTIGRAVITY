@@ -1,6 +1,6 @@
 # PROJECT STATE - LIVE BASELINE
 
-Last Updated: 2026-03-31
+Last Updated: 2026-04-01
 
 ## Current Live Repo
 
@@ -28,7 +28,8 @@ Last Updated: 2026-03-31
 - `C:\ANTIGRAVITY` remains the only authoritative repo root
 - Sandbox and third-party AI infrastructure stays off the live repo until promoted
 - Historical Base contract artifacts remain historical chain context only
-- `www.aidoesitall.website` still needs explicit local source mapping before any confident redeploy
+- `www.aidoesitall.website` now maps to `_deploy/aidoesitall-www` and no longer depends on an unmapped stale Pages build
+- `api.aidoesitall.website/*` now maps to the repo-tracked `infra/cloudflare/aidoesitall-api-guard` Worker source
 - The March 31 doctrine correction is recorded in `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
 - 9020 support lane copy is verified cleaned
 - T5500 Manus lane copy is verified cleaned in the scanned `docs-locked` and dashboard-page surfaces

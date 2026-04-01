@@ -1,0 +1,11 @@
+{
+  "name": "for-the-kids-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-04-01",
+  "routes": [
+    {
+      "pattern": "api.aidoesitall.website/*",
+      "zone_name": "aidoesitall.website"
+    }
+  ]
+}
