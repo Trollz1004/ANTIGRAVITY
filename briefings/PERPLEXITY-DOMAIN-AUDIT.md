@@ -1,5 +1,8 @@
 # Perplexity (Comet) — Full Domain Audit Prompt
 
+> Superseded for current doctrine by `briefings/COMET-SYNC-PROMPT.md`, `briefings/PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`, and `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`.
+> Do not use this file alone as current financial or public-copy truth.
+
 > Run this BEFORE letting Grok look. Every domain, every page, every link.
 
 ---

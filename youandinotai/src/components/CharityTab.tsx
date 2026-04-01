@@ -1,5 +1,5 @@
 /**
- * CharityTab — Displays volunteer impact and the mission context behind it.
+ * CharityTab — Displays volunteer impact and mission context behind it.
  * Fetches volunteer metrics from /api/v1/volunteer/impact.
  */
 
@@ -40,7 +40,7 @@ export default function CharityTab() {
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       {/* Hero Section */}
       <div className="text-center space-y-4">
-        <h1 className="text-3xl font-extrabold text-white">For The Kids</h1>
+        <h1 className="text-3xl font-extrabold text-white">Impact</h1>
         <p className="text-xl text-purple-400 font-medium">
           Volunteer action and mission context, in one place.
         </p>
@@ -91,7 +91,7 @@ export default function CharityTab() {
         
         <div className="relative z-10 space-y-4">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            The Gospel Donation Model
+            Mission Context
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-3">
