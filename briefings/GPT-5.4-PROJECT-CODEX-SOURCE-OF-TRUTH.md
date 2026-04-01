@@ -278,7 +278,7 @@ Mission continuity source:
 
 That file documents:
 - the stated perpetual mission
-- the 60/30/10 split model
+- the historical on-chain `60/30/10` model as project history, not current LLC operating doctrine
 - the blockchain-based continuity philosophy
 - the operator-death continuity intent
 - major contract/wallet references
@@ -291,7 +291,7 @@ Canonical on-chain status:
 - `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
 
 Current verified split understanding:
-- live verified Base split is still `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
+- live verified Base split is still `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4` as historical chain truth
 - the live payout wallets currently verified are:
   - charity `60%` -> `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
   - infrastructure `30%` -> `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`

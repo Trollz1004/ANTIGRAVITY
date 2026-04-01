@@ -21,12 +21,13 @@ def status():
     return jsonify({
         "agents": "Healthy",
         "domains": "Active",
-        "protocol": "Omega 60/30/10",
+        "protocol": "Current LLC doctrine: conservative 10% charitable cap",
         "details": {
             "aidoesitall.website": "Up",
             "youandinotai.com": "Up",
             "youandinotai.online": "Up",
-            "onlinerecycle.org": "Up"
+            "onlinerecycle.org": "Up",
+            "historical_contract": "Base Mainnet GospelDonation.sol retained as historical reference only",
         }
     })
 
