@@ -6,7 +6,7 @@ This file predates the March 30-31, 2026 doctrine cleanup and must not be used a
 
 - `C:\ANTIGRAVITY\AGENTS.md`
 - `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`
-- `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`
+- `C:\ANTIGRAVITY\briefings\CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
 - `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
 - `C:\ANTIGRAVITY\memory\projectState.md`
 

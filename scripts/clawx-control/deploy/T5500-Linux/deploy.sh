@@ -1,6 +1,6 @@
 #!/bin/bash
 # ═══════════════════════════════════════════════════════════════════════════════
-# ENIGMA DEPLOY SCRIPT — T5500 Linux
+# DATE-APP DEPLOY SCRIPT — T5500 Linux
 # Deploys and enables auto-start for the dating platform
 # Run as root or with sudo
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -11,7 +11,7 @@ DEPLOY_DIR="/opt/dateapp"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "═══════════════════════════════════════════════════════════════"
-echo " ENIGMA DEPLOY — YouAndINotAI Dating Platform"
+echo " DATE-APP DEPLOY — YouAndINotAI Dating Platform"
 echo " Target: $DEPLOY_DIR"
 echo "═══════════════════════════════════════════════════════════════"
 

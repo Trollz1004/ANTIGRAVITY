@@ -11,4 +11,4 @@ For current audits, use the canonical repo truth and current doctrine files:
 - `C:\ANTIGRAVITY\AGENTS.md`
 - `C:\ANTIGRAVITY\CLAUDE.md`
 - `C:\ANTIGRAVITY\briefings\REPOSITORY_RECORD.md`
-- `C:\ANTIGRAVITY\briefings\PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`
+- `C:\ANTIGRAVITY\briefings\CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`

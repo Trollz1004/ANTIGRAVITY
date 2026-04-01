@@ -3,7 +3,7 @@
 Last updated: 2026-03-13
 Workspace truth: `C:\ANTIGRAVITY`
 
-This is the current AI team structure for ENIGMA-side work.
+This is the current AI team structure for live repo work.
 
 ## Core Team
 
@@ -56,12 +56,12 @@ Every agent should anchor to these first:
 - `AGENTS.md`
 - `briefings/GPT-5.4-PROJECT-CODEX-SOURCE-OF-TRUTH.md`
 - `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
-- `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
+- `briefings/HISTORICAL-ONCHAIN-STATUS.md`
 - `memory/activeContext.md`
 
 ## Prohibited Drift
 
-- No OMEGA repo work from this lane
+- No retired or recovery-only repo work from this lane
 - No stale `E:\` or `C:\OPUSONLY` context as live truth
 - No Stripe-first decisions
 - No invented metrics

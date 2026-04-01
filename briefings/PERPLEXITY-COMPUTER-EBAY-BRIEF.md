@@ -14,8 +14,8 @@ Use this brief when Perplexity Computer is helping with `eBay` and `onlinerecycl
 - Use only a narrow task-scoped env derived from `briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env`.
 - Do not print secrets back into chat or files.
 - Do not claim repo truth unless Codex verifies it on Sabretooth.
-- Do not touch OMEGA repos.
-- Respect the Iron Wall between ENIGMA and OMEGA.
+- Do not use retired or recovery-only repo assumptions as live truth.
+- Respect the current conservative `10%` doctrine and fact-only public-copy rule.
 
 ## Minimal Env for Perplexity Computer
 

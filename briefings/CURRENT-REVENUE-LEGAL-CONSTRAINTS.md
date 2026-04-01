@@ -1,4 +1,4 @@
-# PROTOCOL OMEGA — LEGAL CONSTRAINTS
+# CURRENT REVENUE — LEGAL CONSTRAINTS
 
 > Date: March 30, 2026
 > Authority: Joshua Coleman

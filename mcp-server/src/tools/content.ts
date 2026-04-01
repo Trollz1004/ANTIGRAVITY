@@ -77,7 +77,7 @@ const CONTENT_BANK: Post[] = [
 export function registerContentTools(server: McpServer) {
   // Tool 5: Get all content
   server.tool(
-    "omega_get_content",
+    "content_get_bank",
     "Return the full content bank of ready-to-post social media content",
     {
       platform: z.enum(["x", "reddit", "tiktok", "linkedin", "all"]).default("all").describe("Filter by platform or 'all'"),
@@ -98,7 +98,7 @@ export function registerContentTools(server: McpServer) {
 
   // Tool 6: Get a single X post (random from bank)
   server.tool(
-    "omega_get_x_post",
+    "content_get_x_post",
     "Get a ready-to-post X/Twitter post from the content bank",
     {
       index: z.number().optional().describe("Specific post index (0-based), or omit for random"),
@@ -124,7 +124,7 @@ export function registerContentTools(server: McpServer) {
 
   // Tool 7: Get a Reddit post
   server.tool(
-    "omega_get_reddit_post",
+    "content_get_reddit_post",
     "Get a ready-to-post Reddit submission from the content bank",
     {
       subreddit: z.string().optional().describe("Filter by subreddit (e.g. 'r/SideProject')"),
@@ -154,7 +154,7 @@ export function registerContentTools(server: McpServer) {
 
   // Tool 8: Get a TikTok script
   server.tool(
-    "omega_get_tiktok_script",
+    "content_get_tiktok_script",
     "Get a TikTok video script from the content bank",
     {},
     async () => {

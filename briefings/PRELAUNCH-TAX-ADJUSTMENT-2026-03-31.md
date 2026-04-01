@@ -1,7 +1,7 @@
 # PRELAUNCH TAX ADJUSTMENT — 2026-03-31
 
 Authority: Joshua Coleman
-Scope: ENIGMA-side / LLC-controlled revenue doctrine
+Scope: LLC-controlled revenue doctrine
 Purpose: record the forced prelaunch doctrine adjustment made close to the April 4, 2026 launch so the AI team does not mistake it for compromise, drift, or silent policy tampering
 
 ## What Changed
@@ -57,7 +57,7 @@ When syncing another AI or auditing the repo:
 
 1. Read `AGENTS.md`
 2. Read `briefings/REPOSITORY_RECORD.md`
-3. Read `briefings/PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`
+3. Read `briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
 4. Read this file
 
 If an older file conflicts with those four, treat the older file as historical or stale unless Josh explicitly says otherwise.

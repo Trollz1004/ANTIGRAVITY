@@ -1,7 +1,7 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # SYSTEMD SERVICE: DateApp Docker Stack
 # Location: /etc/systemd/system/dateapp.service
-# Author: ENIGMA
+# Author: Joshua Coleman
 # Enables: sudo systemctl enable dateapp
 # ═══════════════════════════════════════════════════════════════════════════════
 
