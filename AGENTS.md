@@ -192,6 +192,8 @@ composition may not be altered, reduced, or replaced without Josh's explicit ord
 - **Secrets in .env ONLY** — never in chat, never in git. GitHub PAT in Windows Credential Manager.
 - **Live repo write scope**: Only Codex, Claude, Gemini, and GitHub-approved repo workflows may write directly to `C:\ANTIGRAVITY`.
   All other platforms must work through sandbox lanes and the sandbox repo first.
+- **Auxiliary node restriction**: mirrored clones, helper nodes, and auxiliary workstations such as the ASUS mini are read-only for live repo truth.
+  Only the primary Sabretooth session may make direct live-repo edits or push `C:\ANTIGRAVITY`.
 - **Worker count max**: 10
 - **Revenue doctrine boundary**: no operational or customer-facing surface may claim routing above the current conservative `10%` charitable cap for LLC-controlled revenue unless a new canonical legal update replaces it
 - **FL §496.405**: NEVER use "donate" / "donation" / "solicitation" in customer-facing code.
