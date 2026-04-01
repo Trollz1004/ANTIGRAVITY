@@ -1,6 +1,10 @@
 # ANTIGRAVITY MEMORY SNAPSHOT — 2026-03-11
 ## Personal Vault Backup for Codex, Claude, & Gemini
 
+> Historical backup snapshot only.
+> Do not treat this file as current canonical doctrine for LLC-controlled revenue.
+> Current canonical sources are `AGENTS.md`, `CLAUDE.md`, `briefings/REPOSITORY_RECORD.md`, `briefings/PROTOCOL-OMEGA-LEGAL-CONSTRAINTS.md`, and `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`.
+
 ### 1. Mission Truth
 - **Project:** YouAndINotAI (youandinotai.com)
 - **Entity:** Trash Or Treasure Online Recycler LLC (FL)
