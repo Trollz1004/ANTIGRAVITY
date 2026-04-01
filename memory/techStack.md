@@ -22,8 +22,17 @@
 | Service | Version | Status |
 |---------|---------|--------|
 | Claude Code CLI | v2.1.41 | Global npm install, --dangerously-skip-permissions enabled |
-| OpenClaw | 2026.2.13 | Global npm install, gateway port 18789 (auth BROKEN — deprecated profile) |
+| OpenClaw | 2026.2.13 | Global npm install, gateway port 18789 (auth BROKEN â€” deprecated profile) |
 | Gemini CLI | Active | VS Code extension, port 54802 |
+
+## AI Services on MINI-ASUS-PC (NEW)
+
+| Service | Version | Status |
+|---------|---------|--------|
+| Claude Code CLI | v2.1.89 | Installed & Authenticated |
+| CodeX CLI | v0.117.0 | Installed (OpenAI.Codex) |
+| Gemini / Jules | google-genai | Python 3.13 + SDK Installed |
+| Repos | Local | C:\Users\joshl\ANTIGRAVITY & Sandbox-REPO |
 
 ## Claude Code Config
 
