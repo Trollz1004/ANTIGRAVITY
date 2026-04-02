@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MessageCircle, ChevronRight } from 'lucide-react';
+import { ChevronRight, MessageCircle } from 'lucide-react';
+
 import { api } from '../../lib/api';
 
 interface MatchData {
@@ -25,12 +26,12 @@ export function Inbox() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 flex items-center justify-center mx-auto mb-4">
-            <MessageCircle size={24} className="text-blue-400 animate-pulse" />
+      <div className="app-page flex items-center justify-center">
+        <div className="glass-strong rounded-[2rem] p-8 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-[1.4rem] border-4 border-[#111111] bg-[#111111] text-white">
+            <MessageCircle size={26} className="animate-pulse" />
           </div>
-          <p className="text-gray-400 font-medium">Loading conversations...</p>
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">Loading conversations</p>
         </div>
       </div>
     );
@@ -38,14 +39,12 @@ export function Inbox() {
 
   if (matches.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-8 text-center">
-        <div className="animate-scale-in">
-          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-blue-500/20 animate-float">
-            <MessageCircle size={44} className="text-white" />
-          </div>
-          <h1 className="text-3xl font-black text-white mb-3 tracking-tight">Messages</h1>
-          <p className="text-gray-400 max-w-sm leading-relaxed">
-            Match with someone to start chatting!
+      <div className="app-page flex items-center justify-center">
+        <div className="glass-strong glass-highlight max-w-xl rounded-[2rem] p-8 text-center">
+          <div className="app-kicker mb-3">Messages</div>
+          <h1 className="app-title">no messages yet.</h1>
+          <p className="app-subtitle mt-4">
+            Match with someone first, then the conversation lane opens here.
           </p>
         </div>
       </div>
@@ -53,53 +52,52 @@ export function Inbox() {
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="p-4 md:p-8">
-        <div className="animate-fade-in">
-          <h1 className="text-2xl font-black text-white mb-1 tracking-tight">Messages</h1>
-          <p className="text-gray-500 text-sm mb-6">{matches.length} {matches.length === 1 ? 'conversation' : 'conversations'}</p>
+    <div className="app-page">
+      <div className="app-page-inner max-w-5xl">
+        <div className="mb-8">
+          <div className="app-kicker mb-3">Messages</div>
+          <h1 className="app-title">active conversations.</h1>
+          <p className="app-subtitle mt-4">
+            {matches.length} {matches.length === 1 ? 'thread is' : 'threads are'} waiting on the next move.
+          </p>
         </div>
 
-        <div className="space-y-2 stagger-children">
+        <div className="space-y-4 stagger-children">
           {matches.map((match) => {
             const initial = match.display_name.charAt(0).toUpperCase();
-            const hue = match.display_name.charCodeAt(0) * 7 % 360;
-            const bg = `hsl(${hue}, 50%, 25%)`;
+            const hue = (match.display_name.charCodeAt(0) * 7) % 360;
+            const bg = `hsl(${hue}, 50%, 32%)`;
             return (
               <Link
                 key={match.match_id}
                 to={`/app/chat/${match.match_id}`}
-                className="flex items-center gap-4 p-4 glass rounded-2xl hover:bg-white/[0.04] hover:border-pink-500/10 transition-all duration-200 no-underline group"
+                className="glass-strong glass-highlight group flex items-center gap-4 rounded-[1.8rem] p-4 no-underline transition-all duration-200 hover:-translate-y-1"
               >
-                {/* Avatar */}
-                <div className="relative flex-shrink-0">
+                <div className="relative shrink-0">
                   <div
-                    className="w-14 h-14 rounded-2xl bg-cover bg-center flex items-center justify-center"
+                    className="flex h-16 w-16 items-center justify-center rounded-[1.25rem] border-4 border-[#111111] bg-cover bg-center text-2xl font-black text-white/40"
                     style={{
                       backgroundColor: bg,
                       backgroundImage: match.photos[0] ? `url(${match.photos[0]})` : undefined,
                     }}
                   >
-                    {!match.photos[0] && (
-                      <span className="text-2xl font-black text-white/25">{initial}</span>
-                    )}
+                    {!match.photos[0] && initial}
                   </div>
-                  {/* Online dot placeholder */}
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-gray-950" />
+                  <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-[#111111] bg-[#ff4f00]" />
                 </div>
 
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-white font-bold text-sm group-hover:text-pink-300 transition-colors">{match.display_name}</h3>
-                  <p className="text-gray-500 text-xs truncate mt-0.5">
+                <div className="min-w-0 flex-1">
+                  <h3 className="truncate text-lg font-black tracking-[-0.04em] text-[#111111]">{match.display_name}</h3>
+                  <p className="mt-1 truncate text-sm font-medium text-[#5c594f]">
                     {match.last_message_at
                       ? `Last message ${new Date(match.last_message_at).toLocaleDateString()}`
-                      : 'No messages yet — say hi!'}
+                      : 'No messages yet. Open the thread and start it.'}
                   </p>
                 </div>
 
-                {/* Arrow */}
-                <ChevronRight size={18} className="text-gray-600 group-hover:text-pink-400 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-transform group-hover:-translate-y-0.5">
+                  <ChevronRight size={18} />
+                </div>
               </Link>
             );
           })}

@@ -114,44 +114,45 @@ export function Volunteering() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center mx-auto mb-4">
-            <HandHeart size={24} className="text-emerald-400 animate-pulse" />
+      <div className="app-page flex items-center justify-center">
+        <div className="glass-strong rounded-[2rem] p-8 text-center animate-fade-in">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#111111] text-white">
+            <HandHeart size={24} className="animate-pulse" />
           </div>
-          <p className="text-gray-400 font-medium">Loading opportunities...</p>
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">Loading opportunities</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
+    <div className="app-page">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 animate-fade-in">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-tight">Volunteering Hub</h1>
-          <p className="text-gray-500 text-sm mt-0.5 flex items-center gap-1">
-            Local community impact <Heart size={12} className="text-pink-400" fill="currentColor" />
+          <div className="app-kicker mb-3">Volunteer</div>
+          <h1 className="app-title">community work.</h1>
+          <p className="app-subtitle mt-4 flex items-center gap-2">
+            Local community impact <Heart size={12} className="text-[#ff4f00]" fill="currentColor" />
           </p>
         </div>
         <button
           onClick={() => setShowCreate(!showCreate)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl text-white text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+          className="app-button-accent px-5 py-3 text-sm"
         >
           <Plus size={16} /> Create Opportunity
         </button>
       </div>
 
       {/* View mode tabs */}
-      <div className="flex bg-gray-900/60 rounded-2xl p-1 gap-1 mb-6 animate-fade-in">
+      <div className="glass flex rounded-2xl p-1 gap-1 mb-6 animate-fade-in">
         <button
           id="volunteer-view-all"
           onClick={() => setViewMode('all')}
           className={`flex-1 text-sm py-2.5 rounded-xl font-bold transition-all duration-200 ${
             viewMode === 'all'
-              ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-400 border border-emerald-500/15'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[#111111] text-white border border-[#111111]'
+              : 'text-[#5c594f] hover:text-[#111111]'
           }`}
         >
           All Opportunities
@@ -161,8 +162,8 @@ export function Volunteering() {
           onClick={() => setViewMode('my-impact')}
           className={`flex-1 text-sm py-2.5 rounded-xl font-bold transition-all duration-200 ${
             viewMode === 'my-impact'
-              ? 'bg-gradient-to-r from-purple-500/20 to-violet-500/20 text-purple-400 border border-purple-500/15'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[#111111] text-white border border-[#111111]'
+              : 'text-[#5c594f] hover:text-[#111111]'
           }`}
         >
           My Signups
@@ -181,7 +182,7 @@ export function Volunteering() {
       {impact && (
         <div className="glass-strong rounded-3xl p-6 glass-highlight mb-6 animate-scale-in">
           <h2 className="text-white font-bold mb-4 flex items-center gap-2">
-            <TrendingUp size={18} className="text-emerald-400" />
+            <TrendingUp size={18} className="text-[#ff4f00]" />
             Community Impact
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
@@ -240,8 +241,8 @@ export function Volunteering() {
           onClick={() => setFilterCategory(null)}
           className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all duration-200 ${
             !filterCategory
-              ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-400 border border-emerald-500/20'
-              : 'glass text-gray-400 hover:text-white'
+              ? 'bg-[#111111] text-white border-[3px] border-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]'
+              : 'glass text-[#5c594f] hover:text-[#111111]'
           }`}
         >
           All
@@ -252,8 +253,8 @@ export function Volunteering() {
             onClick={() => setFilterCategory(cat.value === filterCategory ? null : cat.value)}
             className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all duration-200 ${
               filterCategory === cat.value
-                ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-400 border border-emerald-500/20'
-                : 'glass text-gray-400 hover:text-white'
+                ? 'bg-[#111111] text-white border-[3px] border-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]'
+                : 'glass text-[#5c594f] hover:text-[#111111]'
             }`}
           >
             {cat.label}
@@ -264,23 +265,23 @@ export function Volunteering() {
       {/* Create form */}
       {showCreate && (
         <div className="glass-strong rounded-3xl p-6 glass-highlight mb-6 space-y-4 animate-scale-in">
-          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Opportunity title" className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/40 input-glow transition-all duration-300" />
-          <input value={organization} onChange={(e) => setOrganization(e.target.value)} placeholder="Organization name" className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/40 input-glow transition-all duration-300" />
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe the volunteer opportunity" rows={3} className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/40 input-glow transition-all duration-300 resize-none" />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Opportunity title" className="app-input input-glow" />
+          <input value={organization} onChange={(e) => setOrganization(e.target.value)} placeholder="Organization name" className="app-input input-glow" />
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe the volunteer opportunity" rows={3} className="app-textarea input-glow" />
           <div className="grid grid-cols-2 gap-3">
-            <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location (city, state)" className="px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/40 input-glow transition-all duration-300" />
-            <select value={category} onChange={(e) => setCategory(e.target.value)} className="px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white focus:outline-none focus:border-emerald-500/40 transition-all duration-300 appearance-none">
+            <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location (city, state)" className="app-input input-glow" />
+            <select value={category} onChange={(e) => setCategory(e.target.value)} className="app-select input-glow">
               {CATEGORIES.map((cat) => (
-                <option key={cat.value} value={cat.value} className="bg-gray-900">{cat.label}</option>
+                <option key={cat.value} value={cat.value}>{cat.label}</option>
               ))}
             </select>
           </div>
           <div className="grid grid-cols-3 gap-3">
-            <input type="number" step="0.5" min="0.5" value={hoursEstimate} onChange={(e) => setHoursEstimate(e.target.value)} placeholder="Est. hours" className="px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/40 input-glow transition-all duration-300" />
-            <input type="datetime-local" value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white focus:outline-none focus:border-emerald-500/40 transition-all duration-300" />
-            <input type="number" value={spots} onChange={(e) => setSpots(e.target.value)} placeholder="Spots" className="px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/40 input-glow transition-all duration-300" />
+            <input type="number" step="0.5" min="0.5" value={hoursEstimate} onChange={(e) => setHoursEstimate(e.target.value)} placeholder="Est. hours" className="app-input input-glow" />
+            <input type="datetime-local" value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="app-input input-glow" />
+            <input type="number" value={spots} onChange={(e) => setSpots(e.target.value)} placeholder="Spots" className="app-input input-glow" />
           </div>
-          <button onClick={create} className="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl text-white text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-200">Create</button>
+          <button onClick={create} className="app-button-dark px-6 py-3 text-sm">Create</button>
         </div>
       )}
 

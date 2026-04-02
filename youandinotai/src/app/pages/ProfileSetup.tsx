@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Camera, MapPin, Sparkles, Check } from 'lucide-react';
-import { api } from '../../lib/api';
+import { Camera, Check, MapPin, Sparkles, User } from 'lucide-react';
+
 import { useAuth } from '../../lib/auth';
+import { api } from '../../lib/api';
 import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 
 const INTEREST_OPTIONS = [
@@ -28,7 +29,7 @@ export function ProfileSetup() {
     setSelectedInterests((prev) =>
       prev.includes(interest)
         ? prev.filter((i) => i !== interest)
-        : prev.length < 10 ? [...prev, interest] : prev
+        : prev.length < 10 ? [...prev, interest] : prev,
     );
   };
 
@@ -68,160 +69,159 @@ export function ProfileSetup() {
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
-      <div className="max-w-lg mx-auto animate-scale-in">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center mx-auto mb-5 shadow-2xl shadow-pink-500/20">
-            <User size={44} className="text-white" />
+    <div className="app-page">
+      <div className="app-page-inner max-w-5xl animate-scale-in">
+        <div className="mb-8 grid gap-4 md:grid-cols-[1.15fr_0.85fr] md:items-end">
+          <div>
+            <div className="app-kicker mb-3">Profile Setup</div>
+            <h1 className="app-title">tell people who you are.</h1>
+            <p className="app-subtitle mt-4 max-w-2xl">
+              Build the real profile before you start matching. Keep it specific, human, and useful to someone deciding whether to say hi.
+            </p>
           </div>
-          <h1 className="text-3xl font-black text-white tracking-tight">Set Up Your Profile</h1>
-          <p className="text-gray-400 text-sm mt-2 font-medium">
-            Hey <span className="text-pink-400">{user?.display_name}</span>! Tell people about yourself.
-          </p>
+          <div className="glass rounded-[1.6rem] p-5">
+            <div className="app-panel-title mb-3">Current account</div>
+            <p className="text-lg font-black uppercase tracking-[-0.06em] text-[#111111]">{user?.display_name}</p>
+            <p className="mt-2 text-sm font-medium text-[#5c594f]">
+              This profile becomes the public side of your account inside discover, matches, and boards.
+            </p>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="glass rounded-xl px-4 py-3 border-red-500/20 animate-slide-up">
-              <p className="text-red-400 text-sm font-medium">{error}</p>
+            <div className="rounded-[1.4rem] border-4 border-[#111111] bg-[#ffd9c7] px-4 py-3 text-sm font-semibold text-[#111111]">
+              {error}
             </div>
           )}
 
-          {/* Bio */}
-          <div className="glass-strong rounded-3xl p-6 glass-highlight space-y-5">
-            <div>
-              <label className="text-sm font-bold text-gray-300 mb-2 block">About You</label>
-              <textarea
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                placeholder="What makes you, you?"
-                maxLength={500}
-                rows={3}
-                className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300 resize-none"
-              />
-              <div className="flex justify-end mt-1">
-                <span className="text-gray-600 text-xs">{bio.length}/500</span>
-              </div>
-            </div>
-
-            {/* Date of birth + Age + Gender */}
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
+            <div className="grid gap-5">
               <div>
-                <label className="text-sm font-bold text-gray-300 mb-2 block">Date of Birth</label>
-                <input
-                  type="text"
-                  value={dateOfBirth}
-                  onChange={(e) => setDateOfBirth(formatDateInput(e.target.value))}
-                  inputMode="numeric"
-                  maxLength={14}
-                  placeholder="MM / DD / YYYY"
-                  className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300"
+                <label className="app-panel-title mb-3 block">About You</label>
+                <textarea
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  placeholder="What makes you you?"
+                  maxLength={500}
+                  rows={4}
+                  className="app-textarea input-glow"
                 />
+                <div className="mt-2 text-right text-xs font-bold uppercase tracking-[0.16em] text-[#5c594f]">
+                  {bio.length}/500
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-bold text-gray-300 mb-2 block">Age</label>
-                <input
-                  type="number"
-                  min={18}
-                  max={120}
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  placeholder="18+"
-                  className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300"
-                />
+
+              <div className="grid gap-4 md:grid-cols-3">
+                <div>
+                  <label className="app-panel-title mb-3 block">Date of Birth</label>
+                  <input
+                    type="text"
+                    value={dateOfBirth}
+                    onChange={(e) => setDateOfBirth(formatDateInput(e.target.value))}
+                    inputMode="numeric"
+                    maxLength={14}
+                    placeholder="MM / DD / YYYY"
+                    className="app-input input-glow"
+                  />
+                </div>
+                <div>
+                  <label className="app-panel-title mb-3 block">Age</label>
+                  <input
+                    type="number"
+                    min={18}
+                    max={120}
+                    value={age}
+                    onChange={(e) => setAge(e.target.value)}
+                    placeholder="18+"
+                    className="app-input input-glow"
+                  />
+                </div>
+                <div>
+                  <label className="app-panel-title mb-3 block">Gender</label>
+                  <select value={gender} onChange={(e) => setGender(e.target.value)} className="app-select input-glow">
+                    <option value="">Select...</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="nonbinary">Non-binary</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-bold text-gray-300 mb-2 block">Gender</label>
-                <select
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300 appearance-none"
-                >
-                  <option value="" className="bg-gray-900">Select...</option>
-                  <option value="male" className="bg-gray-900">Male</option>
-                  <option value="female" className="bg-gray-900">Female</option>
-                  <option value="nonbinary" className="bg-gray-900">Non-binary</option>
-                  <option value="other" className="bg-gray-900">Other</option>
-                </select>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label className="app-panel-title mb-3 block">Looking For</label>
+                  <select value={lookingFor} onChange={(e) => setLookingFor(e.target.value)} className="app-select input-glow">
+                    <option value="">Select...</option>
+                    <option value="relationship">Relationship</option>
+                    <option value="friends">Friends</option>
+                    <option value="casual">Something casual</option>
+                    <option value="unsure">Not sure yet</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="app-panel-title mb-3 flex items-center gap-2">
+                    <MapPin size={15} className="text-[#ff4f00]" />
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="City, State"
+                    maxLength={200}
+                    className="app-input input-glow"
+                  />
+                </div>
               </div>
             </div>
+          </div>
 
-            {/* Looking for */}
-            <div>
-              <label className="text-sm font-bold text-gray-300 mb-2 block">Looking For</label>
-              <select
-                value={lookingFor}
-                onChange={(e) => setLookingFor(e.target.value)}
-                className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300 appearance-none"
-              >
-                <option value="" className="bg-gray-900">Select...</option>
-                <option value="relationship" className="bg-gray-900">Relationship</option>
-                <option value="friends" className="bg-gray-900">Friends</option>
-                <option value="casual" className="bg-gray-900">Something Casual</option>
-                <option value="unsure" className="bg-gray-900">Not Sure Yet</option>
-              </select>
-            </div>
-
-            {/* Location */}
-            <div>
-              <label className="text-sm font-bold text-gray-300 mb-2 block flex items-center gap-1.5">
-                <MapPin size={14} className="text-pink-400" /> Location
+          <div className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <label className="app-panel-title flex items-center gap-2">
+                <Sparkles size={15} className="text-[#ff4f00]" />
+                Interests
               </label>
-              <input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="City, State"
-                maxLength={200}
-                className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300"
-              />
+              <span className="text-xs font-black uppercase tracking-[0.16em] text-[#5c594f]">
+                {selectedInterests.length}/10 selected
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {INTEREST_OPTIONS.map((interest) => {
+                const active = selectedInterests.includes(interest);
+                return (
+                  <button
+                    key={interest}
+                    type="button"
+                    onClick={() => toggleInterest(interest)}
+                    className={`inline-flex items-center gap-2 rounded-full border-[3px] px-4 py-2 text-sm font-bold transition-all ${
+                      active
+                        ? 'border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)]'
+                        : 'border-[#111111] bg-white text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]'
+                    }`}
+                  >
+                    {active && <Check size={14} />}
+                    {interest}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* Interests — separate glass card */}
-          <div className="glass-strong rounded-3xl p-6 glass-highlight">
-            <label className="text-sm font-bold text-gray-300 mb-3 block flex items-center gap-1.5">
-              <Sparkles size={14} className="text-purple-400" /> Interests
-              <span className="text-gray-500 font-normal ml-1">({selectedInterests.length}/10)</span>
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {INTEREST_OPTIONS.map((interest) => (
-                <button
-                  key={interest}
-                  type="button"
-                  onClick={() => toggleInterest(interest)}
-                  className={`px-4 py-2 rounded-2xl text-sm font-medium transition-all duration-200 ${
-                    selectedInterests.includes(interest)
-                      ? 'bg-gradient-to-r from-pink-500/20 to-purple-500/20 text-pink-300 border border-pink-500/30 shadow-lg shadow-pink-500/5'
-                      : 'glass text-gray-400 hover:text-white hover:bg-white/[0.04]'
-                  }`}
-                >
-                  {selectedInterests.includes(interest) && <Check size={12} className="inline mr-1" />}
-                  {interest}
-                </button>
-              ))}
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="app-surface-note">
+              Save the real profile first. Photos, matching, and verification become more useful once the basics are filled in.
             </div>
+            <button type="submit" disabled={loading} className="app-button-dark px-6 py-4 disabled:opacity-60">
+              {loading ? 'Saving...' : (
+                <>
+                  <Camera size={18} /> Save Profile
+                </>
+              )}
+            </button>
           </div>
-
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-4 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl font-bold text-white flex items-center justify-center gap-2 hover:shadow-xl hover:shadow-pink-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-50 relative overflow-hidden group"
-          >
-            {loading ? (
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Saving...
-              </div>
-            ) : (
-              <>
-                <Camera size={18} /> Save Profile
-              </>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
-          </button>
         </form>
       </div>
     </div>
