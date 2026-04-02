@@ -11,6 +11,7 @@
 - **Date-app authenticated reskin is live:** the shell and core signed-in pages now visually align with the public brutalist landing direction and were revalidated on production.
 - **Hermes local runtime is working:** PaperClip now has a validated Sabretooth-local Hermes adapter path plus a one-click repair/launch script outside OneDrive.
 - **Play-readiness safety pass is locally complete:** block/report moderation now exists in the repo for discover, chat, and boards, with backend tests passing at `209 passed`.
+- **Privacy Center fallback is live:** production now shows a truthful degraded privacy snapshot instead of a broken failure state while the advanced privacy backend route is unhealthy.
 
 ## Verified State
 
@@ -30,6 +31,7 @@
 - **Live payment check:** all five Square links still resolve with live `303` redirects into Square-hosted checkout
 - **PaperClip runtime check:** local Hermes agent `Hermes Codex` validated successfully in the private PaperClip workspace, and the desktop launcher at `C:\Users\joshl\Desktop\Launch-Hermes-PaperClip.cmd` now self-heals the local setup before opening the dashboard
 - **Live safety-route probe:** `https://api.youandinotai.com/api/v1/safety/blocks` currently returns `404`, so the new safety UI is intentionally hard-gated on production until the backend deploy occurs
+- **Live privacy check:** `https://api.youandinotai.com/api/v1/privacy/my-data` currently fails server-side in production, but `/app/privacy` now falls back to basic account/profile data and disables advanced privacy actions cleanly
 
 ## Current Risks / Open Items
 
@@ -38,7 +40,8 @@
 3. **Historical contract artifacts remain in the repo by design and must continue to be treated as chain history, not current LLC doctrine.**
 4. **The current PaperClip validation path is the Windows-safe idle wake flow, not the stock Linux-style localhost polling template.**
 5. **Sabretooth currently has no active local `gcloud` auth/project config, so the backend safety patch is ready locally but not yet deployed live.**
-6. **The repo still lacks an Android packaging layer, so Google Play submission packaging is a separate remaining deliverable even after the moderation pass.**
+6. **The production privacy backend path is still unhealthy; the live frontend now degrades honestly, but advanced privacy requests remain temporarily unavailable until backend deploy/auth is restored.**
+7. **The repo still lacks an Android packaging layer, so Google Play submission packaging is a separate remaining deliverable even after the moderation pass.**
 
 ## Rules To Preserve
 

@@ -2,6 +2,24 @@ import { useEffect, useState } from 'react';
 
 import { api } from '../lib/api';
 
+interface AuthMeResponse {
+  user_id: string;
+  email: string;
+  display_name: string;
+  has_profile: boolean;
+}
+
+interface ProfileMeResponse {
+  bio: string | null;
+  age: number | null;
+  gender: string | null;
+  looking_for: string | null;
+  location: string | null;
+  photos: string[];
+  interests: string[];
+  verified: boolean;
+}
+
 interface PrivacyProfileSummary {
   bio: string | null;
   age: number | null;
@@ -25,11 +43,11 @@ interface PrivacyMyDataResponse {
   user_id: string;
   email: string;
   display_name: string;
-  created_at: string;
+  created_at: string | null;
   profile: PrivacyProfileSummary | null;
-  message_count: number;
-  match_count: number;
-  photos_count: number;
+  message_count: number | null;
+  match_count: number | null;
+  photos_count: number | null;
   pending_requests: PrivacyRequest[];
 }
 
@@ -51,10 +69,16 @@ function formatDateTime(value: string | null | undefined): string {
   return new Date(value).toLocaleString();
 }
 
+function formatMetric(value: number | null | undefined): string {
+  if (value === null || value === undefined) return 'Unavailable';
+  return String(value);
+}
+
 export default function DataPrivacyDashboard() {
   const [data, setData] = useState<PrivacyMyDataResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [degradedMode, setDegradedMode] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [requestState, setRequestState] = useState({
     export: false,
@@ -63,15 +87,61 @@ export default function DataPrivacyDashboard() {
   });
   const [confirmation, setConfirmation] = useState<string | null>(null);
 
+  async function loadFallbackSnapshot() {
+    const user = await api.get<AuthMeResponse>('/auth/me');
+    let profile: ProfileMeResponse | null = null;
+
+    if (user.has_profile) {
+      try {
+        profile = await api.get<ProfileMeResponse>('/profiles/me');
+      } catch {
+        profile = null;
+      }
+    }
+
+    const fallback: PrivacyMyDataResponse = {
+      user_id: user.user_id,
+      email: user.email,
+      display_name: user.display_name,
+      created_at: null,
+      profile: profile
+        ? {
+            bio: profile.bio,
+            age: profile.age,
+            gender: profile.gender,
+            looking_for: profile.looking_for,
+            location: profile.location,
+            interests: profile.interests ?? [],
+            verified: profile.verified,
+            location_enabled: true,
+          }
+        : null,
+      message_count: null,
+      match_count: null,
+      photos_count: profile?.photos?.length ?? null,
+      pending_requests: [],
+    };
+
+    setData(fallback);
+    setDegradedMode(true);
+    setError('Advanced privacy actions are temporarily unavailable. Basic account details are shown below.');
+  }
+
   async function loadMyData() {
     setLoading(true);
     setError(null);
     try {
       const response = await api.get<PrivacyMyDataResponse>('/privacy/my-data');
       setData(response);
+      setDegradedMode(false);
     } catch (err) {
       console.error(err);
-      setError('Unable to load your privacy data right now.');
+      try {
+        await loadFallbackSnapshot();
+      } catch (fallbackErr) {
+        console.error(fallbackErr);
+        setError('Unable to load your privacy data right now.');
+      }
     } finally {
       setLoading(false);
     }
@@ -86,6 +156,12 @@ export default function DataPrivacyDashboard() {
     endpoint: string,
     successMessage: (response: PrivacyActionResponse) => string,
   ) {
+    if (degradedMode) {
+      setConfirmation(null);
+      setError('Advanced privacy actions are temporarily unavailable right now.');
+      return;
+    }
+
     setRequestState((current) => ({ ...current, [key]: true }));
     setError(null);
     setConfirmation(null);
@@ -151,7 +227,9 @@ export default function DataPrivacyDashboard() {
                 <div>
                   <h3 className="text-lg font-semibold text-white">Stored Account Snapshot</h3>
                   <p className="mt-1 text-sm text-slate-500">
-                    Account created {new Date(data.created_at).toLocaleDateString()}.
+                    {data.created_at
+                      ? `Account created ${new Date(data.created_at).toLocaleDateString()}.`
+                      : 'Core account details available. Full privacy export summary is temporarily offline.'}
                   </p>
                 </div>
                 <span className="rounded-full border border-cyan-900/80 bg-cyan-950/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
@@ -161,15 +239,15 @@ export default function DataPrivacyDashboard() {
 
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
-                  <div className="text-3xl font-semibold text-white">{data.message_count}</div>
+                  <div className="text-3xl font-semibold text-white">{formatMetric(data.message_count)}</div>
                   <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">Messages</div>
                 </div>
                 <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
-                  <div className="text-3xl font-semibold text-white">{data.match_count}</div>
+                  <div className="text-3xl font-semibold text-white">{formatMetric(data.match_count)}</div>
                   <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">Matches</div>
                 </div>
                 <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
-                  <div className="text-3xl font-semibold text-white">{data.photos_count}</div>
+                  <div className="text-3xl font-semibold text-white">{formatMetric(data.photos_count)}</div>
                   <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">Photos</div>
                 </div>
               </div>
@@ -196,12 +274,16 @@ export default function DataPrivacyDashboard() {
 
             <aside className="rounded-[24px] border border-slate-800 bg-[linear-gradient(180deg,rgba(15,23,42,0.92),rgba(15,23,42,0.72))] p-6">
               <h3 className="text-lg font-semibold text-white">Pending Requests</h3>
-              <p className="mt-1 text-sm text-slate-500">Any export or deletion request will appear here until processed.</p>
+              <p className="mt-1 text-sm text-slate-500">
+                {degradedMode
+                  ? 'Advanced privacy request status is temporarily unavailable.'
+                  : 'Any export or deletion request will appear here until processed.'}
+              </p>
 
               <div className="mt-5 space-y-3">
                 {data.pending_requests.length === 0 ? (
                   <div className="rounded-2xl border border-dashed border-slate-800 px-4 py-5 text-sm text-slate-500">
-                    No pending privacy actions.
+                    {degradedMode ? 'Pending request history is temporarily unavailable.' : 'No pending privacy actions.'}
                   </div>
                 ) : (
                   data.pending_requests.map((request) => (
@@ -232,7 +314,7 @@ export default function DataPrivacyDashboard() {
           <div className="grid gap-4 lg:grid-cols-3">
             <button
               type="button"
-              disabled={requestState.export || Boolean(hasPendingExport)}
+              disabled={degradedMode || requestState.export || Boolean(hasPendingExport)}
               onClick={() =>
                 handleAction('export', '/privacy/export', () => 'Data export requested. We will keep it queued until it is ready.')
               }
@@ -241,7 +323,9 @@ export default function DataPrivacyDashboard() {
               <div className="text-xs uppercase tracking-[0.2em] text-cyan-300">Download My Data</div>
               <div className="mt-2 text-lg font-semibold text-white">Queue a full export</div>
               <p className="mt-2 text-sm text-slate-400">
-                {hasPendingExport
+                {degradedMode
+                  ? 'Temporarily unavailable until the privacy service is restored.'
+                  : hasPendingExport
                   ? 'An export is already pending.'
                   : 'Request a copy of your current profile, matches, and stored activity summary.'}
               </p>
@@ -249,7 +333,7 @@ export default function DataPrivacyDashboard() {
 
             <button
               type="button"
-              disabled={requestState.location || locationDisabled}
+              disabled={degradedMode || requestState.location || locationDisabled}
               onClick={() =>
                 handleAction(
                   'location',
@@ -262,7 +346,9 @@ export default function DataPrivacyDashboard() {
               <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Disable Location Tracking</div>
               <div className="mt-2 text-lg font-semibold text-white">Stop future location sharing</div>
               <p className="mt-2 text-sm text-slate-400">
-                {locationDisabled
+                {degradedMode
+                  ? 'Temporarily unavailable until the privacy service is restored.'
+                  : locationDisabled
                   ? 'Location tracking is already disabled.'
                   : 'Turns off location-based discovery and stores a completed privacy log entry.'}
               </p>
@@ -270,14 +356,16 @@ export default function DataPrivacyDashboard() {
 
             <button
               type="button"
-              disabled={requestState.delete || Boolean(hasPendingDelete)}
+              disabled={degradedMode || requestState.delete || Boolean(hasPendingDelete)}
               onClick={() => setShowDeleteModal(true)}
               className="rounded-[24px] border border-rose-900/80 bg-rose-950/30 p-5 text-left transition hover:border-rose-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <div className="text-xs uppercase tracking-[0.2em] text-rose-300">Delete Account</div>
               <div className="mt-2 text-lg font-semibold text-white">Start the 30-day deletion clock</div>
               <p className="mt-2 text-sm text-slate-400">
-                {hasPendingDelete
+                {degradedMode
+                  ? 'Temporarily unavailable until the privacy service is restored.'
+                  : hasPendingDelete
                   ? 'An account deletion request is already pending.'
                   : 'Your account is queued for deletion 30 days after you confirm the request.'}
               </p>
