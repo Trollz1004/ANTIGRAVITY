@@ -1,31 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Trophy, Vote, Heart, ShieldAlert, Hammer, HandMetal, Ghost } from 'lucide-react';
 
-interface ContestEntry {
-  id: string;
-  author: string;
-  image: string;
-  votes: number;
-  rank?: number;
-}
-
-const MOCK_ENTRIES: ContestEntry[] = [
-  { id: '1', author: 'StarGazer_99', image: 'https://picsum.photos/seed/cosmic1/400/300', votes: 0, rank: 1 },
-  { id: '2', author: 'NebulaDreamer', image: 'https://picsum.photos/seed/cosmic2/400/300', votes: 0, rank: 2 },
-  { id: '3', author: 'OrbitEnthusiast', image: 'https://picsum.photos/seed/cosmic3/400/300', votes: 0, rank: 3 },
-  { id: '4', author: 'VoidWalker', image: 'https://picsum.photos/seed/cosmic4/400/300', votes: 0 },
-];
-
 export function CosmicContest({ onClose }: { onClose: () => void }) {
-  const [entries, setEntries] = useState(MOCK_ENTRIES);
-  const [votedId, setVotedId] = useState<string | null>(null);
-
-  const handleVote = (id: string) => {
-    if (votedId) return;
-    setVotedId(id);
-    setEntries(prev => prev.map(e => e.id === id ? { ...e, votes: e.votes + 1 } : e));
-  };
 
   return (
     <motion.div
@@ -87,53 +64,19 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          {/* Entries Grid */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold flex items-center gap-2">
+          {/* Coming Soon Section */}
+          <div className="space-y-6 text-center">
+            <h3 className="text-xl font-bold flex items-center justify-center gap-2">
               <Vote className="text-pink-500" />
-              Current Standings
+              The Contest is Coming Soon!
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {entries.map((entry) => (
-                <motion.div
-                  key={entry.id}
-                  whileHover={{ y: -5 }}
-                  className="bg-white/5 rounded-3xl overflow-hidden border border-white/10 flex flex-col"
-                >
-                  <div className="aspect-[4/3] relative">
-                    <img src={entry.image} alt={entry.author} className="w-full h-full object-cover" />
-                    {entry.rank && (
-                      <div className={`absolute top-4 left-4 w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${
-                        entry.rank === 1 ? 'bg-yellow-500 text-black' : 
-                        entry.rank === 2 ? 'bg-zinc-300 text-black' : 
-                        'bg-orange-600 text-white'
-                      }`}>
-                        #{entry.rank}
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-4 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="text-xs text-gray-500 font-bold uppercase tracking-wider">Artist</div>
-                      <div className="font-bold text-sm truncate">{entry.author}</div>
-                    </div>
-                    <div className="mt-4 flex items-center justify-between">
-                      <div className="text-xs font-medium text-pink-400">{entry.votes.toLocaleString()} votes</div>
-                      <button
-                        onClick={() => handleVote(entry.id)}
-                        disabled={!!votedId}
-                        className={`p-2 rounded-xl transition-all ${
-                          votedId === entry.id 
-                            ? 'bg-pink-500 text-white' 
-                            : 'bg-white/10 hover:bg-white/20 text-white'
-                        }`}
-                      >
-                        <Heart size={16} className={votedId === entry.id ? 'fill-white' : ''} />
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+            <div className="p-8 bg-white/5 rounded-3xl border border-white/10">
+              <p className="text-gray-300">
+                We're building a space for our community to showcase their creativity and become a part of the YouAndINotAI story.
+              </p>
+              <p className="text-gray-400 mt-2 text-sm">
+                Stay tuned for updates on our first official contest!
+              </p>
             </div>
           </div>
 
