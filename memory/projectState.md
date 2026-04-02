@@ -1,6 +1,6 @@
 # PROJECT STATE - LIVE BASELINE
 
-Last Updated: 2026-04-01
+Last Updated: 2026-04-02
 
 ## Current Live Repo
 
@@ -8,7 +8,7 @@ Last Updated: 2026-04-01
 |-------|-------|
 | Authoritative root | `C:\ANTIGRAVITY` |
 | Branch | `main` |
-| Status | live repo refreshed after the March 31 prelaunch doctrine audit and final validation pass |
+| Status | live repo refreshed after the March 31 prelaunch doctrine audit, April 1 public-surface remediation, and April 2 authenticated date-app reskin / launch validation |
 | Trust Policy | Threshold of Trust remains enforced as an operational boundary |
 | Sandbox repo | `Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY` |
 
@@ -18,11 +18,13 @@ Last Updated: 2026-04-01
 - Historical `60/30/10`, `100% charity`, and `100% DAO` language is not current live doctrine for LLC-controlled revenue
 - Retired split-separation labels are not current operational doctrine for active repo control surfaces
 - YouAndINotAI public landing remains product-first and does not market `10%`, `Protocol Omega`, or donation language
-- Date-app payments remain bound to the internal checkout creation flow and verified for all five live checkout paths
+- YouAndINotAI authenticated shell and core signed-in pages now match the public brutalist design direction
+- Date-app payments remain bound to the internal checkout creation flow and were reverified for all five live checkout paths on April 2, 2026
 - OnlineRecycle remains live with service-first copy
 - Dashboard gateway remains live and hands trusted users into the authenticated PaperClip workspace
 - PaperClip runtime remains sandboxed and private
 - March 31 validation pass is complete on Sabretooth for the touched live workspaces
+- April 2 production validation confirmed the beta-access path can still load the core app routes after the reskin
 
 ## Operational Truth
 
@@ -34,6 +36,8 @@ Last Updated: 2026-04-01
 - The March 31 doctrine correction is recorded in `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
 - 9020 support lane copy is verified cleaned
 - T5500 Manus lane copy is verified cleaned in the scanned `docs-locked` and dashboard-page surfaces
+- the April 2 frontend pass was deployed to Cloudflare Pages only; no backend / GCR redeploy was required because backend code did not change
+- Cloudflare JavaScript detections still inject an inline challenge script that causes a CSP console error on production pages; this is an edge-level behavior, not a repo-bundle regression
 
 ## Account Routing Note
 

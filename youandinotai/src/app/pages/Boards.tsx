@@ -84,12 +84,12 @@ export function Boards() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center mx-auto mb-4">
-            <Users size={24} className="text-purple-400 animate-pulse" />
+      <div className="app-page flex items-center justify-center">
+        <div className="glass-strong rounded-[2rem] p-8 text-center animate-fade-in">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#111111] text-white">
+            <Users size={24} className="animate-pulse" />
           </div>
-          <p className="text-gray-400 font-medium">Loading boards...</p>
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">Loading boards</p>
         </div>
       </div>
     );
@@ -98,8 +98,8 @@ export function Boards() {
   // Comment view
   if (activePost) {
     return (
-      <div className="min-h-screen p-4 md:p-8 animate-fade-in">
-        <button onClick={() => setActivePost(null)} className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 group transition-colors">
+      <div className="app-page animate-fade-in">
+        <button onClick={() => setActivePost(null)} className="app-back-link mb-6 group">
           <ArrowLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" /> Back to posts
         </button>
 
@@ -114,8 +114,8 @@ export function Boards() {
         </div>
 
         {/* Comments */}
-        <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-          <MessageSquare size={16} className="text-pink-400" />
+        <h3 className="text-[#111111] font-black uppercase tracking-[0.14em] mb-4 flex items-center gap-2">
+          <MessageSquare size={16} className="text-[#ff4f00]" />
           Comments ({comments.length})
         </h3>
         <div className="space-y-3 mb-6 stagger-children">
@@ -141,10 +141,10 @@ export function Boards() {
             onChange={(e) => setNewComment(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && submitComment()}
             placeholder="Write a comment..."
-            className="flex-1 px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300"
+            className="app-input input-glow flex-1"
           />
-          <button onClick={submitComment} className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center hover:shadow-lg hover:shadow-pink-500/25 hover:scale-105 active:scale-95 transition-all duration-200 flex-shrink-0">
-            <Send size={18} className="text-white" />
+          <button onClick={submitComment} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] border-[3px] border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:-translate-y-0.5">
+            <Send size={18} className="text-[#ff4f00]" />
           </button>
         </div>
       </div>
@@ -156,8 +156,8 @@ export function Boards() {
     const boardInfo = boards.find((b) => b.slug === activeBoard);
     const gradient = BOARD_COLORS[activeBoard] || 'from-gray-500 to-gray-600';
     return (
-      <div className="min-h-screen p-4 md:p-8 animate-fade-in">
-        <button onClick={() => setActiveBoard(null)} className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 group transition-colors">
+      <div className="app-page animate-fade-in">
+        <button onClick={() => setActiveBoard(null)} className="app-back-link mb-6 group">
           <ArrowLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" /> All Boards
         </button>
 
@@ -166,11 +166,11 @@ export function Boards() {
             <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg`}>
               <Users size={18} className="text-white" />
             </div>
-            <h1 className="text-2xl font-black text-white tracking-tight">{boardInfo?.name}</h1>
+            <h1 className="text-3xl font-black tracking-[-0.06em] text-[#111111]">{boardInfo?.name}</h1>
           </div>
           <button
             onClick={() => setShowNewPost(!showNewPost)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl text-white text-sm font-bold hover:shadow-lg hover:shadow-pink-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+            className="app-button-accent px-5 py-3 text-sm"
           >
             <Plus size={16} /> New Post
           </button>
@@ -182,16 +182,16 @@ export function Boards() {
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
               placeholder="Post title"
-              className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300"
+              className="app-input input-glow"
             />
             <textarea
               value={newBody}
               onChange={(e) => setNewBody(e.target.value)}
               placeholder="What's on your mind?"
               rows={4}
-              className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300 resize-none"
+              className="app-textarea input-glow"
             />
-            <button onClick={submitPost} className="px-6 py-2.5 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl text-white text-sm font-bold hover:shadow-lg hover:shadow-pink-500/20 transition-all duration-200">
+            <button onClick={submitPost} className="app-button-dark px-6 py-3 text-sm">
               Post
             </button>
           </div>
@@ -229,10 +229,11 @@ export function Boards() {
 
   // Board list
   return (
-    <div className="min-h-screen p-4 md:p-8">
+    <div className="app-page">
       <div className="animate-fade-in">
-        <h1 className="text-2xl font-black text-white mb-1 tracking-tight">Social Boards</h1>
-        <p className="text-gray-500 text-sm mb-6">Connect, share stories, and uplift each other</p>
+        <div className="app-kicker mb-3">Boards</div>
+        <h1 className="app-title mb-3">social boards.</h1>
+        <p className="app-subtitle mb-6">Connect, share updates, and keep the app social without losing the main dating flow.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 stagger-children">
         {boards.map((board) => {
