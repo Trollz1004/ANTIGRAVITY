@@ -73,6 +73,7 @@ Primary adjustment record:
 - `AGENTS.md`, `CLAUDE.md`, canonical memory files, Brain/MCP config examples, and active OpenClaw/control scripts were normalized away from retired split-separation doctrine
 - current control surfaces now treat the conservative `10%` charitable cap as the only live LLC operating doctrine unless a future canonical legal update replaces it
 - historical chain and contract artifacts remain in explicitly historical files only and do not control current operational truth
+- `briefings/ACTIVE-PROMPTS.md` was reduced to a superseded notice so old prompt copy cannot masquerade as current operating instructions
 - canonical briefing names were normalized to:
   - `briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
   - `briefings/HISTORICAL-ONCHAIN-STATUS.md`

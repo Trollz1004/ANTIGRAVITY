@@ -1,8 +1,13 @@
 # DECISIONS LOG — WHY WE DID WHAT WE DID
 
-**Last Updated**: 2026-03-10T10:35:00-04:00
+**Last Updated**: 2026-04-01T12:35:00-04:00
 
 Every architectural decision is recorded here so no future session re-debates it.
+
+Current reading rule:
+
+- Read the newest entries first.
+- If an older entry conflicts with the March 31, 2026 doctrine correction, treat the older entry as historical context only.
 
 ---
 
