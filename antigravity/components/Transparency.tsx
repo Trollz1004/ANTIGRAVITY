@@ -2,13 +2,7 @@
 
 import React from 'react';
 import { ExternalLink, Globe, Lock, ShieldCheck } from 'lucide-react';
-
-const links = [
-  { name: 'YouAndINotAI', url: 'https://youandinotai.com', label: 'Social platform' },
-  { name: 'OnlineRecycle', url: 'https://onlinerecycle.org', label: 'Electronics recycling service' },
-  { name: 'AI-Solutions Store', url: 'https://ai-solutions.store', label: 'Storefront surface' },
-  { name: 'Antigravity Dashboard', url: 'https://dashboard.aidoesitall.website', label: 'Public status board' },
-];
+import { PUBLIC_SURFACES } from '../lib/constants';
 
 const guardrails = [
   'Internal node names, SSH reachability, and repo state do not belong on a public dashboard.',
@@ -53,7 +47,7 @@ export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {
             Verified Public Links
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {links.map((link) => (
+            {PUBLIC_SURFACES.map((link) => (
               <a
                 key={link.url}
                 href={link.url}
@@ -65,7 +59,7 @@ export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {
                   {link.name}
                   <ExternalLink className="w-3 h-3 opacity-50" />
                 </span>
-                <span className={`text-xs mt-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{link.label}</span>
+                <span className={`text-xs mt-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{link.status}</span>
               </a>
             ))}
           </div>
