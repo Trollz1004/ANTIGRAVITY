@@ -114,8 +114,14 @@ verify_limiter = RateLimiter(
     window_seconds=60,
     trusted_proxy_networks=trusted_proxy_networks,
 )
+waitlist_limiter = RateLimiter(
+    max_requests=settings.waitlist_rate_limit_per_minute,
+    window_seconds=60,
+    trusted_proxy_networks=trusted_proxy_networks,
+)
 
 
 def reset_rate_limits() -> None:
     auth_limiter.reset()
     verify_limiter.reset()
+    waitlist_limiter.reset()

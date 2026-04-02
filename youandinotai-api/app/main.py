@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from app.config import get_settings
 from app.database import reconcile_legacy_schema
 from app.scheduler import setup_scheduler
-from app.routers import auth, billing, boards, double_dates, events, health, lovebot, messages, metrics, privacy, profiles, support, swipe, users, verify, video, video_rooms, volunteering, webhooks
+from app.routers import auth, billing, boards, double_dates, events, health, lovebot, messages, metrics, privacy, profiles, support, swipe, users, verify, video, video_rooms, volunteering, waitlist, webhooks
 
 settings = get_settings()
 
@@ -98,6 +98,7 @@ app.include_router(video.router, prefix="/api/v1", tags=["video"])
 app.include_router(video_rooms.router, prefix="/api/v1", tags=["video-rooms"])
 app.include_router(double_dates.router, prefix="/api/v1", tags=["double-dates"])
 app.include_router(users.router, prefix="/api/v1", tags=["users"])
+app.include_router(waitlist.router, prefix="/api/v1", tags=["waitlist"])
 
 # Static file serving for uploads
 uploads_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")

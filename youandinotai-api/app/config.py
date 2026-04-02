@@ -80,6 +80,7 @@ class Settings(BaseSettings):
     registration_rate_limit_per_minute: int = 10
     auth_rate_limit_per_minute: int = 10
     verify_rate_limit_per_minute: int = 5
+    waitlist_rate_limit_per_minute: int = 5
     rate_limit_trusted_proxies: str = "127.0.0.1/32,::1/128"
     match_top_k: int = 5
     match_candidate_limit: int = 50
