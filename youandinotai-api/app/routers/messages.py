@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user, decode_token
 from app.database import get_db, SessionLocal
+from app.moderation import has_block_relationship
 from app.models import Match, Message, User
 from app.schemas import MessageResponse, MessageSendRequest
 
@@ -32,6 +33,9 @@ async def get_messages(
     match = await db.get(Match, match_id)
     if not match or (match.user_a != user.id and match.user_b != user.id):
         raise HTTPException(status_code=404, detail="Match not found")
+    other_id = match.user_b if match.user_a == user.id else match.user_a
+    if await has_block_relationship(db, user_a=user.id, user_b=other_id):
+        raise HTTPException(status_code=403, detail="Conversation unavailable due to safety settings")
 
     query = select(Message).where(Message.match_id == match_id)
     if before:
@@ -62,6 +66,9 @@ async def send_message(
     match = await db.get(Match, match_id)
     if not match or (match.user_a != user.id and match.user_b != user.id):
         raise HTTPException(status_code=404, detail="Match not found")
+    other_id = match.user_b if match.user_a == user.id else match.user_a
+    if await has_block_relationship(db, user_a=user.id, user_b=other_id):
+        raise HTTPException(status_code=403, detail="Conversation unavailable due to safety settings")
     if match.status != "active":
         raise HTTPException(status_code=400, detail="Match is not active")
 
@@ -118,6 +125,10 @@ async def websocket_chat(
         match = await db.get(Match, uuid.UUID(match_id))
         if not match or (str(match.user_a) != user_id and str(match.user_b) != user_id):
             await websocket.close(code=4004, reason="Match not found")
+            return
+        other_id = match.user_b if str(match.user_a) == user_id else match.user_a
+        if await has_block_relationship(db, user_a=uuid.UUID(user_id), user_b=other_id):
+            await websocket.close(code=4003, reason="Conversation unavailable")
             return
 
     await websocket.accept()

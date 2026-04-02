@@ -34,6 +34,7 @@
 - YouAndINotAI authenticated shell and major signed-in pages reskinned to match the public landing direction
 - production beta-access validation confirmed the signed-in app routes still load after the reskin
 - all five live Square payment links were reverified with live `303` redirects into Square-hosted checkout
+- Play-readiness safety code was added locally for blocking/reporting users and reporting board posts, with backend tests passing at `209 passed`
 
 ## Important Current Truth
 
@@ -51,17 +52,23 @@
 - authenticated date-app launch surface now matches the public brutalist system instead of the older dark dashboard look
 - no backend / GCR redeploy was needed for the April 2 reskin pass
 - one remaining non-blocking issue is a Cloudflare-injected inline challenge script that triggers a CSP console error on production pages
+- Hermes local runtime is repaired on Sabretooth, and `C:\Users\joshl\Desktop\Launch-Hermes-PaperClip.cmd` is the one-click local repair/launch path for the private PaperClip workspace
+- the live backend currently returns `404` for `/api/v1/safety/blocks`, so the new moderation UI is intentionally hard-gated on production until the backend deploy happens
+- Sabretooth currently has no active local `gcloud` auth/project config, so the backend safety patch is ready locally but not yet deployed live
+- the repo still lacks an Android packaging layer, so Play submission packaging remains a separate follow-up
 
 ## Validation Snapshot
 
 - `youandinotai`: lint + build passed
-- `youandinotai-api`: `201 passed`
+- `youandinotai-api`: `209 passed`
 - `mcp-server`: build passed
 - `social-command-center`: build passed
 - `revenue-core`: build passed on Sabretooth after local dependency install
 - `antigravity`: build passed
 - revenue-policy consistency check: passed
 - live beta-access path loaded `/app`, `/app/lovebot`, `/app/matches`, `/app/inbox`, `/app/boards`, `/app/events`, `/app/volunteer`, `/app/support`, `/app/impact`, `/app/privacy`, and `/app/verify`
+- PaperClip agent `Hermes Codex` succeeded on validation run `64aa2074-3b4d-4476-a964-9ac909c48693`
+- live backend probe on `https://api.youandinotai.com/api/v1/safety/blocks` returned `404`
 
 ## Next Reader Rule
 

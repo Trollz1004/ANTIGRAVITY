@@ -19,10 +19,12 @@ Last Updated: 2026-04-02
 - Retired split-separation labels are not current operational doctrine for active repo control surfaces
 - YouAndINotAI public landing remains product-first and does not market `10%`, `Protocol Omega`, or donation language
 - YouAndINotAI authenticated shell and core signed-in pages now match the public brutalist design direction
+- YouAndINotAI now has repo-tracked block/report moderation code for discover, chat, and boards, with the frontend hard-gated until the backend safety routes are live
 - Date-app payments remain bound to the internal checkout creation flow and were reverified for all five live checkout paths on April 2, 2026
 - OnlineRecycle remains live with service-first copy
 - Dashboard gateway remains live and hands trusted users into the authenticated PaperClip workspace
 - PaperClip runtime remains sandboxed and private
+- PaperClip now has a validated local Hermes adapter on Sabretooth with a one-click self-heal launcher at `C:\Users\joshl\Desktop\Launch-Hermes-PaperClip.cmd`
 - March 31 validation pass is complete on Sabretooth for the touched live workspaces
 - April 2 production validation confirmed the beta-access path can still load the core app routes after the reskin
 
@@ -37,7 +39,11 @@ Last Updated: 2026-04-02
 - 9020 support lane copy is verified cleaned
 - T5500 Manus lane copy is verified cleaned in the scanned `docs-locked` and dashboard-page surfaces
 - the April 2 frontend pass was deployed to Cloudflare Pages only; no backend / GCR redeploy was required because backend code did not change
+- the later April 2 Play-readiness safety pass changed both frontend and backend locally; frontend was redeployed in a gated state, but the backend safety routes still require a live Cloud Run deploy
+- the April 2 Hermes/PaperClip runtime fix was a local Sabretooth/PaperClip change only and did not require a live-repo deploy
 - Cloudflare JavaScript detections still inject an inline challenge script that causes a CSP console error on production pages; this is an edge-level behavior, not a repo-bundle regression
+- Sabretooth currently has no active local `gcloud` auth and no configured project, so direct backend deployment from this session is blocked
+- the repo still has no Android packaging layer for Play submission
 
 ## Account Routing Note
 
