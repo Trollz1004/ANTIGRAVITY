@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Send, Smile, Flame, Loader2 } from 'lucide-react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Send, Shield, Flame, Loader2 } from 'lucide-react';
 import { useChat } from '../../lib/useChat';
 import { useAuth } from '../../lib/auth';
+import { api } from '../../lib/api';
+import { isSafetyToolsAvailable } from '../../lib/safety';
 import { GoogleGenAI } from '@google/genai';
+import { SafetyDrawer } from '../components/SafetyDrawer';
 
 async function generateIcebreaker(): Promise<string> {
   const ai = new GoogleGenAI({
@@ -23,15 +26,37 @@ async function generateIcebreaker(): Promise<string> {
 
 export function Chat() {
   const { matchId } = useParams<{ matchId: string }>();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { messages, connected, sendMessage, loadHistory } = useChat(matchId || null);
   const [input, setInput] = useState('');
   const [icebreakerLoading, setIcebreakerLoading] = useState(false);
+  const [matchDisplayName, setMatchDisplayName] = useState('Chat');
+  const [matchUserId, setMatchUserId] = useState<string | null>(null);
+  const [safetyOpen, setSafetyOpen] = useState(false);
+  const [safetyAvailable, setSafetyAvailable] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (matchId) loadHistory(matchId);
   }, [matchId, loadHistory]);
+
+  useEffect(() => {
+    void isSafetyToolsAvailable().then(setSafetyAvailable);
+  }, []);
+
+  useEffect(() => {
+    if (!matchId) return;
+    api.get<{ user_id: string; display_name: string }>(`/matches/${matchId}`)
+      .then((match) => {
+        setMatchDisplayName(match.display_name);
+        setMatchUserId(match.user_id);
+      })
+      .catch(() => {
+        setMatchDisplayName('Chat');
+        setMatchUserId(null);
+      });
+  }, [matchId]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -63,7 +88,7 @@ export function Chat() {
         </Link>
         <div className="flex-1">
           <div className="app-kicker mb-1">Messages</div>
-          <h2 className="text-lg font-black tracking-[-0.05em] text-[#111111]">Chat</h2>
+          <h2 className="text-lg font-black tracking-[-0.05em] text-[#111111]">{matchDisplayName}</h2>
           <div className="flex items-center gap-1.5">
             <div className={`w-2 h-2 rounded-full ${connected ? 'bg-[#ff4f00]' : 'bg-[#8a8478]'}`} />
             <span className={`text-xs font-bold uppercase tracking-[0.16em] ${connected ? 'text-[#111111]' : 'text-[#5c594f]'}`}>
@@ -71,6 +96,16 @@ export function Chat() {
             </span>
           </div>
         </div>
+        {matchUserId && safetyAvailable && (
+          <button
+            type="button"
+            onClick={() => setSafetyOpen(true)}
+            className="flex h-12 items-center justify-center gap-2 rounded-[1rem] border-[3px] border-[#111111] bg-white px-4 text-xs font-black uppercase tracking-[0.14em] text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]"
+          >
+            <Shield size={14} className="text-[#ff4f00]" />
+            Safety
+          </button>
+        )}
       </div>
 
       {/* Messages */}
@@ -170,6 +205,19 @@ export function Chat() {
           </button>
         </div>
       </div>
+
+      {matchUserId && safetyAvailable && (
+        <SafetyDrawer
+          open={safetyOpen}
+          targetUserId={matchUserId}
+          targetName={matchDisplayName}
+          source="chat"
+          onClose={() => setSafetyOpen(false)}
+          onBlocked={() => {
+            navigate('/app/inbox', { replace: true });
+          }}
+        />
+      )}
     </div>
   );
 }

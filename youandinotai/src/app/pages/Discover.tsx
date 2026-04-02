@@ -1,10 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Compass, RefreshCw, Heart, MessageCircle, Sliders } from 'lucide-react';
+import { Compass, RefreshCw, Heart, MessageCircle, Shield, Sliders } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { api, ApiError } from '../../lib/api';
+import { api } from '../../lib/api';
+import { isSafetyToolsAvailable } from '../../lib/safety';
 import { SwipeCard, SwipeButtons } from '../components/SwipeCard';
 import { DiscoverSettings } from '../components/DiscoverSettings';
+import { SafetyDrawer } from '../components/SafetyDrawer';
 
 interface Profile {
   user_id: string;
@@ -78,6 +80,9 @@ export function Discover() {
   const [loading, setLoading] = useState(true);
   const [matchAlert, setMatchAlert] = useState<{ name: string; matchId: string } | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [safetyOpen, setSafetyOpen] = useState(false);
+  const [safetyNotice, setSafetyNotice] = useState<string | null>(null);
+  const [safetyAvailable, setSafetyAvailable] = useState(false);
 
   const loadProfiles = useCallback(async () => {
     setLoading(true);
@@ -92,9 +97,15 @@ export function Discover() {
     }
   }, []);
 
+  const activeProfile = profiles[0];
+
   useEffect(() => {
     loadProfiles();
   }, [loadProfiles]);
+
+  useEffect(() => {
+    void isSafetyToolsAvailable().then(setSafetyAvailable);
+  }, []);
 
   const handleSwipe = async (direction: 'like' | 'pass' | 'superlike') => {
     if (profiles.length === 0) return;
@@ -182,6 +193,12 @@ export function Discover() {
 
         <DiscoverSettings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
+        {safetyNotice && (
+          <div className="mb-4 w-full max-w-[28rem] rounded-[1.2rem] border-4 border-[#111111] bg-[#eef8ed] px-4 py-3 text-sm font-bold text-[#244f1f]">
+            {safetyNotice}
+          </div>
+        )}
+
       {/* Match Celebration Overlay */}
       <AnimatePresence>
         {matchAlert && (
@@ -267,6 +284,16 @@ export function Discover() {
           </div>
 
           <div className="relative h-[520px] w-full md:h-[580px]">
+            {activeProfile && safetyAvailable && (
+              <button
+                type="button"
+                onClick={() => setSafetyOpen(true)}
+                className="absolute right-3 top-3 z-20 flex items-center gap-2 rounded-[1rem] border-4 border-[#111111] bg-[#fffaf2] px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]"
+              >
+                <Shield size={14} className="text-[#ff4f00]" />
+                Safety tools
+              </button>
+            )}
             <AnimatePresence>
               {profiles.slice(0, 2).map((profile, i) => (
                 <SwipeCard
@@ -286,6 +313,23 @@ export function Discover() {
           />
         </div>
       </div>
+
+      {activeProfile && safetyAvailable && (
+        <SafetyDrawer
+          open={safetyOpen}
+          targetUserId={activeProfile.user_id}
+          targetName={activeProfile.display_name}
+          source="profile"
+          onClose={() => setSafetyOpen(false)}
+          onBlocked={() => {
+            setProfiles((prev) => prev.slice(1));
+            setSafetyNotice(`${activeProfile.display_name} was blocked and removed from your feed.`);
+            if (profiles.length <= 3) {
+              void loadProfiles();
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

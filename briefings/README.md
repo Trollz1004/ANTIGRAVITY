@@ -1,6 +1,6 @@
 # Briefings — AI Team Index
 
-Last updated: 2026-03-27
+Last updated: 2026-04-02
 
 Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 
@@ -34,9 +34,10 @@ Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 Current deployment shorthand:
 - frontend: `https://youandinotai.com`
 - onlinerecycle: `https://onlinerecycle.org` (service-first Pages deploy verified on March 27, 2026)
-- public dashboard: `https://dashboard.aidoesitall.website` (direct-upload Pages project; source mapping still needs explicit confirmation before redeploy)
+- public dashboard: `https://dashboard.aidoesitall.website` (repo-mapped no-index gateway confirmed live)
 - multiplayer backend: `https://youandinotai-backend-731395189513.us-east1.run.app`
 - API: `https://api.youandinotai.com`
+- latest launch-risk briefing: `briefings/GOOGLE-PLAY-READINESS-2026-04-02.md`
 
 ## Historical Briefings
 

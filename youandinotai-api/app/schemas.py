@@ -125,6 +125,36 @@ class DiscoverProfileResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class SafetyBlockRequest(BaseModel):
+    reason: str | None = Field(None, max_length=500)
+
+
+class SafetyBlockResponse(BaseModel):
+    status: str
+    blocked_user_id: uuid.UUID
+    match_records_closed: int = 0
+
+
+class SafetyBlockedUserResponse(BaseModel):
+    blocked_user_id: uuid.UUID
+    display_name: str
+    reason: str | None = None
+    created_at: datetime
+
+
+class UserReportRequest(BaseModel):
+    reason: str = Field(min_length=1, max_length=100)
+    details: str | None = Field(None, max_length=1000)
+    source: Literal["profile", "chat", "match", "board", "other"] = "profile"
+
+
+class UserReportResponse(BaseModel):
+    status: str
+    report_id: uuid.UUID
+    reported_user_id: uuid.UUID
+    ticket_id: uuid.UUID | None = None
+
+
 # ── Messages ──
 
 class MessageSendRequest(BaseModel):
@@ -207,6 +237,7 @@ class CommentResponse(BaseModel):
 
 class PostReportRequest(BaseModel):
     reason: str = Field(min_length=1, max_length=500)
+    details: str | None = Field(None, max_length=1000)
 
 
 # ── Events ──

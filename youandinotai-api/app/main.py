@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from app.config import get_settings
 from app.database import reconcile_legacy_schema
 from app.scheduler import setup_scheduler
-from app.routers import auth, billing, boards, double_dates, events, health, lovebot, messages, metrics, privacy, profiles, support, swipe, users, verify, video, video_rooms, volunteering, waitlist, webhooks
+from app.routers import auth, billing, boards, double_dates, events, health, lovebot, messages, metrics, privacy, profiles, safety, support, swipe, users, verify, video, video_rooms, volunteering, waitlist, webhooks
 
 settings = get_settings()
 
@@ -93,6 +93,7 @@ app.include_router(verify.router, prefix="/api/v1", tags=["verification"])
 app.include_router(billing.router, prefix="/api/v1", tags=["billing"])
 app.include_router(metrics.router, prefix="/api/v1", tags=["metrics"])
 app.include_router(privacy.router, prefix="/api/v1", tags=["privacy"])
+app.include_router(safety.router, prefix="/api/v1", tags=["safety"])
 app.include_router(support.router, prefix="/api/v1", tags=["support"])
 app.include_router(video.router, prefix="/api/v1", tags=["video"])
 app.include_router(video_rooms.router, prefix="/api/v1", tags=["video-rooms"])

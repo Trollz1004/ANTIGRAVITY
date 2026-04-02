@@ -93,6 +93,12 @@ You agree not to:
 - Post content that infringes on others' copyrights, trademarks, or other intellectual property
 - Redistribute or republish other users' photos or content without their consent
 
+### 5.5 Safety Tools
+- We provide in-app reporting and blocking tools for user safety
+- You agree to use those tools honestly and not to file knowingly false reports
+- Blocking another user removes that person from your active experience on your account
+- Reports may be reviewed by automated systems and human operators when needed
+
 Violation of these rules may result in warnings, temporary suspension, or permanent termination at our sole discretion. Serious violations (threats, child safety concerns, illegal activity) will be reported to law enforcement.
 
 ## 6. User Content
