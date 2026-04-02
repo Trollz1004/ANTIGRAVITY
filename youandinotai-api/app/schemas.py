@@ -149,6 +149,16 @@ class WebhookAckResponse(BaseModel):
     duplicate: bool = False
 
 
+class WaitlistSignupRequest(BaseModel):
+    email: EmailStr
+
+
+class WaitlistSignupResponse(BaseModel):
+    received: bool = True
+    confirmation_sent: bool = True
+    message: str = "Check your inbox for confirmation."
+
+
 # ── Health ──
 
 class HealthResponse(BaseModel):
