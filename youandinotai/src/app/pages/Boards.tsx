@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Users, MessageSquare, Plus, ArrowLeft, Send, Heart } from 'lucide-react';
+import { Users, MessageSquare, Plus, ArrowLeft, Send, Flag, Shield } from 'lucide-react';
 import { api } from '../../lib/api';
 import { useAuth } from '../../lib/auth';
+import { isSafetyToolsAvailable } from '../../lib/safety';
+import { SafetyDrawer } from '../components/SafetyDrawer';
 
 interface BoardInfo {
   slug: string;
@@ -48,9 +50,16 @@ export function Boards() {
   const [newBody, setNewBody] = useState('');
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(true);
+  const [safetyOpen, setSafetyOpen] = useState(false);
+  const [boardNotice, setBoardNotice] = useState<string | null>(null);
+  const [safetyAvailable, setSafetyAvailable] = useState(false);
 
   useEffect(() => {
     api.get<BoardInfo[]>('/boards').then(setBoards).finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    void isSafetyToolsAvailable().then(setSafetyAvailable);
   }, []);
 
   const loadPosts = async (slug: string) => {
@@ -82,6 +91,18 @@ export function Boards() {
     loadComments(activePost);
   };
 
+  const reportActivePost = async () => {
+    if (!activePost) return;
+    const reason = window.prompt('Brief reason for reporting this post', 'Unsafe or inappropriate content');
+    if (!reason || !reason.trim()) return;
+
+    await api.post(`/boards/posts/${activePost.id}/report`, {
+      reason: reason.trim(),
+      details: `Board=${activePost.board_slug}; post=${activePost.id}; author=${activePost.author_id}`,
+    });
+    setBoardNotice('Board post queued for moderation review.');
+  };
+
   if (loading) {
     return (
       <div className="app-page flex items-center justify-center">
@@ -103,14 +124,44 @@ export function Boards() {
           <ArrowLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" /> Back to posts
         </button>
 
+        {boardNotice && (
+          <div className="mb-4 rounded-[1.2rem] border-4 border-[#111111] bg-[#eef8ed] px-4 py-3 text-sm font-bold text-[#244f1f]">
+            {boardNotice}
+          </div>
+        )}
+
         {/* Original post — glass card */}
         <div className="glass-strong rounded-3xl p-6 glass-highlight mb-8">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3 text-xs text-gray-500">
+              <span className="glass rounded-full px-3 py-1 font-medium">{activePost.author_name}</span>
+              <span>{new Date(activePost.created_at).toLocaleDateString()}</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {safetyAvailable && (
+              <button
+                type="button"
+                onClick={reportActivePost}
+                className="flex items-center gap-2 rounded-[1rem] border-4 border-[#111111] bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]"
+              >
+                <Flag size={14} className="text-[#ff4f00]" />
+                Report post
+              </button>
+              )}
+              {safetyAvailable && (
+              <button
+                type="button"
+                onClick={() => setSafetyOpen(true)}
+                className="flex items-center gap-2 rounded-[1rem] border-4 border-[#111111] bg-[#fff4ef] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]"
+              >
+                <Shield size={14} className="text-[#ff4f00]" />
+                Safety
+              </button>
+              )}
+            </div>
+          </div>
           <h2 className="text-xl font-bold text-white mb-3">{activePost.title}</h2>
           <p className="text-gray-300 text-sm whitespace-pre-wrap leading-relaxed">{activePost.body}</p>
-          <div className="flex items-center gap-3 mt-5 text-xs text-gray-500">
-            <span className="glass rounded-full px-3 py-1 font-medium">{activePost.author_name}</span>
-            <span>{new Date(activePost.created_at).toLocaleDateString()}</span>
-          </div>
         </div>
 
         {/* Comments */}
@@ -147,6 +198,24 @@ export function Boards() {
             <Send size={18} className="text-[#ff4f00]" />
           </button>
         </div>
+
+        {safetyAvailable && (
+          <SafetyDrawer
+            open={safetyOpen}
+            targetUserId={activePost.author_id}
+            targetName={activePost.author_name}
+            source="board"
+            onClose={() => setSafetyOpen(false)}
+            onBlocked={() => {
+              setBoardNotice(`${activePost.author_name} was blocked and removed from your board lane.`);
+              setSafetyOpen(false);
+              setActivePost(null);
+              if (activeBoard) {
+                void loadPosts(activeBoard);
+              }
+            }}
+          />
+        )}
       </div>
     );
   }

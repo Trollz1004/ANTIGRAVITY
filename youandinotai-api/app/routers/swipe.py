@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
 from app.database import get_db
+from app.moderation import blocked_by_user_subquery, blocked_user_subquery, has_block_relationship
 from app.models import Match, Profile, Swipe, User
 from app.schemas import DiscoverProfileResponse, MatchResponse, SwipeRequest, SwipeResponse
 from app.subscriptions import user_has_active_subscription
@@ -23,6 +24,8 @@ async def swipe(
 ) -> SwipeResponse:
     if payload.target_id == user.id:
         raise HTTPException(status_code=400, detail="Cannot swipe yourself")
+    if await has_block_relationship(db, user_a=user.id, user_b=payload.target_id):
+        raise HTTPException(status_code=403, detail="That profile is unavailable due to safety settings")
 
     # Check for duplicate swipe
     existing = await db.scalar(
@@ -88,6 +91,8 @@ async def get_matches(
     results = []
     for match in matches:
         other_id = match.user_b if match.user_a == user.id else match.user_a
+        if await has_block_relationship(db, user_a=user.id, user_b=other_id):
+            continue
         other_user = await db.get(User, other_id)
         other_profile = await db.scalar(select(Profile).where(Profile.user_id == other_id))
 
@@ -107,6 +112,38 @@ async def get_matches(
     return results
 
 
+@router.get("/matches/{match_id}", response_model=MatchResponse)
+async def get_match(
+    match_id: uuid.UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> MatchResponse:
+    match = await db.get(Match, match_id)
+    if not match or user.id not in (match.user_a, match.user_b) or match.status != "active":
+        raise HTTPException(status_code=404, detail="Match not found")
+
+    other_id = match.user_b if match.user_a == user.id else match.user_a
+    if await has_block_relationship(db, user_a=user.id, user_b=other_id):
+        raise HTTPException(status_code=404, detail="Match not found")
+
+    other_user = await db.get(User, other_id)
+    other_profile = await db.scalar(select(Profile).where(Profile.user_id == other_id))
+    if not other_user:
+        raise HTTPException(status_code=404, detail="Match not found")
+
+    return MatchResponse(
+        match_id=match.id,
+        user_id=other_id,
+        display_name=other_user.display_name,
+        photos=(other_profile.photos or []) if other_profile else [],
+        matched_at=match.matched_at,
+        last_message_at=match.last_message_at,
+        verified=(other_profile.verified if other_profile else False),
+        subscription_active=user_has_active_subscription(other_user),
+        breeze_bypass_enabled=match.breeze_bypass_enabled,
+    )
+
+
 @router.get("/discover", response_model=list[DiscoverProfileResponse])
 async def discover(
     user: User = Depends(get_current_user),
@@ -115,6 +152,8 @@ async def discover(
 ) -> list[DiscoverProfileResponse]:
     # Get IDs already swiped on
     swiped_subq = select(Swipe.target_id).where(Swipe.user_id == user.id)
+    blocked_by_me = blocked_by_user_subquery(user.id)
+    blocked_me = blocked_user_subquery(user.id)
 
     # Get profiles excluding self and already-swiped
     profiles = (
@@ -123,6 +162,8 @@ async def discover(
             .where(
                 Profile.user_id != user.id,
                 Profile.user_id.notin_(swiped_subq),
+                Profile.user_id.notin_(blocked_by_me),
+                Profile.user_id.notin_(blocked_me),
             )
             .order_by(func.random())
             .limit(limit)

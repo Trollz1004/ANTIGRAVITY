@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.auth import get_current_user
 from app.age_gate import ensure_adult
 from app.database import get_db
+from app.moderation import has_block_relationship
 from app.models import Profile, User
 from app.schemas import ProfileResponse, ProfileUpdateRequest
 
@@ -93,9 +94,12 @@ async def update_my_profile(
 @router.get("/{user_id}", response_model=ProfileResponse)
 async def get_user_profile(
     user_id: uuid.UUID,
-    _current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> ProfileResponse:
+    if await has_block_relationship(db, user_a=current_user.id, user_b=user_id):
+        raise HTTPException(status_code=404, detail="Profile not found")
+
     profile = await db.scalar(select(Profile).where(Profile.user_id == user_id))
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")

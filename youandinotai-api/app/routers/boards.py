@@ -7,8 +7,9 @@ from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
+from app.config import get_settings
 from app.database import get_db
-from app.models import Board, Comment, Post, User
+from app.models import Board, Comment, Post, SupportTicket, User
 from app.schemas import (
     CommentCreateRequest,
     CommentResponse,
@@ -16,6 +17,7 @@ from app.schemas import (
     PostResponse,
     PostReportRequest,
 )
+from app.support_service import notify_support_ticket
 
 router = APIRouter(prefix="/boards")
 
@@ -194,7 +196,32 @@ async def report_post(
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
 
-    # In a real app, we might have a dedicated Report model.
-    # For now, we'll log it as a privacy-related action or just return success.
-    # According to task instructions, we just need the endpoint.
+    author = await db.get(User, post.author_id)
+    ticket = SupportTicket(
+        id=uuid.uuid4(),
+        user_id=user.id,
+        status="open",
+        category="safety",
+        subject=f"Board post report: {post.title[:120]}",
+        customer_email=user.email,
+        customer_message=payload.details or payload.reason,
+        bot_response="A board post safety report was submitted for moderation review.",
+        escalation_reason=f"board_post:{payload.reason}",
+        transcript=[
+            {"role": "user", "content": payload.details or payload.reason},
+            {
+                "role": "system",
+                "content": (
+                    f"Reported board post {post.id} by "
+                    f"{author.display_name if author else post.author_id}. "
+                    f"reason={payload.reason}"
+                ),
+            },
+        ],
+    )
+    db.add(ticket)
+    await db.commit()
+    await db.refresh(ticket)
+    await notify_support_ticket(ticket=ticket, user=user, settings=get_settings())
+
     return {"status": "reported", "post_id": str(post_id)}
