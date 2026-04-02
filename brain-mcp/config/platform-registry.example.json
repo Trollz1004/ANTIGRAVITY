@@ -9,7 +9,7 @@
       "certificationAuthority": true,
       "allowedIps": ["127.0.0.1", "192.168.0.8"],
       "allowedPathPrefixes": ["C:\\ANTIGRAVITY"],
-      "blockedPathPrefixes": ["C:\\OPUSONLY", "E:\\ANTIGRAVITY", "C:\\Users\\joshl\\OneDrive\\Personal Vault"],
+      "blockedPathPrefixes": ["C:\\OPUSONLY", "E:\\ANTIGRAVITY"],
       "tokenHash": "sha256:<replace-me>"
     },
     {
@@ -21,7 +21,7 @@
       "certificationAuthority": true,
       "allowedIps": ["127.0.0.1", "192.168.0.8"],
       "allowedPathPrefixes": ["C:\\ANTIGRAVITY", "E:\\claudes-claw"],
-      "blockedPathPrefixes": ["C:\\OPUSONLY", "E:\\ANTIGRAVITY", "C:\\Users\\joshl\\OneDrive\\Personal Vault"],
+      "blockedPathPrefixes": ["C:\\OPUSONLY", "E:\\ANTIGRAVITY"],
       "tokenHash": "sha256:<replace-me>"
     }
   ],
