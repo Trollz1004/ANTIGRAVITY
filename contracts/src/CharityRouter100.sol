@@ -6,10 +6,11 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 /**
  * @title CharityRouter100
- * @author FOR THE KIDS Platform
- * @notice Immutable router that forwards 100% of all received funds to verified pediatric charities
- * @dev This contract is intentionally non-upgradeable and has no admin functions.
- *      Once deployed, it cannot be modified - ensuring permanent 100% charity allocation.
+ * @author FOR THE KIDS Platform — historical draft artifact
+ * @notice Historical charity-side router artifact kept for audit/reference purposes only.
+ * @dev This file does NOT represent current live LLC operating doctrine and must not be
+ *      deployed for current LLC-controlled commerce unless a future canonical legal update
+ *      explicitly restores a matching structure.
  *
  *      "Until no kid is in need"
  */

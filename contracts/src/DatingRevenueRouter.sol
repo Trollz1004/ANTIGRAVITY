@@ -6,10 +6,12 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 /**
  * @title DatingRevenueRouter
- * @author FOR THE KIDS Platform — Protocol Omega
- * @notice Immutable revenue splitter: 60% charity / 30% mission infrastructure and AI operations / 10% founder
- * @dev No phases. No admin. No upgrades. 60/30/10 from deploy, forever.
- *      Integer remainder goes to charity (Shriners).
+ * @author FOR THE KIDS Platform — historical draft artifact
+ * @notice Historical intended-next router artifact kept for chain-history and audit context only.
+ * @dev This file does NOT represent current live LLC operating doctrine.
+ *      Do NOT deploy this router for current LLC-controlled revenue unless a future
+ *      canonical legal review explicitly restores a matching structure.
+ *      Historical split logic remains in-source only for auditability.
  *
  *      "Until no kid is in need"
  */
