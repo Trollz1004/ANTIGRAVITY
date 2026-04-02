@@ -133,6 +133,20 @@ Primary adjustment record:
   - this repo still does not contain an Android packaging layer (`android/`, Capacitor, Expo, or equivalent)
   - product/policy safety readiness improved materially, but literal Play submission packaging is still a separate remaining step
 
+## April 2 Privacy Center Live Fallback
+
+- live production backend check:
+  - authenticated `GET https://api.youandinotai.com/api/v1/privacy/my-data` returns `500`
+  - the route exists, but the advanced privacy backend path is currently unhealthy in production
+- production protection applied with a frontend-only Cloudflare Pages deploy:
+  - `DataPrivacyDashboard` now falls back to live `/auth/me` and optional `/profiles/me` data when the advanced privacy endpoint fails
+  - the live page now shows a truthful degraded state instead of a generic hard failure
+  - export, location-disable, and deletion actions are visibly disabled while the backend privacy service remains unavailable
+- current safe Pages deployment for this fallback pass: `7a982b59`
+- verified live on `https://youandinotai.com/app/privacy` with the beta-access path:
+  - the old `Unable to load your privacy data right now.` failure state no longer blocks the screen
+  - the page now shows basic account details with an explicit temporary-unavailability notice for advanced privacy actions
+
 ## Final Validation Pass
 
 Verified on March 31, 2026:
@@ -161,6 +175,7 @@ Verified again on April 2, 2026:
   - `Royalty Card` `$2,500`
   all responded with live `303` redirects into Square-hosted checkout
 - live backend probe on `https://api.youandinotai.com/api/v1/safety/blocks` returned `404`, confirming the backend safety patch still needs a real Cloud Run deploy before the new moderation controls can go live
+- live beta-authenticated privacy probe confirmed the frontend fallback is active on production and no longer leaves the Privacy Center in a dead failure state
 
 ## Local Hermes / PaperClip Runtime
 
