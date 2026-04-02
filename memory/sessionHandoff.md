@@ -1,4 +1,4 @@
-# Session Handoff - 2026-04-01
+# Session Handoff - 2026-04-02
 
 ## Status Update
 - **Machine:** Mini ASUS PC (Windows)
@@ -31,6 +31,9 @@
 - final Sabretooth validation pass completed
 - 9020 and T5500 secondary lanes rechecked and cleaned in the scanned surfaces
 - canonical briefings renamed to neutral current titles so active handoffs stop inheriting split-era labels
+- YouAndINotAI authenticated shell and major signed-in pages reskinned to match the public landing direction
+- production beta-access validation confirmed the signed-in app routes still load after the reskin
+- all five live Square payment links were reverified with live `303` redirects into Square-hosted checkout
 
 ## Important Current Truth
 
@@ -45,6 +48,9 @@
 - `www.aidoesitall.website` now maps to `_deploy/aidoesitall-www`
 - `api.aidoesitall.website/*` now maps to the repo-tracked `infra/cloudflare/aidoesitall-api-guard` Worker source
 - ASUS mini PC is a trusted CLI node with local continuity and local RDP/PaperClip launchers outside OneDrive
+- authenticated date-app launch surface now matches the public brutalist system instead of the older dark dashboard look
+- no backend / GCR redeploy was needed for the April 2 reskin pass
+- one remaining non-blocking issue is a Cloudflare-injected inline challenge script that triggers a CSP console error on production pages
 
 ## Validation Snapshot
 
@@ -55,6 +61,7 @@
 - `revenue-core`: build passed on Sabretooth after local dependency install
 - `antigravity`: build passed
 - revenue-policy consistency check: passed
+- live beta-access path loaded `/app`, `/app/lovebot`, `/app/matches`, `/app/inbox`, `/app/boards`, `/app/events`, `/app/volunteer`, `/app/support`, `/app/impact`, `/app/privacy`, and `/app/verify`
 
 ## Next Reader Rule
 

@@ -218,14 +218,14 @@ function formatDate(value: string): string {
 
 function actionButtonClasses(kind: SupportActionKind): string {
   if (kind === 'ticket') {
-    return 'inline-flex items-center gap-2 rounded-full border border-amber-700/60 bg-amber-950/50 px-4 py-2 text-sm font-medium text-amber-200 transition hover:border-amber-500';
+    return 'app-button-dark px-4 py-2 text-sm no-underline';
   }
 
   if (kind === 'link') {
-    return 'inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-cyan-400/50 hover:text-white';
+    return 'app-button-outline px-4 py-2 text-sm no-underline';
   }
 
-  return 'inline-flex items-center gap-2 rounded-full border border-cyan-700/50 bg-cyan-950/40 px-4 py-2 text-sm font-medium text-cyan-100 transition hover:border-cyan-400 hover:text-white';
+  return 'app-button-outline px-4 py-2 text-sm no-underline';
 }
 
 export function Support() {
@@ -385,242 +385,246 @@ export function Support() {
   const SelectedLaneIcon = selectedLane.icon;
 
   return (
-    <section className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-5 py-6 text-slate-100 sm:px-8">
-      <div className="rounded-[28px] border border-slate-800 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.16),_transparent_42%),linear-gradient(180deg,rgba(15,23,42,0.98),rgba(2,6,23,0.98))] p-6 shadow-[0_30px_120px_rgba(2,6,23,0.55)]">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">Support Center</span>
-            <h2 className="mt-3 text-3xl font-semibold text-white">Guided support first. Human review when it actually matters.</h2>
-            <p className="mt-2 max-w-3xl text-sm text-slate-400">
-              Pick a lane like receipts, verification, privacy, or app issues. The support assistant stays narrow, gives preset answers,
-              and escalates only when the request needs billing, safety, access, or human judgment.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-slate-800 bg-black/30 px-4 py-3 text-sm text-slate-300">
-            <div className="flex items-center gap-2 text-white">
-              <Headset size={16} className="text-cyan-300" />
-              Live support workflow
+    <section className="app-page">
+      <div className="app-page-inner flex flex-col gap-6">
+        <div className="glass-strong glass-highlight rounded-[28px] p-6">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <span className="app-kicker">Support Center</span>
+              <h2 className="mt-3 text-3xl font-black tracking-[-0.06em] text-[#111111]">Guided support first. Human review when it actually matters.</h2>
+              <p className="mt-2 max-w-3xl text-sm text-[#5c594f]">
+                Pick a lane like receipts, verification, privacy, or app issues. The support assistant stays narrow, gives preset answers,
+                and escalates only when the request needs billing, safety, access, or human judgment.
+              </p>
             </div>
-            <div className="mt-1 text-slate-500">Pick lane {'->'} preset answer {'->'} escalate only if needed</div>
-          </div>
-        </div>
-      </div>
-
-      {error && (
-        <div className="rounded-2xl border border-rose-900 bg-rose-950/60 px-4 py-3 text-sm text-rose-200">
-          {error}
-        </div>
-      )}
-
-      {notice && (
-        <div className="rounded-2xl border border-emerald-900 bg-emerald-950/60 px-4 py-3 text-sm text-emerald-200">
-          {notice}
-        </div>
-      )}
-
-      <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-        <article className="rounded-[28px] border border-slate-800 bg-slate-950/85 p-5 shadow-[0_20px_80px_rgba(2,6,23,0.45)]">
-          <div className="flex flex-col gap-4 border-b border-slate-800 pb-5">
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-white">Choose a support lane</h3>
-                <p className="mt-1 text-sm text-slate-500">
-                  This works more like a live help desk than an open-ended chatbot. Pick the closest lane and let the system route it.
-                </p>
+            <div className="glass rounded-2xl px-4 py-3 text-sm text-[#5c594f]">
+              <div className="flex items-center gap-2 font-bold text-[#111111]">
+                <Headset size={16} className="text-[#ff4f00]" />
+                Live support workflow
               </div>
-              <button
-                type="button"
-                onClick={() => void handleManualEscalation()}
-                disabled={loading}
-                className="inline-flex items-center gap-2 rounded-full border border-amber-700/60 bg-amber-950/50 px-4 py-2 text-sm font-medium text-amber-200 transition hover:border-amber-500 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                <ShieldAlert size={16} />
-                Open human ticket
-              </button>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-              {SUPPORT_LANES.map((lane) => {
-                const Icon = lane.icon;
-                const isSelected = lane.id === selectedLane.id;
-
-                return (
-                  <button
-                    key={lane.id}
-                    type="button"
-                    onClick={() => void handleLaneSelect(lane)}
-                    disabled={loading}
-                    className={`rounded-[24px] border bg-[linear-gradient(180deg,rgba(15,23,42,0.95),rgba(2,6,23,0.9))] p-4 text-left transition duration-200 hover:border-cyan-400/60 hover:shadow-[0_18px_50px_rgba(8,145,178,0.18)] disabled:cursor-not-allowed disabled:opacity-60 ${
-                      isSelected ? 'border-cyan-400/60 shadow-[0_18px_50px_rgba(8,145,178,0.18)]' : 'border-slate-800'
-                    }`}
-                  >
-                    <div className={`rounded-2xl border bg-gradient-to-br p-3 ${lane.accentClass}`}>
-                      <Icon size={18} className="text-white" />
-                    </div>
-                    <div className="mt-4 text-base font-semibold text-white">{lane.title}</div>
-                    <p className="mt-2 text-sm leading-6 text-slate-400">{lane.description}</p>
-                    <div className="mt-4 text-xs uppercase tracking-[0.2em] text-cyan-300">
-                      {isSelected ? 'Selected lane' : 'Ask support'}
-                    </div>
-                  </button>
-                );
-              })}
+              <div className="mt-1">Pick lane {'->'} preset answer {'->'} escalate only if needed</div>
             </div>
           </div>
+        </div>
 
-          <div className="mt-5 rounded-[28px] border border-slate-800 bg-[radial-gradient(circle_at_top_left,_rgba(34,197,94,0.10),_transparent_38%),linear-gradient(180deg,rgba(2,6,23,0.92),rgba(15,23,42,0.85))] p-5">
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div className="flex items-start gap-3">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <SelectedLaneIcon size={18} className="text-cyan-300" />
-                </div>
+        {error && (
+          <div className="rounded-2xl border-4 border-[#111111] bg-[#ffd9c7] px-4 py-3 text-sm font-semibold text-[#111111]">
+            {error}
+          </div>
+        )}
+
+        {notice && (
+          <div className="rounded-2xl border-4 border-[#111111] bg-[#efe6d8] px-4 py-3 text-sm font-semibold text-[#111111]">
+            {notice}
+          </div>
+        )}
+
+        <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
+          <article className="glass-strong rounded-[28px] p-5">
+            <div className="flex flex-col gap-4 border-b-4 border-[#111111] pb-5">
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <div className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Selected lane</div>
-                  <h4 className="mt-2 text-lg font-semibold text-white">{selectedLane.title}</h4>
-                  <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">{selectedLane.guidance}</p>
+                  <h3 className="text-lg font-black text-[#111111] uppercase tracking-[0.12em]">Choose a support lane</h3>
+                  <p className="mt-1 text-sm text-[#5c594f]">
+                    This works more like a live help desk than an open-ended chatbot. Pick the closest lane and let the system route it.
+                  </p>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => void handleManualEscalation()}
+                  disabled={loading}
+                  className="app-button-dark px-4 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <ShieldAlert size={16} />
+                  Open human ticket
+                </button>
               </div>
-              <div className="rounded-2xl border border-slate-800 bg-black/30 px-4 py-3 text-sm text-slate-400">
-                The operator only gets pulled in when billing, safety, access, or uncertainty crosses the line.
-              </div>
-            </div>
 
-            <div className="mt-5 flex flex-wrap gap-2">
-              {selectedLane.actions.map((action) =>
-                action.kind === 'link' && action.href ? (
-                  <Link key={action.label} to={action.href} className={actionButtonClasses(action.kind)}>
-                    <ExternalLink size={15} />
-                    {action.label}
-                  </Link>
-                ) : (
-                  <button
-                    key={action.label}
-                    type="button"
-                    disabled={loading}
-                    onClick={() => void handleLaneAction(action)}
-                    className={`${actionButtonClasses(action.kind)} disabled:cursor-not-allowed disabled:opacity-60`}
-                  >
-                    {action.kind === 'ticket' ? <Ticket size={15} /> : <Send size={15} />}
-                    {action.label}
-                  </button>
-                ),
-              )}
-            </div>
-            <div className="mt-3 text-xs text-slate-500">
-              {selectedLane.actions.map((action) => action.hint).join('  •  ')}
-            </div>
-          </div>
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {SUPPORT_LANES.map((lane) => {
+                  const Icon = lane.icon;
+                  const isSelected = lane.id === selectedLane.id;
 
-          <div className="mt-5 flex max-h-[360px] flex-col gap-3 overflow-y-auto pr-1">
-            {messages.map((message, index) => (
-              <div
-                key={`${message.role}-${index}`}
-                className={`max-w-[88%] rounded-3xl px-4 py-3 text-sm leading-6 ${
-                  message.role === 'assistant'
-                    ? 'self-start border border-slate-800 bg-slate-900/85 text-slate-200'
-                    : 'self-end bg-gradient-to-r from-cyan-500/90 to-blue-500/90 text-white shadow-lg shadow-cyan-950/30'
-                }`}
-              >
-                {message.content}
-              </div>
-            ))}
-            {loading && (
-              <div className="self-start rounded-3xl border border-slate-800 bg-slate-900/85 px-4 py-3 text-sm text-slate-400">
-                Support is thinking...
-              </div>
-            )}
-          </div>
-
-          <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3">
-            <textarea
-              value={draft}
-              onChange={(event) => setDraft(event.target.value)}
-              rows={3}
-              placeholder="Need something outside the guided lanes? Type it here."
-              className="w-full rounded-[24px] border border-slate-800 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
-            />
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
-                Safety, billing disputes, and access issues auto-escalate.
-              </div>
-              <button
-                type="submit"
-                disabled={loading || draft.trim().length === 0}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                <Send size={16} />
-                Send custom message
-              </button>
-            </div>
-          </form>
-        </article>
-
-        <div className="grid gap-6">
-          <aside className="rounded-[28px] border border-slate-800 bg-[linear-gradient(180deg,rgba(15,23,42,0.92),rgba(15,23,42,0.72))] p-5">
-            <div className="flex items-center gap-2">
-              <Ticket size={18} className="text-cyan-300" />
-              <h3 className="text-lg font-semibold text-white">My tickets</h3>
-            </div>
-            <p className="mt-1 text-sm text-slate-500">Every escalation keeps the customer message and bot reply together.</p>
-
-            <div className="mt-4 space-y-3">
-              {tickets.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-slate-800 px-4 py-5 text-sm text-slate-500">
-                  No support tickets yet.
-                </div>
-              ) : (
-                tickets.map((ticket) => (
-                  <div key={ticket.id} className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="text-sm font-medium text-white">{ticket.subject}</div>
-                        <div className="mt-1 text-xs uppercase tracking-[0.18em] text-cyan-300">
-                          {ticket.category.replace('_', ' ')}
-                        </div>
+                  return (
+                    <button
+                      key={lane.id}
+                      type="button"
+                      onClick={() => void handleLaneSelect(lane)}
+                      disabled={loading}
+                      className={`rounded-[24px] border-[3px] p-4 text-left transition duration-200 disabled:cursor-not-allowed disabled:opacity-60 ${
+                        isSelected
+                          ? 'border-[#111111] bg-[#111111] text-white shadow-[6px_6px_0_0_rgba(17,17,17,1)]'
+                          : 'border-[#111111] bg-white text-[#111111] shadow-[6px_6px_0_0_rgba(17,17,17,1)] hover:-translate-y-0.5'
+                      }`}
+                    >
+                      <div className={`rounded-2xl border-[3px] border-[#111111] bg-gradient-to-br p-3 ${lane.accentClass}`}>
+                        <Icon size={18} className={isSelected ? 'text-white' : 'text-[#111111]'} />
                       </div>
-                      <span className="rounded-full border border-amber-700/70 bg-amber-950/70 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-300">
-                        {ticket.status}
-                      </span>
-                    </div>
-                    <div className="mt-3 text-sm text-slate-300">{ticket.customer_message}</div>
-                    {ticket.bot_response && (
-                      <div className="mt-3 rounded-2xl border border-slate-800 bg-black/20 px-3 py-3 text-sm text-slate-400">
-                        Bot: {ticket.bot_response}
+                      <div className={`mt-4 text-base font-black ${isSelected ? 'text-white' : 'text-[#111111]'}`}>{lane.title}</div>
+                      <p className={`mt-2 text-sm leading-6 ${isSelected ? 'text-white/75' : 'text-[#5c594f]'}`}>{lane.description}</p>
+                      <div className={`mt-4 text-xs uppercase tracking-[0.2em] ${isSelected ? 'text-[#ffcfbc]' : 'text-[#ff4f00]'}`}>
+                        {isSelected ? 'Selected lane' : 'Ask support'}
                       </div>
-                    )}
-                    <div className="mt-3 text-xs text-slate-500">Opened {formatDate(ticket.created_at)}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="mt-5 glass rounded-[28px] p-5">
+              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                <div className="flex items-start gap-3">
+                  <div className="rounded-2xl border-[3px] border-[#111111] bg-white p-3">
+                    <SelectedLaneIcon size={18} className="text-[#ff4f00]" />
                   </div>
-                ))
+                  <div>
+                    <div className="text-xs font-black uppercase tracking-[0.2em] text-[#ff4f00]">Selected lane</div>
+                    <h4 className="mt-2 text-lg font-black text-[#111111]">{selectedLane.title}</h4>
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-[#5c594f]">{selectedLane.guidance}</p>
+                  </div>
+                </div>
+                <div className="rounded-2xl border-[3px] border-[#111111] bg-white px-4 py-3 text-sm text-[#5c594f]">
+                  The operator only gets pulled in when billing, safety, access, or uncertainty crosses the line.
+                </div>
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {selectedLane.actions.map((action) =>
+                  action.kind === 'link' && action.href ? (
+                    <Link key={action.label} to={action.href} className={actionButtonClasses(action.kind)}>
+                      <ExternalLink size={15} />
+                      {action.label}
+                    </Link>
+                  ) : (
+                    <button
+                      key={action.label}
+                      type="button"
+                      disabled={loading}
+                      onClick={() => void handleLaneAction(action)}
+                      className={`${actionButtonClasses(action.kind)} disabled:cursor-not-allowed disabled:opacity-60`}
+                    >
+                      {action.kind === 'ticket' ? <Ticket size={15} /> : <Send size={15} />}
+                      {action.label}
+                    </button>
+                  ),
+                )}
+              </div>
+              <div className="mt-3 text-xs text-[#5c594f]">
+                {selectedLane.actions.map((action) => action.hint).join('  •  ')}
+              </div>
+            </div>
+
+            <div className="mt-5 flex max-h-[360px] flex-col gap-3 overflow-y-auto pr-1">
+              {messages.map((message, index) => (
+                <div
+                  key={`${message.role}-${index}`}
+                  className={`max-w-[88%] rounded-3xl border-[3px] px-4 py-3 text-sm leading-6 ${
+                    message.role === 'assistant'
+                      ? 'self-start border-[#111111] bg-white text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]'
+                      : 'self-end border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)]'
+                  }`}
+                >
+                  {message.content}
+                </div>
+              ))}
+              {loading && (
+                <div className="self-start rounded-3xl border-[3px] border-[#111111] bg-white px-4 py-3 text-sm text-[#5c594f] shadow-[4px_4px_0_0_rgba(17,17,17,1)]">
+                  Support is thinking...
+                </div>
               )}
             </div>
-          </aside>
 
-          {operatorViewEnabled && (
-            <aside className="rounded-[28px] border border-cyan-900/50 bg-cyan-950/20 p-5">
-              <div className="flex items-center gap-2">
-                <ShieldAlert size={18} className="text-cyan-300" />
-                <h3 className="text-lg font-semibold text-white">Operator queue</h3>
+            <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3">
+              <textarea
+                value={draft}
+                onChange={(event) => setDraft(event.target.value)}
+                rows={3}
+                placeholder="Need something outside the guided lanes? Type it here."
+                className="app-textarea input-glow rounded-[24px]"
+              />
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="text-xs uppercase tracking-[0.18em] text-[#5c594f]">
+                  Safety, billing disputes, and access issues auto-escalate.
+                </div>
+                <button
+                  type="submit"
+                  disabled={loading || draft.trim().length === 0}
+                  className="app-button-accent px-5 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <Send size={16} />
+                  Send custom message
+                </button>
               </div>
-              <p className="mt-1 text-sm text-slate-400">Visible only to configured operator accounts.</p>
+            </form>
+          </article>
+
+          <div className="grid gap-6">
+            <aside className="glass-strong rounded-[28px] p-5">
+              <div className="flex items-center gap-2">
+                <Ticket size={18} className="text-[#ff4f00]" />
+                <h3 className="text-lg font-black text-[#111111] uppercase tracking-[0.12em]">My tickets</h3>
+              </div>
+              <p className="mt-1 text-sm text-[#5c594f]">Every escalation keeps the customer message and bot reply together.</p>
 
               <div className="mt-4 space-y-3">
-                {operatorTickets.slice(0, 5).map((ticket) => (
-                  <div key={ticket.id} className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4">
-                    <div className="text-sm font-medium text-white">{ticket.customer_email}</div>
-                    <div className="mt-1 text-xs uppercase tracking-[0.18em] text-cyan-300">
-                      {ticket.category.replace('_', ' ')} · {ticket.escalation_reason || 'manual_review'}
-                    </div>
-                    <div className="mt-3 text-sm text-slate-300">{ticket.customer_message}</div>
-                    {ticket.bot_response && (
-                      <div className="mt-3 rounded-2xl border border-slate-800 bg-black/20 px-3 py-3 text-sm text-slate-400">
-                        Bot: {ticket.bot_response}
-                      </div>
-                    )}
+                {tickets.length === 0 ? (
+                  <div className="rounded-2xl border-[3px] border-dashed border-[#111111] px-4 py-5 text-sm text-[#5c594f]">
+                    No support tickets yet.
                   </div>
-                ))}
+                ) : (
+                  tickets.map((ticket) => (
+                    <div key={ticket.id} className="rounded-2xl border-[3px] border-[#111111] bg-white p-4 shadow-[4px_4px_0_0_rgba(17,17,17,1)]">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="text-sm font-bold text-[#111111]">{ticket.subject}</div>
+                          <div className="mt-1 text-xs uppercase tracking-[0.18em] text-[#ff4f00]">
+                            {ticket.category.replace('_', ' ')}
+                          </div>
+                        </div>
+                        <span className="rounded-full border-[2px] border-[#111111] bg-[#efe6d8] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#111111]">
+                          {ticket.status}
+                        </span>
+                      </div>
+                      <div className="mt-3 text-sm text-[#111111]">{ticket.customer_message}</div>
+                      {ticket.bot_response && (
+                        <div className="mt-3 rounded-2xl border-[2px] border-[#111111] bg-[#fffaf2] px-3 py-3 text-sm text-[#5c594f]">
+                          Bot: {ticket.bot_response}
+                        </div>
+                      )}
+                      <div className="mt-3 text-xs text-[#5c594f]">Opened {formatDate(ticket.created_at)}</div>
+                    </div>
+                  ))
+                )}
               </div>
             </aside>
-          )}
+
+            {operatorViewEnabled && (
+              <aside className="glass rounded-[28px] p-5">
+                <div className="flex items-center gap-2">
+                  <ShieldAlert size={18} className="text-[#ff4f00]" />
+                  <h3 className="text-lg font-black text-[#111111] uppercase tracking-[0.12em]">Operator queue</h3>
+                </div>
+                <p className="mt-1 text-sm text-[#5c594f]">Visible only to configured operator accounts.</p>
+
+                <div className="mt-4 space-y-3">
+                  {operatorTickets.slice(0, 5).map((ticket) => (
+                    <div key={ticket.id} className="rounded-2xl border-[3px] border-[#111111] bg-white p-4 shadow-[4px_4px_0_0_rgba(17,17,17,1)]">
+                      <div className="text-sm font-bold text-[#111111]">{ticket.customer_email}</div>
+                      <div className="mt-1 text-xs uppercase tracking-[0.18em] text-[#ff4f00]">
+                        {ticket.category.replace('_', ' ')} · {ticket.escalation_reason || 'manual_review'}
+                      </div>
+                      <div className="mt-3 text-sm text-[#111111]">{ticket.customer_message}</div>
+                      {ticket.bot_response && (
+                        <div className="mt-3 rounded-2xl border-[2px] border-[#111111] bg-[#fffaf2] px-3 py-3 text-sm text-[#5c594f]">
+                          Bot: {ticket.bot_response}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </aside>
+            )}
+          </div>
         </div>
       </div>
     </section>

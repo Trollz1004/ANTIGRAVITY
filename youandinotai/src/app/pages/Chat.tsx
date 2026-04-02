@@ -56,18 +56,17 @@ export function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-950">
-      {/* Header — glass */}
-      <div className="glass-strong flex items-center gap-3 px-4 py-3.5 border-b-0 relative z-10">
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
-        <Link to="/app/inbox" className="text-gray-400 hover:text-white transition-colors p-1">
+    <div className="flex h-screen flex-col bg-[#f4efe6]">
+      <div className="flex items-center gap-3 border-b-4 border-[#111111] bg-[#fffaf2] px-4 py-4 relative z-10">
+        <Link to="/app/inbox" className="app-back-link p-1">
           <ArrowLeft size={20} />
         </Link>
         <div className="flex-1">
-          <h2 className="text-white font-bold text-sm">Chat</h2>
+          <div className="app-kicker mb-1">Messages</div>
+          <h2 className="text-lg font-black tracking-[-0.05em] text-[#111111]">Chat</h2>
           <div className="flex items-center gap-1.5">
-            <div className={`w-1.5 h-1.5 rounded-full ${connected ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50' : 'bg-gray-500'}`} />
-            <span className={`text-xs font-medium ${connected ? 'text-emerald-400' : 'text-gray-500'}`}>
+            <div className={`w-2 h-2 rounded-full ${connected ? 'bg-[#ff4f00]' : 'bg-[#8a8478]'}`} />
+            <span className={`text-xs font-bold uppercase tracking-[0.16em] ${connected ? 'text-[#111111]' : 'text-[#5c594f]'}`}>
               {connected ? 'Online' : 'Connecting...'}
             </span>
           </div>
@@ -75,7 +74,7 @@ export function Chat() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 app-bg-premium">
         {messages.length === 0 && (
           <div className="text-center mt-12 animate-fade-in">
             {/* Flaming Heart Icebreaker */}
@@ -87,19 +86,14 @@ export function Chat() {
               />
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/50 to-transparent" />
             </div>
-            <p className="text-white font-bold text-lg mb-1">Break the Ice</p>
-            <p className="text-gray-500 text-xs mb-5 max-w-xs mx-auto">
+            <p className="text-[#111111] font-black text-lg mb-1 tracking-[-0.05em]">Break the Ice</p>
+            <p className="text-[#5c594f] text-xs mb-5 max-w-xs mx-auto font-medium">
               Heart on fire but frozen on words? Let AI craft the perfect opener.
             </p>
             <button
               onClick={handleIcebreaker}
               disabled={icebreakerLoading}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold text-white transition-all duration-300 hover:scale-[1.05] active:scale-[0.95] disabled:opacity-60"
-              style={{
-                background: 'linear-gradient(135deg, rgba(239,68,68,0.8), rgba(236,72,153,0.8))',
-                boxShadow: '0 0 20px rgba(239,68,68,0.3), inset 0 0 15px rgba(255,255,255,0.1)',
-                border: '1px solid rgba(255,255,255,0.15)',
-              }}
+              className="app-button-accent px-6 py-3 text-sm disabled:opacity-60"
             >
               {icebreakerLoading ? (
                 <><Loader2 size={16} className="animate-spin" /> Melting the ice...</>
@@ -107,7 +101,7 @@ export function Chat() {
                 <><Flame size={16} /> Generate Icebreaker</>
               )}
             </button>
-            <p className="text-gray-600 text-[10px] mt-3 uppercase tracking-widest">Powered by Gemini AI</p>
+            <p className="text-[#5c594f] text-[10px] mt-3 uppercase tracking-widest font-bold">Powered by Gemini AI</p>
           </div>
         )}
         {messages.map((msg, i) => {
@@ -118,7 +112,7 @@ export function Chat() {
             <div key={msg.id}>
               {showTimestamp && (
                 <div className="text-center my-4">
-                  <span className="text-[10px] text-gray-600 font-medium px-3 py-1 glass rounded-full">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.14em] px-3 py-1 glass rounded-full">
                     {new Date(msg.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
@@ -127,12 +121,12 @@ export function Chat() {
                 <div
                   className={`max-w-[75%] px-4 py-3 text-sm leading-relaxed ${
                     isMine
-                      ? 'bg-gradient-to-br from-pink-500 to-purple-600 text-white rounded-2xl rounded-br-md shadow-lg shadow-pink-500/10'
-                      : 'glass text-gray-200 rounded-2xl rounded-bl-md'
+                      ? 'rounded-2xl rounded-br-md border-[3px] border-[#111111] bg-[#111111] text-white shadow-[6px_6px_0_0_rgba(17,17,17,1)]'
+                      : 'glass text-[#111111] rounded-2xl rounded-bl-md'
                   }`}
                 >
                   <p className="break-words">{msg.content}</p>
-                  <span className={`text-[10px] mt-1.5 block text-right ${isMine ? 'text-white/50' : 'text-gray-500'}`}>
+                  <span className={`text-[10px] mt-1.5 block text-right font-bold uppercase tracking-[0.12em] ${isMine ? 'text-white/60' : 'text-[#5c594f]'}`}>
                     {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
@@ -144,24 +138,19 @@ export function Chat() {
       </div>
 
       {/* Input — glass */}
-      <div className="p-4 glass-strong border-t-0 relative">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+      <div className="border-t-4 border-[#111111] bg-[#fffaf2] p-4 relative">
         <div className="flex gap-2 items-end">
           {/* Icebreaker mini button */}
           <button
             onClick={handleIcebreaker}
             disabled={icebreakerLoading}
-            className="w-12 h-12 rounded-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 flex-shrink-0 disabled:opacity-30"
-            style={{
-              background: 'rgba(239,68,68,0.1)',
-              border: '1px solid rgba(239,68,68,0.2)',
-            }}
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] border-[3px] border-[#111111] bg-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-30"
             title="Generate icebreaker"
           >
             {icebreakerLoading ? (
-              <Loader2 size={18} className="text-red-400 animate-spin" />
+              <Loader2 size={18} className="text-[#ff4f00] animate-spin" />
             ) : (
-              <Flame size={18} className="text-red-400" />
+              <Flame size={18} className="text-[#ff4f00]" />
             )}
           </button>
           <input
@@ -170,14 +159,14 @@ export function Chat() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Type a message..."
-            className="flex-1 px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/40 input-glow transition-all duration-300"
+            className="app-input input-glow flex-1"
           />
           <button
             onClick={handleSend}
             disabled={!input.trim()}
-            className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center hover:shadow-lg hover:shadow-pink-500/25 hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-30 disabled:scale-100 disabled:shadow-none flex-shrink-0"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] border-[3px] border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-30 disabled:shadow-none"
           >
-            <Send size={18} className="text-white" />
+            <Send size={18} className="text-[#ff4f00]" />
           </button>
         </div>
       </div>

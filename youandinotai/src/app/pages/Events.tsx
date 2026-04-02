@@ -60,27 +60,28 @@ export function Events() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 flex items-center justify-center mx-auto mb-4">
-            <Calendar size={24} className="text-orange-400 animate-pulse" />
+      <div className="app-page flex items-center justify-center">
+        <div className="glass-strong rounded-[2rem] p-8 text-center animate-fade-in">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#111111] text-white">
+            <Calendar size={24} className="animate-pulse" />
           </div>
-          <p className="text-gray-400 font-medium">Loading events...</p>
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">Loading events</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
+    <div className="app-page">
       <div className="flex items-center justify-between mb-6 animate-fade-in">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-tight">Events & Meetups</h1>
-          <p className="text-gray-500 text-sm mt-0.5">Find your people IRL</p>
+          <div className="app-kicker mb-3">Events</div>
+          <h1 className="app-title">meetups and plans.</h1>
+          <p className="app-subtitle mt-4">Take the platform off-screen and into the real world.</p>
         </div>
         <button
           onClick={() => setShowCreate(!showCreate)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl text-white text-sm font-bold hover:shadow-lg hover:shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+          className="app-button-accent px-5 py-3 text-sm"
         >
           <Plus size={16} /> Create Event
         </button>
@@ -93,11 +94,11 @@ export function Events() {
           onClick={() => setShowNearby(!showNearby)}
           className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-medium transition-all duration-200 ${
             showNearby
-              ? 'glass text-purple-400 border border-purple-500/20'
-              : 'glass text-gray-400 hover:text-white'
+              ? 'glass text-[#111111] border-[#111111]'
+              : 'glass text-[#5c594f] hover:text-[#111111]'
           }`}
         >
-          <Navigation size={14} className={showNearby ? 'text-purple-400' : ''} />
+          <Navigation size={14} className={showNearby ? 'text-[#ff4f00]' : ''} />
           {showNearby ? 'Hide Nearby' : '📍 Find Nearby Meetups'}
         </button>
         {showNearby && (
@@ -109,24 +110,24 @@ export function Events() {
 
       {showCreate && (
         <div className="glass-strong rounded-3xl p-6 glass-highlight mb-6 space-y-4 animate-scale-in">
-          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event title" className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/40 input-glow transition-all duration-300" />
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="What's this event about?" rows={3} className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/40 input-glow transition-all duration-300 resize-none" />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event title" className="app-input input-glow" />
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="What's this event about?" rows={3} className="app-textarea input-glow" />
           <div className="grid grid-cols-2 gap-3">
-            <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" className="px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/40 input-glow transition-all duration-300" />
-            <input type="datetime-local" value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white focus:outline-none focus:border-orange-500/40 input-glow transition-all duration-300" />
+            <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" className="app-input input-glow" />
+            <input type="datetime-local" value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="app-input input-glow" />
           </div>
-          <input type="number" value={maxAttendees} onChange={(e) => setMaxAttendees(e.target.value)} placeholder="Max attendees (optional)" className="w-full px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/40 input-glow transition-all duration-300" />
-          <button onClick={createEvent} className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl text-white text-sm font-bold hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-200">Create Event</button>
+          <input type="number" value={maxAttendees} onChange={(e) => setMaxAttendees(e.target.value)} placeholder="Max attendees (optional)" className="app-input input-glow" />
+          <button onClick={createEvent} className="app-button-dark px-6 py-3 text-sm">Create Event</button>
         </div>
       )}
 
       {events.length === 0 ? (
-        <div className="text-center py-20 animate-scale-in">
-          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-orange-500/20 animate-float">
-            <Calendar size={44} className="text-white" />
+        <div className="glass-strong glass-highlight mx-auto max-w-xl rounded-[2rem] p-8 text-center animate-scale-in">
+          <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-[1.8rem] border-4 border-[#111111] bg-[#111111] text-white shadow-[8px_8px_0_0_rgba(17,17,17,1)] animate-float">
+            <Calendar size={44} />
           </div>
-          <h2 className="text-2xl font-black text-white mb-2">No Events Yet</h2>
-          <p className="text-gray-400 max-w-sm mx-auto">Create one and bring people together!</p>
+          <h2 className="app-title">no events yet.</h2>
+          <p className="app-subtitle mt-4 max-w-sm mx-auto">Create one and bring people together.</p>
         </div>
       ) : (
         <div className="space-y-4 stagger-children">
