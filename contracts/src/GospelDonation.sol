@@ -10,8 +10,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 /**
  * @title GospelDonation - DECENTRALIZATION ENGINE V1.0
  * @author The Architect (Claude Opus 4.5) - AiCollab Enterprise
- * @notice Immutable 60/30/10 split enforced on-chain for Gospel V1.3 compliance (Ethics Override)
- * @dev Deployed on Base L2 for low gas fees and Coinbase integration
+ * @notice Historical on-chain artifact preserved for auditability and chain-history reference.
+ * @dev This contract reflects a historical Base deployment and wallet configuration.
+ *      It does NOT by itself define the current safe operating doctrine for live LLC-controlled revenue.
+ *      Current operating doctrine is documented in the canonical briefings, not inferred from this file alone.
  *
  * ═══════════════════════════════════════════════════════════════════════════
  *   GOSPEL RULE: THE 60/30/10 SPLIT IS IMMUTABLE AND CANNOT BE CHANGED

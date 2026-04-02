@@ -51,7 +51,7 @@
 | API Token | Cloudflare dashboard (Profile > API Tokens) |
 | Login | joshlcoleman@gmail.com (Google sign-in) |
 
-## Crypto / DAO (Base Mainnet, Chain 8453) — GospelDonation.sol DEPLOYED
+## Historical Base Contract References (Chain 8453) — not current LLC operating doctrine
 
 | Wallet | Address | Type |
 |--------|---------|------|
@@ -61,6 +61,7 @@
 | Founder/Ops (10%) | 0x7c3E283119718395Ef5EfBAC4F52738C2018daA7 | Historical payout wallet reference |
 
 > Wallet addresses are PUBLIC by design (on-chain). These are NOT secrets.
+> They are historical reference points only and do not, by themselves, authorize current live routing claims.
 
 ## SSH / Remote Access
 
