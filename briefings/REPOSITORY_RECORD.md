@@ -2,7 +2,7 @@
 
 Date: April 2, 2026
 Authority: Joshua Coleman
-Status: authoritative repo refreshed after prelaunch doctrine audit, drift cleanup, node-lane verification, stale AIDoesItAll public-surface remediation, and April 2 YouAndINotAI authenticated-surface reskin / launch validation
+Status: authoritative repo refreshed after prelaunch doctrine audit, drift cleanup, node-lane verification, stale AIDoesItAll public-surface remediation, April 2 YouAndINotAI authenticated-surface reskin / launch validation, and April 2 Play-readiness safety pass
 
 ## Repository Truth
 
@@ -109,6 +109,30 @@ Primary adjustment record:
 - frontend-only deploy was pushed to Cloudflare Pages project `youandinotai`; no GCR / Cloud Run backend deploy was required because this pass did not change backend code
 - one residual remains: Cloudflare JavaScript detections inject an inline challenge script that produces a CSP console error on production pages; page behavior is still correct and this is not sourced from the repo bundle
 
+## April 2 Play Readiness Safety Pass
+
+- first-class safety controls were implemented locally for the date app:
+  - user blocking
+  - user reporting
+  - block enforcement across discover, profile, matches, and chat
+  - board-post reporting backed by the moderation/support lane
+- local backend code now contains repo-tracked safety routes and tests:
+  - `app/routers/safety.py`
+  - `app/moderation.py`
+  - `tests/test_safety_routes.py`
+- local frontend code now contains repo-tracked safety UI for discover, chat, and boards
+- full backend validation passed again on April 2, 2026 with `209 passed`
+- frontend lint/build passed again on April 2, 2026 after the safety pass
+- live backend reality check:
+  - `https://api.youandinotai.com/api/v1/safety/blocks` currently returns `404`
+  - Sabretooth currently has no active local `gcloud` auth or configured project, so the backend safety patch could not be deployed from this session
+- production protection applied:
+  - the frontend safety/report UI was redeployed to Cloudflare Pages in a hard-gated state so the controls stay hidden until the backend route exists live
+  - current safe Pages deployments for this gating pass were `e565c55d` and final `e9697b6d`
+- Android / Play boundary:
+  - this repo still does not contain an Android packaging layer (`android/`, Capacitor, Expo, or equivalent)
+  - product/policy safety readiness improved materially, but literal Play submission packaging is still a separate remaining step
+
 ## Final Validation Pass
 
 Verified on March 31, 2026:
@@ -126,6 +150,7 @@ Verified again on April 2, 2026:
 
 - `youandinotai`: `npm run lint` passed
 - `youandinotai`: `npm run build` passed
+- `youandinotai-api`: `uv run --python 3.13 --with-requirements requirements.txt --with pytest --with pytest-cov --with pytest-asyncio python -m pytest -q` passed with `209 passed`
 - live `https://youandinotai.com/login` reflects the new auth reskin
 - live beta-access path successfully entered the authenticated shell and loaded the core in-app routes listed above
 - Square payment links:
@@ -135,6 +160,18 @@ Verified again on April 2, 2026:
   - `12-Month Founder` `$99.99`
   - `Royalty Card` `$2,500`
   all responded with live `303` redirects into Square-hosted checkout
+- live backend probe on `https://api.youandinotai.com/api/v1/safety/blocks` returned `404`, confirming the backend safety patch still needs a real Cloud Run deploy before the new moderation controls can go live
+
+## Local Hermes / PaperClip Runtime
+
+Validated on April 2, 2026:
+
+- Hermes local runtime is repaired on Sabretooth and responds through the isolated venv at `C:\Users\joshl\.local\hermes-venv`
+- PaperClip company `1c69e02a-6c7e-4f58-ab35-616bec49d778` now has validated agent `Hermes Codex` (`2fdb271a-fa67-4ca5-be85-bd0626d1deed`)
+- the PaperClip validation run `64aa2074-3b4d-4476-a964-9ac909c48693` completed with status `succeeded`
+- one-click local repair/launch path exists at `C:\Users\joshl\Desktop\Launch-Hermes-PaperClip.cmd`
+- the launcher self-heals Hermes shims/config, opens the PaperClip gateway/dashboard, stays open on error, and does not create a scheduled task or daemon
+- repo-tracked status note: `briefings/HERMES-PAPERCLIP-STATUS-2026-04-02.md`
 
 ## Node Lane Verification
 
