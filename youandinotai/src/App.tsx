@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Check, Heart, KeyRound, Mail, Menu, ShieldCheck, Users, X } from 'lucide-react';
 import { useAuth } from './lib/auth';
 
-const PUBLIC_API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
+const WAITLIST_FORM_ACTION = 'https://formsubmit.co/contact@youandinotai.com';
 
 const SECURE_PLAN_LINKS = {
   bot_shield: '/app/verify',
@@ -212,32 +212,24 @@ function PricingSection() {
 
 function WaitlistForm() {
   const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [submitted, setSubmitted] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return new URLSearchParams(window.location.search).get('waitlist') === 'confirmed';
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim() || loading) return;
-    setError('');
-    setLoading(true);
-    try {
-      const response = await fetch(`${PUBLIC_API_BASE}/waitlist`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      if (!response.ok) {
-        const body = await response.json().catch(() => ({ detail: 'Waitlist signup is temporarily unavailable.' }));
-        throw new Error(body.detail || 'Waitlist signup is temporarily unavailable.');
-      }
-      setSubmitted(true);
-      setEmail('');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Waitlist signup is temporarily unavailable.');
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    if (!submitted || typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('waitlist') !== 'confirmed') return;
+    url.searchParams.delete('waitlist');
+    window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+  }, [submitted]);
+
+  const waitlistReturnUrl =
+    typeof window === 'undefined' ? 'https://youandinotai.com/?waitlist=confirmed#join' : `${window.location.origin}/?waitlist=confirmed#join`;
+
+  const handleSubmit = () => {
+    setSubmitted(false);
   };
 
   return (
@@ -250,16 +242,27 @@ function WaitlistForm() {
         </p>
         <div className="mt-8 border-4 border-white bg-[#f4efe7] p-6 text-[#111111] shadow-[8px_8px_0_0_#ff5a1f]">
           {submitted ? (
-            <div className="flex items-center justify-center gap-3 text-center text-sm font-black uppercase tracking-[0.18em]">
-              <Check size={18} />
-              You&apos;re on the list. Check your inbox.
+            <div className="space-y-3 text-center">
+              <div className="flex items-center justify-center gap-3 text-sm font-black uppercase tracking-[0.18em]">
+                <Check size={18} />
+                You&apos;re on the list. Check your inbox.
+              </div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#5c554d]">If you do not see it, check spam or email support.</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:flex-row">
+            <form action={WAITLIST_FORM_ACTION} method="POST" onSubmit={handleSubmit} className="flex flex-col gap-4 md:flex-row">
+              <input type="hidden" name="_subject" value="New YouAndINotAI waitlist signup" />
+              <input type="hidden" name="_next" value={waitlistReturnUrl} />
+              <input
+                type="hidden"
+                name="_autoresponse"
+                value="You're on the YouAndINotAI waitlist. No charge was made, and no account was created yet. We will send launch updates to this address."
+              />
               <div className="relative min-w-0 flex-1">
                 <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7a746d]" />
                 <input
                   type="email"
+                  name="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -269,14 +272,12 @@ function WaitlistForm() {
               </div>
               <button
                 type="submit"
-                disabled={loading}
                 className="border-4 border-[#111111] bg-[#ff5a1f] px-8 py-4 text-sm font-black uppercase tracking-[0.18em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 disabled:opacity-60 shadow-[6px_6px_0_0_#111111]"
               >
-                {loading ? '...' : 'Join Now'}
+                Join Now
               </button>
             </form>
           )}
-          {error && <p className="mt-4 text-sm font-bold uppercase tracking-[0.16em] text-[#b42318]">{error}</p>}
           <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#5c554d]">No spam. No bots. Just launch updates.</p>
         </div>
         <BetaCodeEntry />
@@ -292,7 +293,7 @@ const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   },
   privacy: {
     title: 'Privacy Policy',
-    body: `YouAndiNotAi values your privacy.\n\nDATA WE COLLECT — Email address, profile information you provide, verification-state events, payment confirmation tied to your account, and waitlist signups you submit.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Square (payments), Cloudflare (hosting), and email-delivery providers used for transactional and waitlist messages. Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data is encrypted in transit, and protected services use authenticated account access.\n\nLast updated: April 2026.`,
+    body: `YouAndiNotAi values your privacy.\n\nDATA WE COLLECT — Email address, profile information you provide, verification-state events, payment confirmation tied to your account, and waitlist signups you submit.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Square (payments), Cloudflare (hosting), and FormSubmit (waitlist capture and autoresponse). Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data is encrypted in transit, and protected services use authenticated account access.\n\nLast updated: April 2026.`,
   },
   age: {
     title: 'Age Policy',
