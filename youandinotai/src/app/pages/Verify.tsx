@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-import { ShieldCheck, Zap, CheckCircle, XCircle, ExternalLink, ArrowRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowRight, CheckCircle, ExternalLink, ShieldCheck, XCircle, Zap } from 'lucide-react';
+
 import { ApiError, api } from '../../lib/api';
-import { VerifiedBadge, TrustScoreRing } from '../components/VerifiedBadge';
+import { TrustScoreRing, VerifiedBadge } from '../components/VerifiedBadge';
 
 interface ChallengeData {
   challenge_id: string;
@@ -136,7 +137,6 @@ export function Verify() {
       });
       setResult(data);
       setChallenge(null);
-      // Refresh status
       await refreshVerificationStatus();
     } catch (err: any) {
       alert(err.message || 'Submission failed');
@@ -147,103 +147,105 @@ export function Verify() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-yellow-500/20 flex items-center justify-center mx-auto mb-4">
-            <ShieldCheck size={24} className="text-amber-400 animate-pulse" />
+      <div className="app-page flex items-center justify-center">
+        <div className="glass-strong rounded-[2rem] p-8 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-[1.4rem] border-4 border-[#111111] bg-[#111111] text-white">
+            <ShieldCheck size={26} className="animate-pulse" />
           </div>
-          <p className="text-gray-400 font-medium">Loading verification status...</p>
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">Loading verification</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
-      <div className="max-w-lg mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8 animate-scale-in">
-          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center mx-auto mb-5 shadow-2xl shadow-amber-500/20">
-            <ShieldCheck size={44} className="text-white" />
-          </div>
-          <h1 className="text-3xl font-black text-white tracking-tight">Bot-Shield Verification</h1>
-          <p className="text-gray-400 text-sm mt-2">Prove you're human. Support children in need.</p>
-        </div>
-
-        {/* Current Status Card */}
-        <div className="glass-strong rounded-3xl p-6 glass-highlight mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-white font-bold">Your Status</h2>
-            {status && <TrustScoreRing score={status.trust_score} />}
-          </div>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-400 text-sm">Verification Tier</span>
-              {status && <VerifiedBadge tier={status.tier} size="sm" />}
-              {status?.tier === 'unverified' && <span className="text-gray-500 text-sm">Not verified</span>}
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-400 text-sm">Trust Score</span>
-              <span className="text-white font-bold text-sm">{status?.trust_score ?? 0}/100</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-400 text-sm">Bot-Shield Paid</span>
-              <span className={`text-sm font-bold ${status?.bot_shield_paid ? 'text-emerald-400' : 'text-gray-500'}`}>
-                {status?.bot_shield_paid ? 'Yes' : 'No'}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Already verified */}
-        {status?.verified && (
-          <div className="glass rounded-3xl p-6 border-emerald-500/20 text-center animate-scale-in">
-            <CheckCircle size={48} className="text-emerald-400 mx-auto mb-3" />
-            <h3 className="text-white font-bold text-lg">You're Verified!</h3>
-            <p className="text-gray-400 text-sm mt-1">
-              Your {status.tier === 'platinum' ? 'Platinum Founding Member' : 'Gold Verified Human'} badge is active.
+    <div className="app-page">
+      <div className="app-page-inner max-w-5xl">
+        <div className="mb-8 grid gap-4 md:grid-cols-[1.1fr_0.9fr] md:items-end">
+          <div>
+            <div className="app-kicker mb-3">Bot-Shield</div>
+            <h1 className="app-title">prove you're human.</h1>
+            <p className="app-subtitle mt-4 max-w-2xl">
+              Complete the liveness challenge, finish the $1 Square check, and activate the badge tied to your account.
             </p>
           </div>
-        )}
+          <div className="glass rounded-[1.6rem] p-5">
+            <div className="app-panel-title mb-3">Current status</div>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-[#5c594f]">Trust score</p>
+                <p className="mt-1 text-3xl font-black tracking-[-0.08em] text-[#111111]">{status?.trust_score ?? 0}</p>
+              </div>
+              {status && <TrustScoreRing score={status.trust_score} />}
+            </div>
+          </div>
+        </div>
 
-        {/* Not verified — show challenge flow */}
-        {!status?.verified && (
-          <>
-            {/* How it works */}
-            <div className="glass rounded-3xl p-6 mb-6">
-              <h3 className="text-white font-bold mb-3 flex items-center gap-2">
-                <Zap size={16} className="text-amber-400" /> How It Works
-              </h3>
-              <div className="space-y-3 text-sm text-gray-400">
-                <div className="flex gap-3">
-                  <span className="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
-                  <span>Complete a quick liveness challenge (takes ~10 seconds)</span>
-                </div>
-                <div className="flex gap-3">
-                  <span className="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
-                  <span>Pay the $1 Bot-Shield fee through Square checkout</span>
-                </div>
-                <div className="flex gap-3">
-                  <span className="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
-                  <span>Earn your Verified Human badge and boost your Trust Score</span>
+        <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+          <section className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
+            <div className="app-panel-title mb-4">Verification summary</div>
+            <div className="space-y-4 text-sm font-medium text-[#5c594f]">
+              <div className="flex items-center justify-between gap-3 border-b-2 border-[#111111] pb-3">
+                <span>Verification tier</span>
+                <div className="flex items-center gap-2">
+                  {status && <VerifiedBadge tier={status.tier} size="sm" />}
+                  {status?.tier === 'unverified' && <span className="font-bold text-[#111111]">Not verified</span>}
                 </div>
               </div>
-              <div className="mt-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
-                <p className="text-white text-sm font-bold mb-2">Checkout methods</p>
-                <p className="text-gray-400 text-xs leading-relaxed">
-                  Square-hosted checkout always supports card entry. Apple Pay and Google Pay are currently enabled for the live merchant configuration and appear on supported devices and browsers. Cash App Pay is not configured right now, and Afterpay is currently disabled for this merchant.
-                </p>
+              <div className="flex items-center justify-between gap-3 border-b-2 border-[#111111] pb-3">
+                <span>Bot-Shield paid</span>
+                <span className="font-bold text-[#111111]">{status?.bot_shield_paid ? 'Yes' : 'No'}</span>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <span>Checks completed</span>
+                <span className="font-bold text-[#111111]">{status?.checks_completed ?? 0}</span>
               </div>
             </div>
 
-            {/* Challenge in progress */}
-            {challenge && !result && (
-              <div className="glass-strong rounded-3xl p-6 glass-highlight mb-6 animate-scale-in">
-                <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-                  <Zap size={16} className="text-amber-400" /> Liveness Challenge
-                </h3>
-                <p className="text-gray-300 text-lg font-medium mb-4">{challenge.question}</p>
-                <div className="flex gap-2">
+            <div className="mt-6 rounded-[1.5rem] border-4 border-[#111111] bg-[#efe6d8] p-5">
+              <div className="app-panel-title mb-3">How the flow works</div>
+              <div className="space-y-3 text-sm font-medium text-[#5c594f]">
+                <div className="flex gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-[#111111] bg-white font-black text-[#111111]">1</span>
+                  <span>Answer a short liveness prompt.</span>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-[#111111] bg-white font-black text-[#111111]">2</span>
+                  <span>Complete the $1 Bot-Shield checkout in Square.</span>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-[#111111] bg-white font-black text-[#111111]">3</span>
+                  <span>Sync the badge back to your account.</span>
+                </div>
+              </div>
+              <p className="mt-4 text-xs font-medium leading-6 text-[#5c594f]">
+                Square-hosted checkout always supports card entry. Apple Pay and Google Pay appear on supported devices and browsers. Cash App Pay is not configured right now, and Afterpay is currently disabled.
+              </p>
+            </div>
+          </section>
+
+          <section className="space-y-6">
+            {status?.verified && (
+              <div className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-[1.4rem] border-4 border-[#111111] bg-[#111111] text-white">
+                  <CheckCircle size={28} />
+                </div>
+                <div className="app-kicker mb-3">Verified</div>
+                <h2 className="app-title">badge active.</h2>
+                <p className="app-subtitle mt-4">
+                  Your {status.tier === 'platinum' ? 'Founding Member' : 'Verified Human'} badge is live on the account.
+                </p>
+              </div>
+            )}
+
+            {!status?.verified && challenge && !result && (
+              <div className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
+                <div className="app-panel-title mb-4 flex items-center gap-2">
+                  <Zap size={16} className="text-[#ff4f00]" />
+                  Liveness challenge
+                </div>
+                <p className="mb-4 text-2xl font-black tracking-[-0.05em] text-[#111111]">{challenge.question}</p>
+                <div className="flex flex-col gap-3 md:flex-row">
                   <input
                     type="text"
                     value={answer}
@@ -251,82 +253,69 @@ export function Verify() {
                     onKeyDown={(e) => e.key === 'Enter' && submitAnswer()}
                     placeholder="Your answer"
                     autoFocus
-                    className="flex-1 px-5 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/40 input-glow transition-all duration-300 text-center text-lg font-bold"
+                    className="app-input input-glow flex-1 text-center text-lg font-black"
                   />
-                  <button
-                    onClick={submitAnswer}
-                    disabled={submitting || !answer.trim()}
-                    className="px-6 py-3.5 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-2xl font-bold text-white hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-200 disabled:opacity-50"
-                  >
-                    {submitting ? '...' : 'Submit'}
+                  <button onClick={submitAnswer} disabled={submitting || !answer.trim()} className="app-button-accent px-6 py-4 disabled:opacity-60">
+                    {submitting ? 'Submitting...' : 'Submit'}
                   </button>
                 </div>
-                <p className="text-gray-500 text-xs mt-3 text-center">Take your time — bots rush, humans think.</p>
+                <p className="mt-3 text-sm font-medium text-[#5c594f]">Take your time. Fast guesses are usually the wrong move.</p>
               </div>
             )}
 
-            {/* Result */}
             {result && (
-              <div className={`glass-strong rounded-3xl p-6 glass-highlight mb-6 animate-scale-in ${result.passed ? 'border-emerald-500/20' : 'border-red-500/20'}`}>
-                <div className="flex items-center gap-3 mb-3">
+              <div className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
+                <div className="mb-4 flex items-center gap-3">
                   {result.passed ? (
-                    <CheckCircle size={24} className="text-emerald-400" />
+                    <CheckCircle size={26} className="text-[#ff4f00]" />
                   ) : (
-                    <XCircle size={24} className="text-red-400" />
+                    <XCircle size={26} className="text-[#111111]" />
                   )}
-                  <h3 className={`font-bold text-lg ${result.passed ? 'text-emerald-400' : 'text-red-400'}`}>
-                    {result.passed ? 'Challenge Passed!' : 'Challenge Failed'}
-                  </h3>
+                  <div className="app-panel-title">
+                    {result.passed ? 'Challenge passed' : 'Challenge failed'}
+                  </div>
                 </div>
-                <p className="text-gray-400 text-sm mb-4">{result.message}</p>
+                <p className="text-base font-medium text-[#5c594f]">{result.message}</p>
 
                 {result.passed && result.checkout_url && (
-                  <div className="space-y-3">
-                    <a
-                      href={result.checkout_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full py-4 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-2xl font-bold text-white flex items-center justify-center gap-2 hover:shadow-xl hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 no-underline"
-                    >
+                  <div className="mt-6 space-y-3">
+                    <a href={result.checkout_url} target="_blank" rel="noopener noreferrer" className="app-button-accent w-full px-6 py-4 no-underline">
                       Pay $1 Bot-Shield <ExternalLink size={16} />
                     </a>
                     <button
                       onClick={() => checkVerificationAfterPayment()}
                       disabled={syncingPayment}
-                      className="w-full py-3 glass rounded-2xl font-bold text-white hover:bg-white/[0.04] transition-colors disabled:opacity-50"
+                      className="app-button-outline w-full px-6 py-4 disabled:opacity-60"
                     >
-                      {syncingPayment ? 'Checking payment...' : 'I Paid - Check My Badge'}
+                      {syncingPayment ? 'Checking payment...' : 'I paid, check my badge'}
                     </button>
                   </div>
                 )}
 
                 {!result.passed && (
-                  <button
-                    onClick={startChallenge}
-                    className="w-full py-3 glass rounded-2xl font-bold text-white hover:bg-white/[0.04] transition-colors"
-                  >
-                    Try Again
+                  <button onClick={startChallenge} className="app-button-dark mt-6 px-6 py-4">
+                    Try again
                   </button>
                 )}
 
-                {syncMessage && (
-                  <p className="text-xs text-gray-400 mt-3">{syncMessage}</p>
-                )}
+                {syncMessage && <p className="mt-4 text-sm font-medium text-[#5c594f]">{syncMessage}</p>}
               </div>
             )}
 
-            {/* Start button (when no active challenge) */}
-            {!challenge && !result && (
-              <button
-                onClick={startChallenge}
-                className="w-full py-4 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-2xl font-bold text-white flex items-center justify-center gap-2 hover:shadow-xl hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 relative overflow-hidden group"
-              >
-                Start Verification <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
-              </button>
+            {!status?.verified && !challenge && !result && (
+              <div className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
+                <div className="app-kicker mb-3">Start</div>
+                <h2 className="app-title">ready for badge activation?</h2>
+                <p className="app-subtitle mt-4">
+                  Start the liveness check now. When it passes, the page will hand you into the live Square checkout.
+                </p>
+                <button onClick={startChallenge} className="app-button-dark mt-6 px-6 py-4">
+                  Start Verification <ArrowRight size={18} />
+                </button>
+              </div>
             )}
-          </>
-        )}
+          </section>
+        </div>
       </div>
     </div>
   );

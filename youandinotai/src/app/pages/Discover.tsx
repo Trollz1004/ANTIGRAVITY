@@ -125,12 +125,12 @@ export function Discover() {
   // Loading state
   if (loading && profiles.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center mx-auto mb-4">
-            <Compass size={28} className="text-pink-400 animate-spin" style={{ animationDuration: '3s' }} />
+      <div className="app-page flex items-center justify-center">
+        <div className="glass-strong rounded-[2rem] p-8 text-center animate-fade-in">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-[1.4rem] border-4 border-[#111111] bg-[#111111] text-white">
+            <Compass size={28} className="animate-spin" style={{ animationDuration: '3s' }} />
           </div>
-          <p className="text-gray-400 font-medium">Finding people near you...</p>
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">Building your feed</p>
         </div>
       </div>
     );
@@ -139,18 +139,19 @@ export function Discover() {
   // Empty state
   if (profiles.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-8 text-center">
-        <div className="animate-scale-in">
-          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-pink-500/20 animate-float">
-            <Compass size={44} className="text-white" />
+      <div className="app-page flex flex-col items-center justify-center text-center">
+        <div className="glass-strong glass-highlight max-w-xl rounded-[2rem] p-8 animate-scale-in">
+          <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-[1.8rem] border-4 border-[#111111] bg-[#111111] text-white shadow-[8px_8px_0_0_rgba(17,17,17,1)] animate-float">
+            <Compass size={44} />
           </div>
-          <h2 className="text-3xl font-black text-white mb-3 tracking-tight">No More Profiles</h2>
-          <p className="text-gray-400 max-w-sm mb-8 leading-relaxed">
-            You've seen everyone for now. New people join every day!
+          <div className="app-kicker mb-3">Discover</div>
+          <h2 className="app-title">feed cleared.</h2>
+          <p className="app-subtitle mx-auto mt-4 max-w-sm">
+            You have worked through the current queue. Refresh when you want the next batch.
           </p>
           <button
             onClick={loadProfiles}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl font-bold text-white hover:shadow-xl hover:shadow-pink-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+            className="app-button-accent mt-8 px-8 py-4"
           >
             <RefreshCw size={18} /> Refresh
           </button>
@@ -160,29 +161,26 @@ export function Discover() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative discover-mesh">
-      {/* Ambient background glow — ace card themed */}
-      <div className="fixed top-1/4 left-1/4 w-[500px] h-[500px] bg-pink-500/[0.04] rounded-full blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-500/[0.04] rounded-full blur-[100px] pointer-events-none" />
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-500/[0.02] rounded-full blur-[80px] pointer-events-none" />
-      <div className="fixed bottom-1/3 left-1/6 w-[200px] h-[200px] bg-rose-500/[0.03] rounded-full blur-[60px] pointer-events-none" />
+    <div className="app-page relative discover-mesh">
+      <div className="app-page-inner flex flex-col items-center">
+        <div className="mb-6 flex w-full max-w-6xl flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <div className="app-kicker mb-3">Discover</div>
+            <h1 className="app-title">swipe real profiles.</h1>
+            <p className="app-subtitle mt-4 max-w-2xl">
+              Move through your active feed, open matches, and keep the app focused on real conversations instead of endless filler.
+            </p>
+          </div>
 
-      {/* Settings toggle */}
-      <button
-        onClick={() => setSettingsOpen(true)}
-        className="absolute top-4 right-4 z-30 px-4 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2 group"
-        style={{
-          background: 'rgba(236,72,153,0.12)',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(236,72,153,0.3)',
-        }}
-      >
-        <Sliders size={22} className="text-pink-400 group-hover:text-pink-300" />
-        <span className="text-pink-400 group-hover:text-pink-300 text-sm font-semibold">Options</span>
-      </button>
+          <button
+            onClick={() => setSettingsOpen(true)}
+            className="app-button-outline px-5 py-3"
+          >
+            <Sliders size={18} /> Feed options
+          </button>
+        </div>
 
-      {/* Settings Panel */}
-      <DiscoverSettings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+        <DiscoverSettings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
       {/* Match Celebration Overlay */}
       <AnimatePresence>
@@ -193,7 +191,7 @@ export function Discover() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
             <motion.div
               className="relative text-center z-10"
@@ -246,13 +244,13 @@ export function Discover() {
               >
                 <Link
                   to={`/app/chat/${matchAlert.matchId}`}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl font-bold text-white hover:shadow-lg hover:shadow-pink-500/25 transition-all no-underline"
+                  className="app-button-accent px-6 py-3 no-underline"
                 >
                   <MessageCircle size={18} /> Send Message
                 </Link>
                 <button
                   onClick={() => setMatchAlert(null)}
-                  className="px-6 py-3 glass rounded-2xl font-bold text-gray-300 hover:text-white transition-colors"
+                  className="app-button-outline px-6 py-3"
                 >
                   Keep Swiping
                 </button>
@@ -262,26 +260,32 @@ export function Discover() {
         )}
       </AnimatePresence>
 
-      {/* Card Stack */}
-      <div className="relative w-full max-w-sm h-[520px] md:h-[580px]">
-        <AnimatePresence>
-          {profiles.slice(0, 2).map((profile, i) => (
-            <SwipeCard
-              key={profile.user_id}
-              profile={profile}
-              onSwipe={handleSwipe}
-              isTop={i === 0}
-            />
-          ))}
-        </AnimatePresence>
-      </div>
+        <div className="glass-strong glass-highlight w-full max-w-[28rem] rounded-[2rem] p-4 md:p-5">
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <span className="app-chip">Verified flow</span>
+            <span className="app-chip">Cards available: {profiles.length}</span>
+          </div>
 
-      {/* Action Buttons */}
-      <SwipeButtons
-        onPass={() => handleSwipe('pass')}
-        onLike={() => handleSwipe('like')}
-        onSuperLike={() => handleSwipe('superlike')}
-      />
+          <div className="relative h-[520px] w-full md:h-[580px]">
+            <AnimatePresence>
+              {profiles.slice(0, 2).map((profile, i) => (
+                <SwipeCard
+                  key={profile.user_id}
+                  profile={profile}
+                  onSwipe={handleSwipe}
+                  isTop={i === 0}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+
+          <SwipeButtons
+            onPass={() => handleSwipe('pass')}
+            onLike={() => handleSwipe('like')}
+            onSuperLike={() => handleSwipe('superlike')}
+          />
+        </div>
+      </div>
     </div>
   );
 }

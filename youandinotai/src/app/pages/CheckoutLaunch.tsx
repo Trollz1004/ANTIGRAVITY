@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowRight, LoaderCircle } from 'lucide-react';
+
 import { api } from '../../lib/api';
 
 const PLAN_LABELS: Record<string, string> = {
@@ -49,30 +50,34 @@ export function CheckoutLaunch() {
   const label = tier ? PLAN_LABELS[tier] : 'Founder plan';
 
   return (
-    <div className="min-h-screen app-bg-premium text-white flex items-center justify-center px-4">
-      <div className="max-w-md w-full glass-strong rounded-3xl p-8 text-center border border-white/10">
-        <div className="w-16 h-16 mx-auto rounded-full bg-pink-500/10 flex items-center justify-center mb-5">
-          <LoaderCircle className="w-7 h-7 text-pink-400 animate-spin" />
-        </div>
-        <h1 className="text-3xl font-black mb-3">{label}</h1>
-        <p className="text-gray-300 leading-relaxed">
-          Preparing your secure account-bound Square checkout. This keeps the payment tied to your
-          YouAndiNotAi account instead of sending you to an anonymous public payment link.
-        </p>
-        {error ? (
-          <div className="mt-6 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            {error}
+    <div className="mesh-gradient min-h-screen px-4 py-8">
+      <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-3xl items-center justify-center">
+        <div className="glass-strong glass-highlight w-full rounded-[2rem] p-8 text-center md:p-10">
+          <div className="app-kicker mb-3">Secure Checkout</div>
+          <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-[1.8rem] border-4 border-[#111111] bg-[#111111] text-white shadow-[8px_8px_0_0_rgba(17,17,17,1)]">
+            <LoaderCircle className="h-8 w-8 animate-spin" />
           </div>
-        ) : (
-          <p className="mt-6 text-sm text-gray-400">You will be redirected automatically.</p>
-        )}
-        <div className="mt-6 flex justify-center">
-          <Link
-            to="/app/profile"
-            className="inline-flex items-center gap-2 text-pink-300 hover:text-white transition-colors no-underline"
-          >
-            Back to profile <ArrowRight size={16} />
-          </Link>
+
+          <h1 className="app-title mx-auto max-w-2xl">{label.toLowerCase()} checkout.</h1>
+          <p className="app-subtitle mx-auto mt-4 max-w-2xl">
+            Preparing the account-bound Square session so the payment stays linked to your actual platform account instead of a generic public link.
+          </p>
+
+          {error ? (
+            <div className="mt-6 rounded-[1.4rem] border-4 border-[#111111] bg-[#ffd9c7] px-4 py-4 text-sm font-semibold text-[#111111]">
+              {error}
+            </div>
+          ) : (
+            <p className="mt-6 text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">
+              Redirecting automatically
+            </p>
+          )}
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Link to="/app/profile" className="app-button-outline px-5 py-3 no-underline">
+              Back to profile <ArrowRight size={16} />
+            </Link>
+          </div>
         </div>
       </div>
     </div>

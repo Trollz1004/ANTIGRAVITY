@@ -68,21 +68,13 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
     >
       {/* ─── Crystal Card Shell ─── */}
       <div
-        className="w-full h-full rounded-2xl overflow-hidden relative group card-edge-glow"
+        className="swipe-card w-full h-full rounded-[2rem] overflow-hidden relative group border-[4px] border-[#111111] bg-[#fffaf2] card-edge-glow"
         style={{
           boxShadow: isFounder
-            ? `0 0 50px rgba(255, 165, 0, 0.3), 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(255, 165, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.25)`
-            : `0 0 40px rgba(236, 72, 153, 0.2), 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(139, 92, 246, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2)`,
+            ? '12px 12px 0 0 rgba(17,17,17,1), 0 0 0 10px rgba(255,165,0,0.12)'
+            : '12px 12px 0 0 rgba(17,17,17,1), 0 0 0 10px rgba(255,79,0,0.08)',
         }}
       >
-        {/* Outer crystal border — animated gradient */}
-        <div className={`absolute inset-0 rounded-2xl p-[1.5px] z-10 pointer-events-none ${
-          isFounder
-            ? 'bg-gradient-to-br from-orange-400/40 via-yellow-500/15 to-orange-400/35'
-            : 'bg-gradient-to-br from-pink-400/25 via-purple-500/10 to-blue-400/20'
-        }`}>
-          <div className="w-full h-full rounded-2xl" />
-        </div>
 
         {/* Photo layer */}
         <div
@@ -94,9 +86,8 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
         />
 
         {/* Glass frost overlay — enhanced for depth */}
-        <div className="absolute inset-0 bg-black/35 backdrop-blur-[3px]" />
-        {/* Subtle vignette for photo cards */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.4)_100%)] z-[1]" />
+        <div className="absolute inset-0 bg-black/18" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.24)_100%)] z-[1]" />
 
         {/* Top-left royal designation */}
         <div className="absolute top-4 left-5 z-20 flex flex-col items-center">
@@ -127,44 +118,38 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
         </div>
 
         {/* Ornamental lines */}
-        <div className="absolute top-0 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent z-20" />
-        <div className="absolute bottom-0 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent z-20" />
-        <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-20" />
-        <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-20" />
+        <div className="absolute top-4 left-4 right-4 h-[3px] bg-[#fffaf2]/75 z-20" />
+        <div className="absolute bottom-4 left-4 right-4 h-[3px] bg-[#fffaf2]/55 z-20" />
 
         {/* Cinematic gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/42 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/32 via-transparent to-transparent z-10" />
 
         {/* Crystal shimmer on hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] via-transparent to-white/[0.04] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none" />
 
         {/* LIKE indicator */}
         <motion.div
-          className="absolute top-16 right-6 z-30 rounded-xl px-5 py-2.5 flex items-center gap-2 border border-emerald-400/40"
+          className="absolute top-16 right-6 z-30 rounded-[1rem] px-5 py-2.5 flex items-center gap-2 border-[3px] border-[#111111] bg-[#fffaf2]"
           style={{
             opacity: likeOpacity,
-            background: 'rgba(16, 185, 129, 0.1)',
-            backdropFilter: 'blur(12px)',
-            boxShadow: '0 0 20px rgba(16, 185, 129, 0.2), inset 0 0 10px rgba(16, 185, 129, 0.1)',
+            boxShadow: '6px 6px 0 0 rgba(17,17,17,1)',
           }}
         >
-          <Heart size={22} className="text-emerald-400" fill="currentColor" />
-          <span className="text-emerald-400 text-lg font-black tracking-widest">LIKE</span>
+          <Heart size={20} className="text-[#ff4f00]" fill="currentColor" />
+          <span className="text-[#111111] text-lg font-black tracking-widest">LIKE</span>
         </motion.div>
 
         {/* PASS indicator */}
         <motion.div
-          className="absolute top-16 left-6 z-30 rounded-xl px-5 py-2.5 flex items-center gap-2 border border-red-400/40"
+          className="absolute top-16 left-6 z-30 rounded-[1rem] px-5 py-2.5 flex items-center gap-2 border-[3px] border-[#111111] bg-[#fffaf2]"
           style={{
             opacity: passOpacity,
-            background: 'rgba(239, 68, 68, 0.1)',
-            backdropFilter: 'blur(12px)',
-            boxShadow: '0 0 20px rgba(239, 68, 68, 0.2), inset 0 0 10px rgba(239, 68, 68, 0.1)',
+            boxShadow: '6px 6px 0 0 rgba(17,17,17,1)',
           }}
         >
-          <X size={22} className="text-red-400" />
-          <span className="text-red-400 text-lg font-black tracking-widest">PASS</span>
+          <X size={20} className="text-[#111111]" />
+          <span className="text-[#111111] text-lg font-black tracking-widest">PASS</span>
         </motion.div>
 
         {/* No-photo avatar — with ace card background imagery */}
@@ -185,29 +170,28 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
             <button
               type="button"
               onClick={() => setSplatVisible(!splatVisible)}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-orange-300/90 cursor-pointer hover:scale-110 transition-transform"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-[#111111] cursor-pointer hover:scale-110 transition-transform"
               style={{
-                background: 'rgba(255, 165, 0, 0.12)',
-                backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255, 165, 0, 0.25)',
-                boxShadow: '0 0 12px rgba(255, 165, 0, 0.15)',
+                background: '#fffaf2',
+                border: '3px solid #111111',
+                boxShadow: '4px 4px 0 0 rgba(17,17,17,1)',
               }}
             >
-              <Zap size={10} className="text-orange-400" />
+              <Zap size={10} className="text-[#ff4f00]" />
               USER 0001 — THE JOKER
             </button>
           </div>
         ) : (
           <div className="absolute top-5 left-1/2 -translate-x-1/2 z-20">
             <div
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-pink-300/80"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-[#111111]"
               style={{
-                background: 'rgba(255,255,255,0.05)',
-                backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255,255,255,0.1)',
+                background: '#fffaf2',
+                border: '3px solid #111111',
+                boxShadow: '4px 4px 0 0 rgba(17,17,17,1)',
               }}
             >
-              <Crown size={10} className="text-pink-400" />
+              <Crown size={10} className="text-[#ff4f00]" />
               {royalFull} OF HEARTS
             </div>
           </div>
@@ -338,8 +322,7 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
         <div
           className="absolute bottom-0 left-0 right-0 z-20 p-5"
           style={{
-            background: 'linear-gradient(to top, rgba(5,5,16,0.92) 0%, rgba(5,5,16,0.65) 50%, rgba(5,5,16,0.2) 75%, transparent 100%)',
-            backdropFilter: 'blur(8px)',
+            background: 'linear-gradient(to top, rgba(17,17,17,0.96) 0%, rgba(17,17,17,0.72) 54%, rgba(17,17,17,0.15) 78%, transparent 100%)',
           }}
         >
           {/* Name + age + verified */}
@@ -350,9 +333,9 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
             )}
             <VerifiedDot tier={profile.subscription_active ? 'platinum' : profile.verified ? 'gold' : 'unverified'} />
             {isFounder && (
-              <span className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-orange-300 bg-orange-500/20 border border-orange-400/30">
-                Founder
-              </span>
+                <span className="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-white bg-[#ff4f00] border-2 border-white/20">
+                  Founder
+                </span>
             )}
           </div>
 
@@ -377,12 +360,11 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
                   key={interest}
                   className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
                     isFounder
-                      ? 'text-orange-200/80 border-orange-400/20'
-                      : 'text-pink-200/80 border-white/10'
+                      ? 'text-orange-50 border-orange-200/30'
+                      : 'text-white/90 border-white/20'
                   }`}
                   style={{
-                    background: isFounder ? 'rgba(255,165,0,0.08)' : 'rgba(255,255,255,0.05)',
-                    backdropFilter: 'blur(4px)',
+                    background: isFounder ? 'rgba(255,79,0,0.2)' : 'rgba(255,255,255,0.08)',
                   }}
                 >
                   {interest}
@@ -414,42 +396,26 @@ export function SwipeButtons({ onPass, onLike, onSuperLike }: SwipeButtonsProps)
       {/* Pass */}
       <button
         onClick={onPass}
-        className="w-16 h-16 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group crystal-inner"
-        style={{
-          background: 'rgba(255,255,255,0.04)',
-          backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(239, 68, 68, 0.15)',
-        }}
+        className="w-16 h-16 rounded-[1.3rem] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group border-[3px] border-[#111111] bg-white shadow-[6px_6px_0_0_rgba(17,17,17,1)]"
       >
-        <X size={28} className="text-red-400 group-hover:text-red-300 transition-colors drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
+        <X size={28} className="text-[#111111] transition-colors" />
       </button>
 
       {/* Like */}
       <button
         onClick={onLike}
-        className="w-20 h-20 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group"
-        style={{
-          background: 'linear-gradient(135deg, rgba(236,72,153,0.95), rgba(168,85,247,0.95))',
-          boxShadow: '0 0 35px rgba(236,72,153,0.35), 0 10px 30px rgba(0,0,0,0.3), inset 0 0 15px rgba(255,255,255,0.12)',
-          border: '1px solid rgba(255,255,255,0.2)',
-        }}
+        className="w-20 h-20 rounded-[1.5rem] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group border-[4px] border-[#111111] bg-[#111111] shadow-[8px_8px_0_0_rgba(17,17,17,1)]"
       >
-        <Heart size={32} className="text-white group-hover:scale-110 transition-transform drop-shadow-lg" fill="white" />
+        <Heart size={32} className="text-[#ff4f00] group-hover:scale-110 transition-transform" fill="currentColor" />
       </button>
 
       {/* Diamond Super Like — whale engine */}
       <button
         onClick={onSuperLike || onLike}
-        className="w-16 h-16 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group relative overflow-hidden crystal-inner"
-        style={{
-          background: 'rgba(255,255,255,0.04)',
-          backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(139,92,246,0.35)',
-          boxShadow: '0 0 25px rgba(139,92,246,0.25), inset 0 0 12px rgba(139,92,246,0.1)',
-        }}
+        className="w-16 h-16 rounded-[1.3rem] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group relative overflow-hidden border-[3px] border-[#111111] bg-[#efe6d8] shadow-[6px_6px_0_0_rgba(17,17,17,1)]"
       >
         {/* Animated glow pulse */}
-        <div className="absolute inset-0 rounded-2xl animate-pulse opacity-50" style={{ boxShadow: '0 0 35px rgba(139,92,246,0.5), 0 0 70px rgba(236,72,153,0.2)' }} />
+        <div className="absolute inset-0 rounded-[1.3rem] animate-pulse opacity-40" style={{ boxShadow: '0 0 0 6px rgba(255,79,0,0.12)' }} />
         {/* Sweeping shimmer */}
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -458,8 +424,8 @@ export function SwipeButtons({ onPass, onLike, onSuperLike }: SwipeButtonsProps)
             animation: 'shimmer 2s infinite',
           }}
         />
-        <Diamond size={26} className="text-purple-400 group-hover:text-purple-300 transition-colors relative z-10 drop-shadow-[0_0_10px_rgba(139,92,246,0.7)]" />
-        <span className="absolute -bottom-0.5 text-[7px] font-black uppercase tracking-widest text-purple-400/70 z-10">Super</span>
+        <Diamond size={24} className="text-[#ff4f00] transition-colors relative z-10" />
+        <span className="absolute -bottom-0.5 text-[7px] font-black uppercase tracking-widest text-[#111111]/70 z-10">Super</span>
       </button>
     </div>
   );

@@ -12,21 +12,21 @@ const TIER_CONFIG = {
   gold: {
     icon: ShieldCheck,
     label: 'Verified Human',
-    gradient: 'from-amber-400 via-yellow-500 to-amber-400',
-    bgGlow: 'bg-amber-500/10',
-    borderGlow: 'border-amber-400/30',
-    shadowGlow: 'shadow-amber-500/20',
-    textColor: 'text-amber-400',
+    gradient: 'from-[#ff4f00] via-[#ff7b40] to-[#ff4f00]',
+    bgGlow: 'bg-[#ff4f00]/10',
+    borderGlow: 'border-[#111111]',
+    shadowGlow: 'shadow-[#111111]/15',
+    textColor: 'text-[#111111]',
     iconFill: true,
   },
   platinum: {
     icon: Crown,
     label: 'Founding Member',
-    gradient: 'from-slate-300 via-purple-300 to-slate-300',
-    bgGlow: 'bg-purple-500/10',
-    borderGlow: 'border-purple-400/30',
-    shadowGlow: 'shadow-purple-500/30',
-    textColor: 'text-purple-300',
+    gradient: 'from-[#111111] via-[#444444] to-[#111111]',
+    bgGlow: 'bg-[#111111]/10',
+    borderGlow: 'border-[#111111]',
+    shadowGlow: 'shadow-[#111111]/15',
+    textColor: 'text-[#111111]',
     iconFill: false,
   },
 } as const;
@@ -49,7 +49,7 @@ export function VerifiedBadge({ tier, size = 'md', showLabel = true }: VerifiedB
       className={`inline-flex items-center ${sizeConfig.badge} ${sizeConfig.pill} glass ${config.borderGlow} shadow-lg ${config.shadowGlow} font-bold ${config.textColor} relative overflow-hidden`}
     >
       {/* Animated gradient shimmer background */}
-      <div className={`absolute inset-0 opacity-30 bg-gradient-to-r ${config.gradient}`} style={{ backgroundSize: '200% 100%', animation: 'gradient-shift 4s ease infinite' }} />
+      <div className={`absolute inset-0 opacity-20 bg-gradient-to-r ${config.gradient}`} style={{ backgroundSize: '200% 100%', animation: 'gradient-shift 4s ease infinite' }} />
 
       {/* Content */}
       <div className="relative flex items-center gap-inherit">
@@ -80,7 +80,7 @@ export function TrustScoreRing({ score, size = 48 }: { score: number; size?: num
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (score / 100) * circumference;
 
-  const color = score >= 80 ? '#a855f7' : score >= 50 ? '#eab308' : '#6b7280';
+  const color = score >= 80 ? '#ff4f00' : score >= 50 ? '#111111' : '#8a8478';
 
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
@@ -91,7 +91,7 @@ export function TrustScoreRing({ score, size = 48 }: { score: number; size?: num
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(255,255,255,0.05)"
+          stroke="rgba(17,17,17,0.12)"
           strokeWidth={3}
         />
         {/* Progress ring */}
@@ -108,7 +108,7 @@ export function TrustScoreRing({ score, size = 48 }: { score: number; size?: num
           style={{ transition: 'stroke-dashoffset 1s ease' }}
         />
       </svg>
-      <span className="absolute text-[10px] font-black text-white">{Math.round(score)}</span>
+      <span className="absolute text-[10px] font-black text-[#111111]">{Math.round(score)}</span>
     </div>
   );
 }

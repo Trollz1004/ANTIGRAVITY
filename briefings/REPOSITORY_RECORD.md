@@ -1,8 +1,8 @@
 # REPOSITORY RECORD - SABRETOOTH LIVE STATE
 
-Date: April 1, 2026
+Date: April 2, 2026
 Authority: Joshua Coleman
-Status: authoritative repo refreshed after prelaunch doctrine audit, drift cleanup, node-lane verification, final validation pass, and stale AIDoesItAll public-surface remediation
+Status: authoritative repo refreshed after prelaunch doctrine audit, drift cleanup, node-lane verification, stale AIDoesItAll public-surface remediation, and April 2 YouAndINotAI authenticated-surface reskin / launch validation
 
 ## Repository Truth
 
@@ -87,6 +87,28 @@ Primary adjustment record:
 - `joshlcoleman@gmail.com` remains the primary non-date-app commerce identity
 - direct-upload Cloudflare Pages deployments should continue to use the verified API/upload-token path or a known authenticated project path
 
+## April 2 Date-App Reskin and Launch Validation
+
+- the authenticated YouAndINotAI shell was brought into the same brutalist / typographic system as the new public landing surface
+- reskinned surfaces include login, register, profile setup, discover, matches, inbox, concierge, verification, support, boards, events, volunteer, checkout launch, shared badges, swipe cards, and the authenticated app shell
+- support routing UX now uses the same visual language while keeping the existing operator / escalation logic intact
+- launch-critical routes were validated live on production with the beta-access path:
+  - `/app`
+  - `/app/lovebot`
+  - `/app/matches`
+  - `/app/inbox`
+  - `/app/boards`
+  - `/app/events`
+  - `/app/volunteer`
+  - `/app/support`
+  - `/app/impact`
+  - `/app/privacy`
+  - `/app/verify`
+- founder pricing and Square commerce links were rechecked on April 2, 2026 and all five live checkout rails still return `303` redirects into Square checkout
+- the customer-facing login copy leak using `donation checkout` wording was removed before final deploy
+- frontend-only deploy was pushed to Cloudflare Pages project `youandinotai`; no GCR / Cloud Run backend deploy was required because this pass did not change backend code
+- one residual remains: Cloudflare JavaScript detections inject an inline challenge script that produces a CSP console error on production pages; page behavior is still correct and this is not sourced from the repo bundle
+
 ## Final Validation Pass
 
 Verified on March 31, 2026:
@@ -99,6 +121,20 @@ Verified on March 31, 2026:
 - `antigravity`: `npm run build` passed
 - `youandinotai-api`: `uv run --python 3.13 --with-requirements requirements.txt --with pytest --with pytest-cov --with pytest-asyncio python -m pytest -q` passed with `201 passed`
 - `scripts/youandinotai/split-consistency-check.sh`: passed after root-path and filter fixes
+
+Verified again on April 2, 2026:
+
+- `youandinotai`: `npm run lint` passed
+- `youandinotai`: `npm run build` passed
+- live `https://youandinotai.com/login` reflects the new auth reskin
+- live beta-access path successfully entered the authenticated shell and loaded the core in-app routes listed above
+- Square payment links:
+  - Bot-Shield `$1`
+  - Founding Member `$14.99/mo`
+  - `3-Month Founder` `$39.99`
+  - `12-Month Founder` `$99.99`
+  - `Royalty Card` `$2,500`
+  all responded with live `303` redirects into Square-hosted checkout
 
 ## Node Lane Verification
 
