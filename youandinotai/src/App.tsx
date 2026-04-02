@@ -245,14 +245,15 @@ function WaitlistForm() {
             <div className="space-y-3 text-center">
               <div className="flex items-center justify-center gap-3 text-sm font-black uppercase tracking-[0.18em]">
                 <Check size={18} />
-                You&apos;re on the list. Check your inbox.
+                You&apos;re on the list.
               </div>
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#5c554d]">If you do not see it, check spam or email support.</p>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#5c554d]">Launch updates will go to this address. Need help? Email support.</p>
             </div>
           ) : (
             <form action={WAITLIST_FORM_ACTION} method="POST" onSubmit={handleSubmit} className="flex flex-col gap-4 md:flex-row">
               <input type="hidden" name="_subject" value="New YouAndINotAI waitlist signup" />
               <input type="hidden" name="_next" value={waitlistReturnUrl} />
+              <input type="hidden" name="_captcha" value="false" />
               <input
                 type="hidden"
                 name="_autoresponse"
