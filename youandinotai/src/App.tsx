@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Check, Heart, KeyRound, Mail, Menu, ShieldCheck, Users, X } from 'lucide-react';
 import { useAuth } from './lib/auth';
 
+const PUBLIC_API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
+
 const SECURE_PLAN_LINKS = {
   bot_shield: '/app/verify',
   founding_member: '/app/checkout/founding_member',
@@ -212,20 +214,27 @@ function WaitlistForm() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || loading) return;
+    setError('');
     setLoading(true);
     try {
-      await fetch('https://formsubmit.co/ajax/contact@youandinotai.com', {
+      const response = await fetch(`${PUBLIC_API_BASE}/waitlist`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ email, _subject: 'YouAndiNotAi Waitlist Signup', _template: 'table' }),
+        body: JSON.stringify({ email }),
       });
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({ detail: 'Waitlist signup is temporarily unavailable.' }));
+        throw new Error(body.detail || 'Waitlist signup is temporarily unavailable.');
+      }
       setSubmitted(true);
-    } catch {
-      setSubmitted(true);
+      setEmail('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Waitlist signup is temporarily unavailable.');
     } finally {
       setLoading(false);
     }
@@ -243,7 +252,7 @@ function WaitlistForm() {
           {submitted ? (
             <div className="flex items-center justify-center gap-3 text-center text-sm font-black uppercase tracking-[0.18em]">
               <Check size={18} />
-              You're on the list.
+              You&apos;re on the list. Check your inbox.
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:flex-row">
@@ -267,6 +276,7 @@ function WaitlistForm() {
               </button>
             </form>
           )}
+          {error && <p className="mt-4 text-sm font-bold uppercase tracking-[0.16em] text-[#b42318]">{error}</p>}
           <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#5c554d]">No spam. No bots. Just launch updates.</p>
         </div>
         <BetaCodeEntry />
@@ -282,7 +292,7 @@ const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   },
   privacy: {
     title: 'Privacy Policy',
-    body: `YouAndiNotAi values your privacy.\n\nDATA WE COLLECT — Email address, profile information you provide, verification-state events, and payment confirmation tied to your account.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Square (payments), FormSubmit (waitlist), and Cloudflare (hosting). Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data is encrypted in transit, and protected services use authenticated account access.\n\nLast updated: March 2026.`,
+    body: `YouAndiNotAi values your privacy.\n\nDATA WE COLLECT — Email address, profile information you provide, verification-state events, payment confirmation tied to your account, and waitlist signups you submit.\nDATA WE DO NOT SELL — We never sell your personal data. Period.\nTHIRD PARTIES — Square (payments), Cloudflare (hosting), and email-delivery providers used for transactional and waitlist messages. Each has their own privacy policy.\nCOOKIES — Minimal. Session cookies only. No ad trackers.\nDATA DELETION — Email contact@youandinotai.com to request full data deletion.\nSECURITY — All data is encrypted in transit, and protected services use authenticated account access.\n\nLast updated: April 2026.`,
   },
   age: {
     title: 'Age Policy',

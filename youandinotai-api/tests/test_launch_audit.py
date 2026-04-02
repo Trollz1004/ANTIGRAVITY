@@ -69,6 +69,7 @@ def test_protected_http_routes_require_auth():
         ("/api/v1/auth/login", "POST"),
         ("/api/v1/auth/google", "POST"),
         ("/api/v1/auth/refresh", "POST"),
+        ("/api/v1/waitlist", "POST"),
         ("/api/v1/webhooks/stripe", "POST"),
         ("/api/v1/webhooks/square", "POST"),
         ("/api/v1/webhooks/square-payment", "POST"),
