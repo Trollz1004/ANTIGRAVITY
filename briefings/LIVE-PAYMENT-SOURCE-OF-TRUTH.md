@@ -27,8 +27,10 @@ If any older doc, node note, export, or backup conflicts with this file:
 - Email lookup, customer lookup, or loose payment matching may support bookkeeping or operator logging only
 - Email lookup, customer lookup, or loose payment matching must **never** create a verification `challenge_type="payment"` event
 - If `checkout_ref` is missing, invalid, expired, tampered, mismatched, or detached from the bound liveness event, the webhook may be recorded but verification must not be promoted
-- The date app's current operating doctrine may separately track a conservative `10%` charitable cap for LLC-controlled revenue, but that policy is not the same thing as the Bot-Shield checkout itself routing funds to a kids lane
-- Before accepting another test payment, the repo must not imply that Bot-Shield checkout proceeds are already split/disbursed unless a verified revenue-distribution path and test coverage exist
+- Every authoritative Square `payment.completed` event now creates an internal `revenue_allocations` ledger row when the amount is positive
+- The ledger reserves exactly `10%` of gross platform payment revenue, rounded up to whole cents, into the `kids_support` beneficiary lane with status `reserved`
+- For a `$1.00` Bot-Shield payment, the required reserved allocation is `10` cents and the operating amount is `90` cents
+- This ledger is internal accounting proof only; it does not claim that an external charitable disbursement has already been sent until `status` is updated through a verified payout/reconciliation path
 
 ## Catalog Drift Guard
 
