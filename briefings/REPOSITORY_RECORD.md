@@ -188,6 +188,35 @@ Validated on April 2, 2026:
 - the launcher self-heals Hermes shims/config, opens the PaperClip gateway/dashboard, stays open on error, and does not create a scheduled task or daemon
 - repo-tracked status note: `briefings/HERMES-PAPERCLIP-STATUS-2026-04-02.md`
 
+## April 10 Sabretooth PaperClip Restart Cleanup
+
+- the active public PaperClip surface on Sabretooth is `https://paperclip.youandinotai.com`
+- the active isolated runtime remains on `E:\trollz-sandbox\paperclip-antigravity` with source runtime at `E:\trollz-sandbox\dao-patches`
+- user-level restart behavior was reduced to a clean PaperClip server autorun plus a dedicated PaperClip-only Cloudflare tunnel autorun
+- noisy user Startup-folder entries for OpenClaw, BRAIN MCP, DAO, Chrome app launch, and the prior tunnel wrappers were moved out of the live Startup folder into a dated disabled folder
+- machine-level admin surfaces still exist separately and are documented instead of being misrepresented as removed
+- repo-tracked status note: `briefings/PAPERCLIP-SABRETOOTH-RESTART-2026-04-10.md`
+
+## April 10 Sabretooth Unified Local Stack Launcher
+
+- a single Sabretooth-local launcher now exists at `C:\Users\joshl\Desktop\START-DAO.ps1`, with desktop entrypoint `C:\Users\joshl\Desktop\START-DAO.bat`
+- Windows logon now uses the same canonical launcher via `C:\Users\joshl\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ANTIGRAVITY-Stack.cmd`
+- the unified launcher now starts and verifies, in order:
+  - Docker Desktop
+  - Ollama
+  - BRAIN MCP on `:3900`
+  - OpenClaw gateway local startup attempt on `:18789`
+  - PaperClip on `:3100`
+  - Hermes on `:8000`
+  - Cloudflared service tunnel plus the separate PaperClip direct tunnel
+- stale desktop wrappers now forward into the canonical launcher instead of using dead `E:\sandbox-repo\...` paths
+- local and public verification completed on April 10, 2026 for:
+  - `https://paperclip.youandinotai.com/api/health`
+  - `https://mcp.youandinotai.com/api/health`
+  - `https://hermes.youandinotai.com/health`
+- local OpenClaw gateway is healthy on `http://127.0.0.1:18789/`
+- remaining caveat:
+  - `https://openclaw-gw.youandinotai.com` still returns a Cloudflare-side `1033`, so the local stack is restart-safe for PaperClip / Hermes / BRAIN / Ollama / Cloudflare, but the external OpenClaw hostname still needs tunnel-side remediation
 ## Node Lane Verification
 
 - `9020` support lane verified clean for `D:\claws\openclaw-9020\posts\rotation.json` and `queue_pending.json`
