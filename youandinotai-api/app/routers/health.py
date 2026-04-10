@@ -113,3 +113,13 @@ async def check_allocations(db: AsyncSession = Depends(get_db)):
         return {"allocations": [dict(r) for r in rows]}
     except Exception as e:
         return {"error": str(e)}
+
+@router.get("/health/webhooks")
+async def check_webhooks(db: AsyncSession = Depends(get_db)):
+    from sqlalchemy import text
+    try:
+        result = await db.execute(text("SELECT event_id, event_type, created_at, processed FROM webhook_events ORDER BY created_at DESC LIMIT 10"))
+        rows = result.mappings().all()
+        return {"webhooks": [dict(r) for r in rows]}
+    except Exception as e:
+        return {"error": str(e)}
