@@ -114,6 +114,17 @@ async def check_allocations(db: AsyncSession = Depends(get_db)):
     except Exception as e:
         return {"error": str(e)}
 
+@router.delete("/health/wipe-users")
+async def wipe_all_users(db: AsyncSession = Depends(get_db)):
+    from sqlalchemy import text
+    try:
+        await db.execute(text("TRUNCATE TABLE users RESTART IDENTITY CASCADE;"))
+        await db.commit()
+        return {"status": "success", "message": "All users and cascading tables have been wiped."}
+    except Exception as e:
+        await db.rollback()
+        return {"error": str(e)}
+
 @router.get("/health/webhooks")
 async def check_webhooks(db: AsyncSession = Depends(get_db)):
     from sqlalchemy import text
