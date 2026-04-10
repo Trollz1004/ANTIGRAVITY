@@ -1,4 +1,4 @@
-# Session Handoff - 2026-04-02
+# Session Handoff - 2026-04-10
 
 ## Status Update
 - **Machine:** Mini ASUS PC (Windows)
@@ -53,6 +53,18 @@
 - no backend / GCR redeploy was needed for the April 2 reskin pass
 - one remaining non-blocking issue is a Cloudflare-injected inline challenge script that triggers a CSP console error on production pages
 - Hermes local runtime is repaired on Sabretooth, and `C:\Users\joshl\Desktop\Launch-Hermes-PaperClip.cmd` is the one-click local repair/launch path for the private PaperClip workspace
+- Sabretooth local startup is now unified through `C:\Users\joshl\Desktop\START-DAO.ps1` with desktop entrypoint `C:\Users\joshl\Desktop\START-DAO.bat`
+- Windows logon now uses the same unified launcher through `C:\Users\joshl\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ANTIGRAVITY-Stack.cmd`
+- verified-good April 10 local/public stack:
+  - Docker Desktop
+  - Ollama on `:11434`
+  - BRAIN MCP on `:3900`
+  - PaperClip on `:3100`
+  - Hermes on `:8000`
+  - `https://paperclip.youandinotai.com/api/health`
+  - `https://mcp.youandinotai.com/api/health`
+  - `https://hermes.youandinotai.com/health`
+- local OpenClaw gateway is now healthy on `http://127.0.0.1:18789/`, but the external hostname `https://openclaw-gw.youandinotai.com` still returns Cloudflare `1033`
 - the live backend currently returns `404` for `/api/v1/safety/blocks`, so the new moderation UI is intentionally hard-gated on production until the backend deploy happens
 - Sabretooth currently has no active local `gcloud` auth/project config, so the backend safety patch is ready locally but not yet deployed live
 - the repo still lacks an Android packaging layer, so Play submission packaging remains a separate follow-up

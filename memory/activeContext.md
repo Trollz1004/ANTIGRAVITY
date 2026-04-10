@@ -1,4 +1,4 @@
-# Active Context - 2026-04-02
+# Active Context - 2026-04-10
 
 ## Current Focus
 
@@ -10,6 +10,7 @@
 - **PaperClip remains sandbox-only:** `E:\sandbox-repo\paperclip` and `E:\sandbox-repo\paperclip-antigravity` remain isolated from the live repo.
 - **Date-app authenticated reskin is live:** the shell and core signed-in pages now visually align with the public brutalist landing direction and were revalidated on production.
 - **Hermes local runtime is working:** PaperClip now has a validated Sabretooth-local Hermes adapter path plus a one-click repair/launch script outside OneDrive.
+- **Sabretooth launcher drift is reduced:** one canonical desktop/startup launcher now boots Docker, Ollama, BRAIN MCP, PaperClip, Hermes, and Cloudflare from the same path.
 - **Play-readiness safety pass is locally complete:** block/report moderation now exists in the repo for discover, chat, and boards, with backend tests passing at `209 passed`.
 - **Privacy Center fallback is live:** production now shows a truthful degraded privacy snapshot instead of a broken failure state while the advanced privacy backend route is unhealthy.
 
@@ -30,6 +31,7 @@
 - **Live route check:** beta-access successfully loaded `/app`, `/app/lovebot`, `/app/matches`, `/app/inbox`, `/app/boards`, `/app/events`, `/app/volunteer`, `/app/support`, `/app/impact`, `/app/privacy`, and `/app/verify`
 - **Live payment check:** all five Square links still resolve with live `303` redirects into Square-hosted checkout
 - **PaperClip runtime check:** local Hermes agent `Hermes Codex` validated successfully in the private PaperClip workspace, and the desktop launcher at `C:\Users\joshl\Desktop\Launch-Hermes-PaperClip.cmd` now self-heals the local setup before opening the dashboard
+- **Unified local stack check:** `C:\Users\joshl\Desktop\START-DAO.bat` and the Startup-folder stub both resolve through `C:\Users\joshl\Desktop\START-DAO.ps1`, and the launcher completed cleanly on April 10 with public health checks passing for `paperclip`, `mcp`, and `hermes`
 - **Live safety-route probe:** `https://api.youandinotai.com/api/v1/safety/blocks` currently returns `404`, so the new safety UI is intentionally hard-gated on production until the backend deploy occurs
 - **Live privacy check:** `https://api.youandinotai.com/api/v1/privacy/my-data` currently fails server-side in production, but `/app/privacy` now falls back to basic account/profile data and disables advanced privacy actions cleanly
 
@@ -42,6 +44,7 @@
 5. **Sabretooth currently has no active local `gcloud` auth/project config, so the backend safety patch is ready locally but not yet deployed live.**
 6. **The production privacy backend path is still unhealthy; the live frontend now degrades honestly, but advanced privacy requests remain temporarily unavailable until backend deploy/auth is restored.**
 7. **The repo still lacks an Android packaging layer, so Google Play submission packaging is a separate remaining deliverable even after the moderation pass.**
+8. **`https://openclaw-gw.youandinotai.com` still fails at the Cloudflare side with `1033` even though the local OpenClaw gateway now responds on `127.0.0.1:18789`.**
 
 ## Rules To Preserve
 
