@@ -21,6 +21,7 @@ from app.models import (
     Message,
     Post,
     Profile,
+    RevenueAllocation,
     User,
     VerificationEvent,
     VolunteerOpportunity,
@@ -82,10 +83,10 @@ async def impact_metrics(
     NO individual user data, emails, names, or payment details.
     """
 
-    # Revenue: sum amount_cents from successful verification events
+    # Revenue: completed Square payments reserved into the internal allocation ledger.
     revenue_total = await db.scalar(
-        select(func.coalesce(func.sum(VerificationEvent.amount_cents), 0))
-        .where(VerificationEvent.status == "passed")
+        select(func.coalesce(func.sum(RevenueAllocation.gross_amount_cents), 0))
+        .where(RevenueAllocation.status.in_(["reserved", "disbursed"]))
     ) or 0
 
     # Also count subscription revenue from Square webhook events (payment.completed / payment.created)

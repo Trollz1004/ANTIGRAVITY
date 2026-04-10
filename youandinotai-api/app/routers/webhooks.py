@@ -37,6 +37,7 @@ from app.payment_truth import (
     iter_text_hints,
     parse_checkout_reference,
 )
+from app.revenue_allocation import reserve_revenue_allocation
 from app.schemas import WebhookAckResponse
 from app.subscriptions import build_subscription_expiry, utc_now
 from app.verification_service import promote_user_verification_if_ready
@@ -478,6 +479,15 @@ async def square_payment_webhook(
             )
             proof_label = extract_payment_proof_label(payment_obj)
             observed_at = utc_now()
+
+            await reserve_revenue_allocation(
+                db,
+                user_id=user.id if user else None,
+                source_event_id=event_id,
+                square_payment_id=payment_id,
+                payment_tier=tier,
+                gross_amount_cents=payment_amount_cents,
+            )
 
             if user and tier:
                 if tier == "royalty":

@@ -21,7 +21,7 @@ os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-
 
 from sqlalchemy import select
 
-from app.models import User, VerificationEvent
+from app.models import RevenueAllocation, User, VerificationEvent
 from app.payment_truth import build_checkout_reference
 from tests.conftest import (
     generate_square_signature,
@@ -377,7 +377,7 @@ def test_completed_bot_shield_payment_requires_checkout_binding(
 
     assert response.status_code == 200, response.text
 
-    async def fetch_state() -> tuple[User | None, list[VerificationEvent]]:
+    async def fetch_state() -> tuple[User | None, list[VerificationEvent], list[RevenueAllocation]]:
         async with db_session_factory() as session:
             user = await session.scalar(select(User).where(User.id == user_id))
             events = list(
@@ -387,12 +387,19 @@ def test_completed_bot_shield_payment_requires_checkout_binding(
                     )
                 ).all()
             )
-            return user, events
+            allocations = list((await session.scalars(select(RevenueAllocation))).all())
+            return user, events, allocations
 
-    user, events = asyncio.run(fetch_state())
+    user, events, allocations = asyncio.run(fetch_state())
     assert user is not None
     assert user.bot_shield_verified is False
     assert not any(event.challenge_type == "payment" for event in events)
+    assert len(allocations) == 1
+    assert allocations[0].user_id == user_id
+    assert allocations[0].payment_tier == "bot_shield"
+    assert allocations[0].gross_amount_cents == 100
+    assert allocations[0].charitable_amount_cents == 10
+    assert allocations[0].status == "reserved"
 
 
 def test_payment_updated_is_not_authoritative_for_bot_shield_completion(
@@ -461,7 +468,7 @@ def test_payment_updated_is_not_authoritative_for_bot_shield_completion(
 
     assert response.status_code == 200, response.text
 
-    async def fetch_state() -> tuple[User | None, list[VerificationEvent]]:
+    async def fetch_state() -> tuple[User | None, list[VerificationEvent], list[RevenueAllocation]]:
         async with db_session_factory() as session:
             user = await session.scalar(select(User).where(User.id == user_id))
             events = list(
@@ -471,12 +478,14 @@ def test_payment_updated_is_not_authoritative_for_bot_shield_completion(
                     )
                 ).all()
             )
-            return user, events
+            allocations = list((await session.scalars(select(RevenueAllocation))).all())
+            return user, events, allocations
 
-    user, events = asyncio.run(fetch_state())
+    user, events, allocations = asyncio.run(fetch_state())
     assert user is not None
     assert user.bot_shield_verified is False
     assert not any(event.challenge_type == "payment" for event in events)
+    assert allocations == []
 
 
 def test_completed_bot_shield_payment_with_valid_binding_promotes_user(
@@ -544,7 +553,7 @@ def test_completed_bot_shield_payment_with_valid_binding_promotes_user(
 
     assert response.status_code == 200, response.text
 
-    async def fetch_state() -> tuple[User | None, list[VerificationEvent]]:
+    async def fetch_state() -> tuple[User | None, list[VerificationEvent], list[RevenueAllocation]]:
         async with db_session_factory() as session:
             user = await session.scalar(select(User).where(User.id == user_id))
             events = list(
@@ -554,9 +563,10 @@ def test_completed_bot_shield_payment_with_valid_binding_promotes_user(
                     )
                 ).all()
             )
-            return user, events
+            allocations = list((await session.scalars(select(RevenueAllocation))).all())
+            return user, events, allocations
 
-    user, events = asyncio.run(fetch_state())
+    user, events, allocations = asyncio.run(fetch_state())
     assert user is not None
     assert user.bot_shield_verified is True
     assert any(
@@ -565,6 +575,14 @@ def test_completed_bot_shield_payment_with_valid_binding_promotes_user(
         and event.challenge_token == checkout_ref
         for event in events
     )
+    assert len(allocations) == 1
+    assert allocations[0].user_id == user_id
+    assert allocations[0].payment_tier == "bot_shield"
+    assert allocations[0].gross_amount_cents == 100
+    assert allocations[0].charitable_amount_cents == 10
+    assert allocations[0].operating_amount_cents == 90
+    assert allocations[0].beneficiary_lane == "kids_support"
+    assert allocations[0].status == "reserved"
 
 
 def test_payment_webhook_skips_signature_check_when_material_missing(

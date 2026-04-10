@@ -168,6 +168,36 @@ class WebhookEvent(Base):
     )
 
 
+class RevenueAllocation(Base):
+    """Internal ledger for founder-directed platform revenue allocations."""
+    __tablename__ = "revenue_allocations"
+    __table_args__ = (
+        UniqueConstraint("source_event_id", name="uq_revenue_allocations_source_event_id"),
+        UniqueConstraint("square_payment_id", name="uq_revenue_allocations_square_payment_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    source: Mapped[str] = mapped_column(String(50), default="square", nullable=False)
+    source_event_id: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    square_payment_id: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    payment_tier: Mapped[str] = mapped_column(String(50), default="unknown", nullable=False)
+    gross_amount_cents: Mapped[int] = mapped_column(Integer, nullable=False)
+    charitable_amount_cents: Mapped[int] = mapped_column(Integer, nullable=False)
+    operating_amount_cents: Mapped[int] = mapped_column(Integer, nullable=False)
+    charitable_percent: Mapped[int] = mapped_column(Integer, default=10, nullable=False)
+    beneficiary_lane: Mapped[str] = mapped_column(String(100), default="kids_support", nullable=False)
+    status: Mapped[str] = mapped_column(String(20), default="reserved", nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    disbursed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
 class Board(Base):
     __tablename__ = "boards"
 
