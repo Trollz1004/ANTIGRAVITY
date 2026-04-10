@@ -102,3 +102,13 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
         payment_proof_labels=payment_proof_labels,
         user_count=user_count,
     )
+
+
+@router.get("/health/check-table")
+async def check_table(db: AsyncSession = Depends(get_db)):
+    from sqlalchemy import text
+    try:
+        await db.execute(text("SELECT 1 FROM revenue_allocations LIMIT 1"))
+        return {"table_exists": True}
+    except Exception as e:
+        return {"table_exists": False, "error": str(e)}
