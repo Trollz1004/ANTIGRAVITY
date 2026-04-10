@@ -27,6 +27,8 @@ If any older doc, node note, export, or backup conflicts with this file:
 - Email lookup, customer lookup, or loose payment matching may support bookkeeping or operator logging only
 - Email lookup, customer lookup, or loose payment matching must **never** create a verification `challenge_type="payment"` event
 - If `checkout_ref` is missing, invalid, expired, tampered, mismatched, or detached from the bound liveness event, the webhook may be recorded but verification must not be promoted
+- The date app's current operating doctrine may separately track a conservative `10%` charitable cap for LLC-controlled revenue, but that policy is not the same thing as the Bot-Shield checkout itself routing funds to a kids lane
+- Before accepting another test payment, the repo must not imply that Bot-Shield checkout proceeds are already split/disbursed unless a verified revenue-distribution path and test coverage exist
 
 ## Catalog Drift Guard
 
