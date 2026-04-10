@@ -228,6 +228,9 @@ Validated on April 2, 2026:
   - the webhook binds the checkout reference back to the user and creates a `VerificationEvent` with `challenge_type="payment"` and `status="completed"`
   - `/verify/confirm` only promotes the badge after both liveness and completed payment are present
 - this means the `$1` is not routed into a mystery pool inside the app code; it enters the Square-hosted checkout, and the repo-tracked state is the verification event plus webhook-backed badge promotion path
+- the repo does contain a separate revenue-policy reporting endpoint in `youandinotai-api/app/routers/metrics.py` that calculates a founder-directed conservative `10%` charitable cap, but this is reporting/math only and is not the same thing as a verified live disbursement path from Bot-Shield checkout proceeds
+- no current traced Bot-Shield payment code path was found that automatically allocates `10%` of the `$1` checkout to a kids-specific payout lane before payment acceptance; if that routing is required, it still needs an explicit verified implementation and test coverage
+- until that payout path exists, the date app should be treated as payment-acceptance-ready only for verification receipt handling, not for claiming automated charitable disbursement on the same checkout event
 
 ## Node Lane Verification
 
