@@ -217,6 +217,18 @@ Validated on April 2, 2026:
 - local OpenClaw gateway is healthy on `http://127.0.0.1:18789/`
 - remaining caveat:
   - `https://openclaw-gw.youandinotai.com` still returns a Cloudflare-side `1033`, so the local stack is restart-safe for PaperClip / Hermes / BRAIN / Ollama / Cloudflare, but the external OpenClaw hostname still needs tunnel-side remediation
+
+## April 10 YouAndINotAI Profile Contrast and Bot-Shield Trace
+
+- profile setup interest chips and discovery preference chips were hardened so selected and unselected states always render with explicit readable text colors instead of inheriting a black-on-black contrast failure
+- Bot-Shield `$1` payment flow is tracked through the live verification chain:
+  - `/app/verify` creates a liveness challenge
+  - passing the challenge returns a Square checkout URL from `/billing/checkout-link`
+  - the Square webhook records `payment.completed`
+  - the webhook binds the checkout reference back to the user and creates a `VerificationEvent` with `challenge_type="payment"` and `status="completed"`
+  - `/verify/confirm` only promotes the badge after both liveness and completed payment are present
+- this means the `$1` is not routed into a mystery pool inside the app code; it enters the Square-hosted checkout, and the repo-tracked state is the verification event plus webhook-backed badge promotion path
+
 ## Node Lane Verification
 
 - `9020` support lane verified clean for `D:\claws\openclaw-9020\posts\rotation.json` and `queue_pending.json`

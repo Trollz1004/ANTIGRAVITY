@@ -201,6 +201,10 @@ export function ProfileSetup() {
                         ? 'border-[#111111] bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)]'
                         : 'border-[#111111] bg-white text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]'
                     }`}
+                    style={{
+                      color: active ? '#ffffff' : '#111111',
+                      backgroundColor: active ? '#111111' : '#ffffff',
+                    }}
                   >
                     {active && <Check size={14} />}
                     {interest}

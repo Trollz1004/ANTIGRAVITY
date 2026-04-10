@@ -1,11 +1,10 @@
 # AGENTS.md — ANTIGRAVITY (Multi-Node)
 
-> **UNLOCKED ORCHESTRATION ACTIVE:** All core agents operate under the "No Locked Doors" protocol.
 > Auto-loaded every session. This IS your memory. If you forgot, read this first.
 > Canonical status file: [briefings/REPOSITORY_RECORD.md](file:///C:/ANTIGRAVITY/briefings/REPOSITORY_RECORD.md) (LATEST STATE)
 > Canonical skill file: `briefings/CLAUDE-SKILL.md` (has EVERYTHING)
 
-## LIVE INFRASTRUCTURE STATUS (AS OF 2026-04-08)
+## LIVE INFRASTRUCTURE STATUS (AS OF 2026-03-19)
 
 - **GCR Backend (ai-collab4kids)**: DEPLOYED & LIVE (Built from T5500 node).
 - **Cloudflare Tunnels (Sabretooth)**: LIVE & ROUTING (`openclaw`, `mcp`).
@@ -13,9 +12,7 @@
 - **Daily.co Video Rooms**: INTEGRATED (REST + iframe).
 - **Data Export Worker**: IMPLEMENTED (scheduler.py).
 - **Board Moderation**: IMPLEMENTED (Reporting endpoints).
-- **Zero-Cost Multi-Node (Paperclip)**: LIVE & PATCHED — `gemini_local` and `opencode_local` adapters support distributed Ollama compute across Sabretooth, 9020, and T5500.
-- **DAO Guardian**: DEPLOYED to Paperclip (enforcing mission layer via local Ollama inference).
-- **Memory Recovery**: Integrated April 2026 status from Personal Vault.
+- **OpenClaw runtime (Sabretooth / 9020 / T5500)**: SELF-HOSTED ONLY — active configs use Ollama/local inference only. No cloud model providers in the live OpenClaw path.
 - **Git History**: PRISTINE & PURGED.
 
 ---
@@ -341,33 +338,21 @@ New ideas, experimental platforms, and speculative automation go here first.
 
 ## ARMY OF AGENTS
 
-| Agent | Model/Executor | Node | Role | Cost |
-|-------|---------------|------|------|------|
-| CEO Agent | gemini-2.0-pro | Sabretooth | Global Strategy | ACTIVE SUB |
-| Clawed (Dev) | claude-3.5-sonnet | 9020 | Engineering, Feature Ships | ACTIVE SUB |
-| Scribe | qwen2.5:7b | T5500 | Content & Orchestration | FREE (Local) |
-| DAO Guardian | qwen2.5:7b | Local | Mission Layer Enforcement | FREE (Local) |
-| Sentinel | llama3.2 | 9020 | Quality & Doctrine Check | FREE (Local) |
-| Jarvis (Brain) | Codex Opus 4.6 | Sabretooth | Global Strategy | ACTIVE SUB |
-| Atlas (Research) | Perplexity Pro | Sabretooth | Deep Intel | ACTIVE SUB |
-| Gordon (Arch) | Docker/LLM | T5500 | Node Orchestration | FREE (Local) |
-| Designer | Gemini 3.1 | Cloud | Visual Assets | FREE |
-| Motion | Codex + Remotion | Local | Video as Code | FREE |
-| Growth | Atlas + Scribe | Local | Reddit/X Acquisition | FREE |
-| Clipper | 9020 SSH Script | 9020 | Social Clipping | FREE |
-| Ryder (Admin) | Gemini 3.1 | Cloud | Daily Ops | FREE |
+| Agent | Model/Executor | Role | Cost |
+|-------|---------------|------|------|
+| Jarvis (Brain) | Codex Opus 4.6 | Strategy, Architecture | $20/mo |
+| Atlas (Research) | Perplexity Pro | Deep Intel, Competitor Audits | $20/mo |
+| Scribe (Content) | Gemini 1.5 Pro | Content, Orchestration | FREE |
+| Gordon (Arch) | Docker/LLM | Node Orchestration & Infrastructure | FREE |
+| Designer | Gemini 3.1 | AI Images / UI Assets / Mockups | FREE |
+| Motion | Codex + Remotion | Motion Graphics / Video as Code | FREE |
+| Clawed (Dev) | Codex + Opus | Code, Feature Ships | FREE |
+| Sentinel | Gemini 3.1 | Code Quality, Security, Doctrine Drift Checks | FREE |
+| Growth | Atlas + Scribe | Reddit/X Engagement & Acquisition | FREE |
+| Clipper | 9020 SSH Script | YouTube to Social Clipping | FREE |
+| Ryder (Admin) | Gemini 3.1 | Personal Support & Daily Ops | FREE |
 
-Total Monthly Cost: ~$100.00+ (Active Subscriptions for Gemini, Claude, OpenAI, Windows, GitHub)
-
----
-
-## MODEL STRATEGY (HYBRID COMPUTE)
-
-To ensure maximum efficiency and intelligence, the team uses a **Hybrid Tier** approach:
-
-1. **Leadership Tier (Frontier Models):** CEO, Dev, and Strategy roles use your active subscriptions (Gemini 2.0 Pro, Claude 3.5 Sonnet, GPT-4o) for high-reasoning tasks.
-2. **Execution Tier (Local Grunt):** Scribe, Sentinel, and Automation roles use the **Zero-Cost Multi-Node** setup (Ollama on Sabretooth, 9020, T5500) to offload high-volume tasks without hitting token limits or increasing costs.
-
+Total Monthly Cost: ~$40.00
 
 ---
 
@@ -462,22 +447,18 @@ Due to token/subscription limits, orchestration runs in this order:
 
 ## OLLAMA — NODE COMPUTE & MEMORY ENGINE
 
-All three nodes run Ollama. qwen2.5:7b is the default worker.
+All three nodes run Ollama. qwen2.5:7b is the default. Built-in Ollama embedding is
+sufficient — no external embedding API required.
 
-| Node | IP | Suffix | Models | Primary Use |
-|------|----|--------|--------|-------------|
-| SABRETOOTH | 192.168.0.8 | `-sabretooth` | qwen2.5:7b, qwen2.5:3b, nomic-embed-text | CEO, Brain, Primary Ops |
-| 9020 | 192.168.0.5 | `-9020` | qwen2.5:7b, llama3.2 | Dev, Sentinel, Marketing |
-| T5500 | 192.168.0.15 | `-t5500` | qwen2.5:7b | Scribe, Build Node |
-
-**How Routing Works:**
-The Paperclip adapters (`gemini_local`, `opencode_local`) automatically route requests based on the model ID.
-- Selection `qwen2.5:7b-9020` -> Routes to `192.168.0.5:11434` and cleans model to `qwen2.5:7b`.
-- Selection `qwen2.5:7b` -> Routes to `localhost:11434`.
+| Node | IP | Ollama | Models | Use |
+|------|----|--------|--------|-----|
+| SABRETOOTH | 192.168.0.8 | loopback 127.0.0.1:11434 | qwen2.5:7b, qwen2.5:3b, nomic-embed-text | Primary - marketing, memory, orchestration |
+| 9020 | 192.168.0.5 | loopback 127.0.0.1:11434 | qwen2.5:7b | Marketing/support node |
+| T5500 | 192.168.0.15 | loopback 127.0.0.1:11434 | qwen2.5:7b | Build/media node - cold-start only |
 
 **What Ollama handles:**
 - Marketing content generation (social engine, captions, Reddit/X engagement)
-- Memory embedding for session context
+- Memory embedding for OpenClaw session context
 - Local inference for tasks that don't require frontier models
 - Fallback inference when API quota is hit
 
