@@ -102,3 +102,14 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
         payment_proof_labels=payment_proof_labels,
         user_count=user_count,
     )
+
+
+@router.get("/health/allocations")
+async def check_allocations(db: AsyncSession = Depends(get_db)):
+    from sqlalchemy import text
+    try:
+        result = await db.execute(text("SELECT square_payment_id, gross_amount_cents, charitable_amount_cents, operating_amount_cents, status FROM revenue_allocations ORDER BY created_at DESC LIMIT 5"))
+        rows = result.mappings().all()
+        return {"allocations": [dict(r) for r in rows]}
+    except Exception as e:
+        return {"error": str(e)}
