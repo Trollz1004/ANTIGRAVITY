@@ -110,8 +110,10 @@ export function DiscoverSettings({ open, onClose }: DiscoverSettingsProps) {
                         style={active ? {
                           background: 'linear-gradient(135deg, rgba(236,72,153,0.6), rgba(168,85,247,0.6))',
                           border: '1px solid rgba(236,72,153,0.4)',
+                          color: '#ffffff',
                         } : {
                           background: 'rgba(255,255,255,0.03)',
+                          color: '#9ca3af',
                         }}
                       >
                         {pref}
@@ -140,8 +142,10 @@ export function DiscoverSettings({ open, onClose }: DiscoverSettingsProps) {
                         style={active ? {
                           background: 'linear-gradient(135deg, rgba(139,92,246,0.6), rgba(79,70,229,0.6))',
                           border: '1px solid rgba(139,92,246,0.4)',
+                          color: '#ffffff',
                         } : {
                           background: 'rgba(255,255,255,0.03)',
+                          color: '#9ca3af',
                         }}
                       >
                         {s}
