@@ -486,7 +486,7 @@ async def square_payment_webhook(
         user.square_customer_id = customer_id
 
     # Process based on event type
-    if event_type == "payment.completed":
+    if event_type in ("payment.created", "payment.updated"):
         payment_status = str(payment_obj.get("status") or "").upper()
         if payment_status == "COMPLETED":
             payment_amount_cents = payment_obj.get("amount_money", {}).get("amount")
