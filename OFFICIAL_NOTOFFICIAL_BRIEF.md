@@ -138,8 +138,7 @@ FL §496.405: never "donation" — always "contractual revenue disbursement" in 
 - **Backend:** FastAPI 0.115.6 + PostgreSQL + Alembic + Uvicorn
 - **Backend host:** GCP Cloud Run (ai-collab4kids) — DEPLOYED & LIVE
 - **Payments:**
-  - Date-App Lane (YouAndINotAI): Square ONLY — `ebaytrashortreasure@gmail.com`
-  - Commerce Lane (eBay, OnlineRecycle): Square — `joshlcoleman@gmail.com`
+  - All Square lanes (YouAndINotAI and Commerce): Square ONLY — `joshlcoleman@gmail.com`
 - **Auth:** JWT + bcrypt
 
 ---

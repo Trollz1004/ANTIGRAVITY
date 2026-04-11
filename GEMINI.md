@@ -48,7 +48,7 @@
 
 **Payment Truth:**
 - **Square ONLY.** Stripe is dead.
-- Date app (YouAndINotAI) is completely isolated to `ebaytrashortreasure@gmail.com`. Do not sync to other accounts.
+- All Square lanes (including YouAndINotAI date app) are routed through `joshlcoleman@gmail.com`.
 
 ---
 

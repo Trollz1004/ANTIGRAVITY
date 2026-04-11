@@ -14,8 +14,7 @@ If any older doc, node note, export, or backup conflicts with this file:
 ## Current Live Rail
 
 - Primary live payment rail: **Square only**
-- Date-app Square account: `ebaytrashortreasure@gmail.com`
-- Commerce / Non-date-app Square account: `joshlcoleman@gmail.com`
+- Square account: `joshlcoleman@gmail.com` (all lanes — YouAndINotAI and commerce)
 - Active Square location: `LY5GN09F5AN83`
 - Customer-facing payment copy must stay business-first and must not use `donate`, `donation`, or `solicitation`
 
@@ -86,12 +85,8 @@ If any older doc, node note, export, or backup conflicts with this file:
 
 - **PRIMARY (joshlcoleman):** #ForTheKids (sq0idp-Carv59GQKuQHoIydJ1Wanw)
   - Status: ACTIVE & AUTHORIZED
-  - Purpose: OnlineRecycle.org, Ai-Collab4Kids, Merch Shop
+  - Purpose: All Square lanes — OnlineRecycle.org, Ai-Collab4Kids, Merch Shop, YouAndINotAI
   - Location: Trash or Treasure (LTDX6ZANTVEEN)
-
-- **ISOLATED (ebaytrashortreasure):** Dating App Support
-  - Status: ACTIVE & ISOLATED
-  - Purpose: YouAndINotAI (High-Risk)
 
 - **BLACKLISTED / DO NOT USE:**
   - u-annd-a-i-not-a-i.online (sq0idp-O4K4lNKXVSQoWdfgczv17Q)

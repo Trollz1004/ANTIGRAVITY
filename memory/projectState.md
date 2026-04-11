@@ -60,5 +60,4 @@ Last Updated: 2026-04-10
 
 ## Account Routing Note
 
-- `ebaytrashortreasure@gmail.com`: isolated date-app Square / PayPal lane
-- `joshlcoleman@gmail.com`: primary non-date-app commerce identity
+- `joshlcoleman@gmail.com`: unified Square account for all lanes (YouAndINotAI and commerce)
