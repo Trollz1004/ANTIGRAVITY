@@ -127,7 +127,7 @@ export const PLATFORMS: Record<string, PlatformEntry> = {
     claw: "HEMORzoid",
     api: "Square Commerce API",
     corsSupport: "backend-proxy",
-    notes: "Payment links live. Location: LY5GN09F5AN83. Account: ebaytrashortreasure@gmail.com (date-app lane).",
+    notes: "Payment links live. Location: LY5GN09F5AN83. Account: joshlcoleman@gmail.com.",
   },
   mercari: {
     id: "mercari",
