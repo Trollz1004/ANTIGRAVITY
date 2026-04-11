@@ -21,11 +21,12 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
-# Set a valid JWT_SECRET before importing app modules
+# Set environment variables IMMEDIATELY
 os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-security"
-os.environ.setdefault("APP_ENV", "test")
-os.environ.setdefault("SQUARE_WEBHOOK_VERIFY_SIGNATURE", "true")
-os.environ.setdefault("SQUARE_BOT_SHIELD_PAYMENT_LINK", "https://square.link/u/Qc5mxUy7")
+os.environ["APP_ENV"] = "test"
+os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
+os.environ["SQUARE_WEBHOOK_VERIFY_SIGNATURE"] = "false"
+os.environ["SQUARE_BOT_SHIELD_PAYMENT_LINK"] = "https://square.link/u/Qc5mxUy7"
 os.environ.setdefault("SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY", "test-square-signature")
 os.environ.setdefault(
     "SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL",
@@ -41,6 +42,13 @@ os.environ.setdefault("CORS_ORIGINS", "http://testserver")
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+from app.config import get_settings
+get_settings.cache_clear()
+
+from app import database
+# Force the engine to use SQLite to prevent PG connection attempts during module-level init or lifespan
+database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
 
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
