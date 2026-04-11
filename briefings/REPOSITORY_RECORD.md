@@ -83,8 +83,7 @@ Primary adjustment record:
 ## Operational Notes
 
 - Square remains the live payment rail
-- `ebaytrashortreasure@gmail.com` remains the isolated date-app commerce lane
-- `joshlcoleman@gmail.com` remains the primary non-date-app commerce identity
+- `joshlcoleman@gmail.com` is the unified Square account for all lanes (YouAndINotAI and commerce)
 - direct-upload Cloudflare Pages deployments should continue to use the verified API/upload-token path or a known authenticated project path
 
 ## April 2 Date-App Reskin and Launch Validation
