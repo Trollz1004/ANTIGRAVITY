@@ -248,7 +248,7 @@ class TestSquarePaymentEventFactory:
             note="Bot-Shield Verification",
         )
         assert "event_id" in event
-        assert event["type"] == "payment.completed"
+        assert event["type"] == "payment.updated"
         payment = event["data"]["object"]["payment"]
         assert payment["amount_money"]["amount"] == 100
         assert payment["buyer_email_address"] == "test@example.com"
@@ -402,7 +402,7 @@ def test_completed_bot_shield_payment_requires_checkout_binding(
     assert allocations[0].status == "reserved"
 
 
-def test_payment_updated_is_not_authoritative_for_bot_shield_completion(
+def test_non_completed_payment_status_is_not_authoritative_for_bot_shield_completion(
     client,
     db_session_factory,
 ):
@@ -443,12 +443,12 @@ def test_payment_updated_is_not_authoritative_for_bot_shield_completion(
     )
 
     payload = make_square_payment_event(
-        event_id="evt_payment_updated_completed",
+        event_id="evt_payment_updated_not_completed",
         event_type="payment.updated",
         amount_cents=100,
         buyer_email="non-authoritative@example.com",
         note=f"Bot-Shield Verification agref:{checkout_ref}",
-        payment_status="COMPLETED",
+        payment_status="APPROVED",
     )
 
     signature = generate_square_signature(

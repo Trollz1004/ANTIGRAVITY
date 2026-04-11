@@ -63,6 +63,8 @@ def test_protected_http_routes_require_auth():
     public_routes = {
         ("/", "GET"),
         ("/api/v1/health", "GET"),
+        ("/api/v1/health/allocations", "GET"),
+        ("/api/v1/health/webhooks", "GET"),
         ("/api/v1/auth/register", "POST"),
         ("/api/v1/auth/beta-access", "POST"),
         ("/api/v1/users/register", "POST"),
@@ -216,7 +218,7 @@ def test_square_webhook_binds_bot_shield_to_user(client, db_session_factory):
 
     payload = {
         "event_id": "evt_square_bind_1",
-        "type": "payment.completed",
+        "type": "payment.updated",
         "created_at": "2026-03-11T12:00:00Z",
         "data": {
             "object": {
@@ -311,7 +313,7 @@ def test_square_payment_updated_sends_founder_badge_email(client, db_session_fac
 
     payload = {
         "event_id": "evt_square_updated_1",
-        "type": "payment.completed",
+        "type": "payment.updated",
         "created_at": "2026-03-11T12:00:00Z",
         "data": {
             "object": {

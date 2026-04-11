@@ -133,7 +133,7 @@ def generate_square_signature(
 def make_square_payment_event(
     *,
     event_id: str | None = None,
-    event_type: str = "payment.completed",
+    event_type: str = "payment.updated",
     amount_cents: int = 100,
     customer_id: str | None = None,
     buyer_email: str | None = None,
