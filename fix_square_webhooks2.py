@@ -1,9 +1,12 @@
-﻿import asyncio
+import asyncio
 import httpx
 import json
+import os
 
 async def main():
-    token = "EAAAl2YFWNK4FRsKmfPfQ1br-mJUNi7RvfUWqJHnnulDtIecKeQoQqTR4ISjyT5i"
+    token = os.environ.get("SQUARE_ACCESS_TOKEN", "")
+    if not token:
+        raise RuntimeError("SQUARE_ACCESS_TOKEN must be set in the environment.")
     
     async with httpx.AsyncClient() as client:
         # Step 1: Get subscriptions

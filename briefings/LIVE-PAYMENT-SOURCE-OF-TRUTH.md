@@ -1,6 +1,6 @@
 # LIVE PAYMENT SOURCE OF TRUTH
 
-Last updated: 2026-03-19
+Last updated: 2026-04-10
 
 ## Authority
 
@@ -22,7 +22,7 @@ If any older doc, node note, export, or backup conflicts with this file:
 ## Verification-Grade Payment Truth
 
 - Bot-Shield verification promotion is **fail-closed**
-- Verification-grade payment completion is only authoritative on Square `payment.completed`
+- Verification-grade payment completion is only authoritative on Square `payment.created` or `payment.updated` when the embedded Square payment status is `COMPLETED`
 - Bot-Shield requires a valid signed `checkout_ref` that binds the same user and the same passed liveness event
 - Email lookup, customer lookup, or loose payment matching may support bookkeeping or operator logging only
 - Email lookup, customer lookup, or loose payment matching must **never** create a verification `challenge_type="payment"` event
@@ -96,3 +96,27 @@ If any older doc, node note, export, or backup conflicts with this file:
 - **BLACKLISTED / DO NOT USE:**
   - u-annd-a-i-not-a-i.online (sq0idp-O4K4lNKXVSQoWdfgczv17Q)
   - Status: DEPRECATED - DO NOT ROUTE TRAFFIC
+
+## Active Production Payment Webhook (Updated 2026-04-10)
+
+- Name: YouAndINotAI Bot-Shield Payments
+- Subscription ID: `wbhk_a2022ac6b20043a5a3bc2d43bbca0f1b`
+- Status: Enabled
+- API version: `2026-01-22`
+- URL: `https://api.youandinotai.com/api/v1/webhooks/square-payment`
+- Events:
+  - `payment.created`
+  - `payment.updated`
+  - `subscription.created`
+  - `subscription.updated`
+- Runtime secret requirements:
+  - `SQUARE_WEBHOOK_SIGNATURE_KEY`
+  - `SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY`
+  - `SQUARE_WEBHOOK_NOTIFICATION_URL`
+  - `SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL`
+  - `SQUARE_WEBHOOK_VERIFY_SIGNATURE=true`
+
+The signature key is stored only in local vault/env, GitHub secrets, or platform secret managers.
+It must never be committed to source or pasted into chat.
+GitHub currently stores the key in existing secret `SQUARE_WEBHOOK_SIGNATURE_KEY`; the Cloud Run
+deploy workflow mirrors that same value into runtime env `SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY`.

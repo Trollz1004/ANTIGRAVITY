@@ -401,7 +401,6 @@ async def square_payment_webhook(
                 request_url=str(request.url).split("?", 1)[0],
             )
         except HTTPException as exc:
-            import json, hashlib
             try:
                 payload_json = json.loads(payload.decode("utf-8"))
             except Exception:
