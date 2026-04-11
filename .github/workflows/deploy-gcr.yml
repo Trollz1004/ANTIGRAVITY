@@ -32,11 +32,34 @@ jobs:
           REGION: ${{ secrets.GCP_REGION }}
           SERVICE: ${{ secrets.GCR_SERVICE_NAME }}
           BETA_ACCESS_CODES: ${{ vars.BETA_ACCESS_CODES }}
+          SQUARE_ACCESS_TOKEN: ${{ secrets.SQUARE_ACCESS_TOKEN }}
+          SQUARE_LOCATION_ID: ${{ secrets.SQUARE_LOCATION_ID }}
+          SQUARE_WEBHOOK_SIGNATURE_KEY: ${{ secrets.SQUARE_WEBHOOK_SIGNATURE_KEY }}
+          SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL: https://api.youandinotai.com/api/v1/webhooks/square-payment
+          SQUARE_WEBHOOK_NOTIFICATION_URL: https://api.youandinotai.com/api/v1/webhooks/square-payment
+          SQUARE_WEBHOOK_VERIFY_SIGNATURE: "true"
+          SQUARE_API_VERSION: "2026-01-22"
         run: |
           EXTRA_ENV_ARGS=()
+          add_env_var() {
+            local name="$1"
+            local value="$2"
+            if [ -n "$value" ]; then
+              EXTRA_ENV_ARGS+=(--update-env-vars "^@^${name}=${value}")
+            fi
+          }
+
           if [ -n "$BETA_ACCESS_CODES" ]; then
             EXTRA_ENV_ARGS+=(--update-env-vars "^@^BETA_ACCESS_CODES=$BETA_ACCESS_CODES")
           fi
+          add_env_var "SQUARE_ACCESS_TOKEN" "$SQUARE_ACCESS_TOKEN"
+          add_env_var "SQUARE_LOCATION_ID" "$SQUARE_LOCATION_ID"
+          add_env_var "SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY" "$SQUARE_WEBHOOK_SIGNATURE_KEY"
+          add_env_var "SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL" "$SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL"
+          add_env_var "SQUARE_WEBHOOK_SIGNATURE_KEY" "$SQUARE_WEBHOOK_SIGNATURE_KEY"
+          add_env_var "SQUARE_WEBHOOK_NOTIFICATION_URL" "$SQUARE_WEBHOOK_NOTIFICATION_URL"
+          add_env_var "SQUARE_WEBHOOK_VERIFY_SIGNATURE" "$SQUARE_WEBHOOK_VERIFY_SIGNATURE"
+          add_env_var "SQUARE_API_VERSION" "$SQUARE_API_VERSION"
 
           gcloud run deploy "$SERVICE" \
             --project "$PROJECT_ID" \

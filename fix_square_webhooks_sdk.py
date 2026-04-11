@@ -1,10 +1,13 @@
-﻿import asyncio
+import asyncio
+import os
 from square.environment import SquareEnvironment
 from square import Square
 import uuid
 
 def main():
-    token = "EAAAl2YFWNK4FRsKmfPfQ1br-mJUNi7RvfUWqJHnnulDtIecKeQoQqTR4ISjyT5i"
+    token = os.environ.get("SQUARE_ACCESS_TOKEN", "")
+    if not token:
+        raise RuntimeError("SQUARE_ACCESS_TOKEN must be set in the environment.")
     
     client = Square(
         token=token,
