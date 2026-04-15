@@ -87,6 +87,12 @@ scripts/codex-admin-bootstrap.ps1
 scripts/codex-memory-selfheal.ps1
 scripts/node-connect.ps1
 
+# Local PaperClip runtime/source checkouts (do not commit)
+.paperclip/
+paperclip-runtime/
+paperclip-worktrees/
+paperclip-upstream/
+
 # Local secret-bearing memory/data (keep available on node, never commit)
 memory/local/
 memory/private/
@@ -138,6 +144,7 @@ antigravity-dashboard/
 _deploy/onlinerecycle/THE WHEEL.txt
 _deploy/onlinerecycle/THE_WHEEL.html
 briefings/CODEX-DIRECTIVE-*.md
+briefings/CODEX-HANDOFF-*.md
 scripts/sync-claude-token.sh
 
 youandinotai.zip

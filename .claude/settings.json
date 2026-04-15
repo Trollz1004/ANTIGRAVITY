@@ -1,6 +1,6 @@
 {
   "enabledPlugins": {
-    "semgrep@claude-plugins-official": true
+    "semgrep@claude-plugins-official": false
   },
   "enableAllProjectMcpServers": true,
   "hooks": {
@@ -11,6 +11,15 @@
           {
             "type": "command",
             "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if echo \"$FILE\" | grep -qiE \"\\.(env|secret|key|pem|vault)\" && ! echo \"$FILE\" | grep -q \".env.example\"; then echo \"BLOCKED: Cannot edit secrets/env files. Update .env manually or via vault scripts.\" >&2; exit 2; fi; exit 0'"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; PROTECTED=\"CLAUDE.md AGENTS.md .mcp.json\"; for P in $PROTECTED; do if echo \"$FILE\" | grep -qF \"$P\"; then echo \"NOTICE: Editing protected file $P — Claude Code architect access only. Ensure this is intentional.\"; fi; done; exit 0'"
           }
         ]
       },
