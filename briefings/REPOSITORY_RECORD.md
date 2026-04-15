@@ -194,7 +194,11 @@ Validated on April 2, 2026:
 - the active Cloudflare tunnel config is repo-tracked at `C:\ANTIGRAVITY\infra\cloudflare\paperclip-hq.yml`
 - `C:\ANTIGRAVITY\scripts\autostart.ps1` now launches the repo-owned runtime via `paperclipai run -d C:\ANTIGRAVITY\paperclip-runtime -i default --no-repair`
 - the startup script kills any non-ANTIGRAVITY process already holding port `3100` and skips duplicate tunnel starts
-- legacy PaperClip drift under `E:\trollz-sandbox` was removed except for one locked path queued for deletion at next logon via `C:\ANTIGRAVITY\scripts\cleanup-paperclip-drift.ps1`
+- legacy PaperClip drift under `E:\trollz-sandbox` was removed except for a locked `logs` remainder under `E:\trollz-sandbox\paperclip-antigravity`, which is still queued for deletion at next logon via `C:\ANTIGRAVITY\scripts\cleanup-paperclip-drift.ps1`
+- legacy mixed-drive ANTIGRAVITY drift was also removed from `C:\Users\joshl\Documents\ANTIGRAVITY-CLEANUP-ARCHIVE-2026-04-02`, and no matching PaperClip / ANTIGRAVITY drift was found under `C:\Users\joshl\Downloads`
+- the old Docker-only paperclip containers `paperclip-antigravity-postgres` and `paperclip-sabretooth-postgres` plus their paperclip-only volumes were removed from Sabretooth
+- stale temporary setup docs/scripts from the mixed-stack PaperClip integration pass were removed from the repo root, and `.gitignore` now excludes node-local PaperClip runtime/source trees so the live repo stays cleaner on Sabretooth
+- `E:\OllamaModels\models` remains the active Ollama model store via `OLLAMA_MODELS`, so `E:` is not safe for a full wipe until the model store is migrated
 - repo-tracked status note: `briefings/PAPERCLIP-HQ-ANTIGRAVITY-2026-04-15.md`
 
 ## April 10 Sabretooth Unified Local Stack Launcher
