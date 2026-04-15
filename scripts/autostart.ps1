@@ -135,7 +135,7 @@ try {
 
     if (Ensure-PaperclipPortAvailable) {
         Log 'Starting Paperclip...'
-        $paperclipCommand = "Set-Location -LiteralPath '$PaperclipRoot'; & '$PnpmCmd' paperclipai run -d '$PaperclipRuntimeRoot' -i default --no-repair *>> '$PaperclipLog' 2>&1"
+        $paperclipCommand = "Set-Location -LiteralPath 'C:\ANTIGRAVITY'; `$env:DATABASE_URL = 'postgresql://paperclip:paperclip@localhost:5432/paperclip_hq'; paperclipai run *>> '$PaperclipLog' 2>&1"
         Start-Process -FilePath $PowerShellExe -ArgumentList @(
             '-NoExit',
             '-ExecutionPolicy', 'Bypass',
