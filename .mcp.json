@@ -21,7 +21,7 @@
     "social-command-center": {
       "command": "node",
       "args": [
-        "C:\\\\ANTIGRAVITY/social-command-center/dist/server.js"
+        "C:\\\\ANTIGRAVITY/social-command-center/dist/index.js"
       ],
       "env": {
         "HOME": "C:\\Users\\joshl"
