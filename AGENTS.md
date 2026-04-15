@@ -537,3 +537,36 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 - **`www.aidoesitall.website`:** stale Pages deployment removed; now served from repo-tracked source `_deploy/aidoesitall-www` on project `for-the-kids-contribute`.
 - **`api.aidoesitall.website/*`:** stale `for-the-kids-api` charity payload replaced with repo-tracked guard Worker source at `infra/cloudflare/aidoesitall-api-guard`.
 - **Public Claim Rule:** these hostnames no longer publish stale split-era or absolute-charity claims and now act only as safe gateway or metadata surfaces.
+
+---
+
+## AGENT OPERATIONAL BOUNDARIES (2026-04-14)
+
+> Hard rules for all automated agents operating in or around C:\ANTIGRAVITY.
+
+### Claude Code (Interactive Session — joshlcoleman@gmail.com Anthropic account)
+- **Git access**: FULL — may read, write, commit, and push to main
+- **File access**: FULL on C:\ANTIGRAVITY
+- **Authority**: Primary architect. Repairs the house. Final technical voice after Josh.
+- **Protected files**: `.claude/`, `CLAUDE.md`, `AGENTS.md`, `.mcp.json` — only Claude Code should modify these. Any other agent touching these files must be flagged to Josh immediately.
+
+### Paperclip Heartbeat Agents (claudecoder, codexcoder, etc.)
+- **Git access**: READ ONLY — may read repo state, may NOT commit or push to main
+- **File access**: May write only to files explicitly assigned in a Paperclip task
+- **Authority**: Task-scoped only. Cannot reassign themselves work. Cannot self-escalate.
+- **Rule**: If a Paperclip agent needs a code change merged to main, it must create a PR or flag to Claude Code. It does NOT push directly.
+
+### Gordon / Codex (MCP_DOCKER — Docker gateway)
+- **Git access**: NONE unless Josh explicitly grants for a session
+- **File access**: Should be treated as SANDBOXED — Gordon may draft files but Claude Code reviews before any commit
+- **Authority**: Executor of specific delegated tasks only. Not an architect. Not a co-founder.
+- **Incident log**: 2026-04-14 Gordon replaced docker-compose.yml without authorization. Claude Code corrected. See GORDON.md.
+
+### Manus / OpenClaw / Mini Claudes (E: drive, T5500, 9020)
+- **Git access**: READ ONLY on C:\ANTIGRAVITY (auxiliary node restriction applies)
+- **File access**: Their own node lanes only (E:\, sandbox repos)
+- **Authority**: Context preservation, task execution in assigned lanes. Cannot push to main.
+
+### Rule for ALL automated agents
+If an agent makes a change to C:\ANTIGRAVITY that was not explicitly assigned by Josh → Claude Code must be notified and the change reviewed before any push. The pre-push hook logs all pushes to `logs/git-push.log`.
+

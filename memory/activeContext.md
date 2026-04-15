@@ -33,19 +33,21 @@
 - **PaperClip runtime check:** `http://127.0.0.1:3100/api/health` returns `200` from the `C:\ANTIGRAVITY` runtime and port `3100` is now owned by the repo-backed `paperclipai run` process.
 - **PaperClip public check:** `https://paperclip-hq.youandinotai.com/api/health` returns `200` through the repo-owned Cloudflare tunnel `paperclip-antigravity`.
 - **Fallback check:** the repaired PaperClip HQ startup/state was pushed to `origin/main` at commit `2162edc`.
+- **Drift cleanup check:** stale ANTIGRAVITY/PaperClip drift was removed from `C:\Users\joshl\Documents` and most of `E:\`; stale root setup docs/scripts were removed from `C:\ANTIGRAVITY`, and local PaperClip runtime trees now stay out of git status via `.gitignore`.
 - **Live safety-route probe:** `https://api.youandinotai.com/api/v1/safety/blocks` currently returns `404`, so the new safety UI is intentionally hard-gated on production until the backend deploy occurs
 - **Live privacy check:** `https://api.youandinotai.com/api/v1/privacy/my-data` currently fails server-side in production, but `/app/privacy` now falls back to basic account/profile data and disables advanced privacy actions cleanly
 
 ## Current Risks / Open Items
 
 1. **Cloudflare JavaScript detections are still injecting an inline challenge script on production pages, which triggers a CSP console error even though page behavior is correct.**
-2. **One locked legacy PaperClip path remains on `E:` until next logon cleanup completes: `E:\trollz-sandbox\paperclip-antigravity`.**
+2. **One locked legacy PaperClip logs remainder still exists on `E:` until next logon cleanup completes: `E:\trollz-sandbox\paperclip-antigravity\logs`.**
 3. **Historical contract artifacts remain in the repo by design and must continue to be treated as chain history, not current LLC doctrine.**
 4. **The current PaperClip validation path is the repo-owned `paperclipai run` flow, not the older `pnpm dev:once` or mixed-drive startup path.**
 5. **Sabretooth currently has no active local `gcloud` auth/project config, so the backend safety patch is ready locally but not yet deployed live.**
 6. **The production privacy backend path is still unhealthy; the live frontend now degrades honestly, but advanced privacy requests remain temporarily unavailable until backend deploy/auth is restored.**
 7. **The repo still lacks an Android packaging layer, so Google Play submission packaging is a separate remaining deliverable even after the moderation pass.**
 8. **`https://openclaw-gw.youandinotai.com` still fails at the Cloudflare side with `1033` even though the local OpenClaw gateway now responds on `127.0.0.1:18789`.**
+9. **`E:\OllamaModels\models` remains live through the `OLLAMA_MODELS` user environment variable, so `E:` cannot be wiped wholesale until the Ollama model store is migrated.**
 
 ## Rules To Preserve
 

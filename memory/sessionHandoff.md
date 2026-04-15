@@ -64,6 +64,9 @@
   - LiteLLM on `:11435`
   - PaperClip on `:3100`
   - `https://paperclip-hq.youandinotai.com/api/health`
+- legacy mixed-drive PaperClip drift was removed from `Documents` and almost all of `E:`, with only a locked `E:\trollz-sandbox\paperclip-antigravity\logs` remainder still queued for next-logon cleanup
+- `E:\OllamaModels\models` is still the live Ollama model store via `OLLAMA_MODELS`, so do not wipe `E:` wholesale until the models are migrated
+- stale root setup docs/scripts from the temporary PaperClip integration pass were deleted from `C:\ANTIGRAVITY`, and local PaperClip runtime/source trees are now git-ignored on Sabretooth
 - local OpenClaw gateway is now healthy on `http://127.0.0.1:18789/`, but the external hostname `https://openclaw-gw.youandinotai.com` still returns Cloudflare `1033`
 - the live backend currently returns `404` for `/api/v1/safety/blocks`, so the new moderation UI is intentionally hard-gated on production until the backend deploy happens
 - Sabretooth currently has no active local `gcloud` auth/project config, so the backend safety patch is ready locally but not yet deployed live
