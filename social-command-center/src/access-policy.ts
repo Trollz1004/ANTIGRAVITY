@@ -35,7 +35,7 @@ export const ACCESS_POLICY = {
       name: "Founder",
       description: "Joshua Coleman — full authority over everything",
       permissions: ["read", "write", "orchestrate", "post", "deploy", "delete"],
-      entities: ["JoshuaClaw"],
+      entities: ["JoshuaClaw", "Joshua Claw"],
     },
     {
       name: "Trusted Four — Orchestrators",
@@ -64,6 +64,9 @@ export const ACCESS_POLICY = {
       permissions: ["read", "draft"],
       entities: [
         "Manus",
+        "Hermes",
+        "Hermes / Joshua Claw",
+        "HermesBridge",
         "Ollama",
         "GensparkClaw",
         "MetaClaw",
