@@ -1,6 +1,6 @@
 # PROJECT STATE - LIVE BASELINE
 
-Last Updated: 2026-04-10
+Last Updated: 2026-04-15
 
 ## Current Live Repo
 
@@ -23,8 +23,8 @@ Last Updated: 2026-04-10
 - Date-app payments remain bound to the internal checkout creation flow and were reverified for all five live checkout paths on April 2, 2026
 - OnlineRecycle remains live with service-first copy
 - Dashboard gateway remains live and hands trusted users into the authenticated PaperClip workspace
-- PaperClip runtime remains sandboxed and private
-- PaperClip now has a validated local Hermes adapter on Sabretooth with a unified local stack launcher at `C:\Users\joshl\Desktop\START-DAO.bat`
+- PaperClip runtime is now anchored to `C:\ANTIGRAVITY` on Sabretooth, not the older `E:` sandbox lane
+- the current clean public PaperClip hostname is `https://paperclip-hq.youandinotai.com`
 - March 31 validation pass is complete on Sabretooth for the touched live workspaces
 - April 2 production validation confirmed the beta-access path can still load the core app routes after the reskin
 
@@ -41,18 +41,18 @@ Last Updated: 2026-04-10
 - the April 2 frontend pass was deployed to Cloudflare Pages only; no backend / GCR redeploy was required because backend code did not change
 - the later April 2 Play-readiness safety pass changed both frontend and backend locally; frontend was redeployed in a gated state, but the backend safety routes still require a live Cloud Run deploy
 - the April 2 Hermes/PaperClip runtime fix was a local Sabretooth/PaperClip change only and did not require a live-repo deploy
-- the April 10 Sabretooth-local startup path is now unified through `C:\Users\joshl\Desktop\START-DAO.ps1` and the matching Startup-folder stub, not through the older scattered desktop/startup wrappers
-- current verified Sabretooth-local stack after the April 10 launcher repair:
+- the April 15 PaperClip HQ cutover moved the active PaperClip runtime to `C:\ANTIGRAVITY\paperclip-upstream` with runtime home `C:\ANTIGRAVITY\paperclip-runtime`
+- `C:\ANTIGRAVITY\scripts\autostart.ps1` now launches the repo-owned PaperClip runtime and the repo-owned Cloudflare tunnel
+- current verified Sabretooth-local stack after the April 15 PaperClip HQ cutover:
   - Docker Desktop
   - Ollama on `:11434`
-  - BRAIN MCP on `:3900`
   - PaperClip on `:3100`
-  - Hermes on `:8000`
-  - Cloudflared service tunnel plus the separate PaperClip direct tunnel
-- current verified public surfaces after the launcher repair:
-  - `https://paperclip.youandinotai.com/api/health`
-  - `https://mcp.youandinotai.com/api/health`
-  - `https://hermes.youandinotai.com/health`
+  - LiteLLM on `:11435`
+  - repo-owned Cloudflare tunnel `paperclip-antigravity`
+- current verified PaperClip surfaces after the cutover:
+  - `http://127.0.0.1:3100/api/health`
+  - `https://paperclip-hq.youandinotai.com/api/health`
+- legacy PaperClip drift under `E:\trollz-sandbox` has been removed except for one old locked path queued for next-logon cleanup
 - local OpenClaw gateway now responds on `http://127.0.0.1:18789/`, but `https://openclaw-gw.youandinotai.com` still fails at the Cloudflare layer with `1033`
 - Cloudflare JavaScript detections still inject an inline challenge script that causes a CSP console error on production pages; this is an edge-level behavior, not a repo-bundle regression
 - Sabretooth currently has no active local `gcloud` auth and no configured project, so direct backend deployment from this session is blocked
