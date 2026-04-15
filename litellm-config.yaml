@@ -1,0 +1,53 @@
+model_list:
+  - model_name: gemma4:31b
+    litellm_params:
+      model: ollama/gemma4:31b
+      api_base: http://host.docker.internal:11434
+      drop_params: true
+
+  - model_name: gemma4:8b
+    litellm_params:
+      model: ollama/gemma4:e4b
+      api_base: http://host.docker.internal:11434
+      drop_params: true
+
+  - model_name: gemma4:latest
+    litellm_params:
+      model: ollama/gemma4:latest
+      api_base: http://host.docker.internal:11434
+      drop_params: true
+
+  # Aliases so clients using OpenAI model names still work
+  - model_name: gpt-4
+    litellm_params:
+      model: ollama/gemma4:31b
+      api_base: http://host.docker.internal:11434
+      drop_params: true
+
+  - model_name: gpt-3.5-turbo
+    litellm_params:
+      model: ollama/gemma4:e4b
+      api_base: http://host.docker.internal:11434
+      drop_params: true
+
+  # Cloud routing (requires env vars set in .env)
+  - model_name: cloud-llama-70b
+    litellm_params:
+      model: together_ai/meta-llama/Llama-3.2-70B-Turbo
+      api_key: os.environ/TOGETHER_API_KEY
+      drop_params: true
+
+  - model_name: cloud-claude
+    litellm_params:
+      model: anthropic/claude-3-5-sonnet-20241022
+      api_key: os.environ/ANTHROPIC_API_KEY
+      drop_params: true
+
+litellm_settings:
+  drop_params: true
+  set_verbose: false
+  log_response_time: true
+
+general_settings:
+  port: 4000
+  num_workers: 4

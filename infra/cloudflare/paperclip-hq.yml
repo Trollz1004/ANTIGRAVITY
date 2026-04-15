@@ -1,0 +1,7 @@
+tunnel: c7bc9665-3923-4977-acd7-2033838cd56e
+credentials-file: C:\Users\joshl\.cloudflared\c7bc9665-3923-4977-acd7-2033838cd56e.json
+
+ingress:
+  - hostname: paperclip-hq.youandinotai.com
+    service: http://127.0.0.1:3100
+  - service: http_status:404
