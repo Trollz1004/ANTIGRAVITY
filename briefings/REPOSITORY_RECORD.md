@@ -187,14 +187,15 @@ Validated on April 2, 2026:
 - the launcher self-heals Hermes shims/config, opens the PaperClip gateway/dashboard, stays open on error, and does not create a scheduled task or daemon
 - repo-tracked status note: `briefings/HERMES-PAPERCLIP-STATUS-2026-04-02.md`
 
-## April 10 Sabretooth PaperClip Restart Cleanup
+## April 15 PaperClip HQ ANTIGRAVITY Cutover
 
-- the active public PaperClip surface on Sabretooth is `https://paperclip.youandinotai.com`
-- the active isolated runtime remains on `E:\trollz-sandbox\paperclip-antigravity` with source runtime at `E:\trollz-sandbox\dao-patches`
-- user-level restart behavior was reduced to a clean PaperClip server autorun plus a dedicated PaperClip-only Cloudflare tunnel autorun
-- noisy user Startup-folder entries for OpenClaw, BRAIN MCP, DAO, Chrome app launch, and the prior tunnel wrappers were moved out of the live Startup folder into a dated disabled folder
-- machine-level admin surfaces still exist separately and are documented instead of being misrepresented as removed
-- repo-tracked status note: `briefings/PAPERCLIP-SABRETOOTH-RESTART-2026-04-10.md`
+- the active local PaperClip runtime on Sabretooth is now `C:\ANTIGRAVITY\paperclip-upstream` with runtime home `C:\ANTIGRAVITY\paperclip-runtime`
+- the active local URL is `http://127.0.0.1:3100` and the active public URL is `https://paperclip-hq.youandinotai.com`
+- the active Cloudflare tunnel config is repo-tracked at `C:\ANTIGRAVITY\infra\cloudflare\paperclip-hq.yml`
+- `C:\ANTIGRAVITY\scripts\autostart.ps1` now launches the repo-owned runtime via `paperclipai run -d C:\ANTIGRAVITY\paperclip-runtime -i default --no-repair`
+- the startup script kills any non-ANTIGRAVITY process already holding port `3100` and skips duplicate tunnel starts
+- legacy PaperClip drift under `E:\trollz-sandbox` was removed except for one locked path queued for deletion at next logon via `C:\ANTIGRAVITY\scripts\cleanup-paperclip-drift.ps1`
+- repo-tracked status note: `briefings/PAPERCLIP-HQ-ANTIGRAVITY-2026-04-15.md`
 
 ## April 10 Sabretooth Unified Local Stack Launcher
 
