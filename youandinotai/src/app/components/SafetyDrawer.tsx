@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Flag, Shield, X } from 'lucide-react';
+import { Flag, Shield, X, VolumeX, EyeOff, MessageCircleOff } from 'lucide-react';
 
 import { api, ApiError } from '../../lib/api';
+import { ReportForm } from './ReportForm';
+import { BlockConfirmationDialog } from './BlockConfirmationDialog';
 
 type SafetySource = 'profile' | 'chat' | 'match' | 'board' | 'other';
 
@@ -12,6 +14,7 @@ interface SafetyDrawerProps {
   source: SafetySource;
   onClose: () => void;
   onBlocked?: () => void | Promise<void>;
+  onActionComplete?: (action: string) => void | Promise<void>;
 }
 
 const REPORT_REASONS = [
@@ -23,14 +26,7 @@ const REPORT_REASONS = [
   { value: 'other', label: 'Other safety concern' },
 ];
 
-export function SafetyDrawer({
-  open,
-  targetUserId,
-  targetName,
-  source,
-  onClose,
-  onBlocked,
-}: SafetyDrawerProps) {
+export function SafetyDrawer({ open, targetUserId, targetName, source, onClose, onBlocked }: SafetyDrawerProps) {
   const [reason, setReason] = useState(REPORT_REASONS[0].value);
   const [details, setDetails] = useState('');
   const [loadingAction, setLoadingAction] = useState<'report' | 'block' | null>(null);
@@ -124,14 +120,8 @@ export function SafetyDrawer({
               <h3 className="text-lg font-black tracking-[-0.04em] text-[#111111]">Report for review</h3>
             </div>
 
-            <label className="mb-3 block text-xs font-black uppercase tracking-[0.14em] text-[#5c594f]">
-              Reason
-            </label>
-            <select
-              value={reason}
-              onChange={(event) => setReason(event.target.value)}
-              className="app-input mb-4"
-            >
+            <label className="mb-3 block text-xs font-black uppercase tracking-[0.14em] text-[#5c594f]">Reason</label>
+            <select value={reason} onChange={(event) => setReason(event.target.value)} className="app-input mb-4">
               {REPORT_REASONS.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -139,9 +129,7 @@ export function SafetyDrawer({
               ))}
             </select>
 
-            <label className="mb-3 block text-xs font-black uppercase tracking-[0.14em] text-[#5c594f]">
-              Details
-            </label>
+            <label className="mb-3 block text-xs font-black uppercase tracking-[0.14em] text-[#5c594f]">Details</label>
             <textarea
               value={details}
               onChange={(event) => setDetails(event.target.value)}
