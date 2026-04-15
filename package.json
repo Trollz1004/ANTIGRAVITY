@@ -3,6 +3,8 @@
   "name": "antigravity-monorepo",
   "description": "ANTIGRAVITY monorepo — YouAndINotAI platform",
   "devDependencies": {
-    "prettier": "^3.4.0"
+    "eslint": "^8.57.1",
+    "eslint-config-react-app": "^7.0.1",
+    "prettier": "^3.8.3"
   }
 }

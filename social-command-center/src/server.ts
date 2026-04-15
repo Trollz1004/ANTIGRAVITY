@@ -1,9 +1,9 @@
 /**
  * Social Command Center MCP Server
- * 
- * Read-only operational visibility for all AIs.
- * 24 APIs · 34 Agents · Content Feed · Analytics · CORS Routing Map
- * 
+ *
+ * Operational visibility for all AIs.
+ * 25 APIs · 35 Agents · Content Feed · Approval Queue · Analytics · CORS Routing Map
+ *
  * ZERO SECRETS — all data is public platform metadata.
  * Any AI on the team can connect and see what's happening.
  */
@@ -11,10 +11,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
-import { PLATFORMS, PLATFORM_TYPES, getPlatformsByType, getPlatformCount, type PlatformEntry } from "./platforms.js";
-import { AGENTS, AGENT_GROUPS, getAgentsByGroup, getAgentsByStatus, getAgentCount, getActiveAgentCount } from "./agents.js";
-import { getFeed, addPost, updatePostStatus, getFeedByPlatform, getFeedByLlm, getFeedByStatus, getFeedAnalytics, type PostEntry } from "./feed.js";
+import { PLATFORMS, getPlatformsByType, getPlatformCount } from "./platforms.js";
+import { AGENTS, getAgentCount, getActiveAgentCount } from "./agents.js";
 import { ACCESS_POLICY, getAccessTier, hasPermission } from "./access-policy.js";
+import { addPost, getApprovalQueue, getFeed, getFeedAnalytics, reviewPost, updatePostStatus } from "./feed.js";
 
 function jsonContent(payload: unknown) {
   return {
@@ -33,15 +33,11 @@ export function createSocialCommandServer(): McpServer {
     version: "1.0.0",
   });
 
-  // ═══════════════════════════════════════════════════════════
-  // RESOURCES — static read-only data that any AI can browse
-  // ═══════════════════════════════════════════════════════════
-
   server.registerResource(
     "scc-platforms-all",
     "scc://platforms/all",
     {
-      title: "All 24 Platforms",
+      title: "All 25 Platforms",
       description: "Complete platform registry with CORS routing intelligence",
       mimeType: "application/json",
     },
@@ -60,7 +56,7 @@ export function createSocialCommandServer(): McpServer {
     "scc-agents-all",
     "scc://agents/all",
     {
-      title: "All 34 Agents",
+      title: "All 35 Agents",
       description: "Complete agent swarm registry with status and node assignments",
       mimeType: "application/json",
     },
@@ -80,7 +76,7 @@ export function createSocialCommandServer(): McpServer {
     "scc://feed/all",
     {
       title: "Content Feed",
-      description: "All posts with LLM provenance and engagement metrics",
+      description: "All posts with approval state, LLM provenance, and engagement metrics",
       mimeType: "application/json",
     },
     async () => ({
@@ -99,7 +95,7 @@ export function createSocialCommandServer(): McpServer {
     "scc://analytics/summary",
     {
       title: "Analytics Summary",
-      description: "Aggregated reach, likes, and engagement metrics by LLM and platform",
+      description: "Aggregated reach, likes, engagement, and approval metrics by LLM and platform",
       mimeType: "application/json",
     },
     async () => ({
@@ -142,10 +138,10 @@ export function createSocialCommandServer(): McpServer {
     },
     async () => {
       const allPlatforms = Object.values(PLATFORMS);
-      const browserDirect = allPlatforms.filter((p) => p.corsSupport === "browser");
-      const backendProxy = allPlatforms.filter((p) => p.corsSupport === "backend-proxy");
-      const local = allPlatforms.filter((p) => p.corsSupport === "local");
-      const notApplicable = allPlatforms.filter((p) => p.corsSupport === "n/a");
+      const browserDirect = allPlatforms.filter((platform) => platform.corsSupport === "browser");
+      const backendProxy = allPlatforms.filter((platform) => platform.corsSupport === "backend-proxy");
+      const local = allPlatforms.filter((platform) => platform.corsSupport === "local");
+      const notApplicable = allPlatforms.filter((platform) => platform.corsSupport === "n/a");
 
       return {
         contents: [
@@ -155,10 +151,30 @@ export function createSocialCommandServer(): McpServer {
             text: JSON.stringify(
               {
                 summary: `${browserDirect.length} browser-direct, ${backendProxy.length} backend-proxy, ${local.length} local, ${notApplicable.length} n/a`,
-                browser_direct: browserDirect.map((p) => ({ id: p.id, label: p.label, api: p.api, notes: p.notes })),
-                backend_proxy: backendProxy.map((p) => ({ id: p.id, label: p.label, api: p.api, notes: p.notes })),
-                local: local.map((p) => ({ id: p.id, label: p.label, api: p.api, notes: p.notes })),
-                not_applicable: notApplicable.map((p) => ({ id: p.id, label: p.label, api: p.api, notes: p.notes })),
+                browser_direct: browserDirect.map((platform) => ({
+                  id: platform.id,
+                  label: platform.label,
+                  api: platform.api,
+                  notes: platform.notes,
+                })),
+                backend_proxy: backendProxy.map((platform) => ({
+                  id: platform.id,
+                  label: platform.label,
+                  api: platform.api,
+                  notes: platform.notes,
+                })),
+                local: local.map((platform) => ({
+                  id: platform.id,
+                  label: platform.label,
+                  api: platform.api,
+                  notes: platform.notes,
+                })),
+                not_applicable: notApplicable.map((platform) => ({
+                  id: platform.id,
+                  label: platform.label,
+                  api: platform.api,
+                  notes: platform.notes,
+                })),
               },
               null,
               2,
@@ -169,17 +185,11 @@ export function createSocialCommandServer(): McpServer {
     },
   );
 
-  // ═══════════════════════════════════════════════════════════
-  // TOOLS — query and manage the social command center
-  // ═══════════════════════════════════════════════════════════
-
-  // ── READ TOOLS ─────────────────────────────────────────────
-
   server.registerTool(
     "scc.getDashboard",
     {
       title: "Get Dashboard",
-      description: "Return a complete operational dashboard: KPIs, active agents, live posts, CORS routing summary",
+      description: "Return a complete operational dashboard: KPIs, active agents, approval queue, live posts, and CORS routing summary",
     },
     async () => {
       const analytics = getFeedAnalytics();
@@ -190,19 +200,28 @@ export function createSocialCommandServer(): McpServer {
           live_posts: analytics.livePosts,
           queued_posts: analytics.queuedPosts,
           draft_posts: analytics.draftPosts,
+          approval_pending: analytics.approvalPending,
+          needs_edit: analytics.needsEdit,
           active_agents: `${getActiveAgentCount()}/${getAgentCount()}`,
           platform_count: getPlatformCount(),
         },
         cors_summary: {
-          browser_direct: Object.values(PLATFORMS).filter((p) => p.corsSupport === "browser").map((p) => p.label),
-          backend_proxy_count: Object.values(PLATFORMS).filter((p) => p.corsSupport === "backend-proxy").length,
-          local_count: Object.values(PLATFORMS).filter((p) => p.corsSupport === "local").length,
+          browser_direct: Object.values(PLATFORMS)
+            .filter((platform) => platform.corsSupport === "browser")
+            .map((platform) => platform.label),
+          backend_proxy_count: Object.values(PLATFORMS).filter((platform) => platform.corsSupport === "backend-proxy").length,
+          local_count: Object.values(PLATFORMS).filter((platform) => platform.corsSupport === "local").length,
         },
         top_posts_by_reach: getFeed()
-          .filter((p) => p.status === "Live")
-          .sort((a, b) => b.reach - a.reach)
+          .filter((post) => post.status === "Live")
+          .sort((left, right) => right.reach - left.reach)
           .slice(0, 5)
-          .map((p) => ({ title: p.title, platform: p.platform, llm: p.llm, reach: p.reach })),
+          .map((post) => ({
+            title: post.title,
+            platform: post.platform,
+            llm: post.llm,
+            reach: post.reach,
+          })),
       });
     },
   );
@@ -221,12 +240,13 @@ export function createSocialCommandServer(): McpServer {
       if (!platform) {
         throw new Error(`Unknown platform_id: ${platform_id}. Valid: ${Object.keys(PLATFORMS).join(", ")}`);
       }
-      const posts = getFeedByPlatform(platform_id);
+
+      const posts = getFeed().filter((post) => post.platform === platform_id);
       return jsonContent({
         platform,
         post_count: posts.length,
-        live_posts: posts.filter((p) => p.status === "Live").length,
-        total_reach: posts.reduce((s, p) => s + p.reach, 0),
+        live_posts: posts.filter((post) => post.status === "Live").length,
+        total_reach: posts.reduce((sum, post) => sum + post.reach, 0),
         posts,
       });
     },
@@ -257,10 +277,10 @@ export function createSocialCommandServer(): McpServer {
     async ({ group, status }) => {
       let result = AGENTS;
       if (group) {
-        result = result.filter((a) => a.group === group);
+        result = result.filter((agent) => agent.group === group);
       }
       if (status) {
-        result = result.filter((a) => a.status === status);
+        result = result.filter((agent) => agent.status === status);
       }
       return jsonContent({
         count: result.length,
@@ -273,18 +293,23 @@ export function createSocialCommandServer(): McpServer {
     "scc.getFeed",
     {
       title: "Get Feed",
-      description: "Return content feed, optionally filtered by platform, LLM, or status",
+      description: "Return content feed, optionally filtered by platform, LLM, delivery status, or approval status",
       inputSchema: z.object({
         platform: z.string().optional().describe("Filter by platform ID"),
         llm: z.string().optional().describe("Filter by LLM (opus, gemini, perplexity, grok, kimi, qwen)"),
         status: z.enum(["Live", "Queued", "Draft"]).optional().describe("Filter by post status"),
+        approval_status: z
+          .enum(["Not Needed", "Pending", "Approved", "Needs Edit", "Rejected"])
+          .optional()
+          .describe("Filter by approval state"),
       }),
     },
-    async ({ platform, llm, status }) => {
+    async ({ platform, llm, status, approval_status }) => {
       let result = getFeed();
-      if (platform) result = result.filter((p) => p.platform === platform);
-      if (llm) result = result.filter((p) => p.llm === llm);
-      if (status) result = result.filter((p) => p.status === status);
+      if (platform) result = result.filter((post) => post.platform === platform);
+      if (llm) result = result.filter((post) => post.llm === llm);
+      if (status) result = result.filter((post) => post.status === status);
+      if (approval_status) result = result.filter((post) => post.approvalStatus === approval_status);
       return jsonContent({
         count: result.length,
         posts: result,
@@ -293,10 +318,28 @@ export function createSocialCommandServer(): McpServer {
   );
 
   server.registerTool(
+    "scc.getApprovalQueue",
+    {
+      title: "Get Approval Queue",
+      description: "Return posts waiting for human approval or revision, optionally filtered by approval channel",
+      inputSchema: z.object({
+        approval_channel: z.enum(["discord", "telegram", "whatsapp", "openclaw"]).optional(),
+      }),
+    },
+    async ({ approval_channel }) => {
+      const posts = getApprovalQueue(approval_channel);
+      return jsonContent({
+        count: posts.length,
+        posts,
+      });
+    },
+  );
+
+  server.registerTool(
     "scc.getAnalytics",
     {
       title: "Get Analytics",
-      description: "Return aggregated reach, engagement, and performance metrics across all posts",
+      description: "Return aggregated reach, engagement, and approval metrics across all posts",
     },
     async () => jsonContent(getFeedAnalytics()),
   );
@@ -311,18 +354,21 @@ export function createSocialCommandServer(): McpServer {
       const allPlatforms = Object.values(PLATFORMS);
       return jsonContent({
         browser_direct: allPlatforms
-          .filter((p) => p.corsSupport === "browser")
-          .map((p) => ({ id: p.id, label: p.label, notes: p.notes })),
+          .filter((platform) => platform.corsSupport === "browser")
+          .map((platform) => ({ id: platform.id, label: platform.label, notes: platform.notes })),
         backend_proxy: allPlatforms
-          .filter((p) => p.corsSupport === "backend-proxy")
-          .map((p) => ({ id: p.id, label: p.label, notes: p.notes })),
+          .filter((platform) => platform.corsSupport === "backend-proxy")
+          .map((platform) => ({ id: platform.id, label: platform.label, notes: platform.notes })),
         local: allPlatforms
-          .filter((p) => p.corsSupport === "local")
-          .map((p) => ({ id: p.id, label: p.label, notes: p.notes })),
-        recommendation: "Route all 8 social platforms through FastAPI backend for unified logging, token management, and retry logic. Use browser-direct (Facebook, YouTube) only as development shortcut or fallback.",
+          .filter((platform) => platform.corsSupport === "local")
+          .map((platform) => ({ id: platform.id, label: platform.label, notes: platform.notes })),
+        recommendation:
+          "Route social posting through the backend for unified logging, token management, and retry logic. " +
+          "Use dispatch platforms as approval channels rather than autonomous publishers.",
       });
     },
   );
+
   server.registerTool(
     "scc.getAccessPolicy",
     {
@@ -364,8 +410,6 @@ export function createSocialCommandServer(): McpServer {
     },
   );
 
-  // ── WRITE TOOLS ────────────────────────────────────────────
-
   server.registerTool(
     "scc.addPost",
     {
@@ -379,12 +423,37 @@ export function createSocialCommandServer(): McpServer {
         status: z.enum(["Live", "Queued", "Draft"]).default("Draft"),
         deployed: z.string().default("—").describe("Deploy date (YYYY-MM-DD) or '—' for undeployed"),
         tags: z.array(z.string()).default([]),
+        approvalStatus: z.enum(["Not Needed", "Pending", "Approved", "Needs Edit", "Rejected"]).default("Pending"),
+        approvalChannel: z.enum(["discord", "telegram", "whatsapp", "openclaw", "n/a"]).default("discord"),
+        approvalRequestedBy: z.string().default("Joshua Claw"),
+        approver: z.string().default(""),
+        reviewPriority: z.enum(["low", "normal", "high"]).default("normal"),
+        reviewNotes: z.string().default(""),
+        approvalRequestedAt: z.string().default(""),
+        approvalReviewedAt: z.string().default(""),
       }),
     },
-    async ({ platform, llm, agent, title, status, deployed, tags }) => {
+    async ({
+      platform,
+      llm,
+      agent,
+      title,
+      status,
+      deployed,
+      tags,
+      approvalStatus,
+      approvalChannel,
+      approvalRequestedBy,
+      approver,
+      reviewPriority,
+      reviewNotes,
+      approvalRequestedAt,
+      approvalReviewedAt,
+    }) => {
       if (!PLATFORMS[platform]) {
         throw new Error(`Unknown platform: ${platform}. Valid: ${Object.keys(PLATFORMS).join(", ")}`);
       }
+
       const post = addPost({
         platform,
         llm,
@@ -397,8 +466,42 @@ export function createSocialCommandServer(): McpServer {
         status,
         deployed,
         tags,
+        approvalStatus,
+        approvalChannel,
+        approvalRequestedBy,
+        approver,
+        reviewPriority,
+        reviewNotes,
+        approvalRequestedAt,
+        approvalReviewedAt,
       });
       return jsonContent({ created: post });
+    },
+  );
+
+  server.registerTool(
+    "scc.reviewPost",
+    {
+      title: "Review Post",
+      description: "Record an approval decision and move the post through the release gate",
+      inputSchema: z.object({
+        post_id: z.number().describe("Post ID"),
+        decision: z.enum(["Approved", "Needs Edit", "Rejected"]),
+        approver: z.string().default("JoshuaClaw"),
+        reviewNotes: z.string().default(""),
+        approvalChannel: z.enum(["discord", "telegram", "whatsapp", "openclaw"]).default("discord"),
+      }),
+    },
+    async ({ post_id, decision, approver, reviewNotes, approvalChannel }) => {
+      const updated = reviewPost(post_id, decision, {
+        approver,
+        reviewNotes,
+        approvalChannel,
+      });
+      if (!updated) {
+        throw new Error(`Post not found: ${post_id}`);
+      }
+      return jsonContent({ updated });
     },
   );
 
@@ -417,11 +520,12 @@ export function createSocialCommandServer(): McpServer {
       }),
     },
     async ({ post_id, status, reach, likes, comments, shares }) => {
-      const updated = updatePostStatus(
-        post_id,
-        status ?? "Live",
-        { reach, likes, comments, shares },
-      );
+      const updated = updatePostStatus(post_id, status ?? "Live", {
+        reach,
+        likes,
+        comments,
+        shares,
+      });
       if (!updated) {
         throw new Error(`Post not found: ${post_id}`);
       }
