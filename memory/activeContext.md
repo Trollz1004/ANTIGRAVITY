@@ -1,4 +1,4 @@
-# Active Context - 2026-04-10
+# Active Context - 2026-04-15
 
 ## Current Focus
 
@@ -7,10 +7,10 @@
 - **Neutral briefing names are live:** canonical read-order now uses current neutral briefing names instead of the old split-era labels.
 - **Live code validation is complete:** Sabretooth passed the relevant build, lint, and backend test checks for the touched workspaces.
 - **Node lanes were rechecked:** 9020 support-lane post files were verified clean, its stale legacy sandbox notes were archived, and T5500 Manus-lane docs and dashboard pages were cleaned and reverified against legacy split terms.
-- **PaperClip remains sandbox-only:** `E:\sandbox-repo\paperclip` and `E:\sandbox-repo\paperclip-antigravity` remain isolated from the live repo.
+- **PaperClip HQ cutover is live:** the active runtime now lives under `C:\ANTIGRAVITY\paperclip-upstream` with runtime home `C:\ANTIGRAVITY\paperclip-runtime`.
 - **Date-app authenticated reskin is live:** the shell and core signed-in pages now visually align with the public brutalist landing direction and were revalidated on production.
-- **Hermes local runtime is working:** PaperClip now has a validated Sabretooth-local Hermes adapter path plus a one-click repair/launch script outside OneDrive.
-- **Sabretooth launcher drift is reduced:** one canonical desktop/startup launcher now boots Docker, Ollama, BRAIN MCP, PaperClip, Hermes, and Cloudflare from the same path.
+- **PaperClip public browser path is clean again:** `https://paperclip-hq.youandinotai.com/api/health` now resolves to the repo-owned local runtime on Sabretooth.
+- **Sabretooth launcher drift is reduced again:** `C:\ANTIGRAVITY\scripts\autostart.ps1` now starts the repo-owned PaperClip runtime and its repo-owned Cloudflare tunnel, not the older mixed `C:`/`E:` stack.
 - **Play-readiness safety pass is locally complete:** block/report moderation now exists in the repo for discover, chat, and boards, with backend tests passing at `209 passed`.
 - **Privacy Center fallback is live:** production now shows a truthful degraded privacy snapshot instead of a broken failure state while the advanced privacy backend route is unhealthy.
 
@@ -18,7 +18,7 @@
 
 - **Repo root:** `C:\ANTIGRAVITY`
 - **Branch:** `main`
-- **Worktree:** April 2 authenticated date-app reskin, Play-readiness safety patch, and supporting continuity updates are present locally on Sabretooth
+- **Worktree:** April 2 authenticated date-app reskin, Play-readiness safety patch, and the April 15 PaperClip HQ cutover are present locally on Sabretooth
 - **YouAndINotAI frontend:** `npm run lint` passed; `npm run build` passed
 - **YouAndINotAI backend:** `209 passed` via `uv`-managed pytest run on Python 3.13 after the safety pass
 - **MCP server:** `npm run build` passed
@@ -30,17 +30,18 @@
 - **T5500 lane:** `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian` docs and dashboard pages verified
 - **Live route check:** beta-access successfully loaded `/app`, `/app/lovebot`, `/app/matches`, `/app/inbox`, `/app/boards`, `/app/events`, `/app/volunteer`, `/app/support`, `/app/impact`, `/app/privacy`, and `/app/verify`
 - **Live payment check:** all five Square links still resolve with live `303` redirects into Square-hosted checkout
-- **PaperClip runtime check:** local Hermes agent `Hermes Codex` validated successfully in the private PaperClip workspace, and the desktop launcher at `C:\Users\joshl\Desktop\Launch-Hermes-PaperClip.cmd` now self-heals the local setup before opening the dashboard
-- **Unified local stack check:** `C:\Users\joshl\Desktop\START-DAO.bat` and the Startup-folder stub both resolve through `C:\Users\joshl\Desktop\START-DAO.ps1`, and the launcher completed cleanly on April 10 with public health checks passing for `paperclip`, `mcp`, and `hermes`
+- **PaperClip runtime check:** `http://127.0.0.1:3100/api/health` returns `200` from the `C:\ANTIGRAVITY` runtime and port `3100` is now owned by the repo-backed `paperclipai run` process.
+- **PaperClip public check:** `https://paperclip-hq.youandinotai.com/api/health` returns `200` through the repo-owned Cloudflare tunnel `paperclip-antigravity`.
+- **Fallback check:** the repaired PaperClip HQ startup/state was pushed to `origin/main` at commit `2162edc`.
 - **Live safety-route probe:** `https://api.youandinotai.com/api/v1/safety/blocks` currently returns `404`, so the new safety UI is intentionally hard-gated on production until the backend deploy occurs
 - **Live privacy check:** `https://api.youandinotai.com/api/v1/privacy/my-data` currently fails server-side in production, but `/app/privacy` now falls back to basic account/profile data and disables advanced privacy actions cleanly
 
 ## Current Risks / Open Items
 
 1. **Cloudflare JavaScript detections are still injecting an inline challenge script on production pages, which triggers a CSP console error even though page behavior is correct.**
-2. **`E:\sandbox-repo` still has unrelated PaperClip script drift that is intentionally separate from the live repo.**
+2. **One locked legacy PaperClip path remains on `E:` until next logon cleanup completes: `E:\trollz-sandbox\paperclip-antigravity`.**
 3. **Historical contract artifacts remain in the repo by design and must continue to be treated as chain history, not current LLC doctrine.**
-4. **The current PaperClip validation path is the Windows-safe idle wake flow, not the stock Linux-style localhost polling template.**
+4. **The current PaperClip validation path is the repo-owned `paperclipai run` flow, not the older `pnpm dev:once` or mixed-drive startup path.**
 5. **Sabretooth currently has no active local `gcloud` auth/project config, so the backend safety patch is ready locally but not yet deployed live.**
 6. **The production privacy backend path is still unhealthy; the live frontend now degrades honestly, but advanced privacy requests remain temporarily unavailable until backend deploy/auth is restored.**
 7. **The repo still lacks an Android packaging layer, so Google Play submission packaging is a separate remaining deliverable even after the moderation pass.**
@@ -50,5 +51,5 @@
 
 1. Treat `C:\ANTIGRAVITY` on `main` as the only live coding source of truth.
 2. Keep canonical docs, MCPs, and automation surfaces aligned to the current conservative `10%` charitable-cap doctrine.
-3. Keep secondary-drive AI infrastructure and experiments in sandbox lanes until explicitly promoted.
+3. Treat `C:\ANTIGRAVITY\paperclip-upstream` + `C:\ANTIGRAVITY\paperclip-runtime` as the active PaperClip source of truth on Sabretooth.
 4. Ship only facts; any unverified claim remains out.
