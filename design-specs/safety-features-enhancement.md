@@ -372,6 +372,104 @@ When a user opens the ReportForm, they are guided through a step-by-step process
 - Alternative suggestions
 - Confirmation buttons
 
+### Enhanced BlockConfirmationDialog Component Specification
+
+**Overview:**
+The enhanced BlockConfirmationDialog provides explicit information about blocking consequences while offering alternatives and clear reversal options. The dialog aims to prevent accidental blocks while ensuring users understand the impact of their actions.
+
+**Props:**
+
+- targetName: String - Display name of the user to be blocked
+- onConfirm: Function - Callback when block is confirmed
+- onCancel: Function - Callback when dialog is cancelled
+- isLoading: Boolean - Loading state during block processing
+- onMuteInstead: Function - Callback to switch to muting action
+- onRestrictInstead: Function - Callback to switch to restriction action
+
+**Visual Structure:**
+
+```
+┌─────────────────────────────────────┐
+│  Block @{targetName}?      [✕]     │
+├─────────────────────────────────────┤
+│                                     │
+│ This prevents:                      │
+│ • Direct messages                   │
+│ • Profile viewing                   │
+│ • Tagging in posts                  │
+│ • Adding as a connection            │
+│                                     │
+│ They won't be notified you blocked  │
+│ them, but they may notice some      │
+│ interactions no longer work.        │
+│                                     │
+│ Consider these alternatives first:  │
+│ [🔇 Mute Instead] [👁️ Restrict]    │
+│                                     │
+│ Want to proceed with blocking?      │
+│                                     │
+│ [	Block Permanently	] [	Cancel	]   │
+│                                     │
+│ Undo within 5 minutes: [Undo]       │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+**Accessibility Features:**
+
+- Clear heading structure with level 2 heading
+- Proper contrast for all text elements
+- Focus management on primary actions
+- Keyboard navigation (Tab, Enter, Escape)
+- Screen reader announcements for state changes
+- Reduced motion option for transitions
+
+**Mobile Optimizations:**
+
+- Full-width buttons for easy tapping
+- Landscape-compatible information layout
+- Scrollable content area for small screens
+- Large tap targets for all interactive elements
+- Sticky action buttons at bottom of viewport
+- Single-column layout for easy reading
+
+**Behavior Description:**
+When a user initiates blocking, the dialog clearly explains what blocking entails and offers alternatives. Users can choose to mute or restrict instead of blocking. The dialog emphasizes that blocking is reversible through settings but explains what the blocked user will experience. An undo option appears briefly after confirmation to prevent accidental blocks.
+
+**Copy Stubs:**
+
+- "Block @{targetName}?" - Dialog header with dynamic username
+- "This prevents:" - Consequences section header
+- "Direct messages" - First blocking consequence
+- "Profile viewing" - Second blocking consequence
+- "Tagging in posts" - Third blocking consequence
+- "Adding as a connection" - Fourth blocking consequence
+- "They won't be notified you blocked them, but they may notice some interactions no longer work." - Notification policy explanation
+- "Consider these alternatives first:" - Alternatives section header
+- "🔇 Mute Instead" - Alternative action button
+- "👁️ Restrict" - Alternative action button
+- "Want to proceed with blocking?" - Confirmation prompt
+- "Block Permanently" - Confirmation button
+- "Cancel" - Cancellation button
+- "Undo within 5 minutes:" - Undo option with timer
+- "Undo" - Undo action button
+
+**Timing & States:**
+
+- Initial confirmation dialog appears immediately
+- After confirmation, brief "Processing..." state
+- Success state shown for 5 seconds with undo option
+- Automatic dismissal after 5 seconds if no interaction
+- Manual dismissal option always available
+
+**Trust-Building Elements:**
+
+- Explicit listing of what blocking does and doesn't do
+- Clear explanation that blocked users aren't notified
+- Prominent alternatives presented before final confirmation
+- Time-limited undo option for accidental actions
+- Link to safety center for additional information
+
 ### SafetyTipBanner
 
 **Props:**
@@ -386,6 +484,150 @@ When a user opens the ReportForm, they are guided through a step-by-step process
 - Warning (orange)
 - Alert (red)
 - Educational (purple)
+
+### Enhanced SafetyTipBanner Component Specification
+
+**Overview:**
+The enhanced SafetyTipBanner provides contextual safety guidance through distinct visual variants. Each variant serves a specific purpose in promoting user safety and platform trust.
+
+**Props:**
+
+- tip: SafetyTip object - Contains tip content and metadata
+- onDismiss: Function - Callback when banner is dismissed
+- variant: String - Visual variant ('preventive', 'warning', 'alert', 'educational')
+- onAction: Function - Callback for primary action (when applicable)
+- autoDismiss: Boolean - Whether banner dismisses automatically
+- dismissTime: Number - Time in seconds before auto-dismiss
+
+**Visual Variants:**
+
+**Preventive (Blue)**
+
+- Purpose: Proactive safety suggestions
+- Color: #3B82F6 (blue-500) with #EFF6FF background
+- Icon: ℹ️ Information
+- Use Case: "Before you meet someone in person, let a friend know your plans"
+
+**Warning (Orange)**
+
+- Purpose: Caution about potential risks
+- Color: #F59E0B (amber-500) with #FEF3C7 background
+- Icon: ⚠️ Warning
+- Use Case: "This person has sent similar messages to multiple users"
+
+**Alert (Red)**
+
+- Purpose: Immediate safety concerns
+- Color: #EF4444 (red-500) with #FEE2E2 background
+- Icon: 🚨 Alert
+- Use Case: "This account may be compromised. We recommend blocking"
+
+**Educational (Purple)**
+
+- Purpose: Teaching moments about safety features
+- Color: #8B5CF6 (violet-500) with #EDE9FE background
+- Icon: 📚 Learn
+- Use Case: "Learn how muting can help manage unwanted attention"
+
+**Visual Structure:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ [Icon] Title Text                              [✕][Timer] │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │                                                       │ │
+│ │ Main message content explaining the situation and     │ │
+│ │ providing specific guidance.                          │ │
+│ │                                                       │ │
+│ │ [Primary Action] [Secondary Action]                   │ │
+│ └─────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Accessibility Features:**
+
+- Proper heading structure (level 3 headings)
+- Sufficient color contrast (WCAG AA minimum)
+- Screen reader friendly icons with aria-labels
+- Keyboard navigable action buttons
+- Focus-visible indicators on interactive elements
+- Reduced motion respect for animations
+
+**Mobile Optimizations:**
+
+- Horizontal padding optimized for thumb reach
+- Flexible width containers with max-width constraints
+- Touch-friendly minimum target sizes (48px)
+- Sticky positioning options for persistent banners
+- Collapsible content for space-constrained views
+- Landscape orientation readable widths
+
+**Behavior Descriptions:**
+
+**Preventive Variant:**
+Appears proactively to encourage safe behaviors before issues arise. Often tied to user actions like planning meetups or changing privacy settings.
+
+**Warning Variant:**
+Appears when the system detects potentially risky patterns but no immediate threat exists. Provides context and suggestions to mitigate risks.
+
+**Alert Variant:**
+Appears when immediate action may be needed to protect the user. Highest priority visually and temporally, often requiring user interaction to dismiss.
+
+**Educational Variant:**
+Appears to highlight safety features or explain platform mechanisms. Toned appropriately to not alarm users while increasing awareness.
+
+**Copy Stubs:**
+
+_Preventive:_
+
+- "💡 Meetup Safety Tip" - Header for preventive variant
+- "Before meeting someone new, share your plans with a trusted contact" - Main message
+- "Learn More" - Primary action
+- "Got it" - Secondary action to dismiss
+
+_Warning:_
+
+- "⚠️ We Noticed Something" - Header for warning variant
+- "This message pattern has been reported by other users" - Main message
+- "Show Example" - Primary action
+- "Dismiss" - Secondary action
+
+_Alert:_
+
+- "🚨 Potential Threat Detected" - Header for alert variant
+- "This account may be impersonating someone else" - Main message
+- "Block Account" - Primary action
+- "Report" - Secondary action
+
+_Educational:_
+
+- "📚 Safety Feature Spotlight" - Header for educational variant
+- "Muting hides messages without notifying the sender" - Main message
+- "Try Muting" - Primary action
+- "Settings" - Secondary action
+
+**Timing Controls:**
+
+- Default display: 15 seconds (unless dismissed)
+- Auto-dismiss options: 5s, 10s, 15s, 30s
+- Persistence: Can remain until manually dismissed
+- Stacking: Maximum 2 banners visible simultaneously
+- Queue: Additional banners wait in priority order
+
+**Content Structure:**
+
+- Header: Clear, concise descriptor of the banner type
+- Message: Specific, actionable guidance (1-2 sentences)
+- Actions: Primary action (bold) and secondary option
+- Dismissal: Always possible with clear X button
+
+**Trust-Building Elements:**
+
+- Consistent, honest language without fear-mongering
+- Actionable advice rather than generic warnings
+- Transparency about why the banner appeared
+- Respecting user autonomy with clear dismissal
+- Connecting to broader safety education resources
 
 ## Visual Design Enhancements
 
