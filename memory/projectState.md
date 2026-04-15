@@ -52,7 +52,10 @@ Last Updated: 2026-04-15
 - current verified PaperClip surfaces after the cutover:
   - `http://127.0.0.1:3100/api/health`
   - `https://paperclip-hq.youandinotai.com/api/health`
-- legacy PaperClip drift under `E:\trollz-sandbox` has been removed except for one old locked path queued for next-logon cleanup
+- legacy PaperClip drift under `E:\trollz-sandbox` has been removed except for a locked `logs` remainder under `E:\trollz-sandbox\paperclip-antigravity`, and the old `paperclip-antigravity-postgres` / `paperclip-sabretooth-postgres` Docker containers plus their paperclip-only volumes were removed
+- stale ANTIGRAVITY cleanup archive content under `C:\Users\joshl\Documents\ANTIGRAVITY-CLEANUP-ARCHIVE-2026-04-02` was removed, and no matching PaperClip / ANTIGRAVITY drift was found in `C:\Users\joshl\Downloads`
+- `E:\OllamaModels\models` remains active via `OLLAMA_MODELS`, so `E:` is not safe for a full wipe until the model store is migrated
+- stale repo-root integration docs/scripts from the temporary mixed-stack setup were removed, and `.gitignore` now excludes node-local PaperClip runtime/source trees so the repo can stay cleaner on Sabretooth
 - local OpenClaw gateway now responds on `http://127.0.0.1:18789/`, but `https://openclaw-gw.youandinotai.com` still fails at the Cloudflare layer with `1033`
 - Cloudflare JavaScript detections still inject an inline challenge script that causes a CSP console error on production pages; this is an edge-level behavior, not a repo-bundle regression
 - Sabretooth currently has no active local `gcloud` auth and no configured project, so direct backend deployment from this session is blocked

@@ -34,17 +34,32 @@ Owner: Codex
 - Removed:
   - `C:\ANTIGRAVITY\paperclip-runtime-test325`
   - `C:\ANTIGRAVITY\paperclip-postgres-data`
+  - `C:\Users\joshl\Documents\ANTIGRAVITY-CLEANUP-ARCHIVE-2026-04-02`
   - `E:\trollz-sandbox\dao-patches`
+  - `E:\trollz-antigravity`
+  - `E:\tmp\openclaw`
   - `E:\opt\paperclip`
+  - `E:\.env`
+  - `E:\.env.txt`
+  - `E:\.mcp.json`
+  - `E:\deploy-antigravity.ps1`
   - `C:\Users\joshl\.cloudflared\paperclip-direct.yml`
   - `C:\Users\joshl\.cloudflared\8051d1ed-75c7-4dda-82eb-933930570526.json`
-- Remaining locked legacy path:
-  - `E:\trollz-sandbox\paperclip-antigravity`
+- Docker cleanup:
+  - removed legacy containers `paperclip-antigravity-postgres` and `paperclip-sabretooth-postgres`
+  - removed legacy volumes `docker_paperclip-data`, `paperclip-antigravity_postgres-data`, and `paperclip-antigravity_ollama-data`
+- Remaining locked legacy remainder:
+  - `E:\trollz-sandbox\paperclip-antigravity\logs`
 - One-time cleanup queued at next logon:
   - `HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce\PaperclipDriftCleanup`
   - runs `C:\ANTIGRAVITY\scripts\cleanup-paperclip-drift.ps1`
+- Downloads scan:
+  - no matching `paperclip` / `antigravity` / `openclaw` / `ollama` drift was found under `C:\Users\joshl\Downloads`
+- Ollama holdout:
+  - `E:\OllamaModels\models` remains the active Ollama model store via `OLLAMA_MODELS`, so `E:` cannot be wiped wholesale until the model store is migrated
 
 ## Notes
 
 - The old `paperclip.youandinotai.com` / `mcp.youandinotai.com` history remains documented, but the new clean browser entrypoint is `paperclip-hq.youandinotai.com`.
 - The active Paperclip runtime is now fully local to `C:\ANTIGRAVITY`; the old `E:` runtime is no longer the source of truth.
+- `.gitignore` now excludes node-local `paperclip-runtime/`, `paperclip-worktrees/`, `paperclip-upstream/`, and `.paperclip/` so the live repo can stay cleaner on Sabretooth.
