@@ -1,0 +1,70 @@
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  # files
+  | alembic/
+)/
+'''
+
+[tool.ruff]
+# Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
+lint.select = [
+  "E",    # pycodestyle errors
+  "W",    # pycodestyle warnings
+  "F",    # pyflakes
+  "I",    # isort
+  "C",    # mccabe
+  "B",    # flake8-bugbear
+  "UP",   # pyupgrade
+  "SIM",  # flake8-simplify
+  "ARG",  # flake8-unused-arguments
+]
+
+lint.extend-ignore = [
+  "E501",  # Line too long
+]
+
+# Allow autofix for all enabled rules (when `--fix` is provided).
+lint.fixable = ["ALL"]
+
+# Exclude a variety of commonly ignored directories.
+extend-exclude = [
+  "__pycache__",
+  "alembic/",
+  ".git",
+  ".mypy_cache",
+  ".pytest_cache",
+  ".venv",
+  ".env",
+  "env",
+  "venv",
+  "build",
+  "dist",
+]
+
+# Same as Black.
+line-length = 88
+
+# Allow unused variables when underscore-prefixed.
+lint.dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.9
+target-version = "py39"
+
+[tool.ruff.lint.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
