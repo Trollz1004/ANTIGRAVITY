@@ -1,5 +1,5 @@
 /**
- * 34-Agent Swarm Registry — public metadata only, zero secrets.
+ * 35-Agent Swarm Registry — public metadata only, zero secrets.
  * Source of truth: AGENTS.md + Command Center TSX.
  */
 
@@ -70,8 +70,9 @@ export const AGENTS: AgentEntry[] = [
   { id: "clawx_grok", name: "ClawX-Grok", role: "Adversarial Testing", status: "active", node: "xAI", color: "#00ccff", group: "ClawX Council" },
   { id: "clawx_ollama", name: "ClawX-Ollama", role: "Local Free Worker", status: "active", node: "Local", color: "#fbbf24", group: "ClawX Council" },
 
-  // DISPATCH / BOTS (2)
+  // DISPATCH / BOTS (3)
   { id: "aisolutionsbot", name: "@AiSolutionsForTheKids", role: "Telegram Dispatch Bot", status: "active", node: "Telegram", color: "#2CA5E0", group: "Dispatch" },
+  { id: "hermesbridge", name: "Hermes / Joshua Claw", role: "Approval Messenger Bridge", status: "active", node: "Sabretooth", color: "#5865F2", group: "Dispatch" },
   { id: "revenuepack", name: "CodeX-Revenue-Pack", role: "Revenue Automation", status: "standby", node: "T5500", color: "#334155", group: "Dispatch" },
 ];
 

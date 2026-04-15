@@ -1,21 +1,40 @@
 /**
  * Social Command Center — Unit Tests
- * 
- * Tests all data modules and server creation.
+ *
+ * Tests data modules, approval workflow, and server creation.
  * Run: node --test dist/test.js
  */
 
-import { describe, it } from "node:test";
+import { after, beforeEach, describe, it } from "node:test";
 import assert from "node:assert/strict";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import path from "node:path";
 
-import { PLATFORMS, getPlatformsByType, getPlatformCount, PLATFORM_TYPES } from "./platforms.js";
-import { AGENTS, AGENT_GROUPS, getAgentsByGroup, getAgentsByStatus, getAgentCount, getActiveAgentCount } from "./agents.js";
-import { createSocialCommandServer } from "./server.js";
+import { PLATFORMS, getPlatformsByType, getPlatformCount } from "./platforms.js";
+import { AGENTS, AGENT_GROUPS, getAgentsByGroup, getAgentCount, getActiveAgentCount } from "./agents.js";
 import { ACCESS_POLICY, getAccessTier, hasPermission } from "./access-policy.js";
+import { addPost, getApprovalQueue, reviewPost } from "./feed.js";
+import { createSocialCommandServer } from "./server.js";
+
+const DATA_DIR = path.join(process.cwd(), "data");
+const FEED_FILE = path.join(DATA_DIR, "feed.json");
+const originalFeedFile = existsSync(FEED_FILE) ? readFileSync(FEED_FILE, "utf-8") : null;
+
+function restoreFeedSnapshot(): void {
+  if (originalFeedFile === null) {
+    rmSync(DATA_DIR, { recursive: true, force: true });
+    return;
+  }
+  writeFileSync(FEED_FILE, originalFeedFile, "utf-8");
+}
+
+after(() => {
+  restoreFeedSnapshot();
+});
 
 describe("Platform Registry", () => {
-  it("should have exactly 24 platforms", () => {
-    assert.equal(getPlatformCount(), 24);
+  it("should have exactly 25 platforms", () => {
+    assert.equal(getPlatformCount(), 25);
   });
 
   it("should have all required fields on every platform", () => {
@@ -59,8 +78,8 @@ describe("Platform Registry", () => {
     assert.equal(getPlatformsByType("llm").length, 6);
   });
 
-  it("should have exactly 2 dispatch platforms", () => {
-    assert.equal(getPlatformsByType("dispatch").length, 2);
+  it("should have exactly 3 dispatch platforms", () => {
+    assert.equal(getPlatformsByType("dispatch").length, 3);
   });
 
   it("should have exactly 4 infra platforms", () => {
@@ -75,10 +94,16 @@ describe("Platform Registry", () => {
   });
 
   it("should have only 2 browser-direct CORS platforms (Facebook + YouTube)", () => {
-    const browserDirect = Object.values(PLATFORMS).filter((p) => p.corsSupport === "browser");
+    const browserDirect = Object.values(PLATFORMS).filter((platform) => platform.corsSupport === "browser");
     assert.equal(browserDirect.length, 2);
-    const ids = browserDirect.map((p) => p.id).sort();
+    const ids = browserDirect.map((platform) => platform.id).sort();
     assert.deepEqual(ids, ["facebook", "youtube"]);
+  });
+
+  it("should have discord as a dispatch approval platform", () => {
+    assert.equal(PLATFORMS.discord.type, "dispatch");
+    assert.equal(PLATFORMS.discord.corsSupport, "backend-proxy");
+    assert.ok(PLATFORMS.discord.notes.includes("approval"));
   });
 
   it("should have unique platform IDs", () => {
@@ -89,13 +114,13 @@ describe("Platform Registry", () => {
 });
 
 describe("Agent Swarm", () => {
-  it("should have exactly 34 agents", () => {
-    assert.equal(getAgentCount(), 34);
+  it("should have exactly 35 agents", () => {
+    assert.equal(getAgentCount(), 35);
   });
 
   it("should have all required fields on every agent", () => {
     for (const agent of AGENTS) {
-      assert.ok(agent.id, `Agent missing id`);
+      assert.ok(agent.id, "Agent missing id");
       assert.ok(agent.name, `${agent.id} missing name`);
       assert.ok(agent.role, `${agent.id} missing role`);
       assert.ok(agent.status, `${agent.id} missing status`);
@@ -119,9 +144,9 @@ describe("Agent Swarm", () => {
   });
 
   it("should have unique agent IDs", () => {
-    const ids = AGENTS.map((a) => a.id);
+    const ids = AGENTS.map((agent) => agent.id);
     const uniqueIds = new Set(ids);
-    assert.equal(ids.length, uniqueIds.size, `Duplicate agent IDs found`);
+    assert.equal(ids.length, uniqueIds.size, "Duplicate agent IDs found");
   });
 
   it("should have 8 agent groups", () => {
@@ -156,8 +181,8 @@ describe("Agent Swarm", () => {
     assert.equal(getAgentsByGroup("ClawX Council").length, 7);
   });
 
-  it("should have 2 Dispatch agents", () => {
-    assert.equal(getAgentsByGroup("Dispatch").length, 2);
+  it("should have 3 Dispatch agents", () => {
+    assert.equal(getAgentsByGroup("Dispatch").length, 3);
   });
 
   it("should have active agents count <= total", () => {
@@ -166,13 +191,20 @@ describe("Agent Swarm", () => {
   });
 
   it("should have JoshuaClaw as founder with permanent vote", () => {
-    const josh = AGENTS.find((a) => a.id === "joshuaclaw");
+    const josh = AGENTS.find((agent) => agent.id === "joshuaclaw");
     assert.ok(josh);
     assert.equal(josh.name, "JoshuaClaw");
     assert.ok(josh.role.includes("Founder"));
     assert.ok(josh.role.includes("Permanent Vote"));
     assert.equal(josh.node, "Human");
     assert.equal(josh.group, "ClawX Council");
+  });
+
+  it("should include Hermes as the approval messenger bridge", () => {
+    const hermes = AGENTS.find((agent) => agent.id === "hermesbridge");
+    assert.ok(hermes);
+    assert.equal(hermes?.group, "Dispatch");
+    assert.ok(hermes?.role.includes("Approval"));
   });
 
   it("should have valid hex colors", () => {
@@ -191,7 +223,6 @@ describe("MCP Server Creation", () => {
 
   it("should have correct server name", () => {
     const server = createSocialCommandServer();
-    // Server should be created successfully — name is set internally
     assert.ok(server);
   });
 });
@@ -199,7 +230,6 @@ describe("MCP Server Creation", () => {
 describe("Iron Wall Compliance", () => {
   it("should NOT contain any secrets or API keys in platform data", () => {
     const json = JSON.stringify(PLATFORMS);
-    // Check for common secret patterns
     assert.ok(!json.includes("sk-"), "Found potential secret key prefix 'sk-'");
     assert.ok(!json.includes("APIKEY"), "Found 'APIKEY' in platform data");
     assert.ok(!json.includes("SECRET"), "Found 'SECRET' in platform data");
@@ -210,7 +240,6 @@ describe("Iron Wall Compliance", () => {
 
   it("should NOT contain any secrets in agent data", () => {
     const json = JSON.stringify(AGENTS);
-    // Check for actual API key patterns (prefix + hex/alphanumeric), not English words like "Task-Sentry"
     assert.ok(!/sk-[a-zA-Z0-9]{20,}/.test(json), "Found potential secret key in agent data");
     assert.ok(!/APIKEY\s*[:=]/.test(json), "Found 'APIKEY' assignment in agent data");
     assert.ok(!/SECRET\s*[:=]/.test(json), "Found 'SECRET' assignment in agent data");
@@ -294,23 +323,157 @@ describe("Threshold of Trust — Access Policy", () => {
     assert.ok(hasPermission("JoshuaClaw", "delete"));
   });
 
+  it("should grant Joshua Claw founder permissions under the spaced name too", () => {
+    assert.ok(hasPermission("Joshua Claw", "read"));
+    assert.ok(hasPermission("Joshua Claw", "post"));
+  });
+
   it("should deny third parties write/post/orchestrate", () => {
     assert.ok(!hasPermission("RandomBot", "write"));
     assert.ok(!hasPermission("RandomBot", "post"));
     assert.ok(!hasPermission("RandomBot", "orchestrate"));
     assert.ok(!hasPermission("RandomBot", "deploy"));
     assert.ok(!hasPermission("RandomBot", "delete"));
-    // But can read
     assert.ok(hasPermission("RandomBot", "read"));
   });
 
   it("should have hard rules that block third-party access to ANTIGRAVITY", () => {
     const rules = ACCESS_POLICY.hard_rules;
-    assert.ok(rules.some((r) => r.includes("No third-party AI may post")));
-    assert.ok(rules.some((r) => r.includes("No third-party AI may orchestrate")));
-    assert.ok(rules.some((r) => r.includes("No third-party AI may modify ANTIGRAVITY")));
-    assert.ok(rules.some((r) => r.includes("No third-party AI may access secrets")));
-    assert.ok(rules.some((r) => r.includes("E: drive sandbox repos get read-only")));
+    assert.ok(rules.some((rule) => rule.includes("No third-party AI may post")));
+    assert.ok(rules.some((rule) => rule.includes("No third-party AI may orchestrate")));
+    assert.ok(rules.some((rule) => rule.includes("No third-party AI may modify ANTIGRAVITY")));
+    assert.ok(rules.some((rule) => rule.includes("No third-party AI may access secrets")));
+    assert.ok(rules.some((rule) => rule.includes("E: drive sandbox repos get read-only")));
   });
 });
 
+describe("Approval Workflow", () => {
+  beforeEach(() => {
+    restoreFeedSnapshot();
+  });
+
+  it("should add a pending Discord approval item with Joshua Claw defaults", () => {
+    const post = addPost({
+      platform: "discord",
+      llm: "gemini",
+      agent: "Hermes / Joshua Claw",
+      title: "Approval packet for Discord review",
+      reach: 0,
+      likes: 0,
+      comments: 0,
+      shares: 0,
+      status: "Draft",
+      deployed: "—",
+      tags: ["#approval"],
+      approvalStatus: "Pending",
+      approvalChannel: "discord",
+      approvalRequestedBy: "Joshua Claw",
+      approver: "",
+      reviewPriority: "high",
+      reviewNotes: "",
+      approvalRequestedAt: "2026-04-15T00:00:00Z",
+      approvalReviewedAt: "",
+    });
+
+    assert.equal(post.approvalStatus, "Pending");
+    assert.equal(post.approvalChannel, "discord");
+    assert.equal(post.approvalRequestedBy, "Joshua Claw");
+  });
+
+  it("should return pending and needs-edit items in the approval queue", () => {
+    const post = addPost({
+      platform: "discord",
+      llm: "perplexity",
+      agent: "Hermes / Joshua Claw",
+      title: "Review me in Discord",
+      reach: 0,
+      likes: 0,
+      comments: 0,
+      shares: 0,
+      status: "Draft",
+      deployed: "—",
+      tags: ["#review"],
+      approvalStatus: "Pending",
+      approvalChannel: "discord",
+      approvalRequestedBy: "Joshua Claw",
+      approver: "",
+      reviewPriority: "normal",
+      reviewNotes: "",
+      approvalRequestedAt: "2026-04-15T00:05:00Z",
+      approvalReviewedAt: "",
+    });
+
+    const queue = getApprovalQueue("discord");
+    assert.ok(queue.some((entry) => entry.id === post.id));
+  });
+
+  it("should move approved draft posts to queued status", () => {
+    const post = addPost({
+      platform: "telegram",
+      llm: "opus",
+      agent: "Hermes / Joshua Claw",
+      title: "Approval to queue",
+      reach: 0,
+      likes: 0,
+      comments: 0,
+      shares: 0,
+      status: "Draft",
+      deployed: "—",
+      tags: ["#queue"],
+      approvalStatus: "Pending",
+      approvalChannel: "discord",
+      approvalRequestedBy: "Joshua Claw",
+      approver: "",
+      reviewPriority: "normal",
+      reviewNotes: "",
+      approvalRequestedAt: "2026-04-15T00:10:00Z",
+      approvalReviewedAt: "",
+    });
+
+    const reviewed = reviewPost(post.id, "Approved", {
+      approver: "JoshuaClaw",
+      reviewNotes: "Ship it",
+      approvalChannel: "discord",
+    });
+
+    assert.ok(reviewed);
+    assert.equal(reviewed?.approvalStatus, "Approved");
+    assert.equal(reviewed?.status, "Queued");
+    assert.equal(reviewed?.approver, "JoshuaClaw");
+  });
+
+  it("should keep needs-edit posts in draft and visible in the queue", () => {
+    const post = addPost({
+      platform: "whatsapp",
+      llm: "grok",
+      agent: "Hermes / Joshua Claw",
+      title: "Needs revision",
+      reach: 0,
+      likes: 0,
+      comments: 0,
+      shares: 0,
+      status: "Draft",
+      deployed: "—",
+      tags: ["#edit"],
+      approvalStatus: "Pending",
+      approvalChannel: "discord",
+      approvalRequestedBy: "Joshua Claw",
+      approver: "",
+      reviewPriority: "normal",
+      reviewNotes: "",
+      approvalRequestedAt: "2026-04-15T00:15:00Z",
+      approvalReviewedAt: "",
+    });
+
+    const reviewed = reviewPost(post.id, "Needs Edit", {
+      approver: "JoshuaClaw",
+      reviewNotes: "Tighten the copy",
+      approvalChannel: "discord",
+    });
+
+    assert.ok(reviewed);
+    assert.equal(reviewed?.approvalStatus, "Needs Edit");
+    assert.equal(reviewed?.status, "Draft");
+    assert.ok(getApprovalQueue("discord").some((entry) => entry.id === post.id));
+  });
+});

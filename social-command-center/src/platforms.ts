@@ -1,5 +1,5 @@
 /**
- * 24-API Platform Registry — public metadata only, zero secrets.
+ * 25-API Platform Registry — public metadata only, zero secrets.
  * Source of truth: MASTER.env platform list + CORS research.
  */
 
@@ -242,6 +242,17 @@ export const PLATFORMS: Record<string, PlatformEntry> = {
     api: "WhatsApp Business API",
     corsSupport: "backend-proxy",
     notes: "WhatsApp Business API via Meta Graph.",
+  },
+  discord: {
+    id: "discord",
+    label: "Discord",
+    icon: "◉",
+    color: "#5865F2",
+    type: "dispatch",
+    claw: "JoshuaClaw",
+    api: "Discord Bot API / Webhooks",
+    corsSupport: "backend-proxy",
+    notes: "Primary approval inbox for Joshua Claw and Hermes review packets. Use for approval messaging, not autonomous social posting.",
   },
 
   // ── INFRA ─────────────────────────────────────────────────

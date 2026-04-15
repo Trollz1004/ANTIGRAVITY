@@ -1,0 +1,14 @@
+API CONTAINER ISSUE
+
+The uandinotai-app container is continuously restarting because it cannot import the ASGI app module.
+
+Error message: 'Error loading ASGI app. Could not import module app.main'
+
+This is blocking the backend service and needs to be fixed urgently.
+
+The issue appears to be related to the directory structure changes made during the repository reorganization. The Dockerfile copies the app directory to /app/app but the CMD is trying to run app.main:app which may not be correctly referencing the module path.
+
+Files to check:
+- backend/fastapi-app/Dockerfile
+- backend/fastapi-app/app/main.py
+- backend/fastapi-app/docker-compose.yml

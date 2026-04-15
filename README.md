@@ -4,32 +4,33 @@ Public monorepo for the YouAndINotAI platform and related web properties operate
 
 ## Ecosystem projects
 
-| Project | Visibility | Surface | Purpose |
-| ------- | ---------- | ------- | ------- |
-| [YouAndINotAI](https://youandinotai.com/) | Public | Live product | Human-focused social platform with verification, moderation, and subscription flows. |
-| [OnlineRecycle](https://onlinerecycle.org/) | Public | Live product | Central Florida electronics recycling, secure device intake, pickup, drop-off, and resale. |
-| [AI-Solutions Store](https://ai-solutions.store/) | Public | Live product | Separate storefront for digital products and automation offers. |
-| [Antigravity Dashboard](https://dashboard.aidoesitall.website/) | Public | Live auth gateway | Cloudflare-hosted entry page that routes trusted users into the authenticated PaperClip workspace. |
-| [AIDoesItAll.website](https://www.aidoesitall.website/) | Public | Live gateway surface | Safe public handoff surface that routes trusted users to the authenticated workspace and points public visitors to the active product sites. |
-| [ClawX](https://clawx-aihub-zwxfcstm.manus.space/) | Public | Live external dashboard | Separate multi-AI governance and coordination surface hosted outside this monorepo. |
-| Command Center | Private | Separate private repo | Private admin dashboard for approvals, media workflow, and internal operator views. |
-| Social Command Center | Internal | MCP/dashboard utility | Read-only internal dashboard for platform and agent visibility. |
+| Project                                                         | Visibility | Surface                 | Purpose                                                                                                                                      |
+| --------------------------------------------------------------- | ---------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| [YouAndINotAI](https://youandinotai.com/)                       | Public     | Live product            | Human-focused social platform with verification, moderation, and subscription flows.                                                         |
+| [OnlineRecycle](https://onlinerecycle.org/)                     | Public     | Live product            | Central Florida electronics recycling, secure device intake, pickup, drop-off, and resale.                                                   |
+| [AI-Solutions Store](https://ai-solutions.store/)               | Public     | Live product            | Separate storefront for digital products and automation offers.                                                                              |
+| [Antigravity Dashboard](https://dashboard.aidoesitall.website/) | Public     | Live auth gateway       | Cloudflare-hosted entry page that routes trusted users into the authenticated PaperClip workspace.                                           |
+| [AIDoesItAll.website](https://www.aidoesitall.website/)         | Public     | Live gateway surface    | Safe public handoff surface that routes trusted users to the authenticated workspace and points public visitors to the active product sites. |
+| [ClawX](https://clawx-aihub-zwxfcstm.manus.space/)              | Public     | Live external dashboard | Separate multi-AI governance and coordination surface hosted outside this monorepo.                                                          |
+| Command Center                                                  | Private    | Separate private repo   | Private admin dashboard for approvals, media workflow, and internal operator views.                                                          |
+| Social Command Center                                           | Internal   | MCP/dashboard utility   | Read-only internal dashboard for platform and agent visibility.                                                                              |
 
-## What this public README covers
+## Repository Structure
 
-- high-level product and stack context
-- local development entry points
-- the major product and dashboard surfaces tied to this repo
-- the names of related private or internal surfaces at a high level
-
-## What it intentionally does not cover
-
-- private operational playbooks
-- internal node topology
-- credential handling
-- unpublished reporting or recovery procedures
-- provider-specific orchestration doctrine
-- private repo internals beyond simple project identification
+```
+ANTIGRAVITY/
+├── backend/                  # Backend services
+│   └── fastapi-app/          # YouAndINotAI FastAPI service
+├── frontend/                 # Frontend applications
+│   └── react-app/            # YouAndINotAI React frontend
+├── infra/                    # Infrastructure as Code
+├── scripts/                  # Automation scripts
+├── docs/                     # Documentation
+├── briefings/                # Operational briefings
+├── memory/                   # Design and operational memory
+├── research/                 # User research and evaluation
+└── projects/                 # Project-specific documentation
+```
 
 ## Stack
 
@@ -39,15 +40,46 @@ Public monorepo for the YouAndINotAI platform and related web properties operate
 - Hosting: Cloudflare Pages and Google Cloud Run
 - Operations: Windows-based multi-node build and support workflow
 
-## Local development
+## Local Development Setup
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- Python (v3.9 or higher)
+- Docker (for infrastructure services)
+- Git
+
+### Backend Setup
 
 ```powershell
-Set-Location C:\ANTIGRAVITY
-npm install
+cd backend/fastapi-app
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python run.py
 ```
 
-Project-specific apps keep their own dependency and run instructions in their local folders.
+### Frontend Setup
 
-## Public note
+```powershell
+cd frontend/react-app
+npm install
+npm run dev
+```
+
+## Environment Configuration
+
+Each component requires specific environment variables. Refer to the respective `.env.example` files in each directory.
+
+## Documentation
+
+Comprehensive documentation is available in the `docs/` directory:
+
+- `docs/architecture.md` - System architecture
+- `docs/api.md` - API endpoints and contracts
+- `docs/workflows.md` - Core business workflows
+- `docs/contributing.md` - Contribution guidelines
+
+## Public Note
 
 This repository intentionally keeps customer-facing product details separate from internal operational material. Public product claims should live on controlled web surfaces, not in repo doctrine.
