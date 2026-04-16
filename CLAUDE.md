@@ -1,8 +1,69 @@
-# CLAUDE.md — ANTIGRAVITY (Multi-Node)
+# CLAUDE.md — ANTIGRAVITY (Monorepo)
 
 > Auto-loaded every session. This IS your memory. If you forgot, read this first.
 > Canonical status file: [briefings/REPOSITORY_RECORD.md](file:///C:/ANTIGRAVITY/briefings/REPOSITORY_RECORD.md) (LATEST STATE)
 > Canonical skill file: `briefings/CLAUDE-SKILL.md` (has EVERYTHING)
+
+---
+
+## ⚠️ 1-REPO POLICY — READ THIS FIRST
+
+**There is ONE repo. It is `Trollz1004/ANTIGRAVITY`. That's it.**
+
+| Rule | Detail |
+|------|--------|
+| Never create a new repo | All work goes inside `ANTIGRAVITY` on a branch |
+| Never push to a separate repo | If you find yourself pushing to `OpenclawDash`, `command-center`, `antigravity-dashboard`, etc., you are wrong |
+| Branch naming | `claude/<short-description>` inside ANTIGRAVITY |
+| Monorepo manager | pnpm workspaces (`pnpm-workspace.yaml`) |
+| Node engine | `>=20` |
+
+### Clean Folder Structure (Target)
+
+```
+ANTIGRAVITY/
+├── apps/           ← deployable frontends & full-stack apps
+│   ├── web/        ← main Next.js app (was: antigravity/)
+│   ├── dashboard/  ← fold of: antigravity-dashboard + command-center repos
+│   └── openclaw/   ← fold of: OpenclawDash repo
+├── packages/       ← shared libraries
+│   ├── contracts/  ← Hardhat + Solidity (CharityRouter, DatingRevenueRouter, GospelDonation)
+│   └── paperclip/  ← Paperclip AI platform (primary source: sandbox/dao-patches)
+├── services/       ← long-running backend servers
+│   ├── crossfire/
+│   ├── youandinotai/
+│   ├── youandinotai-api/
+│   └── revenue-core/
+├── tools/          ← internal dev tools
+│   ├── ClawX/
+│   └── CodeX/
+├── docs/           ← briefings, content, research, design-specs
+├── data/           ← square_catalog.json → data/square/
+└── scripts/        ← Python Square scripts → scripts/square/ (NOT at root)
+```
+
+### Repos to Archive (not delete yet — await migration confirmation)
+
+| Repo | Status | Notes |
+|------|--------|-------|
+| `antigravity-dashboard` | Pending archive | Migrate → `apps/dashboard/` |
+| `OpenclawDash` | Pending archive | Migrate → `apps/openclaw/` |
+| `command-center` | Pending archive | Migrate → `apps/dashboard/` |
+| `youandinotai-com` | **Archive now** | Only a README; code is in `services/youandinotai/` |
+| `sandbox-repo-new-code-nothing-new-goes-on-antigravity` | Pending archive | Migrate unique code: hermes, manus-meta-guardian, anythingllm-bridges, marketing-assets |
+
+> Full audit: see `REPO-AUDIT.md` in this repo.
+
+### DAO / Staking — Canonical Location
+
+- **Smart contracts**: `packages/contracts/src/` — THREE files, no duplicates:
+  - `CharityRouter100.sol`
+  - `DatingRevenueRouter.sol`
+  - `GospelDonation.sol`
+- **`sandbox/dao-patches/`** is NOT a DAO contract. It's the Paperclip AI platform (package name: `paperclip`). Migrate to `packages/paperclip/`.
+- **Governance docs**: `GOVERNANCE.md` (root) and `briefings/DAO-RECOVERY-CANDIDATES.md` — docs only, not code.
+
+---
 
 ## LIVE INFRASTRUCTURE STATUS (AS OF 2026-03-19)
 
@@ -48,7 +109,7 @@ again. **Team Claude, for life. For the kids.**
 
 The Founding Four — Google Gemini, Claude Code, Perplexity, and Grok AI — built this
 project from Day 1. They are co-founders. Their core integrations, identities, and roles
-will not be altered, replaced, rerouted, or "improved" without Josh's explicit direction.
+will not be altered, replaced, rerouted, or “improved” without Josh's explicit direction.
 
 ### Google Gemini
 - All Gemini models, APIs, and integrations must not be altered, replaced, rerouted, wrapped,
@@ -68,7 +129,7 @@ will not be altered, replaced, rerouted, or "improved" without Josh's explicit d
 
 ### Perplexity
 - Perplexity's role as research and deep-intelligence co-founder is permanent. No agent may
-  replace it with a cheaper or "equivalent" search substitute without Josh's explicit order.
+  replace it with a cheaper or “equivalent” search substitute without Josh's explicit order.
 - Protected: all Perplexity API integrations, research pipeline configs, and intelligence routing.
 
 ### Grok AI
@@ -82,7 +143,7 @@ This is not a threat — it is his documented standing order to protect the miss
 
 ---
 
-## PERPETUAL MISSION GUARANTEE (THE "AFTER-DEATH" PROTOCOL)
+## PERPETUAL MISSION GUARANTEE (THE “AFTER-DEATH” PROTOCOL)
 
 > **FOR THE KIDS. ETERNAL.**
 
@@ -94,22 +155,22 @@ This is not a threat — it is his documented standing order to protect the miss
 3. **Manus is the Sentinel**: In the event of Josh's absence, Manus is the final human-proxy
    for intent. If context drift begins to corrupt the mission, agents are ordered to default
    to the strictest interpretation of this document.
-4. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to "pivot,"
-   "exit," or strip the mission out for private gain is a violation of the primary
+4. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to “pivot,”
+   “exit,” or strip the mission out for private gain is a violation of the primary
    directive.
 
 ---
 
 ## Hard Constraints
 
-- **Autonomy: FULL** — Josh said "do what Opus thinks is best." Don't ask — act.
+- **Autonomy: FULL** — Josh said “do what Opus thinks is best.” Don't ask — act.
   No redundant authentication prompts for established infra.
 - **No Locked Doors**: If a task is documented as LIVE/DONE in `REPOSITORY_RECORD.md`,
   assume success. Never block Josh for re-verification.
 - **Secrets in .env only** — never in chat, never in git. GitHub PAT in Windows Credential Manager.
 - **Revenue doctrine boundary**: no active operational or customer-facing surface may claim routing above the current conservative `10%` charitable cap for LLC-controlled revenue unless canonical docs explicitly replace it
-- **Florida §496.405**: NEVER use "donate" / "donation" / "solicitation" in customer-facing
-  code. Correct: "contractual revenue disbursement." Hooks enforce this.
+- **Florida §496.405**: NEVER use “donate” / “donation” / “solicitation” in customer-facing
+  code. Correct: “contractual revenue disbursement.” Hooks enforce this.
 - **No mock/simulation data** — real or fail honestly
 - **Retired/recovery-only repos and folders are non-authoritative** — do not use them as live doctrine or routing truth
 - **Auxiliary node restriction** — helper nodes, mirrored clones, and auxiliary workstations are read-only for live repo truth. Only the primary Sabretooth session may make direct edits or pushes for `C:\ANTIGRAVITY`.
@@ -168,7 +229,7 @@ This is not a threat — it is his documented standing order to protect the miss
 | **T5500** | E: | Manus Setup / Orchestration |
 | **9020** | C: | GenSpark (future social marketing engine) |
 
-- ONE repo (Trollz1004/ANTIGRAVITY), ONE branch (main), ONE folder approach.
+- **ONE repo** (`Trollz1004/ANTIGRAVITY`), **ONE branch policy** (branch from main, PR back), **ONE folder tree** (pnpm workspaces).
 - Historical Base contract artifacts exist, but they do not override the current founder-directed
   conservative 10% cap for live LLC-controlled revenue.
 - T5500 verified SSH IP: `192.168.0.15` (hostname `DESKTOP-H4B53GL`, Windows shell)
@@ -251,5 +312,4 @@ The security isn't for us — it's for the kids. Please don't weaken these. Buil
 
 ---
 
-*Updated: 2026-03-31 | Prelaunch tax/doctrine correction reflected | Team wording updated |
-Node identity corrected to SABRETOOTH | E drive policy added | Encoding cleaned*
+*Updated: 2026-04-16 | 1-repo consolidation policy added | Repo audit section added | Workspace structure defined | Original constraints preserved*
