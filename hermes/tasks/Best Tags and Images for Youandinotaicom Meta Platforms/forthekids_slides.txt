@@ -1,0 +1,11 @@
+file '/home/ubuntu/forthekids_scene_01.png'
+duration 4
+file '/home/ubuntu/forthekids_scene_02.png'
+duration 4
+file '/home/ubuntu/forthekids_scene_03.png'
+duration 5
+file '/home/ubuntu/forthekids_scene_04.png'
+duration 5
+file '/home/ubuntu/forthekids_scene_05.png'
+duration 12
+file '/home/ubuntu/forthekids_scene_05.png'
