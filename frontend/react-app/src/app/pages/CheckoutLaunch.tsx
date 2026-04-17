@@ -30,13 +30,18 @@ export function CheckoutLaunch() {
       }
 
       try {
-        const response = await api.post<CheckoutResponse>('/billing/checkout-link', { tier });
+        const response = await api.post<CheckoutResponse>(
+          '/billing/checkout-link',
+          { tier }
+        );
         if (!cancelled) {
           window.location.href = response.checkout_url;
         }
       } catch (err: any) {
         if (!cancelled) {
-          setError(err.message || 'Secure Square checkout is temporarily unavailable.');
+          setError(
+            err.message || 'Secure Square checkout is temporarily unavailable.'
+          );
         }
       }
     };
@@ -58,9 +63,13 @@ export function CheckoutLaunch() {
             <LoaderCircle className="h-8 w-8 animate-spin" />
           </div>
 
-          <h1 className="app-title mx-auto max-w-2xl">{label.toLowerCase()} checkout.</h1>
+          <h1 className="app-title mx-auto max-w-2xl">
+            {label.toLowerCase()} checkout.
+          </h1>
           <p className="app-subtitle mx-auto mt-4 max-w-2xl">
-            Preparing the account-bound Square session so the payment stays linked to your actual platform account instead of a generic public link.
+            Preparing the account-bound Square session so the payment stays
+            linked to your actual platform account instead of a generic public
+            link.
           </p>
 
           {error ? (
@@ -74,7 +83,10 @@ export function CheckoutLaunch() {
           )}
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Link to="/app/profile" className="app-button-outline px-5 py-3 no-underline">
+            <Link
+              to="/app/profile"
+              className="app-button-outline px-5 py-3 no-underline"
+            >
               Back to profile <ArrowRight size={16} />
             </Link>
           </div>

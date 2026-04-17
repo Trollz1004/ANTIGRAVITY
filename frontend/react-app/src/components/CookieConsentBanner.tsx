@@ -21,11 +21,18 @@ export function CookieConsentBanner() {
     return null;
   }
 
-  const persist = (nextEssential: boolean, nextPreferences: boolean, nextPerformance: boolean) => {
+  const persist = (
+    nextEssential: boolean,
+    nextPreferences: boolean,
+    nextPerformance: boolean
+  ) => {
     if (!nextEssential) {
       return;
     }
-    saveCookieConsent({ preferences: nextPreferences, performance: nextPerformance });
+    saveCookieConsent({
+      preferences: nextPreferences,
+      performance: nextPerformance,
+    });
     setDismissed(true);
   };
 
@@ -39,7 +46,8 @@ export function CookieConsentBanner() {
           <div className="flex-1">
             <h2 className="text-sm font-bold text-white">Cookie controls</h2>
             <p className="mt-1 text-sm text-gray-400">
-              We do not sell data or run ad trackers. Use these three boxes to decide what stays on your device.
+              We do not sell data or run ad trackers. Use these three boxes to
+              decide what stays on your device.
             </p>
 
             <div className="mt-4 space-y-3">
@@ -47,12 +55,17 @@ export function CookieConsentBanner() {
                 <input
                   type="checkbox"
                   checked={essential}
-                  onChange={(e) => setEssential(e.target.checked)}
+                  onChange={e => setEssential(e.target.checked)}
                   className="mt-1 h-4 w-4 accent-pink-500"
                 />
                 <span>
-                  <span className="block text-sm font-semibold text-white">Strictly necessary cookies</span>
-                  <span className="block text-xs text-gray-400">Required for sign-in, safety checks, and session security. You must tick this box yourself.</span>
+                  <span className="block text-sm font-semibold text-white">
+                    Strictly necessary cookies
+                  </span>
+                  <span className="block text-xs text-gray-400">
+                    Required for sign-in, safety checks, and session security.
+                    You must tick this box yourself.
+                  </span>
                 </span>
               </label>
 
@@ -60,12 +73,16 @@ export function CookieConsentBanner() {
                 <input
                   type="checkbox"
                   checked={preferences}
-                  onChange={(e) => setPreferences(e.target.checked)}
+                  onChange={e => setPreferences(e.target.checked)}
                   className="mt-1 h-4 w-4 accent-pink-500"
                 />
                 <span>
-                  <span className="block text-sm font-semibold text-white">Preference cookies</span>
-                  <span className="block text-xs text-gray-400">Remember UI choices like theme or layout on this device.</span>
+                  <span className="block text-sm font-semibold text-white">
+                    Preference cookies
+                  </span>
+                  <span className="block text-xs text-gray-400">
+                    Remember UI choices like theme or layout on this device.
+                  </span>
                 </span>
               </label>
 
@@ -73,12 +90,17 @@ export function CookieConsentBanner() {
                 <input
                   type="checkbox"
                   checked={performance}
-                  onChange={(e) => setPerformance(e.target.checked)}
+                  onChange={e => setPerformance(e.target.checked)}
                   className="mt-1 h-4 w-4 accent-pink-500"
                 />
                 <span>
-                  <span className="block text-sm font-semibold text-white">Performance cookies</span>
-                  <span className="block text-xs text-gray-400">Optional diagnostics only. No ad networks, no resale, no third-party profiling.</span>
+                  <span className="block text-sm font-semibold text-white">
+                    Performance cookies
+                  </span>
+                  <span className="block text-xs text-gray-400">
+                    Optional diagnostics only. No ad networks, no resale, no
+                    third-party profiling.
+                  </span>
                 </span>
               </label>
             </div>

@@ -1,44 +1,44 @@
-import { useState } from "react";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { trpc } from "@/lib/trpc";
-import { getLoginUrl } from "@/const";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
-import { Eye, EyeOff, Key, Trash2, CheckCircle2, XCircle, Lock, ShieldCheck } from "lucide-react";
-import { PROVIDER_CONFIGS } from "../../../shared/ai-providers";
-import type { AiProviderSlug } from "../../../shared/ai-providers";
+import { useState } from 'react';
+import { useAuth } from '@/_core/hooks/useAuth';
+import { trpc } from '@/lib/trpc';
+import { getLoginUrl } from '@/const';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { toast } from 'sonner';
+import { Eye, EyeOff, Key, Trash2, CheckCircle2, XCircle, Lock, ShieldCheck } from 'lucide-react';
+import { PROVIDER_CONFIGS } from '../../../shared/ai-providers';
+import type { AiProviderSlug } from '../../../shared/ai-providers';
 
-const PROVIDERS_WITH_KEYS: AiProviderSlug[] = ["claude", "gemini", "perplexity", "grok", "codex"];
+const PROVIDERS_WITH_KEYS: AiProviderSlug[] = ['claude', 'gemini', 'perplexity', 'grok', 'codex'];
 
 const PROVIDER_KEY_LABELS: Record<AiProviderSlug, { placeholder: string; docsUrl: string; envVar: string }> = {
-  manus: { placeholder: "Built-in — no key required", docsUrl: "", envVar: "" },
+  manus: { placeholder: 'Built-in — no key required', docsUrl: '', envVar: '' },
   claude: {
-    placeholder: "Anthropic API key",
-    docsUrl: "https://console.anthropic.com/settings/keys",
-    envVar: "ANTHROPIC_API_KEY",
+    placeholder: 'Anthropic API key',
+    docsUrl: 'https://console.anthropic.com/settings/keys',
+    envVar: 'ANTHROPIC_API_KEY',
   },
   gemini: {
-    placeholder: "AIza...",
-    docsUrl: "https://aistudio.google.com/app/apikey",
-    envVar: "GEMINI_API_KEY",
+    placeholder: 'AIza...',
+    docsUrl: 'https://aistudio.google.com/app/apikey',
+    envVar: 'GEMINI_API_KEY',
   },
   perplexity: {
-    placeholder: "pplx-...",
-    docsUrl: "https://www.perplexity.ai/settings/api",
-    envVar: "SONAR_API_KEY",
+    placeholder: 'pplx-...',
+    docsUrl: 'https://www.perplexity.ai/settings/api',
+    envVar: 'SONAR_API_KEY',
   },
   grok: {
-    placeholder: "xai-...",
-    docsUrl: "https://console.x.ai/",
-    envVar: "XAI_API_KEY",
+    placeholder: 'xai-...',
+    docsUrl: 'https://console.x.ai/',
+    envVar: 'XAI_API_KEY',
   },
   codex: {
-    placeholder: "sk-...",
-    docsUrl: "https://platform.openai.com/api-keys",
-    envVar: "OPENAI_API_KEY",
+    placeholder: 'sk-...',
+    docsUrl: 'https://platform.openai.com/api-keys',
+    envVar: 'OPENAI_API_KEY',
   },
 };
 
@@ -56,7 +56,7 @@ export default function Settings() {
   const saveMutation = trpc.apiKeys.save.useMutation({
     onSuccess: (_, vars) => {
       toast.success(`${PROVIDER_CONFIGS[vars.providerSlug]?.name} key saved securely`);
-      setInputValues((prev) => ({ ...prev, [vars.providerSlug]: "" }));
+      setInputValues((prev) => ({ ...prev, [vars.providerSlug]: '' }));
       setSaving((prev) => ({ ...prev, [vars.providerSlug]: false }));
       refetchKeys();
     },
@@ -80,7 +80,7 @@ export default function Settings() {
   const handleSave = async (slug: AiProviderSlug) => {
     const key = inputValues[slug]?.trim();
     if (!key || key.length < 8) {
-      toast.error("API key must be at least 8 characters");
+      toast.error('API key must be at least 8 characters');
       return;
     }
     setSaving((prev) => ({ ...prev, [slug]: true }));
@@ -128,7 +128,9 @@ export default function Settings() {
             <div className="text-sm">
               <p className="font-medium text-primary">End-to-end encrypted storage</p>
               <p className="text-muted-foreground mt-1">
-                Your keys are encrypted with AES-256-GCM before being stored in the database. Only you can use them — they are injected server-side into API calls and never exposed to the frontend or logs. Signed in as <span className="font-medium text-foreground">{user?.name ?? user?.email}</span>.
+                Your keys are encrypted with AES-256-GCM before being stored in the database. Only you can use them —
+                they are injected server-side into API calls and never exposed to the frontend or logs. Signed in as{' '}
+                <span className="font-medium text-foreground">{user?.name ?? user?.email}</span>.
               </p>
             </div>
           </div>
@@ -142,17 +144,17 @@ export default function Settings() {
         const status = providerStatusMap.get(slug);
         const keyInfo = PROVIDER_KEY_LABELS[slug];
         const hasKey = !!meta?.isActive;
-        const isReady = status?.status === "ready";
+        const isReady = status?.status === 'ready';
         const keySource = status?.keySource;
 
         return (
-          <Card key={slug} className={hasKey || isReady ? "border-green-500/30" : "border-border"}>
+          <Card key={slug} className={hasKey || isReady ? 'border-green-500/30' : 'border-border'}>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div
                     className="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold"
-                    style={{ backgroundColor: config?.color + "20", color: config?.color }}
+                    style={{ backgroundColor: config?.color + '20', color: config?.color }}
                   >
                     {config?.name?.charAt(0)}
                   </div>
@@ -165,7 +167,7 @@ export default function Settings() {
                   {isReady ? (
                     <Badge className="bg-green-500/20 text-green-400 border-green-500/30 gap-1">
                       <CheckCircle2 className="h-3 w-3" />
-                      {keySource === "user" ? `User Key (...${meta?.keyHint})` : "Env Key"}
+                      {keySource === 'user' ? `User Key (...${meta?.keyHint})` : 'Env Key'}
                     </Badge>
                   ) : (
                     <Badge variant="outline" className="text-muted-foreground gap-1">
@@ -180,14 +182,12 @@ export default function Settings() {
               <div className="flex gap-2">
                 <div className="relative flex-1">
                   <Input
-                    type={showKey[slug] ? "text" : "password"}
+                    type={showKey[slug] ? 'text' : 'password'}
                     placeholder={keyInfo.placeholder}
-                    value={inputValues[slug] ?? ""}
-                    onChange={(e) =>
-                      setInputValues((prev) => ({ ...prev, [slug]: e.target.value }))
-                    }
+                    value={inputValues[slug] ?? ''}
+                    onChange={(e) => setInputValues((prev) => ({ ...prev, [slug]: e.target.value }))}
                     className="pr-10 font-mono text-sm"
-                    onKeyDown={(e) => e.key === "Enter" && handleSave(slug)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSave(slug)}
                   />
                   <button
                     type="button"
@@ -204,7 +204,7 @@ export default function Settings() {
                   className="gap-1"
                 >
                   <Key className="h-3.5 w-3.5" />
-                  {saving[slug] ? "Saving..." : hasKey ? "Update" : "Save"}
+                  {saving[slug] ? 'Saving...' : hasKey ? 'Update' : 'Save'}
                 </Button>
                 {hasKey && (
                   <Button
@@ -219,14 +219,14 @@ export default function Settings() {
               </div>
               {keyInfo.docsUrl && (
                 <p className="text-xs text-muted-foreground">
-                  Get your key at{" "}
+                  Get your key at{' '}
                   <a
                     href={keyInfo.docsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary hover:underline"
                   >
-                    {keyInfo.docsUrl.replace("https://", "")}
+                    {keyInfo.docsUrl.replace('https://', '')}
                   </a>
                 </p>
               )}

@@ -124,7 +124,9 @@ export default function DataPrivacyDashboard() {
 
     setData(fallback);
     setDegradedMode(true);
-    setError('Advanced privacy actions are temporarily unavailable. Basic account details are shown below.');
+    setError(
+      'Advanced privacy actions are temporarily unavailable. Basic account details are shown below.'
+    );
   }
 
   async function loadMyData() {
@@ -154,15 +156,17 @@ export default function DataPrivacyDashboard() {
   async function handleAction(
     key: 'export' | 'delete' | 'location',
     endpoint: string,
-    successMessage: (response: PrivacyActionResponse) => string,
+    successMessage: (response: PrivacyActionResponse) => string
   ) {
     if (degradedMode) {
       setConfirmation(null);
-      setError('Advanced privacy actions are temporarily unavailable right now.');
+      setError(
+        'Advanced privacy actions are temporarily unavailable right now.'
+      );
       return;
     }
 
-    setRequestState((current) => ({ ...current, [key]: true }));
+    setRequestState(current => ({ ...current, [key]: true }));
     setError(null);
     setConfirmation(null);
 
@@ -174,23 +178,32 @@ export default function DataPrivacyDashboard() {
       console.error(err);
       setError('That privacy request could not be completed.');
     } finally {
-      setRequestState((current) => ({ ...current, [key]: false }));
+      setRequestState(current => ({ ...current, [key]: false }));
     }
   }
 
-  const hasPendingExport = data?.pending_requests.some((request) => request.action === 'export_requested');
-  const hasPendingDelete = data?.pending_requests.some((request) => request.action === 'delete_requested');
+  const hasPendingExport = data?.pending_requests.some(
+    request => request.action === 'export_requested'
+  );
+  const hasPendingDelete = data?.pending_requests.some(
+    request => request.action === 'delete_requested'
+  );
   const locationDisabled = data?.profile?.location_enabled === false;
 
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[28px] border border-slate-800 bg-slate-950 px-5 py-6 text-slate-100 shadow-[0_30px_120px_rgba(2,6,23,0.55)] sm:px-8">
       <div className="flex flex-col gap-3 rounded-[24px] border border-cyan-900/50 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.18),_transparent_42%),linear-gradient(180deg,rgba(15,23,42,0.98),rgba(2,6,23,0.98))] p-6">
-        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">Privacy Center</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">
+          Privacy Center
+        </span>
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="font-serif text-3xl text-white">Control what stays, what moves, and what stops.</h2>
+            <h2 className="font-serif text-3xl text-white">
+              Control what stays, what moves, and what stops.
+            </h2>
             <p className="mt-2 max-w-2xl text-sm text-slate-400">
-              Review your stored profile data, request an export, schedule deletion, or disable location tracking from one place.
+              Review your stored profile data, request an export, schedule
+              deletion, or disable location tracking from one place.
             </p>
           </div>
           {data && (
@@ -225,10 +238,14 @@ export default function DataPrivacyDashboard() {
             <article className="rounded-[24px] border border-slate-800 bg-slate-900/70 p-6">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h3 className="text-lg font-semibold text-white">Stored Account Snapshot</h3>
+                  <h3 className="text-lg font-semibold text-white">
+                    Stored Account Snapshot
+                  </h3>
                   <p className="mt-1 text-sm text-slate-500">
                     {data.created_at
-                      ? `Account created ${new Date(data.created_at).toLocaleDateString()}.`
+                      ? `Account created ${new Date(
+                          data.created_at
+                        ).toLocaleDateString()}.`
                       : 'Core account details available. Full privacy export summary is temporarily offline.'}
                   </p>
                 </div>
@@ -239,41 +256,71 @@ export default function DataPrivacyDashboard() {
 
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
-                  <div className="text-3xl font-semibold text-white">{formatMetric(data.message_count)}</div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">Messages</div>
+                  <div className="text-3xl font-semibold text-white">
+                    {formatMetric(data.message_count)}
+                  </div>
+                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">
+                    Messages
+                  </div>
                 </div>
                 <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
-                  <div className="text-3xl font-semibold text-white">{formatMetric(data.match_count)}</div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">Matches</div>
+                  <div className="text-3xl font-semibold text-white">
+                    {formatMetric(data.match_count)}
+                  </div>
+                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">
+                    Matches
+                  </div>
                 </div>
                 <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
-                  <div className="text-3xl font-semibold text-white">{formatMetric(data.photos_count)}</div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">Photos</div>
+                  <div className="text-3xl font-semibold text-white">
+                    {formatMetric(data.photos_count)}
+                  </div>
+                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">
+                    Photos
+                  </div>
                 </div>
               </div>
 
               <dl className="mt-6 grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
                 <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">Bio</dt>
-                  <dd className="mt-2">{data.profile?.bio || 'No bio saved.'}</dd>
+                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                    Bio
+                  </dt>
+                  <dd className="mt-2">
+                    {data.profile?.bio || 'No bio saved.'}
+                  </dd>
                 </div>
                 <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">Looking For</dt>
-                  <dd className="mt-2">{data.profile?.looking_for || 'Not specified.'}</dd>
+                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                    Looking For
+                  </dt>
+                  <dd className="mt-2">
+                    {data.profile?.looking_for || 'Not specified.'}
+                  </dd>
                 </div>
                 <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">Location</dt>
-                  <dd className="mt-2">{data.profile?.location || 'Not shared.'}</dd>
+                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                    Location
+                  </dt>
+                  <dd className="mt-2">
+                    {data.profile?.location || 'Not shared.'}
+                  </dd>
                 </div>
                 <div className="rounded-2xl border border-slate-800 bg-black/20 p-4">
-                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">Interests</dt>
-                  <dd className="mt-2">{data.profile?.interests?.join(', ') || 'None saved.'}</dd>
+                  <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                    Interests
+                  </dt>
+                  <dd className="mt-2">
+                    {data.profile?.interests?.join(', ') || 'None saved.'}
+                  </dd>
                 </div>
               </dl>
             </article>
 
             <aside className="rounded-[24px] border border-slate-800 bg-[linear-gradient(180deg,rgba(15,23,42,0.92),rgba(15,23,42,0.72))] p-6">
-              <h3 className="text-lg font-semibold text-white">Pending Requests</h3>
+              <h3 className="text-lg font-semibold text-white">
+                Pending Requests
+              </h3>
               <p className="mt-1 text-sm text-slate-500">
                 {degradedMode
                   ? 'Advanced privacy request status is temporarily unavailable.'
@@ -283,11 +330,16 @@ export default function DataPrivacyDashboard() {
               <div className="mt-5 space-y-3">
                 {data.pending_requests.length === 0 ? (
                   <div className="rounded-2xl border border-dashed border-slate-800 px-4 py-5 text-sm text-slate-500">
-                    {degradedMode ? 'Pending request history is temporarily unavailable.' : 'No pending privacy actions.'}
+                    {degradedMode
+                      ? 'Pending request history is temporarily unavailable.'
+                      : 'No pending privacy actions.'}
                   </div>
                 ) : (
-                  data.pending_requests.map((request) => (
-                    <div key={request.id} className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4">
+                  data.pending_requests.map(request => (
+                    <div
+                      key={request.id}
+                      className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4"
+                    >
                       <div className="flex items-center justify-between gap-3">
                         <span className="text-sm font-medium text-white">
                           {actionLabels[request.action] ?? request.action}
@@ -314,60 +366,83 @@ export default function DataPrivacyDashboard() {
           <div className="grid gap-4 lg:grid-cols-3">
             <button
               type="button"
-              disabled={degradedMode || requestState.export || Boolean(hasPendingExport)}
+              disabled={
+                degradedMode || requestState.export || Boolean(hasPendingExport)
+              }
               onClick={() =>
-                handleAction('export', '/privacy/export', () => 'Data export requested. We will keep it queued until it is ready.')
+                handleAction(
+                  'export',
+                  '/privacy/export',
+                  () =>
+                    'Data export requested. We will keep it queued until it is ready.'
+                )
               }
               className="rounded-[24px] border border-cyan-900/80 bg-cyan-950/30 p-5 text-left transition hover:border-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <div className="text-xs uppercase tracking-[0.2em] text-cyan-300">Download My Data</div>
-              <div className="mt-2 text-lg font-semibold text-white">Queue a full export</div>
+              <div className="text-xs uppercase tracking-[0.2em] text-cyan-300">
+                Download My Data
+              </div>
+              <div className="mt-2 text-lg font-semibold text-white">
+                Queue a full export
+              </div>
               <p className="mt-2 text-sm text-slate-400">
                 {degradedMode
                   ? 'Temporarily unavailable until the privacy service is restored.'
                   : hasPendingExport
-                  ? 'An export is already pending.'
-                  : 'Request a copy of your current profile, matches, and stored activity summary.'}
+                    ? 'An export is already pending.'
+                    : 'Request a copy of your current profile, matches, and stored activity summary.'}
               </p>
             </button>
 
             <button
               type="button"
-              disabled={degradedMode || requestState.location || locationDisabled}
+              disabled={
+                degradedMode || requestState.location || locationDisabled
+              }
               onClick={() =>
                 handleAction(
                   'location',
                   '/privacy/location/disable',
-                  () => 'Location tracking has been disabled for your profile.',
+                  () => 'Location tracking has been disabled for your profile.'
                 )
               }
               className="rounded-[24px] border border-slate-800 bg-slate-900/70 p-5 text-left transition hover:border-slate-600 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Disable Location Tracking</div>
-              <div className="mt-2 text-lg font-semibold text-white">Stop future location sharing</div>
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                Disable Location Tracking
+              </div>
+              <div className="mt-2 text-lg font-semibold text-white">
+                Stop future location sharing
+              </div>
               <p className="mt-2 text-sm text-slate-400">
                 {degradedMode
                   ? 'Temporarily unavailable until the privacy service is restored.'
                   : locationDisabled
-                  ? 'Location tracking is already disabled.'
-                  : 'Turns off location-based discovery and stores a completed privacy log entry.'}
+                    ? 'Location tracking is already disabled.'
+                    : 'Turns off location-based discovery and stores a completed privacy log entry.'}
               </p>
             </button>
 
             <button
               type="button"
-              disabled={degradedMode || requestState.delete || Boolean(hasPendingDelete)}
+              disabled={
+                degradedMode || requestState.delete || Boolean(hasPendingDelete)
+              }
               onClick={() => setShowDeleteModal(true)}
               className="rounded-[24px] border border-rose-900/80 bg-rose-950/30 p-5 text-left transition hover:border-rose-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <div className="text-xs uppercase tracking-[0.2em] text-rose-300">Delete Account</div>
-              <div className="mt-2 text-lg font-semibold text-white">Start the 30-day deletion clock</div>
+              <div className="text-xs uppercase tracking-[0.2em] text-rose-300">
+                Delete Account
+              </div>
+              <div className="mt-2 text-lg font-semibold text-white">
+                Start the 30-day deletion clock
+              </div>
               <p className="mt-2 text-sm text-slate-400">
                 {degradedMode
                   ? 'Temporarily unavailable until the privacy service is restored.'
                   : hasPendingDelete
-                  ? 'An account deletion request is already pending.'
-                  : 'Your account is queued for deletion 30 days after you confirm the request.'}
+                    ? 'An account deletion request is already pending.'
+                    : 'Your account is queued for deletion 30 days after you confirm the request.'}
               </p>
             </button>
           </div>
@@ -377,10 +452,16 @@ export default function DataPrivacyDashboard() {
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 px-4">
           <div className="w-full max-w-lg rounded-[28px] border border-rose-900 bg-slate-950 p-6 shadow-2xl">
-            <div className="text-xs uppercase tracking-[0.24em] text-rose-300">Delete Account</div>
-            <h3 className="mt-3 text-2xl font-semibold text-white">This starts a 30-day waiting period.</h3>
+            <div className="text-xs uppercase tracking-[0.24em] text-rose-300">
+              Delete Account
+            </div>
+            <h3 className="mt-3 text-2xl font-semibold text-white">
+              This starts a 30-day waiting period.
+            </h3>
             <p className="mt-3 text-sm leading-6 text-slate-400">
-              Your account will be scheduled for deletion 30 days from confirmation. During that window, the request remains pending and can be reviewed before the final purge job runs.
+              Your account will be scheduled for deletion 30 days from
+              confirmation. During that window, the request remains pending and
+              can be reviewed before the final purge job runs.
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
               <button
@@ -398,8 +479,10 @@ export default function DataPrivacyDashboard() {
                   await handleAction(
                     'delete',
                     '/privacy/delete',
-                    (response) =>
-                      `Deletion requested. The account is scheduled for ${formatDateTime(response.scheduled_for)}.`,
+                    response =>
+                      `Deletion requested. The account is scheduled for ${formatDateTime(
+                        response.scheduled_for
+                      )}.`
                   );
                 }}
                 className="rounded-2xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-500 disabled:opacity-60"

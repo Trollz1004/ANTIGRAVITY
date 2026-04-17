@@ -22,7 +22,7 @@ const PRODUCTS: Product[] = [
     name: 'Bot-Shield Verification',
     price: '$1.00',
     interval: 'one-time',
-    description: 'V8 Cloud Verification — Prove you\'re human. One-time fee.',
+    description: "V8 Cloud Verification — Prove you're human. One-time fee.",
     icon: <Shield size={24} />,
     stripeUrl: 'https://square.link/u/Qc5mxUy7',
   },
@@ -70,9 +70,7 @@ const PaymentLinks: React.FC<PaymentLinksProps> = ({ onNavigate }) => {
     <div className="min-h-full p-8 bg-slate-950">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-extrabold text-white tracking-tight">
-          Payment Products
-        </h1>
+        <h1 className="text-2xl font-extrabold text-white tracking-tight">Payment Products</h1>
         <p className="text-sm text-slate-400 mt-1">
           All payment links are live on Stripe. Payments redirect to youandinotai.com/success.
         </p>
@@ -98,24 +96,16 @@ const PaymentLinks: React.FC<PaymentLinksProps> = ({ onNavigate }) => {
             </div>
 
             {/* Name */}
-            <h3 className="text-base font-bold text-white mb-2">
-              {product.name}
-            </h3>
+            <h3 className="text-base font-bold text-white mb-2">{product.name}</h3>
 
             {/* Price */}
             <div className="flex items-baseline gap-1.5 mb-3">
-              <span className="text-2xl font-extrabold text-white font-mono">
-                {product.price}
-              </span>
-              <span className="text-xs text-slate-500 font-medium">
-                {product.interval}
-              </span>
+              <span className="text-2xl font-extrabold text-white font-mono">{product.price}</span>
+              <span className="text-xs text-slate-500 font-medium">{product.interval}</span>
             </div>
 
             {/* Description */}
-            <p className="text-sm text-slate-400 leading-relaxed mb-6 flex-1">
-              {product.description}
-            </p>
+            <p className="text-sm text-slate-400 leading-relaxed mb-6 flex-1">{product.description}</p>
 
             {/* Actions */}
             <div className="flex gap-2 mt-auto">
@@ -153,8 +143,8 @@ const PaymentLinks: React.FC<PaymentLinksProps> = ({ onNavigate }) => {
             >
               Stripe Dashboard
             </a>
-            . Once created, paste the live URLs here to activate checkout buttons.
-            All prices shown are final launch pricing for YouAndINotAI.
+            . Once created, paste the live URLs here to activate checkout buttons. All prices shown are final launch
+            pricing for YouAndINotAI.
           </p>
         </div>
       </div>

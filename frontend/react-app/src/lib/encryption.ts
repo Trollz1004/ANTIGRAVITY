@@ -33,18 +33,21 @@ export async function exportKey(key: CryptoKey): Promise<string> {
 
 /** Import a base64 string back to a CryptoKey. */
 export async function importKey(b64: string): Promise<CryptoKey> {
-  const raw = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-  return crypto.subtle.importKey('raw', raw, { name: ALGO, length: KEY_BITS }, false, [
-    'encrypt',
-    'decrypt',
-  ]);
+  const raw = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  return crypto.subtle.importKey(
+    'raw',
+    raw,
+    { name: ALGO, length: KEY_BITS },
+    false,
+    ['encrypt', 'decrypt']
+  );
 }
 
 // ── Encrypt / decrypt ────────────────────────────────────────────────────────
 
 export interface EncryptedPayload {
   type: 'encrypted';
-  iv: string;   // base64
+  iv: string; // base64
   data: string; // base64
 }
 
@@ -58,11 +61,15 @@ export type ChatPayload = EncryptedPayload | PlainPayload;
 /** Encrypt a plaintext message string. Returns a serialisable payload. */
 export async function encryptMessage(
   plaintext: string,
-  key: CryptoKey,
+  key: CryptoKey
 ): Promise<EncryptedPayload> {
   const iv = crypto.getRandomValues(new Uint8Array(IV_BYTES));
   const encoded = new TextEncoder().encode(plaintext);
-  const cipherBuffer = await crypto.subtle.encrypt({ name: ALGO, iv }, key, encoded);
+  const cipherBuffer = await crypto.subtle.encrypt(
+    { name: ALGO, iv },
+    key,
+    encoded
+  );
 
   return {
     type: 'encrypted',
@@ -74,10 +81,10 @@ export async function encryptMessage(
 /** Decrypt an encrypted payload back to plaintext. */
 export async function decryptMessage(
   payload: EncryptedPayload,
-  key: CryptoKey,
+  key: CryptoKey
 ): Promise<string> {
-  const iv = Uint8Array.from(atob(payload.iv), (c) => c.charCodeAt(0));
-  const data = Uint8Array.from(atob(payload.data), (c) => c.charCodeAt(0));
+  const iv = Uint8Array.from(atob(payload.iv), c => c.charCodeAt(0));
+  const data = Uint8Array.from(atob(payload.data), c => c.charCodeAt(0));
   const plain = await crypto.subtle.decrypt({ name: ALGO, iv }, key, data);
   return new TextDecoder().decode(plain);
 }
@@ -88,7 +95,7 @@ export async function decryptMessage(
  */
 export async function decryptPayload(
   payload: ChatPayload,
-  key: CryptoKey | null,
+  key: CryptoKey | null
 ): Promise<string> {
   if (payload.type === 'plain') return payload.content;
   if (!key) return '[encrypted message — key not yet available]';
@@ -104,7 +111,9 @@ export async function decryptPayload(
 const _keys = new Map<string, CryptoKey>();
 
 /** Get or create a session key for a match. Persists for the lifetime of the page. */
-export async function getOrCreateSessionKey(matchId: string): Promise<CryptoKey> {
+export async function getOrCreateSessionKey(
+  matchId: string
+): Promise<CryptoKey> {
   if (_keys.has(matchId)) return _keys.get(matchId)!;
   const key = await generateMatchKey();
   _keys.set(matchId, key);

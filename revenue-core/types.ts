@@ -1,4 +1,3 @@
-
 export enum View {
   DASHBOARD = 'DASHBOARD',
   HIVE = 'HIVE',
@@ -6,7 +5,7 @@ export enum View {
   INTELLIGENCE = 'INTELLIGENCE',
   ADS = 'ADS',
   ROYALTY = 'ROYALTY',
-  SETTINGS = 'SETTINGS'
+  SETTINGS = 'SETTINGS',
 }
 
 export interface MediaTrack {

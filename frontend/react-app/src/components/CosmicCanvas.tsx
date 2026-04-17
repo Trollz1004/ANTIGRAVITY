@@ -1,7 +1,7 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
-*/
+ */
 
 import React, { useRef, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
@@ -13,9 +13,13 @@ import { Particles } from './Particles';
 import { ForceFields } from './ForceFields';
 import { OtherPlayers, LocalCursor } from './OtherPlayers';
 
-function SceneInteraction({ mousePosRef }: { mousePosRef: React.MutableRefObject<THREE.Vector3 | null> }) {
-  const sendCursor = useGameStore((state) => state.sendCursor);
-  const addForce = useGameStore((state) => state.addForce);
+function SceneInteraction({
+  mousePosRef,
+}: {
+  mousePosRef: React.MutableRefObject<THREE.Vector3 | null>;
+}) {
+  const sendCursor = useGameStore(state => state.sendCursor);
+  const addForce = useGameStore(state => state.addForce);
   const { camera, gl } = useThree();
 
   useEffect(() => {
@@ -51,7 +55,14 @@ function SceneInteraction({ mousePosRef }: { mousePosRef: React.MutableRefObject
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
         if (mousePosRef.current) {
-          addForce({ x: mousePosRef.current.x, y: mousePosRef.current.y, z: mousePosRef.current.z }, 'repulsor');
+          addForce(
+            {
+              x: mousePosRef.current.x,
+              y: mousePosRef.current.y,
+              z: mousePosRef.current.z,
+            },
+            'repulsor'
+          );
         }
       }
     };
@@ -77,7 +88,7 @@ function SceneInteraction({ mousePosRef }: { mousePosRef: React.MutableRefObject
 
 function RotatingStars() {
   const groupRef = useRef<THREE.Group>(null);
-  
+
   useFrame((state, delta) => {
     if (groupRef.current) {
       groupRef.current.rotation.y += delta * 0.02;
@@ -87,7 +98,15 @@ function RotatingStars() {
 
   return (
     <group ref={groupRef}>
-      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+      <Stars
+        radius={100}
+        depth={50}
+        count={5000}
+        factor={4}
+        saturation={0}
+        fade
+        speed={1}
+      />
     </group>
   );
 }
@@ -103,24 +122,29 @@ export function CosmicCanvas() {
 
     const startAudio = () => {
       if (audioCtx) return;
-      
-      audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      
+
+      audioCtx = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
+
       // Deep space hum (low oscillator)
       oscillator = audioCtx.createOscillator();
       oscillator.type = 'sine';
       oscillator.frequency.setValueAtTime(40, audioCtx.currentTime);
-      
+
       gainNode = audioCtx.createGain();
       gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime); // Very subtle
-      
+
       oscillator.connect(gainNode);
       gainNode.connect(audioCtx.destination);
       oscillator.start();
 
       // Subtle white noise for "stellar wind"
       const bufferSize = 2 * audioCtx.sampleRate;
-      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const noiseBuffer = audioCtx.createBuffer(
+        1,
+        bufferSize,
+        audioCtx.sampleRate
+      );
       const output = noiseBuffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
         output[i] = Math.random() * 2 - 1;
@@ -166,18 +190,18 @@ export function CosmicCanvas() {
     <div className="w-full h-full absolute inset-0 bg-black">
       <Canvas camera={{ position: [0, 0, 20], fov: 60 }}>
         <color attach="background" args={['#0a0510']} />
-        
+
         <ambientLight intensity={0.4} />
-        
+
         <RotatingStars />
-        
+
         <Particles mousePosRef={mousePosRef} />
         <ForceFields />
         <OtherPlayers />
         <LocalCursor mousePosRef={mousePosRef} />
-        
+
         <SceneInteraction mousePosRef={mousePosRef} />
-        
+
         <EffectComposer>
           <Bloom luminanceThreshold={0.1} mipmapBlur intensity={2.0} />
         </EffectComposer>

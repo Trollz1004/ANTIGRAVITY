@@ -17,7 +17,10 @@ async function proxyUpstream(url, request) {
   return fetch(url, {
     method: request.method,
     headers,
-    body: request.method === 'GET' || request.method === 'HEAD' ? undefined : request.body,
+    body:
+      request.method === 'GET' || request.method === 'HEAD'
+        ? undefined
+        : request.body,
     redirect: 'manual',
   });
 }
@@ -25,16 +28,23 @@ async function proxyUpstream(url, request) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (!url.pathname.startsWith('/api/v1/') && !url.pathname.startsWith('/webhooks/')) {
+    if (
+      !url.pathname.startsWith('/api/v1/') &&
+      !url.pathname.startsWith('/webhooks/')
+    ) {
       return env.ASSETS.fetch(request);
     }
 
     try {
-      const upstreamUrl = new URL(buildUpstreamPath(url.pathname), UPSTREAM_BASE);
+      const upstreamUrl = new URL(
+        buildUpstreamPath(url.pathname),
+        UPSTREAM_BASE
+      );
       upstreamUrl.search = url.search;
       return proxyUpstream(upstreamUrl.toString(), request);
     } catch (error) {
-      const detail = error instanceof Error ? error.message : 'Unexpected worker error';
+      const detail =
+        error instanceof Error ? error.message : 'Unexpected worker error';
       return new Response(JSON.stringify({ detail }), {
         status: 500,
         headers: { 'content-type': 'application/json; charset=utf-8' },

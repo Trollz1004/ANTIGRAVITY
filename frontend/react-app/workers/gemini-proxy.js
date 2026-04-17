@@ -11,7 +11,8 @@ export default {
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, x-goog-api-key, x-goog-api-client',
+      'Access-Control-Allow-Headers':
+        'Content-Type, x-goog-api-key, x-goog-api-client',
       'Access-Control-Max-Age': '86400',
     };
 
@@ -22,7 +23,9 @@ export default {
     const url = new URL(request.url);
 
     // Build the real Gemini URL, replacing any client-provided key
-    const geminiUrl = new URL(`https://generativelanguage.googleapis.com${url.pathname}`);
+    const geminiUrl = new URL(
+      `https://generativelanguage.googleapis.com${url.pathname}`
+    );
     geminiUrl.searchParams.set('key', env.GEMINI_API_KEY);
     // Copy other query params except key
     for (const [k, v] of url.searchParams) {
@@ -44,7 +47,8 @@ export default {
     return new Response(data, {
       status: response.status,
       headers: {
-        'Content-Type': response.headers.get('Content-Type') || 'application/json',
+        'Content-Type':
+          response.headers.get('Content-Type') || 'application/json',
         ...corsHeaders,
       },
     });

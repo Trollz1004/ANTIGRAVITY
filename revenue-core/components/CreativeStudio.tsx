@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Image as ImageIcon, Video, Sparkles, Upload, Download, Loader2, Wand2 } from 'lucide-react';
 import { editImage, generateVeoVideo } from '../services/geminiService';
@@ -7,7 +6,7 @@ const CreativeStudio: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [resultMedia, setResultMedia] = useState<{ type: 'image' | 'video', url: string } | null>(null);
+  const [resultMedia, setResultMedia] = useState<{ type: 'image' | 'video'; url: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +33,7 @@ const CreativeStudio: React.FC = () => {
     if (!selectedImage && !prompt) return;
     setIsLoading(true);
     try {
-      const result = await generateVeoVideo(prompt || "Animate this photo", selectedImage || undefined);
+      const result = await generateVeoVideo(prompt || 'Animate this photo', selectedImage || undefined);
       if (result) setResultMedia({ type: 'video', url: result });
     } finally {
       setIsLoading(false);
@@ -55,7 +54,7 @@ const CreativeStudio: React.FC = () => {
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 overflow-hidden">
         {/* Workspace */}
         <div className="bg-surface rounded-xl border border-slate-700 p-6 flex flex-col gap-6 overflow-auto">
-          <div 
+          <div
             onClick={() => fileInputRef.current?.click()}
             className="aspect-video bg-slate-900 border-2 border-dashed border-slate-700 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-primary transition-colors relative overflow-hidden group"
           >
@@ -72,15 +71,15 @@ const CreativeStudio: React.FC = () => {
 
           <div className="space-y-4">
             <label className="block text-xs font-bold text-slate-500 uppercase">Creative Prompt</label>
-            <textarea 
+            <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="e.g., 'Add a retro filter' or 'Make a video of this character driving a car'..."
               className="w-full bg-slate-900 border border-slate-700 rounded-lg p-4 text-white focus:outline-none focus:border-primary resize-none h-24"
             />
-            
+
             <div className="grid grid-cols-2 gap-4">
-              <button 
+              <button
                 onClick={handleEdit}
                 disabled={isLoading || !selectedImage}
                 className="flex items-center justify-center gap-2 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold disabled:opacity-50"
@@ -88,7 +87,7 @@ const CreativeStudio: React.FC = () => {
                 {isLoading ? <Loader2 className="animate-spin" /> : <ImageIcon size={20} />}
                 Edit Image
               </button>
-              <button 
+              <button
                 onClick={handleAnimate}
                 disabled={isLoading}
                 className="flex items-center justify-center gap-2 py-3 bg-primary hover:bg-indigo-600 text-white rounded-lg font-bold disabled:opacity-50 shadow-lg shadow-indigo-500/20"
@@ -119,12 +118,12 @@ const CreativeStudio: React.FC = () => {
                   <video src={resultMedia.url} controls autoPlay loop className="max-w-full max-h-full" />
                 )}
               </div>
-              <button 
+              <button
                 onClick={() => {
-                   const link = document.createElement('a');
-                   link.href = resultMedia.url;
-                   link.download = `gemini-output-${Date.now()}`;
-                   link.click();
+                  const link = document.createElement('a');
+                  link.href = resultMedia.url;
+                  link.download = `gemini-output-${Date.now()}`;
+                  link.click();
                 }}
                 className="flex items-center justify-center gap-2 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm"
               >

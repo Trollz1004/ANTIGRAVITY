@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, (process as any).cwd(), '');
   return {
     plugins: [react()],
-    base: '/', 
+    base: '/',
     define: {
       'process.env.API_KEY': JSON.stringify(env.API_KEY),
       'process.env.VITE_GOOGLE_CLIENT_ID': JSON.stringify(env.VITE_GOOGLE_CLIENT_ID),
@@ -34,8 +34,8 @@ export default defineConfig(({ mode }) => {
           target: 'http://localhost:8080',
           changeOrigin: true,
           secure: false,
-        }
-      }
-    }
+        },
+      },
+    },
   };
 });

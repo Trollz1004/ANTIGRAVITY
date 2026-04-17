@@ -10,19 +10,25 @@ export default function DonateCollectables({ isDarkMode }: { isDarkMode: boolean
           Support & Collectables
         </h2>
         <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-          Review independent pediatric-care support options or explore exclusive digital collectables through controlled platform surfaces.
+          Review independent pediatric-care support options or explore exclusive digital collectables through controlled
+          platform surfaces.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* External pediatric-care support options */}
-        <div className={`p-8 rounded-3xl border relative overflow-hidden ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200 shadow-xl shadow-rose-900/5'}`}>
+        <div
+          className={`p-8 rounded-3xl border relative overflow-hidden ${
+            isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200 shadow-xl shadow-rose-900/5'
+          }`}
+        >
           <div className="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-6 shadow-inner">
             <Heart className="w-7 h-7" />
           </div>
           <h3 className="text-2xl font-bold mb-3">Support Pediatric Care Directly</h3>
           <p className={`mb-6 leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            If you want to support pediatric care outside the platform, use a third-party charity directory and choose the organization you trust directly.
+            If you want to support pediatric care outside the platform, use a third-party charity directory and choose
+            the organization you trust directly.
           </p>
           <a
             href="https://www.charitynavigator.org/"
@@ -35,13 +41,18 @@ export default function DonateCollectables({ isDarkMode }: { isDarkMode: boolean
         </div>
 
         {/* Collectables */}
-        <div className={`p-8 rounded-3xl border relative overflow-hidden ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200 shadow-xl shadow-purple-900/5'}`}>
+        <div
+          className={`p-8 rounded-3xl border relative overflow-hidden ${
+            isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200 shadow-xl shadow-purple-900/5'
+          }`}
+        >
           <div className="w-14 h-14 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center mb-6 shadow-inner">
             <Gift className="w-7 h-7" />
           </div>
           <h3 className="text-2xl font-bold mb-3">Digital Collectables</h3>
           <p className={`mb-6 leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Purchase exclusive AI-generated digital collectables (NFTs) on the Base network. Routing terms must match the current published policy for the specific surface instead of generic 100% claims.
+            Purchase exclusive AI-generated digital collectables (NFTs) on the Base network. Routing terms must match
+            the current published policy for the specific surface instead of generic 100% claims.
           </p>
           <button className="inline-flex items-center justify-center w-full py-3 px-6 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold transition-colors gap-2">
             View Collection <CreditCard className="w-4 h-4" />

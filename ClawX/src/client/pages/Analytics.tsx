@@ -1,23 +1,36 @@
-import { trpc } from "@/lib/trpc";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { trpc } from '@/lib/trpc';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Bot, Brain, Sparkles, Search, Zap, Server, TrendingUp, DollarSign, Clock, Hash } from 'lucide-react';
 import {
-  Bot, Brain, Sparkles, Search, Zap, Server,
-  TrendingUp, DollarSign, Clock, Hash,
-} from "lucide-react";
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell,
-} from "recharts";
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
 
 const providerIcons: Record<string, React.ElementType> = {
-  manus: Bot, claude: Brain, gemini: Sparkles,
-  perplexity: Search, grok: Zap, ollama: Server,
+  manus: Bot,
+  claude: Brain,
+  gemini: Sparkles,
+  perplexity: Search,
+  grok: Zap,
+  ollama: Server,
 };
 
 const providerColors: Record<string, string> = {
-  manus: "#6366f1", claude: "#d97706", gemini: "#4285f4",
-  perplexity: "#22c55e", grok: "#ef4444", ollama: "#8b5cf6",
+  manus: '#6366f1',
+  claude: '#d97706',
+  gemini: '#4285f4',
+  perplexity: '#22c55e',
+  grok: '#ef4444',
+  ollama: '#8b5cf6',
 };
 
 export default function Analytics() {
@@ -25,32 +38,35 @@ export default function Analytics() {
   const { data: timeline } = trpc.analytics.timeline.useQuery({ days: 7 });
 
   const totalRequests = stats?.reduce((sum, s) => sum + Number(s.totalRequests ?? 0), 0) ?? 0;
-  const totalTokens = stats?.reduce((sum, s) => sum + Number(s.totalInputTokens ?? 0) + Number(s.totalOutputTokens ?? 0), 0) ?? 0;
+  const totalTokens =
+    stats?.reduce((sum, s) => sum + Number(s.totalInputTokens ?? 0) + Number(s.totalOutputTokens ?? 0), 0) ?? 0;
   const totalCost = stats?.reduce((sum, s) => sum + Number(s.totalCost ?? 0), 0) ?? 0;
   const avgResponseTime = stats?.length
     ? stats.reduce((sum, s) => sum + Number(s.avgResponseTime ?? 0), 0) / stats.length
     : 0;
 
   // Prepare pie chart data
-  const pieData = stats?.map((s) => ({
-    name: s.providerSlug,
-    value: Number(s.totalRequests ?? 0),
-    color: providerColors[s.providerSlug ?? ""] ?? "#6366f1",
-  })) ?? [];
+  const pieData =
+    stats?.map((s) => ({
+      name: s.providerSlug,
+      value: Number(s.totalRequests ?? 0),
+      color: providerColors[s.providerSlug ?? ''] ?? '#6366f1',
+    })) ?? [];
 
   // Prepare bar chart data from timeline
-  const barData = timeline?.reduce((acc: any[], item) => {
-    const existing = acc.find((d) => d.date === item.date);
-    if (existing) {
-      existing[item.providerSlug ?? "unknown"] = Number(item.totalTokens ?? 0);
-    } else {
-      acc.push({
-        date: item.date,
-        [item.providerSlug ?? "unknown"]: Number(item.totalTokens ?? 0),
-      });
-    }
-    return acc;
-  }, []) ?? [];
+  const barData =
+    timeline?.reduce((acc: any[], item) => {
+      const existing = acc.find((d) => d.date === item.date);
+      if (existing) {
+        existing[item.providerSlug ?? 'unknown'] = Number(item.totalTokens ?? 0);
+      } else {
+        acc.push({
+          date: item.date,
+          [item.providerSlug ?? 'unknown']: Number(item.totalTokens ?? 0),
+        });
+      }
+      return acc;
+    }, []) ?? [];
 
   return (
     <div className="space-y-6">
@@ -129,14 +145,14 @@ export default function Analytics() {
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={barData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.28 0 0)" />
-                  <XAxis dataKey="date" tick={{ fontSize: 11, fill: "oklch(0.6 0 0)" }} />
-                  <YAxis tick={{ fontSize: 11, fill: "oklch(0.6 0 0)" }} />
+                  <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'oklch(0.6 0 0)' }} />
+                  <YAxis tick={{ fontSize: 11, fill: 'oklch(0.6 0 0)' }} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "oklch(0.178 0 0)",
-                      border: "1px solid oklch(0.28 0 0)",
-                      borderRadius: "8px",
-                      color: "oklch(0.95 0 0)",
+                      backgroundColor: 'oklch(0.178 0 0)',
+                      border: '1px solid oklch(0.28 0 0)',
+                      borderRadius: '8px',
+                      color: 'oklch(0.95 0 0)',
                     }}
                   />
                   {Object.keys(providerColors).map((slug) => (
@@ -176,10 +192,10 @@ export default function Analytics() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "oklch(0.178 0 0)",
-                      border: "1px solid oklch(0.28 0 0)",
-                      borderRadius: "8px",
-                      color: "oklch(0.95 0 0)",
+                      backgroundColor: 'oklch(0.178 0 0)',
+                      border: '1px solid oklch(0.28 0 0)',
+                      borderRadius: '8px',
+                      color: 'oklch(0.95 0 0)',
                     }}
                   />
                 </PieChart>
@@ -214,10 +230,13 @@ export default function Analytics() {
                 </thead>
                 <tbody>
                   {stats.map((stat) => {
-                    const Icon = providerIcons[stat.providerSlug ?? ""] ?? Bot;
-                    const color = providerColors[stat.providerSlug ?? ""] ?? "#6366f1";
+                    const Icon = providerIcons[stat.providerSlug ?? ''] ?? Bot;
+                    const color = providerColors[stat.providerSlug ?? ''] ?? '#6366f1';
                     return (
-                      <tr key={stat.providerSlug} className="border-b border-border/50 hover:bg-accent/30 transition-colors">
+                      <tr
+                        key={stat.providerSlug}
+                        className="border-b border-border/50 hover:bg-accent/30 transition-colors"
+                      >
                         <td className="py-3 px-2">
                           <div className="flex items-center gap-2">
                             <Icon className="h-4 w-4" style={{ color }} />
@@ -227,7 +246,9 @@ export default function Analytics() {
                         <td className="text-right py-3 px-2">{Number(stat.totalRequests ?? 0).toLocaleString()}</td>
                         <td className="text-right py-3 px-2">{Number(stat.totalInputTokens ?? 0).toLocaleString()}</td>
                         <td className="text-right py-3 px-2">{Number(stat.totalOutputTokens ?? 0).toLocaleString()}</td>
-                        <td className="text-right py-3 px-2">{(Number(stat.avgResponseTime ?? 0) / 1000).toFixed(1)}s</td>
+                        <td className="text-right py-3 px-2">
+                          {(Number(stat.avgResponseTime ?? 0) / 1000).toFixed(1)}s
+                        </td>
                         <td className="text-right py-3 px-2">${Number(stat.totalCost ?? 0).toFixed(4)}</td>
                       </tr>
                     );

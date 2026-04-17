@@ -1,16 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Play,
-  Pause,
-  Network,
-  Activity,
-  Brain,
-  Cpu,
-  Search,
-  Zap,
-  Globe,
-  BookOpen,
-} from 'lucide-react';
+import { Play, Pause, Network, Activity, Brain, Cpu, Search, Zap, Globe, BookOpen } from 'lucide-react';
 import { Agent } from '../types';
 
 interface AgentMonitorProps {
@@ -26,31 +15,45 @@ const PROVIDER_ICONS: Record<string, React.ReactNode> = {
 
 const AgentMonitor: React.FC<AgentMonitorProps> = ({ agents, setAgents }) => {
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
-  const selectedAgent = agents.find(a => a.id === selectedAgentId);
+  const selectedAgent = agents.find((a) => a.id === selectedAgentId);
 
   const toggleAgentStatus = (id: string) => {
-    setAgents(prev => prev.map(a =>
-      a.id === id ? { ...a, status: a.status === 'Paused' ? 'Active' : a.status === 'Active' ? 'Paused' : a.status } : a
-    ));
+    setAgents((prev) =>
+      prev.map((a) =>
+        a.id === id
+          ? { ...a, status: a.status === 'Paused' ? 'Active' : a.status === 'Active' ? 'Paused' : a.status }
+          : a,
+      ),
+    );
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Active': return 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]';
-      case 'Standby': return 'bg-amber-400';
-      case 'Paused': return 'bg-slate-500';
-      case 'Error': return 'bg-rose-500 animate-pulse';
-      default: return 'bg-slate-500';
+      case 'Active':
+        return 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]';
+      case 'Standby':
+        return 'bg-amber-400';
+      case 'Paused':
+        return 'bg-slate-500';
+      case 'Error':
+        return 'bg-rose-500 animate-pulse';
+      default:
+        return 'bg-slate-500';
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'Active': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-      case 'Standby': return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-      case 'Paused': return 'bg-slate-700 text-slate-400 border-slate-600';
-      case 'Error': return 'bg-rose-500/20 text-rose-400 border-rose-500/30';
-      default: return 'bg-slate-700 text-slate-400 border-slate-600';
+      case 'Active':
+        return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+      case 'Standby':
+        return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+      case 'Paused':
+        return 'bg-slate-700 text-slate-400 border-slate-600';
+      case 'Error':
+        return 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+      default:
+        return 'bg-slate-700 text-slate-400 border-slate-600';
     }
   };
 
@@ -62,14 +65,15 @@ const AgentMonitor: React.FC<AgentMonitorProps> = ({ agents, setAgents }) => {
           <Network className="text-primary" /> AI Formation Control
         </h2>
         <p className="text-slate-400 text-sm mt-1">
-          {agents.length} agents deployed. {agents.filter(a => a.status === 'Active').length} active, {agents.filter(a => a.status === 'Standby').length} on standby.
+          {agents.length} agents deployed. {agents.filter((a) => a.status === 'Active').length} active,{' '}
+          {agents.filter((a) => a.status === 'Standby').length} on standby.
         </p>
       </div>
 
       <div className="flex-1 flex gap-6 min-h-0 overflow-hidden">
         {/* Agent Cards */}
         <div className="flex-1 grid grid-cols-1 gap-4 content-start overflow-auto">
-          {agents.map(agent => (
+          {agents.map((agent) => (
             <div
               key={agent.id}
               onClick={() => setSelectedAgentId(agent.id)}
@@ -86,12 +90,18 @@ const AgentMonitor: React.FC<AgentMonitorProps> = ({ agents, setAgents }) => {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-white">{agent.name}</h3>
-                    <p className="text-sm text-slate-400">{agent.role} — {agent.provider}</p>
+                    <p className="text-sm text-slate-400">
+                      {agent.role} — {agent.provider}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className={`w-2.5 h-2.5 rounded-full ${getStatusColor(agent.status)}`} />
-                  <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded border ${getStatusBadge(agent.status)}`}>
+                  <span
+                    className={`text-[10px] font-bold uppercase px-2 py-1 rounded border ${getStatusBadge(
+                      agent.status,
+                    )}`}
+                  >
                     {agent.status}
                   </span>
                 </div>
@@ -108,7 +118,11 @@ const AgentMonitor: React.FC<AgentMonitorProps> = ({ agents, setAgents }) => {
                 </div>
                 <div className="bg-slate-900/50 p-3 rounded-lg border border-slate-800">
                   <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Health</div>
-                  <div className={`text-xs font-mono ${agent.health >= 80 ? 'text-emerald-400' : agent.health >= 50 ? 'text-yellow-400' : 'text-rose-400'}`}>
+                  <div
+                    className={`text-xs font-mono ${
+                      agent.health >= 80 ? 'text-emerald-400' : agent.health >= 50 ? 'text-yellow-400' : 'text-rose-400'
+                    }`}
+                  >
                     {agent.health}%
                   </div>
                 </div>
@@ -169,7 +183,9 @@ const AgentMonitor: React.FC<AgentMonitorProps> = ({ agents, setAgents }) => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-500">Health</span>
-                    <span className={`font-bold ${selectedAgent.health >= 80 ? 'text-emerald-400' : 'text-yellow-400'}`}>
+                    <span
+                      className={`font-bold ${selectedAgent.health >= 80 ? 'text-emerald-400' : 'text-yellow-400'}`}
+                    >
                       {selectedAgent.health}%
                     </span>
                   </div>
@@ -183,7 +199,13 @@ const AgentMonitor: React.FC<AgentMonitorProps> = ({ agents, setAgents }) => {
                   </div>
                   <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
                     <div
-                      className={`h-full transition-all ${selectedAgent.health >= 80 ? 'bg-emerald-400' : selectedAgent.health >= 50 ? 'bg-yellow-400' : 'bg-rose-500'}`}
+                      className={`h-full transition-all ${
+                        selectedAgent.health >= 80
+                          ? 'bg-emerald-400'
+                          : selectedAgent.health >= 50
+                            ? 'bg-yellow-400'
+                            : 'bg-rose-500'
+                      }`}
                       style={{ width: `${selectedAgent.health}%` }}
                     />
                   </div>
@@ -196,15 +218,33 @@ const AgentMonitor: React.FC<AgentMonitorProps> = ({ agents, setAgents }) => {
                     <span className="text-xs font-bold text-slate-500 uppercase">Capabilities</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {selectedAgent.id === 'opus-4.6' && ['Code', 'Strategy', 'CLI', 'Git', 'Deploy', 'Stripe'].map(c => (
-                      <span key={c} className="text-[10px] bg-red-500/10 text-red-300 border border-red-500/20 px-2 py-1 rounded">{c}</span>
-                    ))}
-                    {selectedAgent.id === 'gemini-3.1' && ['React', 'Search', 'Admin', 'UI/UX', 'Research'].map(c => (
-                      <span key={c} className="text-[10px] bg-blue-500/10 text-blue-300 border border-blue-500/20 px-2 py-1 rounded">{c}</span>
-                    ))}
-                    {selectedAgent.id === 'comet-perplexity' && ['Web Search', 'Briefs', 'Audit', 'DNS', 'Context'].map(c => (
-                      <span key={c} className="text-[10px] bg-purple-500/10 text-purple-300 border border-purple-500/20 px-2 py-1 rounded">{c}</span>
-                    ))}
+                    {selectedAgent.id === 'opus-4.6' &&
+                      ['Code', 'Strategy', 'CLI', 'Git', 'Deploy', 'Stripe'].map((c) => (
+                        <span
+                          key={c}
+                          className="text-[10px] bg-red-500/10 text-red-300 border border-red-500/20 px-2 py-1 rounded"
+                        >
+                          {c}
+                        </span>
+                      ))}
+                    {selectedAgent.id === 'gemini-3.1' &&
+                      ['React', 'Search', 'Admin', 'UI/UX', 'Research'].map((c) => (
+                        <span
+                          key={c}
+                          className="text-[10px] bg-blue-500/10 text-blue-300 border border-blue-500/20 px-2 py-1 rounded"
+                        >
+                          {c}
+                        </span>
+                      ))}
+                    {selectedAgent.id === 'comet-perplexity' &&
+                      ['Web Search', 'Briefs', 'Audit', 'DNS', 'Context'].map((c) => (
+                        <span
+                          key={c}
+                          className="text-[10px] bg-purple-500/10 text-purple-300 border border-purple-500/20 px-2 py-1 rounded"
+                        >
+                          {c}
+                        </span>
+                      ))}
                   </div>
                 </div>
               </div>

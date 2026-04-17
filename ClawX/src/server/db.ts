@@ -1,5 +1,5 @@
-import { eq, desc, sql, and } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/mysql2";
+import { eq, desc, sql, and } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/mysql2';
 import {
   InsertUser,
   users,
@@ -11,8 +11,8 @@ import {
   type InsertMessage,
   type InsertUsageLog,
   type InsertAiProvider,
-} from "../drizzle/schema";
-import { ENV } from "./_core/env";
+} from '../drizzle/schema';
+import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -21,7 +21,7 @@ export async function getDb() {
     try {
       _db = drizzle(process.env.DATABASE_URL);
     } catch (error) {
-      console.warn("[Database] Failed to connect:", error);
+      console.warn('[Database] Failed to connect:', error);
       _db = null;
     }
   }
@@ -31,13 +31,16 @@ export async function getDb() {
 // ─── User helpers ───────────────────────────────────────────────────
 
 export async function upsertUser(user: InsertUser): Promise<void> {
-  if (!user.openId) throw new Error("User openId is required for upsert");
+  if (!user.openId) throw new Error('User openId is required for upsert');
   const db = await getDb();
-  if (!db) { console.warn("[Database] Cannot upsert user: database not available"); return; }
+  if (!db) {
+    console.warn('[Database] Cannot upsert user: database not available');
+    return;
+  }
   try {
     const values: InsertUser = { openId: user.openId };
     const updateSet: Record<string, unknown> = {};
-    const textFields = ["name", "email", "loginMethod"] as const;
+    const textFields = ['name', 'email', 'loginMethod'] as const;
     type TextField = (typeof textFields)[number];
     const assignNullable = (field: TextField) => {
       const value = user[field];
@@ -47,13 +50,24 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       updateSet[field] = normalized;
     };
     textFields.forEach(assignNullable);
-    if (user.lastSignedIn !== undefined) { values.lastSignedIn = user.lastSignedIn; updateSet.lastSignedIn = user.lastSignedIn; }
-    if (user.role !== undefined) { values.role = user.role; updateSet.role = user.role; }
-    else if (user.openId === ENV.ownerOpenId) { values.role = "admin"; updateSet.role = "admin"; }
+    if (user.lastSignedIn !== undefined) {
+      values.lastSignedIn = user.lastSignedIn;
+      updateSet.lastSignedIn = user.lastSignedIn;
+    }
+    if (user.role !== undefined) {
+      values.role = user.role;
+      updateSet.role = user.role;
+    } else if (user.openId === ENV.ownerOpenId) {
+      values.role = 'admin';
+      updateSet.role = 'admin';
+    }
     if (!values.lastSignedIn) values.lastSignedIn = new Date();
     if (Object.keys(updateSet).length === 0) updateSet.lastSignedIn = new Date();
     await db.insert(users).values(values).onDuplicateKeyUpdate({ set: updateSet });
-  } catch (error) { console.error("[Database] Failed to upsert user:", error); throw error; }
+  } catch (error) {
+    console.error('[Database] Failed to upsert user:', error);
+    throw error;
+  }
 }
 
 export async function getUserByOpenId(openId: string) {
@@ -67,7 +81,7 @@ export async function getUserByOpenId(openId: string) {
 
 export async function createConversation(data: InsertConversation) {
   const db = await getDb();
-  if (!db) throw new Error("Database not available");
+  if (!db) throw new Error('Database not available');
   const result = await db.insert(conversations).values(data);
   return { id: result[0].insertId };
 }
@@ -81,7 +95,11 @@ export async function getConversations(userId: number) {
 export async function getConversation(id: number, userId: number) {
   const db = await getDb();
   if (!db) return undefined;
-  const result = await db.select().from(conversations).where(and(eq(conversations.id, id), eq(conversations.userId, userId))).limit(1);
+  const result = await db
+    .select()
+    .from(conversations)
+    .where(and(eq(conversations.id, id), eq(conversations.userId, userId)))
+    .limit(1);
   return result[0];
 }
 
@@ -102,7 +120,7 @@ export async function deleteConversation(id: number) {
 
 export async function addMessage(data: InsertMessage) {
   const db = await getDb();
-  if (!db) throw new Error("Database not available");
+  if (!db) throw new Error('Database not available');
   const result = await db.insert(messages).values(data);
   return { id: result[0].insertId };
 }
@@ -165,16 +183,19 @@ export async function getProviders() {
 export async function upsertProvider(data: InsertAiProvider) {
   const db = await getDb();
   if (!db) return;
-  await db.insert(aiProviders).values(data).onDuplicateKeyUpdate({
-    set: {
-      name: data.name,
-      type: data.type,
-      baseUrl: data.baseUrl,
-      model: data.model,
-      isEnabled: data.isEnabled,
-      priority: data.priority,
-      costPerInputToken: data.costPerInputToken,
-      costPerOutputToken: data.costPerOutputToken,
-    },
-  });
+  await db
+    .insert(aiProviders)
+    .values(data)
+    .onDuplicateKeyUpdate({
+      set: {
+        name: data.name,
+        type: data.type,
+        baseUrl: data.baseUrl,
+        model: data.model,
+        isEnabled: data.isEnabled,
+        priority: data.priority,
+        costPerInputToken: data.costPerInputToken,
+        costPerOutputToken: data.costPerOutputToken,
+      },
+    });
 }

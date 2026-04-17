@@ -79,7 +79,9 @@ export function EnhancedSafetyDrawer({
         duration: muteDuration,
       });
       setSuccess(
-        `${targetName} was muted for ${muteDuration === '24h' ? '24 hours' : muteDuration}.`
+        `${targetName} was muted for ${
+          muteDuration === '24h' ? '24 hours' : muteDuration
+        }.`
       );
       onActionComplete?.('mute');
     } catch (err) {
