@@ -1,0 +1,26 @@
+{
+  "tasks": [
+    {
+      "id": "h001",
+      "task": "post_twitter",
+      "platform": "twitter",
+      "content": "dating app where the verification process is harder than getting a security clearance. you're welcome. youandinotai.com",
+      "status": "done",
+      "created": "2026-04-16T13:45:00Z",
+      "result": null,
+      "completed_at": "2026-04-16T13:45:24.466497"
+    },
+    {
+      "id": "h002",
+      "task": "post_instagram",
+      "platform": "instagram",
+      "content": "human-first social platform for real-world connection. verification and identity-first design help keep the experience grounded in real people. #HumanConnection #VerifiedPeople #RealConversations",
+      "image": "/mnt/c/ANTIGRAVITY/hermes/tasks/unzipped/human_first_02.png",
+      "status": "done",
+      "created": "2026-04-16T13:45:00Z",
+      "result": null,
+      "completed_at": "2026-04-16T14:14:57.810243"
+    }
+  ],
+  "last_updated": "2026-04-16T14:14:57.814940"
+}
