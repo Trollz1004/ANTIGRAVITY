@@ -1,4 +1,3 @@
-
 import { Agent, ResearchItem, MediaTrack } from './types';
 
 // REAL agents — the actual AI formation running this operation

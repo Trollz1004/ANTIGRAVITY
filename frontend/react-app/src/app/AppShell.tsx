@@ -15,7 +15,12 @@ import {
 
 import { useAuth } from '../lib/auth';
 
-const NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolean }[] = [
+const NAV_ITEMS: {
+  to: string;
+  icon: typeof Compass;
+  label: string;
+  end?: boolean;
+}[] = [
   { to: '/app', icon: Compass, label: 'Discover', end: true },
   { to: '/app/lovebot', icon: Sparkles, label: 'Concierge' },
   { to: '/app/matches', icon: Heart, label: 'Matches' },
@@ -27,10 +32,12 @@ const NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolea
   { to: '/app/impact', icon: Sparkles, label: 'Impact' },
 ];
 
-const MOBILE_NAV_ITEMS: { to: string; icon: typeof Compass; label: string; end?: boolean }[] = [
-  ...NAV_ITEMS,
-  { to: '/app/privacy', icon: Shield, label: 'Privacy' },
-];
+const MOBILE_NAV_ITEMS: {
+  to: string;
+  icon: typeof Compass;
+  label: string;
+  end?: boolean;
+}[] = [...NAV_ITEMS, { to: '/app/privacy', icon: Shield, label: 'Privacy' }];
 
 function navClasses(isActive: boolean) {
   return `group relative flex items-center gap-3 rounded-[1.5rem] border-[3px] px-4 py-3 font-bold uppercase tracking-[0.16em] text-[0.72rem] transition-all ${
@@ -64,13 +71,20 @@ export function AppShell() {
         </div>
 
         <nav className="flex-1 space-y-3 overflow-y-auto px-4 py-5">
-          {NAV_ITEMS.map((item) => (
-            <NavLink key={item.to} to={item.to} end={item.end} className={({ isActive }) => navClasses(isActive)}>
+          {NAV_ITEMS.map(item => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) => navClasses(isActive)}
+            >
               {({ isActive }) => (
                 <>
                   <div
                     className={`flex h-11 w-11 items-center justify-center rounded-[1rem] border-[3px] ${
-                      isActive ? 'border-white bg-[#ff4f00] text-white' : 'border-[#111111] bg-[#efe6d8] text-[#111111]'
+                      isActive
+                        ? 'border-white bg-[#ff4f00] text-white'
+                        : 'border-[#111111] bg-[#efe6d8] text-[#111111]'
                     }`}
                   >
                     <item.icon size={18} />
@@ -83,27 +97,39 @@ export function AppShell() {
         </nav>
 
         <div className="space-y-3 border-t-4 border-[#111111] px-4 py-5">
-          <NavLink to="/app/profile" className={({ isActive }) => navClasses(isActive)}>
+          <NavLink
+            to="/app/profile"
+            className={({ isActive }) => navClasses(isActive)}
+          >
             {({ isActive }) => (
               <>
                 <div
                   className={`flex h-11 w-11 items-center justify-center rounded-[1rem] border-[3px] ${
-                    isActive ? 'border-white bg-[#ff4f00] text-white' : 'border-[#111111] bg-[#efe6d8] text-[#111111]'
+                    isActive
+                      ? 'border-white bg-[#ff4f00] text-white'
+                      : 'border-[#111111] bg-[#efe6d8] text-[#111111]'
                   }`}
                 >
                   <User size={18} />
                 </div>
-                <span className="flex-1 truncate">{user?.display_name || 'Profile'}</span>
+                <span className="flex-1 truncate">
+                  {user?.display_name || 'Profile'}
+                </span>
               </>
             )}
           </NavLink>
 
-          <NavLink to="/app/privacy" className={({ isActive }) => navClasses(isActive)}>
+          <NavLink
+            to="/app/privacy"
+            className={({ isActive }) => navClasses(isActive)}
+          >
             {({ isActive }) => (
               <>
                 <div
                   className={`flex h-11 w-11 items-center justify-center rounded-[1rem] border-[3px] ${
-                    isActive ? 'border-white bg-[#ff4f00] text-white' : 'border-[#111111] bg-[#efe6d8] text-[#111111]'
+                    isActive
+                      ? 'border-white bg-[#ff4f00] text-white'
+                      : 'border-[#111111] bg-[#efe6d8] text-[#111111]'
                   }`}
                 >
                   <Shield size={18} />
@@ -129,7 +155,9 @@ export function AppShell() {
         <header className="sticky top-0 z-40 border-b-4 border-[#111111] bg-[#fffaf2] px-4 py-4 md:hidden">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <div className="text-[0.68rem] font-black uppercase tracking-[0.22em] text-[#ff4f00]">YouAndINotAI</div>
+              <div className="text-[0.68rem] font-black uppercase tracking-[0.22em] text-[#ff4f00]">
+                YouAndINotAI
+              </div>
               <div className="text-xl font-black uppercase tracking-[-0.08em] leading-none text-[#111111]">
                 Human Only.
               </div>
@@ -156,7 +184,7 @@ export function AppShell() {
         </main>
 
         <nav className="fixed bottom-0 left-0 right-0 z-50 flex gap-2 overflow-x-auto border-t-4 border-[#111111] bg-[#fffaf2] px-2 py-2 md:hidden">
-          {MOBILE_NAV_ITEMS.map((item) => (
+          {MOBILE_NAV_ITEMS.map(item => (
             <NavLink
               key={item.to}
               to={item.to}

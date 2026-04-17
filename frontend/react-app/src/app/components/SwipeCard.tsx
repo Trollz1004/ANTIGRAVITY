@@ -39,7 +39,7 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
     }
   };
 
-  const hue = profile.display_name.charCodeAt(0) * 7 % 360;
+  const hue = (profile.display_name.charCodeAt(0) * 7) % 360;
   const placeholderBg = `hsl(${hue}, 50%, 15%)`;
   const accentColor = `hsl(${hue}, 70%, 65%)`;
 
@@ -75,13 +75,14 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
             : '12px 12px 0 0 rgba(17,17,17,1), 0 0 0 10px rgba(255,79,0,0.08)',
         }}
       >
-
         {/* Photo layer */}
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundColor: placeholderBg,
-            backgroundImage: profile.photos[0] ? `url(${profile.photos[0]})` : `url(/ace-spades-smoke.jpg)`,
+            backgroundImage: profile.photos[0]
+              ? `url(${profile.photos[0]})`
+              : `url(/ace-spades-smoke.jpg)`,
           }}
         />
 
@@ -92,13 +93,19 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
         {/* Top-left royal designation */}
         <div className="absolute top-4 left-5 z-20 flex flex-col items-center">
           {isJoker ? (
-            <span className="text-2xl drop-shadow-[0_0_8px_rgba(255,165,0,0.6)] leading-none">🃏</span>
+            <span className="text-2xl drop-shadow-[0_0_8px_rgba(255,165,0,0.6)] leading-none">
+              🃏
+            </span>
           ) : (
             <>
               <span className="text-2xl font-black text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,0.6)] leading-none">
                 {royalTitle}
               </span>
-              <Heart size={14} className="text-pink-500 mt-0.5" fill="currentColor" />
+              <Heart
+                size={14}
+                className="text-pink-500 mt-0.5"
+                fill="currentColor"
+              />
             </>
           )}
         </div>
@@ -106,13 +113,19 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
         {/* Bottom-right royal designation (inverted) */}
         <div className="absolute bottom-4 right-5 z-20 flex flex-col items-center rotate-180">
           {isJoker ? (
-            <span className="text-2xl drop-shadow-[0_0_8px_rgba(255,165,0,0.6)] leading-none">🃏</span>
+            <span className="text-2xl drop-shadow-[0_0_8px_rgba(255,165,0,0.6)] leading-none">
+              🃏
+            </span>
           ) : (
             <>
               <span className="text-2xl font-black text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,0.6)] leading-none">
                 {royalTitle}
               </span>
-              <Heart size={14} className="text-pink-500 mt-0.5" fill="currentColor" />
+              <Heart
+                size={14}
+                className="text-pink-500 mt-0.5"
+                fill="currentColor"
+              />
             </>
           )}
         </div>
@@ -137,7 +150,9 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
           }}
         >
           <Heart size={20} className="text-[#ff4f00]" fill="currentColor" />
-          <span className="text-[#111111] text-lg font-black tracking-widest">LIKE</span>
+          <span className="text-[#111111] text-lg font-black tracking-widest">
+            LIKE
+          </span>
         </motion.div>
 
         {/* PASS indicator */}
@@ -149,13 +164,20 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
           }}
         >
           <X size={20} className="text-[#111111]" />
-          <span className="text-[#111111] text-lg font-black tracking-widest">PASS</span>
+          <span className="text-[#111111] text-lg font-black tracking-widest">
+            PASS
+          </span>
         </motion.div>
 
         {/* No-photo avatar — with ace card background imagery */}
         {!profile.photos[0] && (
           <div className="absolute inset-0 flex items-center justify-center z-10">
-            <div className="w-40 h-40 rounded-full flex items-center justify-center relative" style={{ background: `radial-gradient(circle, ${accentColor}25, transparent)` }}>
+            <div
+              className="w-40 h-40 rounded-full flex items-center justify-center relative"
+              style={{
+                background: `radial-gradient(circle, ${accentColor}25, transparent)`,
+              }}
+            >
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/5 to-transparent" />
               <span className="text-8xl font-black text-white/20 drop-shadow-[0_0_20px_rgba(236,72,153,0.15)] relative z-10">
                 {profile.display_name.charAt(0).toUpperCase()}
@@ -208,7 +230,10 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
           >
             {/* Orange splat blob */}
             <div className="relative">
-              <svg viewBox="0 0 260 200" className="w-64 h-48 drop-shadow-[0_0_20px_rgba(255,140,0,0.6)]">
+              <svg
+                viewBox="0 0 260 200"
+                className="w-64 h-48 drop-shadow-[0_0_20px_rgba(255,140,0,0.6)]"
+              >
                 <path
                   d="M130,10 C160,5 190,15 210,30 C235,50 250,75 245,100 C240,130 225,145 200,160 C180,170 160,185 130,190 C100,185 80,170 60,160 C35,145 20,130 15,100 C10,75 25,50 50,30 C70,15 100,5 130,10Z"
                   fill="#FF6600"
@@ -216,7 +241,14 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
                   strokeWidth="3"
                 />
                 {/* Inner drip details */}
-                <ellipse cx="130" cy="100" rx="85" ry="65" fill="#FF7700" opacity="0.7" />
+                <ellipse
+                  cx="130"
+                  cy="100"
+                  rx="85"
+                  ry="65"
+                  fill="#FF7700"
+                  opacity="0.7"
+                />
                 {/* Splat drips */}
                 <circle cx="45" cy="70" r="12" fill="#FF6600" />
                 <circle cx="215" cy="65" r="14" fill="#FF6600" />
@@ -230,7 +262,8 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
                 <span
                   className="text-3xl font-black text-white tracking-tight"
                   style={{
-                    textShadow: '2px 2px 0 #CC5500, -1px -1px 0 #CC5500, 0 3px 6px rgba(0,0,0,0.5)',
+                    textShadow:
+                      '2px 2px 0 #CC5500, -1px -1px 0 #CC5500, 0 3px 6px rgba(0,0,0,0.5)',
                     transform: 'rotate(-3deg)',
                     fontFamily: 'Impact, "Arial Black", sans-serif',
                   }}
@@ -259,14 +292,22 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
             <motion.div
               className="relative flex items-center gap-1.5"
               animate={{ y: [0, -3, 0] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
             >
               {/* Troll avatar — the bait */}
               <div
                 className="w-10 h-10 rounded-lg overflow-hidden border-2 border-orange-400/50 group-hover:border-orange-400 group-hover:scale-110 transition-all flex-shrink-0"
                 style={{ boxShadow: '0 0 12px rgba(255,165,0,0.3)' }}
               >
-                <img src="/trollz-discord.png" alt="" className="w-full h-full object-cover" />
+                <img
+                  src="/trollz-discord.png"
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
               </div>
 
               {/* Chat bubble with thinking dots */}
@@ -322,40 +363,60 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
         <div
           className="absolute bottom-0 left-0 right-0 z-20 p-5"
           style={{
-            background: 'linear-gradient(to top, rgba(17,17,17,0.96) 0%, rgba(17,17,17,0.72) 54%, rgba(17,17,17,0.15) 78%, transparent 100%)',
+            background:
+              'linear-gradient(to top, rgba(17,17,17,0.96) 0%, rgba(17,17,17,0.72) 54%, rgba(17,17,17,0.15) 78%, transparent 100%)',
           }}
         >
           {/* Name + age + verified */}
           <div className="flex items-center gap-2.5 mb-1">
-            <h2 className="text-2xl font-black text-white tracking-tight drop-shadow-lg">{profile.display_name}</h2>
+            <h2 className="text-2xl font-black text-white tracking-tight drop-shadow-lg">
+              {profile.display_name}
+            </h2>
             {profile.age && (
-              <span className="text-xl text-gray-300 font-light">{profile.age}</span>
+              <span className="text-xl text-gray-300 font-light">
+                {profile.age}
+              </span>
             )}
-            <VerifiedDot tier={profile.subscription_active ? 'platinum' : profile.verified ? 'gold' : 'unverified'} />
+            <VerifiedDot
+              tier={
+                profile.subscription_active
+                  ? 'platinum'
+                  : profile.verified
+                    ? 'gold'
+                    : 'unverified'
+              }
+            />
             {isFounder && (
-                <span className="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-white bg-[#ff4f00] border-2 border-white/20">
-                  Founder
-                </span>
+              <span className="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-white bg-[#ff4f00] border-2 border-white/20">
+                Founder
+              </span>
             )}
           </div>
 
           {/* Location */}
           {profile.location && (
             <div className="flex items-center gap-1.5 text-gray-400 text-sm mb-2.5">
-              <MapPin size={12} className={isFounder ? 'text-orange-400/70' : 'text-pink-400/70'} />
+              <MapPin
+                size={12}
+                className={
+                  isFounder ? 'text-orange-400/70' : 'text-pink-400/70'
+                }
+              />
               <span>{profile.location}</span>
             </div>
           )}
 
           {/* Bio */}
           {profile.bio && (
-            <p className="text-gray-300/80 text-sm mb-3 line-clamp-2 leading-relaxed">{profile.bio}</p>
+            <p className="text-gray-300/80 text-sm mb-3 line-clamp-2 leading-relaxed">
+              {profile.bio}
+            </p>
           )}
 
           {/* Interests — crystal pills */}
           {profile.interests.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
-              {profile.interests.slice(0, 4).map((interest) => (
+              {profile.interests.slice(0, 4).map(interest => (
                 <span
                   key={interest}
                   className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
@@ -364,7 +425,9 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
                       : 'text-white/90 border-white/20'
                   }`}
                   style={{
-                    background: isFounder ? 'rgba(255,79,0,0.2)' : 'rgba(255,255,255,0.08)',
+                    background: isFounder
+                      ? 'rgba(255,79,0,0.2)'
+                      : 'rgba(255,255,255,0.08)',
                   }}
                 >
                   {interest}
@@ -390,7 +453,11 @@ interface SwipeButtonsProps {
   onSuperLike?: () => void;
 }
 
-export function SwipeButtons({ onPass, onLike, onSuperLike }: SwipeButtonsProps) {
+export function SwipeButtons({
+  onPass,
+  onLike,
+  onSuperLike,
+}: SwipeButtonsProps) {
   return (
     <div className="flex justify-center items-center gap-4 mt-8">
       {/* Pass */}
@@ -406,7 +473,11 @@ export function SwipeButtons({ onPass, onLike, onSuperLike }: SwipeButtonsProps)
         onClick={onLike}
         className="w-20 h-20 rounded-[1.5rem] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group border-[4px] border-[#111111] bg-[#111111] shadow-[8px_8px_0_0_rgba(17,17,17,1)]"
       >
-        <Heart size={32} className="text-[#ff4f00] group-hover:scale-110 transition-transform" fill="currentColor" />
+        <Heart
+          size={32}
+          className="text-[#ff4f00] group-hover:scale-110 transition-transform"
+          fill="currentColor"
+        />
       </button>
 
       {/* Diamond Super Like — whale engine */}
@@ -415,19 +486,27 @@ export function SwipeButtons({ onPass, onLike, onSuperLike }: SwipeButtonsProps)
         className="w-16 h-16 rounded-[1.3rem] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group relative overflow-hidden border-[3px] border-[#111111] bg-[#efe6d8] shadow-[6px_6px_0_0_rgba(17,17,17,1)]"
       >
         {/* Animated glow pulse */}
-        <div className="absolute inset-0 rounded-[1.3rem] animate-pulse opacity-40" style={{ boxShadow: '0 0 0 6px rgba(255,79,0,0.12)' }} />
+        <div
+          className="absolute inset-0 rounded-[1.3rem] animate-pulse opacity-40"
+          style={{ boxShadow: '0 0 0 6px rgba(255,79,0,0.12)' }}
+        />
         {/* Sweeping shimmer */}
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
           style={{
-            background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%)',
+            background:
+              'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%)',
             animation: 'shimmer 2s infinite',
           }}
         />
-        <Diamond size={24} className="text-[#ff4f00] transition-colors relative z-10" />
-        <span className="absolute -bottom-0.5 text-[7px] font-black uppercase tracking-widest text-[#111111]/70 z-10">Super</span>
+        <Diamond
+          size={24}
+          className="text-[#ff4f00] transition-colors relative z-10"
+        />
+        <span className="absolute -bottom-0.5 text-[7px] font-black uppercase tracking-widest text-[#111111]/70 z-10">
+          Super
+        </span>
       </button>
     </div>
   );
 }
-

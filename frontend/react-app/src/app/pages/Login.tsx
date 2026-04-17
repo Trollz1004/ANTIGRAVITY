@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowRight, Heart, KeyRound, Lock, Mail, ShieldCheck, Sparkles } from 'lucide-react';
+import {
+  ArrowRight,
+  Heart,
+  KeyRound,
+  Lock,
+  Mail,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react';
 
 import { GoogleSignInButton } from '../../components/auth/GoogleSignInButton';
 import { useAuth } from '../../lib/auth';
@@ -61,7 +69,8 @@ export function Login() {
               Zero noise.
             </h1>
             <p className="mt-6 max-w-md text-base leading-7 text-white/72">
-              Sign in to the verified side of the platform. Matching, meetups, boards, and support all stay tied to a real account.
+              Sign in to the verified side of the platform. Matching, meetups,
+              boards, and support all stay tied to a real account.
             </p>
           </div>
 
@@ -75,11 +84,17 @@ export function Login() {
                 </div>
                 <div className="flex items-start gap-3">
                   <Sparkles size={18} className="mt-0.5 text-[#ff4f00]" />
-                  <span>Dating, social boards, meetups, and volunteer surfaces in one shell.</span>
+                  <span>
+                    Dating, social boards, meetups, and volunteer surfaces in
+                    one shell.
+                  </span>
                 </div>
                 <div className="flex items-start gap-3">
                   <Heart size={18} className="mt-0.5 text-[#ff4f00]" />
-                  <span>No fake mission-marketing framing. Just a real platform with verified users.</span>
+                  <span>
+                    No fake mission-marketing framing. Just a real platform with
+                    verified users.
+                  </span>
                 </div>
               </div>
             </div>
@@ -91,13 +106,18 @@ export function Login() {
             <div className="mb-8 md:hidden">
               <div className="app-kicker mb-3">YouAndINotAI</div>
               <h1 className="app-title">welcome back.</h1>
-              <p className="app-subtitle mt-3">Verified humans only. Sign in and pick up where you left off.</p>
+              <p className="app-subtitle mt-3">
+                Verified humans only. Sign in and pick up where you left off.
+              </p>
             </div>
 
             <div className="mb-8 hidden md:block">
               <div className="app-kicker mb-3">Sign In</div>
               <h1 className="app-title">welcome back.</h1>
-              <p className="app-subtitle mt-3">Use the same email tied to your platform account so verification and billing stay attached correctly.</p>
+              <p className="app-subtitle mt-3">
+                Use the same email tied to your platform account so verification
+                and billing stay attached correctly.
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -109,12 +129,15 @@ export function Login() {
 
               <div className="space-y-4">
                 <label className="relative block">
-                  <Mail size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]" />
+                  <Mail
+                    size={18}
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]"
+                  />
                   <input
                     type="email"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                     autoComplete="email"
                     placeholder="Email"
                     className="app-input input-glow pl-12"
@@ -122,12 +145,15 @@ export function Login() {
                 </label>
 
                 <label className="relative block">
-                  <Lock size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]" />
+                  <Lock
+                    size={18}
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]"
+                  />
                   <input
                     type="password"
                     required
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     autoComplete="current-password"
                     placeholder="Password"
                     className="app-input input-glow pl-12"
@@ -135,8 +161,14 @@ export function Login() {
                 </label>
               </div>
 
-              <button type="submit" disabled={loading} className="app-button-dark w-full px-5 py-4 disabled:opacity-60">
-                {loading ? 'Signing In...' : (
+              <button
+                type="submit"
+                disabled={loading}
+                className="app-button-dark w-full px-5 py-4 disabled:opacity-60"
+              >
+                {loading ? (
+                  'Signing In...'
+                ) : (
                   <>
                     Sign In <ArrowRight size={18} />
                   </>
@@ -146,7 +178,9 @@ export function Login() {
 
             <div className="my-6 flex items-center gap-3">
               <div className="h-[3px] flex-1 bg-[#111111]" />
-              <span className="text-xs font-black uppercase tracking-[0.2em] text-[#5c594f]">or</span>
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-[#5c594f]">
+                or
+              </span>
               <div className="h-[3px] flex-1 bg-[#111111]" />
             </div>
 
@@ -168,18 +202,29 @@ export function Login() {
               </button>
 
               {showBeta && (
-                <form onSubmit={handleBetaCode} className="mt-4 space-y-3 animate-slide-up">
-                  {betaError && <p className="text-sm font-semibold text-[#111111]">{betaError}</p>}
+                <form
+                  onSubmit={handleBetaCode}
+                  className="mt-4 space-y-3 animate-slide-up"
+                >
+                  {betaError && (
+                    <p className="text-sm font-semibold text-[#111111]">
+                      {betaError}
+                    </p>
+                  )}
                   <div className="flex flex-col gap-3 md:flex-row">
                     <input
                       type="text"
                       value={betaCode}
-                      onChange={(e) => setBetaCode(e.target.value)}
+                      onChange={e => setBetaCode(e.target.value)}
                       autoComplete="one-time-code"
                       placeholder="Enter access code"
                       className="app-input input-glow flex-1 uppercase tracking-[0.14em]"
                     />
-                    <button type="submit" disabled={betaLoading} className="app-button-accent px-5 py-3">
+                    <button
+                      type="submit"
+                      disabled={betaLoading}
+                      className="app-button-accent px-5 py-3"
+                    >
                       {betaLoading ? 'Checking...' : 'Enter'}
                     </button>
                   </div>
@@ -189,14 +234,18 @@ export function Login() {
 
             <p className="mt-6 text-center text-sm font-medium text-[#5c594f]">
               Need an account?{' '}
-              <Link to={registerHref} className="font-black uppercase tracking-[0.14em] text-[#111111] underline decoration-[3px] underline-offset-4">
+              <Link
+                to={registerHref}
+                className="font-black uppercase tracking-[0.14em] text-[#111111] underline decoration-[3px] underline-offset-4"
+              >
                 Create one
               </Link>
             </p>
 
             <div className="mt-4 text-center">
               <Link to="/" className="app-back-link">
-                <Heart size={14} className="text-[#ff4f00]" /> Back to YouAndINotAI
+                <Heart size={14} className="text-[#ff4f00]" /> Back to
+                YouAndINotAI
               </Link>
             </div>
           </div>

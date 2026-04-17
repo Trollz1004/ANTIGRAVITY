@@ -20,29 +20,29 @@ export function GoogleSignInButton() {
         await googleLogin(response.credential);
         // The user will be redirected by the auth hook
       } catch (error) {
-        console.error("Google login failed", error);
+        console.error('Google login failed', error);
       }
     };
 
     const initializeGsi = () => {
       if (cancelled || !window.google?.accounts?.id) {
-        console.error("Google Identity Services library not loaded.");
+        console.error('Google Identity Services library not loaded.');
         return;
       }
 
-      const buttonRoot = document.getElementById("google-signin-button");
+      const buttonRoot = document.getElementById('google-signin-button');
       if (!buttonRoot) return;
-      buttonRoot.innerHTML = "";
+      buttonRoot.innerHTML = '';
 
       window.google.accounts.id.initialize({
         client_id: googleClientId,
         callback: handleCredentialResponse,
       });
 
-      window.google.accounts.id.renderButton(
-        buttonRoot,
-        { theme: "outline", size: "large" }
-      );
+      window.google.accounts.id.renderButton(buttonRoot, {
+        theme: 'outline',
+        size: 'large',
+      });
     };
 
     const loadGsi = async () => {
@@ -51,21 +51,27 @@ export function GoogleSignInButton() {
         return;
       }
 
-      const existing = document.getElementById("google-gsi-client") as HTMLScriptElement | null;
+      const existing = document.getElementById(
+        'google-gsi-client'
+      ) as HTMLScriptElement | null;
       if (existing) {
-        existing.addEventListener("load", initializeGsi, { once: true });
+        existing.addEventListener('load', initializeGsi, { once: true });
         return;
       }
 
-      const script = document.createElement("script");
-      script.id = "google-gsi-client";
-      script.src = "https://accounts.google.com/gsi/client";
+      const script = document.createElement('script');
+      script.id = 'google-gsi-client';
+      script.src = 'https://accounts.google.com/gsi/client';
       script.async = true;
       script.defer = true;
-      script.addEventListener("load", initializeGsi, { once: true });
-      script.addEventListener("error", () => {
-        console.error("Google Identity Services library failed to load.");
-      }, { once: true });
+      script.addEventListener('load', initializeGsi, { once: true });
+      script.addEventListener(
+        'error',
+        () => {
+          console.error('Google Identity Services library failed to load.');
+        },
+        { once: true }
+      );
       document.head.appendChild(script);
     };
 

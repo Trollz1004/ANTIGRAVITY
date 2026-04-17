@@ -1,37 +1,37 @@
 #!/usr/bin/env node
-"use strict";
+'use strict';
 
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
-const ROOT = path.resolve(__dirname, "..");
-const INPUT_JSON = path.join(ROOT, "data", "ewaste-intake", "output", "latest-ebay-listings-batch.json");
-const STATE_DIR = path.join(ROOT, "CodeX", "state");
+const ROOT = path.resolve(__dirname, '..');
+const INPUT_JSON = path.join(ROOT, 'data', 'ewaste-intake', 'output', 'latest-ebay-listings-batch.json');
+const STATE_DIR = path.join(ROOT, 'CodeX', 'state');
 
 function esc(value) {
-  return String(value || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function readJson(filePath) {
-  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
 function render(payload) {
   const generatedAt = payload.generated_at || new Date().toISOString();
-  const batchId = payload.batch_id || "unknown-batch";
+  const batchId = payload.batch_id || 'unknown-batch';
   const listings = Array.isArray(payload.listings) ? payload.listings : [];
 
   const sections = listings.map((item, idx) => {
     const title = esc(item.title);
     const intakeId = esc(item.intake_id);
-    const variant = esc(item.listing_variant || "primary");
-    const format = esc(item.listing_format || "buy_it_now");
+    const variant = esc(item.listing_variant || 'primary');
+    const format = esc(item.listing_format || 'buy_it_now');
     const price = Number(item.suggested_price_usd || 0).toFixed(2);
-    const revenueNote = esc(item.revenue_note || item.charity_impact_line || "");
-    const htmlDescription = String(item.description_html || "").trim();
+    const revenueNote = esc(item.revenue_note || item.charity_impact_line || '');
+    const htmlDescription = String(item.description_html || '').trim();
 
     return [
       `<section class="listing">`,
@@ -46,7 +46,7 @@ function render(payload) {
       `<h3>Copy/Paste Description HTML</h3>`,
       `<textarea readonly>${esc(htmlDescription)}</textarea>`,
       `</section>`,
-    ].join("\n");
+    ].join('\n');
   });
 
   return `<!doctype html>
@@ -66,8 +66,10 @@ function render(payload) {
 </head>
 <body>
   <h1>eBay Ready Listing Pack</h1>
-  <p class="meta">Batch: <strong>${esc(batchId)}</strong> | Generated: <strong>${esc(generatedAt)}</strong> | Listings: <strong>${listings.length}</strong></p>
-  ${sections.join("\n")}
+  <p class="meta">Batch: <strong>${esc(batchId)}</strong> | Generated: <strong>${esc(
+    generatedAt,
+  )}</strong> | Listings: <strong>${listings.length}</strong></p>
+  ${sections.join('\n')}
 </body>
 </html>
 `;
@@ -81,12 +83,12 @@ function main() {
   fs.mkdirSync(STATE_DIR, { recursive: true });
   const payload = readJson(INPUT_JSON);
   const html = render(payload);
-  const ts = new Date().toISOString().replace(/[:.]/g, "-");
+  const ts = new Date().toISOString().replace(/[:.]/g, '-');
   const outputPath = path.join(STATE_DIR, `ebay-ready-batch-${ts}.html`);
-  const latestPath = path.join(STATE_DIR, "ebay-ready-batch-latest.html");
+  const latestPath = path.join(STATE_DIR, 'ebay-ready-batch-latest.html');
 
-  fs.writeFileSync(outputPath, html, "utf8");
-  fs.writeFileSync(latestPath, html, "utf8");
+  fs.writeFileSync(outputPath, html, 'utf8');
+  fs.writeFileSync(latestPath, html, 'utf8');
 
   console.log(`HTML=${outputPath}`);
   console.log(`LATEST=${latestPath}`);
@@ -98,4 +100,3 @@ try {
   console.error(`export-ebay-ready-html failed: ${error.message}`);
   process.exit(1);
 }
-

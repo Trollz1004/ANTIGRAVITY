@@ -1,54 +1,56 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { 
-  Recycle, 
-  Heart, 
-  Globe, 
-  Cpu, 
-  ShoppingBag, 
-  ExternalLink, 
-  TreeDeciduous, 
-  DollarSign, 
-  Smartphone 
+import {
+  Recycle,
+  Heart,
+  Globe,
+  Cpu,
+  ShoppingBag,
+  ExternalLink,
+  TreeDeciduous,
+  DollarSign,
+  Smartphone,
 } from 'lucide-react';
 
-const CharityCard = ({ 
-  icon: Icon, 
-  name, 
-  tagline, 
-  url, 
+const CharityCard = ({
+  icon: Icon,
+  name,
+  tagline,
+  url,
   description,
-  color = "from-green-400 to-green-600"
-}: { 
-  icon: any, 
-  name: string, 
-  tagline: string, 
-  url: string, 
-  description: string,
-  color?: string
+  color = 'from-green-400 to-green-600',
+}: {
+  icon: any;
+  name: string;
+  tagline: string;
+  url: string;
+  description: string;
+  color?: string;
 }) => (
-  <motion.div
-    whileHover={{ y: -10, scale: 1.02 }}
-    className="relative group"
-  >
-    <div className={`absolute -inset-1 bg-gradient-to-r ${color} rounded-[2.5rem] blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200`}></div>
+  <motion.div whileHover={{ y: -10, scale: 1.02 }} className="relative group">
+    <div
+      className={`absolute -inset-1 bg-gradient-to-r ${color} rounded-[2.5rem] blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200`}
+    ></div>
     <div className="relative p-8 bg-zinc-900/90 backdrop-blur-xl border border-white/10 rounded-[2.5rem] h-full flex flex-col">
-      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center mb-6 shadow-lg shadow-green-500/20`}>
+      <div
+        className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center mb-6 shadow-lg shadow-green-500/20`}
+      >
         <Icon className="text-white" size={32} />
       </div>
       <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">{name}</h3>
       <p className="text-green-400 font-bold text-xs uppercase tracking-widest mb-4">{tagline}</p>
-      <p className="text-gray-400 text-sm leading-relaxed mb-8 flex-1">
-        {description}
-      </p>
-      <a 
-        href={url} 
-        target="_blank" 
+      <p className="text-gray-400 text-sm leading-relaxed mb-8 flex-1">{description}</p>
+      <a
+        href={url}
+        target="_blank"
         rel="noopener noreferrer"
         className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center gap-2 text-white font-bold hover:bg-green-500 hover:border-green-400 transition-all group/btn"
       >
         Visit Platform
-        <ExternalLink size={16} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+        <ExternalLink
+          size={16}
+          className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform"
+        />
       </a>
     </div>
   </motion.div>
@@ -57,16 +59,16 @@ const CharityCard = ({
 const Particle = ({ delay }: { delay: number }) => (
   <motion.div
     initial={{ y: '100%', opacity: 0, x: Math.random() * 100 + '%' }}
-    animate={{ 
-      y: '-10%', 
+    animate={{
+      y: '-10%',
       opacity: [0, 1, 1, 0],
-      x: (Math.random() * 100 - 50) + '%'
+      x: Math.random() * 100 - 50 + '%',
     }}
-    transition={{ 
-      duration: Math.random() * 10 + 10, 
-      repeat: Infinity, 
+    transition={{
+      duration: Math.random() * 10 + 10,
+      repeat: Infinity,
       delay,
-      ease: "linear"
+      ease: 'linear',
     }}
     className="absolute w-1 h-1 bg-green-400 rounded-full blur-[1px]"
   />
@@ -74,7 +76,10 @@ const Particle = ({ delay }: { delay: number }) => (
 
 export function CharitySection() {
   return (
-    <section id="charity-section" className="relative min-h-screen py-24 px-6 overflow-hidden bg-gradient-to-b from-black via-[#0a1a0f] to-[#051009]">
+    <section
+      id="charity-section"
+      className="relative min-h-screen py-24 px-6 overflow-hidden bg-gradient-to-b from-black via-[#0a1a0f] to-[#051009]"
+    >
       {/* Background Particles */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {[...Array(30)].map((_, i) => (
@@ -94,7 +99,7 @@ export function CharitySection() {
             <Recycle size={14} />
             Give Back & Go Green
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -102,10 +107,13 @@ export function CharitySection() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-7xl font-black tracking-tighter text-white leading-none"
           >
-            Every Match. Every Device. <br/>
-            Every Dollar. <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">FOR THE KIDS. ♥</span>
+            Every Match. Every Device. <br />
+            Every Dollar.{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">
+              FOR THE KIDS. ♥
+            </span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -113,7 +121,8 @@ export function CharitySection() {
             transition={{ delay: 0.2 }}
             className="text-gray-400 max-w-2xl mx-auto text-lg font-light"
           >
-            We're building a sustainable future where technology heals. Our ecosystem turns e-waste into miracles and AI revenue into children's smiles.
+            We're building a sustainable future where technology heals. Our ecosystem turns e-waste into miracles and AI
+            revenue into children's smiles.
           </motion.p>
         </div>
 
@@ -129,7 +138,9 @@ export function CharitySection() {
               <Smartphone size={24} />
             </div>
             <div className="text-3xl font-black text-white">E-Waste</div>
-            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Device Recycling Program</div>
+            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+              Device Recycling Program
+            </div>
           </div>
           <div className="flex flex-col items-center text-center space-y-2 border-x border-white/5">
             <div className="p-3 bg-rose-500/10 rounded-2xl text-rose-400">
@@ -149,14 +160,14 @@ export function CharitySection() {
 
         {/* Platforms Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <CharityCard 
+          <CharityCard
             icon={Globe}
             name="AiDoesItAll.website"
             tagline="AI for Good"
             url="https://AiDoesItAll.website"
             description="Our flagship AI platform where 100% of all subscription revenue is directly allocated to children's hospitals. Harnessing the power of Gemini to fund medical breakthroughs."
           />
-          <CharityCard 
+          <CharityCard
             icon={Recycle}
             name="OnlineRecycle.org"
             tagline="Trash or Treasure"
@@ -164,7 +175,7 @@ export function CharitySection() {
             description="Responsible e-waste recycling. Ship your old electronics to us; we recycle them and donate all proceeds to Shriners Children's Hospital. Turning old tech into new hope."
             color="from-emerald-400 to-teal-600"
           />
-          <CharityCard 
+          <CharityCard
             icon={ShoppingBag}
             name="The Square Store"
             tagline="Donation Portal"
@@ -182,7 +193,9 @@ export function CharitySection() {
             </div>
             <div className="text-left">
               <div className="text-sm font-bold text-white uppercase tracking-tight">Transparency First</div>
-              <div className="text-xs text-gray-400">All donations are verified and tracked publicly for total accountability.</div>
+              <div className="text-xs text-gray-400">
+                All donations are verified and tracked publicly for total accountability.
+              </div>
             </div>
           </div>
         </div>

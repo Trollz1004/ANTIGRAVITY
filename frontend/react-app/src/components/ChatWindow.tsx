@@ -17,7 +17,12 @@ interface Props {
   onClose?: () => void;
 }
 
-export default function ChatWindow({ matchId, currentUserId, matchedUser, onClose }: Props) {
+export default function ChatWindow({
+  matchId,
+  currentUserId,
+  matchedUser,
+  onClose,
+}: Props) {
   const { messages, connectionState, sendMessage } = useChat(matchId);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
@@ -56,14 +61,14 @@ export default function ChatWindow({ matchId, currentUserId, matchedUser, onClos
     disconnected: '🔴 Offline',
   };
 
-  const avatar =
-    matchedUser.photos?.[0]
-      ? matchedUser.photos[0]
-      : `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(matchedUser.display_name)}`;
+  const avatar = matchedUser.photos?.[0]
+    ? matchedUser.photos[0]
+    : `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+        matchedUser.display_name
+      )}`;
 
   return (
     <div className="flex flex-col h-full bg-gray-950 text-white rounded-xl overflow-hidden border border-gray-800 shadow-2xl">
-
       {/* ── Header ── */}
       <div className="flex items-center gap-3 px-4 py-3 bg-gray-900 border-b border-gray-800">
         <img
@@ -73,12 +78,18 @@ export default function ChatWindow({ matchId, currentUserId, matchedUser, onClos
         />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <span className="font-semibold truncate">{matchedUser.display_name}</span>
+            <span className="font-semibold truncate">
+              {matchedUser.display_name}
+            </span>
             {matchedUser.verified && (
-              <span className="text-blue-400 text-xs" title="Human-verified">✓</span>
+              <span className="text-blue-400 text-xs" title="Human-verified">
+                ✓
+              </span>
             )}
           </div>
-          <span className="text-xs text-gray-400">{connectionLabel[connectionState]}</span>
+          <span className="text-xs text-gray-400">
+            {connectionLabel[connectionState]}
+          </span>
         </div>
         {onClose && (
           <button
@@ -98,12 +109,14 @@ export default function ChatWindow({ matchId, currentUserId, matchedUser, onClos
             <p className="text-2xl mb-2">💬</p>
             <p>Start the conversation.</p>
             {connectionState === 'connected' && (
-              <p className="text-xs mt-1 text-green-500">🔒 End-to-end encrypted</p>
+              <p className="text-xs mt-1 text-green-500">
+                🔒 End-to-end encrypted
+              </p>
             )}
           </div>
         )}
 
-        {messages.map((msg) => {
+        {messages.map(msg => {
           const isMe = msg.sender_id === currentUserId;
           return (
             <div
@@ -118,7 +131,11 @@ export default function ChatWindow({ matchId, currentUserId, matchedUser, onClos
                 }`}
               >
                 <p>{msg.content}</p>
-                <div className={`flex items-center gap-1 mt-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
+                <div
+                  className={`flex items-center gap-1 mt-1 ${
+                    isMe ? 'justify-end' : 'justify-start'
+                  }`}
+                >
                   <span className="text-[10px] opacity-50">
                     {new Date(msg.created_at).toLocaleTimeString([], {
                       hour: '2-digit',
@@ -126,7 +143,12 @@ export default function ChatWindow({ matchId, currentUserId, matchedUser, onClos
                     })}
                   </span>
                   {msg.encrypted && (
-                    <span className="text-[10px] opacity-40" title="End-to-end encrypted">🔒</span>
+                    <span
+                      className="text-[10px] opacity-40"
+                      title="End-to-end encrypted"
+                    >
+                      🔒
+                    </span>
                   )}
                 </div>
               </div>
@@ -149,9 +171,13 @@ export default function ChatWindow({ matchId, currentUserId, matchedUser, onClos
           <textarea
             ref={inputRef}
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={connectionState === 'disconnected' ? 'Reconnecting…' : 'Type a message…'}
+            placeholder={
+              connectionState === 'disconnected'
+                ? 'Reconnecting…'
+                : 'Type a message…'
+            }
             disabled={connectionState === 'disconnected'}
             rows={1}
             maxLength={2000}
@@ -160,15 +186,23 @@ export default function ChatWindow({ matchId, currentUserId, matchedUser, onClos
           />
           <button
             onClick={handleSend}
-            disabled={!input.trim() || sending || connectionState === 'disconnected'}
+            disabled={
+              !input.trim() || sending || connectionState === 'disconnected'
+            }
             className="shrink-0 bg-purple-600 hover:bg-purple-500 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl px-4 py-2.5 text-sm font-medium transition-colors"
           >
             {sending ? '…' : 'Send'}
           </button>
         </div>
         <div className="flex justify-between mt-1">
-          <span className="text-[10px] text-gray-600">Shift+Enter for new line</span>
-          <span className={`text-[10px] ${input.length > 1800 ? 'text-orange-400' : 'text-gray-600'}`}>
+          <span className="text-[10px] text-gray-600">
+            Shift+Enter for new line
+          </span>
+          <span
+            className={`text-[10px] ${
+              input.length > 1800 ? 'text-orange-400' : 'text-gray-600'
+            }`}
+          >
             {input.length}/2000
           </span>
         </div>

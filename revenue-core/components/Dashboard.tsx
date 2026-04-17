@@ -17,7 +17,7 @@ const Dashboard: React.FC<DashboardProps> = ({ agents }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const activeAgents = agents.filter(a => a.status === 'Active').length;
+  const activeAgents = agents.filter((a) => a.status === 'Active').length;
   const daysToLaunch = Math.ceil((LAUNCH_DATE.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
   return (
     <div className="space-y-6 animate-fade-in">
@@ -56,7 +56,9 @@ const Dashboard: React.FC<DashboardProps> = ({ agents }) => {
             </div>
             <div>
               <p className="text-slate-400 text-sm">Active Agents</p>
-              <h3 className="text-2xl font-bold text-white">{activeAgents}/{agents.length}</h3>
+              <h3 className="text-2xl font-bold text-white">
+                {activeAgents}/{agents.length}
+              </h3>
               <p className="text-[10px] text-slate-500 mt-1">AI formation operational</p>
             </div>
           </div>
@@ -83,12 +85,20 @@ const Dashboard: React.FC<DashboardProps> = ({ agents }) => {
           <h3 className="text-lg font-bold text-white mb-4">AI Formation</h3>
           <div className="space-y-3">
             {agents.map((agent) => (
-              <div key={agent.id} className="flex items-center justify-between p-3 bg-slate-900/50 rounded-lg border border-slate-800">
+              <div
+                key={agent.id}
+                className="flex items-center justify-between p-3 bg-slate-900/50 rounded-lg border border-slate-800"
+              >
                 <div className="flex items-center gap-3">
-                  <div className={`w-2.5 h-2.5 rounded-full ${
-                    agent.status === 'Active' ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]' :
-                    agent.status === 'Standby' ? 'bg-amber-400' : 'bg-slate-500'
-                  }`} />
+                  <div
+                    className={`w-2.5 h-2.5 rounded-full ${
+                      agent.status === 'Active'
+                        ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]'
+                        : agent.status === 'Standby'
+                          ? 'bg-amber-400'
+                          : 'bg-slate-500'
+                    }`}
+                  />
                   <div>
                     <span className="text-sm font-bold text-white">{agent.name}</span>
                     <span className="text-xs text-slate-500 ml-2">{agent.provider}</span>
@@ -96,10 +106,15 @@ const Dashboard: React.FC<DashboardProps> = ({ agents }) => {
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-xs text-slate-400">{agent.task}</span>
-                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${
-                    agent.status === 'Active' ? 'bg-emerald-500/20 text-emerald-400' :
-                    agent.status === 'Standby' ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-700 text-slate-400'
-                  }`}>
+                  <span
+                    className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${
+                      agent.status === 'Active'
+                        ? 'bg-emerald-500/20 text-emerald-400'
+                        : agent.status === 'Standby'
+                          ? 'bg-amber-500/20 text-amber-400'
+                          : 'bg-slate-700 text-slate-400'
+                    }`}
+                  >
                     {agent.status}
                   </span>
                 </div>
@@ -114,7 +129,9 @@ const Dashboard: React.FC<DashboardProps> = ({ agents }) => {
           <div className="space-y-4">
             <div className="text-center py-4">
               <div className="text-2xl font-bold font-mono text-white">10% CAP</div>
-              <p className="text-xs text-slate-500 mt-1">Founder-directed conservative charitable cap for current LLC operations.</p>
+              <p className="text-xs text-slate-500 mt-1">
+                Founder-directed conservative charitable cap for current LLC operations.
+              </p>
             </div>
 
             <div className="space-y-3">
@@ -153,8 +170,12 @@ const Dashboard: React.FC<DashboardProps> = ({ agents }) => {
       <div className="bg-surface p-6 rounded-xl border border-slate-700">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-white">Live Products</h3>
-          <a href={SQUARE_DASHBOARD} target="_blank" rel="noopener noreferrer"
-            className="text-xs text-slate-400 hover:text-white flex items-center gap-1">
+          <a
+            href={SQUARE_DASHBOARD}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-slate-400 hover:text-white flex items-center gap-1"
+          >
             Square Dashboard <ExternalLink size={12} />
           </a>
         </div>

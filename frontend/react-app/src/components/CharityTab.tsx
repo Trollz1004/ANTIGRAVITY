@@ -15,7 +15,8 @@ export default function CharityTab() {
   useEffect(() => {
     const fetchImpact = async () => {
       try {
-        const data = await api.get<VolunteerImpactResponse>('/volunteer/impact');
+        const data =
+          await api.get<VolunteerImpactResponse>('/volunteer/impact');
         setImpact(data);
       } catch (err) {
         console.error('Failed to fetch impact metrics:', err);
@@ -45,8 +46,10 @@ export default function CharityTab() {
           Volunteer action and mission context, in one place.
         </p>
         <p className="max-w-2xl mx-auto text-gray-400 text-sm leading-relaxed">
-          These live cards track community volunteering activity: hours committed, signups, and organizations supported.
-          Any charitable support follows the separate founder-directed operating policy and is not represented by the volunteer totals below.
+          These live cards track community volunteering activity: hours
+          committed, signups, and organizations supported. Any charitable
+          support follows the separate founder-directed operating policy and is
+          not represented by the volunteer totals below.
         </p>
       </div>
 
@@ -88,24 +91,32 @@ export default function CharityTab() {
         <div className="absolute top-0 right-0 p-4 opacity-10">
           <p className="text-9xl">🕊️</p>
         </div>
-        
+
         <div className="relative z-10 space-y-4">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             Mission Context
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-3">
-              <h3 className="text-purple-400 font-bold text-sm uppercase">The Iron Wall</h3>
+              <h3 className="text-purple-400 font-bold text-sm uppercase">
+                The Iron Wall
+              </h3>
               <p className="text-gray-300 text-sm leading-relaxed">
-                We maintain absolute separation between our social mission and corporate operations.
-                Volunteer activity, product revenue, and any later charitable support are tracked separately so the platform does not make fake or unsupported claims.
+                We maintain absolute separation between our social mission and
+                corporate operations. Volunteer activity, product revenue, and
+                any later charitable support are tracked separately so the
+                platform does not make fake or unsupported claims.
               </p>
             </div>
             <div className="space-y-3">
-              <h3 className="text-purple-400 font-bold text-sm uppercase">Real-World Action</h3>
+              <h3 className="text-purple-400 font-bold text-sm uppercase">
+                Real-World Action
+              </h3>
               <p className="text-gray-300 text-sm leading-relaxed">
-                Beyond financial support, the community directly connects volunteers with local non-profits.
-                Matches on YouAndINotAI are meant to create measurable local action, not just in-app engagement.
+                Beyond financial support, the community directly connects
+                volunteers with local non-profits. Matches on YouAndINotAI are
+                meant to create measurable local action, not just in-app
+                engagement.
               </p>
             </div>
           </div>
@@ -113,9 +124,7 @@ export default function CharityTab() {
       </div>
 
       {error && (
-        <div className="text-center text-red-400 text-sm py-4">
-          {error}
-        </div>
+        <div className="text-center text-red-400 text-sm py-4">{error}</div>
       )}
     </div>
   );

@@ -20,27 +20,27 @@ export default function PacManGame({ isDarkMode }: { isDarkMode: boolean }) {
 
     // 1: wall, 0: dot, 2: empty, 3: power pellet
     const map = [
-      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-      [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
-      [1,3,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,3,1],
-      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,0,1],
-      [1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1],
-      [1,1,1,1,1,0,1,1,1,2,1,2,1,1,1,0,1,1,1,1,1],
-      [2,2,2,2,1,0,1,2,2,2,2,2,2,2,1,0,1,2,2,2,2],
-      [1,1,1,1,1,0,1,2,1,1,2,1,1,2,1,0,1,1,1,1,1],
-      [2,2,2,2,2,0,2,2,1,2,2,2,1,2,2,0,2,2,2,2,2],
-      [1,1,1,1,1,0,1,2,1,1,1,1,1,2,1,0,1,1,1,1,1],
-      [2,2,2,2,1,0,1,2,2,2,2,2,2,2,1,0,1,2,2,2,2],
-      [1,1,1,1,1,0,1,2,1,1,1,1,1,2,1,0,1,1,1,1,1],
-      [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
-      [1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,0,1],
-      [1,3,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,3,1],
-      [1,1,1,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,1,1,1],
-      [1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1],
-      [1,0,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,0,1],
-      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 3, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 3, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
+      [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+      [1, 1, 1, 1, 1, 0, 1, 1, 1, 2, 1, 2, 1, 1, 1, 0, 1, 1, 1, 1, 1],
+      [2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2],
+      [1, 1, 1, 1, 1, 0, 1, 2, 1, 1, 2, 1, 1, 2, 1, 0, 1, 1, 1, 1, 1],
+      [2, 2, 2, 2, 2, 0, 2, 2, 1, 2, 2, 2, 1, 2, 2, 0, 2, 2, 2, 2, 2],
+      [1, 1, 1, 1, 1, 0, 1, 2, 1, 1, 1, 1, 1, 2, 1, 0, 1, 1, 1, 1, 1],
+      [2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2],
+      [1, 1, 1, 1, 1, 0, 1, 2, 1, 1, 1, 1, 1, 2, 1, 0, 1, 1, 1, 1, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+      [1, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 3, 1],
+      [1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1],
+      [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+      [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
 
     // Game state
@@ -50,34 +50,73 @@ export default function PacManGame({ isDarkMode }: { isDarkMode: boolean }) {
 
     // Player (Jules - SpongeBob style)
     const player = {
-      x: 10 * TILE_SIZE + TILE_SIZE/2,
-      y: 15 * TILE_SIZE + TILE_SIZE/2,
+      x: 10 * TILE_SIZE + TILE_SIZE / 2,
+      y: 15 * TILE_SIZE + TILE_SIZE / 2,
       vx: 0,
       vy: 0,
       speed: 2,
-      radius: TILE_SIZE/2 - 2,
+      radius: TILE_SIZE / 2 - 2,
       nextVx: 0,
       nextVy: 0,
     };
 
     // Ghosts (Kraken Opus style)
     const ghosts = [
-      { x: 9 * TILE_SIZE + TILE_SIZE/2, y: 9 * TILE_SIZE + TILE_SIZE/2, vx: 2, vy: 0, speed: 1.5, color: '#9333ea' },
-      { x: 10 * TILE_SIZE + TILE_SIZE/2, y: 9 * TILE_SIZE + TILE_SIZE/2, vx: -2, vy: 0, speed: 1.5, color: '#c084fc' },
-      { x: 11 * TILE_SIZE + TILE_SIZE/2, y: 9 * TILE_SIZE + TILE_SIZE/2, vx: 0, vy: -2, speed: 1.5, color: '#7e22ce' },
+      {
+        x: 9 * TILE_SIZE + TILE_SIZE / 2,
+        y: 9 * TILE_SIZE + TILE_SIZE / 2,
+        vx: 2,
+        vy: 0,
+        speed: 1.5,
+        color: '#9333ea',
+      },
+      {
+        x: 10 * TILE_SIZE + TILE_SIZE / 2,
+        y: 9 * TILE_SIZE + TILE_SIZE / 2,
+        vx: -2,
+        vy: 0,
+        speed: 1.5,
+        color: '#c084fc',
+      },
+      {
+        x: 11 * TILE_SIZE + TILE_SIZE / 2,
+        y: 9 * TILE_SIZE + TILE_SIZE / 2,
+        vx: 0,
+        vy: -2,
+        speed: 1.5,
+        color: '#7e22ce',
+      },
     ];
 
     // Input handling
-    const keys: {[key: string]: boolean} = {};
+    const keys: { [key: string]: boolean } = {};
     const handleKeyDown = (e: KeyboardEvent) => {
       keys[e.key] = true;
-      if (['ArrowUp', 'w', 'W'].includes(e.key)) { player.nextVx = 0; player.nextVy = -player.speed; e.preventDefault(); }
-      if (['ArrowDown', 's', 'S'].includes(e.key)) { player.nextVx = 0; player.nextVy = player.speed; e.preventDefault(); }
-      if (['ArrowLeft', 'a', 'A'].includes(e.key)) { player.nextVx = -player.speed; player.nextVy = 0; e.preventDefault(); }
-      if (['ArrowRight', 'd', 'D'].includes(e.key)) { player.nextVx = player.speed; player.nextVy = 0; e.preventDefault(); }
+      if (['ArrowUp', 'w', 'W'].includes(e.key)) {
+        player.nextVx = 0;
+        player.nextVy = -player.speed;
+        e.preventDefault();
+      }
+      if (['ArrowDown', 's', 'S'].includes(e.key)) {
+        player.nextVx = 0;
+        player.nextVy = player.speed;
+        e.preventDefault();
+      }
+      if (['ArrowLeft', 'a', 'A'].includes(e.key)) {
+        player.nextVx = -player.speed;
+        player.nextVy = 0;
+        e.preventDefault();
+      }
+      if (['ArrowRight', 'd', 'D'].includes(e.key)) {
+        player.nextVx = player.speed;
+        player.nextVy = 0;
+        e.preventDefault();
+      }
     };
-    const handleKeyUp = (e: KeyboardEvent) => { keys[e.key] = false; };
-    
+    const handleKeyUp = (e: KeyboardEvent) => {
+      keys[e.key] = false;
+    };
+
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
 
@@ -91,10 +130,12 @@ export default function PacManGame({ isDarkMode }: { isDarkMode: boolean }) {
 
     const canMove = (x: number, y: number, vx: number, vy: number) => {
       const margin = player.radius;
-      return !isWall(x + vx + margin, y + vy + margin) &&
-             !isWall(x + vx - margin, y + vy + margin) &&
-             !isWall(x + vx + margin, y + vy - margin) &&
-             !isWall(x + vx - margin, y + vy - margin);
+      return (
+        !isWall(x + vx + margin, y + vy + margin) &&
+        !isWall(x + vx - margin, y + vy + margin) &&
+        !isWall(x + vx + margin, y + vy - margin) &&
+        !isWall(x + vx - margin, y + vy - margin)
+      );
     };
 
     // Game loop
@@ -132,14 +173,16 @@ export default function PacManGame({ isDarkMode }: { isDarkMode: boolean }) {
       }
 
       // Move ghosts
-      ghosts.forEach(ghost => {
+      ghosts.forEach((ghost) => {
         if (!canMove(ghost.x, ghost.y, ghost.vx, ghost.vy)) {
           // Simple random direction change
           const dirs = [
-            {vx: ghost.speed, vy: 0}, {vx: -ghost.speed, vy: 0},
-            {vx: 0, vy: ghost.speed}, {vx: 0, vy: -ghost.speed}
+            { vx: ghost.speed, vy: 0 },
+            { vx: -ghost.speed, vy: 0 },
+            { vx: 0, vy: ghost.speed },
+            { vx: 0, vy: -ghost.speed },
           ];
-          const validDirs = dirs.filter(d => canMove(ghost.x, ghost.y, d.vx, d.vy));
+          const validDirs = dirs.filter((d) => canMove(ghost.x, ghost.y, d.vx, d.vy));
           if (validDirs.length > 0) {
             const dir = validDirs[Math.floor(Math.random() * validDirs.length)];
             ghost.vx = dir.vx;
@@ -178,12 +221,12 @@ export default function PacManGame({ isDarkMode }: { isDarkMode: boolean }) {
           } else if (gameMap[r][c] === 0) {
             ctx.fillStyle = '#fbbf24';
             ctx.beginPath();
-            ctx.arc(c * TILE_SIZE + TILE_SIZE/2, r * TILE_SIZE + TILE_SIZE/2, 3, 0, Math.PI * 2);
+            ctx.arc(c * TILE_SIZE + TILE_SIZE / 2, r * TILE_SIZE + TILE_SIZE / 2, 3, 0, Math.PI * 2);
             ctx.fill();
           } else if (gameMap[r][c] === 3) {
             ctx.fillStyle = '#f59e0b';
             ctx.beginPath();
-            ctx.arc(c * TILE_SIZE + TILE_SIZE/2, r * TILE_SIZE + TILE_SIZE/2, 6, 0, Math.PI * 2);
+            ctx.arc(c * TILE_SIZE + TILE_SIZE / 2, r * TILE_SIZE + TILE_SIZE / 2, 6, 0, Math.PI * 2);
             ctx.fill();
           }
         }
@@ -191,36 +234,54 @@ export default function PacManGame({ isDarkMode }: { isDarkMode: boolean }) {
 
       // Draw player (Jules - Yellow Square with face)
       ctx.fillStyle = '#fde047';
-      ctx.fillRect(player.x - player.radius, player.y - player.radius, player.radius*2, player.radius*2);
+      ctx.fillRect(player.x - player.radius, player.y - player.radius, player.radius * 2, player.radius * 2);
       // Eyes
       ctx.fillStyle = 'white';
-      ctx.beginPath(); ctx.arc(player.x - 3, player.y - 3, 3, 0, Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(player.x + 3, player.y - 3, 3, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(player.x - 3, player.y - 3, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(player.x + 3, player.y - 3, 3, 0, Math.PI * 2);
+      ctx.fill();
       ctx.fillStyle = 'blue';
-      ctx.beginPath(); ctx.arc(player.x - 3, player.y - 3, 1.5, 0, Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(player.x + 3, player.y - 3, 1.5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(player.x - 3, player.y - 3, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(player.x + 3, player.y - 3, 1.5, 0, Math.PI * 2);
+      ctx.fill();
       // Smile
       ctx.strokeStyle = 'black';
-      ctx.beginPath(); ctx.arc(player.x, player.y + 2, 4, 0, Math.PI); ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(player.x, player.y + 2, 4, 0, Math.PI);
+      ctx.stroke();
 
       // Draw ghosts (Kraken Opus)
-      ghosts.forEach(ghost => {
+      ghosts.forEach((ghost) => {
         ctx.fillStyle = ghost.color;
         ctx.beginPath();
         ctx.arc(ghost.x, ghost.y, player.radius, Math.PI, 0);
         ctx.lineTo(ghost.x + player.radius, ghost.y + player.radius);
-        ctx.lineTo(ghost.x + player.radius/2, ghost.y + player.radius - 2);
+        ctx.lineTo(ghost.x + player.radius / 2, ghost.y + player.radius - 2);
         ctx.lineTo(ghost.x, ghost.y + player.radius);
-        ctx.lineTo(ghost.x - player.radius/2, ghost.y + player.radius - 2);
+        ctx.lineTo(ghost.x - player.radius / 2, ghost.y + player.radius - 2);
         ctx.lineTo(ghost.x - player.radius, ghost.y + player.radius);
         ctx.fill();
         // Eyes
         ctx.fillStyle = 'white';
-        ctx.beginPath(); ctx.arc(ghost.x - 3, ghost.y - 2, 2, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(ghost.x + 3, ghost.y - 2, 2, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath();
+        ctx.arc(ghost.x - 3, ghost.y - 2, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(ghost.x + 3, ghost.y - 2, 2, 0, Math.PI * 2);
+        ctx.fill();
         ctx.fillStyle = 'black';
-        ctx.beginPath(); ctx.arc(ghost.x - 3, ghost.y - 2, 1, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(ghost.x + 3, ghost.y - 2, 1, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath();
+        ctx.arc(ghost.x - 3, ghost.y - 2, 1, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(ghost.x + 3, ghost.y - 2, 1, 0, Math.PI * 2);
+        ctx.fill();
       });
     };
 
@@ -245,7 +306,10 @@ export default function PacManGame({ isDarkMode }: { isDarkMode: boolean }) {
         <div className="text-xl font-bold text-yellow-500">SCORE: {score}</div>
         {gameOver && <div className="text-xl font-bold text-red-500 animate-pulse">GAME OVER</div>}
       </div>
-      <div className={`p-2 rounded-xl ${isDarkMode ? 'bg-slate-800' : 'bg-slate-200'} shadow-inner`} style={{ maxWidth: 'min(420px, 100%)' }}>
+      <div
+        className={`p-2 rounded-xl ${isDarkMode ? 'bg-slate-800' : 'bg-slate-200'} shadow-inner`}
+        style={{ maxWidth: 'min(420px, 100%)' }}
+      >
         <canvas
           ref={canvasRef}
           className="rounded-lg shadow-lg"

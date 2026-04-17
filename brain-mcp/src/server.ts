@@ -1,21 +1,17 @@
-import path from "node:path";
+import path from 'node:path';
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
 
-import type {
-  BrainConfig,
-  PlatformDefinition,
-  WorktreeState,
-} from "./config.js";
-import { BrainStateStore } from "./state.js";
+import type { BrainConfig, PlatformDefinition, WorktreeState } from './config.js';
+import { BrainStateStore } from './state.js';
 import {
   buildBaselineTag,
   buildRepoTruthSummary,
   computeShaStatus,
   evaluateTargetPaths,
   readTextFile,
-} from "./truth.js";
+} from './truth.js';
 
 export interface AuthContext {
   authenticatedPlatformId?: string;
@@ -26,36 +22,27 @@ function jsonContent(payload: unknown) {
   return {
     content: [
       {
-        type: "text" as const,
+        type: 'text' as const,
         text: JSON.stringify(payload, null, 2),
       },
     ],
   };
 }
 
-function resolvePlatform(
-  config: BrainConfig,
-  platformId: string,
-  authContext?: AuthContext,
-): PlatformDefinition {
+function resolvePlatform(config: BrainConfig, platformId: string, authContext?: AuthContext): PlatformDefinition {
   const platform = config.platforms.find((entry) => entry.id === platformId);
   if (!platform) {
     throw new Error(`Unknown platform_id: ${platformId}`);
   }
 
-  if (
-    authContext?.authenticatedPlatformId &&
-    authContext.authenticatedPlatformId !== platformId
-  ) {
+  if (authContext?.authenticatedPlatformId && authContext.authenticatedPlatformId !== platformId) {
     throw new Error(
       `Authenticated platform mismatch. Expected ${authContext.authenticatedPlatformId}, received ${platformId}.`,
     );
   }
 
   if (authContext?.remoteIp && !platform.allowedIps.includes(authContext.remoteIp)) {
-    throw new Error(
-      `Credential migration attempt. ${platform.id} is not allowed from ${authContext.remoteIp}.`,
-    );
+    throw new Error(`Credential migration attempt. ${platform.id} is not allowed from ${authContext.remoteIp}.`);
   }
 
   return platform;
@@ -63,19 +50,14 @@ function resolvePlatform(
 
 function validateNode(platform: PlatformDefinition, nodeId: string): void {
   if (platform.nodeId.toLowerCase() !== nodeId.toLowerCase()) {
-    throw new Error(
-      `Node mismatch for ${platform.id}. Expected ${platform.nodeId}, received ${nodeId}.`,
-    );
+    throw new Error(`Node mismatch for ${platform.id}. Expected ${platform.nodeId}, received ${nodeId}.`);
   }
 }
 
-function ensurePathsAllowed(
-  platform: PlatformDefinition,
-  targetPaths: string[],
-): { lane: string[] } {
+function ensurePathsAllowed(platform: PlatformDefinition, targetPaths: string[]): { lane: string[] } {
   const result = evaluateTargetPaths(platform, targetPaths);
   if (!result.allowed) {
-    throw new Error(result.violations.join(" "));
+    throw new Error(result.violations.join(' '));
   }
   return { lane: result.lane };
 }
@@ -115,90 +97,82 @@ function buildSyncPayload(args: {
   };
 }
 
-export function createBrainServer(
-  config: BrainConfig,
-  state: BrainStateStore,
-  authContext?: AuthContext,
-): McpServer {
+export function createBrainServer(config: BrainConfig, state: BrainStateStore, authContext?: AuthContext): McpServer {
   const server = new McpServer({
-    name: "brain-mcp",
-    version: "0.1.0",
+    name: 'brain-mcp',
+    version: '0.1.0',
   });
 
   server.registerResource(
-    "brain-repo-agents",
-    "brain://repo/agents",
+    'brain-repo-agents',
+    'brain://repo/agents',
     {
-      title: "AGENTS.md",
-      description: "Canonical authority file for ANTIGRAVITY",
-      mimeType: "text/markdown",
+      title: 'AGENTS.md',
+      description: 'Canonical authority file for ANTIGRAVITY',
+      mimeType: 'text/markdown',
     },
     async () => ({
       contents: [
         {
-          uri: "brain://repo/agents",
-          mimeType: "text/markdown",
-          text: readTextFile(path.join(config.canonicalRepoRoot, "AGENTS.md")),
+          uri: 'brain://repo/agents',
+          mimeType: 'text/markdown',
+          text: readTextFile(path.join(config.canonicalRepoRoot, 'AGENTS.md')),
         },
       ],
     }),
   );
 
   server.registerResource(
-    "brain-repo-record",
-    "brain://repo/record",
+    'brain-repo-record',
+    'brain://repo/record',
     {
-      title: "REPOSITORY_RECORD.md",
-      description: "Latest shared repository state record",
-      mimeType: "text/markdown",
+      title: 'REPOSITORY_RECORD.md',
+      description: 'Latest shared repository state record',
+      mimeType: 'text/markdown',
     },
     async () => ({
       contents: [
         {
-          uri: "brain://repo/record",
-          mimeType: "text/markdown",
-          text: readTextFile(
-            path.join(config.canonicalRepoRoot, "briefings", "REPOSITORY_RECORD.md"),
-          ),
+          uri: 'brain://repo/record',
+          mimeType: 'text/markdown',
+          text: readTextFile(path.join(config.canonicalRepoRoot, 'briefings', 'REPOSITORY_RECORD.md')),
         },
       ],
     }),
   );
 
   server.registerResource(
-    "brain-repo-state",
-    "brain://repo/state",
+    'brain-repo-state',
+    'brain://repo/state',
     {
-      title: "projectState.md",
-      description: "Current shared operational state",
-      mimeType: "text/markdown",
+      title: 'projectState.md',
+      description: 'Current shared operational state',
+      mimeType: 'text/markdown',
     },
     async () => ({
       contents: [
         {
-          uri: "brain://repo/state",
-          mimeType: "text/markdown",
-          text: readTextFile(
-            path.join(config.canonicalRepoRoot, "memory", "projectState.md"),
-          ),
+          uri: 'brain://repo/state',
+          mimeType: 'text/markdown',
+          text: readTextFile(path.join(config.canonicalRepoRoot, 'memory', 'projectState.md')),
         },
       ],
     }),
   );
 
   server.registerResource(
-    "brain-sessions-active",
-    "brain://sessions/active",
+    'brain-sessions-active',
+    'brain://sessions/active',
     {
-      title: "Active Sessions",
-      description: "Currently active BRAIN sessions",
-      mimeType: "application/json",
+      title: 'Active Sessions',
+      description: 'Currently active BRAIN sessions',
+      mimeType: 'application/json',
     },
     async () => ({
       contents: [
         {
-          uri: "brain://sessions/active",
-          mimeType: "application/json",
+          uri: 'brain://sessions/active',
+          mimeType: 'application/json',
           text: JSON.stringify(state.listActiveSessions(), null, 2),
         },
       ],
@@ -206,18 +180,18 @@ export function createBrainServer(
   );
 
   server.registerResource(
-    "brain-audit-recent",
-    "brain://audit/recent",
+    'brain-audit-recent',
+    'brain://audit/recent',
     {
-      title: "Recent Audit Log",
-      description: "Last 50 BRAIN audit events",
-      mimeType: "application/json",
+      title: 'Recent Audit Log',
+      description: 'Last 50 BRAIN audit events',
+      mimeType: 'application/json',
     },
     async () => ({
       contents: [
         {
-          uri: "brain://audit/recent",
-          mimeType: "application/json",
+          uri: 'brain://audit/recent',
+          mimeType: 'application/json',
           text: JSON.stringify(state.recentAudit(50), null, 2),
         },
       ],
@@ -225,19 +199,19 @@ export function createBrainServer(
   );
 
   server.registerTool(
-    "brain.getRepoTruth",
+    'brain.getRepoTruth',
     {
-      title: "Get Repo Truth",
-      description: "Return the current repo truth summary and certification backbone",
+      title: 'Get Repo Truth',
+      description: 'Return the current repo truth summary and certification backbone',
     },
     async () => jsonContent(buildRepoTruthSummary(config)),
   );
 
   server.registerTool(
-    "brain.getActiveContext",
+    'brain.getActiveContext',
     {
-      title: "Get Active Context",
-      description: "Return active sessions and recent audit events",
+      title: 'Get Active Context',
+      description: 'Return active sessions and recent audit events',
     },
     async () =>
       jsonContent({
@@ -249,10 +223,10 @@ export function createBrainServer(
   );
 
   server.registerTool(
-    "brain.getSecretRef",
+    'brain.getSecretRef',
     {
-      title: "Get Secret Reference",
-      description: "Return safe lookup references for a named secret without revealing its value",
+      title: 'Get Secret Reference',
+      description: 'Return safe lookup references for a named secret without revealing its value',
       inputSchema: z.object({
         platform_id: z.string(),
         secret_name: z.string(),
@@ -260,10 +234,8 @@ export function createBrainServer(
     },
     async ({ platform_id, secret_name }) => {
       const platform = resolvePlatform(config, platform_id, authContext);
-      if (platform.tier === "sandbox_only") {
-        throw new Error(
-          `Secret references are not exposed to sandbox_only platforms: ${platform_id}`,
-        );
+      if (platform.tier === 'sandbox_only') {
+        throw new Error(`Secret references are not exposed to sandbox_only platforms: ${platform_id}`);
       }
 
       return jsonContent({
@@ -280,15 +252,14 @@ export function createBrainServer(
     node_id: z.string(),
     target_paths: z.array(z.string()).min(1).max(25),
     git_sha: z.string().min(7),
-    worktree_state: z.enum(["clean", "dirty", "unknown"]).default("unknown"),
+    worktree_state: z.enum(['clean', 'dirty', 'unknown']).default('unknown'),
   });
 
   server.registerTool(
-    "brain.sync",
+    'brain.sync',
     {
-      title: "Sync",
-      description:
-        "Return a single operational truth payload without opening a session",
+      title: 'Sync',
+      description: 'Return a single operational truth payload without opening a session',
       inputSchema: syncSchema,
     },
     async ({ platform_id, node_id, target_paths, git_sha, worktree_state }) => {
@@ -311,26 +282,16 @@ export function createBrainServer(
   );
 
   server.registerTool(
-    "brain.enterWorkspace",
+    'brain.enterWorkspace',
     {
-      title: "Enter Workspace",
-      description: "Open a BRAIN session and return synchronized operational context",
+      title: 'Enter Workspace',
+      description: 'Open a BRAIN session and return synchronized operational context',
       inputSchema: syncSchema.extend({
         intent: z.string().min(1),
-        estimated_scope: z
-          .enum(["read", "edit", "review", "deploy", "push"])
-          .default("read"),
+        estimated_scope: z.enum(['read', 'edit', 'review', 'deploy', 'push']).default('read'),
       }),
     },
-    async ({
-      platform_id,
-      node_id,
-      target_paths,
-      git_sha,
-      worktree_state,
-      intent,
-      estimated_scope,
-    }) => {
+    async ({ platform_id, node_id, target_paths, git_sha, worktree_state, intent, estimated_scope }) => {
       const platform = resolvePlatform(config, platform_id, authContext);
       validateNode(platform, node_id);
       ensurePathsAllowed(platform, target_paths);
@@ -368,23 +329,18 @@ export function createBrainServer(
   );
 
   server.registerTool(
-    "brain.heartbeat",
+    'brain.heartbeat',
     {
-      title: "Heartbeat",
-      description: "Keep an active BRAIN session alive",
+      title: 'Heartbeat',
+      description: 'Keep an active BRAIN session alive',
       inputSchema: z.object({
         session_id: z.string().uuid(),
       }),
     },
     async ({ session_id }) => {
       const session = state.heartbeat(session_id);
-      if (
-        authContext?.authenticatedPlatformId &&
-        authContext.authenticatedPlatformId !== session.platformId
-      ) {
-        throw new Error(
-          `Heartbeat platform mismatch. Session belongs to ${session.platformId}.`,
-        );
+      if (authContext?.authenticatedPlatformId && authContext.authenticatedPlatformId !== session.platformId) {
+        throw new Error(`Heartbeat platform mismatch. Session belongs to ${session.platformId}.`);
       }
 
       return jsonContent({
@@ -398,10 +354,10 @@ export function createBrainServer(
   );
 
   server.registerTool(
-    "brain.reportAction",
+    'brain.reportAction',
     {
-      title: "Report Action",
-      description: "Record a significant file or workflow action during a session",
+      title: 'Report Action',
+      description: 'Record a significant file or workflow action during a session',
       inputSchema: z.object({
         session_id: z.string().uuid(),
         action_type: z.string().min(1),
@@ -412,13 +368,8 @@ export function createBrainServer(
     },
     async ({ session_id, action_type, path: actionPath, summary, metadata }) => {
       const session = state.getSession(session_id);
-      if (
-        authContext?.authenticatedPlatformId &&
-        authContext.authenticatedPlatformId !== session.platformId
-      ) {
-        throw new Error(
-          `Action platform mismatch. Session belongs to ${session.platformId}.`,
-        );
+      if (authContext?.authenticatedPlatformId && authContext.authenticatedPlatformId !== session.platformId) {
+        throw new Error(`Action platform mismatch. Session belongs to ${session.platformId}.`);
       }
 
       const platform = resolvePlatform(config, session.platformId, authContext);
@@ -442,10 +393,10 @@ export function createBrainServer(
   );
 
   server.registerTool(
-    "brain.exitWorkspace",
+    'brain.exitWorkspace',
     {
-      title: "Exit Workspace",
-      description: "Close an active BRAIN session with a factual summary",
+      title: 'Exit Workspace',
+      description: 'Close an active BRAIN session with a factual summary',
       inputSchema: z.object({
         session_id: z.string().uuid(),
         summary: z.string().min(1),
@@ -455,9 +406,7 @@ export function createBrainServer(
         committed: z.boolean().default(false),
         pushed: z.boolean().default(false),
         commit_hash: z.string().optional(),
-        exit_reason: z
-          .enum(["normal", "handoff", "timeout", "crash"])
-          .default("normal"),
+        exit_reason: z.enum(['normal', 'handoff', 'timeout', 'crash']).default('normal'),
       }),
     },
     async ({
@@ -472,13 +421,8 @@ export function createBrainServer(
       exit_reason,
     }) => {
       const session = state.getSession(session_id);
-      if (
-        authContext?.authenticatedPlatformId &&
-        authContext.authenticatedPlatformId !== session.platformId
-      ) {
-        throw new Error(
-          `Exit platform mismatch. Session belongs to ${session.platformId}.`,
-        );
+      if (authContext?.authenticatedPlatformId && authContext.authenticatedPlatformId !== session.platformId) {
+        throw new Error(`Exit platform mismatch. Session belongs to ${session.platformId}.`);
       }
 
       const platform = resolvePlatform(config, session.platformId, authContext);

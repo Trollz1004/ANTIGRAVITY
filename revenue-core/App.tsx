@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, Bot, Globe, Brain, Settings as SettingsIcon, CreditCard, Pen, Palette, MessageSquare, Megaphone, Crown } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Bot,
+  Globe,
+  Brain,
+  Settings as SettingsIcon,
+  CreditCard,
+  Pen,
+  Palette,
+  MessageSquare,
+  Megaphone,
+  Crown,
+} from 'lucide-react';
 import { View, Agent, ContentDraft, ResearchItem, MediaTrack } from './types';
 import { REAL_AGENTS, RESEARCH_ITEMS } from './constants';
 import Dashboard from './components/Dashboard';
@@ -69,32 +81,58 @@ const App: React.FC = () => {
       <header className="flex items-center justify-between px-4 py-2 border-b border-slate-800 bg-[#0f172a]/80 backdrop-blur">
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-          <h1 className="text-sm font-mono font-bold tracking-wider text-red-400">
-            REVENUE COMMAND
-          </h1>
+          <h1 className="text-sm font-mono font-bold tracking-wider text-red-400">REVENUE COMMAND</h1>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <button
-            onClick={() => { setShowPayments(!showPayments); setShowContent(false); setShowCreative(false); }}
-            className={`px-3 py-1 text-xs rounded border ${showPayments ? 'bg-red-500/20 border-red-500 text-red-300' : 'border-slate-700 text-slate-400 hover:text-slate-200'}`}
+            onClick={() => {
+              setShowPayments(!showPayments);
+              setShowContent(false);
+              setShowCreative(false);
+            }}
+            className={`px-3 py-1 text-xs rounded border ${
+              showPayments
+                ? 'bg-red-500/20 border-red-500 text-red-300'
+                : 'border-slate-700 text-slate-400 hover:text-slate-200'
+            }`}
           >
             <CreditCard className="w-3 h-3 inline mr-1" /> Payments
           </button>
           <button
-            onClick={() => { setShowContent(!showContent); setShowPayments(false); setShowCreative(false); }}
-            className={`px-3 py-1 text-xs rounded border ${showContent ? 'bg-red-500/20 border-red-500 text-red-300' : 'border-slate-700 text-slate-400 hover:text-slate-200'}`}
+            onClick={() => {
+              setShowContent(!showContent);
+              setShowPayments(false);
+              setShowCreative(false);
+            }}
+            className={`px-3 py-1 text-xs rounded border ${
+              showContent
+                ? 'bg-red-500/20 border-red-500 text-red-300'
+                : 'border-slate-700 text-slate-400 hover:text-slate-200'
+            }`}
           >
             <Pen className="w-3 h-3 inline mr-1" /> Content
           </button>
           <button
-            onClick={() => { setShowCreative(!showCreative); setShowPayments(false); setShowContent(false); }}
-            className={`px-3 py-1 text-xs rounded border ${showCreative ? 'bg-red-500/20 border-red-500 text-red-300' : 'border-slate-700 text-slate-400 hover:text-slate-200'}`}
+            onClick={() => {
+              setShowCreative(!showCreative);
+              setShowPayments(false);
+              setShowContent(false);
+            }}
+            className={`px-3 py-1 text-xs rounded border ${
+              showCreative
+                ? 'bg-red-500/20 border-red-500 text-red-300'
+                : 'border-slate-700 text-slate-400 hover:text-slate-200'
+            }`}
           >
             <Palette className="w-3 h-3 inline mr-1" /> Creative
           </button>
           <button
             onClick={() => setShowChat(!showChat)}
-            className={`px-3 py-1 text-xs rounded border ${showChat ? 'bg-indigo-500/20 border-indigo-500 text-indigo-300' : 'border-slate-700 text-slate-400 hover:text-slate-200'}`}
+            className={`px-3 py-1 text-xs rounded border ${
+              showChat
+                ? 'bg-indigo-500/20 border-indigo-500 text-indigo-300'
+                : 'border-slate-700 text-slate-400 hover:text-slate-200'
+            }`}
           >
             <MessageSquare className="w-3 h-3 inline mr-1" /> Chat
           </button>
@@ -107,7 +145,12 @@ const App: React.FC = () => {
           {NAV_ITEMS.map(({ view, icon: Icon, label }) => (
             <button
               key={view}
-              onClick={() => { setCurrentView(view); setShowPayments(false); setShowContent(false); setShowCreative(false); }}
+              onClick={() => {
+                setCurrentView(view);
+                setShowPayments(false);
+                setShowContent(false);
+                setShowCreative(false);
+              }}
               className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${
                 currentView === view && !showPayments && !showContent && !showCreative
                   ? 'bg-red-500/20 text-red-400 border border-red-500/50'
@@ -121,9 +164,7 @@ const App: React.FC = () => {
         </nav>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto p-6">
-          {renderView()}
-        </main>
+        <main className="flex-1 overflow-y-auto p-6">{renderView()}</main>
 
         {/* Chat Panel */}
         {showChat && (

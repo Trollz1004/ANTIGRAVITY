@@ -1,7 +1,7 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
-*/
+ */
 
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
@@ -21,9 +21,13 @@ interface Particle {
   life: number;
 }
 
-export function Particles({ mousePosRef }: { mousePosRef: React.MutableRefObject<THREE.Vector3 | null> }) {
+export function Particles({
+  mousePosRef,
+}: {
+  mousePosRef: React.MutableRefObject<THREE.Vector3 | null>;
+}) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
-  
+
   const particleTexture = useMemo(() => {
     const canvas = document.createElement('canvas');
     canvas.width = 64;
@@ -52,9 +56,9 @@ export function Particles({ mousePosRef }: { mousePosRef: React.MutableRefObject
     }
   }, []);
 
-  const myColor = useGameStore((state) => state.myColor);
-  const players = useGameStore((state) => state.players);
-  const forceFields = useGameStore((state) => state.forceFields);
+  const myColor = useGameStore(state => state.myColor);
+  const players = useGameStore(state => state.players);
+  const forceFields = useGameStore(state => state.forceFields);
 
   const particles = useMemo(() => {
     const arr: Particle[] = [];
@@ -82,7 +86,7 @@ export function Particles({ mousePosRef }: { mousePosRef: React.MutableRefObject
     p.position.x += (Math.random() - 0.5) * 1.5;
     p.position.y += (Math.random() - 0.5) * 1.5;
     p.position.z += (Math.random() - 0.5) * 1.5;
-    
+
     p.velocity.set(
       (Math.random() - 0.5) * 2.0,
       (Math.random() - 0.5) * 2.0,
@@ -109,7 +113,11 @@ export function Particles({ mousePosRef }: { mousePosRef: React.MutableRefObject
     // Spawn other players' particles
     Object.values(players).forEach(player => {
       if (player.position && player.color) {
-        const pPos = new THREE.Vector3(player.position.x, player.position.y, player.position.z);
+        const pPos = new THREE.Vector3(
+          player.position.x,
+          player.position.y,
+          player.position.z
+        );
         for (let i = 0; i < 40; i++) {
           spawnParticle(pPos, player.color);
         }
@@ -142,15 +150,23 @@ export function Particles({ mousePosRef }: { mousePosRef: React.MutableRefObject
       }
 
       // Apply curl noise
-      const curl = computeCurl(p.position.x * 0.3, p.position.y * 0.3, p.position.z * 0.3);
+      const curl = computeCurl(
+        p.position.x * 0.3,
+        p.position.y * 0.3,
+        p.position.z * 0.3
+      );
       p.velocity.add(curl.multiplyScalar(delta * 5.0));
 
       // Apply force fields
       for (const force of forces) {
-        const fPos = new THREE.Vector3(force.position.x, force.position.y, force.position.z);
+        const fPos = new THREE.Vector3(
+          force.position.x,
+          force.position.y,
+          force.position.z
+        );
         const dir = new THREE.Vector3().subVectors(fPos, p.position);
         const distSq = dir.lengthSq();
-        
+
         // Avoid division by zero and extreme forces
         if (distSq > 0.1 && distSq < 400) {
           dir.normalize();
@@ -159,7 +175,7 @@ export function Particles({ mousePosRef }: { mousePosRef: React.MutableRefObject
             p.velocity.add(dir.multiplyScalar(strength * delta));
             // Tint particle if close to attractor
             if (distSq < 10) {
-               p.baseColor.lerp(whiteColor, 0.05); // permanently tint a bit
+              p.baseColor.lerp(whiteColor, 0.05); // permanently tint a bit
             }
           } else {
             p.velocity.sub(dir.multiplyScalar(strength * delta));
@@ -178,13 +194,13 @@ export function Particles({ mousePosRef }: { mousePosRef: React.MutableRefObject
 
       // Update instanced mesh
       dummy.position.copy(p.position);
-      
+
       const speed = p.velocity.length();
       // Scale down as life decreases, base size is larger for soft blending
       const scale = (p.life / PARTICLE_LIFETIME) * 0.08;
       // Stretch along velocity, clamp to prevent extreme distortion
       const stretch = Math.min(4, Math.max(1, speed * 0.1));
-      
+
       dummy.scale.set(scale, scale, scale * stretch);
 
       // Orient along velocity
@@ -209,10 +225,10 @@ export function Particles({ mousePosRef }: { mousePosRef: React.MutableRefObject
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, MAX_PARTICLES]}>
       <sphereGeometry args={[1, 16, 16]} />
-      <meshBasicMaterial 
+      <meshBasicMaterial
         map={particleTexture}
-        transparent 
-        opacity={0.8} 
+        transparent
+        opacity={0.8}
         blending={THREE.AdditiveBlending}
         depthWrite={false}
       />

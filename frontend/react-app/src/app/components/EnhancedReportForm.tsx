@@ -140,7 +140,11 @@ export function EnhancedReportForm({
                   setReason(option.value);
                   setShowMoreReasons(false);
                 }}
-                className={`text-left text-sm ${reason === option.value ? 'font-bold text-[#ff4f00]' : 'text-gray-700'}`}
+                className={`text-left text-sm ${
+                  reason === option.value
+                    ? 'font-bold text-[#ff4f00]'
+                    : 'text-gray-700'
+                }`}
               >
                 {option.label}
                 <p className="text-xs text-gray-500">{option.description}</p>

@@ -14,7 +14,17 @@
 
 import { useState, useRef } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'motion/react';
-import { Crown, Heart, Shield, Star, Gem, Infinity as InfinityIcon, Zap, FileText, TrendingUp } from 'lucide-react';
+import {
+  Crown,
+  Heart,
+  Shield,
+  Star,
+  Gem,
+  Infinity as InfinityIcon,
+  Zap,
+  FileText,
+  TrendingUp,
+} from 'lucide-react';
 
 const ROYALTY_LINK = '/app/checkout/royalty';
 
@@ -31,13 +41,18 @@ function FloatingHearts() {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {hearts.map((h) => (
+      {hearts.map(h => (
         <motion.div
           key={h.id}
           className="absolute text-amber-400"
           style={{ left: h.left, bottom: '-20px', opacity: h.opacity }}
           animate={{ y: [0, -800], opacity: [h.opacity, 0], rotate: [0, 360] }}
-          transition={{ duration: h.duration, delay: h.delay, repeat: Infinity, ease: 'linear' }}
+          transition={{
+            duration: h.duration,
+            delay: h.delay,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
         >
           <Heart size={h.size} fill="currentColor" />
         </motion.div>
@@ -54,8 +69,14 @@ function HolographicCard() {
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
 
-  const rotateX = useSpring(useTransform(mouseY, [0, 1], [12, -12]), { stiffness: 200, damping: 20 });
-  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-12, 12]), { stiffness: 200, damping: 20 });
+  const rotateX = useSpring(useTransform(mouseY, [0, 1], [12, -12]), {
+    stiffness: 200,
+    damping: 20,
+  });
+  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-12, 12]), {
+    stiffness: 200,
+    damping: 20,
+  });
 
   const sheenX = useTransform(mouseX, [0, 1], ['-100%', '200%']);
   const sheenY = useTransform(mouseY, [0, 1], ['-100%', '200%']);
@@ -134,7 +155,8 @@ function HolographicCard() {
         <motion.div
           className="absolute -inset-1 rounded-3xl pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(255,215,0,0.2) 0%, transparent 70%)',
+            background:
+              'radial-gradient(ellipse at center, rgba(255,215,0,0.2) 0%, transparent 70%)',
             opacity: isHovering ? 1 : 0,
           }}
           transition={{ duration: 0.3 }}
@@ -145,17 +167,24 @@ function HolographicCard() {
           {/* Top row: suit corners + crown */}
           <div className="flex items-start justify-between mb-4">
             <div className="flex flex-col items-center">
-              <span className="text-amber-400 text-2xl font-black leading-none">R</span>
+              <span className="text-amber-400 text-2xl font-black leading-none">
+                R
+              </span>
               <Heart size={14} className="text-red-500 fill-red-500 mt-0.5" />
             </div>
             <motion.div
               animate={{ y: [0, -4, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <Crown size={36} className="text-amber-400 drop-shadow-[0_0_12px_rgba(255,215,0,0.6)]" />
+              <Crown
+                size={36}
+                className="text-amber-400 drop-shadow-[0_0_12px_rgba(255,215,0,0.6)]"
+              />
             </motion.div>
             <div className="flex flex-col items-center">
-              <span className="text-amber-400 text-2xl font-black leading-none rotate-180">R</span>
+              <span className="text-amber-400 text-2xl font-black leading-none rotate-180">
+                R
+              </span>
               <Heart size={14} className="text-red-500 fill-red-500 mt-0.5" />
             </div>
           </div>
@@ -167,7 +196,9 @@ function HolographicCard() {
             </h3>
             <div className="flex items-center justify-center gap-2 mt-1">
               <div className="h-px flex-1 max-w-[60px] bg-gradient-to-r from-transparent to-amber-500/50" />
-              <span className="text-xs uppercase tracking-[0.3em] text-amber-400/70 font-bold">Deck of Hearts</span>
+              <span className="text-xs uppercase tracking-[0.3em] text-amber-400/70 font-bold">
+                Deck of Hearts
+              </span>
               <div className="h-px flex-1 max-w-[60px] bg-gradient-to-l from-transparent to-amber-500/50" />
             </div>
           </div>
@@ -181,12 +212,18 @@ function HolographicCard() {
               <motion.div
                 className="absolute -top-1 -right-3"
                 animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
               >
                 <Gem size={16} className="text-amber-400" />
               </motion.div>
             </div>
-            <p className="text-amber-400/60 text-xs mt-1 uppercase tracking-widest font-bold">One-time • Lifetime access</p>
+            <p className="text-amber-400/60 text-xs mt-1 uppercase tracking-widest font-bold">
+              One-time • Lifetime access
+            </p>
           </div>
 
           {/* Benefits */}
@@ -212,21 +249,32 @@ function HolographicCard() {
           <div className="bg-gradient-to-br from-amber-500/[0.08] to-amber-600/[0.04] border border-amber-400/20 rounded-xl p-4 mb-5">
             <div className="flex items-center gap-2 mb-2">
               <FileText size={14} className="text-amber-400" />
-              <span className="text-amber-300 text-xs font-black uppercase tracking-wider">Revenue Share Terms</span>
+              <span className="text-amber-300 text-xs font-black uppercase tracking-wider">
+                Revenue Share Terms
+              </span>
             </div>
             <div className="space-y-1.5 text-xs text-gray-400 leading-relaxed">
               <p>
-                Each Royalty Card holder receives <span className="text-amber-300 font-bold">1% of net platform revenue</span>,
-                paid <span className="text-white/80 font-semibold">quarterly</span> via the method of their choice.
+                Each Royalty Card holder receives{' '}
+                <span className="text-amber-300 font-bold">
+                  1% of net platform revenue
+                </span>
+                , paid{' '}
+                <span className="text-white/80 font-semibold">quarterly</span>{' '}
+                via the method of their choice.
               </p>
               <p>
-                Revenue share follows the published Royalty Card terms and does not represent equity,
-                governance control, or ownership in Trash Or Treasure Online Recycler LLC.
+                Revenue share follows the published Royalty Card terms and does
+                not represent equity, governance control, or ownership in Trash
+                Or Treasure Online Recycler LLC.
               </p>
               <p>
-                Maximum <span className="text-amber-300 font-bold">5 cards</span> will be issued. This is a contractual
-                revenue share right — <span className="text-white/80 font-semibold">not equity</span>. Terms are perpetual
-                and bound to the platform for as long as it generates revenue.
+                Maximum{' '}
+                <span className="text-amber-300 font-bold">5 cards</span> will
+                be issued. This is a contractual revenue share right —{' '}
+                <span className="text-white/80 font-semibold">not equity</span>.
+                Terms are perpetual and bound to the platform for as long as it
+                generates revenue.
               </p>
             </div>
           </div>
@@ -261,7 +309,12 @@ function HolographicCard() {
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
                 animate={{ x: ['-100%', '200%'] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3, ease: 'easeInOut' }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatDelay: 3,
+                  ease: 'easeInOut',
+                }}
               />
             </motion.div>
           </a>
@@ -271,7 +324,11 @@ function HolographicCard() {
             <Heart size={12} className="text-red-500/30 fill-red-500/30" />
             <div className="flex gap-1">
               {[...Array(5)].map((_, i) => (
-                <Heart key={i} size={8} className="text-red-500/20 fill-red-500/20" />
+                <Heart
+                  key={i}
+                  size={8}
+                  className="text-red-500/20 fill-red-500/20"
+                />
               ))}
             </div>
             <Heart size={12} className="text-red-500/30 fill-red-500/30" />
@@ -304,14 +361,17 @@ export function RoyaltyDeck() {
         >
           <div className="inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/20 rounded-full px-4 py-1.5 mb-4">
             <Crown size={14} className="text-amber-400" />
-            <span className="text-xs uppercase tracking-[0.2em] text-amber-400 font-bold">Limited Edition</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-amber-400 font-bold">
+              Limited Edition
+            </span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 mb-3">
             The Royalty Deck of Hearts
           </h2>
           <p className="text-gray-400 text-sm md:text-base max-w-md mx-auto leading-relaxed">
-            The ultimate founding membership. Lifetime VIP status, 1% quarterly net revenue share,
-            and priority access to every premium feature that follows launch.
+            The ultimate founding membership. Lifetime VIP status, 1% quarterly
+            net revenue share, and priority access to every premium feature that
+            follows launch.
           </p>
         </motion.div>
 
@@ -335,8 +395,7 @@ export function RoyaltyDeck() {
             1% net revenue • quarterly
           </span>
           <span className="flex items-center gap-1.5">
-            <Star size={12} className="text-amber-400" />
-            5 cards total
+            <Star size={12} className="text-amber-400" />5 cards total
           </span>
         </motion.div>
       </div>
