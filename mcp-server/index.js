@@ -9,7 +9,7 @@ const { v4: uuidv4 } = require('uuid');
 const app = express();
 const redis = new Redis(process.env.REDIS_URL);
 const qdrant = new QdrantClient({
-  url: process.env.QDRANT_URL
+  url: process.env.QDRANT_URL,
 });
 
 const ollamaBaseUrl = process.env.OLLAMA_BASE_URL;
@@ -31,7 +31,7 @@ app.get('/health', async (req, res) => {
     res.json({
       status: 'healthy',
       redis: redisCheck === 'PONG',
-      qdrant: !!qdrantCheck
+      qdrant: !!qdrantCheck,
     });
   } catch (error) {
     res.status(503).json({ status: 'unhealthy', error: error.message });
@@ -48,11 +48,13 @@ app.post('/tools/memory_store', async (req, res) => {
     const id = Math.floor(Math.random() * 1000000);
 
     await qdrant.upsert(qdrantCollection, {
-      points: [{
-        id,
-        vector: embedding,
-        payload: { text, ...metadata }
-      }]
+      points: [
+        {
+          id,
+          vector: embedding,
+          payload: { text, ...metadata },
+        },
+      ],
     });
 
     res.json({ id, status: 'stored' });
@@ -71,7 +73,7 @@ app.post('/tools/memory_search', async (req, res) => {
     const results = await qdrant.search(qdrantCollection, {
       vector: embedding,
       limit: limit || 5,
-      with_payload: true
+      with_payload: true,
     });
 
     res.json({ results });
@@ -87,7 +89,7 @@ app.post('/tools/memory_recent', async (req, res) => {
     if (!sessionId) return res.status(400).json({ error: 'sessionId required' });
 
     const history = await redis.lrange(`history:${sessionId}`, -(count || 10), -1);
-    const messages = history.map(h => JSON.parse(h));
+    const messages = history.map((h) => JSON.parse(h));
 
     res.json({ messages });
   } catch (error) {
@@ -113,7 +115,7 @@ async function embedText(text) {
   try {
     const response = await axios.post(`${ollamaBaseUrl}/api/embeddings`, {
       model: embedModel,
-      prompt: text
+      prompt: text,
     });
     return response.data.embedding;
   } catch (error) {
@@ -126,15 +128,15 @@ async function embedText(text) {
 async function init() {
   try {
     const collections = await qdrant.getCollections();
-    const collectionNames = collections.collections.map(c => c.name);
+    const collectionNames = collections.collections.map((c) => c.name);
 
     if (!collectionNames.includes(qdrantCollection)) {
       console.log(`[MCP] Creating Qdrant collection: ${qdrantCollection}`);
       await qdrant.createCollection(qdrantCollection, {
         vectors: {
           size: 768,
-          distance: 'Cosine'
-        }
+          distance: 'Cosine',
+        },
       });
     }
 

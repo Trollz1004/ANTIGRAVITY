@@ -155,7 +155,13 @@ const RoyaltyDeck: React.FC = () => {
   };
 
   return (
-    <div style={{ minHeight: '100%', padding: '32px 24px', background: 'linear-gradient(180deg, #0a0010 0%, #1a0020 50%, #0a0010 100%)' }}>
+    <div
+      style={{
+        minHeight: '100%',
+        padding: '32px 24px',
+        background: 'linear-gradient(180deg, #0a0010 0%, #1a0020 50%, #0a0010 100%)',
+      }}
+    >
       <style>{`
         @keyframes shatter {
           0% { transform: rotate(var(--r, 0deg)) translateX(0); opacity: 1; }
@@ -177,37 +183,61 @@ const RoyaltyDeck: React.FC = () => {
 
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: 40 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: '#dc2626', letterSpacing: 4, textTransform: 'uppercase', marginBottom: 8 }}>
+        <div
+          style={{
+            fontSize: 11,
+            fontWeight: 700,
+            color: '#dc2626',
+            letterSpacing: 4,
+            textTransform: 'uppercase',
+            marginBottom: 8,
+          }}
+        >
           ♥ Royalty Deck of Hearts ♥
         </div>
         <h1 style={{ fontSize: 32, fontWeight: 800, margin: 0, color: '#fef2f2', lineHeight: 1.2 }}>
           5 Founder Cards. 5 Legends.
         </h1>
-        <p style={{ fontSize: 14, color: '#94a3b8', marginTop: 8, maxWidth: 500, marginLeft: 'auto', marginRight: 'auto' }}>
-          Own a piece of the mission. Each card is a permanent stake in YouAndINotAI — with revenue share, governance rights, and your name on the blockchain forever.
+        <p
+          style={{
+            fontSize: 14,
+            color: '#94a3b8',
+            marginTop: 8,
+            maxWidth: 500,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          Own a piece of the mission. Each card is a permanent stake in YouAndINotAI — with revenue share, governance
+          rights, and your name on the blockchain forever.
         </p>
 
         {/* Scarcity Counter */}
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 12,
-          marginTop: 20,
-          padding: '10px 20px',
-          background: 'rgba(220, 38, 38, 0.1)',
-          border: '1px solid rgba(220, 38, 38, 0.3)',
-          borderRadius: 30,
-        }}>
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 12,
+            marginTop: 20,
+            padding: '10px 20px',
+            background: 'rgba(220, 38, 38, 0.1)',
+            border: '1px solid rgba(220, 38, 38, 0.3)',
+            borderRadius: 30,
+          }}
+        >
           <div style={{ display: 'flex', gap: 4 }}>
             {[...Array(totalCards)].map((_, i) => (
-              <div key={i} style={{
-                width: 10,
-                height: 10,
-                borderRadius: '50%',
-                background: i < soldCount ? '#dc2626' : 'rgba(220, 38, 38, 0.2)',
-                border: '1px solid rgba(220, 38, 38, 0.5)',
-                transition: 'all 0.3s',
-              }} />
+              <div
+                key={i}
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: '50%',
+                  background: i < soldCount ? '#dc2626' : 'rgba(220, 38, 38, 0.2)',
+                  border: '1px solid rgba(220, 38, 38, 0.5)',
+                  transition: 'all 0.3s',
+                }}
+              />
             ))}
           </div>
           <span style={{ fontSize: 12, fontWeight: 700, color: '#fca5a5', fontFamily: "'JetBrains Mono', monospace" }}>
@@ -217,13 +247,15 @@ const RoyaltyDeck: React.FC = () => {
       </div>
 
       {/* Cards Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: 20,
-        maxWidth: 1400,
-        margin: '0 auto',
-      }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: 20,
+          maxWidth: 1400,
+          margin: '0 auto',
+        }}
+      >
         {FOUNDER_CARDS.map((card) => {
           const isSelected = selectedCard === card.id;
           const isHovered = hoveredCard === card.id;
@@ -247,9 +279,8 @@ const RoyaltyDeck: React.FC = () => {
                 cursor: isSold || isJokerLocked ? 'not-allowed' : 'pointer',
                 transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                 transform: isHovered && !isSold ? 'translateY(-4px)' : 'none',
-                boxShadow: isHovered && !isSold
-                  ? `0 20px 60px ${card.glowColor}22, 0 0 30px ${card.glowColor}11`
-                  : 'none',
+                boxShadow:
+                  isHovered && !isSold ? `0 20px 60px ${card.glowColor}22, 0 0 30px ${card.glowColor}11` : 'none',
                 opacity: isSold ? 0.4 : isJokerLocked ? 0.6 : 1,
                 animation: isHovered && !isSold ? 'float 3s ease-in-out infinite' : 'none',
                 overflow: 'hidden',
@@ -259,41 +290,54 @@ const RoyaltyDeck: React.FC = () => {
 
               {/* Glow effect */}
               {isHovered && !isSold && (
-                <div style={{
-                  position: 'absolute',
-                  top: -2,
-                  left: -2,
-                  right: -2,
-                  bottom: -2,
-                  borderRadius: 22,
-                  background: card.borderGradient,
-                  zIndex: -1,
-                  opacity: 0.3,
-                  animation: 'pulse-glow 2s ease-in-out infinite',
-                }} />
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: -2,
+                    left: -2,
+                    right: -2,
+                    bottom: -2,
+                    borderRadius: 22,
+                    background: card.borderGradient,
+                    zIndex: -1,
+                    opacity: 0.3,
+                    animation: 'pulse-glow 2s ease-in-out infinite',
+                  }}
+                />
               )}
 
               {/* Card Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+              <div
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}
+              >
                 <div>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: card.glowColor, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 4 }}>
+                  <div
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 700,
+                      color: card.glowColor,
+                      letterSpacing: 2,
+                      textTransform: 'uppercase',
+                      marginBottom: 4,
+                    }}
+                  >
                     {card.name}
                   </div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: '#f8fafc' }}>
-                    {card.title}
-                  </div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#f8fafc' }}>{card.title}</div>
                 </div>
                 <HeartIcon size={28} className="" />
               </div>
 
               {/* Price */}
-              <div style={{
-                fontSize: 28,
-                fontWeight: 800,
-                color: card.glowColor,
-                fontFamily: "'JetBrains Mono', monospace",
-                marginBottom: 16,
-              }}>
+              <div
+                style={{
+                  fontSize: 28,
+                  fontWeight: 800,
+                  color: card.glowColor,
+                  fontFamily: "'JetBrains Mono', monospace",
+                  marginBottom: 16,
+                }}
+              >
                 ${card.price.toLocaleString()}
                 <span style={{ fontSize: 11, fontWeight: 500, color: '#64748b', marginLeft: 6 }}>one-time</span>
               </div>
@@ -309,40 +353,71 @@ const RoyaltyDeck: React.FC = () => {
               </div>
 
               {/* Status Badge */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingTop: 16,
-                borderTop: '1px solid rgba(255,255,255,0.06)',
-              }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingTop: 16,
+                  borderTop: '1px solid rgba(255,255,255,0.06)',
+                }}
+              >
                 {isSold ? (
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: 1 }}>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: '#475569',
+                      textTransform: 'uppercase',
+                      letterSpacing: 1,
+                    }}
+                  >
                     SOLD — {card.buyer}
                   </span>
                 ) : isJokerLocked ? (
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: 1 }}>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: '#64748b',
+                      textTransform: 'uppercase',
+                      letterSpacing: 1,
+                    }}
+                  >
                     🔒 UNLOCKS WHEN 4 CARDS SELL
                   </span>
                 ) : (
-                  <span style={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: '#22c55e',
-                    textTransform: 'uppercase',
-                    letterSpacing: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 4,
-                  }}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: '#22c55e',
+                      textTransform: 'uppercase',
+                      letterSpacing: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 4,
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: 6,
+                        height: 6,
+                        borderRadius: '50%',
+                        background: '#22c55e',
+                        display: 'inline-block',
+                      }}
+                    />
                     AVAILABLE
                   </span>
                 )}
 
                 {!isSold && !isJokerLocked && (
                   <button
-                    onClick={(e) => { e.stopPropagation(); handlePurchase(card); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePurchase(card);
+                    }}
                     style={{
                       padding: '8px 20px',
                       background: `linear-gradient(135deg, ${card.glowColor}, ${card.glowColor}cc)`,
@@ -367,28 +442,35 @@ const RoyaltyDeck: React.FC = () => {
       </div>
 
       {/* Trust Section */}
-      <div style={{
-        maxWidth: 800,
-        margin: '48px auto 0',
-        textAlign: 'center',
-      }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 16,
-          marginBottom: 32,
-        }}>
+      <div
+        style={{
+          maxWidth: 800,
+          margin: '48px auto 0',
+          textAlign: 'center',
+        }}
+      >
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 16,
+            marginBottom: 32,
+          }}
+        >
           {[
             { label: 'Blockchain Verified', detail: 'Base Mainnet (Chain 8453)', icon: '⛓️' },
             { label: 'Stripe Secured', detail: 'PCI DSS Compliant', icon: '🔒' },
             { label: 'DAO Protected', detail: 'Gnosis Safe Multi-sig', icon: '🏛️' },
           ].map((item, i) => (
-            <div key={i} style={{
-              padding: '16px 12px',
-              background: 'rgba(255,255,255,0.02)',
-              border: '1px solid rgba(255,255,255,0.06)',
-              borderRadius: 12,
-            }}>
+            <div
+              key={i}
+              style={{
+                padding: '16px 12px',
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: 12,
+              }}
+            >
               <div style={{ fontSize: 20, marginBottom: 6 }}>{item.icon}</div>
               <div style={{ fontSize: 12, fontWeight: 700, color: '#e2e8f0', marginBottom: 2 }}>{item.label}</div>
               <div style={{ fontSize: 10, color: '#64748b' }}>{item.detail}</div>
@@ -396,15 +478,18 @@ const RoyaltyDeck: React.FC = () => {
           ))}
         </div>
 
-        <div style={{
-          padding: '20px 24px',
-          background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.08), rgba(168, 85, 247, 0.08))',
-          border: '1px solid rgba(220, 38, 38, 0.2)',
-          borderRadius: 16,
-        }}>
+        <div
+          style={{
+            padding: '20px 24px',
+            background: 'linear-gradient(135deg, rgba(220, 38, 38, 0.08), rgba(168, 85, 247, 0.08))',
+            border: '1px solid rgba(220, 38, 38, 0.2)',
+            borderRadius: 16,
+          }}
+        >
           <p style={{ fontSize: 14, color: '#94a3b8', lineHeight: 1.8, margin: 0 }}>
-            Every Royalty Card purchase is recorded on-chain. Your name, your stake, your legacy — immutable and transparent.
-            The dating app pays the bills. The AI tools fund the kids. <strong style={{ color: '#fca5a5' }}>Forever.</strong>
+            Every Royalty Card purchase is recorded on-chain. Your name, your stake, your legacy — immutable and
+            transparent. The dating app pays the bills. The AI tools fund the kids.{' '}
+            <strong style={{ color: '#fca5a5' }}>Forever.</strong>
           </p>
         </div>
       </div>

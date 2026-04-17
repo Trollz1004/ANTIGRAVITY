@@ -19,7 +19,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
   onNext,
   onPrev,
   minimized,
-  onToggleMinimize
+  onToggleMinimize,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [progress, setProgress] = useState(0);
@@ -27,7 +27,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
   useEffect(() => {
     if (videoRef.current) {
       if (isPlaying) {
-        videoRef.current.play().catch(e => console.error("Playback error", e));
+        videoRef.current.play().catch((e) => console.error('Playback error', e));
       } else {
         videoRef.current.pause();
       }
@@ -45,8 +45,10 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
   if (!currentTrack) return null;
 
   return (
-    <div 
-      className={`fixed bottom-4 right-4 bg-surface border border-slate-700 shadow-2xl rounded-xl overflow-hidden transition-all duration-300 z-50 ${minimized ? 'w-64 h-16' : 'w-80'}`}
+    <div
+      className={`fixed bottom-4 right-4 bg-surface border border-slate-700 shadow-2xl rounded-xl overflow-hidden transition-all duration-300 z-50 ${
+        minimized ? 'w-64 h-16' : 'w-80'
+      }`}
     >
       {/* Video/Visualizer Area */}
       {!minimized && (
@@ -61,7 +63,11 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
             playsInline
           />
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
-             {currentTrack.type === 'video' ? <Video className="w-8 h-8 text-white" /> : <div className="animate-pulse w-12 h-12 rounded-full bg-primary/20"></div>}
+            {currentTrack.type === 'video' ? (
+              <Video className="w-8 h-8 text-white" />
+            ) : (
+              <div className="animate-pulse w-12 h-12 rounded-full bg-primary/20"></div>
+            )}
           </div>
         </div>
       )}
@@ -73,7 +79,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
         {/* Progress Bar (Only visible when not minimized) */}
         {!minimized && (
           <div className="w-full h-1 bg-slate-700 rounded-full mb-3 cursor-pointer">
-            <div 
+            <div
               className="h-full bg-primary rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
@@ -90,8 +96,8 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
             <button onClick={onPrev} className="text-slate-400 hover:text-white p-1">
               <SkipBack size={16} />
             </button>
-            <button 
-              onClick={onPlayPause} 
+            <button
+              onClick={onPlayPause}
               className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-indigo-600 transition-colors"
             >
               {isPlaying ? <Pause size={16} /> : <Play size={16} />}
@@ -101,11 +107,8 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
             </button>
           </div>
         </div>
-        
-        <button 
-          onClick={onToggleMinimize}
-          className="absolute top-2 right-2 text-slate-500 hover:text-white"
-        >
+
+        <button onClick={onToggleMinimize} className="absolute top-2 right-2 text-slate-500 hover:text-white">
           {minimized ? <Maximize2 size={12} /> : <Minimize2 size={12} />}
         </button>
       </div>

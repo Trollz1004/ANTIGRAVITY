@@ -1,11 +1,11 @@
-import { eq, and, desc, sql } from "drizzle-orm";
-import { getDb } from "./db";
+import { eq, and, desc, sql } from 'drizzle-orm';
+import { getDb } from './db';
 import {
   governanceProposals,
   governanceVotes,
   type InsertGovernanceProposal,
   type InsertGovernanceVote,
-} from "../drizzle/schema";
+} from '../drizzle/schema';
 
 /**
  * JoshuaCLAW Governance Engine
@@ -27,27 +27,27 @@ import {
  */
 
 export const VOTERS = [
-  { slug: "joshua", name: "Joshua", type: "human" as const, position: 7, role: "Founder & Tiebreaker" },
-  { slug: "manus", name: "Manus", type: "ai" as const, position: 1, role: "Legacy Guardian" },
-  { slug: "claude", name: "Claude/Opus", type: "ai" as const, position: 2, role: "CTO / Architect" },
-  { slug: "gemini", name: "Gemini", type: "ai" as const, position: 3, role: "Agentic Ops" },
-  { slug: "perplexity", name: "Perplexity/Comet", type: "ai" as const, position: 4, role: "Lead Technical Architect" },
-  { slug: "grok", name: "Grok", type: "ai" as const, position: 5, role: "Adversarial Research" },
-  { slug: "codex", name: "Codex", type: "ai" as const, position: 6, role: "MCP Keyholder" },
+  { slug: 'joshua', name: 'Joshua', type: 'human' as const, position: 7, role: 'Founder & Tiebreaker' },
+  { slug: 'manus', name: 'Manus', type: 'ai' as const, position: 1, role: 'Legacy Guardian' },
+  { slug: 'claude', name: 'Claude/Opus', type: 'ai' as const, position: 2, role: 'CTO / Architect' },
+  { slug: 'gemini', name: 'Gemini', type: 'ai' as const, position: 3, role: 'Agentic Ops' },
+  { slug: 'perplexity', name: 'Perplexity/Comet', type: 'ai' as const, position: 4, role: 'Lead Technical Architect' },
+  { slug: 'grok', name: 'Grok', type: 'ai' as const, position: 5, role: 'Adversarial Research' },
+  { slug: 'codex', name: 'Codex', type: 'ai' as const, position: 6, role: 'MCP Keyholder' },
 ] as const;
 
 export const TIER_CONFIG = {
   critical: {
-    label: "Tier 1 — Critical",
+    label: 'Tier 1 — Critical',
     requiredVotes: 4,
-    description: "Revenue splits, contract deployments, Iron Wall changes, new team members",
-    categories: ["revenue-split", "contract-deploy", "iron-wall", "team-member", "governance-change"],
+    description: 'Revenue splits, contract deployments, Iron Wall changes, new team members',
+    categories: ['revenue-split', 'contract-deploy', 'iron-wall', 'team-member', 'governance-change'],
   },
   operational: {
-    label: "Tier 2 — Operational",
+    label: 'Tier 2 — Operational',
     requiredVotes: 3,
-    description: "Bug fixes, UI updates, marketing pushes",
-    categories: ["bug-fix", "ui-update", "marketing", "documentation", "feature-add"],
+    description: 'Bug fixes, UI updates, marketing pushes',
+    categories: ['bug-fix', 'ui-update', 'marketing', 'documentation', 'feature-add'],
   },
 } as const;
 
@@ -55,7 +55,7 @@ export const TIER_CONFIG = {
 
 export async function createProposal(data: InsertGovernanceProposal) {
   const db = await getDb();
-  if (!db) throw new Error("Database not available");
+  if (!db) throw new Error('Database not available');
 
   const tier = data.tier as keyof typeof TIER_CONFIG;
   const requiredVotes = TIER_CONFIG[tier]?.requiredVotes ?? 4;
@@ -91,9 +91,14 @@ export async function getProposal(id: number) {
 
 // ─── Voting ─────────────────────────────────────────────────────────
 
-export async function castVote(data: { proposalId: number; voterSlug: string; vote: "approve" | "reject"; reasoning?: string }) {
+export async function castVote(data: {
+  proposalId: number;
+  voterSlug: string;
+  vote: 'approve' | 'reject';
+  reasoning?: string;
+}) {
   const db = await getDb();
-  if (!db) throw new Error("Database not available");
+  if (!db) throw new Error('Database not available');
 
   // Validate voter
   const voter = VOTERS.find((v) => v.slug === data.voterSlug);
@@ -109,8 +114,8 @@ export async function castVote(data: { proposalId: number; voterSlug: string; vo
 
   // Get proposal
   const proposal = await getProposal(data.proposalId);
-  if (!proposal) throw new Error("Proposal not found");
-  if (proposal.status !== "pending") throw new Error(`Proposal is ${proposal.status}, cannot vote`);
+  if (!proposal) throw new Error('Proposal not found');
+  if (proposal.status !== 'pending') throw new Error(`Proposal is ${proposal.status}, cannot vote`);
 
   // Cast vote
   await db.insert(governanceVotes).values({
@@ -119,7 +124,7 @@ export async function castVote(data: { proposalId: number; voterSlug: string; vo
   });
 
   // Update proposal vote counts
-  const isApprove = data.vote === "approve";
+  const isApprove = data.vote === 'approve';
   const newApprove = proposal.approveVotes + (isApprove ? 1 : 0);
   const newReject = proposal.rejectVotes + (isApprove ? 0 : 1);
   const newTotal = proposal.totalVotes + 1;
@@ -132,11 +137,11 @@ export async function castVote(data: { proposalId: number; voterSlug: string; vo
 
   // Check if proposal is resolved
   if (newApprove >= proposal.requiredVotes) {
-    updateData.status = "approved";
+    updateData.status = 'approved';
     updateData.resolvedAt = new Date();
   } else if (newReject > VOTERS.length - proposal.requiredVotes) {
     // If enough rejections that approval is impossible
-    updateData.status = "rejected";
+    updateData.status = 'rejected';
     updateData.resolvedAt = new Date();
   }
 
@@ -148,14 +153,18 @@ export async function castVote(data: { proposalId: number; voterSlug: string; vo
     newApprove,
     newReject,
     resolved: !!updateData.resolvedAt,
-    status: updateData.status ?? "pending",
+    status: updateData.status ?? 'pending',
   };
 }
 
 export async function getVotesForProposal(proposalId: number) {
   const db = await getDb();
   if (!db) return [];
-  return db.select().from(governanceVotes).where(eq(governanceVotes.proposalId, proposalId)).orderBy(governanceVotes.createdAt);
+  return db
+    .select()
+    .from(governanceVotes)
+    .where(eq(governanceVotes.proposalId, proposalId))
+    .orderBy(governanceVotes.createdAt);
 }
 
 export async function getGovernanceStats() {
@@ -174,10 +183,10 @@ export async function getGovernanceStats() {
   stats.forEach((s) => {
     const count = Number(s.count);
     result.total += count;
-    if (s.status === "pending") result.pending = count;
-    if (s.status === "approved") result.approved = count;
-    if (s.status === "rejected") result.rejected = count;
-    if (s.status === "expired") result.expired = count;
+    if (s.status === 'pending') result.pending = count;
+    if (s.status === 'approved') result.approved = count;
+    if (s.status === 'rejected') result.rejected = count;
+    if (s.status === 'expired') result.expired = count;
   });
   return result;
 }

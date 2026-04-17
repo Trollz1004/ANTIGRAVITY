@@ -5,22 +5,39 @@ const REPORT_REASONS = [
   {
     value: 'harassment',
     label: 'Harassment or threats',
-    description: 'Includes bullying, stalking, threats of violence, hate speech',
+    description:
+      'Includes bullying, stalking, threats of violence, hate speech',
   },
-  { value: 'spam', label: 'Spam or solicitation', description: 'Unwanted promotional content or persistent messaging' },
-  { value: 'impersonation', label: 'Impersonation', description: 'Someone pretending to be someone else' },
+  {
+    value: 'spam',
+    label: 'Spam or solicitation',
+    description: 'Unwanted promotional content or persistent messaging',
+  },
+  {
+    value: 'impersonation',
+    label: 'Impersonation',
+    description: 'Someone pretending to be someone else',
+  },
   {
     value: 'minor-risk',
     label: 'Possible minor-safety issue',
     description: 'Concern about underage user or inappropriate conduct',
   },
-  { value: 'scam', label: 'Scam or payment manipulation', description: 'Financial fraud or deceptive payment schemes' },
+  {
+    value: 'scam',
+    label: 'Scam or payment manipulation',
+    description: 'Financial fraud or deceptive payment schemes',
+  },
   {
     value: 'inappropriate',
     label: 'Inappropriate content',
     description: 'Explicit images, offensive material, or violating content',
   },
-  { value: 'other', label: 'Other safety concern', description: 'Any other safety issue not covered above' },
+  {
+    value: 'other',
+    label: 'Other safety concern',
+    description: 'Any other safety issue not covered above',
+  },
 ];
 
 const URGENCY_LEVELS = [
@@ -42,7 +59,11 @@ interface ReportFormProps {
   isLoading?: boolean;
 }
 
-export function ReportForm({ onSubmit, onCancel, isLoading = false }: ReportFormProps) {
+export function ReportForm({
+  onSubmit,
+  onCancel,
+  isLoading = false,
+}: ReportFormProps) {
   const [reason, setReason] = useState(REPORT_REASONS[0].value);
   const [details, setDetails] = useState('');
   const [incidentDate, setIncidentDate] = useState('');
@@ -66,12 +87,12 @@ export function ReportForm({ onSubmit, onCancel, isLoading = false }: ReportForm
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      setEvidence((prev) => [...prev, ...files]);
+      setEvidence(prev => [...prev, ...files]);
     }
   };
 
   const removeEvidence = (index: number) => {
-    setEvidence((prev) => prev.filter((_, i) => i !== index));
+    setEvidence(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -84,10 +105,10 @@ export function ReportForm({ onSubmit, onCancel, isLoading = false }: ReportForm
         <div className="relative">
           <select
             value={reason}
-            onChange={(e) => setReason(e.target.value)}
+            onChange={e => setReason(e.target.value)}
             className="app-input w-full appearance-none pr-10"
           >
-            {REPORT_REASONS.slice(0, 1).map((option) => (
+            {REPORT_REASONS.slice(0, 1).map(option => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -105,13 +126,15 @@ export function ReportForm({ onSubmit, onCancel, isLoading = false }: ReportForm
           )}
         </div>
 
-        {REPORT_REASONS.find((r) => r.value === reason)?.description && (
-          <p className="mt-2 text-xs text-gray-600">{REPORT_REASONS.find((r) => r.value === reason)?.description}</p>
+        {REPORT_REASONS.find(r => r.value === reason)?.description && (
+          <p className="mt-2 text-xs text-gray-600">
+            {REPORT_REASONS.find(r => r.value === reason)?.description}
+          </p>
         )}
 
         {showMoreReasons && (
           <div className="mt-3 grid grid-cols-1 gap-2 rounded-xl bg-gray-50 p-3">
-            {REPORT_REASONS.slice(1).map((option) => (
+            {REPORT_REASONS.slice(1).map(option => (
               <button
                 key={option.value}
                 type="button"
@@ -119,7 +142,11 @@ export function ReportForm({ onSubmit, onCancel, isLoading = false }: ReportForm
                   setReason(option.value);
                   setShowMoreReasons(false);
                 }}
-                className={`text-left text-sm ${reason === option.value ? 'font-bold text-[#ff4f00]' : 'text-gray-700'}`}
+                className={`text-left text-sm ${
+                  reason === option.value
+                    ? 'font-bold text-[#ff4f00]'
+                    : 'text-gray-700'
+                }`}
               >
                 {option.label}
                 <p className="text-xs text-gray-500">{option.description}</p>
@@ -137,7 +164,7 @@ export function ReportForm({ onSubmit, onCancel, isLoading = false }: ReportForm
           <input
             type="date"
             value={incidentDate}
-            onChange={(e) => setIncidentDate(e.target.value)}
+            onChange={e => setIncidentDate(e.target.value)}
             className="app-input w-full pl-10"
           />
           <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -150,7 +177,7 @@ export function ReportForm({ onSubmit, onCancel, isLoading = false }: ReportForm
         </label>
         <textarea
           value={details}
-          onChange={(e) => setDetails(e.target.value)}
+          onChange={e => setDetails(e.target.value)}
           rows={4}
           placeholder="I noticed..."
           className="app-input min-h-[8rem] resize-y"
@@ -165,7 +192,13 @@ export function ReportForm({ onSubmit, onCancel, isLoading = false }: ReportForm
           <label className="app-button-outline cursor-pointer justify-center px-4 py-2 text-sm">
             <Paperclip size={16} />
             Add Photos/Videos
-            <input type="file" multiple accept="image/*,video/*" onChange={handleFileChange} className="hidden" />
+            <input
+              type="file"
+              multiple
+              accept="image/*,video/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
           </label>
         </div>
 
@@ -195,17 +228,19 @@ export function ReportForm({ onSubmit, onCancel, isLoading = false }: ReportForm
           Is this urgent?
         </label>
         <div className="flex gap-4">
-          {URGENCY_LEVELS.map((level) => (
+          {URGENCY_LEVELS.map(level => (
             <label key={level.value} className="flex items-center gap-2">
               <input
                 type="radio"
                 name="urgency"
                 value={level.value}
                 checked={urgency === level.value}
-                onChange={(e) => setUrgency(e.target.value)}
+                onChange={e => setUrgency(e.target.value)}
                 className="h-4 w-4 text-[#ff4f00]"
               />
-              <span className={`inline-block h-3 w-3 rounded-full ${level.color}`}></span>
+              <span
+                className={`inline-block h-3 w-3 rounded-full ${level.color}`}
+              ></span>
               <span className="text-sm">{level.label}</span>
             </label>
           ))}
@@ -217,12 +252,17 @@ export function ReportForm({ onSubmit, onCancel, isLoading = false }: ReportForm
           Additional context
         </label>
         <div className="space-y-2">
-          {CONTEXT_CHECKBOXES.map((checkbox) => (
+          {CONTEXT_CHECKBOXES.map(checkbox => (
             <label key={checkbox.id} className="flex items-center gap-2">
               <input
                 type="checkbox"
                 checked={context[checkbox.id] || false}
-                onChange={(e) => setContext((prev) => ({ ...prev, [checkbox.id]: e.target.checked }))}
+                onChange={e =>
+                  setContext(prev => ({
+                    ...prev,
+                    [checkbox.id]: e.target.checked,
+                  }))
+                }
                 className="h-4 w-4 rounded border-gray-300 text-[#ff4f00] focus:ring-[#ff4f00]"
               />
               <span className="text-sm">{checkbox.label}</span>
@@ -239,7 +279,11 @@ export function ReportForm({ onSubmit, onCancel, isLoading = false }: ReportForm
         >
           {isLoading ? 'Submitting Report...' : 'Submit Report'}
         </button>
-        <button type="button" onClick={onCancel} className="app-button-outline flex-1 justify-center px-5 py-3">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="app-button-outline flex-1 justify-center px-5 py-3"
+        >
           Cancel
         </button>
       </div>

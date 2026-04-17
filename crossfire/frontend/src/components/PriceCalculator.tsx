@@ -1,24 +1,24 @@
-import { useState } from 'react'
-import { calcPrices } from '../api'
+import { useState } from 'react';
+import { calcPrices } from '../api';
 
 interface FeeBreakdown {
-  platform: string
-  list_price: number
-  platform_fee: number
-  processing_fee: number
-  total_fees: number
-  net_payout: number
-  profit: number
-  profit_margin: number
+  platform: string;
+  list_price: number;
+  platform_fee: number;
+  processing_fee: number;
+  total_fees: number;
+  net_payout: number;
+  profit: number;
+  profit_margin: number;
 }
 
 interface PriceResult {
-  ebay: FeeBreakdown
-  mercari: FeeBreakdown
-  poshmark: FeeBreakdown
-  fbmp: FeeBreakdown
-  etsy: FeeBreakdown
-  square: FeeBreakdown
+  ebay: FeeBreakdown;
+  mercari: FeeBreakdown;
+  poshmark: FeeBreakdown;
+  fbmp: FeeBreakdown;
+  etsy: FeeBreakdown;
+  square: FeeBreakdown;
 }
 
 const PLATFORM_COLORS: Record<string, string> = {
@@ -28,7 +28,7 @@ const PLATFORM_COLORS: Record<string, string> = {
   poshmark: 'from-pink-500 to-rose-600',
   fbmp: 'from-blue-500 to-blue-700',
   etsy: 'from-orange-500 to-orange-700',
-}
+};
 
 const PLATFORM_LABELS: Record<string, string> = {
   ebay: 'eBay',
@@ -37,44 +37,44 @@ const PLATFORM_LABELS: Record<string, string> = {
   poshmark: 'Poshmark',
   fbmp: 'FB Marketplace',
   etsy: 'Etsy',
-}
+};
 
 export default function PriceCalculator() {
-  const [ebayPrice, setEbayPrice] = useState('')
-  const [costBasis, setCostBasis] = useState('')
-  const [shippingCost, setShippingCost] = useState('6.50')
-  const [materialsCost, setMaterialsCost] = useState('1.50')
-  const [result, setResult] = useState<PriceResult | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [ebayPrice, setEbayPrice] = useState('');
+  const [costBasis, setCostBasis] = useState('');
+  const [shippingCost, setShippingCost] = useState('6.50');
+  const [materialsCost, setMaterialsCost] = useState('1.50');
+  const [result, setResult] = useState<PriceResult | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const calculate = async () => {
-    const price = parseFloat(ebayPrice)
-    if (!price || price <= 0) return
-    setLoading(true)
+    const price = parseFloat(ebayPrice);
+    if (!price || price <= 0) return;
+    setLoading(true);
     try {
-      const data = await calcPrices(
+      const data = (await calcPrices(
         price,
         parseFloat(costBasis) || 0,
-        parseFloat(shippingCost) || 6.50,
-        parseFloat(materialsCost) || 1.50,
-      ) as PriceResult
-      setResult(data)
+        parseFloat(shippingCost) || 6.5,
+        parseFloat(materialsCost) || 1.5,
+      )) as PriceResult;
+      setResult(data);
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
-  const shipping = parseFloat(shippingCost) || 0
-  const materials = parseFloat(materialsCost) || 0
-  const totalShipping = shipping + materials
+  const shipping = parseFloat(shippingCost) || 0;
+  const materials = parseFloat(materialsCost) || 0;
+  const totalShipping = shipping + materials;
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6">Price Calculator</h2>
       <p className="text-white/50 text-sm mb-6">
-        Enter your eBay price. eBay = buyer pays shipping. Other platforms = FREE SHIPPING baked in.
-        Other platform prices adjusted so you net the same profit as eBay after shipping + materials.
+        Enter your eBay price. eBay = buyer pays shipping. Other platforms = FREE SHIPPING baked in. Other platform
+        prices adjusted so you net the same profit as eBay after shipping + materials.
       </p>
 
       {/* Input row */}
@@ -86,8 +86,8 @@ export default function PriceCalculator() {
             <input
               type="number"
               value={ebayPrice}
-              onChange={e => setEbayPrice(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && calculate()}
+              onChange={(e) => setEbayPrice(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && calculate()}
               placeholder="49.99"
               className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 w-32 text-white outline-none focus:border-orange-500"
             />
@@ -100,7 +100,7 @@ export default function PriceCalculator() {
             <input
               type="number"
               value={costBasis}
-              onChange={e => setCostBasis(e.target.value)}
+              onChange={(e) => setCostBasis(e.target.value)}
               placeholder="10.00"
               className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 w-32 text-white outline-none focus:border-orange-500"
             />
@@ -113,7 +113,7 @@ export default function PriceCalculator() {
             <input
               type="number"
               value={shippingCost}
-              onChange={e => setShippingCost(e.target.value)}
+              onChange={(e) => setShippingCost(e.target.value)}
               className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 w-28 text-white outline-none focus:border-orange-500"
             />
           </div>
@@ -125,7 +125,7 @@ export default function PriceCalculator() {
             <input
               type="number"
               value={materialsCost}
-              onChange={e => setMaterialsCost(e.target.value)}
+              onChange={(e) => setMaterialsCost(e.target.value)}
               className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 w-28 text-white outline-none focus:border-orange-500"
             />
           </div>
@@ -145,7 +145,7 @@ export default function PriceCalculator() {
       {result && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           {Object.entries(result).map(([key, breakdown]) => {
-            const b = breakdown as FeeBreakdown
+            const b = breakdown as FeeBreakdown;
 
             return (
               <div
@@ -154,7 +154,9 @@ export default function PriceCalculator() {
               >
                 {/* Platform header */}
                 <div className="flex items-center gap-2 mb-3">
-                  <div className={`w-6 h-6 rounded bg-gradient-to-br ${PLATFORM_COLORS[key]} flex items-center justify-center text-[10px] font-bold`}>
+                  <div
+                    className={`w-6 h-6 rounded bg-gradient-to-br ${PLATFORM_COLORS[key]} flex items-center justify-center text-[10px] font-bold`}
+                  >
                     {key[0].toUpperCase()}
                   </div>
                   <span className="font-semibold text-sm">{PLATFORM_LABELS[key]}</span>
@@ -170,9 +172,7 @@ export default function PriceCalculator() {
                 </div>
 
                 {/* List price */}
-                <div className="text-3xl font-black text-white mb-2">
-                  ${b.list_price.toFixed(2)}
-                </div>
+                <div className="text-3xl font-black text-white mb-2">${b.list_price.toFixed(2)}</div>
 
                 {/* Fee breakdown */}
                 <div className="space-y-1 text-xs text-white/50">
@@ -218,10 +218,10 @@ export default function PriceCalculator() {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -49,14 +49,22 @@ const VARIANT_STYLES = {
   },
 };
 
-export function SafetyTipBanner({ tip, onDismiss, onAction }: SafetyTipBannerProps) {
+export function SafetyTipBanner({
+  tip,
+  onDismiss,
+  onAction,
+}: SafetyTipBannerProps) {
   const styles = VARIANT_STYLES[tip.variant];
   const IconComponent = styles.icon;
 
   return (
-    <div className={`${styles.bg} ${styles.border} border-l-4 rounded-[1.2rem] p-4 shadow-sm`}>
+    <div
+      className={`${styles.bg} ${styles.border} border-l-4 rounded-[1.2rem] p-4 shadow-sm`}
+    >
       <div className="flex items-start gap-3">
-        <div className={`${styles.iconBg} flex h-10 w-10 items-center justify-center rounded-full`}>
+        <div
+          className={`${styles.iconBg} flex h-10 w-10 items-center justify-center rounded-full`}
+        >
           <IconComponent className={`h-5 w-5 ${styles.iconColor}`} />
         </div>
 

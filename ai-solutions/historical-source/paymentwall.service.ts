@@ -68,7 +68,7 @@ export class PaymentwallService {
     this.config = {
       publicKey: process.env.PAYMENTWALL_PUBLIC_KEY || '',
       privateKey: process.env.PAYMENTWALL_PRIVATE_KEY || '',
-      apiUrl: 'https://api.paymentwall.com/api'
+      apiUrl: 'https://api.paymentwall.com/api',
     };
 
     if (!this.config.publicKey || !this.config.privateKey) {
@@ -102,7 +102,7 @@ export class PaymentwallService {
         ag_name: request.description,
         ag_external_id: request.productId || `product_${Date.now()}`,
         ps: 'all', // All payment methods
-        sign_version: 2
+        sign_version: 2,
       };
 
       // Generate signature
@@ -122,7 +122,7 @@ export class PaymentwallService {
         currency: request.currency,
         status: 'pending',
         timestamp: new Date(),
-        childrenSupported
+        childrenSupported,
       };
 
       await this.logTransaction(transactionLog);
@@ -130,7 +130,7 @@ export class PaymentwallService {
       console.log('💚 Payment initiated:', {
         total: `$${totalAmount.toFixed(2)}`,
         charity: `$${charityAmount.toFixed(2)} to Shriners`,
-        children: `${childrenSupported} children will be supported!`
+        children: `${childrenSupported} children will be supported!`,
       });
 
       return {
@@ -138,16 +138,15 @@ export class PaymentwallService {
         transactionId: transactionLog.id,
         charityAmount,
         childrenSupported,
-        paymentUrl
+        paymentUrl,
       };
-
     } catch (error: any) {
       console.error('Paymentwall payment error:', error);
       return {
         success: false,
         charityAmount: 0,
         childrenSupported: 0,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -158,12 +157,12 @@ export class PaymentwallService {
   async createSubscription(
     request: PaymentRequest & {
       subscriptionType: 'monthly' | 'quarterly' | 'annual';
-    }
+    },
   ): Promise<PaymentResponse> {
     const periodMap = {
       monthly: 'month',
       quarterly: 'quarter',
-      annual: 'year'
+      annual: 'year',
     };
 
     const totalAmount = request.amount / 100;
@@ -183,7 +182,7 @@ export class PaymentwallService {
       ag_period_length: 1,
       ag_period_type: periodMap[request.subscriptionType],
       ag_recurring: 1,
-      ps: 'all'
+      ps: 'all',
     };
 
     const signature = this.generateSignature(widgetParams);
@@ -195,7 +194,7 @@ export class PaymentwallService {
       type: request.subscriptionType,
       amount: `$${totalAmount.toFixed(2)}/${request.subscriptionType}`,
       charity: `$${charityAmount.toFixed(2)} per billing → Shriners`,
-      children: `${childrenSupported} children per billing cycle!`
+      children: `${childrenSupported} children per billing cycle!`,
     });
 
     return {
@@ -203,7 +202,7 @@ export class PaymentwallService {
       transactionId: `sub_${Date.now()}`,
       charityAmount,
       childrenSupported,
-      paymentUrl
+      paymentUrl,
     };
   }
 
@@ -230,7 +229,6 @@ export class PaymentwallService {
       }
 
       return true;
-
     } catch (error) {
       console.error('Webhook processing error:', error);
       return false;
@@ -249,7 +247,7 @@ export class PaymentwallService {
       transactionId: webhookData.ref,
       total: `$${amount.toFixed(2)}`,
       charity: `$${charityAmount.toFixed(2)} to Shriners!`,
-      children: `${childrenSupported} children will be helped!`
+      children: `${childrenSupported} children will be helped!`,
     });
 
     // Update transaction log to completed
@@ -282,18 +280,13 @@ export class PaymentwallService {
   private generateSignature(params: any): string {
     // Sort parameters alphabetically
     const sortedKeys = Object.keys(params).sort();
-    const signatureBase = sortedKeys
-      .map(key => `${key}=${params[key]}`)
-      .join('');
+    const signatureBase = sortedKeys.map((key) => `${key}=${params[key]}`).join('');
 
     // Add private key
     const signatureString = signatureBase + this.config.privateKey;
 
     // Generate MD5 hash
-    return crypto
-      .createHash('md5')
-      .update(signatureString)
-      .digest('hex');
+    return crypto.createHash('md5').update(signatureString).digest('hex');
   }
 
   /**
@@ -314,7 +307,7 @@ export class PaymentwallService {
    */
   private generatePaymentUrl(params: any): string {
     const queryString = Object.keys(params)
-      .map(key => `${key}=${encodeURIComponent(params[key])}`)
+      .map((key) => `${key}=${encodeURIComponent(params[key])}`)
       .join('&');
 
     return `https://api.paymentwall.com/api/subscription/?${queryString}`;
@@ -333,7 +326,7 @@ export class PaymentwallService {
    */
   private async updateTransactionStatus(
     transactionId: string,
-    status: 'pending' | 'completed' | 'failed'
+    status: 'pending' | 'completed' | 'failed',
   ): Promise<void> {
     console.log(`💚 Transaction ${transactionId} → ${status}`);
     // TODO: await prisma.txLogs.update({ where: { id: transactionId }, data: { status } });
@@ -349,7 +342,7 @@ export class PaymentwallService {
     console.log('💚 SUBSCRIPTION PAYMENT CONFIRMED!', {
       subscriptionId: webhookData.subscription_id,
       amount: `$${amount.toFixed(2)}`,
-      charity: `$${charityAmount.toFixed(2)} to Shriners!`
+      charity: `$${charityAmount.toFixed(2)} to Shriners!`,
     });
 
     // Log recurring transaction
@@ -362,7 +355,7 @@ export class PaymentwallService {
       currency: webhookData.currency,
       status: 'completed',
       timestamp: new Date(),
-      childrenSupported: Math.floor(charityAmount / this.COST_PER_CHILD)
+      childrenSupported: Math.floor(charityAmount / this.COST_PER_CHILD),
     });
 
     await this.checkDonationThreshold();
@@ -389,7 +382,7 @@ export class PaymentwallService {
     return {
       totalDonated: 0,
       childrenSupported: 0,
-      pendingDonation: 0
+      pendingDonation: 0,
     };
   }
 
@@ -413,8 +406,8 @@ export class PaymentwallService {
         subscriptions: true,
         multiplePaymentMethods: true,
         autoCharitySplit: true,
-        webhookProcessing: true
-      }
+        webhookProcessing: true,
+      },
     };
   }
 }

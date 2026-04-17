@@ -5,7 +5,10 @@
  * Nothing is sent to the server without explicit user action.
  */
 
-export interface Coords { lat: number; lng: number; }
+export interface Coords {
+  lat: number;
+  lng: number;
+}
 
 export type RadiusMiles = 5 | 10 | 25;
 
@@ -24,15 +27,15 @@ export async function requestLocation(): Promise<Coords | null> {
 
   if (!navigator.geolocation) return null;
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      pos => {
         _cachedCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         _cacheExpiry = Date.now() + CACHE_TTL_MS;
         resolve(_cachedCoords);
       },
       () => resolve(null),
-      { enableHighAccuracy: false, timeout: 8000, maximumAge: CACHE_TTL_MS },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: CACHE_TTL_MS }
     );
   });
 }
@@ -58,12 +61,17 @@ const DEG_TO_RAD = Math.PI / 180;
  * Used to pass lat/lng bounds to the backend for meetup filtering.
  */
 export interface BoundingBox {
-  lat_min: number; lat_max: number;
-  lng_min: number; lng_max: number;
+  lat_min: number;
+  lat_max: number;
+  lng_min: number;
+  lng_max: number;
 }
 
-export function boundingBox(center: Coords, radiusMiles: RadiusMiles): BoundingBox {
-  const latDelta = (radiusMiles / EARTH_RADIUS_MILES) / DEG_TO_RAD;
+export function boundingBox(
+  center: Coords,
+  radiusMiles: RadiusMiles
+): BoundingBox {
+  const latDelta = radiusMiles / EARTH_RADIUS_MILES / DEG_TO_RAD;
   const lngDelta = latDelta / Math.cos(center.lat * DEG_TO_RAD);
   return {
     lat_min: center.lat - latDelta,
@@ -82,6 +90,8 @@ export function distanceMiles(a: Coords, b: Coords): number {
   const dLng = (b.lng - a.lng) * DEG_TO_RAD;
   const h =
     Math.sin(dLat / 2) ** 2 +
-    Math.cos(a.lat * DEG_TO_RAD) * Math.cos(b.lat * DEG_TO_RAD) * Math.sin(dLng / 2) ** 2;
+    Math.cos(a.lat * DEG_TO_RAD) *
+      Math.cos(b.lat * DEG_TO_RAD) *
+      Math.sin(dLng / 2) ** 2;
   return 2 * EARTH_RADIUS_MILES * Math.asin(Math.sqrt(h));
 }

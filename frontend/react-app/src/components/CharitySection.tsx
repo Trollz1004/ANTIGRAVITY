@@ -1,6 +1,13 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { CalendarDays, DollarSign, Heart, ShieldCheck, Sparkles, Users } from 'lucide-react';
+import {
+  CalendarDays,
+  DollarSign,
+  Heart,
+  ShieldCheck,
+  Sparkles,
+  Users,
+} from 'lucide-react';
 
 const cards = [
   {
@@ -39,8 +46,17 @@ function Particle({ delay }: { delay: number }) {
   return (
     <motion.div
       initial={{ y: '100%', opacity: 0, x: Math.random() * 100 + '%' }}
-      animate={{ y: '-10%', opacity: [0, 1, 1, 0], x: `${Math.random() * 100}%` }}
-      transition={{ duration: Math.random() * 10 + 10, repeat: Infinity, delay, ease: 'linear' }}
+      animate={{
+        y: '-10%',
+        opacity: [0, 1, 1, 0],
+        x: `${Math.random() * 100}%`,
+      }}
+      transition={{
+        duration: Math.random() * 10 + 10,
+        repeat: Infinity,
+        delay,
+        ease: 'linear',
+      }}
       className="absolute h-1 w-1 rounded-full bg-emerald-400 blur-[1px]"
     />
   );
@@ -93,8 +109,9 @@ export function CharitySection() {
             transition={{ delay: 0.2 }}
             className="mx-auto max-w-3xl text-lg font-light text-gray-400"
           >
-            YouAndiNotAi keeps its launch story inside the product: Bot-Shield verification, public founder pricing,
-            and a prelaunch flow built to move from waitlist to profile setup without friction.
+            YouAndiNotAi keeps its launch story inside the product: Bot-Shield
+            verification, public founder pricing, and a prelaunch flow built to
+            move from waitlist to profile setup without friction.
           </motion.p>
         </div>
 
@@ -104,29 +121,44 @@ export function CharitySection() {
           viewport={{ once: true }}
           className="mb-20 grid grid-cols-1 gap-8 rounded-[3rem] border border-white/5 bg-zinc-900/50 p-8 backdrop-blur-md md:grid-cols-3"
         >
-          {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center space-y-2 text-center">
+          {stats.map(stat => (
+            <div
+              key={stat.label}
+              className="flex flex-col items-center space-y-2 text-center"
+            >
               <div className="rounded-2xl bg-emerald-500/10 p-3 text-emerald-400">
                 <stat.icon size={24} />
               </div>
               <div className="text-3xl font-black text-white">{stat.value}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{stat.label}</div>
+              <div className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                {stat.label}
+              </div>
             </div>
           ))}
         </motion.div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {cards.map((card) => (
-            <motion.div key={card.title} whileHover={{ y: -10, scale: 1.02 }} className="relative group">
+          {cards.map(card => (
+            <motion.div
+              key={card.title}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className="relative group"
+            >
               <div
                 className={`absolute -inset-1 rounded-[2.5rem] bg-gradient-to-r ${card.color} opacity-25 blur transition duration-1000 group-hover:opacity-75 group-hover:duration-200`}
               />
               <div className="relative flex h-full flex-col rounded-[2.5rem] border border-white/10 bg-zinc-900/90 p-8 backdrop-blur-xl">
-                <div className={`mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${card.color} shadow-lg shadow-green-500/20`}>
+                <div
+                  className={`mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${card.color} shadow-lg shadow-green-500/20`}
+                >
                   <card.icon className="text-white" size={32} />
                 </div>
-                <h3 className="mb-3 text-2xl font-black uppercase tracking-tight text-white">{card.title}</h3>
-                <p className="mb-8 flex-1 text-sm leading-relaxed text-gray-400">{card.body}</p>
+                <h3 className="mb-3 text-2xl font-black uppercase tracking-tight text-white">
+                  {card.title}
+                </h3>
+                <p className="mb-8 flex-1 text-sm leading-relaxed text-gray-400">
+                  {card.body}
+                </p>
                 <a
                   href={card.href}
                   className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 py-4 font-bold text-white no-underline transition-all hover:border-emerald-400 hover:bg-emerald-500"
@@ -144,9 +176,12 @@ export function CharitySection() {
               <CalendarDays size={24} />
             </div>
             <div className="text-left">
-              <div className="text-sm font-bold uppercase tracking-tight text-white">Launch Surface Only</div>
+              <div className="text-sm font-bold uppercase tracking-tight text-white">
+                Launch Surface Only
+              </div>
               <div className="text-xs text-gray-400">
-                This section stays inside YouAndiNotAi: one launch surface, one checkout path, one profile flow.
+                This section stays inside YouAndiNotAi: one launch surface, one
+                checkout path, one profile flow.
               </div>
             </div>
           </div>
