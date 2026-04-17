@@ -1,0 +1,35 @@
+{
+  "tasks": [
+    {
+      "id": "h003",
+      "task": "post_facebook",
+      "platform": "facebook",
+      "content": "YouAndiNotAi is a human-first social platform designed for dating, meetups, and real-world connection. Verification and identity-first design help keep the experience grounded in real people.",
+      "image": "/mnt/c/ANTIGRAVITY/hermes/tasks/unzipped/trust_meetup_01_refined.png",
+      "status": "pending",
+      "created": "2026-04-16T13:45:00Z",
+      "result": null
+    },
+    {
+      "id": "h004",
+      "task": "post_linkedin",
+      "platform": "linkedin",
+      "content": "Built for real conversation, not bot noise. YouAndiNotAi uses AI behind the scenes for trust and safety, while keeping connection human.",
+      "status": "pending",
+      "created": "2026-04-16T13:45:00Z",
+      "result": null
+    },
+    {
+      "id": "h005",
+      "task": "post_pinterest",
+      "platform": "pinterest",
+      "content": "Real people. Less bot noise. A human-first platform where verification, trust, and real-world connection come first.",
+      "image": "/mnt/c/ANTIGRAVITY/hermes/tasks/unzipped/verification_03.png",
+      "status": "pending",
+      "created": "2026-04-16T13:45:00Z",
+      "result": null
+    }
+  ],
+  "last_updated": "2026-04-16T14:14:57.817195",
+  "total_processed": 2
+}
