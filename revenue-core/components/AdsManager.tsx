@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Megaphone, ExternalLink, Target, Layers, Music, AlertTriangle } from 'lucide-react';
 
@@ -35,8 +34,8 @@ const AdsManager: React.FC = () => {
         <div>
           <p className="text-amber-200 font-bold text-sm">No Active Ad Campaigns</p>
           <p className="text-amber-300/70 text-xs mt-1">
-            Budget: $0. Current strategy is organic traffic via Reddit and social posts.
-            Ad campaigns will launch when revenue supports paid acquisition.
+            Budget: $0. Current strategy is organic traffic via Reddit and social posts. Ad campaigns will launch when
+            revenue supports paid acquisition.
           </p>
         </div>
       </div>
@@ -72,13 +71,11 @@ const AdsManager: React.FC = () => {
 
       {/* Platform Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {platforms.map(p => (
+        {platforms.map((p) => (
           <div key={p.name} className={`p-6 rounded-xl border ${p.color} flex flex-col justify-between`}>
             <div>
               <div className="flex justify-between items-start mb-4">
-                <div className="p-3 bg-surface rounded-lg border border-slate-700 shadow-xl">
-                  {p.icon}
-                </div>
+                <div className="p-3 bg-surface rounded-lg border border-slate-700 shadow-xl">{p.icon}</div>
                 <span className="px-2 py-1 bg-slate-900/50 rounded text-[10px] text-slate-500 uppercase tracking-wider border border-slate-800">
                   Not Active
                 </span>

@@ -1,13 +1,10 @@
-import { useAuth } from "@/_core/hooks/useAuth";
-import { trpc } from "@/lib/trpc";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { useLocation } from "wouter";
-import {
-  Bot, Brain, Sparkles, Search, Zap, Code2,
-  MessageSquare, BarChart3, Radio, Shield,
-} from "lucide-react";
+import { useAuth } from '@/_core/hooks/useAuth';
+import { trpc } from '@/lib/trpc';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { useLocation } from 'wouter';
+import { Bot, Brain, Sparkles, Search, Zap, Code2, MessageSquare, BarChart3, Radio, Shield } from 'lucide-react';
 
 const providerIcons: Record<string, React.ElementType> = {
   manus: Bot,
@@ -19,12 +16,12 @@ const providerIcons: Record<string, React.ElementType> = {
 };
 
 const providerColors: Record<string, string> = {
-  manus: "#6366f1",
-  claude: "#d97706",
-  gemini: "#4285f4",
-  perplexity: "#22c55e",
-  grok: "#ef4444",
-  codex: "#10b981",
+  manus: '#6366f1',
+  claude: '#d97706',
+  gemini: '#4285f4',
+  perplexity: '#22c55e',
+  grok: '#ef4444',
+  codex: '#10b981',
 };
 
 export default function Home() {
@@ -35,17 +32,16 @@ export default function Home() {
 
   const availableCount = providers?.filter((p) => p.isAvailable).length ?? 0;
   const totalRequests = stats?.reduce((sum, s) => sum + Number(s.totalRequests ?? 0), 0) ?? 0;
-  const totalTokens = stats?.reduce((sum, s) => sum + Number(s.totalInputTokens ?? 0) + Number(s.totalOutputTokens ?? 0), 0) ?? 0;
+  const totalTokens =
+    stats?.reduce((sum, s) => sum + Number(s.totalInputTokens ?? 0) + Number(s.totalOutputTokens ?? 0), 0) ?? 0;
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">
-          Command Center
-        </h1>
+        <h1 className="text-2xl font-bold tracking-tight">Command Center</h1>
         <p className="text-muted-foreground mt-1">
-          Welcome back{user?.name ? `, ${user.name}` : ""}. Manage your AI fleet from one place.
+          Welcome back{user?.name ? `, ${user.name}` : ''}. Manage your AI fleet from one place.
         </p>
       </div>
 
@@ -59,7 +55,10 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Active Providers</p>
-                <p className="text-2xl font-bold">{availableCount}<span className="text-sm text-muted-foreground font-normal">/6</span></p>
+                <p className="text-2xl font-bold">
+                  {availableCount}
+                  <span className="text-sm text-muted-foreground font-normal">/6</span>
+                </p>
               </div>
             </div>
           </CardContent>
@@ -111,7 +110,7 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {providers?.map((provider) => {
             const Icon = providerIcons[provider.slug] ?? Bot;
-            const color = providerColors[provider.slug] ?? "#6366f1";
+            const color = providerColors[provider.slug] ?? '#6366f1';
             return (
               <Card key={provider.slug} className="bg-card border-border hover:border-primary/30 transition-colors">
                 <CardContent className="p-4">
@@ -129,20 +128,16 @@ export default function Home() {
                       </div>
                     </div>
                     <Badge
-                      variant={provider.isAvailable ? "default" : "secondary"}
-                      className={provider.isAvailable ? "bg-green-500/10 text-green-500 border-green-500/20" : ""}
+                      variant={provider.isAvailable ? 'default' : 'secondary'}
+                      className={provider.isAvailable ? 'bg-green-500/10 text-green-500 border-green-500/20' : ''}
                     >
-                      {provider.isAvailable ? "Ready" : "No Key"}
+                      {provider.isAvailable ? 'Ready' : 'No Key'}
                     </Badge>
                   </div>
                   <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
                     <span className="capitalize">{provider.type}</span>
                     <span>·</span>
-                    <span>
-                      {provider.costPerInputToken > 0
-                        ? `$${provider.costPerInputToken}/1K in`
-                        : "Free"}
-                    </span>
+                    <span>{provider.costPerInputToken > 0 ? `$${provider.costPerInputToken}/1K in` : 'Free'}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -157,7 +152,7 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card
             className="bg-card border-border hover:border-primary/30 transition-colors cursor-pointer"
-            onClick={() => setLocation("/chat")}
+            onClick={() => setLocation('/chat')}
           >
             <CardContent className="p-4 flex items-center gap-3">
               <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -171,7 +166,7 @@ export default function Home() {
           </Card>
           <Card
             className="bg-card border-border hover:border-primary/30 transition-colors cursor-pointer"
-            onClick={() => setLocation("/chat?mode=broadcast")}
+            onClick={() => setLocation('/chat?mode=broadcast')}
           >
             <CardContent className="p-4 flex items-center gap-3">
               <div className="h-10 w-10 rounded-lg bg-chart-3/10 flex items-center justify-center">
@@ -185,7 +180,7 @@ export default function Home() {
           </Card>
           <Card
             className="bg-card border-border hover:border-primary/30 transition-colors cursor-pointer"
-            onClick={() => setLocation("/analytics")}
+            onClick={() => setLocation('/analytics')}
           >
             <CardContent className="p-4 flex items-center gap-3">
               <div className="h-10 w-10 rounded-lg bg-chart-2/10 flex items-center justify-center">

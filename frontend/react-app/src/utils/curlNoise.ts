@@ -1,7 +1,7 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
-*/
+ */
 
 import { createNoise3D } from 'simplex-noise';
 import * as THREE from 'three';

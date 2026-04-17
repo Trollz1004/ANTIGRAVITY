@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const BrowserView: React.FC = () => {
@@ -10,7 +9,7 @@ const BrowserView: React.FC = () => {
           <span className="text-red-500 font-bold uppercase">SANDBOXED</span>
         </div>
         <div className="flex-1 bg-black/20 flex items-center justify-center p-12 text-center text-slate-500 italic text-sm">
-          Claude.ai orchestration active. <br/> Local node tunneling established.
+          Claude.ai orchestration active. <br /> Local node tunneling established.
         </div>
       </div>
       <div className="w-1/2 flex flex-col">
@@ -19,7 +18,7 @@ const BrowserView: React.FC = () => {
           <span className="text-emerald-500 font-bold uppercase">LIVE SYNC</span>
         </div>
         <div className="flex-1 bg-black/20 flex items-center justify-center p-12 text-center text-slate-500 italic text-sm">
-          Gemini AI Studio live grounding enabled. <br/> Protocol: Revenue First.
+          Gemini AI Studio live grounding enabled. <br /> Protocol: Revenue First.
         </div>
       </div>
     </div>

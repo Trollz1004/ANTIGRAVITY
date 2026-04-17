@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Check, Heart, KeyRound, Mail, Menu, ShieldCheck, Users, X } from 'lucide-react';
+import {
+  Check,
+  Heart,
+  KeyRound,
+  Mail,
+  Menu,
+  ShieldCheck,
+  Users,
+  X,
+} from 'lucide-react';
 import { useAuth } from './lib/auth';
 
 const WAITLIST_FORM_ACTION = 'https://formsubmit.co/contact@youandinotai.com';
@@ -46,11 +55,41 @@ const PLATFORM_CARDS = [
 ] as const;
 
 const PRICING_PLANS = [
-  { name: 'Bot-Shield Verification', price: '$1', desc: 'Human checkpoint before the badge is awarded.', link: SECURE_PLAN_LINKS.bot_shield, tone: 'bg-[#111111] text-white' },
-  { name: 'Founding Member', price: '$14.99/mo', desc: 'Locked founder rate with account-bound checkout.', link: SECURE_PLAN_LINKS.founding_member, tone: 'bg-white' },
-  { name: '3-Month Founder', price: '$39.99', desc: 'Short-term founder access with one upfront payment.', link: SECURE_PLAN_LINKS['3_month'], tone: 'bg-[#efe8da]' },
-  { name: '12-Month Founder', price: '$99.99', desc: 'Best value for launch-year access.', link: SECURE_PLAN_LINKS['12_month'], tone: 'bg-[#efe8da]' },
-  { name: 'Royalty Card', price: '$2,500', desc: 'Premium founder product. Current terms are provided privately at checkout.', link: SECURE_PLAN_LINKS.royalty, tone: 'bg-[#ff5a1f] text-white' },
+  {
+    name: 'Bot-Shield Verification',
+    price: '$1',
+    desc: 'Human checkpoint before the badge is awarded.',
+    link: SECURE_PLAN_LINKS.bot_shield,
+    tone: 'bg-[#111111] text-white',
+  },
+  {
+    name: 'Founding Member',
+    price: '$14.99/mo',
+    desc: 'Locked founder rate with account-bound checkout.',
+    link: SECURE_PLAN_LINKS.founding_member,
+    tone: 'bg-white',
+  },
+  {
+    name: '3-Month Founder',
+    price: '$39.99',
+    desc: 'Short-term founder access with one upfront payment.',
+    link: SECURE_PLAN_LINKS['3_month'],
+    tone: 'bg-[#efe8da]',
+  },
+  {
+    name: '12-Month Founder',
+    price: '$99.99',
+    desc: 'Best value for launch-year access.',
+    link: SECURE_PLAN_LINKS['12_month'],
+    tone: 'bg-[#efe8da]',
+  },
+  {
+    name: 'Royalty Card',
+    price: '$2,500',
+    desc: 'Premium founder product. Current terms are provided privately at checkout.',
+    link: SECURE_PLAN_LINKS.royalty,
+    tone: 'bg-[#ff5a1f] text-white',
+  },
 ] as const;
 
 function HeroBackground() {
@@ -62,7 +101,15 @@ function HeroBackground() {
   );
 }
 
-function BrutalButton({ href, children, dark = false }: { href: string; children: React.ReactNode; dark?: boolean }) {
+function BrutalButton({
+  href,
+  children,
+  dark = false,
+}: {
+  href: string;
+  children: React.ReactNode;
+  dark?: boolean;
+}) {
   return (
     <a
       href={href}
@@ -79,7 +126,9 @@ function SignupCTA() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t-4 border-[#111111] bg-[#111111] px-4 py-3 text-white">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
-        <span className="text-sm font-black uppercase tracking-[0.18em] text-[#f4efe7]">Bot-Shield verification is live now.</span>
+        <span className="text-sm font-black uppercase tracking-[0.18em] text-[#f4efe7]">
+          Bot-Shield verification is live now.
+        </span>
         <a
           href={SECURE_PLAN_LINKS.bot_shield}
           className="inline-flex items-center justify-center border-4 border-white bg-[#ff5a1f] px-5 py-2 text-xs font-black uppercase tracking-[0.18em] text-white no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#ffffff]"
@@ -132,14 +181,20 @@ function BetaCodeEntry() {
           onClick={() => setShowInput(true)}
           className="border-4 border-[#111111] bg-white px-4 py-3 text-xs font-black uppercase tracking-[0.18em] text-[#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111]"
         >
-          <span className="inline-flex items-center gap-2"><KeyRound size={12} />Beta Tester? Enter Access Code</span>
+          <span className="inline-flex items-center gap-2">
+            <KeyRound size={12} />
+            Beta Tester? Enter Access Code
+          </span>
         </button>
       ) : (
-        <form onSubmit={handleSubmit} className="mx-auto flex max-w-lg flex-col gap-3 sm:flex-row">
+        <form
+          onSubmit={handleSubmit}
+          className="mx-auto flex max-w-lg flex-col gap-3 sm:flex-row"
+        >
           <input
             type="text"
             value={code}
-            onChange={(e) => setCode(e.target.value)}
+            onChange={e => setCode(e.target.value)}
             placeholder="Access code"
             className="min-w-0 flex-1 border-4 border-[#111111] bg-white px-4 py-3 text-sm font-bold uppercase tracking-[0.16em] text-[#111111] outline-none placeholder:text-[#7a746d]"
             autoFocus
@@ -153,28 +208,58 @@ function BetaCodeEntry() {
           </button>
         </form>
       )}
-      {error && <p className="mt-3 text-sm font-bold uppercase tracking-[0.16em] text-[#b42318]">{error}</p>}
+      {error && (
+        <p className="mt-3 text-sm font-bold uppercase tracking-[0.16em] text-[#b42318]">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
 
 function VerificationSteps() {
   const steps = [
-    { num: '01', title: 'Start Bot-Shield', desc: 'Begin the one-time human checkpoint from the public launch flow.' },
-    { num: '02', title: 'Pass the Human Check', desc: 'Complete the liveness challenge and the account-bound Square step.' },
-    { num: '03', title: 'Unlock the Badge', desc: 'The verified badge is awarded only after both checkpoints are complete.' },
+    {
+      num: '01',
+      title: 'Start Bot-Shield',
+      desc: 'Begin the one-time human checkpoint from the public launch flow.',
+    },
+    {
+      num: '02',
+      title: 'Pass the Human Check',
+      desc: 'Complete the liveness challenge and the account-bound Square step.',
+    },
+    {
+      num: '03',
+      title: 'Unlock the Badge',
+      desc: 'The verified badge is awarded only after both checkpoints are complete.',
+    },
   ];
 
   return (
-    <section id="verification" className="border-b-4 border-[#111111] bg-[#111111] px-6 py-16 text-white md:px-12">
+    <section
+      id="verification"
+      className="border-b-4 border-[#111111] bg-[#111111] px-6 py-16 text-white md:px-12"
+    >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 text-xs font-black uppercase tracking-[0.24em] text-[#ff8b61]">Section 02 // Verification</div>
+        <div className="mb-8 text-xs font-black uppercase tracking-[0.24em] text-[#ff8b61]">
+          Section 02 // Verification
+        </div>
         <div className="grid gap-6 md:grid-cols-3">
-          {steps.map((step) => (
-            <div key={step.num} className="border-4 border-white bg-[#1a1a1a] p-6 shadow-[6px_6px_0_0_#ff5a1f]">
-              <div className="mb-4 text-5xl font-black tracking-tighter text-[#ff8b61]">{step.num}</div>
-              <h3 className="mb-3 text-2xl font-black uppercase tracking-tight">{step.title}</h3>
-              <p className="text-sm font-medium leading-7 text-[#d7d3cc]">{step.desc}</p>
+          {steps.map(step => (
+            <div
+              key={step.num}
+              className="border-4 border-white bg-[#1a1a1a] p-6 shadow-[6px_6px_0_0_#ff5a1f]"
+            >
+              <div className="mb-4 text-5xl font-black tracking-tighter text-[#ff8b61]">
+                {step.num}
+              </div>
+              <h3 className="mb-3 text-2xl font-black uppercase tracking-tight">
+                {step.title}
+              </h3>
+              <p className="text-sm font-medium leading-7 text-[#d7d3cc]">
+                {step.desc}
+              </p>
             </div>
           ))}
         </div>
@@ -185,25 +270,46 @@ function VerificationSteps() {
 
 function PricingSection() {
   return (
-    <section id="pricing" className="border-b-4 border-[#111111] bg-[#f4efe7] px-6 py-16 md:px-12">
+    <section
+      id="pricing"
+      className="border-b-4 border-[#111111] bg-[#f4efe7] px-6 py-16 md:px-12"
+    >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">Section 03 // Founder Pricing</div>
-        <h2 className="mb-4 text-5xl font-black tracking-tighter text-[#111111] md:text-7xl">pick your lane.</h2>
+        <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+          Section 03 // Founder Pricing
+        </div>
+        <h2 className="mb-4 text-5xl font-black tracking-tighter text-[#111111] md:text-7xl">
+          pick your lane.
+        </h2>
         <p className="mb-10 max-w-3xl text-lg font-medium leading-8 text-[#38322b]">
-          Every checkout route is account-bound. Public pricing is live, plain, and tied to the actual launch flow.
+          Every checkout route is account-bound. Public pricing is live, plain,
+          and tied to the actual launch flow.
         </p>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-5">
-          {PRICING_PLANS.map((plan) => (
-            <a key={plan.name} href={plan.link} className={`block border-4 border-[#111111] p-6 no-underline shadow-[6px_6px_0_0_#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 ${plan.tone}`}>
-              <div className="text-xs font-black uppercase tracking-[0.18em] opacity-70">Live</div>
-              <div className="mt-4 text-3xl font-black tracking-tighter">{plan.price}</div>
-              <h3 className="mt-4 text-2xl font-black uppercase tracking-tight">{plan.name}</h3>
-              <p className="mt-3 text-sm font-medium leading-7 opacity-80">{plan.desc}</p>
+          {PRICING_PLANS.map(plan => (
+            <a
+              key={plan.name}
+              href={plan.link}
+              className={`block border-4 border-[#111111] p-6 no-underline shadow-[6px_6px_0_0_#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 ${plan.tone}`}
+            >
+              <div className="text-xs font-black uppercase tracking-[0.18em] opacity-70">
+                Live
+              </div>
+              <div className="mt-4 text-3xl font-black tracking-tighter">
+                {plan.price}
+              </div>
+              <h3 className="mt-4 text-2xl font-black uppercase tracking-tight">
+                {plan.name}
+              </h3>
+              <p className="mt-3 text-sm font-medium leading-7 opacity-80">
+                {plan.desc}
+              </p>
             </a>
           ))}
         </div>
         <p className="mt-8 max-w-4xl text-sm font-bold uppercase tracking-[0.16em] text-[#5c554d]">
-          Securely processed by Square. Customer purchases buy platform access and founder products. They are not charitable contributions.
+          Securely processed by Square. Customer purchases buy platform access
+          and founder products. They are not charitable contributions.
         </p>
       </div>
     </section>
@@ -214,7 +320,10 @@ function WaitlistForm() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(() => {
     if (typeof window === 'undefined') return false;
-    return new URLSearchParams(window.location.search).get('waitlist') === 'confirmed';
+    return (
+      new URLSearchParams(window.location.search).get('waitlist') ===
+      'confirmed'
+    );
   });
 
   useEffect(() => {
@@ -222,23 +331,37 @@ function WaitlistForm() {
     const url = new URL(window.location.href);
     if (url.searchParams.get('waitlist') !== 'confirmed') return;
     url.searchParams.delete('waitlist');
-    window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+    window.history.replaceState(
+      {},
+      '',
+      `${url.pathname}${url.search}${url.hash}`
+    );
   }, [submitted]);
 
   const waitlistReturnUrl =
-    typeof window === 'undefined' ? 'https://youandinotai.com/?waitlist=confirmed#join' : `${window.location.origin}/?waitlist=confirmed#join`;
+    typeof window === 'undefined'
+      ? 'https://youandinotai.com/?waitlist=confirmed#join'
+      : `${window.location.origin}/?waitlist=confirmed#join`;
 
   const handleSubmit = () => {
     setSubmitted(false);
   };
 
   return (
-    <section id="join" className="border-b-4 border-[#111111] bg-[#111111] px-6 py-16 text-white md:px-12">
+    <section
+      id="join"
+      className="border-b-4 border-[#111111] bg-[#111111] px-6 py-16 text-white md:px-12"
+    >
       <div className="mx-auto max-w-3xl">
-        <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff8b61]">Section 05 // Join</div>
-        <h2 className="text-5xl font-black tracking-tighter md:text-7xl">join the list.</h2>
+        <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff8b61]">
+          Section 05 // Join
+        </div>
+        <h2 className="text-5xl font-black tracking-tighter md:text-7xl">
+          join the list.
+        </h2>
         <p className="mt-4 max-w-2xl text-lg font-medium leading-8 text-[#d7d3cc]">
-          Get early access updates without the noise. The waitlist is simple by design.
+          Get early access updates without the noise. The waitlist is simple by
+          design.
         </p>
         <div className="mt-8 border-4 border-white bg-[#f4efe7] p-6 text-[#111111] shadow-[8px_8px_0_0_#ff5a1f]">
           {submitted ? (
@@ -247,11 +370,23 @@ function WaitlistForm() {
                 <Check size={18} />
                 You&apos;re on the list.
               </div>
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#5c554d]">Launch updates will go to this address. Need help? Email support.</p>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#5c554d]">
+                Launch updates will go to this address. Need help? Email
+                support.
+              </p>
             </div>
           ) : (
-            <form action={WAITLIST_FORM_ACTION} method="POST" onSubmit={handleSubmit} className="flex flex-col gap-4 md:flex-row">
-              <input type="hidden" name="_subject" value="New YouAndINotAI waitlist signup" />
+            <form
+              action={WAITLIST_FORM_ACTION}
+              method="POST"
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-4 md:flex-row"
+            >
+              <input
+                type="hidden"
+                name="_subject"
+                value="New YouAndINotAI waitlist signup"
+              />
               <input type="hidden" name="_next" value={waitlistReturnUrl} />
               <input type="hidden" name="_captcha" value="false" />
               <input
@@ -260,13 +395,16 @@ function WaitlistForm() {
                 value="You're on the YouAndINotAI waitlist. No charge was made, and no account was created yet. We will send launch updates to this address."
               />
               <div className="relative min-w-0 flex-1">
-                <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7a746d]" />
+                <Mail
+                  size={16}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7a746d]"
+                />
                 <input
                   type="email"
                   name="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   className="w-full border-4 border-[#111111] bg-white py-4 pl-12 pr-4 text-base font-bold text-[#111111] outline-none placeholder:text-[#7a746d]"
                 />
@@ -279,7 +417,9 @@ function WaitlistForm() {
               </button>
             </form>
           )}
-          <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#5c554d]">No spam. No bots. Just launch updates.</p>
+          <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#5c554d]">
+            No spam. No bots. Just launch updates.
+          </p>
         </div>
         <BetaCodeEntry />
       </div>
@@ -311,21 +451,34 @@ function LegalModal({ type, onClose }: { type: string; onClose: () => void }) {
   if (!content) return null;
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 p-4" onClick={onClose}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 p-4"
+      onClick={onClose}
+    >
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         className="max-h-[85vh] w-full max-w-3xl overflow-y-auto border-4 border-[#111111] bg-[#f4efe7] p-6 shadow-[10px_10px_0_0_#111111]"
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between gap-4">
-          <h3 className="text-2xl font-black uppercase tracking-tight text-[#111111]">{content.title}</h3>
-          <button onClick={onClose} className="border-4 border-[#111111] bg-white p-2 text-[#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111]">
+          <h3 className="text-2xl font-black uppercase tracking-tight text-[#111111]">
+            {content.title}
+          </h3>
+          <button
+            onClick={onClose}
+            className="border-4 border-[#111111] bg-white p-2 text-[#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111]"
+          >
             <X size={18} />
           </button>
         </div>
-        <div className="whitespace-pre-line text-sm font-medium leading-7 text-[#2c2924]">{content.body}</div>
+        <div className="whitespace-pre-line text-sm font-medium leading-7 text-[#2c2924]">
+          {content.body}
+        </div>
       </motion.div>
     </motion.div>
   );
@@ -333,20 +486,38 @@ function LegalModal({ type, onClose }: { type: string; onClose: () => void }) {
 
 function SuccessModal({ onClose }: { onClose: () => void }) {
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/75 p-4" onClick={onClose}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/75 p-4"
+      onClick={onClose}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.95 }}
         className="w-full max-w-md border-4 border-[#111111] bg-[#dff6e6] p-8 text-center text-[#111111] shadow-[10px_10px_0_0_#111111]"
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
         <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border-4 border-[#111111] bg-white">
-          <img src="/bot-shield-logo.png" alt="Bot-Shield Verified" className="h-10 w-10 object-contain" />
+          <img
+            src="/bot-shield-logo.png"
+            alt="Bot-Shield Verified"
+            className="h-10 w-10 object-contain"
+          />
         </div>
-        <h3 className="text-3xl font-black uppercase tracking-tight">Bot-Shield Verified</h3>
-        <p className="mt-3 text-sm font-medium leading-7">Your verification is complete. Square handles receipt delivery for the payment email used at checkout.</p>
-        <button onClick={onClose} className="mt-6 border-4 border-[#111111] bg-[#111111] px-6 py-3 text-sm font-black uppercase tracking-[0.18em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[6px_6px_0_0_#111111]">
+        <h3 className="text-3xl font-black uppercase tracking-tight">
+          Bot-Shield Verified
+        </h3>
+        <p className="mt-3 text-sm font-medium leading-7">
+          Your verification is complete. Square handles receipt delivery for the
+          payment email used at checkout.
+        </p>
+        <button
+          onClick={onClose}
+          className="mt-6 border-4 border-[#111111] bg-[#111111] px-6 py-3 text-sm font-black uppercase tracking-[0.18em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[6px_6px_0_0_#111111]"
+        >
           Let&apos;s Go
         </button>
       </motion.div>
@@ -361,33 +532,60 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
     <footer className="border-t-4 border-[#111111] bg-[#efe8da] px-6 py-10 text-[#111111] md:px-12">
       <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-[1.2fr_0.8fr_1fr]">
         <div>
-          <div className="text-3xl font-black uppercase tracking-tighter">YOUANDINOTAI<span className="text-[#ff5a1f]">.</span></div>
+          <div className="text-3xl font-black uppercase tracking-tighter">
+            YOUANDINOTAI<span className="text-[#ff5a1f]">.</span>
+          </div>
           <p className="mt-4 max-w-lg text-sm font-medium leading-7 text-[#3f3a34]">
-            Human-first social platform for dating, meetups, and real-world connection. Bot-Shield and account-bound checkout are live now.
+            Human-first social platform for dating, meetups, and real-world
+            connection. Bot-Shield and account-bound checkout are live now.
           </p>
         </div>
         <div>
-          <h4 className="text-sm font-black uppercase tracking-[0.18em]">Launch Links</h4>
+          <h4 className="text-sm font-black uppercase tracking-[0.18em]">
+            Launch Links
+          </h4>
           <div className="mt-4 flex flex-col gap-3 text-sm font-bold uppercase tracking-[0.12em]">
-            <a href="#pricing" className="no-underline hover:text-[#ff5a1f]">Pricing</a>
-            <a href="#join" className="no-underline hover:text-[#ff5a1f]">Waitlist</a>
-            <a href="/support" className="no-underline hover:text-[#ff5a1f]">Support</a>
-            <a href="mailto:contact@youandinotai.com" className="no-underline hover:text-[#ff5a1f]">Contact</a>
+            <a href="#pricing" className="no-underline hover:text-[#ff5a1f]">
+              Pricing
+            </a>
+            <a href="#join" className="no-underline hover:text-[#ff5a1f]">
+              Waitlist
+            </a>
+            <a href="/support" className="no-underline hover:text-[#ff5a1f]">
+              Support
+            </a>
+            <a
+              href="mailto:contact@youandinotai.com"
+              className="no-underline hover:text-[#ff5a1f]"
+            >
+              Contact
+            </a>
           </div>
         </div>
         <div>
-          <h4 className="text-sm font-black uppercase tracking-[0.18em]">Policy</h4>
+          <h4 className="text-sm font-black uppercase tracking-[0.18em]">
+            Policy
+          </h4>
           <div className="mt-4 flex flex-wrap gap-3">
-            {legalKeys.map((key) => (
-              <button key={key} onClick={() => onLegal(key)} className="border-4 border-[#111111] bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.16em] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111]">
-                {LEGAL_CONTENT[key].title.replace(' Policy', '').replace(' of Service', '')}
+            {legalKeys.map(key => (
+              <button
+                key={key}
+                onClick={() => onLegal(key)}
+                className="border-4 border-[#111111] bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.16em] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111]"
+              >
+                {LEGAL_CONTENT[key].title
+                  .replace(' Policy', '')
+                  .replace(' of Service', '')}
               </button>
             ))}
           </div>
         </div>
       </div>
       <div className="mx-auto mt-8 max-w-7xl border-t-4 border-[#111111] pt-6">
-        <p className="text-xs font-black uppercase tracking-[0.16em] text-[#5c554d]">© 2026 Trash Or Treasure Online Recycler LLC. YouAndiNotAi.com is a for-profit platform.</p>
+        <p className="text-xs font-black uppercase tracking-[0.16em] text-[#5c554d]">
+          © 2026 Trash Or Treasure Online Recycler LLC. YouAndiNotAi.com is a
+          for-profit platform.
+        </p>
       </div>
     </footer>
   );
@@ -403,7 +601,10 @@ export function PublicSupportPage() {
         <main className="flex-1 px-6 py-12 md:px-12">
           <div className="mx-auto max-w-5xl">
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-              <a href="/" className="border-4 border-white bg-[#111111] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#ffffff]">
+              <a
+                href="/"
+                className="border-4 border-white bg-[#111111] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#ffffff]"
+              >
                 Back Home
               </a>
               <div className="border-4 border-white bg-[#ff5a1f] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_0_#ffffff]">
@@ -412,41 +613,61 @@ export function PublicSupportPage() {
             </div>
 
             <section className="border-4 border-white bg-[#f4efe7] p-8 text-[#111111] shadow-[10px_10px_0_0_#ff5a1f]">
-              <p className="text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">YouAndiNotAi Support</p>
-              <h1 className="mt-4 text-4xl font-black tracking-tighter md:text-6xl">help for receipts, verification, privacy, and account issues.</h1>
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+                YouAndiNotAi Support
+              </p>
+              <h1 className="mt-4 text-4xl font-black tracking-tighter md:text-6xl">
+                help for receipts, verification, privacy, and account issues.
+              </h1>
               <p className="mt-4 max-w-3xl text-base font-medium leading-8 text-[#3f3a34]">
-                Signed-in members can use the in-app support center to chat with support, escalate a ticket, and review prior requests. If you are not signed in yet, use the email contact below or create an account first.
+                Signed-in members can use the in-app support center to chat with
+                support, escalate a ticket, and review prior requests. If you
+                are not signed in yet, use the email contact below or create an
+                account first.
               </p>
 
               <div className="mt-8 grid gap-4 md:grid-cols-2">
                 <div className="border-4 border-[#111111] bg-white p-5 shadow-[6px_6px_0_0_#111111]">
-                  <h2 className="text-xl font-black uppercase tracking-tight">Account Support</h2>
+                  <h2 className="text-xl font-black uppercase tracking-tight">
+                    Account Support
+                  </h2>
                   <p className="mt-3 text-sm font-medium leading-7 text-[#3f3a34]">
-                    Use the support center after sign-in for payment receipts, Bot-Shield verification, privacy requests, and account troubleshooting.
+                    Use the support center after sign-in for payment receipts,
+                    Bot-Shield verification, privacy requests, and account
+                    troubleshooting.
                   </p>
                 </div>
                 <div className="border-4 border-[#111111] bg-white p-5 shadow-[6px_6px_0_0_#111111]">
-                  <h2 className="text-xl font-black uppercase tracking-tight">Direct Contact</h2>
+                  <h2 className="text-xl font-black uppercase tracking-tight">
+                    Direct Contact
+                  </h2>
                   <p className="mt-3 text-sm font-medium leading-7 text-[#3f3a34]">
-                    For general support or login issues, email the support inbox and include the address tied to your account when possible.
+                    For general support or login issues, email the support inbox
+                    and include the address tied to your account when possible.
                   </p>
                 </div>
               </div>
 
               <div className="mt-8 flex flex-wrap gap-3">
-                <BrutalButton href="/login" dark>Sign In</BrutalButton>
+                <BrutalButton href="/login" dark>
+                  Sign In
+                </BrutalButton>
                 <BrutalButton href="/register">Create Account</BrutalButton>
-                <BrutalButton href="mailto:contact@youandinotai.com?subject=YouAndiNotAi%20Support">Email Support</BrutalButton>
+                <BrutalButton href="mailto:contact@youandinotai.com?subject=YouAndiNotAi%20Support">
+                  Email Support
+                </BrutalButton>
                 <BrutalButton href="/app/support">Member Support</BrutalButton>
               </div>
             </section>
           </div>
         </main>
-        <Footer onLegal={(type) => setLegalModal(type)} />
+        <Footer onLegal={type => setLegalModal(type)} />
       </div>
 
       <AnimatePresence>
-        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
+        {legalModal && (
+          <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />
+        )}
       </AnimatePresence>
     </div>
   );
@@ -469,33 +690,51 @@ export default function App() {
     <div className="mx-auto min-h-screen max-w-[1600px] border-x-4 border-[#111111] bg-[#f4efe7] text-[#111111] pb-cta">
       <nav className="sticky top-0 z-50 border-b-4 border-[#111111] bg-white px-6 py-5 md:px-12">
         <div className="flex items-center justify-between gap-4">
-          <div className="text-3xl font-black uppercase tracking-tighter">YOUANDINOTAI<span className="text-[#ff5a1f]">.</span></div>
+          <div className="text-3xl font-black uppercase tracking-tighter">
+            YOUANDINOTAI<span className="text-[#ff5a1f]">.</span>
+          </div>
 
           <div className="hidden items-center gap-8 md:flex">
-            {NAV_ITEMS.map((item) => (
-              <a key={item.label} href={item.href} className="text-sm font-black uppercase tracking-[0.16em] no-underline hover:text-[#ff5a1f]">
+            {NAV_ITEMS.map(item => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="text-sm font-black uppercase tracking-[0.16em] no-underline hover:text-[#ff5a1f]"
+              >
                 {item.label}
               </a>
             ))}
           </div>
 
           <div className="hidden md:block">
-            <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>Get Verified</BrutalButton>
+            <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
+              Get Verified
+            </BrutalButton>
           </div>
 
-          <button onClick={() => setMenuOpen((value) => !value)} className="inline-flex items-center justify-center border-4 border-[#111111] bg-white p-2 md:hidden shadow-[4px_4px_0_0_#111111]">
+          <button
+            onClick={() => setMenuOpen(value => !value)}
+            className="inline-flex items-center justify-center border-4 border-[#111111] bg-white p-2 md:hidden shadow-[4px_4px_0_0_#111111]"
+          >
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
         {menuOpen && (
           <div className="mt-5 flex flex-col gap-3 border-t-4 border-[#111111] pt-5 md:hidden">
-            {NAV_ITEMS.map((item) => (
-              <a key={item.label} href={item.href} onClick={() => setMenuOpen(false)} className="border-4 border-[#111111] bg-[#f4efe7] px-4 py-3 text-sm font-black uppercase tracking-[0.16em] no-underline shadow-[4px_4px_0_0_#111111]">
+            {NAV_ITEMS.map(item => (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                className="border-4 border-[#111111] bg-[#f4efe7] px-4 py-3 text-sm font-black uppercase tracking-[0.16em] no-underline shadow-[4px_4px_0_0_#111111]"
+              >
                 {item.label}
               </a>
             ))}
-            <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>Get Verified</BrutalButton>
+            <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
+              Get Verified
+            </BrutalButton>
           </div>
         )}
       </nav>
@@ -504,24 +743,32 @@ export default function App() {
         Founder pricing is live. Launch day is April 4, 2026.
       </div>
 
-      <section id="about" className="grid border-b-4 border-[#111111] md:min-h-[78vh] md:grid-cols-12">
+      <section
+        id="about"
+        className="grid border-b-4 border-[#111111] md:min-h-[78vh] md:grid-cols-12"
+      >
         <div className="border-b-4 border-[#111111] bg-white px-6 py-12 md:col-span-8 md:border-b-0 md:border-r-4 md:px-12 md:py-20">
           <div className="max-w-4xl">
-            <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">Section 01 // Human Only</div>
+            <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+              Section 01 // Human Only
+            </div>
             <h1 className="text-6xl font-black lowercase leading-[0.84] tracking-tighter md:text-8xl xl:text-9xl">
               real people.
               <br />
               zero bot noise.
             </h1>
             <p className="mt-8 max-w-3xl text-2xl font-medium leading-tight text-[#2f2a24] md:text-3xl">
-              A human-first social platform for dating, meetups, and real-world connection. AI is used to protect the experience, not perform it.
+              A human-first social platform for dating, meetups, and real-world
+              connection. AI is used to protect the experience, not perform it.
             </p>
             <div className="mt-8 inline-block border-l-4 border-[#ff5a1f] bg-[#fff6f1] px-4 py-3 text-sm font-black uppercase tracking-[0.16em] text-[#111111]">
               Bot-Shield verification and account-bound checkout are live now.
             </div>
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>Get Verified</BrutalButton>
+              <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
+                Get Verified
+              </BrutalButton>
               <BrutalButton href="#pricing">See Pricing</BrutalButton>
             </div>
           </div>
@@ -530,38 +777,73 @@ export default function App() {
         <div className="bg-[#ff5a1f] px-6 py-12 text-[#111111] md:col-span-4 md:px-10 md:py-16">
           <div className="space-y-6">
             <div className="border-t-4 border-[#111111] pt-6">
-              <h2 className="text-4xl font-black uppercase tracking-tighter">Launch Status</h2>
-              <p className="mt-4 text-lg font-bold leading-8">The public surface is product-first: verification, pricing, support, and profile flow.</p>
+              <h2 className="text-4xl font-black uppercase tracking-tighter">
+                Launch Status
+              </h2>
+              <p className="mt-4 text-lg font-bold leading-8">
+                The public surface is product-first: verification, pricing,
+                support, and profile flow.
+              </p>
             </div>
 
             <div className="grid gap-4">
               <div className="border-4 border-[#111111] bg-white p-5 shadow-[6px_6px_0_0_#111111]">
-                <div className="text-xs font-black uppercase tracking-[0.18em] text-[#ff5a1f]">Live</div>
-                <div className="mt-2 text-2xl font-black uppercase tracking-tight">Bot-Shield Flow</div>
-                <p className="mt-2 text-sm font-medium leading-7 text-[#38322b]">Verification stays tied to the real checkout path instead of anonymous payment links.</p>
+                <div className="text-xs font-black uppercase tracking-[0.18em] text-[#ff5a1f]">
+                  Live
+                </div>
+                <div className="mt-2 text-2xl font-black uppercase tracking-tight">
+                  Bot-Shield Flow
+                </div>
+                <p className="mt-2 text-sm font-medium leading-7 text-[#38322b]">
+                  Verification stays tied to the real checkout path instead of
+                  anonymous payment links.
+                </p>
               </div>
               <div className="border-4 border-[#111111] bg-white p-5 shadow-[6px_6px_0_0_#111111]">
-                <div className="text-xs font-black uppercase tracking-[0.18em] text-[#ff5a1f]">Launch</div>
-                <div className="mt-2 text-2xl font-black uppercase tracking-tight">April 4, 2026</div>
-                <p className="mt-2 text-sm font-medium leading-7 text-[#38322b]">Founder pricing, support, and early-access capture are all wired into the same surface.</p>
+                <div className="text-xs font-black uppercase tracking-[0.18em] text-[#ff5a1f]">
+                  Launch
+                </div>
+                <div className="mt-2 text-2xl font-black uppercase tracking-tight">
+                  April 4, 2026
+                </div>
+                <p className="mt-2 text-sm font-medium leading-7 text-[#38322b]">
+                  Founder pricing, support, and early-access capture are all
+                  wired into the same surface.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="platform" className="border-b-4 border-[#111111] bg-[#f4efe7] px-6 py-16 md:px-12">
+      <section
+        id="platform"
+        className="border-b-4 border-[#111111] bg-[#f4efe7] px-6 py-16 md:px-12"
+      >
         <div className="mx-auto max-w-7xl">
-          <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">The Social</div>
-          <h2 className="mb-10 text-5xl font-black tracking-tighter md:text-7xl">how we connect.</h2>
+          <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+            The Social
+          </div>
+          <h2 className="mb-10 text-5xl font-black tracking-tighter md:text-7xl">
+            how we connect.
+          </h2>
           <div className="grid gap-6 md:grid-cols-3">
-            {PLATFORM_CARDS.map((card) => (
-              <div key={card.title} className={`border-4 border-[#111111] p-8 shadow-[6px_6px_0_0_#111111] ${card.tone}`}>
-                <div className={`mb-6 inline-flex h-14 w-14 items-center justify-center border-4 border-[#111111] ${card.iconTone}`}>
+            {PLATFORM_CARDS.map(card => (
+              <div
+                key={card.title}
+                className={`border-4 border-[#111111] p-8 shadow-[6px_6px_0_0_#111111] ${card.tone}`}
+              >
+                <div
+                  className={`mb-6 inline-flex h-14 w-14 items-center justify-center border-4 border-[#111111] ${card.iconTone}`}
+                >
                   <card.icon size={24} />
                 </div>
-                <h3 className="text-2xl font-black uppercase tracking-tight">{card.title}</h3>
-                <p className="mt-4 text-sm font-medium leading-7 opacity-85">{card.body}</p>
+                <h3 className="text-2xl font-black uppercase tracking-tight">
+                  {card.title}
+                </h3>
+                <p className="mt-4 text-sm font-medium leading-7 opacity-85">
+                  {card.body}
+                </p>
               </div>
             ))}
           </div>
@@ -571,19 +853,29 @@ export default function App() {
       <VerificationSteps />
       <PricingSection />
 
-      <section id="mission" className="border-b-4 border-[#111111] bg-white px-6 py-16 md:px-12">
+      <section
+        id="mission"
+        className="border-b-4 border-[#111111] bg-white px-6 py-16 md:px-12"
+      >
         <div className="mx-auto max-w-5xl">
-          <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">Section 04 // Impact</div>
-          <h2 className="text-5xl font-black tracking-tighter md:text-7xl">silent impact.</h2>
+          <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+            Section 04 // Impact
+          </div>
+          <h2 className="text-5xl font-black tracking-tighter md:text-7xl">
+            silent impact.
+          </h2>
           <div className="mt-10 grid gap-8 md:grid-cols-2">
             <div className="border-4 border-[#111111] bg-[#f4efe7] p-6 shadow-[6px_6px_0_0_#111111]">
               <p className="text-lg font-medium leading-8 text-[#2f2a24]">
-                We do not market this platform as a charity. It has to stand on product quality, trust, and real human value first.
+                We do not market this platform as a charity. It has to stand on
+                product quality, trust, and real human value first.
               </p>
             </div>
             <div className="border-4 border-[#111111] bg-[#111111] p-6 text-white shadow-[6px_6px_0_0_#ff5a1f]">
               <p className="text-lg font-medium leading-8 text-[#d7d3cc]">
-                Any later mission support follows the current operating policy and stays out of the sales pitch. Customer purchases are platform purchases, not charitable contributions.
+                Any later mission support follows the current operating policy
+                and stays out of the sales pitch. Customer purchases are
+                platform purchases, not charitable contributions.
               </p>
             </div>
           </div>
@@ -597,20 +889,35 @@ export default function App() {
 
       <section className="border-b-4 border-[#111111] bg-white px-6 py-16 text-center md:px-12">
         <div className="mx-auto max-w-xl">
-          <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">Section 06 // Share</div>
-          <h2 className="text-5xl font-black tracking-tighter md:text-6xl">share the platform.</h2>
-          <p className="mt-4 text-lg font-medium leading-8 text-[#3f3a34]">Scan to visit or pass it to someone who is tired of fake profiles and low-trust noise.</p>
+          <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+            Section 06 // Share
+          </div>
+          <h2 className="text-5xl font-black tracking-tighter md:text-6xl">
+            share the platform.
+          </h2>
+          <p className="mt-4 text-lg font-medium leading-8 text-[#3f3a34]">
+            Scan to visit or pass it to someone who is tired of fake profiles
+            and low-trust noise.
+          </p>
           <div className="mx-auto mt-8 inline-block border-4 border-[#111111] bg-[#f4efe7] p-4 shadow-[8px_8px_0_0_#111111]">
-            <img src="/qrcode.png" alt="Scan to visit youandinotai.com" width={220} height={220} className="mx-auto bg-white" />
+            <img
+              src="/qrcode.png"
+              alt="Scan to visit youandinotai.com"
+              width={220}
+              height={220}
+              className="mx-auto bg-white"
+            />
           </div>
         </div>
       </section>
 
-      <Footer onLegal={(type) => setLegalModal(type)} />
+      <Footer onLegal={type => setLegalModal(type)} />
       <SignupCTA />
 
       <AnimatePresence>
-        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
+        {legalModal && (
+          <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />
+        )}
         {showSuccess && <SuccessModal onClose={() => setShowSuccess(false)} />}
       </AnimatePresence>
     </div>

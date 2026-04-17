@@ -38,7 +38,7 @@ interface AuthState {
   fetchUser: () => Promise<void>;
 }
 
-export const useAuth = create<AuthState>((set) => ({
+export const useAuth = create<AuthState>(set => ({
   user: null,
   loading: true,
 
@@ -54,7 +54,7 @@ export const useAuth = create<AuthState>((set) => ({
     set({ user });
   },
 
-  googleLogin: async (idToken) => {
+  googleLogin: async idToken => {
     const data = await api.post<{
       access_token: string;
       refresh_token: string;
@@ -66,7 +66,7 @@ export const useAuth = create<AuthState>((set) => ({
     set({ user });
   },
 
-  betaAccess: async (code) => {
+  betaAccess: async code => {
     const data = await api.post<{
       access_token: string;
       refresh_token: string;
@@ -79,7 +79,15 @@ export const useAuth = create<AuthState>((set) => ({
     set({ user, loading: false });
   },
 
-  register: async ({ email, password, displayName, dateOfBirth, acceptedTerms, acceptedCookiePolicy, confirmedOver18 }) => {
+  register: async ({
+    email,
+    password,
+    displayName,
+    dateOfBirth,
+    acceptedTerms,
+    acceptedCookiePolicy,
+    confirmedOver18,
+  }) => {
     const data = await api.post<{
       access_token: string;
       refresh_token: string;

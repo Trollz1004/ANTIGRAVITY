@@ -1,6 +1,3 @@
-
-
-
 export interface DaoLaunch {
   id: string;
   name: string;
@@ -40,7 +37,22 @@ export interface AuditLog {
   };
 }
 
-export type View = 'dashboard' | 'dao' | 'kickstarter' | 'chat' | 'live' | 'command' | 'audit' | 'media' | 'kids' | 'dating' | 'impact' | 'browser' | 'security' | 'governance' | 'mobile';
+export type View =
+  | 'dashboard'
+  | 'dao'
+  | 'kickstarter'
+  | 'chat'
+  | 'live'
+  | 'command'
+  | 'audit'
+  | 'media'
+  | 'kids'
+  | 'dating'
+  | 'impact'
+  | 'browser'
+  | 'security'
+  | 'governance'
+  | 'mobile';
 
 // FIX: Made uri and title optional to match the GroundingChunk type from the @google/genai SDK, resolving a type incompatibility.
 export interface GroundingChunk {

@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Calendar, MapPin, Users, Plus, Check, Clock, Navigation } from 'lucide-react';
+import {
+  Calendar,
+  MapPin,
+  Users,
+  Plus,
+  Check,
+  Clock,
+  Navigation,
+} from 'lucide-react';
 import { api } from '../../lib/api';
 import MeetupsDiscovery from '../../components/MeetupsDiscovery';
 
@@ -30,10 +38,15 @@ export function Events() {
   const [showNearby, setShowNearby] = useState(false);
 
   const loadEvents = () => {
-    api.get<EventData[]>('/events').then(setEvents).finally(() => setLoading(false));
+    api
+      .get<EventData[]>('/events')
+      .then(setEvents)
+      .finally(() => setLoading(false));
   };
 
-  useEffect(() => { loadEvents(); }, []);
+  useEffect(() => {
+    loadEvents();
+  }, []);
 
   const createEvent = async () => {
     if (!title.trim() || !description.trim() || !eventDate) return;
@@ -45,7 +58,11 @@ export function Events() {
       max_attendees: maxAttendees ? parseInt(maxAttendees) : null,
       category: 'general',
     });
-    setTitle(''); setDescription(''); setLocation(''); setEventDate(''); setMaxAttendees('');
+    setTitle('');
+    setDescription('');
+    setLocation('');
+    setEventDate('');
+    setMaxAttendees('');
     setShowCreate(false);
     loadEvents();
   };
@@ -53,9 +70,11 @@ export function Events() {
   const handleRsvp = async (eventId: string) => {
     try {
       await api.post(`/events/${eventId}/rsvp`);
-      setRsvpd((prev) => new Set(prev).add(eventId));
+      setRsvpd(prev => new Set(prev).add(eventId));
       loadEvents();
-    } catch { /* already rsvpd or full */ }
+    } catch {
+      /* already rsvpd or full */
+    }
   };
 
   if (loading) {
@@ -65,7 +84,9 @@ export function Events() {
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#111111] text-white">
             <Calendar size={24} className="animate-pulse" />
           </div>
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">Loading events</p>
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">
+            Loading events
+          </p>
         </div>
       </div>
     );
@@ -77,7 +98,9 @@ export function Events() {
         <div>
           <div className="app-kicker mb-3">Events</div>
           <h1 className="app-title">meetups and plans.</h1>
-          <p className="app-subtitle mt-4">Take the platform off-screen and into the real world.</p>
+          <p className="app-subtitle mt-4">
+            Take the platform off-screen and into the real world.
+          </p>
         </div>
         <button
           onClick={() => setShowCreate(!showCreate)}
@@ -98,7 +121,10 @@ export function Events() {
               : 'glass text-[#5c594f] hover:text-[#111111]'
           }`}
         >
-          <Navigation size={14} className={showNearby ? 'text-[#ff4f00]' : ''} />
+          <Navigation
+            size={14}
+            className={showNearby ? 'text-[#ff4f00]' : ''}
+          />
           {showNearby ? 'Hide Nearby' : '📍 Find Nearby Meetups'}
         </button>
         {showNearby && (
@@ -110,14 +136,46 @@ export function Events() {
 
       {showCreate && (
         <div className="glass-strong rounded-3xl p-6 glass-highlight mb-6 space-y-4 animate-scale-in">
-          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event title" className="app-input input-glow" />
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="What's this event about?" rows={3} className="app-textarea input-glow" />
+          <input
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            placeholder="Event title"
+            className="app-input input-glow"
+          />
+          <textarea
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            placeholder="What's this event about?"
+            rows={3}
+            className="app-textarea input-glow"
+          />
           <div className="grid grid-cols-2 gap-3">
-            <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" className="app-input input-glow" />
-            <input type="datetime-local" value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="app-input input-glow" />
+            <input
+              value={location}
+              onChange={e => setLocation(e.target.value)}
+              placeholder="Location"
+              className="app-input input-glow"
+            />
+            <input
+              type="datetime-local"
+              value={eventDate}
+              onChange={e => setEventDate(e.target.value)}
+              className="app-input input-glow"
+            />
           </div>
-          <input type="number" value={maxAttendees} onChange={(e) => setMaxAttendees(e.target.value)} placeholder="Max attendees (optional)" className="app-input input-glow" />
-          <button onClick={createEvent} className="app-button-dark px-6 py-3 text-sm">Create Event</button>
+          <input
+            type="number"
+            value={maxAttendees}
+            onChange={e => setMaxAttendees(e.target.value)}
+            placeholder="Max attendees (optional)"
+            className="app-input input-glow"
+          />
+          <button
+            onClick={createEvent}
+            className="app-button-dark px-6 py-3 text-sm"
+          >
+            Create Event
+          </button>
         </div>
       )}
 
@@ -127,34 +185,58 @@ export function Events() {
             <Calendar size={44} />
           </div>
           <h2 className="app-title">no events yet.</h2>
-          <p className="app-subtitle mt-4 max-w-sm mx-auto">Create one and bring people together.</p>
+          <p className="app-subtitle mt-4 max-w-sm mx-auto">
+            Create one and bring people together.
+          </p>
         </div>
       ) : (
         <div className="space-y-4 stagger-children">
-          {events.map((event) => {
+          {events.map(event => {
             const isPast = new Date(event.event_date) < new Date();
             return (
-              <div key={event.id} className={`glass rounded-3xl p-6 glass-highlight hover:bg-white/[0.04] transition-all duration-200 ${isPast ? 'opacity-60' : ''}`}>
+              <div
+                key={event.id}
+                className={`glass rounded-3xl p-6 glass-highlight hover:bg-white/[0.04] transition-all duration-200 ${
+                  isPast ? 'opacity-60' : ''
+                }`}
+              >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-white font-bold text-lg">{event.title}</h3>
-                      {isPast && <span className="text-[10px] font-bold text-gray-500 glass rounded-full px-2 py-0.5 uppercase">Past</span>}
+                      <h3 className="text-white font-bold text-lg">
+                        {event.title}
+                      </h3>
+                      {isPast && (
+                        <span className="text-[10px] font-bold text-gray-500 glass rounded-full px-2 py-0.5 uppercase">
+                          Past
+                        </span>
+                      )}
                     </div>
-                    <p className="text-gray-400 text-sm mt-1 leading-relaxed">{event.description}</p>
+                    <p className="text-gray-400 text-sm mt-1 leading-relaxed">
+                      {event.description}
+                    </p>
                     <div className="flex flex-wrap gap-3 mt-4">
                       <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
                         <Clock size={12} className="text-orange-400" />
-                        {new Date(event.event_date).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
+                        {new Date(event.event_date).toLocaleDateString([], {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric',
+                        })}
                       </span>
                       {event.location && (
                         <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
-                          <MapPin size={12} className="text-orange-400" /> {event.location}
+                          <MapPin size={12} className="text-orange-400" />{' '}
+                          {event.location}
                         </span>
                       )}
                       <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
                         <Users size={12} className="text-orange-400" />
-                        {event.attendee_count}{event.max_attendees ? `/${event.max_attendees}` : ''} going
+                        {event.attendee_count}
+                        {event.max_attendees
+                          ? `/${event.max_attendees}`
+                          : ''}{' '}
+                        going
                       </span>
                     </div>
                   </div>
@@ -168,7 +250,13 @@ export function Events() {
                           : 'bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:shadow-lg hover:shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98]'
                       }`}
                     >
-                      {rsvpd.has(event.id) ? <span className="flex items-center gap-1.5"><Check size={14} /> Going</span> : 'RSVP'}
+                      {rsvpd.has(event.id) ? (
+                        <span className="flex items-center gap-1.5">
+                          <Check size={14} /> Going
+                        </span>
+                      ) : (
+                        'RSVP'
+                      )}
                     </button>
                   )}
                 </div>

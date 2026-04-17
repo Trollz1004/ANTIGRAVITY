@@ -1,38 +1,71 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { CalendarDays, Heart, Rocket, Shield, Sparkles, Wallet, X, Zap } from 'lucide-react';
+import {
+  CalendarDays,
+  Heart,
+  Rocket,
+  Shield,
+  Sparkles,
+  Wallet,
+  X,
+  Zap,
+} from 'lucide-react';
 
 interface EcosystemStatsProps {
   onClose: () => void;
 }
 
 const stats = [
-  { label: 'Launch Window', value: 'April 4', growth: '2026', color: 'text-emerald-500' },
-  { label: 'Waitlist', value: 'Live', growth: 'Email capture ready', color: 'text-blue-500' },
-  { label: 'Checkout', value: 'Square', growth: '4 launch links live', color: 'text-pink-500' },
-  { label: 'Verification', value: 'Bot-Shield', growth: '$1 entry flow', color: 'text-amber-500' },
+  {
+    label: 'Launch Window',
+    value: 'April 4',
+    growth: '2026',
+    color: 'text-emerald-500',
+  },
+  {
+    label: 'Waitlist',
+    value: 'Live',
+    growth: 'Email capture ready',
+    color: 'text-blue-500',
+  },
+  {
+    label: 'Checkout',
+    value: 'Square',
+    growth: '4 launch links live',
+    color: 'text-pink-500',
+  },
+  {
+    label: 'Verification',
+    value: 'Bot-Shield',
+    growth: '$1 entry flow',
+    color: 'text-amber-500',
+  },
 ];
 
 const systems = [
   {
     icon: Shield,
     title: 'Human Verification',
-    detail: 'Liveness challenge, payment checkpoint, and verification state stay tied to the same account flow.',
+    detail:
+      'Liveness challenge, payment checkpoint, and verification state stay tied to the same account flow.',
   },
   {
     icon: Wallet,
     title: 'Revenue Transparency',
-    detail: 'Public-facing copy stays on contractual revenue split language with the launch plans anchored to Square.',
+    detail:
+      'Public-facing copy stays on contractual revenue split language with the launch plans anchored to Square.',
   },
   {
     icon: Sparkles,
     title: 'Community Layer',
-    detail: 'Profiles, boards, events, and volunteering sit in the same product instead of bouncing people to other properties.',
+    detail:
+      'Profiles, boards, events, and volunteering sit in the same product instead of bouncing people to other properties.',
   },
   {
     icon: Rocket,
     title: 'Launch Readiness',
-    detail: 'Countdown, OG sharing tags, waitlist capture, and the mobile landing flow are all part of the pre-launch checklist.',
+    detail:
+      'Countdown, OG sharing tags, waitlist capture, and the mobile landing flow are all part of the pre-launch checklist.',
   },
 ];
 
@@ -44,7 +77,10 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
     >
-      <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+        onClick={onClose}
+      />
 
       <motion.div
         initial={{ scale: 0.9, y: 20 }}
@@ -55,25 +91,43 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
           <div>
             <div className="mb-1 flex items-center gap-2 text-blue-400">
               <Zap size={20} className="animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest">YouAndiNotAi Launch Board</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">
+                YouAndiNotAi Launch Board
+              </span>
             </div>
-            <h2 className="text-3xl font-black tracking-tighter text-white md:text-4xl">Readiness Snapshot</h2>
+            <h2 className="text-3xl font-black tracking-tighter text-white md:text-4xl">
+              Readiness Snapshot
+            </h2>
           </div>
-          <button onClick={onClose} className="rounded-full bg-white/5 p-3 transition-colors hover:bg-white/10">
+          <button
+            onClick={onClose}
+            className="rounded-full bg-white/5 p-3 transition-colors hover:bg-white/10"
+          >
             <X size={24} />
           </button>
         </div>
 
         <div className="flex-1 space-y-10 overflow-y-auto p-6 md:p-10">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 md:gap-6">
-            {stats.map((stat) => (
-              <div key={stat.label} className="group relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-6">
-                <div className={`absolute right-0 top-0 translate-x-2 -translate-y-2 p-4 opacity-10 transition-transform group-hover:translate-x-0 group-hover:translate-y-0 ${stat.color}`}>
+            {stats.map(stat => (
+              <div
+                key={stat.label}
+                className="group relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-6"
+              >
+                <div
+                  className={`absolute right-0 top-0 translate-x-2 -translate-y-2 p-4 opacity-10 transition-transform group-hover:translate-x-0 group-hover:translate-y-0 ${stat.color}`}
+                >
                   <Rocket size={48} />
                 </div>
-                <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-gray-500">{stat.label}</div>
-                <div className="mb-2 text-3xl font-black tracking-tight text-white">{stat.value}</div>
-                <div className={`flex items-center gap-1 text-xs font-bold ${stat.color}`}>
+                <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                  {stat.label}
+                </div>
+                <div className="mb-2 text-3xl font-black tracking-tight text-white">
+                  {stat.value}
+                </div>
+                <div
+                  className={`flex items-center gap-1 text-xs font-bold ${stat.color}`}
+                >
                   <Zap size={12} />
                   {stat.growth}
                 </div>
@@ -88,7 +142,7 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
                 Launch Systems
               </h3>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {systems.map((system) => (
+                {systems.map(system => (
                   <div
                     key={system.title}
                     className="rounded-3xl border border-white/5 bg-white/5 p-6 transition-all hover:border-blue-500/30"
@@ -98,8 +152,12 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
                         <system.icon size={20} />
                       </div>
                     </div>
-                    <div className="text-lg font-bold text-white">{system.title}</div>
-                    <p className="mt-3 text-sm leading-relaxed text-gray-400">{system.detail}</p>
+                    <div className="text-lg font-bold text-white">
+                      {system.title}
+                    </div>
+                    <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                      {system.detail}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -132,8 +190,12 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
                 <div className="flex items-center gap-3 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4">
                   <Sparkles size={20} className="text-emerald-400" />
                   <div>
-                    <div className="text-[10px] font-black uppercase tracking-widest text-emerald-400">Mission Status</div>
-                    <div className="text-sm font-bold text-white">Launch-facing surfaces are product-only</div>
+                    <div className="text-[10px] font-black uppercase tracking-widest text-emerald-400">
+                      Mission Status
+                    </div>
+                    <div className="text-sm font-bold text-white">
+                      Launch-facing surfaces are product-only
+                    </div>
                   </div>
                 </div>
               </div>

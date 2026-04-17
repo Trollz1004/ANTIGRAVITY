@@ -23,7 +23,9 @@ export function toIsoDate(value: string): string | null {
     return null;
   }
 
-  return `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  return `${year.toString().padStart(4, '0')}-${month
+    .toString()
+    .padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 }
 
 export function calculateAgeUtc(dateOfBirthIso: string): number {
@@ -32,7 +34,10 @@ export function calculateAgeUtc(dateOfBirthIso: string): number {
   let age = today.getUTCFullYear() - birthDate.getUTCFullYear();
   const monthDelta = today.getUTCMonth() - birthDate.getUTCMonth();
 
-  if (monthDelta < 0 || (monthDelta === 0 && today.getUTCDate() < birthDate.getUTCDate())) {
+  if (
+    monthDelta < 0 ||
+    (monthDelta === 0 && today.getUTCDate() < birthDate.getUTCDate())
+  ) {
     age -= 1;
   }
 

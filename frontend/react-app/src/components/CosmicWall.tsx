@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, PenTool, Music, Image as ImageIcon, Sparkles, Volume2, Heart } from 'lucide-react';
+import {
+  X,
+  PenTool,
+  Music,
+  Image as ImageIcon,
+  Sparkles,
+  Volume2,
+  Heart,
+} from 'lucide-react';
 import { useGameStore } from '../store/useGameStore';
 
 interface Signature {
@@ -14,11 +22,12 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
   const [signatures, setSignatures] = useState<Signature[]>([]);
   const [name, setName] = useState('');
   const [isSigning, setIsSigning] = useState(false);
-  const myColor = useGameStore((state) => state.myColor);
-  
+  const myColor = useGameStore(state => state.myColor);
+
   // Sound effects
   const playSound = (type: 'click' | 'success' | 'hover') => {
-    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const audioCtx = new (window.AudioContext ||
+      (window as any).webkitAudioContext)();
     const oscillator = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
 
@@ -29,15 +38,24 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
       oscillator.type = 'sine';
       oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
       gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.01,
+        audioCtx.currentTime + 0.1
+      );
       oscillator.start();
       oscillator.stop(audioCtx.currentTime + 0.1);
     } else if (type === 'success') {
       oscillator.type = 'triangle';
       oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-      oscillator.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.3); // C6
+      oscillator.frequency.exponentialRampToValueAtTime(
+        1046.5,
+        audioCtx.currentTime + 0.3
+      ); // C6
       gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.01,
+        audioCtx.currentTime + 0.3
+      );
       oscillator.start();
       oscillator.stop(audioCtx.currentTime + 0.3);
     }
@@ -77,11 +95,18 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
               <PenTool className="text-pink-400" size={28} />
             </div>
             <div>
-              <h2 className="text-2xl font-black italic tracking-tighter uppercase">The Cosmic Signature Wall</h2>
-              <p className="text-[10px] text-gray-500 uppercase tracking-[0.4em] font-bold">Leave your mark on the galaxy</p>
+              <h2 className="text-2xl font-black italic tracking-tighter uppercase">
+                The Cosmic Signature Wall
+              </h2>
+              <p className="text-[10px] text-gray-500 uppercase tracking-[0.4em] font-bold">
+                Leave your mark on the galaxy
+              </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors">
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-white/5 rounded-full transition-colors"
+          >
             <X size={24} />
           </button>
         </div>
@@ -94,9 +119,11 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
                 <ImageIcon size={16} />
                 Community Wall
               </h3>
-              <span className="text-[10px] text-pink-600 font-bold">YOUANDINOTAI — FOUNDING MEMBERS</span>
+              <span className="text-[10px] text-pink-600 font-bold">
+                YOUANDINOTAI — FOUNDING MEMBERS
+              </span>
             </div>
-            
+
             <div className="space-y-8">
               <motion.div
                 whileHover={{ scale: 1.02 }}
@@ -104,8 +131,12 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-900/60 via-purple-900/40 to-indigo-900/60" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                  <div className="bg-pink-500 text-white px-4 py-1 font-black text-xl mb-2 rotate-[-2deg] shadow-lg">YouAndiNotAi</div>
-                  <div className="bg-purple-500 text-white px-4 py-1 font-black text-2xl rotate-[1deg] shadow-lg">SIGNATURE WALL</div>
+                  <div className="bg-pink-500 text-white px-4 py-1 font-black text-xl mb-2 rotate-[-2deg] shadow-lg">
+                    YouAndiNotAi
+                  </div>
+                  <div className="bg-purple-500 text-white px-4 py-1 font-black text-2xl rotate-[1deg] shadow-lg">
+                    SIGNATURE WALL
+                  </div>
                   <div className="mt-6 text-white font-bold text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                     Be one of the first to leave your mark
                   </div>
@@ -117,12 +148,15 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
 
               <div className="p-6 bg-pink-500/10 rounded-3xl border border-pink-500/20 space-y-4">
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  Sign the wall before launch and be recognized as a founding member of the YouAndiNotAi community. Every signature is a statement: real humans, real connections.
+                  Sign the wall before launch and be recognized as a founding
+                  member of the YouAndiNotAi community. Every signature is a
+                  statement: real humans, real connections.
                 </p>
                 <div className="h-px bg-white/10 w-full" />
                 <div className="flex flex-col gap-2">
                   <div className="text-cyan-400 font-black text-xs uppercase tracking-widest">
-                    REAL HUMANS ONLY <Heart size={10} className="inline fill-cyan-400" /> 18+
+                    REAL HUMANS ONLY{' '}
+                    <Heart size={10} className="inline fill-cyan-400" /> 18+
                   </div>
                 </div>
               </div>
@@ -136,8 +170,11 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
                 <Sparkles size={16} />
                 Recent Signatures
               </h3>
-              <button 
-                onClick={() => { setIsSigning(true); playSound('click'); }}
+              <button
+                onClick={() => {
+                  setIsSigning(true);
+                  playSound('click');
+                }}
                 className="text-[10px] bg-white text-black px-3 py-1 rounded-full font-bold hover:scale-105 transition-transform"
               >
                 SIGN WALL
@@ -153,22 +190,22 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
                     exit={{ opacity: 0, scale: 0.9, height: 0 }}
                     className="p-4 bg-white/10 rounded-2xl border border-pink-500/30 space-y-3"
                   >
-                    <input 
+                    <input
                       autoFocus
-                      type="text" 
+                      type="text"
                       placeholder="Your Galactic Name..."
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={e => setName(e.target.value)}
                       className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-pink-500"
                     />
                     <div className="flex gap-2">
-                      <button 
+                      <button
                         onClick={handleSign}
                         className="flex-1 bg-pink-500 text-white py-2 rounded-xl text-xs font-bold hover:bg-pink-600 transition-colors"
                       >
                         CONFIRM
                       </button>
-                      <button 
+                      <button
                         onClick={() => setIsSigning(false)}
                         className="px-4 py-2 bg-white/5 text-gray-400 rounded-xl text-xs font-bold hover:bg-white/10 transition-colors"
                       >
@@ -182,11 +219,13 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
               {signatures.length === 0 && !isSigning && (
                 <div className="h-full flex flex-col items-center justify-center text-gray-600 space-y-4 opacity-50">
                   <PenTool size={48} />
-                  <p className="text-xs font-bold uppercase tracking-widest">No signatures yet</p>
+                  <p className="text-xs font-bold uppercase tracking-widest">
+                    No signatures yet
+                  </p>
                 </div>
               )}
 
-              {signatures.map((sig) => (
+              {signatures.map(sig => (
                 <motion.div
                   layout
                   initial={{ opacity: 0, x: 20 }}
@@ -195,10 +234,16 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
                   className="flex items-center gap-4 p-3 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-colors group"
                 >
                   <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden">
-                    <img src={sig.avatar} alt={sig.name} referrerPolicy="no-referrer" />
+                    <img
+                      src={sig.avatar}
+                      alt={sig.name}
+                      referrerPolicy="no-referrer"
+                    />
                   </div>
                   <div className="flex-1">
-                    <div className="text-sm font-bold text-white">{sig.name}</div>
+                    <div className="text-sm font-bold text-white">
+                      {sig.name}
+                    </div>
                     <div className="text-[10px] text-gray-500 font-medium">
                       {new Date(sig.timestamp).toLocaleTimeString()}
                     </div>

@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Flag, Shield, X, VolumeX, EyeOff, MessageCircleOff } from 'lucide-react';
+import {
+  Flag,
+  Shield,
+  X,
+  VolumeX,
+  EyeOff,
+  MessageCircleOff,
+} from 'lucide-react';
 
 import { api, ApiError } from '../../lib/api';
 import { ReportForm } from './ReportForm';
@@ -37,7 +44,9 @@ export function SafetyDrawer({
 }: SafetyDrawerProps) {
   const [reason, setReason] = useState(REPORT_REASONS[0].value);
   const [details, setDetails] = useState('');
-  const [loadingAction, setLoadingAction] = useState<'report' | 'block' | 'mute' | 'restrict' | 'freeze' | null>(null);
+  const [loadingAction, setLoadingAction] = useState<
+    'report' | 'block' | 'mute' | 'restrict' | 'freeze' | null
+  >(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [showBlockConfirmation, setShowBlockConfirmation] = useState(false);
@@ -58,7 +67,9 @@ export function SafetyDrawer({
   if (!open) return null;
 
   async function handleMute() {
-    const confirmed = window.confirm(`Mute ${targetName}? Their messages will be hidden for 24 hours.`);
+    const confirmed = window.confirm(
+      `Mute ${targetName}? Their messages will be hidden for 24 hours.`
+    );
     if (!confirmed) return;
 
     setLoadingAction('mute');
@@ -80,7 +91,7 @@ export function SafetyDrawer({
 
   async function handleRestrict() {
     const confirmed = window.confirm(
-      `Restrict ${targetName}? This will limit their profile access to basic information only.`,
+      `Restrict ${targetName}? This will limit their profile access to basic information only.`
     );
     if (!confirmed) return;
 
@@ -94,7 +105,9 @@ export function SafetyDrawer({
       setSuccess(`${targetName}'s profile visibility was restricted.`);
       onActionComplete?.('restrict');
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Restrict action failed.');
+      setError(
+        err instanceof ApiError ? err.message : 'Restrict action failed.'
+      );
     } finally {
       setLoadingAction(null);
     }
@@ -102,7 +115,7 @@ export function SafetyDrawer({
 
   async function handleFreeze() {
     const confirmed = window.confirm(
-      `Freeze conversation with ${targetName}? This will pause messaging but keep previous messages visible.`,
+      `Freeze conversation with ${targetName}? This will pause messaging but keep previous messages visible.`
     );
     if (!confirmed) return;
 
@@ -188,7 +201,7 @@ export function SafetyDrawer({
 
   async function handleBlock() {
     const confirmed = window.confirm(
-      `Block ${targetName}? This removes them from your active feed and conversation path.`,
+      `Block ${targetName}? This removes them from your active feed and conversation path.`
     );
     if (!confirmed) return;
 
@@ -218,7 +231,8 @@ export function SafetyDrawer({
               <div className="app-kicker mb-3">Safety tools</div>
               <h2 className="app-title">protect your lane.</h2>
               <p className="app-subtitle mt-3 max-w-xl">
-                Report unsafe behavior for review, or take immediate protective actions.
+                Report unsafe behavior for review, or take immediate protective
+                actions.
               </p>
             </div>
 
@@ -233,15 +247,21 @@ export function SafetyDrawer({
           </div>
 
           <div className="mb-6 rounded-[1.4rem] border-4 border-[#111111] bg-[#111111] px-5 py-4 text-white">
-            <div className="text-xs font-black uppercase tracking-[0.18em] text-[#ff9d73]">Target</div>
-            <div className="mt-2 text-2xl font-black tracking-[-0.05em]">{targetName}</div>
+            <div className="text-xs font-black uppercase tracking-[0.18em] text-[#ff9d73]">
+              Target
+            </div>
+            <div className="mt-2 text-2xl font-black tracking-[-0.05em]">
+              {targetName}
+            </div>
           </div>
 
           {showReportForm ? (
             <section className="rounded-[1.6rem] border-4 border-[#111111] bg-white p-5">
               <div className="mb-4 flex items-center gap-2">
                 <Flag size={18} className="text-[#ff4f00]" />
-                <h3 className="text-lg font-black tracking-[-0.04em] text-[#111111]">Detailed Report</h3>
+                <h3 className="text-lg font-black tracking-[-0.04em] text-[#111111]">
+                  Detailed Report
+                </h3>
               </div>
 
               <ReportForm
@@ -255,7 +275,9 @@ export function SafetyDrawer({
               <section className="rounded-[1.6rem] border-4 border-[#111111] bg-white p-5">
                 <div className="mb-4 flex items-center gap-2">
                   <Flag size={18} className="text-[#ff4f00]" />
-                  <h3 className="text-lg font-black tracking-[-0.04em] text-[#111111]">Report Concern</h3>
+                  <h3 className="text-lg font-black tracking-[-0.04em] text-[#111111]">
+                    Report Concern
+                  </h3>
                 </div>
 
                 <button
@@ -270,8 +292,12 @@ export function SafetyDrawer({
                   <label className="mb-2 block text-xs font-black uppercase tracking-[0.14em] text-[#5c594f]">
                     Quick Report
                   </label>
-                  <select value={reason} onChange={(event) => setReason(event.target.value)} className="app-input mb-3">
-                    {REPORT_REASONS.map((option) => (
+                  <select
+                    value={reason}
+                    onChange={event => setReason(event.target.value)}
+                    className="app-input mb-3"
+                  >
+                    {REPORT_REASONS.map(option => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
@@ -280,7 +306,7 @@ export function SafetyDrawer({
 
                   <textarea
                     value={details}
-                    onChange={(event) => setDetails(event.target.value)}
+                    onChange={event => setDetails(event.target.value)}
                     rows={3}
                     maxLength={500}
                     placeholder="Briefly describe what happened..."
@@ -312,7 +338,9 @@ export function SafetyDrawer({
                 <section className="rounded-[1.6rem] border-4 border-[#111111] bg-[#fff4ef] p-5">
                   <div className="mb-4 flex items-center gap-2">
                     <Shield size={18} className="text-[#111111]" />
-                    <h3 className="text-lg font-black tracking-[-0.04em] text-[#111111]">Immediate Actions</h3>
+                    <h3 className="text-lg font-black tracking-[-0.04em] text-[#111111]">
+                      Immediate Actions
+                    </h3>
                   </div>
 
                   <div className="space-y-4">
@@ -324,7 +352,9 @@ export function SafetyDrawer({
                     >
                       <div>
                         <div className="font-bold">🛡️ Block User</div>
-                        <div className="text-sm text-gray-600">Stops all contact permanently</div>
+                        <div className="text-sm text-gray-600">
+                          Stops all contact permanently
+                        </div>
                       </div>
                       <div className="text-xs font-bold">BLOCK</div>
                     </button>
@@ -337,7 +367,9 @@ export function SafetyDrawer({
                     >
                       <div>
                         <div className="font-bold">🔕 Mute User</div>
-                        <div className="text-sm text-gray-600">Hide messages temporarily (24h)</div>
+                        <div className="text-sm text-gray-600">
+                          Hide messages temporarily (24h)
+                        </div>
                       </div>
                       <div className="text-xs font-bold">MUTE</div>
                     </button>
@@ -350,7 +382,9 @@ export function SafetyDrawer({
                     >
                       <div>
                         <div className="font-bold">👁️ Restrict Visibility</div>
-                        <div className="text-sm text-gray-600">Limit profile access</div>
+                        <div className="text-sm text-gray-600">
+                          Limit profile access
+                        </div>
                       </div>
                       <div className="text-xs font-bold">RESTRICT</div>
                     </button>
@@ -363,7 +397,9 @@ export function SafetyDrawer({
                     >
                       <div>
                         <div className="font-bold">💬 Freeze Conversation</div>
-                        <div className="text-sm text-gray-600">Pause messaging</div>
+                        <div className="text-sm text-gray-600">
+                          Pause messaging
+                        </div>
                       </div>
                       <div className="text-xs font-bold">FREEZE</div>
                     </button>

@@ -1,7 +1,7 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
-*/
+ */
 
 import express from 'express';
 import { createServer as createViteServer } from 'vite';
@@ -48,7 +48,7 @@ const COLORS = [
   '#FF0000', // Red
   '#FFD700', // Gold
   '#E6E6FA', // Lavender
-  '#FF4500'  // Orange Red
+  '#FF4500', // Orange Red
 ];
 
 function broadcast(data: any, excludeId?: string) {
@@ -63,43 +63,48 @@ function broadcast(data: any, excludeId?: string) {
 async function startServer() {
   const app = express();
   const server = http.createServer(app);
-  
+
   // WebSocket Server
   const wss = new WebSocketServer({ server });
 
-  wss.on('connection', (ws) => {
+  wss.on('connection', ws => {
     const id = uuidv4();
     const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-    
+
     const player: Player = {
       id,
       color,
       position: null,
-      lastUpdate: Date.now()
+      lastUpdate: Date.now(),
     };
-    
+
     players.set(id, player);
     clients.set(id, ws);
 
     // Send initial state to the new client
-    ws.send(JSON.stringify({
-      type: 'init',
-      id,
-      color,
-      players: Array.from(players.values()),
-      forceFields: Array.from(forceFields.values())
-    }));
+    ws.send(
+      JSON.stringify({
+        type: 'init',
+        id,
+        color,
+        players: Array.from(players.values()),
+        forceFields: Array.from(forceFields.values()),
+      })
+    );
 
     // Broadcast new player to others
-    broadcast({
-      type: 'player_joined',
-      player
-    }, id);
+    broadcast(
+      {
+        type: 'player_joined',
+        player,
+      },
+      id
+    );
 
-    ws.on('message', (message) => {
+    ws.on('message', message => {
       try {
         const data = JSON.parse(message.toString());
-        
+
         if (data.type === 'cursor') {
           const p = players.get(id);
           if (p) {
@@ -114,14 +119,14 @@ async function startServer() {
             type: data.forceType,
             ownerId: id,
             createdAt: Date.now(),
-            color: data.color
+            color: data.color,
           };
           forceFields.set(forceId, force);
-          
+
           // Broadcast new force field immediately
           broadcast({
             type: 'force_added',
-            force
+            force,
           });
         }
       } catch (e) {
@@ -132,7 +137,7 @@ async function startServer() {
     ws.on('close', () => {
       players.delete(id);
       clients.delete(id);
-      
+
       // Remove player's force fields
       for (const [forceId, force] of forceFields.entries()) {
         if (force.ownerId === id) {
@@ -142,7 +147,7 @@ async function startServer() {
 
       broadcast({
         type: 'player_left',
-        id
+        id,
       });
     });
   });
@@ -150,7 +155,7 @@ async function startServer() {
   // Broadcast loop (20Hz)
   setInterval(() => {
     const now = Date.now();
-    
+
     // Clean up old force fields (e.g., after 10.5 seconds to allow client animation)
     let forcesChanged = false;
     for (const [id, force] of forceFields.entries()) {
@@ -163,7 +168,9 @@ async function startServer() {
     const updateData = {
       type: 'sync',
       players: Array.from(players.values()).filter(p => p.position !== null),
-      ...(forcesChanged ? { forceFields: Array.from(forceFields.values()) } : {})
+      ...(forcesChanged
+        ? { forceFields: Array.from(forceFields.values()) }
+        : {}),
     };
 
     broadcast(updateData);

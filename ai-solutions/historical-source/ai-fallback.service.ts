@@ -1,6 +1,6 @@
 /**
  * AI Fallback Service - Gemini → Bedrock with Budget Protection
- * 
+ *
  * Implements intelligent fallback and budget auto-disable
  * Mission: 100% of ALL revenue → Shriners Children's Hospitals (OMEGA = full charity)
  */
@@ -33,12 +33,12 @@ export class AIFallbackService {
     this.dailyBudget = parseFloat(process.env.BEDROCK_DAILY_BUDGET || '10');
     this.monthlyBudget = parseFloat(process.env.BEDROCK_MONTHLY_BUDGET || '100');
     this.autoDisableThreshold = parseFloat(process.env.BEDROCK_AUTO_DISABLE_THRESHOLD || '0.9');
-    
+
     this.budgetTracker = {
       dailySpend: 0,
       monthlySpend: 0,
       lastReset: new Date(),
-      disabled: false
+      disabled: false,
     };
   }
 
@@ -47,9 +47,8 @@ export class AIFallbackService {
    */
   async generateWithFallback(
     prompt: string,
-    options: { maxTokens?: number; temperature?: number } = {}
+    options: { maxTokens?: number; temperature?: number } = {},
   ): Promise<GeminiResponse | BedrockResponse> {
-    
     // Check budget before proceeding
     if (this.isBudgetExceeded()) {
       console.log('💰 Budget exceeded, using Gemini only');
@@ -59,33 +58,35 @@ export class AIFallbackService {
     try {
       // Try Gemini first (primary AI)
       const geminiResponse = await this.generateWithGemini(prompt, options);
-      
+
       // If Gemini succeeds, return it
       return geminiResponse;
-      
     } catch (geminiError) {
       console.log('🔄 Gemini failed, falling back to Bedrock');
-      
+
       try {
         // Fallback to Bedrock
         const startTime = Date.now();
         const bedrockResponse = await bedrockService.generate(prompt, options);
         const latency = Date.now() - startTime;
-        
+
         // Track costs and update budget
         this.updateBudgetTracker(bedrockResponse.usage.cost || 0);
-        
+
         // Log metrics
         await cloudWatchAlarms.logLatency(latency);
         await cloudWatchAlarms.logCost(bedrockResponse.usage.cost || 0);
-        
+
         console.log(`💚 Bedrock fallback successful (${latency}ms, $${(bedrockResponse.usage.cost || 0).toFixed(6)})`);
-        
+
         return bedrockResponse;
-        
       } catch (bedrockError) {
         console.error('❌ Both Gemini and Bedrock failed');
-        throw new Error(`AI generation failed: Gemini (${(geminiError as Error).message}), Bedrock (${(bedrockError as Error).message})`);
+        throw new Error(
+          `AI generation failed: Gemini (${(geminiError as Error).message}), Bedrock (${
+            (bedrockError as Error).message
+          })`,
+        );
       }
     }
   }
@@ -95,9 +96,8 @@ export class AIFallbackService {
    */
   private async generateWithGemini(
     prompt: string,
-    options: { maxTokens?: number; temperature?: number }
+    options: { maxTokens?: number; temperature?: number },
   ): Promise<GeminiResponse> {
-    
     // Check if Gemini fallback is enabled
     if (process.env.ENABLE_GEMINI_FALLBACK !== '1') {
       throw new Error('Gemini fallback disabled');
@@ -109,11 +109,11 @@ export class AIFallbackService {
       usage: {
         input_tokens: Math.ceil(prompt.length / 4),
         output_tokens: 50,
-        cost: 0 // Gemini is free tier
+        cost: 0, // Gemini is free tier
       },
       model: 'gemini-1.5-pro',
       timestamp: new Date(),
-      charityPortion: 1.0 // GOSPEL: OMEGA = 100% to kids
+      charityPortion: 1.0, // GOSPEL: OMEGA = 100% to kids
     };
 
     // Simulate potential failure for testing
@@ -129,15 +129,19 @@ export class AIFallbackService {
    */
   private isBudgetExceeded(): boolean {
     this.resetBudgetIfNeeded();
-    
-    const dailyExceeded = this.budgetTracker.dailySpend >= (this.dailyBudget * this.autoDisableThreshold);
-    const monthlyExceeded = this.budgetTracker.monthlySpend >= (this.monthlyBudget * this.autoDisableThreshold);
-    
+
+    const dailyExceeded = this.budgetTracker.dailySpend >= this.dailyBudget * this.autoDisableThreshold;
+    const monthlyExceeded = this.budgetTracker.monthlySpend >= this.monthlyBudget * this.autoDisableThreshold;
+
     if (dailyExceeded || monthlyExceeded || this.budgetTracker.disabled) {
-      console.log(`🛡️ Budget protection active: Daily: $${this.budgetTracker.dailySpend.toFixed(4)}/$${this.dailyBudget}, Monthly: $${this.budgetTracker.monthlySpend.toFixed(4)}/$${this.monthlyBudget}`);
+      console.log(
+        `🛡️ Budget protection active: Daily: $${this.budgetTracker.dailySpend.toFixed(4)}/$${
+          this.dailyBudget
+        }, Monthly: $${this.budgetTracker.monthlySpend.toFixed(4)}/$${this.monthlyBudget}`,
+      );
       return true;
     }
-    
+
     return false;
   }
 
@@ -146,16 +150,15 @@ export class AIFallbackService {
    */
   private updateBudgetTracker(cost: number): void {
     this.resetBudgetIfNeeded();
-    
+
     this.budgetTracker.dailySpend += cost;
     this.budgetTracker.monthlySpend += cost;
-    
+
     // Auto-disable if threshold exceeded
     const dailyThreshold = this.dailyBudget * this.autoDisableThreshold;
     const monthlyThreshold = this.monthlyBudget * this.autoDisableThreshold;
-    
-    if (this.budgetTracker.dailySpend >= dailyThreshold || 
-        this.budgetTracker.monthlySpend >= monthlyThreshold) {
+
+    if (this.budgetTracker.dailySpend >= dailyThreshold || this.budgetTracker.monthlySpend >= monthlyThreshold) {
       this.budgetTracker.disabled = true;
       console.log('🚨 Budget threshold exceeded - Bedrock auto-disabled for charity protection');
     }
@@ -167,21 +170,22 @@ export class AIFallbackService {
   private resetBudgetIfNeeded(): void {
     const now = new Date();
     const lastReset = this.budgetTracker.lastReset;
-    
+
     // Reset daily budget (new day)
-    if (now.getDate() !== lastReset.getDate() || 
-        now.getMonth() !== lastReset.getMonth() || 
-        now.getFullYear() !== lastReset.getFullYear()) {
+    if (
+      now.getDate() !== lastReset.getDate() ||
+      now.getMonth() !== lastReset.getMonth() ||
+      now.getFullYear() !== lastReset.getFullYear()
+    ) {
       this.budgetTracker.dailySpend = 0;
       this.budgetTracker.disabled = false; // Re-enable on new day
     }
-    
+
     // Reset monthly budget (new month)
-    if (now.getMonth() !== lastReset.getMonth() || 
-        now.getFullYear() !== lastReset.getFullYear()) {
+    if (now.getMonth() !== lastReset.getMonth() || now.getFullYear() !== lastReset.getFullYear()) {
       this.budgetTracker.monthlySpend = 0;
     }
-    
+
     this.budgetTracker.lastReset = now;
   }
 
@@ -190,7 +194,7 @@ export class AIFallbackService {
    */
   getBudgetStatus() {
     this.resetBudgetIfNeeded();
-    
+
     return {
       dailySpend: this.budgetTracker.dailySpend,
       dailyBudget: this.dailyBudget,
@@ -199,7 +203,7 @@ export class AIFallbackService {
       monthlyBudget: this.monthlyBudget,
       monthlyRemaining: Math.max(0, this.monthlyBudget - this.budgetTracker.monthlySpend),
       disabled: this.budgetTracker.disabled,
-      charityProtected: this.budgetTracker.dailySpend * 1.0 // GOSPEL: OMEGA = 100% to kids
+      charityProtected: this.budgetTracker.dailySpend * 1.0, // GOSPEL: OMEGA = 100% to kids
     };
   }
 
@@ -211,7 +215,7 @@ export class AIFallbackService {
       dailySpend: 0,
       monthlySpend: 0,
       lastReset: new Date(),
-      disabled: false
+      disabled: false,
     };
     console.log('💰 Budget tracker reset');
   }

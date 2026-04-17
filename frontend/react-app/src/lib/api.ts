@@ -5,7 +5,10 @@
 const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
 
 class ApiError extends Error {
-  constructor(public status: number, message: string) {
+  constructor(
+    public status: number,
+    message: string
+  ) {
     super(message);
   }
 }
@@ -26,14 +29,18 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     // Try refresh
     const refreshed = await tryRefresh();
     if (refreshed) {
-      headers['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`;
+      headers['Authorization'] = `Bearer ${localStorage.getItem(
+        'access_token'
+      )}`;
       const retry = await fetch(`${API_BASE}${path}`, { ...options, headers });
       if (!retry.ok) throw new ApiError(retry.status, await retry.text());
       return retry.json();
     }
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    const next = encodeURIComponent(`${window.location.pathname}${window.location.search}`);
+    const next = encodeURIComponent(
+      `${window.location.pathname}${window.location.search}`
+    );
     window.location.href = `/login?next=${next}`;
     throw new ApiError(401, 'Session expired');
   }
@@ -69,9 +76,15 @@ async function tryRefresh(): Promise<boolean> {
 export const api = {
   get: <T>(path: string) => request<T>(path),
   post: <T>(path: string, body?: unknown) =>
-    request<T>(path, { method: 'POST', body: body ? JSON.stringify(body) : undefined }),
+    request<T>(path, {
+      method: 'POST',
+      body: body ? JSON.stringify(body) : undefined,
+    }),
   put: <T>(path: string, body?: unknown) =>
-    request<T>(path, { method: 'PUT', body: body ? JSON.stringify(body) : undefined }),
+    request<T>(path, {
+      method: 'PUT',
+      body: body ? JSON.stringify(body) : undefined,
+    }),
   delete: <T>(path: string) => request<T>(path, { method: 'DELETE' }),
 };
 

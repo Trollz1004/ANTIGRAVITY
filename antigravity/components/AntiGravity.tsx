@@ -38,7 +38,9 @@ export default function AntiGravity({ isDarkMode }: { isDarkMode: boolean }) {
         {highlights.map((item) => (
           <div
             key={item.title}
-            className={`p-6 rounded-3xl border ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200 shadow-lg'}`}
+            className={`p-6 rounded-3xl border ${
+              isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200 shadow-lg'
+            }`}
           >
             <div className="mb-4">{item.icon}</div>
             <h3 className="text-xl font-bold mb-3">{item.title}</h3>

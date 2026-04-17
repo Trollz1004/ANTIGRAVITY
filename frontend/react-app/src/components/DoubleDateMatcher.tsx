@@ -35,16 +35,26 @@ const statusStyles: Record<DoubleDateSession['status'], string> = {
 };
 
 function fallbackAvatar(name: string): string {
-  return `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name)}`;
+  return `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+    name
+  )}`;
 }
 
-function CoupleCard({ label, couple }: { label: string; couple: DoubleDateCouple | null }) {
+function CoupleCard({
+  label,
+  couple,
+}: {
+  label: string;
+  couple: DoubleDateCouple | null;
+}) {
   return (
     <div className="rounded-[24px] border border-slate-800 bg-slate-950/70 p-4">
-      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">{label}</div>
+      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">
+        {label}
+      </div>
       <div className="mt-3 space-y-3">
         {couple?.members?.length ? (
-          couple.members.map((member) => (
+          couple.members.map(member => (
             <div key={member.user_id} className="flex items-center gap-3">
               <img
                 src={member.photo_url || fallbackAvatar(member.display_name)}
@@ -52,20 +62,26 @@ function CoupleCard({ label, couple }: { label: string; couple: DoubleDateCouple
                 className="h-12 w-12 rounded-2xl border border-slate-700 object-cover"
               />
               <div>
-                <div className="text-sm font-medium text-white">{member.display_name}</div>
+                <div className="text-sm font-medium text-white">
+                  {member.display_name}
+                </div>
                 <div className="text-xs text-slate-500">{couple.match_id}</div>
               </div>
             </div>
           ))
         ) : (
-          <div className="text-sm text-slate-500">No couple data returned yet.</div>
+          <div className="text-sm text-slate-500">
+            No couple data returned yet.
+          </div>
         )}
       </div>
     </div>
   );
 }
 
-export default function DoubleDateMatcher({ onLaunchGroupVideo }: DoubleDateMatcherProps) {
+export default function DoubleDateMatcher({
+  onLaunchGroupVideo,
+}: DoubleDateMatcherProps) {
   const [sessions, setSessions] = useState<DoubleDateSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -102,11 +118,17 @@ export default function DoubleDateMatcher({ onLaunchGroupVideo }: DoubleDateMatc
     setError(null);
 
     try {
-      const created = await api.post<DoubleDateSession>('/double-dates/propose', {
-        match_a_id: proposal.matchAId.trim(),
-        match_b_id: proposal.matchBId.trim(),
-      });
-      setSessions((current) => [created, ...current.filter((session) => session.id !== created.id)]);
+      const created = await api.post<DoubleDateSession>(
+        '/double-dates/propose',
+        {
+          match_a_id: proposal.matchAId.trim(),
+          match_b_id: proposal.matchBId.trim(),
+        }
+      );
+      setSessions(current => [
+        created,
+        ...current.filter(session => session.id !== created.id),
+      ]);
       setProposal({ matchAId: '', matchBId: '' });
     } catch (err) {
       console.error(err);
@@ -116,13 +138,20 @@ export default function DoubleDateMatcher({ onLaunchGroupVideo }: DoubleDateMatc
     }
   }
 
-  async function updateSession(sessionId: string, action: 'accept' | 'decline') {
+  async function updateSession(
+    sessionId: string,
+    action: 'accept' | 'decline'
+  ) {
     setActingOn(sessionId);
     setError(null);
 
     try {
-      const updated = await api.post<DoubleDateSession>(`/double-dates/${sessionId}/${action}`);
-      setSessions((current) => current.map((session) => (session.id === sessionId ? updated : session)));
+      const updated = await api.post<DoubleDateSession>(
+        `/double-dates/${sessionId}/${action}`
+      );
+      setSessions(current =>
+        current.map(session => (session.id === sessionId ? updated : session))
+      );
     } catch (err) {
       console.error(err);
       setError(`Unable to ${action} this proposal.`);
@@ -132,8 +161,8 @@ export default function DoubleDateMatcher({ onLaunchGroupVideo }: DoubleDateMatc
   }
 
   const activeSessions = useMemo(
-    () => sessions.filter((session) => session.status === 'active'),
-    [sessions],
+    () => sessions.filter(session => session.status === 'active'),
+    [sessions]
   );
 
   const launchGroupVideo = useCallback(
@@ -143,24 +172,34 @@ export default function DoubleDateMatcher({ onLaunchGroupVideo }: DoubleDateMatc
         return;
       }
 
-      window.dispatchEvent(new CustomEvent('double-date-video-launch', { detail: session }));
+      window.dispatchEvent(
+        new CustomEvent('double-date-video-launch', { detail: session })
+      );
     },
-    [onLaunchGroupVideo],
+    [onLaunchGroupVideo]
   );
 
   return (
     <section className="mx-auto flex w-full max-w-6xl flex-col gap-6 rounded-[32px] border border-slate-800 bg-slate-950 p-5 text-slate-100 shadow-[0_35px_120px_rgba(2,6,23,0.55)] md:p-7">
       <div className="flex flex-col gap-3 rounded-[26px] border border-fuchsia-900/50 bg-[radial-gradient(circle_at_top_right,_rgba(236,72,153,0.14),_transparent_36%),linear-gradient(180deg,rgba(15,23,42,0.96),rgba(2,6,23,0.96))] p-6">
-        <div className="text-xs font-semibold uppercase tracking-[0.3em] text-fuchsia-300">Double Dates</div>
+        <div className="text-xs font-semibold uppercase tracking-[0.3em] text-fuchsia-300">
+          Double Dates
+        </div>
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="text-3xl font-semibold text-white">Pair two couples before the meetup happens.</h2>
+            <h2 className="text-3xl font-semibold text-white">
+              Pair two couples before the meetup happens.
+            </h2>
             <p className="mt-2 max-w-3xl text-sm text-slate-400">
-              Propose a double date using two match IDs, review live proposals, and jump into a group-call handoff when both couples accept.
+              Propose a double date using two match IDs, review live proposals,
+              and jump into a group-call handoff when both couples accept.
             </p>
           </div>
           <div className="rounded-2xl border border-slate-800 bg-black/25 px-4 py-3 text-sm text-slate-400">
-            Active sessions: <span className="font-semibold text-white">{activeSessions.length}</span>
+            Active sessions:{' '}
+            <span className="font-semibold text-white">
+              {activeSessions.length}
+            </span>
           </div>
         </div>
       </div>
@@ -176,21 +215,35 @@ export default function DoubleDateMatcher({ onLaunchGroupVideo }: DoubleDateMatc
         className="grid gap-4 rounded-[28px] border border-slate-800 bg-slate-900/65 p-5 md:grid-cols-[1fr_1fr_auto]"
       >
         <label className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Your couple match ID</span>
+          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
+            Your couple match ID
+          </span>
           <input
             type="text"
             value={proposal.matchAId}
-            onChange={(event) => setProposal((current) => ({ ...current, matchAId: event.target.value }))}
+            onChange={event =>
+              setProposal(current => ({
+                ...current,
+                matchAId: event.target.value,
+              }))
+            }
             className="rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-fuchsia-500"
             placeholder="11111111-1111-1111-1111-111111111111"
           />
         </label>
         <label className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Other couple match ID</span>
+          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
+            Other couple match ID
+          </span>
           <input
             type="text"
             value={proposal.matchBId}
-            onChange={(event) => setProposal((current) => ({ ...current, matchBId: event.target.value }))}
+            onChange={event =>
+              setProposal(current => ({
+                ...current,
+                matchBId: event.target.value,
+              }))
+            }
             className="rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-fuchsia-500"
             placeholder="22222222-2222-2222-2222-222222222222"
           />
@@ -211,14 +264,17 @@ export default function DoubleDateMatcher({ onLaunchGroupVideo }: DoubleDateMatc
         </div>
       ) : sessions.length === 0 ? (
         <div className="rounded-[28px] border border-dashed border-slate-800 px-5 py-12 text-center">
-          <div className="text-lg font-medium text-white">No proposals yet.</div>
+          <div className="text-lg font-medium text-white">
+            No proposals yet.
+          </div>
           <p className="mt-2 text-sm text-slate-500">
-            Once a couple proposes a double date, it will show up here with acceptance controls.
+            Once a couple proposes a double date, it will show up here with
+            acceptance controls.
           </p>
         </div>
       ) : (
         <div className="grid gap-4">
-          {sessions.map((session) => {
+          {sessions.map(session => {
             const isPending = session.status === 'pending';
             const isActive = session.status === 'active';
             const busy = actingOn === session.id;
@@ -231,14 +287,22 @@ export default function DoubleDateMatcher({ onLaunchGroupVideo }: DoubleDateMatc
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div>
-                      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">Proposal {session.id.slice(0, 8)}</div>
-                      <h3 className="mt-1 text-xl font-semibold text-white">Two-couple meetup coordination</h3>
+                      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">
+                        Proposal {session.id.slice(0, 8)}
+                      </div>
+                      <h3 className="mt-1 text-xl font-semibold text-white">
+                        Two-couple meetup coordination
+                      </h3>
                       <p className="mt-2 text-sm text-slate-500">
                         Created {new Date(session.created_at).toLocaleString()}
                       </p>
                     </div>
                     <div className="flex flex-wrap items-center gap-3">
-                      <span className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${statusStyles[session.status]}`}>
+                      <span
+                        className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${
+                          statusStyles[session.status]
+                        }`}
+                      >
                         {session.status}
                       </span>
                       {isActive && (
@@ -260,7 +324,10 @@ export default function DoubleDateMatcher({ onLaunchGroupVideo }: DoubleDateMatc
 
                   <div className="flex flex-col gap-3 border-t border-slate-800 pt-4 md:flex-row md:items-center md:justify-between">
                     <div className="text-sm text-slate-400">
-                      Accepted match IDs: {session.accepted_match_ids.length ? session.accepted_match_ids.join(', ') : 'none yet'}
+                      Accepted match IDs:{' '}
+                      {session.accepted_match_ids.length
+                        ? session.accepted_match_ids.join(', ')
+                        : 'none yet'}
                     </div>
                     {isPending && (
                       <div className="flex flex-wrap gap-3">

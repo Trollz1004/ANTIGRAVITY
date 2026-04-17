@@ -1,28 +1,28 @@
-import { useState } from 'react'
-import { bestRate } from '../api'
+import { useState } from 'react';
+import { bestRate } from '../api';
 
 interface RateOption {
-  service: string
-  cost: number
+  service: string;
+  cost: number;
 }
 
 interface BestRateResult {
-  cheapest: RateOption
-  all_options: RateOption[]
+  cheapest: RateOption;
+  all_options: RateOption[];
 }
 
 export default function ShippingCalc() {
-  const [weightOz, setWeightOz] = useState('')
-  const [result, setResult] = useState<BestRateResult | null>(null)
+  const [weightOz, setWeightOz] = useState('');
+  const [result, setResult] = useState<BestRateResult | null>(null);
 
   const calculate = async () => {
-    const w = parseFloat(weightOz)
-    if (!w || w <= 0) return
+    const w = parseFloat(weightOz);
+    if (!w || w <= 0) return;
     try {
-      const data = await bestRate(w) as BestRateResult
-      setResult(data)
+      const data = (await bestRate(w)) as BestRateResult;
+      setResult(data);
     } catch {}
-  }
+  };
 
   return (
     <div>
@@ -37,8 +37,8 @@ export default function ShippingCalc() {
           <input
             type="number"
             value={weightOz}
-            onChange={e => setWeightOz(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && calculate()}
+            onChange={(e) => setWeightOz(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && calculate()}
             placeholder="16"
             className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 w-28 text-white outline-none focus:border-orange-500"
           />
@@ -99,5 +99,5 @@ export default function ShippingCalc() {
         </div>
       )}
     </div>
-  )
+  );
 }

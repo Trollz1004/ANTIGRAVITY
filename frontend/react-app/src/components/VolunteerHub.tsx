@@ -140,7 +140,7 @@ export default function VolunteerHub() {
       const data = await api.get<MySignup[]>('/volunteer/my-signups');
       setMySignups(data);
       // Populate signedUpIds from server state
-      setSignedUpIds(new Set(data.map((s) => s.opportunity_id)));
+      setSignedUpIds(new Set(data.map(s => s.opportunity_id)));
     } catch {
       setError('Failed to load your signups.');
     } finally {
@@ -166,14 +166,18 @@ export default function VolunteerHub() {
     setSigningUp(oppId);
     try {
       await api.post(`/volunteer/${oppId}/signup`);
-      setSignedUpIds((prev) => new Set(prev).add(oppId));
-      setOpportunities((prev) =>
-        prev.map((o) => (o.id === oppId ? { ...o, signup_count: o.signup_count + 1 } : o)),
+      setSignedUpIds(prev => new Set(prev).add(oppId));
+      setOpportunities(prev =>
+        prev.map(o =>
+          o.id === oppId ? { ...o, signup_count: o.signup_count + 1 } : o
+        )
       );
       // Refresh impact score after signup
       fetchImpact();
     } catch {
-      setError('Signup failed. You may have already signed up or there are no spots left.');
+      setError(
+        'Signup failed. You may have already signed up or there are no spots left.'
+      );
     } finally {
       setSigningUp(null);
     }
@@ -188,7 +192,9 @@ export default function VolunteerHub() {
         <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <span className="text-2xl">🤝</span> Volunteer Hub
         </h2>
-        <p className="text-xs text-gray-500 mt-0.5">Make a difference. Track your impact.</p>
+        <p className="text-xs text-gray-500 mt-0.5">
+          Make a difference. Track your impact.
+        </p>
       </div>
 
       {/* ── Impact Score Banner ──────────────────────────────────────────── */}
@@ -208,33 +214,58 @@ export default function VolunteerHub() {
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="glass rounded-lg p-3 text-center">
-                <div className="text-xl font-black text-white">{impact.total_signups}</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">Volunteers</div>
+                <div className="text-xl font-black text-white">
+                  {impact.total_signups}
+                </div>
+                <div className="text-[10px] text-gray-400 mt-0.5">
+                  Volunteers
+                </div>
               </div>
               <div className="glass rounded-lg p-3 text-center">
-                <div className="text-xl font-black text-emerald-400">{Math.round(impact.total_hours_committed)}</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">Hours Given</div>
+                <div className="text-xl font-black text-emerald-400">
+                  {Math.round(impact.total_hours_committed)}
+                </div>
+                <div className="text-[10px] text-gray-400 mt-0.5">
+                  Hours Given
+                </div>
               </div>
               <div className="glass rounded-lg p-3 text-center">
-                <div className="text-xl font-black text-purple-400">{impact.unique_organizations}</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">Organizations</div>
+                <div className="text-xl font-black text-purple-400">
+                  {impact.unique_organizations}
+                </div>
+                <div className="text-[10px] text-gray-400 mt-0.5">
+                  Organizations
+                </div>
               </div>
               <div className="glass rounded-lg p-3 text-center">
-                <div className="text-xl font-black text-amber-400">{impact.total_opportunities}</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">Opportunities</div>
+                <div className="text-xl font-black text-amber-400">
+                  {impact.total_opportunities}
+                </div>
+                <div className="text-[10px] text-gray-400 mt-0.5">
+                  Opportunities
+                </div>
               </div>
             </div>
 
             {/* Top organizations */}
             {impact.top_organizations.length > 0 && (
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold mb-2">Top Organizations</p>
+                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold mb-2">
+                  Top Organizations
+                </p>
                 <div className="space-y-1.5">
                   {impact.top_organizations.map((org, i) => (
-                    <div key={org.name} className="flex items-center justify-between glass rounded-lg px-3 py-2">
+                    <div
+                      key={org.name}
+                      className="flex items-center justify-between glass rounded-lg px-3 py-2"
+                    >
                       <div className="flex items-center gap-2">
-                        <span className="w-5 h-5 rounded bg-purple-600/20 text-purple-400 flex items-center justify-center text-[10px] font-bold">{i + 1}</span>
-                        <span className="text-sm text-white font-medium">{org.name}</span>
+                        <span className="w-5 h-5 rounded bg-purple-600/20 text-purple-400 flex items-center justify-center text-[10px] font-bold">
+                          {i + 1}
+                        </span>
+                        <span className="text-sm text-white font-medium">
+                          {org.name}
+                        </span>
                       </div>
                       <div className="flex items-center gap-3 text-[10px] text-gray-500">
                         <span>{org.signups} signups</span>
@@ -252,8 +283,12 @@ export default function VolunteerHub() {
               🌱
             </div>
             <div>
-              <p className="text-sm font-medium text-white">Start Volunteering</p>
-              <p className="text-xs text-gray-400 mt-0.5">Sign up for an opportunity to build community impact.</p>
+              <p className="text-sm font-medium text-white">
+                Start Volunteering
+              </p>
+              <p className="text-xs text-gray-400 mt-0.5">
+                Sign up for an opportunity to build community impact.
+              </p>
             </div>
           </div>
         )}
@@ -289,7 +324,10 @@ export default function VolunteerHub() {
       {error && (
         <div className="bg-red-900/30 border border-red-800/50 text-red-300 rounded-lg px-4 py-2.5 text-sm flex items-center justify-between">
           <span>{error}</span>
-          <button className="text-red-400 hover:text-red-200 text-xs ml-3 shrink-0" onClick={() => setError(null)}>
+          <button
+            className="text-red-400 hover:text-red-200 text-xs ml-3 shrink-0"
+            onClick={() => setError(null)}
+          >
             Dismiss
           </button>
         </div>
@@ -300,7 +338,7 @@ export default function VolunteerHub() {
         <>
           {loadingOpps ? (
             <div className="space-y-3">
-              {[1, 2, 3].map((i) => (
+              {[1, 2, 3].map(i => (
                 <div key={i} className="glass rounded-xl p-5 animate-pulse">
                   <div className="h-4 bg-gray-800 rounded w-2/3 mb-3" />
                   <div className="h-3 bg-gray-800 rounded w-full mb-2" />
@@ -311,16 +349,26 @@ export default function VolunteerHub() {
           ) : opportunities.length === 0 ? (
             <div className="text-center py-16 space-y-3">
               <p className="text-4xl">🌿</p>
-              <p className="text-gray-400">No volunteer opportunities right now.</p>
-              <p className="text-gray-600 text-sm">Check back soon — new ones are posted regularly.</p>
+              <p className="text-gray-400">
+                No volunteer opportunities right now.
+              </p>
+              <p className="text-gray-600 text-sm">
+                Check back soon — new ones are posted regularly.
+              </p>
             </div>
           ) : (
             <div className="space-y-3 stagger-children">
-              {opportunities.map((opp) => {
-                const isFull = opp.spots != null && opp.signup_count >= opp.spots;
+              {opportunities.map(opp => {
+                const isFull =
+                  opp.spots != null && opp.signup_count >= opp.spots;
                 const didSignup = signedUpIds.has(opp.id);
-                const isPast = opp.event_date ? new Date(opp.event_date) < new Date() : false;
-                const spotsLeft = opp.spots != null ? Math.max(0, opp.spots - opp.signup_count) : null;
+                const isPast = opp.event_date
+                  ? new Date(opp.event_date) < new Date()
+                  : false;
+                const spotsLeft =
+                  opp.spots != null
+                    ? Math.max(0, opp.spots - opp.signup_count)
+                    : null;
 
                 return (
                   <div
@@ -342,21 +390,38 @@ export default function VolunteerHub() {
                         <h3 className="font-semibold text-white group-hover:text-purple-300 transition-colors">
                           {opp.title}
                         </h3>
-                        <p className="text-sm text-gray-400 mt-1 line-clamp-2">{opp.description}</p>
+                        <p className="text-sm text-gray-400 mt-1 line-clamp-2">
+                          {opp.description}
+                        </p>
 
                         {/* Meta row */}
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-3 text-xs text-gray-500">
                           {opp.event_date && (
-                            <span className="flex items-center gap-1">📅 {formatDate(opp.event_date)}</span>
+                            <span className="flex items-center gap-1">
+                              📅 {formatDate(opp.event_date)}
+                            </span>
                           )}
                           {opp.location && (
-                            <span className="flex items-center gap-1">📍 {opp.location}</span>
+                            <span className="flex items-center gap-1">
+                              📍 {opp.location}
+                            </span>
                           )}
                           {opp.hours_estimate && (
-                            <span className="flex items-center gap-1">⏱ {opp.hours_estimate}h</span>
+                            <span className="flex items-center gap-1">
+                              ⏱ {opp.hours_estimate}h
+                            </span>
                           )}
-                          <span className={`flex items-center gap-1 ${spotsLeft != null && spotsLeft <= 3 && spotsLeft > 0 ? 'text-orange-400' : ''}`}>
-                            👥 {opp.signup_count}{opp.spots ? `/${opp.spots}` : ''} signed up
+                          <span
+                            className={`flex items-center gap-1 ${
+                              spotsLeft != null &&
+                              spotsLeft <= 3 &&
+                              spotsLeft > 0
+                                ? 'text-orange-400'
+                                : ''
+                            }`}
+                          >
+                            👥 {opp.signup_count}
+                            {opp.spots ? `/${opp.spots}` : ''} signed up
                           </span>
                         </div>
                       </div>
@@ -365,7 +430,9 @@ export default function VolunteerHub() {
                       <button
                         id={`volunteer-signup-${opp.id}`}
                         onClick={() => handleSignup(opp.id)}
-                        disabled={didSignup || isFull || isPast || signingUp === opp.id}
+                        disabled={
+                          didSignup || isFull || isPast || signingUp === opp.id
+                        }
                         className={`shrink-0 text-sm px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                           didSignup
                             ? 'bg-green-600/20 text-green-400 border border-green-600/30 cursor-default'
@@ -395,7 +462,10 @@ export default function VolunteerHub() {
                           <div
                             className="h-full rounded-full transition-all duration-500"
                             style={{
-                              width: `${Math.min((opp.signup_count / opp.spots) * 100, 100)}%`,
+                              width: `${Math.min(
+                                (opp.signup_count / opp.spots) * 100,
+                                100
+                              )}%`,
                               background: isFull
                                 ? 'rgb(239, 68, 68)'
                                 : 'linear-gradient(90deg, rgb(147, 51, 234), rgb(59, 130, 246))',
@@ -417,7 +487,7 @@ export default function VolunteerHub() {
         <>
           {loadingSignups ? (
             <div className="space-y-3">
-              {[1, 2].map((i) => (
+              {[1, 2].map(i => (
                 <div key={i} className="glass rounded-xl p-5 animate-pulse">
                   <div className="h-4 bg-gray-800 rounded w-2/3 mb-3" />
                   <div className="h-3 bg-gray-800 rounded w-1/2" />
@@ -427,7 +497,9 @@ export default function VolunteerHub() {
           ) : mySignups.length === 0 ? (
             <div className="text-center py-16 space-y-3">
               <p className="text-4xl">📋</p>
-              <p className="text-gray-400">You haven't signed up for anything yet.</p>
+              <p className="text-gray-400">
+                You haven't signed up for anything yet.
+              </p>
               <button
                 onClick={() => setActiveTab('discover')}
                 className="text-purple-400 hover:text-purple-300 text-sm transition-colors"
@@ -437,32 +509,47 @@ export default function VolunteerHub() {
             </div>
           ) : (
             <div className="space-y-3 stagger-children">
-              {mySignups.map((signup) => {
-                const isPast = signup.event_date ? new Date(signup.event_date) < new Date() : false;
+              {mySignups.map(signup => {
+                const isPast = signup.event_date
+                  ? new Date(signup.event_date) < new Date()
+                  : false;
 
                 return (
                   <div
                     key={signup.signup_id}
-                    className={`glass rounded-xl p-5 transition-all duration-300 ${isPast ? 'opacity-60' : ''}`}
+                    className={`glass rounded-xl p-5 transition-all duration-300 ${
+                      isPast ? 'opacity-60' : ''
+                    }`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-white">{signup.title}</h3>
+                          <h3 className="font-semibold text-white">
+                            {signup.title}
+                          </h3>
                           <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-600/15 text-purple-300 border border-purple-600/20">
-                            {CATEGORY_LABELS[signup.category] || signup.category}
+                            {CATEGORY_LABELS[signup.category] ||
+                              signup.category}
                           </span>
                         </div>
-                        <p className="text-xs text-emerald-400 font-medium">{signup.organization}</p>
+                        <p className="text-xs text-emerald-400 font-medium">
+                          {signup.organization}
+                        </p>
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-gray-500">
                           {signup.event_date && (
-                            <span className="flex items-center gap-1">📅 {formatDate(signup.event_date)}</span>
+                            <span className="flex items-center gap-1">
+                              📅 {formatDate(signup.event_date)}
+                            </span>
                           )}
                           {signup.location && (
-                            <span className="flex items-center gap-1">📍 {signup.location}</span>
+                            <span className="flex items-center gap-1">
+                              📍 {signup.location}
+                            </span>
                           )}
                           {signup.hours_estimate && (
-                            <span className="flex items-center gap-1">⏱ {signup.hours_estimate}h</span>
+                            <span className="flex items-center gap-1">
+                              ⏱ {signup.hours_estimate}h
+                            </span>
                           )}
                         </div>
                       </div>
@@ -479,7 +566,8 @@ export default function VolunteerHub() {
                     </div>
 
                     <p className="text-[10px] text-gray-600 mt-2">
-                      Signed up {new Date(signup.signed_up_at).toLocaleDateString()}
+                      Signed up{' '}
+                      {new Date(signup.signed_up_at).toLocaleDateString()}
                     </p>
                   </div>
                 );

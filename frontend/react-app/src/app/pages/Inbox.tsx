@@ -18,7 +18,8 @@ export function Inbox() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get<MatchData[]>('/matches')
+    api
+      .get<MatchData[]>('/matches')
       .then(setMatches)
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -31,7 +32,9 @@ export function Inbox() {
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-[1.4rem] border-4 border-[#111111] bg-[#111111] text-white">
             <MessageCircle size={26} className="animate-pulse" />
           </div>
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">Loading conversations</p>
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">
+            Loading conversations
+          </p>
         </div>
       </div>
     );
@@ -58,12 +61,14 @@ export function Inbox() {
           <div className="app-kicker mb-3">Messages</div>
           <h1 className="app-title">active conversations.</h1>
           <p className="app-subtitle mt-4">
-            {matches.length} {matches.length === 1 ? 'thread is' : 'threads are'} waiting on the next move.
+            {matches.length}{' '}
+            {matches.length === 1 ? 'thread is' : 'threads are'} waiting on the
+            next move.
           </p>
         </div>
 
         <div className="space-y-4 stagger-children">
-          {matches.map((match) => {
+          {matches.map(match => {
             const initial = match.display_name.charAt(0).toUpperCase();
             const hue = (match.display_name.charCodeAt(0) * 7) % 360;
             const bg = `hsl(${hue}, 50%, 32%)`;
@@ -78,7 +83,9 @@ export function Inbox() {
                     className="flex h-16 w-16 items-center justify-center rounded-[1.25rem] border-4 border-[#111111] bg-cover bg-center text-2xl font-black text-white/40"
                     style={{
                       backgroundColor: bg,
-                      backgroundImage: match.photos[0] ? `url(${match.photos[0]})` : undefined,
+                      backgroundImage: match.photos[0]
+                        ? `url(${match.photos[0]})`
+                        : undefined,
                     }}
                   >
                     {!match.photos[0] && initial}
@@ -87,10 +94,14 @@ export function Inbox() {
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <h3 className="truncate text-lg font-black tracking-[-0.04em] text-[#111111]">{match.display_name}</h3>
+                  <h3 className="truncate text-lg font-black tracking-[-0.04em] text-[#111111]">
+                    {match.display_name}
+                  </h3>
                   <p className="mt-1 truncate text-sm font-medium text-[#5c594f]">
                     {match.last_message_at
-                      ? `Last message ${new Date(match.last_message_at).toLocaleDateString()}`
+                      ? `Last message ${new Date(
+                          match.last_message_at
+                        ).toLocaleDateString()}`
                       : 'No messages yet. Open the thread and start it.'}
                   </p>
                 </div>

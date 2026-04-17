@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import './index.css'
-import PriceCalculator from './components/PriceCalculator'
-import ListingsTable from './components/ListingsTable'
-import ShippingCalc from './components/ShippingCalc'
-import CsvImport from './components/CsvImport'
+import { useState } from 'react';
+import './index.css';
+import PriceCalculator from './components/PriceCalculator';
+import ListingsTable from './components/ListingsTable';
+import ShippingCalc from './components/ShippingCalc';
+import CsvImport from './components/CsvImport';
 
-const tabs = ['CSV Import', 'Price Calculator', 'Listings', 'Shipping'] as const
-type Tab = typeof tabs[number]
+const tabs = ['CSV Import', 'Price Calculator', 'Listings', 'Shipping'] as const;
+type Tab = (typeof tabs)[number];
 
 function App() {
-  const [tab, setTab] = useState<Tab>('CSV Import')
+  const [tab, setTab] = useState<Tab>('CSV Import');
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
@@ -27,14 +27,12 @@ function App() {
 
       {/* Tabs */}
       <nav className="border-b border-white/10 px-6 flex gap-1">
-        {tabs.map(t => (
+        {tabs.map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
             className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors cursor-pointer ${
-              tab === t
-                ? 'border-orange-500 text-orange-400'
-                : 'border-transparent text-white/50 hover:text-white/80'
+              tab === t ? 'border-orange-500 text-orange-400' : 'border-transparent text-white/50 hover:text-white/80'
             }`}
           >
             {t}
@@ -50,7 +48,7 @@ function App() {
         {tab === 'Shipping' && <ShippingCalc />}
       </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

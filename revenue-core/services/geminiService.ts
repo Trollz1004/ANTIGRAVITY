@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI } from '@google/genai';
 
 const STORAGE_KEY = 'revenue-core-config';
 
@@ -25,18 +25,18 @@ Protocol: Profit First. Scale or die. Be proactive, suggest optimizations, and d
 // Complex reasoning chat with thinking budget
 export const chatWithThinking = async (prompt: string, history: any[] = []) => {
   const ai = new GoogleGenAI({ apiKey: getApiKey() });
-  const formattedHistory = history.map(m => ({
+  const formattedHistory = history.map((m) => ({
     role: m.role,
-    parts: [{ text: m.text }]
+    parts: [{ text: m.text }],
   }));
-  
+
   const response = await ai.models.generateContent({
     model: 'gemini-3-pro-preview',
     contents: [...formattedHistory, { role: 'user', parts: [{ text: prompt }] }],
     config: {
       thinkingConfig: { thinkingBudget: 32768 },
-      systemInstruction: SYSTEM_INSTRUCTION
-    }
+      systemInstruction: SYSTEM_INSTRUCTION,
+    },
   });
   return response.text;
 };
@@ -47,7 +47,7 @@ export const generateContent = async (prompt: string, platform?: string) => {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
     contents: prompt,
-    config: { systemInstruction: SYSTEM_INSTRUCTION }
+    config: { systemInstruction: SYSTEM_INSTRUCTION },
   });
   return response.text;
 };
@@ -56,17 +56,17 @@ export const generateContent = async (prompt: string, platform?: string) => {
 export const searchMaps = async (query: string) => {
   const ai = new GoogleGenAI({ apiKey: getApiKey() });
   const response = await ai.models.generateContent({
-    model: "gemini-flash-lite-latest",
+    model: 'gemini-flash-lite-latest',
     contents: query,
     config: {
       tools: [{ googleMaps: {} }],
-      systemInstruction: SYSTEM_INSTRUCTION
-    }
+      systemInstruction: SYSTEM_INSTRUCTION,
+    },
   });
 
   return {
     text: response.text,
-    chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
+    chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks || [],
   };
 };
 
@@ -78,10 +78,10 @@ export const transcribeAudio = async (base64Audio: string) => {
     contents: {
       parts: [
         { inlineData: { data: base64Audio, mimeType: 'audio/webm' } },
-        { text: "CEO Voice Command: Transcribe this for revenue optimization." }
-      ]
+        { text: 'CEO Voice Command: Transcribe this for revenue optimization.' },
+      ],
     },
-    config: { systemInstruction: SYSTEM_INSTRUCTION }
+    config: { systemInstruction: SYSTEM_INSTRUCTION },
   });
   return response.text;
 };
@@ -91,15 +91,12 @@ export const editImage = async (prompt: string, base64Image: string) => {
   const ai = new GoogleGenAI({ apiKey: getApiKey() });
   // Clean base64 data
   const data = base64Image.includes('base64,') ? base64Image.split('base64,')[1] : base64Image;
-  
+
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash-image',
     contents: {
-      parts: [
-        { inlineData: { data, mimeType: 'image/png' } },
-        { text: prompt }
-      ]
-    }
+      parts: [{ inlineData: { data, mimeType: 'image/png' } }, { text: prompt }],
+    },
   });
 
   // Extract the generated image from response parts
@@ -128,16 +125,18 @@ export const generateVeoVideo = async (prompt: string, imageBase64?: string) => 
     let operation = await ai.models.generateVideos({
       model: 'veo-3.1-fast-generate-preview',
       prompt: `[CEO COMMAND]: ${prompt}`,
-      image: data ? {
-        imageBytes: data,
-        mimeType: 'image/png',
-      } : undefined,
-      config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' }
+      image: data
+        ? {
+            imageBytes: data,
+            mimeType: 'image/png',
+          }
+        : undefined,
+      config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' },
     });
-    
+
     // Polling for video generation completion
     while (!operation.done) {
-      await new Promise(resolve => setTimeout(resolve, 10000));
+      await new Promise((resolve) => setTimeout(resolve, 10000));
       operation = await ai.operations.getVideosOperation({ operation: operation });
     }
 
@@ -149,10 +148,10 @@ export const generateVeoVideo = async (prompt: string, imageBase64?: string) => 
       return URL.createObjectURL(blob);
     }
   } catch (error: any) {
-    if (error.message?.includes("Requested entity was not found.")) {
-       // Reset key selection on error
-       // @ts-ignore
-       await window.aistudio.openSelectKey();
+    if (error.message?.includes('Requested entity was not found.')) {
+      // Reset key selection on error
+      // @ts-ignore
+      await window.aistudio.openSelectKey();
     }
     throw error;
   }

@@ -24,7 +24,11 @@ export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className={`p-6 rounded-3xl border ${isDarkMode ? 'bg-slate-800/40 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
+        <div
+          className={`p-6 rounded-3xl border ${
+            isDarkMode ? 'bg-slate-800/40 border-slate-700' : 'bg-white border-slate-200 shadow-sm'
+          }`}
+        >
           <h3 className="text-xl font-bold flex items-center gap-2 mb-4">
             <Lock className="w-5 h-5 text-blue-500" />
             What Stays Private
@@ -33,7 +37,11 @@ export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {
             {guardrails.map((item) => (
               <div
                 key={item}
-                className={`p-4 rounded-2xl border ${isDarkMode ? 'bg-slate-950/50 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'}`}
+                className={`p-4 rounded-2xl border ${
+                  isDarkMode
+                    ? 'bg-slate-950/50 border-slate-800 text-slate-300'
+                    : 'bg-slate-50 border-slate-200 text-slate-700'
+                }`}
               >
                 {item}
               </div>
@@ -41,7 +49,11 @@ export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {
           </div>
         </div>
 
-        <div className={`p-6 rounded-3xl border ${isDarkMode ? 'bg-slate-800/40 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
+        <div
+          className={`p-6 rounded-3xl border ${
+            isDarkMode ? 'bg-slate-800/40 border-slate-700' : 'bg-white border-slate-200 shadow-sm'
+          }`}
+        >
           <h3 className="text-xl font-bold flex items-center gap-2 mb-4">
             <Globe className="w-5 h-5 text-blue-500" />
             Verified Public Links
@@ -53,13 +65,19 @@ export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`p-4 rounded-xl border flex flex-col transition-all hover:-translate-y-1 ${isDarkMode ? 'bg-slate-950/50 border-slate-800 hover:border-blue-500' : 'bg-slate-50 border-slate-200 hover:border-blue-400'}`}
+                className={`p-4 rounded-xl border flex flex-col transition-all hover:-translate-y-1 ${
+                  isDarkMode
+                    ? 'bg-slate-950/50 border-slate-800 hover:border-blue-500'
+                    : 'bg-slate-50 border-slate-200 hover:border-blue-400'
+                }`}
               >
                 <span className="font-bold flex items-center justify-between">
                   {link.name}
                   <ExternalLink className="w-3 h-3 opacity-50" />
                 </span>
-                <span className={`text-xs mt-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{link.status}</span>
+                <span className={`text-xs mt-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                  {link.status}
+                </span>
               </a>
             ))}
           </div>

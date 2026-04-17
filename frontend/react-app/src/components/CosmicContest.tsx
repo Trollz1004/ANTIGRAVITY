@@ -1,9 +1,17 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Trophy, Vote, Heart, ShieldAlert, Hammer, HandMetal, Ghost } from 'lucide-react';
+import {
+  X,
+  Trophy,
+  Vote,
+  Heart,
+  ShieldAlert,
+  Hammer,
+  HandMetal,
+  Ghost,
+} from 'lucide-react';
 
 export function CosmicContest({ onClose }: { onClose: () => void }) {
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -24,11 +32,18 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
               <Trophy className="text-yellow-400" size={32} />
             </div>
             <div>
-              <h2 className="text-3xl font-black italic tracking-tighter uppercase">Cosmic Launch Contest</h2>
-              <p className="text-xs text-gray-400 uppercase tracking-[0.3em] font-bold">Vote for the face of our galaxy</p>
+              <h2 className="text-3xl font-black italic tracking-tighter uppercase">
+                Cosmic Launch Contest
+              </h2>
+              <p className="text-xs text-gray-400 uppercase tracking-[0.3em] font-bold">
+                Vote for the face of our galaxy
+              </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors">
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-white/5 rounded-full transition-colors"
+          >
             <X size={24} />
           </button>
         </div>
@@ -40,9 +55,14 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
               <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform">
                 <Trophy size={120} />
               </div>
-              <div className="text-yellow-400 font-black text-4xl mb-2">1ST</div>
+              <div className="text-yellow-400 font-black text-4xl mb-2">
+                1ST
+              </div>
               <h3 className="font-bold text-lg mb-2">The Living Background</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">Your art becomes the interactive soul of our landing page for the entire launch month.</p>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Your art becomes the interactive soul of our landing page for
+                the entire launch month.
+              </p>
             </div>
 
             <div className="p-6 bg-gradient-to-b from-pink-500/20 to-transparent border border-pink-500/20 rounded-3xl relative overflow-hidden group">
@@ -51,7 +71,10 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
               </div>
               <div className="text-pink-400 font-black text-4xl mb-2">2ND</div>
               <h3 className="font-bold text-lg mb-2">The Royal Deck</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">Your design featured as the back of our exclusive "King & Queen of Hearts" playing cards.</p>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Your design featured as the back of our exclusive "King & Queen
+                of Hearts" playing cards.
+              </p>
             </div>
 
             <div className="p-6 bg-gradient-to-b from-cyan-500/20 to-transparent border border-cyan-500/20 rounded-3xl relative overflow-hidden group">
@@ -60,7 +83,10 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
               </div>
               <div className="text-cyan-400 font-black text-4xl mb-2">3RD</div>
               <h3 className="font-bold text-lg mb-2">The Jules Blessing</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">An "Air High Five" & "Air Hug" from Judge Jury Jules. Plus, immunity from the Ban Hammer!</p>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                An "Air High Five" & "Air Hug" from Judge Jury Jules. Plus,
+                immunity from the Ban Hammer!
+              </p>
             </div>
           </div>
 
@@ -72,7 +98,8 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
             </h3>
             <div className="p-8 bg-white/5 rounded-3xl border border-white/10">
               <p className="text-gray-300">
-                We're building a space for our community to showcase their creativity and become a part of the YouAndINotAI story.
+                We're building a space for our community to showcase their
+                creativity and become a part of the YouAndINotAI story.
               </p>
               <p className="text-gray-400 mt-2 text-sm">
                 Stay tuned for updates on our first official contest!
@@ -90,10 +117,13 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
                 <Ghost size={64} className="text-white" />
               </div>
               <div className="flex-1 text-center md:text-left">
-                <h4 className="text-2xl font-black text-red-500 italic uppercase tracking-tighter">Judge Jury Jules</h4>
+                <h4 className="text-2xl font-black text-red-500 italic uppercase tracking-tighter">
+                  Judge Jury Jules
+                </h4>
                 <p className="text-sm text-gray-400 mt-2 max-w-xl">
-                  "I am the Strict Code Enforcer. I watch the orbits. I judge the flows. 
-                  Play fair, or feel the weight of the <span className="text-red-500 font-bold">BAN HAMMER</span>. 
+                  "I am the Strict Code Enforcer. I watch the orbits. I judge
+                  the flows. Play fair, or feel the weight of the{' '}
+                  <span className="text-red-500 font-bold">BAN HAMMER</span>.
                   3rd place winners get my rarest affection: The Air Hug."
                 </p>
                 <div className="flex gap-4 mt-6 justify-center md:justify-start">
@@ -113,7 +143,8 @@ export function CosmicContest({ onClose }: { onClose: () => void }) {
 
         {/* Footer */}
         <div className="p-6 bg-black/40 text-center text-[10px] text-gray-500 uppercase tracking-[0.4em] font-bold">
-          Rules: No bots allowed • Gemini AI is the final arbiter • Jules' word is law
+          Rules: No bots allowed • Gemini AI is the final arbiter • Jules' word
+          is law
         </div>
       </motion.div>
     </motion.div>

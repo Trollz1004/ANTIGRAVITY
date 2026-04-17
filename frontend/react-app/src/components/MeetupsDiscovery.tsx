@@ -62,7 +62,9 @@ function formatEventDate(iso: string): string {
 
 function toLocalDatetimeString(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(
+    d.getHours()
+  )}:${pad(d.getMinutes())}`;
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -111,7 +113,9 @@ export default function MeetupsDiscovery() {
   }, []);
 
   // Initial load
-  useEffect(() => { fetchEvents(); }, [fetchEvents]);
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   // Client-side geo filtering when coords or radius change
   useEffect(() => {
@@ -156,12 +160,16 @@ export default function MeetupsDiscovery() {
     setRsvpLoading(eventId);
     try {
       await api.post(`/events/${eventId}/rsvp`);
-      setRsvpSet((prev) => new Set(prev).add(eventId));
-      setAllEvents((prev) =>
-        prev.map((e) => (e.id === eventId ? { ...e, attendee_count: e.attendee_count + 1 } : e)),
+      setRsvpSet(prev => new Set(prev).add(eventId));
+      setAllEvents(prev =>
+        prev.map(e =>
+          e.id === eventId ? { ...e, attendee_count: e.attendee_count + 1 } : e
+        )
       );
     } catch {
-      setError('RSVP failed. You may have already RSVP\'d or the event is full.');
+      setError(
+        "RSVP failed. You may have already RSVP'd or the event is full."
+      );
     } finally {
       setRsvpLoading(null);
     }
@@ -181,7 +189,7 @@ export default function MeetupsDiscovery() {
         max_attendees: form.max_attendees || null,
         category: form.category,
       });
-      setAllEvents((prev) => [created, ...prev]);
+      setAllEvents(prev => [created, ...prev]);
       setShowCreate(false);
       setForm({
         title: '',
@@ -198,8 +206,10 @@ export default function MeetupsDiscovery() {
     }
   };
 
-  const updateForm = (field: keyof CreateEventPayload, value: string | number) =>
-    setForm((prev) => ({ ...prev, [field]: value }));
+  const updateForm = (
+    field: keyof CreateEventPayload,
+    value: string | number
+  ) => setForm(prev => ({ ...prev, [field]: value }));
 
   // ── Render ───────────────────────────────────────────────────────────────
 
@@ -211,7 +221,9 @@ export default function MeetupsDiscovery() {
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <span className="text-2xl">📍</span> Nearby Meetups
           </h2>
-          <p className="text-xs text-gray-500 mt-0.5">Find people near you doing good</p>
+          <p className="text-xs text-gray-500 mt-0.5">
+            Find people near you doing good
+          </p>
         </div>
         <button
           id="meetups-create-btn"
@@ -227,8 +239,12 @@ export default function MeetupsDiscovery() {
         {!coords ? (
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-300">Enable location to find meetups nearby</p>
-              <p className="text-xs text-gray-500 mt-0.5">GPS is opt-in. Never stored or tracked.</p>
+              <p className="text-sm text-gray-300">
+                Enable location to find meetups nearby
+              </p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                GPS is opt-in. Never stored or tracked.
+              </p>
             </div>
             <button
               id="meetups-enable-gps"
@@ -263,7 +279,7 @@ export default function MeetupsDiscovery() {
             <div className="flex items-center gap-2">
               <span className="text-xs text-gray-500">Radius:</span>
               <div className="flex bg-gray-800 rounded-lg p-0.5 gap-0.5">
-                {RADIUS_OPTIONS.map((r) => (
+                {RADIUS_OPTIONS.map(r => (
                   <button
                     key={r}
                     id={`meetups-radius-${r}`}
@@ -278,7 +294,9 @@ export default function MeetupsDiscovery() {
                   </button>
                 ))}
               </div>
-              <span className="text-[10px] text-gray-600 ml-1">(geo filtering coming soon)</span>
+              <span className="text-[10px] text-gray-600 ml-1">
+                (geo filtering coming soon)
+              </span>
             </div>
           </div>
         )}
@@ -288,7 +306,10 @@ export default function MeetupsDiscovery() {
       {error && (
         <div className="bg-red-900/30 border border-red-800/50 text-red-300 rounded-lg px-4 py-2.5 text-sm flex items-center justify-between">
           <span>{error}</span>
-          <button className="text-red-400 hover:text-red-200 text-xs ml-3 shrink-0" onClick={() => setError(null)}>
+          <button
+            className="text-red-400 hover:text-red-200 text-xs ml-3 shrink-0"
+            onClick={() => setError(null)}
+          >
             Dismiss
           </button>
         </div>
@@ -297,7 +318,7 @@ export default function MeetupsDiscovery() {
       {/* Event list */}
       {loading ? (
         <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
+          {[1, 2, 3].map(i => (
             <div key={i} className="glass rounded-xl p-5 animate-pulse">
               <div className="h-4 bg-gray-800 rounded w-2/3 mb-3" />
               <div className="h-3 bg-gray-800 rounded w-1/2 mb-2" />
@@ -308,13 +329,18 @@ export default function MeetupsDiscovery() {
       ) : filteredEvents.length === 0 ? (
         <div className="text-center py-16 space-y-3">
           <p className="text-4xl">🌏</p>
-          <p className="text-gray-400">No meetups found{coords ? ' in this area' : ''}.</p>
-          <p className="text-gray-600 text-sm">Be the first to organize something!</p>
+          <p className="text-gray-400">
+            No meetups found{coords ? ' in this area' : ''}.
+          </p>
+          <p className="text-gray-600 text-sm">
+            Be the first to organize something!
+          </p>
         </div>
       ) : (
         <div className="space-y-3 stagger-children">
-          {filteredEvents.map((ev) => {
-            const isFull = ev.max_attendees != null && ev.attendee_count >= ev.max_attendees;
+          {filteredEvents.map(ev => {
+            const isFull =
+              ev.max_attendees != null && ev.attendee_count >= ev.max_attendees;
             const didRsvp = rsvpSet.has(ev.id);
             const isPast = new Date(ev.event_date) < new Date();
 
@@ -328,7 +354,9 @@ export default function MeetupsDiscovery() {
                     <h3 className="font-semibold text-white truncate group-hover:text-purple-300 transition-colors">
                       {ev.title}
                     </h3>
-                    <p className="text-sm text-gray-400 mt-1 line-clamp-2">{ev.description}</p>
+                    <p className="text-sm text-gray-400 mt-1 line-clamp-2">
+                      {ev.description}
+                    </p>
 
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-3 text-xs text-gray-500">
                       <span className="flex items-center gap-1">
@@ -340,7 +368,8 @@ export default function MeetupsDiscovery() {
                         </span>
                       )}
                       <span className="flex items-center gap-1">
-                        👥 {ev.attendee_count}{ev.max_attendees ? `/${ev.max_attendees}` : ''} going
+                        👥 {ev.attendee_count}
+                        {ev.max_attendees ? `/${ev.max_attendees}` : ''} going
                       </span>
                     </div>
                   </div>
@@ -349,7 +378,9 @@ export default function MeetupsDiscovery() {
                   <button
                     id={`meetup-rsvp-${ev.id}`}
                     onClick={() => handleRsvp(ev.id)}
-                    disabled={didRsvp || isFull || isPast || rsvpLoading === ev.id}
+                    disabled={
+                      didRsvp || isFull || isPast || rsvpLoading === ev.id
+                    }
                     className={`shrink-0 text-sm px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                       didRsvp
                         ? 'bg-green-600/20 text-green-400 border border-green-600/30 cursor-default'
@@ -379,7 +410,10 @@ export default function MeetupsDiscovery() {
                       <div
                         className="h-full rounded-full transition-all duration-500"
                         style={{
-                          width: `${Math.min((ev.attendee_count / ev.max_attendees) * 100, 100)}%`,
+                          width: `${Math.min(
+                            (ev.attendee_count / ev.max_attendees) * 100,
+                            100
+                          )}%`,
                           background: isFull
                             ? 'rgb(239, 68, 68)'
                             : 'linear-gradient(90deg, rgb(147, 51, 234), rgb(168, 85, 247))',
@@ -404,7 +438,7 @@ export default function MeetupsDiscovery() {
 
           <div
             className="relative glass-strong rounded-2xl p-6 w-full max-w-md space-y-4 animate-scale-in"
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-white">Create a Meetup</h3>
@@ -417,11 +451,13 @@ export default function MeetupsDiscovery() {
             </div>
 
             <div>
-              <label className="block text-xs text-gray-400 mb-1">Title *</label>
+              <label className="block text-xs text-gray-400 mb-1">
+                Title *
+              </label>
               <input
                 id="meetup-create-title"
                 value={form.title}
-                onChange={(e) => updateForm('title', e.target.value)}
+                onChange={e => updateForm('title', e.target.value)}
                 placeholder="Saturday morning park cleanup"
                 maxLength={200}
                 className="w-full bg-gray-900 text-white placeholder-gray-600 rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-purple-500 transition-colors"
@@ -429,11 +465,13 @@ export default function MeetupsDiscovery() {
             </div>
 
             <div>
-              <label className="block text-xs text-gray-400 mb-1">Description *</label>
+              <label className="block text-xs text-gray-400 mb-1">
+                Description *
+              </label>
               <textarea
                 id="meetup-create-desc"
                 value={form.description}
-                onChange={(e) => updateForm('description', e.target.value)}
+                onChange={e => updateForm('description', e.target.value)}
                 placeholder="What's the plan?"
                 rows={3}
                 maxLength={5000}
@@ -442,11 +480,13 @@ export default function MeetupsDiscovery() {
             </div>
 
             <div>
-              <label className="block text-xs text-gray-400 mb-1">Location</label>
+              <label className="block text-xs text-gray-400 mb-1">
+                Location
+              </label>
               <input
                 id="meetup-create-location"
                 value={form.location}
-                onChange={(e) => updateForm('location', e.target.value)}
+                onChange={e => updateForm('location', e.target.value)}
                 placeholder="Lake Eola Park, Orlando FL"
                 maxLength={300}
                 className="w-full bg-gray-900 text-white placeholder-gray-600 rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-purple-500 transition-colors"
@@ -455,24 +495,30 @@ export default function MeetupsDiscovery() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Date & Time</label>
+                <label className="block text-xs text-gray-400 mb-1">
+                  Date & Time
+                </label>
                 <input
                   id="meetup-create-date"
                   type="datetime-local"
                   value={form.event_date}
-                  onChange={(e) => updateForm('event_date', e.target.value)}
+                  onChange={e => updateForm('event_date', e.target.value)}
                   className="w-full bg-gray-900 text-white rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-purple-500 transition-colors [color-scheme:dark]"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Max Attendees</label>
+                <label className="block text-xs text-gray-400 mb-1">
+                  Max Attendees
+                </label>
                 <input
                   id="meetup-create-max"
                   type="number"
                   min={1}
                   max={500}
                   value={form.max_attendees}
-                  onChange={(e) => updateForm('max_attendees', Number(e.target.value))}
+                  onChange={e =>
+                    updateForm('max_attendees', Number(e.target.value))
+                  }
                   className="w-full bg-gray-900 text-white rounded-lg px-3 py-2.5 text-sm outline-none border border-gray-800 focus:border-purple-500 transition-colors"
                 />
               </div>
@@ -488,7 +534,9 @@ export default function MeetupsDiscovery() {
               <button
                 id="meetup-create-submit"
                 onClick={handleCreate}
-                disabled={!form.title.trim() || !form.description.trim() || creating}
+                disabled={
+                  !form.title.trim() || !form.description.trim() || creating
+                }
                 className="bg-purple-600 hover:bg-purple-500 disabled:opacity-40 disabled:hover:bg-purple-600 text-white text-sm px-5 py-2 rounded-lg font-medium transition-all duration-200 hover:shadow-lg hover:shadow-purple-600/20 flex items-center gap-2"
               >
                 {creating && (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { X, Sparkles, Send, Loader2, Heart, Stars } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI } from '@google/genai';
 import { useGameStore } from '../store/useGameStore';
 
 interface GeminiMatchmakerProps {
@@ -11,12 +11,17 @@ interface GeminiMatchmakerProps {
 
 export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<{ role: 'user' | 'ai'; text: string }[]>([
-    { role: 'ai', text: "Welcome to the Cosmic Matchmaker. I am Gemini, your celestial guide. Tell me, what are you seeking in this vast universe?" }
+  const [messages, setMessages] = useState<
+    { role: 'user' | 'ai'; text: string }[]
+  >([
+    {
+      role: 'ai',
+      text: 'Welcome to the Cosmic Matchmaker. I am Gemini, your celestial guide. Tell me, what are you seeking in this vast universe?',
+    },
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const [compatibility, setCompatibility] = useState<number | null>(null);
-  const myColor = useGameStore((state) => state.myColor);
+  const myColor = useGameStore(state => state.myColor);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -34,9 +39,14 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: 'PROXY', httpOptions: { baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev' } });
-      const model = "gemini-3-flash-preview";
-      
+      const ai = new GoogleGenAI({
+        apiKey: 'PROXY',
+        httpOptions: {
+          baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev',
+        },
+      });
+      const model = 'gemini-3-flash-preview';
+
       const systemInstruction = `You are the "Cosmic Matchmaker" for the dating app "youandinotai.com". 
       Your personality is ethereal, wise, slightly mysterious, and romantic. 
       You use space metaphors (galaxies, stars, nebulae, gravity, orbits) to give dating advice or analyze the user's romantic prospects.
@@ -45,24 +55,38 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
 
       const response = await ai.models.generateContent({
         model,
-        contents: [...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.text }] })), { role: 'user', parts: [{ text: userMessage }] }],
+        contents: [
+          ...messages.map(m => ({
+            role: m.role === 'user' ? 'user' : 'model',
+            parts: [{ text: m.text }],
+          })),
+          { role: 'user', parts: [{ text: userMessage }] },
+        ],
         config: {
           systemInstruction,
           temperature: 0.8,
         },
       });
 
-      const aiText = response.text || "The stars are silent for a moment. Try again, traveler.";
+      const aiText =
+        response.text ||
+        'The stars are silent for a moment. Try again, traveler.';
       setMessages(prev => [...prev, { role: 'ai', text: aiText }]);
       const score = Math.floor(Math.random() * 20) + 80;
       setCompatibility(score);
-      
+
       if (score >= 95 && onMatch) {
         onMatch(score);
       }
     } catch (error) {
-      console.error("Gemini Error:", error);
-      setMessages(prev => [...prev, { role: 'ai', text: "A solar flare has interrupted our connection. Please try again when the orbits align." }]);
+      console.error('Gemini Error:', error);
+      setMessages(prev => [
+        ...prev,
+        {
+          role: 'ai',
+          text: 'A solar flare has interrupted our connection. Please try again when the orbits align.',
+        },
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -88,22 +112,30 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
               <Sparkles className="text-pink-400" size={20} />
             </div>
             <div>
-              <h2 className="font-bold text-lg leading-none">Cosmic Matchmaker</h2>
-              <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Powered by Gemini AI</p>
+              <h2 className="font-bold text-lg leading-none">
+                Cosmic Matchmaker
+              </h2>
+              <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">
+                Powered by Gemini AI
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-4">
             {compatibility && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex flex-col items-end"
               >
-                <div className="text-[10px] text-pink-400 font-bold uppercase tracking-tighter">Compatibility</div>
-                <div className="text-xl font-black text-white leading-none">{compatibility}%</div>
+                <div className="text-[10px] text-pink-400 font-bold uppercase tracking-tighter">
+                  Compatibility
+                </div>
+                <div className="text-xl font-black text-white leading-none">
+                  {compatibility}%
+                </div>
               </motion.div>
             )}
-            <button 
+            <button
               onClick={onClose}
               className="p-2 hover:bg-white/5 rounded-full transition-colors"
             >
@@ -113,7 +145,7 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
         </div>
 
         {/* Chat Area */}
-        <div 
+        <div
           ref={scrollRef}
           className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-hide"
         >
@@ -122,14 +154,20 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
               initial={{ opacity: 0, x: msg.role === 'user' ? 20 : -20 }}
               animate={{ opacity: 1, x: 0 }}
               key={i}
-              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${
+                msg.role === 'user' ? 'justify-end' : 'justify-start'
+              }`}
             >
-              <div className={`max-w-[80%] p-4 rounded-2xl ${
-                msg.role === 'user' 
-                  ? 'bg-indigo-600 text-white rounded-tr-none' 
-                  : 'bg-white/5 text-gray-200 border border-white/5 rounded-tl-none'
-              }`}>
-                <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+              <div
+                className={`max-w-[80%] p-4 rounded-2xl ${
+                  msg.role === 'user'
+                    ? 'bg-indigo-600 text-white rounded-tr-none'
+                    : 'bg-white/5 text-gray-200 border border-white/5 rounded-tl-none'
+                }`}
+              >
+                <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                  {msg.text}
+                </p>
               </div>
             </motion.div>
           ))}
@@ -148,8 +186,8 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
             <input
               type="text"
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSend()}
               placeholder="Ask the stars..."
               className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-pink-500/50 transition-colors pr-12"
             />
@@ -162,7 +200,10 @@ export function GeminiMatchmaker({ onClose, onMatch }: GeminiMatchmakerProps) {
             </button>
           </div>
           <p className="text-[9px] text-center text-gray-500 mt-4 uppercase tracking-widest">
-            Your aura is currently <span style={{ color: myColor || '#fff' }}>{myColor || 'calculating...'}</span>
+            Your aura is currently{' '}
+            <span style={{ color: myColor || '#fff' }}>
+              {myColor || 'calculating...'}
+            </span>
           </p>
         </div>
       </motion.div>

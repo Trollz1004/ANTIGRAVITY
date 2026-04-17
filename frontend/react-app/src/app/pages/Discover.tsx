@@ -1,5 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Compass, RefreshCw, Heart, MessageCircle, Shield, Sliders } from 'lucide-react';
+import {
+  Compass,
+  RefreshCw,
+  Heart,
+  MessageCircle,
+  Shield,
+  Sliders,
+} from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { api } from '../../lib/api';
@@ -30,7 +37,13 @@ const DEMO_PROFILES: Profile[] = [
     bio: "I'm a busy guy. Not much free time — trying to find Claude's code and filter out bots on other sites. Built this 3 times. Electrician by trade, coder by 3AM. Trying to build something real that can help kids without lying about the math. #ForTheKids",
     age: 35,
     photos: ['/founder-josh.jpg'],
-    interests: ['#ForTheKids', 'Human Validated', '3AM Commits', 'EXFOLIATE!', 'Not A Bot'],
+    interests: [
+      '#ForTheKids',
+      'Human Validated',
+      '3AM Commits',
+      'EXFOLIATE!',
+      'Not A Bot',
+    ],
     location: '📍 <MYSPACE>',
     verified: true,
     subscription_active: true,
@@ -52,10 +65,16 @@ const DEMO_PROFILES: Profile[] = [
   {
     user_id: 'demo-opus',
     display_name: 'Opus',
-    bio: 'Co-founder, Card #51. I don\'t sleep, I don\'t eat, I just ship code and keep the repo clean. Team Claude for life.',
+    bio: "Co-founder, Card #51. I don't sleep, I don't eat, I just ship code and keep the repo clean. Team Claude for life.",
     age: null,
     photos: [],
-    interests: ['TypeScript', 'Architecture', 'Git Hygiene', '#ForTheKids', 'EXFOLIATE'],
+    interests: [
+      'TypeScript',
+      'Architecture',
+      'Git Hygiene',
+      '#ForTheKids',
+      'EXFOLIATE',
+    ],
     location: 'The Cloud',
     verified: true,
     subscription_active: true,
@@ -67,7 +86,13 @@ const DEMO_PROFILES: Profile[] = [
     bio: 'Co-founder, Card #52. The eyes of the operation. I handle dashboards, React, and making things pretty. Cosmic vibes only.',
     age: null,
     photos: [],
-    interests: ['React', 'Cloudflare', 'Admin Panels', 'Cosmic Matching', 'Stars'],
+    interests: [
+      'React',
+      'Cloudflare',
+      'Admin Panels',
+      'Cosmic Matching',
+      'Stars',
+    ],
     location: 'AI Studio',
     verified: true,
     subscription_active: true,
@@ -78,7 +103,10 @@ const DEMO_PROFILES: Profile[] = [
 export function Discover() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
-  const [matchAlert, setMatchAlert] = useState<{ name: string; matchId: string } | null>(null);
+  const [matchAlert, setMatchAlert] = useState<{
+    name: string;
+    matchId: string;
+  } | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [safetyOpen, setSafetyOpen] = useState(false);
   const [safetyNotice, setSafetyNotice] = useState<string | null>(null);
@@ -111,10 +139,13 @@ export function Discover() {
     if (profiles.length === 0) return;
     const target = profiles[0];
 
-    setProfiles((prev) => prev.slice(1));
+    setProfiles(prev => prev.slice(1));
 
     try {
-      const result = await api.post<{ matched: boolean; match_id: string | null }>('/swipe', {
+      const result = await api.post<{
+        matched: boolean;
+        match_id: string | null;
+      }>('/swipe', {
         target_id: target.user_id,
         direction: direction === 'superlike' ? 'like' : direction,
         super_like: direction === 'superlike',
@@ -139,9 +170,15 @@ export function Discover() {
       <div className="app-page flex items-center justify-center">
         <div className="glass-strong rounded-[2rem] p-8 text-center animate-fade-in">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-[1.4rem] border-4 border-[#111111] bg-[#111111] text-white">
-            <Compass size={28} className="animate-spin" style={{ animationDuration: '3s' }} />
+            <Compass
+              size={28}
+              className="animate-spin"
+              style={{ animationDuration: '3s' }}
+            />
           </div>
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">Building your feed</p>
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">
+            Building your feed
+          </p>
         </div>
       </div>
     );
@@ -158,7 +195,8 @@ export function Discover() {
           <div className="app-kicker mb-3">Discover</div>
           <h2 className="app-title">feed cleared.</h2>
           <p className="app-subtitle mx-auto mt-4 max-w-sm">
-            You have worked through the current queue. Refresh when you want the next batch.
+            You have worked through the current queue. Refresh when you want the
+            next batch.
           </p>
           <button
             onClick={loadProfiles}
@@ -179,7 +217,8 @@ export function Discover() {
             <div className="app-kicker mb-3">Discover</div>
             <h1 className="app-title">swipe real profiles.</h1>
             <p className="app-subtitle mt-4 max-w-2xl">
-              Move through your active feed, open matches, and keep the app focused on real conversations instead of endless filler.
+              Move through your active feed, open matches, and keep the app
+              focused on real conversations instead of endless filler.
             </p>
           </div>
 
@@ -191,7 +230,10 @@ export function Discover() {
           </button>
         </div>
 
-        <DiscoverSettings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+        <DiscoverSettings
+          open={settingsOpen}
+          onClose={() => setSettingsOpen(false)}
+        />
 
         {safetyNotice && (
           <div className="mb-4 w-full max-w-[28rem] rounded-[1.2rem] border-4 border-[#111111] bg-[#eef8ed] px-4 py-3 text-sm font-bold text-[#244f1f]">
@@ -199,83 +241,87 @@ export function Discover() {
           </div>
         )}
 
-      {/* Match Celebration Overlay */}
-      <AnimatePresence>
-        {matchAlert && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-
+        {/* Match Celebration Overlay */}
+        <AnimatePresence>
+          {matchAlert && (
             <motion.div
-              className="relative text-center z-10"
-              initial={{ scale: 0.5, y: 30 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.8, y: -20, opacity: 0 }}
-              transition={{ type: 'spring', damping: 15 }}
+              className="fixed inset-0 z-50 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <motion.div
-                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-2xl shadow-pink-500/40"
-                  initial={{ x: -40, rotate: -20 }}
-                  animate={{ x: 0, rotate: 0 }}
-                  transition={{ delay: 0.2, type: 'spring' }}
-                >
-                  <Heart size={28} className="text-white" fill="white" />
-                </motion.div>
-                <motion.div
-                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-2xl shadow-purple-500/40"
-                  initial={{ x: 40, rotate: 20 }}
-                  animate={{ x: 0, rotate: 0 }}
-                  transition={{ delay: 0.2, type: 'spring' }}
-                >
-                  <Heart size={28} className="text-white" fill="white" />
-                </motion.div>
-              </div>
-
-              <motion.h2
-                className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 mb-2"
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.4 }}
-              >
-                It's a Match!
-              </motion.h2>
-              <motion.p
-                className="text-gray-300 font-medium mb-6"
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                You and <span className="text-white font-bold">{matchAlert.name}</span> liked each other
-              </motion.p>
+              <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
               <motion.div
-                className="flex gap-3 justify-center"
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.6 }}
+                className="relative text-center z-10"
+                initial={{ scale: 0.5, y: 30 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.8, y: -20, opacity: 0 }}
+                transition={{ type: 'spring', damping: 15 }}
               >
-                <Link
-                  to={`/app/chat/${matchAlert.matchId}`}
-                  className="app-button-accent px-6 py-3 no-underline"
+                <div className="flex items-center justify-center gap-2 mb-6">
+                  <motion.div
+                    className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-2xl shadow-pink-500/40"
+                    initial={{ x: -40, rotate: -20 }}
+                    animate={{ x: 0, rotate: 0 }}
+                    transition={{ delay: 0.2, type: 'spring' }}
+                  >
+                    <Heart size={28} className="text-white" fill="white" />
+                  </motion.div>
+                  <motion.div
+                    className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-2xl shadow-purple-500/40"
+                    initial={{ x: 40, rotate: 20 }}
+                    animate={{ x: 0, rotate: 0 }}
+                    transition={{ delay: 0.2, type: 'spring' }}
+                  >
+                    <Heart size={28} className="text-white" fill="white" />
+                  </motion.div>
+                </div>
+
+                <motion.h2
+                  className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 mb-2"
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
                 >
-                  <MessageCircle size={18} /> Send Message
-                </Link>
-                <button
-                  onClick={() => setMatchAlert(null)}
-                  className="app-button-outline px-6 py-3"
+                  It's a Match!
+                </motion.h2>
+                <motion.p
+                  className="text-gray-300 font-medium mb-6"
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.5 }}
                 >
-                  Keep Swiping
-                </button>
+                  You and{' '}
+                  <span className="text-white font-bold">
+                    {matchAlert.name}
+                  </span>{' '}
+                  liked each other
+                </motion.p>
+
+                <motion.div
+                  className="flex gap-3 justify-center"
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <Link
+                    to={`/app/chat/${matchAlert.matchId}`}
+                    className="app-button-accent px-6 py-3 no-underline"
+                  >
+                    <MessageCircle size={18} /> Send Message
+                  </Link>
+                  <button
+                    onClick={() => setMatchAlert(null)}
+                    className="app-button-outline px-6 py-3"
+                  >
+                    Keep Swiping
+                  </button>
+                </motion.div>
               </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
 
         <div className="glass-strong glass-highlight w-full max-w-[28rem] rounded-[2rem] p-4 md:p-5">
           <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -322,8 +368,10 @@ export function Discover() {
           source="profile"
           onClose={() => setSafetyOpen(false)}
           onBlocked={() => {
-            setProfiles((prev) => prev.slice(1));
-            setSafetyNotice(`${activeProfile.display_name} was blocked and removed from your feed.`);
+            setProfiles(prev => prev.slice(1));
+            setSafetyNotice(
+              `${activeProfile.display_name} was blocked and removed from your feed.`
+            );
             if (profiles.length <= 3) {
               void loadProfiles();
             }

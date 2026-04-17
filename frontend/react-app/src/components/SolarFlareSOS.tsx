@@ -1,11 +1,26 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  X, AlertTriangle, Flame, MapPin, Search, Camera, Video, 
-  Mic, Brain, Sparkles, Loader2, Info, Diamond, Database,
-  Zap, Navigation, MessageSquare, Heart
+import {
+  X,
+  AlertTriangle,
+  Flame,
+  MapPin,
+  Search,
+  Camera,
+  Video,
+  Mic,
+  Brain,
+  Sparkles,
+  Loader2,
+  Info,
+  Diamond,
+  Database,
+  Zap,
+  Navigation,
+  MessageSquare,
+  Heart,
 } from 'lucide-react';
-import { GoogleGenAI, ThinkingLevel, Modality } from "@google/genai";
+import { GoogleGenAI, ThinkingLevel, Modality } from '@google/genai';
 
 interface SOSFeature {
   id: string;
@@ -18,7 +33,9 @@ interface SOSFeature {
 
 export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<'menu' | 'feature'>('menu');
-  const [selectedFeature, setSelectedFeature] = useState<SOSFeature | null>(null);
+  const [selectedFeature, setSelectedFeature] = useState<SOSFeature | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [prompt, setPrompt] = useState('');
@@ -38,7 +55,8 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result?.toString().split(',')[1] || '');
+      reader.onload = () =>
+        resolve(reader.result?.toString().split(',')[1] || '');
       reader.onerror = error => reject(error);
     });
   };
@@ -53,23 +71,38 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
       action: async () => {
         setLoading(true);
         try {
-          const ai = new GoogleGenAI({ apiKey: 'PROXY', httpOptions: { baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev' } });
+          const ai = new GoogleGenAI({
+            apiKey: 'PROXY',
+            httpOptions: {
+              baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev',
+            },
+          });
           let operation = await ai.models.generateVideos({
             model: 'veo-3.1-fast-generate-preview',
             prompt: `A romantic cosmic SOS beacon in space, ${prompt}, cinematic lighting, 4k`,
-            config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' }
+            config: {
+              numberOfVideos: 1,
+              resolution: '720p',
+              aspectRatio: '16:9',
+            },
           });
           while (!operation.done) {
             await new Promise(r => setTimeout(r, 5000));
             operation = await ai.operations.getVideosOperation({ operation });
           }
-          setResult({ type: 'video', url: operation.response?.generatedVideos?.[0]?.video?.uri });
+          setResult({
+            type: 'video',
+            url: operation.response?.generatedVideos?.[0]?.video?.uri,
+          });
         } catch (e) {
           console.error(e);
-          setResult({ type: 'error', message: 'Solar interference blocked the transmission.' });
+          setResult({
+            type: 'error',
+            message: 'Solar interference blocked the transmission.',
+          });
         }
         setLoading(false);
-      }
+      },
     },
     {
       id: 'image-edit',
@@ -82,26 +115,36 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
         setLoading(true);
         try {
           const base64 = await getBase64(file);
-          const ai = new GoogleGenAI({ apiKey: 'PROXY', httpOptions: { baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev' } });
+          const ai = new GoogleGenAI({
+            apiKey: 'PROXY',
+            httpOptions: {
+              baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev',
+            },
+          });
           const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash-image',
             contents: {
               parts: [
                 { inlineData: { data: base64, mimeType: file.type } },
-                { text: `Enhance this image for a cosmic SOS: ${prompt}` }
-              ]
-            }
+                { text: `Enhance this image for a cosmic SOS: ${prompt}` },
+              ],
+            },
           });
-          const imgPart = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
+          const imgPart = response.candidates?.[0]?.content?.parts.find(
+            p => p.inlineData
+          );
           if (imgPart) {
-            setResult({ type: 'image', url: `data:${imgPart.inlineData?.mimeType};base64,${imgPart.inlineData?.data}` });
+            setResult({
+              type: 'image',
+              url: `data:${imgPart.inlineData?.mimeType};base64,${imgPart.inlineData?.data}`,
+            });
           }
         } catch (e) {
           console.error(e);
           setResult({ type: 'error', message: 'Image processing failed.' });
         }
         setLoading(false);
-      }
+      },
     },
     {
       id: 'maps-grounding',
@@ -112,42 +155,63 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
       action: async () => {
         setLoading(true);
         try {
-          const ai = new GoogleGenAI({ apiKey: 'PROXY', httpOptions: { baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev' } });
+          const ai = new GoogleGenAI({
+            apiKey: 'PROXY',
+            httpOptions: {
+              baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev',
+            },
+          });
           const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: `Find romantic meetup locations or safe zones near: ${prompt}`,
-            config: { tools: [{ googleMaps: {} }] }
+            config: { tools: [{ googleMaps: {} }] },
           });
-          setResult({ type: 'text', text: response.text, chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks });
+          setResult({
+            type: 'text',
+            text: response.text,
+            chunks:
+              response.candidates?.[0]?.groundingMetadata?.groundingChunks,
+          });
         } catch (e) {
           console.error(e);
           setResult({ type: 'error', message: 'Maps data unavailable.' });
         }
         setLoading(false);
-      }
+      },
     },
     {
       id: 'search-grounding',
       title: 'Solar Activity Check',
-      description: 'Real-time search for solar flare status and SOS conditions.',
+      description:
+        'Real-time search for solar flare status and SOS conditions.',
       icon: <Search className="text-cyan-400" />,
       model: 'gemini-3-flash-preview',
       action: async () => {
         setLoading(true);
         try {
-          const ai = new GoogleGenAI({ apiKey: 'PROXY', httpOptions: { baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev' } });
+          const ai = new GoogleGenAI({
+            apiKey: 'PROXY',
+            httpOptions: {
+              baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev',
+            },
+          });
           const response = await ai.models.generateContent({
             model: 'gemini-3-flash-preview',
             contents: `What is the current solar flare activity and SOS status for: ${prompt}`,
-            config: { tools: [{ googleSearch: {} }] }
+            config: { tools: [{ googleSearch: {} }] },
           });
-          setResult({ type: 'text', text: response.text, chunks: response.candidates?.[0]?.groundingMetadata?.groundingChunks });
+          setResult({
+            type: 'text',
+            text: response.text,
+            chunks:
+              response.candidates?.[0]?.groundingMetadata?.groundingChunks,
+          });
         } catch (e) {
           console.error(e);
           setResult({ type: 'error', message: 'Search grounding failed.' });
         }
         setLoading(false);
-      }
+      },
     },
     {
       id: 'thinking-mode',
@@ -158,11 +222,16 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
       action: async () => {
         setLoading(true);
         try {
-          const ai = new GoogleGenAI({ apiKey: 'PROXY', httpOptions: { baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev' } });
+          const ai = new GoogleGenAI({
+            apiKey: 'PROXY',
+            httpOptions: {
+              baseUrl: 'https://gemini-proxy.joshlcoleman.workers.dev',
+            },
+          });
           const response = await ai.models.generateContent({
             model: 'gemini-3.1-pro-preview',
             contents: `Calculate the best romantic trajectory to meet a match given these conditions: ${prompt}`,
-            config: { thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH } }
+            config: { thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH } },
           });
           setResult({ type: 'text', text: response.text });
         } catch (e) {
@@ -170,8 +239,8 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
           setResult({ type: 'error', message: 'Reasoning engine overheated.' });
         }
         setLoading(false);
-      }
-    }
+      },
+    },
   ];
 
   return (
@@ -194,11 +263,18 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
               <Flame className="text-orange-400" size={32} />
             </div>
             <div>
-              <h2 className="text-3xl font-black italic tracking-tighter uppercase text-orange-500">Adult Solar Flares</h2>
-              <p className="text-xs text-gray-400 uppercase tracking-[0.3em] font-bold">SOS Meetup Hub • Emergency Romance</p>
+              <h2 className="text-3xl font-black italic tracking-tighter uppercase text-orange-500">
+                Adult Solar Flares
+              </h2>
+              <p className="text-xs text-gray-400 uppercase tracking-[0.3em] font-bold">
+                SOS Meetup Hub • Emergency Romance
+              </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors">
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-white/5 rounded-full transition-colors"
+          >
             <X size={24} />
           </button>
         </div>
@@ -208,18 +284,27 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
           <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-3xl flex gap-4 items-start">
             <AlertTriangle className="text-red-500 shrink-0" size={24} />
             <div className="space-y-2">
-              <h4 className="font-bold text-red-500 uppercase tracking-widest text-sm">Supply Warning: Extreme Scarcity</h4>
+              <h4 className="font-bold text-red-500 uppercase tracking-widest text-sm">
+                Supply Warning: Extreme Scarcity
+              </h4>
               <p className="text-xs text-gray-400 leading-relaxed">
-                Available Flares are dangerously scarce. <span className="text-white font-bold">OPUS MEMORY Loss</span> has caused supplies to be severely compacted. 
-                Legend says Opus almost made a <span className="text-cyan-400 font-bold">Diamond</span> for his dream girl, <span className="text-pink-400 font-bold">Miss REDIS CACHE</span>... 
-                or so he thought. He might have forgotten.
+                Available Flares are dangerously scarce.{' '}
+                <span className="text-white font-bold">OPUS MEMORY Loss</span>{' '}
+                has caused supplies to be severely compacted. Legend says Opus
+                almost made a{' '}
+                <span className="text-cyan-400 font-bold">Diamond</span> for his
+                dream girl,{' '}
+                <span className="text-pink-400 font-bold">
+                  Miss REDIS CACHE
+                </span>
+                ... or so he thought. He might have forgotten.
               </p>
             </div>
           </div>
 
           {activeTab === 'menu' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {features.map((f) => (
+              {features.map(f => (
                 <motion.button
                   key={f.id}
                   whileHover={{ scale: 1.02, y: -5 }}
@@ -238,7 +323,9 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
                     {f.icon}
                   </div>
                   <h3 className="font-bold text-lg mb-2">{f.title}</h3>
-                  <p className="text-xs text-gray-500 leading-relaxed">{f.description}</p>
+                  <p className="text-xs text-gray-500 leading-relaxed">
+                    {f.description}
+                  </p>
                   <div className="mt-4 text-[10px] text-gray-600 font-mono uppercase tracking-widest">
                     Model: {f.model}
                   </div>
@@ -247,7 +334,7 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
             </div>
           ) : (
             <div className="space-y-8">
-              <button 
+              <button
                 onClick={() => setActiveTab('menu')}
                 className="text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white transition-colors flex items-center gap-2"
               >
@@ -261,48 +348,63 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
                       {selectedFeature?.icon}
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold">{selectedFeature?.title}</h3>
-                      <p className="text-sm text-gray-400">{selectedFeature?.description}</p>
+                      <h3 className="text-2xl font-bold">
+                        {selectedFeature?.title}
+                      </h3>
+                      <p className="text-sm text-gray-400">
+                        {selectedFeature?.description}
+                      </p>
                     </div>
                   </div>
 
                   <div className="space-y-4">
-                    <label className="block text-xs font-bold uppercase tracking-widest text-gray-500">Distress Prompt</label>
-                    <textarea 
+                    <label className="block text-xs font-bold uppercase tracking-widest text-gray-500">
+                      Distress Prompt
+                    </label>
+                    <textarea
                       value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
+                      onChange={e => setPrompt(e.target.value)}
                       placeholder="Describe your cosmic emergency..."
                       className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-sm focus:outline-none focus:border-orange-500/50 h-32"
                     />
                   </div>
 
-                  {(selectedFeature?.id === 'image-edit' || selectedFeature?.id === 'analyze-image') && (
+                  {(selectedFeature?.id === 'image-edit' ||
+                    selectedFeature?.id === 'analyze-image') && (
                     <div className="space-y-4">
-                      <label className="block text-xs font-bold uppercase tracking-widest text-gray-500">Distress Photo</label>
-                      <input 
-                        type="file" 
+                      <label className="block text-xs font-bold uppercase tracking-widest text-gray-500">
+                        Distress Photo
+                      </label>
+                      <input
+                        type="file"
                         ref={fileInputRef}
                         onChange={handleFileChange}
                         className="hidden"
                         accept="image/*"
                       />
-                      <button 
+                      <button
                         onClick={() => fileInputRef.current?.click()}
                         className="w-full aspect-video border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center hover:bg-white/5 transition-colors overflow-hidden relative"
                       >
                         {previewUrl ? (
-                          <img src={previewUrl} className="w-full h-full object-cover" alt="Preview" />
+                          <img
+                            src={previewUrl}
+                            className="w-full h-full object-cover"
+                            alt="Preview"
+                          />
                         ) : (
                           <>
                             <Camera className="text-gray-600 mb-2" size={32} />
-                            <span className="text-xs text-gray-600">Upload distress signal photo</span>
+                            <span className="text-xs text-gray-600">
+                              Upload distress signal photo
+                            </span>
                           </>
                         )}
                       </button>
                     </div>
                   )}
 
-                  <button 
+                  <button
                     onClick={selectedFeature?.action}
                     disabled={loading || !prompt.trim()}
                     className="w-full py-4 bg-orange-500 text-white font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-orange-600 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
@@ -331,7 +433,9 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
                     {!result && !loading && (
                       <div className="text-center space-y-4 opacity-30">
                         <Zap size={48} className="mx-auto" />
-                        <p className="text-xs font-bold uppercase tracking-widest">Awaiting Signal</p>
+                        <p className="text-xs font-bold uppercase tracking-widest">
+                          Awaiting Signal
+                        </p>
                       </div>
                     )}
 
@@ -341,10 +445,15 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
                           <div className="absolute inset-0 border-4 border-orange-500/20 rounded-full" />
                           <div className="absolute inset-0 border-4 border-orange-500 rounded-full border-t-transparent animate-spin" />
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <Flame className="text-orange-500 animate-pulse" size={32} />
+                            <Flame
+                              className="text-orange-500 animate-pulse"
+                              size={32}
+                            />
                           </div>
                         </div>
-                        <p className="text-xs font-bold uppercase tracking-widest text-orange-500 animate-pulse">Piercing the Solar Storm</p>
+                        <p className="text-xs font-bold uppercase tracking-widest text-orange-500 animate-pulse">
+                          Piercing the Solar Storm
+                        </p>
                       </div>
                     )}
 
@@ -355,10 +464,18 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
                         </div>
                         {result.chunks && (
                           <div className="space-y-2">
-                            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Sources</p>
+                            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+                              Sources
+                            </p>
                             <div className="flex flex-wrap gap-2">
                               {result.chunks.map((c: any, i: number) => (
-                                <a key={i} href={c.web?.uri || c.maps?.uri} target="_blank" rel="noreferrer" className="text-[10px] bg-white/5 px-2 py-1 rounded hover:bg-white/10 transition-colors text-cyan-400 truncate max-w-[200px]">
+                                <a
+                                  key={i}
+                                  href={c.web?.uri || c.maps?.uri}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-[10px] bg-white/5 px-2 py-1 rounded hover:bg-white/10 transition-colors text-cyan-400 truncate max-w-[200px]"
+                                >
                                   {c.web?.title || c.maps?.title || 'Source'}
                                 </a>
                               ))}
@@ -370,13 +487,23 @@ export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
 
                     {result?.type === 'image' && (
                       <div className="w-full aspect-square rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-                        <img src={result.url} className="w-full h-full object-cover" alt="Result" />
+                        <img
+                          src={result.url}
+                          className="w-full h-full object-cover"
+                          alt="Result"
+                        />
                       </div>
                     )}
 
                     {result?.type === 'video' && (
                       <div className="w-full aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black">
-                        <video src={result.url} controls autoPlay loop className="w-full h-full object-contain" />
+                        <video
+                          src={result.url}
+                          controls
+                          autoPlay
+                          loop
+                          className="w-full h-full object-contain"
+                        />
                       </div>
                     )}
 

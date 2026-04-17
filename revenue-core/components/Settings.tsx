@@ -18,11 +18,11 @@ const Settings: React.FC = () => {
   const [isSaved, setIsSaved] = useState(false);
 
   const toggleShowKey = (key: string) => {
-    setShowKeys(prev => ({ ...prev, [key]: !prev[key] }));
+    setShowKeys((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   const handleChange = (field: keyof ApiConfig, value: string) => {
-    setLocalConfig(prev => ({ ...prev, [field]: value }));
+    setLocalConfig((prev) => ({ ...prev, [field]: value }));
     setIsSaved(false);
   };
 
@@ -50,13 +50,13 @@ const Settings: React.FC = () => {
             <Lock size={20} />
             <h3 className="font-bold text-lg">Core Intelligence</h3>
           </div>
-          
+
           <div className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">Google Gemini API Key</label>
               <div className="relative">
                 <input
-                  type={showKeys['gemini'] ? "text" : "password"}
+                  type={showKeys['gemini'] ? 'text' : 'password'}
                   value={localConfig.geminiKey}
                   onChange={(e) => handleChange('geminiKey', e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-4 pr-10 py-3 text-white focus:outline-none focus:border-primary transition-colors"
@@ -72,10 +72,12 @@ const Settings: React.FC = () => {
               <p className="text-[10px] text-slate-500 mt-2">Required for Content Studio and Agent logic.</p>
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">Stripe Secret Key (Revenue)</label>
+              <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">
+                Stripe Secret Key (Revenue)
+              </label>
               <div className="relative">
                 <input
-                  type={showKeys['stripe'] ? "text" : "password"}
+                  type={showKeys['stripe'] ? 'text' : 'password'}
                   value={localConfig.stripeKey || ''}
                   onChange={(e) => handleChange('stripeKey', e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-4 pr-10 py-3 text-white focus:outline-none focus:border-primary transition-colors"
@@ -113,23 +115,25 @@ const Settings: React.FC = () => {
 
         {/* Social APIs */}
         <div className="md:col-span-2 bg-surface p-6 rounded-xl border border-slate-700">
-           <div className="flex items-center gap-2 mb-6 text-blue-400">
+          <div className="flex items-center gap-2 mb-6 text-blue-400">
             <Server size={20} />
             <h3 className="font-bold text-lg">Platform Connectors</h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">Reddit Client ID (Research)</label>
+              <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">
+                Reddit Client ID (Research)
+              </label>
               <div className="relative">
-                <input 
-                  type={showKeys['reddit'] ? "text" : "password"}
+                <input
+                  type={showKeys['reddit'] ? 'text' : 'password'}
                   value={localConfig.redditClientId}
                   onChange={(e) => handleChange('redditClientId', e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-4 pr-10 py-3 text-white focus:outline-none focus:border-primary transition-colors"
                   placeholder="Use for Snoowrap..."
                 />
-                 <button 
+                <button
                   onClick={() => toggleShowKey('reddit')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
                 >
@@ -138,17 +142,19 @@ const Settings: React.FC = () => {
               </div>
             </div>
 
-             <div>
-              <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">YouTube Data API Key (Research)</label>
+            <div>
+              <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">
+                YouTube Data API Key (Research)
+              </label>
               <div className="relative">
-                <input 
-                  type={showKeys['youtube'] ? "text" : "password"}
+                <input
+                  type={showKeys['youtube'] ? 'text' : 'password'}
                   value={localConfig.youtubeApiKey}
                   onChange={(e) => handleChange('youtubeApiKey', e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-4 pr-10 py-3 text-white focus:outline-none focus:border-primary transition-colors"
                   placeholder="GCP API Key..."
                 />
-                 <button 
+                <button
                   onClick={() => toggleShowKey('youtube')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
                 >
@@ -158,16 +164,18 @@ const Settings: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">X (Twitter) API Key (Posting)</label>
+              <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">
+                X (Twitter) API Key (Posting)
+              </label>
               <div className="relative">
-                <input 
-                  type={showKeys['twitter'] ? "text" : "password"}
+                <input
+                  type={showKeys['twitter'] ? 'text' : 'password'}
                   value={localConfig.twitterApiKey}
                   onChange={(e) => handleChange('twitterApiKey', e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-4 pr-10 py-3 text-white focus:outline-none focus:border-primary transition-colors"
                   placeholder="v2 API Key..."
                 />
-                 <button 
+                <button
                   onClick={() => toggleShowKey('twitter')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
                 >
@@ -177,16 +185,18 @@ const Settings: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">LinkedIn Client ID (Posting)</label>
+              <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">
+                LinkedIn Client ID (Posting)
+              </label>
               <div className="relative">
-                <input 
-                  type={showKeys['linkedin'] ? "text" : "password"}
+                <input
+                  type={showKeys['linkedin'] ? 'text' : 'password'}
                   value={localConfig.linkedinClientId}
                   onChange={(e) => handleChange('linkedinClientId', e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-4 pr-10 py-3 text-white focus:outline-none focus:border-primary transition-colors"
                   placeholder="OAuth Client ID..."
                 />
-                 <button 
+                <button
                   onClick={() => toggleShowKey('linkedin')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
                 >
@@ -199,9 +209,11 @@ const Settings: React.FC = () => {
       </div>
 
       <div className="flex justify-end pt-4 pb-8">
-        <button 
+        <button
           onClick={handleSave}
-          className={`flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-white transition-all transform hover:scale-105 active:scale-95 ${isSaved ? 'bg-emerald-500' : 'bg-primary hover:bg-indigo-500'}`}
+          className={`flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-white transition-all transform hover:scale-105 active:scale-95 ${
+            isSaved ? 'bg-emerald-500' : 'bg-primary hover:bg-indigo-500'
+          }`}
         >
           {isSaved ? <Shield size={18} /> : <Save size={18} />}
           {isSaved ? 'Configuration Saved' : 'Save Configuration'}

@@ -23,7 +23,9 @@ export function readCookieConsent(): CookieConsentState | null {
   }
 }
 
-export function saveCookieConsent(preferences: Pick<CookieConsentState, 'preferences' | 'performance'>): CookieConsentState {
+export function saveCookieConsent(
+  preferences: Pick<CookieConsentState, 'preferences' | 'performance'>
+): CookieConsentState {
   const value: CookieConsentState = {
     essential: true,
     preferences: preferences.preferences,

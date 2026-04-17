@@ -36,7 +36,9 @@ export default function Organization({ isDarkMode }: { isDarkMode: boolean }) {
         {sections.map((section) => (
           <div
             key={section.title}
-            className={`p-8 rounded-3xl border ${isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200 shadow-lg'}`}
+            className={`p-8 rounded-3xl border ${
+              isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200 shadow-lg'
+            }`}
           >
             <div className="mb-4">{section.icon}</div>
             <h3 className="text-2xl font-bold mb-4">{section.title}</h3>

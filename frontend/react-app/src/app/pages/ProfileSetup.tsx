@@ -7,9 +7,24 @@ import { api } from '../../lib/api';
 import { calculateAgeUtc, formatDateInput, toIsoDate } from '../../lib/ageGate';
 
 const INTEREST_OPTIONS = [
-  'Travel', 'Music', 'Cooking', 'Fitness', 'Reading', 'Gaming',
-  'Art', 'Photography', 'Hiking', 'Movies', 'Dancing', 'Volunteering',
-  'Animals', 'Technology', 'Sports', 'Yoga', 'Coffee', 'Wine',
+  'Travel',
+  'Music',
+  'Cooking',
+  'Fitness',
+  'Reading',
+  'Gaming',
+  'Art',
+  'Photography',
+  'Hiking',
+  'Movies',
+  'Dancing',
+  'Volunteering',
+  'Animals',
+  'Technology',
+  'Sports',
+  'Yoga',
+  'Coffee',
+  'Wine',
 ];
 
 export function ProfileSetup() {
@@ -26,10 +41,12 @@ export function ProfileSetup() {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
 
   const toggleInterest = (interest: string) => {
-    setSelectedInterests((prev) =>
+    setSelectedInterests(prev =>
       prev.includes(interest)
-        ? prev.filter((i) => i !== interest)
-        : prev.length < 10 ? [...prev, interest] : prev,
+        ? prev.filter(i => i !== interest)
+        : prev.length < 10
+          ? [...prev, interest]
+          : prev
     );
   };
 
@@ -76,14 +93,18 @@ export function ProfileSetup() {
             <div className="app-kicker mb-3">Profile Setup</div>
             <h1 className="app-title">tell people who you are.</h1>
             <p className="app-subtitle mt-4 max-w-2xl">
-              Build the real profile before you start matching. Keep it specific, human, and useful to someone deciding whether to say hi.
+              Build the real profile before you start matching. Keep it
+              specific, human, and useful to someone deciding whether to say hi.
             </p>
           </div>
           <div className="glass rounded-[1.6rem] p-5">
             <div className="app-panel-title mb-3">Current account</div>
-            <p className="text-lg font-black uppercase tracking-[-0.06em] text-[#111111]">{user?.display_name}</p>
+            <p className="text-lg font-black uppercase tracking-[-0.06em] text-[#111111]">
+              {user?.display_name}
+            </p>
             <p className="mt-2 text-sm font-medium text-[#5c594f]">
-              This profile becomes the public side of your account inside discover, matches, and boards.
+              This profile becomes the public side of your account inside
+              discover, matches, and boards.
             </p>
           </div>
         </div>
@@ -101,7 +122,7 @@ export function ProfileSetup() {
                 <label className="app-panel-title mb-3 block">About You</label>
                 <textarea
                   value={bio}
-                  onChange={(e) => setBio(e.target.value)}
+                  onChange={e => setBio(e.target.value)}
                   placeholder="What makes you you?"
                   maxLength={500}
                   rows={4}
@@ -114,11 +135,15 @@ export function ProfileSetup() {
 
               <div className="grid gap-4 md:grid-cols-3">
                 <div>
-                  <label className="app-panel-title mb-3 block">Date of Birth</label>
+                  <label className="app-panel-title mb-3 block">
+                    Date of Birth
+                  </label>
                   <input
                     type="text"
                     value={dateOfBirth}
-                    onChange={(e) => setDateOfBirth(formatDateInput(e.target.value))}
+                    onChange={e =>
+                      setDateOfBirth(formatDateInput(e.target.value))
+                    }
                     inputMode="numeric"
                     maxLength={14}
                     placeholder="MM / DD / YYYY"
@@ -132,14 +157,18 @@ export function ProfileSetup() {
                     min={18}
                     max={120}
                     value={age}
-                    onChange={(e) => setAge(e.target.value)}
+                    onChange={e => setAge(e.target.value)}
                     placeholder="18+"
                     className="app-input input-glow"
                   />
                 </div>
                 <div>
                   <label className="app-panel-title mb-3 block">Gender</label>
-                  <select value={gender} onChange={(e) => setGender(e.target.value)} className="app-select input-glow">
+                  <select
+                    value={gender}
+                    onChange={e => setGender(e.target.value)}
+                    className="app-select input-glow"
+                  >
                     <option value="">Select...</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
@@ -151,8 +180,14 @@ export function ProfileSetup() {
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <label className="app-panel-title mb-3 block">Looking For</label>
-                  <select value={lookingFor} onChange={(e) => setLookingFor(e.target.value)} className="app-select input-glow">
+                  <label className="app-panel-title mb-3 block">
+                    Looking For
+                  </label>
+                  <select
+                    value={lookingFor}
+                    onChange={e => setLookingFor(e.target.value)}
+                    className="app-select input-glow"
+                  >
                     <option value="">Select...</option>
                     <option value="relationship">Relationship</option>
                     <option value="friends">Friends</option>
@@ -168,7 +203,7 @@ export function ProfileSetup() {
                   <input
                     type="text"
                     value={location}
-                    onChange={(e) => setLocation(e.target.value)}
+                    onChange={e => setLocation(e.target.value)}
                     placeholder="City, State"
                     maxLength={200}
                     className="app-input input-glow"
@@ -189,7 +224,7 @@ export function ProfileSetup() {
               </span>
             </div>
             <div className="flex flex-wrap gap-3">
-              {INTEREST_OPTIONS.map((interest) => {
+              {INTEREST_OPTIONS.map(interest => {
                 const active = selectedInterests.includes(interest);
                 return (
                   <button
@@ -216,10 +251,17 @@ export function ProfileSetup() {
 
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="app-surface-note">
-              Save the real profile first. Photos, matching, and verification become more useful once the basics are filled in.
+              Save the real profile first. Photos, matching, and verification
+              become more useful once the basics are filled in.
             </div>
-            <button type="submit" disabled={loading} className="app-button-dark px-6 py-4 disabled:opacity-60">
-              {loading ? 'Saving...' : (
+            <button
+              type="submit"
+              disabled={loading}
+              className="app-button-dark px-6 py-4 disabled:opacity-60"
+            >
+              {loading ? (
+                'Saving...'
+              ) : (
                 <>
                   <Camera size={18} /> Save Profile
                 </>

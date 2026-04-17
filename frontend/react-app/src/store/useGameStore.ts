@@ -1,14 +1,17 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
-*/
+ */
 
 import { create } from 'zustand';
 
-const DEFAULT_MULTIPLAYER_URL = 'https://youandinotai-backend-731395189513.us-east1.run.app';
+const DEFAULT_MULTIPLAYER_URL =
+  'https://youandinotai-backend-731395189513.us-east1.run.app';
 
 function getWebSocketUrl() {
-  const target = new URL(import.meta.env.VITE_MULTIPLAYER_URL || DEFAULT_MULTIPLAYER_URL);
+  const target = new URL(
+    import.meta.env.VITE_MULTIPLAYER_URL || DEFAULT_MULTIPLAYER_URL
+  );
   target.protocol = target.protocol === 'https:' ? 'wss:' : 'ws:';
   target.pathname = '/';
   target.search = '';
@@ -54,47 +57,51 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   connect: () => {
     const { ws: currentWs } = get();
-    if (currentWs && (currentWs.readyState === WebSocket.CONNECTING || currentWs.readyState === WebSocket.OPEN)) {
+    if (
+      currentWs &&
+      (currentWs.readyState === WebSocket.CONNECTING ||
+        currentWs.readyState === WebSocket.OPEN)
+    ) {
       return;
     }
 
     const ws = new WebSocket(getWebSocketUrl());
 
-    ws.onmessage = (event) => {
+    ws.onmessage = event => {
       const data = JSON.parse(event.data);
-      
+
       if (data.type === 'init') {
         set({ myId: data.id, myColor: data.color });
         const playersMap: Record<string, Player> = {};
         data.players.forEach((p: Player) => {
           if (p.id !== data.id) playersMap[p.id] = p;
         });
-        
+
         const forcesMap: Record<string, ForceField> = {};
         data.forceFields.forEach((f: ForceField) => {
           forcesMap[f.id] = f;
         });
-        
+
         set({ players: playersMap, forceFields: forcesMap });
       } else if (data.type === 'player_joined') {
-        set((state) => ({
-          players: { ...state.players, [data.player.id]: data.player }
+        set(state => ({
+          players: { ...state.players, [data.player.id]: data.player },
         }));
       } else if (data.type === 'player_left') {
-        set((state) => {
+        set(state => {
           const newPlayers = { ...state.players };
           delete newPlayers[data.id];
           return { players: newPlayers };
         });
       } else if (data.type === 'sync') {
-        set((state) => {
+        set(state => {
           const newPlayers = { ...state.players };
           data.players.forEach((p: Player) => {
             if (p.id !== state.myId) {
               newPlayers[p.id] = { ...newPlayers[p.id], position: p.position };
             }
           });
-          
+
           let newForces = state.forceFields;
           if (data.forceFields) {
             newForces = {};
@@ -102,12 +109,12 @@ export const useGameStore = create<GameState>((set, get) => ({
               newForces[f.id] = f;
             });
           }
-          
+
           return { players: newPlayers, forceFields: newForces };
         });
       } else if (data.type === 'force_added') {
-        set((state) => ({
-          forceFields: { ...state.forceFields, [data.force.id]: data.force }
+        set(state => ({
+          forceFields: { ...state.forceFields, [data.force.id]: data.force },
         }));
       }
     };
@@ -141,7 +148,14 @@ export const useGameStore = create<GameState>((set, get) => ({
   addForce: (position: Vector3, type: 'attractor' | 'repulsor') => {
     const { ws, myColor } = get();
     if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: 'add_force', position, forceType: type, color: myColor }));
+      ws.send(
+        JSON.stringify({
+          type: 'add_force',
+          position,
+          forceType: type,
+          color: myColor,
+        })
+      );
     }
-  }
+  },
 }));

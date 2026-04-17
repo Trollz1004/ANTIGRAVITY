@@ -15,20 +15,35 @@ async function generateIcebreaker(): Promise<string> {
   });
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
-    contents: [{ role: 'user', parts: [{ text: 'Generate one creative, fun, flirty icebreaker message for a dating app. Keep it under 2 sentences. Be witty but respectful. No emojis. No quotes around it. Just the message.' }] }],
+    contents: [
+      {
+        role: 'user',
+        parts: [
+          {
+            text: 'Generate one creative, fun, flirty icebreaker message for a dating app. Keep it under 2 sentences. Be witty but respectful. No emojis. No quotes around it. Just the message.',
+          },
+        ],
+      },
+    ],
     config: {
-      systemInstruction: 'You are the Icebreaker Engine for YouAndiNotAi dating platform. Generate short, clever, human-sounding opening messages that feel natural — not cheesy, not generic. Think first-message-that-actually-gets-a-reply energy.',
+      systemInstruction:
+        'You are the Icebreaker Engine for YouAndiNotAi dating platform. Generate short, clever, human-sounding opening messages that feel natural — not cheesy, not generic. Think first-message-that-actually-gets-a-reply energy.',
       temperature: 1.0,
     },
   });
-  return response.text || "I don't usually message first, but your profile made me rethink my whole strategy.";
+  return (
+    response.text ||
+    "I don't usually message first, but your profile made me rethink my whole strategy."
+  );
 }
 
 export function Chat() {
   const { matchId } = useParams<{ matchId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { messages, connected, sendMessage, loadHistory } = useChat(matchId || null);
+  const { messages, connected, sendMessage, loadHistory } = useChat(
+    matchId || null
+  );
   const [input, setInput] = useState('');
   const [icebreakerLoading, setIcebreakerLoading] = useState(false);
   const [matchDisplayName, setMatchDisplayName] = useState('Chat');
@@ -47,8 +62,9 @@ export function Chat() {
 
   useEffect(() => {
     if (!matchId) return;
-    api.get<{ user_id: string; display_name: string }>(`/matches/${matchId}`)
-      .then((match) => {
+    api
+      .get<{ user_id: string; display_name: string }>(`/matches/${matchId}`)
+      .then(match => {
         setMatchDisplayName(match.display_name);
         setMatchUserId(match.user_id);
       })
@@ -74,7 +90,9 @@ export function Chat() {
       const line = await generateIcebreaker();
       setInput(line);
     } catch {
-      setInput("I don't usually message first, but your profile made me rethink my whole strategy.");
+      setInput(
+        "I don't usually message first, but your profile made me rethink my whole strategy."
+      );
     } finally {
       setIcebreakerLoading(false);
     }
@@ -88,10 +106,20 @@ export function Chat() {
         </Link>
         <div className="flex-1">
           <div className="app-kicker mb-1">Messages</div>
-          <h2 className="text-lg font-black tracking-[-0.05em] text-[#111111]">{matchDisplayName}</h2>
+          <h2 className="text-lg font-black tracking-[-0.05em] text-[#111111]">
+            {matchDisplayName}
+          </h2>
           <div className="flex items-center gap-1.5">
-            <div className={`w-2 h-2 rounded-full ${connected ? 'bg-[#ff4f00]' : 'bg-[#8a8478]'}`} />
-            <span className={`text-xs font-bold uppercase tracking-[0.16em] ${connected ? 'text-[#111111]' : 'text-[#5c594f]'}`}>
+            <div
+              className={`w-2 h-2 rounded-full ${
+                connected ? 'bg-[#ff4f00]' : 'bg-[#8a8478]'
+              }`}
+            />
+            <span
+              className={`text-xs font-bold uppercase tracking-[0.16em] ${
+                connected ? 'text-[#111111]' : 'text-[#5c594f]'
+              }`}
+            >
               {connected ? 'Online' : 'Connecting...'}
             </span>
           </div>
@@ -121,9 +149,12 @@ export function Chat() {
               />
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/50 to-transparent" />
             </div>
-            <p className="text-[#111111] font-black text-lg mb-1 tracking-[-0.05em]">Break the Ice</p>
+            <p className="text-[#111111] font-black text-lg mb-1 tracking-[-0.05em]">
+              Break the Ice
+            </p>
             <p className="text-[#5c594f] text-xs mb-5 max-w-xs mx-auto font-medium">
-              Heart on fire but frozen on words? Let AI craft the perfect opener.
+              Heart on fire but frozen on words? Let AI craft the perfect
+              opener.
             </p>
             <button
               onClick={handleIcebreaker}
@@ -131,28 +162,47 @@ export function Chat() {
               className="app-button-accent px-6 py-3 text-sm disabled:opacity-60"
             >
               {icebreakerLoading ? (
-                <><Loader2 size={16} className="animate-spin" /> Melting the ice...</>
+                <>
+                  <Loader2 size={16} className="animate-spin" /> Melting the
+                  ice...
+                </>
               ) : (
-                <><Flame size={16} /> Generate Icebreaker</>
+                <>
+                  <Flame size={16} /> Generate Icebreaker
+                </>
               )}
             </button>
-            <p className="text-[#5c594f] text-[10px] mt-3 uppercase tracking-widest font-bold">Powered by Gemini AI</p>
+            <p className="text-[#5c594f] text-[10px] mt-3 uppercase tracking-widest font-bold">
+              Powered by Gemini AI
+            </p>
           </div>
         )}
         {messages.map((msg, i) => {
           const isMine = msg.sender_id === user?.user_id;
-          const showTimestamp = i === 0 ||
-            new Date(msg.created_at).getTime() - new Date(messages[i-1].created_at).getTime() > 300000;
+          const showTimestamp =
+            i === 0 ||
+            new Date(msg.created_at).getTime() -
+              new Date(messages[i - 1].created_at).getTime() >
+              300000;
           return (
             <div key={msg.id}>
               {showTimestamp && (
                 <div className="text-center my-4">
                   <span className="text-[10px] font-bold uppercase tracking-[0.14em] px-3 py-1 glass rounded-full">
-                    {new Date(msg.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    {new Date(msg.created_at).toLocaleString([], {
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
                   </span>
                 </div>
               )}
-              <div className={`flex ${isMine ? 'justify-end' : 'justify-start'} animate-slide-up`}>
+              <div
+                className={`flex ${
+                  isMine ? 'justify-end' : 'justify-start'
+                } animate-slide-up`}
+              >
                 <div
                   className={`max-w-[75%] px-4 py-3 text-sm leading-relaxed ${
                     isMine
@@ -161,8 +211,15 @@ export function Chat() {
                   }`}
                 >
                   <p className="break-words">{msg.content}</p>
-                  <span className={`text-[10px] mt-1.5 block text-right font-bold uppercase tracking-[0.12em] ${isMine ? 'text-white/60' : 'text-[#5c594f]'}`}>
-                    {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  <span
+                    className={`text-[10px] mt-1.5 block text-right font-bold uppercase tracking-[0.12em] ${
+                      isMine ? 'text-white/60' : 'text-[#5c594f]'
+                    }`}
+                  >
+                    {new Date(msg.created_at).toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
                   </span>
                 </div>
               </div>
@@ -191,8 +248,8 @@ export function Chat() {
           <input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleSend()}
             placeholder="Type a message..."
             className="app-input input-glow flex-1"
           />

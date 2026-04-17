@@ -6,17 +6,17 @@
  * Set TRANSPORT=http and MCP_HTTP_PORT=3100 for remote access
  */
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { createServer, IncomingMessage, ServerResponse } from "node:http";
-import "dotenv/config";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import { createServer, IncomingMessage, ServerResponse } from 'node:http';
+import 'dotenv/config';
 
-import { registerContentTools } from "./tools/content.js";
-import { registerProtocolTools } from "./tools/protocol.js";
+import { registerContentTools } from './tools/content.js';
+import { registerProtocolTools } from './tools/protocol.js';
 
 function createMcpServer(): McpServer {
-  const s = new McpServer({ name: "antigravity-sentry", version: "1.0.1" });
+  const s = new McpServer({ name: 'antigravity-sentry', version: '1.0.1' });
   registerContentTools(s);
   registerProtocolTools(s);
   return s;
@@ -24,33 +24,40 @@ function createMcpServer(): McpServer {
 
 async function readBody(req: IncomingMessage): Promise<unknown> {
   return new Promise((resolve, reject) => {
-    let data = "";
-    req.on("data", (chunk) => { data += chunk; });
-    req.on("end", () => {
-      try { resolve(data ? JSON.parse(data) : undefined); }
-      catch { reject(new Error("Invalid JSON")); }
+    let data = '';
+    req.on('data', (chunk) => {
+      data += chunk;
     });
-    req.on("error", reject);
+    req.on('end', () => {
+      try {
+        resolve(data ? JSON.parse(data) : undefined);
+      } catch {
+        reject(new Error('Invalid JSON'));
+      }
+    });
+    req.on('error', reject);
   });
 }
 
-if (process.env.TRANSPORT === "http") {
-  const PORT = parseInt(process.env.MCP_HTTP_PORT ?? "3100", 10);
+if (process.env.TRANSPORT === 'http') {
+  const PORT = parseInt(process.env.MCP_HTTP_PORT ?? '3100', 10);
   const AUTH_TOKEN = process.env.MCP_AUTH_TOKEN;
 
   createServer(async (req: IncomingMessage, res: ServerResponse) => {
     // Optional bearer token auth
     if (AUTH_TOKEN) {
-      const header = req.headers["authorization"] ?? "";
+      const header = req.headers['authorization'] ?? '';
       if (header !== `Bearer ${AUTH_TOKEN}`) {
-        res.writeHead(401, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Unauthorized" }));
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Unauthorized' }));
         return;
       }
     }
 
-    if (req.url !== "/mcp" && req.url !== "/") {
-      res.writeHead(404); res.end(); return;
+    if (req.url !== '/mcp' && req.url !== '/') {
+      res.writeHead(404);
+      res.end();
+      return;
     }
 
     // Stateless: fresh server + transport per request
@@ -59,15 +66,15 @@ if (process.env.TRANSPORT === "http") {
     await mcpServer.connect(transport);
 
     try {
-      const body = req.method === "POST" ? await readBody(req) : undefined;
+      const body = req.method === 'POST' ? await readBody(req) : undefined;
       await transport.handleRequest(req, res, body);
     } catch {
       if (!res.headersSent) {
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Internal server error" }));
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Internal server error' }));
       }
     }
-  }).listen(PORT, "127.0.0.1", () => {
+  }).listen(PORT, '127.0.0.1', () => {
     process.stderr.write(`antigravity-sentry MCP HTTP server on port ${PORT}\n`);
   });
 } else {

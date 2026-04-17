@@ -50,7 +50,7 @@ export class CivitAIService {
     this.apiClient = axios.create({
       baseURL: 'https://api.civitai.com/v1',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
       },
       timeout: 30000,
@@ -69,7 +69,7 @@ export class CivitAIService {
       removeBackground?: boolean;
       improveQuality?: boolean;
       applyStyle?: string;
-    }
+    },
   ): Promise<GenerationResult> {
     console.log(`🎨 Enhancing profile picture for user: ${userId}`);
 
@@ -97,23 +97,28 @@ export class CivitAIService {
       });
 
       // Log enhancement to database
-      await this.db.query(`
+      await this.db.query(
+        `
         INSERT INTO ai_enhancements (
           user_id, original_image, enhanced_image, type, status, created_at
         ) VALUES ($1, $2, $3, 'profile_picture', 'completed', NOW())
-      `, [userId, imageUrl, result.imageUrl]);
+      `,
+        [userId, imageUrl, result.imageUrl],
+      );
 
       console.log(`✅ Profile picture enhanced: ${result.imageUrl}`);
       return result;
-
     } catch (error: any) {
       console.error(`❌ Enhancement failed:`, error.message);
 
-      await this.db.query(`
+      await this.db.query(
+        `
         INSERT INTO ai_enhancements (
           user_id, original_image, type, status, error, created_at
         ) VALUES ($1, $2, 'profile_picture', 'failed', $3, NOW())
-      `, [userId, imageUrl, error.message]);
+      `,
+        [userId, imageUrl, error.message],
+      );
 
       throw error;
     }
@@ -126,14 +131,17 @@ export class CivitAIService {
     console.log(`💡 Generating photo suggestions for user: ${userId}`);
 
     // Get user preferences and profile data
-    const userResult = await this.db.query(`
+    const userResult = await this.db.query(
+      `
       SELECT
         u.gender, u.interests, u.bio,
         p.outdoor_preferences, p.style_preferences
       FROM users u
       LEFT JOIN user_profiles p ON p.user_id = u.id
       WHERE u.id = $1
-    `, [userId]);
+    `,
+      [userId],
+    );
 
     const user = userResult.rows[0];
 
@@ -183,18 +191,20 @@ export class CivitAIService {
       const reasons = !approved ? result.flags : [];
 
       // Log moderation result
-      await this.db.query(`
+      await this.db.query(
+        `
         INSERT INTO image_moderation (
           image_url, approved, reasons, confidence, created_at
         ) VALUES ($1, $2, $3, $4, NOW())
-      `, [imageUrl, approved, JSON.stringify(reasons), result.confidence]);
+      `,
+        [imageUrl, approved, JSON.stringify(reasons), result.confidence],
+      );
 
       return {
         approved,
         reasons,
         confidence: result.confidence || 0,
       };
-
     } catch (error: any) {
       console.error(`❌ Moderation failed:`, error.message);
 
@@ -222,7 +232,6 @@ export class CivitAIService {
       console.log(`✅ Background removed: ${resultUrl}`);
 
       return resultUrl;
-
     } catch (error: any) {
       console.error(`❌ Background removal failed:`, error.message);
       throw error;
@@ -254,7 +263,6 @@ export class CivitAIService {
       const result = await this.pollGeneration(jobId);
 
       return result;
-
     } catch (error: any) {
       console.error(`❌ Image generation failed:`, error.message);
 
@@ -293,7 +301,6 @@ export class CivitAIService {
 
         // Still processing, wait and retry
         await this.delay(2000);
-
       } catch (error: any) {
         console.error(`❌ Polling failed:`, error.message);
 
@@ -328,7 +335,6 @@ export class CivitAIService {
       });
 
       return response.data.items || [];
-
     } catch (error: any) {
       console.error(`❌ Failed to fetch models:`, error.message);
       return [];
@@ -342,14 +348,17 @@ export class CivitAIService {
     console.log(`🎨 Starting batch enhancement (limit: ${limit})...`);
 
     // Get users with unenhanced profile pictures
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       SELECT u.id, u.profile_picture
       FROM users u
       LEFT JOIN ai_enhancements ae ON ae.user_id = u.id AND ae.type = 'profile_picture'
       WHERE u.profile_picture IS NOT NULL
         AND ae.id IS NULL
       LIMIT $1
-    `, [limit]);
+    `,
+      [limit],
+    );
 
     const users = result.rows;
     console.log(`Found ${users.length} users to enhance`);
@@ -365,7 +374,6 @@ export class CivitAIService {
 
         // Rate limiting
         await this.delay(5000);
-
       } catch (error: any) {
         console.error(`❌ Failed to enhance profile for user ${user.id}:`, error.message);
       }
@@ -381,10 +389,10 @@ export class CivitAIService {
     console.log(`📢 Generating marketing image for campaign: ${campaign}`);
 
     const prompts: Record<string, string> = {
-      'valentines_day': 'romantic couple, valentines day theme, hearts, warm lighting, professional photography',
-      'summer_dating': 'happy couple at beach, summer vibes, sunset, casual clothing, smiling',
-      'winter_romance': 'cozy couple with hot chocolate, winter setting, warm tones, romantic atmosphere',
-      'pride_month': 'diverse couples, pride theme, colorful, joyful, inclusive dating',
+      valentines_day: 'romantic couple, valentines day theme, hearts, warm lighting, professional photography',
+      summer_dating: 'happy couple at beach, summer vibes, sunset, casual clothing, smiling',
+      winter_romance: 'cozy couple with hot chocolate, winter setting, warm tones, romantic atmosphere',
+      pride_month: 'diverse couples, pride theme, colorful, joyful, inclusive dating',
     };
 
     const prompt = prompts[campaign] || `dating app marketing, ${campaign} theme, professional, engaging`;
@@ -400,11 +408,14 @@ export class CivitAIService {
 
     if (result.status === 'succeeded' && result.imageUrl) {
       // Save to marketing assets
-      await this.db.query(`
+      await this.db.query(
+        `
         INSERT INTO marketing_assets (
           campaign, image_url, type, created_at
         ) VALUES ($1, $2, 'ai_generated', NOW())
-      `, [campaign, result.imageUrl]);
+      `,
+        [campaign, result.imageUrl],
+      );
 
       return result.imageUrl;
     }
@@ -433,7 +444,7 @@ export class CivitAIService {
    * Delay helper
    */
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 

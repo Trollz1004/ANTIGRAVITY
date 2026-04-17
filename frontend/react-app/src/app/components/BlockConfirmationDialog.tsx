@@ -30,8 +30,9 @@ export function BlockConfirmationDialog({
             <div>
               <p className="font-bold text-red-800">This action is permanent</p>
               <p className="text-sm text-red-700">
-                {targetName} will be removed from your discover feed and conversation path. They won't be able to
-                contact you or see your profile.
+                {targetName} will be removed from your discover feed and
+                conversation path. They won't be able to contact you or see your
+                profile.
               </p>
             </div>
           </div>
@@ -41,7 +42,8 @@ export function BlockConfirmationDialog({
             <div>
               <p className="font-bold text-gray-800">Reversing this</p>
               <p className="text-sm text-gray-700">
-                You can unblock {targetName} later in your privacy settings if you change your mind.
+                You can unblock {targetName} later in your privacy settings if
+                you change your mind.
               </p>
             </div>
           </div>

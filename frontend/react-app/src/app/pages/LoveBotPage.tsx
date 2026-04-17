@@ -14,7 +14,9 @@ export function LoveBotPage() {
           <div className="app-kicker mb-3">Concierge</div>
           <h1 className="app-title">romance concierge.</h1>
           <p className="app-subtitle mt-4 max-w-2xl">
-            Premium-only compatibility tools, prompts, gift ideas, and date-planning support without turning the whole app into a chatbot skin.
+            Premium-only compatibility tools, prompts, gift ideas, and
+            date-planning support without turning the whole app into a chatbot
+            skin.
           </p>
         </div>
 

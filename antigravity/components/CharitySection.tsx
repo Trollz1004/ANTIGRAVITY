@@ -15,10 +15,11 @@ interface CharityCardProps {
 const CharityCard = ({ icon, name, tagline, url, isDarkMode }: CharityCardProps) => (
   <motion.div
     whileHover={{ y: -10, scale: 1.02 }}
-    className={`relative p-8 rounded-3xl border-2 transition-all duration-500 overflow-hidden group ${isDarkMode
-      ? 'bg-slate-900/40 border-emerald-500/30 hover:border-emerald-400 hover:shadow-[0_0_30px_rgba(16,185,129,0.2)]'
-      : 'bg-white border-emerald-100 hover:border-emerald-300 hover:shadow-xl'
-      }`}
+    className={`relative p-8 rounded-3xl border-2 transition-all duration-500 overflow-hidden group ${
+      isDarkMode
+        ? 'bg-slate-900/40 border-emerald-500/30 hover:border-emerald-400 hover:shadow-[0_0_30px_rgba(16,185,129,0.2)]'
+        : 'bg-white border-emerald-100 hover:border-emerald-300 hover:shadow-xl'
+    }`}
   >
     {/* Background Glow */}
     <div className="absolute -right-10 -top-10 w-32 h-32 bg-emerald-500/10 blur-3xl rounded-full group-hover:bg-emerald-500/20 transition-colors" />
@@ -31,9 +32,7 @@ const CharityCard = ({ icon, name, tagline, url, isDarkMode }: CharityCardProps)
       {name}
     </h3>
 
-    <p className={`mb-8 leading-relaxed min-h-[60px] ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-      {tagline}
-    </p>
+    <p className={`mb-8 leading-relaxed min-h-[60px] ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>{tagline}</p>
 
     <a
       href={url}
@@ -52,7 +51,7 @@ const STATIC_PARTICLES = [...Array(15)].map(() => ({
   scale: Math.random() * 0.5 + 0.5,
   duration: Math.random() * 5 + 5,
   delay: Math.random() * 5,
-  xOffset: (Math.random() * 100 - 10) + '%'
+  xOffset: Math.random() * 100 - 10 + '%',
 }));
 
 export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) {
@@ -66,14 +65,14 @@ export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) 
       name: 'AI-Solutions.Store',
       tagline: 'Charity storefront kept separate from the revenue and recycling lanes.',
       url: 'https://ai-solutions.store',
-      icon: <Heart className="w-8 h-8 text-emerald-500" />
+      icon: <Heart className="w-8 h-8 text-emerald-500" />,
     },
     {
       name: 'OnlineRecycle.org',
       tagline: 'Florida electronics recycling, pickup, drop-off, and resale service.',
       url: 'https://OnlineRecycle.org',
-      icon: <Recycle className="w-8 h-8 text-emerald-500" />
-    }
+      icon: <Recycle className="w-8 h-8 text-emerald-500" />,
+    },
   ];
 
   return (
@@ -89,18 +88,18 @@ export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) 
                 x: p.x,
                 y: '100%',
                 opacity: 0,
-                scale: p.scale
+                scale: p.scale,
               }}
               animate={{
                 y: '-20%',
                 opacity: [0, 0.5, 0],
-                x: p.xOffset
+                x: p.xOffset,
               }}
               transition={{
                 duration: p.duration,
                 repeat: Infinity,
                 delay: p.delay,
-                ease: "linear"
+                ease: 'linear',
               }}
               className="absolute w-2 h-2 bg-emerald-400 rounded-full blur-[1px]"
             />
@@ -117,25 +116,41 @@ export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) 
             <Recycle className="w-4 h-4 animate-spin-slow" /> Service & Mission Links
           </div>
           <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-6">
-            Built Clean. Reported Honestly.<br />
+            Built Clean. Reported Honestly.
+            <br />
             <span className="text-emerald-500">ZERO B.S. &hearts;</span>
           </h2>
-          <p className={`text-xl max-w-3xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-            The public surface should stay simple: real links, clear lane separation, and no inflated counts or mission claims that have not been verified.
+          <p
+            className={`text-xl max-w-3xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
+          >
+            The public surface should stay simple: real links, clear lane separation, and no inflated counts or mission
+            claims that have not been verified.
           </p>
         </motion.div>
       </div>
 
       {/* Stats Bar */}
-      <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 p-2 rounded-3xl border ${isDarkMode ? 'bg-emerald-950/20 border-emerald-500/20' : 'bg-emerald-50 border-emerald-100'}`}>
+      <div
+        className={`grid grid-cols-1 md:grid-cols-2 gap-4 p-2 rounded-3xl border ${
+          isDarkMode ? 'bg-emerald-950/20 border-emerald-500/20' : 'bg-emerald-50 border-emerald-100'
+        }`}
+      >
         {stats.map((stat, i) => (
           <div key={i} className="flex items-center justify-center gap-4 p-6 text-center">
-            <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white text-emerald-600 shadow-sm'}`}>
+            <div
+              className={`p-3 rounded-xl ${
+                isDarkMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white text-emerald-600 shadow-sm'
+              }`}
+            >
               {stat.icon}
             </div>
             <div className="text-left">
               <p className="text-2xl font-black text-emerald-500 leading-none mb-1">{stat.value}</p>
-              <p className={`text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-emerald-500/60' : 'text-emerald-600/60'}`}>
+              <p
+                className={`text-xs font-bold uppercase tracking-wider ${
+                  isDarkMode ? 'text-emerald-500/60' : 'text-emerald-600/60'
+                }`}
+              >
                 {stat.label}
               </p>
             </div>
@@ -154,13 +169,15 @@ export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) 
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        className={`p-10 rounded-[2.5rem] text-center border-2 border-dashed ${isDarkMode ? 'bg-slate-900/40 border-emerald-500/20' : 'bg-emerald-50/50 border-emerald-200'}`}
+        className={`p-10 rounded-[2.5rem] text-center border-2 border-dashed ${
+          isDarkMode ? 'bg-slate-900/40 border-emerald-500/20' : 'bg-emerald-50/50 border-emerald-200'
+        }`}
       >
         <Heart className="w-12 h-12 text-emerald-500 mx-auto mb-6 animate-pulse" />
         <h3 className="text-2xl font-bold mb-4">Keep It Verifiable</h3>
         <p className={`max-w-2xl mx-auto mb-8 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-          Public copy should describe what is live, what is owned, and what has actually been verified.
-          If a number, claim, or routing path is not confirmed, it should stay out of customer-facing copy.
+          Public copy should describe what is live, what is owned, and what has actually been verified. If a number,
+          claim, or routing path is not confirmed, it should stay out of customer-facing copy.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-500 text-sm font-bold">

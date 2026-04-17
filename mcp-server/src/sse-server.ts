@@ -5,49 +5,49 @@
  * Connect from claude.ai or any MCP client via SSE.
  */
 
-import http from "node:http";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
-import "dotenv/config";
+import http from 'node:http';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
+import 'dotenv/config';
 
-import { registerContentTools } from "./tools/content.js";
-import { registerProtocolTools } from "./tools/protocol.js";
+import { registerContentTools } from './tools/content.js';
+import { registerProtocolTools } from './tools/protocol.js';
 
-const PORT = parseInt(process.env.MCP_PORT || "3100", 10);
+const PORT = parseInt(process.env.MCP_PORT || '3100', 10);
 
 // Track active transports by session ID
 const transports = new Map<string, SSEServerTransport>();
 
 const httpServer = http.createServer(async (req, res) => {
   // CORS headers for tunnel access
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     res.writeHead(204);
     res.end();
     return;
   }
 
-  const url = new URL(req.url || "/", `http://localhost:${PORT}`);
+  const url = new URL(req.url || '/', `http://localhost:${PORT}`);
 
   // Health check
-  if (url.pathname === "/health") {
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ status: "ok", server: "antigravity-sentry", transport: "sse" }));
+  if (url.pathname === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', server: 'antigravity-sentry', transport: 'sse' }));
     return;
   }
 
   // SSE endpoint — client connects here
-  if (url.pathname === "/sse" && req.method === "GET") {
+  if (url.pathname === '/sse' && req.method === 'GET') {
     console.log(`[MCP] New SSE connection from ${req.socket.remoteAddress}`);
 
-    const server = new McpServer({ name: "antigravity-sentry", version: "1.0.1" });
+    const server = new McpServer({ name: 'antigravity-sentry', version: '1.0.1' });
     registerContentTools(server);
     registerProtocolTools(server);
 
-    const transport = new SSEServerTransport("/messages", res);
+    const transport = new SSEServerTransport('/messages', res);
     transports.set(transport.sessionId, transport);
 
     transport.onclose = () => {
@@ -60,11 +60,11 @@ const httpServer = http.createServer(async (req, res) => {
   }
 
   // Message endpoint — client POSTs messages here
-  if (url.pathname === "/messages" && req.method === "POST") {
-    const sessionId = url.searchParams.get("sessionId");
+  if (url.pathname === '/messages' && req.method === 'POST') {
+    const sessionId = url.searchParams.get('sessionId');
     if (!sessionId || !transports.has(sessionId)) {
-      res.writeHead(400, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "Invalid or missing sessionId" }));
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid or missing sessionId' }));
       return;
     }
 
@@ -74,8 +74,8 @@ const httpServer = http.createServer(async (req, res) => {
   }
 
   // 404
-  res.writeHead(404, { "Content-Type": "application/json" });
-  res.end(JSON.stringify({ error: "Not found" }));
+  res.writeHead(404, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ error: 'Not found' }));
 });
 
 httpServer.listen(PORT, () => {
