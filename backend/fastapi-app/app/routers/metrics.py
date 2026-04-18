@@ -28,6 +28,7 @@ from app.models import (
     VolunteerSignup,
     WebhookEvent,
 )
+from app.security_audit import run_security_audit
 from app.subscriptions import PREPAID_SUBSCRIPTION_DURATIONS, utc_now
 
 router = APIRouter(prefix="/metrics")
@@ -35,6 +36,7 @@ router = APIRouter(prefix="/metrics")
 
 class RevenuePolicyResponse(BaseModel):
     """Current founder-directed operating policy for LLC revenue."""
+
     total_revenue_cents: int
     reserve_cents: int  # 10% founder-directed reserve
     operating_cents: int  # 90% operations
@@ -43,6 +45,7 @@ class RevenuePolicyResponse(BaseModel):
 
 class PlatformMetricsResponse(BaseModel):
     """Aggregate platform health metrics — zero PII."""
+
     generated_at: str
     revenue: RevenuePolicyResponse
     users: dict  # total, verified, with_profile, subscribers
@@ -62,12 +65,18 @@ def _calculate_revenue_policy(total_cents: int) -> RevenuePolicyResponse:
     )
 
 
-def _verify_metrics_key(x_metrics_key: str | None = Header(default=None, alias="X-Metrics-Key")) -> str:
+def _verify_metrics_key(
+    x_metrics_key: str | None = Header(default=None, alias="X-Metrics-Key"),
+) -> str:
     """Simple API key auth for dashboard access. Not user JWT."""
     settings = get_settings()
-    expected = settings.metrics_api_key or settings.jwt_secret  # prefer dedicated key, fallback to jwt
+    expected = (
+        settings.metrics_api_key or settings.jwt_secret
+    )  # prefer dedicated key, fallback to jwt
     if not x_metrics_key or x_metrics_key != expected:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid metrics key")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Invalid metrics key"
+        )
     return x_metrics_key
 
 
@@ -84,42 +93,57 @@ async def impact_metrics(
     """
 
     # Revenue: completed Square payments reserved into the internal allocation ledger.
-    revenue_total = await db.scalar(
-        select(func.coalesce(func.sum(RevenueAllocation.gross_amount_cents), 0))
-        .where(RevenueAllocation.status.in_(["reserved", "disbursed"]))
-    ) or 0
+    revenue_total = (
+        await db.scalar(
+            select(
+                func.coalesce(func.sum(RevenueAllocation.gross_amount_cents), 0)
+            ).where(RevenueAllocation.status.in_(["reserved", "disbursed"]))
+        )
+        or 0
+    )
 
     # Also count subscription revenue from Square webhook events (payment.completed / payment.created)
     # We count unique processed payment events to avoid double-counting
-    webhook_revenue = await db.scalar(
-        select(func.count(WebhookEvent.id))
-        .where(WebhookEvent.event_type.in_(["payment.completed", "payment.created"]))
-        .where(WebhookEvent.processed == True)
-    ) or 0
+    webhook_revenue = (
+        await db.scalar(
+            select(func.count(WebhookEvent.id))
+            .where(
+                WebhookEvent.event_type.in_(["payment.completed", "payment.created"])
+            )
+            .where(WebhookEvent.processed == True)
+        )
+        or 0
+    )
 
     # User metrics — counts only
     total_users = await db.scalar(select(func.count(User.id))) or 0
-    verified_users = await db.scalar(
-        select(func.count(User.id)).where(User.bot_shield_verified == True)
-    ) or 0
+    verified_users = (
+        await db.scalar(
+            select(func.count(User.id)).where(User.bot_shield_verified == True)
+        )
+        or 0
+    )
     profiled_users = await db.scalar(select(func.count(Profile.id))) or 0
     subscriber_now = utc_now()
     prepaid_tiers = tuple(PREPAID_SUBSCRIPTION_DURATIONS.keys())
-    subscribers = await db.scalar(
-        select(func.count(User.id)).where(
-            and_(
-                User.subscription_active == True,
-                or_(
-                    User.subscription_tier.is_(None),
-                    User.subscription_tier.notin_(prepaid_tiers),
-                    and_(
-                        User.subscription_expires_at.is_not(None),
-                        User.subscription_expires_at > subscriber_now,
+    subscribers = (
+        await db.scalar(
+            select(func.count(User.id)).where(
+                and_(
+                    User.subscription_active == True,
+                    or_(
+                        User.subscription_tier.is_(None),
+                        User.subscription_tier.notin_(prepaid_tiers),
+                        and_(
+                            User.subscription_expires_at.is_not(None),
+                            User.subscription_expires_at > subscriber_now,
+                        ),
                     ),
-                ),
+                )
             )
         )
-    ) or 0
+        or 0
+    )
 
     # Engagement metrics — counts only
     total_matches = await db.scalar(select(func.count(Match.id))) or 0
@@ -132,15 +156,30 @@ async def impact_metrics(
 
     # Verification metrics
     total_checks = await db.scalar(select(func.count(VerificationEvent.id))) or 0
-    passed_checks = await db.scalar(
-        select(func.count(VerificationEvent.id)).where(VerificationEvent.status == "passed")
-    ) or 0
-    failed_checks = await db.scalar(
-        select(func.count(VerificationEvent.id)).where(VerificationEvent.status == "failed")
-    ) or 0
-    pending_checks = await db.scalar(
-        select(func.count(VerificationEvent.id)).where(VerificationEvent.status == "pending")
-    ) or 0
+    passed_checks = (
+        await db.scalar(
+            select(func.count(VerificationEvent.id)).where(
+                VerificationEvent.status == "passed"
+            )
+        )
+        or 0
+    )
+    failed_checks = (
+        await db.scalar(
+            select(func.count(VerificationEvent.id)).where(
+                VerificationEvent.status == "failed"
+            )
+        )
+        or 0
+    )
+    pending_checks = (
+        await db.scalar(
+            select(func.count(VerificationEvent.id)).where(
+                VerificationEvent.status == "pending"
+            )
+        )
+        or 0
+    )
 
     return PlatformMetricsResponse(
         generated_at=datetime.now(timezone.utc).isoformat(),
@@ -168,3 +207,21 @@ async def impact_metrics(
             "pending": pending_checks,
         },
     )
+
+
+@router.get("/security-audit")
+async def get_security_audit(
+    _key: str = Depends(_verify_metrics_key),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Run and return security audit results.
+
+    This endpoint performs a comprehensive security audit of the application
+    configuration and reports any potential security issues found.
+
+    Note: This is an administrative endpoint that should only be accessible
+    to authorized operators with the metrics API key.
+    """
+    # Run security audit
+    audit_result = run_security_audit()
+    return audit_result
