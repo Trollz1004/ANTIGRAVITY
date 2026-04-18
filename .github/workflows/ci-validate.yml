@@ -10,6 +10,15 @@ on:
       - 'mcp-server/**'
       - 'scripts/**'
       - '.github/workflows/ci-validate.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'youandinotai/**'
+      - 'revenue-core/**'
+      - 'antigravity/**'
+      - 'mcp-server/**'
+      - 'scripts/**'
+      - '.github/workflows/ci-validate.yml'
 
 jobs:
   validate:
@@ -93,30 +102,77 @@ jobs:
           fi
           echo "No secrets found in tracked files"
 
-  run-tests:
+  eslint-prettier-check:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: youandinotai-api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install frontend dependencies
+        working-directory: frontend/react-app
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: frontend/react-app
+        run: npx eslint src --ext .ts,.tsx --max-warnings 0
+
+      - name: Run Prettier check
+        working-directory: frontend/react-app
+        run: npx prettier --check "src/**/*.{ts,tsx,json,css}"
+
+  black-ruff-check:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        working-directory: backend/fastapi-app
+        run: |
+          pip install -r requirements.txt
+          pip install black ruff
+
+      - name: Run Black check
+        working-directory: backend/fastapi-app
+        run: black --check .
+
+      - name: Run Ruff check
+        working-directory: backend/fastapi-app
+        run: ruff check .
+
+  run-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend/fastapi-app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt pytest pytest-cov pytest-asyncio aiosqlite
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio aiosqlite
 
-      - name: Run test suite
+      - name: Run test suite with coverage
         env:
-          JWT_SECRET: "ci-test-secret-that-is-at-least-32-characters-long"
+          JWT_SECRET: 'ci-test-secret-that-is-at-least-32-characters-long'
           APP_ENV: test
-          SQUARE_WEBHOOK_VERIFY_SIGNATURE: "false"
-          CORS_ORIGINS: "http://localhost"
-          SQUARE_BOT_SHIELD_PAYMENT_LINK: "https://square.link/u/Qc5mxUy7"
-          SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY: "ci-test-signature-key"
-          SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL: "http://localhost/api/v1/webhooks/square-payment"
-          SQUARE_BOOKING_WEBHOOK_SIGNATURE_KEY: "ci-test-signature-key"
-          SQUARE_BOOKING_WEBHOOK_NOTIFICATION_URL: "http://localhost/api/v1/webhooks/square-booking"
-        run: pytest --tb=short
+          SQUARE_WEBHOOK_VERIFY_SIGNATURE: 'false'
+          CORS_ORIGINS: 'http://localhost'
+          SQUARE_BOT_SHIELD_PAYMENT_LINK: 'https://square.link/u/Qc5mxUy7'
+          SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY: 'ci-test-signature-key'
+          SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL: 'http://localhost/api/v1/webhooks/square-payment'
+          SQUARE_BOOKING_WEBHOOK_SIGNATURE_KEY: 'ci-test-signature-key'
+          SQUARE_BOOKING_WEBHOOK_NOTIFICATION_URL: 'http://localhost/api/v1/webhooks/square-booking'
+        run: |
+          pytest --tb=short --cov=app --cov-report=term-missing --cov-fail-under=80
