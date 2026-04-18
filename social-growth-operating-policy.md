@@ -1,4 +1,4 @@
-# 24/7 Social Growth Operating Policy
+yeap # 24/7 Social Growth Operating Policy
 
 ## YouAndINotAI - Continuous Growth Operations Framework
 
