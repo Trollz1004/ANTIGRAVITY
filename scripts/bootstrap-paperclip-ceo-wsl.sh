@@ -30,7 +30,8 @@ mkdir -p "$(dirname "$LOG_FILE")"
   export PYTHONUNBUFFERED=1
 
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] Repo root: $REPO_ROOT"
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting Hermes from Windows venv inside WSL"
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting unified OpenCode launcher with fallback models"
 } >> "$LOG_FILE" 2>&1
 
-exec /mnt/c/Users/joshl/.local/hermes-venv/Scripts/hermes.exe chat
+# Use the unified OpenCode launcher instead of Hermes
+exec /mnt/c/ANTIGRAVITY/paperclip-adapters/opencode-unified.cmd chat
