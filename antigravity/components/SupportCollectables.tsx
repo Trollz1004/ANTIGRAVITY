@@ -1,7 +1,7 @@
 import React from 'react';
 import { Heart, Gift, ExternalLink, CreditCard } from 'lucide-react';
 
-export default function DonateCollectables({ isDarkMode }: { isDarkMode: boolean }) {
+export default function SupportCollectables({ isDarkMode }: { isDarkMode: boolean }) {
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="text-center mb-12">

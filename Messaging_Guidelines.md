@@ -35,9 +35,9 @@ DON'T: "Don't miss out on your soulmate"
 
 NEVER use:
 
-- Donate
-- Donation
-- Solicitation
+- donate
+- donation
+- solicitation
 
 ALWAYS use instead:
 

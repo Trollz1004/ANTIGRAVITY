@@ -14,7 +14,7 @@ const { ethers } = require('hardhat');
 
 if (process.env.ALLOW_HISTORICAL_SPLIT_DEPLOY !== 'YES') {
   throw new Error(
-    "Historical split deploy blocked. This repo's current LLC doctrine is the conservative 10% charitable cap. " +
+    "Historical split deploy blocked. This repo's current LLC doctrine is 1-wallet with 10% reserve — no automatic split routing. " +
       'Set ALLOW_HISTORICAL_SPLIT_DEPLOY=YES only if you are intentionally deploying a historical artifact.',
   );
 }

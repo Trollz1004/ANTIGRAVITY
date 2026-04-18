@@ -29,9 +29,9 @@
 
 ## CURRENT FINANCIAL DOCTRINE
 
-- The current LLC operating rule is a **founder-directed conservative 10% cap** on charitable support sourced from for-profit platform operations.
-- Do not present `60/30/10`, `100% charity`, or `100% DAO` as current live operating truth unless Josh explicitly restores that language in canonical repo docs.
-- Do not present the 10% cap as a universal settled tax-law conclusion. Treat it as the current safe operating rule chosen by Josh for LLC survival and compliance.
+- The current LLC operating rule is **1-wallet, 10% reserve, founder-directed**.
+- Do not present `60/30/10`, `100% charity`, or `100% DAO` as current live operating truth.
+- Do not present the 10% reserve as a universal settled tax-law conclusion. Treat it as Josh's current operating choice.
 - Legacy on-chain 60/30/10 references remain historical context, not current operating doctrine.
 
 ---
@@ -70,7 +70,7 @@
 
 1. **One repo, one branch, one folder.** (`C:\ANTIGRAVITY` -> `main`)
 2. **Product Boundary Enforcement:** keep platform scopes distinct and do not restore retired split-era labels as live doctrine.
-3. **§496.405 Compliance:** Never use "donate" or "solicitation" in customer-facing code. It is a "contractual revenue disbursement."
+3. **Word Ban:** Never use "donate", "donation", or "solicitation" in customer-facing code or copy.
 4. **Push to Main:** If a task is complete and verified, push it to `origin/main`. Do not leave local drift.
 
 ---
