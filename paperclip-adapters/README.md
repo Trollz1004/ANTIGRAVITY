@@ -12,6 +12,8 @@ Wrappers provided:
 - `opencode.cmd` / `opencode.ps1`
 - `hermes.cmd` / `hermes.ps1`
 - `gemini.cmd` / `gemini.ps1`
+- `gemini-ceo-backup.cmd`
+- `ollama-ceo-failsafe.cmd`
 
 These wrappers delegate to the currently installed machine-local CLIs under
 `C:\Users\joshl`.

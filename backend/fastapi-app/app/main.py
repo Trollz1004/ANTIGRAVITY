@@ -20,6 +20,11 @@ from app.database import reconcile_legacy_schema
 from app.logging_config import setup_logging
 from app.monitoring import setup_monitoring
 from app.scheduler import setup_scheduler
+from app.security import (
+    RateLimitMiddleware,
+    InputValidationMiddleware,
+    SecurityHeadersMiddleware,
+)
 from app.routers import (
     auth,
     billing,
@@ -100,7 +105,10 @@ async def lifespan(app: FastAPI):
     setup_logging()
 
     # Startup: Initialize monitoring
-    setup_monitoring()
+    setup_monitoring(
+        sentry_dsn=getattr(settings, "sentry_dsn", None),
+        prometheus_port=getattr(settings, "prometheus_port", None),
+    )
 
     # Startup: Reconcile database schema
     await reconcile_legacy_schema()
@@ -124,29 +132,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-
-@app.middleware("http")
-async def security_headers_middleware(request: Request, call_next):
-    """Add security headers to all responses."""
-    response = await call_next(request)
-
-    # Add security headers
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["X-Frame-Options"] = "DENY"
-    response.headers["X-XSS-Protection"] = "1; mode=block"
-    response.headers["Strict-Transport-Security"] = (
-        "max-age=31536000; includeSubDomains"
-    )
-
-    # Content Security Policy (basic)
-    response.headers["Content-Security-Policy"] = (
-        "default-src 'self'; frame-ancestors 'none';"
-    )
-
-    # Referrer Policy
-    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-
-    return response
+# Add security middleware (order matters - InputValidation should be first)
+app.add_middleware(InputValidationMiddleware)
+app.add_middleware(RateLimitMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
 
 
 @app.middleware("http")
@@ -169,8 +158,32 @@ async def request_context_middleware(request: Request, call_next):
         },
     )
 
+    # Track metrics if Prometheus is available
+    start_time = time.time()
+    if (
+        hasattr(app.state, "monitoring")
+        and app.state.monitoring.REQUEST_IN_PROGRESS_GAUGE
+    ):
+        app.state.monitoring.REQUEST_IN_PROGRESS_GAUGE.inc()
+
     try:
         response = await call_next(request)
+
+        # Record metrics for successful response
+        if hasattr(app.state, "monitoring"):
+            monitoring = app.state.monitoring
+            if monitoring.REQUEST_COUNTER:
+                monitoring.REQUEST_COUNTER.labels(
+                    method=request.method,
+                    endpoint=request.url.path,
+                    status_code=response.status_code,
+                ).inc()
+            if monitoring.REQUEST_DURATION_HISTOGRAM:
+                monitoring.REQUEST_DURATION_HISTOGRAM.labels(
+                    method=request.method, endpoint=request.url.path
+                ).observe(time.time() - start_time)
+            if monitoring.REQUEST_IN_PROGRESS_GAUGE:
+                monitoring.REQUEST_IN_PROGRESS_GAUGE.dec()
 
         # Log successful response
         logger.info(
@@ -180,6 +193,7 @@ async def request_context_middleware(request: Request, call_next):
                 "status_code": response.status_code,
                 "method": request.method,
                 "path": request.url.path,
+                "duration": time.time() - start_time,
             },
         )
 
@@ -188,6 +202,13 @@ async def request_context_middleware(request: Request, call_next):
         return response
 
     except Exception as e:
+        # Record metrics for error response
+        if (
+            hasattr(app.state, "monitoring")
+            and app.state.monitoring.REQUEST_IN_PROGRESS_GAUGE
+        ):
+            app.state.monitoring.REQUEST_IN_PROGRESS_GAUGE.dec()
+
         # Log unhandled exceptions with correlation context
         logger.error(
             "Unhandled exception in request processing",
@@ -198,6 +219,7 @@ async def request_context_middleware(request: Request, call_next):
                 "error_type": type(e).__name__,
                 "error_message": str(e),
                 "traceback": traceback.format_exc(),
+                "duration": time.time() - start_time,
             },
             exc_info=True,
         )
