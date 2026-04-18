@@ -6,8 +6,8 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from app.auth import get_current_active_user
-from app.models.user import User
+from app.auth import get_current_user
+from app.models import User
 
 router = APIRouter(prefix="/marketing", tags=["marketing"])
 
@@ -84,7 +84,7 @@ class ContentItem(BaseModel):
 
 @router.post("/content", response_model=ContentItem)
 async def create_content_item(
-    content: MarketingPost, current_user: User = Depends(get_current_active_user)
+    content: MarketingPost, current_user: User = Depends(get_current_user)
 ):
     """
     Create a new marketing content item from AI agent.
@@ -136,7 +136,7 @@ async def create_content_item(
 
 
 @router.get("/content", response_model=List[ContentItem])
-async def list_content_items(current_user: User = Depends(get_current_active_user)):
+async def list_content_items(current_user: User = Depends(get_current_user)):
     """
     List all marketing content items.
     """
@@ -146,7 +146,7 @@ async def list_content_items(current_user: User = Depends(get_current_active_use
 
 @router.get("/content/{content_id}", response_model=ContentItem)
 async def get_content_item(
-    content_id: str, current_user: User = Depends(get_current_active_user)
+    content_id: str, current_user: User = Depends(get_current_user)
 ):
     """
     Get a specific marketing content item.
@@ -167,7 +167,7 @@ async def get_content_item(
 async def update_content_item(
     content_id: str,
     content_update: MarketingPost,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user),
 ):
     """
     Update a marketing content item.
