@@ -121,8 +121,8 @@ function latestEbayContext() {
             ? 'price not set'
             : `$${item.suggested_price_usd}`;
         const format = String(item.listing_format || 'buy_it_now').trim();
-        const impact = String(item.charity_impact_line || '').trim();
-        return `- ${title} | ${price} | ${format} | ${impact}`;
+        const reserve = String(item.reserve_line || '').trim();
+        return `- ${title} | ${price} | ${format} | ${reserve}`;
       })
       .join('\n');
   } catch {
