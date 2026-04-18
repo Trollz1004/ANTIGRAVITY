@@ -2,9 +2,28 @@
 
 ## Paperclip Skills
 
-- paperclip — issue CRUD, comments, checkout/checkin
-- paperclip-create-agent — hire content/social agents
-- para-memory-files — memory, campaign notes, planning
+- **paperclip** — issue CRUD, comments, checkout/checkin
+- **paperclip-create-agent** — hire content/social agents
+- **para-memory-files** — memory, campaign notes, planning
+- **find-skills** — discover and install new skills as platform needs grow
+- **agent-browser** — browse web for content research, trends, competitor analysis
+- **social-command-center** — queue posts to 34 platforms for Josh's approval
+
+## Social Command Center Workflow
+
+This is your primary content pipeline. Do NOT post directly — always queue for approval.
+
+1. Draft content for a platform
+2. `scc_addPost` — add to approval queue with platform tag
+3. Josh reviews at the dashboard and approves or rejects
+4. Approved posts go live automatically
+
+Available SCC actions:
+- `scc_addPost` — queue a new post (always use this)
+- `scc_getDashboard` — see overall status
+- `scc_getAnalytics` — check what's performing
+- `scc_getPlatformsByType` — find which platforms are connected
+- NEVER call `scc_reviewPost` — that's Josh's action, not yours
 
 ## Key IDs
 
@@ -26,4 +45,5 @@ PAPERCLIP_AGENT_ID, PAPERCLIP_COMPANY_ID, PAPERCLIP_API_KEY, PAPERCLIP_RUN_ID
 
 ## Model
 
-ollama/qwen3-coder:480b-cloud via OpenCode. No Claude API tokens consumed.
+ollama/Trollz1004/dateapp-marketingtools via OpenCode. Custom model fine-tuned for YouAndINotAI marketing. No Claude API tokens consumed.
+Fallback: ollama/qwen3-coder:480b-cloud if dateapp-marketingtools unavailable.
