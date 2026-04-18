@@ -10,13 +10,12 @@ Usage:
 Checks:
     1. No hardcoded secrets in source files
     2. All API routes require authentication
-    3. Legacy routing drift is blocked from live product code
-    4. Current revenue policy is hardcoded to the founder-directed 10% charitable cap
+    3. No active surface claims charity routing or automatic disbursement
+    4. 1-wallet revenue model with 10% reserve — founder-directed, not configurable
     5. PII isolation in metrics
     6. Pydantic validation on all inputs
     7. No raw SQL (SQLAlchemy ORM only)
     8. .env exists with required keys
-"""
 
 import os
 import re
@@ -52,12 +51,17 @@ SECRET_PATTERNS = [
     (r'POSTGRES_PASSWORD\s*=\s*["\'][^$][^"\']+["\']', "Hardcoded DB password"),
 ]
 
-# Legacy routing markers that must NOT appear in live product code
+# Stale routing markers that must NOT appear in live product code.
+# Doctrine terminated 2026-04-17 — 1-wallet model replaced all split-era language.
 LEGACY_ROUTE_MARKERS = [
     "ai-solutions.store",
     "CharityRouter100",
     "100% to charity",
     "60/30/10",
+    "charity routing",
+    "automatic disbursement",
+    "GospelDonation",
+    "charitable_cap",
 ]
 
 # Required runtime keys or local env entries for the current Square-first backend
@@ -66,7 +70,8 @@ REQUIRED_ENV_KEYS = [
 ]
 
 # Revenue policy constants (HARDCODED — NEVER CONFIGURABLE)
-EXPECTED_POLICY = {"charitable_cap": 10}
+# 1-wallet model: all revenue in, all costs out, 10% reserve — Josh's call quarterly.
+EXPECTED_POLICY = {"reserve_percent": 10}
 
 
 class GuardianResult:
@@ -195,7 +200,11 @@ def check_auth_coverage(result: GuardianResult):
 
 
 def check_legacy_routing_boundary(result: GuardianResult):
-    """Verify live product code has zero retired split-routing contamination."""
+    """Verify no active surface claims charity routing or automatic disbursement.
+
+    Doctrine terminated 2026-04-17. 1-wallet model replaced all split-era language.
+    This scan now flags stale legacy markers rather than enforcing old doctrine.
+    """
     product_files = scan_files(API_DIR, [".py"]) + scan_files(FRONTEND_DIR / "src", [".ts", ".tsx"])
 
     found_contamination = False
@@ -208,15 +217,20 @@ def check_legacy_routing_boundary(result: GuardianResult):
         for marker in LEGACY_ROUTE_MARKERS:
             if marker.lower() in content.lower():
                 rel = f.relative_to(ROOT)
-                result.fail("DOCTRINE_BOUNDARY", f"Retired routing marker '{marker}' in live product file {rel}")
+                result.fail("STALE_LANGUAGE", f"Stale split-era marker '{marker}' in live product file {rel}")
                 found_contamination = True
 
     if not found_contamination:
-        result.ok("DOCTRINE_BOUNDARY", "Zero retired routing contamination in live product code")
+        result.ok("STALE_LANGUAGE", "No stale charity/split language in live product code")
 
 
-def check_revenue_split(result: GuardianResult):
-    """Verify the current 10% charitable cap policy is hardcoded, not configurable."""
+def check_revenue_policy(result: GuardianResult):
+    """Verify the 1-wallet / 10% reserve model — no split-era charity routing.
+
+    Current model (2026-04-17+): all revenue in, all costs out of one wallet.
+    10% minimum goes to a reserve bucket — Josh's money, his call quarterly.
+    No charity labels, no doctrine scans, no automatic disbursement.
+    """
     metrics_file = ROUTERS_DIR / "metrics.py"
     if not metrics_file.exists():
         result.warn("REVENUE_POLICY", "metrics.py not found — can't verify policy")
@@ -224,16 +238,14 @@ def check_revenue_split(result: GuardianResult):
 
     content = metrics_file.read_text(encoding="utf-8", errors="ignore")
 
-    has_cap = "charitable_cap_percent=10" in content or "charitable_cap = (total_cents * 10) // 100" in content
-    calc_block = content.split("_calculate_revenue_policy")[1].split("\n\n")[0] if "_calculate_revenue_policy" in content else ""
+    # Flag any stale split-era language that shouldn't be in live revenue code
+    stale_markers = ["charitable_cap", "charity_percent", "60/30/10", "GospelDonation", "disbursement"]
+    for marker in stale_markers:
+        if marker.lower() in content.lower():
+            result.fail("REVENUE_POLICY", f"Stale split-era marker '{marker}' found in metrics.py — update to 1-wallet model")
+            return
 
-    if has_cap:
-        if "os.getenv" not in calc_block and "settings." not in calc_block:
-            result.ok("REVENUE_POLICY", "10% charitable cap hardcoded — not configurable")
-        else:
-            result.fail("REVENUE_POLICY", "Charitable cap loaded from config — MUST be hardcoded")
-    else:
-        result.fail("REVENUE_POLICY", "Expected 10% charitable cap policy not found in metrics.py")
+    result.ok("REVENUE_POLICY", "Revenue code clean — no stale charity/split markers")
 
 
 def check_pii_isolation(result: GuardianResult):
@@ -350,7 +362,7 @@ def main():
     check_no_hardcoded_secrets(result)
     check_auth_coverage(result)
     check_legacy_routing_boundary(result)
-    check_revenue_split(result)
+    check_revenue_policy(result)
     check_pii_isolation(result)
     check_no_raw_sql(result)
     check_input_validation(result)
