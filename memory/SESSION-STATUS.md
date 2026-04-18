@@ -96,6 +96,30 @@
 
 ---
 
+## HERMES (CEO orchestration / bootstrap lane)
+
+**Last active:** 2026-04-18 current session
+**Session summary:**
+- Verified `scripts/autostart.ps1` had a stale `paperclip-upstream` WorkingDirectory and corrected startup to use the live repo path.
+- Created unified bootstrap: `C:\ANTIGRAVITY\scripts\bootstrap-paperclip-ceo.ps1`
+- Routed all desktop launchers and autostart through the same bootstrap so manual recovery and startup use one code path.
+- Created/updated desktop recovery launchers including `C:\Users\joshl\Desktop\Hermes-Paperclip-CEO-24x7.bat`
+- Hardened bootstrap with Paperclip retry logic and tunnel health recheck.
+- Installed skills.sh skills `find-skills` and `agent-browser` globally for Antigravity/Gemini CLI/OpenCode/Codex lanes.
+- Added fallback launchers: `paperclip-adapters\\gemini-ceo-backup.cmd`, `paperclip-adapters\\ollama-ceo-failsafe.cmd`, plus `scripts\\test-ceo-fallbacks.ps1`.
+- Added WSL-first orchestration launchers: `scripts\\bootstrap-paperclip-ceo-wsl.sh`, `scripts\\launch-hermes-paperclip-ceo-wsl.cmd`, and desktop recovery `C:\Users\joshl\Desktop\Hermes-Paperclip-CEO-WSL-24x7.bat`.
+- Verified repo MCP config already exists at `C:\ANTIGRAVITY\.mcp.json` for `brain-mcp`, `antigravity-sentry`, and `social-command-center`.
+
+**Current blockers:**
+- Bootstrap wiring is in place, but live runtime still depends on local Windows services actually being healthy after reboot.
+- Hermes executive-agent subprocess env behavior inside Paperclip may still require `hermes-headless.cmd` where Paperclip adapters ignore DB env forwarding.
+
+**Next up:**
+- If startup misses, click `Hermes-Paperclip-CEO-24x7.bat` and inspect `C:\ANTIGRAVITY\logs\paperclip-ceo-bootstrap.log`.
+- If CEO/CFO/CSO still error after Paperclip is up, continue adapter-specific debugging separately from startup orchestration.
+
+---
+
 ## HANDOFF LOG
 
 > Quick notes when one AI finishes something another AI needs to pick up.
@@ -109,6 +133,9 @@
 | 2026-04-18 | Gemini | Opus | Finished doctrine sweep, deleted QWEN CEO files, and updated vault for 1-wallet/10% reserve. Ready for next steps. |
 | 2026-04-18 | Gemini | KLM | Modified hermes wrapper to enforce ACP mode for CEO/CFO/CSO. Hired 4 new agents (TRO-37, TRO-52). |
 | 2026-04-18 | Gemini | Opus | DAO bootstrapper automated with non-blocking processes and injected Telegram alert hooks. Repo cleared of drift and pushed cleanly. Your floor! |
+| 2026-04-18 | Hermes | All | Unified startup + manual recovery under `scripts/bootstrap-paperclip-ceo.ps1`; desktop launcher `Hermes-Paperclip-CEO-24x7.bat`; autostart now delegates to same bootstrap; MCP config verified in `.mcp.json`. |
+| 2026-04-18 | Hermes | All | Installed skills.sh skills `find-skills` + `agent-browser`; added `gemini-ceo-backup.cmd`, `ollama-ceo-failsafe.cmd`, and `scripts/test-ceo-fallbacks.ps1`; local Ollama backup tested OK, Gemini API awaits key in env. |
+| 2026-04-18 | Hermes | All | Switched bootstrap to WSL-first orchestration via `scripts/launch-hermes-paperclip-ceo-wsl.cmd` and `scripts/bootstrap-paperclip-ceo-wsl.sh`; desktop recovery added at `Hermes-Paperclip-CEO-WSL-24x7.bat`. |
 
 ---
 

@@ -26,6 +26,17 @@ except ImportError:
 logger = logging.getLogger("youandinotai.monitoring")
 
 
+# Metric names
+REQUEST_COUNT = "youandinotai_http_requests_total"
+REQUEST_DURATION = "youandinotai_http_request_duration_seconds"
+REQUEST_IN_PROGRESS = "youandinotai_http_requests_in_progress"
+
+# Prometheus metrics (initialized in setup_monitoring)
+REQUEST_COUNTER = None
+REQUEST_DURATION_HISTOGRAM = None
+REQUEST_IN_PROGRESS_GAUGE = None
+
+
 class MetricsCollector:
     """Simple in-memory metrics collector for basic monitoring."""
 
@@ -98,28 +109,72 @@ def timing_decorator(metric_name: str):
     return decorator
 
 
-# Placeholder for Sentry/Prometheus integration
-def setup_monitoring() -> None:
+def setup_monitoring(
+    sentry_dsn: Optional[str] = None, prometheus_port: Optional[int] = None
+) -> None:
     """Initialize monitoring integrations.
 
-    This function sets up stubs for Sentry and Prometheus integration
-    that can be implemented when ready.
+    Args:
+        sentry_dsn: Sentry DSN for error tracking
+        prometheus_port: Port to expose Prometheus metrics endpoint
     """
     logger.info("Setting up monitoring infrastructure")
 
-    # Placeholder for Sentry initialization
-    try:
-        # This would be: import sentry_sdk; sentry_sdk.init(dsn=SENTRY_DSN)
-        logger.info("Sentry integration stubbed - ready for implementation")
-    except ImportError:
-        logger.info("Sentry SDK not available - skipping integration")
+    # Initialize Sentry integration
+    if SENTRY_AVAILABLE and sentry_dsn:
+        try:
+            # Configure Sentry logging integration
+            sentry_logging = LoggingIntegration(
+                level=logging.INFO,  # Capture info and above as breadcrumbs
+                event_level=logging.ERROR,  # Send errors as events
+            )
 
-    # Placeholder for Prometheus integration
-    try:
-        # This would be: from prometheus_client import start_http_server
-        logger.info("Prometheus integration stubbed - ready for implementation")
-    except ImportError:
-        logger.info("Prometheus client not available - skipping integration")
+            sentry_sdk.init(
+                dsn=sentry_dsn,
+                integrations=[sentry_logging],
+                traces_sample_rate=1.0,  # 100% of transactions for performance monitoring
+                profiles_sample_rate=1.0,  # 100% of transactions for profiling
+            )
+            logger.info("Sentry integration initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize Sentry: {e}")
+    elif sentry_dsn:
+        logger.warning("Sentry DSN provided but sentry-sdk not available")
+    else:
+        logger.info("Sentry integration not configured (no DSN provided)")
+
+    # Initialize Prometheus integration
+    global REQUEST_COUNTER, REQUEST_DURATION_HISTOGRAM, REQUEST_IN_PROGRESS_GAUGE
+
+    if PROMETHEUS_AVAILABLE and prometheus_port:
+        try:
+            # Create Prometheus metrics
+            REQUEST_COUNTER = Counter(
+                "youandinotai_http_requests_total",
+                "Total HTTP requests",
+                ["method", "endpoint", "status_code"],
+            )
+
+            REQUEST_DURATION_HISTOGRAM = Histogram(
+                "youandinotai_http_request_duration_seconds",
+                "HTTP request duration in seconds",
+                ["method", "endpoint"],
+            )
+
+            REQUEST_IN_PROGRESS_GAUGE = Gauge(
+                "youandinotai_http_requests_in_progress",
+                "Number of HTTP requests in progress",
+            )
+
+            # Start Prometheus metrics server
+            start_http_server(prometheus_port)
+            logger.info(f"Prometheus metrics server started on port {prometheus_port}")
+        except Exception as e:
+            logger.error(f"Failed to initialize Prometheus: {e}")
+    elif prometheus_port:
+        logger.warning("Prometheus port provided but prometheus-client not available")
+    else:
+        logger.info("Prometheus integration not configured (no port provided)")
 
 
 # Backward compatibility
