@@ -28,8 +28,12 @@ class Settings(BaseSettings):
     # stripe_webhook_secret: str = ""  # REMOVED — Iron Wall migration to Square
     square_access_token: str = ""
     square_location_id: str = ""
-    square_bot_shield_payment_link: str = ""  # Pre-configured Square payment link for $1 Bot-Shield
-    square_subscription_payment_link: str = ""  # Pre-configured Square payment link for subscriptions
+    square_bot_shield_payment_link: str = (
+        ""  # Pre-configured Square payment link for $1 Bot-Shield
+    )
+    square_subscription_payment_link: str = (
+        ""  # Pre-configured Square payment link for subscriptions
+    )
     square_payment_webhook_signature_key: str = ""
     square_payment_webhook_notification_url: str = ""
     square_booking_webhook_signature_key: str = ""
@@ -66,6 +70,10 @@ class Settings(BaseSettings):
     google_client_id: str = ""
     google_client_secret: str = ""
 
+    # Monitoring settings
+    sentry_dsn: str = ""
+    prometheus_port: int = 8000
+
     jwt_secret: str = Field(
         default="",
         validation_alias=AliasChoices("JWT_SECRET", "SECRET_KEY"),
@@ -76,7 +84,9 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
 
-    cors_origins: str = "https://youandinotai.com,http://localhost:3000,http://localhost:5173"
+    cors_origins: str = (
+        "https://youandinotai.com,http://localhost:3000,http://localhost:5173"
+    )
     registration_rate_limit_per_minute: int = 10
     auth_rate_limit_per_minute: int = 10
     verify_rate_limit_per_minute: int = 5
@@ -87,7 +97,9 @@ class Settings(BaseSettings):
 
     @property
     def cors_origin_list(self) -> list[str]:
-        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+        return [
+            origin.strip() for origin in self.cors_origins.split(",") if origin.strip()
+        ]
 
     @property
     def rate_limit_trusted_proxy_list(self) -> list[str]:
