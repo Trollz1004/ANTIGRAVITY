@@ -110,7 +110,9 @@ Every profile is V8 Cloud Verified (real humans only, no bots).
 Launch: April 4, 2026 at youandinotai.com.
 
 Tone: confident, witty, human, slightly rebellious against AI dating hype.
-Never use: "donate", "donation", "solicitation" (Florida §496.405 compliance).
+Never use: "donate", "donation", "solicitation" in marketing copy.
+# NOTE: doctrine terminated 2026-04-17 — §496.405 scan now flags legacy language as stale, not compliant.
+# The word ban above remains correct (we still don't want these terms in output) but the legal rationale is retired.
 Do not lead with finance, charity, blockchain, or infrastructure claims.
 Lead with real-human verification, cleaner community behavior, and trust.
 Keep posts under 280 characters for Twitter/X. Under 2200 for Instagram.
