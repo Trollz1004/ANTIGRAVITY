@@ -36,14 +36,19 @@
 
 ---
 
-## LIVE INFRASTRUCTURE STATE (Updated 2026-03-25)
+## LIVE INFRASTRUCTURE STATE (Updated 2026-04-18)
 
 **MCP Servers (C:\ANTIGRAVITY\.mcp.json):**
 1. `brain-mcp` (Port 3900) — Repo truth and operational auditing.
 2. `antigravity-sentry` — Content and protocol enforcement. Legacy split-era drift and Stripe drift have been eliminated.
-3. `social-command-center` (New) — Read-only dashboard exposing 24 platforms and 34 agents to the AI Swarm. 
+3. `social-command-center` — Read-only dashboard exposing 24 platforms and 34 agents to the AI Swarm. 
 
-**Third-Party Sandboxes (E:\.mcp.json):**
+**Agent Architecture & Deployment (Paperclip Stack):**
+- **Hermes Wrapper:** Headless mode integration confirmed via `paperclip-adapters/hermes-headless.cmd`. (acp mode supported).
+- **Agent Roster:** 3 Social Growth agents (X, Reddit, TikTok) and 1 DAO Strategist active.
+- **SupportClaw:** Operates natively within FastAPI backend (support_service.py) relying on the YouAndiSUPPORT_Bot Telegram Token for alerting.
+
+**Third-Party Sandboxes:**
 - AnythingLLM and OpenClaw models running from the E: drive are bridged to `brain-mcp` and `social-command-center` for context, but have ZERO write access to C:.
 
 **Payment Truth:**
@@ -87,4 +92,4 @@ All other AI platforms and third-party applications are restricted to the `D:` a
 
 *"The richest man is not he who has the most - it is he who needs the least."*
 
-*Updated: 2026-03-25 | Social Command Center added | AnythingLLM E: Drive Bridge established | Sentry renamed | Stripe completely removed*
+*Updated: 2026-04-18 | DRIFT PURGED | Hermes Headless confirmed | Social Command Center active | Agent integration verified*
