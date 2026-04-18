@@ -8,10 +8,12 @@ If Paperclip's database gets wiped or an agent's instructions get corrupted, res
 
 | Agent | Dir | Adapter | Agent ID |
 |-------|-----|---------|----------|
-| CEO | ceo/ | opencode_local | c4b4a3d9-8e66-4463-bf65-abfc5037b92a |
-| CTO | cto/ | opencode_local | b02a21c7-737e-4177-91ac-6d8e57805801 |
-| CMO | cmo/ | opencode_local | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 |
-| UX Designer | uxdesigner/ | opencode_local | bd6d6722-9f3e-46ba-8651-ec9a219042ee |
+| CEO | ceo/ | opencode_local / glm-5.1:cloud | c4b4a3d9-8e66-4463-bf65-abfc5037b92a |
+| CFO | cfo/ | opencode_local / glm-5.1:cloud | cf6c84e2 (full UUID at runtime) |
+| CSO | cso/ | opencode_local / glm-5.1:cloud | new hire — ID assigned on creation |
+| CTO | cto/ | opencode_local / qwen3-coder | b02a21c7-737e-4177-91ac-6d8e57805801 |
+| CMO | cmo/ | opencode_local / dateapp-marketingtools | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 |
+| UX Designer | uxdesigner/ | opencode_local / dateapp | bd6d6722-9f3e-46ba-8651-ec9a219042ee |
 | Mission Guardian (Claude) | mission-guardian-claude/ | claude_local | 2229682b-cede-4462-b38b-25a910af022e |
 | Mission Guardian (Codex) | mission-guardian-codex/ | codex_local | 42200bfa-fb9e-42b1-901d-6dadf15eb23b |
 
@@ -28,7 +30,10 @@ C:\Users\joshl\.paperclip\instances\default\companies\{companyId}\agents\{agentI
 
 Then reload the agent from the Paperclip UI.
 
-## Model
+## Models (updated 2026-04-17)
 
-All agents except Mission Guardians run on ollama/qwen3-coder:480b-cloud (no Claude tokens).
-Mission Guardians use claude_local + codex_local (daily caps — heartbeat set to 3600s).
+- CEO / CFO / CSO: `ollama/glm-5.1:cloud` — 198K context, tools, thinking
+- CTO / TechExecutor: `ollama/qwen3-coder:480b-cloud`
+- CMO: `ollama/Trollz1004/dateapp-marketingtools` (platform-specific, fallback: qwen3-coder)
+- UX Designer: `ollama/Trollz1004/dateapp`
+- Mission Guardians: `claude_local` + `codex_local` — daily audit only (86400s heartbeat)
