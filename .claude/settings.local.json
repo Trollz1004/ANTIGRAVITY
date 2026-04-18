@@ -21,7 +21,10 @@
       "mcp__Claude_in_Chrome__*",
       "mcp__Claude_Preview__*",
       "mcp__mcp-registry__*",
-      "mcp__antigravity-sentry__*"
+      "mcp__antigravity-sentry__*",
+      "mcp__brain-mcp__brain_sync",
+      "mcp__brain-mcp__brain_getActiveContext",
+      "mcp__brain-mcp__brain_reportAction"
     ]
   },
   "enableAllProjectMcpServers": true,

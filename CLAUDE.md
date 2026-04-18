@@ -107,9 +107,7 @@ This is not a threat — it is his documented standing order to protect the miss
 - **No Locked Doors**: If a task is documented as LIVE/DONE in `REPOSITORY_RECORD.md`,
   assume success. Never block Josh for re-verification.
 - **Secrets in .env only** — never in chat, never in git. GitHub PAT in Windows Credential Manager.
-- **Revenue doctrine boundary**: no active operational or customer-facing surface may claim routing above the current conservative `10%` charitable cap for LLC-controlled revenue unless canonical docs explicitly replace it
-- **Florida §496.405**: NEVER use "donate" / "donation" / "solicitation" in customer-facing
-  code. Correct: "contractual revenue disbursement." Hooks enforce this.
+- **1-wallet model**: all revenue in, all costs out of one wallet. 10% minimum goes to a reserve — Josh's money, his call what happens to it quarterly. No charity labels, no doctrine scans.
 - **No mock/simulation data** — real or fail honestly
 - **Retired/recovery-only repos and folders are non-authoritative** — do not use them as live doctrine or routing truth
 - **Auxiliary node restriction** — helper nodes, mirrored clones, and auxiliary workstations are read-only for live repo truth. Only the primary Sabretooth session may make direct edits or pushes for `C:\ANTIGRAVITY`.
@@ -169,8 +167,7 @@ This is not a threat — it is his documented standing order to protect the miss
 | **9020** | C: | GenSpark (future social marketing engine) |
 
 - ONE repo (Trollz1004/ANTIGRAVITY), ONE branch (main), ONE folder approach.
-- Historical Base contract artifacts exist, but they do not override the current founder-directed
-  conservative 10% cap for live LLC-controlled revenue.
+- Historical Base contract artifacts exist but are history only — do not use as live doctrine.
 - T5500 verified SSH IP: `192.168.0.15` (hostname `DESKTOP-H4B53GL`, Windows shell)
 - 9020 SSH: `ssh -i ~/.ssh/id_ed25519 joshl@192.168.0.5` (cmd.exe shell)
 - 9020 has NO git push creds — use bundle relay
@@ -188,7 +185,7 @@ This is not a threat — it is his documented standing order to protect the miss
 ## Claude Code Automation
 
 **Hooks** (.claude/settings.json):
-- PreToolUse: .env file protection, §496.405 donate-guard
+- PreToolUse: .env file protection, protected file notice
 - PostToolUse: Prettier auto-format on edit
 
 **Skills** (`/command`): status, health, policy-boundary, launch-checklist, cost-check, my-workflow,
@@ -211,22 +208,13 @@ deploy-check, square-status, donate-scan, security-review
 
 ---
 
-## Revenue Policy: Founder-Directed Conservative 10% Cap
+## Revenue Model: 1 Wallet (Updated 2026-04-17)
 
-- Current LLC operating rule: charitable support sourced from for-profit platform operations is capped at **10%**
-  until Josh explicitly changes it after formal legal/tax review or a documented partner/co-venture structure.
-- The remainder stays inside lawful business operations: taxes, platform costs, retained cash, founder survival,
-  and general operating reserve.
-- Do not present legacy split-era or absolute-charity language as current live operating truth.
-- Historical reference only: Base Mainnet `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`.
-
----
-
-## Current Public-Surface Boundary
-
-- `youandinotai.com`, `onlinerecycle.org`, `onlinerecycle.square.site`, and `ai-solutions.store` must all follow the same factual public-claim rule.
-- Do not present retired split-era percentages, absolute-charity claims, named-beneficiary routing, or automatic charity-side separation as current live LLC truth.
-- Historical chain artifacts remain history only unless canonical docs explicitly restore a different operating model.
+- **ONE wallet**: all platform revenue in, all costs out. No separate charity routing, no named-beneficiary splits.
+- **10% minimum reserve**: set aside automatically. It is Josh's money — taxable income. He decides quarterly whether to donate, reinvest, stake, or hold.
+- **Josh is an LLC**: 100% of merchant receipts = taxable income. Do not suggest "direct to charity to skip taxes" — that is illegal for an LLC.
+- No active surface (code, UI, docs) may claim charity routing, automatic disbursement, or §496.405-style language.
+- Historical chain artifacts (GospelDonation.sol, split-era percentages) are history only.
 
 ---
 
@@ -251,5 +239,4 @@ The security isn't for us — it's for the kids. Please don't weaken these. Buil
 
 ---
 
-*Updated: 2026-03-31 | Prelaunch tax/doctrine correction reflected | Team wording updated |
-Node identity corrected to SABRETOOTH | E drive policy added | Encoding cleaned*
+*Updated: 2026-04-17 | Revenue model permanently changed to 1-wallet/10% reserve — no charity doctrine | Donate-guard hook removed | GLM-5.1:cloud token policy set*
