@@ -14,6 +14,15 @@ Wrappers provided:
 - `gemini.cmd` / `gemini.ps1`
 - `gemini-ceo-backup.cmd`
 - `ollama-ceo-failsafe.cmd`
+- `opencode-unified.cmd` - Unified launcher with automatic fallback between cloud models
 
 These wrappers delegate to the currently installed machine-local CLIs under
 `C:\Users\joshl`.
+
+The unified launcher (`opencode-unified.cmd`) provides automatic fallback between:
+
+1. Primary: opencode/glm-5.1
+2. Cloud models: ollama/qwen3-coder:480b-cloud, ollama/joshlcoleman/dateapp
+3. Falls back to default OpenCode if all models fail
+
+This ensures resilience against API usage caps.
