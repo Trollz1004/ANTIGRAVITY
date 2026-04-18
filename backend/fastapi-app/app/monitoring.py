@@ -6,6 +6,23 @@ import logging
 import time
 from typing import Any, Dict, Optional
 
+try:
+    import sentry_sdk
+    from sentry_sdk.integrations.logging import LoggingIntegration
+
+    SENTRY_AVAILABLE = True
+except ImportError:
+    SENTRY_AVAILABLE = False
+    sentry_sdk = None
+
+try:
+    from prometheus_client import Counter, Histogram, Gauge, start_http_server
+
+    PROMETHEUS_AVAILABLE = True
+except ImportError:
+    PROMETHEUS_AVAILABLE = False
+    Counter = Histogram = Gauge = start_http_server = None
+
 logger = logging.getLogger("youandinotai.monitoring")
 
 
