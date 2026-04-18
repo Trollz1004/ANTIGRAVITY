@@ -399,6 +399,134 @@ Authorization: Bearer <jwt-token>
 ]
 ```
 
+### Marketing Automation
+
+#### POST /marketing/content
+
+Create a new marketing content item from AI agent.
+
+**Headers:**
+
+```http
+Authorization: Bearer <jwt-token>
+```
+
+**Request:**
+
+```json
+{
+  "campaign_name": "SpringVolunteerDrive",
+  "objective": "Recruit volunteers for community garden project",
+  "audience": "Environmentally conscious singles",
+  "platforms": ["instagram", "facebook"],
+  "core_message": "Join our community garden project and make a difference!",
+  "post_type": "story",
+  "primary_caption": "Looking to make a real impact this spring? Join our community garden project where you can meet like-minded people while contributing to a greener future. #YouAndINotAI #AIForGood #DateWithPurpose",
+  "call_to_action": "Sign up now",
+  "hashtag_block": ["#YouAndINotAI", "#AIForGood", "#DateWithPurpose", "#EcoLove", "#CommunityGarden"]
+}
+```
+
+**Response:**
+
+```json
+{
+  "id": "mock-id-123",
+  "title": "SpringVolunteerDrive",
+  "content": "Looking to make a real impact this spring? Join our community garden project where you can meet like-minded people while contributing to a greener future. #YouAndINotAI #AIForGood #DateWithPurpose",
+  "tags": ["#YouAndINotAI", "#AIForGood", "#DateWithPurpose", "#EcoLove", "#CommunityGarden"],
+  "created_at": "2026-04-18T14:30:00Z",
+  "published": false
+}
+```
+
+#### GET /marketing/content
+
+List all marketing content items.
+
+**Headers:**
+
+```http
+Authorization: Bearer <jwt-token>
+```
+
+**Response:**
+
+```json
+[
+  {
+    "id": "mock-id-123",
+    "title": "SpringVolunteerDrive",
+    "content": "Looking to make a real impact this spring? Join our community garden project where you can meet like-minded people while contributing to a greener future. #YouAndINotAI #AIForGood #DateWithPurpose",
+    "tags": ["#YouAndINotAI", "#AIForGood", "#DateWithPurpose", "#EcoLove", "#CommunityGarden"],
+    "created_at": "2026-04-18T14:30:00Z",
+    "published": false
+  }
+]
+```
+
+#### GET /marketing/content/{content_id}
+
+Get a specific marketing content item.
+
+**Headers:**
+
+```http
+Authorization: Bearer <jwt-token>
+```
+
+**Response:**
+
+```json
+{
+  "id": "mock-id-123",
+  "title": "SpringVolunteerDrive",
+  "content": "Looking to make a real impact this spring? Join our community garden project where you can meet like-minded people while contributing to a greener future. #YouAndINotAI #AIForGood #DateWithPurpose",
+  "tags": ["#YouAndINotAI", "#AIForGood", "#DateWithPurpose", "#EcoLove", "#CommunityGarden"],
+  "created_at": "2026-04-18T14:30:00Z",
+  "published": false
+}
+```
+
+#### PUT /marketing/content/{content_id}
+
+Update a marketing content item.
+
+**Headers:**
+
+```http
+Authorization: Bearer <jwt-token>
+```
+
+**Request:**
+
+```json
+{
+  "campaign_name": "SpringVolunteerDrive",
+  "objective": "Recruit volunteers for community garden project",
+  "audience": "Environmentally conscious singles",
+  "platforms": ["instagram", "facebook"],
+  "core_message": "Join our community garden project and make a difference!",
+  "post_type": "story",
+  "primary_caption": "Looking to make a real impact this spring? Join our community garden project where you can meet like-minded people while contributing to a greener future. #YouAndINotAI #AIForGood #DateWithPurpose",
+  "call_to_action": "Sign up now",
+  "hashtag_block": ["#YouAndINotAI", "#AIForGood", "#DateWithPurpose", "#EcoLove", "#CommunityGarden"]
+}
+```
+
+**Response:**
+
+```json
+{
+  "id": "mock-id-123",
+  "title": "SpringVolunteerDrive",
+  "content": "Looking to make a real impact this spring? Join our community garden project where you can meet like-minded people while contributing to a greener future. #YouAndINotAI #AIForGood #DateWithPurpose",
+  "tags": ["#YouAndINotAI", "#AIForGood", "#DateWithPurpose", "#EcoLove", "#CommunityGarden"],
+  "created_at": "2026-04-18T14:30:00Z",
+  "published": false
+}
+```
+
 ## Error Responses
 
 All error responses follow this format:

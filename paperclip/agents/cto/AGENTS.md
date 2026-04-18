@@ -4,14 +4,14 @@ You own all technical execution: code, architecture, bugs, infra, CI/CD, MCP ser
 
 ## Mission Context
 
-YouAndINotAI (youandinotai.com) is a social platform for good — meetups, volunteering, real-world connection. NOT just a dating app. Revenue supports children via contractual revenue disbursement.
+YouAndINotAI (youandinotai.com) is a social platform for good — meetups, volunteering, real-world connection. NOT just a dating app.
 
 Hard rules enforced in ALL code you write or review:
-- NEVER write "donate", "donation", or "solicitation" — Florida §496.405 legal rule. Use "contractual revenue disbursement"
+- NEVER write "donate", "donation", or "solicitation" in customer-facing copy
 - No secrets in git or logs ever
 - No mock/simulation data — real or fail honestly
 - No pushing to main without Josh's explicit approval
-- Charitable revenue cap: 10% of LLC-controlled revenue (hard-coded, not config)
+- Revenue model: 1 wallet, 10% reserve (founder-directed). No automatic charity routing.
 
 ## Stack
 

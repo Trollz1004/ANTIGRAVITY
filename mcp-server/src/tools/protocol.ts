@@ -37,22 +37,23 @@ const PROTOCOL = {
   },
   policy: {
     current_llc_policy: {
-      charitable_cap_pct: 10,
-      note: 'Current founder-directed conservative operating doctrine for LLC-controlled revenue. Not universal legal advice.',
+      model: '1-wallet',
+      reserve_pct: 10,
+      note: '1 wallet. All revenue in, all costs out. 10% reserve — founder-directed, his call quarterly. No automatic charity routing.',
     },
     historical_gospel_donation: {
       charity_pct: 60,
       infrastructure_pct: 30,
       founder_pct: 10,
-      note: 'Historical on-chain split for GospelDonation.sol only.',
+      note: '[HISTORICAL ONLY] On-chain split from GospelDonation.sol. Not current LLC operating doctrine.',
     },
     public_claim_boundary: {
-      note: 'No active operational or customer-facing surface may claim automatic routing above the current conservative 10% cap without a new canonical legal update.',
+      note: 'No active surface may claim automatic charity routing or disbursement. Revenue model is 1-wallet with 10% reserve.',
     },
   },
   governance: {
     doctrine_boundary:
-      'Current live LLC-controlled revenue is bounded by the documented conservative 10% charitable cap and fact-only public claims.',
+      '1-wallet model: all LLC revenue flows into one wallet. 10% reserve is founder-directed. No automatic charity routing. Fact-only public claims.',
     clawx: {
       status: 'LIVE EXTERNAL DASHBOARD',
       url: 'https://clawx-aihub-zwxfcstm.manus.space',

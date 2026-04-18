@@ -36,9 +36,9 @@ router = APIRouter(prefix="/metrics")
 class RevenuePolicyResponse(BaseModel):
     """Current founder-directed operating policy for LLC revenue."""
     total_revenue_cents: int
-    charitable_cap_cents: int  # 10%
-    operating_reserve_cents: int  # 90%
-    charitable_cap_percent: int
+    reserve_cents: int  # 10% founder-directed reserve
+    operating_cents: int  # 90% operations
+    reserve_percent: int
 
 
 class PlatformMetricsResponse(BaseModel):
@@ -51,14 +51,14 @@ class PlatformMetricsResponse(BaseModel):
 
 
 def _calculate_revenue_policy(total_cents: int) -> RevenuePolicyResponse:
-    """Founder-directed conservative 10% charitable cap for current LLC operations."""
-    charitable_cap = (total_cents * 10) // 100
-    operating_reserve = total_cents - charitable_cap
+    """1-wallet model: 10% reserve, founder-directed. No automatic routing."""
+    reserve = (total_cents * 10) // 100
+    operating = total_cents - reserve
     return RevenuePolicyResponse(
         total_revenue_cents=total_cents,
-        charitable_cap_cents=charitable_cap,
-        operating_reserve_cents=operating_reserve,
-        charitable_cap_percent=10,
+        reserve_cents=reserve,
+        operating_cents=operating,
+        reserve_percent=10,
     )
 
 
