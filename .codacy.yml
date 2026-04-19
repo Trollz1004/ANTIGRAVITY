@@ -1,0 +1,15 @@
+---
+engines:
+  eslint:
+    enabled: true
+  pylint:
+    enabled: true
+  hadolint:
+    enabled: true
+  yamllint:
+    enabled: true
+max-allowed-issues: 0
+exclude_paths:
+  - "docs/**"
+  - "assets/**"
+  - "**/*.md"

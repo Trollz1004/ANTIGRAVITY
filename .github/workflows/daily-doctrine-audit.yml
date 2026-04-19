@@ -1,0 +1,150 @@
+name: Daily Paperclip Agent Audit
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'paperclip/agents/*/AGENTS.md'
+      - 'paperclip/agents/*/HEARTBEAT.md'
+      - 'paperclip/agents/*/TOOLS.md'
+      - 'paperclip/agents/audit/AUDIT-*.md'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Paperclip agent audit
+        id: audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          scripts/paperclip/agent-audit.sh
+
+      - name: Build workflow summary
+        shell: bash
+        run: |
+          {
+            echo '## Paperclip Agent Audit'
+            echo
+            echo "- Audit file: \`${{ steps.audit.outputs.audit_file }}\`"
+            echo "- Unauthorized change detected: \`${{ steps.audit.outputs.unauthorized_change }}\`"
+            echo "- Fail flag: \`${{ steps.audit.outputs.audit_fail }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Auto-revert unauthorized protected-file mutations
+        if: github.event_name == 'push' && steps.audit.outputs.unauthorized_change == '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          BEFORE_SHA="${{ github.event.before }}"
+          AFTER_SHA="${{ github.sha }}"
+
+          if [ -z "$BEFORE_SHA" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            if git rev-parse "${AFTER_SHA}^" >/dev/null 2>&1; then
+              BEFORE_SHA="$(git rev-parse "${AFTER_SHA}^")"
+            else
+              echo "No parent commit available for restore target."
+              exit 1
+            fi
+          fi
+
+          if ! git cat-file -e "${BEFORE_SHA}^{commit}"; then
+            echo "Restore target commit is invalid: $BEFORE_SHA"
+            exit 1
+          fi
+
+          if ! git merge-base --is-ancestor "$BEFORE_SHA" "$AFTER_SHA"; then
+            echo "Restore target is not an ancestor of current commit."
+            exit 1
+          fi
+
+          mapfile -t TO_RESTORE < <(
+            git diff --name-only "$BEFORE_SHA" "$AFTER_SHA" -- \
+              'paperclip/agents/*/AGENTS.md' \
+              'paperclip/agents/*/HEARTBEAT.md' \
+              'paperclip/agents/*/TOOLS.md' \
+              'paperclip/agents/audit/AUDIT-*.md' \
+            | sort -u
+          )
+
+          if [ "${#TO_RESTORE[@]}" -eq 0 ]; then
+            echo "No protected files require restore."
+            exit 0
+          fi
+
+          for file in "${TO_RESTORE[@]}"; do
+            git checkout "$BEFORE_SHA" -- "$file"
+          done
+
+      # This condition prevents an audit-log push by github-actions[bot] from recursively creating more audit-log commits.
+      - name: Commit audit log and any automatic restore (skip bot-authored push loops)
+        if: always() && (github.event_name != 'push' || github.actor != 'github-actions[bot]')
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add paperclip/agents/audit
+
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ steps.audit.outputs.unauthorized_change }}" = "1" ]; then
+            git add paperclip/agents/*/AGENTS.md paperclip/agents/*/HEARTBEAT.md paperclip/agents/*/TOOLS.md || true
+          fi
+
+          if git diff --cached --quiet; then
+            echo "No audit artifacts to commit."
+            exit 0
+          fi
+
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ steps.audit.outputs.unauthorized_change }}" = "1" ]; then
+            MSG="chore(audit): revert unauthorized protected-file changes and record audit [skip ci]"
+          else
+            MSG="chore(audit): record daily paperclip agent audit [skip ci]"
+          fi
+
+          git commit -m "$MSG"
+          git push
+
+      - name: Escalate unauthorized mutation to issue tracker
+        if: github.event_name == 'push' && steps.audit.outputs.unauthorized_change == '1'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const shortSha = context.sha?.slice(0, 8) || 'unknown';
+            const title = `[SECURITY] Paperclip protected-file mutation auto-reverted (${shortSha})`;
+            const body = [
+              'Unauthorized mutation detected in protected Paperclip agent files.',
+              '',
+              `- Actor: @${context.actor}`,
+              `- Commit: ${context.sha}`,
+              `- Workflow run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              '',
+              'Escalation required: CEO, CTO, and mission guardians.'
+            ].join('\n');
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: ['security', 'paperclip', 'audit']
+            });
+
+      - name: Fail run when audit flags risk
+        if: steps.audit.outputs.audit_fail == '1'
+        shell: bash
+        run: |
+          echo "Paperclip agent audit reported FAIL. Review audit log and remediation actions."
+          exit 1
