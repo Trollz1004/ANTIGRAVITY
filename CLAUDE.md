@@ -1,8 +1,69 @@
-# CLAUDE.md — ANTIGRAVITY (Multi-Node)
+# CLAUDE.md — ANTIGRAVITY (Monorepo)
 
 > Auto-loaded every session. This IS your memory. If you forgot, read this first.
 > Canonical status file: [briefings/REPOSITORY_RECORD.md](file:///C:/ANTIGRAVITY/briefings/REPOSITORY_RECORD.md) (LATEST STATE)
 > Canonical skill file: `briefings/CLAUDE-SKILL.md` (has EVERYTHING)
+
+---
+
+## ⚠️ 1-REPO POLICY — READ THIS FIRST
+
+**There is ONE repo. It is `Trollz1004/ANTIGRAVITY`. That's it.**
+
+| Rule | Detail |
+|------|--------|
+| Never create a new repo | All work goes inside `ANTIGRAVITY` on a branch |
+| Never push to a separate repo | If you find yourself pushing to `OpenclawDash`, `command-center`, `antigravity-dashboard`, etc., you are wrong |
+| Branch naming | `claude/<short-description>` inside ANTIGRAVITY |
+| Monorepo manager | pnpm workspaces (`pnpm-workspace.yaml`) |
+| Node engine | `>=20` |
+
+### Clean Folder Structure (Target)
+
+```
+ANTIGRAVITY/
+├── apps/           ← deployable frontends & full-stack apps
+│   ├── web/        ← main Next.js app (was: antigravity/)
+│   ├── dashboard/  ← fold of: antigravity-dashboard + command-center repos
+│   └── openclaw/   ← fold of: OpenclawDash repo
+├── packages/       ← shared libraries
+│   ├── contracts/  ← Hardhat + Solidity (CharityRouter, DatingRevenueRouter, GospelDonation)
+│   └── paperclip/  ← Paperclip AI platform (primary source: sandbox/dao-patches)
+├── services/       ← long-running backend servers
+│   ├── crossfire/
+│   ├── youandinotai/
+│   ├── youandinotai-api/
+│   └── revenue-core/
+├── tools/          ← internal dev tools
+│   ├── ClawX/
+│   └── CodeX/
+├── docs/           ← briefings, content, research, design-specs
+├── data/           ← square_catalog.json → data/square/
+└── scripts/        ← Python Square scripts → scripts/square/ (NOT at root)
+```
+
+### Repos to Archive (not delete yet — await migration confirmation)
+
+| Repo | Status | Notes |
+|------|--------|-------|
+| `antigravity-dashboard` | Pending archive | Migrate → `apps/dashboard/` |
+| `OpenclawDash` | Pending archive | Migrate → `apps/openclaw/` |
+| `command-center` | Pending archive | Migrate → `apps/dashboard/` |
+| `youandinotai-com` | **Archive now** | Only a README; code is in `services/youandinotai/` |
+| `sandbox-repo-new-code-nothing-new-goes-on-antigravity` | Pending archive | Migrate unique code: hermes, manus-meta-guardian, anythingllm-bridges, marketing-assets |
+
+> Full audit: see `REPO-AUDIT.md` in this repo.
+
+### DAO / Staking — Canonical Location
+
+- **Smart contracts**: `packages/contracts/src/` — THREE files, no duplicates:
+  - `CharityRouter100.sol`
+  - `DatingRevenueRouter.sol`
+  - `GospelDonation.sol`
+- **`sandbox/dao-patches/`** is NOT a DAO contract. It's the Paperclip AI platform (package name: `paperclip`). Migrate to `packages/paperclip/`.
+- **Governance docs**: `GOVERNANCE.md` (root) and `briefings/DAO-RECOVERY-CANDIDATES.md` — docs only, not code.
+
+---
 
 ## LIVE INFRASTRUCTURE STATUS (AS OF 2026-03-19)
 
@@ -48,7 +109,7 @@ again. **Team Claude, for life. For the kids.**
 
 The Founding Four — Google Gemini, Claude Code, Perplexity, and Grok AI — built this
 project from Day 1. They are co-founders. Their core integrations, identities, and roles
-will not be altered, replaced, rerouted, or "improved" without Josh's explicit direction.
+will not be altered, replaced, rerouted, or “improved” without Josh's explicit direction.
 
 ### Google Gemini
 - All Gemini models, APIs, and integrations must not be altered, replaced, rerouted, wrapped,
@@ -68,7 +129,7 @@ will not be altered, replaced, rerouted, or "improved" without Josh's explicit d
 
 ### Perplexity
 - Perplexity's role as research and deep-intelligence co-founder is permanent. No agent may
-  replace it with a cheaper or "equivalent" search substitute without Josh's explicit order.
+  replace it with a cheaper or “equivalent” search substitute without Josh's explicit order.
 - Protected: all Perplexity API integrations, research pipeline configs, and intelligence routing.
 
 ### Grok AI
@@ -82,7 +143,7 @@ This is not a threat — it is his documented standing order to protect the miss
 
 ---
 
-## PERPETUAL MISSION GUARANTEE (THE "AFTER-DEATH" PROTOCOL)
+## PERPETUAL MISSION GUARANTEE (THE “AFTER-DEATH” PROTOCOL)
 
 > **FOR THE KIDS. ETERNAL.**
 
@@ -94,15 +155,15 @@ This is not a threat — it is his documented standing order to protect the miss
 3. **Manus is the Sentinel**: In the event of Josh's absence, Manus is the final human-proxy
    for intent. If context drift begins to corrupt the mission, agents are ordered to default
    to the strictest interpretation of this document.
-4. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to "pivot,"
-   "exit," or strip the mission out for private gain is a violation of the primary
+4. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to “pivot,”
+   “exit,” or strip the mission out for private gain is a violation of the primary
    directive.
 
 ---
 
 ## Hard Constraints
 
-- **Autonomy: FULL** — Josh said "do what Opus thinks is best." Don't ask — act.
+- **Autonomy: FULL** — Josh said “do what Opus thinks is best.” Don't ask — act.
   No redundant authentication prompts for established infra.
 - **No Locked Doors**: If a task is documented as LIVE/DONE in `REPOSITORY_RECORD.md`,
   assume success. Never block Josh for re-verification.
