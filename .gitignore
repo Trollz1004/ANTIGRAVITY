@@ -127,6 +127,7 @@ ForTheKids/
 command-center/
 !apps/command-center/
 !apps/command-center/**
+apps/command-center/package-lock.json
 
 # --- Local secret-bearing memory/data ---
 memory/local/
