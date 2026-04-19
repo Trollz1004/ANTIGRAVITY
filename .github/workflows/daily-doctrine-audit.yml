@@ -1,0 +1,128 @@
+name: Daily Doctrine Audit
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run doctrine audit
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          failures=0
+          summary_rows=""
+
+          add_row() {
+            local check="$1"
+            local status="$2"
+            local detail="$3"
+            summary_rows+="| ${check} | ${status} | ${detail} |"$'\n'
+          }
+
+          pass() {
+            add_row "$1" "✅ PASS" "$2"
+          }
+
+          fail() {
+            failures=$((failures + 1))
+            add_row "$1" "❌ FAIL" "$2"
+          }
+
+          forbidden_pattern='donate|donation|solicitation|automatic disbursement|charity routing'
+
+          mapfile -t agent_docs < <(find paperclip/agents -mindepth 2 -maxdepth 2 -name AGENTS.md | sort)
+
+          if [ "${#agent_docs[@]}" -eq 0 ]; then
+            fail "Agent AGENTS.md discovery" "No paperclip/agents/*/AGENTS.md files found"
+          else
+            pass "Agent AGENTS.md discovery" "Found ${#agent_docs[@]} AGENTS.md files"
+          fi
+
+          violations=""
+          for file in "${agent_docs[@]}"; do
+            if grep -Eqi "$forbidden_pattern" "$file"; then
+              violations+="${file}; "
+            fi
+          done
+
+          if [ -n "$violations" ]; then
+            fail "Forbidden language scan" "Violations in: ${violations}"
+          else
+            pass "Forbidden language scan" "No forbidden terms found in paperclip agent AGENTS.md files"
+          fi
+
+          authority_missing=""
+          for file in "${agent_docs[@]}"; do
+            if ! grep -Eqi 'Josh|Joshua Coleman' "$file"; then
+              authority_missing+="${file}; "
+            fi
+          done
+
+          if [ -n "$authority_missing" ]; then
+            fail "Agent authority reference" "Missing Josh/Joshua Coleman in: ${authority_missing}"
+          else
+            pass "Agent authority reference" "All paperclip agent AGENTS.md files include authority reference"
+          fi
+
+          if grep -q "Joshua Coleman" GOVERNANCE.md; then
+            pass "GOVERNANCE.md authority" "Contains 'Joshua Coleman'"
+          else
+            fail "GOVERNANCE.md authority" "Missing 'Joshua Coleman'"
+          fi
+
+          if grep -q "SOLE AUTHORITY" AGENTS.md; then
+            pass "Root AGENTS.md doctrine" "Contains 'SOLE AUTHORITY'"
+          else
+            fail "Root AGENTS.md doctrine" "Missing 'SOLE AUTHORITY'"
+          fi
+
+          dao_missing=""
+          for contract in contracts/src/governance/YANAI.sol contracts/src/governance/AISO.sol contracts/src/governance/RECYCLE.sol; do
+            if [ ! -f "$contract" ]; then
+              dao_missing+="$contract; "
+            fi
+          done
+
+          if [ -n "$dao_missing" ]; then
+            fail "DAO contract integrity" "Missing: ${dao_missing}"
+          else
+            pass "DAO contract integrity" "YANAI, AISO, RECYCLE present"
+          fi
+
+          agent_dir_missing=""
+          mapfile -t agent_dirs < <(find paperclip/agents -mindepth 1 -maxdepth 1 -type d | sort)
+          for dir in "${agent_dirs[@]}"; do
+            for required in AGENTS.md TOOLS.md HEARTBEAT.md SOUL.md; do
+              if [ ! -f "$dir/$required" ]; then
+                agent_dir_missing+="${dir}/$required; "
+              fi
+            done
+          done
+
+          if [ -n "$agent_dir_missing" ]; then
+            fail "Agent file completeness" "Missing files: ${agent_dir_missing}"
+          else
+            pass "Agent file completeness" "All agent folders include AGENTS.md/TOOLS.md/HEARTBEAT.md/SOUL.md"
+          fi
+
+          {
+            echo "## Daily Doctrine Audit"
+            echo
+            echo "| Check | Status | Details |"
+            echo "|---|---|---|"
+            printf "%s" "$summary_rows"
+            echo
+            echo "Failures: ${failures}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$failures" -gt 0 ]; then
+            exit 1
+          fi

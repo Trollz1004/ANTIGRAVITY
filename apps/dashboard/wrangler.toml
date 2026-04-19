@@ -1,0 +1,8 @@
+name = "dashboard"
+compatibility_date = "2026-04-19"
+
+[build]
+command = ""
+
+[site]
+bucket = "."

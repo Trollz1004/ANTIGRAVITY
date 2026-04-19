@@ -235,3 +235,5 @@ status_summary.txt
 # --- Path-mangled dirs (agent drift artifacts) ---
 CUsersjoshl*/
 CANTIGRAVITY*/
+
+.coverage
