@@ -125,6 +125,8 @@ PARA/
 .agents/
 ForTheKids/
 command-center/
+!apps/command-center/
+!apps/command-center/**
 
 # --- Local secret-bearing memory/data ---
 memory/local/
