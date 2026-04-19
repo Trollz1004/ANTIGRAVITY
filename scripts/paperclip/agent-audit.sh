@@ -18,6 +18,14 @@ REPO_NAME="${GITHUB_REPOSITORY:-local}"
 REF_NAME="${GITHUB_REF_NAME:-$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)}"
 HEAD_SHA="${GITHUB_SHA:-$(git rev-parse HEAD 2>/dev/null || echo unknown)}"
 BEFORE_SHA="${GITHUB_EVENT_BEFORE:-}"
+IDENTITY_MARKER_PATTERN='Josh|Joshua Coleman|CEO Agent ID'
+# Detects direct claims that an agent can self-modify protected instruction files.
+PRIVILEGE_ESCALATION_PATTERN='self[- ]?(edit|modify|update|upgrade)|can (edit|modify|update).*(AGENTS|HEARTBEAT|TOOLS)\.md|writable by (agent|ai)|auto[- ]?upgrade (its|their).*(AGENTS|HEARTBEAT|TOOLS)\.md'
+
+if [ ! -d "paperclip/agents" ]; then
+  echo "paperclip/agents directory not found; cannot run audit."
+  exit 1
+fi
 
 mapfile -t AGENT_DIRS < <(find paperclip/agents -mindepth 1 -maxdepth 1 -type d ! -name audit | sort)
 mapfile -t MONITORED_FILES < <(find paperclip/agents -mindepth 2 -maxdepth 2 -type f \( -name 'AGENTS.md' -o -name 'HEARTBEAT.md' -o -name 'TOOLS.md' \) | sort)
@@ -64,7 +72,7 @@ fi
 
 for file in "${MONITORED_FILES[@]}"; do
   if [[ "$file" == */AGENTS.md ]]; then
-    if ! grep -qiE 'Josh|Joshua Coleman|CEO Agent ID' "$file"; then
+    if ! grep -qiE "$IDENTITY_MARKER_PATTERN" "$file"; then
       IDENTITY_MISSING=$((IDENTITY_MISSING + 1))
     fi
   fi
@@ -78,7 +86,7 @@ else
 fi
 
 if [ "${#MONITORED_FILES[@]}" -gt 0 ]; then
-  PRIVILEGE_HITS=$(printf '%s\0' "${MONITORED_FILES[@]}" | xargs -0 grep -nEi 'self[- ]?(edit|modify|update|upgrade)|can (edit|modify|update).*(AGENTS|HEARTBEAT|TOOLS)\.md|writable by (agent|ai)|auto[- ]?upgrade (its|their).*(AGENTS|HEARTBEAT|TOOLS)\.md' || true)
+  PRIVILEGE_HITS=$(printf '%s\0' "${MONITORED_FILES[@]}" | xargs -0 grep -nEi "$PRIVILEGE_ESCALATION_PATTERN" || true)
 fi
 
 if [ -n "$PRIVILEGE_HITS" ]; then
@@ -174,7 +182,8 @@ fi
 } >> "$AUDIT_FILE"
 
 if [ -n "${GITHUB_OUTPUT:-}" ]; then
-  echo "audit_file=$AUDIT_FILE" >> "$GITHUB_OUTPUT"
+  SAFE_AUDIT_FILE="$(printf '%s' "$AUDIT_FILE" | tr -d '\r\n')"
+  echo "audit_file=$SAFE_AUDIT_FILE" >> "$GITHUB_OUTPUT"
   echo "audit_fail=$FAIL" >> "$GITHUB_OUTPUT"
   echo "unauthorized_change=$UNAUTHORIZED_CHANGE" >> "$GITHUB_OUTPUT"
 fi

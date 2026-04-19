@@ -18,7 +18,6 @@ permissions:
 
 jobs:
   audit:
-    if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,7 +52,22 @@ jobs:
           AFTER_SHA="${{ github.sha }}"
 
           if [ -z "$BEFORE_SHA" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
-            BEFORE_SHA="$(git rev-parse "${AFTER_SHA}^")"
+            if git rev-parse "${AFTER_SHA}^" >/dev/null 2>&1; then
+              BEFORE_SHA="$(git rev-parse "${AFTER_SHA}^")"
+            else
+              echo "No parent commit available for restore target."
+              exit 1
+            fi
+          fi
+
+          if ! git cat-file -e "${BEFORE_SHA}^{commit}"; then
+            echo "Restore target commit is invalid: $BEFORE_SHA"
+            exit 1
+          fi
+
+          if ! git merge-base --is-ancestor "$BEFORE_SHA" "$AFTER_SHA"; then
+            echo "Restore target is not an ancestor of current commit."
+            exit 1
           fi
 
           mapfile -t TO_RESTORE < <(
@@ -74,15 +88,16 @@ jobs:
             git checkout "$BEFORE_SHA" -- "$file"
           done
 
-      - name: Commit audit log and any automatic restore
-        if: always()
+      # This condition prevents an audit-log push by github-actions[bot] from recursively creating more audit-log commits.
+      - name: Commit audit log and any automatic restore (skip bot-authored push loops)
+        if: always() && (github.event_name != 'push' || github.actor != 'github-actions[bot]')
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add paperclip/agents/audit scripts/paperclip/agent-audit.sh
+          git add paperclip/agents/audit
 
           if [ "${{ github.event_name }}" = "push" ] && [ "${{ steps.audit.outputs.unauthorized_change }}" = "1" ]; then
             git add paperclip/agents/*/AGENTS.md paperclip/agents/*/HEARTBEAT.md paperclip/agents/*/TOOLS.md || true
@@ -107,7 +122,8 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `🚨 Paperclip protected-file mutation auto-reverted (${context.sha.slice(0,7)})`;
+            const shortSha = context.sha?.slice(0, 8) || 'unknown';
+            const title = `[SECURITY] Paperclip protected-file mutation auto-reverted (${shortSha})`;
             const body = [
               'Unauthorized mutation detected in protected Paperclip agent files.',
               '',
