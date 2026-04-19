@@ -16,6 +16,13 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
  *         Deployed once per DAO. No owner. No admin. No upgrades.
  *         The split ratios are in the bytecode — no human can change them.
  *
+ *         SCOPE: This splitter ratio applies to the current codebase only (timestamped
+ *         2026-04-19: YouAndINotAI, AI-Solutions, OnlineRecycle, AiDoesItAll).
+ *         Future platforms under Trollz1004 will use whatever structure yields the
+ *         maximum legally allowable flow of resources to children — the 10/27/63 ratio
+ *         is NOT automatically inherited by new platforms (see founder directive §12.4
+ *         in DAO-ARCHITECTURE-CANONICAL.md).
+ *
  *         "Until no kid is in need" — Joshua Coleman, Founder
  */
 contract PlatformSplitter {
