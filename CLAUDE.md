@@ -52,7 +52,7 @@ ANTIGRAVITY/
 | `youandinotai-com` | **Archive now** | Only a README; code is in `services/youandinotai/` |
 | `sandbox-repo-new-code-nothing-new-goes-on-antigravity` | Pending archive | Migrate unique code: hermes, manus-meta-guardian, anythingllm-bridges, marketing-assets |
 
-> Full audit: see `REPO-AUDIT.md` in this repo.
+> Full audit: see `docs/architecture/REPO-AUDIT.md` in this repo.
 
 ### DAO / Staking — Canonical Location
 
@@ -61,7 +61,7 @@ ANTIGRAVITY/
   - `DatingRevenueRouter.sol`
   - `GospelDonation.sol`
 - **`sandbox/dao-patches/`** is NOT a DAO contract. It's the Paperclip AI platform (package name: `paperclip`). Migrate to `packages/paperclip/`.
-- **Governance docs**: `GOVERNANCE.md` (root) and `briefings/DAO-RECOVERY-CANDIDATES.md` — docs only, not code.
+- **Governance docs**: `docs/governance/GOVERNANCE.md` and `briefings/DAO-RECOVERY-CANDIDATES.md` — docs only, not code.
 
 ---
 
