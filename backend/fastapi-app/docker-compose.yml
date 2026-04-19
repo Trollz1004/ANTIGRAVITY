@@ -1,0 +1,64 @@
+# YouAndINotAI — App Stack
+# Usage: docker compose up -d
+# Isolated from root compose (OpenClaw/Qdrant stack)
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: uandinotai-postgres
+    environment:
+      POSTGRES_USER: uandinotai
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: uandinotai_dating
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8 --locale=C'
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U uandinotai -d uandinotai_dating']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: uandinotai-app
+    ports:
+      - '8000:8000'
+    env_file:
+      - ../.env
+    environment:
+      PORT: '8000'
+      DATABASE_URL: 'postgresql+asyncpg://uandinotai:${POSTGRES_PASSWORD}@postgres:5432/uandinotai_dating'
+      SQUARE_ACCESS_TOKEN: '${SQUARE_ACCESS_TOKEN:-}'
+      SQUARE_LOCATION_ID: '${SQUARE_LOCATION_ID:-}'
+      SQUARE_BOT_SHIELD_PAYMENT_LINK: '${SQUARE_BOT_SHIELD_PAYMENT_LINK:-}'
+      SQUARE_SUBSCRIPTION_PAYMENT_LINK: '${SQUARE_SUBSCRIPTION_PAYMENT_LINK:-}'
+      SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY: '${SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY:-}'
+      SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL: '${SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL:-}'
+      SQUARE_BOOKING_WEBHOOK_SIGNATURE_KEY: '${SQUARE_BOOKING_WEBHOOK_SIGNATURE_KEY:-}'
+      SQUARE_BOOKING_WEBHOOK_NOTIFICATION_URL: '${SQUARE_BOOKING_WEBHOOK_NOTIFICATION_URL:-}'
+      SQUARE_WEBHOOK_SIGNATURE_KEY: '${SQUARE_WEBHOOK_SIGNATURE_KEY:-}'
+      SQUARE_WEBHOOK_NOTIFICATION_URL: '${SQUARE_WEBHOOK_NOTIFICATION_URL:-}'
+      SQUARE_WEBHOOK_VERIFY_SIGNATURE: '${SQUARE_WEBHOOK_VERIFY_SIGNATURE:-true}'
+      SQUARE_BOOKING_LOG_DIR: '${SQUARE_BOOKING_LOG_DIR:-/app/ewaste-intake-data/bookings}'
+      APP_URL: '${APP_URL:-https://youandinotai.com}'
+      CORS_ORIGINS: '${CORS_ORIGINS:-https://youandinotai.com,http://localhost:3000}'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./uploads:/app/uploads
+      - ../data/ewaste-intake:/app/ewaste-intake-data
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8000/api/v1/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  postgres_data:

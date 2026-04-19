@@ -5,8 +5,6 @@ export const runtime = 'edge';
 
 export async function GET() {
   return NextResponse.json({
-    logs: [
-      '[INFO] Internal task logs and node diagnostics are intentionally withheld from the public dashboard.',
-    ],
+    logs: ['[INFO] Internal task logs and node diagnostics are intentionally withheld from the public dashboard.'],
   });
 }

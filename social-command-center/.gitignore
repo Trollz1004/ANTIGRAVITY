@@ -1,6 +1,0 @@
-# Build artifacts
-dist/
-node_modules/
-
-# Runtime data (file-backed feed persistence)
-data/

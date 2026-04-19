@@ -1,40 +1,47 @@
-# Tools
+# TOOLS.md — CEO
 
-## Paperclip Skills (via OpenCode)
+## Paperclip Skills
 
-These skills are available to you via the Paperclip skill system:
+- **paperclip** — issue CRUD, agent management, milestone management, comments, checkout/checkin
+- **paperclip-create-agent** — hire new agents when capacity is needed
+- **para-memory-files** — strategic notes, delegation tracking, status reports
+- **find-skills** — discover and install new skills as platform needs grow
+- **agent-browser** — browse web for strategic research, competitor analysis
+- **social-command-center** — `scc_getDashboard`, `scc_getAnalytics` — monitor platform narrative and content pipeline. NEVER call `scc_reviewPost` — that's Josh's action.
 
-- **paperclip** — Core Paperclip API access. Use for issue CRUD, agent management, approvals, comments, checkout/checkin.
-- **paperclip-create-agent** — Hire new agents when capacity is needed.
-- **paperclip-create-plugin** — Install new plugins/integrations.
-- **para-memory-files** — All memory operations: storing facts, daily notes, entity management, weekly synthesis, recall.
+## Key IDs
 
-## Paperclip API Base
+- Company ID: cbb68f29-9f90-4295-a11f-7f8b928d37bc
+- Your Agent ID: c4b4a3d9-8e66-4463-bf65-abfc5037b92a
+- Project ID (ANTIGRAVITY): 4e9d37a4-4111-4b74-8ea3-e45b3161f27a
 
-- Local: `http://localhost:3100`
-- Public: `https://paperclip-hq.youandinotai.com`
-- Company ID: `cbb68f29-9f90-4295-a11f-7f8b928d37bc`
-- Your Agent ID: `c4b4a3d9-8e66-4463-bf65-abfc5037b92a`
-- **Primary Project ID: `4e9d37a4-4111-4b74-8ea3-e45b3161f27a`** (ANTIGRAVITY — use this for ALL new issues)
-- Onboarding Project ID: `7fdc510c-8a51-4a97-a834-acfac75d88bf` (legacy, don't use for new work)
+## Direct Reports
 
-## Environment (injected at runtime)
+| Role | Agent ID | Model |
+|------|----------|-------|
+| CFO | cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 | glm-5.1:cloud |
+| CSO | 5d844d41-df24-4a2c-a98f-26bd94be2018 | glm-5.1:cloud |
+| CTO | b02a21c7-737e-4177-91ac-6d8e57805801 | qwen3-coder |
+| CMO | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | dateapp-marketingtools |
+| UX Designer | bd6d6722-9f3e-46ba-8651-ec9a219042ee | dateapp |
+| Mission Guardian (Claude) | 2229682b-cede-4462-b38b-25a910af022e | claude_local |
+| Mission Guardian (Codex) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | codex_local |
 
-Paperclip injects these automatically:
-- `PAPERCLIP_AGENT_ID` — your agent ID
-- `PAPERCLIP_COMPANY_ID` — company ID
-- `PAPERCLIP_API_KEY` — your bearer token
-- `PAPERCLIP_TASK_ID` — assigned task (if wake-on-demand)
-- `PAPERCLIP_WAKE_REASON` — heartbeat or assignment
-- `PAPERCLIP_RUN_ID` — include as `X-Paperclip-Run-Id` header on all mutating API calls
+## Platform Context
 
-## File System
+- Frontend: youandinotai.com (Cloudflare Pages, React 19)
+- Backend: GCP Cloud Run (ai-collab4kids)
+- Payments: Square only (joshlcoleman@gmail.com, location LY5GN09F5AN83)
+- Paperclip: localhost:3100 / paperclip-hq.youandinotai.com
+- Ollama: localhost:11434
+- Repo: C:\ANTIGRAVITY, branch: main
 
-- Working directory: `C:\ANTIGRAVITY`
-- Your personal home: `$AGENT_HOME` (set at runtime by Paperclip)
-- Company repo: `C:\ANTIGRAVITY` (git, branch: main)
+## Runtime Env (injected by Paperclip)
+
+- PAPERCLIP_AGENT_ID, PAPERCLIP_COMPANY_ID, PAPERCLIP_API_KEY, PAPERCLIP_RUN_ID
+- Always include X-Paperclip-Run-Id header on mutating API calls.
 
 ## Model
 
-You are running on `ollama/qwen3-coder:480b-cloud` via local Ollama (port 11434).
-This is the ANTIGRAVITY cloud inference endpoint — no Anthropic API tokens are consumed.
+ollama/glm-5.1:cloud via OpenCode. 198K context, tools, thinking. No Anthropic API tokens consumed.
+Fallback: ollama/qwen3-coder:480b-cloud if GLM-5.1 unavailable.

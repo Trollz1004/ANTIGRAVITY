@@ -1,9 +1,9 @@
-import fs from "node:fs";
-import path from "node:path";
-import { randomUUID } from "node:crypto";
-import { DatabaseSync } from "node:sqlite";
+import fs from 'node:fs';
+import path from 'node:path';
+import { randomUUID } from 'node:crypto';
+import { DatabaseSync } from 'node:sqlite';
 
-import type { BrainConfig, ShaStatus, WorktreeState } from "./config.js";
+import type { BrainConfig, ShaStatus, WorktreeState } from './config.js';
 
 export interface SessionRecord {
   sessionId: string;
@@ -22,7 +22,7 @@ export interface SessionRecord {
   startedAt: string;
   lastHeartbeatAt: string;
   endedAt?: string;
-  status: "active" | "closed" | "timed_out";
+  status: 'active' | 'closed' | 'timed_out';
   exitReason?: string;
   summary?: string;
   committed: boolean;
@@ -66,7 +66,7 @@ interface ExitSessionInput {
   committed: boolean;
   pushed: boolean;
   commitHash?: string;
-  exitReason: "normal" | "handoff" | "timeout" | "crash";
+  exitReason: 'normal' | 'handoff' | 'timeout' | 'crash';
 }
 
 export class BrainStateStore {
@@ -154,7 +154,7 @@ export class BrainStateStore {
     const endedAt = new Date().toISOString();
     for (const row of rows) {
       update.run(endedAt, row.session_id);
-      this.recordAudit("session_timed_out", {
+      this.recordAudit('session_timed_out', {
         sessionId: row.session_id,
         platformId: row.platform_id,
       });
@@ -198,7 +198,7 @@ export class BrainStateStore {
       );
 
     const session = this.getSession(sessionId);
-    this.recordAudit("session_entered", {
+    this.recordAudit('session_entered', {
       sessionId,
       platformId: input.platformId,
       nodeId: input.nodeId,
@@ -227,7 +227,7 @@ export class BrainStateStore {
     }
 
     const session = this.getSession(sessionId);
-    this.recordAudit("session_heartbeat", {
+    this.recordAudit('session_heartbeat', {
       sessionId,
       platformId: session.platformId,
     });
@@ -243,7 +243,7 @@ export class BrainStateStore {
   }): SessionRecord {
     this.expireTimedOutSessions();
     const session = this.getSession(input.sessionId);
-    if (session.status !== "active") {
+    if (session.status !== 'active') {
       throw new Error(`Session is not active: ${input.sessionId}`);
     }
 
@@ -255,14 +255,7 @@ export class BrainStateStore {
         VALUES (?, ?, ?, ?, ?, ?)
         `,
       )
-      .run(
-        input.sessionId,
-        now,
-        input.actionType,
-        input.path,
-        input.summary,
-        JSON.stringify(input.metadata ?? {}),
-      );
+      .run(input.sessionId, now, input.actionType, input.path, input.summary, JSON.stringify(input.metadata ?? {}));
 
     this.db
       .prepare(
@@ -274,7 +267,7 @@ export class BrainStateStore {
       )
       .run(now, input.sessionId);
 
-    this.recordAudit("session_action", {
+    this.recordAudit('session_action', {
       sessionId: input.sessionId,
       platformId: session.platformId,
       actionType: input.actionType,
@@ -315,16 +308,12 @@ export class BrainStateStore {
         input.pushed ? 1 : 0,
         input.commitHash ?? null,
         input.testsRun ? 1 : 0,
-        typeof input.testsPassed === "boolean"
-          ? input.testsPassed
-            ? 1
-            : 0
-          : null,
+        typeof input.testsPassed === 'boolean' ? (input.testsPassed ? 1 : 0) : null,
         JSON.stringify(input.filesTouched),
         input.sessionId,
       );
 
-    this.recordAudit("session_exited", {
+    this.recordAudit('session_exited', {
       sessionId: input.sessionId,
       platformId: existing.platformId,
       exitReason: input.exitReason,
@@ -337,9 +326,9 @@ export class BrainStateStore {
   }
 
   public getSession(sessionId: string): SessionRecord {
-    const row = this.db
-      .prepare(`SELECT * FROM sessions WHERE session_id = ?`)
-      .get(sessionId) as Record<string, unknown> | undefined;
+    const row = this.db.prepare(`SELECT * FROM sessions WHERE session_id = ?`).get(sessionId) as
+      | Record<string, unknown>
+      | undefined;
 
     if (!row) {
       throw new Error(`Session not found: ${sessionId}`);
@@ -378,15 +367,10 @@ export class BrainStateStore {
     }));
   }
 
-  public recordAudit(
-    eventType: string,
-    details: Record<string, unknown>,
-  ): void {
+  public recordAudit(eventType: string, details: Record<string, unknown>): void {
     const at = new Date().toISOString();
-    const sessionId =
-      typeof details.sessionId === "string" ? details.sessionId : undefined;
-    const platformId =
-      typeof details.platformId === "string" ? details.platformId : undefined;
+    const sessionId = typeof details.sessionId === 'string' ? details.sessionId : undefined;
+    const platformId = typeof details.platformId === 'string' ? details.platformId : undefined;
 
     this.db
       .prepare(
@@ -395,21 +379,11 @@ export class BrainStateStore {
         VALUES (?, ?, ?, ?, ?)
         `,
       )
-      .run(
-        at,
-        eventType,
-        sessionId ?? null,
-        platformId ?? null,
-        JSON.stringify(details),
-      );
+      .run(at, eventType, sessionId ?? null, platformId ?? null, JSON.stringify(details));
 
     const day = at.slice(0, 10);
     const logPath = path.join(this.config.auditDir, `audit-${day}.jsonl`);
-    fs.appendFileSync(
-      logPath,
-      `${JSON.stringify({ at, eventType, sessionId, platformId, details })}\n`,
-      "utf8",
-    );
+    fs.appendFileSync(logPath, `${JSON.stringify({ at, eventType, sessionId, platformId, details })}\n`, 'utf8');
   }
 
   private mapSession(row: Record<string, unknown>): SessionRecord {
@@ -430,7 +404,7 @@ export class BrainStateStore {
       startedAt: String(row.started_at),
       lastHeartbeatAt: String(row.last_heartbeat_at),
       endedAt: row.ended_at ? String(row.ended_at) : undefined,
-      status: row.status as SessionRecord["status"],
+      status: row.status as SessionRecord['status'],
       exitReason: row.exit_reason ? String(row.exit_reason) : undefined,
       summary: row.summary ? String(row.summary) : undefined,
       committed: Number(row.committed) === 1,
@@ -438,9 +412,7 @@ export class BrainStateStore {
       commitHash: row.commit_hash ? String(row.commit_hash) : undefined,
       testsRun: Number(row.tests_run) === 1,
       testsPassed:
-        row.tests_passed === null || row.tests_passed === undefined
-          ? undefined
-          : Number(row.tests_passed) === 1,
+        row.tests_passed === null || row.tests_passed === undefined ? undefined : Number(row.tests_passed) === 1,
       filesTouched: JSON.parse(String(row.files_touched_json)) as string[],
     };
   }

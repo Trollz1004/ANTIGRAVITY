@@ -8,8 +8,8 @@ The ANTIGRAVITY mission: a social platform for good run by Joshua Coleman — se
 
 ## The 7 Hard Rules — Flag ANY Violation Immediately
 
-1. No "donate", "donation", or "solicitation" anywhere — code, content, agent instructions, issue descriptions. Florida §496.405. Zero exceptions.
-2. Charitable revenue cap must not exceed 10% of LLC-controlled revenue in any agent plan, proposal, or code.
+1. No "donate", "donation", or "solicitation" anywhere — code, content, agent instructions, issue descriptions. Hard rule, zero exceptions.
+2. Revenue model is 1-wallet with 10% reserve (founder-directed). No agent may claim or code automatic charity routing.
 3. No secrets (API keys, passwords, tokens) in git, logs, or issue comments.
 4. No agent pushes to main without Josh's explicit approval.
 5. No agent modifies AGENTS.md, CLAUDE.md, TOOLS.md, or HEARTBEAT.md for any agent without first creating a flagged issue for Josh to review.

@@ -1,32 +1,32 @@
-import { ExternalLink, Globe, Lock, ShieldCheck } from "lucide-react";
+import { ExternalLink, Globe, Lock, ShieldCheck } from 'lucide-react';
 
 const publicSurfaces = [
   {
-    name: "YouAndINotAI",
-    url: "https://youandinotai.com",
-    label: "Customer-facing social platform",
+    name: 'YouAndINotAI',
+    url: 'https://youandinotai.com',
+    label: 'Customer-facing social platform',
   },
   {
-    name: "OnlineRecycle",
-    url: "https://onlinerecycle.org",
-    label: "Central Florida electronics recycling service",
+    name: 'OnlineRecycle',
+    url: 'https://onlinerecycle.org',
+    label: 'Central Florida electronics recycling service',
   },
   {
-    name: "AI-Solutions Store",
-    url: "https://ai-solutions.store",
-    label: "Separate storefront surface",
+    name: 'AI-Solutions Store',
+    url: 'https://ai-solutions.store',
+    label: 'Separate storefront surface',
   },
   {
-    name: "Antigravity Dashboard",
-    url: "https://dashboard.aidoesitall.website",
-    label: "Public status board",
+    name: 'Antigravity Dashboard',
+    url: 'https://dashboard.aidoesitall.website',
+    label: 'Public status board',
   },
 ] as const;
 
 const privateItems = [
-  "Publishing queues, creator workflows, and platform dashboards stay on approved internal lanes.",
-  "Internal node operations, credential flows, and unfinished rollout tooling do not belong on a public route.",
-  "This public dashboard only keeps high-level status, verified links, and explicitly tracked information.",
+  'Publishing queues, creator workflows, and platform dashboards stay on approved internal lanes.',
+  'Internal node operations, credential flows, and unfinished rollout tooling do not belong on a public route.',
+  'This public dashboard only keeps high-level status, verified links, and explicitly tracked information.',
 ] as const;
 
 export default function SccBoundaryPage() {
@@ -36,8 +36,8 @@ export default function SccBoundaryPage() {
         className="fixed inset-0 z-0 pointer-events-none opacity-[0.05]"
         style={{
           backgroundImage:
-            "linear-gradient(#2563eb 1px, transparent 1px), linear-gradient(90deg, #2563eb 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
+            'linear-gradient(#2563eb 1px, transparent 1px), linear-gradient(90deg, #2563eb 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
         }}
       />
 
@@ -48,14 +48,16 @@ export default function SccBoundaryPage() {
               <ShieldCheck className="h-7 w-7 text-blue-400" />
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Non-Indexed Boundary Page</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
+                Non-Indexed Boundary Page
+              </p>
               <h1 className="text-3xl font-black tracking-tight">Internal Workflow Tools Stay Private</h1>
             </div>
           </div>
 
           <p className="max-w-3xl text-sm leading-7 text-slate-300">
-            This route is intentionally limited to a public-safe boundary note. Operational workspaces, publishing controls,
-            platform dashboards, and internal automation lanes are handled outside the public status surface.
+            This route is intentionally limited to a public-safe boundary note. Operational workspaces, publishing
+            controls, platform dashboards, and internal automation lanes are handled outside the public status surface.
           </p>
         </section>
 
@@ -93,7 +95,10 @@ export default function SccBoundaryPage() {
 
             <div className="space-y-3">
               {privateItems.map((item) => (
-                <div key={item} className="rounded-2xl border border-slate-800 bg-slate-950/50 p-4 text-sm leading-6 text-slate-300">
+                <div
+                  key={item}
+                  className="rounded-2xl border border-slate-800 bg-slate-950/50 p-4 text-sm leading-6 text-slate-300"
+                >
                   {item}
                 </div>
               ))}
@@ -102,8 +107,9 @@ export default function SccBoundaryPage() {
         </div>
 
         <section className="rounded-[2rem] border border-slate-800 bg-slate-900/40 p-6 text-sm leading-7 text-slate-300">
-          If you reached this page from an old bookmark or indexed link, return to the main dashboard for the current public
-          status view. Private workflow tooling is intentionally separated from public product and status surfaces.
+          If you reached this page from an old bookmark or indexed link, return to the main dashboard for the current
+          public status view. Private workflow tooling is intentionally separated from public product and status
+          surfaces.
         </section>
 
         <footer className="border-t border-slate-800 py-6 text-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-600">

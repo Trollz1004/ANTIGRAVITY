@@ -8,9 +8,13 @@ interface Message {
   content: string;
 }
 
-export default function GeminiChat({ apiKey, isDarkMode }: { apiKey: string, isDarkMode: boolean }) {
+export default function GeminiChat({ apiKey, isDarkMode }: { apiKey: string; isDarkMode: boolean }) {
   const [messages, setMessages] = useState<Message[]>([
-    { id: '1', role: 'model', content: "Hello. I can help summarize the public dashboard, public site status, and published updates." }
+    {
+      id: '1',
+      role: 'model',
+      content: 'Hello. I can help summarize the public dashboard, public site status, and published updates.',
+    },
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +37,7 @@ export default function GeminiChat({ apiKey, isDarkMode }: { apiKey: string, isD
     }
 
     const userMessage: Message = { id: Date.now().toString(), role: 'user', content: input };
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
     setError('');
@@ -50,7 +54,7 @@ export default function GeminiChat({ apiKey, isDarkMode }: { apiKey: string, isD
         role: 'model',
         content: response.text || 'No response generated.',
       };
-      setMessages(prev => [...prev, modelMessage]);
+      setMessages((prev) => [...prev, modelMessage]);
     } catch (err: any) {
       console.error(err);
       setError(err.message || 'An error occurred while communicating with Gemini.');
@@ -60,8 +64,16 @@ export default function GeminiChat({ apiKey, isDarkMode }: { apiKey: string, isD
   };
 
   return (
-    <div className={`flex flex-col h-[600px] rounded-2xl border ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-white border-slate-200'} overflow-hidden`}>
-      <div className={`p-4 border-b flex items-center gap-3 ${isDarkMode ? 'border-slate-700 bg-slate-800/50' : 'border-slate-100 bg-slate-50'}`}>
+    <div
+      className={`flex flex-col h-[600px] rounded-2xl border ${
+        isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-white border-slate-200'
+      } overflow-hidden`}
+    >
+      <div
+        className={`p-4 border-b flex items-center gap-3 ${
+          isDarkMode ? 'border-slate-700 bg-slate-800/50' : 'border-slate-100 bg-slate-50'
+        }`}
+      >
         <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white">
           <Bot className="w-6 h-6" />
         </div>
@@ -74,13 +86,15 @@ export default function GeminiChat({ apiKey, isDarkMode }: { apiKey: string, isD
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[80%] rounded-2xl p-4 ${
-              msg.role === 'user' 
-                ? 'bg-blue-600 text-white rounded-tr-sm' 
-                : isDarkMode 
-                  ? 'bg-slate-800 text-slate-200 rounded-tl-sm' 
-                  : 'bg-slate-100 text-slate-800 rounded-tl-sm'
-            }`}>
+            <div
+              className={`max-w-[80%] rounded-2xl p-4 ${
+                msg.role === 'user'
+                  ? 'bg-blue-600 text-white rounded-tr-sm'
+                  : isDarkMode
+                    ? 'bg-slate-800 text-slate-200 rounded-tl-sm'
+                    : 'bg-slate-100 text-slate-800 rounded-tl-sm'
+              }`}
+            >
               <div className="flex items-center gap-2 mb-1 opacity-80">
                 {msg.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                 <span className="text-xs font-medium uppercase tracking-wider">{msg.role}</span>
@@ -91,7 +105,11 @@ export default function GeminiChat({ apiKey, isDarkMode }: { apiKey: string, isD
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className={`rounded-2xl p-4 rounded-tl-sm flex items-center gap-2 ${isDarkMode ? 'bg-slate-800 text-slate-400' : 'bg-slate-100 text-slate-500'}`}>
+            <div
+              className={`rounded-2xl p-4 rounded-tl-sm flex items-center gap-2 ${
+                isDarkMode ? 'bg-slate-800 text-slate-400' : 'bg-slate-100 text-slate-500'
+              }`}
+            >
               <Loader2 className="w-5 h-5 animate-spin" />
               <span>Gemini is thinking...</span>
             </div>
@@ -117,8 +135,8 @@ export default function GeminiChat({ apiKey, isDarkMode }: { apiKey: string, isD
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Ask about public site status or published updates..."
             className={`flex-1 px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
-              isDarkMode 
-                ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-500' 
+              isDarkMode
+                ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-500'
                 : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'
             }`}
           />

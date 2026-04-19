@@ -29,21 +29,26 @@
 
 ## CURRENT FINANCIAL DOCTRINE
 
-- The current LLC operating rule is a **founder-directed conservative 10% cap** on charitable support sourced from for-profit platform operations.
-- Do not present `60/30/10`, `100% charity`, or `100% DAO` as current live operating truth unless Josh explicitly restores that language in canonical repo docs.
-- Do not present the 10% cap as a universal settled tax-law conclusion. Treat it as the current safe operating rule chosen by Josh for LLC survival and compliance.
+- The current LLC operating rule is **1-wallet, 10% reserve, founder-directed**.
+- Do not present `60/30/10`, `100% charity`, or `100% DAO` as current live operating truth.
+- Do not present the 10% reserve as a universal settled tax-law conclusion. Treat it as Josh's current operating choice.
 - Legacy on-chain 60/30/10 references remain historical context, not current operating doctrine.
 
 ---
 
-## LIVE INFRASTRUCTURE STATE (Updated 2026-03-25)
+## LIVE INFRASTRUCTURE STATE (Updated 2026-04-18)
 
 **MCP Servers (C:\ANTIGRAVITY\.mcp.json):**
 1. `brain-mcp` (Port 3900) — Repo truth and operational auditing.
 2. `antigravity-sentry` — Content and protocol enforcement. Legacy split-era drift and Stripe drift have been eliminated.
-3. `social-command-center` (New) — Read-only dashboard exposing 24 platforms and 34 agents to the AI Swarm. 
+3. `social-command-center` — Read-only dashboard exposing 24 platforms and 34 agents to the AI Swarm. 
 
-**Third-Party Sandboxes (E:\.mcp.json):**
+**Agent Architecture & Deployment (Paperclip Stack):**
+- **Hermes Wrapper:** Headless mode integration confirmed via `paperclip-adapters/hermes-headless.cmd`. (acp mode supported).
+- **Agent Roster:** 3 Social Growth agents (X, Reddit, TikTok) and 1 DAO Strategist active.
+- **SupportClaw:** Operates natively within FastAPI backend (support_service.py) relying on the YouAndiSUPPORT_Bot Telegram Token for alerting.
+
+**Third-Party Sandboxes:**
 - AnythingLLM and OpenClaw models running from the E: drive are bridged to `brain-mcp` and `social-command-center` for context, but have ZERO write access to C:.
 
 **Payment Truth:**
@@ -70,7 +75,7 @@
 
 1. **One repo, one branch, one folder.** (`C:\ANTIGRAVITY` -> `main`)
 2. **Product Boundary Enforcement:** keep platform scopes distinct and do not restore retired split-era labels as live doctrine.
-3. **§496.405 Compliance:** Never use "donate" or "solicitation" in customer-facing code. It is a "contractual revenue disbursement."
+3. **Word Ban:** Never use "donate", "donation", or "solicitation" in customer-facing code or copy.
 4. **Push to Main:** If a task is complete and verified, push it to `origin/main`. Do not leave local drift.
 
 ---
@@ -85,6 +90,42 @@ All other AI platforms and third-party applications are restricted to the `D:` a
 
 ---
 
+## TASK 1/1000 — 4-DAO CONTRACT ARCHITECTURE (2026-04-19)
+
+**Status:** Contracts in progress (Claude Code building on Base L2)
+**Architecture:** 4-DAO Multi-Platform Model (2.5M tokens per DAO, 10M hard cap)
+
+### Token Nomenclature (Josh-Approved)
+
+| Token | DAO | Platform |
+|-------|-----|----------|
+| $LOVE | Love DAO | YouAndINotAI.com |
+| $UKID | #UntilNoKidInNeed | AI-Solutions.Store |
+| $GREEN | AiGreenTeam | OnlineRecycle.org |
+| $AGRAV | Antigravity DAO | AiDoesItAll.website |
+
+### Contract Status
+
+| Contract | Status | Notes |
+|----------|--------|-------|
+| PlatformSplitter.sol | Written | Immutable 10/27/63 three-way Base L2 splitter, pull-over-push |
+| DAOTreasury.sol | Written | 63% ops receiver, monthly sinking fund, epoch-based |
+| StakingVault.sol | In progress | Aave V4 on Base, 80/20 rule, 10% yield to mission reserve |
+| DAOToken.sol | In progress | ERC-20 x4, 2.5M cap each, founder vesting, transfer lock |
+
+### Compliance
+
+- FL §496.405 compliance enacted: all public-facing language uses "contractual revenue disbursement"
+- Gemini deep research validated the for-profit LLC structure and commercial co-venturer avoidance strategy
+- Corrected token descriptions saved at `briefings/DAO-TOKEN-DESCRIPTIONS-COMPLIANT-2026-04-19.md`
+
+### 4-Year Conservative Projection
+
+$64,900 total to mission reserve over 4 years. This is reserve — Josh directs quarterly.
+Covers $3K/mo founder baseline, $200 AI API, $500 hardware, $135 power before surplus staking.
+
+---
+
 *"The richest man is not he who has the most - it is he who needs the least."*
 
-*Updated: 2026-03-25 | Social Command Center added | AnythingLLM E: Drive Bridge established | Sentry renamed | Stripe completely removed*
+*Updated: 2026-04-19 | 4-DAO model adopted | Task 1/1000 contracts in progress | Token descriptions compliance-cleaned | CEO agent repo-backed*

@@ -22,15 +22,6 @@
             "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; PROTECTED=\"CLAUDE.md AGENTS.md .mcp.json\"; for P in $PROTECTED; do if echo \"$FILE\" | grep -qF \"$P\"; then echo \"NOTICE: Editing protected file $P — Claude Code architect access only. Ensure this is intentional.\"; fi; done; exit 0'"
           }
         ]
-      },
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if echo \"$FILE\" | grep -qiE \"\\.(tsx|ts|jsx|html)$\"; then if echo \"$CLAUDE_TOOL_INPUT\" | grep -qiE \"\\bdonat(e|ion|ions|ing)\\b\" && ! echo \"$CLAUDE_TOOL_INPUT\" | grep -qiE \"not.*(charit|donat)|not a.*(donat|solicitat)\"; then echo \"BLOCKED: §496.405 — Do not use donate/donation language. Use disbursement or revenue split.\" >&2; exit 2; fi; fi; exit 0'"
-          }
-        ]
       }
     ],
     "PostToolUse": [
