@@ -30,18 +30,12 @@ jobs:
             printf '| %s | %s | %s |\n' "$check" "$status" "$details" >> "$TMP_REPORT"
           }
 
-          has_matches() {
-            local pattern="$1"
-            local target="$2"
-            grep -RniE "$pattern" $target 2>/dev/null || true
-          }
-
           echo '| Check | Status | Details |' > "$TMP_REPORT"
           echo '|---|---|---|' >> "$TMP_REPORT"
 
           # Doctrine Drift: forbidden language in paperclip AGENTS.md files
           FORBIDDEN='donate|donation|solicitation|automatic disbursement|charity routing'
-          FORBIDDEN_HITS=$(has_matches "$FORBIDDEN" 'paperclip/agents/*/AGENTS.md')
+          FORBIDDEN_HITS=$(find paperclip/agents -mindepth 2 -maxdepth 2 -type f -name 'AGENTS.md' -print0 | xargs -0 grep -nEi "$FORBIDDEN" 2>/dev/null || true)
           if [ -n "$FORBIDDEN_HITS" ]; then
             FAIL=1
             add_row 'Forbidden doctrine terms in paperclip AGENTS.md' 'FAIL' "Found matches."
@@ -67,15 +61,20 @@ jobs:
           fi
 
           # Doctrine Drift: deprecated Solidity patterns in non-historical contracts
-          SOL_HITS=$(find contracts/src -type f -name '*.sol' \
-            ! -iname '*GospelDonation*' \
-            ! -iname '*CharityRouter100*' \
-            -print0 | xargs -0 grep -nE 'charityWallet|donationSplit' 2>/dev/null || true)
-          if [ -n "$SOL_HITS" ]; then
+          if [ ! -d contracts/src ]; then
             FAIL=1
-            add_row 'Deprecated charity-routing Solidity patterns in non-historical contracts' 'FAIL' 'Found charityWallet/donationSplit references.'
+            add_row 'Deprecated charity-routing Solidity patterns in non-historical contracts' 'FAIL' 'contracts/src directory is missing.'
           else
-            add_row 'Deprecated charity-routing Solidity patterns in non-historical contracts' 'PASS' 'No deprecated patterns found.'
+            SOL_HITS=$(find contracts/src -type f -name '*.sol' \
+              ! -iname '*GospelDonation*' \
+              ! -iname '*CharityRouter100*' \
+              -print0 | xargs -0 grep -nE 'charityWallet|donationSplit' 2>/dev/null || true)
+            if [ -n "$SOL_HITS" ]; then
+              FAIL=1
+              add_row 'Deprecated charity-routing Solidity patterns in non-historical contracts' 'FAIL' 'Found charityWallet/donationSplit references.'
+            else
+              add_row 'Deprecated charity-routing Solidity patterns in non-historical contracts' 'PASS' 'No deprecated patterns found.'
+            fi
           fi
 
           # Governance docs checks
