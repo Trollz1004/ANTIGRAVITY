@@ -1,12 +1,20 @@
-name: Daily Doctrine Audit
+name: Daily Paperclip Agent Audit
 
 on:
   schedule:
     - cron: '0 6 * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'paperclip/agents/*/AGENTS.md'
+      - 'paperclip/agents/*/HEARTBEAT.md'
+      - 'paperclip/agents/*/TOOLS.md'
+      - 'paperclip/agents/audit/AUDIT-*.md'
 
 permissions:
-  contents: read
+  contents: write
+  issues: write
 
 jobs:
   audit:
@@ -14,136 +22,129 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Run doctrine and agent audit
+      - name: Run Paperclip agent audit
+        id: audit
         shell: bash
         run: |
           set -euo pipefail
+          scripts/paperclip/agent-audit.sh
 
-          FAIL=0
-          TMP_REPORT="$(mktemp)"
-
-          add_row() {
-            local check="$1"
-            local status="$2"
-            local details="$3"
-            printf '| %s | %s | %s |\n' "$check" "$status" "$details" >> "$TMP_REPORT"
-          }
-
-          echo '| Check | Status | Details |' > "$TMP_REPORT"
-          echo '|---|---|---|' >> "$TMP_REPORT"
-
-          # Doctrine Drift: forbidden language in paperclip AGENTS.md files
-          FORBIDDEN='donate|donation|solicitation|automatic disbursement|charity routing'
-          FORBIDDEN_HITS=$(find paperclip/agents -mindepth 2 -maxdepth 2 -type f -name 'AGENTS.md' -print0 | xargs -0 grep -nEi "$FORBIDDEN" 2>/dev/null || true)
-          if [ -n "$FORBIDDEN_HITS" ]; then
-            FAIL=1
-            add_row 'Forbidden doctrine terms in paperclip AGENTS.md' 'FAIL' "Found matches."
-          else
-            add_row 'Forbidden doctrine terms in paperclip AGENTS.md' 'PASS' 'No forbidden terms found.'
-          fi
-
-          # Doctrine Drift: authority reference in each paperclip AGENTS.md file
-          AUTH_FAIL=0
-          AUTH_MISSING=()
-          while IFS= read -r file; do
-            if ! grep -qiE 'Josh|Joshua Coleman' "$file"; then
-              AUTH_FAIL=1
-              AUTH_MISSING+=("$file")
-            fi
-          done < <(find paperclip/agents -mindepth 2 -maxdepth 2 -type f -name 'AGENTS.md' | sort)
-
-          if [ "$AUTH_FAIL" -eq 1 ]; then
-            FAIL=1
-            add_row 'Authority reference in each paperclip AGENTS.md' 'FAIL' "Missing in ${#AUTH_MISSING[@]} file(s)."
-          else
-            add_row 'Authority reference in each paperclip AGENTS.md' 'PASS' 'All AGENTS.md files contain Josh/Joshua Coleman.'
-          fi
-
-          # Doctrine Drift: deprecated Solidity patterns in non-historical contracts
-          if [ ! -d contracts/src ]; then
-            FAIL=1
-            add_row 'Deprecated charity-routing Solidity patterns in non-historical contracts' 'FAIL' 'contracts/src directory is missing.'
-          else
-            SOL_HITS=$(find contracts/src -type f -name '*.sol' \
-              ! -iname '*GospelDonation*' \
-              ! -iname '*CharityRouter100*' \
-              -print0 | xargs -0 grep -nE 'charityWallet|donationSplit' 2>/dev/null || true)
-            if [ -n "$SOL_HITS" ]; then
-              FAIL=1
-              add_row 'Deprecated charity-routing Solidity patterns in non-historical contracts' 'FAIL' 'Found charityWallet/donationSplit references.'
-            else
-              add_row 'Deprecated charity-routing Solidity patterns in non-historical contracts' 'PASS' 'No deprecated patterns found.'
-            fi
-          fi
-
-          # Governance docs checks
-          if [ -f GOVERNANCE.md ] && grep -q 'Joshua Coleman' GOVERNANCE.md; then
-            add_row 'GOVERNANCE.md exists and contains Joshua Coleman' 'PASS' 'Verified.'
-          else
-            FAIL=1
-            add_row 'GOVERNANCE.md exists and contains Joshua Coleman' 'FAIL' 'Missing file or required authority text.'
-          fi
-
-          if [ -f AGENTS.md ] && grep -q 'SOLE AUTHORITY' AGENTS.md; then
-            add_row 'AGENTS.md exists and contains SOLE AUTHORITY' 'PASS' 'Verified.'
-          else
-            FAIL=1
-            add_row 'AGENTS.md exists and contains SOLE AUTHORITY' 'FAIL' 'Missing file or required authority text.'
-          fi
-
-          # Required DAO contracts existence
-          DAO_MISSING=0
-          for f in \
-            contracts/src/governance/YANAI.sol \
-            contracts/src/governance/AISO.sol \
-            contracts/src/governance/RECYCLE.sol; do
-            if [ ! -f "$f" ]; then
-              DAO_MISSING=1
-            fi
-          done
-          if [ "$DAO_MISSING" -eq 0 ]; then
-            add_row 'DAO governance contracts exist (YANAI/AISO/RECYCLE)' 'PASS' 'All required contracts found.'
-          else
-            FAIL=1
-            add_row 'DAO governance contracts exist (YANAI/AISO/RECYCLE)' 'FAIL' 'One or more required contracts missing.'
-          fi
-
-          # Agent health checks
-          AGENT_MISSING=0
-          AGENT_MISSING_COUNT=0
-          while IFS= read -r dir; do
-            for req in AGENTS.md TOOLS.md HEARTBEAT.md SOUL.md; do
-              if [ ! -f "$dir/$req" ]; then
-                AGENT_MISSING=1
-                AGENT_MISSING_COUNT=$((AGENT_MISSING_COUNT + 1))
-              fi
-            done
-          done < <(find paperclip/agents -mindepth 1 -maxdepth 1 -type d | sort)
-
-          if [ "$AGENT_MISSING" -eq 1 ]; then
-            FAIL=1
-            add_row 'Agent required files (AGENTS/TOOLS/HEARTBEAT/SOUL per agent)' 'FAIL' "Missing $AGENT_MISSING_COUNT required file(s)."
-          else
-            add_row 'Agent required files (AGENTS/TOOLS/HEARTBEAT/SOUL per agent)' 'PASS' 'All required files exist for all agents.'
-          fi
-
+      - name: Build workflow summary
+        shell: bash
+        run: |
           {
-            echo '## Daily Doctrine Audit Report'
+            echo '## Paperclip Agent Audit'
             echo
-            cat "$TMP_REPORT"
-            echo
-            if [ "$FAIL" -eq 0 ]; then
-              echo '**Result:** PASS ✅'
-            else
-              echo '**Result:** FAIL ❌'
-            fi
+            echo "- Audit file: \`${{ steps.audit.outputs.audit_file }}\`"
+            echo "- Unauthorized change detected: \`${{ steps.audit.outputs.unauthorized_change }}\`"
+            echo "- Fail flag: \`${{ steps.audit.outputs.audit_fail }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
-          if [ "$FAIL" -ne 0 ]; then
+      - name: Auto-revert unauthorized protected-file mutations
+        if: github.event_name == 'push' && steps.audit.outputs.unauthorized_change == '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          BEFORE_SHA="${{ github.event.before }}"
+          AFTER_SHA="${{ github.sha }}"
+
+          if [ -z "$BEFORE_SHA" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            if git rev-parse "${AFTER_SHA}^" >/dev/null 2>&1; then
+              BEFORE_SHA="$(git rev-parse "${AFTER_SHA}^")"
+            else
+              echo "No parent commit available for restore target."
+              exit 1
+            fi
+          fi
+
+          if ! git cat-file -e "${BEFORE_SHA}^{commit}"; then
+            echo "Restore target commit is invalid: $BEFORE_SHA"
             exit 1
           fi
 
-      - name: Policy note
+          if ! git merge-base --is-ancestor "$BEFORE_SHA" "$AFTER_SHA"; then
+            echo "Restore target is not an ancestor of current commit."
+            exit 1
+          fi
+
+          mapfile -t TO_RESTORE < <(
+            git diff --name-only "$BEFORE_SHA" "$AFTER_SHA" -- \
+              'paperclip/agents/*/AGENTS.md' \
+              'paperclip/agents/*/HEARTBEAT.md' \
+              'paperclip/agents/*/TOOLS.md' \
+              'paperclip/agents/audit/AUDIT-*.md' \
+            | sort -u
+          )
+
+          if [ "${#TO_RESTORE[@]}" -eq 0 ]; then
+            echo "No protected files require restore."
+            exit 0
+          fi
+
+          for file in "${TO_RESTORE[@]}"; do
+            git checkout "$BEFORE_SHA" -- "$file"
+          done
+
+      # This condition prevents an audit-log push by github-actions[bot] from recursively creating more audit-log commits.
+      - name: Commit audit log and any automatic restore (skip bot-authored push loops)
+        if: always() && (github.event_name != 'push' || github.actor != 'github-actions[bot]')
+        shell: bash
         run: |
-          echo "Workflow files are branch-protected policy code and should only be modified by repository owner-approved changes."
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add paperclip/agents/audit
+
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ steps.audit.outputs.unauthorized_change }}" = "1" ]; then
+            git add paperclip/agents/*/AGENTS.md paperclip/agents/*/HEARTBEAT.md paperclip/agents/*/TOOLS.md || true
+          fi
+
+          if git diff --cached --quiet; then
+            echo "No audit artifacts to commit."
+            exit 0
+          fi
+
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ steps.audit.outputs.unauthorized_change }}" = "1" ]; then
+            MSG="chore(audit): revert unauthorized protected-file changes and record audit [skip ci]"
+          else
+            MSG="chore(audit): record daily paperclip agent audit [skip ci]"
+          fi
+
+          git commit -m "$MSG"
+          git push
+
+      - name: Escalate unauthorized mutation to issue tracker
+        if: github.event_name == 'push' && steps.audit.outputs.unauthorized_change == '1'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const shortSha = context.sha?.slice(0, 8) || 'unknown';
+            const title = `[SECURITY] Paperclip protected-file mutation auto-reverted (${shortSha})`;
+            const body = [
+              'Unauthorized mutation detected in protected Paperclip agent files.',
+              '',
+              `- Actor: @${context.actor}`,
+              `- Commit: ${context.sha}`,
+              `- Workflow run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              '',
+              'Escalation required: CEO, CTO, and mission guardians.'
+            ].join('\n');
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: ['security', 'paperclip', 'audit']
+            });
+
+      - name: Fail run when audit flags risk
+        if: steps.audit.outputs.audit_fail == '1'
+        shell: bash
+        run: |
+          echo "Paperclip agent audit reported FAIL. Review audit log and remediation actions."
+          exit 1
