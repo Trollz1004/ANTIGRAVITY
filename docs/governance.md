@@ -4,32 +4,28 @@
 
 This document outlines the governance model for the ANTIGRAVITY repository and related projects. These guidelines ensure consistent, secure, and mission-aligned development practices across all contributors.
 
-## Branch Protection Rules
+## Branch Policy
+
+This repository follows a **1-branch policy**: `main` is the only long-lived branch.
 
 ### Main Branch (Production)
 
-- Protected branch - direct pushes forbidden
-- Requires at least 1 approved review from CODEOWNERS
-- Status checks required:
-  - CI/CD pipeline must pass
-  - All tests must pass
-  - Linting must pass
-  - No security vulnerabilities
-- Linear history enforced
-- Include administrators in restrictions
+- Protected branch — direct pushes forbidden
+- Requires at least 1 approved review from a CODEOWNER
+- All four CI status checks must pass before merge:
+  - `validate` — build, secret scan, §496.405 scan, doctrine drift
+  - `eslint-prettier-check` — TypeScript/React style
+  - `black-ruff-check` — Python style
+  - `run-tests` — backend tests (≥80% coverage)
+- Branches must be up-to-date with `main` before merge
+- Auto-delete head branch enabled
+- No long-lived side branches (`develop`, `staging`, `release/*`, etc.)
 
-### Develop Branch (Integration)
+### Short-lived Feature and Fix Branches
 
-- Semi-protected branch
-- Requires passing CI checks
-- Allows fast-forward merges from feature branches
-- Feature flags recommended for incomplete features
-
-### Feature Branches
-
-- Naming convention: `feature/descriptive-name`
-- No mandatory CI checks for personal forks
-- Required checks for branches in main repository
+- Naming: `feat/`, `fix/`, `chore/`, `docs/`, `claude/`, `codex/` prefixes
+- Created from `main`, merged to `main`, deleted immediately after merge
+- See `CONTRIBUTING.md` for the full PR workflow
 
 ## Pull Request Approval Rules
 
@@ -67,11 +63,10 @@ We follow Semantic Versioning 2.0.0:
 
 ### Release Process
 
-1. Create release branch from develop
-2. Finalize changelog and version bump
-3. Create tag and GitHub release
-4. Deploy to production
-5. Merge release branch back to main and develop
+1. All work merges to `main` via PR (1-branch policy — no release branches)
+2. Tag the commit on `main` using the version format: `vMAJOR.MINOR.PATCH`
+3. Create a GitHub Release from the tag with changelog notes
+4. CI automatically deploys tagged commits to production
 
 ### Tagging Convention
 
