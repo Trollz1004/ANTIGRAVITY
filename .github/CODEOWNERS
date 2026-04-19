@@ -2,6 +2,9 @@
 #
 # This file maps file patterns to responsible teams/persons for code review.
 # See docs/governance.md for CODEOWNER responsibilities and becoming a CODEOWNER.
+#
+# Global catch-all: @Trollz1004 owns everything not matched by a more specific rule.
+* @Trollz1004
 
 # Backend/API - @cto
 /backend/fastapi-app/app/*.py @cto
