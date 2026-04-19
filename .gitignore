@@ -125,6 +125,9 @@ PARA/
 .agents/
 ForTheKids/
 command-center/
+!apps/command-center/
+!apps/command-center/**
+apps/command-center/package-lock.json
 
 # --- Local secret-bearing memory/data ---
 memory/local/
@@ -235,6 +238,6 @@ status_summary.txt
 # --- Path-mangled dirs (agent drift artifacts) ---
 CUsersjoshl*/
 CANTIGRAVITY*/
-UsersjoshlAppData*/
 
 .coverage
+UsersjoshlAppData*/
