@@ -9,6 +9,12 @@
         "HOME": "C:\\Users\\joshl"
       }
     },
+    "brain-mcp-remote": {
+      "url": "https://mcp.youandinotai.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${BRAIN_MCP_TOKEN}"
+      }
+    },
     "antigravity-sentry": {
       "command": "node",
       "args": [
