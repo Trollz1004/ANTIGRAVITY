@@ -1,0 +1,147 @@
+name: Daily Doctrine Audit
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run doctrine and agent audit
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          FAIL=0
+          TMP_REPORT="$(mktemp)"
+
+          add_row() {
+            local check="$1"
+            local status="$2"
+            local details="$3"
+            printf '| %s | %s | %s |\n' "$check" "$status" "$details" >> "$TMP_REPORT"
+          }
+
+          has_matches() {
+            local pattern="$1"
+            local target="$2"
+            grep -RniE "$pattern" $target 2>/dev/null || true
+          }
+
+          echo '| Check | Status | Details |' > "$TMP_REPORT"
+          echo '|---|---|---|' >> "$TMP_REPORT"
+
+          # Doctrine Drift: forbidden language in paperclip AGENTS.md files
+          FORBIDDEN='donate|donation|solicitation|automatic disbursement|charity routing'
+          FORBIDDEN_HITS=$(has_matches "$FORBIDDEN" 'paperclip/agents/*/AGENTS.md')
+          if [ -n "$FORBIDDEN_HITS" ]; then
+            FAIL=1
+            add_row 'Forbidden doctrine terms in paperclip AGENTS.md' 'FAIL' "Found matches."
+          else
+            add_row 'Forbidden doctrine terms in paperclip AGENTS.md' 'PASS' 'No forbidden terms found.'
+          fi
+
+          # Doctrine Drift: authority reference in each paperclip AGENTS.md file
+          AUTH_FAIL=0
+          AUTH_MISSING=()
+          while IFS= read -r file; do
+            if ! grep -qiE 'Josh|Joshua Coleman' "$file"; then
+              AUTH_FAIL=1
+              AUTH_MISSING+=("$file")
+            fi
+          done < <(find paperclip/agents -mindepth 2 -maxdepth 2 -type f -name 'AGENTS.md' | sort)
+
+          if [ "$AUTH_FAIL" -eq 1 ]; then
+            FAIL=1
+            add_row 'Authority reference in each paperclip AGENTS.md' 'FAIL' "Missing in ${#AUTH_MISSING[@]} file(s)."
+          else
+            add_row 'Authority reference in each paperclip AGENTS.md' 'PASS' 'All AGENTS.md files contain Josh/Joshua Coleman.'
+          fi
+
+          # Doctrine Drift: deprecated Solidity patterns in non-historical contracts
+          SOL_HITS=$(find contracts/src -type f -name '*.sol' \
+            ! -iname '*GospelDonation*' \
+            ! -iname '*CharityRouter100*' \
+            -print0 | xargs -0 grep -nE 'charityWallet|donationSplit' 2>/dev/null || true)
+          if [ -n "$SOL_HITS" ]; then
+            FAIL=1
+            add_row 'Deprecated charity-routing Solidity patterns in non-historical contracts' 'FAIL' 'Found charityWallet/donationSplit references.'
+          else
+            add_row 'Deprecated charity-routing Solidity patterns in non-historical contracts' 'PASS' 'No deprecated patterns found.'
+          fi
+
+          # Governance docs checks
+          if [ -f GOVERNANCE.md ] && grep -q 'Joshua Coleman' GOVERNANCE.md; then
+            add_row 'GOVERNANCE.md exists and contains Joshua Coleman' 'PASS' 'Verified.'
+          else
+            FAIL=1
+            add_row 'GOVERNANCE.md exists and contains Joshua Coleman' 'FAIL' 'Missing file or required authority text.'
+          fi
+
+          if [ -f AGENTS.md ] && grep -q 'SOLE AUTHORITY' AGENTS.md; then
+            add_row 'AGENTS.md exists and contains SOLE AUTHORITY' 'PASS' 'Verified.'
+          else
+            FAIL=1
+            add_row 'AGENTS.md exists and contains SOLE AUTHORITY' 'FAIL' 'Missing file or required authority text.'
+          fi
+
+          # Required DAO contracts existence
+          DAO_MISSING=0
+          for f in \
+            contracts/src/governance/YANAI.sol \
+            contracts/src/governance/AISO.sol \
+            contracts/src/governance/RECYCLE.sol; do
+            if [ ! -f "$f" ]; then
+              DAO_MISSING=1
+            fi
+          done
+          if [ "$DAO_MISSING" -eq 0 ]; then
+            add_row 'DAO governance contracts exist (YANAI/AISO/RECYCLE)' 'PASS' 'All required contracts found.'
+          else
+            FAIL=1
+            add_row 'DAO governance contracts exist (YANAI/AISO/RECYCLE)' 'FAIL' 'One or more required contracts missing.'
+          fi
+
+          # Agent health checks
+          AGENT_MISSING=0
+          AGENT_MISSING_COUNT=0
+          while IFS= read -r dir; do
+            for req in AGENTS.md TOOLS.md HEARTBEAT.md SOUL.md; do
+              if [ ! -f "$dir/$req" ]; then
+                AGENT_MISSING=1
+                AGENT_MISSING_COUNT=$((AGENT_MISSING_COUNT + 1))
+              fi
+            done
+          done < <(find paperclip/agents -mindepth 1 -maxdepth 1 -type d | sort)
+
+          if [ "$AGENT_MISSING" -eq 1 ]; then
+            FAIL=1
+            add_row 'Agent required files (AGENTS/TOOLS/HEARTBEAT/SOUL per agent)' 'FAIL' "Missing $AGENT_MISSING_COUNT required file(s)."
+          else
+            add_row 'Agent required files (AGENTS/TOOLS/HEARTBEAT/SOUL per agent)' 'PASS' 'All required files exist for all agents.'
+          fi
+
+          {
+            echo '## Daily Doctrine Audit Report'
+            echo
+            cat "$TMP_REPORT"
+            echo
+            if [ "$FAIL" -eq 0 ]; then
+              echo '**Result:** PASS ✅'
+            else
+              echo '**Result:** FAIL ❌'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$FAIL" -ne 0 ]; then
+            exit 1
+          fi
+
+      - name: Policy note
+        run: |
+          echo "Workflow files are branch-protected policy code and should only be modified by repository owner-approved changes."
