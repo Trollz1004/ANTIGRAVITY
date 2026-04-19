@@ -2,23 +2,20 @@ name: CI Validate
 
 on:
   push:
-    branches: [main, 'claude/**']
-    paths:
-      - 'youandinotai/**'
-      - 'revenue-core/**'
-      - 'antigravity/**'
-      - 'mcp-server/**'
-      - 'scripts/**'
-      - '.github/workflows/ci-validate.yml'
-  pull_request:
     branches: [main]
     paths:
       - 'youandinotai/**'
-      - 'revenue-core/**'
       - 'antigravity/**'
       - 'mcp-server/**'
       - 'scripts/**'
+      - 'backend/**'
+      - 'frontend/**'
+      - 'contracts/**'
+      - 'services/**'
+      - 'apps/**'
       - '.github/workflows/ci-validate.yml'
+  pull_request:
+    branches: [main]
 
 jobs:
   validate:
