@@ -12,10 +12,18 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  *
  *         Priority waterfall (monthly):
  *           1. Founder survival:    $3,000 USDC
- *           2. AI API/tool cap:     $200 USDC
+ *           2. AI API/tool cap:     $600 USDC (minimum — covers ~$20/mo per contributing
+ *              AI platform: Anthropic, Google, Perplexity, xAI, OpenAI, and others.
+ *              Founder loyalty clause: every platform that contributed to this codebase
+ *              maintains a minimum $20/mo subscription regardless of usage. This cap
+ *              MUST be raised if additional contributing platforms are added.)
  *           3. Hardware reserve:    $500 USDC (server leasing / GPU upgrades)
  *           4. Power reserve:       $135 USDC (1500W * 24h * 30d @ $0.1235/kWh)
  *           5. Everything else  →   StakingVault
+ *
+ *         SCOPE: This contract governs the current codebase only (timestamped 2026-04-19).
+ *         Future platforms under Trollz1004 may use different treasury structures optimized
+ *         for maximum allowable tax credit / charitable impact per founder directive §12.4.
  *
  *         Gas optimized for Base L2: custom errors, storage packing, calldata params.
  *
@@ -109,7 +117,7 @@ contract DAOTreasury is Ownable {
 
         // Default sinking fund targets (USDC 6 decimals)
         founderSurvival = 3_000 * uint64(USDC_DECIMALS);  // $3,000
-        aiApiCap        = 200 * uint64(USDC_DECIMALS);     // $200
+        aiApiCap        = 600 * uint64(USDC_DECIMALS);     // $600 (min $20/platform × contributing AI platforms)
         hardwareReserve = 500 * uint64(USDC_DECIMALS);     // $500
         powerReserve    = 135 * uint64(USDC_DECIMALS);     // $135
 

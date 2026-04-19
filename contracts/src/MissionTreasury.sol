@@ -14,6 +14,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  *         After founder death (confirmed by DeadManSwitch + Gnosis Safe 3-of-5),
  *         ownership transfers to mission governance — Founding Four + DAO token holders.
  *
+ *         MISSION SCOPE (per founder directive §12.6, 2026-04-19):
+ *         NOT limited to medical needs. Covers ALL child welfare categories:
+ *         medical/health, hunger/food security, education/school supplies,
+ *         children in war zones, foster care, housing/shelter, mental health,
+ *         and any other unmet child need. If a kid needs it, it's in scope.
+ *
  *         State A (alive):  Josh controls disbursements
  *         State B (dead):   Gnosis Safe 3-of-5 controls disbursements
  *

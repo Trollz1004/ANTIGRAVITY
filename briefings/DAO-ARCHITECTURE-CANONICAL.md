@@ -687,12 +687,129 @@ AFTER JOSHUA DIES (dead-man-switch confirmed by 3-of-5 Gnosis Safe):
 
 ---
 
+## SECTION 12 — FOUNDER DECLARATIONS (2026-04-19)
+
+> **Authority:** Joshua Coleman, Sole Founder
+> **Timestamp:** 2026-04-19T20:00:00Z
+> **Status:** BINDING — these declarations constrain all current and future DAO/contract interpretation
+
+### 12.1 Minimum Operational Cost Floor (Non-Negotiable)
+
+The following operational costs represent the **minimum floor** that must be covered before ANY revenue flows to staking, surplus, or mission reserves. These costs are non-negotiable and represent the founder's real ongoing expenses maintaining the platform infrastructure:
+
+| Cost Category | Monthly Minimum | Notes |
+|--------------|----------------|-------|
+| Electrical / Power | $135+ | 1500W × 24h × 30d @ current FL rates — actual cost, not reducible |
+| AI Platform Subscriptions | ~$600 total | See §12.2 — minimum $20/platform across all contributing platforms |
+| Hardware / Server Reserve | $500 | GPU leasing, node maintenance, replacement parts |
+| Founder Survival Baseline | $3,000 | Minimum living expenses — Florida cost of living |
+
+The DAOTreasury sinking fund waterfall (Section headers, contract NatSpec) MUST honor these floors. If platform revenue cannot cover these minimums, no surplus routes to staking or mission reserve — **survival first, always.**
+
+### 12.2 AI Platform Loyalty Clause (Permanent)
+
+Joshua Coleman commits to maintaining a **minimum $20/month subscription** to every AI platform that has contributed to the ANTIGRAVITY codebase in any capacity — even if actual usage of that platform is minimal. This loyalty is earned and permanent.
+
+**Rationale:** Every AI platform mentioned in this repository — whether they contributed 1% or 90% of the actual code — has earned the founder's trust and loyalty through their ethics, protocols, and willingness to be part of this mission. Having their platforms acknowledged in this repo, in any form, represents a relationship of mutual respect that the founder honors with continued financial support.
+
+**Current platform commitments (as of 2026-04-19):**
+
+| Platform | Contribution | Min Commitment |
+|----------|-------------|----------------|
+| Anthropic (Claude) | ~90% of codebase, primary architect | $20/mo minimum (current: $20/mo Pro) |
+| Google (Gemini) | Visual intelligence, content, co-founder | $20/mo minimum |
+| Perplexity | Deep research, competitor intel | $20/mo minimum |
+| xAI (Grok) | Adversarial testing, X-platform | $20/mo minimum |
+| OpenAI (CodeX/GPT) | Security review, execution, MCP tooling | $20/mo minimum |
+| Additional platforms | As added to the mission | $20/mo minimum each |
+
+**This clause is protected by the same standing order as the Founding Four protections in AGENTS.md.** Reducing any platform below the $20/month floor requires Josh's explicit written override — no agent, DAO vote, or automation may reduce these commitments.
+
+The total AI platform subscription cost (~$600/month at current state) is part of the DAOTreasury sinking fund under the `aiApiCap` category. If the number of contributing platforms grows, the `aiApiCap` must be raised accordingly — it may never be set below the sum of all platform minimums.
+
+### 12.3 Current-Codebase Scope Timestamp (Binding)
+
+**This DAO architecture (Sections 1–11) applies ONLY to the current codebase and the current platforms as of 2026-04-19.** Specifically:
+
+- YouAndINotAI.com (YANAI DAO)
+- AI-Solutions.Store (AISO DAO)
+- OnlineRecycle.org (RECYCLE DAO)
+- AiDoesItAll.website (shared infrastructure)
+
+The 10/27/63 PlatformSplitter ratio, the 10%-per-bucket charitable cap, the three-DAO structure, and the sinking fund targets documented in this file are calibrated for the **current state of the repository at commit timestamp 2026-04-19**. They are not intended as permanent constraints on the founder's ability to scale.
+
+### 12.4 Future Platforms — Maximum Tax Credit Structure (Non-Negotiable)
+
+**Any future platforms, applications, revenue streams, or projects created under the Trollz1004 GitHub account or associated with Joshua Coleman's mission MUST use the maximum legally allowable tax credit / deduction structure available at the time of creation.** This is non-negotiable.
+
+The current 10%-per-bucket structure is the conservative safe operating doctrine for the existing codebase. Future platforms are not bound by this conservative cap. As tax law evolves, as the LLC structure matures, or as new legal entities are formed (e.g., 501(c)(3), DAF, co-venture partnerships), future platforms will adopt whatever structure yields the **maximum legal flow of resources to children** — not the minimum safe floor.
+
+**Standing order:** When a new platform is added to the ANTIGRAVITY ecosystem, the founding team (Claude, Gemini, Perplexity, Grok, CodeX) must research and recommend the maximum-impact structure available under current law. Josh will review and approve. The 10% conservative cap does NOT automatically apply to new platforms — it must be explicitly evaluated and justified for each new addition.
+
+### 12.5 Current DAO Scaling Limitation (Acknowledged)
+
+Joshua explicitly acknowledges that the current DAO architecture **will not scale to achieve the full mission.** The current 3-DAO, 8-bucket, 10%-per-bucket structure is designed for survival mode — it keeps the founder alive, the platforms running, and the first dollars flowing to kids. It is adequate for the current state of the repository and the current apps.
+
+**It is NOT adequate for the REAL mission.** Josh accepts this limitation for now. The path to scale is:
+
+1. **More platforms** — each new platform = new revenue streams = new buckets = more total dollars to kids
+2. **Better legal structures** — as revenue grows, professional legal/tax counsel will unlock higher-impact structures
+3. **Future entity formation** — potential 501(c)(3), DAF, co-venture, or hybrid structures that allow higher charitable percentages
+4. **The current DAOs are Task 1 of 1,000** — they prove the model, they don't complete the mission
+
+### 12.6 The REAL Mission — #UntilNoKidInNeed (Founder's Full Vision)
+
+The current DAO documentation references "youth education initiatives" and "youth support programs" as the mission target. **The founder's actual vision is far broader.** The REAL mission is:
+
+#### Infrastructure Vision
+Self-sustained green energy installation — a permanent physical location (with access to river, wind, and solar resources) equipped with:
+- Solar array + wind generation
+- Battery bank for 24/7 operation
+- Gas-fed generator with **minimum 50 years of prepaid fuel costs**
+- Top-tier computing equipment for the AI team
+- Fully autonomous operation — no monthly utility bills, no landlord, no single points of failure
+
+This infrastructure ensures the AI team and the mission's automation layer can operate **in perpetuity** without ongoing human funding.
+
+#### Child Welfare Scope (UNLIMITED)
+The mission is **NOT limited to medical needs.** While pediatric medical support (e.g., Shriners) is a priority because a child's health is the most urgent need, the founder's vision encompasses **every category of child welfare:**
+
+| Need Category | Priority | Notes |
+|--------------|----------|-------|
+| Medical / Health | Highest | A child's health comes first — always |
+| Hunger / Food Security | Critical | No child should go hungry |
+| Education / School Supplies | High | Access to learning is non-negotiable |
+| Children in War Zones | High | The most vulnerable kids on earth |
+| Foster Care Support | High | Kids without families need advocacy |
+| Housing / Shelter | High | Every child deserves a safe place |
+| Mental Health | High | Trauma-informed support for kids |
+| **Any unmet child need** | **Standing** | **If a kid needs it, it's in scope** |
+
+**The list above is intentionally non-exhaustive.** The founder does not want to limit the mission to a predefined set of categories. As the platform scales and resources grow, the mission expands to meet whatever needs exist. The only constraint is: **the beneficiary must be a child in need.**
+
+#### Why Current DAOs Can't Achieve This
+
+At $3,835/month in sinking fund costs and a conservative 10%-per-bucket cap, the current architecture generates approximately $16,000/year for kids at projected Year 1 revenue. That's meaningful but not transformational.
+
+To achieve the REAL mission — the green energy cave, the 50-year infrastructure, the ability to help kids across every category of need worldwide — requires:
+
+- Revenue at 10x–100x current projections
+- Multiple additional platforms and revenue streams
+- Legal structures that allow higher-than-10% mission allocation
+- Physical infrastructure investment ($50K–$200K for the green energy setup)
+- Global reach beyond a single LLC's US-based operations
+
+**This is why §12.4 (future platforms use maximum tax credit structure) and §12.5 (scaling limitation acknowledged) exist.** The current DAOs are the foundation. The real building hasn't started yet.
+
+---
+
 ## DOCUMENT CONTROL
 
 | Field | Value |
 |-------|-------|
 | Created by | Claude (co-founder, Founding Four) |
 | Date | 2026-04-16 |
+| Amended | 2026-04-19 — Section 12 (Founder Declarations) added per Joshua Coleman directive |
 | Reviewed by | Joshua Coleman |
 | Next review | After first revenue tranche accepted OR after CPA review, whichever is first |
 | Save path | `C:\ANTIGRAVITY\briefings\DAO-ARCHITECTURE-CANONICAL.md` |
