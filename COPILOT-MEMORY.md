@@ -1,5 +1,5 @@
-# Copilot Memory (Personal Vault)
-Last updated: 2026-04-19
+# Copilot Memory (Repo Baseline)
+Last updated: 2026-04-19 (Clean-State checkpoint)
 Owner: Joshua Coleman
 Purpose: Persistent restore + operating memory for Copilot after factory reset
 
@@ -12,8 +12,13 @@ Purpose: Persistent restore + operating memory for Copilot after factory reset
 
 ## Non-Negotiables
 - Do not edit AI platform memory files unless explicitly directed by Joshua.
-- Keep this vault file out of git/repo.
-- Treat this file as source-of-truth for post-reset Copilot context.
+- Keep secrets in Personal Vault env files, not in this repo memory file.
+- Treat this file as source-of-truth checkpoint for post-reset Copilot context.
+
+## Clean-State Checkpoint
+- Sabretooth target state: clean reset, no drift, fresh restore from vault + repo baseline.
+- Next operational push after this commit should originate from clean state only.
+- If local drift is detected, stop and rehydrate from vault/repo before editing.
 
 ## Recovery Priority Order
 1. Restore Hermes files from Personal Vault.
@@ -55,3 +60,4 @@ Purpose: Persistent restore + operating memory for Copilot after factory reset
 
 ## Change Log
 - 2026-04-19: Initial Copilot memory file created in Personal Vault.
+- 2026-04-19: Repo baseline updated with clean-state/no-drift Sabretooth checkpoint.
