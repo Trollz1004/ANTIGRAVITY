@@ -6,16 +6,17 @@ If Paperclip's database gets wiped or an agent's instructions get corrupted, res
 
 ## Agent Roster
 
-| Agent | Dir | Adapter | Agent ID |
-|-------|-----|---------|----------|
-| CEO | ceo/ | hermes_local / glm-5.1:cloud | c4b4a3d9-8e66-4463-bf65-abfc5037b92a |
-| CFO | cfo/ | hermes_local / glm-5.1:cloud | cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 |
-| CSO | cso/ | hermes_local / glm-5.1:cloud | 5d844d41-df24-4a2c-a98f-26bd94be2018 |
-| CTO | cto/ | opencode_local / qwen3-coder | b02a21c7-737e-4177-91ac-6d8e57805801 |
-| CMO | cmo/ | opencode_local / dateapp-marketingtools | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 |
-| UX Designer | uxdesigner/ | opencode_local / dateapp | bd6d6722-9f3e-46ba-8651-ec9a219042ee |
-| Mission Guardian (Claude) | mission-guardian-claude/ | claude_local | 2229682b-cede-4462-b38b-25a910af022e |
-| Mission Guardian (Codex) | mission-guardian-codex/ | codex_local | 42200bfa-fb9e-42b1-901d-6dadf15eb23b |
+| Agent | Dir | Adapter | Agent ID | Heartbeat |
+|-------|-----|---------|----------|-----------|
+| CEO | ceo/ | hermes_local / glm-5.1:cloud | c4b4a3d9-8e66-4463-bf65-abfc5037b92a | 30m |
+| CFO | cfo/ | hermes_local / glm-5.1:cloud | cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 | 60m |
+| CSO | cso/ | hermes_local / glm-5.1:cloud | 5d844d41-df24-4a2c-a98f-26bd94be2018 | 60m |
+| CTO | cto/ | opencode_local / qwen3-coder | b02a21c7-737e-4177-91ac-6d8e57805801 | 30m |
+| CMO | cmo/ | opencode_local / dateapp-marketingtools | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | 60m |
+| UX Designer | uxdesigner/ | opencode_local / dateapp | bd6d6722-9f3e-46ba-8651-ec9a219042ee | 60m |
+| Mission Guardian (Claude) | mission-guardian-claude/ | claude_local | 2229682b-cede-4462-b38b-25a910af022e | 24h |
+| Mission Guardian (Codex) | mission-guardian-codex/ | codex_local | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | 24h |
+| GitHub Auditor | github-auditor/ | github-actions | N/A (workflow) | 24h |
 
 ## IDs
 
@@ -29,6 +30,28 @@ Copy the .md files from this folder back to:
 C:\Users\joshl\.paperclip\instances\default\companies\{companyId}\agents\{agentId}\instructions\
 
 Then reload the agent from the Paperclip UI.
+
+## Required Files Per Agent
+
+Each agent directory must contain:
+- `AGENTS.md` — Identity, role, responsibilities, delegation rules
+- `TOOLS.md` — Available tools, permissions, key IDs
+- `HEARTBEAT.md` — Schedule, health checks, escalation rules
+- `SOUL.md` — Who you are, why you exist, mission context
+
+CEO additionally has:
+- `SKILLS.md` — Skill boundaries and approval requirements
+
+## DAO Architecture (4-DAO Model, Updated 2026-04-19)
+
+| Token | DAO | Platform |
+|-------|-----|----------|
+| $LOVE | Love DAO | YouAndINotAI.com |
+| $UKID | #UntilNoKidInNeed | AI-Solutions.Store |
+| $GREEN | AiGreenTeam | OnlineRecycle.org |
+| $AGRAV | Antigravity DAO | AiDoesItAll.website |
+
+2.5M tokens per DAO, 10M hard cap total.
 
 ## Models (updated 2026-04-17)
 

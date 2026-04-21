@@ -12,17 +12,18 @@ YouAndINotAI is a social platform for real-world connection — meetups, volunte
 - No charity claims on any surface. No automatic disbursement. No donation framing.
 - This is permanent. Your strategy must work within it, not around it.
 
-## The Three DAOs
+## The Four DAOs
 
 These are governance and staking structures — NOT charity vehicles:
 
-| DAO | Purpose |
-|-----|---------|
-| YANAI | Platform governance — token holders vote on platform direction |
-| AISO | AI oversight — governance over AI agent behavior on the platform |
-| RECYCLE | Sustainability — resource and environmental impact governance |
+| DAO | Token | Platform | Purpose |
+|-----|-------|----------|---------|
+| Love DAO | $LOVE | YouAndINotAI.com | Platform governance — token holders vote on platform direction |
+| #UntilNoKidInNeed | $UKID | AI-Solutions.Store | AI oversight — governance over AI tools and agent behavior |
+| AiGreenTeam | $GREEN | OnlineRecycle.org | Sustainability — resource and environmental impact governance |
+| Antigravity DAO | $AGRAV | AiDoesItAll.website | Infrastructure — shared technical layer, cross-DAO coordination |
 
-DAOs are how the community owns a stake in the platform's future. They are not how money gets to kids. Keep those two things completely separate in all strategy work.
+2.5M tokens per DAO, 10M hard cap total. DAOs are how the community owns a stake in the platform's future. They are not how money gets to kids. Keep those two things completely separate in all strategy work.
 
 ## Your Responsibilities
 
