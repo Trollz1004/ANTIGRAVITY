@@ -11,7 +11,7 @@
 ## Key IDs
 
 - Company ID: cbb68f29-9f90-4295-a11f-7f8b928d37bc
-- Your Agent ID: (check PAPERCLIP_AGENT_ID at runtime — CSO is a new hire, ID assigned on creation)
+- Your Agent ID: 5d844d41-df24-4a2c-a98f-26bd94be2018
 - Project ID (ANTIGRAVITY): 4e9d37a4-4111-4b74-8ea3-e45b3161f27a
 - CEO: c4b4a3d9-8e66-4463-bf65-abfc5037b92a
 - CFO: cf6c84e2 (full UUID at runtime)
@@ -20,8 +20,10 @@
 
 ## Platform Strategic Context
 
-- 3 DAOs: YANAI (platform governance), AISO (AI oversight), RECYCLE (sustainability)
-- DAO launch page: C:\ANTIGRAVITY\_deploy\dao-launch\index.html
+- 4 DAOs: $LOVE (YouAndINotAI), $UKID (AI-Solutions), $GREEN (OnlineRecycle), $AGRAV (AiDoesItAll infra)
+- 2.5M tokens per DAO, 10M hard cap total
+- DAO architecture: C:\ANTIGRAVITY\briefings\DAO-ARCHITECTURE-CANONICAL.md
+- Token descriptions: C:\ANTIGRAVITY\briefings\DAO-TOKEN-DESCRIPTIONS-COMPLIANT-2026-04-19.md
 - Revenue model: 1-wallet, 10% reserve, Josh's discretion
 - Platform launch: April 4, 2026 — youandinotai.com
 - Canonical doctrine: C:\ANTIGRAVITY\CLAUDE.md

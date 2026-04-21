@@ -1,0 +1,55 @@
+{
+  "version": "1.0.0",
+  "enforcement": "hard",
+  "tiers": {
+    "tier_1_primary": [
+      "claude_local",
+      "codex_local"
+    ],
+    "tier_2": [],
+    "tier_3_emergency_only": [
+      "hermes_ollama_cloud"
+    ]
+  },
+  "adapters": {
+    "claude_local": {
+      "type": "anthropic_api",
+      "default_model": "claude-opus-4-7",
+      "fallback_model": "claude-sonnet-4-6",
+      "tier": 1
+    },
+    "codex_local": {
+      "type": "codex_mcp",
+      "endpoint_env": "CODEX_MCP_ENDPOINT",
+      "tier": 1
+    },
+    "hermes_ollama_cloud": {
+      "type": "ollama_cloud",
+      "model": "jeffreyvandekorput/korpohermes-prime:latest",
+      "persona": "KorpoHermes Prime — high-agency systems and engineering model for Hermes Agent",
+      "params": {
+        "min_p": 0.05,
+        "num_ctx": 131072,
+        "temperature": 0.35,
+        "top_p": 0.9
+      },
+      "tier": 3,
+      "activation_rule": "tier_1 both unreachable 30+ min",
+      "deactivation_rule": "any tier_1 adapter returns",
+      "degraded_mode": true
+    }
+  },
+  "banned": [
+    "glm-5.1:cloud",
+    "hermes_local_legacy",
+    "qwen3-coder",
+    "qwen3-coder:480b-cloud",
+    "dateapp-marketingtools",
+    "dateapp",
+    "any-other-ollama-cloud-model-except-korpohermes-prime"
+  ],
+  "on_banned_adapter_load_attempt": {
+    "action": "reject + file URGENT issue + refuse to start heartbeat",
+    "who_resolves": "Joshua Coleman only"
+  }
+}

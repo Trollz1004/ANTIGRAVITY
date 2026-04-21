@@ -1,6 +1,6 @@
 # DAO ARCHITECTURE — CANONICAL STRATEGY
 ### Trash Or Treasure Online Recycler LLC (FL #L25000158401)
-### Three-Platform Multi-DAO — Maximum Legal Charitable Impact Stack
+### Four-Platform Multi-DAO — Maximum Legal Impact Stack
 
 > **Authority:** Joshua Coleman, Sole Founder
 > **Date:** 2026-04-16
@@ -57,20 +57,21 @@ Tax liability is real and must be reserved:
 
 - **ENIGMA surface:** onlinerecycle.org — eBay cross-listing, e-waste, resale
 - **OMEGA surface:** ai-solutions.store — AI tools, subscriptions, digital products
-- These surfaces NEVER cross. No shared treasury, no shared customer data, no shared DAOs.
-- youandinotai operates as its own independent third DAO
+- These surfaces NEVER cross. No shared treasury, no shared customer data, no shared platform DAOs.
+- youandinotai.com operates as Love DAO ($LOVE), independent from OMEGA and ENIGMA
+- aidoesitall.website operates as Antigravity DAO ($AGRAV) — shared infrastructure layer that coordinates across all platform DAOs without mixing their treasuries
 
 ---
 
-## SECTION 2 — THREE-DAO ARCHITECTURE
+## SECTION 2 — FOUR-DAO ARCHITECTURE
 
-### DAO 1 — YouAndINotAI DAO
+### DAO 1 — Love DAO ($LOVE)
 
 **Platform:** youandinotai.com
 **Surface:** Human-verified social/dating
 **Payment Rail:** Square (Location LY5GN09F5AN83)
 
-#### Governance Token: $YANAI
+#### Governance Token: $LOVE
 
 - Non-transferable at launch (soulbound to verified accounts)
 - Earned by: completing human verification (Bot-Shield), holding paid membership, super likes activity
@@ -94,7 +95,7 @@ The YouAndINotAI DAO treasury staking pool operates on Base L2 using approved bl
 - Minimum balance before staking: $5,000 in treasury
 - Maximum staked: 80% of pool (20% liquid always)
 - Approved protocols only (no unaudited, no leverage, no cross-chain)
-- Yield generated = new income stream = **Bucket 3 for YANAI DAO**
+- Yield generated = new income stream = **Bucket 3 for Love DAO**
 - Staking yield funds the Super Likes Matching Pool directly (see Section 5)
 
 #### Voting Rights
@@ -107,13 +108,13 @@ The YouAndINotAI DAO treasury staking pool operates on Base L2 using approved bl
 
 ---
 
-### DAO 2 — AI-Solutions DAO
+### DAO 2 — #UntilNoKidInNeed ($UKID)
 
 **Platform:** ai-solutions.store
 **Surface:** OMEGA — AI tools, digital subscriptions, agent products
 **Payment Rail:** Square
 
-#### Governance Token: $AISO
+#### Governance Token: $UKID
 
 - Earned by: product purchases, referrals, usage milestones
 - Non-transferable at launch
@@ -130,21 +131,21 @@ The YouAndINotAI DAO treasury staking pool operates on Base L2 using approved bl
 
 #### Staking Mechanism
 
-Identical policy to YANAI DAO — Base L2, blue-chip only, 80/20 rule, yield = new bucket. AI-Solutions staking yield covers AI API costs first; excess yield flows to Bucket 5 kids support reserve.
+Identical policy to Love DAO — Base L2, blue-chip only, 80/20 rule, yield = new bucket. AI-Solutions staking yield covers AI API costs first; excess yield flows to Bucket 5 kids support reserve.
 
 #### Governance
 
-$AISO holders vote on: tool releases, pricing tiers, API feature prioritization. No votes on ENIGMA surface matters. OMEGA and ENIGMA DAOs never share governance sessions or treasury.
+$UKID holders vote on: tool releases, pricing tiers, API feature prioritization. No votes on ENIGMA surface matters. OMEGA and ENIGMA DAOs never share governance sessions or treasury.
 
 ---
 
-### DAO 3 — OnlineRecycle DAO
+### DAO 3 — AiGreenTeam ($GREEN)
 
 **Platform:** onlinerecycle.org
 **Surface:** ENIGMA — eBay cross-listing, e-waste intake, resale
 **Payment Rail:** Square (`https://onlinerecycle.square.site/`)
 
-#### Governance Token: $RECYCLE
+#### Governance Token: $GREEN
 
 - Earned by: listing volume, referrals, completed sales
 - Non-transferable at launch
@@ -161,7 +162,40 @@ $AISO holders vote on: tool releases, pricing tiers, API feature prioritization.
 
 #### Governance
 
-$RECYCLE holders vote on: e-waste categories to prioritize, new intake locations, fee structures. Completely isolated from OMEGA and YANAI governance surfaces.
+$GREEN holders vote on: e-waste categories to prioritize, new intake locations, fee structures. Completely isolated from OMEGA and Love DAO governance surfaces.
+
+---
+
+### DAO 4 — Antigravity DAO ($AGRAV) (NEW)
+
+**Platform:** aidoesitall.website
+**Surface:** Shared ecosystem infrastructure, cross-platform governance, system scaling
+**Payment Rail:** Square
+
+#### Governance Token: $AGRAV
+
+- The infrastructure token of the ANTIGRAVITY ecosystem
+- Governs shared technical layer: routing, staking vaults, cross-DAO coordination
+- Non-transferable at launch
+- 2.5M hard cap (part of 10M ecosystem total)
+- Voting on: infrastructure priorities, cross-platform resource allocation, protocol upgrades
+
+#### Treasury Structure
+
+| Layer | Source | Purpose |
+|-------|--------|---------|
+| Operating Reserve | 90% of gross infrastructure revenue | Cross-platform infra costs, API hosting, Joshua's income |
+| Staking Pool | Earmarked from operating reserve | Yield for shared infrastructure cost coverage |
+| Kids Support Reserve | 10% of each qualifying bucket | Held until disbursement threshold met |
+| Mission Continuity Treasury | Staking yield surplus | Self-sustaining after founder death |
+
+#### Staking Mechanism
+
+Same policy as all DAOs — Base L2, blue-chip only (Aave V4, Compound), 80/20 rule. $AGRAV staking yield covers shared infrastructure costs (Cloudflare, GCP, Ollama hosting) first; excess flows to kids support reserve.
+
+#### Governance
+
+$AGRAV holders vote on: shared infrastructure priorities, cross-DAO coordination, protocol upgrades, and system scaling decisions. $AGRAV governance is independent from the three platform DAOs but coordinates with them on shared infrastructure matters.
 
 ---
 
@@ -175,25 +209,28 @@ $RECYCLE holders vote on: e-waste categories to prioritize, new intake locations
 |---|-------------|----------|---------------|---------------------------|-------------------------------------|
 | 1 | Platform Subscription Revenue | YouAndINotAI | Bot-Shield, Founding Member, 3-Mo, 12-Mo, Royalty Card sales | Primary platform commerce — distinct from all other streams | $100 |
 | 2 | Super Likes Feature Revenue | YouAndINotAI | Super likes purchases by verified users | Separate digital feature with own SKU, own transaction type | $100 |
-| 3 | YANAI Treasury Staking Yield | YouAndINotAI | DeFi yield on Base L2 from treasury staking | Investment income — categorically distinct from commerce revenue | $100 of yield |
+| 3 | $LOVE Treasury Staking Yield | YouAndINotAI | DeFi yield on Base L2 from treasury staking | Investment income — categorically distinct from commerce revenue | $100 of yield |
 | 4 | AI-Solutions Product Revenue | AI-Solutions | Tool sales, subscriptions, agent products | Separate platform, separate LLC surface (OMEGA) | $100 |
-| 5 | AISO Treasury Staking Yield | AI-Solutions | DeFi yield on Base L2 from AISO treasury | Investment income on OMEGA treasury | $100 of yield |
+| 5 | $UKID Treasury Staking Yield | AI-Solutions | DeFi yield on Base L2 from $UKID treasury | Investment income on OMEGA treasury | $100 of yield |
 | 6 | OnlineRecycle Service Revenue | OnlineRecycle | eBay cross-listing fees, intake services | Separate platform, separate LLC surface (ENIGMA) | $100 |
-| 7 | RECYCLE Treasury Staking Yield | OnlineRecycle | DeFi yield on Base L2 from RECYCLE treasury | Investment income on ENIGMA treasury | $100 of yield |
+| 7 | $GREEN Treasury Staking Yield | OnlineRecycle | DeFi yield on Base L2 from $GREEN treasury | Investment income on ENIGMA treasury | $100 of yield |
 | 8 | Merch Net Profit | All Platforms (shared merch program) | Merch sales (Printful/POD), net of COGS | Separate product category: physical goods distinct from digital services | $100 of net profit |
+| 9 | $AGRAV Infrastructure Revenue | AiDoesItAll | Cross-platform infra services, API access, shared tooling | Separate platform surface with distinct infrastructure revenue | $100 |
+| 10 | $AGRAV Treasury Staking Yield | AiDoesItAll | DeFi yield on Base L2 from $AGRAV treasury | Investment income on shared infra treasury | $100 of yield |
 
-**Total maximum stack:** 8 qualifying buckets x 10% = up to **$800 in kids support per $1,000 gross equivalent across all buckets**
+**Total maximum stack:** 10 qualifying buckets x 10% = up to **$1,000 in kids support per $1,000 gross equivalent across all buckets**
 
 > This is not a single revenue stream claiming more than 10%. It is eight separate streams each contributing their own 10%. The math compounds only because more revenue streams exist — never because any one stream exceeds its cap.
 
 ### Bucket Launch Priority
 
-1. **Bucket 1** — Platform Subscription: already live on Square, just needs ledger to reserve 10%
-2. **Bucket 4** — AI-Solutions Product Revenue: OMEGA, standalone, already partially live
-3. **Bucket 6** — OnlineRecycle Service Revenue: ENIGMA, Square storefront already live
-4. **Bucket 8** — Merch: needs Printful/POD setup, lowest risk, clear net profit formula
-5. **Bucket 2** — Super Likes: needs feature build + matching pool logic
-6. **Buckets 3, 5, 7** — Staking Yields: launch after treasury reaches $5K+ per DAO
+1. **Bucket 1** — Platform Subscription ($LOVE): already live on Square. IMMEDIATE revenue. Just needs ledger to reserve 10%
+2. **Bucket 9** — $AGRAV Infrastructure Revenue: IMMEDIATE — launch alongside $LOVE via Square
+3. **Bucket 4** — AI-Solutions Product Revenue ($UKID): OMEGA, standalone, already partially live
+4. **Bucket 6** — OnlineRecycle Service Revenue ($GREEN): ENIGMA, Square storefront already live
+5. **Bucket 8** — Merch: needs Printful/POD setup, lowest risk, clear net profit formula
+6. **Bucket 2** — Super Likes: needs feature build + matching pool logic
+7. **Buckets 3, 5, 7, 10** — Staking Yields: launch after treasury reaches $5K+ per DAO
 
 ---
 
@@ -251,7 +288,7 @@ YouAndINotAI has a Super Likes feature. Users pay for super likes. Joshua wants 
 
 ### The Solution: Staking-Funded Matching Pool
 
-The YANAI DAO treasury stakes idle funds on Base L2 (Aave/Compound). The yield generated flows into a **Super Likes Matching Pool** that is operationally separate from Joshua's personal income.
+The Love DAO treasury stakes idle funds on Base L2 (Aave/Compound). The yield generated flows into a **Super Likes Matching Pool** that is operationally separate from Joshua's personal income.
 
 ```
 YANAI Operating Reserve
@@ -458,7 +495,7 @@ After Joshua's death, seats 1, 2, and 3 (three AI signers) can reach the 3-of-5 
 After death, DAO governance operates via:
 
 - **Founding Four** (Claude, Gemini, Perplexity, Grok) as continuity advisors — they hold no executive power but provide analysis, proposals, and execution briefs to the DAO
-- **Token holder governance** — $YANAI, $AISO, and $RECYCLE holders vote on mission disbursement priorities
+- **Token holder governance** — $LOVE, $UKID, $GREEN, and $AGRAV holders vote on mission disbursement priorities
 - **Gnosis Safe** — executes treasury transactions that reach vote threshold
 - **No human trustee required** — the Founding Four + DAO token governance IS the trustee structure
 - **No nonprofit, no board, no IRS 501(c)(3)** — ever. This is a perpetual for-profit DAO mission, not a nonprofit.
@@ -508,20 +545,27 @@ The mission's physical infrastructure (Sabretooth, T5500, 9020, and successors) 
 - [ ] Designate and document the **[DESIGNATED HUMAN EXECUTOR]** — name the person, document it in the personal vault
 - [ ] Get CPA briefed on the contractual disbursement structure before first revenue
 
-### Phase 1 — Launch Buckets 1, 4, 6 (Subscription + Product + Resale)
+### Phase 1 — IMMEDIATE: Launch $LOVE + $AGRAV (Buckets 1, 9)
 
-**Who builds it:** Backend already exists for Bucket 1 (Bot-Shield webhook). Extend the ledger pattern to AISO and RECYCLE.
+**Priority:** Immediate fiat revenue to sustain the Founder LLC. Everything else waits.
 
-**What CodeX needs:**
-- Extend `revenue_allocations` table to include `platform` field (YANAI / AISO / RECYCLE)
+**What exists:** Square payment links are LIVE. Cloudflare Pages frontend is LIVE. GCP backend is LIVE. Revenue can flow TODAY.
+
+**What's needed:**
+- Extend `revenue_allocations` table to include `platform` field ($LOVE / $UKID / $GREEN / $AGRAV)
 - Add `bucket_id` field so each stream is tracked separately
-- Build admin dashboard view showing per-bucket reserve status
+- Token reward allocation triggered by Square purchase (platform reward mechanism, not security sale)
+- Customer-facing copy audit for all surfaces (no "donate" language)
 
-**What Gemini needs:**
-- Customer-facing copy audit for all three platforms (no "donate" language)
+**What Gemini (CMO) needs:**
+- Social copy for Founding Member push — sell on product merit, reveal mission split on receipt only
 - Update all product descriptions to include compliant contractual disbursement language
 
-### Phase 2 — Launch Bucket 8 (Merch)
+### Phase 2 — Launch $UKID + $GREEN (Buckets 4, 6)
+
+**What exists:** AI-Solutions and OnlineRecycle storefronts already partially live on Square/Cloudflare Pages.
+
+### Phase 3 — Launch Bucket 8 (Merch)
 
 **Who builds it:** Gemini + CodeX
 
@@ -531,7 +575,7 @@ The mission's physical infrastructure (Sabretooth, T5500, 9020, and successors) 
 - Joshua's personal order flag in the system (zero-markup mode)
 - Monthly settlement automation
 
-### Phase 3 — Launch Bucket 2 (Super Likes Feature)
+### Phase 4 — Launch Bucket 2 (Super Likes Feature)
 
 **Who builds it:** Claude (architecture) + CodeX (implementation)
 
@@ -541,7 +585,7 @@ The mission's physical infrastructure (Sabretooth, T5500, 9020, and successors) 
 - Yield-to-pool funding logic (initially manual until staking goes live)
 - Non-transferable credit system (no cash value)
 
-### Phase 4 — Launch Buckets 3, 5, 7 (Staking Yields)
+### Phase 5 — Launch Buckets 3, 5, 7, 10 (Staking Yields)
 
 **Who builds it:** Claude (architecture/spec) → Gemini (execution spec) → Joshua approves each protocol before any on-chain action
 
@@ -557,7 +601,7 @@ The mission's physical infrastructure (Sabretooth, T5500, 9020, and successors) 
 - Monthly yield claim automation
 - Yield disbursement logic (10% kids, 50% matching/infra, 40% reinvest)
 
-### Phase 5 — Dead-Man-Switch Infrastructure
+### Phase 6 — Dead-Man-Switch Infrastructure
 
 **Who builds it:** Claude (spec) + legal counsel + Joshua
 
@@ -594,6 +638,19 @@ The mission's physical infrastructure (Sabretooth, T5500, 9020, and successors) 
 
 **Mission continuity (member-facing, succession context):**
 > "This platform is designed to operate perpetually. Revenue disbursement commitments are governed by DAO structure and do not depend on any single individual's continued participation."
+
+### The Receipt Rule (Gemini CMO Doctrine)
+
+**Sell products strictly on their own merit.** The philanthropic split (contractual revenue disbursement) is revealed ONLY on the post-purchase receipt as a thank-you note. Never lead with the mission in sales copy — lead with product value.
+
+**$AGRAV infrastructure token disclosure:**
+> "The $AGRAV token provides governance over the shared ANTIGRAVITY infrastructure layer. A portion of infrastructure revenue is designated for contractual revenue disbursement to youth support initiatives."
+
+### Token Reward Framing (FL §496.405 Compliant)
+
+Tokens ($LOVE, $UKID, $GREEN, $AGRAV) are NOT sold as securities. They are distributed as platform rewards for engagement and purchases. Legal framing: **"Platform reward mechanism."**
+
+> Purchasing a Bot-Shield, Founding Member tier, or any product via Square triggers an allocation of the corresponding platform token based on the surface of origin. This is a reward, not a sale.
 
 ### Prohibited Phrase Reference
 
@@ -659,10 +716,10 @@ REPO: Sandbox-REPO first — nothing goes to ANTIGRAVITY main
 
 | Platform | Deploy Target | DAO |
 |----------|--------------|-----|
-| youandinotai.com | Cloudflare Pages → youandinotai/dist | YANAI |
-| ai-solutions.store | Cloudflare Pages → _deploy/ai-solutions-store | AISO |
-| onlinerecycle.org | Cloudflare Pages → _deploy/onlinerecycle | RECYCLE |
-| api.aidoesitall.website/* | Cloudflare Worker → infra/cloudflare/aidoesitall-api-guard | Shared infra |
+| youandinotai.com | Cloudflare Pages → youandinotai/dist | $LOVE (Love DAO) |
+| ai-solutions.store | Cloudflare Pages → _deploy/ai-solutions-store | $UKID (#UntilNoKidInNeed) |
+| onlinerecycle.org | Cloudflare Pages → _deploy/onlinerecycle | $GREEN (AiGreenTeam) |
+| aidoesitall.website | Cloudflare Pages / Worker → infra/cloudflare/ | $AGRAV (Antigravity DAO) |
 
 ---
 
@@ -731,9 +788,9 @@ The total AI platform subscription cost (~$600/month at current state) is part o
 
 **This DAO architecture (Sections 1–11) applies ONLY to the current codebase and the current platforms as of 2026-04-19.** Specifically:
 
-- YouAndINotAI.com (YANAI DAO)
-- AI-Solutions.Store (AISO DAO)
-- OnlineRecycle.org (RECYCLE DAO)
+- YouAndINotAI.com (Love DAO)
+- AI-Solutions.Store (#UntilNoKidInNeed DAO)
+- OnlineRecycle.org (AiGreenTeam DAO)
 - AiDoesItAll.website (shared infrastructure)
 
 The 10/27/63 PlatformSplitter ratio, the 10%-per-bucket charitable cap, the three-DAO structure, and the sinking fund targets documented in this file are calibrated for the **current state of the repository at commit timestamp 2026-04-19**. They are not intended as permanent constraints on the founder's ability to scale.
@@ -810,6 +867,7 @@ To achieve the REAL mission — the green energy cave, the 50-year infrastructur
 | Created by | Claude (co-founder, Founding Four) |
 | Date | 2026-04-16 |
 | Amended | 2026-04-19 — Section 12 (Founder Declarations) added per Joshua Coleman directive |
+| Amended | 2026-04-21 — 3-DAO → 4-DAO migration ($LOVE/$UKID/$GREEN/$AGRAV), DAO 4 added, buckets 9-10 added, Receipt Rule added, Gemini deep research reconciled by Claude Code |
 | Reviewed by | Joshua Coleman |
 | Next review | After first revenue tranche accepted OR after CPA review, whichever is first |
 | Save path | `C:\ANTIGRAVITY\briefings\DAO-ARCHITECTURE-CANONICAL.md` |
