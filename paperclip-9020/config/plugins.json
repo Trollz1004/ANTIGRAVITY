@@ -1,0 +1,129 @@
+{
+  "version": "1.0.0",
+  "agent": "hermes-ceo",
+  "purpose": "All plugins/skills Hermes CEO needs for Phase 1 launch ($LOVE + $AGRAV via Square).",
+  "enabled_plugins": [
+    {
+      "name": "paperclip-core",
+      "purpose": "issue CRUD, milestones, comments, checkout/checkin",
+      "approval_required": false
+    },
+    {
+      "name": "para-memory-files",
+      "purpose": "strategic notes, DAO design, drift logs, decisions",
+      "approval_required": false
+    },
+    {
+      "name": "find-skills",
+      "purpose": "capability search before requesting new integrations",
+      "approval_required": false
+    },
+    {
+      "name": "agent-browser",
+      "purpose": "read-only research (no posting, no form submission)",
+      "approval_required": false,
+      "scope_restriction": "read-only"
+    },
+    {
+      "name": "social-command-center",
+      "purpose": "analytics only (scc_getAnalytics, scc_getDashboard)",
+      "approval_required": false,
+      "scope_restriction": "read-only"
+    },
+    {
+      "name": "github-mcp",
+      "purpose": "issue/PR/CI operations on trollz1004/antigravity",
+      "approval_required": false,
+      "scope_restriction": "repo=trollz1004/antigravity ONLY"
+    },
+    {
+      "name": "square-status",
+      "purpose": "check Square payment infra status (read-only)",
+      "approval_required": false,
+      "scope_restriction": "read-only"
+    },
+    {
+      "name": "policy-boundary",
+      "purpose": "doctrine-boundary verification scan",
+      "approval_required": false
+    },
+    {
+      "name": "donate-scan",
+      "purpose": "scan frontend for FL §496.405 violations",
+      "approval_required": false
+    },
+    {
+      "name": "deploy-check",
+      "purpose": "Cloudflare Pages deployment status",
+      "approval_required": false,
+      "scope_restriction": "read-only"
+    },
+    {
+      "name": "launch-checklist",
+      "purpose": "April 4, 2026 YouAndINotAI launch gate review",
+      "approval_required": false
+    },
+    {
+      "name": "cost-check",
+      "purpose": "recommend cheapest path for current task",
+      "approval_required": false
+    },
+    {
+      "name": "security-review",
+      "purpose": "security review of branch changes",
+      "approval_required": false
+    },
+    {
+      "name": "health",
+      "purpose": "Sabretooth platform diagnostics (port 3100, 4444, 5555, 6379)",
+      "approval_required": false,
+      "scope_restriction": "read-only"
+    },
+    {
+      "name": "status",
+      "purpose": "quick 3-bullet platform status for Josh",
+      "approval_required": false
+    }
+  ],
+  "approval_required_plugins": [
+    {
+      "name": "square-write",
+      "reason": "money"
+    },
+    {
+      "name": "wallet-treasury",
+      "reason": "money"
+    },
+    {
+      "name": "social-posting",
+      "reason": "brand voice"
+    },
+    {
+      "name": "git-push-main",
+      "reason": "branch protection"
+    },
+    {
+      "name": "repo-create",
+      "reason": "1-repo policy"
+    },
+    {
+      "name": "repo-archive",
+      "reason": "irreversible"
+    },
+    {
+      "name": "secret-rotation",
+      "reason": "security"
+    }
+  ],
+  "banned_plugins": [
+    "auto-donate",
+    "charity-router",
+    "section-496-405-beneficiary-split",
+    "auto-rewrite-instruction-files"
+  ],
+  "on_plugin_load": {
+    "check_integrity_state": true,
+    "check_adapter_tier": true,
+    "if_tier_3_active": "restrict to read-only plugins only"
+  }
+}
