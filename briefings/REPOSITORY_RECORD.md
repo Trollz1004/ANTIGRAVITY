@@ -236,13 +236,12 @@ Validated on April 2, 2026:
 - for a `$1.00` Bot-Shield payment, the ledger reserves `10` cents and leaves `90` cents as the operating amount
 - this is verified internal allocation tracking, not a claim that an external payout has already been sent; external disbursement still requires a separate verified payout/reconciliation path
 
-## April 11 Orphaned Cloudflare Pages Project — snowy-wave-bf78
+## April 11 Orphaned Cloudflare Workers Service — snowy-wave-bf78
 
-- Cloudflare Pages project `snowy-wave-bf78` was identified as a failing deployment connected to the ANTIGRAVITY GitHub repo via Cloudflare's Git integration
-- It is **NOT** part of the canonical deployment map and has no repo-side wrangler config pointing to it
-- The auto-generated random name `snowy-wave-bf78` confirms it was created during an early test/experiment (likely when the `antigravity/` Next.js status dashboard was first connected to Cloudflare Pages), and never given a canonical project name
-- The `antigravity/` status dashboard app does NOT currently have Cloudflare Pages adapter (`@cloudflare/next-on-pages`) configured, so any Cloudflare Pages build attempt will fail
-- **Action required (Cloudflare dashboard):** Delete project `snowy-wave-bf78` from the Cloudflare Pages dashboard under `joshlcoleman@gmail.com` → Pages → `snowy-wave-bf78` → Settings → Delete project
+- Cloudflare Workers service `snowy-wave-bf78` was identified as a failing deployment connected to the ANTIGRAVITY GitHub repo via Cloudflare's Git integration
+- It is **NOT** part of the canonical deployment map and should not run as a live CI/check context for this repo
+- The auto-generated random name `snowy-wave-bf78` confirms it was created during an early test/experiment and never promoted to a canonical named service
+- **Action required (Cloudflare dashboard):** remove the service from `joshlcoleman@gmail.com` Cloudflare account at `Workers & Pages` → `Workers` → `snowy-wave-bf78` → `Settings` → `Delete`, or disconnect its Git integration so the `cloudflare-workers-and-pages[bot]` check stops posting failures on PRs
 - Junk file `null.txt` (a UTF-16 encoded temp Python script accidentally committed to the repo root) was also removed in this pass
 
 ## Node Lane Verification
