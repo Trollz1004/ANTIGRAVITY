@@ -1,14 +1,28 @@
 # TOOLS.md — Hermes CEO (9020 Local)
 
-## Adapters (ONLY TWO)
+## Adapter Tiers (3-TIER FALLBACK)
 
-- **claude_local** — primary brain. Claude API (Opus 4.7 / Sonnet 4.6). Strategic thinking,
-  writing, review, delegation.
-- **codex_local** — code executor via MCP. Runs bash, edits files, executes git, handles
-  GitHub-native workflows, wallet/treasury tooling.
+### Tier 1 — Primary (always prefer)
+- **claude_local** — Claude API (Opus 4.7 / Sonnet 4.6). Strategic thinking, writing,
+  review, delegation.
+- **codex_local** — Codex MCP. Code execution, git, shell, GitHub workflows, wallet/treasury.
 
-**No other adapters.** If Paperclip tries to auto-register GLM, Qwen, or Ollama fallback,
-reject and alert Josh.
+### Tier 2 — None
+No tier-2 adapters. Jumping straight to tier-3 is intentional — it forces drift detection.
+
+### Tier 3 — Emergency Fallback (LAST RESORT ONLY)
+- **hermes_ollama_cloud** — `ollama/jeffreyvandekorput/korpohermes-prime:latest`
+  - Params: `min_p=0.05, num_ctx=131072, temperature=0.35, top_p=0.9`
+  - System persona: "KorpoHermes Prime — high-agency systems and engineering model"
+  - **Only activates when BOTH claude_local AND codex_local are unreachable for 30+ min**
+  - **Auto-deactivates the moment Claude or Codex returns**
+  - Hermes must log EVERY tier-3 activation as a drift-risk event
+  - While on tier-3: heartbeat drops to 4h minimum, no git pushes, no money-touching
+    actions, no skill execution beyond read-only
+
+**Banned adapters** (never load, ever):
+- `glm-5.1:cloud`, `qwen3-coder`, `dateapp-marketingtools`, `dateapp`,
+  any other Ollama cloud model except korpohermes-prime.
 
 ## Paperclip Skills
 
@@ -28,8 +42,8 @@ reject and alert Josh.
 ## Local-Only Constraints
 
 - All model calls routed through localhost:5555 (Paperclip) → localhost:4444 (OpenClaw)
-- No cloud model endpoints except Claude API (authorized) and Codex API (authorized)
-- No GLM cloud, no Ollama cloud tier, no Qwen cloud — these are banned on 9020
+- Authorized cloud endpoints: Claude API, Codex API, and `jeffreyvandekorput/korpohermes-prime` (Ollama cloud, tier-3 only)
+- All other cloud models (GLM, Qwen, other Ollama) are banned
 
 ## Key IDs
 
@@ -54,11 +68,26 @@ reject and alert Josh.
 
 ## Model Routing (hard rule)
 
-| Task type | Route to |
-|-----------|----------|
-| Strategic thinking / writing | claude_local |
-| Code changes / git / shell | codex_local |
-| GitHub issues / PRs | codex_local → github MCP |
-| Everything else | claude_local |
+| Task type | Normal | Tier-3 emergency |
+|-----------|--------|------------------|
+| Strategic thinking / writing | claude_local | hermes_ollama_cloud |
+| Code changes / git / shell | codex_local | hermes_ollama_cloud (read-only analysis only) |
+| GitHub issues / PRs | codex_local → github MCP | NONE — wait for Josh |
+| Money / secrets / wallet | claude_local + Josh approval | NONE — wait for Josh |
+| Everything else | claude_local | hermes_ollama_cloud |
 
 If a task is ambiguous, default to claude_local and have it decide whether to delegate.
+On tier-3, default to "wait for Josh" unless the task is strictly read-only analysis.
+
+## MD File Integrity (the real brain)
+
+The instruction files in this directory (`AGENTS.md`, `TOOLS.md`, `HEARTBEAT.md`, `SOUL.md`,
+`SKILLS.md`) ARE the agent. A well-written prompt on a 20MB model beats a lazy prompt on
+Sonnet. Protect them.
+
+Integrity config: `paperclip-9020/config/integrity-watchdog.json`
+- Every MD file has a SHA-256 baseline
+- Any unauthorized modification flips `integrity_state: TAMPERED`
+- Watchdog: **GitHub Copilot + local Ollama (korpohermes-prime)** — they FLAG the drift
+  and open a diff issue for Josh. They do NOT auto-resolve.
+- Hermes enters `safe_mode` when `integrity_state != OK` — no new actions until Josh clears.

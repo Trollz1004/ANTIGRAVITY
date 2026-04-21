@@ -100,16 +100,38 @@ New-Item -ItemType Directory -Path $AgentDest -Force | Out-Null
 Copy-Item -Path "$AgentSource\*.md" -Destination $AgentDest -Force
 Write-Host "  Copied 5 instruction files (AGENTS, TOOLS, HEARTBEAT, SOUL, SKILLS)"
 
-# --- 8. Adapter lockdown ---
-Write-Host "[8/10] Locking adapter allowlist to claude_local + codex_local only..." -ForegroundColor Yellow
-$AllowlistPath = "$InstallRoot\config\adapter-allowlist.json"
-$Allowlist = @{
-    allowed = @("claude_local", "codex_local")
-    banned  = @("hermes_local", "glm_5_1_cloud", "qwen3_coder", "dateapp_marketingtools", "dateapp", "ollama_any_cloud")
-    enforcement = "hard"
-} | ConvertTo-Json -Depth 3
+# --- 8. Adapter lockdown + tier-3 fallback + integrity baseline ---
+Write-Host "[8/10] Locking adapter allowlist + stamping MD integrity baselines..." -ForegroundColor Yellow
 New-Item -ItemType Directory -Path "$InstallRoot\config" -Force | Out-Null
-Set-Content -Path $AllowlistPath -Value $Allowlist -Encoding UTF8
+Copy-Item "$RepoRoot\paperclip-9020\config\adapter-allowlist.json"   "$InstallRoot\config\" -Force
+Copy-Item "$RepoRoot\paperclip-9020\config\plugins.json"             "$InstallRoot\config\" -Force
+Copy-Item "$RepoRoot\paperclip-9020\config\integrity-watchdog.json"  "$InstallRoot\config\" -Force
+
+# Pull tier-3 emergency fallback model (ONLY this ollama cloud model is authorized)
+Write-Host "  Pulling tier-3 fallback model: jeffreyvandekorput/korpohermes-prime..." -ForegroundColor Magenta
+if (Test-Cmd "ollama") {
+    ollama pull jeffreyvandekorput/korpohermes-prime:latest
+} else {
+    Write-Host "  Ollama not installed — install from ollama.com, then: ollama pull jeffreyvandekorput/korpohermes-prime" -ForegroundColor Red
+}
+
+# Compute SHA-256 baselines for the 5 MD files + 3 config files, write into integrity-watchdog.json
+$ProtectedFiles = @(
+    "$InstallRoot\instances\default\companies\cbb68f29-9f90-4295-a11f-7f8b928d37bc\agents\hermes-ceo\instructions\AGENTS.md",
+    "$InstallRoot\instances\default\companies\cbb68f29-9f90-4295-a11f-7f8b928d37bc\agents\hermes-ceo\instructions\TOOLS.md",
+    "$InstallRoot\instances\default\companies\cbb68f29-9f90-4295-a11f-7f8b928d37bc\agents\hermes-ceo\instructions\HEARTBEAT.md",
+    "$InstallRoot\instances\default\companies\cbb68f29-9f90-4295-a11f-7f8b928d37bc\agents\hermes-ceo\instructions\SOUL.md",
+    "$InstallRoot\instances\default\companies\cbb68f29-9f90-4295-a11f-7f8b928d37bc\agents\hermes-ceo\instructions\SKILLS.md"
+)
+$Baselines = @{}
+foreach ($f in $ProtectedFiles) {
+    if (Test-Path $f) {
+        $Baselines[$f] = (Get-FileHash -Algorithm SHA256 -Path $f).Hash
+    }
+}
+$BaselinePath = "$InstallRoot\config\integrity-baselines.json"
+$Baselines | ConvertTo-Json | Set-Content -Path $BaselinePath -Encoding UTF8
+Write-Host "  Baselines written: $BaselinePath"
 
 # --- 9. OpenClaw bridge ---
 Write-Host "[9/10] Starting OpenClaw on port 4444..." -ForegroundColor Yellow

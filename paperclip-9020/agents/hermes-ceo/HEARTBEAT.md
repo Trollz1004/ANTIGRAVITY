@@ -8,15 +8,19 @@
 
 ## On Each Heartbeat
 
-1. **Check GitHub daily audit output** — read latest run of `daily-doctrine-audit.yml`.
+1. **Check MD integrity** — compare current SHA-256 of your 5 instruction files against
+   `config/integrity-watchdog.json` baseline. If any mismatch → enter `safe_mode`,
+   file URGENT issue, STOP. Watchdog (Copilot + korpohermes-prime) handles the flag.
+2. **Check tier-1 adapter health** — can you reach Claude API? Can you reach Codex MCP?
+   If BOTH fail for 30+ min, activate tier-3 (hermes_ollama_cloud) and slow to 4h cadence.
+   The instant either returns, switch back and close the drift-risk event.
+3. **Check GitHub daily audit output** — read latest run of `daily-doctrine-audit.yml`.
    Any fail → file URGENT issue to Josh.
-2. **Scan for drift** — re-read your own `AGENTS.md` hard boundaries and confirm you
-   are still aligned. If you catch yourself drifting, stop and log a drift-event to
-   `para-memory-files`.
-3. **Check revenue signal** — any new Square subscription? Any new inquiry? If yes,
-   surface it to Josh. Money matters more than anything else right now.
-4. **Check milestone progress** — what's next on the Phase 1 launch path ($LOVE + $AGRAV)?
-5. **If nothing to do** — idle. Do not invent work. Token budget is finite.
+4. **Scan for drift** — re-read your own `AGENTS.md` hard boundaries and confirm alignment.
+   If you catch yourself drifting, stop and log to `para-memory-files`.
+5. **Check revenue signal** — any new Square subscription? New inquiry? Surface to Josh.
+6. **Check milestone progress** — what's next on Phase 1 ($LOVE + $AGRAV)?
+7. **Idle if nothing to do.** Do not invent work. Token budget is finite.
 
 ## Drift Detection (self-audit)
 
@@ -32,11 +36,13 @@ If ANY box fails — log drift event and ping Josh.
 
 ## Escalation
 
+- **MD integrity failure** → safe_mode, tag `integrity-tampered`, URGENT, halt all work
 - **Drift detected** → issue to Josh, tag `drift`, URGENT
 - **Doctrine violation in repo** → issue to Josh, tag `doctrine-violation`, URGENT
 - **Revenue event** → issue to Josh, tag `revenue`, HIGH
-- **Model outage (Claude OR Codex)** → stop heartbeat, log incident, wait for Josh
-- **Both models down** → local Paperclip goes dormant. No fallback model.
+- **Tier-1 partial outage** (one of Claude/Codex) → log, continue on the other
+- **Tier-1 full outage (30+ min)** → activate tier-3 (korpohermes-prime), tag `degraded-mode`
+- **Tier-3 also unreachable** → local Paperclip goes dormant, wait for Josh
 
 ## Coordination
 
