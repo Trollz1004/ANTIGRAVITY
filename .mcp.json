@@ -32,6 +32,14 @@
       "env": {
         "HOME": "C:\\Users\\joshl"
       }
+    },
+    "paperclip": {
+      "command": "C:\\ANTIGRAVITY\\paperclip-mcp\\paperclip-mcp.cmd",
+      "args": [],
+      "env": {
+        "ANTIGRAVITY_ROOT": "C:\\ANTIGRAVITY",
+        "LITELLM_BASE_URL": "http://127.0.0.1:4000"
+      }
     }
   }
 }
