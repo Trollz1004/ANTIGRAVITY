@@ -9,10 +9,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * @notice Base non-transferable governance token for ANTIGRAVITY platform DAOs.
  *         Earned by platform activity — never purchased, never traded.
  *         Each token carries weighted voting power by tier.
- *         Extended by YANAI, AISO, and RECYCLE — never used directly.
+ *         Extended by $LOVE, $UKID, $GREEN, and $AGRAV — never used directly.
+ *         Max supply enforced per DAO (2,500,000 tokens).
  */
 abstract contract SoulboundToken is ERC721, Ownable {
     uint256 private _nextTokenId;
+    uint256 public immutable maxSupply;
 
     mapping(uint256 => uint256) public tokenWeight;
     mapping(address => uint256) public holderWeight;
@@ -21,11 +23,14 @@ abstract contract SoulboundToken is ERC721, Ownable {
 
     error Soulbound();
     error ZeroAddress();
+    error SupplyCapReached();
 
-    constructor(string memory name, string memory symbol, address founder)
+    constructor(string memory name, string memory symbol, address founder, uint256 _maxSupply)
         ERC721(name, symbol)
         Ownable(founder)
-    {}
+    {
+        maxSupply = _maxSupply;
+    }
 
     // Block all transfers — soulbound to the earning wallet forever
     function transferFrom(address, address, uint256) public pure override {
@@ -46,6 +51,7 @@ abstract contract SoulboundToken is ERC721, Ownable {
 
     function _mintEarned(address to, uint256 weight, string memory reason) internal returns (uint256) {
         if (to == address(0)) revert ZeroAddress();
+        if (_nextTokenId >= maxSupply) revert SupplyCapReached();
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
         tokenWeight[tokenId] = weight;
