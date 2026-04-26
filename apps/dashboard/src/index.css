@@ -1,0 +1,268 @@
+:root {
+  --bg: #06121d;
+  --bg2: #0d2236;
+  --panel: rgba(7, 20, 31, 0.92);
+  --border: rgba(107, 176, 255, 0.18);
+  --text: #eef5ff;
+  --muted: #8ba3bc;
+  --accent: #66b3ff;
+  --green: #8ff2c7;
+  --pink: #ff6eb4;
+  --yellow: #ffd966;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(102, 179, 255, 0.12), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(143, 242, 199, 0.08), transparent 35%),
+    radial-gradient(circle at 50% 50%, rgba(255, 110, 180, 0.05), transparent 50%),
+    var(--bg);
+}
+
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Top Bar */
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--accent), var(--green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.connection {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.last-poll {
+  opacity: 0.5;
+  font-size: 0.75rem;
+}
+
+/* Status Dot */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Sections */
+.section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+/* Agent Grid */
+.agent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.agent-card {
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.agent-card:hover {
+  box-shadow: 0 0 20px rgba(102, 179, 255, 0.1);
+}
+
+.agent-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.agent-name {
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.agent-status {
+  margin-left: auto;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.agent-role {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.agent-tasks {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-bar-bg {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.task-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.task-count {
+  font-size: 0.7rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* DAO Grid */
+.dao-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.dao-card {
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.dao-symbol {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.dao-platform {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 4px 0;
+}
+
+.dao-supply {
+  font-size: 0.7rem;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* Bucket Grid */
+.bucket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px;
+}
+
+.bucket {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+
+.bucket-label {
+  font-size: 0.78rem;
+  color: var(--text);
+  min-width: 120px;
+}
+
+.bucket-bar-bg {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.bucket-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--green), var(--accent));
+}
+
+.bucket-pct {
+  font-size: 0.7rem;
+  color: var(--green);
+  font-weight: 700;
+  min-width: 30px;
+  text-align: right;
+}
+
+.bucket-note {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: center;
+  font-style: italic;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .dashboard { padding: 10px; }
+  .top-bar { flex-direction: column; align-items: flex-start; }
+  .connection { margin-left: 0; }
+  .agent-grid { grid-template-columns: 1fr; }
+  .dao-grid { grid-template-columns: repeat(2, 1fr); }
+  .bucket-grid { grid-template-columns: 1fr; }
+}
