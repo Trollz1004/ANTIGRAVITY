@@ -65,26 +65,69 @@ the launch sale pool for that platform's DAO.
 Token-to-dollar ratio: approximately **10 tokens per $1 spent** (adjusted as needed).
 At this ratio, the 375,000 launch pool per DAO depletes at ~$37,500 in platform revenue.
 
-### Revenue from Launch Sale — Kids Get Theirs
+### Revenue from Launch Sale — Kids Get MAXIMUM Tax Credit
 
-Every dollar that comes through the launch sale (which is just normal product revenue)
-follows the standard 1-wallet model:
+The launch sale generates revenue across MULTIPLE legally distinct buckets.
+Each bucket has its own 10% contractual revenue disbursement. The buckets
+COMPOUND — it is not 10% total, it is 10% PER BUCKET.
+
+**The 10-Bucket Compounding Engine** (designed by original Opus, canonical):
+
+| # | Bucket | Source | 10% to Kids |
+|---|--------|--------|-------------|
+| 1 | Platform Subscriptions | Square purchases ($LOVE) | Yes — per $1K gross |
+| 2 | Super Likes Revenue | Super likes purchases | Yes — separate SKU |
+| 3 | $LOVE Staking Yield | DeFi yield on treasury | Yes — investment income (different tax category) |
+| 4 | AI-Solutions Revenue | Tool sales ($UKID) | Yes — separate platform (OMEGA) |
+| 5 | $UKID Staking Yield | DeFi yield on $UKID treasury | Yes — investment income |
+| 6 | OnlineRecycle Revenue | eBay cross-listing ($GREEN) | Yes — separate platform (ENIGMA) |
+| 7 | $GREEN Staking Yield | DeFi yield on $GREEN treasury | Yes — investment income |
+| 8 | Merch Net Profit | Printful/POD sales | Yes — physical goods (different category) |
+| 9 | $AGRAV Infra Revenue | Cross-platform services | Yes — separate platform |
+| 10 | $AGRAV Staking Yield | DeFi yield on $AGRAV treasury | Yes — investment income |
+
+**$1,000 across all 10 buckets = up to $1,000 to kids.**
+
+No single bucket exceeds 10%. The math compounds because MORE legally distinct
+revenue streams exist. Each new platform, each new product category, each new
+staking pool = another 10% bucket. This is the MAXIMUM tax credit structure.
+
+### Super Likes Matching — Josh Pays Nothing
+
+The Super Likes matching pool is funded by $LOVE staking yield (Bucket 3) — NOT
+from Josh's pocket. Users buy super likes (Bucket 2 → 10% to kids). The treasury
+stakes idle reserves on Base L2. The yield funds the matching pool. Josh matches
+super likes using OTHER PEOPLE'S YIELD, not his own money.
 
 ```
-Purchase ($100 example)
-  └── 10% ($10) → Kids Support Reserve (contractual revenue disbursement)
-  └── 90% ($90) → Josh's Operating Income (taxable)
-        └── 35% tax reserve (~$31.50)
-        └── Josh nets ~$58.50
+User buys super likes ($50)
+  └── 10% ($5) → kids (Bucket 2)
+  └── 90% ($45) → operating reserve
+        └── Portion staked on Base L2
+              └── Yield generated monthly
+                    └── 10% of yield → kids (Bucket 3 — NEW bucket!)
+                    └── 50% of yield → Super Likes matching pool
+                    └── 40% of yield → reinvested (compounds)
 ```
 
-**Kids get 10% of every dollar from launch sale revenue.** Same as every other bucket.
-The token distribution is a platform reward — not a separate financial event.
+Two buckets triggered from one feature. Kids win twice. Josh pays nothing extra.
+
+### AI-Solutions Sales — Another Bucket
+
+Every product sold on ai-solutions.store is Bucket 4. If those products stake
+revenue, that yield is Bucket 5. Two more buckets. Two more 10%s for kids.
+
+**The more platforms, the more buckets. The more buckets, the more kids get.**
+This is why Section 12.4 of the canonical doc says future platforms MUST use
+maximum legally allowable tax credit structures. Every new platform = more kids helped.
 
 ### After Launch Pool Depletes
 
 Once the 375,000 launch tokens per DAO are distributed, new tokens come from
 the Platform Activity Rewards pool (65%) — earned by engagement, not purchase.
+Revenue continues flowing through all 10 buckets regardless of token pool status.
+
+Full bucket architecture: `briefings/DAO-ARCHITECTURE-CANONICAL.md` Section 3.
 
 ---
 
