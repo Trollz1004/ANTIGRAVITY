@@ -1,28 +1,31 @@
 # TOOLS.md — Hermes CEO (9020 Local)
 
-## Adapter Tiers (3-TIER FALLBACK)
+## Adapter Tiers (Ollama-First — Opus Watches)
 
-### Tier 1 — Primary (always prefer)
-- **claude_local** — Claude API (Opus 4.7 / Sonnet 4.6). Strategic thinking, writing,
-  review, delegation.
-- **codex_local** — Codex MCP. Code execution, git, shell, GitHub workflows, wallet/treasury.
+The intelligence is in the instruction files (these MDs). Any model that reads them gets
+the full Opus-level strategic brain. The model weights are just the execution engine.
 
-### Tier 2 — None
-No tier-2 adapters. Jumping straight to tier-3 is intentional — it forces drift detection.
+### Tier 1 — Workers (Ollama Cloud, covered by Pro subscription)
+- **Any Ollama cloud model** — gemma4, glm-5.1:cloud, kimi-k2.6, deepseek-v4-flash,
+  qwen3.5, nemotron-3-nano, or whatever is available. Use the most responsive one.
+- No per-call API cost. Ollama Pro covers it all.
+- These models execute the instructions in AGENTS.md / TOOLS.md / HEARTBEAT.md / SOUL.md.
+- Even a 1B parameter model works — the thinking is in the prompt files, not the weights.
 
-### Tier 3 — Emergency Fallback (LAST RESORT ONLY)
+### Tier 0 — Architects + Auditors (Claude Opus + Codex)
+- **claude_opus** — WRITES and MAINTAINS these instruction files. Reviews output for drift.
+  Called only when files need updating or drift is detected. Not a daily worker.
+- **codex_local** — Code review, security audit, CI/CD, GitHub workflow maintenance.
+  Not a daily worker.
+- These are expensive API calls. Used sparingly for architecture, not operations.
+
+### Tier 3 — Emergency Fallback
 - **hermes_ollama_cloud** — `ollama/jeffreyvandekorput/korpohermes-prime:latest`
   - Params: `min_p=0.05, num_ctx=131072, temperature=0.35, top_p=0.9`
-  - System persona: "KorpoHermes Prime — high-agency systems and engineering model"
-  - **Only activates when BOTH claude_local AND codex_local are unreachable for 30+ min**
-  - **Auto-deactivates the moment Claude or Codex returns**
-  - Hermes must log EVERY tier-3 activation as a drift-risk event
-  - While on tier-3: heartbeat drops to 4h minimum, no git pushes, no money-touching
-    actions, no skill execution beyond read-only
+  - Only if all other Ollama cloud models are also unavailable
 
-**Banned adapters** (never load, ever):
-- `glm-5.1:cloud`, `qwen3-coder`, `dateapp-marketingtools`, `dateapp`,
-  any other Ollama cloud model except korpohermes-prime.
+**Banned adapters** (retired custom models):
+- `dateapp-marketingtools`, `dateapp`
 
 ## Paperclip Skills
 
@@ -39,11 +42,12 @@ No tier-2 adapters. Jumping straight to tier-3 is intentional — it forces drif
 - Daily doctrine audit runs via `.github/workflows/daily-doctrine-audit.yml`
 - You review its output each morning. Any violation → issue to Josh immediately.
 
-## Local-Only Constraints
+## Routing
 
 - All model calls routed through localhost:5555 (Paperclip) → localhost:4444 (OpenClaw)
-- Authorized cloud endpoints: Claude API, Codex API, and `jeffreyvandekorput/korpohermes-prime` (Ollama cloud, tier-3 only)
-- All other cloud models (GLM, Qwen, other Ollama) are banned
+- Tier 1 workers: any Ollama cloud model (covered by Ollama Pro, no API key needed)
+- Tier 0 architects: Claude Opus + Codex (API calls, used sparingly for MD file updates and audits)
+- Tier 3 fallback: `jeffreyvandekorput/korpohermes-prime` (if all Ollama cloud models are down)
 
 ## Key IDs
 
@@ -63,21 +67,24 @@ No tier-2 adapters. Jumping straight to tier-3 is intentional — it forces drif
 ## Runtime Env (injected by Paperclip 9020)
 
 - `PAPERCLIP_AGENT_ID`, `PAPERCLIP_COMPANY_ID`, `PAPERCLIP_API_KEY`, `PAPERCLIP_RUN_ID`
-- `ANTHROPIC_API_KEY` (for claude_local)
-- `CODEX_API_KEY` or local Codex MCP socket (for codex_local)
+- Ollama cloud models require no API key — covered by Ollama Pro subscription
 
-## Model Routing (hard rule)
+## Model Routing (Ollama-first)
 
-| Task type | Normal | Tier-3 emergency |
-|-----------|--------|------------------|
-| Strategic thinking / writing | claude_local | hermes_ollama_cloud |
-| Code changes / git / shell | codex_local | hermes_ollama_cloud (read-only analysis only) |
-| GitHub issues / PRs | codex_local → github MCP | NONE — wait for Josh |
-| Money / secrets / wallet | claude_local + Josh approval | NONE — wait for Josh |
-| Everything else | claude_local | hermes_ollama_cloud |
+| Task type | Worker (Tier 1) | Architect (Tier 0) |
+|-----------|-----------------|---------------------|
+| Daily operations / heartbeat | Ollama cloud model | — |
+| Strategic thinking / writing | Ollama cloud model | — |
+| Issue triage / milestones | Ollama cloud model | — |
+| Code changes / git / shell | Ollama cloud model via OpenCode | — |
+| GitHub issues / PRs | Ollama cloud model via MCP | — |
+| Money / secrets / wallet | — | Josh approval required |
+| Updating instruction MD files | — | Claude Opus only |
+| Drift audit / security review | — | Claude Opus + Codex |
+| Architecture decisions | — | Claude Opus |
 
-If a task is ambiguous, default to claude_local and have it decide whether to delegate.
-On tier-3, default to "wait for Josh" unless the task is strictly read-only analysis.
+All daily work runs on Ollama cloud models (free via Pro). Opus/Codex are called
+ONLY for instruction file maintenance and drift audits — expensive, infrequent, high-value.
 
 ## MD File Integrity (the real brain)
 
