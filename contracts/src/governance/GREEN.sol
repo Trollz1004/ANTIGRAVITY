@@ -4,18 +4,23 @@ pragma solidity ^0.8.24;
 import "../SoulboundToken.sol";
 
 /**
- * @title RECYCLE — HISTORICAL ARTIFACT (superseded by GREEN.sol)
- * @notice Replaced by governance/GREEN.sol in the 4-DAO finalization (2026-04-26).
- *         Do NOT deploy. Kept for audit trail only.
+ * @title GREEN — OnlineRecycle Governance Token ($GREEN)
+ * @notice Soulbound. Earned by: listing volume, referrals, completed sales, e-waste intake.
+ *         Voting on: intake workflow, listing categories, fee structure.
+ *         ENIGMA surface ONLY — never shares governance with $LOVE or $UKID.
+ *         Max supply: 2,500,000 per DAO tokenomics.
+ *         Non-transferable. Earn-only.
  */
-contract RECYCLE is SoulboundToken {
+contract GREEN is SoulboundToken {
+    uint256 public constant DAO_SUPPLY = 2_500_000;
+
     uint256 public constant WEIGHT_FIRST_LISTING     = 2;
     uint256 public constant WEIGHT_COMPLETED_SALE    = 5;
     uint256 public constant WEIGHT_REFERRAL          = 3;
     uint256 public constant WEIGHT_VOLUME_MILESTONE  = 15;
     uint256 public constant WEIGHT_EWASTE_INTAKE     = 8;
 
-    constructor(address founder) SoulboundToken("OnlineRecycle Governance", "RECYCLE", founder, 2_500_000) {}
+    constructor(address founder) SoulboundToken("OnlineRecycle Governance", "GREEN", founder, DAO_SUPPLY) {}
 
     function mintFirstListing(address to) external onlyOwner {
         _mintEarned(to, WEIGHT_FIRST_LISTING, "FirstListing");
