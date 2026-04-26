@@ -16,6 +16,7 @@ If Paperclip's database gets wiped or an agent's instructions get corrupted, res
 | UX Designer | uxdesigner/ | opencode_local / dateapp | bd6d6722-9f3e-46ba-8651-ec9a219042ee | 60m |
 | Mission Guardian (Claude) | mission-guardian-claude/ | claude_local | 2229682b-cede-4462-b38b-25a910af022e | 24h |
 | Mission Guardian (Codex) | mission-guardian-codex/ | codex_local | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | 24h |
+| INTERN (DoWhatTold) | intern/ | any ollama cloud (smallest) | (spawned by CEO/CFO) | NONE |
 | GitHub Auditor | github-auditor/ | github-actions | N/A (workflow) | 24h |
 
 ## IDs
@@ -41,6 +42,13 @@ Each agent directory must contain:
 
 CEO additionally has:
 - `SKILLS.md` — Skill boundaries and approval requirements
+
+INTERN has only:
+- `AGENTS.md` — DoWhatTold rules, social media idle behavior, speed enforcement
+- `TOOLS.md` — Minimal toolset, no heartbeat, no soul, no skills
+- No HEARTBEAT.md (doesn't think, doesn't self-check)
+- No SOUL.md (no identity needed)
+- No SKILLS.md (executes orders, doesn't choose)
 
 ## DAO Architecture (4-DAO Model, Updated 2026-04-19)
 
