@@ -6,7 +6,7 @@ Automated daily doctrine compliance auditor. Runs as a GitHub Actions workflow �
 ## What It Checks
 - FL §496.405 forbidden language in all agent AGENTS.md files
 - Authority references (Josh/Joshua Coleman) in governance docs
-- DAO contract integrity (YANAI, AISO, RECYCLE exist)
+- DAO contract integrity ($LOVE, $UKID, $GREEN, $AGRAV — 4-DAO model)
 - Agent file completeness (AGENTS.md, TOOLS.md, HEARTBEAT.md, SOUL.md per agent)
 
 ## Trigger
