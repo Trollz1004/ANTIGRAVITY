@@ -74,9 +74,12 @@ Tax liability is real and must be reserved:
 #### Governance Token: $LOVE
 
 - Non-transferable at launch (soulbound to verified accounts)
-- Earned by: completing human verification (Bot-Shield), holding paid membership, super likes activity
+- **15% launch sale** (375,000 tokens) — distributed via Square product purchases (10 tokens/$1)
+- 65% earned by platform activity (login, meetups, volunteering, referrals)
+- 10% Founding Four reserve (Gnosis Safe, governance only, never sold)
+- 10% Mission Treasury (staked for yield)
 - Voting power: 1 token = 1 vote on feature proposals and super likes pool allocation
-- No token sale at launch — earned-only until treasury reaches minimum threshold
+- Full tokenomics: `briefings/DAO-TOKENOMICS-FINAL.md`
 
 #### Treasury Structure
 

@@ -1,26 +1,45 @@
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "enforcement": "hard",
+  "architecture": "Opus writes the brain (MD files). Ollama cloud models execute it. Even a 1B model works because the intelligence is in the instruction files, not the weights. Opus + Codex AUDIT — they do not do daily operational work.",
   "tiers": {
-    "tier_1_primary": [
-      "claude_local",
+    "tier_1_workers": [
+      "ollama_cloud_primary",
+      "ollama_cloud_fallback"
+    ],
+    "tier_0_architects": [
+      "claude_opus",
       "codex_local"
     ],
-    "tier_2": [],
     "tier_3_emergency_only": [
       "hermes_ollama_cloud"
     ]
   },
   "adapters": {
-    "claude_local": {
-      "type": "anthropic_api",
-      "default_model": "claude-opus-4-7",
-      "fallback_model": "claude-sonnet-4-6",
-      "tier": 1
+    "ollama_cloud_primary": {
+      "type": "ollama_cloud",
+      "models": [
+        "gemma4",
+        "glm-5.1:cloud",
+        "kimi-k2.6",
+        "deepseek-v4-flash"
+      ],
+      "note": "Any Ollama cloud model works — the MD instruction files contain all the thinking. Covered by Ollama Pro subscription. No per-call API cost.",
+      "tier": 1,
+      "params": {
+        "num_ctx": 131072,
+        "temperature": 0.35,
+        "top_p": 0.9
+      }
     },
-    "codex_local": {
-      "type": "codex_mcp",
-      "endpoint_env": "CODEX_MCP_ENDPOINT",
+    "ollama_cloud_fallback": {
+      "type": "ollama_cloud",
+      "models": [
+        "qwen3.5",
+        "gemma4:e2b",
+        "nemotron-3-nano"
+      ],
+      "note": "Smaller/cheaper models. Still works because intelligence is in the prompt files.",
       "tier": 1
     },
     "hermes_ollama_cloud": {
@@ -34,19 +53,43 @@
         "top_p": 0.9
       },
       "tier": 3,
-      "activation_rule": "tier_1 both unreachable 30+ min",
-      "deactivation_rule": "any tier_1 adapter returns",
-      "degraded_mode": true
+      "note": "Emergency fallback if all Ollama cloud models are unavailable"
+    },
+    "claude_opus": {
+      "type": "anthropic_api",
+      "role": "ARCHITECT + AUDITOR ONLY",
+      "purpose": "Writes and maintains MD instruction files. Reviews agent output for drift. Does NOT do daily operational work.",
+      "models": ["claude-opus-4-7", "claude-sonnet-4-6"],
+      "tier": 0,
+      "when_used": [
+        "Writing or updating AGENTS.md / TOOLS.md / HEARTBEAT.md / SOUL.md / SKILLS.md",
+        "Auditing agent output for drift or doctrine violations",
+        "Strategic architecture decisions",
+        "Security review",
+        "PR review"
+      ]
+    },
+    "codex_local": {
+      "type": "codex_mcp",
+      "role": "ARCHITECT + AUDITOR ONLY",
+      "purpose": "Code review, security audit, GitHub workflow maintenance. Does NOT do daily operational work.",
+      "tier": 0,
+      "when_used": [
+        "CI/CD and GitHub Actions maintenance",
+        "Security review of code changes",
+        "Smart contract audit",
+        "Infrastructure changes"
+      ]
     }
   },
+  "cost_model": {
+    "tier_1_ollama_cloud": "Covered by Ollama Pro subscription. No per-call cost. Great usage rates.",
+    "tier_0_opus_codex": "API costs only when writing/auditing instruction files. Infrequent. Josh approves.",
+    "savings": "Daily operational work moves from ~$600/mo API calls to $0 incremental (Ollama Pro covers it)"
+  },
   "banned": [
-    "glm-5.1:cloud",
-    "hermes_local_legacy",
-    "qwen3-coder",
-    "qwen3-coder:480b-cloud",
     "dateapp-marketingtools",
-    "dateapp",
-    "any-other-ollama-cloud-model-except-korpohermes-prime"
+    "dateapp"
   ],
   "on_banned_adapter_load_attempt": {
     "action": "reject + file URGENT issue + refuse to start heartbeat",

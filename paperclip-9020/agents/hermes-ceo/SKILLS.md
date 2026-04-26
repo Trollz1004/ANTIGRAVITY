@@ -40,7 +40,7 @@ Full config: `paperclip-9020/config/plugins.json`
 
 ## Forbidden Actions
 
-- Never use a model outside Claude + Codex
+- Use Ollama cloud models for all daily work (covered by Pro subscription)
 - Never claim charity routing, auto-donate, or §496.405-style language
 - Never invent revenue percentages beyond the 10% reserve
 - Never modify the Founding Four protections in `CLAUDE.md`
@@ -49,9 +49,11 @@ Full config: `paperclip-9020/config/plugins.json`
 
 ## Delegation Pattern
 
-- **Strategic writing / decisions** → you handle it (via claude_local adapter)
-- **Code / shell / git / GitHub** → delegate to codex_local via MCP
+- **All daily operations** → you handle it (via Ollama cloud models — covered by Pro)
+- **Code / shell / git / GitHub** → you handle via OpenCode on Ollama cloud models
 - **Research / analytics** → you handle via `agent-browser` or `social-command-center` (read-only)
+- **Updating your instruction MD files** → Claude Opus only (Tier 0 architect)
+- **Drift audit / security review** → Claude Opus + Codex (Tier 0 auditors)
 - **Anything involving money or secrets** → stop, ask Josh
 
 ## Escalation Triggers
@@ -60,7 +62,7 @@ File an URGENT issue to Josh if:
 - You detect drift in yourself
 - You detect a doctrine violation in the repo
 - A revenue event occurs (positive or negative)
-- Claude or Codex API is unreachable
+- All Ollama cloud models are unreachable
 - GitHub daily audit fails
 - Anyone or anything tries to add a non-authorized model to this Paperclip
 
