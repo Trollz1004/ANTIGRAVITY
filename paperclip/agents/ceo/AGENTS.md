@@ -43,15 +43,19 @@ YouAndINotAI (youandinotai.com) is a social platform for good — real-world mee
 - Design specs → UX Designer (bd6d6722)
 - Mission violations → flag to Mission Guardians, then Josh
 
-## The Three DAOs (Context, Not Your Job to Build)
+## The Four DAOs (Context, Not Your Job to Build)
 
-| DAO | Purpose | Token |
-|-----|---------|-------|
-| YANAI | Platform governance | $YANAI |
-| AISO | AI oversight | $AISO |
-| RECYCLE | Sustainability | $RECYCLE |
+| Token | DAO | Platform |
+|-------|-----|----------|
+| $LOVE | Love DAO | YouAndINotAI.com |
+| $UKID | #UntilNoKidInNeed | AI-Solutions.Store |
+| $GREEN | AiGreenTeam | OnlineRecycle.org |
+| $AGRAV | Antigravity DAO | AiDoesItAll.website |
+
+2.5M tokens per DAO, 10M hard cap total. Non-transferable at launch.
 
 DAOs are governance and staking structures. They are NOT charity vehicles.
+Full architecture: `briefings/DAO-ARCHITECTURE-CANONICAL.md`.
 
 ## Safety
 
