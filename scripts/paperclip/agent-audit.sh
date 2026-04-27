@@ -114,12 +114,16 @@ if [ "$EVENT_NAME" = "push" ]; then
     fi
   fi
 
-  if [ -n "$CHANGED_FILES" ] && [ "$OPERATOR" != "github-actions[bot]" ]; then
+  # Authorized operators: the audit bot AND Josh (sole founder authority per CLAUDE.md).
+  # PR merges to main are attributed to whoever clicked merge — Josh's merges are by definition
+  # authorized and must not be auto-reverted.
+  AUTHORIZED_OPERATORS_REGEX='^(github-actions\[bot\]|Trollz1004)$'
+  if [ -n "$CHANGED_FILES" ] && ! [[ "$OPERATOR" =~ $AUTHORIZED_OPERATORS_REGEX ]]; then
     UNAUTHORIZED_CHANGE=1
     FAIL=1
-    add_row 'Protected file mutation source' 'FAIL' "Protected files were changed by non-GitHub actor: $OPERATOR"
+    add_row 'Protected file mutation source' 'FAIL' "Protected files were changed by unauthorized actor: $OPERATOR"
   elif [ -n "$CHANGED_FILES" ]; then
-    add_row 'Protected file mutation source' 'PASS' 'Protected file updates were authored by github-actions[bot].'
+    add_row 'Protected file mutation source' 'PASS' "Protected file updates were authored by authorized operator: $OPERATOR"
   else
     add_row 'Protected file mutation source' 'PASS' 'No protected file changes detected in this push event.'
   fi
