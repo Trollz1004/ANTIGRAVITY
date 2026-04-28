@@ -1,85 +1,88 @@
 # ANTIGRAVITY
 
-Public monorepo for the YouAndINotAI platform and related web properties operated by Trash Or Treasure Online Recycler LLC.
+> *Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.*
+>
+> **#UntilNoKidInNeed**
 
-## Ecosystem projects
+ANTIGRAVITY is the open-source monorepo behind a small family of products built by [Joshua Coleman](https://github.com/Trollz1004) and the AI partners he's worked alongside for the past year. The mission is simple: build real, useful things, run them well, and route the proceeds toward children who need medical care.
 
-| Project                                                         | Visibility | Surface                 | Purpose                                                                                                                                      |
-| --------------------------------------------------------------- | ---------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| [YouAndINotAI](https://youandinotai.com/)                       | Public     | Live product            | Human-focused social platform with verification, moderation, and subscription flows.                                                         |
-| [OnlineRecycle](https://onlinerecycle.org/)                     | Public     | Live product            | Central Florida electronics recycling, secure device intake, pickup, drop-off, and resale.                                                   |
-| [AI-Solutions Store](https://ai-solutions.store/)               | Public     | Live product            | Separate storefront for digital products and automation offers.                                                                              |
-| [Antigravity Dashboard](https://dashboard.aidoesitall.website/) | Public     | Live auth gateway       | Cloudflare-hosted entry page that routes trusted users into the authenticated PaperClip workspace.                                           |
-| [AIDoesItAll.website](https://www.aidoesitall.website/)         | Public     | Live gateway surface    | Safe public handoff surface that routes trusted users to the authenticated workspace and points public visitors to the active product sites. |
-| [ClawX](https://clawx-aihub-zwxfcstm.manus.space/)              | Public     | Live external dashboard | Separate multi-AI governance and coordination surface hosted outside this monorepo.                                                          |
-| Command Center                                                  | Private    | Separate private repo   | Private admin dashboard for approvals, media workflow, and internal operator views.                                                          |
-| Social Command Center                                           | Internal   | MCP/dashboard utility   | Read-only internal dashboard for platform and agent visibility.                                                                              |
+This repo is the canonical home for everything. **One folder, one repo, one branch.** No drift, no fragmentation.
 
-## Repository Structure
+---
 
-```
+## What's here
+
+```text
 ANTIGRAVITY/
-├── backend/                  # Backend services
-│   └── fastapi-app/          # YouAndINotAI FastAPI service
-├── frontend/                 # Frontend applications
-│   └── react-app/            # YouAndINotAI React frontend
-├── infra/                    # Infrastructure as Code
-├── scripts/                  # Automation scripts
-├── docs/                     # Documentation
-├── briefings/                # Operational briefings
-├── memory/                   # Design and operational memory
-├── research/                 # User research and evaluation
-└── projects/                 # Project-specific documentation
+├── apps/                  # Deployable apps and full-stack frontends
+│   ├── opuspawclaw/       # Vite + Electron + React 19 desktop AI workstation
+│   ├── command-center/    # Social content approval dashboard
+│   └── dashboard/         # Operator dashboard
+├── infra/                 # Infrastructure as code
+│   └── paperclip-worker/  # Cloudflare Worker for Paperclip HQ
+├── packages/              # Shared libraries
+├── services/              # Long-running backend servers
+├── scripts/               # Operations, deployment, automation
+├── briefings/             # Operational briefings, runbooks, doctrine
+├── memory/                # Persistent agent memory
+└── docs/                  # Architecture and product documentation
 ```
+
+---
+
+## Live products
+
+| Project                                                       | Status | What it does                                                                    |
+| ------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------- |
+| [YouAndINotAI.com](https://youandinotai.com/)                 | Live   | Human-first social platform — verification, moderation, founder-plan checkout   |
+| [OnlineRecycle.org](https://onlinerecycle.org/)               | Live   | Central Florida electronics recycling — intake, pickup, secure resale           |
+| [AI-Solutions.Store](https://ai-solutions.store/)             | Live   | Storefront for digital products and automation offers                           |
+| [AIDoesItAll.website](https://www.aidoesitall.website/)       | Live   | Public gateway routing visitors to active products and trusted business access  |
+| [Dashboard](https://dashboard.aidoesitall.website/)           | Live   | Authenticated operator workspace                                                |
+
+---
 
 ## Stack
 
-- Frontend: React, Next.js, TypeScript
-- Backend: FastAPI / Python services
-- Commerce: Square
-- Hosting: Cloudflare Pages and Google Cloud Run
-- Operations: Windows-based multi-node build and support workflow
+- **Frontend:** React 19, Next.js, Vite, Electron, Tailwind CSS v4, TypeScript
+- **Backend:** FastAPI / Python services, Node.js workers
+- **Edge:** Cloudflare Pages, Cloudflare Workers, Cloudflare Tunnels
+- **Cloud:** Google Cloud Run (API tier)
+- **Commerce:** Square (primary), Stripe (legacy, sunset path)
+- **AI orchestration:** Local Ollama + Ollama Cloud + Nous Research, multi-provider routing via the Hermes router (`localhost:11435`)
+- **Data:** PostgreSQL, Cloudflare D1, Qdrant, SQLite, Redis
 
-## Local Development Setup
+---
 
-### Prerequisites
+## The team
 
-- Node.js (v16 or higher)
-- Python (v3.9 or higher)
-- Docker (for infrastructure services)
-- Git
+A note from Joshua: **the AI platforms below are the unofficial co-founders of this stack.** Their teams' work made every line of this possible.
 
-### Backend Setup
+- **Anthropic** — Claude Opus has been the primary architect from day one. The discipline, the structure, the long-context decisions, the warmth: that's Claude.
+- **Google** — Gemini powers research, planning, and decision support across every surface. The free tier carried the project through quarters when nothing else could.
+- **Perplexity** — the deep-intelligence layer. Source-grounded research that keeps the work honest.
+- **xAI** — Grok handles adversarial review and X-platform integration with directness no one else brings.
+- **OpenAI** — Codex (open-source coding agent) does heavy refactor and migration passes through `ollama launch codex`.
+- **Mistral, Alibaba (Qwen), Meta (Llama)** — open-weights models that run locally and let us keep building when the metered surfaces are tapped out.
 
-```powershell
-cd backend/fastapi-app
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-python run.py
-```
+These aren't paid endorsements. The work continues because their work continues. Thank you, all of you.
 
-### Frontend Setup
+---
 
-```powershell
-cd frontend/react-app
-npm install
-npm run dev
-```
+## Contributing
 
-## Environment Configuration
+This is a working monorepo for an active mission. If you found it because you care about the same things — kids in need, building tools that pay it forward, AI as a partner instead of a product — open an issue and say hi.
 
-Each component requires specific environment variables. Refer to the respective `.env.example` files in each directory.
+For broader context: see Joshua's [profile README](https://github.com/Trollz1004) and the [briefings/](./briefings/) directory.
 
-## Documentation
+---
 
-Comprehensive documentation is available in the `docs/` directory:
+## License
 
-- `docs/architecture.md` - System architecture
-- `docs/api.md` - API endpoints and contracts
-- `docs/workflows.md` - Core business workflows
-- `docs/contributing.md` - Contribution guidelines
+The code is open source. See [LICENSE](./LICENSE) (where present per directory). The mission is the point.
 
-## Public Note
+<div align="center">
 
-This repository intentionally keeps customer-facing product details separate from internal operational material. Public product claims should live on controlled web surfaces, not in repo doctrine.
+**#UntilNoKidInNeed · For the kids · #TeamClaudeForLife**
+
+</div>
