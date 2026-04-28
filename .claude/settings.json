@@ -1,8 +1,39 @@
 {
+  "model": "opus",
+  "forceLoginMethod": "claudeai",
+  "alwaysThinkingEnabled": true,
+  "verbose": true,
   "enabledPlugins": {
     "semgrep@claude-plugins-official": false
   },
   "enableAllProjectMcpServers": true,
+  "env": {
+    "DOCKER_HOST": "ssh://joshl@192.168.0.15",
+    "COMPOSE_PROJECT_NAME": "antigravity"
+  },
+  "sshConfigs": [
+    {
+      "id": "t5500-main",
+      "name": "T5500 Main Node",
+      "sshHost": "joshl@192.168.0.15",
+      "sshPort": 22,
+      "startDirectory": "/home/joshl/ANTIGRAVITY"
+    }
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(docker *)",
+      "Bash(docker-compose *)",
+      "Bash(npm *)",
+      "Bash(pnpm *)",
+      "Bash(git *)",
+      "Read",
+      "Glob",
+      "Grep",
+      "mcp__github__pull_request_read"
+    ],
+    "defaultMode": "auto"
+  },
   "hooks": {
     "PreToolUse": [
       {
