@@ -571,5 +571,5 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 If an agent makes a change to C:\ANTIGRAVITY that was not explicitly assigned by Josh → Claude Code must be notified and the change reviewed before any push. The pre-push hook logs all pushes to `logs/git-push.log`.
 
 ---
-*OpenCode Session — Model: opencode-go/qwen3.6-plus (Qwen 3.6 Plus) | 2026-04-28T01:05:00Z | Tasks: Git push fix, Wrangler install, GitHub/CF auth, Paperclip Worker deployed (paperclip-hq.youandinotai.com), D1 created | No protected files modified*
+*OpenCode Session — Model: opencode-go/qwen3.6-plus (Qwen 3.6 Plus) | 2026-04-28T01:30:00Z | Tasks: Git push fix, Wrangler v4.85.0 install, GitHub/CF/Claude auth, Paperclip Worker deployed (paperclip-hq.youandinotai.com), D1 created, Docker CLI v29.4.1 installed, Bedrock→Anthropic switch | No protected files modified*
 
