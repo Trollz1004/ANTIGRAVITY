@@ -47,7 +47,7 @@ Last Updated: 2026-04-15
   - Docker Desktop
   - Ollama on `:11434`
   - PaperClip on `:3100`
-  - LiteLLM on `:11435`
+  - LiteLLM on `:11436` (moved from :11435; :11435 is now Hermes Router)
   - repo-owned Cloudflare tunnel `paperclip-antigravity`
 - current verified PaperClip surfaces after the cutover:
   - `http://127.0.0.1:3100/api/health`

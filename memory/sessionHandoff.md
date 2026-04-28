@@ -61,7 +61,7 @@
 - verified-good April 15 PaperClip HQ stack:
   - Docker Desktop
   - Ollama on `:11434`
-  - LiteLLM on `:11435`
+  - LiteLLM on `:11436` (moved from :11435; :11435 is now Hermes Router)
   - PaperClip on `:3100`
   - `https://paperclip-hq.youandinotai.com/api/health`
 - legacy mixed-drive PaperClip drift was removed from `Documents` and almost all of `E:`, with only a locked `E:\trollz-sandbox\paperclip-antigravity\logs` remainder still queued for next-logon cleanup

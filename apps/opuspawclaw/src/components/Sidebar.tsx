@@ -6,7 +6,7 @@ import { SystemStatus } from './SystemStatus';
 
 interface SidebarProps {
   activeMode?: string;
-  onModeChange?: (mode: 'code' | 'chat' | 'create' | 'research' | 'settings' | 'mars' | 'mission') => void;
+  onModeChange?: (mode: 'code' | 'chat' | 'create' | 'research' | 'settings' | 'mars' | 'social' | 'mission') => void;
 }
 
 export function Sidebar({ activeMode = 'code', onModeChange }: SidebarProps) {

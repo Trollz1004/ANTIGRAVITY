@@ -1,13 +1,15 @@
 # LiteLLM Proxy — Ollama OpenAI-compatible bridge
 # Usage: docker-compose -f docker-compose.litellm.yml up -d
-# Exposes Ollama (192.168.0.8:11434) as OpenAI API at localhost:11435
+# Exposes Ollama (192.168.0.8:11434) as OpenAI API at localhost:11436
+# NOTE: moved from 11435 → 11436 so port 11435 is owned by services/hermes-router/
 
 services:
   litellm-proxy:
     image: ghcr.io/berriai/litellm:main-latest
     container_name: litellm-proxy
     ports:
-      - "11435:4000"
+      # Port 11435 is reserved for services/hermes-router/ — LiteLLM moved to 11436
+      - "11436:4000"
     volumes:
       - ./litellm-config.yaml:/app/config.yaml:ro
     command: ["--config", "/app/config.yaml", "--port", "4000"]

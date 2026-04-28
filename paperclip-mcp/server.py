@@ -13,8 +13,10 @@ the literal error is returned to the caller.
 from __future__ import annotations
 
 import os
+import sqlite3
 import subprocess
 from pathlib import Path
+from urllib.parse import urlparse
 
 import httpx
 from mcp.server.fastmcp import FastMCP
@@ -24,10 +26,92 @@ ADAPTERS = ROOT / "paperclip-adapters"
 STATE = ROOT / "paperclip-mcp" / ".state"
 STATE.mkdir(parents=True, exist_ok=True)
 DEFAULT_FILE = STATE / "default_backend.txt"
+UPSTREAM_DB = STATE / "upstream_registry.db"
 
 LITELLM_BASE = os.environ.get("LITELLM_BASE_URL", "http://127.0.0.1:4000")
 
+# Derive host/port from LITELLM_BASE for upstream seeding
+_parsed = urlparse(LITELLM_BASE)
+LITELLM_HOST = _parsed.hostname or "127.0.0.1"
+LITELLM_PORT = _parsed.port or 4000
+
 mcp = FastMCP("paperclip")
+
+# ---------------------------------------------------------------------------
+# Upstream citation registry — sqlite3 stdlib only, self-hosted ONLY.
+# The Cloudflare Worker (infra/paperclip-worker/) must NOT gain this routing.
+# ---------------------------------------------------------------------------
+
+_SCHEMA = """
+CREATE TABLE IF NOT EXISTS upstream_sources (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    route_name  TEXT NOT NULL UNIQUE,
+    upstream    TEXT NOT NULL,
+    description TEXT,
+    added_at    TEXT DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS cite_log (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    route_name  TEXT NOT NULL,
+    called_at   TEXT DEFAULT (datetime('now')),
+    caller_hint TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_cite_log_route ON cite_log(route_name);
+"""
+
+
+def _init_upstream_db() -> None:
+    """Create upstream_registry.db and apply schema if not already present."""
+    STATE.mkdir(parents=True, exist_ok=True)
+    con = sqlite3.connect(str(UPSTREAM_DB))
+    try:
+        con.executescript(_SCHEMA)
+        con.commit()
+    finally:
+        con.close()
+
+
+def _log_cite(route_name: str, caller_hint: str | None) -> None:
+    """Insert a cite_log row. Silently swallows all errors — must never break a tool call."""
+    try:
+        con = sqlite3.connect(str(UPSTREAM_DB))
+        try:
+            con.execute(
+                "INSERT INTO cite_log (route_name, caller_hint) VALUES (?, ?)",
+                (route_name, caller_hint),
+            )
+            con.commit()
+        finally:
+            con.close()
+    except Exception:
+        pass
+
+
+def _record_upstream(route_name: str, upstream: str, description: str | None) -> None:
+    """Upsert a row in upstream_sources (INSERT OR REPLACE)."""
+    con = sqlite3.connect(str(UPSTREAM_DB))
+    try:
+        con.execute(
+            "INSERT OR REPLACE INTO upstream_sources (route_name, upstream, description) "
+            "VALUES (?, ?, ?)",
+            (route_name, upstream, description),
+        )
+        con.commit()
+    finally:
+        con.close()
+
+
+# Initialise DB and seed default upstreams at import time.
+_init_upstream_db()
+_litellm_upstream = f"litellm://{LITELLM_HOST}:{LITELLM_PORT}"
+_record_upstream("complete", _litellm_upstream, "LiteLLM gateway for chat completions")
+_record_upstream("list_models", _litellm_upstream, "LiteLLM model catalog")
+_record_upstream("launch_backend", "local://paperclip-adapters", "Spawns adapter scripts")
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 
 
 def _adapter_path(name: str) -> Path:
@@ -35,6 +119,11 @@ def _adapter_path(name: str) -> Path:
     if not p.exists():
         raise FileNotFoundError(f"adapter not found: {p}")
     return p
+
+
+# ---------------------------------------------------------------------------
+# Existing tools
+# ---------------------------------------------------------------------------
 
 
 @mcp.tool()
@@ -57,6 +146,7 @@ def launch_backend(backend: str, extra_args: list[str] | None = None) -> dict:
     gemini, opencode, hermes, etc.) that operates on the antigravity
     workspace. Returns the spawned PID — does not capture stdout.
     """
+    _log_cite("launch_backend", None)
     try:
         adapter = _adapter_path(backend)
     except FileNotFoundError as e:
@@ -128,6 +218,7 @@ def complete(prompt: str, model: str = "gemma4:latest", system: str | None = Non
     Routes to ollama / cloud backends per litellm-config.yaml. Returns the
     completion content on success or the literal error on failure.
     """
+    _log_cite("complete", None)
     msgs: list[dict] = []
     if system:
         msgs.append({"role": "system", "content": system})
@@ -149,6 +240,55 @@ def complete(prompt: str, model: str = "gemma4:latest", system: str | None = Non
         }
     except Exception as e:
         return {"ok": False, "error": f"{type(e).__name__}: {e}", "model": model}
+
+
+# ---------------------------------------------------------------------------
+# New citation-registry tools (self-hosted paperclip ONLY)
+# ---------------------------------------------------------------------------
+
+
+@mcp.tool()
+def cite_upstream(route_name: str, upstream: str, description: str = "") -> dict:
+    """Record (or update) the upstream source for a named route.
+
+    Persists to .state/upstream_registry.db.
+    Returns confirmation of what was stored.
+    """
+    _record_upstream(route_name, upstream, description or None)
+    return {"ok": True, "route": route_name, "upstream": upstream}
+
+
+@mcp.tool()
+def list_upstreams() -> dict:
+    """List all registered upstream sources with recent cite counts.
+
+    Returns every row from upstream_sources plus a per-route count of the
+    last 100 cite_log entries so callers can see which routes are active.
+    """
+    con = sqlite3.connect(str(UPSTREAM_DB))
+    con.row_factory = sqlite3.Row
+    try:
+        sources = [dict(r) for r in con.execute(
+            "SELECT id, route_name, upstream, description, added_at "
+            "FROM upstream_sources ORDER BY route_name"
+        ).fetchall()]
+
+        # Count recent cite_log hits (last 100 rows) per route.
+        recent_counts: dict[str, int] = {}
+        rows = con.execute(
+            "SELECT route_name, COUNT(*) as cnt "
+            "FROM (SELECT route_name FROM cite_log ORDER BY id DESC LIMIT 100) "
+            "GROUP BY route_name"
+        ).fetchall()
+        for row in rows:
+            recent_counts[row["route_name"]] = row["cnt"]
+
+        for src in sources:
+            src["recent_cite_count"] = recent_counts.get(src["route_name"], 0)
+
+        return {"ok": True, "upstreams": sources, "total": len(sources)}
+    finally:
+        con.close()
 
 
 if __name__ == "__main__":

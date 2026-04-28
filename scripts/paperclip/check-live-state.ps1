@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Continue'
 Write-Output '=== PORTS ==='
-foreach ($port in @(3100, 54329, 11434, 11435, 18789)) {
+foreach ($port in @(3100, 54329, 11434, 11435, 11436, 18789)) {
     Write-Output "PORT $port"
     Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue |
         Select-Object LocalAddress, LocalPort, State, OwningProcess |
