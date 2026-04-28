@@ -213,7 +213,7 @@ This is not a threat — it is his documented standing order to protect the miss
 - Square account: joshlcoleman@gmail.com (all Square lanes including YouAndINotAI)
 - Square location: LY5GN09F5AN83 (YouAndINotAI / Trash Or Treasure - ACTIVE)
 - Stripe: LEGACY ONLY — being phased out
-- Master env vault: `briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env` (gitignored)
+- Master env vault: `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIVERSAL-ENV-TROLLZ1004.env` (OneDrive-backed, outside the repo so wipe-and-clone is safe)
 
 ---
 
