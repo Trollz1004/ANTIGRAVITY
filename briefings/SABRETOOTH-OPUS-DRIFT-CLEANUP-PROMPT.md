@@ -33,6 +33,27 @@ Joshua Coleman. Founder. Sole authority. LLC of one (Trash Or Treasure Online Re
 
 The cloud Opus is about to run a recurring audit on `paperclip/agents/**`. It will fail or thrash if the local disk has drift. Your job is to remove drift **without** introducing new drift. Be conservative. When in doubt, leave it and report it.
 
+### URGENT — new drift from the latest OpenCode session (commit `41491fe` on main)
+
+Josh ran an OpenCode session on `qwen3.6-plus` that pushed `OPENCODE-MEMORY.md` and a touch of `AGENTS.md` to main. Cross-check it against `CLAUDE.md` + `paperclip/agents/README.md` before anything else. Specifically:
+
+1. **STRIPE KEY EXPOSURE — handle first.** `OPENCODE-MEMORY.md` line ~75 contains `sk_live_51T3DVxIO6LWQSQoI...`. Even truncated, the `sk_live_` prefix on a real account in a committed file is an Opus Guardian invariant #1 violation. Confirm with Josh whether the rest of the key was redacted before commit or is recoverable (terminal scrollback, OpenCode session memory, git reflog). If recoverable in any form: **Stripe live key must be rotated, then this file replaced.** Do NOT echo the key in chat or commits. Replace the line with `- **Secret Key**: <vaulted in MASTER-UNIVERSAL-ENV-TROLLZ1004.env>` and remove from history if rotation occurred.
+
+2. **PaperClip company ID conflict.** `OPENCODE-MEMORY.md` documents Company ID `c1643b5d-b646-48e5-acd3-4e8e3766d8bc` with 6 agents (CEO/CTO/Engineer/CMO/UXDesigner/Intern). The canonical `paperclip/agents/README.md` documents Company ID `cbb68f29-9f90-4295-a11f-7f8b928d37bc` with 10 agents (adds CFO, CSO, 2× Mission Guardian, GitHub Auditor). Determine which is actually running on `localhost:3100` right now (check `paperclipai status` / API `/health` / DB). Resolve by either:
+   - (a) Re-creating the missing canonical agents (CFO, CSO, both Mission Guardians, GitHub Auditor) into the live local company, OR
+   - (b) Replacing `OPENCODE-MEMORY.md`'s registry table with the canonical roster if the OpenCode-spawned local company was a throwaway sandbox.
+   Do NOT silently delete either company's data. CFO + CSO + Mission Guardians own 1-wallet/10% reserve, DAO strategy, and doctrine compliance — they are not optional.
+
+3. **Hardware spec contradiction.** `CLAUDE.md` says `GTX 1070 8GB, CUDA 12.6`. `OPENCODE-MEMORY.md` says `AMD Radeon RX 6700 XT 12GB`. Ask Josh which is current and update the wrong file. Don't both guess.
+
+4. **Square location ID contradiction.** `CLAUDE.md` and `paperclip/agents/cfo/TOOLS.md` say `LY5GN09F5AN83`. `OPENCODE-MEMORY.md` says `L24ZX5WRA41TH` plus a separate high-risk account `ebaytrashortreasure@gmail.com` and merchant ID `ML3C7FMTQS5KX`. Don't pick one — confirm with Josh which Square account/location is the **active** one for YouAndINotAI revenue, then sync.
+
+5. **Stripe status contradiction.** `CLAUDE.md` says Stripe is `LEGACY ONLY — being phased out`. `OPENCODE-MEMORY.md` lists Stripe as `LIVE`. After resolving #1, decide whether Stripe is still live or phased out, and align both files.
+
+6. **Stale Gemini model names.** `OPENCODE-MEMORY.md` references `gemini-1.5-flash`, `gemini-1.5-pro`, `gemini-pro`. Current Gemini is 2.x. Update if you have authoritative names; otherwise just delete the version pins.
+
+7. **Uncommitted `.claude/settings.json` change.** Per Josh's paste, the OpenCode session left `.claude/settings.json` and `.claude/settings.local.json` modified (Bedrock removed, Anthropic direct auth wired up — Josh just upgraded Max). The OpenCode session correctly chose not to auto-commit a protected file. Decide: commit those edits via a clearly-titled PR (`chore(claude): remove Bedrock, use Anthropic direct via Max sub`), or revert if unintended. Don't leave it dangling — the Stop hook will keep complaining, and an audit revert may stomp it.
+
 ### Drift to find and fix (priority order)
 
 1. **Forbidden revenue language anywhere customer-facing or in active agent files**
