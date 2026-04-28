@@ -186,7 +186,7 @@ This is not a threat — it is his documented standing order to protect the miss
 | Owner | Joshua Coleman / Trollz1004 |
 | Entity | Trash Or Treasure Online Recycler LLC (FL) |
 | Brain | Claude Opus 4.6 (primary architect) |
-| GPU | GTX 1070 8GB, CUDA 12.6 |
+| GPU | AMD Radeon RX 6700 XT 12GB |
 
 ---
 
