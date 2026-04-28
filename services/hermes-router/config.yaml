@@ -1,0 +1,68 @@
+# Hermes Router configuration
+# This file is SEPARATE from paperclip/litellm configs.
+# Loaded at startup. Override path via HERMES_ROUTER_CONFIG env var.
+
+providers:
+  - name: ollama-cloud
+    base_url: https://ollama.com/v1
+    enabled: false  # flip to true once OLLAMA_API_KEY is exported
+    api_key_env: OLLAMA_API_KEY
+
+  - name: ollama-local
+    base_url: http://192.168.0.8:11434/v1
+    enabled: true
+    api_key_env: ""
+
+  - name: openclaw
+    base_url: http://localhost:18789/v1
+    enabled: true
+    api_key_env: ""
+
+  - name: anthropic
+    base_url: https://api.anthropic.com/v1
+    enabled: false
+    api_key_env: ANTHROPIC_API_KEY
+
+  - name: openrouter
+    base_url: https://openrouter.ai/api/v1
+    enabled: false
+    api_key_env: OPENROUTER_API_KEY
+
+# Virtual model aliases → provider + real model
+# Aliases match what HermesRouterPanel.tsx renders.
+#
+# Cloud-only models:
+#   - jeffreyvandekorput/korpohermes-prime:latest  → only on ollama-cloud
+#
+# Self-hosted (local Ollama on Sabretooth GPU):
+#   - joshlcoleman/dateapp:latest                  → custom qwen2.5-coder:480b for YouAndINotAI
+#   - joshlcoleman/CFO-Until-No-Kid-In-Need:latest → CFO PRIME w/ Hermes Agency Layer
+#   - gemma family                                 → general fallback
+routes:
+  hermes:
+    provider: ollama-cloud
+    model: jeffreyvandekorput/korpohermes-prime:latest
+
+  hermes-deep:
+    provider: ollama-cloud
+    model: jeffreyvandekorput/korpohermes-prime:latest
+
+  cfo:
+    provider: ollama-local
+    model: joshlcoleman/CFO-Until-No-Kid-In-Need:latest
+
+  code:
+    provider: ollama-local
+    model: joshlcoleman/dateapp:latest
+
+  marketing:
+    provider: ollama-local
+    model: joshlcoleman/dateapp:latest
+
+  kimi:
+    provider: openrouter
+    model: moonshotai/kimi-k2
+
+  fast:
+    provider: ollama-local
+    model: gemma3:1b
