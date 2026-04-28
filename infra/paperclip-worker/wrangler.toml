@@ -1,0 +1,20 @@
+name = "paperclip-hq"
+main = "src/index.ts"
+compatibility_date = "2026-04-28"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+PAPERCLIP_ORIGIN = "http://127.0.0.1:3100"
+PAPERCLIP_ENV = "production"
+
+[[d1_databases]]
+binding = "PAPERCLIP_DB"
+database_name = "paperclip-db"
+database_id = "192d82c0-2cc9-48e5-b4dc-f03dbc64a194"
+
+[[routes]]
+pattern = "paperclip-hq.youandinotai.com"
+zone_name = "youandinotai.com"
+
+[observability]
+enabled = true
