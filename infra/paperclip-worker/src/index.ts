@@ -1,3 +1,9 @@
+// SELF-HOSTED-ONLY GUARD: This non-self-hosted worker MUST NOT
+// route MCP traffic. The PAPERCLIP_DB D1 binding declared in
+// wrangler.toml is intentionally inert — never query env.PAPERCLIP_DB
+// from this file. MCP routing + the cite-upstream registry live in
+// /paperclip-mcp/server.py only. See briefings/REPOSITORY_RECORD.md.
+
 const PAPERCLIP_ORIGIN = "http://127.0.0.1:3100";
 
 export default {
