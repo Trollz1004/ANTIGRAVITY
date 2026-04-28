@@ -48,7 +48,10 @@ Josh ran an OpenCode session on `qwen3.6-plus` that pushed `OPENCODE-MEMORY.md` 
 
 4. **Square location ID contradiction.** `CLAUDE.md` and `paperclip/agents/cfo/TOOLS.md` say `LY5GN09F5AN83`. `OPENCODE-MEMORY.md` says `L24ZX5WRA41TH` plus a separate high-risk account `ebaytrashortreasure@gmail.com` and merchant ID `ML3C7FMTQS5KX`. Don't pick one — confirm with Josh which Square account/location is the **active** one for YouAndINotAI revenue, then sync.
 
-5. **Stripe status contradiction.** `CLAUDE.md` says Stripe is `LEGACY ONLY — being phased out`. `OPENCODE-MEMORY.md` lists Stripe as `LIVE`. After resolving #1, decide whether Stripe is still live or phased out, and align both files.
+5. **Stripe scoping (clarified by Josh 2026-04-28).** Stripe stays live for the rest of the LLC's surfaces (e.g. onlinerecycle.org, ai-solutions.store, aidoesitall.website, or general LLC operations). Stripe is **NOT** allowed on YouAndINotAI / the dating app — Square only there, no exceptions. Update both files to reflect that scoping:
+   - `CLAUDE.md`: replace `Stripe: LEGACY ONLY — being phased out` with something like `Stripe: live for non-YouAndINotAI surfaces only. YouAndINotAI / dating app is Square-only.`
+   - `OPENCODE-MEMORY.md`: keep the Stripe LIVE entry, but tag it with `(NOT YouAndINotAI — Square-only there)` so no future agent wires Stripe into the dating app.
+   This is independent of issue #1 — the committed `sk_live_` prefix is still its own problem regardless of which platform Stripe serves.
 
 6. **Stale Gemini model names.** `OPENCODE-MEMORY.md` references `gemini-1.5-flash`, `gemini-1.5-pro`, `gemini-pro`. Current Gemini is 2.x. Update if you have authoritative names; otherwise just delete the version pins.
 
