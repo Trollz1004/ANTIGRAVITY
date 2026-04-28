@@ -418,7 +418,7 @@ The security isn't for us — it's for the kids. Please don't weaken these. Buil
 | Owner | Joshua Coleman / Trollz1004 |
 | Entity | Trash Or Treasure Online Recycler LLC (FL) |
 | Brain | Claude (primary architect, ~90% of codebase) + Codex executor + Ollama local inference |
-| GPU | GTX 1070 8GB, CUDA 12.6 |
+| GPU | AMD Radeon RX 6700 XT 12GB |
 
 ---
 
@@ -572,4 +572,7 @@ If an agent makes a change to C:\ANTIGRAVITY that was not explicitly assigned by
 
 ---
 *OpenCode Session — Model: opencode-go/qwen3.6-plus (Qwen 3.6 Plus) | 2026-04-28T01:30:00Z | Tasks: Git push fix, Wrangler v4.85.0 install, GitHub/CF/Claude auth, Paperclip Worker deployed (paperclip-hq.youandinotai.com), D1 created, Docker CLI v29.4.1 installed, Bedrock→Anthropic switch | No protected files modified*
+
+---
+*OpenCode Session — Model: ollama-cloud/glm-5.1 | 2026-04-28T04:15:00Z | Tasks: Post-migration cleanup commit (6ab58a50), housekeeping sweep (docs/scratch deleted, development/ relocated to briefings/, Desktop .bat launchers consolidated to scripts/, test-hermes variants deleted), OPENCODE-MEMORY.md updated, AGENTS.md GPU corrected & signed | GPU entry corrected to AMD Radeon RX 6700 XT 12GB*
 
