@@ -24,7 +24,8 @@
       "mcp__antigravity-sentry__*",
       "mcp__brain-mcp__brain_sync",
       "mcp__brain-mcp__brain_getActiveContext",
-      "mcp__brain-mcp__brain_reportAction"
+      "mcp__brain-mcp__brain_reportAction",
+      "PowerShell(head -20)"
     ]
   },
   "enableAllProjectMcpServers": true,
