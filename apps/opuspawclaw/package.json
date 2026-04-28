@@ -8,7 +8,7 @@
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "dev:electron": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "dev:electron": "concurrently \"npm run dev\" \"npm run build:electron && wait-on http://localhost:3000 && electron .\"",
     "build:renderer": "vite build",
     "build:electron": "tsc -p electron/tsconfig.json",
     "build": "npm run build:renderer && npm run build:electron",
@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
+    "better-sqlite3": "^11.5.0",
     "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",

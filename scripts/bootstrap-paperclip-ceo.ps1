@@ -237,7 +237,8 @@ try {
   Log '  Paperclip:   http://localhost:3100'
   Log '  Public HQ:   https://paperclip-hq.youandinotai.com'
   Log '  MCP:         https://mcp.youandinotai.com'
-  Log '  LiteLLM:     http://localhost:11435'
+  Log '  LiteLLM:     http://localhost:11436'
+  Log '  Hermes Rtr:  http://localhost:11435'
   Log '  Log file:    C:\ANTIGRAVITY\logs\paperclip-ceo-bootstrap.log'
   exit 0
 } catch {
