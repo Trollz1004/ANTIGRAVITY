@@ -74,3 +74,8 @@ playwright-report/
 
 # Docker
 docker-compose.override.yml
+
+# Binary archives — should never live at repo root; use proper subdirs (apps/, infra/, etc.)
+*.zip
+!docs/**/*.zip
+!assets/**/*.zip
