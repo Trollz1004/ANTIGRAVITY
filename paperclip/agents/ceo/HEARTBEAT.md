@@ -14,7 +14,15 @@
 
 ## Escalation
 
-If any agent has missed 3 consecutive heartbeats → create HIGH priority issue and notify Josh.
+Per-tier dark-agent thresholds (3 consecutive missed beats):
+
+| Agent tier | Heartbeat | Escalate after |
+|------------|-----------|----------------|
+| CTO (active dev) | 30m | 90 minutes dark |
+| CFO / CSO / CMO / UX | 60m | 3 hours dark |
+| Mission Guardians (Claude/Codex) | 24h | 36 hours dark — split-tier early flag because both shouldn't go dark together |
+
+On threshold breach → create HIGH priority issue and notify Josh. If both Mission Guardians dark > 36h, escalate URGENT — the audit floor is down.
 
 ## Health Indicators
 

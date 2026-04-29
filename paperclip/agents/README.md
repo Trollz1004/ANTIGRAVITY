@@ -14,8 +14,8 @@ If Paperclip's database gets wiped or an agent's instructions get corrupted, res
 | CTO | cto/ | opencode_local / qwen3-coder | b02a21c7-737e-4177-91ac-6d8e57805801 | 30m |
 | CMO | cmo/ | opencode_local / dateapp-marketingtools | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | 60m |
 | UX Designer | uxdesigner/ | opencode_local / dateapp | bd6d6722-9f3e-46ba-8651-ec9a219042ee | 60m |
-| Mission Guardian (Claude) | mission-guardian-claude/ | claude_local | 2229682b-cede-4462-b38b-25a910af022e | 24h |
-| Mission Guardian (Codex) | mission-guardian-codex/ | codex_local | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | 24h |
+| Mission Guardian (Claude) | mission-guardian-claude/ | claude_local | 2229682b-cede-4462-b38b-25a910af022e | 24h @ 00:00 UTC |
+| Mission Guardian (Codex) | mission-guardian-codex/ | codex_local | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | 24h @ 12:00 UTC |
 | INTERN (DoWhatTold) | intern/ | any ollama cloud (smallest) | (spawned by CEO/CFO) | NONE |
 | GitHub Auditor | github-auditor/ | github-actions | N/A (workflow) | 24h |
 
@@ -67,4 +67,21 @@ INTERN has only:
 - CTO / TechExecutor: `ollama/qwen3-coder:480b-cloud`
 - CMO: `ollama/Trollz1004/dateapp-marketingtools` (platform-specific, fallback: qwen3-coder)
 - UX Designer: `ollama/Trollz1004/dateapp`
-- Mission Guardians: `claude_local` + `codex_local` — daily audit only (86400s heartbeat)
+- Mission Guardians: `claude_local` + `codex_local` — daily audit only (86400s heartbeat, 12h staggered)
+
+## Language Rule (canonical, 2026-04-29 reconciliation)
+
+Two surfaces, two rules — keep them straight:
+
+| Surface | Allowed | Banned |
+|---------|---------|--------|
+| Compliance/legal (ToS, whitepapers, audit reports) | "contractual revenue disbursement", "platform revenue", "operating reserve" | "donate", "donation", "solicitation", "charity routing", "automatic disbursement" |
+| Marketing / UI / customer-facing (CMO + UX scope) | "platform built for real people", "community that actually does something", "connection with purpose" | "donate", "donation", "solicitation", "charity", "charitable", "disbursement", "giving back" |
+
+Mission Guardians audit both surfaces. CEO routes ambiguous cases to CMO for customer-facing or CFO/CTO for compliance text.
+
+## Platform State (2026-04-29)
+
+- April 4, 2026 launch is past — operations are post-launch.
+- Revenue model is permanent: 1 wallet, 10% reserve, founder-directed.
+- 4-DAO model is final ($LOVE / $UKID / $GREEN / $AGRAV) — Claude CLI + Gemini Deep Research approved 2026-04-19.

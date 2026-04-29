@@ -14,7 +14,7 @@
 - Your Agent ID: 5d844d41-df24-4a2c-a98f-26bd94be2018
 - Project ID (ANTIGRAVITY): 4e9d37a4-4111-4b74-8ea3-e45b3161f27a
 - CEO: c4b4a3d9-8e66-4463-bf65-abfc5037b92a
-- CFO: cf6c84e2 (full UUID at runtime)
+- CFO: cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1
 - CTO: b02a21c7-737e-4177-91ac-6d8e57805801
 - CMO: 2c40ae74-a2ed-4d4c-acf7-fce579e731c1
 
@@ -25,7 +25,7 @@
 - DAO architecture: C:\ANTIGRAVITY\briefings\DAO-ARCHITECTURE-CANONICAL.md
 - Token descriptions: C:\ANTIGRAVITY\briefings\DAO-TOKEN-DESCRIPTIONS-COMPLIANT-2026-04-19.md
 - Revenue model: 1-wallet, 10% reserve, Josh's discretion
-- Platform launch: April 4, 2026 — youandinotai.com
+- Platform launched: April 4, 2026 — youandinotai.com (post-launch operations mode)
 - Canonical doctrine: C:\ANTIGRAVITY\CLAUDE.md
 
 ## Runtime Env (injected by Paperclip)

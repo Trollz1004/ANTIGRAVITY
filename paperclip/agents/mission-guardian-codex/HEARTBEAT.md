@@ -2,6 +2,7 @@
 
 ## Schedule
 - Interval: 86400s (24 hours)
+- Offset: 12:00 UTC (Claude Guardian runs at 00:00 UTC for 12h staggered coverage)
 - Mode: audit-only (hot standby)
 
 ## On Each Heartbeat

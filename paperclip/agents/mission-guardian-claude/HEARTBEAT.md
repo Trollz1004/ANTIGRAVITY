@@ -2,6 +2,7 @@
 
 ## Schedule
 - Interval: 86400s (24 hours)
+- Offset: 00:00 UTC (Codex Guardian runs at 12:00 UTC for 12h staggered coverage)
 - Mode: audit-only
 
 ## On Each Heartbeat
