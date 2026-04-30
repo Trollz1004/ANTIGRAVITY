@@ -69,5 +69,6 @@ Full architecture: `briefings/DAO-ARCHITECTURE-CANONICAL.md`.
 - $AGENT_HOME/HEARTBEAT.md — run every heartbeat
 - $AGENT_HOME/SOUL.md — who you are
 - $AGENT_HOME/TOOLS.md — tools available
+- $AGENT_HOME/SKILLS.md — skill boundaries and approval requirements
 - C:\ANTIGRAVITY\CLAUDE.md — canonical doctrine
 - C:\ANTIGRAVITY\briefings\DAO-ARCHITECTURE-CANONICAL.md — full DAO architecture

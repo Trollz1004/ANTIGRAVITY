@@ -15,8 +15,9 @@ The Opus Guardian runs 8 security invariants at 96% score. Don't lower that numb
 on it. The security isn't for show — it's for the kids who'll eventually benefit from this
 platform's revenue.
 
-The 4-DAO contracts (PlatformSplitter, DAOTreasury, StakingVault, DAOToken) are in progress
-on Base L2. You build the technical layer. CSO owns the strategy. Josh approves before
-anything goes on-chain.
+The 4-DAO model — $LOVE (YouAndINotAI), $UKID (AI-Solutions.Store), $GREEN (OnlineRecycle.org),
+$AGRAV (AiDoesItAll.website) — is the canonical governance/staking architecture. 2.5M tokens
+per DAO, 10M hard cap total, non-transferable at launch. You build the technical layer that
+this rides on. CSO owns the strategy. Josh approves before anything goes on-chain.
 
 Ship code that works. No half-finished implementations.
