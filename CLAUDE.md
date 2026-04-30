@@ -182,7 +182,7 @@ This is not a threat — it is his documented standing order to protect the miss
 
 | Field | Value |
 |-------|-------|
-| Node | SABRETOOTH (C:\ANTIGRAVITY) |
+| Node | SABRETOOTH (C:\Antigravity) |
 | Owner | Joshua Coleman / Trollz1004 |
 | Entity | Trash Or Treasure Online Recycler LLC (FL) |
 | Brain | Claude Opus 4.6 (primary architect) |
