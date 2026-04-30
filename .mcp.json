@@ -3,48 +3,32 @@
     "brain-mcp": {
       "command": "node",
       "args": [
-        "C:\\\\ANTIGRAVITY/brain-mcp/dist/index.js"
+        "C:\\Antigravity\\brain-mcp\\dist\\index.js"
       ],
       "env": {
         "HOME": "C:\\Users\\joshl"
-      }
-    },
-    "brain-mcp-remote": {
-      "type": "http",
-      "url": "https://mcp.youandinotai.com/mcp",
-      "headers": {
-        "Authorization": "Bearer ${BRAIN_MCP_TOKEN}"
       }
     },
     "antigravity-sentry": {
       "command": "node",
       "args": [
-        "C:\\\\ANTIGRAVITY/mcp-server/dist/index.js"
-      ],
-      "env": {
-        "HOME": "C:\\Users\\joshl"
-      }
-    },
-    "social-command-center": {
-      "command": "node",
-      "args": [
-        "C:\\\\ANTIGRAVITY/social-command-center/dist/index.js"
+        "C:\\Antigravity\\mcp-server\\dist\\index.js"
       ],
       "env": {
         "HOME": "C:\\Users\\joshl"
       }
     },
     "paperclip": {
-      "command": "C:\\ANTIGRAVITY\\paperclip-mcp\\paperclip-mcp.cmd",
+      "command": "C:\\Antigravity\\paperclip-mcp\\paperclip-mcp.cmd",
       "args": [],
       "env": {
-        "ANTIGRAVITY_ROOT": "C:\\ANTIGRAVITY",
+        "ANTIGRAVITY_ROOT": "C:\\Antigravity",
         "LITELLM_BASE_URL": "http://127.0.0.1:4000"
       }
     },
     "playwright": {
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
     }
   }
 }
