@@ -4,13 +4,17 @@
 
 $ErrorActionPreference = 'Continue'
 
-$LogDir     = 'C:\ANTIGRAVITY\logs'
+$LogDir     = 'C:\Antigravity\logs'
 $LogFile    = "$LogDir\paperclip-watchdog.log"
+$CfStdErr   = "$LogDir\cloudflared.stderr.log"
+$CfStdOut   = "$LogDir\cloudflared.stdout.log"
+$PcStdErr   = "$LogDir\paperclip.stderr.log"
+$PcStdOut   = "$LogDir\paperclip.stdout.log"
 $MaxLogBytes = 10MB
 
 $CloudflaredExe   = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
-$TunnelConfig     = 'C:\ANTIGRAVITY\infra\cloudflare\paperclip-hq.yml'
-$PaperclipScript  = 'C:\ANTIGRAVITY\scripts\start-paperclip.ps1'
+$TunnelConfig     = 'C:\Antigravity\infra\cloudflare\paperclip-hq.yml'
+$PaperclipScript  = 'C:\Antigravity\scripts\start-paperclip.ps1'
 $PaperclipPort    = 3100
 $CheckInterval    = 30   # seconds between health checks
 
@@ -22,8 +26,10 @@ function Log($msg) {
 }
 
 function Rotate-Log {
-    if ((Test-Path $LogFile) -and (Get-Item $LogFile).Length -gt $MaxLogBytes) {
-        Move-Item $LogFile "$LogFile.1" -Force -ErrorAction SilentlyContinue
+    foreach ($f in @($LogFile, $CfStdErr, $CfStdOut, $PcStdErr, $PcStdOut)) {
+        if ((Test-Path $f) -and (Get-Item $f).Length -gt $MaxLogBytes) {
+            Move-Item $f "$f.1" -Force -ErrorAction SilentlyContinue
+        }
     }
 }
 
@@ -50,8 +56,10 @@ function Start-Paperclip {
     Start-Process -FilePath 'powershell.exe' `
         -ArgumentList '-NonInteractive', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-File', $PaperclipScript `
         -WindowStyle Hidden `
+        -RedirectStandardOutput $PcStdOut `
+        -RedirectStandardError  $PcStdErr `
         -ErrorAction SilentlyContinue
-    Log 'Paperclip start command issued.'
+    Log "Paperclip start command issued. stderr -> $PcStdErr"
 }
 
 function Get-CloudflaredPid {
@@ -60,11 +68,23 @@ function Get-CloudflaredPid {
 
 function Start-CloudflaredTunnel {
     Log 'Cloudflared DOWN — starting tunnel silently...'
+    # Capture stderr so failures (bad creds, missing config, edge errors) become diagnosable
+    # instead of vanishing into the void of a hidden process.
     Start-Process -FilePath $CloudflaredExe `
         -ArgumentList "tunnel --config `"$TunnelConfig`" run" `
         -WindowStyle Hidden `
+        -RedirectStandardOutput $CfStdOut `
+        -RedirectStandardError  $CfStdErr `
         -ErrorAction SilentlyContinue
-    Log 'Cloudflared tunnel start command issued.'
+    Log "Cloudflared tunnel start command issued. stderr -> $CfStdErr"
+    Start-Sleep -Seconds 3
+    # Surface the most recent error tail into the watchdog log so a single tail tells the story
+    if (Test-Path $CfStdErr) {
+        $tail = Get-Content $CfStdErr -Tail 5 -ErrorAction SilentlyContinue
+        if ($tail) {
+            foreach ($l in $tail) { Log "  cloudflared> $l" }
+        }
+    }
 }
 
 Log '====== Paperclip Watchdog Started ======'
