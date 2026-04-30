@@ -112,7 +112,7 @@ With live safety features now available, refine recruitment criteria to specific
 
 - Digital gift cards (Amazon, Visa)
 - Platform credit or subscription discounts
-- Charitable donation in participant's name (compliant with Florida §496.405)
+- Contractual revenue disbursement in participant's name (compliant with Florida §496.405)
 - Entry into prize drawings for larger value rewards
 
 ## Screening Process
