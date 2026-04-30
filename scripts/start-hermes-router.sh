@@ -6,6 +6,7 @@ SERVICE_DIR="$REPO_ROOT/services/hermes-router"
 VENV_DIR="$SERVICE_DIR/.venv"
 LOG_FILE="$REPO_ROOT/logs/hermes-router.log"
 ENV_CANDIDATES=(
+  "/mnt/c/Users/joshl/OneDrive/Personal Vault-Sabretooth/MASTER-UNIVERSAL-ENV-TROLLZ1004.env"
   "/mnt/c/Antigravity/briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env"
 )
 
