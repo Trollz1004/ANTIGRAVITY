@@ -1,8 +1,8 @@
 # REPOSITORY RECORD - SABRETOOTH LIVE STATE
 
-Date: April 2, 2026
+Date: April 28, 2026
 Authority: Joshua Coleman
-Status: authoritative repo refreshed after prelaunch doctrine audit, drift cleanup, node-lane verification, stale AIDoesItAll public-surface remediation, April 2 YouAndINotAI authenticated-surface reskin / launch validation, and April 2 Play-readiness safety pass
+Status: authoritative repo refreshed after April 15 PaperClip HQ cutover, the April 17 1-wallet revenue-model pivot (charity-routing language removed from all active surfaces), the April 19 4-DAO architecture finalization and Gemini memory refresh, the April 27 OpenCode / Paperclip Worker finalization, and the April 28 doctrine sweep that moved the env vault to OneDrive, locked the 1-folder rule, migrated OpusPawClaw to `c:\Antigravity\apps\opuspawclaw`, added the Sabretooth always-on watchdog, stood up Hermes Router on `:11435`, and wired the Playwright browser MCP into the project
 
 ## Repository Truth
 
@@ -25,13 +25,13 @@ Status: authoritative repo refreshed after prelaunch doctrine audit, drift clean
 | Root AIDoesItAll mapping | LIVE | `www.aidoesitall.website` now maps to `_deploy/aidoesitall-www` on Cloudflare Pages project `for-the-kids-contribute` |
 | AIDoesItAll API guard | LIVE | `api.aidoesitall.website/*` is now guarded by repo-tracked Worker source at `infra/cloudflare/aidoesitall-api-guard` |
 
-## Current Financial Doctrine
+## Current Financial Doctrine (as of April 17, 2026)
 
-- Live LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`
-- This is the current safe operating doctrine for repo, launch, copy, and audit work
-- It is not presented as universal legal advice or a blanket legal conclusion
-- Historical `60/30/10`, `100% charity`, and `100% DAO` language is legacy unless canonical docs explicitly restore it
-- Historical Base Mainnet `GospelDonation.sol` remains real chain history, not current automatic doctrine for live LLC-controlled revenue
+- **One wallet model.** All platform revenue lands in a single founder-controlled wallet; all costs leave from the same wallet. There is no separate charity rail, no automatic-disbursement contract on the live revenue path, and no named-beneficiary split logic in active code.
+- **10% reserve, founder-directed quarterly.** A minimum of 10% of merchant receipts is set aside automatically as a reserve. That reserve is Joshua Coleman's taxable income (the LLC receives 100% of merchant receipts) and is held until he decides quarterly whether to donate, reinvest, stake, or hold. No agent, surface, or doc may pre-commit that reserve to a beneficiary.
+- **No charity-routing language on active surfaces.** No active surface (code, UI, marketing copy, docs) may claim charity routing, automatic disbursement, percent-to-charity splits, or §496.405-style language. The pre-April-17 "10% charitable cap" framing is retired and superseded.
+- **History is preserved, not authoritative.** Historical `60/30/10`, `100% charity`, `100% DAO`, and split-era percentages remain in clearly-historical files only. Historical Base Mainnet `GospelDonation.sol` is real chain history and must not be presented as current automatic doctrine for live LLC-controlled revenue.
+- **Canonical reference.** `CLAUDE.md` (Revenue Model section, footer dated `2026-04-17`) is the source of truth. This block restates that doctrine for the repo-level status file.
 
 ## March 31 Audit Sweep
 
@@ -254,4 +254,52 @@ Validated on April 2, 2026:
   - `manus-meta-guardian-dashboard\client\src\pages\CSVGuide.tsx`
 - sandbox repo on `E:\sandbox-repo` remains non-authoritative and still carries separate uncommitted PaperClip-script drift outside the live repo
 
-This file is the repo-level state summary for Sabretooth as of March 31, 2026.
+## April 17 Revenue Model Pivot — 1-Wallet / 10% Reserve
+
+- the pre-April-17 "10% charitable cap" framing was retired and superseded by the **1-wallet model**: all platform revenue in, all costs out of one founder-controlled wallet
+- a minimum **10% reserve** is set aside automatically; that reserve is Joshua Coleman's taxable income (LLC receives 100% of merchant receipts) and is held for founder-directed quarterly disposition (donate, reinvest, stake, or hold)
+- charity-routing language, automatic-disbursement claims, percent-to-charity splits, and §496.405-style framing are no longer permitted on any active surface (code, UI, marketing copy, docs)
+- the donate-guard hook was removed in this pivot
+- a GLM-5.1:cloud token policy was set in the same sweep
+- canonical reference for the post-pivot doctrine: `CLAUDE.md` (Revenue Model section, footer dated `2026-04-17`)
+- historical chain artifacts (`GospelDonation.sol`, split-era 60/30/10, 100% charity language) remain valid history-only artifacts and must not be presented as current automatic doctrine
+
+## April 19 4-DAO Architecture and Gemini Memory Refresh
+
+- the 3-DAO → 4-DAO naming sync landed on the active DAO architecture line (`PR #40`, `PR #42`)
+- compliance briefings and 4-DAO architecture contracts were added (`PR #24`, `PR #42`)
+- Task 1/1000 — CEO agent backup, Gemini DAO viz, `PlatformSplitter` and `DAOTreasury` contracts merged
+- all Gemini memory files were refreshed for the April 19, 2026 full update
+- agent scaling and the Cloudflare tunnel for the 4-DAO line landed in `PR #42`
+
+## April 27 OpenCode and Paperclip Worker Finalization
+
+- OpenCode session was finalized covering the Paperclip Worker, D1, Docker CLI, Claude auth, and full doc updates
+- the Paperclip Worker was deployed and its OpenCode session signature recorded
+- `OpenCode Memory file` plus `.gitignore` updates landed for system-continuity purposes
+- the unified OpenCode launcher with cloud-model fallbacks for the Paperclip CEO agent was added
+- session signatures `qwen3.6-plus` are recorded against the OpenCode session line
+
+## April 28 Doctrine Sweep, OpusPawClaw Migration, and Sabretooth Always-On
+
+- doctrine sweep of `2026-04-28` (commit `eb9c4045`) moved the master env vault to OneDrive (`C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIVERSAL-ENV-TROLLZ1004.env`), locked the **1-folder rule** (`c:\Antigravity` is the only working surface), and refreshed briefings to the post-pivot 1-wallet truth
+- **OpusPawClaw flagship migrated** from `D:\` to `c:\Antigravity\apps\opuspawclaw` per the 1-folder rule (commit `377df0b2`); Mission Control mode added in the same change. Stack: Vite + Electron + React 19 + Tailwind v4 desktop AI workstation. New GUI work extends this app — it does not get rebuilt.
+- **Sabretooth always-on watchdog** added with always-on registration (commit `b6a632fc`) so the local stack survives reboots and orphaned processes
+- **Hermes Router on `:11435`** brought online with a Paperclip cite-upstream registry; OpusPawClaw launch fixes shipped in the same commit (`bace43ae`)
+- `README.md` was rewritten to be mission-forward, monorepo-aware, and to credit the AI partners (commit `88c1b15a`)
+- post-migration C:\ root cleanup landed (commit `e8a914da`); `.gitignore` was extended and the session-permission grant recorded (commit `d19b0f5a`)
+- housekeeping sweep cleared `docs/scratch`, `development/`, Desktop launchers, and corrected the GPU line in `CLAUDE.md` to **AMD Radeon RX 6700 XT 12GB** (commits `6d94b065`, `6e7c571d`)
+- **Playwright browser MCP** wired into the project `.mcp.json` (commit `8d2374f9`) so headed/headless browser automation is available alongside the existing antigravity-sentry, postgres, fetch, and memory MCPs
+- secrets carveout confirmed: env files live in OneDrive Personal Vault and never in the repo — repo remains wipe-and-clone-safe
+
+## Cross-Opus Knowledge Transfer Pattern
+
+- documented the working git-auth pattern used on Sabretooth so other Opus instances (WSL, T5500, 9020) do not re-discover from scratch:
+  - `gh auth login` (GitHub.com → HTTPS → web browser flow)
+  - `gh auth setup-git` to extend the token to plain `git`
+  - verification: `git ls-remote https://github.com/Trollz1004/ANTIGRAVITY.git HEAD` should print a SHA with no auth prompt
+  - reset path for partial setups: `git config --global --unset credential.helper && gh auth logout`, then re-run
+- canonical entry recorded in user memory: `feedback_cross_opus_knowledge_transfer.md`
+- principle: ask Joshua "what command did the other-node Opus use?" before re-discovering — saves cross-fleet token spend
+
+This file is the repo-level state summary for Sabretooth as of April 28, 2026.
