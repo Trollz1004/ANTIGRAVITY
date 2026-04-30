@@ -21,7 +21,7 @@ const PROTOCOL = {
     historical_founder_wallet: '0x7c3E283119718395Ef5EfBAC4F52738C2018daA7',
   },
   contracts: {
-    historical_gospel_donation: {
+    historical_gospel_disbursement: {
       name: 'GospelDonation.sol',
       address: '0x9855B75061D4c841791382998f0CE8B2BCC965A4',
       network: 'Base Mainnet (Chain 8453)',
@@ -41,7 +41,7 @@ const PROTOCOL = {
       reserve_pct: 10,
       note: '1 wallet. All revenue in, all costs out. 10% reserve — founder-directed, his call quarterly. No automatic charity routing.',
     },
-    historical_gospel_donation: {
+    historical_gospel_disbursement: {
       charity_pct: 60,
       infrastructure_pct: 30,
       founder_pct: 10,
@@ -136,7 +136,7 @@ export function registerProtocolTools(server: McpServer) {
               rule: PROTOCOL.governance.doctrine_boundary,
               public_surfaces: Object.values(PROTOCOL.sites).map((site) => site.url),
               current_llc_policy: PROTOCOL.policy.current_llc_policy,
-              historical_gospel_donation: PROTOCOL.policy.historical_gospel_donation,
+              historical_gospel_disbursement: PROTOCOL.policy.historical_gospel_disbursement,
               public_claim_boundary: PROTOCOL.policy.public_claim_boundary,
             },
             null,
