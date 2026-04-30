@@ -46,7 +46,22 @@ if ([string]::IsNullOrWhiteSpace($hermesPid)) {
     Log "Hermes Router already running (PID $hermesPid)"
 }
 
-# ---------- 3. Paperclip Watchdog (handles paperclip + cloudflared forever) ----------
+# ---------- 3a. Hermes Router Watchdog (Hermes :11435) ----------
+$hermesWatchdogScript = "$Repo\scripts\hermes-watchdog.ps1"
+$hermesWatchdogRunning = $false
+Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -ErrorAction SilentlyContinue |
+    Where-Object { $_.CommandLine -match 'hermes-watchdog\.ps1' } |
+    ForEach-Object { $hermesWatchdogRunning = $true }
+if (-not $hermesWatchdogRunning) {
+    Log 'starting Hermes Router watchdog (hidden)'
+    Start-Process -FilePath 'powershell.exe' `
+        -ArgumentList '-NonInteractive','-WindowStyle','Hidden','-ExecutionPolicy','Bypass','-File',$hermesWatchdogScript `
+        -WindowStyle Hidden -ErrorAction SilentlyContinue
+} else {
+    Log 'Hermes Router watchdog already running'
+}
+
+# ---------- 3b. Paperclip Watchdog (handles paperclip + cloudflared forever) ----------
 $watchdogScript = "$Repo\scripts\paperclip-watchdog.ps1"
 $watchdogRunning = $false
 Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -ErrorAction SilentlyContinue |
