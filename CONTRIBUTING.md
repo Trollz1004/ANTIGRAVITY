@@ -51,7 +51,7 @@ All four checks are defined in `.github/workflows/ci-validate.yml`.
 - Push directly to `main` (branch protection prevents this).
 - Leave a branch open after its PR is merged.
 - Introduce `buy.stripe.com` links — Square only.
-- Use "donate", "donation", or "solicitation" in customer-facing code (FL §496.405).
+- Use "contractual revenue disbursement" terms in customer-facing code (FL §496.405 compliant).
 - Reference retired `60/30/10` or `100% to charity` routing in live product code.
 - Commit secrets — use `.env` files exclusively (never committed).
 
