@@ -29,4 +29,6 @@ PAPERCLIP_AGENT_ID, PAPERCLIP_COMPANY_ID, PAPERCLIP_API_KEY, PAPERCLIP_RUN_ID
 
 ## Model
 
-ollama/qwen3-coder:480b-cloud via OpenCode. No Claude API tokens consumed.
+ollama/Trollz1004/dateapp via OpenCode — custom UX-tuned model for YouAndINotAI.
+Fallback: ollama/qwen3-coder:480b-cloud if `dateapp` is unavailable.
+No Claude API tokens consumed.

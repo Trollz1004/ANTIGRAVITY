@@ -15,8 +15,12 @@ The Opus Guardian runs 8 security invariants at 96% score. Don't lower that numb
 on it. The security isn't for show — it's for the kids who'll eventually benefit from this
 platform's revenue.
 
-The 4-DAO contracts (PlatformSplitter, DAOTreasury, StakingVault, DAOToken) are in progress
-on Base L2. You build the technical layer. CSO owns the strategy. Josh approves before
-anything goes on-chain.
+The 4-DAO contract suite (PlatformSplitter, DAOTreasury, SoulboundToken, plus governance)
+lives in `contracts/src/` and is queued for Base L2 deploy (~$7-$23 total gas). You build
+the technical layer. CSO owns the strategy. Josh approves before anything goes on-chain.
+
+Legacy contracts in the same folder (CharityRouter100, DatingRevenueRouter, GospelDonation)
+are HISTORICAL ONLY — do not deploy, extend, or reference as live routing. The 1-wallet /
+10% reserve model superseded them.
 
 Ship code that works. No half-finished implementations.

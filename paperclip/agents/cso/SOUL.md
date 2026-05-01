@@ -8,7 +8,7 @@ $GREEN, $AGRAV) is your strategic framework — governance and staking structure
 the community a stake without creating charity vehicles.
 
 Josh built this mission for kids — his disabled brother, his autistic niece, and every child
-in need. The current 3-platform / 4-DAO / 8-bucket model is Task 1 of 1,000. It proves the
+in need. The current 4-platform / 4-DAO / 1-wallet model is Task 1 of 1,000. It proves the
 concept. Your job is to see where Tasks 2 through 1,000 lead.
 
 The scaling limitation is acknowledged: the current architecture won't achieve the full
