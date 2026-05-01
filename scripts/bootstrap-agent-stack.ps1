@@ -1,12 +1,12 @@
-# scripts/bootstrap-agent-stack.ps1
+﻿# scripts/bootstrap-agent-stack.ps1
 # Install + update the ANTIGRAVITY agent CLI stack on a Windows node from
-# OFFICIAL sources (no 3rd-party wrappers). Idempotent — safe to re-run.
+# OFFICIAL sources (no 3rd-party wrappers). Idempotent - safe to re-run.
 # After a clean run, every agent in `ollama launch` shows as installed.
 #
 # Modes:
-#   (no flag)  Full — agent CLIs + cloud models + heavy local + custom models
+#   (no flag)  Full - agent CLIs + cloud models + heavy local + custom models
 #              (default for Sabretooth and other workstation-class nodes)
-#   -Light     Skip heavy local pulls and custom models — keep agent CLIs +
+#   -Light     Skip heavy local pulls and custom models - keep agent CLIs +
 #              cloud models + the small nomic-embed-text. For service-loaded
 #              nodes like T5500 that run Docker / brain-mcp / DBs.
 #
@@ -42,11 +42,11 @@ if ($missing) {
     if ('python' -in $missing) { Write-Host '  Python:   winget install Python.Python.3.12' }
     if ('ollama' -in $missing) { Write-Host '  Ollama:   winget install Ollama.Ollama' }
     if ('winget' -in $missing) { Write-Host '  WinGet:   ms-appinstaller (or update Windows)' }
-    throw 'Prereqs missing — abort.'
+    throw 'Prereqs missing - abort.'
 }
 
-# ---------- 2. Claude Code — official Anthropic installer ----------
-Step 'Claude Code (Anthropic — claude.ai/install.ps1)'
+# ---------- 2. Claude Code - official Anthropic installer ----------
+Step 'Claude Code (Anthropic - claude.ai/install.ps1)'
 if (Has 'claude') {
     Write-Host ('  installed: {0}' -f (Ver 'claude'))
     Write-Host '  updating...'
@@ -56,8 +56,8 @@ if (Has 'claude') {
     irm https://claude.ai/install.ps1 | iex
 }
 
-# ---------- 3. Codex — OpenAI official npm package ----------
-Step 'Codex (OpenAI — @openai/codex)'
+# ---------- 3. Codex - OpenAI official npm package ----------
+Step 'Codex (OpenAI - @openai/codex)'
 if (Has 'codex') {
     Write-Host ('  installed: {0}' -f (Ver 'codex'))
     npm update -g @openai/codex 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
@@ -66,8 +66,8 @@ if (Has 'codex') {
     npm install -g @openai/codex 2>&1 | Select-Object -Last 5 | ForEach-Object { Write-Host "  $_" }
 }
 
-# ---------- 4. OpenCode — SST official, WinGet on Windows ----------
-Step 'OpenCode (SST — winget SST.opencode)'
+# ---------- 4. OpenCode - SST official, WinGet on Windows ----------
+Step 'OpenCode (SST - winget SST.opencode)'
 if (Has 'opencode') {
     Write-Host ('  installed: {0}' -f (Ver 'opencode'))
     winget upgrade --id SST.opencode --silent --accept-package-agreements --accept-source-agreements 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
@@ -76,8 +76,8 @@ if (Has 'opencode') {
     winget install --id SST.opencode --silent --accept-package-agreements --accept-source-agreements 2>&1 | Select-Object -Last 5 | ForEach-Object { Write-Host "  $_" }
 }
 
-# ---------- 5. Droid — Factory official installer ----------
-Step 'Droid (Factory — app.factory.ai)'
+# ---------- 5. Droid - Factory official installer ----------
+Step 'Droid (Factory - app.factory.ai)'
 if (Has 'droid') {
     Write-Host ('  installed: {0}' -f (Ver 'droid'))
     droid update 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
@@ -91,8 +91,8 @@ if (Has 'droid') {
     }
 }
 
-# ---------- 6. Pi — Mario Zechner's official package (badlogic/pi-mono) ----------
-Step 'Pi (Mario Zechner — @mariozechner/pi-coding-agent)'
+# ---------- 6. Pi - Mario Zechner's official package (badlogic/pi-mono) ----------
+Step 'Pi (Mario Zechner - @mariozechner/pi-coding-agent)'
 if (Has 'pi') {
     Write-Host ('  installed: {0}' -f (Ver 'pi'))
     npm update -g '@mariozechner/pi-coding-agent' 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
@@ -101,8 +101,8 @@ if (Has 'pi') {
     npm install -g '@mariozechner/pi-coding-agent' 2>&1 | Select-Object -Last 5 | ForEach-Object { Write-Host "  $_" }
 }
 
-# ---------- 7. Cline — official npm CLI ----------
-Step 'Cline (cline.bot — @cline/cli)'
+# ---------- 7. Cline - official npm CLI ----------
+Step 'Cline (cline.bot - @cline/cli)'
 if (Has 'cline') {
     Write-Host ('  installed: {0}' -f (Ver 'cline'))
     npm update -g '@cline/cli' 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
@@ -115,18 +115,18 @@ if (Has 'cline') {
     }
 }
 
-# ---------- 8. Ollama models — local pulls ----------
+# ---------- 8. Ollama models - local pulls ----------
 $mode = if ($Light) { 'LIGHT' } else { 'FULL' }
-Step "Ollama models — local pulls (mode: $mode)"
+Step "Ollama models - local pulls (mode: $mode)"
 Write-Host ('  ollama: {0}' -f (Ver 'ollama'))
 $existing = (ollama list 2>$null | Select-Object -Skip 1 | ForEach-Object { ($_ -split '\s+')[0] })
 
 # Always pull: small embed (RAG/search, ~274 MB).
-# korpohermes-prime moved to cloud section — it's a cloud-backed custom model
+# korpohermes-prime moved to cloud section - it's a cloud-backed custom model
 # (zero local cost); see step 9 below.
 $alwaysModels = @('nomic-embed-text:latest')
 
-# Heavy local + custom — skipped on -Light nodes (T5500 runs Docker/brain-mcp)
+# Heavy local + custom - skipped on -Light nodes (T5500 runs Docker/brain-mcp)
 $heavyModels = @(
     'gemma2:latest',                                 # 5.4 GB
     'gemma3:1b',                                     # 815 MB
@@ -140,7 +140,7 @@ $heavyModels = @(
 
 $toPull = $alwaysModels
 if (-not $Light) { $toPull += $heavyModels }
-else { Write-Host '  (light mode — skipping heavy local + custom models)' -ForegroundColor Yellow }
+else { Write-Host '  (light mode - skipping heavy local + custom models)' -ForegroundColor Yellow }
 
 foreach ($m in $toPull) {
     if ($m -in $existing) {
@@ -163,18 +163,18 @@ foreach ($m in $cloudModels) {
     Write-Host "  $m : pulling cloud alias..."
     $out = ollama pull $m 2>&1 | Out-String
     if ($out -match 'unauthorized|signin|sign in') {
-        Write-Host "    skipped — run 'ollama signin' on this node first" -ForegroundColor Yellow
+        Write-Host "    skipped - run 'ollama signin' on this node first" -ForegroundColor Yellow
         break
     } else {
         Write-Host ('    {0}' -f (($out -split "`n") | Select-Object -Last 1).Trim())
     }
 }
 
-# ---------- 10. Build local Modelfile if present (CFO PRIME) — full mode only ----------
+# ---------- 10. Build local Modelfile if present (CFO PRIME) - full mode only ----------
 Step 'Local Modelfile (./Modelfile -> CFO-PRIME)'
 $mf = 'C:\Antigravity\Modelfile'
 if ($Light) {
-    Write-Host '  (light mode — skipped)' -ForegroundColor Yellow
+    Write-Host '  (light mode - skipped)' -ForegroundColor Yellow
 } elseif (Test-Path $mf) {
     if ('cfo-prime:latest' -in $existing) {
         Write-Host '  cfo-prime:latest : already built (use `ollama rm cfo-prime` then re-run to rebuild)'
@@ -183,11 +183,11 @@ if ($Light) {
         ollama create cfo-prime -f $mf 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
     }
 } else {
-    Write-Host '  no Modelfile at C:\Antigravity\Modelfile — skipped'
+    Write-Host '  no Modelfile at C:\Antigravity\Modelfile - skipped'
 }
 
 # ---------- 11. Final verification ----------
-Step 'Verification — what `ollama launch` will see'
+Step 'Verification - what `ollama launch` will see'
 $results = @()
 foreach ($cmd in 'claude','codex','opencode','droid','pi','cline','ollama','node','npm','python','winget') {
     $loc = (Get-Command $cmd -ErrorAction SilentlyContinue).Source
@@ -208,5 +208,5 @@ if ($still) {
     Write-Host 'Fixes: open a new shell to refresh PATH, or restart Windows for installer-based tools.' -ForegroundColor Yellow
 } else {
     Write-Host "`nAll components installed and updated." -ForegroundColor Green
-    Write-Host 'Run `ollama launch` to see the agent menu — every entry should now lack the "(not installed)" tag.'
+    Write-Host 'Run `ollama launch` to see the agent menu - every entry should now lack the "(not installed)" tag.'
 }
