@@ -13,7 +13,7 @@ if exist "%ENV_FILE%" (
 )
 
 REM Set OpenCode path
-set "OPENCODE_PATH=C:\Users\joshl\AppData\Roaming\npm\opencode.cmd"
+set "OPENCODE_PATH=opencode.exe"
 
 REM Define model priority order based on available cloud models
 set "PRIMARY_MODEL=opencode/glm-5.1"

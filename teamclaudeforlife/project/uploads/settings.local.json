@@ -24,11 +24,7 @@
       "mcp__antigravity-sentry__*",
       "mcp__brain-mcp__brain_sync",
       "mcp__brain-mcp__brain_getActiveContext",
-      "mcp__brain-mcp__brain_reportAction",
-      "PowerShell(head -20)",
-      "PowerShell(Stop-Process *)",
-      "PowerShell(& \"C:\\\\Antigravity\\\\scripts\\\\autostart-mission.ps1\")",
-      "PowerShell(powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:\\\\Antigravity\\\\scripts\\\\autostart-mission.ps1\")"
+      "mcp__brain-mcp__brain_reportAction"
     ]
   },
   "enableAllProjectMcpServers": true,

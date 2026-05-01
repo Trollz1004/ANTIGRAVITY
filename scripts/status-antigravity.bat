@@ -19,7 +19,7 @@ echo.
 echo  [CORE SERVICES]
 call :check_url  "Ollama"           "http://127.0.0.1:11434/api/tags"
 call :check_url  "Paperclip HQ"     "http://127.0.0.1:3100/api/health"
-call :check_url  "Embedded PG"      "http://127.0.0.1:54329"
+call :check_port "Embedded PG"      "54329"
 echo.
 
 :: --- Cloudflare / External --------------------------------------
@@ -41,10 +41,10 @@ echo.
 
 :: --- Hermes / Adapters ------------------------------------------
 echo  [HERMES ADAPTER]
-hermes.bat --version >nul 2>&1
+call hermes.bat --version >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo   [OK] Hermes CLI wrapper
-    for /f "tokens=*" %%a in ('hermes.bat --version 2^>^&1') do (
+    for /f "tokens=*" %%a in ('call hermes.bat --version 2^>^&1') do (
         echo        %%a
     )
 ) else (
@@ -73,7 +73,7 @@ echo.
 :: --- Process List -----------------------------------------------
 echo  [RUNNING PROCESSES]
 C:\Windows\System32\tasklist.exe 2>nul | find /I "ollama"       >nul && echo   - Ollama
-C:\Windows\System32\tasklist.exe 2>nul | find /I "paperclip"    >nul && echo   - Paperclip
+powershell -NoProfile -Command "if (Get-NetTCPConnection -LocalPort 3100 -State Listen -ErrorAction SilentlyContinue) { exit 0 } else { exit 1 }" >nul 2>&1 && echo   - Paperclip
 C:\Windows\System32\tasklist.exe 2>nul | find /I "cloudflared"  >nul && echo   - Cloudflare tunnel
 C:\Windows\System32\tasklist.exe 2>nul | find /I "docker"       >nul && echo   - Docker
 echo.
@@ -83,6 +83,17 @@ pause >nul
 exit /b
 
 :: --- SUBROUTINES -----------------------------------------------
+:check_port
+set "NAME=%~1"
+set "PORT=%~2"
+powershell -NoProfile -Command "if (Get-NetTCPConnection -LocalPort %PORT% -State Listen -ErrorAction SilentlyContinue) { exit 0 } else { exit 1 }" >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+    echo   [OK] %NAME%
+) else (
+    echo   [DOWN] %NAME%
+)
+exit /b 0
+
 :check_url
 set "NAME=%~1"
 set "URL=%~2"
