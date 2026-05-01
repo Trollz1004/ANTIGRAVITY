@@ -86,4 +86,33 @@ Start-Process wt -ArgumentList @(
     'powershell.exe','-NoExit','-Command','claude --resume'
 ) -ErrorAction SilentlyContinue
 
+# ---------- 5. Hermes Agent CLI (WSL TUI at /mnt/c/Antigravity) ----------
+# Mirrors Joshua's manual flow: cd c:\Antigravity → wsl → hermes.
+# Direct exec of the venv-wrapper script so wt's pty goes straight to the TUI.
+# bash -ic ... breaks the TUI's tty check; full path bypasses PATH issues.
+Log 'opening Hermes Agent CLI in Windows Terminal at /mnt/c/Antigravity (WSL Ubuntu)'
+Start-Process wt -ArgumentList @(
+    '-d','c:\Antigravity',
+    'wsl.exe','-d','Ubuntu','--cd','/mnt/c/Antigravity','--','/home/josh/.local/bin/hermes'
+) -ErrorAction SilentlyContinue
+
+# ---------- 6. OpenClaw dashboard in default browser ----------
+# OpenClaw Gateway.cmd (separate Startup item) takes ~40s to be ready.
+# Spawn a hidden powershell that polls port 18789 for up to 90s,
+# then opens the canvas URL — survives this script's exit.
+Log 'scheduling OpenClaw dashboard browser-open (waits for gateway :18789)'
+$openclawWait = @'
+for ($i = 0; $i -lt 45; $i++) {
+    try {
+        $c = New-Object System.Net.Sockets.TcpClient
+        $a = $c.BeginConnect('127.0.0.1', 18789, $null, $null)
+        $ok = $a.AsyncWaitHandle.WaitOne(1000, $false)
+        $c.Close()
+        if ($ok) { Start-Process 'http://127.0.0.1:18789/__openclaw__/canvas/'; exit }
+    } catch {}
+    Start-Sleep -Seconds 2
+}
+'@
+Start-Process powershell.exe -ArgumentList '-NonInteractive','-WindowStyle','Hidden','-Command',$openclawWait -WindowStyle Hidden -ErrorAction SilentlyContinue
+
 Log '=== autostart complete ==='
