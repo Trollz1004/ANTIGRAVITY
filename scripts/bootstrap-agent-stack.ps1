@@ -3,8 +3,20 @@
 # OFFICIAL sources (no 3rd-party wrappers). Idempotent — safe to re-run.
 # After a clean run, every agent in `ollama launch` shows as installed.
 #
-# Usage (local):  powershell -ExecutionPolicy Bypass -File C:\Antigravity\scripts\bootstrap-agent-stack.ps1
-# Usage (remote): ssh joshl@<node> "powershell -ExecutionPolicy Bypass -File C:\Antigravity\scripts\bootstrap-agent-stack.ps1"
+# Modes:
+#   (no flag)  Full — agent CLIs + cloud models + heavy local + custom models
+#              (default for Sabretooth and other workstation-class nodes)
+#   -Light     Skip heavy local pulls and custom models — keep agent CLIs +
+#              cloud models + the small nomic-embed-text. For service-loaded
+#              nodes like T5500 that run Docker / brain-mcp / DBs.
+#
+# Usage (local):     powershell -ExecutionPolicy Bypass -File C:\Antigravity\scripts\bootstrap-agent-stack.ps1
+# Usage (T5500):     powershell -ExecutionPolicy Bypass -File C:\Antigravity\scripts\bootstrap-agent-stack.ps1 -Light
+# Usage (remote):    ssh joshl@<node> "powershell -ExecutionPolicy Bypass -File C:\Antigravity\scripts\bootstrap-agent-stack.ps1 [-Light]"
+
+param(
+    [switch]$Light
+)
 
 $ErrorActionPreference = 'Continue'
 $ProgressPreference    = 'SilentlyContinue'
@@ -103,12 +115,76 @@ if (Has 'cline') {
     }
 }
 
-# ---------- 8. Ollama itself — keep current ----------
-Step 'Ollama (already a prereq — checking version)'
+# ---------- 8. Ollama models — local pulls ----------
+$mode = if ($Light) { 'LIGHT' } else { 'FULL' }
+Step "Ollama models — local pulls (mode: $mode)"
 Write-Host ('  ollama: {0}' -f (Ver 'ollama'))
-Write-Host '  (Ollama updates are handled by the Ollama installer itself; not auto-updated here.)'
+$existing = (ollama list 2>$null | Select-Object -Skip 1 | ForEach-Object { ($_ -split '\s+')[0] })
 
-# ---------- 9. Final verification ----------
+# Always pull: small embed model, useful for any node (RAG/search, ~274 MB)
+$alwaysModels = @('nomic-embed-text:latest')
+
+# Heavy local + custom — skipped on -Light nodes (T5500 runs Docker/brain-mcp)
+$heavyModels = @(
+    'gemma2:latest',                                 # 5.4 GB
+    'gemma3:1b',                                     # 815 MB
+    'qwen2.5:7b',                                    # 4.7 GB
+    'qwen2.5-coder:7b',                              # 4.7 GB
+    'qwen3.5:latest',                                # 6.6 GB
+    'joshlcoleman/dateapp:latest',                   # 2.0 GB Joshua's
+    'joshlcoleman/dateapp-marketing:latest',         # 2.0 GB
+    'joshlcoleman/CFO-Until-No-Kid-In-Need:latest',  # 2.0 GB
+    'jeffreyvandekorput/korpohermes-prime:latest'    # community
+)
+
+$toPull = $alwaysModels
+if (-not $Light) { $toPull += $heavyModels }
+else { Write-Host '  (light mode — skipping heavy local + custom models)' -ForegroundColor Yellow }
+
+foreach ($m in $toPull) {
+    if ($m -in $existing) {
+        Write-Host "  $m : already present"
+    } else {
+        Write-Host "  $m : pulling..."
+        ollama pull $m 2>&1 | Select-Object -Last 1 | ForEach-Object { Write-Host "    $_" }
+    }
+}
+
+# ---------- 9. Ollama Cloud models (minimax, glm — used by OpenClaw + CFO) ----------
+Step 'Ollama Cloud models'
+$cloudModels = @(
+    'minimax-m2.7:cloud',  # confirmed in OpenClaw gateway log
+    'glm-4.6:cloud'        # per CLAUDE.md GLM token policy
+)
+Write-Host '  Cloud models require `ollama signin` to be done at least once.'
+foreach ($m in $cloudModels) {
+    Write-Host "  $m : pulling cloud alias..."
+    $out = ollama pull $m 2>&1 | Out-String
+    if ($out -match 'unauthorized|signin|sign in') {
+        Write-Host "    skipped — run 'ollama signin' on this node first" -ForegroundColor Yellow
+        break
+    } else {
+        Write-Host ('    {0}' -f (($out -split "`n") | Select-Object -Last 1).Trim())
+    }
+}
+
+# ---------- 10. Build local Modelfile if present (CFO PRIME) — full mode only ----------
+Step 'Local Modelfile (./Modelfile -> CFO-PRIME)'
+$mf = 'C:\Antigravity\Modelfile'
+if ($Light) {
+    Write-Host '  (light mode — skipped)' -ForegroundColor Yellow
+} elseif (Test-Path $mf) {
+    if ('cfo-prime:latest' -in $existing) {
+        Write-Host '  cfo-prime:latest : already built (use `ollama rm cfo-prime` then re-run to rebuild)'
+    } else {
+        Write-Host '  building cfo-prime from Modelfile...'
+        ollama create cfo-prime -f $mf 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
+    }
+} else {
+    Write-Host '  no Modelfile at C:\Antigravity\Modelfile — skipped'
+}
+
+# ---------- 11. Final verification ----------
 Step 'Verification — what `ollama launch` will see'
 $results = @()
 foreach ($cmd in 'claude','codex','opencode','droid','pi','cline','ollama','node','npm','python','winget') {
@@ -120,6 +196,9 @@ foreach ($cmd in 'claude','codex','opencode','droid','pi','cline','ollama','node
     }
 }
 $results | Format-Table Tool,Status,Version -AutoSize
+
+Step 'Ollama models present'
+ollama list 2>&1 | Select-Object -First 25
 
 $still = ($results | Where-Object { $_.Status -eq 'MISSING' }).Tool
 if ($still) {
