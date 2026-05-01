@@ -65,6 +65,19 @@ if (Healthy 'claude') {
         Write-Host '  installing...'
     }
     irm https://claude.ai/install.ps1 | iex
+    # Standalone installer drops claude.exe in ~/.local/bin but does NOT modify PATH.
+    # Persist that path into user PATH and refresh the running shell so subsequent
+    # steps (and future logins) see the new claude immediately.
+    $localBin = "$env:USERPROFILE\.local\bin"
+    if ((Test-Path "$localBin\claude.exe")) {
+        $userPath = [System.Environment]::GetEnvironmentVariable('PATH','User')
+        if ($userPath -notlike "*$localBin*") {
+            [System.Environment]::SetEnvironmentVariable('PATH', "$localBin;$userPath", 'User')
+            Write-Host "  added to user PATH: $localBin"
+        }
+    }
+    # Remove any stale npm-shim claude.bat that would shadow the standalone exe
+    npm uninstall -g @anthropic-ai/claude-code 2>$null | Out-Null
     Refresh-Path
 }
 

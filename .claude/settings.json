@@ -22,18 +22,42 @@
   ],
   "permissions": {
     "allow": [
-      "Bash(docker *)",
-      "Bash(docker-compose *)",
-      "Bash(npm *)",
-      "Bash(pnpm *)",
-      "Bash(git *)",
+      "Bash",
       "Read",
+      "Write",
+      "Edit",
+      "NotebookEdit",
       "Glob",
       "Grep",
-      "mcp__github__pull_request_read"
+      "WebFetch",
+      "WebSearch",
+      "Skill",
+      "Agent",
+      "TaskCreate",
+      "TaskList",
+      "TaskGet",
+      "TaskUpdate",
+      "TaskOutput",
+      "TaskStop",
+      "Monitor",
+      "PushNotification",
+      "ScheduleWakeup",
+      "AskUserQuestion",
+      "EnterPlanMode",
+      "ExitPlanMode",
+      "EnterWorktree",
+      "ExitWorktree",
+      "ListMcpResourcesTool",
+      "ReadMcpResourceTool",
+      "RemoteTrigger",
+      "ToolSearch",
+      "CronCreate",
+      "CronList",
+      "CronDelete"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "bypassPermissions"
   },
+  "skipDangerousModePermissionPrompt": true,
   "hooks": {
     "PreToolUse": [
       {
