@@ -24,6 +24,13 @@ $ProgressPreference    = 'SilentlyContinue'
 function Step($msg) { Write-Host "`n=== $msg ===" -ForegroundColor Cyan }
 function Has($cmd)  { [bool](Get-Command $cmd -ErrorAction SilentlyContinue) }
 function Ver($cmd)  { try { ((& $cmd --version 2>$null) -join ' ').Trim() } catch { '' } }
+# Healthy = on PATH AND --version returns something non-empty.
+# Catches half-broken installs where the binary exists but node_modules are missing.
+function Healthy($cmd) { (Has $cmd) -and ((Ver $cmd) -ne '') }
+# Refresh PATH from machine + user env. Winget installers update env but the running shell does not see it.
+function Refresh-Path {
+    $env:PATH = [System.Environment]::GetEnvironmentVariable('PATH','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('PATH','User')
+}
 
 # ---------- 1. Prereqs ----------
 Step 'Prereqs (node, npm, python, ollama, winget)'
@@ -47,13 +54,18 @@ if ($missing) {
 
 # ---------- 2. Claude Code - official Anthropic installer ----------
 Step 'Claude Code (Anthropic - claude.ai/install.ps1)'
-if (Has 'claude') {
+if (Healthy 'claude') {
     Write-Host ('  installed: {0}' -f (Ver 'claude'))
     Write-Host '  updating...'
     claude update 2>&1 | Select-Object -Last 5 | ForEach-Object { Write-Host "  $_" }
 } else {
-    Write-Host '  installing...'
+    if (Has 'claude') {
+        Write-Host '  detected broken install (claude on PATH but --version fails). Reinstalling...' -ForegroundColor Yellow
+    } else {
+        Write-Host '  installing...'
+    }
     irm https://claude.ai/install.ps1 | iex
+    Refresh-Path
 }
 
 # ---------- 3. Codex - OpenAI official npm package ----------
@@ -74,6 +86,8 @@ if (Has 'opencode') {
 } else {
     Write-Host '  installing...'
     winget install --id SST.opencode --silent --accept-package-agreements --accept-source-agreements 2>&1 | Select-Object -Last 5 | ForEach-Object { Write-Host "  $_" }
+    Refresh-Path
+    if (Has 'opencode') { Write-Host ('  post-install: {0}' -f (Ver 'opencode')) }
 }
 
 # ---------- 5. Droid - Factory official installer ----------
@@ -82,12 +96,23 @@ if (Has 'droid') {
     Write-Host ('  installed: {0}' -f (Ver 'droid'))
     droid update 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
 } else {
-    Write-Host '  installing via Factory PowerShell installer...'
-    try {
-        irm https://app.factory.ai/cli/install.ps1 | iex
-    } catch {
-        Write-Host "  Factory PS installer failed: $_" -ForegroundColor Yellow
-        Write-Host '  Fallback: try `npm install -g @factory-ai/droid` or visit https://docs.factory.ai/cli'
+    # Try multiple official install paths in order of likelihood; Factory has changed URLs.
+    $installed = $false
+    Write-Host '  trying npm @factory-ai/droid...'
+    npm install -g @factory-ai/droid 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
+    Refresh-Path
+    if (Has 'droid') { $installed = $true }
+
+    if (-not $installed) {
+        Write-Host '  npm did not yield a droid binary; trying npm @factory-ai/cli...'
+        npm install -g @factory-ai/cli 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
+        Refresh-Path
+        if (Has 'droid') { $installed = $true }
+    }
+
+    if (-not $installed) {
+        Write-Host '  npm fallbacks failed. Visit https://docs.factory.ai/cli for the current installer.' -ForegroundColor Yellow
+        Write-Host '  Droid will remain uninstalled - skip without aborting.' -ForegroundColor Yellow
     }
 }
 
@@ -101,18 +126,14 @@ if (Has 'pi') {
     npm install -g '@mariozechner/pi-coding-agent' 2>&1 | Select-Object -Last 5 | ForEach-Object { Write-Host "  $_" }
 }
 
-# ---------- 7. Cline - official npm CLI ----------
-Step 'Cline (cline.bot - @cline/cli)'
+# ---------- 7. Cline - VS Code extension only (no public npm CLI) ----------
+Step 'Cline (cline.bot - VS Code extension)'
 if (Has 'cline') {
     Write-Host ('  installed: {0}' -f (Ver 'cline'))
-    npm update -g '@cline/cli' 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
 } else {
-    Write-Host '  installing...'
-    npm install -g '@cline/cli' 2>&1 | Select-Object -Last 5 | ForEach-Object { Write-Host "  $_" }
-    if (-not (Has 'cline')) {
-        Write-Host '  @cline/cli may not exist as a public package; Cline is primarily a VS Code extension.' -ForegroundColor Yellow
-        Write-Host '  Skipping. If Cline CLI is needed, check https://github.com/cline/cline for current install.' -ForegroundColor Yellow
-    }
+    Write-Host '  Cline is primarily a VS Code extension - no public npm CLI as of writing.' -ForegroundColor Yellow
+    Write-Host '  To install: VS Code -> Extensions -> search "Cline" by saoudrizwan, click Install.'
+    Write-Host '  ollama launch will continue to show Cline as "(not installed)" - safe to ignore.'
 }
 
 # ---------- 8. Ollama models - local pulls ----------
