@@ -47,7 +47,7 @@ function Wait-DockerReady {
 }
 
 function MainStackIsAvailable {
-  return (Test-Path 'C:\openclaw') -and (Test-Path 'C:\openclaw\.env')
+  return (Test-Path 'C:\openclaw') -and (Test-Path 'C:\openclaw\.env') -and (Test-Path 'C:\openclaw\Dockerfile')
 }
 
 function Ensure-MainStack {
@@ -88,6 +88,16 @@ function Ensure-LiteLLMRunning {
 }
 
 function Ensure-PaperclipPortAvailable {
+  try {
+    $healthResponse = Invoke-WebRequest -Uri 'http://127.0.0.1:3100/api/health' -TimeoutSec 2 -UseBasicParsing
+    if ($healthResponse.StatusCode -ge 200 -and $healthResponse.StatusCode -lt 500) {
+      Log 'Existing canonical Paperclip listener is already healthy.'
+      return $false
+    }
+  }
+  catch {
+  }
+
   $listener = Get-NetTCPConnection -LocalPort 3100 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
   if ($null -eq $listener) {
     return $true
@@ -134,7 +144,7 @@ function Start-PaperclipWithRetry {
 
     for ($i = 0; $i -lt 20; $i++) {
       try {
-        $response = Invoke-WebRequest -Uri 'http://localhost:3100' -TimeoutSec 3 -UseBasicParsing
+        $response = Invoke-WebRequest -Uri 'http://127.0.0.1:3100/api/health' -TimeoutSec 3 -UseBasicParsing
         if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 500) {
           Log 'Paperclip is responding.'
           return
@@ -181,10 +191,10 @@ function Ensure-PaperclipTunnelRunning {
 }
 
 function Wait-ForPaperclip {
-  Log 'Waiting for Paperclip to answer on localhost:3100...'
+  Log 'Waiting for Paperclip to answer on http://127.0.0.1:3100/api/health...'
   for ($i = 0; $i -lt 30; $i++) {
     try {
-      $response = Invoke-WebRequest -Uri 'http://localhost:3100' -TimeoutSec 3 -UseBasicParsing
+      $response = Invoke-WebRequest -Uri 'http://127.0.0.1:3100/api/health' -TimeoutSec 3 -UseBasicParsing
       if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 500) {
         Log 'Paperclip is responding.'
         return
@@ -224,12 +234,17 @@ New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 
 try {
   Log '=== Paperclip CEO bootstrap triggered ==='
-  Wait-DockerReady
-  Ensure-MainStack
-  Ensure-LiteLLMRunning
   Start-PaperclipWithRetry
   Ensure-PaperclipTunnelRunning
   Wait-ForPaperclip
+  try {
+    Wait-DockerReady
+    Ensure-MainStack
+    Ensure-LiteLLMRunning
+  }
+  catch {
+    Log "Docker/LiteLLM optional startup skipped: $($_.Exception.Message)"
+  }
   Start-WSLOrchestration
   Open-BrowserTabs
   Log '=== Paperclip CEO bootstrap complete ==='
