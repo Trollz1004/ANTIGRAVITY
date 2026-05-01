@@ -121,7 +121,9 @@ Step "Ollama models — local pulls (mode: $mode)"
 Write-Host ('  ollama: {0}' -f (Ver 'ollama'))
 $existing = (ollama list 2>$null | Select-Object -Skip 1 | ForEach-Object { ($_ -split '\s+')[0] })
 
-# Always pull: small embed model, useful for any node (RAG/search, ~274 MB)
+# Always pull: small embed (RAG/search, ~274 MB).
+# korpohermes-prime moved to cloud section — it's a cloud-backed custom model
+# (zero local cost); see step 9 below.
 $alwaysModels = @('nomic-embed-text:latest')
 
 # Heavy local + custom — skipped on -Light nodes (T5500 runs Docker/brain-mcp)
@@ -133,8 +135,7 @@ $heavyModels = @(
     'qwen3.5:latest',                                # 6.6 GB
     'joshlcoleman/dateapp:latest',                   # 2.0 GB Joshua's
     'joshlcoleman/dateapp-marketing:latest',         # 2.0 GB
-    'joshlcoleman/CFO-Until-No-Kid-In-Need:latest',  # 2.0 GB
-    'jeffreyvandekorput/korpohermes-prime:latest'    # community
+    'joshlcoleman/CFO-Until-No-Kid-In-Need:latest'   # 2.0 GB
 )
 
 $toPull = $alwaysModels
@@ -150,11 +151,12 @@ foreach ($m in $toPull) {
     }
 }
 
-# ---------- 9. Ollama Cloud models (minimax, glm — used by OpenClaw + CFO) ----------
+# ---------- 9. Ollama Cloud models (zero local compute/disk) ----------
 Step 'Ollama Cloud models'
 $cloudModels = @(
-    'minimax-m2.7:cloud',  # confirmed in OpenClaw gateway log
-    'glm-4.6:cloud'        # per CLAUDE.md GLM token policy
+    'jeffreyvandekorput/korpohermes-prime:latest',  # Joshua's preferred default brain (cloud-backed)
+    'minimax-m2.7:cloud',                            # confirmed in OpenClaw gateway log
+    'glm-4.6:cloud'                                  # per CLAUDE.md GLM token policy
 )
 Write-Host '  Cloud models require `ollama signin` to be done at least once.'
 foreach ($m in $cloudModels) {
