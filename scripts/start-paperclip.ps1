@@ -1,6 +1,5 @@
-# Start Paperclip HQ — SQLite mode (no external postgres dependency)
-# paperclipai uses its own built-in storage by default.
-# If you need external postgres: set DATABASE_URL here and ensure postgres is running.
+# Start Paperclip HQ using its local trusted embedded Postgres runtime.
+# The active instance lives under C:\Users\joshl\.paperclip\instances\default.
 
 $ErrorActionPreference = 'Continue'
 $LogDir = 'C:\ANTIGRAVITY\logs'
@@ -13,7 +12,7 @@ function Log($msg) {
     Add-Content -Path $LogFile -Value $line -ErrorAction SilentlyContinue
 }
 
-Log 'Starting Paperclip HQ (SQLite mode) on port 3100...'
+Log 'Starting Paperclip HQ (embedded Postgres) on port 3100...'
 
 try {
     & 'C:\Users\joshl\AppData\Roaming\npm\paperclipai.cmd' run *>> $LogFile 2>&1

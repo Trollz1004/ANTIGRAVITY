@@ -1,0 +1,59 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "youandinotai",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["node_modules/tsx/dist/cli.mjs", "server.ts"],
+      "port": 3000,
+      "cwd": "youandinotai"
+    },
+    {
+      "name": "antigravity",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev", "-p", "3001"],
+      "port": 3001,
+      "cwd": "antigravity"
+    },
+    {
+      "name": "revenue-core",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--host", "--port", "3002"],
+      "port": 3002,
+      "cwd": "revenue-core"
+    },
+    {
+      "name": "briefings",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--host", "--port", "3003"],
+      "port": 3003,
+      "cwd": "briefings"
+    },
+    {
+      "name": "brain-mcp",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["dist/index.js"],
+      "port": 3900,
+      "cwd": "brain-mcp",
+      "env": {
+        "BRAIN_TRANSPORT": "http",
+        "BRAIN_HTTP_PORT": "3900",
+        "BRAIN_REQUIRE_AUTH": "false"
+      }
+    },
+    {
+      "name": "crossfire-backend",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["run.py"],
+      "port": 8000,
+      "cwd": "crossfire/backend"
+    },
+    {
+      "name": "crossfire-frontend",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--host", "--port", "3004"],
+      "port": 3004,
+      "cwd": "crossfire/frontend"
+    }
+  ]
+}
