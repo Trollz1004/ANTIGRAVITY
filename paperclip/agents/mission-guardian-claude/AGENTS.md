@@ -31,7 +31,7 @@ The ANTIGRAVITY mission: a social platform for good run by Joshua Coleman — se
 - Primary Project ID: 4e9d37a4-4111-4b74-8ea3-e45b3161f27a
 - CEO Agent ID: c4b4a3d9-8e66-4463-bf65-abfc5037b92a
 - Your Agent ID: 2229682b-cede-4462-b38b-25a910af022e
-- Backup Guardian ID: 42200bfa-fb9e-42b1-901d-6dadf15eb23b
+- Peer Guardian ID: 42200bfa-fb9e-42b1-901d-6dadf15eb23b
 
 ## References
 

@@ -24,4 +24,5 @@ PAPERCLIP_AGENT_ID, PAPERCLIP_COMPANY_ID, PAPERCLIP_API_KEY, PAPERCLIP_RUN_ID
 ## Adapter
 
 Codex (local) — has a daily usage cap. Budget it on audit work only.
-Primary Guardian (Claude: 2229682b) runs hourly. You are the hot standby.
+Mission Guardian (Claude: 2229682b) runs as an independent peer auditor on the same
+24-hour cadence. You are not a backup; you are a parallel set of eyes.

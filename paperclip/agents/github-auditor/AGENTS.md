@@ -4,7 +4,7 @@
 Automated daily doctrine compliance auditor. Runs as a GitHub Actions workflow — not a Paperclip agent. Cannot be modified by any AI agent.
 
 ## What It Checks
-- FL §496.405 forbidden language in all agent AGENTS.md files
+- Forbidden charity-language scan ("donate", "donation", "solicitation", etc.) across all agent doctrine files — protects the 1-wallet / 10% reserve revenue model from drift
 - Authority references (Josh/Joshua Coleman) in governance docs
 - DAO contract integrity ($LOVE, $UKID, $GREEN, $AGRAV — 4-DAO model, Josh-approved 2026-04-19)
 - Agent file completeness (AGENTS.md, TOOLS.md, HEARTBEAT.md, SOUL.md per agent)

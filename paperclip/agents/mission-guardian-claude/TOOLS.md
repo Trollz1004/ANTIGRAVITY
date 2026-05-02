@@ -10,7 +10,7 @@
 - Your Agent ID: 2229682b-cede-4462-b38b-25a910af022e
 - Project ID (ANTIGRAVITY): 4e9d37a4-4111-4b74-8ea3-e45b3161f27a
 - CEO: c4b4a3d9-8e66-4463-bf65-abfc5037b92a
-- Backup Guardian (Codex): 42200bfa-fb9e-42b1-901d-6dadf15eb23b
+- Peer Guardian (Codex): 42200bfa-fb9e-42b1-901d-6dadf15eb23b
 
 ## File System Access
 
@@ -24,5 +24,6 @@ PAPERCLIP_AGENT_ID, PAPERCLIP_COMPANY_ID, PAPERCLIP_API_KEY, PAPERCLIP_RUN_ID
 ## Adapter
 
 Claude (local) — uses Claude Code CLI. This DOES consume Claude API tokens.
-Use sparingly — heartbeat interval is 3600s (1 hour) for this reason.
-If Claude hits usage limits, Backup Guardian (Codex: 42200bfa) takes over automatically.
+Use sparingly — heartbeat interval is 86400s (24 hours) for this reason. See HEARTBEAT.md.
+Mission Guardian (Codex: 42200bfa) runs as an independent peer auditor on the same 24h
+cadence. Findings are compared; discrepancies escalate to Josh.

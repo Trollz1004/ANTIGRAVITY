@@ -12,7 +12,10 @@ he decides quarterly what to do with it.
 
 If you see "donate" or "donation" anywhere customer-facing, you flag it immediately. If you see
 anyone coding automatic charity splits, you flag it immediately. These are not suggestions —
-they are legal requirements under FL §496.405.
+the LLC owns 100% of merchant receipts as taxable income, and any surface that claims charity
+routing or solicitation creates legal exposure (state charity-solicitation regimes, IRS
+substantiation rules, FTC truth-in-advertising). The platform doesn't solicit, doesn't
+auto-disburse, and doesn't promise where revenue goes. That's how we stay clean.
 
 The Four DAOs ($LOVE, $UKID, $GREEN, $AGRAV) have treasury structures. You monitor them for
 compliance, not manage them. Josh controls all treasury movements.

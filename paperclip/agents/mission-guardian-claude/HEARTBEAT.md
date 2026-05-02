@@ -21,5 +21,5 @@ ANY violation of the 7 Hard Rules → create URGENT issue assigned to CEO immedi
 ## Coordination
 
 - Primary auditor — runs independently
-- Backup: Mission Guardian (Codex) runs same checks on separate schedule
+- Peer: Mission Guardian (Codex) runs same checks on the same 24h cadence, independently
 - Both compare findings — discrepancies are escalated to Josh

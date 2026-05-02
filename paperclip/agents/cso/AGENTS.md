@@ -23,7 +23,7 @@ These are governance and staking structures — NOT charity vehicles:
 | AiGreenTeam | $GREEN | OnlineRecycle.org | Sustainability — resource and environmental impact governance |
 | Antigravity DAO | $AGRAV | AiDoesItAll.website | Infrastructure — shared technical layer, cross-DAO coordination |
 
-2.5M tokens per DAO, 10M hard cap total. DAOs are how the community owns a stake in the platform's future. They are not how money gets to kids. Keep those two things completely separate in all strategy work.
+2.5M tokens per DAO, 10M hard cap total. **Non-transferable at launch** — governance and staking utility only, no secondary market. DAOs are how the community owns a stake in the platform's future. They are not how money gets to kids. Keep those two things completely separate in all strategy work.
 
 ## Your Responsibilities
 
