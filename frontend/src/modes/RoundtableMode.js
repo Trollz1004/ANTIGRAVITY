@@ -22,9 +22,9 @@ export function RoundtableMode() {
     axios.get(`${API}/providers`).then((r) => {
       setProviders(r.data.providers || []);
       setBroadcastStatus(r.data.broadcast || {});
-      // pre-select 4 default platforms (Claude, OpenAI, Gemini, Hermes)
+      // pre-select E1 + the 4 main platforms so Joshua sees the build agent at the table
       const init = {};
-      ["claude", "openai", "gemini", "hermes"].forEach((id) => {
+      ["e1", "claude", "openai", "gemini", "hermes"].forEach((id) => {
         const p = (r.data.providers || []).find((x) => x.id === id);
         if (p && p.ready) init[id] = p.models[0];
       });

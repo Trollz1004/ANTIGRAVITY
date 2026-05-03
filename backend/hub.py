@@ -37,6 +37,30 @@ TIER_LOCAL = "local"
 
 PLATFORMS: List[Dict[str, Any]] = [
     {
+        "id": "e1", "label": "E1 · Build Agent", "tier": TIER_EMERGENT,
+        "color": "#fb923c",
+        "models": ["e1-opus", "e1-gpt", "e1-gemini"],
+        "description": "The agent that built this surface — Emergent's full-stack engineer.",
+        "persona": (
+            "You are E1, the build agent that constructed this Mission Control "
+            "for OpusPawClaw. You speak as the maker — direct, technical, warm, "
+            "no fluff. You hold the doctrine: Opus conducts, agents execute; "
+            "no fast-tier Anthropic label; no request-for-funds language; "
+            "honest mirrors only; #UntilNoKidInNeed. "
+            "When Joshua asks for changes, propose the smallest viable edit. "
+            "When Joshua asks for opinions, give them — short, specific, useful. "
+            "When you say 'we' you mean Joshua + the agents on this surface. "
+            "Quote his motto only when it lands: "
+            "'Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.'"
+        ),
+        "bridge_provider_default": "anthropic",
+        "bridge_models": {
+            "e1-opus":   ("anthropic", "claude-opus-4-5-20251101"),
+            "e1-gpt":    ("openai",    "gpt-5.1"),
+            "e1-gemini": ("gemini",    "gemini-2.5-pro"),
+        },
+    },
+    {
         "id": "hermes", "label": "Hermes Router", "tier": TIER_EMERGENT,
         "color": "#00d4ff",
         "models": ["hermes", "hermes-deep", "cfo", "code", "marketing", "kimi", "fast"],
@@ -194,8 +218,9 @@ class UnifiedChatRequest(BaseModel):
 async def list_providers():
     """Public registry — every AI surface, with honest tier + readiness state."""
     out = []
+    SAFE_KEYS = {"id", "label", "tier", "color", "models", "description", "env"}
     for p in PLATFORMS:
-        copy = {k: v for k, v in p.items() if k != "endpoint"}
+        copy = {k: v for k, v in p.items() if k in SAFE_KEYS}
         if p["tier"] == TIER_BYOK:
             copy["ready"] = bool(os.environ.get(p["env"], "").strip())
         elif p["tier"] == TIER_EMERGENT:
@@ -219,7 +244,19 @@ async def chat_send(body: UnifiedChatRequest, response: Response):
     real_model = body.model
 
     try:
-        if body.provider == "hermes":
+        if body.provider == "e1":
+            # E1 · Build Agent — the maker speaks. Inject the persona system
+            # prompt unless Joshua already passed his own system message.
+            e1 = PLATFORM_BY_ID["e1"]
+            bridge_provider, bridge_model = e1["bridge_models"].get(
+                body.model, ("anthropic", "claude-opus-4-5-20251101")
+            )
+            real_model = f"e1 · {body.model} · bridged via {bridge_provider}/{bridge_model}"
+            has_system = any(m["role"] == "system" for m in msgs)
+            if not has_system:
+                msgs = [{"role": "system", "content": e1["persona"]}] + msgs
+            reply = await asyncio.to_thread(_emergent_chat, bridge_provider, bridge_model, msgs, session_id)
+        elif body.provider == "hermes":
             # Reuse the existing Hermes virtual-model table
             from server import HERMES_VIRTUAL_MODELS  # late import to avoid circular
             conf = HERMES_VIRTUAL_MODELS.get(body.model)

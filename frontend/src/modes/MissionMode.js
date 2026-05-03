@@ -62,6 +62,26 @@ export function MissionMode() {
           <GitPanel />
           <RunbookViewer />
 
+          <div className="bg-[#0a0f1a] border border-[#fb923c]/30 rounded-md p-3 relative overflow-hidden" data-testid="build-agent-card">
+            <div className="absolute -top-4 -right-4 opacity-10">
+              <span className="mono text-5xl font-black text-[#fb923c]">E1</span>
+            </div>
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#fb923c] shadow-[0_0_5px_#fb923c] animate-heartbeat" />
+                <span className="text-[8px] tracking-[0.3em] uppercase text-[#fb923c] font-bold">build agent</span>
+              </div>
+              <div className="text-[12px] font-bold text-[#e8f0ff] leading-tight mb-1">E1 · Emergent</div>
+              <div className="mono text-[9px] text-[#6b82a6] leading-relaxed">
+                Built this Mission Control. Now seated at the Roundtable —
+                ask <span className="text-[#fb923c]">E1</span> what to ship next.
+              </div>
+              <div className="mt-2 pt-2 border-t border-[#fb923c]/15 text-[8px] tracking-widest uppercase text-[#6b82a6]">
+                bridged · opus / gpt / gemini
+              </div>
+            </div>
+          </div>
+
           <div className="bg-gradient-to-br from-[#e040fb]/10 to-[#ffb300]/10 border border-[#e040fb]/30 rounded-md p-4 relative overflow-hidden">
             <div className="absolute -top-6 -right-6 opacity-20">
               <Heart size={80} className="text-[#e040fb]" />
