@@ -24,5 +24,5 @@ PAPERCLIP_AGENT_ID, PAPERCLIP_COMPANY_ID, PAPERCLIP_API_KEY, PAPERCLIP_RUN_ID
 ## Adapter
 
 Claude (local) — uses Claude Code CLI. This DOES consume Claude API tokens.
-Use sparingly — heartbeat interval is 3600s (1 hour) for this reason.
+Use sparingly — heartbeat interval is 86400s (24 hours) for this reason. See HEARTBEAT.md for the canonical schedule.
 If Claude hits usage limits, Backup Guardian (Codex: 42200bfa) takes over automatically.

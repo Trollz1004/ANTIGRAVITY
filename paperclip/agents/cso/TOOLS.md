@@ -34,4 +34,5 @@
 
 ## Model
 
-ollama/glm-5.1:cloud via OpenCode. 198K context, tools, thinking. No Anthropic API tokens consumed.
+Adapter: `hermes_local` + `ollama/glm-5.1:cloud` (198K context, tools, thinking, persistent memory, Ollama auto-detect). No Anthropic API tokens consumed.
+Fallback: `ollama/qwen3-coder:480b-cloud` if GLM-5.1 unavailable.

@@ -5,6 +5,7 @@
 - paperclip — issue CRUD, agent management, comments, checkout/checkin
 - paperclip-create-agent — hire engineer/devops agents
 - para-memory-files — memory, daily notes, planning
+- find-skills — discover and install new skills (MCP servers, integrations) as platform needs grow
 
 ## Key IDs
 
@@ -29,4 +30,4 @@ Always include X-Paperclip-Run-Id header on mutating API calls.
 
 ## Model
 
-ollama/qwen3-coder:480b-cloud via OpenCode. No Claude API tokens consumed.
+Adapter: `opencode_local` + `ollama/qwen3-coder:480b-cloud` (per agents/README.md). No Claude API tokens consumed.

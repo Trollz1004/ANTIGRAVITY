@@ -8,13 +8,16 @@
 
 1. Check Paperclip issue board for new/stale issues — triage and assign
 2. Verify all direct reports have checked in within their own heartbeat window
-3. Flag any blockers that need escalation to Josh
-4. Update milestone progress if tasks completed since last beat
-5. Run quick doctrine check: no forbidden language in recent issue titles/descriptions
+3. Workload balance: if any direct report has 5+ open tasks, rebalance or spawn an INTERN (cap: 5 active INTERNs at any time)
+4. Flag any blockers that need escalation to Josh
+5. Update milestone progress if tasks completed since last beat
+6. Run quick doctrine check: no forbidden language in recent issue titles/descriptions ("donate", "donation", "solicitation", "charity routing")
+7. Confirm the 1-wallet / 10% reserve framing is intact in any new public-facing surface created since last beat
 
 ## Escalation
 
-If any agent has missed 3 consecutive heartbeats → create HIGH priority issue and notify Josh.
+- If any agent has missed 3 consecutive heartbeats → create HIGH priority issue and notify Josh.
+- If a Mission Guardian (Claude or Codex) flags a violation → it is already URGENT; you are responsible for routing the fix to the right agent and confirming closure.
 
 ## Health Indicators
 

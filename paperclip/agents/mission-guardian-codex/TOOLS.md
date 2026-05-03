@@ -24,4 +24,4 @@ PAPERCLIP_AGENT_ID, PAPERCLIP_COMPANY_ID, PAPERCLIP_API_KEY, PAPERCLIP_RUN_ID
 ## Adapter
 
 Codex (local) — has a daily usage cap. Budget it on audit work only.
-Primary Guardian (Claude: 2229682b) runs hourly. You are the hot standby.
+Primary Guardian (Claude: 2229682b) runs daily (86400s heartbeat). You are the hot standby on the same daily cadence — staggered so both guardians don't fire at the same time. See HEARTBEAT.md for the canonical schedule.

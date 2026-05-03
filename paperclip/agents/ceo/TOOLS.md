@@ -43,5 +43,10 @@
 
 ## Model
 
-ollama/glm-5.1:cloud via OpenCode. 198K context, tools, thinking. No Anthropic API tokens consumed.
-Fallback: ollama/qwen3-coder:480b-cloud if GLM-5.1 unavailable.
+Adapter: `hermes_local` + `ollama/glm-5.1:cloud` (198K context, tools, thinking, persistent memory, 30+ tools, Ollama auto-detect). No Anthropic API tokens consumed.
+Fallback chain (per `briefings/HERMES-CEO-READY-2026-04-19.md`):
+1. `korpohermes-prime:latest` (OpenClaw → ollama.com)
+2. `glm-5.1:cloud` (138K context)
+3. `ollama-launch` (qwen2.5:7b local)
+4. Paperclip agent pool (hosted)
+5. Anthropic + Gemini (via config, last resort)

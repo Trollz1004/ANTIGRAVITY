@@ -61,10 +61,32 @@ INTERN has only:
 
 2.5M tokens per DAO, 10M hard cap total.
 
-## Models (updated 2026-04-17)
+## Models (updated 2026-05-03)
 
-- CEO / CFO / CSO: `hermes_local` + `ollama/glm-5.1:cloud` — persistent memory, 30+ tools, Ollama auto-detect
-- CTO / TechExecutor: `ollama/qwen3-coder:480b-cloud`
-- CMO: `ollama/Trollz1004/dateapp-marketingtools` (platform-specific, fallback: qwen3-coder)
-- UX Designer: `ollama/Trollz1004/dateapp`
-- Mission Guardians: `claude_local` + `codex_local` — daily audit only (86400s heartbeat)
+- CEO / CFO / CSO: `hermes_local` + `ollama/glm-5.1:cloud` — persistent memory, 30+ tools, Ollama auto-detect. CEO carries a 5-step fallback chain to `korpohermes-prime` and beyond — see `briefings/HERMES-CEO-READY-2026-04-19.md`.
+- CTO / TechExecutor: `opencode_local` + `ollama/qwen3-coder:480b-cloud`
+- CMO: `opencode_local` + `ollama/Trollz1004/dateapp-marketingtools` (platform-specific; fallback: qwen3-coder)
+- UX Designer: `opencode_local` + `ollama/Trollz1004/dateapp` (fallback: qwen3-coder)
+- Mission Guardians: `claude_local` + `codex_local` — daily audit only (86400s heartbeat, staggered)
+- INTERN: any cheapest available Ollama cloud model (Gemma 1B is fine — INTERNs do not think)
+
+## Required Files Per Agent — Quick Matrix
+
+| Agent       | AGENTS.md | TOOLS.md | HEARTBEAT.md | SOUL.md | SKILLS.md |
+|-------------|:---------:|:--------:|:------------:|:-------:|:---------:|
+| CEO         | ✅ | ✅ | ✅ | ✅ | ✅ |
+| CFO         | ✅ | ✅ | ✅ | ✅ | — |
+| CSO         | ✅ | ✅ | ✅ | ✅ | — |
+| CTO         | ✅ | ✅ | ✅ | ✅ | — |
+| CMO         | ✅ | ✅ | ✅ | ✅ | — |
+| UX Designer | ✅ | ✅ | ✅ | ✅ | — |
+| Mission Guardian (Claude) | ✅ | ✅ | ✅ | ✅ | — |
+| Mission Guardian (Codex)  | ✅ | ✅ | ✅ | ✅ | — |
+| INTERN      | ✅ | ✅ | — | — | — |
+| GitHub Auditor | ✅ | ✅ | — (driven by `.github/workflows/daily-doctrine-audit.yml` cron) | — | — |
+
+## Change Log
+
+- **2026-05-03** — Audit & optimization pass by Claude Code Opus 4.7. Resolved drift: Mission Guardian (Claude) heartbeat reconciled to 86400s in TOOLS.md (was claiming 3600s, contradicting HEARTBEAT.md and the README). UX Designer model corrected to `Trollz1004/dateapp` (was incorrectly listed as qwen3-coder). CEO/CFO/CSO/CTO/CMO TOOLS.md model lines unified with the canonical adapter syntax used in this README. CEO HEARTBEAT.md gained the workload-rebalance step (5+ open tasks → spawn INTERN) and explicit Mission-Guardian violation routing. CEO AGENTS.md updated to reflect post-launch reality (live since 2026-04-04). New OPS-INDEX.md added to this directory.
+- **2026-04-19** — 4-DAO model approved by Claude CLI / Gemini Deep Research and locked.
+- **2026-04-17** — Revenue model permanently changed to 1-wallet + 10% reserve (founder-directed). All charity-routing language removed from active surfaces.
