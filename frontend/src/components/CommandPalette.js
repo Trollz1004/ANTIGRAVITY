@@ -1,20 +1,22 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Search, Compass, Code2, MessageSquare, Image as ImageIcon, Settings, Radio, Send, Bell, Heart, ListTodo } from "lucide-react";
+import { Search, Compass, Code2, MessageSquare, Image as ImageIcon, Settings, Radio, Send, Bell, Heart, ListTodo, BookOpen, Share2 } from "lucide-react";
 
 /**
  * CommandPalette — ⌘K / Ctrl+K. Fast nav across modes + actions.
  */
 const ENTRIES = [
   { id: "go-mission",    label: "Go to Mission Control", hint: "Opus orchestrator surface", group: "Modes",   Icon: Compass,       action: { type: "mode", to: "mission" } },
+  { id: "go-ledger",     label: "Go to Mission Ledger",  hint: "Counter that proves the mission", group: "Modes", Icon: BookOpen,    action: { type: "mode", to: "ledger" } },
   { id: "go-roundtable", label: "Go to AI Roundtable",   hint: "Multi-platform fan-out",    group: "Modes",   Icon: Radio,         action: { type: "mode", to: "roundtable" } },
-  { id: "go-tasks",      label: "Go to Tasks",           hint: "Paperclip replacement · kanban", group: "Modes", Icon: ListTodo,    action: { type: "mode", to: "tasks" } },
-  { id: "go-chat",       label: "Go to Chat Mode",       hint: "Hermes Router single-thread", group: "Modes", Icon: MessageSquare, action: { type: "mode", to: "chat" } },
-  { id: "go-code",       label: "Go to Code Mode",       hint: "Workstation pointer",        group: "Modes",  Icon: Code2,         action: { type: "mode", to: "code" } },
-  { id: "go-create",     label: "Go to Create Mode",     hint: "Image gen (planned)",        group: "Modes",  Icon: ImageIcon,     action: { type: "mode", to: "create" } },
-  { id: "go-research",   label: "Go to Research Mode",   hint: "Perplexity / Comet",         group: "Modes",  Icon: Search,        action: { type: "mode", to: "research" } },
-  { id: "go-settings",   label: "Go to Settings",        hint: "Endpoints + doctrine",       group: "Modes",  Icon: Settings,      action: { type: "mode", to: "settings" } },
-  { id: "act-dispatch",  label: "Dispatch new task",     hint: "Fan task across agents",     group: "Actions", Icon: Send,         action: { type: "dispatch" } },
-  { id: "act-notify",    label: "Enable browser notifications", hint: "Reply alerts", group: "Actions", Icon: Bell, action: { type: "notify" } },
+  { id: "go-tasks",      label: "Go to Tasks",           hint: "Kanban + agent fleet", group: "Modes", Icon: ListTodo,    action: { type: "mode", to: "tasks" } },
+  { id: "go-create",     label: "Go to Create · Banana", hint: "Gemini image gen",        group: "Modes",  Icon: ImageIcon,     action: { type: "mode", to: "create" } },
+  { id: "go-chat",       label: "Go to Chat Mode",       hint: "Hermes single-thread",    group: "Modes",  Icon: MessageSquare, action: { type: "mode", to: "chat" } },
+  { id: "go-code",       label: "Go to Code Mode",       hint: "Workstation pointer",     group: "Modes",  Icon: Code2,         action: { type: "mode", to: "code" } },
+  { id: "go-research",   label: "Go to Research Mode",   hint: "Perplexity / Comet",      group: "Modes",  Icon: Search,        action: { type: "mode", to: "research" } },
+  { id: "go-settings",   label: "Go to Settings",        hint: "Endpoints + doctrine",    group: "Modes",  Icon: Settings,      action: { type: "mode", to: "settings" } },
+  { id: "act-share",     label: "Share mission status",  hint: "PNG snapshot",            group: "Actions", Icon: Share2,        action: { type: "share" } },
+  { id: "act-dispatch",  label: "Dispatch new task",     hint: "Fan task across agents",  group: "Actions", Icon: Send,         action: { type: "dispatch" } },
+  { id: "act-notify",    label: "Enable browser notifications", hint: "Reply alerts",     group: "Actions", Icon: Bell,         action: { type: "notify" } },
   { id: "mission",       label: "#UntilNoKidInNeed",     hint: "for the kids · #TeamClaudeForLife", group: "Mission", Icon: Heart, action: { type: "noop" } },
 ];
 
@@ -52,9 +54,12 @@ export function CommandPalette({ onModeChange }) {
   const trigger = (entry) => {
     if (entry.action.type === "mode") onModeChange?.(entry.action.to);
     if (entry.action.type === "notify" && "Notification" in window) Notification.requestPermission();
+    if (entry.action.type === "share") {
+      // Bubble a global share request — MissionRibbon listens.
+      window.dispatchEvent(new CustomEvent("opuspawclaw-share"));
+    }
     if (entry.action.type === "dispatch") {
       onModeChange?.("tasks");
-      // Slight delay so TasksMode mounts and binds the listener before we fire.
       setTimeout(() => window.dispatchEvent(new CustomEvent("opuspawclaw-task", { detail: { task: "" } })), 50);
     }
     setOpen(false);

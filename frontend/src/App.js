@@ -13,6 +13,8 @@ import { ResearchMode } from "./modes/ResearchMode";
 import { MissionMode } from "./modes/MissionMode";
 import { RoundtableMode } from "./modes/RoundtableMode";
 import { TasksMode } from "./modes/TasksMode";
+import { LedgerMode } from "./modes/LedgerMode";
+import { MissionRibbon } from "./components/MissionRibbon";
 import { SettingsPanel } from "./components/SettingsPanel";
 
 export default function App() {
@@ -38,6 +40,7 @@ export default function App() {
       case "mission":    return <MissionMode />;
       case "roundtable": return <RoundtableMode />;
       case "tasks":      return <TasksMode />;
+      case "ledger":     return <LedgerMode />;
       case "settings":   return <SettingsPanel />;
       default:           return <MissionMode />;
     }
@@ -50,6 +53,7 @@ export default function App() {
         <div className="flex-1 flex overflow-hidden relative z-10">
           <Sidebar activeMode={activeMode} onModeChange={setActiveMode} />
           <div className="flex-1 flex flex-col overflow-hidden relative">
+            <MissionRibbon />
             <TaskCommander />
             <div className="flex-1 overflow-hidden">{renderMode()}</div>
 

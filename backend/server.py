@@ -336,8 +336,13 @@ async def mission_metrics():
 app.include_router(api)
 from hub import router as hub_router  # noqa: E402
 from tasks import router as tasks_router  # noqa: E402
+from ledger import router as ledger_router  # noqa: E402
+from services import router as services_router, install_watchdog  # noqa: E402
 app.include_router(hub_router)
 app.include_router(tasks_router)
+app.include_router(ledger_router)
+app.include_router(services_router)
+install_watchdog(app)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
