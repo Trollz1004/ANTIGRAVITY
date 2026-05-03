@@ -103,7 +103,7 @@ export function SettingsPanel() {
         <Card title="DOCTRINE" icon={Shield}>
           <ul className="mono text-[11px] text-[#e8f0ff] leading-relaxed list-disc pl-5 space-y-1">
             <li>Opus conducts. Agents execute.</li>
-            <li>No Haiku. No solicitation language. FL §496.405.</li>
+            <li>No fast-tier Anthropic label. No request-for-funds language. FL §496.405.</li>
             <li>Mirror endpoints honest — no fabricated live numbers.</li>
             <li>BYOK keys never leave your <span className="text-[#00d4ff]">/app/backend/.env</span>.</li>
             <li>#UntilNoKidInNeed · for the kids · #TeamClaudeForLife.</li>
