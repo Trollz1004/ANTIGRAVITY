@@ -4,34 +4,42 @@ import { TitleBar } from "./components/TitleBar";
 import { Sidebar } from "./components/Sidebar";
 import { TaskCommander } from "./components/TaskCommander";
 import { FloatingGuide } from "./components/FloatingGuide";
+import { CommandPalette } from "./components/CommandPalette";
 import { ChatProvider } from "./contexts/ChatContext";
 import { ChatMode } from "./modes/ChatMode";
 import { CodeMode } from "./modes/CodeMode";
 import { CreateMode } from "./modes/CreateMode";
 import { ResearchMode } from "./modes/ResearchMode";
 import { MissionMode } from "./modes/MissionMode";
+import { RoundtableMode } from "./modes/RoundtableMode";
+import { TasksMode } from "./modes/TasksMode";
 import { SettingsPanel } from "./components/SettingsPanel";
 
-/**
- * OpusPawClaw — Mission Control.
- * Palette & structure mirror the local Electron flagship
- * (joshuaclaw-flagship-beta-testing). Mission is the orchestrator surface.
- */
 export default function App() {
   const [gated, setGated] = useState(false);
-  const [activeMode, setActiveMode] = useState("mission"); // default to mission on first boot
+  const [activeMode, setActiveMode] = useState("mission");
+
+  // TaskCommander dispatches an "opuspawclaw-mode" event so the input can flip
+  // the user into Tasks mode while it also fires "opuspawclaw-task" for prefill.
+  React.useEffect(() => {
+    const onMode = (e) => { if (e.detail?.mode) setActiveMode(e.detail.mode); };
+    window.addEventListener("opuspawclaw-mode", onMode);
+    return () => window.removeEventListener("opuspawclaw-mode", onMode);
+  }, []);
 
   if (!gated) return <AgeGate onVerified={() => setGated(true)} />;
 
   const renderMode = () => {
     switch (activeMode) {
-      case "code":     return <CodeMode />;
-      case "chat":     return <ChatMode />;
-      case "create":   return <CreateMode />;
-      case "research": return <ResearchMode />;
-      case "mission":  return <MissionMode />;
-      case "settings": return <SettingsPanel />;
-      default:         return <MissionMode />;
+      case "code":       return <CodeMode />;
+      case "chat":       return <ChatMode />;
+      case "create":     return <CreateMode />;
+      case "research":   return <ResearchMode />;
+      case "mission":    return <MissionMode />;
+      case "roundtable": return <RoundtableMode />;
+      case "tasks":      return <TasksMode />;
+      case "settings":   return <SettingsPanel />;
+      default:           return <MissionMode />;
     }
   };
 
@@ -52,27 +60,22 @@ export default function App() {
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1.5 opacity-70 hover:opacity-100 transition-all">
                   <div className="w-2 h-2 rounded-full bg-[#00d4ff] shadow-[0_0_5px_#00d4ff]" />
-                  <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-[#6b82a6]">
-                    Mission Control Online
-                  </span>
+                  <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-[#6b82a6]">Mission Control Online</span>
                 </div>
                 <div className="h-2 w-px bg-[#2a3a52]" />
                 <span className="text-[8px] font-medium text-[#4a5568] uppercase tracking-widest">
-                  Orchestrator surface — Opus conducts, agents execute
+                  Press <span className="text-[#00d4ff]">⌘K</span> · roundtable across every AI platform
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-[8px] font-bold text-[#e040fb] uppercase tracking-widest opacity-80">
-                  #UntilNoKidInNeed
-                </span>
-                <span className="text-[8px] font-bold text-[#00d4ff] uppercase tracking-widest px-2 py-0.5 bg-[#00d4ff]/10 rounded-full border border-[#00d4ff]/20">
-                  PAWCLAW-ELITE-V1
-                </span>
+                <span className="text-[8px] font-bold text-[#e040fb] uppercase tracking-widest opacity-80">#UntilNoKidInNeed</span>
+                <span className="text-[8px] font-bold text-[#00d4ff] uppercase tracking-widest px-2 py-0.5 bg-[#00d4ff]/10 rounded-full border border-[#00d4ff]/20">PAWCLAW-ELITE-V1</span>
               </div>
             </footer>
           </div>
         </div>
         <FloatingGuide />
+        <CommandPalette onModeChange={setActiveMode} />
       </div>
     </ChatProvider>
   );

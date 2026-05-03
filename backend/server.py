@@ -334,6 +334,10 @@ async def mission_metrics():
 
 # ---------- wiring -------------------------------------------------------- #
 app.include_router(api)
+from hub import router as hub_router  # noqa: E402
+from tasks import router as tasks_router  # noqa: E402
+app.include_router(hub_router)
+app.include_router(tasks_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,

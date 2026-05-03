@@ -7,7 +7,10 @@ export function TaskCommander() {
   const dispatch = (e) => {
     e?.preventDefault();
     if (!task.trim()) return;
+    // Fan out: TasksMode listens for this and opens the Dispatch dialog with prefill.
     window.dispatchEvent(new CustomEvent("opuspawclaw-task", { detail: { task } }));
+    // Also bubble a request to switch to tasks mode if a parent wired it up.
+    window.dispatchEvent(new CustomEvent("opuspawclaw-mode", { detail: { mode: "tasks" } }));
     setTask("");
   };
 
@@ -27,7 +30,7 @@ export function TaskCommander() {
             type="text"
             value={task}
             onChange={(e) => setTask(e.target.value)}
-            placeholder="Assign a global task — dispatches across every active agent…"
+            placeholder="Type a task brief — dispatches to selected agents and creates a tracked task…"
             className="w-full bg-[#111827]/80 backdrop-blur-sm border border-[#2a3a52] rounded-xl py-3 pl-4 pr-14 text-sm text-[#e8f0ff] focus:outline-none focus:border-[#00d4ff]/50 transition-colors placeholder:text-[#4a5568]"
           />
           <button

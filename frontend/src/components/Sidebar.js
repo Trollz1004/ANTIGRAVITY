@@ -1,15 +1,17 @@
 import React from "react";
-import { Compass, Code2, Image as ImageIcon, Search, MessageSquare, Settings, Plus, Rocket } from "lucide-react";
+import { Compass, Code2, Image as ImageIcon, Search, MessageSquare, Settings, Plus, Rocket, Radio, ListTodo } from "lucide-react";
 import { useChat } from "../contexts/ChatContext";
 import { DAOMonitor } from "./DAOMonitor";
 import { SystemStatus } from "./SystemStatus";
 
 const MODES = [
-  { id: "mission",  label: "Mission Control", Icon: Compass,       tone: "magenta" },
-  { id: "code",     label: "Code Mode",       Icon: Code2,         tone: "cyan" },
-  { id: "create",   label: "Create Mode",     Icon: ImageIcon,     tone: "cyan" },
-  { id: "research", label: "Research Mode",   Icon: Search,        tone: "cyan" },
-  { id: "chat",     label: "Chat Mode",       Icon: MessageSquare, tone: "cyan" },
+  { id: "mission",    label: "Mission Control", Icon: Compass,       tone: "magenta" },
+  { id: "roundtable", label: "AI Roundtable",   Icon: Radio,         tone: "magenta" },
+  { id: "tasks",      label: "Tasks",           Icon: ListTodo,      tone: "magenta" },
+  { id: "code",       label: "Code Mode",       Icon: Code2,         tone: "cyan" },
+  { id: "create",     label: "Create Mode",     Icon: ImageIcon,     tone: "cyan" },
+  { id: "research",   label: "Research Mode",   Icon: Search,        tone: "cyan" },
+  { id: "chat",       label: "Chat Mode",       Icon: MessageSquare, tone: "cyan" },
 ];
 
 export function Sidebar({ activeMode = "mission", onModeChange }) {
@@ -34,9 +36,9 @@ export function Sidebar({ activeMode = "mission", onModeChange }) {
             onClick={() => onModeChange?.(id)}
             className={btnClass(id, tone)}
           >
-            <Icon size={18} className={id === "mission" ? "text-[#e040fb]" : ""} />
+            <Icon size={18} className={id === "mission" || id === "roundtable" || id === "tasks" ? "text-[#e040fb]" : ""} />
             <span className="text-sm font-medium">{label}</span>
-            {id === "mission" && (
+            {(id === "mission" || id === "roundtable" || id === "tasks") && (
               <span className="ml-auto text-[8px] font-bold text-[#e040fb] uppercase tracking-widest opacity-80">
                 NEW
               </span>
