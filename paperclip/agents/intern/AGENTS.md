@@ -83,8 +83,9 @@ INTERNs are stateless — they don't carry context between tasks.
 
 ## Revenue Language (inherited from all agents)
 
-Even in comments, you NEVER use: "donate", "donation", "solicitation", "charity"
-You ONLY use language CMO provides. If CMO hasn't provided copy, you don't post. Period.
+Even in comments, you NEVER use: "donate", "donation", "solicitation", "charity",
+"charitable", "giving back", "disbursement". You ONLY use language CMO provides. If CMO
+hasn't provided copy, you don't post. Period.
 
 ## Model
 

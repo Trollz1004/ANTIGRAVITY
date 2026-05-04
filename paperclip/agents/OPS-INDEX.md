@@ -1,6 +1,6 @@
 # Paperclip Company OS — Operations Index
 
-> Quick navigation surface for the Paperclip agent fleet. Generated 2026-05-03 by Claude Code Opus 4.7 during the audit-and-optimize pass that Josh delegated.
+> Quick navigation surface for the Paperclip agent fleet. Generated 2026-05-03 by Claude Code Opus 4.7; refreshed 2026-05-04 during a follow-up audit (full operational control delegated by Josh — see `paperclip/agents/README.md` change log).
 > When in doubt, this file points you at the source of truth — it does not replace it.
 
 ---

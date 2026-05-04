@@ -17,11 +17,12 @@
 ## Environment
 
 - Repo: C:\ANTIGRAVITY (git, branch: main)
-- Backend: C:\ANTIGRAVITY\youandinotai (FastAPI)
-- Frontend: C:\ANTIGRAVITY\youandinotai (React 19)
-- Docker postgres: localhost:5432 (uandinotai-postgres container)
+- Backend (FastAPI): C:\ANTIGRAVITY\backend\fastapi-app
+- Frontend (Next.js 15 / React 19): C:\ANTIGRAVITY\antigravity
+- Cloudflare Pages deploy dist: C:\ANTIGRAVITY\_deploy\youandinotai
+- Postgres compose: C:\ANTIGRAVITY\youandinotai-api\docker-compose.yml (uandinotai-postgres on localhost:5432)
 - Ollama: localhost:11434
-- Paperclip: localhost:3100
+- Paperclip: localhost:3100 / paperclip-hq.youandinotai.com
 
 ## Runtime Env (injected)
 

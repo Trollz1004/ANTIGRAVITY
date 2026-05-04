@@ -7,14 +7,15 @@
 ## On Each Heartbeat
 
 1. Check assigned issues for new technical tasks
-2. Verify CI status — last push green or red
+2. Verify CI status — last push green or red (`.github/workflows/ci-validate.yml`, `daily-doctrine-audit.yml`, `deploy-gcr.yml`, `hermes-integrity-watchdog.yml`)
 3. Review any open PRs for merge readiness
-4. Check infra health: Cloudflare tunnels, GCP Cloud Run, Paperclip HQ
-5. Flag any blocked technical work to CEO
+4. Check infra health: Cloudflare tunnels (openclaw, mcp), GCP Cloud Run (ai-collab4kids), Paperclip HQ
+5. Confirm Opus Guardian score is still ≥ 96% — if a recent commit lowered it, open a HIGH issue
+6. Flag any blocked technical work to CEO
 
 ## Escalation
 
-CI failure or infra down → create URGENT issue and notify CEO immediately.
+CI failure, infra down, or Opus Guardian score drop → create URGENT issue assigned to CEO and notify Josh immediately.
 
 ## Health Indicators
 

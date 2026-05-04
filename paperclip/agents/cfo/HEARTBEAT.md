@@ -14,7 +14,7 @@
 
 ## Escalation
 
-If 10% reserve rule is violated or charity routing language appears → create URGENT issue immediately.
+If 10% reserve rule is violated or charity routing language appears → create URGENT issue assigned to CEO (c4b4a3d9) immediately. If the violation is in code, mirror the issue to CTO (b02a21c7); if in customer-facing copy, mirror to CMO (2c40ae74). Notify Josh directly if reserve compliance is broken.
 
 ## Health Indicators
 

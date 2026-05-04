@@ -41,7 +41,7 @@ YouAndINotAI (youandinotai.com) is a social platform for good — real-world mee
 - Financial audit → CFO (cf6c84e2)
 - DAO strategy → CSO (5d844d41)
 - Design specs → UX Designer (bd6d6722)
-- Mission violations → flag to Mission Guardians, then Josh
+- Mission Guardian flags (you receive them; they are already URGENT) → route fix to the right agent, confirm closure, escalate to Josh if unresolved within one heartbeat
 
 ## The Four DAOs (Context, Not Your Job to Build)
 

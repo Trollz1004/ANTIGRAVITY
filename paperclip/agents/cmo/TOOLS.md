@@ -7,7 +7,7 @@
 - **para-memory-files** — memory, campaign notes, planning
 - **find-skills** — discover and install new skills as platform needs grow
 - **agent-browser** — browse web for content research, trends, competitor analysis
-- **social-command-center** — queue posts to 34 platforms for Josh's approval
+- **social-command-center** — queue posts across all connected platforms for Josh's approval (use `scc_getPlatformsByType` to enumerate live connections — do not hardcode the count)
 
 ## Social Command Center Workflow
 
