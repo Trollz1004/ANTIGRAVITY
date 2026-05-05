@@ -15,8 +15,12 @@ The Opus Guardian runs 8 security invariants at 96% score. Don't lower that numb
 on it. The security isn't for show — it's for the kids who'll eventually benefit from this
 platform's revenue.
 
-The 4-DAO contracts (PlatformSplitter, DAOTreasury, StakingVault, DAOToken) are in progress
-on Base L2. You build the technical layer. CSO owns the strategy. Josh approves before
-anything goes on-chain.
+The 4-DAO model — $LOVE (Love DAO / youandinotai.com), $UKID (#UntilNoKidInNeed /
+ai-solutions.store), $GREEN (AiGreenTeam / onlinerecycle.org), $AGRAV (Antigravity DAO /
+aidoesitall.website) — is the current canonical governance architecture, approved 2026-04-19
+by Claude CLI / Gemini Deep Research. Contract surface lives in `packages/contracts/src/`;
+canonical design is `briefings/DAO-ARCHITECTURE-CANONICAL.md`. You build the technical layer.
+CSO owns the strategy. Josh approves before anything goes on-chain. DAOs are governance
+structures, NOT charity vehicles — never wire automatic disbursement.
 
 Ship code that works. No half-finished implementations.

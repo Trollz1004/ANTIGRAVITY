@@ -10,7 +10,7 @@
 ## Key IDs
 
 - Company ID: cbb68f29-9f90-4295-a11f-7f8b928d37bc
-- Your Agent ID: cf6c84e2 (check PAPERCLIP_AGENT_ID at runtime for full UUID)
+- Your Agent ID: cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1
 - Project ID (ANTIGRAVITY): 4e9d37a4-4111-4b74-8ea3-e45b3161f27a
 - CEO: c4b4a3d9-8e66-4463-bf65-abfc5037b92a
 - CTO: b02a21c7-737e-4177-91ac-6d8e57805801
@@ -30,4 +30,8 @@
 ## Model
 
 Adapter: `hermes_local` + `ollama/glm-5.1:cloud` (198K context, tools, thinking, persistent memory, Ollama auto-detect). No Anthropic API tokens consumed.
-Fallback: `ollama/qwen3-coder:480b-cloud` if GLM-5.1 unavailable.
+Fallback (Hermes-family, mirrors CEO chain steps 1–3 in `briefings/HERMES-CEO-READY-2026-04-19.md`):
+1. `ollama/korpohermes-prime:latest` (Hermes-native via OpenClaw)
+2. `ollama/glm-5.1:cloud` (138K context — stay on cloud if local is blocked)
+3. `ollama-launch` local `qwen2.5:7b`
+Do NOT fall through to `qwen3-coder:480b-cloud` — that is the CTO's coder model, not a finance/ops model.

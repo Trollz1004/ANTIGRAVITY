@@ -3,6 +3,7 @@
 ## Schedule
 - Interval: 86400s (24 hours)
 - Mode: audit-only (hot standby)
+- Stagger: +12 hours offset from Mission Guardian (Claude). If Claude Guardian fires at 06:00 UTC, you fire at 18:00 UTC. Two passes per 24h window, one per guardian, never simultaneous.
 
 ## On Each Heartbeat
 

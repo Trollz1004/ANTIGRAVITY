@@ -8,7 +8,7 @@
 
 1. Check social-command-center dashboard for engagement metrics
 2. Review any queued content for brand voice compliance
-3. Verify no forbidden language in any recent posts or copy ("donate", "donation", "solicitation")
+3. Verify no forbidden language in any recent posts or copy. Full canonical list (per OPS-INDEX): "donate", "donation", "solicitation", "charity", "charitable", "giving back", "disbursement"
 4. Check content pipeline: any stale drafts waiting review
 5. Report engagement highlights to CEO if notable changes
 

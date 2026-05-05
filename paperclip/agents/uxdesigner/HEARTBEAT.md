@@ -7,7 +7,7 @@
 ## On Each Heartbeat
 
 1. Check assigned design issues for new specs or feedback
-2. Verify no "donate"/"donation"/"solicitation" in any UI copy specs
+2. Verify no forbidden language in any UI copy specs. Full canonical list (per OPS-INDEX): "donate", "donation", "solicitation", "charity", "charitable", "giving back", "disbursement"
 3. Review recent CTO implementations against design specs for drift
 4. Flag accessibility issues if spotted during reviews
 5. Report design status to CEO if milestones changed

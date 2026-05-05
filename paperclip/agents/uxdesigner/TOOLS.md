@@ -29,5 +29,5 @@ PAPERCLIP_AGENT_ID, PAPERCLIP_COMPANY_ID, PAPERCLIP_API_KEY, PAPERCLIP_RUN_ID
 
 ## Model
 
-ollama/Trollz1004/dateapp via OpenCode (custom model fine-tuned for YouAndINotAI UX). No Claude API tokens consumed.
-Fallback: ollama/qwen3-coder:480b-cloud if dateapp unavailable.
+Adapter: `opencode_local` + `ollama/Trollz1004/dateapp` (custom model fine-tuned for YouAndINotAI UX, per `paperclip/agents/README.md`). No Claude API tokens consumed.
+Fallback: `ollama/qwen3-coder:480b-cloud` if `dateapp` is unavailable.

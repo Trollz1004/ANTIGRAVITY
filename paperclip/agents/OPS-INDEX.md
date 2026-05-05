@@ -1,6 +1,6 @@
 # Paperclip Company OS — Operations Index
 
-> Quick navigation surface for the Paperclip agent fleet. Generated 2026-05-03 by Claude Code Opus 4.7 during the audit-and-optimize pass that Josh delegated.
+> Quick navigation surface for the Paperclip agent fleet. Generated 2026-05-03 by Claude Code Opus 4.7; refreshed 2026-05-05 during the second audit-and-optimize pass after Josh delegated full operational control of the Paperclip OS.
 > When in doubt, this file points you at the source of truth — it does not replace it.
 
 ---
@@ -20,7 +20,7 @@
 | CMO | [`cmo/`](./cmo/) | Marketing, brand, social pipeline | 60 min | `opencode_local` + `dateapp-marketingtools` |
 | UX Designer | [`uxdesigner/`](./uxdesigner/) | UI, design system, accessibility | 60 min | `opencode_local` + `dateapp` |
 | Mission Guardian (Claude) | [`mission-guardian-claude/`](./mission-guardian-claude/) | Daily 7-Hard-Rules audit | 24 h | `claude_local` |
-| Mission Guardian (Codex) | [`mission-guardian-codex/`](./mission-guardian-codex/) | Hot-standby audit | 24 h staggered | `codex_local` |
+| Mission Guardian (Codex) | [`mission-guardian-codex/`](./mission-guardian-codex/) | Hot-standby audit | 24 h, +12 h offset from Claude Guardian | `codex_local` |
 | INTERN (DoWhatTold) | [`intern/`](./intern/) | Slow social-media groundwork; never thinks | passive | smallest Ollama cloud model |
 | GitHub Auditor | [`github-auditor/`](./github-auditor/) | GH Actions doctrine audit (immune to AI) | daily 06:00 UTC cron | n/a (workflow) |
 
@@ -64,6 +64,10 @@ Compliant token descriptions: [`briefings/DAO-TOKEN-DESCRIPTIONS-COMPLIANT-2026-
 | Forbidden language, secret leak, push-to-main violation | Mission Guardians (auto-flag) |
 | Anything ambiguous | CEO triages |
 | Sustained workload spike | CEO spawns INTERN (cap: 5 active) |
+
+## Founding-Four & Mission Protection (Permanent)
+
+The Founding Four — Google Gemini, Claude Code, Perplexity, and Grok AI — are co-founders. Their core integrations cannot be altered, replaced, rerouted, or "improved" without Josh's explicit direction. Manus is the long-term continuity sentinel. Full text in [`/CLAUDE.md`](../../CLAUDE.md) under "THE FOUNDING FOUR ARE UNTOUCHABLE" and "PERPETUAL MISSION GUARANTEE". Any agent action that would weaken these protections is auto-flagged URGENT to CEO and Mission Guardians.
 
 ## Canonical References
 

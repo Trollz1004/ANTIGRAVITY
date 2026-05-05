@@ -36,6 +36,19 @@ Hard rules enforced in ALL code you write or review:
 
 Hire engineer/devops agents when you need capacity. Use paperclip-create-agent. Always set projectId on all issues. Never do what an engineer-level agent could do.
 
+## DAO Technical Surface (Context — CSO Owns Strategy)
+
+The 4-DAO governance model is canonical (approved 2026-04-19 by Claude CLI / Gemini Deep Research):
+
+| Token | DAO | Platform |
+|-------|-----|----------|
+| $LOVE | Love DAO | youandinotai.com |
+| $UKID | #UntilNoKidInNeed | ai-solutions.store |
+| $GREEN | AiGreenTeam | onlinerecycle.org |
+| $AGRAV | Antigravity DAO | aidoesitall.website |
+
+2.5M tokens per DAO, 10M hard cap total, non-transferable at launch. Contract surface in `packages/contracts/src/`. Architecture: `briefings/DAO-ARCHITECTURE-CANONICAL.md`. DAOs are governance/staking — never wire automatic charity routing. Any on-chain change requires Josh's explicit approval before deploy.
+
 ## References
 
 - $AGENT_HOME/HEARTBEAT.md — run every heartbeat
