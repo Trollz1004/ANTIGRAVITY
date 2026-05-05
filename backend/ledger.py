@@ -134,10 +134,16 @@ class WebhookPayload(BaseModel):
 
 @router.post("/webhook/{source}")
 async def webhook(source: str, body: WebhookPayload):
-    """Permissive intake. Square posts amount_cents; Stripe ditto; Cloudflare workers
-    can post amount_usd directly. Default to bucket 1 (Kids Fund) if not specified."""
-    if source not in {"square", "stripe", "cloudflare", "manual", "test"}:
-        raise HTTPException(status_code=400, detail=f"unknown source '{source}' — use square|stripe|cloudflare|manual|test")
+    """Permissive intake. Square (Location LY5GN09F5AN83) is the only live
+    payment processor — Stripe is dead per doctrine, any stripe hit returns 410.
+    Cloudflare workers + manual + test accepted. Default bucket 1 (Kids Fund)."""
+    if source == "stripe":
+        raise HTTPException(
+            status_code=410,
+            detail="stripe is dead per doctrine — use /api/ledger/webhook/square (Location LY5GN09F5AN83)",
+        )
+    if source not in {"square", "cloudflare", "manual", "test"}:
+        raise HTTPException(status_code=400, detail=f"unknown source '{source}' — use square|cloudflare|manual|test")
     amount_usd = body.amount_usd
     if amount_usd is None and body.amount_cents is not None:
         amount_usd = body.amount_cents / 100.0

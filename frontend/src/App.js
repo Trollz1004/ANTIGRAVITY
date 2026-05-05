@@ -14,6 +14,7 @@ import { MissionMode } from "./modes/MissionMode";
 import { RoundtableMode } from "./modes/RoundtableMode";
 import { TasksMode } from "./modes/TasksMode";
 import { LedgerMode } from "./modes/LedgerMode";
+import { GraphifyMode } from "./modes/GraphifyMode";
 import { MissionRibbon } from "./components/MissionRibbon";
 import { SettingsPanel } from "./components/SettingsPanel";
 
@@ -41,6 +42,7 @@ export default function App() {
       case "roundtable": return <RoundtableMode />;
       case "tasks":      return <TasksMode />;
       case "ledger":     return <LedgerMode />;
+      case "graphify":   return <GraphifyMode />;
       case "settings":   return <SettingsPanel />;
       default:           return <MissionMode />;
     }
