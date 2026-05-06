@@ -1,4 +1,4 @@
-# Removes the final legacy Paperclip drift after reboot/logon clears stale file handles.
+﻿# Removes the final legacy Paperclip drift after reboot/logon clears stale file handles.
 
 $ErrorActionPreference = 'Stop'
 

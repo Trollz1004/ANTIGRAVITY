@@ -1,4 +1,4 @@
-# Creates an ANTIGRAVITY desktop shortcut that launches everything
+﻿# Creates an ANTIGRAVITY desktop shortcut that launches everything
 # Run once — no admin needed
 
 $Desktop = [Environment]::GetFolderPath("Desktop")

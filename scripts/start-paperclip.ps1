@@ -1,4 +1,4 @@
-# Start Paperclip HQ on :3100 with all required env vars loaded from the
+﻿# Start Paperclip HQ on :3100 with all required env vars loaded from the
 # OneDrive-backed master env vault. The active instance lives at
 # C:\Users\joshl\.paperclip\instances\default.
 #

@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 
 function Write-Status($Name, $Status, $Detail) {
   Write-Host ("[{0}] {1} - {2}" -f $Status, $Name, $Detail)

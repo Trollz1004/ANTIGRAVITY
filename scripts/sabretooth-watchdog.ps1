@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Continue'
+﻿$ErrorActionPreference = 'Continue'
 
 $LogDir     = 'C:\ANTIGRAVITY\logs'
 $LogFile    = "$LogDir\sabretooth-watchdog.log"

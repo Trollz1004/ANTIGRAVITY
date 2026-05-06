@@ -1,4 +1,4 @@
-# Mission stack unified bootstrap.
+﻿# Mission stack unified bootstrap.
 #
 # Brings up the entire Sabretooth cockpit in dependency order:
 #   1. Docker Desktop
@@ -109,7 +109,10 @@ $hermesPid = $null
 try { $hermesPid = (wsl -d Ubuntu -- pgrep -f hermes_router.py 2>$null | Select-Object -First 1) } catch {}
 if ([string]::IsNullOrWhiteSpace($hermesPid)) {
     Log '[3/8] starting Hermes Router (WSL background)'
-    $hermesCmd = 'nohup bash /mnt/c/Antigravity/scripts/start-hermes-router.sh > /tmp/hermes-router.log 2>&1 & disown'
+    # Bash command built from [char]38 because PowerShell 5.1 refuses literal
+    # ampersands anywhere in the source file (even comments) due to a parser bug.
+    $a = [char]38
+    $hermesCmd = "nohup bash /mnt/c/Antigravity/scripts/start-hermes-router.sh > /tmp/hermes-router.log 2>${a}1 ${a} disown"
     $hermesArgs = @('-d','Ubuntu','--','bash','-lc',$hermesCmd)
     Start-Process wsl -ArgumentList $hermesArgs -WindowStyle Hidden -ErrorAction SilentlyContinue
 } else {
@@ -175,19 +178,21 @@ if (Test-Path $mcWatchdogLog) {
 # Spawn a hidden powershell that polls port 18789 for up to 90s,
 # then opens the canvas URL — survives this script's exit.
 Log '[7/8] scheduling OpenClaw dashboard browser-open (waits for :18789)'
-$openclawWait = @'
-for ($i = 0; $i -lt 45; $i++) {
-    try {
-        $c = New-Object System.Net.Sockets.TcpClient
-        $a = $c.BeginConnect('127.0.0.1', 18789, $null, $null)
-        $ok = $a.AsyncWaitHandle.WaitOne(1000, $false)
-        $c.Close()
-        if ($ok) { Start-Process 'http://127.0.0.1:18789/__openclaw__/canvas/'; exit }
-    } catch {}
-    Start-Sleep -Seconds 2
+$openclawBlock = {
+    for ($i = 0; $i -lt 45; $i++) {
+        try {
+            $c = New-Object System.Net.Sockets.TcpClient
+            $a = $c.BeginConnect('127.0.0.1', 18789, $null, $null)
+            $ok = $a.AsyncWaitHandle.WaitOne(1000, $false)
+            $c.Close()
+            if ($ok) { Start-Process 'http://127.0.0.1:18789/__openclaw__/canvas/'; exit }
+        } catch {}
+        Start-Sleep -Seconds 2
+    }
 }
-'@
-Start-Process powershell.exe -ArgumentList '-NonInteractive','-WindowStyle','Hidden','-Command',$openclawWait -WindowStyle Hidden -ErrorAction SilentlyContinue
+$openclawCmd = $openclawBlock.ToString()
+$openclawArgs = @('-NonInteractive','-WindowStyle','Hidden','-Command',$openclawCmd)
+Start-Process powershell.exe -ArgumentList $openclawArgs -WindowStyle Hidden -ErrorAction SilentlyContinue
 
 # ---------- 8. Terminal windows ----------
 # Open Claude Code at c:\Antigravity (lowercase to match resume cache)

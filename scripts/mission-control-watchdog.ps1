@@ -1,4 +1,4 @@
-# Mission Control API Watchdog
+﻿# Mission Control API Watchdog
 # Purpose: Monitor MC API (8787) and restart if down, log all checks
 # How to run: .\mission-control-watchdog.ps1 from elevated PowerShell
 # How to stop: Ctrl+C or stop scheduled task
