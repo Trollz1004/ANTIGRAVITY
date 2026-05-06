@@ -2,7 +2,7 @@ import React from 'react';
 import { Heart, Share2 } from 'lucide-react';
 
 export const TopBar: React.FC = () => (
-  <div className="flex items-center justify-between bg-panel px-4 py-2 border-b border-border">
+  <div data-testid="topbar" className="flex items-center justify-between bg-panel px-4 py-2 border-b border-border">
     <div className="flex items-center gap-6 text-xs font-mono">
       <span className="text-accentMagenta flex items-center gap-1">
         <Heart size={12} /> #UntilNoKidInNeed

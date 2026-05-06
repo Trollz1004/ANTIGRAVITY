@@ -20,7 +20,7 @@ const modes = [
 export const Sidebar: React.FC = () => {
   const [active, setActive] = useState('mission');
   return (
-    <aside className="w-56 bg-panel border-r border-border flex flex-col overflow-y-auto">
+    <aside data-testid="sidebar" className="w-56 bg-panel border-r border-border flex flex-col overflow-y-auto">
       <div className="p-3 space-y-1">
         {modes.map(m => {
           const Icon = m.icon;
