@@ -34,4 +34,6 @@ mkdir -p "$(dirname "$LOG_FILE")"
 } >> "$LOG_FILE" 2>&1
 
 # Use the unified OpenCode launcher instead of Hermes
-exec /mnt/c/ANTIGRAVITY/paperclip-adapters/opencode-unified.cmd chat
+# IMPORTANT: .cmd files must run through cmd.exe in WSL, not directly as bash scripts
+# Otherwise Windows batch commands (@echo, setlocal, etc.) are interpreted as bash
+cmd.exe /c "C:\ANTIGRAVITY\paperclip-adapters\opencode-unified.cmd" chat

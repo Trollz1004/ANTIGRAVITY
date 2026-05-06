@@ -1,4 +1,8 @@
-export const API_BASE = (import.meta.env.VITE_API_URL ?? 'http://localhost:8787').replace(/\/$/, '');
+// Default to relative paths so the dashboard works whatever origin it's served from
+// (localhost:8787, 127.0.0.1:8787, LAN IP, future tunnel — all same-origin to the API).
+// Override only when running the Vite dev server separately from the API:
+//   echo "VITE_API_URL=http://localhost:8787" > apps/mission-control/.env.local
+export const API_BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
 
 export type Envelope<T = any> = {
   status: 'ok' | 'degraded' | 'unreachable';

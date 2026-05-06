@@ -42,35 +42,35 @@ LOCAL_MODEL="qwen3-coder:480b-cloud"
 
 # Try primary model first
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Attempting to use primary model: $PRIMARY_MODEL" >> "$LOG_FILE"
-if /mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd --model "$PRIMARY_MODEL" chat; then
+if cmd.exe /c "/mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd" --model "$PRIMARY_MODEL" chat; then
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] Primary model succeeded" >> "$LOG_FILE"
   exit 0
 fi
 
 # If primary fails, try fallbacks
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Primary model failed, trying fallback 1: $FALLBACK1_MODEL" >> "$LOG_FILE"
-if /mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd --model "$FALLBACK1_MODEL" chat; then
+if cmd.exe /c "/mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd" --model "$FALLBACK1_MODEL" chat; then
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] Fallback 1 succeeded" >> "$LOG_FILE"
   exit 0
 fi
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Fallback 1 failed, trying fallback 2: $FALLBACK2_MODEL" >> "$LOG_FILE"
-if /mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd --model "$FALLBACK2_MODEL" chat; then
+if cmd.exe /c "/mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd" --model "$FALLBACK2_MODEL" chat; then
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] Fallback 2 succeeded" >> "$LOG_FILE"
   exit 0
 fi
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Fallback 2 failed, trying fallback 3: $FALLBACK3_MODEL" >> "$LOG_FILE"
-if /mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd --model "$FALLBACK3_MODEL" chat; then
+if cmd.exe /c "/mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd" --model "$FALLBACK3_MODEL" chat; then
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] Fallback 3 succeeded" >> "$LOG_FILE"
   exit 0
 fi
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] All cloud models failed, trying local Ollama model: $LOCAL_MODEL" >> "$LOG_FILE"
-if /mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd --model "ollama/$LOCAL_MODEL" chat; then
+if cmd.exe /c "/mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd" --model "ollama/$LOCAL_MODEL" chat; then
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] Local Ollama model succeeded" >> "$LOG_FILE"
   exit 0
 fi
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] All models failed, falling back to default OpenCode" >> "$LOG_FILE"
-exec /mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd chat
+exec cmd.exe /c "/mnt/c/Users/joshl/AppData/Roaming/npm/opencode.cmd" chat

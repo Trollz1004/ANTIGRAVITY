@@ -25,10 +25,26 @@ from pathlib import Path
 # ── Config ──────────────────────────────────────────────────────
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-API_DIR = ROOT / "youandinotai-api"
+
+# The customer-facing API may live at any of these paths depending on node:
+#   Sabretooth: API not local (lives on T5500) → API_DIR will not exist; checks skip
+#   T5500: services/youandinotai-api/ or youandinotai-api/ at repo root
+# We resolve to the first one that exists; otherwise API_DIR stays unresolved
+# and AUTH_COVERAGE / PII / RAW_SQL checks degrade to WARN ("API not on this node").
+_API_CANDIDATES = [
+    ROOT / "services" / "youandinotai-api",
+    ROOT / "youandinotai-api",
+    ROOT / "apps" / "youandinotai-api",
+]
+API_DIR = next((p for p in _API_CANDIDATES if p.exists()), _API_CANDIDATES[0])
 APP_DIR = API_DIR / "app"
 ROUTERS_DIR = APP_DIR / "routers"
-FRONTEND_DIR = ROOT / "youandinotai"
+
+_FRONTEND_CANDIDATES = [
+    ROOT / "apps" / "youandinotai",
+    ROOT / "youandinotai",
+]
+FRONTEND_DIR = next((p for p in _FRONTEND_CANDIDATES if p.exists()), _FRONTEND_CANDIDATES[-1])
 
 # Endpoints that are intentionally public (no auth)
 PUBLIC_ENDPOINTS = {
@@ -166,7 +182,9 @@ def check_no_hardcoded_secrets(result: GuardianResult):
 def check_auth_coverage(result: GuardianResult):
     """Verify all router endpoints require authentication."""
     if not ROUTERS_DIR.exists():
-        result.fail("AUTH_COVERAGE", "Routers directory not found")
+        # The customer-facing API lives on T5500, not Sabretooth. Skip with WARN
+        # rather than FAIL so a single-node guardian run doesn't false-flag.
+        result.warn("AUTH_COVERAGE", f"API routers not on this node ({ROUTERS_DIR}); run guardian on the T5500 box for the real check")
         return
 
     for router_file in ROUTERS_DIR.glob("*.py"):
