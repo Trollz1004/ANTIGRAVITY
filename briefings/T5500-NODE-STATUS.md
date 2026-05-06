@@ -47,6 +47,21 @@ foreach ($p in 5432,6333,6334,6379,3200) {
 Get-NetFirewallRule -DisplayName "T5500 LAN *" | Remove-NetFirewallRule
 ```
 
+## Gotcha — Network Profile Must Be Private
+
+Firewall rules added by `lan-bind.ps1` are scoped to the **Private** profile only.
+Windows defaults unidentified networks to **Public**, which silently drops LAN
+traffic and makes Sabretooth's wire test refuse every port even though the
+0.0.0.0 listeners are live.
+
+```powershell
+Get-NetConnectionProfile                                            # check
+Set-NetConnectionProfile -InterfaceAlias 'Ethernet' -NetworkCategory Private
+```
+
+Loopback Test-NetConnection on T5500 itself still succeeds even when Public,
+so always wire-test from Sabretooth (192.168.0.8) to confirm.
+
 ## Remaining Blockers
 
 - **Paperclip cred mismatch on Sabretooth** (`cl_user`) — unblock with `paperclipai configure --section database`. Not a T5500 issue.
