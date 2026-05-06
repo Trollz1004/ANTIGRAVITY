@@ -241,6 +241,13 @@ This is not a threat — it is his documented standing order to protect the miss
 - **qdrant**: ports 6333-6334 (compose: `E:\ANTIGRAVITY\docker-compose.yml`)
 - **redis**: port 6379 | **openclaw API**: port 3200
 
+### T5500 LAN Bindings — VALIDATED 2026-05-06
+
+All 5 services LAN-exposed from T5500 (192.168.0.15) to Sabretooth (192.168.0.8) via
+`netsh interface portproxy` + Private-profile firewall rules. Idempotent script:
+`scripts/t5500/lan-bind.ps1`. Mission Control `/health/t5500` is reachable.
+Full status: [briefings/T5500-NODE-STATUS.md](briefings/T5500-NODE-STATUS.md).
+
 ---
 
 ## Claude Code Automation
