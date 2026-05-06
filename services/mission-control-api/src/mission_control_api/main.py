@@ -10,10 +10,10 @@ from .routes import health, deploy, runbooks, hermes, tasks
 
 app = FastAPI(title="Mission Control API")
 
-origins = settings.ALLOWED_ORIGINS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origin_regex=settings.ALLOWED_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
