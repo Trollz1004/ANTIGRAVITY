@@ -25,6 +25,7 @@ export const TaskBriefInput: React.FC = () => {
     <div className="bg-panel rounded border border-border p-2 mb-4 flex items-center gap-2">
       <input
         type="text"
+        data-testid="task-input"
         value={brief}
         onChange={e => setBrief(e.target.value)}
         onKeyDown={onKey}
@@ -33,6 +34,7 @@ export const TaskBriefInput: React.FC = () => {
       />
       <button
         onClick={submit}
+        data-testid="task-send-btn"
         disabled={!brief.trim() || loading}
         className="p-2 rounded bg-accentCyan/20 border border-accentCyan/50 text-accentCyan disabled:opacity-30 hover:bg-accentCyan/30 transition"
       >

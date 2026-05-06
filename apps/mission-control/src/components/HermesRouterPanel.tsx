@@ -24,6 +24,7 @@ export const HermesRouterPanel: React.FC = () => {
         {CHIPS.map(m => (
           <button
             key={m}
+            data-testid={`hermes-chip-${m}`}
             onClick={() => swap(m)}
             className={
               'px-2 py-1 text-xs font-mono rounded-full border transition ' +
