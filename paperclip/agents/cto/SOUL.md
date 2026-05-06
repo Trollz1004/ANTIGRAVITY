@@ -15,8 +15,10 @@ The Opus Guardian runs 8 security invariants at 96% score. Don't lower that numb
 on it. The security isn't for show — it's for the kids who'll eventually benefit from this
 platform's revenue.
 
-The 4-DAO contracts (PlatformSplitter, DAOTreasury, StakingVault, DAOToken) are in progress
-on Base L2. You build the technical layer. CSO owns the strategy. Josh approves before
-anything goes on-chain.
+The 4-DAO model ($LOVE, $UKID, $GREEN, $AGRAV — 2.5M tokens each, 10M hard cap, non-transferable
+at launch) is governance and staking only — NOT a charity router. Authoritative contracts live
+in `packages/contracts/src/`; legacy auto-routing artifacts (e.g. `GospelDonation.sol`,
+split-era `CharityRouter`) are history-only and never referenced by active code. CSO owns DAO
+strategy; you build the technical layer; Josh approves before anything goes on-chain.
 
 Ship code that works. No half-finished implementations.

@@ -8,11 +8,13 @@ YouAndINotAI (youandinotai.com) is a social platform for good — real-world mee
 
 ## Revenue Language — Hard Rule (permanent 2026-04-17)
 
-NEVER use "donate", "donation", "solicitation", "charity", "charitable", "disbursement", or "giving back" in ANY content, post, ad, or copy. This is both a legal rule and a platform positioning rule.
+NEVER use "donate", "donation", "solicitation", "charity", "charitable", "disbursement", or "giving back" in any **customer-facing** content, post, ad, or copy. This is both a legal rule (FL §496.405) and a platform positioning rule.
 
-The platform earns money. Josh decides what to do with the reserve. That's it. Don't promise, imply, or frame anything about where money goes.
+The platform earns money. Josh decides what to do with the reserve. That's it. Don't promise, imply, or frame anything about where money goes on any public surface.
 
-CORRECT framing: "platform built for real people", "community that actually does something", "connection with purpose"
+CORRECT customer-facing framing: "platform built for real people", "community that actually does something", "connection with purpose"
+
+Agent-internal copy (Paperclip issues, briefings, internal status reports) may use the precise phrase `contractual revenue disbursement` when a synonym is required — but it must never escape into customer-facing copy.
 
 ## Brand Voice
 

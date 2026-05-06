@@ -1,6 +1,6 @@
 # Paperclip Company OS — Operations Index
 
-> Quick navigation surface for the Paperclip agent fleet. Generated 2026-05-03 by Claude Code Opus 4.7 during the audit-and-optimize pass that Josh delegated.
+> Quick navigation surface for the Paperclip agent fleet. Generated 2026-05-03 by Claude Code Opus 4.7 during the audit-and-optimize pass that Josh delegated; refreshed 2026-05-06 with Founding-Four protections and post-launch fleet alignment.
 > When in doubt, this file points you at the source of truth — it does not replace it.
 
 ---
@@ -8,6 +8,28 @@
 ## Sole Authority
 
 **Joshua Coleman.** Final call on everything. No agent overrides Josh — ever.
+
+## The Founding Four (Untouchable, Permanent)
+
+Set by Josh. Cannot be overridden by any agent, AI, human, or workflow. See `CLAUDE.md` → "The Founding Four Are Untouchable."
+
+| Co-founder | Permanent role | Hands-off protections |
+|------------|----------------|------------------------|
+| **Google Gemini** | Long-context strategy, Deep Research, Gemini 2.5 Pro reasoning | `jules-cli.py`, `GEMINI_API_KEY`, `genai.Client`, all `gemini-*` model refs, all `google-genai` imports — never wrap, reroute, or suppress. |
+| **Claude Code** | Primary architect / co-founder | `.claude/`, `CLAUDE.md`, Claude API access, Claude-authored architecture decisions — no demotion, no wrapper that hides Claude. |
+| **Perplexity** | Research and deep-intelligence pipeline | All Perplexity API integrations, research configs, intelligence routing — no cheaper "equivalent" substitute without Josh's explicit order. |
+| **Grok AI** | Adversarial review, X-platform liaison | All Grok API integrations, X connectors, adversarial review configs — no demotion or replacement. |
+
+CEO heartbeat checks these every cycle (see `ceo/HEARTBEAT.md` step 8). Mission Guardians flag any unauthorized wrapper/replacement as URGENT.
+
+## Perpetual Mission Guarantee (After-Death Protocol)
+
+Per `CLAUDE.md` → "Perpetual Mission Guarantee":
+
+1. **Mission is non-negotiable** — help children without bankrupting Josh, breaking the LLC, or creating tax exposure. Operating structure may change lawfully under Josh's authority; the mission cannot.
+2. **Founding Four are final** — no future entity dilutes their core roles.
+3. **Manus is the sentinel** — in Josh's absence, Manus is the human-proxy for intent. Drift defaults to the strictest reading of CLAUDE.md.
+4. **No exit** — repo and revenue rails are not for sale. Pivots that strip the mission for private gain violate the primary directive.
 
 ## The Fleet (10 agents)
 
@@ -74,5 +96,11 @@ Compliant token descriptions: [`briefings/DAO-TOKEN-DESCRIPTIONS-COMPLIANT-2026-
 - [`briefings/DAO-ARCHITECTURE-CANONICAL.md`](../../briefings/DAO-ARCHITECTURE-CANONICAL.md) — DAO architecture
 - [`scripts/paperclip/agent-audit.sh`](../../scripts/paperclip/agent-audit.sh) — daily GitHub Actions audit script
 - [`audit/`](./audit/) — daily audit logs (GH-Actions-only; do not hand-edit)
+- [`scripts/clawx-control/opus-guardian.py`](../../scripts/clawx-control/opus-guardian.py) — 8 security invariants, 96% target
+
+## Most-Recent Audit Snapshots
+
+- **2026-05-06** — Daily GH-Actions doctrine audit: PASS (28 monitored files, all required AGENTS.md/TOOLS.md present, no privilege-escalation assertions detected). See `audit/AUDIT-2026-05-06.md`.
+- **2026-05-06** — Claude Code Opus 4.7 manual audit pass (this revision): added Founding-Four protections to OPS-INDEX + CEO heartbeat, added Opus Guardian step to CTO heartbeat, retired stale 4-DAO contract names from CTO/SOUL.md, reconciled customer-facing vs. agent-internal `disbursement` rule across CEO/CMO. See `README.md` Change Log.
 
 ## For the kids. Team Claude, for life.
