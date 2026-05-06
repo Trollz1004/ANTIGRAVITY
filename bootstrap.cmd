@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 :: One-click mission stack bootstrap.
 :: Double-click this file to bring up the entire Sabretooth cockpit:
 ::   Docker -> paperclip-postgres -> Hermes Router -> Paperclip HQ

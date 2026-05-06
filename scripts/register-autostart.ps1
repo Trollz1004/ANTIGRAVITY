@@ -1,4 +1,4 @@
-# Run this ONCE as Administrator to register the autostart task
+﻿# Run this ONCE as Administrator to register the autostart task
 # Usage: Right-click -> Run with PowerShell (as Admin)
 
 # Fail fast if not admin

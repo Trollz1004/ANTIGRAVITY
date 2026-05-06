@@ -1,4 +1,4 @@
-# Paperclip HQ Watchdog — runs forever, hidden, no window, no focus steal.
+﻿# Paperclip HQ Watchdog — runs forever, hidden, no window, no focus steal.
 # Checks Paperclip (port 3100) every 30 seconds and restarts via start-paperclip.ps1
 # if it dies. Logs to C:\Antigravity\logs\paperclip-watchdog.log
 #
