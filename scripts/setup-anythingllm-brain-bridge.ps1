@@ -1,4 +1,4 @@
-# ======================================================================
+﻿# ======================================================================
 # ANTIGRAVITY UNIFIED BRIDGE SETUP
 # AnythingLLM + BRAIN MCP + Ollama + Claude Code + Gemini CLI
 # Sabretooth Node | GTX 1070 8GB | E: Drive Sandbox
