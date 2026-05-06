@@ -16,7 +16,7 @@ Checks:
     6. Pydantic validation on all inputs
     7. No raw SQL (SQLAlchemy ORM only)
     8. .env exists with required keys
-
+"""
 import os
 import re
 import sys

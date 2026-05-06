@@ -111,6 +111,10 @@ logs/*.err
 logs/*.log
 t5500-*.png
 
+# Graphify knowledge-graph state — regenerated locally by post-commit hook
+.graphify/
+graphify-out/
+
 # External tool clones (e.g. cff-initializer-javascript, gemini-cli) belong outside this repo per 1-folder rule
 cff-initializer-javascript/
 gemini-cli/

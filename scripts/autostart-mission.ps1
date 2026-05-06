@@ -76,6 +76,28 @@ if (-not $watchdogRunning) {
     Log 'Paperclip watchdog already running'
 }
 
+# ---------- 3c. Mission Control API (FastAPI on :8787) ----------
+$missionApiCwd = "$Repo\services\mission-control-api"
+$missionApiPort = 8787
+$missionApiRunning = $false
+try {
+    $listening = Get-NetTCPConnection -LocalPort $missionApiPort -State Listen -ErrorAction SilentlyContinue
+    if ($listening) { $missionApiRunning = $true }
+} catch {}
+if (-not $missionApiRunning) {
+    if (Test-Path $missionApiCwd) {
+        Log 'starting Mission Control API (uvicorn :8787, hidden)'
+        Start-Process -FilePath 'python.exe' `
+            -ArgumentList '-m','uvicorn','mission_control_api.main:app','--host','127.0.0.1','--port','8787' `
+            -WorkingDirectory $missionApiCwd `
+            -WindowStyle Hidden -ErrorAction SilentlyContinue
+    } else {
+        Log "Mission Control API path missing: $missionApiCwd — skipping"
+    }
+} else {
+    Log "Mission Control API already listening on :$missionApiPort"
+}
+
 # ---------- 4. Claude Code (Opus CLI) in Windows Terminal ----------
 # Opens in lowercase c:\Antigravity to match the existing session cwd casing
 # so `--resume` shows the right session list. See memory:
