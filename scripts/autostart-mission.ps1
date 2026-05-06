@@ -109,9 +109,9 @@ $hermesPid = $null
 try { $hermesPid = (wsl -d Ubuntu -- pgrep -f hermes_router.py 2>$null | Select-Object -First 1) } catch {}
 if ([string]::IsNullOrWhiteSpace($hermesPid)) {
     Log '[3/8] starting Hermes Router (WSL background)'
-    Start-Process wsl -ArgumentList '-d','Ubuntu','--','bash','-lc',
-        'nohup bash /mnt/c/Antigravity/scripts/start-hermes-router.sh > /tmp/hermes-router.log 2>&1 & disown' `
-        -WindowStyle Hidden -ErrorAction SilentlyContinue
+    $hermesCmd = 'nohup bash /mnt/c/Antigravity/scripts/start-hermes-router.sh > /tmp/hermes-router.log 2>&1 & disown'
+    $hermesArgs = @('-d','Ubuntu','--','bash','-lc',$hermesCmd)
+    Start-Process wsl -ArgumentList $hermesArgs -WindowStyle Hidden -ErrorAction SilentlyContinue
 } else {
     Log "[3/8] Hermes Router already running (PID $hermesPid)"
 }
