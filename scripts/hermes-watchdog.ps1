@@ -1,4 +1,4 @@
-# Hermes Router Watchdog — runs forever, completely hidden, no window, no focus steal.
+﻿# Hermes Router Watchdog — runs forever, completely hidden, no window, no focus steal.
 # Checks Hermes Router (port 11435) every 30 seconds.
 # Restarts via WSL on failure. Logs to C:\ANTIGRAVITY\logs\hermes-watchdog.log
 

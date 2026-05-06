@@ -1,4 +1,4 @@
-# Register Paperclip HQ as bulletproof always-on services.
+﻿# Register Paperclip HQ as bulletproof always-on services.
 # Run ONCE as Administrator. Re-run any time to update.
 #
 # Creates two Task Scheduler tasks:

@@ -1,4 +1,4 @@
-# Register Mission Control API as a Windows Scheduled Task
+﻿# Register Mission Control API as a Windows Scheduled Task
 # Always-on: starts at boot + login, auto-restarts on crash every 1 min, no time limit
 $action = New-ScheduledTaskAction `
     -Execute 'python.exe' `
