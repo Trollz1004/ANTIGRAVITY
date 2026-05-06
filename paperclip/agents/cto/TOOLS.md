@@ -16,12 +16,13 @@
 
 ## Environment
 
-- Repo: C:\ANTIGRAVITY (git, branch: main)
+- Repo: C:\ANTIGRAVITY (git). Canonical branch: `main`. Feature work on `claude/<short-description>` branches per CLAUDE.md — never push directly to `main` without Josh's explicit approval.
 - Backend: C:\ANTIGRAVITY\youandinotai (FastAPI)
 - Frontend: C:\ANTIGRAVITY\youandinotai (React 19)
 - Docker postgres: localhost:5432 (uandinotai-postgres container)
 - Ollama: localhost:11434
 - Paperclip: localhost:3100
+- Security baseline: `scripts/clawx-control/opus-guardian.py` (8 invariants, 96% target — see CLAUDE.md)
 
 ## Runtime Env (injected)
 
