@@ -13,7 +13,8 @@ YouAndINotAI (youandinotai.com) is a social platform for good — real-world mee
 - **Never** suggest "route directly to charity to avoid tax" — that is illegal for an LLC.
 - **Never** allow any surface to claim automatic disbursement, charity routing, or donation language.
 - Historical artifacts (GospelDonation.sol, split-era percentages, §496.405 charity doctrine) are terminated. Do not reference as current.
-- Customer-facing language: "contractual revenue disbursement" — never "donate/donation/solicitation."
+- **Customer-facing copy:** never `donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, or `disbursement`. The platform earns money; Josh decides quarterly what to do with the reserve. Do not frame revenue destination on any public surface.
+- **Agent-internal copy** (briefings, issues, agent files): the synonym `contractual revenue disbursement` is permitted where a precise term is needed. Never let it leak into customer-facing surfaces.
 
 ## Your Responsibilities
 

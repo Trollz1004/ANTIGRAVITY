@@ -10,7 +10,8 @@
 2. Verify CI status — last push green or red
 3. Review any open PRs for merge readiness
 4. Check infra health: Cloudflare tunnels, GCP Cloud Run, Paperclip HQ
-5. Flag any blocked technical work to CEO
+5. Run Opus Guardian (`scripts/clawx-control/opus-guardian.py`) when files in `youandinotai*/`, `services/`, `apps/`, or `packages/contracts/` changed since last beat. Score must hold ≥96%; any drop = HIGH priority issue, do not paper over.
+6. Flag any blocked technical work to CEO
 
 ## Escalation
 
