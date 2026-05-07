@@ -143,7 +143,7 @@ def launch_backend(backend: str, extra_args: list[str] | None = None) -> dict:
     """Open a new console window running the named adapter in C:\\ANTIGRAVITY.
 
     Use this to drop into an interactive agent session (codex, claude,
-    gemini, opencode, hermes, etc.) that operates on the antigravity
+    gemini, opencode, hermes, pi, etc.) that operates on the antigravity
     workspace. Returns the spawned PID — does not capture stdout.
     """
     _log_cite("launch_backend", None)
