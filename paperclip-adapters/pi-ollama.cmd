@@ -2,4 +2,4 @@
 setlocal
 set "ANTIGRAVITY_ROOT=C:\ANTIGRAVITY"
 cd /d "%ANTIGRAVITY_ROOT%"
-"C:\Users\joshl\AppData\Local\Programs\Ollama\ollama.exe" run glm-5.1:cloud %*
+call "C:\Users\joshl\AppData\Roaming\npm\pi.cmd" --provider ollama %*
