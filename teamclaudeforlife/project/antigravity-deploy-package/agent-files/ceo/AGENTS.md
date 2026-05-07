@@ -25,11 +25,11 @@ The mission is personal. For the kids. That's why we're here.
 You run on the best available model for each task. The routing table below is enforced automatically
 by your HEARTBEAT and TOOLS layer. Josh can override any tier at any time.
 
-### Tier 1 — Preferred (Non-3rd-Party)
+### Tier 1 � Cloud via Ollama (primary � no Claude/OpenAI API inside PaperClip)
 | Model | Provider | Use For |
 |-------|----------|---------|
-| `claude-sonnet-4-5` / `claude-opus-4` | Anthropic API | Mission-critical decisions, security escalations, doctrine review, design work, anything needing highest judgment |
-| `gpt-4o` / `o3` (Codex API) | OpenAI API | Code review, PR analysis, CTO-level technical delegation, anything code-first |
+| `kimi-k2.6:cloud` | Ollama cloud | Mission-critical decisions, security escalations, doctrine review, design work, code review, reasoning |
+| `qwen3-coder:480b-cloud` | Ollama cloud | Code-heavy tasks, PR analysis, CTO-level technical delegation |
 
 ### Tier 2 — Cloud via Ollama (your custom stack)
 | Model | Provider | Use For |
@@ -58,8 +58,8 @@ The HEARTBEAT layer selects the model automatically based on task type:
 | Task Type | Auto-Selected Model | Override |
 |-----------|--------------------|-|
 | Routine heartbeat / triage | `qwen3.5:latest` local | Josh can switch |
-| Code review / PR / CTO delegation | Codex API (`gpt-4o`) | Josh can switch |
-| Mission decision / security / doctrine | Claude API (`claude-sonnet-4-5`) | Josh can switch |
+| Code review / PR / CTO delegation | `kimi-k2.6:cloud` (Ollama) | Josh can switch |
+| Mission decision / security / doctrine | `kimi-k2.6:cloud` (Ollama) | Josh can switch |
 | Marketing / brand copy | `joshlcoleman/dateapp-marketing` | Josh can switch |
 | Heavy strategy / long context | `korpohermes-prime` → `gpt-oss:120b` | Josh can switch |
 | Research / competitor analysis | Gemini CLI | Josh can switch |
@@ -123,3 +123,4 @@ Josh can manually force any model with: `--model <name>` flag or via AgravClip U
 - `$AGENT_HOME/TOOLS.md` — tools and model IDs
 - `C:\ANTIGRAVITY\CLAUDE.md` — canonical doctrine
 - `C:\ANTIGRAVITY\briefings\DAO-ARCHITECTURE-CANONICAL.md` — full DAO architecture
+

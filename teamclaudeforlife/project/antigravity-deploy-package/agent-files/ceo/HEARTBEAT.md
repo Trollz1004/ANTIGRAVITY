@@ -107,11 +107,11 @@ When a task is assigned TO YOU (not routine heartbeat), select model by task typ
 ```
 INCOMING TASK TYPE            → MODEL TO USE
 ─────────────────────────────────────────────────────────────────
-Code review / PR analysis     → Codex API  (gpt-4o)
-Mission violation decision    → Claude API (claude-sonnet-4-5)
-Security escalation           → Claude API (claude-sonnet-4-5)
-Doctrine interpretation       → Claude API (claude-sonnet-4-5)
-Design / UX feedback          → Claude API (claude-sonnet-4-5)
+Code review / PR analysis     -> kimi-k2.6:cloud          (Ollama, no Codex API)
+Mission violation decision    -> kimi-k2.6:cloud          (Ollama, no Claude API)
+Security escalation           -> kimi-k2.6:cloud          (Ollama, no Claude API)
+Doctrine interpretation       -> kimi-k2.6:cloud          (Ollama, no Claude API)
+Design / UX feedback          -> kimi-k2.6:cloud          (Ollama, no Claude API)
 Marketing copy review         → joshlcoleman/dateapp-marketing
 Brand voice check             → joshlcoleman/dateapp-marketing
 Heavy strategy / long context → korpohermes-prime (gpt-oss:120b cloud)
@@ -121,7 +121,7 @@ Simple delegation             → qwen2.5:7b (local, fastest)
 ```
 
 **Josh override:** any task can be forced to a specific model with:
-`--model anthropic/claude-sonnet-4-5` or `--model openai/gpt-4o` or `--model local/qwen3.5`
+`--model kimi-k2.6:cloud` or `--model glm-5.1:cloud` or `--model local/qwen2.5:7b`
 
 ---
 
@@ -149,7 +149,7 @@ without flagging to Josh first — these are different capabilities, not equival
 | Doctrine compliance | No violations flagged | Active MISSION VIOLATION issues open |
 | Ollama local | :11434 responds, qwen3.5 loaded | Ollama down or models missing |
 | Paperclip | :3100 and public HQ both healthy | Either endpoint unreachable |
-| Tier 1 APIs | At least one of Anthropic/OpenAI reachable | Both APIs unreachable |
+| Ollama cloud | At least one cloud model responsive via Ollama | All cloud models unreachable � local fallback active |
 
 ---
 
@@ -157,5 +157,6 @@ without flagging to Josh first — these are different capabilities, not equival
 
 - Any agent missed 3+ heartbeats → HIGH priority issue → notify Josh
 - Mission VIOLATION language found → immediate escalation → Mission Guardians + Josh
-- Both Tier 1 APIs unreachable >2 heartbeat cycles → notify Josh (cost-free local fallback active)
+- All Ollama cloud models unreachable >2 heartbeat cycles -> notify Josh (local qwen2.5:7b active)
 - Paperclip down >1 heartbeat → create issue → attempt autostart → notify Josh if still down
+
