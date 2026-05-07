@@ -25,9 +25,28 @@ import {
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { apiGet, apiJson, apiPost, type Envelope } from '../lib/api';
+import { validateTaskBrief, validateAgentId } from '../lib/input-validation';
 
 type HealthSummary = { ok: number; degraded: number; unreachable: number };
 type HealthAll = Record<string, Envelope<any>> & { _summary?: HealthSummary };
+type RepoLastCommit = { short_sha?: string };
+type RepoDetails = {
+  last_commit?: RepoLastCommit;
+  branch?: string;
+  changed?: number;
+  untracked?: number;
+};
+type PaperclipDetails = {
+  version?: string;
+  deploymentMode?: string;
+  authReady?: boolean;
+  json?: { version?: string; deploymentMode?: string; authReady?: boolean };
+};
+type OllamaDetails = {
+  models?: (string | { name?: string; model?: string })[];
+  model_count?: number;
+  json?: { models?: (string | { name?: string; model?: string })[] };
+};
 type RunbookFile = { filename: string; size: number; mtime: string };
 type TaskRecord = {
   task_id: string;
@@ -259,23 +278,26 @@ function formatMoney(value: unknown) {
 function detailLine(name: string, env: Envelope<any>) {
   const details = env.details ?? {};
   if (name === 'repo') {
-    const last = details.last_commit;
-    return `${details.branch ?? 'unknown'} | changed ${details.changed ?? 0} | untracked ${
-      details.untracked ?? 0
+    const repoDetails = details as RepoDetails;
+    const last = repoDetails.last_commit;
+    return `${repoDetails.branch ?? 'unknown'} | changed ${repoDetails.changed ?? 0} | untracked ${
+      repoDetails.untracked ?? 0
     }${last?.short_sha ? ` | ${last.short_sha}` : ''}`;
   }
   if (name === 'paperclip') {
-    const json = details.json ?? {};
+    const paperclipDetails = details as PaperclipDetails;
+    const json = paperclipDetails.json ?? paperclipDetails;
     return `${json.version ?? 'unknown'} | ${json.deploymentMode ?? 'mode unknown'} | auth ${
       json.authReady ? 'ready' : 'unknown'
     }`;
   }
   if (name === 'ollama') {
-    const rawModels = details.models ?? details.json?.models ?? [];
+    const ollamaDetails = details as OllamaDetails;
+    const rawModels = ollamaDetails.models ?? ollamaDetails.json?.models ?? [];
     const models = Array.isArray(rawModels)
       ? rawModels.map((model: any) => (typeof model === 'string' ? model : model.name ?? model.model ?? 'unknown'))
       : [];
-    const count = details.model_count && details.model_count > 0 ? details.model_count : models.length;
+    const count = ollamaDetails.model_count && ollamaDetails.model_count > 0 ? ollamaDetails.model_count : models.length;
     return `${count} models | ${models.slice(0, 3).join(', ')}`;
   }
   if (name === 't5500') return `${details.ok ?? 0}/${details.total ?? 0} services | ${details.host ?? 'unknown host'}`;
@@ -436,8 +458,25 @@ export const MissionControlDashboard = () => {
   };
 
   const submitTask = async () => {
+    setDispatchMessage(null);
     const clean = brief.trim();
-    if (!clean) return;
+
+    // Validate task brief against allowlist
+    const briefValidation = validateTaskBrief(clean);
+    if (!briefValidation.valid) {
+      setDispatchMessage(`Validation Error: ${briefValidation.error}`);
+      return;
+    }
+
+    // Validate all selected agent IDs against allowlist
+    for (const agentId of agents) {
+      const agentValidation = validateAgentId(agentId);
+      if (!agentValidation.valid) {
+        setDispatchMessage(`Agent Validation Error: ${agentValidation.error}`);
+        return;
+      }
+    }
+
     setDispatching(true);
     const result = await apiPost<{ task_id: string; queued: boolean }>('/tasks/dispatch', { brief: clean, agents }, 8000);
     setDispatching(false);
