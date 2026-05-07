@@ -95,6 +95,20 @@ class Settings(BaseSettings):
     match_top_k: int = 5
     match_candidate_limit: int = 50
 
+    # File upload settings
+    upload_max_size_mb: int = 10
+    upload_allowed_types: str = "image/jpeg,image/png,image/gif,application/pdf,text/plain"
+    upload_storage_path: str = "/var/secure_uploads"
+    clamav_enabled: bool = False
+
+    @property
+    def upload_allowed_types_list(self) -> list[str]:
+        return [t.strip() for t in self.upload_allowed_types.split(",") if t.strip()]
+
+    @property
+    def upload_max_size_bytes(self) -> int:
+        return self.upload_max_size_mb * 1024 * 1024
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [
