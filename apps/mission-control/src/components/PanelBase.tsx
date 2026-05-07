@@ -1,5 +1,6 @@
 import React from 'react';
 import { UnreachableTile } from './UnreachableTile';
+import { SkeletonLoader, PanelSkeleton } from './SkeletonLoader';
 import { usePoll } from '../lib/usePoll';
 import { clsx } from 'clsx';
 
@@ -14,6 +15,7 @@ export const PanelBase: React.FC<PanelProps> = ({ title, path, pill, children })
   const env = usePoll<any>(path);
   const live = env.status === 'ok';
   const dotColor = live ? 'bg-accentCyan' : env.status === 'degraded' ? 'bg-amber-400' : 'bg-rose-500';
+  
   return (
     <div className="bg-panel rounded border border-border p-4 mb-4">
       <div className="flex items-center justify-between mb-2">
@@ -23,9 +25,15 @@ export const PanelBase: React.FC<PanelProps> = ({ title, path, pill, children })
         </h2>
         {pill && <span className="text-xs px-2 py-0.5 rounded-full bg-background border border-border text-accentCyan font-mono">{pill}</span>}
       </div>
-      {env.status === 'unreachable'
-        ? <UnreachableTile />
-        : typeof children === 'function' ? children(env.details) : children}
+      {env.loading ? (
+        <PanelSkeleton />
+      ) : env.status === 'unreachable' ? (
+        <UnreachableTile />
+      ) : typeof children === 'function' ? (
+        children(env.details)
+      ) : (
+        children
+      )}
     </div>
   );
 };
