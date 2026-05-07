@@ -9,6 +9,7 @@
 secrets/
 *.key
 master.key
+.paperclip-context.json
 
 # Node modules
 node_modules/
