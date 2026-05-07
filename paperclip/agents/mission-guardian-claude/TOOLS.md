@@ -23,6 +23,12 @@ PAPERCLIP_AGENT_ID, PAPERCLIP_COMPANY_ID, PAPERCLIP_API_KEY, PAPERCLIP_RUN_ID
 
 ## Adapter
 
-Claude (local) — uses Claude Code CLI. This DOES consume Claude API tokens.
-Use sparingly — heartbeat interval is 86400s (24 hours) for this reason. See HEARTBEAT.md for the canonical schedule.
-If Claude hits usage limits, Backup Guardian (Codex: 42200bfa) takes over automatically.
+`kimi-k2.6:cloud` via Ollama (http://127.0.0.1:11434). No Claude API tokens consumed.
+Fallback chain: `qwen3-coder:480b-cloud` → `glm-5.1:cloud` → `qwen2.5:7b` (local)
+
+Heartbeat interval: 86400s (24 hours). See HEARTBEAT.md for the canonical schedule.
+If primary model hits limits, Backup Guardian (Codex: 42200bfa) takes over automatically.
+
+> **TOKEN DOCTRINE (2026-05-07):** Previously used Claude Code CLI which consumed Claude API tokens.
+> Rerouted to kimi-k2.6:cloud via Ollama per Josh's hard rule — Claude is reserved for
+> Cowork/Claude Code orchestration sessions only, never inside PaperClip.

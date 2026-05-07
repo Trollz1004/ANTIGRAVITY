@@ -21,34 +21,37 @@
 
 | Role | Agent ID | Default Model |
 |------|----------|---------------|
-| CFO | cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 | qwen3.5:latest |
+| CFO | cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 | glm-5.1:cloud (via Ollama) |
 | CSO | 5d844d41-df24-4a2c-a98f-26bd94be2018 | korpohermes-prime |
-| CTO | b02a21c7-737e-4177-91ac-6d8e57805801 | Codex API (gpt-4o) |
+| CTO | b02a21c7-737e-4177-91ac-6d8e57805801 | kimi-k2.6:cloud (via Ollama) |
 | CMO | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | joshlcoleman/dateapp-marketing |
-| UX Designer | bd6d6722-9f3e-46ba-8651-ec9a219042ee | Claude API |
-| Mission Guardian (Claude) | 2229682b-cede-4462-b38b-25a910af022e | Claude API |
-| Mission Guardian (Codex) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | Codex API |
+| UX Designer | bd6d6722-9f3e-46ba-8651-ec9a219042ee | kimi-k2.6:cloud (via Ollama) |
+| Mission Guardian (Claude) | 2229682b-cede-4462-b38b-25a910af022e | kimi-k2.6:cloud (via Ollama) |
+| Mission Guardian (Codex) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | qwen3-coder:480b-cloud (via Ollama) |
 
 ## Model Providers + Connection Details
 
-### Tier 1 — Preferred (Non-3rd-Party APIs)
+> **TOKEN DOCTRINE:** Claude is reserved for Cowork/Claude Code orchestration ONLY.
+> No `anthropic/*` or `openai/*` API calls inside PaperClip. Ever.
+> Rerouted 2026-05-07 per Josh's hard rule.
+
+### Tier 1 — Cloud via Ollama (primary)
 
 ```yaml
-# Anthropic — Claude
-provider: anthropic
-api_key: $ANTHROPIC_API_KEY
-models:
-  default: claude-sonnet-4-5
-  heavy:   claude-opus-4
-  fast:    claude-haiku-4-5
+# Kimi K2.6 — best for reasoning, coding, and tool use
+provider: ollama
+base_url: http://127.0.0.1:11434
+model: kimi-k2.6:cloud
 
-# OpenAI — Codex
-provider: openai
-api_key: $OPENAI_API_KEY
-models:
-  default: gpt-4o
-  reason:  o3
-  fast:    gpt-4o-mini
+# Qwen3-Coder 480B — code-heavy tasks
+provider: ollama
+base_url: http://127.0.0.1:11434
+model: qwen3-coder:480b-cloud
+
+# GLM-5.1 — general tasks, 198K context
+provider: ollama
+base_url: http://127.0.0.1:11434
+model: glm-5.1:cloud
 ```
 
 ### Tier 2 — Ollama (local pull from ollama.com registry)
@@ -76,9 +79,8 @@ model: joshlcoleman/dateapp-marketing:latest
 
 ```yaml
 # All local models — Ollama API at 127.0.0.1:11434
-qwen3.5:latest           # 9.7B Q4_K_M — primary local workhorse
 qwen2.5:7b               # 7.6B Q4_K_M — fast lightweight fallback
-gemma2:latest            # 9.2B Q4_0   — secondary local option
+gemma3:1b                # emergency fast local
 nomic-embed-text:latest  # 137M F16    — embeddings only
 ```
 
@@ -100,26 +102,27 @@ tool: copilot-ollama
 
 The HEARTBEAT layer reads this table and selects the model automatically.
 Josh overrides with --model flag or AgravClip UI selector.
+**Claude reserved for Cowork orchestration only — not used inside PaperClip.**
 
 ```
-TASK_TYPE          → MODEL
+TASK_TYPE           → MODEL
 ────────────────────────────────────────────────────────
-heartbeat-check    → qwen3.5:latest          (local, fast)
-triage             → qwen3.5:latest          (local, fast)
-code-review        → openai/gpt-4o           (Codex API)
-pr-analysis        → openai/gpt-4o           (Codex API)
-mission-decision   → anthropic/claude-sonnet-4-5 (Claude API)
-security-escalation→ anthropic/claude-sonnet-4-5 (Claude API)
-doctrine-check     → anthropic/claude-sonnet-4-5 (Claude API)
-design-review      → anthropic/claude-sonnet-4-5 (Claude API)
-marketing-copy     → joshlcoleman/dateapp-marketing (local)
-brand-voice        → joshlcoleman/dateapp-marketing (local)
-heavy-strategy     → korpohermes-prime        (cloud)
-long-context       → korpohermes-prime        (cloud)
-research           → gemini-cli               (CLI)
-competitor-analysis→ gemini-cli               (CLI)
-embeddings         → nomic-embed-text         (local, fixed)
-lightweight-fallback→ qwen2.5:7b              (local)
+heartbeat-check     → qwen2.5:7b               (local, fast)
+triage              → glm-5.1:cloud            (cloud, Ollama)
+code-review         → kimi-k2.6:cloud          (cloud, Ollama)
+pr-analysis         → kimi-k2.6:cloud          (cloud, Ollama)
+mission-decision    → kimi-k2.6:cloud          (cloud, Ollama)
+security-escalation → kimi-k2.6:cloud          (cloud, Ollama)
+doctrine-check      → kimi-k2.6:cloud          (cloud, Ollama)
+design-review       → kimi-k2.6:cloud          (cloud, Ollama)
+marketing-copy      → joshlcoleman/dateapp-marketing (local)
+brand-voice         → joshlcoleman/dateapp-marketing (local)
+heavy-strategy      → korpohermes-prime         (cloud)
+long-context        → kimi-k2.6:cloud          (cloud, Ollama)
+research            → gemini-cli                (CLI)
+competitor-analysis → gemini-cli                (CLI)
+embeddings          → nomic-embed-text          (local, fixed)
+lightweight-fallback→ qwen2.5:7b               (local)
 ```
 
 ## Platform Context
@@ -134,8 +137,6 @@ lightweight-fallback→ qwen2.5:7b              (local)
 ## Runtime Env (injected by Paperclip)
 
 - `PAPERCLIP_AGENT_ID`, `PAPERCLIP_COMPANY_ID`, `PAPERCLIP_API_KEY`, `PAPERCLIP_RUN_ID`
-- `ANTHROPIC_API_KEY` — Claude Tier 1
-- `OPENAI_API_KEY` — Codex Tier 1
 - `GITHUB_TOKEN` — repo ops
 - `SQUARE_ACCESS_TOKEN` — payments (read-only for CEO)
 - Always include `X-Paperclip-Run-Id` header on mutating API calls.
