@@ -5,7 +5,8 @@
   "tiers": {
     "tier_1_workers": [
       "ollama_cloud_primary",
-      "ollama_cloud_fallback"
+      "ollama_cloud_fallback",
+      "pi_ceo"
     ],
     "tier_0_architects": [
       "claude_opus",
@@ -55,9 +56,18 @@
       "tier": 3,
       "note": "Emergency fallback if all Ollama cloud models are unavailable"
     },
-    "claude_opus": {
-      "type": "anthropic_api",
-      "role": "ARCHITECT + AUDITOR ONLY",
+    "pi_ceo": {
+      "type": "pi_ollama_cloud",
+      "model": "glm-5.1:cloud",
+      "fallbacks": ["qwen3-coder:480b-cloud", "gemma4"],
+      "note": "Pi coding agent via Ollama cloud models. Same intelligence in MD files. Use when Hermes is down or for tasks requiring file-system access.",
+      "tier": 1,
+      "params": {
+        "num_ctx": 131072,
+        "temperature": 0.35,
+        "top_p": 0.9
+      }
+    },
       "purpose": "Writes and maintains MD instruction files. Reviews agent output for drift. Does NOT do daily operational work.",
       "models": ["claude-opus-4-7", "claude-sonnet-4-6"],
       "tier": 0,
