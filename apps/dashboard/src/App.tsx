@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import "./index.css";
+import { AgentCardSkeleton, DAOCardSkeleton, BucketMeterSkeleton } from "./Skeletons";
 
 const API_BASE =
   import.meta.env.VITE_PAPERCLIP_URL || "https://paperclip-hq.youandinotai.com";
@@ -97,30 +98,39 @@ function BucketMeter({ id, label, pct }: { id: number; label: string; pct: numbe
 }
 
 export function App() {
-  const [agents, setAgents] = useState<Agent[]>(AGENTS);
+  const [agents, setAgents] = useState<Agent[]>([]);
   const [connected, setConnected] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [lastPoll, setLastPoll] = useState<string>("");
+  const pollInProgress = useRef(false);
 
-  useEffect(() => {
-    async function poll() {
-      try {
-        const res = await fetch(`${API_BASE}/api/health`, { signal: AbortSignal.timeout(5000) });
-        if (res.ok) {
-          setConnected(true);
-          const data = await res.json();
-          if (data.agents) setAgents(data.agents);
-        } else {
-          setConnected(false);
-        }
-      } catch {
+  const poll = useCallback(async () => {
+    if (pollInProgress.current) return;
+    pollInProgress.current = true;
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/health`, { signal: AbortSignal.timeout(5000) });
+      if (res.ok) {
+        setConnected(true);
+        const data = await res.json();
+        if (data.agents) setAgents(data.agents);
+      } else {
         setConnected(false);
       }
+    } catch {
+      setConnected(false);
+    } finally {
+      setLoading(false);
       setLastPoll(new Date().toLocaleTimeString());
+      pollInProgress.current = false;
     }
+  }, []);
+
+  useEffect(() => {
     poll();
     const interval = setInterval(poll, 15000);
     return () => clearInterval(interval);
-  }, []);
+  }, [poll]);
 
   return (
     <ErrorBoundary>
@@ -131,6 +141,17 @@ export function App() {
           <div className="connection">
             <StatusDot status={connected ? "online" : "offline"} />
             <span>{connected ? "Paperclip HQ Connected" : "Paperclip HQ Offline"}</span>
+            {loading && agents.length > 0 && (
+              <span className="refresh-indicator">Refreshing...</span>
+            )}
+            <button
+              className="refresh-btn"
+              onClick={poll}
+              disabled={loading}
+              title="Refresh dashboard data"
+            >
+              ↻ Refresh
+            </button>
             {lastPoll && <span className="last-poll">Last: {lastPoll}</span>}
           </div>
         </header>
@@ -138,9 +159,17 @@ export function App() {
         <section className="section">
           <h2 className="section-title">Agent Fleet</h2>
           <div className="agent-grid">
-            {agents.map((a) => (
-              <AgentCard key={a.id} agent={a} />
-            ))}
+            {loading && agents.length === 0 ? (
+              <>
+                <AgentCardSkeleton />
+                <AgentCardSkeleton />
+                <AgentCardSkeleton />
+                <AgentCardSkeleton />
+                <AgentCardSkeleton />
+              </>
+            ) : (
+              agents.map((a) => <AgentCard key={a.id} agent={a} />)
+            )}
           </div>
         </section>
 
