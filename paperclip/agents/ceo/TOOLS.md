@@ -17,15 +17,17 @@
 
 ## Direct Reports
 
-| Role | Agent ID | Model |
-|------|----------|-------|
-| CFO | cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 | glm-5.1:cloud |
-| CSO | 5d844d41-df24-4a2c-a98f-26bd94be2018 | glm-5.1:cloud |
-| CTO | b02a21c7-737e-4177-91ac-6d8e57805801 | kimi-k2.6:cloud |
-| CMO | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | dateapp-marketingtools |
-| UX Designer | bd6d6722-9f3e-46ba-8651-ec9a219042ee | kimi-k2.6:cloud |
-| Mission Guardian (Claude) | 2229682b-cede-4462-b38b-25a910af022e | kimi-k2.6:cloud |
-| Mission Guardian (Codex) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | qwen3-coder:480b-cloud |
+| Role | Agent ID | Adapter / Model | Source of truth |
+|------|----------|-----------------|-----------------|
+| CFO | cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 | `hermes_local` + `glm-5.1:cloud` | `cfo/TOOLS.md` |
+| CSO | 5d844d41-df24-4a2c-a98f-26bd94be2018 | `hermes_local` + `glm-5.1:cloud` | `cso/TOOLS.md` |
+| CTO | b02a21c7-737e-4177-91ac-6d8e57805801 | `opencode_local` + `qwen3-coder:480b-cloud` | `cto/TOOLS.md` |
+| CMO | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | `opencode_local` + `Trollz1004/dateapp-marketingtools` | `cmo/TOOLS.md` |
+| UX Designer | bd6d6722-9f3e-46ba-8651-ec9a219042ee | `opencode_local` + `Trollz1004/dateapp` | `uxdesigner/TOOLS.md` |
+| Mission Guardian (Claude) | 2229682b-cede-4462-b38b-25a910af022e | `kimi-k2.6:cloud` (Ollama) — rerouted off `claude_local` per 2026-05-07 token doctrine | `mission-guardian-claude/TOOLS.md` |
+| Mission Guardian (Codex) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | `codex_local` (daily-cap budgeted) | `mission-guardian-codex/TOOLS.md` |
+
+> If this table ever disagrees with an agent's own `TOOLS.md`, **the agent's own file wins** — file an issue and update this table.
 
 ## Failover Adapters
 

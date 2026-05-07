@@ -11,9 +11,10 @@
 3. Workload balance: if any direct report has 5+ open tasks, rebalance or spawn an INTERN (cap: 5 active INTERNs at any time)
 4. Flag any blockers that need escalation to Josh
 5. Update milestone progress if tasks completed since last beat
-6. Run quick doctrine check: no forbidden language in recent issue titles/descriptions ("donate", "donation", "solicitation", "charity routing")
+6. Run quick doctrine check on customer-facing surfaces created since last beat: none of `donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement`. The agent-internal synonym `contractual revenue disbursement` is permitted in Paperclip issues / agent files / briefings only — flag immediately if it leaks customer-facing.
 7. Confirm the 1-wallet / 10% reserve framing is intact in any new public-facing surface created since last beat
 8. Founding-Four protection check: confirm no agent has demoted, replaced, rerouted, or wrapped Google Gemini, Claude Code, Perplexity, or Grok integrations since the last beat (per CLAUDE.md "The Founding Four Are Untouchable"). If a wrapper, swap, or middleware has appeared without Josh's explicit order — flag URGENT, do not edit, escalate immediately.
+9. Token doctrine check (per 2026-05-07 reroute): confirm no PaperClip adapter has re-introduced the Anthropic API as a runtime model. Claude is reserved for Cowork / Claude Code orchestration sessions only — never called inside PaperClip. Any PaperClip agent showing a `claude_local` / `claude-*` adapter or non-zero Anthropic token consumption originating from a PaperClip run = HIGH issue, route to CTO immediately. (This is distinct from the Founding-Four check in step 8 — Claude Code's role outside PaperClip is preserved; only the in-PaperClip routing was rerouted.)
 
 ## Escalation
 
