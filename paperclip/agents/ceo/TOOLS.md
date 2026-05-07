@@ -27,6 +27,17 @@
 | Mission Guardian (Claude) | 2229682b-cede-4462-b38b-25a910af022e | claude_local |
 | Mission Guardian (Codex) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | codex_local |
 
+## Failover Adapters
+
+When Hermes is down or you need file-system access, use these Paperclip adapters:
+
+| Adapter | When to use | Model |
+|---------|-------------|-------|
+| `pi-ceo` | Hermes offline, need file ops | glm-5.1:cloud → qwen3-coder:480b-cloud → gemma4 |
+| `opencode-unified` | Standard CEO work, full fallback chain | glm-5.1 → qwen3-coder → dateapp |
+| `ollama-glm` | Quick single-turn via Ollama directly | glm-5.1:cloud |
+| `hermes` | Normal operations | korpohermes-prime |
+
 ## Platform Context
 
 - Frontend: youandinotai.com (Cloudflare Pages, React 19)
