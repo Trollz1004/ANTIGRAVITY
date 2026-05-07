@@ -53,6 +53,21 @@ export async function apiPost<T = any>(path: string, body: any, timeout = 5000):
   }
 }
 
+export async function apiJson<T = any>(path: string, timeout = 5000): Promise<{ data: T | null; error: string | null }> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  try {
+    const res = await fetch(`${API_BASE}${path}`, { signal: controller.signal });
+    clearTimeout(id);
+    if (!res.ok) return { data: null, error: `HTTP ${res.status}` };
+    const data: T = await res.json();
+    return { data, error: null };
+  } catch (e: any) {
+    clearTimeout(id);
+    return { data: null, error: e?.message ?? 'fetch failed' };
+  }
+}
+
 export async function fetchWithTimeout(url: string, init?: RequestInit, timeout = 2500): Promise<any> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
