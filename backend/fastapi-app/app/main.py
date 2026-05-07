@@ -8,16 +8,17 @@ import time
 import traceback
 import uuid
 from contextlib import asynccontextmanager
+from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Any
 
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.config import get_settings
-from app.database import reconcile_legacy_schema
+from app.database import get_db, reconcile_legacy_schema
 from app.logging_config import setup_logging
 from app.monitoring import setup_monitoring
 from app.scheduler import setup_scheduler
@@ -26,17 +27,21 @@ from app.security import (
     InputValidationMiddleware,
     SecurityHeadersMiddleware,
 )
+from app.schemas import HealthResponse
+from app.feature_flags import get_all_flags, get_flag, set_flag
 from app.routers import (
     auth,
     billing,
     boards,
     double_dates,
     events,
+    feature_flags,
     health,
     lovebot,
     marketing,
     messages,
     metrics,
+    ops_runs,
     privacy,
     profiles,
     safety,
@@ -49,7 +54,9 @@ from app.routers import (
     volunteering,
     waitlist,
     webhooks,
+    uploads,
 )
+from app.routers.health import health_check
 
 # Configure structured logging
 setup_logging()
@@ -128,8 +135,8 @@ app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     description="YouAndINotAI - Social Platform for Good",
-    docs_url="/api/v1/docs",
-    openapi_url="/api/v1/openapi.json",
+    docs_url="/docs",
+    openapi_url="/openapi.json",
     lifespan=lifespan,
 )
 
@@ -337,11 +344,11 @@ app.include_router(double_dates.router, prefix="/api/v1", tags=["double-dates"])
 app.include_router(users.router, prefix="/api/v1", tags=["users"])
 app.include_router(waitlist.router, prefix="/api/v1", tags=["waitlist"])
 app.include_router(marketing.router, prefix="/api/v1", tags=["marketing"])
+app.include_router(feature_flags.router)
+app.include_router(ops_runs.router, prefix="/api/v1", tags=["ops-runs"])
 
-# Static file serving for uploads
-uploads_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")
-os.makedirs(uploads_dir, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
+# Secure file uploads (replaces direct static mount)
+app.include_router(uploads.router)
 
 
 @app.get("/")
@@ -350,5 +357,10 @@ async def root() -> dict[str, str]:
         "service": settings.app_name,
         "status": "running",
         "version": settings.app_version,
-        "docs_url": "/api/v1/docs",
+        "docs_url": "/docs",
     }
+
+
+@app.get("/health", response_model=HealthResponse)
+async def root_health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
+    return await health_check(db)
