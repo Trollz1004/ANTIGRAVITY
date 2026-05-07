@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css'; // Global styles
 import PublicBanner from '../components/PublicBanner';
+import ClientErrorBoundary from '../components/ClientErrorBoundary';
 
 export const metadata: Metadata = {
   title: 'Antigravity Status Dashboard',
@@ -12,7 +13,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body suppressHydrationWarning>
         <PublicBanner />
-        {children}
+        <ClientErrorBoundary>
+          {children}
+        </ClientErrorBoundary>
       </body>
     </html>
   );

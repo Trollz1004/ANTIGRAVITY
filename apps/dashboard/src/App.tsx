@@ -123,55 +123,57 @@ export function App() {
   }, []);
 
   return (
-    <div className="dashboard">
-      <header className="top-bar">
-        <div className="logo">ANTIGRAVITY</div>
-        <div className="subtitle">Mission Control</div>
-        <div className="connection">
-          <StatusDot status={connected ? "online" : "offline"} />
-          <span>{connected ? "Paperclip HQ Connected" : "Paperclip HQ Offline"}</span>
-          {lastPoll && <span className="last-poll">Last: {lastPoll}</span>}
-        </div>
-      </header>
+    <ErrorBoundary>
+      <div className="dashboard">
+        <header className="top-bar">
+          <div className="logo">ANTIGRAVITY</div>
+          <div className="subtitle">Mission Control</div>
+          <div className="connection">
+            <StatusDot status={connected ? "online" : "offline"} />
+            <span>{connected ? "Paperclip HQ Connected" : "Paperclip HQ Offline"}</span>
+            {lastPoll && <span className="last-poll">Last: {lastPoll}</span>}
+          </div>
+        </header>
 
-      <section className="section">
-        <h2 className="section-title">Agent Fleet</h2>
-        <div className="agent-grid">
-          {agents.map((a) => (
-            <AgentCard key={a.id} agent={a} />
-          ))}
-        </div>
-      </section>
+        <section className="section">
+          <h2 className="section-title">Agent Fleet</h2>
+          <div className="agent-grid">
+            {agents.map((a) => (
+              <AgentCard key={a.id} agent={a} />
+            ))}
+          </div>
+        </section>
 
-      <section className="section">
-        <h2 className="section-title">4-DAO Governance Tokens</h2>
-        <div className="dao-grid">
-          {DAO_TOKENS.map((d) => (
-            <DAOCard key={d.symbol} dao={d} />
-          ))}
-        </div>
-      </section>
+        <section className="section">
+          <h2 className="section-title">4-DAO Governance Tokens</h2>
+          <div className="dao-grid">
+            {DAO_TOKENS.map((d) => (
+              <DAOCard key={d.symbol} dao={d} />
+            ))}
+          </div>
+        </section>
 
-      <section className="section">
-        <h2 className="section-title">10-Bucket Revenue Engine</h2>
-        <div className="bucket-grid">
-          <BucketMeter id={1} label="Platform Subs" pct={10} />
-          <BucketMeter id={2} label="Super Likes" pct={10} />
-          <BucketMeter id={3} label="$LOVE Yield" pct={10} />
-          <BucketMeter id={4} label="AI-Solutions" pct={10} />
-          <BucketMeter id={5} label="$UKID Yield" pct={10} />
-          <BucketMeter id={6} label="OnlineRecycle" pct={10} />
-          <BucketMeter id={7} label="$GREEN Yield" pct={10} />
-          <BucketMeter id={8} label="Merch Net" pct={10} />
-          <BucketMeter id={9} label="$AGRAV Infra" pct={10} />
-          <BucketMeter id={10} label="$AGRAV Yield" pct={10} />
-        </div>
-        <div className="bucket-note">Each bucket: 10% to kids. More buckets = more kids helped.</div>
-      </section>
+        <section className="section">
+          <h2 className="section-title">10-Bucket Revenue Engine</h2>
+          <div className="bucket-grid">
+            <BucketMeter id={1} label="Platform Subs" pct={10} />
+            <BucketMeter id={2} label="Super Likes" pct={10} />
+            <BucketMeter id={3} label="$LOVE Yield" pct={10} />
+            <BucketMeter id={4} label="AI-Solutions" pct={10} />
+            <BucketMeter id={5} label="$UKID Yield" pct={10} />
+            <BucketMeter id={6} label="OnlineRecycle" pct={10} />
+            <BucketMeter id={7} label="$GREEN Yield" pct={10} />
+            <BucketMeter id={8} label="Merch Net" pct={10} />
+            <BucketMeter id={9} label="$AGRAV Infra" pct={10} />
+            <BucketMeter id={10} label="$AGRAV Yield" pct={10} />
+          </div>
+          <div className="bucket-note">Each bucket: 10% to kids. More buckets = more kids helped.</div>
+        </section>
 
-      <footer className="footer">
-        Until no kid is in need. | Base L2 | Soulbound
-      </footer>
-    </div>
+        <footer className="footer">
+          Until no kid is in need. | Base L2 | Soulbound
+        </footer>
+      </div>
+    </ErrorBoundary>
   );
 }
