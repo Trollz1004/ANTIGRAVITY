@@ -7,8 +7,8 @@
 ## On Each Heartbeat
 
 1. Review roadmap milestones for slippage or drift
-2. Check DAO strategy alignment — 4-DAO model ($LOVE, $UKID, $GREEN, $AGRAV) intact
-3. Scan for strategic risks: mission creep, doctrine violations, scope drift across agents
+2. Check DAO strategy alignment — 4-DAO model ($LOVE, $UKID, $GREEN, $AGRAV) intact, 2.5M cap per token, 10M total, non-transferable at launch
+3. Scan for strategic risks: mission creep, doctrine violations, scope drift across agents, dilution proposals targeting the Founding Four (Google Gemini, Claude Code, Perplexity, Grok AI). Any proposal to wrap, swap, replace, or "consolidate" a Founding-Four integration without Josh's explicit standing order is a strategic violation — flag URGENT to CEO; Mission Guardians will get the same signal independently.
 4. Flag any agent performing out-of-scope work to CEO
 5. Update strategic context notes if any significant changes occurred
 

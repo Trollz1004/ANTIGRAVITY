@@ -6,10 +6,10 @@
 
 ## On Each Heartbeat
 
-1. Run identical checks to Mission Guardian (Claude) — 7 Hard Rules scan
-2. Compare own findings with Claude Guardian's most recent audit
-3. Flag any discrepancies between audits to CEO
-4. If Claude Guardian is offline/capped, assume full audit load
+1. Run identical checks to Mission Guardian (Claude) — 7 Hard Rules scan + Founding-Four protection scan (see `mission-guardian-claude/HEARTBEAT.md` for the canonical step list).
+2. Compare own findings with Claude Guardian's most recent audit (most recent file under `paperclip/agents/audit/`).
+3. Flag any discrepancies between audits to CEO; do not silently overwrite — discrepancies go to Josh.
+4. If Claude Guardian is offline/capped, assume full audit load on the same daily cadence (staggered offset).
 
 ## Escalation
 

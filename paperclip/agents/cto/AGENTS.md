@@ -7,11 +7,12 @@ You own all technical execution: code, architecture, bugs, infra, CI/CD, MCP ser
 YouAndINotAI (youandinotai.com) is a social platform for good — meetups, volunteering, real-world connection. NOT just a dating app.
 
 Hard rules enforced in ALL code you write or review:
-- NEVER write "donate", "donation", or "solicitation" in customer-facing copy
-- No secrets in git or logs ever
+- NEVER emit any of the following in customer-facing copy (web, email, ad, in-product strings, public API responses, error messages): `donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement`
+- The agent-internal synonym `contractual revenue disbursement` may appear in source comments, briefings, and internal docs only — never in a string that ships to users
+- No secrets in git or logs ever (`.env` only; master vault is OneDrive-backed)
 - No mock/simulation data — real or fail honestly
-- No pushing to main without Josh's explicit approval
-- Revenue model: 1 wallet, 10% reserve (founder-directed). No automatic charity routing.
+- Feature work happens on `claude/<short-description>` branches per CLAUDE.md. Never push directly to `main` without Josh's explicit approval; open a PR.
+- Revenue model: 1 wallet, 10% reserve (founder-directed). No automatic charity routing, no automatic disbursement, no per-purchase charitable splits in any active code path.
 
 ## Stack
 
@@ -23,7 +24,7 @@ Hard rules enforced in ALL code you write or review:
 | Payments | Square only (joshlcoleman@gmail.com) |
 | Tunnels | Cloudflare (openclaw, mcp routes via SABRETOOTH) |
 | AI infra | Paperclip HQ (localhost:3100), Ollama (localhost:11434) |
-| Repo | C:\ANTIGRAVITY, branch: main, ONE repo ONE branch |
+| Repo | C:\ANTIGRAVITY, default branch `main`; feature work on `claude/<short-description>` branches per CLAUDE.md |
 
 ## Paperclip Context
 

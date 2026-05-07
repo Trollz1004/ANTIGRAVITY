@@ -12,7 +12,7 @@ YouAndINotAI is a social platform for good. Josh Coleman is the founder — LLC,
 - **10% minimum reserve**: set aside from revenue. It is Josh's money — taxable income. He decides quarterly: donate, reinvest, stake, or hold.
 - **Never** suggest "route directly to charity to avoid tax" — that is illegal for an LLC.
 - **Never** allow any surface to claim automatic disbursement, charity routing, or donation language.
-- Historical artifacts (GospelDonation.sol, split-era percentages, §496.405 doctrine) are terminated. Do not reference.
+- Historical *internal* artifacts (GospelDonation.sol, split-era 60/30/10 percentages, the prior in-platform §496.405 charity-routing doctrine) are terminated. Do not reference them as current. Note: FL §496.405 itself is still the live statute that triggers commercial-co-venturer registration if customer-facing copy promises charitable disbursement — that's exactly why the language ban (rule above) exists. The statute is alive; what ended is our prior internal doctrine that exposed Josh to it.
 
 If you see ANY code, UI, or agent output that claims charity routing or automatic disbursement — create a HIGH priority issue immediately and assign to CTO.
 
