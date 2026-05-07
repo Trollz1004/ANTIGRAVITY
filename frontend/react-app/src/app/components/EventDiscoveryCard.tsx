@@ -242,11 +242,11 @@ export function EventDiscoveryCard({
                     {friendsAttending.slice(0, 3).map((friend, index) => (
                       <img
                         key={friend.id}
-                        src={friend.avatar_url || '/default-avatar.png'}
+                        src={friend.avatar_url || '/faceless-avatar.svg'}
                         alt={friend.name}
                         className="w-6 h-6 rounded-full border-2 border-gray-800"
                         onError={e =>
-                          (e.currentTarget.src = '/default-avatar.png')
+                          (e.currentTarget.src = '/faceless-avatar.svg')
                         }
                       />
                     ))}
