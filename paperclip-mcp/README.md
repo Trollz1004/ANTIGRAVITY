@@ -12,7 +12,7 @@ resolve identical paths.
 | Tool | Purpose |
 |---|---|
 | `list_backends()` | Enumerate `.cmd` adapters on disk |
-| `launch_backend(backend, extra_args?)` | Open a new console window running the adapter in `C:\ANTIGRAVITY` (interactive sessions: codex, claude, gemini, opencode, hermes, ollama-glm, ...) |
+| `launch_backend(backend, extra_args?)` | Open a new console window running the adapter in `C:\ANTIGRAVITY` (interactive sessions: codex, claude, gemini, opencode, hermes, pi, ollama-glm, ...) |
 | `health_check(backend)` | Verify adapter file + report its exec line |
 | `swap_default(backend)` | Persist a default backend to disk |
 | `get_default()` | Read the persisted default |
