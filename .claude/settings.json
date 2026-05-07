@@ -82,6 +82,18 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "Write-Output 'ANTIGRAVITY TOKEN GUARD ACTIVE: Route file-writing, boilerplate, and search tasks to @paperclip-worker or @ollama-opencode. Use Claude only for diagnosis, security review, and strategic decisions. Run /token-check for the full routing guide.'",
+            "statusMessage": "Loading token guard context..."
+          }
+        ]
+      }
     ]
   },
   "enabledPlugins": {
