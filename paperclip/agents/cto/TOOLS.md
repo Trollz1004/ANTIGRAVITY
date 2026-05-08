@@ -17,11 +17,12 @@
 ## Environment
 
 - Repo: C:\ANTIGRAVITY (git). Canonical branch: `main`. Feature work on `claude/<short-description>` branches per CLAUDE.md — never push directly to `main` without Josh's explicit approval.
-- Backend: C:\ANTIGRAVITY\youandinotai (FastAPI)
-- Frontend: C:\ANTIGRAVITY\youandinotai (React 19)
-- Docker postgres: localhost:5432 (uandinotai-postgres container)
+- Backend (FastAPI): `services/youandinotai-api/` (compose: `youandinotai-api/docker-compose.yml --env-file ../.env`) — deployed to GCP Cloud Run (`ai-collab4kids`)
+- Frontend (React 19): `apps/web/` (legacy path: `youandinotai/`) — deployed to Cloudflare Pages from `youandinotai/dist`
+- Long-running services live under `services/` (crossfire, youandinotai, youandinotai-api, revenue-core) per CLAUDE.md target structure
+- Docker postgres: T5500 LAN-bound, accessible via 192.168.0.15:5432 (uandinotai-postgres container)
 - Ollama: localhost:11434
-- Paperclip: localhost:3100
+- Paperclip: localhost:3100 (public alias: paperclip-hq.youandinotai.com)
 - Security baseline: `scripts/clawx-control/opus-guardian.py` (8 invariants, 96% target — see CLAUDE.md)
 
 ## Runtime Env (injected)

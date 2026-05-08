@@ -10,7 +10,7 @@
 ## Key IDs
 
 - Company ID: cbb68f29-9f90-4295-a11f-7f8b928d37bc
-- Your Agent ID: cf6c84e2 (check PAPERCLIP_AGENT_ID at runtime for full UUID)
+- Your Agent ID: cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 (also injected at runtime as PAPERCLIP_AGENT_ID)
 - Project ID (ANTIGRAVITY): 4e9d37a4-4111-4b74-8ea3-e45b3161f27a
 - CEO: c4b4a3d9-8e66-4463-bf65-abfc5037b92a
 - CTO: b02a21c7-737e-4177-91ac-6d8e57805801

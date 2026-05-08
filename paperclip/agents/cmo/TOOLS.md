@@ -35,9 +35,12 @@ Available SCC actions:
 
 ## Platform Links
 
-- youandinotai.com — live frontend
-- onlinerecycle.org — secondary Cloudflare Pages property
-- Square payments: joshlcoleman@gmail.com
+- **youandinotai.com** — Love DAO ($LOVE) primary surface, live frontend (React 19 / Cloudflare Pages)
+- **ai-solutions.store** — #UntilNoKidInNeed DAO ($UKID) — AI tools / digital products surface
+- **onlinerecycle.org** — AiGreenTeam DAO ($GREEN) — eBay cross-listing / e-waste surface
+- **aidoesitall.website** — Antigravity DAO ($AGRAV) — shared infrastructure surface
+- **dashboard.aidoesitall.website** — internal dashboard gateway (not a marketing surface)
+- Square payments: joshlcoleman@gmail.com (location LY5GN09F5AN83)
 
 ## Runtime Env (injected)
 

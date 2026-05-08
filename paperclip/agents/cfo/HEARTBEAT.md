@@ -21,6 +21,6 @@ If 10% reserve rule is violated or charity routing language appears → create U
 | Check | Healthy | Unhealthy |
 |-------|---------|-----------|
 | Reserve compliance | 10% set aside on all revenue | Any revenue without reserve allocation |
-| Language compliance | No "donate/donation/solicitation" in any surface | Forbidden language detected |
+| Language compliance | None of the 7 banned terms (`donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement`) on any customer-facing surface | Any banned term detected customer-facing, or `contractual revenue disbursement` leaked outside agent-internal copy |
 | Token costs | Under budget ceiling | Costs exceeding projections |
 | Square status | Payments processing normally | Payment failures or anomalies |
