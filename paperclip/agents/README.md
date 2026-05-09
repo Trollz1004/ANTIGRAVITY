@@ -14,8 +14,8 @@ If Paperclip's database gets wiped or an agent's instructions get corrupted, res
 | CTO | cto/ | opencode_local / qwen3-coder | b02a21c7-737e-4177-91ac-6d8e57805801 | 30m |
 | CMO | cmo/ | opencode_local / dateapp-marketingtools | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | 60m |
 | UX Designer | uxdesigner/ | opencode_local / dateapp | bd6d6722-9f3e-46ba-8651-ec9a219042ee | 60m |
-| Mission Guardian (Claude) | mission-guardian-claude/ | claude_local | 2229682b-cede-4462-b38b-25a910af022e | 24h |
-| Mission Guardian (Codex) | mission-guardian-codex/ | codex_local | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | 24h |
+| Mission Guardian (Claude) | mission-guardian-claude/ | kimi-k2.6:cloud via Ollama (rerouted 2026-05-07; agent identity unchanged, no Claude API tokens consumed) | 2229682b-cede-4462-b38b-25a910af022e | 24h |
+| Mission Guardian (Codex) | mission-guardian-codex/ | codex_local (daily-cap budgeted) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | 24h |
 | INTERN (DoWhatTold) | intern/ | any ollama cloud (smallest) | (spawned by CEO/CFO) | NONE |
 | GitHub Auditor | github-auditor/ | github-actions | N/A (workflow) | 24h |
 
@@ -67,7 +67,8 @@ INTERN has only:
 - CTO / TechExecutor: `opencode_local` + `ollama/qwen3-coder:480b-cloud`
 - CMO: `opencode_local` + `ollama/Trollz1004/dateapp-marketingtools` (platform-specific; fallback: qwen3-coder)
 - UX Designer: `opencode_local` + `ollama/Trollz1004/dateapp` (fallback: qwen3-coder)
-- Mission Guardians: `claude_local` + `codex_local` — daily audit only (86400s heartbeat, staggered)
+- Mission Guardian (Claude): `kimi-k2.6:cloud` via Ollama (rerouted 2026-05-07 by commit 4c62fc5; the agent name is preserved, but no Claude API tokens are consumed from inside PaperClip — see Token Doctrine in OPS-INDEX.md). Fallback: `qwen3-coder:480b-cloud` → `glm-5.1:cloud` → `qwen2.5:7b` (local). 86400s heartbeat.
+- Mission Guardian (Codex): `codex_local` (daily-cap budgeted; staggered 86400s heartbeat — hot standby for the Claude-named guardian).
 - INTERN: any cheapest available Ollama cloud model (Gemma 1B is fine — INTERNs do not think)
 
 ## Required Files Per Agent — Quick Matrix
@@ -87,6 +88,13 @@ INTERN has only:
 
 ## Change Log
 
+- **2026-05-09** — Audit & optimization pass by Claude Code Opus 4.7 (Josh delegated full operational control over CEO / Agents / SKILLS-HEARTBEAT-TOOLS; "treat it as your own"). Fleet-wide reconciliation of the 2026-05-07 token reroute that landed in commit `4c62fc5` but was never written into the README/OPS-INDEX/CEO files. Changes:
+  - **CEO/TOOLS.md** — Direct Reports table corrected: `CTO` was listed as `kimi-k2.6:cloud` (drift) → now `opencode_local + qwen3-coder:480b-cloud` (matches CTO's own TOOLS.md and the canonical Models section). `UX Designer` was `kimi-k2.6:cloud` (drift) → now `opencode_local + dateapp`. `Mission Guardian (Codex)` was `qwen3-coder:480b-cloud` (drift) → now `codex_local (daily-cap budgeted)` per its own TOOLS.md. Mission Guardian (Claude) row labelled with the post-reroute reality: `kimi-k2.6:cloud via Ollama`, agent-name preserved, zero Claude API tokens.
+  - **CEO/TOOLS.md** — Branch policy line ("Repo: C:\\ANTIGRAVITY, branch: main") fixed: it implied direct-to-main work, contradicting CLAUDE.md and CTO/TOOLS.md. New text reflects feature-branch-then-PR rule.
+  - **CEO/TOOLS.md** — Model section's "kimi-k2.6:cloud (primary)" claim contradicted both the 5-step fallback chain immediately below it and the canonical CEO/CFO/CSO line in this README. Reconciled to `hermes_local + glm-5.1:cloud` as steady-state primary, with the local-first `korpohermes-prime` step kept as #1 in the fallback chain. Token Doctrine note rewritten and pointed at OPS-INDEX.md so the rule is discoverable fleet-wide.
+  - **CEO/TOOLS.md** — Failover Adapters table reconciled. The `opencode-unified` row's chain (`kimi → glm → dateapp`) made no sense as a CEO failover (UX Designer's marketing model is not a CEO fallback). Replaced with the canonical 5-step chain. `hermes` row's chain made explicit so the table can be read standalone.
+  - **paperclip/agents/README.md** — Roster table Mission Guardian rows updated to reflect the 2026-05-07 reroute. Models section split Mission Guardian (Claude) and Mission Guardian (Codex) onto separate lines because they are no longer on the same adapter family.
+- **2026-05-07** — (retroactively logged 2026-05-09) Commit `4c62fc5` rerouted all PaperClip agents off the Claude API. Mission Guardian (Claude) moved to `kimi-k2.6:cloud` via Ollama; CEO/TOOLS.md fallback chain stripped of Anthropic refs; Token Doctrine added: Claude reserved for Cowork/Claude Code orchestration only, never inside PaperClip. The change shipped in code but did not propagate into `paperclip/agents/README.md` or `OPS-INDEX.md` until the 2026-05-09 audit pass above.
 - **2026-05-06** — Audit & optimization pass #3 by Claude Code Opus 4.7 (Josh delegated full operational control over CEO / Agents / SKILLS-HEARTBEAT-TOOLS; "treat it as your own"). Fleet-wide language and protected-file reconciliation. Changes:
   - **Mission Guardian (Claude + Codex) AGENTS.md** — Rule 1 patched. Previously read "No 'donate', 'donation', or 'solicitation' anywhere ... zero exceptions" — that would have false-flagged the legitimate agent-internal `contractual revenue disbursement` synonym used by CEO/CMO/CFO. New rule: full 7-term customer-facing ban (`donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement`) **plus** an explicit allow-list for `contractual revenue disbursement` in agent-internal copy only. Rule 5 protected-file list expanded to include `SOUL.md` and `SKILLS.md` (previously only listed AGENTS.md/CLAUDE.md/TOOLS.md/HEARTBEAT.md). Rule 5 also notes the Josh-authorized Claude Code manual audit-pass exception (which is what allows passes like this one to land).
   - **Mission Guardian (Claude + Codex) HEARTBEAT.md** — Forbidden-language scan (step 1) updated to the full 7-term list with the agent-internal exception, protected-file scan (step 4) extended to include `SKILLS.md`, and a new **step 7: Founding-Four protection scan** (Gemini, Claude Code, Perplexity, Grok). Mission Guardian (Codex) now explicitly references the canonical step list owned by Mission Guardian (Claude).
