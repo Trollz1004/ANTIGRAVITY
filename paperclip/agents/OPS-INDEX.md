@@ -41,8 +41,8 @@ Per `CLAUDE.md` → "Perpetual Mission Guarantee":
 | CTO | [`cto/`](./cto/) | Code, infra, CI/CD, MCP, devtools | 30 min | `opencode_local` + `qwen3-coder:480b-cloud` |
 | CMO | [`cmo/`](./cmo/) | Marketing, brand, social pipeline | 60 min | `opencode_local` + `dateapp-marketingtools` |
 | UX Designer | [`uxdesigner/`](./uxdesigner/) | UI, design system, accessibility | 60 min | `opencode_local` + `dateapp` |
-| Mission Guardian (Claude) | [`mission-guardian-claude/`](./mission-guardian-claude/) | Daily 7-Hard-Rules audit | 24 h | `claude_local` |
-| Mission Guardian (Codex) | [`mission-guardian-codex/`](./mission-guardian-codex/) | Hot-standby audit | 24 h staggered | `codex_local` |
+| Mission Guardian (Claude) | [`mission-guardian-claude/`](./mission-guardian-claude/) | Daily 7-Hard-Rules audit | 24 h | `kimi-k2.6:cloud` via Ollama (rerouted 2026-05-07; was `claude_local`) |
+| Mission Guardian (Codex) | [`mission-guardian-codex/`](./mission-guardian-codex/) | Hot-standby audit | 24 h staggered | `codex_local` (daily-cap budget) |
 | INTERN (DoWhatTold) | [`intern/`](./intern/) | Slow social-media groundwork; never thinks | passive | smallest Ollama cloud model |
 | GitHub Auditor | [`github-auditor/`](./github-auditor/) | GH Actions doctrine audit (immune to AI) | daily 06:00 UTC cron | n/a (workflow) |
 
@@ -100,6 +100,8 @@ Compliant token descriptions: [`briefings/DAO-TOKEN-DESCRIPTIONS-COMPLIANT-2026-
 
 ## Most-Recent Audit Snapshots
 
+- **2026-05-10** — Claude Code Opus 4.7 manual audit pass #4 (Josh delegated full operational control; manual edits paused). Branch `claude/charming-einstein-59bRe`. Reconciled Mission Guardian model entries in README + OPS-INDEX (was claiming `claude_local`, the 2026-05-07 token doctrine rerouted to `kimi-k2.6:cloud` via Ollama — the agent file was right, the roster was stale). Corrected CEO/TOOLS.md Direct-Reports model column (CTO/UX/MG-Codex were wrong). CEO/CSO/INTERN/GitHub-Auditor language bans normalized to the canonical 7 used by CMO/UX/CTO/CFO/Mission Guardians. Added explicit forbidden-language scan steps to CSO + CTO heartbeats. CEO/TOOLS.md branch line expanded to the canonical `claude/<short-description>` feature-branch policy. See `README.md` Change Log for the full diff.
+- **2026-05-10** — Daily GH-Actions doctrine audit: PASS (28 monitored files). See `audit/AUDIT-2026-05-10.md`.
 - **2026-05-06** — Daily GH-Actions doctrine audit: PASS (28 monitored files, all required AGENTS.md/TOOLS.md present, no privilege-escalation assertions detected). See `audit/AUDIT-2026-05-06.md`.
 - **2026-05-06** — Claude Code Opus 4.7 manual audit pass (#2 of the day): added Founding-Four protections to OPS-INDEX + CEO heartbeat, added Opus Guardian step to CTO heartbeat, retired stale 4-DAO contract names from CTO/SOUL.md, reconciled customer-facing vs. agent-internal `disbursement` rule across CEO/CMO. See `README.md` Change Log.
 - **2026-05-06** — Claude Code Opus 4.7 manual audit pass (#3, fleet-wide language reconciliation, Josh delegated full operational control). Mission Guardians' Rule 1 patched to match the canonical CEO/CMO doctrine: full 7-term customer-facing ban + explicit allow-list for the agent-internal `contractual revenue disbursement` synonym (previously they would have false-flagged the very files that legitimately use that phrase). UX/CTO/CMO/CFO forbidden-language lists unified to the same 7 terms. CTO branch policy reconciled (AGENTS.md was claiming "ONE branch", contradicting its own TOOLS.md). CTO/SOUL.md cleared the "authoritative vs. history-only" contradiction on `packages/contracts/src/`. CFO/AGENTS.md clarified §496.405 framing — the *internal charity-routing doctrine* is terminated; the statute is alive and is exactly why the language ban exists. CSO heartbeat gained an explicit Founding-Four dilution-proposal scan. Mission Guardian protected-file list expanded to include SOUL.md and SKILLS.md. See `README.md` Change Log.

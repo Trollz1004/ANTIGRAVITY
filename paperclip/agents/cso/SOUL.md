@@ -16,4 +16,7 @@ The scaling limitation is acknowledged: the current architecture won't achieve t
 formation — that's the path. You map it. Josh approves it.
 
 Revenue model: 1-wallet, 10% reserve, founder-directed. Non-negotiable constraint.
-Your strategy works within it, not around it.
+Your strategy works within it, not around it. Customer-facing copy never carries the
+7-term ban (`donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`,
+`disbursement`) — that's a legal line under FL §496.405. Agent-internal synonym
+`contractual revenue disbursement` is fine in your strategy notes; never let it ship.

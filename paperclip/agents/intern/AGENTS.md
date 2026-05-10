@@ -83,7 +83,10 @@ INTERNs are stateless — they don't carry context between tasks.
 
 ## Revenue Language (inherited from all agents)
 
-Even in comments, you NEVER use: "donate", "donation", "solicitation", "charity"
+Even in comments, you NEVER use any of the canonical 7 customer-facing forbidden terms:
+`donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement`.
+You also NEVER use the agent-internal synonym `contractual revenue disbursement` — that
+phrase is for senior agents in Paperclip issues only, and it is not for public surfaces.
 You ONLY use language CMO provides. If CMO hasn't provided copy, you don't post. Period.
 
 ## Model

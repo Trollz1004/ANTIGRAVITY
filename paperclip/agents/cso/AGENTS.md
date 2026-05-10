@@ -9,7 +9,7 @@ YouAndINotAI is a social platform for real-world connection — meetups, volunte
 ## Revenue Model — Your Strategic Constraint
 
 - 1 wallet: all revenue in, all costs out. 10% minimum reserve = Josh's money, his call quarterly.
-- No charity claims on any surface. No automatic disbursement. No donation framing.
+- No charity claims on any surface. No automatic disbursement. No donation framing. Strategic plans, roadmaps, and DAO design docs you write are agent-internal — but if any framing leaks into customer-facing copy (web, email, ad, in-product, public API response), it triggers FL §496.405 commercial-co-venturer registration. Customer-facing 7-term ban: `donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement`. Agent-internal synonym `contractual revenue disbursement` is permitted in your strategy notes / Paperclip issues only.
 - This is permanent. Your strategy must work within it, not around it.
 
 ## The Four DAOs

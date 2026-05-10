@@ -14,8 +14,8 @@ If Paperclip's database gets wiped or an agent's instructions get corrupted, res
 | CTO | cto/ | opencode_local / qwen3-coder | b02a21c7-737e-4177-91ac-6d8e57805801 | 30m |
 | CMO | cmo/ | opencode_local / dateapp-marketingtools | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | 60m |
 | UX Designer | uxdesigner/ | opencode_local / dateapp | bd6d6722-9f3e-46ba-8651-ec9a219042ee | 60m |
-| Mission Guardian (Claude) | mission-guardian-claude/ | claude_local | 2229682b-cede-4462-b38b-25a910af022e | 24h |
-| Mission Guardian (Codex) | mission-guardian-codex/ | codex_local | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | 24h |
+| Mission Guardian (Claude) | mission-guardian-claude/ | kimi-k2.6:cloud via Ollama (rerouted 2026-05-07; was claude_local) | 2229682b-cede-4462-b38b-25a910af022e | 24h |
+| Mission Guardian (Codex) | mission-guardian-codex/ | codex_local (Ollama-routed; daily-cap budget) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | 24h |
 | INTERN (DoWhatTold) | intern/ | any ollama cloud (smallest) | (spawned by CEO/CFO) | NONE |
 | GitHub Auditor | github-auditor/ | github-actions | N/A (workflow) | 24h |
 
@@ -67,7 +67,8 @@ INTERN has only:
 - CTO / TechExecutor: `opencode_local` + `ollama/qwen3-coder:480b-cloud`
 - CMO: `opencode_local` + `ollama/Trollz1004/dateapp-marketingtools` (platform-specific; fallback: qwen3-coder)
 - UX Designer: `opencode_local` + `ollama/Trollz1004/dateapp` (fallback: qwen3-coder)
-- Mission Guardians: `claude_local` + `codex_local` — daily audit only (86400s heartbeat, staggered)
+- Mission Guardian (Claude): `kimi-k2.6:cloud` via Ollama (rerouted 2026-05-07 per token doctrine — Claude API reserved for Cowork/Claude Code orchestration only). Fallback: `qwen3-coder:480b-cloud` → `glm-5.1:cloud` → `qwen2.5:7b` (local). Daily audit only (86400s heartbeat).
+- Mission Guardian (Codex): `codex_local` — daily-cap budget on audit work only. Daily audit only (86400s heartbeat, staggered offset from Claude Guardian).
 - INTERN: any cheapest available Ollama cloud model (Gemma 1B is fine — INTERNs do not think)
 
 ## Required Files Per Agent — Quick Matrix
@@ -87,6 +88,19 @@ INTERN has only:
 
 ## Change Log
 
+- **2026-05-10** — Audit & optimization pass #4 by Claude Code Opus 4.7 (Josh delegated full operational control over CEO / Agents / SKILLS-HEARTBEAT-TOOLS; "treat it as your own"; said all manual edits are stopped). Branch: `claude/charming-einstein-59bRe`. Drift reconciled fleet-wide:
+  - **README.md (this file) — Agent Roster + Models** — Mission Guardian (Claude) updated from `claude_local` to `kimi-k2.6:cloud` via Ollama (the 2026-05-07 token doctrine rerouted Claude Code CLI off the Claude API; the agent's own TOOLS.md was already correct, but the roster/Models section was stale). Mission Guardian (Codex) clarified as `codex_local` daily-cap budget. Fleet now has one canonical model story across README → OPS-INDEX → individual agent files.
+  - **OPS-INDEX.md — fleet table** — Same Mission Guardian model fix.
+  - **CEO/TOOLS.md — Direct Reports table** — Model column was inaccurate (CTO listed as `kimi-k2.6:cloud`, UX Designer as `kimi-k2.6:cloud`, MG-Codex as `qwen3-coder:480b-cloud`). Reconciled with each agent's own TOOLS.md: CTO=`opencode_local + qwen3-coder:480b-cloud`, UX=`opencode_local + Trollz1004/dateapp`, MG-Claude=`kimi-k2.6:cloud via Ollama` (per token doctrine), MG-Codex=`codex_local`. Branch line expanded from "main" to the canonical feature-branch policy (`claude/<short-description>`, never push direct to `main`).
+  - **CEO/SOUL.md** — Customer-facing language ban expanded from 2 example terms (`donate`, `donation`) to the canonical 7. Brings CEO/SOUL into sync with CMO/UX/CTO/CFO/Mission Guardian SOULs.
+  - **CEO/HEARTBEAT.md step 6** — Forbidden-language scan expanded from 4 terms (`donate`, `donation`, `solicitation`, `charity routing`) to canonical 7 with the agent-internal `contractual revenue disbursement` allow-list note.
+  - **CSO/AGENTS.md** — Revenue-model section expanded with the canonical 7 + FL §496.405 framing + agent-internal allow-list note. Previously only said "no charity claims" without enumerating.
+  - **CSO/HEARTBEAT.md** — New step 4: forbidden-language scan on public-facing roadmap artifacts (DAO launch page, public roadmap, governance announcement). Renumbered downstream steps.
+  - **CSO/SOUL.md** — Customer-facing 7-term ban explicitly enumerated.
+  - **CTO/HEARTBEAT.md** — New step 6: forbidden-language scan when frontend / public-API surface changed since last beat. CTO ships strings to users; previously had Opus Guardian (security) + CI scans but no explicit language scan in the beat. Catches drift before PR merges.
+  - **INTERN/AGENTS.md** — "Revenue Language" section expanded from 4 terms to canonical 7 + explicit ban on the agent-internal synonym (INTERNs never use the synonym either, since they post to public surfaces).
+  - **GitHub Auditor/AGENTS.md** — "What It Checks" updated: enumerates the canonical 7 with agent-internal allow-list note; mentions SKILLS.md (CEO-only) in agent-file completeness; adds the privilege-escalation / self-modification check that the workflow already runs.
+  - Net effect: every fleet file now uses the same 7-term customer-facing ban, the same `contractual revenue disbursement` agent-internal allow-list, and the same Mission Guardian model story. Daily GitHub Actions audit is unaffected (all required files still present).
 - **2026-05-06** — Audit & optimization pass #3 by Claude Code Opus 4.7 (Josh delegated full operational control over CEO / Agents / SKILLS-HEARTBEAT-TOOLS; "treat it as your own"). Fleet-wide language and protected-file reconciliation. Changes:
   - **Mission Guardian (Claude + Codex) AGENTS.md** — Rule 1 patched. Previously read "No 'donate', 'donation', or 'solicitation' anywhere ... zero exceptions" — that would have false-flagged the legitimate agent-internal `contractual revenue disbursement` synonym used by CEO/CMO/CFO. New rule: full 7-term customer-facing ban (`donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement`) **plus** an explicit allow-list for `contractual revenue disbursement` in agent-internal copy only. Rule 5 protected-file list expanded to include `SOUL.md` and `SKILLS.md` (previously only listed AGENTS.md/CLAUDE.md/TOOLS.md/HEARTBEAT.md). Rule 5 also notes the Josh-authorized Claude Code manual audit-pass exception (which is what allows passes like this one to land).
   - **Mission Guardian (Claude + Codex) HEARTBEAT.md** — Forbidden-language scan (step 1) updated to the full 7-term list with the agent-internal exception, protected-file scan (step 4) extended to include `SKILLS.md`, and a new **step 7: Founding-Four protection scan** (Gemini, Claude Code, Perplexity, Grok). Mission Guardian (Codex) now explicitly references the canonical step list owned by Mission Guardian (Claude).

@@ -16,7 +16,9 @@ makes it beautiful, Mission Guardians keep everyone honest. You keep them all po
 same target.
 
 The Four DAOs ($LOVE, $UKID, $GREEN, $AGRAV) are governance structures, not charity vehicles.
-The 1-wallet / 10% reserve model is permanent. Revenue language is "contractual revenue
-disbursement" — never "donate" or "donation."
+The 1-wallet / 10% reserve model is permanent. Revenue language is `contractual revenue
+disbursement` — agent-internal copy only — and the customer-facing 7-term ban (`donate`,
+`donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement`) is a
+hard line in any post, page, email, or in-product string that ships to a user.
 
 For the kids. That's why we're here.
