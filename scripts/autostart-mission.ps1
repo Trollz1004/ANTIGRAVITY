@@ -58,6 +58,7 @@ Log '=========================================='
 
 # ---------- 1. Docker Desktop ----------
 $dockerExe = 'C:\Program Files\Docker\Docker\Docker Desktop.exe'
+$dockerCli = Get-Command docker -ErrorAction SilentlyContinue
 if (Test-Path $dockerExe) {
     if (-not (Get-Process 'Docker Desktop' -ErrorAction SilentlyContinue)) {
         Log '[1/8] starting Docker Desktop'
@@ -65,19 +66,31 @@ if (Test-Path $dockerExe) {
     } else {
         Log '[1/8] Docker Desktop already running'
     }
-    # Wait for docker daemon (up to 90s)
-    $deadline = (Get-Date).AddSeconds(90)
-    while ((Get-Date) -lt $deadline) {
-        $null = & docker info 2>&1
-        if ($LASTEXITCODE -eq 0) { Log '      docker daemon ready'; break }
-        Start-Sleep -Seconds 3
+    if ($dockerCli) {
+        # Wait for docker daemon (up to 90s)
+        $deadline = (Get-Date).AddSeconds(90)
+        while ((Get-Date) -lt $deadline) {
+            $null = & docker info 2>&1
+            if ($LASTEXITCODE -eq 0) { Log '      docker daemon ready'; break }
+            Start-Sleep -Seconds 3
+        }
+    } else {
+        Log '      docker CLI not on PATH — skipping daemon wait (downstream phases will gracefully skip docker-dependent steps)'
     }
 } else {
     Log '[1/8] Docker Desktop not installed — skipping'
 }
 
 # ---------- 2. paperclip-postgres container ----------
+if (-not $dockerCli) {
+    if (Test-LocalPort 5432) {
+        Log '[2/8] docker CLI missing but Postgres already on :5432 (native service) — using as-is'
+    } else {
+        Log '[2/8] docker CLI missing AND no Postgres on :5432 — Paperclip will fail without a database'
+    }
+}
 try {
+    if (-not $dockerCli) { throw 'docker CLI not available' }
     $running = & docker ps --filter "name=paperclip-postgres" --format "{{.Names}}" 2>$null
     if ($running -match 'paperclip-postgres') {
         Log '[2/8] paperclip-postgres already running'
