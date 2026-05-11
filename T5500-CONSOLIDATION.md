@@ -11,7 +11,8 @@
 - **ONE repo:** `Trollz1004/ANTIGRAVITY` (caps spelling matters)
 - **ONE folder:** `C:\Antigravity` on T5500
 - **ONE branch:** `main`
-- **Push-to-main authority moves to T5500** (was Sabretooth; Sabretooth will be wiped)
+- **Push-to-main authority moves to T5500** (was Sabretooth; Sabretooth will be wiped after `sabretooth-preserve-20260511` lands on origin)
+- **Ollama Cloud API key needs rotation** — one was found in a stripped zip during 9020 preserve: `e50184ca...J6w3HWQkWh9KrLCnfpJM6` (Ollama Cloud key, prefix `e50184ca`). Rotate at https://ollama.com/account/keys before redeploying any code that uses it.
 - **Paperclip:** one instance on T5500, four companies inside (TRA, AIS, YOU, MAR)
 - Hardware: T5500, Dual Xeon, 72GB RAM, single GTX 1070 (8GB VRAM)
 - Network: 192.168.0.15
@@ -23,8 +24,9 @@
 
 ## What needs to come from 9020 / Sabretooth
 
-- `income-engine/` subtree (already merged into origin/main from Sabretooth, commit `0a24807`, origin HEAD `6c3cab88`). Just pull.
-- `C:\NewsCreator-backup\NewsCreator-main\` (preserved FastAPI + Ollama app, ~31KB). Lives on 9020 at that path. Copy via network share or push to a temp branch first.
+- `income-engine/` subtree (already merged into origin/main from Sabretooth, commit `0a24807`, origin HEAD now `08c160c` after this runbook). Just pull.
+- **9020 preserve bundle**: branch `9020-preserve-20260511` on origin. Contains `_9020-preserve/income-engine-CLAUDEs/` (Manus dating-app source), `_9020-preserve/support-claw/` (Python support bot), `_9020-preserve/NewsCreator/` (FastAPI+Ollama YouTube automation). See `_9020-preserve/README.md` on that branch for triage instructions.
+- **Sabretooth preserve bundle**: branch `sabretooth-preserve-20260511` (to be created by Sabretooth before its wipe — see `SABRETOOTH-PREWIPE.md` on main).
 - Paperclip company UUIDs from Sabretooth instance — they will NOT carry over (per-instance state). Recreate by NAME on T5500:
   - Trash Or Treasure Online Recycler LLC → prefix TRA
   - ai-solutions.store → prefix AIS
