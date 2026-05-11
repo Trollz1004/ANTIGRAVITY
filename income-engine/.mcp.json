@@ -1,0 +1,29 @@
+{
+  "mcpServers": {
+    "paperclip": {
+      "command": "npx",
+      "args": ["-y", "paperclip-mcp@latest"],
+      "env": {
+        "PAPERCLIP_BASE_URL": "http://localhost:3101",
+        "PAPERCLIP_API_KEY": "90e4e195afa302a53b362433abea6d4fce3affe1b8f4777a289eef462cabb432"
+      },
+      "description": "Paperclip AI agent orchestration — manage companies, agents, projects, issues, goals, approvals"
+    },
+    "claude-flow": {
+      "command": "npx",
+      "args": ["-y", "claude-flow@alpha", "mcp", "start"],
+      "description": "Ruflo enterprise agent orchestration — 150+ commands, swarm coordination, SPARC methodology"
+    },
+    "ruv-swarm": {
+      "command": "npx",
+      "args": ["-y", "ruv-swarm", "mcp", "start"],
+      "description": "Enhanced swarm coordination with WASM acceleration for Ruflo"
+    },
+    "flow-nexus": {
+      "command": "npx",
+      "args": ["-y", "flow-nexus@latest", "mcp", "start"],
+      "description": "Cloud-based orchestration platform with 70+ tools for Ruflo",
+      "optional": true
+    }
+  }
+}

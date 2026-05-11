@@ -1,0 +1,74 @@
+{"ts":"2026-05-08T01:33:35.743Z","stream":"stdout","chunk":"[hermes] Starting Hermes Agent (model=anthropic/claude-sonnet-4, provider=anthropic [modelInference], timeout=300s)\n"}
+{"ts":"2026-05-08T01:33:35.747Z","stream":"stdout","chunk":"[hermes] Resuming session: 20260507_213320_d4a432\n"}
+{"ts":"2026-05-08T01:33:39.500Z","stream":"stdout","chunk":"⚠️  Normalized model 'anthropic/claude-sonnet-4'"}
+{"ts":"2026-05-08T01:33:39.501Z","stream":"stdout","chunk":" to 'claude-sonnet-4' for \r\nanthropic.\r\n"}
+{"ts":"2026-05-08T01:33:39.528Z","stream":"stderr","chunk":"Traceback (most recent call last):\r\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\r\n  File \"<frozen runpy>\", line 88, in _run_code\r\n"}
+{"ts":"2026-05-08T01:33:39.529Z","stream":"stderr","chunk":"  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes.EXE\\__main__.py\", line 10, in <module>\r\n"}
+{"ts":"2026-05-08T01:33:39.530Z","stream":"stderr","chunk":"  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\hermes_cli\\main.py\", line 10963, in main\r\n"}
+{"ts":"2026-05-08T01:33:39.534Z","stream":"stderr","chunk":"    args.func(args)\r\n"}
+{"ts":"2026-05-08T01:33:39.535Z","stream":"stderr","chunk":"  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\hermes_cli\\main.py\", line 1473, in cmd_chat\r\n"}
+{"ts":"2026-05-08T01:33:39.536Z","stream":"stderr","chunk":"    cli_main(**kwargs)"}
+{"ts":"2026-05-08T01:33:39.537Z","stream":"stderr","chunk":"\r\n"}
+{"ts":"2026-05-08T01:33:39.538Z","stream":"stderr","chunk":"  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\cli.py\", line 12516, in main\r\n"}
+{"ts":"2026-05-08T01:33:39.543Z","stream":"stderr","chunk":"    if cli._init_agent(\r\n"}
+{"ts":"2026-05-08T01:33:39.544Z","stream":"stderr","chunk":"       ^^^^^^^^^^^^^^^^\r\n  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\cli.py\", line 3846, in _init_agent\r\n"}
+{"ts":"2026-05-08T01:33:39.545Z","stream":"stderr","chunk":"    ChatConsole().print("}
+{"ts":"2026-05-08T01:33:39.545Z","stream":"stderr","chunk":"\r\n  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\cli.py\", line 1903, in print\r\n"}
+{"ts":"2026-05-08T01:33:39.546Z","stream":"stderr","chunk":"    _cprint(line)"}
+{"ts":"2026-05-08T01:33:39.547Z","stream":"stderr","chunk":"\r\n  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\cli.py\", line 1398, in _cprint\r\n"}
+{"ts":"2026-05-08T01:33:39.549Z","stream":"stderr","chunk":"    _pt_print(_PT_ANSI(text))"}
+{"ts":"2026-05-08T01:33:39.550Z","stream":"stderr","chunk":"\r\n"}
+{"ts":"2026-05-08T01:33:39.551Z","stream":"stderr","chunk":"  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\prompt_toolkit\\shortcuts\\utils.py\", line 111, in print_formatted_text\r\n"}
+{"ts":"2026-05-08T01:33:39.553Z","stream":"stderr","chunk":"    "}
+{"ts":"2026-05-08T01:33:39.553Z","stream":"stderr","chunk":"output = get_app_session().output"}
+{"ts":"2026-05-08T01:33:39.554Z","stream":"stderr","chunk":"\r\n"}
+{"ts":"2026-05-08T01:33:39.555Z","stream":"stderr","chunk":"  "}
+{"ts":"2026-05-08T01:33:39.556Z","stream":"stderr","chunk":"       "}
+{"ts":"2026-05-08T01:33:39.557Z","stream":"stderr","chunk":"    ^"}
+{"ts":"2026-05-08T01:33:39.558Z","stream":"stderr","chunk":"^^^^"}
+{"ts":"2026-05-08T01:33:39.559Z","stream":"stderr","chunk":"^^^"}
+{"ts":"2026-05-08T01:33:39.560Z","stream":"stderr","chunk":"^^"}
+{"ts":"2026-05-08T01:33:39.560Z","stream":"stderr","chunk":"^^"}
+{"ts":"2026-05-08T01:33:39.561Z","stream":"stderr","chunk":"^^"}
+{"ts":"2026-05-08T01:33:39.562Z","stream":"stderr","chunk":"^^"}
+{"ts":"2026-05-08T01:33:39.562Z","stream":"stderr","chunk":"^"}
+{"ts":"2026-05-08T01:33:39.563Z","stream":"stderr","chunk":"^^^"}
+{"ts":"2026-05-08T01:33:39.564Z","stream":"stderr","chunk":"^^^^"}
+{"ts":"2026-05-08T01:33:39.567Z","stream":"stderr","chunk":"\r\n"}
+{"ts":"2026-05-08T01:33:39.568Z","stream":"stderr","chunk":"  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\prompt_toolkit\\application\\current.py\", line 67, in output\r\n"}
+{"ts":"2026-05-08T01:33:39.570Z","stream":"stderr","chunk":"    self._output = create_output()\r\n                   ^^^^^^^^^^^^^^^\r\n"}
+{"ts":"2026-05-08T01:33:39.571Z","stream":"stderr","chunk":"  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\prompt_toolkit\\output\\defaults.py\", line 91, in create_output\r\n"}
+{"ts":"2026-05-08T01:33:39.572Z","stream":"stderr","chunk":"    return Win32Output(stdout, default_color_depth=color_depth_from_env)\r\n           "}
+{"ts":"2026-05-08T01:33:39.573Z","stream":"stderr","chunk":"^"}
+{"ts":"2026-05-08T01:33:39.573Z","stream":"stderr","chunk":"^^^^^^^^"}
+{"ts":"2026-05-08T01:33:39.574Z","stream":"stderr","chunk":"^^"}
+{"ts":"2026-05-08T01:33:39.575Z","stream":"stderr","chunk":"^^^^"}
+{"ts":"2026-05-08T01:33:39.575Z","stream":"stderr","chunk":"^^^^"}
+{"ts":"2026-05-08T01:33:39.576Z","stream":"stderr","chunk":"^^"}
+{"ts":"2026-05-08T01:33:39.577Z","stream":"stderr","chunk":"^^^"}
+{"ts":"2026-05-08T01:33:39.577Z","stream":"stderr","chunk":"^^^^^^^^"}
+{"ts":"2026-05-08T01:33:39.578Z","stream":"stderr","chunk":"^^"}
+{"ts":"2026-05-08T01:33:39.579Z","stream":"stderr","chunk":"^^^^^"}
+{"ts":"2026-05-08T01:33:39.580Z","stream":"stderr","chunk":"^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\prompt_toolkit\\output\\win32.py\", line 115, in __init__\r\n"}
+{"ts":"2026-05-08T01:33:39.580Z","stream":"stderr","chunk":"    info = self.get_win32_screen_buffer_info()\r\n        "}
+{"ts":"2026-05-08T01:33:39.581Z","stream":"stderr","chunk":"  "}
+{"ts":"2026-05-08T01:33:39.583Z","stream":"stderr","chunk":" "}
+{"ts":"2026-05-08T01:33:39.584Z","stream":"stderr","chunk":"^^"}
+{"ts":"2026-05-08T01:33:39.585Z","stream":"stderr","chunk":"^^^^"}
+{"ts":"2026-05-08T01:33:39.586Z","stream":"stderr","chunk":"^^^^"}
+{"ts":"2026-05-08T01:33:39.586Z","stream":"stderr","chunk":"^^"}
+{"ts":"2026-05-08T01:33:39.587Z","stream":"stderr","chunk":"^"}
+{"ts":"2026-05-08T01:33:39.588Z","stream":"stderr","chunk":"^^^"}
+{"ts":"2026-05-08T01:33:39.589Z","stream":"stderr","chunk":"^^^^^^^^^^"}
+{"ts":"2026-05-08T01:33:39.589Z","stream":"stderr","chunk":"^"}
+{"ts":"2026-05-08T01:33:39.590Z","stream":"stderr","chunk":"^"}
+{"ts":"2026-05-08T01:33:39.591Z","stream":"stderr","chunk":"^^^^^^"}
+{"ts":"2026-05-08T01:33:39.592Z","stream":"stderr","chunk":"^"}
+{"ts":"2026-05-08T01:33:39.593Z","stream":"stderr","chunk":"\r\n"}
+{"ts":"2026-05-08T01:33:39.594Z","stream":"stderr","chunk":"  File \"C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\prompt_toolkit\\output\\win32.py\", line 219, in get_win32_screen_buffer_info\r\n"}
+{"ts":"2026-05-08T01:33:39.594Z","stream":"stderr","chunk":"    "}
+{"ts":"2026-05-08T01:33:39.595Z","stream":"stderr","chunk":"raise NoConsoleScreenBufferError\r\n"}
+{"ts":"2026-05-08T01:33:39.596Z","stream":"stderr","chunk":"prompt_toolkit.output.win32."}
+{"ts":"2026-05-08T01:33:39.596Z","stream":"stderr","chunk":"NoConsoleScreenBufferError: Found xterm-256color, while expecting a Windows console. Maybe try to run this program using \"winpty\" or run it in cmd.exe instead. Or otherwise, in case of Cygwin, use the Python executable that is compiled for Cygwin."}
+{"ts":"2026-05-08T01:33:39.597Z","stream":"stderr","chunk":"\r\n"}
+{"ts":"2026-05-08T01:33:39.860Z","stream":"stdout","chunk":"[hermes] Exit code: 1, timed out: false\n"}

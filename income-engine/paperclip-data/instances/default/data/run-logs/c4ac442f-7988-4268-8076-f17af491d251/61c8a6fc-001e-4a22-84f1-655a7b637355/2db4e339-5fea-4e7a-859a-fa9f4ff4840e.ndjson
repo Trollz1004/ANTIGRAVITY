@@ -1,0 +1,8 @@
+{"ts":"2026-05-08T02:43:06.776Z","stream":"stdout","chunk":"[paperclip] No project or prior session workspace was available. Using fallback workspace \"C:\\income-engine\\paperclip-data\\instances\\default\\workspaces\\61c8a6fc-001e-4a22-84f1-655a7b637355\" for this run.\n"}
+{"ts":"2026-05-08T02:43:06.795Z","stream":"stdout","chunk":"[hermes] Starting Hermes Agent (model=anthropic/claude-sonnet-4, provider=anthropic [modelInference], timeout=300s)\n"}
+{"ts":"2026-05-08T02:43:16.663Z","stream":"stdout","chunk":"⚠️  Normalized model "}
+{"ts":"2026-05-08T02:43:16.664Z","stream":"stdout","chunk":"'anthropic/claude-sonnet-4' to 'claude-sonnet-4' for \r\nanthropic.\r\n"}
+{"ts":"2026-05-08T02:43:35.945Z","stream":"stdout","chunk":"API call failed after 3 retries: HTTP 400: Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\r\n"}
+{"ts":"2026-05-08T02:43:35.947Z","stream":"stderr","chunk":"\r\nsession_id: 20260507_224316_15b08f\r\n"}
+{"ts":"2026-05-08T02:43:36.902Z","stream":"stdout","chunk":"[hermes] Exit code: 1, timed out: false\n"}
+{"ts":"2026-05-08T02:43:36.903Z","stream":"stdout","chunk":"[hermes] Session: 20260507_224316_15b08f\n"}
