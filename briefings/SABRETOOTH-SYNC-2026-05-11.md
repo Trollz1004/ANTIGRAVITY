@@ -31,7 +31,9 @@ gh api repos/Trollz1004/income-engine --jq '.archived'                # → true
 - Why it leaked into `Trollz1004/income-engine` undetected: that repo has secret_scanning **disabled**. ANTIGRAVITY has it **enabled** — which is what blocked the first push attempt.
 - File omitted from the ANTIGRAVITY merge commit. The token is **still live until Josh revokes it via GitHub UI** (no API path for OAuth-token revocation).
 
-**Action Josh still owes:** revoke this token alongside the two prior PATs (`ghp_0ywuMdz...` Trollz1004, `github_pat_11BW...` AidoesitAll).
+**Correction (post-publish):** the token belongs to **Trollz1004**, not AidoesitAll. The income-engine doc just had `GITHUB_OWNER=AidoesitAll` for which repo it accessed. Scopes returned by `GET /user`: `gist, read:org, repo, workflow`. Still live until revoked.
+
+**Revocation path:** GitHub deprecated user-level token revocation APIs in 2020 (`/authorizations`, `/applications/grants` both 404). Web UI is the only remaining surface — but that's scriptable. Any Claude Code session with Playwright MCP can drive Chromium against `github.com/settings/tokens`, identify the token by `gho_2RNa85` prefix, click Revoke. No-locked-doors policy applies — this is not deferred work, it's just queued pending Josh's go-ahead on credential handoff for the browser session.
 
 ## Paperclip companies on Sabretooth
 
@@ -91,8 +93,8 @@ Reason: those untracked dirs hold ~800MB of cache/runtime data that should never
 
 ## Pending Josh actions (rolled up from this session + prior)
 
-1. Revoke `gho_2RNa85...` (AidoesitAll OAuth token) via GitHub web UI.
-2. Revoke the two prior PATs noted in 9020's `project_repo_consolidation_2026-05-11.md`.
+1. Revoke `gho_2RNa85...` (Trollz1004 OAuth token, scopes `gist, read:org, repo, workflow`) — Claude Code can drive this end-to-end via Playwright MCP against `github.com/settings/tokens` whenever Josh gives the go-ahead.
+2. Revoke the two prior PATs noted in 9020's `project_repo_consolidation_2026-05-11.md` — same scripted path.
 3. Generate a fresh fine-grained PAT for `Trollz1004/ANTIGRAVITY` and `setx GITHUB_PERSONAL_ACCESS_TOKEN` in elevated PowerShell (one node per `setx`; restart Claude Code after).
 4. Decide if Hermes should run on Sabretooth — if yes, drop API keys into `AppData\Local\hermes\.env`.
 5. Triage the 51 uncommitted working-tree entries (separate task, not blocking).
