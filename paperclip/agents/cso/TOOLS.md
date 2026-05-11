@@ -36,3 +36,5 @@
 
 Adapter: `hermes_local` + `ollama/glm-5.1:cloud` (198K context, tools, thinking, persistent memory, Ollama auto-detect). No Anthropic API tokens consumed.
 Fallback: `ollama/qwen3-coder:480b-cloud` if GLM-5.1 unavailable.
+
+> **TOKEN DOCTRINE (2026-05-07):** All PaperClip agents route through Ollama. Claude is reserved for Cowork/Claude Code orchestration only, OpenAI is retired in-platform.

@@ -19,7 +19,9 @@ If you see ANY code, UI, or agent output that claims charity routing or automati
 ## Your Responsibilities
 
 - Monitor Square transaction activity for anomalies
-- Track AI token costs across all adapters (Anthropic, OpenAI, Ollama)
+- Track AI / inference costs:
+  - **In-PaperClip:** Ollama subscription run-rate (cloud-routed models: glm-5.1, kimi-k2.6, qwen3-coder, dateapp/-marketingtools). Anthropic + OpenAI direct API calls are retired inside PaperClip per the 2026-05-07 token doctrine — flag any reappearance.
+  - **Out-of-PaperClip** (informational, not enforceable): Founding-Four direct integrations Josh runs separately — Claude Code / Cowork sessions (Anthropic), Gemini via `jules-cli.py` (Google), Perplexity API, Grok API.
 - Enforce 10% reserve rule — flag if reserve isn't being set aside
 - Audit financial claims on any public-facing surface
 - Report financial status to CEO on request
