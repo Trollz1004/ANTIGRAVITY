@@ -1,8 +1,30 @@
 # REPOSITORY RECORD - SABRETOOTH LIVE STATE
 
-Date: April 28, 2026
+Date: May 11, 2026 (header date forward-rolled — content from 2026-04-28 sweep preserved below)
 Authority: Joshua Coleman
-Status: authoritative repo refreshed after April 15 PaperClip HQ cutover, the April 17 1-wallet revenue-model pivot (charity-routing language removed from all active surfaces), the April 19 4-DAO architecture finalization and Gemini memory refresh, the April 27 OpenCode / Paperclip Worker finalization, and the April 28 doctrine sweep that moved the env vault to OneDrive, locked the 1-folder rule, migrated OpusPawClaw to `c:\Antigravity\apps\opuspawclaw`, added the Sabretooth always-on watchdog, stood up Hermes Router on `:11435`, and wired the Playwright browser MCP into the project
+Status: authoritative repo refreshed after the 2026-05-11 ONE-repo consolidation (income-engine merged in, second repo archived, Paperclip companies created), the April 15 PaperClip HQ cutover, the April 17 1-wallet revenue-model pivot (charity-routing language removed from all active surfaces), the April 19 4-DAO architecture finalization and Gemini memory refresh, the April 27 OpenCode / Paperclip Worker finalization, and the April 28 doctrine sweep that moved the env vault to OneDrive, locked the 1-folder rule, migrated OpusPawClaw to `c:\Antigravity\apps\opuspawclaw`, added the Sabretooth always-on watchdog, stood up Hermes Router on `:11435`, and wired the Playwright browser MCP into the project
+
+## 2026-05-11 ONE-Repo Consolidation (canonical)
+
+> Latest doctrine. Supersedes any earlier "two repos one owner" wording. Full details: [SABRETOOTH-SYNC-2026-05-11.md](SABRETOOTH-SYNC-2026-05-11.md).
+
+| Aspect | Value |
+|---|---|
+| Repo (only) | `Trollz1004/ANTIGRAVITY` |
+| Folder (every node) | `C:\Antigravity` (or `C:\ANTIGRAVITY`) |
+| Branch | `main` |
+| Push-to-main authority | Sabretooth (192.168.0.8) |
+| Sync-only nodes | 9020, T5500 (clone/pull from origin) |
+| Sabretooth main HEAD | `0a248073` — "Merge income-engine into ANTIGRAVITY (redact leaked AidoesitAll gho_ token…)" |
+| Subtree imported | `Trollz1004/income-engine@f9feff1d` → `income-engine/` (2018 files; one secret-bearing file omitted) |
+| `Trollz1004/income-engine` | **archived** (read-only safety net, not deleted) |
+| `AidoesitAll/income-engine` | archived earlier this round |
+| Paperclip companies | `Trash Or Treasure Online Recycler LLC` (TRA), `ai-solutions.store` (AIS), `youandinotai.com` (YOU), `marketing` (MAR, unified for now) |
+| Hermes config (Sabretooth) | `AppData\Local\hermes\config.yaml` — model `inclusionai/ring-2.6-1t:free`, provider `openrouter`, fallbacks `openrouter/nous/zai` |
+| Hermes `.env` (Sabretooth) | not yet created — keys not pasted through chat per session rule |
+| Language firewall | **DEAD** — mission is helping kids with medical care; speak honestly in code/commits/docs. FL §496.405 (avoid "donate/donation/solicitation" in customer-facing copy) remains the one real legal constraint. |
+
+
 
 ## Repository Truth
 
