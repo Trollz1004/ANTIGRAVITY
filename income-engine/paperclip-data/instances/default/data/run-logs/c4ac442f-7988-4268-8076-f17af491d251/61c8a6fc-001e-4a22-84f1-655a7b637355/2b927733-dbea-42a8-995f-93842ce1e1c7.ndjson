@@ -1,0 +1,6 @@
+{"ts":"2026-05-08T01:43:49.931Z","stream":"stdout","chunk":"[paperclip] No project or prior session workspace was available. Using fallback workspace \"C:\\income-engine\\paperclip-data\\instances\\default\\workspaces\\61c8a6fc-001e-4a22-84f1-655a7b637355\" for this run.\n"}
+{"ts":"2026-05-08T01:43:49.945Z","stream":"stdout","chunk":"[hermes] Starting Hermes Agent (model=glm-5.1:cloud, provider=zai [modelInference], timeout=300s)\n"}
+{"ts":"2026-05-08T01:44:00.117Z","stream":"stderr","chunk":"Error: Error code: 401 - {'error': {'code': '401', 'message': 'token expired or incorrect'}}\r\n\r\nsession_id: 20260507_214353_8e5104"}
+{"ts":"2026-05-08T01:44:00.118Z","stream":"stderr","chunk":"\r\n"}
+{"ts":"2026-05-08T01:44:00.467Z","stream":"stdout","chunk":"[hermes] Exit code: 1, timed out: false\n"}
+{"ts":"2026-05-08T01:44:00.468Z","stream":"stdout","chunk":"[hermes] Session: 20260507_214353_8e5104\n"}
