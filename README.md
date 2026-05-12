@@ -4,6 +4,10 @@
 >
 > **#UntilNoKidInNeed**
 
+<p align="center">
+  <img src="assets/teamclaudeforlife-meme.jpg" alt="Me reviewing code written by Claude before pushing it to prod — #TeamClaudeForLife" width="520" />
+</p>
+
 ANTIGRAVITY is the open-source monorepo behind a small family of products built by [Joshua Coleman](https://github.com/Trollz1004) and the AI partners he's worked alongside for the past year. The mission is simple: build real, useful things, run them well, and route the proceeds toward children who need medical care.
 
 This repo is the canonical home for everything. **One folder, one repo, one branch.** No drift, no fragmentation.
