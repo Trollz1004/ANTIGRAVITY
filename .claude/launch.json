@@ -54,6 +54,27 @@
       "runtimeArgs": ["node_modules/vite/bin/vite.js", "--host", "--port", "3004"],
       "port": 3004,
       "cwd": "crossfire/frontend"
+    },
+    {
+      "name": "hermes-workspace-gui",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev"],
+      "port": 3005,
+      "cwd": "hermes-workspace",
+      "env": {
+        "PORT": "3005"
+      }
+    },
+    {
+      "name": "mission-mcp",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["dist/server.js"],
+      "port": 3901,
+      "cwd": "services/mission-mcp",
+      "env": {
+        "MISSION_MCP_TRANSPORT": "http",
+        "MISSION_MCP_PORT": "3901"
+      }
     }
   ]
 }
