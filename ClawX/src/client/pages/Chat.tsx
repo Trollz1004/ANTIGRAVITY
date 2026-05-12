@@ -25,7 +25,7 @@ import {
   Hash,
   ChevronDown,
 } from 'lucide-react';
-import type { AiProviderSlug } from '../../../shared/ai-providers';
+import type { AiProviderSlug } from '../../shared/ai-providers';
 
 const providerIcons: Record<string, React.ElementType> = {
   manus: Bot,
@@ -48,8 +48,8 @@ const providerColors: Record<string, string> = {
 export default function Chat() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
-  const [, params] = useRoute('/chat/:id');
-  const conversationId = params?.id ? parseInt(params.id) : null;
+  const [matched, params] = useRoute<{ id: string }>('/chat/:id');
+  const conversationId = matched && params?.id ? parseInt(params.id) : null;
 
   const [selectedProviders, setSelectedProviders] = useState<AiProviderSlug[]>(['manus']);
   const [isBroadcast, setIsBroadcast] = useState(false);
