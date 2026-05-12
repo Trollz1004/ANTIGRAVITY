@@ -1,0 +1,36 @@
+{
+  "name": "@antigravity/mission-mcp",
+  "version": "0.1.0",
+  "description": "ANTIGRAVITY mission orchestrator MCP server — no-Paperclip bedrock",
+  "type": "module",
+  "main": "dist/server.js",
+  "bin": {
+    "mission-mcp": "dist/server.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "start": "node dist/server.js",
+    "start:http": "MISSION_MCP_TRANSPORT=http node dist/server.js",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "better-sqlite3": "^11.5.0",
+    "diff": "^7.0.0",
+    "express": "^4.21.0",
+    "ulid": "^2.3.0",
+    "zod": "^3.25.76",
+    "zod-to-json-schema": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/diff": "^7.0.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
+  }
+}
