@@ -8,8 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Eye, EyeOff, Key, Trash2, CheckCircle2, XCircle, Lock, ShieldCheck } from 'lucide-react';
-import { PROVIDER_CONFIGS } from '../../../shared/ai-providers';
-import type { AiProviderSlug } from '../../../shared/ai-providers';
+import { PROVIDER_CONFIGS } from '../../shared/ai-providers';
+import type { AiProviderSlug } from '../../shared/ai-providers';
 
 const PROVIDERS_WITH_KEYS: AiProviderSlug[] = ['claude', 'gemini', 'perplexity', 'grok', 'codex'];
 
@@ -54,20 +54,20 @@ export default function Settings() {
   const { data: providers } = trpc.providers.list.useQuery(undefined, { enabled: isAuthenticated });
 
   const saveMutation = trpc.apiKeys.save.useMutation({
-    onSuccess: (_, vars) => {
+    onSuccess: (_, vars: { providerSlug: AiProviderSlug; key: string; label?: string }) => {
       toast.success(`${PROVIDER_CONFIGS[vars.providerSlug]?.name} key saved securely`);
       setInputValues((prev) => ({ ...prev, [vars.providerSlug]: '' }));
       setSaving((prev) => ({ ...prev, [vars.providerSlug]: false }));
       refetchKeys();
     },
-    onError: (err, vars) => {
+    onError: (err, vars: { providerSlug: AiProviderSlug; key: string; label?: string }) => {
       toast.error(`Failed to save key: ${err.message}`);
       setSaving((prev) => ({ ...prev, [vars.providerSlug]: false }));
     },
   });
 
   const deleteMutation = trpc.apiKeys.delete.useMutation({
-    onSuccess: (_, vars) => {
+    onSuccess: (_, vars: { providerSlug: AiProviderSlug }) => {
       toast.success(`${PROVIDER_CONFIGS[vars.providerSlug]?.name} key removed`);
       refetchKeys();
     },
@@ -160,7 +160,7 @@ export default function Settings() {
                   </div>
                   <div>
                     <CardTitle className="text-base">{config?.name}</CardTitle>
-                    <CardDescription className="text-xs">{config?.role}</CardDescription>
+                    <CardDescription className="text-xs">{config?.boardTitle}</CardDescription>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

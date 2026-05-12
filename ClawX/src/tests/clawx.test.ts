@@ -15,7 +15,7 @@ function createAuthContext(): { ctx: TrpcContext; clearedCookies: CookieCall[] }
   const clearedCookies: CookieCall[] = [];
 
   const user: AuthenticatedUser = {
-    id: 1,we have 5 
+    id: 1,
     openId: "test-user-001",
     email: "josh@forthekids.org",
     name: "Josh",
