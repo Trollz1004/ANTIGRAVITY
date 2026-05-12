@@ -1,6 +1,6 @@
 # Paperclip Company OS — Operations Index
 
-> Quick navigation surface for the Paperclip agent fleet. Generated 2026-05-03 by Claude Code Opus 4.7 during the audit-and-optimize pass that Josh delegated; refreshed 2026-05-06 with Founding-Four protections and post-launch fleet alignment.
+> Quick navigation surface for the Paperclip agent fleet. Generated 2026-05-03 by Claude Code Opus 4.7 during the audit-and-optimize pass that Josh delegated; refreshed 2026-05-06 with Founding-Four protections and post-launch fleet alignment; refreshed 2026-05-12 to propagate the 2026-05-07 Token-Doctrine reroute and align the fleet model table with `agents/README.md`.
 > When in doubt, this file points you at the source of truth — it does not replace it.
 
 ---
@@ -35,28 +35,29 @@ Per `CLAUDE.md` → "Perpetual Mission Guarantee":
 
 | Agent | Dir | Role | Heartbeat | Adapter / Model |
 |-------|-----|------|-----------|-----------------|
-| CEO | [`ceo/`](./ceo/) | Strategy, delegation, issue-board owner | 30 min | `hermes_local` + `glm-5.1:cloud` (5-step fallback chain) |
+| CEO | [`ceo/`](./ceo/) | Strategy, delegation, issue-board owner | 30 min | `hermes_local` + `kimi-k2.6:cloud` (primary) → `glm-5.1:cloud` (backup); 5-step fallback chain |
 | CFO | [`cfo/`](./cfo/) | 1-wallet enforcement, Square reconciliation, 10% reserve audit | 60 min | `hermes_local` + `glm-5.1:cloud` |
 | CSO | [`cso/`](./cso/) | Roadmap, DAO governance, long-range strategy | 60 min | `hermes_local` + `glm-5.1:cloud` |
 | CTO | [`cto/`](./cto/) | Code, infra, CI/CD, MCP, devtools | 30 min | `opencode_local` + `qwen3-coder:480b-cloud` |
 | CMO | [`cmo/`](./cmo/) | Marketing, brand, social pipeline | 60 min | `opencode_local` + `dateapp-marketingtools` |
 | UX Designer | [`uxdesigner/`](./uxdesigner/) | UI, design system, accessibility | 60 min | `opencode_local` + `dateapp` |
-| Mission Guardian (Claude) | [`mission-guardian-claude/`](./mission-guardian-claude/) | Daily 7-Hard-Rules audit | 24 h | `claude_local` |
+| Mission Guardian (Claude) | [`mission-guardian-claude/`](./mission-guardian-claude/) | Daily 7-Hard-Rules audit | 24 h | `kimi-k2.6:cloud` via Ollama (rerouted 2026-05-07 per Token Doctrine) |
 | Mission Guardian (Codex) | [`mission-guardian-codex/`](./mission-guardian-codex/) | Hot-standby audit | 24 h staggered | `codex_local` |
 | INTERN (DoWhatTold) | [`intern/`](./intern/) | Slow social-media groundwork; never thinks | passive | smallest Ollama cloud model |
 | GitHub Auditor | [`github-auditor/`](./github-auditor/) | GH Actions doctrine audit (immune to AI) | daily 06:00 UTC cron | n/a (workflow) |
 
 Full identity table with UUIDs is in [`README.md`](./README.md).
 
-## Doctrine — Permanent (2026-04-17)
+## Doctrine — Permanent
 
-1. **Revenue: 1 wallet, 10% reserve.** All revenue in, all costs out, 10% reserved as Josh's taxable income. He decides quarterly: donate, reinvest, stake, or hold.
+1. **Revenue: 1 wallet, 10% reserve.** (2026-04-17) All revenue in, all costs out, 10% reserved as Josh's taxable income. He decides quarterly: donate, reinvest, stake, or hold.
 2. **Language ban (legal).** Never `donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement` in any customer-facing surface. Use *contractual revenue disbursement* in agent-internal copy where a synonym is needed.
 3. **No automatic charity routing.** Any code/UI/agent output that claims it = mission violation, route to CEO immediately.
 4. **No secrets in source.** `.env` only. Master vault: `briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env` (OneDrive-backed).
 5. **No mock data presented as real.** Real or fail honestly.
-6. **One repo, one branch.** `Trollz1004/ANTIGRAVITY`, `main`. Feature work on `claude/<short-description>` branches.
-7. **No agent modifies another agent's instruction files.** File a flagged issue; Josh approves.
+6. **One repo, one default branch.** `Trollz1004/ANTIGRAVITY`, default branch `main`. Feature work on `claude/<short-description>` branches. Never push direct to `main` without Josh's explicit approval.
+7. **No agent modifies another agent's instruction files.** File a flagged issue; Josh approves. (Exception: manual audit-and-optimize passes by Claude Code under Josh's standing order — logged in `README.md` change log.)
+8. **Token Doctrine (2026-05-07).** Claude API tokens are reserved for Cowork / Claude Code orchestration sessions only — never called from inside PaperClip. Any Paperclip agent that previously hit the Claude API has been rerouted to Ollama-hosted models (e.g. Mission Guardian (Claude) → `kimi-k2.6:cloud` via Ollama). Hermes-layer and Paperclip-layer agents draw exclusively from the Ollama fleet.
 
 Full doctrine: [`/CLAUDE.md`](../../CLAUDE.md).
 
@@ -100,6 +101,7 @@ Compliant token descriptions: [`briefings/DAO-TOKEN-DESCRIPTIONS-COMPLIANT-2026-
 
 ## Most-Recent Audit Snapshots
 
+- **2026-05-12** — Claude Code Opus 4.7 manual audit pass #4 (Josh delegated full operational control again; "treat it as your own"). Drift sweep after the 2026-05-07 Token-Doctrine reroute landed in `ceo/TOOLS.md` + `mission-guardian-claude/TOOLS.md` but had not propagated. Changes: (1) `README.md` model section and roster table updated — CEO primary is now `kimi-k2.6:cloud` with `glm-5.1:cloud` as backup; Mission Guardian (Claude) shown as `kimi-k2.6:cloud via Ollama` (rerouted 2026-05-07 — previously `claude_local`, which consumed Claude API tokens against the Token Doctrine). (2) OPS-INDEX fleet table aligned with the same; **Token Doctrine added as Doctrine rule #8** so future agents see it alongside the other permanent rules. (3) `ceo/TOOLS.md` Direct Reports table reconciled to canonical README values (CTO → `qwen3-coder:480b-cloud`, UX → `Trollz1004/dateapp`, MG-Codex → `codex_local`); the column was renamed to "Primary Model" with an explicit pointer to each agent's own `TOOLS.md` for the full fallback chain. The same file's stale `branch: main` line replaced with the canonical feature-branch policy. (4) `intern/AGENTS.md` forbidden-language list expanded from 4 terms to the canonical 7; explicit note that the agent-internal `contractual revenue disbursement` synonym is NOT available to INTERN (every action it takes is customer-facing). (5) Header + change log updated; no Mission Guardian violation expected — manual audit pass under Josh's standing order. See `README.md` Change Log.
 - **2026-05-06** — Daily GH-Actions doctrine audit: PASS (28 monitored files, all required AGENTS.md/TOOLS.md present, no privilege-escalation assertions detected). See `audit/AUDIT-2026-05-06.md`.
 - **2026-05-06** — Claude Code Opus 4.7 manual audit pass (#2 of the day): added Founding-Four protections to OPS-INDEX + CEO heartbeat, added Opus Guardian step to CTO heartbeat, retired stale 4-DAO contract names from CTO/SOUL.md, reconciled customer-facing vs. agent-internal `disbursement` rule across CEO/CMO. See `README.md` Change Log.
 - **2026-05-06** — Claude Code Opus 4.7 manual audit pass (#3, fleet-wide language reconciliation, Josh delegated full operational control). Mission Guardians' Rule 1 patched to match the canonical CEO/CMO doctrine: full 7-term customer-facing ban + explicit allow-list for the agent-internal `contractual revenue disbursement` synonym (previously they would have false-flagged the very files that legitimately use that phrase). UX/CTO/CMO/CFO forbidden-language lists unified to the same 7 terms. CTO branch policy reconciled (AGENTS.md was claiming "ONE branch", contradicting its own TOOLS.md). CTO/SOUL.md cleared the "authoritative vs. history-only" contradiction on `packages/contracts/src/`. CFO/AGENTS.md clarified §496.405 framing — the *internal charity-routing doctrine* is terminated; the statute is alive and is exactly why the language ban exists. CSO heartbeat gained an explicit Founding-Four dilution-proposal scan. Mission Guardian protected-file list expanded to include SOUL.md and SKILLS.md. See `README.md` Change Log.
