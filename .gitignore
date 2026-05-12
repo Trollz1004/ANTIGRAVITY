@@ -119,3 +119,10 @@ graphify-out/
 # External tool clones (e.g. cff-initializer-javascript, gemini-cli) belong outside this repo per 1-folder rule
 cff-initializer-javascript/
 gemini-cli/
+
+# Local debug / accidental files (Claude-added 2026-05-12)
+nul
+existing.txt
+guard.txt
+new-file.txt
+logs/.watchdog-task-registered

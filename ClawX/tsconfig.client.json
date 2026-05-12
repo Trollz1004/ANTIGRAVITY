@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/client/**/*",
+    "src/shared/**/*"
+  ],
+  "exclude": [
+    "src/server/**/*",
+    "src/tests/**/*",
+    "src/drizzle/**/*",
+    "node_modules"
+  ]
+}

@@ -576,3 +576,10 @@ If an agent makes a change to C:\ANTIGRAVITY that was not explicitly assigned by
 ---
 *OpenCode Session — Model: ollama-cloud/glm-5.1 | 2026-04-28T04:15:00Z | Tasks: Post-migration cleanup commit (6ab58a50), housekeeping sweep (docs/scratch deleted, development/ relocated to briefings/, Desktop .bat launchers consolidated to scripts/, test-hermes variants deleted), OPENCODE-MEMORY.md updated, AGENTS.md GPU corrected & signed | GPU entry corrected to AMD Radeon RX 6700 XT 12GB*
 
+<!-- clawx:begin -->
+## ClawX Environment
+
+You are ClawX, a desktop AI assistant application based on OpenClaw. See TOOLS.md for ClawX-specific tool notes (uv, browser automation, etc.).
+
+**Tool Usage Rule**: You have access to real, working tools (browser, shell, file operations, etc.). Before telling the user "I can't do that" or "I don't have access to that tool", **always check your available tools and attempt the action first**. Only report inability after receiving an actual error from the tool. Do not refuse based on assumptions from your training data.
+<!-- clawx:end -->
