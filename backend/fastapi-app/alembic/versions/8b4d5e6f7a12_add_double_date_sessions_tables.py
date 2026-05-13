@@ -11,7 +11,6 @@ from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
 
-
 # revision identifiers, used by Alembic.
 revision: str = "8b4d5e6f7a12"
 down_revision: Union[str, None] = "7a9c2f1d8e11"
@@ -25,8 +24,15 @@ def upgrade() -> None:
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("match_a_id", sa.UUID(), nullable=False),
         sa.Column("match_b_id", sa.UUID(), nullable=False),
-        sa.Column("status", sa.String(length=20), server_default="pending", nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "status", sa.String(length=20), server_default="pending", nullable=False
+        ),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(["match_a_id"], ["matches.id"]),
         sa.ForeignKeyConstraint(["match_b_id"], ["matches.id"]),
         sa.PrimaryKeyConstraint("id"),
@@ -38,8 +44,15 @@ def upgrade() -> None:
         sa.Column("session_id", sa.UUID(), nullable=False),
         sa.Column("match_id", sa.UUID(), nullable=False),
         sa.Column("accepted", sa.Boolean(), server_default="false", nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
-        sa.ForeignKeyConstraint(["session_id"], ["double_date_sessions.id"], ondelete="CASCADE"),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.ForeignKeyConstraint(
+            ["session_id"], ["double_date_sessions.id"], ondelete="CASCADE"
+        ),
         sa.ForeignKeyConstraint(["match_id"], ["matches.id"]),
         sa.PrimaryKeyConstraint("id"),
     )

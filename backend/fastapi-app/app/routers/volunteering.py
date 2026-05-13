@@ -31,27 +31,31 @@ router = APIRouter(prefix="/volunteer")
 async def volunteer_impact(
     _user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-    near: str | None = Query(None, description="Filter impact by location (case-insensitive substring)"),
+    near: str | None = Query(
+        None, description="Filter impact by location (case-insensitive substring)"
+    ),
 ) -> VolunteerImpactResponse:
     """Aggregate community impact — shown on the Volunteering Hub dashboard."""
 
     # Base filter for location
-    location_filter = (
-        VolunteerOpportunity.location.ilike(f"%{near}%")
-        if near
-        else True
-    )
+    location_filter = VolunteerOpportunity.location.ilike(f"%{near}%") if near else True
 
     # Total opportunities
-    total_opps = await db.scalar(
-        select(func.count(VolunteerOpportunity.id)).where(location_filter)
-    ) or 0
+    total_opps = (
+        await db.scalar(
+            select(func.count(VolunteerOpportunity.id)).where(location_filter)
+        )
+        or 0
+    )
 
     # Total signups (join through opportunities for location filter)
     if near:
         signup_q = (
             select(func.count(VolunteerSignup.id))
-            .join(VolunteerOpportunity, VolunteerSignup.opportunity_id == VolunteerOpportunity.id)
+            .join(
+                VolunteerOpportunity,
+                VolunteerSignup.opportunity_id == VolunteerOpportunity.id,
+            )
             .where(location_filter)
         )
     else:
@@ -62,26 +66,38 @@ async def volunteer_impact(
     if near:
         hours_q = (
             select(func.coalesce(func.sum(VolunteerOpportunity.hours_estimate), 0))
-            .join(VolunteerSignup, VolunteerSignup.opportunity_id == VolunteerOpportunity.id)
+            .join(
+                VolunteerSignup,
+                VolunteerSignup.opportunity_id == VolunteerOpportunity.id,
+            )
             .where(location_filter)
         )
     else:
-        hours_q = (
-            select(func.coalesce(func.sum(VolunteerOpportunity.hours_estimate), 0))
-            .join(VolunteerSignup, VolunteerSignup.opportunity_id == VolunteerOpportunity.id)
+        hours_q = select(
+            func.coalesce(func.sum(VolunteerOpportunity.hours_estimate), 0)
+        ).join(
+            VolunteerSignup, VolunteerSignup.opportunity_id == VolunteerOpportunity.id
         )
     total_hours = float(await db.scalar(hours_q) or 0)
 
     # Unique organizations
-    unique_orgs = await db.scalar(
-        select(func.count(distinct(VolunteerOpportunity.organization))).where(location_filter)
-    ) or 0
+    unique_orgs = (
+        await db.scalar(
+            select(func.count(distinct(VolunteerOpportunity.organization))).where(
+                location_filter
+            )
+        )
+        or 0
+    )
 
     # Unique volunteers
     if near:
         vol_q = (
             select(func.count(distinct(VolunteerSignup.user_id)))
-            .join(VolunteerOpportunity, VolunteerSignup.opportunity_id == VolunteerOpportunity.id)
+            .join(
+                VolunteerOpportunity,
+                VolunteerSignup.opportunity_id == VolunteerOpportunity.id,
+            )
             .where(location_filter)
         )
     else:
@@ -95,7 +111,10 @@ async def volunteer_impact(
                 VolunteerOpportunity.category,
                 func.count(VolunteerSignup.id),
             )
-            .join(VolunteerSignup, VolunteerSignup.opportunity_id == VolunteerOpportunity.id)
+            .join(
+                VolunteerSignup,
+                VolunteerSignup.opportunity_id == VolunteerOpportunity.id,
+            )
             .where(location_filter)
             .group_by(VolunteerOpportunity.category)
         )
@@ -108,9 +127,14 @@ async def volunteer_impact(
             select(
                 VolunteerOpportunity.organization,
                 func.count(VolunteerSignup.id).label("signups"),
-                func.coalesce(func.sum(VolunteerOpportunity.hours_estimate), 0).label("hours"),
+                func.coalesce(func.sum(VolunteerOpportunity.hours_estimate), 0).label(
+                    "hours"
+                ),
             )
-            .join(VolunteerSignup, VolunteerSignup.opportunity_id == VolunteerOpportunity.id)
+            .join(
+                VolunteerSignup,
+                VolunteerSignup.opportunity_id == VolunteerOpportunity.id,
+            )
             .where(location_filter)
             .group_by(VolunteerOpportunity.organization)
             .order_by(func.count(VolunteerSignup.id).desc())
@@ -118,8 +142,7 @@ async def volunteer_impact(
         )
     ).all()
     top_organizations = [
-        {"name": row[0], "signups": row[1], "hours": float(row[2])}
-        for row in org_rows
+        {"name": row[0], "signups": row[1], "hours": float(row[2])} for row in org_rows
     ]
 
     # Local count (always filtered)
@@ -146,7 +169,10 @@ async def my_signups(
     rows = (
         await db.execute(
             select(VolunteerSignup, VolunteerOpportunity)
-            .join(VolunteerOpportunity, VolunteerSignup.opportunity_id == VolunteerOpportunity.id)
+            .join(
+                VolunteerOpportunity,
+                VolunteerSignup.opportunity_id == VolunteerOpportunity.id,
+            )
             .where(VolunteerSignup.user_id == user.id)
             .order_by(VolunteerSignup.created_at.desc())
         )
@@ -172,12 +198,16 @@ async def my_signups(
 async def list_opportunities(
     _user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-    near: str | None = Query(None, description="Filter by location (case-insensitive substring)"),
+    near: str | None = Query(
+        None, description="Filter by location (case-insensitive substring)"
+    ),
     category: str | None = Query(None, description="Filter by category"),
     limit: int = 30,
 ) -> list[VolunteerResponse]:
     """List volunteer opportunities with optional location and category filters."""
-    query = select(VolunteerOpportunity).order_by(VolunteerOpportunity.created_at.desc())
+    query = select(VolunteerOpportunity).order_by(
+        VolunteerOpportunity.created_at.desc()
+    )
 
     if near:
         query = query.where(VolunteerOpportunity.location.ilike(f"%{near}%"))
@@ -190,7 +220,9 @@ async def list_opportunities(
     results = []
     for opp in opps:
         signup_count = await db.scalar(
-            select(func.count()).select_from(VolunteerSignup).where(VolunteerSignup.opportunity_id == opp.id)
+            select(func.count())
+            .select_from(VolunteerSignup)
+            .where(VolunteerSignup.opportunity_id == opp.id)
         )
         creator = await db.get(User, opp.created_by)
         results.append(
@@ -273,7 +305,9 @@ async def signup_volunteer(
 
     if opp.spots:
         count = await db.scalar(
-            select(func.count()).select_from(VolunteerSignup).where(VolunteerSignup.opportunity_id == opp_id)
+            select(func.count())
+            .select_from(VolunteerSignup)
+            .where(VolunteerSignup.opportunity_id == opp_id)
         )
         if count >= opp.spots:
             raise HTTPException(status_code=400, detail="No spots left")

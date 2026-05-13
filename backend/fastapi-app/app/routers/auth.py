@@ -45,7 +45,9 @@ def _beta_identity(code: str, secret: str) -> tuple[str, str, str]:
     normalized = _normalize_beta_code(code)
     digest = hashlib.sha256(f"{secret}:{normalized}".encode("utf-8")).hexdigest()
     email = f"beta-{digest[:12]}@youandinotai.com"
-    password_seed = hashlib.sha256(f"beta-password:{secret}:{normalized}".encode("utf-8")).hexdigest()
+    password_seed = hashlib.sha256(
+        f"beta-password:{secret}:{normalized}".encode("utf-8")
+    ).hexdigest()
     display_name = "Beta Tester"
     return email, password_seed, display_name
 
@@ -58,11 +60,15 @@ def _beta_password_hash(password_seed: str, secret: str, code: str) -> str:
         # deterministic fallback keeps the account creatable even if bcrypt
         # backend compilation/runtime drifts in production.
         return hashlib.sha256(
-            f"beta-stored:{secret}:{_normalize_beta_code(code)}:{password_seed}".encode("utf-8")
+            f"beta-stored:{secret}:{_normalize_beta_code(code)}:{password_seed}".encode(
+                "utf-8"
+            )
         ).hexdigest()
 
 
-@router.post("/register", response_model=AuthTokenResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register", response_model=AuthTokenResponse, status_code=status.HTTP_201_CREATED
+)
 async def register(
     request: Request,
     payload: AuthRegisterRequest,
@@ -158,7 +164,6 @@ async def google_login(
     )
 
 
-
 @router.post("/beta-access", response_model=AuthTokenResponse)
 async def beta_access(
     payload: AuthBetaAccessRequest,
@@ -172,14 +177,18 @@ async def beta_access(
         raise HTTPException(status_code=401, detail="Invalid beta access code")
 
     settings = get_settings()
-    email, password_seed, display_name = _beta_identity(normalized_code, settings.jwt_secret)
+    email, password_seed, display_name = _beta_identity(
+        normalized_code, settings.jwt_secret
+    )
     user = await db.scalar(select(User).where(User.email == email))
 
     if not user:
         user = User(
             id=uuid.uuid4(),
             email=email,
-            password_hash=_beta_password_hash(password_seed, settings.jwt_secret, normalized_code),
+            password_hash=_beta_password_hash(
+                password_seed, settings.jwt_secret, normalized_code
+            ),
             display_name=display_name,
             date_of_birth=datetime(2000, 1, 1, tzinfo=timezone.utc).date(),
             adult_verified_at=datetime.now(timezone.utc),

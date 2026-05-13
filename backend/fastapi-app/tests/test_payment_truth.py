@@ -39,39 +39,70 @@ SECRET = "test-secret-at-least-32-chars-long"
 
 
 def test_infer_tier_bot_shield():
-    assert infer_payment_tier(amount_cents=BOT_SHIELD_CENTS, text_hints=["Bot-Shield Verification"]) == "bot_shield"
+    assert (
+        infer_payment_tier(
+            amount_cents=BOT_SHIELD_CENTS, text_hints=["Bot-Shield Verification"]
+        )
+        == "bot_shield"
+    )
 
 
 def test_infer_tier_founding_member():
-    assert infer_payment_tier(amount_cents=FOUNDING_MEMBER_CENTS, text_hints=["founding member"]) == "founding_member"
+    assert (
+        infer_payment_tier(
+            amount_cents=FOUNDING_MEMBER_CENTS, text_hints=["founding member"]
+        )
+        == "founding_member"
+    )
 
 
 def test_infer_tier_3_month():
-    assert infer_payment_tier(amount_cents=THREE_MONTH_FOUNDER_CENTS, text_hints=["3-month founder"]) == "3_month"
+    assert (
+        infer_payment_tier(
+            amount_cents=THREE_MONTH_FOUNDER_CENTS, text_hints=["3-month founder"]
+        )
+        == "3_month"
+    )
 
 
 def test_infer_tier_12_month():
-    assert infer_payment_tier(amount_cents=TWELVE_MONTH_FOUNDER_CENTS, text_hints=["12 month founder"]) == "12_month"
+    assert (
+        infer_payment_tier(
+            amount_cents=TWELVE_MONTH_FOUNDER_CENTS, text_hints=["12 month founder"]
+        )
+        == "12_month"
+    )
 
 
 def test_infer_tier_royalty():
-    assert infer_payment_tier(amount_cents=ROYALTY_CARD_CENTS, text_hints=["royalty card"]) == "royalty"
+    assert (
+        infer_payment_tier(amount_cents=ROYALTY_CARD_CENTS, text_hints=["royalty card"])
+        == "royalty"
+    )
 
 
 def test_infer_tier_amount_alone_no_hints():
     # Amount match with empty hint list should still classify by amount
-    assert infer_payment_tier(amount_cents=BOT_SHIELD_CENTS, text_hints=[]) == "bot_shield"
+    assert (
+        infer_payment_tier(amount_cents=BOT_SHIELD_CENTS, text_hints=[]) == "bot_shield"
+    )
 
 
 def test_infer_tier_catalog_drift_hint_blocks_classification():
     """Old Stripe-era product names must not be classified."""
-    assert infer_payment_tier(
-        amount_cents=FOUNDING_MEMBER_CENTS, text_hints=["basic monthly subscription"]
-    ) is None
+    assert (
+        infer_payment_tier(
+            amount_cents=FOUNDING_MEMBER_CENTS,
+            text_hints=["basic monthly subscription"],
+        )
+        is None
+    )
 
 
 def test_infer_tier_unknown_amount():
-    assert infer_payment_tier(amount_cents=9999999, text_hints=["founding member"]) is None
+    assert (
+        infer_payment_tier(amount_cents=9999999, text_hints=["founding member"]) is None
+    )
 
 
 def test_infer_tier_none_amount():
@@ -79,7 +110,10 @@ def test_infer_tier_none_amount():
 
 
 def test_infer_tier_drift_hint_cic2fnig():
-    assert infer_payment_tier(amount_cents=FOUNDING_MEMBER_CENTS, text_hints=["cic2fnig"]) is None
+    assert (
+        infer_payment_tier(amount_cents=FOUNDING_MEMBER_CENTS, text_hints=["cic2fnig"])
+        is None
+    )
 
 
 # ── build / parse checkout reference round-trip ─────────────────────────────
@@ -126,7 +160,10 @@ def test_wrong_secret_rejected():
     token = build_checkout_reference(
         user_id=uuid.uuid4(), event_id=uuid.uuid4(), tier="bot_shield", secret=SECRET
     )
-    assert parse_checkout_reference(token, secret="wrong-secret-here-totally-different") is None
+    assert (
+        parse_checkout_reference(token, secret="wrong-secret-here-totally-different")
+        is None
+    )
 
 
 def test_expired_token_rejected():
@@ -138,7 +175,9 @@ def test_expired_token_rejected():
         secret=SECRET,
         issued_at=issued_at,
     )
-    assert parse_checkout_reference(token, secret=SECRET, max_age_seconds=172_800) is None
+    assert (
+        parse_checkout_reference(token, secret=SECRET, max_age_seconds=172_800) is None
+    )
 
 
 def test_max_age_zero_skips_expiry_check():
@@ -207,7 +246,10 @@ def test_proof_label_cash():
 
 
 def test_proof_label_bank_account():
-    assert extract_payment_proof_label({"bank_account_details": {"last_4": "1234"}}) == "bank_account"
+    assert (
+        extract_payment_proof_label({"bank_account_details": {"last_4": "1234"}})
+        == "bank_account"
+    )
 
 
 def test_proof_label_card():

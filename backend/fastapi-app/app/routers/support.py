@@ -22,7 +22,9 @@ from app.support_service import (
 router = APIRouter(prefix="/support")
 
 
-def _serialize_transcript(payload: SupportChatRequest, reply: str | None = None) -> list[dict[str, str]]:
+def _serialize_transcript(
+    payload: SupportChatRequest, reply: str | None = None
+) -> list[dict[str, str]]:
     transcript = [item.model_dump() for item in payload.transcript]
     transcript.append({"role": "user", "content": payload.message})
     if reply:
