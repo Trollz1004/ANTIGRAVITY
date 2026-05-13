@@ -26,7 +26,7 @@ os.environ["JWT_SECRET"] = (
 )
 os.environ["APP_ENV"] = "test"
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
-os.environ["SQUARE_WEBHOOK_VERIFY_SIGNATURE"] = "false"
+os.environ["SQUARE_WEBHOOK_VERIFY_SIGNATURE"] = "true"
 os.environ["SQUARE_BOT_SHIELD_PAYMENT_LINK"] = "https://square.link/u/Qc5mxUy7"
 os.environ.setdefault("SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY", "test-square-signature")
 os.environ.setdefault(
