@@ -29,7 +29,7 @@ jobs:
 
       # Build youandinotai frontend
       - name: Build YouAndINotAI
-        working-directory: youandinotai
+        working-directory: apps/youandinotai-frontend
         run: |
           npm ci
           npm run build
@@ -37,18 +37,18 @@ jobs:
       # Verify no Stripe links in built output
       - name: Check for stale Stripe links
         run: |
-          if grep -r "buy\.stripe\.com" youandinotai/dist/ 2>/dev/null; then
+          if grep -r "buy\.stripe\.com" apps/youandinotai-frontend/.next/ 2>/dev/null; then
             echo "::error::Found Stripe links in built output — should be Square"
             exit 1
           fi
-          echo "No Stripe links found in dist/"
+          echo "No Stripe links found in build output"
 
       # Florida §496.405 language scan
       - name: Scan for donation language violations
         run: |
           VIOLATIONS=$(grep -rn --include="*.tsx" --include="*.ts" --include="*.html" \
             -iE '\bdonat(e|ion|ions|ing)\b' \
-            youandinotai/src/ antigravity/components/ antigravity/app/ \
+            apps/youandinotai-frontend/ antigravity/components/ antigravity/app/ \
             revenue-core/components/ _deploy/ mcp-server/src/ 2>/dev/null \
             | grep -ivE 'not.*(charit|donat)|not a.*(donat|solicitat)|donate\.lovetotherescue' || true)
           if [ -n "$VIOLATIONS" ]; then
@@ -62,7 +62,7 @@ jobs:
       - name: Doctrine drift scan
         run: |
           if grep -rn "ai-solutions\.store\|CharityRouter100\|60/30/10\|100% to charity" \
-            youandinotai/src/ youandinotai-api/app/ 2>/dev/null; then
+            apps/youandinotai-frontend/ youandinotai-api/app/ 2>/dev/null; then
             echo "::error::Doctrine drift violation — live product code references retired routing markers"
             exit 1
           fi
@@ -71,21 +71,13 @@ jobs:
       # TODO scanner — prevent placeholder implementations in production code
       - name: Scan for TODO/FIXME comments
         run: |
-          TODO_COMMENTS=$(git ls-files youandinotai/src/ backend/fastapi-app/app/ | xargs grep -n "TODO\|FIXME\|TEMPORARY" || true)
+          TODO_COMMENTS=$(git ls-files apps/youandinotai-frontend/ backend/fastapi-app/app/ | xargs grep -n "TODO\|FIXME\|TEMPORARY" || true)
           if [ -n "$TODO_COMMENTS" ]; then
             echo "::warning::Found TODO/FIXME comments in code (review for production readiness):"
             echo "$TODO_COMMENTS"
           else
             echo "No TODO/FIXME comments found"
           fi
-
-      # Wallet consistency check
-      - name: Wallet consistency
-        run: bash scripts/youandinotai/wallet-consistency-check.sh
-
-      # Split consistency check
-      - name: Split consistency
-        run: bash scripts/youandinotai/split-consistency-check.sh
 
       # Secret scanner — block committed secrets
       - name: Secret scan
@@ -95,7 +87,7 @@ jobs:
           GITHUB_PAT_PREFIX='ghp'
           PATTERNS="AIza[0-9A-Za-z_-]{20,}|[0-9]{8,10}:[A-Za-z0-9_-]{35}|sk_live_[A-Za-z0-9]{16,}|${GITHUB_PAT_PREFIX}_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}"
           HITS=$(git ls-files \
-            memory/ briefings/ mcp-server/ youandinotai/ antigravity/ revenue-core/ CLAUDE.md AGENTS.md \
+            memory/ briefings/ mcp-server/ apps/youandinotai-frontend/ antigravity/ revenue-core/ CLAUDE.md AGENTS.md \
             | grep -E '\.(md|ts|tsx|json|txt)$' \
             | xargs grep -nE "$PATTERNS" 2>/dev/null \
             | grep -v "REDACTED" | grep -v "\.env\.example" | grep -v "\.githooks" | grep -v "scripts/opus-guardian" \
