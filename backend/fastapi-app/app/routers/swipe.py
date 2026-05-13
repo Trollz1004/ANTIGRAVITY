@@ -8,9 +8,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
 from app.database import get_db
-from app.moderation import blocked_by_user_subquery, blocked_user_subquery, has_block_relationship
+from app.moderation import (
+    blocked_by_user_subquery,
+    blocked_user_subquery,
+    has_block_relationship,
+)
 from app.models import Match, Profile, Swipe, User
-from app.schemas import DiscoverProfileResponse, MatchResponse, SwipeRequest, SwipeResponse
+from app.schemas import (
+    DiscoverProfileResponse,
+    MatchResponse,
+    SwipeRequest,
+    SwipeResponse,
+)
 from app.subscriptions import user_has_active_subscription
 
 router = APIRouter()
@@ -25,7 +34,9 @@ async def swipe(
     if payload.target_id == user.id:
         raise HTTPException(status_code=400, detail="Cannot swipe yourself")
     if await has_block_relationship(db, user_a=user.id, user_b=payload.target_id):
-        raise HTTPException(status_code=403, detail="That profile is unavailable due to safety settings")
+        raise HTTPException(
+            status_code=403, detail="That profile is unavailable due to safety settings"
+        )
 
     # Check for duplicate swipe
     existing = await db.scalar(
@@ -94,7 +105,9 @@ async def get_matches(
         if await has_block_relationship(db, user_a=user.id, user_b=other_id):
             continue
         other_user = await db.get(User, other_id)
-        other_profile = await db.scalar(select(Profile).where(Profile.user_id == other_id))
+        other_profile = await db.scalar(
+            select(Profile).where(Profile.user_id == other_id)
+        )
 
         results.append(
             MatchResponse(
@@ -105,7 +118,9 @@ async def get_matches(
                 matched_at=match.matched_at,
                 last_message_at=match.last_message_at,
                 verified=(other_profile.verified if other_profile else False),
-                subscription_active=(user_has_active_subscription(other_user) if other_user else False),
+                subscription_active=(
+                    user_has_active_subscription(other_user) if other_user else False
+                ),
                 breeze_bypass_enabled=match.breeze_bypass_enabled,
             )
         )
@@ -119,7 +134,11 @@ async def get_match(
     db: AsyncSession = Depends(get_db),
 ) -> MatchResponse:
     match = await db.get(Match, match_id)
-    if not match or user.id not in (match.user_a, match.user_b) or match.status != "active":
+    if (
+        not match
+        or user.id not in (match.user_a, match.user_b)
+        or match.status != "active"
+    ):
         raise HTTPException(status_code=404, detail="Match not found")
 
     other_id = match.user_b if match.user_a == user.id else match.user_a
@@ -204,7 +223,7 @@ async def toggle_breeze_bypass(
     match = await db.get(Match, match_id)
     if not match or user.id not in (match.user_a, match.user_b):
         raise HTTPException(status_code=404, detail="Match not found")
-    
+
     match.breeze_bypass_enabled = enabled
     await db.commit()
     return {"match_id": match_id, "breeze_bypass_enabled": enabled}

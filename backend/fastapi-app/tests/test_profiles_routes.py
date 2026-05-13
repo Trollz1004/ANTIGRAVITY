@@ -39,6 +39,7 @@ def _seed(*items, db_session_factory) -> None:
 def _override_user(user: User):
     async def _dep():
         return user
+
     return _dep
 
 

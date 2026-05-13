@@ -93,7 +93,9 @@ async def block_user(
         reason=payload.reason,
     )
     db.add(block)
-    closed_count = await close_active_matches_for_block(db, user_a=user.id, user_b=user_id)
+    closed_count = await close_active_matches_for_block(
+        db, user_a=user.id, user_b=user_id
+    )
     await db.commit()
 
     return SafetyBlockResponse(
@@ -128,7 +130,11 @@ async def unblock_user(
     )
 
 
-@router.post("/users/{user_id}/report", response_model=UserReportResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/users/{user_id}/report",
+    response_model=UserReportResponse,
+    status_code=status.HTTP_201_CREATED,
+)
 async def report_user(
     user_id: uuid.UUID,
     payload: UserReportRequest,

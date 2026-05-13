@@ -31,7 +31,9 @@ async def list_events(
     for event in events:
         organizer = await db.get(User, event.organizer_id)
         attendee_count = await db.scalar(
-            select(func.count()).select_from(EventRSVP).where(EventRSVP.event_id == event.id)
+            select(func.count())
+            .select_from(EventRSVP)
+            .where(EventRSVP.event_id == event.id)
         )
         results.append(
             EventResponse(
@@ -97,19 +99,25 @@ async def rsvp_event(
         raise HTTPException(status_code=404, detail="Event not found")
 
     existing = await db.scalar(
-        select(EventRSVP).where(EventRSVP.event_id == event_id, EventRSVP.user_id == user.id)
+        select(EventRSVP).where(
+            EventRSVP.event_id == event_id, EventRSVP.user_id == user.id
+        )
     )
     if existing:
         raise HTTPException(status_code=409, detail="Already RSVP'd")
 
     if event.max_attendees:
         count = await db.scalar(
-            select(func.count()).select_from(EventRSVP).where(EventRSVP.event_id == event_id)
+            select(func.count())
+            .select_from(EventRSVP)
+            .where(EventRSVP.event_id == event_id)
         )
         if count >= event.max_attendees:
             raise HTTPException(status_code=400, detail="Event is full")
 
-    rsvp = EventRSVP(id=uuid.uuid4(), event_id=event_id, user_id=user.id, status="going")
+    rsvp = EventRSVP(
+        id=uuid.uuid4(), event_id=event_id, user_id=user.id, status="going"
+    )
     db.add(rsvp)
     await db.commit()
     await db.refresh(rsvp)

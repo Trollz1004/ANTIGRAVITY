@@ -47,7 +47,9 @@ async def list_boards(
 ):
     await _ensure_boards(db)
     boards = (await db.scalars(select(Board).order_by(Board.name))).all()
-    return [{"slug": b.slug, "name": b.name, "description": b.description} for b in boards]
+    return [
+        {"slug": b.slug, "name": b.name, "description": b.description} for b in boards
+    ]
 
 
 @router.get("/{slug}/posts", response_model=list[PostResponse])
@@ -154,7 +156,9 @@ async def list_comments(
     return results
 
 
-@router.post("/{slug}/posts/{post_id}/comments", response_model=CommentResponse, status_code=201)
+@router.post(
+    "/{slug}/posts/{post_id}/comments", response_model=CommentResponse, status_code=201
+)
 async def create_comment(
     slug: str,
     post_id: uuid.UUID,

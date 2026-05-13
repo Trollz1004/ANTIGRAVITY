@@ -9,7 +9,16 @@ from sqlalchemy import select
 
 from app.auth import get_current_user
 from app.main import app
-from app.models import Board, Match, Post, Profile, SupportTicket, User, UserBlock, UserReport
+from app.models import (
+    Board,
+    Match,
+    Post,
+    Profile,
+    SupportTicket,
+    User,
+    UserBlock,
+    UserReport,
+)
 
 
 def _make_user(*, email: str, display_name: str = "Safety User") -> User:
@@ -98,8 +107,12 @@ def test_block_user_closes_match_and_hides_it_from_matches(client, db_session_fa
 
 def test_discover_excludes_blocked_users(client, db_session_factory):
     actor = _make_user(email="discover_actor_block@example.com", display_name="Actor")
-    blocked_target = _make_user(email="blocked_target@example.com", display_name="Blocked Target")
-    visible_target = _make_user(email="visible_target@example.com", display_name="Visible Target")
+    blocked_target = _make_user(
+        email="blocked_target@example.com", display_name="Blocked Target"
+    )
+    visible_target = _make_user(
+        email="visible_target@example.com", display_name="Visible Target"
+    )
     actor_profile = _make_profile(actor)
     blocked_profile = _make_profile(blocked_target)
     visible_profile = _make_profile(visible_target)
@@ -158,7 +171,9 @@ def test_blocked_match_rejects_message_access(client, db_session_factory):
         app.dependency_overrides.pop(get_current_user, None)
 
 
-def test_report_user_creates_report_and_support_ticket(client, db_session_factory, monkeypatch):
+def test_report_user_creates_report_and_support_ticket(
+    client, db_session_factory, monkeypatch
+):
     from app.routers import safety as safety_router
 
     reporter = _make_user(email="reporter@example.com", display_name="Reporter")
@@ -200,12 +215,16 @@ def test_report_user_creates_report_and_support_ticket(client, db_session_factor
         app.dependency_overrides.pop(get_current_user, None)
 
 
-def test_report_board_post_creates_support_ticket(client, db_session_factory, monkeypatch):
+def test_report_board_post_creates_support_ticket(
+    client, db_session_factory, monkeypatch
+):
     from app.routers import boards as boards_router
 
     reporter = _make_user(email="board_reporter@example.com", display_name="Reporter")
     author = _make_user(email="board_author@example.com", display_name="Board Author")
-    board = Board(id=uuid.uuid4(), name="General", description="General board", slug="general")
+    board = Board(
+        id=uuid.uuid4(), name="General", description="General board", slug="general"
+    )
     post = Post(
         id=uuid.uuid4(),
         board_id=board.id,

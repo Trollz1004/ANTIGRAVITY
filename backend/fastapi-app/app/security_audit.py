@@ -173,11 +173,11 @@ class SecurityAudit:
         }
         self.findings.append(finding)
         logger.log(
-            logging.ERROR
-            if severity == "critical"
-            else logging.WARNING
-            if severity == "high"
-            else logging.INFO,
+            (
+                logging.ERROR
+                if severity == "critical"
+                else logging.WARNING if severity == "high" else logging.INFO
+            ),
             f"Security finding [{severity.upper()}]: {title} - {description}",
         )
 

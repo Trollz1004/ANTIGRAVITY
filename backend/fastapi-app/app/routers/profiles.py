@@ -59,7 +59,9 @@ async def update_my_profile(
     if payload.date_of_birth is not None:
         if user.date_of_birth is not None:
             if payload.date_of_birth != user.date_of_birth:
-                raise HTTPException(status_code=409, detail="Date of birth is locked after verification")
+                raise HTTPException(
+                    status_code=409, detail="Date of birth is locked after verification"
+                )
         else:
             profile.age = ensure_adult(payload.date_of_birth)
             user.date_of_birth = payload.date_of_birth

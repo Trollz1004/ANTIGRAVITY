@@ -79,9 +79,7 @@ SQUARE_CSV_FIELDS = [
 
 def _utc_now_iso() -> str:
     return (
-        datetime.now(timezone.utc)
-        .isoformat(timespec="seconds")
-        .replace("+00:00", "Z")
+        datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     )
 
 
@@ -169,7 +167,9 @@ def _should_verify_square_signature(
     endpoint: str,
 ) -> tuple[bool, str, str]:
     """Skip verification safely when a node is missing Square webhook material."""
-    signature_key, notification_url = _resolve_square_signature_material(settings, endpoint)
+    signature_key, notification_url = _resolve_square_signature_material(
+        settings, endpoint
+    )
     if not settings.square_webhook_verify_signature:
         return False, signature_key, notification_url
     if signature_key and notification_url:
@@ -218,7 +218,9 @@ async def _fetch_square_order(
         response.raise_for_status()
         payload_json = response.json()
     except (httpx.HTTPError, ValueError) as exc:
-        logger.warning("Square order lookup failed: order_id=%s error=%s", order_id, exc)
+        logger.warning(
+            "Square order lookup failed: order_id=%s error=%s", order_id, exc
+        )
         return None
 
     order = payload_json.get("order")
@@ -243,7 +245,11 @@ def _extract_square_payment_tier(
         payment_obj.get("description"),
         payment_obj.get("reference_id"),
         order_obj.get("reference_id") if isinstance(order_obj, dict) else None,
-        order_obj.get("source", {}).get("name") if isinstance(order_obj, dict) else None,
+        (
+            order_obj.get("source", {}).get("name")
+            if isinstance(order_obj, dict)
+            else None
+        ),
         *order_line_items,
         *extra_hints,
     ]
@@ -262,6 +268,7 @@ def _extract_square_customer_email(payment_obj: dict[str, Any]) -> str | None:
     if "email=" in receipt_url:
         try:
             from urllib.parse import parse_qs, urlparse
+
             parsed = urlparse(receipt_url)
             params = parse_qs(parsed.query)
             if "email" in params:
@@ -279,9 +286,7 @@ async def _get_user_by_email(
     """Look up user by email address."""
     if not email:
         return None
-    return await db.scalar(
-        select(User).where(User.email == email.strip().lower())
-    )
+    return await db.scalar(select(User).where(User.email == email.strip().lower()))
 
 
 async def _get_user_by_square_customer_id(
@@ -291,9 +296,7 @@ async def _get_user_by_square_customer_id(
     """Look up user by Square customer ID."""
     if not customer_id:
         return None
-    return await db.scalar(
-        select(User).where(User.square_customer_id == customer_id)
-    )
+    return await db.scalar(select(User).where(User.square_customer_id == customer_id))
 
 
 async def _get_existing_payment_verification_event(
@@ -334,9 +337,7 @@ async def _get_user_by_checkout_reference(
     if not verification_event:
         return None, None, checkout_data
 
-    user = await db.scalar(
-        select(User).where(User.id == checkout_data["user_id"])
-    )
+    user = await db.scalar(select(User).where(User.id == checkout_data["user_id"]))
     return user, verification_event, checkout_data
 
 
@@ -404,14 +405,21 @@ async def square_payment_webhook(
             try:
                 payload_json = json.loads(payload.decode("utf-8"))
             except Exception:
-                payload_json = {"raw_payload": payload.decode("utf-8", errors="replace")}
+                payload_json = {
+                    "raw_payload": payload.decode("utf-8", errors="replace")
+                }
             event_id = f"sigfail-{hashlib.sha256(payload).hexdigest()[:15]}"
-            
+
             await create_webhook_event(
                 db,
                 event_id=event_id,
                 event_type="verification_failed",
-                payload={"error": str(exc.detail), "url": str(request.url), "headers": dict(request.headers), "payload": payload_json},
+                payload={
+                    "error": str(exc.detail),
+                    "url": str(request.url),
+                    "headers": dict(request.headers),
+                    "payload": payload_json,
+                },
                 processed=True,
                 event_source="square",
             )
@@ -426,18 +434,12 @@ async def square_payment_webhook(
             detail="Webhook payload must be valid JSON.",
         ) from exc
 
-    event_id = str(
-        payload_json.get("event_id")
-        or payload_json.get("id")
-        or ""
-    ).strip()
+    event_id = str(payload_json.get("event_id") or payload_json.get("id") or "").strip()
     if not event_id:
         event_id = f"square-pay-{hashlib.sha256(payload).hexdigest()[:20]}"
 
     event_type = str(
-        payload_json.get("type")
-        or payload_json.get("event_type")
-        or "unknown"
+        payload_json.get("type") or payload_json.get("event_type") or "unknown"
     )
 
     # Deduplicate
@@ -509,7 +511,11 @@ async def square_payment_webhook(
 
             if user and tier:
                 if tier == "royalty":
-                    if bound_event and checkout_data and checkout_data.get("tier") == tier:
+                    if (
+                        bound_event
+                        and checkout_data
+                        and checkout_data.get("tier") == tier
+                    ):
                         bound_event.status = "completed"
                         bound_event.completed_at = observed_at
                         bound_event.square_payment_id = payment_id
@@ -529,7 +535,11 @@ async def square_payment_webhook(
                         tier,
                         activated_at=observed_at,
                     )
-                    if bound_event and checkout_data and checkout_data.get("tier") == tier:
+                    if (
+                        bound_event
+                        and checkout_data
+                        and checkout_data.get("tier") == tier
+                    ):
                         bound_event.status = "completed"
                         bound_event.completed_at = observed_at
                         bound_event.square_payment_id = payment_id
@@ -541,13 +551,18 @@ async def square_payment_webhook(
                         event_id,
                         proof_label,
                     )
-                elif _bot_shield_binding_is_valid(
-                    checkout_data=checkout_data,
-                    liveness_event=bound_event,
-                ) and payment_amount_cents == 100:
-                    existing_payment_event = await _get_existing_payment_verification_event(
-                        db,
-                        payment_id=payment_id,
+                elif (
+                    _bot_shield_binding_is_valid(
+                        checkout_data=checkout_data,
+                        liveness_event=bound_event,
+                    )
+                    and payment_amount_cents == 100
+                ):
+                    existing_payment_event = (
+                        await _get_existing_payment_verification_event(
+                            db,
+                            payment_id=payment_id,
+                        )
                     )
                     if not existing_payment_event:
                         payment_event = VerificationEvent(
@@ -569,11 +584,7 @@ async def square_payment_webhook(
 
                     was_verified = user.bot_shield_verified
                     promoted = await promote_user_verification_if_ready(db, user)
-                    if (
-                        payment_amount_cents == 100
-                        and promoted
-                        and not was_verified
-                    ):
+                    if payment_amount_cents == 100 and promoted and not was_verified:
                         await send_welcome_email(
                             recipient_email=user.email,
                             display_name=user.display_name,
@@ -621,7 +632,8 @@ async def square_payment_webhook(
             user.subscription_expires_at = None
             logger.info(
                 "Square subscription created: user=%s event=%s",
-                user.id, event_id,
+                user.id,
+                event_id,
             )
 
     elif event_type in ("subscription.updated",):
@@ -634,7 +646,9 @@ async def square_payment_webhook(
                 user.subscription_expires_at = None
                 logger.info(
                     "Square subscription deactivated: user=%s status=%s event=%s",
-                    user.id, sub_status, event_id,
+                    user.id,
+                    sub_status,
+                    event_id,
                 )
             elif sub_status == "ACTIVE":
                 user.subscription_active = True
@@ -710,38 +724,26 @@ def _append_square_logs(
             or "unknown"
         ),
         "event_created_at": str(
-            payload_json.get("created_at")
-            or payload_json.get("event_created_at")
-            or ""
+            payload_json.get("created_at") or payload_json.get("event_created_at") or ""
         ),
         "merchant_id": str(payload_json.get("merchant_id") or ""),
         "booking_id": str(booking.get("id") or ""),
         "booking_status": str(booking.get("status") or ""),
         "start_at": str(booking.get("start_at") or ""),
         "location_id": str(
-            booking.get("location_id")
-            or payload_json.get("location_id")
-            or ""
+            booking.get("location_id") or payload_json.get("location_id") or ""
         ),
         "customer_id": str(
-            booking.get("customer_id")
-            or customer_details.get("customer_id")
-            or ""
+            booking.get("customer_id") or customer_details.get("customer_id") or ""
         ),
         "customer_phone": str(
-            customer_details.get("phone")
-            or booking.get("customer_phone")
-            or ""
+            customer_details.get("phone") or booking.get("customer_phone") or ""
         ),
         "customer_email": str(
-            customer_details.get("email_address")
-            or booking.get("customer_email")
-            or ""
+            customer_details.get("email_address") or booking.get("customer_email") or ""
         ),
         "customer_note": str(
-            booking.get("customer_note")
-            or booking.get("notes")
-            or ""
+            booking.get("customer_note") or booking.get("notes") or ""
         ),
         "source": "square_webhook",
     }

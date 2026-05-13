@@ -41,6 +41,7 @@ def _seed(*items, db_session_factory) -> None:
 def _override_user(user: User):
     async def _dep():
         return user
+
     return _dep
 
 
@@ -93,7 +94,10 @@ def test_list_opportunities_location_filter(client, db_session_factory):
     app.dependency_overrides[get_current_user] = _override_user(user)
     try:
         client.post("/api/v1/volunteer", json=_opp_payload(location="Orlando, FL"))
-        client.post("/api/v1/volunteer", json=_opp_payload(title="Tampa Cleanup", location="Tampa, FL"))
+        client.post(
+            "/api/v1/volunteer",
+            json=_opp_payload(title="Tampa Cleanup", location="Tampa, FL"),
+        )
         resp = client.get("/api/v1/volunteer?near=Orlando")
         assert resp.status_code == 200
         data = resp.json()
@@ -171,7 +175,10 @@ def test_signup_capacity_full_returns_400(client, db_session_factory):
     try:
         resp = client.post(f"/api/v1/volunteer/{opp_id}/signup")
         assert resp.status_code == 400
-        assert "spots" in resp.json()["detail"].lower() or "No spots" in resp.json()["detail"]
+        assert (
+            "spots" in resp.json()["detail"].lower()
+            or "No spots" in resp.json()["detail"]
+        )
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
@@ -243,7 +250,9 @@ def test_my_signups_returns_signed_up_opportunity(client, db_session_factory):
     _seed(user, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = _override_user(user)
     try:
-        create_resp = client.post("/api/v1/volunteer", json=_opp_payload(title="Beach Cleanup"))
+        create_resp = client.post(
+            "/api/v1/volunteer", json=_opp_payload(title="Beach Cleanup")
+        )
         opp_id = create_resp.json()["id"]
         client.post(f"/api/v1/volunteer/{opp_id}/signup")
         resp = client.get("/api/v1/volunteer/my-signups")
