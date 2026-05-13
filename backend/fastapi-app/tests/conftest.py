@@ -9,13 +9,12 @@ import asyncio
 import base64
 import hashlib
 import hmac
-import json
 import os
 import sys
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
@@ -45,11 +44,11 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from app.config import get_settings
+from app.config import get_settings  # noqa: E402
 
 get_settings.cache_clear()
 
-from app import database
+from app import database  # noqa: E402
 
 # Force the engine to use SQLite to prevent PG connection attempts during module-level init or lifespan
 database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
