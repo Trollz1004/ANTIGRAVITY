@@ -1,4 +1,5 @@
 """Secure file upload router with validation, size limits, and virus scanning."""
+
 import hashlib
 import json
 import logging
@@ -23,6 +24,7 @@ def _get_file_magic_type(file_path: str) -> str | None:
     """Detect file MIME type using python-magic if available, else fallback to extension."""
     try:
         import magic
+
         return magic.from_file(file_path, mime=True)
     except ImportError:
         # Fallback to extension-based detection

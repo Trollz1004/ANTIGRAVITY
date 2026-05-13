@@ -8,85 +8,77 @@ from app.schemas import (
     LoveBotCompatibilityResponse,
     LoveBotQuoteResponse,
     LoveBotTipResponse,
-    LoveBotGiftResponse
+    LoveBotGiftResponse,
 )
 from app.lovebot_service import lovebot_service
 from app.subscriptions import user_has_active_subscription
 
 router = APIRouter(prefix="/lovebot", tags=["LoveBot"])
 
+
 @router.post("/compatibility", response_model=LoveBotCompatibilityResponse)
 async def check_compatibility(
-    payload: LoveBotCompatibilityRequest,
-    user: User = Depends(get_current_user)
+    payload: LoveBotCompatibilityRequest, user: User = Depends(get_current_user)
 ) -> LoveBotCompatibilityResponse:
     """Check name and optional birthday compatibility."""
     if not user or not user_has_active_subscription(user):
         raise HTTPException(
             status_code=403,
-            detail="LoveBot features require a Founding Member or Premium subscription."
+            detail="LoveBot features require a Founding Member or Premium subscription.",
         )
 
     if payload.dob1 and payload.dob2:
         result = lovebot_service.calculate_birthday_match(payload.dob1, payload.dob2)
     else:
         result = lovebot_service.calculate_compatibility(payload.name1, payload.name2)
-    
+
     return LoveBotCompatibilityResponse(
-        score=result["score"],
-        message=result["message"]
+        score=result["score"], message=result["message"]
     )
+
 
 @router.get("/quotes", response_model=LoveBotQuoteResponse)
 async def get_love_quotes(
-    category: str | None = None,
-    user: User = Depends(get_current_user)
+    category: str | None = None, user: User = Depends(get_current_user)
 ) -> LoveBotQuoteResponse:
     """Get a random love quote or pickup line."""
     if not user or not user_has_active_subscription(user):
         raise HTTPException(
             status_code=403,
-            detail="LoveBot features require a Founding Member or Premium subscription."
+            detail="LoveBot features require a Founding Member or Premium subscription.",
         )
     quote = lovebot_service.get_random_quote(category)
     return LoveBotQuoteResponse(
-        text=quote["text"],
-        author=quote["author"],
-        category=quote["category"]
+        text=quote["text"], author=quote["author"], category=quote["category"]
     )
+
 
 @router.get("/tips", response_model=LoveBotTipResponse)
 async def get_dating_tips(
     category: str = "attracting_partners_neutral",
-    user: User = Depends(get_current_user)
+    user: User = Depends(get_current_user),
 ) -> LoveBotTipResponse:
     """Get expert dating tips and lessons."""
     if not user or not user_has_active_subscription(user):
         raise HTTPException(
             status_code=403,
-            detail="LoveBot features require a Founding Member or Premium subscription."
+            detail="LoveBot features require a Founding Member or Premium subscription.",
         )
     if category not in lovebot_service.tips:
         raise HTTPException(status_code=400, detail="Invalid tip category")
-    
-    return LoveBotTipResponse(
-        category=category,
-        tips=lovebot_service.tips[category]
-    )
+
+    return LoveBotTipResponse(category=category, tips=lovebot_service.tips[category])
+
 
 @router.get("/gifts", response_model=LoveBotGiftResponse)
 async def get_gift_ideas(
-    recipient: str = "neutral",
-    user: User = Depends(get_current_user)
+    recipient: str = "neutral", user: User = Depends(get_current_user)
 ) -> LoveBotGiftResponse:
     """Get personalized gift ideas for your soulmate."""
     if not user or not user_has_active_subscription(user):
         raise HTTPException(
             status_code=403,
-            detail="LoveBot features require a Founding Member or Premium subscription."
+            detail="LoveBot features require a Founding Member or Premium subscription.",
         )
     ideas = lovebot_service.get_gift_ideas(recipient)
-    return LoveBotGiftResponse(
-        recipient=recipient,
-        ideas=ideas
-    )
+    return LoveBotGiftResponse(recipient=recipient, ideas=ideas)

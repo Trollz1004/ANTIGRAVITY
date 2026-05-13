@@ -106,9 +106,7 @@ async def reconcile_legacy_schema() -> None:
         for statement in statements:
             await connection.execute(text(statement))
 
-        await connection.execute(
-            text(
-                """
+        await connection.execute(text("""
                 DO $$
                 BEGIN
                     IF EXISTS (
@@ -127,13 +125,9 @@ async def reconcile_legacy_schema() -> None:
                     END IF;
                 END
                 $$;
-                """
-            )
-        )
+                """))
 
-        await connection.execute(
-            text(
-                """
+        await connection.execute(text("""
                 DO $$
                 BEGIN
                     IF EXISTS (
@@ -149,6 +143,4 @@ async def reconcile_legacy_schema() -> None:
                     END IF;
                 END
                 $$;
-                """
-            )
-        )
+                """))

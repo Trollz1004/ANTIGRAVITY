@@ -97,7 +97,9 @@ class Settings(BaseSettings):
 
     # File upload settings
     upload_max_size_mb: int = 10
-    upload_allowed_types: str = "image/jpeg,image/png,image/gif,application/pdf,text/plain"
+    upload_allowed_types: str = (
+        "image/jpeg,image/png,image/gif,application/pdf,text/plain"
+    )
     upload_storage_path: str = "/var/secure_uploads"
     clamav_enabled: bool = False
 

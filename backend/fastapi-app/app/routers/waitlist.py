@@ -15,7 +15,9 @@ router = APIRouter(prefix="/waitlist")
 logger = logging.getLogger(__name__)
 
 
-@router.post("", response_model=WaitlistSignupResponse, status_code=status.HTTP_202_ACCEPTED)
+@router.post(
+    "", response_model=WaitlistSignupResponse, status_code=status.HTTP_202_ACCEPTED
+)
 async def signup_waitlist(
     request: Request,
     payload: WaitlistSignupRequest,
@@ -48,6 +50,8 @@ async def signup_waitlist(
             settings=settings,
         )
     except Exception:
-        logger.exception("Waitlist operator notification failed for %s", recipient_email)
+        logger.exception(
+            "Waitlist operator notification failed for %s", recipient_email
+        )
 
     return WaitlistSignupResponse()

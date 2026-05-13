@@ -41,8 +41,18 @@ def test_propose_and_accept_double_date(client, db_session_factory):
         updated_at=datetime.now(timezone.utc),
     )
 
-    match_a = Match(id=uuid.uuid4(), user_a=couple_a_user_1.id, user_b=couple_a_user_2.id, status="active")
-    match_b = Match(id=uuid.uuid4(), user_a=couple_b_user_1.id, user_b=couple_b_user_2.id, status="active")
+    match_a = Match(
+        id=uuid.uuid4(),
+        user_a=couple_a_user_1.id,
+        user_b=couple_a_user_2.id,
+        status="active",
+    )
+    match_b = Match(
+        id=uuid.uuid4(),
+        user_a=couple_b_user_1.id,
+        user_b=couple_b_user_2.id,
+        status="active",
+    )
 
     async def seed_data():
         async with db_session_factory() as session:
@@ -54,10 +64,26 @@ def test_propose_and_accept_double_date(client, db_session_factory):
                     couple_b_user_2,
                     match_a,
                     match_b,
-                    Profile(id=uuid.uuid4(), user_id=couple_a_user_1.id, photos=["/alex.jpg"]),
-                    Profile(id=uuid.uuid4(), user_id=couple_a_user_2.id, photos=["/jordan.jpg"]),
-                    Profile(id=uuid.uuid4(), user_id=couple_b_user_1.id, photos=["/taylor.jpg"]),
-                    Profile(id=uuid.uuid4(), user_id=couple_b_user_2.id, photos=["/morgan.jpg"]),
+                    Profile(
+                        id=uuid.uuid4(),
+                        user_id=couple_a_user_1.id,
+                        photos=["/alex.jpg"],
+                    ),
+                    Profile(
+                        id=uuid.uuid4(),
+                        user_id=couple_a_user_2.id,
+                        photos=["/jordan.jpg"],
+                    ),
+                    Profile(
+                        id=uuid.uuid4(),
+                        user_id=couple_b_user_1.id,
+                        photos=["/taylor.jpg"],
+                    ),
+                    Profile(
+                        id=uuid.uuid4(),
+                        user_id=couple_b_user_2.id,
+                        photos=["/morgan.jpg"],
+                    ),
                 ]
             )
             await session.commit()
@@ -92,7 +118,10 @@ def test_propose_and_accept_double_date(client, db_session_factory):
         assert accept_response.status_code == 200
         accept_payload = accept_response.json()
         assert accept_payload["status"] == "active"
-        assert set(accept_payload["accepted_match_ids"]) == {str(match_a.id), str(match_b.id)}
+        assert set(accept_payload["accepted_match_ids"]) == {
+            str(match_a.id),
+            str(match_b.id),
+        }
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
@@ -127,8 +156,18 @@ def test_squad_recommendations_sort_by_mission_score(client, db_session_factory)
         updated_at=datetime.now(timezone.utc),
     )
 
-    first_match = Match(id=uuid.uuid4(), user_a=initiator.id, user_b=first_match_user.id, status="active")
-    second_match = Match(id=uuid.uuid4(), user_a=initiator.id, user_b=second_match_user.id, status="active")
+    first_match = Match(
+        id=uuid.uuid4(),
+        user_a=initiator.id,
+        user_b=first_match_user.id,
+        status="active",
+    )
+    second_match = Match(
+        id=uuid.uuid4(),
+        user_a=initiator.id,
+        user_b=second_match_user.id,
+        status="active",
+    )
 
     async def seed_data():
         async with db_session_factory() as session:
@@ -139,8 +178,16 @@ def test_squad_recommendations_sort_by_mission_score(client, db_session_factory)
                     second_match_user,
                     first_match,
                     second_match,
-                    Profile(id=uuid.uuid4(), user_id=first_match_user.id, photos=["/first.jpg"]),
-                    Profile(id=uuid.uuid4(), user_id=second_match_user.id, photos=["/second.jpg"]),
+                    Profile(
+                        id=uuid.uuid4(),
+                        user_id=first_match_user.id,
+                        photos=["/first.jpg"],
+                    ),
+                    Profile(
+                        id=uuid.uuid4(),
+                        user_id=second_match_user.id,
+                        photos=["/second.jpg"],
+                    ),
                 ]
             )
             await session.commit()

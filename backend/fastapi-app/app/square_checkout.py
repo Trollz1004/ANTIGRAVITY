@@ -14,13 +14,17 @@ async def create_square_payment_link(
     request_body: dict[str, object],
     settings,
 ) -> str | None:
-    square_access_token = str(getattr(settings, "square_access_token", "") or "").strip()
+    square_access_token = str(
+        getattr(settings, "square_access_token", "") or ""
+    ).strip()
     square_location_id = str(getattr(settings, "square_location_id", "") or "").strip()
     square_api_base_url = str(
         getattr(settings, "square_api_base_url", "https://connect.squareup.com")
         or "https://connect.squareup.com"
     ).rstrip("/")
-    square_api_version = str(getattr(settings, "square_api_version", "2026-01-22") or "2026-01-22")
+    square_api_version = str(
+        getattr(settings, "square_api_version", "2026-01-22") or "2026-01-22"
+    )
 
     if not square_access_token or not square_location_id:
         return None

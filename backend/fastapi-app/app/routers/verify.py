@@ -91,12 +91,13 @@ class CheckoutResponse(BaseModel):
 def _generate_math_challenge() -> tuple[str, str]:
     """Generate a simple math challenge. Answer is the string of the result."""
     import random
+
     a = random.randint(10, 99)
     b = random.randint(1, 9)
-    op = random.choice(['+', '-', '*'])
-    if op == '+':
+    op = random.choice(["+", "-", "*"])
+    if op == "+":
         answer = a + b
-    elif op == '-':
+    elif op == "-":
         answer = a - b
     else:
         answer = a * b
@@ -127,7 +128,10 @@ async def _build_square_checkout_url(
     )
 
     request_body = build_bot_shield_checkout_request(
-        app_url=str(getattr(settings, "app_url", "https://youandinotai.com") or "https://youandinotai.com"),
+        app_url=str(
+            getattr(settings, "app_url", "https://youandinotai.com")
+            or "https://youandinotai.com"
+        ),
         location_id=str(getattr(settings, "square_location_id", "") or "").strip(),
         buyer_email=user.email,
         checkout_ref=checkout_ref,
@@ -159,31 +163,43 @@ async def _calculate_trust_score(user: User, db: AsyncSession) -> float:
     score += 20.0
 
     # Liveness passed: 40 pts
-    passed = await db.scalar(
-        select(func.count(VerificationEvent.id))
-        .where(VerificationEvent.user_id == user.id)
-        .where(VerificationEvent.status == "passed")
-        .where(VerificationEvent.challenge_type == "liveness")
-    ) or 0
+    passed = (
+        await db.scalar(
+            select(func.count(VerificationEvent.id))
+            .where(VerificationEvent.user_id == user.id)
+            .where(VerificationEvent.status == "passed")
+            .where(VerificationEvent.challenge_type == "liveness")
+        )
+        or 0
+    )
     if passed > 0:
         score += 40.0
 
     # Account age: up to 20 pts (1 per day, max 20)
-    age_days = (datetime.now(timezone.utc) - user.created_at.replace(tzinfo=timezone.utc)).days
+    age_days = (
+        datetime.now(timezone.utc) - user.created_at.replace(tzinfo=timezone.utc)
+    ).days
     score += min(age_days, 20)
 
     # Activity: up to 20 pts
-    matches = await db.scalar(
-        select(func.count(Match.id)).where(
-            (Match.user_a == user.id) | (Match.user_b == user.id)
+    matches = (
+        await db.scalar(
+            select(func.count(Match.id)).where(
+                (Match.user_a == user.id) | (Match.user_b == user.id)
+            )
         )
-    ) or 0
-    messages = await db.scalar(
-        select(func.count(Message.id)).where(Message.sender_id == user.id)
-    ) or 0
-    posts = await db.scalar(
-        select(func.count(Post.id)).where(Post.author_id == user.id)
-    ) or 0
+        or 0
+    )
+    messages = (
+        await db.scalar(
+            select(func.count(Message.id)).where(Message.sender_id == user.id)
+        )
+        or 0
+    )
+    posts = (
+        await db.scalar(select(func.count(Post.id)).where(Post.author_id == user.id))
+        or 0
+    )
     activity = min(matches * 2 + messages * 0.5 + posts * 3, 20)
     score += activity
 
@@ -247,10 +263,14 @@ async def submit_challenge(
         .where(VerificationEvent.status == "pending")
     )
     if not event:
-        raise HTTPException(status_code=404, detail="Challenge not found or already completed")
+        raise HTTPException(
+            status_code=404, detail="Challenge not found or already completed"
+        )
 
     # Check expiry
-    elapsed = (datetime.now(timezone.utc) - event.created_at.replace(tzinfo=timezone.utc)).total_seconds()
+    elapsed = (
+        datetime.now(timezone.utc) - event.created_at.replace(tzinfo=timezone.utc)
+    ).total_seconds()
     if elapsed > CHALLENGE_EXPIRY_SECONDS:
         event.status = "expired"
         await db.commit()
@@ -304,9 +324,11 @@ async def submit_challenge(
         message=(
             "Liveness verified! Complete the $1 Bot-Shield payment to earn your badge."
             if checkout_url
-            else "Liveness verified. Add a real email address to unlock Square checkout."
-            if not square_ready_email
-            else "Liveness verified, but secure Square checkout is temporarily unavailable. Please try again shortly."
+            else (
+                "Liveness verified. Add a real email address to unlock Square checkout."
+                if not square_ready_email
+                else "Liveness verified, but secure Square checkout is temporarily unavailable. Please try again shortly."
+            )
         ),
         checkout_url=checkout_url,
     )
@@ -321,10 +343,14 @@ async def verification_status(
 
     trust = await _calculate_trust_score(user, db)
     bot_shield_paid = await has_completed_payment(db, user.id)
-    checks = await db.scalar(
-        select(func.count(VerificationEvent.id))
-        .where(VerificationEvent.user_id == user.id)
-    ) or 0
+    checks = (
+        await db.scalar(
+            select(func.count(VerificationEvent.id)).where(
+                VerificationEvent.user_id == user.id
+            )
+        )
+        or 0
+    )
 
     # Tier logic
     subscription_active = user_has_active_subscription(user)

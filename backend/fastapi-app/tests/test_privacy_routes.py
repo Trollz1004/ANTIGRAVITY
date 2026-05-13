@@ -40,7 +40,12 @@ def test_my_data_summary_and_delete_request(client, db_session_factory):
                         photos=["/photos/1.jpg", "/photos/2.jpg"],
                         location_enabled=True,
                     ),
-                    Match(id=match_id, user_a=primary_user.id, user_b=match_user.id, status="active"),
+                    Match(
+                        id=match_id,
+                        user_a=primary_user.id,
+                        user_b=match_user.id,
+                        status="active",
+                    ),
                     Message(
                         id=uuid.uuid4(),
                         match_id=match_id,
