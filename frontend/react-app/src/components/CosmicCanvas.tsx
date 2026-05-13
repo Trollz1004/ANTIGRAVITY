@@ -118,7 +118,6 @@ export function CosmicCanvas() {
     let audioCtx: AudioContext | null = null;
     let oscillator: OscillatorNode | null = null;
     let gainNode: GainNode | null = null;
-    let noiseNode: AudioWorkletNode | ScriptProcessorNode | null = null;
 
     const startAudio = () => {
       if (audioCtx) return;
