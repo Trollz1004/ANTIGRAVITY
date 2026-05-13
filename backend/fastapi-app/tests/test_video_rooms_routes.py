@@ -17,12 +17,10 @@ from datetime import date, datetime, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import httpx
-import pytest
 
 from app.auth import get_current_user, hash_password
 from app.main import app
 from app.models import User
-
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -173,9 +171,9 @@ def test_create_room_requests_max_2_participants(client):
 
         assert resp.status_code == 200
         props = captured_payload.get("properties", {})
-        assert props.get("max_participants") == 2, (
-            f"Room max_participants should be 2 to enforce pair-only access, got {props.get('max_participants')}"
-        )
+        assert (
+            props.get("max_participants") == 2
+        ), f"Room max_participants should be 2 to enforce pair-only access, got {props.get('max_participants')}"
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
@@ -220,7 +218,9 @@ def test_create_room_daily_connection_error_returns_502(client):
 
             mock_client = AsyncMock()
             mock_client.post = AsyncMock(
-                side_effect=httpx.RequestError("Connection refused", request=MagicMock())
+                side_effect=httpx.RequestError(
+                    "Connection refused", request=MagicMock()
+                )
             )
             mock_client.__aenter__ = AsyncMock(return_value=mock_client)
             mock_client.__aexit__ = AsyncMock(return_value=False)

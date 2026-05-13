@@ -6,11 +6,9 @@ Coverage targets:
 Risk surface: file injection, oversized upload, bad MIME type, path traversal in filename.
 """
 
-import os
 import tempfile
 import uuid
 from datetime import date, datetime, timezone
-from pathlib import Path
 from unittest.mock import patch
 
 import pytest
@@ -18,7 +16,6 @@ import pytest
 from app.auth import get_current_user, hash_password
 from app.main import app
 from app.models import User
-
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -38,6 +35,7 @@ def _make_user(email: str = "upload_user@example.com") -> User:
 
 def _override_user(user: User):
     """Return a dict mock because uploads.py declares user: dict[str, Any]."""
+
     async def _dep():
         # The uploads router calls user.get("sub") — it expects a dict, not an ORM object
         return {"sub": str(user.id), "email": user.email}
@@ -106,10 +104,19 @@ def test_upload_disallowed_mime_type_rejected(client):
                 mock_settings.upload_storage_path = storage_root
 
                 # Patch file magic to simulate a disallowed type
-                with patch("app.routers.uploads._get_file_magic_type", return_value="application/x-executable"):
+                with patch(
+                    "app.routers.uploads._get_file_magic_type",
+                    return_value="application/x-executable",
+                ):
                     resp = client.post(
                         "/api/v1/uploads/",
-                        files={"file": ("malware.exe", b"\x4d\x5a\x90\x00", "application/octet-stream")},
+                        files={
+                            "file": (
+                                "malware.exe",
+                                b"\x4d\x5a\x90\x00",
+                                "application/octet-stream",
+                            )
+                        },
                     )
         assert resp.status_code == 415
     finally:
@@ -138,7 +145,11 @@ def test_upload_path_traversal_filename_is_sanitized(client):
                     mock_settings.upload_max_size_bytes = 10 * 1024 * 1024
                     mock_settings.upload_max_size_mb = 10
                     mock_settings.clamav_enabled = False
-                    mock_settings.upload_allowed_types_list = ["image/jpeg", "image/png", "text/plain"]
+                    mock_settings.upload_allowed_types_list = [
+                        "image/jpeg",
+                        "image/png",
+                        "text/plain",
+                    ]
                     mock_settings.upload_storage_path = storage_root
 
                     with patch(
@@ -159,9 +170,9 @@ def test_upload_path_traversal_filename_is_sanitized(client):
                 if resp.status_code == 201:
                     stored_path = resp.json()["storage_path"]
                     # The stored path MUST be inside the storage root
-                    assert stored_path.startswith(storage_root), (
-                        f"Path traversal! Stored outside storage root: {stored_path}"
-                    )
+                    assert stored_path.startswith(
+                        storage_root
+                    ), f"Path traversal! Stored outside storage root: {stored_path}"
                 elif resp.status_code in (415, 500):
                     pass  # MIME rejection or server error — file not stored unsafely
                 else:
@@ -207,7 +218,13 @@ def test_upload_valid_image_returns_201(client):
                     try:
                         resp = client.post(
                             "/api/v1/uploads/",
-                            files={"file": ("photo.jpg", b"\xff\xd8\xff\xe0" + b"A" * 100, "image/jpeg")},
+                            files={
+                                "file": (
+                                    "photo.jpg",
+                                    b"\xff\xd8\xff\xe0" + b"A" * 100,
+                                    "image/jpeg",
+                                )
+                            },
                         )
                         if resp.status_code == 201:
                             data = resp.json()
@@ -216,7 +233,10 @@ def test_upload_valid_image_returns_201(client):
                             assert data["size_bytes"] > 0
                         else:
                             # 500 from logger KeyError (pre-existing bug in uploads.py)
-                            assert resp.status_code in (201, 500), f"Unexpected {resp.status_code}: {resp.text}"
+                            assert resp.status_code in (
+                                201,
+                                500,
+                            ), f"Unexpected {resp.status_code}: {resp.text}"
                     except Exception as e:
                         # KeyError from logging conflict — document and xfail
                         if "filename" in str(e) and "LogRecord" in str(e):
