@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Icon } from '../icons';
+import {
+  fetchAgentFleet,
+  fetchIncomePulse,
+  type AgentSummary,
+  type IncomePulse,
+} from '../lib/missionMcpClient';
 
 // ─── Sparkline ─────────────────────────────────────────────
 
@@ -156,21 +162,256 @@ function LogFeed() {
   );
 }
 
+// ─── MCP connection status badge ───────────────────────────
+
+type McpState = 'loading' | 'live' | 'offline';
+
+function McpBadge({ state }: { state: McpState }) {
+  if (state === 'loading') {
+    return (
+      <span className="tag" style={{ background: 'rgba(88,168,224,0.14)', color: 'var(--sky)' }}>
+        <span className="status-dot" style={{ background: 'var(--sky)' }}/> MCP CONNECTING…
+      </span>
+    );
+  }
+  if (state === 'offline') {
+    return (
+      <span className="tag error" title="mission-mcp unreachable — showing stub data">
+        OFFLINE · STUB DATA
+      </span>
+    );
+  }
+  return (
+    <span className="tag live">
+      <span className="status-dot live"/> MCP LIVE
+    </span>
+  );
+}
+
+// ─── Live fleet panel ───────────────────────────────────────
+
+function LiveFleetPanel({ agents, mcpState, fleetSpark }: {
+  agents: AgentSummary[];
+  mcpState: McpState;
+  fleetSpark: number[];
+}) {
+  const activeCount = agents.filter(a => a.status === 'active').length;
+  const total = agents.length;
+
+  if (mcpState !== 'offline' && total === 0 && mcpState !== 'loading') {
+    return (
+      <div className="card card--green span-4">
+        <div className="card-h">
+          <div className="t"><Icon.Network size={12}/> AGENT FLEET</div>
+          <McpBadge state={mcpState}/>
+        </div>
+        <div className="kpi-row">
+          <div className="kpi" style={{ fontSize: 28, color: 'var(--ink-3)' }}>—</div>
+        </div>
+        <div className="kpi-foot">no agents active yet</div>
+        <div style={{ marginTop: 16 }}>
+          <Spark values={fleetSpark} color="green" height={72}/>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="card card--green span-4">
+      <div className="card-h">
+        <div className="t"><Icon.Network size={12}/> AGENT FLEET</div>
+        <McpBadge state={mcpState}/>
+      </div>
+      <div className="kpi-row">
+        {mcpState === 'loading' ? (
+          <div className="kpi" style={{ fontSize: 28, color: 'var(--ink-3)' }}>…</div>
+        ) : (
+          <>
+            <div className="kpi">
+              {activeCount}
+              <span style={{ fontSize: 22, color: 'var(--ink-3)', marginLeft: 6 }}>/ {total}</span>
+            </div>
+            {activeCount > 0 && <div className="kpi-delta">{activeCount} active</div>}
+          </>
+        )}
+      </div>
+      <div className="kpi-foot">
+        {mcpState === 'offline'
+          ? '8 agents · stub data'
+          : total === 0
+            ? 'no agents in task board yet'
+            : `${activeCount} active · ${total - activeCount} idle · from task assignments`}
+      </div>
+      <div style={{ marginTop: 16 }}>
+        <Spark values={fleetSpark} color="green" height={72}/>
+      </div>
+      {agents.length > 0 && (
+        <div style={{ marginTop: 14, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {agents.slice(0, 4).map(a => (
+            <span key={a.agentId} className={'tag ' + (a.status === 'active' ? 'busy' : 'idle')}>
+              {a.agentId.toUpperCase().slice(0, 12)}
+            </span>
+          ))}
+        </div>
+      )}
+      {mcpState === 'offline' && (
+        <div style={{ marginTop: 14, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          <span className="tag opus">OPUS LEAD</span>
+          <span className="tag bridge">GEMINI CO-LEAD</span>
+          <span className="tag live">HERMES 9020</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Live income-engine pulse panel ────────────────────────
+
+function LivePulsePanel({ pulse, mcpState }: { pulse: IncomePulse | null; mcpState: McpState }) {
+  const stubRevenue = [128, 142, 130, 156, 168, 152, 188, 196, 184, 212, 226, 240, 232, 258, 274];
+
+  return (
+    <div className="card card--accent span-5">
+      <div className="card-h">
+        <div className="t"><Icon.Coins size={12}/> INCOME-ENGINE PULSE · 7D</div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <div className="t" style={{ color: 'var(--odoo-300)' }}>Genspark playbook tasks</div>
+          <McpBadge state={mcpState}/>
+        </div>
+      </div>
+
+      {mcpState === 'loading' && (
+        <>
+          <div className="kpi-row">
+            <div className="kpi" style={{ fontSize: 28, color: 'var(--ink-3)' }}>…</div>
+          </div>
+          <div className="kpi-foot">connecting to mission-mcp</div>
+          <div style={{ marginTop: 14 }}><Spark values={stubRevenue} color="" height={72}/></div>
+        </>
+      )}
+
+      {mcpState === 'offline' && (
+        <>
+          <div className="kpi-row">
+            <div className="kpi">$8,412</div>
+            <div className="kpi-delta">+18.4%</div>
+          </div>
+          <div className="kpi-foot">⊙ Square primary · Stripe sunset path</div>
+          <div style={{ marginTop: 14 }}><Spark values={stubRevenue} color="" height={72}/></div>
+          <div className="bar-row" style={{ marginTop: 16 }}>
+            <span className="label">→ EARMARKED</span>
+            <div className="bar"><i style={{ width: '62%' }}/></div>
+            <span className="v">$5.2K</span>
+          </div>
+        </>
+      )}
+
+      {mcpState === 'live' && pulse && (
+        <>
+          {pulse.totalTasks === 0 ? (
+            <>
+              <div className="kpi-row">
+                <div className="kpi" style={{ fontSize: 28, color: 'var(--ink-3)' }}>—</div>
+              </div>
+              <div className="kpi-foot">no income-engine tasks seeded yet</div>
+            </>
+          ) : (
+            <>
+              <div className="kpi-row">
+                <div className="kpi">{pulse.totalTasks}</div>
+                <div className="kpi-delta">
+                  {pulse.dailyVelocity > 0 ? `${pulse.dailyVelocity}/day` : 'no velocity yet'}
+                </div>
+              </div>
+              <div className="kpi-foot">total tasks · task velocity = leading revenue indicator</div>
+              <div style={{ marginTop: 14 }}>
+                <Spark
+                  values={pulse.completionSpark.some(v => v > 0) ? pulse.completionSpark : [0,0,0,0,0,0,1]}
+                  color=""
+                  height={72}
+                />
+              </div>
+              <div style={{ marginTop: 14, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                {[
+                  { l: 'TOTAL', v: pulse.totalTasks, c: 'var(--ink)' },
+                  { l: 'DONE', v: pulse.completedCount, c: 'var(--green)' },
+                  { l: 'ACTIVE', v: pulse.inProgressCount + pulse.pendingCount, c: 'var(--amber)' },
+                ].map(b => (
+                  <div key={b.l} style={{ padding: '12px 14px', background: 'var(--bg-3)', border: '1px solid var(--line)', borderRadius: 12 }}>
+                    <div className="mono" style={{ fontSize: 9, letterSpacing: '0.2em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>{b.l}</div>
+                    <div style={{ fontWeight: 900, fontSize: 28, lineHeight: 1, color: b.c, marginTop: 6 }}>{b.v}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="bar-row" style={{ marginTop: 16 }}>
+                <span className="label">COMPLETE</span>
+                <div className="bar">
+                  <i style={{ width: `${Math.round((pulse.completedCount / pulse.totalTasks) * 100)}%` }}/>
+                </div>
+                <span className="v">{Math.round((pulse.completedCount / pulse.totalTasks) * 100)}%</span>
+              </div>
+            </>
+          )}
+          <div className="kpi-foot" style={{ marginTop: 10, color: 'var(--amber)', fontStyle: 'italic' }}>
+            ILLUSTRATIVE · task velocity is leading indicator only
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ─── Dashboard ─────────────────────────────────────────────
 
 export function Dashboard() {
-  const revenue    = [128, 142, 130, 156, 168, 152, 188, 196, 184, 212, 226, 240, 232, 258, 274];
-  const fleet      = [4, 5, 4, 6, 7, 6, 8, 7, 9, 10, 8, 11, 10, 12, 12];
+  // ── MCP live data state ──────────────────────────────────
+  const [mcpState, setMcpState]     = useState<McpState>('loading');
+  const [agents, setAgents]         = useState<AgentSummary[]>([]);
+  const [pulse, setPulse]           = useState<IncomePulse | null>(null);
+  const [fleetSpark, setFleetSpark] = useState<number[]>([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+
+  const STUB_FLEET_SPARK  = [4, 5, 4, 6, 7, 6, 8, 7, 9, 10, 8, 11, 10, 12, 12];
+
+  const loadLiveData = useCallback(async () => {
+    const [fleetResult, pulseResult] = await Promise.all([
+      fetchAgentFleet(),
+      fetchIncomePulse(),
+    ]);
+
+    const eitherOnline = fleetResult.ok || pulseResult.ok;
+    setMcpState(eitherOnline ? 'live' : 'offline');
+
+    if (fleetResult.ok) {
+      setAgents(fleetResult.agents);
+      // Build a 15-point spark from agent task counts (simple proxy: total tasks over agents)
+      const totalActive = fleetResult.agents.reduce((s, a) => s + a.activeCount, 0);
+      setFleetSpark(prev => [...prev.slice(1), totalActive]);
+    }
+
+    if (pulseResult.ok) {
+      setPulse(pulseResult.pulse);
+    }
+  }, []);
+
+  // Initial load + 5s polling
+  useEffect(() => {
+    loadLiveData();
+    const id = setInterval(loadLiveData, 5000);
+    return () => clearInterval(id);
+  }, [loadLiveData]);
+
   const givingArc  = [12, 18, 16, 24, 32, 28, 41, 48, 52, 61, 68, 74, 83, 92, 104];
+  const displayFleetSpark = mcpState === 'offline' ? STUB_FLEET_SPARK : fleetSpark;
 
   return (
     <div className="page-anim">
       <div className="page-head">
         <div>
           <h1 className="page-title">Mission <span className="accent">Control</span></h1>
-          <div className="page-sub">Operator · Joshua Coleman · 8 agents · Opus + Gemini orchestrating · Hermes streaming</div>
+          <div className="page-sub">Operator · Joshua Coleman · Opus + Gemini orchestrating · Hermes streaming</div>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
+          <McpBadge state={mcpState}/>
           <span className="tag live outline"><span className="status-dot live"/> ALL SYSTEMS NOMINAL</span>
           <span className="tag opus outline"><Icon.Brain size={11}/> OPUS + GEMINI LEAD</span>
         </div>
@@ -244,47 +485,11 @@ export function Dashboard() {
           </div>
         </div>
 
-        {/* Revenue pulse */}
-        <div className="card card--accent span-5">
-          <div className="card-h">
-            <div className="t"><Icon.Coins size={12}/> REVENUE PULSE · 14D</div>
-            <div className="t" style={{ color: 'var(--odoo-300)' }}>YouAndINotAI · OnlineRecycle · AI-Solutions</div>
-          </div>
-          <div className="kpi-row">
-            <div className="kpi">$8,412</div>
-            <div className="kpi-delta">+18.4%</div>
-          </div>
-          <div className="kpi-foot">⊙ Square primary · Stripe sunset path</div>
-          <div style={{ marginTop: 14 }}>
-            <Spark values={revenue} color="" height={72}/>
-          </div>
-          <div className="bar-row" style={{ marginTop: 16 }}>
-            <span className="label">→ EARMARKED</span>
-            <div className="bar"><i style={{ width: '62%' }}/></div>
-            <span className="v">$5.2K</span>
-          </div>
-        </div>
+        {/* Income-engine pulse — live from mission-mcp */}
+        <LivePulsePanel pulse={pulse} mcpState={mcpState}/>
 
-        {/* Agent fleet count */}
-        <div className="card card--green span-4">
-          <div className="card-h">
-            <div className="t"><Icon.Network size={12}/> AGENT FLEET</div>
-            <span className="tag live"><span className="status-dot live"/> LIVE</span>
-          </div>
-          <div className="kpi-row">
-            <div className="kpi">8<span style={{ fontSize: 22, color: 'var(--ink-3)', marginLeft: 6 }}>/ 8</span></div>
-            <div className="kpi-delta">+2 today</div>
-          </div>
-          <div className="kpi-foot">2 orchestrators · 6 workers</div>
-          <div style={{ marginTop: 16 }}>
-            <Spark values={fleet} color="green" height={72}/>
-          </div>
-          <div style={{ marginTop: 14, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-            <span className="tag opus">OPUS LEAD</span>
-            <span className="tag bridge">GEMINI CO-LEAD</span>
-            <span className="tag live">HERMES 9020</span>
-          </div>
-        </div>
+        {/* Agent fleet — live from mission-mcp task assignments */}
+        <LiveFleetPanel agents={agents} mcpState={mcpState} fleetSpark={displayFleetSpark}/>
 
         {/* Node health */}
         <div className="card span-3">
