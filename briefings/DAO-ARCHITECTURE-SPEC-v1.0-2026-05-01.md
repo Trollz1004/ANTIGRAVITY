@@ -218,7 +218,7 @@ The DAO operates as a hybrid: the LLC Operating Agreement is the legal instrumen
 
 ## 10. What This DAO Is Not
 
-- **Not a token launch.** There is no DAO token. Governance is seat-based, not token-weighted. This eliminates speculation, pump-and-dump risk, and SEC token classification issues. (Note: this contradicts `DAO-TOKENOMICS-FINAL.md` which defines 4 soulbound DAOs with 10M tokens. **Reconcile:** the tokenomics doc defines platform/activity reward tokens that are non-transferable — those are soulbound engagement instruments, NOT governance tokens. This spec's "no DAO token" rule applies to investor governance: voting is by seat, not token-weight.)
+- **Not a token launch.** There is no DAO governance token. Governance is seat-based, not token-weighted. This eliminates speculation, pump-and-dump risk, and SEC token classification issues. **Engagement-token carveout:** `DAO-TOKENOMICS-FINAL.md` defines 4 soulbound activity/reward tokens ($LOVE/$UKID/$GREEN/$AGRAV, 10M total, non-transferable on Base L2) — those are engagement instruments only and carry zero governance weight; the "no DAO token" rule here applies exclusively to investor voting seats.
 - **Not a democracy.** The community does not govern. The founder leads. Investors advise. The Founding Four counsel. The mission is supreme.
 - **Not a charity.** This is a for-profit LLC that contractually disburses revenue to charitable operations. The distinction matters for tax treatment, regulatory compliance, and founder liability.
 - **Not temporary.** This is a 50-year minimum commitment. The code runs. The mission executes. #UntilNoKidInNeed.

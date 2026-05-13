@@ -1,8 +1,8 @@
-# REPOSITORY RECORD - SABRETOOTH LIVE STATE
+# REPOSITORY RECORD - T5500 PRIMARY NODE (Sabretooth pending wipe)
 
-Date: May 11, 2026 (header date forward-rolled — content from 2026-04-28 sweep preserved below)
+Date: May 13, 2026 (node-primary updated; prior content from 2026-05-11 ONE-repo sweep preserved below)
 Authority: Joshua Coleman
-Status: authoritative repo refreshed after the 2026-05-11 ONE-repo consolidation (income-engine merged in, second repo archived, Paperclip companies created), the April 15 PaperClip HQ cutover, the April 17 1-wallet revenue-model pivot (charity-routing language removed from all active surfaces), the April 19 4-DAO architecture finalization and Gemini memory refresh, the April 27 OpenCode / Paperclip Worker finalization, and the April 28 doctrine sweep that moved the env vault to OneDrive, locked the 1-folder rule, migrated OpusPawClaw to `c:\Antigravity\apps\opuspawclaw`, added the Sabretooth always-on watchdog, stood up Hermes Router on `:11435`, and wired the Playwright browser MCP into the project
+Status: **T5500 is now the primary node** per the 2026-05-11/12 node-consolidation plan (`T5500-CONSOLIDATION.md`). Sabretooth was the primary node through 2026-05-11 and is pending factory wipe after the `sabretooth-preserve-20260511` branch is confirmed on origin. 9020 is also pending wipe. All prior Sabretooth-era history below remains accurate as historical record. Updated after the 2026-05-11 ONE-repo consolidation (income-engine merged in, second repo archived, Paperclip companies created), the April 15 PaperClip HQ cutover, the April 17 1-wallet revenue-model pivot (charity-routing language removed from all active surfaces), the April 19 4-DAO architecture finalization and Gemini memory refresh, the April 27 OpenCode / Paperclip Worker finalization, and the April 28 doctrine sweep that moved the env vault to OneDrive, locked the 1-folder rule, migrated OpusPawClaw to `c:\Antigravity\apps\opuspawclaw`, added the Sabretooth always-on watchdog, stood up Hermes Router on `:11435`, and wired the Playwright browser MCP into the project
 
 ## 2026-05-11 ONE-Repo Consolidation (canonical)
 
@@ -13,8 +13,8 @@ Status: authoritative repo refreshed after the 2026-05-11 ONE-repo consolidation
 | Repo (only) | `Trollz1004/ANTIGRAVITY` |
 | Folder (every node) | `C:\Antigravity` (or `C:\ANTIGRAVITY`) |
 | Branch | `main` |
-| Push-to-main authority | Sabretooth (192.168.0.8) |
-| Sync-only nodes | 9020, T5500 (clone/pull from origin) |
+| Push-to-main authority | T5500 (192.168.0.15) — was Sabretooth (192.168.0.8), now pending wipe |
+| Sync-only nodes | 9020 (pending wipe), Sabretooth (pending wipe) |
 | Sabretooth main HEAD | `0a248073` — "Merge income-engine into ANTIGRAVITY (redact leaked AidoesitAll gho_ token…)" |
 | Subtree imported | `Trollz1004/income-engine@f9feff1d` → `income-engine/` (2018 files; one secret-bearing file omitted) |
 | `Trollz1004/income-engine` | **archived** (read-only safety net, not deleted) |
