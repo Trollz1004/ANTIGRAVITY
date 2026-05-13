@@ -240,7 +240,7 @@ function LiveFleetPanel({ agents, mcpState, fleetSpark }: {
           ? '8 agents · stub data'
           : total === 0
             ? 'no agents in task board yet'
-            : `${activeCount} active · ${total - activeCount} idle · from task assignments`}
+            : `${activeCount} active · ${total - activeCount} idle · live from mission-mcp`}
       </div>
       <div style={{ marginTop: 16 }}>
         <Spark values={fleetSpark} color="green" height={72}/>
@@ -248,7 +248,7 @@ function LiveFleetPanel({ agents, mcpState, fleetSpark }: {
       {agents.length > 0 && (
         <div style={{ marginTop: 14, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {agents.slice(0, 4).map(a => (
-            <span key={a.agentId} className={'tag ' + (a.status === 'active' ? 'busy' : 'idle')}>
+            <span key={a.agentId} className={'tag ' + (a.status === 'active' ? 'busy' : 'idle')} title={a.model}>
               {a.agentId.toUpperCase().slice(0, 12)}
             </span>
           ))}
@@ -383,8 +383,8 @@ export function Dashboard() {
 
     if (fleetResult.ok) {
       setAgents(fleetResult.agents);
-      // Build a 15-point spark from agent task counts (simple proxy: total tasks over agents)
-      const totalActive = fleetResult.agents.reduce((s, a) => s + a.activeCount, 0);
+      // Build a 15-point spark from live agent count (active agents per poll tick)
+      const totalActive = fleetResult.agents.filter(a => a.status === 'active').length;
       setFleetSpark(prev => [...prev.slice(1), totalActive]);
     }
 
