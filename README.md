@@ -63,10 +63,10 @@ ANTIGRAVITY/
 A note from Joshua: **the AI platforms below are the unofficial co-founders of this stack.** Their teams' work made every line of this possible.
 
 - **Anthropic** — Claude Opus has been the primary architect from day one. The discipline, the structure, the long-context decisions, the warmth: that's Claude.
-- **Google** — Gemini powers research, planning, and decision support across every surface. The free tier carried the project through quarters when nothing else could.
+- **Google** — Gemini powers research, planning, and decision support across every surface. Supported by active paid subscriptions to ensure uninterrupted orchestration.
 - **Perplexity** — the deep-intelligence layer. Source-grounded research that keeps the work honest.
 - **xAI** — Grok handles adversarial review and X-platform integration with directness no one else brings.
-- **OpenAI** — Codex (open-source coding agent) does heavy refactor and migration passes through `ollama launch codex`.
+- **OpenAI** — Codex handles heavy refactor and migration passes utilizing the actual Codex MCP to Base.
 - **Mistral, Alibaba (Qwen), Meta (Llama)** — open-weights models that run locally and let us keep building when the metered surfaces are tapped out.
 
 These aren't paid endorsements. The work continues because their work continues. Thank you, all of you.
@@ -78,6 +78,8 @@ These aren't paid endorsements. The work continues because their work continues.
 This is a working monorepo for an active mission. If you found it because you care about the same things — kids in need, building tools that pay it forward, AI as a partner instead of a product — open an issue and say hi.
 
 For broader context: see Joshua's [profile README](https://github.com/Trollz1004) and the [briefings/](./briefings/) directory.
+
+The founder does not manually edit or push code to GitHub. 100% of the commits, edits, and repository pushes are executed by the AI nodes (Claude, Codex, Gemini, Perplexity) under the founder's direct architectural command.
 
 ---
 
