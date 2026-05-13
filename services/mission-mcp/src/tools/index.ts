@@ -30,6 +30,7 @@ import {
   writeFileTool,
   patchFileTool,
 } from "./files.js";
+import { ListAgentsInput, listAgents } from "./agents.js";
 
 // ── ToolContext ───────────────────────────────────────────────────────────────
 
@@ -127,5 +128,12 @@ export const TOOLS: ToolDef[] = [
       "Apply a unified diff to a file relative to the ANTIGRAVITY repo root.",
     schema: PatchFileInput,
     handler: ({ db }, input) => patchFileTool(db, input),
+  }),
+  makeTool({
+    name: "list_agents",
+    description:
+      "List registered agent processes (pid, model, last heartbeat). Returns an empty array if no agents have registered yet. Optionally filter by recency via active_since_ms.",
+    schema: ListAgentsInput,
+    handler: ({ db }, input) => listAgents(db, input),
   }),
 ];
