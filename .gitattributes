@@ -10,3 +10,7 @@ scripts/**/*.py text eol=lf
 *.cmd   text eol=crlf
 *.bat   text eol=crlf
 *.ps1   text eol=crlf
+# Exempt: stored verbatim because Linux-side checkout kept regenerating a
+# phantom diff against the CRLF-normalized blob. -text disables EOL
+# conversion so on-disk bytes round-trip cleanly through both OSes.
+scripts/launch-hermes-paperclip-ceo-wsl.cmd -text
