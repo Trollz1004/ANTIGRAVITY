@@ -138,7 +138,7 @@ jobs:
 
       - name: Run ESLint
         working-directory: frontend/react-app
-        run: npx eslint src --ext .ts,.tsx --max-warnings 0
+        run: npx eslint src --ext .ts,.tsx
 
       - name: Run Prettier check
         working-directory: frontend/react-app

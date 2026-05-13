@@ -526,16 +526,3 @@ class LoveBotTipResponse(BaseModel):
 class LoveBotGiftResponse(BaseModel):
     recipient: str
     ideas: list[str]
-
-
-# ── User Registration ──
-
-
-class UserRegisterRequest(BaseModel):
-    email: EmailStr
-    display_name: str = Field(min_length=1, max_length=100)
-
-
-class UserRegisterResponse(BaseModel):
-    user_id: uuid.UUID
-    session_token: str
