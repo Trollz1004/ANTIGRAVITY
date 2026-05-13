@@ -74,7 +74,6 @@ def test_calculate_age_uses_utc_today_by_default():
 
 
 def test_ensure_adult_passes_for_18():
-    dob = date(2007, 3, 25)
     # Patch today via monkeypatch is not needed; calculate_age uses utc today.
     # Use a known-adult dob instead.
     adult_dob = date(1990, 1, 1)

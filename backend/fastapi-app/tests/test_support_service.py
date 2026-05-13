@@ -29,7 +29,7 @@ def test_support_openclaw_accepts_direct_reply_payload(monkeypatch):
         async def __aexit__(self, exc_type, exc, tb):
             return False
 
-        async def post(self, *args, **kwargs):
+        async def post(self, *args, **kwargs):  # noqa: ARG002
             return DummyResponse()
 
     monkeypatch.setattr("app.support_service.httpx.AsyncClient", DummyClient)
