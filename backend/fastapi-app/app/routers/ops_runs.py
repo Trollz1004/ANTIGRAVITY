@@ -1,8 +1,8 @@
 """Ops-runs router — lightweight audit log for operational script executions.
 
-POST /api/v1/ops-runs        — record a run event
-GET  /api/v1/ops-runs        — list recent run events
-GET  /api/v1/ops-runs/{id}   — get a single run event
+POST /api/v1/ops-runs        — record a run event (requires auth)
+GET  /api/v1/ops-runs        — list recent run events (requires auth)
+GET  /api/v1/ops-runs/{id}   — get a single run event (requires auth)
 """
 
 from __future__ import annotations
@@ -11,8 +11,11 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+
+from app.auth import get_current_user
+from app.models import User
 
 router = APIRouter()
 
@@ -43,7 +46,10 @@ class OpsRunResponse(BaseModel):
     status_code=201,
     summary="Record an ops run event",
 )
-async def create_ops_run(body: OpsRunCreate) -> OpsRunResponse:
+async def create_ops_run(
+    body: OpsRunCreate,
+    current_user: User = Depends(get_current_user),
+) -> OpsRunResponse:
     run = {
         "id": str(uuid.uuid4()),
         "script": body.script,
@@ -63,7 +69,10 @@ async def create_ops_run(body: OpsRunCreate) -> OpsRunResponse:
     response_model=list[OpsRunResponse],
     summary="List recent ops run events",
 )
-async def list_ops_runs(limit: int = 50) -> list[OpsRunResponse]:
+async def list_ops_runs(
+    limit: int = 50,
+    current_user: User = Depends(get_current_user),
+) -> list[OpsRunResponse]:
     return [OpsRunResponse(**r) for r in _RUNS[-limit:]]
 
 
@@ -72,9 +81,10 @@ async def list_ops_runs(limit: int = 50) -> list[OpsRunResponse]:
     response_model=OpsRunResponse,
     summary="Get a single ops run event",
 )
-async def get_ops_run(run_id: str) -> OpsRunResponse:
-    from fastapi import HTTPException
-
+async def get_ops_run(
+    run_id: str,
+    current_user: User = Depends(get_current_user),
+) -> OpsRunResponse:
     for run in _RUNS:
         if run["id"] == run_id:
             return OpsRunResponse(**run)
