@@ -16,6 +16,7 @@ import hashlib
 import hmac
 import json
 import logging
+from collections.abc import Iterable
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -31,8 +32,8 @@ from app.database import get_db
 from app.email_service import send_welcome_email
 from app.models import User, VerificationEvent
 from app.payment_truth import (
-    extract_payment_proof_label,
     extract_checkout_reference,
+    extract_payment_proof_label,
     infer_payment_tier,
     iter_text_hints,
     parse_checkout_reference,
