@@ -1,0 +1,20 @@
+/**
+ * Cloudflare Pages deploy config for youandinotai
+ *
+ * Canonical runbook: briefings/YOUANDINOTAI-DEPLOY-RUNBOOK.md
+ * Deploy doctrine:   only wrangler + cloudflared (no GitHub Actions, no manual upload)
+ *
+ * Default mode: Mode B (SSR via @opennextjs/cloudflare).
+ * Switch to Mode A (static export): change pages_build_output_dir to "out"
+ * and add output: 'export' to next.config.ts.
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "yni-landing",
+  "compatibility_date": "2026-05-12",
+  "compatibility_flags": ["nodejs_compat"],
+  "pages_build_output_dir": ".open-next/assets",
+  "vars": {
+    "NEXT_PUBLIC_SITE_NAME": "YouAndINotAI"
+  }
+}
