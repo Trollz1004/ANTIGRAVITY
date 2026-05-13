@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 from app.auth import get_current_user
 from app.main import app
-from app.models import DataPrivacyLog, Match, Message, Profile, User
+from app.models import Match, Message, Profile, User
 
 
 def test_my_data_summary_and_delete_request(client, db_session_factory):

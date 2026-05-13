@@ -2,9 +2,8 @@
 
 import json
 import logging
-import os
 import sys
-from typing import Any, Dict, Optional
+from typing import Optional
 
 
 class JSONFormatter(logging.Formatter):

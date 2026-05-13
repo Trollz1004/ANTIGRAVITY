@@ -54,7 +54,7 @@ def _square_signature(
 ) -> str:
     body = json.dumps(payload, separators=(",", ":"))
     digest = hmac.new(
-        key.encode("utf-8"), f"{url}{body}".encode("utf-8"), hashlib.sha256
+        key.encode("utf-8"), f"{url}{body}".encode(), hashlib.sha256
     ).digest()
     return base64.b64encode(digest).decode("utf-8")
 

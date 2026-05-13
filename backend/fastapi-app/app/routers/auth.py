@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.age_gate import ensure_adult
 from app.auth import (
     create_access_token,
     create_refresh_token,
@@ -15,10 +16,9 @@ from app.auth import (
     ensure_active_user,
     get_current_user,
     hash_password,
-    verify_password,
     verify_google_token,
+    verify_password,
 )
-from app.age_gate import ensure_adult
 from app.config import get_settings
 from app.database import get_db
 from app.models import Profile, User
@@ -29,8 +29,8 @@ from app.schemas import (
     AuthRefreshRequest,
     AuthRegisterRequest,
     AuthTokenResponse,
-    UserMeResponse,
     GoogleLoginRequest,
+    UserMeResponse,
 )
 from app.subscriptions import user_has_active_subscription
 
@@ -43,10 +43,10 @@ def _normalize_beta_code(code: str) -> str:
 
 def _beta_identity(code: str, secret: str) -> tuple[str, str, str]:
     normalized = _normalize_beta_code(code)
-    digest = hashlib.sha256(f"{secret}:{normalized}".encode("utf-8")).hexdigest()
+    digest = hashlib.sha256(f"{secret}:{normalized}".encode()).hexdigest()
     email = f"beta-{digest[:12]}@youandinotai.com"
     password_seed = hashlib.sha256(
-        f"beta-password:{secret}:{normalized}".encode("utf-8")
+        f"beta-password:{secret}:{normalized}".encode()
     ).hexdigest()
     display_name = "Beta Tester"
     return email, password_seed, display_name
@@ -60,9 +60,7 @@ def _beta_password_hash(password_seed: str, secret: str, code: str) -> str:
         # deterministic fallback keeps the account creatable even if bcrypt
         # backend compilation/runtime drifts in production.
         return hashlib.sha256(
-            f"beta-stored:{secret}:{_normalize_beta_code(code)}:{password_seed}".encode(
-                "utf-8"
-            )
+            f"beta-stored:{secret}:{_normalize_beta_code(code)}:{password_seed}".encode()
         ).hexdigest()
 
 

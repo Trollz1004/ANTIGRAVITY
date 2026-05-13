@@ -7,11 +7,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user
 from app.age_gate import ensure_adult
+from app.auth import get_current_user
 from app.database import get_db
-from app.moderation import has_block_relationship
 from app.models import Profile, User
+from app.moderation import has_block_relationship
 from app.schemas import ProfileResponse, ProfileUpdateRequest
 
 router = APIRouter(prefix="/profiles")

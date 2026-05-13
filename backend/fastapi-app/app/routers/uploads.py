@@ -1,7 +1,6 @@
 """Secure file upload router with validation, size limits, and virus scanning."""
 
 import hashlib
-import json
 import logging
 import os
 import subprocess
@@ -12,8 +11,8 @@ import aiofiles
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
 
-from app.config import get_settings
 from app.auth import get_current_user
+from app.config import get_settings
 
 logger = logging.getLogger("youandinotai.api.uploads")
 router = APIRouter(prefix="/api/v1/uploads", tags=["uploads"])

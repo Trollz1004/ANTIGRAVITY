@@ -40,9 +40,9 @@ from app.rate_limit import verify_limiter
 from app.square_checkout import create_square_payment_link
 from app.subscriptions import user_has_active_subscription
 from app.verification_service import (
-    lock_user_for_verification,
     has_completed_payment,
     has_passed_liveness,
+    lock_user_for_verification,
     promote_user_verification_if_ready,
 )
 
