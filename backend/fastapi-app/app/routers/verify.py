@@ -256,9 +256,14 @@ async def submit_challenge(
     """Submit the answer to a liveness challenge. Returns trust score + checkout URL on pass."""
     verify_limiter.check(request)
 
+    try:
+        challenge_uuid = uuid.UUID(req.challenge_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail="invalid challenge_id format")
+
     event = await db.scalar(
         select(VerificationEvent)
-        .where(VerificationEvent.id == uuid.UUID(req.challenge_id))
+        .where(VerificationEvent.id == challenge_uuid)
         .where(VerificationEvent.user_id == user.id)
         .where(VerificationEvent.status == "pending")
     )

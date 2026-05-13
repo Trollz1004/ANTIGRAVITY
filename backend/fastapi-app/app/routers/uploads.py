@@ -121,7 +121,7 @@ async def upload_file(
         "File uploaded successfully",
         extra={
             "user_id": user.get("sub"),
-            "filename": secure_filename,
+            "secure_filename": secure_filename,
             "original_filename": file.filename,
             "size_bytes": file_size,
             "mime_type": detected_type,
