@@ -124,7 +124,7 @@ export function listTasks(
   params.push(parsed.limit);
 
   return db
-    .prepare(`SELECT * FROM tasks ${where} ORDER BY created_at DESC LIMIT ?`)
+    .prepare(`SELECT * FROM tasks ${where} ORDER BY created_at DESC, rowid DESC LIMIT ?`)
     .all(...params) as TaskRow[];
 }
 
