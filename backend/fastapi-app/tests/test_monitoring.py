@@ -66,10 +66,12 @@ def test_timing_decorator_sync():
 
 
 @patch("app.monitoring.SENTRY_AVAILABLE", True)
+@patch("app.monitoring.LoggingIntegration", create=True)
 @patch("app.monitoring.sentry_sdk")
-def test_setup_monitoring_with_sentry(mock_sentry):
+def test_setup_monitoring_with_sentry(mock_sentry, mock_logging_integration):
     """Test that setup_monitoring initializes Sentry when available."""
     mock_sentry.init = MagicMock()
+    mock_logging_integration.return_value = MagicMock()
 
     # Test with sentry available
     monitoring.setup_monitoring(sentry_dsn="https://test@test.ingest.sentry.io/123456")
