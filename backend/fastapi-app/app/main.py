@@ -141,8 +141,11 @@ app = FastAPI(
 )
 
 # Add security middleware (order matters - InputValidation should be first)
+# In test mode, raise the per-minute cap so the full test suite can run without
+# hitting the global IP rate-limiter (245+ requests from a single testclient IP).
+_rate_limit_rpm = 10_000 if settings.app_env == "test" else 60
 app.add_middleware(InputValidationMiddleware)
-app.add_middleware(RateLimitMiddleware)
+app.add_middleware(RateLimitMiddleware, calls_per_minute=_rate_limit_rpm)
 app.add_middleware(SecurityHeadersMiddleware)
 
 
