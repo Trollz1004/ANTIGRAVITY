@@ -41,7 +41,7 @@ Per `CLAUDE.md` → "Perpetual Mission Guarantee":
 | CTO | [`cto/`](./cto/) | Code, infra, CI/CD, MCP, devtools | 30 min | `opencode_local` + `qwen3-coder:480b-cloud` |
 | CMO | [`cmo/`](./cmo/) | Marketing, brand, social pipeline | 60 min | `opencode_local` + `dateapp-marketingtools` |
 | UX Designer | [`uxdesigner/`](./uxdesigner/) | UI, design system, accessibility | 60 min | `opencode_local` + `dateapp` |
-| Mission Guardian (Claude) | [`mission-guardian-claude/`](./mission-guardian-claude/) | Daily 7-Hard-Rules audit | 24 h | `claude_local` |
+| Mission Guardian (Claude) | [`mission-guardian-claude/`](./mission-guardian-claude/) | Daily 7-Hard-Rules audit | 24 h | `kimi-k2.6:cloud via Ollama (rerouted 2026-05-07)` |
 | Mission Guardian (Codex) | [`mission-guardian-codex/`](./mission-guardian-codex/) | Hot-standby audit | 24 h staggered | `codex_local` |
 | INTERN (DoWhatTold) | [`intern/`](./intern/) | Slow social-media groundwork; never thinks | passive | smallest Ollama cloud model |
 | GitHub Auditor | [`github-auditor/`](./github-auditor/) | GH Actions doctrine audit (immune to AI) | daily 06:00 UTC cron | n/a (workflow) |
@@ -57,6 +57,7 @@ Full identity table with UUIDs is in [`README.md`](./README.md).
 5. **No mock data presented as real.** Real or fail honestly.
 6. **One repo, one branch.** `Trollz1004/ANTIGRAVITY`, `main`. Feature work on `claude/<short-description>` branches.
 7. **No agent modifies another agent's instruction files.** File a flagged issue; Josh approves.
+8. **Token Doctrine.** Claude (Anthropic API) is reserved for Cowork / Claude Code orchestration only — never called inside PaperClip. Mission Guardian (Claude) was rerouted 2026-05-07 to `kimi-k2.6:cloud via Ollama` to eliminate Anthropic API spend inside the agent fleet. This routing is permanent unless Josh explicitly reverses it.
 
 Full doctrine: [`/CLAUDE.md`](../../CLAUDE.md).
 
