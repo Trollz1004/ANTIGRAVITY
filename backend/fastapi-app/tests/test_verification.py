@@ -15,7 +15,9 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 from sqlalchemy.dialects import postgresql
 
-os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-security"
+os.environ["JWT_SECRET"] = (
+    "test-secret-that-is-at-least-32-characters-long-for-security"
+)
 
 
 class TestVerifyConfirmPaymentEnforcement:
@@ -41,6 +43,7 @@ class TestVerifyConfirmPaymentEnforcement:
         user_id = uuid.uuid4()
 
         import asyncio
+
         result = asyncio.run(_has_completed_payment(mock_db, user_id))
         assert result is False
 
@@ -59,6 +62,7 @@ class TestVerifyConfirmPaymentEnforcement:
         user_id = uuid.uuid4()
 
         import asyncio
+
         result = asyncio.run(_has_completed_payment(mock_db, user_id))
         assert result is True
 
@@ -102,7 +106,10 @@ class TestSquarePaymentLinkGeneration:
 
         assert "reference_id" not in request_body["order"]
         assert request_body["payment_note"].endswith(f"agref:{checkout_ref}")
-        assert request_body["order"]["line_items"][0]["base_price_money"]["amount"] == BOT_SHIELD_CENTS
+        assert (
+            request_body["order"]["line_items"][0]["base_price_money"]["amount"]
+            == BOT_SHIELD_CENTS
+        )
         assert request_body["pre_populated_data"]["buyer_email"] == "josh@example.com"
         assert request_body["checkout_options"]["redirect_url"].startswith(
             "https://youandinotai.com/app/verify?status=success"
@@ -150,16 +157,17 @@ class TestSquarePaymentLinkGeneration:
         # or not at all in active code
         lines = source.split("\n")
         active_stripe_refs = [
-            line for line in lines
+            line
+            for line in lines
             if "stripe" in line.lower()
             and not line.strip().startswith("#")
             and not line.strip().startswith("//")
             and "DEPRECATED" not in line
             and "REMOVED" not in line
         ]
-        assert len(active_stripe_refs) == 0, (
-            f"Found active Stripe references in verify.py: {active_stripe_refs}"
-        )
+        assert (
+            len(active_stripe_refs) == 0
+        ), f"Found active Stripe references in verify.py: {active_stripe_refs}"
 
 
 class TestVerificationPromotion:
@@ -234,8 +242,12 @@ class TestVerificationStatusTruth:
         mock_db = AsyncMock()
         mock_db.scalar = AsyncMock(return_value=2)
 
-        monkeypatch.setattr(verify, "_calculate_trust_score", AsyncMock(return_value=60.0))
-        monkeypatch.setattr(verify, "has_completed_payment", AsyncMock(return_value=True))
+        monkeypatch.setattr(
+            verify, "_calculate_trust_score", AsyncMock(return_value=60.0)
+        )
+        monkeypatch.setattr(
+            verify, "has_completed_payment", AsyncMock(return_value=True)
+        )
 
         response = asyncio.run(verify.verification_status(user=user, db=mock_db))
 

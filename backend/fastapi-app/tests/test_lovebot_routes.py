@@ -12,7 +12,10 @@ def test_lovebot_requires_active_subscription(client):
     try:
         response = client.get("/api/v1/lovebot/quotes")
         assert response.status_code == 403
-        assert "require a Founding Member or Premium subscription" in response.json()["detail"]
+        assert (
+            "require a Founding Member or Premium subscription"
+            in response.json()["detail"]
+        )
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 

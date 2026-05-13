@@ -4,7 +4,14 @@ import json
 import uuid
 from collections import defaultdict
 
-from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect, Query
+from fastapi import (
+    APIRouter,
+    Depends,
+    HTTPException,
+    WebSocket,
+    WebSocketDisconnect,
+    Query,
+)
 from sqlalchemy import and_, or_, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -35,7 +42,9 @@ async def get_messages(
         raise HTTPException(status_code=404, detail="Match not found")
     other_id = match.user_b if match.user_a == user.id else match.user_a
     if await has_block_relationship(db, user_a=user.id, user_b=other_id):
-        raise HTTPException(status_code=403, detail="Conversation unavailable due to safety settings")
+        raise HTTPException(
+            status_code=403, detail="Conversation unavailable due to safety settings"
+        )
 
     query = select(Message).where(Message.match_id == match_id)
     if before:
@@ -68,7 +77,9 @@ async def send_message(
         raise HTTPException(status_code=404, detail="Match not found")
     other_id = match.user_b if match.user_a == user.id else match.user_a
     if await has_block_relationship(db, user_a=user.id, user_b=other_id):
-        raise HTTPException(status_code=403, detail="Conversation unavailable due to safety settings")
+        raise HTTPException(
+            status_code=403, detail="Conversation unavailable due to safety settings"
+        )
     if match.status != "active":
         raise HTTPException(status_code=400, detail="Match is not active")
 
@@ -84,13 +95,15 @@ async def send_message(
     await db.refresh(msg)
 
     # Broadcast to WebSocket connections
-    ws_data = json.dumps({
-        "type": "message",
-        "id": str(msg.id),
-        "sender_id": str(msg.sender_id),
-        "content": msg.content,
-        "created_at": msg.created_at.isoformat(),
-    })
+    ws_data = json.dumps(
+        {
+            "type": "message",
+            "id": str(msg.id),
+            "sender_id": str(msg.sender_id),
+            "content": msg.content,
+            "created_at": msg.created_at.isoformat(),
+        }
+    )
     for ws in _connections.get(str(match_id), []):
         try:
             await ws.send_text(ws_data)
@@ -155,13 +168,15 @@ async def websocket_chat(
                     await db.commit()
                     await db.refresh(msg)
 
-                    broadcast = json.dumps({
-                        "type": "message",
-                        "id": str(msg.id),
-                        "sender_id": user_id,
-                        "content": msg.content,
-                        "created_at": msg.created_at.isoformat(),
-                    })
+                    broadcast = json.dumps(
+                        {
+                            "type": "message",
+                            "id": str(msg.id),
+                            "sender_id": user_id,
+                            "content": msg.content,
+                            "created_at": msg.created_at.isoformat(),
+                        }
+                    )
 
                 # Broadcast to all connections in this match
                 for ws in _connections[match_id]:

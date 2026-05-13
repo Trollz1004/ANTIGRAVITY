@@ -12,7 +12,6 @@ from fastapi import HTTPException
 
 from app.age_gate import calculate_age, ensure_adult
 
-
 # ── calculate_age ────────────────────────────────────────────────────────────
 
 
@@ -106,6 +105,7 @@ def test_ensure_adult_raises_for_17():
     dob = date(today.year - 17, today.month, today.day)
     # Move one day forward so they're definitely < 18
     from datetime import timedelta
+
     dob = dob + timedelta(days=1)
     with pytest.raises(HTTPException) as exc_info:
         ensure_adult(dob)

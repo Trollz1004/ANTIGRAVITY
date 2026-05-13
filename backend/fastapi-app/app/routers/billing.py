@@ -63,7 +63,10 @@ async def create_checkout_link(
     checkout_event.challenge_token = checkout_ref
 
     request_body = build_account_bound_checkout_request(
-        app_url=str(getattr(settings, "app_url", "https://youandinotai.com") or "https://youandinotai.com"),
+        app_url=str(
+            getattr(settings, "app_url", "https://youandinotai.com")
+            or "https://youandinotai.com"
+        ),
         location_id=str(getattr(settings, "square_location_id", "") or "").strip(),
         buyer_email=user.email,
         checkout_ref=checkout_ref,

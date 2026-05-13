@@ -8,7 +8,9 @@ from unittest.mock import MagicMock
 import pytest
 from fastapi import HTTPException
 
-os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-security"
+os.environ["JWT_SECRET"] = (
+    "test-secret-that-is-at-least-32-characters-long-for-security"
+)
 
 from app.rate_limit import RateLimiter
 

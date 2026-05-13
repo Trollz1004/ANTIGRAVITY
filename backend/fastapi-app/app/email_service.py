@@ -274,7 +274,10 @@ async def send_welcome_email(
         )
         return False
 
-    app_url = str(settings.app_url or "https://youandinotai.com").strip() or "https://youandinotai.com"
+    app_url = (
+        str(settings.app_url or "https://youandinotai.com").strip()
+        or "https://youandinotai.com"
+    )
     text_body = _build_founder_badge_text(
         display_name=display_name,
         app_url=app_url,
@@ -308,7 +311,10 @@ async def send_waitlist_confirmation(
         )
         return False
 
-    app_url = str(settings.app_url or "https://youandinotai.com").strip() or "https://youandinotai.com"
+    app_url = (
+        str(settings.app_url or "https://youandinotai.com").strip()
+        or "https://youandinotai.com"
+    )
     message = _build_email_message(
         recipients=[recipient_email],
         subject=_build_waitlist_confirmation_subject(),
@@ -343,7 +349,10 @@ async def send_waitlist_operator_notice(
         )
         return False
 
-    app_url = str(settings.app_url or "https://youandinotai.com").strip() or "https://youandinotai.com"
+    app_url = (
+        str(settings.app_url or "https://youandinotai.com").strip()
+        or "https://youandinotai.com"
+    )
     message = _build_email_message(
         recipients=recipients,
         subject=_build_waitlist_notification_subject(),

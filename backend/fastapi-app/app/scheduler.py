@@ -58,12 +58,16 @@ async def purge_deleted_accounts():
             # Clear direct dependencies first
             await db.execute(delete(Message).where(Message.sender_id == user_id))
             await db.execute(delete(VideoCall).where(VideoCall.initiator_id == user_id))
-            await db.execute(delete(VolunteerSignup).where(VolunteerSignup.user_id == user_id))
+            await db.execute(
+                delete(VolunteerSignup).where(VolunteerSignup.user_id == user_id)
+            )
             await db.execute(delete(EventRSVP).where(EventRSVP.user_id == user_id))
             await db.execute(delete(Swipe).where(Swipe.user_id == user_id))
             await db.execute(delete(Post).where(Post.author_id == user_id))
             await db.execute(delete(Comment).where(Comment.author_id == user_id))
-            await db.execute(delete(VerificationEvent).where(VerificationEvent.user_id == user_id))
+            await db.execute(
+                delete(VerificationEvent).where(VerificationEvent.user_id == user_id)
+            )
 
             # Double date cascade
             match_ids_query = select(Match.id).where(
@@ -112,13 +116,9 @@ async def process_data_exports():
                 log.status = "failed"
                 continue
 
-            profile = await db.scalar(
-                select(Profile).where(Profile.user_id == user_id)
-            )
+            profile = await db.scalar(select(Profile).where(Profile.user_id == user_id))
             messages = (
-                await db.scalars(
-                    select(Message).where(Message.sender_id == user_id)
-                )
+                await db.scalars(select(Message).where(Message.sender_id == user_id))
             ).all()
             matches = (
                 await db.scalars(
@@ -133,13 +133,19 @@ async def process_data_exports():
                     "id": str(user.id),
                     "email": user.email,
                     "display_name": user.display_name,
-                    "created_at": user.created_at.isoformat() if user.created_at else None,
+                    "created_at": (
+                        user.created_at.isoformat() if user.created_at else None
+                    ),
                 },
-                "profile": {
-                    "bio": profile.bio if profile else None,
-                    "interests": profile.interests if profile else [],
-                    "location": profile.location if profile else None,
-                } if profile else None,
+                "profile": (
+                    {
+                        "bio": profile.bio if profile else None,
+                        "interests": profile.interests if profile else [],
+                        "location": profile.location if profile else None,
+                    }
+                    if profile
+                    else None
+                ),
                 "messages_sent": [
                     {
                         "id": str(m.id),

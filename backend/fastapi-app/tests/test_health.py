@@ -5,7 +5,9 @@ import os
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
-os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-security"
+os.environ["JWT_SECRET"] = (
+    "test-secret-that-is-at-least-32-characters-long-for-security"
+)
 
 from app.routers import health
 
@@ -34,13 +36,17 @@ def test_square_health_ready_requires_dynamic_square_credentials(monkeypatch):
     assert health._square_health_ready() is False
 
 
-def test_square_health_ready_tolerates_missing_signature_material_when_enabled(monkeypatch):
+def test_square_health_ready_tolerates_missing_signature_material_when_enabled(
+    monkeypatch,
+):
     monkeypatch.setattr(health, "settings", _settings(signature_key=""))
     assert health._square_health_ready() is True
 
 
 def test_square_signature_configured_requires_key_and_url(monkeypatch):
-    monkeypatch.setattr(health, "settings", _settings(signature_key="", notification_url=""))
+    monkeypatch.setattr(
+        health, "settings", _settings(signature_key="", notification_url="")
+    )
     assert health._square_signature_configured() is False
 
 
@@ -50,7 +56,9 @@ def test_health_check_reports_square_connected(monkeypatch):
 
     monkeypatch.setattr(health, "settings", _settings())
     monkeypatch.setattr(health, "check_db_health", AsyncMock(return_value=True))
-    monkeypatch.setattr(health, "_runtime_payment_proof_labels", AsyncMock(return_value=[]))
+    monkeypatch.setattr(
+        health, "_runtime_payment_proof_labels", AsyncMock(return_value=[])
+    )
 
     response = asyncio.run(health.health_check(mock_db))
 

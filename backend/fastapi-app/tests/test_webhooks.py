@@ -17,7 +17,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-security"
+os.environ["JWT_SECRET"] = (
+    "test-secret-that-is-at-least-32-characters-long-for-security"
+)
 
 from sqlalchemy import select
 
@@ -45,7 +47,9 @@ class TestSquareSignatureVerification:
         """A correctly signed payload must pass verification."""
         from app.routers.webhooks import _verify_square_signature
 
-        payload = json.dumps({"event_id": "test123", "type": "payment.completed"}).encode()
+        payload = json.dumps(
+            {"event_id": "test123", "type": "payment.completed"}
+        ).encode()
         signature = generate_square_signature(
             payload, self.SIGNATURE_KEY, self.NOTIFICATION_URL
         )
@@ -63,7 +67,9 @@ class TestSquareSignatureVerification:
         from fastapi import HTTPException
         from app.routers.webhooks import _verify_square_signature
 
-        payload = json.dumps({"event_id": "test123", "type": "payment.completed"}).encode()
+        payload = json.dumps(
+            {"event_id": "test123", "type": "payment.completed"}
+        ).encode()
 
         with pytest.raises(HTTPException) as exc_info:
             _verify_square_signature(
@@ -120,7 +126,9 @@ class TestSquareWebhookEndpointConfig:
             square_webhook_notification_url="https://example.com/legacy",
         )
 
-        signature_key, notification_url = _resolve_square_signature_material(settings, "payment")
+        signature_key, notification_url = _resolve_square_signature_material(
+            settings, "payment"
+        )
 
         assert signature_key == "pay-key"
         assert notification_url == "https://example.com/payment"
@@ -135,7 +143,9 @@ class TestSquareWebhookEndpointConfig:
             square_webhook_notification_url="https://example.com/legacy",
         )
 
-        signature_key, notification_url = _resolve_square_signature_material(settings, "booking")
+        signature_key, notification_url = _resolve_square_signature_material(
+            settings, "booking"
+        )
 
         assert signature_key == "legacy-key"
         assert notification_url == "https://example.com/legacy"
@@ -151,9 +161,11 @@ class TestSquareWebhookEndpointConfig:
             square_webhook_notification_url="",
         )
 
-        should_verify, signature_key, notification_url = _should_verify_square_signature(
-            settings,
-            "payment",
+        should_verify, signature_key, notification_url = (
+            _should_verify_square_signature(
+                settings,
+                "payment",
+            )
         )
 
         assert should_verify is False
@@ -179,7 +191,10 @@ class TestSquarePaymentTierExtraction:
     def test_extract_founding_member_from_note(self):
         from app.routers.webhooks import _extract_square_payment_tier
 
-        payment = {"note": "Founding Member subscription", "amount_money": {"amount": 1499}}
+        payment = {
+            "note": "Founding Member subscription",
+            "amount_money": {"amount": 1499},
+        }
         assert _extract_square_payment_tier(payment) == "founding_member"
 
     def test_extract_founding_member_from_amount(self):
@@ -197,14 +212,20 @@ class TestSquarePaymentTierExtraction:
     def test_catalog_drift_plan_fails_closed(self):
         from app.routers.webhooks import _extract_square_payment_tier
 
-        payment = {"note": "Basic Monthly Subscription", "amount_money": {"amount": 999}}
+        payment = {
+            "note": "Basic Monthly Subscription",
+            "amount_money": {"amount": 999},
+        }
         assert _extract_square_payment_tier(payment) is None
 
     def test_order_reference_can_supply_checkout_binding_hint(self):
         from app.routers.webhooks import _extract_square_payment_tier
 
         payment = {"note": "", "amount_money": {"amount": 100}}
-        order = {"reference_id": "agref:v1.token", "line_items": [{"name": "Bot-Shield Verification"}]}
+        order = {
+            "reference_id": "agref:v1.token",
+            "line_items": [{"name": "Bot-Shield Verification"}],
+        }
         assert _extract_square_payment_tier(payment, order_obj=order) == "bot_shield"
 
     def test_unknown_amount_returns_none(self):
@@ -266,7 +287,9 @@ class TestSquarePaymentEventFactory:
         assert booking["customer_details"]["email_address"] == "pickup@example.com"
 
 
-def test_completed_founding_member_payment_activates_subscription(client, db_session_factory):
+def test_completed_founding_member_payment_activates_subscription(
+    client, db_session_factory
+):
     async def seed_user() -> None:
         async with db_session_factory() as session:
             session.add(
@@ -312,7 +335,9 @@ def test_completed_founding_member_payment_activates_subscription(client, db_ses
 
     async def fetch_user() -> User | None:
         async with db_session_factory() as session:
-            return await session.scalar(select(User).where(User.email == "founder@example.com"))
+            return await session.scalar(
+                select(User).where(User.email == "founder@example.com")
+            )
 
     user = asyncio.run(fetch_user())
     assert user is not None
@@ -377,13 +402,17 @@ def test_completed_bot_shield_payment_requires_checkout_binding(
 
     assert response.status_code == 200, response.text
 
-    async def fetch_state() -> tuple[User | None, list[VerificationEvent], list[RevenueAllocation]]:
+    async def fetch_state() -> (
+        tuple[User | None, list[VerificationEvent], list[RevenueAllocation]]
+    ):
         async with db_session_factory() as session:
             user = await session.scalar(select(User).where(User.id == user_id))
             events = list(
                 (
                     await session.scalars(
-                        select(VerificationEvent).where(VerificationEvent.user_id == user_id)
+                        select(VerificationEvent).where(
+                            VerificationEvent.user_id == user_id
+                        )
                     )
                 ).all()
             )
@@ -468,13 +497,17 @@ def test_non_completed_payment_status_is_not_authoritative_for_bot_shield_comple
 
     assert response.status_code == 200, response.text
 
-    async def fetch_state() -> tuple[User | None, list[VerificationEvent], list[RevenueAllocation]]:
+    async def fetch_state() -> (
+        tuple[User | None, list[VerificationEvent], list[RevenueAllocation]]
+    ):
         async with db_session_factory() as session:
             user = await session.scalar(select(User).where(User.id == user_id))
             events = list(
                 (
                     await session.scalars(
-                        select(VerificationEvent).where(VerificationEvent.user_id == user_id)
+                        select(VerificationEvent).where(
+                            VerificationEvent.user_id == user_id
+                        )
                     )
                 ).all()
             )
@@ -553,13 +586,17 @@ def test_completed_bot_shield_payment_with_valid_binding_promotes_user(
 
     assert response.status_code == 200, response.text
 
-    async def fetch_state() -> tuple[User | None, list[VerificationEvent], list[RevenueAllocation]]:
+    async def fetch_state() -> (
+        tuple[User | None, list[VerificationEvent], list[RevenueAllocation]]
+    ):
         async with db_session_factory() as session:
             user = await session.scalar(select(User).where(User.id == user_id))
             events = list(
                 (
                     await session.scalars(
-                        select(VerificationEvent).where(VerificationEvent.user_id == user_id)
+                        select(VerificationEvent).where(
+                            VerificationEvent.user_id == user_id
+                        )
                     )
                 ).all()
             )
@@ -647,7 +684,8 @@ class TestNoStripeReferences:
         source = inspect.getsource(webhooks)
         lines = source.split("\n")
         active_stripe = [
-            line.strip() for line in lines
+            line.strip()
+            for line in lines
             if "stripe" in line.lower()
             and not line.strip().startswith("#")
             and not line.strip().startswith("//")
@@ -659,9 +697,9 @@ class TestNoStripeReferences:
             and "retired" not in line.lower()
             and '"/stripe"' not in line
         ]
-        assert len(active_stripe) == 0, (
-            f"Active Stripe references found in webhooks.py: {active_stripe}"
-        )
+        assert (
+            len(active_stripe) == 0
+        ), f"Active Stripe references found in webhooks.py: {active_stripe}"
 
     def test_config_no_active_stripe(self):
         """config.py must not have active Stripe settings."""
@@ -671,13 +709,14 @@ class TestNoStripeReferences:
         source = inspect.getsource(config)
         lines = source.split("\n")
         active_stripe = [
-            line.strip() for line in lines
+            line.strip()
+            for line in lines
             if "stripe" in line.lower()
             and not line.strip().startswith("#")
             and not line.strip().startswith("//")
             and "DEPRECATED" not in line
             and "REMOVED" not in line
         ]
-        assert len(active_stripe) == 0, (
-            f"Active Stripe references found in config.py: {active_stripe}"
-        )
+        assert (
+            len(active_stripe) == 0
+        ), f"Active Stripe references found in config.py: {active_stripe}"

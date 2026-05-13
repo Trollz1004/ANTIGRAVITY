@@ -125,7 +125,9 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.drop_table("matches")
-    op.drop_index(op.f("ix_webhook_events_stripe_event_id"), table_name="webhook_events")
+    op.drop_index(
+        op.f("ix_webhook_events_stripe_event_id"), table_name="webhook_events"
+    )
     op.drop_table("webhook_events")
     op.drop_index(op.f("ix_users_email"), table_name="users")
     op.drop_table("users")

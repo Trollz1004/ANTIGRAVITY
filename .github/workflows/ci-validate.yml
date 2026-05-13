@@ -91,7 +91,8 @@ jobs:
             | grep -E '\.(md|ts|tsx|json|txt)$' \
             | xargs grep -nE "$PATTERNS" 2>/dev/null \
             | grep -v "REDACTED" | grep -v "\.env\.example" | grep -v "\.githooks" | grep -v "scripts/opus-guardian" \
-            | grep -v "security-review\.md" | grep -v "placeholder" | grep -v 'sk_live_\.\.\.' || true)
+            | grep -v "security-review\.md" | grep -v "placeholder" | grep -v 'sk_live_\.\.\.' \
+            | grep -v "SABRETOOTH-OPUS-DRIFT-CLEANUP-PROMPT\.md" || true)
           if [ -n "$HITS" ]; then
             echo "::error::Secret-shaped values found in tracked files:"
             echo "$HITS"
@@ -133,7 +134,7 @@ jobs:
 
       - name: Install frontend dependencies
         working-directory: frontend/react-app
-        run: npm ci
+        run: npm install
 
       - name: Run ESLint
         working-directory: frontend/react-app

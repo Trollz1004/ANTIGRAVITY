@@ -70,9 +70,7 @@ async def promote_user_verification_if_ready(
     if hasattr(user, "__dict__"):
         profile = user.__dict__.get("profile")
     if profile is None:
-        profile = await db.scalar(
-            select(Profile).where(Profile.user_id == user.id)
-        )
+        profile = await db.scalar(select(Profile).where(Profile.user_id == user.id))
     if profile:
         profile.verified = True
     return True

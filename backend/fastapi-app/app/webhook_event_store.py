@@ -177,7 +177,9 @@ async def recent_processed_payment_payloads(
             .order_by(desc(WebhookEvent.created_at))
             .limit(limit)
         )
-        return [payload for event in rows if isinstance((payload := event.payload), dict)]
+        return [
+            payload for event in rows if isinstance((payload := event.payload), dict)
+        ]
 
     stmt = select(schema.table.c.payload).where(schema.table.c.event_type == event_type)
     if "processed" in schema.columns:

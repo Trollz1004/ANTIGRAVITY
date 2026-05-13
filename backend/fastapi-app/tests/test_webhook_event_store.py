@@ -28,7 +28,12 @@ def test_legacy_webhook_event_schema_supports_payment_audit(tmp_path: Path):
         Column("event_type", String(100), nullable=False),
         Column("payload", JSON, nullable=False),
         Column("processed", Boolean, nullable=False, server_default="0"),
-        Column("created_at", DateTime(timezone=True), nullable=False, server_default=func.now()),
+        Column(
+            "created_at",
+            DateTime(timezone=True),
+            nullable=False,
+            server_default=func.now(),
+        ),
     )
 
     async def scenario() -> None:

@@ -39,6 +39,7 @@ def _seed(*items, db_session_factory) -> None:
 def _override_user(user: User):
     async def _dep():
         return user
+
     return _dep
 
 
@@ -88,7 +89,9 @@ def test_list_events_category_filter(client, db_session_factory):
     app.dependency_overrides[get_current_user] = _override_user(user)
     try:
         client.post("/api/v1/events", json=_event_payload(category="charity"))
-        client.post("/api/v1/events", json=_event_payload(title="Sports Day", category="sports"))
+        client.post(
+            "/api/v1/events", json=_event_payload(title="Sports Day", category="sports")
+        )
         resp = client.get("/api/v1/events?category=charity")
         assert resp.status_code == 200
         data = resp.json()
@@ -187,7 +190,9 @@ def test_rsvp_capacity_full_returns_400(client, db_session_factory):
     # Create event with capacity=1 and organizer takes the last spot
     app.dependency_overrides[get_current_user] = _override_user(organizer)
     try:
-        create_resp = client.post("/api/v1/events", json=_event_payload(max_attendees=1))
+        create_resp = client.post(
+            "/api/v1/events", json=_event_payload(max_attendees=1)
+        )
         event_id = create_resp.json()["id"]
         client.post(f"/api/v1/events/{event_id}/rsvp")
     finally:

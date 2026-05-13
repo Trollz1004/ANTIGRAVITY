@@ -42,6 +42,7 @@ def _seed(*users: User, db_session_factory) -> None:
 def _override_user(user: User):
     async def _dep():
         return user
+
     return _dep
 
 
@@ -53,7 +54,9 @@ def test_swipe_self_returns_400(client, db_session_factory):
     _seed(actor, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = _override_user(actor)
     try:
-        resp = client.post("/api/v1/swipe", json={"target_id": str(actor.id), "direction": "like"})
+        resp = client.post(
+            "/api/v1/swipe", json={"target_id": str(actor.id), "direction": "like"}
+        )
         assert resp.status_code == 400
         assert "yourself" in resp.json()["detail"].lower()
     finally:
@@ -66,7 +69,9 @@ def test_swipe_like_no_mutual_no_match(client, db_session_factory):
     _seed(actor, target, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = _override_user(actor)
     try:
-        resp = client.post("/api/v1/swipe", json={"target_id": str(target.id), "direction": "like"})
+        resp = client.post(
+            "/api/v1/swipe", json={"target_id": str(target.id), "direction": "like"}
+        )
         assert resp.status_code == 200
         data = resp.json()
         assert data["matched"] is False
@@ -81,7 +86,9 @@ def test_swipe_pass_never_creates_match(client, db_session_factory):
     _seed(actor, target, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = _override_user(actor)
     try:
-        resp = client.post("/api/v1/swipe", json={"target_id": str(target.id), "direction": "pass"})
+        resp = client.post(
+            "/api/v1/swipe", json={"target_id": str(target.id), "direction": "pass"}
+        )
         assert resp.status_code == 200
         assert resp.json()["matched"] is False
     finally:
@@ -111,7 +118,9 @@ def test_swipe_mutual_like_creates_match(client, db_session_factory):
 
     app.dependency_overrides[get_current_user] = _override_user(actor)
     try:
-        resp = client.post("/api/v1/swipe", json={"target_id": str(target.id), "direction": "like"})
+        resp = client.post(
+            "/api/v1/swipe", json={"target_id": str(target.id), "direction": "like"}
+        )
         assert resp.status_code == 200
         data = resp.json()
         assert data["matched"] is True
@@ -141,14 +150,18 @@ def test_duplicate_swipe_returns_409(client, db_session_factory):
 
     app.dependency_overrides[get_current_user] = _override_user(actor)
     try:
-        resp = client.post("/api/v1/swipe", json={"target_id": str(target.id), "direction": "like"})
+        resp = client.post(
+            "/api/v1/swipe", json={"target_id": str(target.id), "direction": "like"}
+        )
         assert resp.status_code == 409
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
 
 def test_swipe_unauthenticated_returns_403(client):
-    resp = client.post("/api/v1/swipe", json={"target_id": str(uuid.uuid4()), "direction": "like"})
+    resp = client.post(
+        "/api/v1/swipe", json={"target_id": str(uuid.uuid4()), "direction": "like"}
+    )
     assert resp.status_code in (401, 403)
 
 

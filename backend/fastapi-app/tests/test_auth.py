@@ -16,7 +16,9 @@ import pytest
 from jose import jwt
 
 # Ensure JWT_SECRET is set before importing app modules
-os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-security"
+os.environ["JWT_SECRET"] = (
+    "test-secret-that-is-at-least-32-characters-long-for-security"
+)
 
 from app.auth import (
     ALGORITHM,
@@ -78,12 +80,14 @@ class TestJWTTokens:
 
     def test_decode_invalid_token_raises(self):
         from fastapi import HTTPException
+
         with pytest.raises(HTTPException) as exc_info:
             decode_token("invalid.token.here")
         assert exc_info.value.status_code == 401
 
     def test_decode_expired_token_raises(self):
         from fastapi import HTTPException
+
         user_id = str(uuid.uuid4())
         # Create a token that expired 1 hour ago
         expired_payload = {
@@ -136,7 +140,9 @@ class TestJWTSecretFailFast:
 
         config_module.get_settings.cache_clear()
 
-        with patch.dict(os.environ, {"JWT_SECRET": "change-me-in-production"}, clear=False):
+        with patch.dict(
+            os.environ, {"JWT_SECRET": "change-me-in-production"}, clear=False
+        ):
             with pytest.raises(RuntimeError, match="FATAL"):
                 config_module.get_settings.cache_clear()
                 config_module.get_settings()
@@ -162,7 +168,9 @@ class TestJWTSecretFailFast:
 
         config_module.get_settings.cache_clear()
 
-        valid_secret = "this-is-a-secure-jwt-secret-that-is-definitely-long-enough-for-production"
+        valid_secret = (
+            "this-is-a-secure-jwt-secret-that-is-definitely-long-enough-for-production"
+        )
         with patch.dict(os.environ, {"JWT_SECRET": valid_secret}, clear=False):
             config_module.get_settings.cache_clear()
             settings = config_module.get_settings()

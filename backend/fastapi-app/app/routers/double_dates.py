@@ -109,11 +109,20 @@ async def propose_double_date(
 
     match_a = await db.get(Match, payload.match_a_id)
     match_b = await db.get(Match, payload.match_b_id)
-    if not match_a or match_a.status != "active" or not match_b or match_b.status != "active":
-        raise HTTPException(status_code=404, detail="One or both matches are not active")
+    if (
+        not match_a
+        or match_a.status != "active"
+        or not match_b
+        or match_b.status != "active"
+    ):
+        raise HTTPException(
+            status_code=404, detail="One or both matches are not active"
+        )
 
     if not (_user_in_match(match_a, user.id) or _user_in_match(match_b, user.id)):
-        raise HTTPException(status_code=403, detail="You must belong to one of the couples")
+        raise HTTPException(
+            status_code=403, detail="You must belong to one of the couples"
+        )
 
     existing = await db.scalar(
         select(DoubleDateSession).where(
@@ -131,7 +140,9 @@ async def propose_double_date(
         )
     )
     if existing:
-        raise HTTPException(status_code=409, detail="A proposal already exists for these couples")
+        raise HTTPException(
+            status_code=409, detail="A proposal already exists for these couples"
+        )
 
     session = DoubleDateSession(
         id=uuid.uuid4(),
@@ -142,7 +153,9 @@ async def propose_double_date(
     )
     db.add(session)
 
-    initiator_match_id = payload.match_a_id if _user_in_match(match_a, user.id) else payload.match_b_id
+    initiator_match_id = (
+        payload.match_a_id if _user_in_match(match_a, user.id) else payload.match_b_id
+    )
     db.add(
         DoubleDateAcceptance(
             id=uuid.uuid4(),
@@ -165,7 +178,9 @@ async def list_double_dates(
 ) -> list[DoubleDateSessionResponse]:
     user_match_ids = (
         await db.scalars(
-            select(Match.id).where(or_(Match.user_a == user.id, Match.user_b == user.id))
+            select(Match.id).where(
+                or_(Match.user_a == user.id, Match.user_b == user.id)
+            )
         )
     ).all()
     if not user_match_ids:
@@ -198,7 +213,9 @@ async def accept_double_date(
     if not session:
         raise HTTPException(status_code=404, detail="Double-date proposal not found")
     if session.status == "declined":
-        raise HTTPException(status_code=409, detail="This proposal has already been declined")
+        raise HTTPException(
+            status_code=409, detail="This proposal has already been declined"
+        )
 
     user_match_id = await _get_user_match_id(db, session, user.id)
     if not user_match_id:
@@ -234,7 +251,10 @@ async def accept_double_date(
         ).all()
     )
     accepted_match_ids.add(user_match_id)
-    if session.match_a_id in accepted_match_ids and session.match_b_id in accepted_match_ids:
+    if (
+        session.match_a_id in accepted_match_ids
+        and session.match_b_id in accepted_match_ids
+    ):
         session.status = "active"
 
     await db.commit()
@@ -281,31 +301,43 @@ async def decline_double_date(
     return await _serialize_session(db, session)
 
 
-@router.get("/squad-recommendations", response_model=list[DoubleDateSquadRecommendation])
+@router.get(
+    "/squad-recommendations", response_model=list[DoubleDateSquadRecommendation]
+)
 async def get_squad_recommendations(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> list[DoubleDateSquadRecommendation]:
     """Squad Protocol: Recommend matches for double-dates based on Mission Impact Score."""
-    all_matches = (await db.scalars(
-        select(Match).where(
-            or_(Match.user_a == user.id, Match.user_b == user.id),
-            Match.status == "active"
+    all_matches = (
+        await db.scalars(
+            select(Match).where(
+                or_(Match.user_a == user.id, Match.user_b == user.id),
+                Match.status == "active",
+            )
         )
-    )).all()
+    ).all()
     recommended = []
     for m in all_matches:
         target_id = m.user_b if m.user_a == user.id else m.user_a
         target_user = await db.get(User, target_id)
         if not target_user:
             continue
-        target_profile = await db.scalar(select(Profile).where(Profile.user_id == target_id))
-        photo = str(target_profile.photos[0]) if target_profile and target_profile.photos else None
-        recommended.append(DoubleDateSquadRecommendation(
-            match_id=m.id,
-            display_name=target_user.display_name,
-            photo_url=photo,
-            mission_score=target_user.mission_impact_score,
-            intent_badge=target_user.intent_badge
-        ))
+        target_profile = await db.scalar(
+            select(Profile).where(Profile.user_id == target_id)
+        )
+        photo = (
+            str(target_profile.photos[0])
+            if target_profile and target_profile.photos
+            else None
+        )
+        recommended.append(
+            DoubleDateSquadRecommendation(
+                match_id=m.id,
+                display_name=target_user.display_name,
+                photo_url=photo,
+                mission_score=target_user.mission_impact_score,
+                intent_badge=target_user.intent_badge,
+            )
+        )
     return sorted(recommended, key=lambda x: x.mission_score, reverse=True)[:10]

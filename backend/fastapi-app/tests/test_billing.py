@@ -126,7 +126,9 @@ def test_completed_prepaid_payment_sets_expiry(client, db_session_factory):
     async def fetch_state() -> tuple[User | None, VerificationEvent | None]:
         async with db_session_factory() as session:
             user = await session.scalar(select(User).where(User.id == user_id))
-            event = await session.scalar(select(VerificationEvent).where(VerificationEvent.id == event_id))
+            event = await session.scalar(
+                select(VerificationEvent).where(VerificationEvent.id == event_id)
+            )
             return user, event
 
     user, event = asyncio.run(fetch_state())
@@ -154,7 +156,8 @@ def test_auth_me_deactivates_expired_prepaid_subscription(client, db_session_fac
                     display_name="Expired User",
                     subscription_tier="3_month",
                     subscription_active=True,
-                    subscription_expires_at=datetime.now(timezone.utc) - timedelta(days=2),
+                    subscription_expires_at=datetime.now(timezone.utc)
+                    - timedelta(days=2),
                     created_at=datetime.now(timezone.utc),
                     updated_at=datetime.now(timezone.utc),
                 )

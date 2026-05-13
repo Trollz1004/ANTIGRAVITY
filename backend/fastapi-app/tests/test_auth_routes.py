@@ -87,7 +87,9 @@ def test_inactive_user_is_blocked_across_auth_routes(client, db_session_factory)
 
     me_response = client.get(
         "/api/v1/auth/me",
-        headers={"Authorization": f"Bearer {create_access_token(str(inactive_user_id))}"},
+        headers={
+            "Authorization": f"Bearer {create_access_token(str(inactive_user_id))}"
+        },
     )
     assert me_response.status_code == 403
     assert me_response.json()["detail"] == "Account is inactive"
