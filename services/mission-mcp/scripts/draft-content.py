@@ -79,12 +79,25 @@ CONTENT_CALENDAR_TAG = "income-engine-tags"
 
 def http_post_json(url: str, payload: dict, headers: dict | None = None, timeout: int = 60) -> dict:
     body = json.dumps(payload).encode()
-    h = {"Content-Type": "application/json"}
+    # MCP streamable-HTTP requires Accept: application/json, text/event-stream.
+    # Server may respond as either JSON or SSE; we parse both. For non-MCP
+    # endpoints (e.g. Hermes Router, Ollama) this Accept is also valid.
+    h = {
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/event-stream",
+    }
     if headers:
         h.update(headers)
     req = urllib.request.Request(url, data=body, headers=h, method="POST")
     with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return json.loads(resp.read().decode())
+        content_type = resp.headers.get("Content-Type", "")
+        raw = resp.read().decode()
+        if "text/event-stream" in content_type:
+            for line in raw.splitlines():
+                if line.startswith("data: "):
+                    return json.loads(line[len("data: "):])
+            raise RuntimeError(f"SSE response had no data: line. Raw: {raw[:200]}")
+        return json.loads(raw)
 
 
 def mcp_call_tool(url: str, token: str | None, tool_name: str, arguments: dict) -> dict:

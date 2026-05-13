@@ -71,15 +71,30 @@ def check_forbidden(text: str) -> None:
 
 
 def mcp_post(url: str, token: str | None, payload: dict) -> dict:
-    """POST JSON-RPC-style request to mission-mcp HTTP endpoint."""
+    """POST JSON-RPC request to mission-mcp HTTP endpoint.
+
+    MCP streamable-HTTP transport requires Accept: application/json, text/event-stream
+    (server validates the Accept header and 406s otherwise). The server may respond
+    with either a plain JSON body or a single-event SSE stream; we parse both.
+    """
     body = json.dumps(payload).encode()
-    headers = {"Content-Type": "application/json"}
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/event-stream",
+    }
     if token:
         headers["Authorization"] = f"Bearer {token}"
     req = urllib.request.Request(f"{url}/mcp", data=body, headers=headers, method="POST")
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
+            content_type = resp.headers.get("Content-Type", "")
             raw = resp.read().decode()
+            if "text/event-stream" in content_type:
+                # SSE: extract the first `data: ...` line that contains JSON
+                for line in raw.splitlines():
+                    if line.startswith("data: "):
+                        return json.loads(line[len("data: "):])
+                raise RuntimeError(f"SSE response had no data: line. Raw: {raw[:200]}")
             return json.loads(raw)
     except urllib.error.URLError as e:
         raise RuntimeError(f"mission-mcp unreachable at {url}: {e}") from e
