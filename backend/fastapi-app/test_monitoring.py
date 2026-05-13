@@ -1,8 +1,8 @@
 """Simple test to verify monitoring and logging functionality."""
 
 import logging
-import sys
-from app.logging_config import setup_logging, JSONFormatter
+
+from app.logging_config import setup_logging
 from app.monitoring import MetricsCollector, setup_monitoring
 
 

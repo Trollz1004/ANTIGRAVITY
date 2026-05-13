@@ -1,16 +1,17 @@
 """LoveBot router for premium dating and relationship tools."""
 
 from fastapi import APIRouter, Depends, HTTPException
+
 from app.auth import get_current_user
+from app.lovebot_service import lovebot_service
 from app.models import User
 from app.schemas import (
     LoveBotCompatibilityRequest,
     LoveBotCompatibilityResponse,
+    LoveBotGiftResponse,
     LoveBotQuoteResponse,
     LoveBotTipResponse,
-    LoveBotGiftResponse,
 )
-from app.lovebot_service import lovebot_service
 from app.subscriptions import user_has_active_subscription
 
 router = APIRouter(prefix="/lovebot", tags=["LoveBot"])

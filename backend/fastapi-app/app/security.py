@@ -2,10 +2,10 @@
 
 import logging
 import time
-from typing import Callable, Optional
 from collections import defaultdict
+from typing import Callable
 
-from fastapi import Request, Response, HTTPException, status
+from fastapi import HTTPException, Request, Response, status
 from fastapi.security import HTTPBearer
 from starlette.middleware.base import BaseHTTPMiddleware
 

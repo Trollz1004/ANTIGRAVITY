@@ -9,8 +9,8 @@ import json
 import re
 import time
 import uuid
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
-from typing import Iterable, Iterator
 
 BOT_SHIELD_CENTS = 100
 FOUNDING_MEMBER_CENTS = 1499

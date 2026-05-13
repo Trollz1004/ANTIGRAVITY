@@ -9,13 +9,13 @@ Covers:
 import os
 import uuid
 from datetime import datetime, timedelta, timezone
+from unittest.mock import AsyncMock, patch
 
 import pytest
 import pytest_asyncio
 from fastapi import HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials
 from jose import jwt
-from unittest.mock import AsyncMock, patch
 
 # Set JWT secret before importing app modules
 os.environ["JWT_SECRET"] = (
@@ -29,8 +29,8 @@ from app.auth import (
     decode_token,
     get_current_user,
     hash_password,
-    verify_password,
     verify_google_token,
+    verify_password,
 )
 from app.models import User
 
@@ -198,6 +198,7 @@ class TestGetCurrentUser:
 class TestRefreshFlow:
     async def test_valid_refresh_token_returns_new_tokens(self):
         from fastapi.testclient import TestClient
+
         from app.main import app
 
         client = TestClient(app)
@@ -227,6 +228,7 @@ class TestRefreshFlow:
 
     async def test_refresh_token_non_refresh_type_raises_401(self):
         from fastapi.testclient import TestClient
+
         from app.main import app
 
         client = TestClient(app)
@@ -241,6 +243,7 @@ class TestRefreshFlow:
 
     async def test_expired_refresh_token_raises_401(self):
         from fastapi.testclient import TestClient
+
         from app.main import app
 
         client = TestClient(app)
@@ -263,6 +266,7 @@ class TestRefreshFlow:
     async def test_refresh_token_non_existent_user_raises_401(self):
         """Test refresh token with non-existent user returns 401."""
         from fastapi.testclient import TestClient
+
         from app.main import app
 
         client = TestClient(app)

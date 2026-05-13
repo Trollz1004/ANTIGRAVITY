@@ -1,10 +1,10 @@
 """Users router with registration and basic rate limiting."""
 
-from collections import defaultdict, deque
-from threading import Lock
 import secrets
 import time
 import uuid
+from collections import defaultdict, deque
+from threading import Lock
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import select

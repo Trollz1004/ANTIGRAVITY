@@ -11,8 +11,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.auth import get_current_user
 from app.config import get_settings
 from app.database import get_db
-from app.moderation import close_active_matches_for_block
 from app.models import SupportTicket, User, UserBlock, UserReport
+from app.moderation import close_active_matches_for_block
 from app.schemas import (
     SafetyBlockedUserResponse,
     SafetyBlockRequest,

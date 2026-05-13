@@ -1,11 +1,13 @@
-import pytest
 from uuid import uuid4
+
+import pytest
 from sqlalchemy import select
+
+from app.models import RevenueAllocation
 from app.revenue_allocation import (
     calculate_charitable_amount_cents,
     reserve_revenue_allocation,
 )
-from app.models import RevenueAllocation
 
 
 def test_calculate_charitable_amount_cents():

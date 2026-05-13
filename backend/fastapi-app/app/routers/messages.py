@@ -8,17 +8,17 @@ from fastapi import (
     APIRouter,
     Depends,
     HTTPException,
+    Query,
     WebSocket,
     WebSocketDisconnect,
-    Query,
 )
-from sqlalchemy import and_, or_, select, func
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import get_current_user, decode_token
-from app.database import get_db, SessionLocal
-from app.moderation import has_block_relationship
+from app.auth import decode_token, get_current_user
+from app.database import SessionLocal, get_db
 from app.models import Match, Message, User
+from app.moderation import has_block_relationship
 from app.schemas import MessageResponse, MessageSendRequest
 
 router = APIRouter()

@@ -1,34 +1,22 @@
 """FastAPI entrypoint for the YouAndINotAI REST API."""
 
-import asyncio
 import json
 import logging
-import os
 import time
 import traceback
 import uuid
 from contextlib import asynccontextmanager
-from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Any
 
-from fastapi import FastAPI, Request, HTTPException, Depends
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fastapi.staticfiles import StaticFiles
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.config import get_settings
 from app.database import get_db, reconcile_legacy_schema
 from app.logging_config import setup_logging
 from app.monitoring import setup_monitoring
-from app.scheduler import setup_scheduler
-from app.security import (
-    RateLimitMiddleware,
-    InputValidationMiddleware,
-    SecurityHeadersMiddleware,
-)
-from app.schemas import HealthResponse
-from app.feature_flags import get_all_flags, get_flag, set_flag
 from app.routers import (
     auth,
     billing,
@@ -47,6 +35,7 @@ from app.routers import (
     safety,
     support,
     swipe,
+    uploads,
     users,
     verify,
     video,
@@ -54,9 +43,15 @@ from app.routers import (
     volunteering,
     waitlist,
     webhooks,
-    uploads,
 )
 from app.routers.health import health_check
+from app.scheduler import setup_scheduler
+from app.schemas import HealthResponse
+from app.security import (
+    InputValidationMiddleware,
+    RateLimitMiddleware,
+    SecurityHeadersMiddleware,
+)
 
 # Configure structured logging
 setup_logging()

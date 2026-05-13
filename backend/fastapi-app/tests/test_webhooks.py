@@ -65,6 +65,7 @@ class TestSquareSignatureVerification:
     def test_invalid_signature_raises(self):
         """A tampered payload must fail verification."""
         from fastapi import HTTPException
+
         from app.routers.webhooks import _verify_square_signature
 
         payload = json.dumps(
@@ -83,6 +84,7 @@ class TestSquareSignatureVerification:
     def test_missing_signature_raises(self):
         """A request without a signature header must fail."""
         from fastapi import HTTPException
+
         from app.routers.webhooks import _verify_square_signature
 
         payload = b'{"test": true}'
@@ -99,6 +101,7 @@ class TestSquareSignatureVerification:
     def test_missing_config_raises_503(self):
         """If verification is enabled but key/url not configured, return 503."""
         from fastapi import HTTPException
+
         from app.routers.webhooks import _verify_square_signature
 
         payload = b'{"test": true}'
@@ -679,6 +682,7 @@ class TestNoStripeReferences:
     def test_webhooks_no_active_stripe(self):
         """webhooks.py must not contain active Stripe code."""
         import inspect
+
         from app.routers import webhooks
 
         source = inspect.getsource(webhooks)
@@ -704,6 +708,7 @@ class TestNoStripeReferences:
     def test_config_no_active_stripe(self):
         """config.py must not have active Stripe settings."""
         import inspect
+
         from app import config
 
         source = inspect.getsource(config)

@@ -11,8 +11,6 @@ import asyncio
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import select
-
 from app.auth import get_current_user
 from app.main import app
 from app.models import Match, Swipe, User
