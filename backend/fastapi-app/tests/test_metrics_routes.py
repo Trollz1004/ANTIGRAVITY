@@ -16,12 +16,7 @@ import asyncio
 import uuid
 from datetime import date, datetime, timezone
 
-import pytest
-
-from app.config import get_settings
-from app.main import app
 from app.models import User
-
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -133,18 +128,17 @@ def test_metrics_impact_contains_no_pii(client, db_session_factory):
         elif isinstance(obj, list):
             for i, item in enumerate(obj):
                 violations.extend(_scan_for_pii(item, path=f"{path}[{i}]"))
-        elif isinstance(obj, str):
-            # Flag if any string value is an email address
-            if "@" in obj and "." in obj and len(obj) < 200:
-                violations.append(
-                    f"Possible email address found at {path}: '{obj[:40]}...'"
-                )
+        elif isinstance(obj, str) and "@" in obj and "." in obj and len(obj) < 200:
+            # Flag if any string value looks like an email address
+            violations.append(
+                f"Possible email address found at {path}: '{obj[:40]}...'"
+            )
         return violations
 
     data = resp.json()
     violations = _scan_for_pii(data)
-    assert not violations, (
-        "PII detected in /metrics/impact response:\n" + "\n".join(violations)
+    assert not violations, "PII detected in /metrics/impact response:\n" + "\n".join(
+        violations
     )
 
 
@@ -172,9 +166,9 @@ def test_metrics_impact_engagement_is_aggregate_only(client):
 
     engagement = resp.json()["engagement"]
     for field, value in engagement.items():
-        assert isinstance(value, int), (
-            f"engagement.{field} is {type(value).__name__}, expected int"
-        )
+        assert isinstance(
+            value, int
+        ), f"engagement.{field} is {type(value).__name__}, expected int"
 
 
 def test_metrics_impact_revenue_has_no_individual_payment_details(client):
@@ -192,9 +186,9 @@ def test_metrics_impact_revenue_has_no_individual_payment_details(client):
     }
     actual_fields = set(revenue.keys())
     unexpected = actual_fields - allowed_revenue_fields
-    assert not unexpected, (
-        f"Unexpected fields in revenue block (may contain PII / individual records): {unexpected}"
-    )
+    assert (
+        not unexpected
+    ), f"Unexpected fields in revenue block (may contain PII / individual records): {unexpected}"
     # All values must be integers
     for k, v in revenue.items():
         assert isinstance(v, int), f"revenue.{k} = {v!r}, expected int"
@@ -208,12 +202,11 @@ def test_metrics_response_contains_no_user_ids(client, db_session_factory):
     resp = client.get("/api/v1/metrics/impact", headers=_metrics_headers())
     assert resp.status_code == 200
 
-    import json as _json
     raw = resp.text
     # The seeded user's ID should NOT appear anywhere in the response
-    assert str(user.id) not in raw, (
-        f"User UUID {user.id} leaked into /metrics/impact response"
-    )
+    assert (
+        str(user.id) not in raw
+    ), f"User UUID {user.id} leaked into /metrics/impact response"
 
 
 # ── Revenue policy labels — TOS-safe ─────────────────────────────────────────
@@ -221,12 +214,18 @@ def test_metrics_response_contains_no_user_ids(client, db_session_factory):
 
 def test_metrics_response_contains_no_forbidden_revenue_labels(client):
     """Response must not contain retired revenue split labels or solicitation language."""
-    forbidden_terms = ["donate", "donation", "solicitation", "tax-deductible", "charity_percent"]
+    forbidden_terms = [
+        "donate",
+        "donation",
+        "solicitation",
+        "tax-deductible",
+        "charity_percent",
+    ]
     resp = client.get("/api/v1/metrics/impact", headers=_metrics_headers())
     assert resp.status_code == 200
 
     raw_lower = resp.text.lower()
     for term in forbidden_terms:
-        assert term not in raw_lower, (
-            f"Forbidden revenue label '{term}' found in /metrics/impact response"
-        )
+        assert (
+            term not in raw_lower
+        ), f"Forbidden revenue label '{term}' found in /metrics/impact response"

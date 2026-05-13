@@ -12,15 +12,9 @@ All tests run with SQUARE_WEBHOOK_VERIFY_SIGNATURE=true (set in conftest.py).
 
 from __future__ import annotations
 
-import base64
-import hashlib
-import hmac
 import inspect
 import json
 import uuid
-from datetime import datetime, timezone
-
-import pytest
 
 from tests.conftest import (
     generate_square_signature,
@@ -74,9 +68,7 @@ class TestConstantTimeHmacCompare:
         from app.routers.webhooks import _verify_square_signature
 
         source = inspect.getsource(_verify_square_signature)
-        assert (
-            "hmac.compare_digest" in source
-        ), (
+        assert "hmac.compare_digest" in source, (
             "SECURITY: _verify_square_signature must use hmac.compare_digest "
             "to prevent timing-attack signature enumeration. "
             "Replace any `==` comparison with hmac.compare_digest(expected, provided)."
@@ -93,12 +85,12 @@ class TestConstantTimeHmacCompare:
         # is NOT used to compare signature strings, we're safe.
         # We specifically check that no `== provided_signature` or
         # `== expected_signature` appears (the variable names used in the impl).
-        assert "== provided_signature" not in source, (
-            "SECURITY: signature comparison must use hmac.compare_digest, not =="
-        )
-        assert "== expected_signature" not in source, (
-            "SECURITY: signature comparison must use hmac.compare_digest, not =="
-        )
+        assert (
+            "== provided_signature" not in source
+        ), "SECURITY: signature comparison must use hmac.compare_digest, not =="
+        assert (
+            "== expected_signature" not in source
+        ), "SECURITY: signature comparison must use hmac.compare_digest, not =="
 
     def test_valid_signature_passes_with_verification_on(self):
         """End-to-end: a correctly signed payload reaches 200 with verify=true."""
@@ -131,7 +123,7 @@ class TestReplayPrevention:
     """
 
     def test_duplicate_payment_event_returns_200_with_duplicate_flag(
-        self, client, db_session_factory
+        self, client, db_session_factory  # noqa: ARG002
     ):
         """Sending the same event_id twice must succeed idempotently."""
         event_id = f"evt_replay_{uuid.uuid4().hex[:16]}"
@@ -155,13 +147,13 @@ class TestReplayPrevention:
         r2 = client.post(
             "/api/v1/webhooks/square-payment", headers=headers, content=body
         )
-        assert r2.status_code == 200, (
-            f"Replay must return 200 (idempotent), got {r2.status_code}: {r2.text}"
-        )
+        assert (
+            r2.status_code == 200
+        ), f"Replay must return 200 (idempotent), got {r2.status_code}: {r2.text}"
         r2_json = r2.json()
-        assert r2_json["duplicate"] is True, (
-            f"Replay response must set duplicate=true, got: {r2_json}"
-        )
+        assert (
+            r2_json["duplicate"] is True
+        ), f"Replay response must set duplicate=true, got: {r2_json}"
 
     def test_second_duplicate_does_not_create_extra_db_rows(
         self, client, db_session_factory
@@ -187,19 +179,17 @@ class TestReplayPrevention:
         async def count_events() -> int:
             async with db_session_factory() as session:
                 rows = await session.scalars(
-                    select(WebhookEvent).where(
-                        WebhookEvent.event_source_id == event_id
-                    )
+                    select(WebhookEvent).where(WebhookEvent.event_source_id == event_id)
                 )
                 return len(list(rows))
 
         count = asyncio.run(count_events())
-        assert count == 1, (
-            f"Duplicate event_id must produce exactly 1 DB row, got {count}"
-        )
+        assert (
+            count == 1
+        ), f"Duplicate event_id must produce exactly 1 DB row, got {count}"
 
     def test_distinct_event_ids_are_not_deduplicated(
-        self, client, db_session_factory
+        self, client, db_session_factory  # noqa: ARG002
     ):
         """Two requests with different event_ids must both be processed."""
         event_id_a = f"evt_distinct_a_{uuid.uuid4().hex[:12]}"
@@ -245,7 +235,9 @@ class TestMalformedHeaderRejection:
         payload, sig = _make_signed_payment_payload()
         return json.dumps(payload, separators=(",", ":")).encode("utf-8"), sig
 
-    def test_missing_signature_header_returns_400(self, client, db_session_factory):
+    def test_missing_signature_header_returns_400(
+        self, client, db_session_factory  # noqa: ARG002
+    ):
         """A webhook with no x-square-hmacsha256-signature header must be rejected."""
         payload, _ = _make_signed_payment_payload()
         body = json.dumps(payload, separators=(",", ":"))
@@ -255,17 +247,22 @@ class TestMalformedHeaderRejection:
             headers={"Content-Type": "application/json"},
             content=body,
         )
-        assert response.status_code in (400, 401), (
-            f"Missing signature must be rejected with 400/401, got {response.status_code}"
-        )
+        assert response.status_code in (
+            400,
+            401,
+        ), f"Missing signature must be rejected with 400/401, got {response.status_code}"
 
-    def test_wrong_body_signature_returns_400(self, client, db_session_factory):
+    def test_wrong_body_signature_returns_400(
+        self, client, db_session_factory  # noqa: ARG002
+    ):
         """A signature computed over a different body must be rejected."""
         payload, _ = _make_signed_payment_payload()
         body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
 
         # Compute signature over a DIFFERENT body
-        different_body = b'{"event_id": "attacker-controlled", "type": "payment.updated"}'
+        different_body = (
+            b'{"event_id": "attacker-controlled", "type": "payment.updated"}'
+        )
         bad_signature = generate_square_signature(
             different_body, TEST_SIGNING_KEY, TEST_NOTIFICATION_URL
         )
@@ -278,12 +275,13 @@ class TestMalformedHeaderRejection:
             },
             content=body,
         )
-        assert response.status_code in (400, 401), (
-            f"Wrong-body signature must be rejected, got {response.status_code}"
-        )
+        assert response.status_code in (
+            400,
+            401,
+        ), f"Wrong-body signature must be rejected, got {response.status_code}"
 
     def test_invalid_base64_signature_returns_400_not_500(
-        self, client, db_session_factory
+        self, client, db_session_factory  # noqa: ARG002
     ):
         """A signature with invalid base64 content must not cause a 500."""
         payload, _ = _make_signed_payment_payload()
@@ -303,7 +301,9 @@ class TestMalformedHeaderRejection:
         )
         assert response.status_code < 500, "Must never return 500 on bad signature"
 
-    def test_empty_signature_header_returns_400(self, client, db_session_factory):
+    def test_empty_signature_header_returns_400(
+        self, client, db_session_factory  # noqa: ARG002
+    ):
         """An empty string in the signature header must be treated as missing."""
         payload, _ = _make_signed_payment_payload()
         body = json.dumps(payload, separators=(",", ":"))
@@ -316,11 +316,14 @@ class TestMalformedHeaderRejection:
             },
             content=body,
         )
-        assert response.status_code in (400, 401), (
-            f"Empty signature must be rejected, got {response.status_code}"
-        )
+        assert response.status_code in (
+            400,
+            401,
+        ), f"Empty signature must be rejected, got {response.status_code}"
 
-    def test_wrong_signing_key_returns_400(self, client, db_session_factory):
+    def test_wrong_signing_key_returns_400(
+        self, client, db_session_factory  # noqa: ARG002
+    ):
         """A signature computed with a different key must be rejected."""
         payload, _ = _make_signed_payment_payload()
         body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
@@ -339,6 +342,7 @@ class TestMalformedHeaderRejection:
             },
             content=body,
         )
-        assert response.status_code in (400, 401), (
-            f"Wrong-key signature must be rejected, got {response.status_code}"
-        )
+        assert response.status_code in (
+            400,
+            401,
+        ), f"Wrong-key signature must be rejected, got {response.status_code}"

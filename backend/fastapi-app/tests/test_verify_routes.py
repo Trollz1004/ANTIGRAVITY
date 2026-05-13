@@ -12,14 +12,13 @@ Risk surface: FL §496.405 compliance gate; no-free-verification Iron Wall.
 import asyncio
 import uuid
 from datetime import date, datetime, timezone
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
 
 import pytest
 
 from app.auth import create_access_token, get_current_user, hash_password
 from app.main import app
 from app.models import User, VerificationEvent
-
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -115,7 +114,7 @@ class TestVerifyChallenge:
 
 
 class TestVerifySubmit:
-    def _create_challenge(self, client, user) -> dict:
+    def _create_challenge(self, client, user=None) -> dict:  # noqa: ARG002
         resp = client.post("/api/v1/verify/challenge")
         assert resp.status_code == 200, resp.text
         return resp.json()
@@ -153,6 +152,7 @@ class TestVerifySubmit:
 
             # Patch elapsed time to bypass MIN_SOLVE_TIME check
             import app.routers.verify as verify_mod
+
             with patch.object(
                 verify_mod,
                 "MIN_SOLVE_TIME_SECONDS",
@@ -188,9 +188,9 @@ class TestVerifySubmit:
                     json={"challenge_id": "not-a-uuid", "answer": "42"},
                 )
                 # Must never succeed (200/passed)
-                assert resp.status_code != 200, (
-                    f"Malformed challenge_id should be rejected but got 200: {resp.json()}"
-                )
+                assert (
+                    resp.status_code != 200
+                ), f"Malformed challenge_id should be rejected but got 200: {resp.json()}"
             except ValueError as e:
                 # ValueError from uuid.UUID() leaking through — document it
                 pytest.xfail(
@@ -249,9 +249,7 @@ class TestVerifyStatus:
             app.dependency_overrides.pop(get_current_user, None)
 
     def test_status_verified_user_shows_gold_tier(self, client, db_session_factory):
-        user = _make_user(
-            email="status_gold@example.com", bot_shield_verified=True
-        )
+        user = _make_user(email="status_gold@example.com", bot_shield_verified=True)
         _seed(user, db_session_factory=db_session_factory)
         app.dependency_overrides[get_current_user] = _override_user(user)
         try:
@@ -290,10 +288,16 @@ class TestVerifyStatus:
             resp = client.get("/api/v1/verify/status")
             assert resp.status_code == 200
             data = resp.json()
-            pii_fields = {"email", "display_name", "date_of_birth", "password_hash", "google_id"}
-            assert not pii_fields.intersection(data.keys()), (
-                f"PII fields found in /verify/status response: {pii_fields.intersection(data.keys())}"
-            )
+            pii_fields = {
+                "email",
+                "display_name",
+                "date_of_birth",
+                "password_hash",
+                "google_id",
+            }
+            assert not pii_fields.intersection(
+                data.keys()
+            ), f"PII fields found in /verify/status response: {pii_fields.intersection(data.keys())}"
         finally:
             app.dependency_overrides.pop(get_current_user, None)
 
@@ -365,7 +369,9 @@ class TestVerifyConfirm:
             amount_cents=100,
             created_at=datetime.now(timezone.utc),
         )
-        _seed(user, liveness_event, payment_event, db_session_factory=db_session_factory)
+        _seed(
+            user, liveness_event, payment_event, db_session_factory=db_session_factory
+        )
         app.dependency_overrides[get_current_user] = _override_user(user)
         try:
             resp = client.post("/api/v1/verify/confirm")

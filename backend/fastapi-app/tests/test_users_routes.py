@@ -17,9 +17,7 @@ from datetime import date, datetime, timezone
 import pytest
 
 from app.auth import hash_password
-from app.config import get_settings
 from app.models import User
-
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -59,6 +57,7 @@ def test_register_user_happy_path(client):
     the contract: request validation passes, but DB write fails.
     """
     import sqlalchemy.exc
+
     try:
         resp = client.post(
             "/api/v1/users/register",
@@ -68,7 +67,10 @@ def test_register_user_happy_path(client):
             },
         )
         # 201 = bug fixed; 500 = known IntegrityError from missing password_hash
-        assert resp.status_code in (201, 500), f"Unexpected status {resp.status_code}: {resp.text}"
+        assert resp.status_code in (
+            201,
+            500,
+        ), f"Unexpected status {resp.status_code}: {resp.text}"
         if resp.status_code == 201:
             data = resp.json()
             assert "user_id" in data
@@ -84,7 +86,7 @@ def test_register_user_returns_unique_session_token(client):
 
     NOTE: Will xfail until users.py is fixed to include password_hash.
     """
-    import sqlalchemy.exc
+
     try:
         resp1 = client.post(
             "/api/v1/users/register",
@@ -188,7 +190,7 @@ def test_register_email_is_case_insensitive_for_dedup(client, db_session_factory
 
 def test_register_cannot_set_bot_shield_verified_via_payload(client):
     """Pydantic schema must strip bot_shield_verified from registration payload."""
-    import sqlalchemy.exc
+
     try:
         resp = client.post(
             "/api/v1/users/register",
@@ -208,7 +210,7 @@ def test_register_cannot_set_bot_shield_verified_via_payload(client):
 
 def test_register_cannot_set_subscription_active_via_payload(client):
     """Pydantic schema must strip subscription_active from registration payload."""
-    import sqlalchemy.exc
+
     try:
         resp = client.post(
             "/api/v1/users/register",
