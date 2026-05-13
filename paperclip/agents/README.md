@@ -14,7 +14,7 @@ If Paperclip's database gets wiped or an agent's instructions get corrupted, res
 | CTO | cto/ | opencode_local / qwen3-coder | b02a21c7-737e-4177-91ac-6d8e57805801 | 30m |
 | CMO | cmo/ | opencode_local / dateapp-marketingtools | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | 60m |
 | UX Designer | uxdesigner/ | opencode_local / dateapp | bd6d6722-9f3e-46ba-8651-ec9a219042ee | 60m |
-| Mission Guardian (Claude) | mission-guardian-claude/ | claude_local | 2229682b-cede-4462-b38b-25a910af022e | 24h |
+| Mission Guardian (Claude) | mission-guardian-claude/ | kimi-k2.6:cloud via Ollama (rerouted 2026-05-07) | 2229682b-cede-4462-b38b-25a910af022e | 24h |
 | Mission Guardian (Codex) | mission-guardian-codex/ | codex_local | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | 24h |
 | INTERN (DoWhatTold) | intern/ | any ollama cloud (smallest) | (spawned by CEO/CFO) | NONE |
 | GitHub Auditor | github-auditor/ | github-actions | N/A (workflow) | 24h |
@@ -67,7 +67,7 @@ INTERN has only:
 - CTO / TechExecutor: `opencode_local` + `ollama/qwen3-coder:480b-cloud`
 - CMO: `opencode_local` + `ollama/Trollz1004/dateapp-marketingtools` (platform-specific; fallback: qwen3-coder)
 - UX Designer: `opencode_local` + `ollama/Trollz1004/dateapp` (fallback: qwen3-coder)
-- Mission Guardians: `claude_local` + `codex_local` — daily audit only (86400s heartbeat, staggered)
+- Mission Guardians: Mission Guardian (Claude) uses `kimi-k2.6:cloud via Ollama (rerouted 2026-05-07)` — Token Doctrine: no Anthropic API spend inside PaperClip. Mission Guardian (Codex) uses `codex_local`. Both run daily audit only (86400s heartbeat, staggered).
 - INTERN: any cheapest available Ollama cloud model (Gemma 1B is fine — INTERNs do not think)
 
 ## Required Files Per Agent — Quick Matrix
