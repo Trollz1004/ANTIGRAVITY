@@ -66,6 +66,10 @@ async def register_user(
         id=uuid.uuid4(),
         email=payload.email.lower(),
         display_name=payload.display_name.strip(),
+        # Placeholder hash satisfies NOT NULL constraint.
+        # This value is cryptographically random and cannot be used to log in.
+        # It is overwritten when the user sets a real password via a separate endpoint.
+        password_hash=secrets.token_urlsafe(32),
     )
 
     db.add(user)
