@@ -122,8 +122,9 @@ export function CosmicCanvas() {
     const startAudio = () => {
       if (audioCtx) return;
 
-      audioCtx = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
+      audioCtx = new (
+        window.AudioContext || (window as any).webkitAudioContext
+      )();
 
       // Deep space hum (low oscillator)
       oscillator = audioCtx.createOscillator();

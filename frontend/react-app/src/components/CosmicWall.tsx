@@ -26,8 +26,9 @@ export function CosmicWall({ onClose }: { onClose: () => void }) {
 
   // Sound effects
   const playSound = (type: 'click' | 'success' | 'hover') => {
-    const audioCtx = new (window.AudioContext ||
-      (window as any).webkitAudioContext)();
+    const audioCtx = new (
+      window.AudioContext || (window as any).webkitAudioContext
+    )();
     const oscillator = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
 
