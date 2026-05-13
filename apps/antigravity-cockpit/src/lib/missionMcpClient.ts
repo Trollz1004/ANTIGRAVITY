@@ -112,16 +112,30 @@ export interface TaskRow {
   parent_task_id: string | null;
   assigned_agent_id: string | null;
   result: string | null;
-  created_at: number;  // Unix ms
-  updated_at: number;  // Unix ms
+  created_at: number;    // Unix ms
+  updated_at: number;    // Unix ms
+  completed_at?: number; // Unix ms — set when status transitions to done (686e8ed)
 }
 
-/** Agent derived from grouping tasks by assigned_agent_id */
+/**
+ * Agent row as returned by mission-mcp list_agents (686e8ed).
+ * Returns [] when no agents are registered.
+ */
+export interface AgentRow {
+  id: string;
+  model: string;
+  pid: number | null;
+  last_heartbeat: number | null; // Unix ms
+  meta: Record<string, unknown>;
+  registered_at: number; // Unix ms
+}
+
+/** Agent summary shown in the fleet panel */
 export interface AgentSummary {
   agentId: string;
-  taskCount: number;
-  activeCount: number;   // pending + in_progress
-  lastActivity: number;  // max updated_at ms
+  model: string;
+  lastHeartbeat: number | null;
+  registeredAt: number;
   status: 'active' | 'idle';
 }
 
@@ -144,52 +158,43 @@ export interface IncomePulse {
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
 /**
- * Derive a synthetic agent fleet by grouping all tasks by assigned_agent_id.
- * mission-mcp has no list_agents tool; task assignment is the proxy.
- *
- * Returns [] (not undefined) when there are no tasks — honest empty state.
+ * Fetch live agent fleet via native list_agents tool (686e8ed).
+ * Returns [] when no agents are registered — honest empty state.
+ * Falls back to { ok: false } if mission-mcp is unreachable.
  */
 export async function fetchAgentFleet(): Promise<{ ok: boolean; agents: AgentSummary[]; error?: string }> {
-  const r = await mcpCall<TaskRow[]>('list_tasks', { limit: 500 });
+  const r = await mcpCall<AgentRow[]>('list_agents', {});
   if (!r.ok || !r.data) {
     return { ok: false, agents: [], error: r.error };
   }
 
-  const tasks = r.data;
-  const byAgent = new Map<string, TaskRow[]>();
+  const now = Date.now();
+  // An agent is "active" if it sent a heartbeat within the last 60 seconds
+  const ACTIVE_THRESHOLD_MS = 60_000;
 
-  for (const t of tasks) {
-    const key = t.assigned_agent_id ?? '__unassigned__';
-    if (!byAgent.has(key)) byAgent.set(key, []);
-    byAgent.get(key)!.push(t);
-  }
+  const agents: AgentSummary[] = r.data.map(a => ({
+    agentId: a.id,
+    model: a.model,
+    lastHeartbeat: a.last_heartbeat,
+    registeredAt: a.registered_at,
+    status: (a.last_heartbeat && now - a.last_heartbeat < ACTIVE_THRESHOLD_MS)
+      ? 'active'
+      : 'idle',
+  }));
 
-  const agents: AgentSummary[] = [];
-  for (const [agentId, agentTasks] of byAgent) {
-    if (agentId === '__unassigned__') continue; // skip unassigned tasks
-    const activeCount = agentTasks.filter(t => t.status === 'pending' || t.status === 'in_progress').length;
-    const lastActivity = Math.max(...agentTasks.map(t => t.updated_at));
-    agents.push({
-      agentId,
-      taskCount: agentTasks.length,
-      activeCount,
-      lastActivity,
-      status: activeCount > 0 ? 'active' : 'idle',
-    });
-  }
-
-  // Sort: active first, then by task count desc
+  // Sort: active first, then by most-recent heartbeat
   agents.sort((a, b) => {
     if (a.status !== b.status) return a.status === 'active' ? -1 : 1;
-    return b.taskCount - a.taskCount;
+    return (b.lastHeartbeat ?? 0) - (a.lastHeartbeat ?? 0);
   });
 
   return { ok: true, agents };
 }
 
 /**
- * Compute income-engine task pulse from tasks whose description contains
- * the income-engine tag block seeded by seed-income-engine.py.
+ * Compute income-engine task pulse using server-side tag filter (686e8ed).
+ * Uses since_ms to fetch only the last 7 days for the velocity window,
+ * plus a separate total-count call without since_ms for the summary stats.
  *
  * Falls back gracefully — if 0 tasks returned, metrics are all 0.
  */
@@ -200,34 +205,41 @@ export async function fetchIncomePulse(): Promise<{ ok: boolean; pulse: IncomePu
     completionSpark: [0, 0, 0, 0, 0, 0, 0],
   };
 
-  // Fetch all tasks (income-engine tasks don't have a distinct status filter;
-  // we filter client-side by the tag block in description)
-  const r = await mcpCall<TaskRow[]>('list_tasks', { limit: 500 });
-  if (!r.ok || !r.data) {
-    return { ok: false, pulse: empty, error: r.error };
+  const now = Date.now();
+  const since7d = now - SEVEN_DAYS_MS;
+
+  // Two parallel calls: all income-engine tasks (totals) + last-7d only (velocity)
+  const [allResult, recentResult] = await Promise.all([
+    mcpCall<TaskRow[]>('list_tasks', { tag: 'income-engine' }),
+    mcpCall<TaskRow[]>('list_tasks', { tag: 'income-engine', since_ms: since7d }),
+  ]);
+
+  if (!allResult.ok || !allResult.data) {
+    return { ok: false, pulse: empty, error: allResult.error };
   }
 
-  // Filter to income-engine tagged tasks
-  const ieTasks = r.data.filter(t =>
-    t.description?.includes('"income-engine"') || t.description?.includes('income-engine-tags')
-  );
+  const ieTasks = allResult.data;
 
   if (ieTasks.length === 0) {
     return { ok: true, pulse: empty };
   }
 
-  const now = Date.now();
-  const cutoff = now - SEVEN_DAYS_MS;
-
-  const completed = ieTasks.filter(t => t.status === 'done');
+  const completed  = ieTasks.filter(t => t.status === 'done');
   const inProgress = ieTasks.filter(t => t.status === 'in_progress');
-  const pending = ieTasks.filter(t => t.status === 'pending');
-  const completedRecent = completed.filter(t => t.updated_at >= cutoff);
+  const pending    = ieTasks.filter(t => t.status === 'pending');
 
-  // Build sparkline: completions-per-day for last 7 days (day 0 = oldest)
+  // Velocity sparkline uses completed_at (accurate since 686e8ed).
+  // recent window comes from the since_ms-filtered call; fall back to allResult
+  // if the recent call failed (backward compat).
+  const recentTasks = (recentResult.ok && recentResult.data) ? recentResult.data : ieTasks;
+  const completedRecent = recentTasks.filter(t => t.status === 'done');
+
+  // Build sparkline: completions-per-day for last 7 days (idx 0 = oldest, 6 = today)
+  // Use completed_at for accuracy; fall back to updated_at for rows that predate 686e8ed.
   const spark = Array(7).fill(0) as number[];
   for (const t of completedRecent) {
-    const daysAgo = Math.floor((now - t.updated_at) / (24 * 60 * 60 * 1000));
+    const ts = t.completed_at ?? t.updated_at;
+    const daysAgo = Math.floor((now - ts) / (24 * 60 * 60 * 1000));
     const idx = 6 - Math.min(daysAgo, 6); // idx 6 = today
     spark[idx]++;
   }
