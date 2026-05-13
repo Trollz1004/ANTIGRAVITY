@@ -14,7 +14,6 @@ Risk surface:
   - Only allowed signal types are relayed; unknown types are dropped
 """
 
-import json
 import uuid
 from datetime import date, datetime, timezone
 from unittest.mock import AsyncMock, patch
@@ -23,7 +22,6 @@ import pytest
 
 from app.auth import create_access_token, hash_password
 from app.models import User
-
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -51,17 +49,17 @@ def _valid_token(user: User) -> str:
 
 def test_video_ws_invalid_token_rejected(client):
     call_id = str(uuid.uuid4())
-    with pytest.raises(Exception):
-        # TestClient raises on abnormal WS close
+    with pytest.raises(Exception):  # noqa: B017
+        # TestClient raises on abnormal WS close; exception type varies by version
         with client.websocket_connect(
             f"/api/v1/ws/video/{call_id}?token=bad.token.here"
         ) as ws:
-            msg = ws.receive_json()
+            ws.receive_json()
 
 
 def test_video_ws_missing_token_rejected(client):
     call_id = str(uuid.uuid4())
-    with pytest.raises(Exception):
+    with pytest.raises(Exception):  # noqa: B017
         with client.websocket_connect(f"/api/v1/ws/video/{call_id}") as ws:
             ws.receive_json()
 
@@ -72,7 +70,7 @@ def test_video_ws_missing_token_rejected(client):
 def test_video_ws_non_uuid_call_id_rejected(client):
     user = _make_user("video_badcallid@example.com")
     token = _valid_token(user)
-    with pytest.raises(Exception):
+    with pytest.raises(Exception):  # noqa: B017
         with client.websocket_connect(
             f"/api/v1/ws/video/not-a-uuid?token={token}"
         ) as ws:
@@ -164,7 +162,7 @@ def test_video_allowed_signal_types_are_exact():
     from app.routers.video import ALLOWED_SIGNAL_TYPES
 
     expected = {"ice_candidate", "sdp_offer", "sdp_answer", "hang_up"}
-    assert ALLOWED_SIGNAL_TYPES == expected, (
+    assert expected == ALLOWED_SIGNAL_TYPES, (
         f"ALLOWED_SIGNAL_TYPES changed. Expected {expected}, got {ALLOWED_SIGNAL_TYPES}. "
         "Any new signal type requires a recording-permission review."
     )
