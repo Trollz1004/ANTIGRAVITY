@@ -68,7 +68,19 @@ def _decision(
 def _match_preset_support_reply(message: str) -> SupportDecision | None:
     normalized = _normalize_text(message).lower()
 
-    if any(keyword in normalized for keyword in ("unsafe", "harass", "abuse", "minor", "scam", "fraud", "threat", "report user")):
+    if any(
+        keyword in normalized
+        for keyword in (
+            "unsafe",
+            "harass",
+            "abuse",
+            "minor",
+            "scam",
+            "fraud",
+            "threat",
+            "report user",
+        )
+    ):
         return _decision(
             reply=(
                 "I’m escalating this to a human review queue now. "
@@ -81,7 +93,17 @@ def _match_preset_support_reply(message: str) -> SupportDecision | None:
             message=message,
         )
 
-    if any(keyword in normalized for keyword in ("refund", "charged twice", "double charged", "cancel subscription", "billing dispute", "payment issue")):
+    if any(
+        keyword in normalized
+        for keyword in (
+            "refund",
+            "charged twice",
+            "double charged",
+            "cancel subscription",
+            "billing dispute",
+            "payment issue",
+        )
+    ):
         return _decision(
             reply=(
                 "I’m opening a billing ticket so this can be reviewed by a human. "
@@ -94,7 +116,18 @@ def _match_preset_support_reply(message: str) -> SupportDecision | None:
             message=message,
         )
 
-    if any(keyword in normalized for keyword in ("receipt", "bot-shield", "bot shield", "founding member", "subscription", "payment", "square")):
+    if any(
+        keyword in normalized
+        for keyword in (
+            "receipt",
+            "bot-shield",
+            "bot shield",
+            "founding member",
+            "subscription",
+            "payment",
+            "square",
+        )
+    ):
         return _decision(
             reply=(
                 "Square sends the checkout receipt directly to the email used during payment. "
@@ -107,7 +140,16 @@ def _match_preset_support_reply(message: str) -> SupportDecision | None:
             message=message,
         )
 
-    if any(keyword in normalized for keyword in ("delete account", "delete my account", "export my data", "privacy", "location tracking")):
+    if any(
+        keyword in normalized
+        for keyword in (
+            "delete account",
+            "delete my account",
+            "export my data",
+            "privacy",
+            "location tracking",
+        )
+    ):
         return _decision(
             reply=(
                 "You can manage data export, deletion requests, and location tracking from the Data & Privacy area in the app. "
@@ -120,7 +162,17 @@ def _match_preset_support_reply(message: str) -> SupportDecision | None:
             message=message,
         )
 
-    if any(keyword in normalized for keyword in ("can’t log in", "cant log in", "locked out", "password reset", "login issue", "sign in issue")):
+    if any(
+        keyword in normalized
+        for keyword in (
+            "can’t log in",
+            "cant log in",
+            "locked out",
+            "password reset",
+            "login issue",
+            "sign in issue",
+        )
+    ):
         return _decision(
             reply=(
                 "I’m escalating this to a human support ticket because account-access issues need review. "
@@ -133,7 +185,16 @@ def _match_preset_support_reply(message: str) -> SupportDecision | None:
             message=message,
         )
 
-    if any(keyword in normalized for keyword in ("verify", "liveness", "verified human", "verification", "face check")):
+    if any(
+        keyword in normalized
+        for keyword in (
+            "verify",
+            "liveness",
+            "verified human",
+            "verification",
+            "face check",
+        )
+    ):
         return _decision(
             reply=(
                 "Verified-human access usually requires the liveness check plus the Bot-Shield payment. "
@@ -146,7 +207,18 @@ def _match_preset_support_reply(message: str) -> SupportDecision | None:
             message=message,
         )
 
-    if any(keyword in normalized for keyword in ("bug", "not working", "error", "crash", "stuck", "message failed", "video not working")):
+    if any(
+        keyword in normalized
+        for keyword in (
+            "bug",
+            "not working",
+            "error",
+            "crash",
+            "stuck",
+            "message failed",
+            "video not working",
+        )
+    ):
         return _decision(
             reply=(
                 "I’m opening a technical support ticket so the issue can be reviewed with the exact app response. "
@@ -159,7 +231,10 @@ def _match_preset_support_reply(message: str) -> SupportDecision | None:
             message=message,
         )
 
-    if any(keyword in normalized for keyword in ("human", "agent", "person", "open a ticket", "support ticket")):
+    if any(
+        keyword in normalized
+        for keyword in ("human", "agent", "person", "open a ticket", "support ticket")
+    ):
         return _decision(
             reply="I’m opening a support ticket now so a human can review the conversation.",
             category="general",
@@ -199,7 +274,9 @@ async def _ask_ollama_support(
         return None
 
     try:
-        async with httpx.AsyncClient(base_url=base_url, timeout=settings.support_ollama_timeout_seconds) as client:
+        async with httpx.AsyncClient(
+            base_url=base_url, timeout=settings.support_ollama_timeout_seconds
+        ) as client:
             response = await client.post(
                 "/api/generate",
                 json={
@@ -221,12 +298,19 @@ async def _ask_ollama_support(
     if not reply:
         return None
 
-    category = _normalize_text(str(parsed.get("category") or "general")).lower().replace(" ", "_")
+    category = (
+        _normalize_text(str(parsed.get("category") or "general"))
+        .lower()
+        .replace(" ", "_")
+    )
     subject = _truncate(
-        _normalize_text(str(parsed.get("subject") or "")) or _build_subject(category, message),
+        _normalize_text(str(parsed.get("subject") or ""))
+        or _build_subject(category, message),
         MAX_SUBJECT_LENGTH,
     )
-    escalation_reason = _normalize_text(str(parsed.get("escalation_reason") or "")) or None
+    escalation_reason = (
+        _normalize_text(str(parsed.get("escalation_reason") or "")) or None
+    )
 
     return SupportDecision(
         reply=reply,
@@ -252,7 +336,9 @@ async def _ask_support_openclaw(
     prompt = _build_ollama_prompt(message, transcript)
 
     try:
-        async with httpx.AsyncClient(timeout=settings.support_openclaw_timeout_seconds) as client:
+        async with httpx.AsyncClient(
+            timeout=settings.support_openclaw_timeout_seconds
+        ) as client:
             response = await client.post(
                 f"{base_url}/chat",
                 json={
@@ -275,12 +361,19 @@ async def _ask_support_openclaw(
     if not reply:
         return None
 
-    category = _normalize_text(str(parsed.get("category") or "general")).lower().replace(" ", "_")
+    category = (
+        _normalize_text(str(parsed.get("category") or "general"))
+        .lower()
+        .replace(" ", "_")
+    )
     subject = _truncate(
-        _normalize_text(str(parsed.get("subject") or "")) or _build_subject(category, message),
+        _normalize_text(str(parsed.get("subject") or ""))
+        or _build_subject(category, message),
         MAX_SUBJECT_LENGTH,
     )
-    escalation_reason = _normalize_text(str(parsed.get("escalation_reason") or "")) or None
+    escalation_reason = (
+        _normalize_text(str(parsed.get("escalation_reason") or "")) or None
+    )
 
     return SupportDecision(
         reply=reply,
@@ -342,7 +435,9 @@ async def notify_support_ticket(
     token = str(settings.telegram_bot_token or "").strip()
     chat_id = str(settings.telegram_chat_id or "").strip()
     if not token or not chat_id:
-        logger.info("Skipping support ticket Telegram alert; Telegram is not configured.")
+        logger.info(
+            "Skipping support ticket Telegram alert; Telegram is not configured."
+        )
         return False
 
     message = "\n".join(

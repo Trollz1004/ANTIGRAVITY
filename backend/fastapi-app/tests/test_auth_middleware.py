@@ -5,6 +5,7 @@ Covers:
   - Refresh token flow
   - Token revocation via user inactive status
 """
+
 import os
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -17,7 +18,9 @@ from jose import jwt
 from unittest.mock import AsyncMock, patch
 
 # Set JWT secret before importing app modules
-os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-security"
+os.environ["JWT_SECRET"] = (
+    "test-secret-that-is-at-least-32-characters-long-for-security"
+)
 
 from app.auth import (
     ALGORITHM,
@@ -71,7 +74,9 @@ class TestGetCurrentUser:
         mock_db.scalar.assert_called_once()
 
     async def test_invalid_token_raises_401(self, mock_db):
-        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials="invalid.token")
+        creds = HTTPAuthorizationCredentials(
+            scheme="Bearer", credentials="invalid.token"
+        )
         with pytest.raises(HTTPException) as exc:
             await get_current_user(creds, mock_db)
         assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED
@@ -102,8 +107,10 @@ class TestGetCurrentUser:
 
         # Mock sync_subscription_state to flip the flag
         with patch("app.auth.sync_subscription_state") as mock_sync:
+
             def side_effect(user):
                 user.subscription_active = True
+
             mock_sync.side_effect = side_effect
             mock_db.scalar.return_value = active_user
 
@@ -117,7 +124,9 @@ class TestGetCurrentUser:
             "sub": str(active_user.id),
             "exp": datetime.now(timezone.utc) - timedelta(minutes=1),
         }
-        expired_token = jwt.encode(expired_payload, os.environ["JWT_SECRET"], algorithm=ALGORITHM)
+        expired_token = jwt.encode(
+            expired_payload, os.environ["JWT_SECRET"], algorithm=ALGORITHM
+        )
         creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=expired_token)
 
         with pytest.raises(HTTPException) as exc:
@@ -130,7 +139,9 @@ class TestGetCurrentUser:
         # Tamper with the token signature
         parts = token.split(".")
         tampered_token = f"{parts[0]}.{parts[1]}.invalidsignature"
-        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=tampered_token)
+        creds = HTTPAuthorizationCredentials(
+            scheme="Bearer", credentials=tampered_token
+        )
 
         with pytest.raises(HTTPException) as exc:
             await get_current_user(creds, mock_db)
@@ -150,7 +161,9 @@ class TestGetCurrentUser:
 
     async def test_malformed_token_raises_401(self, mock_db):
         """Test that a token with wrong number of parts is rejected."""
-        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials="part1.part2")  # Only 2 parts
+        creds = HTTPAuthorizationCredentials(
+            scheme="Bearer", credentials="part1.part2"
+        )  # Only 2 parts
         with pytest.raises(HTTPException) as exc:
             await get_current_user(creds, mock_db)
         assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED
@@ -168,8 +181,13 @@ class TestGetCurrentUser:
     async def test_token_wrong_algorithm_raises_401(self, mock_db):
         """Test that a token using wrong algorithm is rejected."""
         user_id = str(uuid.uuid4())
-        payload = {"sub": user_id, "exp": datetime.now(timezone.utc) + timedelta(minutes=30)}
-        token = jwt.encode(payload, os.environ["JWT_SECRET"], algorithm="HS384")  # Wrong algo
+        payload = {
+            "sub": user_id,
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=30),
+        }
+        token = jwt.encode(
+            payload, os.environ["JWT_SECRET"], algorithm="HS384"
+        )  # Wrong algo
         creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
         with pytest.raises(HTTPException) as exc:
             await get_current_user(creds, mock_db)
@@ -187,8 +205,10 @@ class TestRefreshFlow:
         refresh_token_str = create_refresh_token(user_id)
 
         # Mock decode_token and DB
-        with patch("app.routers.auth.decode_token") as mock_decode, \
-             patch("app.routers.auth.get_db") as mock_get_db:
+        with (
+            patch("app.routers.auth.decode_token") as mock_decode,
+            patch("app.routers.auth.get_db") as mock_get_db,
+        ):
             mock_decode.return_value = {"sub": user_id, "type": "refresh"}
             mock_db = AsyncMock()
             mock_user = User(id=uuid.UUID(user_id), is_active=True)
@@ -230,7 +250,9 @@ class TestRefreshFlow:
             "type": "refresh",
             "exp": datetime.now(timezone.utc) - timedelta(hours=1),
         }
-        expired_token = jwt.encode(expired_payload, os.environ["JWT_SECRET"], algorithm=ALGORITHM)
+        expired_token = jwt.encode(
+            expired_payload, os.environ["JWT_SECRET"], algorithm=ALGORITHM
+        )
 
         response = client.post(
             "/api/v1/auth/refresh",
@@ -247,8 +269,10 @@ class TestRefreshFlow:
         user_id = str(uuid.uuid4())
         refresh_token_str = create_refresh_token(user_id)
 
-        with patch("app.routers.auth.decode_token") as mock_decode, \
-             patch("app.routers.auth.get_db") as mock_get_db:
+        with (
+            patch("app.routers.auth.decode_token") as mock_decode,
+            patch("app.routers.auth.get_db") as mock_get_db,
+        ):
             mock_decode.return_value = {"sub": user_id, "type": "refresh"}
             mock_db = AsyncMock()
             mock_db.scalar.return_value = None  # User not found
@@ -261,6 +285,7 @@ class TestRefreshFlow:
             )
             assert response.status_code == 401
             assert "User not found" in response.json()["detail"]
+
 
 # Tests for auth utility functions
 class TestAuthUtils:
@@ -301,7 +326,10 @@ class TestAuthUtils:
     async def test_get_current_user_invalid_uuid(self, mock_db):
         """Test that get_current_user raises 401 for invalid UUID in token."""
         # Create a token with an invalid UUID in sub
-        payload = {"sub": "not-a-uuid", "exp": datetime.now(timezone.utc) + timedelta(minutes=30)}
+        payload = {
+            "sub": "not-a-uuid",
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=30),
+        }
         token = jwt.encode(payload, os.environ["JWT_SECRET"], algorithm=ALGORITHM)
         creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
         with pytest.raises(HTTPException) as exc:
@@ -313,7 +341,10 @@ class TestAuthUtils:
     async def test_verify_google_token_valid(self):
         """Test verify_google_token returns payload for valid Google token."""
         with patch("app.auth.id_token.verify_oauth2_token") as mock_verify:
-            mock_verify.return_value = {"email": "test@example.com", "sub": "google-123"}
+            mock_verify.return_value = {
+                "email": "test@example.com",
+                "sub": "google-123",
+            }
             result = verify_google_token("valid-google-token")
             assert result["email"] == "test@example.com"
 

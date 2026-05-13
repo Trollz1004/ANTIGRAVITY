@@ -22,7 +22,9 @@ from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 # Set environment variables IMMEDIATELY
-os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long-for-security"
+os.environ["JWT_SECRET"] = (
+    "test-secret-that-is-at-least-32-characters-long-for-security"
+)
 os.environ["APP_ENV"] = "test"
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
 os.environ["SQUARE_WEBHOOK_VERIFY_SIGNATURE"] = "false"
@@ -44,16 +46,17 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from app.config import get_settings
+
 get_settings.cache_clear()
 
 from app import database
+
 # Force the engine to use SQLite to prevent PG connection attempts during module-level init or lifespan
 database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
 
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
 from app.rate_limit import reset_rate_limits  # noqa: E402
-
 
 # ── Mock User Factory ──
 

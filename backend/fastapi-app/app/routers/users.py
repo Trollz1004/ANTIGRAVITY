@@ -41,7 +41,11 @@ def _enforce_registration_rate_limit(client_ip: str) -> None:
         bucket.append(now)
 
 
-@router.post("/register", response_model=UserRegisterResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register",
+    response_model=UserRegisterResponse,
+    status_code=status.HTTP_201_CREATED,
+)
 async def register_user(
     payload: UserRegisterRequest,
     request: Request,
@@ -50,9 +54,13 @@ async def register_user(
     client_ip = request.client.host if request.client else "unknown"
     _enforce_registration_rate_limit(client_ip)
 
-    existing_user = await db.scalar(select(User).where(User.email == payload.email.lower()))
+    existing_user = await db.scalar(
+        select(User).where(User.email == payload.email.lower())
+    )
     if existing_user:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email is already registered.")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail="Email is already registered."
+        )
 
     user = User(
         id=uuid.uuid4(),

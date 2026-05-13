@@ -38,6 +38,7 @@ def _seed(*items, db_session_factory) -> None:
 def _override_user(user: User):
     async def _dep():
         return user
+
     return _dep
 
 
@@ -155,7 +156,9 @@ def test_send_message_returns_201_and_persists(client, db_session_factory):
 
     app.dependency_overrides[get_current_user] = _override_user(user_a)
     try:
-        resp = client.post(f"/api/v1/messages/{match.id}", json={"content": "Hey there"})
+        resp = client.post(
+            f"/api/v1/messages/{match.id}", json={"content": "Hey there"}
+        )
         assert resp.status_code == 201
         data = resp.json()
         assert data["content"] == "Hey there"

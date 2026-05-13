@@ -6,8 +6,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-
 # ── Auth ──
+
 
 class AuthRegisterRequest(BaseModel):
     email: EmailStr
@@ -43,7 +43,6 @@ class GoogleLoginRequest(BaseModel):
     id_token: str
 
 
-
 class UserMeResponse(BaseModel):
     user_id: uuid.UUID
     email: str
@@ -60,6 +59,7 @@ class UserMeResponse(BaseModel):
 
 
 # ── Profile ──
+
 
 class ProfileUpdateRequest(BaseModel):
     bio: str | None = Field(None, max_length=500)
@@ -86,6 +86,7 @@ class ProfileResponse(BaseModel):
 
 
 # ── Swipe / Match ──
+
 
 class SwipeRequest(BaseModel):
     target_id: uuid.UUID
@@ -157,6 +158,7 @@ class UserReportResponse(BaseModel):
 
 # ── Messages ──
 
+
 class MessageSendRequest(BaseModel):
     content: str = Field(min_length=1, max_length=2000)
 
@@ -171,6 +173,7 @@ class MessageResponse(BaseModel):
 
 
 # ── Webhooks ──
+
 
 class WebhookAckResponse(BaseModel):
     received: bool = True
@@ -191,6 +194,7 @@ class WaitlistSignupResponse(BaseModel):
 
 # ── Health ──
 
+
 class HealthResponse(BaseModel):
     status: str
     db_connected: bool
@@ -204,6 +208,7 @@ class HealthResponse(BaseModel):
 
 
 # ── Boards ──
+
 
 class PostCreateRequest(BaseModel):
     title: str = Field(min_length=1, max_length=200)
@@ -242,6 +247,7 @@ class PostReportRequest(BaseModel):
 
 # ── Events ──
 
+
 class EventCreateRequest(BaseModel):
     title: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1, max_length=5000)
@@ -278,8 +284,16 @@ class EventRSVPResponse(BaseModel):
 # ── Volunteering ──
 
 VOLUNTEER_CATEGORIES = [
-    "general", "children", "elderly", "environment", "animals",
-    "food_bank", "education", "healthcare", "disaster_relief", "community",
+    "general",
+    "children",
+    "elderly",
+    "environment",
+    "animals",
+    "food_bank",
+    "education",
+    "healthcare",
+    "disaster_relief",
+    "community",
 ]
 
 
@@ -313,6 +327,7 @@ class VolunteerResponse(BaseModel):
 
 class VolunteerImpactResponse(BaseModel):
     """Aggregate community impact — shown on the volunteering hub dashboard."""
+
     total_opportunities: int
     total_signups: int
     total_hours_committed: float
@@ -336,6 +351,7 @@ class MySignupResponse(BaseModel):
 
 
 # ── Privacy ──
+
 
 class PrivacyProfileSummary(BaseModel):
     bio: str | None
@@ -378,6 +394,7 @@ class PrivacyActionResponse(BaseModel):
 
 # ── Video Calls ──
 
+
 class VideoCallResponse(BaseModel):
     id: uuid.UUID
     match_id: uuid.UUID
@@ -391,6 +408,7 @@ class VideoCallResponse(BaseModel):
 
 # ── Double Dates ──
 
+
 class DoubleDateSquadRecommendation(BaseModel):
     match_id: uuid.UUID
     display_name: str
@@ -398,6 +416,7 @@ class DoubleDateSquadRecommendation(BaseModel):
     mission_score: float
     intent_badge: str | None
     model_config = ConfigDict(from_attributes=True)
+
 
 class DoubleDateParticipantResponse(BaseModel):
     user_id: uuid.UUID
@@ -429,6 +448,7 @@ class DoubleDateProposeRequest(BaseModel):
 
 
 # ── Support ──
+
 
 class SupportChatMessage(BaseModel):
     role: Literal["user", "assistant"]
@@ -466,6 +486,7 @@ class SupportChatResponse(BaseModel):
 
 # ── User Registration ──
 
+
 class UserRegisterRequest(BaseModel):
     email: EmailStr
     display_name: str = Field(min_length=1, max_length=100)
@@ -477,6 +498,7 @@ class UserRegisterResponse(BaseModel):
 
 
 # ── LoveBot ──
+
 
 class LoveBotCompatibilityRequest(BaseModel):
     name1: str = Field(min_length=1, max_length=100)
@@ -508,6 +530,7 @@ class LoveBotGiftResponse(BaseModel):
 
 # ── User Registration ──
 
+
 class UserRegisterRequest(BaseModel):
     email: EmailStr
     display_name: str = Field(min_length=1, max_length=100)
@@ -516,4 +539,3 @@ class UserRegisterRequest(BaseModel):
 class UserRegisterResponse(BaseModel):
     user_id: uuid.UUID
     session_token: str
-

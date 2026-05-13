@@ -107,20 +107,32 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
 @router.get("/health/allocations")
 async def check_allocations(db: AsyncSession = Depends(get_db)):
     from sqlalchemy import text
+
     try:
-        result = await db.execute(text("SELECT square_payment_id, gross_amount_cents, charitable_amount_cents, operating_amount_cents, status FROM revenue_allocations ORDER BY created_at DESC LIMIT 5"))
+        result = await db.execute(
+            text(
+                "SELECT square_payment_id, gross_amount_cents, charitable_amount_cents, operating_amount_cents, status FROM revenue_allocations ORDER BY created_at DESC LIMIT 5"
+            )
+        )
         rows = result.mappings().all()
         return {"allocations": [dict(r) for r in rows]}
     except Exception as e:
         return {"error": str(e)}
 
+
 # Temporarily removed wipe-users endpoint
+
 
 @router.get("/health/webhooks")
 async def check_webhooks(db: AsyncSession = Depends(get_db)):
     from sqlalchemy import text
+
     try:
-        result = await db.execute(text("SELECT event_source_id, event_type, created_at, processed FROM webhook_events ORDER BY created_at DESC LIMIT 10"))
+        result = await db.execute(
+            text(
+                "SELECT event_source_id, event_type, created_at, processed FROM webhook_events ORDER BY created_at DESC LIMIT 10"
+            )
+        )
         rows = result.mappings().all()
         return {"webhooks": [dict(r) for r in rows]}
     except Exception as e:

@@ -55,7 +55,9 @@ def test_support_chat_uses_preset_without_escalation(client, db_session_factory)
         app.dependency_overrides.pop(get_current_user, None)
 
 
-def test_support_chat_escalates_and_operator_can_see_ticket(client, db_session_factory, monkeypatch):
+def test_support_chat_escalates_and_operator_can_see_ticket(
+    client, db_session_factory, monkeypatch
+):
     from app.routers import support as support_router
 
     operator = _make_user(email="operator@example.com", display_name="Operator")
