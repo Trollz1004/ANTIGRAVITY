@@ -19,6 +19,10 @@ export const ListTasksInput = z.object({
     .optional(),
   parent_task_id: z.string().optional(),
   assigned_agent_id: z.string().optional(),
+  /** Filter tasks whose description contains this substring (case-insensitive) */
+  tag: z.string().optional(),
+  /** Only return tasks created or updated at or after this Unix ms timestamp */
+  since_ms: z.number().int().min(0).optional(),
   limit: z.number().int().min(1).max(500).optional().default(50),
 });
 
@@ -46,6 +50,7 @@ export interface TaskRow {
   result: string | null;
   created_at: number;
   updated_at: number;
+  completed_at: number | null;
 }
 
 // ── Implementations ───────────────────────────────────────────────────────────
@@ -102,6 +107,17 @@ export function listTasks(
     conditions.push("assigned_agent_id = ?");
     params.push(parsed.assigned_agent_id);
   }
+  if (parsed.tag !== undefined) {
+    conditions.push(
+      "(description LIKE ? OR title LIKE ?)"
+    );
+    const like = `%${parsed.tag}%`;
+    params.push(like, like);
+  }
+  if (parsed.since_ms !== undefined) {
+    conditions.push("(created_at >= ? OR updated_at >= ?)");
+    params.push(parsed.since_ms, parsed.since_ms);
+  }
 
   const where =
     conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
@@ -154,8 +170,15 @@ export function updateTask(
     return existing;
   }
 
+  const now = Date.now();
   fields.push("updated_at = ?");
-  params.push(Date.now());
+  params.push(now);
+
+  // Set completed_at exactly once when transitioning to 'done'
+  if (parsed.status === "done" && existing.completed_at === null) {
+    fields.push("completed_at = ?");
+    params.push(now);
+  }
   params.push(parsed.id);
 
   db.prepare(

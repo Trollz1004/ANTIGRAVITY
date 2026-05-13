@@ -25,6 +25,7 @@ describe("tasks", () => {
     expect(task.parent_task_id).toBeNull();
     expect(task.assigned_agent_id).toBeNull();
     expect(task.result).toBeNull();
+    expect(task.completed_at).toBeNull();
   });
 
   it("creates a task with overrides", () => {
@@ -133,5 +134,122 @@ describe("tasks", () => {
     const result = updateTask(db, { id: task.id });
     expect(result.id).toBe(task.id);
     expect(result.title).toBe("No change");
+  });
+
+  // ── New: completed_at ─────────────────────────────────────────────────────
+
+  it("sets completed_at when status transitions to done", () => {
+    const { db, cleanup } = makeTmpDb();
+    cleanups.push(cleanup);
+
+    const before = Date.now();
+    const task = createTask(db, { title: "Will complete" });
+    expect(task.completed_at).toBeNull();
+
+    const updated = updateTask(db, { id: task.id, status: "done" });
+    const after = Date.now();
+
+    expect(updated.completed_at).not.toBeNull();
+    expect(updated.completed_at!).toBeGreaterThanOrEqual(before);
+    expect(updated.completed_at!).toBeLessThanOrEqual(after);
+  });
+
+  it("does not overwrite completed_at on subsequent updates to done", () => {
+    const { db, cleanup } = makeTmpDb();
+    cleanups.push(cleanup);
+
+    const task = createTask(db, { title: "Multi-update" });
+    // First transition to done
+    const first = updateTask(db, { id: task.id, status: "done" });
+    const firstCompletedAt = first.completed_at;
+    expect(firstCompletedAt).not.toBeNull();
+
+    // Second update that still says done (e.g. adding result) — completed_at stays
+    const second = updateTask(db, { id: task.id, result: "late result" });
+    expect(second.completed_at).toBe(firstCompletedAt);
+  });
+
+  it("does not set completed_at for non-done status transitions", () => {
+    const { db, cleanup } = makeTmpDb();
+    cleanups.push(cleanup);
+
+    const task = createTask(db, { title: "In flight" });
+    const updated = updateTask(db, { id: task.id, status: "in_progress" });
+    expect(updated.completed_at).toBeNull();
+  });
+
+  // ── New: tag filter ───────────────────────────────────────────────────────
+
+  it("filters tasks by tag substring in description", () => {
+    const { db, cleanup } = makeTmpDb();
+    cleanups.push(cleanup);
+
+    const t1 = createTask(db, {
+      title: "Alpha",
+      description: "income-engine: post to reddit",
+    });
+    const t2 = createTask(db, {
+      title: "Beta",
+      description: "unrelated work",
+    });
+    createTask(db, { title: "Gamma" }); // no description
+
+    const results = listTasks(db, { tag: "income-engine" });
+    expect(results).toHaveLength(1);
+    expect(results[0].id).toBe(t1.id);
+  });
+
+  it("filters tasks by tag substring in title", () => {
+    const { db, cleanup } = makeTmpDb();
+    cleanups.push(cleanup);
+
+    const t1 = createTask(db, { title: "income-engine seeder run" });
+    createTask(db, { title: "unrelated task" });
+
+    const results = listTasks(db, { tag: "income-engine" });
+    expect(results).toHaveLength(1);
+    expect(results[0].id).toBe(t1.id);
+  });
+
+  it("tag filter returns empty array when no match", () => {
+    const { db, cleanup } = makeTmpDb();
+    cleanups.push(cleanup);
+
+    createTask(db, { title: "something else" });
+    const results = listTasks(db, { tag: "income-engine" });
+    expect(results).toHaveLength(0);
+  });
+
+  // ── New: since_ms filter ──────────────────────────────────────────────────
+
+  it("filters tasks by since_ms", () => {
+    const { db, cleanup } = makeTmpDb();
+    cleanups.push(cleanup);
+
+    const t1 = createTask(db, { title: "Old" });
+    // Manually backdate t1 by modifying created_at and updated_at
+    const cutoff = Date.now();
+    db.prepare(
+      "UPDATE tasks SET created_at = ?, updated_at = ? WHERE id = ?"
+    ).run(cutoff - 10000, cutoff - 10000, t1.id);
+
+    const t2 = createTask(db, { title: "New" });
+
+    const results = listTasks(db, { since_ms: cutoff });
+    const ids = results.map((r) => r.id);
+    expect(ids).toContain(t2.id);
+    expect(ids).not.toContain(t1.id);
+  });
+
+  it("since_ms=0 returns all tasks (same as no filter)", () => {
+    const { db, cleanup } = makeTmpDb();
+    cleanups.push(cleanup);
+
+    createTask(db, { title: "A" });
+    createTask(db, { title: "B" });
+
+    const all = listTasks(db, {});
+    const since0 = listTasks(db, { since_ms: 0 });
+    expect(since0).toHaveLength(all.length);
   });
 });
