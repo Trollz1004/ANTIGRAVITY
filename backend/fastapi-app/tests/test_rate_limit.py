@@ -3,7 +3,6 @@
 import os
 from ipaddress import ip_network
 from types import SimpleNamespace
-from unittest.mock import MagicMock
 
 import pytest
 from fastapi import HTTPException

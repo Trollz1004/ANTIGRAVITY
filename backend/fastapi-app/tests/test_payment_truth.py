@@ -15,8 +15,6 @@ Covers:
 import time
 import uuid
 
-import pytest
-
 from app.payment_truth import (
     BOT_SHIELD_CENTS,
     FOUNDING_MEMBER_CENTS,

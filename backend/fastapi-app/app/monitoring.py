@@ -16,7 +16,7 @@ except ImportError:
     sentry_sdk = None
 
 try:
-    from prometheus_client import Counter, Histogram, Gauge, start_http_server
+    from prometheus_client import Counter, Gauge, Histogram, start_http_server
 
     PROMETHEUS_AVAILABLE = True
 except ImportError:

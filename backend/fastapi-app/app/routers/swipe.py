@@ -3,17 +3,17 @@
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import and_, or_, select, func
+from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
 from app.database import get_db
+from app.models import Match, Profile, Swipe, User
 from app.moderation import (
     blocked_by_user_subquery,
     blocked_user_subquery,
     has_block_relationship,
 )
-from app.models import Match, Profile, Swipe, User
 from app.schemas import (
     DiscoverProfileResponse,
     MatchResponse,

@@ -1,12 +1,14 @@
+from unittest.mock import patch
+
 import pytest
 import pytest_asyncio
-from unittest.mock import patch
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from app.main import app
-from app.models import User, Base
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+
 from app.database import get_db
+from app.main import app
+from app.models import Base, User
 
 DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 

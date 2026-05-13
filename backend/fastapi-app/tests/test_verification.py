@@ -12,7 +12,6 @@ import uuid
 from datetime import datetime, timedelta, timezone
 from unittest.mock import AsyncMock, MagicMock
 
-import pytest
 from sqlalchemy.dialects import postgresql
 
 os.environ["JWT_SECRET"] = (
@@ -150,6 +149,7 @@ class TestSquarePaymentLinkGeneration:
     def test_no_stripe_references_in_verify(self):
         """verify.py must not contain any Stripe imports or references."""
         import inspect
+
         from app.routers import verify
 
         source = inspect.getsource(verify)
