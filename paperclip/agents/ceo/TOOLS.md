@@ -17,15 +17,17 @@
 
 ## Direct Reports
 
-| Role | Agent ID | Model |
-|------|----------|-------|
-| CFO | cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 | glm-5.1:cloud |
-| CSO | 5d844d41-df24-4a2c-a98f-26bd94be2018 | glm-5.1:cloud |
-| CTO | b02a21c7-737e-4177-91ac-6d8e57805801 | kimi-k2.6:cloud |
-| CMO | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | dateapp-marketingtools |
-| UX Designer | bd6d6722-9f3e-46ba-8651-ec9a219042ee | kimi-k2.6:cloud |
-| Mission Guardian (Claude) | 2229682b-cede-4462-b38b-25a910af022e | kimi-k2.6:cloud |
-| Mission Guardian (Codex) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | qwen3-coder:480b-cloud |
+| Role | Agent ID | Adapter / Model |
+|------|----------|-----------------|
+| CFO | cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 | `hermes_local` + `glm-5.1:cloud` |
+| CSO | 5d844d41-df24-4a2c-a98f-26bd94be2018 | `hermes_local` + `glm-5.1:cloud` |
+| CTO | b02a21c7-737e-4177-91ac-6d8e57805801 | `opencode_local` + `qwen3-coder:480b-cloud` |
+| CMO | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | `opencode_local` + `dateapp-marketingtools` |
+| UX Designer | bd6d6722-9f3e-46ba-8651-ec9a219042ee | `opencode_local` + `dateapp` |
+| Mission Guardian (Claude) | 2229682b-cede-4462-b38b-25a910af022e | `claude_local` |
+| Mission Guardian (Codex) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | `codex_local` |
+
+> Canonical source: `paperclip/agents/README.md` roster table. If this drifts from the README, the README wins.
 
 ## Failover Adapters
 
@@ -40,12 +42,12 @@ When Hermes is down or you need file-system access, use these Paperclip adapters
 
 ## Platform Context
 
-- Frontend: youandinotai.com (Cloudflare Pages, React 19)
-- Backend: GCP Cloud Run (ai-collab4kids)
+- Frontend: youandinotai.com (Cloudflare Pages, React 19) — LIVE since 2026-04-04
+- Backend: GCP Cloud Run (ai-collab4kids) — LIVE
 - Payments: Square only (joshlcoleman@gmail.com, location LY5GN09F5AN83)
 - Paperclip: localhost:3100 / paperclip-hq.youandinotai.com
 - Ollama: localhost:11434
-- Repo: C:\ANTIGRAVITY, branch: main
+- Repo: `Trollz1004/ANTIGRAVITY` (working tree `C:\ANTIGRAVITY`). Main branch is `main`; feature work lands on `claude/<short-description>` branches and is merged via PR — never push direct to `main` without Josh's explicit approval.
 
 ## Runtime Env (injected by Paperclip)
 
@@ -54,12 +56,14 @@ When Hermes is down or you need file-system access, use these Paperclip adapters
 
 ## Model
 
-Adapter: `hermes_local` + `ollama/kimi-k2.6:cloud` (primary) or `ollama/glm-5.1:cloud` (198K context, tools, thinking, persistent memory, 30+ tools, Ollama auto-detect). No Anthropic API tokens consumed.
-Fallback chain (per `briefings/HERMES-CEO-READY-2026-04-19.md`):
-1. `korpohermes-prime:latest` (OpenClaw → ollama.com)
+Adapter: `hermes_local` + `ollama/glm-5.1:cloud` (primary — 198K context, tools, thinking, persistent memory, 30+ tools, Ollama auto-detect). No Anthropic API tokens consumed.
+
+Fallback chain (matches `paperclip/agents/README.md` roster; supersedes the legacy chain in `briefings/HERMES-CEO-READY-2026-04-19.md` which still listed Anthropic + Gemini as a tail step):
+
+1. `korpohermes-prime:latest` (OpenClaw → ollama.com) — Hermes-native primary brain
 2. `kimi-k2.6:cloud` (cloud reasoning/tools via Ollama)
 3. `glm-5.1:cloud` (198K context via Ollama)
-4. `ollama-launch` (qwen2.5:7b local)
-5. Paperclip agent pool (hosted)
+4. `ollama-launch` (qwen2.5:7b local — last-resort offline)
+5. Paperclip hosted agent pool
 
-> **TOKEN DOCTRINE:** Claude reserved for Cowork/Claude Code orchestration only — never called inside PaperClip. Rerouted 2026-05-07.
+> **TOKEN DOCTRINE (locked 2026-05-07):** Claude / Anthropic API is reserved for Cowork / Claude Code orchestration only — never called inside PaperClip. Any fallback step that would consume Anthropic tokens (e.g. the legacy "Anthropic + Gemini" tail in HERMES-CEO-READY-2026-04-19.md) is deprecated and must not be re-introduced without Josh's explicit order.
