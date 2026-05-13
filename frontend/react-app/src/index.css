@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;900&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --app-bg: #f4efe6;
@@ -32,7 +32,11 @@ body {
   background-image:
     radial-gradient(circle at 18% 20%, rgba(255, 79, 0, 0.12), transparent 22%),
     radial-gradient(circle at 82% 12%, rgba(255, 79, 0, 0.08), transparent 16%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(244, 239, 230, 0.98));
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.72),
+      rgba(244, 239, 230, 0.98)
+    );
 }
 
 ::selection {
@@ -105,38 +109,73 @@ section[id] {
 }
 
 @keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.45; }
-  50% { opacity: 0.9; }
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
+  }
 }
 
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.96); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .animate-shimmer {
@@ -167,14 +206,30 @@ section[id] {
   animation: slide-up 0.35s ease-out both;
 }
 
-.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
-.stagger-children > *:nth-child(2) { animation-delay: 40ms; }
-.stagger-children > *:nth-child(3) { animation-delay: 80ms; }
-.stagger-children > *:nth-child(4) { animation-delay: 120ms; }
-.stagger-children > *:nth-child(5) { animation-delay: 160ms; }
-.stagger-children > *:nth-child(6) { animation-delay: 200ms; }
-.stagger-children > *:nth-child(7) { animation-delay: 240ms; }
-.stagger-children > *:nth-child(8) { animation-delay: 280ms; }
+.stagger-children > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.stagger-children > *:nth-child(2) {
+  animation-delay: 40ms;
+}
+.stagger-children > *:nth-child(3) {
+  animation-delay: 80ms;
+}
+.stagger-children > *:nth-child(4) {
+  animation-delay: 120ms;
+}
+.stagger-children > *:nth-child(5) {
+  animation-delay: 160ms;
+}
+.stagger-children > *:nth-child(6) {
+  animation-delay: 200ms;
+}
+.stagger-children > *:nth-child(7) {
+  animation-delay: 240ms;
+}
+.stagger-children > *:nth-child(8) {
+  animation-delay: 280ms;
+}
 
 .input-glow:focus {
   border-color: var(--app-accent);
@@ -222,7 +277,11 @@ section[id] {
     radial-gradient(circle at 100% 0%, rgba(255, 79, 0, 0.05), transparent 16%),
     radial-gradient(#111111 0.55px, transparent 0.55px),
     linear-gradient(180deg, #f8f3eb 0%, #f0e7da 100%);
-  background-size: auto, auto, 18px 18px, auto;
+  background-size:
+    auto,
+    auto,
+    18px 18px,
+    auto;
 }
 
 .discover-mesh {
@@ -246,7 +305,12 @@ section[id] {
 }
 
 .text-shimmer {
-  background: linear-gradient(90deg, var(--app-accent), #111, var(--app-accent));
+  background: linear-gradient(
+    90deg,
+    var(--app-accent),
+    #111,
+    var(--app-accent)
+  );
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;
@@ -312,7 +376,10 @@ section[id] {
   border-radius: 1.25rem;
   padding: 0.9rem 1.05rem;
   outline: none;
-  transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
+  transition:
+    box-shadow 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
 }
 
 .app-textarea {
@@ -336,7 +403,11 @@ section[id] {
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, color 160ms ease;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease,
+    color 160ms ease;
 }
 
 .app-button-accent {

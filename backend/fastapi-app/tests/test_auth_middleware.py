@@ -32,6 +32,7 @@ from app.auth import (
     verify_google_token,
     verify_password,
 )
+from app.database import get_db
 from app.models import User
 
 
@@ -201,30 +202,32 @@ class TestRefreshFlow:
 
         from app.main import app
 
-        client = TestClient(app)
         user_id = str(uuid.uuid4())
         refresh_token_str = create_refresh_token(user_id)
 
-        # Mock decode_token and DB
-        with (
-            patch("app.routers.auth.decode_token") as mock_decode,
-            patch("app.routers.auth.get_db") as mock_get_db,
-        ):
-            mock_decode.return_value = {"sub": user_id, "type": "refresh"}
-            mock_db = AsyncMock()
-            mock_user = User(id=uuid.UUID(user_id), is_active=True)
-            mock_db.scalar.return_value = mock_user
-            mock_get_db.return_value.__aenter__ = AsyncMock(return_value=mock_db)
-            mock_get_db.return_value.__aexit__ = AsyncMock(return_value=False)
+        mock_db = AsyncMock()
+        mock_user = User(id=uuid.UUID(user_id), is_active=True)
+        mock_db.scalar.return_value = mock_user
 
-            response = client.post(
-                "/api/v1/auth/refresh",
-                json={"refresh_token": refresh_token_str},
-            )
-            assert response.status_code == 200
-            data = response.json()
-            assert "access_token" in data
-            assert "refresh_token" in data
+        async def override_get_db():
+            yield mock_db
+
+        app.dependency_overrides[get_db] = override_get_db
+        try:
+            with patch("app.routers.auth.decode_token") as mock_decode:
+                mock_decode.return_value = {"sub": user_id, "type": "refresh"}
+                client = TestClient(app)
+                response = client.post(
+                    "/api/v1/auth/refresh",
+                    json={"refresh_token": refresh_token_str},
+                )
+        finally:
+            app.dependency_overrides.pop(get_db, None)
+
+        assert response.status_code == 200
+        data = response.json()
+        assert "access_token" in data
+        assert "refresh_token" in data
 
     async def test_refresh_token_non_refresh_type_raises_401(self):
         from fastapi.testclient import TestClient
@@ -269,26 +272,29 @@ class TestRefreshFlow:
 
         from app.main import app
 
-        client = TestClient(app)
         user_id = str(uuid.uuid4())
         refresh_token_str = create_refresh_token(user_id)
 
-        with (
-            patch("app.routers.auth.decode_token") as mock_decode,
-            patch("app.routers.auth.get_db") as mock_get_db,
-        ):
-            mock_decode.return_value = {"sub": user_id, "type": "refresh"}
-            mock_db = AsyncMock()
-            mock_db.scalar.return_value = None  # User not found
-            mock_get_db.return_value.__aenter__ = AsyncMock(return_value=mock_db)
-            mock_get_db.return_value.__aexit__ = AsyncMock(return_value=False)
+        mock_db = AsyncMock()
+        mock_db.scalar.return_value = None  # User not found
 
-            response = client.post(
-                "/api/v1/auth/refresh",
-                json={"refresh_token": refresh_token_str},
-            )
-            assert response.status_code == 401
-            assert "User not found" in response.json()["detail"]
+        async def override_get_db():
+            yield mock_db
+
+        app.dependency_overrides[get_db] = override_get_db
+        try:
+            with patch("app.routers.auth.decode_token") as mock_decode:
+                mock_decode.return_value = {"sub": user_id, "type": "refresh"}
+                client = TestClient(app)
+                response = client.post(
+                    "/api/v1/auth/refresh",
+                    json={"refresh_token": refresh_token_str},
+                )
+        finally:
+            app.dependency_overrides.pop(get_db, None)
+
+        assert response.status_code == 401
+        assert "User not found" in response.json()["detail"]
 
 
 # Tests for auth utility functions
