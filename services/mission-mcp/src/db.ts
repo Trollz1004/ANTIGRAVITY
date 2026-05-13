@@ -2,6 +2,7 @@ import Database from "better-sqlite3";
 import { mkdirSync } from "fs";
 import { dirname } from "path";
 import migration001 from "./migrations/001_initial.sql";
+import migration002 from "./migrations/002_agents_and_completed_at.sql";
 
 const DEFAULT_DB_PATH = "C:\\Users\\joshl\\.hermes\\state.db";
 
@@ -22,6 +23,7 @@ export function applyMigrations(db: Database.Database): void {
   ).run();
 
   runMigration(db, "001_initial", migration001);
+  runMigration(db, "002_agents_and_completed_at", migration002);
 }
 
 function runMigration(
