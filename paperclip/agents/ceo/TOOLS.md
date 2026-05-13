@@ -19,13 +19,13 @@
 
 | Role | Agent ID | Model |
 |------|----------|-------|
-| CFO | cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 | glm-5.1:cloud |
-| CSO | 5d844d41-df24-4a2c-a98f-26bd94be2018 | glm-5.1:cloud |
-| CTO | b02a21c7-737e-4177-91ac-6d8e57805801 | kimi-k2.6:cloud |
-| CMO | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | dateapp-marketingtools |
-| UX Designer | bd6d6722-9f3e-46ba-8651-ec9a219042ee | kimi-k2.6:cloud |
-| Mission Guardian (Claude) | 2229682b-cede-4462-b38b-25a910af022e | kimi-k2.6:cloud |
-| Mission Guardian (Codex) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | qwen3-coder:480b-cloud |
+| CFO | cf6c84e2-c37f-492f-9a49-2d5f3c4a56e1 | hermes_local + glm-5.1:cloud |
+| CSO | 5d844d41-df24-4a2c-a98f-26bd94be2018 | hermes_local + glm-5.1:cloud |
+| CTO | b02a21c7-737e-4177-91ac-6d8e57805801 | opencode_local + qwen3-coder:480b-cloud |
+| CMO | 2c40ae74-a2ed-4d4c-acf7-fce579e731c1 | opencode_local + dateapp-marketingtools |
+| UX Designer | bd6d6722-9f3e-46ba-8651-ec9a219042ee | opencode_local + dateapp |
+| Mission Guardian (Claude) | 2229682b-cede-4462-b38b-25a910af022e | kimi-k2.6:cloud via Ollama (rerouted 2026-05-07) |
+| Mission Guardian (Codex) | 42200bfa-fb9e-42b1-901d-6dadf15eb23b | codex_local |
 
 ## Failover Adapters
 
@@ -54,12 +54,12 @@ When Hermes is down or you need file-system access, use these Paperclip adapters
 
 ## Model
 
-Adapter: `hermes_local` + `ollama/kimi-k2.6:cloud` (primary) or `ollama/glm-5.1:cloud` (198K context, tools, thinking, persistent memory, 30+ tools, Ollama auto-detect). No Anthropic API tokens consumed.
+Adapter: `hermes_local` + `ollama/glm-5.1:cloud` (primary, 198K context, tools, thinking, persistent memory, 30+ tools, Ollama auto-detect). No Anthropic API tokens consumed.
 Fallback chain (per `briefings/HERMES-CEO-READY-2026-04-19.md`):
 1. `korpohermes-prime:latest` (OpenClaw → ollama.com)
-2. `kimi-k2.6:cloud` (cloud reasoning/tools via Ollama)
-3. `glm-5.1:cloud` (198K context via Ollama)
+2. `glm-5.1:cloud` (198K context via Ollama)
+3. `kimi-k2.6:cloud` (cloud reasoning/tools via Ollama)
 4. `ollama-launch` (qwen2.5:7b local)
 5. Paperclip agent pool (hosted)
 
-> **TOKEN DOCTRINE:** Claude reserved for Cowork/Claude Code orchestration only — never called inside PaperClip. Rerouted 2026-05-07.
+> **TOKEN DOCTRINE:** Claude reserved for Cowork/Claude Code orchestration only — never called inside PaperClip. Rerouted 2026-05-07. Mission Guardian (Claude) now uses `kimi-k2.6:cloud via Ollama` to avoid Anthropic API spend.
