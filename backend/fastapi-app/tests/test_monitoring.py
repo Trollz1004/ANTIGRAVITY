@@ -1,7 +1,8 @@
 """Tests for monitoring and error handling functionality."""
 
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
 
 from app import monitoring
 
@@ -64,6 +65,7 @@ def test_timing_decorator_sync():
     assert "test_sync_func_calls" in collector.counters
 
 
+@patch("app.monitoring.SENTRY_AVAILABLE", True)
 @patch("app.monitoring.sentry_sdk")
 def test_setup_monitoring_with_sentry(mock_sentry):
     """Test that setup_monitoring initializes Sentry when available."""
@@ -76,6 +78,7 @@ def test_setup_monitoring_with_sentry(mock_sentry):
     mock_sentry.init.assert_called_once()
 
 
+@patch("app.monitoring.PROMETHEUS_AVAILABLE", True)
 @patch("app.monitoring.start_http_server")
 @patch("app.monitoring.Counter")
 @patch("app.monitoring.Histogram")

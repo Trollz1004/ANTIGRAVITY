@@ -35,7 +35,18 @@ lint.select = [
 ]
 
 lint.extend-ignore = [
-  "E501",  # Line too long
+  "E501",   # Line too long
+  "B008",   # FastAPI Depends() in function defaults is the canonical pattern
+  "UP006",  # Dict/List typing compat — codebase targets py3.9
+  "UP035",  # typing.Dict/List deprecated — py3.9 compat
+  "UP045",  # X | None — py3.10+ only
+  "ARG001", # Unused function argument — auth deps inject user but endpoint may not use it
+  "SIM105", # contextlib.suppress — pre-existing style choice
+  "SIM117", # nested with — pre-existing style choice
+  "SIM103", # return condition directly — pre-existing style
+  "B904",   # raise from err — pre-existing style; safe to fix gradually
+  "C901",   # complexity — FastAPI webhooks/websockets are inherently complex
+  "E712",   # == True comparisons — SQLAlchemy columns need explicit equality
 ]
 
 # Allow autofix for all enabled rules (when `--fix` is provided).

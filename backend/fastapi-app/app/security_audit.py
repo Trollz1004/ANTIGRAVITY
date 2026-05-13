@@ -1,10 +1,9 @@
 """Security audit utilities for the YouAndINotAI platform."""
 
 import logging
-from typing import Dict, List, Any
 import os
-import hashlib
 from pathlib import Path
+from typing import Any, Dict, List
 
 from app.config import get_settings
 
@@ -114,8 +113,8 @@ class SecurityAudit:
         if env_file.exists():
             try:
                 # On Windows, we can't easily check permissions, but we can check if it's readable
-                with open(env_file, "r") as f:
-                    content = f.read(100)  # Read just a bit to test access
+                with open(env_file) as f:
+                    f.read(100)  # Read just a bit to test access
                 logger.info(".env file exists and is readable")
             except PermissionError:
                 self._add_finding(
