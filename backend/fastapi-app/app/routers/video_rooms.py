@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from app.auth import get_current_user
 from app.config import get_settings
-from app.models import Match, User
+from app.models import User
 
 router = APIRouter(prefix="/video/rooms")
 settings = get_settings()

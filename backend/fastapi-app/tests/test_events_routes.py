@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 from app.auth import get_current_user
 from app.main import app
-from app.models import Event, EventRSVP, User
+from app.models import User
 
 
 def _make_user(*, email: str, display_name: str = "Event User") -> User:

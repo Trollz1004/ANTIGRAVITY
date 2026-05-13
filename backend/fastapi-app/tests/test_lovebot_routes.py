@@ -1,6 +1,5 @@
 from app.auth import get_current_user
 from app.main import app
-
 from tests.conftest import make_user
 
 

@@ -119,7 +119,6 @@ class TestJWTSecretFailFast:
 
     def test_empty_jwt_secret_raises(self):
         """App must crash if JWT_SECRET is empty."""
-        from importlib import reload
         import app.config as config_module
 
         # Clear the lru_cache
@@ -135,17 +134,18 @@ class TestJWTSecretFailFast:
 
     def test_insecure_default_jwt_secret_raises(self):
         """App must crash if JWT_SECRET is the old insecure default."""
-        from importlib import reload
         import app.config as config_module
 
         config_module.get_settings.cache_clear()
 
-        with patch.dict(
-            os.environ, {"JWT_SECRET": "change-me-in-production"}, clear=False
+        with (
+            patch.dict(
+                os.environ, {"JWT_SECRET": "change-me-in-production"}, clear=False
+            ),
+            pytest.raises(RuntimeError, match="FATAL"),
         ):
-            with pytest.raises(RuntimeError, match="FATAL"):
-                config_module.get_settings.cache_clear()
-                config_module.get_settings()
+            config_module.get_settings.cache_clear()
+            config_module.get_settings()
 
         config_module.get_settings.cache_clear()
 

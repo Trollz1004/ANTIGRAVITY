@@ -3,7 +3,7 @@
 import asyncio
 from pathlib import Path
 
-from sqlalchemy import Boolean, Column, DateTime, JSON, MetaData, String, Table, func
+from sqlalchemy import JSON, Boolean, Column, DateTime, MetaData, String, Table, func
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app.webhook_event_store import (
