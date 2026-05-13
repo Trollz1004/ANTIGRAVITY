@@ -195,7 +195,7 @@ composition may not be altered, reduced, or replaced without Josh's explicit ord
 - **Auxiliary node restriction**: mirrored clones, helper nodes, and auxiliary workstations such as the ASUS mini are read-only for live repo truth.
   Only the primary Sabretooth session may make direct live-repo edits or push `C:\ANTIGRAVITY`.
 - **Worker count max**: 10
-- **Revenue doctrine boundary**: no operational or customer-facing surface may claim routing above the current conservative `10%` charitable cap for LLC-controlled revenue unless a new canonical legal update replaces it
+- **Revenue doctrine boundary**: no operational or customer-facing surface may claim routing above the current conservative `10% per-bucket charitable disbursement` for LLC-controlled revenue unless a new canonical legal update replaces it. See `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md` for canonical doctrine evolution (pre-April-17 "10% charitable cap" framing is retired; current model is 1-wallet / 10% per-bucket reserve, founder-directed quarterly).
 - **FL §496.405**: NEVER use "donate" / "donation" / "solicitation" in customer-facing code.
   Correct: "contractual revenue disbursement." Hooks enforce this.
 - **No mock/simulation data** — real or fail honestly
@@ -256,15 +256,13 @@ New ideas, experimental platforms, and speculative automation go here first.
 
 ---
 
-## SABRETOOTH GIT COMPLETION RULE (HARDCODED)
+## GIT COMPLETION RULE (T5500 PRIMARY — as of 2026-05-12)
 
 - Default completion path: task fully verified -> push finished state to `origin/main` immediately.
 - Do NOT leave finished work sitting only in local worktree or on unmerged branch.
 - If a temporary branch or side repo is used for isolation/recovery, merge it, push `main`,
   and delete or retire the extra branch/copy before calling the task complete.
-- After every successful push to `origin/main`: SSH to `9020` and `T5500`, fast-forward
-  `C:\ANTIGRAVITY` when remote worktrees are clean.
-- If `9020` or `T5500` is dirty: preserve the drift and stop — do not force sync.
+- **T5500 is now the push-to-main authority.** Sabretooth and 9020 are pending wipe.
 - Closeout standard: local verification passed, CI passed, `main` clean, `origin/main` updated.
 
 ---
@@ -299,13 +297,13 @@ New ideas, experimental platforms, and speculative automation go here first.
 
 | Node | Drive | Role |
 |------|-------|------|
-| SABRETOOTH | C: | Live command post â€” primary |
-| SABRETOOTH | E: | Coworker instance isolated sandbox only |
-| T5500 | C: | Remote utility / heavy media-build node â€” SSH reachable (192.168.0.15) |
+| T5500 | C: | **Primary command post** (as of 2026-05-12 consolidation) — SSH 192.168.0.15 |
 | T5500 | E: | Manus orchestration setup / media sandbox lane |
-| 9020 | C: | GenSpark (future social marketing engine) / Remote ops â€” SSH reachable (192.168.0.5) |
+| SABRETOOTH | C: | **PENDING WIPE** — was primary through 2026-05-11; preserve branch `sabretooth-preserve-20260511` on origin |
+| SABRETOOTH | E: | Coworker instance isolated sandbox only |
+| 9020 | C: | **PENDING WIPE** — was GenSpark / remote ops node; preserve branch `9020-preserve-20260511` on origin |
 | 9020 | D: | OpenClaw/support sandbox lane (`D:\claws`, `D:\sandbox-repos`) |
-| MINI-ASUS-PC | C: | Trusted CLI Node (Claude Code, CodeX, Gemini CLI) â€” Local Setup |
+| MINI-ASUS-PC | C: | Trusted CLI Node (Claude Code, CodeX, Gemini CLI) — Local Setup |
 
 - 9020 SSH: `ssh -i ~/.ssh/id_ed25519 joshl@192.168.0.5` (cmd.exe shell)
 - 9020 has NO git push creds — use bundle relay
@@ -414,11 +412,11 @@ The security isn't for us — it's for the kids. Please don't weaken these. Buil
 
 | Field | Value |
 |-------|-------|
-| Node | SABRETOOTH (C:\ANTIGRAVITY) |
+| Node | T5500 (C:\ANTIGRAVITY) — primary as of 2026-05-12; was SABRETOOTH |
 | Owner | Joshua Coleman / Trollz1004 |
 | Entity | Trash Or Treasure Online Recycler LLC (FL) |
 | Brain | Claude (primary architect, ~90% of codebase) + Codex executor + Ollama local inference |
-| GPU | AMD Radeon RX 6700 XT 12GB |
+| GPU | GTX 1070 8GB VRAM (T5500); AMD Radeon RX 6700 XT 12GB (Sabretooth — pending wipe) |
 
 ---
 
@@ -462,6 +460,20 @@ sufficient — no external embedding API required.
 - Fallback inference when API quota is hit
 
 **SABRETOOTH is the primary orchestration node.** 9020 and T5500 are cold — opt-in only.
+
+---
+
+## INTERNAL VS CUSTOMER-FACING LANGUAGE
+
+Internal docs (AGENTS.md, CLAUDE.md, briefings/, code comments, commits) use honest framing:
+speak plainly about the mission, kids, charitable disbursement, and revenue doctrine without
+euphemism. Language firewall is DEAD for internal surfaces.
+
+Customer-facing surfaces (youandinotai.com, onlinerecycle.org, ai-solutions.store, Square
+catalog copy, any public-facing API response or UI text) follow TOS-safe framing per
+`memory/feedback_officially_unofficial_doctrine.md`: lead with product/service value, no
+"donate"/"donation"/"solicitation"/"tax-deductible", revenue disbursement described as
+"contractual revenue disbursement" if mentioned at all. Same project, different audience rules.
 
 ---
 
