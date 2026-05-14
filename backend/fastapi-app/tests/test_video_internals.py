@@ -13,14 +13,13 @@ All DB helpers use the in-memory SQLite fixture from conftest.
 import asyncio
 import uuid
 from datetime import datetime, timezone
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app.database import Base
 from app.models import Match, User, VideoCall
-
 
 # ── In-memory DB fixture ──────────────────────────────────────────────────────
 
@@ -65,7 +64,9 @@ def _make_user(email: str = "video_int@example.com") -> User:
     )
 
 
-def _make_match(user_a_id: uuid.UUID, user_b_id: uuid.UUID, status: str = "active") -> Match:
+def _make_match(
+    user_a_id: uuid.UUID, user_b_id: uuid.UUID, status: str = "active"
+) -> Match:
     return Match(
         id=uuid.uuid4(),
         user_a=user_a_id,
@@ -376,7 +377,7 @@ async def test_mark_call_ended_no_started_at_skips_duration(mem_session_factory)
 @pytest.mark.asyncio
 async def test_relay_to_peers_no_peers_returns_false():
     """When no connections exist, relay returns False (not delivered)."""
-    from app.routers.video import _relay_to_peers, _video_connections
+    from app.routers.video import _relay_to_peers
 
     call_key = "relay_empty_" + str(uuid.uuid4())
     result = await _relay_to_peers(call_key, "sender_id", '{"type": "sdp_offer"}')
