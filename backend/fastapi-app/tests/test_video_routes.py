@@ -16,7 +16,7 @@ Risk surface:
 
 import uuid
 from datetime import date, datetime, timezone
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
@@ -148,6 +148,89 @@ def test_video_ws_non_json_payload_is_silently_dropped(client):
             ) as ws:
                 ws.send_text("this is not json {{")
                 ws.send_json({"type": "hang_up"})
+
+
+# ── Room-full rejection (code 4008) ──────────────────────────────────────────
+
+
+def test_video_ws_room_full_rejects_third_peer(client):
+    """When 2 peers are already in a call, a third connection is closed 4008."""
+    from app.routers.video import _call_initiators, _video_connections
+
+    call_id = str(uuid.uuid4())
+    # Manually populate 2 existing mock connections
+    mock_ws_a = MagicMock()
+    mock_ws_b = MagicMock()
+    _video_connections[call_id]["user_aaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"] = mock_ws_a
+    _video_connections[call_id]["user_bbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"] = mock_ws_b
+
+    user_c = _make_user("video_thirdc@example.com")
+    token_c = _valid_token(user_c)
+
+    try:
+        with pytest.raises(Exception):  # noqa: B017
+            with client.websocket_connect(
+                f"/api/v1/ws/video/{call_id}?token={token_c}"
+            ) as ws:
+                ws.receive_json()
+    finally:
+        _video_connections.pop(call_id, None)
+        _call_initiators.pop(call_id, None)
+
+
+# ── Signal relay + buffer path ────────────────────────────────────────────────
+
+
+def test_video_ws_signal_buffered_when_no_peer(client):
+    """SDP offer sent to an empty room should be buffered (no exception)."""
+    user = _make_user("video_buffer@example.com")
+    token = _valid_token(user)
+    call_id = str(uuid.uuid4())
+
+    with patch(
+        "app.routers.video._find_active_match",
+        new=AsyncMock(return_value=None),
+    ):
+        with patch(
+            "app.routers.video._ensure_call_record",
+            new=AsyncMock(return_value=None),
+        ):
+            with client.websocket_connect(
+                f"/api/v1/ws/video/{call_id}?token={token}"
+            ) as ws:
+                # Send an allowed signal type with no peer connected
+                ws.send_json({"type": "sdp_offer", "sdp": "v=0..."})
+                # Close cleanly
+                ws.send_json({"type": "hang_up"})
+
+
+# ── Two-peer match-verification failure (code 4003) ───────────────────────────
+
+
+def test_video_ws_two_peers_no_match_kicks_second(client):
+    """When 2 peers join but no active match exists, second is kicked (4003)."""
+    from app.routers.video import _call_initiators, _video_connections
+
+    call_id = str(uuid.uuid4())
+    user_a = _make_user("video_nomatch_a@example.com")
+    user_b = _make_user("video_nomatch_b@example.com")
+
+    token_a = _valid_token(user_a)
+    token_b = _valid_token(user_b)
+
+    # Connect user_a first (solo connect, match check not triggered)
+    with patch("app.routers.video._find_active_match", new=AsyncMock(return_value=None)):
+        with patch("app.routers.video._ensure_call_record", new=AsyncMock(return_value=None)):
+            with client.websocket_connect(
+                f"/api/v1/ws/video/{call_id}?token={token_a}"
+            ) as ws_a:
+                # Now try to connect user_b — this triggers match check which returns None
+                with pytest.raises(Exception):  # noqa: B017
+                    with client.websocket_connect(
+                        f"/api/v1/ws/video/{call_id}?token={token_b}"
+                    ) as ws_b:
+                        ws_b.receive_json()
+                ws_a.send_json({"type": "hang_up"})
 
 
 # ── ALLOWED_SIGNAL_TYPES constant is locked ───────────────────────────────────
