@@ -14,7 +14,6 @@ Design constraints:
 
 import asyncio
 import json
-import os
 import uuid
 from datetime import datetime, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -27,13 +26,9 @@ from app.database import Base
 from app.models import (
     DataPrivacyLog,
     Match,
-    Message,
-    Profile,
     User,
     VerificationEvent,
-    VideoCall,
 )
-
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -131,7 +126,6 @@ async def test_purge_deletes_user_and_marks_log_completed(mem_session_factory):
             await sched_mod.purge_deleted_accounts()
 
     # Verify log status updated and user deleted
-    from sqlalchemy import select
 
     async with mem_session_factory() as session:
         updated_log = await session.get(DataPrivacyLog, log.id)
@@ -202,7 +196,6 @@ async def test_purge_skips_non_pending_logs(mem_session_factory):
 async def test_purge_with_matches_triggers_cascade(mem_session_factory):
     """When a user has matches, the match cascade branch executes."""
     from app import scheduler as sched_mod
-    from app.models import Match
 
     user_a = _make_user("match_purge_a@example.com")
     user_b = _make_user("match_purge_b@example.com")
@@ -360,7 +353,7 @@ async def test_export_file_write_failure_marks_log_failed(mem_session_factory):
         async def __aexit__(self, *args):
             pass
 
-        async def write(self, content):
+        async def write(self, _content):
             raise OSError("Disk full")
 
     with patch.object(sched_mod, "SessionLocal", mem_session_factory):
@@ -502,7 +495,6 @@ def test_normalize_datetime_naive_datetime_gets_utc():
 @pytest.mark.asyncio
 async def test_promote_user_already_verified_returns_true(mem_session_factory):
     """If user.bot_shield_verified is True, early-return True without DB queries."""
-    from unittest.mock import AsyncMock
 
     from app.verification_service import promote_user_verification_if_ready
 
@@ -550,11 +542,11 @@ async def test_promote_user_no_liveness_returns_false(mem_session_factory):
 
 
 @pytest.mark.asyncio
-async def test_promote_user_liveness_passed_no_payment_returns_false(mem_session_factory):
+async def test_promote_user_liveness_passed_no_payment_returns_false(
+    mem_session_factory,
+):
     """If user passed liveness but has no payment event, returns False (line 66)."""
-    from datetime import date
 
-    from app.models import VerificationEvent
     from app.verification_service import promote_user_verification_if_ready
 
     user = _make_user("promo_livnopay@example.com")
@@ -789,7 +781,7 @@ def test_coerce_payload_integer_returns_none():
 @pytest.mark.asyncio
 async def test_webhook_event_exists_no_schema_returns_false(mem_session_factory):
     """When the webhook_events table doesn't exist, webhook_event_exists returns False."""
-    from unittest.mock import AsyncMock, patch
+    from unittest.mock import patch
 
     from app.webhook_event_store import webhook_event_exists
 
@@ -803,9 +795,11 @@ async def test_webhook_event_exists_no_schema_returns_false(mem_session_factory)
 
 
 @pytest.mark.asyncio
-async def test_recent_processed_payment_payloads_no_schema_returns_empty(mem_session_factory):
+async def test_recent_processed_payment_payloads_no_schema_returns_empty(
+    mem_session_factory,
+):
     """When no schema is available, returns empty list."""
-    from unittest.mock import AsyncMock, patch
+    from unittest.mock import patch
 
     from app.webhook_event_store import recent_processed_payment_payloads
 
@@ -821,7 +815,7 @@ async def test_recent_processed_payment_payloads_no_schema_returns_empty(mem_ses
 @pytest.mark.asyncio
 async def test_create_webhook_event_no_schema_raises(mem_session_factory):
     """When the schema lookup returns None, create_webhook_event raises RuntimeError."""
-    from unittest.mock import AsyncMock, patch
+    from unittest.mock import patch
 
     from app.webhook_event_store import create_webhook_event
 
@@ -830,7 +824,9 @@ async def test_create_webhook_event_no_schema_raises(mem_session_factory):
             "app.webhook_event_store.get_webhook_event_schema",
             new=AsyncMock(return_value=None),
         ):
-            with pytest.raises(RuntimeError, match="webhook_events table is not available"):
+            with pytest.raises(
+                RuntimeError, match="webhook_events table is not available"
+            ):
                 await create_webhook_event(
                     db,
                     event_id="evt_test",
@@ -843,14 +839,23 @@ async def test_create_webhook_event_no_schema_raises(mem_session_factory):
 @pytest.mark.asyncio
 async def test_webhook_event_exists_with_event_source_id_schema(mem_session_factory):
     """When schema uses event_source_id, webhook_event_exists queries via ORM."""
-    from unittest.mock import AsyncMock, MagicMock, patch
+    from unittest.mock import MagicMock, patch
 
     from app.webhook_event_store import WebhookEventSchema, webhook_event_exists
 
     mock_table = MagicMock()
     mock_schema = WebhookEventSchema(
         table=mock_table,
-        columns=frozenset(["id", "event_source_id", "event_source", "event_type", "payload", "processed"]),
+        columns=frozenset(
+            [
+                "id",
+                "event_source_id",
+                "event_source",
+                "event_type",
+                "payload",
+                "processed",
+            ]
+        ),
         external_id_column="event_source_id",
     )
 
@@ -868,7 +873,7 @@ async def test_webhook_event_exists_with_event_source_id_schema(mem_session_fact
 @pytest.mark.asyncio
 async def test_mark_webhook_event_processed_no_schema_is_noop(mem_session_factory):
     """mark_webhook_event_processed with no schema returns without error."""
-    from unittest.mock import AsyncMock, patch
+    from unittest.mock import patch
 
     from app.webhook_event_store import mark_webhook_event_processed
 
@@ -887,12 +892,11 @@ async def test_get_webhook_event_schema_no_table_returns_none(mem_session_factor
     The in-memory SQLite test DB only has the app models — webhook_events is
     created by the normal Base.metadata but we patch it to not exist.
     """
-    from sqlalchemy.exc import NoSuchTableError
-
-    from app.webhook_event_store import get_webhook_event_schema
 
     # Create a fresh engine with NO tables at all
     from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+
+    from app.webhook_event_store import get_webhook_event_schema
 
     bare_engine = create_async_engine("sqlite+aiosqlite:///:memory:")
     bare_factory = async_sessionmaker(bare_engine, expire_on_commit=False)
@@ -908,14 +912,27 @@ async def test_get_webhook_event_schema_no_table_returns_none(mem_session_factor
 @pytest.mark.asyncio
 async def test_recent_payloads_with_event_source_id_schema(mem_session_factory):
     """recent_processed_payment_payloads with event_source_id schema returns list."""
-    from unittest.mock import AsyncMock, MagicMock, patch
+    from unittest.mock import MagicMock, patch
 
-    from app.webhook_event_store import WebhookEventSchema, recent_processed_payment_payloads
+    from app.webhook_event_store import (
+        WebhookEventSchema,
+        recent_processed_payment_payloads,
+    )
 
     mock_table = MagicMock()
     mock_schema = WebhookEventSchema(
         table=mock_table,
-        columns=frozenset(["id", "event_source_id", "event_source", "event_type", "payload", "processed", "created_at"]),
+        columns=frozenset(
+            [
+                "id",
+                "event_source_id",
+                "event_source",
+                "event_type",
+                "payload",
+                "processed",
+                "created_at",
+            ]
+        ),
         external_id_column="event_source_id",
     )
 
