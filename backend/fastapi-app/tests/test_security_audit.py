@@ -14,13 +14,15 @@ All tests run with env isolation — get_settings() cache is cleared between
 tests so environment mutations don't bleed across.
 """
 
+from __future__ import annotations
+
 import logging
 import os
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 
+from app.security_audit import SecurityAudit
 
 # ── Fixture: fresh settings + audit instance ──────────────────────────────────
 
@@ -35,10 +37,8 @@ def _clear_settings_cache():
     get_settings.cache_clear()
 
 
-def _make_audit(overrides: dict | None = None) -> "SecurityAudit":
+def _make_audit(overrides: dict | None = None) -> SecurityAudit:
     """Return a SecurityAudit with a mocked Settings object."""
-    from app.security_audit import SecurityAudit
-
     audit = SecurityAudit.__new__(SecurityAudit)
     audit.findings = []
 
@@ -79,7 +79,10 @@ def test_jwt_check_weak_secret_adds_critical_finding():
     audit = _make_audit({"jwt_secret": "change-me-value-padding-for-length"})
     audit.check_jwt_configuration()
     criticals = [f for f in audit.findings if f["severity"] == "critical"]
-    assert any("weak" in f["title"].lower() or "default" in f["title"].lower() for f in criticals)
+    assert any(
+        "weak" in f["title"].lower() or "default" in f["title"].lower()
+        for f in criticals
+    )
 
 
 def test_jwt_check_strong_secret_no_finding():
@@ -106,14 +109,20 @@ def test_square_missing_token_logs_info_no_finding():
     """Missing Square token is development-expected; should not add a finding."""
     audit = _make_audit({"square_access_token": ""})
     audit.check_square_configuration()
-    square_findings = [f for f in audit.findings if f["category"] == "SQUARE_ACCESS_TOKEN"]
+    square_findings = [
+        f for f in audit.findings if f["category"] == "SQUARE_ACCESS_TOKEN"
+    ]
     assert square_findings == []
 
 
 def test_square_short_token_adds_high_finding():
     audit = _make_audit({"square_access_token": "tiny"})
     audit.check_square_configuration()
-    highs = [f for f in audit.findings if f["severity"] == "high" and "SQUARE" in f["category"]]
+    highs = [
+        f
+        for f in audit.findings
+        if f["severity"] == "high" and "SQUARE" in f["category"]
+    ]
     assert highs
 
 
@@ -225,7 +234,7 @@ def test_env_file_other_exception_no_finding(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
     audit = _make_audit()
-    with patch("builtins.open", side_effect=IOError("unexpected")):
+    with patch("builtins.open", side_effect=OSError("unexpected")):
         audit.check_file_permissions()  # should not raise
 
     # No high finding for generic errors
@@ -257,7 +266,9 @@ def test_run_audit_summary_counts_match_findings():
     summary = result["summary"]
 
     assert summary["total_findings"] == len(findings)
-    assert summary["critical"] == sum(1 for f in findings if f["severity"] == "critical")
+    assert summary["critical"] == sum(
+        1 for f in findings if f["severity"] == "critical"
+    )
     assert summary["medium"] == sum(1 for f in findings if f["severity"] == "medium")
 
 

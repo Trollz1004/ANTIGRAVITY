@@ -209,7 +209,6 @@ def test_video_ws_signal_buffered_when_no_peer(client):
 
 def test_video_ws_two_peers_no_match_kicks_second(client):
     """When 2 peers join but no active match exists, second is kicked (4003)."""
-    from app.routers.video import _call_initiators, _video_connections
 
     call_id = str(uuid.uuid4())
     user_a = _make_user("video_nomatch_a@example.com")
@@ -219,8 +218,12 @@ def test_video_ws_two_peers_no_match_kicks_second(client):
     token_b = _valid_token(user_b)
 
     # Connect user_a first (solo connect, match check not triggered)
-    with patch("app.routers.video._find_active_match", new=AsyncMock(return_value=None)):
-        with patch("app.routers.video._ensure_call_record", new=AsyncMock(return_value=None)):
+    with patch(
+        "app.routers.video._find_active_match", new=AsyncMock(return_value=None)
+    ):
+        with patch(
+            "app.routers.video._ensure_call_record", new=AsyncMock(return_value=None)
+        ):
             with client.websocket_connect(
                 f"/api/v1/ws/video/{call_id}?token={token_a}"
             ) as ws_a:
