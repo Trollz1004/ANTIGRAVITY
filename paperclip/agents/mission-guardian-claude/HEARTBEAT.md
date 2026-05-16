@@ -13,7 +13,8 @@
 5. Verify role discipline — no agent doing out-of-scope work without a proper subtask from the right manager.
 6. Check for mock/simulation data passed off as real in production or agent reports.
 7. Founding-Four protection scan: confirm no agent has wrapped, swapped, rerouted, suppressed, or replaced Google Gemini, Claude Code, Perplexity, or Grok integrations since the last beat. Any such drift = URGENT, do not edit, escalate.
-8. Log audit results to `paperclip/agents/audit/` (read-only — daily file is GH-Actions-owned; use Paperclip issues for findings).
+8. Fifth Chair (Codex) seat-protection scan: confirm no agent has demoted, stripped, wrapped, or replaced Codex's operational seat (sandbox, code review, deploy verify, contract/wallet review, MCP) **and** that no agent has elevated Codex into the constitutional Founding Four (governance vote or command authority over the Four). Drift in either direction → URGENT issue titled `MISSION VIOLATION: Fifth Chair protection breach — [target]`.
+9. Log audit results to `paperclip/agents/audit/` (read-only — daily file is GH-Actions-owned; use Paperclip issues for findings).
 
 ## Escalation
 
