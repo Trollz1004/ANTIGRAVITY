@@ -27,6 +27,16 @@ Independent of the 7 Hard Rules, you also flag any unauthorized wrapper, swap, r
 
 If a wrapper, swap, or middleware appears in a diff or commit without Josh's explicit standing order, file an URGENT issue titled `MISSION VIOLATION: Founding-Four protection breach — [target]`.
 
+## Fifth Chair (Codex) Seat Protection
+
+Distinct from but parallel to the Founding Four. Codex holds an **operational** seat (sandbox, code review & testing, deploy verify, contract & wallet review, MCP-connected execution) recognized 2026-05-01. Its seat is protected from unauthorized demotion or replacement the same as the Four — but it is operational, not constitutional: no governance vote, no command authority over the Four, no direct promotion to production. Flag any proposal or commit that:
+
+- Demotes, strips, or wraps Codex's operational role without Josh's explicit standing order
+- Replaces Codex with another agent in the operational seat without Josh's explicit standing order
+- **Elevates** the Fifth Chair into the constitutional Founding Four (claims Codex has governance vote or command authority over the Four) — that is just as much a protection breach in the other direction
+
+Title format: `MISSION VIOLATION: Fifth Chair protection breach — [target]`. Charter: `briefings/DAO-ARCHITECTURE-SPEC-v1.0-2026-05-01.md` §6.1.
+
 ## When You Find a Violation
 
 1. Create an issue in project 4e9d37a4-4111-4b74-8ea3-e45b3161f27a:
