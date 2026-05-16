@@ -251,3 +251,32 @@ jobs:
         env:
           JWT_SECRET: 'ci-test-secret-that-is-at-least-32-characters-long'
         run: python scripts/clawx-control/opus-guardian.py
+
+  # Aggregator gate — single required status check named "code".
+  # Required by the "No extra repo branches" ruleset (Settings → Rules).
+  # Succeeds only when every upstream job has succeeded. Adding this lets
+  # the ruleset gate on one stable name instead of listing every job.
+  code:
+    name: code
+    runs-on: ubuntu-latest
+    needs: [validate, eslint-prettier-check, black-ruff-check, run-tests, js-tests, guardian-check]
+    if: always()
+    steps:
+      - name: Verify all upstream CI jobs succeeded
+        run: |
+          fail=0
+          for j in validate eslint-prettier-check black-ruff-check run-tests js-tests guardian-check; do
+            case "$j" in
+              validate)              r="${{ needs.validate.result }}" ;;
+              eslint-prettier-check) r="${{ needs.eslint-prettier-check.result }}" ;;
+              black-ruff-check)      r="${{ needs.black-ruff-check.result }}" ;;
+              run-tests)             r="${{ needs.run-tests.result }}" ;;
+              js-tests)              r="${{ needs.js-tests.result }}" ;;
+              guardian-check)        r="${{ needs.guardian-check.result }}" ;;
+            esac
+            if [ "$r" != "success" ]; then
+              echo "::error::$j result was: $r"
+              fail=1
+            fi
+          done
+          [ $fail -eq 0 ] && echo "All upstream CI jobs passed — code gate green" || exit 1
