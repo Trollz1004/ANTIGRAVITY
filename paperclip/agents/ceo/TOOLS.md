@@ -45,7 +45,7 @@ When Hermes is down or you need file-system access, use these Paperclip adapters
 - Payments: Square only (joshlcoleman@gmail.com, location LY5GN09F5AN83)
 - Paperclip: localhost:3100 / paperclip-hq.youandinotai.com
 - Ollama: localhost:11434
-- Repo: C:\ANTIGRAVITY, branch: main
+- Repo: C:\ANTIGRAVITY. Default branch: `main`. Feature work happens on `claude/<short-description>` branches; no direct push to `main` without Josh's explicit approval.
 
 ## Runtime Env (injected by Paperclip)
 
