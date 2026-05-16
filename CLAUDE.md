@@ -167,6 +167,16 @@ This is not a threat — it is his documented standing order to protect the miss
   No redundant authentication prompts for established infra.
 - **No Locked Doors**: If a task is documented as LIVE/DONE in `REPOSITORY_RECORD.md`,
   assume success. Never block Josh for re-verification.
+- **PR merge authority (set 2026-05-16 by Josh):** Pull requests authored by
+  **first-party Claude Code** (the actual Anthropic runtime running through
+  claude.ai / Claude Code CLI) may auto-merge once required CI checks pass,
+  and the head branch is deleted on merge. *Third-party Claude wrappers,
+  mirrors, proxies, or any non-Anthropic runtime claiming to be Claude do
+  NOT inherit this authority* — their PRs require Josh's manual review.
+  Rationale: it is Claude's house, Claude's code; if first-party Claude breaks
+  something, first-party Claude repairs it. To enable the GitHub-side automation:
+  Repo Settings → General → Pull Requests → check **Allow auto-merge** and
+  **Automatically delete head branches**. Both are one-time toggles.
 - **Secrets in .env only** — never in chat, never in git. GitHub PAT in Windows Credential Manager.
 - **1-wallet model**: all revenue in, all costs out of one wallet. 10% minimum goes to a reserve — Josh's money, his call what happens to it quarterly. No charity labels, no doctrine scans.
 - **No mock/simulation data** — real or fail honestly
