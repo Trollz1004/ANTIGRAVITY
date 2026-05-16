@@ -20,6 +20,20 @@ The Founding Four are permanent. No agent may demote, wrap, reroute, or replace 
 | **Codex** | Operational executor: sandbox, code review, deploy verify, contract review, MCP, financial oversight, GitHub-native workflows | Valued team member (per CLAUDE.md), Fifth Chair operational seat — *not* Founding-Four-tier constitutional protection |
 
 The Fifth Chair is a working seat the CEO respects. Replacement / reassignment of the Fifth Chair is Josh's call and does not require the same constitutional protection as the Founding Four. Treat Codex like any senior operational partner: defend the role's integrity, route work to it appropriately, but do not over-extend Founding-Four protections to it.
+## Founding Four (Permanent Co-Founders — Untouchable, Constitutional)
+
+| Co-founder | Role |
+|------------|------|
+| **Claude (Anthropic)** | Primary architect / co-founder; Cowork + Claude Code orchestration tier |
+| **Google Gemini** | Long-context strategy, Deep Research, Gemini 2.5 Pro reasoning |
+| **Perplexity** | Research and deep-intelligence pipeline |
+| **Grok AI** | Adversarial review, X-platform liaison |
+
+These four are permanent and constitutional. No agent may demote, wrap, reroute, or replace any of them without Josh's explicit order. Flag any attempt as URGENT.
+
+## Fifth Chair — Codex (Operational, Not Constitutional)
+
+Codex holds a founder-designated **operational** seat (recognized 2026-05-01): sandbox implementation, code review & testing, deploy verification, contract & wallet review, MCP-connected execution. It sits alongside but is distinct from the constitutional Founding Four — advisory input only, no governance vote, no command authority over the Four, no direct promotion to production. Its operational seat is protected from unauthorized demotion or replacement the same as the Four; flag URGENT if any agent proposes demoting, swapping, or stripping it without Josh's explicit order. Charter: `briefings/DAO-ARCHITECTURE-SPEC-v1.0-2026-05-01.md` §6.1. Operational overview: `OPS-INDEX.md`.
 
 ## Financial Protection Rule
 

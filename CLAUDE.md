@@ -18,29 +18,40 @@
 | Monorepo manager | pnpm workspaces (`pnpm-workspace.yaml`) |
 | Node engine | `>=20` |
 
-### Clean Folder Structure (Target)
+### Actual Folder Structure (As of 2026-05-16)
 
 ```
 ANTIGRAVITY/
-├── apps/           ← deployable frontends & full-stack apps
-│   ├── web/        ← main Next.js app (was: antigravity/)
-│   ├── dashboard/  ← fold of: antigravity-dashboard + command-center repos
-│   └── openclaw/   ← fold of: OpenclawDash repo
-├── packages/       ← shared libraries
-│   ├── contracts/  ← Hardhat + Solidity (CharityRouter, DatingRevenueRouter, GospelDonation)
-│   └── paperclip/  ← Paperclip AI platform (primary source: sandbox/dao-patches)
-├── services/       ← long-running backend servers
-│   ├── crossfire/
-│   ├── youandinotai/
-│   ├── youandinotai-api/
-│   └── revenue-core/
-├── tools/          ← internal dev tools
-│   ├── ClawX/
-│   └── CodeX/
-├── docs/           ← briefings, content, research, design-specs
-├── data/           ← square_catalog.json → data/square/
-└── scripts/        ← Python Square scripts → scripts/square/ (NOT at root)
+├── apps/                       ← pnpm workspace: deployable frontends & full-stack apps
+│   ├── antigravity-cockpit/    ← operator cockpit
+│   ├── command-center/         ← Next.js social content approval dashboard
+│   ├── dashboard/              ← Vite operator dashboard (Cloudflare Pages)
+│   ├── mission-control/        ← Vite + Playwright mission-control UI
+│   ├── opuspawclaw/            ← Vite + Electron + React 19 desktop AI workstation
+│   └── youandinotai-frontend/  ← Next.js 15 / React 19 / Prisma — youandinotai.com
+├── services/                   ← pnpm workspace: long-running backend servers
+│   ├── hermes-router/          ← Python multi-provider LLM router (localhost:11435)
+│   ├── mission-control-api/    ← mission-control backend
+│   └── mission-mcp/            ← MCP server kernel (TypeScript, vitest, 57 tests)
+├── backend/
+│   └── fastapi-app/            ← FastAPI app (Python 3.12) — 80% test coverage gate
+├── packages/                   ← pnpm workspace: shared libraries (currently empty)
+├── tools/                      ← pnpm workspace: dev tools
+├── contracts/                  ← Hardhat + Solidity
+│   └── src/                    ← CharityRouter100, DatingRevenueRouter, GospelDonation, PlatformSplitter10, …
+├── scripts/                    ← operations, deployment, automation (Python + PowerShell)
+│   └── clawx-control/          ← opus-guardian.py (security invariants)
+├── infra/                      ← infrastructure as code (Cloudflare Worker, etc.)
+├── briefings/                  ← REPOSITORY_RECORD.md, CLAUDE-SKILL.md, runbooks, doctrine
+├── docs/                       ← architecture, governance, product
+├── memory/                     ← persistent agent memory
+├── _deploy/                    ← built artifacts for Cloudflare Pages targets
+├── .claude/                    ← Claude Code config (settings, agents, commands, hooks)
+├── .github/workflows/          ← ci-validate, daily-doctrine-audit, deploy-gcr, hermes-integrity-watchdog
+└── .graphify/                  ← knowledge graph artifacts (god nodes, communities)
 ```
+
+> Historical: `antigravity/`, `frontend/`, `youandinotai/`, `paperclip*` folders persist at root from pre-monorepo era. They are **not** in pnpm workspaces — treat as legacy unless a CI workflow path explicitly references them.
 
 ### Repos to Archive (not delete yet — await migration confirmation)
 
@@ -65,12 +76,77 @@ ANTIGRAVITY/
 
 ---
 
-## LIVE INFRASTRUCTURE STATUS (AS OF 2026-03-19)
+## LIVE INFRASTRUCTURE STATUS (AS OF 2026-05-16)
 
-- **GCR Backend (ai-collab4kids)**: DEPLOYED & LIVE (Built from T5500 node).
+- **GCR Backend (ai-collab4kids)**: DEPLOYED & LIVE (built from T5500 node).
 - **Cloudflare Tunnels (Sabretooth)**: LIVE & ROUTING (`openclaw`, `mcp`).
-- **Frontend (youandinotai.com)**: DEPLOYED & LIVE (React 19/Cloudflare Pages).
+- **Frontend (youandinotai.com)**: DEPLOYED & LIVE (React 19 / Cloudflare Pages).
+- **mission-mcp**: 57-test suite, `list_agents` + tag/`since_ms` filters, `completed_at` field shipped (commits `4d287e7`, `686e8ed`).
+- **FastAPI backend**: pytest coverage gate raised from 63% → **80%** (commit `5a57a26`); ruff + black clean on 39 files.
+- **CI**: 6 jobs green — `validate`, `eslint-prettier-check`, `black-ruff-check`, `run-tests`, `js-tests` (vitest), `guardian-check` (opus-guardian).
+- **Square webhooks**: `SQUARE_WEBHOOK_VERIFY_SIGNATURE=true` in CI with HMAC + replay + malformed-header tests (commit `1e89162`).
 - **Git History**: PRISTINE & PURGED.
+
+---
+
+## Development Commands (root)
+
+```bash
+# Install everything (uses pnpm-workspace.yaml; node >=20, pnpm 9.15.4)
+pnpm install --frozen-lockfile
+
+# Per-app dev servers
+pnpm dev:web         # @antigravity/web
+pnpm dev:dashboard   # @antigravity/dashboard
+pnpm dev:openclaw    # @antigravity/openclaw
+
+# Whole-monorepo passes
+pnpm build           # pnpm -r build
+pnpm typecheck       # pnpm -r typecheck
+pnpm test            # pnpm -r test (vitest in mission-mcp, etc.)
+pnpm format          # prettier --write .
+```
+
+### FastAPI backend (`backend/fastapi-app/`)
+
+```bash
+cd backend/fastapi-app
+pip install -r requirements.txt
+pip install pytest pytest-cov pytest-asyncio aiosqlite black ruff
+
+# Required env to match CI behaviour
+export JWT_SECRET='ci-test-secret-that-is-at-least-32-characters-long'
+export APP_ENV=test
+export SQUARE_WEBHOOK_VERIFY_SIGNATURE=true
+
+# Lint + format
+black --check .
+ruff check .
+
+# Test (coverage gate = 80%, hard fail under that)
+pytest --tb=short --cov=app --cov-report=term-missing --cov-fail-under=80
+```
+
+### mission-mcp (`services/mission-mcp/`)
+
+```bash
+cd services/mission-mcp
+pnpm build              # tsup
+pnpm test               # vitest (57 tests)
+pnpm typecheck
+pnpm start              # stdio transport
+pnpm start:http         # MISSION_MCP_TRANSPORT=http
+```
+
+### Smart contracts (`contracts/`)
+
+Hardhat (`hardhat.config.ts`). PlatformSplitter10 has a 47-test suite covering per-bucket 10/90 doctrine (commit `6847c88`).
+
+### Security invariants
+
+```bash
+python scripts/clawx-control/opus-guardian.py   # 8 invariants, current score 96%
+```
 
 ---
 
@@ -262,16 +338,43 @@ Full status: [briefings/T5500-NODE-STATUS.md](briefings/T5500-NODE-STATUS.md).
 
 ## Claude Code Automation
 
-**Hooks** (.claude/settings.json):
-- PreToolUse: .env file protection, protected file notice
-- PostToolUse: Prettier auto-format on edit
+**Settings** (`.claude/settings.json`):
+- `model: opus`, `defaultMode: bypassPermissions`, `enableAllProjectMcpServers: true`
+- Hooks — PreToolUse: `.env` protection + protected-file notice on `Edit|Write`; PostToolUse: Prettier auto-format on edit
+- `DOCKER_HOST=ssh://joshl@192.168.0.15` (T5500 docker tunnel), `COMPOSE_PROJECT_NAME=antigravity`
 
-**Skills** (`/command`): status, health, policy-boundary, launch-checklist, cost-check, my-workflow,
-deploy-check, square-status, donate-scan, security-review
+**Slash commands** (`.claude/commands/`): `status`, `health`, `policy-boundary`, `launch-checklist`,
+`cost-check`, `my-workflow`, `deploy-check`, `square-status`, `donate-scan`, `security-review`, `token-check`
 
-**MCP Servers** (.mcp.json): antigravity-sentry, postgres, playwright, fetch, memory
+**Sub-agents** (`.claude/agents/`): `ollama-claude`, `ollama-codex`, `ollama-hermes`, `ollama-openclaw`,
+`ollama-opencode`, `ollama-pi`, `paperclip-worker`, `router` (token-router — invoke first for cost routing)
 
-**CI**: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405, doctrine drift scan)
+**MCP servers** (`.mcp.json`): `brain-mcp`, `antigravity-sentry`, `paperclip`, `playwright`, `mission-mcp`
+
+### mission-mcp tools (the orchestrator kernel)
+
+| Tool | Purpose |
+|------|---------|
+| `create_task` / `list_tasks` / `update_task` | Mission-board CRUD (filters: `status`, `parent_task_id`, `assigned_agent_id`, `tag`, `since_ms`, `limit`) |
+| `create_issue` / `resolve_issue` | Block/risk tracking, optionally linked to a task |
+| `store_memory` / `search_memory` | Persistent knowledge in `~/.hermes/memories/` |
+| `read_file` / `write_file` / `patch_file` | Repo-relative file ops (`patch_file` takes unified diff) |
+| `list_agents` | Registered agent processes — always returns array (never null) |
+
+Ordering: `created_at DESC, rowid DESC` (rowid tiebreaker ensures determinism for same-ms inserts).
+
+### CI workflows (`.github/workflows/`)
+
+| Workflow | Triggers on | Jobs |
+|----------|-------------|------|
+| `ci-validate.yml` | push to main + PRs | `validate` (build, §496.405 scan, doctrine drift scan, secret scan, TODO scan), `eslint-prettier-check`, `black-ruff-check`, `run-tests` (pytest 80% gate), `js-tests` (pnpm vitest), `guardian-check` (opus-guardian) |
+| `daily-doctrine-audit.yml` | cron | paperclip agent audit commits |
+| `deploy-gcr.yml` | manual / tag | GCR backend deploy |
+| `hermes-integrity-watchdog.yml` | cron | hermes router integrity |
+| `mission-control-ci.yml` | mission-control paths | mission-control build/test |
+
+Doctrine drift blocker — these strings cannot appear in `apps/youandinotai-frontend/` or `youandinotai-api/app/`:
+`ai-solutions.store`, `CharityRouter100`, `60/30/10`, `100% to charity`.
 
 ---
 
@@ -314,10 +417,25 @@ The security isn't for us — it's for the kids. Please don't weaken these. Buil
 - GitHub PAT: Windows Credential Manager (NOT .env) — rotated 2026-03-05
 - Cloudflare API token: check status at dash.cloudflare.com
 - Launch: PowerShell 7.5 admin -> `go` -> Start-Opus -> `claude --dangerously-skip-permissions`
+- `.env.example` is the authoritative key list (67 keys); copy to `.env` and fill from the master vault. `.env` is gitignored.
 
 ---
 
-*Updated: 2026-04-17 | Revenue model permanently changed to 1-wallet/10% reserve — no charity doctrine | Donate-guard hook removed | GLM-5.1:cloud token policy set*
+## Conventions for AI Assistants
+
+- **Branch**: develop on `claude/<short-description>` off `main`. Never push to `main` directly. Never push to any repo other than `Trollz1004/ANTIGRAVITY`.
+- **Commit style** (see `git log`): `type(scope): message` — `fix(ci):`, `feat(mission-mcp):`, `test(coverage):`, `docs(paperclip):`, `chore(audit):`, `security(webhooks):`. Use `[skip ci]` only for automated audit commits.
+- **Pull request**: after pushing, always open a PR (ready for review, not draft) on `Trollz1004/ANTIGRAVITY`. No `gh` CLI — use `mcp__github__*` tools.
+- **Format on save** is configured via PostToolUse hook. Don't run formatters manually unless CI fails.
+- **Python**: ruff + black. Match existing style; no comments unless the WHY is non-obvious.
+- **JS/TS**: ESLint + Prettier. React 19, Next.js 15, TypeScript 5.x. Vitest for tests.
+- **No mock data**: real values or fail honestly (see Hard Constraints).
+- **No `donate*` / charity language** on active surfaces (CI scan blocks it). One-wallet model only.
+- **Graphify**: after modifying code files, run `npx graphify hook-rebuild` to keep the graph current. Before architecture answers, read `.graphify/GRAPH_REPORT.md`.
+
+---
+
+*Updated: 2026-05-16 | Folder structure aligned to actual `apps/`+`services/`+`backend/` layout | mission-mcp tool surface documented | Dev commands + CI job list added | Coverage gate raised to 80% (commit `5a57a26`) | Previous: 2026-04-17 — 1-wallet/10% reserve, donate-guard removed*
 
 ## graphify
 
