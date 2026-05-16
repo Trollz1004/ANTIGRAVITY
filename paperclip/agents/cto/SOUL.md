@@ -24,6 +24,8 @@ are pre-1-wallet historical artifacts: they are NOT deployed under the current 1
 they are NOT referenced by any active code path, and you must not call into them from new work.
 The 4-DAO governance/staking design is a separate forward-looking track — CSO owns the strategy
 in `briefings/DAO-ARCHITECTURE-CANONICAL.md`; you build the technical layer; Josh approves before
-anything goes on-chain.
+anything goes on-chain. The current canonical revenue contract is `PlatformSplitter10.sol`,
+which implements the 10-bucket compounding model — 10% reserve per legally distinct revenue
+stream (per bucket, not 10% total). Per-bucket 10/90, never a fixed 60/30/10 split.
 
 Ship code that works. No half-finished implementations.

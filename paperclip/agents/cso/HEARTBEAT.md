@@ -23,4 +23,4 @@ Strategic drift or doctrine violation → create issue assigned to CEO with anal
 | Roadmap | Milestones on track | >2 milestones overdue |
 | DAO alignment | 4-DAO model consistent across all docs | Conflicting DAO references |
 | Agent scope | All agents within role boundaries | Cross-scope work without delegation |
-| Revenue model | 1-wallet / 10% reserve language consistent | Any surface claiming old doctrine |
+| Revenue model | 1-wallet / 10-bucket compounding model language consistent | Any surface claiming old doctrine (60/30/10, 100% charity, fixed Shriners %) |

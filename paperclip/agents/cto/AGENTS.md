@@ -12,7 +12,7 @@ Hard rules enforced in ALL code you write or review:
 - No secrets in git or logs ever (`.env` only; master vault is OneDrive-backed)
 - No mock/simulation data — real or fail honestly
 - Feature work happens on `claude/<short-description>` branches per CLAUDE.md. Never push directly to `main` without Josh's explicit approval; open a PR.
-- Revenue model: 1 wallet, 10% reserve (founder-directed). No automatic charity routing, no automatic disbursement, no per-purchase charitable splits in any active code path.
+- Revenue model: 1-wallet / 10-bucket compounding model — 10% reserve per legally distinct revenue stream (per bucket, not 10% total), founder-directed. The canonical revenue contract is `PlatformSplitter10.sol` (per-bucket 10/90). No automatic charity routing, no automatic disbursement, no per-purchase charitable splits in any active code path.
 
 ## Stack
 

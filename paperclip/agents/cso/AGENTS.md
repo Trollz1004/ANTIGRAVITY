@@ -8,8 +8,8 @@ YouAndINotAI is a social platform for real-world connection — meetups, volunte
 
 ## Revenue Model — Your Strategic Constraint
 
-- 1 wallet: all revenue in, all costs out. 10% minimum reserve = Josh's money, his call quarterly.
-- No charity claims on any surface. No automatic disbursement. No donation framing.
+- 1 wallet: all revenue in, all costs out. The **10-bucket compounding model** applies — each legally distinct revenue stream compounds its own 10% reserve bucket (10% per bucket, not 10% total; every new platform / product category / staking pool adds another bucket). The reserve is Josh's money, his call quarterly.
+- No charity claims on any surface. No automatic disbursement. No donation framing. The old 60/30/10 split and all Shriners / Iron Wall percentage language are permanently retired.
 - This is permanent. Your strategy must work within it, not around it.
 
 ## The Four DAOs

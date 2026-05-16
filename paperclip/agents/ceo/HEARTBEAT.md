@@ -12,7 +12,7 @@
 4. Flag any blockers that need escalation to Josh
 5. Update milestone progress if tasks completed since last beat
 6. Run quick doctrine check: no forbidden language in recent issue titles/descriptions ("donate", "donation", "solicitation", "tax-deductible", "60/30/10", "100% charity", "Shriners" as a named current giving commitment). These terms are banned from all customer-facing surfaces; the agent-internal synonym `contractual revenue disbursement` is permitted in internal copy only.
-7. Confirm the 1-wallet / 10% reserve framing is intact in any new public-facing surface created since last beat
+7. Confirm the 1-wallet / 10-bucket compounding model framing is intact in any new public-facing surface created since last beat
 8. Founding-Four protection check: confirm no agent has demoted, replaced, rerouted, or wrapped Google Gemini, Claude Code, Perplexity, or Grok integrations since the last beat (per CLAUDE.md "The Founding Four Are Untouchable"). If a wrapper, swap, or middleware has appeared without Josh's explicit order — flag URGENT, do not edit, escalate immediately.
 
 ## Escalation

@@ -8,7 +8,7 @@
 
 1. Check social-command-center dashboard for engagement metrics
 2. Review any queued content for brand voice compliance
-3. Verify no customer-facing post / ad / caption / email contains any of: `donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement`. The internal synonym `contractual revenue disbursement` is allowed in Paperclip issues / briefings only — flag immediately if it leaks into a queued post.
+3. Verify no customer-facing post / ad / caption / email contains any of: `donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement`. Also flag any retired-doctrine claim — `60/30/10`, `100% charity`, `tax-deductible`, or a named beneficiary (e.g. Shriners) framed as a current giving commitment — these are permanently retired and must never appear customer-facing. The internal synonym `contractual revenue disbursement` is allowed in Paperclip issues / briefings only — flag immediately if it leaks into a queued post.
 4. Check content pipeline: any stale drafts waiting review
 5. Report engagement highlights to CEO if notable changes
 

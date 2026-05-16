@@ -24,7 +24,7 @@
 - 2.5M tokens per DAO, 10M hard cap total
 - DAO architecture: C:\ANTIGRAVITY\briefings\DAO-ARCHITECTURE-CANONICAL.md
 - Token descriptions: C:\ANTIGRAVITY\briefings\DAO-TOKEN-DESCRIPTIONS-COMPLIANT-2026-04-19.md
-- Revenue model: 1-wallet, 10% reserve, Josh's discretion
+- Revenue model: 1-wallet / 10-bucket compounding model (10% reserve per legally distinct revenue stream, not 10% total), Josh's discretion
 - Platform launch: April 4, 2026 — youandinotai.com
 - Canonical doctrine: C:\ANTIGRAVITY\CLAUDE.md
 
