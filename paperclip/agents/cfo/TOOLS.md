@@ -22,6 +22,7 @@
 - Square location: LY5GN09F5AN83 (YouAndINotAI / Trash Or Treasure — ACTIVE)
 - Payment products: Bot-Shield $1, Founding Member $14.99/mo, 3-Month $39.99, 12-Month $99.99, Royalty $2,500
 - Stripe: LEGACY ONLY — being phased out
+- Reserve model: 10-bucket compounding — 10% per legally distinct revenue stream, not 10% total. Canonical: `briefings/DAO-TOKENOMICS-FINAL.md`
 
 ## Runtime Env (injected by Paperclip)
 
