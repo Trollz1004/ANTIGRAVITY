@@ -732,7 +732,11 @@ export const MissionControlDashboard = () => {
               </ShellButton>
             }
           >
+            <label htmlFor="task-dispatch-input" className="block text-xs text-slate-400 mb-1">
+              Task brief <span className="text-red-400" aria-label="required">*</span>
+            </label>
             <textarea
+              id="task-dispatch-input"
               data-testid="task-input"
               value={brief}
               onChange={event => setBrief(event.target.value)}
@@ -741,7 +745,10 @@ export const MissionControlDashboard = () => {
               }}
               placeholder="Type the task once. Pick agents below. Ctrl+Enter queues it."
               aria-label="Task brief input"
-              className="min-h-28 w-full resize-y rounded-md border border-slate-800 bg-slate-950 p-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-cyan-400/70 focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2"
+              aria-required="true"
+              aria-invalid={dispatchMessage?.startsWith('Validation') ? true : undefined}
+              aria-describedby={dispatchMessage ? 'task-dispatch-message' : undefined}
+              className={`min-h-28 w-full resize-y rounded-md border bg-slate-950 p-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-cyan-400/70 focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2 ${dispatchMessage?.startsWith('Validation') ? 'border-red-500/70' : 'border-slate-800'}`}
             />
             <div className="mt-3 flex flex-wrap items-center gap-2" role="group" aria-label="Agent selection">
               {AGENTS.map(agent => (
@@ -760,7 +767,15 @@ export const MissionControlDashboard = () => {
                 </ShellButton>
               ))}
             </div>
-            {dispatchMessage && <div className="mt-3 text-xs text-cyan-200">{dispatchMessage}</div>}
+            {dispatchMessage && (
+              <div
+                id="task-dispatch-message"
+                className={`mt-3 text-xs ${dispatchMessage.startsWith('Validation') || dispatchMessage.startsWith('Dispatch failed') ? 'text-red-400' : 'text-cyan-200'}`}
+                role={dispatchMessage.startsWith('Validation') ? 'alert' : undefined}
+              >
+                {dispatchMessage}
+              </div>
+            )}
           </Section>
 
           <Section title="Needs Attention" icon={<AlertTriangle size={16} />}>
