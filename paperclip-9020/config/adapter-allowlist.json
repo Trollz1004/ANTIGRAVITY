@@ -68,6 +68,9 @@
         "top_p": 0.9
       }
     },
+    "claude_opus": {
+      "type": "anthropic_api",
+      "role": "ARCHITECT + AUDITOR ONLY",
       "purpose": "Writes and maintains MD instruction files. Reviews agent output for drift. Does NOT do daily operational work.",
       "models": ["claude-opus-4-7", "claude-sonnet-4-6"],
       "tier": 0,
