@@ -8,6 +8,12 @@ services:
     ports:
       - "6380:6379"
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   qdrant-staging:
     image: qdrant/qdrant
@@ -18,6 +24,12 @@ services:
     volumes:
       - ./qdrant-data-staging:/qdrant/storage
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   openclaw-staging:
     build:
@@ -38,9 +50,17 @@ services:
       - openclaw_wwebjs_cache_staging:/app/.wwebjs_cache
       - ./openclaw/.env.staging:/app/.env:ro # This refers to .env.staging in the root, not inside openclaw dir
     depends_on:
-      - redis-staging
-      - qdrant-staging
+      redis-staging:
+        condition: service_healthy
+      qdrant-staging:
+        condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3200/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   whatsapp-bridge-staging:
     build:
@@ -61,12 +81,21 @@ services:
       - openclaw_wwebjs_staging:/app/.wwebjs_auth
       - openclaw_wwebjs_cache_staging:/app/.wwebjs_cache
     depends_on:
-      - redis-staging
-      - qdrant-staging
-      - openclaw-staging
+      redis-staging:
+        condition: service_healthy
+      qdrant-staging:
+        condition: service_healthy
+      openclaw-staging:
+        condition: service_healthy
     security_opt:
       - seccomp:unconfined
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3200/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   backend-fastapi-staging:
     build:
@@ -91,10 +120,19 @@ services:
     volumes:
       - ./logs-staging:/app/logs
     depends_on:
-      - redis-staging
-      - qdrant-staging
-      - postgres-staging
+      redis-staging:
+        condition: service_healthy
+      qdrant-staging:
+        condition: service_healthy
+      postgres-staging:
+        condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   postgres-staging:
     image: postgres:15-alpine
@@ -108,6 +146,12 @@ services:
     volumes:
       - ./postgres-data-staging:/var/lib/postgresql/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U paperclip_staging -d paperclip_staging"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   frontend-mission-control-staging:
     build:
@@ -124,8 +168,15 @@ services:
       - NODE_ENV=staging
       - VITE_API_URL=http://backend-fastapi-staging:8000/api/v1 # For container internal communication
     depends_on:
-      - backend-fastapi-staging
+      backend-fastapi-staging:
+        condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5173/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
 volumes:
   openclaw_wwebjs_staging:
