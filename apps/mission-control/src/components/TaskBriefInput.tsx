@@ -7,7 +7,6 @@ import { validateTaskBrief } from '../lib/input-validation';
 export const TaskBriefInput: React.FC = () => {
   const [brief, setBrief] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
   const { success, error: toastError } = useToast();
 
@@ -21,10 +20,8 @@ export const TaskBriefInput: React.FC = () => {
     setTouched(true);
     const result = validateTaskBrief(brief);
     if (!result.valid) {
-      setError(result.error);
       return;
     }
-    setError(null);
     setLoading(true);
     const apiResult = await apiPost('/tasks/dispatch', { brief: (result.value as string), agents: [] });
     setLoading(false);
@@ -46,10 +43,6 @@ export const TaskBriefInput: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBrief(e.target.value);
-    if (touched) {
-      const result = validateTaskBrief(e.target.value);
-      setError(result.valid ? null : result.error);
-    }
   };
 
   const validationError = validate(brief);
