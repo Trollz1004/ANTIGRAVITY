@@ -1,28 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  Activity,
-  AlertTriangle,
-  CheckCircle2,
-  Clipboard,
-  Code2,
-  Copy,
-  ExternalLink,
-  FileText,
-  GitBranch,
-  HeartPulse,
-  ListChecks,
-  Loader2,
-  PlayCircle,
-  RefreshCw,
-  Route,
-  ScrollText,
-  Send,
-  Server,
-  ShieldCheck,
-  TerminalSquare,
-  Wallet,
-  XCircle,
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, Activity, AlertTriangle, CheckCircle2, Clipboard, Code2, Copy, ExternalLink, FileText, GitBranch, HeartPulse, ListChecks, Loader2, PlayCircle, RefreshCw, Route, ScrollText, Send, Server, ShieldCheck, TerminalSquare, Wallet, XCircle } from 'lucide-react';
 import { clsx } from 'clsx';
 import { apiGet, apiJson, apiPost, type Envelope } from '../lib/api';
 import { validateTaskBrief, validateAgentId } from '../lib/input-validation';
@@ -392,7 +369,10 @@ export const MissionControlDashboard = () => {
   const [activeModel, setActiveModel] = useState('hermes');
   const [copiedCommand, setCopiedCommand] = useState<string | null>(null);
   const [commands, setCommands] = useState<OperationCommand[]>([]);
-  const [runs, setRuns] = useState<OperationRun[]>([]);
+    const [runs, setRuns] = useState<OperationRun[]>([]);
+    const [runsOffset, setRunsOffset] = useState(0);
+    const [runsLimit, setRunsLimit] = useState(6);
+    const [runsTotal, setRunsTotal] = useState(0);
   const [selectedRunId, setSelectedRunId] = useState<string | null>(null);
   const [operationMessage, setOperationMessage] = useState<string | null>(null);
   const { success, error } = useToast();
@@ -458,9 +438,13 @@ export const MissionControlDashboard = () => {
   };
 
   const loadRuns = async () => {
-    const result = await apiJson<{ runs: OperationRun[] }>('/ops/runs', 5000);
+    const result = await apiJson<{ runs: OperationRun[]; pagination: { offset: number; limit: number; total: number } }>(
+      `/ops/runs?offset=${runsOffset}&limit=${runsLimit}`,
+      5000
+    );
     if (result.data?.runs) {
       setRuns(result.data.runs);
+      setRunsTotal(result.data.pagination.total);
       setSelectedRunId(current => current ?? result.data?.runs?.[0]?.run_id ?? null);
     }
   };
@@ -887,10 +871,25 @@ export const MissionControlDashboard = () => {
             title="Run Logs"
             icon={<ScrollText size={16} />}
             action={
-              <ShellButton onClick={loadRuns} ariaLabel="Reload run logs">
-                <RefreshCw size={14} />
-                Reload
-              </ShellButton>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-500">
+                  {runsTotal > 0 ? `${runsOffset + 1}-${Math.min(runsOffset + runsLimit, runsTotal)} of ${runsTotal}` : ''}
+                </span>
+                <ShellButton onClick={() => setRunsOffset(prev => Math.max(0, prev - runsLimit))} disabled={runsOffset === 0} ariaLabel="Previous page">
+                  <ChevronLeft size={14} />
+                </ShellButton>
+                <ShellButton
+                  onClick={() => setRunsOffset(prev => prev + runsLimit)}
+                  disabled={runsOffset + runsLimit >= runsTotal}
+                  ariaLabel="Next page"
+                >
+                  <ChevronRight size={14} />
+                </ShellButton>
+                <ShellButton onClick={loadRuns} ariaLabel="Reload run logs">
+                  <RefreshCw size={14} />
+                  Reload
+                </ShellButton>
+              </div>
             }
           >
             <div data-testid="runs-list" className="space-y-2">
@@ -899,7 +898,7 @@ export const MissionControlDashboard = () => {
                   No operations have run from this API process yet.
                 </div>
               ) : (
-                runs.slice(0, 6).map(run => (
+                runs.slice(runsOffset, runsOffset + runsLimit).map(run => (
                   <button
                     key={run.run_id}
                     type="button"

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ArrowRight,
@@ -13,6 +13,17 @@ import {
 import { GoogleSignInButton } from '../../components/auth/GoogleSignInButton';
 import { useAuth } from '../../lib/auth';
 import { getSafeNextPath } from '../../lib/navigation';
+import {
+  validateRequired,
+  validateEmail,
+  validateMinLength,
+} from '../../lib/validation';
+import { FormField } from '../../components/FormField';
+
+interface LoginErrors {
+  email?: string;
+  password?: string;
+}
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -23,15 +34,57 @@ export function Login() {
   const [betaError, setBetaError] = useState('');
   const [betaLoading, setBetaLoading] = useState(false);
   const [showBeta, setShowBeta] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<LoginErrors>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const { login, betaAccess } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const nextPath = getSafeNextPath(location.search, '/app');
   const registerHref = `/register?next=${encodeURIComponent(nextPath)}`;
 
+  const validateLoginField = useCallback(
+    (name: string, value: string): string | undefined => {
+      if (name === 'email') {
+        if (!validateRequired(value)) return 'Email is required';
+        if (!validateEmail(value)) return 'Enter a valid email address';
+        return undefined;
+      }
+      if (name === 'password') {
+        if (!validateRequired(value)) return 'Password is required';
+        if (!validateMinLength(value, 1)) return 'Password is required';
+        return undefined;
+      }
+      return undefined;
+    },
+    []
+  );
+
+  const handleFieldBlur = useCallback(
+    (name: string, value: string) => {
+      setTouched((prev) => ({ ...prev, [name]: true }));
+      const err = validateLoginField(name, value);
+      setFieldErrors((prev) => ({ ...prev, [name]: err }));
+    },
+    [validateLoginField]
+  );
+
+  const validateAll = useCallback((): boolean => {
+    const errors: LoginErrors = {};
+    const emailErr = validateLoginField('email', email);
+    const passwordErr = validateLoginField('password', password);
+    if (emailErr) errors.email = emailErr;
+    if (passwordErr) errors.password = passwordErr;
+    setFieldErrors(errors);
+    setTouched({ email: true, password: true });
+    return !emailErr && !passwordErr;
+  }, [email, password, validateLoginField]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!validateAll()) return;
+
     setLoading(true);
     try {
       await login(email, password);
@@ -46,6 +99,10 @@ export function Login() {
   const handleBetaCode = async (e: React.FormEvent) => {
     e.preventDefault();
     setBetaError('');
+    if (!validateRequired(betaCode)) {
+      setBetaError('Access code is required');
+      return;
+    }
     setBetaLoading(true);
     try {
       await betaAccess(betaCode);
@@ -120,7 +177,7 @@ export function Login() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
               {error && (
                 <div className="rounded-[1.4rem] border-4 border-[#111111] bg-[#ffd9c7] px-4 py-3 text-sm font-semibold text-[#111111]">
                   {error}
@@ -128,37 +185,35 @@ export function Login() {
               )}
 
               <div className="space-y-4">
-                <label className="relative block">
-                  <Mail
-                    size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]"
-                  />
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    autoComplete="email"
-                    placeholder="Email"
-                    className="app-input input-glow pl-12"
-                  />
-                </label>
+                <FormField
+                  label="Email"
+                  name="email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onBlur={(e) => handleFieldBlur('email', e.target.value)}
+                  error={fieldErrors.email}
+                  touched={touched.email}
+                  placeholder="Email"
+                  autoComplete="email"
+                  icon={<Mail size={18} />}
+                />
 
-                <label className="relative block">
-                  <Lock
-                    size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]"
-                  />
-                  <input
-                    type="password"
-                    required
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    autoComplete="current-password"
-                    placeholder="Password"
-                    className="app-input input-glow pl-12"
-                  />
-                </label>
+                <FormField
+                  label="Password"
+                  name="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onBlur={(e) => handleFieldBlur('password', e.target.value)}
+                  error={fieldErrors.password}
+                  touched={touched.password}
+                  placeholder="Password"
+                  autoComplete="current-password"
+                  icon={<Lock size={18} />}
+                />
               </div>
 
               <button
@@ -205,9 +260,10 @@ export function Login() {
                 <form
                   onSubmit={handleBetaCode}
                   className="mt-4 space-y-3 animate-slide-up"
+                  noValidate
                 >
                   {betaError && (
-                    <p className="text-sm font-semibold text-[#111111]">
+                    <p className="text-sm font-semibold text-red-600">
                       {betaError}
                     </p>
                   )}
@@ -215,7 +271,7 @@ export function Login() {
                     <input
                       type="text"
                       value={betaCode}
-                      onChange={e => setBetaCode(e.target.value)}
+                      onChange={(e) => setBetaCode(e.target.value)}
                       autoComplete="one-time-code"
                       placeholder="Enter access code"
                       className="app-input input-glow flex-1 uppercase tracking-[0.14em]"
