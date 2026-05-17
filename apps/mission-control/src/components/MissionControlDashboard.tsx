@@ -26,6 +26,7 @@ import {
 import { clsx } from 'clsx';
 import { apiGet, apiJson, apiPost, type Envelope } from '../lib/api';
 import { validateTaskBrief, validateAgentId } from '../lib/input-validation';
+import { useToast } from '../lib/useToast';
 
 type HealthSummary = { ok: number; degraded: number; unreachable: number };
 type HealthAll = Record<string, Envelope<any>> & { _summary?: HealthSummary };
@@ -386,6 +387,7 @@ export const MissionControlDashboard = () => {
   const [runs, setRuns] = useState<OperationRun[]>([]);
   const [selectedRunId, setSelectedRunId] = useState<string | null>(null);
   const [operationMessage, setOperationMessage] = useState<string | null>(null);
+  const { success, error } = useToast();
 
   const summary = useMemo(() => summarizeHealth(health), [health]);
   const entries = useMemo(() => healthEntries(health), [health]);
@@ -404,6 +406,7 @@ export const MissionControlDashboard = () => {
       setHealthError(null);
     } else {
       setHealthError(result.error ?? 'health/all failed');
+      error(result.error ?? 'Health check failed');
     }
   };
 
@@ -482,10 +485,12 @@ export const MissionControlDashboard = () => {
     setDispatching(false);
     if (result?.queued) {
       setDispatchMessage(`Queued ${result.task_id}`);
+      success(`Task queued: ${result.task_id}`);
       setBrief('');
       await loadTasks();
     } else {
       setDispatchMessage('Dispatch failed');
+      error('Task dispatch failed');
     }
   };
 
@@ -504,7 +509,12 @@ export const MissionControlDashboard = () => {
 
   const swapModel = async (model: string) => {
     setActiveModel(model);
-    await apiPost('/hermes/active', { model }, 5000);
+    const result = await apiPost('/hermes/active', { model }, 5000);
+    if (result) {
+      success(`Switched to ${model}`);
+    } else {
+      error(`Failed to switch to ${model}`);
+    }
     await loadModels();
   };
 
@@ -513,11 +523,13 @@ export const MissionControlDashboard = () => {
     const result = await apiPost<OperationRun>(`/ops/runs/${commandId}`, {}, 8000);
     if (result?.run_id) {
       setOperationMessage(`Started ${result.title}`);
+      success(`Started: ${result.title}`);
       setRuns(current => [result, ...current.filter(run => run.run_id !== result.run_id)]);
       setSelectedRunId(result.run_id);
       window.setTimeout(loadRuns, 1200);
     } else {
       setOperationMessage('Operation failed to start');
+      error('Operation failed to start');
     }
   };
 
