@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ANTIGRAVITY
 
 > *Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.*
@@ -92,3 +93,6 @@ The code is open source. See [LICENSE](./LICENSE) (where present per directory).
 **#UntilNoKidInNeed · For the kids · #TeamClaudeForLife**
 
 </div>
+=======
+# Here are your Instructions
+>>>>>>> origin/main-emergent-command-center-opus-approval-needed
