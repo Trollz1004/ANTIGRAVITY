@@ -11,7 +11,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from app.error_responses import not_found
 from pydantic import BaseModel
 
@@ -71,10 +71,40 @@ async def create_ops_run(
     summary="List recent ops run events",
 )
 async def list_ops_runs(
-    limit: int = 50,
+    offset: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
     current_user: User = Depends(get_current_user),
-) -> list[OpsRunResponse]:
-    return [OpsRunResponse(**r) for r in _RUNS[-limit:]]
+) -> dict:
+    # Sort runs by recorded_at in descending order (most recent first)
+    sorted_runs = sorted(_RUNS, key=lambda r: r.get("recorded_at", ""), reverse=True)
+    total = len(sorted_runs)
+
+    # Apply offset and limit for pagination
+    start_index = offset
+    end_index = min(offset + limit, total)
+
+    # Ensure start_index is not out of bounds, adjust if necessary for empty results
+    if start_index >= total and total > 0:
+        start_index = max(0, total - limit)
+        end_index = total
+    elif start_index >= total and total == 0:
+        start_index = 0
+        end_index = 0
+
+    paginated_runs = sorted_runs[start_index:end_index]
+
+    return {
+        "runs": [OpsRunResponse(**r) for r in paginated_runs],
+        "pagination": {
+            "offset": start_index,
+            "limit": limit,
+            "total": total,
+            "has_next": end_index < total,
+            "has_prev": start_index > 0,
+            "next_offset": end_index if end_index < total else None,
+            "prev_offset": max(0, start_index - limit) if start_index > 0 else None,
+        },
+    }
 
 
 @router.get(
