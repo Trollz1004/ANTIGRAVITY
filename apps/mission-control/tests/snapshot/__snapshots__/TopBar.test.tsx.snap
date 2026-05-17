@@ -1,0 +1,126 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TopBar > renders correctly 1`] = `
+<div>
+  <div
+    class="flex items-center justify-between bg-panel px-4 py-2 border-b border-border"
+    data-testid="topbar"
+  >
+    <div
+      class="flex items-center gap-6 text-xs font-mono"
+    >
+      <span
+        class="text-accentMagenta flex items-center gap-1"
+      >
+        <svg
+          class="lucide lucide-heart"
+          fill="none"
+          height="12"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="12"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+          />
+        </svg>
+         #UntilNoKidInNeed
+      </span>
+      <span
+        class="text-gray-400"
+      >
+        committed 
+        <span
+          class="text-gray-200"
+        >
+          $0.00
+        </span>
+      </span>
+      <span
+        class="text-gray-400"
+      >
+        kids fund 
+        <span
+          class="text-gray-200"
+        >
+          $0.00
+        </span>
+      </span>
+      <span
+        class="text-gray-400"
+        title="$250 USD per kid threshold"
+      >
+        kids covered (est.) 
+        <span
+          class="text-accentCyan"
+        >
+          0
+        </span>
+      </span>
+    </div>
+    <div
+      class="flex items-center gap-3"
+    >
+      <span
+        class="text-[10px] font-mono uppercase tracking-wider text-gray-500"
+      >
+        OpusPawClaw · Mission Control
+      </span>
+      <span
+        class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-accentCyan/10 border border-accentCyan/30 text-accentCyan"
+      >
+        BUILT · E1
+      </span>
+      <button
+        class="flex items-center gap-1 px-2 py-1 text-xs font-mono rounded border border-border hover:border-accentCyan/50 transition text-gray-300"
+      >
+        <svg
+          class="lucide lucide-share2"
+          fill="none"
+          height="12"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="12"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="18"
+            cy="5"
+            r="3"
+          />
+          <circle
+            cx="6"
+            cy="12"
+            r="3"
+          />
+          <circle
+            cx="18"
+            cy="19"
+            r="3"
+          />
+          <line
+            x1="8.59"
+            x2="15.42"
+            y1="13.51"
+            y2="17.49"
+          />
+          <line
+            x1="15.41"
+            x2="8.59"
+            y1="6.51"
+            y2="10.49"
+          />
+        </svg>
+         share
+      </button>
+    </div>
+  </div>
+</div>
+`;
