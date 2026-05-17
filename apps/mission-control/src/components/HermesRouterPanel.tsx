@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { PanelBase } from './PanelBase';
 import { apiGet, apiPost } from '../lib/api';
+import { useToast } from '../lib/useToast';
 
 const CHIPS = ['hermes', 'hermes-deep', 'cfo', 'code', 'marketing', 'kimi', 'fast'];
 
 export const HermesRouterPanel: React.FC = () => {
   const [active, setActive] = useState<string>('hermes');
+  const { success, error } = useToast();
 
   useEffect(() => {
     apiGet<{ models: string[]; active: string }>('/hermes/models').then(env => {
@@ -15,7 +17,12 @@ export const HermesRouterPanel: React.FC = () => {
 
   const swap = async (model: string) => {
     setActive(model);
-    await apiPost('/hermes/active', { model });
+    const result = await apiPost('/hermes/active', { model });
+    if (result) {
+      success(`Switched to ${model}`);
+    } else {
+      error(`Failed to switch to ${model}`);
+    }
   };
 
   return (

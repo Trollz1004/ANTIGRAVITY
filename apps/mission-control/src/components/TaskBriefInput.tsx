@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
 import { apiPost } from '../lib/api';
+import { useToast } from '../lib/useToast';
 
 export const TaskBriefInput: React.FC = () => {
   const [brief, setBrief] = useState('');
   const [loading, setLoading] = useState(false);
+  const { success, error } = useToast();
 
   const submit = async () => {
     if (!brief.trim()) return;
     setLoading(true);
-    await apiPost('/tasks/dispatch', { brief: brief.trim(), agents: [] });
+    const result = await apiPost('/tasks/dispatch', { brief: brief.trim(), agents: [] });
     setLoading(false);
-    setBrief('');
+    if (result) {
+      success('Task dispatched successfully');
+      setBrief('');
+    } else {
+      error('Failed to dispatch task');
+    }
   };
 
   const onKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
