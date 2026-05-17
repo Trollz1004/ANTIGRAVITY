@@ -70,3 +70,5 @@ yarn.lock
 # Temporary files
 *.tmp
 .tmp/
+
+.pytest_tmp/

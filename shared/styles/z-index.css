@@ -1,0 +1,50 @@
+/**
+ * ANTIGRAVITY Z-Index Scale Standard
+ *
+ * Centralized z-index values to prevent stacking context issues.
+ * All overlay components should reference these CSS custom properties.
+ *
+ * Scale:
+ *   0–10    : Base content
+ *   100–200 : Navigation / header
+ *   300–400 : Dropdowns / popovers
+ *   500–600 : Modals / dialogs
+ *   700–800 : Toasts / notifications
+ *   900–1000: Critical overlays
+ *
+ * OPU-28: Audit and fix z-index stacking context across all overlay components.
+ */
+
+:root {
+  /* Base content */
+  --z-base: 0;
+  --z-base-1: 1;
+  --z-base-2: 2;
+  --z-base-5: 5;
+  --z-base-10: 10;
+
+  /* Decorative / sticky hover states */
+  --z-deco-50: 50;
+
+  /* Navigation / header */
+  --z-nav: 100;
+  --z-header: 100;
+
+  /* Dropdowns / popovers */
+  --z-dropdown: 300;
+  --z-popover: 350;
+
+  /* Modals / dialogs */
+  --z-modal-backdrop: 500;
+  --z-modal: 501;
+  --z-modal-confirm: 510;
+
+  /* Toasts / notifications */
+  --z-toast: 700;
+  --z-notification: 750;
+
+  /* Critical overlays */
+  --z-critical: 900;
+  --z-cmd-palette: 950;
+  --z-cookie-banner: 990;
+}
