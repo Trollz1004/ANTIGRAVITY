@@ -51,6 +51,9 @@ async def reconcile_legacy_schema() -> None:
 
     async with engine.begin() as connection:
         await connection.run_sync(Base.metadata.create_all)
+        # Create webhook retry tables (lazy import to avoid circular dependency)
+        from app import webhook_retry as _wr
+        await connection.run_sync(_wr.WebhookRetryQueue.metadata.create_all)
 
         if connection.dialect.name != "postgresql":
             return

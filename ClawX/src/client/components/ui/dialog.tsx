@@ -47,11 +47,11 @@ export function DialogContent({ className = '', children, ...props }: DialogCont
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[var(--z-modal-backdrop)] flex items-center justify-center">
       <div className="fixed inset-0 bg-black/50" onClick={() => onOpenChange(false)} />
       <div
         className={[
-          'relative z-50 w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-xl',
+          'relative z-[var(--z-modal)] w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-xl',
           className,
         ].join(' ')}
         {...props}
