@@ -7,11 +7,11 @@ from collections import defaultdict
 from fastapi import (
     APIRouter,
     Depends,
-    HTTPException,
     Query,
     WebSocket,
     WebSocketDisconnect,
 )
+from app.error_responses import not_found, forbidden, bad_request
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -39,12 +39,10 @@ async def get_messages(
     # Verify user is part of this match
     match = await db.get(Match, match_id)
     if not match or (match.user_a != user.id and match.user_b != user.id):
-        raise HTTPException(status_code=404, detail="Match not found")
+        raise not_found(message="Match not found")
     other_id = match.user_b if match.user_a == user.id else match.user_a
     if await has_block_relationship(db, user_a=user.id, user_b=other_id):
-        raise HTTPException(
-            status_code=403, detail="Conversation unavailable due to safety settings"
-        )
+        raise forbidden(message="Conversation unavailable due to safety settings")
 
     query = select(Message).where(Message.match_id == match_id)
     if before:
@@ -74,14 +72,12 @@ async def send_message(
 ) -> MessageResponse:
     match = await db.get(Match, match_id)
     if not match or (match.user_a != user.id and match.user_b != user.id):
-        raise HTTPException(status_code=404, detail="Match not found")
+        raise not_found(message="Match not found")
     other_id = match.user_b if match.user_a == user.id else match.user_a
     if await has_block_relationship(db, user_a=user.id, user_b=other_id):
-        raise HTTPException(
-            status_code=403, detail="Conversation unavailable due to safety settings"
-        )
+        raise forbidden(message="Conversation unavailable due to safety settings")
     if match.status != "active":
-        raise HTTPException(status_code=400, detail="Match is not active")
+        raise bad_request(message="Match is not active")
 
     msg = Message(
         id=uuid.uuid4(),

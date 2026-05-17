@@ -27,6 +27,7 @@ import { clsx } from 'clsx';
 import { apiGet, apiJson, apiPost, type Envelope } from '../lib/api';
 import { validateTaskBrief, validateAgentId } from '../lib/input-validation';
 import { useToast } from '../lib/useToast';
+import { ConfirmDialog } from './ConfirmDialog';
 
 type HealthSummary = { ok: number; degraded: number; unreachable: number };
 type HealthAll = Record<string, Envelope<any>> & { _summary?: HealthSummary };
@@ -336,8 +337,15 @@ const ShellButton = ({
     aria-label={ariaLabel}
     onClick={onClick}
     disabled={disabled}
+    onKeyDown={e => {
+      if ((e.key === 'Enter' || e.key === ' ') && onClick) {
+        e.preventDefault();
+        onClick();
+      }
+    }}
+    tabIndex={0}
     className={clsx(
-      'inline-flex min-h-9 items-center justify-center gap-2 rounded-md border px-3 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-40',
+      'inline-flex min-h-9 items-center justify-center gap-2 rounded-md border px-3 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2',
       className ?? 'border-slate-700 bg-slate-900 text-slate-200 hover:border-cyan-400/60'
     )}
   >
@@ -388,6 +396,22 @@ export const MissionControlDashboard = () => {
   const [selectedRunId, setSelectedRunId] = useState<string | null>(null);
   const [operationMessage, setOperationMessage] = useState<string | null>(null);
   const { success, error } = useToast();
+
+  // Confirmation dialog state
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  }>({ open: false, title: '', message: '', onConfirm: () => {} });
+
+  const confirmAction = (title: string, message: string, onConfirm: () => void) => {
+    setConfirmDialog({ open: true, title, message, onConfirm });
+  };
+
+  const closeConfirmDialog = () => {
+    setConfirmDialog(prev => ({ ...prev, open: false }));
+  };
 
   const summary = useMemo(() => summarizeHealth(health), [health]);
   const entries = useMemo(() => healthEntries(health), [health]);
@@ -480,18 +504,25 @@ export const MissionControlDashboard = () => {
       }
     }
 
-    setDispatching(true);
-    const result = await apiPost<{ task_id: string; queued: boolean }>('/tasks/dispatch', { brief: clean, agents }, 8000);
-    setDispatching(false);
-    if (result?.queued) {
-      setDispatchMessage(`Queued ${result.task_id}`);
-      success(`Task queued: ${result.task_id}`);
-      setBrief('');
-      await loadTasks();
-    } else {
-      setDispatchMessage('Dispatch failed');
-      error('Task dispatch failed');
-    }
+    confirmAction(
+      'Dispatch Task',
+      `Queue task "${clean.slice(0, 80)}${clean.length > 80 ? '...' : ''}" for agents: ${agents.join(', ')}?`,
+      async () => {
+        closeConfirmDialog();
+        setDispatching(true);
+        const result = await apiPost<{ task_id: string; queued: boolean }>('/tasks/dispatch', { brief: clean, agents }, 8000);
+        setDispatching(false);
+        if (result?.queued) {
+          setDispatchMessage(`Queued ${result.task_id}`);
+          success(`Task queued: ${result.task_id}`);
+          setBrief('');
+          await loadTasks();
+        } else {
+          setDispatchMessage('Dispatch failed');
+          error('Task dispatch failed');
+        }
+      }
+    );
   };
 
   const copyCommand = async (id: string, command: string) => {
@@ -508,29 +539,47 @@ export const MissionControlDashboard = () => {
   };
 
   const swapModel = async (model: string) => {
-    setActiveModel(model);
-    const result = await apiPost('/hermes/active', { model }, 5000);
-    if (result) {
-      success(`Switched to ${model}`);
-    } else {
-      error(`Failed to switch to ${model}`);
-    }
-    await loadModels();
+    confirmAction(
+      'Switch Model',
+      `Change the active Hermes model from "${activeModel}" to "${model}"?`,
+      async () => {
+        closeConfirmDialog();
+        setActiveModel(model);
+        const result = await apiPost('/hermes/active', { model }, 5000);
+        if (result) {
+          success(`Switched to ${model}`);
+        } else {
+          error(`Failed to switch to ${model}`);
+        }
+        await loadModels();
+      }
+    );
   };
 
   const startOperation = async (commandId: string) => {
-    setOperationMessage('Starting operation...');
-    const result = await apiPost<OperationRun>(`/ops/runs/${commandId}`, {}, 8000);
-    if (result?.run_id) {
-      setOperationMessage(`Started ${result.title}`);
-      success(`Started: ${result.title}`);
-      setRuns(current => [result, ...current.filter(run => run.run_id !== result.run_id)]);
-      setSelectedRunId(result.run_id);
-      window.setTimeout(loadRuns, 1200);
-    } else {
-      setOperationMessage('Operation failed to start');
-      error('Operation failed to start');
-    }
+    const command = commands.find(c => c.id === commandId);
+    const title = command?.title ?? commandId;
+    const caution = command?.caution;
+
+    confirmAction(
+      'Run Operation',
+      `Execute "${title}"${caution ? `\n\n⚠ ${caution}` : ''}?\n\nThis will run a system command on the server.`,
+      async () => {
+        closeConfirmDialog();
+        setOperationMessage('Starting operation...');
+        const result = await apiPost<OperationRun>(`/ops/runs/${commandId}`, {}, 8000);
+        if (result?.run_id) {
+          setOperationMessage(`Started ${result.title}`);
+          success(`Started: ${result.title}`);
+          setRuns(current => [result, ...current.filter(run => run.run_id !== result.run_id)]);
+          setSelectedRunId(result.run_id);
+          window.setTimeout(loadRuns, 1200);
+        } else {
+          setOperationMessage('Operation failed to start');
+          error('Operation failed to start');
+        }
+      }
+    );
   };
 
   return (
@@ -620,7 +669,7 @@ export const MissionControlDashboard = () => {
             title="Actions"
             icon={<TerminalSquare size={16} />}
             action={
-              <ShellButton onClick={loadHealth} disabled={refreshing}>
+              <ShellButton onClick={loadHealth} disabled={refreshing} ariaLabel="Refresh health checks">
                 {refreshing ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
                 Refresh
               </ShellButton>
@@ -632,8 +681,16 @@ export const MissionControlDashboard = () => {
                   key={item.id}
                   data-testid={`copy-${item.id}`}
                   type="button"
+                  aria-label={`Copy command: ${item.title}`}
+                  tabIndex={0}
                   onClick={() => copyCommand(item.id, item.command)}
-                  className="w-full rounded-md border border-slate-800 bg-slate-900/80 p-3 text-left transition hover:border-cyan-400/60"
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      copyCommand(item.id, item.command);
+                    }
+                  }}
+                  className="w-full rounded-md border border-slate-800 bg-slate-900/80 p-3 text-left transition hover:border-cyan-400/60 focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs font-semibold text-slate-100">{item.title}</span>
@@ -654,6 +711,7 @@ export const MissionControlDashboard = () => {
                   key={model}
                   testId={`hermes-chip-${model}`}
                   onClick={() => swapModel(model)}
+                  ariaLabel={`Switch to ${model} model`}
                   className={
                     activeModel === model
                       ? 'border-cyan-300 bg-cyan-300/15 text-cyan-100'
@@ -685,7 +743,7 @@ export const MissionControlDashboard = () => {
             title="Task Dispatch"
             icon={<Send size={16} />}
             action={
-              <ShellButton onClick={submitTask} disabled={!brief.trim() || dispatching} testId="task-send-btn">
+              <ShellButton onClick={submitTask} disabled={!brief.trim() || dispatching} testId="task-send-btn" ariaLabel="Queue task">
                 {dispatching ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
                 Queue
               </ShellButton>
@@ -699,13 +757,16 @@ export const MissionControlDashboard = () => {
                 if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) submitTask();
               }}
               placeholder="Type the task once. Pick agents below. Ctrl+Enter queues it."
-              className="min-h-28 w-full resize-y rounded-md border border-slate-800 bg-slate-950 p-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-cyan-400/70"
+              aria-label="Task brief input"
+              className="min-h-28 w-full resize-y rounded-md border border-slate-800 bg-slate-950 p-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-cyan-400/70 focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2"
             />
-            <div className="mt-3 flex flex-wrap items-center gap-2">
+            <div className="mt-3 flex flex-wrap items-center gap-2" role="group" aria-label="Agent selection">
               {AGENTS.map(agent => (
                 <ShellButton
                   key={agent.id}
                   onClick={() => toggleAgent(agent.id)}
+                  ariaLabel={`Toggle ${agent.label} agent`}
+                  aria-pressed={agents.includes(agent.id)}
                   className={
                     agents.includes(agent.id)
                       ? 'border-cyan-300 bg-cyan-300/15 text-cyan-100'
@@ -826,7 +887,7 @@ export const MissionControlDashboard = () => {
             title="Run Logs"
             icon={<ScrollText size={16} />}
             action={
-              <ShellButton onClick={loadRuns}>
+              <ShellButton onClick={loadRuns} ariaLabel="Reload run logs">
                 <RefreshCw size={14} />
                 Reload
               </ShellButton>
@@ -842,9 +903,17 @@ export const MissionControlDashboard = () => {
                   <button
                     key={run.run_id}
                     type="button"
+                    aria-label={`View run: ${run.title}, status ${run.status}, exit code ${run.exit_code ?? 'pending'}, duration ${run.duration_s ?? 0} seconds`}
+                    tabIndex={0}
                     onClick={() => setSelectedRunId(run.run_id)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSelectedRunId(run.run_id);
+                      }
+                    }}
                     className={clsx(
-                      'w-full rounded-md border p-3 text-left transition',
+                      'w-full rounded-md border p-3 text-left transition focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2',
                       selectedRun?.run_id === run.run_id
                         ? 'border-cyan-300 bg-cyan-300/10'
                         : 'border-slate-800 bg-slate-900 hover:border-cyan-400/60'
@@ -877,7 +946,7 @@ export const MissionControlDashboard = () => {
             title="Runbooks"
             icon={<FileText size={16} />}
             action={
-              <ShellButton onClick={loadRunbooks}>
+              <ShellButton onClick={loadRunbooks} ariaLabel="Reload runbooks">
                 <RefreshCw size={14} />
                 Reload
               </ShellButton>
@@ -888,9 +957,17 @@ export const MissionControlDashboard = () => {
                 <button
                   key={file.filename}
                   type="button"
+                  aria-label={`Open runbook: ${file.filename}, size ${Math.ceil(file.size / 1024)} KB`}
+                  tabIndex={0}
                   onClick={() => selectRunbook(file.filename)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      selectRunbook(file.filename);
+                    }
+                  }}
                   className={clsx(
-                    'w-full rounded-md border p-3 text-left text-xs transition',
+                    'w-full rounded-md border p-3 text-left text-xs transition focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2',
                     selectedRunbook === file.filename
                       ? 'border-cyan-300 bg-cyan-300/10 text-cyan-100'
                       : 'border-slate-800 bg-slate-900 text-slate-300 hover:border-cyan-400/60'
@@ -913,7 +990,7 @@ export const MissionControlDashboard = () => {
             title="Recent Tasks"
             icon={<ListChecks size={16} />}
             action={
-              <ShellButton onClick={loadTasks}>
+              <ShellButton onClick={loadTasks} ariaLabel="Refresh task list">
                 <RefreshCw size={14} />
                 Refresh
               </ShellButton>
@@ -961,6 +1038,16 @@ export const MissionControlDashboard = () => {
           </Section>
         </aside>
       </main>
+
+      <ConfirmDialog
+        open={confirmDialog.open}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        confirmLabel="Confirm"
+        cancelLabel="Cancel"
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={closeConfirmDialog}
+      />
     </div>
   );
 };

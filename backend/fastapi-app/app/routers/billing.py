@@ -5,7 +5,8 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
+from app.error_responses import bad_request, service_unavailable
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -41,9 +42,8 @@ async def create_checkout_link(
     settings = get_settings()
 
     if not email_supported_for_square_checkout(user.email):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Use a real email address to launch Square checkout.",
+        raise bad_request(
+            message="Use a real email address to launch Square checkout."
         )
 
     checkout_event = VerificationEvent(
@@ -82,9 +82,8 @@ async def create_checkout_link(
         checkout_event.status = "failed"
         checkout_event.completed_at = datetime.now(timezone.utc)
         await db.commit()
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Secure Square checkout is temporarily unavailable. Please try again shortly.",
+        raise service_unavailable(
+            message="Secure Square checkout is temporarily unavailable. Please try again shortly."
         )
 
     await db.commit()

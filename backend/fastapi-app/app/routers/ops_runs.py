@@ -11,7 +11,8 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
+from app.error_responses import not_found
 from pydantic import BaseModel
 
 from app.auth import get_current_user
@@ -88,4 +89,4 @@ async def get_ops_run(
     for run in _RUNS:
         if run["id"] == run_id:
             return OpsRunResponse(**run)
-    raise HTTPException(status_code=404, detail=f"Ops run '{run_id}' not found")
+    raise not_found(message=f"Ops run '{run_id}' not found")

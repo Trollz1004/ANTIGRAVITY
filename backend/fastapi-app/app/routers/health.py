@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.database import check_db_health, get_db
+from app.error_responses import internal_error
 from app.models import User
 from app.payment_truth import extract_payment_proof_label, proof_label_is_wallet
 from app.schemas import HealthResponse
@@ -117,7 +118,7 @@ async def check_allocations(db: AsyncSession = Depends(get_db)):
         rows = result.mappings().all()
         return {"allocations": [dict(r) for r in rows]}
     except Exception as e:
-        return {"error": str(e)}
+        raise internal_error(message=f"Failed to retrieve allocations: {e}")
 
 
 # Temporarily removed wipe-users endpoint
@@ -136,4 +137,4 @@ async def check_webhooks(db: AsyncSession = Depends(get_db)):
         rows = result.mappings().all()
         return {"webhooks": [dict(r) for r in rows]}
     except Exception as e:
-        return {"error": str(e)}
+        raise internal_error(message=f"Failed to retrieve webhooks: {e}")
