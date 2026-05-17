@@ -21,6 +21,7 @@ from app.auth import (
 )
 from app.config import get_settings
 from app.database import get_db
+from app.error_responses import api_exception, ErrorCode, unauthorized, not_found, conflict, bad_request, forbidden
 from app.models import Profile, User
 from app.rate_limit import auth_limiter
 from app.schemas import (
@@ -75,7 +76,7 @@ async def register(
     auth_limiter.check(request)
     existing = await db.scalar(select(User).where(User.email == payload.email.lower()))
     if existing:
-        raise HTTPException(status_code=409, detail="Email already registered")
+        raise conflict(message="Email already registered")
 
     user = User(
         id=uuid.uuid4(),
@@ -106,7 +107,7 @@ async def login(
     auth_limiter.check(request)
     user = await db.scalar(select(User).where(User.email == payload.email.lower()))
     if not user or not verify_password(payload.password, user.password_hash):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise unauthorized(message="Invalid email or password")
     ensure_active_user(user)
 
     return AuthTokenResponse(
@@ -126,11 +127,11 @@ async def google_login(
     try:
         id_info = verify_google_token(payload.id_token)
     except Exception as e:
-        raise HTTPException(status_code=401, detail=f"Invalid Google token: {e}")
+        raise unauthorized(message=f"Invalid Google token: {e}")
 
     email = id_info.get("email")
     if not email:
-        raise HTTPException(status_code=400, detail="Email not present in Google token")
+        raise bad_request(message="Email not present in Google token")
 
     user = await db.scalar(select(User).where(User.email == email.lower()))
 
@@ -172,7 +173,7 @@ async def beta_access(
     normalized_code = _normalize_beta_code(payload.code)
     allowed_codes = get_settings().beta_access_code_list
     if not allowed_codes or normalized_code not in allowed_codes:
-        raise HTTPException(status_code=401, detail="Invalid beta access code")
+        raise unauthorized(message="Invalid beta access code", details={"code": ErrorCode.BETA_ACCESS_DENIED})
 
     settings = get_settings()
     email, password_seed, display_name = _beta_identity(
@@ -224,17 +225,17 @@ async def refresh_token(
     auth_limiter.check(request)
     data = decode_token(payload.refresh_token)
     if data.get("type") != "refresh":
-        raise HTTPException(status_code=401, detail="Not a refresh token")
+        raise unauthorized(message="Not a refresh token", details={"code": ErrorCode.TOKEN_INVALID})
 
     user_id = data.get("sub")
     try:
         parsed_user_id = uuid.UUID(str(user_id))
     except ValueError as exc:
-        raise HTTPException(status_code=401, detail="Invalid token payload") from exc
+        raise unauthorized(message="Invalid token payload", details={"code": ErrorCode.TOKEN_INVALID}) from exc
 
     user = await db.scalar(select(User).where(User.id == parsed_user_id))
     if not user:
-        raise HTTPException(status_code=401, detail="User not found")
+        raise unauthorized(message="User not found", details={"code": ErrorCode.TOKEN_INVALID})
     ensure_active_user(user)
 
     return AuthTokenResponse(
