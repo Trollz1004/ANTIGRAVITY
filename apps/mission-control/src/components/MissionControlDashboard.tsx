@@ -5,7 +5,7 @@ import { apiGet, apiJson, apiPost, type Envelope } from '../lib/api';
 import { validateTaskBrief, validateAgentId } from '../lib/input-validation';
 import { useToast } from '../lib/useToast';
 import { ConfirmDialog } from './ConfirmDialog';
-import { formatDateTime, formatTime } from '../../../../shared/utils/timezone';
+import { formatDateTime } from '../../../../shared/utils/timezone';
 
 type HealthSummary = { ok: number; degraded: number; unreachable: number };
 type HealthAll = Record<string, Envelope<any>> & { _summary?: HealthSummary };
@@ -244,7 +244,7 @@ function runStatusClass(status: string) {
 
 function compactDate(value?: string) {
   if (!value) return 'not checked';
-  return formatTime(value);
+  return formatDateTime(value, { date: false, time: true, hour12: false, seconds: true });
 }
 
 function formatMoney(value: unknown) {
