@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/*  OpusPawClaw / Mission Control — flagship palette                        */
+/*  Source: src/index.css from joshuaclaw-flagship-beta-testing (verbatim)  */
+/*  Do NOT invent new colors. These match the Electron flagship exactly.    */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --bg-primary:    #0a0f1a;
+  --bg-secondary:  #111827;
+  --bg-card:       #1a2332;
+  --border:        #2a3a52;
+  --accent-cyan:   #00d4ff;
+  --accent-magenta:#e040fb;
+  --accent-gold:   #ffb300;
+  --accent-green:  #00e676;
+  --accent-danger: #ff1744;
+  --text-primary:  #e8f0ff;
+  --text-muted:    #6b82a6;
+  --text-dim:      #4a5568;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code, pre, .mono {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.custom-scrollbar::-webkit-scrollbar         { width: 6px; height: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track   { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb   { background: var(--border); border-radius: 3px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+@keyframes mc-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: mc-spin 3s linear infinite; }
+
+@keyframes mc-pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(1.15); }
+}
+.animate-heartbeat { animation: mc-pulse-dot 2s ease-in-out infinite; }
+
+@keyframes mc-ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-ticker { animation: mc-ticker 38s linear infinite; }
+
+/* subtle orbital grain over the whole app */
+.grain::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  mix-blend-mode: screen;
+}
+
+/* shadcn base vars kept for component compat */
+@layer base {
+  :root {
+    --background: 220 30% 7%;
+    --foreground: 218 100% 96%;
+    --card: 220 30% 12%;
+    --card-foreground: 218 100% 96%;
+    --popover: 220 30% 9%;
+    --popover-foreground: 218 100% 96%;
+    --primary: 191 100% 50%;
+    --primary-foreground: 220 30% 7%;
+    --secondary: 220 20% 20%;
+    --secondary-foreground: 218 100% 96%;
+    --muted: 220 20% 20%;
+    --muted-foreground: 215 30% 60%;
+    --accent: 191 100% 50%;
+    --accent-foreground: 220 30% 7%;
+    --destructive: 352 100% 54%;
+    --destructive-foreground: 218 100% 96%;
+    --border: 218 33% 24%;
+    --input: 218 33% 24%;
+    --ring: 191 100% 50%;
+    --radius: 0.5rem;
+  }
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+}
+
+[data-debug-wrapper="true"] { display: contents !important; }
