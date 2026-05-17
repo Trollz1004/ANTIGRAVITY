@@ -9,7 +9,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from .config import settings
 from .logging_config import setup_logging, get_logger, new_request_id, LogContext
-from .routes import health, deploy, runbooks, hermes, tasks
+from .routes import health, deploy, runbooks, hermes, tasks, ops_runs
 
 # ── Logging setup ────────────────────────────────────────────────────────────
 setup_logging(level="INFO")
@@ -88,6 +88,7 @@ app.include_router(deploy.router)
 app.include_router(runbooks.router)
 app.include_router(hermes.router)
 app.include_router(tasks.router)
+app.include_router(ops_runs.router)
 
 # ── Dashboard static mount ───────────────────────────────────────────────────
 REPO_ROOT = Path(__file__).resolve().parents[4]
