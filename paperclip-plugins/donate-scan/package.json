@@ -1,0 +1,17 @@
+{
+  "name": "donate-scan",
+  "version": "0.1.0",
+  "description": "Paperclip MCP plugin for FL §496.405 campaign finance compliance scanning",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}
