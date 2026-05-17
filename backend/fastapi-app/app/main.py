@@ -8,6 +8,7 @@ import uuid
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -15,6 +16,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.config import get_settings
 from app.database import get_db, reconcile_legacy_schema
+from app.error_responses import ErrorCode, ErrorResponse, internal_error
 from app.logging_config import setup_logging
 from app.monitoring import setup_monitoring
 from app.routers import (
@@ -273,13 +275,15 @@ async def global_exception_handler(request: Request, exc: Exception):
         exc_info=True,
     )
 
-    # Return user-safe error message
+    # Return standardized ErrorResponse format
+    payload = ErrorResponse(
+        code=ErrorCode.INTERNAL_ERROR,
+        message="An unexpected error occurred. Our team has been notified.",
+        details={"correlation_id": correlation_id},
+    )
     return JSONResponse(
         status_code=500,
-        content={
-            "detail": "An unexpected error occurred. Our team has been notified.",
-            "correlation_id": correlation_id,
-        },
+        content=payload.model_dump(),
     )
 
 
@@ -301,14 +305,63 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
             },
         )
 
-    # Return consistent error format
+    # If the detail is already a standardized ErrorResponse dict (from api_exception helpers), pass it through
+    if isinstance(exc.detail, dict) and "code" in exc.detail and "message" in exc.detail:
+        content = exc.detail
+    else:
+        # Wrap raw string details into the standard format
+        content = ErrorResponse(
+            code=_status_to_error_code(exc.status_code),
+            message=str(exc.detail),
+            details={"correlation_id": correlation_id},
+        ).model_dump()
+
     return JSONResponse(
         status_code=exc.status_code,
-        content={
-            "detail": exc.detail,
+        content=content,
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Handler for request validation errors (422) to return standardized format."""
+    correlation_id = getattr(request.state, "correlation_id", "unknown")
+
+    logger.warning(
+        "Validation error",
+        extra={
             "correlation_id": correlation_id,
+            "method": request.method,
+            "path": request.url.path,
+            "errors": exc.errors(),
         },
     )
+
+    payload = ErrorResponse(
+        code=ErrorCode.VALIDATION_ERROR,
+        message="Request validation failed",
+        details={"errors": exc.errors(), "correlation_id": correlation_id},
+    )
+    return JSONResponse(
+        status_code=422,
+        content=payload.model_dump(),
+    )
+
+
+def _status_to_error_code(status_code: int) -> str:
+    """Map an HTTP status code to the closest ErrorCode string."""
+    mapping = {
+        400: ErrorCode.BAD_REQUEST,
+        401: ErrorCode.INVALID_CREDENTIALS,
+        403: ErrorCode.INSUFFICIENT_PERMISSIONS,
+        404: ErrorCode.NOT_FOUND,
+        409: ErrorCode.ALREADY_EXISTS,
+        422: ErrorCode.VALIDATION_ERROR,
+        429: ErrorCode.RATE_LIMIT_EXCEEDED,
+        500: ErrorCode.INTERNAL_ERROR,
+        503: ErrorCode.SERVICE_UNAVAILABLE,
+    }
+    return str(mapping.get(status_code, ErrorCode.INTERNAL_ERROR))
 
 
 app.add_middleware(
