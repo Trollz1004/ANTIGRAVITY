@@ -8,6 +8,10 @@ from typing import List
 from fastapi import APIRouter
 from pydantic import BaseModel, Field, validator
 
+from mission_control_api.logging_config import get_logger
+
+logger = get_logger(__name__)
+
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 REPO_ROOT = Path(__file__).resolve().parents[5]
@@ -56,12 +60,15 @@ async def dispatch(payload: TaskBrief):
     }
     with TASK_LOG.open("a", encoding="utf-8") as f:
         f.write(json.dumps(record) + "\n")
+    logger.info("task dispatched", extra=record)
     return {"task_id": task_id, "queued": True}
 
 
 @router.get("")
 async def list_tasks(limit: int = 50):
+    logger.info("listing tasks", extra={"limit": limit})
     if not TASK_LOG.exists():
+        logger.info("task log file not found, returning empty list")
         return {"tasks": []}
     lines = TASK_LOG.read_text(encoding="utf-8").strip().splitlines()
     items = []
@@ -69,6 +76,8 @@ async def list_tasks(limit: int = 50):
         try:
             items.append(json.loads(line))
         except json.JSONDecodeError:
+            logger.warning("failed to parse task log line", extra={"line": line})
             continue
     items.reverse()
+    logger.info("tasks listed", extra={"count": len(items), "total_lines_read": len(lines)})
     return {"tasks": items}

@@ -1,4 +1,8 @@
 from fastapi import APIRouter
+from mission_control_api.logging_config import get_logger
+
+logger = get_logger(__name__)
+
 from ..probes import (
     http as http_probe_mod,
     tcp as tcp_probe_mod,
