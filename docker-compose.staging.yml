@@ -1,0 +1,132 @@
+# T5500 OPUS Stack — Docker Services (Staging)
+# Usage: docker-compose -f docker-compose.staging.yml up -d
+
+services:
+  redis-staging:
+    image: redis:alpine
+    container_name: redis-staging
+    ports:
+      - "6380:6379"
+    restart: unless-stopped
+
+  qdrant-staging:
+    image: qdrant/qdrant
+    container_name: qdrant-staging
+    ports:
+      - "6335:6333"
+      - "6336:6334"
+    volumes:
+      - ./qdrant-data-staging:/qdrant/storage
+    restart: unless-stopped
+
+  openclaw-staging:
+    build:
+      context: ./openclaw
+      dockerfile: Dockerfile
+    container_name: openclaw-staging
+    ports:
+      - "3201:3200"
+    env_file:
+      - .env.staging
+    environment:
+      - REDIS_URL=redis://redis-staging:6379
+      - QDRANT_URL=http://qdrant-staging:6333
+      - ENVIRONMENT=staging
+    volumes:
+      - ./logs-staging:/logs
+      - openclaw_wwebjs_staging:/app/.wwebjs_auth
+      - openclaw_wwebjs_cache_staging:/app/.wwebjs_cache
+      - ./openclaw/.env.staging:/app/.env:ro # This refers to .env.staging in the root, not inside openclaw dir
+    depends_on:
+      - redis-staging
+      - qdrant-staging
+    restart: unless-stopped
+
+  whatsapp-bridge-staging:
+    build:
+      context: ./openclaw
+      dockerfile: Dockerfile
+    container_name: whatsapp-bridge-staging
+    user: root
+    command: node whatsapp-bridge.js
+    env_file:
+      - .env.staging
+    environment:
+      - REDIS_URL=redis://redis-staging:6379
+      - QDRANT_URL=http://qdrant-staging:6333
+      - OPENCLAW_URL=http://openclaw-staging:3200
+      - ENVIRONMENT=staging
+    volumes:
+      - ./logs-staging:/logs
+      - openclaw_wwebjs_staging:/app/.wwebjs_auth
+      - openclaw_wwebjs_cache_staging:/app/.wwebjs_cache
+    depends_on:
+      - redis-staging
+      - qdrant-staging
+      - openclaw-staging
+    security_opt:
+      - seccomp:unconfined
+    restart: unless-stopped
+
+  backend-fastapi-staging:
+    build:
+      context: ./backend/fastapi-app
+      dockerfile: Dockerfile
+    container_name: backend-fastapi-staging
+    ports:
+      - "8788:8000"
+    env_file:
+      - .env.staging
+    environment:
+      - ENVIRONMENT=staging
+      - REDIS_HOST=redis-staging
+      - REDIS_PORT=6379
+      - QDRANT_URL=http://qdrant-staging:6333
+      - PAPERCLIP_API_URL=http://localhost:3100 # Assuming Paperclip remains on localhost:3100
+      - DATABASE_URL=postgresql://paperclip_staging:paperclip_staging@postgres-staging:5432/paperclip_staging
+      - POSTGRES_USER=paperclip_staging
+      - POSTGRES_PASSWORD=paperclip_staging
+      - POSTGRES_DB=paperclip_staging
+      # Add other environment variables from .env.staging as needed
+    volumes:
+      - ./logs-staging:/app/logs
+    depends_on:
+      - redis-staging
+      - qdrant-staging
+      - postgres-staging
+    restart: unless-stopped
+
+  postgres-staging:
+    image: postgres:15-alpine
+    container_name: postgres-staging
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=paperclip_staging
+      - POSTGRES_PASSWORD=paperclip_staging
+      - POSTGRES_DB=paperclip_staging
+    volumes:
+      - ./postgres-data-staging:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  frontend-mission-control-staging:
+    build:
+      context: ./apps/mission-control
+      dockerfile: Dockerfile.staging # This Dockerfile needs to be created
+      args:
+        VITE_API_URL: http://localhost:8788/api/v1 # Points to staging backend on host
+    container_name: frontend-mission-control-staging
+    ports:
+      - "5174:5173" # Assuming Vite dev server runs on 5173 in the container
+    env_file:
+      - .env.staging
+    environment:
+      - NODE_ENV=staging
+      - VITE_API_URL=http://backend-fastapi-staging:8000/api/v1 # For container internal communication
+    depends_on:
+      - backend-fastapi-staging
+    restart: unless-stopped
+
+volumes:
+  openclaw_wwebjs_staging:
+  openclaw_wwebjs_cache_staging:
