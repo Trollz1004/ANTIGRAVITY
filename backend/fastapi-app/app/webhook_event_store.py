@@ -18,7 +18,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import WebhookEvent
 
-
 @dataclass(frozen=True)
 class WebhookEventSchema:
     table: Table
@@ -86,6 +85,7 @@ async def create_webhook_event(
     payload: dict[str, Any],
     processed: bool,
     event_source: str = "square",
+    retry_parent_event_id: str | None = None,
 ) -> None:
     schema = await get_webhook_event_schema(db)
     if not schema:
@@ -98,6 +98,7 @@ async def create_webhook_event(
                 event_type=event_type,
                 payload=payload,
                 processed=processed,
+                retry_parent_event_id=retry_parent_event_id,
             )
         )
         return

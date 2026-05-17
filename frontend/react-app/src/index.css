@@ -297,7 +297,7 @@ section[id] {
   border: 1px dashed rgba(255, 255, 255, 0.35);
   border-radius: inherit;
   pointer-events: none;
-  z-index: 15;
+  z-index: var(--z-deco-50);
 }
 
 .crystal-inner {

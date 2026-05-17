@@ -53,7 +53,7 @@ export function ConfirmDialog({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-[var(--z-modal-backdrop)] flex items-center justify-center bg-black/70 backdrop-blur-sm"
       role="alertdialog"
       aria-modal="true"
       aria-labelledby="confirm-dialog-title"

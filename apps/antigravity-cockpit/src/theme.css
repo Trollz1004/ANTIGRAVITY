@@ -118,7 +118,7 @@ body {
     radial-gradient(900px 600px at 80% -10%, var(--odoo-glow), transparent 70%),
     radial-gradient(700px 500px at -10% 90%, rgba(63,191,114,0.10), transparent 70%);
   pointer-events: none;
-  z-index: 0;
+  z-index: var(--z-base);
 }
 body.gravity .app::before { opacity: 0.6; }
 body.hermes-off .app::before { opacity: 0.3; }
@@ -127,7 +127,7 @@ body.hermes-off .app::before { opacity: 0.3; }
 
 .sidebar {
   position: relative;
-  z-index: 2;
+  z-index: var(--z-base-2);
   background: var(--bg-2);
   border-right: 1px solid var(--line);
   display: flex; flex-direction: column;
@@ -154,7 +154,7 @@ body.hermes-off .app::before { opacity: 0.3; }
   border-radius: 12px;
   background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), transparent 60%);
 }
-.brand-mark svg { position: relative; z-index: 1; }
+.brand-mark svg { position: relative; z-index: var(--z-base-1); }
 .brand-text { line-height: 1; }
 .brand-text .h {
   font-family: 'JetBrains Mono', monospace;
@@ -237,7 +237,7 @@ body.hermes-off .app::before { opacity: 0.3; }
 
 /* ─── Main column ────────────────────────────────────────── */
 
-.main { display: flex; flex-direction: column; min-width: 0; position: relative; z-index: 1; }
+.main { display: flex; flex-direction: column; min-width: 0; position: relative; z-index: var(--z-base-1); }
 
 .strip {
   height: var(--strip-h);
@@ -262,7 +262,7 @@ body.hermes-off .app::before { opacity: 0.3; }
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   position: relative;
-  z-index: 5;
+  z-index: var(--z-header);
 }
 body.gravity .header { background: rgba(255,255,255,0.7); }
 
@@ -559,7 +559,7 @@ body.hermes-on .hermes-toggle .dot {
 }
 .kids-content {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base-1);
   display: grid;
   grid-template-columns: 1.1fr 2fr;
   gap: 36px;
@@ -955,7 +955,7 @@ body.gravity .cork::before {
 }
 .sticky:hover {
   transform: translateY(-4px) scale(1.02) rotate(0deg) !important;
-  z-index: 50;
+  z-index: var(--z-deco-50);
   box-shadow: 2px 4px 0 rgba(0,0,0,0.12), 8px 16px 32px rgba(0,0,0,0.36);
 }
 .sticky::before {
@@ -1094,7 +1094,7 @@ body.hermes-on .hermes-big-toggle {
   background: rgba(5,3,10,0.78);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  z-index: 100;
+  z-index: var(--z-cmd-palette);
   display: flex; align-items: flex-start; justify-content: center;
   padding-top: 12vh;
   animation: cmd-in 0.18s ease-out;
@@ -1160,7 +1160,7 @@ body.hermes-on .hermes-big-toggle {
 
 /* ─── Tweaks panel ──────────────────────────────────────────── */
 
-.twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+.twk-panel{position:fixed;right:16px;bottom:16px;z-index:var(--z-critical);width:280px;
   max-height:calc(100vh - 32px);display:flex;flex-direction:column;
   transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
   background:rgba(250,249,247,.78);color:#29261b;

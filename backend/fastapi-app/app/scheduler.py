@@ -27,7 +27,8 @@ from app.models import (
     VideoCall,
     VolunteerSignup,
 )
-
+from app.models import WebhookRetryQueue, WebhookDeadLetter
+from app import webhook_retry
 logger = logging.getLogger(__name__)
 
 EXPORTS_DIR = "exports"
@@ -187,6 +188,7 @@ def setup_scheduler():
     scheduler = AsyncIOScheduler()
     scheduler.add_job(purge_deleted_accounts, "cron", hour=3)
     scheduler.add_job(process_data_exports, "interval", hours=1)
+    scheduler.add_job(webhook_retry.scheduled_retry_task, "interval", minutes=1)
     scheduler.start()
     logger.info("Background scheduler started.")
     return scheduler

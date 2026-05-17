@@ -18,7 +18,7 @@ export function EnhancedBlockConfirmationDialog({
   onRestrictInstead,
 }: EnhancedBlockConfirmationDialogProps) {
   return (
-    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[var(--z-modal-backdrop)] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
       <div className="glass-strong glass-highlight w-full max-w-md rounded-[2rem] border-4 border-[#111111] p-6 shadow-[12px_12px_0_0_rgba(17,17,17,1)]">
         <div className="mb-4 flex items-center justify-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
