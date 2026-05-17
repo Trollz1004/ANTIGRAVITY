@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.database import get_db
+from app.error_responses import conflict, rate_limit
 from app.models import User
 from app.schemas import UserRegisterRequest, UserRegisterResponse
 
@@ -33,10 +34,7 @@ def _enforce_registration_rate_limit(client_ip: str) -> None:
             bucket.popleft()
 
         if len(bucket) >= limit:
-            raise HTTPException(
-                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                detail="Rate limit exceeded. Try again in a minute.",
-            )
+            raise rate_limit(message="Rate limit exceeded. Try again in a minute.")
 
         bucket.append(now)
 
@@ -52,7 +50,7 @@ async def register_user(
 
     existing_user = await db.scalar(select(User).where(User.email == payload.email.lower()))
     if existing_user:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email is already registered.")
+        raise conflict(message="Email is already registered.")
 
     user = User(
         id=uuid.uuid4(),
