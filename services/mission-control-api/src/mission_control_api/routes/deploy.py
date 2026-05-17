@@ -1,12 +1,17 @@
 from fastapi import APIRouter, BackgroundTasks
 import uuid, datetime, asyncio
 from ..envelope import make_envelope
+from mission_control_api.logging_config import get_logger
+
+logger = get_logger(__name__)
+
 
 router = APIRouter()
 
 def register_run(run_id, command):
     # placeholder: just store in memory dict
     runs[run_id] = {"command": command, "status": "running", "started_at": datetime.datetime.utcnow().isoformat() + "Z", "log": []}
+    logger.info("deploy run registered", extra={"run_id": run_id, "command": command})
 
 runs = {}
 
