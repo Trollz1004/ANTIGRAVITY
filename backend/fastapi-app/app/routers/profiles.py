@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.auth import get_current_user
 from app.age_gate import ensure_adult
 from app.database import get_db
+from app.error_responses import not_found, conflict, forbidden
 from app.moderation import has_block_relationship
 from app.models import Profile, User
 from app.schemas import ProfileResponse, ProfileUpdateRequest
@@ -24,7 +25,7 @@ async def get_my_profile(
 ) -> ProfileResponse:
     profile = await db.scalar(select(Profile).where(Profile.user_id == user.id))
     if not profile:
-        raise HTTPException(status_code=404, detail="Profile not created yet")
+        raise not_found(message="Profile not created yet")
 
     return ProfileResponse(
         user_id=user.id,
@@ -59,7 +60,7 @@ async def update_my_profile(
     if payload.date_of_birth is not None:
         if user.date_of_birth is not None:
             if payload.date_of_birth != user.date_of_birth:
-                raise HTTPException(status_code=409, detail="Date of birth is locked after verification")
+                raise conflict(message="Date of birth is locked after verification")
         else:
             profile.age = ensure_adult(payload.date_of_birth)
             user.date_of_birth = payload.date_of_birth
@@ -98,15 +99,15 @@ async def get_user_profile(
     db: AsyncSession = Depends(get_db),
 ) -> ProfileResponse:
     if await has_block_relationship(db, user_a=current_user.id, user_b=user_id):
-        raise HTTPException(status_code=404, detail="Profile not found")
+        raise not_found(message="Profile not found")
 
     profile = await db.scalar(select(Profile).where(Profile.user_id == user_id))
     if not profile:
-        raise HTTPException(status_code=404, detail="Profile not found")
+        raise not_found(message="Profile not found")
 
     user = await db.get(User, user_id)
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise not_found(message="User not found")
 
     return ProfileResponse(
         user_id=user.id,
