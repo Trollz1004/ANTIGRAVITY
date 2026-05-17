@@ -1,6 +1,6 @@
 import React from 'react';
 import { UnreachableTile } from './UnreachableTile';
-import { SkeletonLoader, PanelSkeleton } from './SkeletonLoader';
+import { SkeletonLoader } from './SkeletonLoader';
 import { usePoll } from '../lib/usePoll';
 import { clsx } from 'clsx';
 
@@ -26,7 +26,7 @@ export const PanelBase: React.FC<PanelProps> = ({ title, path, pill, children })
         {pill && <span className="text-xs px-2 py-0.5 rounded-full bg-background border border-border text-accentCyan font-mono">{pill}</span>}
       </div>
       {env.loading ? (
-        <PanelSkeleton />
+        <SkeletonLoader lines={2} />
       ) : env.status === 'unreachable' ? (
         <UnreachableTile />
       ) : typeof children === 'function' ? (
