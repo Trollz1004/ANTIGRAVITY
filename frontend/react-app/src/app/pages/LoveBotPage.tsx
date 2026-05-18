@@ -27,3 +27,5 @@ export function LoveBotPage() {
     </div>
   );
 }
+
+export default LoveBotPage;
