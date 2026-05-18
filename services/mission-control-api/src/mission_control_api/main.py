@@ -14,6 +14,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from .config import settings
 from .logging_config import setup_logging, get_logger, new_request_id, LogContext
 from .routes import health, deploy, runbooks, hermes, tasks, ops_runs
+from .middleware.sanitization import SanitizationMiddleware
 
 # Global in-memory cache for request deduplication
 request_cache = {} # Stores (response_body, status_code, headers, expiration_time)
@@ -35,6 +36,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ── Input sanitization middleware ────────────────────────────────────────────
+app.add_middleware(SanitizationMiddleware)
 
 
 # ── Request tracing middleware ───────────────────────────────────────────────
