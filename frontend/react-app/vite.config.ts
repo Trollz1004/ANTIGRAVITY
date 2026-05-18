@@ -8,6 +8,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
+import type { Plugin } from 'vite';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
@@ -21,6 +22,15 @@ export default defineConfig(({ mode }) => {
       // Plugin to inject resource hints (dns-prefetch, preconnect) into HTML
       // when a CDN base URL is configured for production builds.
       cdnResourceHintsPlugin(cdnBase),
+      // Bundle analyzer — generates stats.html and bundle-stats.json on build
+      // Opens automatically in production; set open: false to suppress.
+      visualizer({
+        filename: 'bundle-stats.html',
+        open: false,
+        gzipSize: true,
+        brotliSize: true,
+        template: 'treemap', // sunburst, treemap, network, list
+      }) as Plugin,
     ],
     define: {
       // Make CDN base URL available in client code if needed
@@ -59,10 +69,19 @@ export default defineConfig(({ mode }) => {
             }
             return 'assets/[name]-[hash][extname]';
           },
+          // Manual chunks for better code splitting — separates vendor libs
+          // from application code so they can be cached independently.
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+            'vendor-motion': ['motion', 'framer-motion'],
+            'vendor-crypto': ['crypto-js'],
+          },
         },
       },
       // Ensure source maps are generated for production (optional, useful for debugging)
       sourcemap: isProduction ? 'hidden' : true,
+      // Generate bundle stats JSON for CI/CD tracking
+      reportCompressedSize: true,
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
