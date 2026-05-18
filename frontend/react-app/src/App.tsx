@@ -531,22 +531,22 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
   const legalKeys = ['terms', 'privacy', 'age', 'refund'] as const;
 
   return (
-    <footer className="border-t-4 border-[#111111] bg-[#efe8da] px-6 py-10 text-[#111111] md:px-12">
-      <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-[1.2fr_0.8fr_1fr]">
+    <footer className="border-t-4 border-[#111111] bg-[#efe8da] px-4 py-6 text-[#111111] md:px-12 md:py-10">
+      <div className="mx-auto grid max-w-7xl gap-6 md:gap-8 md:grid-cols-[1.2fr_0.8fr_1fr]">
         <div>
-          <div className="text-3xl font-black uppercase tracking-tighter">
+          <div className="text-2xl font-black uppercase tracking-tighter md:text-3xl">
             YOUANDINOTAI<span className="text-[#ff5a1f]">.</span>
           </div>
-          <p className="mt-4 max-w-lg text-sm font-medium leading-7 text-[#3f3a34]">
+          <p className="mt-3 max-w-lg text-xs font-medium leading-6 text-[#3f3a34] md:mt-4 md:text-sm md:leading-7">
             Human-first social platform for dating, meetups, and real-world
             connection. Bot-Shield and account-bound checkout are live now.
           </p>
         </div>
         <div>
-          <h4 className="text-sm font-black uppercase tracking-[0.18em]">
+          <h4 className="text-xs font-black uppercase tracking-[0.14em] md:text-sm md:tracking-[0.18em]">
             Launch Links
           </h4>
-          <div className="mt-4 flex flex-col gap-3 text-sm font-bold uppercase tracking-[0.12em]">
+          <div className="mt-3 flex flex-col gap-2 text-xs font-bold uppercase tracking-[0.1em] md:mt-4 md:gap-3 md:text-sm md:tracking-[0.12em]">
             <a href="#pricing" className="no-underline hover:text-[#ff5a1f]">
               Pricing
             </a>
@@ -557,7 +557,7 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
               Support
             </a>
             <a
-              href="mailto:contact@youandinotai.com"
+              href="mailto:[EMAIL]"
               className="no-underline hover:text-[#ff5a1f]"
             >
               Contact
@@ -565,15 +565,15 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
           </div>
         </div>
         <div>
-          <h4 className="text-sm font-black uppercase tracking-[0.18em]">
+          <h4 className="text-xs font-black uppercase tracking-[0.14em] md:text-sm md:tracking-[0.18em]">
             Policy
           </h4>
-          <div className="mt-4 flex flex-wrap gap-3">
+          <div className="mt-3 flex flex-wrap gap-2 md:mt-4 md:gap-3">
             {legalKeys.map(key => (
               <button
                 key={key}
                 onClick={() => onLegal(key)}
-                className="border-4 border-[#111111] bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.16em] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111]"
+                className="border-4 border-[#111111] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111] md:px-4 md:py-2 md:text-xs md:tracking-[0.16em]"
               >
                 {LEGAL_CONTENT[key].title
                   .replace(' Policy', '')
@@ -583,8 +583,8 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
           </div>
         </div>
       </div>
-      <div className="mx-auto mt-8 max-w-7xl border-t-4 border-[#111111] pt-6">
-        <p className="text-xs font-black uppercase tracking-[0.16em] text-[#5c554d]">
+      <div className="mx-auto mt-5 max-w-7xl border-t-4 border-[#111111] pt-4 md:mt-8 md:pt-6">
+        <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#5c554d] md:text-xs md:tracking-[0.16em]">
           © 2026 Trash Or Treasure Online Recycler LLC. YouAndiNotAi.com is a
           for-profit platform.
         </p>

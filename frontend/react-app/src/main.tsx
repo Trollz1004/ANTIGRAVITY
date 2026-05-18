@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StrictMode } from 'react';
+import { StrictMode, lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage, { PublicSupportPage } from './App';
@@ -24,7 +24,12 @@ import { LoveBotPage } from './app/pages/LoveBotPage';
 import { Verify } from './app/pages/Verify';
 import { CheckoutLaunch } from './app/pages/CheckoutLaunch';
 import DataPrivacyDashboard from './components/DataPrivacyDashboard';
-import CharityTab from './components/CharityTab';
+
+// Lazy-loaded heavy components — loaded on demand to reduce initial bundle
+const CharityTab = lazy(() => import('./components/CharityTab'));
+const ChatWindow = lazy(() => import('./components/ChatWindow'));
+const VideoChat = lazy(() => import('./components/VideoChat'));
+
 import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './index.css';
@@ -171,7 +176,9 @@ createRoot(document.getElementById('root')!).render(
                   path="/app/impact"
                   element={
                     <ErrorBoundary boundaryName="page:impact" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
-                      <CharityTab />
+                      <Suspense fallback={<div className="flex min-h-[60vh] items-center justify-center px-6 py-12"><div className="app-subtitle">Loading impact dashboard…</div></div>}>
+                        <CharityTab />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
