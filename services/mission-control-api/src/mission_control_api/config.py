@@ -26,6 +26,7 @@ class Settings(BaseSettings):
         r"(:\d+)?$"
     )
     RESERVE_PERCENT: int = 10
+    REQUEST_DEDUPLICATION_SECONDS: int = 60 # Cache requests for this many seconds
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
