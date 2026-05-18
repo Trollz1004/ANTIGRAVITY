@@ -11,27 +11,37 @@ import { Login } from './app/pages/Login';
 import { Register } from './app/pages/Register';
 import { AuthGuard } from './app/AuthGuard';
 import { AppShell } from './app/AppShell';
-import { Discover } from './app/pages/Discover';
 import { Matches } from './app/pages/Matches';
 import { Inbox } from './app/pages/Inbox';
 import { ProfileSetup } from './app/pages/ProfileSetup';
 import { Chat } from './app/pages/Chat';
-import { Boards } from './app/pages/Boards';
 import { Events } from './app/pages/Events';
-import { Volunteering } from './app/pages/Volunteering';
-import { Support } from './app/pages/Support';
-import { LoveBotPage } from './app/pages/LoveBotPage';
-import { Verify } from './app/pages/Verify';
-import { CheckoutLaunch } from './app/pages/CheckoutLaunch';
-import DataPrivacyDashboard from './components/DataPrivacyDashboard';
 
 // Lazy-loaded heavy components — loaded on demand to reduce initial bundle
 const CharityTab = lazy(() => import('./components/CharityTab'));
 const ChatWindow = lazy(() => import('./components/ChatWindow'));
 const VideoChat = lazy(() => import('./components/VideoChat'));
 
+const LazyDataPrivacyDashboard = lazy(() => import('./components/DataPrivacyDashboard'));
+const LazyVolunteerHub = lazy(() => import('./components/VolunteerHub'));
+const LazySolarFlareSOS = lazy(() => import('./components/SolarFlareSOS'));
+const LazyMeetupsDiscovery = lazy(() => import('./components/MeetupsDiscovery'));
+const LazyLoveBot = lazy(() => import('./components/LoveBot'));
+const LazyRoyaltyDeck = lazy(() => import('./components/RoyaltyDeck'));
+const LazySocialBoards = lazy(() => import('./components/SocialBoards'));
+const LazyCosmicWall = lazy(() => import('./components/CosmicWall'));
+
+const LazyDiscover = lazy(() => import('./app/pages/Discover'));
+const LazyLoveBotPage = lazy(() => import('./app/pages/LoveBotPage'));
+const LazyBoards = lazy(() => import('./app/pages/Boards'));
+const LazyVolunteering = lazy(() => import('./app/pages/Volunteering'));
+const LazySupport = lazy(() => import('./app/pages/Support'));
+const LazyVerify = lazy(() => import('./app/pages/Verify'));
+const LazyCheckoutLaunch = lazy(() => import('./app/pages/CheckoutLaunch'));
+
 import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { SkeletonLoader } from './components/SkeletonLoader';
 import './index.css';
 
 function PageErrorFallback({
@@ -88,7 +98,9 @@ createRoot(document.getElementById('root')!).render(
                   path="/app"
                   element={
                     <ErrorBoundary boundaryName="page:discover" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
-                      <Discover />
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyDiscover />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -96,7 +108,9 @@ createRoot(document.getElementById('root')!).render(
                   path="/app/lovebot"
                   element={
                     <ErrorBoundary boundaryName="page:lovebot" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
-                      <LoveBotPage />
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyLoveBotPage />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -136,7 +150,9 @@ createRoot(document.getElementById('root')!).render(
                   path="/app/boards"
                   element={
                     <ErrorBoundary boundaryName="page:boards" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
-                      <Boards />
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyBoards />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -152,7 +168,9 @@ createRoot(document.getElementById('root')!).render(
                   path="/app/volunteer"
                   element={
                     <ErrorBoundary boundaryName="page:volunteer" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
-                      <Volunteering />
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyVolunteering />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -160,7 +178,9 @@ createRoot(document.getElementById('root')!).render(
                   path="/app/support"
                   element={
                     <ErrorBoundary boundaryName="page:support" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
-                      <Support />
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazySupport />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -168,7 +188,9 @@ createRoot(document.getElementById('root')!).render(
                   path="/app/privacy"
                   element={
                     <ErrorBoundary boundaryName="page:privacy" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
-                      <DataPrivacyDashboard />
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyDataPrivacyDashboard />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -190,7 +212,9 @@ createRoot(document.getElementById('root')!).render(
                   path="/app/verify"
                   element={
                     <ErrorBoundary boundaryName="page:verify" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
-                      <Verify />
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyVerify />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -198,7 +222,9 @@ createRoot(document.getElementById('root')!).render(
                   path="/app/checkout/:tier"
                   element={
                     <ErrorBoundary boundaryName="page:checkout" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
-                      <CheckoutLaunch />
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyCheckoutLaunch />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
