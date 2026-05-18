@@ -24,7 +24,7 @@ from app.config import get_settings
 from app.database import get_db
 from app.error_responses import api_exception, ErrorCode, unauthorized, not_found, conflict, bad_request, forbidden
 from app.models import Profile, User
-from app.rate_limit import auth_limiter
+
 from app.schemas import (
     AuthBetaAccessRequest,
     AuthLoginRequest,
