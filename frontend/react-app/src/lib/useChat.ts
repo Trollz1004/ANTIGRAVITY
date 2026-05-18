@@ -36,6 +36,7 @@ export function useChat(matchId: string | null) {
   const pollRef = useRef<number | null>(null);
   const keyRef = useRef<CryptoKey | null>(null);
   const reconnectTimer = useRef<number | null>(null);
+  const mountedRef = useRef(true);
 
   // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -86,7 +87,7 @@ export function useChat(matchId: string | null) {
   const startPolling = useCallback(
     (id: string) => {
       if (pollRef.current) return;
-      setConnectionState('polling');
+      if (mountedRef.current) setConnectionState('polling');
       pollRef.current = window.setInterval(() => loadHistory(id), 5000);
     },
     [loadHistory]
@@ -109,13 +110,13 @@ export function useChat(matchId: string | null) {
       if (!token) return;
 
       keyRef.current = await getOrCreateSessionKey(id);
-      setConnectionState('connecting');
+      if (mountedRef.current) setConnectionState('connecting');
 
       const ws = new WebSocket(`${WS_BASE}/ws/chat/${id}?token=${token}`);
       wsRef.current = ws;
 
       ws.onopen = () => {
-        setConnectionState('connected');
+        if (mountedRef.current) setConnectionState('connected');
         stopPolling();
       };
 
@@ -157,7 +158,7 @@ export function useChat(matchId: string | null) {
 
       ws.onclose = () => {
         wsRef.current = null;
-        setConnectionState('disconnected');
+        if (mountedRef.current) setConnectionState('disconnected');
         // Reconnect after 3s, fall back to polling after 3 attempts
         reconnectTimer.current = window.setTimeout(() => {
           startPolling(id);
@@ -172,11 +173,21 @@ export function useChat(matchId: string | null) {
   );
 
   const disconnect = useCallback(() => {
-    if (reconnectTimer.current) window.clearTimeout(reconnectTimer.current);
-    wsRef.current?.close();
-    wsRef.current = null;
+    if (reconnectTimer.current) {
+      window.clearTimeout(reconnectTimer.current);
+      reconnectTimer.current = null;
+    }
+    if (wsRef.current) {
+      // Remove event listeners before closing to prevent callbacks after disconnect
+      wsRef.current.onopen = null;
+      wsRef.current.onmessage = null;
+      wsRef.current.onclose = null;
+      wsRef.current.onerror = null;
+      wsRef.current.close();
+      wsRef.current = null;
+    }
     stopPolling();
-    setConnectionState('disconnected');
+    if (mountedRef.current) setConnectionState('disconnected');
   }, [stopPolling]);
 
   // ── Send ────────────────────────────────────────────────────────────────────
@@ -209,6 +220,8 @@ export function useChat(matchId: string | null) {
   // ── Lifecycle ───────────────────────────────────────────────────────────────
 
   useEffect(() => {
+    mountedRef.current = true;
+
     if (!matchId) {
       disconnect();
       setMessages([]);
@@ -218,10 +231,12 @@ export function useChat(matchId: string | null) {
     loadHistory(matchId).then(() => connect(matchId));
 
     return () => {
+      mountedRef.current = false;
       disconnect();
       clearSessionKey(matchId);
     };
-  }, [matchId, connect, disconnect, loadHistory]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matchId]);
 
   return {
     messages,
