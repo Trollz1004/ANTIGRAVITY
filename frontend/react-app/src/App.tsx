@@ -126,14 +126,14 @@ function BrutalButton({
 
 function SignupCTA() {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t-4 border-[#111111] bg-[#111111] px-4 py-3 text-white">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
-        <span className="text-sm font-black uppercase tracking-[0.18em] text-[#f4efe7]">
+    <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t-4 border-[#111111] bg-[#111111] px-3 py-2 text-white md:px-4 md:py-3">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 md:gap-3">
+        <span className="text-[10px] font-black uppercase tracking-[0.12em] text-[#f4efe7] md:text-sm md:tracking-[0.18em]">
           Bot-Shield verification is live now.
         </span>
         <a
           href={SECURE_PLAN_LINKS.bot_shield}
-          className="inline-flex items-center justify-center border-4 border-white bg-[#ff5a1f] px-5 py-2 text-xs font-black uppercase tracking-[0.18em] text-white no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#ffffff]"
+          className="inline-flex items-center justify-center border-4 border-white bg-[#ff5a1f] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-white no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[3px_3px_0_0_#ffffff] md:px-5 md:py-2 md:text-xs md:tracking-[0.18em] md:shadow-[4px_4px_0_0_#ffffff]"
         >
           Get Verified
         </a>
@@ -352,27 +352,27 @@ function WaitlistForm() {
   return (
     <section
       id="join"
-      className="border-b-4 border-[#111111] bg-[#111111] px-6 py-16 text-white md:px-12"
+      className="border-b-4 border-[#111111] bg-[#111111] px-4 py-10 text-white md:px-12 md:py-16"
     >
       <div className="mx-auto max-w-3xl">
-        <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff8b61]">
+        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff8b61] md:mb-4 md:text-xs md:tracking-[0.24em]">
           Section 05 // Join
         </div>
-        <h2 className="text-5xl font-black tracking-tighter md:text-7xl">
+        <h2 className="text-3xl font-black tracking-tighter md:text-7xl">
           join the list.
         </h2>
-        <p className="mt-4 max-w-2xl text-lg font-medium leading-8 text-[#d7d3cc]">
+        <p className="mt-3 max-w-2xl text-sm font-medium leading-7 text-[#d7d3cc] md:mt-4 md:text-lg md:leading-8">
           Get early access updates without the noise. The waitlist is simple by
           design.
         </p>
-        <div className="mt-8 border-4 border-white bg-[#f4efe7] p-6 text-[#111111] shadow-[8px_8px_0_0_#ff5a1f]">
+        <div className="mt-5 border-4 border-white bg-[#f4efe7] p-4 text-[#111111] shadow-[8px_8px_0_0_#ff5a1f] md:mt-8 md:p-6">
           {submitted ? (
-            <div className="space-y-3 text-center">
-              <div className="flex items-center justify-center gap-3 text-sm font-black uppercase tracking-[0.18em]">
-                <Check size={18} />
+            <div className="space-y-2 text-center md:space-y-3">
+              <div className="flex items-center justify-center gap-2 text-xs font-black uppercase tracking-[0.14em] md:gap-3 md:text-sm md:tracking-[0.18em]">
+                <Check size={16} />
                 You&apos;re on the list.
               </div>
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#5c554d]">
+              <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#5c554d] md:text-xs md:tracking-[0.16em]">
                 Launch updates will go to this address. Need help? Email
                 support.
               </p>
@@ -382,7 +382,7 @@ function WaitlistForm() {
               action={WAITLIST_FORM_ACTION}
               method="POST"
               onSubmit={handleSubmit}
-              className="flex flex-col gap-4 md:flex-row"
+              className="flex flex-col gap-3 md:flex-row md:gap-4"
             >
               <input
                 type="hidden"
@@ -399,7 +399,7 @@ function WaitlistForm() {
               <div className="relative min-w-0 flex-1">
                 <Mail
                   size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7a746d]"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7a746d] md:left-4"
                 />
                 <input
                   type="email"
@@ -407,19 +407,19 @@ function WaitlistForm() {
                   required
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  className="w-full border-4 border-[#111111] bg-white py-4 pl-12 pr-4 text-base font-bold text-[#111111] outline-none placeholder:text-[#7a746d]"
+                  placeholder="[EMAIL]"
+                  className="w-full border-4 border-[#111111] bg-white py-3 pl-10 pr-3 text-sm font-bold text-[#111111] outline-none placeholder:text-[#7a746d] md:py-4 md:pl-12 md:pr-4 md:text-base"
                 />
               </div>
               <button
                 type="submit"
-                className="border-4 border-[#111111] bg-[#ff5a1f] px-8 py-4 text-sm font-black uppercase tracking-[0.18em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 disabled:opacity-60 shadow-[6px_6px_0_0_#111111]"
+                className="border-4 border-[#111111] bg-[#ff5a1f] px-6 py-3 text-xs font-black uppercase tracking-[0.14em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 disabled:opacity-60 shadow-[6px_6px_0_0_#111111] md:px-8 md:text-sm md:tracking-[0.18em]"
               >
                 Join Now
               </button>
             </form>
           )}
-          <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#5c554d]">
+          <p className="mt-3 text-[10px] font-black uppercase tracking-[0.14em] text-[#5c554d] md:mt-4 md:text-xs md:tracking-[0.18em]">
             No spam. No bots. Just launch updates.
           </p>
         </div>
