@@ -18,7 +18,7 @@ interface Signature {
   timestamp: number;
 }
 
-export function CosmicWall({ onClose }: { onClose: () => void }) {
+export default function CosmicWall({ onClose }: { onClose: () => void }) {
   const [signatures, setSignatures] = useState<Signature[]>([]);
   const [name, setName] = useState('');
   const [isSigning, setIsSigning] = useState(false);
