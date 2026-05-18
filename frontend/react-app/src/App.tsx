@@ -241,25 +241,25 @@ function VerificationSteps() {
   return (
     <section
       id="verification"
-      className="border-b-4 border-[#111111] bg-[#111111] px-6 py-16 text-white md:px-12"
+      className="border-b-4 border-[#111111] bg-[#111111] px-4 py-10 text-white md:px-12 md:py-16"
     >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 text-xs font-black uppercase tracking-[0.24em] text-[#ff8b61]">
+        <div className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff8b61] md:mb-8 md:text-xs md:tracking-[0.24em]">
           Section 02 // Verification
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-4 md:gap-6 md:grid-cols-3">
           {steps.map(step => (
             <div
               key={step.num}
-              className="border-4 border-white bg-[#1a1a1a] p-6 shadow-[6px_6px_0_0_#ff5a1f]"
+              className="border-4 border-white bg-[#1a1a1a] p-4 shadow-[6px_6px_0_0_#ff5a1f] md:p-6"
             >
-              <div className="mb-4 text-5xl font-black tracking-tighter text-[#ff8b61]">
+              <div className="mb-2 text-3xl font-black tracking-tighter text-[#ff8b61] md:mb-4 md:text-5xl">
                 {step.num}
               </div>
-              <h3 className="mb-3 text-2xl font-black uppercase tracking-tight">
+              <h3 className="mb-2 text-xl font-black uppercase tracking-tight md:mb-3 md:text-2xl">
                 {step.title}
               </h3>
-              <p className="text-sm font-medium leading-7 text-[#d7d3cc]">
+              <p className="text-xs font-medium leading-6 text-[#d7d3cc] md:text-sm md:leading-7">
                 {step.desc}
               </p>
             </div>
@@ -274,42 +274,42 @@ function PricingSection() {
   return (
     <section
       id="pricing"
-      className="border-b-4 border-[#111111] bg-[#f4efe7] px-6 py-16 md:px-12"
+      className="border-b-4 border-[#111111] bg-[#f4efe7] px-4 py-10 md:px-12 md:py-16"
     >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
           Section 03 // Founder Pricing
         </div>
-        <h2 className="mb-4 text-5xl font-black tracking-tighter text-[#111111] md:text-7xl">
+        <h2 className="mb-3 text-3xl font-black tracking-tighter text-[#111111] md:mb-4 md:text-7xl">
           pick your lane.
         </h2>
-        <p className="mb-10 max-w-3xl text-lg font-medium leading-8 text-[#38322b]">
+        <p className="mb-6 max-w-3xl text-sm font-medium leading-7 text-[#38322b] md:mb-10 md:text-lg md:leading-8">
           Every checkout route is account-bound. Public pricing is live, plain,
           and tied to the actual launch flow.
         </p>
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-5">
+        <div className="grid gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-5">
           {PRICING_PLANS.map(plan => (
             <a
               key={plan.name}
               href={plan.link}
-              className={`block border-4 border-[#111111] p-6 no-underline shadow-[6px_6px_0_0_#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 ${plan.tone}`}
+              className={`block border-4 border-[#111111] p-4 no-underline shadow-[6px_6px_0_0_#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 md:p-6 ${plan.tone}`}
             >
-              <div className="text-xs font-black uppercase tracking-[0.18em] opacity-70">
+              <div className="text-[10px] font-black uppercase tracking-[0.14em] opacity-70 md:text-xs md:tracking-[0.18em]">
                 Live
               </div>
-              <div className="mt-4 text-3xl font-black tracking-tighter">
+              <div className="mt-2 text-2xl font-black tracking-tighter md:mt-4 md:text-3xl">
                 {plan.price}
               </div>
-              <h3 className="mt-4 text-2xl font-black uppercase tracking-tight">
+              <h3 className="mt-2 text-lg font-black uppercase tracking-tight md:mt-4 md:text-2xl">
                 {plan.name}
               </h3>
-              <p className="mt-3 text-sm font-medium leading-7 opacity-80">
+              <p className="mt-2 text-xs font-medium leading-6 opacity-80 md:mt-3 md:text-sm md:leading-7">
                 {plan.desc}
               </p>
             </a>
           ))}
         </div>
-        <p className="mt-8 max-w-4xl text-sm font-bold uppercase tracking-[0.16em] text-[#5c554d]">
+        <p className="mt-5 max-w-4xl text-xs font-bold uppercase tracking-[0.12em] text-[#5c554d] md:mt-8 md:text-sm md:tracking-[0.16em]">
           Securely processed by Square. Customer purchases buy platform access
           and founder products. They are not charitable contributions.
         </p>
@@ -751,25 +751,25 @@ export default function App() {
         id="about"
         className="grid border-b-4 border-[#111111] md:min-h-[78vh] md:grid-cols-12"
       >
-        <div className="border-b-4 border-[#111111] bg-white px-6 py-12 md:col-span-8 md:border-b-0 md:border-r-4 md:px-12 md:py-20">
+        <div className="border-b-4 border-[#111111] bg-white px-4 py-8 md:col-span-8 md:border-b-0 md:border-r-4 md:px-12 md:py-20">
           <div className="max-w-4xl">
-            <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
               Section 01 // Human Only
             </div>
-            <h1 className="text-6xl font-black lowercase leading-[0.84] tracking-tighter md:text-8xl xl:text-9xl">
+            <h1 className="text-4xl font-black lowercase leading-[0.9] tracking-tighter md:text-8xl xl:text-9xl">
               real people.
               <br />
               zero bot noise.
             </h1>
-            <p className="mt-8 max-w-3xl text-2xl font-medium leading-tight text-[#2f2a24] md:text-3xl">
+            <p className="mt-5 max-w-3xl text-lg font-medium leading-snug text-[#2f2a24] md:mt-8 md:text-3xl md:leading-tight">
               A human-first social platform for dating, meetups, and real-world
               connection. AI is used to protect the experience, not perform it.
             </p>
-            <div className="mt-8 inline-block border-l-4 border-[#ff5a1f] bg-[#fff6f1] px-4 py-3 text-sm font-black uppercase tracking-[0.16em] text-[#111111]">
+            <div className="mt-5 inline-block border-l-4 border-[#ff5a1f] bg-[#fff6f1] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#111111] md:mt-8 md:px-4 md:py-3 md:text-sm md:tracking-[0.16em]">
               Bot-Shield verification and account-bound checkout are live now.
             </div>
 
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4 md:mt-10">
               <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
                 Get Verified
               </BrutalButton>
@@ -778,39 +778,39 @@ export default function App() {
           </div>
         </div>
 
-        <div className="bg-[#ff5a1f] px-6 py-12 text-[#111111] md:col-span-4 md:px-10 md:py-16">
-          <div className="space-y-6">
-            <div className="border-t-4 border-[#111111] pt-6">
-              <h2 className="text-4xl font-black uppercase tracking-tighter">
+        <div className="bg-[#ff5a1f] px-4 py-8 text-[#111111] md:col-span-4 md:px-10 md:py-16">
+          <div className="space-y-4 md:space-y-6">
+            <div className="border-t-4 border-[#111111] pt-4 md:pt-6">
+              <h2 className="text-2xl font-black uppercase tracking-tighter md:text-4xl">
                 Launch Status
               </h2>
-              <p className="mt-4 text-lg font-bold leading-8">
+              <p className="mt-2 text-base font-bold leading-7 md:mt-4 md:text-lg md:leading-8">
                 The public surface is product-first: verification, pricing,
                 support, and profile flow.
               </p>
             </div>
 
-            <div className="grid gap-4">
-              <div className="border-4 border-[#111111] bg-white p-5 shadow-[6px_6px_0_0_#111111]">
-                <div className="text-xs font-black uppercase tracking-[0.18em] text-[#ff5a1f]">
+            <div className="grid gap-3 sm:grid-cols-2 md:gap-4">
+              <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
+                <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#ff5a1f] md:text-xs md:tracking-[0.18em]">
                   Live
                 </div>
-                <div className="mt-2 text-2xl font-black uppercase tracking-tight">
+                <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
                   Bot-Shield Flow
                 </div>
-                <p className="mt-2 text-sm font-medium leading-7 text-[#38322b]">
+                <p className="mt-1 text-xs font-medium leading-6 text-[#38322b] md:mt-2 md:text-sm md:leading-7">
                   Verification stays tied to the real checkout path instead of
                   anonymous payment links.
                 </p>
               </div>
-              <div className="border-4 border-[#111111] bg-white p-5 shadow-[6px_6px_0_0_#111111]">
-                <div className="text-xs font-black uppercase tracking-[0.18em] text-[#ff5a1f]">
+              <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
+                <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#ff5a1f] md:text-xs md:tracking-[0.18em]">
                   Launch
                 </div>
-                <div className="mt-2 text-2xl font-black uppercase tracking-tight">
+                <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
                   April 4, 2026
                 </div>
-                <p className="mt-2 text-sm font-medium leading-7 text-[#38322b]">
+                <p className="mt-1 text-xs font-medium leading-6 text-[#38322b] md:mt-2 md:text-sm md:leading-7">
                   Founder pricing, support, and early-access capture are all
                   wired into the same surface.
                 </p>
@@ -822,30 +822,30 @@ export default function App() {
 
       <section
         id="platform"
-        className="border-b-4 border-[#111111] bg-[#f4efe7] px-6 py-16 md:px-12"
+        className="border-b-4 border-[#111111] bg-[#f4efe7] px-4 py-10 md:px-12 md:py-16"
       >
         <div className="mx-auto max-w-7xl">
-          <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+          <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
             The Social
           </div>
-          <h2 className="mb-10 text-5xl font-black tracking-tighter md:text-7xl">
+          <h2 className="mb-6 text-3xl font-black tracking-tighter md:mb-10 md:text-7xl">
             how we connect.
           </h2>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-4 md:gap-6 md:grid-cols-3">
             {PLATFORM_CARDS.map(card => (
               <div
                 key={card.title}
-                className={`border-4 border-[#111111] p-8 shadow-[6px_6px_0_0_#111111] ${card.tone}`}
+                className={`border-4 border-[#111111] p-5 shadow-[6px_6px_0_0_#111111] md:p-8 ${card.tone}`}
               >
                 <div
-                  className={`mb-6 inline-flex h-14 w-14 items-center justify-center border-4 border-[#111111] ${card.iconTone}`}
+                  className={`mb-4 inline-flex h-10 w-10 items-center justify-center border-4 border-[#111111] md:mb-6 md:h-14 md:w-14 ${card.iconTone}`}
                 >
-                  <card.icon size={24} />
+                  <card.icon size={20} />
                 </div>
-                <h3 className="text-2xl font-black uppercase tracking-tight">
+                <h3 className="text-xl font-black uppercase tracking-tight md:text-2xl">
                   {card.title}
                 </h3>
-                <p className="mt-4 text-sm font-medium leading-7 opacity-85">
+                <p className="mt-3 text-xs font-medium leading-6 opacity-85 md:mt-4 md:text-sm md:leading-7">
                   {card.body}
                 </p>
               </div>
@@ -859,57 +859,57 @@ export default function App() {
 
       <section
         id="mission"
-        className="border-b-4 border-[#111111] bg-white px-6 py-16 md:px-12"
+        className="border-b-4 border-[#111111] bg-white px-4 py-10 md:px-12 md:py-16"
       >
         <div className="mx-auto max-w-5xl">
-          <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+          <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
             Section 04 // Impact
           </div>
-          <h2 className="text-5xl font-black tracking-tighter md:text-7xl">
+          <h2 className="text-3xl font-black tracking-tighter md:text-7xl">
             silent impact.
           </h2>
-          <div className="mt-10 grid gap-8 md:grid-cols-2">
-            <div className="border-4 border-[#111111] bg-[#f4efe7] p-6 shadow-[6px_6px_0_0_#111111]">
-              <p className="text-lg font-medium leading-8 text-[#2f2a24]">
+          <div className="mt-6 grid gap-4 md:mt-10 md:gap-8 md:grid-cols-2">
+            <div className="border-4 border-[#111111] bg-[#f4efe7] p-4 shadow-[6px_6px_0_0_#111111] md:p-6">
+              <p className="text-sm font-medium leading-7 text-[#2f2a24] md:text-lg md:leading-8">
                 We do not market this platform as a charity. It has to stand on
                 product quality, trust, and real human value first.
               </p>
             </div>
-            <div className="border-4 border-[#111111] bg-[#111111] p-6 text-white shadow-[6px_6px_0_0_#ff5a1f]">
-              <p className="text-lg font-medium leading-8 text-[#d7d3cc]">
+            <div className="border-4 border-[#111111] bg-[#111111] p-4 text-white shadow-[6px_6px_0_0_#ff5a1f] md:p-6">
+              <p className="text-sm font-medium leading-7 text-[#d7d3cc] md:text-lg md:leading-8">
                 Any later mission support follows the current operating policy
                 and stays out of the sales pitch. Customer purchases are
                 platform purchases, not charitable contributions.
               </p>
             </div>
           </div>
-          <div className="mt-10 border-4 border-[#111111] bg-[#ff5a1f] px-6 py-8 text-center text-2xl font-black italic tracking-tight text-white shadow-[8px_8px_0_0_#111111]">
-            "The Silent Founder would thank you, but he stays silent."
+          <div className="mt-6 border-4 border-[#111111] bg-[#ff5a1f] px-4 py-5 text-center text-lg font-black italic tracking-tight text-white shadow-[8px_8px_0_0_#111111] md:mt-10 md:px-6 md:py-8 md:text-2xl">
+            &quot;The Silent Founder would thank you, but he stays silent.&quot;
           </div>
         </div>
       </section>
 
       <WaitlistForm />
 
-      <section className="border-b-4 border-[#111111] bg-white px-6 py-16 text-center md:px-12">
+      <section className="border-b-4 border-[#111111] bg-white px-4 py-10 text-center md:px-12 md:py-16">
         <div className="mx-auto max-w-xl">
-          <div className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+          <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
             Section 06 // Share
           </div>
-          <h2 className="text-5xl font-black tracking-tighter md:text-6xl">
+          <h2 className="text-3xl font-black tracking-tighter md:text-6xl">
             share the platform.
           </h2>
-          <p className="mt-4 text-lg font-medium leading-8 text-[#3f3a34]">
+          <p className="mt-3 text-sm font-medium leading-7 text-[#3f3a34] md:mt-4 md:text-lg md:leading-8">
             Scan to visit or pass it to someone who is tired of fake profiles
             and low-trust noise.
           </p>
-          <div className="mx-auto mt-8 inline-block border-4 border-[#111111] bg-[#f4efe7] p-4 shadow-[8px_8px_0_0_#111111]">
+          <div className="mx-auto mt-5 inline-block border-4 border-[#111111] bg-[#f4efe7] p-3 shadow-[8px_8px_0_0_#111111] md:mt-8 md:p-4">
             <img
               src="/qrcode.png"
               alt="Scan to visit youandinotai.com"
-              width={220}
-              height={220}
-              className="mx-auto bg-white"
+              width={160}
+              height={160}
+              className="mx-auto h-auto max-w-[160px] bg-white md:max-w-[220px]"
             />
           </div>
         </div>
