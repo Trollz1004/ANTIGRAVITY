@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useChat } from '../lib/useChat';
+import { ErrorBoundary } from './ErrorBoundary';
 
 interface Props {
   matchId: string;
@@ -68,7 +69,8 @@ export default function ChatWindow({
       )}`;
 
   return (
-    <div className="flex flex-col h-full bg-gray-950 text-white rounded-xl overflow-hidden border border-gray-800 shadow-2xl">
+    <ErrorBoundary boundaryName="ChatWindow">
+      <div className="flex flex-col h-full bg-gray-950 text-white rounded-xl overflow-hidden border border-gray-800 shadow-2xl">
       {/* ── Header ── */}
       <div className="flex items-center gap-3 px-4 py-3 bg-gray-900 border-b border-gray-800">
         <img
@@ -207,6 +209,7 @@ export default function ChatWindow({
           </span>
         </div>
       </div>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }
