@@ -82,7 +82,16 @@ jobs:
           # grep exit codes: 0=match, 1=no match, 2=error. Trailing `|| true` collapses
           # 1 (no match) into a clean empty result; an actual error would surface via set -u
           # on an unset later var, but we explicitly guard the empty case below.
-          ALL_HITS=$(grep -rnE "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
+          # Exclude build output and dependency dirs — source URLs (e.g.
+          # 'https://ai-solutions.store' in CharitySection.tsx) are bundled
+          # into .next/server/app/page.js by the preceding Next.js build step,
+          # which would otherwise look like an un-allowlisted scan hit.
+          ALL_HITS=$(grep -rnE \
+            --exclude-dir=.next \
+            --exclude-dir=node_modules \
+            --exclude-dir=dist \
+            --exclude-dir=build \
+            "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
           if [ -z "$ALL_HITS" ]; then
             echo "Doctrine boundary intact (zero matches in: ${TARGETS[*]})"
             exit 0
