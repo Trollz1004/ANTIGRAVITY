@@ -106,6 +106,11 @@ class Settings(BaseSettings):
     match_top_k: int = 5
     match_candidate_limit: int = 50
 
+    # Request size limits (DoS protection)
+    max_request_body_size: int = 1_048_576       # 1 MB default for JSON bodies
+    max_file_upload_size: int = 10_485_760        # 10 MB for file uploads
+    max_json_depth: int = 10                      # max nested object/array levels
+
     # File upload settings
     upload_max_size_mb: int = 10
     upload_allowed_types: str = (

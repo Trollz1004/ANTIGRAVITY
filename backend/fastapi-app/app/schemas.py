@@ -71,6 +71,25 @@ class ProfileUpdateRequest(BaseModel):
     interests: list[str] = Field(default_factory=list, max_length=20)
 
 
+class ProfilePatchRequest(BaseModel):
+    """Partial update schema — only fields explicitly sent are applied.
+
+    ``extra="forbid"`` ensures unknown fields are rejected with 422.
+    ``model_fields_set`` tracks which fields were explicitly provided
+    (distinguishing *absent* from *explicitly null*).
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    bio: str | None = None
+    age: int | None = None
+    date_of_birth: date | None = None
+    gender: str | None = None
+    looking_for: str | None = None
+    location: str | None = None
+    interests: list[str] | None = None
+
+
 class ProfileResponse(BaseModel):
     user_id: uuid.UUID
     display_name: str
