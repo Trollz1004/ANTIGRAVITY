@@ -17,6 +17,11 @@ from starlette.middleware.gzip import GZipMiddleware
 
 from app.middleware.cache_headers import CacheHeadersMiddleware
 
+from app.middleware.request_limits import (
+    JsonDepthLimitMiddleware,
+    RequestSizeLimitMiddleware,
+)
+
 from app.config import get_settings
 from app.database import get_db, reconcile_legacy_schema
 from app.error_responses import ErrorCode, ErrorResponse, internal_error
@@ -153,6 +158,16 @@ app.add_middleware(InputValidationMiddleware)
 app.add_middleware(RateLimitMiddleware, calls_per_minute=_rate_limit_rpm)
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(CacheHeadersMiddleware)
+# Request size & depth limits (DoS protection) — OPU-96
+app.add_middleware(
+    RequestSizeLimitMiddleware,
+    max_body_size=settings.max_request_body_size,
+    max_file_upload_size=settings.max_file_upload_size,
+)
+app.add_middleware(
+    JsonDepthLimitMiddleware,
+    max_depth=settings.max_json_depth,
+)
 
 
 @app.middleware("http")
