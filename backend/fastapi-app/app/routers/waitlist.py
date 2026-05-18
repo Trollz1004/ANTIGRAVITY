@@ -8,7 +8,7 @@ from fastapi import APIRouter, HTTPException, Request, status
 
 from app.config import get_settings
 from app.email_service import send_waitlist_confirmation, send_waitlist_operator_notice
-from app.rate_limit import waitlist_limiter
+
 from app.schemas import WaitlistSignupRequest, WaitlistSignupResponse
 
 router = APIRouter(prefix="/waitlist")
