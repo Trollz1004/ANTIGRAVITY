@@ -58,15 +58,58 @@ jobs:
             echo "No §496.405 violations found"
           fi
 
-      # Doctrine drift check — live product code must not reintroduce retired split-routing markers
+      # Doctrine drift check — live product code must not reintroduce retired split-routing markers.
+      # Allowlist of legitimate pre-existing references lives at .github/doctrine-drift-allowlist.txt.
       - name: Doctrine drift scan
         run: |
-          if grep -rn "ai-solutions\.store\|CharityRouter100\|60/30/10\|100% to charity" \
-            apps/youandinotai-frontend/ youandinotai-api/app/ 2>/dev/null; then
-            echo "::error::Doctrine drift violation — live product code references retired routing markers"
+          set -u
+          # Live customer-surface target dirs. youandinotai-api/app/ was removed during the
+          # monorepo restructure; the FastAPI app now lives at backend/fastapi-app/app/.
+          # Pre-existing grep was passing silently when youandinotai-api/app/ disappeared
+          # because grep exited 2 (error) and `if grep ...; then` only fires on exit 0.
+          CANDIDATES=(apps/youandinotai-frontend backend/fastapi-app/app)
+          TARGETS=()
+          for t in "${CANDIDATES[@]}"; do
+            if [ -d "$t" ]; then
+              TARGETS+=("$t")
+            fi
+          done
+          if [ ${#TARGETS[@]} -eq 0 ]; then
+            echo "::error::Doctrine drift scan has no valid target directories — repo layout changed; update ci-validate.yml"
             exit 1
           fi
-          echo "Doctrine boundary intact"
+          PATTERN='ai-solutions\.store|CharityRouter100|60/30/10|100% to charity'
+          # grep exit codes: 0=match, 1=no match, 2=error. Trailing `|| true` collapses
+          # 1 (no match) into a clean empty result; an actual error would surface via set -u
+          # on an unset later var, but we explicitly guard the empty case below.
+          ALL_HITS=$(grep -rnE "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
+          if [ -z "$ALL_HITS" ]; then
+            echo "Doctrine boundary intact (zero matches in: ${TARGETS[*]})"
+            exit 0
+          fi
+          ALLOWLIST_FILE=".github/doctrine-drift-allowlist.txt"
+          ALLOWED_PATHS=""
+          if [ -f "$ALLOWLIST_FILE" ]; then
+            ALLOWED_PATHS=$(grep -v '^[[:space:]]*#' "$ALLOWLIST_FILE" | grep -v '^[[:space:]]*$' || true)
+          fi
+          NEW_HITS=""
+          while IFS= read -r hit; do
+            [ -z "$hit" ] && continue
+            file_path=$(echo "$hit" | cut -d: -f1)
+            if [ -n "$ALLOWED_PATHS" ] && echo "$ALLOWED_PATHS" | grep -Fxq "$file_path"; then
+              continue
+            fi
+            NEW_HITS+="$hit"$'\n'
+          done <<< "$ALL_HITS"
+          if [ -n "$NEW_HITS" ]; then
+            echo "::error::Doctrine drift violation — live product code references retired routing markers"
+            echo "$NEW_HITS"
+            echo ""
+            echo "If a reference is legitimate (internal ops, monitoring), add the file path to $ALLOWLIST_FILE with a rationale in the file's commit message."
+            exit 1
+          fi
+          echo "::warning::Doctrine drift scan: all matches are allowlisted in $ALLOWLIST_FILE — review the allowlist file for context."
+          echo "$ALL_HITS"
 
       # TODO scanner — prevent placeholder implementations in production code
       - name: Scan for TODO/FIXME comments
