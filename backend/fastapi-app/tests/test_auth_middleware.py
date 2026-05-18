@@ -242,7 +242,7 @@ class TestRefreshFlow:
             json={"refresh_token": access_token},
         )
         assert response.status_code == 401
-        assert "Not a refresh token" in response.json()["detail"]
+        assert "Not a refresh token" in response.json()["message"]
 
     async def test_expired_refresh_token_raises_401(self):
         from fastapi.testclient import TestClient
@@ -294,7 +294,7 @@ class TestRefreshFlow:
             app.dependency_overrides.pop(get_db, None)
 
         assert response.status_code == 401
-        assert "User not found" in response.json()["detail"]
+        assert "User not found" in response.json()["message"]
 
 
 # Tests for auth utility functions
