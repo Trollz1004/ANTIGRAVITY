@@ -9,6 +9,7 @@ import aiofiles
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy import delete, select
 
+from app import webhook_retry
 from app.database import SessionLocal
 from app.models import (
     Comment,
@@ -27,8 +28,7 @@ from app.models import (
     VideoCall,
     VolunteerSignup,
 )
-from app.models import WebhookRetryQueue, WebhookDeadLetter
-from app import webhook_retry
+
 logger = logging.getLogger(__name__)
 
 EXPORTS_DIR = "exports"

@@ -26,7 +26,8 @@ async def get_current_websocket_user(
         parsed_user_id = uuid.UUID(str(user_id))
     except Exception:
         raise WebSocketException(
-            code=status.WS_1008_POLICY_VIOLATION, reason="Could not validate credentials"
+            code=status.WS_1008_POLICY_VIOLATION,
+            reason="Could not validate credentials",
         )
 
     user = await db.scalar(select(User).where(User.id == parsed_user_id))

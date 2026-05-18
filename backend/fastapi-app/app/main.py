@@ -15,12 +15,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.gzip import GZipMiddleware
 
-from app.middleware.cache_headers import CacheHeadersMiddleware
-
 from app.config import get_settings
 from app.database import get_db, reconcile_legacy_schema
-from app.error_responses import ErrorCode, ErrorResponse, internal_error
+from app.error_responses import ErrorCode, ErrorResponse
 from app.logging_config import setup_logging
+from app.middleware.cache_headers import CacheHeadersMiddleware
 from app.monitoring import setup_monitoring
 from app.routers import (
     auth,
@@ -51,13 +50,13 @@ from app.routers import (
 )
 from app.routers.health import health_check
 from app.scheduler import setup_scheduler
-from app.webhook_retry import router as webhook_retry_router
 from app.schemas import HealthResponse
 from app.security import (
     InputValidationMiddleware,
     RateLimitMiddleware,
     SecurityHeadersMiddleware,
 )
+from app.webhook_retry import router as webhook_retry_router
 
 # Configure structured logging
 setup_logging()
@@ -315,7 +314,11 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
         )
 
     # If the detail is already a standardized ErrorResponse dict (from api_exception helpers), pass it through
-    if isinstance(exc.detail, dict) and "code" in exc.detail and "message" in exc.detail:
+    if (
+        isinstance(exc.detail, dict)
+        and "code" in exc.detail
+        and "message" in exc.detail
+    ):
         content = exc.detail
     else:
         # Wrap raw string details into the standard format

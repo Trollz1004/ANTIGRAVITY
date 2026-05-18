@@ -25,32 +25,31 @@ os.environ.setdefault(
 )
 os.environ.setdefault("CORS_ORIGINS", "http://testserver")
 
-import sys
-from pathlib import Path
+import sys  # noqa: E402
+from pathlib import Path  # noqa: E402
 
-import pytest
+import pytest  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-import asyncio
-from unittest.mock import AsyncMock
+import asyncio  # noqa: E402
 
-from fastapi.testclient import TestClient
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from fastapi.testclient import TestClient  # noqa: E402
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine  # noqa: E402
 
-from app.config import get_settings
+from app.config import get_settings  # noqa: E402
 
 get_settings.cache_clear()
 
-from app import database
+from app import database  # noqa: E402
 
 database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
 
-from app.database import Base, get_db
-from app.main import app
-from app.rate_limit import reset_rate_limits
+from app.database import Base, get_db  # noqa: E402
+from app.main import app  # noqa: E402
+from app.rate_limit import reset_rate_limits  # noqa: E402
 
 
 @pytest.fixture()
@@ -120,20 +119,22 @@ def test_gzip_middleware_is_configured():
     """Verify GZipMiddleware is present in the app's middleware stack."""
     middleware_classes = [m.cls for m in app.user_middleware]
     from starlette.middleware.gzip import GZipMiddleware
-    assert GZipMiddleware in middleware_classes, (
-        "GZipMiddleware should be registered in the middleware stack"
-    )
+
+    assert (
+        GZipMiddleware in middleware_classes
+    ), "GZipMiddleware should be registered in the middleware stack"
 
 
 def test_gzip_middleware_minimum_size():
     """Verify GZipMiddleware is configured with minimum_size=1024."""
     from starlette.middleware.gzip import GZipMiddleware
+
     for m in app.user_middleware:
         if m.cls is GZipMiddleware:
             # Check that minimum_size kwarg is set to 1024
-            assert m.kwargs.get("minimum_size") == 1024, (
-                f"GZipMiddleware minimum_size should be 1024, got {m.kwargs}"
-            )
+            assert (
+                m.kwargs.get("minimum_size") == 1024
+            ), f"GZipMiddleware minimum_size should be 1024, got {m.kwargs}"
             break
     else:
         pytest.fail("GZipMiddleware not found in middleware stack")

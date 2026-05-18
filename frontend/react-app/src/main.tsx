@@ -25,14 +25,14 @@ import { Verify } from './app/pages/Verify';
 import { CheckoutLaunch } from './app/pages/CheckoutLaunch';
 import DataPrivacyDashboard from './components/DataPrivacyDashboard';
 
+import { CookieConsentBanner } from './components/CookieConsentBanner';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import './index.css';
+
 // Lazy-loaded heavy components — loaded on demand to reduce initial bundle
 const CharityTab = lazy(() => import('./components/CharityTab'));
 const ChatWindow = lazy(() => import('./components/ChatWindow'));
 const VideoChat = lazy(() => import('./components/VideoChat'));
-
-import { CookieConsentBanner } from './components/CookieConsentBanner';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import './index.css';
 
 function PageErrorFallback({
   errorId,
@@ -57,10 +57,16 @@ function PageErrorFallback({
           Error ID: {errorId.slice(0, 8)}
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <button onClick={resetError} className="app-button-accent px-6 py-3 text-sm">
+          <button
+            onClick={resetError}
+            className="app-button-accent px-6 py-3 text-sm"
+          >
             🔄 Try Again
           </button>
-          <a href="/app" className="app-button-dark px-6 py-3 text-sm no-underline">
+          <a
+            href="/app"
+            className="app-button-dark px-6 py-3 text-sm no-underline"
+          >
             🏠 Go Home
           </a>
         </div>
@@ -87,7 +93,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app"
                   element={
-                    <ErrorBoundary boundaryName="page:discover" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:discover"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Discover />
                     </ErrorBoundary>
                   }
@@ -95,7 +109,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/lovebot"
                   element={
-                    <ErrorBoundary boundaryName="page:lovebot" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:lovebot"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <LoveBotPage />
                     </ErrorBoundary>
                   }
@@ -103,7 +125,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/matches"
                   element={
-                    <ErrorBoundary boundaryName="page:matches" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:matches"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Matches />
                     </ErrorBoundary>
                   }
@@ -111,7 +141,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/inbox"
                   element={
-                    <ErrorBoundary boundaryName="page:inbox" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:inbox"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Inbox />
                     </ErrorBoundary>
                   }
@@ -119,7 +157,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/profile"
                   element={
-                    <ErrorBoundary boundaryName="page:profile" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:profile"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <ProfileSetup />
                     </ErrorBoundary>
                   }
@@ -127,7 +173,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/chat/:matchId"
                   element={
-                    <ErrorBoundary boundaryName="page:chat" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:chat"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Chat />
                     </ErrorBoundary>
                   }
@@ -135,7 +189,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/boards"
                   element={
-                    <ErrorBoundary boundaryName="page:boards" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:boards"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Boards />
                     </ErrorBoundary>
                   }
@@ -143,7 +205,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/events"
                   element={
-                    <ErrorBoundary boundaryName="page:events" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:events"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Events />
                     </ErrorBoundary>
                   }
@@ -151,7 +221,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/volunteer"
                   element={
-                    <ErrorBoundary boundaryName="page:volunteer" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:volunteer"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Volunteering />
                     </ErrorBoundary>
                   }
@@ -159,7 +237,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/support"
                   element={
-                    <ErrorBoundary boundaryName="page:support" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:support"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Support />
                     </ErrorBoundary>
                   }
@@ -167,7 +253,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/privacy"
                   element={
-                    <ErrorBoundary boundaryName="page:privacy" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:privacy"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <DataPrivacyDashboard />
                     </ErrorBoundary>
                   }
@@ -175,8 +269,24 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/impact"
                   element={
-                    <ErrorBoundary boundaryName="page:impact" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
-                      <Suspense fallback={<div className="flex min-h-[60vh] items-center justify-center px-6 py-12"><div className="app-subtitle">Loading impact dashboard…</div></div>}>
+                    <ErrorBoundary
+                      boundaryName="page:impact"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense
+                        fallback={
+                          <div className="flex min-h-[60vh] items-center justify-center px-6 py-12">
+                            <div className="app-subtitle">
+                              Loading impact dashboard…
+                            </div>
+                          </div>
+                        }
+                      >
                         <CharityTab />
                       </Suspense>
                     </ErrorBoundary>
@@ -189,7 +299,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/verify"
                   element={
-                    <ErrorBoundary boundaryName="page:verify" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:verify"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Verify />
                     </ErrorBoundary>
                   }
@@ -197,7 +315,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/checkout/:tier"
                   element={
-                    <ErrorBoundary boundaryName="page:checkout" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:checkout"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <CheckoutLaunch />
                     </ErrorBoundary>
                   }

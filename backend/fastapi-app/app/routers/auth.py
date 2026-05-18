@@ -4,7 +4,7 @@ import hashlib
 import uuid
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, Request, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -21,7 +21,12 @@ from app.auth import (
 )
 from app.config import get_settings
 from app.database import get_db
-from app.error_responses import api_exception, ErrorCode, unauthorized, not_found, conflict, bad_request, forbidden
+from app.error_responses import (
+    ErrorCode,
+    bad_request,
+    conflict,
+    unauthorized,
+)
 from app.models import Profile, User
 from app.rate_limit import auth_limiter
 from app.schemas import (
@@ -173,7 +178,10 @@ async def beta_access(
     normalized_code = _normalize_beta_code(payload.code)
     allowed_codes = get_settings().beta_access_code_list
     if not allowed_codes or normalized_code not in allowed_codes:
-        raise unauthorized(message="Invalid beta access code", details={"code": ErrorCode.BETA_ACCESS_DENIED})
+        raise unauthorized(
+            message="Invalid beta access code",
+            details={"code": ErrorCode.BETA_ACCESS_DENIED},
+        )
 
     settings = get_settings()
     email, password_seed, display_name = _beta_identity(
@@ -225,17 +233,23 @@ async def refresh_token(
     auth_limiter.check(request)
     data = decode_token(payload.refresh_token)
     if data.get("type") != "refresh":
-        raise unauthorized(message="Not a refresh token", details={"code": ErrorCode.TOKEN_INVALID})
+        raise unauthorized(
+            message="Not a refresh token", details={"code": ErrorCode.TOKEN_INVALID}
+        )
 
     user_id = data.get("sub")
     try:
         parsed_user_id = uuid.UUID(str(user_id))
     except ValueError as exc:
-        raise unauthorized(message="Invalid token payload", details={"code": ErrorCode.TOKEN_INVALID}) from exc
+        raise unauthorized(
+            message="Invalid token payload", details={"code": ErrorCode.TOKEN_INVALID}
+        ) from exc
 
     user = await db.scalar(select(User).where(User.id == parsed_user_id))
     if not user:
-        raise unauthorized(message="User not found", details={"code": ErrorCode.TOKEN_INVALID})
+        raise unauthorized(
+            message="User not found", details={"code": ErrorCode.TOKEN_INVALID}
+        )
     ensure_active_user(user)
 
     return AuthTokenResponse(

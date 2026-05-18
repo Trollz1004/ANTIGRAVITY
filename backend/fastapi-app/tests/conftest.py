@@ -56,10 +56,9 @@ database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
 from app.rate_limit import reset_rate_limits  # noqa: E402
-from app.models import User # noqa: E402
-from app.auth import hash_password # noqa: E402
 
 # ── Mock User Factory ──
+
 
 def make_user(
     *,
