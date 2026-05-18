@@ -70,6 +70,12 @@ class Settings(BaseSettings):
     google_client_id: str = ""
     google_client_secret: str = ""
 
+    # Database connection pooling settings
+    db_pool_size: int = 10
+    db_max_overflow: int = 20
+    db_pool_timeout: int = 30
+    db_pool_recycle: int = 1800
+
     # Monitoring settings
     sentry_dsn: str = ""
     prometheus_port: int = 8000

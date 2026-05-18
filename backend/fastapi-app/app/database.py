@@ -14,7 +14,15 @@ _database_url = settings.database_url
 if _database_url.startswith("postgresql://"):
     _database_url = _database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
 
-engine = create_async_engine(_database_url, pool_pre_ping=True)
+engine = create_async_engine(
+    _database_url,
+    pool_pre_ping=True,
+    pool_size=settings.db_pool_size,
+    max_overflow=settings.db_max_overflow,
+    pool_timeout=settings.db_pool_timeout,
+    pool_recycle=settings.db_pool_recycle,
+    echo_pool=settings.app_env == "development",
+)
 SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
@@ -36,6 +44,17 @@ async def check_db_health() -> bool:
         return True
     except Exception:
         return False
+
+
+async def get_pool_status() -> dict:
+    """Return connection pool statistics for monitoring."""
+    pool = engine.pool
+    return {
+        "size": pool.size(),
+        "checked_in": pool.checkedin(),
+        "checked_out": pool.checkedout(),
+        "overflow": pool.overflow(),
+    }
 
 
 async def reconcile_legacy_schema() -> None:
