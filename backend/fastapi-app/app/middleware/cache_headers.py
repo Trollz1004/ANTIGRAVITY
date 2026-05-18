@@ -38,7 +38,16 @@ CACHE_TIERS: list[tuple[str, str, int]] = [
     ("/api/v1/waitlist", "public, max-age=300", 300),
     # Metrics - no caching
     ("/api/v1/metrics", "no-cache, no-store", 0),
+    # Static assets served by the backend (e.g. uploads) - public, long cache
+    ("/static/", "public, max-age=31536000, immutable", 31536000),
+    ("/assets/", "public, max-age=31536000, immutable", 31536000),
 ]
+
+# File extensions that should receive long-term immutable cache when served as static
+STATIC_ASSET_EXTENSIONS = {
+    ".js", ".css", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp",
+    ".ico", ".woff", ".woff2", ".ttf", ".eot", ".avif",
+}
 
 # Default for unmatched GET endpoints
 DEFAULT_CACHE_CONTROL = "private, max-age=60"

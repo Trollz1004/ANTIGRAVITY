@@ -84,6 +84,17 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
 
+    # -------------------------------------------------------------------------
+    # CDN / static asset delivery
+    # -------------------------------------------------------------------------
+    # CDN base URL for serving static assets (fingerprinted JS/CSS/images).
+    # When set, the frontend Vite build uses this as the asset origin.
+    # Example: "https://cdn.youandinotai.com" or "https://pub-xxxxx.r2.dev"
+    cdn_base_url: str = ""
+    # Whether to use the CDN base URL for asset references.
+    # Set to true in production when CDN is configured.
+    cdn_enabled: bool = False
+
     cors_origins: str = (
         "https://youandinotai.com,http://localhost:3000,http://localhost:5173"
     )

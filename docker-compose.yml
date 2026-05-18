@@ -15,6 +15,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+    labels:
+      - "logging=promtail"
+      - "logging.jobname=redis"
 
   qdrant:
     image: qdrant/qdrant
@@ -31,6 +34,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    labels:
+      - "logging=promtail"
+      - "logging.jobname=qdrant"
 
   openclaw:
     build:
@@ -61,6 +67,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    labels:
+      - "logging=promtail"
+      - "logging.jobname=openclaw"
 
   whatsapp-bridge:
     build:
@@ -95,6 +104,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    labels:
+      - "logging=promtail"
+      - "logging.jobname=whatsapp-bridge"
 
 volumes:
   openclaw_wwebjs:
