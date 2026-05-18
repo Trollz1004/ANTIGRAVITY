@@ -691,9 +691,9 @@ export default function App() {
   return (
     <ThemeProvider>
     <div className="mx-auto min-h-screen max-w-[1600px] border-x-4 border-[#111111] bg-[#f4efe7] text-[#111111] pb-cta">
-      <nav className="sticky top-0 z-50 border-b-4 border-[#111111] bg-white px-6 py-5 md:px-12">
-        <div className="flex items-center justify-between gap-4">
-          <div className="text-3xl font-black uppercase tracking-tighter">
+      <nav className="sticky top-0 z-50 border-b-4 border-[#111111] bg-white px-4 py-3 md:px-12 md:py-5">
+        <div className="flex items-center justify-between gap-2 md:gap-4">
+          <div className="text-xl font-black uppercase tracking-tighter md:text-3xl">
             YOUANDINOTAI<span className="text-[#ff5a1f]">.</span>
           </div>
 
@@ -743,7 +743,7 @@ export default function App() {
         )}
       </nav>
 
-      <div className="border-b-4 border-[#111111] bg-[#111111] px-6 py-3 text-center text-xs font-black uppercase tracking-[0.2em] text-[#f4efe7] md:px-12">
+      <div className="border-b-4 border-[#111111] bg-[#111111] px-3 py-2 text-center text-[10px] font-black uppercase tracking-[0.16em] text-[#f4efe7] md:px-12 md:py-3 md:text-xs md:tracking-[0.2em]">
         Founder pricing is live. Launch day is April 4, 2026.
       </div>
 
