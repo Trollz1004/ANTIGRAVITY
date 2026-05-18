@@ -95,3 +95,5 @@ export function CheckoutLaunch() {
     </div>
   );
 }
+
+export default CheckoutLaunch;
