@@ -239,20 +239,7 @@ jobs:
           SQUARE_BOOKING_WEBHOOK_SIGNATURE_KEY: 'test-square-signature'
           SQUARE_BOOKING_WEBHOOK_NOTIFICATION_URL: 'http://testserver/api/v1/webhooks/square-booking'
         run: |
-          pytest --tb=short --cov=app --cov-report=term-missing --cov-report=html:htmlcov --cov-report=xml:coverage.xml --cov-fail-under=60
-
-      - name: Generate coverage badge
-        run: python scripts/generate_coverage_badge.py
-
-      - name: Upload coverage XML artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: |
-            backend/fastapi-app/coverage.xml
-            backend/fastapi-app/coverage-badge.svg
-            backend/fastapi-app/htmlcov/
-          retention-days: 14
+          pytest --tb=short --cov=app --cov-report=term-missing --cov-fail-under=63
 
   js-tests:
     runs-on: ubuntu-latest
