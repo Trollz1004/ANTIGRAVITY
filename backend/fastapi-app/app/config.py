@@ -101,8 +101,17 @@ class Settings(BaseSettings):
     # Set to true in production when CDN is configured.
     cdn_enabled: bool = False
 
+    # -------------------------------------------------------------------------
+    # Redis
+    # -------------------------------------------------------------------------
+    redis_url: str = "redis://localhost:6379/0"
+    redis_max_connections: int = 20
+    redis_cache_default_ttl: int = 300
+    redis_session_ttl: int = 3600
+    redis_rate_limit_window: int = 60
+
     cors_origins: str = (
-        "https://youandinotai.com,http://localhost:3000,http://localhost:5173,http://localhost:8000,http://127.0.0.1:8000"
+        "https://youandinotai.com,http://localhost:3000,http://localhost:5173,http://localhost:8000,http://[IP_ADDRESS]:8000"
     )
     registration_rate_limit_per_minute: int = 10
     auth_rate_limit_per_minute: int = 10
