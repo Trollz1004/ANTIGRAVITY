@@ -11,6 +11,8 @@ import {
   X,
 } from 'lucide-react';
 import { useAuth } from './lib/auth';
+import { ThemeProvider } from './lib/ThemeContext';
+import { ThemeToggle } from './components/ThemeToggle';
 
 const WAITLIST_FORM_ACTION = 'https://formsubmit.co/contact@youandinotai.com';
 
@@ -687,6 +689,7 @@ export default function App() {
   }, []);
 
   return (
+    <ThemeProvider>
     <div className="mx-auto min-h-screen max-w-[1600px] border-x-4 border-[#111111] bg-[#f4efe7] text-[#111111] pb-cta">
       <nav className="sticky top-0 z-50 border-b-4 border-[#111111] bg-white px-6 py-5 md:px-12">
         <div className="flex items-center justify-between gap-4">
@@ -706,10 +709,11 @@ export default function App() {
             ))}
           </div>
 
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-3">
             <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
               Get Verified
             </BrutalButton>
+            <ThemeToggle />
           </div>
 
           <button
@@ -921,5 +925,6 @@ export default function App() {
         {showSuccess && <SuccessModal onClose={() => setShowSuccess(false)} />}
       </AnimatePresence>
     </div>
+    </ThemeProvider>
   );
 }
