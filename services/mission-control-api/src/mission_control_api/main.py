@@ -15,6 +15,8 @@ from .config import settings
 from .logging_config import setup_logging, get_logger, new_request_id, LogContext
 from .routes import health, deploy, runbooks, hermes, tasks, ops_runs
 from .middleware.sanitization import SanitizationMiddleware
+from .middleware.rate_limiting import RateLimitingMiddleware
+from .middleware.idempotency import IdempotencyMiddleware
 
 # Global in-memory cache for request deduplication
 request_cache = {} # Stores (response_body, status_code, headers, expiration_time)
@@ -39,6 +41,12 @@ app.add_middleware(
 
 # ── Input sanitization middleware ────────────────────────────────────────────
 app.add_middleware(SanitizationMiddleware)
+
+# ── Rate limiting middleware ──────────────────────────────────────────────────
+app.add_middleware(RateLimitingMiddleware)
+
+# ── Idempotency key middleware ───────────────────────────────────────────────
+app.add_middleware(IdempotencyMiddleware)
 
 
 # ── Request tracing middleware ───────────────────────────────────────────────
