@@ -17,15 +17,47 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $canonicalPath = Join-Path $repoRoot 'infra\claude-desktop\claude_desktop_config.json'
-$liveDir = Join-Path $env:APPDATA 'Claude'
-$livePath = Join-Path $liveDir 'claude_desktop_config.json'
 
 if (-not (Test-Path $canonicalPath)) {
     throw "Canonical config not found at $canonicalPath. Run 'git pull' first."
 }
 
-if (-not (Test-Path $liveDir)) {
-    throw "Claude Desktop config dir not found at $liveDir. Is Claude Desktop installed on this node?"
+# Locate Claude Desktop's live config — supports BOTH install modes:
+#   1) Standard installer:        %APPDATA%\Claude\claude_desktop_config.json
+#   2) Microsoft Store package:   %LOCALAPPDATA%\Packages\Claude_<pfn-hash>\LocalCache\Roaming\Claude\claude_desktop_config.json
+# Prefer whichever has an existing config; fall back to the standard dir if neither exists yet.
+$standardDir = Join-Path $env:APPDATA 'Claude'
+$standardPath = Join-Path $standardDir 'claude_desktop_config.json'
+
+$storePackagesRoot = Join-Path $env:LOCALAPPDATA 'Packages'
+$storePackageDir = $null
+if (Test-Path $storePackagesRoot) {
+    $storePackageDir = Get-ChildItem -Path $storePackagesRoot -Filter 'Claude_*' -Directory -ErrorAction SilentlyContinue |
+        Select-Object -First 1 -ExpandProperty FullName
+}
+$storeDir = if ($storePackageDir) { Join-Path $storePackageDir 'LocalCache\Roaming\Claude' } else { $null }
+$storePath = if ($storeDir) { Join-Path $storeDir 'claude_desktop_config.json' } else { $null }
+
+if ($storePath -and (Test-Path $storePath)) {
+    $liveDir = $storeDir
+    $livePath = $storePath
+    Write-Host "[detect] Microsoft Store install: $liveDir" -ForegroundColor DarkGray
+} elseif (Test-Path $standardPath) {
+    $liveDir = $standardDir
+    $livePath = $standardPath
+    Write-Host "[detect] Standard install: $liveDir" -ForegroundColor DarkGray
+} elseif (Test-Path $standardDir) {
+    # Standard dir exists but no config yet — create one there
+    $liveDir = $standardDir
+    $livePath = $standardPath
+    Write-Host "[detect] Standard install (empty config): $liveDir" -ForegroundColor DarkGray
+} elseif ($storeDir -and (Test-Path $storeDir)) {
+    # Store dir exists but no config yet
+    $liveDir = $storeDir
+    $livePath = $storePath
+    Write-Host "[detect] Microsoft Store install (empty config): $liveDir" -ForegroundColor DarkGray
+} else {
+    throw "Claude Desktop config dir not found. Looked in:`n  - $standardDir`n  - $storeDir`nIs Claude Desktop installed on this node?"
 }
 
 # Load canonical (source of truth for mcpServers)
