@@ -49,6 +49,5 @@ class RefreshToken(Base):
     user: Mapped["User"] = relationship("User", lazy="selectin")
 
     __table_args__ = (
-        Index("ix_refresh_tokens_token_hash", "token_hash"),
         Index("ix_refresh_tokens_user_id_revoked", "user_id", "revoked_at"),
     )
