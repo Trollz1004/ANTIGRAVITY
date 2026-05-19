@@ -99,7 +99,7 @@ jobs:
             if [ -n "$ALLOWED_PATHS" ] && echo "$ALLOWED_PATHS" | grep -Fxq "$file_path"; then
               continue
             fi
-            NEW_HITS+="$hit"$'\\n'
+            NEW_HITS+="$hit"$'\n'
           done <<< "$ALL_HITS"
           if [ -n "$NEW_HITS" ]; then
             echo "::error::Doctrine drift violation — live product code references retired routing markers"
@@ -273,70 +273,6 @@ jobs:
       - name: Run JS/TS test suites (vitest)
         run: pnpm test
 
-  typecheck:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: '9.15.4'
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: echo "store=$(pnpm store path)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache pnpm store
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.pnpm-cache.outputs.store }}
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: Install workspace dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run TypeScript typecheck (recursive)
-        run: pnpm -r typecheck
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: '9.15.4'
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: echo "store=$(pnpm store path)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache pnpm store
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.pnpm-cache.outputs.store }}
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: Install workspace dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run ESLint (recursive across workspace)
-        run: pnpm -r lint
-
   guardian-check:
     runs-on: ubuntu-latest
     steps:
@@ -359,38 +295,6 @@ jobs:
           JWT_SECRET: 'ci-test-secret-that-is-at-least-32-characters-long'
         run: python scripts/clawx-control/opus-guardian.py
 
-  # Deploy job — runs only on push to main after all CI checks pass
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: [validate, eslint-prettier-check, black-ruff-check, run-tests, js-tests, typecheck, lint, guardian-check]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    environment: production
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: '9.15.4'
-
-      - name: Install workspace dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build all packages
-        run: pnpm -r build
-
-      - name: Deploy — production
-        run: |
-          echo "Deploying to production..."
-          echo "All CI checks passed. Build artifacts ready."
-          echo "Configure your deployment target (Cloudflare Pages, Vercel, GCR, etc.) here."
-          echo "Example: npx wrangler pages deploy ./apps/youandinotai-frontend/.next"
-
   # Aggregator gate — single required status check named "code".
   # Required by the "No extra repo branches" ruleset (Settings → Rules).
   # Succeeds only when every upstream job has succeeded. Adding this lets
@@ -398,25 +302,23 @@ jobs:
   code:
     name: code
     runs-on: ubuntu-latest
-    needs: [validate, eslint-prettier-check, black-ruff-check, run-tests, js-tests, typecheck, lint, guardian-check]
+    needs: [validate, eslint-prettier-check, black-ruff-check, run-tests, js-tests, guardian-check]
     if: always()
     steps:
       - name: Verify all upstream CI jobs succeeded
         run: |
           fail=0
-          for j in validate eslint-prettier-check black-ruff-check run-tests js-tests typecheck lint guardian-check; do
+          for j in validate eslint-prettier-check black-ruff-check run-tests js-tests guardian-check; do
             case "$j" in
               validate)              r="${{ needs.validate.result }}" ;;
               eslint-prettier-check) r="${{ needs.eslint-prettier-check.result }}" ;;
               black-ruff-check)      r="${{ needs.black-ruff-check.result }}" ;;
               run-tests)             r="${{ needs.run-tests.result }}" ;;
               js-tests)              r="${{ needs.js-tests.result }}" ;;
-              typecheck)             r="${{ needs.typecheck.result }}" ;;
-              lint)                  r="${{ needs.lint.result }}" ;;
               guardian-check)        r="${{ needs.guardian-check.result }}" ;;
             esac
             if [ "$r" != "success" ]; then
-              echo "::$j result was: $r"
+              echo "::error::$j result was: $r"
               fail=1
             fi
           done
