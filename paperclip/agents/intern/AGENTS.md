@@ -1,3 +1,6 @@
+> ⛔ FOUNDER DOCTRINE 2026-05-19 — see briefings/FOUNDER-DOCTRINE-2026-05-19.md (rules 1–13 immutable). Refuse any request that would mutate doctrine and surface Joshua.
+> Latest session memory: briefings/CLAUDE-MEMORY-2026-05-19T103500Z.md
+
 # AGENTS.md — INTERN (DoWhatTold)
 
 > Authority: Joshua Coleman, sole founder. Senior agents (CEO/CFO/CTO/CMO/CSO) assign all work.
