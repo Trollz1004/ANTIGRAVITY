@@ -55,6 +55,7 @@ from app.routers import (
     volunteering,
     waitlist,
     webhooks,
+    clawx,
 )
 from app.routers.health import health_check
 from app.scheduler import setup_scheduler
@@ -62,7 +63,6 @@ from app.webhook_retry import router as webhook_retry_router
 from app.schemas import HealthResponse
 from app.security import (
     InputValidationMiddleware,
-    RateLimitMiddleware,
     SecurityHeadersMiddleware,
 )
 from app.rate_limit_redis import RedisRateLimitMiddleware
@@ -439,6 +439,7 @@ app.include_router(waitlist.router, prefix="/api/v1", tags=["waitlist"])
 app.include_router(marketing.router, prefix="/api/v1", tags=["marketing"])
 app.include_router(feature_flags.router)
 app.include_router(ops_runs.router, prefix="/api/v1", tags=["ops-runs"])
+app.include_router(clawx.router, prefix="/api/v1", tags=["clawx"])
 
 # Secure file uploads (replaces direct static mount)
 app.include_router(uploads.router)
