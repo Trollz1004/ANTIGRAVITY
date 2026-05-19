@@ -37,6 +37,7 @@ const BulkActionsTable = <T extends { id: string }>({
   const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(new Set());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownCloseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const allSelected = selectedItemIds.size === data.length && data.length > 0;
   const someSelected = selectedItemIds.size > 0 && selectedItemIds.size < data.length;
@@ -45,6 +46,10 @@ const BulkActionsTable = <T extends { id: string }>({
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
+        if (dropdownCloseTimeoutRef.current) {
+          clearTimeout(dropdownCloseTimeoutRef.current);
+          dropdownCloseTimeoutRef.current = null;
+        }
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -52,6 +57,19 @@ const BulkActionsTable = <T extends { id: string }>({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handleDropdownMouseEnter = () => {
+    if (dropdownCloseTimeoutRef.current) {
+      clearTimeout(dropdownCloseTimeoutRef.current);
+      dropdownCloseTimeoutRef.current = null;
+    }
+  };
+
+  const handleDropdownMouseLeave = () => {
+    dropdownCloseTimeoutRef.current = setTimeout(() => {
+      setIsDropdownOpen(false);
+    }, 300);
+  };
 
   const toggleAll = () => {
     if (allSelected) {
@@ -141,7 +159,7 @@ const BulkActionsTable = <T extends { id: string }>({
                 <Trash2 className="w-4 h-4" /> Delete
               </button>
               {assignees.length > 0 && (
-                <div className="relative" ref={dropdownRef}>
+                <div className="relative" ref={dropdownRef} onMouseEnter={handleDropdownMouseEnter} onMouseLeave={handleDropdownMouseLeave}>
                   <button
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-emerald-700 hover:bg-emerald-900 text-white text-sm transition-colors"
