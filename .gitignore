@@ -83,7 +83,7 @@ docker-compose.override.yml
 
 # Nested workspace at repo root — accidentally-cloned/duplicated tree, not canonical
 # Keep it on disk for inspection but never commit it.
-Antigravity/
+# Antigravity/
 
 # VS Code workspace files reference local-only paths (e.g. OneDrive vault); keep local
 *.code-workspace
