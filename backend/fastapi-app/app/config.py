@@ -70,6 +70,13 @@ class Settings(BaseSettings):
     google_client_id: str = ""
     google_client_secret: str = ""
 
+    # -------------------------------------------------------------------------
+    # ClawX 6-AI Council Integration
+    # -------------------------------------------------------------------------
+    clawx_enabled: bool = False
+    clawx_base_url: str = "https://api.clawx.example.com"
+    clawx_agent_keys: str = "{}"  # JSON dict of agent_name: api_key
+
     # Database connection pooling settings
     db_pool_size: int = 10
     db_max_overflow: int = 20
