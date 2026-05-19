@@ -9,4 +9,4 @@
   Cache-Control: public, max-age=3600
 
 /
-  Link: </og-image.jpg>; rel=preload; as=image
+  Link: </assets/logo/logo-og-image-1200x630.png>; rel=preload; as=image

@@ -13,6 +13,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.middleware.gzip import GZipMiddleware
+
+from app.middleware.cache_headers import CacheHeadersMiddleware
+
+from app.cache import close_redis, get_redis, redis_health_check
+
+from app.middleware.request_limits import (
+    JsonDepthLimitMiddleware,
+    RequestSizeLimitMiddleware,
+)
 
 from app.config import get_settings
 from app.database import get_db, reconcile_legacy_schema
@@ -45,15 +55,17 @@ from app.routers import (
     volunteering,
     waitlist,
     webhooks,
+    clawx,
 )
 from app.routers.health import health_check
 from app.scheduler import setup_scheduler
+from app.webhook_retry import router as webhook_retry_router
 from app.schemas import HealthResponse
 from app.security import (
     InputValidationMiddleware,
-    RateLimitMiddleware,
     SecurityHeadersMiddleware,
 )
+from app.rate_limit_redis import RedisRateLimitMiddleware
 
 # Configure structured logging
 setup_logging()
@@ -115,6 +127,17 @@ async def lifespan(app: FastAPI):
         prometheus_port=getattr(settings, "prometheus_port", None),
     )
 
+    # Startup: Initialize Redis connection pool
+    try:
+        await get_redis()
+        health = await redis_health_check()
+        if health["status"] == "ok":
+            logger.info("Redis connected", extra={"latency_ms": health["latency_ms"]})
+        else:
+            logger.warning("Redis health check returned non-ok", extra=health)
+    except Exception as exc:
+        logger.warning("Redis not available at startup (will retry on demand): %s", exc)
+
     # Startup: Reconcile database schema
     await reconcile_legacy_schema()
 
@@ -126,6 +149,8 @@ async def lifespan(app: FastAPI):
     logger.info("Application shutdown initiated")
     # Shutdown: Stop scheduler
     scheduler.shutdown()
+    # Shutdown: Close Redis connection pool
+    await close_redis()
 
 
 app = FastAPI(
@@ -141,9 +166,25 @@ app = FastAPI(
 # In test mode, raise the per-minute cap so the full test suite can run without
 # hitting the global IP rate-limiter (245+ requests from a single testclient IP).
 _rate_limit_rpm = 10_000 if settings.app_env == "test" else 60
+# NOTE: GZipMiddleware is added first so all downstream responses are compressed
+# when they exceed the 1KB threshold. Brotli support can be added later by
+# installing the `brotli` package and adding BrotliMiddleware.
+app.add_middleware(GZipMiddleware, minimum_size=1024)
 app.add_middleware(InputValidationMiddleware)
-app.add_middleware(RateLimitMiddleware, calls_per_minute=_rate_limit_rpm)
+# Redis-backed rate limiting middleware (replaces in-memory RateLimitMiddleware)
+app.add_middleware(RedisRateLimitMiddleware, calls_per_minute=_rate_limit_rpm)
 app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(CacheHeadersMiddleware)
+# Request size & depth limits (DoS protection) — OPU-96
+app.add_middleware(
+    RequestSizeLimitMiddleware,
+    max_body_size=settings.max_request_body_size,
+    max_file_upload_size=settings.max_file_upload_size,
+)
+app.add_middleware(
+    JsonDepthLimitMiddleware,
+    max_depth=settings.max_json_depth,
+)
 
 
 @app.middleware("http")
@@ -383,6 +424,7 @@ app.include_router(boards.router, prefix="/api/v1", tags=["boards"])
 app.include_router(events.router, prefix="/api/v1", tags=["events"])
 app.include_router(volunteering.router, prefix="/api/v1", tags=["volunteering"])
 app.include_router(webhooks.router, prefix="/api/v1", tags=["webhooks"])
+app.include_router(webhook_retry_router, prefix="/api/v1", tags=["webhooks"])
 app.include_router(verify.router, prefix="/api/v1", tags=["verification"])
 app.include_router(billing.router, prefix="/api/v1", tags=["billing"])
 app.include_router(metrics.router, prefix="/api/v1", tags=["metrics"])
@@ -397,6 +439,7 @@ app.include_router(waitlist.router, prefix="/api/v1", tags=["waitlist"])
 app.include_router(marketing.router, prefix="/api/v1", tags=["marketing"])
 app.include_router(feature_flags.router)
 app.include_router(ops_runs.router, prefix="/api/v1", tags=["ops-runs"])
+app.include_router(clawx.router, prefix="/api/v1", tags=["clawx"])
 
 # Secure file uploads (replaces direct static mount)
 app.include_router(uploads.router)

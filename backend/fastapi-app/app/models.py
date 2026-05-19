@@ -225,6 +225,7 @@ class WebhookEvent(Base):
     event_type: Mapped[str] = mapped_column(String(100), nullable=False)
     payload: Mapped[dict] = mapped_column(JSON, nullable=False)
     processed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    retry_parent_event_id: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
@@ -594,3 +595,10 @@ class DoubleDateAcceptance(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
+
+# RefreshToken model for OPU-47 JWT refresh token rotation
+from app.models_refresh_token import RefreshToken  # noqa: F401, E402
+
+# Import webhook retry models for table creation and scheduler access
+from app.webhook_retry import WebhookRetryQueue, WebhookDeadLetter  # noqa: F401, E402

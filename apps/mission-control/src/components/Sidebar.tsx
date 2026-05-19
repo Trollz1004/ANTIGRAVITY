@@ -6,6 +6,12 @@ import {
 import { StackIntegrityWidget } from './StackIntegrityWidget';
 import { DaoPanel } from './DaoPanel';
 
+/**
+ * Navigation modes for the sidebar.
+ *
+ * Each entry pairs a unique `id` with a display `label`, a Lucide icon
+ * component, and an optional `new` flag that renders a "NEW" badge.
+ */
 const modes = [
   { id: 'mission', label: 'Mission Control', new: true, icon: LayoutGrid },
   { id: 'ledger', label: 'Mission Ledger', new: true, icon: BookOpen },
@@ -17,7 +23,23 @@ const modes = [
   { id: 'chat', label: 'Chat Mode', new: false, icon: MessageSquare },
 ];
 
+/**
+ * Sidebar Navigation Component
+ *
+ * Renders the left-hand navigation panel with mode buttons, a history
+ * section, the DAO panel, the stack integrity widget, and a settings footer.
+ *
+ * The active mode is tracked internally via `useState` and highlighted with
+ * a distinct border/background style.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Sidebar />
+ * ```
+ */
 export const Sidebar: React.FC = () => {
+  /** Currently active mode identifier. Defaults to `'mission'`. */
   const [active, setActive] = useState('mission');
   return (
     <aside data-testid="sidebar" className="w-56 bg-panel border-r border-border flex flex-col overflow-y-auto">

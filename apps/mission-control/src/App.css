@@ -30,7 +30,7 @@
   .base {
     width: 170px;
     position: relative;
-    z-index: 0;
+    z-index: var(--z-base);
   }
 
   .framework,
@@ -39,7 +39,7 @@
   }
 
   .framework {
-    z-index: 1;
+    z-index: var(--z-base-1);
     top: 34px;
     height: 28px;
     transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
@@ -47,7 +47,7 @@
   }
 
   .vite {
-    z-index: 0;
+    z-index: var(--z-base);
     top: 107px;
     height: 26px;
     width: auto;

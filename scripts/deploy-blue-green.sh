@@ -1,0 +1,341 @@
+#!/usr/bin/env bash
+# ──────────────────────────────────────────────────────────────────────────────
+# ANTIGRAVITY — Blue-Green Deployment Script (OPU-53)
+#
+# Detects the currently active environment, starts the inactive one with the
+# new version, runs health checks, then switches nginx upstream to point to
+# the new environment.  The old environment stays running for instant rollback.
+#
+# Usage:
+#   ./scripts/deploy-blue-green.sh [--force blue|green] [--skip-build]
+#
+# Options:
+#   --force blue|green  Force deployment to a specific color
+#   --skip-build        Skip Docker build (use existing images)
+#   --dry-run           Show what would be done without executing
+# ──────────────────────────────────────────────────────────────────────────────
+
+set -euo pipefail
+
+REPO_ROOT="/mnt/c/ANTIGRAVITY"
+NGINX_CONF_DIR="/etc/nginx"
+ACTIVE_UPSTREAM_FILE="${NGINX_CONF_DIR}/conf.d/active_upstream.conf"
+STATE_FILE="${REPO_ROOT}/.blue-green-state"
+HEALTH_ENDPOINT="/api/v1/health"
+MAX_HEALTH_RETRIES=30
+HEALTH_RETRY_INTERVAL=5
+
+# ── Colors for output ──
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+log_info()  { echo -e "${GREEN}[INFO]${NC}  $*"; }
+log_warn()  { echo -e "${YELLOW}[WARN]${NC}  $*"; }
+log_error() { echo -e "${RED}[ERROR]${NC} $*"; }
+log_step()  { echo -e "${BLUE}[STEP]${NC}  $*"; }
+
+# ── Parse arguments ──
+FORCE_COLOR=""
+SKIP_BUILD=false
+DRY_RUN=false
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --force)
+            FORCE_COLOR="$2"
+            shift 2
+            ;;
+        --skip-build)
+            SKIP_BUILD=true
+            shift
+            ;;
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        *)
+            log_error "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+# ── Helper: run or dry-run ──
+run_cmd() {
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "  [DRY-RUN] $*"
+    else
+        eval "$@"
+    fi
+}
+
+# ── Step 1: Detect currently active environment ──
+detect_active() {
+    local active=""
+
+    # Method 1: Check the nginx active_upstream.conf file
+    if [[ -f "$ACTIVE_UPSTREAM_FILE" ]]; then
+        if grep -q "backend_blue" "$ACTIVE_UPSTREAM_FILE" 2>/dev/null; then
+            active="blue"
+        elif grep -q "backend_green" "$ACTIVE_UPSTREAM_FILE" 2>/dev/null; then
+            active="green"
+        fi
+    fi
+
+    # Method 2: Check the state file
+    if [[ -z "$active" && -f "$STATE_FILE" ]]; then
+        active=$(head -1 "$STATE_FILE" 2>/dev/null | tr -d '[:space:]')
+    fi
+
+    # Method 3: Check which containers are running
+    if [[ -z "$active" ]]; then
+        if docker ps --format '{{.Names}}' 2>/dev/null | grep -q "uandinotai-app-blue"; then
+            active="blue"
+        elif docker ps --format '{{.Names}}' 2>/dev/null | grep -q "uandinotai-app-green"; then
+            active="green"
+        fi
+    fi
+
+    # Default to blue if nothing is running
+    if [[ -z "$active" ]]; then
+        active="blue"
+        log_warn "No active environment detected. Defaulting to blue."
+    fi
+
+    echo "$active"
+}
+
+# ── Step 2: Determine target (inactive) environment ──
+get_inactive() {
+    local active="$1"
+    if [[ "$active" == "blue" ]]; then
+        echo "green"
+    else
+        echo "blue"
+    fi
+}
+
+# ── Step 3: Get port for environment ──
+get_port() {
+    local color="$1"
+    if [[ "$color" == "blue" ]]; then
+        echo "8001"
+    else
+        echo "8002"
+    fi
+}
+
+# ── Step 4: Health check ──
+health_check() {
+    local color="$1"
+    local port
+    port=$(get_port "$color")
+    local url="http://localhost:${port}${HEALTH_ENDPOINT}"
+    local retries=0
+
+    log_step "Running health checks on ${color} environment (port ${port})..."
+    log_info "Health endpoint: ${url}"
+
+    while [[ $retries -lt $MAX_HEALTH_RETRIES ]]; do
+        if curl -sf --max-time 5 "$url" > /dev/null 2>&1; then
+            log_info "✓ Health check PASSED for ${color} (attempt $((retries + 1)))"
+
+            # Verify response body contains expected fields
+            local response
+            response=$(curl -sf --max-time 5 "$url" 2>/dev/null || echo "{}")
+            if echo "$response" | grep -q "status"; then
+                log_info "✓ Health response valid: ${response}"
+            fi
+            return 0
+        fi
+
+        retries=$((retries + 1))
+        log_warn "Health check attempt ${retries}/${MAX_HEALTH_RETRIES} failed. Retrying in ${HEALTH_RETRY_INTERVAL}s..."
+        sleep "$HEALTH_RETRY_INTERVAL"
+    done
+
+    log_error "✗ Health check FAILED for ${color} after ${MAX_HEALTH_RETRIES} attempts."
+    return 1
+}
+
+# ── Step 5: Switch nginx upstream ──
+switch_nginx() {
+    local new_color="$1"
+    local upstream_name="backend_${new_color}"
+
+    log_step "Switching nginx upstream to ${new_color} (${upstream_name})..."
+
+    # Write the active upstream config
+    cat > /tmp/active_upstream.conf <<EOF
+# Auto-generated by deploy-blue-green.sh — DO NOT EDIT MANUALLY
+# Active upstream: ${new_color}
+upstream upstreams {
+    server app-${new_color}:8000 max_fails=3 fail_timeout=30s;
+}
+EOF
+
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "  [DRY-RUN] Would write to ${ACTIVE_UPSTREAM_FILE}:"
+        cat /tmp/active_upstream.conf
+        echo "  [DRY-RUN] Would run: nginx -t && nginx -s reload"
+    else
+        # Copy to nginx conf.d
+        cp /tmp/active_upstream.conf "$ACTIVE_UPSTREAM_FILE"
+
+        # Test nginx config before reloading
+        if nginx -t 2>&1; then
+            log_info "✓ Nginx configuration test PASSED"
+        else
+            log_error "✗ Nginx configuration test FAILED! Aborting switch."
+            return 1
+        fi
+
+        # Reload nginx (zero-downtime)
+        if nginx -s reload 2>&1; then
+            log_info "✓ Nginx reloaded successfully — now serving ${new_color}"
+        else
+            log_error "✗ Nginx reload FAILED!"
+            return 1
+        fi
+    fi
+
+    # Update state file
+    echo "$new_color" > "$STATE_FILE"
+    echo "$(date -Iseconds)" >> "$STATE_FILE"
+
+    log_info "✓ Active upstream switched to ${new_color}"
+}
+
+# ── Step 6: Start the inactive environment ──
+start_environment() {
+    local color="$1"
+    local compose_args=""
+
+    log_step "Starting ${color} environment..."
+
+    if [[ "$SKIP_BUILD" == true ]]; then
+        compose_args="up -d"
+        log_info "Skipping Docker build (--skip-build)"
+    else
+        compose_args="up --build -d"
+    fi
+
+    # Start the blue-green stack with project name for isolation
+    run_cmd "docker compose \
+        -f ${REPO_ROOT}/docker-compose.blue-green.yml \
+        -p antigravity-${color} \
+        ${compose_args} \
+        app-${color} frontend-${color}"
+
+    log_info "✓ ${color} environment containers started"
+}
+
+# ── Step 7: Verify containers are running ──
+verify_containers() {
+    local color="$1"
+    local max_wait=60
+    local waited=0
+
+    log_step "Verifying ${color} containers are running..."
+
+    while [[ $waited -lt $max_wait ]]; do
+        local app_running
+        app_running=$(docker ps --format '{{.Names}}' | grep -c "uandinotai-app-${color}" || true)
+        local fe_running
+        fe_running=$(docker ps --format '{{.Names}}' | grep -c "uandinotai-frontend-${color}" || true)
+
+        if [[ $app_running -ge 1 && $fe_running -ge 1 ]]; then
+            log_info "✓ All ${color} containers are running"
+            return 0
+        fi
+
+        sleep 2
+        waited=$((waited + 2))
+    done
+
+    log_error "✗ ${color} containers did not start within ${max_wait}s"
+    return 1
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# MAIN DEPLOYMENT FLOW
+# ═══════════════════════════════════════════════════════════════════════════════
+
+echo ""
+echo "═══════════════════════════════════════════════════════"
+echo "  ANTIGRAVITY Blue-Green Deployment (OPU-53)"
+echo "═══════════════════════════════════════════════════════"
+echo ""
+
+cd "$REPO_ROOT"
+
+# ── Determine active and target ──
+ACTIVE=$(detect_active)
+
+if [[ -n "$FORCE_COLOR" ]]; then
+    TARGET="$FORCE_COLOR"
+    log_warn "Forced target: ${TARGET} (active: ${ACTIVE})"
+else
+    TARGET=$(get_inactive "$ACTIVE")
+    log_info "Active environment: ${ACTIVE}"
+    log_info "Target environment: ${TARGET} (inactive)"
+fi
+
+if [[ "$ACTIVE" == "$TARGET" ]]; then
+    log_warn "Target (${TARGET}) is already active. Deploying to same environment."
+    read -r -p "Continue? [y/N] " confirm 2>/dev/null || true
+    if [[ "${confirm:-n}" != "y" && "${confirm:-n}" != "Y" ]]; then
+        log_info "Deployment cancelled."
+        exit 0
+    fi
+fi
+
+echo ""
+log_info "Deploying to: ${TARGET}"
+log_info "Previous active: ${ACTIVE} (will remain running for rollback)"
+echo ""
+
+# ── Step 1: Start the inactive environment ──
+log_step "━━━ Step 1/4: Start ${TARGET} environment ━━━"
+start_environment "$TARGET"
+
+# ── Step 2: Verify containers ──
+log_step "━━━ Step 2/4: Verify containers ━━━"
+verify_containers "$TARGET"
+
+# ── Step 3: Health checks ──
+log_step "━━━ Step 3/4: Health checks ━━━"
+if ! health_check "$TARGET"; then
+    log_error "Health check failed on ${TARGET}. Rolling back start..."
+    log_warn "Stopping ${TARGET} environment..."
+    run_cmd "docker compose \
+        -f ${REPO_ROOT}/docker-compose.blue-green.yml \
+        -p antigravity-${target} \
+        down app-${TARGET} frontend-${TARGET}" || true
+    log_error "Deployment ABORTED. Active environment (${ACTIVE}) unchanged."
+    exit 1
+fi
+
+# ── Step 4: Switch nginx ──
+log_step "━━━ Step 4/4: Switch nginx upstream ━━━"
+switch_nginx "$TARGET"
+
+echo ""
+echo "═══════════════════════════════════════════════════════"
+echo "  ✓ DEPLOYMENT COMPLETE"
+echo "═══════════════════════════════════════════════════════"
+echo ""
+log_info "Active environment:  ${TARGET}"
+log_info "Previous environment: ${ACTIVE} (still running — ready for rollback)"
+echo ""
+log_info "Backend:  http://localhost:$(get_port "$TARGET")/api/v1"
+log_info "Frontend: http://localhost:$(if [[ "$TARGET" == "blue" ]]; then echo "5174"; else echo "5175"; fi)"
+echo ""
+log_info "To rollback: ./scripts/rollback.sh"
+echo ""
+
+# ── Cleanup temp files ──
+rm -f /tmp/active_upstream.conf

@@ -170,7 +170,7 @@ async def update_content_item(
     current_user: User = Depends(get_current_user),
 ):
     """
-    Update a marketing content item.
+    Update a marketing content item (full replace).
     """
     # Validate content same as in create endpoint
     branded_hashtags_present = any(
@@ -192,3 +192,64 @@ async def update_content_item(
         created_at=datetime.now(),
         published=False,
     )
+
+
+class MarketingPostUpdate(BaseModel):
+    """Partial update schema — all fields optional for PATCH semantics."""
+    campaign_name: Optional[str] = Field(None, description="Name of the marketing campaign")
+    objective: Optional[str] = Field(None, description="Campaign objective")
+    audience: Optional[str] = Field(None, description="Target audience")
+    platforms: Optional[List[str]] = Field(None, description="Platforms to publish on")
+    core_message: Optional[str] = Field(None, description="Core marketing message")
+    post_type: Optional[str] = Field(None, description="Type of post")
+    primary_caption: Optional[str] = Field(None, description="Main caption text")
+    call_to_action: Optional[str] = Field(None, description="Call to action phrase")
+    hashtag_block: Optional[List[str]] = Field(None, description="Hashtags")
+
+
+@router.patch("/content/{content_id}", response_model=ContentItem)
+async def patch_content_item(
+    content_id: str,
+    patch_data: MarketingPostUpdate,
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Partially update a marketing content item.
+    Only fields explicitly provided in the request body are updated;
+    omitted fields retain their current values.
+    """
+    # Fetch existing item (in production, from DB)
+    existing = ContentItem(
+        id=content_id,
+        title="Mock Content",
+        content="This is mock content for demonstration purposes.",
+        tags=["#YouAndINotAI"],
+        created_at=datetime.now(),
+        published=False,
+    )
+
+    # Merge: only update fields that were explicitly set in the request
+    update_dict = patch_data.model_dump(exclude_unset=True)
+
+    # Merge hashtag_block with branded hashtag validation
+    if "hashtag_block" in update_dict:
+        branded_hashtags_present = any(
+            tag in update_dict["hashtag_block"]
+            for tag in [BRANDED_HASHTAGS["primary"]] + BRANDED_HASHTAGS["themes"]
+        )
+        if not branded_hashtags_present:
+            raise HTTPException(
+                status_code=400, detail="At least one branded hashtag must be included"
+            )
+
+    # Build updated item — only overwrite provided fields
+    updated = ContentItem(
+        id=content_id,
+        title=update_dict.get("campaign_name", existing.title),
+        content=update_dict.get("primary_caption", existing.content),
+        tags=update_dict.get("hashtag_block", existing.tags),
+        created_at=existing.created_at,
+        published=existing.published,
+    )
+
+    return updated
