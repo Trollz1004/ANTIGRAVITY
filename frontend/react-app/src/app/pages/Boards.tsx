@@ -12,6 +12,8 @@ import { api } from '../../lib/api';
 import { useAuth } from '../../lib/auth';
 import { isSafetyToolsAvailable } from '../../lib/safety';
 import { SafetyDrawer } from '../components/SafetyDrawer';
+import { LazySection } from '../../components/LazySection';
+import { SkeletonLoader } from '../../components/SkeletonLoader';
 
 interface BoardInfo {
   slug: string;
@@ -379,33 +381,37 @@ export function Boards() {
           main dating flow.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 stagger-children">
-        {boards.map(board => {
-          const gradient =
-            BOARD_COLORS[board.slug] || 'from-gray-500 to-gray-600';
-          return (
-            <button
-              key={board.slug}
-              onClick={() => loadPosts(board.slug)}
-              className="text-left glass rounded-3xl p-6 glass-highlight hover:bg-white/[0.04] hover:scale-[1.01] transition-all duration-200 group"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div
-                  className={`w-11 h-11 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow`}
-                >
-                  <Users size={20} className="text-white" />
+      <LazySection fallback={<SkeletonLoader />}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 stagger-children">
+          {boards.map(board => {
+            const gradient =
+              BOARD_COLORS[board.slug] || 'from-gray-500 to-gray-600';
+            return (
+              <button
+                key={board.slug}
+                onClick={() => loadPosts(board.slug)}
+                className="text-left glass rounded-3xl p-6 glass-highlight hover:bg-white/[0.04] hover:scale-[1.01] transition-all duration-200 group"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div
+                    className={`w-11 h-11 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow`}
+                  >
+                    <Users size={20} className="text-white" />
+                  </div>
+                  <h3 className="text-white font-bold text-lg group-hover:text-pink-300 transition-colors">
+                    {board.name}
+                  </h3>
                 </div>
-                <h3 className="text-white font-bold text-lg group-hover:text-pink-300 transition-colors">
-                  {board.name}
-                </h3>
-              </div>
-              <p className="text-gray-400 text-sm leading-relaxed">
-                {board.description}
-              </p>
-            </button>
-          );
-        })}
-      </div>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  {board.description}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+      </LazySection>
     </div>
   );
 }
+
+export default Boards;

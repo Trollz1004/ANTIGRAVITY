@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { ErrorBoundary } from './ErrorBoundary';
 
 type CallState = 'connecting' | 'waiting' | 'connected' | 'ended';
 
