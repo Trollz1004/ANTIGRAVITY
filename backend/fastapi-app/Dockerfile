@@ -31,4 +31,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8000/api/v1/health || exit 1
 
 # Cloud Run compatible — uses $PORT env or defaults to 8000
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Run Alembic migrations before starting the app
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host [IP_ADDRESS] --port ${PORT:-8000}"]

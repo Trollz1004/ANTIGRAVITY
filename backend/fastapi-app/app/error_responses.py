@@ -109,3 +109,7 @@ def rate_limit(message: str = "Rate limit exceeded", details: Any = None) -> HTT
 
 def internal_error(message: str = "An unexpected error occurred", details: Any = None) -> HTTPException:
     return api_exception(status.HTTP_500_INTERNAL_SERVER_ERROR, ErrorCode.INTERNAL_ERROR, message, details)
+
+
+def service_unavailable(message: str = "Service temporarily unavailable", details: Any = None) -> HTTPException:
+    return api_exception(status.HTTP_503_SERVICE_UNAVAILABLE, ErrorCode.SERVICE_UNAVAILABLE, message, details)
