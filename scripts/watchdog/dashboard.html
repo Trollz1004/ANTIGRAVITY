@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ANTIGRAVITY · #UntilNoKidInNeed · node sentry</title>
+    <style>
+      :root {
+        --bg: #0a0e1a;
+        --bg2: #101729;
+        --fg: #e6ecff;
+        --muted: #8a93b3;
+        --line: rgba(255, 255, 255, 0.08);
+        --green: #4ade80;
+        --green-bg: rgba(34, 197, 94, 0.12);
+        --green-line: rgba(34, 197, 94, 0.45);
+        --red: #f87171;
+        --red-bg: rgba(239, 68, 68, 0.12);
+        --red-line: rgba(239, 68, 68, 0.55);
+        --amber: #fbbf24;
+        --amber-bg: rgba(245, 158, 11, 0.12);
+        --amber-line: rgba(245, 158, 11, 0.5);
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; height: 100%; }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: 'IBM Plex Mono', 'Cascadia Mono', Consolas, monospace;
+        font-size: 14px;
+        line-height: 1.4;
+        background-image: radial-gradient(ellipse at top, #1a2440 0%, var(--bg) 60%);
+        padding: 16px 20px 40px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 16px;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 12px;
+      }
+      h1 { font-size: 1.2rem; margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+      h1 .tag { color: var(--muted); font-weight: 400; margin-left: 8px; }
+      .last { color: var(--muted); font-size: 0.8rem; }
+      .node {
+        background: var(--bg2);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-bottom: 14px;
+      }
+      .node.stale { border-color: var(--amber-line); }
+      .node.error { border-color: var(--red-line); }
+      .node-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .node-name { font-size: 1.05rem; font-weight: 700; }
+      .node-meta { color: var(--muted); font-size: 0.78rem; }
+      .age.fresh { color: var(--green); }
+      .age.stale { color: var(--amber); }
+      .age.dead { color: var(--red); }
+      .group { margin-top: 8px; }
+      .group-name {
+        color: var(--muted);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 4px;
+      }
+      .checks {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 6px;
+      }
+      .check {
+        padding: 7px 10px;
+        border-radius: 6px;
+        border: 1px solid;
+        font-size: 0.82rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .check .label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .check .mark { font-weight: 700; margin-left: 8px; flex-shrink: 0; }
+      .check.green { background: var(--green-bg); border-color: var(--green-line); color: var(--green); }
+      .check.red { background: var(--red-bg); border-color: var(--red-line); color: var(--red); }
+      .check.amber { background: var(--amber-bg); border-color: var(--amber-line); color: var(--amber); }
+      footer {
+        margin-top: 18px;
+        padding-top: 10px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.78rem;
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>
+        ANTIGRAVITY node sentry
+        <span class="tag">#UntilNoKidInNeed</span>
+      </h1>
+      <div class="last" id="lastRefresh"></div>
+    </header>
+    <div id="nodes"></div>
+    <footer>
+      <div>
+        sentry writes: <code>~/OneDrive/Personal Vault/sentry-&lt;hostname&gt;.json</code>
+      </div>
+      <div>refresh: 30s</div>
+    </footer>
+    <script>
+      // Node hostnames to look for. Adjust if more nodes added.
+      const NODES = ['DESKTOP-H4B53GL', 'SABRETOOTH', 'DESKTOP-9020'];
+      const STALE_AFTER_SEC = 180;  // 3 minutes
+      const DEAD_AFTER_SEC = 600;   // 10 minutes
+      const REFRESH_MS = 30_000;
+
+      async function loadStatus(node) {
+        try {
+          const res = await fetch(`sentry-${node}.json?cb=${Date.now()}`, { cache: 'no-store' });
+          if (!res.ok) return { __missing: true };
+          return await res.json();
+        } catch (_) {
+          return { __missing: true };
+        }
+      }
+
+      function ageSec(captured) {
+        if (!captured) return null;
+        const t = new Date(captured).getTime();
+        if (isNaN(t)) return null;
+        return Math.round((Date.now() - t) / 1000);
+      }
+
+      function ageClass(sec) {
+        if (sec == null) return 'dead';
+        if (sec > DEAD_AFTER_SEC) return 'dead';
+        if (sec > STALE_AFTER_SEC) return 'stale';
+        return 'fresh';
+      }
+
+      // ── safe DOM construction (no innerHTML for untrusted data) ─────────────
+      function el(tag, opts = {}, children = []) {
+        const e = document.createElement(tag);
+        if (opts.class) e.className = opts.class;
+        if (opts.text != null) e.textContent = String(opts.text);
+        if (opts.attrs) for (const [k, v] of Object.entries(opts.attrs)) e.setAttribute(k, v);
+        for (const c of children) if (c) e.appendChild(c);
+        return e;
+      }
+
+      function checkEl(label, val) {
+        const cls = val === true ? 'green' : val === false ? 'red' : 'amber';
+        const mark = val === true ? '✓' : val === false ? '✗' : '?';
+        return el('div', { class: `check ${cls}` }, [
+          el('span', { class: 'label', text: label }),
+          el('span', { class: 'mark', text: mark }),
+        ]);
+      }
+
+      function urlCheckEl(name, urlResult) {
+        let val;
+        if (!urlResult || urlResult.reachable === undefined) val = null;
+        else if (urlResult.title_match === false) val = false; // 200 but wrong content
+        else val = !!urlResult.reachable;
+        const title = urlResult && urlResult.title ? String(urlResult.title).slice(0, 28) : '';
+        const label = title ? `${name} (${title})` : name;
+        return checkEl(label, val);
+      }
+
+      function renderNode(node, status) {
+        const wrap = el('div');
+        if (status.__missing) {
+          const card = el('div', { class: 'node error' });
+          const head = el('div', { class: 'node-head' }, [
+            el('div', { class: 'node-name', text: node }),
+            el('div', { class: 'node-meta age dead', text: 'NO SENTRY DATA' }),
+          ]);
+          const note = el('div', {
+            class: 'node-meta',
+            text: `No sentry-${node}.json found. Start sentry.py on that node, or unlock OneDrive Personal Vault.`,
+          });
+          card.append(head, note);
+          wrap.append(card);
+          return wrap;
+        }
+        if (status.error) {
+          const card = el('div', { class: 'node error' });
+          const head = el('div', { class: 'node-head' }, [
+            el('div', { class: 'node-name', text: node }),
+            el('div', { class: 'node-meta age dead', text: 'SENTRY ERROR' }),
+          ]);
+          card.append(head, el('div', { class: 'node-meta', text: String(status.error) }));
+          wrap.append(card);
+          return wrap;
+        }
+        const age = ageSec(status.captured);
+        const ac = ageClass(age);
+        const nodeCls = ac === 'fresh' ? 'node' : ac === 'stale' ? 'node stale' : 'node error';
+        const ports = status.ports || {};
+        const docker = status.docker_containers || {};
+        const urls = status.urls || {};
+
+        const card = el('div', { class: nodeCls });
+        const head = el('div', { class: 'node-head' }, [
+          el('div', { class: 'node-name', text: node }),
+          el('div', {
+            class: 'node-meta',
+            text: `captured ${status.captured} · ${age == null ? 'n/a' : age + 's ago'}`,
+          }),
+        ]);
+        card.append(head);
+
+        const groupPorts = el('div', { class: 'group' }, [el('div', { class: 'group-name', text: 'ports' })]);
+        const portChecks = el('div', { class: 'checks' });
+        for (const [k, v] of Object.entries(ports)) portChecks.append(checkEl(k, v));
+        groupPorts.append(portChecks);
+
+        const groupDocker = el('div', { class: 'group' }, [el('div', { class: 'group-name', text: 'docker' })]);
+        const dockerChecks = el('div', { class: 'checks' });
+        dockerChecks.append(checkEl('docker_engine', !!status.docker_engine));
+        for (const [k, v] of Object.entries(docker)) dockerChecks.append(checkEl(k, v));
+        groupDocker.append(dockerChecks);
+
+        const groupUrls = el('div', { class: 'group' }, [el('div', { class: 'group-name', text: 'public surfaces' })]);
+        const urlChecks = el('div', { class: 'checks' });
+        for (const [k, v] of Object.entries(urls)) urlChecks.append(urlCheckEl(k, v));
+        groupUrls.append(urlChecks);
+
+        card.append(groupPorts, groupDocker, groupUrls);
+        wrap.append(card);
+        return wrap;
+      }
+
+      async function render() {
+        const root = document.getElementById('nodes');
+        const cards = await Promise.all(NODES.map(async (n) => renderNode(n, await loadStatus(n))));
+        root.replaceChildren(...cards.map((c) => c.firstChild));
+        document.getElementById('lastRefresh').textContent =
+          'last refresh: ' + new Date().toLocaleTimeString();
+      }
+
+      render();
+      setInterval(render, REFRESH_MS);
+    </script>
+  </body>
+</html>
