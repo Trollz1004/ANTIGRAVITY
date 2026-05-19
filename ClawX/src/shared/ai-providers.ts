@@ -48,7 +48,7 @@ export const PROVIDER_CONFIGS: Record<AiProviderSlug, ProviderConfig> = {
     boardPosition: 2,
     type: 'cloud',
     defaultModel: 'claude-opus-4-7',
-    availableModels: ['claude-opus-4-7', 'claude-sonnet-4-7', 'claude-haiku-4-5-20251001'],
+    availableModels: ['claude-opus-4-7', 'claude-sonnet-4-7'],
     icon: 'Brain',
     color: '#d97706',
     costPerInputToken: 0.015,

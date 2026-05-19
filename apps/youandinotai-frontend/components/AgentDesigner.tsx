@@ -86,7 +86,6 @@ export default function AgentDesigner({ isDarkMode }: { isDarkMode: boolean }) {
               >
                 <option value="gemini-3-flash-preview">Gemini 3 Flash</option>
                 <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro</option>
-                <option value="claude-3-haiku">Claude 3 Haiku</option>
                 <option value="llama-3-8b">Llama 3 8B (Local)</option>
               </select>
             </div>
