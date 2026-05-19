@@ -7,6 +7,7 @@ import { api } from '../../lib/api';
 import { isSafetyToolsAvailable } from '../../lib/safety';
 import { GoogleGenAI } from '@google/genai';
 import { SafetyDrawer } from '../components/SafetyDrawer';
+import { OptimizedImage } from '../../components/OptimizedImage';
 
 async function generateIcebreaker(): Promise<string> {
   const ai = new GoogleGenAI({
@@ -142,10 +143,11 @@ export function Chat() {
           <div className="text-center mt-12 animate-fade-in">
             {/* Flaming Heart Icebreaker */}
             <div className="relative w-32 h-32 mx-auto mb-5">
-              <img
+              <OptimizedImage
                 src="/icebreaker.jpg"
                 alt="Break the Ice"
                 className="w-32 h-32 rounded-2xl object-cover shadow-[0_0_30px_rgba(239,68,68,0.3)]"
+                loading="eager"
               />
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/50 to-transparent" />
             </div>
