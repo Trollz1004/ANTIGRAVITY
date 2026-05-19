@@ -36,7 +36,7 @@ from app.payment_truth import (
     build_checkout_reference,
     email_supported_for_square_checkout,
 )
-from app.rate_limit import verify_limiter
+
 from app.square_checkout import create_square_payment_link
 from app.subscriptions import user_has_active_subscription
 from app.verification_service import (

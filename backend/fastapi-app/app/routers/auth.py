@@ -16,6 +16,7 @@ from app.auth import (
     ensure_active_user,
     get_current_user,
     hash_password,
+    rotate_refresh_token,
     verify_google_token,
     verify_password,
 )
@@ -23,7 +24,7 @@ from app.config import get_settings
 from app.database import get_db
 from app.error_responses import api_exception, ErrorCode, unauthorized, not_found, conflict, bad_request, forbidden
 from app.models import Profile, User
-from app.rate_limit import auth_limiter
+
 from app.schemas import (
     AuthBetaAccessRequest,
     AuthLoginRequest,
@@ -222,6 +223,12 @@ async def refresh_token(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> AuthTokenResponse:
+    """Refresh an access token using refresh token rotation (OPU-47).
+
+    The old refresh token is validated, revoked, and replaced with a new one.
+    If token reuse is detected (already revoked), ALL tokens for the user are
+    revoked as a security measure against potential token theft.
+    """
     auth_limiter.check(request)
     data = decode_token(payload.refresh_token)
     if data.get("type") != "refresh":
@@ -238,9 +245,23 @@ async def refresh_token(
         raise unauthorized(message="User not found", details={"code": ErrorCode.TOKEN_INVALID})
     ensure_active_user(user)
 
+    # OPU-47: Rotate the refresh token instead of just creating a new one
+    ip_address = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+
+    new_refresh_token = await rotate_refresh_token(
+        db=db,
+        raw_token=payload.refresh_token,
+        user_id=parsed_user_id,
+        ip_address=ip_address,
+        user_agent=user_agent,
+    )
+
+    new_access_token = create_access_token(str(user.id))
+
     return AuthTokenResponse(
-        access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
+        access_token=new_access_token,
+        refresh_token=new_refresh_token,
         user_id=user.id,
     )
 

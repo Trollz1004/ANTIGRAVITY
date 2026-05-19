@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, Activity, AlertTriangle, CheckCircle2, Clipboard, Code2, Copy, ExternalLink, FileText, GitBranch, HeartPulse, ListChecks, Loader2, PlayCircle, RefreshCw, Route, ScrollText, Send, Server, ShieldCheck, TerminalSquare, Wallet, XCircle } from 'lucide-react';
+import { SearchFilter, defaultSearchFilter, isSearchFilterActive, applySearchFilter } from './SearchFilter';
 import { clsx } from 'clsx';
 import { apiGet, apiJson, apiPost, type Envelope } from '../lib/api';
 import { validateTaskBrief, validateAgentId } from '../lib/input-validation';
 import { useToast } from '../lib/useToast';
 import { ConfirmDialog } from './ConfirmDialog';
+import { formatDateTime } from '../../../../shared/utils/timezone';
 
 type HealthSummary = { ok: number; degraded: number; unreachable: number };
 type HealthAll = Record<string, Envelope<any>> & { _summary?: HealthSummary };
@@ -243,9 +245,7 @@ function runStatusClass(status: string) {
 
 function compactDate(value?: string) {
   if (!value) return 'not checked';
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  return formatDateTime(value, { date: false, time: true, hour12: false, seconds: true });
 }
 
 function formatMoney(value: unknown) {
@@ -371,11 +371,16 @@ export const MissionControlDashboard = () => {
   const [commands, setCommands] = useState<OperationCommand[]>([]);
     const [runs, setRuns] = useState<OperationRun[]>([]);
     const [runsOffset, setRunsOffset] = useState(0);
-    const [runsLimit, setRunsLimit] = useState(6);
+    const runsLimit = 6;
     const [runsTotal, setRunsTotal] = useState(0);
   const [selectedRunId, setSelectedRunId] = useState<string | null>(null);
   const [operationMessage, setOperationMessage] = useState<string | null>(null);
   const { success, error } = useToast();
+
+  // Search/filter state
+  const [healthFilter, setHealthFilter] = useState(defaultSearchFilter);
+  const [tasksFilter, setTasksFilter] = useState(defaultSearchFilter);
+  const [runsFilter, setRunsFilter] = useState(defaultSearchFilter);
 
   // Confirmation dialog state
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -399,6 +404,34 @@ export const MissionControlDashboard = () => {
   const selectedRun = useMemo(
     () => runs.find(run => run.run_id === selectedRunId) ?? runs[0] ?? null,
     [runs, selectedRunId]
+  );
+
+  // Filtered data
+  const filteredEntries = useMemo(
+    () => applySearchFilter(
+      entries.map(([name, env]) => ({ name, env, status: env.status, checked_at: env.checked_at ?? '' })),
+      healthFilter,
+      ['name', 'status']
+    ).map(({ name, env }) => [name, env] as [string, Envelope<any>]),
+    [entries, healthFilter]
+  );
+
+  const filteredTasks = useMemo(
+    () => applySearchFilter(
+      tasks,
+      tasksFilter,
+      ['task_id', 'brief', 'status']
+    ),
+    [tasks, tasksFilter]
+  );
+
+  const filteredRuns = useMemo(
+    () => applySearchFilter(
+      runs,
+      runsFilter,
+      ['title', 'command_id', 'status']
+    ),
+    [runs, runsFilter]
   );
 
   const loadHealth = async () => {
@@ -733,7 +766,11 @@ export const MissionControlDashboard = () => {
               </ShellButton>
             }
           >
+            <label htmlFor="task-dispatch-input" className="block text-xs text-slate-400 mb-1">
+              Task brief <span className="text-red-400" aria-label="required">*</span>
+            </label>
             <textarea
+              id="task-dispatch-input"
               data-testid="task-input"
               value={brief}
               onChange={event => setBrief(event.target.value)}
@@ -742,7 +779,10 @@ export const MissionControlDashboard = () => {
               }}
               placeholder="Type the task once. Pick agents below. Ctrl+Enter queues it."
               aria-label="Task brief input"
-              className="min-h-28 w-full resize-y rounded-md border border-slate-800 bg-slate-950 p-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-cyan-400/70 focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2"
+              aria-required="true"
+              aria-invalid={dispatchMessage?.startsWith('Validation') ? true : undefined}
+              aria-describedby={dispatchMessage ? 'task-dispatch-message' : undefined}
+              className={`min-h-28 w-full resize-y rounded-md border bg-slate-950 p-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-cyan-400/70 focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2 ${dispatchMessage?.startsWith('Validation') ? 'border-red-500/70' : 'border-slate-800'}`}
             />
             <div className="mt-3 flex flex-wrap items-center gap-2" role="group" aria-label="Agent selection">
               {AGENTS.map(agent => (
@@ -761,7 +801,15 @@ export const MissionControlDashboard = () => {
                 </ShellButton>
               ))}
             </div>
-            {dispatchMessage && <div className="mt-3 text-xs text-cyan-200">{dispatchMessage}</div>}
+            {dispatchMessage && (
+              <div
+                id="task-dispatch-message"
+                className={`mt-3 text-xs ${dispatchMessage.startsWith('Validation') || dispatchMessage.startsWith('Dispatch failed') ? 'text-red-400' : 'text-cyan-200'}`}
+                role={dispatchMessage.startsWith('Validation') ? 'alert' : undefined}
+              >
+                {dispatchMessage}
+              </div>
+            )}
           </Section>
 
           <Section title="Needs Attention" icon={<AlertTriangle size={16} />}>
@@ -814,13 +862,19 @@ export const MissionControlDashboard = () => {
             title="Runtime Health"
             icon={<Activity size={16} />}
             action={
-              <div className="text-xs text-slate-500">
-                {healthError ? healthError : refreshing ? 'refreshing' : 'live'}
+              <div className="flex items-center gap-2">
+                {isSearchFilterActive(healthFilter) && (
+                  <span className="text-[10px] text-cyan-400">{filteredEntries.length}/{entries.length}</span>
+                )}
+                <div className="text-xs text-slate-500">
+                  {healthError ? healthError : refreshing ? 'refreshing' : 'live'}
+                </div>
               </div>
             }
           >
+            <SearchFilter filter={healthFilter} onChange={setHealthFilter} statusOptions={['ok', 'degraded', 'unreachable']} compact />
             <div className="grid gap-3 md:grid-cols-2">
-              {entries.map(([name, env]) => {
+              {filteredEntries.map(([name, env]) => {
                 const meta = SERVICE_META[name] ?? {
                   label: name,
                   endpoint: `/health/${name}`,
@@ -872,6 +926,9 @@ export const MissionControlDashboard = () => {
             icon={<ScrollText size={16} />}
             action={
               <div className="flex items-center gap-2">
+                {isSearchFilterActive(runsFilter) && (
+                  <span className="text-[10px] text-cyan-400">{filteredRuns.length}/{runs.length}</span>
+                )}
                 <span className="text-xs text-slate-500">
                   {runsTotal > 0 ? `${runsOffset + 1}-${Math.min(runsOffset + runsLimit, runsTotal)} of ${runsTotal}` : ''}
                 </span>
@@ -892,13 +949,14 @@ export const MissionControlDashboard = () => {
               </div>
             }
           >
+            <SearchFilter filter={runsFilter} onChange={setRunsFilter} statusOptions={['running', 'succeeded', 'failed', 'queued']} compact />
             <div data-testid="runs-list" className="space-y-2">
-              {runs.length === 0 ? (
+              {filteredRuns.length === 0 ? (
                 <div className="rounded-md border border-slate-800 bg-slate-900 p-3 text-sm text-slate-400">
                   No operations have run from this API process yet.
                 </div>
               ) : (
-                runs.slice(runsOffset, runsOffset + runsLimit).map(run => (
+                filteredRuns.slice(runsOffset, runsOffset + runsLimit).map(run => (
                   <button
                     key={run.run_id}
                     type="button"
@@ -989,17 +1047,23 @@ export const MissionControlDashboard = () => {
             title="Recent Tasks"
             icon={<ListChecks size={16} />}
             action={
-              <ShellButton onClick={loadTasks} ariaLabel="Refresh task list">
-                <RefreshCw size={14} />
-                Refresh
-              </ShellButton>
+              <div className="flex items-center gap-2">
+                {isSearchFilterActive(tasksFilter) && (
+                  <span className="text-[10px] text-cyan-400">{filteredTasks.length}/{tasks.length}</span>
+                )}
+                <ShellButton onClick={loadTasks} ariaLabel="Refresh task list">
+                  <RefreshCw size={14} />
+                  Refresh
+                </ShellButton>
+              </div>
             }
           >
+            <SearchFilter filter={tasksFilter} onChange={setTasksFilter} statusOptions={['queued', 'running', 'succeeded', 'failed']} compact />
             <div data-testid="tasks-list" className="space-y-2">
-              {tasks.length === 0 ? (
+              {filteredTasks.length === 0 ? (
                 <div className="rounded-md border border-slate-800 bg-slate-900 p-3 text-sm text-slate-400">No queued tasks yet.</div>
               ) : (
-                tasks.slice(0, 8).map(task => (
+                filteredTasks.slice(0, 8).map(task => (
                   <div key={task.task_id} className="rounded-md border border-slate-800 bg-slate-900 p-3">
                     <div className="flex items-center justify-between gap-2 text-xs">
                       <span className="font-semibold text-cyan-200">{task.task_id}</span>
