@@ -1,0 +1,38 @@
+# .github/doctrine-drift-allowlist.txt
+#
+# Allowlist for the CI "Doctrine drift scan" step in .github/workflows/ci-validate.yml.
+#
+# Format: one file path per line, relative to repo root. Comments start with '#'.
+# A match (grep hit of the forbidden routing markers — ai-solutions.store,
+# CharityRouter100, 60/30/10, 100% to charity — in apps/youandinotai-frontend/
+# or backend/fastapi-app/app/) is treated as a passing warning IF the file path
+# appears in this list. Any hit in a file NOT in this list fails CI.
+#
+# This file is the explicit, Josh-visible backlog of pre-existing references
+# that need to be triaged: removed, narrowed, or accepted as legitimate
+# internal-ops cross-references with the doctrine blocker scope updated.
+#
+# When the scan is FIXED on 2026-05-17 (PR — restores the broken drift scan
+# that had been silently passing since `youandinotai-api/app/` was removed
+# from the layout), four pre-existing `ai-solutions.store` references in
+# apps/youandinotai-frontend/ remain. None are explicit donation/charity
+# routing claims — they are cross-references to the AI-Solutions Store
+# public surface from neighbouring surfaces. The doctrine blocker, as
+# currently written in CLAUDE.md, lists `ai-solutions.store` as a banned
+# string in apps/youandinotai-frontend/ (lane separation rule).
+#
+# Triage options for Josh (tracked in awaiting-josh issue — see PR body):
+#   A. Remove the cross-references entirely (strict lane separation).
+#   B. Narrow the doctrine blocker scope to customer-rendered code only
+#      (so internal ops/monitoring/boundary pages are exempt).
+#   C. Keep the blocker as-is and update each call-site to a routing-safe
+#      indirection (e.g. fetch the surface list from a server-side config).
+#
+# Removing a file from this list (i.e. fixing the underlying reference)
+# tightens the safety net. Adding a new entry MUST be accompanied by a PR
+# comment explaining why it is operationally necessary.
+
+apps/youandinotai-frontend/components/CharitySection.tsx
+apps/youandinotai-frontend/lib/constants.ts
+apps/youandinotai-frontend/app/api/node-watch/route.ts
+apps/youandinotai-frontend/app/scc/page.tsx

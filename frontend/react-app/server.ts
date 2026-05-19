@@ -194,13 +194,38 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distDir = path.join(__dirname, 'dist');
-    app.use(express.static(distDir));
+
+    // Serve static assets with CDN-ready cache headers.
+    // Fingerprinted assets (containing a hash like abc1234) get long-term immutable caching.
+    // Non-fingerprinted assets and HTML get short/no caching.
+    app.use(express.static(distDir, {
+      setHeaders(res, filePath) {
+        // HTML files: no-cache so clients always get the latest entry point
+        if (filePath.endsWith('.html')) {
+          res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+          return;
+        }
+
+        // Fingerprinted assets: hash in filename (e.g. main-abc1234.js, vendor-def5678.css)
+        // These are safe to cache forever because the hash changes when content changes.
+        const basename = path.basename(filePath);
+        const hasHash = /-[a-f0-9]{8,}\./.test(basename);
+        if (hasHash) {
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+          return;
+        }
+
+        // All other static assets (images, fonts, etc.): moderate cache
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+      },
+    }));
 
     app.get('*', (req, res, next) => {
       if (req.path.startsWith('/api/')) {
         next();
         return;
       }
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       res.sendFile(path.join(distDir, 'index.html'));
     });
   }

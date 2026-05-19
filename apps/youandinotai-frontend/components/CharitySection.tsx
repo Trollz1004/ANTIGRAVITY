@@ -63,7 +63,7 @@ export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) 
   const platforms = [
     {
       name: 'AI-Solutions.Store',
-      tagline: 'Charity storefront kept separate from the revenue and recycling lanes.',
+      tagline: 'Public storefront on a lane separate from the recycling and revenue operations.',
       url: 'https://ai-solutions.store',
       icon: <Heart className="w-8 h-8 text-emerald-500" />,
     },
