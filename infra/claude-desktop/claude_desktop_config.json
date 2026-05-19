@@ -1,0 +1,64 @@
+{
+  "_canonical_source": "infra/claude-desktop/claude_desktop_config.json in Trollz1004/ANTIGRAVITY — applied to %APPDATA%\\Claude\\claude_desktop_config.json via scripts/sync-claude-desktop-config.ps1. Edit here, commit, every node picks it up on next git pull + sync.",
+  "_node_specific_block": "preferences{} stays per-node and is NOT replaced by the sync — only mcpServers is canonicalized.",
+  "mcpServers": {
+    "brain-mcp": {
+      "command": "node",
+      "args": ["C:\\ANTIGRAVITY\\brain-mcp\\dist\\index.js"],
+      "env": {
+        "HOME": "C:\\Users\\joshl"
+      }
+    },
+    "antigravity-sentry": {
+      "command": "node",
+      "args": ["C:\\ANTIGRAVITY\\mcp-server\\dist\\index.js"],
+      "env": {
+        "HOME": "C:\\Users\\joshl"
+      }
+    },
+    "paperclip": {
+      "command": "C:\\ANTIGRAVITY\\paperclip-mcp\\paperclip-mcp.cmd",
+      "args": [],
+      "env": {
+        "ANTIGRAVITY_ROOT": "C:\\ANTIGRAVITY",
+        "LITELLM_BASE_URL": "http://127.0.0.1:4000"
+      }
+    },
+    "playwright": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
+    },
+    "mission-mcp": {
+      "command": "node",
+      "args": ["C:\\ANTIGRAVITY\\services\\mission-mcp\\dist\\server.js"],
+      "env": {
+        "HOME": "C:\\Users\\joshl"
+      }
+    },
+    "hermes-mcp": {
+      "command": "node",
+      "args": ["C:\\ANTIGRAVITY\\apps\\mcp\\hermes-mcp\\dist\\index.js"],
+      "env": {
+        "HOME": "C:\\Users\\joshl",
+        "HERMES_ROUTER_URL": "http://localhost:11435",
+        "HERMES_HEALTH_URL": "http://localhost:8000/healthz"
+      }
+    },
+    "paperweight-mcp": {
+      "command": "node",
+      "args": ["C:\\ANTIGRAVITY\\apps\\mcp\\paperweight-mcp\\dist\\index.js"],
+      "env": {
+        "HOME": "C:\\Users\\joshl",
+        "PAPERWEIGHT_API": "http://localhost:3100/api/paperweight"
+      }
+    },
+    "dao-mcp": {
+      "command": "node",
+      "args": ["C:\\ANTIGRAVITY\\apps\\mcp\\dao-mcp\\dist\\index.js"],
+      "env": {
+        "HOME": "C:\\Users\\joshl",
+        "DAO_SPEC_VERSION": "v1.0"
+      }
+    }
+  }
+}
