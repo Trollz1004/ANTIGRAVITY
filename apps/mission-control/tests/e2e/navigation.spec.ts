@@ -62,4 +62,24 @@ test.describe('Sidebar Navigation & Panel Switching', () => {
     await expect(page.locator('[data-testid="upload-progress-panel"]')).toBeVisible();
     await expect(page.getByText('Drag \'n\' drop some files here, or click to select files')).toBeVisible();
   });
+
+  test('navigating to Rate Limits shows the rate limit dashboard', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('[data-testid="sidebar"]').getByText('Rate Limits', { exact: true }).click();
+    await expect(page.getByTestId('rate-limit-dashboard')).toBeVisible();
+    await expect(page.getByText('Requests / minute')).toBeVisible();
+  });
+
+  test.describe('Responsive Layout', () => {
+    test('should display core elements in mobile viewport', async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 667 }); // iPhone X dimensions
+      await page.goto('/');
+
+      await expect(page.getByTestId('topbar')).toBeVisible();
+      // Sidebar might be hidden or have a different trigger on mobile, 
+      // for now, just check if it's rendered, even if hidden behind a hamburger menu.
+      await expect(page.getByTestId('sidebar')).toBeVisible(); 
+      await expect(page.locator('main')).toBeVisible();
+    });
+  });
 });
