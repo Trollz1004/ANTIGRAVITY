@@ -45,6 +45,7 @@ from app.routers import (
     ops_runs,
     privacy,
     profiles,
+    rate_limits,
     safety,
     support,
     swipe,
@@ -457,6 +458,7 @@ app.include_router(feature_flags.router)
 app.include_router(ops_runs.router, prefix="/api/v1", tags=["ops-runs"])
 app.include_router(clawx.router, prefix="/api/v1", tags=["clawx"])
 app.include_router(notifications.router, prefix="/api/v1", tags=["notifications"])
+app.include_router(rate_limits.router)
 
 # Secure file uploads (replaces direct static mount)
 app.include_router(uploads.router)
