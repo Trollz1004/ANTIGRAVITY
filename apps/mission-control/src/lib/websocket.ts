@@ -7,6 +7,7 @@ export interface Notification {
   message: string;
   timestamp: string;
   read: boolean;
+  type: 'info' | 'success' | 'warning' | 'error'; // Added notification type
   data?: any;
 }
 
@@ -68,6 +69,7 @@ export const useWebSocket = (token: string | null, options?: WebSocketHookOption
             message: message.data.message || 'New notification',
             timestamp: message.data.timestamp || new Date().toISOString(),
             read: false,
+            type: message.data.type || 'info', // Default to 'info' if not provided
             data: message.data,
           };
           options?.onMessage?.(notification);

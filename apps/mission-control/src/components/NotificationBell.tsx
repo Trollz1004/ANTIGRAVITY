@@ -1,49 +1,27 @@
-import React, { useState } from 'react';
-import { Bell, BellOff } from 'lucide-react';
-import { useNotifications } from '../hooks/useNotifications';
-import { NotificationPanel } from './NotificationPanel'; // Will create this next
-import { Popover, PopoverContent, PopoverTrigger } from './ui/Popover'; // Assuming Popover component exists
+import React from 'react';
+import { Bell } from 'lucide-react';
 
-export const NotificationBell: React.FC = () => {
-  const { unreadCount, notifications, markAsRead, markAllAsRead, clearAllNotifications, isConnected } = useNotifications();
-  const [isOpen, setIsOpen] = useState(false);
+interface NotificationBellProps {
+  unreadCount: number;
+  onClick: () => void;
+}
 
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-    if (open && unreadCount > 0) {
-      // Mark all as read when the panel is opened
-      markAllAsRead();
-    }
-  };
-
+export const NotificationBell: React.FC<NotificationBellProps> = ({
+  unreadCount,
+  onClick,
+}) => {
   return (
-    <Popover open={isOpen} onOpenChange={handleOpenChange}>
-      <PopoverTrigger asChild>
-        <button
-          className="relative p-2 rounded-full hover:bg-zinc-700 transition-colors"
-          aria-label={isConnected ? `Notifications: ${unreadCount} unread` : 'Notifications disconnected'}
-          disabled={!isConnected}
-        >
-          {isConnected ? (
-            <Bell size={18} className="text-gray-300" />
-          ) : (
-            <BellOff size={18} className="text-gray-500" />
-          )}
-          {unreadCount > 0 && isConnected && (
-            <span className="absolute top-1 right-1 flex h-3 w-3 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white leading-none">
-              {unreadCount}
-            </span>
-          )}
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="w-80 p-0" align="end">
-        <NotificationPanel
-          notifications={notifications}
-          markAsRead={markAsRead}
-          clearAllNotifications={clearAllNotifications}
-          onClose={() => setIsOpen(false)}
-        />
-      </PopoverContent>
-    </Popover>
+    <button
+      onClick={onClick}
+      className="relative p-2 rounded-full hover:bg-zinc-700 transition-colors focus:outline-none focus:ring-2 focus:ring-accentCyan"
+      aria-label="Notifications"
+    >
+      <Bell size={20} className="text-gray-300" />
+      {unreadCount > 0 && (
+        <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">
+          {unreadCount}
+        </span>
+      )}
+    </button>
   );
 };

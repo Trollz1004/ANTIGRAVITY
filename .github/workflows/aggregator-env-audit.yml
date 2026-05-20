@@ -1,0 +1,33 @@
+name: aggregator-env-audit
+
+on:
+  pull_request:
+    paths:
+      - "services/health-aggregator/**"
+      - ".github/workflows/aggregator-env-audit.yml"
+      - "scripts/hermes-env-audit.ps1"
+  push:
+    branches: [main]
+    paths:
+      - "services/health-aggregator/**"
+      - ".github/workflows/aggregator-env-audit.yml"
+      - "scripts/hermes-env-audit.ps1"
+
+jobs:
+  no-anthropic-env:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Block Anthropic key strings
+        shell: pwsh
+        run: |
+          $blocked = @(
+            ("ANTHROPIC" + "_API_KEY"),
+            ("CLAUDE" + "_API_KEY")
+          )
+          $pattern = ($blocked | ForEach-Object { [regex]::Escape($_) }) -join "|"
+          $hits = Select-String -Path "services/health-aggregator/**/*",".github/workflows/aggregator-env-audit.yml" -Pattern $pattern -CaseSensitive -ErrorAction SilentlyContinue
+          if ($hits) {
+            $hits | ForEach-Object { Write-Error "$($_.Path):$($_.LineNumber) $($_.Line)" }
+            exit 1
+          }

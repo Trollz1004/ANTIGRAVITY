@@ -1,9 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests',
-  testMatch: '**/*.spec.ts',
-  baseURL: 'http://localhost:5173',
+  testDir: './tests/e2e',
+  testMatch: './tests/e2e/**/*.spec.ts',
+
   timeout: 30000,
   expect: {
     timeout: 10000,
