@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { clsx } from 'clsx';
 import {
-  LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare, Upload,
+  LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare, Upload, Shield,
 } from 'lucide-react';
 import { StackIntegrityWidget } from './StackIntegrityWidget';
 import { DaoPanel } from './DaoPanel';
@@ -22,6 +22,7 @@ const modes = [
   { id: 'research', label: 'Research Mode', new: false, icon: Search },
   { id: 'chat', label: 'Chat Mode', new: false, icon: MessageSquare },
   { id: 'uploads', label: 'File Uploads', new: true, icon: Upload },
+  { id: 'rate-limits', label: 'Rate Limits', new: true, icon: Shield },
 
 ];
 
