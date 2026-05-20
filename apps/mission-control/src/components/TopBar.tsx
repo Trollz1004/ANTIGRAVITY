@@ -1,5 +1,7 @@
 import React from 'react';
 import { Heart, Share2 } from 'lucide-react';
+import { NotificationBell } from './NotificationBell';
+import { ThemeToggle } from './ThemeToggle';
 
 /**
  * Top Bar Component
@@ -34,8 +36,10 @@ export const TopBar: React.FC = () => (
         kids covered (est.) <span className="text-accentCyan">0</span>
       </span>
     </div>
-    {/* Right side: build badge and share button */}
+    {/* Right side: build badge, share button, and notifications */}
     <div className="flex items-center gap-3">
+      <ThemeToggle />
+      <NotificationBell />
       <span className="text-[10px] font-mono uppercase tracking-wider text-gray-500">OpusPawClaw · Mission Control</span>
       <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-accentCyan/10 border border-accentCyan/30 text-accentCyan">
         BUILT · E1
