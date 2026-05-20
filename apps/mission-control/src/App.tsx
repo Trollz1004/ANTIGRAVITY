@@ -45,6 +45,7 @@ export const App: React.FC = () => {
                 {activePanel === 'mission' && <TrustHierarchyPanel />}
                 {activePanel === 'mission' && <StackIntegrityPanel />}
                 {activePanel === 'uploads' && <UploadProgressPanel />}
+                {activePanel === 'rate-limits' && <RateLimitDashboard />}
                 {/* Add other panels here based on activePanel */}
               </main>
               <aside className="w-64 bg-panel p-4 overflow-auto">
