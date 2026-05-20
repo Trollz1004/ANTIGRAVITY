@@ -56,6 +56,7 @@ from app.routers import (
     waitlist,
     webhooks,
     clawx,
+    notifications,
 )
 from app.routers.health import health_check
 from app.scheduler import setup_scheduler
@@ -440,6 +441,7 @@ app.include_router(marketing.router, prefix="/api/v1", tags=["marketing"])
 app.include_router(feature_flags.router)
 app.include_router(ops_runs.router, prefix="/api/v1", tags=["ops-runs"])
 app.include_router(clawx.router, prefix="/api/v1", tags=["clawx"])
+app.include_router(notifications.router, prefix="/api/v1", tags=["notifications"])
 
 # Secure file uploads (replaces direct static mount)
 app.include_router(uploads.router)
