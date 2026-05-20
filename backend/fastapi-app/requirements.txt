@@ -27,3 +27,4 @@ redis>=5.0.0
 hiredis>=2.0.0
 fakeredis>=2.20.0
 hypothesis==6.x.x
+pip-audit>=2.7.0
