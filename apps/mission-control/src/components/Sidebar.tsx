@@ -3,6 +3,7 @@ import { clsx } from 'clsx';
 import {
   LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare, Upload, Shield,
 } from 'lucide-react';
+import { NotificationBell } from './NotificationBell';
 import { StackIntegrityWidget } from './StackIntegrityWidget';
 import { DaoPanel } from './DaoPanel';
 
@@ -44,12 +45,15 @@ const modes = [
 interface SidebarProps {
   active: string;
   setActive: (mode: string) => void;
+  unreadCount: number;
+  onNotificationBellClick: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ active, setActive }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ active, setActive, unreadCount, onNotificationBellClick }) => {
   return (
     <aside data-testid="sidebar" className="w-56 bg-panel border-r border-border flex flex-col overflow-y-auto">
       <div className="p-3 space-y-1">
+        <NotificationBell unreadCount={unreadCount} onClick={onNotificationBellClick} />
         {modes.map(m => {
           const Icon = m.icon;
           const isActive = active === m.id;
