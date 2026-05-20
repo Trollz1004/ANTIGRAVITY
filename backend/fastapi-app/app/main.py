@@ -18,6 +18,7 @@ from starlette.middleware.gzip import GZipMiddleware
 from app.middleware.cache_headers import CacheHeadersMiddleware
 
 from app.cache import close_redis, get_redis, redis_health_check
+from app.telemetry import get_tracer_status, setup_telemetry
 
 from app.middleware.request_limits import (
     JsonDepthLimitMiddleware,
@@ -25,7 +26,7 @@ from app.middleware.request_limits import (
 )
 
 from app.config import get_settings
-from app.database import get_db, reconcile_legacy_schema
+from app.database import engine, get_db, reconcile_legacy_schema
 from app.error_responses import ErrorCode, ErrorResponse, internal_error
 from app.logging_config import setup_logging
 from app.monitoring import setup_monitoring
@@ -162,6 +163,9 @@ app = FastAPI(
     openapi_url="/openapi.json",
     lifespan=lifespan,
 )
+
+# Set up OpenTelemetry tracing
+setup_telemetry(app=app, engine=engine)
 
 # Add security middleware (order matters - InputValidation should be first)
 # In test mode, raise the per-minute cap so the full test suite can run without
@@ -460,3 +464,12 @@ async def root() -> dict[str, str]:
 @app.get("/health", response_model=HealthResponse)
 async def root_health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
     return await health_check(db)
+
+
+@app.get("/api/v1/health/telemetry")
+async def telemetry_health():
+    """Return OpenTelemetry tracer status."""
+    return {
+        "service": "youandinotai-api",
+        "telemetry": get_tracer_status(),
+    }
