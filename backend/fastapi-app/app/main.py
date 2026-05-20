@@ -59,6 +59,13 @@ from app.routers import (
     clawx,
     notifications,
 )
+from app.openapi_extra import (
+    API_DESCRIPTION,
+    CONTACT_INFO,
+    LICENSE_INFO,
+    SERVERS,
+    TAGS_METADATA,
+)
 from app.routers.health import health_check
 from app.scheduler import setup_scheduler
 from app.webhook_retry import router as webhook_retry_router
@@ -158,10 +165,14 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
-    description="YouAndINotAI - Social Platform for Good",
+    description=API_DESCRIPTION,
     docs_url="/docs",
     openapi_url="/openapi.json",
     lifespan=lifespan,
+    openapi_tags=TAGS_METADATA,
+    contact=CONTACT_INFO,
+    license_info=LICENSE_INFO,
+    servers=SERVERS,
 )
 
 # Set up OpenTelemetry tracing

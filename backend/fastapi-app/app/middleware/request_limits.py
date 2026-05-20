@@ -15,6 +15,7 @@ from typing import Any
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
+from app.routers.rate_limits import record_request
 
 logger = logging.getLogger(__name__)
 
@@ -164,7 +165,9 @@ class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
                         media_type="application/json",
                     )
 
-        return await call_next(request)
+        response = await call_next(request)
+        record_request(request.url.path)
+        return response
 
 
 # ---------------------------------------------------------------------------
@@ -213,4 +216,6 @@ class JsonDepthLimitMiddleware(BaseHTTPMiddleware):
                     # Let FastAPI's own validation handle malformed JSON
                     pass
 
-        return await call_next(request)
+        response = await call_next(request)
+        record_request(request.url.path)
+        return response
