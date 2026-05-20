@@ -15,6 +15,8 @@ import { MissionBand } from './components/MissionBand';
 import { Footer } from './components/Footer';
 import { ScanningRepoIndicator } from './components/ScanningRepoIndicator';
 import { T5500Panel } from './components/T5500Panel';
+import { NotificationPanel } from './components/NotificationPanel';
+import { useWebSocketNotifications } from './hooks/useWebSocketNotifications';
 import { ToastContainer } from './components/Toast';
 import { ToastProvider } from './lib/useToast';
 import { AuthProvider } from './lib/useAuth';
@@ -24,6 +26,8 @@ import { UploadProgressPanel } from './components/UploadProgressPanel';
 
 export const App: React.FC = () => {
   const [activePanel, setActivePanel] = useState('mission'); // Default active panel
+  const [showNotificationPanel, setShowNotificationPanel] = useState(false);
+  const { notifications, unreadCount, markAsRead, clearAllNotifications } = useWebSocketNotifications();
 
   return (
     <ThemeProvider>
@@ -32,7 +36,12 @@ export const App: React.FC = () => {
           <div className="flex flex-col h-screen bg-background text-white font-sans">
             <TopBar />
             <div className="flex flex-1 overflow-hidden">
-              <Sidebar active={activePanel} setActive={setActivePanel} /> {/* Pass active and setActive to Sidebar */}
+              <Sidebar
+                active={activePanel}
+                setActive={setActivePanel}
+                unreadCount={unreadCount}
+                onNotificationBellClick={() => setShowNotificationPanel(prev => !prev)}
+              /> {/* Pass active and setActive to Sidebar */}
               <main className="flex-1 overflow-auto p-4">
                 {activePanel === 'mission' && <TaskBriefInput />}
                 {activePanel === 'mission' && <ScanningRepoIndicator />}
@@ -56,6 +65,16 @@ export const App: React.FC = () => {
             </div>
             <Footer />
             <ToastContainer />
+            {showNotificationPanel && (
+              <div className="absolute top-16 right-4 z-50">
+                <NotificationPanel
+                  notifications={notifications}
+                  markAsRead={markAsRead}
+                  clearAllNotifications={clearAllNotifications}
+                  onClose={() => setShowNotificationPanel(false)}
+                />
+              </div>
+            )}
           </div>
         </ToastProvider>
       </AuthProvider>
