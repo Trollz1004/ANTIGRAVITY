@@ -67,7 +67,50 @@ def _beta_password_hash(password_seed: str, secret: str, code: str) -> str:
 
 
 @router.post(
-    "/register", response_model=AuthTokenResponse, status_code=status.HTTP_201_CREATED
+    "/register",
+    response_model=AuthTokenResponse,
+    status_code=status.HTTP_201_CREATED,
+    responses={
+        201: {
+            "description": "User registered successfully",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "access_token": "eyJhbGciOiJIUzI1NiIs...",
+                        "refresh_token": "eyJhbGciOiJIUzI1NiIs...",
+                        "token_type": "bearer",
+                        "user_id": "550e8400-e29b-41d4-a716-446655440000",
+                    }
+                }
+            },
+        },
+        409: {
+            "description": "Email already registered",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "code": "ALREADY_EXISTS",
+                        "message": "Email already registered",
+                        "details": None,
+                    }
+                }
+            },
+        },
+        422: {
+            "description": "Validation error — invalid request body",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "code": "VALIDATION_ERROR",
+                        "message": "Request validation failed",
+                        "details": {"errors": []},
+                    }
+                }
+            },
+        },
+    },
+    summary="Register a new user",
+    description="Create a new user account. Requires email, password (8-128 chars), display name, date of birth, and acceptance of terms.",
 )
 async def register(
     request: Request,
@@ -99,7 +142,39 @@ async def register(
     )
 
 
-@router.post("/login", response_model=AuthTokenResponse)
+@router.post(
+    "/login",
+    response_model=AuthTokenResponse,
+    responses={
+        200: {
+            "description": "Login successful",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "access_token": "eyJhbGciOiJIUzI1NiIs...",
+                        "refresh_token": "eyJhbGciOiJIUzI1NiIs...",
+                        "token_type": "bearer",
+                        "user_id": "550e8400-e29b-41d4-a716-446655440000",
+                    }
+                }
+            },
+        },
+        401: {
+            "description": "Invalid email or password",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "code": "INVALID_CREDENTIALS",
+                        "message": "Invalid email or password",
+                        "details": None,
+                    }
+                }
+            },
+        },
+    },
+    summary="Log in",
+    description="Authenticate with email and password. Returns JWT access and refresh tokens.",
+)
 async def login(
     request: Request,
     payload: AuthLoginRequest,
@@ -217,7 +292,39 @@ async def beta_access(
     )
 
 
-@router.post("/refresh", response_model=AuthTokenResponse)
+@router.post(
+    "/refresh",
+    response_model=AuthTokenResponse,
+    responses={
+        200: {
+            "description": "Tokens refreshed successfully",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "access_token": "eyJhbGciOiJIUzI1NiIs...",
+                        "refresh_token": "eyJhbGciOiJIUzI1NiIs...",
+                        "token_type": "bearer",
+                        "user_id": "550e8400-e29b-41d4-a716-446655440000",
+                    }
+                }
+            },
+        },
+        401: {
+            "description": "Invalid or expired refresh token",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "code": "TOKEN_INVALID",
+                        "message": "Not a refresh token",
+                        "details": None,
+                    }
+                }
+            },
+        },
+    },
+    summary="Refresh tokens",
+    description="Refresh an access token using refresh token rotation (OPU-47). The old refresh token is validated, revoked, and replaced with a new one.",
+)
 async def refresh_token(
     payload: AuthRefreshRequest,
     request: Request,
@@ -266,7 +373,46 @@ async def refresh_token(
     )
 
 
-@router.get("/me", response_model=UserMeResponse)
+@router.get(
+    "/me",
+    response_model=UserMeResponse,
+    responses={
+        200: {
+            "description": "Current user profile",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "user_id": "550e8400-e29b-41d4-a716-446655440000",
+                        "email": "user@example.com",
+                        "display_name": "Jane Doe",
+                        "bot_shield_verified": True,
+                        "subscription_tier": "founding_member",
+                        "subscription_active": True,
+                        "subscription_expires_at": None,
+                        "has_profile": True,
+                        "adult_verified": True,
+                        "mission_impact_score": 5.0,
+                        "intent_badge": "Intentional",
+                    }
+                }
+            },
+        },
+        401: {
+            "description": "Missing or invalid authentication token",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "code": "INVALID_CREDENTIALS",
+                        "message": "Authentication required",
+                        "details": None,
+                    }
+                }
+            },
+        },
+    },
+    summary="Get current user",
+    description="Return the authenticated user's profile including subscription status, verification badges, and mission impact score.",
+)
 async def get_me(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { TaskBriefInput } from './components/TaskBriefInput';
@@ -19,36 +19,45 @@ import { ToastContainer } from './components/Toast';
 import { ToastProvider } from './lib/useToast';
 import { AuthProvider } from './lib/useAuth';
 import { ThemeProvider } from './context/ThemeContext';
+import { RateLimitDashboard } from './components/RateLimitDashboard';
+import { UploadProgressPanel } from './components/UploadProgressPanel';
 
-export const App: React.FC = () => (
-  <ThemeProvider>
-    <AuthProvider>
-      <ToastProvider>
-        <div className="flex flex-col h-screen bg-background text-white font-sans">
-          <TopBar />
-        <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
-          <main className="flex-1 overflow-auto p-4">
-            <TaskBriefInput />
-            <ScanningRepoIndicator />
-            <LaunchPanel />
-            <TreasuryBand />
-            <HermesRouterPanel />
-            <PaperclipWorkerPanel />
-            <T5500Panel />
-            <RevenueEnginePanel />
-            <TrustHierarchyPanel />
-            <StackIntegrityPanel />
-          </main>
-          <aside className="w-64 bg-panel p-4 overflow-auto">
-            <RunbooksPanel />
-            <BuildAgentPanel />
-            <MissionBand />
-          </aside>
-        </div>
-        <Footer />
-        <ToastContainer />
-      </ToastProvider>
-    </AuthProvider>
-  </ThemeProvider>
-);
+export const App: React.FC = () => {
+  const [activePanel, setActivePanel] = useState('mission'); // Default active panel
+
+  return (
+    <ThemeProvider>
+      <AuthProvider>
+        <ToastProvider>
+          <div className="flex flex-col h-screen bg-background text-white font-sans">
+            <TopBar />
+            <div className="flex flex-1 overflow-hidden">
+              <Sidebar active={activePanel} setActive={setActivePanel} /> {/* Pass active and setActive to Sidebar */}
+              <main className="flex-1 overflow-auto p-4">
+                {activePanel === 'mission' && <TaskBriefInput />}
+                {activePanel === 'mission' && <ScanningRepoIndicator />}
+                {activePanel === 'mission' && <LaunchPanel />}
+                {activePanel === 'mission' && <TreasuryBand />}
+                {activePanel === 'mission' && <HermesRouterPanel />}
+                {activePanel === 'mission' && <PaperclipWorkerPanel />}
+                {activePanel === 'mission' && <T5500Panel />}
+                {activePanel === 'mission' && <RevenueEnginePanel />}
+                {activePanel === 'mission' && <TrustHierarchyPanel />}
+                {activePanel === 'mission' && <StackIntegrityPanel />}
+                {activePanel === 'uploads' && <UploadProgressPanel />}
+                {/* Add other panels here based on activePanel */}
+              </main>
+              <aside className="w-64 bg-panel p-4 overflow-auto">
+                <RunbooksPanel />
+                <BuildAgentPanel />
+                <MissionBand />
+              </aside>
+            </div>
+            <Footer />
+            <ToastContainer />
+          </div>
+        </ToastProvider>
+      </AuthProvider>
+    </ThemeProvider>
+  );
+};

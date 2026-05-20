@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { clsx } from 'clsx';
 import {
-  LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare,
+  LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare, Upload,
 } from 'lucide-react';
 import { StackIntegrityWidget } from './StackIntegrityWidget';
 import { DaoPanel } from './DaoPanel';
@@ -21,6 +21,8 @@ const modes = [
   { id: 'banana', label: 'Create · Banana', new: false, icon: ImagePlus },
   { id: 'research', label: 'Research Mode', new: false, icon: Search },
   { id: 'chat', label: 'Chat Mode', new: false, icon: MessageSquare },
+  { id: 'uploads', label: 'File Uploads', new: true, icon: Upload },
+
 ];
 
 /**
@@ -38,9 +40,12 @@ const modes = [
  * <Sidebar />
  * ```
  */
-export const Sidebar: React.FC = () => {
-  /** Currently active mode identifier. Defaults to `'mission'`. */
-  const [active, setActive] = useState('mission');
+interface SidebarProps {
+  active: string;
+  setActive: (mode: string) => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ active, setActive }) => {
   return (
     <aside data-testid="sidebar" className="w-56 bg-panel border-r border-border flex flex-col overflow-y-auto">
       <div className="p-3 space-y-1">
