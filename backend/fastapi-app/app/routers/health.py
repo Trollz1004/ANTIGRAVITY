@@ -13,6 +13,8 @@ from app.models import User
 from app.payment_truth import extract_payment_proof_label, proof_label_is_wallet
 from app.schemas import HealthResponse
 from app.webhook_event_store import recent_processed_payment_payloads
+from app.monitoring import get_metrics_response  # Import get_metrics_response
+import re  # Import re for parsing prometheus metrics
 
 router = APIRouter()
 settings = get_settings()

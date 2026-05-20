@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatDistanceToNowStrict } from 'date-fns';
-import { X } from 'lucide-react';
+import { X, Info, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
 import { type Notification } from '../lib/websocket';
 
 interface NotificationPanelProps {
@@ -9,6 +9,13 @@ interface NotificationPanelProps {
   clearAllNotifications: () => void;
   onClose: () => void;
 }
+
+const iconMap = {
+  info: <Info size={16} className="text-blue-400" />,
+  success: <CheckCircle size={16} className="text-green-400" />,
+  warning: <AlertTriangle size={16} className="text-yellow-400" />,
+  error: <XCircle size={16} className="text-red-400" />,
+};
 
 export const NotificationPanel: React.FC<NotificationPanelProps> = ({
   notifications,
@@ -39,7 +46,8 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                 className={`flex items-start gap-3 p-3 border-b border-border last:border-b-0 ${notification.read ? 'bg-zinc-800' : 'bg-zinc-700 hover:bg-zinc-600'}`}
                 onClick={() => !notification.read && markAsRead(notification.id)}
               >
-                <div className="flex-1">
+                <div className="flex-1 flex items-start gap-2">
+                  {iconMap[notification.type]}
                   <p className={`text-sm ${notification.read ? 'text-gray-400' : 'text-gray-200'} leading-snug`}>
                     {notification.message}
                   </p>
