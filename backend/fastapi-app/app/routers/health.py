@@ -69,7 +69,48 @@ async def _runtime_payment_proof_labels(db: AsyncSession) -> list[str]:
     return labels
 
 
-@router.get("/health", response_model=HealthResponse)
+@router.get(
+    "/health",
+    response_model=HealthResponse,
+    responses={
+        200: {
+            "description": "Service is healthy",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "status": "ok",
+                        "db_connected": True,
+                        "square_connected": True,
+                        "square_signature_configured": True,
+                        "wallet_rails_proven": False,
+                        "wallet_rails_status": "unproven",
+                        "payment_proof_labels": [],
+                        "user_count": 42,
+                    }
+                }
+            },
+        },
+        503: {
+            "description": "Service is degraded",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "status": "degraded",
+                        "db_connected": False,
+                        "square_connected": True,
+                        "square_signature_configured": False,
+                        "wallet_rails_proven": False,
+                        "wallet_rails_status": "unproven",
+                        "payment_proof_labels": [],
+                        "user_count": 0,
+                    }
+                }
+            },
+        },
+    },
+    summary="Health check",
+    description="Returns service health status including database, Square payment, and webhook connectivity.",
+)
 async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
     db_connected = await check_db_health()
 
