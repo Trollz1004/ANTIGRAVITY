@@ -109,6 +109,7 @@ def get_protection_reason(file_path: str | None) -> str | None:
 # Safety checker
 # ---------------------------------------------------------------------------
 
+
 class MigrationSafetyChecker:
     """Tracks applied migrations and enforces rollback safety rules.
 
@@ -134,7 +135,9 @@ class MigrationSafetyChecker:
             self.dry_run = dry_run
         else:
             self.dry_run = os.environ.get(ENV_VAR_DRY_RUN, "").lower() in (
-                "1", "true", "yes"
+                "1",
+                "true",
+                "yes",
             )
         # Allow protected: explicit arg > env var > default False
         if allow_protected is not None:
@@ -166,7 +169,8 @@ class MigrationSafetyChecker:
 
         # Check for protected migrations in the path
         protected_in_path = [
-            m for m in migrations_to_revoke
+            m
+            for m in migrations_to_revoke
             if m.protection == ProtectionStatus.PROTECTED
         ]
 
@@ -188,9 +192,7 @@ class MigrationSafetyChecker:
 
         return report
 
-    def build_report(
-        self, *, connection=None
-    ) -> SafetyReport:
+    def build_report(self, *, connection=None) -> SafetyReport:
         """Build a full safety report of all migrations."""
         report = SafetyReport()
 
@@ -214,9 +216,8 @@ class MigrationSafetyChecker:
                 description=rev.doc or "",
                 file_path=file_path,
                 protection=prot,
-                is_applied=rev.revision in applied or bool(
-                    connection is None
-                ),  # assume applied if no connection
+                is_applied=rev.revision in applied
+                or bool(connection is None),  # assume applied if no connection
             )
             report.migrations.append(info)
             if info.protection == ProtectionStatus.PROTECTED:
@@ -326,6 +327,7 @@ class MigrationSafetyChecker:
 # ---------------------------------------------------------------------------
 # Hook for env.py integration
 # ---------------------------------------------------------------------------
+
 
 def pre_downgrade(
     context: context,  # type: ignore[type-arg]

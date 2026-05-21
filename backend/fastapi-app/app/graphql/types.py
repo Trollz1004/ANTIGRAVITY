@@ -1,9 +1,10 @@
 """GraphQL type definitions for ANTIGRAVITY models."""
 
-import strawberry
 import uuid
-from datetime import datetime, date
-from typing import List, Optional
+from datetime import datetime
+from typing import Optional
+
+import strawberry
 
 
 @strawberry.type

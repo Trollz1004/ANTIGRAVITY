@@ -1,7 +1,6 @@
 """JWT authentication utilities."""
 
 import hashlib
-import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
 
@@ -119,6 +118,7 @@ def verify_google_token(token: str) -> dict:
 
 
 # ── OPU-47: Refresh Token Rotation ──
+
 
 def _hash_token(raw_token: str) -> str:
     """Return SHA-256 hex digest of a raw token string."""

@@ -10,7 +10,7 @@ import logging
 import time
 from collections.abc import Callable
 from ipaddress import ip_address, ip_network
-from typing import Optional, Tuple
+from typing import Tuple
 
 import redis.asyncio as redis
 from fastapi import HTTPException, Request, Response, status

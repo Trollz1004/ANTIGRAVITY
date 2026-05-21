@@ -7,9 +7,6 @@ import traceback
 import uuid
 from contextlib import asynccontextmanager
 
-from strawberry.fastapi import GraphQLRouter
-from app.graphql.schema import schema
-
 from fastapi import Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,28 +14,39 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.gzip import GZipMiddleware
-
-from app.middleware.cache_headers import CacheHeadersMiddleware
+from strawberry.fastapi import GraphQLRouter
 
 from app.cache import close_redis, get_redis, redis_health_check
-from app.telemetry import get_tracer_status, setup_telemetry
-from app.database import check_db_health # New import
-from app.routers.health import _square_health_ready, _square_signature_configured # New imports
-
+from app.config import get_settings
+from app.database import (
+    check_db_health,  # New import
+    engine,
+    get_db,
+    reconcile_legacy_schema,
+)
+from app.error_responses import ErrorCode, ErrorResponse
+from app.graphql.schema import schema
+from app.logging_config import setup_logging
+from app.middleware.cache_headers import CacheHeadersMiddleware
 from app.middleware.request_limits import (
     JsonDepthLimitMiddleware,
     RequestSizeLimitMiddleware,
 )
-
-from app.config import get_settings
-from app.database import engine, get_db, reconcile_legacy_schema
-from app.error_responses import ErrorCode, ErrorResponse, internal_error
-from app.logging_config import setup_logging
 from app.monitoring import setup_monitoring
+from app.openapi_extra import (
+    API_DESCRIPTION,
+    CONTACT_INFO,
+    LICENSE_INFO,
+    SERVERS,
+    TAGS_METADATA,
+    get_custom_swagger_html,
+)
+from app.rate_limit_redis import RedisRateLimitMiddleware
 from app.routers import (
     auth,
     billing,
     boards,
+    clawx,
     double_dates,
     events,
     feature_flags,
@@ -47,6 +55,7 @@ from app.routers import (
     marketing,
     messages,
     metrics,
+    notifications,
     ops_runs,
     privacy,
     profiles,
@@ -62,27 +71,20 @@ from app.routers import (
     volunteering,
     waitlist,
     webhooks,
-    clawx,
-    notifications,
 )
-from app.openapi_extra import (
-    API_DESCRIPTION,
-    CONTACT_INFO,
-    LICENSE_INFO,
-    SERVERS,
-    TAGS_METADATA,
-    get_custom_swagger_html,
+from app.routers.health import (  # New imports
+    _square_health_ready,
+    _square_signature_configured,
+    health_check,
 )
-from app.routers.health import health_check
 from app.scheduler import setup_scheduler
-from app.webhook_retry import router as webhook_retry_router
 from app.schemas import HealthResponse
 from app.security import (
     InputValidationMiddleware,
     SecurityHeadersMiddleware,
 )
-from app.rate_limit_redis import RedisRateLimitMiddleware
-from app.middleware.audit_middleware import AuditMiddleware # New import for OPU-144
+from app.telemetry import get_tracer_status, setup_telemetry
+from app.webhook_retry import router as webhook_retry_router
 
 # Configure structured logging
 setup_logging()
@@ -372,7 +374,11 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
         )
 
     # If the detail is already a standardized ErrorResponse dict (from api_exception helpers), pass it through
-    if isinstance(exc.detail, dict) and "code" in exc.detail and "message" in exc.detail:
+    if (
+        isinstance(exc.detail, dict)
+        and "code" in exc.detail
+        and "message" in exc.detail
+    ):
         content = exc.detail
     else:
         # Wrap raw string details into the standard format
@@ -588,7 +594,6 @@ async def detailed_health_dashboard(db: AsyncSession = Depends(get_db)):
 
     No authentication required. Safe for monitoring tools and load balancers.
     """
-    import asyncio
     from datetime import datetime, timezone
 
     start_time = time.time()
@@ -636,7 +641,9 @@ async def detailed_health_dashboard(db: AsyncSession = Depends(get_db)):
         if isinstance(route, APIRoute) and route.include_in_schema:
             path = route.path
             # Only include API routes, exclude existing health routes from detailed dashboard itself
-            if path.startswith("/api/") and not path.startswith("/api/v1/health/detailed"):
+            if path.startswith("/api/") and not path.startswith(
+                "/api/v1/health/detailed"
+            ):
                 for method in route.methods:
                     if method in ("GET", "POST", "PUT", "PATCH", "DELETE"):
                         endpoints_summary.append(
