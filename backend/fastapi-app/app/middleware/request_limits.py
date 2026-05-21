@@ -15,6 +15,7 @@ from typing import Any
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
+
 from app.routers.rate_limits import record_request
 
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # Default limits (bytes / depth)
 # ---------------------------------------------------------------------------
-DEFAULT_MAX_BODY_SIZE = 1_048_576       # 1 MB
+DEFAULT_MAX_BODY_SIZE = 1_048_576  # 1 MB
 DEFAULT_MAX_FILE_UPLOAD_SIZE = 10_485_760  # 10 MB
 DEFAULT_MAX_JSON_DEPTH = 10
 
@@ -38,7 +39,10 @@ FILE_UPLOAD_PREFIXES = (
 # Utility: recursive depth check
 # ---------------------------------------------------------------------------
 
-def check_json_depth(obj: Any, max_depth: int = DEFAULT_MAX_JSON_DEPTH, current_depth: int = 0) -> bool:
+
+def check_json_depth(
+    obj: Any, max_depth: int = DEFAULT_MAX_JSON_DEPTH, current_depth: int = 0
+) -> bool:
     """Recursively check that *obj* does not exceed *max_depth* levels of nesting.
 
     Returns ``True`` if the object is within the depth limit, ``False`` otherwise.
@@ -46,7 +50,9 @@ def check_json_depth(obj: Any, max_depth: int = DEFAULT_MAX_JSON_DEPTH, current_
     if current_depth > max_depth:
         return False
     if isinstance(obj, dict):
-        return all(check_json_depth(v, max_depth, current_depth + 1) for v in obj.values())
+        return all(
+            check_json_depth(v, max_depth, current_depth + 1) for v in obj.values()
+        )
     if isinstance(obj, list):
         return all(check_json_depth(item, max_depth, current_depth + 1) for item in obj)
     return True
@@ -55,6 +61,7 @@ def check_json_depth(obj: Any, max_depth: int = DEFAULT_MAX_JSON_DEPTH, current_
 # ---------------------------------------------------------------------------
 # Per-endpoint decorator
 # ---------------------------------------------------------------------------
+
 
 def MaxBodySize(max_bytes: int) -> Callable:
     """Decorator that tags an endpoint with a custom maximum body size.
@@ -69,6 +76,7 @@ def MaxBodySize(max_bytes: int) -> Callable:
         async def upload(request: Request):
             ...
     """
+
     def decorator(endpoint: Callable) -> Callable:
         @wraps(endpoint)
         async def wrapper(*args, **kwargs):
@@ -80,15 +88,18 @@ def MaxBodySize(max_bytes: int) -> Callable:
             if request is not None:
                 request.state.max_body_size = max_bytes
             return await endpoint(*args, **kwargs)
+
         # Also store on the raw function for non-async / class-based views
         wrapper._max_body_size = max_bytes  # type: ignore[attr-defined]
         return wrapper
+
     return decorator
 
 
 # ---------------------------------------------------------------------------
 # Middleware: request body size limit
 # ---------------------------------------------------------------------------
+
 
 class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
     """Reject requests whose body exceeds a configurable byte limit.
@@ -154,13 +165,15 @@ class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
                         request.client.host if request.client else "unknown",
                     )
                     return Response(
-                        content=json.dumps({
-                            "code": "PAYLOAD_TOO_LARGE",
-                            "message": (
-                                f"Request body exceeds the maximum allowed size of "
-                                f"{limit} bytes."
-                            ),
-                        }),
+                        content=json.dumps(
+                            {
+                                "code": "PAYLOAD_TOO_LARGE",
+                                "message": (
+                                    f"Request body exceeds the maximum allowed size of "
+                                    f"{limit} bytes."
+                                ),
+                            }
+                        ),
                         status_code=413,
                         media_type="application/json",
                     )
@@ -173,6 +186,7 @@ class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
 # ---------------------------------------------------------------------------
 # Middleware: JSON depth limit
 # ---------------------------------------------------------------------------
+
 
 class JsonDepthLimitMiddleware(BaseHTTPMiddleware):
     """Validate that incoming JSON request bodies do not exceed a depth limit.
@@ -202,13 +216,15 @@ class JsonDepthLimitMiddleware(BaseHTTPMiddleware):
                                 request.client.host if request.client else "unknown",
                             )
                             return Response(
-                                content=json.dumps({
-                                    "code": "VALIDATION_ERROR",
-                                    "message": (
-                                        f"JSON body exceeds the maximum nesting depth "
-                                        f"of {self.max_depth}."
-                                    ),
-                                }),
+                                content=json.dumps(
+                                    {
+                                        "code": "VALIDATION_ERROR",
+                                        "message": (
+                                            f"JSON body exceeds the maximum nesting depth "
+                                            f"of {self.max_depth}."
+                                        ),
+                                    }
+                                ),
                                 status_code=400,
                                 media_type="application/json",
                             )

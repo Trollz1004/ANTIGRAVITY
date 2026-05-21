@@ -14,11 +14,9 @@ Output:
 
 from __future__ import annotations
 
-import os
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
-
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 COVERAGE_XML = PROJECT_ROOT / "coverage.xml"
@@ -26,12 +24,12 @@ BADGE_SVG = PROJECT_ROOT / "coverage-badge.svg"
 
 # Badge colour thresholds
 COLOUR_RANGES = [
-    (90, "#4c1"),   # bright green
-    (80, "#97ca00"), # green
-    (70, "#a4a61d"), # yellow-green
-    (60, "#dfb317"), # yellow
-    (50, "#fe7d37"), # orange
-    (0,  "#e05d44"), # red
+    (90, "#4c1"),  # bright green
+    (80, "#97ca00"),  # green
+    (70, "#a4a61d"),  # yellow-green
+    (60, "#dfb317"),  # yellow
+    (50, "#fe7d37"),  # orange
+    (0, "#e05d44"),  # red
 ]
 
 

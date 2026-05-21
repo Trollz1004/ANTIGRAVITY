@@ -18,9 +18,7 @@ from fastapi import (
     Depends,
     WebSocket,
     WebSocketDisconnect,
-    status,
 )
-from fastapi import WebSocketException
 
 from app.dependencies.websocket_auth import get_current_websocket_user
 from app.models import User
@@ -45,7 +43,11 @@ class NotificationConnectionManager:
         """Accept a WebSocket connection and register it for the given user."""
         await websocket.accept()
         self._connections[user_id].append(websocket)
-        logger.info("User %s connected to notifications (total connections: %d)", user_id, self._total_connections())
+        logger.info(
+            "User %s connected to notifications (total connections: %d)",
+            user_id,
+            self._total_connections(),
+        )
 
     def disconnect(self, websocket: WebSocket, user_id: str) -> None:
         """Remove a WebSocket connection for the given user."""
@@ -54,7 +56,11 @@ class NotificationConnectionManager:
             conns.remove(websocket)
         if not conns:
             self._connections.pop(user_id, None)
-        logger.info("User %s disconnected from notifications (total connections: %d)", user_id, self._total_connections())
+        logger.info(
+            "User %s disconnected from notifications (total connections: %d)",
+            user_id,
+            self._total_connections(),
+        )
 
     async def broadcast(self, event: dict[str, Any]) -> int:
         """Send an event to all connected clients.
@@ -141,10 +147,14 @@ async def websocket_notifications(
 
     # Send connection acknowledgment
     try:
-        await websocket.send_text(json.dumps({
-            "type": "connected",
-            "user_id": user_id,
-        }))
+        await websocket.send_text(
+            json.dumps(
+                {
+                    "type": "connected",
+                    "user_id": user_id,
+                }
+            )
+        )
     except Exception:
         notification_manager.disconnect(websocket, user_id)
         return
@@ -169,17 +179,23 @@ async def websocket_notifications(
                 # Acknowledge the mark_read; actual persistence would require DB
                 notification_id = msg.get("id", "")
                 try:
-                    await websocket.send_text(json.dumps({
-                        "type": "marked_read",
-                        "id": notification_id,
-                    }))
+                    await websocket.send_text(
+                        json.dumps(
+                            {
+                                "type": "marked_read",
+                                "id": notification_id,
+                            }
+                        )
+                    )
                 except Exception:
                     break
 
     except WebSocketDisconnect:
         pass
     except Exception:
-        logger.exception("Unexpected error in notifications WebSocket for user %s", user_id)
+        logger.exception(
+            "Unexpected error in notifications WebSocket for user %s", user_id
+        )
     finally:
         notification_manager.disconnect(websocket, user_id)
 

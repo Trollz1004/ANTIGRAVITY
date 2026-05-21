@@ -23,17 +23,14 @@ if str(APP_ROOT) not in sys.path:
     sys.path.insert(0, str(APP_ROOT))
 
 from alembic.config import Config  # noqa: E402
+
 from alembic.safety import (  # noqa: E402
     MigrationSafetyChecker,
     get_protection_reason,
-    is_protected_migration,
 )
-from alembic.script import ScriptDirectory  # noqa: E402
 
 
-def build_report(
-    alembic_ini_path: str, *, as_json: bool = False
-) -> str:
+def build_report(alembic_ini_path: str, *, as_json: bool = False) -> str:
     """Build and return the migration safety report."""
     cfg = Config(alembic_ini_path)
     checker = MigrationSafetyChecker(cfg, interactive=False)
@@ -82,29 +79,19 @@ def build_report(
         if m.protection.value == "protected":
             reason = get_protection_reason(m.file_path) or "production-critical"
             prot = f"  🛡️  PROTECTED ({reason})"
-        lines.append(
-            f"  {m.revision:<14}  {status:<12}  {m.description}{prot}"
-        )
+        lines.append(f"  {m.revision:<14}  {status:<12}  {m.description}{prot}")
 
     lines.append("-" * 70)
 
     if report.has_protected:
         lines.append("")
-        lines.append(
-            "  ⚠️  Protected migrations cannot be rolled back without setting"
-        )
-        lines.append(
-            f"     ALEMBIC_ALLOW_PROTECTED_DOWNGRADE=1  environment variable."
-        )
+        lines.append("  ⚠️  Protected migrations cannot be rolled back without setting")
+        lines.append("     ALEMBIC_ALLOW_PROTECTED_DOWNGRADE=1  environment variable.")
 
     lines.append("")
     lines.append("  Environment variables:")
-    lines.append(
-        "    ALEMBIC_DRY_RUN=1                   Show SQL without executing"
-    )
-    lines.append(
-        "    ALEMBIC_SKIP_DOWNGRADE_CONFIRM=1    Skip interactive prompt"
-    )
+    lines.append("    ALEMBIC_DRY_RUN=1                   Show SQL without executing")
+    lines.append("    ALEMBIC_SKIP_DOWNGRADE_CONFIRM=1    Skip interactive prompt")
     lines.append(
         "    ALEMBIC_ALLOW_PROTECTED_DOWNGRADE=1 Allow rollback of protected migrations"
     )
@@ -114,9 +101,7 @@ def build_report(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Generate a migration safety report"
-    )
+    parser = argparse.ArgumentParser(description="Generate a migration safety report")
     parser.add_argument(
         "--format",
         choices=["text", "json"],

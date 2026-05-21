@@ -1,8 +1,10 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime
-from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime
 
-from app.database import Base # Import Base from app.database
+from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy.dialects.postgresql import JSONB
+
+from app.database import Base  # Import Base from app.database
+
 
 class AuditLog(Base):
     __tablename__ = "audit_logs"
