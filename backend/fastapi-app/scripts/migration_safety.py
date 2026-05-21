@@ -18,20 +18,17 @@ from __future__ import annotations
 
 import argparse
 import logging
-import os
 import shutil
 import sys
-import time
 from pathlib import Path
 
 # Add parent dir to path so we can import app modules
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from alembic.config import Config
-from alembic import command, script
 from sqlalchemy import text
 
-from app.config import get_settings
+from alembic import command, script
 from app.database import engine
 
 logger = logging.getLogger("migration_safety")
@@ -77,7 +74,11 @@ def check_database_connection() -> dict:
                 await conn.execute(text("SELECT 1"))
 
         asyncio.run(_check())
-        return {"check": "db_connection", "passed": True, "message": "OK: Database reachable"}
+        return {
+            "check": "db_connection",
+            "passed": True,
+            "message": "OK: Database reachable",
+        }
     except Exception as e:
         return {"check": "db_connection", "passed": False, "message": f"FAIL: {e}"}
 
@@ -106,10 +107,18 @@ def check_concurrent_migrations() -> dict:
                 "passed": False,
                 "message": f"FAIL: {len(rows)} active migration(s) detected: {rows}",
             }
-        return {"check": "concurrent_migrations", "passed": True, "message": "OK: No concurrent migrations"}
+        return {
+            "check": "concurrent_migrations",
+            "passed": True,
+            "message": "OK: No concurrent migrations",
+        }
     except Exception as e:
         # SQLite doesn't have pg_stat_activity — that's OK
-        return {"check": "concurrent_migrations", "passed": True, "message": f"SKIP: {e}"}
+        return {
+            "check": "concurrent_migrations",
+            "passed": True,
+            "message": f"SKIP: {e}",
+        }
 
 
 def check_table_locks() -> dict:
@@ -135,7 +144,11 @@ def check_table_locks() -> dict:
                 "passed": False,
                 "message": f"WARNING: {len(rows)} ungranted exclusive lock(s): {rows}",
             }
-        return {"check": "table_locks", "passed": True, "message": "OK: No blocking locks"}
+        return {
+            "check": "table_locks",
+            "passed": True,
+            "message": "OK: No blocking locks",
+        }
     except Exception as e:
         return {"check": "table_locks", "passed": True, "message": f"SKIP: {e}"}
 
@@ -165,14 +178,18 @@ def get_migration_health() -> dict:
             async with engine.connect() as conn:
                 # Get current version
                 try:
-                    result = await conn.execute(text("SELECT version_num FROM alembic_version"))
+                    result = await conn.execute(
+                        text("SELECT version_num FROM alembic_version")
+                    )
                     current = result.scalar()
                 except Exception:
                     current = None
 
                 # Count applied migrations
                 try:
-                    result = await conn.execute(text("SELECT COUNT(*) FROM alembic_version"))
+                    result = await conn.execute(
+                        text("SELECT COUNT(*) FROM alembic_version")
+                    )
                     applied = result.scalar()
                 except Exception:
                     applied = 0
@@ -182,7 +199,9 @@ def get_migration_health() -> dict:
         db_info = asyncio.run(_get_info())
 
         # Get pending migrations from alembic
-        alembic_cfg = Config(str(Path(__file__).resolve().parent.parent / "alembic" / "alembic.ini"))
+        alembic_cfg = Config(
+            str(Path(__file__).resolve().parent.parent / "alembic" / "alembic.ini")
+        )
         script_dir = script.ScriptDirectory.from_config(alembic_cfg)
 
         current_rev = db_info.get("current_version")
@@ -215,7 +234,11 @@ def get_migration_health() -> dict:
             "pre_flight_checks": run_all_checks(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "pre_flight_checks": run_all_checks()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "pre_flight_checks": run_all_checks(),
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -226,13 +249,14 @@ def get_migration_health() -> dict:
 def dry_run_migration(target: str = "head") -> dict:
     """Run a migration in dry-run mode (generate SQL without executing)."""
     try:
-        alembic_cfg = Config(str(Path(__file__).resolve().parent.parent / "alembic" / "alembic.ini"))
+        _alembic_cfg = Config(
+            str(Path(__file__).resolve().parent.parent / "alembic" / "alembic.ini")
+        )
 
         # Capture the SQL output
         import io
-        from alembic import command as alembic_command
 
-        sql_output = io.StringIO()
+        _sql_output = io.StringIO()
 
         # Use alembic upgrade with --sql flag
         import subprocess
@@ -281,7 +305,9 @@ def rollback_migration(target: str) -> dict:
                 "failed_checks": failed,
             }
 
-        alembic_cfg = Config(str(Path(__file__).resolve().parent.parent / "alembic" / "alembic.ini"))
+        alembic_cfg = Config(
+            str(Path(__file__).resolve().parent.parent / "alembic" / "alembic.ini")
+        )
         command.downgrade(alembic_cfg, target)
         return {"status": "success", "rolled_back_to": target}
     except Exception as e:
@@ -300,7 +326,9 @@ def main():
     subparsers.add_parser("check", help="Run pre-flight safety checks")
     subparsers.add_parser("health", help="Generate migration health report")
 
-    dry_run_parser = subparsers.add_parser("dry-run", help="Run migration in dry-run mode")
+    dry_run_parser = subparsers.add_parser(
+        "dry-run", help="Run migration in dry-run mode"
+    )
     dry_run_parser.add_argument("--target", default="head", help="Target revision")
 
     rollback_parser = subparsers.add_parser("rollback", help="Rollback to a revision")
@@ -347,5 +375,7 @@ def main():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+    logging.basicConfig(
+        level=logging.INFO, format="%(levelname)s %(name)s: %(message)s"
+    )
     main()

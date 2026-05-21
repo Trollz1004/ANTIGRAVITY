@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
 from app.auth import get_current_user
@@ -22,7 +22,7 @@ from app.clawx_integration import (
     KeyNotFoundError,
 )
 from app.config import get_settings
-from app.error_responses import bad_request, internal_error, not_found
+from app.error_responses import bad_request, not_found
 from app.models import User
 
 router = APIRouter(prefix="/api/v1/clawx", tags=["clawx"])

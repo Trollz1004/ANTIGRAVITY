@@ -3,37 +3,31 @@
 Uses fakeredis to mock Redis for unit tests.
 """
 
-import asyncio
 import json
-import time
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-import pytest_asyncio
-from fastapi import FastAPI, Request
+from fastapi import Request
 from fastapi.responses import JSONResponse
-from fastapi.testclient import TestClient
-from httpx import AsyncClient
 
 from app.cache import (
     _build_cache_key,
     cache_response,
-    close_redis,
     get_redis,
     invalidate_cache,
     redis_health_check,
 )
-from app.config import get_settings
-
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture(autouse=True)
 def _clear_redis_singleton():
     """Reset the global Redis pool between tests."""
     import app.cache as cache_mod
+
     cache_mod._redis_pool = None
     yield
     cache_mod._redis_pool = None
@@ -55,6 +49,7 @@ def fake_redis():
 # ---------------------------------------------------------------------------
 # cache.py tests
 # ---------------------------------------------------------------------------
+
 
 class TestGetRedis:
     @pytest.mark.asyncio
@@ -80,6 +75,7 @@ class TestRedisHealthCheck:
     async def test_health_check_error(self):
         """When Redis is unreachable, health check returns error."""
         import app.cache as cache_mod
+
         cache_mod._redis_pool = None
 
         mock_pool = AsyncMock()
@@ -208,6 +204,7 @@ class TestInvalidateCache:
 # session_store.py tests
 # ---------------------------------------------------------------------------
 
+
 class TestSessionStore:
     @pytest.mark.asyncio
     async def test_create_and_get_session(self, fake_redis):
@@ -268,6 +265,7 @@ class TestSessionStore:
 # ---------------------------------------------------------------------------
 # rate_limit_redis.py tests
 # ---------------------------------------------------------------------------
+
 
 class TestCheckRateLimit:
     @pytest.mark.asyncio

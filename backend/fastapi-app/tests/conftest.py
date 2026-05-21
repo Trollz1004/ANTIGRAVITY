@@ -5,20 +5,19 @@ auth flows, verification flows, and webhook signature verification
 without requiring a live database or external services.
 """
 
-import asyncio
 import base64
 import hashlib
 import hmac
 import os
 import sys
 import uuid
-from datetime import datetime, timezone, date
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 # Set environment variables IMMEDIATELY
 os.environ["JWT_SECRET"] = (
@@ -56,10 +55,8 @@ database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
 
-from app.models import User # noqa: E402
-from app.auth import hash_password # noqa: E402
-
 # ── Mock User Factory ──
+
 
 def make_user(
     *,
@@ -200,7 +197,7 @@ def make_square_booking_event(
 
 
 @pytest.fixture(scope="session")
-async def db_session_factory(): # Changed to async
+async def db_session_factory():  # Changed to async
     engine = create_async_engine("sqlite+aiosqlite:///:memory:")
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
@@ -215,14 +212,15 @@ async def db_session_factory(): # Changed to async
 
     await setup()
 
-    yield (engine, session_factory) # Yield both engine and factory
+    yield (engine, session_factory)  # Yield both engine and factory
 
     await teardown()
 
 
 @pytest.fixture()
-def client(db_session_factory): # This fixture now receives a tuple
-    _engine, session_maker = db_session_factory # Unpack the tuple
+def client(db_session_factory):  # This fixture now receives a tuple
+    _engine, session_maker = db_session_factory  # Unpack the tuple
+
     async def override_get_db():
         async with session_maker() as session:
             yield session
@@ -236,20 +234,22 @@ def client(db_session_factory): # This fixture now receives a tuple
 
 
 @pytest.fixture()
-async def isolated_db_session(db_session_factory): # This fixture now receives a tuple
+async def isolated_db_session(db_session_factory):  # This fixture now receives a tuple
     """
     Provides an isolated database session for each test using SAVEPOINTs.
     This fixture ensures that database changes made during a test are rolled back
     at the end of the test, preventing test pollution.
     """
-    engine, session_maker = db_session_factory # Unpack the tuple
+    engine, session_maker = db_session_factory  # Unpack the tuple
 
     connection = await engine.connect()
     transaction = await connection.begin()  # Outer transaction
     nested = await connection.begin_nested()  # SAVEPOINT
 
     # Create a session bound to this connection and transaction
-    Session = async_sessionmaker(autocommit=False, autoflush=False, bind=connection, expire_on_commit=False)
+    Session = async_sessionmaker(
+        autocommit=False, autoflush=False, bind=connection, expire_on_commit=False
+    )
     session = Session()
 
     try:
@@ -270,6 +270,7 @@ def isolated_client(isolated_db_session: AsyncSession):
     for each test. This client ensures that all requests made during a test
     are within a transaction that will be rolled back, providing full isolation.
     """
+
     async def override_get_db_isolated():
         yield isolated_db_session
 

@@ -46,8 +46,9 @@ from app.config import get_settings  # noqa: E402
 
 get_settings.cache_clear()
 
-from app import database  # noqa: E402
 from sqlalchemy.ext.asyncio import create_async_engine  # noqa: E402
+
+from app import database  # noqa: E402
 
 database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
 
@@ -58,6 +59,7 @@ from app.main import app  # noqa: E402
 try:
     from app.rate_limit import reset_rate_limits  # noqa: E402
 except (ImportError, AttributeError):
+
     def reset_rate_limits() -> None:
         pass
 
@@ -180,14 +182,16 @@ class TestSlowDependency:
         mock_db = AsyncMock()
         mock_db.scalar = AsyncMock(return_value=42)
 
-        with patch(
-            "app.routers.health.check_db_health", new_callable=AsyncMock
-        ) as mock_health, patch(
-            "app.routers.health._runtime_payment_proof_labels", new_callable=AsyncMock
-        ) as mock_labels, patch(
-            "app.routers.health._square_health_ready", return_value=True
-        ), patch(
-            "app.routers.health._square_signature_configured", return_value=True
+        with (
+            patch(
+                "app.routers.health.check_db_health", new_callable=AsyncMock
+            ) as mock_health,
+            patch(
+                "app.routers.health._runtime_payment_proof_labels",
+                new_callable=AsyncMock,
+            ) as mock_labels,
+            patch("app.routers.health._square_health_ready", return_value=True),
+            patch("app.routers.health._square_signature_configured", return_value=True),
         ):
             mock_health.return_value = True
             mock_labels.return_value = []
@@ -234,7 +238,9 @@ class TestConcurrentLoad:
         assert response.status_code == status.HTTP_200_OK
         # Rate limit headers are added by RedisRateLimitMiddleware
         # In test mode with high limits, these should be present
-        assert "X-RateLimit-Limit" in response.headers or True  # May be absent if middleware skipped
+        assert (
+            "X-RateLimit-Limit" in response.headers or True
+        )  # noqa: SIM222  # May be absent if middleware skipped
 
     def test_health_endpoint_under_load_reports_correctly(self, chaos_client):
         """Health endpoint should report correct status even under concurrent access."""
@@ -268,12 +274,12 @@ class TestTransientFailureRecovery:
 
     def test_recovery_after_db_outage(self, chaos_client):
         """API should recover once DB comes back after an outage."""
-        with patch(
-            "app.routers.health.check_db_health", new_callable=AsyncMock
-        ) as mock_db_health, patch(
-            "app.routers.health._square_health_ready", return_value=True
-        ), patch(
-            "app.routers.health._square_signature_configured", return_value=True
+        with (
+            patch(
+                "app.routers.health.check_db_health", new_callable=AsyncMock
+            ) as mock_db_health,
+            patch("app.routers.health._square_health_ready", return_value=True),
+            patch("app.routers.health._square_signature_configured", return_value=True),
         ):
             # Phase 1: DB is down
             mock_db_health.return_value = False
@@ -298,12 +304,12 @@ class TestTransientFailureRecovery:
                 return False
             return True
 
-        with patch(
-            "app.routers.health.check_db_health", new_callable=AsyncMock
-        ) as mock_db_health, patch(
-            "app.routers.health._square_health_ready", return_value=True
-        ), patch(
-            "app.routers.health._square_signature_configured", return_value=True
+        with (
+            patch(
+                "app.routers.health.check_db_health", new_callable=AsyncMock
+            ) as mock_db_health,
+            patch("app.routers.health._square_health_ready", return_value=True),
+            patch("app.routers.health._square_signature_configured", return_value=True),
         ):
             mock_db_health.side_effect = intermittent_db_health
 
@@ -392,10 +398,9 @@ class TestDegradedHealthStatus:
 
     def test_ok_when_all_dependencies_healthy(self, chaos_client):
         """Health should report ok when all dependencies are healthy."""
-        with patch(
-            "app.routers.health._square_health_ready", return_value=True
-        ), patch(
-            "app.routers.health._square_signature_configured", return_value=True
+        with (
+            patch("app.routers.health._square_health_ready", return_value=True),
+            patch("app.routers.health._square_signature_configured", return_value=True),
         ):
             response = chaos_client.get("/api/v1/health")
             body = response.json()
@@ -404,18 +409,21 @@ class TestDegradedHealthStatus:
 
     def test_degraded_when_db_and_square_both_down(self, chaos_client):
         """Health should report degraded when multiple dependencies are down."""
-        with patch(
-            "app.routers.health.check_db_health", new_callable=AsyncMock
-        ) as mock_db_health, patch(
-            "app.routers.health.settings",
-            MagicMock(
-                square_access_token="",
-                square_location_id="",
-                square_webhook_verify_signature=False,
-                square_payment_webhook_signature_key="",
-                square_payment_webhook_notification_url="",
-                square_webhook_signature_key="",
-                square_webhook_notification_url="",
+        with (
+            patch(
+                "app.routers.health.check_db_health", new_callable=AsyncMock
+            ) as mock_db_health,
+            patch(
+                "app.routers.health.settings",
+                MagicMock(
+                    square_access_token="",
+                    square_location_id="",
+                    square_webhook_verify_signature=False,
+                    square_payment_webhook_signature_key="",
+                    square_payment_webhook_notification_url="",
+                    square_webhook_signature_key="",
+                    square_webhook_notification_url="",
+                ),
             ),
         ):
             mock_db_health.return_value = False
