@@ -1,6 +1,8 @@
 import uuid
 from datetime import date, datetime, timedelta, timezone
+
 from app.auth import hash_password
+
 
 def UserFactory(**kwargs) -> dict:
     """Factory for User model."""
@@ -26,6 +28,7 @@ def UserFactory(**kwargs) -> dict:
     defaults.update(kwargs)
     return defaults
 
+
 def ProfileFactory(user_id: uuid.UUID | None = None, **kwargs) -> dict:
     """Factory for Profile model."""
     defaults = {
@@ -46,7 +49,10 @@ def ProfileFactory(user_id: uuid.UUID | None = None, **kwargs) -> dict:
     defaults.update(kwargs)
     return defaults
 
-def SwipeFactory(user_id: uuid.UUID | None = None, target_id: uuid.UUID | None = None, **kwargs) -> dict:
+
+def SwipeFactory(
+    user_id: uuid.UUID | None = None, target_id: uuid.UUID | None = None, **kwargs
+) -> dict:
     """Factory for Swipe model."""
     defaults = {
         "id": uuid.uuid4(),
@@ -58,7 +64,10 @@ def SwipeFactory(user_id: uuid.UUID | None = None, target_id: uuid.UUID | None =
     defaults.update(kwargs)
     return defaults
 
-def MatchFactory(user_a: uuid.UUID | None = None, user_b: uuid.UUID | None = None, **kwargs) -> dict:
+
+def MatchFactory(
+    user_a: uuid.UUID | None = None, user_b: uuid.UUID | None = None, **kwargs
+) -> dict:
     """Factory for Match model."""
     defaults = {
         "id": uuid.uuid4(),
@@ -73,7 +82,10 @@ def MatchFactory(user_a: uuid.UUID | None = None, user_b: uuid.UUID | None = Non
     defaults.update(kwargs)
     return defaults
 
-def MessageFactory(match_id: uuid.UUID | None = None, sender_id: uuid.UUID | None = None, **kwargs) -> dict:
+
+def MessageFactory(
+    match_id: uuid.UUID | None = None, sender_id: uuid.UUID | None = None, **kwargs
+) -> dict:
     """Factory for Message model."""
     defaults = {
         "id": uuid.uuid4(),
@@ -85,6 +97,7 @@ def MessageFactory(match_id: uuid.UUID | None = None, sender_id: uuid.UUID | Non
     }
     defaults.update(kwargs)
     return defaults
+
 
 def BoardFactory(**kwargs) -> dict:
     """Factory for Board model."""
@@ -99,7 +112,10 @@ def BoardFactory(**kwargs) -> dict:
     defaults.update(kwargs)
     return defaults
 
-def PostFactory(board_id: uuid.UUID | None = None, author_id: uuid.UUID | None = None, **kwargs) -> dict:
+
+def PostFactory(
+    board_id: uuid.UUID | None = None, author_id: uuid.UUID | None = None, **kwargs
+) -> dict:
     """Factory for Post model."""
     defaults = {
         "id": uuid.uuid4(),
@@ -113,7 +129,10 @@ def PostFactory(board_id: uuid.UUID | None = None, author_id: uuid.UUID | None =
     defaults.update(kwargs)
     return defaults
 
-def CommentFactory(post_id: uuid.UUID | None = None, author_id: uuid.UUID | None = None, **kwargs) -> dict:
+
+def CommentFactory(
+    post_id: uuid.UUID | None = None, author_id: uuid.UUID | None = None, **kwargs
+) -> dict:
     """Factory for Comment model."""
     defaults = {
         "id": uuid.uuid4(),
@@ -124,6 +143,7 @@ def CommentFactory(post_id: uuid.UUID | None = None, author_id: uuid.UUID | None
     }
     defaults.update(kwargs)
     return defaults
+
 
 def EventFactory(organizer_id: uuid.UUID | None = None, **kwargs) -> dict:
     """Factory for Event model."""
@@ -140,6 +160,7 @@ def EventFactory(organizer_id: uuid.UUID | None = None, **kwargs) -> dict:
     }
     defaults.update(kwargs)
     return defaults
+
 
 def SupportTicketFactory(user_id: uuid.UUID | None = None, **kwargs) -> dict:
     """Factory for SupportTicket model."""
@@ -161,9 +182,11 @@ def SupportTicketFactory(user_id: uuid.UUID | None = None, **kwargs) -> dict:
     defaults.update(kwargs)
     return defaults
 
+
 def RefreshTokenFactory(user_id: uuid.UUID | None = None, **kwargs) -> dict:
     """Factory for RefreshToken model."""
     import hashlib
+
     raw_token = f"refresh_token_{uuid.uuid4().hex}"
     token_hash = hashlib.sha256(raw_token.encode()).hexdigest()
     expires = datetime.now(timezone.utc) + timedelta(days=7)

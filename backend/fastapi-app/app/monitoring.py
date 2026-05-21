@@ -17,19 +17,21 @@ except ImportError:
 
 try:
     from prometheus_client import (
+        CONTENT_TYPE_LATEST,
+        CollectorRegistry,
         Counter,
         Gauge,
         Histogram,
         generate_latest,
-        CONTENT_TYPE_LATEST,
-        CollectorRegistry,
     )
     from starlette.responses import Response
 
     PROMETHEUS_AVAILABLE = True
 except ImportError:
     PROMETHEUS_AVAILABLE = False
-    Counter = Histogram = Gauge = generate_latest = CONTENT_TYPE_LATEST = CollectorRegistry = Response = None
+    Counter = Histogram = Gauge = generate_latest = CONTENT_TYPE_LATEST = (
+        CollectorRegistry
+    ) = Response = None
 
 logger = logging.getLogger("youandinotai.monitoring")
 
@@ -49,7 +51,21 @@ METRICS_REGISTRY = None
 
 # Default histogram buckets for request duration (in seconds)
 DEFAULT_LATENCY_BUCKETS = [
-    0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.15, 0.2, 0.3, 0.5, 0.75, 1.0, 2.5, 5.0, 10.0
+    0.005,
+    0.01,
+    0.025,
+    0.05,
+    0.075,
+    0.1,
+    0.15,
+    0.2,
+    0.3,
+    0.5,
+    0.75,
+    1.0,
+    2.5,
+    5.0,
+    10.0,
 ]
 
 
@@ -211,7 +227,9 @@ def setup_monitoring(
                 from prometheus_client import start_http_server
 
                 start_http_server(prometheus_port)
-                logger.info(f"Prometheus metrics server started on port {prometheus_port}")
+                logger.info(
+                    f"Prometheus metrics server started on port {prometheus_port}"
+                )
 
             logger.info("Prometheus metrics initialized successfully")
         except Exception as e:

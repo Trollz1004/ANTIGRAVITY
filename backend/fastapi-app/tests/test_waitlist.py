@@ -1,8 +1,6 @@
 from unittest.mock import AsyncMock
 
 
-
-
 def test_waitlist_signup_sends_confirmation_and_operator_notice(client, monkeypatch):
     confirmation_mock = AsyncMock(return_value=True)
     operator_mock = AsyncMock(return_value=True)

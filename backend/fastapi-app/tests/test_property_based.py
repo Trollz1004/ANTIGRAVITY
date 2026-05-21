@@ -20,15 +20,15 @@ os.environ["APP_ENV"] = "test"
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
 
 import pytest
-from hypothesis import given, settings, HealthCheck
+from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 
 from app.schemas import HealthResponse
 
-
 # ---------------------------------------------------------------------------
 # 1. Pydantic schema properties
 # ---------------------------------------------------------------------------
+
 
 @given(
     status=st.sampled_from(["ok", "degraded", "error"]),
@@ -60,7 +60,9 @@ def test_health_response_schema(status: str, user_count: int):
 def test_health_response_status_logic(db_connected, square_connected, square_sig):
     """Status should be 'ok' only when all dependencies are healthy."""
     response = HealthResponse(
-        status="ok" if (db_connected and square_connected and square_sig) else "degraded",
+        status=(
+            "ok" if (db_connected and square_connected and square_sig) else "degraded"
+        ),
         db_connected=db_connected,
         square_connected=square_connected,
         square_signature_configured=square_sig,
@@ -77,6 +79,7 @@ def test_health_response_status_logic(db_connected, square_connected, square_sig
 # ---------------------------------------------------------------------------
 # 2. Rate limiting counter properties
 # ---------------------------------------------------------------------------
+
 
 @given(
     request_count=st.integers(min_value=0, max_value=500),
@@ -119,6 +122,7 @@ def test_rate_limit_counter_logic(request_count: int, limit: int):
 # 3. Input validation properties
 # ---------------------------------------------------------------------------
 
+
 @given(
     input_text=st.text(max_size=200),
 )
@@ -151,6 +155,7 @@ def test_email_validation_never_crashes(email: str):
 # ---------------------------------------------------------------------------
 # 4. Data structure properties
 # ---------------------------------------------------------------------------
+
 
 @given(
     items=st.lists(st.integers(min_value=0, max_value=1000), max_size=100),

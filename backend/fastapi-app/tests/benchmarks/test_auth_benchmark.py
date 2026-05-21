@@ -6,12 +6,10 @@ from datetime import date, datetime, timedelta, timezone
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import create_access_token, create_refresh_token, hash_password
-from app.models import User, RefreshToken
-from tests.benchmarks.utils import measure_latency, assert_slo
+from app.auth import create_refresh_token, hash_password
+from app.models import RefreshToken, User
+from tests.benchmarks.utils import assert_slo, measure_latency
 
 
 async def _seed_user(db_session_factory) -> tuple[uuid.UUID, str]:
@@ -51,7 +49,7 @@ async def _seed_refresh_token(db_session_factory, user_id: uuid.UUID) -> str:
             )
         )
         await session.commit()
-    return raw_token_value # Return the raw token value for the client to use
+    return raw_token_value  # Return the raw token value for the client to use
 
 
 @pytest.fixture(scope="module")
@@ -63,7 +61,9 @@ def seeded_auth_data(db_session_factory):
 
 
 @pytest.mark.parametrize("n_requests", [50])
-def test_auth_login_latency(benchmark_client: TestClient, seeded_auth_data, n_requests: int):
+def test_auth_login_latency(
+    benchmark_client: TestClient, seeded_auth_data, n_requests: int
+):
     """Benchmark POST /api/v1/auth/login."""
     print(f"\nBenchmarking POST /api/v1/auth/login with {n_requests} requests...")
     stats = measure_latency(
@@ -71,7 +71,10 @@ def test_auth_login_latency(benchmark_client: TestClient, seeded_auth_data, n_re
         "POST",
         "/api/v1/auth/login",
         n=n_requests,
-        json={"email": "benchmark@example.com", "password": seeded_auth_data["password"]},
+        json={
+            "email": "benchmark@example.com",
+            "password": seeded_auth_data["password"],
+        },
     )
 
     print(f"Login Endpoint Latency (n={n_requests}):")
@@ -87,12 +90,17 @@ def test_auth_login_latency(benchmark_client: TestClient, seeded_auth_data, n_re
 
 
 @pytest.mark.parametrize("n_requests", [50])
-def test_auth_me_latency(benchmark_client: TestClient, seeded_auth_data, n_requests: int):
+def test_auth_me_latency(
+    benchmark_client: TestClient, seeded_auth_data, n_requests: int
+):
     """Benchmark GET /api/v1/auth/me."""
     # First, get a valid access token
     login_response = benchmark_client.post(
         "/api/v1/auth/login",
-        json={"email": "benchmark@example.com", "password": seeded_auth_data["password"]},
+        json={
+            "email": "benchmark@example.com",
+            "password": seeded_auth_data["password"],
+        },
     )
     access_token = login_response.json()["access_token"]
 
@@ -118,7 +126,9 @@ def test_auth_me_latency(benchmark_client: TestClient, seeded_auth_data, n_reque
 
 
 @pytest.mark.parametrize("n_requests", [50])
-def test_auth_refresh_latency(benchmark_client: TestClient, seeded_auth_data, n_requests: int):
+def test_auth_refresh_latency(
+    benchmark_client: TestClient, seeded_auth_data, n_requests: int
+):
     """Benchmark POST /api/v1/auth/refresh."""
     print(f"\nBenchmarking POST /api/v1/auth/refresh with {n_requests} requests...")
     stats = measure_latency(

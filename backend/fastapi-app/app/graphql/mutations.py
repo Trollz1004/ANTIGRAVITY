@@ -1,10 +1,11 @@
+import uuid
+from datetime import date
+from typing import List, Optional
 
 import strawberry
-import uuid
-from typing import Optional, List
-from datetime import date
 
-from .types import ProfileResponse, UserMeResponse
+from .types import ProfileResponse
+
 
 @strawberry.input
 class ProfileCreateInput:
@@ -16,6 +17,7 @@ class ProfileCreateInput:
     looking_for: Optional[str] = None
     location: Optional[str] = None
     interests: Optional[List[str]] = None
+
 
 @strawberry.type
 class Mutation:
@@ -36,7 +38,9 @@ class Mutation:
         )
 
     @strawberry.mutation
-    def update_profile(self, user_id: uuid.UUID, profile_data: ProfileCreateInput) -> ProfileResponse:
+    def update_profile(
+        self, user_id: uuid.UUID, profile_data: ProfileCreateInput
+    ) -> ProfileResponse:
         # Placeholder for updating an existing profile
         return ProfileResponse(
             user_id=user_id,
@@ -46,8 +50,7 @@ class Mutation:
             gender=profile_data.gender,
             looking_for=profile_data.looking_for,
             location=profile_data.location,
-            photos=["http://example.com/updated_photo.jpg"], # Placeholder
+            photos=["http://example.com/updated_photo.jpg"],  # Placeholder
             interests=profile_data.interests or [],
             verified=True,
         )
-
