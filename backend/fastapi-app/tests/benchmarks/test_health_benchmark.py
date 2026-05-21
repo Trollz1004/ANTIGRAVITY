@@ -3,7 +3,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from tests.benchmarks.utils import measure_latency, assert_slo
+from tests.benchmarks.utils import assert_slo, measure_latency
 
 
 @pytest.mark.parametrize("n_requests", [100])

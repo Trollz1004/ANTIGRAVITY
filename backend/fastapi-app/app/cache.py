@@ -74,7 +74,9 @@ async def redis_health_check() -> dict[str, Any]:
         return {"status": "error", "message": str(exc)}
 
 
-def _build_cache_key(prefix: str, request: Request, vary_on: Optional[list[str]] = None) -> str:
+def _build_cache_key(
+    prefix: str, request: Request, vary_on: Optional[list[str]] = None
+) -> str:
     """Build a deterministic cache key from the request."""
     parts = [prefix, request.method, request.url.path]
     vary_on = vary_on or []
@@ -105,6 +107,7 @@ def cache_response(
         vary_on: List of request header names to include in the cache key.
                  e.g. ["authorization"] to cache per-user.
     """
+
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         async def wrapper(*args, **kwargs):
@@ -128,9 +131,14 @@ def cache_response(
                     logger.debug("Cache HIT: %s", redis_key)
                     data = json.loads(cached)
                     from fastapi.responses import JSONResponse
-                    return JSONResponse(content=data["body"], status_code=data["status_code"])
+
+                    return JSONResponse(
+                        content=data["body"], status_code=data["status_code"]
+                    )
             except Exception as exc:
-                logger.warning("Redis cache read failed (%s), falling through: %s", redis_key, exc)
+                logger.warning(
+                    "Redis cache read failed (%s), falling through: %s", redis_key, exc
+                )
 
             response = await func(*args, **kwargs)
 
@@ -149,16 +157,19 @@ def cache_response(
 
                     if body_bytes:
                         # Reconstruct iterator for downstream consumption
-                        payload = json.dumps({
-                            "body": json.loads(body_bytes),
-                            "status_code": status_code,
-                        })
+                        payload = json.dumps(
+                            {
+                                "body": json.loads(body_bytes),
+                                "status_code": status_code,
+                            }
+                        )
                         r = await get_redis()
                         await r.set(redis_key, payload, ex=ttl)
                         logger.debug("Cache SET: %s (TTL=%ds)", redis_key, ttl)
 
                     # Rebuild response so downstream can still read the body
                     from fastapi.responses import Response as StarletteResponse
+
                     response = StarletteResponse(
                         content=body_bytes,
                         status_code=status_code,
@@ -171,6 +182,7 @@ def cache_response(
             return response
 
         return wrapper
+
     return decorator
 
 

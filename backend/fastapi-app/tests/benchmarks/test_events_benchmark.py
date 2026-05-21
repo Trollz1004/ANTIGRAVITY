@@ -6,11 +6,10 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import select
 
-from app.models import User, Event
-from app.auth import hash_password, create_access_token
-from tests.benchmarks.utils import measure_latency, assert_slo
+from app.auth import create_access_token, hash_password
+from app.models import Event, User
+from tests.benchmarks.utils import assert_slo, measure_latency
 
 
 async def _seed_user(db_session_factory) -> uuid.UUID:
@@ -33,7 +32,9 @@ async def _seed_user(db_session_factory) -> uuid.UUID:
     return user_id
 
 
-async def _seed_events(db_session_factory, organizer_id: uuid.UUID, count: int) -> list[uuid.UUID]:
+async def _seed_events(
+    db_session_factory, organizer_id: uuid.UUID, count: int
+) -> list[uuid.UUID]:
     """Helper to seed multiple events."""
     event_ids = []
     async with db_session_factory() as session:
@@ -69,7 +70,9 @@ def seeded_events_data(db_session_factory):
 
 
 @pytest.mark.parametrize("n_requests", [50])
-def test_events_list_latency(benchmark_client: TestClient, seeded_events_data, n_requests: int):
+def test_events_list_latency(
+    benchmark_client: TestClient, seeded_events_data, n_requests: int
+):
     """Benchmark GET /api/v1/events for listing events."""
     print(f"\nBenchmarking GET /api/v1/events with {n_requests} requests...")
     stats = measure_latency(
@@ -93,7 +96,9 @@ def test_events_list_latency(benchmark_client: TestClient, seeded_events_data, n
 
 
 @pytest.mark.parametrize("n_requests", [50])
-def test_events_detail_latency(benchmark_client: TestClient, seeded_events_data, n_requests: int):
+def test_events_detail_latency(
+    benchmark_client: TestClient, seeded_events_data, n_requests: int
+):
     """Benchmark GET /api/v1/events/:id for a single event detail."""
     event_id = seeded_events_data["event_ids"][0]  # Use the first seeded event
     print(f"\nBenchmarking GET /api/v1/events/{event_id} with {n_requests} requests...")

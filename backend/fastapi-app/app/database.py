@@ -17,11 +17,16 @@ if _database_url.startswith("postgresql://"):
 engine = create_async_engine(
     _database_url,
     pool_pre_ping=True,
-    **({'pool_size': settings.db_pool_size,
-       'max_overflow': settings.db_max_overflow,
-       'pool_timeout': settings.db_pool_timeout,
-       'pool_recycle': settings.db_pool_recycle}
-      if not _database_url.startswith("sqlite") else {}),
+    **(
+        {
+            "pool_size": settings.db_pool_size,
+            "max_overflow": settings.db_max_overflow,
+            "pool_timeout": settings.db_pool_timeout,
+            "pool_recycle": settings.db_pool_recycle,
+        }
+        if not _database_url.startswith("sqlite")
+        else {}
+    ),
     echo_pool=settings.app_env == "development",
 )
 SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -73,6 +78,7 @@ async def reconcile_legacy_schema() -> None:
         await connection.run_sync(Base.metadata.create_all)
         # Create webhook retry tables (lazy import to avoid circular dependency)
         from app import webhook_retry as _wr
+
         await connection.run_sync(_wr.WebhookRetryQueue.metadata.create_all)
 
         if connection.dialect.name != "postgresql":

@@ -501,6 +501,7 @@ SERVERS: list[dict] = [
 # Custom Swagger UI HTML with mission-control dark theme
 # ---------------------------------------------------------------------------
 
+
 def get_custom_swagger_html() -> str:
     """Return custom Swagger UI HTML with mission-control dark theme.
 

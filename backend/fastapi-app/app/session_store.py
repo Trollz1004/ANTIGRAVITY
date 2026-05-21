@@ -39,10 +39,12 @@ async def create_session(
     session_id = str(uuid.uuid4())
     key = f"session:{session_id}"
 
-    payload = json.dumps({
-        "user_id": user_id,
-        "data": data,
-    })
+    payload = json.dumps(
+        {
+            "user_id": user_id,
+            "data": data,
+        }
+    )
 
     r: redis.Redis = await get_redis()
     await r.set(key, payload, ex=ttl)

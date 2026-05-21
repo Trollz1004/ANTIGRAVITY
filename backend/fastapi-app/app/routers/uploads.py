@@ -2,7 +2,6 @@
 
 import hashlib
 import logging
-import logging
 import os
 import re
 import shutil
@@ -12,7 +11,16 @@ from pathlib import Path
 from typing import Any
 
 import aiofiles
-from fastapi import APIRouter, Depends, File, Header, HTTPException, Query, Request, UploadFile
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    Header,
+    HTTPException,
+    Query,
+    Request,
+    UploadFile,
+)
 from fastapi.responses import JSONResponse
 
 from app.auth import get_current_user
@@ -105,6 +113,7 @@ def _parse_content_range(header_value: str | None) -> tuple[int, int, int] | Non
 # Standard (non-chunked) upload — now with progress tracking
 # ---------------------------------------------------------------------------
 
+
 @router.post("/")
 async def upload_file(
     file: UploadFile = File(...),
@@ -123,7 +132,9 @@ async def upload_file(
         )
 
     # Create progress tracker entry
-    upload_id = create_upload(total_bytes=file_size, filename=file.filename or "unknown")
+    upload_id = create_upload(
+        total_bytes=file_size, filename=file.filename or "unknown"
+    )
 
     # Create storage directory if not exists
     storage_path = Path(settings.upload_storage_path)
@@ -203,6 +214,7 @@ async def upload_file(
 # ---------------------------------------------------------------------------
 # Chunked upload endpoints
 # ---------------------------------------------------------------------------
+
 
 @router.post("/chunked/init")
 async def init_chunked_upload(
@@ -500,4 +512,3 @@ async def cancel_chunked_upload(
 
 
 # Need to import Request for the chunk endpoint body reading
-

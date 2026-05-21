@@ -46,9 +46,10 @@ from app import database  # noqa: E402
 
 database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
 
+from app.rate_limit import reset_rate_limits  # noqa: E402
+
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
-from app.rate_limit import reset_rate_limits  # noqa: E402
 
 
 @pytest.fixture()
@@ -75,6 +76,7 @@ def db_session_factory(tmp_path):
 @pytest.fixture()
 def client(db_session_factory):
     """Yield a FastAPI TestClient with DB dependency overridden."""
+
     async def override_get_db():
         async with db_session_factory() as session:
             yield session

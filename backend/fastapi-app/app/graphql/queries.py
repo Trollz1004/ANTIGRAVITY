@@ -1,19 +1,13 @@
+import uuid
+from typing import List, Optional
 
 import strawberry
-from typing import List, Optional
-import uuid
 
 from .types import (
-    UserMeResponse,
     ProfileResponse,
-    MatchResponse,
-    DiscoverProfileResponse,
-    MessageResponse,
-    PostResponse,
-    CommentResponse,
-    EventResponse,
-    VolunteerResponse,
+    UserMeResponse,
 )
+
 
 @strawberry.type
 class Query:
@@ -39,7 +33,9 @@ class Query:
         )
 
     @strawberry.field
-    def profiles(self, age: Optional[int] = None, location: Optional[str] = None) -> List[ProfileResponse]:
+    def profiles(
+        self, age: Optional[int] = None, location: Optional[str] = None
+    ) -> List[ProfileResponse]:
         # Placeholder for fetching profiles
         return [
             ProfileResponse(
@@ -67,4 +63,3 @@ class Query:
                 verified=False,
             ),
         ]
-

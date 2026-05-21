@@ -49,7 +49,9 @@ def run_pip_outdated() -> list[dict]:
     try:
         result = subprocess.run(
             [sys.executable, "-m", "pip", "list", "--outdated", "--format=json"],
-            capture_output=True, text=True, timeout=60,
+            capture_output=True,
+            text=True,
+            timeout=60,
         )
         if result.returncode == 0:
             return json.loads(result.stdout)
@@ -63,7 +65,9 @@ def run_npm_outdated() -> dict:
     try:
         result = subprocess.run(
             ["npm", "outdated", "--json"],
-            capture_output=True, text=True, timeout=60,
+            capture_output=True,
+            text=True,
+            timeout=60,
             cwd=str(FRONTEND_DIR),
         )
         if result.returncode in (0, 1):
@@ -113,7 +117,9 @@ def generate_report(pip_outdated: list[dict], npm_outdated: dict) -> str:
                 wanted = info.get("wanted", "?")
                 latest = info.get("latest", "?")
                 update_type = categorize_update(current, latest)
-                lines.append(f"| {name} | {current} | {wanted} | {latest} | {update_type} |")
+                lines.append(
+                    f"| {name} | {current} | {wanted} | {latest} | {update_type} |"
+                )
     else:
         lines.append("✅ All Node.js dependencies are up to date.")
     lines.append("")
@@ -131,7 +137,9 @@ def main() -> int:
 
     report = generate_report(pip_outdated, npm_outdated)
 
-    output_path = Path(args.output) if args.output else REPORTS_DIR / "outdated-dependencies.md"
+    output_path = (
+        Path(args.output) if args.output else REPORTS_DIR / "outdated-dependencies.md"
+    )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(report, encoding="utf-8")
     logger.info("Report written to %s", output_path)

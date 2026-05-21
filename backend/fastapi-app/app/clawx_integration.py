@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 import re
 import threading
 from typing import Any
@@ -174,9 +173,7 @@ class ClawxClient:
         with self._lock:
             key = self._agents.get(name)
         if key is None:
-            raise KeyNotFoundError(
-                f"No API key registered for agent '{name}'."
-            )
+            raise KeyNotFoundError(f"No API key registered for agent '{name}'.")
         return key
 
     def rotate_key(self, agent_name: str, new_key: str) -> None:
@@ -266,9 +263,7 @@ class ClawxClient:
             Dict with ``reachable`` (bool), ``status_code`` (int or None),
             ``agent`` (str), and ``error`` (str or None).
         """
-        base_url = str(
-            getattr(self._settings, "clawx_base_url", "") or ""
-        ).rstrip("/")
+        base_url = str(getattr(self._settings, "clawx_base_url", "") or "").rstrip("/")
         enabled = bool(getattr(self._settings, "clawx_enabled", False))
 
         if not enabled:
@@ -290,7 +285,9 @@ class ClawxClient:
         # Determine which agent/key to use.
         if agent_name:
             try:
-                name, key = self._normalise_name(agent_name), self.get_agent_key(agent_name)
+                name, key = self._normalise_name(agent_name), self.get_agent_key(
+                    agent_name
+                )
             except KeyNotFoundError as exc:
                 return {
                     "reachable": False,

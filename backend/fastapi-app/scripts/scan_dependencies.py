@@ -20,7 +20,6 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-import os
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -40,18 +39,32 @@ REQUIREMENTS_FILE = BACKEND_DIR / "requirements.txt"
 # pip-audit
 # ---------------------------------------------------------------------------
 
+
 def run_pip_audit() -> dict | None:
     """Run pip-audit and return parsed JSON output, or None on failure."""
     try:
         result = subprocess.run(
-            [sys.executable, "-m", "pip_audit", "--progress-spinner=off",
-             "--format=json", "--requirement", str(REQUIREMENTS_FILE)],
-            capture_output=True, text=True, timeout=120,
+            [
+                sys.executable,
+                "-m",
+                "pip_audit",
+                "--progress-spinner=off",
+                "--format=json",
+                "--requirement",
+                str(REQUIREMENTS_FILE),
+            ],
+            capture_output=True,
+            text=True,
+            timeout=120,
             cwd=str(BACKEND_DIR),
         )
         if result.returncode not in (0, 1):
             # pip-audit returns 1 when vulns found, 0 when clean
-            logger.warning("pip-audit exited with code %d: %s", result.returncode, result.stderr[:200])
+            logger.warning(
+                "pip-audit exited with code %d: %s",
+                result.returncode,
+                result.stderr[:200],
+            )
         return json.loads(result.stdout)
     except FileNotFoundError:
         logger.warning("pip-audit not installed. Install with: pip install pip-audit")
@@ -65,6 +78,7 @@ def run_pip_audit() -> dict | None:
 # npm audit
 # ---------------------------------------------------------------------------
 
+
 def run_npm_audit() -> dict | None:
     """Run npm audit --json and return parsed output, or None on failure."""
     if not (FRONTEND_DIR / "package.json").exists():
@@ -73,7 +87,9 @@ def run_npm_audit() -> dict | None:
     try:
         result = subprocess.run(
             ["npm", "audit", "--json"],
-            capture_output=True, text=True, timeout=120,
+            capture_output=True,
+            text=True,
+            timeout=120,
             cwd=str(FRONTEND_DIR),
         )
         return json.loads(result.stdout)
@@ -100,13 +116,16 @@ def severity_sort_key(item: dict) -> int:
 # Report generation
 # ---------------------------------------------------------------------------
 
-def generate_report(pip_data: dict | None, npm_data: dict | None) -> tuple[str, int, int, int]:
+
+def generate_report(
+    pip_data: dict | None, npm_data: dict | None
+) -> tuple[str, int, int, int]:
     """Generate a unified markdown vulnerability report. Returns (report, total, critical, high)."""
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     lines: list[str] = []
     lines.append("# Dependency Security Audit Report")
     lines.append(f"\n**Generated:** {now}")
-    lines.append(f"\n**Repository:** ANTIGRAVITY")
+    lines.append("\n**Repository:** ANTIGRAVITY")
     lines.append("")
 
     total_vulns = 0
@@ -122,13 +141,15 @@ def generate_report(pip_data: dict | None, npm_data: dict | None) -> tuple[str, 
         vulns = []
         for dep in pip_data.get("dependencies", []):
             for vuln in dep.get("vulns", []):
-                vulns.append({
-                    "package": dep.get("name", "unknown"),
-                    "version": dep.get("version", "?"),
-                    "id": vuln.get("id", "N/A"),
-                    "severity": vuln.get("fix_versions", []) and "medium" or "high",
-                    "description": vuln.get("description", "No description")[:200],
-                })
+                vulns.append(
+                    {
+                        "package": dep.get("name", "unknown"),
+                        "version": dep.get("version", "?"),
+                        "id": vuln.get("id", "N/A"),
+                        "severity": vuln.get("fix_versions", []) and "medium" or "high",
+                        "description": vuln.get("description", "No description")[:200],
+                    }
+                )
         if vulns:
             vulns.sort(key=severity_sort_key)
             lines.append(f"**{len(vulns)} vulnerabilities found**")
@@ -137,7 +158,9 @@ def generate_report(pip_data: dict | None, npm_data: dict | None) -> tuple[str, 
             lines.append("|---------|---------|----|----------|-------------|")
             for v in vulns:
                 sev = v["severity"].upper()
-                lines.append(f"| {v['package']} | {v['version']} | {v['id']} | {sev} | {v['description']} |")
+                lines.append(
+                    f"| {v['package']} | {v['version']} | {v['id']} | {sev} | {v['description']} |"
+                )
                 total_vulns += 1
                 if v["severity"] == "critical":
                     critical_count += 1
@@ -162,23 +185,27 @@ def generate_report(pip_data: dict | None, npm_data: dict | None) -> tuple[str, 
             if isinstance(via, list) and via:
                 for v in via:
                     if isinstance(v, dict):
-                        npm_vulns.append({
-                            "package": name,
-                            "severity": severity,
-                            "title": v.get("title", "N/A"),
-                            "url": v.get("url", ""),
-                            "cwe": v.get("cwe", ""),
-                            "range": v.get("range", ""),
-                        })
+                        npm_vulns.append(
+                            {
+                                "package": name,
+                                "severity": severity,
+                                "title": v.get("title", "N/A"),
+                                "url": v.get("url", ""),
+                                "cwe": v.get("cwe", ""),
+                                "range": v.get("range", ""),
+                            }
+                        )
             else:
-                npm_vulns.append({
-                    "package": name,
-                    "severity": severity,
-                    "title": str(via)[:100] if via else "N/A",
-                    "url": "",
-                    "cwe": "",
-                    "range": info.get("range", ""),
-                })
+                npm_vulns.append(
+                    {
+                        "package": name,
+                        "severity": severity,
+                        "title": str(via)[:100] if via else "N/A",
+                        "url": "",
+                        "cwe": "",
+                        "range": info.get("range", ""),
+                    }
+                )
         if npm_vulns:
             npm_vulns.sort(key=severity_sort_key)
             lines.append(f"**{len(npm_vulns)} vulnerabilities found**")
@@ -187,7 +214,9 @@ def generate_report(pip_data: dict | None, npm_data: dict | None) -> tuple[str, 
             lines.append("|---------|----------|-------|-----|-------|")
             for v in npm_vulns:
                 sev = v["severity"].upper()
-                lines.append(f"| {v['package']} | {sev} | {v['title'][:60]} | {v['cwe']} | {v['range']} |")
+                lines.append(
+                    f"| {v['package']} | {sev} | {v['title'][:60]} | {v['cwe']} | {v['range']} |"
+                )
                 total_vulns += 1
                 if v["severity"] == "critical":
                     critical_count += 1
@@ -207,9 +236,13 @@ def generate_report(pip_data: dict | None, npm_data: dict | None) -> tuple[str, 
     lines.append(f"- **High:** {high_count}")
     lines.append("")
     if critical_count > 0:
-        lines.append("⚠️ **ACTION REQUIRED:** Critical vulnerabilities detected. Update immediately.")
+        lines.append(
+            "⚠️ **ACTION REQUIRED:** Critical vulnerabilities detected. Update immediately."
+        )
     elif high_count > 0:
-        lines.append("⚠️ **ATTENTION:** High severity vulnerabilities detected. Plan updates soon.")
+        lines.append(
+            "⚠️ **ATTENTION:** High severity vulnerabilities detected. Plan updates soon."
+        )
     else:
         lines.append("✅ No critical or high severity vulnerabilities.")
 
@@ -220,10 +253,15 @@ def generate_report(pip_data: dict | None, npm_data: dict | None) -> tuple[str, 
 # Main
 # ---------------------------------------------------------------------------
 
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Scan dependencies for security vulnerabilities")
+    parser = argparse.ArgumentParser(
+        description="Scan dependencies for security vulnerabilities"
+    )
     parser.add_argument("--output", "-o", help="Output path for the markdown report")
-    parser.add_argument("--quiet", "-q", action="store_true", help="Suppress console output")
+    parser.add_argument(
+        "--quiet", "-q", action="store_true", help="Suppress console output"
+    )
     args = parser.parse_args()
 
     logger.info("Starting dependency security audit...")
@@ -234,7 +272,9 @@ def main() -> int:
     report, total, critical, high = generate_report(pip_data, npm_data)
 
     # Write report
-    output_path = Path(args.output) if args.output else REPORTS_DIR / "dependency-audit.md"
+    output_path = (
+        Path(args.output) if args.output else REPORTS_DIR / "dependency-audit.md"
+    )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(report, encoding="utf-8")
     logger.info("Report written to %s", output_path)

@@ -2,16 +2,13 @@
 
 from __future__ import annotations
 
-import os
-import tempfile
-import textwrap
-from pathlib import Path
-from unittest.mock import MagicMock, patch
-
-import pytest
-
 # Ensure the app root is importable
 import sys
+import textwrap
+from pathlib import Path
+from unittest.mock import MagicMock
+
+import pytest
 
 APP_ROOT = Path(__file__).resolve().parent.parent
 if str(APP_ROOT) not in sys.path:
@@ -20,9 +17,7 @@ if str(APP_ROOT) not in sys.path:
 from alembic.safety import (
     ENV_VAR_ALLOW_PROTECTED,
     ENV_VAR_DRY_RUN,
-    ENV_VAR_SKIP_CONFIRM,
     PROTECTION_COMMENT,
-    PROTECTION_MARKER,
     MigrationSafetyChecker,
     ProtectionStatus,
     SafetyReport,
@@ -30,7 +25,6 @@ from alembic.safety import (
     is_protected_migration,
     pre_downgrade,
 )
-
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -44,8 +38,7 @@ def tmp_migration_dir(tmp_path):
     versions.mkdir()
 
     # Unprotected migration
-    (versions / "001_initial.py").write_text(
-        textwrap.dedent("""\
+    (versions / "001_initial.py").write_text(textwrap.dedent("""\
         \"\"\"initial
 
         Revision ID: 001
@@ -65,12 +58,10 @@ def tmp_migration_dir(tmp_path):
 
         def downgrade():
             pass
-    """)
-    )
+    """))
 
     # Protected migration
-    (versions / "002_add_users.py").write_text(
-        textwrap.dedent(f"""\
+    (versions / "002_add_users.py").write_text(textwrap.dedent(f"""\
         \"\"\"add users table
 
         Revision ID: 002
@@ -91,12 +82,10 @@ def tmp_migration_dir(tmp_path):
 
         def downgrade():
             pass
-    """)
-    )
+    """))
 
     # Protected migration with custom reason
-    (versions / "003_add_payments.py").write_text(
-        textwrap.dedent("""\
+    (versions / "003_add_payments.py").write_text(textwrap.dedent("""\
         \"\"\"add payments
 
         Revision ID: 003
@@ -117,11 +106,9 @@ def tmp_migration_dir(tmp_path):
 
         def downgrade():
             pass
-    """)
-    )
+    """))
 
     return versions
-
 
 
 # ---------------------------------------------------------------------------
@@ -190,8 +177,7 @@ class TestMigrationSafetyChecker:
 
         # Write alembic.ini
         ini_path = tmp_path / "alembic.ini"
-        ini_path.write_text(
-            textwrap.dedent(f"""\
+        ini_path.write_text(textwrap.dedent(f"""\
             [alembic]
             script_location = {tmp_path}
             version_path_separator = os
@@ -217,8 +203,7 @@ class TestMigrationSafetyChecker:
 
             [formatter_generic]
             format = %(levelname)-5.5s [%(name)s] %(message)s
-            """)
-        )
+            """))
 
         cfg = Config(str(ini_path))
         checker = MigrationSafetyChecker(cfg, interactive=False, **kwargs)
@@ -429,9 +414,7 @@ class TestMigrationSafetyChecker:
                 pass
         '''),
         )
-        checker = self._make_checker(
-            tmp_path, interactive=False, allow_protected=True
-        )
+        checker = self._make_checker(tmp_path, interactive=False, allow_protected=True)
         # Should NOT raise because allow_protected=True
         report = checker.check_downgrade("abc123")
         assert isinstance(report, SafetyReport)
@@ -476,9 +459,7 @@ class TestMigrationSafetyChecker:
                 pass
         '''),
         )
-        checker = self._make_checker(
-            tmp_path, interactive=False, dry_run=True
-        )
+        checker = self._make_checker(tmp_path, interactive=False, dry_run=True)
         # Dry run should NOT raise even for protected
         report = checker.check_downgrade("abc123")
         assert isinstance(report, SafetyReport)

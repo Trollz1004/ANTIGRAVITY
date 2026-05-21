@@ -196,7 +196,10 @@ async def update_content_item(
 
 class MarketingPostUpdate(BaseModel):
     """Partial update schema — all fields optional for PATCH semantics."""
-    campaign_name: Optional[str] = Field(None, description="Name of the marketing campaign")
+
+    campaign_name: Optional[str] = Field(
+        None, description="Name of the marketing campaign"
+    )
     objective: Optional[str] = Field(None, description="Campaign objective")
     audience: Optional[str] = Field(None, description="Target audience")
     platforms: Optional[List[str]] = Field(None, description="Platforms to publish on")

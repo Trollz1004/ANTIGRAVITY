@@ -5,18 +5,17 @@ app/dependencies/websocket_auth.py with mocked token decode
 and database session to avoid needing a real DB or JWT secret.
 """
 
-import uuid
-from unittest.mock import AsyncMock, MagicMock, patch
-
-import pytest
-from fastapi import status, WebSocketException
-
 # ---------------------------------------------------------------------------
 # Ensure the app root is importable (mirrors conftest.py pattern)
 # ---------------------------------------------------------------------------
 import os
 import sys
+import uuid
 from pathlib import Path
+from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
+from fastapi import WebSocketException, status
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -30,10 +29,10 @@ os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite:///:memory:")
 
 from app.dependencies.websocket_auth import get_current_websocket_user  # noqa: E402
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _make_user(*, is_active: bool = True) -> MagicMock:
     """Return a lightweight mock User with the attributes the auth code uses."""
@@ -63,6 +62,7 @@ def _make_db_session(return_value=None) -> AsyncMock:
 # Tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_valid_token_returns_user():
     """Successful authentication returns the correct User object."""
@@ -72,7 +72,10 @@ async def test_valid_token_returns_user():
     token = "valid-token"
     user_id_str = str(user.id)
 
-    with patch("app.dependencies.websocket_auth.decode_token", return_value={"sub": user_id_str}):
+    with patch(
+        "app.dependencies.websocket_auth.decode_token",
+        return_value={"sub": user_id_str},
+    ):
         result = await get_current_websocket_user(
             websocket=websocket,
             token=token,

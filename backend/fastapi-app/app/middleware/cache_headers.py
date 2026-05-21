@@ -5,9 +5,7 @@ based on endpoint volatility. Handles 304 Not Modified responses.
 """
 
 import hashlib
-import json
 import logging
-import time
 from collections.abc import Callable
 from datetime import datetime, timezone
 
@@ -45,8 +43,20 @@ CACHE_TIERS: list[tuple[str, str, int]] = [
 
 # File extensions that should receive long-term immutable cache when served as static
 STATIC_ASSET_EXTENSIONS = {
-    ".js", ".css", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp",
-    ".ico", ".woff", ".woff2", ".ttf", ".eot", ".avif",
+    ".js",
+    ".css",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".svg",
+    ".webp",
+    ".ico",
+    ".woff",
+    ".woff2",
+    ".ttf",
+    ".eot",
+    ".avif",
 }
 
 # Default for unmatched GET endpoints

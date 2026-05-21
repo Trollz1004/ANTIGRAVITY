@@ -1,7 +1,7 @@
 """Benchmark utility functions for latency measurement and statistical analysis."""
 
-import time
 import statistics
+import time
 from typing import Any
 
 from fastapi.testclient import TestClient
@@ -31,7 +31,7 @@ def measure_latency(
 
     for _ in range(n):
         start = time.perf_counter()
-        response = client_func(url, **kwargs)
+        _response = client_func(url, **kwargs)
         elapsed_ms = (time.perf_counter() - start) * 1000
         latencies.append(elapsed_ms)
 
@@ -75,15 +75,9 @@ def assert_slo(
     """
     violations: list[str] = []
     if p50_limit is not None and stats["p50"] > p50_limit:
-        violations.append(
-            f"{slo_name} p50 {stats['p50']:.1f}ms exceeds {p50_limit}ms"
-        )
+        violations.append(f"{slo_name} p50 {stats['p50']:.1f}ms exceeds {p50_limit}ms")
     if p95_limit is not None and stats["p95"] > p95_limit:
-        violations.append(
-            f"{slo_name} p95 {stats['p95']:.1f}ms exceeds {p95_limit}ms"
-        )
+        violations.append(f"{slo_name} p95 {stats['p95']:.1f}ms exceeds {p95_limit}ms")
     if p99_limit is not None and stats["p99"] > p99_limit:
-        violations.append(
-            f"{slo_name} p99 {stats['p99']:.1f}ms exceeds {p99_limit}ms"
-        )
+        violations.append(f"{slo_name} p99 {stats['p99']:.1f}ms exceeds {p99_limit}ms")
     return violations

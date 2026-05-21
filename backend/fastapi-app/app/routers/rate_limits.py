@@ -9,7 +9,7 @@ import time
 from collections import defaultdict
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from app.auth import get_current_user
@@ -61,6 +61,7 @@ def record_request(path: str) -> None:
 # Response models
 # ---------------------------------------------------------------------------
 
+
 class EndpointStat(BaseModel):
     path: str
     count: int
@@ -83,6 +84,7 @@ class RateLimitConfig(BaseModel):
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
+
 
 @router.get("/status", response_model=RateLimitStatus)
 async def get_rate_limit_status(

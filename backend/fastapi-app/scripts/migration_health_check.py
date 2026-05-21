@@ -11,15 +11,15 @@ Exit codes:
 
 from __future__ import annotations
 
-import sys
 import os
+import sys
 
 # Ensure the app package is importable when run from the repo root or scripts/
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from alembic.config import Config
-from alembic.script import ScriptDirectory
 from alembic.runtime.migration import MigrationContext
+from alembic.script import ScriptDirectory
 
 from app.config import get_settings
 
@@ -44,9 +44,11 @@ def get_current_revision(database_url: str, alembic_cfg: Config) -> str | None:
         engine = create_async_engine(db_url, pool_pre_ping=True)
         try:
             async with engine.connect() as conn:
+
                 def _get_rev(sync_conn):
                     context = MigrationContext.configure(sync_conn)
                     return context.get_current_revision()
+
                 return await conn.run_sync(_get_rev)
         finally:
             await engine.dispose()
@@ -59,7 +61,9 @@ def main() -> int:
     settings = get_settings()
     database_url = settings.database_url
 
-    alembic_cfg = Config(os.path.join(os.path.dirname(os.path.dirname(__file__)), "alembic.ini"))
+    alembic_cfg = Config(
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), "alembic.ini")
+    )
 
     head = get_head_revision(alembic_cfg)
     current = get_current_revision(database_url, alembic_cfg)

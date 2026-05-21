@@ -1,11 +1,11 @@
-
 import json
 import logging
-from datetime import datetime, timedelta
-from typing import Dict, Any, List, Callable
 import os
+from datetime import datetime, timedelta
+from typing import Any, Callable, Dict, List
 
 logger = logging.getLogger(__name__)
+
 
 class SecretsRotationManager:
     """
@@ -31,7 +31,7 @@ class SecretsRotationManager:
     def _load_config(self) -> Dict[str, Any]:
         """Loads the secrets rotation configuration from a JSON file."""
         try:
-            with open(self._config_path, "r") as f:
+            with open(self._config_path) as f:
                 return json.load(f)
         except FileNotFoundError:
             logger.warning(
@@ -52,8 +52,10 @@ class SecretsRotationManager:
             os.makedirs(os.path.dirname(self._config_path), exist_ok=True)
             with open(self._config_path, "w") as f:
                 json.dump(self._secrets_config, f, indent=4)
-        except IOError as e:
-            logger.error(f"Error saving secrets rotation config to {self._config_path}: {e}")
+        except OSError as e:
+            logger.error(
+                f"Error saving secrets rotation config to {self._config_path}: {e}"
+            )
 
     def _log_audit(self, secret_name: str, action: str, details: str):
         """
@@ -66,8 +68,10 @@ class SecretsRotationManager:
             os.makedirs(os.path.dirname(self._audit_log_path), exist_ok=True)
             with open(self._audit_log_path, "a") as f:
                 f.write(log_entry)
-        except IOError as e:
-            logger.error(f"Error writing to secrets rotation audit log {self._audit_log_path}: {e}")
+        except OSError as e:
+            logger.error(
+                f"Error writing to secrets rotation audit log {self._audit_log_path}: {e}"
+            )
 
     def get_rotation_status(self) -> List[Dict[str, Any]]:
         """
@@ -79,7 +83,9 @@ class SecretsRotationManager:
         for secret_info in self._secrets_config.get("secrets", []):
             secret_name = secret_info["name"]
             last_rotated_str = secret_info.get("last_rotated")
-            interval_days = secret_info.get("interval_days", self.DEFAULT_ROTATION_INTERVAL_DAYS)
+            interval_days = secret_info.get(
+                "interval_days", self.DEFAULT_ROTATION_INTERVAL_DAYS
+            )
 
             last_rotated = None
             is_expired = False
@@ -94,7 +100,7 @@ class SecretsRotationManager:
                         f"'{last_rotated_str}'. Skipping expiry check."
                     )
             else:
-                is_expired = True # No rotation date means it's effectively expired/never rotated
+                is_expired = True  # No rotation date means it's effectively expired/never rotated
 
             status_list.append(
                 {
@@ -134,14 +140,20 @@ class SecretsRotationManager:
                 self._log_audit(
                     secret_name,
                     "Rotation initiated",
-                    f"Old last_rotated: {old_last_rotated}, New last_rotated: {now.isoformat()}"
+                    f"Old last_rotated: {old_last_rotated}, New last_rotated: {now.isoformat()}",
                 )
-                logger.info(f"Secret '{secret_name}' rotation simulated and timestamp updated.")
+                logger.info(
+                    f"Secret '{secret_name}' rotation simulated and timestamp updated."
+                )
                 return True
-        logger.warning(f"Secret '{secret_name}' not found in configuration for rotation.")
+        logger.warning(
+            f"Secret '{secret_name}' not found in configuration for rotation."
+        )
         return False
 
-    def zero_downtime_rotation_pattern(self, secret_name: str, generate_new_secret_func: Callable[[], str]) -> bool:
+    def zero_downtime_rotation_pattern(
+        self, secret_name: str, generate_new_secret_func: Callable[[], str]
+    ) -> bool:
         """
         Outlines a zero-downtime rotation pattern for a given secret.
         This is a conceptual method that describes the steps; it does not execute them live.
@@ -153,14 +165,22 @@ class SecretsRotationManager:
         Returns:
             True if the conceptual rotation process completes, False otherwise.
         """
-        logger.info(f"Initiating zero-downtime rotation pattern for secret: '{secret_name}'")
-        self._log_audit(secret_name, "Zero-downtime rotation start", "Beginning conceptual rotation process.")
+        logger.info(
+            f"Initiating zero-downtime rotation pattern for secret: '{secret_name}'"
+        )
+        self._log_audit(
+            secret_name,
+            "Zero-downtime rotation start",
+            "Beginning conceptual rotation process.",
+        )
 
         try:
             # Step 1: Generate new secret
             logger.info(f"Step 1: Generating new value for '{secret_name}'.")
-            new_secret_value = generate_new_secret_func()
-            self._log_audit(secret_name, "Generate New", "New secret value conceptually generated.")
+            _new_secret_value = generate_new_secret_func()
+            self._log_audit(
+                secret_name, "Generate New", "New secret value conceptually generated."
+            )
             # In a real scenario, this would involve calling an external KMS or a secure generation function.
 
             # Step 2: Provision new secret in parallel
@@ -169,21 +189,39 @@ class SecretsRotationManager:
                 "This typically involves updating a temporary environment variable or KMS entry, "
                 "allowing the application to load both old and new secrets."
             )
-            self._log_audit(secret_name, "Provision Parallel", "New secret conceptually provisioned alongside old.")
+            self._log_audit(
+                secret_name,
+                "Provision Parallel",
+                "New secret conceptually provisioned alongside old.",
+            )
             # E.g., for a database URL, you might provision a new DB user/pass, or for API keys,
             # store the new key in a separate variable (e.g., NEW_SQUARE_ACCESS_TOKEN).
 
             # Step 3: Validate new secret
-            logger.info(f"Step 3: Validating new secret for '{secret_name}'. "
-                        "This involves attempting to use the new secret without affecting live traffic.")
+            logger.info(
+                f"Step 3: Validating new secret for '{secret_name}'. "
+                "This involves attempting to use the new secret without affecting live traffic."
+            )
             # In a real scenario, this would involve a test connection or API call using new_secret_value.
-            validation_successful = True # Assume success for simulation
+            validation_successful = True  # Assume success for simulation
             if not validation_successful:
-                logger.error(f"Validation failed for new secret for '{secret_name}'. Aborting rotation.")
-                self._log_audit(secret_name, "Validation Failed", "New secret validation failed. Aborting.")
+                logger.error(
+                    f"Validation failed for new secret for '{secret_name}'. Aborting rotation."
+                )
+                self._log_audit(
+                    secret_name,
+                    "Validation Failed",
+                    "New secret validation failed. Aborting.",
+                )
                 return False
-            self._log_audit(secret_name, "Validate New", "New secret conceptually validated successfully.")
-            logger.info(f"New secret for '{secret_name}' conceptually validated successfully.")
+            self._log_audit(
+                secret_name,
+                "Validate New",
+                "New secret conceptually validated successfully.",
+            )
+            logger.info(
+                f"New secret for '{secret_name}' conceptually validated successfully."
+            )
 
             # Step 4: Swap to new secret (application restart/reload or dynamic update)
             logger.info(
@@ -191,8 +229,14 @@ class SecretsRotationManager:
                 "This could be an application reload to pick up the new secret, "
                 "or a dynamic update if the application supports it. Old secret is still available."
             )
-            self._log_audit(secret_name, "Swap Active", "Application conceptually switched to new secret.")
-            self.rotate_secret(secret_name) # Update last_rotated timestamp for the primary secret
+            self._log_audit(
+                secret_name,
+                "Swap Active",
+                "Application conceptually switched to new secret.",
+            )
+            self.rotate_secret(
+                secret_name
+            )  # Update last_rotated timestamp for the primary secret
             # At this point, new connections or operations should prefer the new secret.
 
             # Step 5: Deprecate/Cleanup old secret (after a grace period)
@@ -201,20 +245,35 @@ class SecretsRotationManager:
                 "This happens after a grace period to ensure all services are using the new secret. "
                 "The old secret is then removed from configuration/KMS."
             )
-            self._log_audit(secret_name, "Cleanup Old", "Old secret conceptually deprecated/cleaned up.")
+            self._log_audit(
+                secret_name,
+                "Cleanup Old",
+                "Old secret conceptually deprecated/cleaned up.",
+            )
             # This step would typically be manual or automated after a significant delay.
 
-            logger.info(f"Zero-downtime rotation pattern for secret '{secret_name}' conceptually completed.")
-            self._log_audit(secret_name, "Zero-downtime rotation end", "Conceptual rotation process finished.")
+            logger.info(
+                f"Zero-downtime rotation pattern for secret '{secret_name}' conceptually completed."
+            )
+            self._log_audit(
+                secret_name,
+                "Zero-downtime rotation end",
+                "Conceptual rotation process finished.",
+            )
             return True
         except Exception as e:
-            logger.exception(f"An error occurred during conceptual zero-downtime rotation for '{secret_name}': {e}")
+            logger.exception(
+                f"An error occurred during conceptual zero-downtime rotation for '{secret_name}': {e}"
+            )
             self._log_audit(secret_name, "Rotation Error", f"An error occurred: {e}")
             return False
 
+
 # Example usage (for testing/demonstration, not part of live app logic)
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.basicConfig(
+        level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    )
 
     # Ensure the target directory exists for example files
     target_dir = os.path.join("/mnt/c/ANTIGRAVITY", "backend", "fastapi-app", "app")
@@ -223,14 +282,28 @@ if __name__ == "__main__":
     # Initialize config.json with some sample secrets for demonstration
     initial_config = {
         "secrets": [
-            {"name": "database_url", "last_rotated": datetime.now().isoformat(), "interval_days": 90},
-            {"name": "square_access_token", "last_rotated": (datetime.now() - timedelta(days=100)).isoformat(), "interval_days": 90},
-            {"name": "jwt_secret", "last_rotated": (datetime.now() - timedelta(days=50)).isoformat(), "interval_days": 60},
+            {
+                "name": "database_url",
+                "last_rotated": datetime.now().isoformat(),
+                "interval_days": 90,
+            },
+            {
+                "name": "square_access_token",
+                "last_rotated": (datetime.now() - timedelta(days=100)).isoformat(),
+                "interval_days": 90,
+            },
+            {
+                "name": "jwt_secret",
+                "last_rotated": (datetime.now() - timedelta(days=50)).isoformat(),
+                "interval_days": 60,
+            },
             {"name": "gemini_api_key", "last_rotated": None, "interval_days": 180},
         ]
     }
     config_file_path = os.path.join(target_dir, SecretsRotationManager.CONFIG_FILE_NAME)
-    audit_log_file_path = os.path.join(target_dir, SecretsRotationManager.AUDIT_LOG_FILE_NAME)
+    audit_log_file_path = os.path.join(
+        target_dir, SecretsRotationManager.AUDIT_LOG_FILE_NAME
+    )
 
     with open(config_file_path, "w") as f:
         json.dump(initial_config, f, indent=4)
@@ -239,8 +312,10 @@ if __name__ == "__main__":
 
     print("\n--- Current Rotation Status ---")
     for status_item in manager.get_rotation_status():
-        print(f"  {status_item['name']}: Last Rotated: {status_item['last_rotated']}, "
-              f"Interval: {status_item['interval_days']} days, Expired: {status_item['is_expired']}")
+        print(
+            f"  {status_item['name']}: Last Rotated: {status_item['last_rotated']}, "
+            f"Interval: {status_item['interval_days']} days, Expired: {status_item['is_expired']}"
+        )
 
     print("\n--- Checking for Expired Secrets ---")
     expired = manager.check_expiry()
@@ -254,24 +329,30 @@ if __name__ == "__main__":
 
     print("\n--- Status After Rotation Simulation ---")
     for status_item in manager.get_rotation_status():
-        print(f"  {status_item['name']}: Last Rotated: {status_item['last_rotated']}, "
-              f"Interval: {status_item['interval_days']} days, Expired: {status_item['is_expired']}")
+        print(
+            f"  {status_item['name']}: Last Rotated: {status_item['last_rotated']}, "
+            f"Interval: {status_item['interval_days']} days, Expired: {status_item['is_expired']}"
+        )
 
     print("\n--- Demonstrating Zero-Downtime Rotation Pattern for jwt_secret ---")
+
     def generate_jwt_secret():
         import secrets
-        return secrets.token_urlsafe(64) # Placeholder for actual generation
 
-    manager.zero_downtime_rotation_pattern("jwt_secret", generate_new_jwt_secret)
+        return secrets.token_urlsafe(64)  # Placeholder for actual generation
+
+    manager.zero_downtime_rotation_pattern("jwt_secret", generate_jwt_secret)
 
     print("\n--- Status After Zero-Downtime Pattern ---")
     for status_item in manager.get_rotation_status():
-        print(f"  {status_item['name']}: Last Rotated: {status_item['last_rotated']}, "
-              f"Interval: {status_item['interval_days']} days, Expired: {status_item['is_expired']}")
+        print(
+            f"  {status_item['name']}: Last Rotated: {status_item['last_rotated']}, "
+            f"Interval: {status_item['interval_days']} days, Expired: {status_item['is_expired']}"
+        )
 
     print("\n--- Audit Log Content (Partial) ---")
     try:
-        with open(audit_log_file_path, "r") as f:
-            print("".join(f.readlines()[-5:])) # Print last 5 lines for example
+        with open(audit_log_file_path) as f:
+            print("".join(f.readlines()[-5:]))  # Print last 5 lines for example
     except FileNotFoundError:
         print("Audit log not yet created or found.")

@@ -6,11 +6,10 @@ from datetime import datetime, timezone
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import select
 
-from app.models import User, Board, Post
-from app.auth import hash_password
-from tests.benchmarks.utils import measure_latency, assert_slo
+from app.auth import create_access_token, hash_password
+from app.models import Board, Post, User
+from tests.benchmarks.utils import assert_slo, measure_latency
 
 
 async def _seed_user(db_session_factory) -> uuid.UUID:
@@ -52,7 +51,9 @@ async def _seed_board(db_session_factory) -> uuid.UUID:
     return board_id
 
 
-async def _seed_posts(db_session_factory, board_id: uuid.UUID, author_id: uuid.UUID, count: int) -> list[uuid.UUID]:
+async def _seed_posts(
+    db_session_factory, board_id: uuid.UUID, author_id: uuid.UUID, count: int
+) -> list[uuid.UUID]:
     """Helper to seed multiple posts."""
     post_ids = []
     async with db_session_factory() as session:
@@ -64,7 +65,8 @@ async def _seed_posts(db_session_factory, board_id: uuid.UUID, author_id: uuid.U
                     board_id=board_id,
                     author_id=author_id,
                     title=f"Test Post Title {i} {uuid.uuid4().hex[:4]}",
-                    body=f"This is the body of a test post number {i}." * 5,  # Larger body for detail view
+                    body=f"This is the body of a test post number {i}."
+                    * 5,  # Larger body for detail view
                     created_at=datetime.now(timezone.utc),
                 )
             )
@@ -86,7 +88,9 @@ def seeded_posts_data(db_session_factory):
 
 
 @pytest.mark.parametrize("n_requests", [50])
-def test_posts_list_latency(benchmark_client: TestClient, seeded_posts_data, n_requests: int):
+def test_posts_list_latency(
+    benchmark_client: TestClient, seeded_posts_data, n_requests: int
+):
     """Benchmark GET /api/v1/posts for listing posts."""
     print(f"\nBenchmarking GET /api/v1/posts with {n_requests} requests...")
     stats = measure_latency(
@@ -110,7 +114,9 @@ def test_posts_list_latency(benchmark_client: TestClient, seeded_posts_data, n_r
 
 
 @pytest.mark.parametrize("n_requests", [50])
-def test_posts_detail_latency(benchmark_client: TestClient, seeded_posts_data, n_requests: int):
+def test_posts_detail_latency(
+    benchmark_client: TestClient, seeded_posts_data, n_requests: int
+):
     """Benchmark GET /api/v1/posts/:id for a single post detail."""
     post_id = seeded_posts_data["post_ids"][0]  # Use the first seeded post
     print(f"\nBenchmarking GET /api/v1/posts/{post_id} with {n_requests} requests...")

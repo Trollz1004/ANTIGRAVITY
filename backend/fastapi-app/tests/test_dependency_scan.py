@@ -5,17 +5,15 @@ Uses mock data to test report generation without requiring pip-audit or npm.
 
 from __future__ import annotations
 
-import json
 import sys
 import unittest
 from pathlib import Path
-from unittest.mock import patch, MagicMock
 
 # Add scripts dir to path
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
-from scan_dependencies import generate_report, run_pip_audit, run_npm_audit, SEVERITY_ORDER
+from scan_dependencies import SEVERITY_ORDER, generate_report
 
 
 class TestGenerateReport(unittest.TestCase):
@@ -37,7 +35,11 @@ class TestGenerateReport(unittest.TestCase):
                     "name": "vulnerable-pkg",
                     "version": "1.0.0",
                     "vulns": [
-                        {"id": "GHSA-1234", "description": "A bad vulnerability", "fix_versions": ["1.0.1"]},
+                        {
+                            "id": "GHSA-1234",
+                            "description": "A bad vulnerability",
+                            "fix_versions": ["1.0.1"],
+                        },
                     ],
                 },
             ],
@@ -52,7 +54,14 @@ class TestGenerateReport(unittest.TestCase):
             "vulnerabilities": {
                 "bad-package": {
                     "severity": "high",
-                    "via": [{"title": "XSS vulnerability", "url": "https://example.com", "cwe": "CWE-79", "range": ">=1.0.0 <2.0.0"}],
+                    "via": [
+                        {
+                            "title": "XSS vulnerability",
+                            "url": "https://example.com",
+                            "cwe": "CWE-79",
+                            "range": ">=1.0.0 <2.0.0",
+                        }
+                    ],
                     "range": ">=1.0.0 <2.0.0",
                 },
             },

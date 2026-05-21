@@ -16,6 +16,7 @@ CLEANUP_THRESHOLD_SECONDS = 3600  # 1 hour
 @dataclass
 class UploadProgress:
     """Tracks the state of a single upload."""
+
     upload_id: str
     total_bytes: int
     uploaded_bytes: int = 0

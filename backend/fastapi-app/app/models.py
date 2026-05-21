@@ -1,7 +1,7 @@
 """SQLAlchemy ORM models for the YouAndINotAI platform."""
 
 import uuid
-from datetime import date, datetime
+from datetime import datetime
 
 from sqlalchemy import (
     JSON,
@@ -19,7 +19,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
-from app.encryption import EncryptedString, EncryptedDate
+from app.encryption import EncryptedDate, EncryptedString
 
 
 class User(Base):
@@ -28,12 +28,20 @@ class User(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
-    email: EncryptedString = EncryptedString(mapped_column(String(255), unique=True, index=True, nullable=False))
+    email: EncryptedString = EncryptedString(
+        mapped_column(String(255), unique=True, index=True, nullable=False)
+    )
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
-    display_name: EncryptedString = EncryptedString(mapped_column(String(100), nullable=False))
+    display_name: EncryptedString = EncryptedString(
+        mapped_column(String(100), nullable=False)
+    )
     date_of_birth: EncryptedDate = EncryptedDate(mapped_column(nullable=True))
-    square_customer_id: EncryptedString = EncryptedString(mapped_column(String(255), nullable=True))
-    google_id: EncryptedString = EncryptedString(mapped_column(String(255), unique=True, nullable=True))
+    square_customer_id: EncryptedString = EncryptedString(
+        mapped_column(String(255), nullable=True)
+    )
+    google_id: EncryptedString = EncryptedString(
+        mapped_column(String(255), unique=True, nullable=True)
+    )
     # DEPRECATED: stripe_customer_id removed — Square is sole payment processor
     bot_shield_verified: Mapped[bool] = mapped_column(
         Boolean, default=False, nullable=False
@@ -222,7 +230,9 @@ class WebhookEvent(Base):
     event_type: Mapped[str] = mapped_column(String(100), nullable=False)
     payload: Mapped[dict] = mapped_column(JSON, nullable=False)
     processed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-    retry_parent_event_id: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
+    retry_parent_event_id: Mapped[str | None] = mapped_column(
+        String(255), nullable=True, index=True
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
@@ -598,4 +608,4 @@ class DoubleDateAcceptance(Base):
 from app.models_refresh_token import RefreshToken  # noqa: F401, E402
 
 # Import webhook retry models for table creation and scheduler access
-from app.webhook_retry import WebhookRetryQueue, WebhookDeadLetter  # noqa: F401, E402
+from app.webhook_retry import WebhookDeadLetter, WebhookRetryQueue  # noqa: F401, E402

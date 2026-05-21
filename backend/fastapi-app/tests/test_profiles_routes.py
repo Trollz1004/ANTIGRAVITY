@@ -176,9 +176,7 @@ def test_patch_profile_unknown_field_returns_422(client, db_session_factory):
     _seed(user, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = _override_user(user)
     try:
-        resp = client.patch(
-            "/api/v1/profiles/me", json={"unknown_field": "some_value"}
-        )
+        resp = client.patch("/api/v1/profiles/me", json={"unknown_field": "some_value"})
         assert resp.status_code == 422
         assert "extra_forbidden" in resp.json()["detail"][0]["type"]
     finally:

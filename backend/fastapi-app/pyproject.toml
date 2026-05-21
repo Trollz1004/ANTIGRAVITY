@@ -41,6 +41,7 @@ lint.extend-ignore = [
   "UP035",  # typing.Dict/List deprecated — py3.9 compat
   "UP045",  # X | None — py3.10+ only
   "ARG001", # Unused function argument — auth deps inject user but endpoint may not use it
+  "ARG002", # Unused method argument — pytest fixtures (caplog, fake_redis) and resolver signatures inject by name
   "SIM105", # contextlib.suppress — pre-existing style choice
   "SIM117", # nested with — pre-existing style choice
   "SIM103", # return condition directly — pre-existing style
@@ -79,6 +80,14 @@ target-version = "py39"
 [tool.ruff.lint.mccabe]
 # Unlike Flake8, default to a complexity level of 10.
 max-complexity = 10
+
+[tool.ruff.lint.per-file-ignores]
+# These tests set os.environ / sys.path before importing the app, so module-level
+# imports legitimately appear after executable statements.
+"tests/test_compression.py" = ["E402"]
+"tests/test_dependency_scan.py" = ["E402"]
+"tests/test_migration_safety.py" = ["E402"]
+
 [project]
 name = "fastapi_app"
 version = "0.1.0"
