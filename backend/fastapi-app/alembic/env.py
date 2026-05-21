@@ -107,9 +107,7 @@ def do_run_migrations(connection):
                         dry_run=None,  # respects ALEMBIC_DRY_RUN env var
                         allow_protected=None,  # respects ALEMBIC_ALLOW_PROTECTED_DOWNGRADE
                     )
-                    checker.check_downgrade(
-                        target_rev, connection=connection
-                    )
+                    checker.check_downgrade(target_rev, connection=connection)
 
     context.configure(connection=connection, target_metadata=target_metadata)
 

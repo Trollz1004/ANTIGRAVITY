@@ -13,10 +13,10 @@ import logging
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import text
 
 from app.auth import get_current_user
 from app.database import engine
-from sqlalchemy import text
 
 logger = logging.getLogger("youandinotai.api.migrations")
 
@@ -54,10 +54,13 @@ async def migration_status(
     # Count pending migrations
     try:
         from pathlib import Path
+
         from alembic.config import Config
         from alembic.script import ScriptDirectory
 
-        alembic_cfg = Config(str(Path(__file__).resolve().parent.parent / "alembic" / "alembic.ini"))
+        alembic_cfg = Config(
+            str(Path(__file__).resolve().parent.parent / "alembic" / "alembic.ini")
+        )
         script_dir = ScriptDirectory.from_config(alembic_cfg)
 
         pending_count = 0
@@ -66,7 +69,7 @@ async def migration_status(
                 if rev.revision != current:
                     pending_count += 1
         else:
-            for rev in script_dir.walk_revisions("base", "heads"):
+            for _rev in script_dir.walk_revisions("base", "heads"):
                 pending_count += 1
     except Exception as e:
         logger.warning(f"Could not determine pending migrations: {e}")
@@ -76,7 +79,11 @@ async def migration_status(
         "current_revision": current,
         "applied_count": applied,
         "pending_count": pending_count,
-        "status": "up_to_date" if pending_count == 0 else "pending" if pending_count > 0 else "unknown",
+        "status": (
+            "up_to_date"
+            if pending_count == 0
+            else "pending" if pending_count > 0 else "unknown"
+        ),
     }
 
 

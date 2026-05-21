@@ -11,7 +11,6 @@ Provides:
 
 from __future__ import annotations
 
-import asyncio
 import logging
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -32,8 +31,8 @@ from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.database import Base, get_db, SessionLocal
-from app.webhook_event_store import create_webhook_event, get_webhook_event_schema
+from app.database import Base, SessionLocal, get_db
+from app.webhook_event_store import create_webhook_event
 
 logger = logging.getLogger(__name__)
 
@@ -56,14 +55,24 @@ class WebhookRetryQueue(Base):
     )
     event_id: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     event_type: Mapped[str] = mapped_column(String(100), nullable=False)
-    event_source: Mapped[str] = mapped_column(String(50), default="square", nullable=False)
-    payload: Mapped[str] = mapped_column(Text, nullable=False)  # JSON-serialized payload
+    event_source: Mapped[str] = mapped_column(
+        String(50), default="square", nullable=False
+    )
+    payload: Mapped[str] = mapped_column(
+        Text, nullable=False
+    )  # JSON-serialized payload
     retry_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
-    max_retries: Mapped[int] = mapped_column(Integer, default=MAX_RETRIES, nullable=False)
-    next_retry_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    max_retries: Mapped[int] = mapped_column(
+        Integer, default=MAX_RETRIES, nullable=False
+    )
+    next_retry_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
     last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
@@ -71,10 +80,14 @@ class WebhookRetryQueue(Base):
         onupdate=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
-    moved_to_dead_letter: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    moved_to_dead_letter: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False
+    )
 
     __table_args__ = (
-        Index("ix_webhook_retry_queue_next_retry", "next_retry_at", "moved_to_dead_letter"),
+        Index(
+            "ix_webhook_retry_queue_next_retry", "next_retry_at", "moved_to_dead_letter"
+        ),
     )
 
 
@@ -88,15 +101,23 @@ class WebhookDeadLetter(Base):
     )
     event_id: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     event_type: Mapped[str] = mapped_column(String(100), nullable=False)
-    event_source: Mapped[str] = mapped_column(String(50), default="square", nullable=False)
-    payload: Mapped[str] = mapped_column(Text, nullable=False)  # JSON-serialized payload
+    event_source: Mapped[str] = mapped_column(
+        String(50), default="square", nullable=False
+    )
+    payload: Mapped[str] = mapped_column(
+        Text, nullable=False
+    )  # JSON-serialized payload
     retry_count: Mapped[int] = mapped_column(Integer, nullable=False)
     final_error: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )
     moved_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )
 
 
@@ -138,7 +159,7 @@ class RetryEnqueueResponse(BaseModel):
 
 def _compute_next_retry_time(retry_count: int) -> datetime:
     """Compute the next retry time using exponential backoff."""
-    delay = BASE_BACKOFF_SECONDS * (2 ** retry_count)
+    delay = BASE_BACKOFF_SECONDS * (2**retry_count)
     return datetime.now(timezone.utc) + timedelta(seconds=delay)
 
 
@@ -216,7 +237,9 @@ async def enqueue_retry(
     )
     db.add(retry_entry)
     await db.flush()
-    logger.info("Webhook event %s enqueued for retry (attempt 1/%d)", event_id, MAX_RETRIES)
+    logger.info(
+        "Webhook event %s enqueued for retry (attempt 1/%d)", event_id, MAX_RETRIES
+    )
     return retry_entry
 
 
@@ -299,14 +322,11 @@ async def process_retry_queue(db: AsyncSession) -> list[str]:
     return processed
 
 
-async def manual_retry(
-    db: AsyncSession, event_id: str
-) -> WebhookRetryQueue:
+async def manual_retry(db: AsyncSession, event_id: str) -> WebhookRetryQueue:
     """Manually retry a webhook event by event_id.
 
     Works for events in the retry queue or dead-letter table.
     """
-    import json
 
     # Check retry queue first
     entry = await db.scalar(
@@ -337,7 +357,9 @@ async def manual_retry(
             # Remove from dead-letter
             await db.delete(dead)
             await db.flush()
-            logger.info("Webhook event %s re-enqueued from dead-letter (manual retry)", event_id)
+            logger.info(
+                "Webhook event %s re-enqueued from dead-letter (manual retry)", event_id
+            )
             return entry
         else:
             raise HTTPException(
@@ -390,7 +412,6 @@ async def scheduled_retry_task():
 
     Designed to be called from APScheduler.
     """
-    from app.database import SessionLocal
 
     async with SessionLocal() as db:
         try:
