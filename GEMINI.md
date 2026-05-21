@@ -30,6 +30,10 @@
 ## CURRENT FINANCIAL DOCTRINE
 
 - The current LLC operating rule is **1-wallet, 10% reserve, founder-directed**.
+- Codex validation on 2026-05-21 clarified the working dollar model: `$1.00 gross -> max $0.10 kids/mission reserve per legally distinct bucket -> $0.90 Joshua/LLC taxable operating share -> about $0.27 tax reserve at Joshua's 30% working assumption -> about $0.63 for AI fees, power, hosting, hardware, founder survival, family support, and scaling`.
+- Square processing fees are a business cost; they do **not** replace the 10% per-bucket reserve logic.
+- Real Square payments are not enough to call the money path complete. Future Gemini audits must verify `revenue_allocations`, tax-reserve math, and reconciliation.
+- Codex verified on 2026-05-21 that Square has completed YouAndiNotAi payments, but the live API returned an empty `revenue_allocations` list. Treat reconciliation as the next payment fix.
 - Do not present `60/30/10`, `100% charity`, or `100% DAO` as current live operating truth.
 - Do not present the 10% reserve as a universal settled tax-law conclusion. Treat it as Josh's current operating choice.
 - Legacy on-chain 60/30/10 references remain historical context, not current operating doctrine.
