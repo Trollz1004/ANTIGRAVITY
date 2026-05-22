@@ -14,7 +14,6 @@ export async function GET() {
       founder: 0,
       nodes: 3,
       uptime: 'Untracked',
-      launchDate: '2026-04-04',
       lastUpdated: new Date().toISOString(),
     };
 
