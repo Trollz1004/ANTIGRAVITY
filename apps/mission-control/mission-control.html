@@ -205,6 +205,7 @@
     <div class="nav-item"><span class="ico">⛁</span> Revenue Engine</div>
     <div class="nav-item"><span class="ico">⚙</span> Hermes Router</div>
     <div class="nav-item"><span class="ico">⧉</span> Hermes Sessions</div>
+    <div class="nav-item"><span class="ico">⌬</span> Hermes Fleet</div>
     <div class="nav-item"><span class="ico">⊞</span> Open Windows</div>
     <div class="spacer"></div>
     <div class="footnote">
@@ -276,6 +277,12 @@
     <section class="section">
       <div class="label">Hermes Sessions · 127.0.0.1:9119 · what Hermes is doing right now</div>
       <div id="sessionList" class="data muted">Probing Hermes agent on :9119…</div>
+    </section>
+
+    <!-- Hermes Fleet (nodes registry — scripts/add-node.ps1) -->
+    <section class="section">
+      <div class="label">Hermes Fleet · compute nodes + per-node Hermes · add with scripts/add-node.ps1</div>
+      <div id="fleetGrid" class="grid cols-4"></div>
     </section>
 
     <!-- Agent Fleet -->
@@ -506,7 +513,27 @@
     }
   }
 
-  probeHermes(); probeReserve(); probeSessions();
+  // ---- Hermes Fleet (nodes.json) ----
+  async function probeFleet() {
+    const grid = document.getElementById('fleetGrid');
+    try {
+      const j = await (await fetch('/nodes.json')).json();
+      const nodes = j.nodes || [];
+      grid.innerHTML = nodes.map(n => `
+        <div class="agent-card">
+          <div class="name"><span class="hb idle" data-hb="${n.name}"></span>${n.name}</div>
+          <div class="task">${n.role || ''}<br><span class="muted">${n.address}:${n.hermesPort}</span></div>
+          <a class="label" style="color:var(--accent);display:inline-block;margin-top:6px" href="http://${n.address}:${n.hermesPort}/healthz" target="_blank" rel="noopener noreferrer">Hermes ↗</a>
+        </div>`).join('') || '<div class="muted">No nodes registered.</div>';
+      nodes.forEach(n => fetch('http://' + n.address + ':' + n.hermesPort + '/healthz', { mode: 'no-cors' })
+        .then(() => { const d = document.querySelector(`[data-hb="${n.name}"]`); if (d) d.classList.remove('idle'); })
+        .catch(() => {}));
+    } catch (e) {
+      grid.innerHTML = '<div class="muted">nodes.json not found — run scripts/add-node.ps1</div>';
+    }
+  }
+
+  probeHermes(); probeReserve(); probeSessions(); probeFleet();
   setInterval(probeHermes, 15000);
   setInterval(probeSessions, 15000);
 </script>

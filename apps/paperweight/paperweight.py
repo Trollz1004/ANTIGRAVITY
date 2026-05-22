@@ -38,7 +38,7 @@ PORT = int(os.environ.get("PAPERWEIGHT_PORT", "4200"))
 STATIC = ROOT / "static"
 
 STATUSES = ("todo", "doing", "blocked", "done", "archived")
-KINDS = ("task", "issue", "bug", "idea", "support", "proposal")
+KINDS = ("task", "issue", "bug", "idea", "support", "proposal", "goal", "routine")
 NOTE_COLORS = ("amber", "love", "ukid", "green", "agrav")
 DEFAULT_COMPANY = "marketing"
 
@@ -47,6 +47,7 @@ SEED_COMPANIES = [
     ("youandinotai", "YouAndINotAI", "Date app + customer support", "love"),
     ("marketing", "Marketing", "Cross-platform — serves all surfaces", "amber"),
     ("ai-solutions", "AI-Solutions", "ai-solutions.store products", "ukid"),
+    ("youtube", "YouTube", "Content engine — many buckets per video (CTA, subs, Super Thanks, membership, merch, affiliate)", "youtube"),
     ("onlinerecycle", "OnlineRecycle", "onlinerecycle.org cross-lister — eBay cross-listing, e-waste, resale", "green"),
     ("dao", "DAO Governance", "Proposals & voting (tracking only — on-chain stays off this board)", "agrav"),
 ]
@@ -118,10 +119,11 @@ def init_db() -> None:
     con.execute("CREATE INDEX IF NOT EXISTS idx_items_status ON items(status)")
     con.execute("CREATE INDEX IF NOT EXISTS idx_events_ts ON events(ts)")
 
-    if con.execute("SELECT COUNT(*) c FROM companies").fetchone()["c"] == 0:
-        for cid, name, desc, color in SEED_COMPANIES:
-            con.execute("INSERT OR IGNORE INTO companies (id,name,description,color,created_at) VALUES (?,?,?,?,?)",
-                        (cid, name, desc, color, now_ms()))
+    # Always upsert seed companies (INSERT OR IGNORE) so newly-added workspaces
+    # (e.g. youtube) land on existing DBs without wiping data.
+    for cid, name, desc, color in SEED_COMPANIES:
+        con.execute("INSERT OR IGNORE INTO companies (id,name,description,color,created_at) VALUES (?,?,?,?,?)",
+                    (cid, name, desc, color, now_ms()))
     if con.execute("SELECT COUNT(*) c FROM agents").fetchone()["c"] == 0:
         for name, role in SEED_AGENTS:
             con.execute("INSERT OR IGNORE INTO agents (id,name,role,created_at) VALUES (?,?,?,?)",
@@ -171,10 +173,15 @@ def create_item(b: dict) -> tuple[int, dict]:
     kind = b.get("kind") if b.get("kind") in KINDS else "task"
     status = b.get("status") if b.get("status") in STATUSES else "todo"
     company = b.get("company") or DEFAULT_COMPANY
+    iid, ts = new_id("itm"), now_ms()
     meta = {}
     if kind == "proposal":
         meta = {"for": 0, "against": 0, "vote_status": "open"}
-    iid, ts = new_id("itm"), now_ms()
+    elif kind == "routine":
+        days = max(1, int(b.get("every_days") or 7))
+        meta = {"every_days": days, "next_due": ts + days * 86400000, "runs": 0}
+    elif kind == "goal":
+        meta = {"target": b.get("target")}
     con = connect()
     con.execute(
         "INSERT INTO items (id,company,kind,title,body,status,priority,assignee,parent_id,meta,created_at,updated_at) "
@@ -237,6 +244,29 @@ def vote_item(iid: str, b: dict) -> tuple[int, dict]:
     con.execute("UPDATE items SET meta=?, updated_at=? WHERE id=?", (json.dumps(meta), now_ms(), iid))
     log_event(con, cur["company"], "item", iid, "voted",
               {"dir": direction, "for": meta["for"], "against": meta["against"]})
+    con.commit()
+    row = dict(con.execute("SELECT * FROM items WHERE id=?", (iid,)).fetchone())
+    con.close()
+    return 200, row
+
+
+def tick_item(iid: str) -> tuple[int, dict]:
+    """Mark a routine run once — advances next_due, increments runs (the wheel turning)."""
+    con = connect()
+    cur = con.execute("SELECT * FROM items WHERE id=?", (iid,)).fetchone()
+    if not cur:
+        con.close()
+        return 404, {"error": "not found"}
+    if cur["kind"] != "routine":
+        con.close()
+        return 400, {"error": "only routines can be ticked"}
+    meta = json.loads(cur["meta"] or "{}")
+    days = max(1, int(meta.get("every_days") or 7))
+    meta["runs"] = int(meta.get("runs") or 0) + 1
+    meta["last_run"] = now_ms()
+    meta["next_due"] = now_ms() + days * 86400000
+    con.execute("UPDATE items SET meta=?, updated_at=? WHERE id=?", (json.dumps(meta), now_ms(), iid))
+    log_event(con, cur["company"], "item", iid, "ran", {"runs": meta["runs"]})
     con.commit()
     row = dict(con.execute("SELECT * FROM items WHERE id=?", (iid,)).fetchone())
     con.close()
@@ -362,6 +392,9 @@ class Handler(BaseHTTPRequestHandler):
         m = re.match(r"^/api/items/([\w-]+)/vote$", path)
         if m:
             return self._send(*vote_item(m.group(1), b))
+        m = re.match(r"^/api/items/([\w-]+)/tick$", path)
+        if m:
+            return self._send(*tick_item(m.group(1)))
         if path == "/api/items":
             return self._send(*create_item(b))
         if path == "/api/notes":
