@@ -64,6 +64,13 @@
       "env": {
         "HERMES_ROUTER_PORT": "11435"
       }
+    },
+    {
+      "name": "mission-control-standalone",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "4178"],
+      "port": 4178,
+      "cwd": "apps/mission-control"
     }
   ]
 }
