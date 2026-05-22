@@ -79,10 +79,17 @@ jobs:
             exit 1
           fi
           PATTERN='ai-solutions\.store|CharityRouter100|60/30/10|100% to charity'
-          # grep exit codes: 0=match, 1=no match, 2=error. Trailing `|| true` collapses
-          # 1 (no match) into a clean empty result; an actual error would surface via set -u
-          # on an unset later var, but we explicitly guard the empty case below.
-          ALL_HITS=$(grep -rnE "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
+          # Scan only git-tracked source files. The previous `grep -rnE ... "${TARGETS[@]}"`
+          # walked the directory tree, which in the `validate` job runs AFTER `npm run build`
+          # has populated apps/youandinotai-frontend/.next/. Compiled output re-emits the
+          # allowlisted source strings at NEW paths (.next/server/app/scc.rsc, page.js, etc.)
+          # the allowlist can't enumerate, tripping a false drift failure on every build.
+          # git ls-files restricts the scan to tracked source and inherently excludes build
+          # artifacts and node_modules.
+          # grep exit codes: 0=match, 1=no match, 2=error. `|| true` collapses 1 (no match)
+          # into an empty result; the empty case is guarded below. xargs -r skips running grep
+          # when no files are listed (prevents grep from blocking on stdin).
+          ALL_HITS=$(git ls-files -z -- "${TARGETS[@]}" | xargs -0 -r grep -nE "$PATTERN" 2>/dev/null || true)
           if [ -z "$ALL_HITS" ]; then
             echo "Doctrine boundary intact (zero matches in: ${TARGETS[*]})"
             exit 0
