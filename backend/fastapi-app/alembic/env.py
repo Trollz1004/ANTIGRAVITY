@@ -20,7 +20,7 @@ from app.config import get_settings
 # ---------------------------------------------------------------------------
 # Migration safety checks (OPU-131)
 # ---------------------------------------------------------------------------
-from alembic.safety import MigrationSafetyChecker, ENV_VAR_DRY_RUN
+from app.migration_safety import MigrationSafetyChecker, ENV_VAR_DRY_RUN
 
 settings = get_settings()
 
