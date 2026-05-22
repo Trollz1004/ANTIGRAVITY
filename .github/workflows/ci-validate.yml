@@ -18,6 +18,16 @@ on:
     branches: [main]
 
 jobs:
+  paperweight-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Paperweight unit + migration tests (stdlib, zero deps)
+        run: python apps/paperweight/test_paperweight.py
+
   validate:
     runs-on: ubuntu-latest
     steps:
