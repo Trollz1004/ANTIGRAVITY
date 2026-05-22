@@ -17,15 +17,24 @@ import { ProfileSetup } from './app/pages/ProfileSetup';
 import { Chat } from './app/pages/Chat';
 import { Events } from './app/pages/Events';
 
+import { CookieConsentBanner } from './components/CookieConsentBanner';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { SkeletonLoader } from './components/SkeletonLoader';
+import './index.css';
+
 // Lazy-loaded heavy components — loaded on demand to reduce initial bundle
 const CharityTab = lazy(() => import('./components/CharityTab'));
 const ChatWindow = lazy(() => import('./components/ChatWindow'));
 const VideoChat = lazy(() => import('./components/VideoChat'));
 
-const LazyDataPrivacyDashboard = lazy(() => import('./components/DataPrivacyDashboard'));
+const LazyDataPrivacyDashboard = lazy(
+  () => import('./components/DataPrivacyDashboard')
+);
 const LazyVolunteerHub = lazy(() => import('./components/VolunteerHub'));
 const LazySolarFlareSOS = lazy(() => import('./components/SolarFlareSOS'));
-const LazyMeetupsDiscovery = lazy(() => import('./components/MeetupsDiscovery'));
+const LazyMeetupsDiscovery = lazy(
+  () => import('./components/MeetupsDiscovery')
+);
 const LazyLoveBot = lazy(() => import('./components/LoveBot'));
 const LazyRoyaltyDeck = lazy(() => import('./components/RoyaltyDeck'));
 const LazySocialBoards = lazy(() => import('./components/SocialBoards'));
@@ -38,11 +47,6 @@ const LazyVolunteering = lazy(() => import('./app/pages/Volunteering'));
 const LazySupport = lazy(() => import('./app/pages/Support'));
 const LazyVerify = lazy(() => import('./app/pages/Verify'));
 const LazyCheckoutLaunch = lazy(() => import('./app/pages/CheckoutLaunch'));
-
-import { CookieConsentBanner } from './components/CookieConsentBanner';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { SkeletonLoader } from './components/SkeletonLoader';
-import './index.css';
 
 function PageErrorFallback({
   errorId,
@@ -67,10 +71,16 @@ function PageErrorFallback({
           Error ID: {errorId.slice(0, 8)}
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <button onClick={resetError} className="app-button-accent px-6 py-3 text-sm">
+          <button
+            onClick={resetError}
+            className="app-button-accent px-6 py-3 text-sm"
+          >
             🔄 Try Again
           </button>
-          <a href="/app" className="app-button-dark px-6 py-3 text-sm no-underline">
+          <a
+            href="/app"
+            className="app-button-dark px-6 py-3 text-sm no-underline"
+          >
             🏠 Go Home
           </a>
         </div>
@@ -97,7 +107,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app"
                   element={
-                    <ErrorBoundary boundaryName="page:discover" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:discover"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyDiscover />
                       </Suspense>
@@ -107,7 +125,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/lovebot"
                   element={
-                    <ErrorBoundary boundaryName="page:lovebot" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:lovebot"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyLoveBotPage />
                       </Suspense>
@@ -117,7 +143,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/matches"
                   element={
-                    <ErrorBoundary boundaryName="page:matches" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:matches"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Matches />
                     </ErrorBoundary>
                   }
@@ -125,7 +159,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/inbox"
                   element={
-                    <ErrorBoundary boundaryName="page:inbox" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:inbox"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Inbox />
                     </ErrorBoundary>
                   }
@@ -133,7 +175,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/profile"
                   element={
-                    <ErrorBoundary boundaryName="page:profile" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:profile"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <ProfileSetup />
                     </ErrorBoundary>
                   }
@@ -141,7 +191,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/chat/:matchId"
                   element={
-                    <ErrorBoundary boundaryName="page:chat" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:chat"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Chat />
                     </ErrorBoundary>
                   }
@@ -149,7 +207,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/boards"
                   element={
-                    <ErrorBoundary boundaryName="page:boards" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:boards"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyBoards />
                       </Suspense>
@@ -159,7 +225,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/events"
                   element={
-                    <ErrorBoundary boundaryName="page:events" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:events"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Events />
                     </ErrorBoundary>
                   }
@@ -167,7 +241,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/volunteer"
                   element={
-                    <ErrorBoundary boundaryName="page:volunteer" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:volunteer"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyVolunteering />
                       </Suspense>
@@ -177,7 +259,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/support"
                   element={
-                    <ErrorBoundary boundaryName="page:support" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:support"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazySupport />
                       </Suspense>
@@ -187,7 +277,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/privacy"
                   element={
-                    <ErrorBoundary boundaryName="page:privacy" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:privacy"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyDataPrivacyDashboard />
                       </Suspense>
@@ -197,8 +295,24 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/impact"
                   element={
-                    <ErrorBoundary boundaryName="page:impact" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
-                      <Suspense fallback={<div className="flex min-h-[60vh] items-center justify-center px-6 py-12"><div className="app-subtitle">Loading impact dashboard…</div></div>}>
+                    <ErrorBoundary
+                      boundaryName="page:impact"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense
+                        fallback={
+                          <div className="flex min-h-[60vh] items-center justify-center px-6 py-12">
+                            <div className="app-subtitle">
+                              Loading impact dashboard…
+                            </div>
+                          </div>
+                        }
+                      >
                         <CharityTab />
                       </Suspense>
                     </ErrorBoundary>
@@ -211,7 +325,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/verify"
                   element={
-                    <ErrorBoundary boundaryName="page:verify" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:verify"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyVerify />
                       </Suspense>
@@ -221,7 +343,15 @@ createRoot(document.getElementById('root')!).render(
                 <Route
                   path="/app/checkout/:tier"
                   element={
-                    <ErrorBoundary boundaryName="page:checkout" fallback={(errorId, reset) => <PageErrorFallback errorId={errorId} resetError={reset} />}>
+                    <ErrorBoundary
+                      boundaryName="page:checkout"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyCheckoutLaunch />
                       </Suspense>
