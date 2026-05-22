@@ -29,6 +29,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 DB_PATH = os.environ.get("PAPERWEIGHT_DB", str(ROOT / "data" / "paperweight.db"))
+# Loopback by default: this is an unauthenticated CRUD surface fronted by a
+# Cloudflare-Access-gated tunnel (127.0.0.1:4200). Set PAPERWEIGHT_HOST=0.0.0.0
+# only when LAN exposure is intended and the Access gate is in place.
+HOST = os.environ.get("PAPERWEIGHT_HOST", "127.0.0.1")
 PORT = int(os.environ.get("PAPERWEIGHT_PORT", "4200"))
 STATIC = ROOT / "static"
 
@@ -347,8 +351,8 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     init_db()
     print(f"[paperweight] DB: {DB_PATH}")
-    print(f"[paperweight] http://127.0.0.1:{PORT}")
-    ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
+    print(f"[paperweight] http://{HOST}:{PORT}")
+    ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()
 
 
 if __name__ == "__main__":
