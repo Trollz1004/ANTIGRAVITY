@@ -208,19 +208,26 @@ $openclawArgs = @('-NonInteractive','-WindowStyle','Hidden','-Command',$openclaw
 Start-Process powershell.exe -ArgumentList $openclawArgs -WindowStyle Hidden -ErrorAction SilentlyContinue
 
 # ---------- 8. Terminal windows ----------
-# Open Claude Code at c:\Antigravity (lowercase to match resume cache)
-Log '[8/8] opening Claude Code (claude --resume) in Windows Terminal'
-Start-Process wt -ArgumentList @(
-    '-d','c:\Antigravity',
-    'powershell.exe','-NoExit','-Command','claude --resume'
-) -ErrorAction SilentlyContinue
+# GUARDED + MINIMIZED so re-runs (Chrome Remote Desktop reconnects, re-logins) never
+# re-spawn focus-stealing terminals — the "4 windows in a row that move the cursor" bug.
+# Services already run headless via the watchdogs above, so skipping these is harmless.
+if (Get-Process WindowsTerminal -ErrorAction SilentlyContinue) {
+    Log '[8/8] Windows Terminal already open — skipping session windows (prevents cursor-stealing re-spawn)'
+} else {
+    # Open Claude Code at c:\Antigravity (lowercase to match resume cache), minimized
+    Log '[8/8] opening Claude Code (claude --resume) in Windows Terminal (minimized)'
+    Start-Process wt -ArgumentList @(
+        '-d','c:\Antigravity',
+        'powershell.exe','-NoExit','-Command','claude --resume'
+    ) -WindowStyle Minimized -ErrorAction SilentlyContinue
 
-# Open Hermes Agent CLI in WSL
-Log '      opening Hermes Agent CLI in Windows Terminal at /mnt/c/Antigravity (WSL Ubuntu)'
-Start-Process wt -ArgumentList @(
-    '-d','c:\Antigravity',
-    'wsl.exe','-d','Ubuntu','--cd','/mnt/c/Antigravity','--','/home/josh/.local/bin/hermes'
-) -ErrorAction SilentlyContinue
+    # Open Hermes Agent CLI in WSL, minimized
+    Log '      opening Hermes Agent CLI in Windows Terminal at /mnt/c/Antigravity (WSL Ubuntu, minimized)'
+    Start-Process wt -ArgumentList @(
+        '-d','c:\Antigravity',
+        'wsl.exe','-d','Ubuntu','--cd','/mnt/c/Antigravity','--','/home/josh/.local/bin/hermes'
+    ) -WindowStyle Minimized -ErrorAction SilentlyContinue
+}
 
 Log '=========================================='
 Log '=== mission stack autostart complete ====='
