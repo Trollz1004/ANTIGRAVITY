@@ -55,13 +55,17 @@ body {
 /* Dark body background (OPU-17) */
 .dark body {
   background-image:
-    radial-gradient(circle at 18% 20%, rgba(255, 107, 43, 0.08), transparent 22%),
-    radial-gradient(circle at 82% 12%, rgba(255, 107, 43, 0.05), transparent 16%),
-    linear-gradient(
-      180deg,
-      rgba(13, 13, 13, 0.95),
-      rgba(20, 20, 20, 1)
-    );
+    radial-gradient(
+      circle at 18% 20%,
+      rgba(255, 107, 43, 0.08),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at 82% 12%,
+      rgba(255, 107, 43, 0.05),
+      transparent 16%
+    ),
+    linear-gradient(180deg, rgba(13, 13, 13, 0.95), rgba(20, 20, 20, 1));
 }
 
 ::selection {
@@ -328,8 +332,12 @@ section[id] {
 .dark .app-bg-premium {
   background:
     radial-gradient(circle at 0% 0%, rgba(255, 107, 43, 0.06), transparent 22%),
-    radial-gradient(circle at 100% 0%, rgba(255, 107, 43, 0.03), transparent 16%),
-    radial-gradient(rgba(255,255,255,0.06) 0.55px, transparent 0.55px),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(255, 107, 43, 0.03),
+      transparent 16%
+    ),
+    radial-gradient(rgba(255, 255, 255, 0.06) 0.55px, transparent 0.55px),
     linear-gradient(180deg, #141414 0%, #0d0d0d 100%);
   background-size:
     auto,
