@@ -444,16 +444,22 @@ export function Volunteering() {
                                   size={12}
                                   className="text-emerald-400"
                                 />
-                                {new Date(opp.event_date).toLocaleDateString([], {
-                                  weekday: 'short',
-                                  month: 'short',
-                                  day: 'numeric',
-                                })}
+                                {new Date(opp.event_date).toLocaleDateString(
+                                  [],
+                                  {
+                                    weekday: 'short',
+                                    month: 'short',
+                                    day: 'numeric',
+                                  }
+                                )}
                               </span>
                             )}
                             {opp.location && (
                               <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
-                                <MapPin size={12} className="text-emerald-400" />{' '}
+                                <MapPin
+                                  size={12}
+                                  className="text-emerald-400"
+                                />{' '}
                                 {opp.location}
                               </span>
                             )}

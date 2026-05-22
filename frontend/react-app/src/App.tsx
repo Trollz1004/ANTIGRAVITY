@@ -690,241 +690,245 @@ export default function App() {
 
   return (
     <ThemeProvider>
-    <div className="mx-auto min-h-screen max-w-[1600px] border-x-4 border-[#111111] bg-[#f4efe7] text-[#111111] pb-cta">
-      <nav className="sticky top-0 z-50 border-b-4 border-[#111111] bg-white px-4 py-3 md:px-12 md:py-5">
-        <div className="flex items-center justify-between gap-2 md:gap-4">
-          <div className="text-xl font-black uppercase tracking-tighter md:text-3xl">
-            YOUANDINOTAI<span className="text-[#ff5a1f]">.</span>
-          </div>
-
-          <div className="hidden items-center gap-8 md:flex">
-            {NAV_ITEMS.map(item => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-sm font-black uppercase tracking-[0.16em] no-underline hover:text-[#ff5a1f]"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-
-          <div className="hidden md:flex items-center gap-3">
-            <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
-              Get Verified
-            </BrutalButton>
-            <ThemeToggle />
-          </div>
-
-          <button
-            onClick={() => setMenuOpen(value => !value)}
-            className="inline-flex items-center justify-center border-4 border-[#111111] bg-white p-2 md:hidden shadow-[4px_4px_0_0_#111111]"
-          >
-            {menuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-
-        {menuOpen && (
-          <div className="mt-5 flex flex-col gap-3 border-t-4 border-[#111111] pt-5 md:hidden">
-            {NAV_ITEMS.map(item => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={() => setMenuOpen(false)}
-                className="border-4 border-[#111111] bg-[#f4efe7] px-4 py-3 text-sm font-black uppercase tracking-[0.16em] no-underline shadow-[4px_4px_0_0_#111111]"
-              >
-                {item.label}
-              </a>
-            ))}
-            <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
-              Get Verified
-            </BrutalButton>
-          </div>
-        )}
-      </nav>
-
-      <div className="border-b-4 border-[#111111] bg-[#111111] px-3 py-2 text-center text-[10px] font-black uppercase tracking-[0.16em] text-[#f4efe7] md:px-12 md:py-3 md:text-xs md:tracking-[0.2em]">
-        Founder pricing is live. Launch day is April 4, 2026.
-      </div>
-
-      <section
-        id="about"
-        className="grid border-b-4 border-[#111111] md:min-h-[78vh] md:grid-cols-12"
-      >
-        <div className="border-b-4 border-[#111111] bg-white px-4 py-8 md:col-span-8 md:border-b-0 md:border-r-4 md:px-12 md:py-20">
-          <div className="max-w-4xl">
-            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
-              Section 01 // Human Only
-            </div>
-            <h1 className="text-4xl font-black lowercase leading-[0.9] tracking-tighter md:text-8xl xl:text-9xl">
-              real people.
-              <br />
-              zero bot noise.
-            </h1>
-            <p className="mt-5 max-w-3xl text-lg font-medium leading-snug text-[#2f2a24] md:mt-8 md:text-3xl md:leading-tight">
-              A human-first social platform for dating, meetups, and real-world
-              connection. AI is used to protect the experience, not perform it.
-            </p>
-            <div className="mt-5 inline-block border-l-4 border-[#ff5a1f] bg-[#fff6f1] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#111111] md:mt-8 md:px-4 md:py-3 md:text-sm md:tracking-[0.16em]">
-              Bot-Shield verification and account-bound checkout are live now.
+      <div className="mx-auto min-h-screen max-w-[1600px] border-x-4 border-[#111111] bg-[#f4efe7] text-[#111111] pb-cta">
+        <nav className="sticky top-0 z-50 border-b-4 border-[#111111] bg-white px-4 py-3 md:px-12 md:py-5">
+          <div className="flex items-center justify-between gap-2 md:gap-4">
+            <div className="text-xl font-black uppercase tracking-tighter md:text-3xl">
+              YOUANDINOTAI<span className="text-[#ff5a1f]">.</span>
             </div>
 
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4 md:mt-10">
+            <div className="hidden items-center gap-8 md:flex">
+              {NAV_ITEMS.map(item => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="text-sm font-black uppercase tracking-[0.16em] no-underline hover:text-[#ff5a1f]"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
+
+            <div className="hidden md:flex items-center gap-3">
               <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
                 Get Verified
               </BrutalButton>
-              <BrutalButton href="#pricing">See Pricing</BrutalButton>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-[#ff5a1f] px-4 py-8 text-[#111111] md:col-span-4 md:px-10 md:py-16">
-          <div className="space-y-4 md:space-y-6">
-            <div className="border-t-4 border-[#111111] pt-4 md:pt-6">
-              <h2 className="text-2xl font-black uppercase tracking-tighter md:text-4xl">
-                Launch Status
-              </h2>
-              <p className="mt-2 text-base font-bold leading-7 md:mt-4 md:text-lg md:leading-8">
-                The public surface is product-first: verification, pricing,
-                support, and profile flow.
-              </p>
+              <ThemeToggle />
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 md:gap-4">
-              <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
-                <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#ff5a1f] md:text-xs md:tracking-[0.18em]">
-                  Live
-                </div>
-                <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
-                  Bot-Shield Flow
-                </div>
-                <p className="mt-1 text-xs font-medium leading-6 text-[#38322b] md:mt-2 md:text-sm md:leading-7">
-                  Verification stays tied to the real checkout path instead of
-                  anonymous payment links.
-                </p>
-              </div>
-              <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
-                <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#ff5a1f] md:text-xs md:tracking-[0.18em]">
-                  Launch
-                </div>
-                <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
-                  April 4, 2026
-                </div>
-                <p className="mt-1 text-xs font-medium leading-6 text-[#38322b] md:mt-2 md:text-sm md:leading-7">
-                  Founder pricing, support, and early-access capture are all
-                  wired into the same surface.
-                </p>
-              </div>
-            </div>
+            <button
+              onClick={() => setMenuOpen(value => !value)}
+              className="inline-flex items-center justify-center border-4 border-[#111111] bg-white p-2 md:hidden shadow-[4px_4px_0_0_#111111]"
+            >
+              {menuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
-        </div>
-      </section>
 
-      <section
-        id="platform"
-        className="border-b-4 border-[#111111] bg-[#f4efe7] px-4 py-10 md:px-12 md:py-16"
-      >
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
-            The Social
-          </div>
-          <h2 className="mb-6 text-3xl font-black tracking-tighter md:mb-10 md:text-7xl">
-            how we connect.
-          </h2>
-          <div className="grid gap-4 md:gap-6 md:grid-cols-3">
-            {PLATFORM_CARDS.map(card => (
-              <div
-                key={card.title}
-                className={`border-4 border-[#111111] p-5 shadow-[6px_6px_0_0_#111111] md:p-8 ${card.tone}`}
-              >
-                <div
-                  className={`mb-4 inline-flex h-10 w-10 items-center justify-center border-4 border-[#111111] md:mb-6 md:h-14 md:w-14 ${card.iconTone}`}
+          {menuOpen && (
+            <div className="mt-5 flex flex-col gap-3 border-t-4 border-[#111111] pt-5 md:hidden">
+              {NAV_ITEMS.map(item => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="border-4 border-[#111111] bg-[#f4efe7] px-4 py-3 text-sm font-black uppercase tracking-[0.16em] no-underline shadow-[4px_4px_0_0_#111111]"
                 >
-                  <card.icon size={20} />
-                </div>
-                <h3 className="text-xl font-black uppercase tracking-tight md:text-2xl">
-                  {card.title}
-                </h3>
-                <p className="mt-3 text-xs font-medium leading-6 opacity-85 md:mt-4 md:text-sm md:leading-7">
-                  {card.body}
+                  {item.label}
+                </a>
+              ))}
+              <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
+                Get Verified
+              </BrutalButton>
+            </div>
+          )}
+        </nav>
+
+        <div className="border-b-4 border-[#111111] bg-[#111111] px-3 py-2 text-center text-[10px] font-black uppercase tracking-[0.16em] text-[#f4efe7] md:px-12 md:py-3 md:text-xs md:tracking-[0.2em]">
+          Founder pricing is live. Launch day is April 4, 2026.
+        </div>
+
+        <section
+          id="about"
+          className="grid border-b-4 border-[#111111] md:min-h-[78vh] md:grid-cols-12"
+        >
+          <div className="border-b-4 border-[#111111] bg-white px-4 py-8 md:col-span-8 md:border-b-0 md:border-r-4 md:px-12 md:py-20">
+            <div className="max-w-4xl">
+              <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+                Section 01 // Human Only
+              </div>
+              <h1 className="text-4xl font-black lowercase leading-[0.9] tracking-tighter md:text-8xl xl:text-9xl">
+                real people.
+                <br />
+                zero bot noise.
+              </h1>
+              <p className="mt-5 max-w-3xl text-lg font-medium leading-snug text-[#2f2a24] md:mt-8 md:text-3xl md:leading-tight">
+                A human-first social platform for dating, meetups, and
+                real-world connection. AI is used to protect the experience, not
+                perform it.
+              </p>
+              <div className="mt-5 inline-block border-l-4 border-[#ff5a1f] bg-[#fff6f1] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#111111] md:mt-8 md:px-4 md:py-3 md:text-sm md:tracking-[0.16em]">
+                Bot-Shield verification and account-bound checkout are live now.
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4 md:mt-10">
+                <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
+                  Get Verified
+                </BrutalButton>
+                <BrutalButton href="#pricing">See Pricing</BrutalButton>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#ff5a1f] px-4 py-8 text-[#111111] md:col-span-4 md:px-10 md:py-16">
+            <div className="space-y-4 md:space-y-6">
+              <div className="border-t-4 border-[#111111] pt-4 md:pt-6">
+                <h2 className="text-2xl font-black uppercase tracking-tighter md:text-4xl">
+                  Launch Status
+                </h2>
+                <p className="mt-2 text-base font-bold leading-7 md:mt-4 md:text-lg md:leading-8">
+                  The public surface is product-first: verification, pricing,
+                  support, and profile flow.
                 </p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      <VerificationSteps />
-      <PricingSection />
-
-      <section
-        id="mission"
-        className="border-b-4 border-[#111111] bg-white px-4 py-10 md:px-12 md:py-16"
-      >
-        <div className="mx-auto max-w-5xl">
-          <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
-            Section 04 // Impact
-          </div>
-          <h2 className="text-3xl font-black tracking-tighter md:text-7xl">
-            silent impact.
-          </h2>
-          <div className="mt-6 grid gap-4 md:mt-10 md:gap-8 md:grid-cols-2">
-            <div className="border-4 border-[#111111] bg-[#f4efe7] p-4 shadow-[6px_6px_0_0_#111111] md:p-6">
-              <p className="text-sm font-medium leading-7 text-[#2f2a24] md:text-lg md:leading-8">
-                We do not market this platform as a charity. It has to stand on
-                product quality, trust, and real human value first.
-              </p>
-            </div>
-            <div className="border-4 border-[#111111] bg-[#111111] p-4 text-white shadow-[6px_6px_0_0_#ff5a1f] md:p-6">
-              <p className="text-sm font-medium leading-7 text-[#d7d3cc] md:text-lg md:leading-8">
-                Any later mission support follows the current operating policy
-                and stays out of the sales pitch. Customer purchases are
-                platform purchases, not charitable contributions.
-              </p>
+              <div className="grid gap-3 sm:grid-cols-2 md:gap-4">
+                <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
+                  <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#ff5a1f] md:text-xs md:tracking-[0.18em]">
+                    Live
+                  </div>
+                  <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
+                    Bot-Shield Flow
+                  </div>
+                  <p className="mt-1 text-xs font-medium leading-6 text-[#38322b] md:mt-2 md:text-sm md:leading-7">
+                    Verification stays tied to the real checkout path instead of
+                    anonymous payment links.
+                  </p>
+                </div>
+                <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
+                  <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#ff5a1f] md:text-xs md:tracking-[0.18em]">
+                    Launch
+                  </div>
+                  <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
+                    April 4, 2026
+                  </div>
+                  <p className="mt-1 text-xs font-medium leading-6 text-[#38322b] md:mt-2 md:text-sm md:leading-7">
+                    Founder pricing, support, and early-access capture are all
+                    wired into the same surface.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="mt-6 border-4 border-[#111111] bg-[#ff5a1f] px-4 py-5 text-center text-lg font-black italic tracking-tight text-white shadow-[8px_8px_0_0_#111111] md:mt-10 md:px-6 md:py-8 md:text-2xl">
-            &quot;The Silent Founder would thank you, but he stays silent.&quot;
+        </section>
+
+        <section
+          id="platform"
+          className="border-b-4 border-[#111111] bg-[#f4efe7] px-4 py-10 md:px-12 md:py-16"
+        >
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+              The Social
+            </div>
+            <h2 className="mb-6 text-3xl font-black tracking-tighter md:mb-10 md:text-7xl">
+              how we connect.
+            </h2>
+            <div className="grid gap-4 md:gap-6 md:grid-cols-3">
+              {PLATFORM_CARDS.map(card => (
+                <div
+                  key={card.title}
+                  className={`border-4 border-[#111111] p-5 shadow-[6px_6px_0_0_#111111] md:p-8 ${card.tone}`}
+                >
+                  <div
+                    className={`mb-4 inline-flex h-10 w-10 items-center justify-center border-4 border-[#111111] md:mb-6 md:h-14 md:w-14 ${card.iconTone}`}
+                  >
+                    <card.icon size={20} />
+                  </div>
+                  <h3 className="text-xl font-black uppercase tracking-tight md:text-2xl">
+                    {card.title}
+                  </h3>
+                  <p className="mt-3 text-xs font-medium leading-6 opacity-85 md:mt-4 md:text-sm md:leading-7">
+                    {card.body}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <WaitlistForm />
+        <VerificationSteps />
+        <PricingSection />
 
-      <section className="border-b-4 border-[#111111] bg-white px-4 py-10 text-center md:px-12 md:py-16">
-        <div className="mx-auto max-w-xl">
-          <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
-            Section 06 // Share
+        <section
+          id="mission"
+          className="border-b-4 border-[#111111] bg-white px-4 py-10 md:px-12 md:py-16"
+        >
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+              Section 04 // Impact
+            </div>
+            <h2 className="text-3xl font-black tracking-tighter md:text-7xl">
+              silent impact.
+            </h2>
+            <div className="mt-6 grid gap-4 md:mt-10 md:gap-8 md:grid-cols-2">
+              <div className="border-4 border-[#111111] bg-[#f4efe7] p-4 shadow-[6px_6px_0_0_#111111] md:p-6">
+                <p className="text-sm font-medium leading-7 text-[#2f2a24] md:text-lg md:leading-8">
+                  We do not market this platform as a charity. It has to stand
+                  on product quality, trust, and real human value first.
+                </p>
+              </div>
+              <div className="border-4 border-[#111111] bg-[#111111] p-4 text-white shadow-[6px_6px_0_0_#ff5a1f] md:p-6">
+                <p className="text-sm font-medium leading-7 text-[#d7d3cc] md:text-lg md:leading-8">
+                  Any later mission support follows the current operating policy
+                  and stays out of the sales pitch. Customer purchases are
+                  platform purchases, not charitable contributions.
+                </p>
+              </div>
+            </div>
+            <div className="mt-6 border-4 border-[#111111] bg-[#ff5a1f] px-4 py-5 text-center text-lg font-black italic tracking-tight text-white shadow-[8px_8px_0_0_#111111] md:mt-10 md:px-6 md:py-8 md:text-2xl">
+              &quot;The Silent Founder would thank you, but he stays
+              silent.&quot;
+            </div>
           </div>
-          <h2 className="text-3xl font-black tracking-tighter md:text-6xl">
-            share the platform.
-          </h2>
-          <p className="mt-3 text-sm font-medium leading-7 text-[#3f3a34] md:mt-4 md:text-lg md:leading-8">
-            Scan to visit or pass it to someone who is tired of fake profiles
-            and low-trust noise.
-          </p>
-          <div className="mx-auto mt-5 inline-block border-4 border-[#111111] bg-[#f4efe7] p-3 shadow-[8px_8px_0_0_#111111] md:mt-8 md:p-4">
-            <img
-              src="/qrcode.png"
-              alt="Scan to visit youandinotai.com"
-              width={160}
-              height={160}
-              className="mx-auto h-auto max-w-[160px] bg-white md:max-w-[220px]"
-            />
+        </section>
+
+        <WaitlistForm />
+
+        <section className="border-b-4 border-[#111111] bg-white px-4 py-10 text-center md:px-12 md:py-16">
+          <div className="mx-auto max-w-xl">
+            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+              Section 06 // Share
+            </div>
+            <h2 className="text-3xl font-black tracking-tighter md:text-6xl">
+              share the platform.
+            </h2>
+            <p className="mt-3 text-sm font-medium leading-7 text-[#3f3a34] md:mt-4 md:text-lg md:leading-8">
+              Scan to visit or pass it to someone who is tired of fake profiles
+              and low-trust noise.
+            </p>
+            <div className="mx-auto mt-5 inline-block border-4 border-[#111111] bg-[#f4efe7] p-3 shadow-[8px_8px_0_0_#111111] md:mt-8 md:p-4">
+              <img
+                src="/qrcode.png"
+                alt="Scan to visit youandinotai.com"
+                width={160}
+                height={160}
+                className="mx-auto h-auto max-w-[160px] bg-white md:max-w-[220px]"
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <Footer onLegal={type => setLegalModal(type)} />
-      <SignupCTA />
+        <Footer onLegal={type => setLegalModal(type)} />
+        <SignupCTA />
 
-      <AnimatePresence>
-        {legalModal && (
-          <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />
-        )}
-        {showSuccess && <SuccessModal onClose={() => setShowSuccess(false)} />}
-      </AnimatePresence>
-    </div>
+        <AnimatePresence>
+          {legalModal && (
+            <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />
+          )}
+          {showSuccess && (
+            <SuccessModal onClose={() => setShowSuccess(false)} />
+          )}
+        </AnimatePresence>
+      </div>
     </ThemeProvider>
   );
 }

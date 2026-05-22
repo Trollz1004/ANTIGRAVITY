@@ -6,18 +6,24 @@ interface LazySectionProps {
   rootMargin?: string;
 }
 
-export function LazySection({ children, fallback = null, rootMargin = '200px' }: LazySectionProps) {
+export function LazySection({
+  children,
+  fallback = null,
+  rootMargin = '200px',
+}: LazySectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  
+
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
       { rootMargin }
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, [rootMargin]);
-  
+
   return <div ref={ref}>{isVisible ? children : fallback}</div>;
 }
