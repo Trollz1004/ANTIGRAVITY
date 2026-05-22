@@ -142,9 +142,9 @@ export default function Dashboard() {
             isDarkMode={isDarkMode}
           />
           <StatCard
-            label="Recorded Disbursements"
+            label="Reserved Allocation"
             value={`$${metrics.shriners.toLocaleString()}`}
-            note="This stays at recorded values only, never projections."
+            note="Reserved share of revenue. Recorded values only, never projections."
             isDarkMode={isDarkMode}
           />
           <StatCard
