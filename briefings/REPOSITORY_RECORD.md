@@ -1,3 +1,19 @@
+<!-- ============================================================ -->
+<!-- ORIENTATION GUARD — READ BEFORE YOU DO ANYTHING -->
+<!-- ============================================================ -->
+
+> # STOP — THE APP ALREADY EXISTS. DO NOT BUILD A NEW ONE.
+>
+> If you are about to scaffold a new app, a new repo, or "a date app" — **STOP. You are wrong.** It is already built, deployed, and taking real money.
+>
+> - **ONE repo only:** `Trollz1004/ANTIGRAVITY`. Never create another repo or greenfield app.
+> - **Product code (already written):** `apps/youandinotai-frontend/` (Next.js 15 → youandinotai.com) + `backend/fastapi-app/` (FastAPI). GCR backend deployed & live. Mirror on **T5500** (`192.168.0.15`); **Sabretooth** `C:\ANTIGRAVITY` is the only push node.
+> - **Square is LIVE and has cleared real payments** — `joshlcoleman@gmail.com`, location `LY5GN09F5AN83`. Do **NOT** assume $0 / pre-launch. Verify in Square or `backend/fastapi-app/app/revenue_allocation.py`.
+> - **Revenue model:** 1 wallet, 1 LLC, **10% per-bucket reserve** (coded: `reserve_revenue_allocation()`). Never invent splits; never resurrect 60/30/10 or charity-routing.
+> - **Before writing anything:** read `CLAUDE.md` fully, then this file, then **grep for an existing implementation.** Assume it exists until search proves otherwise.
+
+<!-- ============================================================ -->
+
 # REPOSITORY RECORD - T5500 PRIMARY NODE (Sabretooth pending wipe)
 
 Date: May 13, 2026 (node-primary updated; prior content from 2026-05-11 ONE-repo sweep preserved below)

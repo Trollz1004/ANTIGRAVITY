@@ -1,3 +1,24 @@
+<!-- ============================================================ -->
+<!-- ORIENTATION GUARD — READ BEFORE YOU DO ANYTHING -->
+<!-- ============================================================ -->
+
+> # STOP — THE APP ALREADY EXISTS. DO NOT BUILD A NEW ONE.
+>
+> If you are about to scaffold a new app, a new repo, or "a date app" — **STOP. You are wrong.** It is already built, deployed, and taking real money. Rebuilding it wastes days and is the single most expensive mistake you can make here.
+>
+> **What is LIVE right now:**
+> - **ONE repo only:** `Trollz1004/ANTIGRAVITY`. Never create another repo. Never start a greenfield app.
+> - **Product code (already written):** `apps/youandinotai-frontend/` (Next.js 15 → youandinotai.com) + `backend/fastapi-app/` (FastAPI, Python 3.12). GCR backend is deployed & live. A working mirror exists on **T5500** (`192.168.0.15`); **Sabretooth** `C:\ANTIGRAVITY` is the only push node.
+> - **Square is LIVE and has cleared real payments** — account `joshlcoleman@gmail.com`, location `LY5GN09F5AN83`, 5 product links live (Bot-Shield $1 → Royalty Card $2,500). Do **NOT** assume $0 / pre-launch — the "Revenue: $0" line further down is stale. Verify real totals in Square or via `backend/fastapi-app/app/revenue_allocation.py`.
+> - **Revenue model:** 1 wallet, 1 LLC, **10% per-bucket reserve** — already coded (`reserve_revenue_allocation()`). Never invent splits. Never resurrect 60/30/10 or charity-routing.
+> - **Knowledge graph:** read `.graphify/GRAPH_REPORT.md` before broad code reads (run `graphify update` if stale; package is `graphifyy`, command `graphify`).
+>
+> **Before you write a single file:** (1) finish reading this CLAUDE.md, (2) read `briefings/REPOSITORY_RECORD.md` (LATEST STATE), (3) **grep the repo for an existing implementation of what you're about to build.** Assume it already exists until search proves otherwise.
+>
+> **Hard bans:** new repos · new apps · `donate / donation / charity / charitable / solicitation / giving back / disbursement` on customer surfaces · Stripe on youandinotai.com (Square only) · any Haiku model.
+
+<!-- ============================================================ -->
+
 # CLAUDE.md — ANTIGRAVITY (Monorepo)
 
 > **⛔ FOUNDER DOCTRINE — IMMUTABLE — 2026-05-19**
@@ -108,6 +129,7 @@ ANTIGRAVITY/
 - **2026-05-20** — COWORKER-DISPATCH global instruction filed: authority lives in the authenticated claude.ai Max session, not in any node. First-party Claude (web / mobile / Code CLI OAuth / Cowork) has FULL push + auto-merge authority on any node. Third-party Claude wrappers have NONE (`briefings/COWORKER-DISPATCH.md`).
 - **2026-05-20** — Agent fleet contract files written by Opus: `hermes/agents/AGENTS.md` entry-point + 10 role MDs (CEO, CFO, CSO, CTO, CMO, UX, MissionGuardian-Claude, MissionGuardian-Codex, INTERN, GitHubAuditor). Sub-agents may load these but never author them — Opus-only contract files.
 - **2026-05-20** — Hermes dispatch filed: `briefings/HERMES-DISPATCH-2026-05-20.md` (sub-agent-tier work only; contract authorship queued as claude.ai summons).
+- **2026-05-22** — Marketing & Hermes model routing (founder directive): Hermes' **primary model is now Grok**, via a new **x.ai subscription** — user-auth, **NO API key** (consistent with the FOUNDER-DOCTRINE-6 Anthropic hard-wall philosophy: auth, not keys). x.com / X marketing routes through Grok because xAI has no ToS friction on x.com. **Marketing split:** Grok → X (x.com); **Manus → Meta platforms** (Facebook/Instagram/Threads); **Perplexity → research + the remaining platforms**; **Opus → strategy/assist via browser only** (never an in-platform adapter). OpenCode paid tier under consideration (cheap; not confirmed). Founding Four protections unchanged — Grok already holds the X / adversarial co-founder seat; this just activates the native x.ai user-auth path CLAUDE.md already anticipated. The Hermes Anthropic hard wall (`services/hermes-router/.env*` = zero Anthropic key) still holds; Grok-via-x.ai is auth-based, so no key lands in Hermes either.
 
 ---
 
