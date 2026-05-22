@@ -13,7 +13,7 @@
     --text-primary:#F9F6EE;--text-secondary:#B5A79E;--text-muted:#8A7D75;
     --accent:#FF6B35;--accent-glow:rgba(255,107,53,.5);
     --success:#10B981;--warning:#F59E0B;--danger:#EF4444;
-    --love:#EF4444;--ukid:#3B82F6;--green:#10B981;--agrav:#F59E0B;--amber:#F59E0B;
+    --love:#EF4444;--ukid:#3B82F6;--green:#10B981;--agrav:#F59E0B;--amber:#F59E0B;--youtube:#FF3B30;
     --font-heading:'Instrument Serif',serif;--font-sans:'IBM Plex Sans',system-ui,sans-serif;--font-mono:'IBM Plex Mono',monospace;
     --radius:6px;
   }
@@ -48,6 +48,7 @@
   .kind.task{color:var(--ukid);border-color:var(--ukid)} .kind.issue{color:var(--danger);border-color:var(--danger)}
   .kind.bug{color:var(--warning);border-color:var(--warning)} .kind.idea{color:var(--green);border-color:var(--green)}
   .kind.support{color:var(--love);border-color:var(--love)} .kind.proposal{color:var(--agrav);border-color:var(--agrav)}
+  .kind.goal{color:var(--accent);border-color:var(--accent)} .kind.routine{color:var(--ukid);border-color:var(--ukid)}
   .card .title{font-weight:600;font-size:13.5px;margin-bottom:4px}
   .card .body{color:var(--text-secondary);font-size:12px;white-space:pre-wrap}
   .card .cmp{font-family:var(--font-mono);font-size:9px;color:var(--text-muted);margin-left:6px}
@@ -93,6 +94,8 @@
     <div class="tab active" data-view="board">Board</div>
     <div class="tab" data-view="support">Customer Support</div>
     <div class="tab" data-view="governance">Governance</div>
+    <div class="tab" data-view="buckets">Kids Buckets</div>
+    <div class="tab" data-view="wheel">The Wheel</div>
     <div class="tab" data-view="notes">Sticky Notes</div>
     <div class="tab" data-view="activity">Activity Log</div>
   </div>
@@ -139,6 +142,33 @@
     <div id="propList"></div>
   </section>
 
+  <!-- KIDS BUCKETS -->
+  <section class="view" id="view-buckets">
+    <div id="bk-banner" class="label" style="margin-bottom:6px">Real reserved-for-kids per legally-distinct bucket — 10% max each. Compounding comes from more buckets, never a bigger %.</div>
+    <div class="row" style="justify-content:space-between;align-items:baseline">
+      <div><span class="label">Total reserved for kids</span> <span id="bk-total" style="font-family:var(--font-heading);font-size:34px;color:var(--accent)">$0.00</span></div>
+      <div id="bk-source" class="mono" style="font-size:11px;color:var(--text-muted)">source: live ledger</div>
+    </div>
+    <div class="board" id="bucketGrid" style="grid-template-columns:repeat(2,1fr)"></div>
+  </section>
+
+  <!-- THE WHEEL: goals + routines -->
+  <section class="view" id="view-wheel">
+    <div class="label" style="margin-bottom:8px">The Wheel — goals (toward 100) + recurring routines. The loop never stops. #UntilNoKidInNeed</div>
+    <div class="row">
+      <input id="gl-title" placeholder="New goal…" style="flex:1;min-width:200px" />
+      <button class="btn-add" id="gl-add">Add Goal</button>
+      <span style="width:10px"></span>
+      <input id="rt-title" placeholder="New routine…" style="flex:1;min-width:160px" />
+      <select id="rt-days"><option value="1">daily</option><option value="7" selected>weekly</option><option value="30">monthly</option></select>
+      <button class="btn-add" id="rt-add">Add Routine</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div><div class="label" style="margin-bottom:8px">Goals <span id="gl-count">0</span> / 100</div><div id="goalList"></div></div>
+      <div><div class="label" style="margin-bottom:8px">Routines</div><div id="routineList"></div></div>
+    </div>
+  </section>
+
   <!-- NOTES -->
   <section class="view" id="view-notes">
     <div class="row">
@@ -165,7 +195,7 @@ const ago=ms=>{const d=Date.now()-ms;if(d<6e4)return'just now';if(d<36e5)return 
 const NEXT={todo:'doing',doing:'done',blocked:'doing'},PREV={done:'doing',doing:'todo',blocked:'todo'};
 let STATE={companies:[],items:[],notes:[],events:[],agents:[]};
 let CURRENT='all';
-const COL={love:'var(--love)',ukid:'var(--ukid)',green:'var(--green)',agrav:'var(--agrav)',amber:'var(--amber)'};
+const COL={love:'var(--love)',ukid:'var(--ukid)',green:'var(--green)',agrav:'var(--agrav)',amber:'var(--amber)',youtube:'var(--youtube)'};
 
 async function api(method,path,body){const r=await fetch(path,{method,headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});return r.json();}
 async function load(){
@@ -198,6 +228,12 @@ function render(){
   // governance
   const props=STATE.items.filter(i=>i.kind==='proposal'&&i.status!=='archived');
   $('#propList').innerHTML=props.map(propCard).join('')||'<div class="empty">No proposals.</div>';
+  // wheel: goals + routines
+  const goals=STATE.items.filter(i=>i.kind==='goal'&&i.status!=='archived');
+  $('#gl-count').textContent=goals.length;
+  $('#goalList').innerHTML=goals.map(card).join('')||'<div class="empty">No goals yet.</div>';
+  const routines=STATE.items.filter(i=>i.kind==='routine'&&i.status!=='archived');
+  $('#routineList').innerHTML=routines.map(routineCard).join('')||'<div class="empty">No routines yet.</div>';
   // notes
   $('#wall').innerHTML=STATE.notes.map(noteEl).join('')||'<div class="empty">No notes yet.</div>';
   // feed
@@ -234,6 +270,12 @@ function propCard(i){
       <span style="color:var(--danger)">Against ${a}</span>
     </div></div>`;
 }
+function routineCard(i){let m={};try{m=JSON.parse(i.meta||'{}');}catch(e){}
+  const due=m.next_due?new Date(m.next_due).toLocaleDateString():'';
+  return `<div class="card" style="margin-bottom:10px">
+    <div class="top"><span class="kind routine">routine</span><span class="mono" style="font-size:10px;color:var(--text-muted)">every ${m.every_days||'?'}d · ${m.runs||0} runs</span></div>
+    <div class="title">${esc(i.title)}</div>
+    <div class="meta"><span class="mono" style="font-size:11px;color:var(--text-muted)">${due?'next: '+due:''}</span><button class="vbtn" data-tick="${i.id}">✓ Ran</button></div></div>`;}
 function noteEl(n){return `<div class="note ${n.color}">
   <span class="pin ${n.pinned?'on':''}" data-id="${n.id}" data-pin="${n.pinned?0:1}" title="pin">📌</span>
   <span class="x" data-del="${n.id}" title="delete">×</span>
@@ -248,15 +290,65 @@ $('#companies').addEventListener('click',e=>{const c=e.target.closest('[data-c]'
 $('#ni-add').onclick=async()=>{const t=$('#ni-title').value.trim();if(!t)return;await api('POST','/api/items',{title:t,kind:$('#ni-kind').value,assignee:$('#ni-assignee').value,priority:+$('#ni-priority').value,company:createCompany()});$('#ni-title').value='';load();};
 $('#su-add').onclick=async()=>{const t=$('#su-title').value.trim();if(!t)return;await api('POST','/api/items',{title:t,kind:'support',assignee:$('#su-assignee').value,company:(CURRENT==='all'?'youandinotai':CURRENT)});$('#su-title').value='';load();};
 $('#pr-add').onclick=async()=>{const t=$('#pr-title').value.trim();if(!t)return;await api('POST','/api/items',{title:t,kind:'proposal',company:(CURRENT==='all'?'dao':CURRENT)});$('#pr-title').value='';load();};
+$('#gl-add').onclick=async()=>{const t=$('#gl-title').value.trim();if(!t)return;await api('POST','/api/items',{title:t,kind:'goal',company:createCompany()});$('#gl-title').value='';load();};
+$('#rt-add').onclick=async()=>{const t=$('#rt-title').value.trim();if(!t)return;await api('POST','/api/items',{title:t,kind:'routine',every_days:+$('#rt-days').value,company:createCompany()});$('#rt-title').value='';load();};
+$('#gl-title').addEventListener('keydown',e=>{if(e.key==='Enter')$('#gl-add').click();});
+$('#rt-title').addEventListener('keydown',e=>{if(e.key==='Enter')$('#rt-add').click();});
 $('#nn-add').onclick=async()=>{const b=$('#nn-body').value.trim();if(!b)return;await api('POST','/api/notes',{body:b,color:$('#nn-color').value,author:$('#nn-author').value,pinned:1,company:createCompany()});$('#nn-body').value='';load();};
 ['ni-title','su-title','pr-title','nn-body'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter')$('#'+id.replace('-title','-add').replace('nn-body','nn-add').replace('su-add','su-add'))?.click?.();}));
 document.body.addEventListener('click',async e=>{
   const mv=e.target.closest('.mv button');if(mv){await api('PATCH','/api/items/'+mv.dataset.id,{status:mv.dataset.to});load();return;}
   const v=e.target.closest('[data-vote]');if(v){await api('POST','/api/items/'+v.dataset.vote+'/vote',{dir:v.dataset.dir});load();return;}
+  const tk=e.target.closest('[data-tick]');if(tk){await api('POST','/api/items/'+tk.dataset.tick+'/tick',{});load();return;}
   const del=e.target.closest('[data-del]');if(del){await api('DELETE','/api/notes/'+del.dataset.del);load();return;}
   const pin=e.target.closest('[data-pin]');if(pin){await api('PATCH','/api/notes/'+pin.dataset.id,{pinned:+pin.dataset.pin});load();return;}
 });
 document.body.addEventListener('change',async e=>{const as=e.target.closest('.assign');if(as){await api('PATCH','/api/items/'+as.dataset.id,{assignee:as.value});load();}});
+// Kids Buckets — canonical 10 (DAO-ARCHITECTURE). Amounts are REAL from the live
+// ledger; $0.00 until payments reconcile into revenue_allocations. Never fabricated.
+const BUCKETS=[
+  {n:1,name:'Platform Subscriptions',surface:'youandinotai',live:true},
+  {n:2,name:'Super Likes',surface:'youandinotai',live:false},
+  {n:3,name:'$LOVE Staking Yield',surface:'youandinotai',live:false},
+  {n:4,name:'AI-Solutions Products',surface:'ai-solutions',live:false},
+  {n:5,name:'$UKID Staking Yield',surface:'ai-solutions',live:false},
+  {n:6,name:'OnlineRecycle Services',surface:'onlinerecycle',live:false},
+  {n:7,name:'$GREEN Staking Yield',surface:'onlinerecycle',live:false},
+  {n:8,name:'Merch Net Profit',surface:'all',live:false},
+  {n:9,name:'$AGRAV Infra Revenue',surface:'aidoesitall',live:false},
+  {n:10,name:'$AGRAV Staking Yield',surface:'aidoesitall',live:false},
+];
+let BUCKET_CENTS={}; // bucket# -> reserved cents (real)
+function fmt(c){return '$'+((c||0)/100).toFixed(2);}
+function renderBuckets(){
+  let total=0;
+  $('#bucketGrid').innerHTML=BUCKETS.map(b=>{
+    const c=BUCKET_CENTS[b.n]||0; total+=c;
+    return `<div class="card" style="margin:0">
+      <div class="top"><span class="kind ${b.live?'idea':'task'}" style="${b.live?'color:var(--success);border-color:var(--success)':''}">${b.live?'LIVE':'pending'}</span>
+        <span class="mono" style="font-size:10px;color:var(--text-muted)">Bucket ${b.n} · ${esc(b.surface)}</span></div>
+      <div class="title">${esc(b.name)}</div>
+      <div style="font-family:var(--font-heading);font-size:26px;color:${c>0?'var(--accent)':'var(--text-muted)'};margin-top:4px">${fmt(c)}</div>
+      <div class="mono" style="font-size:10px;color:var(--text-muted)">reserved for kids (10% max)</div>
+    </div>`;}).join('');
+  $('#bk-total').textContent=fmt(total);
+}
+async function probeBuckets(){
+  renderBuckets();
+  try{
+    const r=await fetch('https://api.youandinotai.com/api/v1/health/allocations');
+    const j=await r.json(); const rows=Array.isArray(j)?j:(j.allocations||[]);
+    // current ledger maps subscription/Bot-Shield tiers to Bucket 1
+    const cents=rows.reduce((s,a)=>s+(a.charitable_amount_cents||a.charitable_cents||0),0);
+    BUCKET_CENTS={1:cents};
+    $('#bk-source').textContent=rows.length?('source: live ledger · '+rows.length+' allocations'):'source: live ledger · 0 reconciled yet';
+    renderBuckets();
+  }catch(e){
+    $('#bk-source').textContent='source: live ledger unreachable (CORS/offline) — showing $0.00';
+    renderBuckets();
+  }
+}
+probeBuckets();
 load();setInterval(load,20000);
 </script>
 </body>
