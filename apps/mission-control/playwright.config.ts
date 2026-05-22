@@ -1,8 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests/e2e',
-  testMatch: './tests/e2e/**/*.spec.ts',
+  testDir: '.',
+  testMatch: './tests/**/*.spec.ts',
 
   timeout: 30000,
   expect: {
@@ -13,12 +13,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     trace: 'on-first-retry',
   },
-  webServer: {
-    command: 'pnpm dev',
-    port: 5173,
-    reuseExistingServer: true,
-    timeout: 120000,
-  },
+
   projects: [
     {
       name: 'chromium',
