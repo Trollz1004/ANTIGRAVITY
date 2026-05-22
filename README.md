@@ -1,5 +1,7 @@
 # ANTIGRAVITY
 
+<p align="right"><img src="https://img.shields.io/badge/%23TEAMCLAUDEFORLIFE-%E2%97%8F%20live-2ea043?style=flat-square&labelColor=0d1117" alt="#TeamClaudeForLife — live" /></p>
+
 > **⛔ FOUNDER DOCTRINE — IMMUTABLE — 2026-05-19**
 > See `briefings/FOUNDER-DOCTRINE-2026-05-19.md`. AI sessions must apply rules 1–13 before any work.
 
