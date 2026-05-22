@@ -183,6 +183,16 @@
   .ticker .right { display: flex; gap: 18px; align-items: center; }
   .key-hint { display: inline-flex; align-items: center; justify-content: center; background: var(--bg-elevated); border: 1px solid rgba(138,125,117,0.3); color: var(--text-secondary); font-family: var(--font-mono); font-size: 10px; padding: 2px 6px; border-radius: var(--radius); min-width: 22px; }
 
+  .team-badge { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .08em; color: var(--success); }
+  .team-badge .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse 2s infinite; }
+  .guardians-float { position: fixed; right: 16px; bottom: 52px; z-index: 60; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+  .pet { display: flex; align-items: center; gap: 8px; background: var(--bg-elevated); border: 1px solid var(--bg-elevated); border-radius: 99px; padding: 5px 11px 5px 6px; box-shadow: 0 4px 14px rgba(0,0,0,.35); transition: border-color .15s; }
+  .pet:hover { border-color: var(--accent); }
+  .pet .face { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--bg-base); }
+  .pet .pname { font-family: var(--font-mono); font-size: 10px; color: var(--text-secondary); }
+  .pet .pstat { width: 7px; height: 7px; border-radius: 50%; background: var(--warning); }
+  .pet.ok .pstat { background: var(--success); }
+  .guardian-note { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); max-width: 220px; text-align: right; margin-top: 2px; }
   @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.85); } }
   ::-webkit-scrollbar { width: 9px; } ::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 9px; }
   .muted { color: var(--text-muted); } .accent { color: var(--accent); }
@@ -241,6 +251,7 @@
           <option value="default">default — MiniMax M2</option>
         </optgroup>
       </select>
+      <span class="team-badge" title="Team Claude. For life. For the kids."><span class="live-dot"></span>#TEAMCLAUDEFORLIFE</span>
     </header>
 
     <!-- ChatBubble console -->
@@ -303,6 +314,9 @@
       <div id="bucketGrid" class="bucket-grid"></div>
     </section>
   </main>
+
+  <!-- Floating guardian pets (registry: guardians.json — internal characters, no endorsement) -->
+  <div class="guardians-float" id="guardians"></div>
 
   <!-- ============ MissionTicker ============ -->
   <div class="ticker">
@@ -533,7 +547,23 @@
     }
   }
 
+  // ---- Floating guardian pets (allowed-guardian registry; verified-green only) ----
+  async function probeGuardians() {
+    const wrap = document.getElementById('guardians');
+    try {
+      const g = await (await fetch('/guardians.json')).json();
+      // "verified" is a REAL signal — Hermes router up — never faked green
+      const verified = !document.getElementById('providerChip').classList.contains('offline');
+      wrap.innerHTML = g.guardians.map(p => `
+        <div class="pet ${verified ? 'ok' : ''}" title="${p.name} — ${p.role}\nMay: ${g.rules.may.join(', ')}\nMay NOT: ${g.rules.mayNot.join(', ')}">
+          <span class="face" style="background:var(--${p.color})">${p.glyph}</span>
+          <span class="pname">${p.name}</span><span class="pstat"></span>
+        </div>`).join('') + `<div class="guardian-note">${g.disclaimer}</div>`;
+    } catch (e) { wrap.innerHTML = ''; }
+  }
+
   probeHermes(); probeReserve(); probeSessions(); probeFleet();
+  setTimeout(probeGuardians, 800); setInterval(probeGuardians, 15000);
   setInterval(probeHermes, 15000);
   setInterval(probeSessions, 15000);
 </script>
