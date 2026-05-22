@@ -27,7 +27,7 @@ export default function SupportCollectables({ isDarkMode }: { isDarkMode: boolea
           </div>
           <h3 className="text-2xl font-bold mb-3">Support Pediatric Care Directly</h3>
           <p className={`mb-6 leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            If you want to support pediatric care outside the platform, use a third-party charity directory and choose
+            If you want to support pediatric care outside the platform, use a third-party nonprofit directory and choose
             the organization you trust directly.
           </p>
           <a

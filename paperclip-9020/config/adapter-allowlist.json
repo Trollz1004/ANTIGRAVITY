@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "enforcement": "hard",
-  "architecture": "Opus writes the brain (MD files). Ollama cloud models execute it. Even a 1B model works because the intelligence is in the instruction files, not the weights. Opus + Codex AUDIT — they do not do daily operational work.",
+  "architecture": "The MD instruction files are the brain, authored and audited by EXTERNAL architects that live OUTSIDE any agent platform (browser-session Claude/Opus per FOUNDER-DOCTRINE rule 6 — the Anthropic hard wall — never an in-platform adapter). Ollama cloud models execute the brain in-platform. Even a 1B model works because the intelligence is in the instruction files, not the weights. Codex AUDITs — it does not do daily operational work.",
   "tiers": {
     "tier_1_workers": [
       "ollama_cloud_primary",
@@ -9,7 +9,6 @@
       "pi_ceo"
     ],
     "tier_0_architects": [
-      "claude_opus",
       "codex_local"
     ],
     "tier_3_emergency_only": [
@@ -68,20 +67,6 @@
         "top_p": 0.9
       }
     },
-    "claude_opus": {
-      "type": "anthropic_api",
-      "role": "ARCHITECT + AUDITOR ONLY",
-      "purpose": "Writes and maintains MD instruction files. Reviews agent output for drift. Does NOT do daily operational work.",
-      "models": ["claude-opus-4-7", "claude-sonnet-4-6"],
-      "tier": 0,
-      "when_used": [
-        "Writing or updating AGENTS.md / TOOLS.md / HEARTBEAT.md / SOUL.md / SKILLS.md",
-        "Auditing agent output for drift or doctrine violations",
-        "Strategic architecture decisions",
-        "Security review",
-        "PR review"
-      ]
-    },
     "codex_local": {
       "type": "codex_mcp",
       "role": "ARCHITECT + AUDITOR ONLY",
@@ -97,7 +82,7 @@
   },
   "cost_model": {
     "tier_1_ollama_cloud": "Covered by Ollama Pro subscription. No per-call cost. Great usage rates.",
-    "tier_0_opus_codex": "API costs only when writing/auditing instruction files. Infrequent. Josh approves.",
+    "tier_0_codex": "Codex audit only. NO in-platform Anthropic adapter (FOUNDER-DOCTRINE rule 6, Anthropic hard wall). Claude/Opus architecture + audit happens via external browser session and is never instantiated or billed in-platform.",
     "savings": "Daily operational work moves from ~$600/mo API calls to $0 incremental (Ollama Pro covers it)"
   },
   "banned": [
