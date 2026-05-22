@@ -61,10 +61,11 @@ class EncryptedDate:
 
     def __init__(self, mapped_column):
         self.mapped_column = mapped_column
-        self.private_name = f"_{mapped_column.key}"
+        self.private_name = None
 
     def __set_name__(self, owner, name):
         self.public_name = name
+        self.private_name = f"_{name}"
         setattr(owner, self.private_name, None)
 
     def __get__(self, instance, owner):
@@ -101,10 +102,11 @@ class EncryptedString:
 
     def __init__(self, mapped_column):
         self.mapped_column = mapped_column
-        self.private_name = f"_{mapped_column.key}"
+        self.private_name = None
 
     def __set_name__(self, owner, name):
         self.public_name = name
+        self.private_name = f"_{name}"
         setattr(owner, self.private_name, None)
 
     def __get__(self, instance, owner):

@@ -212,14 +212,14 @@ async def db_session_factory():  # Changed to async
 
     await setup()
 
-    yield (engine, session_factory)  # Yield both engine and factory
+    yield session_factory
 
     await teardown()
 
 
 @pytest.fixture()
-def client(db_session_factory):  # This fixture now receives a tuple
-    _engine, session_maker = db_session_factory  # Unpack the tuple
+def client(db_session_factory):
+    session_maker = db_session_factory
 
     async def override_get_db():
         async with session_maker() as session:
@@ -234,13 +234,13 @@ def client(db_session_factory):  # This fixture now receives a tuple
 
 
 @pytest.fixture()
-async def isolated_db_session(db_session_factory):  # This fixture now receives a tuple
+async def isolated_db_session(db_session_factory):
     """
     Provides an isolated database session for each test using SAVEPOINTs.
     This fixture ensures that database changes made during a test are rolled back
     at the end of the test, preventing test pollution.
     """
-    engine, session_maker = db_session_factory  # Unpack the tuple
+    engine = db_session_factory.kw["bind"]
 
     connection = await engine.connect()
     transaction = await connection.begin()  # Outer transaction

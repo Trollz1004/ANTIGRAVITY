@@ -236,11 +236,11 @@ class TestConcurrentLoad:
         """Successful responses should include rate limit headers."""
         response = chaos_client.get("/api/v1/health")
         assert response.status_code == status.HTTP_200_OK
-        # Rate limit headers are added by RedisRateLimitMiddleware
-        # In test mode with high limits, these should be present
-        assert (
-            "X-RateLimit-Limit" in response.headers or True
-        )  # noqa: SIM222  # May be absent if middleware skipped
+        # Rate limit headers are added by RedisRateLimitMiddleware and are
+        # optional — present only when the middleware is active. When present,
+        # the limit value must be non-empty.
+        if "X-RateLimit-Limit" in response.headers:
+            assert response.headers["X-RateLimit-Limit"]
 
     def test_health_endpoint_under_load_reports_correctly(self, chaos_client):
         """Health endpoint should report correct status even under concurrent access."""
