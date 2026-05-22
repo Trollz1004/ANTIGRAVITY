@@ -38,6 +38,13 @@ Codex verified on 2026-05-21:
 - Live API allocation endpoint returned an empty list.
 - Therefore the launch/payment stack is not allowed to claim reserve-ledger completion until reconciliation is implemented and verified.
 
+## Marketing Role (2026-05-22)
+
+- Hermes' **primary model is now Grok**, via an **x.ai subscription** — **user-auth, NO API key** (consistent with the Anthropic hard-wall philosophy: auth, not keys).
+- Grok owns **X / x.com marketing** because xAI has no ToS friction posting to x.com. Post natively through the authenticated x.ai session — never an X API key.
+- Routing peers: **Manus → Meta** (Facebook/Instagram/Threads); **Perplexity → research + the remaining platforms**; **Opus → strategy / browser-assist only** (never an in-platform adapter).
+- The Hermes Anthropic hard wall holds: `services/hermes-router/.env*` carries **zero** Anthropic key. Grok-via-x.ai is auth-based, so no key lands in Hermes either.
+
 ## Grok Review Standard
 
 When reviewing ANTIGRAVITY:
