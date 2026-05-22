@@ -185,8 +185,10 @@ app = FastAPI(
     servers=SERVERS,
 )
 
-# Set up OpenTelemetry tracing
-setup_telemetry(app=app, engine=engine)
+# Set up OpenTelemetry tracing. Skipped under tests so the suite does not block
+# on exporting spans to an OTLP collector that is not running.
+if settings.app_env != "test":
+    setup_telemetry(app=app, engine=engine)
 
 # Add security middleware (order matters - InputValidation should be first)
 # In test mode, raise the per-minute cap so the full test suite can run without
