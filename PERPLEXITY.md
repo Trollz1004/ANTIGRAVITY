@@ -38,6 +38,11 @@ Codex verified on 2026-05-21:
 - Live `https://api.youandinotai.com/api/v1/health/allocations` returned an empty allocation list.
 - The next payment fix is reconciliation from real Square completed payments into `revenue_allocations`; do not call the money path complete until that ledger reflects reality.
 
+## Marketing Role (2026-05-22)
+
+- Marketing routing: **Grok → X / x.com** (via x.ai user-auth, no API key); **Manus → Meta** (Facebook/Instagram/Threads); **Perplexity → research + the remaining platforms**; **Opus → strategy / browser-assist only**.
+- Perplexity's lane is the platforms not owned by Grok (X) or Manus (Meta), plus the source-backed research that feeds every campaign: audience, competitor, keyword, and claim verification.
+
 ## Research Standard
 
 Perplexity's value is current-source truth. No trust-me-bro summaries. Separate:
