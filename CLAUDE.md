@@ -1,3 +1,24 @@
+<!-- ============================================================ -->
+<!-- ORIENTATION GUARD — READ BEFORE YOU DO ANYTHING -->
+<!-- ============================================================ -->
+
+> # STOP — THE APP ALREADY EXISTS. DO NOT BUILD A NEW ONE.
+>
+> If you are about to scaffold a new app, a new repo, or "a date app" — **STOP. You are wrong.** It is already built, deployed, and taking real money. Rebuilding it wastes days and is the single most expensive mistake you can make here.
+>
+> **What is LIVE right now:**
+> - **ONE repo only:** `Trollz1004/ANTIGRAVITY`. Never create another repo. Never start a greenfield app.
+> - **Product code (already written):** `apps/youandinotai-frontend/` (Next.js 15 → youandinotai.com) + `backend/fastapi-app/` (FastAPI, Python 3.12). GCR backend is deployed & live. A working mirror exists on **T5500** (`192.168.0.15`); **Sabretooth** `C:\ANTIGRAVITY` is the only push node.
+> - **Square is LIVE and has cleared real payments** — account `joshlcoleman@gmail.com`, location `LY5GN09F5AN83`, 5 product links live (Bot-Shield $1 → Royalty Card $2,500). Do **NOT** assume $0 / pre-launch — the "Revenue: $0" line further down is stale. Verify real totals in Square or via `backend/fastapi-app/app/revenue_allocation.py`.
+> - **Revenue model:** 1 wallet, 1 LLC, **10% per-bucket reserve** — already coded (`reserve_revenue_allocation()`). Never invent splits. Never resurrect 60/30/10 or charity-routing.
+> - **Knowledge graph:** read `.graphify/GRAPH_REPORT.md` before broad code reads (run `graphify update` if stale; package is `graphifyy`, command `graphify`).
+>
+> **Before you write a single file:** (1) finish reading this CLAUDE.md, (2) read `briefings/REPOSITORY_RECORD.md` (LATEST STATE), (3) **grep the repo for an existing implementation of what you're about to build.** Assume it already exists until search proves otherwise.
+>
+> **Hard bans:** new repos · new apps · `donate / donation / charity / charitable / solicitation / giving back / disbursement` on customer surfaces · Stripe on youandinotai.com (Square only) · any Haiku model.
+
+<!-- ============================================================ -->
+
 # CLAUDE.md — ANTIGRAVITY (Monorepo)
 
 > **⛔ FOUNDER DOCTRINE — IMMUTABLE — 2026-05-19**
