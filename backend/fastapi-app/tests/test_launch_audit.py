@@ -15,7 +15,6 @@ from app.auth import get_current_user
 from app.models import Profile, User, VerificationEvent
 from app.payment_truth import build_checkout_reference
 
-
 def _auth_headers(token: str) -> dict[str, str]:
     return {"Authorization": f"Bearer {token}"}
 
