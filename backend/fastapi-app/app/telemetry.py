@@ -34,8 +34,11 @@ def setup_telemetry(app=None, engine=None):
         FastAPIInstrumentor.instrument_app(app)
 
     if engine is not None:
+        # AsyncEngine cannot take event listeners directly; instrument its
+        # underlying synchronous engine instead.
+        target_engine = getattr(engine, "sync_engine", engine)
         SQLAlchemyInstrumentor().instrument(
-            engine=engine,
+            engine=target_engine,
             enable_commenter=True,
         )
 

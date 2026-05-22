@@ -2,9 +2,38 @@
 
 import uuid
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 import strawberry
+
+
+@strawberry.type
+class UserMeResponse:
+    user_id: uuid.UUID
+    email: str
+    display_name: str
+    bot_shield_verified: bool
+    subscription_tier: Optional[str]
+    subscription_active: bool
+    subscription_expires_at: Optional[datetime]
+    has_profile: bool
+    adult_verified: bool
+    mission_impact_score: float
+    intent_badge: str
+
+
+@strawberry.type
+class ProfileResponse:
+    user_id: uuid.UUID
+    display_name: str
+    bio: Optional[str]
+    age: Optional[int]
+    gender: Optional[str]
+    looking_for: Optional[str]
+    location: Optional[str]
+    photos: List[str]
+    interests: List[str]
+    verified: bool
 
 
 @strawberry.type
