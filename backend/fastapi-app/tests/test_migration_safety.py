@@ -14,7 +14,7 @@ APP_ROOT = Path(__file__).resolve().parent.parent
 if str(APP_ROOT) not in sys.path:
     sys.path.insert(0, str(APP_ROOT))
 
-from alembic.safety import (
+from app.migration_safety import (
     ENV_VAR_ALLOW_PROTECTED,
     ENV_VAR_DRY_RUN,
     PROTECTION_COMMENT,

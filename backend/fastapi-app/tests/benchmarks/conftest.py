@@ -46,10 +46,9 @@ from app import database  # noqa: E402
 
 database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
 
-from app.rate_limit import reset_rate_limits  # noqa: E402
-
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
+from app.rate_limit import reset_rate_limits  # noqa: E402
 
 
 @pytest.fixture()
