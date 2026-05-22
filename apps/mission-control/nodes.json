@@ -1,0 +1,9 @@
+{
+  "_comment": "Compute-node + Hermes registry for the Mission Control cockpit. SECRET-FREE: names/addresses/ports only, never credentials. Add nodes with scripts/add-node.ps1.",
+  "updated": "2026-05-22",
+  "nodes": [
+    { "name": "SABRETOOTH", "address": "192.168.0.8", "hermesPort": 11435, "role": "primary command post (push authority)", "drive": "C:" },
+    { "name": "T5500", "address": "192.168.0.15", "hermesPort": 11435, "role": "servers + date app (production)", "drive": "C:" },
+    { "name": "9020", "address": "192.168.0.5", "hermesPort": 11435, "role": "GenSpark / social marketing", "drive": "C:" }
+  ]
+}
