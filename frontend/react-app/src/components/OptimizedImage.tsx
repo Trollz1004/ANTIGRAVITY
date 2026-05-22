@@ -6,8 +6,10 @@ import {
   DEFAULT_SIZES,
 } from '../utils/imageOptimizer';
 
-export interface OptimizedImageProps
-  extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'alt'> {
+export interface OptimizedImageProps extends Omit<
+  ImgHTMLAttributes<HTMLImageElement>,
+  'src' | 'alt'
+> {
   /** Image path relative to /public (e.g. "/hero-bg.png") */
   src: string;
   /** Alt text for accessibility */
@@ -71,14 +73,8 @@ export function OptimizedImage({
 
   return (
     <picture>
-      {webp && (
-        <source type="image/webp" srcSet={webpSrcSet} sizes={sizes} />
-      )}
-      <source
-        type={getMimeType(src)}
-        srcSet={fallbackSrcSet}
-        sizes={sizes}
-      />
+      {webp && <source type="image/webp" srcSet={webpSrcSet} sizes={sizes} />}
+      <source type={getMimeType(src)} srcSet={fallbackSrcSet} sizes={sizes} />
       <img
         src={src}
         alt={alt}
