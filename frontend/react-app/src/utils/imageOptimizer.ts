@@ -61,11 +61,13 @@ function getBasePath(src: string): string {
  */
 export function generateSrcSet(
   src: string,
-  widths: readonly number[] = DEFAULT_WIDTHS,
+  widths: readonly number[] = DEFAULT_WIDTHS
 ): string {
   const base = getBasePath(src);
   const ext = getExtension(src);
-  return widths.map((w) => `${base}-${w}w.${ext.replace('.', '')} ${w}w`).join(', ');
+  return widths
+    .map(w => `${base}-${w}w.${ext.replace('.', '')} ${w}w`)
+    .join(', ');
 }
 
 /**
@@ -83,10 +85,10 @@ export function generateSrcSet(
  */
 export function generateWebPSrcSet(
   src: string,
-  widths: readonly number[] = DEFAULT_WIDTHS,
+  widths: readonly number[] = DEFAULT_WIDTHS
 ): string {
   const base = getBasePath(src);
-  return widths.map((w) => `${base}-${w}w.webp ${w}w`).join(', ');
+  return widths.map(w => `${base}-${w}w.webp ${w}w`).join(', ');
 }
 
 /**
@@ -126,7 +128,7 @@ export function supportsWebP(): boolean {
  * @returns The best matching width for the current viewport
  */
 export function getOptimalWidth(
-  widths: readonly number[] = DEFAULT_WIDTHS,
+  widths: readonly number[] = DEFAULT_WIDTHS
 ): number {
   if (typeof window === 'undefined') {
     return widths[Math.floor(widths.length / 2)];
@@ -164,7 +166,7 @@ export interface ResponsiveImageSources {
 export function buildResponsiveSources(
   src: string,
   widths: readonly number[] = DEFAULT_WIDTHS,
-  sizes: string = DEFAULT_SIZES,
+  sizes: string = DEFAULT_SIZES
 ): ResponsiveImageSources {
   return {
     webpSrcSet: generateWebPSrcSet(src, widths),

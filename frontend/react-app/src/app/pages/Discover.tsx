@@ -326,69 +326,69 @@ export function Discover() {
           )}
         </AnimatePresence>
 
-      <div className="glass-strong glass-highlight w-full max-w-[28rem] rounded-[2rem] p-4 md:p-5">
-        <div className="mb-4 flex flex-wrap items-center gap-2">
-          <span className="app-chip">Verified flow</span>
-          <span className="app-chip">Cards available: {profiles.length}</span>
+        <div className="glass-strong glass-highlight w-full max-w-[28rem] rounded-[2rem] p-4 md:p-5">
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <span className="app-chip">Verified flow</span>
+            <span className="app-chip">Cards available: {profiles.length}</span>
+          </div>
+
+          <div className="relative h-[520px] w-full md:h-[580px]">
+            {activeProfile && safetyAvailable && (
+              <button
+                type="button"
+                onClick={() => setSafetyOpen(true)}
+                className="absolute right-3 top-3 z-20 flex items-center gap-2 rounded-[1rem] border-4 border-[#111111] bg-[#fffaf2] px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]"
+              >
+                <Shield size={14} className="text-[#ff4f00]" />
+                Safety tools
+              </button>
+            )}
+            <AnimatePresence>
+              {profiles.slice(0, 2).map((profile, i) => (
+                <SwipeCard
+                  key={profile.user_id}
+                  profile={profile}
+                  onSwipe={handleSwipe}
+                  isTop={i === 0}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+
+          <SwipeButtons
+            onPass={() => handleSwipe('pass')}
+            onLike={() => handleSwipe('like')}
+            onSuperLike={() => handleSwipe('superlike')}
+          />
         </div>
 
-        <div className="relative h-[520px] w-full md:h-[580px]">
-          {activeProfile && safetyAvailable && (
-            <button
-              type="button"
-              onClick={() => setSafetyOpen(true)}
-              className="absolute right-3 top-3 z-20 flex items-center gap-2 rounded-[1rem] border-4 border-[#111111] bg-[#fffaf2] px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]"
-            >
-              <Shield size={14} className="text-[#ff4f00]" />
-              Safety tools
-            </button>
-          )}
-          <AnimatePresence>
-            {profiles.slice(0, 2).map((profile, i) => (
-              <SwipeCard
-                key={profile.user_id}
-                profile={profile}
-                onSwipe={handleSwipe}
-                isTop={i === 0}
-              />
-            ))}
-          </AnimatePresence>
-        </div>
+        {activeProfile && safetyAvailable && (
+          <SafetyDrawer
+            open={safetyOpen}
+            targetUserId={activeProfile.user_id}
+            targetName={activeProfile.display_name}
+            source="profile"
+            onClose={() => setSafetyOpen(false)}
+            onBlocked={() => {
+              setProfiles(prev => prev.slice(1));
+              setSafetyNotice(
+                `${activeProfile.display_name} was blocked and removed from your feed.`
+              );
+              if (profiles.length <= 3) {
+                void loadProfiles();
+              }
+            }}
+          />
+        )}
 
-        <SwipeButtons
-          onPass={() => handleSwipe('pass')}
-          onLike={() => handleSwipe('like')}
-          onSuperLike={() => handleSwipe('superlike')}
-        />
+        {/* Meetups Discovery Section */}
+        <LazySection fallback={<SkeletonLoader />}>
+          <div className="mt-12 w-full max-w-6xl">
+            <h2 className="app-section-title mb-6">Upcoming Meetups</h2>
+            <MeetupsDiscovery />
+          </div>
+        </LazySection>
       </div>
-
-      {activeProfile && safetyAvailable && (
-        <SafetyDrawer
-          open={safetyOpen}
-          targetUserId={activeProfile.user_id}
-          targetName={activeProfile.display_name}
-          source="profile"
-          onClose={() => setSafetyOpen(false)}
-          onBlocked={() => {
-            setProfiles(prev => prev.slice(1));
-            setSafetyNotice(
-              `${activeProfile.display_name} was blocked and removed from your feed.`
-            );
-            if (profiles.length <= 3) {
-              void loadProfiles();
-            }
-          }}
-        />
-      )}
-
-      {/* Meetups Discovery Section */}
-      <LazySection fallback={<SkeletonLoader />}>
-        <div className="mt-12 w-full max-w-6xl">
-          <h2 className="app-section-title mb-6">Upcoming Meetups</h2>
-          <MeetupsDiscovery />
-        </div>
-      </LazySection>
-    </div>
     </div>
   );
 }

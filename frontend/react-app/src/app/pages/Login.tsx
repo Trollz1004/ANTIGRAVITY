@@ -61,9 +61,9 @@ export function Login() {
 
   const handleFieldBlur = useCallback(
     (name: string, value: string) => {
-      setTouched((prev) => ({ ...prev, [name]: true }));
+      setTouched(prev => ({ ...prev, [name]: true }));
       const err = validateLoginField(name, value);
-      setFieldErrors((prev) => ({ ...prev, [name]: err }));
+      setFieldErrors(prev => ({ ...prev, [name]: err }));
     },
     [validateLoginField]
   );
@@ -191,8 +191,8 @@ export function Login() {
                   type="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onBlur={(e) => handleFieldBlur('email', e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
+                  onBlur={e => handleFieldBlur('email', e.target.value)}
                   error={fieldErrors.email}
                   touched={touched.email}
                   placeholder="Email"
@@ -206,8 +206,8 @@ export function Login() {
                   type="password"
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onBlur={(e) => handleFieldBlur('password', e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
+                  onBlur={e => handleFieldBlur('password', e.target.value)}
                   error={fieldErrors.password}
                   touched={touched.password}
                   placeholder="Password"
@@ -271,7 +271,7 @@ export function Login() {
                     <input
                       type="text"
                       value={betaCode}
-                      onChange={(e) => setBetaCode(e.target.value)}
+                      onChange={e => setBetaCode(e.target.value)}
                       autoComplete="one-time-code"
                       placeholder="Enter access code"
                       className="app-input input-glow flex-1 uppercase tracking-[0.14em]"
