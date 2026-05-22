@@ -10,7 +10,9 @@ import { ErrorFallback } from './ErrorFallback';
 interface ErrorBoundaryProps {
   children: ReactNode;
   /** Optional custom fallback UI. Receives errorId and resetError. */
-  fallback?: ReactNode | ((errorId: string, resetError: () => void) => ReactNode);
+  fallback?:
+    | ReactNode
+    | ((errorId: string, resetError: () => void) => ReactNode);
   /** Optional name for the boundary section (used in logging). */
   boundaryName?: string;
   /** Optional callback when an error is caught. */
@@ -28,7 +30,10 @@ function generateErrorId(): string {
   return `err_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
@@ -53,10 +58,14 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     // Log error with component stack traces
     console.error(
       `[ErrorBoundary:${boundaryName}] Caught error:`,
-      '\n  Error ID:', errorId,
-      '\n  Message:', error.message,
-      '\n  Stack:', error.stack,
-      '\n  Component Stack:', errorInfo.componentStack,
+      '\n  Error ID:',
+      errorId,
+      '\n  Message:',
+      error.message,
+      '\n  Stack:',
+      error.stack,
+      '\n  Component Stack:',
+      errorInfo.componentStack
     );
 
     // Optional: send error report to backend
@@ -72,7 +81,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     error: Error,
     errorInfo: ErrorInfo,
     errorId: string,
-    boundaryName: string,
+    boundaryName: string
   ): Promise<void> {
     try {
       const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
@@ -86,7 +95,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           stack: error.stack,
           component_stack: errorInfo.componentStack,
           url: typeof window !== 'undefined' ? window.location.href : '',
-          user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+          user_agent:
+            typeof navigator !== 'undefined' ? navigator.userAgent : '',
           timestamp: new Date().toISOString(),
         }),
       });
@@ -117,7 +127,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       window.dispatchEvent(
         new CustomEvent('error-report', {
           detail: { errorId, boundaryName: this.props.boundaryName },
-        }),
+        })
       );
     }
   };
