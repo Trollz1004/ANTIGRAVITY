@@ -102,7 +102,7 @@ export default function KidsPlatform({ isDarkMode }: { isDarkMode: boolean }) {
         ))}
       </div>
 
-      {/* Charity Tracker */}
+      {/* Support Tracker */}
       <div
         className={`p-8 md:p-10 rounded-3xl border relative overflow-hidden ${
           isDarkMode
