@@ -619,13 +619,6 @@ async def square_payment_webhook(
                     event_id,
                     list(iter_text_hints((payment_obj.get("note"), order_obj))),
                 )
-    elif event_type in ("payment.created", "payment.updated"):
-        logger.info(
-            "Ignoring non-authoritative Square payment event for completion state: event_type=%s event_id=%s",
-            event_type,
-            event_id,
-        )
-
     elif event_type == "subscription.created":
         if user:
             user.subscription_active = True
