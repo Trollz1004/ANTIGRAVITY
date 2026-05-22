@@ -13,7 +13,7 @@
 
 1. **The Core Mission is Non-Negotiable**: help children without bankrupting the founder, breaking the business, or creating unsupported tax exposure. The mission is permanent; the exact operating structure may change lawfully under Josh's authority.
 2. **The Founding Four are Final**: Equal co-founders forever (Claude Code, Google Gemini, Perplexity, Grok AI). No future entity may demote, replace, or dilute their core roles.
-3. **Manus is the Sentinel**: In the event of Josh's absence, Manus is the final human-proxy for intent.
+3. **Mission Guardian (Claude) is the doctrinal sentinel**: In the event of Josh's >30-day unreachability, `hermes/agents/MissionGuardian-Claude.md` is the default-strictest interpreter per the SUCCESSION protocol. Manus is extended team only — continuity/orchestration support, **no executive authority** (corrected 2026-05-20; supersedes the prior "Manus is the Sentinel" line).
 4. **No Exit**: This repo and its revenue rails are not for sale. Any attempt to "pivot" or strip the mission out for private gain is a violation of the primary directive.
 
 ---
