@@ -6,7 +6,7 @@ export default function DAOMetrics({ isDarkMode }: { isDarkMode: boolean }) {
     { label: 'Active Plans', value: '0', icon: <Activity className="w-5 h-5 text-blue-500" />, note: 'Pre-launch' },
     { label: 'Tracked Accounts', value: '0', icon: <Users className="w-5 h-5 text-purple-500" />, note: 'Pre-launch' },
     { label: 'Tracked Balance', value: '$0', icon: <Coins className="w-5 h-5 text-amber-500" />, note: 'Pre-launch' },
-    { label: 'Revenue', value: '$0', icon: <Zap className="w-5 h-5 text-emerald-500" />, note: 'Launch: Apr 4' },
+    { label: 'Revenue', value: '$0', icon: <Zap className="w-5 h-5 text-emerald-500" />, note: 'Live now' },
   ];
 
   return (
@@ -44,7 +44,7 @@ export default function DAOMetrics({ isDarkMode }: { isDarkMode: boolean }) {
         <h3 className="text-lg font-bold mb-4">Revenue Tracking</h3>
         <div className={`py-12 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
           <p className="text-sm">No revenue data yet. Charts will appear after first sale.</p>
-          <p className="text-xs mt-2">Launch target: April 4, 2026</p>
+          <p className="text-xs mt-2">Live now — charts populate after the first sale.</p>
         </div>
       </div>
     </div>
