@@ -71,6 +71,13 @@
       "runtimeArgs": ["-m", "http.server", "4178"],
       "port": 4178,
       "cwd": "apps/mission-control"
+    },
+    {
+      "name": "paperweight",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["paperweight.py"],
+      "port": 4200,
+      "cwd": "apps/paperweight"
     }
   ]
 }
