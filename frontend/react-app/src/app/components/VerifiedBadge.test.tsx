@@ -9,22 +9,30 @@ describe('VerifiedBadge', () => {
   });
 
   it('renders gold tier with label', () => {
-    const { getByText } = render(<VerifiedBadge tier="gold" size="md" showLabel={true} />);
+    const { getByText } = render(
+      <VerifiedBadge tier="gold" size="md" showLabel={true} />
+    );
     expect(getByText('Verified Human')).toBeDefined();
   });
 
   it('renders platinum tier with label', () => {
-    const { getByText } = render(<VerifiedBadge tier="platinum" size="md" showLabel={true} />);
+    const { getByText } = render(
+      <VerifiedBadge tier="platinum" size="md" showLabel={true} />
+    );
     expect(getByText('Founding Member')).toBeDefined();
   });
 
   it('renders without label when showLabel is false', () => {
-    const { queryByText } = render(<VerifiedBadge tier="gold" showLabel={false} />);
+    const { queryByText } = render(
+      <VerifiedBadge tier="gold" showLabel={false} />
+    );
     expect(queryByText('Verified Human')).toBeNull();
   });
 
   it('renders all sizes', () => {
-    const { rerender, getByText } = render(<VerifiedBadge tier="gold" size="sm" />);
+    const { rerender, getByText } = render(
+      <VerifiedBadge tier="gold" size="sm" />
+    );
     expect(getByText('Verified Human')).toBeDefined();
 
     rerender(<VerifiedBadge tier="gold" size="md" />);
