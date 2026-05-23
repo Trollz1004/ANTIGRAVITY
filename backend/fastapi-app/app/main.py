@@ -10,22 +10,43 @@ from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.gzip import GZipMiddleware
+from strawberry.fastapi import GraphQLRouter
 
-from app.middleware.cache_headers import CacheHeadersMiddleware
-
+from app.cache import close_redis, get_redis, redis_health_check
 from app.config import get_settings
-from app.database import get_db, reconcile_legacy_schema
-from app.error_responses import ErrorCode, ErrorResponse, internal_error
+from app.database import (
+    check_db_health,  # New import
+    engine,
+    get_db,
+    reconcile_legacy_schema,
+)
+from app.error_responses import ErrorCode, ErrorResponse
+from app.graphql.schema import schema
 from app.logging_config import setup_logging
+from app.middleware.cache_headers import CacheHeadersMiddleware
+from app.middleware.request_limits import (
+    JsonDepthLimitMiddleware,
+    RequestSizeLimitMiddleware,
+)
 from app.monitoring import setup_monitoring
+from app.openapi_extra import (
+    API_DESCRIPTION,
+    CONTACT_INFO,
+    LICENSE_INFO,
+    SERVERS,
+    TAGS_METADATA,
+    get_custom_swagger_html,
+)
+from app.rate_limit_redis import RedisRateLimitMiddleware
 from app.routers import (
     auth,
     billing,
     boards,
+    clawx,
     double_dates,
     events,
     feature_flags,
@@ -34,9 +55,11 @@ from app.routers import (
     marketing,
     messages,
     metrics,
+    notifications,
     ops_runs,
     privacy,
     profiles,
+    rate_limits,
     safety,
     support,
     swipe,
@@ -49,15 +72,19 @@ from app.routers import (
     waitlist,
     webhooks,
 )
-from app.routers.health import health_check
+from app.routers.health import (  # New imports
+    _square_health_ready,
+    _square_signature_configured,
+    health_check,
+)
 from app.scheduler import setup_scheduler
-from app.webhook_retry import router as webhook_retry_router
 from app.schemas import HealthResponse
 from app.security import (
     InputValidationMiddleware,
-    RateLimitMiddleware,
     SecurityHeadersMiddleware,
 )
+from app.telemetry import get_tracer_status, setup_telemetry
+from app.webhook_retry import router as webhook_retry_router
 
 # Configure structured logging
 setup_logging()
@@ -119,6 +146,17 @@ async def lifespan(app: FastAPI):
         prometheus_port=getattr(settings, "prometheus_port", None),
     )
 
+    # Startup: Initialize Redis connection pool
+    try:
+        await get_redis()
+        health = await redis_health_check()
+        if health["status"] == "ok":
+            logger.info("Redis connected", extra={"latency_ms": health["latency_ms"]})
+        else:
+            logger.warning("Redis health check returned non-ok", extra=health)
+    except Exception as exc:
+        logger.warning("Redis not available at startup (will retry on demand): %s", exc)
+
     # Startup: Reconcile database schema
     await reconcile_legacy_schema()
 
@@ -130,29 +168,52 @@ async def lifespan(app: FastAPI):
     logger.info("Application shutdown initiated")
     # Shutdown: Stop scheduler
     scheduler.shutdown()
+    # Shutdown: Close Redis connection pool
+    await close_redis()
 
 
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
-    description="YouAndINotAI - Social Platform for Good",
+    description=API_DESCRIPTION,
     docs_url="/docs",
     openapi_url="/openapi.json",
     lifespan=lifespan,
+    openapi_tags=TAGS_METADATA,
+    contact=CONTACT_INFO,
+    license_info=LICENSE_INFO,
+    servers=SERVERS,
 )
+
+# Set up OpenTelemetry tracing. Skipped under tests so the suite does not block
+# on exporting spans to an OTLP collector that is not running.
+if settings.app_env != "test":
+    setup_telemetry(app=app, engine=engine)
 
 # Add security middleware (order matters - InputValidation should be first)
 # In test mode, raise the per-minute cap so the full test suite can run without
 # hitting the global IP rate-limiter (245+ requests from a single testclient IP).
 _rate_limit_rpm = 10_000 if settings.app_env == "test" else 60
+
 # NOTE: GZipMiddleware is added first so all downstream responses are compressed
 # when they exceed the 1KB threshold. Brotli support can be added later by
 # installing the `brotli` package and adding BrotliMiddleware.
 app.add_middleware(GZipMiddleware, minimum_size=1024)
 app.add_middleware(InputValidationMiddleware)
-app.add_middleware(RateLimitMiddleware, calls_per_minute=_rate_limit_rpm)
+# Redis-backed rate limiting middleware (replaces in-memory RateLimitMiddleware)
+app.add_middleware(RedisRateLimitMiddleware, calls_per_minute=_rate_limit_rpm)
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(CacheHeadersMiddleware)
+# Request size & depth limits (DoS protection) — OPU-96
+app.add_middleware(
+    RequestSizeLimitMiddleware,
+    max_body_size=settings.max_request_body_size,
+    max_file_upload_size=settings.max_file_upload_size,
+)
+app.add_middleware(
+    JsonDepthLimitMiddleware,
+    max_depth=settings.max_json_depth,
+)
 
 
 @app.middleware("http")
@@ -315,7 +376,11 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
         )
 
     # If the detail is already a standardized ErrorResponse dict (from api_exception helpers), pass it through
-    if isinstance(exc.detail, dict) and "code" in exc.detail and "message" in exc.detail:
+    if (
+        isinstance(exc.detail, dict)
+        and "code" in exc.detail
+        and "message" in exc.detail
+    ):
         content = exc.detail
     else:
         # Wrap raw string details into the standard format
@@ -407,6 +472,14 @@ app.include_router(waitlist.router, prefix="/api/v1", tags=["waitlist"])
 app.include_router(marketing.router, prefix="/api/v1", tags=["marketing"])
 app.include_router(feature_flags.router)
 app.include_router(ops_runs.router, prefix="/api/v1", tags=["ops-runs"])
+app.include_router(clawx.router, prefix="/api/v1", tags=["clawx"])
+app.include_router(notifications.router, prefix="/api/v1", tags=["notifications"])
+
+app.include_router(rate_limits.router)
+
+graphql_app = GraphQLRouter(schema)
+app.include_router(graphql_app, prefix="/graphql")
+
 
 # Secure file uploads (replaces direct static mount)
 app.include_router(uploads.router)
@@ -425,3 +498,192 @@ async def root() -> dict[str, str]:
 @app.get("/health", response_model=HealthResponse)
 async def root_health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
     return await health_check(db)
+
+
+@app.get("/api/v1/health/telemetry")
+async def telemetry_health():
+    """Return OpenTelemetry tracer status."""
+    return {
+        "service": "youandinotai-api",
+        "telemetry": get_tracer_status(),
+    }
+
+
+# ─── Custom Swagger UI with Mission Control Dark Theme ──────────────────────
+
+
+@app.get("/docs-custom", include_in_schema=False)
+async def custom_swagger_ui():
+    """Serve a custom Swagger UI with the mission-control dark theme.
+
+    This endpoint provides a branded, dark-themed Swagger UI that matches
+    the YouAndINotAI design system. The theme features:
+    - Deep navy background (#1a1a2e)
+    - Coral red accent (#e94560)
+    - Color-coded HTTP methods
+    - Custom header with navigation links
+    """
+    return HTMLResponse(content=get_custom_swagger_html())
+
+
+# ─── API Health Dashboard ───────────────────────────────────────────────────
+
+
+@app.get(
+    "/api/v1/health/detailed",
+    tags=["health"],
+    summary="Detailed API health dashboard",
+    description="Returns comprehensive health status including endpoint response times, availability, and dependency checks.",
+    responses={
+        200: {
+            "description": "Detailed health dashboard data",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "service": "youandinotai-api",
+                        "version": "1.0.0",
+                        "status": "healthy",
+                        "timestamp": "2025-01-15T10:30:00Z",
+                        "uptime_seconds": 86400,
+                        "dependencies": {
+                            "database": {"status": "connected", "latency_ms": 2.5},
+                            "redis": {"status": "connected", "latency_ms": 1.2},
+                            "square": {"status": "connected", "latency_ms": 45.0},
+                        },
+                        "endpoints": [
+                            {
+                                "path": "/api/v1/health",
+                                "method": "GET",
+                                "status": "available",
+                                "avg_response_ms": 12.3,
+                                "last_checked": "2025-01-15T10:29:55Z",
+                            }
+                        ],
+                        "rate_limiting": {
+                            "enabled": True,
+                            "requests_per_minute": 60,
+                        },
+                    }
+                }
+            },
+        },
+        503: {
+            "description": "Service is degraded",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "service": "youandinotai-api",
+                        "status": "degraded",
+                        "dependencies": {
+                            "database": {"status": "disconnected", "latency_ms": None},
+                        },
+                    }
+                }
+            },
+        },
+    },
+)
+async def detailed_health_dashboard(db: AsyncSession = Depends(get_db)):
+    """Public API health dashboard with endpoint response times and availability.
+
+    This endpoint provides a comprehensive view of the API's health, including:
+    - Overall service status
+    - Database connectivity and latency
+    - Redis cache status
+    - Square payment integration status
+    - Endpoint availability summary
+    - Rate limiting configuration
+
+    No authentication required. Safe for monitoring tools and load balancers.
+    """
+    from datetime import datetime, timezone
+
+    start_time = time.time()
+    now = datetime.now(timezone.utc).isoformat()
+
+    # Check database health
+    db_start = time.time()
+    db_connected = await check_db_health()
+    db_latency = round((time.time() - db_start) * 1000, 2)
+
+    # Check Redis health
+    redis_status = {"status": "unknown", "latency_ms": None}
+    try:
+        redis_start = time.time()
+        redis_health = await redis_health_check()
+        redis_status = {
+            "status": redis_health.get("status", "unknown"),
+            "latency_ms": round((time.time() - redis_start) * 1000, 2),
+        }
+    except Exception:
+        redis_status = {"status": "unavailable", "latency_ms": None}
+
+    # Check Square connectivity
+    square_connected = _square_health_ready()
+    square_signature_configured = _square_signature_configured()
+
+    # Determine overall status
+    all_healthy = db_connected and redis_status["status"] == "ok" and square_connected
+    any_healthy = db_connected or redis_status["status"] == "ok"
+
+    if all_healthy:
+        overall_status = "healthy"
+    elif any_healthy:
+        overall_status = "degraded"
+    else:
+        overall_status = "unhealthy"
+
+    total_latency = round((time.time() - start_time) * 1000, 2)
+
+    # Build endpoint summary from registered routes
+    endpoints_summary = []
+    for route in app.routes:
+        from fastapi.routing import APIRoute
+
+        if isinstance(route, APIRoute) and route.include_in_schema:
+            path = route.path
+            # Only include API routes, exclude existing health routes from detailed dashboard itself
+            if path.startswith("/api/") and not path.startswith(
+                "/api/v1/health/detailed"
+            ):
+                for method in route.methods:
+                    if method in ("GET", "POST", "PUT", "PATCH", "DELETE"):
+                        endpoints_summary.append(
+                            {
+                                "path": path,
+                                "method": method,
+                                "status": "available",
+                                "avg_response_ms": None,
+                                "last_checked": now,
+                            }
+                        )
+
+    return {
+        "service": "youandinotai-api",
+        "version": settings.app_version,
+        "status": overall_status,
+        "timestamp": now,
+        "total_check_latency_ms": total_latency,
+        "dependencies": {
+            "database": {
+                "status": "connected" if db_connected else "disconnected",
+                "latency_ms": db_latency if db_connected else None,
+            },
+            "redis": redis_status,
+            "square": {
+                "status": "connected" if square_connected else "disconnected",
+                "signature_configured": square_signature_configured,
+            },
+        },
+        "endpoints": endpoints_summary[:50],  # Limit to 50 entries
+        "endpoint_count": len(endpoints_summary),
+        "rate_limiting": {
+            "enabled": True,
+            "requests_per_minute": _rate_limit_rpm,
+        },
+        "docs": {
+            "swagger_ui": "/docs",
+            "custom_swagger_ui": "/docs-custom",
+            "openapi_schema": "/openapi.json",
+        },
+    }

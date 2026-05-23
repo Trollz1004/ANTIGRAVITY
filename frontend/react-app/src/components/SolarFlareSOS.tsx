@@ -31,7 +31,7 @@ interface SOSFeature {
   action: () => void;
 }
 
-export function SolarFlareSOS({ onClose }: { onClose: () => void }) {
+export default function SolarFlareSOS({ onClose }: { onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<'menu' | 'feature'>('menu');
   const [selectedFeature, setSelectedFeature] = useState<SOSFeature | null>(
     null

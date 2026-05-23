@@ -5,6 +5,9 @@ packages:
   # Deployable applications
   - 'apps/*'
 
+  # MCP servers (Anthropic-pattern, stdio transport)
+  - 'apps/mcp/*'
+
   # Shared libraries and platform packages
   - 'packages/*'
 

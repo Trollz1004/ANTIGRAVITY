@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { clsx } from 'clsx';
 import {
-  LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare,
+  LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare, Upload, Shield,
 } from 'lucide-react';
+import { NotificationBell } from './NotificationBell';
 import { StackIntegrityWidget } from './StackIntegrityWidget';
 import { DaoPanel } from './DaoPanel';
 
+/**
+ * Navigation modes for the sidebar.
+ *
+ * Each entry pairs a unique `id` with a display `label`, a Lucide icon
+ * component, and an optional `new` flag that renders a "NEW" badge.
+ */
 const modes = [
   { id: 'mission', label: 'Mission Control', new: true, icon: LayoutGrid },
   { id: 'ledger', label: 'Mission Ledger', new: true, icon: BookOpen },
@@ -15,13 +22,38 @@ const modes = [
   { id: 'banana', label: 'Create · Banana', new: false, icon: ImagePlus },
   { id: 'research', label: 'Research Mode', new: false, icon: Search },
   { id: 'chat', label: 'Chat Mode', new: false, icon: MessageSquare },
+  { id: 'uploads', label: 'File Uploads', new: true, icon: Upload },
+  { id: 'rate-limits', label: 'Rate Limits', new: true, icon: Shield },
+
 ];
 
-export const Sidebar: React.FC = () => {
-  const [active, setActive] = useState('mission');
+/**
+ * Sidebar Navigation Component
+ *
+ * Renders the left-hand navigation panel with mode buttons, a history
+ * section, the DAO panel, the stack integrity widget, and a settings footer.
+ *
+ * The active mode is tracked internally via `useState` and highlighted with
+ * a distinct border/background style.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Sidebar />
+ * ```
+ */
+interface SidebarProps {
+  active: string;
+  setActive: (mode: string) => void;
+  unreadCount: number;
+  onNotificationBellClick: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ active, setActive, unreadCount, onNotificationBellClick }) => {
   return (
     <aside data-testid="sidebar" className="w-56 bg-panel border-r border-border flex flex-col overflow-y-auto">
       <div className="p-3 space-y-1">
+        <NotificationBell unreadCount={unreadCount} onClick={onNotificationBellClick} />
         {modes.map(m => {
           const Icon = m.icon;
           const isActive = active === m.id;

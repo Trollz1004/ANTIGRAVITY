@@ -1,0 +1,46 @@
+{
+  "summary": "Iteration 2 covered the THREE new surfaces: (a) /api/chat/send unified routing with header surfacing, (b) /api/broadcast/{telegram,whatsapp} graceful unconfigured behavior, (c) /api/tasks/* full CRUD + dispatch + audit + agents/heartbeats + stats. New pytest module test_hub_and_tasks.py = 19/19 passing. Frontend Playwright sweep validated AgeGate -> 7-button sidebar, Tasks mode (4 columns + 12 agent cards + new task + dispatch + status PATCH), Roundtable mode (12 providers visible, 4 default toggles), Command Palette (Ctrl+K opens, Enter navigates), Settings panel (12 platforms grid, Telegram/WhatsApp 'NOT CONFIGURED' pills + TEST PING buttons, endpoints incl. /api/chat/send + /api/broadcast/*). Iteration-1 backend regression tests still passing (re-confirmed by suite). One DOCTRINE VIOLATION found: SettingsPanel.js doctrine bullet renders the literal strings 'Haiku' and 'solicitation' in the UI even though it is declaring them forbidden. Main agent must rephrase line 106.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Settings -> DOCTRINE block",
+        "issues": [
+          "Line 106 of /app/frontend/src/components/SettingsPanel.js renders literal forbidden words: 'No Haiku. No solicitation language. FL §496.405.' This breaks Joshua's binding rule that the strings 'Haiku' and 'solicitation' must not appear ANYWHERE in the rendered UI, even when used to declare the rule itself. Suggested rephrase: 'No fast-tier Anthropic label. No request-for-funds language. FL §496.405.'"
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_hub_and_tasks.py",
+    "/app/test_reports/pytest/iter2_results.xml",
+    "/app/backend/tests/test_mission_control.py"
+  ],
+  "action_items": [
+    "Rephrase /app/frontend/src/components/SettingsPanel.js line 106 so the rendered DOCTRINE bullet does NOT contain the literal strings 'Haiku' or 'solicitation'. The current text 'No Haiku. No solicitation language. FL §496.405.' is itself a doctrine violation per Joshua's binding rules.",
+    "Optional hardening: extract a shared FORBIDDEN-words constant into both backend (server.py / hub.py) and a frontend lint check so this class of regression is caught automatically."
+  ],
+  "critical_code_review_comments": [
+    "hub.py /api/chat/send is solid: provider registry single-source-of-truth, BYOK/local/emergent tier switching, X-Hermes-* metadata headers exposed via CORS, broadcast fan-out wired but won't 500 when creds missing. Late import 'from server import HERMES_VIRTUAL_MODELS' inside the request handler is acceptable but could move to module top with a forward-ref helper.",
+    "tasks.py is clean: stable uuid ids, no _id leakage (find with {_id:0}), audit log writes on every transition, heartbeat upsert per agent, stats aggregations correct. Worth noting: _new_id() returns 12-char hex, not full uuid4 — adequate but reduces collision margin on very high write rates.",
+    "/api/tasks (GET) and /api/tasks (POST) share the same path with prefix='/api/tasks' and route='' — works in FastAPI but '/api/tasks/' (with trailing slash) currently 307-redirects; verify Joshua's clients follow redirects.",
+    "DELETE on tasks uses window.confirm() in the UI which blocks Playwright by default — not a bug, but flag for QA: tests must register a dialog handler.",
+    "SettingsPanel doctrine block contains the forbidden literals 'Haiku' and 'solicitation' even though it's declaring them forbidden — must be rephrased.",
+    "All 12 providers and 12 agents are wired correctly end-to-end; broadcast unconfigured returns ok:false + hint as required (NOT 500); BYOK missing key returns 503 with the exact env var name."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_hub_and_tasks.py"
+  ],
+  "success_rate": {"backend": "100% (19/19 new + iter1 still passing)", "frontend": "95% (1 doctrine-text violation in Settings)"},
+  "test_credentials": "N/A — no auth.",
+  "seed_data_creation": "Test tasks were prefixed with TEST_ and cleaned up by the test_cleanup_remaining and Playwright cleanup loop. Audit/heartbeat collections retain the records by design.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "After main agent fixes SettingsPanel.js line 106, retest by (1) running `python -m pytest /app/backend/tests/ -v` and (2) running a Playwright sweep that opens Settings and asserts page.body innerText.toLowerCase() contains none of {haiku, donate, donation, solicitation}. Tasks DELETE uses window.confirm — Playwright must register `page.on('dialog', d: d.accept())`. The Roundtable provider count selector should be `[data-testid=\"provider-{id}\"]` per-id, NOT a wildcard with :not chains. Tests live at /app/backend/tests/test_hub_and_tasks.py and /app/backend/tests/test_mission_control.py.",
+  "rca_of_the_issue": "Doctrine violation root cause: the SettingsPanel DOCTRINE block was authored to make the rules visible to Joshua, but the rules themselves contain the very words they ban. Mitigation = rephrase the bullet to describe the prohibition without using the prohibited tokens (e.g., 'No fast-tier Anthropic label. No request-for-funds language.'). All other surfaces (backend JSON, agents, providers, broadcast hints) pass the doctrine sweep cleanly."
+}
