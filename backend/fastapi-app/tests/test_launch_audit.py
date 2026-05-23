@@ -14,7 +14,6 @@ from sqlalchemy import select
 from app.auth import get_current_user
 from app.models import Profile, User, VerificationEvent
 from app.payment_truth import build_checkout_reference
-from app.routers.metrics import _verify_metrics_key
 
 
 def _auth_headers(token: str) -> dict[str, str]:
@@ -82,6 +81,7 @@ def test_protected_http_routes_require_auth():
         ("/api/v1/webhooks/square", "POST"),
         ("/api/v1/webhooks/square-payment", "POST"),
         ("/api/v1/webhooks/square-booking", "POST"),
+        ("/api/v1/metrics", "GET"),
     }
     protected_routes = []
 
@@ -96,7 +96,6 @@ def test_protected_http_routes_require_auth():
                     continue
                 assert (
                     get_current_user in dependency_calls
-                    or _verify_metrics_key in dependency_calls
                 ), f"Missing auth on {method} {route.path}"
                 protected_routes.append(route_key)
 

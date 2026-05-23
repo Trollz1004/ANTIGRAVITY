@@ -14,6 +14,9 @@ import { isSafetyToolsAvailable } from '../../lib/safety';
 import { SwipeCard, SwipeButtons } from '../components/SwipeCard';
 import { DiscoverSettings } from '../components/DiscoverSettings';
 import { SafetyDrawer } from '../components/SafetyDrawer';
+import { LazySection } from '../../components/LazySection';
+import { SkeletonLoader } from '../../components/SkeletonLoader';
+import MeetupsDiscovery from '../../components/MeetupsDiscovery';
 
 interface Profile {
   user_id: string;
@@ -358,26 +361,36 @@ export function Discover() {
             onSuperLike={() => handleSwipe('superlike')}
           />
         </div>
-      </div>
 
-      {activeProfile && safetyAvailable && (
-        <SafetyDrawer
-          open={safetyOpen}
-          targetUserId={activeProfile.user_id}
-          targetName={activeProfile.display_name}
-          source="profile"
-          onClose={() => setSafetyOpen(false)}
-          onBlocked={() => {
-            setProfiles(prev => prev.slice(1));
-            setSafetyNotice(
-              `${activeProfile.display_name} was blocked and removed from your feed.`
-            );
-            if (profiles.length <= 3) {
-              void loadProfiles();
-            }
-          }}
-        />
-      )}
+        {activeProfile && safetyAvailable && (
+          <SafetyDrawer
+            open={safetyOpen}
+            targetUserId={activeProfile.user_id}
+            targetName={activeProfile.display_name}
+            source="profile"
+            onClose={() => setSafetyOpen(false)}
+            onBlocked={() => {
+              setProfiles(prev => prev.slice(1));
+              setSafetyNotice(
+                `${activeProfile.display_name} was blocked and removed from your feed.`
+              );
+              if (profiles.length <= 3) {
+                void loadProfiles();
+              }
+            }}
+          />
+        )}
+
+        {/* Meetups Discovery Section */}
+        <LazySection fallback={<SkeletonLoader />}>
+          <div className="mt-12 w-full max-w-6xl">
+            <h2 className="app-section-title mb-6">Upcoming Meetups</h2>
+            <MeetupsDiscovery />
+          </div>
+        </LazySection>
+      </div>
     </div>
   );
 }
+
+export default Discover;

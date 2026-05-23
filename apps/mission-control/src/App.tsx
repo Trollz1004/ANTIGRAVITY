@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { TaskBriefInput } from './components/TaskBriefInput';
@@ -15,35 +15,69 @@ import { MissionBand } from './components/MissionBand';
 import { Footer } from './components/Footer';
 import { ScanningRepoIndicator } from './components/ScanningRepoIndicator';
 import { T5500Panel } from './components/T5500Panel';
+import { NotificationPanel } from './components/NotificationPanel';
+import { useWebSocketNotifications } from './hooks/useWebSocketNotifications';
 import { ToastContainer } from './components/Toast';
 import { ToastProvider } from './lib/useToast';
+import { AuthProvider } from './lib/useAuth';
+import { ThemeProvider } from './context/ThemeContext';
+import { RateLimitDashboard } from './components/RateLimitDashboard';
+import { UploadProgressPanel } from './components/UploadProgressPanel';
 
-export const App: React.FC = () => (
-  <ToastProvider>
-    <div className="flex flex-col h-screen bg-background text-white font-sans">
-      <TopBar />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-auto p-4">
-          <TaskBriefInput />
-          <ScanningRepoIndicator />
-          <LaunchPanel />
-          <TreasuryBand />
-          <HermesRouterPanel />
-          <PaperclipWorkerPanel />
-          <T5500Panel />
-          <RevenueEnginePanel />
-          <TrustHierarchyPanel />
-          <StackIntegrityPanel />
-        </main>
-        <aside className="w-64 bg-panel p-4 overflow-auto">
-          <RunbooksPanel />
-          <BuildAgentPanel />
-          <MissionBand />
-        </aside>
-      </div>
-      <Footer />
-      <ToastContainer />
-    </div>
-  </ToastProvider>
-);
+export const App: React.FC = () => {
+  const [activePanel, setActivePanel] = useState('mission'); // Default active panel
+  const [showNotificationPanel, setShowNotificationPanel] = useState(false);
+  const { notifications, unreadCount, markAsRead, clearAllNotifications } = useWebSocketNotifications();
+
+  return (
+    <ThemeProvider>
+      <AuthProvider>
+        <ToastProvider>
+          <div className="flex flex-col h-screen bg-background text-white font-sans">
+            <TopBar />
+            <div className="flex flex-1 overflow-hidden">
+              <Sidebar
+                active={activePanel}
+                setActive={setActivePanel}
+                unreadCount={unreadCount}
+                onNotificationBellClick={() => setShowNotificationPanel(prev => !prev)}
+              /> {/* Pass active and setActive to Sidebar */}
+              <main className="flex-1 overflow-auto p-4">
+                {activePanel === 'mission' && <TaskBriefInput />}
+                {activePanel === 'mission' && <ScanningRepoIndicator />}
+                {activePanel === 'mission' && <LaunchPanel />}
+                {activePanel === 'mission' && <TreasuryBand />}
+                {activePanel === 'mission' && <HermesRouterPanel />}
+                {activePanel === 'mission' && <PaperclipWorkerPanel />}
+                {activePanel === 'mission' && <T5500Panel />}
+                {activePanel === 'mission' && <RevenueEnginePanel />}
+                {activePanel === 'mission' && <TrustHierarchyPanel />}
+                {activePanel === 'mission' && <StackIntegrityPanel />}
+                {activePanel === 'uploads' && <UploadProgressPanel />}
+                {activePanel === 'rate-limits' && <RateLimitDashboard />}
+                {/* Add other panels here based on activePanel */}
+              </main>
+              <aside className="w-64 bg-panel p-4 overflow-auto">
+                <RunbooksPanel />
+                <BuildAgentPanel />
+                <MissionBand />
+              </aside>
+            </div>
+            <Footer />
+            <ToastContainer />
+            {showNotificationPanel && (
+              <div className="absolute top-16 right-4 z-50">
+                <NotificationPanel
+                  notifications={notifications}
+                  markAsRead={markAsRead}
+                  clearAllNotifications={clearAllNotifications}
+                  onClose={() => setShowNotificationPanel(false)}
+                />
+              </div>
+            )}
+          </div>
+        </ToastProvider>
+      </AuthProvider>
+    </ThemeProvider>
+  );
+};

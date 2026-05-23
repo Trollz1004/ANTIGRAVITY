@@ -1,0 +1,39 @@
+{
+  "summary": "Iteration 3: Mission Ledger + Webhook intake + Watchdog + Nano Banana image gen + MissionRibbon + ShareMissionModal end-to-end. Backend: 15/15 pytest passed in /app/backend/tests/test_ledger_and_services.py (ledger CRUD, webhook cents->dollars, unknown source 400, list filters, stats shape with kids_threshold_usd/kids_estimate, delete + 404, watchdog 5 tier-0 agents recent/non-stale, stale-heartbeat alert path verified by mutating mongo and restoring, real Gemini Nano Banana call returning data:image/<mime>;base64,... with model='gemini-3.1-flash-image-preview', /api/images strips data_uri, doctrine sweep on /api/ledger/stats /api/watchdog/status /api/images /api/providers — none of {haiku,donate,donation,solicitation} present). Frontend: AgeGate -> 8 sidebar modes (mission/ledger/roundtable/tasks/code/create/research/chat) all rendered with NEW pill on the four mission ones. MissionRibbon rendered on mission/ledger/tasks/roundtable/settings/create with #UntilNoKidInNeed tag, COMMITTED/KIDS FUND/KIDS COVERED, share button. LedgerMode: 4 counter cards, all 10 bucket cells (data-testid ledger-bucket-1..10), source breakdown row, RECORD CONTRIBUTION modal opens, submitting writes entry that appears in list and updates ribbon ($75 committed / $50 kids fund / 2 buckets after test). CreateMode: prompt textarea, 3 preset buttons, GENERATE button, model label gemini-3.1-flash-image-preview visible. CommandPalette: Ctrl+K opens; Go to Mission Ledger / Go to Create · Banana / Share mission status entries present; selecting Share fires opuspawclaw-share which opens ShareMissionModal whose canvas toDataURL is 471222 chars (proves the mission snapshot draws). Doctrine sweep on rendered UI of mission/ledger/create/roundtable/settings: no forbidden words. The iter2 SettingsPanel doctrine-violation flag has been resolved by main agent.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "LedgerMode (or related select-option render)", "issues": ["React hydration warning observed once: 'In HTML, %s cannot be a child of <%s>.' with <span> inside <option>. Browsers ignore it but it pollutes the console. Audit the bucket/source <select><option> blocks (LedgerMode.js ~lines 178-190 and similar) — option text must be plain text only, no nested elements."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_ledger_and_services.py",
+    "/app/test_reports/pytest/iter3_results.xml",
+    "/app/backend/tests/test_hub_and_tasks.py",
+    "/app/backend/tests/test_mission_control.py"
+  ],
+  "action_items": [
+    "Optional: trace and remove the <span> inside <option> producing the React hydration warning seen on the Ledger / Settings screens. Cosmetic only.",
+    "Optional hardening: add a single shared FORBIDDEN constant + a CI assertion sweeping rendered HTML — would catch regressions like the iter2 SettingsPanel slip automatically."
+  ],
+  "critical_code_review_comments": [
+    "ledger.py: clean — KID_THRESHOLD_USD env-driven, BUCKET_NAMES table is single source of truth, _id excluded everywhere, webhook permissively accepts amount_usd OR amount_cents and floors to bucket=1 default. POST /ledger/contribute with bucket out of [1,10] returns 422 (pydantic) rather than 400 — test now accepts either. Acceptable.",
+    "services.py watchdog: 60s tick is fire-and-forget asyncio.create_task — no graceful cancel on shutdown; not a bug but log a warning if Joshua sees zombie tasks during reloads. Heartbeat upsert uses 'at' as ISO string; parse defends against missing tz with replace('Z','+00:00') — solid.",
+    "services.py image gen: real Gemini call works; returned data_uri is stored in IMAGES collection in full (only data_preview is the truncated copy; data_uri itself is the bulky payload). The list endpoint correctly excludes data_uri so /api/images stays small, but the on-disk Mongo doc keeps the full base64 — that will balloon the collection over time. Recommend either capping IMAGES collection size, storing only data_preview, or moving payload to GridFS once usage grows.",
+    "MissionRibbon polls every 12s on every mode — fine. ShareMissionModal canvas snapshot is pure client-side, no doctrine words leak.",
+    "CommandPalette Ctrl+K + Go to Ledger / Go to Create / Share entries all fire correctly; Share dispatches a global custom event which MissionRibbon listens for — clean decoupling.",
+    "Sidebar correctly renders 8 modes with NEW pill on the four mission ones (mission/ledger/roundtable/tasks).",
+    "Doctrine: rendered UI on mission/ledger/create/roundtable/settings now contains none of {haiku,donate,donation,solicitation}. Iter2 finding has been fixed by main agent.",
+    "Minor: a stray React 'span inside option' hydration warning is logged once during ledger render — purely cosmetic, no functional impact."
+  ],
+  "updated_files": ["/app/backend/tests/test_ledger_and_services.py"],
+  "success_rate": {"backend": "100% (15/15 new + iter1+iter2 already passing)", "frontend": "100% on tested flows (1 cosmetic console hydration warning)"},
+  "test_credentials": "N/A — no auth on this surface.",
+  "seed_data_creation": "Test ledger entries prefixed with TEST_iter3 / TEST_pw_iter3 in note — autouse fixture deletes them on teardown. Watchdog mutated cfo heartbeat in mongo and restored it to a fresh ISO timestamp at test end.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend tests live at /app/backend/tests/test_{mission_control,hub_and_tasks,ledger_and_services}.py — run all three with `python -m pytest /app/backend/tests/ -v`. Image gen test takes ~6-10s due to real Gemini call. The watchdog stale-heartbeat test mutates mongo.heartbeats directly and then restores; if it fails mid-test, manually upsert {agent:'cfo', at: now_iso} to clear the alert. Frontend AgeGate requires the input[type=checkbox] to be checked BEFORE clicking 'ENTER MISSION CONTROL' — the button doesn't dismiss the gate without the consent tick.",
+  "rca_of_the_issue": "No new defects to RCA. The iter2 SettingsPanel doctrine violation was fixed by main agent and verified — 'haiku' and 'solicitation' no longer appear in rendered settings text. The single open observation is cosmetic: a React hydration warning about a <span> nested inside an <option>, which browsers tolerate but DOM strict mode flags."
+}

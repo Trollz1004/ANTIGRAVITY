@@ -43,6 +43,45 @@ def _enforce_registration_rate_limit(client_ip: str) -> None:
     "/register",
     response_model=UserRegisterResponse,
     status_code=status.HTTP_201_CREATED,
+    responses={
+        201: {
+            "description": "User created successfully",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "user_id": "550e8400-e29b-41d4-a716-446655440000",
+                        "session_token": "dBkFyLXa3RjHmNq8pT...",
+                    }
+                }
+            },
+        },
+        409: {
+            "description": "Email already registered",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "code": "ALREADY_EXISTS",
+                        "message": "Email is already registered.",
+                        "details": None,
+                    }
+                }
+            },
+        },
+        429: {
+            "description": "Rate limit exceeded",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "code": "RATE_LIMIT_EXCEEDED",
+                        "message": "Rate limit exceeded. Try again in a minute.",
+                        "details": None,
+                    }
+                }
+            },
+        },
+    },
+    summary="Register a user (legacy)",
+    description="Legacy user registration endpoint with IP-based rate limiting. Prefer `POST /api/v1/auth/register` for new integrations.",
 )
 async def register_user(
     payload: UserRegisterRequest,

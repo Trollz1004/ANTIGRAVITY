@@ -5,7 +5,6 @@ auth flows, verification flows, and webhook signature verification
 without requiring a live database or external services.
 """
 
-import asyncio
 import base64
 import hashlib
 import hmac
@@ -18,7 +17,7 @@ from unittest.mock import MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 # Set environment variables IMMEDIATELY
 os.environ["JWT_SECRET"] = (
@@ -55,7 +54,6 @@ database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
 
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
-from app.rate_limit import reset_rate_limits  # noqa: E402
 
 # ── Mock User Factory ──
 
@@ -189,7 +187,7 @@ def make_square_booking_event(
                     "customer_id": "CUST123",
                     "customer_details": {
                         "email_address": customer_email,
-                        "phone": "+15551234567",
+                        "phone": "+155****4567",
                     },
                     "customer_note": "E-waste pickup",
                 }
@@ -198,37 +196,87 @@ def make_square_booking_event(
     }
 
 
-@pytest.fixture()
-def db_session_factory(tmp_path):
-    db_path = tmp_path / "audit.db"
-    engine = create_async_engine(f"sqlite+aiosqlite:///{db_path.as_posix()}")
+@pytest.fixture(scope="session")
+async def db_session_factory():  # Changed to async
+    engine = create_async_engine("sqlite+aiosqlite:///:memory:")
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
     async def setup() -> None:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
 
-    asyncio.run(setup())
+    async def teardown() -> None:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.drop_all)
+        await engine.dispose()
+
+    await setup()
 
     yield session_factory
 
-    async def teardown() -> None:
-        await engine.dispose()
-
-    asyncio.run(teardown())
+    await teardown()
 
 
 @pytest.fixture()
 def client(db_session_factory):
+    session_maker = db_session_factory
+
     async def override_get_db():
-        async with db_session_factory() as session:
+        async with session_maker() as session:
             yield session
 
     app.dependency_overrides[get_db] = override_get_db
-    reset_rate_limits()
 
     with TestClient(app) as test_client:
         yield test_client
 
     app.dependency_overrides.clear()
-    reset_rate_limits()
+
+
+@pytest.fixture()
+async def isolated_db_session(db_session_factory):
+    """
+    Provides an isolated database session for each test using SAVEPOINTs.
+    This fixture ensures that database changes made during a test are rolled back
+    at the end of the test, preventing test pollution.
+    """
+    engine = db_session_factory.kw["bind"]
+
+    connection = await engine.connect()
+    transaction = await connection.begin()  # Outer transaction
+    nested = await connection.begin_nested()  # SAVEPOINT
+
+    # Create a session bound to this connection and transaction
+    Session = async_sessionmaker(
+        autocommit=False, autoflush=False, bind=connection, expire_on_commit=False
+    )
+    session = Session()
+
+    try:
+        yield session
+    finally:
+        if nested.is_active:
+            await nested.rollback()
+        if transaction.is_active:
+            await transaction.rollback()  # Rollback outer transaction too
+        await connection.close()
+        await session.close()
+
+
+@pytest.fixture()
+def isolated_client(isolated_db_session: AsyncSession):
+    """
+    Provides a FastAPI TestClient that uses an isolated database session
+    for each test. This client ensures that all requests made during a test
+    are within a transaction that will be rolled back, providing full isolation.
+    """
+
+    async def override_get_db_isolated():
+        yield isolated_db_session
+
+    app.dependency_overrides[get_db] = override_get_db_isolated
+
+    with TestClient(app) as test_client:
+        yield test_client
+
+    app.dependency_overrides.clear()
