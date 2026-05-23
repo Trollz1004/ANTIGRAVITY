@@ -257,7 +257,7 @@ This is not a threat — it is his documented standing order to protect the miss
 - **1-wallet model**: all revenue in, all costs out of one wallet. 10% minimum goes to a reserve — Josh's money, his call what happens to it quarterly. No charity labels, no doctrine scans.
 - **No mock/simulation data** — real or fail honestly
 - **Retired/recovery-only repos and folders are non-authoritative** — do not use them as live doctrine or routing truth
-- **Auxiliary node restriction** — helper nodes, mirrored clones, and auxiliary workstations are read-only for live repo truth. Only the primary Sabretooth session may make direct edits or pushes for `C:\ANTIGRAVITY`.
+- **Multi-node write model** — Any node Josh works from may edit and push to the one remote (`Trollz1004/ANTIGRAVITY`). Git is the coordination layer: the remote is the single source of truth, every node pulls before work and lands changes through branches/PRs, and merges reconcile. No node is a write-bottleneck — Sabretooth is the primary command post but **not** the sole writer (a 24/7 multi-agent fleet across SABRETOOTH, T5500, 9020, and helper nodes cannot funnel every write through one box). Each node keeps its machine-local files (e.g. `.claude/settings.local.json`) out of commits.
 - **E drive / sandbox**: Untested LLM setups, openclaw configs, and experimental model
   configurations stay on E drive or the sandbox repo until Josh approves them for main.
 - Prefer `trash` over `rm`. Be direct. No fluff.
