@@ -114,8 +114,11 @@ POSTGRES_DB=paperclip9020
 POSTGRES_USER=paperclip
 POSTGRES_PASSWORD=$(New-Guid)
 
-# === Model APIs (ONLY THESE TWO + tier-3 fallback) ===
-ANTHROPIC_API_KEY=sk-ant-PASTE_YOUR_KEY_HERE
+# === Model APIs (Ollama Cloud primary — Anthropic hard wall) ===
+# FOUNDER-DOCTRINE rule 2 & 6: Claude/Opus is an EXTERNAL architect-auditor only,
+# NEVER an in-platform adapter. No Anthropic key belongs in this node.
+# adapter-allowlist.json v2.0.0: tier-1 = ollama_cloud_*; tier-0 = codex_local (audit only).
+OLLAMA_API_KEY=PASTE_YOUR_OLLAMA_PRO_KEY_HERE
 CODEX_API_KEY=PASTE_YOUR_KEY_HERE
 
 # === Tier-3 fallback (Ollama korpohermes-prime — local, no API key needed) ===
@@ -260,7 +263,7 @@ if ($allGreen) {
   Postgres:            localhost:5433
 
   BEFORE FIRST START:
-    1. Edit $envPath with real ANTHROPIC_API_KEY and CODEX_API_KEY
+    1. Edit $envPath with real OLLAMA_API_KEY and CODEX_API_KEY
     2. Start Ollama: ollama serve (if not running)
     3. Start Paperclip: cd $InstallRoot && hermes start --port 5555
     4. Verify: http://localhost:5555 shows Hermes CEO
