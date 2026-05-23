@@ -95,8 +95,8 @@ Import-Module
 .hermes/
 hermes.log
 
-# Per-machine Claude Code local overrides — never commit
-.claude/settings.local.json
+# Per-machine Claude Code local overrides — never commit (any node, any depth)
+**/.claude/settings.local.json
 
 # Any env-style secrets file (*.env, *.env.txt, NSFWAdvanced-legacy.env, etc.)
 # — never commit. Real secrets live in the OneDrive Personal Vault.
