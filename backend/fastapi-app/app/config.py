@@ -70,6 +70,19 @@ class Settings(BaseSettings):
     google_client_id: str = ""
     google_client_secret: str = ""
 
+    # -------------------------------------------------------------------------
+    # ClawX 6-AI Council Integration
+    # -------------------------------------------------------------------------
+    clawx_enabled: bool = False
+    clawx_base_url: str = "https://api.clawx.example.com"
+    clawx_agent_keys: str = "{}"  # JSON dict of agent_name: api_key
+
+    # Database connection pooling settings
+    db_pool_size: int = 10
+    db_max_overflow: int = 20
+    db_pool_timeout: int = 30
+    db_pool_recycle: int = 1800
+
     # Monitoring settings
     sentry_dsn: str = ""
     prometheus_port: int = 8000
@@ -95,8 +108,17 @@ class Settings(BaseSettings):
     # Set to true in production when CDN is configured.
     cdn_enabled: bool = False
 
+    # -------------------------------------------------------------------------
+    # Redis
+    # -------------------------------------------------------------------------
+    redis_url: str = "redis://localhost:6379/0"
+    redis_max_connections: int = 20
+    redis_cache_default_ttl: int = 300
+    redis_session_ttl: int = 3600
+    redis_rate_limit_window: int = 60
+
     cors_origins: str = (
-        "https://youandinotai.com,http://localhost:3000,http://localhost:5173"
+        "https://youandinotai.com,http://localhost:3000,http://localhost:5173,http://localhost:8000,http://[IP_ADDRESS]:8000"
     )
     registration_rate_limit_per_minute: int = 10
     auth_rate_limit_per_minute: int = 10
@@ -105,6 +127,11 @@ class Settings(BaseSettings):
     rate_limit_trusted_proxies: str = "127.0.0.1/32,::1/128"
     match_top_k: int = 5
     match_candidate_limit: int = 50
+
+    # Request size limits (DoS protection)
+    max_request_body_size: int = 1_048_576  # 1 MB default for JSON bodies
+    max_file_upload_size: int = 10_485_760  # 10 MB for file uploads
+    max_json_depth: int = 10  # max nested object/array levels
 
     # File upload settings
     upload_max_size_mb: int = 10

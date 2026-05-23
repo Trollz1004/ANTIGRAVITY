@@ -5,12 +5,18 @@ import uuid
 from collections import defaultdict
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from fastapi import (
+    APIRouter,
+    Depends,
+    WebSocket,
+    WebSocketDisconnect,
+    status,
+)
 from sqlalchemy import and_, or_, select
 
-from app.auth import decode_token
 from app.database import SessionLocal
-from app.models import Match, VideoCall
+from app.dependencies.websocket_auth import get_current_websocket_user
+from app.models import Match, User, VideoCall
 
 router = APIRouter()
 
@@ -107,13 +113,16 @@ async def _relay_to_peers(
 
 
 @router.websocket("/ws/video/{call_id}")
-async def websocket_video_signaling(websocket: WebSocket, call_id: str, token: str):
+async def websocket_video_signaling(
+    websocket: WebSocket, call_id: str, user: User = Depends(get_current_websocket_user)
+):
     try:
-        payload = decode_token(token)
-        user_id = str(uuid.UUID(str(payload.get("sub"))))
+        user_id = str(user.id)
         call_uuid = uuid.UUID(call_id)
     except Exception:
-        await websocket.close(code=4001, reason="Invalid token")
+        await websocket.close(
+            code=status.WS_1008_POLICY_VIOLATION, reason="Invalid call ID or user ID."
+        )
         return
 
     room = _video_connections[call_id]

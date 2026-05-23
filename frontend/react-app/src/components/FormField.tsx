@@ -25,8 +25,16 @@ export interface FormFieldProps {
   className?: string;
   icon?: React.ReactNode;
   children?: React.ReactNode;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onChange?: (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => void;
+  onBlur?: (
+    e: React.FocusEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => void;
   renderInput?: (props: {
     id: string;
     name: string;
@@ -64,7 +72,11 @@ export function FormField({
   const inputId = `field-${name}`;
 
   const inputClasses = [
-    type === 'textarea' ? 'app-textarea' : type === 'select' ? 'app-select' : 'app-input',
+    type === 'textarea'
+      ? 'app-textarea'
+      : type === 'select'
+        ? 'app-select'
+        : 'app-input',
     'input-glow',
     icon ? 'pl-12' : '',
     showError ? 'border-red-500 ring-2 ring-red-500/30' : '',

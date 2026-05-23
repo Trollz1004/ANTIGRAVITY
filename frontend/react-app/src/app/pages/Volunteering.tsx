@@ -13,6 +13,8 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { api } from '../../lib/api';
+import { LazySection } from '../../components/LazySection';
+import { SkeletonLoader } from '../../components/SkeletonLoader';
 import VolunteerHub from '../../components/VolunteerHub';
 
 interface VolunteerData {
@@ -199,9 +201,9 @@ export function Volunteering() {
 
       {/* My Impact view */}
       {viewMode === 'my-impact' ? (
-        <div className="animate-scale-in">
+        <LazySection fallback={<SkeletonLoader />}>
           <VolunteerHub />
-        </div>
+        </LazySection>
       ) : (
         <>
           {/* Impact Dashboard */}
@@ -399,99 +401,109 @@ export function Volunteering() {
               </p>
             </div>
           ) : (
-            <div className="space-y-4 stagger-children">
-              {opportunities.map(opp => {
-                const gradient =
-                  CATEGORY_COLORS[opp.category] || CATEGORY_COLORS.general;
-                return (
-                  <div
-                    key={opp.id}
-                    className="glass rounded-3xl p-6 glass-highlight hover:bg-white/[0.04] transition-all duration-200"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-white font-bold text-lg">
-                            {opp.title}
-                          </h3>
-                          <span
-                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white bg-gradient-to-r ${gradient}`}
-                          >
-                            {CATEGORIES.find(c => c.value === opp.category)
-                              ?.label || opp.category}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-emerald-400 text-sm font-semibold">
-                            {opp.organization}
-                          </span>
-                          {opp.creator_name && (
-                            <span className="text-gray-600 text-xs">
-                              by {opp.creator_name}
+            <LazySection fallback={<SkeletonLoader />}>
+              <div className="space-y-4 stagger-children">
+                {opportunities.map(opp => {
+                  const gradient =
+                    CATEGORY_COLORS[opp.category] || CATEGORY_COLORS.general;
+                  return (
+                    <div
+                      key={opp.id}
+                      className="glass rounded-3xl p-6 glass-highlight hover:bg-white/[0.04] transition-all duration-200"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="text-white font-bold text-lg">
+                              {opp.title}
+                            </h3>
+                            <span
+                              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white bg-gradient-to-r ${gradient}`}
+                            >
+                              {CATEGORIES.find(c => c.value === opp.category)
+                                ?.label || opp.category}
                             </span>
-                          )}
-                        </div>
-                        <p className="text-gray-400 text-sm mt-2 leading-relaxed">
-                          {opp.description}
-                        </p>
-                        <div className="flex flex-wrap gap-3 mt-4">
-                          {opp.event_date && (
+                          </div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-emerald-400 text-sm font-semibold">
+                              {opp.organization}
+                            </span>
+                            {opp.creator_name && (
+                              <span className="text-gray-600 text-xs">
+                                by {opp.creator_name}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-gray-400 text-sm mt-2 leading-relaxed">
+                            {opp.description}
+                          </p>
+                          <div className="flex flex-wrap gap-3 mt-4">
+                            {opp.event_date && (
+                              <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
+                                <Calendar
+                                  size={12}
+                                  className="text-emerald-400"
+                                />
+                                {new Date(opp.event_date).toLocaleDateString(
+                                  [],
+                                  {
+                                    weekday: 'short',
+                                    month: 'short',
+                                    day: 'numeric',
+                                  }
+                                )}
+                              </span>
+                            )}
+                            {opp.location && (
+                              <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
+                                <MapPin
+                                  size={12}
+                                  className="text-emerald-400"
+                                />{' '}
+                                {opp.location}
+                              </span>
+                            )}
+                            {opp.hours_estimate && (
+                              <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
+                                <Clock size={12} className="text-emerald-400" />{' '}
+                                {opp.hours_estimate}h
+                              </span>
+                            )}
                             <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
-                              <Calendar
-                                size={12}
-                                className="text-emerald-400"
-                              />
-                              {new Date(opp.event_date).toLocaleDateString([], {
-                                weekday: 'short',
-                                month: 'short',
-                                day: 'numeric',
-                              })}
+                              <Users size={12} className="text-emerald-400" />
+                              {opp.signup_count}
+                              {opp.spots ? `/${opp.spots}` : ''} signed up
                             </span>
-                          )}
-                          {opp.location && (
-                            <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
-                              <MapPin size={12} className="text-emerald-400" />{' '}
-                              {opp.location}
-                            </span>
-                          )}
-                          {opp.hours_estimate && (
-                            <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
-                              <Clock size={12} className="text-emerald-400" />{' '}
-                              {opp.hours_estimate}h
-                            </span>
-                          )}
-                          <span className="flex items-center gap-1.5 text-xs text-gray-400 glass rounded-full px-3 py-1.5">
-                            <Users size={12} className="text-emerald-400" />
-                            {opp.signup_count}
-                            {opp.spots ? `/${opp.spots}` : ''} signed up
-                          </span>
+                          </div>
                         </div>
+                        <button
+                          onClick={() => signup(opp.id)}
+                          disabled={signedUp.has(opp.id)}
+                          className={`px-5 py-2.5 rounded-2xl text-sm font-bold flex-shrink-0 transition-all duration-200 ${
+                            signedUp.has(opp.id)
+                              ? 'glass text-emerald-400 border-emerald-500/20'
+                              : 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:shadow-lg hover:shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98]'
+                          }`}
+                        >
+                          {signedUp.has(opp.id) ? (
+                            <span className="flex items-center gap-1.5">
+                              <Check size={14} /> Signed Up
+                            </span>
+                          ) : (
+                            'Sign Up'
+                          )}
+                        </button>
                       </div>
-                      <button
-                        onClick={() => signup(opp.id)}
-                        disabled={signedUp.has(opp.id)}
-                        className={`px-5 py-2.5 rounded-2xl text-sm font-bold flex-shrink-0 transition-all duration-200 ${
-                          signedUp.has(opp.id)
-                            ? 'glass text-emerald-400 border-emerald-500/20'
-                            : 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:shadow-lg hover:shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98]'
-                        }`}
-                      >
-                        {signedUp.has(opp.id) ? (
-                          <span className="flex items-center gap-1.5">
-                            <Check size={14} /> Signed Up
-                          </span>
-                        ) : (
-                          'Sign Up'
-                        )}
-                      </button>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            </LazySection>
           )}
         </>
       )}
     </div>
   );
 }
+
+export default Volunteering;

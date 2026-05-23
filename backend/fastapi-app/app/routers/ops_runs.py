@@ -12,10 +12,10 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
-from app.error_responses import not_found
 from pydantic import BaseModel
 
 from app.auth import get_current_user
+from app.error_responses import not_found
 from app.models import User
 
 router = APIRouter()

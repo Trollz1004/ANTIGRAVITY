@@ -35,7 +35,6 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 import asyncio
-from unittest.mock import AsyncMock
 
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
@@ -50,7 +49,6 @@ database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
 
 from app.database import Base, get_db
 from app.main import app
-from app.rate_limit import reset_rate_limits
 
 
 @pytest.fixture()
@@ -70,13 +68,11 @@ def client():
             yield session
 
     app.dependency_overrides[get_db] = override_get_db
-    reset_rate_limits()
 
     with TestClient(app) as test_client:
         yield test_client
 
     app.dependency_overrides.clear()
-    reset_rate_limits()
 
     async def teardown():
         await engine.dispose()
@@ -120,20 +116,22 @@ def test_gzip_middleware_is_configured():
     """Verify GZipMiddleware is present in the app's middleware stack."""
     middleware_classes = [m.cls for m in app.user_middleware]
     from starlette.middleware.gzip import GZipMiddleware
-    assert GZipMiddleware in middleware_classes, (
-        "GZipMiddleware should be registered in the middleware stack"
-    )
+
+    assert (
+        GZipMiddleware in middleware_classes
+    ), "GZipMiddleware should be registered in the middleware stack"
 
 
 def test_gzip_middleware_minimum_size():
     """Verify GZipMiddleware is configured with minimum_size=1024."""
     from starlette.middleware.gzip import GZipMiddleware
+
     for m in app.user_middleware:
         if m.cls is GZipMiddleware:
             # Check that minimum_size kwarg is set to 1024
-            assert m.kwargs.get("minimum_size") == 1024, (
-                f"GZipMiddleware minimum_size should be 1024, got {m.kwargs}"
-            )
+            assert (
+                m.kwargs.get("minimum_size") == 1024
+            ), f"GZipMiddleware minimum_size should be 1024, got {m.kwargs}"
             break
     else:
         pytest.fail("GZipMiddleware not found in middleware stack")

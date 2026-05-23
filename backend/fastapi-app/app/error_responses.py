@@ -55,6 +55,7 @@ class ErrorResponse(BaseModel):
 #         global handler and rendered as a standardized ErrorResponse.
 # ---------------------------------------------------------------------------
 
+
 def api_exception(
     status_code: int,
     code: ErrorCode | str,
@@ -79,37 +80,84 @@ def api_exception(
 # Convenience shapers for the most common status codes
 # ---------------------------------------------------------------------------
 
-def not_found(message: str = "Resource not found", details: Any = None) -> HTTPException:
-    return api_exception(status.HTTP_404_NOT_FOUND, ErrorCode.NOT_FOUND, message, details)
+
+def not_found(
+    message: str = "Resource not found", details: Any = None
+) -> HTTPException:
+    return api_exception(
+        status.HTTP_404_NOT_FOUND, ErrorCode.NOT_FOUND, message, details
+    )
 
 
-def unauthorized(message: str = "Authentication required", details: Any = None) -> HTTPException:
-    return api_exception(status.HTTP_401_UNAUTHORIZED, ErrorCode.INVALID_CREDENTIALS, message, details)
+def unauthorized(
+    message: str = "Authentication required", details: Any = None
+) -> HTTPException:
+    return api_exception(
+        status.HTTP_401_UNAUTHORIZED, ErrorCode.INVALID_CREDENTIALS, message, details
+    )
 
 
-def forbidden(message: str = "Insufficient permissions", details: Any = None) -> HTTPException:
-    return api_exception(status.HTTP_403_FORBIDDEN, ErrorCode.INSUFFICIENT_PERMISSIONS, message, details)
+def forbidden(
+    message: str = "Insufficient permissions", details: Any = None
+) -> HTTPException:
+    return api_exception(
+        status.HTTP_403_FORBIDDEN, ErrorCode.INSUFFICIENT_PERMISSIONS, message, details
+    )
 
 
 def bad_request(message: str = "Bad request", details: Any = None) -> HTTPException:
-    return api_exception(status.HTTP_400_BAD_REQUEST, ErrorCode.BAD_REQUEST, message, details)
+    return api_exception(
+        status.HTTP_400_BAD_REQUEST, ErrorCode.BAD_REQUEST, message, details
+    )
 
 
-def conflict(message: str = "Resource already exists", details: Any = None) -> HTTPException:
-    return api_exception(status.HTTP_409_CONFLICT, ErrorCode.ALREADY_EXISTS, message, details)
+def conflict(
+    message: str = "Resource already exists", details: Any = None
+) -> HTTPException:
+    return api_exception(
+        status.HTTP_409_CONFLICT, ErrorCode.ALREADY_EXISTS, message, details
+    )
 
 
-def validation_error(message: str = "Validation error", details: Any = None) -> HTTPException:
-    return api_exception(status.HTTP_422_UNPROCESSABLE_ENTITY, ErrorCode.VALIDATION_ERROR, message, details)
+def validation_error(
+    message: str = "Validation error", details: Any = None
+) -> HTTPException:
+    return api_exception(
+        status.HTTP_422_UNPROCESSABLE_ENTITY,
+        ErrorCode.VALIDATION_ERROR,
+        message,
+        details,
+    )
 
 
-def rate_limit(message: str = "Rate limit exceeded", details: Any = None) -> HTTPException:
-    return api_exception(status.HTTP_429_TOO_MANY_REQUESTS, ErrorCode.RATE_LIMIT_EXCEEDED, message, details)
+def rate_limit(
+    message: str = "Rate limit exceeded", details: Any = None
+) -> HTTPException:
+    return api_exception(
+        status.HTTP_429_TOO_MANY_REQUESTS,
+        ErrorCode.RATE_LIMIT_EXCEEDED,
+        message,
+        details,
+    )
 
 
-def internal_error(message: str = "An unexpected error occurred", details: Any = None) -> HTTPException:
-    return api_exception(status.HTTP_500_INTERNAL_SERVER_ERROR, ErrorCode.INTERNAL_ERROR, message, details)
+def internal_error(
+    message: str = "An unexpected error occurred", details: Any = None
+) -> HTTPException:
+    return api_exception(
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+        ErrorCode.INTERNAL_ERROR,
+        message,
+        details,
+    )
 
 
-def service_unavailable(message: str = "Service temporarily unavailable", details: Any = None) -> HTTPException:
-    return api_exception(status.HTTP_503_SERVICE_UNAVAILABLE, ErrorCode.SERVICE_UNAVAILABLE, message, details)
+def service_unavailable(
+    message: str = "Service temporarily unavailable", details: Any = None
+) -> HTTPException:
+    return api_exception(
+        status.HTTP_503_SERVICE_UNAVAILABLE,
+        ErrorCode.SERVICE_UNAVAILABLE,
+        message,
+        details,
+    )

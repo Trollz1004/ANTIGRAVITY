@@ -18,6 +18,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import WebhookEvent
 
+
 @dataclass(frozen=True)
 class WebhookEventSchema:
     table: Table

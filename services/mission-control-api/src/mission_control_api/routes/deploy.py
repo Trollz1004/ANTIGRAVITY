@@ -1,6 +1,7 @@
 from fastapi import APIRouter, BackgroundTasks
 import uuid, datetime, asyncio
 from ..envelope import make_envelope
+from ..middleware.schemas import DeployRequest
 from mission_control_api.logging_config import get_logger
 
 logger = get_logger(__name__)
@@ -16,12 +17,15 @@ def register_run(run_id, command):
 runs = {}
 
 @router.post("/deploy/paperclip")
-async def deploy_paperclip(background: BackgroundTasks):
+async def deploy_paperclip(background: BackgroundTasks, payload: DeployRequest):
     run_id = str(uuid.uuid4())
-    # placeholder command
-    command = "wrangler deploy"  # not actually run
+    # placeholder command — environment from validated payload
+    command = f"wrangler deploy --env {payload.environment}"
+    if payload.force:
+        command += " --force"
     register_run(run_id, command)
-    return {"run_id": run_id, "started_at": runs[run_id]["started_at"], "status": "running"}
+    logger.info("deploy requested", extra={"environment": payload.environment, "force": payload.force})
+    return {"run_id": run_id, "started_at": runs[run_id]["started_at"], "status": "running", "environment": payload.environment}
 
 @router.get("/deploy/runs")
 async def list_deploys():

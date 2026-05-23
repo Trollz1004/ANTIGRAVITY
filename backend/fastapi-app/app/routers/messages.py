@@ -7,16 +7,17 @@ from collections import defaultdict
 from fastapi import (
     APIRouter,
     Depends,
-    Query,
     WebSocket,
     WebSocketDisconnect,
+    status,
 )
-from app.error_responses import not_found, forbidden, bad_request
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import decode_token, get_current_user
+from app.auth import get_current_user
 from app.database import SessionLocal, get_db
+from app.dependencies.websocket_auth import get_current_websocket_user
+from app.error_responses import bad_request, forbidden, not_found
 from app.models import Match, Message, User
 from app.moderation import has_block_relationship
 from app.schemas import MessageResponse, MessageSendRequest
@@ -119,25 +120,23 @@ async def send_message(
 async def websocket_chat(
     websocket: WebSocket,
     match_id: str,
-    token: str = Query(...),
+    user: User = Depends(get_current_websocket_user),
 ):
-    # Authenticate via token query param
-    try:
-        payload = decode_token(token)
-        user_id = payload.get("sub")
-    except Exception:
-        await websocket.close(code=4001, reason="Invalid token")
-        return
+    user_id = str(user.id)
 
     # Verify match membership
     async with SessionLocal() as db:
         match = await db.get(Match, uuid.UUID(match_id))
         if not match or (str(match.user_a) != user_id and str(match.user_b) != user_id):
-            await websocket.close(code=4004, reason="Match not found")
+            await websocket.close(
+                code=status.WS_1008_POLICY_VIOLATION, reason="Match not found"
+            )
             return
         other_id = match.user_b if str(match.user_a) == user_id else match.user_a
         if await has_block_relationship(db, user_a=uuid.UUID(user_id), user_b=other_id):
-            await websocket.close(code=4003, reason="Conversation unavailable")
+            await websocket.close(
+                code=status.WS_1008_POLICY_VIOLATION, reason="Conversation unavailable"
+            )
             return
 
     await websocket.accept()

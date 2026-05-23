@@ -394,3 +394,5 @@ export function Verify() {
     </div>
   );
 }
+
+export default Verify;

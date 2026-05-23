@@ -1,7 +1,11 @@
 import time
+import asyncio
+import json
+import hashlib
+from collections import deque
 from pathlib import Path
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -10,6 +14,14 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from .config import settings
 from .logging_config import setup_logging, get_logger, new_request_id, LogContext
 from .routes import health, deploy, runbooks, hermes, tasks, ops_runs
+from .middleware.sanitization import SanitizationMiddleware
+from .middleware.rate_limiting import RateLimitingMiddleware
+from .middleware.idempotency import IdempotencyMiddleware
+
+# Global in-memory cache for request deduplication
+request_cache = {} # Stores (response_body, status_code, headers, expiration_time)
+in_flight_requests = {} # Stores asyncio.Event for requests currently being processed
+cache_cleanup_queue = deque() # Stores (expiration_time, request_key) for efficient cleanup
 
 # ── Logging setup ────────────────────────────────────────────────────────────
 setup_logging(level="INFO")
@@ -26,6 +38,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ── Input sanitization middleware ────────────────────────────────────────────
+app.add_middleware(SanitizationMiddleware)
+
+# ── Rate limiting middleware ──────────────────────────────────────────────────
+app.add_middleware(RateLimitingMiddleware)
+
+# ── Idempotency key middleware ───────────────────────────────────────────────
+app.add_middleware(IdempotencyMiddleware)
 
 
 # ── Request tracing middleware ───────────────────────────────────────────────
@@ -45,9 +66,54 @@ class RequestTracingMiddleware(BaseHTTPMiddleware):
         LogContext.set_request_id(request_id)
         LogContext.set_user_id(user_id)
 
+        # Generate a unique key for the request for deduplication
+        request_key = await self._get_request_key(request)
+
+        # ── Request Deduplication Logic ──────────────────────────────────────────
+        # Check if an identical request is already in flight
+        if request_key in in_flight_requests:
+            logger.info("Duplicate request in flight, waiting for response", extra={"request_key": request_key})
+            await in_flight_requests[request_key].wait() # Wait for the original request to complete
+            cached_response_data = request_cache.get(request_key)
+            if cached_response_data:
+                response_body, status_code, headers, _ = cached_response_data
+                logger.info("Returning cached response for in-flight duplicate", extra={"request_key": request_key, "status_code": status_code})
+                return Response(content=response_body, status_code=status_code, headers=headers, media_type="application/json") # Assume JSON for now
+
+        # Check if an identical request has been recently completed and cached
+        if request_key in request_cache:
+            response_body, status_code, headers, expiration_time = request_cache[request_key]
+            if time.time() < expiration_time:
+                logger.info("Returning cached response", extra={"request_key": request_key, "status_code": status_code})
+                # FastAPI's Response class handles headers for us. We need to recreate it.
+                return Response(content=response_body, status_code=status_code, headers=headers, media_type="application/json")
+            else:
+                # Cache expired, remove it and proceed with new request
+                logger.info("Cached response expired", extra={"request_key": request_key})
+                del request_cache[request_key]
+                # No need to remove from cleanup queue, it will be naturally purged or ignored if already removed
+
+        # If not in cache or in-flight, process the request
+        request_event = asyncio.Event()
+        in_flight_requests[request_key] = request_event
+        response = None # Initialize response outside try block
+
         start = time.monotonic()
         try:
             response = await call_next(request)
+            response_body = b''
+            if response.body:
+                response_body = await response.body
+                # Ensure the original response stream is not consumed for downstream middlewares
+                response.extra['body'] = response_body # Store body in extra for potential re-use
+            
+            # Cache the successful response
+            expiration_time = time.time() + settings.REQUEST_DEDUPLICATION_SECONDS
+            # Copy headers to avoid issues with mutable response object
+            response_headers = {k: v for k, v in response.headers.items()}
+            request_cache[request_key] = (response_body, response.status_code, response_headers, expiration_time)
+            cache_cleanup_queue.append((expiration_time, request_key))
+
         except Exception as exc:
             duration_ms = int((time.monotonic() - start) * 1000)
             LogContext.set_duration_ms(duration_ms)
@@ -56,6 +122,10 @@ class RequestTracingMiddleware(BaseHTTPMiddleware):
                 exc_info=True,
                 extra={"path": request.url.path, "method": request.method},
             )
+            # Remove from in-flight requests on exception
+            if request_key in in_flight_requests:
+                del in_flight_requests[request_key]
+            request_event.set() # Signal completion even on error
             raise
         finally:
             duration_ms = int((time.monotonic() - start) * 1000)
@@ -63,21 +133,50 @@ class RequestTracingMiddleware(BaseHTTPMiddleware):
             # Clear per-request context
             LogContext.clear()
 
-        # Attach request ID to response headers for client correlation
-        response.headers["X-Request-ID"] = request_id
-        response.headers["X-Duration-Ms"] = str(duration_ms)
+            # Signal completion for any waiting duplicate requests
+            if request_key in in_flight_requests:
+                in_flight_requests[request_key].set()
+                del in_flight_requests[request_key]
 
-        logger.info(
-            "request completed",
-            extra={
-                "method": request.method,
-                "path": request.url.path,
-                "status_code": response.status_code,
-                "duration_ms": duration_ms,
-            },
-        )
+
+        # Attach request ID to response headers for client correlation
+        if response:
+            response.headers["X-Request-ID"] = request_id
+            response.headers["X-Duration-Ms"] = str(duration_ms)
+
+            logger.info(
+                "request completed",
+                extra={
+                    "method": request.method,
+                    "path": request.url.path,
+                    "status_code": response.status_code,
+                    "duration_ms": duration_ms,
+                },
+            )
 
         return response
+    
+    async def _get_request_key(self, request: Request) -> str:
+        """Generates a unique key for a request based on method, URL, and body."""
+        hash_input = f"{request.method}:{request.url.path}"
+        if request.query_params:
+            hash_input += f"?{str(request.query_params)}"
+
+        if request.method in ["POST", "PUT", "PATCH"]:
+            try:
+                # Read body and reconstruct it for other middlewares/handlers
+                body = await request.body()
+                request.state.body = body # Store body in request state
+                if body:
+                    hash_input += f":{body.decode('utf-8')}"
+            except Exception as e:
+                logger.warning(f"Could not read request body for deduplication: {e}")
+                # If body cannot be read, proceed without body in hash
+                pass
+        
+        return hashlib.sha256(hash_input.encode("utf-8")).hexdigest()
+
+
 
 
 app.add_middleware(RequestTracingMiddleware)

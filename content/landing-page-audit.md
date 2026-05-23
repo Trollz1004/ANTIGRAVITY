@@ -152,7 +152,7 @@ Open Graph tags are **PARTIALLY IMPLEMENTED** but missing the critical `og:image
 
 ### ❌ Missing:
 ```html
-<meta property="og:image" content="https://youandinotai.com/og-image.jpg">
+<meta property="og:image" content="https://youandinotai.com/assets/logo/logo-og-image-1200x630.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="YouAndINotAI — Verified Human Dating. No Bots.">
@@ -167,7 +167,7 @@ Open Graph tags are **PARTIALLY IMPLEMENTED** but missing the critical `og:image
 
 ### ❌ Missing:
 ```html
-<meta name="twitter:image" content="https://youandinotai.com/og-image.jpg">
+<meta name="twitter:image" content="https://youandinotai.com/assets/logo/logo-og-image-1200x630.png">
 <meta name="twitter:image:alt" content="YouAndINotAI — No Bots. Real Humans. Real Connections.">
 ```
 
@@ -182,7 +182,7 @@ Add immediately after line 16 (after `og:site_name`):
 
 ```html
     <meta property="og:site_name" content="YouAndINotAI">
-    <meta property="og:image" content="https://youandinotai.com/assets/og-image.jpg">
+    <meta property="og:image" content="https://youandinotai.com/assets/logo/logo-og-image-1200x630.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="YouAndINotAI — Verified Dating. No Bots. Real Humans. $14.99/mo Founding Members.">
@@ -191,7 +191,7 @@ Add immediately after line 16 (after `og:site_name`):
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="You AND I Not AI — Verified Human Dating">
     <meta name="twitter:description" content="The only dating app where every profile is verified human. $1 Bot-Shield Verification. Join the revolution.">
-    <meta name="twitter:image" content="https://youandinotai.com/assets/og-image.jpg">
+    <meta name="twitter:image" content="https://youandinotai.com/assets/logo/logo-og-image-1200x630.png">
     <meta name="twitter:image:alt" content="YouAndINotAI — No Bots. Real Humans. Real Connections.">
 ```
 
@@ -201,7 +201,7 @@ Add immediately after line 16 (after `og:site_name`):
    - Tagline: "No Bots. Real Humans. Real Connections."
    - V8 Cloud Verification badge
    - "$14.99/mo Founding Members" callout
-2. **Upload to:** `https://youandinotai.com/assets/og-image.jpg`
+2. **Upload to:** `https://youandinotai.com/assets/logo/logo-og-image-1200x630.png`
 3. **Add meta tags** as shown above
 
 ---
@@ -373,7 +373,7 @@ And add honeypot field:
 **Location:** After line 16
 **Insert:**
 ```html
-    <meta property="og:image" content="https://youandinotai.com/assets/og-image.jpg">
+    <meta property="og:image" content="https://youandinotai.com/assets/logo/logo-og-image-1200x630.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="YouAndINotAI — Verified Dating. No Bots. Real Humans.">
@@ -384,7 +384,7 @@ And add honeypot field:
 **Location:** After line 21
 **Insert:**
 ```html
-    <meta name="twitter:image" content="https://youandinotai.com/assets/og-image.jpg">
+    <meta name="twitter:image" content="https://youandinotai.com/assets/logo/logo-og-image-1200x630.png">
     <meta name="twitter:image:alt" content="YouAndINotAI — No Bots. Real Humans. Real Connections.">
 ```
 
@@ -422,7 +422,7 @@ And add honeypot field:
 ### Immediate (Before Any Marketing Push):
 - [ ] Add Plausible Analytics script to `<head>`
 - [ ] Create 1200x630px OG image with branding
-- [ ] Upload OG image to `/assets/og-image.jpg`
+ - [ ] Upload OG image to `/assets/logo/logo-og-image-1200x630.png`
 - [ ] Add OG and Twitter image meta tags
 - [ ] Add "93 of 100 Founding Spots Remaining" badge
 - [ ] Fix Netlify form attributes

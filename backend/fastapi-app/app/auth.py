@@ -1,5 +1,6 @@
 """JWT authentication utilities."""
 
+import hashlib
 import uuid
 from datetime import datetime, timedelta, timezone
 
@@ -15,6 +16,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import get_settings
 from app.database import get_db
 from app.models import User
+from app.models_refresh_token import RefreshToken
 from app.subscriptions import sync_subscription_state
 
 settings = get_settings()
@@ -48,6 +50,7 @@ def create_access_token(user_id: str, expires_minutes: int | None = None) -> str
 
 
 def create_refresh_token(user_id: str) -> str:
+    """Generate a raw refresh token JWT (opaque string to send to the client)."""
     expire = datetime.now(timezone.utc) + timedelta(
         days=settings.refresh_token_expire_days
     )
@@ -112,3 +115,128 @@ def verify_google_token(token: str) -> dict:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Invalid Google token: {e}",
         )
+
+
+# ── OPU-47: Refresh Token Rotation ──
+
+
+def _hash_token(raw_token: str) -> str:
+    """Return SHA-256 hex digest of a raw token string."""
+    return hashlib.sha256(raw_token.encode()).hexdigest()
+
+
+async def rotate_refresh_token(
+    db: AsyncSession,
+    raw_token: str,
+    user_id: uuid.UUID,
+    ip_address: str | None = None,
+    user_agent: str | None = None,
+) -> str:
+    """
+    Rotate a refresh token: validate the old one, revoke it, issue a new one.
+
+    Returns the new raw refresh token string.
+
+    Raises HTTP 401 if the token is not found, expired, or already revoked.
+    If the token was already revoked (reuse detection), ALL tokens for the user
+    are revoked as a security measure (potential token theft).
+    """
+    token_hash = _hash_token(raw_token)
+
+    # Look up the stored token record
+    stored_token = await db.scalar(
+        select(RefreshToken).where(RefreshToken.token_hash == token_hash)
+    )
+
+    if not stored_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token",
+        )
+
+    now = datetime.now(timezone.utc)
+
+    # Check expiry
+    if stored_token.expires_at < now:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token expired",
+        )
+
+    # Reuse detection: if the token was already revoked, someone is reusing it
+    if stored_token.revoked_at is not None:
+        # Potential token theft — revoke ALL tokens for this user
+        await revoke_all_user_tokens(db, user_id)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token reuse detected. All sessions revoked.",
+        )
+
+    # Decode the JWT to get the user_id (defense in depth — we already have it)
+    payload = decode_token(raw_token)
+    token_user_id = uuid.UUID(str(payload["sub"]))
+
+    # Create the new token record
+    new_raw_token = create_refresh_token(str(token_user_id))
+    new_expires = datetime.now(timezone.utc) + timedelta(
+        days=settings.refresh_token_expire_days
+    )
+    new_token = RefreshToken(
+        id=uuid.uuid4(),
+        user_id=token_user_id,
+        token_hash=_hash_token(new_raw_token),
+        expires_at=new_expires,
+        ip_address=ip_address,
+        user_agent=user_agent,
+    )
+    db.add(new_token)
+    await db.flush()  # get the new token's id
+
+    # Revoke the old token and link it to the new one
+    stored_token.revoked_at = now
+    stored_token.replaced_by = new_token.id
+
+    await db.commit()
+    return new_raw_token
+
+
+async def revoke_all_user_tokens(db: AsyncSession, user_id: uuid.UUID) -> int:
+    """
+    Revoke all active refresh tokens for a user.
+    Called on token reuse detection or explicit logout-all.
+    Returns the number of tokens revoked.
+    """
+    now = datetime.now(timezone.utc)
+    result = await db.execute(
+        select(RefreshToken).where(
+            RefreshToken.user_id == user_id,
+            RefreshToken.revoked_at.is_(None),
+            RefreshToken.expires_at > now,
+        )
+    )
+    active_tokens = result.scalars().all()
+    count = 0
+    for token in active_tokens:
+        token.revoked_at = now
+        count += 1
+    await db.commit()
+    return count
+
+
+async def purge_expired_tokens(db: AsyncSession, max_age_days: int = 30) -> int:
+    """
+    Delete refresh tokens that have been expired for more than max_age_days.
+    Can be called periodically by a cleanup job.
+    Returns the number of tokens deleted.
+    """
+    cutoff = datetime.now(timezone.utc) - timedelta(days=max_age_days)
+    result = await db.execute(
+        select(RefreshToken).where(RefreshToken.expires_at < cutoff)
+    )
+    expired_tokens = result.scalars().all()
+    count = 0
+    for token in expired_tokens:
+        await db.delete(token)
+        count += 1
+    await db.commit()
+    return count

@@ -13,6 +13,19 @@
   --app-shadow-lg: 10px 10px 0 0 rgba(17, 17, 17, 1);
 }
 
+/* ── Dark theme variable overrides (OPU-17) ── */
+.dark {
+  --app-bg: #0d0d0d;
+  --app-surface: #1a1a1a;
+  --app-surface-2: #242424;
+  --app-line: #f0ece4;
+  --app-muted: #9a9589;
+  --app-accent: #ff6b2b;
+  --app-accent-soft: #3d1f0f;
+  --app-shadow: 6px 6px 0 0 rgba(255, 255, 255, 0.08);
+  --app-shadow-lg: 10px 10px 0 0 rgba(255, 255, 255, 0.08);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -37,6 +50,22 @@ body {
       rgba(255, 255, 255, 0.72),
       rgba(244, 239, 230, 0.98)
     );
+}
+
+/* Dark body background (OPU-17) */
+.dark body {
+  background-image:
+    radial-gradient(
+      circle at 18% 20%,
+      rgba(255, 107, 43, 0.08),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at 82% 12%,
+      rgba(255, 107, 43, 0.05),
+      transparent 16%
+    ),
+    linear-gradient(180deg, rgba(13, 13, 13, 0.95), rgba(20, 20, 20, 1));
 }
 
 ::selection {
@@ -71,6 +100,12 @@ section[id] {
   overflow: hidden;
   background: rgba(255, 250, 242, 0.96);
   color: var(--app-line);
+}
+
+/* Dark glass (OPU-17) */
+.dark .glass,
+.dark .glass-strong {
+  background: rgba(26, 26, 26, 0.96);
 }
 
 .glass {
@@ -254,6 +289,15 @@ section[id] {
   background: rgba(17, 17, 17, 0.38);
 }
 
+/* Dark scrollbar (OPU-17) */
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
 .mesh-gradient {
   position: relative;
   background:
@@ -277,6 +321,24 @@ section[id] {
     radial-gradient(circle at 100% 0%, rgba(255, 79, 0, 0.05), transparent 16%),
     radial-gradient(#111111 0.55px, transparent 0.55px),
     linear-gradient(180deg, #f8f3eb 0%, #f0e7da 100%);
+  background-size:
+    auto,
+    auto,
+    18px 18px,
+    auto;
+}
+
+/* Dark app-bg-premium (OPU-17) */
+.dark .app-bg-premium {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 107, 43, 0.06), transparent 22%),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(255, 107, 43, 0.03),
+      transparent 16%
+    ),
+    radial-gradient(rgba(255, 255, 255, 0.06) 0.55px, transparent 0.55px),
+    linear-gradient(180deg, #141414 0%, #0d0d0d 100%);
   background-size:
     auto,
     auto,
