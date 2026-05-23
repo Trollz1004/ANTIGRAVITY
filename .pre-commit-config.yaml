@@ -1,4 +1,13 @@
 repos:
+  - repo: local
+    hooks:
+      - id: validate-adapters
+        name: validate-adapters
+        entry: python tools/validate-adapters.py
+        language: system
+        files: ^adapters/
+        always_run: true
+
   - repo: https://github.com/psf/black
     rev: 26.3.1
     hooks:
