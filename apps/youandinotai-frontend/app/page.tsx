@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { ExternalLink, Globe, LayoutDashboard, Moon, ShieldCheck, Sun } from 'lucide-react';
 
+import Membership from '../components/Membership';
 import Transparency from '../components/Transparency';
 import { PUBLIC_SURFACES } from '../lib/constants';
 
@@ -154,6 +155,8 @@ export default function Dashboard() {
             isDarkMode={isDarkMode}
           />
         </section>
+
+        <Membership isDarkMode={isDarkMode} />
 
         <section
           className={`p-8 rounded-[3rem] border ${
