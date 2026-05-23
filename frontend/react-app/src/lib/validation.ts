@@ -3,6 +3,10 @@
  * Provides composable validators, a useFormValidation hook, and helper types.
  */
 
+// ── Hook ───────────────────────────────────────────────────────────────
+
+import { useState, useCallback } from 'react';
+
 export interface ValidationError {
   message: string;
 }
@@ -68,13 +72,17 @@ export function validateMax(value: number, max: number): boolean {
 
 // ── Composable rule builders ───────────────────────────────────────────
 
-export function requiredRule(message = 'This field is required'): ValidationRule {
+export function requiredRule(
+  message = 'This field is required'
+): ValidationRule {
   return { validate: validateRequired, message };
 }
 
-export function emailRule(message = 'Enter a valid email address'): ValidationRule {
+export function emailRule(
+  message = 'Enter a valid email address'
+): ValidationRule {
   return {
-    validate: (v) => !v || validateEmail(v),
+    validate: v => !v || validateEmail(v),
     message,
   };
 }
@@ -84,7 +92,7 @@ export function minLengthRule(
   message = `Must be at least ${min} characters`
 ): ValidationRule {
   return {
-    validate: (v) => validateMinLength(v, min),
+    validate: v => validateMinLength(v, min),
     message,
   };
 }
@@ -94,7 +102,7 @@ export function maxLengthRule(
   message = `Must be no more than ${max} characters`
 ): ValidationRule {
   return {
-    validate: (v) => validateMaxLength(v, max),
+    validate: v => validateMaxLength(v, max),
     message,
   };
 }
@@ -104,7 +112,7 @@ export function patternRule(
   message = 'Invalid format'
 ): ValidationRule {
   return {
-    validate: (v) => validatePattern(v, regex),
+    validate: v => validatePattern(v, regex),
     message,
   };
 }
@@ -114,7 +122,7 @@ export function minRule(
   message = `Must be at least ${min}`
 ): ValidationRule {
   return {
-    validate: (v) => validateMin(v, min),
+    validate: v => validateMin(v, min),
     message,
   };
 }
@@ -124,22 +132,22 @@ export function maxRule(
   message = `Must be no more than ${max}`
 ): ValidationRule {
   return {
-    validate: (v) => validateMax(v, max),
+    validate: v => validateMax(v, max),
     message,
   };
 }
-
-// ── Hook ───────────────────────────────────────────────────────────────
-
-import { useState, useCallback } from 'react';
 
 export function useFormValidation(fieldConfigs: FieldConfig[]) {
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const validateField = useCallback(
-    (name: string, value: any, formValues?: Record<string, any>): string | undefined => {
-      const config = fieldConfigs.find((f) => f.name === name);
+    (
+      name: string,
+      value: any,
+      formValues?: Record<string, any>
+    ): string | undefined => {
+      const config = fieldConfigs.find(f => f.name === name);
       if (!config) return undefined;
 
       // Required check
@@ -190,9 +198,9 @@ export function useFormValidation(fieldConfigs: FieldConfig[]) {
 
   const setFieldTouched = useCallback(
     (name: string, value: any, formValues?: Record<string, any>) => {
-      setTouched((prev) => ({ ...prev, [name]: true }));
+      setTouched(prev => ({ ...prev, [name]: true }));
       const error = validateField(name, value, formValues);
-      setErrors((prev) => ({ ...prev, [name]: error }));
+      setErrors(prev => ({ ...prev, [name]: error }));
     },
     [validateField]
   );
@@ -202,7 +210,7 @@ export function useFormValidation(fieldConfigs: FieldConfig[]) {
     setTouched({});
   }, []);
 
-  const isValid = Object.values(errors).every((e) => e === undefined);
+  const isValid = Object.values(errors).every(e => e === undefined);
 
   return {
     errors,

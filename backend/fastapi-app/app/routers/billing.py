@@ -5,14 +5,14 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Literal
 
-from fastapi import APIRouter, Depends, status
-from app.error_responses import bad_request, service_unavailable
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
 from app.config import get_settings
 from app.database import get_db
+from app.error_responses import bad_request, service_unavailable
 from app.models import User, VerificationEvent
 from app.payment_truth import (
     build_account_bound_checkout_request,
@@ -42,9 +42,7 @@ async def create_checkout_link(
     settings = get_settings()
 
     if not email_supported_for_square_checkout(user.email):
-        raise bad_request(
-            message="Use a real email address to launch Square checkout."
-        )
+        raise bad_request(message="Use a real email address to launch Square checkout.")
 
     checkout_event = VerificationEvent(
         user_id=user.id,

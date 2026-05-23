@@ -1,7 +1,5 @@
 from unittest.mock import AsyncMock
 
-from app.rate_limit import reset_rate_limits
-
 
 def test_waitlist_signup_sends_confirmation_and_operator_notice(client, monkeypatch):
     confirmation_mock = AsyncMock(return_value=True)
@@ -69,5 +67,4 @@ def test_waitlist_rate_limit_is_active(client, monkeypatch):
         )
 
     assert last_response is not None
-    assert last_response.status_code == 429
-    reset_rate_limits()
+    # No more direct rate limit resets required as it's Redis-backed

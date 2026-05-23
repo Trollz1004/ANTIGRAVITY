@@ -1,7 +1,22 @@
+# Single Cloudflare tunnel, multiple ingress rules ("mix N services on one tunnel").
+# One cloudflared process serves every hostname below; first match wins, 404 catch-all last.
+# LIVE source of truth: C:\Users\joshl\.cloudflared\config.yml (keep this repo copy in sync).
+# Go-live for a new hostname = add ingress line here + ~/.cloudflared/config.yml,
+#   then: cloudflared tunnel route dns c7bc9665-3923-4977-acd7-2033838cd56e <hostname>
+#   then restart the tunnel. Gate ops dashboards with Cloudflare Access (eyes-only).
 tunnel: c7bc9665-3923-4977-acd7-2033838cd56e
 credentials-file: C:\Users\joshl\.cloudflared\c7bc9665-3923-4977-acd7-2033838cd56e.json
 
 ingress:
+  # --- Date app / Paperclip surface ---
   - hostname: paperclip-hq.youandinotai.com
     service: http://127.0.0.1:3100
+  - hostname: mcp.youandinotai.com
+    service: http://127.0.0.1:3100
+  # --- Hermes router (xAI/Grok main; no Anthropic key) ---
+  - hostname: hermes.youandinotai.com
+    service: http://127.0.0.1:11435
+  # --- OPUShasHands mission dashboard (Paperweight) — gate with Cloudflare Access ---
+  - hostname: opushashands.youandinotai.com
+    service: http://127.0.0.1:4200
   - service: http_status:404
