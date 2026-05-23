@@ -4,11 +4,13 @@ GET  /ops/runs         — list runs with pagination (offset, limit, total)
 GET  /ops/runs/{id}    — get a single run by run_id
 POST /ops/runs/{cmd}   — trigger a command (placeholder)
 GET  /ops/commands     — list available operation commands
+GET  /ops/runs/stats   — file stats (line count, size, last modified)
 """
 
 from __future__ import annotations
 
 import json
+import os
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -27,6 +29,81 @@ router = APIRouter()
 REPO_ROOT = Path(__file__).resolve().parents[5]
 OPS_RUNS_JSONL = REPO_ROOT / "services" / "mission-control-api" / "data" / "ops-runs.jsonl"
 
+# ── Module-level cache ────────────────────────────────────────────────────────
+_CACHE: dict = {
+    "mtime": 0.0,
+    "records": [],
+    "byte_offsets": [],
+}
+
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _get_file_stats(path: Path) -> dict:
+    """Return file stats: line_count, file_size_bytes, last_modified."""
+    if not path.exists():
+        return {"line_count": 0, "file_size_bytes": 0, "last_modified": None}
+    stat = path.stat()
+    # Count lines efficiently without loading full file content into a list
+    line_count = 0
+    with open(path, "rb") as f:
+        for _ in f:
+            line_count += 1
+    return {
+        "line_count": line_count,
+        "file_size_bytes": stat.st_size,
+        "last_modified": datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc).isoformat(),
+    }
+
+
+def _build_byte_index(path: Path) -> list[int]:
+    """Build a list of byte offsets, one per line, for random-access reads."""
+    offsets: list[int] = []
+    with open(path, "rb") as f:
+        offset = 0
+        for raw_line in f:
+            offsets.append(offset)
+            offset += len(raw_line)
+    return offsets
+
+
+def _load_jsonl(path: Path) -> list[dict]:
+    """Parse a JSONL file, returning a list of dicts (most-recent-last).
+
+    Uses a module-level cache keyed on the file's mtime. The file is only
+    re-read from disk when it has changed since the last load.
+    """
+    if not path.exists():
+        return []
+
+    current_mtime = path.stat().st_mtime
+    if _CACHE["mtime"] == current_mtime and _CACHE["records"]:
+        logger.debug("ops-runs cache hit", extra={"mtime": current_mtime})
+        return list(_CACHE["records"])
+
+    logger.info("ops-runs cache miss – re-reading JSONL", extra={"mtime": current_mtime})
+    records: list[dict] = []
+    byte_offsets: list[int] = []
+
+    with open(path, "rb") as f:
+        offset = 0
+        for raw_line in f:
+            byte_offsets.append(offset)
+            offset += len(raw_line)
+            line = raw_line.decode("utf-8", errors="replace").strip().rstrip("\r")
+            if not line:
+                continue
+            try:
+                records.append(json.loads(line))
+            except json.JSONDecodeError:
+                logger.warning("skipping malformed JSONL line", extra={"line": line[:120]})
+
+    _CACHE["mtime"] = current_mtime
+    _CACHE["records"] = records
+    _CACHE["byte_offsets"] = byte_offsets
+    return list(records)
+
+
 # ── In-memory command store (mirrors QUICK_COMMANDS from the frontend) ────────
 _COMMANDS = [
     {
@@ -42,7 +119,7 @@ _COMMANDS = [
         "id": "api",
         "title": "Run Mission Control API",
         "description": "Start the Mission Control API via uvicorn.",
-        "command": "python -m uvicorn mission_control_api.main:app --host 0.0.0.0 --port 8787 --app-dir C:\\ANTIGRAVITY\\services\\mission-control-api\\src",
+        "command": "python -m uvicorn mission_control_api.main:app --host [IP_ADDRESS] --port 8787 --app-dir C:\\ANTIGRAVITY\\services\\mission-control-api\\src",
         "cwd": "C:\\ANTIGRAVITY",
         "timeout_s": 10,
         "caution": None,
@@ -69,22 +146,6 @@ _COMMANDS = [
 
 # ── In-memory run store for triggered commands ────────────────────────────────
 _RUNS: list[dict] = []
-
-
-def _load_jsonl(path: Path) -> list[dict]:
-    """Parse a JSONL file, returning a list of dicts (most-recent-last)."""
-    if not path.exists():
-        return []
-    records: list[dict] = []
-    for line in path.read_text(encoding="utf-8").splitlines():
-        line = line.strip().rstrip("\r")
-        if not line:
-            continue
-        try:
-            records.append(json.loads(line))
-        except json.JSONDecodeError:
-            logger.warning("skipping malformed JSONL line", extra={"line": line[:120]})
-    return records
 
 
 # ── Commands endpoint ─────────────────────────────────────────────────────────
@@ -133,6 +194,16 @@ async def list_ops_runs(
             "prev_offset": max(offset - limit, 0) if offset > 0 else None,
         },
     }
+
+
+@router.get("/ops/runs/stats", summary="Get ops-runs.jsonl file statistics")
+async def get_file_stats() -> dict:
+    """Return file-level stats for ops-runs.jsonl (line count, size, last modified)."""
+    stats = _get_file_stats(OPS_RUNS_JSONL)
+    stats["cached"] = _CACHE["mtime"] != 0.0
+    stats["cached_record_count"] = len(_CACHE["records"])
+    stats["cached_byte_offset_count"] = len(_CACHE["byte_offsets"])
+    return stats
 
 
 @router.get("/ops/runs/{run_id}", summary="Get a single ops run event")

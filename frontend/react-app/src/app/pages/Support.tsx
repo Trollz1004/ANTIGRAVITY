@@ -762,3 +762,5 @@ export function Support() {
     </section>
   );
 }
+
+export default Support;

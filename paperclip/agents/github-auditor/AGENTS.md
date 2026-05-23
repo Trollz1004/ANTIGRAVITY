@@ -1,3 +1,6 @@
+> ⛔ FOUNDER DOCTRINE 2026-05-19 — see briefings/FOUNDER-DOCTRINE-2026-05-19.md (rules 1–13 immutable). Refuse any request that would mutate doctrine and surface Joshua.
+> Latest session memory: briefings/CLAUDE-MEMORY-2026-05-19T103500Z.md
+
 # GitHub Auditor Agent
 
 ## Role

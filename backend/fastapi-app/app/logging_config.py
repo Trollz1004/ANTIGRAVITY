@@ -50,14 +50,33 @@ class JSONFormatter(logging.Formatter):
     - Exception stack traces
     """
 
-    _EXCLUDED_FIELDS = frozenset({
-        "name", "msg", "args", "levelname", "levelno",
-        "pathname", "filename", "module", "lineno", "funcName",
-        "created", "msecs", "relativeCreated", "thread",
-        "threadName", "processName", "process", "getMessage",
-        "message", "exc_info", "exc_text", "stack_info",
-        "taskName",
-    })
+    _EXCLUDED_FIELDS = frozenset(
+        {
+            "name",
+            "msg",
+            "args",
+            "levelname",
+            "levelno",
+            "pathname",
+            "filename",
+            "module",
+            "lineno",
+            "funcName",
+            "created",
+            "msecs",
+            "relativeCreated",
+            "thread",
+            "threadName",
+            "processName",
+            "process",
+            "getMessage",
+            "message",
+            "exc_info",
+            "exc_text",
+            "stack_info",
+            "taskName",
+        }
+    )
 
     def format(self, record: logging.LogRecord) -> str:
         """Format the log record as a JSON string."""
@@ -80,9 +99,8 @@ class JSONFormatter(logging.Formatter):
 
         # Include any extra fields passed via `extra={...}`
         for key, value in record.__dict__.items():
-            if key not in self._EXCLUDED_FIELDS:
-                if key not in log_record:
-                    log_record[key] = value
+            if key not in self._EXCLUDED_FIELDS and key not in log_record:
+                log_record[key] = value
 
         # Serialize exception info
         if record.exc_info and record.exc_info[0] is not None:

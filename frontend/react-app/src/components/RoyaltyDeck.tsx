@@ -340,7 +340,7 @@ function HolographicCard() {
 }
 
 /* ─── Main Export ─── */
-export function RoyaltyDeck() {
+export default function RoyaltyDeck() {
   return (
     <section className="relative z-10 py-16 md:py-24 px-4 overflow-hidden">
       {/* Ambient glow behind everything */}

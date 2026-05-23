@@ -1,6 +1,6 @@
 # DECISIONS LOG — WHY WE DID WHAT WE DID
 
-**Last Updated**: 2026-04-01T12:35:00-04:00
+**Last Updated**: 2026-05-21T00:00:00-04:00
 
 Every architectural decision is recorded here so no future session re-debates it.
 
@@ -8,6 +8,15 @@ Current reading rule:
 
 - Read the newest entries first.
 - If an older entry conflicts with the March 31, 2026 doctrine correction, treat the older entry as historical context only.
+
+---
+
+## 2026-05-21: Payment reserve math separates mission reserve, tax reserve, and operating survival
+
+**Decision**: Treat the live operating math as gross platform receipt -> max 10% kids/mission reserve per legally distinct bucket -> 90% Joshua/LLC taxable operating share -> tax reserve on that 90% -> remaining funds for AI fees, power, hosting, hardware, founder survival, family support, and scaling.
+**Why**: Joshua corrected Codex when it conflated Square processing fees with the tax/reserve model. The Square fee is an ordinary business cost question; it does not replace the 10% per-bucket reserve doctrine. The old 100% or 60/30/10 paths could bankrupt Joshua because he would owe tax while having insufficient operating funds.
+**Impact**: Future agents must not call a payment path complete merely because Square charged a card. They must verify the `revenue_allocations` ledger, tax-reserve math, and reconciliation. Codex verified on 2026-05-21 that Square has completed YouAndiNotAi payments but the live API returned an empty `revenue_allocations` list, so reconciliation is the next payment fix.
+**Status**: Active
 
 ---
 

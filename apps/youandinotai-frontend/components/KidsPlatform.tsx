@@ -102,7 +102,7 @@ export default function KidsPlatform({ isDarkMode }: { isDarkMode: boolean }) {
         ))}
       </div>
 
-      {/* Charity Tracker */}
+      {/* Impact Policy */}
       <div
         className={`p-8 md:p-10 rounded-3xl border relative overflow-hidden ${
           isDarkMode
@@ -136,7 +136,7 @@ export default function KidsPlatform({ isDarkMode }: { isDarkMode: boolean }) {
         <div className="space-y-3">
           <div className="flex justify-between text-sm font-bold">
             <span className="text-blue-600 dark:text-blue-400">$0 Raised</span>
-            <span className="text-slate-500">Launch: April 4, 2026</span>
+            <span className="text-slate-500">Live now</span>
           </div>
           <div className="relative h-6 bg-slate-200 dark:bg-slate-900 rounded-full overflow-hidden shadow-inner">
             <div className="absolute top-0 left-0 h-full w-[0%] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full transition-all duration-1000 ease-out"></div>

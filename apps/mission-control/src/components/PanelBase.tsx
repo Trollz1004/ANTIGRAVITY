@@ -9,15 +9,16 @@ type PanelProps = {
   path: string;
   pill?: string;
   children?: React.ReactNode | ((details: any) => React.ReactNode);
+  'data-testid'?: string; // Add data-testid to PanelProps
 };
 
-export const PanelBase: React.FC<PanelProps> = ({ title, path, pill, children }) => {
+export const PanelBase: React.FC<PanelProps> = ({ title, path, pill, children, 'data-testid': dataTestId }) => {
   const env = usePoll<any>(path);
   const live = env.status === 'ok';
   const dotColor = live ? 'bg-accentCyan' : env.status === 'degraded' ? 'bg-amber-400' : 'bg-rose-500';
   
   return (
-    <div className="bg-panel rounded border border-border p-4 mb-4">
+    <div className="bg-panel rounded border border-border p-4 mb-4" data-testid={dataTestId}>
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-sm font-mono uppercase tracking-wider text-white flex items-center gap-2">
           <span className={clsx('inline-block w-2 h-2 rounded-full', dotColor)} />

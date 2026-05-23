@@ -36,7 +36,6 @@ from app.payment_truth import (
     build_checkout_reference,
     email_supported_for_square_checkout,
 )
-from app.rate_limit import verify_limiter
 from app.square_checkout import create_square_payment_link
 from app.subscriptions import user_has_active_subscription
 from app.verification_service import (
@@ -213,7 +212,6 @@ async def create_challenge(
     db: AsyncSession = Depends(get_db),
 ) -> ChallengeResponse:
     """Start a V8 liveness challenge. Returns a math question with a time window."""
-    verify_limiter.check(request)
 
     # Check if already verified
     if user.bot_shield_verified:
@@ -254,7 +252,6 @@ async def submit_challenge(
     db: AsyncSession = Depends(get_db),
 ) -> ChallengeResult:
     """Submit the answer to a liveness challenge. Returns trust score + checkout URL on pass."""
-    verify_limiter.check(request)
 
     try:
         challenge_uuid = uuid.UUID(req.challenge_id)
@@ -391,7 +388,6 @@ async def confirm_verification(
     Without both conditions met, verification is denied.
     This prevents free verification bypass (Iron Wall enforcement).
     """
-    verify_limiter.check(request)
 
     try:
         # Re-read and lock the user row so concurrent confirm requests cannot

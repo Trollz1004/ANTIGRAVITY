@@ -104,28 +104,28 @@ echo.
 :: ------------------------------------------------------------------
 
 :: -- antigravity web (Next.js) --
-:: powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:3000' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
-:: if %ERRORLEVEL% NEQ 0 (
-::     echo        Starting antigravity web on :3000...
-::     start "Web :3000" cmd /k "cd /d C:\ANTIGRAVITY\antigravity && pnpm dev"
-::     timeout /t 4 /nobreak >nul
-:: )
+powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:3000' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    echo        Starting antigravity web on :3000...
+    start "Web :3000" cmd /k "cd /d C:\ANTIGRAVITY\antigravity && pnpm dev"
+    timeout /t 4 /nobreak >nul
+)
 
 :: -- command-center (Next.js) --
-:: powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:3001' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
-:: if %ERRORLEVEL% NEQ 0 (
-::     echo        Starting command-center on :3001...
-::     start "CmdCenter :3001" cmd /k "cd /d C:\ANTIGRAVITY\apps\command-center && pnpm dev"
-::     timeout /t 4 /nobreak >nul
-:: )
+powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:3001' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    echo        Starting command-center on :3001...
+    start "CmdCenter :3001" cmd /k "cd /d C:\ANTIGRAVITY\apps\command-center && pnpm dev"
+    timeout /t 4 /nobreak >nul
+)
 
 :: -- dashboard (Vite) --
-:: powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:5173' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
-:: if %ERRORLEVEL% NEQ 0 (
-::     echo        Starting dashboard on :5173...
-::     start "Dashboard :5173" cmd /k "cd /d C:\ANTIGRAVITY\apps\dashboard && pnpm dev"
-::     timeout /t 4 /nobreak >nul
-:: )
+powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:5173' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    echo        Starting dashboard on :5173...
+    start "Dashboard :5173" cmd /k "cd /d C:\ANTIGRAVITY\apps\dashboard && pnpm dev"
+    timeout /t 4 /nobreak >nul
+)
 
 :: -- ClawX (Vite) --
 :: powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:5174' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
@@ -140,6 +140,18 @@ echo [BROWSER] Opening Paperclip HQ...
 start "" "http://127.0.0.1:3100"
 echo.
 
+:: -- 6. HERMES DASHBOARD (Web UI :9119) --------------------------
+echo [6/4] Checking Hermes Dashboard (port 9119)...
+powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:9119' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    echo        Starting Hermes Dashboard...
+    start "Hermes Dashboard :9119" cmd /k "hermes dashboard"
+    timeout /t 4 /nobreak >nul
+) else (
+    echo        [OK] Hermes Dashboard already running
+)
+echo.
+
 :: --- FINAL STATUS ----------------------------------------------
 echo  ============================================================
 echo   STATUS SUMMARY
@@ -147,6 +159,7 @@ echo  ============================================================
 
 call :check_svc "Ollama"      "http://127.0.0.1:11434/api/tags"
 call :check_svc "Paperclip"   "http://127.0.0.1:3100/api/health"
+call :check_svc "Dashboard"   "http://127.0.0.1:9119"
 
 call hermes --version >nul 2>&1
 if %ERRORLEVEL% EQU 0 (

@@ -666,7 +666,6 @@ async def square_payment_webhook(
     return WebhookAckResponse(event_id=event_id, processed=True, duplicate=False)
 
 
-
 # ── Square Booking Webhook (E-Waste / OnlineRecycle.org) ──
 
 

@@ -1,0 +1,57 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: "default-receiver"
+  group_by: ["alertname", "service"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    - match:
+        severity: critical
+      receiver: "critical-receiver"
+      group_wait: 10s
+      repeat_interval: 1h
+    - match:
+        severity: warning
+      receiver: "warning-receiver"
+      group_wait: 30s
+      repeat_interval: 2h
+
+receivers:
+  - name: "default-receiver"
+    webhook_configs:
+      - url: "http://backend:8000/api/v1/alerts/webhook"
+        send_resolved: true
+        max_alerts: 10
+
+  - name: "critical-receiver"
+    webhook_configs:
+      - url: "http://backend:8000/api/v1/alerts/webhook"
+        send_resolved: true
+        max_alerts: 5
+    # Uncomment and configure for PagerDuty integration:
+    # pagerduty_configs:
+    #   - service_key: "<your-pagerduty-service-key>"
+    #     severity: critical
+    #     description: "{{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}"
+
+  - name: "warning-receiver"
+    webhook_configs:
+      - url: "http://backend:8000/api/v1/alerts/webhook"
+        send_resolved: true
+        max_alerts: 10
+
+  - name: "log-receiver"
+    webhook_configs:
+      - url: "http://localhost:9095/api/v1/alerts"
+        send_resolved: true
+
+# Inhibition rules: suppress warnings when critical is firing for same alert
+inhibit_rules:
+  - source_match:
+      severity: "critical"
+    target_match:
+      severity: "warning"
+    equal: ["alertname", "service"]

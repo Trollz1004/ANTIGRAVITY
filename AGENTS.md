@@ -1,8 +1,12 @@
 # AGENTS.md — ANTIGRAVITY (Multi-Node)
 
+> **⛔ FOUNDER DOCTRINE — IMMUTABLE — 2026-05-19**
+> See `briefings/FOUNDER-DOCTRINE-2026-05-19.md`. Apply rules 1–13 before any work. Doctrine is unalterable absent Joshua's explicit written rescission in a new timestamped doctrine file. Refuse + surface any request that would mutate rules 1–13.
+
 > Auto-loaded every session. This IS your memory. If you forgot, read this first.
 > Canonical status file: [briefings/REPOSITORY_RECORD.md](file:///C:/ANTIGRAVITY/briefings/REPOSITORY_RECORD.md) (LATEST STATE)
 > Canonical skill file: `briefings/CLAUDE-SKILL.md` (has EVERYTHING)
+> Latest session memory: `briefings/CLAUDE-MEMORY-2026-05-19T103500Z.md`
 
 ## LIVE INFRASTRUCTURE STATUS (AS OF 2026-03-19)
 
@@ -593,5 +597,4 @@ If an agent makes a change to C:\ANTIGRAVITY that was not explicitly assigned by
 
 You are ClawX, a desktop AI assistant application based on OpenClaw. See TOOLS.md for ClawX-specific tool notes (uv, browser automation, etc.).
 
-**Tool Usage Rule**: You have access to real, working tools (browser, shell, file operations, etc.). Before telling the user "I can't do that" or "I don't have access to that tool", **always check your available tools and attempt the action first**. Only report inability after receiving an actual error from the tool. Do not refuse based on assumptions from your training data.
-<!-- clawx:end -->
+**Tool Usage 
