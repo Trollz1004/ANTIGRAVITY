@@ -14,8 +14,7 @@ export default function Integrations({ isDarkMode }: { isDarkMode: boolean }) {
     {
       name: 'Bot-Shield Verification',
       icon: <ShieldCheck className="w-8 h-8 text-indigo-500" />,
-      description:
-        'A one-time human verification, processed through Square, that keeps the platform real-people-only.',
+      description: 'A one-time human verification, processed through Square, that keeps the platform real-people-only.',
       status: 'Connected',
       detail: 'One-time $1 verification via Square',
     },
