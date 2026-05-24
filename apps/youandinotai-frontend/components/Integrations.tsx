@@ -1,21 +1,23 @@
 import React from 'react';
-import { CreditCard, DollarSign, CheckCircle2 } from 'lucide-react';
+import { DollarSign, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 export default function Integrations({ isDarkMode }: { isDarkMode: boolean }) {
   const integrations = [
     {
-      name: 'Stripe',
-      icon: <CreditCard className="w-8 h-8 text-indigo-500" />,
-      description: 'Primary payment gateway for subscriptions and marketplace transactions.',
+      name: 'Square',
+      icon: <DollarSign className="w-8 h-8 text-emerald-500" />,
+      description:
+        'The payment processor for YouAndINotAI. Memberships and Bot-Shield verification check out through a secure Square-hosted page.',
       status: 'Connected',
-      color: 'indigo',
+      detail: 'Hosted checkout • PCI-compliant • cards & digital wallets',
     },
     {
-      name: 'Square',
-      icon: <DollarSign className="w-8 h-8 text-slate-500" />,
-      description: 'Used for onlinerecycle.square.site only. Not part of the YouAndINotAI platform.',
+      name: 'Bot-Shield Verification',
+      icon: <ShieldCheck className="w-8 h-8 text-indigo-500" />,
+      description:
+        'A one-time human verification, processed through Square, that keeps the platform real-people-only.',
       status: 'Connected',
-      color: 'slate',
+      detail: 'One-time $1 verification via Square',
     },
   ];
 
@@ -24,7 +26,7 @@ export default function Integrations({ isDarkMode }: { isDarkMode: boolean }) {
       <div className="text-center mb-10">
         <h2 className="text-3xl font-bold">Payment Integrations</h2>
         <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-          V8 Cloud financial infrastructure setups for seamless global transactions.
+          Secure, Square-powered checkout for memberships and verification.
         </p>
       </div>
 
@@ -49,16 +51,7 @@ export default function Integrations({ isDarkMode }: { isDarkMode: boolean }) {
             <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{int.description}</p>
 
             <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
-              <button
-                onClick={() => alert('Configuration managed via Stripe Dashboard')}
-                className={`w-full py-2 rounded-lg text-sm font-semibold transition-colors ${
-                  isDarkMode
-                    ? 'bg-slate-700 hover:bg-slate-600 text-white'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
-                }`}
-              >
-                Manage Configuration
-              </button>
+              <p className={`text-xs font-medium ${isDarkMode ? 'text-slate-500' : 'text-slate-500'}`}>{int.detail}</p>
             </div>
           </div>
         ))}
