@@ -153,13 +153,70 @@ async def check_allocations(db: AsyncSession = Depends(get_db)):
     try:
         result = await db.execute(
             text(
-                "SELECT square_payment_id, gross_amount_cents, charitable_amount_cents, operating_amount_cents, status FROM revenue_allocations ORDER BY created_at DESC LIMIT 5"
+                "SELECT square_payment_id, payer_type, gross_amount_cents, "
+                "charitable_amount_cents, operating_amount_cents, status "
+                "FROM revenue_allocations ORDER BY created_at DESC LIMIT 5"
             )
         )
         rows = result.mappings().all()
         return {"allocations": [dict(r) for r in rows]}
     except Exception as e:
         raise internal_error(message=f"Failed to retrieve allocations: {e}")
+
+
+@router.get("/health/allocations/summary")
+async def allocations_summary(db: AsyncSession = Depends(get_db)):
+    """Two-figure revenue summary: gross-with-test vs customer-only.
+
+    customer_only is the number that actually moves the mission. with_test
+    keeps the full audit trail visible. Both come from the same ledger so
+    the math cannot drift.
+    """
+    from sqlalchemy import text
+
+    try:
+        result = await db.execute(
+            text(
+                "SELECT payer_type, "
+                "COUNT(*) AS payments, "
+                "COALESCE(SUM(gross_amount_cents), 0) AS gross_cents, "
+                "COALESCE(SUM(charitable_amount_cents), 0) AS kids_cents, "
+                "COALESCE(SUM(operating_amount_cents), 0) AS llc_cents "
+                "FROM revenue_allocations "
+                "GROUP BY payer_type"
+            )
+        )
+        by_payer = {row["payer_type"]: dict(row) for row in result.mappings().all()}
+
+        def _tot(key: str) -> dict:
+            row = by_payer.get(key) or {
+                "payments": 0,
+                "gross_cents": 0,
+                "kids_cents": 0,
+                "llc_cents": 0,
+            }
+            return {
+                "payments": int(row["payments"]),
+                "gross_cents": int(row["gross_cents"]),
+                "kids_cents": int(row["kids_cents"]),
+                "llc_cents": int(row["llc_cents"]),
+            }
+
+        customer = _tot("customer")
+        founder_test = _tot("founder_test")
+        with_test = {
+            "payments": customer["payments"] + founder_test["payments"],
+            "gross_cents": customer["gross_cents"] + founder_test["gross_cents"],
+            "kids_cents": customer["kids_cents"] + founder_test["kids_cents"],
+            "llc_cents": customer["llc_cents"] + founder_test["llc_cents"],
+        }
+        return {
+            "customer_only": customer,
+            "founder_test": founder_test,
+            "with_test": with_test,
+        }
+    except Exception as e:
+        raise internal_error(message=f"Failed to summarize allocations: {e}")
 
 
 # Temporarily removed wipe-users endpoint
