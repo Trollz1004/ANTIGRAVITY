@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../lib/useAuth';
+import { useWebSocketNotifications } from '../hooks/useWebSocketNotifications';
 import { Heart, Share2 } from 'lucide-react';
 import { NotificationBell } from './NotificationBell';
 import { ThemeToggle } from './ThemeToggle';
+import { WebSocketStatus } from './WebSocketStatus';
 
 /**
  * Top Bar Component
@@ -22,6 +24,7 @@ import { ThemeToggle } from './ThemeToggle';
  */
 export const TopBar: React.FC = () => {
   const { token } = useAuth();
+  const { unreadCount } = useWebSocketNotifications();
 
   const handleLogin = () => {
     localStorage.setItem('auth_token', 'dummy-jwt-token');
@@ -34,9 +37,9 @@ export const TopBar: React.FC = () => {
   };
 
   return (
-    <div data-testid="topbar" className="flex items-center justify-between bg-panel px-4 py-2 border-b border-border">
+    <div data-testid="topbar" className="flex flex-wrap items-center justify-between bg-panel px-4 py-2 border-b border-border gap-2">
       {/* Left side: mission branding and financial stats */}
-      <div className="flex items-center gap-6 text-xs font-mono">
+      <div className="flex-1 min-w-0 flex items-center gap-2 sm:gap-6 text-xs font-mono">
       <span className="text-accentMagenta flex items-center gap-1">
         <Heart size={12} /> #UntilNoKidInNeed
       </span>
@@ -53,19 +56,20 @@ export const TopBar: React.FC = () => {
     {/* Right side: build badge, share button, and notifications */}
     <div className="flex items-center gap-3">
       <ThemeToggle />
-      <NotificationBell />
-      <span className="text-[10px] font-mono uppercase tracking-wider text-gray-500">OpusPawClaw · Mission Control</span>
+      <WebSocketStatus />
+      <NotificationBell unreadCount={unreadCount} onClick={() => {}} />
+      <span className="text-[10px] font-mono uppercase tracking-wider text-gray-500 truncate">OpusPawClaw · Mission Control</span>
       <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-accentCyan/10 border border-accentCyan/30 text-accentCyan">
         BUILT · E1
       </span>
-      <button className="flex items-center gap-1 px-2 py-1 text-xs font-mono rounded border border-border hover:border-accentCyan/50 transition text-gray-300">
+      <button className="flex items-center gap-1 px-1 sm:px-2 py-1 text-xs font-mono rounded border border-border hover:border-accentCyan/50 transition text-gray-300">
         <Share2 size={12} /> share
       </button>
       {token ? (
         <button
           data-testid="logout-button"
           onClick={handleLogout}
-          className="flex items-center gap-1 px-2 py-1 text-xs font-mono rounded border border-red-500/50 hover:border-red-500 transition text-red-400"
+          className="flex items-center gap-1 px-1 sm:px-2 py-1 text-xs font-mono rounded border border-red-500/50 hover:border-red-500 transition text-red-400"
         >
           Logout
         </button>
@@ -73,7 +77,7 @@ export const TopBar: React.FC = () => {
         <button
           data-testid="login-button"
           onClick={handleLogin}
-          className="flex items-center gap-1 px-2 py-1 text-xs font-mono rounded border border-green-500/50 hover:border-green-500 transition text-green-400"
+          className="flex items-center gap-1 px-1 sm:px-2 py-1 text-xs font-mono rounded border border-green-500/50 hover:border-green-500 transition text-green-400"
         >
           Login
         </button>

@@ -20,15 +20,26 @@ interface WebSocketHookOptions {
   retryInterval?: number;
 }
 
+interface WebSocketStatus {
+  isConnected: boolean;
+  latency: number | null;
+  reconnectAttempts: number;
+  lastError: string | null;
+}
+
 const RECONNECT_INTERVAL_MS = 3000;
 const PING_INTERVAL_MS = 25000; // Send ping every 25 seconds
 
 export const useWebSocket = (token: string | null, options?: WebSocketHookOptions) => {
   const [isConnected, setIsConnected] = useState(false);
+  const [latency, setLatency] = useState<number | null>(null);
+  const [reconnectAttempts, setReconnectAttempts] = useState(0);
+  const [lastError, setLastError] = useState<string | null>(null);
   const ws = useRef<WebSocket | null>(null);
   const retryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pingInterval = useRef<ReturnType<typeof setInterval> | null>(null);
   const shouldConnect = useRef(false);
+  const pingStartTime = useRef<number | null>(null);
 
   const connect = useCallback(() => {
     if (!token || !shouldConnect.current) return;
@@ -53,6 +64,7 @@ export const useWebSocket = (token: string | null, options?: WebSocketHookOption
       if (pingInterval.current) clearInterval(pingInterval.current);
       pingInterval.current = setInterval(() => {
         if (ws.current?.readyState === WebSocket.OPEN) {
+          pingStartTime.current = Date.now();
           ws.current.send(JSON.stringify({ type: 'ping' }));
         }
       }, PING_INTERVAL_MS);
@@ -76,7 +88,11 @@ export const useWebSocket = (token: string | null, options?: WebSocketHookOption
         } else if (message.type === 'connected') {
           console.log(`[WebSocket] Server acknowledged connection for user: ${message.user_id}`);
         } else if (message.type === 'pong') {
-          // console.log('[WebSocket] Pong received');
+          if (pingStartTime.current) {
+            const latency = Date.now() - pingStartTime.current;
+            setLatency(latency);
+            pingStartTime.current = null;
+          }
         }
       } catch (e) {
         console.error('[WebSocket] Failed to parse message:', e);
@@ -86,9 +102,11 @@ export const useWebSocket = (token: string | null, options?: WebSocketHookOption
     ws.current.onclose = (event) => {
       console.warn('[WebSocket] Disconnected:', event.code, event.reason);
       setIsConnected(false);
+      setLastError(`Disconnected: ${event.code} ${event.reason}`);
       if (pingInterval.current) clearInterval(pingInterval.current);
       options?.onDisconnected?.(event);
       if (shouldConnect.current) {
+        setReconnectAttempts(prev => prev + 1);
         console.log(`[WebSocket] Reconnecting in ${RECONNECT_INTERVAL_MS / 1000}s...`);
         retryTimer.current = setTimeout(connect, RECONNECT_INTERVAL_MS);
       }
@@ -96,6 +114,7 @@ export const useWebSocket = (token: string | null, options?: WebSocketHookOption
 
     ws.current.onerror = (event) => {
       console.error('[WebSocket] Error:', event);
+      setLastError('Connection error');
       options?.onError?.(event);
       if (ws.current) {
         ws.current.close(); // Force close to trigger onclose and retry logic
@@ -105,6 +124,9 @@ export const useWebSocket = (token: string | null, options?: WebSocketHookOption
 
   const disconnect = useCallback(() => {
     shouldConnect.current = false;
+    setLastError(null);
+    setReconnectAttempts(0);
+    setLatency(null);
     if (ws.current) {
       ws.current.close();
       ws.current = null;
@@ -142,5 +164,12 @@ export const useWebSocket = (token: string | null, options?: WebSocketHookOption
     };
   }, [token, connect, disconnect]);
 
-  return { isConnected, send, disconnect };
+  return { 
+    isConnected, 
+    send, 
+    disconnect,
+    latency,
+    reconnectAttempts,
+    lastError
+  };
 };

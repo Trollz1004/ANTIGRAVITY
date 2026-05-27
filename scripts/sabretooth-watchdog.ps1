@@ -10,8 +10,11 @@ $CloudflaredExe   = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
 $TunnelConfig     = 'C:\ANTIGRAVITY\infra\cloudflare\paperclip-hq.yml'
 $ClaudeExe        = 'C:\Users\joshl\.local\bin\claude.exe'
 $OpenCodeExe      = 'C:\Users\joshl\AppData\Local\Microsoft\WinGet\Packages\SST.opencode_Microsoft.Winget.Source_8wekyb3d8bbwe\opencode.exe'
+$PythonExe        = 'C:\Windows\py.exe'
+$OpusHasHandsDir  = 'C:\Antigravity\_handoff-staging-2026-05-26\_deploy\opushashands'
 $PaperclipPort    = 3100
 $OllamaPort       = 11434
+$OpusHasHandsPort = 4200
 $CheckInterval    = 30
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
@@ -96,6 +99,30 @@ function Ensure-OpenCodeCLI {
     Log 'OpenCode CLI start command issued.'
 }
 
+function Ensure-OpusHasHands {
+    # Serves OpusHasHands hub on 127.0.0.1:4200.
+    # Cloudflare tunnel ingress (paperclip-antigravity, c7bc9665-...) routes
+    # opushashands.youandinotai.com -> http://127.0.0.1:4200.
+    if (Test-LocalPort $OpusHasHandsPort) { return }
+    Log 'OpusHasHands DOWN — starting python http.server on 4200...'
+    if (-not (Test-Path $OpusHasHandsDir)) {
+        Log "OpusHasHands dir missing: $OpusHasHandsDir — cannot start."
+        return
+    }
+    Start-Process -FilePath $PythonExe `
+        -ArgumentList '-m', 'http.server', $OpusHasHandsPort, '--bind', '127.0.0.1' `
+        -WorkingDirectory $OpusHasHandsDir `
+        -RedirectStandardOutput "$LogDir\opushashands-server.log" `
+        -RedirectStandardError "$LogDir\opushashands-server.log.err" `
+        -WindowStyle Hidden -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 3
+    if (Test-LocalPort $OpusHasHandsPort) {
+        Log 'OpusHasHands UP — opushashands.youandinotai.com now live.'
+    } else {
+        Log 'OpusHasHands still DOWN after restart attempt.'
+    }
+}
+
 function Open-DashboardBrowser {
     $chrome = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
     $urls = @('http://localhost:3100', 'https://paperclip-hq.youandinotai.com')
@@ -115,12 +142,13 @@ if (-not (Test-Path $bootFile) -or (Get-Content $bootFile -ErrorAction SilentlyC
 }
 
 Log '====== Sabretooth Always-On Watchdog Started ======'
-Log "Ollama:$OllamaPort | Paperclip:$PaperclipPort | Cloudflared | Claude CLI | OpenCode CLI | Interval:${CheckInterval}s"
+Log "Ollama:$OllamaPort | Paperclip:$PaperclipPort | OpusHasHands:$OpusHasHandsPort | Cloudflared | Claude CLI | OpenCode CLI | Interval:${CheckInterval}s"
 
 while ($true) {
     Rotate-Log
     Ensure-Ollama
     Ensure-Paperclip
+    Ensure-OpusHasHands
     Ensure-Cloudflared
     Ensure-ClaudeCLI
     Ensure-OpenCodeCLI

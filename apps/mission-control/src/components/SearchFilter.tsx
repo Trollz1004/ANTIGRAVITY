@@ -80,7 +80,7 @@ export const SearchFilter = ({ filter, onChange, statusOptions, compact }: Searc
 
   return (
     <div className={clsx('flex flex-wrap items-center gap-2', compact ? '' : 'mb-3')}>
-      <div className="relative flex-1 min-w-[180px]">
+      <div className="relative flex-1 min-w-0">
         <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
         <input
           type="text"

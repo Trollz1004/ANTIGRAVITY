@@ -186,6 +186,30 @@ if (Test-Path $mcWatchdogLog) {
     Log '[6/8] MC Watchdog log not present yet — Scheduled Task may still be starting'
 }
 
+# ---------- 6b. OpusHasHands hub (:4200) ----------
+# Cloudflare tunnel ingress (paperclip-antigravity tunnel c7bc9665-...) routes
+# opushashands.youandinotai.com -> http://127.0.0.1:4200. Without this listener
+# the public hub returns 502 Bad Gateway.
+$ohhDir = 'C:\Antigravity\_handoff-staging-2026-05-26\_deploy\opushashands'
+$ohhLog = "$LogDir\opushashands-server.log"
+$pyExe  = 'C:\Windows\py.exe'
+if (Test-LocalPort 4200) {
+    Log '[6b/8] OpusHasHands hub already up on :4200'
+} elseif (-not (Test-Path $ohhDir)) {
+    Log "[6b/8] OpusHasHands dir missing: $ohhDir — skipping (run Hermes integration dispatch first)"
+} elseif (-not (Test-Path $pyExe)) {
+    Log "[6b/8] python launcher missing: $pyExe — skipping"
+} else {
+    Log '[6b/8] starting OpusHasHands hub (python http.server :4200, hidden)'
+    Start-Process -FilePath $pyExe `
+        -ArgumentList '-m','http.server','4200','--bind','127.0.0.1' `
+        -WorkingDirectory $ohhDir `
+        -RedirectStandardOutput $ohhLog `
+        -RedirectStandardError "$ohhLog.err" `
+        -WindowStyle Hidden -ErrorAction SilentlyContinue
+    Wait-ForPort 4200 15 'OpusHasHands' | Out-Null
+}
+
 # ---------- 7. OpenClaw Gateway dashboard browser-open ----------
 # OpenClaw Gateway.cmd (separate Startup item) takes ~40s to be ready.
 # Spawn a hidden powershell that polls port 18789 for up to 90s,
@@ -233,5 +257,6 @@ Log '=========================================='
 Log '=== mission stack autostart complete ====='
 Log '=== Mission Control: http://127.0.0.1:8787/'
 Log '=== Paperclip HQ:    http://127.0.0.1:3100/'
+Log '=== OpusHasHands:    http://127.0.0.1:4200/  (public: https://opushashands.youandinotai.com/)'
 Log '=== OpenClaw:        http://127.0.0.1:18789/'
 Log '=========================================='

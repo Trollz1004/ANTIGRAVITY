@@ -8,7 +8,8 @@
 >
 > **What is LIVE right now:**
 > - **ONE repo only:** `Trollz1004/ANTIGRAVITY`. Never create another repo. Never start a greenfield app.
-> - **Product code (already written):** `apps/youandinotai-frontend/` (Next.js 15 → youandinotai.com) + `backend/fastapi-app/` (FastAPI, Python 3.12). GCR backend is deployed & live. A working mirror exists on **T5500** (`192.168.0.15`); **Sabretooth** `C:\ANTIGRAVITY` is the only push node.
+> - **Product code (already written):** `backend/fastapi-app/` (FastAPI, Python 3.12) — CONFIRMED deployed to GCR `youandinotai-backend-731395189513.us-east1.run.app`. Backend is in this repo and live. A working mirror exists on **T5500** (`192.168.0.15`); **Sabretooth** `C:\ANTIGRAVITY` is the only push node.
+> - **FRONTEND DRIFT WARNING (2026-05-26):** `apps/youandinotai-frontend/` (Next.js 15) is in this repo BUT the LIVE `youandinotai.com` is a Vite/React production build (`/assets/index-BH_3avto.js`, 837KB, sourcemap stripped) whose source is **NOT** in `Trollz1004/ANTIGRAVITY`. The canonical 1-repo rule is being violated by the production deploy chain. See `briefings/DEPLOY-SOURCE-OF-TRUTH.md` § "Known gaps" #1 for the discovery protocol.
 > - **Square is LIVE and has cleared real payments** — account `joshlcoleman@gmail.com`, location `LY5GN09F5AN83`, 5 product links live (Bot-Shield $1 → Royalty Card $2,500). Do **NOT** assume $0 / pre-launch — the "Revenue: $0" line further down is stale. Verify real totals in Square or via `backend/fastapi-app/app/revenue_allocation.py`.
 > - **Revenue model:** 1 wallet, 1 LLC, **10% per-bucket reserve** — already coded (`reserve_revenue_allocation()`). Never invent splits. Never resurrect 60/30/10 or charity-routing.
 > - **Knowledge graph:** read `.graphify/GRAPH_REPORT.md` before broad code reads (run `graphify update` if stale; package is `graphifyy`, command `graphify`).
@@ -16,6 +17,12 @@
 > **Before you write a single file:** (1) finish reading this CLAUDE.md, (2) read `briefings/REPOSITORY_RECORD.md` (LATEST STATE), (3) **grep the repo for an existing implementation of what you're about to build.** Assume it already exists until search proves otherwise.
 >
 > **Hard bans:** new repos · new apps · `donate / donation / charity / charitable / solicitation / giving back / disbursement` on customer surfaces · Stripe on youandinotai.com (Square only) · any Haiku model.
+
+> # DEPLOY SOURCE OF TRUTH — READ INSTEAD OF ASKING
+>
+> Any time you (Claude) are about to ask Joshua "where does X deploy from", "what hosts youandinotai.com", "is it Cloudflare or Netlify", "where's the source for ai-solutions.store", or any variant — **STOP. Read [`briefings/DEPLOY-SOURCE-OF-TRUTH.md`](briefings/DEPLOY-SOURCE-OF-TRUTH.md) FIRST.** That file lists every domain, its host, its source repo (or `UNKNOWN` with the exact discovery protocol), its backend, and the last verified timestamp. If a row says `UNKNOWN`, your job is to discover it from live HTTP headers / CSP / JS bundles / Cloudflare-Netlify-Vercel APIs and **edit the file** so the next Claude doesn't repeat the question. Asking Joshua "where does X deploy from" without first reading and updating this file is a doctrine violation. He has answered that question 900+ times — never again.
+>
+> Refreshed daily by the `paperweight-daily-memory` scheduled task.
 
 <!-- ============================================================ -->
 

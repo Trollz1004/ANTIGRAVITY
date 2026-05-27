@@ -47,9 +47,9 @@ export default function CharityTab() {
         </p>
         <p className="max-w-2xl mx-auto text-gray-400 text-sm leading-relaxed">
           These live cards track community volunteering activity: hours
-          committed, signups, and organizations supported. Any charitable
-          support follows the separate founder-directed operating policy and is
-          not represented by the volunteer totals below.
+          committed, signups, and organizations supported. Any later
+          mission-aligned support follows the separate founder-directed
+          operating policy and is not represented by the volunteer totals below.
         </p>
       </div>
 
@@ -104,7 +104,7 @@ export default function CharityTab() {
               <p className="text-gray-300 text-sm leading-relaxed">
                 We maintain absolute separation between our social mission and
                 corporate operations. Volunteer activity, product revenue, and
-                any later charitable support are tracked separately so the
+                any later mission-aligned support are tracked separately so the
                 platform does not make fake or unsupported claims.
               </p>
             </div>

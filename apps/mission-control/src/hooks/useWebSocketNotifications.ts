@@ -37,7 +37,7 @@ export const useWebSocketNotifications = () => {
 
   }, [showToast]);
 
-  const { isConnected, send } = useWebSocket(token, {
+  const { isConnected, send, latency, reconnectAttempts, lastError } = useWebSocket(token, {
     onMessage: handleNewNotification,
     onConnected: () => console.log('Notifications WebSocket connected'),
     onDisconnected: (event) => console.log('Notifications WebSocket disconnected:', event.reason),
@@ -66,6 +66,9 @@ export const useWebSocketNotifications = () => {
     notifications: historyNotifications,
     unreadCount,
     isConnected,
+    latency,
+    reconnectAttempts,
+    lastError,
     markAsRead,
     markAllAsRead,
     clearAllNotifications,

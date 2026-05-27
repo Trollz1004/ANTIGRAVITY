@@ -9,7 +9,7 @@
  */
 
 import { Moon, Sun } from 'lucide-react';
-import { useTheme } from './ThemeContext';
+import { useTheme } from '../lib/ThemeContext';
 
 interface ThemeToggleProps {
   /** Additional CSS classes for the button */

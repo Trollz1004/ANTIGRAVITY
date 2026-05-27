@@ -311,7 +311,7 @@ function PricingSection() {
         </div>
         <p className="mt-5 max-w-4xl text-xs font-bold uppercase tracking-[0.12em] text-[#5c554d] md:mt-8 md:text-sm md:tracking-[0.16em]">
           Securely processed by Square. Customer purchases buy platform access
-          and founder products. They are not charitable contributions.
+          and founder products. They are commercial transactions, not gifts.
         </p>
       </div>
     </section>
@@ -872,15 +872,16 @@ export default function App() {
             <div className="mt-6 grid gap-4 md:mt-10 md:gap-8 md:grid-cols-2">
               <div className="border-4 border-[#111111] bg-[#f4efe7] p-4 shadow-[6px_6px_0_0_#111111] md:p-6">
                 <p className="text-sm font-medium leading-7 text-[#2f2a24] md:text-lg md:leading-8">
-                  We do not market this platform as a charity. It has to stand
-                  on product quality, trust, and real human value first.
+                  This is a product. It has to stand on quality, trust, and
+                  real human value first. The mission rides on top, not in
+                  place of, that foundation.
                 </p>
               </div>
               <div className="border-4 border-[#111111] bg-[#111111] p-4 text-white shadow-[6px_6px_0_0_#ff5a1f] md:p-6">
                 <p className="text-sm font-medium leading-7 text-[#d7d3cc] md:text-lg md:leading-8">
                   Any later mission support follows the current operating policy
                   and stays out of the sales pitch. Customer purchases are
-                  platform purchases, not charitable contributions.
+                  commercial transactions for platform value delivered.
                 </p>
               </div>
             </div>
