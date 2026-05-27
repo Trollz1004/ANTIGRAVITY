@@ -46,7 +46,7 @@ def test_beta_access_rejects_invalid_code(client, monkeypatch):
     response = client.post("/api/v1/auth/beta-access", json={"code": "NOPE"})
 
     assert response.status_code == 401
-    assert response.json()["detail"] == "Invalid beta access code"
+    assert response.json()["message"] == "Invalid beta access code"
 
     get_settings.cache_clear()
 

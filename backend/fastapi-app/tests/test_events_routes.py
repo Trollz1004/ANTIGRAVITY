@@ -203,7 +203,7 @@ def test_rsvp_capacity_full_returns_400(client, db_session_factory):
     try:
         resp = client.post(f"/api/v1/events/{event_id}/rsvp")
         assert resp.status_code == 400
-        assert "full" in resp.json()["detail"].lower()
+        assert "full" in resp.json()["message"].lower()
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 

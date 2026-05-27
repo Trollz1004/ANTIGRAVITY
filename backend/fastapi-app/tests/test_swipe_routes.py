@@ -56,7 +56,7 @@ def test_swipe_self_returns_400(client, db_session_factory):
             "/api/v1/swipe", json={"target_id": str(actor.id), "direction": "like"}
         )
         assert resp.status_code == 400
-        assert "yourself" in resp.json()["detail"].lower()
+        assert "yourself" in resp.json()["message"].lower()
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 

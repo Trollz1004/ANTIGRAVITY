@@ -435,7 +435,7 @@ def _status_to_error_code(status_code: int) -> str:
         500: ErrorCode.INTERNAL_ERROR,
         503: ErrorCode.SERVICE_UNAVAILABLE,
     }
-    return str(mapping.get(status_code, ErrorCode.INTERNAL_ERROR))
+    return mapping.get(status_code, ErrorCode.INTERNAL_ERROR).value
 
 
 app.add_middleware(

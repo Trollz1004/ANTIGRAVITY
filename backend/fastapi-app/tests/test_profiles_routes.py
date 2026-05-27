@@ -178,7 +178,7 @@ def test_patch_profile_unknown_field_returns_422(client, db_session_factory):
     try:
         resp = client.patch("/api/v1/profiles/me", json={"unknown_field": "some_value"})
         assert resp.status_code == 422
-        assert "extra_forbidden" in resp.json()["detail"][0]["type"]
+        assert "extra_forbidden" in resp.json()["details"]["errors"][0]["type"]
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
@@ -206,7 +206,7 @@ def test_patch_profile_under_18_dob_returns_400(client, db_session_factory):
             json={"date_of_birth": "2015-01-01"},  # ~10 years old
         )
         assert resp.status_code == 400
-        assert "18+" in resp.json()["detail"]
+        assert "18+" in resp.json()["message"]
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 

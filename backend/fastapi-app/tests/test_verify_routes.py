@@ -94,7 +94,7 @@ class TestVerifyChallenge:
         try:
             resp = client.post("/api/v1/verify/challenge")
             assert resp.status_code == 400
-            assert "Already verified" in resp.json()["detail"]
+            assert "Already verified" in resp.json()["message"]
         finally:
             app.dependency_overrides.pop(get_current_user, None)
 
@@ -320,7 +320,7 @@ class TestVerifyConfirm:
         try:
             resp = client.post("/api/v1/verify/confirm")
             assert resp.status_code == 400
-            assert "liveness" in resp.json()["detail"].lower()
+            assert "liveness" in resp.json()["message"].lower()
         finally:
             app.dependency_overrides.pop(get_current_user, None)
 
@@ -343,7 +343,7 @@ class TestVerifyConfirm:
         try:
             resp = client.post("/api/v1/verify/confirm")
             assert resp.status_code == 402
-            assert "payment" in resp.json()["detail"].lower()
+            assert "payment" in resp.json()["message"].lower()
         finally:
             app.dependency_overrides.pop(get_current_user, None)
 

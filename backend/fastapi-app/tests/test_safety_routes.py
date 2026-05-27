@@ -160,7 +160,7 @@ def test_blocked_match_rejects_message_access(client, db_session_factory):
     try:
         get_response = client.get(f"/api/v1/messages/{match.id}")
         assert get_response.status_code == 403
-        assert "safety settings" in get_response.json()["detail"].lower()
+        assert "safety settings" in get_response.json()["message"].lower()
 
         post_response = client.post(
             f"/api/v1/messages/{match.id}",

@@ -13,7 +13,7 @@ def test_lovebot_requires_active_subscription(client):
         assert response.status_code == 403
         assert (
             "require a Founding Member or Premium subscription"
-            in response.json()["detail"]
+            in response.json()["message"]
         )
     finally:
         app.dependency_overrides.pop(get_current_user, None)
@@ -51,7 +51,7 @@ def test_lovebot_tips_rejects_invalid_category(client):
     try:
         response = client.get("/api/v1/lovebot/tips?category=unknown")
         assert response.status_code == 400
-        assert response.json()["detail"] == "Invalid tip category"
+        assert response.json()["message"] == "Invalid tip category"
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 

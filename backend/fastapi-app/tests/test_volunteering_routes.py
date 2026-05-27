@@ -176,8 +176,8 @@ def test_signup_capacity_full_returns_400(client, db_session_factory):
         resp = client.post(f"/api/v1/volunteer/{opp_id}/signup")
         assert resp.status_code == 400
         assert (
-            "spots" in resp.json()["detail"].lower()
-            or "No spots" in resp.json()["detail"]
+            "spots" in resp.json()["message"].lower()
+            or "No spots" in resp.json()["message"]
         )
     finally:
         app.dependency_overrides.pop(get_current_user, None)
