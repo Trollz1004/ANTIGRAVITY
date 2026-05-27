@@ -5,7 +5,9 @@ from sqlalchemy import select
 
 from app.models import RevenueAllocation
 from app.revenue_allocation import (
+    FOUNDER_TEST_PAYMENT_IDS,
     calculate_charitable_amount_cents,
+    classify_payer_type,
     reserve_revenue_allocation,
 )
 
@@ -84,6 +86,75 @@ async def test_reserve_revenue_allocation_duplicate(db_session_factory):
         )
 
         assert second.id == first.id
+
+
+def test_classify_payer_type_known_founder_test():
+    # Sanity: every ID in the constant maps to founder_test
+    assert FOUNDER_TEST_PAYMENT_IDS  # not empty
+    for pid in FOUNDER_TEST_PAYMENT_IDS:
+        assert classify_payer_type(pid) == "founder_test"
+
+
+def test_classify_payer_type_defaults_to_customer():
+    assert classify_payer_type("pay_some_real_customer_id_not_in_list") == "customer"
+    assert classify_payer_type("") == "customer"
+
+
+@pytest.mark.asyncio
+async def test_reserve_revenue_allocation_founder_test_classification(
+    db_session_factory,
+):
+    """A known founder-test Square payment ID auto-classifies as founder_test."""
+    known_test_id = next(iter(FOUNDER_TEST_PAYMENT_IDS))
+    async with db_session_factory() as db:
+        allocation = await reserve_revenue_allocation(
+            db,
+            user_id=None,
+            source_event_id="evt_classify_founder_test",
+            square_payment_id=known_test_id,
+            payment_tier="bot_shield",
+            gross_amount_cents=100,
+        )
+        await db.commit()
+        assert allocation is not None
+        assert allocation.payer_type == "founder_test"
+
+
+@pytest.mark.asyncio
+async def test_reserve_revenue_allocation_customer_default(db_session_factory):
+    """Unknown payment IDs classify as customer revenue."""
+    async with db_session_factory() as db:
+        allocation = await reserve_revenue_allocation(
+            db,
+            user_id=None,
+            source_event_id="evt_classify_real_customer",
+            square_payment_id="pay_real_customer_001",
+            payment_tier="founding_member",
+            gross_amount_cents=1499,
+        )
+        await db.commit()
+        assert allocation is not None
+        assert allocation.payer_type == "customer"
+
+
+@pytest.mark.asyncio
+async def test_reserve_revenue_allocation_explicit_payer_type_override(
+    db_session_factory,
+):
+    """Explicit payer_type override (e.g. from reconcile) is honored."""
+    async with db_session_factory() as db:
+        allocation = await reserve_revenue_allocation(
+            db,
+            user_id=None,
+            source_event_id="evt_explicit_override",
+            square_payment_id="pay_explicit_override",
+            payment_tier="test",
+            gross_amount_cents=100,
+            payer_type="founder_test",
+        )
+        await db.commit()
+        assert allocation is not None
+        assert allocation.payer_type == "founder_test"
 
 
 @pytest.mark.asyncio
