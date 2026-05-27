@@ -10,7 +10,7 @@ const REPORT_REASONS = [
   },
   {
     value: 'spam',
-    label: 'Spam or solicitation',
+    label: 'Spam or unwanted offers',
     description: 'Unwanted promotional content or persistent messaging',
   },
   {

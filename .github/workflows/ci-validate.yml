@@ -252,7 +252,7 @@ jobs:
           SQUARE_BOOKING_WEBHOOK_SIGNATURE_KEY: 'test-square-signature'
           SQUARE_BOOKING_WEBHOOK_NOTIFICATION_URL: 'http://testserver/api/v1/webhooks/square-booking'
         run: |
-          pytest --tb=short --cov=app --cov-report=term-missing --cov-fail-under=63
+          pytest --tb=short --cov=app --cov-report=term-missing --cov-fail-under=80
 
   js-tests:
     runs-on: ubuntu-latest
