@@ -278,6 +278,9 @@ class RevenueAllocation(Base):
         String(100), default="kids_support", nullable=False
     )
     status: Mapped[str] = mapped_column(String(20), default="reserved", nullable=False)
+    payer_type: Mapped[str] = mapped_column(
+        String(20), default="customer", nullable=False, index=True
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
