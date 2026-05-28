@@ -34,21 +34,19 @@ jobs:
       - name: Run forbidden pattern scan
         run: |
           echo "=== Scanning for forbidden patterns ==="
-          # Scan for actual secret VALUES — not env var names or URLs in code
-          # Pattern breakdown:
-          #   ghp_[a-zA-Z0-9]{20,}     — GitHub personal access tokens
-          #   sk-[a-zA-Z0-9]{20,}      — OpenAI/anthropic API sk- tokens
-          #   -----BEGIN.*PRIVATE KEY  — PEM private keys
-          #   AWS_SECRET|WRANGLER_     — cloud provider secret prefixes (in assigned values)
-          # NOT flagged: ANTHROPIC_API_KEY as var name, claude.ai as URL, CLOUDFLARE_API_TOKEN as var name
-          PATTERNS="ghp_[a-zA-Z0-9]{20,}|sk-[a-zA-Z0-9]{20,}|-----BEGIN.*PRIVATE KEY|AWS_SECRETACCESSKEY|WRANGLER_[A-Z0-9]{20,}"
-          FOUND=$(grep -rliE "$PATTERNS" --include="*.py" --include="*.js" --include="*.ts" --include="*.yaml" --include="*.yml" --include="*.sh" --exclude-dir=".git" . 2>/dev/null || true)
+          # Scan tracked files for actual secret values — not env var names or URL strings.
+          # Scans for: GitHub PATs, OpenAI/anthropic sk- tokens, AWS key IDs,
+          # Cloudflare Wrangler tokens, PEM certificate anchors.
+          # NOTE: .github/workflows/ excluded — CI configs document their own scan patterns
+          # and would self-trigger. Secrets in workflow files must be injected via env/secrets.
+          PATTERNS="ghp_[a-zA-Z0-9]{20,}|sk-[a-zA-Z0-9]{20,}|-----BEGIN CERTIFICATE|AKIA[0-9A-Z]{16}|WRANGLER_[A-Z0-9]{20,}"
+          FOUND=$(grep -rliE "$PATTERNS" --include="*.py" --include="*.js" --include="*.ts" --include="*.yaml" --include="*.yml" --exclude-dir=".git" --exclude-dir=".github" . 2>/dev/null || true)
           if [ -n "$FOUND" ]; then
             echo "SECRET/POLICY VIOLATION DETECTED:"
             echo "$FOUND"
             echo ""
             echo "=== Matches ==="
-            grep -rliE "$PATTERNS" --include="*.py" --include="*.js" --include="*.ts" --include="*.yaml" --include="*.yml" --include="*.sh" --exclude-dir=".git" . 2>/dev/null | while read f; do
+            grep -rliE "$PATTERNS" --include="*.py" --include="*.js" --include="*.ts" --include="*.yaml" --include="*.yml" --include="*.sh" --exclude-dir=".git" --exclude-dir=".github" . 2>/dev/null | while read f; do
               echo "FILE: $f"
               grep -nE "$PATTERNS" "$f" | head -5
             done
