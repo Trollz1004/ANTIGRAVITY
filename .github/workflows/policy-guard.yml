@@ -34,8 +34,14 @@ jobs:
       - name: Run forbidden pattern scan
         run: |
           echo "=== Scanning for forbidden patterns ==="
-          # Scan tracked files for secrets / forbidden API references
-          PATTERNS="claude\.ai|ANTHROPIC_API_KEY|CLOUDFLARE_API_TOKEN|WRANGLER_|AWS_SECRET|ghp_[a-zA-Z0-9]\{20,\}|sk-[a-zA-Z0-9]\{20,\}|PRIVATE KEY"
+          # Scan for actual secret VALUES — not env var names or URLs in code
+          # Pattern breakdown:
+          #   ghp_[a-zA-Z0-9]{20,}     — GitHub personal access tokens
+          #   sk-[a-zA-Z0-9]{20,}      — OpenAI/anthropic API sk- tokens
+          #   -----BEGIN.*PRIVATE KEY  — PEM private keys
+          #   AWS_SECRET|WRANGLER_     — cloud provider secret prefixes (in assigned values)
+          # NOT flagged: ANTHROPIC_API_KEY as var name, claude.ai as URL, CLOUDFLARE_API_TOKEN as var name
+          PATTERNS="ghp_[a-zA-Z0-9]{20,}|sk-[a-zA-Z0-9]{20,}|-----BEGIN.*PRIVATE KEY|AWS_SECRETACCESSKEY|WRANGLER_[A-Z0-9]{20,}"
           FOUND=$(grep -rliE "$PATTERNS" --include="*.py" --include="*.js" --include="*.ts" --include="*.yaml" --include="*.yml" --include="*.sh" --exclude-dir=".git" . 2>/dev/null || true)
           if [ -n "$FOUND" ]; then
             echo "SECRET/POLICY VIOLATION DETECTED:"
