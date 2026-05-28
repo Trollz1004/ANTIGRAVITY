@@ -72,7 +72,8 @@ def api_exception(
             message="Profile not found",
         )
     """
-    payload = ErrorResponse(code=str(code), message=message, details=details)
+    code_value = code.value if isinstance(code, ErrorCode) else str(code)
+    payload = ErrorResponse(code=code_value, message=message, details=details)
     return HTTPException(status_code=status_code, detail=payload.model_dump())
 
 
