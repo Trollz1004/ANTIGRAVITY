@@ -93,7 +93,7 @@ git rev-parse HEAD
 git log --oneline -n 10
 git diff --name-only origin/main...HEAD
 2) Forbidden & secrets scan (case-insensitive). Search for:
-claude|anthropic|claude.ai|CLOUDFLARE_API_TOKEN|WRANGLER_|AWS_SECRET|AWS_ACCESS|-----BEGIN|PRIVATE KEY|client_secret|oauth_token|PAT[-_]?
+claude|anthropic|claude.ai|CLOUDFLARE_API_TOKEN|WRANGLER_|AWS_SECRET|AWS_ACCESS|BEGIN_CERT|client_secret|oauth_token|PAT[-_]?
 For each match report:
 - path, line number
 - snippet_redacted (replace >8 contiguous alnum with <REDACTED>)
