@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>OpusHasHands · AntiGravity · #UntilNoKidInNeed</title>
+  <meta name="description" content="Open-windows mission control. Trusted AI observers (Anthropic · Google · xAI · Microsoft · OpenAI) can watch Hermes and sub-agents live. No trust-me-bro. Eyes-on by URL."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a070f;
+      --bg-2: #100918;
+      --bg-3: #170d22;
+      --surface: #1a0e26;
+      --surface-2: #221432;
+      --line: rgba(255,255,255,0.06);
+      --line-2: rgba(255,255,255,0.10);
+      --line-strong: rgba(255,255,255,0.18);
+      --ink: #f4f0f8;
+      --ink-2: #b9adc6;
+      --ink-3: #8c7d9d;
+      --ink-4: #5e5170;
+      --ink-5: #3a3148;
+      --odoo: #714B67;
+      --odoo-200: #d0c6d8;
+      --odoo-300: #b3a2bf;
+      --odoo-glow: rgba(126,94,142,0.55);
+      --green: #3fbf72;
+      --green-soft: rgba(63,191,114,0.14);
+      --sky: #58a8e0;
+      --sky-soft: rgba(88,168,224,0.14);
+      --amber: #e6a93a;
+      --amber-soft: rgba(230,169,58,0.14);
+      --rose: #e36a76;
+      --rose-soft: rgba(227,106,118,0.14);
+    }
+
+    /* ── Anthropic light mode ─────────────────────
+       Inspired by Anthropic's public brand palette: warm off-white paper,
+       Crail/coral accent, slate ink. Used here as a complementary daytime
+       theme — not a claim of brand authorization or partnership. */
+    body.theme-light {
+      --bg:           #F5F4EE;   /* paper */
+      --bg-2:         #EFEDE5;
+      --bg-3:         #E8E5DA;
+      --surface:      #FFFFFF;
+      --surface-2:    #F7F5EE;
+      --line:         rgba(20,15,8,0.07);
+      --line-2:       rgba(20,15,8,0.12);
+      --line-strong:  rgba(20,15,8,0.22);
+      --ink:          #1A1714;   /* warm near-black */
+      --ink-2:        #4A4540;
+      --ink-3:        #7A7268;
+      --ink-4:        #A6A096;
+      --ink-5:        #D6D2C7;
+      --odoo:         #CC785C;   /* Crail — Anthropic accent */
+      --odoo-200:     #F4E0D6;
+      --odoo-300:     #D9876A;
+      --odoo-glow:    rgba(204,120,92,0.30);
+      --green:        #2E8F55;
+      --green-soft:   rgba(46,143,85,0.10);
+      --sky:          #3A7BA8;
+      --sky-soft:     rgba(58,123,168,0.10);
+      --amber:        #B8841C;
+      --amber-soft:   rgba(184,132,28,0.12);
+      --rose:         #B84A56;
+      --rose-soft:    rgba(184,74,86,0.10);
+    }
+    body.theme-light .strip,
+    body.theme-light .header { background: var(--bg-2); }
+    body.theme-light .page::before {
+      background:
+        radial-gradient(900px 600px at 80% -10%, rgba(204,120,92,0.18), transparent 70%),
+        radial-gradient(700px 500px at -10% 90%, rgba(58,123,168,0.10), transparent 70%);
+    }
+    body.theme-light .page::after {
+      background-image: radial-gradient(circle at 1px 1px, rgba(20,15,8,0.05) 1px, transparent 0);
+    }
+    body.theme-light .modal-overlay { background: rgba(245,244,238,0.85); }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { margin: 0; padding: 0; min-height: 100vh; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+
+    /* ── strips & header ─────────────────────────── */
+    .strip {
+      padding: 8px 32px;
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--line);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+      font: 700 9px/1 'JetBrains Mono', monospace;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+    .strip .amber { color: var(--amber); }
+    .strip .rose  { color: var(--rose); }
+    .strip .green { color: var(--green); }
+
+    .header {
+      padding: 22px 32px;
+      border-bottom: 1px solid var(--line);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 18px; flex-wrap: wrap;
+      background: rgba(10,7,15,0.5);
+      backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 40;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-mark {
+      width: 42px; height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--odoo) 0%, #2a1235 100%);
+      display: grid; place-items: center;
+      box-shadow: 0 0 0 1px var(--line-strong), 0 6px 22px var(--odoo-glow);
+      position: relative;
+    }
+    .brand-mark::after {
+      content: ''; position: absolute; inset: 0; border-radius: 13px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 60%);
+    }
+    .brand-text { line-height: 1; }
+    .brand-text .h { font: 800 14px/1 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
+    .brand-text .s { font: 500 9px/1 'JetBrains Mono', monospace; letter-spacing: 0.24em; color: var(--ink-3); text-transform: uppercase; margin-top: 5px; }
+
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .btn {
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--line-2);
+      color: var(--ink-2);
+      font: 700 10px/1 'JetBrains Mono', monospace;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn:hover { background: var(--line); color: var(--ink); border-color: var(--line-strong); }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--odoo) 0%, #2a1235 100%);
+      border-color: var(--odoo-300);
+      color: white;
+      box-shadow: 0 4px 14px var(--odoo-glow);
+    }
+    .btn.rose {
+      background: linear-gradient(135deg, var(--rose) 0%, #7e2733 100%);
+      border-color: rgba(227,106,118,0.55);
+      color: white;
+    }
+
+    /* ── page ────────────────────────────────────── */
+    .page {
+      position: relative;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 36px 28px 80px;
+    }
+    .page::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(900px 600px at 80% -10%, var(--odoo-glow), transparent 70%),
+        radial-gradient(700px 500px at -10% 90%, rgba(63,191,114,0.08), transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    .page::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);
+      background-size: 22px 22px;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.7;
+    }
+
+    /* ── hero ─────────────────────────────────────── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 1000px) { .hero { grid-template-columns: 1fr; } }
+
+    .hero-eye {
+      font: 800 11px/1 'JetBrains Mono', monospace;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--odoo-300);
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .hero-eye .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 1.6s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; transform:scale(1);} 50% { opacity: 0.4; transform: scale(1.5);} }
+
+    .hero-title {
+      font-weight: 900;
+      font-size: clamp(40px, 5.5vw, 72px);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      margin: 16px 0 0;
+    }
+    .hero-title .accent { color: var(--odoo-300); }
+    .hero-title .rose-accent { color: var(--rose); }
+    .hero-sub {
+      color: var(--ink-2);
+      max-width: 640px;
+      margin-top: 16px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .hero-sub strong { color: var(--ink); }
+    .hero-sub code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: var(--bg-3);
+      border: 1px solid var(--line);
+      color: var(--odoo-200);
+    }
+
+    .hero-meta {
+      margin-top: 18px;
+      display: flex; gap: 18px; flex-wrap: wrap;
+    }
+    .hero-meta .item {
+      padding: 12px 16px;
+      background: var(--bg-3);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+    .hero-meta .k { font: 700 9px/1 'JetBrains Mono', monospace; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3); }
+    .hero-meta .v { font-weight: 900; font-size: 22px; letter-spacing: -0.02em; margin-top: 6px; }
+    .hero-meta .v.zero { color: var(--ink-3); }
+
+    /* ── house diagram ────────────────────────────── */
+    .house-card {
+      padding: 26px;
+      background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+      border: 1px solid rgba(126,94,142,0.30);
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .house-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(420px 280px at 80% 0%, var(--odoo-glow), transparent 70%);
+      pointer-events: none;
+    }
+    .house-eye {
+      font: 800 10px/1 'JetBrains Mono', monospace;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--odoo-300);
+      position: relative;
+    }
+    .house-h {
+      font-weight: 900;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+      margin: 10px 0 14px;
+      position: relative;
+    }
+    .house-svg {
+      width: 100%;
+      height: auto;
+      position: relative;
+      display: block;
+    }
+    .house-foot {
+      font: 700 10px/1.5 'JetBrains Mono', monospace;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-top: 14px;
+      position: relative;
+    }
+    .house-foot strong { color: var(--ink); }
+
+    /* ── grid ─────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+    .span-3 { grid-column: span 3; }
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-6 { grid-column: span 6; }
+    .span-7 { grid-column: span 7; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+    @media (max-width: 1100px) {
+      .span-3, .span-4, .span-5, .span-6, .span-7, .span-8 { grid-column: span 12; }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-h {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .card-h .t {
+      font: 800 10px/1 'JetBrains Mono', monospace;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font: 700 9.5px/1 'JetBrains Mono', monospace;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: var(--line);
+      color: var(--ink-2);
+    }
+    .tag.green { background: var(--green-soft); color: var(--green); }
+    .tag.amber { background: var(--amber-soft); color: var(--amber); }
+    .tag.rose  { background: var(--rose-soft);  color: var(--rose); }
+    .tag.sky   { background: var(--sky-soft);   color: var(--sky); }
+    .tag.odoo  { background: rgba(126,94,142,0.18); color: var(--odoo-300); }
+    .tag.outline { background: transparent; border: 1px solid var(--line-2); color: var(--ink-2); }
+
+    /* ── observers panel ──────────────────────────── */
+    .observers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    @media (max-width: 800px) { .observers { grid-template-columns: 1fr; } }
+    .observer {
+      padding: 14px;
+      background: var(--bg-3);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .observer .glyph {
+      width: 38px; height: 38px;
+      border-radius: 11px;
+      background: var(--surface-2);
+      border: 1px solid var(--line-2);
+      display: grid; place-items: center;
+      font: 800 12px/1 'JetBrains Mono', monospace;
+      flex-shrink: 0;
+    }
+    .observer.anthropic .glyph { background: rgba(126,94,142,0.20); border-color: rgba(126,94,142,0.40); color: var(--odoo-300); }
+    .observer.google    .glyph { background: var(--sky-soft);  border-color: rgba(88,168,224,0.40); color: var(--sky); }
+    .observer.xai       .glyph { background: var(--amber-soft); border-color: rgba(230,169,58,0.40); color: var(--amber); }
+    .observer.microsoft .glyph { background: var(--green-soft); border-color: rgba(63,191,114,0.40); color: var(--green); }
+    .observer.openai    .glyph { background: var(--rose-soft);  border-color: rgba(227,106,118,0.40); color: var(--rose); }
+    .observer.perplexity .glyph { background: rgba(255,255,255,0.06); color: var(--ink-2); }
+    .observer .info { min-width: 0; flex: 1; }
+    .observer .name { font-weight: 700; font-size: 13px; letter-spacing: -0.005em; }
+    .observer .role { font: 700 9.5px/1 'JetBrains Mono', monospace; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3); margin-top: 5px; }
+    .observer .state { margin-left: auto; }
+
+    /* ── route / nav cards ───────────────────────── */
+    .route-card {
+      padding: 22px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      display: flex; flex-direction: column; gap: 14px;
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .route-card:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+    .route-card .num { font: 800 9.5px/1 'JetBrains Mono', monospace; letter-spacing: 0.32em; color: var(--ink-3); text-transform: uppercase; }
+    .route-card .title { font-weight: 900; font-size: 22px; letter-spacing: -0.03em; line-height: 1.1; }
+    .route-card .title .accent { color: var(--odoo-300); }
+    .route-card .desc { color: var(--ink-2); font-size: 13.5px; line-height: 1.55; }
+    .route-card .meta { display: flex; gap: 6px; flex-wrap: wrap; }
+    .route-card .go {
+      margin-top: auto;
+      font: 800 10px/1 'JetBrains Mono', monospace;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--odoo-300);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .route-card.private {
+      border-color: rgba(227,106,118,0.30);
+      background: linear-gradient(180deg, rgba(227,106,118,0.06), var(--surface) 60%);
+    }
+    .route-card.private .go { color: var(--rose); }
+
+    /* ── trust band ───────────────────────────────── */
+    .trust-band {
+      padding: 24px 26px;
+      background: linear-gradient(180deg, rgba(126,94,142,0.12), transparent 80%), var(--surface);
+      border: 1px solid rgba(126,94,142,0.30);
+      border-radius: 22px;
+    }
+    .trust-row {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(4, 1fr);
+      gap: 14px;
+      align-items: end;
+    }
+    @media (max-width: 1000px) { .trust-row { grid-template-columns: 1fr 1fr; } }
+    .trust-row .label { font: 800 10px/1 'JetBrains Mono', monospace; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3); }
+    .trust-row .v { font-weight: 900; font-size: 26px; letter-spacing: -0.025em; margin-top: 8px; }
+    .trust-row .v.zero { color: var(--ink-3); }
+
+    /* ── footer ───────────────────────────────────── */
+    .footer-note {
+      margin-top: 28px;
+      padding: 18px;
+      background: var(--bg-3);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      font: 600 11px/1.6 'JetBrains Mono', monospace;
+      letter-spacing: 0.04em;
+      color: var(--ink-3);
+      text-align: center;
+    }
+    .footer-note strong { color: var(--ink); }
+
+    /* ── email modal ──────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(5,3,10,0.85);
+      backdrop-filter: blur(14px);
+      z-index: 150;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .modal-card {
+      width: min(480px, 100%);
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 30px 100px rgba(0,0,0,0.7);
+    }
+    .modal-eye { font: 800 10px/1 'JetBrains Mono', monospace; letter-spacing: 0.32em; text-transform: uppercase; color: var(--rose); }
+    .modal-h { font-weight: 900; font-size: 24px; letter-spacing: -0.03em; margin: 12px 0 10px; }
+    .modal-h .accent { color: var(--odoo-300); }
+    .modal-sub { color: var(--ink-2); font-size: 13px; line-height: 1.6; margin-bottom: 18px; }
+    .modal-sub code { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; padding: 2px 6px; border-radius: 5px; background: var(--bg-3); border: 1px solid var(--line); color: var(--odoo-200); }
+    .modal-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--bg-3);
+      border: 1px solid var(--line-2);
+      color: var(--ink);
+      font: 500 14px/1 'Inter', sans-serif;
+      outline: none;
+      margin-bottom: 8px;
+    }
+    .modal-input:focus { border-color: var(--odoo-300); box-shadow: 0 0 0 3px rgba(126,94,142,0.2); }
+    .modal-error { color: var(--rose); font: 700 11px/1.4 'JetBrains Mono', monospace; letter-spacing: 0.04em; min-height: 16px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 14px; justify-content: flex-end; }
+    .modal-note { color: var(--ink-4); font-size: 11px; line-height: 1.5; margin-top: 16px; }
+
+    /* ── ribbon for "open windows" emphasis ──────── */
+    .open-windows {
+      padding: 14px 18px;
+      background: var(--bg-3);
+      border: 1px solid rgba(63,191,114,0.30);
+      border-radius: 14px;
+      display: flex; align-items: center; gap: 14px;
+      margin-top: 18px;
+    }
+    .open-windows .dot {
+      width: 10px; height: 10px; border-radius: 999px;
+      background: var(--green); box-shadow: 0 0 12px var(--green);
+      animation: pulse 1.6s infinite;
+      flex-shrink: 0;
+    }
+    .open-windows .text {
+      font: 700 11px/1.5 'JetBrains Mono', monospace;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+    }
+    .open-windows .text strong { color: var(--green); }
+  </style>
+</head>
+<body>
+
+<!-- ═══ STRIPS ═══ -->
+<div class="strip">
+  <span>◆ OPUSHASHANDS · ANTIGRAVITY HUB · PUBLIC TRANSPARENCY VIEW</span>
+  <span class="green">◆ <span class="dot-inline" style="display:inline-block;width:6px;height:6px;border-radius:999px;background:var(--green);vertical-align:middle;margin-right:6px;"></span> OPEN WINDOWS · TRUSTED OBSERVERS WELCOME</span>
+  <span class="rose">♡ #UntilNoKidInNeed</span>
+</div>
+
+<header class="header">
+  <a class="brand" href="#top">
+    <div class="brand-mark">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2 4 8v10l8 4 8-4V8l-8-6Z" stroke="white" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M12 6 8 9v6l4 2 4-2V9l-4-3Z" stroke="white" stroke-width="1.4" stroke-linejoin="round" opacity="0.65"/>
+        <circle cx="12" cy="12" r="1.6" fill="white"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <div class="h">OPUSHASHANDS</div>
+      <div class="s">AntiGravity Hub · Public</div>
+    </div>
+  </a>
+  <div class="header-right">
+    <a class="btn" href="#observers">Observers</a>
+    <a class="btn" href="#routes">Surfaces</a>
+    <a class="btn" href="#mission">Mission</a>
+    <button class="btn" id="btn-theme" title="Toggle light/dark">☼ Light</button>
+    <button class="btn primary" id="btn-private">Operator View →</button>
+  </div>
+</header>
+
+<main class="page" id="top">
+
+  <!-- ═══ HERO ═══ -->
+  <div class="hero">
+    <div>
+      <span class="hero-eye"><span class="dot"></span> EYES-ON VIA URL · NO TRUST-ME-BRO</span>
+      <h1 class="hero-title">
+        A house with the<br/>
+        <span class="accent">windows open</span>.
+      </h1>
+      <p class="hero-sub">
+        AntiGravity is built openly on top of AI tools from teams that don't share a roadmap. The mission deserves more than <em>"trust me, the AI is doing what I say."</em> Every surface that matters is <strong>visible by URL</strong> &mdash; so <strong>Anthropic</strong>, <strong>Google</strong>, <strong>xAI</strong>, <strong>Microsoft</strong>, and <strong>OpenAI</strong> teams can drop in, watch Hermes route, watch sub-agents work, and verify the mission with their own eyes. No API key required. No private channel. Just <code>opushashands.youandinotai.com</code>.
+      </p>
+      <div class="open-windows">
+        <span class="dot"></span>
+        <div class="text">
+          <strong>OPEN WINDOWS · ACTIVE</strong> &middot; This URL is the front door. Any trusted-platform engineer can view it via browser, screen-share, or read-only Chrome extension.
+        </div>
+      </div>
+      <div class="hero-meta">
+        <div class="item">
+          <div class="k">KIDS HELPED</div>
+          <div class="v zero">0</div>
+        </div>
+        <div class="item">
+          <div class="k">GROSS · YTD</div>
+          <div class="v zero">$0</div>
+        </div>
+        <div class="item">
+          <div class="k">NODES ACTIVE</div>
+          <div class="v">3 <span style="font-size:14px;color:var(--ink-4);">/ 35+</span></div>
+        </div>
+        <div class="item">
+          <div class="k">CHARITABLE FLOOR</div>
+          <div class="v" style="color:var(--odoo-300);">10%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="house-card">
+      <div class="house-eye">◆ THE HOUSE · OPEN-WINDOWS DIAGRAM</div>
+      <div class="house-h">Watchers <span style="color:var(--odoo-300);">welcome.</span></div>
+      <svg class="house-svg" viewBox="0 0 480 320" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="house-wall" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#221432"/>
+            <stop offset="1" stop-color="#170d22"/>
+          </linearGradient>
+          <linearGradient id="house-roof" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#714B67"/>
+            <stop offset="1" stop-color="#2a1235"/>
+          </linearGradient>
+          <radialGradient id="window-light" cx="0.5" cy="0.5">
+            <stop offset="0" stop-color="#f4dd6e" stop-opacity="0.95"/>
+            <stop offset="1" stop-color="#f4dd6e" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- ground -->
+        <line x1="20" y1="288" x2="460" y2="288" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+        <!-- roof -->
+        <polygon points="60,160 240,40 420,160" fill="url(#house-roof)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+        <!-- walls -->
+        <rect x="80" y="160" width="320" height="128" fill="url(#house-wall)" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+        <!-- door -->
+        <rect x="220" y="220" width="40" height="68" fill="#0a070f" stroke="rgba(255,255,255,0.18)" stroke-width="1.2"/>
+        <circle cx="252" cy="256" r="2" fill="#b3a2bf"/>
+        <!-- windows (4) with light streaming -->
+        <g>
+          <rect x="110" y="184" width="48" height="40" fill="url(#window-light)"/>
+          <rect x="110" y="184" width="48" height="40" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.4"/>
+          <line x1="134" y1="184" x2="134" y2="224" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <line x1="110" y1="204" x2="158" y2="204" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+        </g>
+        <g>
+          <rect x="174" y="184" width="48" height="40" fill="url(#window-light)"/>
+          <rect x="174" y="184" width="48" height="40" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.4"/>
+          <line x1="198" y1="184" x2="198" y2="224" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <line x1="174" y1="204" x2="222" y2="204" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+        </g>
+        <g>
+          <rect x="258" y="184" width="48" height="40" fill="url(#window-light)"/>
+          <rect x="258" y="184" width="48" height="40" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.4"/>
+          <line x1="282" y1="184" x2="282" y2="224" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <line x1="258" y1="204" x2="306" y2="204" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+        </g>
+        <g>
+          <rect x="322" y="184" width="48" height="40" fill="url(#window-light)"/>
+          <rect x="322" y="184" width="48" height="40" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.4"/>
+          <line x1="346" y1="184" x2="346" y2="224" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <line x1="322" y1="204" x2="370" y2="204" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+        </g>
+        <!-- observer silhouettes -->
+        <g transform="translate(35 240)">
+          <circle cx="0" cy="-8" r="6" fill="#b3a2bf"/>
+          <path d="M-8 0 L-8 22 L8 22 L8 0 Z" fill="#b3a2bf"/>
+          <text x="0" y="38" text-anchor="middle" font-family="JetBrains Mono" font-size="7" letter-spacing="1" fill="#8c7d9d">CLAUDE</text>
+        </g>
+        <g transform="translate(445 240)">
+          <circle cx="0" cy="-8" r="6" fill="#58a8e0"/>
+          <path d="M-8 0 L-8 22 L8 22 L8 0 Z" fill="#58a8e0"/>
+          <text x="0" y="38" text-anchor="middle" font-family="JetBrains Mono" font-size="7" letter-spacing="1" fill="#8c7d9d">GEMINI</text>
+        </g>
+        <g transform="translate(35 100)">
+          <circle cx="0" cy="-8" r="5" fill="#e6a93a"/>
+          <path d="M-7 0 L-7 20 L7 20 L7 0 Z" fill="#e6a93a"/>
+          <text x="0" y="34" text-anchor="middle" font-family="JetBrains Mono" font-size="7" letter-spacing="1" fill="#8c7d9d">xAI</text>
+        </g>
+        <g transform="translate(445 100)">
+          <circle cx="0" cy="-8" r="5" fill="#3fbf72"/>
+          <path d="M-7 0 L-7 20 L7 20 L7 0 Z" fill="#3fbf72"/>
+          <text x="0" y="34" text-anchor="middle" font-family="JetBrains Mono" font-size="7" letter-spacing="1" fill="#8c7d9d">MS</text>
+        </g>
+        <!-- sight lines (dashed) -->
+        <g stroke="rgba(255,255,255,0.20)" stroke-width="1" stroke-dasharray="3,3" fill="none">
+          <line x1="45" y1="232" x2="110" y2="206"/>
+          <line x1="435" y1="232" x2="370" y2="206"/>
+          <line x1="45" y1="92" x2="158" y2="186"/>
+          <line x1="435" y1="92" x2="322" y2="186"/>
+        </g>
+        <!-- title above roof -->
+        <text x="240" y="28" text-anchor="middle" font-family="JetBrains Mono" font-weight="800" font-size="10" letter-spacing="3" fill="#b3a2bf">ANTIGRAVITY · MISSION HOUSE</text>
+      </svg>
+      <div class="house-foot">
+        <strong>FOUR WINDOWS · ONE FRONT DOOR.</strong> Trusted-platform teams view from any side. Operator (Joshua) holds the door. No locked rooms inside the mission.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ OBSERVERS ═══ -->
+  <div class="card" id="observers">
+    <div class="card-h">
+      <div class="t">◆ TRUSTED OBSERVERS · AT-WILL EYES-ON</div>
+      <span class="tag outline">NO ENDORSEMENT IMPLIED · NO PARTNERSHIP CLAIM</span>
+    </div>
+    <div class="observers">
+      <div class="observer anthropic">
+        <div class="glyph">C</div>
+        <div class="info">
+          <div class="name">Anthropic · Claude (Opus &amp; family)</div>
+          <div class="role">SEAT 1 · ARCHITECTURE · CODE · DESIGN</div>
+        </div>
+        <span class="state tag green">WINDOW OPEN</span>
+      </div>
+      <div class="observer google">
+        <div class="glyph">G</div>
+        <div class="info">
+          <div class="name">Google · Gemini</div>
+          <div class="role">SEAT 2 · VISUAL · CONTENT</div>
+        </div>
+        <span class="state tag green">WINDOW OPEN</span>
+      </div>
+      <div class="observer xai">
+        <div class="glyph">X</div>
+        <div class="info">
+          <div class="name">xAI · Grok</div>
+          <div class="role">HERMES · X.COM ROUTER · SIGN-IN AUTH (NO API)</div>
+        </div>
+        <span class="state tag green">WINDOW OPEN</span>
+      </div>
+      <div class="observer microsoft">
+        <div class="glyph">M</div>
+        <div class="info">
+          <div class="name">Microsoft</div>
+          <div class="role">PLATFORM · ENGINEERING SURFACE</div>
+        </div>
+        <span class="state tag green">WINDOW OPEN</span>
+      </div>
+      <div class="observer openai">
+        <div class="glyph">5</div>
+        <div class="info">
+          <div class="name">OpenAI · Codex</div>
+          <div class="role">FIFTH CHAIR · OPS · SANDBOX ENGINEERING</div>
+        </div>
+        <span class="state tag green">WINDOW OPEN</span>
+      </div>
+      <div class="observer perplexity">
+        <div class="glyph">P</div>
+        <div class="info">
+          <div class="name">Perplexity</div>
+          <div class="role">RESEARCH · SOURCE-GROUNDED</div>
+        </div>
+        <span class="state tag green">WINDOW OPEN</span>
+      </div>
+    </div>
+    <div class="footer-note" style="margin-top:16px;">
+      <strong>"Window open"</strong> means: this URL is publicly viewable by any engineer or system at the named company &mdash; no auth, no allowlist on the public path. It does <strong>not</strong> imply endorsement, partnership, board role, agency relationship, or sponsorship. Founder-recognized collaboration on work product only.
+    </div>
+  </div>
+
+  <!-- ═══ SURFACES ═══ -->
+  <div style="margin-top:22px;" id="routes">
+    <h2 style="font-weight:900;font-size:32px;letter-spacing:-0.035em;margin:0 0 14px;">Surfaces <span style="color:var(--odoo-300);">to walk through.</span></h2>
+    <p style="color:var(--ink-2);font-size:14px;line-height:1.6;max-width:680px;margin:0 0 22px;">
+      Every screen below is part of the open-windows promise. Public surfaces are linked from here. The Operator View is gated for the founder &mdash; trusted observers can request a live screen-share if they want to see it.
+    </p>
+
+    <div class="grid">
+      <a class="route-card span-4" href="AntiGravity Landing (standalone).html">
+        <span class="num">01 · LANDING</span>
+        <div class="title">Mission <span class="accent">brief</span></div>
+        <p class="desc">The public-face introduction. The mission, the team (Joshua + AI collaborators), the surfaces, the disclosure footer. Safe for any audience.</p>
+        <div class="meta">
+          <span class="tag outline">PUBLIC</span>
+          <span class="tag green">SAFE TO SHARE</span>
+        </div>
+        <span class="go">OPEN LANDING →</span>
+      </a>
+
+      <a class="route-card span-4" href="AntiGravity Prototype (standalone).html">
+        <span class="num">02 · MISSION CONTROL</span>
+        <div class="title">Interactive <span class="accent">console</span></div>
+        <p class="desc">The "epic model" Mission Control: bento dashboard, agents (Opus + Gemini orchestrating, six workers including Hermes via Grok sign-in), live ticker, Hermes node health, Paperweight, Hermes routing.</p>
+        <div class="meta">
+          <span class="tag outline">PUBLIC</span>
+          <span class="tag odoo">INTERACTIVE</span>
+        </div>
+        <span class="go">OPEN CONSOLE →</span>
+      </a>
+
+      <a class="route-card span-4" href="DAO Transparency (standalone).html">
+        <span class="num">03 · DAO TRANSPARENCY</span>
+        <div class="title">Public <span class="accent">ledger view</span></div>
+        <p class="desc">Real-or-zero state of the Perpetual Mission DAO. Waterfall, gateways, investor seats, Founding Four with no-forced-association doctrine. Every figure traceable.</p>
+        <div class="meta">
+          <span class="tag outline">PUBLIC</span>
+          <span class="tag green">ZERO FALSE CLAIMS</span>
+        </div>
+        <span class="go">OPEN LEDGER →</span>
+      </a>
+
+      <a class="route-card span-6" href="AntiGravity Walkthrough.html">
+        <span class="num">04 · WALKTHROUGH</span>
+        <div class="title">60-second <span class="accent">tour</span></div>
+        <p class="desc">Auto-advancing reel through Mission Control, Comms, Paperweight, Hermes. Press H to hide UI for clean screen recording. Loops cleanly.</p>
+        <div class="meta">
+          <span class="tag outline">PUBLIC</span>
+          <span class="tag sky">RECORD-FRIENDLY</span>
+        </div>
+        <span class="go">OPEN WALKTHROUGH →</span>
+      </a>
+
+      <div class="route-card private span-6" id="route-private">
+        <span class="num">05 · OPERATOR VIEW</span>
+        <div class="title">Cockpit · <span style="color:var(--rose);">private</span></div>
+        <p class="desc">Local-only admin cockpit. CRD launchers, live watchdog, autopilot state. Never deployed publicly. Trusted observers can request a live screen-share if they want to look inside.</p>
+        <div class="meta">
+          <span class="tag rose">EMAIL GATE</span>
+          <span class="tag outline">LOCAL ONLY</span>
+        </div>
+        <span class="go">REQUEST OPERATOR VIEW →</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TRUST BAND ═══ -->
+  <div class="trust-band" style="margin-top:22px;" id="mission">
+    <div class="trust-row">
+      <div>
+        <div style="font-weight:900;font-size:28px;letter-spacing:-0.035em;line-height:1.1;">
+          A real or zero ledger.
+        </div>
+        <div style="color:var(--ink-2);font-size:14px;line-height:1.55;margin-top:10px;max-width:480px;">
+          No fabricated user counts. No inflated revenue. No social-proof theater. Every public figure is what it is, or it's zero.
+        </div>
+      </div>
+      <div>
+        <div class="label">CHARITABLE FLOOR</div>
+        <div class="v" style="color:var(--odoo-300);">10%</div>
+        <div class="label" style="margin-top:6px;">PER BUCKET · STACKED</div>
+      </div>
+      <div>
+        <div class="label">REVENUE BUCKETS</div>
+        <div class="v">4</div>
+        <div class="label" style="margin-top:6px;">YOUANDINOTAI · OR · AIS · AIDIA</div>
+      </div>
+      <div>
+        <div class="label">INVESTOR SEATS</div>
+        <div class="v zero">0 / 10</div>
+        <div class="label" style="margin-top:6px;">CLOSED · PRE-COUNSEL</div>
+      </div>
+      <div>
+        <div class="label">FAMILIES HELPED</div>
+        <div class="v zero">0</div>
+        <div class="label" style="margin-top:6px;">WE RISE FROM ZERO</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ HERMES / GROK CLARIFICATION ═══ -->
+  <div class="card" style="margin-top:22px;">
+    <div class="card-h">
+      <div class="t">◆ HERMES · ROUTING NOTE</div>
+      <span class="tag amber">GROK SIGN-IN AUTH · NOT XAI API</span>
+    </div>
+    <div style="color:var(--ink-2);font-size:14px;line-height:1.65;">
+      <strong style="color:var(--ink);">Hermes</strong> is the router that bridges this stack to <strong style="color:var(--amber);">x.com</strong>. It uses <strong style="color:var(--ink);">Grok sign-in authentication</strong> &mdash; not the xAI developer API &mdash; so there's no API-key rate-limit cap, no commercial-API TOS surface, and no public claim of an xAI partnership. Hermes routes <em>only</em> the x.com side of the platform. Anthropic / Google / Microsoft / OpenAI surfaces are routed separately through their own first-party tools (Claude Code CLI, Gemini in browser, etc.) per the <strong style="color:var(--ink);">No-Forced-Association doctrine</strong>.
+    </div>
+  </div>
+
+  <!-- ═══ FINAL DISCLOSURE ═══ -->
+  <div class="footer-note">
+    <strong>OPUSHASHANDS.YOUANDINOTAI.COM</strong> &middot; PUBLIC HUB FOR THE ANTIGRAVITY MISSION &middot; #UntilNoKidInNeed<br/>
+    Independent project. Founder: Joshua Coleman. No public partnership claim with Anthropic, Google, xAI, Microsoft, OpenAI, or Perplexity. References describe founder-recognized collaboration on work product only. No solicitation. No securities offering. Last published: <span id="last-pub"></span>
+  </div>
+
+</main>
+
+<!-- ═══ EMAIL GATE MODAL ═══ -->
+<div class="modal-overlay" id="email-modal" hidden>
+  <div class="modal-card">
+    <div class="modal-eye">◆ OPERATOR VIEW · EMAIL GATE</div>
+    <div class="modal-h">Request <span class="accent">operator view</span>.</div>
+    <div class="modal-sub">
+      The Operator View (Cockpit) runs <strong style="color:var(--ink);">locally only</strong> on Joshua's machine. It is not deployed to this URL. If you are on the trusted allowlist, your email unlocks a link to request a live screen-share. Otherwise you stay on the public hub.
+    </div>
+    <input type="email" id="email-input" class="modal-input" placeholder="you@anthropic.com / @google.com / @xai.com / @microsoft.com / @openai.com" autocomplete="off" spellcheck="false"/>
+    <div class="modal-error" id="email-error"></div>
+    <div class="modal-actions">
+      <button class="btn" id="email-cancel">Cancel</button>
+      <button class="btn primary" id="email-submit">Verify →</button>
+    </div>
+    <div class="modal-note">
+      <strong style="color:var(--ink-3);">Honesty note:</strong> this is a UX gate, not a security gate. The Cockpit URL is not exposed publicly &mdash; even an allowlist hit only reveals a contact path to coordinate a live screen-share with the operator. No private data is fetched by this page.
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ── Theme toggle (dark default · Anthropic-inspired light) ────────────────────────────────
+let __ohh_theme = 'dark';
+(function theme() {
+  const KEY = 'ohh_theme_v1';
+  const btn = document.getElementById('btn-theme');
+  try {
+    const stored = localStorage.getItem(KEY);
+    if (stored === 'light' || stored === 'dark') __ohh_theme = stored;
+  } catch (e) {}
+  function apply(mode) {
+    __ohh_theme = mode;
+    document.body.classList.toggle('theme-light', mode === 'light');
+    btn.textContent = mode === 'light' ? '☽ Dark' : '☼ Light';
+    try { localStorage.setItem(KEY, mode); } catch (e) {}
+  }
+  btn.addEventListener('click', () => apply(__ohh_theme === 'light' ? 'dark' : 'light'));
+  apply(__ohh_theme);
+})();
+
+// ── Last published timestamp (real, computed at load) ────────────────
+(function ts() {
+  const t = new Date();
+  const pad = (n) => String(n).padStart(2, '0');
+  document.getElementById('last-pub').textContent =
+    t.getUTCFullYear() + '-' + pad(t.getUTCMonth()+1) + '-' + pad(t.getUTCDate()) +
+    ' ' + pad(t.getUTCHours()) + ':' + pad(t.getUTCMinutes()) + ' UTC';
+})();
+
+// ── Email gate (UX-only, honest about it) ───────────────────────────
+(function emailGate() {
+  // Allowlist is intentionally domain-based, not address-based.
+  // It controls what UI message you see, NOT what data you can read.
+  // No private data is exposed by this page either way.
+  const ALLOW_DOMAINS = [
+    'anthropic.com',
+    'google.com',
+    'xai.com', 'x.ai',
+    'microsoft.com',
+    'openai.com',
+    'perplexity.ai',
+    'gmail.com', // founder's domain
+  ];
+  // Operator's exact email — only this address sees the contact path.
+  const OPERATOR = 'joshlcoleman@gmail.com';
+
+  const modal = document.getElementById('email-modal');
+  const input = document.getElementById('email-input');
+  const err   = document.getElementById('email-error');
+  const btnP  = document.getElementById('btn-private');
+  const btnR  = document.getElementById('route-private');
+  const cancel = document.getElementById('email-cancel');
+  const submit = document.getElementById('email-submit');
+
+  function open() {
+    err.textContent = '';
+    input.value = '';
+    modal.hidden = false;
+    setTimeout(() => input.focus(), 10);
+  }
+  function close() { modal.hidden = true; }
+
+  btnP.addEventListener('click', open);
+  btnR.addEventListener('click', open);
+  cancel.addEventListener('click', close);
+  modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+
+  function verify() {
+    const v = (input.value || '').trim().toLowerCase();
+    if (!v || !v.includes('@')) {
+      err.textContent = 'EMAIL REQUIRED · INCLUDING @DOMAIN';
+      return;
+    }
+    const domain = v.split('@')[1];
+    if (v === OPERATOR) {
+      err.style.color = 'var(--green)';
+      err.textContent = 'OPERATOR · COCKPIT IS LOCAL · OPEN IT ON YOUR TRUSTED MACHINE';
+      return;
+    }
+    if (ALLOW_DOMAINS.includes(domain)) {
+      err.style.color = 'var(--green)';
+      err.textContent = 'TRUSTED DOMAIN · CONTACT JOSHUA FOR A LIVE SCREEN-SHARE';
+      return;
+    }
+    err.style.color = 'var(--rose)';
+    err.textContent = 'NOT ON ALLOWLIST · STAYING ON PUBLIC HUB';
+  }
+  submit.addEventListener('click', verify);
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') verify(); });
+})();
+</script>
+
+</body>
+</html>
