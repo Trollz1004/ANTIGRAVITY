@@ -2,21 +2,38 @@ export const PUBLIC_SURFACES = [
   {
     name: 'YouAndINotAI',
     url: 'https://youandinotai.com',
-    status: 'Public product site',
-    description: 'Customer-facing social platform. Public claims should stay limited to what is live and documented.',
+    status: 'Live product',
+    description: 'Dating and community platform with human verification, message boards, and memberships. A live revenue engine.',
+  },
+  {
+    name: 'Business Exchange',
+    url: 'https://aidoesitall.website',
+    status: 'Live marketplace',
+    description: 'Marketplace for services, referrals, and business sales. The B2B routing layer for the ecosystem.',
+  },
+  {
+    name: 'DAO Launch',
+    url: 'https://dashboard.aidoesitall.website',
+    status: 'Public',
+    description: 'Governance and funding layer. Token sale active across 4 DAOs ($LOVE, $UKID, $GREEN, $AGRAV).',
+  },
+  {
+    name: 'Customer Support',
+    url: 'https://dashboard.aidoesitall.website',
+    status: 'Active',
+    description: 'Direct support surface — visible, reachable, not buried. A trust signal and conversion layer.',
   },
   {
     name: 'OnlineRecycle',
     url: 'https://onlinerecycle.org',
-    status: 'Public service site',
+    status: 'Live product',
     description: 'Electronics recycling, pickup, and resale intake for Central Florida customers.',
   },
   {
     name: 'AI-Solutions Store',
     url: 'https://ai-solutions.store',
-    status: 'Public storefront',
-    description:
-      'Separate storefront surface. Customer messaging should stay distinct from service and dashboard pages.',
+    status: 'Live storefront',
+    description: 'Storefront for digital products and automation offers.',
   },
   {
     name: 'Antigravity Dashboard',

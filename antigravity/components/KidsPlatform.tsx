@@ -10,11 +10,11 @@ export default function KidsPlatform({ isDarkMode }: { isDarkMode: boolean }) {
           <Heart className="w-10 h-10 fill-current" />
         </div>
         <h2 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 pb-2">
-          For The Kids
+        For The Kids
         </h2>
         <p className={`mt-4 text-lg max-w-2xl mx-auto ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-          The heart of our ecosystem. Kid-focused support follows the current published operating policy instead of
-          retired split-era branding or hard-coded percentage bragging.
+        The heart of our ecosystem. A minimum 10% from public sale proceeds and a separate minimum 10% from
+        staking proceeds are each routed to the kids bucket via distinct rails. These buckets are never merged.
         </p>
       </div>
 

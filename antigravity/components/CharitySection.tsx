@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'motion/react';
-import { Recycle, Heart, Globe, Laptop, TrendingUp } from 'lucide-react';
+import { Recycle, Heart, Globe, Laptop, TrendingUp, Handshake, Coins, Scale } from 'lucide-react';
 
 interface CharityCardProps {
   icon: React.ReactNode;
@@ -56,21 +56,33 @@ const STATIC_PARTICLES = [...Array(15)].map(() => ({
 
 export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) {
   const stats = [
-    { label: 'Verified Public Links', value: '2', icon: <Laptop className="w-5 h-5" /> },
+    { label: 'Verified Public Links', value: '7', icon: <Laptop className="w-5 h-5" /> },
     { label: 'Published Impact Totals', value: 'Pending', icon: <TrendingUp className="w-5 h-5" /> },
   ];
 
   const platforms = [
     {
-      name: 'AI-Solutions.Store',
-      tagline: 'Charity storefront kept separate from the revenue and recycling lanes.',
-      url: 'https://ai-solutions.store',
+      name: 'YouAndINotAI',
+      tagline: 'Dating and community platform. Human-verified, real-people-only. A live revenue engine in the ecosystem.',
+      url: 'https://youandinotai.com',
       icon: <Heart className="w-8 h-8 text-emerald-500" />,
+    },
+    {
+      name: 'Business Exchange',
+      tagline: 'Marketplace for services, referrals, and business sales. The B2B routing layer connected to the broader ecosystem.',
+      url: 'https://aidoesitall.website',
+      icon: <Handshake className="w-8 h-8 text-emerald-500" />,
+    },
+    {
+      name: 'AI-Solutions.Store',
+      tagline: 'Digital products and automation offers storefront.',
+      url: 'https://ai-solutions.store',
+      icon: <Laptop className="w-8 h-8 text-emerald-500" />,
     },
     {
       name: 'OnlineRecycle.org',
       tagline: 'Florida electronics recycling, pickup, drop-off, and resale service.',
-      url: 'https://OnlineRecycle.org',
+      url: 'https://onlinerecycle.org',
       icon: <Recycle className="w-8 h-8 text-emerald-500" />,
     },
   ];
@@ -113,20 +125,67 @@ export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) 
           className="relative z-10"
         >
           <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-widest bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-            <Recycle className="w-4 h-4 animate-spin-slow" /> Service & Mission Links
+            <Recycle className="w-4 h-4 animate-spin-slow" /> Ecosystem Platforms
           </div>
           <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-6">
-            Built Clean. Reported Honestly.
+            Built to fund the mission.
             <br />
-            <span className="text-emerald-500">ZERO B.S. &hearts;</span>
+            <span className="text-emerald-500">Every real revenue stream mapped.</span>
           </h2>
           <p
             className={`text-xl max-w-3xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
           >
-            The public surface should stay simple: real links, clear lane separation, and no inflated counts or mission
-            claims that have not been verified.
+            YouAndINotAI is live. Business Exchange is live. The DAO launch is public. Customer support is active.
+            Every platform exists to generate real revenue, route real work, and keep the mission moving.
           </p>
         </motion.div>
+      </div>
+
+      {/* DAO Token Highlight */}
+      <div className={`p-6 rounded-3xl border ${isDarkMode ? 'bg-purple-950/20 border-purple-500/20' : 'bg-purple-50 border-purple-100'}`}>
+        <div className="flex items-center gap-3 mb-4">
+          <Coins className="w-6 h-6 text-purple-500" />
+          <h3 className="text-xl font-black">DAO Launch — Public</h3>
+        </div>
+        <p className={`mb-4 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+          Four governance tokens power the ecosystem. Total supply: 10,000,000. Public sale allocation: 2,000,000 (20%).
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { name: '$LOVE', platform: 'YouAndINotAI', color: 'text-pink-500' },
+            { name: '$UKID', platform: 'AI-Solutions', color: 'text-blue-500' },
+            { name: '$GREEN', platform: 'OnlineRecycle', color: 'text-emerald-500' },
+            { name: '$AGRAV', platform: 'Antigravity', color: 'text-purple-500' },
+          ].map((dao) => (
+            <div key={dao.name} className={`p-3 rounded-xl text-center border ${isDarkMode ? 'border-slate-800 bg-slate-900/50' : 'border-slate-200 bg-white'}`}>
+              <p className={`text-lg font-black ${dao.color}`}>{dao.name}</p>
+              <p className={`text-xs mt-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{dao.platform}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Two Separate Buckets */}
+      <div className={`p-6 rounded-3xl border ${isDarkMode ? 'bg-blue-950/20 border-blue-500/20' : 'bg-blue-50 border-blue-100'}`}>
+        <div className="flex items-center gap-3 mb-4">
+          <Scale className="w-6 h-6 text-blue-500" />
+          <h3 className="text-xl font-black">Separate Funding Buckets</h3>
+        </div>
+        <p className={`mb-4 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+          The public launch sale and the staking engine are separate funding buckets. A minimum 10% from public sale proceeds is
+          routed to the kids bucket, and a separate minimum 10% from staking-related proceeds is also routed to the kids bucket.
+          These are distinct rails and must be shown separately.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-slate-900/50' : 'bg-white'}`}>
+            <p className="font-bold text-blue-500">Sale Proceeds Bucket</p>
+            <p className={`text-sm mt-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Min 10% from sale → kids</p>
+          </div>
+          <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-slate-900/50' : 'bg-white'}`}>
+            <p className="font-bold text-emerald-500">Staking Proceeds Bucket</p>
+            <p className={`text-sm mt-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Min 10% from staking → kids (separate)</p>
+          </div>
+        </div>
       </div>
 
       {/* Stats Bar */}
@@ -177,7 +236,8 @@ export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) 
         <h3 className="text-2xl font-bold mb-4">Keep It Verifiable</h3>
         <p className={`max-w-2xl mx-auto mb-8 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
           Public copy should describe what is live, what is owned, and what has actually been verified. If a number,
-          claim, or routing path is not confirmed, it should stay out of customer-facing copy.
+          claim, or routing path is not confirmed, it should stay out of customer-facing copy. Sale proceeds and
+          staking proceeds are separate buckets — never merged.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-500 text-sm font-bold">
@@ -185,6 +245,9 @@ export default function CharitySection({ isDarkMode }: { isDarkMode: boolean }) 
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-500 text-sm font-bold">
             <Heart className="w-4 h-4" /> No Inflated Metrics
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-500 text-sm font-bold">
+            <Scale className="w-4 h-4" /> Separate Buckets
           </div>
         </div>
       </motion.div>
