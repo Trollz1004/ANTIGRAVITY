@@ -9,14 +9,6 @@
         "HOME": "C:\\Users\\joshl"
       }
     },
-    "paperclip": {
-      "command": "C:\\Antigravity\\paperclip-mcp\\paperclip-mcp.cmd",
-      "args": [],
-      "env": {
-        "ANTIGRAVITY_ROOT": "C:\\Antigravity",
-        "LITELLM_BASE_URL": "http://127.0.0.1:4000"
-      }
-    },
     "playwright": {
       "command": "cmd",
       "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]

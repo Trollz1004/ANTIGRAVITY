@@ -1,14 +1,16 @@
-﻿# Mission stack unified bootstrap.
+# Mission stack unified bootstrap.
 #
 # Brings up the entire Sabretooth cockpit in dependency order:
 #   1. Docker Desktop
-#   2. paperclip-postgres container (:5432)
-#   3. WSL Hermes Router (:11435) + watchdog
-#   4. Paperclip HQ (:3100) + watchdog
-#   5. Mission Control API (:8787) — verify only (Scheduled Task starts it)
-#   6. Mission Control Watchdog — verify only (Scheduled Task starts it)
-#   7. OpenClaw Gateway browser-open (waits for :18789)
-#   8. Claude Code + Hermes TUI windows in Windows Terminal
+#   2. WSL Hermes Router (:11435) + watchdog
+#   3. Mission Control API (:8787) — verify only (Scheduled Task starts it)
+#   4. Mission Control Watchdog — verify only (Scheduled Task starts it)
+#   5. OpusHasHands hub (:4200)
+#   6. OpenClaw Gateway browser-open (waits for :18789)
+#   7. Claude Code + Hermes TUI windows in Windows Terminal
+#
+# NOTE: Paperclip HQ (:3100) and its postgres container decommissioned 2026-05-29.
+#       Hermes Dashboard (:9119) replaces it — tunneled via dashboard.youandinotai.com
 #
 # Idempotent. Re-running is safe — every phase checks before acting.
 # Logs to C:\Antigravity\logs\autostart-YYYY-MM-DD.log
@@ -81,43 +83,8 @@ if (Test-Path $dockerExe) {
     Log '[1/8] Docker Desktop not installed — skipping'
 }
 
-# ---------- 2. paperclip-postgres container ----------
-if (-not $dockerCli) {
-    if (Test-LocalPort 5432) {
-        Log '[2/8] docker CLI missing but Postgres already on :5432 (native service) — using as-is'
-    } else {
-        Log '[2/8] docker CLI missing AND no Postgres on :5432 — Paperclip will fail without a database'
-    }
-}
-try {
-    if (-not $dockerCli) { throw 'docker CLI not available' }
-    $running = & docker ps --filter "name=paperclip-postgres" --format "{{.Names}}" 2>$null
-    if ($running -match 'paperclip-postgres') {
-        Log '[2/8] paperclip-postgres already running'
-    } else {
-        $exists = & docker ps -a --filter "name=paperclip-postgres" --format "{{.Names}}" 2>$null
-        if ($exists -match 'paperclip-postgres') {
-            Log '[2/8] starting existing paperclip-postgres container'
-            & docker start paperclip-postgres 2>&1 | Out-Null
-        } else {
-            Log '[2/8] creating paperclip-postgres container (first run)'
-            & docker run -d `
-                --name paperclip-postgres `
-                --restart unless-stopped `
-                -e POSTGRES_USER=paperclip `
-                -e POSTGRES_PASSWORD=paperclip_local_only `
-                -e POSTGRES_DB=paperclip `
-                -p 127.0.0.1:5432:5432 `
-                -v paperclip-pgdata:/var/lib/postgresql/data `
-                postgres:16 2>&1 | Out-Null
-        }
-    }
-    Wait-ForPort 5432 30 'Postgres' | Out-Null
-} catch {
-    Log "[2/8] postgres step error: $($_.Exception.Message)"
-}
-
-# ---------- 3. Hermes Router (WSL :11435) ----------
+# ---------- 2. Hermes Router (WSL :11435) ----------
+Log '[2/7] starting Hermes Router check'
 $hermesPid = $null
 try { $hermesPid = (wsl -d Ubuntu -- pgrep -f hermes_router.py 2>$null | Select-Object -First 1) } catch {}
 if ([string]::IsNullOrWhiteSpace($hermesPid)) {
@@ -147,23 +114,7 @@ if ((-not $hermesWatchdogRunning) -and (Test-Path $hermesWatchdogScript)) {
     Log '      Hermes Router watchdog already running (or script missing)'
 }
 
-# ---------- 4. Paperclip HQ (:3100) + watchdog ----------
-$watchdogScript = "$Repo\scripts\paperclip-watchdog.ps1"
-$watchdogRunning = $false
-Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -ErrorAction SilentlyContinue |
-    Where-Object { $_.CommandLine -match 'paperclip-watchdog\.ps1' } |
-    ForEach-Object { $watchdogRunning = $true }
-if ((-not $watchdogRunning) -and (Test-Path $watchdogScript)) {
-    Log '[4/8] starting Paperclip watchdog (hidden) — will boot paperclipai itself'
-    Start-Process -FilePath 'powershell.exe' `
-        -ArgumentList '-NonInteractive','-WindowStyle','Hidden','-ExecutionPolicy','Bypass','-File',$watchdogScript `
-        -WindowStyle Hidden -ErrorAction SilentlyContinue
-} else {
-    Log '[4/8] Paperclip watchdog already running'
-}
-Wait-ForPort 3100 60 'Paperclip HQ' | Out-Null
-
-# ---------- 5. Mission Control API (:8787) ----------
+# ---------- 3. Mission Control API (:8787) ----------
 # Scheduled Task "MissionControlAPI" boots this at startup. Verify only.
 if (Test-LocalPort 8787) {
     Log '[5/8] Mission Control API up on :8787'
@@ -256,7 +207,7 @@ if (Get-Process WindowsTerminal -ErrorAction SilentlyContinue) {
 Log '=========================================='
 Log '=== mission stack autostart complete ====='
 Log '=== Mission Control: http://127.0.0.1:8787/'
-Log '=== Paperclip HQ:    http://127.0.0.1:3100/'
+Log '=== Hermes Dashboard: http://127.0.0.1:9119/  (public: https://dashboard.youandinotai.com/)'
 Log '=== OpusHasHands:    http://127.0.0.1:4200/  (public: https://opushashands.youandinotai.com/)'
 Log '=== OpenClaw:        http://127.0.0.1:18789/'
 Log '=========================================='
