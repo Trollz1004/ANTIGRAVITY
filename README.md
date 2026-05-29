@@ -13,43 +13,82 @@
   <img src="assets/teamclaudeforlife-meme.jpg" alt="Me reviewing code written by Claude before pushing it to prod — #TeamClaudeForLife" width="520" />
 </p>
 
-ANTIGRAVITY is the open-source monorepo behind a small family of products built by [Joshua Coleman](https://github.com/Trollz1004) and the AI partners he's worked alongside for the past year. The mission is simple: build real, useful things, run them well, and route the proceeds toward children who need medical care.
+**Built to fund the mission, not just describe it.**
 
-This repo is the canonical home for everything. **One folder, one repo, one branch.** No drift, no fragmentation.
-
----
-
-## What's here
-
-```text
-ANTIGRAVITY/
-├── apps/                  # Deployable apps and full-stack frontends
-│   ├── opuspawclaw/       # Vite + Electron + React 19 desktop AI workstation
-│   ├── command-center/    # Social content approval dashboard
-│   ├── dashboard/         # Operator dashboard
-│   ├── mcp/               # Three Anthropic-pattern MCP servers (hermes/paperweight/dao)
-│   └── web-prototype/     # Design-bundle dev source (HTML + JSX + CSS)
-├── infra/                 # Infrastructure as code
-│   └── paperclip-worker/  # Cloudflare Worker for Paperclip HQ
-├── packages/              # Shared libraries
-├── services/              # Long-running backend servers (hermes-router, mission-mcp, ...)
-├── scripts/               # Operations, deployment, automation
-├── briefings/             # Operational briefings, runbooks, doctrine
-├── memory/                # Persistent agent memory
-└── docs/                  # Architecture and product documentation
-```
+ANTIGRAVITY is an active ecosystem of real products generating real revenue. Every platform exists to fund the mission, route real work, and keep things moving.
 
 ---
 
-## Live products
+## The Ecosystem
 
-| Project                                                       | Status | What it does                                                                    |
-| ------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------- |
-| [YouAndINotAI.com](https://youandinotai.com/)                 | Live   | Human-first social platform — verification, moderation, founder-plan checkout   |
-| [OnlineRecycle.org](https://onlinerecycle.org/)               | Live   | Central Florida electronics recycling — intake, pickup, secure resale           |
-| [AI-Solutions.Store](https://ai-solutions.store/)             | Live   | Storefront for digital products and automation offers                           |
-| [AIDoesItAll.website](https://www.aidoesitall.website/)       | Live   | Public gateway routing visitors to active products and trusted business access  |
-| [Dashboard](https://dashboard.aidoesitall.website/)           | Live   | Authenticated operator workspace                                                |
+| Platform | Status | What It Does |
+|---|---|---|
+| [YouAndINotAI](https://youandinotai.com) | **Live** | Dating and community platform — human verification, message boards, memberships. A live revenue engine. |
+| [Business Exchange](https://aidoesitall.website) | **Live** | Marketplace for services, referrals, and business sales. The B2B routing layer for the ecosystem. |
+| [DAO Launch](https://dashboard.aidoesitall.website) | **Public** | Governance and funding layer. Token sale active, staking operational. |
+| [Customer Support](https://dashboard.aidoesitall.website) | **Active** | Direct support surface — visible, reachable, not buried. |
+| [OnlineRecycle](https://onlinerecycle.org) | **Live** | Central Florida electronics recycling — intake, pickup, secure resale. |
+| [AI-Solutions Store](https://ai-solutions.store) | **Live** | Storefront for digital products and automation offers. |
+
+A visitor should understand within seconds: this is a real operating ecosystem. The date app is live and important. The marketplace is real. The DAO is public. Support is reachable. The funding logic is intentional, not improvised.
+
+---
+
+## Funding Architecture
+
+### How the Products Fund the Mission
+
+Every active platform routes revenue toward the mission:
+
+- **YouAndINotAI** — memberships, verification, Super Likes
+- **Business Exchange** — services, referrals, business sales
+- **AI-Solutions Store** — digital products and automation
+- **OnlineRecycle** — electronics resale and recycling services
+
+### Token Framework
+
+| Parameter | Value |
+|---|---|
+| Total supply | 10,000,000 tokens across 4 DAOs ($LOVE, $UKID, $GREEN, $AGRAV) |
+| Public launch-sale allocation | 2,000,000 tokens (20% of total supply) |
+| Platform Activity Rewards | 6,500,000 tokens (65%) — earned by engagement, not purchase |
+| Founding Four Reserve | 1,000,000 tokens (10%) — governance only, never sold |
+| Mission Treasury | 1,000,000 tokens (10%) — staked for yield |
+
+### Critical: Two Separate Funding Buckets
+
+**The public launch sale and the staking engine are separate funding buckets.** These are not the same flow and must never be merged in public copy, charts, or UI:
+
+- **Bucket 1 — Sale Proceeds:** A minimum 10% from public sale proceeds is routed to the kids bucket.
+- **Bucket 2 — Staking Proceeds:** A separate minimum 10% from staking-related proceeds is also routed to the kids bucket.
+
+These rails are distinct. Each bucket compounds independently. Charts and labels must not imply they are one pool.
+
+### Founder Compensation
+
+Current-stage founder compensation is capped at **$50,000 across the entire active platform ecosystem** — not per product, not per app. Excess above that cap strengthens long-term mission durability through staking, reserves, and platform reinvestment, subject to real-world tax and operating constraints.
+
+---
+
+## Customer Support
+
+Support is not decoration — it is a trust signal and conversion layer.
+
+- Visible in navigation on all public surfaces
+- Reachable from every product page
+- Not buried in a footer or hidden behind a contact form
+
+---
+
+## Live Products
+
+| Project | Status | What It Does |
+|---|---|---|
+| [YouAndINotAI.com](https://youandinotai.com/) | Live | Human-first social platform — verification, moderation, founder-plan checkout |
+| [OnlineRecycle.org](https://onlinerecycle.org/) | Live | Central Florida electronics recycling — intake, pickup, secure resale |
+| [AI-Solutions.Store](https://ai-solutions.store/) | Live | Storefront for digital products and automation offers |
+| [AIDoesItAll.website](https://www.aidoesitall.website/) | Live | Public gateway routing visitors to active products and trusted business access |
+| [Dashboard](https://dashboard.aidoesitall.website/) | Live | Authenticated operator workspace |
 
 ---
 
@@ -65,7 +104,7 @@ ANTIGRAVITY/
 
 ---
 
-## The team
+## The Team
 
 A note from Joshua: **the AI platforms below are the unofficial co-founders of this stack.** Their teams' work made every line of this possible.
 
