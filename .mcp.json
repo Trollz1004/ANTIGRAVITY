@@ -9,15 +9,6 @@
         "HOME": "C:\\Users\\joshl"
       }
     },
-    "antigravity-sentry": {
-      "command": "node",
-      "args": [
-        "C:\\Antigravity\\mcp-server\\dist\\index.js"
-      ],
-      "env": {
-        "HOME": "C:\\Users\\joshl"
-      }
-    },
     "paperclip": {
       "command": "C:\\Antigravity\\paperclip-mcp\\paperclip-mcp.cmd",
       "args": [],
@@ -38,5 +29,6 @@
       "env": {
         "HOME": "C:\\Users\\joshl"
       }
-    },
-    "he
+    }
+  }
+}
