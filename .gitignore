@@ -1,0 +1,75 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Build artifacts
+dist/
+.next/
+build/
+*.egg-info/
+coverage.xml
+bundle-stats.html
+tsconfig.tsbuildinfo
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.env.bak
+
+# IDE / editor
+.vscode/
+.idea/
+*.code-workspace
+.claude/settings.local.json
+.claude/skills/
+
+# Logs
+logs/
+*.log
+
+# Cache / temp
+.cache/
+.graphify/
+.openclaw/
+.hermes/
+.playwright-mcp/
+.wrangler/
+*.zip
+
+# OS junk
+.DS_Store
+Thumbs.db
+__cmd*.txt
+__env_diff.txt
+
+# Docker
+docker-compose.override.yml
+
+# Paperclip (decommissioned)
+paperclip-ceo/
+.paperclip-context.json
+
+# Deploy staging
+_deploy/*/node_modules/
+
+# Handoff (keep directory, ignore large sub-items)
+_handoff-staging-*/_deploy/node_modules/
+
+# Service runtime data
+services/mission-control-api/data/
+infra/paperclip-worker/.wrangler/
+
+# Misc generated
+docs/beta-access-after-click.png
+assets/__pycache__/
+marketing-assets/assets/__pycache__/
+scripts/__pycache__/
+services/*/src/*/__pycache__/
+services/*/tests/__pycache__/
+services/health-aggregator/app/__pycache__/
+services/health-aggregator/app/probes/__pycache__/
+services/health-aggregator/tests/__pycache__/
