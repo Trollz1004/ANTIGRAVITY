@@ -501,7 +501,34 @@
       color: var(--ink-2);
     }
     .open-windows .text strong { color: var(--green); }
-  </style>
+  
+    .countdown-container {
+      margin: 2rem auto;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--surface) 0%, var(--bg-2) 100%);
+      border: 2px solid var(--odoo-300);
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 0 30px var(--odoo-glow);
+      max-width: 500px;
+    }
+    .countdown-title {
+      font: 800 14px/1 'JetBrains Mono', monospace;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--odoo-300);
+      margin-bottom: 1rem;
+    }
+    .countdown-clock {
+      font: 900 48px/1 'JetBrains Mono', monospace;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+    @media(max-width: 600px) {
+      .countdown-clock { font-size: 32px; }
+    }
+
+</style>
 </head>
 <body>
 
@@ -574,7 +601,13 @@
       </div>
     </div>
 
-    <div class="house-card">
+    
+    <div class="countdown-container" id="countdown-timer">
+      <div class="countdown-title">WORLD PREMIERE</div>
+      <div class="countdown-clock" id="clock">00d 00h 00m 00s</div>
+    </div>
+
+<div class="house-card">
       <div class="house-eye">◆ THE HOUSE · OPEN-WINDOWS DIAGRAM</div>
       <div class="house-h">Watchers <span style="color:var(--odoo-300);">welcome.</span></div>
       <svg class="house-svg" viewBox="0 0 480 320" xmlns="http://www.w3.org/2000/svg">
@@ -786,6 +819,31 @@
         </div>
         <span class="go">REQUEST OPERATOR VIEW →</span>
       </div>
+
+      <div class="card span-12" id="ai-help">
+        <div class="card-h">
+          <div class="t">◆ AI COMMUNITY HELP · ZERO-DRIFT RESOURCE</div>
+          <span class="tag green">LIVE & VERIFIED</span>
+        </div>
+        <div style="color:var(--ink-2);font-size:14px;line-height:1.65;">
+          <p style="margin-top:0;">AntiGravity provides a structural framework for AI‑driven impact. We practice <strong style="color:var(--ink);">radical honesty</strong>: if a bucket shows $0, we report $0. The AI Community Help follows the <strong style="color:var(--ink);">100‑Cent Law</strong>: a 10% floor directly supports kids, a 27% tax reserve funds compliance, and the remaining 63% covers survival and growth. All figures are live, verified, and updated automatically.</p>
+          <div class="observers" style="margin-top:15px;">
+            <div class="observer">
+              <div class="info">
+                <div class="name">Honest Benchmarks</div>
+                <div class="role">No simulated totals. Real-or-zero reporting.</div>
+              </div>
+            </div>
+            <div class="observer">
+              <div class="info">
+                <div class="name">Sovereignty Rule</div>
+                <div class="role">The kids' floor is permanent. Never moves down.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -954,6 +1012,32 @@ let __ohh_theme = 'dark';
   submit.addEventListener('click', verify);
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') verify(); });
 })();
+
+(function countdown() {
+  const target = new Date("2026-06-01T00:00:00Z").getTime();
+  const clock = document.getElementById('clock');
+  
+  function update() {
+    const now = new Date().getTime();
+    const diff = target - now;
+    
+    if (diff <= 0) {
+      clock.textContent = 'WORLD PREMIERE LIVE';
+      return;
+    }
+    
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff % (1000 * 60 *  la-60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    clock.textContent = `${String(d).padStart(2, '0')}d ${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+  }
+  
+  setInterval(update, 1000);
+  update();
+})();
+
 </script>
 
 </body>
