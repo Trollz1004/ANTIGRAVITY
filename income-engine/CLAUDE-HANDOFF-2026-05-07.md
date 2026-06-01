@@ -25,7 +25,7 @@
 
 ### New Income Project
 - GitHub account: AidoesitAll (aiforyoullc@gmail.com)
-- Repo: AidoesitAll/income-engine (private)
+- Repo: Trollz1004/income-engine (private)
 - Local: C:/income-engine (this folder)
 - Cleaned AidoesitAll account — kept only NewsCreator + income-engine, deleted 9 dead repos
 - NewsCreator: Python FastAPI + Ollama, session memory, web UI — we built this previously, keeping it
@@ -49,7 +49,7 @@
 
 ## Next Steps
 1. Manus delivers build to C:/income-engine
-2. Claude Code wires it to AidoesitAll/income-engine repo
+2. Claude Code wires it to Trollz1004/income-engine repo
 3. Claude Code sets up CLAUDE.md + Paperclip fresh install
 4. Rotate PAT
 5. Get it running and generating income
