@@ -23,6 +23,6 @@ All agents in this company MUST follow these rules. No exceptions.
 
 ## Company Info
 - Name: CLAUDE's Antigravity
-- GitHub: AidoesitAll/income-engine
+- GitHub: Trollz1004/income-engine
 - Node: 9020 (192.168.0.5)
 - Owner: Joshua Coleman (aiforyoullc@gmail.com)

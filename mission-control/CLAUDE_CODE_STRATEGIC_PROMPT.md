@@ -159,7 +159,7 @@ FETCHER finds leads. ManusClaw pre-qualifies + categorizes. Paperclip CEO agent 
 ## THE WALL STAYS ABSOLUTE
 
 **This is income-engine only. Zero Antigravity crossover.**
-- Separate GitHub (AidoesitAll/income-engine)
+- Separate GitHub (Trollz1004/income-engine)
 - Separate stack (Paperclip, ManusClaw, Graphy)
 - Separate revenue (goes to survival, not mixed with mission)
 - Trust with AI platforms protected

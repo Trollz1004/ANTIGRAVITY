@@ -2,7 +2,7 @@
 # Income Engine .env — ManusClaw Configuration
 # For: C:/income-engine
 # Platform: 9020 (i7-4790, 32GB, GTX 1070)
-# Repo: AidoesitAll/income-engine (private)
+# Repo: Trollz1004/income-engine (private)
 # 
 # CRITICAL: This file contains ONLY income-engine configs.
 # NEVER reference Antigravity paths or credentials.
@@ -68,10 +68,10 @@ ANTHROPIC_API_KEY=your-anthropic-api-key
 CLAUDE_MODEL=claude-opus-4-5-20250514
 
 # ─── GITHUB ──────────────────────────────────────────────────────
-# For AidoesitAll/income-engine repo
+# For Trollz1004/income-engine repo
 GITHUB_TOKEN=your-github-personal-access-token
-GITHUB_REPO=AidoesitAll/income-engine
-GITHUB_OWNER=AidoesitAll
+GITHUB_REPO=Trollz1004/income-engine
+GITHUB_OWNER=Trollz1004
 
 # ─── MANUS APIS ─────────────────────────────────────────────────
 # For Manus agent orchestration
