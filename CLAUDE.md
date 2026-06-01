@@ -24,6 +24,16 @@
 >
 > Refreshed daily by the `paperweight-daily-memory` scheduled task.
 
+> # T5500 = POWERSTATION · Sabretooth = DEF NODE (no ad-hoc AI)
+>
+> **T5500 (`192.168.0.15`, dual Xeon, GTX 1050 Ti 4GB, 72GB server RAM) is the powerstation. All existing repo state lives there.**
+> - T5500 owns: customer-service OpenClaw, dev OpenClaw (ClawX 3rd-party GUI), YouAndINotAI date app, mission-control backend, repo working tree, all Docker services.
+> - **Sabretooth (`192.168.0.8`, 64GB, GTX 1070) is the def node for Opus + Hermes only.** It does NOT run ad-hoc AI work Josh didn't ask for. No background daemons. No autonomous agents spinning up models on its single GPU.
+> - 9020 (`192.168.0.5`, i7-4790, 32GB, GTX 1050 Ti) is the **income node** (separate GitHub account, zero overlap with Antigravity).
+> - **GPU rule (Josh-confirmed 2026-06-01):** 1 GPU per node. Sabretooth = GTX 1070. T5500 and 9020 = GTX 1050 Ti. No multi-GPU nodes. No stacking.
+> - **Migration rule:** any new repo state lands on T5500 first. Sabretooth is the orchestration seat, not the compute seat. This stops a single GTX 1070 from doing AI work Josh didn't ask for when T5500's dual Xeon is sitting idle.
+> - See `briefings/T5500-NODE-STATUS.md` and `briefings/CLAUDE-DOCTRINE.md` for the full node map.
+
 <!-- ============================================================ -->
 
 # CLAUDE.md — ANTIGRAVITY (Monorepo)
@@ -504,29 +514,41 @@ Ordering: `created_at DESC, rowid DESC` (rowid tiebreaker ensures determinism fo
 
 ---
 
-## Revenue Model: 1 Wallet, 1 LLC, 10% Per-Bucket Floor (Updated 2026-05-20)
+## Revenue Model: 1 Wallet, 1 LLC, 10% Per-Bucket Mission Reserve (Updated 2026-06-01)
 
-- **ONE wallet, ONE LLC**: Trash Or Treasure Online Recycler LLC (FL #L25000158401). All
-  platform revenue in, all costs out. No separate charity routing, no named-beneficiary
-  splits, no platform-level walls between surfaces (youandinotai.com, onlinerecycle.org,
-  ai-solutions.store, paperclip.youandinotai.com all flow through the same wallet).
-- **10% per-bucket reserve floor**: every legally-distinct revenue stream auto-reserves 10%
-  as Joshua's taxable personal income. He decides quarterly whether to donate, reinvest,
-  stake, or hold. Floor only — buckets can compound higher when surfaces over-perform and
-  Joshua hasn't drawn the income.
-- **Per-bucket compounding (legal architecture per OBBBA / IRS LLC for-profit charitable
-  cap)**: N distinct revenue streams × 10% buckets is the legal workaround. ANY bucket > NO
-  bucket. Per-video / per-surface stacking allowed: one YouTube video can carry product CTA
-  + sub CTA + tip jar + Super Thanks + membership + merch + affiliate, each generating its
-  own bucket. Views are the delivery mechanism for N simultaneous revenue surfaces.
-- **Josh is an LLC**: 100% of merchant receipts = taxable income. Do not suggest "direct to
-  charity to skip taxes" — that is illegal for an LLC.
-- **Customer-facing language ban**: see Hard Constraints. Active surfaces (code, UI, docs,
-  ads, video text, social posts) may NOT claim charity routing, automatic disbursement, or
-  §496.405-style language. The internal synonym `contractual revenue disbursement` is for
-  briefings + agent files ONLY, never customer-facing.
-- Historical chain artifacts (GospelDonation.sol, CharityRouter100.sol, split-era
-  percentages, 60/30/10, "100% charity" claims) are history only — do not resurrect.
+> Supersedes the 2026-05-20 framing. Same architecture, corrected economic
+> description. See `C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md`
+> for the canonical text and the dead-artifact list.
+
+- **ONE wallet, ONE LLC**: Trash Or Treasure Online Recycler LLC (FL #L25000158401).
+  All platform revenue in, all costs out. No separate charity routing, no named-
+  beneficiary splits, no platform-level walls between surfaces (youandinotai.com,
+  onlinerecycle.org, ai-solutions.store, paperclip.youandinotai.com all flow through
+  the same wallet).
+- **10% per-bucket mission reserve (the hard cap)**: every legally distinct revenue
+  stream auto-reserves 10% for the kids' mission. **This 10% is the maximum allowable
+  corporate charitable tax deduction (10 cents per dollar)** — NOT Joshua's personal
+  income, NOT a "donation" Joshua chooses to make. The 10% is claimed as a charitable
+  deduction after the LLC legally processes the revenue. Floor only — buckets can
+  compound higher when surfaces over-perform and the 10% is the maximum deduction the
+  LLC may claim, not the maximum it must give.
+- **Per-bucket compounding (legal architecture per OBBBA / IRS LLC for-profit
+  charitable cap)**: N distinct revenue streams × 10% buckets is the legal
+  workaround. ANY bucket > NO bucket. Per-video / per-surface stacking allowed: one
+  YouTube video can carry product CTA + sub CTA + tip jar + Super Thanks + membership
+  + merch + affiliate, each generating its own bucket. Views are the delivery
+  mechanism for N simultaneous revenue surfaces.
+- **Josh is an LLC**: 100% of merchant receipts = taxable income to the LLC. Do not
+  suggest "direct to charity to skip taxes" — that is illegal. The 10% is a
+  deduction, not income diversion.
+- **Customer-facing language ban**: see Hard Constraints. Active surfaces (code, UI,
+  docs, ads, video text, social posts) may NOT claim charity routing, automatic
+  disbursement, or §496.405-style language. The internal synonym `contractual
+  revenue disbursement` is for briefings + agent files ONLY, never customer-facing.
+- **Historical chain artifacts (dead — never resurrect)**: `GospelDonation.sol`,
+  `CharityRouter100.sol`, `DatingRevenueRouter.sol`, the `60/30/10` split, the
+  "100% charity" claim, and the "10% personal income to Joshua" framing are all
+  permanently deprecated. Treat as historical context only.
 
 ---
 
