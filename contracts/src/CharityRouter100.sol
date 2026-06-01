@@ -4,13 +4,29 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+ *   DEPRECATION NOTICE — 2026-06-01
+ *   ──────────────────────────────────────────────────────────────────────
+ *   This file is a HISTORICAL DRAFT ARTIFACT. It is not deployed to a live
+ *   network and is preserved for chain-history / audit reference only.
+ *
+ *   "100% charity" framing and the named-beneficiary payment routing in
+ *   this file are DEPRECATED. Current doctrine: 1 LLC, 1 Square wallet,
+ *   10% per legally distinct revenue stream as the MAXIMUM ALLOWABLE
+ *   CORPORATE CHARITABLE DEDUCTION.
+ *
+ *   See briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md and the canonical
+ *   revenue model file:
+ *   C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md
+ *
+ *   Do NOT deploy this file. Do NOT cite it as live doctrine.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
 /**
- * @title CharityRouter100
+ * @title CharityRouter100 (DEPRECATED)
  * @author FOR THE KIDS Platform — historical draft artifact
- * @notice Historical charity-side router artifact kept for audit/reference purposes only.
- * @dev This file does NOT represent current live LLC operating doctrine and must not be
- *      deployed for current LLC-controlled commerce unless a future canonical legal update
- *      explicitly restores a matching structure.
+ * @notice HISTORICAL ARTIFACT — see deprecation notice above. Not deployed.
+ *         Do not deploy. Not current doctrine.
  *
  *      "Until no kid is in need"
  */

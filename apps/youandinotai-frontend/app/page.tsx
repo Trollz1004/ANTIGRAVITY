@@ -365,7 +365,7 @@ export default function Dashboard() {
           <h2 className="text-2xl font-black italic tracking-tight mb-3">THE MISSION</h2>
           <p className={`max-w-2xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
             For The Kids. Until No Kid In Need. The mission is the reason every product exists. Every platform,
-            every revenue stream, every contractual disbursement routes toward that outcome.
+            every revenue stream supports the kids' medical care mission.
           </p>
         </section>
 
