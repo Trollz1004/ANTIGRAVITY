@@ -1,13 +1,26 @@
 # DECISIONS LOG — WHY WE DID WHAT WE DID
 
-**Last Updated**: 2026-05-21T00:00:00-04:00
+**Last Updated**: 2026-06-01T00:00:00-04:00
 
 Every architectural decision is recorded here so no future session re-debates it.
 
 Current reading rule:
 
 - Read the newest entries first.
-- If an older entry conflicts with the March 31, 2026 doctrine correction, treat the older entry as historical context only.
+- If an older entry conflicts with the **June 1, 2026 revenue model correction** below, treat the older entry as historical context only.
+- All entries referencing `10% personal income`, `10% to Joshua`, `100% charity`, `60/30/10`, or `GospelDonation.sol as live doctrine` are **historical artifacts** — superseded by the new model.
+
+---
+
+## 2026-06-01: Revenue model corrected — 1 wallet, 1 LLC, 10% per-bucket max charitable deduction (not personal income)
+
+**Decision**: Adopt the corrected revenue model as canonical. One LLC, one Square wallet, 10% per legally distinct revenue stream = maximum allowable corporate charitable tax deduction. The 10% is NOT Joshua's personal income, and it is NOT "donated" by Joshua — it is the IRS cap on what the LLC can write off as a charitable deduction per stream. Stacking strategy: N distinct revenue streams × 10% buckets. Customer-facing copy bans "charity/donation/solicitation" (FL §496.405). `GospelDonation.sol`, `CharityRouter100.sol`, the `60/30/10` split, and "100% to charity" claims are permanently dead. See `C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md` for the canonical text.
+
+**Why**: The prior "10% charitable cap" framing was accurate in spirit but technically wrong. It implied (a) Joshua personally receives 10% as income, and (b) the 10% is "his" choice to donate. Both are false. Joshua is the LLC; all receipts are taxable to the LLC; the 10% is the IRS ceiling on the corporate charitable deduction, not a personal allocation. Without the correction, future agents could suggest "route 10% direct to charity to skip taxes" (illegal) or treat `GospelDonation.sol` as live doctrine (it is history, verified on Base, not the active LLC path).
+
+**Impact**: All Claude sessions must now use the corrected framing. Active customer surfaces (UI, code, ads, video text, social posts) must avoid "charity/donation/solicitation". `briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`, `briefings/DAO-TOKENOMICS-FINAL.md`, `briefings/MERCH-CHARITY-LOGIC.md`, and any on-chain references must be aligned. Historical contract files (`GospelDonation.sol`, `CharityRouter100.sol`) remain in repo as DEAD history, not live doctrine.
+
+**Status**: Active (supersedes the 2026-03-31 and 2026-05-21 entries below as current doctrine; older entries remain as historical context).
 
 ---
 

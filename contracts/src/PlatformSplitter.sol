@@ -4,10 +4,28 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+ *   DEPRECATION NOTICE — 2026-06-01
+ *   ──────────────────────────────────────────────────────────────────────
+ *   This file is a HISTORICAL DRAFT. The `10 / 27 / 63` triple split
+ *   and the "30% tax on 90% operating share" framing are DEPRECATED.
+ *
+ *   Current doctrine: 1 LLC, 1 Square wallet, 10% per legally distinct
+ *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE CHARITABLE
+ *   DEDUCTION. The triple-split was an early on-chain experiment and is
+ *   not the current model. Tax handling is a separate problem, not
+ *   bundled into a smart contract split.
+ *
+ *   See briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md and
+ *   C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md
+ *
+ *   Do NOT deploy this file. Do NOT cite it as live doctrine.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
 /**
- * @title PlatformSplitter
- * @notice Immutable 10/27/63 three-way revenue splitter for the ANTIGRAVITY multi-DAO
- *         ecosystem on Base L2. Pull-over-Push pattern — recipients withdraw their share.
+ * @title PlatformSplitter (DEPRECATED)
+ * @notice HISTORICAL ARTIFACT — see deprecation notice above. The 10/27/63
+ *         triple split is not current doctrine. Do not deploy.
  *
  *         10% → MissionReserve  (contractual revenue disbursement — youth initiatives)
  *         27% → TaxWallet       (covers 30% tax on the 90% operating share)

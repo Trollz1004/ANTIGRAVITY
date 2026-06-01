@@ -1,6 +1,15 @@
 /**
- * CharityTab — Displays volunteer impact and mission context behind it.
- * Fetches volunteer metrics from /api/v1/volunteer/impact.
+ * CharityTab (DEPRECATION NOTE 2026-06-01)
+ *   The file/component name `CharityTab` is an internal legacy label.
+ *   Customer-facing copy in this component is already compliant (uses
+ *   "Impact" and "Mission Context" — no "charity/donation/solicitation"
+ *   words). Preserve the rule on any future edits. Renaming the file
+ *   is out of scope for this commit; do it in a separate PR that also
+ *   updates the lazy import in main.tsx.
+ *
+ *   See C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md
+ *
+ *   Fetches volunteer metrics from /api/v1/volunteer/impact.
  */
 
 import { useState, useEffect } from 'react';

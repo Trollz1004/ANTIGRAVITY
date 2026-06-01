@@ -5,9 +5,30 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+ *   DEPRECATION NOTICE — 2026-06-01
+ *   ──────────────────────────────────────────────────────────────────────
+ *   This file is a HISTORICAL DRAFT. The on-chain treasury pattern, the
+ *   "DeadManSwitch + Gnosis Safe 3-of-5" framing, the "perpetual mission
+ *   DAO" framing, and the "no 501(c)(3)" framing here are DEPRECATED.
+ *
+ *   Current doctrine: 1 LLC, 1 Square wallet, 10% per legally distinct
+ *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE CHARITABLE
+ *   DEDUCTION. The corporate charitable deduction is claimed on the
+ *   LLC's tax return, not routed through an on-chain multisig treasury.
+ *
+ *   See briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md and
+ *   C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md
+ *
+ *   Do NOT deploy this file. The on-chain treasury model is not the
+ *   current operating path.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
 /**
- * @title MissionTreasury
- * @notice Master treasury for kids support reserves across all platform DAOs.
+ * @title MissionTreasury (DEPRECATED)
+ * @notice HISTORICAL ARTIFACT — see deprecation notice above. The on-chain
+ *         treasury + dead-man-switch + Gnosis Safe pattern is not the
+ *         current operating doctrine. Do not deploy.
  *
  *         Receives 10% from each PlatformSplitter10 bucket.
  *         Holds funds until verified disbursement event.

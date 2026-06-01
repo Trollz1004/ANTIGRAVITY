@@ -1,3 +1,15 @@
+/*
+ * DEPRECATION NOTE — 2026-06-01
+ *   The file name `CharitySection.tsx` is an internal legacy label. Per
+ *   the corrected revenue model (see
+ *   C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md)
+ *   customer-facing copy must NOT use the words "charity", "donation",
+ *   or "solicitation" (FL §496.405). The current copy in this file is
+ *   already compliant; preserve the rule on any future edits. Renaming
+ *   the file is out of scope for this commit; do it in a separate PR
+ *   that also updates all imports.
+ */
+
 import React from 'react';
 import { motion } from 'motion/react';
 import {
