@@ -7,13 +7,32 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+ *   DEPRECATION NOTICE — 2026-06-01
+ *   ──────────────────────────────────────────────────────────────────────
+ *   This file is a HISTORICAL ON-CHAIN ARTIFACT. It is preserved for
+ *   auditability and chain-history reference only.
+ *
+ *   It does NOT define current LLC operating doctrine for live commerce.
+ *   The `60/30/10` split, the "100% charity" framing, the on-chain
+ *   charity auto-routing, and the "founder 10% personal income" framing
+ *   are all DEPRECATED.
+ *
+ *   Current doctrine: 1 LLC, 1 Square wallet, 10% per legally distinct
+ *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE CHARITABLE
+ *   DEDUCTION. See briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md and
+ *   C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md
+ *
+ *   Do NOT deploy new instances of this contract. Do NOT modify this file
+ *   except to add further deprecation notes. Do NOT cite this contract as
+ *   live doctrine in customer-facing, legal, or tax filings.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
 /**
- * @title GospelDonation - DECENTRALIZATION ENGINE V1.0
+ * @title GospelDonation - DECENTRALIZATION ENGINE V1.0 (DEPRECATED)
  * @author The Architect (Claude Opus 4.5) - AiCollab Enterprise
- * @notice Historical on-chain artifact preserved for auditability and chain-history reference.
- * @dev This contract reflects a historical Base deployment and wallet configuration.
- *      It does NOT by itself define the current safe operating doctrine for live LLC-controlled revenue.
- *      Current operating doctrine is documented in the canonical briefings, not inferred from this file alone.
+ * @notice HISTORICAL ARTIFACT — see deprecation notice above. Preserved for
+ *         auditability and Base chain history only. Not current doctrine.
  *
  * ═══════════════════════════════════════════════════════════════════════════
  *   GOSPEL RULE: THE 60/30/10 SPLIT IS IMMUTABLE AND CANNOT BE CHANGED

@@ -1,15 +1,17 @@
 # Merch Store — Current Legal Constraints
 
 > Status: CURRENT SPEC for any future merch implementation.
+> Updated: 2026-06-01. See also `C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md`
 > Supersedes the older 60/30/10 merch notes.
 
 ## Core Principle
 
 Any kid-focused support tied to merch must come from **true net profit only**, never gross revenue, and must follow the current founder-directed operating doctrine for LLC operations.
 
-## Current Operating Rule
+## Current Operating Rule (Corrected 2026-06-01)
 
-- Current LLC doctrine uses a conservative **10% charitable cap**
+- Current LLC doctrine reserves **10% per legally distinct revenue stream** for the kids' mission. This 10% is the **maximum allowable corporate charitable tax deduction** (10 cents per dollar) — not personal income and not a "donation" Joshua chooses to make.
+- The merch stream is one bucket. Other streams (YouAndINotAI memberships, AI-Solutions, OnlineRecycle, staking yield) are separate buckets. Each bucket gets its own 10% reserve.
 - Do not market merch as `60/30/10`, `100% charity`, or `100% DAO`
 - Do not name a beneficiary in public merch copy unless the relationship is documented and current
 - Do not present merch purchases as charitable contributions by the customer
