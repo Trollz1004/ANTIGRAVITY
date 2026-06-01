@@ -13,7 +13,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from .config import settings
 from .logging_config import setup_logging, get_logger, new_request_id, LogContext
-from .routes import health, deploy, runbooks, hermes, tasks, ops_runs
+from .routes import health, deploy, runbooks, hermes, tasks, ops_runs, adapters, goals
 from .middleware.sanitization import SanitizationMiddleware
 from .middleware.rate_limiting import RateLimitingMiddleware
 from .middleware.idempotency import IdempotencyMiddleware
@@ -102,17 +102,29 @@ class RequestTracingMiddleware(BaseHTTPMiddleware):
         try:
             response = await call_next(request)
             response_body = b''
-            if response.body:
-                response_body = await response.body
-                # Ensure the original response stream is not consumed for downstream middlewares
-                response.extra['body'] = response_body # Store body in extra for potential re-use
-            
-            # Cache the successful response
-            expiration_time = time.time() + settings.REQUEST_DEDUPLICATION_SECONDS
-            # Copy headers to avoid issues with mutable response object
-            response_headers = {k: v for k, v in response.headers.items()}
-            request_cache[request_key] = (response_body, response.status_code, response_headers, expiration_time)
-            cache_cleanup_queue.append((expiration_time, request_key))
+            # Skip body caching for streaming/file responses (no .body attr).
+            # Starlette StreamingResponse / FileResponse would 500 the dedup middleware.
+            if hasattr(response, 'body') and not getattr(response, 'body_iterator', None):
+                try:
+                    body_attr = response.body
+                    if body_attr:
+                        if hasattr(body_attr, '__await__'):
+                            response_body = await body_attr
+                        else:
+                            response_body = bytes(body_attr)
+                        if not isinstance(response_body, (bytes, bytearray)):
+                            response_body = bytes(response_body)
+                        response.extra = getattr(response, 'extra', {}) or {}
+                        response.extra['body'] = response_body
+                        # Only cache if the body is small enough (≤ 256KB)
+                        if len(response_body) <= 256 * 1024:
+                            expiration_time = time.time() + settings.REQUEST_DEDUPLICATION_SECONDS
+                            response_headers = {k: v for k, v in response.headers.items()}
+                            request_cache[request_key] = (response_body, response.status_code, response_headers, expiration_time)
+                            cache_cleanup_queue.append((expiration_time, request_key))
+                except Exception as body_err:
+                    logger.debug("body read skipped", extra={"err": str(body_err)})
+            # else: streaming/file response — skip caching, just pass through
 
         except Exception as exc:
             duration_ms = int((time.monotonic() - start) * 1000)
@@ -188,6 +200,8 @@ app.include_router(runbooks.router)
 app.include_router(hermes.router)
 app.include_router(tasks.router)
 app.include_router(ops_runs.router)
+app.include_router(adapters.router)
+app.include_router(goals.router)
 
 # ── Dashboard static mount ───────────────────────────────────────────────────
 REPO_ROOT = Path(__file__).resolve().parents[4]
