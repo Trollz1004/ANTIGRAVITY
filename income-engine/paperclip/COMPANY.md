@@ -3,7 +3,7 @@
 **Port:** 3101 (NOT 3100 — that's Sabretooth)
 **Node:** 9020 (192.168.0.5)
 **Owner:** Joshua Coleman (aiforyoullc@gmail.com)
-**Repo:** AidoesitAll/income-engine
+**Repo:** Trollz1004/income-engine
 
 ## Agents to Register
 | Agent ID     | Model           | Provider   | Heartbeat |

@@ -4,7 +4,7 @@
 **To:** Claude Code  
 **Mission:** Wire ManusClaw into C:/income-engine with Paperclip, Ollama, and GitHub  
 **Hardware:** 9020 (i7-4790, 32GB, GTX 1070)  
-**Repo:** AidoesitAll/income-engine (private)  
+**Repo:** Trollz1004/income-engine (private)  
 
 ---
 
@@ -14,7 +14,7 @@ You have:
 - ✅ ManusClaw production build (ready in C:/income-engine)
 - ✅ Paperclip fresh install (waiting on 9020)
 - ✅ Josh's .env credentials (income-engine specific)
-- ✅ GitHub PAT (for AidoesitAll/income-engine)
+- ✅ GitHub PAT (for Trollz1004/income-engine)
 
 **The Wall:** Antigravity ← [ABSOLUTE SEPARATION] → Income-Engine  
 **No crossover. Ever. Trust depends on it.**
@@ -99,12 +99,12 @@ ollama pull neural-chat
 
 ```powershell
 # 1. Verify repo exists (private)
-# GitHub: AidoesitAll/income-engine
+# GitHub: Trollz1004/income-engine
 
 # 2. Configure GitHub in ManusClaw
 # Settings → GitHub
 # - GitHub Token: Josh's PAT
-# - Repo: AidoesitAll/income-engine
+# - Repo: Trollz1004/income-engine
 # - Owner: AidoesitAll
 
 # 3. Test connection

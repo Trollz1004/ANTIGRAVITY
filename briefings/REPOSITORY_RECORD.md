@@ -34,7 +34,7 @@ Status: **T5500 is now the primary node** per the 2026-05-11/12 node-consolidati
 | Sabretooth main HEAD | `0a248073` — "Merge income-engine into ANTIGRAVITY (redact leaked AidoesitAll gho_ token…)" |
 | Subtree imported | `Trollz1004/income-engine@f9feff1d` → `income-engine/` (2018 files; one secret-bearing file omitted) |
 | `Trollz1004/income-engine` | **archived** (read-only safety net, not deleted) |
-| `AidoesitAll/income-engine` | archived earlier this round |
+| `Trollz1004/income-engine` | archived earlier this round |
 | Paperclip companies | `Trash Or Treasure Online Recycler LLC` (TRA), `ai-solutions.store` (AIS), `youandinotai.com` (YOU), `marketing` (MAR, unified for now) |
 | Hermes config (Sabretooth) | `AppData\Local\hermes\config.yaml` — model `inclusionai/ring-2.6-1t:free`, provider `openrouter`, fallbacks `openrouter/nous/zai` |
 | Hermes `.env` (Sabretooth) | not yet created — keys not pasted through chat per session rule |

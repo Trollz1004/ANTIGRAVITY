@@ -42,7 +42,7 @@
    - Purpose: #ForTheKids mission + profit combined
 
 4. **income-engine** — NEW. Separate GitHub, separate account, runs on 9020
-   - GitHub: AidoesitAll/income-engine (private)
+   - GitHub: Trollz1004/income-engine (private)
    - Email: aiforyoullc@gmail.com
    - Purpose: Revenue generation for survival
    - Status: NEVER references Antigravity. Hard wall.
@@ -113,7 +113,7 @@ start-opus.ps1                 — starts Redis + Ollama on boot
 - Josh approves
 
 **GitHub:**
-- Remote: AidoesitAll/income-engine (private)
+- Remote: Trollz1004/income-engine (private)
 - Local: C:/income-engine
 - PAT: Rotate once .env is secured (was exposed in chat)
 

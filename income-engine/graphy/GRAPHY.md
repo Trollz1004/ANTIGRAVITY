@@ -1,6 +1,6 @@
 # GRAPHY — income-engine
 # Company: CLAUDE's Antigravity (AidoesitAll)
-# Node: 9020 | Repo: AidoesitAll/income-engine
+# Node: 9020 | Repo: Trollz1004/income-engine
 # Last updated: 2026-05-07
 
 ## PROJECT GRAPH

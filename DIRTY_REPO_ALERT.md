@@ -1,45 +1,82 @@
-# 🚨 DIRTY REPO ALERT: C:\ANTIGRAVITY
+# DIRTY REPO ALERT — C:\ANTIGRAVITY
 
-**Timestamp:** 2026-06-01 21:36:37 UTC  
-**Alert ID:** DIRTY-20260601-213637  
-**Branch:** ## feature/mission-control-hermes-live
+**Generated:** 2026-06-01T22:04:33.733208+00:00
+**Repo:** C:\ANTIGRAVITY (WSL: /mnt/c/ANTIGRAVITY)
+**Trigger:** Scheduled cron check; Discord delivery unavailable; local file is the durable alert.
 
-## ⚠️ Status: DIRTY
+---
 
-The repository at `C:\ANTIGRAVITY` has uncommitted changes. Review and commit/stash as appropriate.
+## ALERT
 
-**DO NOT auto-commit.** This is an alert only. A human should review and decide.
+**ALERT: Repo C:\ANTIGRAVITY is dirty. Run 'git status' to review changes.**
 
-## New State Change Detected
+DO NOT auto-commit. Review and stage/commit manually.
 
-Previous alert run detected 81 dirty items. Current run detects 82 items.
+---
 
-**New since last alert:**
-- `?? hermes.md` (new untracked file)
+## Why this file exists
 
-## Uncommitted changes (git status --porcelain output as of 2026-06-01 21:36:37 UTC):
+- Pre-flight: `hermes send --list discord` reported "No messaging platforms configured or no channels discovered yet."
+- `channel_directory.json` has no Discord channels registered.
+- Discord gateway pre-flights indicate paused / failed to reconnect state.
+- This file is the fallback persistent alert (per `local-platform-bootstrap` skill).
+
+---
+
+## Uncommitted changes (git status --porcelain output as of 2026-06-01 22:04:33 UTC
 
 ```
+ M .agents/skills/supabase-postgres-best-practices/SKILL.md
+ M .agents/skills/supabase-postgres-best-practices/references/_contributing.md
+ M .agents/skills/supabase-postgres-best-practices/references/_sections.md
+ M .agents/skills/supabase-postgres-best-practices/references/_template.md
+ M .agents/skills/supabase-postgres-best-practices/references/advanced-full-text-search.md
+ M .agents/skills/supabase-postgres-best-practices/references/advanced-jsonb-indexing.md
+ M .agents/skills/supabase-postgres-best-practices/references/conn-idle-timeout.md
+ M .agents/skills/supabase-postgres-best-practices/references/conn-limits.md
+ M .agents/skills/supabase-postgres-best-practices/references/conn-pooling.md
+ M .agents/skills/supabase-postgres-best-practices/references/conn-prepared-statements.md
+ M .agents/skills/supabase-postgres-best-practices/references/data-batch-inserts.md
+ M .agents/skills/supabase-postgres-best-practices/references/data-n-plus-one.md
+ M .agents/skills/supabase-postgres-best-practices/references/data-pagination.md
+ M .agents/skills/supabase-postgres-best-practices/references/data-upsert.md
+ M .agents/skills/supabase-postgres-best-practices/references/lock-advisory.md
+ M .agents/skills/supabase-postgres-best-practices/references/lock-deadlock-prevention.md
+ M .agents/skills/supabase-postgres-best-practices/references/lock-short-transactions.md
+ M .agents/skills/supabase-postgres-best-practices/references/lock-skip-locked.md
+ M .agents/skills/supabase-postgres-best-practices/references/monitor-explain-analyze.md
+ M .agents/skills/supabase-postgres-best-practices/references/monitor-pg-stat-statements.md
+ M .agents/skills/supabase-postgres-best-practices/references/monitor-vacuum-analyze.md
+ M .agents/skills/supabase-postgres-best-practices/references/query-composite-indexes.md
+ M .agents/skills/supabase-postgres-best-practices/references/query-covering-indexes.md
+ M .agents/skills/supabase-postgres-best-practices/references/query-index-types.md
+ M .agents/skills/supabase-postgres-best-practices/references/query-missing-indexes.md
+ M .agents/skills/supabase-postgres-best-practices/references/query-partial-indexes.md
+ M .agents/skills/supabase-postgres-best-practices/references/schema-constraints.md
+ M .agents/skills/supabase-postgres-best-practices/references/schema-data-types.md
+ M .agents/skills/supabase-postgres-best-practices/references/schema-foreign-key-indexes.md
+ M .agents/skills/supabase-postgres-best-practices/references/schema-lowercase-identifiers.md
+ M .agents/skills/supabase-postgres-best-practices/references/schema-partitioning.md
+ M .agents/skills/supabase-postgres-best-practices/references/schema-primary-keys.md
+ M .agents/skills/supabase-postgres-best-practices/references/security-privileges.md
+ M .agents/skills/supabase-postgres-best-practices/references/security-rls-basics.md
+ M .agents/skills/supabase-postgres-best-practices/references/security-rls-performance.md
+ M .agents/skills/supabase/SKILL.md
+ M .agents/skills/supabase/assets/feedback-issue-template.md
+ M .agents/skills/supabase/references/skill-feedback.md
  M .gitignore
- M AGENTS.md
  M CLAUDE.md
- D COPILOT-MEMORY.md
  M "DAO and FOUNDER CAP.md"
- D DEPLOYMENT_LOG.md
  M DIRTY_REPO_ALERT.md
- D DOCKER-SETUP.md
+ M GEMINI.md
+ M GEMINI_STATE.md
+ M GROK.md
  M HERMES_MASTER_PROMPT_WHEEL_KANBAN_EXECUTION.md
- D HIRING_PLAN.md
  M IDENTITY.md
- D ONBOARDING.md
- D OPENCODE-MEMORY.md
- D PLATFORM-LIVE-STATUS-GEMINI-APPROVED.md
- D ROADMAP.md
- D SABRETOOTH-PREWIPE.md
- D SECURITY_AUDIT.md
- D T5500-CONSOLIDATION.md
+ M OPUS-MASTER-BRIEFING-FULL-REPLACEMENT.md
  M USER.md
  M _handoff-staging-2026-05-26/_deploy/opushashands/index.html
+ M agent.md
  M antigravity/app/page.tsx
  M antigravity/components/CharitySection.tsx
  M apps/mission-control/index.html
@@ -49,28 +86,248 @@ Previous alert run detected 81 dirty items. Current run detects 82 items.
  M briefings/CLAUDE-DOCTRINE.md
  M briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md
  M briefings/DAO-TOKENOMICS-FINAL.md
+ M briefings/JOSHUAGOSPEL-GROK-HAS-HANDS-2026-05-30.md
  M briefings/MERCH-CHARITY-LOGIC.md
+ M briefings/MISSION-CONTROL-ADAPTERS-2026-06-01.md
+ M briefings/archive/COPILOT-MEMORY.md
+ M briefings/archive/DEPLOYMENT_LOG.md
+ M briefings/archive/DIRTY_REPO_ALERT.md
+ M briefings/archive/DOCKER-SETUP.md
+ M briefings/archive/MISSION_CONTROL_DASHBOARD-manus-orig-20260601-134100.html
+ M briefings/archive/ONBOARDING.md
+ M briefings/archive/OPENCODE-MEMORY.md
+ M briefings/archive/SABRETOOTH-PREWIPE.md
+ M briefings/archive/SECURITY_AUDIT.md
+ M briefings/archive/T5500-CONSOLIDATION.md
+ M campaign-deliverables/marketing-campaign-plan.md
+ M campaign-deliverables/payment-flow-verification.md
+ M campaign-deliverables/social-platform-api-audit.md
  M contracts/src/CharityRouter100.sol
  M contracts/src/DatingRevenueRouter.sol
  M contracts/src/GospelDonation.sol
  M contracts/src/MissionTreasury.sol
  M contracts/src/PlatformSplitter.sol
  M contracts/src/PlatformSplitter10.sol
+ M data/post-queue-dao-launch.json
  M frontend/react-app/src/components/CharitySection.tsx
  M frontend/react-app/src/components/CharityTab.tsx
- D hermes_short_scan.txt
- D "in the heart of the street. Bro the broke, I feel.md"
- M logs/watchdog-boot-marker.txt
+ M hermes-config-improved-xai.md
+ M hermes-config.json
+ M hermes.md
+ M hermes/agents/CLOSER-SUBMISSION-PACKAGER.md
+ M hermes/agents/HERMES-REVENUE-SCOUT.md
  M memory/decisions.md
  M memory/identity.md
+ M mission-control/0001_futuristic_guardian.sql
+ M mission-control/ABOUT.md
+ M mission-control/App.tsx
+ M mission-control/CLAUDE.md
+ M mission-control/CLAUDE_CODE_STRATEGIC_PROMPT.md
+ M mission-control/CREDITS.md
+ M mission-control/DELIVERY_MANIFEST.md
+ M mission-control/DEPLOYMENT_GUIDE.md
+ M "mission-control/HERMES + MANUS ARCHITECTURE \342\200\224 Refined.md"
+ M "mission-control/HERMES KANBAN MASTER SETUP PROMPT.md"
+ M "mission-control/HERMES KANBAN SETUP PROMPT.md"
+ M "mission-control/HERMES SETUP PROMPT \342\200\224 Manus API Multi-Provider Orchestration + Financial Compliance.md"
+ M mission-control/IMPLEMENTATION_GUIDE.md
+ M mission-control/INCOME_ENGINE_ENV.example
+ M mission-control/INCOME_ENGINE_GITHUB.md
+ M mission-control/INCOME_ENGINE_PAPERCLIP.md
+ M mission-control/INTEGRATION_GUIDE.md
+ M mission-control/JOSHUA_COLEMAN_MEMORY.md
+ M mission-control/LICENSE
+ M mission-control/OPENCLAW_README.md
+ M mission-control/PAPERCLIP_INTEGRATION.md
+ M "mission-control/PAYMENT PROCESSING GUIDE.md"
+ M mission-control/PaperclipIntegration.tsx
+ M mission-control/README.md
+ M mission-control/README_OPENCLAW.md
+ M mission-control/SKILL.md
+ M mission-control/Settings.tsx
+ M mission-control/TaskAssignmentPanel.tsx
+ M mission-control/Workspace.tsx
+ M mission-control/db.ts
+ M mission-control/fetcherAgent.ts
+ M mission-control/hermesAdapter.test.ts
+ M mission-control/hermesAdapter.ts
+ M mission-control/imageGeneration.ts
+ M mission-control/index.css
+ M mission-control/issues.md
+ M mission-control/modelProvider.test.ts
+ M mission-control/modelProvider.ts
+ M mission-control/ollamaCloud.ts
+ M mission-control/package.json
+ M mission-control/paperclipIntegration.ts
+ M mission-control/routers.ts
+ M mission-control/schema.ts
+ M mission-control/task.create.mdx
+ M mission-control/todo.md
  M package.json
  M paperclip/agents/audit/AUDIT-2026-05-30.md
+ M paperclip/agents/audit/AUDIT-2026-05-31.md
+ M paperclip/agents/audit/AUDIT-2026-06-01.md
  M pnpm-lock.yaml
+ M services/mission-control-backend/KANBAN_STATE_LOGGER.py
+ M services/mission-control-backend/README.md
+ M services/mission-control-backend/SABRETOOTH_FAILSAFE.py
+ M services/mission-control-backend/T5500_CREDIT_MONITOR.py
  M services/mission-mcp/package-lock.json
  M services/mission-mcp/package.json
+ M skills-lock.json
  D test_result.md
-?? .agents/
 ?? "@NO PLACEHOLDERS LIVE PRODUCTION FULL CODE ONLY  g.md"
+?? mission-control/pasted_content.txt
+?? mission-control/pasted_content_2.txt
+?? mission-control/pasted_content_3.txt
+?? mission-control/pasted_file_MCPBht_image.png
+?? mission-control/pasted_file_NY8Q5v_image.png
+?? mission-control/pasted_file_Ry74vT_image.png
+?? "soundtrack 2.mp4"
+?? soundtrack.mp4
+?? soundtrack0.mp4
+?? tmp/
+```
+
+---
+
+## Diff vs. prior alert
+
+- Total current dirty items (excluding this alert file): **160**
+- Total previous dirty items (excluding this alert file): **82**
+- New items since last alert: **122**
+- Resolved items since last alert: **44**
+
+
+### New since last alert
+```
+?? mission-control/pasted_content.txt
+?? mission-control/pasted_content_2.txt
+?? mission-control/pasted_content_3.txt
+?? mission-control/pasted_file_MCPBht_image.png
+?? mission-control/pasted_file_NY8Q5v_image.png
+?? mission-control/pasted_file_Ry74vT_image.png
+M "mission-control/HERMES + MANUS ARCHITECTURE \342\200\224 Refined.md"
+M "mission-control/HERMES KANBAN MASTER SETUP PROMPT.md"
+M "mission-control/HERMES KANBAN SETUP PROMPT.md"
+M "mission-control/HERMES SETUP PROMPT \342\200\224 Manus API Multi-Provider Orchestration + Financial Compliance.md"
+M "mission-control/PAYMENT PROCESSING GUIDE.md"
+M .agents/skills/supabase-postgres-best-practices/SKILL.md
+M .agents/skills/supabase-postgres-best-practices/references/_contributing.md
+M .agents/skills/supabase-postgres-best-practices/references/_sections.md
+M .agents/skills/supabase-postgres-best-practices/references/_template.md
+M .agents/skills/supabase-postgres-best-practices/references/advanced-full-text-search.md
+M .agents/skills/supabase-postgres-best-practices/references/advanced-jsonb-indexing.md
+M .agents/skills/supabase-postgres-best-practices/references/conn-idle-timeout.md
+M .agents/skills/supabase-postgres-best-practices/references/conn-limits.md
+M .agents/skills/supabase-postgres-best-practices/references/conn-pooling.md
+M .agents/skills/supabase-postgres-best-practices/references/conn-prepared-statements.md
+M .agents/skills/supabase-postgres-best-practices/references/data-batch-inserts.md
+M .agents/skills/supabase-postgres-best-practices/references/data-n-plus-one.md
+M .agents/skills/supabase-postgres-best-practices/references/data-pagination.md
+M .agents/skills/supabase-postgres-best-practices/references/data-upsert.md
+M .agents/skills/supabase-postgres-best-practices/references/lock-advisory.md
+M .agents/skills/supabase-postgres-best-practices/references/lock-deadlock-prevention.md
+M .agents/skills/supabase-postgres-best-practices/references/lock-short-transactions.md
+M .agents/skills/supabase-postgres-best-practices/references/lock-skip-locked.md
+M .agents/skills/supabase-postgres-best-practices/references/monitor-explain-analyze.md
+M .agents/skills/supabase-postgres-best-practices/references/monitor-pg-stat-statements.md
+M .agents/skills/supabase-postgres-best-practices/references/monitor-vacuum-analyze.md
+M .agents/skills/supabase-postgres-best-practices/references/query-composite-indexes.md
+M .agents/skills/supabase-postgres-best-practices/references/query-covering-indexes.md
+M .agents/skills/supabase-postgres-best-practices/references/query-index-types.md
+M .agents/skills/supabase-postgres-best-practices/references/query-missing-indexes.md
+M .agents/skills/supabase-postgres-best-practices/references/query-partial-indexes.md
+M .agents/skills/supabase-postgres-best-practices/references/schema-constraints.md
+M .agents/skills/supabase-postgres-best-practices/references/schema-data-types.md
+M .agents/skills/supabase-postgres-best-practices/references/schema-foreign-key-indexes.md
+M .agents/skills/supabase-postgres-best-practices/references/schema-lowercase-identifiers.md
+M .agents/skills/supabase-postgres-best-practices/references/schema-partitioning.md
+M .agents/skills/supabase-postgres-best-practices/references/schema-primary-keys.md
+M .agents/skills/supabase-postgres-best-practices/references/security-privileges.md
+M .agents/skills/supabase-postgres-best-practices/references/security-rls-basics.md
+M .agents/skills/supabase-postgres-best-practices/references/security-rls-performance.md
+M .agents/skills/supabase/SKILL.md
+M .agents/skills/supabase/assets/feedback-issue-template.md
+M .agents/skills/supabase/references/skill-feedback.md
+M GEMINI.md
+M GEMINI_STATE.md
+M GROK.md
+M OPUS-MASTER-BRIEFING-FULL-REPLACEMENT.md
+M agent.md
+M briefings/JOSHUAGOSPEL-GROK-HAS-HANDS-2026-05-30.md
+M briefings/MISSION-CONTROL-ADAPTERS-2026-06-01.md
+M briefings/archive/COPILOT-MEMORY.md
+M briefings/archive/DEPLOYMENT_LOG.md
+M briefings/archive/DIRTY_REPO_ALERT.md
+M briefings/archive/DOCKER-SETUP.md
+M briefings/archive/MISSION_CONTROL_DASHBOARD-manus-orig-20260601-134100.html
+M briefings/archive/ONBOARDING.md
+M briefings/archive/OPENCODE-MEMORY.md
+M briefings/archive/SABRETOOTH-PREWIPE.md
+M briefings/archive/SECURITY_AUDIT.md
+M briefings/archive/T5500-CONSOLIDATION.md
+M campaign-deliverables/marketing-campaign-plan.md
+M campaign-deliverables/payment-flow-verification.md
+M campaign-deliverables/social-platform-api-audit.md
+M data/post-queue-dao-launch.json
+M hermes-config-improved-xai.md
+M hermes-config.json
+M hermes.md
+M hermes/agents/CLOSER-SUBMISSION-PACKAGER.md
+M hermes/agents/HERMES-REVENUE-SCOUT.md
+M mission-control/0001_futuristic_guardian.sql
+M mission-control/ABOUT.md
+M mission-control/App.tsx
+M mission-control/CLAUDE.md
+M mission-control/CLAUDE_CODE_STRATEGIC_PROMPT.md
+M mission-control/CREDITS.md
+M mission-control/DELIVERY_MANIFEST.md
+M mission-control/DEPLOYMENT_GUIDE.md
+M mission-control/IMPLEMENTATION_GUIDE.md
+M mission-control/INCOME_ENGINE_ENV.example
+M mission-control/INCOME_ENGINE_GITHUB.md
+M mission-control/INCOME_ENGINE_PAPERCLIP.md
+M mission-control/INTEGRATION_GUIDE.md
+M mission-control/JOSHUA_COLEMAN_MEMORY.md
+M mission-control/LICENSE
+M mission-control/OPENCLAW_README.md
+M mission-control/PAPERCLIP_INTEGRATION.md
+M mission-control/PaperclipIntegration.tsx
+M mission-control/README.md
+M mission-control/README_OPENCLAW.md
+M mission-control/SKILL.md
+M mission-control/Settings.tsx
+M mission-control/TaskAssignmentPanel.tsx
+M mission-control/Workspace.tsx
+M mission-control/db.ts
+M mission-control/fetcherAgent.ts
+M mission-control/hermesAdapter.test.ts
+M mission-control/hermesAdapter.ts
+M mission-control/imageGeneration.ts
+M mission-control/index.css
+M mission-control/issues.md
+M mission-control/modelProvider.test.ts
+M mission-control/modelProvider.ts
+M mission-control/ollamaCloud.ts
+M mission-control/package.json
+M mission-control/paperclipIntegration.ts
+M mission-control/routers.ts
+M mission-control/schema.ts
+M mission-control/task.create.mdx
+M mission-control/todo.md
+M paperclip/agents/audit/AUDIT-2026-05-31.md
+M paperclip/agents/audit/AUDIT-2026-06-01.md
+M services/mission-control-backend/KANBAN_STATE_LOGGER.py
+M services/mission-control-backend/README.md
+M services/mission-control-backend/SABRETOOTH_FAILSAFE.py
+M services/mission-control-backend/T5500_CREDIT_MONITOR.py
+M skills-lock.json
+```
+
+### Resolved since last alert
+```
+?? .agents/
 ?? GEMINI_STATE.md
 ?? OPUS-MASTER-BRIEFING-FULL-REPLACEMENT.md
 ?? briefings/JOSHUAGOSPEL-GROK-HAS-HANDS-2026-05-30.md
@@ -99,130 +356,31 @@ Previous alert run detected 81 dirty items. Current run detects 82 items.
 ?? scripts/bootstrap-grok-t5500.ps1
 ?? services/mission-control-backend/
 ?? skills-lock.json
-?? "soundtrack 2.mp4"
-?? soundtrack.mp4
-?? soundtrack0.mp4
-?? tmp/
-```
-
-## Full git status:
-
-```
-On branch feature/mission-control-hermes-live
-Changes not staged for commit:
-  (use "git add/rm <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-	modified:   .gitignore
-	modified:   AGENTS.md
-	modified:   CLAUDE.md
-	deleted:    COPILOT-MEMORY.md
-	modified:   DAO and FOUNDER CAP.md
-	deleted:    DEPLOYMENT_LOG.md
-	modified:   DIRTY_REPO_ALERT.md
-	deleted:    DOCKER-SETUP.md
-	modified:   HERMES_MASTER_PROMPT_WHEEL_KANBAN_EXECUTION.md
-	deleted:    HIRING_PLAN.md
-	modified:   IDENTITY.md
-	deleted:    ONBOARDING.md
-	deleted:    OPENCODE-MEMORY.md
-	deleted:    PLATFORM-LIVE-STATUS-GEMINI-APPROVED.md
-	deleted:    ROADMAP.md
-	deleted:    SABRETOOTH-PREWIPE.md
-	deleted:    SECURITY_AUDIT.md
-	deleted:    T5500-CONSOLIDATION.md
-	modified:   USER.md
-	modified:   _handoff-staging-2026-05-26/_deploy/opushashands/index.html
-	modified:   antigravity/app/page.tsx
-	modified:   antigravity/components/CharitySection.tsx
-	modified:   apps/mission-control/index.html
-	modified:   apps/youandinotai-frontend/app/page.tsx
-	modified:   apps/youandinotai-frontend/components/CharitySection.tsx
-	modified:   briefings/BUSINESS-PROFILE-CANONICAL.md
-	modified:   briefings/CLAUDE-DOCTRINE.md
-	modified:   briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md
-	modified:   briefings/DAO-TOKENOMICS-FINAL.md
-	modified:   briefings/MERCH-CHARITY-LOGIC.md
-	modified:   contracts/src/CharityRouter100.sol
-	modified:   contracts/src/DatingRevenueRouter.sol
-	modified:   contracts/src/GospelDonation.sol
-	modified:   contracts/src/MissionTreasury.sol
-	modified:   contracts/src/PlatformSplitter.sol
-	modified:   contracts/src/PlatformSplitter10.sol
-	modified:   frontend/react-app/src/components/CharitySection.tsx
-	modified:   frontend/react-app/src/components/CharityTab.tsx
-	deleted:    hermes_short_scan.txt
-	deleted:    in the heart of the street. Bro the broke, I feel.md
-	modified:   logs/watchdog-boot-marker.txt
-	modified:   memory/decisions.md
-	modified:   memory/identity.md
-	modified:   package.json
-	modified:   paperclip/agents/audit/AUDIT-2026-05-30.md
-	modified:   pnpm-lock.yaml
-	modified:   services/mission-mcp/package-lock.json
-	modified:   services/mission-mcp/package.json
-	deleted:    test_result.md
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	.agents/
-	@NO PLACEHOLDERS LIVE PRODUCTION FULL CODE ONLY  g.md
-	GEMINI_STATE.md
-	OPUS-MASTER-BRIEFING-FULL-REPLACEMENT.md
-	briefings/JOSHUAGOSPEL-GROK-HAS-HANDS-2026-05-30.md
-	briefings/archive/COPILOT-MEMORY.md
-	briefings/archive/DEPLOYMENT_LOG.md
-	briefings/archive/DIRTY_REPO_ALERT.md
-	briefings/archive/DOCKER-SETUP.md
-	briefings/archive/MISSION_CONTROL_DASHBOARD-manus-orig-20260601-134100.html
-	briefings/archive/ONBOARDING.md
-	briefings/archive/OPENCODE-MEMORY.md
-	briefings/archive/SABRETOOTH-PREWIPE.md
-	briefings/archive/SECURITY_AUDIT.md
-	briefings/archive/T5500-CONSOLIDATION.md
-	campaign-deliverables/marketing-campaign-plan.md
-	campaign-deliverables/payment-flow-verification.md
-	campaign-deliverables/social-platform-api-audit.md
-	data/post-queue-dao-launch.json
-	hermes-config-improved-xai.md
-	hermes-config.json
-	hermes.md
-	hermes/agents/CLOSER-SUBMISSION-PACKAGER.md
-	hermes/agents/HERMES-REVENUE-SCOUT.md
-	mission-control-manus.bundle
-	mission-control/
-	scripts/bootstrap-grok-9020.ps1
-	scripts/bootstrap-grok-t5500.ps1
-	services/mission-control-backend/
-	skills-lock.json
-	soundtrack 2.mp4
-	soundtrack.mp4
-	soundtrack0.mp4
-	tmp/
-
-no changes added to commit (use "git add" and/or "git commit -a")
+D "in the heart of the street. Bro the broke, I feel.md"
+D COPILOT-MEMORY.md
+D DEPLOYMENT_LOG.md
+D DOCKER-SETUP.md
+D HIRING_PLAN.md
+D ONBOARDING.md
+D OPENCODE-MEMORY.md
+D PLATFORM-LIVE-STATUS-GEMINI-APPROVED.md
+D ROADMAP.md
+D SABRETOOTH-PREWIPE.md
+D SECURITY_AUDIT.md
+D T5500-CONSOLIDATION.md
+D hermes_short_scan.txt
+M AGENTS.md
+M logs/watchdog-boot-marker.txt
 ```
 
 ---
 
-## Discord Delivery Status
+## How to clear this alert
 
-Discord gateway is **paused** (state: "failed to reconnect", last updated 2026-05-24).  
-Channel directory has no Discord channels.  
-`hermes send --list discord` confirms: "No messaging platforms configured or no channels discovered yet."
-
-**Alert delivery method:** Local file only (DIRTY_REPO_ALERT.md) — Discord unavailable.
+1. Review the changes: `cd /mnt/c/ANTIGRAVITY && git status`
+2. Stage & commit: `git add -A && git commit -m "..."`
+3. Delete this file once the repo is clean: `rm /mnt/c/ANTIGRAVITY/DIRTY_REPO_ALERT.md`
 
 ---
 
-## Action Required
-
-1. Review the changes listed above
-2. Commit legitimate changes: `git add <files> && git commit -m "..."`
-3. Stash work-in-progress: `git stash`
-4. Discard unwanted changes: `git checkout -- <files>` or `git clean -fd`
-
-Run `git status` in `C:\ANTIGRAVITY` for full context.
-
----
-
-*Generated by scheduled cron job. Suppress further alerts unless new state changes are detected.*
+*This is an automated alert. DO NOT auto-commit.*

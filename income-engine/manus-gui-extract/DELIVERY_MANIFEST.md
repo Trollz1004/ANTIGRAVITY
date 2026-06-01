@@ -378,7 +378,7 @@ Get-Content C:\income-engine\.manus-logs\devserver.log
 **Date:** 2026-05-07  
 **Version:** ManusClaw v4  
 **Hardware:** 9020 (i7-4790, 32GB, GTX 1070)  
-**Repo:** AidoesitAll/income-engine (private)  
+**Repo:** Trollz1004/income-engine (private)  
 **Mission:** #ForTheKids  
 
 **The wall is absolute. Antigravity stays separate. Trust is preserved.**
