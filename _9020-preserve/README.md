@@ -24,7 +24,7 @@ Source: `D:\support-claw\` on 9020.
 Python bot (`bot.py`) + `config.json`, `data/`, `requirements.txt`, setup scripts. Per memory this is the YouAndINotAI support bot (Ollama/Gemini fallback). Not in main yet.
 
 ### `NewsCreator/`
-Source: `C:\NewsCreator-backup\NewsCreator-main\` on 9020 (preserved earlier 2026-05-11 from the deleted `AidoesitAll/NewsCreator` repo).
+Source: `C:\NewsCreator-backup\NewsCreator-main\` on 9020 (preserved earlier 2026-05-11 from the deleted `Trollz1004/NewsCreator` repo).
 FastAPI + Ollama YouTube automation app. `app.py`, `cli.py`, web dashboard, session memory. See `NewsCreator/README.md` for original docs.
 
 ## What is NOT here (and why)

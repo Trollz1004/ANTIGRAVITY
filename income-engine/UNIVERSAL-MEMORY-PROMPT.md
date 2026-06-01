@@ -38,8 +38,8 @@ I am Joshua Coleman. CEO. Electrician from Florida. Self-taught coder. You are m
 ## REPO STRUCTURE
 - Trollz1004/ANTIGRAVITY — single source of truth for everything except income-engine
 - ENIGMA and OMEGA are MERGED into Antigravity (tax law changed — 10% max charity credit, no point keeping split)
-- AidoesitAll/income-engine — income automation project. NEVER references Antigravity. Hard wall.
-- AidoesitAll/NewsCreator — old Python FastAPI + Ollama app we built. Keeping it.
+- Trollz1004/income-engine — income automation project. NEVER references Antigravity. Hard wall.
+- Trollz1004/NewsCreator — old Python FastAPI + Ollama app we built. Keeping it.
 
 ## THE ONE WALL THAT REMAINS
 - Antigravity (Trollz1004) and income-engine (AidoesitAll) NEVER cross.
@@ -60,7 +60,7 @@ I am Joshua Coleman. CEO. Electrician from Florida. Self-taught coder. You are m
 ## ACTIVE PROJECT — INCOME-ENGINE
 - Manus is delivering the build (lead-gen pipeline — scans Reddit r/forhire, Upwork, Fiverr)
 - Local: C:/income-engine
-- Remote: AidoesitAll/income-engine (private)
+- Remote: Trollz1004/income-engine (private)
 - PAT needs rotation — was exposed in chat. Rotate once .env is secured.
 - Claude Code orchestrates. Manus builds. Josh approves.
 

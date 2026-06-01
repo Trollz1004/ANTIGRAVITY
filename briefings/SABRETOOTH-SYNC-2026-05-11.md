@@ -12,7 +12,7 @@
 | Merge commit message | "Merge income-engine into ANTIGRAVITY (redact leaked AidoesitAll gho_ token from manus-gui-extract/INCOME_ENGINE_GITHUB.md)" |
 | `income-engine/` subtree | 2018 files (2019 from `Trollz1004/income-engine` HEAD `f9feff1d` minus 1 redacted secret file) |
 | `Trollz1004/income-engine` (remote) | **archived = true** (read-only safety net, not deleted) |
-| `AidoesitAll/income-engine` (remote) | archived earlier in this round |
+| `Trollz1004/income-engine` (remote) | archived earlier in this round |
 
 To verify on 9020:
 ```
