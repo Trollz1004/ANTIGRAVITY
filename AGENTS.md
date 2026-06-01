@@ -199,9 +199,8 @@ composition may not be altered, reduced, or replaced without Josh's explicit ord
 - **Auxiliary node restriction**: mirrored clones, helper nodes, and auxiliary workstations such as the ASUS mini are read-only for live repo truth.
   Only the primary Sabretooth session may make direct live-repo edits or push `C:\ANTIGRAVITY`.
 - **Worker count max**: 10
-- **Revenue doctrine boundary**: no operational or customer-facing surface may claim routing above the current conservative `10% per-bucket charitable disbursement` for LLC-controlled revenue unless a new canonical legal update replaces it. See `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md` for canonical doctrine evolution (pre-April-17 "10% charitable cap" framing is retired; current model is 1-wallet / 10% per-bucket reserve, founder-directed quarterly).
-- **FL §496.405**: NEVER use "donate" / "donation" / "solicitation" in customer-facing code.
-  Correct: "contractual revenue disbursement." Hooks enforce this.
+- **Revenue doctrine boundary (2026-06-01)**: no operational or customer-facing surface may claim routing above the current `10% per-bucket mission reserve` (max allowable corporate charitable deduction per legally distinct revenue stream) unless a new canonical legal update replaces it. `briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md` is the canonical text. The pre-2026 "10% personal income to Joshua" framing is dead. `GospelDonation.sol`, `CharityRouter100.sol`, `DatingRevenueRouter.sol`, the `60/30/10` split, and the "100% charity" claim are history only.
+- **FL §496.405 (canonical-7 ban, 2026-06-01)**: NEVER use `donate / donation / solicitation / charity / charitable / giving back / disbursement` in customer-facing code or copy. `contractual revenue disbursement` is for internal briefings/agent files ONLY — not customer-facing, not even self-referentially. Hooks enforce this.
 - **No mock/simulation data** — real or fail honestly
 - **Prefer `trash` over `rm`**. Be direct. No fluff.
 
@@ -315,17 +314,29 @@ New ideas, experimental platforms, and speculative automation go here first.
 
 ---
 
-## CURRENT OPERATING POLICY — CONSERVATIVE 10% CAP
+## CURRENT OPERATING POLICY — 10% PER-BUCKET MISSION RESERVE (Updated 2026-06-01)
 
-- **Current LLC rule:** charitable support sourced from for-profit platform operations is capped at **10%**
-  unless Josh explicitly changes it after formal legal/tax review or a documented partner/co-venture structure.
-- **Business first:** the remaining operating revenue stays available for taxes, platform costs, retained cash,
-  founder survival, and lawful business operations.
-- **Public messaging rule:** do not brag about percentages. Product value comes first. If impact is mentioned,
-  keep it factual, restrained, and non-solicitation.
-- **Legacy chain reference:** Base Mainnet `GospelDonation.sol` at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
-  and its historical payout wallets remain part of project history, not the current safe operating doctrine for
-  live LLC revenue.
+> Supersedes the prior "10% charitable cap" wording. See
+> `briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md` and
+> `C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md`.
+
+- **Current LLC rule**: every legally distinct revenue stream auto-reserves **10%** for
+  the kids' mission. This 10% is the **maximum allowable corporate charitable tax
+  deduction** (10 cents per dollar) — NOT Joshua's personal income, NOT a "donation"
+  Joshua chooses to make. It is claimed as a charitable deduction after the LLC legally
+  processes the revenue. The remaining 90% is operating capital subject to tax, retained
+  cash, founder survival, and lawful business operations.
+- **Per-bucket stacking**: N legally distinct revenue streams × 10% buckets = N times
+  the impact of one stream. The strategy exploits the IRS cap by maximizing the number
+  of distinct streams.
+- **Public messaging rule**: do not brag about percentages. Product value comes first. If
+  impact is mentioned, keep it factual, restrained, and non-solicitation. Use neutral
+  phrasing: "supports the platform's mission", "helps kids with medical care".
+- **Legacy chain reference (dead)**: Base Mainnet `GospelDonation.sol` at
+  `0x9855B75061D4c841791382998f0CE8B2BCC965A4` and its historical payout wallets are
+  history only. They are NOT the current safe operating doctrine for live LLC revenue.
+  `CharityRouter100.sol`, `DatingRevenueRouter.sol`, the `60/30/10` split, and the
+  "100% charity" claim are also history only.
 
 ---
 
@@ -467,17 +478,21 @@ sufficient — no external embedding API required.
 
 ---
 
-## INTERNAL VS CUSTOMER-FACING LANGUAGE
+## INTERNAL VS CUSTOMER-FACING LANGUAGE (Updated 2026-06-01)
 
 Internal docs (AGENTS.md, CLAUDE.md, briefings/, code comments, commits) use honest framing:
-speak plainly about the mission, kids, charitable disbursement, and revenue doctrine without
-euphemism. Language firewall is DEAD for internal surfaces.
+speak plainly about the mission, kids, and revenue doctrine without euphemism. Language
+firewall is DEAD for internal surfaces.
 
 Customer-facing surfaces (youandinotai.com, onlinerecycle.org, ai-solutions.store, Square
 catalog copy, any public-facing API response or UI text) follow TOS-safe framing per
-`memory/feedback_officially_unofficial_doctrine.md`: lead with product/service value, no
-"donate"/"donation"/"solicitation"/"tax-deductible", revenue disbursement described as
-"contractual revenue disbursement" if mentioned at all. Same project, different audience rules.
+`briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md` and the corrected revenue model file
+`C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md`:
+lead with product/service value, no `donate` / `donation` / `solicitation` /
+`charity` / `charitable` / `giving back` / `disbursement` in customer copy, and the
+internal synonym `contractual revenue disbursement` is for `briefings/`, `hermes/agents/`,
+`AGENTS.md`, `SOUL.md`, `HEARTBEAT.md`, `SKILLS.md`, `TOOLS.md` ONLY. NEVER on customer
+surfaces, not even self-referentially. Same project, different audience rules.
 
 ---
 

@@ -1,5 +1,20 @@
 'use client';
 
+/*
+ * DEPRECATION NOTE — 2026-06-01
+ *   The file name `CharitySection.tsx` is an internal legacy label. Per
+ *   the corrected revenue model (see
+ *   C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md)
+ *   customer-facing copy must NOT use the words "charity", "donation",
+ *   or "solicitation" (FL §496.405). Use neutral phrasing such as
+ *   "supports the platform's mission" or "helps kids with medical care".
+ *
+ *   This component is preserved for layout/composition continuity. Any
+ *   copy edits must scrub the charity/donation/solicitation language.
+ *   Renaming the file is out of scope for this commit; do it in a
+ *   separate PR that also updates all imports.
+ */
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { Recycle, Heart, Globe, Laptop, TrendingUp, Handshake, Coins, Scale } from 'lucide-react';

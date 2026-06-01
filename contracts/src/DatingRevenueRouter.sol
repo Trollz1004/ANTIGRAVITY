@@ -4,14 +4,29 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+ *   DEPRECATION NOTICE — 2026-06-01
+ *   ──────────────────────────────────────────────────────────────────────
+ *   This file is a HISTORICAL DRAFT ROUTER. It is preserved for chain
+ *   history / audit context only. The `60% / 30% / 10%` split in this
+ *   file is DEPRECATED.
+ *
+ *   Current doctrine: 1 LLC, 1 Square wallet, 10% per legally distinct
+ *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE CHARITABLE
+ *   DEDUCTION. The legacy "10% to founder / 30% to DAO / 60% to Shriners"
+ *   triple is not the current operating model.
+ *
+ *   See briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md and
+ *   C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md
+ *
+ *   Do NOT deploy this file. Do NOT cite it as live doctrine.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
 /**
- * @title DatingRevenueRouter
+ * @title DatingRevenueRouter (DEPRECATED)
  * @author FOR THE KIDS Platform — historical draft artifact
- * @notice Historical intended-next router artifact kept for chain-history and audit context only.
- * @dev This file does NOT represent current live LLC operating doctrine.
- *      Do NOT deploy this router for current LLC-controlled revenue unless a future
- *      canonical legal review explicitly restores a matching structure.
- *      Historical split logic remains in-source only for auditability.
+ * @notice HISTORICAL ARTIFACT — see deprecation notice above. Not deployed.
+ *         Do not deploy. Not current doctrine.
  *
  *      "Until no kid is in need"
  */
