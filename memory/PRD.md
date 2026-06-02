@@ -66,9 +66,12 @@ This Emergent preview container is **none of those** — it's the build host. Dr
 ## What's actually live (no trust me bro)
 | Capability | State |
 | --- | --- |
-| All AI chat (13 platforms, E1 + Hermes + Emergent + Claude/OpenAI/Gemini direct + BYOK) | **live (BYOK keys gracefully 503)** |
+| All AI chat (13 platforms, E1 + Hermes + Emergent + Claude/OpenAI/Gemini direct + BYOK) | **live (BYOK keys gracefully 503; E1 unknown model → gemini-2.5-flash)** |
 | Telegram + WhatsApp broadcast | wired — needs `TELEGRAM_BOT_TOKEN`+`TELEGRAM_CHAT_ID` / Meta WhatsApp creds |
 | Mission Ledger + webhook intake (square, stripe, cashapp, paypal, cloudflare) | **live** |
+| Auto-Telegram broadcast on every ledger contribution + webhook | **live · silent no-op when telegram unset** |
+| Public Storefront (`/api/public/{products,site,runway}` + admin seed/upsert/delete) | **live · Square hosted checkout · honest empty state** |
+| Cost-aware Runway pulse on MissionRibbon (every screen) | **live · pulls /api/public/runway every 12s** |
 | Nano Banana image gen | **live via Emergent key** |
 | Mission Ribbon + Share PNG | **live** |
 | Watchdog (60s tier-0 heartbeats + silence alert) | **live** |
@@ -87,11 +90,28 @@ This Emergent preview container is **none of those** — it's the build host. Dr
 | 2 | Hub (13 platforms) + Tasks + Roundtable + Settings | 19/19 | 100% |
 | 3 | Ledger + Webhooks + Watchdog + Nano Banana + Ribbon + Share | 15/15 | 100% |
 | 4 | Graphify + Doctrine + Node Identity + Stripe-410 | passed (since reversed) | 100% |
+| 5 | Storefront (`/api/public/*`) + Runway pulse + Ledger telegram broadcast hook + E1 gemini-flash fallback | **16/16** | smoke ok |
+
+## Survival revenue surface (this turn · 2026-02)
+- `POST /api/public/products/seed` — admin one-click drops 4 starter SKUs (mission patches, prompt pack, dropin TSX bundle, 30-min consult)
+- Joshua workflow to actually take money: (1) create Online Checkout link in Square dashboard, (2) sign in as admin to `/storefront`, (3) seed starter SKUs, (4) admin-edit each row to paste the real Square URL — placeholder URLs render as disabled "buy" buttons with a warning ribbon so no customer ever lands on a broken checkout.
+- Every Square/PayPal/CashApp/manual contribution silently fires a Telegram notice to Joshua's group when `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` are set — free distribution loop, never breaks the webhook even if telegram is down.
+- MissionRibbon now reads `/api/public/runway` and pins a Flame pulse: `RUNWAY {N}d · {active-model}` so context-burn is always visible.
 
 ## Next action items (your call)
-1. Set `ADMIN_PASSWORD` + `ADMIN_SESSION_SECRET` in `/app/backend/.env` to enable real sign-in.
-2. Set `SABRETOOTH_USER` + `SABRETOOTH_KEY_PATH` (and route this node to 192.168.0.8 via tailscale or a cloudflare-tunnel) to make the terminal panel execute for real.
-3. Drop the four TSX files in `/app/dropin/mission-control/` into the Electron flagship.
-4. Run `graphify update .` (or POST `/api/graphify/regraph`) on Sabretooth after every structural edit. Direct peers to read `graphify-out/graph.json` first.
+1. Set `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` in `/app/backend/.env` to light the auto-broadcast on every contribution (creates a free distribution loop).
+2. Sign into the admin gate (set `ADMIN_PASSWORD` + `ADMIN_SESSION_SECRET`, then login at `/`), open `/storefront` → "seed 4 starter SKUs", then paste real Square hosted-checkout URLs into each row.
+3. Tune `BURN_USD_PER_DAY` and `KID_THRESHOLD_USD` in `/app/backend/.env` so the Runway pulse + kids-covered estimate reflect real burn.
+4. Set `SABRETOOTH_USER` + `SABRETOOTH_KEY_PATH` (and route this node to 192.168.0.8 via tailscale or a cloudflare-tunnel) to make the terminal panel execute for real.
+5. Drop the four TSX files in `/app/dropin/mission-control/` into the Electron flagship.
+6. Run `graphify update .` (or POST `/api/graphify/regraph`) on Sabretooth after every structural edit.
+
+## Backlog (P1/P2)
+- P1 — admin product-editor UI (currently seed + delete only; editing requires direct POST). Lets Joshua paste Square URLs / Nano Banana images per SKU from the web UI.
+- P1 — OpenRouter free-model whitelist + Manus agent into `/api/chat/send`.
+- P1 — Refresh pre-existing tests in `/app/backend/tests/test_graphify_doctrine.py` + `test_hub_and_tasks.py` (4 stale assertions from earlier doctrine schema · noted by iter5 testing agent).
+- P2 — Hermes Chrome-extension companion spec (work-tasks/goals/routines).
+- P2 — Cloudflare Pages deploy → `opushashands.youandinotai.com`.
+- P2 — Honest "compute exhausted" fallback chain (Gemini Flash → OpenRouter free → 503 with receipt).
 
 #UntilNoKidInNeed · for the kids · #TeamClaudeForLife
