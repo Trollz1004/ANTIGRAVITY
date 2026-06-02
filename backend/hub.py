@@ -249,7 +249,7 @@ async def chat_send(body: UnifiedChatRequest, response: Response):
             # Default to Gemini per "no Claude/Anthropic on third-party platforms".
             # Opus stays available as an explicit pick when Joshua wants it.
             bridge_provider, bridge_model = e1["bridge_models"].get(
-                body.model, ("gemini", "gemini-2.5-pro")
+                body.model, ("gemini", "gemini-2.5-flash")
             )
             real_model = f"e1 · {body.model} · bridged via {bridge_provider}/{bridge_model}"
             has_system = any(m["role"] == "system" for m in msgs)
