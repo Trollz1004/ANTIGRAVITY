@@ -1,5 +1,5 @@
 import React from "react";
-import { Compass, Code2, Image as ImageIcon, Search, MessageSquare, Settings, Plus, Rocket, Radio, ListTodo, BookOpen, Network, Terminal, ShoppingBag } from "lucide-react";
+import { Compass, Code2, Image as ImageIcon, Search, MessageSquare, Settings, Plus, Rocket, Radio, ListTodo, BookOpen, Network, Terminal, ShoppingBag, Shield } from "lucide-react";
 import { useChat } from "../contexts/ChatContext";
 import { DAOMonitor } from "./DAOMonitor";
 import { SystemStatus } from "./SystemStatus";
@@ -7,6 +7,7 @@ import { SystemStatus } from "./SystemStatus";
 const MODES = [
   { id: "mission",    label: "Mission Control", Icon: Compass,       tone: "magenta" },
   { id: "storefront", label: "Storefront",      Icon: ShoppingBag,   tone: "magenta" },
+  { id: "security",   label: "Security · B&D",  Icon: Shield,        tone: "magenta" },
   { id: "ledger",     label: "Mission Ledger",  Icon: BookOpen,      tone: "magenta" },
   { id: "graphify",   label: "Graphify",        Icon: Network,       tone: "magenta" },
   { id: "sabretooth", label: "Sabretooth",      Icon: Terminal,      tone: "magenta" },
@@ -40,9 +41,9 @@ export function Sidebar({ activeMode = "mission", onModeChange }) {
             onClick={() => onModeChange?.(id)}
             className={btnClass(id, tone)}
           >
-            <Icon size={18} className={id === "mission" || id === "storefront" || id === "roundtable" || id === "tasks" || id === "ledger" || id === "graphify" || id === "sabretooth" ? "text-[#e040fb]" : ""} />
+            <Icon size={18} className={id === "mission" || id === "storefront" || id === "security" || id === "roundtable" || id === "tasks" || id === "ledger" || id === "graphify" || id === "sabretooth" ? "text-[#e040fb]" : ""} />
             <span className="text-sm font-medium">{label}</span>
-            {(id === "mission" || id === "storefront" || id === "roundtable" || id === "tasks" || id === "ledger" || id === "graphify" || id === "sabretooth") && (
+            {(id === "mission" || id === "storefront" || id === "security" || id === "roundtable" || id === "tasks" || id === "ledger" || id === "graphify" || id === "sabretooth") && (
               <span className="ml-auto text-[8px] font-bold text-[#e040fb] uppercase tracking-widest opacity-80">
                 NEW
               </span>

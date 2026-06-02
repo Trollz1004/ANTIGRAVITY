@@ -18,6 +18,7 @@ import { LedgerMode } from "./modes/LedgerMode";
 import { GraphifyMode } from "./modes/GraphifyMode";
 import { SabretoothMode } from "./modes/SabretoothMode";
 import { StorefrontMode } from "./modes/StorefrontMode";
+import { SecurityMode } from "./modes/SecurityMode";
 import { MissionRibbon } from "./components/MissionRibbon";
 import { SettingsPanel } from "./components/SettingsPanel";
 
@@ -30,7 +31,11 @@ export default function App() {
   React.useEffect(() => {
     const onMode = (e) => { if (e.detail?.mode) setActiveMode(e.detail.mode); };
     window.addEventListener("opuspawclaw-mode", onMode);
-    return () => window.removeEventListener("opuspawclaw-mode", onMode);
+    window.addEventListener("opuspawclaw-mode-change", onMode);
+    return () => {
+      window.removeEventListener("opuspawclaw-mode", onMode);
+      window.removeEventListener("opuspawclaw-mode-change", onMode);
+    };
   }, []);
 
   if (!gated) return <AgeGate onVerified={() => setGated(true)} />;
@@ -48,6 +53,7 @@ export default function App() {
       case "graphify":   return <GraphifyMode />;
       case "sabretooth": return <SabretoothMode />;
       case "storefront": return <StorefrontMode />;
+      case "security": return <SecurityMode />;
       case "settings":   return <SettingsPanel />;
       default:           return <MissionMode />;
     }

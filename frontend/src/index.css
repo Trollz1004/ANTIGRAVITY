@@ -60,6 +60,30 @@ code, pre, .mono {
 }
 .animate-ticker { animation: mc-ticker 38s linear infinite; }
 
+/* Kanban "work in progress" card animation — pulses border + a scan-line
+   sweeps top-to-bottom every 2.5s so the user actually sees work being done. */
+@keyframes mc-wip-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.0); border-color: rgba(0, 212, 255, 0.4); }
+  50%      { box-shadow: 0 0 16px 0 rgba(0, 212, 255, 0.45); border-color: rgba(0, 212, 255, 0.85); }
+}
+.task-wip { animation: mc-wip-glow 2.4s ease-in-out infinite; }
+@keyframes mc-wip-scan {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+.task-wip-scanline {
+  position: absolute; left: 0; right: 0; top: 0; height: 28%;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.18) 50%, transparent 100%);
+  pointer-events: none;
+  animation: mc-wip-scan 2.8s ease-in-out infinite;
+}
+@keyframes mc-wip-column-glow {
+  0%, 100% { box-shadow: inset 0 -1px 0 0 rgba(0, 212, 255, 0.5); }
+  50%      { box-shadow: inset 0 -2px 0 0 rgba(0, 212, 255, 1.0); }
+}
+.column-wip-header { animation: mc-wip-column-glow 2.4s ease-in-out infinite; }
+
 /* subtle orbital grain over the whole app */
 .grain::before {
   content: "";

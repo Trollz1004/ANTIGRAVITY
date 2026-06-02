@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Heart, AlertTriangle, Share2, Flame } from "lucide-react";
+import { Heart, AlertTriangle, Share2, Flame, ShieldCheck, ShieldAlert } from "lucide-react";
 import { ShareMissionModal } from "./ShareMissionModal";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 /**
  * MissionRibbon — always-on top strip showing the actual mission counter.
- * Reads /api/ledger/stats, /api/watchdog/status, /api/public/runway. Honest empty state.
+ * Reads /api/ledger/stats, /api/watchdog/status, /api/public/runway, /api/compliance/status.
  */
 export function MissionRibbon() {
   const [stats, setStats] = useState(null);
   const [alerts, setAlerts] = useState([]);
   const [runway, setRunway] = useState(null);
+  const [compliance, setCompliance] = useState(null);
   const [share, setShare] = useState(false);
   const [tick, setTick] = useState(0);
 
@@ -26,13 +27,14 @@ export function MissionRibbon() {
     let alive = true;
     const load = async () => {
       try {
-        const [s, w, r] = await Promise.all([
+        const [s, w, r, c] = await Promise.all([
           axios.get(`${API}/ledger/stats`).then((r) => r.data),
           axios.get(`${API}/watchdog/status`).then((r) => r.data),
           axios.get(`${API}/public/runway`).then((r) => r.data).catch(() => null),
+          axios.get(`${API}/compliance/status`).then((r) => r.data).catch(() => null),
         ]);
         if (!alive) return;
-        setStats(s); setAlerts(w.alerts || []); setRunway(r);
+        setStats(s); setAlerts(w.alerts || []); setRunway(r); setCompliance(c);
       } catch (err) {
         // honest empty state — ribbon renders blank counters rather than fabricated numbers
         // eslint-disable-next-line no-console
@@ -79,6 +81,9 @@ export function MissionRibbon() {
             </div>
           </>
         )}
+        {compliance?.latest_check && (
+          <ComplianceChip compliance={compliance} />
+        )}
         {alerts.length > 0 && (
           <div data-testid="mission-ribbon-alert" className="flex items-center gap-1.5 ml-auto bg-[#ff1744]/15 border border-[#ff1744]/40 rounded-full px-3 py-0.5 animate-pulse">
             <AlertTriangle size={11} className="text-[#ff1744]" />
@@ -113,4 +118,25 @@ function Stat({ label, value, tone, hint, tick }) {
 function formatUsd(n) {
   if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
   return Number(n).toFixed(2);
+}
+
+function ComplianceChip({ compliance }) {
+  const verdict = compliance.latest_check?.verdict;
+  const dev = compliance.latest_check?.deviation_pct;
+  const ok = verdict === "ok";
+  const tone = ok ? "#00e676" : "#ff1744";
+  const Icon = ok ? ShieldCheck : ShieldAlert;
+  return (
+    <button
+      data-testid="ribbon-compliance"
+      onClick={() => window.dispatchEvent(new CustomEvent("opuspawclaw-mode-change", { detail: { mode: "security" } }))}
+      title={`10/27/63 doctrine · max deviation ${dev ?? "?"}pp · ${ok ? "within tolerance" : "REBALANCE NEEDED"}`}
+      className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border bg-[#1a2332] cursor-pointer transition-colors"
+      style={{ borderColor: `${tone}60` }}
+    >
+      <Icon size={10} style={{ color: tone }} className={ok ? "" : "animate-pulse"} />
+      <span className="text-[8px] tracking-[0.25em] uppercase text-[#6b82a6]">split</span>
+      <span className="mono text-[10px] font-bold" style={{ color: tone }}>{ok ? "ok" : `${dev}pp`}</span>
+    </button>
+  );
 }

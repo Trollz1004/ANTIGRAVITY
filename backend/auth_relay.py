@@ -122,9 +122,23 @@ async def auth_logout(response: Response):
 
 def require_admin(request: Request) -> None:
     """Dependency-style guard — raises 401/503 if not signed in.
-    Call inside any handler that must be locked to the admin dashboard."""
+    Call inside any handler that must be locked to the admin dashboard.
+
+    Also enforces ADMIN_IP_ALLOWLIST when present: if the env var is set
+    (comma-separated IPs), the caller's IP must match exactly. CF-Connecting-IP
+    is honored when the app is fronted by Cloudflare.
+    """
     if not (_admin_password() and _session_secret()):
         raise HTTPException(status_code=503, detail="admin auth not configured")
+    # IP allowlist (zero-trust foundation)
+    raw_allow = os.environ.get("ADMIN_IP_ALLOWLIST", "").strip()
+    if raw_allow:
+        allow = [p.strip() for p in raw_allow.split(",") if p.strip()]
+        ip = (request.headers.get("cf-connecting-ip", "").strip()
+              or (request.headers.get("x-forwarded-for", "").split(",")[0].strip() if request.headers.get("x-forwarded-for") else "")
+              or (request.client.host if request.client else ""))
+        if ip not in allow:
+            raise HTTPException(status_code=403, detail=f"caller IP {ip} not in ADMIN_IP_ALLOWLIST")
     token = request.cookies.get(SESSION_COOKIE, "")
     if not _verify_token(token):
         raise HTTPException(status_code=401, detail="sign-in required")
