@@ -69,10 +69,28 @@ STARTER_SKUS: List[Dict[str, Any]] = [
         "square_checkout_url": os.environ.get("SQUARE_BOT_SHIELD_LINK", "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD"),
     },
     {
-        "title": "Founding Member · Subscription",
+        "title": "Founding Member · Square Subscription",
         "description": "Recurring Square subscription · founding-circle support. Locks in early-supporter status and a direct line to the mission desk.",
         "price_usd": 29.00, "sku": "OPC-FOUNDING-29", "bucket": 5,
         "square_checkout_url": os.environ.get("SQUARE_FOUNDING_MEMBER_LINK", "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD"),
+    },
+    {
+        "title": "3-Month Mission Pass · Stripe",
+        "description": "Quarterly access tier on Stripe — locked rate, full mission desk access, monthly broadcast roll-up.",
+        "price_usd": 79.00, "sku": "OPC-3MO-79", "bucket": 5,
+        "square_checkout_url": os.environ.get("STRIPE_LINK_3MONTH", "https://buy.stripe.com/SET-THIS-IN-STRIPE-DASHBOARD"),
+    },
+    {
+        "title": "12-Month Mission Pass · Stripe",
+        "description": "Annual pass on Stripe — best per-month rate. Includes founding-circle perks + a real mission-patch print.",
+        "price_usd": 299.00, "sku": "OPC-12MO-299", "bucket": 5,
+        "square_checkout_url": os.environ.get("STRIPE_LINK_12MONTH", "https://buy.stripe.com/SET-THIS-IN-STRIPE-DASHBOARD"),
+    },
+    {
+        "title": "Royalty Tier · Stripe",
+        "description": "Top-tier mission patronage on Stripe. Direct strategy line with Joshua + co-founder voting on next-product spend.",
+        "price_usd": 499.00, "sku": "OPC-ROYALTY-499", "bucket": 5,
+        "square_checkout_url": os.environ.get("STRIPE_LINK_ROYALTY", "https://buy.stripe.com/SET-THIS-IN-STRIPE-DASHBOARD"),
     },
     {
         "title": "Mission Patch · Custom AI Image",
@@ -196,15 +214,18 @@ async def runway_status():
 
 @router.post("/products/seed")
 async def seed_starter_skus(request: Request):
-    """One-click seed: drops the 4 starter SKUs if the catalogue is empty."""
+    """Additive seed: inserts any STARTER_SKUS not already in the catalogue
+    (matched by sku). Safe to re-run after STARTER_SKUS is expanded."""
     require_admin(request)
-    existing = await PRODUCTS.count_documents({})
-    if existing > 0:
-        return {"ok": False, "reason": "catalogue not empty — delete existing first", "count": existing}
+    existing_skus = {d["sku"] async for d in PRODUCTS.find({}, {"sku": 1})}
     created = []
+    skipped = []
     for s in STARTER_SKUS:
+        if s["sku"] in existing_skus:
+            skipped.append(s["sku"])
+            continue
         doc = {**s, "id": uuid.uuid4().hex[:12], "active": True,
                "image_data_uri": None, "created_at": _now(), "updated_at": _now()}
         await PRODUCTS.insert_one(doc.copy())
         created.append(doc)
-    return {"ok": True, "seeded": len(created), "products": created}
+    return {"ok": True, "seeded": len(created), "skipped": skipped, "products": created}

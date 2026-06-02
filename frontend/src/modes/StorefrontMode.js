@@ -77,7 +77,7 @@ export function StorefrontMode() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2">
               <ShoppingBag size={14} className="text-[#00e676]" />
-              <span className="text-[10px] tracking-[0.3em] uppercase text-[#00e676] font-bold">Public Storefront · Square hosted</span>
+              <span className="text-[10px] tracking-[0.3em] uppercase text-[#00e676] font-bold">Public Storefront · Square + Stripe hosted</span>
             </div>
             <h1 className="text-3xl font-bold tracking-tight">{site?.name || "OpusPawClaw"}</h1>
             <p className="text-sm text-[#6b82a6] mt-1">{site?.tagline}</p>
@@ -170,7 +170,13 @@ function EmptyCatalogue({ admin, onSeed, busy }) {
 }
 
 function ProductCard({ p, admin, onDelete }) {
-  const placeholderUrl = (p.square_checkout_url || "").includes("SET-THIS-IN-SQUARE-DASHBOARD");
+  const url = p.square_checkout_url || "";
+  const placeholderUrl = url.includes("SET-THIS-IN-");
+  const isStripe = url.includes("stripe.com");
+  const processorLabel = isStripe ? "buy via Stripe" : "buy via Square";
+  const accentClasses = isStripe
+    ? "bg-[#a78bfa]/15 border border-[#a78bfa]/40 text-[#c4b5fd] hover:bg-[#a78bfa]/25"
+    : "bg-[#00d4ff]/15 border border-[#00d4ff]/40 text-[#00d4ff] hover:bg-[#00d4ff]/25";
   return (
     <div data-testid={`storefront-product-${p.id}`} className="bg-[#111827] border border-[#2a3a52] rounded-lg overflow-hidden flex flex-col hover:border-[#00d4ff]/40 transition-colors">
       {p.image_data_uri ? (
@@ -199,11 +205,11 @@ function ProductCard({ p, admin, onDelete }) {
             className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold uppercase tracking-widest transition-colors ${
               placeholderUrl
                 ? "bg-[#2a3a52]/40 border border-[#2a3a52] text-[#4a5568] cursor-not-allowed"
-                : "bg-[#00d4ff]/15 border border-[#00d4ff]/40 text-[#00d4ff] hover:bg-[#00d4ff]/25"
+                : accentClasses
             }`}
             onClick={(e) => placeholderUrl && e.preventDefault()}
           >
-            buy via Square <ExternalLink size={10} />
+            {processorLabel} <ExternalLink size={10} />
           </a>
           {admin && (
             <button
