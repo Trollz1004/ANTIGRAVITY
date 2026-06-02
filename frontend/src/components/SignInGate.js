@@ -44,7 +44,12 @@ export function SignInGate({ children }) {
   };
 
   const signOut = async () => {
-    try { await axios.post(`${API}/auth/logout`, {}, { withCredentials: true }); } catch {}
+    try { await axios.post(`${API}/auth/logout`, {}, { withCredentials: true }); }
+    catch (err) {
+      // logout endpoint failed — still clear local state via refresh()
+      // eslint-disable-next-line no-console
+      console.warn("signout request failed:", err?.message || err);
+    }
     refresh();
   };
 

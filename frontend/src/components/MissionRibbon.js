@@ -33,7 +33,11 @@ export function MissionRibbon() {
         ]);
         if (!alive) return;
         setStats(s); setAlerts(w.alerts || []); setRunway(r);
-      } catch { /* honest empty state */ }
+      } catch (err) {
+        // honest empty state — ribbon renders blank counters rather than fabricated numbers
+        // eslint-disable-next-line no-console
+        console.warn("MissionRibbon load failed:", err?.message || err);
+      }
     };
     load();
     const iv = setInterval(() => { if (!document.hidden) { load(); setTick((t) => t + 1); } }, 12_000);

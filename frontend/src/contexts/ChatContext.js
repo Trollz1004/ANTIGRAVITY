@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -85,12 +85,18 @@ export function ChatProvider({ children }) {
 
   useEffect(() => { loadConversations(); }, [loadConversations]);
 
+  const value = useMemo(() => ({
+    conversations, activeConversationId, messages, isLoading,
+    loadConversations, selectConversation, createNewConversation, addMessage,
+    sendThroughHermes,
+  }), [
+    conversations, activeConversationId, messages, isLoading,
+    loadConversations, selectConversation, createNewConversation, addMessage,
+    sendThroughHermes,
+  ]);
+
   return (
-    <ChatContext.Provider value={{
-      conversations, activeConversationId, messages, isLoading,
-      loadConversations, selectConversation, createNewConversation, addMessage,
-      sendThroughHermes,
-    }}>
+    <ChatContext.Provider value={value}>
       {children}
     </ChatContext.Provider>
   );

@@ -83,7 +83,7 @@ export function ChatMode() {
           </div>
         ) : (
           messages.map((m, i) => (
-            <div key={i} className={`flex gap-4 ${m.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
+            <div key={`${m.created_at || ""}-${i}`} className={`flex gap-4 ${m.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
               <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${
                 m.role === "user"
                   ? "bg-[#00d4ff]/10 border-[#00d4ff]/30 text-[#00d4ff]"

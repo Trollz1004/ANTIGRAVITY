@@ -150,8 +150,8 @@ export function SabretoothMode() {
               <span className="ml-auto text-[8px] tracking-widest uppercase text-[#6b82a6]">{output.length}</span>
             </div>
             <div className="divide-y divide-[#2a3a52]">
-              {output.map((row, i) => (
-                <div key={i} className="p-3 space-y-1">
+              {output.map((row) => (
+                <div key={`${row.ts}-${row.command}`} className="p-3 space-y-1">
                   <div className="flex items-center gap-2 text-[9px] tracking-widest uppercase">
                     <span className="text-[#6b82a6]">{row.ts}</span>
                     <span className="text-[#00e676]">{row.command}</span>

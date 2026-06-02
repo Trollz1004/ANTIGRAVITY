@@ -67,8 +67,8 @@ export function GitPanel() {
             </span>
           </div>
           <div className="space-y-1">
-            {changed.map((f, i) => (
-              <div key={i} className="flex items-center gap-2 px-2 py-1.5 hover:bg-[#1a2332] rounded text-xs transition-colors border border-transparent hover:border-[#2a3a52]">
+            {changed.map((f) => (
+              <div key={`${f.status}-${f.name}`} className="flex items-center gap-2 px-2 py-1.5 hover:bg-[#1a2332] rounded text-xs transition-colors border border-transparent hover:border-[#2a3a52]">
                 <FileText size={12} className={
                   f.status === "new" ? "text-[#00e676]" :
                   f.status === "deleted" ? "text-red-400" : "text-yellow-400"

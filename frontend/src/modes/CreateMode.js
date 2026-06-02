@@ -62,7 +62,7 @@ export function CreateMode() {
           <div className="flex flex-wrap gap-1.5">
             {PRESETS.map((p, i) => (
               <button
-                key={i}
+                key={p}
                 data-testid={`create-preset-${i}`}
                 onClick={() => setPrompt(p)}
                 className="text-[9px] tracking-widest uppercase px-2.5 py-1 rounded-full bg-[#0a0f1a] border border-[#2a3a52] text-[#6b82a6] hover:border-[#fb923c] hover:text-[#fb923c] transition-all"

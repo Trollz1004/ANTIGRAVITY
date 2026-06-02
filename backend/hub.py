@@ -24,6 +24,8 @@ import httpx
 from fastapi import APIRouter, HTTPException, Response
 from pydantic import BaseModel
 
+from hermes_models import HERMES_VIRTUAL_MODELS
+
 logger = logging.getLogger("hub")
 
 # ── platform registry ─────────────────────────────────────────────────── #
@@ -257,8 +259,6 @@ async def chat_send(body: UnifiedChatRequest, response: Response):
                 msgs = [{"role": "system", "content": e1["persona"]}] + msgs
             reply = await asyncio.to_thread(_emergent_chat, bridge_provider, bridge_model, msgs, session_id)
         elif body.provider == "hermes":
-            # Reuse the existing Hermes virtual-model table
-            from server import HERMES_VIRTUAL_MODELS  # late import to avoid circular
             conf = HERMES_VIRTUAL_MODELS.get(body.model)
             if conf is None:
                 raise HTTPException(status_code=400, detail=f"unknown hermes virtual model '{body.model}'")
