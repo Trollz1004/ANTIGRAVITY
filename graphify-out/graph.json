@@ -9,7 +9,7 @@
       "source_file": "dropin/mission-control/src/components/RunbookViewer.tsx",
       "source_location": "L1",
       "id": "dropin_mission_control_src_components_runbookviewer_tsx",
-      "community": 19,
+      "community": 24,
       "norm_label": "runbookviewer.tsx"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "dropin/mission-control/src/components/RunbookViewer.tsx",
       "source_location": "L16",
       "id": "components_runbookviewer_onfile",
-      "community": 19,
+      "community": 24,
       "norm_label": "onfile()"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "dropin/mission-control/src/components/RunbookViewer.tsx",
       "source_location": "L24",
       "id": "components_runbookviewer_clear",
-      "community": 19,
+      "community": 24,
       "norm_label": "clear()"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "dropin/mission-control/src/components/HermesRouterPanel.tsx",
       "source_location": "L1",
       "id": "dropin_mission_control_src_components_hermesrouterpanel_tsx",
-      "community": 20,
+      "community": 25,
       "norm_label": "hermesrouterpanel.tsx"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "dropin/mission-control/src/components/HermesRouterPanel.tsx",
       "source_location": "L26",
       "id": "components_hermesrouterpanel_fetchhealth",
-      "community": 20,
+      "community": 25,
       "norm_label": "fetchhealth()"
     },
     {
@@ -54,7 +54,7 @@
       "source_file": "dropin/mission-control/src/components/HermesRouterPanel.tsx",
       "source_location": "L48",
       "id": "components_hermesrouterpanel_test",
-      "community": 20,
+      "community": 25,
       "norm_label": "test()"
     },
     {
@@ -63,7 +63,7 @@
       "source_file": "dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
       "source_location": "L1",
       "id": "dropin_mission_control_src_components_paperclipworkerpanel_tsx",
-      "community": 21,
+      "community": 26,
       "norm_label": "paperclipworkerpanel.tsx"
     },
     {
@@ -72,7 +72,7 @@
       "source_file": "dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
       "source_location": "L25",
       "id": "components_paperclipworkerpanel_fetchhealth",
-      "community": 21,
+      "community": 26,
       "norm_label": "fetchhealth()"
     },
     {
@@ -81,7 +81,7 @@
       "source_file": "dropin/mission-control/src/components/PaperclipWorkerPanel.tsx",
       "source_location": "L47",
       "id": "components_paperclipworkerpanel_copy",
-      "community": 21,
+      "community": 26,
       "norm_label": "copy()"
     },
     {
@@ -90,7 +90,7 @@
       "source_file": "dropin/mission-control/src/modes/MissionMode.tsx",
       "source_location": "L1",
       "id": "dropin_mission_control_src_modes_missionmode_tsx",
-      "community": 9,
+      "community": 7,
       "norm_label": "missionmode.tsx"
     },
     {
@@ -99,7 +99,7 @@
       "source_file": "frontend/src/modes/MissionMode.js",
       "source_location": "L21",
       "id": "modes_missionmode_missionmode",
-      "community": 9,
+      "community": 7,
       "norm_label": "missionmode()"
     },
     {
@@ -108,7 +108,7 @@
       "source_file": "tests/__init__.py",
       "source_location": "L1",
       "id": "tests_init_py",
-      "community": 25,
+      "community": 35,
       "norm_label": "__init__.py"
     },
     {
@@ -117,7 +117,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L1",
       "id": "backend_tasks_py",
-      "community": 8,
+      "community": 6,
       "norm_label": "tasks.py"
     },
     {
@@ -126,7 +126,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L59",
       "id": "backend_tasks_now",
-      "community": 8,
+      "community": 6,
       "norm_label": "_now()"
     },
     {
@@ -135,7 +135,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L63",
       "id": "backend_tasks_new_id",
-      "community": 8,
+      "community": 6,
       "norm_label": "_new_id()"
     },
     {
@@ -144,7 +144,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L68",
       "id": "backend_tasks_taskcreate",
-      "community": 8,
+      "community": 6,
       "norm_label": "taskcreate"
     },
     {
@@ -153,7 +153,7 @@
       "source_file": "",
       "source_location": "",
       "id": "basemodel",
-      "community": 5,
+      "community": 1,
       "norm_label": "basemodel"
     },
     {
@@ -162,7 +162,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L79",
       "id": "backend_tasks_taskupdate",
-      "community": 8,
+      "community": 6,
       "norm_label": "taskupdate"
     },
     {
@@ -171,7 +171,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L90",
       "id": "backend_tasks_dispatchrequest",
-      "community": 5,
+      "community": 6,
       "norm_label": "dispatchrequest"
     },
     {
@@ -180,7 +180,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L99",
       "id": "backend_tasks_heartbeatpayload",
-      "community": 8,
+      "community": 6,
       "norm_label": "heartbeatpayload"
     },
     {
@@ -189,7 +189,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L109",
       "id": "backend_tasks_list_agents",
-      "community": 8,
+      "community": 6,
       "norm_label": "list_agents()"
     },
     {
@@ -198,7 +198,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L120",
       "id": "backend_tasks_beat",
-      "community": 8,
+      "community": 6,
       "norm_label": "beat()"
     },
     {
@@ -207,7 +207,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L129",
       "id": "backend_tasks_list_tasks",
-      "community": 8,
+      "community": 6,
       "norm_label": "list_tasks()"
     },
     {
@@ -216,7 +216,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L144",
       "id": "backend_tasks_create_task",
-      "community": 8,
+      "community": 6,
       "norm_label": "create_task()"
     },
     {
@@ -225,7 +225,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L170",
       "id": "backend_tasks_update_task",
-      "community": 8,
+      "community": 6,
       "norm_label": "update_task()"
     },
     {
@@ -234,7 +234,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L189",
       "id": "backend_tasks_delete_task",
-      "community": 8,
+      "community": 6,
       "norm_label": "delete_task()"
     },
     {
@@ -243,7 +243,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L202",
       "id": "backend_tasks_dispatch",
-      "community": 8,
+      "community": 6,
       "norm_label": "dispatch()"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L234",
       "id": "backend_tasks_audit_log",
-      "community": 8,
+      "community": 6,
       "norm_label": "audit_log()"
     },
     {
@@ -261,7 +261,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L242",
       "id": "backend_tasks_stats",
-      "community": 8,
+      "community": 6,
       "norm_label": "stats()"
     },
     {
@@ -270,7 +270,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L1",
       "id": "backend_tasks_rationale_1",
-      "community": 8,
+      "community": 6,
       "norm_label": "task management system \u2014 paperclip replacement.  replaces the paperclip ceo/cfo/"
     },
     {
@@ -279,7 +279,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L110",
       "id": "backend_tasks_rationale_110",
-      "community": 8,
+      "community": 6,
       "norm_label": "return every agent + load + heartbeat status."
     },
     {
@@ -288,7 +288,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L203",
       "id": "backend_tasks_rationale_203",
-      "community": 8,
+      "community": 6,
       "norm_label": "fan a single brief out to multiple agents. returns the created task ids."
     },
     {
@@ -297,7 +297,7 @@
       "source_file": "backend/tasks.py",
       "source_location": "L243",
       "id": "backend_tasks_rationale_243",
-      "community": 8,
+      "community": 6,
       "norm_label": "top-line counters that drive the mission ribbon."
     },
     {
@@ -306,7 +306,7 @@
       "source_file": "backend/server.py",
       "source_location": "L1",
       "id": "backend_server_py",
-      "community": 5,
+      "community": 1,
       "norm_label": "server.py"
     },
     {
@@ -315,7 +315,7 @@
       "source_file": "backend/server.py",
       "source_location": "L46",
       "id": "backend_server_statuscheck",
-      "community": 5,
+      "community": 1,
       "norm_label": "statuscheck"
     },
     {
@@ -324,7 +324,7 @@
       "source_file": "backend/server.py",
       "source_location": "L53",
       "id": "backend_server_statuscheckcreate",
-      "community": 5,
+      "community": 1,
       "norm_label": "statuscheckcreate"
     },
     {
@@ -333,7 +333,7 @@
       "source_file": "backend/server.py",
       "source_location": "L58",
       "id": "backend_server_root",
-      "community": 5,
+      "community": 1,
       "norm_label": "root()"
     },
     {
@@ -342,7 +342,7 @@
       "source_file": "backend/server.py",
       "source_location": "L66",
       "id": "backend_server_create_status_check",
-      "community": 5,
+      "community": 1,
       "norm_label": "create_status_check()"
     },
     {
@@ -351,7 +351,7 @@
       "source_file": "backend/server.py",
       "source_location": "L75",
       "id": "backend_server_list_status_checks",
-      "community": 5,
+      "community": 1,
       "norm_label": "list_status_checks()"
     },
     {
@@ -360,7 +360,7 @@
       "source_file": "backend/server.py",
       "source_location": "L97",
       "id": "backend_server_chatmessage",
-      "community": 5,
+      "community": 1,
       "norm_label": "chatmessage"
     },
     {
@@ -369,7 +369,7 @@
       "source_file": "backend/server.py",
       "source_location": "L102",
       "id": "backend_server_chatcompletionsrequest",
-      "community": 5,
+      "community": 1,
       "norm_label": "chatcompletionsrequest"
     },
     {
@@ -378,7 +378,7 @@
       "source_file": "backend/server.py",
       "source_location": "L110",
       "id": "backend_server_hermes_healthz",
-      "community": 5,
+      "community": 1,
       "norm_label": "hermes_healthz()"
     },
     {
@@ -387,7 +387,7 @@
       "source_file": "backend/server.py",
       "source_location": "L122",
       "id": "backend_server_bridge_via_emergent",
-      "community": 5,
+      "community": 1,
       "norm_label": "_bridge_via_emergent()"
     },
     {
@@ -396,7 +396,7 @@
       "source_file": "backend/server.py",
       "source_location": "L148",
       "id": "backend_server_hermes_chat_completions",
-      "community": 5,
+      "community": 1,
       "norm_label": "hermes_chat_completions()"
     },
     {
@@ -405,7 +405,7 @@
       "source_file": "backend/server.py",
       "source_location": "L210",
       "id": "backend_server_paperclip_health",
-      "community": 5,
+      "community": 1,
       "norm_label": "paperclip_health()"
     },
     {
@@ -414,7 +414,7 @@
       "source_file": "backend/server.py",
       "source_location": "L225",
       "id": "backend_server_list_agents",
-      "community": 5,
+      "community": 1,
       "norm_label": "list_agents()"
     },
     {
@@ -423,7 +423,7 @@
       "source_file": "backend/server.py",
       "source_location": "L240",
       "id": "backend_server_system_status",
-      "community": 5,
+      "community": 1,
       "norm_label": "system_status()"
     },
     {
@@ -432,7 +432,7 @@
       "source_file": "backend/server.py",
       "source_location": "L255",
       "id": "backend_server_dao_stats",
-      "community": 5,
+      "community": 1,
       "norm_label": "dao_stats()"
     },
     {
@@ -441,7 +441,7 @@
       "source_file": "backend/server.py",
       "source_location": "L282",
       "id": "backend_server_git",
-      "community": 5,
+      "community": 1,
       "norm_label": "_git()"
     },
     {
@@ -450,7 +450,7 @@
       "source_file": "backend/server.py",
       "source_location": "L292",
       "id": "backend_server_git_status",
-      "community": 5,
+      "community": 1,
       "norm_label": "git_status()"
     },
     {
@@ -459,16 +459,16 @@
       "source_file": "backend/server.py",
       "source_location": "L321",
       "id": "backend_server_mission_metrics",
-      "community": 5,
+      "community": 1,
       "norm_label": "mission_metrics()"
     },
     {
       "label": "_shutdown()",
       "file_type": "code",
       "source_file": "backend/server.py",
-      "source_location": "L362",
+      "source_location": "L364",
       "id": "backend_server_shutdown",
-      "community": 5,
+      "community": 1,
       "norm_label": "_shutdown()"
     },
     {
@@ -477,7 +477,7 @@
       "source_file": "backend/server.py",
       "source_location": "L1",
       "id": "backend_server_rationale_1",
-      "community": 5,
+      "community": 1,
       "norm_label": "opuspawclaw / mission control backend.  mirrors the contract of the local hermes"
     },
     {
@@ -486,7 +486,7 @@
       "source_file": "backend/server.py",
       "source_location": "L124",
       "id": "backend_server_rationale_124",
-      "community": 5,
+      "community": 1,
       "norm_label": "route the request to emergent's universal llm key via emergentintegrations."
     },
     {
@@ -495,7 +495,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L1",
       "id": "backend_hub_py",
-      "community": 7,
+      "community": 9,
       "norm_label": "hub.py"
     },
     {
@@ -504,7 +504,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L147",
       "id": "backend_hub_emergent_chat",
-      "community": 7,
+      "community": 9,
       "norm_label": "_emergent_chat()"
     },
     {
@@ -513,7 +513,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L169",
       "id": "backend_hub_byok_chat",
-      "community": 7,
+      "community": 9,
       "norm_label": "_byok_chat()"
     },
     {
@@ -522,7 +522,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L187",
       "id": "backend_hub_local_chat",
-      "community": 7,
+      "community": 9,
       "norm_label": "_local_chat()"
     },
     {
@@ -531,7 +531,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L204",
       "id": "backend_hub_chatmessage",
-      "community": 7,
+      "community": 1,
       "norm_label": "chatmessage"
     },
     {
@@ -540,7 +540,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L209",
       "id": "backend_hub_unifiedchatrequest",
-      "community": 7,
+      "community": 1,
       "norm_label": "unifiedchatrequest"
     },
     {
@@ -549,7 +549,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L218",
       "id": "backend_hub_list_providers",
-      "community": 7,
+      "community": 9,
       "norm_label": "list_providers()"
     },
     {
@@ -558,7 +558,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L235",
       "id": "backend_hub_chat_send",
-      "community": 7,
+      "community": 9,
       "norm_label": "chat_send()"
     },
     {
@@ -567,7 +567,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L326",
       "id": "backend_hub_broadcast_status",
-      "community": 7,
+      "community": 9,
       "norm_label": "_broadcast_status()"
     },
     {
@@ -576,7 +576,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L344",
       "id": "backend_hub_broadcastrequest",
-      "community": 7,
+      "community": 1,
       "norm_label": "broadcastrequest"
     },
     {
@@ -585,7 +585,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L350",
       "id": "backend_hub_broadcast_telegram",
-      "community": 7,
+      "community": 9,
       "norm_label": "broadcast_telegram()"
     },
     {
@@ -594,7 +594,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L355",
       "id": "backend_hub_broadcast_whatsapp",
-      "community": 7,
+      "community": 9,
       "norm_label": "broadcast_whatsapp()"
     },
     {
@@ -603,7 +603,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L359",
       "id": "backend_hub_telegram_send",
-      "community": 7,
+      "community": 9,
       "norm_label": "_telegram_send()"
     },
     {
@@ -612,7 +612,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L377",
       "id": "backend_hub_whatsapp_send",
-      "community": 7,
+      "community": 9,
       "norm_label": "_whatsapp_send()"
     },
     {
@@ -621,7 +621,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L1",
       "id": "backend_hub_rationale_1",
-      "community": 7,
+      "community": 9,
       "norm_label": "multi-platform chat fan-out + broadcast hub.  every ai surface joshua named (her"
     },
     {
@@ -630,7 +630,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L148",
       "id": "backend_hub_rationale_148",
-      "community": 7,
+      "community": 9,
       "norm_label": "sync helper that calls emergentintegrations on a worker thread."
     },
     {
@@ -639,7 +639,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L170",
       "id": "backend_hub_rationale_170",
-      "community": 7,
+      "community": 9,
       "norm_label": "openai-compatible byok request to the platform's endpoint."
     },
     {
@@ -648,7 +648,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L188",
       "id": "backend_hub_rationale_188",
-      "community": 7,
+      "community": 9,
       "norm_label": "ollama-style local chat \u2014 only reachable from joshua's workstation."
     },
     {
@@ -657,7 +657,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L219",
       "id": "backend_hub_rationale_219",
-      "community": 7,
+      "community": 9,
       "norm_label": "public registry \u2014 every ai surface, with honest tier + readiness state."
     },
     {
@@ -666,7 +666,7 @@
       "source_file": "backend/hub.py",
       "source_location": "L236",
       "id": "backend_hub_rationale_236",
-      "community": 7,
+      "community": 9,
       "norm_label": "unified send. routes by provider id; surfaces real model + latency headers."
     },
     {
@@ -720,7 +720,7 @@
       "source_file": "backend/services.py",
       "source_location": "L89",
       "id": "backend_services_imagerequest",
-      "community": 5,
+      "community": 11,
       "norm_label": "imagerequest"
     },
     {
@@ -796,12 +796,183 @@
       "norm_label": "recent generations \u2014 without the heavy base64 payload."
     },
     {
+      "label": "auth_relay.py",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L1",
+      "id": "backend_auth_relay_py",
+      "community": 8,
+      "norm_label": "auth_relay.py"
+    },
+    {
+      "label": "_admin_password()",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L43",
+      "id": "backend_auth_relay_admin_password",
+      "community": 8,
+      "norm_label": "_admin_password()"
+    },
+    {
+      "label": "_session_secret()",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L47",
+      "id": "backend_auth_relay_session_secret",
+      "community": 8,
+      "norm_label": "_session_secret()"
+    },
+    {
+      "label": "_sign()",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L51",
+      "id": "backend_auth_relay_sign",
+      "community": 8,
+      "norm_label": "_sign()"
+    },
+    {
+      "label": "_mint_token()",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L56",
+      "id": "backend_auth_relay_mint_token",
+      "community": 8,
+      "norm_label": "_mint_token()"
+    },
+    {
+      "label": "_verify_token()",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L62",
+      "id": "backend_auth_relay_verify_token",
+      "community": 8,
+      "norm_label": "_verify_token()"
+    },
+    {
+      "label": "LoginRequest",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L79",
+      "id": "backend_auth_relay_loginrequest",
+      "community": 1,
+      "norm_label": "loginrequest"
+    },
+    {
+      "label": "auth_status()",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L84",
+      "id": "backend_auth_relay_auth_status",
+      "community": 8,
+      "norm_label": "auth_status()"
+    },
+    {
+      "label": "auth_login()",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L97",
+      "id": "backend_auth_relay_auth_login",
+      "community": 8,
+      "norm_label": "auth_login()"
+    },
+    {
+      "label": "auth_logout()",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L118",
+      "id": "backend_auth_relay_auth_logout",
+      "community": 8,
+      "norm_label": "auth_logout()"
+    },
+    {
+      "label": "require_admin()",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L123",
+      "id": "backend_auth_relay_require_admin",
+      "community": 8,
+      "norm_label": "require_admin()"
+    },
+    {
+      "label": "SabretoothExecRequest",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L153",
+      "id": "backend_auth_relay_sabretoothexecrequest",
+      "community": 8,
+      "norm_label": "sabretoothexecrequest"
+    },
+    {
+      "label": "sabretooth_status()",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L158",
+      "id": "backend_auth_relay_sabretooth_status",
+      "community": 8,
+      "norm_label": "sabretooth_status()"
+    },
+    {
+      "label": "sabretooth_exec()",
+      "file_type": "code",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L194",
+      "id": "backend_auth_relay_sabretooth_exec",
+      "community": 8,
+      "norm_label": "sabretooth_exec()"
+    },
+    {
+      "label": "Admin sign-in + Sabretooth dev-node SSH relay.  Sign-in: per directive (\"admin d",
+      "file_type": "rationale",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L1",
+      "id": "backend_auth_relay_rationale_1",
+      "community": 8,
+      "norm_label": "admin sign-in + sabretooth dev-node ssh relay.  sign-in: per directive (\"admin d"
+    },
+    {
+      "label": "Honest readout: is admin auth configured at all? Is THIS session valid?",
+      "file_type": "rationale",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L85",
+      "id": "backend_auth_relay_rationale_85",
+      "community": 8,
+      "norm_label": "honest readout: is admin auth configured at all? is this session valid?"
+    },
+    {
+      "label": "Dependency-style guard \u2014 raises 401/503 if not signed in.     Call inside any ha",
+      "file_type": "rationale",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L124",
+      "id": "backend_auth_relay_rationale_124",
+      "community": 8,
+      "norm_label": "dependency-style guard \u2014 raises 401/503 if not signed in.     call inside any ha"
+    },
+    {
+      "label": "Connectivity readout BEFORE attempting any execution.     Returns: env config, r",
+      "file_type": "rationale",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L159",
+      "id": "backend_auth_relay_rationale_159",
+      "community": 8,
+      "norm_label": "connectivity readout before attempting any execution.     returns: env config, r"
+    },
+    {
+      "label": "Run one whitelisted command on Sabretooth and stream output back.",
+      "file_type": "rationale",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L195",
+      "id": "backend_auth_relay_rationale_195",
+      "community": 8,
+      "norm_label": "run one whitelisted command on sabretooth and stream output back."
+    },
+    {
       "label": "ledger.py",
       "file_type": "code",
       "source_file": "backend/ledger.py",
       "source_location": "L1",
       "id": "backend_ledger_py",
-      "community": 12,
+      "community": 13,
       "norm_label": "ledger.py"
     },
     {
@@ -810,7 +981,7 @@
       "source_file": "backend/ledger.py",
       "source_location": "L47",
       "id": "backend_ledger_now",
-      "community": 12,
+      "community": 13,
       "norm_label": "_now()"
     },
     {
@@ -819,7 +990,7 @@
       "source_file": "backend/ledger.py",
       "source_location": "L51",
       "id": "backend_ledger_new_id",
-      "community": 12,
+      "community": 13,
       "norm_label": "_new_id()"
     },
     {
@@ -828,7 +999,7 @@
       "source_file": "backend/ledger.py",
       "source_location": "L55",
       "id": "backend_ledger_contributioncreate",
-      "community": 12,
+      "community": 13,
       "norm_label": "contributioncreate"
     },
     {
@@ -837,7 +1008,7 @@
       "source_file": "backend/ledger.py",
       "source_location": "L67",
       "id": "backend_ledger_contribute",
-      "community": 12,
+      "community": 13,
       "norm_label": "contribute()"
     },
     {
@@ -846,7 +1017,7 @@
       "source_file": "backend/ledger.py",
       "source_location": "L85",
       "id": "backend_ledger_list_contributions",
-      "community": 12,
+      "community": 13,
       "norm_label": "list_contributions()"
     },
     {
@@ -855,7 +1026,7 @@
       "source_file": "backend/ledger.py",
       "source_location": "L94",
       "id": "backend_ledger_stats",
-      "community": 12,
+      "community": 13,
       "norm_label": "stats()"
     },
     {
@@ -864,7 +1035,7 @@
       "source_file": "backend/ledger.py",
       "source_location": "L127",
       "id": "backend_ledger_webhookpayload",
-      "community": 12,
+      "community": 13,
       "norm_label": "webhookpayload"
     },
     {
@@ -873,16 +1044,16 @@
       "source_file": "backend/ledger.py",
       "source_location": "L136",
       "id": "backend_ledger_webhook",
-      "community": 12,
+      "community": 13,
       "norm_label": "webhook()"
     },
     {
       "label": "delete_entry()",
       "file_type": "code",
       "source_file": "backend/ledger.py",
-      "source_location": "L172",
+      "source_location": "L169",
       "id": "backend_ledger_delete_entry",
-      "community": 12,
+      "community": 13,
       "norm_label": "delete_entry()"
     },
     {
@@ -891,7 +1062,7 @@
       "source_file": "backend/ledger.py",
       "source_location": "L1",
       "id": "backend_ledger_rationale_1",
-      "community": 12,
+      "community": 13,
       "norm_label": "mission ledger \u2014 every dollar committed to the kids fund, tracked.  replaces the"
     },
     {
@@ -900,17 +1071,17 @@
       "source_file": "backend/ledger.py",
       "source_location": "L95",
       "id": "backend_ledger_rationale_95",
-      "community": 12,
+      "community": 13,
       "norm_label": "aggregate stats \u2014 drives the mission ribbon."
     },
     {
-      "label": "Permissive intake. Square (Location LY5GN09F5AN83) is the only live     payment",
+      "label": "Permissive intake. Payment surface diversified per latest directive:     Square",
       "file_type": "rationale",
       "source_file": "backend/ledger.py",
       "source_location": "L137",
       "id": "backend_ledger_rationale_137",
-      "community": 12,
-      "norm_label": "permissive intake. square (location ly5gn09f5an83) is the only live     payment"
+      "community": 13,
+      "norm_label": "permissive intake. payment surface diversified per latest directive:     square"
     },
     {
       "label": "graph.py",
@@ -918,7 +1089,7 @@
       "source_file": "backend/graph.py",
       "source_location": "L1",
       "id": "backend_graph_py",
-      "community": 6,
+      "community": 5,
       "norm_label": "graph.py"
     },
     {
@@ -927,7 +1098,7 @@
       "source_file": "backend/graph.py",
       "source_location": "L38",
       "id": "backend_graph_resolve_graphify",
-      "community": 6,
+      "community": 5,
       "norm_label": "_resolve_graphify()"
     },
     {
@@ -936,7 +1107,7 @@
       "source_file": "backend/graph.py",
       "source_location": "L58",
       "id": "backend_graph_summarize",
-      "community": 6,
+      "community": 5,
       "norm_label": "_summarize()"
     },
     {
@@ -945,7 +1116,7 @@
       "source_file": "backend/graph.py",
       "source_location": "L85",
       "id": "backend_graph_graphify_status",
-      "community": 6,
+      "community": 5,
       "norm_label": "graphify_status()"
     },
     {
@@ -954,7 +1125,7 @@
       "source_file": "backend/graph.py",
       "source_location": "L134",
       "id": "backend_graph_graphify_regraph",
-      "community": 6,
+      "community": 5,
       "norm_label": "graphify_regraph()"
     },
     {
@@ -963,16 +1134,16 @@
       "source_file": "backend/graph.py",
       "source_location": "L183",
       "id": "backend_graph_doctrine",
-      "community": 6,
+      "community": 5,
       "norm_label": "doctrine()"
     },
     {
       "label": "node_identity()",
       "file_type": "code",
       "source_file": "backend/graph.py",
-      "source_location": "L226",
+      "source_location": "L250",
       "id": "backend_graph_node_identity",
-      "community": 6,
+      "community": 5,
       "norm_label": "node_identity()"
     },
     {
@@ -981,7 +1152,7 @@
       "source_file": "backend/graph.py",
       "source_location": "L1",
       "id": "backend_graph_rationale_1",
-      "community": 6,
+      "community": 5,
       "norm_label": "graphify integration + node identity + doctrine snapshot.  graphify \u2014 runs the `"
     },
     {
@@ -990,7 +1161,7 @@
       "source_file": "backend/graph.py",
       "source_location": "L39",
       "id": "backend_graph_rationale_39",
-      "community": 6,
+      "community": 5,
       "norm_label": "find the graphify binary even when supervisor's path is restricted."
     },
     {
@@ -999,7 +1170,7 @@
       "source_file": "backend/graph.py",
       "source_location": "L86",
       "id": "backend_graph_rationale_86",
-      "community": 6,
+      "community": 5,
       "norm_label": "report graph presence, node/edge counts, and whether code is newer than graph."
     },
     {
@@ -1008,25 +1179,25 @@
       "source_file": "backend/graph.py",
       "source_location": "L135",
       "id": "backend_graph_rationale_135",
-      "community": 6,
+      "community": 5,
       "norm_label": "synchronously re-run graphify on the workspace. blocks until done."
     },
     {
-      "label": "Current binding doctrine \u2014 readable by every AI peer.",
+      "label": "Current binding doctrine \u2014 readable by every AI peer. Updated 2026-05-08     per",
       "file_type": "rationale",
       "source_file": "backend/graph.py",
       "source_location": "L184",
       "id": "backend_graph_rationale_184",
-      "community": 6,
-      "norm_label": "current binding doctrine \u2014 readable by every ai peer."
+      "community": 5,
+      "norm_label": "current binding doctrine \u2014 readable by every ai peer. updated 2026-05-08     per"
     },
     {
       "label": "Return this container's identity so peer agents know which host they reached.",
       "file_type": "rationale",
       "source_file": "backend/graph.py",
-      "source_location": "L227",
-      "id": "backend_graph_rationale_227",
-      "community": 6,
+      "source_location": "L251",
+      "id": "backend_graph_rationale_251",
+      "community": 5,
       "norm_label": "return this container's identity so peer agents know which host they reached."
     },
     {
@@ -1404,7 +1575,7 @@
       "source_file": "backend/tests/__init__.py",
       "source_location": "L1",
       "id": "backend_tests_init_py",
-      "community": 26,
+      "community": 36,
       "norm_label": "__init__.py"
     },
     {
@@ -1872,7 +2043,7 @@
       "source_file": "frontend/postcss.config.js",
       "source_location": "L1",
       "id": "frontend_postcss_config_js",
-      "community": 27,
+      "community": 37,
       "norm_label": "postcss.config.js"
     },
     {
@@ -1881,7 +2052,7 @@
       "source_file": "frontend/tailwind.config.js",
       "source_location": "L1",
       "id": "frontend_tailwind_config_js",
-      "community": 28,
+      "community": 38,
       "norm_label": "tailwind.config.js"
     },
     {
@@ -1890,7 +2061,7 @@
       "source_file": "frontend/craco.config.js",
       "source_location": "L1",
       "id": "frontend_craco_config_js",
-      "community": 29,
+      "community": 39,
       "norm_label": "craco.config.js"
     },
     {
@@ -1899,7 +2070,7 @@
       "source_file": "frontend/src/index.js",
       "source_location": "L1",
       "id": "frontend_src_index_js",
-      "community": 30,
+      "community": 40,
       "norm_label": "index.js"
     },
     {
@@ -1908,16 +2079,16 @@
       "source_file": "frontend/src/App.js",
       "source_location": "L1",
       "id": "frontend_src_app_js",
-      "community": 0,
+      "community": 12,
       "norm_label": "app.js"
     },
     {
       "label": "App()",
       "file_type": "code",
       "source_file": "frontend/src/App.js",
-      "source_location": "L21",
+      "source_location": "L23",
       "id": "src_app_app",
-      "community": 0,
+      "community": 12,
       "norm_label": "app()"
     },
     {
@@ -1926,7 +2097,7 @@
       "source_file": "frontend/src/lib/utils.js",
       "source_location": "L1",
       "id": "frontend_src_lib_utils_js",
-      "community": 1,
+      "community": 0,
       "norm_label": "utils.js"
     },
     {
@@ -1935,7 +2106,7 @@
       "source_file": "frontend/src/lib/utils.js",
       "source_location": "L4",
       "id": "lib_utils_cn",
-      "community": 1,
+      "community": 0,
       "norm_label": "cn()"
     },
     {
@@ -1944,16 +2115,16 @@
       "source_file": "frontend/src/components/CommandPalette.js",
       "source_location": "L1",
       "id": "frontend_src_components_commandpalette_js",
-      "community": 0,
+      "community": 30,
       "norm_label": "commandpalette.js"
     },
     {
       "label": "CommandPalette()",
       "file_type": "code",
       "source_file": "frontend/src/components/CommandPalette.js",
-      "source_location": "L24",
+      "source_location": "L25",
       "id": "components_commandpalette_commandpalette",
-      "community": 0,
+      "community": 30,
       "norm_label": "commandpalette()"
     },
     {
@@ -1962,7 +2133,7 @@
       "source_file": "frontend/src/components/RunbookViewer.js",
       "source_location": "L1",
       "id": "frontend_src_components_runbookviewer_js",
-      "community": 9,
+      "community": 7,
       "norm_label": "runbookviewer.js"
     },
     {
@@ -1971,7 +2142,7 @@
       "source_file": "frontend/src/components/RunbookViewer.js",
       "source_location": "L9",
       "id": "components_runbookviewer_runbookviewer",
-      "community": 9,
+      "community": 7,
       "norm_label": "runbookviewer()"
     },
     {
@@ -1980,7 +2151,7 @@
       "source_file": "frontend/src/components/TitleBar.js",
       "source_location": "L1",
       "id": "frontend_src_components_titlebar_js",
-      "community": 0,
+      "community": 12,
       "norm_label": "titlebar.js"
     },
     {
@@ -1989,7 +2160,7 @@
       "source_file": "frontend/src/components/TitleBar.js",
       "source_location": "L3",
       "id": "components_titlebar_titlebar",
-      "community": 0,
+      "community": 12,
       "norm_label": "titlebar()"
     },
     {
@@ -1998,7 +2169,7 @@
       "source_file": "frontend/src/components/PaperclipWorkerPanel.js",
       "source_location": "L1",
       "id": "frontend_src_components_paperclipworkerpanel_js",
-      "community": 9,
+      "community": 7,
       "norm_label": "paperclipworkerpanel.js"
     },
     {
@@ -2007,7 +2178,7 @@
       "source_file": "frontend/src/components/PaperclipWorkerPanel.js",
       "source_location": "L11",
       "id": "components_paperclipworkerpanel_paperclipworkerpanel",
-      "community": 9,
+      "community": 7,
       "norm_label": "paperclipworkerpanel()"
     },
     {
@@ -2016,7 +2187,7 @@
       "source_file": "frontend/src/components/TaskCommander.js",
       "source_location": "L1",
       "id": "frontend_src_components_taskcommander_js",
-      "community": 0,
+      "community": 12,
       "norm_label": "taskcommander.js"
     },
     {
@@ -2025,7 +2196,7 @@
       "source_file": "frontend/src/components/TaskCommander.js",
       "source_location": "L4",
       "id": "components_taskcommander_taskcommander",
-      "community": 0,
+      "community": 12,
       "norm_label": "taskcommander()"
     },
     {
@@ -2034,7 +2205,7 @@
       "source_file": "frontend/src/components/GitPanel.js",
       "source_location": "L1",
       "id": "frontend_src_components_gitpanel_js",
-      "community": 9,
+      "community": 7,
       "norm_label": "gitpanel.js"
     },
     {
@@ -2043,7 +2214,7 @@
       "source_file": "frontend/src/components/GitPanel.js",
       "source_location": "L7",
       "id": "components_gitpanel_gitpanel",
-      "community": 9,
+      "community": 7,
       "norm_label": "gitpanel()"
     },
     {
@@ -2052,7 +2223,7 @@
       "source_file": "frontend/src/components/SystemStatus.js",
       "source_location": "L1",
       "id": "frontend_src_components_systemstatus_js",
-      "community": 9,
+      "community": 7,
       "norm_label": "systemstatus.js"
     },
     {
@@ -2061,7 +2232,7 @@
       "source_file": "frontend/src/components/SystemStatus.js",
       "source_location": "L7",
       "id": "components_systemstatus_systemstatus",
-      "community": 9,
+      "community": 7,
       "norm_label": "systemstatus()"
     },
     {
@@ -2070,7 +2241,7 @@
       "source_file": "frontend/src/components/ShareMissionModal.js",
       "source_location": "L1",
       "id": "frontend_src_components_sharemissionmodal_js",
-      "community": 16,
+      "community": 19,
       "norm_label": "sharemissionmodal.js"
     },
     {
@@ -2079,8 +2250,26 @@
       "source_file": "frontend/src/components/ShareMissionModal.js",
       "source_location": "L8",
       "id": "components_sharemissionmodal_sharemissionmodal",
-      "community": 16,
+      "community": 19,
       "norm_label": "sharemissionmodal()"
+    },
+    {
+      "label": "SignInGate.js",
+      "file_type": "code",
+      "source_file": "frontend/src/components/SignInGate.js",
+      "source_location": "L1",
+      "id": "frontend_src_components_signingate_js",
+      "community": 12,
+      "norm_label": "signingate.js"
+    },
+    {
+      "label": "SignInGate()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/SignInGate.js",
+      "source_location": "L17",
+      "id": "components_signingate_signingate",
+      "community": 12,
+      "norm_label": "signingate()"
     },
     {
       "label": "LaunchPanel.js",
@@ -2088,7 +2277,7 @@
       "source_file": "frontend/src/components/LaunchPanel.js",
       "source_location": "L1",
       "id": "frontend_src_components_launchpanel_js",
-      "community": 9,
+      "community": 7,
       "norm_label": "launchpanel.js"
     },
     {
@@ -2097,7 +2286,7 @@
       "source_file": "frontend/src/components/LaunchPanel.js",
       "source_location": "L13",
       "id": "components_launchpanel_launchpanel",
-      "community": 9,
+      "community": 7,
       "norm_label": "launchpanel()"
     },
     {
@@ -2106,7 +2295,7 @@
       "source_file": "frontend/src/components/AgeGate.js",
       "source_location": "L1",
       "id": "frontend_src_components_agegate_js",
-      "community": 0,
+      "community": 12,
       "norm_label": "agegate.js"
     },
     {
@@ -2115,7 +2304,7 @@
       "source_file": "frontend/src/components/AgeGate.js",
       "source_location": "L4",
       "id": "components_agegate_agegate",
-      "community": 0,
+      "community": 12,
       "norm_label": "agegate()"
     },
     {
@@ -2124,7 +2313,7 @@
       "source_file": "frontend/src/components/HermesRouterPanel.js",
       "source_location": "L1",
       "id": "frontend_src_components_hermesrouterpanel_js",
-      "community": 9,
+      "community": 7,
       "norm_label": "hermesrouterpanel.js"
     },
     {
@@ -2133,7 +2322,7 @@
       "source_file": "frontend/src/components/HermesRouterPanel.js",
       "source_location": "L21",
       "id": "components_hermesrouterpanel_hermesrouterpanel",
-      "community": 9,
+      "community": 7,
       "norm_label": "hermesrouterpanel()"
     },
     {
@@ -2142,7 +2331,7 @@
       "source_file": "frontend/src/components/DAOMonitor.js",
       "source_location": "L1",
       "id": "frontend_src_components_daomonitor_js",
-      "community": 0,
+      "community": 14,
       "norm_label": "daomonitor.js"
     },
     {
@@ -2151,7 +2340,7 @@
       "source_file": "frontend/src/components/DAOMonitor.js",
       "source_location": "L11",
       "id": "components_daomonitor_daomonitor",
-      "community": 0,
+      "community": 14,
       "norm_label": "daomonitor()"
     },
     {
@@ -2160,7 +2349,7 @@
       "source_file": "frontend/src/components/SettingsPanel.js",
       "source_location": "L1",
       "id": "frontend_src_components_settingspanel_js",
-      "community": 0,
+      "community": 21,
       "norm_label": "settingspanel.js"
     },
     {
@@ -2169,7 +2358,7 @@
       "source_file": "frontend/src/components/SettingsPanel.js",
       "source_location": "L7",
       "id": "components_settingspanel_settingspanel",
-      "community": 0,
+      "community": 21,
       "norm_label": "settingspanel()"
     },
     {
@@ -2178,7 +2367,7 @@
       "source_file": "frontend/src/components/SettingsPanel.js",
       "source_location": "L117",
       "id": "components_settingspanel_card",
-      "community": 0,
+      "community": 21,
       "norm_label": "card()"
     },
     {
@@ -2187,7 +2376,7 @@
       "source_file": "frontend/src/components/SettingsPanel.js",
       "source_location": "L129",
       "id": "components_settingspanel_row",
-      "community": 0,
+      "community": 21,
       "norm_label": "row()"
     },
     {
@@ -2196,7 +2385,7 @@
       "source_file": "frontend/src/components/SettingsPanel.js",
       "source_location": "L138",
       "id": "components_settingspanel_broadcastrow",
-      "community": 0,
+      "community": 21,
       "norm_label": "broadcastrow()"
     },
     {
@@ -2205,7 +2394,7 @@
       "source_file": "frontend/src/components/MissionRibbon.js",
       "source_location": "L1",
       "id": "frontend_src_components_missionribbon_js",
-      "community": 16,
+      "community": 19,
       "norm_label": "missionribbon.js"
     },
     {
@@ -2214,7 +2403,7 @@
       "source_file": "frontend/src/components/MissionRibbon.js",
       "source_location": "L12",
       "id": "components_missionribbon_missionribbon",
-      "community": 16,
+      "community": 19,
       "norm_label": "missionribbon()"
     },
     {
@@ -2223,7 +2412,7 @@
       "source_file": "frontend/src/components/MissionRibbon.js",
       "source_location": "L81",
       "id": "components_missionribbon_stat",
-      "community": 16,
+      "community": 19,
       "norm_label": "stat()"
     },
     {
@@ -2232,7 +2421,7 @@
       "source_file": "frontend/src/components/MissionRibbon.js",
       "source_location": "L91",
       "id": "components_missionribbon_formatusd",
-      "community": 16,
+      "community": 19,
       "norm_label": "formatusd()"
     },
     {
@@ -2241,7 +2430,7 @@
       "source_file": "frontend/src/components/FloatingGuide.js",
       "source_location": "L1",
       "id": "frontend_src_components_floatingguide_js",
-      "community": 0,
+      "community": 32,
       "norm_label": "floatingguide.js"
     },
     {
@@ -2250,7 +2439,7 @@
       "source_file": "frontend/src/components/FloatingGuide.js",
       "source_location": "L12",
       "id": "components_floatingguide_floatingguide",
-      "community": 0,
+      "community": 32,
       "norm_label": "floatingguide()"
     },
     {
@@ -2259,16 +2448,16 @@
       "source_file": "frontend/src/components/Sidebar.js",
       "source_location": "L1",
       "id": "frontend_src_components_sidebar_js",
-      "community": 0,
+      "community": 14,
       "norm_label": "sidebar.js"
     },
     {
       "label": "Sidebar()",
       "file_type": "code",
       "source_file": "frontend/src/components/Sidebar.js",
-      "source_location": "L19",
+      "source_location": "L20",
       "id": "components_sidebar_sidebar",
-      "community": 0,
+      "community": 14,
       "norm_label": "sidebar()"
     },
     {
@@ -2277,7 +2466,7 @@
       "source_file": "frontend/src/components/ui/skeleton.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_skeleton_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "skeleton.jsx"
     },
     {
@@ -2286,7 +2475,7 @@
       "source_file": "frontend/src/components/ui/skeleton.jsx",
       "source_location": "L3",
       "id": "ui_skeleton_skeleton",
-      "community": 1,
+      "community": 0,
       "norm_label": "skeleton()"
     },
     {
@@ -2295,7 +2484,7 @@
       "source_file": "frontend/src/components/ui/collapsible.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_collapsible_jsx",
-      "community": 31,
+      "community": 41,
       "norm_label": "collapsible.jsx"
     },
     {
@@ -2304,7 +2493,7 @@
       "source_file": "frontend/src/components/ui/hover-card.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_hover_card_jsx",
-      "community": 32,
+      "community": 42,
       "norm_label": "hover-card.jsx"
     },
     {
@@ -2313,7 +2502,7 @@
       "source_file": "frontend/src/components/ui/navigation-menu.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_navigation_menu_jsx",
-      "community": 33,
+      "community": 43,
       "norm_label": "navigation-menu.jsx"
     },
     {
@@ -2322,7 +2511,7 @@
       "source_file": "frontend/src/components/ui/toggle-group.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_toggle_group_jsx",
-      "community": 34,
+      "community": 44,
       "norm_label": "toggle-group.jsx"
     },
     {
@@ -2331,7 +2520,7 @@
       "source_file": "frontend/src/components/ui/calendar.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_calendar_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "calendar.jsx"
     },
     {
@@ -2340,7 +2529,7 @@
       "source_file": "frontend/src/components/ui/calendar.jsx",
       "source_location": "L8",
       "id": "ui_calendar_calendar",
-      "community": 1,
+      "community": 0,
       "norm_label": "calendar()"
     },
     {
@@ -2349,7 +2538,7 @@
       "source_file": "frontend/src/components/ui/command.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_command_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "command.jsx"
     },
     {
@@ -2358,7 +2547,7 @@
       "source_file": "frontend/src/components/ui/command.jsx",
       "source_location": "L19",
       "id": "ui_command_commanddialog",
-      "community": 1,
+      "community": 0,
       "norm_label": "commanddialog()"
     },
     {
@@ -2367,7 +2556,7 @@
       "source_file": "frontend/src/components/ui/command.jsx",
       "source_location": "L94",
       "id": "ui_command_commandshortcut",
-      "community": 1,
+      "community": 0,
       "norm_label": "commandshortcut()"
     },
     {
@@ -2376,7 +2565,7 @@
       "source_file": "frontend/src/components/ui/button.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_button_jsx",
-      "community": 35,
+      "community": 45,
       "norm_label": "button.jsx"
     },
     {
@@ -2385,7 +2574,7 @@
       "source_file": "frontend/src/components/ui/tooltip.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_tooltip_jsx",
-      "community": 36,
+      "community": 46,
       "norm_label": "tooltip.jsx"
     },
     {
@@ -2394,7 +2583,7 @@
       "source_file": "frontend/src/components/ui/badge.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_badge_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "badge.jsx"
     },
     {
@@ -2403,7 +2592,7 @@
       "source_file": "frontend/src/components/ui/badge.jsx",
       "source_location": "L26",
       "id": "ui_badge_badge",
-      "community": 1,
+      "community": 0,
       "norm_label": "badge()"
     },
     {
@@ -2412,7 +2601,7 @@
       "source_file": "frontend/src/components/ui/checkbox.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_checkbox_jsx",
-      "community": 37,
+      "community": 47,
       "norm_label": "checkbox.jsx"
     },
     {
@@ -2421,7 +2610,7 @@
       "source_file": "frontend/src/components/ui/resizable.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_resizable_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "resizable.jsx"
     },
     {
@@ -2430,7 +2619,7 @@
       "source_file": "frontend/src/components/ui/resizable.jsx",
       "source_location": "L6",
       "id": "ui_resizable_resizablepanelgroup",
-      "community": 1,
+      "community": 0,
       "norm_label": "resizablepanelgroup()"
     },
     {
@@ -2439,7 +2628,7 @@
       "source_file": "frontend/src/components/ui/resizable.jsx",
       "source_location": "L20",
       "id": "ui_resizable_resizablehandle",
-      "community": 1,
+      "community": 0,
       "norm_label": "resizablehandle()"
     },
     {
@@ -2448,7 +2637,7 @@
       "source_file": "frontend/src/components/ui/avatar.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_avatar_jsx",
-      "community": 38,
+      "community": 48,
       "norm_label": "avatar.jsx"
     },
     {
@@ -2457,7 +2646,7 @@
       "source_file": "frontend/src/components/ui/alert-dialog.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_alert_dialog_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "alert-dialog.jsx"
     },
     {
@@ -2466,7 +2655,7 @@
       "source_file": "frontend/src/components/ui/alert-dialog.jsx",
       "source_location": "L38",
       "id": "ui_alert_dialog_alertdialogheader",
-      "community": 1,
+      "community": 0,
       "norm_label": "alertdialogheader()"
     },
     {
@@ -2475,7 +2664,7 @@
       "source_file": "frontend/src/components/ui/alert-dialog.jsx",
       "source_location": "L48",
       "id": "ui_alert_dialog_alertdialogfooter",
-      "community": 1,
+      "community": 0,
       "norm_label": "alertdialogfooter()"
     },
     {
@@ -2484,7 +2673,7 @@
       "source_file": "frontend/src/components/ui/toast.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_toast_jsx",
-      "community": 39,
+      "community": 49,
       "norm_label": "toast.jsx"
     },
     {
@@ -2493,7 +2682,7 @@
       "source_file": "frontend/src/components/ui/aspect-ratio.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_aspect_ratio_jsx",
-      "community": 40,
+      "community": 50,
       "norm_label": "aspect-ratio.jsx"
     },
     {
@@ -2502,7 +2691,7 @@
       "source_file": "frontend/src/components/ui/slider.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_slider_jsx",
-      "community": 41,
+      "community": 51,
       "norm_label": "slider.jsx"
     },
     {
@@ -2511,7 +2700,7 @@
       "source_file": "frontend/src/components/ui/label.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_label_jsx",
-      "community": 42,
+      "community": 52,
       "norm_label": "label.jsx"
     },
     {
@@ -2520,7 +2709,7 @@
       "source_file": "frontend/src/components/ui/accordion.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_accordion_jsx",
-      "community": 43,
+      "community": 53,
       "norm_label": "accordion.jsx"
     },
     {
@@ -2529,7 +2718,7 @@
       "source_file": "frontend/src/components/ui/toggle.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_toggle_jsx",
-      "community": 44,
+      "community": 54,
       "norm_label": "toggle.jsx"
     },
     {
@@ -2538,7 +2727,7 @@
       "source_file": "frontend/src/components/ui/breadcrumb.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_breadcrumb_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "breadcrumb.jsx"
     },
     {
@@ -2547,7 +2736,7 @@
       "source_file": "frontend/src/components/ui/breadcrumb.jsx",
       "source_location": "L54",
       "id": "ui_breadcrumb_breadcrumbseparator",
-      "community": 1,
+      "community": 0,
       "norm_label": "breadcrumbseparator()"
     },
     {
@@ -2556,7 +2745,7 @@
       "source_file": "frontend/src/components/ui/breadcrumb.jsx",
       "source_location": "L69",
       "id": "ui_breadcrumb_breadcrumbellipsis",
-      "community": 1,
+      "community": 0,
       "norm_label": "breadcrumbellipsis()"
     },
     {
@@ -2565,7 +2754,7 @@
       "source_file": "frontend/src/components/ui/input.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_input_jsx",
-      "community": 45,
+      "community": 55,
       "norm_label": "input.jsx"
     },
     {
@@ -2574,7 +2763,7 @@
       "source_file": "frontend/src/components/ui/toaster.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_toaster_jsx",
-      "community": 13,
+      "community": 15,
       "norm_label": "toaster.jsx"
     },
     {
@@ -2583,7 +2772,7 @@
       "source_file": "frontend/src/components/ui/toaster.jsx",
       "source_location": "L11",
       "id": "ui_toaster_toaster",
-      "community": 13,
+      "community": 15,
       "norm_label": "toaster()"
     },
     {
@@ -2592,7 +2781,7 @@
       "source_file": "frontend/src/components/ui/switch.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_switch_jsx",
-      "community": 46,
+      "community": 56,
       "norm_label": "switch.jsx"
     },
     {
@@ -2601,7 +2790,7 @@
       "source_file": "frontend/src/components/ui/context-menu.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_context_menu_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "context-menu.jsx"
     },
     {
@@ -2610,7 +2799,7 @@
       "source_file": "frontend/src/components/ui/context-menu.jsx",
       "source_location": "L128",
       "id": "ui_context_menu_contextmenushortcut",
-      "community": 1,
+      "community": 0,
       "norm_label": "contextmenushortcut()"
     },
     {
@@ -2619,7 +2808,7 @@
       "source_file": "frontend/src/components/ui/select.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_select_jsx",
-      "community": 47,
+      "community": 57,
       "norm_label": "select.jsx"
     },
     {
@@ -2628,7 +2817,7 @@
       "source_file": "frontend/src/components/ui/sheet.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_sheet_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "sheet.jsx"
     },
     {
@@ -2637,7 +2826,7 @@
       "source_file": "frontend/src/components/ui/sheet.jsx",
       "source_location": "L61",
       "id": "ui_sheet_sheetheader",
-      "community": 1,
+      "community": 0,
       "norm_label": "sheetheader()"
     },
     {
@@ -2646,7 +2835,7 @@
       "source_file": "frontend/src/components/ui/sheet.jsx",
       "source_location": "L71",
       "id": "ui_sheet_sheetfooter",
-      "community": 1,
+      "community": 0,
       "norm_label": "sheetfooter()"
     },
     {
@@ -2655,7 +2844,7 @@
       "source_file": "frontend/src/components/ui/carousel.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_carousel_jsx",
-      "community": 23,
+      "community": 33,
       "norm_label": "carousel.jsx"
     },
     {
@@ -2664,7 +2853,7 @@
       "source_file": "frontend/src/components/ui/carousel.jsx",
       "source_location": "L10",
       "id": "ui_carousel_usecarousel",
-      "community": 23,
+      "community": 33,
       "norm_label": "usecarousel()"
     },
     {
@@ -2673,7 +2862,7 @@
       "source_file": "frontend/src/components/ui/input-otp.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_input_otp_jsx",
-      "community": 48,
+      "community": 58,
       "norm_label": "input-otp.jsx"
     },
     {
@@ -2682,7 +2871,7 @@
       "source_file": "frontend/src/components/ui/sonner.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_sonner_jsx",
-      "community": 24,
+      "community": 34,
       "norm_label": "sonner.jsx"
     },
     {
@@ -2691,7 +2880,7 @@
       "source_file": "frontend/src/components/ui/sonner.jsx",
       "source_location": "L4",
       "id": "ui_sonner_toaster",
-      "community": 24,
+      "community": 34,
       "norm_label": "toaster()"
     },
     {
@@ -2700,7 +2889,7 @@
       "source_file": "frontend/src/components/ui/alert.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_alert_jsx",
-      "community": 49,
+      "community": 59,
       "norm_label": "alert.jsx"
     },
     {
@@ -2709,7 +2898,7 @@
       "source_file": "frontend/src/components/ui/tabs.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_tabs_jsx",
-      "community": 50,
+      "community": 60,
       "norm_label": "tabs.jsx"
     },
     {
@@ -2718,7 +2907,7 @@
       "source_file": "frontend/src/components/ui/form.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_form_jsx",
-      "community": 22,
+      "community": 29,
       "norm_label": "form.jsx"
     },
     {
@@ -2727,7 +2916,7 @@
       "source_file": "frontend/src/components/ui/form.jsx",
       "source_location": "L12",
       "id": "ui_form_formfield",
-      "community": 22,
+      "community": 29,
       "norm_label": "formfield()"
     },
     {
@@ -2736,7 +2925,7 @@
       "source_file": "frontend/src/components/ui/form.jsx",
       "source_location": "L24",
       "id": "ui_form_useformfield",
-      "community": 22,
+      "community": 29,
       "norm_label": "useformfield()"
     },
     {
@@ -2745,7 +2934,7 @@
       "source_file": "frontend/src/components/ui/radio-group.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_radio_group_jsx",
-      "community": 51,
+      "community": 61,
       "norm_label": "radio-group.jsx"
     },
     {
@@ -2754,7 +2943,7 @@
       "source_file": "frontend/src/components/ui/textarea.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_textarea_jsx",
-      "community": 52,
+      "community": 62,
       "norm_label": "textarea.jsx"
     },
     {
@@ -2763,7 +2952,7 @@
       "source_file": "frontend/src/components/ui/menubar.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_menubar_jsx",
-      "community": 14,
+      "community": 16,
       "norm_label": "menubar.jsx"
     },
     {
@@ -2772,7 +2961,7 @@
       "source_file": "frontend/src/components/ui/menubar.jsx",
       "source_location": "L7",
       "id": "ui_menubar_menubarmenu",
-      "community": 14,
+      "community": 16,
       "norm_label": "menubarmenu()"
     },
     {
@@ -2781,7 +2970,7 @@
       "source_file": "frontend/src/components/ui/menubar.jsx",
       "source_location": "L13",
       "id": "ui_menubar_menubargroup",
-      "community": 14,
+      "community": 16,
       "norm_label": "menubargroup()"
     },
     {
@@ -2790,7 +2979,7 @@
       "source_file": "frontend/src/components/ui/menubar.jsx",
       "source_location": "L19",
       "id": "ui_menubar_menubarportal",
-      "community": 14,
+      "community": 16,
       "norm_label": "menubarportal()"
     },
     {
@@ -2799,7 +2988,7 @@
       "source_file": "frontend/src/components/ui/menubar.jsx",
       "source_location": "L25",
       "id": "ui_menubar_menubarradiogroup",
-      "community": 14,
+      "community": 16,
       "norm_label": "menubarradiogroup()"
     },
     {
@@ -2808,7 +2997,7 @@
       "source_file": "frontend/src/components/ui/menubar.jsx",
       "source_location": "L31",
       "id": "ui_menubar_menubarsub",
-      "community": 14,
+      "community": 16,
       "norm_label": "menubarsub()"
     },
     {
@@ -2817,7 +3006,7 @@
       "source_file": "frontend/src/components/ui/menubar.jsx",
       "source_location": "L169",
       "id": "ui_menubar_menubarshortcut",
-      "community": 14,
+      "community": 16,
       "norm_label": "menubarshortcut()"
     },
     {
@@ -2826,7 +3015,7 @@
       "source_file": "frontend/src/components/ui/popover.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_popover_jsx",
-      "community": 53,
+      "community": 63,
       "norm_label": "popover.jsx"
     },
     {
@@ -2835,7 +3024,7 @@
       "source_file": "frontend/src/components/ui/dialog.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_dialog_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "dialog.jsx"
     },
     {
@@ -2844,7 +3033,7 @@
       "source_file": "frontend/src/components/ui/dialog.jsx",
       "source_location": "L47",
       "id": "ui_dialog_dialogheader",
-      "community": 1,
+      "community": 0,
       "norm_label": "dialogheader()"
     },
     {
@@ -2853,7 +3042,7 @@
       "source_file": "frontend/src/components/ui/dialog.jsx",
       "source_location": "L57",
       "id": "ui_dialog_dialogfooter",
-      "community": 1,
+      "community": 0,
       "norm_label": "dialogfooter()"
     },
     {
@@ -2862,7 +3051,7 @@
       "source_file": "frontend/src/components/ui/progress.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_progress_jsx",
-      "community": 54,
+      "community": 64,
       "norm_label": "progress.jsx"
     },
     {
@@ -2871,7 +3060,7 @@
       "source_file": "frontend/src/components/ui/dropdown-menu.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_dropdown_menu_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "dropdown-menu.jsx"
     },
     {
@@ -2880,7 +3069,7 @@
       "source_file": "frontend/src/components/ui/dropdown-menu.jsx",
       "source_location": "L128",
       "id": "ui_dropdown_menu_dropdownmenushortcut",
-      "community": 1,
+      "community": 0,
       "norm_label": "dropdownmenushortcut()"
     },
     {
@@ -2889,7 +3078,7 @@
       "source_file": "frontend/src/components/ui/scroll-area.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_scroll_area_jsx",
-      "community": 55,
+      "community": 65,
       "norm_label": "scroll-area.jsx"
     },
     {
@@ -2898,7 +3087,7 @@
       "source_file": "frontend/src/components/ui/card.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_card_jsx",
-      "community": 56,
+      "community": 66,
       "norm_label": "card.jsx"
     },
     {
@@ -2907,7 +3096,7 @@
       "source_file": "frontend/src/components/ui/table.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_table_jsx",
-      "community": 57,
+      "community": 67,
       "norm_label": "table.jsx"
     },
     {
@@ -2916,7 +3105,7 @@
       "source_file": "frontend/src/components/ui/separator.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_separator_jsx",
-      "community": 58,
+      "community": 68,
       "norm_label": "separator.jsx"
     },
     {
@@ -2925,7 +3114,7 @@
       "source_file": "frontend/src/components/ui/drawer.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_drawer_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "drawer.jsx"
     },
     {
@@ -2934,7 +3123,7 @@
       "source_file": "frontend/src/components/ui/drawer.jsx",
       "source_location": "L6",
       "id": "ui_drawer_drawer",
-      "community": 1,
+      "community": 0,
       "norm_label": "drawer()"
     },
     {
@@ -2943,7 +3132,7 @@
       "source_file": "frontend/src/components/ui/drawer.jsx",
       "source_location": "L45",
       "id": "ui_drawer_drawerheader",
-      "community": 1,
+      "community": 0,
       "norm_label": "drawerheader()"
     },
     {
@@ -2952,7 +3141,7 @@
       "source_file": "frontend/src/components/ui/drawer.jsx",
       "source_location": "L55",
       "id": "ui_drawer_drawerfooter",
-      "community": 1,
+      "community": 0,
       "norm_label": "drawerfooter()"
     },
     {
@@ -2961,7 +3150,7 @@
       "source_file": "frontend/src/components/ui/pagination.jsx",
       "source_location": "L1",
       "id": "frontend_src_components_ui_pagination_jsx",
-      "community": 1,
+      "community": 0,
       "norm_label": "pagination.jsx"
     },
     {
@@ -2970,7 +3159,7 @@
       "source_file": "frontend/src/components/ui/pagination.jsx",
       "source_location": "L7",
       "id": "ui_pagination_pagination",
-      "community": 1,
+      "community": 0,
       "norm_label": "pagination()"
     },
     {
@@ -2979,7 +3168,7 @@
       "source_file": "frontend/src/components/ui/pagination.jsx",
       "source_location": "L32",
       "id": "ui_pagination_paginationlink",
-      "community": 1,
+      "community": 0,
       "norm_label": "paginationlink()"
     },
     {
@@ -2988,7 +3177,7 @@
       "source_file": "frontend/src/components/ui/pagination.jsx",
       "source_location": "L48",
       "id": "ui_pagination_paginationprevious",
-      "community": 1,
+      "community": 0,
       "norm_label": "paginationprevious()"
     },
     {
@@ -2997,7 +3186,7 @@
       "source_file": "frontend/src/components/ui/pagination.jsx",
       "source_location": "L63",
       "id": "ui_pagination_paginationnext",
-      "community": 1,
+      "community": 0,
       "norm_label": "paginationnext()"
     },
     {
@@ -3006,7 +3195,7 @@
       "source_file": "frontend/src/components/ui/pagination.jsx",
       "source_location": "L78",
       "id": "ui_pagination_paginationellipsis",
-      "community": 1,
+      "community": 0,
       "norm_label": "paginationellipsis()"
     },
     {
@@ -3015,7 +3204,7 @@
       "source_file": "frontend/src/contexts/ChatContext.js",
       "source_location": "L1",
       "id": "frontend_src_contexts_chatcontext_js",
-      "community": 0,
+      "community": 14,
       "norm_label": "chatcontext.js"
     },
     {
@@ -3024,7 +3213,7 @@
       "source_file": "frontend/src/contexts/ChatContext.js",
       "source_location": "L14",
       "id": "contexts_chatcontext_chatprovider",
-      "community": 0,
+      "community": 14,
       "norm_label": "chatprovider()"
     },
     {
@@ -3033,7 +3222,7 @@
       "source_file": "frontend/src/contexts/ChatContext.js",
       "source_location": "L99",
       "id": "contexts_chatcontext_usechat",
-      "community": 0,
+      "community": 14,
       "norm_label": "usechat()"
     },
     {
@@ -3042,7 +3231,7 @@
       "source_file": "frontend/src/hooks/use-toast.js",
       "source_location": "L1",
       "id": "frontend_src_hooks_use_toast_js",
-      "community": 13,
+      "community": 15,
       "norm_label": "use-toast.js"
     },
     {
@@ -3051,7 +3240,7 @@
       "source_file": "frontend/src/hooks/use-toast.js",
       "source_location": "L17",
       "id": "hooks_use_toast_genid",
-      "community": 13,
+      "community": 15,
       "norm_label": "genid()"
     },
     {
@@ -3060,7 +3249,7 @@
       "source_file": "frontend/src/hooks/use-toast.js",
       "source_location": "L24",
       "id": "hooks_use_toast_addtoremovequeue",
-      "community": 13,
+      "community": 15,
       "norm_label": "addtoremovequeue()"
     },
     {
@@ -3069,7 +3258,7 @@
       "source_file": "frontend/src/hooks/use-toast.js",
       "source_location": "L40",
       "id": "hooks_use_toast_reducer",
-      "community": 13,
+      "community": 15,
       "norm_label": "reducer()"
     },
     {
@@ -3078,7 +3267,7 @@
       "source_file": "frontend/src/hooks/use-toast.js",
       "source_location": "L97",
       "id": "hooks_use_toast_dispatch",
-      "community": 13,
+      "community": 15,
       "norm_label": "dispatch()"
     },
     {
@@ -3087,7 +3276,7 @@
       "source_file": "frontend/src/hooks/use-toast.js",
       "source_location": "L104",
       "id": "hooks_use_toast_toast",
-      "community": 13,
+      "community": 15,
       "norm_label": "toast()"
     },
     {
@@ -3096,7 +3285,7 @@
       "source_file": "frontend/src/hooks/use-toast.js",
       "source_location": "L135",
       "id": "hooks_use_toast_usetoast",
-      "community": 13,
+      "community": 15,
       "norm_label": "usetoast()"
     },
     {
@@ -3105,7 +3294,7 @@
       "source_file": "frontend/src/modes/ResearchMode.js",
       "source_location": "L1",
       "id": "frontend_src_modes_researchmode_js",
-      "community": 0,
+      "community": 31,
       "norm_label": "researchmode.js"
     },
     {
@@ -3114,7 +3303,7 @@
       "source_file": "frontend/src/modes/ResearchMode.js",
       "source_location": "L4",
       "id": "modes_researchmode_researchmode",
-      "community": 0,
+      "community": 31,
       "norm_label": "researchmode()"
     },
     {
@@ -3123,7 +3312,7 @@
       "source_file": "frontend/src/modes/MissionMode.js",
       "source_location": "L1",
       "id": "frontend_src_modes_missionmode_js",
-      "community": 9,
+      "community": 7,
       "norm_label": "missionmode.js"
     },
     {
@@ -3132,7 +3321,7 @@
       "source_file": "frontend/src/modes/MissionMode.js",
       "source_location": "L108",
       "id": "modes_missionmode_trustrow",
-      "community": 9,
+      "community": 7,
       "norm_label": "trustrow()"
     },
     {
@@ -3141,7 +3330,7 @@
       "source_file": "frontend/src/modes/MissionMode.js",
       "source_location": "L121",
       "id": "modes_missionmode_systemribbon",
-      "community": 9,
+      "community": 7,
       "norm_label": "systemribbon()"
     },
     {
@@ -3150,7 +3339,7 @@
       "source_file": "frontend/src/modes/MissionMode.js",
       "source_location": "L133",
       "id": "modes_missionmode_daoband",
-      "community": 9,
+      "community": 7,
       "norm_label": "daoband()"
     },
     {
@@ -3159,7 +3348,7 @@
       "source_file": "frontend/src/modes/MissionMode.js",
       "source_location": "L183",
       "id": "modes_missionmode_bucketengine",
-      "community": 9,
+      "community": 7,
       "norm_label": "bucketengine()"
     },
     {
@@ -3168,7 +3357,7 @@
       "source_file": "frontend/src/modes/RoundtableMode.js",
       "source_location": "L1",
       "id": "frontend_src_modes_roundtablemode_js",
-      "community": 0,
+      "community": 28,
       "norm_label": "roundtablemode.js"
     },
     {
@@ -3177,7 +3366,7 @@
       "source_file": "frontend/src/modes/RoundtableMode.js",
       "source_location": "L12",
       "id": "modes_roundtablemode_roundtablemode",
-      "community": 0,
+      "community": 28,
       "norm_label": "roundtablemode()"
     },
     {
@@ -3186,7 +3375,7 @@
       "source_file": "frontend/src/modes/RoundtableMode.js",
       "source_location": "L319",
       "id": "modes_roundtablemode_broadcastchip",
-      "community": 0,
+      "community": 28,
       "norm_label": "broadcastchip()"
     },
     {
@@ -3195,7 +3384,7 @@
       "source_file": "frontend/src/modes/CodeMode.js",
       "source_location": "L1",
       "id": "frontend_src_modes_codemode_js",
-      "community": 0,
+      "community": 12,
       "norm_label": "codemode.js"
     },
     {
@@ -3204,7 +3393,7 @@
       "source_file": "frontend/src/modes/CodeMode.js",
       "source_location": "L4",
       "id": "modes_codemode_codemode",
-      "community": 0,
+      "community": 12,
       "norm_label": "codemode()"
     },
     {
@@ -3213,7 +3402,7 @@
       "source_file": "frontend/src/modes/LedgerMode.js",
       "source_location": "L1",
       "id": "frontend_src_modes_ledgermode_js",
-      "community": 17,
+      "community": 20,
       "norm_label": "ledgermode.js"
     },
     {
@@ -3222,7 +3411,7 @@
       "source_file": "frontend/src/modes/LedgerMode.js",
       "source_location": "L12",
       "id": "modes_ledgermode_ledgermode",
-      "community": 17,
+      "community": 20,
       "norm_label": "ledgermode()"
     },
     {
@@ -3231,7 +3420,7 @@
       "source_file": "frontend/src/modes/LedgerMode.js",
       "source_location": "L139",
       "id": "modes_ledgermode_counter",
-      "community": 17,
+      "community": 20,
       "norm_label": "counter()"
     },
     {
@@ -3240,7 +3429,7 @@
       "source_file": "frontend/src/modes/LedgerMode.js",
       "source_location": "L149",
       "id": "modes_ledgermode_newcontributionmodal",
-      "community": 17,
+      "community": 20,
       "norm_label": "newcontributionmodal()"
     },
     {
@@ -3249,7 +3438,7 @@
       "source_file": "frontend/src/modes/LedgerMode.js",
       "source_location": "L208",
       "id": "modes_ledgermode_field",
-      "community": 17,
+      "community": 20,
       "norm_label": "field()"
     },
     {
@@ -3258,8 +3447,35 @@
       "source_file": "frontend/src/modes/LedgerMode.js",
       "source_location": "L212",
       "id": "modes_ledgermode_formatusd",
-      "community": 17,
+      "community": 20,
       "norm_label": "formatusd()"
+    },
+    {
+      "label": "SabretoothMode.js",
+      "file_type": "code",
+      "source_file": "frontend/src/modes/SabretoothMode.js",
+      "source_location": "L1",
+      "id": "frontend_src_modes_sabretoothmode_js",
+      "community": 27,
+      "norm_label": "sabretoothmode.js"
+    },
+    {
+      "label": "SabretoothMode()",
+      "file_type": "code",
+      "source_file": "frontend/src/modes/SabretoothMode.js",
+      "source_location": "L16",
+      "id": "modes_sabretoothmode_sabretoothmode",
+      "community": 27,
+      "norm_label": "sabretoothmode()"
+    },
+    {
+      "label": "KV()",
+      "file_type": "code",
+      "source_file": "frontend/src/modes/SabretoothMode.js",
+      "source_location": "L175",
+      "id": "modes_sabretoothmode_kv",
+      "community": 27,
+      "norm_label": "kv()"
     },
     {
       "label": "ChatMode.js",
@@ -3267,7 +3483,7 @@
       "source_file": "frontend/src/modes/ChatMode.js",
       "source_location": "L1",
       "id": "frontend_src_modes_chatmode_js",
-      "community": 0,
+      "community": 14,
       "norm_label": "chatmode.js"
     },
     {
@@ -3276,7 +3492,7 @@
       "source_file": "frontend/src/modes/ChatMode.js",
       "source_location": "L15",
       "id": "modes_chatmode_chatmode",
-      "community": 0,
+      "community": 14,
       "norm_label": "chatmode()"
     },
     {
@@ -3285,7 +3501,7 @@
       "source_file": "frontend/src/modes/CreateMode.js",
       "source_location": "L1",
       "id": "frontend_src_modes_createmode_js",
-      "community": 0,
+      "community": 12,
       "norm_label": "createmode.js"
     },
     {
@@ -3294,7 +3510,7 @@
       "source_file": "frontend/src/modes/CreateMode.js",
       "source_location": "L13",
       "id": "modes_createmode_createmode",
-      "community": 0,
+      "community": 12,
       "norm_label": "createmode()"
     },
     {
@@ -3303,7 +3519,7 @@
       "source_file": "frontend/src/modes/TasksMode.js",
       "source_location": "L1",
       "id": "frontend_src_modes_tasksmode_js",
-      "community": 0,
+      "community": 18,
       "norm_label": "tasksmode.js"
     },
     {
@@ -3312,7 +3528,7 @@
       "source_file": "frontend/src/modes/TasksMode.js",
       "source_location": "L16",
       "id": "modes_tasksmode_tasksmode",
-      "community": 0,
+      "community": 18,
       "norm_label": "tasksmode()"
     },
     {
@@ -3321,7 +3537,7 @@
       "source_file": "frontend/src/modes/TasksMode.js",
       "source_location": "L207",
       "id": "modes_tasksmode_taskform",
-      "community": 0,
+      "community": 18,
       "norm_label": "taskform()"
     },
     {
@@ -3330,7 +3546,7 @@
       "source_file": "frontend/src/modes/TasksMode.js",
       "source_location": "L271",
       "id": "modes_tasksmode_dispatchform",
-      "community": 0,
+      "community": 18,
       "norm_label": "dispatchform()"
     },
     {
@@ -3339,7 +3555,7 @@
       "source_file": "frontend/src/modes/TasksMode.js",
       "source_location": "L343",
       "id": "modes_tasksmode_modal",
-      "community": 0,
+      "community": 18,
       "norm_label": "modal()"
     },
     {
@@ -3348,7 +3564,7 @@
       "source_file": "frontend/src/modes/TasksMode.js",
       "source_location": "L359",
       "id": "modes_tasksmode_field",
-      "community": 0,
+      "community": 18,
       "norm_label": "field()"
     },
     {
@@ -3357,7 +3573,7 @@
       "source_file": "frontend/src/modes/GraphifyMode.js",
       "source_location": "L1",
       "id": "frontend_src_modes_graphifymode_js",
-      "community": 0,
+      "community": 22,
       "norm_label": "graphifymode.js"
     },
     {
@@ -3366,7 +3582,7 @@
       "source_file": "frontend/src/modes/GraphifyMode.js",
       "source_location": "L12",
       "id": "modes_graphifymode_graphifymode",
-      "community": 0,
+      "community": 22,
       "norm_label": "graphifymode()"
     },
     {
@@ -3375,7 +3591,7 @@
       "source_file": "frontend/src/modes/GraphifyMode.js",
       "source_location": "L217",
       "id": "modes_graphifymode_counter",
-      "community": 0,
+      "community": 22,
       "norm_label": "counter()"
     },
     {
@@ -3384,7 +3600,7 @@
       "source_file": "frontend/src/modes/GraphifyMode.js",
       "source_location": "L227",
       "id": "modes_graphifymode_row",
-      "community": 0,
+      "community": 22,
       "norm_label": "row()"
     },
     {
@@ -3393,7 +3609,7 @@
       "source_file": "frontend/plugins/health-check/health-endpoints.js",
       "source_location": "L1",
       "id": "frontend_plugins_health_check_health_endpoints_js",
-      "community": 18,
+      "community": 23,
       "norm_label": "health-endpoints.js"
     },
     {
@@ -3402,7 +3618,7 @@
       "source_file": "frontend/plugins/health-check/health-endpoints.js",
       "source_location": "L13",
       "id": "health_check_health_endpoints_setuphealthendpoints",
-      "community": 18,
+      "community": 23,
       "norm_label": "setuphealthendpoints()"
     },
     {
@@ -3411,7 +3627,7 @@
       "source_file": "frontend/plugins/health-check/health-endpoints.js",
       "source_location": "L186",
       "id": "health_check_health_endpoints_formatbytes",
-      "community": 18,
+      "community": 23,
       "norm_label": "formatbytes()"
     },
     {
@@ -3420,7 +3636,7 @@
       "source_file": "frontend/plugins/health-check/health-endpoints.js",
       "source_location": "L199",
       "id": "health_check_health_endpoints_formatduration",
-      "community": 18,
+      "community": 23,
       "norm_label": "formatduration()"
     },
     {
@@ -3429,7 +3645,7 @@
       "source_file": "frontend/plugins/health-check/webpack-health-plugin.js",
       "source_location": "L1",
       "id": "frontend_plugins_health_check_webpack_health_plugin_js",
-      "community": 15,
+      "community": 17,
       "norm_label": "webpack-health-plugin.js"
     },
     {
@@ -3438,7 +3654,7 @@
       "source_file": "frontend/plugins/health-check/webpack-health-plugin.js",
       "source_location": "L4",
       "id": "health_check_webpack_health_plugin_webpackhealthplugin",
-      "community": 15,
+      "community": 17,
       "norm_label": "webpackhealthplugin"
     },
     {
@@ -3447,7 +3663,7 @@
       "source_file": "frontend/plugins/health-check/webpack-health-plugin.js",
       "source_location": "L5",
       "id": "health_check_webpack_health_plugin_webpackhealthplugin_constructor",
-      "community": 15,
+      "community": 17,
       "norm_label": ".constructor()"
     },
     {
@@ -3456,7 +3672,7 @@
       "source_file": "frontend/plugins/health-check/webpack-health-plugin.js",
       "source_location": "L18",
       "id": "health_check_webpack_health_plugin_webpackhealthplugin_apply",
-      "community": 15,
+      "community": 17,
       "norm_label": ".apply()"
     },
     {
@@ -3465,7 +3681,7 @@
       "source_file": "frontend/plugins/health-check/webpack-health-plugin.js",
       "source_location": "L84",
       "id": "health_check_webpack_health_plugin_webpackhealthplugin_getstatus",
-      "community": 15,
+      "community": 17,
       "norm_label": ".getstatus()"
     },
     {
@@ -3474,7 +3690,7 @@
       "source_file": "frontend/plugins/health-check/webpack-health-plugin.js",
       "source_location": "L96",
       "id": "health_check_webpack_health_plugin_webpackhealthplugin_getsimplestatus",
-      "community": 15,
+      "community": 17,
       "norm_label": ".getsimplestatus()"
     },
     {
@@ -3483,15 +3699,24 @@
       "source_file": "frontend/plugins/health-check/webpack-health-plugin.js",
       "source_location": "L106",
       "id": "health_check_webpack_health_plugin_webpackhealthplugin_reset",
-      "community": 15,
+      "community": 17,
       "norm_label": ".reset()"
+    },
+    {
+      "label": "Return this container's identity so peer agents know which host they reached.",
+      "file_type": "rationale",
+      "source_file": "backend/graph.py",
+      "source_location": "L227",
+      "community": 5,
+      "norm_label": "return this container's identity so peer agents know which host they reached.",
+      "id": "backend_graph_rationale_227"
     },
     {
       "label": "Report graph presence, node/edge counts, and whether code is newer than graph.",
       "file_type": "rationale",
       "source_file": "backend/graph.py",
       "source_location": "L71",
-      "community": 6,
+      "community": 5,
       "norm_label": "report graph presence, node/edge counts, and whether code is newer than graph.",
       "id": "backend_graph_rationale_71"
     },
@@ -3500,7 +3725,7 @@
       "file_type": "rationale",
       "source_file": "backend/graph.py",
       "source_location": "L120",
-      "community": 6,
+      "community": 5,
       "norm_label": "synchronously re-run graphify on the workspace. blocks until done.",
       "id": "backend_graph_rationale_120"
     },
@@ -3509,7 +3734,7 @@
       "file_type": "rationale",
       "source_file": "backend/graph.py",
       "source_location": "L164",
-      "community": 6,
+      "community": 5,
       "norm_label": "current binding doctrine \u2014 readable by every ai peer.",
       "id": "backend_graph_rationale_164"
     },
@@ -3518,7 +3743,7 @@
       "file_type": "rationale",
       "source_file": "backend/graph.py",
       "source_location": "L207",
-      "community": 6,
+      "community": 5,
       "norm_label": "return this container's identity so peer agents know which host they reached.",
       "id": "backend_graph_rationale_207"
     },
@@ -3527,7 +3752,7 @@
       "file_type": "rationale",
       "source_file": "backend/graph.py",
       "source_location": "L65",
-      "community": 6,
+      "community": 5,
       "norm_label": "report graph presence, node/edge counts, and whether code is newer than graph.",
       "id": "backend_graph_rationale_65"
     },
@@ -3536,7 +3761,7 @@
       "file_type": "rationale",
       "source_file": "backend/graph.py",
       "source_location": "L114",
-      "community": 6,
+      "community": 5,
       "norm_label": "synchronously re-run graphify on the workspace. blocks until done.",
       "id": "backend_graph_rationale_114"
     },
@@ -3545,7 +3770,7 @@
       "file_type": "rationale",
       "source_file": "backend/graph.py",
       "source_location": "L158",
-      "community": 6,
+      "community": 5,
       "norm_label": "current binding doctrine \u2014 readable by every ai peer.",
       "id": "backend_graph_rationale_158"
     },
@@ -3554,7 +3779,7 @@
       "file_type": "rationale",
       "source_file": "backend/graph.py",
       "source_location": "L201",
-      "community": 6,
+      "community": 5,
       "norm_label": "return this container's identity so peer agents know which host they reached.",
       "id": "backend_graph_rationale_201"
     }
@@ -4106,6 +4331,26 @@
       "confidence_score": 1.0,
       "source": "backend_services_imagerequest",
       "target": "basemodel"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "backend_auth_relay_loginrequest",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "backend_auth_relay_sabretoothexecrequest",
+      "target": "basemodel",
+      "confidence_score": 1.0
     },
     {
       "relation": "inherits",
@@ -4812,6 +5057,351 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_admin_password",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_session_secret",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_sign",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_mint_token",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_verify_token",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_loginrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_auth_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L97",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_auth_login",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_auth_logout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_require_admin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_sabretoothexecrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L158",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_sabretooth_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L194",
+      "weight": 1.0,
+      "source": "backend_auth_relay_py",
+      "target": "backend_auth_relay_sabretooth_exec",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "backend_auth_relay_rationale_1",
+      "target": "backend_auth_relay_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "backend_auth_relay_auth_status",
+      "target": "backend_auth_relay_admin_password",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "source": "backend_auth_relay_auth_login",
+      "target": "backend_auth_relay_admin_password",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "backend_auth_relay_require_admin",
+      "target": "backend_auth_relay_admin_password",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "backend_auth_relay_sign",
+      "target": "backend_auth_relay_session_secret",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "backend_auth_relay_verify_token",
+      "target": "backend_auth_relay_session_secret",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "backend_auth_relay_auth_status",
+      "target": "backend_auth_relay_session_secret",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L99",
+      "weight": 1.0,
+      "source": "backend_auth_relay_auth_login",
+      "target": "backend_auth_relay_session_secret",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "backend_auth_relay_require_admin",
+      "target": "backend_auth_relay_session_secret",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "backend_auth_relay_mint_token",
+      "target": "backend_auth_relay_sign",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "backend_auth_relay_verify_token",
+      "target": "backend_auth_relay_sign",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "backend_auth_relay_auth_login",
+      "target": "backend_auth_relay_mint_token",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "source": "backend_auth_relay_auth_status",
+      "target": "backend_auth_relay_verify_token",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "backend_auth_relay_require_admin",
+      "target": "backend_auth_relay_verify_token",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "backend_auth_relay_rationale_85",
+      "target": "backend_auth_relay_auth_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "backend_auth_relay_sabretooth_status",
+      "target": "backend_auth_relay_require_admin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L196",
+      "weight": 1.0,
+      "source": "backend_auth_relay_sabretooth_exec",
+      "target": "backend_auth_relay_require_admin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "backend_auth_relay_rationale_124",
+      "target": "backend_auth_relay_require_admin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "backend_auth_relay_rationale_159",
+      "target": "backend_auth_relay_sabretooth_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/auth_relay.py",
+      "source_location": "L195",
+      "weight": 1.0,
+      "source": "backend_auth_relay_rationale_195",
+      "target": "backend_auth_relay_sabretooth_exec",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "backend/ledger.py",
       "source_location": "L47",
       "weight": 1.0,
@@ -5164,6 +5754,16 @@
       "confidence_score": 1.0,
       "source": "backend_graph_rationale_158",
       "target": "backend_graph_doctrine"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/graph.py",
+      "source_location": "L251",
+      "weight": 1.0,
+      "source": "backend_graph_rationale_251",
+      "target": "backend_graph_node_identity",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -6247,6 +6847,17 @@
       "source_file": "frontend/src/App.js",
       "source_location": "L3",
       "weight": 1.0,
+      "source": "frontend_src_app_js",
+      "target": "components_signingate_signingate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.js",
+      "source_location": "L3",
+      "weight": 1.0,
       "confidence_score": 1.0,
       "source": "frontend_src_app_js",
       "target": "components_titlebar_titlebar"
@@ -6393,6 +7004,17 @@
       "confidence_score": 1.0,
       "source": "frontend_src_app_js",
       "target": "modes_graphifymode_graphifymode"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.js",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "frontend_src_app_js",
+      "target": "modes_sabretoothmode_sabretoothmode",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -6845,6 +7467,16 @@
       "confidence_score": 1.0,
       "source": "frontend_src_components_missionribbon_js",
       "target": "components_sharemissionmodal_sharemissionmodal"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SignInGate.js",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "frontend_src_components_signingate_js",
+      "target": "components_signingate_signingate",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7703,6 +8335,26 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/modes/SabretoothMode.js",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "frontend_src_modes_sabretoothmode_js",
+      "target": "modes_sabretoothmode_sabretoothmode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/modes/SabretoothMode.js",
+      "source_location": "L175",
+      "weight": 1.0,
+      "source": "frontend_src_modes_sabretoothmode_js",
+      "target": "modes_sabretoothmode_kv",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/modes/ChatMode.js",
       "source_location": "L15",
       "weight": 1.0,
@@ -7892,5 +8544,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "ef00fa6a6a0ffc3a45094e3b873b203f051b8772"
+  "built_at_commit": "e8b5b0a2142478dcccc493fcb83a2041d5cd3965"
 }

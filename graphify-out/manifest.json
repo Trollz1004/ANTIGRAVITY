@@ -24,24 +24,28 @@
     "hash": "016a2f07d9303665bd1598fc03b6dc35"
   },
   "/app/backend/server.py": {
-    "mtime": 1778023535.7443886,
-    "hash": "9167726d1ab5f141d3e78ad03502751a"
+    "mtime": 1780380643.3336349,
+    "hash": "488d284a68596f8d39c1aa32dfc48fb9"
   },
   "/app/backend/hub.py": {
-    "mtime": 1777846250.5562007,
-    "hash": "044ea09f1a515d2f0f1eb73f43b8c0e5"
+    "mtime": 1780380666.4146276,
+    "hash": "33235df9c37f6a18ffba2094bcab24db"
   },
   "/app/backend/services.py": {
     "mtime": 1777846902.2512054,
     "hash": "200c46b21ce7c922ece554b510c7994c"
   },
+  "/app/backend/auth_relay.py": {
+    "mtime": 1780380643.335635,
+    "hash": "52afa87f188bd2f5d851684c374a9caa"
+  },
   "/app/backend/ledger.py": {
-    "mtime": 1778023436.1163893,
-    "hash": "6581b18ee8edf4d662981984722275ea"
+    "mtime": 1780380594.3766503,
+    "hash": "421c406832ef7b2b9b306ae4c1016c82"
   },
   "/app/backend/graph.py": {
-    "mtime": 1778023754.786387,
-    "hash": "38435df484cac2f2aa0aaeab79b030cb"
+    "mtime": 1780380594.3816504,
+    "hash": "8b17d7eec1db572f4b2f83c35d9c4cb9"
   },
   "/app/backend/tests/test_graphify_doctrine.py": {
     "mtime": 1778023923.3063858,
@@ -80,16 +84,16 @@
     "hash": "ce5fb650ceea314eb15943ebf9fd93e2"
   },
   "/app/frontend/src/App.js": {
-    "mtime": 1778023671.3903875,
-    "hash": "3c2383fbd52a2b8b298e05b2f5ffa56b"
+    "mtime": 1780380801.907585,
+    "hash": "a133774c8191ed8227e4586dd22bc721"
   },
   "/app/frontend/src/lib/utils.js": {
     "mtime": 1750222016.0,
     "hash": "83545aa57e5a38a104b53d08868db698"
   },
   "/app/frontend/src/components/CommandPalette.js": {
-    "mtime": 1778023671.4273875,
-    "hash": "17c2da0d606a42f55e9fb3045c36f6ca"
+    "mtime": 1780380779.577592,
+    "hash": "b1b55b231a1c8801aff4b8348ff5cfa6"
   },
   "/app/frontend/src/components/RunbookViewer.js": {
     "mtime": 1777596721.2323623,
@@ -118,6 +122,10 @@
   "/app/frontend/src/components/ShareMissionModal.js": {
     "mtime": 1777847043.7092066,
     "hash": "3879d04e2eb3aae8b120739a62c81da4"
+  },
+  "/app/frontend/src/components/SignInGate.js": {
+    "mtime": 1780380746.6536024,
+    "hash": "793baf2ef7df08f7306e739bc39aabda"
   },
   "/app/frontend/src/components/LaunchPanel.js": {
     "mtime": 1777596590.328362,
@@ -148,8 +156,8 @@
     "hash": "42e8ec8b07e05f6f23fe09bd1eb6f5d7"
   },
   "/app/frontend/src/components/Sidebar.js": {
-    "mtime": 1778023671.4293876,
-    "hash": "3979372fcc2f2d5e16fa2d74d788f17f"
+    "mtime": 1780380779.577592,
+    "hash": "5aca0ef553ccc09285b3efd5ef67bc23"
   },
   "/app/frontend/src/components/ui/skeleton.jsx": {
     "mtime": 1758879570.0,
@@ -362,6 +370,10 @@
   "/app/frontend/src/modes/LedgerMode.js": {
     "mtime": 1777847043.8342066,
     "hash": "b94984c8057f47fc63b7532e5fb42d57"
+  },
+  "/app/frontend/src/modes/SabretoothMode.js": {
+    "mtime": 1780380746.6776023,
+    "hash": "758d8f052460881723faae59f75ab9a0"
   },
   "/app/frontend/src/modes/ChatMode.js": {
     "mtime": 1777596721.6033623,

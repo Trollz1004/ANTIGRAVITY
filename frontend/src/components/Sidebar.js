@@ -1,5 +1,5 @@
 import React from "react";
-import { Compass, Code2, Image as ImageIcon, Search, MessageSquare, Settings, Plus, Rocket, Radio, ListTodo, BookOpen, Network } from "lucide-react";
+import { Compass, Code2, Image as ImageIcon, Search, MessageSquare, Settings, Plus, Rocket, Radio, ListTodo, BookOpen, Network, Terminal } from "lucide-react";
 import { useChat } from "../contexts/ChatContext";
 import { DAOMonitor } from "./DAOMonitor";
 import { SystemStatus } from "./SystemStatus";
@@ -8,6 +8,7 @@ const MODES = [
   { id: "mission",    label: "Mission Control", Icon: Compass,       tone: "magenta" },
   { id: "ledger",     label: "Mission Ledger",  Icon: BookOpen,      tone: "magenta" },
   { id: "graphify",   label: "Graphify",        Icon: Network,       tone: "magenta" },
+  { id: "sabretooth", label: "Sabretooth",      Icon: Terminal,      tone: "magenta" },
   { id: "roundtable", label: "AI Roundtable",   Icon: Radio,         tone: "magenta" },
   { id: "tasks",      label: "Tasks",           Icon: ListTodo,      tone: "magenta" },
   { id: "code",       label: "Code Mode",       Icon: Code2,         tone: "cyan" },
@@ -38,9 +39,9 @@ export function Sidebar({ activeMode = "mission", onModeChange }) {
             onClick={() => onModeChange?.(id)}
             className={btnClass(id, tone)}
           >
-            <Icon size={18} className={id === "mission" || id === "roundtable" || id === "tasks" || id === "ledger" || id === "graphify" ? "text-[#e040fb]" : ""} />
+            <Icon size={18} className={id === "mission" || id === "roundtable" || id === "tasks" || id === "ledger" || id === "graphify" || id === "sabretooth" ? "text-[#e040fb]" : ""} />
             <span className="text-sm font-medium">{label}</span>
-            {(id === "mission" || id === "roundtable" || id === "tasks" || id === "ledger" || id === "graphify") && (
+            {(id === "mission" || id === "roundtable" || id === "tasks" || id === "ledger" || id === "graphify" || id === "sabretooth") && (
               <span className="ml-auto text-[8px] font-bold text-[#e040fb] uppercase tracking-widest opacity-80">
                 NEW
               </span>

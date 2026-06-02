@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AgeGate } from "./components/AgeGate";
+import { SignInGate } from "./components/SignInGate";
 import { TitleBar } from "./components/TitleBar";
 import { Sidebar } from "./components/Sidebar";
 import { TaskCommander } from "./components/TaskCommander";
@@ -15,6 +16,7 @@ import { RoundtableMode } from "./modes/RoundtableMode";
 import { TasksMode } from "./modes/TasksMode";
 import { LedgerMode } from "./modes/LedgerMode";
 import { GraphifyMode } from "./modes/GraphifyMode";
+import { SabretoothMode } from "./modes/SabretoothMode";
 import { MissionRibbon } from "./components/MissionRibbon";
 import { SettingsPanel } from "./components/SettingsPanel";
 
@@ -43,12 +45,14 @@ export default function App() {
       case "tasks":      return <TasksMode />;
       case "ledger":     return <LedgerMode />;
       case "graphify":   return <GraphifyMode />;
+      case "sabretooth": return <SabretoothMode />;
       case "settings":   return <SettingsPanel />;
       default:           return <MissionMode />;
     }
   };
 
   return (
+    <SignInGate>
     <ChatProvider>
       <div className="grain h-screen flex flex-col bg-[#0a0f1a] text-[#e8f0ff] font-sans overflow-hidden relative">
         <TitleBar />
@@ -84,5 +88,6 @@ export default function App() {
         <CommandPalette onModeChange={setActiveMode} />
       </div>
     </ChatProvider>
+    </SignInGate>
   );
 }

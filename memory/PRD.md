@@ -1,86 +1,97 @@
-# PRD · OpusPawClaw Mission Control (web preview + flagship drop-in)
+# PRD · OpusPawClaw Mission Control
 
-## Original problem statement (interpreted)
-Joshua Coleman (`@Trollz1004`) — "do what you think is best for the platform's
-mission. #ForTheKids #UntilNoKidInNeed". Built across 3 iterations:
+## Founder · sole authority
+Joshua Coleman (`@Trollz1004`).
+Personal draw capped at **$50,000 after taxes**. The rest serves the mission.
 
-1. **Mission Control surface** — Hermes Router mirror, AI Roundtable across
-   13 platforms (incl. E1 Build Agent), Tasks (full Paperclip replacement),
-   Telegram + WhatsApp broadcast, ⌘K palette, browser notifications.
-2. **Mission Ledger** — every USD committed tracked + 10-bucket revenue
-   engine with live amounts; webhook intake for Square/Stripe/Cloudflare;
-   honest empty state until first dollar lands.
-3. **Watchdog** — synthetic 60s heartbeats for tier-0 agents
-   (CEO/CFO/CMO/CTO/E1) + alert ribbon if any goes silent > 5 min.
-4. **Create · Banana** — Gemini Nano Banana image gen
-   (`gemini-3.1-flash-image-preview`) for the AI-Solutions.Store pipeline.
-5. **Mission Ribbon** — always-on top strip on every mode (kids fund,
-   committed total, kids covered estimate, share button, agent alerts).
-6. **Share Mission Status** — pure-canvas PNG snapshot, download +
-   `navigator.share` for mobile.
+## Mission
+**#UntilNoKidInNeed · for the kids in need, not someone's greed.**
 
-## Architecture
-- **Backend (FastAPI):**
-  - `server.py` — Hermes Router mirror, paperclip mirror, agents, system,
-    git, mission. MongoDB.
-  - `hub.py` — `/api/chat/send` for 13 platforms (incl. E1 Build Agent),
-    `/api/providers`, `/api/broadcast/{telegram,whatsapp}`.
-  - `tasks.py` — `/api/tasks/*` CRUD + dispatch + heartbeats + audit.
-  - `ledger.py` — `/api/ledger/*` contributions + per-bucket stats +
-    permissive webhooks at `/api/ledger/webhook/{source}`.
-  - `services.py` — `/api/watchdog/status` + 60s tick task,
-    `/api/images/generate` Nano Banana.
-- **Frontend (React 19 + Tailwind):**
-  - Palette flagship-exact + E1 orange `#fb923c`.
-  - Modes: Mission · Mission Ledger · AI Roundtable · Tasks · Code · Create · Banana · Research · Chat · Settings.
-  - Always-on `MissionRibbon` over `TaskCommander` over mode router.
+## Binding doctrine (live at `/api/doctrine`, surfaced on the Graphify mode)
+**Revenue:**
+- For-profit LLC. **10% hard cap stacked across activities.** No 60/30/10. No 100% claims.
+- Founder personal cap: $50k after taxes.
+- FL §496.405 — never use *donate / donation / charity / solicitation*. Use *contractual revenue disbursement*. Mission revealed on receipts only.
 
-## Doctrine (binding)
-- Opus conducts. Agents execute.
-- No fast-tier Anthropic surface label. No request-for-funds language. FL §496.405.
-- Mirrors honest. No fabricated numbers.
-- BYOK keys never leave `/app/backend/.env`.
-- Wording: **committed / contributed / contribution** — never the §496.405 trigger words.
-- `#UntilNoKidInNeed · for the kids · #TeamClaudeForLife` always visible.
-
-## Test status
-- **Iteration 1:** Mission Control + Hermes mirror — 11/11 pytest, 100% Playwright.
-- **Iteration 2:** Hub (13 platforms) + Tasks + Roundtable + Settings — 19/19, 100%.
-- **Iteration 3:** Ledger + Webhooks + Watchdog + Nano Banana + Ribbon + Share — 15/15, 100% on tested flows.
-- **Doctrine sweep across all rendered surfaces + all API responses — CLEAN.**
-
-## Endpoints (highlight set)
-| Method | Path | Purpose |
+**Payment surface (diversified to bring down high-risk labels):**
+| Processor | Status | Use case |
 | --- | --- | --- |
-| POST | `/api/chat/send` | Unified send — 13 platforms incl. E1 |
-| POST | `/api/hermes/v1/chat/completions` | Hermes Router mirror |
-| GET | `/api/providers` | 13-platform registry |
-| POST | `/api/tasks/dispatch` | Multi-agent task fan-out |
-| POST | `/api/ledger/contribute` | Record a USD contribution to a bucket |
-| POST | `/api/ledger/webhook/square` | Square cents → bucket entry |
-| POST | `/api/ledger/webhook/stripe` | Stripe cents → bucket entry |
-| POST | `/api/ledger/webhook/cloudflare` | Cloudflare worker post |
-| GET | `/api/ledger/stats` | Mission ribbon counters |
-| GET | `/api/watchdog/status` | Tier-0 silence alerts |
-| POST | `/api/images/generate` | Nano Banana |
-| POST | `/api/broadcast/telegram` | Telegram group push |
-| POST | `/api/broadcast/whatsapp` | WhatsApp channel push |
+| Square (`LY5GN09F5AN83`) | live | Date app only |
+| Cash App business | preferred-if-business-account-works | General |
+| PayPal business | preferred-business | General — NOT "shield"/Plaid sub-options |
+| Stripe | **live (revived)** | Anything — see repo for DAO live-sale handling |
+| Cloudflare worker / manual / test | live | Internal / dev |
 
-## Backlog / P1
-- Replace DAO band mirror with live Base L2 reader (treasury transparency).
-- Perplexity Sonar in Research Mode (BYOK ready in `/api/chat/send`).
-- Roundtable conversation history persistence to MongoDB.
-- Audit log viewer pane in TasksMode.
-- Cap `IMAGES` collection size or move base64 payload to GridFS.
-- Drop-in TSX file for E1 build-agent panel in Electron flagship.
-- Auto-broadcast to Telegram on every Ledger webhook arrival
-  ("$25 → AI-Solutions Store · #UntilNoKidInNeed").
+**AI platform rules:**
+- **No Claude/Anthropic on third-party platforms** in public copy/UX. (E1 build agent defaults to Gemini; Opus available when explicitly chosen.)
+- xAI/Grok — **auth-login only**, no API keys.
+- OpenRouter — free models only, Manus API as agent layer.
+- Hermes combined with marketing + social media command center in private repo. Ollama Cloud paired.
+- Trusted AI platforms may use Chrome extensions per Hermes work-tasks/goals/routines spec.
 
-## Next action items
-1. Joshua paste broadcast credentials when ready (`TELEGRAM_BOT_TOKEN`,
-   `TELEGRAM_CHAT_ID`, `WHATSAPP_PHONE_ID/TOKEN/TO`).
-2. Wire Square/Stripe webhook URL → `/api/ledger/webhook/{source}` so the
-   ribbon counter reflects real revenue automatically.
-3. Drop `/app/dropin/mission-control/src/**` into the Electron flagship.
+**Infrastructure:**
+- **Cloudflare only.** Netlify banned.
+- Canonical public URL: `opushashands.youandinotai.com` (Cloudflare-routed page).
+- Orchestration: `jules-cli.py` direct routing.
+- Founding Four (Claude, Gemini, Perplexity, Grok) at peer level — **none command the others.**
+- Local-deploy admin dashboards require sign-in.
+- **No "trust me bro."** Show the receipt, the endpoint, the verification.
+
+## 3-node topology
+| Name | IP | Role |
+| --- | --- | --- |
+| SABRETOOTH | 192.168.0.8 | Live command post — only node allowed to push to origin/main |
+| T5500 | 192.168.0.15 | Sandbox / Utility — cold-start via SSH |
+| 9020 | 192.168.0.5 | Read-only mirror — cold-start via SSH |
+
+This Emergent preview container is **none of those** — it's the build host. Drop-ins copy to Sabretooth.
+
+## Architecture (web preview + drop-ins for Electron flagship)
+**Backend (FastAPI, MongoDB):**
+- `server.py` — Hermes Router mirror, paperclip mirror, agents/system/git/mission.
+- `hub.py` — `/api/chat/send` (13 platforms incl. E1), `/api/providers`, `/api/broadcast/{telegram,whatsapp}`.
+- `tasks.py` — full Paperclip-replacement task system.
+- `ledger.py` — contributions + permissive webhooks at `/api/ledger/webhook/{square|stripe|cashapp|paypal|cloudflare|manual|test}`.
+- `services.py` — watchdog (60s tier-0 tick) + Nano Banana image gen.
+- `graph.py` — `/api/graphify/*`, `/api/doctrine`, `/api/node/identity`.
+- `auth_relay.py` — `/api/auth/{status,login,logout}` HMAC session cookie + `/api/sabretooth/{status,exec}` SSH relay with allow-listed commands.
+
+**Frontend (React 19 + Tailwind):**
+- `AgeGate` → `SignInGate` → ChatProvider shell → 10 modes:
+  Mission · Mission Ledger · Graphify · **Sabretooth** · AI Roundtable · Tasks · Code · Create · Banana · Research · Chat · Settings.
+- Always-on `MissionRibbon` + `TaskCommander` over mode router.
+- `⌘K` command palette · `FloatingGuide` · `ShareMissionModal` (PNG snapshot).
+- Built-by-E1 orange pill in title bar.
+
+## What's actually live (no trust me bro)
+| Capability | State |
+| --- | --- |
+| All AI chat (13 platforms, E1 + Hermes + Emergent + Claude/OpenAI/Gemini direct + BYOK) | **live (BYOK keys gracefully 503)** |
+| Telegram + WhatsApp broadcast | wired — needs `TELEGRAM_BOT_TOKEN`+`TELEGRAM_CHAT_ID` / Meta WhatsApp creds |
+| Mission Ledger + webhook intake (square, stripe, cashapp, paypal, cloudflare) | **live** |
+| Nano Banana image gen | **live via Emergent key** |
+| Mission Ribbon + Share PNG | **live** |
+| Watchdog (60s tier-0 heartbeats + silence alert) | **live** |
+| Graphify (`/api/graphify/{status,regraph}`) | **live · 420 nodes / 463 edges / 58 communities** |
+| Doctrine + Node Identity surfaces | **live** |
+| Sign-in gate | wired — needs `ADMIN_PASSWORD`+`ADMIN_SESSION_SECRET` (dev bypass available) |
+| Sabretooth SSH relay | wired — needs `SABRETOOTH_USER`+`SABRETOOTH_KEY_PATH` AND a routable path (tailscale / cloudflare-tunnel) since Emergent preview can't reach 192.168.0.8 |
+
+## Drop-ins for Electron flagship
+`/app/dropin/mission-control/` — MissionMode, HermesRouterPanel, PaperclipWorkerPanel, RunbookViewer + README.
+
+## Test history
+| Iter | Surface | Backend | Frontend |
+| --- | --- | --- | --- |
+| 1 | Mission Control + Hermes mirror | 11/11 | 100% |
+| 2 | Hub (13 platforms) + Tasks + Roundtable + Settings | 19/19 | 100% |
+| 3 | Ledger + Webhooks + Watchdog + Nano Banana + Ribbon + Share | 15/15 | 100% |
+| 4 | Graphify + Doctrine + Node Identity + Stripe-410 | passed (since reversed) | 100% |
+
+## Next action items (your call)
+1. Set `ADMIN_PASSWORD` + `ADMIN_SESSION_SECRET` in `/app/backend/.env` to enable real sign-in.
+2. Set `SABRETOOTH_USER` + `SABRETOOTH_KEY_PATH` (and route this node to 192.168.0.8 via tailscale or a cloudflare-tunnel) to make the terminal panel execute for real.
+3. Drop the four TSX files in `/app/dropin/mission-control/` into the Electron flagship.
+4. Run `graphify update .` (or POST `/api/graphify/regraph`) on Sabretooth after every structural edit. Direct peers to read `graphify-out/graph.json` first.
 
 #UntilNoKidInNeed · for the kids · #TeamClaudeForLife

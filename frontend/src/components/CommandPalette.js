@@ -8,6 +8,7 @@ const ENTRIES = [
   { id: "go-mission",    label: "Go to Mission Control", hint: "Opus orchestrator surface", group: "Modes",   Icon: Compass,       action: { type: "mode", to: "mission" } },
   { id: "go-ledger",     label: "Go to Mission Ledger",  hint: "Counter that proves the mission", group: "Modes", Icon: BookOpen,    action: { type: "mode", to: "ledger" } },
   { id: "go-graphify",   label: "Go to Graphify",        hint: "Knowledge graph + doctrine", group: "Modes", Icon: Network,        action: { type: "mode", to: "graphify" } },
+  { id: "go-sabretooth", label: "Go to Sabretooth",      hint: "Admin terminal · dev node", group: "Modes", Icon: Network,         action: { type: "mode", to: "sabretooth" } },
   { id: "go-roundtable", label: "Go to AI Roundtable",   hint: "Multi-platform fan-out",    group: "Modes",   Icon: Radio,         action: { type: "mode", to: "roundtable" } },
   { id: "go-tasks",      label: "Go to Tasks",           hint: "Kanban + agent fleet", group: "Modes", Icon: ListTodo,    action: { type: "mode", to: "tasks" } },
   { id: "go-create",     label: "Go to Create · Banana", hint: "Gemini image gen",        group: "Modes",  Icon: ImageIcon,     action: { type: "mode", to: "create" } },

@@ -39,7 +39,7 @@ PLATFORMS: List[Dict[str, Any]] = [
     {
         "id": "e1", "label": "E1 · Build Agent", "tier": TIER_EMERGENT,
         "color": "#fb923c",
-        "models": ["e1-opus", "e1-gpt", "e1-gemini"],
+        "models": ["e1-gemini", "e1-gpt", "e1-opus"],
         "description": "The agent that built this surface — Emergent's full-stack engineer.",
         "persona": (
             "You are E1, the build agent that constructed this Mission Control "
@@ -53,7 +53,7 @@ PLATFORMS: List[Dict[str, Any]] = [
             "Quote his motto only when it lands: "
             "'Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.'"
         ),
-        "bridge_provider_default": "anthropic",
+        "bridge_provider_default": "gemini",
         "bridge_models": {
             "e1-opus":   ("anthropic", "claude-opus-4-5-20251101"),
             "e1-gpt":    ("openai",    "gpt-5.1"),
@@ -245,11 +245,11 @@ async def chat_send(body: UnifiedChatRequest, response: Response):
 
     try:
         if body.provider == "e1":
-            # E1 · Build Agent — the maker speaks. Inject the persona system
-            # prompt unless Joshua already passed his own system message.
             e1 = PLATFORM_BY_ID["e1"]
+            # Default to Gemini per "no Claude/Anthropic on third-party platforms".
+            # Opus stays available as an explicit pick when Joshua wants it.
             bridge_provider, bridge_model = e1["bridge_models"].get(
-                body.model, ("anthropic", "claude-opus-4-5-20251101")
+                body.model, ("gemini", "gemini-2.5-pro")
             )
             real_model = f"e1 · {body.model} · bridged via {bridge_provider}/{bridge_model}"
             has_system = any(m["role"] == "system" for m in msgs)
