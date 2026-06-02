@@ -1,1 +1,400 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head>  <meta charset="utf-8" />  <meta name="viewport" content="width=device-width, initial-scale=1" />  <title>Mission Control — #UntilNoKidInNeed | Hermes-routed</title>  <link rel="preconnect" href="https://fonts.googleapis.com" />  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet" />  <style>    /* Design tokens: Warm Orbital Ops — doctrine-compliant */    :root {      --bg-base: #141110;      --bg-surface: #1A1614;      --bg-elevated: #261F1C;      --bg-glass: rgba(38, 31, 28, 0.6);      --text-primary: #F9F6EE;      --text-secondary: #B5A79E;      --text-muted: #8A7D75;      --accent: #FF6B35;      --accent-glow: rgba(255, 107, 53, 0.5);      --success: #10B981;      --warning: #F59E0B;      --danger: #EF4444;      --tok-love: #EF4444;      --tok-ukid: #3B82F6;      --tok-green: #10B981;      --tok-agrav: #F59E0B;      --font-heading: 'Instrument Serif', serif;      --font-sans: 'IBM Plex Sans', system-ui, sans-serif;      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;    }    * { box-sizing: border-box; margin: 0; padding: 0; }    html, body { height: 100%; }    body {      background: var(--bg-base);      color: var(--text-primary);      font-family: var(--font-sans);      font-size: 14px;      line-height: 1.55;      display: flex;      flex-direction: column;      min-height: 100vh;      background-image: radial-gradient(rgba(255,255,255,0.012) 1px, transparent 1px);      background-size: 3px 3px;    }    .label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); }    .data { font-family: var(--font-mono); }    .heading { font-family: var(--font-heading); letter-spacing: -0.01em; line-height: 1; }    .hud {      background: var(--bg-surface);      border-bottom: 1px solid var(--bg-elevated);      padding: 16px 24px;      display: grid;      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));      gap: 20px;    }    .hud-card {      background: var(--bg-elevated);      border: 1px solid rgba(181,167,158,0.2);      padding: 14px;      border-radius: 6px;      display: flex;      flex-direction: column;      gap: 8px;    }    .hud-card .label { margin-bottom: 4px; }    .hud-card .value { font-family: var(--font-mono); font-size: 18px; font-weight: 600; color: var(--text-primary); }    .hud-card .sub { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }    .hud-card.warning {      background: rgba(239, 68, 68, 0.1);      border-color: var(--danger);      animation: pulse-warning 1s infinite;    }    .hud-card.warning .value { color: var(--danger); }    @keyframes pulse-warning {      0%, 100% { opacity: 1; }      50% { opacity: 0.6; }    }    .tier-split {      display: grid;      grid-template-columns: 1fr 1fr;      gap: 12px;    }    .tier-box {      background: var(--bg-base);      border: 1px solid rgba(181,167,158,0.2);      padding: 10px;      border-radius: 4px;      text-align: center;    }    .tier-box .label { display: block; margin-bottom: 6px; font-size: 10px; }    .tier-box .value { font-family: var(--font-mono); font-size: 16px; font-weight: 600; }    .tier-note { font-size: 10px; color: var(--text-muted); margin-top: 4px; line-height: 1.3; }    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }    .kanban-section {      padding: 20px 24px;      border-bottom: 1px solid var(--bg-elevated);      flex: 0 0 auto;    }    .kanban-section .label { margin-bottom: 12px; display: block; }    .kanban-grid {      display: grid;      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));      gap: 12px;      overflow-x: auto;      padding-bottom: 8px;    }    .lane {      background: var(--bg-surface);      border: 1px solid var(--bg-elevated);      border-radius: 6px;      padding: 12px;      min-width: 200px;      flex-shrink: 0;    }    .lane .lane-title {      font-family: var(--font-mono);      font-size: 12px;      font-weight: 600;      text-transform: uppercase;      letter-spacing: 0.1em;      color: var(--text-secondary);      margin-bottom: 8px;    }    .lane .lane-status {      display: inline-block;      font-family: var(--font-mono);      font-size: 10px;      padding: 3px 6px;      border-radius: 3px;      background: var(--bg-elevated);      color: var(--text-muted);      margin-bottom: 8px;    }    .lane .lane-status.active { background: rgba(16, 185, 129, 0.2); color: var(--success); }    .lane .lane-status.critical { background: rgba(239, 68, 68, 0.2); color: var(--danger); }    .lane .lane-status.pending { background: rgba(245, 158, 11, 0.2); color: var(--warning); }    .lane .lane-metric {      font-family: var(--font-mono);      font-size: 11px;      color: var(--text-secondary);      line-height: 1.4;    }    .terminal-section {      flex: 1;      display: flex;      flex-direction: column;      padding: 20px 24px;      overflow: hidden;    }    .terminal-section .label { margin-bottom: 12px; display: block; }    .terminal {      flex: 1;      background: var(--bg-base);      border: 1px solid var(--bg-elevated);      border-radius: 6px;      padding: 12px;      font-family: var(--font-mono);      font-size: 12px;      overflow-y: auto;      color: var(--text-secondary);      line-height: 1.6;    }    .terminal .event {      margin-bottom: 8px;      padding: 6px 0;      border-bottom: 1px solid rgba(181,167,158,0.1);    }    .terminal .event:last-child { border-bottom: none; }    .terminal .event .timestamp { color: var(--text-muted); font-weight: 500; }    .terminal .event .agent { color: var(--accent); font-weight: 600; }    .terminal .event.started { color: var(--warning); }    .terminal .event.done { color: var(--success); }    .terminal .event.blocked { color: var(--danger); }    .footer {      background: var(--accent);      color: var(--bg-base);      font-family: var(--font-mono);      font-weight: 700;      font-size: 12px;      padding: 10px 24px;      display: flex;      justify-content: space-between;      align-items: center;      flex-shrink: 0;    }    .footer .mission { letter-spacing: 0.1em; }    .footer .status { display: flex; gap: 16px; align-items: center; }    /* New sections for doctrine accuracy */    .top-bar {      background: #0f0d0b;      border-bottom: 1px solid var(--bg-elevated);      padding: 6px 24px;      font-size: 11px;      font-family: var(--font-mono);      color: var(--text-secondary);      display: flex;      justify-content: space-between;      align-items: center;      flex-wrap: wrap;      gap: 8px;    }    .top-bar .strong { color: var(--accent); font-weight: 600; }    .quick-links {      padding: 10px 24px;      background: var(--bg-surface);      border-bottom: 1px solid var(--bg-elevated);    }    .quick-links .label { margin-bottom: 8px; display: block; }    .link-grid {      display: flex;      flex-wrap: wrap;      gap: 8px;    }    .link-grid a {      background: var(--bg-elevated);      color: var(--text-primary);      text-decoration: none;      padding: 4px 10px;      border-radius: 4px;      font-size: 12px;      font-family: var(--font-mono);      border: 1px solid rgba(181,167,158,0.2);    }    .link-grid a:hover { border-color: var(--accent); color: var(--accent); }    .routing-table {      width: 100%;      border-collapse: collapse;      font-size: 12px;      margin-top: 8px;    }    .routing-table th, .routing-table td {      padding: 6px 8px;      border: 1px solid rgba(181,167,158,0.15);      text-align: left;    }    .routing-table th {      background: var(--bg-elevated);      color: var(--text-muted);      font-weight: 600;      font-size: 10px;      text-transform: uppercase;      letter-spacing: 0.1em;    }    .routing-table td { color: var(--text-secondary); }    .routing-table .note { color: var(--text-muted); font-size: 11px; }    ::-webkit-scrollbar { width: 8px; }    ::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 4px; }  </style></head><body>  <!-- Top doctrine bar -->  <div class="top-bar">    <div>      <span class="strong">1 wallet · 1 LLC · 10% max/bucket</span>      &nbsp;|&nbsp; Hermes-routed cockpit (xAI user-auth sign-in for Grok, NOT OpenRouter) · Square-only revenue · no Anthropic key    </div>    <div>      Hermes :11435 (PRIMARY ROUTER) — xAI sign-in + ollama-local (CFO-Until-No-Kid-In-Need) &nbsp;|&nbsp; <span class="strong">#TEAMCLAUDEFORLIFE</span>    </div>  </div>  <!-- HUD Section -->  <div class="hud">    <!-- Manus Credits -->    <div class="hud-card" id="manusCard">      <span class="label">Manus API Credits</span>      <span class="value" id="manusCredits">—</span>      <span class="sub" id="manusStatus">Fetching…</span>    </div>    <!-- Tier A1 / A2 Split — DOCTRINE AUDITED -->    <div class="hud-card">      <span class="label">Cost Floors — Infra Uptime vs Human Survival (explicit separation)</span>      <div class="tier-split">        <div class="tier-box">          <span class="label">Tier A1</span>          <span class="value">$600/mo</span>          <span class="sub">Infra Uptime</span>        </div>        <div class="tier-box">          <span class="label">Tier A2</span>          <span class="value">$2500/mo</span>          <span class="sub">Human Survival</span>        </div>      </div>      <div class="tier-note">        Tier A1 (platform compute / infra uptime) is <strong>distinct</strong> from Tier A2 (founder human survival baseline).        Neither conflates the $600 with human survival. Both funded from single LLC wallet.      </div>    </div>    <!-- 10/27/63 Compliance — DOCTRINE AUDITED: contractual revenue disbursement -->    <div class="hud-card" id="complianceCard">      <span class="label">Revenue Split Status (Square-enforced)</span>      <span class="value" id="complianceStatus">—</span>      <span class="sub">10% Kids (contractual revenue disbursement) | 27% Tax | 63% Ops</span>      <div class="tier-note" style="margin-top:6px;">        All revenue processed via <strong>Square (Location LY5GN09F5AN83)</strong>.        1-wallet / 1-LLC. The 10% Kids allocation is a contractual revenue disbursement per doctrine — <strong>not a donation</strong>.      </div>    </div>    <!-- Hermes / Live Activity Status -->    <div class="hud-card" id="hermesStatusCard">      <span class="label">Hermes Router + Live Activity</span>      <span class="value" style="color:var(--success);">ACTIVE</span>      <span class="sub">xAI user-auth sign-in for Grok · services/mission-control-backend/ feeding real-time</span>      <div style="margin-top:6px; font-size:10px; color:var(--text-muted);">        Never idle while lanes active. All work routed through Hermes :11435.      </div>    </div>  </div>  <!-- Quick Links — eyes-on surfaces -->  <div class="quick-links">    <span class="label">Live Surfaces — Open Windows · no locked doors</span>    <div class="link-grid">      <a href="http://127.0.0.1:9119/sessions" target="_blank">Hermes Agent</a>      <a href="http://127.0.0.1:11435/healthz" target="_blank">Hermes Router</a>      <a href="https://youandinotai.com" target="_blank">youandinotai.com (live product)</a>      <a href="https://square.link/u/Qc5mxUy7" target="_blank">Square (LY5GN09F5AN83)</a>      <a href="http://127.0.0.1:8790/health" target="_blank">T5500 Backend Health</a>      <a href="https://github.com/Trollz1004/ANTIGRAVITY" target="_blank">Repo (Trollz1004/ANTIGRAVITY)</a>      <a href="#" onclick="window.open('http://127.0.0.1:8080', '_blank'); return false;">code-server / Emergent</a>      <a href="/health/allocations" target="_blank">Allocations</a>    </div>  </div>  <!-- NO MOCK / NO PLACEHOLDER / NO FAKE GREEN — Doctrine Banner -->  <div class="quick-links" style="background:linear-gradient(90deg, rgba(239,68,68,0.15), rgba(255,107,53,0.10)); border-bottom:2px solid var(--accent);">    <span class="label" style="color:var(--accent); font-weight:700;">⚠ NO MOCK · NO PLACEHOLDER · NO FAKE GREEN · LIVE DATA ONLY ⚠</span>    <div style="font-size:11px; color:var(--text-primary); line-height:1.5;">      Every cell on this board pulls from a real adapter heartbeat, real WebSocket event, or real ledger entry.      200 OK with an empty body = <span style="color:var(--danger); font-weight:700;">RED</span>.      200 OK with the wrong shape = <span style="color:var(--danger); font-weight:700;">RED</span>.      Hermes audits itself: any cell green for &gt;24h with no underlying activity is auto-flagged.      If you see a number on this board, you can ask Hermes for the raw event that produced it.      <strong>Visually verified = the only kind of verified.</strong>    </div>  </div>  <!-- Goals & First-Sale Loop — Visible to Customer Service OpenClaw on T5500 -->  <div class="kanban-section" id="goals-section">    <span class="label">GOALS · LOOP #1 = FIRST SALE · Specialist-Owned (no overlap)</span>    <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">      Each platform has exactly one specialist. Hashtag sets, follow-up sequences, comment-on-existing-posts with rotating tags. Lead-spam of commenting, tracked.      <strong>No mock data. Counts come from real posts / engagement. If the cell is blank, the count is zero.</strong>    </div>    <div class="kanban-grid">      <div class="lane" id="goal-grok-x">        <div class="lane-title">Grok → X / x.com (FIRST SALE)</div>        <div class="lane-status active">[ RUNNING ]</div>        <div class="lane-metric">          Hashtag set: <span id="grok-hashtags">loading…</span><br/>          Posts today: <span id="grok-posts">0</span> · Replies: <span id="grok-replies">0</span><br/>          Comments on existing: <span id="grok-comments">0</span><br/>          Follow-ups sent: <span id="grok-followups">0</span><br/>          Leads captured: <span id="grok-leads">0</span> · Sales: <span id="grok-sales">0</span>        </div>      </div>      <div class="lane" id="goal-manus-meta">        <div class="lane-title">Manus → Meta (FB / IG / Threads)</div>        <div class="lane-status active">[ RUNNING ]</div>        <div class="lane-metric">          Hashtag set: <span id="manus-hashtags">loading…</span><br/>          Posts today: <span id="manus-posts">0</span> · Replies: <span id="manus-replies">0</span><br/>          Comments on existing: <span id="manus-comments">0</span><br/>          Follow-ups sent: <span id="manus-followups">0</span><br/>          Leads captured: <span id="manus-leads">0</span> · Sales: <span id="manus-sales">0</span>        </div>      </div>      <div class="lane" id="goal-gemini-youtube">        <div class="lane-title">Gemini → YouTube + Google SEO</div>        <div class="lane-status active">[ RUNNING ]</div>        <div class="lane-metric">          Videos published: <span id="gemini-videos">0</span><br/>          Channel subs: <span id="gemini-subs">0</span> · Views: <span id="gemini-views">0</span><br/>          Search Console impr: <span id="gemini-impressions">0</span><br/>          Maps listings: <span id="gemini-maps">0</span><br/>          Leads: <span id="gemini-leads">0</span>        </div>      </div>      <div class="lane" id="goal-perplexity-research">        <div class="lane-title">Perplexity → Research + Remaining</div>        <div class="lane-status active">[ RUNNING ]</div>        <div class="lane-metric">          Research reports: <span id="perp-reports">0</span><br/>          Citations logged: <span id="perp-citations">0</span><br/>          Competitor audits: <span id="perp-audits">0</span><br/>          Other-platform posts: <span id="perp-posts">0</span>        </div>      </div>    </div>  </div>  <!-- Sticky Notes — Elite OPUSnots per specialist -->  <div class="kanban-section" id="sticky-notes">    <span class="label">STICKY NOTES · One per specialist · OPUSLEVEL soul/skills/heartbeat</span>    <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">      Every specialist agent (CEO / CFO / CTO / CMO / CSO / UX / INTERN) has a sticky note: current top priority, who they're waiting on, one-line status.      OPUSnots = elite notes only Opus can author. Visible to customer-service OpenClaw on T5500 at all times.    </div>    <div class="kanban-grid">      <div class="lane" id="note-ceo"><div class="lane-title">CEO-Sticky</div><div class="lane-status active">[ OPUSNOTE ]</div><div class="lane-metric" id="note-ceo-body">Opus: launch first sale via Grok/X loop. Status: <span id="note-ceo-status">waiting on Hermes kickoff</span></div></div>      <div class="lane" id="note-cfo"><div class="lane-title">CFO-Sticky</div><div class="lane-status active">[ OPUSNOTE ]</div><div class="lane-metric" id="note-cfo-body">Reconcile Square revenue_allocations. Status: <span id="note-cfo-status">pending backend</span></div></div>      <div class="lane" id="note-cto"><div class="lane-title">CTO-Sticky</div><div class="lane-status active">[ OPUSNOTE ]</div><div class="lane-metric" id="note-cto-body">T5500 = powerstation, repo state lives there. Status: <span id="note-cto-status">migrating from Sabretooth</span></div></div>      <div class="lane" id="note-cmo"><div class="lane-title">CMO-Sticky</div><div class="lane-status active">[ OPUSNOTE ]</div><div class="lane-metric" id="note-cmo-body">Canonical-7 ban on customer copy. Status: <span id="note-cmo-status">grok+gemini reviewing</span></div></div>      <div class="lane" id="note-cso"><div class="lane-title">CSO-Sticky</div><div class="lane-status active">[ OPUSNOTE ]</div><div class="lane-metric" id="note-cso-body">FL §496.405 + IRS 10% cap. Status: <span id="note-cso-status">verified</span></div></div>      <div class="lane" id="note-ux"><div class="lane-title">UX-Sticky</div><div class="lane-status active">[ OPUSNOTE ]</div><div class="lane-metric" id="note-ux-body">PAPERWEIGHT board render. Status: <span id="note-ux-status">live</span></div></div>      <div class="lane" id="note-intern"><div class="lane-title">INTERN-Sticky</div><div class="lane-status active">[ OPUSNOTE ]</div><div class="lane-metric" id="note-intern-body">Audit Hermes heartbeats hourly. Status: <span id="note-intern-status">cron wired</span></div></div>    </div>  </div>  <!-- Main Content -->  <div class="main">    <!-- Kanban Section — Visual-Proof Pipeline (ties to multi-agent funnel) -->    <div class="kanban-section">      <span class="label">Operational Kanban — 7 Lanes (Visual-Proof Rule Active)</span>      <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">        Every task flows through specialists (CEO/CTO/CMO/CFO/Compliance). No 'Done' without visual artifact (screenshot, diff, dashboard state, render).        LLM verbosity rejected — output must be: [Task Status] → [Specialist Check] → [Visual Evidence] → [Approval Timestamp].      </div>      <div class="kanban-grid">        <!-- Compliance -->        <div class="lane">          <div class="lane-title">Compliance</div>          <div class="lane-status active">[ ACTIVE ]</div>          <div class="lane-metric">IRS/State Tax Reserve<br/>27% Auto-Split · Opus Guardian 96%</div>        </div>        <!-- Income-Engine -->        <div class="lane">          <div class="lane-title">Income-Engine</div>          <div class="lane-status active">[ ONLINE ]</div>          <div class="lane-metric">AI Managed Arbitrage<br/>63% Yield · Hermes-routed</div>        </div>        <!-- Founder Safety -->        <div class="lane">          <div class="lane-title">Founder Safety (Tier A2)</div>          <div class="lane-status critical">[ CRITICAL ]</div>          <div class="lane-metric">Human Survival Baseline<br/>$2500/mo — distinct from infra</div>        </div>        <!-- Kids Bucket — CORRECTED LABEL -->        <div class="lane">          <div class="lane-title">Kids Bucket (10%)</div>          <div class="lane-status active">[ VAULTED ]</div>          <div class="lane-metric">Long-term UTMA Lock<br/><strong>contractual revenue disbursement</strong> (not donation)</div>        </div>        <!-- Governance -->        <div class="lane">          <div class="lane-title">Governance</div>          <div class="lane-status pending">[ PENDING ]</div>          <div class="lane-metric">Multi-sig Audit<br/>3/5 Signers · ClawX 6-AI</div>        </div>        <!-- Manus Coordination -->        <div class="lane">          <div class="lane-title">Manus Coordination</div>          <div class="lane-status active">[ RUNNING ]</div>          <div class="lane-metric">GPU Local Fallback<br/>Ollama Active · qwen2.5:7b</div>        </div>        <!-- Blocked -->        <div class="lane">          <div class="lane-title">Blocked / Dead Zones</div>          <div class="lane-status pending">[ DEPRIORITIZED ]</div>          <div class="lane-metric">Tier 0 Cloud Legacy<br/>$0 Allocation · no Anthropic key</div>        </div>      </div>    </div>    <!-- Hermes Routing Matrix — CORRECTED: Hermes is the router, xAI user-auth sign-in for Grok -->    <div class="kanban-section">      <span class="label">Hermes Router · alias → provider → real model (xAI user-auth sign-in, NOT OpenRouter key)</span>      <table class="routing-table">        <thead>          <tr>            <th>alias</th>            <th>router</th>            <th>provider / auth</th>            <th>real model</th>            <th>status</th>          </tr>        </thead>        <tbody>          <tr>            <td><strong>grok</strong></td>            <td><strong>Hermes :11435</strong></td>            <td>xAI (user-auth sign-in)</td>            <td>x-ai/grok-4</td>            <td style="color:var(--success);">LIVE · routed through Hermes</td>          </tr>          <tr>            <td><strong>cfo</strong></td>            <td><strong>Hermes :11435</strong></td>            <td>ollama-local</td>            <td>joshlcoleman/CFO-Until-No-Kid-In-Need:latest</td>            <td style="color:var(--success);">LIVE · #UntilNoKidInNeed specialist</td>          </tr>          <tr>            <td><strong>hermes</strong></td>            <td>self</td>            <td>local + xAI user-auth</td>            <td>qwen2.5:7b + grok-4 via xAI sign-in</td>            <td style="color:var(--success);">PRIMARY ROUTER — zero Anthropic key</td>          </tr>          <tr>            <td><strong>codex</strong></td>            <td>direct</td>            <td>local / factory MCP</td>            <td>CodeX executor</td>            <td style="color:var(--warning);">Wallet · treasury · GitHub</td>          </tr>        </tbody>      </table>      <div style="margin-top:6px; font-size:11px; color:var(--text-muted);">        All Grok traffic goes through <strong>Hermes 127.0.0.1:11435</strong> using xAI user-auth sign-in (no raw OpenRouter key). X-Hermes-Provider / X-Hermes-Real-Model in every footer.      </div>    </div>    <!-- Live Activity / Who is Working — NOT IDLE -->    <div class="kanban-section" id="live-activity">      <span class="label">Live Activity — Real-time (powered by services/mission-control-backend/)</span>      <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">        Tasks, routines, and goals executed in real time. Hermes routes every action. Shows <strong>who</strong> is working and current status (never idle while lanes are active).      </div>      <div id="activity-feed" style="background:var(--bg-base); border:1px solid var(--bg-elevated); border-radius:6px; padding:12px; font-family:var(--font-mono); font-size:12px; max-height:160px; overflow-y:auto; line-height:1.45;">        <!-- Populated dynamically from /api/kanban/activity when KANBAN_STATE_LOGGER is running -->        <div style="color:var(--text-muted);">Waiting for backend activity… (start KANBAN_STATE_LOGGER.py to populate real-time who + status)</div>      </div>      <div style="margin-top:8px; font-size:11px;">        <strong>Current Operators:</strong>         <span style="color:var(--success);">Hermes (router)</span> ·         <span style="color:var(--accent);">Grok (xAI sign-in)</span> ·         <span style="color:var(--success);">CFO-Until-No-Kid-In-Need (local)</span> ·         <span style="color:var(--warning);">KANBAN_STATE_LOGGER + FAILSAFE (services/mission-control-backend/)</span>      </div>    </div>    <!-- Live Terminal + Activity (fed by services/mission-control-backend/) -->    <div class="terminal-section">      <span class="label">Live Task Stream — Hermes-routed (ws://127.0.0.1:3300 via SABRETOOTH_FAILSAFE) · Real-time who + status from backends</span>      <div class="terminal" id="terminal">        <div class="event">          <span class="timestamp">[14:32:15]</span> <span class="agent">HERMES</span> Mission Control live on feature/mission-control-hermes-live. All work routed through Hermes :11435 (xAI user-auth for Grok). Backends active — status never idle.        </div>      </div>    </div>  </div>  <!-- Footer -->  <div class="footer">    <span class="mission">#UntilNoKidInNeed — 1 wallet · 1 LLC · 10% contractual revenue disbursement max/bucket</span>    <span class="status">      <span id="wsStatus">WebSocket: Connecting…</span>      <span style="margin-left:12px;">Open Windows · no locked doors · eyes-on for Opus + authorized platforms</span>    </span>  </div>  <script>    // MISSION_CONTROL_API — single source of truth for the local API base.    // Default: 8790 (the live, code-pinned FastAPI service).    // Override: set ?api=http://192.168.x.x:8787 in the URL.    // Why 8790: 8787 is held by an orphan process that returns 500 on every route.    // 8790 is the code-pinned API with paperclip stub + body-cache fix + new /adapters + /goals routes.    const MISSION_CONTROL_API = new URLSearchParams(location.search).get('api') || 'http://127.0.0.1:8790';    // Fetch Manus credits from T5500 (network wiring locked per directive)    async function updateManusCredits() {      try {        const response = await fetch(`${MISSION_CONTROL_API}/manus/credits`);        const data = await response.json();        const creditsEl = document.getElementById('manusCredits');        const statusEl = document.getElementById('manusStatus');        const cardEl = document.getElementById('manusCard');        const balance = data.balance || 0;        const limit = data.limit || 50;        const percentage = (balance / limit) * 100;        creditsEl.textContent = `$${balance.toFixed(2)} / $${limit}`;        statusEl.textContent = `${percentage.toFixed(1)}% remaining`;        if (percentage < 10) {          cardEl.classList.add('warning');          statusEl.textContent = '⚠️ FALLBACK ACTIVE — Free tier models only';          document.getElementById('fallbackStatus').textContent = 'ACTIVE';          document.getElementById('fallbackDetail').textContent = 'Using Ollama local GPU';        } else {          cardEl.classList.remove('warning');          document.getElementById('fallbackStatus').textContent = 'Idle';          document.getElementById('fallbackDetail').textContent = 'Sabretooth GPU Ready';        }      } catch (err) {        document.getElementById('manusStatus').textContent = 'Error fetching credits (T5500:3200)';      }    }    // Fetch compliance status from T5500 (doctrine gate)    async function updateCompliance() {      try {        const response = await fetch(`${MISSION_CONTROL_API}/compliance/status`);        const data = await response.json();        const status = data.verified ? '✅ VERIFIED — Square LY5GN09F5AN83' : '⚠️ PENDING';        document.getElementById('complianceStatus').textContent = status;      } catch (err) {        document.getElementById('complianceStatus').textContent = '— (T5500 unreachable)';      }    }    // WebSocket connection for live task stream (Sabretooth ledger — locked)    function connectWebSocket() {      const ws = new WebSocket('ws://127.0.0.1:3300');      const wsStatusEl = document.getElementById('wsStatus');      const terminalEl = document.getElementById('terminal');      ws.onopen = () => {        wsStatusEl.textContent = '✓ WebSocket: Connected to Sabretooth ledger';        wsStatusEl.style.color = 'var(--success)';      };      ws.onmessage = (event) => {        const message = JSON.parse(event.data);        const eventDiv = document.createElement('div');        eventDiv.className = `event ${message.type}`;        const timestamp = new Date(message.timestamp).toLocaleTimeString();        eventDiv.innerHTML = `          <span class="timestamp">[${timestamp}]</span>          <span class="agent">${message.agent}</span>          ${message.task} — <strong>${message.status}</strong>          ${message.detail ? `<br/><span style="color: var(--text-muted);">${message.detail}</span>` : ''}        `;        terminalEl.appendChild(eventDiv);        terminalEl.scrollTop = terminalEl.scrollHeight;      };      ws.onerror = () => {        wsStatusEl.textContent = '✗ WebSocket: Error (Sabretooth 3300)';        wsStatusEl.style.color = 'var(--danger)';      };      ws.onclose = () => {        wsStatusEl.textContent = '✗ WebSocket: Disconnected — retrying';        wsStatusEl.style.color = 'var(--warning)';        setTimeout(connectWebSocket, 3000);      };    }    // Initialize — routing locked    updateManusCredits();    updateCompliance();    connectWebSocket();    // Periodic refresh    setInterval(updateManusCredits, 30000);    setInterval(updateCompliance, 60000);    // Live Activity Feed — polls KANBAN_STATE_LOGGER /api/kanban/activity (the enhancement from this branch)    async function refreshActivityFeed() {      const feed = document.getElementById('activity-feed');      if (!feed) return;      try {        const res = await fetch(`${MISSION_CONTROL_API}/kanban/activity?limit=12`);        if (!res.ok) throw new Error('backend not reachable');        const data = await res.json();        if (!data.activities || data.activities.length === 0) {          feed.innerHTML = '<div style="color:var(--text-muted);">No activity logged yet. Hermes-routed agents should call record_activity(actor="...", ...) or update_lane_status(..., actor="...")</div>';          return;        }        feed.innerHTML = data.activities.map(a => {          const time = new Date(a.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});          const who = a.actor || 'system';          const detail = a.detail ? ` — ${a.detail}` : '';          const lane = a.lane ? ` [${a.lane}]` : '';          return `<div style="margin-bottom:2px;"><span style="color:var(--text-muted);">[${time}]</span> <strong>${who}</strong>${lane} → ${a.action}${detail}</div>`;        }).join('');      } catch (e) {        // Silently keep previous content or waiting message      }    }    setTimeout(() => {      refreshActivityFeed();      setInterval(refreshActivityFeed, 4000);    }, 1200);    // GOALS LOOP — Real numbers from specialist adapters. Zero = blank cell, never fake.    // Endpoint contract: T5500 backend exposes /api/goals/{grok,manus,gemini,perplexity}/counts    // Adapter health check: 200 + non-empty JSON shape required. Else cell goes RED.    async function fetchGoalCounts(specialist, fields) {      const map = {        grok: `${MISSION_CONTROL_API}/goals/grok/counts`,        manus: `${MISSION_CONTROL_API}/goals/manus/counts`,        gemini: `${MISSION_CONTROL_API}/goals/gemini/counts`,        perplexity: `${MISSION_CONTROL_API}/goals/perplexity/counts`,      };      const url = map[specialist];      try {        const res = await fetch(url);        if (!res.ok) throw new Error('HTTP ' + res.status);        const data = await res.json();        // Shape check — 200 OK with empty body is RED, not green.        if (!data || typeof data !== 'object') throw new Error('empty body');        for (const f of fields) {          const el = document.getElementById(`${specialist}-${f}`);          if (el) el.textContent = (data[f] !== undefined && data[f] !== null) ? data[f] : '0';        }        // Update lane status        const statusEl = document.getElementById(`goal-${specialist === 'perplexity' ? 'perplexity-research' : specialist === 'grok' ? 'grok-x' : specialist === 'manus' ? 'manus-meta' : 'gemini-youtube'}`)?.querySelector('.lane-status');        if (statusEl) {          statusEl.textContent = '[ LIVE ]';          statusEl.className = 'lane-status active';        }        return true;      } catch (e) {        // Mark cell RED — not green, not blank        const goalId = {grok:'goal-grok-x',manus:'goal-manus-meta',gemini:'goal-gemini-youtube',perplexity:'goal-perplexity-research'}[specialist];        const statusEl = document.getElementById(goalId)?.querySelector('.lane-status');        if (statusEl) {          statusEl.textContent = '[ ADAPTER DOWN ]';          statusEl.className = 'lane-status critical';        }        return false;      }    }    async function refreshGoals() {      // Refresh all four specialists in parallel      await Promise.all([        fetchGoalCounts('grok', ['hashtags','posts','replies','comments','followups','leads','sales']),        fetchGoalCounts('manus', ['hashtags','posts','replies','comments','followups','leads','sales']),        fetchGoalCounts('gemini', ['videos','subs','views','impressions','maps','leads']),        fetchGoalCounts('perplexity', ['reports','citations','audits','posts']),      ]);    }    setTimeout(() => {      refreshGoals();      setInterval(refreshGoals, 8000);    }, 1500);    // STICKY NOTES — Opus-tier nots. Pulled from /api/sticky-notes (Opus-authored)    async function refreshStickies() {      try {        const res = await fetch(`${MISSION_CONTROL_API}/sticky-notes`);        if (!res.ok) throw new Error('HTTP ' + res.status);        const data = await res.json();        if (!data || !data.notes) return;        for (const [agent, body] of Object.entries(data.notes)) {          const el = document.getElementById(`note-${agent}-status`);          if (el && body && body.status) el.textContent = body.status;        }      } catch (e) {        // Sticky notes silently stay at last-known state — they don't fake-green      }    }    setTimeout(() => {      refreshStickies();      setInterval(refreshStickies, 12000);    }, 2200);    // ADAPTER HEALTH MATRIX — real heartbeats. 3 missed = RED.    async function refreshAdapterHealth() {      // Endpoint contract: /api/adapters/health returns {adapter_name: {ok, last_ok, last_error, silence_seconds}}      try {        const res = await fetch(`${MISSION_CONTROL_API}/adapters/health`);        if (!res.ok) throw new Error('HTTP ' + res.status);        const data = await res.json();        // Update the Hermes Routing Matrix table statuses dynamically        const table = document.querySelector('.routing-table tbody');        if (!table) return;        for (const row of table.querySelectorAll('tr')) {          const alias = row.cells[0]?.textContent.trim().toLowerCase();          const cell = row.cells[4];          if (!alias || !cell) continue;          const health = data[alias];          if (!health) {            cell.textContent = '— no health data';            cell.style.color = 'var(--text-muted)';          } else if (health.ok && health.silence_seconds < 180) {            cell.innerHTML = `LIVE · last ok ${Math.floor(health.silence_seconds)}s ago`;            cell.style.color = 'var(--success)';          } else {            cell.innerHTML = `RED · ${health.silence_seconds}s silence${health.last_error ? ' · ' + health.last_error : ''}`;            cell.style.color = 'var(--danger)';          }        }      } catch (e) {        // Hermes audit catches this      }    }    setTimeout(() => {      refreshAdapterHealth();      setInterval(refreshAdapterHealth, 15000);    }, 2500);    // Console log for operators    console.log('%c[MISSION CONTROL] feature/mission-control-hermes-live | Hermes :11435 router (xAI user-auth sign-in for Grok) | Live Activity via services/mission-control-backend/KANBAN_STATE_LOGGER.py + /api/kanban/activity', 'color:#8A7D75');  </script></body></html>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OPUSHASHANDS — Hermes glass house · #UntilNoKidInNeed</title>
+  <meta name="description" content="Open-window view of the OPUS / Hermes agent fleet. Live kanban, adapter heartbeats, goal counts, routine runs. No mock, no placeholders, no hidden rooms." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-base: #0E0B0A;
+      --bg-surface: #15110F;
+      --bg-elevated: #1F1916;
+      --bg-glass: rgba(31, 25, 22, 0.7);
+      --text-primary: #F9F6EE;
+      --text-secondary: #B5A79E;
+      --text-muted: #8A7D75;
+      --accent: #FF6B35;
+      --accent-glow: rgba(255, 107, 53, 0.4);
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --ukid: #3B82F6;
+      --font-heading: 'Instrument Serif', serif;
+      --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.55;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-image: radial-gradient(rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 3px 3px;
+    }
+    .label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); }
+    .data { font-family: var(--font-mono); }
+    .heading { font-family: var(--font-heading); letter-spacing: -0.01em; }
+    h1.heading { font-size: 38px; line-height: 1.05; font-weight: 400; }
+    h2.heading { font-size: 22px; line-height: 1.15; font-weight: 400; }
+    h3.heading { font-size: 13px; line-height: 1.2; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; font-family: var(--font-mono); color: var(--text-secondary); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header {
+      padding: 28px 32px 20px;
+      border-bottom: 1px solid var(--bg-elevated);
+      background: linear-gradient(180deg, rgba(255,107,53,0.04), transparent);
+    }
+    header .top { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    header .tagline { color: var(--text-secondary); font-size: 13px; max-width: 720px; }
+    header .windows { display: flex; gap: 8px; align-items: center; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.18em; }
+    .window-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); }
+    main { padding: 24px 32px 48px; flex: 1; display: grid; grid-template-columns: 1.1fr 1fr; gap: 20px; }
+    @media (max-width: 1100px) { main { grid-template-columns: 1fr; } }
+    .panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--bg-elevated);
+      border-radius: 8px;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 240px;
+    }
+    .panel-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .panel-header .status { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; }
+    .panel-header .status.live { color: var(--success); }
+    .panel-header .status.stale { color: var(--warning); }
+    .panel-header .status.dead { color: var(--danger); }
+    .panel-header .status.loading { color: var(--text-muted); }
+    .panel-body { flex: 1; }
+    table.matrix { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+    table.matrix th, table.matrix td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--bg-elevated); }
+    table.matrix th { color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-size: 10px; font-weight: 500; }
+    table.matrix td { color: var(--text-primary); }
+    .pill { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
+    .pill.live { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .pill.silenced { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+    .pill.unknown { background: var(--bg-elevated); color: var(--text-muted); }
+    .goal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .goal-card { background: var(--bg-elevated); border-radius: 6px; padding: 14px 16px; }
+    .goal-card .specialist { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 6px; }
+    .goal-card .counts { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; font-family: var(--font-mono); font-size: 13px; }
+    .goal-card .counts .k { color: var(--text-muted); }
+    .goal-card .counts .v { color: var(--text-primary); text-align: right; }
+    .task-list { display: flex; flex-direction: column; gap: 8px; }
+    .task-row { display: flex; align-items: center; gap: 12px; padding: 8px 10px; background: var(--bg-elevated); border-radius: 4px; font-size: 13px; }
+    .task-row .id { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); min-width: 60px; }
+    .task-row .title { flex: 1; }
+    .task-row .status { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
+    .task-row .status.todo { color: var(--ukid); }
+    .task-row .status.doing { color: var(--accent); }
+    .task-row .status.done { color: var(--text-muted); }
+    .task-row .status.blocked { color: var(--danger); }
+    .empty { color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; padding: 8px 0; }
+    .run-list { display: flex; flex-direction: column; gap: 6px; }
+    .run-row { display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: var(--bg-elevated); border-radius: 4px; font-family: var(--font-mono); font-size: 12px; }
+    .run-row .title { flex: 1; color: var(--text-primary); }
+    .run-row .when { color: var(--text-muted); font-size: 11px; }
+    .run-row .ok { color: var(--success); }
+    .run-row .fail { color: var(--danger); }
+    .run-row .run { color: var(--ukid); }
+    .footer {
+      padding: 18px 32px 24px;
+      border-top: 1px solid var(--bg-elevated);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+    .footer .sep { color: var(--bg-elevated); }
+    .doctrine { max-width: 880px; line-height: 1.6; }
+    .refresh { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top">
+      <div>
+        <h1 class="heading">OPUSHASHANDS</h1>
+        <div class="label" style="margin-top: 4px;">Hermes glass house · #UntilNoKidInNeed · open windows, no locked doors</div>
+      </div>
+      <div class="windows">
+        <span class="window-dot" id="window-dot"></span>
+        <span id="window-label">window open</span>
+        <span class="refresh" id="last-refresh">—</span>
+      </div>
+    </div>
+    <p class="tagline" style="margin-top: 12px;">
+      This page is a live read of every adapter heartbeat, every goal counter, every
+      kanban task, and every routine run that the OPUS / Hermes fleet has recorded.
+      No mock data, no placeholders, no fake green. If a number is shown, ask the
+      API for the raw event that produced it — it's all reachable.
+    </p>
+  </header>
+
+  <main>
+    <section class="panel" id="panel-adapters">
+      <div class="panel-header">
+        <h3 class="heading">Adapter heartbeats</h3>
+        <span class="status loading" id="adapters-status">connecting…</span>
+      </div>
+      <div class="panel-body">
+        <table class="matrix">
+          <thead>
+            <tr><th>alias</th><th>provider</th><th>last ok</th><th>silence</th><th>state</th></tr>
+          </thead>
+          <tbody id="adapters-body"><tr><td colspan="5" class="empty">fetching…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-goals">
+      <div class="panel-header">
+        <h3 class="heading">Goal counts · specialist-owned</h3>
+        <span class="status loading" id="goals-status">connecting…</span>
+      </div>
+      <div class="panel-body">
+        <div class="goal-grid" id="goals-body">
+          <div class="empty">fetching…</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-tasks">
+      <div class="panel-header">
+        <h3 class="heading">Kanban · live task stream</h3>
+        <span class="status loading" id="tasks-status">connecting…</span>
+      </div>
+      <div class="panel-body">
+        <div class="task-list" id="tasks-body">
+          <div class="empty">fetching…</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-runs">
+      <div class="panel-header">
+        <h3 class="heading">Routines · loop runs</h3>
+        <span class="status loading" id="runs-status">connecting…</span>
+      </div>
+      <div class="panel-body">
+        <div class="run-list" id="runs-body">
+          <div class="empty">fetching…</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="doctrine">
+      1 wallet · 1 LLC · 10% max/bucket · Square-only revenue · no Anthropic key · Hermes-routed ·
+      #UntilNoKidInNeed · OPUS Guardian · xAI user-auth sign-in for Grok
+    </div>
+    <span class="sep">|</span>
+    <span>API base: <span class="data" id="api-base">…</span></span>
+    <span class="sep">|</span>
+    <span>proxied via Cloudflare · opushashands.youandinotai.com</span>
+  </footer>
+
+  <script>
+    "use strict";
+
+    // Single source of truth for the API base. Relative paths by default so the
+    // page works on any host serving it. Override with ?api=http://host:port.
+    var API_BASE = (function () {
+      var qs = new URLSearchParams(location.search).get("api");
+      if (qs) return qs.replace(/\/$/, "");
+      return "";
+    })();
+    document.getElementById("api-base").textContent = API_BASE || "(same origin)";
+
+    function getJSON(path) {
+      return fetch(API_BASE + path, { headers: { Accept: "application/json" } })
+        .then(function (r) {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.json();
+        });
+    }
+
+    function setStatus(id, klass, label) {
+      var el = document.getElementById(id);
+      el.className = "status " + klass;
+      el.textContent = label;
+    }
+
+    function relTime(iso) {
+      if (!iso) return "—";
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return iso;
+      var s = Math.floor((Date.now() - d.getTime()) / 1000);
+      if (s < 60) return s + "s ago";
+      if (s < 3600) return Math.floor(s / 60) + "m ago";
+      if (s < 86400) return Math.floor(s / 3600) + "h ago";
+      return Math.floor(s / 86400) + "d ago";
+    }
+
+    function fmtTime(iso) {
+      if (!iso) return "—";
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return iso;
+      return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    }
+
+    function esc(s) {
+      if (s == null) return "";
+      return String(s).replace(/[<>&"']/g, function (c) {
+        return { "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
+
+    function renderAdapters(data) {
+      var body = document.getElementById("adapters-body");
+      var keys = Object.keys(data || {}).filter(function (k) { return k !== "_meta"; });
+      if (keys.length === 0) {
+        body.innerHTML = '<tr><td colspan="5" class="empty">no adapters reported</td></tr>';
+        setStatus("adapters-status", "dead", "EMPTY");
+        return;
+      }
+      keys.sort();
+      var live = 0, silenced = 0;
+      var rows = keys.map(function (alias) {
+        var a = data[alias];
+        var ok = a && a.ok && a.silence_seconds != null && a.silence_seconds < 180;
+        var pillClass = ok ? "live" : (a && a.silence_seconds != null ? "silenced" : "unknown");
+        if (ok) live++; else if (a && a.silence_seconds != null) silenced++;
+        var provider = (a && a.providers && a.providers[0] && a.providers[0].name) || "—";
+        return "<tr>" +
+          "<td>" + esc(alias) + "</td>" +
+          "<td>" + esc(provider) + "</td>" +
+          "<td>" + esc(relTime(a && a.last_ok)) + "</td>" +
+          "<td>" + (a && a.silence_seconds != null ? Math.floor(a.silence_seconds) + "s" : "—") + "</td>" +
+          "<td><span class=\"pill " + pillClass + "\">" + (ok ? "live" : (a && a.silence_seconds != null ? "silenced" : "?")) + "</span></td>" +
+        "</tr>";
+      });
+      body.innerHTML = rows.join("");
+      if (live === keys.length) setStatus("adapters-status", "live", live + " LIVE");
+      else if (live === 0) setStatus("adapters-status", "dead", "ALL SILENT");
+      else setStatus("adapters-status", "stale", live + " LIVE · " + silenced + " SILENT");
+    }
+
+    function loadAdapters() {
+      return getJSON("/adapters/health").then(renderAdapters);
+    }
+
+    var GOAL_SPECIALISTS = [
+      { id: "grok",       platform: "X / x.com (FIRST SALE)",   fields: ["hashtags", "posts", "replies", "comments", "followups", "leads", "sales"] },
+      { id: "manus",      platform: "Meta (FB / IG / Threads)", fields: ["hashtags", "posts", "replies", "comments", "followups", "leads", "sales"] },
+      { id: "gemini",     platform: "YouTube + Google SEO",      fields: ["videos", "subs", "views", "impressions", "maps", "leads"] },
+      { id: "perplexity", platform: "Research + remaining",     fields: ["reports", "citations", "audits", "posts"] },
+    ];
+
+    function renderGoalCard(spec, data) {
+      var rows = spec.fields.map(function (f) {
+        var v = data && data[f] != null ? data[f] : 0;
+        return '<div class="k">' + esc(f) + '</div><div class="v">' + esc(v) + '</div>';
+      }).join("");
+      return '<div class="goal-card">' +
+        '<div class="specialist">' + esc(spec.id) + ' → ' + esc(spec.platform) + '</div>' +
+        '<div class="counts">' + rows + '</div>' +
+      '</div>';
+    }
+
+    function loadGoals() {
+      return Promise.all(GOAL_SPECIALISTS.map(function (spec) {
+        return getJSON("/goals/" + spec.id + "/counts").then(
+          function (data) { return { spec: spec, data: data, ok: true }; },
+          function ()     { return { spec: spec, data: {},     ok: false }; }
+        );
+      })).then(function (results) {
+        var body = document.getElementById("goals-body");
+        body.innerHTML = results.map(function (r) { return renderGoalCard(r.spec, r.data); }).join("");
+        var liveCount = results.filter(function (r) { return r.ok; }).length;
+        if (liveCount === results.length) setStatus("goals-status", "live", liveCount + " LIVE");
+        else if (liveCount === 0) setStatus("goals-status", "dead", "ALL DOWN");
+        else setStatus("goals-status", "stale", liveCount + " LIVE · " + (results.length - liveCount) + " DOWN");
+      });
+    }
+
+    var TASK_STATUS_CLASS = { todo: "todo", doing: "doing", in_progress: "doing", done: "done", completed: "done", blocked: "blocked", failed: "blocked" };
+    function renderTasks(data) {
+      var tasks = (data && data.tasks) || [];
+      var body = document.getElementById("tasks-body");
+      if (tasks.length === 0) {
+        body.innerHTML = '<div class="empty">no open tasks · kanban is clean</div>';
+        setStatus("tasks-status", "live", "0 OPEN");
+        return;
+      }
+      body.innerHTML = tasks.slice(0, 20).map(function (t) {
+        var s = (t.status || "todo").toLowerCase();
+        var cls = TASK_STATUS_CLASS[s] || "todo";
+        return '<div class="task-row">' +
+          '<div class="id">' + esc(t.id || t.task_id || "?") + '</div>' +
+          '<div class="title">' + esc(t.title || t.summary || t.name || "(untitled)") + '</div>' +
+          '<div class="status ' + cls + '">' + esc(s) + '</div>' +
+        '</div>';
+      }).join("");
+      var open = tasks.filter(function (t) { return ["todo", "doing", "in_progress", "blocked"].indexOf((t.status || "").toLowerCase()) >= 0; }).length;
+      setStatus("tasks-status", "live", open + " OPEN · " + tasks.length + " TOTAL");
+    }
+
+    function loadTasks() {
+      return getJSON("/tasks").then(renderTasks, function () {
+        document.getElementById("tasks-body").innerHTML = '<div class="empty">tasks endpoint unreachable</div>';
+        setStatus("tasks-status", "dead", "DOWN");
+      });
+    }
+
+    function renderRuns(data) {
+      var runs = (data && data.runs) || [];
+      var body = document.getElementById("runs-body");
+      if (runs.length === 0) {
+        body.innerHTML = '<div class="empty">no runs logged yet</div>';
+        setStatus("runs-status", "live", "0 RUNS");
+        return;
+      }
+      body.innerHTML = runs.slice(0, 15).map(function (r) {
+        var klass = r.status === "succeeded" ? "ok" : (r.status === "failed" ? "fail" : "run");
+        return '<div class="run-row">' +
+          '<div class="title">' + esc(r.title || r.command_id || "?") + '</div>' +
+          '<div class="when">' + esc(fmtTime(r.started_at)) + ' · ' + esc(r.status || "?") + '</div>' +
+          '<div class="' + klass + '">' + (r.status === "succeeded" ? "OK" : (r.status === "failed" ? "FAIL" : "RUN")) + '</div>' +
+        '</div>';
+      }).join("");
+      setStatus("runs-status", "live", runs.length + " RUNS");
+    }
+
+    function loadRuns() {
+      return getJSON("/ops/runs").then(renderRuns, function () {
+        document.getElementById("runs-body").innerHTML = '<div class="empty">ops/runs unreachable</div>';
+        setStatus("runs-status", "dead", "DOWN");
+      });
+    }
+
+    function tick() {
+      var t0 = Date.now();
+      Promise.allSettled([loadAdapters(), loadGoals(), loadTasks(), loadRuns()])
+        .then(function () {
+          var elapsed = Date.now() - t0;
+          document.getElementById("last-refresh").textContent =
+            "refreshed " + new Date().toLocaleTimeString() + " (" + elapsed + "ms)";
+        });
+    }
+
+    tick();
+    setInterval(tick, 8000);
+  </script>
+</body>
+</html>
