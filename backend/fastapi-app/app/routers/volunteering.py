@@ -1,4 +1,4 @@
-"""Volunteering Hub router — local charity impact for verified humans.
+"""Volunteering Hub router — local community impact for verified humans.
 
 Endpoints:
 - GET /volunteer — list opportunities (filterable by location, category)

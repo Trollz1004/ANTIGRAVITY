@@ -271,9 +271,9 @@ API_DESCRIPTION: str = """
 ![Mission Control](https://img.shields.io/badge/Mission%20Control-API%20v1-blue)
 
 **Social Platform for Good** — A dating and community platform that connects
-people while supporting charitable causes. Every interaction on the platform
-contributes to community impact through integrated volunteering and
-charitable giving features.
+people while supporting the platform's mission. Every interaction on the
+platform contributes to community impact through integrated volunteering and
+mission-support features.
 
 ---
 
