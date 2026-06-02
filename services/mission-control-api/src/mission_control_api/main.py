@@ -224,7 +224,8 @@ async def root_index():
 
 
 if DASHBOARD_DIST.exists():
-    app.mount("/assets", StaticFiles(directory=DASHBOARD_DIST / "assets"), name="dashboard-assets")
+    if (DASHBOARD_DIST / "assets").is_dir():
+        app.mount("/assets", StaticFiles(directory=DASHBOARD_DIST / "assets"), name="dashboard-assets")
 
     @app.get("/{full_path:path}", include_in_schema=False)
     async def spa_fallback(full_path: str, request: Request):
