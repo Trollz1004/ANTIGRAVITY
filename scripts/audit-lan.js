@@ -19,7 +19,7 @@ const { chromium } = require('C:\\Antigravity\\apps\\mission-control\\node_modul
   page.on('request',  r => requests.push(r.url()));
   page.on('requestfailed', r => failedReqs.push(r.url() + ' :: ' + (r.failure()?.errorText || '?')));
 
-  const base = 'http://192.168.0.8:8788';
+  const base = 'http://192.168.0.8:4201';
   const url = base + '/?bust=' + Date.now();
   console.log('opening', url);
   await page.goto(url, { waitUntil: 'networkidle', timeout: 20000 }).catch(e => console.log('nav warn:', e.message));
