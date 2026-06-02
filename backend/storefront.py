@@ -63,6 +63,18 @@ class ProductIn(BaseModel):
 
 STARTER_SKUS: List[Dict[str, Any]] = [
     {
+        "title": "Bot Shield · Square Hosted",
+        "description": "Square-hosted protection ledger for solo founders. Real product, real Square checkout — proceeds split per doctrine (10% kids · 27% tax reserve · 63% ops).",
+        "price_usd": 9.00, "sku": "OPC-BOTSHIELD-9", "bucket": 5,
+        "square_checkout_url": os.environ.get("SQUARE_BOT_SHIELD_LINK", "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD"),
+    },
+    {
+        "title": "Founding Member · Subscription",
+        "description": "Recurring Square subscription · founding-circle support. Locks in early-supporter status and a direct line to the mission desk.",
+        "price_usd": 29.00, "sku": "OPC-FOUNDING-29", "bucket": 5,
+        "square_checkout_url": os.environ.get("SQUARE_FOUNDING_MEMBER_LINK", "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD"),
+    },
+    {
         "title": "Mission Patch · Custom AI Image",
         "description": "One Nano Banana-generated mission patch. Tell us the theme, get a PNG within 24h.",
         "price_usd": 9.00, "sku": "OPC-PATCH-9", "bucket": 5,
