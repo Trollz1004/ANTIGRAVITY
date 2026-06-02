@@ -34,27 +34,38 @@ LEDGER = _db.ledger
 
 
 async def _maybe_broadcast(entry: Dict[str, Any]) -> None:
-    """Fire-and-forget Telegram notice when a contribution lands.
+    """Fire-and-forget encrypted me-to-me notice when a contribution lands.
 
-    Free distribution loop: every Square/PayPal/CashApp hit pings Joshua's
-    group so the mission keeps signaling without ad spend. Honest empty:
-    if TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID are unset, this is a no-op.
+    Prefers WhatsApp (E2E encrypted personal channel · Joshua's directive).
+    Falls back to Telegram only if WhatsApp creds are missing.
+    Either way: never raise — the webhook always succeeds even if both fail.
     """
-    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
-    if not token or not chat_id:
-        return
-    try:
-        from hub import _telegram_send  # late import — avoids circular at module load
-        text = (
-            f"💠 *Contribution recorded · ${entry['amount_usd']:.2f}*\n"
-            f"Bucket *{entry['bucket']} · {entry['bucket_name']}* via _{entry['source']}_\n"
-            f"{entry.get('note') or ''}\n\n"
-            f"_OpusPawClaw Mission Control · #UntilNoKidInNeed_"
-        )
-        await _telegram_send(text)
-    except Exception:  # honest no-throw — never let the broadcast break the webhook
-        pass
+    text = (
+        f"💠 *Contribution recorded · ${entry['amount_usd']:.2f}*\n"
+        f"Bucket *{entry['bucket']} · {entry['bucket_name']}* via _{entry['source']}_\n"
+        f"{entry.get('note') or ''}\n\n"
+        f"_OpusPawClaw Mission Control · #UntilNoKidInNeed_"
+    )
+    # Prefer WhatsApp (e2e encrypted me-to-me)
+    wa_phone_id = os.environ.get("WHATSAPP_PHONE_ID", "").strip()
+    wa_token = os.environ.get("WHATSAPP_TOKEN", "").strip()
+    wa_to = os.environ.get("WHATSAPP_TO", "").strip()
+    if wa_phone_id and wa_token and wa_to:
+        try:
+            from hub import _whatsapp_send  # late import — avoids circular at module load
+            await _whatsapp_send(text)
+            return
+        except Exception:
+            pass
+    # Fallback to Telegram if configured
+    tg_token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    tg_chat = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+    if tg_token and tg_chat:
+        try:
+            from hub import _telegram_send
+            await _telegram_send(text)
+        except Exception:
+            pass
 
 
 # Per-kid funding threshold — covers a meaningful unit of medical-care
