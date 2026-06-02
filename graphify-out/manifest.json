@@ -24,12 +24,16 @@
     "hash": "016a2f07d9303665bd1598fc03b6dc35"
   },
   "/app/backend/server.py": {
-    "mtime": 1780380643.3336349,
-    "hash": "488d284a68596f8d39c1aa32dfc48fb9"
+    "mtime": 1780390783.5826108,
+    "hash": "193bd3be7db69ce65b08458c1931c056"
+  },
+  "/app/backend/storefront.py": {
+    "mtime": 1780390846.215611,
+    "hash": "9da81846ace56ee9fedab980ca93cce1"
   },
   "/app/backend/hub.py": {
-    "mtime": 1780380666.4146276,
-    "hash": "33235df9c37f6a18ffba2094bcab24db"
+    "mtime": 1780381325.4214196,
+    "hash": "a1a00882f29c0724cf09b9fe90958113"
   },
   "/app/backend/services.py": {
     "mtime": 1777846902.2512054,
@@ -40,12 +44,16 @@
     "hash": "52afa87f188bd2f5d851684c374a9caa"
   },
   "/app/backend/ledger.py": {
-    "mtime": 1780380594.3766503,
-    "hash": "421c406832ef7b2b9b306ae4c1016c82"
+    "mtime": 1780390805.6216109,
+    "hash": "0c9ed4e4039b93444c6a4dd3ca91d746"
   },
   "/app/backend/graph.py": {
     "mtime": 1780380594.3816504,
     "hash": "8b17d7eec1db572f4b2f83c35d9c4cb9"
+  },
+  "/app/backend/tests/test_storefront_runway.py": {
+    "mtime": 1780391160.0906117,
+    "hash": "219ef5e713b4387b730829c2929d2c28"
   },
   "/app/backend/tests/test_graphify_doctrine.py": {
     "mtime": 1778023923.3063858,
@@ -84,16 +92,16 @@
     "hash": "ce5fb650ceea314eb15943ebf9fd93e2"
   },
   "/app/frontend/src/App.js": {
-    "mtime": 1780380801.907585,
-    "hash": "a133774c8191ed8227e4586dd22bc721"
+    "mtime": 1780390919.7826111,
+    "hash": "48ad129eaae6f8d38f6dc5ee057fbd23"
   },
   "/app/frontend/src/lib/utils.js": {
     "mtime": 1750222016.0,
     "hash": "83545aa57e5a38a104b53d08868db698"
   },
   "/app/frontend/src/components/CommandPalette.js": {
-    "mtime": 1780380779.577592,
-    "hash": "b1b55b231a1c8801aff4b8348ff5cfa6"
+    "mtime": 1780390988.5926113,
+    "hash": "c20a455e948c0eb9c06277e56e453413"
   },
   "/app/frontend/src/components/RunbookViewer.js": {
     "mtime": 1777596721.2323623,
@@ -148,16 +156,16 @@
     "hash": "f95ff9f137b50a6e4389844b74713dfd"
   },
   "/app/frontend/src/components/MissionRibbon.js": {
-    "mtime": 1777847091.5182068,
-    "hash": "06ec3c5ef5416a9988795cb00bb325b4"
+    "mtime": 1780390963.7336113,
+    "hash": "f87f80eafe57e90c9975ad284b151051"
   },
   "/app/frontend/src/components/FloatingGuide.js": {
     "mtime": 1777596722.2383623,
     "hash": "42e8ec8b07e05f6f23fe09bd1eb6f5d7"
   },
   "/app/frontend/src/components/Sidebar.js": {
-    "mtime": 1780380779.577592,
-    "hash": "5aca0ef553ccc09285b3efd5ef67bc23"
+    "mtime": 1780390939.2376113,
+    "hash": "5f4580343cbd2cd95762b231653cee60"
   },
   "/app/frontend/src/components/ui/skeleton.jsx": {
     "mtime": 1758879570.0,
@@ -351,6 +359,10 @@
     "mtime": 1750222016.0,
     "hash": "7914e66fc5945b37aa1a797715b458b6"
   },
+  "/app/frontend/src/modes/StorefrontMode.js": {
+    "mtime": 1780390906.5636113,
+    "hash": "5ff6880d9c343261b1a266c31d84f991"
+  },
   "/app/frontend/src/modes/ResearchMode.js": {
     "mtime": 1777596721.2593625,
     "hash": "f8cc9be7924107fe16d2348983e64206"
@@ -412,12 +424,12 @@
     "hash": "74298fa7eb777ff38d152cc6a56fc0dd"
   },
   "/app/memory/test_credentials.md": {
-    "mtime": 1774446449.0,
-    "hash": "40550db22145f13ee66e1e6d53c239df"
+    "mtime": 1780380955.2965364,
+    "hash": "c7cf44872d36c052430c39b490bf8b5b"
   },
   "/app/memory/PRD.md": {
-    "mtime": 1777847540.8592098,
-    "hash": "14091806364181ea6983faefa6d866b4"
+    "mtime": 1780380955.2695365,
+    "hash": "974b833392d2eeb10adb73c6fa8ec4e7"
   },
   "/app/backend/requirements.txt": {
     "mtime": 1777844087.0831816,

@@ -32,6 +32,31 @@ _client = AsyncIOMotorClient(os.environ["MONGO_URL"])
 _db = _client[os.environ["DB_NAME"]]
 LEDGER = _db.ledger
 
+
+async def _maybe_broadcast(entry: Dict[str, Any]) -> None:
+    """Fire-and-forget Telegram notice when a contribution lands.
+
+    Free distribution loop: every Square/PayPal/CashApp hit pings Joshua's
+    group so the mission keeps signaling without ad spend. Honest empty:
+    if TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID are unset, this is a no-op.
+    """
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+    if not token or not chat_id:
+        return
+    try:
+        from hub import _telegram_send  # late import — avoids circular at module load
+        text = (
+            f"💠 *Contribution recorded · ${entry['amount_usd']:.2f}*\n"
+            f"Bucket *{entry['bucket']} · {entry['bucket_name']}* via _{entry['source']}_\n"
+            f"{entry.get('note') or ''}\n\n"
+            f"_OpusPawClaw Mission Control · #UntilNoKidInNeed_"
+        )
+        await _telegram_send(text)
+    except Exception:  # honest no-throw — never let the broadcast break the webhook
+        pass
+
+
 # Per-kid funding threshold — covers a meaningful unit of medical-care
 # contribution (configurable so Joshua can adjust as the program scales).
 KID_THRESHOLD_USD = float(os.environ.get("KID_THRESHOLD_USD", "250"))
@@ -78,6 +103,7 @@ async def contribute(payload: ContributionCreate):
         "at": _now(),
     }
     await LEDGER.insert_one(entry.copy())
+    await _maybe_broadcast(entry)
     return entry
 
 
@@ -162,6 +188,7 @@ async def webhook(source: str, body: WebhookPayload):
         "at": _now(),
     }
     await LEDGER.insert_one(entry.copy())
+    await _maybe_broadcast(entry)
     return {"ok": True, "id": entry["id"], "amount_usd": entry["amount_usd"], "bucket": bucket}
 
 

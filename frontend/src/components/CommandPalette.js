@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Search, Compass, Code2, MessageSquare, Image as ImageIcon, Settings, Radio, Send, Bell, Heart, ListTodo, BookOpen, Share2, Network } from "lucide-react";
+import { Search, Compass, Code2, MessageSquare, Image as ImageIcon, Settings, Radio, Send, Bell, Heart, ListTodo, BookOpen, Share2, Network, ShoppingBag } from "lucide-react";
 
 /**
  * CommandPalette — ⌘K / Ctrl+K. Fast nav across modes + actions.
  */
 const ENTRIES = [
   { id: "go-mission",    label: "Go to Mission Control", hint: "Opus orchestrator surface", group: "Modes",   Icon: Compass,       action: { type: "mode", to: "mission" } },
+  { id: "go-storefront", label: "Go to Storefront",      hint: "Public catalogue · Square checkout", group: "Modes", Icon: ShoppingBag, action: { type: "mode", to: "storefront" } },
   { id: "go-ledger",     label: "Go to Mission Ledger",  hint: "Counter that proves the mission", group: "Modes", Icon: BookOpen,    action: { type: "mode", to: "ledger" } },
   { id: "go-graphify",   label: "Go to Graphify",        hint: "Knowledge graph + doctrine", group: "Modes", Icon: Network,        action: { type: "mode", to: "graphify" } },
   { id: "go-sabretooth", label: "Go to Sabretooth",      hint: "Admin terminal · dev node", group: "Modes", Icon: Network,         action: { type: "mode", to: "sabretooth" } },

@@ -17,6 +17,7 @@ import { TasksMode } from "./modes/TasksMode";
 import { LedgerMode } from "./modes/LedgerMode";
 import { GraphifyMode } from "./modes/GraphifyMode";
 import { SabretoothMode } from "./modes/SabretoothMode";
+import { StorefrontMode } from "./modes/StorefrontMode";
 import { MissionRibbon } from "./components/MissionRibbon";
 import { SettingsPanel } from "./components/SettingsPanel";
 
@@ -46,6 +47,7 @@ export default function App() {
       case "ledger":     return <LedgerMode />;
       case "graphify":   return <GraphifyMode />;
       case "sabretooth": return <SabretoothMode />;
+      case "storefront": return <StorefrontMode />;
       case "settings":   return <SettingsPanel />;
       default:           return <MissionMode />;
     }

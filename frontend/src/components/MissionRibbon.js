@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Heart, AlertTriangle, Share2 } from "lucide-react";
+import { Heart, AlertTriangle, Share2, Flame } from "lucide-react";
 import { ShareMissionModal } from "./ShareMissionModal";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 /**
  * MissionRibbon — always-on top strip showing the actual mission counter.
- * Reads /api/ledger/stats and /api/watchdog/status. Honest empty state.
+ * Reads /api/ledger/stats, /api/watchdog/status, /api/public/runway. Honest empty state.
  */
 export function MissionRibbon() {
   const [stats, setStats] = useState(null);
   const [alerts, setAlerts] = useState([]);
+  const [runway, setRunway] = useState(null);
   const [share, setShare] = useState(false);
   const [tick, setTick] = useState(0);
 
@@ -25,12 +26,13 @@ export function MissionRibbon() {
     let alive = true;
     const load = async () => {
       try {
-        const [s, w] = await Promise.all([
+        const [s, w, r] = await Promise.all([
           axios.get(`${API}/ledger/stats`).then((r) => r.data),
           axios.get(`${API}/watchdog/status`).then((r) => r.data),
+          axios.get(`${API}/public/runway`).then((r) => r.data).catch(() => null),
         ]);
         if (!alive) return;
-        setStats(s); setAlerts(w.alerts || []);
+        setStats(s); setAlerts(w.alerts || []); setRunway(r);
       } catch { /* honest empty state */ }
     };
     load();
@@ -57,6 +59,22 @@ export function MissionRibbon() {
         <Stat label="committed" value={`$${formatUsd(total)}`} tone="cyan" tick={tick} />
         <Stat label="kids fund" value={`$${formatUsd(kids)}`} tone="magenta" />
         <Stat label="kids covered (est.)" value={String(estimate)} tone="green" hint={`${threshold} USD per kid threshold`} />
+        {runway && (
+          <>
+            <span className="h-3 w-px bg-[#2a3a52]" />
+            <div
+              data-testid="ribbon-runway"
+              title={runway.note}
+              className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border border-[#2a3a52] bg-[#1a2332]"
+            >
+              <Flame size={10} className={runway.emergent_key_configured ? "text-[#00e676]" : "text-[#ff1744]"} />
+              <span className="text-[8px] tracking-[0.25em] uppercase text-[#6b82a6]">runway</span>
+              <span className="mono text-[10px] font-bold text-[#e8f0ff]">{runway.runway_days}d</span>
+              <span className="text-[8px] text-[#4a5568]">·</span>
+              <span className="text-[8px] tracking-widest uppercase text-[#6b82a6]">{runway.default_bridge.model.replace("gemini-", "")}</span>
+            </div>
+          </>
+        )}
         {alerts.length > 0 && (
           <div data-testid="mission-ribbon-alert" className="flex items-center gap-1.5 ml-auto bg-[#ff1744]/15 border border-[#ff1744]/40 rounded-full px-3 py-0.5 animate-pulse">
             <AlertTriangle size={11} className="text-[#ff1744]" />

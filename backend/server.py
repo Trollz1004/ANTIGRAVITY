@@ -340,12 +340,14 @@ from ledger import router as ledger_router  # noqa: E402
 from services import router as services_router, install_watchdog  # noqa: E402
 from graph import router as graph_router  # noqa: E402
 from auth_relay import router as auth_relay_router  # noqa: E402
+from storefront import router as storefront_router  # noqa: E402
 app.include_router(hub_router)
 app.include_router(tasks_router)
 app.include_router(ledger_router)
 app.include_router(services_router)
 app.include_router(graph_router)
 app.include_router(auth_relay_router)
+app.include_router(storefront_router)
 install_watchdog(app)
 app.add_middleware(
     CORSMiddleware,

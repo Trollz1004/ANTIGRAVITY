@@ -145,6 +145,43 @@ async def delete_product(product_id: str, request: Request):
     return {"ok": True, "deleted": product_id}
 
 
+@router.get("/runway")
+async def runway_status():
+    """Cost-aware runway pulse for the always-on ribbon.
+
+    Honest read of where Joshua actually stands: which LLM tier the default
+    E1 path is using, whether it's the free-tier fallback, and how much
+    committed revenue is sitting in the ledger vs a configurable burn rate.
+
+    No fabrication — if EMERGENT_LLM_KEY is unset, that's surfaced too.
+    """
+    has_emergent = bool(os.environ.get("EMERGENT_LLM_KEY", "").strip())
+    # Default E1 fallback model when caller doesn't pin one — set in hub.py.
+    default_bridge = ("gemini", "gemini-2.5-flash")
+    burn_usd_per_day = float(os.environ.get("BURN_USD_PER_DAY", "8"))
+
+    LEDGER = _db.ledger
+    agg = await LEDGER.aggregate([
+        {"$group": {"_id": None, "amount": {"$sum": "$amount_usd"}}},
+    ]).to_list(1)
+    committed = round(float(agg[0]["amount"]), 2) if agg else 0.0
+    runway_days = round(committed / burn_usd_per_day, 1) if burn_usd_per_day > 0 else 0.0
+
+    return {
+        "default_bridge": {"provider": default_bridge[0], "model": default_bridge[1]},
+        "emergent_key_configured": has_emergent,
+        "compute_tier": "free-tier · cheapest viable model" if has_emergent else "exhausted · honest fail",
+        "committed_usd": committed,
+        "burn_usd_per_day": burn_usd_per_day,
+        "runway_days": runway_days,
+        "note": (
+            "Every $9 patch ≈ 1.1 days of free-tier runway at current burn." if burn_usd_per_day > 0 else
+            "Burn rate unset — set BURN_USD_PER_DAY in /app/backend/.env to enable forecast."
+        ),
+        "tag": "#UntilNoKidInNeed",
+    }
+
+
 @router.post("/products/seed")
 async def seed_starter_skus(request: Request):
     """One-click seed: drops the 4 starter SKUs if the catalogue is empty."""
