@@ -364,14 +364,23 @@ async def _telegram_send(text: str) -> Dict[str, Any]:
                 "hint": "Set TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID in /app/backend/.env. Get a bot from @BotFather, add it to your group, then call https://api.telegram.org/bot<TOKEN>/getUpdates to find chat_id."}
 
     url = f"https://api.telegram.org/bot{token}/sendMessage"
-    payload = {"chat_id": chat_id, "text": text, "parse_mode": "Markdown", "disable_web_page_preview": True}
+    # Try MarkdownV2 first (richer formatting), fall back to plain on parse errors
+    # so an unescaped hashtag-with-underscore never silently drops the message.
     async with httpx.AsyncClient(timeout=10.0) as client:
-        try:
-            r = await client.post(url, json=payload)
-        except httpx.RequestError as e:
-            return {"ok": False, "configured": True, "error": str(e)}
-    data = r.json() if r.headers.get("content-type", "").startswith("application/json") else {"raw": r.text[:200]}
-    return {"ok": r.status_code == 200 and data.get("ok", False), "configured": True, "status": r.status_code, "data": data}
+        for attempt in ({"parse_mode": "Markdown"}, {}):
+            payload = {"chat_id": chat_id, "text": text, "disable_web_page_preview": True, **attempt}
+            try:
+                r = await client.post(url, json=payload)
+            except httpx.RequestError as e:
+                return {"ok": False, "configured": True, "error": str(e)}
+            data = r.json() if r.headers.get("content-type", "").startswith("application/json") else {"raw": r.text[:200]}
+            if r.status_code == 200 and data.get("ok", False):
+                return {"ok": True, "configured": True, "status": 200, "data": data,
+                        "parse_mode": attempt.get("parse_mode", "plain")}
+            # Only fall back on Markdown parse errors — other 4xx/5xx are real failures
+            if r.status_code != 400 or "parse" not in str(data.get("description", "")).lower():
+                return {"ok": False, "configured": True, "status": r.status_code, "data": data}
+        return {"ok": False, "configured": True, "status": r.status_code, "data": data}
 
 
 async def _whatsapp_send(text: str) -> Dict[str, Any]:
