@@ -11,7 +11,7 @@ datasource db {
 
 model Transaction {
   id               String   @id @default(cuid())
-  stripeSessionId  String   @unique
+  squarePaymentId  String?  @unique
   customerEmail    String?
   amountTotal      Int      // In cents
   currency         String   @default("usd")
