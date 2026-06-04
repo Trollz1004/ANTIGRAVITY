@@ -1,0 +1,398 @@
+{
+  "generated_at": "2026-02-15T23:00:00-05:00",
+  "assets": [
+    {
+      "path": "logo/logo-app-icon-1024.png",
+      "size": "1024x1024",
+      "format": "PNG",
+      "file_size_kb": 137.8,
+      "category": "logo"
+    },
+    {
+      "path": "logo/logo-social-profile-400.png",
+      "size": "400x400",
+      "format": "PNG",
+      "file_size_kb": 164.9,
+      "category": "logo"
+    },
+    {
+      "path": "logo/logo-favicon-32.png",
+      "size": "32x32",
+      "format": "PNG",
+      "file_size_kb": 2.5,
+      "category": "logo"
+    },
+    {
+      "path": "logo/logo-og-image-1200x630.png",
+      "size": "1200x630",
+      "format": "PNG",
+      "file_size_kb": 217.7,
+      "category": "logo"
+    },
+    {
+      "path": "logo/logo-watermark-256.png",
+      "size": "256x256",
+      "format": "PNG",
+      "file_size_kb": 82.9,
+      "category": "logo"
+    },
+    {
+      "path": "logo/logo-dark-bg-512.png",
+      "size": "512x512",
+      "format": "PNG",
+      "file_size_kb": 177.7,
+      "category": "logo"
+    },
+    {
+      "path": "logo/logo-dark-bg-256.png",
+      "size": "256x256",
+      "format": "PNG",
+      "file_size_kb": 61.3,
+      "category": "logo"
+    },
+    {
+      "path": "logo/logo-light-bg-512.png",
+      "size": "512x512",
+      "format": "PNG",
+      "file_size_kb": 172.1,
+      "category": "logo"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-01-launch.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 45.6,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-02-v8-cloud.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 48.9,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-03-bot-stat.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 43.5,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-04-testimonial.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 52.7,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-05-verification.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 49.9,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-06-urgency.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 42.2,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-07-comparison.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 58.4,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-08-founder.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 56.2,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-09-plaid.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 48.8,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-10-social-proof.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 50.4,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-11-how-it-works.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 51.5,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-12-realtime.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 51.3,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-13-no-bots.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 46.3,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-14-cta-join.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 50.5,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-feed/ig-feed-15-values.png",
+      "size": "1080x1080",
+      "format": "PNG",
+      "file_size_kb": 43.9,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-stories/ig-story-01.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 51.4,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-stories/ig-story-02.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 54.3,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-stories/ig-story-03.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 48.5,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-stories/ig-story-04.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 46.2,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-stories/ig-story-05.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 45.7,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-stories/ig-story-06.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 45.1,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-stories/ig-story-07.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 41.2,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-stories/ig-story-08.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 50.9,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-stories/ig-story-09.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 40.3,
+      "category": "social"
+    },
+    {
+      "path": "social/instagram-stories/ig-story-10.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 45.6,
+      "category": "social"
+    },
+    {
+      "path": "social/tiktok/tiktok-thumb-01.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 50.4,
+      "category": "social"
+    },
+    {
+      "path": "social/tiktok/tiktok-thumb-02.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 64.1,
+      "category": "social"
+    },
+    {
+      "path": "social/tiktok/tiktok-thumb-03.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 48.0,
+      "category": "social"
+    },
+    {
+      "path": "social/tiktok/tiktok-thumb-04.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 46.7,
+      "category": "social"
+    },
+    {
+      "path": "social/tiktok/tiktok-thumb-05.png",
+      "size": "1080x1920",
+      "format": "PNG",
+      "file_size_kb": 54.1,
+      "category": "social"
+    },
+    {
+      "path": "social/twitter/twitter-card-01.png",
+      "size": "1200x675",
+      "format": "PNG",
+      "file_size_kb": 38.9,
+      "category": "social"
+    },
+    {
+      "path": "social/twitter/twitter-card-02.png",
+      "size": "1200x675",
+      "format": "PNG",
+      "file_size_kb": 43.4,
+      "category": "social"
+    },
+    {
+      "path": "social/twitter/twitter-card-03.png",
+      "size": "1200x675",
+      "format": "PNG",
+      "file_size_kb": 43.0,
+      "category": "social"
+    },
+    {
+      "path": "social/twitter/twitter-card-04.png",
+      "size": "1200x675",
+      "format": "PNG",
+      "file_size_kb": 43.8,
+      "category": "social"
+    },
+    {
+      "path": "social/twitter/twitter-card-05.png",
+      "size": "1200x675",
+      "format": "PNG",
+      "file_size_kb": 42.8,
+      "category": "social"
+    },
+    {
+      "path": "social/twitter/twitter-card-06.png",
+      "size": "1200x675",
+      "format": "PNG",
+      "file_size_kb": 40.4,
+      "category": "social"
+    },
+    {
+      "path": "social/twitter/twitter-card-07.png",
+      "size": "1200x675",
+      "format": "PNG",
+      "file_size_kb": 41.1,
+      "category": "social"
+    },
+    {
+      "path": "social/twitter/twitter-card-08.png",
+      "size": "1200x675",
+      "format": "PNG",
+      "file_size_kb": 39.3,
+      "category": "social"
+    },
+    {
+      "path": "social/twitter/twitter-card-09.png",
+      "size": "1200x675",
+      "format": "PNG",
+      "file_size_kb": 37.2,
+      "category": "social"
+    },
+    {
+      "path": "social/twitter/twitter-card-10.png",
+      "size": "1200x675",
+      "format": "PNG",
+      "file_size_kb": 37.7,
+      "category": "social"
+    },
+    {
+      "path": "social/pinterest/pinterest-pin-01.png",
+      "size": "1000x1500",
+      "format": "PNG",
+      "file_size_kb": 53.5,
+      "category": "social"
+    },
+    {
+      "path": "social/pinterest/pinterest-pin-02.png",
+      "size": "1000x1500",
+      "format": "PNG",
+      "file_size_kb": 55.2,
+      "category": "social"
+    },
+    {
+      "path": "social/pinterest/pinterest-pin-03.png",
+      "size": "1000x1500",
+      "format": "PNG",
+      "file_size_kb": 53.1,
+      "category": "social"
+    },
+    {
+      "path": "social/pinterest/pinterest-pin-04.png",
+      "size": "1000x1500",
+      "format": "PNG",
+      "file_size_kb": 54.4,
+      "category": "social"
+    },
+    {
+      "path": "social/pinterest/pinterest-pin-05.png",
+      "size": "1000x1500",
+      "format": "PNG",
+      "file_size_kb": 53.5,
+      "category": "social"
+    },
+    {
+      "path": "social/pinterest/pinterest-pin-06.png",
+      "size": "1000x1500",
+      "format": "PNG",
+      "file_size_kb": 48.9,
+      "category": "social"
+    },
+    {
+      "path": "social/pinterest/pinterest-pin-07.png",
+      "size": "1000x1500",
+      "format": "PNG",
+      "file_size_kb": 51.5,
+      "category": "social"
+    },
+    {
+      "path": "social/pinterest/pinterest-pin-08.png",
+      "size": "1000x1500",
+      "format": "PNG",
+      "file_size_kb": 51.9,
+      "category": "social"
+    }
+  ],
+  "total_assets": 56
+}

@@ -1,0 +1,6 @@
+{"ts":"2026-05-08T02:35:10.254Z","stream":"stdout","chunk":"[paperclip] No project or prior session workspace was available. Using fallback workspace \"C:\\income-engine\\paperclip-data\\instances\\default\\workspaces\\61c8a6fc-001e-4a22-84f1-655a7b637355\" for this run.\n"}
+{"ts":"2026-05-08T02:35:10.268Z","stream":"stdout","chunk":"[hermes] Starting Hermes Agent (model=minimax/m2.5-free, provider=auto [auto], timeout=300s)\n"}
+{"ts":"2026-05-08T02:35:54.440Z","stream":"stdout","chunk":"API call failed after 3 retries: Connection error.\r\n"}
+{"ts":"2026-05-08T02:35:54.441Z","stream":"stderr","chunk":"\r\nsession_id: 20260507_223519_7204c8\r\n"}
+{"ts":"2026-05-08T02:35:55.042Z","stream":"stdout","chunk":"[hermes] Exit code: 1, timed out: false\n"}
+{"ts":"2026-05-08T02:35:55.043Z","stream":"stdout","chunk":"[hermes] Session: 20260507_223519_7204c8\n"}

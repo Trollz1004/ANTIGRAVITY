@@ -1,0 +1,29 @@
+- id: 1
+  type: campaign_goal
+  content: Drive 1000 new user signups during Q3 focused on real-world engagement
+  status: active
+  created: 2026-04-17
+
+- id: 2
+  type: brand_guideline
+  content: Never use "donate", "donation", or "solicitation" - use "contractual revenue disbursement" instead
+  status: active
+  created: 2026-04-17
+
+- id: 3
+  type: messaging_pillar
+  content: Emphasize real-world meetups and volunteer events over traditional matching
+  status: active
+  created: 2026-04-17
+
+- id: 4
+  type: target_audience
+  content: Socially conscious individuals ages 25-45 who value genuine human connection
+  status: active
+  created: 2026-04-17
+
+- id: 5
+  type: competitive_advantage
+  content: Platform connects people for meaningful activities, not just dating
+  status: active
+  created: 2026-04-17

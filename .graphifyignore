@@ -1,0 +1,63 @@
+# Graphify ignore patterns for ANTIGRAVITY monorepo
+# Created 2026-05-03 — Sabretooth
+
+# Dependency dirs
+node_modules/
+.venv/
+venv/
+__pycache__/
+.git/
+
+# Screenshots and images
+screenshots/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+
+# Runtime state
+*.log
+*.pid
+tmp/
+runtime/
+.cache/
+
+# Backups
+*.bak
+*.backup
+backups/
+*-backup-*
+
+# Archives and binaries
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Duplicate repo copies
+ANTIGRAVITY-*/
+antigravity copy*/
+
+# Generated artifacts
+dist/
+build/
+.next/
+out/
+coverage/
+playwright-report/
+test-results/
+
+# Office / PDF bulk
+*.pdf
+*.docx
+*.xlsx
+*.pptx
+
+# Graphify own output (legacy + current)
+graphify-out/
+.graphify/
