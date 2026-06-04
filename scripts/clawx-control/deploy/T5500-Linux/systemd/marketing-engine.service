@@ -1,0 +1,47 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# SYSTEMD SERVICE: Marketing Engine (when running standalone without Docker)
+# Location: /etc/systemd/system/marketing-engine.service
+# Author: Joshua Coleman
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[Unit]
+Description=YouAndINotAI Marketing Engine
+Documentation=https://youandinotai.com
+After=network-online.target dateapp.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=dateapp
+Group=dateapp
+WorkingDirectory=/opt/marketing-engine
+
+# Environment
+Environment="NODE_ENV=production"
+Environment="PORT=4000"
+EnvironmentFile=/opt/marketing-engine/.env
+
+# Start command
+ExecStart=/usr/bin/node /opt/marketing-engine/server.js
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+# Process limits
+LimitNOFILE=65535
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=marketing-engine
+
+# Security hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/marketing-engine/logs
+
+[Install]
+WantedBy=multi-user.target

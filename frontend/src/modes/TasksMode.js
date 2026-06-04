@@ -122,7 +122,7 @@ export function TasksMode() {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 h-full">
             {STATUS_COLUMNS.map((col) => (
               <div key={col.id} data-testid={`column-${col.id}`} className="bg-[#1a2332] border border-[#2a3a52] rounded-md flex flex-col overflow-hidden">
-                <div className={`bg-[#111827] border-b border-[#2a3a52] px-3 py-2 flex items-center justify-between ${col.id === "in_progress" ? "column-wip-header" : ""}`}>
+                <div className="bg-[#111827] border-b border-[#2a3a52] px-3 py-2 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <col.Icon size={12} style={{ color: col.tone }} />
                     <span className="text-[11px] font-bold tracking-wide" style={{ color: col.tone }}>{col.label}</span>
@@ -135,15 +135,12 @@ export function TasksMode() {
                   )}
                   {grouped[col.id].map((t) => {
                     const owner = agents.find((a) => a.id === t.owner);
-                    const wip = col.id === "in_progress";
                     return (
                       <div
                         key={t.id}
                         data-testid={`task-${t.id}`}
-                        className={`relative bg-[#0a0f1a] border rounded p-2 space-y-1.5 hover:border-[#00d4ff]/40 transition-colors group overflow-hidden ${wip ? "task-wip" : "border-[#2a3a52]"}`}
-                        style={wip ? { borderColor: "#00d4ff66" } : undefined}
+                        className="bg-[#0a0f1a] border border-[#2a3a52] rounded p-2 space-y-1.5 hover:border-[#00d4ff]/40 transition-colors group"
                       >
-                        {wip && <span className="task-wip-scanline" aria-hidden="true" />}
                         <div className="flex items-start justify-between gap-2">
                           <div className="text-[12px] font-bold leading-snug flex-1">{t.title}</div>
                           <span

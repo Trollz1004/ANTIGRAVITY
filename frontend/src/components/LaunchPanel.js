@@ -39,8 +39,8 @@ export function LaunchPanel() {
         {agents.length === 0 && (
           <div className="text-[10px] text-[#4a5568] italic">endpoint unreachable — retry</div>
         )}
-        {agents.map((agent) => (
-          <div key={agent.name} className="flex gap-3">
+        {agents.map((agent, i) => (
+          <div key={i} className="flex gap-3">
             <div
               className="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center font-bold text-lg shadow-md"
               style={{

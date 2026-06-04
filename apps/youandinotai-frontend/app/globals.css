@@ -1,0 +1,151 @@
+/* ============================================================================
+   YouAndINotAI — Global Theme
+   Sleek Cyberpunk Glassmorphism (locked 2026-05-12)
+   Canonical spec: briefings/SLEEK-CYBERPUNK-GLASSMORPHISM-DESIGN-SYSTEM.md
+   ============================================================================ */
+
+@import "tailwindcss";
+
+/* ----------------------------------------------------------------------------
+   Fonts — Church & State Protocol
+   - Inter: names, bios, body reading text
+   - JetBrains Mono: system stats, labels, timestamps, nav labels
+   ----------------------------------------------------------------------------*/
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap");
+
+/* ----------------------------------------------------------------------------
+   Tailwind v4 theme tokens — exposed as utilities + CSS vars
+   ----------------------------------------------------------------------------*/
+@theme {
+  /* Brand palette — keep in lockstep with theme-tokens.ts */
+  --color-brand-bg: #020617;          /* slate-950 — global app background */
+  --color-brand-cyan: #22d3ee;        /* cyan-400 — primary action */
+  --color-brand-cyan-deep: #06b6d4;   /* cyan-500 */
+  --color-brand-pink: #f472b6;        /* pink-400 — secondary action */
+  --color-brand-pink-deep: #ec4899;   /* pink-500 */
+  --color-brand-rose: #f43f5e;        /* rose-500 — icon accent */
+  --color-brand-text: #f8fafc;        /* slate-50 — base text */
+
+  /* Glow tokens — used in shadow-[var(--shadow-glow-cyan)] etc. */
+  --shadow-glow-cyan: 0 0 15px rgba(34, 211, 238, 0.5);
+  --shadow-glow-pink: 0 0 8px rgba(255, 0, 255, 0.8);
+  --shadow-glow-brand: 0 0 8px rgba(0, 243, 255, 0.4);
+  --shadow-glass: 0 0 20px rgba(0, 0, 0, 0.5);
+
+  /* Font families */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Courier New", monospace;
+}
+
+/* ----------------------------------------------------------------------------
+   Base layer — apply deep-space dark + Inter by default
+   ----------------------------------------------------------------------------*/
+@layer base {
+  html {
+    background-color: #020617;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: #020617; /* deep space dark — bg-slate-950 */
+    color: #f8fafc;            /* text-slate-50 */
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    color: #f8fafc;
+  }
+
+  code, kbd, samp, pre {
+    font-family: var(--font-mono);
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Component utilities — shortcuts for the locked design patterns
+   Apply via className="glass-card" etc. when shorter than repeating the full string
+   ----------------------------------------------------------------------------*/
+@layer components {
+  /* §2 — Glass surface (cards, headers, navbars) */
+  .glass-card {
+    background-color: rgb(15 23 42 / 0.6);  /* slate-900/60 */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+
+  /* §3 — Primary neon cyan button glow */
+  .btn-neon-cyan {
+    background-color: #06b6d4;             /* cyan-500 */
+    color: #020617;
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.5);
+    transition: all 150ms ease;
+  }
+  .btn-neon-cyan:hover { filter: brightness(1.1); }
+  .btn-neon-cyan:active { transform: scale(0.95); }
+
+  /* §3 — Outline button (standard) */
+  .btn-outline {
+    background-color: rgb(15 23 42 / 0.4);
+    border: 1px solid transparent;
+    color: #cbd5e1;
+    transition: all 150ms ease;
+  }
+  .btn-outline:hover {
+    background-color: rgb(30 41 59 / 0.8);
+    border-color: rgb(30 41 59);
+    filter: brightness(1.1);
+  }
+  .btn-outline:active { transform: scale(0.95); }
+
+  /* §3 — Brand gradient heading (logos, hero) */
+  .brand-heading {
+    background: linear-gradient(to right, #22d3ee, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.4));
+  }
+
+  /* §3 — Pink/rose accent icon glow (apply to <Icon className="icon-neon-pink" /> wrappers) */
+  .icon-neon-pink {
+    filter: drop-shadow(0 0 8px rgba(255, 0, 255, 0.8));
+  }
+
+  /* §4 — Mono UI label (the universal small-system-text style) */
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #94a3b8; /* slate-400 */
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Selection + scrollbar (tiny polish to match the aesthetic)
+   ----------------------------------------------------------------------------*/
+::selection {
+  background-color: rgba(34, 211, 238, 0.3); /* cyan-400/30 */
+  color: #f8fafc;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 211, 238, 0.4); /* cyan glow on hover */
+}

@@ -181,15 +181,9 @@ REPLACEMENT_WORDS: Dict[str, str] = {
 
 @router.get("/doctrine")
 async def doctrine():
-    """Current binding doctrine — readable by every AI peer. Updated 2026-05-08
-    per Joshua's most recent directive: payment surface diversified to bring
-    down high-risk labels; Stripe revived for general use; xAI auth-login only;
-    OpenRouter free models with Manus API access; no Claude/Anthropic on
-    third-party platforms; founder personal cap $50k after taxes;
-    canonical public URL routed via Cloudflare; admin dashboard requires
-    sign-in; 'no trust me bro' — verification over claims."""
+    """Current binding doctrine — readable by every AI peer."""
     return {
-        "updated_at": "2026-05-08",
+        "updated_at": "2026-05-05",
         "mission_tag": "#UntilNoKidInNeed",
         "motto": "Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.",
         "forbidden_words_in_ui": FORBIDDEN_WORDS,
@@ -198,34 +192,16 @@ async def doctrine():
             "entity_type": "for-profit LLC",
             "hard_cap_pct": 10,
             "hard_cap_note": "Stacked across activities. No 60/30/10. No 100% claims.",
-            "founder_personal_cap_usd_after_tax": 50_000,
-            "founder_cap_note": "Joshua's personal draw is capped at $50k after taxes — for the kids in need, not someone's greed.",
             "fl_compliance": "§496.405 — never use donate/donation/charity; use 'contractual revenue disbursement'.",
             "mission_surface_rule": "Mission revealed on receipts only.",
         },
-        "payment_surface": {
-            "rule": "Diversify to bring down the high-risk label across platforms. Each platform takes the use-case that fits.",
-            "square": {"status": "live", "use_case": "Date app only", "location_id": "LY5GN09F5AN83"},
-            "cashapp": {"status": "preferred-if-business-account-works", "use_case": "General"},
-            "paypal": {"status": "preferred-business", "use_case": "General — NOT 'shield'/Plaid sub-options"},
-            "stripe": {"status": "live", "use_case": "Anything — revived per latest directive"},
-            "dao_live_sale": "See canonical repo for DAO live-sale handling.",
-        },
-        "ai_platform_rules": {
-            "no_claude_anthropic_on_third_party": "Claude/Anthropic surfaces must not be routed through third-party AI marketplaces in public copy/UX.",
-            "xai_grok": "Auth login only — no API keys. (Sign in with X.)",
-            "openrouter": "Free models only, with Manus API as the agent layer.",
-            "hermes": "Combined with marketing + social media command center in the private repo. Ollama Cloud paired.",
-            "chrome_extensions": "Trusted AI platforms may use Chrome extensions per Hermes work-tasks/goals/routines spec.",
-        },
         "infrastructure_doctrine": {
             "hosting": "Cloudflare only. Netlify banned.",
-            "canonical_public_url": "opushashands.youandinotai.com (Cloudflare-routed page)",
+            "payments_live": "Square (Location LY5GN09F5AN83).",
+            "payments_dead": ["Stripe (410)"],
             "orchestration": "jules-cli.py direct routing, bypass middleware.",
             "founding_four_peer_level": ["Claude", "Gemini", "Perplexity", "Grok"],
             "peer_rule": "None command the others. Joshua is sole authority.",
-            "admin_dashboard_rule": "Local-deploy admin dashboards must require sign-in. Public read-only surfaces may be open.",
-            "trust_doctrine": "No 'trust me bro'. Show the receipt, the endpoint, the verification.",
         },
         "nodes": NODE_TOPOLOGY,
         "sole_authority": "Joshua Coleman (Founder)",

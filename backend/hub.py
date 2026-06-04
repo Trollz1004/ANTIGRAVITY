@@ -24,8 +24,6 @@ import httpx
 from fastapi import APIRouter, HTTPException, Response
 from pydantic import BaseModel
 
-from hermes_models import HERMES_VIRTUAL_MODELS
-
 logger = logging.getLogger("hub")
 
 # ── platform registry ─────────────────────────────────────────────────── #
@@ -41,7 +39,7 @@ PLATFORMS: List[Dict[str, Any]] = [
     {
         "id": "e1", "label": "E1 · Build Agent", "tier": TIER_EMERGENT,
         "color": "#fb923c",
-        "models": ["e1-gemini", "e1-gpt", "e1-opus"],
+        "models": ["e1-opus", "e1-gpt", "e1-gemini"],
         "description": "The agent that built this surface — Emergent's full-stack engineer.",
         "persona": (
             "You are E1, the build agent that constructed this Mission Control "
@@ -55,7 +53,7 @@ PLATFORMS: List[Dict[str, Any]] = [
             "Quote his motto only when it lands: "
             "'Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.'"
         ),
-        "bridge_provider_default": "gemini",
+        "bridge_provider_default": "anthropic",
         "bridge_models": {
             "e1-opus":   ("anthropic", "claude-opus-4-5-20251101"),
             "e1-gpt":    ("openai",    "gpt-5.1"),
@@ -247,11 +245,11 @@ async def chat_send(body: UnifiedChatRequest, response: Response):
 
     try:
         if body.provider == "e1":
+            # E1 · Build Agent — the maker speaks. Inject the persona system
+            # prompt unless Joshua already passed his own system message.
             e1 = PLATFORM_BY_ID["e1"]
-            # Default to Gemini per "no Claude/Anthropic on third-party platforms".
-            # Opus stays available as an explicit pick when Joshua wants it.
             bridge_provider, bridge_model = e1["bridge_models"].get(
-                body.model, ("gemini", "gemini-2.5-flash")
+                body.model, ("anthropic", "claude-opus-4-5-20251101")
             )
             real_model = f"e1 · {body.model} · bridged via {bridge_provider}/{bridge_model}"
             has_system = any(m["role"] == "system" for m in msgs)
@@ -259,6 +257,8 @@ async def chat_send(body: UnifiedChatRequest, response: Response):
                 msgs = [{"role": "system", "content": e1["persona"]}] + msgs
             reply = await asyncio.to_thread(_emergent_chat, bridge_provider, bridge_model, msgs, session_id)
         elif body.provider == "hermes":
+            # Reuse the existing Hermes virtual-model table
+            from server import HERMES_VIRTUAL_MODELS  # late import to avoid circular
             conf = HERMES_VIRTUAL_MODELS.get(body.model)
             if conf is None:
                 raise HTTPException(status_code=400, detail=f"unknown hermes virtual model '{body.model}'")
@@ -364,23 +364,14 @@ async def _telegram_send(text: str) -> Dict[str, Any]:
                 "hint": "Set TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID in /app/backend/.env. Get a bot from @BotFather, add it to your group, then call https://api.telegram.org/bot<TOKEN>/getUpdates to find chat_id."}
 
     url = f"https://api.telegram.org/bot{token}/sendMessage"
-    # Try MarkdownV2 first (richer formatting), fall back to plain on parse errors
-    # so an unescaped hashtag-with-underscore never silently drops the message.
+    payload = {"chat_id": chat_id, "text": text, "parse_mode": "Markdown", "disable_web_page_preview": True}
     async with httpx.AsyncClient(timeout=10.0) as client:
-        for attempt in ({"parse_mode": "Markdown"}, {}):
-            payload = {"chat_id": chat_id, "text": text, "disable_web_page_preview": True, **attempt}
-            try:
-                r = await client.post(url, json=payload)
-            except httpx.RequestError as e:
-                return {"ok": False, "configured": True, "error": str(e)}
-            data = r.json() if r.headers.get("content-type", "").startswith("application/json") else {"raw": r.text[:200]}
-            if r.status_code == 200 and data.get("ok", False):
-                return {"ok": True, "configured": True, "status": 200, "data": data,
-                        "parse_mode": attempt.get("parse_mode", "plain")}
-            # Only fall back on Markdown parse errors — other 4xx/5xx are real failures
-            if r.status_code != 400 or "parse" not in str(data.get("description", "")).lower():
-                return {"ok": False, "configured": True, "status": r.status_code, "data": data}
-        return {"ok": False, "configured": True, "status": r.status_code, "data": data}
+        try:
+            r = await client.post(url, json=payload)
+        except httpx.RequestError as e:
+            return {"ok": False, "configured": True, "error": str(e)}
+    data = r.json() if r.headers.get("content-type", "").startswith("application/json") else {"raw": r.text[:200]}
+    return {"ok": r.status_code == 200 and data.get("ok", False), "configured": True, "status": r.status_code, "data": data}
 
 
 async def _whatsapp_send(text: str) -> Dict[str, Any]:

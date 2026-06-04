@@ -1,0 +1,16 @@
+.graphify/graph.json merge=graphify-json
+graphify-out/graph.json merge=graphify-json
+
+# Bash scripts must be LF — WSL/Linux fail on CRLF shebang ('bash\r' error)
+*.sh    text eol=lf
+*.bash  text eol=lf
+# Python helpers used inside WSL too
+scripts/**/*.py text eol=lf
+# CMD/PS1 files stay native (Windows runs them)
+*.cmd   text eol=crlf
+*.bat   text eol=crlf
+*.ps1   text eol=crlf
+# Exempt: stored verbatim because Linux-side checkout kept regenerating a
+# phantom diff against the CRLF-normalized blob. -text disables EOL
+# conversion so on-disk bytes round-trip cleanly through both OSes.
+scripts/launch-hermes-paperclip-ceo-wsl.cmd -text

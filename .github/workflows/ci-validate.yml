@@ -1,0 +1,379 @@
+name: CI Validate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'youandinotai/**'
+      - 'antigravity/**'
+      - 'mcp-server/**'
+      - 'scripts/**'
+      - 'backend/**'
+      - 'frontend/**'
+      - 'contracts/**'
+      - 'services/**'
+      - 'apps/**'
+      - '.github/workflows/ci-validate.yml'
+  pull_request:
+    branches: [main]
+
+jobs:
+  paperweight-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Paperweight unit + migration tests (stdlib, zero deps)
+        run: python apps/paperweight/test_paperweight.py
+
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Build youandinotai frontend
+      - name: Build YouAndINotAI
+        working-directory: apps/youandinotai-frontend
+        run: |
+          npm ci
+          npm run build
+
+      # Verify no Stripe links in built output
+      - name: Check for stale Stripe links
+        run: |
+          if grep -r "buy\.stripe\.com" apps/youandinotai-frontend/.next/ 2>/dev/null; then
+            echo "::error::Found Stripe links in built output — should be Square"
+            exit 1
+          fi
+          echo "No Stripe links found in build output"
+
+      # Florida §496.405 language scan
+      - name: Scan for donation language violations
+        run: |
+          VIOLATIONS=$(grep -rn --include="*.tsx" --include="*.ts" --include="*.html" \
+            -iE '\bdonat(e|ion|ions|ing)\b' \
+            apps/youandinotai-frontend/ antigravity/components/ antigravity/app/ \
+            revenue-core/components/ _deploy/ mcp-server/src/ 2>/dev/null \
+            | grep -ivE 'not.*(charit|donat)|not a.*(donat|solicitat)|donate\.lovetotherescue' || true)
+          if [ -n "$VIOLATIONS" ]; then
+            echo "::warning::§496.405 — Found donation language that may need review:"
+            echo "$VIOLATIONS"
+          else
+            echo "No §496.405 violations found"
+          fi
+
+      # Doctrine drift check — live product code must not reintroduce retired split-routing markers.
+      # Allowlist of legitimate pre-existing references lives at .github/doctrine-drift-allowlist.txt.
+      - name: Doctrine drift scan
+        run: |
+          set -u
+          # Live customer-surface target dirs. youandinotai-api/app/ was removed during the
+          # monorepo restructure; the FastAPI app now lives at backend/fastapi-app/app/.
+          # Pre-existing grep was passing silently when youandinotai-api/app/ disappeared
+          # because grep exited 2 (error) and `if grep ...; then` only fires on exit 0.
+          CANDIDATES=(apps/youandinotai-frontend backend/fastapi-app/app)
+          TARGETS=()
+          for t in "${CANDIDATES[@]}"; do
+            if [ -d "$t" ]; then
+              TARGETS+=("$t")
+            fi
+          done
+          if [ ${#TARGETS[@]} -eq 0 ]; then
+            echo "::error::Doctrine drift scan has no valid target directories — repo layout changed; update ci-validate.yml"
+            exit 1
+          fi
+          PATTERN='ai-solutions\.store|CharityRouter100|60/30/10|100% to charity'
+          # grep exit codes: 0=match, 1=no match, 2=error. Trailing `|| true` collapses
+          # 1 (no match) into a clean empty result; an actual error would surface via set -u
+          # on an unset later var, but we explicitly guard the empty case below.
+          # Scan SOURCE only — build artifacts (.next, dist, node_modules) compile the
+          # allowlisted source strings into output whose paths aren't allowlisted, causing
+          # false drift failures. Source references are governed by the allowlist below.
+          ALL_HITS=$(grep -rnE --exclude-dir=.next --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.turbo --exclude-dir=coverage "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
+          if [ -z "$ALL_HITS" ]; then
+            echo "Doctrine boundary intact (zero matches in: ${TARGETS[*]})"
+            exit 0
+          fi
+          ALLOWLIST_FILE=".github/doctrine-drift-allowlist.txt"
+          ALLOWED_PATHS=""
+          if [ -f "$ALLOWLIST_FILE" ]; then
+            ALLOWED_PATHS=$(grep -v '^[[:space:]]*#' "$ALLOWLIST_FILE" | grep -v '^[[:space:]]*$' || true)
+          fi
+          NEW_HITS=""
+          while IFS= read -r hit; do
+            [ -z "$hit" ] && continue
+            file_path=$(echo "$hit" | cut -d: -f1)
+            if [ -n "$ALLOWED_PATHS" ] && echo "$ALLOWED_PATHS" | grep -Fxq "$file_path"; then
+              continue
+            fi
+            NEW_HITS+="$hit"$'\n'
+          done <<< "$ALL_HITS"
+          if [ -n "$NEW_HITS" ]; then
+            echo "::error::Doctrine drift violation — live product code references retired routing markers"
+            echo "$NEW_HITS"
+            echo ""
+            echo "If a reference is legitimate (internal ops, monitoring), add the file path to $ALLOWLIST_FILE with a rationale in the file's commit message."
+            exit 1
+          fi
+          echo "::warning::Doctrine drift scan: all matches are allowlisted in $ALLOWLIST_FILE — review the allowlist file for context."
+          echo "$ALL_HITS"
+
+      # TODO scanner — prevent placeholder implementations in production code
+      - name: Scan for TODO/FIXME comments
+        run: |
+          TODO_COMMENTS=$(git ls-files apps/youandinotai-frontend/ backend/fastapi-app/app/ | xargs grep -n "TODO\|FIXME\|TEMPORARY" || true)
+          if [ -n "$TODO_COMMENTS" ]; then
+            echo "::warning::Found TODO/FIXME comments in code (review for production readiness):"
+            echo "$TODO_COMMENTS"
+          else
+            echo "No TODO/FIXME comments found"
+          fi
+
+      # Secret scanner — block committed secrets
+      - name: Secret scan
+        run: |
+          SECRETS_FOUND=0
+          # Check tracked files for secret patterns
+          GITHUB_PAT_PREFIX='ghp'
+          PATTERNS="AIza[0-9A-Za-z_-]{20,}|[0-9]{8,10}:[A-Za-z0-9_-]{35}|sk_live_[A-Za-z0-9]{16,}|${GITHUB_PAT_PREFIX}_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}"
+          HITS=$(git ls-files \
+            memory/ briefings/ mcp-server/ apps/youandinotai-frontend/ antigravity/ revenue-core/ CLAUDE.md AGENTS.md \
+            | grep -E '\.(md|ts|tsx|json|txt)$' \
+            | xargs grep -nE "$PATTERNS" 2>/dev/null \
+            | grep -v "REDACTED" | grep -v "\.env\.example" | grep -v "\.githooks" | grep -v "scripts/opus-guardian" \
+            | grep -v "security-review\.md" | grep -v "placeholder" | grep -v 'sk_live_\.\.\.' \
+            | grep -v "SABRETOOTH-OPUS-DRIFT-CLEANUP-PROMPT\.md" || true)
+          if [ -n "$HITS" ]; then
+            echo "::error::Secret-shaped values found in tracked files:"
+            echo "$HITS"
+            SECRETS_FOUND=1
+          fi
+          if [ "$SECRETS_FOUND" -eq 1 ]; then
+            exit 1
+          fi
+          echo "No secrets found in tracked files"
+
+      # TODO endpoint scanner — prevent placeholder endpoints in production
+      - name: Scan for TODO endpoints
+        run: |
+          TODO_ENDPOINTS=$(git ls-files backend/fastapi-app/app/routers/ | xargs grep -n "TODO\|FIXME\|TEMPORARY" || true)
+          if [ -n "$TODO_ENDPOINTS" ]; then
+            echo "::warning::Found TODO/FIXME markers in endpoint code (review for production readiness):"
+            echo "$TODO_ENDPOINTS"
+          else
+            echo "No TODO/FIXME endpoints found in routers"
+          fi
+
+      # Feature flag guidance — flag use of placeholder implementations
+      - name: Flag placeholder implementations
+        run: |
+          PLACEHOLDER_IMPLS=$(git ls-files backend/fastapi-app/ | xargs grep -n "raise NotImplementedError\|pass  # TODO\|# PLACEHOLDER\|dummy.*implementation" || true)
+          if [ -n "$PLACEHOLDER_IMPLS" ]; then
+            echo "::notice::Found placeholder implementations (consider feature flags for gradual rollout):"
+            echo "$PLACEHOLDER_IMPLS"
+          fi
+
+  eslint-prettier-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install frontend dependencies
+        working-directory: frontend/react-app
+        run: npm install
+
+      - name: Run ESLint
+        working-directory: frontend/react-app
+        run: npx eslint src --ext .ts,.tsx
+
+      - name: Run Prettier check
+        working-directory: frontend/react-app
+        run: npx prettier --check "src/**/*.{ts,tsx,json,css}"
+
+  black-ruff-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        working-directory: backend/fastapi-app
+        run: |
+          pip install -r requirements.txt
+          pip install black ruff
+
+      - name: Run Black check
+        working-directory: backend/fastapi-app
+        run: black --check .
+
+      - name: Run Ruff check
+        working-directory: backend/fastapi-app
+        run: ruff check .
+
+  run-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend/fastapi-app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio aiosqlite
+
+      - name: Run test suite with coverage
+        env:
+          JWT_SECRET: 'ci-test-secret-that-is-at-least-32-characters-long'
+          APP_ENV: test
+          SQUARE_WEBHOOK_VERIFY_SIGNATURE: 'true'
+          CORS_ORIGINS: 'http://localhost'
+          SQUARE_BOT_SHIELD_PAYMENT_LINK: 'https://square.link/u/Qc5mxUy7'
+          SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY: 'test-square-signature'
+          SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL: 'http://testserver/api/v1/webhooks/square-payment'
+          SQUARE_BOOKING_WEBHOOK_SIGNATURE_KEY: 'test-square-signature'
+          SQUARE_BOOKING_WEBHOOK_NOTIFICATION_URL: 'http://testserver/api/v1/webhooks/square-booking'
+        run: |
+          pytest --tb=short --cov=app --cov-report=term-missing --cov-fail-under=80
+
+  js-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '9.15.4'
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: echo "store=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.store }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install workspace dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run JS/TS test suites (vitest)
+        run: pnpm test
+
+  guardian-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-guardian-${{ hashFiles('scripts/clawx-control/opus-guardian.py') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-guardian-
+
+      - name: Run Opus Guardian integrity scan
+        env:
+          JWT_SECRET: 'ci-test-secret-that-is-at-least-32-characters-long'
+        run: python scripts/clawx-control/opus-guardian.py
+
+  owasp-dependency-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run OWASP Dependency-Check
+        uses: dependency-check/dependency-check-action@v5
+        with:
+          project: 'antigravity'
+          path: '.'
+          'format': 'ALL'
+          'fail-build': 'true'
+
+      - name: Install npm audit and run
+        run: |
+          npm install -g npm-audit-resolve
+          npm audit
+          npm audit fix --force --package-lock-only
+
+      - name: Install pip-audit and run
+        run: |
+          pip install pip-audit
+          pip-audit --strict
+
+  # Aggregator gate — single required status check named "code".
+  # Required by the "No extra repo branches" ruleset (Settings → Rules).
+  # Succeeds only when every upstream job has succeeded. Adding this lets
+  # the ruleset gate on one stable name instead of listing every job.
+  code:
+    name: code
+    runs-on: ubuntu-latest
+    needs: [validate, eslint-prettier-check, black-ruff-check, run-tests, js-tests, guardian-check, owasp-dependency-check]
+    if: always()
+    steps:
+      - name: Verify all upstream CI jobs succeeded
+        run: |
+          fail=0
+          for j in validate eslint-prettier-check black-ruff-check run-tests js-tests guardian-check owasp-dependency-check; do
+            case "$j" in
+              validate)              r="${{ needs.validate.result }}" ;;
+              eslint-prettier-check) r="${{ needs.eslint-prettier-check.result }}" ;;
+              black-ruff-check)      r="${{ needs.black-ruff-check.result }}" ;;
+              run-tests)             r="${{ needs.run-tests.result }}" ;;
+              js-tests)              r="${{ needs.js-tests.result }}" ;;
+              guardian-check)        r="${{ needs.guardian-check.result }}" ;;
+              owasp-dependency-check) r="${{ needs.owasp-dependency-check.result }}" ;;
+            esac
+            if [ "$r" != "success" ]; then
+              echo "::error::$j result was: $r"
+              fail=1
+            fi
+          done
+          [ $fail -eq 0 ] && echo "All upstream CI jobs passed — code gate green" || exit 1

@@ -1,0 +1,125 @@
+# ANTIGRAVITY — Blue-Green Deployment (OPU-53)
+#
+# TWO complete app stacks: BLUE (8001/5174) and GREEN (8002/5175).
+# Shared services (postgres, redis) are in the root docker-compose.yml.
+#
+# Usage:
+#   Activate BLUE:  docker compose -f docker-compose.blue-green.yml -p antigravity-blue up -d
+#   Activate GREEN: docker compose -f docker-compose.blue-green.yml -p antigravity-green up -d
+#   Both running:   docker compose -f docker-compose.blue-green.yml -p antigravity-blue up -d \
+#                  && docker compose -f docker-compose.blue-green.yml -p antigravity-green up -d
+#
+# The active upstream is switched by nginx reload (see nginx.conf upstream_select).
+
+x-app-base: &app-base
+  build:
+    context: ./backend/fastapi-app
+    dockerfile: Dockerfile
+  environment:
+    PORT: "8000"
+    DATABASE_URL: "postgresql+asyncpg://uandinotai:${POSTGRES_PASSWORD}@postgres:5432/uandinotai_dating"
+    REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379/0"
+    APP_URL: "${APP_URL:-http://localhost}"
+    CORS_ORIGINS: "${CORS_ORIGINS:-http://localhost}"
+    LOG_LEVEL: "${LOG_LEVEL:-info}"
+    GEMINI_API_KEY: "${GEMINI_API_KEY:-}"
+    SQUARE_ACCESS_TOKEN: "${SQUARE_ACCESS_TOKEN:-}"
+    SQUARE_LOCATION_ID: "${SQUARE_LOCATION_ID:-}"
+    SQUARE_BOT_SHIELD_PAYMENT_LINK: "${SQUARE_BOT_SHIELD_PAYMENT_LINK:-}"
+    SQUARE_SUBSCRIPTION_PAYMENT_LINK: "${SQUARE_SUBSCRIPTION_PAYMENT_LINK:-}"
+    SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY: "${SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY:-}"
+    SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL: "${SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL:-}"
+    SQUARE_BOOKING_WEBHOOK_SIGNATURE_KEY: "${SQUARE_BOOKING_WEBHOOK_SIGNATURE_KEY:-}"
+    SQUARE_BOOKING_WEBHOOK_NOTIFICATION_URL: "${SQUARE_BOOKING_WEBHOOK_NOTIFICATION_URL:-}"
+    SQUARE_WEBHOOK_SIGNATURE_KEY: "${SQUARE_WEBHOOK_SIGNATURE_KEY:-}"
+    SQUARE_WEBHOOK_NOTIFICATION_URL: "${SQUARE_WEBHOOK_NOTIFICATION_URL:-}"
+    SQUARE_WEBHOOK_VERIFY_SIGNATURE: "${SQUARE_WEBHOOK_VERIFY_SIGNATURE:-true}"
+    SQUARE_BOOKING_LOG_DIR: "${SQUARE_BOOKING_LOG_DIR:-/app/ewaste-intake-data/bookings}"
+  volumes:
+    - ./backend/fastapi-app/uploads:/app/uploads
+    - ./data/ewaste-intake:/app/ewaste-intake-data
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+    interval: 15s
+    timeout: 10s
+    retries: 5
+    start_period: 40s
+  restart: unless-stopped
+  # IMPORTANT: Do NOT declare depends_on for postgres/redis here — those
+  # services live in the root docker-compose network.  We rely on the
+  # shared external network (uandinotai-network) instead.
+
+x-frontend-base: &frontend-base
+  build:
+    context: ./frontend/react-app
+    dockerfile: Dockerfile
+    args:
+      VITE_API_URL: "${VITE_API_URL:-http://localhost/api/v1}"
+  environment:
+    NODE_ENV: "${NODE_ENV:-production}"
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:80/"]
+    interval: 15s
+    timeout: 10s
+    retries: 5
+    start_period: 30s
+  restart: unless-stopped
+
+# ──────────────────────────────────────────────
+# BLUE environment — ports 8001 (API) / 5174 (FE)
+# ──────────────────────────────────────────────
+services:
+  app-blue:
+    <<: *app-base
+    container_name: uandinotai-app-blue
+    ports:
+      - "8001:8000"
+    networks:
+      - uandinotai-network
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+        reservations:
+          cpus: "0.5"
+          memory: 256M
+
+  frontend-blue:
+    <<: *frontend-base
+    container_name: uandinotai-frontend-blue
+    ports:
+      - "5174:80"
+    networks:
+      - uandinotai-network
+
+# ──────────────────────────────────────────────
+# GREEN environment — ports 8002 (API) / 5175 (FE)
+# ──────────────────────────────────────────────
+  app-green:
+    <<: *app-base
+    container_name: uandinotai-app-green
+    ports:
+      - "8002:8000"
+    networks:
+      - uandinotai-network
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+        reservations:
+          cpus: "0.5"
+          memory: 256M
+
+  frontend-green:
+    <<: *frontend-base
+    container_name: uandinotai-frontend-green
+    ports:
+      - "5175:80"
+    networks:
+      - uandinotai-network
+
+networks:
+  uandinotai-network:
+    external: true

@@ -32,42 +32,6 @@ _client = AsyncIOMotorClient(os.environ["MONGO_URL"])
 _db = _client[os.environ["DB_NAME"]]
 LEDGER = _db.ledger
 
-
-async def _maybe_broadcast(entry: Dict[str, Any]) -> None:
-    """Fire-and-forget encrypted me-to-me notice when a contribution lands.
-
-    Prefers WhatsApp (E2E encrypted personal channel · Joshua's directive).
-    Falls back to Telegram only if WhatsApp creds are missing.
-    Either way: never raise — the webhook always succeeds even if both fail.
-    """
-    text = (
-        f"💠 *Contribution recorded · ${entry['amount_usd']:.2f}*\n"
-        f"Bucket *{entry['bucket']} · {entry['bucket_name']}* via _{entry['source']}_\n"
-        f"{entry.get('note') or ''}\n\n"
-        f"_OpusPawClaw Mission Control · #UntilNoKidInNeed_"
-    )
-    # Prefer WhatsApp (e2e encrypted me-to-me)
-    wa_phone_id = os.environ.get("WHATSAPP_PHONE_ID", "").strip()
-    wa_token = os.environ.get("WHATSAPP_TOKEN", "").strip()
-    wa_to = os.environ.get("WHATSAPP_TO", "").strip()
-    if wa_phone_id and wa_token and wa_to:
-        try:
-            from hub import _whatsapp_send  # late import — avoids circular at module load
-            await _whatsapp_send(text)
-            return
-        except Exception:
-            pass
-    # Fallback to Telegram if configured
-    tg_token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
-    tg_chat = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
-    if tg_token and tg_chat:
-        try:
-            from hub import _telegram_send
-            await _telegram_send(text)
-        except Exception:
-            pass
-
-
 # Per-kid funding threshold — covers a meaningful unit of medical-care
 # contribution (configurable so Joshua can adjust as the program scales).
 KID_THRESHOLD_USD = float(os.environ.get("KID_THRESHOLD_USD", "250"))
@@ -114,7 +78,6 @@ async def contribute(payload: ContributionCreate):
         "at": _now(),
     }
     await LEDGER.insert_one(entry.copy())
-    await _maybe_broadcast(entry)
     return entry
 
 
@@ -171,28 +134,21 @@ class WebhookPayload(BaseModel):
 
 @router.post("/webhook/{source}")
 async def webhook(source: str, body: WebhookPayload):
-    """Permissive intake. Revenue surface keeps growing — every new source is
-    another bucket feeding the kids fund.
-
-    Joshua's directive (2026-03-02): maximize the # of revenue sources before
-    death. Each receiver may pre-split per doctrine (10% kids / 27% tax / 63% ops)
-    when bucket==-1 is passed.
-    """
-    allowed = {"square", "stripe", "cashapp", "paypal", "cloudflare",
-               "buymeacoffee", "github_sponsors", "patreon", "kofi",
-               "gospel", "manual", "test"}
-    if source not in allowed:
-        raise HTTPException(status_code=400, detail=f"unknown source '{source}' — use {'|'.join(sorted(allowed))}")
+    """Permissive intake. Square (Location LY5GN09F5AN83) is the only live
+    payment processor — Stripe is dead per doctrine, any stripe hit returns 410.
+    Cloudflare workers + manual + test accepted. Default bucket 1 (Kids Fund)."""
+    if source == "stripe":
+        raise HTTPException(
+            status_code=410,
+            detail="stripe is dead per doctrine — use /api/ledger/webhook/square (Location LY5GN09F5AN83)",
+        )
+    if source not in {"square", "cloudflare", "manual", "test"}:
+        raise HTTPException(status_code=400, detail=f"unknown source '{source}' — use square|cloudflare|manual|test")
     amount_usd = body.amount_usd
     if amount_usd is None and body.amount_cents is not None:
         amount_usd = body.amount_cents / 100.0
     if amount_usd is None or amount_usd <= 0:
         raise HTTPException(status_code=400, detail="missing positive amount_usd or amount_cents")
-
-    # bucket = -1 → auto-split per doctrine (kids 10% / tax 27% / ops 63%)
-    if body.bucket == -1:
-        return await _autosplit_insert(amount_usd, source, body.note, body.raw)
-
     bucket = body.bucket or 1
     if bucket not in BUCKET_NAMES:
         raise HTTPException(status_code=400, detail=f"unknown bucket {bucket}")
@@ -209,54 +165,7 @@ async def webhook(source: str, body: WebhookPayload):
         "at": _now(),
     }
     await LEDGER.insert_one(entry.copy())
-    await _maybe_broadcast(entry)
     return {"ok": True, "id": entry["id"], "amount_usd": entry["amount_usd"], "bucket": bucket}
-
-
-async def _autosplit_insert(amount_usd: float, source: str,
-                            note: Optional[str], raw: Optional[Dict[str, Any]]) -> Dict[str, Any]:
-    """Split one inbound contribution across the doctrine buckets.
-
-    Default: 10% → bucket 1 (Kids), 27% → bucket 3 (Tax reserve), 63% → bucket 5 (Ops).
-    Configurable via REVENUE_SPLIT_{KIDS,TAX,OPS} env vars.
-    """
-    kids_pct = float(os.environ.get("REVENUE_SPLIT_KIDS", "10")) / 100.0
-    tax_pct  = float(os.environ.get("REVENUE_SPLIT_TAX",  "27")) / 100.0
-    ops_pct  = float(os.environ.get("REVENUE_SPLIT_OPS",  "63")) / 100.0
-    entries = []
-    for bucket, pct, label in (
-        (1, kids_pct, "kids fund"),
-        (3, tax_pct,  "tax reserve"),
-        (5, ops_pct,  "operations"),
-    ):
-        portion = round(amount_usd * pct, 2)
-        if portion <= 0:
-            continue
-        e = {
-            "id": _new_id(),
-            "amount_usd": portion,
-            "bucket": bucket,
-            "bucket_name": BUCKET_NAMES.get(bucket, label),
-            "source": source,
-            "note": f"auto-split {int(pct*100)}% of ${amount_usd:.2f} from {source} · {(note or '')[:200]}",
-            "actor": f"webhook · {source} (auto-split)",
-            "raw": raw,
-            "at": _now(),
-        }
-        await LEDGER.insert_one(e.copy())
-        entries.append(e)
-    # Broadcast a single summary, not three pings
-    if entries:
-        summary = {
-            **entries[0],
-            "amount_usd": round(amount_usd, 2),
-            "bucket": 0,
-            "bucket_name": f"auto-split (kids {int(kids_pct*100)}/tax {int(tax_pct*100)}/ops {int(ops_pct*100)})",
-            "note": f"3-way split applied. Kids: ${entries[0]['amount_usd']}",
-        }
-        await _maybe_broadcast(summary)
-    return {"ok": True, "auto_split": True, "amount_usd": round(amount_usd, 2),
-            "entries": [{"id": e["id"], "bucket": e["bucket"], "amount_usd": e["amount_usd"]} for e in entries]}
 
 
 @router.delete("/{entry_id}")

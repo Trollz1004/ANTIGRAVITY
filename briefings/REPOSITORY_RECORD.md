@@ -1,0 +1,343 @@
+<!-- ============================================================ -->
+<!-- ORIENTATION GUARD — READ BEFORE YOU DO ANYTHING -->
+<!-- ============================================================ -->
+
+> # STOP — THE APP ALREADY EXISTS. DO NOT BUILD A NEW ONE.
+>
+> If you are about to scaffold a new app, a new repo, or "a date app" — **STOP. You are wrong.** It is already built, deployed, and taking real money.
+>
+> - **ONE repo only:** `Trollz1004/ANTIGRAVITY`. Never create another repo or greenfield app.
+> - **Product code (already written):** `apps/youandinotai-frontend/` (Next.js 15 → youandinotai.com) + `backend/fastapi-app/` (FastAPI). GCR backend deployed & live. Mirror on **T5500** (`192.168.0.15`); **Sabretooth** `C:\ANTIGRAVITY` is the only push node.
+> - **Square is LIVE and has cleared real payments** — `joshlcoleman@gmail.com`, location `LY5GN09F5AN83`. Do **NOT** assume $0 / pre-launch. Verify in Square or `backend/fastapi-app/app/revenue_allocation.py`.
+> - **Revenue model:** 1 wallet, 1 LLC, **10% per-bucket reserve** (coded: `reserve_revenue_allocation()`). Never invent splits; never resurrect 60/30/10 or charity-routing.
+> - **Before writing anything:** read `CLAUDE.md` fully, then this file, then **grep for an existing implementation.** Assume it exists until search proves otherwise.
+
+<!-- ============================================================ -->
+
+# REPOSITORY RECORD - T5500 PRIMARY NODE (Sabretooth pending wipe)
+
+Date: May 13, 2026 (node-primary updated; prior content from 2026-05-11 ONE-repo sweep preserved below)
+Authority: Joshua Coleman
+Status: **T5500 is now the primary node** per the 2026-05-11/12 node-consolidation plan (`T5500-CONSOLIDATION.md`). Sabretooth was the primary node through 2026-05-11 and is pending factory wipe after the `sabretooth-preserve-20260511` branch is confirmed on origin. 9020 is also pending wipe. All prior Sabretooth-era history below remains accurate as historical record. Updated after the 2026-05-11 ONE-repo consolidation (income-engine merged in, second repo archived, Paperclip companies created), the April 15 PaperClip HQ cutover, the April 17 1-wallet revenue-model pivot (charity-routing language removed from all active surfaces), the April 19 4-DAO architecture finalization and Gemini memory refresh, the April 27 OpenCode / Paperclip Worker finalization, and the April 28 doctrine sweep that moved the env vault to OneDrive, locked the 1-folder rule, migrated OpusPawClaw to `c:\Antigravity\apps\opuspawclaw`, added the Sabretooth always-on watchdog, stood up Hermes Router on `:11435`, and wired the Playwright browser MCP into the project
+
+## 2026-05-11 ONE-Repo Consolidation (canonical)
+
+> Latest doctrine. Supersedes any earlier "two repos one owner" wording. Full details: [SABRETOOTH-SYNC-2026-05-11.md](SABRETOOTH-SYNC-2026-05-11.md).
+
+| Aspect | Value |
+|---|---|
+| Repo (only) | `Trollz1004/ANTIGRAVITY` |
+| Folder (every node) | `C:\Antigravity` (or `C:\ANTIGRAVITY`) |
+| Branch | `main` |
+| Push-to-main authority | T5500 (192.168.0.15) — was Sabretooth (192.168.0.8), now pending wipe |
+| Sync-only nodes | 9020 (pending wipe), Sabretooth (pending wipe) |
+| Sabretooth main HEAD | `0a248073` — "Merge income-engine into ANTIGRAVITY (redact leaked AidoesitAll gho_ token…)" |
+| Subtree imported | `Trollz1004/income-engine@f9feff1d` → `income-engine/` (2018 files; one secret-bearing file omitted) |
+| `Trollz1004/income-engine` | **archived** (read-only safety net, not deleted) |
+| `Trollz1004/income-engine` | archived earlier this round |
+| Paperclip companies | `Trash Or Treasure Online Recycler LLC` (TRA), `ai-solutions.store` (AIS), `youandinotai.com` (YOU), `marketing` (MAR, unified for now) |
+| Hermes config (Sabretooth) | `AppData\Local\hermes\config.yaml` — model `inclusionai/ring-2.6-1t:free`, provider `openrouter`, fallbacks `openrouter/nous/zai` |
+| Hermes `.env` (Sabretooth) | not yet created — keys not pasted through chat per session rule |
+| Language firewall | **DEAD** — mission is helping kids with medical care; speak honestly in code/commits/docs. FL §496.405 (avoid "donate/donation/solicitation" in customer-facing copy) remains the one real legal constraint. |
+
+
+
+## Repository Truth
+
+- Authoritative root: `C:\ANTIGRAVITY`
+- Git truth: `main` / `origin/main`
+- Current clean pre-audit baseline before this March 31 sweep: `3c2c096`
+- Continuity vault root: `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth`
+- Sandbox repo remains separate and non-authoritative for live repo truth
+
+## Current Runtime Truth
+
+| Component | State | Notes |
+|-----------|-------|-------|
+| YouAndINotAI frontend | LIVE | Cloudflare Pages |
+| YouAndINotAI backend/API path | LIVE | Cloud Run / Cloudflare-backed API path remains the active backend surface |
+| Date-app payments | GREEN | Square checkout-session creation remains verified for Bot-Shield, founder tiers, and royalty checkout |
+| OnlineRecycle | LIVE | service-first public copy remains the live model |
+| Dashboard gateway | LIVE | `dashboard.aidoesitall.website` now serves the no-index auth gateway |
+| PaperClip runtime | SANDBOX / PRIVATE | sandboxed and not part of the live repo runtime |
+| Root AIDoesItAll mapping | LIVE | `www.aidoesitall.website` now maps to `_deploy/aidoesitall-www` on Cloudflare Pages project `for-the-kids-contribute` |
+| AIDoesItAll API guard | LIVE | `api.aidoesitall.website/*` is now guarded by repo-tracked Worker source at `infra/cloudflare/aidoesitall-api-guard` |
+
+## Current Financial Doctrine (as of April 17, 2026)
+
+- **One wallet model.** All platform revenue lands in a single founder-controlled wallet; all costs leave from the same wallet. There is no separate charity rail, no automatic-disbursement contract on the live revenue path, and no named-beneficiary split logic in active code.
+- **10% reserve, founder-directed quarterly.** A minimum of 10% of merchant receipts is set aside automatically as a reserve. That reserve is Joshua Coleman's taxable income (the LLC receives 100% of merchant receipts) and is held until he decides quarterly whether to donate, reinvest, stake, or hold. No agent, surface, or doc may pre-commit that reserve to a beneficiary.
+- **No charity-routing language on active surfaces.** No active surface (code, UI, marketing copy, docs) may claim charity routing, automatic disbursement, percent-to-charity splits, or §496.405-style language. The pre-April-17 "10% charitable cap" framing is retired and superseded.
+- **History is preserved, not authoritative.** Historical `60/30/10`, `100% charity`, `100% DAO`, and split-era percentages remain in clearly-historical files only. Historical Base Mainnet `GospelDonation.sol` is real chain history and must not be presented as current automatic doctrine for live LLC-controlled revenue.
+- **Canonical reference.** `CLAUDE.md` (Revenue Model section, footer dated `2026-04-17`) is the source of truth. This block restates that doctrine for the repo-level status file.
+
+## March 31 Audit Sweep
+
+This refresh was performed so the AI team can pull the repo and see the forced prelaunch adjustment clearly instead of misreading it as compromise or drift.
+
+Refreshed in this sweep:
+
+- canonical memory files
+- AI sync prompts
+- ClawX repo-facing governance docs
+- MCP protocol metadata
+- date-app authenticated impact labeling
+- repo-level doctrine and continuity summaries
+- stale eBay / merch / crossfire / social / 9020 prompt surfaces superseded so they no longer present legacy routing as current truth
+- backup and contract folders labeled more explicitly as historical context
+- `scripts/youandinotai/split-consistency-check.sh` corrected so it scans the actual repo root and filters historical warnings correctly
+- canonical control surfaces scrubbed of retired split-separation doctrine so agent and MCP sessions inherit the current 10% operating truth
+
+Primary adjustment record:
+
+- `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
+
+## Public Copy Rule
+
+- lead with product and service value
+- do not market percentages
+- do not frame purchases as donations
+- keep impact claims factual, restrained, and non-solicitation
+
+## April 1 Public-Surface Remediation
+
+- `www.aidoesitall.website` stale Pages deployment was replaced with the safe repo-tracked handoff surface at `_deploy/aidoesitall-www`
+- Cloudflare Pages project `for-the-kids-contribute` now serves that replacement on production deployment `0e318f27`
+- stale Worker `for-the-kids-api` on route `api.aidoesitall.website/*` was replaced with the repo-tracked guard Worker at `infra/cloudflare/aidoesitall-api-guard`
+- verified live result: both `www.aidoesitall.website` and `api.aidoesitall.website` now avoid stale `60%` / `100% charity` public claims
+
+## April 1 Control-Surface Doctrine Cleanup
+
+- `AGENTS.md`, `CLAUDE.md`, canonical memory files, Brain/MCP config examples, and active OpenClaw/control scripts were normalized away from retired split-separation doctrine
+- current control surfaces now treat the conservative `10%` charitable cap as the only live LLC operating doctrine unless a future canonical legal update replaces it
+- historical chain and contract artifacts remain in explicitly historical files only and do not control current operational truth
+- `briefings/ACTIVE-PROMPTS.md` was reduced to a superseded notice so old prompt copy cannot masquerade as current operating instructions
+- canonical briefing names were normalized to:
+  - `briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
+  - `briefings/HISTORICAL-ONCHAIN-STATUS.md`
+- `9020` legacy sandbox notes carrying `Omega365` / split-era doctrine were archived out of the active support path
+- `T5500` Manus-lane docs and prompts were updated in place so they no longer seed retired split-era labels into current work
+
+## Operational Notes
+
+- Square remains the live payment rail
+- `joshlcoleman@gmail.com` is the unified Square account for all lanes (YouAndINotAI and commerce)
+- direct-upload Cloudflare Pages deployments should continue to use the verified API/upload-token path or a known authenticated project path
+
+## April 2 Date-App Reskin and Launch Validation
+
+- the authenticated YouAndINotAI shell was brought into the same brutalist / typographic system as the new public landing surface
+- reskinned surfaces include login, register, profile setup, discover, matches, inbox, concierge, verification, support, boards, events, volunteer, checkout launch, shared badges, swipe cards, and the authenticated app shell
+- support routing UX now uses the same visual language while keeping the existing operator / escalation logic intact
+- launch-critical routes were validated live on production with the beta-access path:
+  - `/app`
+  - `/app/lovebot`
+  - `/app/matches`
+  - `/app/inbox`
+  - `/app/boards`
+  - `/app/events`
+  - `/app/volunteer`
+  - `/app/support`
+  - `/app/impact`
+  - `/app/privacy`
+  - `/app/verify`
+- founder pricing and Square commerce links were rechecked on April 2, 2026 and all five live checkout rails still return `303` redirects into Square checkout
+- the customer-facing login copy leak using `donation checkout` wording was removed before final deploy
+- frontend-only deploy was pushed to Cloudflare Pages project `youandinotai`; no GCR / Cloud Run backend deploy was required because this pass did not change backend code
+- one residual remains: Cloudflare JavaScript detections inject an inline challenge script that produces a CSP console error on production pages; page behavior is still correct and this is not sourced from the repo bundle
+
+## April 2 Play Readiness Safety Pass
+
+- first-class safety controls were implemented locally for the date app:
+  - user blocking
+  - user reporting
+  - block enforcement across discover, profile, matches, and chat
+  - board-post reporting backed by the moderation/support lane
+- local backend code now contains repo-tracked safety routes and tests:
+  - `app/routers/safety.py`
+  - `app/moderation.py`
+  - `tests/test_safety_routes.py`
+- local frontend code now contains repo-tracked safety UI for discover, chat, and boards
+- full backend validation passed again on April 2, 2026 with `209 passed`
+- frontend lint/build passed again on April 2, 2026 after the safety pass
+- live backend reality check:
+  - `https://api.youandinotai.com/api/v1/safety/blocks` currently returns `404`
+  - Sabretooth currently has no active local `gcloud` auth or configured project, so the backend safety patch could not be deployed from this session
+- production protection applied:
+  - the frontend safety/report UI was redeployed to Cloudflare Pages in a hard-gated state so the controls stay hidden until the backend route exists live
+  - current safe Pages deployments for this gating pass were `e565c55d` and final `e9697b6d`
+- Android / Play boundary:
+  - this repo still does not contain an Android packaging layer (`android/`, Capacitor, Expo, or equivalent)
+  - product/policy safety readiness improved materially, but literal Play submission packaging is still a separate remaining step
+
+## April 2 Privacy Center Live Fallback
+
+- live production backend check:
+  - authenticated `GET https://api.youandinotai.com/api/v1/privacy/my-data` returns `500`
+  - the route exists, but the advanced privacy backend path is currently unhealthy in production
+- production protection applied with a frontend-only Cloudflare Pages deploy:
+  - `DataPrivacyDashboard` now falls back to live `/auth/me` and optional `/profiles/me` data when the advanced privacy endpoint fails
+  - the live page now shows a truthful degraded state instead of a generic hard failure
+  - export, location-disable, and deletion actions are visibly disabled while the backend privacy service remains unavailable
+- current safe Pages deployment for this fallback pass: `7a982b59`
+- verified live on `https://youandinotai.com/app/privacy` with the beta-access path:
+  - the old `Unable to load your privacy data right now.` failure state no longer blocks the screen
+  - the page now shows basic account details with an explicit temporary-unavailability notice for advanced privacy actions
+
+## Final Validation Pass
+
+Verified on March 31, 2026:
+
+- `youandinotai`: `npm run lint` passed
+- `youandinotai`: `npm run build` passed
+- `mcp-server`: `npm run build` passed
+- `social-command-center`: `npm run build` passed
+- `revenue-core`: `npm install --no-package-lock` completed cleanly on Sabretooth, then `npm run build` passed
+- `antigravity`: `npm run build` passed
+- `youandinotai-api`: `uv run --python 3.13 --with-requirements requirements.txt --with pytest --with pytest-cov --with pytest-asyncio python -m pytest -q` passed with `201 passed`
+- `scripts/youandinotai/split-consistency-check.sh`: passed after root-path and filter fixes
+
+Verified again on April 2, 2026:
+
+- `youandinotai`: `npm run lint` passed
+- `youandinotai`: `npm run build` passed
+- `youandinotai-api`: `uv run --python 3.13 --with-requirements requirements.txt --with pytest --with pytest-cov --with pytest-asyncio python -m pytest -q` passed with `209 passed`
+- live `https://youandinotai.com/login` reflects the new auth reskin
+- live beta-access path successfully entered the authenticated shell and loaded the core in-app routes listed above
+- Square payment links:
+  - Bot-Shield `$1`
+  - Founding Member `$14.99/mo`
+  - `3-Month Founder` `$39.99`
+  - `12-Month Founder` `$99.99`
+  - `Royalty Card` `$2,500`
+  all responded with live `303` redirects into Square-hosted checkout
+- live backend probe on `https://api.youandinotai.com/api/v1/safety/blocks` returned `404`, confirming the backend safety patch still needs a real Cloud Run deploy before the new moderation controls can go live
+- live beta-authenticated privacy probe confirmed the frontend fallback is active on production and no longer leaves the Privacy Center in a dead failure state
+
+## Local Hermes / PaperClip Runtime
+
+Validated on April 2, 2026:
+
+- Hermes local runtime is repaired on Sabretooth and responds through the isolated venv at `C:\Users\joshl\.local\hermes-venv`
+- PaperClip company `1c69e02a-6c7e-4f58-ab35-616bec49d778` now has validated agent `Hermes Codex` (`2fdb271a-fa67-4ca5-be85-bd0626d1deed`)
+- the PaperClip validation run `64aa2074-3b4d-4476-a964-9ac909c48693` completed with status `succeeded`
+- one-click local repair/launch path exists at `C:\Users\joshl\Desktop\Launch-Hermes-PaperClip.cmd`
+- the launcher self-heals Hermes shims/config, opens the PaperClip gateway/dashboard, stays open on error, and does not create a scheduled task or daemon
+- repo-tracked status note: `briefings/HERMES-PAPERCLIP-STATUS-2026-04-02.md`
+
+## April 15 PaperClip HQ ANTIGRAVITY Cutover
+
+- the active local PaperClip runtime on Sabretooth is now `C:\ANTIGRAVITY\paperclip-upstream` with runtime home `C:\ANTIGRAVITY\paperclip-runtime`
+- the active local URL is `http://127.0.0.1:3100` and the active public URL is `https://paperclip-hq.youandinotai.com`
+- the active Cloudflare tunnel config is repo-tracked at `C:\ANTIGRAVITY\infra\cloudflare\paperclip-hq.yml`
+- `C:\ANTIGRAVITY\scripts\autostart.ps1` now launches the repo-owned runtime via `paperclipai run -d C:\ANTIGRAVITY\paperclip-runtime -i default --no-repair`
+- the startup script kills any non-ANTIGRAVITY process already holding port `3100` and skips duplicate tunnel starts
+- legacy PaperClip drift under `E:\trollz-sandbox` was removed except for a locked `logs` remainder under `E:\trollz-sandbox\paperclip-antigravity`, which is still queued for deletion at next logon via `C:\ANTIGRAVITY\scripts\cleanup-paperclip-drift.ps1`
+- legacy mixed-drive ANTIGRAVITY drift was also removed from `C:\Users\joshl\Documents\ANTIGRAVITY-CLEANUP-ARCHIVE-2026-04-02`, and no matching PaperClip / ANTIGRAVITY drift was found under `C:\Users\joshl\Downloads`
+- the old Docker-only paperclip containers `paperclip-antigravity-postgres` and `paperclip-sabretooth-postgres` plus their paperclip-only volumes were removed from Sabretooth
+- stale temporary setup docs/scripts from the mixed-stack PaperClip integration pass were removed from the repo root, and `.gitignore` now excludes node-local PaperClip runtime/source trees so the live repo stays cleaner on Sabretooth
+- `E:\OllamaModels\models` remains the active Ollama model store via `OLLAMA_MODELS`, so `E:` is not safe for a full wipe until the model store is migrated
+- repo-tracked status note: `briefings/PAPERCLIP-HQ-ANTIGRAVITY-2026-04-15.md`
+
+## April 10 Sabretooth Unified Local Stack Launcher
+
+- a single Sabretooth-local launcher now exists at `C:\Users\joshl\Desktop\START-DAO.ps1`, with desktop entrypoint `C:\Users\joshl\Desktop\START-DAO.bat`
+- Windows logon now uses the same canonical launcher via `C:\Users\joshl\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ANTIGRAVITY-Stack.cmd`
+- the unified launcher now starts and verifies, in order:
+  - Docker Desktop
+  - Ollama
+  - BRAIN MCP on `:3900`
+  - OpenClaw gateway local startup attempt on `:18789`
+  - PaperClip on `:3100`
+  - Hermes on `:8000`
+  - Cloudflared service tunnel plus the separate PaperClip direct tunnel
+- stale desktop wrappers now forward into the canonical launcher instead of using dead `E:\sandbox-repo\...` paths
+- local and public verification completed on April 10, 2026 for:
+  - `https://paperclip.youandinotai.com/api/health`
+  - `https://mcp.youandinotai.com/api/health`
+  - `https://hermes.youandinotai.com/health`
+- local OpenClaw gateway is healthy on `http://127.0.0.1:18789/`
+- remaining caveat:
+  - `https://openclaw-gw.youandinotai.com` still returns a Cloudflare-side `1033`, so the local stack is restart-safe for PaperClip / Hermes / BRAIN / Ollama / Cloudflare, but the external OpenClaw hostname still needs tunnel-side remediation
+
+## April 10 YouAndINotAI Profile Contrast and Bot-Shield Trace
+
+- profile setup interest chips and discovery preference chips were hardened so selected and unselected states always render with explicit readable text colors instead of inheriting a black-on-black contrast failure
+- Bot-Shield `$1` payment flow is tracked through the live verification chain:
+  - `/app/verify` creates a liveness challenge
+  - passing the challenge returns a Square checkout URL from `/billing/checkout-link`
+  - the Square webhook records `payment.completed`
+  - the webhook binds the checkout reference back to the user and creates a `VerificationEvent` with `challenge_type="payment"` and `status="completed"`
+  - `/verify/confirm` only promotes the badge after both liveness and completed payment are present
+- this means the `$1` is not routed into a mystery pool inside the app code; it enters the Square-hosted checkout, and the repo-tracked state is the verification event plus webhook-backed badge promotion path
+- date-app backend accounting now includes a `revenue_allocations` ledger that reserves exactly `10%` of each authoritative Square `payment.completed` event into the internal `kids_support` lane, rounded up to whole cents
+- for a `$1.00` Bot-Shield payment, the ledger reserves `10` cents and leaves `90` cents as the operating amount
+- this is verified internal allocation tracking, not a claim that an external payout has already been sent; external disbursement still requires a separate verified payout/reconciliation path
+
+## April 11 Orphaned Cloudflare Workers Service — snowy-wave-bf78
+
+- Cloudflare Workers service `snowy-wave-bf78` was identified as a failing deployment connected to the ANTIGRAVITY GitHub repo via Cloudflare's Git integration
+- It is **NOT** part of the canonical deployment map and should not run as a live CI/check context for this repo
+- The auto-generated random name `snowy-wave-bf78` confirms it was created during an early test/experiment and never promoted to a canonical named service
+- **Action required (Cloudflare dashboard):** remove the service from `joshlcoleman@gmail.com` Cloudflare account at `Workers & Pages` → `Workers` → `snowy-wave-bf78` → `Settings` → `Delete`, or disconnect its Git integration so the `cloudflare-workers-and-pages[bot]` check stops posting failures on PRs
+- Junk file `null.txt` (a UTF-16 encoded temp Python script accidentally committed to the repo root) was also removed in this pass
+
+## Node Lane Verification
+
+- `9020` support lane verified clean for `D:\claws\openclaw-9020\posts\rotation.json` and `queue_pending.json`
+- `T5500` Manus lane verified at `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian`
+- stale legacy-split wording removed from:
+  - `docs-locked`
+  - `manus-meta-guardian-dashboard\client\src\pages\Dashboard.tsx`
+  - `manus-meta-guardian-dashboard\client\src\pages\CSVGuide.tsx`
+- sandbox repo on `E:\sandbox-repo` remains non-authoritative and still carries separate uncommitted PaperClip-script drift outside the live repo
+
+## April 17 Revenue Model Pivot — 1-Wallet / 10% Reserve
+
+- the pre-April-17 "10% charitable cap" framing was retired and superseded by the **1-wallet model**: all platform revenue in, all costs out of one founder-controlled wallet
+- a minimum **10% reserve** is set aside automatically; that reserve is Joshua Coleman's taxable income (LLC receives 100% of merchant receipts) and is held for founder-directed quarterly disposition (donate, reinvest, stake, or hold)
+- charity-routing language, automatic-disbursement claims, percent-to-charity splits, and §496.405-style framing are no longer permitted on any active surface (code, UI, marketing copy, docs)
+- the donate-guard hook was removed in this pivot
+- a GLM-5.1:cloud token policy was set in the same sweep
+- canonical reference for the post-pivot doctrine: `CLAUDE.md` (Revenue Model section, footer dated `2026-04-17`)
+- historical chain artifacts (`GospelDonation.sol`, split-era 60/30/10, 100% charity language) remain valid history-only artifacts and must not be presented as current automatic doctrine
+
+## April 19 4-DAO Architecture and Gemini Memory Refresh
+
+- the 3-DAO → 4-DAO naming sync landed on the active DAO architecture line (`PR #40`, `PR #42`)
+- compliance briefings and 4-DAO architecture contracts were added (`PR #24`, `PR #42`)
+- Task 1/1000 — CEO agent backup, Gemini DAO viz, `PlatformSplitter` and `DAOTreasury` contracts merged
+- all Gemini memory files were refreshed for the April 19, 2026 full update
+- agent scaling and the Cloudflare tunnel for the 4-DAO line landed in `PR #42`
+
+## April 27 OpenCode and Paperclip Worker Finalization
+
+- OpenCode session was finalized covering the Paperclip Worker, D1, Docker CLI, Claude auth, and full doc updates
+- the Paperclip Worker was deployed and its OpenCode session signature recorded
+- `OpenCode Memory file` plus `.gitignore` updates landed for system-continuity purposes
+- the unified OpenCode launcher with cloud-model fallbacks for the Paperclip CEO agent was added
+- session signatures `qwen3.6-plus` are recorded against the OpenCode session line
+
+## April 28 Doctrine Sweep, OpusPawClaw Migration, and Sabretooth Always-On
+
+- doctrine sweep of `2026-04-28` (commit `eb9c4045`) moved the master env vault to OneDrive (`C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIVERSAL-ENV-TROLLZ1004.env`), locked the **1-folder rule** (`c:\Antigravity` is the only working surface), and refreshed briefings to the post-pivot 1-wallet truth
+- **OpusPawClaw flagship migrated** from `D:\` to `c:\Antigravity\apps\opuspawclaw` per the 1-folder rule (commit `377df0b2`); Mission Control mode added in the same change. Stack: Vite + Electron + React 19 + Tailwind v4 desktop AI workstation. New GUI work extends this app — it does not get rebuilt.
+- **Sabretooth always-on watchdog** added with always-on registration (commit `b6a632fc`) so the local stack survives reboots and orphaned processes
+- **Hermes Router on `:11435`** brought online with a Paperclip cite-upstream registry; OpusPawClaw launch fixes shipped in the same commit (`bace43ae`)
+- `README.md` was rewritten to be mission-forward, monorepo-aware, and to credit the AI partners (commit `88c1b15a`)
+- post-migration C:\ root cleanup landed (commit `e8a914da`); `.gitignore` was extended and the session-permission grant recorded (commit `d19b0f5a`)
+- housekeeping sweep cleared `docs/scratch`, `development/`, Desktop launchers, and corrected the GPU line in `CLAUDE.md` to **AMD Radeon RX 6700 XT 12GB** (commits `6d94b065`, `6e7c571d`)
+- **Playwright browser MCP** wired into the project `.mcp.json` (commit `8d2374f9`) so headed/headless browser automation is available alongside the existing antigravity-sentry, postgres, fetch, and memory MCPs
+- secrets carveout confirmed: env files live in OneDrive Personal Vault and never in the repo — repo remains wipe-and-clone-safe
+
+## Cross-Opus Knowledge Transfer Pattern
+
+- documented the working git-auth pattern used on Sabretooth so other Opus instances (WSL, T5500, 9020) do not re-discover from scratch:
+  - `gh auth login` (GitHub.com → HTTPS → web browser flow)
+  - `gh auth setup-git` to extend the token to plain `git`
+  - verification: `git ls-remote https://github.com/Trollz1004/ANTIGRAVITY.git HEAD` should print a SHA with no auth prompt
+  - reset path for partial setups: `git config --global --unset credential.helper && gh auth logout`, then re-run
+- canonical entry recorded in user memory: `feedback_cross_opus_knowledge_transfer.md`
+- principle: ask Joshua "what command did the other-node Opus use?" before re-discovering — saves cross-fleet token spend
+
+This file is the repo-level state summary for Sabretooth as of April 28, 2026.

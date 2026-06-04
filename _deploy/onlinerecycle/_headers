@@ -1,0 +1,12 @@
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self' data:; form-action 'self' https://book.squareup.com https://onlinerecycle.square.site; frame-ancestors 'none'; img-src 'self' data: https:; object-src 'none'; script-src 'self' 'sha256-ZXXmOgZOM/5Hn7/DRuCV+afAvFpxJgA9adyQAbEH/1k='; style-src 'self'; upgrade-insecure-requests
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
+  X-Content-Type-Options: nosniff
+  X-Robots-Tag: index, follow
+  Cache-Control: public, max-age=3600
+
+/
+  Link: </assets/logo/logo-og-image-1200x630.png>; rel=preload; as=image

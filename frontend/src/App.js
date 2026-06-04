@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { AgeGate } from "./components/AgeGate";
-import { SignInGate } from "./components/SignInGate";
 import { TitleBar } from "./components/TitleBar";
 import { Sidebar } from "./components/Sidebar";
 import { TaskCommander } from "./components/TaskCommander";
@@ -16,9 +15,6 @@ import { RoundtableMode } from "./modes/RoundtableMode";
 import { TasksMode } from "./modes/TasksMode";
 import { LedgerMode } from "./modes/LedgerMode";
 import { GraphifyMode } from "./modes/GraphifyMode";
-import { SabretoothMode } from "./modes/SabretoothMode";
-import { StorefrontMode } from "./modes/StorefrontMode";
-import { SecurityMode } from "./modes/SecurityMode";
 import { MissionRibbon } from "./components/MissionRibbon";
 import { SettingsPanel } from "./components/SettingsPanel";
 
@@ -31,11 +27,7 @@ export default function App() {
   React.useEffect(() => {
     const onMode = (e) => { if (e.detail?.mode) setActiveMode(e.detail.mode); };
     window.addEventListener("opuspawclaw-mode", onMode);
-    window.addEventListener("opuspawclaw-mode-change", onMode);
-    return () => {
-      window.removeEventListener("opuspawclaw-mode", onMode);
-      window.removeEventListener("opuspawclaw-mode-change", onMode);
-    };
+    return () => window.removeEventListener("opuspawclaw-mode", onMode);
   }, []);
 
   if (!gated) return <AgeGate onVerified={() => setGated(true)} />;
@@ -51,16 +43,12 @@ export default function App() {
       case "tasks":      return <TasksMode />;
       case "ledger":     return <LedgerMode />;
       case "graphify":   return <GraphifyMode />;
-      case "sabretooth": return <SabretoothMode />;
-      case "storefront": return <StorefrontMode />;
-      case "security": return <SecurityMode />;
       case "settings":   return <SettingsPanel />;
       default:           return <MissionMode />;
     }
   };
 
   return (
-    <SignInGate>
     <ChatProvider>
       <div className="grain h-screen flex flex-col bg-[#0a0f1a] text-[#e8f0ff] font-sans overflow-hidden relative">
         <TitleBar />
@@ -96,6 +84,5 @@ export default function App() {
         <CommandPalette onModeChange={setActiveMode} />
       </div>
     </ChatProvider>
-    </SignInGate>
   );
 }

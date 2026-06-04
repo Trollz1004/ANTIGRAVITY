@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Heart, AlertTriangle, Share2, Flame, ShieldCheck, ShieldAlert } from "lucide-react";
+import { Heart, AlertTriangle, Share2 } from "lucide-react";
 import { ShareMissionModal } from "./ShareMissionModal";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 /**
  * MissionRibbon — always-on top strip showing the actual mission counter.
- * Reads /api/ledger/stats, /api/watchdog/status, /api/public/runway, /api/compliance/status.
+ * Reads /api/ledger/stats and /api/watchdog/status. Honest empty state.
  */
 export function MissionRibbon() {
   const [stats, setStats] = useState(null);
   const [alerts, setAlerts] = useState([]);
-  const [runway, setRunway] = useState(null);
-  const [compliance, setCompliance] = useState(null);
   const [share, setShare] = useState(false);
   const [tick, setTick] = useState(0);
 
@@ -27,19 +25,13 @@ export function MissionRibbon() {
     let alive = true;
     const load = async () => {
       try {
-        const [s, w, r, c] = await Promise.all([
+        const [s, w] = await Promise.all([
           axios.get(`${API}/ledger/stats`).then((r) => r.data),
           axios.get(`${API}/watchdog/status`).then((r) => r.data),
-          axios.get(`${API}/public/runway`).then((r) => r.data).catch(() => null),
-          axios.get(`${API}/compliance/status`).then((r) => r.data).catch(() => null),
         ]);
         if (!alive) return;
-        setStats(s); setAlerts(w.alerts || []); setRunway(r); setCompliance(c);
-      } catch (err) {
-        // honest empty state — ribbon renders blank counters rather than fabricated numbers
-        // eslint-disable-next-line no-console
-        console.warn("MissionRibbon load failed:", err?.message || err);
-      }
+        setStats(s); setAlerts(w.alerts || []);
+      } catch { /* honest empty state */ }
     };
     load();
     const iv = setInterval(() => { if (!document.hidden) { load(); setTick((t) => t + 1); } }, 12_000);
@@ -65,25 +57,6 @@ export function MissionRibbon() {
         <Stat label="committed" value={`$${formatUsd(total)}`} tone="cyan" tick={tick} />
         <Stat label="kids fund" value={`$${formatUsd(kids)}`} tone="magenta" />
         <Stat label="kids covered (est.)" value={String(estimate)} tone="green" hint={`${threshold} USD per kid threshold`} />
-        {runway && (
-          <>
-            <span className="h-3 w-px bg-[#2a3a52]" />
-            <div
-              data-testid="ribbon-runway"
-              title={runway.note}
-              className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border border-[#2a3a52] bg-[#1a2332]"
-            >
-              <Flame size={10} className={runway.emergent_key_configured ? "text-[#00e676]" : "text-[#ff1744]"} />
-              <span className="text-[8px] tracking-[0.25em] uppercase text-[#6b82a6]">runway</span>
-              <span className="mono text-[10px] font-bold text-[#e8f0ff]">{runway.runway_days}d</span>
-              <span className="text-[8px] text-[#4a5568]">·</span>
-              <span className="text-[8px] tracking-widest uppercase text-[#6b82a6]">{runway.default_bridge.model.replace("gemini-", "")}</span>
-            </div>
-          </>
-        )}
-        {compliance?.latest_check && (
-          <ComplianceChip compliance={compliance} />
-        )}
         {alerts.length > 0 && (
           <div data-testid="mission-ribbon-alert" className="flex items-center gap-1.5 ml-auto bg-[#ff1744]/15 border border-[#ff1744]/40 rounded-full px-3 py-0.5 animate-pulse">
             <AlertTriangle size={11} className="text-[#ff1744]" />
@@ -118,25 +91,4 @@ function Stat({ label, value, tone, hint, tick }) {
 function formatUsd(n) {
   if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
   return Number(n).toFixed(2);
-}
-
-function ComplianceChip({ compliance }) {
-  const verdict = compliance.latest_check?.verdict;
-  const dev = compliance.latest_check?.deviation_pct;
-  const ok = verdict === "ok";
-  const tone = ok ? "#00e676" : "#ff1744";
-  const Icon = ok ? ShieldCheck : ShieldAlert;
-  return (
-    <button
-      data-testid="ribbon-compliance"
-      onClick={() => window.dispatchEvent(new CustomEvent("opuspawclaw-mode-change", { detail: { mode: "security" } }))}
-      title={`10/27/63 doctrine · max deviation ${dev ?? "?"}pp · ${ok ? "within tolerance" : "REBALANCE NEEDED"}`}
-      className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border bg-[#1a2332] cursor-pointer transition-colors"
-      style={{ borderColor: `${tone}60` }}
-    >
-      <Icon size={10} style={{ color: tone }} className={ok ? "" : "animate-pulse"} />
-      <span className="text-[8px] tracking-[0.25em] uppercase text-[#6b82a6]">split</span>
-      <span className="mono text-[10px] font-bold" style={{ color: tone }}>{ok ? "ok" : `${dev}pp`}</span>
-    </button>
-  );
 }

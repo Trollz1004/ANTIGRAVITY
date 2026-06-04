@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A social platform for showing up. Meetups, volunteering, real-world connection.">
+<meta property="og:title" content="YouAndINotAI — A social platform for showing up">
+<meta property="og:description" content="Meetups, volunteering, real-world connection. Not another swipe app.">
+<meta property="og:url" content="https://youandinotai.com">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="YouAndINotAI">
+<meta name="twitter:description" content="A social platform for showing up. Founding Members open now.">
+<title>YouAndINotAI — A social platform for showing up</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  :root{
+    --bg:#0a0e1a; --bg2:#101729; --fg:#e6ecff; --muted:#8a93b3;
+    --accent:#5a8cff; --accent2:#7c5cff; --line:rgba(255,255,255,0.08);
+  }
+  body{
+    font-family:'IBM Plex Sans','Segoe UI',system-ui,sans-serif;
+    background:var(--bg);color:var(--fg);
+    min-height:100vh;display:flex;flex-direction:column;
+    background-image:radial-gradient(ellipse at top,#1a2440 0%,var(--bg) 60%);
+    line-height:1.5;
+  }
+  header{padding:1.5rem 1.5rem;border-bottom:1px solid var(--line)}
+  .logo{font-weight:700;font-size:1.05rem;letter-spacing:-0.01em}
+  main{flex:1;max-width:780px;margin:0 auto;padding:5rem 1.5rem 4rem;text-align:center}
+  h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:700;letter-spacing:-0.02em;margin:0 0 1rem;line-height:1.1}
+  .lede{font-size:clamp(1.05rem,2vw,1.25rem);color:var(--muted);max-width:560px;margin:0 auto 2.5rem}
+  .cta{
+    display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff;text-decoration:none;font-weight:600;font-size:1.05rem;
+    padding:0.95rem 1.75rem;border-radius:10px;
+    transition:transform 0.15s ease,box-shadow 0.15s ease;
+    box-shadow:0 6px 24px rgba(90,140,255,0.25);
+  }
+  .cta:hover{transform:translateY(-1px);box-shadow:0 10px 32px rgba(90,140,255,0.35)}
+  .sub{margin-top:1rem;color:var(--muted);font-size:0.92rem}
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:1rem;margin-top:4rem;text-align:left;
+  }
+  .card{
+    background:var(--bg2);border:1px solid var(--line);
+    padding:1.25rem;border-radius:12px;
+  }
+  .card h3{margin:0 0 0.5rem;font-size:1rem;font-weight:600}
+  .card p{margin:0;color:var(--muted);font-size:0.92rem}
+  footer{padding:2rem 1.5rem;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:0.85rem}
+  footer a{color:var(--muted);text-decoration:underline}
+  @media(prefers-reduced-motion){.cta{transition:none}}
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">YouAndINotAI</div>
+  </header>
+
+  <main>
+    <h1>A social platform for showing up.</h1>
+    <p class="lede">
+      Meetups, volunteering, real-world events. The platform makes it easy
+      to actually meet people offline. The connection is the meetup, not the swipe.
+    </p>
+
+    <a class="cta" href="https://square.link/u/cxwjcn0s" rel="noopener">
+      Become a Founding Member &mdash; $14.99/mo
+    </a>
+    <div class="sub">Cancel anytime. Original Founder badge stays.</div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Real-world first</h3>
+        <p>Meetups, volunteer days, board-game nights, hikes. The platform is the door. The meetup is the point.</p>
+      </div>
+      <div class="card">
+        <h3>Built in public</h3>
+        <p>Independent team. Founding Members shape the early platform and lock in original-member status that never re-mints.</p>
+      </div>
+      <div class="card">
+        <h3>No swipe loop</h3>
+        <p>The opposite of a dating app. Designed for people who'd rather meet humans than train an algorithm.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      &copy; 2026 Trash Or Treasure Online Recycler LLC.
+      <a href="mailto:joshlcoleman@gmail.com">Contact</a>
+    </p>
+  </footer>
+</body>
+</html>

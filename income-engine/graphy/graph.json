@@ -1,0 +1,35 @@
+{
+  "company": "AidoesitAll",
+  "repo": "Trollz1004/income-engine",
+  "node": "9020",
+  "wall": ["Antigravity", "Trollz1004", "Sabretooth", "port-3100-paperclip"],
+  "services": {
+    "openclaw": { "port": 3000, "status": "pending-install" },
+    "paperclip": { "port": 3101, "status": "running", "version": "2026.428.0", "note": "income-engine ONLY" },
+    "ollama": { "port": 11434, "status": "running", "model": "qwen2.5:7b" },
+    "litellm": { "port": 4000, "status": "running", "note": "LLM proxy for all providers" },
+    "mysql": { "port": 3306, "db": "income_engine", "status": "pending" },
+    "postgres": { "port": 54329, "status": "running", "note": "Paperclip embedded" }
+  },
+  "providers": [
+    { "id": "ollama-local", "model": "qwen2.5:7b", "virtual": "fast" },
+    { "id": "ollama-cloud", "key_env": "OLLAMA_API_KEY", "virtual": "cloud" },
+    { "id": "openrouter", "key_env": "OPENROUTER_API_KEY", "virtual": "router" },
+    { "id": "opencode", "key_env": "OPENCODE_API_KEY", "virtual": "code" },
+    { "id": "anthropic", "key_env": "ANTHROPIC_API_KEY", "model": "claude-sonnet-4-6", "virtual": "ceo" },
+    { "id": "openai-codex", "key_env": "OPENAI_API_KEY", "model": "gpt-4o-mini", "virtual": "codex" },
+    { "id": "hermes", "model": "glm-5.1", "key_env": "XAI_API_KEY", "virtual": "hermes" }
+  ],
+  "agents": [
+    { "id": "ceo-income", "model": "ceo", "heartbeat_min": 5, "paperclip_port": 3101 },
+    { "id": "fetcher", "model": "fast", "heartbeat_min": 5, "targets": ["reddit_forhire", "reddit_websiteservices", "upwork", "fiverr"] }
+  ],
+  "plugins": {
+    "ruflo": { "status": "installed", "mcp": "claude-flow@alpha", "note": "Enterprise orchestration" },
+    "paperclip": { "status": "running", "version": "2026.428.0", "mcp": "paperclip-mcp@latest" },
+    "graphy": { "status": "installed", "note": "Knowledge graph skill in skills/graph-knowledge" },
+    "agent-browser": { "status": "installed", "note": "Vercel skill for browser automation" },
+    "find-skills": { "status": "installed", "note": "Vercel skill for discovering more skills" }
+  },
+  "updated": "2026-05-08"
+}

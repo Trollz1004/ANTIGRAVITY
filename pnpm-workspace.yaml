@@ -1,0 +1,18 @@
+# ANTIGRAVITY monorepo — pnpm workspace definition
+# 1-repo policy: all apps, packages, services, and tools live here.
+
+packages:
+  # Deployable applications
+  - 'apps/*'
+
+  # MCP servers (Anthropic-pattern, stdio transport)
+  - 'apps/mcp/*'
+
+  # Shared libraries and platform packages
+  - 'packages/*'
+
+  # Long-running backend services
+  - 'services/*'
+
+  # Internal developer tools and utilities
+  - 'tools/*'

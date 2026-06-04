@@ -1,0 +1,113 @@
+# T5500 OPUS Stack — Docker Services
+# Usage: docker-compose up -d
+# Auto-starts on reboot via Task Scheduler (see scripts/STARTUP.bat)
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "logging=promtail"
+      - "logging.jobname=redis"
+
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./qdrant-data:/qdrant/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    labels:
+      - "logging=promtail"
+      - "logging.jobname=qdrant"
+
+  openclaw:
+    build:
+      context: ../openclaw
+      dockerfile: Dockerfile
+    container_name: openclaw
+    ports:
+      - "3200:3200"
+    env_file:
+      - ../openclaw/.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
+    volumes:
+      - ./logs:/logs
+      - openclaw_wwebjs:/app/.wwebjs_auth
+      - openclaw_wwebjs_cache:/app/.wwebjs_cache
+      - ../openclaw/.env:/app/.env:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3200/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "logging=promtail"
+      - "logging.jobname=openclaw"
+
+  whatsapp-bridge:
+    build:
+      context: ../openclaw
+      dockerfile: Dockerfile
+    container_name: whatsapp-bridge
+    user: root
+    command: node whatsapp-bridge.js
+    env_file:
+      - ../openclaw/.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      - OPENCLAW_URL=http://openclaw:3200
+    volumes:
+      - ./logs:/logs
+      - openclaw_wwebjs:/app/.wwebjs_auth
+      - openclaw_wwebjs_cache:/app/.wwebjs_cache
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      openclaw:
+        condition: service_healthy
+    security_opt:
+      - seccomp:unconfined
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3200/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "logging=promtail"
+      - "logging.jobname=whatsapp-bridge"
+
+volumes:
+  openclaw_wwebjs:
+  openclaw_wwebjs_cache:

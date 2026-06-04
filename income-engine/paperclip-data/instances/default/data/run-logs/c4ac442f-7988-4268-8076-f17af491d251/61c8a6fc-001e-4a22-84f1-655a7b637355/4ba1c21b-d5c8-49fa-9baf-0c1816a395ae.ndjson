@@ -1,0 +1,8 @@
+{"ts":"2026-05-08T01:33:16.345Z","stream":"stdout","chunk":"[paperclip] Skipping saved session resume for task \"9f89c1eb-fcff-42f0-ad0b-d894f25dd07c\" because wake reason is issue_assigned.\n"}
+{"ts":"2026-05-08T01:33:16.353Z","stream":"stdout","chunk":"[hermes] Starting Hermes Agent (model=anthropic/claude-sonnet-4, provider=anthropic [modelInference], timeout=300s)\n"}
+{"ts":"2026-05-08T01:33:20.325Z","stream":"stdout","chunk":"⚠️  Normalized model 'anthropic/claude-sonnet-4'"}
+{"ts":"2026-05-08T01:33:20.326Z","stream":"stdout","chunk":" to 'claude-sonnet-4' for \r\nanthropic.\r\n"}
+{"ts":"2026-05-08T01:33:34.979Z","stream":"stdout","chunk":"API call failed after 3 retries: HTTP 400: Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\r\n"}
+{"ts":"2026-05-08T01:33:34.980Z","stream":"stderr","chunk":"\r\nsession_id: 20260507_213320_d4a432\r\n"}
+{"ts":"2026-05-08T01:33:35.357Z","stream":"stdout","chunk":"[hermes] Exit code: 1, timed out: false\n"}
+{"ts":"2026-05-08T01:33:35.358Z","stream":"stdout","chunk":"[hermes] Session: 20260507_213320_d4a432\n"}

@@ -1,0 +1,289 @@
+# =============================================================================
+# marketing-distributor — OpenClaw AgentSkill
+# #ForTheKids | ANTIGRAVITY Ecosystem
+# =============================================================================
+# ROLE: Pure distribution layer only.
+# This skill NEVER writes, creates, or edits post content.
+# All content is provided by the caller (Perplexity/Comet or Claude/Opus).
+# OpenClaw's job: receive ready-made content, push it to the right platforms.
+# =============================================================================
+
+name: marketing-distributor
+version: "1.0.0"
+description: >
+  Distribute AI-generated content to social/community platforms.
+  CONTENT IS ALWAYS PROVIDED BY THE CALLER (Perplexity or Opus AI).
+  This skill only publishes — it never writes, edits, or generates posts.
+  Supports: X/Twitter (xurl), Discord (webhook), Bluesky (HTTP API), WhatsApp (wacli).
+author: "Perplexity/Comet + Joshua Coleman #ForTheKids"
+tags:
+  - marketing
+  - distribution
+  - social
+  - forthekids
+  - antigravity
+
+# ---------------------------------------------------------------------------
+# Required environment variables (set in .openclaw/social-platforms.env)
+# All are OPTIONAL — skill skips any platform that is not configured.
+# ---------------------------------------------------------------------------
+env:
+  # X / Twitter (via xurl CLI)
+  - name: TWITTER_API_KEY
+    description: "X/Twitter API Key (OAuth 1.0a)"
+    required: false
+  - name: TWITTER_API_SECRET
+    description: "X/Twitter API Secret"
+    required: false
+  - name: TWITTER_ACCESS_TOKEN
+    description: "X/Twitter Access Token"
+    required: false
+  - name: TWITTER_ACCESS_SECRET
+    description: "X/Twitter Access Token Secret"
+    required: false
+
+  # Discord (webhook — no bot required)
+  - name: DISCORD_WEBHOOK_URL
+    description: "Discord channel webhook URL"
+    required: false
+
+  # Bluesky (HTTP API)
+  - name: BLUESKY_HANDLE
+    description: "Bluesky handle e.g. youandinotai.bsky.social"
+    required: false
+  - name: BLUESKY_APP_PASSWORD
+    description: "Bluesky app-specific password"
+    required: false
+
+  # WhatsApp (via wacli CLI)
+  - name: WHATSAPP_TARGET
+    description: "WhatsApp phone number or group JID to broadcast to"
+    required: false
+
+# ---------------------------------------------------------------------------
+# Binary / CLI dependencies (all optional — checked at runtime)
+# ---------------------------------------------------------------------------
+bins:
+  - name: xurl
+    install: "npm install -g xurl  # or: winget install xurl"
+    required: false
+  - name: wacli
+    install: "go install github.com/steipete/wacli@latest"
+    required: false
+  - name: curl
+    required: false
+
+# ---------------------------------------------------------------------------
+# Tools exposed to the OpenClaw agent
+# ---------------------------------------------------------------------------
+tools:
+  - name: distribute_post
+    description: >
+      Publish a ready-made post (provided by AI caller) to one or more
+      configured platforms. NEVER generates content — caller must supply
+      post_text. Returns a per-platform status report.
+    parameters:
+      type: object
+      required:
+        - post_text
+      properties:
+        post_text:
+          type: string
+          description: "The exact post content to publish. Must be provided by caller (Perplexity/Opus). This skill does NOT write content."
+        image_url:
+          type: string
+          description: "Optional public URL of an image to attach (platform-dependent support)"
+        platforms:
+          type: array
+          items:
+            type: string
+            enum: ["twitter", "discord", "bluesky", "whatsapp", "all"]
+          description: "Which platforms to post to. Defaults to all configured platforms if omitted."
+        dry_run:
+          type: boolean
+          description: "If true, validate config and show what would be posted without actually posting."
+          default: false
+    script: |
+      #!/usr/bin/env node
+      // marketing-distributor — distribution-only, content from caller
+      const { post_text, image_url, platforms = ['all'], dry_run = false } = input;
+      const results = [];
+      const targets = platforms.includes('all')
+        ? ['twitter', 'discord', 'bluesky', 'whatsapp']
+        : platforms;
+
+      // --- X / Twitter via xurl ---
+      if (targets.includes('twitter')) {
+        const hasTwitter = process.env.TWITTER_API_KEY &&
+          process.env.TWITTER_API_SECRET &&
+          process.env.TWITTER_ACCESS_TOKEN &&
+          process.env.TWITTER_ACCESS_SECRET;
+        if (!hasTwitter) {
+          results.push({ platform: 'twitter', status: 'skipped', reason: 'Missing TWITTER_* env vars' });
+        } else if (dry_run) {
+          results.push({ platform: 'twitter', status: 'dry_run', would_post: post_text.substring(0, 50) + '...' });
+        } else {
+          try {
+            const { execSync } = require('child_process');
+            const cmd = `xurl post tweet --text ${JSON.stringify(post_text)}`;
+            const out = execSync(cmd, {
+              env: {
+                ...process.env,
+                TWITTER_CONSUMER_KEY: process.env.TWITTER_API_KEY,
+                TWITTER_CONSUMER_SECRET: process.env.TWITTER_API_SECRET,
+                TWITTER_ACCESS_TOKEN: process.env.TWITTER_ACCESS_TOKEN,
+                TWITTER_TOKEN_SECRET: process.env.TWITTER_ACCESS_SECRET,
+              }
+            }).toString().trim();
+            results.push({ platform: 'twitter', status: 'posted', response: out.substring(0, 200) });
+          } catch (e) {
+            results.push({ platform: 'twitter', status: 'error', error: e.message });
+          }
+        }
+      }
+
+      // --- Discord via webhook (no bot needed) ---
+      if (targets.includes('discord')) {
+        const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+        if (!webhookUrl) {
+          results.push({ platform: 'discord', status: 'skipped', reason: 'Missing DISCORD_WEBHOOK_URL' });
+        } else if (dry_run) {
+          results.push({ platform: 'discord', status: 'dry_run', would_post: post_text.substring(0, 50) + '...' });
+        } else {
+          try {
+            const https = require('https');
+            const url = new URL(webhookUrl);
+            const body = JSON.stringify({ content: post_text });
+            await new Promise((resolve, reject) => {
+              const req = https.request({
+                hostname: url.hostname, path: url.pathname + url.search,
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }
+              }, (res) => {
+                results.push({ platform: 'discord', status: res.statusCode < 300 ? 'posted' : 'error', http_status: res.statusCode });
+                resolve();
+              });
+              req.on('error', (e) => { results.push({ platform: 'discord', status: 'error', error: e.message }); resolve(); });
+              req.write(body); req.end();
+            });
+          } catch (e) {
+            results.push({ platform: 'discord', status: 'error', error: e.message });
+          }
+        }
+      }
+
+      // --- Bluesky via HTTP API ---
+      if (targets.includes('bluesky')) {
+        const handle = process.env.BLUESKY_HANDLE;
+        const appPassword = process.env.BLUESKY_APP_PASSWORD;
+        if (!handle || !appPassword) {
+          results.push({ platform: 'bluesky', status: 'skipped', reason: 'Missing BLUESKY_HANDLE or BLUESKY_APP_PASSWORD' });
+        } else if (dry_run) {
+          results.push({ platform: 'bluesky', status: 'dry_run', would_post: post_text.substring(0, 50) + '...' });
+        } else {
+          try {
+            const https = require('https');
+            // Step 1: create session
+            const sessionBody = JSON.stringify({ identifier: handle, password: appPassword });
+            const sessionData = await new Promise((resolve, reject) => {
+              let data = '';
+              const req = https.request({
+                hostname: 'bsky.social', path: '/xrpc/com.atproto.server.createSession',
+                method: 'POST', headers: { 'Content-Type': 'application/json' }
+              }, (res) => { res.on('data', d => data += d); res.on('end', () => resolve(JSON.parse(data))); });
+              req.on('error', reject); req.write(sessionBody); req.end();
+            });
+            if (!sessionData.accessJwt) throw new Error('Bluesky auth failed: ' + JSON.stringify(sessionData));
+            // Step 2: create post
+            const postBody = JSON.stringify({
+              repo: sessionData.did, collection: 'app.bsky.feed.post',
+              record: { '$type': 'app.bsky.feed.post', text: post_text, createdAt: new Date().toISOString() }
+            });
+            const postResult = await new Promise((resolve, reject) => {
+              let data = '';
+              const req = https.request({
+                hostname: 'bsky.social', path: '/xrpc/com.atproto.repo.createRecord',
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sessionData.accessJwt }
+              }, (res) => { res.on('data', d => data += d); res.on('end', () => resolve(JSON.parse(data))); });
+              req.on('error', reject); req.write(postBody); req.end();
+            });
+            results.push({ platform: 'bluesky', status: 'posted', uri: postResult.uri });
+          } catch (e) {
+            results.push({ platform: 'bluesky', status: 'error', error: e.message });
+          }
+        }
+      }
+
+      // --- WhatsApp via wacli ---
+      if (targets.includes('whatsapp')) {
+        const target = process.env.WHATSAPP_TARGET;
+        if (!target) {
+          results.push({ platform: 'whatsapp', status: 'skipped', reason: 'Missing WHATSAPP_TARGET env var' });
+        } else if (dry_run) {
+          results.push({ platform: 'whatsapp', status: 'dry_run', would_post: post_text.substring(0, 50) + '...' });
+        } else {
+          try {
+            const { execSync } = require('child_process');
+            execSync(`wacli send --to ${JSON.stringify(target)} --message ${JSON.stringify(post_text)}`);
+            results.push({ platform: 'whatsapp', status: 'posted' });
+          } catch (e) {
+            results.push({ platform: 'whatsapp', status: 'error', error: e.message });
+          }
+        }
+      }
+
+      return {
+        summary: `Posted to ${results.filter(r => r.status === 'posted').length}/${results.length} platforms`,
+        note: 'Content was provided by AI caller (Perplexity/Opus). This skill only distributed.',
+        results
+      };
+
+  - name: check_distribution_status
+    description: "Check which distribution platforms are currently configured and ready."
+    parameters:
+      type: object
+      properties: {}
+    script: |
+      #!/usr/bin/env node
+      return {
+        twitter: {
+          configured: !!(process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET &&
+            process.env.TWITTER_ACCESS_TOKEN && process.env.TWITTER_ACCESS_SECRET),
+          needs: 'TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET'
+        },
+        discord: {
+          configured: !!process.env.DISCORD_WEBHOOK_URL,
+          needs: 'DISCORD_WEBHOOK_URL'
+        },
+        bluesky: {
+          configured: !!(process.env.BLUESKY_HANDLE && process.env.BLUESKY_APP_PASSWORD),
+          needs: 'BLUESKY_HANDLE, BLUESKY_APP_PASSWORD'
+        },
+        whatsapp: {
+          configured: !!process.env.WHATSAPP_TARGET,
+          needs: 'WHATSAPP_TARGET, wacli binary'
+        },
+        reminder: 'Set credentials in C:\\Users\\josh1\\.openclaw\\social-platforms.env'
+      };
+
+# ---------------------------------------------------------------------------
+# Usage examples (for OpenClaw agent context)
+# ---------------------------------------------------------------------------
+examples:
+  - |
+    # Perplexity/Comet writes the post, then calls this skill to distribute:
+    distribute_post(
+      post_text="YouAndINotAI launches April 4th! Real humans, verified identities. No bots. #ForTheKids #YouAndINotAI",
+      platforms=["twitter", "discord", "bluesky"]
+    )
+  - |
+    # Check what's configured before posting:
+    check_distribution_status()
+  - |
+    # Dry run to validate without actually posting:
+    distribute_post(
+      post_text="Test post from #ANTIGRAVITY ecosystem",
+      platforms=["all"],
+      dry_run=true
+    )

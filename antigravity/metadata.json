@@ -1,0 +1,7 @@
+{
+  "name": "ANTIGRAVITY Public Status Dashboard",
+  "description": "Public-facing status dashboard for verified site links and explicitly tracked updates.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

@@ -1,0 +1,106 @@
+# ═══════════════════════════════════════════════════════════════
+# Income Engine .env — ManusClaw Configuration
+# For: C:/income-engine
+# Platform: 9020 (i7-4790, 32GB, GTX 1070)
+# Repo: Trollz1004/income-engine (private)
+# 
+# CRITICAL: This file contains ONLY income-engine configs.
+# NEVER reference Antigravity paths or credentials.
+# NEVER commit this file to git.
+# ═══════════════════════════════════════════════════════════════
+
+# ─── META ────────────────────────────────────────────────────────
+NODE_ENV=production
+INCOME_ENGINE_VERSION=1.0.0
+INCOME_ENGINE_NODE=9020
+INCOME_ENGINE_REPO=C:\income-engine
+INCOME_ENGINE_OLLAMA_PORT=11434
+
+# ─── MANUS OAUTH ─────────────────────────────────────────────────
+# From Manus dashboard - Income Engine app
+VITE_APP_ID=your-income-engine-manus-app-id
+OAUTH_SERVER_URL=https://api.manus.im
+VITE_OAUTH_PORTAL_URL=https://manus.im/login
+JWT_SECRET=your-income-engine-jwt-secret
+
+# ─── DATABASE ────────────────────────────────────────────────────
+# Local PostgreSQL for income-engine
+DATABASE_URL=postgresql://income_user:income_password@localhost:5432/income_engine
+POSTGRES_DB=income_engine
+POSTGRES_USER=income_user
+POSTGRES_PASSWORD=your-secure-password
+
+# ─── REDIS ──────────────────────────────────────────────────────
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_CACHE_ENABLED=true
+
+# ─── PAPERCLIP ──────────────────────────────────────────────────
+# Fresh Paperclip instance for income-engine
+PAPERCLIP_API_KEY=your-income-engine-paperclip-api-key
+PAPERCLIP_URL=http://localhost:3100
+PAPERCLIP_PORT=3100
+PAPERCLIP_AGENT_JWT_SECRET=your-paperclip-jwt-secret
+PAPERCLIP_COMPANY_ID=your-income-engine-company-id
+PAPERCLIP_WORKSPACE=income-engine-workspace
+
+# ─── OLLAMA ─────────────────────────────────────────────────────
+# Local Ollama on 9020 hardware
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_BASE_URL=https://ollama.com/v1
+OLLAMA_API_KEY=your-ollama-cloud-api-key
+OLLAMA_MODEL=llama2
+OLLAMA_CLOUD_ENDPOINT=https://ollama.com/v1
+
+# ─── OPENROUTER ─────────────────────────────────────────────────
+# Optional: For cloud models
+OPENROUTER_API_KEY=your-openrouter-api-key
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+
+# ─── OPENAI ─────────────────────────────────────────────────────
+# Optional: For GPT-4 integration
+OPENAI_API_KEY=your-openai-api-key
+OPENAI_API_BASE=https://api.openai.com/v1
+
+# ─── CLAUDE / ANTHROPIC ─────────────────────────────────────────
+# For Claude Opus integration
+ANTHROPIC_API_KEY=your-anthropic-api-key
+CLAUDE_MODEL=claude-opus-4-5-20250514
+
+# ─── GITHUB ──────────────────────────────────────────────────────
+# For Trollz1004/income-engine repo
+GITHUB_TOKEN=your-github-personal-access-token
+GITHUB_REPO=Trollz1004/income-engine
+GITHUB_OWNER=Trollz1004
+
+# ─── MANUS APIS ─────────────────────────────────────────────────
+# For Manus agent orchestration
+BUILT_IN_FORGE_API_URL=https://api.manus.im
+BUILT_IN_FORGE_API_KEY=your-manus-forge-api-key
+VITE_FRONTEND_FORGE_API_URL=https://api.manus.im
+VITE_FRONTEND_FORGE_API_KEY=your-manus-frontend-forge-api-key
+
+# ─── ANALYTICS ──────────────────────────────────────────────────
+VITE_ANALYTICS_ENDPOINT=https://analytics.manus.im
+VITE_ANALYTICS_WEBSITE_ID=your-analytics-website-id
+
+# ─── APPLICATION ────────────────────────────────────────────────
+VITE_APP_TITLE=ManusClaw - Income Engine
+VITE_APP_LOGO=https://your-logo-url.com/logo.png
+APP_URL=http://localhost:3000
+WEBHOOK_BASE_URL=http://localhost:3000/webhooks
+
+# ─── LOGGING ─────────────────────────────────────────────────────
+LOG_LEVEL=info
+LOG_FORMAT=json
+
+# ─── SECURITY ────────────────────────────────────────────────────
+# Never use in production without proper secrets management
+RATE_LIMIT_ENABLED=true
+RATE_LIMIT_REQUESTS_PER_MINUTE=60
+VERIFY_RATE_LIMIT_PER_MINUTE=5
+
+# ═══════════════════════════════════════════════════════════════
+# WALL: This file is ISOLATED from Antigravity
+# No cross-references. No shared credentials. Ever.
+# ═══════════════════════════════════════════════════════════════

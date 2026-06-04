@@ -1,0 +1,103 @@
+name: Deploy to Cloud Run
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "youandinotai-api/**"
+
+jobs:
+  deploy:
+    name: Build & Deploy API
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy to Cloud Run
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          REGION: ${{ secrets.GCP_REGION }}
+          SERVICE: ${{ secrets.GCR_SERVICE_NAME }}
+          BETA_ACCESS_CODES: ${{ vars.BETA_ACCESS_CODES }}
+          SQUARE_ACCESS_TOKEN: ${{ secrets.SQUARE_ACCESS_TOKEN }}
+          SQUARE_LOCATION_ID: ${{ secrets.SQUARE_LOCATION_ID }}
+          SQUARE_WEBHOOK_SIGNATURE_KEY: ${{ secrets.SQUARE_WEBHOOK_SIGNATURE_KEY }}
+          SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL: https://api.youandinotai.com/api/v1/webhooks/square-payment
+          SQUARE_WEBHOOK_NOTIFICATION_URL: https://api.youandinotai.com/api/v1/webhooks/square-payment
+          SQUARE_WEBHOOK_VERIFY_SIGNATURE: "true"
+          SQUARE_API_VERSION: "2026-01-22"
+        run: |
+          EXTRA_ENV_ARGS=()
+          add_env_var() {
+            local name="$1"
+            local value="$2"
+            if [ -n "$value" ]; then
+              EXTRA_ENV_ARGS+=(--update-env-vars "^@^${name}=${value}")
+            fi
+          }
+
+          if [ -n "$BETA_ACCESS_CODES" ]; then
+            EXTRA_ENV_ARGS+=(--update-env-vars "^@^BETA_ACCESS_CODES=$BETA_ACCESS_CODES")
+          fi
+          add_env_var "SQUARE_ACCESS_TOKEN" "$SQUARE_ACCESS_TOKEN"
+          add_env_var "SQUARE_LOCATION_ID" "$SQUARE_LOCATION_ID"
+          add_env_var "SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY" "$SQUARE_WEBHOOK_SIGNATURE_KEY"
+          add_env_var "SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL" "$SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL"
+          add_env_var "SQUARE_WEBHOOK_SIGNATURE_KEY" "$SQUARE_WEBHOOK_SIGNATURE_KEY"
+          add_env_var "SQUARE_WEBHOOK_NOTIFICATION_URL" "$SQUARE_WEBHOOK_NOTIFICATION_URL"
+          add_env_var "SQUARE_WEBHOOK_VERIFY_SIGNATURE" "$SQUARE_WEBHOOK_VERIFY_SIGNATURE"
+          add_env_var "SQUARE_API_VERSION" "$SQUARE_API_VERSION"
+
+          gcloud run deploy "$SERVICE" \
+            --project "$PROJECT_ID" \
+            --region "$REGION" \
+            --source youandinotai-api \
+            --allow-unauthenticated \
+            --port 8000 \
+            "${EXTRA_ENV_ARGS[@]}" \
+            --quiet
+
+      - name: Show URL
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          REGION: ${{ secrets.GCP_REGION }}
+          SERVICE: ${{ secrets.GCR_SERVICE_NAME }}
+          BETA_ACCESS_CODES: ${{ vars.BETA_ACCESS_CODES }}
+        run: |
+          URL=$(gcloud run services describe "$SERVICE" --project "$PROJECT_ID" --region "$REGION" --format='value(status.url)')
+          echo "Deployed to $URL"
+
+          FIRST_BETA_CODE="${BETA_ACCESS_CODES%%,*}"
+          if [ -n "$FIRST_BETA_CODE" ]; then
+            HTTP_CODE=$(curl -sS -o /tmp/beta-access-response.txt -w '%{http_code}' \
+              -X POST \
+              -H 'Content-Type: application/json' \
+              -d "{\"code\":\"$FIRST_BETA_CODE\"}" \
+              "$URL/api/v1/auth/beta-access")
+
+            if [ "$HTTP_CODE" != "200" ]; then
+              echo "Beta access smoke test failed with HTTP $HTTP_CODE"
+              cat /tmp/beta-access-response.txt || true
+              echo "Recent Cloud Run errors:"
+              gcloud logging read \
+                "resource.type=cloud_run_revision AND resource.labels.service_name=$SERVICE AND severity>=ERROR" \
+                --project "$PROJECT_ID" \
+                --limit 20 \
+                --freshness=15m \
+                --format='value(textPayload)'
+              exit 1
+            fi
+          fi
