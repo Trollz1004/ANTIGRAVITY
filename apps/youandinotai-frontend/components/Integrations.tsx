@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreditCard, DollarSign, CheckCircle2 } from 'lucide-react';
+import { DollarSign, CheckCircle2 } from 'lucide-react';
 
 export default function Integrations({ isDarkMode }: { isDarkMode: boolean }) {
   const integrations = [
@@ -9,13 +9,6 @@ export default function Integrations({ isDarkMode }: { isDarkMode: boolean }) {
       description: 'Primary payment gateway for youandinotai.com — Bot-Shield, Founding Member, 3/12-Month Founder, and Royalty Card all flow through Square (location LY5GN09F5AN83 / merchant ML3C7FMTQS5KX).',
       status: 'Connected',
       color: 'emerald',
-    },
-    {
-      name: 'Stripe',
-      icon: <CreditCard className="w-8 h-8 text-slate-500" />,
-      description: 'Used for non-dating commerce only (ai-solutions.store, etc.). NOT used on youandinotai.com — Stripe AUP prohibits dating platforms.',
-      status: 'Configured',
-      color: 'slate',
     },
   ];
 
@@ -50,7 +43,7 @@ export default function Integrations({ isDarkMode }: { isDarkMode: boolean }) {
 
             <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
               <button
-                onClick={() => alert('Configuration managed via Stripe Dashboard')}
+                onClick={() => alert('Configuration managed via Square Dashboard')}
                 className={`w-full py-2 rounded-lg text-sm font-semibold transition-colors ${
                   isDarkMode
                     ? 'bg-slate-700 hover:bg-slate-600 text-white'
