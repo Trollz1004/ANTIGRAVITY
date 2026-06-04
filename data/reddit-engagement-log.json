@@ -1,0 +1,32 @@
+{
+  "strategy": "Reddit Organic Engagement — Build credibility before promoting",
+  "created": "2026-02-16",
+  "target_subreddits": [
+    "r/OnlineDating",
+    "r/datingoverthirty",
+    "r/dating"
+  ],
+  "topics_to_engage": [
+    "Bots and fake profiles",
+    "Dating app frustrations",
+    "Safety concerns",
+    "Catfishing experiences",
+    "Dating app verification",
+    "Online dating tips"
+  ],
+  "rules": [
+    "NO links to youandinotai.com until day 5-7",
+    "Be genuinely helpful — share knowledge, not sales pitches",
+    "Build comment karma organically",
+    "When mentioning app (day 5+), do it naturally in context",
+    "Never cold-post promotional content to dating subs"
+  ],
+  "daily_target": {
+    "posts_to_read": 10,
+    "comments_to_leave": "3-5 helpful comments",
+    "tone": "Knowledgeable peer, not salesperson"
+  },
+  "engagement_log": [],
+  "ready_to_mention_app": false,
+  "minimum_days_before_promotion": 5
+}

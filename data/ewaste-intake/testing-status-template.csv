@@ -1,0 +1,2 @@
+intake_id,test_run_id,test_date,tested_by,bios_post,os_boot,cpu_stress_15min,memtest_pass,storage_smart_pass,network_pass,usb_ports_pass,video_output_pass,audio_pass,keyboard_trackpad_pass,battery_runtime_minutes,temp_peak_c,data_wipe_method,data_wipe_verified_by,test_status,blocking_issues,next_step
+EW-20260304-0001,TR-20260304-01,2026-03-04,tech3,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,205,79,"NIST 800-88 clear",tech4,pass,none,ready_for_valuation

@@ -81,11 +81,17 @@ async def list_status_checks():
 
 
 # ---------- Hermes Router mirror ------------------------------------------ #
-# Virtual model alias table lives in `hermes_models.py` (extracted to break
-# the hub.py ↔ server.py circular import). Re-exported here so legacy
-# server-module consumers keep working.
-from hermes_models import HERMES_VIRTUAL_MODELS  # noqa: E402
-
+# Virtual model alias table — identical to hermes-router service on :11435.
+# Real execution goes through Emergent LLM key → Anthropic / OpenAI / Gemini.
+HERMES_VIRTUAL_MODELS: Dict[str, Dict[str, str]] = {
+    "hermes":       {"provider": "ollama-cloud",  "real_model": "jeffreyvandekorput/korpohermes-prime",   "bridge_provider": "anthropic", "bridge_model": "claude-opus-4-5-20251101"},
+    "hermes-deep":  {"provider": "ollama-cloud",  "real_model": "jeffreyvandekorput/korpohermes-prime",   "bridge_provider": "anthropic", "bridge_model": "claude-opus-4-5-20251101"},
+    "cfo":          {"provider": "ollama-cloud",  "real_model": "joshlcoleman/CFO-Until-No-Kid-In-Need", "bridge_provider": "openai",    "bridge_model": "gpt-5.1"},
+    "code":         {"provider": "ollama-cloud",  "real_model": "joshlcoleman/dateapp",                   "bridge_provider": "openai",    "bridge_model": "gpt-5.1"},
+    "marketing":    {"provider": "ollama-cloud",  "real_model": "joshlcoleman/dateapp",                   "bridge_provider": "anthropic", "bridge_model": "claude-opus-4-5-20251101"},
+    "kimi":         {"provider": "openrouter",    "real_model": "moonshotai/kimi-k2-1205",                "bridge_provider": "gemini",    "bridge_model": "gemini-2.5-pro"},
+    "fast":         {"provider": "ollama-local",  "real_model": "gemma3:1b",                              "bridge_provider": "gemini",    "bridge_model": "gemini-2.5-flash"},
+}
 
 
 class ChatMessage(BaseModel):
@@ -333,19 +339,11 @@ from tasks import router as tasks_router  # noqa: E402
 from ledger import router as ledger_router  # noqa: E402
 from services import router as services_router, install_watchdog  # noqa: E402
 from graph import router as graph_router  # noqa: E402
-from auth_relay import router as auth_relay_router  # noqa: E402
-from storefront import router as storefront_router  # noqa: E402
-from compliance import router as compliance_router  # noqa: E402
-from security import router as security_router  # noqa: E402
 app.include_router(hub_router)
 app.include_router(tasks_router)
 app.include_router(ledger_router)
 app.include_router(services_router)
 app.include_router(graph_router)
-app.include_router(auth_relay_router)
-app.include_router(storefront_router)
-app.include_router(compliance_router)
-app.include_router(security_router)
 install_watchdog(app)
 app.add_middleware(
     CORSMiddleware,

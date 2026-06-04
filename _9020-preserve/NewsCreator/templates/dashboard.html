@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NewsCreator Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>NewsCreator Dashboard</h1>
+      <p>Ask for previews. One click to open via shortcut.</p>
+    </header>
+
+    <section class="controls">
+      <form id="ask-form">
+        <div class="row">
+          <input id="session" type="text" placeholder="Session ID" value="dashboard" />
+          <input id="system" type="text" placeholder="System prompt (optional)" />
+        </div>
+        <div class="row">
+          <textarea id="message" class="blue-box" placeholder="What preview do you want? e.g., Summarize today’s AI news"></textarea>
+        </div>
+        <div class="row">
+          <select id="model" title="Model"></select>
+          <label class="slider-label">Temp <input id="temp" type="range" min="0" max="1" step="0.05" value="0.2" /></label>
+          <button id="ask-btn" type="submit">Show Preview</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="session-tools" class="session-tools">
+      <div class="row">
+        <button id="new-session">New Session</button>
+        <button id="refresh-sessions">Refresh Sessions</button>
+        <button id="clear-sessions">Clear All</button>
+      </div>
+      <div id="sessions" class="sessions"></div>
+    </section>
+
+    <section class="previews" id="previews">
+      <!-- Preview cards appear here -->
+    </section>
+  </div>
+
+  <script src="/static/app.js"></script>
+  <script>
+    // Basic health check to warn if backend is down
+    fetch('/health').catch(() => {
+      const warn = document.createElement('div');
+      warn.className = 'warning';
+      warn.textContent = 'Backend is not running. Start the server to use the dashboard.';
+      document.querySelector('.container').prepend(warn);
+    });
+  </script>
+</body>
+</html>
