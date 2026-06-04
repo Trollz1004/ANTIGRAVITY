@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClawX | Unified AI Deliberation Dashboard</title>
+  <meta name="description" content="ClawX is the ANTIGRAVITY multi-AI deliberation dashboard for internal coordination, proposal review, and provider visibility.">
+  <link rel="manifest" href="/manifest.json">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Force dark theme for the new design
+    document.documentElement.classList.add('dark')
+
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  
+  <!-- Google Identity Services & API Client -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://apis.google.com/js/api.js" async defer></script>
+  
+  <link rel="stylesheet" href="/app-init.css">
+  <link rel="stylesheet" href="/index.css">
+</head>
+<body class="dark">
+  <div class="bg-animation"></div>
+  <!-- This is the root element where the React app will be mounted. -->
+  <div id="root"></div>
+  <!-- This script loads and runs the React application. -->
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

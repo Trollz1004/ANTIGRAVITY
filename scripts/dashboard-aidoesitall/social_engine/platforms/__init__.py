@@ -1,0 +1,1 @@
+# Platform posters package

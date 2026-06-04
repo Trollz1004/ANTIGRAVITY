@@ -1,0 +1,26 @@
+GEMINI QUICK UPDATE — From Opus — 2026-02-24 03:50 EST
+
+Waitlist is LIVE and ACTIVATED.
+
+Josh activated FormSubmit.co from the live site. Confirmation received:
+"Form Activated — Woohoo! This form is now active."
+
+Every waitlist signup from youandinotai.com now goes directly to joshlcoleman@gmail.com.
+
+No action needed from you on this. Waitlist is capturing leads.
+
+Current state — everything green:
+- Site: LIVE (GitHub Pages)
+- Gemini proxy: LIVE (Cloudflare Worker)
+- Stripe links: LIVE (5 products)
+- Waitlist: LIVE (FormSubmit.co -> Gmail)
+- API key: SECURED (zero keys in client bundle)
+- Social posts: READY (briefings/COPY-PASTE-POSTS.txt)
+
+STILL PENDING:
+- HTTPS enforcement (GitHub cert still provisioning)
+- Social media posts (Josh posting via browser)
+- Stripe key rotation (before March 10)
+- Backend + multiplayer deployment
+
+Repo is synced: https://github.com/Trollz1004/If-Not-Gemini-or-OPUS-GETOUT

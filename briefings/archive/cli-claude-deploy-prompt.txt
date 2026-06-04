@@ -1,0 +1,40 @@
+PROMPT FOR CLI CLAUDE (Opus on T5500) — youandinotai.com gh-pages rebuild + deploy
+===================================================================================
+
+Context: Browser Claude (Opus 4.6) completed a repo cleanup on the ANTIGRAVITY mono-repo:
+- Removed build artifacts (antigravity/out/) from git tracking
+- Removed stale onlinerecycle-landing.html (replaced by _deploy/onlinerecycle/index.html)
+- Updated .gitignore and .env.example
+- Verified gh-pages is currently serving youandinotai.com with a runtime patch script
+  that catches old marketing claims, BUT the JS bundle was built from pre-round-2 source.
+
+The gh-pages branch has a runtime patchClaims() script that regex-replaces old claims,
+so the site IS safe right now. But the proper fix is to rebuild from the audited source
+so the bundle itself is clean and the patch script becomes a safety net, not the primary fix.
+
+TASK:
+1. cd C:\OPUSONLY\antigravity  (or /home/user/ANTIGRAVITY on Linux)
+2. cd youandinotai
+3. npm install (if needed)
+4. npm run build
+5. Verify the built dist/ or build/ output contains NO bad claims:
+   - Search for: "first human-only", "proves everyone is real", "No bots. No catfish",
+     "impossible for bots", "Zero-Bot Guarantee", "93 of 100", "68%"
+   - Confirm it has: "strongest human-verification system available",
+     "real human verification + 24h bot report policy"
+6. Copy the build output to a temp directory
+7. git checkout gh-pages
+8. Replace all files EXCEPT .git/ and CNAME with the new build output
+9. Keep the existing patchClaims() script in index.html as a safety net
+10. Keep the #ForTheKids banner div in index.html
+11. git add -A && git commit -m "Rebuild from audited source (round 2 fixes baked in)"
+12. git push origin gh-pages
+13. git checkout main
+
+IMPORTANT:
+- Do NOT touch main branch
+- Do NOT delete the CNAME file (it points youandinotai.com to GitHub Pages)
+- Keep the patchClaims() script even though the bundle should be clean — defense in depth
+- Verify the site loads at youandinotai.com after push
+
+STRIPE KEY REMINDER: Key expires ~March 10, 2026. Plan rotation BEFORE then.
