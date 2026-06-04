@@ -172,11 +172,8 @@ function EmptyCatalogue({ admin, onSeed, busy }) {
 function ProductCard({ p, admin, onDelete }) {
   const url = p.square_checkout_url || "";
   const placeholderUrl = url.includes("SET-THIS-IN-");
-  const isStripe = url.includes("stripe.com");
-  const processorLabel = isStripe ? "buy via Stripe" : "buy via Square";
-  const accentClasses = isStripe
-    ? "bg-[#a78bfa]/15 border border-[#a78bfa]/40 text-[#c4b5fd] hover:bg-[#a78bfa]/25"
-    : "bg-[#00d4ff]/15 border border-[#00d4ff]/40 text-[#00d4ff] hover:bg-[#00d4ff]/25";
+  const processorLabel = "buy via Square";
+  const accentClasses = "bg-[#00d4ff]/15 border border-[#00d4ff]/40 text-[#00d4ff] hover:bg-[#00d4ff]/25";
   return (
     <div data-testid={`storefront-product-${p.id}`} className="bg-[#111827] border border-[#2a3a52] rounded-lg overflow-hidden flex flex-col hover:border-[#00d4ff]/40 transition-colors">
       {p.image_data_uri ? (
