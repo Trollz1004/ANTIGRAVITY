@@ -1,0 +1,137 @@
+groups:
+  - name: slo-recording-rules
+    interval: 30s
+    rules:
+      # Availability: ratio of successful requests (2xx+3xx) to total requests
+      - record: slo:availability:ratio_rate5m
+        expr: |
+          sum(rate(youandinotai_http_requests_total{status_code=~"2..|3.."}[5m]))
+          /
+          sum(rate(youandinotai_http_requests_total[5m]))
+
+      - record: slo:availability:ratio_rate1h
+        expr: |
+          sum(rate(youandinotai_http_requests_total{status_code=~"2..|3.."}[1h]))
+          /
+          sum(rate(youandinotai_http_requests_total[1h]))
+
+      - record: slo:availability:ratio_rate1d
+        expr: |
+          sum(rate(youandinotai_http_requests_total{status_code=~"2..|3.."}[1d]))
+          /
+          sum(rate(youandinotai_http_requests_total[1d]))
+
+      # Latency: p95 and p99 over 5m window
+      - record: slo:latency:p95_rate5m
+        expr: |
+          histogram_quantile(0.95,
+            sum by (le) (rate(youandinotai_http_request_duration_seconds_bucket[5m]))
+          )
+
+      - record: slo:latency:p99_rate5m
+        expr: |
+          histogram_quantile(0.99,
+            sum by (le) (rate(youandinotai_http_request_duration_seconds_bucket[5m]))
+          )
+
+      # Error rate over 5m
+      - record: slo:error_rate:ratio_rate5m
+        expr: |
+          sum(rate(youandinotai_http_requests_total{status_code=~"5.."}[5m]))
+          /
+          sum(rate(youandinotai_http_requests_total[5m]))
+
+  - name: slo-alerts
+    rules:
+      # Availability SLO: 99.9% (error budget: 0.1% over 30 days)
+      # Alert when error budget is being burned too fast
+      - alert: LowAvailability
+        expr: slo:availability:ratio_rate5m < 0.999
+        for: 5m
+        labels:
+          severity: warning
+          service: antigravity-backend
+          slo: availability
+        annotations:
+          summary: "Availability below 99.9% SLO"
+          description: "Current 5m availability is {{ $value | humanizePercentage }}, below the 99.9% SLO target."
+          runbook_url: "https://github.com/youandinotai/antigravity/blob/main/docs/MONITORING.md"
+
+      - alert: CriticalAvailability
+        expr: slo:availability:ratio_rate5m < 0.99
+        for: 2m
+        labels:
+          severity: critical
+          service: antigravity-backend
+          slo: availability
+        annotations:
+          summary: "CRITICAL: Availability below 99%"
+          description: "Current 5m availability is {{ $value | humanizePercentage }}. Immediate investigation required."
+
+      # Latency SLO: p95 < 200ms
+      - alert: HighLatencyP95
+        expr: slo:latency:p95_rate5m > 0.2
+        for: 5m
+        labels:
+          severity: warning
+          service: antigravity-backend
+          slo: latency
+        annotations:
+          summary: "p95 latency exceeds 200ms SLO"
+          description: "Current p95 latency is {{ $value | humanizeDuration }}, exceeding the 200ms SLO target."
+
+      - alert: CriticalLatencyP95
+        expr: slo:latency:p95_rate5m > 0.5
+        for: 2m
+        labels:
+          severity: critical
+          service: antigravity-backend
+          slo: latency
+        annotations:
+          summary: "CRITICAL: p95 latency exceeds 500ms"
+          description: "Current p95 latency is {{ $value | humanizeDuration }}. Immediate investigation required."
+
+      # High error rate alert
+      - alert: HighErrorRate
+        expr: slo:error_rate:ratio_rate5m > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          service: antigravity-backend
+        annotations:
+          summary: "Error rate above 5%"
+          description: "Current 5m error rate is {{ $value | humanizePercentage }}, exceeding the 5% threshold."
+
+      - alert: CriticalErrorRate
+        expr: slo:error_rate:ratio_rate5m > 0.10
+        for: 2m
+        labels:
+          severity: critical
+          service: antigravity-backend
+        annotations:
+          summary: "CRITICAL: Error rate above 10%"
+          description: "Current 5m error rate is {{ $value | humanizePercentage }}. Immediate investigation required."
+
+  - name: service-health
+    rules:
+      # Service down alert
+      - alert: ServiceDown
+        expr: up{job="backend-fastapi"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: antigravity-backend
+        annotations:
+          summary: "ANTIGRAVITY backend service is down"
+          description: "The backend-fastapi target has been down for more than 1 minute."
+
+      # High in-flight requests (potential overload)
+      - alert: HighInFlightRequests
+        expr: youandinotai_http_requests_in_progress > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: antigravity-backend
+        annotations:
+          summary: "High number of in-flight requests"
+          description: "{{ $value }} requests currently in progress, indicating potential overload."

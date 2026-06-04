@@ -1,0 +1,40 @@
+name: mission-control-ci
+
+on:
+  push:
+    paths:
+      - 'apps/mission-control/**'
+      - 'services/mission-control-api/**'
+      - '.github/workflows/mission-control-ci.yml'
+  pull_request:
+    paths:
+      - 'apps/mission-control/**'
+      - 'services/mission-control-api/**'
+      - '.github/workflows/mission-control-ci.yml'
+
+jobs:
+  dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: pnpm/action-setup@v4
+      - run: cd apps/mission-control && pnpm install --no-frozen-lockfile && pnpm build
+
+  api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: cd services/mission-control-api && pip install -e . pytest && pytest tests/ -q
+
+  compliance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          ! grep -rEi "openai|anthropic|gemini|emergent|donate|donation|charity"             apps/mission-control/src/ services/mission-control-api/src/

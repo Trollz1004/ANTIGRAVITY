@@ -1,0 +1,57 @@
+{
+  "$meta": {
+    "version": 1,
+    "updatedAt": "2026-05-08T01:01:15.085Z",
+    "source": "onboard"
+  },
+  "database": {
+    "mode": "embedded-postgres",
+    "embeddedPostgresDataDir": "C:\\income-engine\\paperclip-data\\instances\\default\\db",
+    "embeddedPostgresPort": 54329,
+    "backup": {
+      "enabled": true,
+      "intervalMinutes": 60,
+      "retentionDays": 30,
+      "dir": "C:\\income-engine\\paperclip-data\\instances\\default\\data\\backups"
+    }
+  },
+  "logging": {
+    "mode": "file",
+    "logDir": "C:\\income-engine\\paperclip-data\\instances\\default\\logs"
+  },
+  "server": {
+    "deploymentMode": "local_trusted",
+    "exposure": "private",
+    "bind": "loopback",
+    "host": "127.0.0.1",
+    "port": 3101,
+    "allowedHostnames": [],
+    "serveUi": true
+  },
+  "auth": {
+    "baseUrlMode": "auto",
+    "disableSignUp": false
+  },
+  "telemetry": {
+    "enabled": true
+  },
+  "storage": {
+    "provider": "local_disk",
+    "localDisk": {
+      "baseDir": "C:\\income-engine\\paperclip-data\\instances\\default\\data\\storage"
+    },
+    "s3": {
+      "bucket": "paperclip",
+      "region": "us-east-1",
+      "prefix": "",
+      "forcePathStyle": false
+    }
+  },
+  "secrets": {
+    "provider": "local_encrypted",
+    "strictMode": false,
+    "localEncrypted": {
+      "keyFilePath": "C:\\income-engine\\paperclip-data\\instances\\default\\secrets\\master.key"
+    }
+  }
+}

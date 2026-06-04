@@ -1,0 +1,82 @@
+{
+  "strategy": "7-day organic drip — 5 cities/day, staggered 3-4 hours apart",
+  "start_date": "2026-02-17",
+  "method": "Browser (Claude/Opus) — NOT API",
+  "daily_post_limit": 5,
+  "stagger_hours": 3,
+  "schedule": {
+    "day1_feb17": {
+      "cities": [
+        {"city": "Madison", "state": "WI", "time": "9:00 AM EST"},
+        {"city": "Durham", "state": "NC", "time": "12:00 PM EST"},
+        {"city": "Savannah", "state": "GA", "time": "3:00 PM EST"},
+        {"city": "Charleston", "state": "SC", "time": "6:00 PM EST"},
+        {"city": "Knoxville", "state": "TN", "time": "9:00 PM EST"}
+      ]
+    },
+    "day2_feb18": {
+      "cities": [
+        {"city": "Chattanooga", "state": "TN", "time": "9:00 AM EST"},
+        {"city": "Little Rock", "state": "AR", "time": "12:00 PM EST"},
+        {"city": "Springfield", "state": "MO", "time": "3:00 PM EST"},
+        {"city": "Huntsville", "state": "AL", "time": "6:00 PM EST"},
+        {"city": "Grand Rapids", "state": "MI", "time": "9:00 PM EST"}
+      ]
+    },
+    "day3_feb19": {
+      "cities": [
+        {"city": "Des Moines", "state": "IA", "time": "9:00 AM EST"},
+        {"city": "Tallahassee", "state": "FL", "time": "12:00 PM EST"},
+        {"city": "Baton Rouge", "state": "LA", "time": "3:00 PM EST"},
+        {"city": "Providence", "state": "RI", "time": "6:00 PM EST"},
+        {"city": "Spokane", "state": "WA", "time": "9:00 PM EST"}
+      ]
+    },
+    "day4_feb20": {
+      "cities": [
+        {"city": "Tacoma", "state": "WA", "time": "9:00 AM EST"},
+        {"city": "Greensboro", "state": "NC", "time": "12:00 PM EST"},
+        {"city": "Winston Salem", "state": "NC", "time": "3:00 PM EST"},
+        {"city": "Dayton", "state": "OH", "time": "6:00 PM EST"},
+        {"city": "Akron", "state": "OH", "time": "9:00 PM EST"}
+      ]
+    },
+    "day5_feb21": {
+      "cities": [
+        {"city": "Tulsa", "state": "OK", "time": "9:00 AM EST"},
+        {"city": "Wichita", "state": "KS", "time": "12:00 PM EST"},
+        {"city": "Laredo", "state": "TX", "time": "3:00 PM EST"},
+        {"city": "Lubbock", "state": "TX", "time": "6:00 PM EST"},
+        {"city": "Corpus Christi", "state": "TX", "time": "9:00 PM EST"}
+      ]
+    },
+    "day6_feb22": {
+      "cities": [
+        {"city": "Reno", "state": "NV", "time": "9:00 AM EST"},
+        {"city": "Fayetteville", "state": "AR", "time": "12:00 PM EST"},
+        {"city": "Columbia", "state": "SC", "time": "3:00 PM EST"},
+        {"city": "Augusta", "state": "GA", "time": "6:00 PM EST"},
+        {"city": "Macon", "state": "GA", "time": "9:00 PM EST"}
+      ]
+    },
+    "day7_feb23": {
+      "cities": [
+        {"city": "Jackson", "state": "MS", "time": "10:00 AM EST"},
+        {"city": "Sioux Falls", "state": "SD", "time": "2:00 PM EST"},
+        {"city": "Fargo", "state": "ND", "time": "6:00 PM EST"}
+      ]
+    }
+  },
+  "tweet_templates": [
+    "{city} singles — tired of fake profiles? YouAndINotAI verifies every human with Plaid (same tech your bank uses). Founding members lock in $14.99/mo forever. youandinotai.com #{city_tag} #RealDating",
+    "{city}, {state} — what if every person on a dating app was actually real? V8 Cloud Verification makes it happen. 100 founding spots. youandinotai.com #{city_tag} #NoBots",
+    "Real connections in {city} start with real people. YouAndINotAI — every profile identity-verified. $14.99/mo founding members. youandinotai.com #{city_tag} #DatingApp"
+  ],
+  "notes": [
+    "Post via BROWSER (Claude/Opus), NOT Twitter API",
+    "Rotate between 3 templates — never use same one twice in a row",
+    "Monitor engagement after each day before proceeding",
+    "If any tweet gets flagged, pause 24 hours",
+    "Mix in 1-2 non-promotional tweets per day (dating tips, memes, engagement)"
+  ]
+}

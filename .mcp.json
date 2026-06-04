@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "brain-mcp": {
+      "command": "node",
+      "args": [
+        "C:\\Antigravity\\brain-mcp\\dist\\index.js"
+      ],
+      "env": {
+        "HOME": "C:\\Users\\joshl"
+      }
+    },
+    "playwright": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
+    },
+    "mission-mcp": {
+      "command": "node",
+      "args": [
+        "C:\\Antigravity\\services\\mission-mcp\\dist\\server.js"
+      ],
+      "env": {
+        "HOME": "C:\\Users\\joshl"
+      }
+    }
+  }
+}
