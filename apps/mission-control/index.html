@@ -1,400 +1,69 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OPUSHASHANDS — Hermes glass house · #UntilNoKidInNeed</title>
-  <meta name="description" content="Open-window view of the OPUS / Hermes agent fleet. Live kanban, adapter heartbeats, goal counts, routine runs. No mock, no placeholders, no hidden rooms." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg-base: #0E0B0A;
-      --bg-surface: #15110F;
-      --bg-elevated: #1F1916;
-      --bg-glass: rgba(31, 25, 22, 0.7);
-      --text-primary: #F9F6EE;
-      --text-secondary: #B5A79E;
-      --text-muted: #8A7D75;
-      --accent: #FF6B35;
-      --accent-glow: rgba(255, 107, 53, 0.4);
-      --success: #10B981;
-      --warning: #F59E0B;
-      --danger: #EF4444;
-      --ukid: #3B82F6;
-      --font-heading: 'Instrument Serif', serif;
-      --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
-      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body {
-      background: var(--bg-base);
-      color: var(--text-primary);
-      font-family: var(--font-sans);
-      font-size: 14px;
-      line-height: 1.55;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      background-image: radial-gradient(rgba(255,255,255,0.012) 1px, transparent 1px);
-      background-size: 3px 3px;
-    }
-    .label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); }
-    .data { font-family: var(--font-mono); }
-    .heading { font-family: var(--font-heading); letter-spacing: -0.01em; }
-    h1.heading { font-size: 38px; line-height: 1.05; font-weight: 400; }
-    h2.heading { font-size: 22px; line-height: 1.15; font-weight: 400; }
-    h3.heading { font-size: 13px; line-height: 1.2; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; font-family: var(--font-mono); color: var(--text-secondary); }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    header {
-      padding: 28px 32px 20px;
-      border-bottom: 1px solid var(--bg-elevated);
-      background: linear-gradient(180deg, rgba(255,107,53,0.04), transparent);
-    }
-    header .top { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-    header .tagline { color: var(--text-secondary); font-size: 13px; max-width: 720px; }
-    header .windows { display: flex; gap: 8px; align-items: center; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.18em; }
-    .window-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); }
-    main { padding: 24px 32px 48px; flex: 1; display: grid; grid-template-columns: 1.1fr 1fr; gap: 20px; }
-    @media (max-width: 1100px) { main { grid-template-columns: 1fr; } }
-    .panel {
-      background: var(--bg-surface);
-      border: 1px solid var(--bg-elevated);
-      border-radius: 8px;
-      padding: 20px 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      min-height: 240px;
-    }
-    .panel-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .panel-header .status { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; }
-    .panel-header .status.live { color: var(--success); }
-    .panel-header .status.stale { color: var(--warning); }
-    .panel-header .status.dead { color: var(--danger); }
-    .panel-header .status.loading { color: var(--text-muted); }
-    .panel-body { flex: 1; }
-    table.matrix { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
-    table.matrix th, table.matrix td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--bg-elevated); }
-    table.matrix th { color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-size: 10px; font-weight: 500; }
-    table.matrix td { color: var(--text-primary); }
-    .pill { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
-    .pill.live { background: rgba(16, 185, 129, 0.15); color: var(--success); }
-    .pill.silenced { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-    .pill.unknown { background: var(--bg-elevated); color: var(--text-muted); }
-    .goal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-    .goal-card { background: var(--bg-elevated); border-radius: 6px; padding: 14px 16px; }
-    .goal-card .specialist { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 6px; }
-    .goal-card .counts { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; font-family: var(--font-mono); font-size: 13px; }
-    .goal-card .counts .k { color: var(--text-muted); }
-    .goal-card .counts .v { color: var(--text-primary); text-align: right; }
-    .task-list { display: flex; flex-direction: column; gap: 8px; }
-    .task-row { display: flex; align-items: center; gap: 12px; padding: 8px 10px; background: var(--bg-elevated); border-radius: 4px; font-size: 13px; }
-    .task-row .id { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); min-width: 60px; }
-    .task-row .title { flex: 1; }
-    .task-row .status { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
-    .task-row .status.todo { color: var(--ukid); }
-    .task-row .status.doing { color: var(--accent); }
-    .task-row .status.done { color: var(--text-muted); }
-    .task-row .status.blocked { color: var(--danger); }
-    .empty { color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; padding: 8px 0; }
-    .run-list { display: flex; flex-direction: column; gap: 6px; }
-    .run-row { display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: var(--bg-elevated); border-radius: 4px; font-family: var(--font-mono); font-size: 12px; }
-    .run-row .title { flex: 1; color: var(--text-primary); }
-    .run-row .when { color: var(--text-muted); font-size: 11px; }
-    .run-row .ok { color: var(--success); }
-    .run-row .fail { color: var(--danger); }
-    .run-row .run { color: var(--ukid); }
-    .footer {
-      padding: 18px 32px 24px;
-      border-top: 1px solid var(--bg-elevated);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-    }
-    .footer .sep { color: var(--bg-elevated); }
-    .doctrine { max-width: 880px; line-height: 1.6; }
-    .refresh { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAPERWEIGHT | Mission Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0a0a0a; color: #e5e5e5; font-family: 'Inter', sans-serif; }
+        .kanban-column { background-color: #171717; min-height: 80vh; }
+        .card { background-color: #262626; border: 1px solid #404040; transition: all 0.2s; }
+        .card:hover { border-color: #71717a; background-color: #2d2d2d; }
+        .status-pill { font-size: 0.7rem; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase; font-weight: 600; }
+        .status-pending { background: #3f3f46; color: #d4d4d8; }
+        .status-progress { background: #1e3a8a; color: #bfdbfe; }
+        .status-completed { background: #064e3b; color: #bbf7d0; }
+    </style>
 </head>
-<body>
-  <header>
-    <div class="top">
-      <div>
-        <h1 class="heading">OPUSHASHANDS</h1>
-        <div class="label" style="margin-top: 4px;">Hermes glass house · #UntilNoKidInNeed · open windows, no locked doors</div>
-      </div>
-      <div class="windows">
-        <span class="window-dot" id="window-dot"></span>
-        <span id="window-label">window open</span>
-        <span class="refresh" id="last-refresh">—</span>
-      </div>
-    </div>
-    <p class="tagline" style="margin-top: 12px;">
-      This page is a live read of every adapter heartbeat, every goal counter, every
-      kanban task, and every routine run that the OPUS / Hermes fleet has recorded.
-      No mock data, no placeholders, no fake green. If a number is shown, ask the
-      API for the raw event that produced it — it's all reachable.
-    </p>
-  </header>
-
-  <main>
-    <section class="panel" id="panel-adapters">
-      <div class="panel-header">
-        <h3 class="heading">Adapter heartbeats</h3>
-        <span class="status loading" id="adapters-status">connecting…</span>
-      </div>
-      <div class="panel-body">
-        <table class="matrix">
-          <thead>
-            <tr><th>alias</th><th>provider</th><th>last ok</th><th>silence</th><th>state</th></tr>
-          </thead>
-          <tbody id="adapters-body"><tr><td colspan="5" class="empty">fetching…</td></tr></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="panel" id="panel-goals">
-      <div class="panel-header">
-        <h3 class="heading">Goal counts · specialist-owned</h3>
-        <span class="status loading" id="goals-status">connecting…</span>
-      </div>
-      <div class="panel-body">
-        <div class="goal-grid" id="goals-body">
-          <div class="empty">fetching…</div>
+<body class="p-6">
+    <header class="flex justify-between items-center mb-8 border-b border-zinc-800 pb-4">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tighter text-white">PAPERWEIGHT <span class="text-zinc-500 font-normal text-lg ml-2">Mission Control</span></h1>
+            <p class="text-sm text-zinc-400">#ForTheKids | #UntilNoKidInNeed</p>
         </div>
-      </div>
-    </section>
-
-    <section class="panel" id="panel-tasks">
-      <div class="panel-header">
-        <h3 class="heading">Kanban · live task stream</h3>
-        <span class="status loading" id="tasks-status">connecting…</span>
-      </div>
-      <div class="panel-body">
-        <div class="task-list" id="tasks-body">
-          <div class="empty">fetching…</div>
+        <div class="flex gap-4 items-center">
+            <div class="text-right">
+                <div class="text-xs text-zinc-500 uppercase font-bold">System Integrity</div>
+                <div class="text-sm text-green-500 font-mono">ONLINE // SABRETOOTH</div>
+            </div>
         </div>
-      </div>
-    </section>
+    </header>
 
-    <section class="panel" id="panel-runs">
-      <div class="panel-header">
-        <h3 class="heading">Routines · loop runs</h3>
-        <span class="status loading" id="runs-status">connecting…</span>
-      </div>
-      <div class="panel-body">
-        <div class="run-list" id="runs-body">
-          <div class="empty">fetching…</div>
+    <main class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Backlog -->
+        <div class="kanban-column p-4 rounded-xl">
+            <h2 class="text-sm font-bold text-zinc-400 uppercase mb-4 flex justify-between">
+                Backlog <span class="bg-zinc-800 px-2 py-0.5 rounded">0</span>
+            </h2>
+            <div class="flex flex-col gap-3" id="backlog-list">
+                <!-- Cards go here -->
+            </div>
         </div>
-      </div>
-    </section>
-  </main>
 
-  <footer class="footer">
-    <div class="doctrine">
-      1 wallet · 1 LLC · 10% max/bucket · Square-only revenue · no Anthropic key · Hermes-routed ·
-      #UntilNoKidInNeed · OPUS Guardian · xAI user-auth sign-in for Grok
-    </div>
-    <span class="sep">|</span>
-    <span>API base: <span class="data" id="api-base">…</span></span>
-    <span class="sep">|</span>
-    <span>proxied via Cloudflare · opushashands.youandinotai.com</span>
-  </footer>
+        <!-- In Progress -->
+        <div class="kanban-column p-4 rounded-xl">
+            <h2 class="text-sm font-bold text-zinc-400 uppercase mb-4 flex justify-between">
+                Active <span class="bg-zinc-800 px-2 py-0.5 rounded">0</span>
+            </h2>
+            <div class="flex flex-col gap-3" id="progress-list">
+                <!-- Cards go here -->
+            </div>
+        </div>
 
-  <script>
-    "use strict";
+        <!-- Complete -->
+        <div class="kanban-column p-4 rounded-xl">
+            <h2 class="text-sm font-bold text-zinc-400 uppercase mb-4 flex justify-between">
+                Resolved <span class="bg-zinc-800 px-2 py-0.5 rounded">0</span>
+            </h2>
+            <div class="flex flex-col gap-3" id="completed-list">
+                <!-- Cards go here -->
+            </div>
+        </div>
+    </main>
 
-    // Single source of truth for the API base. Relative paths by default so the
-    // page works on any host serving it. Override with ?api=http://host:port.
-    var API_BASE = (function () {
-      var qs = new URLSearchParams(location.search).get("api");
-      if (qs) return qs.replace(/\/$/, "");
-      return "";
-    })();
-    document.getElementById("api-base").textContent = API_BASE || "(same origin)";
-
-    function getJSON(path) {
-      return fetch(API_BASE + path, { headers: { Accept: "application/json" } })
-        .then(function (r) {
-          if (!r.ok) throw new Error("HTTP " + r.status);
-          return r.json();
-        });
-    }
-
-    function setStatus(id, klass, label) {
-      var el = document.getElementById(id);
-      el.className = "status " + klass;
-      el.textContent = label;
-    }
-
-    function relTime(iso) {
-      if (!iso) return "—";
-      var d = new Date(iso);
-      if (isNaN(d.getTime())) return iso;
-      var s = Math.floor((Date.now() - d.getTime()) / 1000);
-      if (s < 60) return s + "s ago";
-      if (s < 3600) return Math.floor(s / 60) + "m ago";
-      if (s < 86400) return Math.floor(s / 3600) + "h ago";
-      return Math.floor(s / 86400) + "d ago";
-    }
-
-    function fmtTime(iso) {
-      if (!iso) return "—";
-      var d = new Date(iso);
-      if (isNaN(d.getTime())) return iso;
-      return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    }
-
-    function esc(s) {
-      if (s == null) return "";
-      return String(s).replace(/[<>&"']/g, function (c) {
-        return { "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&#39;" }[c];
-      });
-    }
-
-    function renderAdapters(data) {
-      var body = document.getElementById("adapters-body");
-      var keys = Object.keys(data || {}).filter(function (k) { return k !== "_meta"; });
-      if (keys.length === 0) {
-        body.innerHTML = '<tr><td colspan="5" class="empty">no adapters reported</td></tr>';
-        setStatus("adapters-status", "dead", "EMPTY");
-        return;
-      }
-      keys.sort();
-      var live = 0, silenced = 0;
-      var rows = keys.map(function (alias) {
-        var a = data[alias];
-        var ok = a && a.ok && a.silence_seconds != null && a.silence_seconds < 180;
-        var pillClass = ok ? "live" : (a && a.silence_seconds != null ? "silenced" : "unknown");
-        if (ok) live++; else if (a && a.silence_seconds != null) silenced++;
-        var provider = (a && a.providers && a.providers[0] && a.providers[0].name) || "—";
-        return "<tr>" +
-          "<td>" + esc(alias) + "</td>" +
-          "<td>" + esc(provider) + "</td>" +
-          "<td>" + esc(relTime(a && a.last_ok)) + "</td>" +
-          "<td>" + (a && a.silence_seconds != null ? Math.floor(a.silence_seconds) + "s" : "—") + "</td>" +
-          "<td><span class=\"pill " + pillClass + "\">" + (ok ? "live" : (a && a.silence_seconds != null ? "silenced" : "?")) + "</span></td>" +
-        "</tr>";
-      });
-      body.innerHTML = rows.join("");
-      if (live === keys.length) setStatus("adapters-status", "live", live + " LIVE");
-      else if (live === 0) setStatus("adapters-status", "dead", "ALL SILENT");
-      else setStatus("adapters-status", "stale", live + " LIVE · " + silenced + " SILENT");
-    }
-
-    function loadAdapters() {
-      return getJSON("/adapters/health").then(renderAdapters);
-    }
-
-    var GOAL_SPECIALISTS = [
-      { id: "grok",       platform: "X / x.com (FIRST SALE)",   fields: ["hashtags", "posts", "replies", "comments", "followups", "leads", "sales"] },
-      { id: "manus",      platform: "Meta (FB / IG / Threads)", fields: ["hashtags", "posts", "replies", "comments", "followups", "leads", "sales"] },
-      { id: "gemini",     platform: "YouTube + Google SEO",      fields: ["videos", "subs", "views", "impressions", "maps", "leads"] },
-      { id: "perplexity", platform: "Research + remaining",     fields: ["reports", "citations", "audits", "posts"] },
-    ];
-
-    function renderGoalCard(spec, data) {
-      var rows = spec.fields.map(function (f) {
-        var v = data && data[f] != null ? data[f] : 0;
-        return '<div class="k">' + esc(f) + '</div><div class="v">' + esc(v) + '</div>';
-      }).join("");
-      return '<div class="goal-card">' +
-        '<div class="specialist">' + esc(spec.id) + ' → ' + esc(spec.platform) + '</div>' +
-        '<div class="counts">' + rows + '</div>' +
-      '</div>';
-    }
-
-    function loadGoals() {
-      return Promise.all(GOAL_SPECIALISTS.map(function (spec) {
-        return getJSON("/goals/" + spec.id + "/counts").then(
-          function (data) { return { spec: spec, data: data, ok: true }; },
-          function ()     { return { spec: spec, data: {},     ok: false }; }
-        );
-      })).then(function (results) {
-        var body = document.getElementById("goals-body");
-        body.innerHTML = results.map(function (r) { return renderGoalCard(r.spec, r.data); }).join("");
-        var liveCount = results.filter(function (r) { return r.ok; }).length;
-        if (liveCount === results.length) setStatus("goals-status", "live", liveCount + " LIVE");
-        else if (liveCount === 0) setStatus("goals-status", "dead", "ALL DOWN");
-        else setStatus("goals-status", "stale", liveCount + " LIVE · " + (results.length - liveCount) + " DOWN");
-      });
-    }
-
-    var TASK_STATUS_CLASS = { todo: "todo", doing: "doing", in_progress: "doing", done: "done", completed: "done", blocked: "blocked", failed: "blocked" };
-    function renderTasks(data) {
-      var tasks = (data && data.tasks) || [];
-      var body = document.getElementById("tasks-body");
-      if (tasks.length === 0) {
-        body.innerHTML = '<div class="empty">no open tasks · kanban is clean</div>';
-        setStatus("tasks-status", "live", "0 OPEN");
-        return;
-      }
-      body.innerHTML = tasks.slice(0, 20).map(function (t) {
-        var s = (t.status || "todo").toLowerCase();
-        var cls = TASK_STATUS_CLASS[s] || "todo";
-        return '<div class="task-row">' +
-          '<div class="id">' + esc(t.id || t.task_id || "?") + '</div>' +
-          '<div class="title">' + esc(t.title || t.summary || t.name || "(untitled)") + '</div>' +
-          '<div class="status ' + cls + '">' + esc(s) + '</div>' +
-        '</div>';
-      }).join("");
-      var open = tasks.filter(function (t) { return ["todo", "doing", "in_progress", "blocked"].indexOf((t.status || "").toLowerCase()) >= 0; }).length;
-      setStatus("tasks-status", "live", open + " OPEN · " + tasks.length + " TOTAL");
-    }
-
-    function loadTasks() {
-      return getJSON("/tasks").then(renderTasks, function () {
-        document.getElementById("tasks-body").innerHTML = '<div class="empty">tasks endpoint unreachable</div>';
-        setStatus("tasks-status", "dead", "DOWN");
-      });
-    }
-
-    function renderRuns(data) {
-      var runs = (data && data.runs) || [];
-      var body = document.getElementById("runs-body");
-      if (runs.length === 0) {
-        body.innerHTML = '<div class="empty">no runs logged yet</div>';
-        setStatus("runs-status", "live", "0 RUNS");
-        return;
-      }
-      body.innerHTML = runs.slice(0, 15).map(function (r) {
-        var klass = r.status === "succeeded" ? "ok" : (r.status === "failed" ? "fail" : "run");
-        return '<div class="run-row">' +
-          '<div class="title">' + esc(r.title || r.command_id || "?") + '</div>' +
-          '<div class="when">' + esc(fmtTime(r.started_at)) + ' · ' + esc(r.status || "?") + '</div>' +
-          '<div class="' + klass + '">' + (r.status === "succeeded" ? "OK" : (r.status === "failed" ? "FAIL" : "RUN")) + '</div>' +
-        '</div>';
-      }).join("");
-      setStatus("runs-status", "live", runs.length + " RUNS");
-    }
-
-    function loadRuns() {
-      return getJSON("/ops/runs").then(renderRuns, function () {
-        document.getElementById("runs-body").innerHTML = '<div class="empty">ops/runs unreachable</div>';
-        setStatus("runs-status", "dead", "DOWN");
-      });
-    }
-
-    function tick() {
-      var t0 = Date.now();
-      Promise.allSettled([loadAdapters(), loadGoals(), loadTasks(), loadRuns()])
-        .then(function () {
-          var elapsed = Date.now() - t0;
-          document.getElementById("last-refresh").textContent =
-            "refreshed " + new Date().toLocaleTimeString() + " (" + elapsed + "ms)";
-        });
-    }
-
-    tick();
-    setInterval(tick, 8000);
-  </script>
+    <footer class="fixed bottom-6 right-6 text-xs text-zinc-600 font-mono">
+        v0.1.0 // 1-LLC-1-WALLET // DOCTRINE: REAL-OR-ZERO
+    </footer>
 </body>
 </html>
