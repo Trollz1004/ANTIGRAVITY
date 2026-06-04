@@ -106,12 +106,15 @@ export default function Dashboard() {
           <div className="flex items-center justify-center gap-3 mb-6">
             <Rocket size={28} className="text-blue-500" />
             <h1 className="text-3xl md:text-4xl font-black tracking-tighter uppercase italic">
-              Built to fund the mission, not just describe it.
+              LAUNCHED: YouAndINotAI — the dating app that actually ships.
             </h1>
           </div>
           <p className={`text-lg max-w-3xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            YouAndINotAI is live. Business Exchange is live. The DAO launch is public. Customer support is active.
-            Every platform exists to generate real revenue, route real work, and keep the mission moving.
+            No more empty promises. No more data harvesting. This is the platform where real builders find real partners who understand the grind.
+            Bot-shielded from day one. Square powered (Location LY5GN09F5AN83). Every new qualifying activity = new stacked 10% bucket for contractual revenue disbursement.
+            Founding members get permanent recognition + early product access. The first 500 signups lock in the best rates.
+            Real connections. Real revenue. Real mission.
+            Join now at youandinotai.com — Payments via Square. Real money in, real impact out.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
             <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
@@ -252,6 +255,33 @@ export default function Dashboard() {
             not per product, not per app. Excess above that cap strengthens long-term mission durability through staking,
             reserves, and platform reinvestment, subject to real-world tax and operating constraints.
           </p>
+        </section>
+
+
+        {/* ===== LAUNCH COPY (injected per executive override) ===== */}
+        <section className={`p-8 rounded-[3rem] border ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
+          <div className="flex items-center gap-3 mb-4">
+            <Rocket size={22} className="text-blue-500" />
+            <h2 className="text-2xl font-black italic tracking-tight">LAUNCH ANNOUNCEMENTS — YAINAI</h2>
+          </div>
+          <p className={`max-w-3xl leading-relaxed mb-6 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+            Three direct, high-impact posts. All payments via Square (Location LY5GN09F5AN83). Every new qualifying activity triggers a new, stacked 10% bucket for contractual revenue disbursement. 27% tax reserve locked first.
+          </p>
+          <div className="space-y-6">
+            <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-slate-950/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+              <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>POST 1 — FOUNDER LAUNCH</p>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>"Real talk: the dating apps out there treat you like a product. YouAndINotAI is different. Built by solo founders who actually ship. No swipe fatigue. No fake profiles. Just real connections with people who get the mission of building while the world burns. Launch is live. Join at youandinotai.com — first 500 get founding member status with lifetime perks. Payments via Square. Real money in, real impact out. This is the one that actually works." #YouAndINotAI #SoloFounder #RealConnections</p>
+            </div>
+            <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-slate-950/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+              <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>POST 2 — FEATURE + VALUE</p>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>"Stop wasting time on apps that don't respect your time or your values. YouAndINotAI is the dating platform for builders, operators, and people who actually do the work. Verified profiles only (no bots, no catfishing). Mission-aligned matching. Revenue model is locked: every new activity is a fresh 10% bucket — contractual revenue disbursement, 27% tax reserve, founder survival first. Square checkout. Real transactions. No Stripe. Founding members lock in early rates and direct line to the product roadmap. The app is live now. Link in bio. First wave gets the Royalty Card tier access. Build with us. Date with purpose. youandinotai.com"</p>
+            </div>
+            <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-slate-950/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+              <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>POST 3 — HIGH-IMPACT CTA</p>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>"LAUNCHED: YouAndINotAI — the dating app that actually ships. No more empty promises. No more data harvesting. This is the platform where real builders find real partners who understand the grind. Bot-shielded from day one. Square powered (Location LY5GN09F5AN83) — every payment is real, auditable, and routes through the 100-cent rule. Every new qualifying activity = new stacked 10% bucket for contractual revenue disbursement. Founding members get permanent recognition + early product access. The first 500 signups lock in the best rates. Real connections. Real revenue. Real mission. Join now: youandinotai.com No excuses. The future is built by people who show up."</p>
+            </div>
+          </div>
+          <p className={`text-xs mt-4 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>All copy strictly adheres to FL §496.405. Only "contractual revenue disbursement" used. Square Location LY5GN09F5AN83 front and center in Membership below.</p>
         </section>
 
         {/* ===== MEMBERSHIP ===== */}
