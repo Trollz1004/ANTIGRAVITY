@@ -1,0 +1,33 @@
+{
+  "summary": "iter10 backend testing complete · 19/19 tests passed. Verified Boris&Dario security/posture endpoint, channel-binding wiring (Manus→Telegram wired; Hermes→WhatsApp & OpenClaw→Discord correctly reported NOT wired), auto-split webhook on buymeacoffee + github_sponsors (10/27/63 honored), kofi/patreon/gospel as new accepted sources, unknown-source rejection, ADMIN_IP_ALLOWLIST destructive flow (login still works, admin endpoint 403s, .env safely reset), and full regression block (telegram broadcast LIVE, compliance, products, runway, ledger stats, tasks, providers, hermes/healthz).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter10_security_autosplit.py",
+    "/app/test_reports/pytest/iter10_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "security.py · posture_score caps at 7 but only 5 are realistically achievable in this preview env (no Cloudflare, no allowlist by default, hermes/openclaw unwired). Grade ceiling effectively B unless deployed behind CF + creds completed — that's honest, just noting it.",
+    "auth_relay.py · require_admin checks IP allowlist BEFORE session token. Means an unauthenticated request from an allowed IP returns 401 (sign-in required) while from a blocked IP returns 403. Consistent + fail-closed, good.",
+    "ledger.py · _autosplit_insert rounds each portion independently (10.00 + 27.00 + 63.00 = 100.00 only because the percentages sum cleanly). For amounts that don't divide evenly there may be 1-cent drift vs. input. Non-blocking, but worth a note if accounting demands exact reconciliation.",
+    "ledger.py webhook · 'manual' and 'test' sources permitted permissively — fine for ops, but consider rate-limiting public webhook endpoints (currently no auth/signature verification for buymeacoffee, github_sponsors etc.). Out of scope for iter10 but flag for future hardening."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter10_security_autosplit.py (new)"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "skipped"},
+  "test_credentials": "ADMIN_PASSWORD=!!11trasH (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "Inserted small TEST_iter10_* ledger entries via webhooks (kofi/patreon/gospel @ $5 each, buymeacoffee $100 auto-split, github_sponsors $50 auto-split). These show up in /api/ledger as source=kofi/patreon/gospel/buymeacoffee/github_sponsors. Telegram broadcast also fired one TEST ping to Joshua's DM as expected.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "iter10 covers the security panel, auto-split webhook surfaces, new revenue sources, and ADMIN_IP_ALLOWLIST. All 19 pytest cases green; .env was destructively mutated to test allowlist and then cleanly reset (verified no ADMIN_IP_ALLOWLIST line remains). Telegram broadcasts WILL fire to Joshua's real DM during test runs — that's expected per iter9. WhatsApp/Discord intentionally unwired (creds absent). Re-run via: pytest /app/backend/tests/test_iter10_security_autosplit.py -v",
+  "rca of the issue": "N/A — no failures."
+}
