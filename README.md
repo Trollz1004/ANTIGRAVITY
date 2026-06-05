@@ -125,4 +125,4 @@ This is a working monorepo for an active mission. If you found it because you ca
 
 For broader context: see Joshua's [profile README](https://github.com/Trollz1004) and the [briefings/](./briefings/) directory.
 
-The founder does not manually edit or push code to GitHub. 100% of the commits, edits, and repository pushes are executed by the AI nodes (Claude, Codex, Gemini, Perplexity
+The founder does not manually edit or push code to GitHub. 100% of the commits, edits, and repository pushes are executed by the AI nodes (Claude, Codex, Gemini, Perplexity, Grok) under the `FOUNDER-DOCTRINE-2026-05-19.md` rules 1–13. No human hand touches the keyboard for a `git push`. The doctrine is the source of truth; the AI nodes are the operators. See `briefings/CLAUDE-DOCTRINE.md` and `briefings/COWORKER-DISPATCH.md` for the full authority chain.
