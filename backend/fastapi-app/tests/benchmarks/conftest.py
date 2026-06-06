@@ -51,10 +51,16 @@ from app.main import app  # noqa: E402
 from app.rate_limit import reset_rate_limits  # noqa: E402
 
 
-@pytest.fixture()
-def db_session_factory(tmp_path):
-    """Create a fresh async session factory backed by a temp SQLite file."""
-    db_path = tmp_path / "bench.db"
+@pytest.fixture(scope="module")
+def db_session_factory(tmp_path_factory):
+    """Module-scoped async session factory backed by a temp SQLite file.
+
+    Module scope matches the `seeded_*_data` fixtures that depend on it
+    (parametrized benchmarks need stable seeds across tests in a module).
+    Owns the engine lifecycle so state cannot leak between modules.
+    """
+    db_dir = tmp_path_factory.mktemp("bench_db")
+    db_path = db_dir / "bench.db"
     engine = create_async_engine(f"sqlite+aiosqlite:///{db_path.as_posix()}")
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
