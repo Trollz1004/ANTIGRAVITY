@@ -20,11 +20,14 @@ _3MONTH = "https://square.link/u/oY7qEfRM"
 _12MONTH = "https://square.link/u/6GHpbvvl"
 _ROYALTY = "https://square.link/u/CafhorUS"
 
-BOT_SHIELD_PAYMENT_LINK = os.environ.get("SQUARE_BOT_SHIELD_PAYMENT_LINK") or _BOT_SHIELD
+BOT_SHIELD_PAYMENT_LINK = (
+    os.environ.get("SQUARE_BOT_SHIELD_PAYMENT_LINK") or _BOT_SHIELD
+)
 
 PLAN_LINKS: dict[str, str] = {
     "bot_shield": BOT_SHIELD_PAYMENT_LINK,
-    "founding_member": os.environ.get("SQUARE_FOUNDING_MEMBER_PAYMENT_LINK") or _FOUNDING,
+    "founding_member": os.environ.get("SQUARE_FOUNDING_MEMBER_PAYMENT_LINK")
+    or _FOUNDING,
     "3_month": os.environ.get("SQUARE_3MONTH_PAYMENT_LINK") or _3MONTH,
     "12_month": os.environ.get("SQUARE_12MONTH_PAYMENT_LINK") or _12MONTH,
     "royalty": os.environ.get("SQUARE_ROYALTY_PAYMENT_LINK") or _ROYALTY,
