@@ -45,6 +45,14 @@ export const PUBLIC_SURFACES = [
 
 // Square checkout links — backend/fastapi-app/app/payments.py is the source of truth.
 // Keep prices and URLs in sync with PLAN_LINKS / PLAN_AMOUNTS_CENTS there.
+// Env overrides (NEXT_PUBLIC_*) win at build time; hardcoded values are the
+// fallback so the site never breaks on a missing env var.
+const SQUARE_LINK_BOT_SHIELD = process.env.NEXT_PUBLIC_SQUARE_LINK_BOT_SHIELD || 'https://square.link/u/Qc5mxUy7';
+const SQUARE_LINK_FOUNDING = process.env.NEXT_PUBLIC_SQUARE_LINK_FOUNDING || 'https://square.link/u/cxwjcn0s';
+const SQUARE_LINK_3MONTH = process.env.NEXT_PUBLIC_SQUARE_LINK_3MONTH || 'https://square.link/u/oY7qEfRM';
+const SQUARE_LINK_12MONTH = process.env.NEXT_PUBLIC_SQUARE_LINK_12MONTH || 'https://square.link/u/6GHpbvvl';
+const SQUARE_LINK_ROYALTY = process.env.NEXT_PUBLIC_SQUARE_LINK_ROYALTY || 'https://square.link/u/CafhorUS';
+
 export const MEMBERSHIP_PLANS = [
   {
     id: 'bot_shield',
@@ -52,7 +60,7 @@ export const MEMBERSHIP_PLANS = [
     price: '$1',
     cadence: 'one-time',
     blurb: 'One-time human verification that keeps the platform real-people-only.',
-    url: 'https://square.link/u/Qc5mxUy7',
+    url: SQUARE_LINK_BOT_SHIELD,
     featured: false,
   },
   {
@@ -61,7 +69,7 @@ export const MEMBERSHIP_PLANS = [
     price: '$14.99',
     cadence: '/month',
     blurb: 'Full access plus permanent founding-member status as the platform grows.',
-    url: 'https://square.link/u/cxwjcn0s',
+    url: SQUARE_LINK_FOUNDING,
     featured: true,
   },
   {
@@ -70,7 +78,7 @@ export const MEMBERSHIP_PLANS = [
     price: '$39.99',
     cadence: '3 months',
     blurb: 'A full quarter of Founding Member access, prepaid.',
-    url: 'https://square.link/u/oY7qEfRM',
+    url: SQUARE_LINK_3MONTH,
     featured: false,
   },
   {
@@ -79,7 +87,7 @@ export const MEMBERSHIP_PLANS = [
     price: '$99.99',
     cadence: '12 months',
     blurb: 'A full year of Founding Member access at the best rate.',
-    url: 'https://square.link/u/6GHpbvvl',
+    url: SQUARE_LINK_12MONTH,
     featured: false,
   },
   {
@@ -88,7 +96,7 @@ export const MEMBERSHIP_PLANS = [
     price: '$2,500',
     cadence: 'lifetime',
     blurb: 'Lifetime founder tier with permanent recognition.',
-    url: 'https://square.link/u/CafhorUS',
+    url: SQUARE_LINK_ROYALTY,
     featured: false,
   },
 ] as const;
