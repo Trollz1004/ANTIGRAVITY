@@ -9,7 +9,6 @@ import {
   Sun,
   Rocket,
   Heart,
-  Scale,
   ArrowUpRight,
   Mail,
   Handshake,
@@ -110,11 +109,10 @@ export default function Dashboard() {
             </h1>
           </div>
           <p className={`text-lg max-w-3xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            No more empty promises. No more data harvesting. This is the platform where real builders find real partners who understand the grind.
-            Bot-shielded from day one. Square powered (Location LY5GN09F5AN83). Every new qualifying activity = new stacked 10% bucket for contractual revenue disbursement.
-            Founding members get permanent recognition + early product access. The first 500 signups lock in the best rates.
-            Real connections. Real revenue. Real mission.
-            Join now at youandinotai.com — Payments via Square. Real money in, real impact out.
+            Real people, verified before they ever message you. No bots, no catfishing, no data harvesting.
+            YouAndINotAI is a human-first social platform for builders, operators, and people who actually do the work.
+            Bot-Shield verification from day one. Founding members get permanent recognition and the best rates.
+            The first 500 signups lock in founding status for life. Join at youandinotai.com — payments via Square.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
             <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
@@ -140,7 +138,10 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* ===== FUNDING SECTION ===== */}
+        {/* ===== MEMBERSHIP (above the fold — this is the product) ===== */}
+        <Membership isDarkMode={isDarkMode} />
+
+        {/* ===== HOW THE PLATFORMS WORK ===== */}
         <section
           className={`p-8 rounded-[3rem] border ${
             isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'
@@ -148,144 +149,30 @@ export default function Dashboard() {
         >
           <div className="flex items-center gap-3 mb-4">
             <TrendingUp size={22} className="text-emerald-500" />
-            <h2 className="text-2xl font-black italic tracking-tight">HOW THE PRODUCTS FUND THE MISSION</h2>
+            <h2 className="text-2xl font-black italic tracking-tight">WHAT YOU CAN USE TODAY</h2>
           </div>
           <p className={`max-w-3xl leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Every active platform routes revenue toward mission funding. The architecture is intentional:
+            One ecosystem, four live surfaces, all reachable from one account. Pick what you need:
           </p>
           <ul className={`mt-4 space-y-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
             <li className="flex items-start gap-2">
               <span className="text-blue-500 mt-1">→</span>
-              <span><strong>YouAndINotAI</strong> — memberships, verification, Super Likes</span>
+              <span><strong>YouAndINotAI</strong> — memberships, verification, and the founding-member program</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-emerald-500 mt-1">→</span>
-              <span><strong>Business Exchange</strong> — services, referrals, business sales</span>
+              <span><strong>Business Exchange</strong> — services, referrals, and business sales for builders</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-purple-500 mt-1">→</span>
-              <span><strong>AI-Solutions Store</strong> — digital products and automation</span>
+              <span><strong>AI-Solutions Store</strong> — digital products and automation offers</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-amber-500 mt-1">→</span>
-              <span><strong>OnlineRecycle</strong> — electronics resale and recycling services</span>
+              <span><strong>OnlineRecycle</strong> — electronics resale and recycling services (Central Florida)</span>
             </li>
           </ul>
         </section>
-
-        {/* ===== BUCKET LOGIC SECTION ===== */}
-        <section
-          className={`p-8 rounded-[3rem] border ${
-            isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'
-          }`}
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <Scale size={22} className="text-purple-500" />
-            <h2 className="text-2xl font-black italic tracking-tight">SEPARATE FUNDING BUCKETS</h2>
-          </div>
-          <p className={`max-w-3xl leading-relaxed mb-6 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            The public launch sale and the staking engine are separate funding buckets. These must never be merged.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-blue-950/30 border-blue-500/20' : 'bg-blue-50 border-blue-200'}`}>
-              <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
-                <Coins className="w-5 h-5 text-blue-500" /> Bucket 1 — Sale Proceeds
-              </h3>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                A minimum <strong>10% from public sale proceeds</strong> is routed to the kids bucket.
-                Launch-sale allocation: 2,000,000 tokens (20% of 10,000,000 total supply) across 4 DAOs.
-              </p>
-            </div>
-            <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-emerald-950/30 border-emerald-500/20' : 'bg-emerald-50 border-emerald-200'}`}>
-              <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-emerald-500" /> Bucket 2 — Staking Proceeds
-              </h3>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                A separate minimum <strong>10% from staking-related proceeds</strong> is also routed to the kids bucket.
-                These are distinct rails — not the same flow, not the same pool.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== DAO LAUNCH SECTION ===== */}
-        <section
-          className={`p-8 rounded-[3rem] border ${
-            isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'
-          }`}
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <Coins size={22} className="text-amber-500" />
-            <h2 className="text-2xl font-black italic tracking-tight">DAO LAUNCH</h2>
-          </div>
-          <p className={`max-w-3xl leading-relaxed mb-6 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            The DAO launch is public. Four governance tokens ($LOVE, $UKID, $GREEN, $AGRAV) power the ecosystem.
-            Total supply: 10,000,000. Public sale allocation: 2,000,000 tokens (20%). Platform Activity Rewards: 6,500,000 (65%).
-            Founding Four Reserve: 10%. Mission Treasury: 10%.
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { name: '$LOVE', platform: 'YouAndINotAI', color: 'text-pink-500' },
-              { name: '$UKID', platform: 'AI-Solutions', color: 'text-blue-500' },
-              { name: '$GREEN', platform: 'OnlineRecycle', color: 'text-emerald-500' },
-              { name: '$AGRAV', platform: 'Antigravity Infra', color: 'text-purple-500' },
-            ].map((dao) => (
-              <div key={dao.name} className={`p-4 rounded-2xl border text-center ${
-                isDarkMode ? 'bg-slate-950/50 border-slate-800' : 'bg-slate-50 border-slate-200'
-              }`}>
-                <p className={`text-xl font-black ${dao.color}`}>{dao.name}</p>
-                <p className={`text-xs mt-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{dao.platform}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ===== FOUNDER DISCIPLINE ===== */}
-        <section
-          className={`p-8 rounded-[3rem] border ${
-            isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'
-          }`}
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <ShieldCheck size={22} className="text-blue-500" />
-            <h2 className="text-2xl font-black italic tracking-tight">FOUNDER DISCIPLINE</h2>
-          </div>
-          <p className={`max-w-3xl leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Current-stage founder compensation is capped at <strong>$50,000 across the entire active platform ecosystem</strong> —
-            not per product, not per app. Excess above that cap strengthens long-term mission durability through staking,
-            reserves, and platform reinvestment, subject to real-world tax and operating constraints.
-          </p>
-        </section>
-
-
-        {/* ===== LAUNCH COPY (injected per executive override) ===== */}
-        <section className={`p-8 rounded-[3rem] border ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
-          <div className="flex items-center gap-3 mb-4">
-            <Rocket size={22} className="text-blue-500" />
-            <h2 className="text-2xl font-black italic tracking-tight">LAUNCH ANNOUNCEMENTS — YAINAI</h2>
-          </div>
-          <p className={`max-w-3xl leading-relaxed mb-6 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Three direct, high-impact posts. All payments via Square (Location LY5GN09F5AN83). Every new qualifying activity triggers a new, stacked 10% bucket for contractual revenue disbursement. 27% tax reserve locked first.
-          </p>
-          <div className="space-y-6">
-            <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-slate-950/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-              <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>POST 1 — FOUNDER LAUNCH</p>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>"Real talk: the dating apps out there treat you like a product. YouAndINotAI is different. Built by solo founders who actually ship. No swipe fatigue. No fake profiles. Just real connections with people who get the mission of building while the world burns. Launch is live. Join at youandinotai.com — first 500 get founding member status with lifetime perks. Payments via Square. Real money in, real impact out. This is the one that actually works." #YouAndINotAI #SoloFounder #RealConnections</p>
-            </div>
-            <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-slate-950/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-              <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>POST 2 — FEATURE + VALUE</p>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>"Stop wasting time on apps that don't respect your time or your values. YouAndINotAI is the dating platform for builders, operators, and people who actually do the work. Verified profiles only (no bots, no catfishing). Mission-aligned matching. Revenue model is locked: every new activity is a fresh 10% bucket — contractual revenue disbursement, 27% tax reserve, founder survival first. Square checkout. Real transactions. No Stripe. Founding members lock in early rates and direct line to the product roadmap. The app is live now. Link in bio. First wave gets the Royalty Card tier access. Build with us. Date with purpose. youandinotai.com"</p>
-            </div>
-            <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-slate-950/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-              <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>POST 3 — HIGH-IMPACT CTA</p>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>"LAUNCHED: YouAndINotAI — the dating app that actually ships. No more empty promises. No more data harvesting. This is the platform where real builders find real partners who understand the grind. Bot-shielded from day one. Square powered (Location LY5GN09F5AN83) — every payment is real, auditable, and routes through the 100-cent rule. Every new qualifying activity = new stacked 10% bucket for contractual revenue disbursement. Founding members get permanent recognition + early product access. The first 500 signups lock in the best rates. Real connections. Real revenue. Real mission. Join now: youandinotai.com No excuses. The future is built by people who show up."</p>
-            </div>
-          </div>
-          <p className={`text-xs mt-4 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>All copy strictly adheres to FL §496.405. Only "contractual revenue disbursement" used. Square Location LY5GN09F5AN83 front and center in Membership below.</p>
-        </section>
-
-        {/* ===== MEMBERSHIP ===== */}
-        <Membership isDarkMode={isDarkMode} />
 
         {/* ===== STATUS METRICS ===== */}
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
