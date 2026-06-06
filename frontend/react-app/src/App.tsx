@@ -872,9 +872,9 @@ export default function App() {
             <div className="mt-6 grid gap-4 md:mt-10 md:gap-8 md:grid-cols-2">
               <div className="border-4 border-[#111111] bg-[#f4efe7] p-4 shadow-[6px_6px_0_0_#111111] md:p-6">
                 <p className="text-sm font-medium leading-7 text-[#2f2a24] md:text-lg md:leading-8">
-                  This is a product. It has to stand on quality, trust, and
-                  real human value first. The mission rides on top, not in
-                  place of, that foundation.
+                  This is a product. It has to stand on quality, trust, and real
+                  human value first. The mission rides on top, not in place of,
+                  that foundation.
                 </p>
               </div>
               <div className="border-4 border-[#111111] bg-[#111111] p-4 text-white shadow-[6px_6px_0_0_#ff5a1f] md:p-6">
