@@ -334,8 +334,9 @@ jobs:
         with:
           project: 'antigravity'
           path: '.'
-          'format': 'ALL'
-          'fail-build': 'true'
+          format: 'HTML'
+          out: 'reports'
+          args: '--failBuildOnCVSS 7'
 
       - name: Install npm audit and run
         run: |
