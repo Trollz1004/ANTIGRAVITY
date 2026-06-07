@@ -1,2 +1,6 @@
-node_modules/
-.wrangler/
+node_modules
+dist
+build
+.env.local
+.DS_Store
+.wrangler
