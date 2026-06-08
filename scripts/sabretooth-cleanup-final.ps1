@@ -20,7 +20,7 @@
 #   7. Prints /health/all summary so you can see it green at the end.
 #
 # Usage: right-click PowerShell -> Run as Administrator, then:
-#   C:\Antigravity\scripts\sabretooth-cleanup-final.ps1
+#   c:\antigravity\scripts\sabretooth-cleanup-final.ps1
 # Or paste the whole file body in.
 #
 # Cloudflare paperclip-hq tunnel is intentionally NOT touched — cockpit
@@ -38,7 +38,7 @@ if (-not $isAdmin) {
     return
 }
 
-$Repo = 'C:\Antigravity'
+$Repo = 'c:\antigravity'
 Write-Host ''
 Write-Host '=== Sabretooth cockpit cleanup ===' -ForegroundColor Cyan
 

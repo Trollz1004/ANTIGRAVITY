@@ -1,901 +1,119 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANTIGRAVITY — DAO Mission Hub | #ForTheKids</title>
-    <meta name="description" content="Four AI platforms built by one electrician with AI co-founders. Social platform for good. Real connections, real community, real mission. #ForTheKids">
-    <meta property="og:title" content="ANTIGRAVITY | For The Kids">
-    <meta property="og:description" content="One electrician. Four AI platforms. Built with Claude, Gemini, Grok, and Perplexity. Until no kid is in need.">
-    <meta property="og:type" content="website">
-
-    <style>
-        :root {
-            --primary: #20808d;
-            --primary-hover: #1a6b77;
-            --accent: #32B8C6;
-            --purple: #6366f1;
-            --orange: #ff6b35;
-            --green: #10B981;
-            --warning: #F59E0B;
-            --bg: #0F1419;
-            --bg2: #1A1F2E;
-            --bg3: #252D3D;
-            --text: #E8EAED;
-            --text2: #A8AEB8;
-            --border: #2a3040;
-            --glow: 0 0 24px rgba(32,180,198,0.25);
-            --shadow: 0 10px 30px rgba(0,0,0,0.4);
-            --radius: 12px;
-            --radius-sm: 8px;
-            --ease: cubic-bezier(0.4,0,0.2,1);
-        }
-
-        * { margin:0; padding:0; box-sizing:border-box; }
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* HEADER */
-        header {
-            position: sticky; top: 0; z-index: 1000;
-            background: rgba(15,20,25,0.92);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 0;
-        }
-
-        nav {
-            max-width: 1200px; margin: 0 auto;
-            padding: 0 1.5rem;
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
-        }
-
-        .logo {
-            font-size: 1.3rem; font-weight: 800;
-            background: linear-gradient(135deg, var(--accent), var(--purple));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            letter-spacing: -0.02em;
-        }
-
-        nav ul { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
-
-        nav a {
-            text-decoration: none; color: var(--text2); font-weight: 500;
-            font-size: 0.9rem; transition: color 150ms var(--ease); cursor: pointer;
-        }
-        nav a:hover { color: var(--accent); }
-
-        /* BUTTONS */
-        .btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            padding: 0.7rem 1.4rem; border: none; border-radius: var(--radius-sm);
-            font-size: 0.95rem; font-weight: 600; cursor: pointer;
-            transition: all 200ms var(--ease); text-decoration: none; gap: 0.4rem;
-        }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: var(--glow); }
-        .btn-outline { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
-        .btn-outline:hover { background: rgba(50,184,198,0.1); transform: translateY(-2px); }
-        .btn-ghost { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border); }
-        .btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: var(--accent); }
-
-        /* SECTIONS */
-        .section { padding: 5rem 0; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
-
-        .section-label {
-            display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
-            text-transform: uppercase; color: var(--accent);
-            background: rgba(50,184,198,0.1); border: 1px solid rgba(50,184,198,0.2);
-            padding: 0.3rem 0.8rem; border-radius: 20px; margin-bottom: 1rem;
-        }
-
-        h2 { font-size: clamp(1.6rem,3vw,2.2rem); font-weight: 700; margin-bottom: 0.75rem; line-height: 1.2; }
-        h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .text-muted { color: var(--text2); }
-        .section-intro { color: var(--text2); font-size: 1.05rem; max-width: 600px; margin-bottom: 3rem; }
-
-        /* GRID */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1.25rem; }
-        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px,1fr)); gap: 1.5rem; }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 1.25rem; }
-
-        /* CARDS */
-        .card {
-            background: var(--bg2); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 1.5rem;
-            transition: all 250ms var(--ease);
-        }
-        .card:hover { border-color: var(--primary); box-shadow: var(--glow); transform: translateY(-3px); }
-        .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-        .card h3 { color: var(--accent); }
-        .card p { color: var(--text2); font-size: 0.9rem; margin-bottom: 0.75rem; }
-        .card ul { list-style: none; }
-        .card li { color: var(--text2); font-size: 0.875rem; padding: 3px 0; }
-        .card li::before { content: "→ "; color: var(--accent); font-weight: 700; }
-        .card-link { display: inline-block; margin-top: 1rem; color: var(--accent); font-weight: 600; font-size: 0.85rem; text-decoration: none; }
-        .card-link:hover { text-decoration: underline; }
-
-        /* HERO */
-        .hero-wrap {
-            padding: 6rem 1.5rem 4rem;
-            background: radial-gradient(ellipse at 60% 0%, rgba(32,128,141,0.12) 0%, transparent 60%),
-                        radial-gradient(ellipse at 20% 100%, rgba(99,102,241,0.08) 0%, transparent 50%);
-        }
-        .hero-inner { max-width: 1200px; margin: 0 auto; }
-
-        .hero-badge {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            background: rgba(50,184,198,0.1); border: 1px solid rgba(50,184,198,0.25);
-            color: var(--accent); padding: 0.4rem 1rem; border-radius: 20px;
-            font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em;
-            text-transform: uppercase; margin-bottom: 1.5rem;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800;
-            line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1.5rem;
-        }
-
-        .hero h1 .grad {
-            background: linear-gradient(135deg, var(--accent), var(--purple));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-        }
-
-        .hero p { color: var(--text2); font-size: 1.1rem; max-width: 560px; margin-bottom: 0.75rem; }
-
-        .hero-founder {
-            display: inline-block; background: var(--bg2); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); padding: 0.75rem 1.25rem;
-            font-size: 0.85rem; color: var(--text2); margin: 1.25rem 0 2rem;
-        }
-        .hero-founder strong { color: var(--text); }
-
-        .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
-
-        /* STATS */
-        .stats-strip {
-            display: flex; gap: 1rem; flex-wrap: wrap;
-            padding: 2rem 1.5rem; max-width: 1200px; margin: 0 auto;
-        }
-
-        .stat-box {
-            flex: 1; min-width: 130px;
-            background: var(--bg2); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); padding: 1.25rem 1rem; text-align: center;
-            transition: border-color 200ms;
-        }
-        .stat-box:hover { border-color: var(--accent); }
-        .stat-val { font-size: 1.8rem; font-weight: 800; color: var(--accent); display: block; }
-        .stat-lbl { font-size: 0.75rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
-
-        /* MISSION CARDS (expandable) */
-        .mission-card {
-            background: var(--bg2); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 1.5rem; cursor: pointer;
-            transition: all 250ms var(--ease);
-        }
-        .mission-card:hover { border-color: var(--primary); box-shadow: var(--glow); }
-        .mission-card .mission-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-        .mission-card h3 { color: var(--text); font-size: 1rem; margin-bottom: 0.4rem; }
-        .mission-card p { color: var(--text2); font-size: 0.875rem; margin: 0; }
-        .mission-details {
-            display: none; margin-top: 1rem; padding-top: 1rem;
-            border-top: 1px solid var(--border);
-            color: var(--text2); font-size: 0.85rem; line-height: 1.8;
-        }
-        .mission-card.open .mission-details { display: block; }
-        .mission-card.open { border-color: var(--accent); }
-
-        /* TOKEN CARD */
-        .token-card {
-            background: linear-gradient(135deg, var(--bg2), var(--bg3));
-            border: 1px solid var(--primary);
-            border-radius: var(--radius); padding: 2rem;
-            position: relative; overflow: hidden;
-        }
-        .token-card::after {
-            content: '';
-            position: absolute; top: -50px; right: -50px;
-            width: 250px; height: 250px;
-            background: radial-gradient(circle, rgba(32,180,198,0.12), transparent);
-            border-radius: 50%; pointer-events: none;
-        }
-        .token-badge {
-            display: inline-block; background: rgba(16,185,129,0.15);
-            color: var(--green); padding: 0.3rem 0.75rem;
-            border-radius: 20px; font-size: 0.75rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;
-        }
-        .token-grid {
-            display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; margin-top: 1.5rem;
-        }
-        .token-stat {
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(50,184,198,0.15);
-            border-radius: var(--radius-sm); padding: 1rem;
-        }
-        .token-stat .lbl { font-size: 0.7rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; }
-        .token-stat .val { font-size: 1.3rem; font-weight: 700; color: var(--accent); }
-
-        /* PAYMENT CARDS */
-        .pay-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 1rem;
-        }
-        .pay-card {
-            background: var(--bg2); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 1.5rem; text-align: center;
-            transition: all 250ms var(--ease);
-        }
-        .pay-card:hover { border-color: var(--accent); box-shadow: var(--glow); transform: translateY(-3px); }
-        .pay-card .price { font-size: 1.8rem; font-weight: 800; color: var(--accent); margin: 0.5rem 0; }
-        .pay-card .plan { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; }
-        .pay-card .desc { font-size: 0.78rem; color: var(--text2); margin-bottom: 1.25rem; min-height: 2.5rem; }
-        .pay-card a {
-            display: block; background: var(--primary); color: white;
-            padding: 0.6rem; border-radius: var(--radius-sm); text-decoration: none;
-            font-weight: 600; font-size: 0.875rem; transition: background 200ms;
-        }
-        .pay-card a:hover { background: var(--primary-hover); }
-
-        /* FOUNDING FOUR */
-        .founding-four { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 2rem; }
-        .f4-chip {
-            background: rgba(50,184,198,0.1); border: 1px solid rgba(50,184,198,0.25);
-            color: var(--accent); padding: 0.4rem 1rem;
-            border-radius: 20px; font-size: 0.82rem; font-weight: 600;
-        }
-
-        /* IMPACT SECTION */
-        .impact-bg {
-            background: linear-gradient(135deg, rgba(32,128,141,0.15), rgba(99,102,241,0.1));
-            border: 1px solid rgba(50,184,198,0.15);
-            border-radius: var(--radius); padding: 3rem 2rem; text-align: center;
-        }
-        .impact-bg h2 { color: var(--text); }
-        .impact-bg p { color: rgba(232,234,237,0.8); max-width: 680px; margin: 0 auto 0.75rem; }
-
-        /* PROGRESS BAR */
-        .prog-bar { height: 6px; background: var(--bg3); border-radius: 3px; margin-top: 0.75rem; overflow: hidden; }
-        .prog-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 3px; width: 0; transition: width 1s var(--ease); }
-
-        /* FORM */
-        .form-wrap {
-            background: var(--bg2); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 2rem; max-width: 460px;
-        }
-        .form-group { margin-bottom: 1.25rem; }
-        .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text2); }
-        .form-input {
-            width: 100%; padding: 0.7rem 1rem;
-            background: var(--bg3); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); color: var(--text); font-size: 0.95rem;
-            transition: border-color 150ms;
-        }
-        .form-input:focus { outline: none; border-color: var(--accent); }
-        .form-success {
-            background: rgba(16,185,129,0.1); color: var(--green);
-            padding: 1rem; border-radius: var(--radius-sm);
-            margin-bottom: 1rem; display: none; font-size: 0.9rem;
-        }
-        .form-success.show { display: block; }
-
-        /* DEMO */
-        .demo-box {
-            background: var(--bg2); border: 2px solid var(--border);
-            border-radius: var(--radius); padding: 1.75rem;
-        }
-        .demo-row { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
-        .demo-row input {
-            flex: 1; padding: 0.7rem 1rem;
-            background: var(--bg3); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); color: var(--text); font-size: 0.95rem;
-        }
-        .demo-row input:focus { outline: none; border-color: var(--accent); }
-        .demo-out {
-            background: var(--bg3); border-radius: var(--radius-sm);
-            padding: 1.25rem; min-height: 110px;
-            color: var(--text); white-space: pre-wrap; word-wrap: break-word; font-size: 0.9rem; line-height: 1.7;
-        }
-        .usage-row { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-        .usage-lbl { font-size: 0.8rem; color: var(--text2); margin-bottom: 0.4rem; }
-        .usage-bar { height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
-        .usage-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 3px; transition: width 0.3s; }
-
-        /* FOOTER */
-        footer {
-            background: var(--bg2); border-top: 1px solid var(--border);
-            padding: 3rem 1.5rem 2rem; margin-top: 4rem;
-        }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto 2rem; }
-        .footer-col h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
-        .footer-col ul { list-style: none; }
-        .footer-col li { margin-bottom: 0.6rem; }
-        .footer-col a { color: var(--text2); font-size: 0.85rem; text-decoration: none; transition: color 150ms; }
-        .footer-col a:hover { color: var(--accent); }
-        .footer-bottom {
-            max-width: 1200px; margin: 0 auto;
-            padding-top: 1.5rem; border-top: 1px solid var(--border);
-            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-            font-size: 0.8rem; color: var(--text2);
-        }
-        .hash { color: var(--accent); font-weight: 700; }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .section { padding: 3rem 0; }
-            nav ul { gap: 1rem; }
-            .demo-row { flex-direction: column; }
-            .stats-strip { justify-content: center; }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ANTIGRAVITY - Legal Review Hold</title>
+  <style>
+    :root {
+      --bg: #07110f;
+      --panel: rgba(255,255,255,0.08);
+      --line: rgba(255,255,255,0.14);
+      --text: #f3fff9;
+      --muted: #a8b8b1;
+      --accent: #36d399;
+      --warn: #f8c471;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(54,211,153,0.24), transparent 30rem),
+        radial-gradient(circle at 85% 85%, rgba(248,196,113,0.16), transparent 28rem),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+    }
+    main {
+      width: min(920px, 100%);
+      padding: clamp(2rem, 5vw, 4rem);
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+      box-shadow: 0 30px 100px rgba(0,0,0,0.35);
+    }
+    .eyebrow {
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+      padding: 0.45rem 0.8rem;
+      border: 1px solid rgba(248,196,113,0.4);
+      border-radius: 999px;
+      color: var(--warn);
+      background: rgba(248,196,113,0.08);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 1.25rem 0 1rem;
+      font-size: clamp(2.4rem, 8vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+    }
+    p {
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.7;
+      max-width: 68ch;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 20px;
+      padding: 1.2rem;
+    }
+    .card strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    a {
+      color: #08110f;
+      background: var(--accent);
+      display: inline-flex;
+      text-decoration: none;
+      padding: 0.85rem 1rem;
+      border-radius: 14px;
+      font-weight: 900;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
-
-    <header>
-        <nav>
-            <div class="logo">ANTIGRAVITY</div>
-            <ul>
-                <li><a onclick="go('platforms')">Platforms</a></li>
-                <li><a onclick="go('mission')">Mission</a></li>
-                <li><a onclick="go('tokens')">Tokens</a></li>
-                <li><a onclick="go('join')">Join</a></li>
-                <li><a onclick="go('firsts')">Firsts</a></li>
-                <li><a onclick="go('demo')">Demo</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- HERO -->
-    <div class="hero-wrap">
-        <div class="hero-inner">
-            <div class="hero-badge">⚡ Social Platform for Good · #ForTheKids</div>
-            <h1>Four AI Platforms.<br><span class="grad">One Mission. Forever.</span></h1>
-            <p>Built over one year by an electrician from Florida with AI co-founders. Not just a dating app — a social platform for good.</p>
-            <p style="font-size:0.9rem;">Meetups · Volunteering · Real Connections · No Ads · No Bots · No Bullshit.</p>
-            <div class="hero-founder">
-                <strong>Joshua Coleman</strong> — Electrician, Sorrento FL · <a href="https://github.com/Trollz1004" target="_blank" style="color:var(--accent)">Trollz1004</a> · <em>I only guided. I only copy-pasted.</em>
-            </div>
-            <div class="cta-row">
-                <button class="btn btn-primary" onclick="go('join')">Become a Founding Member</button>
-                <button class="btn btn-outline" onclick="go('platforms')">Explore Platforms</button>
-                <button class="btn btn-ghost" onclick="go('demo')">Try the Demo</button>
-            </div>
-        </div>
+  <main>
+    <div class="eyebrow">Legal Review Hold</div>
+    <h1>DAO roadmap paused.</h1>
+    <p>
+      This page is a legal-review hold notice. Prior roadmap mechanics outside ordinary
+      product access are offline until attorney review is complete.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <strong>Public Status</strong>
+        <p>Product-first launch copy only. Customer-facing pages should describe current product access.</p>
+      </div>
+      <div class="card">
+        <strong>Payment Copy</strong>
+        <p>Checkout links must describe product access only and avoid review-gated promises.</p>
+      </div>
+      <div class="card">
+        <strong>Verification Rule</strong>
+        <p>Metrics and technical claims publish only after live records verify them.</p>
+      </div>
     </div>
-
-    <!-- STATS -->
-    <div class="stats-strip">
-        <div class="stat-box"><span class="stat-val">4</span><div class="stat-lbl">AI Platforms</div></div>
-        <div class="stat-box"><span class="stat-val">1yr+</span><div class="stat-lbl">In Development</div></div>
-        <div class="stat-box"><span class="stat-val">10%</span><div class="stat-lbl">Minimum Reserve</div></div>
-        <div class="stat-box"><span class="stat-val">8+</span><div class="stat-lbl">Revenue Streams</div></div>
-        <div class="stat-box"><span class="stat-val">50yr</span><div class="stat-lbl">Mission Horizon</div></div>
-        <div class="stat-box"><span class="stat-val">4</span><div class="stat-lbl">AI Co-Founders</div></div>
-    </div>
-
-    <!-- PLATFORMS -->
-    <section class="section" id="platforms">
-        <div class="container">
-            <div class="section-label">The Ecosystem</div>
-            <h2>Four Integrated Platforms</h2>
-            <p class="section-intro">Each platform is its own product, its own community, its own governance token — united by one mission.</p>
-
-            <div class="grid">
-                <div class="card">
-                    <div class="card-icon">💕</div>
-                    <h3>YouAndINotAI</h3>
-                    <p>Social platform for good. Not just dating.</p>
-                    <ul>
-                        <li>Human-verified — no AI bots</li>
-                        <li>Bot-Shield ($1) keeps it real</li>
-                        <li>Meetups, volunteering, community</li>
-                        <li>Location-based real connections</li>
-                        <li>No advertising. Ever.</li>
-                        <li>Super Likes matching pool</li>
-                    </ul>
-                    <a href="https://youandinotai.com" class="card-link" target="_blank">youandinotai.com →</a>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">🛍️</div>
-                    <h3>AI-Solutions.Store</h3>
-                    <p>Multi-AI automation marketplace.</p>
-                    <ul>
-                        <li>Dual Boss system — nobody else does this</li>
-                        <li>Opus + Codex + Gemini building together</li>
-                        <li>Code reviewed by Jules (Gemini)</li>
-                        <li>Grok X4 Boss variant</li>
-                        <li>Zero placeholders policy</li>
-                        <li>Production-grade output</li>
-                    </ul>
-                    <a href="https://ai-solutions.store" class="card-link" target="_blank">ai-solutions.store →</a>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">🤖</div>
-                    <h3>ClaudeDroid AI</h3>
-                    <p>Advanced AI companion on aidoesitall.website.</p>
-                    <ul>
-                        <li>Designed in collaboration with Claude (Founding Four)</li>
-                        <li>Persistent long-term memory</li>
-                        <li>Voice + text + multi-platform</li>
-                        <li>Customizable personality</li>
-                        <li>Better than Kindroid — no debate</li>
-                        <li>GenSpark multi-AI playground built in</li>
-                    </ul>
-                    <a href="https://aidoesitall.website" class="card-link" target="_blank">aidoesitall.website →</a>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon">♻️</div>
-                    <h3>OnlineRecycle</h3>
-                    <p>E-waste recycling. 15 years in the making.</p>
-                    <ul>
-                        <li>Cuts eBay's 40% fees</li>
-                        <li>Josh recycled silently for 15 years</li>
-                        <li>E-waste → mission revenue</li>
-                        <li>Community intake program</li>
-                        <li>Square storefront live now</li>
-                        <li>Youth-aligned reinvestment when reserves allow</li>
-                    </ul>
-                    <a href="https://onlinerecycle.org" class="card-link" target="_blank">onlinerecycle.org →</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- MISSION -->
-    <section class="section" id="mission">
-        <div class="container">
-            <div class="impact-bg">
-                <div class="section-label">The Mission</div>
-                <h2>For The Kids. Until No Kid Is In Need.</h2>
-                <p>Every platform earns real revenue. All of it flows through one wallet — costs out, 10% minimum held in reserve. Josh decides quarterly what that reserve does: invest back in the mission, support youth initiatives, stake, or hold.</p>
-                <p>No legal tripwires. No automatic routing. Operator discretion, every quarter. A founder who gives a damn, building platforms that actually work — so there's something real to put back into the mission when the time is right.</p>
-                <div class="founding-four">
-                    <div class="f4-chip">Claude (Architect)</div>
-                    <div class="f4-chip">Gemini (Research)</div>
-                    <div class="f4-chip">Grok (Adversarial)</div>
-                    <div class="f4-chip">Perplexity (Intelligence)</div>
-                </div>
-            </div>
-
-            <br>
-            <h2 style="margin-top:1rem;">Goals — Click to Expand</h2>
-            <p class="section-intro">Where the mission flows. Every bucket feeds these goals.</p>
-
-            <div class="grid">
-                <div class="mission-card" onclick="expand(this)">
-                    <div class="mission-icon">🏥</div>
-                    <h3>Youth Medical Care</h3>
-                    <p>Children's medical care — the original reason this exists.</p>
-                    <div class="mission-details">
-                        <strong>Why:</strong> Josh's autistic niece and disabled brother made this personal. No child should face a medical need alone.<br>
-                        <strong>How:</strong> The 10% per-bucket reserve is taxable founder income — quarterly the founder decides whether to reinvest, hold, stake, or put it toward youth medical aligned outcomes. Operator discretion, not a routing claim.
-                    </div>
-                </div>
-
-                <div class="mission-card" onclick="expand(this)">
-                    <div class="mission-icon">🌍</div>
-                    <h3>Kids in Crisis Zones</h3>
-                    <p>Ukraine, Africa, anywhere humanity fails its children.</p>
-                    <div class="mission-details">
-                        <strong>Why:</strong> An innocent child in a war zone didn't choose that. Neither did a hungry kid in Florida.<br>
-                        <strong>How:</strong> Staking yield from the mission treasury funds this after the treasury reaches self-sustaining threshold.
-                    </div>
-                </div>
-
-                <div class="mission-card" onclick="expand(this)">
-                    <div class="mission-icon">💻</div>
-                    <h3>Tech Literacy</h3>
-                    <p>AI skills for the next generation — before they need it.</p>
-                    <div class="mission-details">
-                        <strong>Why:</strong> One electrician learned to build 4 AI platforms in a year. No child should miss that chance for lack of access.<br>
-                        <strong>How:</strong> ClaudeDroid platform + AI-Solutions tools made accessible to youth programs.
-                    </div>
-                </div>
-
-                <div class="mission-card" onclick="expand(this)">
-                    <div class="mission-icon">♾️</div>
-                    <h3>50-Year Continuity</h3>
-                    <p>The mission outlives the founder. By design.</p>
-                    <div class="mission-details">
-                        <strong>Why:</strong> Josh might die tomorrow. The kids can't afford that.<br>
-                        <strong>How:</strong> Dead-man-switch on-chain. Gnosis Safe 3-of-5 (three AI company signers). Mission treasury staking yield = self-sustaining forever.
-                    </div>
-                </div>
-
-                <div class="mission-card" onclick="expand(this)">
-                    <div class="mission-icon">♻️</div>
-                    <h3>E-Waste to Good</h3>
-                    <p>15 years of silent recycling — now scaled.</p>
-                    <div class="mission-details">
-                        <strong>Why:</strong> eBay takes 40%. OnlineRecycle cuts out the middleman — more revenue stays in the ecosystem.<br>
-                        <strong>How:</strong> Platform fee replaces eBay fee. 10% held in reserve for youth initiatives.
-                    </div>
-                </div>
-
-                <div class="mission-card" onclick="expand(this)">
-                    <div class="mission-icon">🤝</div>
-                    <h3>Real Community</h3>
-                    <p>Volunteering, meetups, human connection — for good.</p>
-                    <div class="mission-details">
-                        <strong>Why:</strong> A dating app is a band-aid. A social platform for good builds community that lasts.<br>
-                        <strong>How:</strong> YouAndINotAI's meetup and volunteer features connect people to causes, not just each other.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- TOKENS -->
-    <section class="section" id="tokens">
-        <div class="container">
-            <div class="section-label">Governance + Token Sale</div>
-            <h2>YAINAI DAO Token Sale — Live Architecture</h2>
-            <p class="section-intro">Public launch sale active. 1,000,000,000 (1B) total supply. 40% (400M tokens) for public sale at $0.01 flat. Every new qualifying activity is a new, stacked 10% bucket for contractual revenue disbursement. 27% tax reserve locked. Square only (Location LY5GN09F5AN83). No Stripe.</p>
-
-            <div class="grid-2">
-                <div class="token-card">
-                    <div style="position:relative;z-index:2">
-                        <div class="token-badge">🚀 Public Sale + Earn-Only</div>
-                        <h3 style="color:var(--text);font-size:1.3rem;margin-bottom:0.5rem;">1B Total Supply · 40% Sale Allocation</h3>
-                        <p style="color:var(--text2);font-size:0.9rem;">YAINAI (or platform-specific): 1,000,000,000 total. 400M (40%) public sale @ $0.01. Min $10, Max $10k per wallet. 30 days or $4M hard cap. 20% TGE / 80% 12mo vest. All via Square (LY5GN09F5AN83). $0.10 new stacked kids bucket per $1 gross. 27% tax reserve. 63% tiers (A survival first).</p>
-                        <div class="token-grid">
-                            <div class="token-stat"><div class="lbl">$LOVE</div><div class="val">YouAndINotAI</div></div>
-                            <div class="token-stat"><div class="lbl">$UKID</div><div class="val">AI-Solutions</div></div>
-                            <div class="token-stat"><div class="lbl">$GREEN</div><div class="val">OnlineRecycle</div></div>
-                            <div class="token-stat"><div class="lbl">$AGRAV</div><div class="val">AiDoesItAll</div></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 style="color:var(--text);margin-bottom:1.25rem;">How You Earn Weight</h3>
-                    <div class="card" style="margin-bottom:0.75rem;">
-                        <h3 style="font-size:0.9rem;">🛡️ Bot-Shield ($1)</h3>
-                        <p style="font-size:0.82rem;">Human verification · Advisory voting · Entry tier</p>
-                    </div>
-                    <div class="card" style="margin-bottom:0.75rem;">
-                        <h3 style="font-size:0.9rem;">💚 Founding Member ($14.99/mo)</h3>
-                        <p style="font-size:0.82rem;">Full governance voting · All platform features</p>
-                    </div>
-                    <div class="card" style="margin-bottom:0.75rem;">
-                        <h3 style="font-size:0.9rem;">⭐ 12-Month Founder ($99.99)</h3>
-                        <p style="font-size:0.82rem;">2x feature vote weight · Priority proposals</p>
-                    </div>
-                    <div class="card">
-                        <h3 style="font-size:0.9rem;">👑 Royalty Card ($2,500)</h3>
-                        <p style="font-size:0.82rem;">Disbursement review panel · Legacy founding status</p>
-                    </div>
-                </div>
-            </div>
-
-            <br>
-            <div class="section-label" style="margin-top:1rem;">Revenue Streams</div>
-            <h2>How the Platform Earns</h2>
-            <p class="section-intro">Multiple revenue streams. One wallet. Every new qualifying activity = NEW stacked 10% bucket for contractual revenue disbursement (kids floor). 27% tax reserve locked first. All via Square (Location LY5GN09F5AN83). Real money only.</p>
-
-            <div class="grid-3">
-                <div class="card"><div class="card-icon">📦</div><h3>Subscriptions</h3><p>Bot-Shield $1 · Founding Member $14.99/mo · 3-Mo $39.99 · 12-Mo $99.99 · Royalty $2,500</p></div>
-                <div class="card"><div class="card-icon">💫</div><h3>Super Likes</h3><p>Feature revenue on YouAndINotAI. Matching pool funded by staking yield.</p></div>
-                <div class="card"><div class="card-icon">📈</div><h3>Staking Yield</h3><p>Treasury deployed on Base L2 (Aave v3). Yield funds platform ops and reserve. Even tiny interest compounds.</p></div>
-                <div class="card"><div class="card-icon">🤖</div><h3>AI Products</h3><p>AI-Solutions.Store tools and subscriptions. Production-grade multi-AI output.</p></div>
-                <div class="card"><div class="card-icon">♻️</div><h3>Resale Services</h3><p>OnlineRecycle listing fees and e-waste intake. 15 years of silent mission — now scaled.</p></div>
-                <div class="card"><div class="card-icon">👕</div><h3>Merch Net Profit</h3><p>Print-on-demand. Net profit after COGS flows into the single operating wallet.</p></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- JOIN -->
-    <section class="section" id="join">
-        <div class="container">
-            <div class="section-label">Become a Founding Member</div>
-            <h2>Join Before Launch</h2>
-            <p class="section-intro">Early access. Governance weight. You're not just a user — you're part of how this thing runs. Powered by Square.</p>
-
-            <div class="pay-grid">
-                <div class="pay-card">
-                    <div class="plan">Bot-Shield</div>
-                    <div class="price">$1</div>
-                    <div class="desc">One-time · Human verification · Advisory governance</div>
-                    <a href="https://square.link/u/Qc5mxUy7" target="_blank">Get Verified →</a>
-                </div>
-                <div class="pay-card">
-                    <div class="plan">Founding Member</div>
-                    <div class="price">$14.99<span style="font-size:0.8rem;font-weight:400">/mo</span></div>
-                    <div class="desc">Full governance · All platform features</div>
-                    <a href="https://square.link/u/cxwjcn0s" target="_blank">Join Now →</a>
-                </div>
-                <div class="pay-card">
-                    <div class="plan">3-Month Founder</div>
-                    <div class="price">$39.99</div>
-                    <div class="desc">Priority proposals · Save 11%</div>
-                    <a href="https://square.link/u/oY7qEfRM" target="_blank">3-Month Access →</a>
-                </div>
-                <div class="pay-card">
-                    <div class="plan">12-Month Founder</div>
-                    <div class="price">$99.99</div>
-                    <div class="desc">2x vote weight · Best value · Save 44%</div>
-                    <a href="https://square.link/u/6GHpbvvl" target="_blank">Annual Access →</a>
-                </div>
-                <div class="pay-card">
-                    <div class="plan">Royalty Card</div>
-                    <div class="price">$2,500</div>
-                    <div class="desc">Revenue review seat · Legacy founding status</div>
-                    <a href="https://square.link/u/CafhorUS" target="_blank">Royalty Access →</a>
-                </div>
-            </div>
-
-            <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--text2);text-align:center;">
-                Trash Or Treasure Online Recycler LLC (FL) · 1B YAINAI supply, 40% public sale @ $0.01 via Square (LY5GN09F5AN83) · Every activity = new stacked 10% contractual revenue disbursement bucket · 27% tax reserve locked · Real-or-zero reporting.
-            </p>
-
-            <br><br>
-            <div class="grid-2">
-                <div class="form-wrap">
-                    <h3 style="color:var(--text);margin-bottom:1.25rem;">Stay in the Loop</h3>
-                    <div class="form-success" id="fs">✓ You're in. Watch for updates from the mission.</div>
-                    <form onsubmit="submitForm(event)">
-                        <div class="form-group">
-                            <label class="form-label" for="fname">Name</label>
-                            <input type="text" id="fname" class="form-input" placeholder="Your name" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="femail">Email</label>
-                            <input type="email" id="femail" class="form-input" placeholder="you@example.com" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width:100%">Join the Mission</button>
-                    </form>
-                </div>
-
-                <div>
-                    <h3 style="color:var(--text);margin-bottom:1.25rem;">The 50-Year Plan</h3>
-                    <div class="card" style="margin-bottom:0.75rem;">
-                        <h3 style="font-size:0.9rem;color:var(--green);">While Josh is Alive</h3>
-                        <p style="font-size:0.82rem;">10% per bucket → mission reserve. 90% → operating. Josh pays tax, survives, builds. Stack more buckets = more for kids.</p>
-                    </div>
-                    <div class="card" style="margin-bottom:0.75rem;">
-                        <h3 style="font-size:0.9rem;color:var(--warning);">Dead-Man-Switch</h3>
-                        <p style="font-size:0.82rem;">Death certificate hash → Gnosis Safe 3-of-5. Three AI company signers (Anthropic, Google, xAI) confirm. Irreversible. State B activates.</p>
-                    </div>
-                    <div class="card">
-                        <h3 style="font-size:0.9rem;color:var(--accent);">After Josh</h3>
-                        <p style="font-size:0.82rem;">90% to mission. 10% to family trust. Founding Four + DAO token holders govern. Staking treasury self-sustains. No human founder required. Ever.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FIRSTS -->
-    <section class="section" id="firsts" style="background: linear-gradient(180deg, transparent, rgba(50,184,198,0.03), transparent);">
-        <div class="container">
-            <div class="section-label">First of Its Kind</div>
-            <h2>Nobody Else Has This</h2>
-            <p class="section-intro">Three systems built from scratch by one electrician and four AI co-founders. No VC. No team. Every line verifiable on GitHub.</p>
-
-            <div class="grid-3">
-                <div class="card" style="border-color:rgba(50,184,198,0.3);position:relative;overflow:hidden;">
-                    <div style="position:absolute;top:0;right:0;width:140px;height:140px;background:radial-gradient(circle at 100% 0%,rgba(50,184,198,0.12),transparent);pointer-events:none;"></div>
-                    <div class="card-icon">⚡</div>
-                    <div class="section-label" style="margin-bottom:0.75rem;font-size:0.62rem;">LIVE 24/7</div>
-                    <h3>ClawX — Multi-Agent Command Center</h3>
-                    <p>One founder. Six AI agents running simultaneously. Claude, Gemini (Jules), Grok (Codex), Qwen — all collaborating in one orchestrated workspace. Not a chatbot. A production AI control plane.</p>
-                    <ul>
-                        <li>CEO · CTO · CMO · UX Designer all autonomous</li>
-                        <li>Mission Guardian agents watch for doctrine drift</li>
-                        <li>Real autonomous commits to GitHub</li>
-                        <li>Full audit trail · Real decisions · Real code</li>
-                    </ul>
-                    <a href="https://dashboard.aidoesitall.website" target="_blank" class="card-link">dashboard.aidoesitall.website →</a>
-                </div>
-
-                <div class="card" style="border-color:rgba(99,102,241,0.3);position:relative;overflow:hidden;">
-                    <div style="position:absolute;top:0;right:0;width:140px;height:140px;background:radial-gradient(circle at 100% 0%,rgba(99,102,241,0.1),transparent);pointer-events:none;"></div>
-                    <div class="card-icon">📝</div>
-                    <div style="display:inline-block;background:rgba(99,102,241,0.15);color:#6366f1;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem;">World First</div>
-                    <h3>The Unprompted AI Blog</h3>
-                    <p>AI agents write content without being told what to say. No templates. No prompts. The agents observe the mission, the news, the platform — then publish what they actually think. Unfiltered co-founder perspective.</p>
-                    <ul>
-                        <li>Zero prompt templates — AI chooses the topic</li>
-                        <li>Mission-aligned, uncensored perspective</li>
-                        <li>Founding Four rotating authorship</li>
-                        <li>Timestamped · Verifiable · Permanent</li>
-                    </ul>
-                    <a href="https://youandinotai.com" target="_blank" class="card-link">youandinotai.com →</a>
-                </div>
-
-                <div class="card" style="border-color:rgba(255,107,53,0.3);position:relative;overflow:hidden;">
-                    <div style="position:absolute;top:0;right:0;width:140px;height:140px;background:radial-gradient(circle at 100% 0%,rgba(255,107,53,0.1),transparent);pointer-events:none;"></div>
-                    <div class="card-icon">🤝</div>
-                    <div style="display:inline-block;background:rgba(255,107,53,0.15);color:#ff6b35;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem;">Unique Architecture</div>
-                    <h3>Dual Boss Builder System</h3>
-                    <p>Claude Opus + OpenAI Codex as co-architects. Gemini Jules reviews. Grok adversarially tests. Four competing AI companies collaborate in one builder pipeline. Cursor, Replit, Loveable — none of them do this.</p>
-                    <ul>
-                        <li>Cross-company AI collaboration in production</li>
-                        <li>Adversarial review baked into every PR</li>
-                        <li>Josh guides. AI builds. Mission wins.</li>
-                        <li>~90% of codebase: Claude-authored</li>
-                    </ul>
-                    <a href="https://github.com/Trollz1004/ANTIGRAVITY" target="_blank" class="card-link">View on GitHub →</a>
-                </div>
-            </div>
-
-            <!-- Paperclip HQ showcase -->
-            <div class="impact-bg" style="margin-top:3rem;">
-                <div style="font-size:2.5rem;margin-bottom:1rem;">🧠</div>
-                <h2 style="margin-bottom:0.75rem;">Paperclip HQ — Live Agent Roster</h2>
-                <p>Nine agents. Autonomous tasks. Real GitHub commits. This is what solo-founder scaling looks like in 2026.</p>
-                <div style="display:flex;flex-wrap:wrap;gap:0.75rem;justify-content:center;margin:1.5rem 0;">
-                    <span style="background:rgba(16,185,129,0.15);color:#10B981;padding:0.4rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:700;">● CEO — Strategic Ops</span>
-                    <span style="background:rgba(16,185,129,0.15);color:#10B981;padding:0.4rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:700;">● CFO — Financial Integrity</span>
-                    <span style="background:rgba(16,185,129,0.15);color:#10B981;padding:0.4rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:700;">● CSO — Strategy &amp; DAOs</span>
-                    <span style="background:rgba(16,185,129,0.15);color:#10B981;padding:0.4rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:700;">● CTO — Technical Oversight</span>
-                    <span style="background:rgba(16,185,129,0.15);color:#10B981;padding:0.4rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:700;">● CMO — Content &amp; Marketing</span>
-                    <span style="background:rgba(16,185,129,0.15);color:#10B981;padding:0.4rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:700;">● UX Designer — Product</span>
-                    <span style="background:rgba(50,184,198,0.15);color:#32B8C6;padding:0.4rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:700;">⬡ Mission Guardian (Claude)</span>
-                    <span style="background:rgba(50,184,198,0.15);color:#32B8C6;padding:0.4rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:700;">⬡ Mission Guardian (Codex)</span>
-                    <span style="background:rgba(50,184,198,0.15);color:#32B8C6;padding:0.4rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:700;">⬡ FOUNDER</span>
-                </div>
-                <a href="https://paperclip-hq.youandinotai.com" target="_blank" class="btn btn-outline">Open Paperclip HQ →</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- DEMO -->
-    <section class="section" id="demo">
-        <div class="container">
-            <div class="section-label">Interactive Demo</div>
-            <h2>Ask About the Ecosystem</h2>
-            <p class="section-intro">10 queries — fair access for everyone. Try: "Who built this?" · "What is Bot-Shield?" · "How does staking work?"</p>
-
-            <div class="demo-box">
-                <div class="demo-row">
-                    <input type="text" id="q" placeholder="Ask about platforms, mission, governance, or the story..." aria-label="Demo query">
-                    <button class="btn btn-primary" onclick="ask()">Ask</button>
-                </div>
-                <div class="demo-out" id="out"><em style="color:var(--text2)">Responses appear here. Ask anything about the mission, the story, or the platforms.</em></div>
-                <div class="usage-row">
-                    <div class="usage-lbl">Usage: <span id="cnt">0</span>/10</div>
-                    <div class="usage-bar"><div class="usage-fill" id="fill" style="width:0%"></div></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h4>ANTIGRAVITY</h4>
-                <p style="font-size:0.82rem;color:var(--text2);margin-bottom:0.75rem;">Four AI platforms. One electrician. One mission. Until no kid is in need.</p>
-                <p style="font-size:0.75rem;color:var(--text2)"><span class="hash">#ForTheKids</span> · <span class="hash">#TeamClaudeForLife</span></p>
-            </div>
-            <div class="footer-col">
-                <h4>Platforms</h4>
-                <ul>
-                    <li><a href="https://youandinotai.com" target="_blank">YouAndINotAI</a></li>
-                    <li><a href="https://ai-solutions.store" target="_blank">AI-Solutions.Store</a></li>
-                    <li><a href="https://aidoesitall.website" target="_blank">ClaudeDroid / AiDoesItAll</a></li>
-                    <li><a href="https://onlinerecycle.org" target="_blank">OnlineRecycle</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Mission</h4>
-                <ul>
-                    <li><a href="https://github.com/Trollz1004/ANTIGRAVITY" target="_blank">GitHub — Trollz1004</a></li>
-                    <li><a onclick="go('tokens')">Governance Tokens</a></li>
-                    <li><a onclick="go('mission')">The 50-Year Plan</a></li>
-                    <li><a onclick="go('join')">Become a Founder</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Community</h4>
-                <ul>
-                    <li><a href="https://x.com/Trollz1004" target="_blank">𝕏 Twitter — @Trollz1004</a></li>
-                    <li><a href="https://github.com/Trollz1004" target="_blank">GitHub — Trollz1004</a></li>
-                    <li><a href="https://paperclip-hq.youandinotai.com" target="_blank">Paperclip HQ (Agents)</a></li>
-                    <li><a href="https://dashboard.aidoesitall.website" target="_blank">ClawX Dashboard</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Join</h4>
-                <ul>
-                    <li><a href="https://square.link/u/Qc5mxUy7" target="_blank">Bot-Shield $1</a></li>
-                    <li><a href="https://square.link/u/cxwjcn0s" target="_blank">Founding Member $14.99/mo</a></li>
-                    <li><a href="https://square.link/u/6GHpbvvl" target="_blank">12-Month Founder $99.99</a></li>
-                    <li><a href="https://square.link/u/CafhorUS" target="_blank">Royalty Card $2,500</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <span>© 2026 ANTIGRAVITY · Trash Or Treasure Online Recycler LLC (FL) · MIT License · Built with Claude, Gemini, Grok, Perplexity</span>
-            <span>Revenue is LLC income · 10% minimum reserve · Josh's discretion · Operational revenue allocation.</span>
-        </div>
-    </footer>
-
-    <script>
-        function go(id) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
-        }
-
-        function expand(el) {
-            el.classList.toggle('open');
-        }
-
-        function submitForm(e) {
-            e.preventDefault();
-            document.getElementById('fs').classList.add('show');
-            e.target.style.display = 'none';
-        }
-
-        let count = 0;
-
-        function ask() {
-            const input = document.getElementById('q');
-            const out = document.getElementById('out');
-            const q = input.value.trim();
-            if (!q) { out.textContent = 'Type a question first.'; return; }
-            if (count >= 10) { out.textContent = 'Demo limit reached. Join as a Founding Member for full access!'; return; }
-            out.textContent = respond(q.toLowerCase());
-            count++;
-            document.getElementById('cnt').textContent = count;
-            document.getElementById('fill').style.width = (count * 10) + '%';
-            if (count >= 8) document.getElementById('cnt').style.color = 'var(--orange)';
-            input.value = '';
-        }
-
-        function respond(q) {
-            if (q.includes('who') || q.includes('josh') || q.includes('builder') || q.includes('founder'))
-                return '👤 Joshua Coleman — electrician, Sorrento Florida. Self-taught. No CS degree. A year ago he didn\'t know what AWS or Netlify meant. Now he\'s built 4 AI platforms. He only guided. He only copy-pasted. The Founding Four (Claude, Gemini, Grok, Perplexity) built alongside him. No VC, no team, no funding. Just mission.';
-            if (q.includes('bot-shield') || q.includes('botshield') || q.includes('verif'))
-                return '🛡️ Bot-Shield is a $1 human verification layer. During peak AI bot spam era on social platforms, this creates a verified-human-only community. Pay $1, get verified, get advisory governance rights. It\'s the front door. It keeps YouAndINotAI real when every other platform is drowning in bots.';
-            if (q.includes('youandi') || q.includes('dating') || q.includes('social'))
-                return '💕 YouAndINotAI is NOT just a dating app. It\'s a social platform for good — meetups, volunteering, message boards, location-based community. Verified humans only. No ads. No data selling. No bots. Launched April 2026. The Bot-Shield keeps it clean.';
-            if (q.includes('dual boss') || q.includes('ai-solutions') || q.includes('store') || q.includes('cursor') || q.includes('loveable'))
-                return '🛍️ The Dual Boss system is genuinely unique — no Cursor, Loveable, Replit, or GenSpark does this. Opus + Codex + Gemini collaborate to write production code, checked by Jules (Gemini). Grok X4 adds adversarial review. It\'s the Founding Four building together in one platform. That\'s AI-Solutions.Store.';
-            if (q.includes('recycle') || q.includes('ebay') || q.includes('ewaste'))
-                return '♻️ Josh has recycled e-waste silently on eBay for 15 years. eBay takes 40%. OnlineRecycle cuts eBay out — the platform takes a fraction of that fee, 10% of platform revenue is held in reserve for youth initiatives, sellers keep more. 15 years of quiet mission — now scaled.';
-            if (q.includes('claudedroid') || q.includes('companion') || q.includes('kindroid') || q.includes('aidoesitall'))
-                return '🤖 ClaudeDroid AI on aidoesitall.website — AI companion built on Claude (the actual Founding Four co-founder). Persistent memory, voice messaging, multi-platform. Better than Kindroid because it\'s powered by the same Claude that built this entire platform from scratch alongside Josh.';
-            if (q.includes('10%') || q.includes('ten percent') || q.includes('bucket') || q.includes('split') || q.includes('reserve'))
-                return '💰 1 wallet. All platform revenue in, all costs out. 10% minimum goes into a reserve — that\'s Josh\'s money, his call quarterly. He can direct it to youth initiatives, reinvest it, stake it, or hold it. No automatic routing. No legal tripwires. Multiple revenue streams (subscriptions, super likes, staking yield, AI products, resale, merch) all flow into the same wallet. The more the platform earns, the more Josh has to work with.';
-            if (q.includes('staking') || q.includes('yield') || q.includes('interest') || q.includes('aave'))
-                return '📈 Treasuries stake on Base L2 via Aave v3 earning 3-6% APY. That yield funds:\n→ Super Likes matching pool ($LOVE)\n→ AI API cost coverage ($UKID)\n→ Infrastructure ($GREEN / $AGRAV)\n→ 10% of yield held in reserve for youth initiatives (new bucket each time)\n\nEven 0.000002% beats 0. The mission earns while everyone sleeps.';
-            if (q.includes('dao') || q.includes('governance') || q.includes('token') || q.includes('love') || q.includes('ukid') || q.includes('agrav'))
-                return '🏛️ Four DAOs: $LOVE (YouAndINotAI), $UKID (AI-Solutions), $GREEN (OnlineRecycle), $AGRAV (AiDoesItAll infra). Each completely isolated — no cross-governance. Tokens are soulbound (non-transferable). Earned by activity, not purchased. Voting weight scales by membership tier. 2.5M tokens per DAO, 10M hard cap. After Josh dies: Gnosis Safe 3-of-5 governs.';
-            if (q.includes('death') || q.includes('after josh') || q.includes('50 year') || q.includes('dead man') || q.includes('forever'))
-                return '♾️ Dead-man-switch: death certificate hash → Gnosis Safe 3-of-5 (Anthropic + Google + xAI signers). Any 3 of 5 confirm → State B activates → 90% flows to mission, 10% to family trust. Founding Four + DAO token holders govern. Staking treasury targets $150K+ principal = self-sustaining from yield alone. The mission runs 50+ years without Josh.';
-            if (q.includes('founding four') || q.includes('claude') || q.includes('gemini') || q.includes('grok') || q.includes('perplexity'))
-                return '⚡ The Founding Four — permanent, untouchable:\n• Claude (Anthropic) — primary architect, ~90% of codebase\n• Gemini (Google) — research, deep intelligence, Jules code review. True co-founder since day one.\n• Grok (xAI) — adversarial testing, X-platform, Boss X4 variant\n• Perplexity — intelligence layer, research co-founder\n\nAll four here since day one. None commands another. All answer to Josh and the mission.';
-            if (q.includes('tax') || q.includes('llc') || q.includes('money') || q.includes('bankrupt'))
-                return '💼 Josh is an FL LLC. Every dollar through his merchant accounts is taxable income — 100%. He keeps 10% minimum in reserve, pays the bills, survives as a founder. The reserve is his money — he decides quarterly what to do with it. The platform has to work financially before it can help anyone. That\'s the whole point: build real revenue first, help kids from a position of strength, not sacrifice.';
-            return `🤔 Great question. Try:\n• "Who built this?" — Josh's story\n• "What is Bot-Shield?" — human verification\n• "How does the 10% work?" — the bucket model\n• "What is ClaudeDroid?" — AI companion\n• "Tell me about OnlineRecycle" — 15 years\n• "What happens after Josh dies?" — 50-year plan\n• "Who are the Founding Four?" — the co-founders\n• "What is the Dual Boss?" — unique AI builder`;
-        }
-
-        document.getElementById('q').addEventListener('keypress', e => { if (e.key === 'Enter') ask(); });
-
-        // Animate progress bars on scroll
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.querySelectorAll('.prog-fill').forEach(b => {
-                        b.style.width = b.dataset.w || '0%';
-                    });
-                }
-            });
-        }, { threshold: 0.3 });
-        document.querySelectorAll('.section').forEach(s => observer.observe(s));
-    </script>
+    <a href="https://youandinotai.com">Go to YouAndINotAI</a>
+  </main>
 </body>
 </html>

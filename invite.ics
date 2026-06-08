@@ -1,0 +1,87 @@
+BEGIN:VCALENDAR
+METHOD:REQUEST
+PRODID:Microsoft Exchange Server 2010
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:UTC
+BEGIN:STANDARD
+DTSTART:16010101T000000
+TZOFFSETFROM:+0000
+TZOFFSETTO:+0000
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T000000
+TZOFFSETFROM:+0000
+TZOFFSETTO:+0000
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+ORGANIZER;CN=Johnny Poon:mailto:Johnny@Softwaretailor.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=Trash Or T
+ reasure Online Recycler:mailto:joshlcoleman@gmail.com
+DESCRIPTION;LANGUAGE=en-US:Your free 30-minute AI consultation with Softwar
+ e Tailor.\n\nWhat you asked about:\n\nmarketing dao to public and youandin
+ otai.com\n\nSoftware Tailor · softwaretailor.com<https://softwaretailor.c
+ om/>\n\n__________________________________________________________________
+ ______________\nMicrosoft Teams meeting\nJoin: https://teams.microsoft.com
+ /meet/46061635025069?p=dC0blDjf2ilt4dpMdX\nMeeting ID: 460 616 350 250 69\
+ nPasscode: 2ia2wP9K\n________________________________\nNeed help?<https://
+ aka.ms/JoinTeamsMeeting?omkt=en-US> | System reference<https://teams.micro
+ soft.com/l/meetup-join/19%3ameeting_YzdhNzcxZmEtOGViYy00ZjFlLWI2ODQtMWRlYT
+ Q4MDQ3OTkz%40thread.v2/0?context=%7b%22Tid%22%3a%22293d7c85-7e70-4860-865a
+ -02b43826e69f%22%2c%22Oid%22%3a%22ad7f13ef-6675-497d-a047-f52de86fa38e%22%
+ 7d>\nFor organizers: Meeting options<https://teams.microsoft.com/meetingOp
+ tions/?organizerId=ad7f13ef-6675-497d-a047-f52de86fa38e&tenantId=293d7c85-
+ 7e70-4860-865a-02b43826e69f&threadId=19_meeting_YzdhNzcxZmEtOGViYy00ZjFlLW
+ I2ODQtMWRlYTQ4MDQ3OTkz@thread.v2&messageId=0&language=en-US>\n____________
+ ____________________________________________________________________\n
+UID:040000008200E00074C5B7101A82E00800000000B558078762F2DC01000000000000000
+ 010000000BDC170A895D37C4BBE553E6CA0AA805E
+SUMMARY;LANGUAGE=en-US:Software Tailor: free AI consultation with Trash Or 
+ Treasure Online Recycler
+DTSTART;TZID=UTC:20260602T083000
+DTEND;TZID=UTC:20260602T090000
+CLASS:PUBLIC
+PRIORITY:5
+DTSTAMP:20260602T073632Z
+TRANSP:OPAQUE
+STATUS:CONFIRMED
+SEQUENCE:1
+LOCATION;LANGUAGE=en-US:Microsoft Teams Meeting
+X-MICROSOFT-CDO-APPT-SEQUENCE:1
+X-MICROSOFT-CDO-OWNERAPPTID:2124812812
+X-MICROSOFT-CDO-BUSYSTATUS:TENTATIVE
+X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY
+X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
+X-MICROSOFT-CDO-IMPORTANCE:1
+X-MICROSOFT-CDO-INSTTYPE:0
+X-MICROSOFT-ONLINEMEETINGINFORMATION:{"OnlineMeetingChannelId":null\,"Onlin
+ eMeetingProvider":3}
+X-MICROSOFT-SKYPETEAMSMEETINGURL:https://teams.microsoft.com/l/meetup-join/
+ 19%3ameeting_YzdhNzcxZmEtOGViYy00ZjFlLWI2ODQtMWRlYTQ4MDQ3OTkz%40thread.v2/
+ 0?context=%7b%22Tid%22%3a%22293d7c85-7e70-4860-865a-02b43826e69f%22%2c%22O
+ id%22%3a%22ad7f13ef-6675-497d-a047-f52de86fa38e%22%7d
+X-MICROSOFT-SCHEDULINGSERVICEUPDATEURL:https://api.scheduler.teams.microsof
+ t.com/teams/293d7c85-7e70-4860-865a-02b43826e69f/ad7f13ef-6675-497d-a047-f
+ 52de86fa38e/19_meeting_YzdhNzcxZmEtOGViYy00ZjFlLWI2ODQtMWRlYTQ4MDQ3OTkz@th
+ read.v2/0
+X-MICROSOFT-SKYPETEAMSPROPERTIES:{"cid":"19:meeting_YzdhNzcxZmEtOGViYy00ZjF
+ lLWI2ODQtMWRlYTQ4MDQ3OTkz@thread.v2"\,"rid":0\,"mid":0\,"uid":null\,"priva
+ te":true\,"type":0}
+X-MICROSOFT-DONOTFORWARDMEETING:FALSE
+X-MICROSOFT-DISALLOW-COUNTER:FALSE
+X-MICROSOFT-REQUESTEDATTENDANCEMODE:DEFAULT
+X-MICROSOFT-ISRESPONSEREQUESTED:TRUE
+X-MICROSOFT-LOCATIONDISPLAYNAME:Microsoft Teams Meeting
+X-MICROSOFT-LOCATIONSOURCE:None
+X-MICROSOFT-LOCATIONS:[{"DisplayName":"Microsoft Teams Meeting"\,"LocationA
+ nnotation":""\,"LocationUri":""\,"LocationStreet":""\,"LocationCity":""\,"
+ LocationState":""\,"LocationCountry":""\,"LocationPostalCode":""\,"Locatio
+ nFullAddress":""}]
+BEGIN:VALARM
+DESCRIPTION:REMINDER
+TRIGGER;RELATED=START:-PT15M
+ACTION:DISPLAY
+END:VALARM
+END:VEVENT
+END:VCALENDAR

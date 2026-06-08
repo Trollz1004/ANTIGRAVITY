@@ -7,9 +7,11 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev:web": "pnpm --filter @antigravity/web dev",
-    "dev:dashboard": "pnpm --filter @antigravity/dashboard dev",
-    "dev:openclaw": "pnpm --filter @antigravity/openclaw dev",
+    "dev:web": "pnpm --filter ai-studio-applet dev",
+    "dev:dashboard": "pnpm --filter antigravity-mission-control dev",
+    "dev:mission-control": "pnpm --filter mission-control dev",
+    "dev:cockpit": "pnpm --filter @antigravity/cockpit dev",
+    "dev:openclaw": "pnpm --filter opuspawclaw dev",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",

@@ -1,0 +1,36 @@
+/* ANTIGRAVITY pitch deck — mission-control aesthetic */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Palette — near-black canvas, mono accents */
+  --bg: #0A0B0D;
+  --bg-elev: #111317;
+  --bg-card: #14171C;
+  --rule: #1F242C;
+  --rule-bright: #2B323D;
+  --ink: #E8EAED;
+  --ink-dim: #9BA3AE;
+  --ink-mute: #5B6470;
+  --accent: #7FE3A1;       /* green — live/active signal */
+  --accent-dim: #2E4F3A;
+  --warn: #E8B86D;         /* warm signal */
+  --critical: #E87B6D;
+  --mission: #C9A86B;      /* the "kids gold" — sparingly */
+
+  /* Type scale */
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+/* Body / canvas reset — keep .slide-container flat */
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+body { overflow: hidden; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+
+/* Utility classes for INSIDE data-objects only */
+.mono { font-family: var(--font-mono); letter-spacing: 0.02em; }
+.serif { font-family: var(--font-serif); }
+.dim { color: var(--ink-dim); }
+.mute { color: var(--ink-mute); }
+.uplabel { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); }
+.live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(127,227,161,0.12); vertical-align: middle; margin-right: 8px; }

@@ -10,7 +10,7 @@
 
 ## 1. ARCHITECTURE — THE FINAL STACK
 
-No Emergent. No middleman. No extra subscriptions.
+Single repo, single Hermes agent, node-specific services.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -18,33 +18,31 @@ No Emergent. No middleman. No extra subscriptions.
 └──────────────────────────┬──────────────────────────────────┘
                            │
 ┌──────────────────────────▼──────────────────────────────────┐
-│                 MANUS (CEO Orchestrator)                      │
-│  • Task dispatch        • Model routing                      │
-│  • Provider failover    • Telegram monitoring                │
-│  • Webhook processing   • Scheduled compliance              │
-│  • Notion memory R/W    • Supabase real-time                │
-│  • JSONBin state        • Gmail notifications               │
-└────┬──────────┬──────────┬──────────┬───────────────────────┘
-     │          │          │          │
-┌────▼───┐ ┌───▼────┐ ┌───▼───┐ ┌───▼──────────────┐
-│ HERMES │ │ CLAUDE │ │ CODEX │ │ DESKTOP          │
-│Complian│ │Code CLI│ │ Async │ │ COMMANDER        │
-│ce Brain│ │  Repo  │ │ Code  │ │ (Local MCP)      │
-│        │ │Surgery │ │ Agent │ │ All APIs direct  │
-└────────┘ └────────┘ └───────┘ └──────────────────┘
+│          HERMES (WhatsApp/Telegram Agent)                     │
+│  Session: 20260607_152323_8d46c712                           │
+│  Connected: telegram, whatsapp                               │
+│  Memory OS Six-Layer Stack — orchestrates all below          │
+└────┬──────────────────────────┬────────────────────────────┘
+     │                          │
+┌────▼────────────┐  ┌──────────▼──────────────┐
+│  9020 NODE      │  │  T5500 NODE             │
+│  Marketing      │  │  Cloudflare Wranglers   │
+│  Dating App     │  │  Infrastructure         │
+│  Customer Svc   │  │  Cloud Workers          │
+└─────────────────┘  └─────────────────────────┘
 ```
 
-### Agent Roles
+### Agent Roles & Node Distribution
 
 | Agent | Role | Execution Surface |
 |-------|------|-------------------|
-| **Manus** | CEO Orchestrator / Model Bus | Cloud (manus.im) — dispatches all others |
-| **Hermes** | Compliance Brain | Runs as sol.md rules engine inside Manus |
-| **Claude Code CLI** | Repo Surgery | Sabretooth (192.168.0.8) — push authority |
-| **Codex** | Async Code Agent | Cloud (OpenAI) — background tasks |
-| **Gemini** | Research + Cheap Ops | Cloud (free tier 3) — lead scanning, FETCHER |
-| **Desktop Commander** | Local MCP | All machines — hits any API directly |
-| **ClawX Dashboard** | The Board | clawx-aihub-zwxfcstm.manus.space (public) |
+| **Hermes** | Orchestrator & Brain | WhatsApp/Telegram (connected now) — routes all work, enforces sol.md |
+| **9020 Node** | Marketing + Dating + Support | 192.168.0.5 — GPU primary, local Ollama, leads & customer interaction |
+| **T5500 Node** | Infrastructure + Wranglers | 192.168.0.15 — Cloudflare workers, deployments, DNS |
+| **Opus** | Contract Author | Cloud (Anthropic) — authors all agent .md files for Hermes |
+| **CEOs** | Company Brains | Routes via Hermes — youandi, marketing, ai-solutions, etc. |
+| **Interns** | Doers | Assigned tasks via Hermes — execute, report, no brain files |
+| **Desktop Commander** | Local MCP | All machines — direct API access, no cloud roundtrip |
 
 ---
 

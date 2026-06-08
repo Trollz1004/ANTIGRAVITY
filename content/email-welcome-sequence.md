@@ -1,4 +1,4 @@
-# YouAndINotAI — 3-Email Welcome Sequence
+﻿# YouAndINotAI â€” 3-Email Welcome Sequence
 
 ---
 
@@ -21,13 +21,13 @@
 
         <p style="margin: 0 0 16px 0; font-size: 16px;">Hey there,</p>
 
-        <p style="margin: 0 0 16px 0; font-size: 16px;">You just signed up for YouAndINotAI — a dating app where everyone's actually a real person. No bots. No fake profiles. Just verified people looking to connect.</p>
+        <p style="margin: 0 0 16px 0; font-size: 16px;">You just signed up for YouAndINotAI â€” a dating app where everyone's actually a real person. Bot reduction is the goal. Fake-profile reduction is the goal. Just verified people looking to connect.</p>
 
-        <p style="margin: 0 0 24px 0; font-size: 16px;">We use V8 Cloud Verification to check you're really you. It's bank-level ID verification through Plaid. Not a selfie, not a photo game. Actually real.</p>
+        <p style="margin: 0 0 24px 0; font-size: 16px;">We use Bot-Shield verification to check you're really you. It's bank-level ID verification through planned identity provider. Not a selfie, not a photo game. Actually real.</p>
 
         <div style="background-color: #f0f0f0; padding: 20px; margin: 24px 0; border-left: 4px solid #2563eb;">
             <p style="margin: 0; font-size: 14px; font-weight: 600;">What's next</p>
-            <p style="margin: 8px 0 0 0; font-size: 14px;">We launch April 4, 2026. You'll get early access as a waitlist member. We're keeping founding spots limited to 100 — 93 remaining right now.</p>
+            <p style="margin: 8px 0 0 0; font-size: 14px;">We launch April 4, 2026. You'll get early access as a waitlist member. We're keeping founding spots limited to 100 â€” 93 remaining right now.</p>
         </div>
 
         <p style="margin: 0 0 16px 0; font-size: 16px;">Lock in the founding member rate now for $14.99/month forever. This price never changes, even when we raise it later.</p>
@@ -50,10 +50,10 @@
 
 ---
 
-## EMAIL 2: DAY 3 — V8 VERIFICATION EXPLAINED
+## EMAIL 2: DAY 3 â€” Bot-Shield verification EXPLAINED
 
 **Subject:** How we actually stop bots
-**Preview text:** 8 layers of verification. 0 room for fake profiles.
+**Preview text:** multi-step verification of verification. 0 room for fake profiles.
 
 ```html
 <!DOCTYPE html>
@@ -65,14 +65,14 @@
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; margin: 0; padding: 0;">
     <div style="max-width: 600px; margin: 0 auto; background-color: white; padding: 40px 30px;">
 
-        <h1 style="font-size: 24px; margin: 0 0 24px 0; font-weight: 600;">Here's how V8 Verification actually works.</h1>
+        <h1 style="font-size: 24px; margin: 0 0 24px 0; font-weight: 600;">Here's how Bot-Shield verification actually works.</h1>
 
         <p style="margin: 0 0 16px 0; font-size: 16px;">Most dating apps use photo verification. That's it. One selfie. One chance for a catfish.</p>
 
         <p style="margin: 0 0 24px 0; font-size: 16px;">YouAndINotAI does eight things:</p>
 
         <ol style="margin: 0 0 24px 0; padding-left: 20px; font-size: 16px;">
-            <li style="margin: 0 0 12px 0;">Bank-level ID check through Plaid (same tech that powers your bank app)</li>
+            <li style="margin: 0 0 12px 0;">Bank-level ID check through planned identity provider (same tech that powers your bank app)</li>
             <li style="margin: 0 0 12px 0;">Real name matching against government IDs</li>
             <li style="margin: 0 0 12px 0;">Age verification cross-referenced</li>
             <li style="margin: 0 0 12px 0;">Device fingerprinting (one real person, not five profiles)</li>
@@ -83,12 +83,12 @@
         </ol>
 
         <div style="background-color: #f0f0f0; padding: 20px; margin: 24px 0; border-left: 4px solid #2563eb;">
-            <p style="margin: 0; font-size: 14px;"><strong>Why Plaid matters:</strong> It's not a photo selfie. It's your actual identity verified against the banking system. You can't fake a bank account. That's the difference.</p>
+            <p style="margin: 0; font-size: 14px;"><strong>Why planned identity provider matters:</strong> It's not a photo selfie. It's your actual identity verified against the banking system. You can't fake a bank account. That's the difference.</p>
         </div>
 
         <p style="margin: 0 0 16px 0; font-size: 16px;">Here's what people deal with now: 60% of app users suspect they've matched with bots. That's not paranoia. That's the current reality.</p>
 
-        <p style="margin: 0 0 24px 0; font-size: 16px;">We wanted to build something different. No bots. No fakes. Just real people actually looking to meet.</p>
+        <p style="margin: 0 0 24px 0; font-size: 16px;">We wanted to build something different. Bot reduction is the goal. Fake-profile reduction is the goal. Just real people actually looking to meet.</p>
 
         <div style="text-align: center; margin: 32px 0;">
             <a href="https://square.link/u/cxwjcn0s" style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">Secure Your Spot</a>
@@ -108,7 +108,7 @@
 
 ---
 
-## EMAIL 3: DAY 7 — SCARCITY & HARD CTA
+## EMAIL 3: DAY 7 â€” SCARCITY & HARD CTA
 
 **Subject:** 93 spots left (and yes, it's real)
 **Preview text:** Founding rate locked in forever. Spots fill April 4.
@@ -185,4 +185,6 @@
 - No images needed (faster load, better deliverability)
 - Preview text visible in most email clients
 - Subject lines under 50 characters
-- One exclamation mark total (Email 1: none, Email 2: none, Email 3: none — all period endings)
+- One exclamation mark total (Email 1: none, Email 2: none, Email 3: none â€” all period endings)
+
+
