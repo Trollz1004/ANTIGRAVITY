@@ -214,7 +214,13 @@ class TestRefreshFlow:
 
         app.dependency_overrides[get_db] = override_get_db
         try:
-            with patch("app.routers.auth.decode_token") as mock_decode:
+            with (
+                patch("app.routers.auth.decode_token") as mock_decode,
+                patch(
+                    "app.routers.auth.rotate_refresh_token",
+                    new=AsyncMock(return_value=create_refresh_token(user_id)),
+                ),
+            ):
                 mock_decode.return_value = {"sub": user_id, "type": "refresh"}
                 client = TestClient(app)
                 response = client.post(

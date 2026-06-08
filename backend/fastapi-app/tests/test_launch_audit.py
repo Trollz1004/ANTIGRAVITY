@@ -12,8 +12,10 @@ from fastapi.routing import APIRoute, APIWebSocketRoute
 from sqlalchemy import select
 
 from app.auth import get_current_user
+from app.dependencies.websocket_auth import get_current_websocket_user
 from app.models import Profile, User, VerificationEvent
 from app.payment_truth import build_checkout_reference
+from app.webhook_retry import _require_current_user
 
 
 def _auth_headers(token: str) -> dict[str, str]:
@@ -69,6 +71,7 @@ def test_protected_http_routes_require_auth():
         ("/", "GET"),
         ("/api/v1/health", "GET"),
         ("/api/v1/health/allocations", "GET"),
+        ("/api/v1/health/allocations/summary", "GET"),
         ("/api/v1/health/webhooks", "GET"),
         ("/api/v1/auth/register", "POST"),
         ("/api/v1/auth/beta-access", "POST"),
@@ -82,7 +85,11 @@ def test_protected_http_routes_require_auth():
         ("/api/v1/webhooks/square-payment", "POST"),
         ("/api/v1/webhooks/square-booking", "POST"),
         ("/api/v1/metrics", "GET"),
+        ("/api/v1/metrics/impact", "GET"),
+        ("/api/v1/metrics/charity", "GET"),
+        ("/api/v1/metrics/security-audit", "GET"),
     }
+    auth_dependencies = {get_current_user, _require_current_user}
     protected_routes = []
 
     for route in app.routes:
@@ -94,9 +101,9 @@ def test_protected_http_routes_require_auth():
                 route_key = (route.path, method)
                 if route_key in public_routes:
                     continue
-                assert (
-                    get_current_user in dependency_calls
-                ), f"Missing auth on {method} {route.path}"
+                assert dependency_calls & auth_dependencies, (
+                    f"Missing auth on {method} {route.path}"
+                )
                 protected_routes.append(route_key)
 
     assert protected_routes, "Expected at least one protected API route"
@@ -108,7 +115,12 @@ def test_protected_http_routes_require_auth():
         and route.path == "/api/v1/ws/chat/{match_id}"
     ]
     assert ws_routes, "Expected the authenticated chat websocket route to exist"
-    assert "token" in inspect.signature(ws_routes[0].endpoint).parameters
+    ws_params = inspect.signature(ws_routes[0].endpoint).parameters
+    has_ws_auth_dependency = any(
+        getattr(param.default, "dependency", None) is get_current_websocket_user
+        for param in ws_params.values()
+    )
+    assert "token" in ws_params or has_ws_auth_dependency
 
 
 def test_auth_rate_limit_is_active(client):

@@ -54,7 +54,7 @@ def _make_websocket() -> MagicMock:
 def _make_db_session(return_value=None) -> AsyncMock:
     """Return a mock AsyncSession whose .scalar() returns *return_value*."""
     session = AsyncMock()
-    session.scalar = MagicMock(return_value=return_value)
+    session.scalar = AsyncMock(return_value=return_value)
     return session
 
 

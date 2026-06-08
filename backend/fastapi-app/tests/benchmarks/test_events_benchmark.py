@@ -28,7 +28,6 @@ async def _seed_user(db_session_factory) -> uuid.UUID:
             )
         )
         await session.commit()
-        await session.refresh(session.query(User).filter_by(id=user_id).first())
     return user_id
 
 

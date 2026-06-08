@@ -15,6 +15,7 @@ Risk surface:
 """
 
 import uuid
+import asyncio
 from datetime import date, datetime, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
 
@@ -42,6 +43,15 @@ def _make_user(email: str = "video_user@example.com") -> User:
 
 def _valid_token(user: User) -> str:
     return create_access_token(str(user.id))
+
+
+def _seed_user(user: User, db_session_factory) -> None:
+    async def _run() -> None:
+        async with db_session_factory() as session:
+            session.add(user)
+            await session.commit()
+
+    asyncio.run(_run())
 
 
 # ── Auth boundary — invalid token closes with code 4001 ──────────────────────
@@ -80,10 +90,11 @@ def test_video_ws_non_uuid_call_id_rejected(client):
 # ── Allowed signal types only ─────────────────────────────────────────────────
 
 
-def test_video_ws_connects_with_valid_token_and_call_id(client):
+def test_video_ws_connects_with_valid_token_and_call_id(client, db_session_factory):
     """A valid JWT should allow initial connection. Match check only fires when
     a second peer joins, so a solo connection is accepted."""
     user = _make_user("video_valid@example.com")
+    _seed_user(user, db_session_factory)
     token = _valid_token(user)
     call_id = str(uuid.uuid4())
 
@@ -105,9 +116,10 @@ def test_video_ws_connects_with_valid_token_and_call_id(client):
                 # No exception means connection was accepted
 
 
-def test_video_ws_unknown_signal_type_is_silently_dropped(client):
+def test_video_ws_unknown_signal_type_is_silently_dropped(client, db_session_factory):
     """Messages with type not in ALLOWED_SIGNAL_TYPES must be ignored."""
     user = _make_user("video_unknown_signal@example.com")
+    _seed_user(user, db_session_factory)
     token = _valid_token(user)
     call_id = str(uuid.uuid4())
 
@@ -129,9 +141,10 @@ def test_video_ws_unknown_signal_type_is_silently_dropped(client):
                 # No exception — the unknown type was silently dropped
 
 
-def test_video_ws_non_json_payload_is_silently_dropped(client):
+def test_video_ws_non_json_payload_is_silently_dropped(client, db_session_factory):
     """Non-JSON frames must not crash the handler."""
     user = _make_user("video_nonjson@example.com")
+    _seed_user(user, db_session_factory)
     token = _valid_token(user)
     call_id = str(uuid.uuid4())
 
@@ -153,7 +166,7 @@ def test_video_ws_non_json_payload_is_silently_dropped(client):
 # ── Room-full rejection (code 4008) ──────────────────────────────────────────
 
 
-def test_video_ws_room_full_rejects_third_peer(client):
+def test_video_ws_room_full_rejects_third_peer(client, db_session_factory):
     """When 2 peers are already in a call, a third connection is closed 4008."""
     from app.routers.video import _call_initiators, _video_connections
 
@@ -165,6 +178,7 @@ def test_video_ws_room_full_rejects_third_peer(client):
     _video_connections[call_id]["user_bbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"] = mock_ws_b
 
     user_c = _make_user("video_thirdc@example.com")
+    _seed_user(user_c, db_session_factory)
     token_c = _valid_token(user_c)
 
     try:
@@ -181,9 +195,10 @@ def test_video_ws_room_full_rejects_third_peer(client):
 # ── Signal relay + buffer path ────────────────────────────────────────────────
 
 
-def test_video_ws_signal_buffered_when_no_peer(client):
+def test_video_ws_signal_buffered_when_no_peer(client, db_session_factory):
     """SDP offer sent to an empty room should be buffered (no exception)."""
     user = _make_user("video_buffer@example.com")
+    _seed_user(user, db_session_factory)
     token = _valid_token(user)
     call_id = str(uuid.uuid4())
 
@@ -207,12 +222,14 @@ def test_video_ws_signal_buffered_when_no_peer(client):
 # ── Two-peer match-verification failure (code 4003) ───────────────────────────
 
 
-def test_video_ws_two_peers_no_match_kicks_second(client):
+def test_video_ws_two_peers_no_match_kicks_second(client, db_session_factory):
     """When 2 peers join but no active match exists, second is kicked (4003)."""
 
     call_id = str(uuid.uuid4())
     user_a = _make_user("video_nomatch_a@example.com")
     user_b = _make_user("video_nomatch_b@example.com")
+    _seed_user(user_a, db_session_factory)
+    _seed_user(user_b, db_session_factory)
 
     token_a = _valid_token(user_a)
     token_b = _valid_token(user_b)
