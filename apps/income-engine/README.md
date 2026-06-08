@@ -21,9 +21,6 @@
 
 ## Notes
 
-- Separate GitHub account: **AidoesitAll**
-- Separate repo: `AidoesitAll/income-engine`
-- **NEVER reference Trollz1004/OMEGA repos** (strict isolation)
 
 ## For Profit Sustainment
 

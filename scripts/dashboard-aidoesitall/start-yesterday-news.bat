@@ -20,7 +20,7 @@ if not exist "%RUNTIME_ROOT%\yesterday-news\content" mkdir "%RUNTIME_ROOT%\yeste
 if not exist "%RUNTIME_ROOT%\yesterday-news\archive" mkdir "%RUNTIME_ROOT%\yesterday-news\archive"
 
 REM Run the bot
-cd /d "C:\Antigravity\scripts"
+cd /d "c:\antigravity\scripts"
 python yesterday-news-today.py --mode generate
 
 echo.

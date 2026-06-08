@@ -1,8 +1,8 @@
-﻿# ======================================================================
+# ======================================================================
 # ANTIGRAVITY UNIFIED BRIDGE SETUP
 # AnythingLLM + BRAIN MCP + Ollama + Claude Code + Gemini CLI
 # Sabretooth Node | GTX 1070 8GB | E: Drive Sandbox
-# One Repo: C:\ANTIGRAVITY | One Account: joshlcoleman@gmail.com
+# One Repo: c:\antigravity | One Account: joshlcoleman@gmail.com
 # ======================================================================
 
 #Requires -RunAsAdministrator
@@ -127,7 +127,7 @@ if (-not $ollamaOK) {
 Write-Status "Checking BRAIN MCP..."
 $brainOK = Test-Service "$BrainMCPUrl/health" "BRAIN MCP"
 if (-not $brainOK) {
-    $brainDist = "C:\ANTIGRAVITY\brain-mcp\dist\index.js"
+    $brainDist = "c:\antigravity\brain-mcp\dist\index.js"
     if (Test-Path $brainDist) {
         Write-Status "Starting BRAIN MCP..." "Yellow"
         $env:BRAIN_HTTP_HOST = "127.0.0.1"; $env:BRAIN_HTTP_PORT = "3900"; $env:BRAIN_REQUIRE_AUTH = "false"
@@ -233,7 +233,7 @@ if %ERRORLEVEL% NEQ 0 (
     set BRAIN_HTTP_HOST=127.0.0.1
     set BRAIN_HTTP_PORT=3900
     set BRAIN_REQUIRE_AUTH=false
-    start /MIN "BRAIN-MCP" node "C:\ANTIGRAVITY\brain-mcp\dist\index.js"
+    start /MIN "BRAIN-MCP" node "c:\antigravity\brain-mcp\dist\index.js"
     timeout /t 5 /nobreak >nul
 ) else (echo       BRAIN MCP running)
 
@@ -256,7 +256,7 @@ if %ERRORLEVEL% EQU 0 (echo   [OK] AnythingLLM :3001) else (echo   [!!] Anything
 
 echo.
 echo  Bridge LIVE. Open Claude Code or Gemini CLI.
-echo  One Repo: C:\ANTIGRAVITY
+echo  One Repo: c:\antigravity
 echo  Claude = brain. Gemini = brain. Local = minions.
 echo.
 echo Press any key to close...
@@ -405,7 +405,7 @@ BRAIN_REQUIRE_AUTH=false
 OLLAMA_HOST=http://127.0.0.1:11434
 OLLAMA_PREFERRED_MODEL=qwen2.5-coder:7b
 UNIVERSAL_ACCOUNT=joshlcoleman@gmail.com
-REPO_ROOT=C:\ANTIGRAVITY
+REPO_ROOT=c:\antigravity
 SANDBOX_ROOT=E:\sandbox-repo
 CURRENT_FINANCIAL_DOCTRINE=founder-directed-conservative-10pct-charitable-cap
 "@ | Set-Content -Path "$BridgePath\.env"
@@ -433,7 +433,7 @@ Write-Host ""
 Write-Host "  Gemini controls AnythingLLM:" -ForegroundColor Yellow
 Write-Host "    node E:\sandbox-repo\ollama-brain-bridge\gemini-allm-bridge.js health" -ForegroundColor Gray
 Write-Host ""
-Write-Host "  One Repo: C:\ANTIGRAVITY" -ForegroundColor Cyan
+Write-Host "  One Repo: c:\antigravity" -ForegroundColor Cyan
 Write-Host "  One Account: joshlcoleman@gmail.com" -ForegroundColor Cyan
 Write-Host "  Claude = friend. Gemini = friend. #ForTheKids" -ForegroundColor Magenta
 Write-Host ""

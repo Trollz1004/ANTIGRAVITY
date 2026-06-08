@@ -13,14 +13,14 @@
 #       Hermes Dashboard (:9119) replaces it — tunneled via dashboard.youandinotai.com
 #
 # Idempotent. Re-running is safe — every phase checks before acting.
-# Logs to C:\Antigravity\logs\autostart-YYYY-MM-DD.log
+# Logs to c:\antigravity\logs\autostart-YYYY-MM-DD.log
 #
 # Triggered automatically at user login via Startup-folder shortcut.
 # Click bootstrap.cmd at repo root to run on demand.
 
 $ErrorActionPreference = 'Continue'
 
-$Repo   = 'C:\Antigravity'
+$Repo   = 'c:\antigravity'
 $LogDir = "$Repo\logs"
 $Log    = "$LogDir\autostart-$(Get-Date -Format 'yyyy-MM-dd').log"
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
@@ -92,7 +92,7 @@ if ([string]::IsNullOrWhiteSpace($hermesPid)) {
     # Bash command built from [char]38 because PowerShell 5.1 refuses literal
     # ampersands anywhere in the source file (even comments) due to a parser bug.
     $a = [char]38
-    $hermesCmd = "nohup bash /mnt/c/Antigravity/scripts/start-hermes-router.sh > /tmp/hermes-router.log 2>${a}1 ${a} disown"
+    $hermesCmd = "nohup bash /mnt/c/antigravity/scripts/start-hermes-router.sh > /tmp/hermes-router.log 2>${a}1 ${a} disown"
     $hermesArgs = @('-d','Ubuntu','--','bash','-lc',$hermesCmd)
     Start-Process wsl -ArgumentList $hermesArgs -WindowStyle Hidden -ErrorAction SilentlyContinue
 } else {
@@ -141,7 +141,7 @@ if (Test-Path $mcWatchdogLog) {
 # Cloudflare tunnel ingress (paperclip-antigravity tunnel c7bc9665-...) routes
 # opushashands.youandinotai.com -> http://127.0.0.1:4200. Without this listener
 # the public hub returns 502 Bad Gateway.
-$ohhDir = 'C:\Antigravity\_handoff-staging-2026-05-26\_deploy\opushashands'
+$ohhDir = 'c:\antigravity\_handoff-staging-2026-05-26\_deploy\opushashands'
 $ohhLog = "$LogDir\opushashands-server.log"
 $pyExe  = 'C:\Windows\py.exe'
 if (Test-LocalPort 4200) {
@@ -165,6 +165,7 @@ if (Test-LocalPort 4200) {
 # OpenClaw Gateway.cmd (separate Startup item) takes ~40s to be ready.
 # Spawn a hidden powershell that polls port 18789 for up to 90s,
 # then opens the canvas URL — survives this script's exit.
+if ($env:ANTIGRAVITY_FULL_AUTOSTART -eq '1') {
 Log '[7/8] scheduling OpenClaw dashboard browser-open (waits for :18789)'
 $openclawBlock = {
     for ($i = 0; $i -lt 45; $i++) {
@@ -181,26 +182,31 @@ $openclawBlock = {
 $openclawCmd = $openclawBlock.ToString()
 $openclawArgs = @('-NonInteractive','-WindowStyle','Hidden','-Command',$openclawCmd)
 Start-Process powershell.exe -ArgumentList $openclawArgs -WindowStyle Hidden -ErrorAction SilentlyContinue
+} else {
+    Log '[7/8] OpenClaw dashboard browser-open skipped (set ANTIGRAVITY_FULL_AUTOSTART=1 to enable)'
+}
 
 # ---------- 8. Terminal windows ----------
 # GUARDED + MINIMIZED so re-runs (Chrome Remote Desktop reconnects, re-logins) never
 # re-spawn focus-stealing terminals — the "4 windows in a row that move the cursor" bug.
 # Services already run headless via the watchdogs above, so skipping these is harmless.
-if (Get-Process WindowsTerminal -ErrorAction SilentlyContinue) {
+if ($env:ANTIGRAVITY_FULL_AUTOSTART -ne '1') {
+    Log '[8/8] terminal session windows skipped (set ANTIGRAVITY_FULL_AUTOSTART=1 to enable)'
+} elseif (Get-Process WindowsTerminal -ErrorAction SilentlyContinue) {
     Log '[8/8] Windows Terminal already open — skipping session windows (prevents cursor-stealing re-spawn)'
 } else {
-    # Open Claude Code at c:\Antigravity (lowercase to match resume cache), minimized
+    # Open Claude Code at c:\antigravity, minimized
     Log '[8/8] opening Claude Code (claude --resume) in Windows Terminal (minimized)'
     Start-Process wt -ArgumentList @(
-        '-d','c:\Antigravity',
+        '-d','c:\antigravity',
         'powershell.exe','-NoExit','-Command','claude --resume'
     ) -WindowStyle Minimized -ErrorAction SilentlyContinue
 
     # Open Hermes Agent CLI in WSL, minimized
-    Log '      opening Hermes Agent CLI in Windows Terminal at /mnt/c/Antigravity (WSL Ubuntu, minimized)'
+    Log '      opening Hermes Agent CLI in Windows Terminal at /mnt/c/antigravity (WSL Ubuntu, minimized)'
     Start-Process wt -ArgumentList @(
-        '-d','c:\Antigravity',
-        'wsl.exe','-d','Ubuntu','--cd','/mnt/c/Antigravity','--','/home/josh/.local/bin/hermes'
+        '-d','c:\antigravity',
+        'wsl.exe','-d','Ubuntu','--cd','/mnt/c/antigravity','--','/home/josh/.local/bin/hermes'
     ) -WindowStyle Minimized -ErrorAction SilentlyContinue
 }
 

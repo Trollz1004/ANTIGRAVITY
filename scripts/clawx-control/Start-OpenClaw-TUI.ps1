@@ -5,10 +5,10 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-Set-Location 'C:\ANTIGRAVITY'
+Set-Location 'c:\antigravity'
 
 $gatewayUrl = 'http://127.0.0.1:18789/'
-$briefingPath = 'C:\ANTIGRAVITY\briefings\grok-openclaw\BRIEFING.md'
+$briefingPath = 'c:\antigravity\briefings\grok-openclaw\BRIEFING.md'
 
 Write-Host ''
 Write-Host 'ANTIGRAVITY Mission Guard' -ForegroundColor Cyan

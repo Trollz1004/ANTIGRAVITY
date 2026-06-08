@@ -1,4 +1,4 @@
-# Q3 Launch Campaign for ANTIGRAVITY
+﻿# Q3 Launch Campaign for ANTIGRAVITY
 
 ## Objective
 Create awareness and drive authentic user engagement for the ANTIGRAVITY platform, emphasizing real-world connections and community building over traditional dating app features.
@@ -6,7 +6,7 @@ Create awareness and drive authentic user engagement for the ANTIGRAVITY platfor
 ## Key Messages
 - Connect with people who genuinely care about making a difference
 - Real-world meetups and volunteer events as primary features
-- Platform supports kids through contractual revenue disbursement
+- Platform supports reserved program through reserved allocation review
 - Community-focused experience that builds meaningful relationships
 
 ## Target Audience
@@ -26,3 +26,4 @@ Create awareness and drive authentic user engagement for the ANTIGRAVITY platfor
 - Engagement rates at volunteer events organized through the platform
 - Positive sentiment in user feedback about community aspects
 - Growth in user-generated content about meaningful connections
+

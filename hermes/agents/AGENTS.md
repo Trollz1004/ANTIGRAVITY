@@ -10,25 +10,26 @@
 ## 1. The shape of the fleet
 
 ```
-                 OPUS  (first-party Claude — authors every contract below)
-                   │  makes the CEOs, defines the brain file-set, governs doctrine
-                   ▼
-                HERMES  (orchestrator — Grok via x.ai, no Anthropic key)
-                   │  routes work to the company CEOs; never authors contracts
-        ┌──────────┼───────────┬───────────┬───────────┬──────────┐
-        ▼          ▼           ▼           ▼           ▼          ▼
-   CEO·youandi  CEO·mktg   CEO·ai-sol  CEO·recycle  CEO·youtube  CEO·dao   ← BRAINS
-        │          │           │           │           │          │
-        └──────────┴─────┬─────┴───────────┴───────────┴──────────┘
-                         ▼
-                     INTERNS  (doers — assigned a task, execute, report. NO brain files.)
+        JOSHUA (Sole Authority)
+           │
+           ▼
+        HERMES  (WhatsApp/Telegram Agent — Session 20260607_152323 — Memory OS Six-Layer)
+           │    orchestrates all below; connected to telegram, whatsapp
+           │
+        ┌──────────┬──────────────┬────────────┬──────────────┐
+        ▼          ▼              ▼            ▼              ▼
+   OPUS (Opus)  9020 NODE    T5500 NODE   INTERNS         CEOs (per company)
+   Contracts    Marketing     Cloud/Infra   Doers        youandi/mktg/etc
+                Dating App    Wranglers
+                Customer Svc  Cloudflare
 ```
 
-- **OPUS makes all CEOs.** Each company's CEO is a BRAIN with an Opus-authored contract set.
-- **Hermes orchestrates** down to the CEOs and uses these Opus-level files. Hermes does not think
-  for the CEOs; it routes and coordinates.
-- **CEOs think; INTERNS do.** A brain reasons, plans, and self-improves. A doer executes a single
-  assigned task and reports — no reasoning contract required.
+- **Hermes orchestrates** via WhatsApp/Telegram. Connected platforms: telegram, whatsapp. Session ID: `20260607_152323_8d46c712`
+- **OPUS authors** all agent contracts and deploys via Hermes.
+- **9020 NODE** (GPU primary) — Marketing automations, dating app, customer service.
+- **T5500 NODE** (Orchestrator) — Cloudflare workers, wranglers, infrastructure.
+- **CEOs think; INTERNS do.** A brain (CEO) reasons and plans. A doer (INTERN) executes one task and reports — no brain files needed.
+- **Hermes itself is the brain** — Memory OS Six-Layer stack running Hermes Agent contract files.
 
 ---
 

@@ -25,7 +25,7 @@ const NAV: NavGroup[] = [
     { id: 'hermes',      label: 'Hermes Node',        icon: 'Hermes' },
   ]},
   { group: 'Fleet', items: [
-    { id: 'clawx',       label: 'ClawX Governance',  icon: 'Network' },
+    { id: 'clawx',       label: 'Hermes Sideworld',   icon: 'Search' },
     { id: 'llm',         label: 'LLM Forge',          icon: 'Brain' },
     { id: 'crossfire',   label: 'CROSSFIRE',          icon: 'Bolt' },
   ]},

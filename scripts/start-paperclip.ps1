@@ -1,4 +1,4 @@
-ï»¿# Start Paperclip HQ on :3100 with all required env vars loaded from the
+# Start Paperclip HQ on :3100 with all required env vars loaded from the
 # OneDrive-backed master env vault. The active instance lives at
 # C:\Users\joshl\.paperclip\instances\default.
 #
@@ -6,7 +6,7 @@
 # (started by scripts/autostart-mission.ps1 phase 2).
 
 $ErrorActionPreference = 'Continue'
-$LogDir  = 'C:\Antigravity\logs'
+$LogDir  = 'c:\antigravity\logs'
 $LogFile = "$LogDir\paperclip.log"
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 
@@ -44,17 +44,17 @@ Log '=== start-paperclip.ps1 ==='
 # Try the OneDrive vault first, then a repo-local fallback.
 $envPaths = @(
     'C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIVERSAL-ENV-TROLLZ1004.env',
-    'C:\Antigravity\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
+    'c:\antigravity\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
 )
 $loaded = $false
 foreach ($p in $envPaths) {
     if (Import-EnvFile $p) { $loaded = $true; break }
 }
 if (-not $loaded) {
-    Log 'WARN: no env vault found â€” Paperclip may fail without DATABASE_URL etc.'
+    Log 'WARN: no env vault found — Paperclip may fail without DATABASE_URL etc.'
 }
 
-# Sanity defaults â€” only set if env vault didn't already provide them.
+# Sanity defaults — only set if env vault didn't already provide them.
 if (-not $env:DATABASE_URL) {
     $env:DATABASE_URL = 'postgres://paperclip:paperclip_local_only@localhost:5432/paperclip'
     Log 'DATABASE_URL not in vault; defaulting to local docker postgres'

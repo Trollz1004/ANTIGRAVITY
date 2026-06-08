@@ -1,4 +1,4 @@
-# Content Agents Configuration
+﻿# Content Agents Configuration
 
 ## Overview
 This configuration file defines the behavior and capabilities of the content generation agents for YouAndINotAI's 24/7 marketing operations.
@@ -9,11 +9,11 @@ This configuration file defines the behavior and capabilities of the content gen
 - Target Audience: singles seeking meaningful connections, community-oriented individuals
 
 ## Legal Compliance Settings
-- Prohibited Terms Filter: "donate", "donation", "solicitation"
+- Prohibited Terms Filter: "restricted-term", "customer payments", "review-gated offer"
 - Required Compliant Phrasing: 
-  - "contractual revenue disbursement" (instead of "donation")
-  - "revenue-sharing for good" (instead of "solicitation")
-  - "platform that gives back" (instead of "charity")
+  - "reserved allocation review" (instead of "customer payments")
+  - "review-gated allocation for good" (instead of "review-gated offer")
+  - "platform that gives back" (instead of "reserved program")
 
 ## Agent Types
 
@@ -26,7 +26,7 @@ This configuration file defines the behavior and capabilities of the content gen
 
 ### 2. Blog Content Writer
 - Content Types: Long-form educational articles, how-to guides, opinion pieces
-- Topics Based On: Content pillars (education, story, offer, behind_the_scenes, charity_update)
+- Topics Based On: Content pillars (education, story, offer, behind_the_scenes, product_update)
 - Word Count Range: 800-1500 words
 - SEO Optimization: Headers, keywords, meta descriptions
 
@@ -60,3 +60,4 @@ This configuration file defines the behavior and capabilities of the content gen
 - Compliance violations: Immediate halt and alert
 - API connectivity issues: Queue content for retry when service resumes
 - Approval workflow failures: Store content for manual submission
+

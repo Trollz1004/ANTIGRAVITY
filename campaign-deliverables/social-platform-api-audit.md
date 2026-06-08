@@ -1,4 +1,4 @@
-# Social Platform Command Center — API & Integration Audit
+﻿# Social Platform Command Center â€” API & Integration Audit
 
 **Date**: 2026-06-01  
 **Scope**: All existing social platform dashboard APIs and already-built integrations  
@@ -33,10 +33,10 @@ The canonical platform registry used by the Command Center UI. 24 platforms defi
 
 ### Content Flow Architecture
 - **ContentItem** model: title, body, mediaUrl, mediaType, source, targets[], tags, status (inbox/approved/rejected/sent)
-- **AI Sources**: Opus, Gemini, Perplexity, Grok, Manus — these are the only content creators
+- **AI Sources**: Opus, Gemini, Perplexity, Grok, Manus â€” these are the only content creators
 - **TARGET_PLATFORMS**: All social + commerce platforms (12 targets)
 - **Storage**: localStorage key `cc-items-v2` (client-side only, no server persistence)
-- **Posting**: Currently MANUAL — clicking "Post Here" opens target URLs in browser tabs; no automated server-side posting
+- **Posting**: Currently MANUAL â€” clicking "Post Here" opens target URLs in browser tabs; no automated server-side posting
 
 ### Auth Vault (SocialCommandCenter.tsx)
 UI has an "Auth & Logins" tab with key entry fields for:
@@ -56,8 +56,8 @@ Full 24/7 automated social posting daemon with Playwright browser automation fal
 
 | File | Purpose |
 |---|---|
-| social-engine-24x7.py | Main daemon loop — runs 24/7 |
-| content_engine.py | Content sourcing: Opus queue → caption bank fallback |
+| social-engine-24x7.py | Main daemon loop â€” runs 24/7 |
+| content_engine.py | Content sourcing: Opus queue â†’ caption bank fallback |
 | browser_manager.py | Playwright browser session management |
 | schedule_config.py | Per-platform schedules, rate limits, content pillars |
 | platforms/twitter_poster.py | X/Twitter poster (browser + API fallback via Tweepy) |
@@ -94,22 +94,22 @@ Full 24/7 automated social posting daemon with Playwright browser automation fal
 | eBay | 1 | 10 | browser | 1 (Mon) |
 
 ### Content Pillars (5 pillars with weights)
-1. **Bot Problem** (25%) — Dating app bots/catfish angle
-2. **V8 Verification** (20%) — 8-layer identity proof
-3. **Founding Member** (20%) — Founding member spots at $14.99/mo
-4. **Mission Clarity** (20%) — Real-human verification vs swipe addiction
-5. **Launch Countdown** (15%) — Launch date countdown
+1. **Bot Problem** (25%) â€” Dating app bots/catfish angle
+2. **Bot-Shield verification** (20%) â€” multi-step verification
+3. **Founding Member** (20%) â€” Founding member spots at $14.99/mo
+4. **Mission Clarity** (20%) â€” Real-human verification vs swipe addiction
+5. **Launch Countdown** (15%) â€” Launch date countdown
 
 ### Twitter/X Specific
 - **Browser method**: Playwright automation, navigates to x.com/home, finds compose box, types, clicks post
-- **API method**: Tweepy (OAuth1UserHandler + Client v2) — requires TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET
+- **API method**: Tweepy (OAuth1UserHandler + Client v2) â€” requires TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET
 - **Hashtag hack**: Posts hashtags as first reply to new tweets for algorithm boost
 - **Rate limit**: 50/day max, 15 min minimum interval
 
 ### Content Queue
 - Primary: `data/post-queue.json` (filled by Opus sessions)
 - Fallback: `content/caption-bank.json` (pre-written captions)
-- No Ollama/auto-generation — Opus-only per design
+- No Ollama/auto-generation â€” Opus-only per design
 
 ---
 
@@ -120,12 +120,12 @@ Full 24/7 automated social posting daemon with Playwright browser automation fal
 | Agent | Platforms | Content Pillars | Frequency |
 |---|---|---|---|
 | Social Media Content Generator | Twitter, Instagram, Facebook | community_first, volunteer_life, real_connections, events, behind_the_scenes | 24/7 |
-| Blog Content Writer | Blog (Hugo/Ghost) | education, story, behind_the_scenes, charity_update | On-demand |
+| Blog Content Writer | Blog (Hugo/Ghost) | education, story, behind_the_scenes, product_update | On-demand |
 | Newsletter Creator | Email newsletter | community_first, volunteer_life, real_connections, behind_the_scenes | Weekly |
 
 All agents enforce:
-- Prohibited terms filter: "donate", "donation", "solicitation"
-- Replacement: "contractual revenue disbursement"
+- Prohibited terms filter: "restricted-term", "customer payments", "review-gated offer"
+- Replacement: "reserved allocation review"
 - Platform-specific hashtag limits
 
 ---
@@ -133,19 +133,19 @@ All agents enforce:
 ## 4. Pre-Built Content Assets
 
 ### Caption Bank (content/)
-- `caption-bank.json` / `caption-bank-fresh.json` — pre-written captions per platform
-- `cross-platform-caption-bank.md` — 10 content sets across Instagram, Facebook, LinkedIn, Threads, Bluesky
-- `twitter-drip-all-days.md` — multi-day Twitter drip campaign
-- `instagram-captions-fresh.md` — fresh Instagram ready-to-post
-- `reddit-linkedin-expansion.json` — Reddit and LinkedIn content
-- `whatsapp-broadcasts.md` — WhatsApp broadcast templates
-- `snapchat-story-overlays.md` — Snapchat content
-- `tweet-engagement-audit.md` — Twitter engagement analysis
+- `caption-bank.json` / `caption-bank-fresh.json` â€” pre-written captions per platform
+- `cross-platform-caption-bank.md` â€” 10 content sets across Instagram, Facebook, LinkedIn, Threads, Bluesky
+- `twitter-drip-all-days.md` â€” multi-day Twitter drip campaign
+- `instagram-captions-fresh.md` â€” fresh Instagram ready-to-post
+- `reddit-linkedin-expansion.json` â€” Reddit and LinkedIn content
+- `whatsapp-broadcasts.md` â€” WhatsApp broadcast templates
+- `snapchat-story-overlays.md` â€” Snapchat content
+- `tweet-engagement-audit.md` â€” Twitter engagement analysis
 
 ### Marketing Assets (marketing-assets/)
 - Logo set: app icon, dark/light bg, favicon, OG image, social profile, watermark
 - Countdown social images: Instagram feed, Instagram story, TikTok, Twitter
-- Instagram feed posts (7 template images): launch, V8 cloud, bot stat, testimonial, verification, urgency, comparison
+- Instagram feed posts (7 template images): launch, Bot-Shield verification, bot stat, testimonial, verification, urgency, comparison
 - Video: Grok promotional video
 - Generator script: `generate_all_assets.py`
 
@@ -159,9 +159,9 @@ All agents enforce:
 
 ## 5. Payment Integration
 
-### Square (LIVE — PRIMARY GATEWAY)
+### Square (LIVE â€” PRIMARY GATEWAY)
 - **Status**: Already integrated and live
-- **Backend**: `backend/fastapi-app/app/payments.py` — source of truth
+- **Backend**: `backend/fastapi-app/app/payments.py` â€” source of truth
 - **Environment var**: SQUARE_ACCESS_TOKEN, SQUARE_LOCATION_ID, SQUARE_ENV
 - **Webhooks**: Configured for payment + booking events
 
@@ -179,7 +179,7 @@ All agents enforce:
 - **Reality**: Square is the live, working payment gateway. Stripe is UI-only.
 
 ### Frontend Membership Component
-- `apps/youandinotai-frontend/components/Membership.tsx` — renders 5 plan cards
+- `apps/youandinotai-frontend/components/Membership.tsx` â€” renders 5 plan cards
 - All checkout links point to Square-hosted payment pages
 - Plans defined in `apps/youandinotai-frontend/lib/constants.ts` synced with backend payments.py
 
@@ -189,7 +189,7 @@ All agents enforce:
 
 - **Status**: Configured (TELEGRAM_BOT_TOKEN in .env)
 - **Used for**: Hermes dispatch notifications, mission control alerts
-- **Potential**: Could be used as a DAO launch announcement channel
+- **Potential**: Could be used as a roadmap hold announcement channel
 
 ---
 
@@ -209,8 +209,9 @@ All agents enforce:
 | Mastodon | MASTODON_ACCESS_TOKEN + INSTANCE | Required for API posting |
 
 ### Infrastructure Gaps
-- **Command Center has no server-side posting API** — content items stored in localStorage only
+- **Command Center has no server-side posting API** â€” content items stored in localStorage only
 - **Social Engine daemon needs browser sessions logged in** for browser-mode platforms
-- **No webhook/payment -> social automation pipeline** — payments don't trigger social posts
-- **Stripe not actually connected** — UI says it is but no backend exists
+- **No webhook/payment -> social automation pipeline** â€” payments don't trigger social posts
+- **Stripe not actually connected** â€” UI says it is but no backend exists
 - **Post queue** (data/post-queue.json) must be manually filled by Opus sessions
+

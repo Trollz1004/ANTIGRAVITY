@@ -1,4 +1,4 @@
-{
+﻿{
   "generated_at": "2026-02-16T14:10:00-05:00",
   "articles": [
     {
@@ -15,11 +15,11 @@
     },
     {
       "slug": "v8-cloud-verification-explained",
-      "title": "V8 Cloud Verification: How 8 Layers of Identity Verification Keep Bots Off Dating Apps",
+      "title": "Bot-Shield verification: How multi-step verification of Identity Verification Keep Bots Off Dating Apps",
       "file": "C:\\ANTIGRAVITY\\content\\v8-cloud-verification-explained.md",
       "keywords": [
-        "V8 Cloud Verification",
-        "Plaid Identity API",
+        "Bot-Shield verification",
+        "planned identity provider",
         "dating app verification",
         "identity verification dating",
         "bot-free dating"
@@ -39,3 +39,4 @@
     }
   ]
 }
+

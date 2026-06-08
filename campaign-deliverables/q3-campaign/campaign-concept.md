@@ -1,4 +1,4 @@
-# Q3 Launch Campaign Concept: "Connection with Purpose"
+﻿# Q3 Launch Campaign Concept: "Connection with Purpose"
 
 ## Campaign Overview
 "Connection with Purpose" showcases how ANTIGRAVITY creates meaningful relationships through real-world activities that bring value to participants and communities alike.
@@ -20,7 +20,7 @@ Visual showcase of community impact generated through platform-organized events:
 - Map of events held across different cities
 - Volunteer hours logged collectively
 - New friendships formed through the platform
-- Children's causes supported through contractual revenue disbursement
+- review-gated public-impact programs supported through reserved allocation review
 
 ### 3. "Purpose Partners" Initiative
 Highlight partnerships with local nonprofits and the mutual benefits:
@@ -53,3 +53,4 @@ Spotlight users who have gone beyond initial connections:
 2. Reveal phase: Introduce real users and their stories
 3. Engagement phase: Encourage prospective users to sign up for upcoming events
 4. Community proof phase: Showcase growing impact metrics and testimonials
+

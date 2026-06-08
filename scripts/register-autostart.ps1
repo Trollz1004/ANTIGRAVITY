@@ -1,4 +1,4 @@
-﻿# Run this ONCE as Administrator to register the autostart task
+# Run this ONCE as Administrator to register the autostart task
 # Usage: Right-click -> Run with PowerShell (as Admin)
 
 # Fail fast if not admin
@@ -8,7 +8,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 }
 
 $TaskName = "ANTIGRAVITY-AutoStart"
-$ScriptPath = "C:\ANTIGRAVITY\scripts\autostart.ps1"
+$ScriptPath = "c:\antigravity\scripts\autostart.ps1"
 $User = $env:USERNAME
 
 # Remove old task if it exists
@@ -53,4 +53,4 @@ Write-Host ""
 Write-Host "To check status:"
 Write-Host "  Get-ScheduledTaskInfo -TaskName '$TaskName'"
 Write-Host ""
-Write-Host "Logs will appear at: C:\ANTIGRAVITY\logs\"
+Write-Host "Logs will appear at: c:\antigravity\logs\"

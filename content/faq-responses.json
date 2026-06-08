@@ -4,62 +4,62 @@
   "responses": [
     {
       "question": "How does the verification work?",
-      "context": "Someone asking about V8 Cloud or the verification process",
-      "response": "Great question! V8 Cloud Verification runs 8 separate identity checks:\n\n1. Government ID verification\n2. Liveness detection (you do a quick selfie video)\n3. Bank identity confirmation via Plaid (same API your bank uses)\n4. Device fingerprinting\n5. Address verification\n6. Phone carrier verification (not just SMS — actual carrier check)\n7. Behavioral analysis during signup\n8. Continuous monitoring after verification\n\nThe key differentiator is Plaid — it's the same identity infrastructure that major banks rely on. A bot can fake an email or photo, but it can't fake a verified identity across multiple financial and government databases.\n\nEvery profile you see on YouAndINotAI has passed all 8 layers. No exceptions.",
+      "context": "Someone asking about Bot-Shield verification or the verification process",
+      "response": "YouAndINotAI is building a human-first dating community with verification and moderation controls. Bot reduction is the goal; verification claims publish only after implementation proof is recorded. Join at youandinotai.com.",
       "tone": "Informative, confident, not salesy"
     },
     {
       "question": "What if I don't want to share my ID?",
       "context": "Privacy concern about identity verification",
-      "response": "Totally understand the privacy concern. Here's how we handle it:\n\n1. **We don't store your ID.** Plaid processes the verification and returns a yes/no confirmation. We never see or keep your government ID.\n2. **Bank-grade encryption.** All data in transit and at rest is encrypted with the same standards banks use.\n3. **Privacy-first architecture.** Your verification status is stored, not the verification data itself.\n4. **You're already doing this.** If you use Venmo, Cash App, or any fintech — you've already gone through Plaid verification. We're using the same system.\n\nThe tradeoff is simple: share your identity once (privately, securely) and never interact with a bot again. Most people find that's worth it when they realize 60% of users on other apps suspect theyve matched with bots (Norton 2025).\n\nWe have a full privacy policy at youandinotai.com/privacy if you want the details.",
+      "response": "YouAndINotAI is building a human-first dating community with verification and moderation controls. Bot reduction is the goal; verification claims publish only after implementation proof is recorded. Join at youandinotai.com.",
       "tone": "Empathetic, reassuring, factual"
     },
     {
       "question": "Is this available in my city?",
       "context": "Someone asking about geographic availability",
-      "response": "YouAndINotAI is available nationwide in the US right now! We're currently onboarding our first 100 founding members from all over the country.\n\nSince every user is identity-verified through V8 Cloud, we're building a quality-first user base rather than rushing for numbers. The more founding members from your city, the better the experience.\n\nFounders get $14.99/mo locked forever — that price never goes up for you.\n\nyouandinotai.com to join.",
+      "response": "YouAndINotAI is available nationwide in the US right now! We're currently onboarding our first 100 founding members from all over the country.\n\nSince every user is identity-verified through Bot-Shield verification, we're building a quality-first user base rather than rushing for numbers. The more founding members from your city, the better the experience.\n\nFounders get $14.99/mo locked forever â€” that price never goes up for you.\n\nyouandinotai.com to join.",
       "tone": "Enthusiastic, inclusive"
     },
     {
       "question": "How is this different from Tinder/Bumble/Hinge?",
       "context": "Comparison question with mainstream apps",
-      "response": "The biggest difference is verification depth:\n\n| Feature | Traditional Apps | YouAndINotAI |\n|---------|----------------|--------------|\n| Email verification | ✅ | ✅ |\n| Phone verification | ✅ | ✅ |\n| Photo verification | Some | ✅ |\n| Government ID check | ❌ | ✅ |\n| Bank identity (Plaid) | ❌ | ✅ |\n| Device fingerprinting | ❌ | ✅ |\n| Continuous monitoring | ❌ | ✅ |\n| Behavioral analysis | ❌ | ✅ |\n| **Total verification layers** | **1-2** | **8** |\n\nMainstream apps have a business incentive to keep bot counts high — more profiles = more perceived value = more subscribers. We have the opposite incentive: every fake profile hurts our guarantee.\n\nAlso: $14.99/mo founding member price locked forever vs. Tinder Platinum at $40+/mo with no verification.",
+      "response": "YouAndINotAI is building a human-first dating community with verification and moderation controls. Bot reduction is the goal; verification claims publish only after implementation proof is recorded. Join at youandinotai.com.",
       "tone": "Factual comparison, not aggressive toward competitors"
     },
     {
       "question": "What's the business model?",
       "context": "Someone asking how you make money or if it's sustainable",
-      "response": "Simple subscription model:\n\n- **Founding members (first 100):** $14.99/month, locked at that price forever\n- **Regular members (after founding):** Higher price (TBD)\n\nNo ads. No data selling. No freemium bait-and-switch.\n\nThe subscription covers V8 Cloud Verification costs (Plaid API calls aren't free), server infrastructure, and ongoing platform development.\n\nWe're bootstrapped — no VC money, no pressure to compromise on the zero-bot guarantee for growth metrics. The business model works because people will pay for a dating app they can actually trust.",
+      "response": "YouAndINotAI is building a human-first dating community with verification and moderation controls. Bot reduction is the goal; verification claims publish only after implementation proof is recorded. Join at youandinotai.com.",
       "tone": "Transparent, straightforward"
     },
     {
       "question": "Isn't $14.99 expensive?",
       "context": "Price objection",
-      "response": "Fair question. Let's compare:\n\n- Tinder Platinum: $33-40/month (and 60% of users report matching with suspected bots (Norton 2025))\n- Bumble Premium+: $40/month (still no identity verification)\n- Hinge Preferred: $35/month (photo verification only)\n- **YouAndINotAI Founding: $14.99/month (8-layer identity verification, zero bots)**\n\nYou're paying less than any premium dating app AND getting the only platform that guarantees every person is real.\n\nPlus, founding member price is locked forever. The regular price will be higher. This is genuinely the best deal you'll get.\n\nHow much is your time worth? If you spent even one evening chatting with a bot, that's already more expensive than a year of YouAndINotAI.",
+      "response": "Fair question. Let's compare:\n\n- Tinder Platinum: $33-40/month (and 60% of users report matching with suspected bots (Norton 2025))\n- Bumble Premium+: $40/month (still no identity verification)\n- Hinge Preferred: $35/month (photo verification only)\n- **YouAndINotAI Founding: $14.99/month (multi-step verification, bot reduction is the goal; verification claims publish only after implementation proof)**\n\nYou're paying less than any premium dating app AND getting the only platform that uses the currently implemented verification flow.\n\nPlus, founding member price is locked forever. The regular price will be higher. This is genuinely the best deal you'll get.\n\nHow much is your time worth? If you spent even one evening chatting with a bot, that's already more expensive than a year of YouAndINotAI.",
       "tone": "Value-focused, not defensive"
     },
     {
       "question": "Is this just a scam / vaporware?",
       "context": "Skepticism about legitimacy",
-      "response": "I get the skepticism — the internet is full of promises. Here's what's real:\n\n1. **The site is live:** youandinotai.com — check it yourself\n2. **Plaid is real:** It's a $13B company used by Venmo, Cash App, and thousands of banks. They don't partner with scams.\n3. **The founder is real:** I'm a licensed electrician in [state] who taught myself to code. Not a faceless corporation.\n4. **Payment processing:** We use Square — same payment infrastructure as millions of legit businesses\n5. **The code is functional:** V8 Cloud Verification is built and operational\n\nI'm building this in public and I'm happy to answer any specific concerns. The whole point of this app is trust — I'd be pretty bad at my own mission if I wasn't trustworthy.",
+      "response": "YouAndINotAI is building a human-first dating community with verification and moderation controls. Bot reduction is the goal; verification claims publish only after implementation proof is recorded. Join at youandinotai.com.",
       "tone": "Direct, unflinching, honest"
     },
     {
       "question": "How many users do you have?",
       "context": "Someone asking about user base size",
-      "response": "We're in our founding phase — actively onboarding the first 100 founding members. I'm going to be straight with you: we're early.\n\nBut that's by design. We're building a quality-first platform where every single user is verified. Rushing to 100K users with no verification would defeat the entire purpose.\n\nThe founding members are the people who believe dating should be real. They get the lowest price forever ($14.99/mo locked) and they shape what the platform becomes.\n\nEvery great community started with the first 100 people who believed in it.",
+      "response": "YouAndINotAI is building a human-first dating community with verification and moderation controls. Bot reduction is the goal; verification claims publish only after implementation proof is recorded. Join at youandinotai.com.",
       "tone": "Honest about being early, positive framing"
     },
     {
       "question": "What data do you collect / is my data safe?",
       "context": "Data privacy and security questions",
-      "response": "Full privacy policy is at youandinotai.com/privacy, but here's the summary:\n\n**What we collect:** Profile info you provide, verification status (pass/fail), usage data\n**What we DON'T store:** Your government ID (Plaid processes this and destroys it), your bank details, your financial data\n**How we protect it:** Bank-grade encryption (AES-256), same security standards as financial institutions\n**Who we share with:** Nobody. No data selling. No third-party advertising.\n\nPlaid handles the sensitive verification data — they're SOC 2 Type II certified and process identity data for major banks. Your data is safer with them than with most dating apps.\n\nWe're also COPPA compliant (18+ only) and follow CCPA/GDPR standards.",
+      "response": "YouAndINotAI is building a human-first dating community with verification and moderation controls. Bot reduction is the goal; verification claims publish only after implementation proof is recorded. Join at youandinotai.com.",
       "tone": "Clear, technical but accessible"
     },
     {
       "question": "Why should I trust an electrician to build a dating app?",
       "context": "Questioning founder's qualifications",
-      "response": "Because that's exactly why it works.\n\nSilicon Valley has had 15+ years and billions of dollars to fix the bot problem in dating. They haven't — because fake profiles inflate their user counts and drive revenue.\n\nI didn't learn to code to build a startup. I learned to code because I was genuinely frustrated with the same problem you are. I'm a user first, builder second.\n\nThe technical heavy lifting (identity verification) is handled by Plaid — a $13B fintech infrastructure company. I didn't reinvent cryptography. I integrated the best existing tools into a platform with the right incentives.\n\nSometimes the person who actually experiences the problem builds the best solution. That's what this is.",
+      "response": "YouAndINotAI is building a human-first dating community with verification and moderation controls. Bot reduction is the goal; verification claims publish only after implementation proof is recorded. Join at youandinotai.com.",
       "tone": "Confident, authentic, turning perceived weakness into strength"
     }
   ]

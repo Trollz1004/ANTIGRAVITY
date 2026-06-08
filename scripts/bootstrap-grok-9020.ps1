@@ -7,10 +7,10 @@
 param([switch]$SkipDocker, [switch]$SkipRepoClone)
 
 $ErrorActionPreference = "Continue"
-$LogPath = "C:\antigravity\logs\bootstrap-grok-9020-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
-$RepoPath = "C:\ANTIGRAVITY"
+$LogPath = "c:\antigravity\logs\bootstrap-grok-9020-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
+$RepoPath = "c:\antigravity"
 
-New-Item -ItemType Directory -Path "C:\antigravity\logs" -Force | Out-Null
+New-Item -ItemType Directory -Path "c:\antigravity\logs" -Force | Out-Null
 
 function Write-Log {
     param([string]$Message, [string]$Level = "INFO")
@@ -145,9 +145,9 @@ if (-not $SkipDocker) {
 }
 
 # 7. Hermes reference
-if (Test-Path "C:\antigravity\hermes-config.json") {
+if (Test-Path "c:\antigravity\hermes-config.json") {
     try {
-        Copy-Item "C:\antigravity\hermes-config.json" "$env:USERPROFILE\hermes-config-reference.json" -Force
+        Copy-Item "c:\antigravity\hermes-config.json" "$env:USERPROFILE\hermes-config-reference.json" -Force
         Write-Log "Hermes reference copied."
     } catch {
         Write-Log "Hermes reference warning: $($_.Exception.Message)" "WARN"

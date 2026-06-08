@@ -1,5 +1,5 @@
 param(
-    [string]$DisplayPath = "C:\ANTIGRAVITY\tools\watchdog-sentry\index.html"
+    [string]$DisplayPath = "c:\antigravity\tools\watchdog-sentry\index.html"
 )
 
 $ErrorActionPreference = "Stop"

@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [string]$RepoRoot = "C:\ANTIGRAVITY",
+    [string]$RepoRoot = "c:\antigravity",
     [string]$CodeXRoot,
     [switch]$KeepOBS
 )
@@ -74,4 +74,4 @@ Write-Host ""
 & pwsh -NoProfile -ExecutionPolicy Bypass -File "$RepoRoot\scripts\codex-doctor.ps1" -RepoRoot $RepoRoot -WorkspaceRoot $CodeXRoot
 
 Write-Host ""
-Write-Host "Admin finalize complete. Open a fresh Codex thread in C:\ANTIGRAVITY\CodeX before wiping E:." -ForegroundColor Green
+Write-Host "Admin finalize complete. Open a fresh Codex thread in c:\antigravity\CodeX before wiping E:." -ForegroundColor Green

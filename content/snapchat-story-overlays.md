@@ -1,11 +1,11 @@
-# Snapchat Story Overlays — YouAndINotAI
+﻿# Snapchat Story Overlays â€” YouAndINotAI
 # Generated: 2026-02-17 | Handle: YouAndiNotAi
 
 1. Real humans only
 @YouAndiNotAi
-V8 verified
+verification roadmap
 
-2. No bots. No cap.
+2. Bot reduction is the goal. No hype.
 Just humans.
 @YouAndiNotAi
 
@@ -19,3 +19,5 @@ youandinotai.com
 5. $1 to dodge the bots
 Worth it.
 @YouAndiNotAi
+
+

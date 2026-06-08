@@ -1,7 +1,7 @@
 @echo off
 :: Safe node automation bootstrap
 :: Generates draft packs instead of live posting to third-party platforms
-cd /d C:\ANTIGRAVITY
+cd /d c:\antigravity
 call .venv\Scripts\activate.bat
 set PYTHONIOENCODING=utf-8
 where uv >nul 2>nul

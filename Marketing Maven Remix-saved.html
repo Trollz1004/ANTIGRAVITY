@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision Board: Modern Marketing Strategy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Outfit', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        accent: '#FF6B6B',
+                        primary: '#1A1A2E',
+                        secondary: '#4ECDC4',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .hover-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+        .gradient-text { background: linear-gradient(to right, #4ECDC4, #FF6B6B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="font-body selection:bg-accent selection:text-white">
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <header class="mb-16 text-center">
+            <h1 class="font-display text-5xl md:text-7xl font-bold mb-6 gradient-text">Strategic Marketing Vision</h1>
+            <p class="text-slate-400 max-w-2xl mx-auto text-lg italic">"Humanizing the digital landscape through data-driven connections."</p>
+        </header>
+
+        <!-- Bento Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            
+            <!-- Idea 1 -->
+            <div class="md:col-span-1 glass p-6 rounded-3xl hover-card">
+                <img src='https://opal.google/board/blobs/f2c4c1f9-23ff-4f2a-a47e-bbeb01833a27' alt='AI vs Human Quiz' class="rounded-2xl mb-6 w-full h-48 object-cover opacity-90" />
+                <h2 class="font-display text-2xl font-bold mb-3 text-secondary">AI vs. Human Quiz</h2>
+                <p class="text-sm text-slate-400 leading-relaxed">The cornerstone lead magnet. Direct CRM tagging for automated, hyper-personalized conversion flows.</p>
+            </div>
+
+            <!-- Idea 2 -->
+            <div class="md:col-span-1 glass p-6 rounded-3xl hover-card">
+                <img src='https://opal.google/board/blobs/5e8e1836-0f6d-47b4-8558-b3bc88df44a1' alt='Humanizing Dating Blitz' class="rounded-2xl mb-6 w-full h-48 object-cover opacity-90" />
+                <h2 class="font-display text-2xl font-bold mb-3 text-accent">Organic Blitz</h2>
+                <p class="text-sm text-slate-400 leading-relaxed">The 80/20 value-first approach. Genuine community engagement that bypasses ad-blockers and builds brand trust.</p>
+            </div>
+
+            <!-- Idea 3 -->
+            <div class="md:col-span-1 glass p-6 rounded-3xl hover-card">
+                <img src='https://opal.google/board/blobs/b77358af-ce6a-47d5-9569-ed25fa237d98' alt='Discord Syndicates' class="rounded-2xl mb-6 w-full h-48 object-cover opacity-90" />
+                <h2 class="font-display text-2xl font-bold mb-3 text-white">Discord Syndicates</h2>
+                <p class="text-sm text-slate-400 leading-relaxed">Leveraging existing power structures. Strategic partnerships with server owners to unlock dense, active demographics.</p>
+            </div>
+        </div>
+
+        <!-- Checklist Section -->
+        <section class="glass p-8 md:p-12 rounded-3xl">
+            <h3 class="font-display text-3xl mb-8 flex items-center">
+                <span class="mr-3">🚀</span> Next Steps
+            </h3>
+            <div class="grid gap-4">
+                <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div class="w-6 h-6 border-2 border-secondary rounded flex-shrink-0"></div>
+                    <div>
+                        <p class="font-semibold">Step 1: Technical Integration</p>
+                        <p class="text-sm text-slate-400">Deploy the "AI vs. Human" Quiz and sync CRM mapping for automated lead sequences.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div class="w-6 h-6 border-2 border-secondary rounded flex-shrink-0"></div>
+                    <div>
+                        <p class="font-semibold">Step 2: Organic Outreach</p>
+                        <p class="text-sm text-slate-400">Launch daily 80/20 value-first comments across targeted Reddit/Discord sub-communities.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div class="w-6 h-6 border-2 border-secondary rounded flex-shrink-0"></div>
+                    <div>
+                        <p class="font-semibold">Step 3: Strategic Partnerships</p>
+                        <p class="text-sm text-slate-400">Secure 5 major Discord partnerships to anchor the "highest population first" expansion strategy.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

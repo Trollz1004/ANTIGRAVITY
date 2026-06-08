@@ -1,4 +1,4 @@
-# Reddit Karma-Building Comments - Day 1
+﻿# Reddit Karma-Building Comments - Day 1
 
 Use these comments on relevant subreddit threads (r/OnlineDating, r/Tinder, r/dating, r/Bumble) to build karma. **DO NOT POST LINKS YET.**
 
@@ -49,3 +49,5 @@ Use these comments on relevant subreddit threads (r/OnlineDating, r/Tinder, r/da
 - Upvote others.
 - Be helpful/neutral.
 - **NO LINKS.**
+
+

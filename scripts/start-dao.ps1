@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════════════
 #  start-dao.ps1   ·   ANTIGRAVITY · #UntilNoKidInNeed DAO Transparency
-#  Run from C:\ANTIGRAVITY  ·  Right-click → Run with PowerShell
+#  Run from c:\antigravity  ·  Right-click → Run with PowerShell
 #  Safe by design: never closes on error, always waits for Enter.
 # ═══════════════════════════════════════════════════════════════════════════
 

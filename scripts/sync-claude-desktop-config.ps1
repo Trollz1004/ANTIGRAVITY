@@ -3,7 +3,7 @@
 # on whichever node runs this. Preserves the per-node `preferences` block.
 #
 # Run on each node after `git pull`:
-#   pwsh C:\ANTIGRAVITY\scripts\sync-claude-desktop-config.ps1
+#   pwsh c:\antigravity\scripts\sync-claude-desktop-config.ps1
 #
 # Single source of truth: infra/claude-desktop/claude_desktop_config.json
 # Per-node preferences: stay in %APPDATA%\Claude\claude_desktop_config.json untouched.

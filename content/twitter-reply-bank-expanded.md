@@ -1,4 +1,4 @@
-# Twitter Reply Bank - YouAndINotAI Engagement
+﻿# Twitter Reply Bank - YouAndINotAI Engagement
 
 ## Reply Bank - 15 Humanized Responses
 
@@ -122,9 +122,9 @@
 - **Replies WITHOUT YouAndINotAI mention**: 10
 - **Replies WITH YouAndINotAI mention**: 5
 - **Average character count**: 118
-- **No hashtags used**: ✓
-- **No exclamation marks**: ✓
-- **All under 280 characters**: ✓
+- **No hashtags used**: âœ“
+- **No exclamation marks**: âœ“
+- **All under 280 characters**: âœ“
 
 ## Topics Covered
 
@@ -134,3 +134,5 @@
 4. Fake profiles everywhere: 3 replies
 5. Is anyone real on these apps: 2 replies
 6. AI generated dating profiles: 1 reply
+
+

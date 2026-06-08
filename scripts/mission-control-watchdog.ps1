@@ -1,9 +1,9 @@
-﻿# Mission Control API Watchdog
+# Mission Control API Watchdog
 # Purpose: Monitor MC API (8787) and restart if down, log all checks
 # How to run: .\mission-control-watchdog.ps1 from elevated PowerShell
 # How to stop: Ctrl+C or stop scheduled task
 
-$logPath = "C:\Antigravity\logs\mission-control-watchdog.log"
+$logPath = "c:\antigravity\logs\mission-control-watchdog.log"
 $apiPort = 8787
 $portsToCheck = @(3100, 11434, 11435, 18789)
 $restartCounts = @{}
@@ -22,7 +22,7 @@ while ($true) {
     $restartCounts[$key] = $restartCounts[$key] | Where-Object { ($now - $_).TotalMinutes -lt 5 }
     if ($restartCounts[$key].Count -lt 3) {
       Add-Content -Path $logPath -Value "[$timestamp] MC API down, restarting"
-      Start-Process python -ArgumentList "-m","uvicorn","mission_control_api.main:app","--host","127.0.0.1","--port","8787" -WorkingDirectory "C:\Antigravity\services\mission-control-api" -WindowStyle Hidden
+      Start-Process python -ArgumentList "-m","uvicorn","mission_control_api.main:app","--host","127.0.0.1","--port","8787" -WorkingDirectory "c:\antigravity\services\mission-control-api" -WindowStyle Hidden
       $restartCounts[$key] += $now
     } else {
       Add-Content -Path $logPath -Value "[$timestamp] ALERT: MC API restart cap reached"
