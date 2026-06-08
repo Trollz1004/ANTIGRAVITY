@@ -1,11 +1,12 @@
 """SQLAlchemy ORM models for the YouAndINotAI platform."""
 
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 
 from sqlalchemy import (
     JSON,
     Boolean,
+    Date,
     DateTime,
     Float,
     ForeignKey,
@@ -19,7 +20,6 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
-from app.encryption import EncryptedDate, EncryptedString
 
 
 class User(Base):
@@ -28,19 +28,17 @@ class User(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
-    email: EncryptedString = EncryptedString(
-        mapped_column(String(255), unique=True, index=True, nullable=False)
+    email: Mapped[str] = mapped_column(
+        String(255), unique=True, index=True, nullable=False
     )
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
-    display_name: EncryptedString = EncryptedString(
-        mapped_column(String(100), nullable=False)
+    display_name: Mapped[str] = mapped_column(String(100), nullable=False)
+    date_of_birth: Mapped[date | None] = mapped_column(Date, nullable=True)
+    square_customer_id: Mapped[str | None] = mapped_column(
+        String(255), nullable=True
     )
-    date_of_birth: EncryptedDate = EncryptedDate(mapped_column(nullable=True))
-    square_customer_id: EncryptedString = EncryptedString(
-        mapped_column(String(255), nullable=True)
-    )
-    google_id: EncryptedString = EncryptedString(
-        mapped_column(String(255), unique=True, nullable=True)
+    google_id: Mapped[str | None] = mapped_column(
+        String(255), unique=True, nullable=True
     )
     # DEPRECATED: stripe_customer_id removed — Square is sole payment processor
     bot_shield_verified: Mapped[bool] = mapped_column(
@@ -88,7 +86,7 @@ class Profile(Base):
         unique=True,
         nullable=False,
     )
-    bio: EncryptedString = EncryptedString(mapped_column(Text, nullable=True))
+    bio: Mapped[str | None] = mapped_column(Text, nullable=True)
     age: Mapped[int | None] = mapped_column(Integer, nullable=True)
     gender: Mapped[str | None] = mapped_column(String(50), nullable=True)
     looking_for: Mapped[str | None] = mapped_column(String(50), nullable=True)
