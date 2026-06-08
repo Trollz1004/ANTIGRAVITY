@@ -36,6 +36,7 @@ from app.payment_truth import (
     build_checkout_reference,
     email_supported_for_square_checkout,
 )
+from app.rate_limit_redis import enforce_route_rate_limit
 from app.square_checkout import create_square_payment_link
 from app.subscriptions import user_has_active_subscription
 from app.verification_service import (
@@ -212,6 +213,13 @@ async def create_challenge(
     db: AsyncSession = Depends(get_db),
 ) -> ChallengeResponse:
     """Start a V8 liveness challenge. Returns a math question with a time window."""
+    settings = get_settings()
+    await enforce_route_rate_limit(
+        request,
+        bucket="verify:challenge",
+        limit=settings.verify_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
 
     # Check if already verified
     if user.bot_shield_verified:

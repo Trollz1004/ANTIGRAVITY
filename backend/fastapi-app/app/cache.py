@@ -62,7 +62,10 @@ async def redis_health_check() -> dict[str, Any]:
         if not pong:
             return {"status": "error", "message": "Redis ping returned False"}
 
-        info = await r.info("server")
+        try:
+            info = await r.info("server")
+        except Exception:
+            info = {}
         return {
             "status": "ok",
             "latency_ms": round(latency_ms, 2),
