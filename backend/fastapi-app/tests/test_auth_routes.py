@@ -46,7 +46,9 @@ def test_beta_access_rejects_invalid_code(client, monkeypatch):
     response = client.post("/api/v1/auth/beta-access", json={"code": "NOPE"})
 
     assert response.status_code == 401
-    assert response.json()["detail"] == "Invalid beta access code"
+    payload = response.json()
+    assert payload["message"] == "Invalid beta access code"
+    assert payload["details"]["code"] == "BETA_ACCESS_DENIED"
 
     get_settings.cache_clear()
 
@@ -76,14 +78,14 @@ def test_inactive_user_is_blocked_across_auth_routes(client, db_session_factory)
         json={"email": "inactive@example.com", "password": "super-secret-password"},
     )
     assert login_response.status_code == 403
-    assert login_response.json()["detail"] == "Account is inactive"
+    assert login_response.json()["message"] == "Account is inactive"
 
     refresh_response = client.post(
         "/api/v1/auth/refresh",
         json={"refresh_token": create_refresh_token(str(inactive_user_id))},
     )
     assert refresh_response.status_code == 403
-    assert refresh_response.json()["detail"] == "Account is inactive"
+    assert refresh_response.json()["message"] == "Account is inactive"
 
     me_response = client.get(
         "/api/v1/auth/me",
@@ -92,4 +94,4 @@ def test_inactive_user_is_blocked_across_auth_routes(client, db_session_factory)
         },
     )
     assert me_response.status_code == 403
-    assert me_response.json()["detail"] == "Account is inactive"
+    assert me_response.json()["message"] == "Account is inactive"
