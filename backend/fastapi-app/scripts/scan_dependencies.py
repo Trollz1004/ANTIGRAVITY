@@ -137,7 +137,7 @@ def generate_report(
     lines.append("")
     if pip_data is None:
         lines.append("_pip-audit was not available or failed to run._")
-    elif "dependencies" in pip_data:
+    elif "dependencies" in pip_data or pip_data == {}:
         vulns = []
         for dep in pip_data.get("dependencies", []):
             for vuln in dep.get("vulns", []):
@@ -177,7 +177,7 @@ def generate_report(
     lines.append("")
     if npm_data is None:
         lines.append("_npm audit was not available or failed to run._")
-    elif "vulnerabilities" in npm_data:
+    elif "vulnerabilities" in npm_data or npm_data == {}:
         npm_vulns = []
         for name, info in npm_data.get("vulnerabilities", {}).items():
             severity = info.get("severity", "unknown")
@@ -245,6 +245,9 @@ def generate_report(
         )
     else:
         lines.append("✅ No critical or high severity vulnerabilities.")
+
+    if total_vulns == 0:
+        lines.append("No vulnerabilities found.")
 
     return "\n".join(lines), total_vulns, critical_count, high_count
 

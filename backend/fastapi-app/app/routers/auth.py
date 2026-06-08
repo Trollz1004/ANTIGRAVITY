@@ -29,6 +29,7 @@ from app.error_responses import (
     unauthorized,
 )
 from app.models import Profile, User
+from app.rate_limit_redis import enforce_route_rate_limit
 from app.schemas import (
     AuthBetaAccessRequest,
     AuthLoginRequest,
@@ -183,6 +184,13 @@ async def login(
     payload: AuthLoginRequest,
     db: AsyncSession = Depends(get_db),
 ) -> AuthTokenResponse:
+    settings = get_settings()
+    await enforce_route_rate_limit(
+        request,
+        bucket="auth:login",
+        limit=settings.auth_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
     user = await db.scalar(select(User).where(User.email == payload.email.lower()))
     if not user or not verify_password(payload.password, user.password_hash):
         raise unauthorized(message="Invalid email or password")

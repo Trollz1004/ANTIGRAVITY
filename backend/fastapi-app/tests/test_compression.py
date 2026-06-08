@@ -26,6 +26,7 @@ os.environ.setdefault(
 os.environ.setdefault("CORS_ORIGINS", "http://testserver")
 
 import sys
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -53,7 +54,7 @@ from app.main import app
 
 @pytest.fixture()
 def client():
-    tmp_db_path = Path("/tmp/test_compression.db")
+    tmp_db_path = Path(tempfile.gettempdir()) / "test_compression.db"
     engine = create_async_engine(f"sqlite+aiosqlite:///{tmp_db_path.as_posix()}")
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
 

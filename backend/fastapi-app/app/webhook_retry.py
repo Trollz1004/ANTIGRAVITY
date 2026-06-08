@@ -17,6 +17,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 from sqlalchemy import (
     Boolean,
@@ -429,11 +430,22 @@ async def scheduled_retry_task():
 # ── Router ──
 
 router = APIRouter(prefix="/webhooks", tags=["webhooks"])
+security = HTTPBearer()
+
+
+async def _require_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: AsyncSession = Depends(get_db),
+):
+    from app.auth import get_current_user
+
+    return await get_current_user(credentials=credentials, db=db)
 
 
 @router.post("/retry/{event_id}")
 async def retry_webhook_event(
     event_id: str,
+    _current_user=Depends(_require_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict[str, Any]:
     """Manually retry a failed webhook event.
@@ -455,6 +467,7 @@ async def retry_webhook_event(
 async def list_dead_letter(
     limit: int = 50,
     offset: int = 0,
+    _current_user=Depends(_require_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> list[dict[str, Any]]:
     """List webhook events that exhausted all retries and were moved to dead-letter."""
@@ -478,6 +491,7 @@ async def list_dead_letter(
 async def list_retry_queue(
     limit: int = 50,
     offset: int = 0,
+    _current_user=Depends(_require_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> list[dict[str, Any]]:
     """List active webhook events in the retry queue."""

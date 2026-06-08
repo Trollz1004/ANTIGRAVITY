@@ -206,10 +206,12 @@ class TestMigrationSafetyChecker:
             """))
 
         cfg = Config(str(ini_path))
-        checker = MigrationSafetyChecker(cfg, interactive=False, **kwargs)
+        interactive = kwargs.pop("interactive", False)
+        checker = MigrationSafetyChecker(cfg, interactive=interactive, **kwargs)
         return checker
 
     def _write_migration(self, versions_dir, name, content):
+        versions_dir.mkdir(parents=True, exist_ok=True)
         (versions_dir / name).write_text(content)
 
     def test_build_report_detects_protection(self, tmp_path):

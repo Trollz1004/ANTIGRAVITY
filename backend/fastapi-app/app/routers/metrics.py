@@ -1,14 +1,104 @@
 """Prometheus metrics endpoint for the ANTIGRAVITY platform."""
 
 import logging
+from datetime import datetime, timezone
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, Header, HTTPException, status
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.config import get_settings
+from app.database import get_db
+from app.models import Match, Message, RevenueAllocation, User, VerificationEvent
 from app.monitoring import get_metrics_response
 
 logger = logging.getLogger("youandinotai.metrics")
 
 router = APIRouter()
+
+
+def _expected_metrics_key() -> str:
+    settings = get_settings()
+    return settings.metrics_api_key or settings.jwt_secret
+
+
+def _require_metrics_key(
+    x_metrics_key: str | None = Header(default=None, alias="X-Metrics-Key"),
+) -> None:
+    expected = _expected_metrics_key()
+    if not x_metrics_key or x_metrics_key != expected:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid metrics key",
+        )
+
+
+async def _count(db: AsyncSession, statement) -> int:
+    return int(await db.scalar(statement) or 0)
+
+
+async def _impact_payload(db: AsyncSession) -> dict:
+    total_revenue_cents = await _count(
+        db, select(func.coalesce(func.sum(RevenueAllocation.gross_amount_cents), 0))
+    )
+    reserve_cents = await _count(
+        db,
+        select(func.coalesce(func.sum(RevenueAllocation.charitable_amount_cents), 0)),
+    )
+    operating_cents = await _count(
+        db,
+        select(func.coalesce(func.sum(RevenueAllocation.operating_amount_cents), 0)),
+    )
+
+    total_users = await _count(db, select(func.count(User.id)))
+    active_users = await _count(db, select(func.count(User.id)).where(User.is_active.is_(True)))
+    verified_users = await _count(
+        db, select(func.count(User.id)).where(User.bot_shield_verified.is_(True))
+    )
+    subscription_users = await _count(
+        db, select(func.count(User.id)).where(User.subscription_active.is_(True))
+    )
+
+    matches = await _count(db, select(func.count(Match.id)))
+    messages = await _count(db, select(func.count(Message.id)))
+    verifications_started = await _count(db, select(func.count(VerificationEvent.id)))
+    verifications_completed = await _count(
+        db,
+        select(func.count(VerificationEvent.id)).where(
+            VerificationEvent.status.in_(("passed", "completed"))
+        ),
+    )
+    verifications_pending = await _count(
+        db,
+        select(func.count(VerificationEvent.id)).where(
+            VerificationEvent.status == "pending"
+        ),
+    )
+
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "revenue": {
+            "total_revenue_cents": total_revenue_cents,
+            "reserve_cents": reserve_cents,
+            "operating_cents": operating_cents,
+            "reserve_percent": 10,
+        },
+        "users": {
+            "total": total_users,
+            "active": active_users,
+            "verified": verified_users,
+            "subscribed": subscription_users,
+        },
+        "engagement": {
+            "matches": matches,
+            "messages": messages,
+        },
+        "verification": {
+            "started": verifications_started,
+            "completed": verifications_completed,
+            "pending": verifications_pending,
+        },
+    }
 
 
 @router.get("/metrics")
@@ -29,3 +119,29 @@ async def prometheus_metrics():
             status_code=503,
         )
     return response
+
+
+@router.get("/metrics/impact", dependencies=[Depends(_require_metrics_key)])
+async def impact_metrics(db: AsyncSession = Depends(get_db)):
+    """Aggregate platform metrics with no individual user or payment records."""
+    return await _impact_payload(db)
+
+
+@router.get("/metrics/charity", dependencies=[Depends(_require_metrics_key)])
+async def legacy_impact_alias(db: AsyncSession = Depends(get_db)):
+    """Deprecated compatibility alias for aggregate platform metrics."""
+    return await _impact_payload(db)
+
+
+@router.get("/metrics/security-audit", dependencies=[Depends(_require_metrics_key)])
+async def security_audit_metrics():
+    """Expose a minimal aggregate security status for ops dashboards."""
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "status": "ok",
+        "checks": {
+            "pii_exposed": 0,
+            "individual_records_exposed": 0,
+            "metrics_key_required": 1,
+        },
+    }

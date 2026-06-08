@@ -49,6 +49,7 @@ database.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
 from app.rate_limit import reset_rate_limits  # noqa: E402
+from app.rate_limit_redis import reset_test_rate_limits  # noqa: E402
 
 
 @pytest.fixture(scope="module")
@@ -88,12 +89,14 @@ def client(db_session_factory):
 
     app.dependency_overrides[get_db] = override_get_db
     reset_rate_limits()
+    reset_test_rate_limits()
 
     with TestClient(app) as test_client:
         yield test_client
 
     app.dependency_overrides.clear()
     reset_rate_limits()
+    reset_test_rate_limits()
 
 
 @pytest.fixture()

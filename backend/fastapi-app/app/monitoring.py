@@ -23,6 +23,7 @@ try:
         Gauge,
         Histogram,
         generate_latest,
+        start_http_server,
     )
     from starlette.responses import Response
 
@@ -31,7 +32,7 @@ except ImportError:
     PROMETHEUS_AVAILABLE = False
     Counter = Histogram = Gauge = generate_latest = CONTENT_TYPE_LATEST = (
         CollectorRegistry
-    ) = Response = None
+    ) = Response = start_http_server = None
 
 logger = logging.getLogger("youandinotai.monitoring")
 
@@ -197,7 +198,7 @@ def setup_monitoring(
     if PROMETHEUS_AVAILABLE:
         try:
             # Create a separate registry to avoid conflicts with the default global registry
-            METRICS_REGISTRY = CollectorRegistry()
+            METRICS_REGISTRY = CollectorRegistry() if CollectorRegistry else None
 
             # Create Prometheus metrics with method, path, and status labels
             REQUEST_COUNTER = Counter(
@@ -224,8 +225,6 @@ def setup_monitoring(
             # Optionally start a standalone HTTP server for Prometheus scraping
             # (useful when running outside Docker; in Docker, use the /metrics endpoint)
             if prometheus_port:
-                from prometheus_client import start_http_server
-
                 start_http_server(prometheus_port)
                 logger.info(
                     f"Prometheus metrics server started on port {prometheus_port}"

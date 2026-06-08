@@ -111,8 +111,10 @@ async def get_rate_limit_status(
 
 
 @router.get("/stats", response_model=RateLimitStatus)
-async def get_rate_limit_stats() -> RateLimitStatus:
-    """Public endpoint for rate limit statistics (no auth required for dashboard)."""
+async def get_rate_limit_stats(
+    user: dict[str, Any] = Depends(get_current_user),
+) -> RateLimitStatus:
+    """Return rate limit statistics for authenticated dashboard users."""
     _reset_window_if_needed()
     _reset_day_if_needed()
 

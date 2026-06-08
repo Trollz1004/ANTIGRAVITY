@@ -76,7 +76,7 @@ def is_protected_migration(file_path: str | None) -> bool:
     if file_path is None or not os.path.isfile(file_path):
         return False
     try:
-        with open(file_path, encoding="utf-8") as fh:
+        with open(file_path, encoding="utf-8", errors="replace") as fh:
             content = fh.read(4096)
         return _PROTECTION_RE.search(content) is not None
     except OSError:
@@ -88,7 +88,7 @@ def get_protection_reason(file_path: str | None) -> str | None:
     if file_path is None or not os.path.isfile(file_path):
         return None
     try:
-        with open(file_path, encoding="utf-8") as fh:
+        with open(file_path, encoding="utf-8", errors="replace") as fh:
             content = fh.read(4096)
         match = _PROTECTION_RE.search(content)
         return match.group(1).strip() if match else None
@@ -132,16 +132,16 @@ class MigrationSafetyChecker:
             if migration.protection == ProtectionStatus.PROTECTED
         ]
 
+        if self.dry_run:
+            self._dry_run_downgrade(target_revision, migrations_to_revoke)
+            return report
+
         if protected_in_path and not self.allow_protected:
             names = ", ".join(migration.revision for migration in protected_in_path)
             raise RuntimeError(
                 "BLOCKED: The following protected migrations would be rolled back: "
                 f"{names}. Set {ENV_VAR_ALLOW_PROTECTED}=1 to override."
             )
-
-        if self.dry_run:
-            self._dry_run_downgrade(target_revision, migrations_to_revoke)
-            return report
 
         if self.interactive and not os.environ.get(ENV_VAR_SKIP_CONFIRM):
             self._confirm_downgrade(target_revision, migrations_to_revoke)
@@ -282,11 +282,12 @@ def pre_downgrade(
     if sql:
         return
 
-    cfg = context.config
-    checker = MigrationSafetyChecker(cfg, interactive=sys.stdin.isatty())
     target = revision if isinstance(revision, str) else None
     if target is None:
         return
+
+    cfg = context.config
+    checker = MigrationSafetyChecker(cfg, interactive=sys.stdin.isatty())
 
     connection = getattr(context, "connection", None)
     checker.check_downgrade(target, connection=connection)

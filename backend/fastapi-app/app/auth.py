@@ -157,7 +157,10 @@ async def rotate_refresh_token(
     now = datetime.now(timezone.utc)
 
     # Check expiry
-    if stored_token.expires_at < now:
+    expires_at = stored_token.expires_at
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    if expires_at < now:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Refresh token expired",
