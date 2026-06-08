@@ -70,7 +70,7 @@ if ($Mirror) {
 if ($Baseline) {
     Write-Host "==> BASELINE: generating manifest" -ForegroundColor Cyan
     $allowed = @(
-        'C:\ANTIGRAVITY',
+        'c:\antigravity',
         'C:\OPUS',
         'C:\Users\joshl\.claude\projects',
         $Vault,

@@ -36,11 +36,11 @@
   and apps/dashboard/dist.
 
 .PARAMETER LogDir
-  Where to write the run log. Default C:\ANTIGRAVITY\logs.
+  Where to write the run log. Default c:\antigravity\logs.
 
 .NOTES
   Designed to be launched from a Sabretooth desktop shortcut targeting:
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "C:\ANTIGRAVITY\scripts\sabretooth\Deploy-Everything.ps1"
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "c:\antigravity\scripts\sabretooth\Deploy-Everything.ps1"
 
   Hermes (paperclip-9020) is intentionally NOT launched.
 #>
@@ -51,8 +51,8 @@ param(
   [switch]$SkipDocker,
   [switch]$SkipBuilds,
   [switch]$Publish,
-  [string]$LogDir = 'C:\ANTIGRAVITY\logs',
-  [string]$RepoRoot = 'C:\ANTIGRAVITY'
+  [string]$LogDir = 'c:\antigravity\logs',
+  [string]$RepoRoot = 'c:\antigravity'
 )
 
 # Never crash the window. Continue through every error.

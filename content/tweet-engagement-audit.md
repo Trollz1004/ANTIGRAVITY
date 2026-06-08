@@ -1,4 +1,4 @@
-# YouAndINotAI Engagement Audit - Feb 17, 2026
+﻿# YouAndINotAI Engagement Audit - Feb 17, 2026
 
 ## Overview
 
@@ -29,7 +29,7 @@ Based on reach, **Scottsdale** and **Chandler** have performed best so far. This
 - **Template B (Knoxville/Durham):** Slightly lower initial engagement/views.
 - **Template C (Savannah):** Lowest reach among the most recent posts.
 
-General "Singles — tired of fake profiles?" variations from previous blitzes also showed better reach than pure Template C posts.
+General "Singles â€” tired of fake profiles?" variations from previous blitzes also showed better reach than pure Template C posts.
 
 ## Needed Responses
 
@@ -39,3 +39,5 @@ General "Singles — tired of fake profiles?" variations from previous blitzes a
 
 - Reach and engagement are critically low (zero engagement on 68+ posts).
 - Advise monitoring for shadowban or considering boosted engagement (replies from second accounts, as noted in `post-tracker.json`).
+
+

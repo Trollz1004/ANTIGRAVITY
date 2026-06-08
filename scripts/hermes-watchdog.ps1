@@ -1,14 +1,14 @@
 ﻿# Hermes Router Watchdog — runs forever, completely hidden, no window, no focus steal.
 # Checks Hermes Router (port 11435) every 30 seconds.
-# Restarts via WSL on failure. Logs to C:\ANTIGRAVITY\logs\hermes-watchdog.log
+# Restarts via WSL on failure. Logs to c:\antigravity\logs\hermes-watchdog.log
 
 $ErrorActionPreference = 'Continue'
 
-$LogDir     = 'C:\ANTIGRAVITY\logs'
+$LogDir     = 'c:\antigravity\logs'
 $LogFile    = "$LogDir\hermes-watchdog.log"
 $MaxLogBytes = 10MB
 
-$HermesScript  = 'C:\ANTIGRAVITY\scripts\start-hermes-router.cmd'
+$HermesScript  = 'c:\antigravity\scripts\start-hermes-router.cmd'
 $HermesPort    = 11435
 $CheckInterval = 30   # seconds between health checks
 
@@ -46,7 +46,7 @@ function Get-HermesPid {
 function Start-Hermes {
     Log 'Hermes Router DOWN — restarting via WSL...'
     Start-Process wsl -ArgumentList '-d','Ubuntu','--','bash','-lc',
-        'nohup bash /mnt/c/Antigravity/scripts/start-hermes-router.sh > /tmp/hermes-router.log 2>&1 & disown' `
+        'nohup bash /mnt/c/antigravity/scripts/start-hermes-router.sh > /tmp/hermes-router.log 2>&1 & disown' `
         -WindowStyle Hidden -ErrorAction SilentlyContinue
     Log 'Hermes Router start command issued.'
 }

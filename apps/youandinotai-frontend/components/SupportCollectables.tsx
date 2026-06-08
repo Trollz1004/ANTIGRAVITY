@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Heart, Gift, ExternalLink, CreditCard } from 'lucide-react';
 
 export default function SupportCollectables({ isDarkMode }: { isDarkMode: boolean }) {
@@ -31,7 +31,7 @@ export default function SupportCollectables({ isDarkMode }: { isDarkMode: boolea
             the organization you trust directly.
           </p>
           <a
-            href="https://www.charitynavigator.org/"
+            href="https://www.youandinotai.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center w-full py-3 px-6 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold transition-colors gap-2"
@@ -62,3 +62,4 @@ export default function SupportCollectables({ isDarkMode }: { isDarkMode: boolea
     </div>
   );
 }
+

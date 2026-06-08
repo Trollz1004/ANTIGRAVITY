@@ -1,4 +1,4 @@
-# Fastest-Path Payment Flow — Verified
+﻿# Fastest-Path Payment Flow â€” Verified
 
 **Date**: 2026-06-01  
 **Status**: PAYMENT FLOW IS LIVE AND OPERATIONAL
@@ -8,26 +8,26 @@
 ## Payment Gateway: Square (LIVE)
 
 ### Evidence of Live Operation
-1. **Backend source of truth**: `backend/fastapi-app/app/payments.py` — 5 tiers with Square payment links
-2. **Revenue allocation**: `backend/fastapi-app/app/revenue_allocation.py` — 10% charitable allocation per 100-Cent Rule
-3. **Billing API**: `backend/fastapi-app/app/routers/billing.py` — authenticated checkout link generation
-4. **Payment truth**: `backend/fastapi-app/app/payment_truth.py` — account-bound checkout with reference tracking
-5. **Square checkout**: `backend/fastapi-app/app/square_checkout.py` — Square API integration
+1. **Backend source of truth**: `backend/fastapi-app/app/payments.py` â€” 5 tiers with Square payment links
+2. **Revenue allocation**: `backend/fastapi-app/app/revenue_allocation.py` â€” 10% reserved allocation per 100-Cent Rule
+3. **Billing API**: `backend/fastapi-app/app/routers/billing.py` â€” authenticated checkout link generation
+4. **Payment truth**: `backend/fastapi-app/app/payment_truth.py` â€” account-bound checkout with reference tracking
+5. **Square checkout**: `backend/fastapi-app/app/square_checkout.py` â€” Square API integration
 6. **Environment**: SQUARE_ACCESS_TOKEN + SQUARE_LOCATION_ID configured per .env.example
 7. **Webhooks**: 8 webhook signature/notification URL env vars specified
 8. **Founder test payments**: 6 known test payment IDs in revenue_allocation.py (all classified as `founder_test`, excluded from customer revenue reporting)
 
 ### Checkout Flow (Authenticated Users)
-1. User signs in → POST `/billing/checkout-link` with tier selection
+1. User signs in â†’ POST `/billing/checkout-link` with tier selection
 2. Backend creates VerificationEvent record
 3. Backend builds account-bound Square checkout request (email, location, tier, redirect)
 4. Square returns hosted checkout URL
 5. User completes payment on Square's secure page
-6. Webhook fires → backend records RevenueAllocation
-7. Revenue splits: 10% → kids_support, 90% → operating (within 100-Cent Rule: 10% kids, 27% tax reserve, 63% ops/growth)
+6. Webhook fires â†’ backend records RevenueAllocation
+7. Revenue splits: 10% â†’ reserved program_support, 90% â†’ operating (within 100-Cent Rule: 10% reserved program, 27% tax reserve, 63% ops/growth)
 
 ### Direct Payment Links (No Auth Required)
-For fastest-path conversion (social media → payment), direct Square links work without login:
+For fastest-path conversion (social media â†’ payment), direct Square links work without login:
 - **$1 Bot-Shield**: https://square.link/u/Qc5mxUy7
 - **$14.99/mo Founding Member**: https://square.link/u/cxwjcn0s
 - **$39.99 3-Month**: https://square.link/u/oY7qEfRM
@@ -36,19 +36,19 @@ For fastest-path conversion (social media → payment), direct Square links work
 
 ### Conversion Funnel
 ```
-Social Post → youandinotai.com → Membership Section → Square Checkout → Payment Complete
+Social Post â†’ youandinotai.com â†’ Membership Section â†’ Square Checkout â†’ Payment Complete
 ```
 
-**Fastest path to first payment**: Any social post with youandinotai.com link → $1 Bot-Shield verification (lowest barrier) or $14.99/mo Founding Member (highest value per user).
+**Fastest path to first payment**: Any social post with youandinotai.com link â†’ $1 Bot-Shield verification (lowest barrier) or $14.99/mo Founding Member (highest value per user).
 
 ### Fund Routing Verification
-- Square payment → webhook → `reserve_revenue_allocation()` → splits into:
-  - `charitable_amount_cents` = 10% of gross (rounds up)
+- Square payment â†’ webhook â†’ `reserve_revenue_allocation()` â†’ splits into:
+  - `reserved_amount_cents` = 10% of gross (rounds up)
   - `operating_amount_cents` = 90% of gross
-- Beneficiary lane: `kids_support`
-- Status: `reserved` → quarterly disbursement by founder
+- Beneficiary lane: `reserved program_support`
+- Status: `reserved` â†’ quarterly disbursement by founder
 - Payer type classification: `founder_test` (6 known test IDs) vs `customer` (real revenue)
-- Transparency API: `/api/transparency` (stub — needs live data connection)
+- Transparency API: `/api/transparency` (stub â€” needs live data connection)
 
 ### What's NOT Live (Honest Assessment)
 - **Stripe**: UI shows "Connected" but no backend integration exists. Remove from Integrations component or implement.
@@ -58,8 +58,9 @@ Social Post → youandinotai.com → Membership Section → Square Checkout → 
 ---
 
 ## Action Items for First Payment
-1. ✅ Square is live — no new payment infrastructure needed
-2. ⚠️ Social posts must include youandinotai.com membership links
-3. ⚠️ Post queue content loaded at `data/post-queue-dao-launch.json` 
-4. ⚠️ Social engine daemon needs Josh to authorize live_post policy change (currently all platforms are draft-only per `platform_policy.py`)
-5. ⚠️ Transparency API needs real wallet data before public trust claims
+1. âœ… Square is live â€” no new payment infrastructure needed
+2. âš ï¸ Social posts must include youandinotai.com membership links
+3. âš ï¸ Post queue content loaded at `data/post-queue-dao-launch.json` 
+4. âš ï¸ Social engine daemon needs Josh to authorize live_post policy change (currently all platforms are draft-only per `platform_policy.py`)
+5. âš ï¸ Transparency API needs real wallet data before public trust claims
+

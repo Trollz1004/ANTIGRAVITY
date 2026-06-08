@@ -20,7 +20,8 @@ const PALETTE: PaletteGroup[] = [
     { id: 'comms',       label: 'Universal Comms',     desc: 'Transparent agent + human channel',       icon: 'Comms',     k: 'G C' },
     { id: 'paperweight', label: 'Paperweight',         desc: 'Sticky-note delegation engine',           icon: 'Paperweight', k: 'G P' },
     { id: 'hermes',      label: 'Hermes Node (9020)',  desc: 'OpenClaw routing & health',               icon: 'Hermes',    k: 'G H' },
-    { id: 'clawx',       label: 'ClawX Governance',   desc: 'Multi-AI board · Opus / Gemini / Hermes', icon: 'Network' },
+    { id: 'clawx',       label: 'Hermes Sideworld',    desc: 'Freelance SaaS lead-gen · Fiverr / Upwork', icon: 'Search' },
+    { id: 'marketing',   label: 'Cupid Ad Ops',        desc: 'Dating-app subscriber growth · draft gen',   icon: 'Megaphone' },
   ]},
   { group: 'Actions', items: [
     { id: 'act-delegate',  label: 'Delegate new task',  desc: 'Create a sticky note for the fleet',     icon: 'Plus',     k: 'N' },

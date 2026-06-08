@@ -1,4 +1,4 @@
-﻿# scripts/bootstrap-agent-stack.ps1
+# scripts/bootstrap-agent-stack.ps1
 # Install + update the ANTIGRAVITY agent CLI stack on a Windows node from
 # OFFICIAL sources (no 3rd-party wrappers). Idempotent - safe to re-run.
 # After a clean run, every agent in `ollama launch` shows as installed.
@@ -10,9 +10,9 @@
 #              cloud models + the small nomic-embed-text. For service-loaded
 #              nodes like T5500 that run Docker / brain-mcp / DBs.
 #
-# Usage (local):     powershell -ExecutionPolicy Bypass -File C:\Antigravity\scripts\bootstrap-agent-stack.ps1
-# Usage (T5500):     powershell -ExecutionPolicy Bypass -File C:\Antigravity\scripts\bootstrap-agent-stack.ps1 -Light
-# Usage (remote):    ssh joshl@<node> "powershell -ExecutionPolicy Bypass -File C:\Antigravity\scripts\bootstrap-agent-stack.ps1 [-Light]"
+# Usage (local):     powershell -ExecutionPolicy Bypass -File c:\antigravity\scripts\bootstrap-agent-stack.ps1
+# Usage (T5500):     powershell -ExecutionPolicy Bypass -File c:\antigravity\scripts\bootstrap-agent-stack.ps1 -Light
+# Usage (remote):    ssh joshl@<node> "powershell -ExecutionPolicy Bypass -File c:\antigravity\scripts\bootstrap-agent-stack.ps1 [-Light]"
 
 param(
     [switch]$Light
@@ -206,7 +206,7 @@ foreach ($m in $cloudModels) {
 
 # ---------- 10. Build local Modelfile if present (CFO PRIME) - full mode only ----------
 Step 'Local Modelfile (./Modelfile -> CFO-PRIME)'
-$mf = 'C:\Antigravity\Modelfile'
+$mf = 'c:\antigravity\Modelfile'
 if ($Light) {
     Write-Host '  (light mode - skipped)' -ForegroundColor Yellow
 } elseif (Test-Path $mf) {
@@ -217,7 +217,7 @@ if ($Light) {
         ollama create cfo-prime -f $mf 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
     }
 } else {
-    Write-Host '  no Modelfile at C:\Antigravity\Modelfile - skipped'
+    Write-Host '  no Modelfile at c:\antigravity\Modelfile - skipped'
 }
 
 # ---------- 11. Final verification ----------
