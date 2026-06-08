@@ -47,7 +47,11 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new ApiError(res.status, body.detail || res.statusText);
+    const message =
+      typeof body.detail === 'string'
+        ? body.detail
+        : body.message || res.statusText;
+    throw new ApiError(res.status, message);
   }
 
   return res.json();

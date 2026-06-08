@@ -81,6 +81,10 @@ async def reconcile_legacy_schema() -> None:
 
         await connection.run_sync(_wr.WebhookRetryQueue.metadata.create_all)
 
+        if connection.dialect.name == "sqlite":
+            await _reconcile_sqlite_schema(connection)
+            return
+
         if connection.dialect.name != "postgresql":
             return
 
@@ -135,7 +139,9 @@ async def reconcile_legacy_schema() -> None:
         for statement in statements:
             await connection.execute(text(statement))
 
-        await connection.execute(text("""
+        await connection.execute(
+            text(
+                """
                 DO $$
                 BEGIN
                     IF EXISTS (
@@ -154,9 +160,13 @@ async def reconcile_legacy_schema() -> None:
                     END IF;
                 END
                 $$;
-                """))
+                """
+            )
+        )
 
-        await connection.execute(text("""
+        await connection.execute(
+            text(
+                """
                 DO $$
                 BEGIN
                     IF EXISTS (
@@ -172,4 +182,156 @@ async def reconcile_legacy_schema() -> None:
                     END IF;
                 END
                 $$;
-                """))
+                """
+            )
+        )
+
+
+async def _reconcile_sqlite_schema(connection) -> None:
+    """Add account columns to older local SQLite databases.
+
+    SQLite does not support the PostgreSQL `ADD COLUMN IF NOT EXISTS` syntax,
+    so we inspect first. This is only for local/dev databases; production
+    PostgreSQL keeps using the canonical reconciliation above.
+    """
+
+    user_columns = {
+        row[1] for row in (await connection.execute(text("PRAGMA table_info(users)")))
+    }
+    profile_columns = {
+        row[1]
+        for row in (await connection.execute(text("PRAGMA table_info(profiles)")))
+    }
+    verification_columns = {
+        row[1]
+        for row in (
+            await connection.execute(text("PRAGMA table_info(verification_events)"))
+        )
+    }
+    webhook_columns = {
+        row[1]
+        for row in (await connection.execute(text("PRAGMA table_info(webhook_events)")))
+    }
+
+    async def add_column(
+        table: str, known_columns: set[str], name: str, ddl: str
+    ) -> None:
+        if name not in known_columns:
+            await connection.execute(text(f"ALTER TABLE {table} ADD COLUMN {ddl}"))
+            known_columns.add(name)
+
+    await add_column("users", user_columns, "email", "email VARCHAR(255)")
+    await add_column(
+        "users",
+        user_columns,
+        "display_name",
+        "display_name VARCHAR(100) DEFAULT 'User'",
+    )
+    await add_column("users", user_columns, "password_hash", "password_hash VARCHAR(255)")
+    await add_column(
+        "users", user_columns, "square_customer_id", "square_customer_id VARCHAR(255)"
+    )
+    await add_column("users", user_columns, "date_of_birth", "date_of_birth DATE")
+    await add_column("users", user_columns, "created_at", "created_at DATETIME")
+    await add_column("users", user_columns, "updated_at", "updated_at DATETIME")
+    await add_column(
+        "users", user_columns, "adult_verified_at", "adult_verified_at DATETIME"
+    )
+    await add_column(
+        "users", user_columns, "is_active", "is_active BOOLEAN DEFAULT 1 NOT NULL"
+    )
+    await add_column(
+        "users",
+        user_columns,
+        "bot_shield_verified",
+        "bot_shield_verified BOOLEAN DEFAULT 0 NOT NULL",
+    )
+    await add_column(
+        "users", user_columns, "subscription_tier", "subscription_tier VARCHAR(50)"
+    )
+    await add_column(
+        "users",
+        user_columns,
+        "subscription_active",
+        "subscription_active BOOLEAN DEFAULT 0 NOT NULL",
+    )
+    await add_column(
+        "users",
+        user_columns,
+        "subscription_expires_at",
+        "subscription_expires_at DATETIME",
+    )
+    await add_column(
+        "users",
+        user_columns,
+        "mission_impact_score",
+        "mission_impact_score FLOAT DEFAULT 0 NOT NULL",
+    )
+    await add_column("users", user_columns, "intent_badge", "intent_badge VARCHAR(50)")
+    await add_column("users", user_columns, "google_id", "google_id VARCHAR(255)")
+
+    await add_column("profiles", profile_columns, "bio", "bio TEXT")
+    await add_column("profiles", profile_columns, "age", "age INTEGER")
+    await add_column("profiles", profile_columns, "gender", "gender VARCHAR(50)")
+    await add_column(
+        "profiles", profile_columns, "looking_for", "looking_for VARCHAR(50)"
+    )
+    await add_column("profiles", profile_columns, "location", "location VARCHAR(200)")
+    await add_column(
+        "profiles", profile_columns, "photos", "photos JSON DEFAULT '[]' NOT NULL"
+    )
+    await add_column(
+        "profiles",
+        profile_columns,
+        "interests",
+        "interests JSON DEFAULT '[]' NOT NULL",
+    )
+    await add_column(
+        "profiles", profile_columns, "verified", "verified BOOLEAN DEFAULT 0 NOT NULL"
+    )
+    await add_column(
+        "profiles",
+        profile_columns,
+        "location_enabled",
+        "location_enabled BOOLEAN DEFAULT 1 NOT NULL",
+    )
+    await add_column("profiles", profile_columns, "created_at", "created_at DATETIME")
+    await add_column("profiles", profile_columns, "updated_at", "updated_at DATETIME")
+
+    await add_column(
+        "verification_events",
+        verification_columns,
+        "square_payment_id",
+        "square_payment_id VARCHAR(255)",
+    )
+    await add_column(
+        "verification_events", verification_columns, "trust_score", "trust_score FLOAT"
+    )
+    await add_column(
+        "verification_events",
+        verification_columns,
+        "amount_cents",
+        "amount_cents INTEGER",
+    )
+    await add_column(
+        "webhook_events",
+        webhook_columns,
+        "event_source_id",
+        "event_source_id VARCHAR(255)",
+    )
+    await add_column(
+        "webhook_events",
+        webhook_columns,
+        "event_source",
+        "event_source VARCHAR(50) DEFAULT 'square' NOT NULL",
+    )
+
+    await connection.execute(
+        text("CREATE INDEX IF NOT EXISTS ix_users_email ON users(email)")
+    )
+    await connection.execute(
+        text(
+            "CREATE INDEX IF NOT EXISTS ix_users_square_customer_id "
+            "ON users(square_customer_id)"
+        )
+    )
