@@ -21,6 +21,13 @@ from app.config import get_settings
 
 logger = logging.getLogger("youandinotai.rate_limit")
 
+_test_rate_limit_counts: dict[tuple[str, str, int], int] = {}
+
+
+def reset_test_rate_limits() -> None:
+    """Reset deterministic in-memory route limits used only under tests."""
+    _test_rate_limit_counts.clear()
+
 
 def _parse_trusted_proxy_networks(entries: list[str]) -> tuple:
     networks = []
@@ -88,6 +95,47 @@ async def check_rate_limit(
         # Fail open: if Redis is down, allow the request
         logger.error("Redis rate limit check failed (%s): %s", key, exc)
         return True, limit, now + window_seconds
+
+
+async def enforce_route_rate_limit(
+    request: Request,
+    *,
+    bucket: str,
+    limit: int,
+    window_seconds: int = 60,
+) -> None:
+    """Enforce per-route limits without requiring global Redis middleware in tests."""
+    settings = get_settings()
+    client_ip = _client_ip(request)
+
+    if settings.app_env == "test":
+        now = time.time()
+        window_bucket = int(now // window_seconds)
+        key = (bucket, client_ip, window_bucket)
+        count = _test_rate_limit_counts.get(key, 0) + 1
+        _test_rate_limit_counts[key] = count
+        if count <= limit:
+            return
+        reset_time = (window_bucket + 1) * window_seconds
+    else:
+        allowed, _remaining, reset_time = await check_rate_limit(
+            key=f"rl:{bucket}:{client_ip}",
+            limit=limit,
+            window_seconds=window_seconds,
+        )
+        if allowed:
+            return
+
+    raise HTTPException(
+        status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+        detail="Rate limit exceeded",
+        headers={
+            "X-RateLimit-Limit": str(limit),
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": str(int(reset_time)),
+            "Retry-After": str(max(0, int(reset_time - time.time()))),
+        },
+    )
 
 
 def _client_ip(request: Request) -> str:
