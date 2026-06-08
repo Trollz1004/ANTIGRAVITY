@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useEffect, useState } from 'react';
 import {
@@ -105,40 +105,39 @@ export default function Dashboard() {
           <div className="flex items-center justify-center gap-3 mb-6">
             <Rocket size={28} className="text-blue-500" />
             <h1 className="text-3xl md:text-4xl font-black tracking-tighter uppercase italic">
-              LAUNCHED: YouAndINotAI — the dating app that actually ships.
+              YouAndINotAI - human-first social platform.
             </h1>
           </div>
           <p className={`text-lg max-w-3xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Real people, verified before they ever message you. No bots, no catfishing, no data harvesting.
             YouAndINotAI is a human-first social platform for builders, operators, and people who actually do the work.
-            Bot-Shield verification from day one. Founding members get permanent recognition and the best rates.
-            The first 500 signups lock in founding status for life. Join at youandinotai.com — payments via Square.
+            Verification and moderation claims publish only after implementation proof is recorded.
+            Founding-member offers should describe current product access and avoid absolute safety guarantees.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
             <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
               isDarkMode ? 'bg-blue-500/10 border border-blue-500/30 text-blue-400' : 'bg-blue-50 border border-blue-200 text-blue-600'
             }`}>
-              <Heart className="w-4 h-4" /> YouAndINotAI — Dating &amp; Community
+              <Heart className="w-4 h-4" /> YouAndINotAI â€” Dating &amp; Community
             </div>
             <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
               isDarkMode ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' : 'bg-emerald-50 border border-emerald-200 text-emerald-600'
             }`}>
-              <Handshake className="w-4 h-4" /> Business Exchange — Marketplace
+              <Handshake className="w-4 h-4" /> Business Exchange â€” Marketplace
             </div>
             <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
               isDarkMode ? 'bg-purple-500/10 border border-purple-500/30 text-purple-400' : 'bg-purple-50 border border-purple-200 text-purple-600'
             }`}>
-              <Coins className="w-4 h-4" /> DAO Launch — Governance &amp; Funding
+              <Coins className="w-4 h-4" /> DAO Roadmap - Legal Review
             </div>
             <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
               isDarkMode ? 'bg-amber-500/10 border border-amber-500/30 text-amber-400' : 'bg-amber-50 border border-amber-200 text-amber-600'
             }`}>
-              <Mail className="w-4 h-4" /> Customer Support — Active
+              <Mail className="w-4 h-4" /> Customer Support â€” Active
             </div>
           </div>
         </section>
 
-        {/* ===== MEMBERSHIP (above the fold — this is the product) ===== */}
+        {/* ===== MEMBERSHIP (above the fold â€” this is the product) ===== */}
         <Membership isDarkMode={isDarkMode} />
 
         {/* ===== HOW THE PLATFORMS WORK ===== */}
@@ -156,20 +155,20 @@ export default function Dashboard() {
           </p>
           <ul className={`mt-4 space-y-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
             <li className="flex items-start gap-2">
-              <span className="text-blue-500 mt-1">→</span>
-              <span><strong>YouAndINotAI</strong> — memberships, verification, and the founding-member program</span>
+              <span className="text-blue-500 mt-1">â†’</span>
+              <span><strong>YouAndINotAI</strong> â€” memberships, verification, and the founding-member program</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-emerald-500 mt-1">→</span>
-              <span><strong>Business Exchange</strong> — services, referrals, and business sales for builders</span>
+              <span className="text-emerald-500 mt-1">â†’</span>
+              <span><strong>Business Exchange</strong> â€” services, referrals, and business sales for builders</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-purple-500 mt-1">→</span>
-              <span><strong>AI-Solutions Store</strong> — digital products and automation offers</span>
+              <span className="text-purple-500 mt-1">â†’</span>
+              <span><strong>AI-Solutions Store</strong> â€” digital products and automation offers</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-amber-500 mt-1">→</span>
-              <span><strong>OnlineRecycle</strong> — electronics resale and recycling services (Central Florida)</span>
+              <span className="text-amber-500 mt-1">â†’</span>
+              <span><strong>OnlineRecycle</strong> â€” electronics resale and recycling services (Central Florida)</span>
             </li>
           </ul>
         </section>
@@ -251,7 +250,7 @@ export default function Dashboard() {
             <h2 className="text-2xl font-black italic tracking-tight">CUSTOMER SUPPORT</h2>
           </div>
           <p className={`max-w-3xl leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Support is not decoration — it is a trust signal. Every product in this ecosystem has reachable customer support.
+            Support is not decoration â€” it is a trust signal. Every product in this ecosystem has reachable customer support.
             If you need help, we are here.
           </p>
           <div className="mt-4">
@@ -279,10 +278,9 @@ export default function Dashboard() {
           }`}
         >
           <Heart size={32} className="text-emerald-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-black italic tracking-tight mb-3">THE MISSION</h2>
+          <h2 className="text-2xl font-black italic tracking-tight mb-3">OPERATING PRINCIPLE</h2>
           <p className={`max-w-2xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            For The Kids. Until No Kid In Need. The mission is the reason every product exists. Every platform,
-            every revenue stream supports the kids' medical care mission.
+            Build useful products first, report only verified numbers, and keep legal-review items offline until they are ready.
           </p>
         </section>
 
@@ -293,9 +291,10 @@ export default function Dashboard() {
             isDarkMode ? 'border-slate-800 text-slate-600' : 'border-slate-200 text-slate-400'
           }`}
         >
-          &copy; 2026 Trash Or Treasure Online Recycler LLC • Public status only • No internal admin exposure
+          &copy; 2026 Trash Or Treasure Online Recycler LLC â€¢ Public status only â€¢ No internal admin exposure
         </footer>
       </div>
     </div>
   );
 }
+

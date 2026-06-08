@@ -45,7 +45,7 @@ function RoutingDiagram({ hermesOn }: RoutingDiagramProps) {
           strokeWidth="1.5"
         />
         <text x="360" y="192" textAnchor="middle" fill={hermesOn ? '#ffffff' : '#b9adc6'} fontFamily="JetBrains Mono" fontWeight="800" fontSize="13" letterSpacing="1">HERMES</text>
-        <text x="360" y="208" textAnchor="middle" fill={hermesOn ? '#b3a2bf' : '#5e5170'} fontFamily="JetBrains Mono" fontWeight="700" fontSize="9" letterSpacing="2">NODE 9020 · OPENCLAW</text>
+        <text x="360" y="208" textAnchor="middle" fill={hermesOn ? '#b3a2bf' : '#5e5170'} fontFamily="JetBrains Mono" fontWeight="700" fontSize="9" letterSpacing="2">SABRETOOTH · 192.168.0.8</text>
         {hermesOn && (
           <circle cx="312" cy="180" r="3" fill="#3fbf72">
             <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
@@ -121,7 +121,7 @@ export function HermesNode({ hermesOn, onToggle }: HermesNodeProps) {
     <div className="page-anim">
       <div className="page-head">
         <div>
-          <h1 className="page-title">Hermes <span className="accent">9020</span> Node</h1>
+          <h1 className="page-title">Hermes <span className="accent">Sabretooth</span> Gateway</h1>
           <div className="page-sub">Local orchestration · OpenClaw · Ollama · Nous Research · 11435 router</div>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
@@ -139,7 +139,7 @@ export function HermesNode({ hermesOn, onToggle }: HermesNodeProps) {
           <div style={{ position: 'relative' }}>
             <div className="mono" style={{ fontSize: 10, letterSpacing: '0.24em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>HERMES MODE</div>
             <div style={{ fontWeight: 900, fontSize: 42, lineHeight: 1, letterSpacing: '-0.04em', marginTop: 10 }}>
-              {hermesOn ? <>Routing through <span style={{ color: 'var(--odoo-300)' }}>9020</span></> : <>Direct mode</>}
+              {hermesOn ? <>Routing through <span style={{ color: 'var(--odoo-300)' }}>Sabretooth</span></> : <>Direct mode</>}
             </div>
             <div className="mono" style={{ fontSize: 11, lineHeight: 1.6, color: 'var(--ink-2)', marginTop: 14, letterSpacing: '0.04em' }}>
               {hermesOn
@@ -156,7 +156,7 @@ export function HermesNode({ hermesOn, onToggle }: HermesNodeProps) {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
-                ['BACKEND',    '~/.hermes/openclaw/9020'],
+                ['BACKEND',    '/mnt/c/antigravity/hermes'],
                 ['ROUTER',     'localhost:11435'],
                 ['LOCAL POOL', 'Ollama · Gemma4 · Codex · Pi'],
                 ['CLOUD POOL', 'Claude · Gemini · Perplexity'],
@@ -174,7 +174,7 @@ export function HermesNode({ hermesOn, onToggle }: HermesNodeProps) {
         {/* Right — routing visualization */}
         <div className="routing-grid dotgrid">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, position: 'relative', zIndex: 1 }}>
-            <div className="mono" style={{ fontSize: 10, letterSpacing: '0.24em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>LIVE ROUTING · 9020 → FLEET</div>
+            <div className="mono" style={{ fontSize: 10, letterSpacing: '0.24em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>LIVE ROUTING · SABRETOOTH → FLEET</div>
             <div style={{ display: 'flex', gap: 8 }}>
               <span className="tag live outline"><span className="status-dot live"/> 6 ROUTES</span>
               <span className="tag bridge outline"><Icon.Bolt size={11}/> 210MS P95</span>

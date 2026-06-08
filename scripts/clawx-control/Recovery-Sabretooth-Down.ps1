@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [string]$RepoRoot = "C:\ANTIGRAVITY",
+    [string]$RepoRoot = "c:\antigravity",
     [string]$SabretoothHost = "192.168.0.8",
     [string]$VaultRoot = "$env:USERPROFILE\OneDrive\Personal Vault\ANTIGRAVITY-Codex-Critical",
     [switch]$ForceTakeover

@@ -5,7 +5,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$repoRoot = 'C:\ANTIGRAVITY'
+$repoRoot = 'c:\antigravity'
 [System.Environment]::CurrentDirectory = $repoRoot
 Set-Location -LiteralPath $repoRoot
 

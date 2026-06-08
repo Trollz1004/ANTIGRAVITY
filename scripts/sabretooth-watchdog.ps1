@@ -1,17 +1,17 @@
 ﻿$ErrorActionPreference = 'Continue'
 
-$LogDir     = 'C:\ANTIGRAVITY\logs'
+$LogDir     = 'c:\antigravity\logs'
 $LogFile    = "$LogDir\sabretooth-watchdog.log"
 $MaxLogBytes = 10MB
 
 $OllamaExe        = 'C:\Users\joshl\AppData\Local\Programs\Ollama\ollama.exe'
 $PaperclipExe     = 'C:\Users\joshl\AppData\Roaming\npm\paperclipai.cmd'
 $CloudflaredExe   = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
-$TunnelConfig     = 'C:\ANTIGRAVITY\infra\cloudflare\paperclip-hq.yml'
+$TunnelConfig     = 'c:\antigravity\infra\cloudflare\paperclip-hq.yml'
 $ClaudeExe        = 'C:\Users\joshl\.local\bin\claude.exe'
 $OpenCodeExe      = 'C:\Users\joshl\AppData\Local\Microsoft\WinGet\Packages\SST.opencode_Microsoft.Winget.Source_8wekyb3d8bbwe\opencode.exe'
 $PythonExe        = 'C:\Windows\py.exe'
-$OpusHasHandsDir  = 'C:\Antigravity\_handoff-staging-2026-05-26\_deploy\opushashands'
+$OpusHasHandsDir  = 'c:\antigravity\_handoff-staging-2026-05-26\_deploy\opushashands'
 $PaperclipPort    = 3100
 $OllamaPort       = 11434
 $OpusHasHandsPort = 4200
@@ -58,7 +58,7 @@ function Ensure-Paperclip {
     if (Test-LocalPort $PaperclipPort) { return }
     Log 'Paperclip DOWN — starting...'
     Start-Process -FilePath 'powershell.exe' `
-        -ArgumentList '-NonInteractive', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-File', 'C:\ANTIGRAVITY\scripts\start-paperclip.ps1' `
+        -ArgumentList '-NonInteractive', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-File', 'c:\antigravity\scripts\start-paperclip.ps1' `
         -WindowStyle Hidden -ErrorAction SilentlyContinue
     Start-Sleep -Seconds 15
     if (Test-LocalPort $PaperclipPort) {
@@ -80,21 +80,23 @@ function Ensure-Cloudflared {
 }
 
 function Ensure-ClaudeCLI {
+    if ($env:ANTIGRAVITY_FULL_AUTOSTART -ne '1') { return }
     $proc = Get-Process -Name 'claude' -ErrorAction SilentlyContinue | Where-Object { $_.Path -like '*\.local\bin*' }
     if ($null -ne $proc) { return }
-    Log 'Claude CLI not running — launching headless in C:\ANTIGRAVITY...'
+    Log 'Claude CLI not running — launching headless in c:\antigravity...'
     Start-Process -FilePath $ClaudeExe `
-        -ArgumentList '--dangerously-skip-permissions', '--cwd', 'C:\ANTIGRAVITY' `
+        -ArgumentList '--dangerously-skip-permissions', '--cwd', 'c:\antigravity' `
         -WindowStyle Hidden -ErrorAction SilentlyContinue
     Log 'Claude CLI start command issued.'
 }
 
 function Ensure-OpenCodeCLI {
+    if ($env:ANTIGRAVITY_FULL_AUTOSTART -ne '1') { return }
     $proc = Get-Process -Name 'opencode' -ErrorAction SilentlyContinue
     if ($null -ne $proc) { return }
-    Log 'OpenCode CLI not running — launching headless in C:\ANTIGRAVITY...'
+    Log 'OpenCode CLI not running — launching headless in c:\antigravity...'
     Start-Process -FilePath $OpenCodeExe `
-        -ArgumentList '--workdir', 'C:\ANTIGRAVITY' `
+        -ArgumentList '--workdir', 'c:\antigravity' `
         -WindowStyle Hidden -ErrorAction SilentlyContinue
     Log 'OpenCode CLI start command issued.'
 }
@@ -124,6 +126,7 @@ function Ensure-OpusHasHands {
 }
 
 function Open-DashboardBrowser {
+    if ($env:ANTIGRAVITY_FULL_AUTOSTART -ne '1') { return }
     $chrome = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
     $urls = @('http://localhost:3100', 'https://paperclip-hq.youandinotai.com')
     if (Test-Path $chrome) {

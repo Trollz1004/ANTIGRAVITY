@@ -2,7 +2,7 @@
 #  commit-design-bundle-v1.ps1
 #  Commit + push the design-bundle-v1 work that Cowork dropped into the repo.
 #
-#  Run from C:\ANTIGRAVITY in PowerShell 7+ on Sabretooth.
+#  Run from c:\antigravity in PowerShell 7+ on Sabretooth.
 #
 #  WHAT IT DOES
 #   - Verifies you're on branch claude/design-bundle-v1 (creates it if missing).

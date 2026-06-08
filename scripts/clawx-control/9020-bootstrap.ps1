@@ -49,7 +49,7 @@ npm install -g @anthropic-ai/claude-code
 # ── Step 5: Create workspace ─────────────────────────────────
 Write-Host ""
 Write-Host "  Creating workspace..." -ForegroundColor Yellow
-$workspace = "C:\ANTIGRAVITY"
+$workspace = "c:\antigravity"
 if (-not (Test-Path $workspace)) {
     New-Item -ItemType Directory -Path $workspace -Force | Out-Null
 }
@@ -83,7 +83,7 @@ function prompt {
 Set-Alias -Name opus -Value claude
 
 function Start-Opus {
-    Set-Location C:\ANTIGRAVITY
+    Set-Location c:\antigravity
     claude --dangerously-skip-permissions
 }
 Set-Alias -Name go -Value Start-Opus
@@ -153,8 +153,8 @@ Write-Host "  3. Run: nvidia-smi  (verify CUDA 12.6)" -ForegroundColor White
 Write-Host "  4. Run: ollama serve  (starts on :11434)" -ForegroundColor White
 Write-Host "  5. Run: ollama pull llama3.1  (or whatever model)" -ForegroundColor White
 Write-Host "  6. Open Docker Desktop, then:" -ForegroundColor White
-Write-Host "     cd C:\ANTIGRAVITY && docker compose up -d" -ForegroundColor White
-Write-Host "  7. Copy master .env from 9020 SSD to C:\ANTIGRAVITY\.env" -ForegroundColor White
+Write-Host "     cd c:\antigravity && docker compose up -d" -ForegroundColor White
+Write-Host "  7. Copy master .env from 9020 SSD to c:\antigravity\.env" -ForegroundColor White
 Write-Host "  8. Clone OpenClaw workspace or copy from T5500" -ForegroundColor White
 Write-Host "  9. Run: claude setup-token  (auth to Anthropic)" -ForegroundColor White
 Write-Host " 10. Type: go" -ForegroundColor White

@@ -5,7 +5,7 @@
 $ErrorActionPreference = 'Stop'
 
 # === Fixed paths for your setup ===
-$repoRoot      = 'C:\ANTIGRAVITY'
+$repoRoot      = 'c:\antigravity'
 $masterEnvPath = Join-Path $repoRoot 'briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
 $pwshPath      = 'C:\Program Files\PowerShell\7\pwsh.exe'
 $startupScript = Join-Path $repoRoot 'scripts\startup-pwsh-admin.ps1'
