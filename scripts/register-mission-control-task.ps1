@@ -1,9 +1,9 @@
-﻿# Register Mission Control API as a Windows Scheduled Task
+# Register Mission Control API as a Windows Scheduled Task
 # Always-on: starts at boot + login, auto-restarts on crash every 1 min, no time limit
 $action = New-ScheduledTaskAction `
     -Execute 'python.exe' `
     -Argument '-m uvicorn mission_control_api.main:app --host 127.0.0.1 --port 8787' `
-    -WorkingDirectory 'C:\Antigravity\services\mission-control-api'
+    -WorkingDirectory 'c:\antigravity\services\mission-control-api'
 
 $triggerBoot = New-ScheduledTaskTrigger -AtStartup
 $triggerLogon = New-ScheduledTaskTrigger -AtLogOn
@@ -25,7 +25,7 @@ try {
         -Trigger @($triggerBoot, $triggerLogon) `
         -Settings $settings `
         -Principal $principal `
-        -Description 'Mission Control API on 127.0.0.1:8787 — auto-restart on crash, runs at boot' `
+        -Description 'Mission Control API on 127.0.0.1:8787 � auto-restart on crash, runs at boot' `
         -Force | Out-Null
     Write-Output 'OK: MissionControlAPI scheduled task registered'
     Get-ScheduledTask -TaskName 'MissionControlAPI' | Format-List TaskName, State, Author

@@ -204,7 +204,7 @@ function Start-OneDriveIfInstalled {
 $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $repoHead = Get-GitRef -Repository $RepoRoot -Ref "HEAD"
 $originMain = Get-GitRef -Repository $RepoRoot -Ref "origin/main"
-$cDriveHead = Get-GitRef -Repository "C:\ANTIGRAVITY" -Ref "HEAD"
+$cDriveHead = Get-GitRef -Repository "c:\antigravity" -Ref "HEAD"
 $oneDriveExecutable = $null
 
 $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) "codex-continuity-$timestamp"

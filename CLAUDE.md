@@ -27,12 +27,11 @@
 > # T5500 = POWERSTATION · Sabretooth = DEF NODE (no ad-hoc AI)
 >
 > **T5500 (`192.168.0.15`, dual Xeon, GTX 1050 Ti 4GB, 72GB server RAM) is the powerstation. All existing repo state lives there.**
-> - T5500 owns: customer-service OpenClaw, dev OpenClaw (ClawX 3rd-party GUI), YouAndINotAI date app, mission-control backend, repo working tree, all Docker services.
-> - **Sabretooth (`192.168.0.8`, 64GB, GTX 1070) is the def node for Opus + Hermes only.** It does NOT run ad-hoc AI work Josh didn't ask for. No background daemons. No autonomous agents spinning up models on its single GPU.
-> - 9020 (`192.168.0.5`, i7-4790, 32GB, GTX 1050 Ti) is the **income node** (separate GitHub account, zero overlap with Antigravity).
-> - **GPU rule (Josh-confirmed 2026-06-01):** 1 GPU per node. Sabretooth = GTX 1070. T5500 and 9020 = GTX 1050 Ti. No multi-GPU nodes. No stacking.
-> - **Migration rule:** any new repo state lands on T5500 first. Sabretooth is the orchestration seat, not the compute seat. This stops a single GTX 1070 from doing AI work Josh didn't ask for when T5500's dual Xeon is sitting idle.
-> - See `briefings/T5500-NODE-STATUS.md` and `briefings/CLAUDE-DOCTRINE.md` for the full node map.
+> - **Sabretooth (`192.168.0.8`, 64GB, GTX 1070) is PRIMARY.** Runs Hermes agent (WhatsApp/Telegram), cockpit dashboard, all orchestration.
+> - T5500 (`192.168.0.15`) is OPTIONAL. Cloudflare workers, wranglers, static hosting.
+> - 9020 (`192.168.0.5`) is PENDING WIPE. Being phased out. Preserve branch `9020-preserve-20260511` if data recovery needed.
+> - **Current reality (2026-06-07):** Hermes is the ONE orchestrator. Session `20260607_152323_8d46c712` runs on Sabretooth. No multi-node dispatch.
+> - See `ARCHITECTURE-HERMES.md` for current state.
 
 <!-- ============================================================ -->
 

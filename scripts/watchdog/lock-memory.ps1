@@ -4,9 +4,9 @@
   Emergent, third-party wrappers) that don't honor .claude/settings.json hooks.
 
   When first-party Claude needs to update one of these files, it runs:
-      pwsh C:\Antigravity\scripts\watchdog\lock-memory.ps1 -Unlock
+      pwsh c:\antigravity\scripts\watchdog\lock-memory.ps1 -Unlock
       <edits>
-      pwsh C:\Antigravity\scripts\watchdog\lock-memory.ps1
+      pwsh c:\antigravity\scripts\watchdog\lock-memory.ps1
   …or skips the lock step entirely; the Edit hook will block writes too.
 
   Two layers of defense:
@@ -24,7 +24,7 @@ param(
 
 $ErrorActionPreference = 'Continue'
 
-$repo = 'C:\Antigravity'
+$repo = 'c:\antigravity'
 $briefings = Join-Path $repo 'briefings'
 
 # Files only first-party Claude.ai should write

@@ -1,8 +1,8 @@
-﻿# Removes the final legacy Paperclip drift after reboot/logon clears stale file handles.
+# Removes the final legacy Paperclip drift after reboot/logon clears stale file handles.
 
 $ErrorActionPreference = 'Stop'
 
-$LogDir = 'C:\ANTIGRAVITY\logs'
+$LogDir = 'c:\antigravity\logs'
 $LogFile = Join-Path $LogDir 'paperclip-drift-cleanup.log'
 $LegacyPath = 'E:\trollz-sandbox\paperclip-antigravity'
 

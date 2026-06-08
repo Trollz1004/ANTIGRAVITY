@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Activity, Users, Coins, Zap, TrendingUp, Scale } from 'lucide-react';
 
 export default function DAOMetrics({ isDarkMode }: { isDarkMode: boolean }) {
@@ -14,14 +14,14 @@ export default function DAOMetrics({ isDarkMode }: { isDarkMode: boolean }) {
       <div className="text-center mb-10">
         <h2 className="text-3xl font-bold flex items-center justify-center gap-3">
           <Coins className="w-8 h-8 text-amber-500" />
-          DAO Launch — Token Framework
+          DAO Roadmap - Legal Review Required
         </h2>
         <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-          Four tokens. One total supply of 10,000,000. Public sale allocation: 2,000,000 (20%).
+          Review-gated roadmap mechanics stay offline until attorney review is complete.
         </p>
       </div>
 
-      {/* DAO Token Grid */}
+      {/* Review-gated concept grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { name: '$LOVE', platform: 'YouAndINotAI', color: 'text-pink-500', border: 'border-pink-500/30' },
@@ -62,7 +62,7 @@ export default function DAOMetrics({ isDarkMode }: { isDarkMode: boolean }) {
         ))}
       </div>
 
-      {/* Critical: Two Separate Buckets */}
+      {/* Legal-review hold */}
       <div
         className={`p-6 rounded-3xl border ${
           isDarkMode ? 'bg-slate-800/30 border-purple-500/30' : 'bg-purple-50 border-purple-200'
@@ -70,22 +70,22 @@ export default function DAOMetrics({ isDarkMode }: { isDarkMode: boolean }) {
       >
         <div className="flex items-center gap-2 mb-4">
           <Scale className="w-5 h-5 text-purple-500" />
-          <h3 className="text-lg font-bold">Two Separate Funding Buckets</h3>
+          <h3 className="text-lg font-bold">Review-Gated Mechanics Offline</h3>
         </div>
         <p className={`text-sm mb-4 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-          The public launch sale and the staking engine are separate funding buckets. These are distinct rails and must not be merged.
+          This dashboard is limited to current product status and verified records. Any future mechanics outside normal product access require attorney review before publication.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-blue-950/40' : 'bg-blue-50'}`}>
-            <p className="text-sm font-bold text-blue-500">Bucket 1 — Sale Proceeds</p>
+            <p className="text-sm font-bold text-blue-500">Roadmap Concepts</p>
             <p className={`text-xs mt-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-              Min 10% from public sale proceeds → kids bucket
+              Draft-only until reviewed.
             </p>
           </div>
           <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-emerald-950/40' : 'bg-emerald-50'}`}>
-            <p className="text-sm font-bold text-emerald-500">Bucket 2 — Staking Proceeds</p>
+            <p className="text-sm font-bold text-emerald-500">Payment Proof</p>
             <p className={`text-xs mt-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-              Min 10% from staking proceeds → kids bucket (separate rail)
+              Published only after live records verify it.
             </p>
           </div>
         </div>

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0",
+  "format": "html",
+  "metadata": {
+    "title": "ANTIGRAVITY — Investor Pitch",
+    "description": "Mission-first impact venture pitch deck. Built to fund the mission, not just describe it. #UntilNoKidInNeed",
+    "author": "Joshua Coleman"
+  },
+  "canvas": {"width": 1920, "height": 1080},
+  "playlist": [
+    "01-cover.html",
+    "02-thesis.html",
+    "03-problem.html",
+    "04-solution.html",
+    "05-ecosystem.html",
+    "06-market.html",
+    "07-business-model.html",
+    "08-100-cent-rule.html",
+    "09-tokenomics.html",
+    "10-traction.html",
+    "11-team.html",
+    "12-projections.html",
+    "13-ask.html"
+  ]
+}

@@ -2,8 +2,8 @@ export const PUBLIC_SURFACES = [
   {
     name: 'YouAndINotAI',
     url: 'https://youandinotai.com',
-    status: 'Live product',
-    description: 'Dating and community platform with human verification, message boards, and memberships. A live revenue engine.',
+    status: 'Public product',
+    description: 'Dating and community platform with Bot-Shield verification, message boards, and memberships.',
   },
   {
     name: 'Business Exchange',
@@ -12,10 +12,10 @@ export const PUBLIC_SURFACES = [
     description: 'Marketplace for services, referrals, and business sales. The B2B routing layer for the ecosystem.',
   },
   {
-    name: 'DAO Launch',
+    name: 'DAO Roadmap',
     url: 'https://dashboard.aidoesitall.website',
-    status: 'Public',
-    description: 'Governance and funding layer. Token sale active across 4 DAOs ($LOVE, $UKID, $GREEN, $AGRAV).',
+    status: 'Paused for legal review',
+    description: 'Review-gated mechanics are offline until attorney review is complete.',
   },
   {
     name: 'Customer Support',
