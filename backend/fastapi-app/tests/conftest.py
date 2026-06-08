@@ -10,6 +10,7 @@ import hashlib
 import hmac
 import os
 import sys
+import asyncio
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -220,6 +221,21 @@ async def db_session_factory():  # Changed to async
 @pytest.fixture()
 def client(db_session_factory):
     session_maker = db_session_factory
+
+    async def reset_db() -> None:
+        engine = session_maker.kw["bind"]
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.drop_all)
+            await conn.run_sync(Base.metadata.create_all)
+
+    asyncio.run(reset_db())
+
+    try:
+        from app.rate_limit_redis import reset_test_rate_limits
+
+        reset_test_rate_limits()
+    except Exception:
+        pass
 
     async def override_get_db():
         async with session_maker() as session:

@@ -16,6 +16,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.gzip import GZipMiddleware
 from strawberry.fastapi import GraphQLRouter
 
+from app.auth import get_current_user
 from app.cache import close_redis, get_redis, redis_health_check
 from app.config import get_settings
 from app.database import (
@@ -146,16 +147,22 @@ async def lifespan(app: FastAPI):
         prometheus_port=getattr(settings, "prometheus_port", None),
     )
 
-    # Startup: Initialize Redis connection pool
-    try:
-        await get_redis()
-        health = await redis_health_check()
-        if health["status"] == "ok":
-            logger.info("Redis connected", extra={"latency_ms": health["latency_ms"]})
-        else:
-            logger.warning("Redis health check returned non-ok", extra=health)
-    except Exception as exc:
-        logger.warning("Redis not available at startup (will retry on demand): %s", exc)
+    # Startup: Initialize Redis connection pool outside tests. TestClient suites
+    # run without local Redis, and retrying localhost can add seconds per request.
+    if settings.app_env != "test":
+        try:
+            await get_redis()
+            health = await redis_health_check()
+            if health["status"] == "ok":
+                logger.info(
+                    "Redis connected", extra={"latency_ms": health["latency_ms"]}
+                )
+            else:
+                logger.warning("Redis health check returned non-ok", extra=health)
+        except Exception as exc:
+            logger.warning(
+                "Redis not available at startup (will retry on demand): %s", exc
+            )
 
     # Startup: Reconcile database schema
     await reconcile_legacy_schema()
@@ -200,8 +207,10 @@ _rate_limit_rpm = 10_000 if settings.app_env == "test" else 60
 # installing the `brotli` package and adding BrotliMiddleware.
 app.add_middleware(GZipMiddleware, minimum_size=1024)
 app.add_middleware(InputValidationMiddleware)
-# Redis-backed rate limiting middleware (replaces in-memory RateLimitMiddleware)
-app.add_middleware(RedisRateLimitMiddleware, calls_per_minute=_rate_limit_rpm)
+# Redis-backed rate limiting middleware (replaces in-memory RateLimitMiddleware).
+# Skip it under tests so local suites do not depend on a Redis daemon.
+if settings.app_env != "test":
+    app.add_middleware(RedisRateLimitMiddleware, calls_per_minute=_rate_limit_rpm)
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(CacheHeadersMiddleware)
 # Request size & depth limits (DoS protection) — OPU-96
@@ -351,9 +360,11 @@ async def global_exception_handler(request: Request, exc: Exception):
         message="An unexpected error occurred. Our team has been notified.",
         details={"correlation_id": correlation_id},
     )
+    content = payload.model_dump()
+    content["detail"] = content["message"]
     return JSONResponse(
         status_code=500,
-        content=payload.model_dump(),
+        content=content,
     )
 
 
@@ -389,6 +400,7 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
             message=str(exc.detail),
             details={"correlation_id": correlation_id},
         ).model_dump()
+    content.setdefault("detail", content.get("message"))
 
     return JSONResponse(
         status_code=exc.status_code,
@@ -416,9 +428,11 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         message="Request validation failed",
         details={"errors": exc.errors(), "correlation_id": correlation_id},
     )
+    content = payload.model_dump()
+    content["detail"] = exc.errors()
     return JSONResponse(
         status_code=422,
-        content=payload.model_dump(),
+        content=content,
     )
 
 
@@ -501,7 +515,7 @@ async def root_health_check(db: AsyncSession = Depends(get_db)) -> HealthRespons
 
 
 @app.get("/api/v1/health/telemetry")
-async def telemetry_health():
+async def telemetry_health(_current_user=Depends(get_current_user)):
     """Return OpenTelemetry tracer status."""
     return {
         "service": "youandinotai-api",
@@ -583,8 +597,11 @@ async def custom_swagger_ui():
         },
     },
 )
-async def detailed_health_dashboard(db: AsyncSession = Depends(get_db)):
-    """Public API health dashboard with endpoint response times and availability.
+async def detailed_health_dashboard(
+    _current_user=Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Authenticated API health dashboard with endpoint response times and availability.
 
     This endpoint provides a comprehensive view of the API's health, including:
     - Overall service status
