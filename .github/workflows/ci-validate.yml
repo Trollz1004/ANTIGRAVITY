@@ -336,7 +336,7 @@ jobs:
           path: '.'
           format: 'HTML'
           out: 'reports'
-          args: '--failBuildOnCVSS 7'
+          args: '--failOnCVSS 7'
 
       - name: Install npm audit and run
         run: |
