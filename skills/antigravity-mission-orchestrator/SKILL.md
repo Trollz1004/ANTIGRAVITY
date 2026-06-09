@@ -62,8 +62,19 @@ Use the cheapest safe tool that can do the job well.
 | Local support/research fleet tasks | OpenClaw wrapper |
 | Simple conversational/explainer work | Pi wrapper |
 | Provider/model value decisions | AI value/cost reasoning, not paid APIs by default |
+| Token-budget protection | Hermes or Grok-backed side research for low-risk synthesis, with Codex retaining final authority |
 
 Do not route code edits to the Ollama Codex wrapper. If a historical doc recommends it, treat that doc as stale.
+
+## Token Budget Policy
+
+Default posture:
+
+- Use Codex Desktop for coordination, repo edits, security-sensitive judgment, final verification, PR/merge/delete flow, and anything that can damage the canonical repo.
+- Use Hermes, Grok, OpenCode, OpenClaw, local Ollama models, or other paid/free wrappers for low-risk side work such as broad research, CI-log summarization, content ideation, duplicate detection, and repo-map exploration.
+- Do not send secrets, private phone numbers, populated env files, raw chat logs, or customer data to side agents.
+- Side agents can propose findings, but Codex must verify against `c:\antigravity`, GitHub, CI, or live tools before acting.
+- If a 5-hour usage window is tight, prefer side-agent prompts for context gathering and reserve Codex for the merge-critical path.
 
 ## Node Placement Policy
 
