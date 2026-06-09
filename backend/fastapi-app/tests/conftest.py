@@ -5,12 +5,12 @@ auth flows, verification flows, and webhook signature verification
 without requiring a live database or external services.
 """
 
+import asyncio
 import base64
 import hashlib
 import hmac
 import os
 import sys
-import asyncio
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
