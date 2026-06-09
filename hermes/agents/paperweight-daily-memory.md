@@ -35,5 +35,5 @@ description: Daily automated memory consolidation and mission-control synchroniz
 - **State Drift**: Always prioritize the `.hermes/kanban` file over transient chat history.
 
 ## Verification
-- Verify `C:\ANTIGRAVITY\briefings\DAILY-SYNC.md` was updated with today's date.
+- Verify `c:\antigravity\briefings\DAILY-SYNC.md` was updated with today's date.
 - confirm no duplicate entries in permanent memory.
