@@ -5,6 +5,22 @@
 > they never **AUTHOR** them. Revisions queue as a claude.ai Opus summons.
 > Updated 2026-05-22.
 
+> **CURRENT OVERRIDE - 2026-06-09**
+> Current repo truth supersedes older path/routing text in this file:
+> - One live repo only: `Trollz1004/ANTIGRAVITY`.
+> - Windows root: `c:\antigravity`.
+> - WSL root: `/mnt/c/antigravity`.
+> - `main` is the canonical merge target. Branches are temporary safety lanes, not extra repos.
+> - Do not treat WhatsApp transfer files, OneDrive copies, backups, archives, "New project", or
+>   uppercase `C:\ANTIGRAVITY` as live doctrine.
+> - Real Codex Desktop is the Codex lane. Never route Codex through `ollama launch codex` or any
+>   wrapper that blocks the real desktop session.
+> - No DAO/token launch or public crypto fundraising work until attorney review and a new
+>   timestamped doctrine file explicitly re-enables it.
+> - Hermes and sub-agents draft, summarize, audit, and coordinate by default. They do not push,
+>   merge, deploy, delete, read populated secrets, or post live unless Josh explicitly assigns that
+>   exact action.
+
 ---
 
 ## 1. The shape of the fleet
