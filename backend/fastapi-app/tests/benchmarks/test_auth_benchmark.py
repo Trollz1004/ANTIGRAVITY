@@ -58,10 +58,12 @@ async def _seed_refresh_token(db_session_factory, user_id: uuid.UUID) -> str:
 def seeded_auth_data(db_session_factory):
     """Fixture to provide seeded user and refresh token."""
     settings = get_settings()
+    original_auth_limit = settings.auth_rate_limit_per_minute
     settings.auth_rate_limit_per_minute = 1_000
     user_id, password = asyncio.run(_seed_user(db_session_factory))
     refresh_token = asyncio.run(_seed_refresh_token(db_session_factory, user_id))
-    return {"user_id": user_id, "password": password, "refresh_token": refresh_token}
+    yield {"user_id": user_id, "password": password, "refresh_token": refresh_token}
+    settings.auth_rate_limit_per_minute = original_auth_limit
 
 
 @pytest.mark.parametrize("n_requests", [50])
