@@ -35,6 +35,9 @@
     .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:16px} .step{padding:22px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.045)} .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(110,231,249,.16);color:var(--accent);font-weight:900;margin-bottom:12px}
     .admin{border:1px solid rgba(52,211,153,.35);background:linear-gradient(135deg,rgba(52,211,153,.12),rgba(110,231,249,.06));border-radius:var(--radius);padding:26px;display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center}
     .qr-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.qr-card{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.055);padding:16px;text-align:center}.qr-card img{width:100%;max-width:150px;border-radius:14px;background:#fff;padding:8px}.qr-card strong{display:block;margin-top:10px}.pay-rail{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.pay-pill{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:999px;padding:8px 12px;color:var(--muted);font-size:13px}
+
+    .admin-tools{display:grid;gap:12px}.admin-tools input,.chat-box input{width:100%;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.28);color:var(--ink);padding:12px}.admin-status{border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.22);padding:12px;min-height:44px}.admin-status.ok{border-color:rgba(52,211,153,.55);color:#bbf7d0}.admin-status.bad{border-color:rgba(248,113,113,.55);color:#fecaca}
+    .chat-widget{position:fixed;right:18px;bottom:18px;width:min(380px,calc(100% - 36px));z-index:50;border:1px solid var(--line);border-radius:24px;background:rgba(13,17,26,.96);box-shadow:var(--shadow);overflow:hidden}.chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:linear-gradient(135deg,rgba(110,231,249,.16),rgba(167,139,250,.14));cursor:pointer}.chat-head strong{display:block}.chat-body{display:none;padding:14px}.chat-widget.open .chat-body{display:block}.chat-log{height:220px;overflow:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:12px}.chat-msg{border:1px solid var(--line);border-radius:16px;padding:10px 12px;background:rgba(255,255,255,.055);color:#d6deeb}.chat-msg.me{background:rgba(110,231,249,.12);align-self:flex-end}.chat-msg.bot{align-self:flex-start}.chat-box{display:flex;gap:8px}.chat-box input{flex:1}.chat-box button{white-space:nowrap}.chat-note{font-size:12px;color:var(--muted);line-height:1.45;margin-top:8px}
     code{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;padding:3px 7px;color:#c4f1ff} .small{font-size:13px;color:var(--muted);line-height:1.6}
     footer{padding:48px 0 40px;color:var(--muted);border-top:1px solid var(--line);margin-top:40px} .sticky{position:static;background:rgba(6,7,11,.82);border-top:1px solid var(--line);border-bottom:1px solid var(--line);backdrop-filter:blur(18px);z-index:30;margin:24px 0 0} .sticky .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0} .sticky strong{display:block}
     @media(max-width:900px){.grid,.flow,.proof,.admin,.qr-grid{grid-template-columns:1fr}.wide{grid-column:auto}.navlinks{display:none}.section-head{display:block}.sticky .small{display:none}}
@@ -65,11 +68,88 @@
     <section><div class="section-head"><h2>Royalty Deck</h2><p>Limited premium access card for serious operators. Purchase terms are handled through Stripe and confirmed in writing.</p></div><div class="grid"><article class="card premium wide"><span class="tag">Limited</span><div class="icon">👑</div><h3>Royalty Access Card</h3><p class="desc">Priority support, lifetime product access terms, and early access to future drops under the written program terms.</p><div class="price">$1,000</div><a class="btn primary" data-product="royalty" href="https://buy.stripe.com/dRmcN604kebheRf2cteEo0d">Claim via Stripe</a></article><article class="card"><h3>Concierge scope</h3><p class="desc">Need a custom SKU, business invoice, or platform scope before payment?</p><a class="btn ghost" href="mailto:sales@aidoesitall.website?subject=AI%20Solutions%20custom%20invoice">Email sales</a></article></div></section>
     <section id="delivery"><div class="section-head"><h2>Receipt → key → delivery</h2><p>The fulfillment service is designed around Stripe webhooks. Your checkout receipt becomes the purchase fingerprint for license generation.</p></div><div class="flow"><div class="step"><div class="num">1</div><h3>Checkout</h3><p class="small">Stripe records the product/payment link and buyer email.</p></div><div class="step"><div class="num">2</div><h3>Key issue</h3><p class="small">The fulfillment worker signs a product-specific license key from the receipt/session fingerprint.</p></div><div class="step"><div class="num">3</div><h3>Email handoff</h3><p class="small">Buyer receives the key, activation instructions, and support contact. Duplicate webhooks return the same key.</p></div></div></section>
     <section id="pay-qr"><div class="section-head"><h2>Scan-to-pay QR codes</h2><p>Stripe-only checkout path for phones and live demos. These QR codes point to the same Stripe links as the buttons above.</p></div><div class="qr-grid"><a class="qr-card" href="https://buy.stripe.com/3cI3cwcR6c3910p18peEo09"><img src="assets/qr/bot-shield.png" alt="BotShield Stripe QR"><strong>BotShield</strong><span class="small">Stripe checkout</span></a><a class="qr-card" href="https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a"><img src="assets/qr/founding-member.png" alt="Founding Member Stripe QR"><strong>Founder Stack</strong><span class="small">Stripe checkout</span></a><a class="qr-card" href="https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j"><img src="assets/qr/three-month.png" alt="3-month pass Stripe QR"><strong>3-month pass</strong><span class="small">Stripe checkout</span></a><a class="qr-card" href="https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c"><img src="assets/qr/twelve-month.png" alt="12-month pass Stripe QR"><strong>12-month pass</strong><span class="small">Stripe checkout</span></a><a class="qr-card" href="https://buy.stripe.com/dRmcN604kebheRf2cteEo0d"><img src="assets/qr/royalty.png" alt="Royalty Stripe QR"><strong>Royalty</strong><span class="small">Stripe checkout</span></a></div><div class="pay-rail"><span class="pay-pill">Stripe only on this store to keep merchant rails clean</span><span class="pay-pill">Square/Cash App reserved for separate commerce surfaces</span></div></section>
-    <section id="admin"><div class="admin"><div><h2>Admin testing path</h2><p class="small">Josh can issue a personal admin/test key without a purchase using the local Sideworld CLI. The admin secret stays in the private env file, not this public page.</p><p><code>sideworld admin-key --email you@example.com --product all-access</code></p></div><a class="btn primary" href="mailto:sales@aidoesitall.website?subject=Admin%20key%20test%20request">Request admin test</a></div></section>
+    <section id="admin"><div class="admin"><div><h2>Admin testing path</h2><p class="small">Paste Josh's admin key here to unlock the on-site test console and verify the sold-app flow without making a purchase. The page stores only a SHA-256 hash check; the actual key is not embedded in the public HTML.</p><p><code>sideworld admin-key --email you@example.com --product all-access</code></p></div><div class="admin-tools"><label class="small" for="admin-key-input">Admin test key</label><input id="admin-key-input" autocomplete="off" spellcheck="false" placeholder="AIS-ALL-ACCESS-..."/><button class="btn primary" type="button" onclick="validateAdminKey()">Unlock test console</button><div id="admin-test-result" class="admin-status">Locked. Paste the admin key to test from this site.</div></div></div></section>
   </main>
   <footer><div class="wrap"><strong>AI Solutions Store</strong> · Trash or Treasure Online Recycler LLC<br/>sales@aidoesitall.website · support@aidoesitall.website<br/><span class="small">Built for serious operators. Payments by Stripe. License fulfillment is receipt-linked and auditable.</span></div></footer>
   <div class="sticky"><div class="wrap inner"><div><strong>Best value: 12-month implementation pass</strong><span class="small">Stripe checkout + receipt-linked license key.</span></div><a class="btn primary" data-product="twelve-month" href="https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c">Checkout</a></div></div>
+
+  <div id="support-chat-widget" class="chat-widget" aria-live="polite">
+    <div class="chat-head" onclick="toggleSupportChat()"><div><strong>AI-Solutions SupportClaw</strong><span class="small">Bot youandinotai / ai-solutions · T5500 logs</span></div><span>↕</span></div>
+    <div class="chat-body">
+      <div id="support-chat-log" class="chat-log"><div class="chat-msg bot">SupportClaw is online. Ask about checkout, keys, installs, or escalation. If the T5500 bridge is unavailable, this widget keeps a local transcript and opens an escalation email.</div></div>
+      <form class="chat-box" onsubmit="sendSupportMessage(event)"><input id="support-chat-input" placeholder="Type a support message..."/><button class="btn primary" type="submit">Send</button></form>
+      <div class="chat-note">Routes to <code>/api/support/chat</code>, which proxies to SupportClaw on T5500 when configured. Escalations are marked for Hermes/human step-in.</div>
+    </div>
+  </div>
   <script>
+
+    const ADMIN_TEST_KEY_SHA256 = "74e610a0360cfba3977c1f17cdf3d9befac953330e9e76531894ea4c70e72794";
+    const SUPPORT_SESSION_ID = (() => {
+      try {
+        const existing = localStorage.getItem('aiSolutionsSupportSessionId');
+        if (existing) return existing;
+        const fresh = 'ais-' + crypto.randomUUID();
+        localStorage.setItem('aiSolutionsSupportSessionId', fresh);
+        return fresh;
+      } catch (_) { return 'ais-session-fallback'; }
+    })();
+    async function sha256Hex(value) {
+      const bytes = new TextEncoder().encode(value.trim());
+      const hash = await crypto.subtle.digest('SHA-256', bytes);
+      return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
+    async function validateAdminKey() {
+      const input = document.getElementById('admin-key-input');
+      const result = document.getElementById('admin-test-result');
+      const digest = await sha256Hex(input.value || '');
+      if (digest === ADMIN_TEST_KEY_SHA256) {
+        try { localStorage.setItem('aiSolutionsAdminUnlocked', 'true'); } catch (_) {}
+        result.className = 'admin-status ok';
+        result.textContent = 'Unlocked: admin key accepted. You can now test checkout buttons, QR links, and SupportClaw chat from this site without a purchase.';
+      } else {
+        result.className = 'admin-status bad';
+        result.textContent = 'Key rejected. Use the all-access admin key generated from Sideworld.';
+      }
+    }
+    function toggleSupportChat() { document.getElementById('support-chat-widget').classList.toggle('open'); }
+    function appendChatMessage(text, who) {
+      const log = document.getElementById('support-chat-log');
+      const node = document.createElement('div');
+      node.className = 'chat-msg ' + who;
+      node.textContent = text;
+      log.appendChild(node);
+      log.scrollTop = log.scrollHeight;
+    }
+    function saveLocalChat(record) {
+      try {
+        const key = 'aiSolutionsSupportTranscript';
+        const rows = JSON.parse(localStorage.getItem(key) || '[]');
+        rows.push(record);
+        localStorage.setItem(key, JSON.stringify(rows.slice(-50)));
+      } catch (_) {}
+    }
+    async function sendSupportMessage(event) {
+      event.preventDefault();
+      const input = document.getElementById('support-chat-input');
+      const message = (input.value || '').trim();
+      if (!message) return;
+      input.value = '';
+      appendChatMessage(message, 'me');
+      const payload = { sessionId: SUPPORT_SESSION_ID, source: 'ai-solutions.store', message };
+      saveLocalChat({ ...payload, role: 'user', timestamp: new Date().toISOString() });
+      try {
+        const res = await fetch('/api/support/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (!res.ok) throw new Error('support bridge returned ' + res.status);
+        const data = await res.json();
+        const reply = data.reply || 'Logged. SupportClaw will review this transcript.';
+        appendChatMessage(reply + (data.should_escalate ? ' Escalation flagged for Hermes/human step-in.' : ''), 'bot');
+        saveLocalChat({ ...data, role: 'bot', timestamp: new Date().toISOString() });
+      } catch (err) {
+        const fallback = 'Bridge not reachable from this deploy yet. I saved the local transcript and can escalate through support@aidoesitall.website.';
+        appendChatMessage(fallback, 'bot');
+        saveLocalChat({ sessionId: SUPPORT_SESSION_ID, role: 'bot', reply: fallback, error: String(err), should_escalate: true, timestamp: new Date().toISOString() });
+      }
+    }
     const CHECKOUT_LINKS = {
       "bot-shield": "https://buy.stripe.com/3cI3cwcR6c3910p18peEo09",
       "founding-member": "https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a",
