@@ -36,6 +36,13 @@
 
 ## Repository Structure
 
+### Canonical Root Paths
+
+- Windows root: `c:\antigravity`
+- WSL root: `/mnt/c/antigravity`
+- New Hermes, Paperweight, cron, and dispatcher work must not introduce uppercase root variants such as `C:\Antigravity`, `C:\ANTIGRAVITY`, or `/mnt/c/Antigravity`.
+- Use `/mnt/c/antigravity` for WSL-executed `workspace_path` values. Use `c:\antigravity` for Windows-facing launchers, docs, and services.
+
 ```
 /mnt/c/antigravity/  ← ONE REPO, ONE BRANCH (main)
 ├── hermes/
