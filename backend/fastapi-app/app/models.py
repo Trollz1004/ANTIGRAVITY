@@ -34,9 +34,7 @@ class User(Base):
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     display_name: Mapped[str] = mapped_column(String(100), nullable=False)
     date_of_birth: Mapped[date | None] = mapped_column(Date, nullable=True)
-    square_customer_id: Mapped[str | None] = mapped_column(
-        String(255), nullable=True
-    )
+    square_customer_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     google_id: Mapped[str | None] = mapped_column(
         String(255), unique=True, nullable=True
     )
