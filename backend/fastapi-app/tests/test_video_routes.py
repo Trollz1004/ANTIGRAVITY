@@ -14,8 +14,8 @@ Risk surface:
   - Only allowed signal types are relayed; unknown types are dropped
 """
 
-import uuid
 import asyncio
+import uuid
 from datetime import date, datetime, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
 
