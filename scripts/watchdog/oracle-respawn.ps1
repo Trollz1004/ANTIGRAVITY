@@ -77,15 +77,17 @@ while ($true) {
         }
     }
 
-    $sentryRunning = Get-CimInstance Win32_Process -Filter "Name='pythonw.exe'" -ErrorAction SilentlyContinue |
-        Where-Object { $_.CommandLine -like '*watchdog\sentry.py*' }
-    if (-not $sentryRunning) {
-        $sentryPy = Join-Path $Repo 'scripts\watchdog\sentry.py'
-        if (Test-Path $sentryPy) {
-            Log 'RESTART sentry pythonw'
-            $pythonw = (Get-Command pythonw -ErrorAction SilentlyContinue).Source
-            if (-not $pythonw) { $pythonw = 'pythonw.exe' }
-            Start-Hidden $pythonw @($sentryPy)
+    if ($env:ANTIGRAVITY_ENABLE_SENTRY -eq '1') {
+        $sentryRunning = Get-CimInstance Win32_Process -Filter "Name='pythonw.exe'" -ErrorAction SilentlyContinue |
+            Where-Object { $_.CommandLine -like '*watchdog\sentry.py*' }
+        if (-not $sentryRunning) {
+            $sentryPy = Join-Path $Repo 'scripts\watchdog\sentry.py'
+            if (Test-Path $sentryPy) {
+                Log 'RESTART sentry pythonw'
+                $pythonw = (Get-Command pythonw -ErrorAction SilentlyContinue).Source
+                if (-not $pythonw) { $pythonw = 'pythonw.exe' }
+                Start-Hidden $pythonw @($sentryPy)
+            }
         }
     }
 
