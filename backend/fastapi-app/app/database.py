@@ -139,9 +139,7 @@ async def reconcile_legacy_schema() -> None:
         for statement in statements:
             await connection.execute(text(statement))
 
-        await connection.execute(
-            text(
-                """
+        await connection.execute(text("""
                 DO $$
                 BEGIN
                     IF EXISTS (
@@ -160,13 +158,9 @@ async def reconcile_legacy_schema() -> None:
                     END IF;
                 END
                 $$;
-                """
-            )
-        )
+                """))
 
-        await connection.execute(
-            text(
-                """
+        await connection.execute(text("""
                 DO $$
                 BEGIN
                     IF EXISTS (
@@ -182,9 +176,7 @@ async def reconcile_legacy_schema() -> None:
                     END IF;
                 END
                 $$;
-                """
-            )
-        )
+                """))
 
 
 async def _reconcile_sqlite_schema(connection) -> None:
@@ -227,7 +219,9 @@ async def _reconcile_sqlite_schema(connection) -> None:
         "display_name",
         "display_name VARCHAR(100) DEFAULT 'User'",
     )
-    await add_column("users", user_columns, "password_hash", "password_hash VARCHAR(255)")
+    await add_column(
+        "users", user_columns, "password_hash", "password_hash VARCHAR(255)"
+    )
     await add_column(
         "users", user_columns, "square_customer_id", "square_customer_id VARCHAR(255)"
     )

@@ -101,9 +101,9 @@ def test_protected_http_routes_require_auth():
                 route_key = (route.path, method)
                 if route_key in public_routes:
                     continue
-                assert dependency_calls & auth_dependencies, (
-                    f"Missing auth on {method} {route.path}"
-                )
+                assert (
+                    dependency_calls & auth_dependencies
+                ), f"Missing auth on {method} {route.path}"
                 protected_routes.append(route_key)
 
     assert protected_routes, "Expected at least one protected API route"

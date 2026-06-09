@@ -51,7 +51,9 @@ async def _impact_payload(db: AsyncSession) -> dict:
     )
 
     total_users = await _count(db, select(func.count(User.id)))
-    active_users = await _count(db, select(func.count(User.id)).where(User.is_active.is_(True)))
+    active_users = await _count(
+        db, select(func.count(User.id)).where(User.is_active.is_(True))
+    )
     verified_users = await _count(
         db, select(func.count(User.id)).where(User.bot_shield_verified.is_(True))
     )
