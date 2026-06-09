@@ -1,0 +1,115 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "opencode",
+  "autoshare": false,
+  "autoupdate": true,
+  "provider": {
+    "anthropic": {
+      "options": { "apiKey": "{env:ANTHROPIC_API_KEY}" },
+      "models": {
+        "claude-opus-4-7":         { "name": "Opus 4.7 (deep)" },
+        "claude-sonnet-4-6":       { "name": "Sonnet 4.6 (workhorse)" },
+        "claude-haiku-4-5-20251001": { "name": "Haiku 4.5 (fast)" }
+      }
+    },
+    "openai": {
+      "options": { "apiKey": "{env:OPENAI_API_KEY}" },
+      "models": {
+        "gpt-5":      { "name": "GPT-5 (deep)" },
+        "gpt-5-mini": { "name": "GPT-5 mini (cheap)" },
+        "o3":         { "name": "o3 (reasoning)" }
+      }
+    },
+    "google": {
+      "options": { "apiKey": "{env:GEMINI_API_KEY}" },
+      "models": {
+        "gemini-2.5-pro":   { "name": "Gemini 2.5 Pro" },
+        "gemini-2.5-flash": { "name": "Gemini 2.5 Flash (FREE 15 RPM / 1M tok/day)" }
+      }
+    },
+    "nous": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Nous Research",
+      "options": {
+        "baseURL": "https://inference-api.nousresearch.com/v1",
+        "apiKey":  "{env:NOUS_API_KEY}"
+      },
+      "models": {
+        "Hermes-4-405B":   { "name": "Hermes-4 405B" },
+        "Hermes-4-70B":    { "name": "Hermes-4 70B" },
+        "Hermes-4.3-36B":  { "name": "Hermes-4.3 36B" }
+      }
+    },
+    "ollama-cloud": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama Cloud",
+      "options": {
+        "baseURL": "https://ollama.com/v1",
+        "apiKey":  "{env:OLLAMA_API_KEY}"
+      },
+      "models": {
+        "joshlcoleman/CFO-Until-No-Kid-In-Need:latest":   { "name": "CFO PRIME (your model)" },
+        "joshlcoleman/dateapp-marketing:latest":          { "name": "Marketing (your model)" },
+        "jeffreyvandekorput/korpohermes-prime:latest":    { "name": "Hermes Prime (cloud)" },
+        "kimi-k2.6:cloud":                                 { "name": "Kimi K2.6" },
+        "glm-5.1:cloud":                                   { "name": "GLM 5.1" }
+      }
+    },
+    "ollama-local": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Local Ollama (FREE)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1",
+        "apiKey":  "ollama"
+      },
+      "models": {
+        "qwen2.5-coder:7b": { "name": "Qwen2.5-Coder 7B" },
+        "qwen3.5:latest":   { "name": "Qwen3.5" },
+        "llama3.2:latest":  { "name": "Llama 3.2 (fast)" },
+        "gemma2:latest":    { "name": "Gemma 2" }
+      }
+    },
+    "hermes-router": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Hermes Router (services/hermes-router — auto-fallback)",
+      "options": {
+        "baseURL": "http://localhost:11435/v1",
+        "apiKey":  "router-auth"
+      },
+      "models": {
+        "hermes":        { "name": "Hermes (default)" },
+        "hermes-deep":   { "name": "Hermes Deep (405B)" },
+        "hermes-fast":   { "name": "Hermes Fast (36B)" },
+        "hermes-reason": { "name": "Hermes Reason (think tags)" },
+        "code":          { "name": "Code (local Qwen + fallback)" },
+        "fast":          { "name": "Fast (local Llama)" },
+        "cfo":           { "name": "CFO (cloud + fallback)" },
+        "marketing":     { "name": "Marketing (cloud + fallback)" },
+        "kimi":          { "name": "Kimi (cloud + fallback)" }
+      }
+    }
+  },
+  "model": "hermes-router/hermes",
+  "agent": {
+    "orchestrator": {
+      "description": "High-quality orchestrator. Use Opus for planning, route execution to cheaper models.",
+      "model": "anthropic/claude-opus-4-7"
+    },
+    "closer": {
+      "description": "Demo + proposal builder for paid gigs. Max quality.",
+      "model": "anthropic/claude-opus-4-7"
+    },
+    "hunter": {
+      "description": "Gig hunter / lead scorer. Cheap and fast.",
+      "model": "hermes-router/hermes-fast"
+    },
+    "cfo": {
+      "description": "Financial gating + revenue tracking for #UNTILnoKIDinNEED.",
+      "model": "hermes-router/cfo"
+    },
+    "coder": {
+      "description": "Local-first code writer.",
+      "model": "hermes-router/code"
+    }
+  }
+}
