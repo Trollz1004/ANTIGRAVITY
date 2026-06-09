@@ -29,15 +29,20 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # ── Config ───────────────────────────────────────────────────────────────────
-INTERVAL_SEC = 60
+INTERVAL_SEC = int(os.environ.get("ANTIGRAVITY_SENTRY_INTERVAL_SEC", "60"))
 HTTP_TIMEOUT = 5
 PORT_TIMEOUT = 2
 DOCKER_TIMEOUT = 5
+ENABLE_DOCKER_CHECKS = os.environ.get("ANTIGRAVITY_SENTRY_DOCKER", "").lower() in {"1", "true", "yes", "on"}
+ENABLE_URL_CHECKS = os.environ.get("ANTIGRAVITY_SENTRY_URLS", "1").lower() in {"1", "true", "yes", "on"}
+ENABLE_VAULT_SYNC = os.environ.get("ANTIGRAVITY_SENTRY_VAULT", "").lower() in {"1", "true", "yes", "on"}
 
 NODE = platform.node()
+LOCAL_STATE_DIR = Path(os.environ.get("ANTIGRAVITY_SENTRY_STATE_DIR", os.path.expanduser("~/.antigravity-sentry")))
 VAULT_DIR = Path(os.path.expanduser("~/OneDrive/Personal Vault"))
-STATUS_FILE = VAULT_DIR / f"sentry-{NODE}.json"
-LOG_FILE = VAULT_DIR / f"sentry-{NODE}.log"
+STATE_DIR = VAULT_DIR if ENABLE_VAULT_SYNC else LOCAL_STATE_DIR
+STATUS_FILE = STATE_DIR / f"sentry-{NODE}.json"
+LOG_FILE = STATE_DIR / f"sentry-{NODE}.log"
 
 # Ports we expect listening on every node where they're configured
 PORT_CHECKS = {
@@ -143,27 +148,33 @@ def gather_status() -> dict:
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
     ports = {name: check_port(port) for name, port in PORT_CHECKS.items()}
-    docker_engine = check_docker_engine()
-    docker_containers = (
-        {name: check_docker_container(name) for name in DOCKER_CHECKS}
-        if docker_engine
-        else {name: False for name in DOCKER_CHECKS}
-    )
+    docker_engine = check_docker_engine() if ENABLE_DOCKER_CHECKS else False
+    docker_containers = {}
+    if ENABLE_DOCKER_CHECKS:
+        docker_containers = (
+            {name: check_docker_container(name) for name in DOCKER_CHECKS}
+            if docker_engine
+            else {name: False for name in DOCKER_CHECKS}
+        )
     urls = {}
-    for name, url in URL_CHECKS.items():
-        result = check_url(url)
-        # content verification: title must contain at least one expected fragment
-        expectations = URL_TITLE_EXPECTATIONS.get(name, [])
-        if expectations and "title" in result:
-            result["title_match"] = any(
-                frag.lower() in result["title"].lower() for frag in expectations
-            )
-        urls[name] = result
+    if ENABLE_URL_CHECKS:
+        for name, url in URL_CHECKS.items():
+            result = check_url(url)
+            # content verification: title must contain at least one expected fragment
+            expectations = URL_TITLE_EXPECTATIONS.get(name, [])
+            if expectations and "title" in result:
+                result["title_match"] = any(
+                    frag.lower() in result["title"].lower() for frag in expectations
+                )
+            urls[name] = result
 
     return {
         "node": NODE,
         "captured": now,
         "interval_sec": INTERVAL_SEC,
+        "vault_sync_enabled": ENABLE_VAULT_SYNC,
+        "docker_checks_enabled": ENABLE_DOCKER_CHECKS,
+        "url_checks_enabled": ENABLE_URL_CHECKS,
         "ports": ports,
         "docker_engine": docker_engine,
         "docker_containers": docker_containers,
@@ -189,15 +200,19 @@ def log(msg: str) -> None:
 
 
 def main() -> int:
-    if not VAULT_DIR.exists():
-        log(f"VAULT_DIR not found: {VAULT_DIR}. Personal Vault must be unlocked + OneDrive synced.")
-        # don't crash; write status to local fallback
-        fallback = Path(os.path.expanduser("~/.antigravity-sentry"))
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    if ENABLE_VAULT_SYNC and not VAULT_DIR.exists():
+        log(f"VAULT_DIR not found: {VAULT_DIR}. Falling back to local sentry state.")
+        fallback = LOCAL_STATE_DIR
         fallback.mkdir(parents=True, exist_ok=True)
         globals()["STATUS_FILE"] = fallback / f"sentry-{NODE}.json"
         globals()["LOG_FILE"] = fallback / f"sentry-{NODE}.log"
 
-    log(f"sentry starting on node={NODE} interval={INTERVAL_SEC}s status_file={STATUS_FILE}")
+    log(
+        "sentry starting on node="
+        f"{NODE} interval={INTERVAL_SEC}s status_file={STATUS_FILE} "
+        f"vault_sync={ENABLE_VAULT_SYNC} docker_checks={ENABLE_DOCKER_CHECKS}"
+    )
 
     while True:
         try:
