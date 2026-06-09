@@ -338,11 +338,9 @@ jobs:
           out: 'reports'
           args: '--failOnCVSS 7 --disableNodeAudit --disablePnpmAudit --disableYarnAudit'
 
-      - name: Install npm audit and run
+      - name: Run npm audit
         run: |
-          npm install -g npm-audit-resolve
           npm audit
-          npm audit fix --force --package-lock-only
 
       - name: Install pip-audit and run
         run: |
