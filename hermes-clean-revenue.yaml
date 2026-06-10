@@ -1,0 +1,119 @@
+# Hermes clean revenue profile - internal reference
+# Use this on clean nodes for Ai-Solutions-Store/revenue-first-products work.
+# Do not copy c:\antigravity doctrine, MCP scope, sentries, watchdogs, or old plugins into this lane.
+
+model:
+  base_url: https://chatgpt.com/backend-api/codex
+  default: gpt-5.5
+  provider: openai-codex
+
+providers: {}
+fallback_providers: null
+
+toolsets:
+  - hermes-cli
+
+agent:
+  max_turns: 60
+  gateway_timeout: 1800
+  restart_drain_timeout: 60
+  api_max_retries: 3
+  service_tier: flex
+  tool_use_enforcement: auto
+  task_completion_guidance: true
+  environment_probe: true
+  gateway_timeout_warning: 900
+  clarify_timeout: 600
+  gateway_notify_interval: 180
+  gateway_auto_continue_freshness: 3600
+  image_input_mode: auto
+  disabled_toolsets: []
+  reasoning_effort: medium
+  verbose: false
+
+terminal:
+  backend: local
+  modal_mode: direct
+  cwd: C:\revenue-first-products
+  timeout: 180
+  env_passthrough:
+    - OLLAMA_API_KEY
+  persistent_shell: true
+
+web:
+  backend: xai
+  use_gateway: false
+
+browser:
+  inactivity_timeout: 120
+  command_timeout: 30
+  record_sessions: true
+  allow_private_urls: true
+  engine: auto
+  auto_local_for_private_urls: true
+  use_gateway: true
+
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  write_approval: false
+  memory_char_limit: 8000
+  user_char_limit: 2700
+  provider: holographic
+
+security:
+  allow_private_urls: true
+  redact_secrets: true
+  allow_lazy_installs: true
+
+approvals:
+  mode: yolo
+  timeout: 60
+  cron_mode: approve
+  mcp_reload_confirm: true
+  destructive_slash_confirm: true
+
+mcp_servers:
+  filesystem:
+    command: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-filesystem"
+      - C:\revenue-first-products
+
+plugins:
+  disabled:
+    - google_meet
+    - ANTIGRAVITY
+    - model-providers/anthropic
+  enabled:
+    - browser/browser_use
+    - browser/firecrawl
+    - disk-cleanup
+    - image_gen/fal
+    - image_gen/openai
+    - image_gen/openai-codex
+    - model-providers/openai-codex
+    - model-providers/openrouter
+    - model-providers/ollama-cloud
+    - model-providers/xai
+    - platforms/discord
+    - web/brave_free
+    - web/ddgs
+    - web/exa
+    - web/firecrawl
+    - web/xai
+
+platforms:
+  whatsapp:
+    enabled: false
+  telegram:
+    enabled: false
+
+public_surface_rules:
+  product_first: true
+  no_mission_copy: true
+  no_split_or_tax_copy: true
+  internal_wallet_monitoring_only: true
+  internal_ten_percent_tracking_only: true
+  dating_uses_square_or_approved_dating_safe_rail: true
