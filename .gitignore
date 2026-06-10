@@ -19,6 +19,7 @@ tsconfig.tsbuildinfo
 .env.*
 !.env.example
 *.env.bak
+.secrets/
 
 # IDE / editor
 .vscode/
@@ -73,3 +74,11 @@ services/*/tests/__pycache__/
 services/health-aggregator/app/__pycache__/
 services/health-aggregator/app/probes/__pycache__/
 services/health-aggregator/tests/__pycache__/
+
+# User Personal Folders (DO NOT TRACK)
+Documents/
+documents/
+Downloads/
+downloads/
+OneDrive/
+onedrive/

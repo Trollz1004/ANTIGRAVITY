@@ -1,0 +1,29 @@
+[shell_environment_policy]
+inherit = "core"
+
+[shell_environment_policy.set]
+DOCKER_HOST = "ssh://joshl@192.168.0.15"
+COMPOSE_PROJECT_NAME = "antigravity"
+
+[mcp_servers.brain-mcp]
+command = "node"
+args = ['C:\Antigravity\brain-mcp\dist\index.js']
+
+[mcp_servers.brain-mcp.env]
+HOME = 'C:\Users\joshl'
+
+[mcp_servers.mission-mcp]
+command = "node"
+args = ['C:\Antigravity\services\mission-mcp\dist\server.js']
+
+[mcp_servers.mission-mcp.env]
+HOME = 'C:\Users\joshl'
+
+[mcp_servers.playwright]
+command = "cmd"
+args = [
+    "/c",
+    "npx",
+    "-y",
+    "@playwright/mcp@latest",
+]

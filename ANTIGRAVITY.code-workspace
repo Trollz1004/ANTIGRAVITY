@@ -1,12 +1,16 @@
 {
 	"folders": [
 		{
-			"name": "ANTIGRAVITY",
 			"path": "."
 		},
 		{
-			"name": "ForTheKids",
-			"path": "ForTheKids"
+			"path": "../Users/joshl/Downloads"
+		},
+		{
+			"path": "../Users/joshl/OneDrive/e-commerce-orchestrator-v2/Documents"
+		},
+		{
+			"path": "../Users/joshl/OneDrive"
 		}
 	],
 	"settings": {}

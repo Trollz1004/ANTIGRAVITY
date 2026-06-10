@@ -1,0 +1,23 @@
+{
+  "name": "ANTIGRAVITY Mission Control",
+  "description": "Read-only and draft-first ChatGPT App scaffold for ANTIGRAVITY mission coordination.",
+  "version": "0.1.0",
+  "entrypoints": {
+    "local": "http://127.0.0.1:8788",
+    "widget": "http://127.0.0.1:8788/widget.html",
+    "manifest": "http://127.0.0.1:8788/mcp/manifest"
+  },
+  "capabilities": {
+    "readOnly": true,
+    "draftOnly": true,
+    "destructiveActions": false,
+    "secretsAccess": false,
+    "livePosting": false
+  },
+  "tools": [
+    "get_mission_status",
+    "read_env_drift_map",
+    "prepare_codex_execution_prompt",
+    "draft_handoff"
+  ]
+}
