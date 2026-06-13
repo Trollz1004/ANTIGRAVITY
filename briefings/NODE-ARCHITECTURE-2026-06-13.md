@@ -2,44 +2,52 @@
 
 **Single Source of Truth.** This document supersedes all previous node descriptions, briefings, and notes.
 
+> **Role lock (2026-06-13):** Three nodes, three roles. No drift. No overlap.
+>
+> - **T5500** = tunnels + domains + payments
+> - **Sabretooth** = Paperclip + GPU Ollama + orchestration
+> - **9020** = pure dev
+>
+> Any document, briefing, prompt, or skill that conflicts with this lock is stale and was moved to `briefings/archive/node-arch-2026-06-13-sweep/`. A repo-root pointer lives at `references/node-architecture.md` for quick lookup.
+
 ## Node Roles (Locked)
 
-### T5500 (DESKTOP-H4B53GL) — Production Self-Host + Payments
-- **Hardware**: Dual Xeon, 72 GB RAM, 500 GB SSD (OS + current files), 2 TB mechanical drive (storage)
-- **Role**: All public-facing domains, payment surfaces, and Cloudflare tunnels
+### T5500 (DESKTOP-H4B53GL) — Tunnels + Domains + Payments
+- **Hardware**: Dual Xeon, 72 GB RAM, 500 GB SSD (OS + current files), 2 TB mechanical drive (storage), 1050 Ti (not used for inference)
+- **Role** (locked): **All** Cloudflare tunnels, **all** public-facing domains, **all** payment surfaces
 - **Workloads**:
   - youandinotai.com + www
   - ai-solutions.store + www
   - onlinerecycle.org
   - dashboard.youandinotai.com (port 9119)
-  - hermes.youandinotai.com (port 11435)
-  - paperclip-hq.youandinotai.com (port 3100)
+  - hermes.youandinotai.com (port 11435) — Hermes router runs here
+  - paperclip-hq.youandinotai.com (port 3100) — Cloudflare tunnel terminates on T5500, then proxies to Sabretooth's local Paperclip on `127.0.0.1:3100` via LAN/VPN
   - Date app static / self-hosted services (port 3200)
 - **Tunnels**: **All** Cloudflare tunnels for the above domains run on this node only
 - **Dev Work**: None
-- **GPU**: 1050 Ti (not used for inference)
-- **Rule**: This is the only node that exposes public URLs. Everything payment-related lives here.
+- **Brain services / Docker stacks / Postgres / Qdrant / Redis**: None of these run here. T5500 is a host, not a brain.
+- **Rule**: This is the only node that exposes public URLs. Everything payment-related lives here. Anything that needs to be reached from the public internet is reached through T5500.
 
-### Sabretooth — Paperclip + Multi-Company 24/7 Orchestration (Heavy Node)
+### Sabretooth — Paperclip + GPU Ollama + Multi-Company Orchestration (Heavy Node)
 - **Hardware**: 1070 8 GB GPU, 64 GB RAM
-- **Role**: Paperclip (multiple companies), heavy agent orchestration, self-hosted models
+- **Role** (locked): **Paperclip system of record for all companies, GPU-bound self-hosted Ollama, 24/7 multi-company agent orchestration**
 - **Workloads**:
-  - Paperclip API (port 3100) — system of record for all companies (HER primary)
-  - Self-hosted Ollama models on GPU (gemma4 and other local models)
+  - Paperclip API (port 3100) — local system of record for all companies (HER primary)
+  - Self-hosted Ollama models on the 1070 GPU (gemma4 and other local models)
   - 24/7 multi-company orchestration
   - All agent adapters (OpenClaw/ClawX, Gemini CLI, Grok, Codex, Nous, Pi agents, OpenRouter, Ollama Cloud)
-- **Tunnels**: None
-- **Dev Work**: None (pure production orchestration)
+- **Tunnels**: None. Sabretooth never terminates a Cloudflare tunnel. Public traffic reaches Paperclip only because T5500 tunnels forward to it.
+- **Dev Work**: None (pure production orchestration — Sabretooth is fully occupied by Paperclip + agents)
 - **GPU Usage**: Dedicated to local Ollama models
 - **RAM Usage**: Paperclip + agent runtime + model context
-- **Rule**: This node is the brain. All companies, agents, and adapters are available here so they can be routed to paid-tier APIs or local GPU models as needed.
+- **Rule**: This is the brain. All companies, agents, and adapters are available here so they can be routed to paid-tier APIs or local GPU models as needed. The tunnel config and tunnel daemon do NOT live on this node.
 
-### 9020 (i7k32GB1050ti) — Developer Workstation
+### 9020 (i7k32GB1050ti) — Pure Dev
 - **Hardware**: i7, 32 GB RAM, 1050 Ti
-- **Role**: Development only
-- **Workloads**: Local coding, testing, Hermes chat, git work, node inspection
-- **Tunnels**: None (unless explicitly testing)
-- **Rule**: This is the node the human will eventually use for all chat and development. Sabretooth will be fully occupied by Paperclip + agents.
+- **Role** (locked): **Development only — no production workloads, no tunnels, no payment surfaces, no public services**
+- **Workloads**: Local coding, testing, Hermes chat, git work, node inspection, mission-control browsing, runbook review
+- **Tunnels**: None (unless explicitly testing a one-off tunnel, which must be removed after the test)
+- **Rule**: This is the node the human will eventually use for all chat and development. Sabretooth is fully occupied by Paperclip + agents; T5500 is fully occupied by tunnels + domains + payments. 9020 is the only node that exists for the human's daily interactive use.
 
 ## Model & Adapter Policy (All Nodes)
 
@@ -62,8 +70,9 @@
 ## Drift Prevention
 
 - This file (`briefings/NODE-ARCHITECTURE-2026-06-13.md`) is the only node description that matters.
-- All previous node notes in other briefings are now stale and will be removed.
-- Any future change to node roles must update this file first.
+- A short pointer at the repo root (`references/node-architecture.md`) links here from any tooling or doc that needs to "find the current architecture fast" without scanning the full `briefings/` tree.
+- All previous node notes in other briefings are now stale and were moved to `briefings/archive/node-arch-2026-06-13-sweep/` on 2026-06-13.
+- Any future change to node roles must update **both** this file and `references/node-architecture.md`.
 
 ## Next Steps (Execution Order)
 
