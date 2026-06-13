@@ -53,11 +53,14 @@
 
 | Role | Type | Files required |
 |------|------|----------------|
-| **CEO** (per company), CFO, CSO, CTO, CMO, Mission Guardian | **BRAIN** | `AGENT.md` (mandate) **+** shared `SOUL.md` + `TOOLS.md` + `HEARTBEAT.md` |
+| **CEO** (per company), Mission Guardian | **BRAIN** | company/guardian contract **+** shared `SOUL.md` + `TOOLS.md` + `HEARTBEAT.md` |
+| **CFO, CSO, CTO, CMO, UX** | **BRAIN** | consolidated role file under `roles/{ROLE}.md` |
 | **INTERN** and any assigned doer | **DOER** | none — just the task. See `INTERN.md` for the one-page doer contract. |
 
-- `SOUL.md`, `TOOLS.md`, `HEARTBEAT.md` are the **canonical shared brain set** — written once at
-  the Opus level, inherited by every brain. A brain's own `AGENT.md` is its specialization
+- `roles/CFO.md`, `roles/CMO.md`, `roles/CSO.md`, `roles/CTO.md`, and `roles/UX.md` replace the old
+  per-role directories. Each consolidated role file contains its mandate, soul, heartbeat, and tools.
+- `SOUL.md`, `TOOLS.md`, `HEARTBEAT.md` remain the **canonical shared Hermes-fleet brain set** — written once at
+  the Opus level, inherited by shared brains that do not have a consolidated role file. A brain's own contract is its specialization
   (company, mandate, KPIs, buckets).
 - A doer needs no SOUL/TOOLS/HEARTBEAT. Giving a doer a brain file-set is an anti-pattern: it
   burns authoring effort on something that only executes. Doers are doers, not thinkers.
