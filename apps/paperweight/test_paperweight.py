@@ -44,11 +44,21 @@ class PaperweightTestBase(unittest.TestCase):
 
 
 class TestSeed(PaperweightTestBase):
-    def test_six_companies_seeded(self):
+    def test_company_workspaces_seeded(self):
         _, state = pw.get_state()
         ids = {c["id"] for c in state["companies"]}
         self.assertEqual(
-            ids, {"youandinotai", "marketing", "ai-solutions", "youtube", "onlinerecycle", "dao"}
+            ids,
+            {
+                "youandinotai",
+                "marketing",
+                "ai-solutions",
+                "business-exchange",
+                "hermes-sideworld",
+                "youtube",
+                "onlinerecycle",
+                "dao",
+            },
         )
 
     def test_agents_seeded_once(self):
