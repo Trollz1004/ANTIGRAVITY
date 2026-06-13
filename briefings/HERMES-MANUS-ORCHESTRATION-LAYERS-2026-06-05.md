@@ -25,7 +25,7 @@
 The live repo is **not yet at that target state**:
 
 - The live hub (`backend/hub.py:147-166`) still routes 5 of 13 platforms through the Emergent bridge. `EMERGENT_LLM_KEY` is the engine.
-- The live revenue code (`backend/fastapi-app/app/revenue_allocation.py:97-100`) does a **2-way** split (10% / 90%) at the **LLC** layer. The guide's **3-way** 10/27/63 split is the **DAO PlatformSplitter** at the **DAO** layer, not the LLC layer.
+- The live revenue code (`/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:97-100`) does a **2-way** split (10% / 90%) at the **LLC** layer. The guide's **3-way** 10/27/63 split is the **DAO PlatformSplitter** at the **DAO** layer, not the LLC layer.
 - The live agent fleet (`hermes/agents/AGENTS.md`, Opus-authored 2026-05-22) has Hermes as the **internal** orchestrator routing to Opus-authored CEOs. Manus is on the extended team and not in the fleet diagram.
 - The 100-Cent Rule, the $50k founder cap, and the ENIGMA 60/30/10 are **three different things on three different layers** — the guide collapsed them.
 
@@ -37,7 +37,7 @@ This briefing draws the layer lines so neither file has to be edited to resolve 
 
 | # | Layer | Split | Status | Source of truth |
 |---|-------|-------|--------|-----------------|
-| 1 | **LLC operating** (every Square merchant receipt) | **10% kids bucket (IRS LLC charitable-deduction cap) + 90% operating** | **LIVE — coded** | `backend/fastapi-app/app/revenue_allocation.py:97-100`; `CLAUDE.md` §"Revenue Model" (2026-06-01 restatement); `REPOSITORY_RECORD.md` §"Current Financial Doctrine" (2026-04-17) |
+| 1 | **LLC operating** (every Square merchant receipt) | **10% kids bucket (IRS LLC charitable-deduction cap) + 90% operating** | **LIVE — coded** | `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:97-100`; `CLAUDE.md` §"Revenue Model" (2026-06-01 restatement); `REPOSITORY_RECORD.md` §"Current Financial Doctrine" (2026-04-17) |
 | 2 | **DAO PlatformSplitter** (gross token-sale proceeds, post-LLC formation) | **10% kids (stacked per activity) / min 27% tax reserve / 63% priority tiers (A1 survival + A2 human + Breakeven; then B growth)** | **LIVE at DAO layer only** | `briefings/DAO-ARCHITECTURE-CANONICAL.md:799` (calibrated 2026-04-19); `briefings/DAO-LAUNCH-ARCHITECTURE.md:9-15` (2026-06-04); contract `contracts/src/PlatformSplitter10.sol` (47-test suite, commit `6847c88`) |
 | 3 | **ENIGMA 60/30/10** (historical charity-routing) | 60% ops / 30% growth / 10% kids | **DEAD — never resurrect** | Historical only: `GospelDonation.sol`, pre-April-17 docs. Killed 2026-04-17 per `REPOSITORY_RECORD.md` §"Current Financial Doctrine" and `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`. Joshua confirmed 2026-06-05. |
 
@@ -120,8 +120,8 @@ The live compliance monitor is `backend/compliance.py` (10/27/63 audit on the **
 
 | Check | Target | Layer | Where it lives |
 |-------|--------|-------|----------------|
-| LLC kids bucket (per-bucket) | 10% of gross, rounded up to whole cents | LLC operating | `revenue_allocation.py:47-54` |
-| LLC operating share | 90% of gross | LLC operating | `revenue_allocation.py:98` |
+| LLC kids bucket (per-bucket) | 10% of gross, rounded up to whole cents | LLC operating | `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:47-54` |
+| LLC operating share | 90% of gross | LLC operating | `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:98` |
 | DAO PlatformSplitter kids | 10% of token-sale gross, stacked per activity | DAO | `DAO-ARCHITECTURE-CANONICAL.md:799` |
 | DAO tax reserve | ≥ 27% of token-sale gross, locked | DAO | `DAO-LAUNCH-ARCHITECTURE.md:10` |
 | DAO sovereignty pool | 63% of token-sale gross, Tier A first | DAO | `DAO-LAUNCH-ARCHITECTURE.md:11-13` |

@@ -123,14 +123,14 @@ STEPS:
      "100% to charity" — all permanently deprecated.
    - No mock data, no `TODO: real impl` placeholders, no simulated
      revenue numbers. Real totals from Square or
-     `backend/fastapi-app/app/revenue_allocation.py` or fail
+     `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py` or fail
      honestly.
 
 6. **Routing:** same as CTO — Hermes has zero Anthropic key.
    Escalation to Grok or Gemini only.
 
 7. **Report back** with the audit readout. One page max. Cite Square
-   transaction IDs and `revenue_allocation.py` line numbers.
+   transaction IDs and `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py` line numbers.
 
 ---
 

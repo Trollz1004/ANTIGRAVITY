@@ -20,7 +20,7 @@ description: The live 1-wallet, 1-LLC, 10% per-bucket mission reserve model for 
 - Internal briefings/hermes/agents/AGENTS.md may use precise language including "contractual revenue disbursement".
 
 ## Implementation Notes
-- See backend/fastapi-app/app/revenue_allocation.py for reserve_revenue_allocation() and ledger.
+- See /mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py for reserve_revenue_allocation() and ledger.
 - Square is primary for dating surface (youandinotai.com). Stripe permitted on non-dating.
 - All processors consolidate at the single LLC bank account.
 - Reconcile via revenue_allocations table + Square reports. 10% floor is code, not config.
