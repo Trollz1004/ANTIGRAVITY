@@ -2,6 +2,8 @@
   "name": "github-mcp",
   "description": "GitHub MCP plugin for Paperclip, wrapping gh CLI commands",
   "version": "1.0.0",
+  "owner": "sabretooth",
+  "nodeId": "sabretooth",
   "tools": [
     {
       "name": "list_repos",
