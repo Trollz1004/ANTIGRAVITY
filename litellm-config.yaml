@@ -1,17 +1,30 @@
+# Sabretooth-owned LiteLLM proxy config.
+# All ollama/* entries resolve to the local Ollama daemon on the
+# SABRETOOTH node (loopback 127.0.0.1:11434, reachable from Docker as
+# http://host.docker.internal:11434). See
+# briefings/SABRETOOTH-NODE-OWNERSHIP-2026-06-13.md for the canonical
+# ownership record.
+node: sabretooth
+node_id: sabretooth
+default_model: qwen2.5:7b
+
 model_list:
   - model_name: gemma4:31b
+    owner_node: sabretooth
     litellm_params:
       model: ollama/gemma4:31b
       api_base: http://host.docker.internal:11434
       drop_params: true
 
   - model_name: gemma4:8b
+    owner_node: sabretooth
     litellm_params:
       model: ollama/gemma4:e4b
       api_base: http://host.docker.internal:11434
       drop_params: true
 
   - model_name: gemma4:latest
+    owner_node: sabretooth
     litellm_params:
       model: ollama/gemma4:latest
       api_base: http://host.docker.internal:11434
@@ -19,12 +32,14 @@ model_list:
 
   # Aliases so clients using OpenAI model names still work
   - model_name: gpt-4
+    owner_node: sabretooth
     litellm_params:
       model: ollama/gemma4:31b
       api_base: http://host.docker.internal:11434
       drop_params: true
 
   - model_name: gpt-3.5-turbo
+    owner_node: sabretooth
     litellm_params:
       model: ollama/gemma4:e4b
       api_base: http://host.docker.internal:11434
