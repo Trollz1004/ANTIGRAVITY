@@ -2,6 +2,8 @@
 
 Josh: paste this into Perplexity when you want current-web research anchored to the live repo truth.
 
+> **Node architecture (2026-06-13):** Sabretooth = brain, T5500 = tunnels + domains + payments, 9020 = pure dev. Canonical source: `briefings/NODE-ARCHITECTURE-2026-06-13.md`. Comet runs as a read-only research peer; node topology does not change its scope, but any claim about "where the brain lives" must align with the lock.
+
 ---
 
 ```text

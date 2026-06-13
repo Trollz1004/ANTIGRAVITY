@@ -6,6 +6,7 @@
 > Updated 2026-05-22.
 
 > **CURRENT OVERRIDE - 2026-06-09**
+> **CURRENT OVERRIDE - 2026-06-13**
 > Current repo truth supersedes older path/routing text in this file:
 > - One live repo only: `Trollz1004/ANTIGRAVITY`.
 > - Windows root: `c:\antigravity`.
@@ -20,8 +21,17 @@
 > - Hermes and sub-agents draft, summarize, audit, and coordinate by default. They do not push,
 >   merge, deploy, delete, read populated secrets, or post live unless Josh explicitly assigns that
 >   exact action.
+>
+> **Node architecture — locked 2026-06-13** (source of truth: `briefings/NODE-ARCHITECTURE-2026-06-13.md`):
+> - **T5500** = tunnels + domains + payments (the only node that exposes public URLs).
+> - **Sabretooth** = Paperclip + GPU Ollama + multi-company orchestration (the brain).
+> - **9020** = pure dev (the only node the human uses for daily interactive work).
+>
+> Older routing in this file (e.g. "T5500 = Cloudflare workers / wranglers / infrastructure",
+> "9020 = Marketing automations / dating app / customer service") is stale and was moved to
+> `briefings/archive/node-arch-2026-06-13-sweep/` on 2026-06-13. The fleet diagram below
+> reflects the 2026-06-13 lock.
 
----
 
 ## 1. The shape of the fleet
 
@@ -31,19 +41,32 @@
            ▼
         HERMES  (WhatsApp/Telegram Agent — Session 20260607_152323 — Memory OS Six-Layer)
            │    orchestrates all below; connected to telegram, whatsapp
+           │    **runs on SABRETOOTH (the brain)**
            │
         ┌──────────┬──────────────┬────────────┬──────────────┐
         ▼          ▼              ▼            ▼              ▼
-   OPUS (Opus)  9020 NODE    T5500 NODE   INTERNS         CEOs (per company)
-   Contracts    Marketing     Cloud/Infra   Doers        youandi/mktg/etc
-                Dating App    Wranglers
-                Customer Svc  Cloudflare
+   OPUS (Opus)  SABRETOOTH     T5500         9020           CEOs (per company)
+   Contracts    Brain /         Tunnels +     Pure dev      youandi/mktg/etc
+                GPU Ollama +    Domains +     (human
+                Paperclip +     Payments      daily chat,
+                Multi-company   (public       git, runbooks)
+                Fleet           surface
+                                ONLY)
 ```
 
 - **Hermes orchestrates** via WhatsApp/Telegram. Connected platforms: telegram, whatsapp. Session ID: `20260607_152323_8d46c712`
+- **Hermes runs on Sabretooth.** Sabretooth is the brain; all companies, agents, and adapters
+  are registered and routed here.
 - **OPUS authors** all agent contracts and deploys via Hermes.
-- **9020 NODE** (GPU primary) — Marketing automations, dating app, customer service.
-- **T5500 NODE** (Orchestrator) — Cloudflare workers, wranglers, infrastructure.
+- **SABRETOOTH** (brain / GPU Ollama / Paperclip) — Paperclip board (port 3100), GPU Ollama
+  (port 11434, gemma4 + qwen2.5:7b + nomic-embed-text), all agent adapters (OpenClaw/ClawX,
+  Gemini CLI, Grok, Codex, Nous, Pi agents, OpenRouter, Ollama Cloud), 24/7 multi-company
+  orchestration. Sabretooth never terminates a Cloudflare tunnel.
+- **T5500** (public surface) — Cloudflare tunnels, public-facing domains, payment surfaces
+  (Stripe/Square rails), Hermes router (port 11435), date app static (port 3200). T5500 is
+  the only node that exposes public URLs. No brain services, no dev work.
+- **9020** (pure dev) — local coding, testing, Hermes chat, git work, runbook review,
+  mission-control browsing. No production workloads, no tunnels, no payment surfaces.
 - **CEOs think; INTERNS do.** A brain (CEO) reasons and plans. A doer (INTERN) executes one task and reports — no brain files needed.
 - **Hermes itself is the brain** — Memory OS Six-Layer stack running Hermes Agent contract files.
 
