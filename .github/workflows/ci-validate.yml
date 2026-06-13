@@ -53,6 +53,30 @@ jobs:
           fi
           echo "No Stripe links found in build output"
 
+      # Stripe AUP guard -- dating surfaces must never initialize Stripe.
+      - name: Block Stripe wiring on dating surfaces
+        run: |
+          set -u
+          CANDIDATES=(apps/youandinotai-frontend backend/fastapi-app/app apps/mission-control-public)
+          TARGETS=()
+          for t in "${CANDIDATES[@]}"; do
+            if [ -d "$t" ]; then
+              TARGETS+=("$t")
+            fi
+          done
+          if [ ${#TARGETS[@]} -eq 0 ]; then
+            echo "::error::Stripe dating-surface guard has no valid target directories -- repo layout changed; update ci-validate.yml"
+            exit 1
+          fi
+          PATTERN='import[[:space:]]+stripe|from[[:space:]]+stripe|Stripe\(|stripe\.PaymentIntent\.create|stripe\.checkout\.Session\.create|stripe\.Customer\.create|STRIPE_SECRET_KEY|js\.stripe\.com|stripe-buy-button'
+          HITS=$(grep -RInE --exclude-dir=.next --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.turbo --exclude-dir=coverage "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
+          if [ -n "$HITS" ]; then
+            echo "::error::Stripe wiring is prohibited on youandinotai/dating surfaces. Use Square."
+            echo "$HITS"
+            exit 1
+          fi
+          echo "No Stripe wiring found on dating surfaces: ${TARGETS[*]}"
+
       # Florida §496.405 language scan
       - name: Scan for donation language violations
         run: |
