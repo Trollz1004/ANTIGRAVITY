@@ -296,21 +296,30 @@ New ideas, experimental platforms, and speculative automation go here first.
 
 ---
 
-## NODE TOPOLOGY
+## NODE TOPOLOGY (LOCKED 2026-06-13)
 
-| Node | Drive | Role |
-|------|-------|------|
-| T5500 | C: | **Primary command post** (as of 2026-05-12 consolidation) — SSH 192.168.0.15 |
-| T5500 | E: | Manus orchestration setup / media sandbox lane |
-| SABRETOOTH | C: | **PENDING WIPE** — was primary through 2026-05-11; preserve branch `sabretooth-preserve-20260511` on origin |
-| SABRETOOTH | E: | Coworker instance isolated sandbox only |
-| 9020 | C: | **PENDING WIPE** — was GenSpark / remote ops node; preserve branch `9020-preserve-20260511` on origin |
-| 9020 | D: | OpenClaw/support sandbox lane (`D:\claws`, `D:\sandbox-repos`) |
-| MINI-ASUS-PC | C: | Trusted CLI Node (Claude Code, CodeX, Gemini CLI) — Local Setup |
+> **Single source of truth:** `briefings/NODE-ARCHITECTURE-2026-06-13.md`. Three nodes, three roles, no drift.
+> Repo-root pointer: `references/node-architecture.md` (links to the canonical briefing).
+>
+> - **T5500** = tunnels + domains + payments (the only node that exposes public URLs)
+> - **Sabretooth** = Paperclip + GPU Ollama + multi-company orchestration (the brain)
+> - **9020** = pure dev (the only node the human uses for daily interactive work)
+>
+> This section is a quick-reference index. If it ever conflicts with `briefings/NODE-ARCHITECTURE-2026-06-13.md`, the briefing wins.
+
+| Node | LAN IP | Role (locked) | C: drive state | Secondary drives |
+|------|--------|----------------|-----------------|--------------------|
+| T5500 | 192.168.0.15 | **Tunnels + domains + payments** — Cloudflare tunnels, public-facing domains, payment surfaces (Stripe/Square rails), Hermes router (port 11435), date app static (port 3200). No brain services, no dev work. | T5500 owns the C: drive of the antigravity repo working tree (push authority per FOUNDER DOCTRINE rule 3) | E: holds the `MASTER-UNIVERSAL-ENV-TROLLZ1004.env` vault snapshot + historical `ForTheKids-Guardian` Manus artifacts (read-only archive) |
+| Sabretooth | 192.168.0.8 | **Paperclip + GPU Ollama + multi-company orchestration** — Paperclip API (port 3100), GPU Ollama (port 11434, gemma4 etc.), all agent adapters, 24/7 agent fleet. Sabretooth is the brain and never terminates a Cloudflare tunnel. | Sabretooth C: hosts the WSL Paperclip board at `/home/josh/.paperclip/instances/default` reachable at `http://127.0.0.1:3100`; the antigravity repo working tree lives here too | E: holds `E:\claudes-claw` (Claude Dispatch / coworker lane only) |
+| 9020 | 192.168.0.5 | **Pure dev** — local coding, testing, Hermes chat, git work, runbook review, mission-control browsing. No production workloads, no tunnels, no payment surfaces, no public services. | 9020 C: holds the antigravity repo working tree as a developer checkout; no direct push authority | D: holds `D:\claws\openclaw-9020` and `D:\sandbox-repos\...` (openclaw/support sandbox lane only) |
 
 - 9020 SSH: `ssh -i ~/.ssh/id_ed25519 joshl@192.168.0.5` (cmd.exe shell)
 - 9020 has NO git push creds — use bundle relay
-- ONE repo (Trollz1004/ANTIGRAVITY), ONE branch (main), ONE folder
+- ONE repo (Trollz1004/ANTIGRAVITY), ONE branch (main), ONE folder (`C:\antigravity`)
+- **Tunnels all live on T5500.** T5500 forwards to Sabretooth's local Paperclip on `127.0.0.1:3100` via LAN/VPN.
+- **Telegram chat will move to 9020** once 9020 is configured as pure dev; Sabretooth remains the OpenClaw-gateway host in the meantime.
+- **Auxiliary workstations** (e.g. MINI-ASUS-PC) are read-only for live repo truth; only the primary session on the antigravity working tree may push.
+- Any node-role description in older briefings (e.g. "T5500 is primary command post", "Sabretooth is pending wipe", "Manus orchestration setup on T5500 E:") is stale and was moved to `briefings/archive/node-arch-2026-06-13-sweep/` on 2026-06-13.
 
 ---
 
@@ -427,13 +436,11 @@ The security isn't for us — it's for the kids. Please don't weaken these. Buil
 
 | Field | Value |
 |-------|-------|
-| Node | T5500 (C:\ANTIGRAVITY) — primary as of 2026-05-12; was SABRETOOTH |
+| Working tree | `C:\antigravity` on T5500 (primary C: working tree with push authority per FOUNDER DOCTRINE rule 3) and Sabretooth (parallel C: working tree for Paperclip + agents); 9020 holds a developer checkout only |
 | Owner | Joshua Coleman / Trollz1004 |
 | Entity | Trash Or Treasure Online Recycler LLC (FL) |
-| Brain | Claude (primary architect, ~90% of codebase) + Codex executor + Ollama local inference |
-| GPU | GTX 1070 8GB VRAM (T5500); AMD Radeon RX 6700 XT 12GB (Sabretooth — pending wipe) |
-
----
+| Brain | Claude (primary architect, ~90% of codebase) + Codex executor + Sabretooth GPU Ollama (gemma4, qwen2.5:7b) |
+| GPU | GTX 1070 8GB VRAM (Sabretooth — production GPU inference); GTX 1050 Ti (T5500, not used for inference); GTX 1050 Ti (9020, dev-only) |
 
 ## ORCHESTRATION CHAIN — PRIORITY ORDER (TOKEN ECONOMICS)
 
@@ -442,39 +449,54 @@ are Claude's work. The foundation of this platform is Claude's. Built primarily 
 joshlcoleman@gmail.com Anthropic account across many sessions, often rebuilt multiple times
 due to session memory limitations — a year's worth of work documented in Trollz1004 GitHub logs.
 
+Per the 2026-06-13 node lock, orchestration runs on **Sabretooth** (the brain). T5500 is the
+public-internet-facing surface for tunnels/domains/payments; 9020 is pure dev. Multi-node work
+follows the Sabretooth-central, T5500-front-door pattern.
+
 Due to token/subscription limits, orchestration runs in this order:
 
-| Priority | Orchestrator | When |
-|----------|-------------|------|
-| 1 | **Claude** | Always first. Strategy, architecture, code, decisions. Until token cap. |
-| 2 | **Manus** | When Claude cap is hit. Preserves continuity and helps continue on Claude's API. |
-| 3 | **Gemini** | When Manus cap is hit. Content, visual, agentic ops on nodes. |
-| 4 | **Codex** | Base executor. Code runs, deploys, MCP/wallet tooling, GitHub-native execution. |
+| Priority | Orchestrator | Where it runs | When |
+|----------|-------------|----------------|------|
+| 1 | **Claude** | Sabretooth (brain) or 9020 (dev) | Always first. Strategy, architecture, code, decisions. Until token cap. |
+| 2 | **Manus** | Manus cloud (external) | When Claude cap is hit. Preserves continuity and helps continue on Claude's API. See `briefings/HERMES-MANUS-ORCHESTRATION-LAYERS-2026-06-05.md` for the Manus-cloud / Hermes-internal layer split. |
+| 3 | **Gemini** | 9020 (dev) for content edits; Sabretooth (brain) for fleet ops | When Manus cap is hit. Content, visual, agentic ops. |
+| 4 | **Codex** | Sabretooth (brain) | Base executor. Code runs, deploys, MCP/wallet tooling, GitHub-native execution. |
 
 **All four are agentic** — capable of orchestrating to nodes and Ollama.
 **Only these four** can direct node-level work. Perplexity and Grok do not orchestrate nodes.
 **Handoff is seamless** — AGENTS.md + CLAUDE.md + memory/ are the shared context that survive any cap.
 
+**Sabretooth owns the agent fleet; T5500 owns the public surface.** Anything that needs to be
+reached from the public internet goes through T5500. Anything that needs to think, plan, route,
+or run an adapter does so on Sabretooth. The two layers never conflate.
+
 ---
 
 ## OLLAMA — NODE COMPUTE & MEMORY ENGINE
 
-All three nodes run Ollama. qwen2.5:7b is the default. Built-in Ollama embedding is
-sufficient — no external embedding API required.
+Per the 2026-06-13 node lock, GPU Ollama is a **Sabretooth** workload. T5500 and 9020 may still
+run a loopback Ollama daemon for cold-start local inference, but they are NOT the production
+inference origin. Any agent that needs a model must default to Sabretooth's GPU Ollama unless
+an explicit task forces local-on-9020 (e.g. dev-only testing of a model pull).
 
-| Node | IP | Ollama | Models | Use |
-|------|----|--------|--------|-----|
-| SABRETOOTH | 192.168.0.8 | loopback 127.0.0.1:11434 | qwen2.5:7b, qwen2.5:3b, nomic-embed-text | Primary - marketing, memory, orchestration |
-| 9020 | 192.168.0.5 | loopback 127.0.0.1:11434 | qwen2.5:7b | Marketing/support node |
-| T5500 | 192.168.0.15 | loopback 127.0.0.1:11434 | qwen2.5:7b | Build/media node - cold-start only |
+Built-in Ollama embedding is sufficient — no external embedding API required.
 
-**What Ollama handles:**
+| Node | IP | Ollama | Models | Production role |
+|------|----|--------|--------|-----------------|
+| **Sabretooth** | 192.168.0.8 | loopback 127.0.0.1:11434 | qwen2.5:7b, qwen2.5:3b, nomic-embed-text, gemma4 | **Primary GPU inference** — marketing, memory, orchestration, multi-company fleet |
+| 9020 | 192.168.0.5 | loopback 127.0.0.1:11434 | qwen2.5:7b | Dev-only fallback; not the production inference origin |
+| T5500 | 192.168.0.15 | loopback 127.0.0.1:11434 | qwen2.5:7b | Cold-start only; not a production inference origin |
+
+**What Sabretooth's GPU Ollama handles (production):**
 - Marketing content generation (social engine, captions, Reddit/X engagement)
 - Memory embedding for OpenClaw session context
 - Local inference for tasks that don't require frontier models
 - Fallback inference when API quota is hit
+- Local model context for Hermes-CEO and per-company CEOs
 
-**SABRETOOTH is the primary orchestration node.** 9020 and T5500 are cold — opt-in only.
+**Sabretooth is the production brain for Ollama and agent orchestration.** 9020 and T5500
+are cold — opt-in only. Do not start a long-running inference job on T5500 or 9020 unless
+the task is explicitly scoped to that node.
 
 ---
 
@@ -612,4 +634,5 @@ If an agent makes a change to C:\ANTIGRAVITY that was not explicitly assigned by
 
 You are ClawX, a desktop AI assistant application based on OpenClaw. See TOOLS.md for ClawX-specific tool notes (uv, browser automation, etc.).
 
-**Tool Usage 
+**Tool Usage Rule**: You have access to real, working tools (browser, shell, file operations, etc.). Before telling the user "I can't do that" or "I don't have access to that tool", **always check your available tools and attempt the action first**. Only report inability after receiving an actual error from the tool. Do not refuse based on assumptions from your training data.
+<!-- clawx:end -->

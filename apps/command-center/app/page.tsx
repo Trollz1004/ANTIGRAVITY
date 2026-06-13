@@ -6,14 +6,15 @@ import {
   Sun, Moon, Terminal, ChevronDown, ChevronUp, Plus, Image,
   ArrowRight, RotateCcw, Play, Pause, SkipForward, SkipBack,
   Maximize2, Minimize2, Video, Globe, ShoppingCart, Cpu,
-  Server, Radio as RadioIcon, Link, Volume2, Upload, X,
+  Server, Radio as RadioIcon, Link, Volume2, Upload, X, Shield,
 } from "lucide-react";
 import {
   AI_SOURCES, PLATFORMS, TARGET_PLATFORMS,
   type ContentItem, type ContentStatus, type PlatformType, createItem,
 } from "@/lib/data";
+import SentryDashboard from "@/app/_components/SentryDashboard";
 
-type Tab = "hq" | "inbox" | "approved" | "sent" | "rejected" | "add";
+type Tab = "hq" | "inbox" | "approved" | "sent" | "rejected" | "add" | "sentry";
 
 const STORAGE_KEY = "cc-items-v2";
 const now = () => new Date().toISOString().split("T")[0];
@@ -188,7 +189,7 @@ export default function CommandCenter() {
   };
 
   const filtered = items.filter(i => {
-    if (tab === "add" || tab === "hq") return false;
+    if (tab === "add" || tab === "hq" || tab === "sentry") return false;
     return i.status === tab;
   });
 
@@ -217,6 +218,7 @@ export default function CommandCenter() {
     { key: "sent", label: "Sent", Icon: Send, count: counts.sent },
     { key: "rejected", label: "Rejected", Icon: XCircle, count: counts.rejected },
     { key: "add", label: "Add", Icon: Plus },
+    { key: "sentry", label: "Sentry", Icon: Shield },
   ];
 
   return (
@@ -609,6 +611,27 @@ export default function CommandCenter() {
               </div>
             )}
           </>
+        )}
+
+        {/* ════════ SENTRY (green/red watchdog + one-click repair) ════════ */}
+        {tab === "sentry" && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Watchdog sentry · one-click repair · talks to /api/sentry/*
+              </p>
+              <a
+                href="/sentry"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[10px] font-bold text-blue-500 hover:text-blue-400"
+                title="Open full-screen kiosk sentry"
+              >
+                <ExternalLink size={10} /> Full-Screen
+              </a>
+            </div>
+            <SentryDashboard mode="full" />
+          </div>
         )}
 
         {/* FOOTER */}

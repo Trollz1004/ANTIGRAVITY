@@ -1,86 +1,125 @@
-# ⚠️ REPO DIRTY ALERT
+# 🚨 DIRTY REPO ALERT — C:\ANTIGRAVITY
 
-**Repo:** `C:\ANTIGRAVITY` (mounted at `/mnt/c/Antigravity` in WSL)
-**Detected:** 2026-06-13 (cron run — dirty-repo watcher)
-**Detection command:** `git status --porcelain`
+**Generated:** 2026-06-13 22:09:47 UTC (cron: `local-platform-bootstrap` dirty-repo check)
+**Repo:** `C:\ANTIGRAVITY`  →  WSL path `/mnt/c/Antigravity`
+**Branch:** `main`  **HEAD:** `25d6bdae`
+**Status:** 🔴 **DIRTY** — 39 changes (8 modifications, 0 staged-mod, 20 renames, 11 untracked, 0 deletions, 0 staged-add)
+**Porcelain fingerprint (sha256[:12]):** `d85ab4330bf4`
 
-## Alert
+> **DO NOT auto-commit.** This file is an alert for a human to triage, not a remediation.
+> The cron is intentionally alert-only per `local-platform-bootstrap` doctrine.
+> If two cron runs both write this file, the porcelain + Discord diagnostic blocks are deterministic from git state — read-back verification is sufficient.
 
-**ALERT: Repo C:\ANTIGRAVITY is dirty. Run 'git status' to review changes.**
+---
 
-## Status
+## ⚡ Why Discord Failed (diagnostic block)
 
-The repository has untracked, modified, and renamed files. **No auto-commit was performed**, per cron instructions.
+The scheduled task attempted to deliver this alert to `discord:#engineering`. Discord was **unavailable**, so the cron fell back to this local file. Do not re-run `--to discord:#engineering` without first running `hermes gateway setup` — the same failure will recur.
 
-### Staged additions (`A ` / `AM`)
-- `A  apps/mission-control/public/stream-paperclip.html`
-- `A  apps/mission-control/public/stream-safe.html`
-- `AM apps/paperclip`
-- `A  docs/archive/root-cleanup-2026-06-12/README.md`
-- `A  docs/operations/antigravity-one-root-mission-control-plan.md`
-- `A  hermes/agents/ceo-business-exchange.md`
-- `A  hermes/agents/ceo-hermes-sideworld.md`
+| Check | Result |
+|---|---|
+| `hermes send --list discord` exit code | `0` (succeeded — listed zero channels) |
+| `hermes send --list discord` stdout | `No messaging platforms configured or no channels discovered yet. Set one up with 'hermes gateway setup', or run the gateway once so channel discovery can populate ~/.hermes/channel_directory.json.` |
+| Would `--to discord:#engineering` succeed? | ❌ **No** — would exit 1 with `Could not resolve '#engineering' on discord` (canonical "Discord unavailable" signal). Cron did **not** retry. |
+| `~/.hermes/channel_directory.json` | exists, 730 bytes — `discord` array is **empty** (`[]`) |
+| Discord-related env vars in `~/.hermes/.env` | **none** (no `DISCORD_*`, `BOT_*`, `*_TOKEN`, or `*_WEBHOOK` keys with Discord in the name) |
+| Other platforms populated | Only **whatsapp** has 1 DM (Trollz1004) |
+| Remediation | `hermes gateway setup` (interactive) — needs a human to authorize a Discord bot and re-run channel discovery |
 
-### Modified tracked files
-- `M  apps/paperweight/data/paperweight.db`
-- `M  apps/paperweight/paperweight.py`
-- `M  apps/paperweight/static/index.html`
-- `M  apps/paperweight/test_paperweight.py`
-- ` M .agents/skills/payments/SKILL.md`
-- ` M .agents/skills/revenue-model/SKILL.md`
-- ` M .claude/commands/square-status.md`
-- ` M CLAUDE.md`
-- ` M backend/fastapi-app/app/revenue_allocation.py`
-- ` M backend/ledger.py`
-- ` M briefings/CHROME-EXTENSION-AGENT-DEPLOY-PROMPTS-2026-06-05.md`
-- ` M briefings/DOCTRINE-AUDIT-HERMES-SETUP-GUIDE-2026-06-05.md`
-- ` M briefings/HERMES-MANUS-ORCHESTRATION-LAYERS-2026-06-05.md`
-- ` M briefings/REPOSITORY_RECORD.md`
-- ` M briefings/TEST-COVERAGE-AUDIT-2026-05-12.md`
-- ` M campaign-deliverables/payment-flow-verification.md`
-- ` M hermes/agents/AGENTS.md`
-- ` M hermes/agents/CFO/AGENTS.md`
-- ` M services/mission-control-api/src/mission_control_api/probes/__init__.py`
-- ` M services/mission-control-api/src/mission_control_api/routes/health.py`
-- ` M skills/revenue-model/SKILL.md`
+> **Cron policy:** per the skill, the cron will not retry Discord on a future run until `discord` is non-empty in `channel_directory.json`. Future cron runs will continue to write to this fallback file.
 
-### Renames (`R`, intentional archival)
-Root files moved into `docs/archive/root-cleanup-2026-06-12/`:
-- `High-Traffic_Social_Communities_and_Dating_App_Mar-Genspark_AI_Sheets-*.csv` → `data/`
-- `Genspark.html`, `Marketing Maven Remix-saved.html` → `html/`
-- `68d7a6c5...png` → `media/`
-- `chrome.css`, `mission-control-manus.bundle`, `mission-control.html`, `serve-cockpit.js` → `mission-control-static/`
-- `# ANTIGRAVITY.md`, `Note` → `notes/`
-- `hermes_agent-0.15.0-py3-none-any.whl.sigstore.json` → `release-metadata/`
-- `ANTICRON_SYNC_REPORT.md`, `CONSOLIDATION_MANIFEST.md`, `paperweight-mission-control.pdf`, `telegram_integration_recommendations.pdf`, `test_result.md` → `reports/`
-- `invite.ics` → `data/`
-- `bootstrap_hermes_audit.sh`, `create_audit_commit_stdin.sh` → `scripts/audit/`
+---
 
-### Untracked (`??`)
-- `DIRTY_REPO_ALERT.md` (this file)
-- `backend/fastapi-app/REVENUE_STREAMS_IMPLEMENTATION.md`
-- `backend/fastapi-app/app/revenue_streams.py`
-- `backend/fastapi-app/tests/test_revenue_streams.py`
-- `backend/legacy_modernizer_api.py`
-- `briefings/HERMES-CONSOLIDATION-PHASE3-DIRECTIVE-2026-06-13.md`
-- `services/mission-control-api/src/mission_control_api/probes/compliance.py`
-- `test_revenue_streams_simple.py`
-- `verify_implementation.py`
+## 📊 Bucket Summary
 
-## Discord delivery note
+- `8` tracked-file modification(s) (` M`) — likely in-progress edits
+- `20` rename(s) (`R `) — **archival sweep into `briefings/archive/node-arch-2026-06-13-sweep/`** appears intentional (consistent target dir); confirm before staging
+- `11` untracked new file(s) (`??`) — includes 1 possibly-stray path (comma in name) and 4 new files under `services/health-aggregator/`
 
-The cron job asked to push this alert to Discord `#engineering`. Attempted delivery via `hermes send --to discord:#engineering`, but:
+---
 
-- `~/.hermes/.env` contains no `DISCORD_BOT_TOKEN` / Discord webhook URL.
-- `~/.hermes/channel_directory.json` shows `discord: []` — no channels discovered.
-- Discord is configured at the gateway level in `config.yaml` (`require_mention`, `allowed_channels`, `channel_prompts: {}`) but the gateway has never been started with a token, so no channels are visible to `hermes send`.
+## 📜 Full `git status --porcelain` (verbatim, as required by skill)
 
-**Result:** No Discord delivery possible from this cron session. This file is the on-disk alert; the cron run's final response is the user-facing copy.
+> Reconstructed from two split scans (per `local-platform-bootstrap` pitfall: `git status --untracked-files=no` for tracked changes + `git ls-files --others --exclude-standard` for untracked — concatenated for a full porcelain view).
 
-## Recommended follow-up
+```
+ M AGENTS.md
+ M DIRTY_REPO_ALERT.md
+ M IDENTITY.md
+ M apps/paperclip
+ M briefings/AGENT-ENTOURAGE.md
+ M briefings/NODE-ARCHITECTURE-2026-06-13.md
+R  briefings/ANTIGRAVITY-DEPLOY-CANONICAL.md -> briefings/archive/node-arch-2026-06-13-sweep/ANTIGRAVITY-DEPLOY-CANONICAL.md
+R  briefings/BOOTSTRAP.md -> briefings/archive/node-arch-2026-06-13-sweep/BOOTSTRAP.md
+R  briefings/DEPLOY-SOURCE-OF-TRUTH.md -> briefings/archive/node-arch-2026-06-13-sweep/DEPLOY-SOURCE-OF-TRUTH.md
+R  briefings/HERMES-CONSOLIDATION-AUDIT-FOR-OPUS-2026-06-13.md -> briefings/archive/node-arch-2026-06-13-sweep/HERMES-CONSOLIDATION-AUDIT-FOR-OPUS-2026-06-13.md
+R  briefings/HERMES-CONSOLIDATION-DIRECTIVE-2026-06-13.md -> briefings/archive/node-arch-2026-06-13-sweep/HERMES-CONSOLIDATION-DIRECTIVE-2026-06-13.md
+R  briefings/HERMES-CONSOLIDATION-PHASE2-DIRECTIVE-2026-06-13.md -> briefings/archive/node-arch-2026-06-13-sweep/HERMES-CONSOLIDATION-PHASE2-DIRECTIVE-2026-06-13.md
+R  briefings/HERMES-CONSOLIDATION-PHASE3-DIRECTIVE-2026-06-13.md -> briefings/archive/node-arch-2026-06-13-sweep/HERMES-CONSOLIDATION-PHASE3-DIRECTIVE-2026-06-13.md
+R  briefings/HERMES-PAPERCLIP-24X7-PROMPT.md -> briefings/archive/node-arch-2026-06-13-sweep/HERMES-PAPERCLIP-24X7-PROMPT.md
+R  briefings/LEGAL-SAFE-NODE-AUTOMATIONS.md -> briefings/archive/node-arch-2026-06-13-sweep/LEGAL-SAFE-NODE-AUTOMATIONS.md
+R  briefings/NODE-LOG.md -> briefings/archive/node-arch-2026-06-13-sweep/NODE-LOG.md
+R  briefings/ORCHESTRATION-ARCHITECTURE.md -> briefings/archive/node-arch-2026-06-13-sweep/ORCHESTRATION-ARCHITECTURE.md
+R  briefings/PAPERCLIP-HQ-ANTIGRAVITY-2026-04-15.md -> briefings/archive/node-arch-2026-06-13-sweep/PAPERCLIP-HQ-ANTIGRAVITY-2026-04-15.md
+R  briefings/PAPERCLIP-SABRETOOTH-RESTART-2026-04-10.md -> briefings/archive/node-arch-2026-06-13-sweep/PAPERCLIP-SABRETOOTH-RESTART-2026-04-10.md
+R  briefings/PAPERCLIP-WORKER-DEPLOY-PROMPT-2026-04-28.md -> briefings/archive/node-arch-2026-06-13-sweep/PAPERCLIP-WORKER-DEPLOY-PROMPT-2026-04-28.md
+R  briefings/REPOSITORY_RECORD.md -> briefings/archive/node-arch-2026-06-13-sweep/REPOSITORY_RECORD.md
+R  briefings/SABRETOOTH-BASELINE-2026-06-01.md -> briefings/archive/node-arch-2026-06-13-sweep/SABRETOOTH-BASELINE-2026-06-01.md
+R  briefings/SABRETOOTH-OPUS-DRIFT-CLEANUP-PROMPT.md -> briefings/archive/node-arch-2026-06-13-sweep/SABRETOOTH-OPUS-DRIFT-CLEANUP-PROMPT.md
+R  briefings/SABRETOOTH-SYNC-2026-05-11.md -> briefings/archive/node-arch-2026-06-13-sweep/SABRETOOTH-SYNC-2026-05-11.md
+R  briefings/SESSION-SUMMARY-2026-06-09.md -> briefings/archive/node-arch-2026-06-13-sweep/SESSION-SUMMARY-2026-06-09.md
+R  briefings/T5500-NODE-STATUS.md -> briefings/archive/node-arch-2026-06-13-sweep/T5500-NODE-STATUS.md
+ M services/health-aggregator/app/main.py
+ M tools/watchdog-sentry/index.html
+?? DIRTY_REPO_ALERT-20260613T210424Z.md
+?? DIRTY_REPO_ALERT-20260613T213314Z.md
+?? antigravity-doctrine, antigravity-mission-orchestrator/AGENTS.md
+?? antigravity-doctrine, antigravity-mission-orchestrator/SKILLS.md
+?? antigravity-doctrine, antigravity-mission-orchestrator/Sol.md
+?? antigravity-doctrine, antigravity-mission-orchestrator/TOOLS.md
+?? apps/command-center/lib/sentry.ts
+?? services/health-aggregator/app/repair.py
+?? services/health-aggregator/tests/test_repair.py
+?? services/health-aggregator/tests/test_repair_api.py
+?? tasks/repair-audit.jsonl
+```
 
-1. Review changes with `git status` / `git diff` from `C:\ANTIGRAVITY`.
-2. If changes are intentional, commit on the appropriate feature branch (do not push to `main` without review).
-3. If you want this alert pushed to Discord `#engineering` automatically going forward, run `hermes gateway setup` (or set `DISCORD_BOT_TOKEN` in `~/.hermes/.env`) so the cron job has a delivery channel.
+---
 
-— end of alert —
+
+### 🟡 Possibly stray (untracked, embedded punctuation)
+
+The following untracked path contains a comma — almost certainly a corrupted branch/directory name. Investigate separately from the rest of the untracked bucket:
+
+```
+?? antigravity-doctrine, antigravity-mission-orchestrator/AGENTS.md
+?? antigravity-doctrine, antigravity-mission-orchestrator/SKILLS.md
+?? antigravity-doctrine, antigravity-mission-orchestrator/Sol.md
+?? antigravity-doctrine, antigravity-mission-orchestrator/TOOLS.md
+```
+
+Suggested triage: `ls -la` the parent, then either rename/merge into a real branch directory or `rm -rf` after confirming nothing of value.
+
+---
+
+## ✅ Action Items (for the operator)
+
+
+1. **Decide on the archival sweep** (20 renames into `briefings/archive/node-arch-2026-06-13-sweep/`). If intentional, stage + commit as a single sweep commit; if not, restore from HEAD.
+2. **Review the 8 tracked modifications** (`AGENTS.md`, `IDENTITY.md`, `DIRTY_REPO_ALERT.md`, `apps/paperclip`, 2× `briefings/`, `services/health-aggregator/app/main.py`, `tools/watchdog-sentry/index.html`) for intent.
+3. **Triage the stray comma-mangled path** `antigravity-doctrine, antigravity-mission-orchestrator/` — see section above.
+4. **Decide on the `repair` workstream** — 4 new untracked files under `services/health-aggregator/` (`repair.py`, `tests/test_repair.py`, `tests/test_repair_api.py`) and `apps/command-center/lib/sentry.ts`, plus `tasks/repair-audit.jsonl`.
+5. **DO NOT** stage, commit, push, or stash on behalf of the cron. The doctrine is **alert only**.
+6. **To silence future alerts:** commit/stash the dirty state, **or** set up Discord via `hermes gateway setup` so the cron can deliver to `#engineering` directly.
+
+
+---
+
+## 🔁 Next Cron Run
+
+- Will re-check `/mnt/c/Antigravity` at the next scheduled invocation.
+- Will retry `hermes send --list discord` first; if `discord` is still empty in `channel_directory.json`, this fallback file path will be reused.
+- Sibling-write race mitigation: read-back verification on the next run will confirm content integrity (per `local-platform-bootstrap` pitfall log, 2026-06-13).
+- If two crons hit this file simultaneously, `write_file` may surface a sibling-subagent warning — that is informational, not an error. The porcelain list is deterministic from `git status`, so a byte-identical re-read across both writers means no real data was lost.
+
+— `local-platform-bootstrap` v1.2.0 · dirty-repo cron · alert-only mode

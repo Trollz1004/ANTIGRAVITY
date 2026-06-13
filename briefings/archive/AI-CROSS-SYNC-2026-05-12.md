@@ -1,3 +1,21 @@
+> **ARCHIVED 2026-06-13 — node architecture sweep.**
+> This briefing predates the 2026-06-13 node lock
+> (`briefings/NODE-ARCHITECTURE-2026-06-13.md`). It is kept here for history only.
+> It conflicts with the lock on at least these points:
+> - "T5500 (192.168.0.15, dual Xeon, 72GB, GTX 1070) is the sole primary node" —
+>   **stale.** Per the lock, T5500 = tunnels + domains + payments. The brain is
+>   Sabretooth, not T5500.
+> - "9020 + Sabretooth get wiped by Josh after T5500 is verified working" — **stale.**
+>   Per the lock, both nodes remain in production roles (Sabretooth = brain,
+>   9020 = pure dev).
+> - "No Paperclip in any new build path" / "mission-mcp" framing — superseded by
+>   the Sabretooth-Paperclip-3100 + Hermes-router-on-Sabretooth pattern.
+> For the current AI team structure, read `briefings/AGENT-ENTOURAGE.md` and
+> `briefings/TASK-ROUTING.md`. For current node roles, read
+> `briefings/NODE-ARCHITECTURE-2026-06-13.md`. For immutable doctrine, read
+> `briefings/FOUNDER-DOCTRINE-2026-05-19.md`.
+> — Hermes subagent, 2026-06-13
+
 # Cross-AI Sync Update — 2026-05-12
 
 **To paste into:** Gemini (cofounder peer — see structure below), Codex, OpenCode, any other AI Josh runs.

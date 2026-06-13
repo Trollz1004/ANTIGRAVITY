@@ -7,6 +7,23 @@
 > **Decision:** **FORK** — both files stand; the new guide describes target architecture (Manus cloud orchestration + target-state hub routing); the live doctrine describes current repo state. This briefing reconciles the boundary.
 > **Charter:** No edits to `hermes/HERMES-SETUP-GUIDE.md`. No PR. No push. This file is **untracked** until Joshua says push.
 > **Audit findings being reconciled:** 18 total (4 HIGH · 8 MEDIUM · 2 LOW · 4 items in §3 already ratified by Joshua as boundary-not-conflict).
+
+> **Addendum 2026-06-13 — node architecture lock:**
+> The layer split below is unchanged by the 2026-06-13 node lock
+> (`briefings/NODE-ARCHITECTURE-2026-06-13.md`), but each layer now has a pinned
+> runtime node:
+>
+> | Layer | Runtime node (locked 2026-06-13) |
+> |-------|----------------------------------|
+> | Hermes-internal agent-fleet orchestration | **Sabretooth** (the brain) — `services/hermes-router/` on Sabretooth, not T5500 |
+> | Manus-cloud external orchestration | Manus cloud (still external; not on any of the three ANTIGRAVITY nodes) |
+> | Public-internet front door (tunnels, domains, payment surfaces) | **T5500** — T5500 terminates the Cloudflare tunnels; T5500 is the only node that exposes public URLs |
+> | Live Paperclip board | **Sabretooth** — `http://127.0.0.1:3100`; reached from the public internet only because T5500 tunnels forward to it |
+> | Human daily chat + dev work | **9020** (pure dev, not yet primary; the Hermes Telegram chat will move here once 9020 is configured) |
+>
+> Rule of thumb: **Manus orchestrates (external), Hermes implements (internal, on Sabretooth),
+> T5500 front-doors (tunnels + domains + payments), 9020 hosts the human (dev + chat).**
+> The Manus-cloud / Hermes-internal boundary from §3 below is preserved unchanged.
 >
 > **#UntilNoKidInNeed · #ForTheKids · #NothingStopsTheWheelLikeThePlan**
 

@@ -30,6 +30,7 @@
         gap: 20px;
         padding: 24px 32px;
         border-bottom: 1px solid var(--line);
+        flex-wrap: wrap;
       }
       h1 {
         margin: 0;
@@ -37,9 +38,32 @@
         letter-spacing: 0;
       }
       .stamp { color: var(--muted); font-size: 15px; }
+      .actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      button {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--text);
+        padding: 10px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 120ms ease, border-color 120ms ease, transform 60ms ease;
+      }
+      button:hover { background: #1f2a1c; border-color: #4a5a3f; }
+      button:active { transform: translateY(1px); }
+      button.primary { background: var(--green); color: #081006; border-color: transparent; }
+      button.primary:hover { background: #6fe29c; }
+      button.danger { background: var(--red); color: #1a0707; border-color: transparent; }
+      button.danger:hover { background: #f4837a; }
+      button:disabled { opacity: 0.5; cursor: not-allowed; }
       .board {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 16px;
         padding: 24px 32px;
       }
@@ -49,12 +73,19 @@
         background: color-mix(in srgb, var(--panel) 88%, black);
         padding: 16px;
         min-height: 160px;
+        display: flex;
+        flex-direction: column;
       }
+      .card.red { border-color: var(--red); }
+      .card.yellow { border-color: var(--yellow); }
+      .card.green { border-color: var(--green); }
       .card h2 {
         margin: 0 0 12px;
         font-size: 18px;
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        gap: 8px;
       }
       .pill {
         border-radius: 999px;
@@ -63,9 +94,9 @@
         color: #081006;
         background: var(--muted);
       }
-      .green { background: var(--green); }
-      .yellow { background: var(--yellow); }
-      .red { background: var(--red); }
+      .green { background: var(--green); color: #081006; }
+      .yellow { background: var(--yellow); color: #1f1a05; }
+      .red { background: var(--red); color: #1a0707; }
       .check {
         display: grid;
         grid-template-columns: 14px 1fr;
@@ -80,6 +111,38 @@
         border-radius: 50%;
         margin-top: 5px;
       }
+      .dot.green { background: var(--green); }
+      .dot.yellow { background: var(--yellow); }
+      .dot.red { background: var(--red); }
+      .card .footer {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+      }
+      .tickets {
+        padding: 0 32px 24px;
+      }
+      .tickets h2 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        color: var(--muted);
+      }
+      .ticket {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 10px 12px;
+        margin-bottom: 6px;
+        display: grid;
+        grid-template-columns: 100px 1fr auto;
+        gap: 12px;
+        align-items: center;
+        font-size: 13px;
+      }
+      .ticket .id { color: var(--muted); font-family: monospace; }
       pre {
         margin: 0;
         padding: 16px 32px 28px;
@@ -94,59 +157,216 @@
         <h1 id="banner">LOADING</h1>
         <div class="stamp" id="stamp">waiting for Sabretooth aggregator</div>
       </div>
-      <div class="stamp">polls every 15 seconds</div>
+      <div class="actions">
+        <button id="refresh-btn" onclick="poll(true)">Refresh</button>
+        <button id="plan-btn" onclick="planRepairs(false)">Plan Repairs</button>
+        <button id="auto-btn" class="danger" onclick="planRepairs(true)">Repair All Red</button>
+        <div class="stamp">polls every 15s</div>
+      </div>
     </header>
     <main class="board" id="board"></main>
+    <section class="tickets">
+      <h2>Repair Tickets</h2>
+      <div id="tickets"></div>
+    </section>
     <pre id="events"></pre>
     <script>
-      const endpoint = "http://192.168.0.8:11436/health/all";
+      const endpoint = "http://192.168.0.8:11436";
       const board = document.getElementById("board");
       const banner = document.getElementById("banner");
       const stamp = document.getElementById("stamp");
       const events = document.getElementById("events");
+      const ticketsEl = document.getElementById("tickets");
+      const planBtn = document.getElementById("plan-btn");
+      const autoBtn = document.getElementById("auto-btn");
+      const refreshBtn = document.getElementById("refresh-btn");
 
       function statusText(counts) {
         if (counts.red === 0 && counts.yellow === 0) return "ALL GREEN";
         return `${counts.yellow} YELLOW · ${counts.red} RED`;
       }
 
+      function colorFor(level) {
+        return level === "red" ? "var(--red)" : level === "yellow" ? "var(--yellow)" : "var(--green)";
+      }
+
+      // innerHTML is used below with values sourced from the trusted local
+      // aggregator (localhost LAN). The dashboard is not served to the
+      // public; MINI-ASUS-PC is the only consumer (see SKILL doctrine).
       function render(payload) {
         banner.textContent = statusText(payload.counts);
-        banner.style.color = payload.overall === "red" ? "var(--red)" : payload.overall === "yellow" ? "var(--yellow)" : "var(--green)";
+        banner.style.color = colorFor(payload.overall);
         stamp.textContent = `last update ${payload.captured_at}`;
         board.innerHTML = "";
-        for (const category of payload.categories) {
+
+        // Promote T5500-related categories to the top.
+        const order = ["t5500_services", "cloudflare_pages", "nodes", "vault_health", "hermes_router", "mission_mcp", "github_ci", "revenue_today", "paperweight_audit", "graphify"];
+        const byName = Object.fromEntries(payload.categories.map(c => [c.name, c]));
+        const sorted = order.filter(n => byName[n]).map(n => byName[n]).concat(
+          payload.categories.filter(c => !order.includes(c.name))
+        );
+
+        for (const category of sorted) {
           const card = document.createElement("section");
-          card.className = "card";
-          card.innerHTML = `<h2>${category.name}<span class="pill ${category.status}">${category.status}</span></h2>`;
-          for (const check of category.checks.slice(0, 8)) {
+          card.className = `card ${category.status}`;
+          const header = document.createElement("h2");
+          header.innerHTML = `<span>${category.name}</span><span class="pill ${category.status}">${category.status}</span>`;
+          card.appendChild(header);
+
+          const redChecks = (category.checks || []).filter(c => c.status === "red");
+          for (const check of (category.checks || []).slice(0, 8)) {
             const row = document.createElement("div");
             row.className = "check";
-            row.title = check.summary;
-            row.innerHTML = `<span class="dot ${check.status}"></span><span>${check.name}: ${check.summary}</span>`;
+            row.title = check.summary || "";
+            row.innerHTML = `<span class="dot ${check.status}"></span><span>${check.name}: ${check.summary || ""}</span>`;
             card.appendChild(row);
           }
+
+          const footer = document.createElement("div");
+          footer.className = "footer";
+          if (redChecks.length > 0) {
+            const label = document.createElement("span");
+            label.className = "stamp";
+            label.textContent = `${redChecks.length} red`;
+            footer.appendChild(label);
+            const btn = document.createElement("button");
+            btn.className = "danger";
+            btn.textContent = "Repair";
+            btn.onclick = () => repairCategory(category.name, redChecks);
+            footer.appendChild(btn);
+          } else {
+            const label = document.createElement("span");
+            label.className = "stamp";
+            label.textContent = "no action needed";
+            footer.appendChild(label);
+          }
+          card.appendChild(footer);
           board.appendChild(card);
         }
+
         events.textContent = (payload.events_tail || []).slice(-20).join("\n");
       }
 
-      async function poll() {
+      function renderTickets(tickets) {
+        if (!tickets || tickets.length === 0) {
+          ticketsEl.innerHTML = '<div class="stamp">no repair tickets yet</div>';
+          return;
+        }
+        ticketsEl.innerHTML = "";
+        for (const t of tickets.slice(0, 30)) {
+          const row = document.createElement("div");
+          row.className = "ticket";
+          row.innerHTML = `<span class="pill ${t.status === "ok" ? "green" : t.status === "failed" ? "red" : "yellow"}">${t.status}</span>` +
+                          `<span><b>${t.action.target}</b> · ${t.action.playbook} · ${t.action.reason || ""}</span>`;
+          const actions = document.createElement("span");
+          if (t.status === "queued" || t.status === "failed") {
+            const btn = document.createElement("button");
+            btn.textContent = "Run";
+            btn.onclick = () => dispatchTicket(t.id);
+            actions.appendChild(btn);
+          } else {
+            const span = document.createElement("span");
+            span.className = "stamp";
+            span.textContent = t.id.slice(0, 8);
+            actions.appendChild(span);
+          }
+          row.appendChild(actions);
+          ticketsEl.appendChild(row);
+        }
+      }
+
+      async function poll(verbose=false) {
         try {
-          const response = await fetch(endpoint, { cache: "no-store" });
+          refreshBtn.disabled = true;
+          const response = await fetch(`${endpoint}/health/all`, { cache: "no-store" });
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
           render(await response.json());
+          if (verbose) {
+            const t = await fetch(`${endpoint}/repair/tickets`, { cache: "no-store" });
+            if (t.ok) renderTickets((await t.json()).tickets);
+          }
         } catch (error) {
           banner.textContent = "AGGREGATOR RED";
           banner.style.color = "var(--red)";
           stamp.textContent = String(error);
           board.innerHTML = "";
           events.textContent = "";
+        } finally {
+          refreshBtn.disabled = false;
+        }
+      }
+
+      async function refreshTickets() {
+        try {
+          const t = await fetch(`${endpoint}/repair/tickets`, { cache: "no-store" });
+          if (t.ok) renderTickets((await t.json()).tickets);
+        } catch (e) { /* ignore */ }
+      }
+
+      async function planRepairs(auto) {
+        planBtn.disabled = true;
+        autoBtn.disabled = true;
+        try {
+          const r = await fetch(`${endpoint}/repair/plan`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ auto_dispatch: auto }),
+          });
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          const data = await r.json();
+          stamp.textContent = `planned ${data.submitted.length} repairs at ${data.scanned_at}`;
+          await refreshTickets();
+          if (auto) await poll();
+        } catch (e) {
+          stamp.textContent = `repair plan failed: ${e}`;
+        } finally {
+          planBtn.disabled = false;
+          autoBtn.disabled = false;
+        }
+      }
+
+      async function repairCategory(category, redChecks) {
+        planBtn.disabled = true;
+        autoBtn.disabled = true;
+        try {
+          // The category-level repair uses the same /repair/plan endpoint
+          // (which already filters by red) but does not auto-dispatch;
+          // we then dispatch each ticket we just submitted.
+          const r = await fetch(`${endpoint}/repair/plan`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ auto_dispatch: false }),
+          });
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          const data = await r.json();
+          // Dispatch everything that matches the category the user clicked.
+          for (const t of data.submitted) {
+            await fetch(`${endpoint}/repair/tickets/${t.id}/dispatch`, { method: "POST" });
+          }
+          stamp.textContent = `dispatched repairs for ${category}`;
+          await refreshTickets();
+          await poll();
+        } catch (e) {
+          stamp.textContent = `category repair failed: ${e}`;
+        } finally {
+          planBtn.disabled = false;
+          autoBtn.disabled = false;
+        }
+      }
+
+      async function dispatchTicket(id) {
+        try {
+          await fetch(`${endpoint}/repair/tickets/${id}/dispatch`, { method: "POST" });
+          await refreshTickets();
+        } catch (e) {
+          stamp.textContent = `dispatch failed: ${e}`;
         }
       }
 
       poll();
+      refreshTickets();
       setInterval(poll, 15000);
+      setInterval(refreshTickets, 10000);
     </script>
   </body>
 </html>

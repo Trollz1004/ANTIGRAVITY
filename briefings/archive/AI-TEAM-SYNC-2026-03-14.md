@@ -1,3 +1,11 @@
+> **ARCHIVED 2026-06-13 — node architecture sweep.**
+> This briefing predates the 2026-06-13 node lock
+> (`briefings/NODE-ARCHITECTURE-2026-06-13.md`). It is kept here for history only.
+> For the current AI team structure, read `briefings/AGENT-ENTOURAGE.md` and
+> `briefings/TASK-ROUTING.md`. For current node roles, read
+> `briefings/NODE-ARCHITECTURE-2026-06-13.md`.
+> — Hermes subagent, 2026-06-13
+
 # AI Team Sync - 2026-03-14 (Superseded)
 
 This file predates the March 30-31, 2026 doctrine cleanup and must not be used as current operating truth.

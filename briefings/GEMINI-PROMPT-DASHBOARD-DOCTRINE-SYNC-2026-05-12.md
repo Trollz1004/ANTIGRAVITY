@@ -1,5 +1,11 @@
 # Prompt for Gemini — Dashboard Doctrine Sync (2026-05-12)
 
+> **Re-confirmed 2026-06-13 against the node architecture lock:**
+> Sabretooth = brain, T5500 = tunnels + domains + payments, 9020 = pure dev.
+> Canonical source: `briefings/NODE-ARCHITECTURE-2026-06-13.md`.
+> Dashboard / frontend edits per this prompt run on 9020 (dev) and are
+> validated against T5500 surfaces; the live Paperclip board is Sabretooth.
+
 > **From:** Opus + Josh
 > **To:** Gemini 3.1 Pro (Cofounder Triad)
 > **Re:** Sync the e-commerce-orchestrator-v2 dashboard (and any other UI you hold) to the current revenue/legal doctrine + final tokenomics
