@@ -89,7 +89,7 @@ Two doctrine/reality mismatches worth a reconcile pass (not blocking this briefi
 
 ### Gap 5: Revenue allocation — happy-path math only
 
-- **Location:** `backend/fastapi-app/app/revenue_allocation.py` + `services/mission-control-api/src/mission_control_api/probes/revenue_buckets.py`
+- **Location:** `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py` + `/mnt/c/antigravity/services/mission-control-api/src/mission_control_api/probes/revenue_buckets.py`
 - **Why it matters:** Encodes the 1-wallet / 10%-reserve invariant. Existing `test_revenue_allocation.py` covers basic math; missing integration coverage.
 - **Concrete test cases:**
   - End-to-end: webhook → payment → allocation → treasury settlement

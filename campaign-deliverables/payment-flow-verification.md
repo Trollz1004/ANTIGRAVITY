@@ -9,13 +9,13 @@
 
 ### Evidence of Live Operation
 1. **Backend source of truth**: `backend/fastapi-app/app/payments.py` â€” 5 tiers with Square payment links
-2. **Revenue allocation**: `backend/fastapi-app/app/revenue_allocation.py` â€” 10% reserved allocation per 100-Cent Rule
+2. **Revenue allocation**: `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py` — 10% reserved allocation per 100-Cent Rule
 3. **Billing API**: `backend/fastapi-app/app/routers/billing.py` â€” authenticated checkout link generation
 4. **Payment truth**: `backend/fastapi-app/app/payment_truth.py` â€” account-bound checkout with reference tracking
 5. **Square checkout**: `backend/fastapi-app/app/square_checkout.py` â€” Square API integration
 6. **Environment**: SQUARE_ACCESS_TOKEN + SQUARE_LOCATION_ID configured per .env.example
 7. **Webhooks**: 8 webhook signature/notification URL env vars specified
-8. **Founder test payments**: 6 known test payment IDs in revenue_allocation.py (all classified as `founder_test`, excluded from customer revenue reporting)
+8. **Founder test payments**: 6 known test payment IDs in `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py` (all classified as `founder_test`, excluded from customer revenue reporting)
 
 ### Checkout Flow (Authenticated Users)
 1. User signs in â†’ POST `/billing/checkout-link` with tier selection

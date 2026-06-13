@@ -20,7 +20,7 @@ description: Square vs Stripe per-surface rules, live payment links, webhook ver
 ## Webhooks & Security
 - SQUARE_WEBHOOK_VERIFY_SIGNATURE=true in CI and prod.
 - Always verify signature (HMAC), replay protection, malformed header tests.
-- See backend/fastapi-app for the webhook handler and tests.
+- See /mnt/c/antigravity/backend/fastapi-app for the webhook handler and tests.
 
 ## When to Use
 - Adding/editing any pricing, membership, Bot-Shield, founder plan, or royalty UI.

@@ -105,6 +105,8 @@ Each Paperweight company (`apps/paperweight`) has one CEO brain:
 | `youandinotai` | `ceo-youandinotai.md` | Date app + customer support; first paying customer |
 | `marketing` | `ceo-marketing.md` | Cross-platform growth (Grok→X, Manus→Meta, Perplexity→rest) |
 | `ai-solutions` | `ceo-ai-solutions.md` | ai-solutions.store products |
+| `business-exchange` | `ceo-business-exchange.md` | 9020-hosted marketplace + operator workflow |
+| `hermes-sideworld` | `ceo-hermes-sideworld.md` | Hermes orchestration, node control, safe public mission-control |
 | `onlinerecycle` | `ceo-onlinerecycle.md` | onlinerecycle.org cross-lister (e-waste, resale) |
 | `youtube` | `ceo-youtube.md` | Content engine — many buckets per video |
 | `dao` | `ceo-dao.md` | Governance proposals + vote tallies (on-chain stays off the ops board) |

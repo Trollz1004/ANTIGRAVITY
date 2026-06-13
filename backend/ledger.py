@@ -7,7 +7,7 @@ endpoints and the totals propagate to the Mission ribbon visible on every
 screen.
 
 Doctrine compliance:
-  - All amounts are recorded — never claim donations or solicitations.
+  - All amounts are recorded — never claim contributions or requests.
   - "contributed" / "committed" wording only.
   - The kids-funded estimate uses a configurable per-kid threshold so the UI
     can render an honest count, not a fabricated one.
@@ -37,9 +37,9 @@ LEDGER = _db.ledger
 KID_THRESHOLD_USD = float(os.environ.get("KID_THRESHOLD_USD", "250"))
 
 BUCKET_NAMES = {
-    1: "Kids Fund",          2: "Platform Build",     3: "Hermes Ops",
-    4: "Recycle Intake",     5: "AI-Solutions Store", 6: "Super Likes Match",
-    7: "Content Sprint",     8: "Paperclip Scale",    9: "Antigravity Reserve",
+    1: "Kids Fund - Infrastructure Immunity (Security Cleanup)",          2: "Platform Build - Orchestration Engine (Agentic Workflows)",     3: "Hermes Ops",
+    4: "Recycle Intake",     5: "AI-Solutions Store - Digital Storefront Accelerator (Storefront Deployment)", 6: "Super Likes Match",
+    7: "Content Sprint - Legacy Modernizer (Tech Debt Cleanup)",     8: "Paperclip Scale - Guardian Gateway (API Management)",    9: "Antigravity Reserve",
     10: "Founder Four Trust",
 }
 

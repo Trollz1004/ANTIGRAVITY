@@ -2,7 +2,7 @@
 
 > **Audit date:** 2026-06-05
 > **File audited:** `hermes/HERMES-SETUP-GUIDE.md` (commit `df834c18`, author Trollz1004, 2026-06-05)
-> **Authority referenced:** `briefings/FOUNDER-DOCTRINE-2026-05-19.md` (immutable), `CLAUDE.md` (auto-loaded), `hermes/agents/AGENTS.md` (Opus-authored, 2026-05-22), `hermes/agents/HERMES-CEO-SOUL.md` (Opus-authored), `briefings/DAO-ARCHITECTURE-CANONICAL.md` (2026-04-19), `briefings/DAO-LAUNCH-ARCHITECTURE.md` (2026-06-04), `briefings/REVENUE-PIVOT-REPORT.md` (2026-06-04), `briefings/REPOSITORY_RECORD.md` (2026-05-13), `briefings/CLAUDE-MEMORY-2026-06-{01,02,03,05}T*.md`, `backend/fastapi-app/app/revenue_allocation.py` (live code), `backend/hub.py` (live hub), `backend/hermes_models.py` (live alias table), `backend/compliance.py` (live monitor), `backend/storefront.py` (live catalogue), `backend/fastapi-app/app/config.py` (live env config), `backend/fastapi-app/app/secrets_rotation_config.json` (live rotation ledger).
+> **Authority referenced:** `briefings/FOUNDER-DOCTRINE-2026-05-19.md` (immutable), `CLAUDE.md` (auto-loaded), `hermes/agents/AGENTS.md` (Opus-authored, 2026-05-22), `hermes/agents/HERMES-CEO-SOUL.md` (Opus-authored), `briefings/DAO-ARCHITECTURE-CANONICAL.md` (2026-04-19), `briefings/DAO-LAUNCH-ARCHITECTURE.md` (2026-06-04), `briefings/REVENUE-PIVOT-REPORT.md` (2026-06-04), `briefings/REPOSITORY_RECORD.md` (2026-05-13), `briefings/CLAUDE-MEMORY-2026-06-{01,02,03,05}T*.md`, `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py` (live code), `backend/hub.py` (live hub), `backend/hermes_models.py` (live alias table), `backend/compliance.py` (live monitor), `backend/storefront.py` (live catalogue), `backend/fastapi-app/app/config.py` (live env config), `backend/fastapi-app/app/secrets_rotation_config.json` (live rotation ledger).
 >
 > **Audit charter:** Hold the line. **No edits to `hermes/HERMES-SETUP-GUIDE.md`.** No edits to any doctrine file. No PR. No push. Report only.
 >
@@ -19,7 +19,7 @@
 | 3 | **JSONBin state: `6a230263f5f4af5e29beef15`** | Not verifiable in repo (third-party store), but matches `briefings/HERMES-CEO-READY-2026-04-19.md` and the running Hermes-CEO-Ready doc lineage | 🟡 UNVERIFIED (third-party bin, not in repo) |
 | 4 | **Telegram bridge: `@ManusHasHands_Bot` → chat_id `6244456983`** (verified, live) | Live FastAPI backend already wires Telegram: `config.py:57-58` (`telegram_bot_token`, `telegram_chat_id`), `secrets_rotation_config.json:55-58` (rotated 2026-05-19), broadcast endpoints in `backend/hub.py:349-374`. Token + chat id are the only envs needed; whether they hold the new values is a **runtime** question the guide does not prove | 🟡 PARTIALLY TRUE (wiring is real; specific bot/chat values are founder-asserted, not repo-verified) |
 | 5 | **Notion memory page `376a4be9d37e81b69764f0d228aad977`** | Not verifiable in repo (Notion is external). Recent `CLAUDE-MEMORY-2026-06-{01,02,03,05}T*.md` runs all reference Notion page `372a4be9-d37e-81d1-95c0-da68a3308d4c` for "Paperweight Daily Memory" — DIFFERENT ID from the guide's claim | 🔴 MISMATCH (guide's id `376a4be9...` vs live id `372a4be9...`; first 4 chars differ — likely a typo in the new guide, but I cannot edit it) |
-| 6 | **Square is the only processor for youandinotai.com** | `CLAUDE.md` §"Payments — per-surface ToS", `backend/fastapi-app/app/revenue_allocation.py` (Square-only `square_payment_id` allocation), `REVENUE-PIVOT-REPORT.md` (Stripe stripped 2026-06-04) | ✅ TRUE |
+| 6 | **Square is the only processor for youandinotai.com** | `CLAUDE.md` §"Payments — per-surface ToS", `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py` (Square-only `square_payment_id` allocation), `REVENUE-PIVOT-REPORT.md` (Stripe stripped 2026-06-04) | ✅ TRUE |
 | 7 | **Telegram as transaction bridge to auto-trigger Manus** | `backend/hub.py` already has Telegram broadcast endpoints (`POST /api/broadcast/telegram`), but **no auto-trigger of Manus** is implemented in the live code — `hub.py` returns `{ok, configured, status}` from Telegram, no callback into Manus. The "auto-trigger" is an aspirational claim | ⚠️ PARTIALLY TRUE (broadcast is real; auto-trigger is forward-looking) |
 | 8 | **ClawX board at `clawx-aihub-zwxfcstm.manus.space` (public)** | Listed in `briefings/CLAUDE-MEMORY-2026-06-01T2309Z.md` and `HERMES-AGENT-MEMORY-2026-05-27*.md`; the live `backend/hub.py:122-127` does have a `manus` platform with `MANUS_API_KEY` BYOK path. Whether `clawx-aihub-zwxfcstm.manus.space` resolves and shows a board is runtime verification, not in this repo | 🟡 UNVERIFIED (claim is from a Manus-controlled host) |
 | 9 | **The 4 SKUs / 5 Square product links** are live for youandinotai.com | `CLAUDE.md` §"Square" lists 5 product links live; live `backend/fastapi-app` does NOT have `backend/storefront.py` mounted (it lives in the separate `backend/` folder at the repo root, with the Cloud Run deploy); `storefront.py:64-119` STARTER_SKUS shows 9 products but uses a different catalogue (Bot Shield $9, Founding Member $29, 3-Month $79, 12-Month $299, Royalty $499, plus patch/prompt/dropin/consult). The dollar amounts and the count **do not match** the live 5-product $1/$14.99/$39.99/$99.99/$2,500 lineup in `CLAUDE.md` | 🟡 CATALOGUE DRIFT (the `backend/storefront.py` SKUs are a different/older set; the canonical youandinotai.com SKUs are the 5 in `CLAUDE.md`) |
@@ -52,7 +52,7 @@ Severity scale: **🔴 CRITICAL** = mutates a FOUNDER DOCTRINE rule, **🟠 HIGH
 - **Severity:** 🟠 HIGH (the most material conflict in the file)
 - **Guide §3 (line 92-102):** KIDS 10% / TAX 27% / SOVEREIGNTY 63%, presented as a single **gross-revenue** rule on every dollar.
 - **Live LLC doctrine (CLAUDE.md §"Revenue Model", 2026-04-17, restated 2026-06-01):** 10% per legally-distinct bucket is the **IRS LLC charitable-deduction cap** (10c per $1 maximum corporate charitable deduction). 90% is the LLC operating share, NOT 63%. **The 27% / 63% split does not exist at the LLC layer.**
-- **Live LLC code (`backend/fastapi-app/app/revenue_allocation.py:97-100`):**
+- **Live LLC code (`/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:97-100`):**
   ```python
   charitable_amount_cents=charitable_amount,        # 10%
   operating_amount_cents=amount - charitable_amount, # 90%
@@ -64,7 +64,7 @@ Severity scale: **🔴 CRITICAL** = mutates a FOUNDER DOCTRINE rule, **🟠 HIGH
 - **Reconciliation (100-Cent Rule vs ENIGMA 60/30/10):**
   | Layer | Split | Source of truth | Status |
   |---|---|---|---|
-  | **LLC operating** (every merchant receipt) | 10% kids bucket (charitable-deduction cap) + 90% operating | `revenue_allocation.py`, `CLAUDE.md` 2026-06-01 | **LIVE** |
+  | **LLC operating** (every merchant receipt) | 10% kids bucket (charitable-deduction cap) + 90% operating | `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py`, `CLAUDE.md` 2026-06-01 | **LIVE** |
   | **DAO token sale** (gross sale proceeds) | 10% kids / min 27% tax reserve / 63% priority tiers (A1+A2 survival, then B) | `DAO-ARCHITECTURE-CANONICAL.md:799`, `DAO-LAUNCH-ARCHITECTURE.md:9-15` | **LIVE** at DAO layer, **not** at LLC layer |
   | **Historical charity-routing** (60/30/10, 100% charity) | 60% ops / 30% growth / 10% kids | `GospelDonation.sol`, pre-April-17 docs | **DEAD** — never resurrect |
   | **Guide's 100-Cent Rule** (10/27/63) | Presented as one gross rule on every dollar | `HERMES-SETUP-GUIDE.md:95-102` | **CONFLATES** the LLC and DAO layers |
@@ -203,7 +203,7 @@ But there is a **third** layer the guide does not name: the **DAO PlatformSplitt
 
 | Layer | Split | Status | Source of truth |
 |---|---|---|---|
-| **LLC operating** (every merchant receipt) | 10% kids bucket (IRS charitable-deduction cap) + 90% operating | **LIVE — in `revenue_allocation.py`** | `backend/fastapi-app/app/revenue_allocation.py:97-100`, `CLAUDE.md` 2026-06-01 |
+| **LLC operating** (every merchant receipt) | 10% kids bucket (IRS charitable-deduction cap) + 90% operating | **LIVE — in `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py`** | `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:97-100`, `CLAUDE.md` 2026-06-01 |
 | **DAO PlatformSplitter** (token sale gross proceeds) | 10% kids (stacked per activity) / min 27% tax reserve / 63% priority tiers (A1 survival + A2 human + Breakeven) | **LIVE at DAO layer only** | `DAO-ARCHITECTURE-CANONICAL.md:799`, `DAO-LAUNCH-ARCHITECTURE.md:9-15` |
 | **ENIGMA 60/30/10** (historical charity-routing) | 60% ops / 30% growth / 10% kids | **DEAD — never resurrect** | `GospelDonation.sol`, pre-April-17 docs, `REPOSITORY_RECORD.md` §"Current Financial Doctrine" |
 | **100-Cent Rule (guide's framing)** | 10/27/63, presented as a single gross rule on every dollar at the LLC layer | **CONFLATES the LLC and DAO layers** | `HERMES-SETUP-GUIDE.md:95-102` |

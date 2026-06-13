@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ANTIGRAVITY // Stream-Safe Ops Control</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #05070d;
+        --panel: #0d1320;
+        --panel2: #121a2a;
+        --line: #263248;
+        --ink: #eef4ff;
+        --muted: #8fa1bd;
+        --green: #2bd576;
+        --yellow: #f1b83b;
+        --red: #ff5d6c;
+        --blue: #58a6ff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(circle at top left, #12213d 0, var(--bg) 45%);
+        color: var(--ink);
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          sans-serif;
+      }
+      header,
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 22px;
+        background: rgba(5, 7, 13, 0.88);
+        border-bottom: 1px solid var(--line);
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        border-bottom: 0;
+        color: var(--muted);
+      }
+      h1 {
+        margin: 0;
+        font-size: 20px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .tag {
+        color: var(--muted);
+        font:
+          700 11px/1.3 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        text-transform: uppercase;
+      }
+      main {
+        padding: 22px;
+        display: grid;
+        gap: 18px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .card {
+        background: linear-gradient(180deg, var(--panel), var(--panel2));
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+      }
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .state {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font:
+          800 24px/1 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+      }
+      .dot {
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: var(--yellow);
+        box-shadow: 0 0 18px currentColor;
+      }
+      .green {
+        color: var(--green);
+      }
+      .green .dot {
+        background: var(--green);
+      }
+      .yellow {
+        color: var(--yellow);
+      }
+      .yellow .dot {
+        background: var(--yellow);
+      }
+      .red {
+        color: var(--red);
+      }
+      .red .dot {
+        background: var(--red);
+      }
+      .blue {
+        color: var(--blue);
+      }
+      .blue .dot {
+        background: var(--blue);
+      }
+      .small {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+      .lane {
+        display: grid;
+        grid-template-columns: 180px 130px 1fr 170px;
+        gap: 12px;
+        padding: 11px 0;
+        border-top: 1px solid var(--line);
+        align-items: center;
+      }
+      .lane:first-child {
+        border-top: 0;
+      }
+      .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      .safe {
+        border-color: rgba(43, 213, 118, 0.45);
+      }
+      @media (max-width: 1100px) {
+        .grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .lane {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>ANTIGRAVITY Ops Control</h1>
+        <div class="tag">stream-safe public operations view · private data hidden</div>
+      </div>
+      <div class="tag" id="clock">loading…</div>
+    </header>
+
+    <main>
+      <section class="grid">
+        <div class="card safe">
+          <h2>Public stream</h2>
+          <div class="state blue"><span class="dot"></span>READY</div>
+          <div class="small">OBS/YouTube-safe surface. Private Hermes Desktop panes stay off-stream.</div>
+        </div>
+        <div class="card">
+          <h2>Sabretooth</h2>
+          <div class="state yellow"><span class="dot"></span>CONTROL</div>
+          <div class="small">
+            Hermes + Paperweight/Paperclip CEO board. Health must come from validated local API shape.
+          </div>
+        </div>
+        <div class="card">
+          <h2>T5500 date app</h2>
+          <div class="state yellow"><span class="dot"></span>VERIFYING</div>
+          <div class="small">
+            Port 3200 returned HTML from Sabretooth. Payment path still needs redacted non-destructive probe.
+          </div>
+        </div>
+        <div class="card">
+          <h2>9020 business</h2>
+          <div class="state yellow"><span class="dot"></span>AUTH GATE</div>
+          <div class="small">
+            Port 3050 reachable and redirects to login. Needs health endpoint/body-shape proof for green.
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>CEO lanes controlled by Hermes</h2>
+        <div class="lane">
+          <strong>YouAndINotAI</strong><span class="mono yellow">yellow</span
+          ><span>Date app + support + payment health on T5500.</span><span class="mono">youandinotai</span>
+        </div>
+        <div class="lane">
+          <strong>AI-Solutions</strong><span class="mono yellow">yellow</span
+          ><span>AI product/store lane; payment health redacted.</span><span class="mono">ai-solutions</span>
+        </div>
+        <div class="lane">
+          <strong>Business Exchange</strong><span class="mono yellow">yellow</span
+          ><span>9020 marketplace/operator workflow.</span><span class="mono">business-exchange</span>
+        </div>
+        <div class="lane">
+          <strong>Hermes Sideworld</strong><span class="mono blue">control</span
+          ><span>One-root orchestration, public dashboard safety, node health.</span
+          ><span class="mono">hermes-sideworld</span>
+        </div>
+        <div class="lane">
+          <strong>Marketing</strong><span class="mono yellow">queued</span
+          ><span>Markets the three public platforms via specialist lanes.</span><span class="mono">marketing</span>
+        </div>
+        <div class="lane">
+          <strong>YouTube</strong><span class="mono yellow">queued</span
+          ><span>24/7 stream content engine and public product programming.</span><span class="mono">youtube</span>
+        </div>
+      </section>
+
+      <section class="card safe">
+        <h2>What is intentionally hidden</h2>
+        <div class="small">
+          Private auth material, remote-access details, raw env values, customer records, private doctrine, raw
+          payment-provider responses, and terminal panes stay off-stream. Green status requires real checks; empty or
+          malformed 200 responses are not green.
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Public-safe workstream view for streamed building sessions.</span>
+      <span class="mono">Source: C:\antigravity · Branch: main</span>
+    </footer>
+    <script>
+      const tick = () => {
+        document.getElementById('clock').textContent = new Date().toLocaleString();
+      };
+      tick();
+      setInterval(tick, 1000);
+    </script>
+  </body>
+</html>
