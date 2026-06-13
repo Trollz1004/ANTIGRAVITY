@@ -1,7 +1,9 @@
 # OPUS-CODEX SYNC BRIEF
 
-Status: Current as of 2026-03-31
+Status: Current as of 2026-03-31 (re-confirmed 2026-06-13 against the node architecture lock)
 Audience: Claude and Codex
+
+> **Node architecture (2026-06-13):** Sabretooth = brain (Paperclip + GPU Ollama + multi-company orchestration), T5500 = tunnels + domains + payments, 9020 = pure dev. Canonical source: `briefings/NODE-ARCHITECTURE-2026-06-13.md`. The repo-truth execution path for `main` resolves to Codex on Sabretooth.
 
 ## Immediate Truth
 

@@ -1,3 +1,16 @@
+> **ARCHIVED 2026-06-13 — node architecture sweep.**
+> This briefing predates the 2026-06-13 node lock
+> (`briefings/NODE-ARCHITECTURE-2026-06-13.md`). It is kept here for history only.
+> It conflicts with the lock on the same node-topology points as
+> `archive/UNIVERSAL-SYNC-2026-03-23.md` (Sabretooth = master orchestrator; T5500 =
+> Manus / Meta Guardian). The 2026-06-13 lock keeps Sabretooth as the brain but
+> removes the Manus / Meta Guardian role from T5500, and redefines T5500 as
+> strictly tunnels + domains + payments.
+> For the current AI team structure, read `briefings/AGENT-ENTOURAGE.md` and
+> `briefings/TASK-ROUTING.md`. For current node roles, read
+> `briefings/NODE-ARCHITECTURE-2026-06-13.md`.
+> — Hermes subagent, 2026-06-13
+
 # UNIVERSAL TEAM SYNC (FINAL) - 2026-03-23
 
 ## MISSION CRITICAL STATUS

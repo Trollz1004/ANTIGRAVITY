@@ -1,3 +1,13 @@
+> **ARCHIVED 2026-06-13 — node architecture sweep.**
+> This briefing predates the 2026-06-13 node lock
+> (`briefings/NODE-ARCHITECTURE-2026-06-13.md`). The "REVENUE & PRIVACY SPRINT"
+> it described is COMPLETE, but the node topology it assumed (Sabretooth = single
+> primary; no defined T5500 tunnel/9020 dev split) is stale. Kept here for
+> history only. For current AI team structure, read
+> `briefings/AGENT-ENTOURAGE.md` and `briefings/TASK-ROUTING.md`. For current
+> node roles, read `briefings/NODE-ARCHITECTURE-2026-06-13.md`.
+> — Hermes subagent, 2026-06-13
+
 # AI-TEAM-SYNC-2026-03-18.md — THE REVENUE & PRIVACY SPRINT
 
 **Status:** COMPLETE ✅
