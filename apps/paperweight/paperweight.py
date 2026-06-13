@@ -11,6 +11,8 @@ Multi-company: work is scoped to workspaces (companies) so each surface is separ
   - youandinotai  : date app + Customer Support tickets
   - marketing     : cross-platform, serves all surfaces
   - ai-solutions  : ai-solutions.store products
+  - business-exchange : 9020-hosted business marketplace / operator workflow
+  - hermes-sideworld  : Hermes orchestration, node control, and side-work backlog
   - dao           : governance proposals + vote tallies (TRACKING ONLY — on-chain
                     voting stays off this ops board; this records intent, not chain state)
 
@@ -51,6 +53,8 @@ SEED_COMPANIES = [
     ("youandinotai", "YouAndINotAI", "Date app + customer support", "love"),
     ("marketing", "Marketing", "Cross-platform — serves all surfaces", "amber"),
     ("ai-solutions", "AI-Solutions", "ai-solutions.store products", "ukid"),
+    ("business-exchange", "Business Exchange", "9020-hosted business marketplace and operator workflow", "copper"),
+    ("hermes-sideworld", "Hermes Sideworld", "Hermes orchestration, node control, and side-work backlog", "agrav"),
     ("youtube", "YouTube", "Content engine — many buckets per video (CTA, subs, Super Thanks, membership, merch, affiliate)", "youtube"),
     ("onlinerecycle", "OnlineRecycle", "onlinerecycle.org cross-lister — eBay cross-listing, e-waste, resale", "green"),
     ("dao", "DAO Governance", "Proposals & voting (tracking only — on-chain stays off this board)", "agrav"),
