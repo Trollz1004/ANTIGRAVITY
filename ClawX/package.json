@@ -26,6 +26,13 @@
     "streamdown": "^2.5.0",
     "wouter": "^3.9.0"
   },
+  "antigravity": {
+    "owner": "sabretooth",
+    "nodeId": "sabretooth",
+    "humanOwner": "joshlcoleman@gmail.com",
+    "hosting": "manus",
+    "hostingNote": "Code and ownership live on Sabretooth; hosting runs on Manus infrastructure. See ClawX/README.md."
+  },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.0",
     "@types/express": "^5.0.6",
