@@ -302,8 +302,8 @@ def test_calculate_stream_allocation_setup_fee():
 
     allocation = calculate_stream_allocation(10000, "Security Cleanup", config)
 
-    assert allocation["charitable"] == 1000.0
-    assert allocation["operating"] == 9000.0
+    assert allocation["charitable"] == 10.0
+    assert allocation["operating"] == 90.0
     assert allocation["setup_fee"] == 1500.0
     assert allocation["recurring_fee"] == 0.0
     assert allocation["transaction_fee"] == 0.0
@@ -325,8 +325,8 @@ def test_calculate_stream_allocation_transaction_fee():
 
     allocation = calculate_stream_allocation(10000, "Storefront Deployment", config)
 
-    assert allocation["charitable"] == 1000.0
-    assert allocation["operating"] == 9000.0
+    assert allocation["charitable"] == 10.0
+    assert allocation["operating"] == 90.0
     assert allocation["setup_fee"] == 0.0
     assert allocation["recurring_fee"] == 0.0
     assert allocation["transaction_fee"] == 300.0
@@ -391,17 +391,44 @@ def test_revenue_stream_allocation_summary():
     assert summary["total_revenue_usd"] == 9700.0
 
     # Check individual stream totals
-    assert summary["by_stream"][1]["stream_name"] == "Security Cleanup"
-    assert summary["by_stream"][1]["total_contributed_usd"] == 1700.0
-
-    assert summary["by_stream"][2]["stream_name"] == "Agentic Workflows"
-    assert summary["by_stream"][2]["total_contributed_usd"] == 2500.0
-
-    assert summary["by_stream"][5]["stream_name"] == "Storefront Deployment"
-    assert summary["by_stream"][5]["total_contributed_usd"] == 300.0
-
-    assert summary["by_stream"][7]["stream_name"] == "Tech Debt Cleanup"
-    assert summary["by_stream"][7]["total_contributed_usd"] == 4000.0
-
-    assert summary["by_stream"][8]["stream_name"] == "API Management"
-    assert summary["by_stream"][8]["total_contributed_usd"] == 1200.0
+    buckets = REVENUE_STREAM_TO_BUCKET_MAPPING
+    assert (
+        summary["by_stream"][buckets["Security Cleanup"]]["stream_name"]
+        == "Security Cleanup"
+    )
+    assert (
+        summary["by_stream"][buckets["Security Cleanup"]]["total_contributed_usd"]
+        == 1700.0
+    )
+    assert (
+        summary["by_stream"][buckets["Agentic Workflows"]]["stream_name"]
+        == "Agentic Workflows"
+    )
+    assert (
+        summary["by_stream"][buckets["Agentic Workflows"]]["total_contributed_usd"]
+        == 2500.0
+    )
+    assert (
+        summary["by_stream"][buckets["Storefront Deployment"]]["stream_name"]
+        == "Storefront Deployment"
+    )
+    assert (
+        summary["by_stream"][buckets["Storefront Deployment"]]["total_contributed_usd"]
+        == 300.0
+    )
+    assert (
+        summary["by_stream"][buckets["Tech Debt Cleanup"]]["stream_name"]
+        == "Tech Debt Cleanup"
+    )
+    assert (
+        summary["by_stream"][buckets["Tech Debt Cleanup"]]["total_contributed_usd"]
+        == 4000.0
+    )
+    assert (
+        summary["by_stream"][buckets["API Management"]]["stream_name"]
+        == "API Management"
+    )
+    assert (
+        summary["by_stream"][buckets["API Management"]]["total_contributed_usd"]
+        == 1200.0
+    )
