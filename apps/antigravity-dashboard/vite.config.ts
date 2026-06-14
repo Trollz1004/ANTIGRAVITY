@@ -12,6 +12,12 @@ export default defineConfig({
   server: {
     port: 5179,
     host: "127.0.0.1",
+    allowedHosts: ["dashboard.youandinotai.com"],
+  },
+  preview: {
+    port: 9119,
+    host: "127.0.0.1",
+    allowedHosts: ["dashboard.youandinotai.com"],
   },
   build: {
     outDir: "dist",
