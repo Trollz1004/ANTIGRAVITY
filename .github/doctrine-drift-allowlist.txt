@@ -32,7 +32,6 @@
 # tightens the safety net. Adding a new entry MUST be accompanied by a PR
 # comment explaining why it is operationally necessary.
 
-apps/youandinotai-frontend/components/CharitySection.tsx
 apps/youandinotai-frontend/lib/constants.ts
 apps/youandinotai-frontend/app/api/node-watch/route.ts
 apps/youandinotai-frontend/app/scc/page.tsx
