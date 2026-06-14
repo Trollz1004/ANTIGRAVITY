@@ -9,23 +9,23 @@ import type {
 
 // ---------------------------------------------------------------------
 // Agent fleet — Tier 1 (orchestrators) + Tier 2 (workers).
-// Mirrors the doctrine: Opus + Gemini lead, with Hermes, Codex, etc.
+// Mirrors the doctrine: Nous + Gemini lead, with Hermes, Codex, etc.
 // ---------------------------------------------------------------------
 
 export const ORCHESTRATORS: Agent[] = [
   {
-    id: "opus",
-    name: "Opus",
+    id: "nous",
+    name: "Nous Pro",
     role: "Chief of Staff",
-    vendor: "Anthropic",
-    kind: "opus",
+    vendor: "Nous Portal",
+    kind: "hermes",
     tier: "T1",
     status: "live",
     state: "ORCHESTRATING · 4 workers",
     body: "Routing Paperweight tasks · supervising Codex tests · drafting brief for Gemma4.",
     tags: ["LEAD", "LIVE"],
     busy: true,
-    delegating: ["codex", "gemma", "pi", "claude"],
+    delegating: ["codex", "gemma", "pi", "grok"],
     taskLoad: 17,
   },
   {
@@ -55,10 +55,10 @@ export const WORKERS: Agent[] = [
     tier: "T2",
     status: "live",
     state: "STREAMING · 12 hops/s",
-    body: "$ ollama run opus → routing to local fleet.",
+    body: "$ ollama run gemma4 → routing to local fleet.",
     tags: ["9020", "OPENCLAW"],
     busy: true,
-    leadBy: "opus",
+    leadBy: "nous",
     taskLoad: 22,
   },
   {
@@ -73,7 +73,7 @@ export const WORKERS: Agent[] = [
     body: "pnpm test --filter paperclip-runtime · 14/16 pass.",
     tags: ["BUSY", "OSS"],
     busy: true,
-    leadBy: "opus",
+    leadBy: "nous",
     taskLoad: 19,
   },
   {
@@ -88,22 +88,22 @@ export const WORKERS: Agent[] = [
     body: "Ollama · awaiting moderation overflow tonight.",
     tags: ["IDLE", "OLLAMA"],
     busy: false,
-    leadBy: "opus",
+    leadBy: "nous",
     taskLoad: 4,
   },
   {
-    id: "claude",
-    name: "Claude",
+    id: "grok",
+    name: "Grok",
     role: "Code Architect",
-    vendor: "Anthropic",
-    kind: "claude",
+    vendor: "xAI",
+    kind: "codex",
     tier: "T2",
     status: "live",
     state: "DRAFTING · paperclip-runtime",
     body: "Implementing handoff protocol v2 — race-condition review pending.",
     tags: ["LIVE", "ARCH"],
     busy: true,
-    leadBy: "opus",
+    leadBy: "nous",
     taskLoad: 12,
   },
   {
@@ -130,7 +130,7 @@ export const WORKERS: Agent[] = [
     tier: "T2",
     status: "live",
     state: "SEARCHING · 14 sources",
-    body: "Indexing court filings · charity compliance review.",
+    body: "Indexing court filings · payments compliance review.",
     tags: ["LIVE", "RESEARCH"],
     busy: true,
     leadBy: "gemini",
@@ -213,12 +213,12 @@ export const REVENUE_BUCKETS: RevenueBucket[] = [
 // ---------------------------------------------------------------------
 
 export const SEED_LOG: FeedRow[] = [
-  { t: "11:42:01", who: "opus",   msg: "Delegated → ", accent: "Hermes", after: ': "audit Paperweight task router for race conditions"' },
+  { t: "11:42:01", who: "nous",   msg: "Delegated → ", accent: "Hermes", after: ': "audit Paperweight task router for race conditions"' },
   { t: "11:41:58", who: "hermes", msg: "POST /api/paperweight · 200 OK · task PAPA-241 created" },
   { t: "11:41:32", who: "gemini", msg: "Analyzed Q3 OKR draft · 4 alignment gaps flagged" },
   { t: "11:40:55", who: "user",   msg: 'cmd: "summarize today\'s commits across paperclip-runtime"' },
   { t: "11:40:12", who: "hermes", msg: "BRIDGE telegram://chat/joshua → broadcast to #mission-control" },
-  { t: "11:39:48", who: "opus",   msg: "Memory snapshot persisted → ~/memory/episodic/2026-05-12.json" },
+  { t: "11:39:48", who: "nous",   msg: "Memory snapshot persisted → orchestration ledger" },
   { t: "11:39:02", who: "system", msg: "Self-Improving Agent loop · iteration 47 complete" },
 ];
 
@@ -227,14 +227,14 @@ export const SEED_LOG: FeedRow[] = [
 // ---------------------------------------------------------------------
 
 export const MISSIONS: Mission[] = [
-  { id: "PAPA-241", title: "Audit Paperweight task router for race conditions", status: "active",  owner: "opus",   progress: 64, tag: "paperweight" },
+  { id: "PAPA-241", title: "Audit Paperweight task router for race conditions", status: "active",  owner: "nous",   progress: 64, tag: "paperweight" },
   { id: "PAPA-240", title: "Q3 OKR draft — alignment review",                  status: "active",  owner: "gemini", progress: 38, tag: "strategy" },
   { id: "PAPA-239", title: "Refresh Meta creatives (4 placements)",            status: "active",  owner: "cupid",  progress: 82, tag: "growth" },
-  { id: "PAPA-238", title: "Charity compliance: 990 forms batch",             status: "blocked", owner: "perplexity", progress: 22, tag: "compliance" },
-  { id: "PAPA-237", title: "Paperclip-runtime handoff protocol v2",            status: "active",  owner: "claude", progress: 51, tag: "engineering" },
+  { id: "PAPA-238", title: "Payments compliance review batch",             status: "blocked", owner: "perplexity", progress: 22, tag: "compliance" },
+  { id: "PAPA-237", title: "Paperclip-runtime handoff protocol v2",            status: "active",  owner: "grok", progress: 51, tag: "engineering" },
   { id: "PAPA-236", title: "Local fleet Ollama warmup · gemma4:32b",           status: "queued",  owner: "hermes", progress:  0, tag: "infra" },
   { id: "PAPA-235", title: "Bridge Telegram → #mission-control",              status: "done",    owner: "hermes", progress: 100, tag: "comms" },
-  { id: "PAPA-234", title: "Memory: episodic → semantic promotion",           status: "done",    owner: "opus",   progress: 100, tag: "memory" },
+  { id: "PAPA-234", title: "Memory: episodic → semantic promotion",           status: "done",    owner: "nous",   progress: 100, tag: "memory" },
 ];
 
 // ---------------------------------------------------------------------
