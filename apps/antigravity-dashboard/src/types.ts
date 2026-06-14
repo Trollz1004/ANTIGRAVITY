@@ -8,14 +8,14 @@ export type AgentStatus = "live" | "busy" | "idle" | "offline";
 export type AgentTier = "T1" | "T2";
 
 export type AgentKind =
-  | "opus"
+  | "nous"
   | "gemini"
   | "hermes"
   | "codex"
   | "gemma"
   | "cupid"
   | "perplexity"
-  | "claude";
+  | "grok";
 
 export interface Agent {
   id: string;
@@ -62,7 +62,7 @@ export interface RevenueBucket {
 
 export interface FeedRow {
   t: string; // HH:MM:SS
-  who: "opus" | "gemini" | "hermes" | "codex" | "gemma" | "user" | "system";
+  who: "nous" | "gemini" | "hermes" | "codex" | "gemma" | "user" | "system";
   msg: string;
   accent?: string;
   after?: string;

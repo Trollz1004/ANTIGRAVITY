@@ -4,10 +4,10 @@ import { Icon } from "@/lib/icons";
 import clsx from "@/lib/clsx";
 
 const PROVIDERS = [
-  { id: "claude",  label: "Claude Opus 4.5",     provider: "Anthropic" },
+  { id: "nous",    label: "GPT-5.5 Pro",          provider: "Nous Portal" },
   { id: "gemini",  label: "Gemini 2.5 Pro",      provider: "Google" },
   { id: "gpt",     label: "GPT-5 Codex",         provider: "OpenAI" },
-  { id: "grok",    label: "Grok 3",              provider: "xAI" },
+  { id: "grok",    label: "Grok 4.3",            provider: "xAI" },
   { id: "pplx",    label: "Sonar Pro",           provider: "Perplexity" },
   { id: "ollama",  label: "Ollama · gemma4:32b", provider: "Local" },
 ];

@@ -44,6 +44,14 @@ class RevenueStreamConfig:
     sprint_cost_usd: Optional[float] = None
 
 
+REVENUE_STREAM_TO_BUCKET_ID: Dict[str, int] = {
+    "Security Cleanup": 1,
+    "Agentic Workflows": 2,
+    "Storefront Deployment": 5,
+    "Tech Debt Cleanup": 7,
+    "API Management": 8,
+}
+
 # Configuration mapping revenue streams to pricing models
 REVENUE_STREAM_CONFIGS = {
     RevenueStream.SECURITY_CLEANUP: RevenueStreamConfig(
@@ -276,8 +284,11 @@ class RevenueStreamTracker:
             config = REVENUE_STREAM_CONFIGS[stream]
             amount = self.total_by_stream[stream]
 
-            total_by_stream[stream.value] = {
+            bucket_id = REVENUE_STREAM_TO_BUCKET_ID[config.name]
+            total_by_stream[bucket_id] = {
                 "stream_name": config.name,
+                "stream_id": stream.value,
+                "bucket_id": bucket_id,
                 "total_contributed_usd": round(amount, 2),
             }
 

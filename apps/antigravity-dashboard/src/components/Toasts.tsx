@@ -10,7 +10,7 @@ const TONE_CLASS: Record<string, string> = {
   info:    "border-brand/40 bg-brand/10 text-brand",
 };
 
-const TONE_ICON: Record<string, React.ComponentType<{ size?: number }>> = {
+const TONE_ICON: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
   success: Icon.CheckCircle2,
   warning: Icon.AlertTriangle,
   danger:  Icon.AlertTriangle,

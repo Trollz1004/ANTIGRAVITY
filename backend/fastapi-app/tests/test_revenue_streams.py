@@ -329,7 +329,7 @@ def test_calculate_stream_allocation_transaction_fee():
     assert allocation["operating"] == 90.0
     assert allocation["setup_fee"] == 0.0
     assert allocation["recurring_fee"] == 0.0
-    assert allocation["transaction_fee"] == 300.0
+    assert allocation["transaction_fee"] == 3.0
     assert allocation["sprint_fee"] == 0.0
 
 

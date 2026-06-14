@@ -26,8 +26,8 @@ const SEED: ChatMsg[] = [
     role: "assistant",
     body: "Codex is mid-implementation on handoff v2 (51% complete). Race-condition review pending. Want me to delegate Gemma4 to fuzz the worker queue while Codex finishes?",
     ts: "11:38:21",
-    provider: "Anthropic",
-    model: "claude-opus-4-5",
+    provider: "Nous Portal",
+    model: "openai/gpt-5.5-pro",
   },
   {
     id: 3,
@@ -42,8 +42,8 @@ const SEED: ChatMsg[] = [
     role: "assistant",
     body: "Adding a soft lock on the ad-creative table while Gemma4 fuzzes. Will report back in ~4 minutes.",
     ts: "11:38:49",
-    provider: "Anthropic",
-    model: "claude-opus-4-5",
+    provider: "Nous Portal",
+    model: "openai/gpt-5.5-pro",
   },
 ];
 
@@ -89,11 +89,11 @@ export function ChatPane() {
         role: "assistant",
         body: "Acknowledged. Routing through Hermes and updating the Paperweight board.",
         ts: stamp(),
-        provider: "Anthropic",
-        model: "claude-opus-4-5",
+        provider: "Nous Portal",
+        model: "openai/gpt-5.5-pro",
       };
       setMsgs((m) => [...m, reply]);
-      pushLog({ t: stamp(), who: "opus", msg: "Acknowledged. Routing through Hermes and updating the Paperweight board." });
+      pushLog({ t: stamp(), who: "hermes", msg: "Acknowledged. Routing through Hermes and updating the Paperweight board." });
       setBusy(false);
       pushToast({
         title: "Routed via Hermes",
@@ -109,7 +109,7 @@ export function ChatPane() {
         <span className="heartbeat" />
         <h3 className="font-data text-sm font-bold">Operator chat</h3>
         <span className="text-[10px] font-label uppercase tracking-wider text-ink-dim ml-auto">
-          live · opus-4-5
+          live · gpt-5.5-pro
         </span>
       </div>
 
@@ -144,7 +144,7 @@ export function ChatPane() {
               className="mr-auto max-w-[80%] bg-ag-base border border-ag-elevated px-3 py-2 rounded-md font-data text-xs text-ink-dim flex items-center gap-1.5"
             >
               <span className="heartbeat heartbeat--busy" />
-              Opus is thinking
+              Nous Pro is thinking
               <span className="ml-1 inline-flex gap-0.5">
                 <span className="animate-pulse">.</span>
                 <span className="animate-pulse [animation-delay:120ms]">.</span>
