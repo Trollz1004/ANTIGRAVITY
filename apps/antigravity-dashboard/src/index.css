@@ -117,7 +117,7 @@
 
   /* Sidebar nav item */
   .nav-item {
-    @apply group flex items-center gap-3 px-3 py-2 rounded-md text-ink-muted hover:text-ink hover:bg-ag-elevated/60 transition-colors text-sm font-medium border border-transparent;
+    @apply flex items-center gap-3 px-3 py-2 rounded-md text-ink-muted hover:text-ink hover:bg-ag-elevated/60 transition-colors text-sm font-medium border border-transparent;
   }
   .nav-item.is-active {
     @apply text-ink bg-ag-elevated/80 border-ag-elevated;
@@ -198,7 +198,7 @@
   .log-row .who {
     @apply font-label uppercase tracking-wider w-20 shrink-0;
   }
-  .log-row .who.opus { color: #ff6b35; }
+  .log-row .who.nous { color: #ff6b35; }
   .log-row .who.gemini { color: #58a8e0; }
   .log-row .who.hermes { color: #b3a2bf; }
   .log-row .who.codex { color: #10b981; }

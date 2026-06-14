@@ -3,12 +3,12 @@ import { Icon } from "@/lib/icons";
 import clsx from "@/lib/clsx";
 
 const KIND_GLYPH: Record<string, { Glyph: React.ComponentType<{ size?: number }>; tint: string }> = {
-  opus:      { Glyph: Icon.Brain,     tint: "from-[#FF6B35] to-[#2a1235]" },
+  nous:      { Glyph: Icon.Brain,     tint: "from-[#FF6B35] to-[#2a1235]" },
   gemini:    { Glyph: Icon.Sparkles,  tint: "from-[#58A8E0] to-[#1a3658]" },
   hermes:    { Glyph: Icon.Workflow,  tint: "from-[#B3A2BF] to-[#3a2a45]" },
   codex:     { Glyph: Icon.Terminal,  tint: "from-[#10B981] to-[#0d3a25]" },
   gemma:     { Glyph: Icon.Cpu,       tint: "from-[#8A7D75] to-[#2a2420]" },
-  claude:    { Glyph: Icon.Brain,     tint: "from-[#E36A76] to-[#3a1a22]" },
+  grok:    { Glyph: Icon.Brain,     tint: "from-[#E36A76] to-[#3a1a22]" },
   cupid:     { Glyph: Icon.Heart,     tint: "from-[#EF4444] to-[#3a1418]" },
   perplexity:{ Glyph: Icon.Search,    tint: "from-[#3B82F6] to-[#102a55]" },
 };
