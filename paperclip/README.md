@@ -22,6 +22,8 @@ untuned weight. The model stops *thinking* and starts *executing* a clear proced
 
 ## Files in this folder
 
+### Role agents (business function)
+
 | File                  | Paperclip agent  | Recommended base model       |
 | --------------------- | ---------------- | ---------------------------- |
 | `hermes-agent.md`     | Hermes Agent     | glm-5.1:cloud (current)      |
@@ -29,6 +31,23 @@ untuned weight. The model stops *thinking* and starts *executing* a clear proced
 | `cmo-marketing.md`    | CMO              | joshlcoleman/dateapp-mktg... |
 | `cto-builder.md`      | CTO              | qwen2.5-coder:7b (local)     |
 | `closer.md`           | Closer           | korpohermes-prime:latest     |
+
+### Runtime / model agents (added 2026-06-14 per founder directive — all models, free and paid)
+
+| File                       | Paperclip agent       | Default model                 | Tier        |
+| -------------------------- | --------------------- | ----------------------------- | ----------- |
+| `opencode-agent.md`        | OpenCode Worker       | qwen2.5-coder:7b (local)      | free        |
+| `pi-agent.md`              | Pi Conversational     | Pi runtime default            | free / paid |
+| `ollama-local-agent.md`    | Ollama Local          | qwen2.5:7b (self-hosted)      | free        |
+| `ollama-cloud-agent.md`    | Ollama Cloud          | glm-5.1:cloud                 | free / paid |
+| `gemini-agent.md`          | Gemini (Founding Four) | gemini-2.0-flash (direct API) | free / paid |
+| `openrouter-agent.md`      | OpenRouter Router     | qwen-2.5-7b-instruct:free     | free / paid |
+| `cursor-agent.md`          | Cursor (editor-side)  | claude-sonnet-4-6 (in Cursor) | free / paid |
+
+> **Founding Four protection note**: `gemini-agent.md` honors the FOUNDER DOCTRINE rule
+> that Gemini integrations are PERMANENTLY PROTECTED — direct API via `jules-cli.py`, never
+> wrapped, never rerouted. The `openrouter-agent.md` explicitly refuses to call Anthropic
+> models (Hermes Anthropic hard wall, FOUNDER DOCTRINE rule 6) and refuses to wrap Gemini.
 
 ## What's in each prompt
 
