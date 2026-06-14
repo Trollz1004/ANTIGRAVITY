@@ -1,0 +1,99 @@
+READY-TO-PUSH — 2026-06-14
+Author: Opus (external architect, ephemeral remote-execution session)
+For: Hermes on Sabretooth (only push-authority node per FOUNDER DOCTRINE rule 3)
+
+==============================================================================
+BRANCH
+==============================================================================
+claude/vigilant-archimedes-rrr7ba
+
+==============================================================================
+WHY (REVENUE IMPACT)
+==============================================================================
+PR #132 (2026-06-06) cleaned the canonical-7 hit in apps/youandinotai-frontend/
+app/page.tsx. The 2026-06-07 CLAUDE-MEMORY snapshot flagged two remaining
+customer-surface TSX files. Investigation found:
+
+  - apps/youandinotai-frontend/components/CharitySection.tsx
+      * Content is already scrubbed (zero canonical-7 hits in copy).
+      * React component inside is renamed `EcosystemSection`.
+      * File has ZERO imports anywhere in apps/ or services/ (confirmed via
+        repo-wide grep).
+      * Listed in .github/doctrine-drift-allowlist.txt because it carries an
+        `ai-solutions.store` cross-reference (one of the four drift markers).
+      * Filename itself contains the substring "Charity" — a canonical-7 hit
+        the moment the §496.405 scan in ci-validate.yml expands from
+        `\bdonat(e|ion|ions|ing)\b` to the full canonical-7 list per
+        TASKS.md Active task #1 (2026-05-20).
+
+  - apps/youandinotai-frontend/components/SupportCollectables.tsx
+      * Content is clean (zero canonical-7 hits in copy or filename).
+      * Memory entry is stale; no edit needed.
+
+Surgical decision: delete CharitySection.tsx (triage option A explicitly
+listed in the allowlist's own header) and remove its allowlist entry. This:
+  1) tightens the doctrine drift safety net (one fewer allowlist entry);
+  2) clears the upcoming canonical-7 filename violation in the live
+     customer-surface tree;
+  3) removes dead code with zero behavior change (no importers exist);
+  4) unblocks any future PR that touches apps/youandinotai-frontend/ — the
+     Square checkout wiring, the Founding Member upgrade page, the Royalty
+     Card landing — i.e. anything in the path to the first paying customer.
+
+Revenue impact: removes a CI-drift-blocker class that would otherwise gate
+every Next.js frontend PR Hermes ships from this point forward. The Square
+links (Bot-Shield $1 → Royalty Card $2,500) all need a working frontend
+path; this clears one of the doctrine landmines on that path.
+
+==============================================================================
+CHANGES (2 files)
+==============================================================================
+D   apps/youandinotai-frontend/components/CharitySection.tsx   (176 lines deleted)
+M   .github/doctrine-drift-allowlist.txt                       (1 line removed)
+
+==============================================================================
+COMMIT MESSAGE (use verbatim)
+==============================================================================
+chore(frontend): delete orphan CharitySection.tsx + drop from drift allowlist
+
+CharitySection.tsx had zero importers anywhere in apps/ or services/ — the
+React component inside was already renamed EcosystemSection and content
+was scrubbed in an earlier sweep. The file remained only because of an
+ai-solutions.store cross-reference that put it in the doctrine-drift
+allowlist. Removing the file (triage option A from the allowlist header)
+also clears the canonical-7 filename substring "Charity" from the live
+customer-surface tree, unblocking the canonical-7 hard-fail expansion
+queued in TASKS.md Active task #1.
+
+==============================================================================
+HERMES EXECUTION STEPS (Sabretooth)
+==============================================================================
+1. cd C:\ANTIGRAVITY
+2. git fetch origin
+3. git checkout claude/vigilant-archimedes-rrr7ba   (create if missing: git checkout -b claude/vigilant-archimedes-rrr7ba origin/main)
+4. Apply the deletion + allowlist trim (either re-execute locally OR cherry-pick
+   the local commit from the ephemeral container if it survived; commit hash
+   captured below at commit time).
+5. python scripts/clawx-control/opus-guardian.py   (expect score >= 96%)
+6. cd apps/youandinotai-frontend && pnpm typecheck && pnpm build
+7. git push -u origin claude/vigilant-archimedes-rrr7ba
+8. Open PR (use mcp__github__create_pull_request) against Trollz1004/ANTIGRAVITY
+   main, "ready for review" not draft, with the WHY block above pasted in.
+9. Auto-merge once required CI checks pass (first-party Claude authority).
+
+==============================================================================
+GUARDRAILS RECONFIRMED
+==============================================================================
+- 1 repo only (Trollz1004/ANTIGRAVITY) — no new repo created.
+- Branch claude/vigilant-archimedes-rrr7ba is the doctrine-assigned branch
+  for this Cowork session per the harness payload (matches the
+  "Trollz1004/ANTIGRAVITY → claude/vigilant-archimedes-rrr7ba" assignment).
+- Zero Stripe / zero 60/30/10 / zero CharityRouter100 references introduced.
+- Zero secrets touched.
+- No middleware introduced. No new dependency added.
+- Customer-facing copy unchanged (file was unused).
+- Founding Four protections unaltered.
+- Hermes Anthropic hard wall unaltered (services/hermes-router/.env* not
+  touched).
+
+For The Kids · #UntilNoKidInNeed
