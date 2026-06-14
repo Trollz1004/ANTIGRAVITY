@@ -36,9 +36,9 @@ interface State {
   missions: Mission[];
   log: FeedRow[];
 
-  // Mission ticker (kids-funded counter)
-  kidsFunded: number;
-  bumpKidsFunded: (n: number) => void;
+  // Mission ticker (revenue-monitored counter)
+  revenueMonitored: number;
+  bumpRevenueMonitored: (n: number) => void;
 
   // Command palette
   cmdOpen: boolean;
@@ -74,14 +74,14 @@ const SYNTH_AGENTS: Array<{
     who: "hermes",
     msgs: [
       "GET /ollama/healthz · 200 · 12ms",
-      "Routed prompt → claude-opus-4-5 (cloud)",
+      "Routed prompt → grok-nous-4-5 (cloud)",
       "BRIDGE telegram://chat/joshua → 1 inbound",
       "POST /api/paperweight · 200 OK",
       "Dispatched task PAPA-241 → codex",
     ],
   },
   {
-    who: "opus",
+    who: "hermes",
     msgs: [
       "Reviewed sticky · PAPA-238 · approved for dispatch",
       "Memory: working → semantic promotion · 3 entries",
@@ -108,7 +108,7 @@ const SYNTH_AGENTS: Array<{
   {
     who: "gemma",
     msgs: [
-      "Local inference · gemma4:32b · 14 tok/s",
+      "Local inference · gemma4 · GPU queue ready",
       "Standby — awaiting moderation overflow",
     ],
   },
@@ -156,8 +156,8 @@ export const useStore = create<State>((set, get) => ({
   missions: MISSIONS,
   log: SEED_LOG,
 
-  kidsFunded: 10_482,
-  bumpKidsFunded: (n) => set((s) => ({ kidsFunded: s.kidsFunded + n })),
+  revenueMonitored: 10_482,
+  bumpRevenueMonitored: (n) => set((s) => ({ revenueMonitored: s.revenueMonitored + n })),
 
   cmdOpen: false,
   setCmdOpen: (b) => set({ cmdOpen: b }),
@@ -195,9 +195,9 @@ export const useStore = create<State>((set, get) => ({
   synthTick: () => {
     const row = pickSynth();
     set((s) => ({ log: [{ ...row, t: stamp() }, ...s.log].slice(0, 30) }));
-    // Randomly bump kids-funded
+    // Randomly bump revenue-monitored
     if (Math.random() < 0.4) {
-      set((s) => ({ kidsFunded: s.kidsFunded + (Math.random() < 0.85 ? 1 : 2) }));
+      set((s) => ({ revenueMonitored: s.revenueMonitored + (Math.random() < 0.85 ? 1 : 2) }));
     }
   },
 

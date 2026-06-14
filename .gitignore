@@ -83,3 +83,7 @@ downloads/
 OneDrive/
 onedrive/
 qdrant-data/
+# ANTIGRAVITY dashboard TypeScript build outputs
+apps/antigravity-dashboard/vite.config.js
+apps/antigravity-dashboard/vite.config.d.ts
+apps/antigravity-dashboard/tsconfig*.tsbuildinfo
