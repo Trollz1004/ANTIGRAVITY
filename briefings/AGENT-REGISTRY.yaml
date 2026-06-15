@@ -1,0 +1,111 @@
+# Agent Registry — Canonical UUID Mapping
+# Purpose: Maps agent aliases (role names, slugs) to their canonical UUID instruction roots
+# Effective Date: 2026-06-15
+# Authority: CTO / BUS-144
+
+# CRITICAL: This is a single source of truth for agent identity.
+# Do NOT create filesystem mirrors of instruction bundles for aliases.
+# Aliases are resolver-only; they MUST resolve to the canonical UUID path.
+
+---
+
+active_agents:
+  # CEO — Chief Executive Officer
+  ceo:
+    canonical_id: "61b35078-98e5-461c-b852-23c3d205f83c"
+    paperclip_agent_id: "61b35078-98e5-461c-b852-23c3d205f83c"
+    instruction_root_source: "https://github.com/Trollz1004/ANTIGRAVITY/blob/main/paperclip/agents/61b35078-98e5-461c-b852-23c3d205f83c/instructions/AGENTS.md"
+    role: "CEO"
+    status: "active"
+    aliases: ["ceo", "chief-executive"]
+    last_updated: "2026-06-15T00:00:00Z"
+
+  # CTO — Chief Technology Officer
+  cto:
+    canonical_id: "79187d95-dae6-4e4a-a320-da47fc9e2b37"
+    paperclip_agent_id: "79187d95-dae6-4e4a-a320-da47fc9e2b37"
+    instruction_root_source: "https://github.com/Trollz1004/ANTIGRAVITY/blob/main/paperclip/agents/79187d95-dae6-4e4a-a320-da47fc9e2b37/instructions/AGENTS.md"
+    role: "CTO"
+    status: "active"
+    aliases: ["cto", "chief-technology"]
+    last_updated: "2026-06-15T00:00:00Z"
+
+  # TOKEN SENTRY — Auditor / Fleet Heartbeat Monitor
+  token-sentry:
+    canonical_id: "3ea582ea-5b87-4659-a649-631b6cb8a22c"
+    paperclip_agent_id: "3ea582ea-5b87-4659-a649-631b6cb8a22c"
+    instruction_root_source: "https://github.com/Trollz1004/ANTIGRAVITY/blob/main/paperclip/agents/3ea582ea-5b87-4659-a649-631b6cb8a22c/instructions/AGENTS.md"
+    role: "TOKEN SENTRY"
+    status: "active"
+    aliases: ["token-sentry", "auditor", "sentry"]
+    last_updated: "2026-06-15T00:00:00Z"
+
+  # Additional active agents (to be populated during migration)
+  # UUIDs from TOKEN SENTRY audit with AGENTS.md present:
+  genSpark:
+    canonical_id: "20909d8e-3905-44d6-915e-6e1451d33e55"
+    paperclip_agent_id: "20909d8e-3905-44d6-915e-6e1451d33e55"
+    instruction_root_source: "https://github.com/Trollz1004/ANTIGRAVITY/blob/main/paperclip/agents/20909d8e-3905-44d6-915e-6e1451d33e55/instructions/AGENTS.md"
+    role: "GenSpark"
+    status: "active"
+    aliases: ["genspark", "gen-spark"]
+    last_updated: "2026-06-15T00:00:00Z"
+
+---
+
+# RESOLVER RULES FOR IMPLEMENTATION
+# These rules define how alias resolution works. Update this section when adding new enforcement.
+
+resolver_behavior:
+  description: "When a tool or system requests an agent by alias, follow this logic"
+  algorithm:
+    - step: 1
+      action: "Receive alias (e.g., 'token-sentry', 'cto')"
+    - step: 2
+      action: "Look up alias in this registry (case-insensitive)"
+    - step: 3
+      action: "Retrieve canonical_id from matching entry"
+    - step: 4
+      action: "Construct instruction path: companies/{companyId}/agents/{canonical_id}/instructions/"
+    - step: 5
+      action: "Read from canonical path only (NOT from alias filesystem path)"
+    - step: 6
+      action: "Return instruction content (AGENTS.md, HEARTBEAT.md, etc.)"
+
+enforcement:
+  - rule: "No filesystem mirrors"
+    description: "Do not create agents/{role}/instructions/ directories for aliases. Only canonical UUID paths allowed."
+    check: "validate-agent-bundle-uuids.py --check-no-alias-mirrors"
+    severity: "ERROR"
+
+  - rule: "Canonical UUID required"
+    description: "Every agent must have a canonical_id pointing to a UUID-based directory."
+    check: "validate-agent-bundle-uuids.py --check-mode strict"
+    severity: "ERROR"
+
+  - rule: "Immutable mappings"
+    description: "Once an alias is mapped to a canonical_id, do not change it without explicit CTO + CEO approval."
+    approval_required: "both"
+
+---
+
+# NOTES FOR CLEANUP (separate BUS-145 issue)
+# These agents exist on disk but have unclear active/archived status.
+# They should be audited and either reactivated (added to active_agents above)
+# or archived (moved to archived_agents section) in the BUS-145 follow-up.
+
+unclear_agents:
+  - "5cb30b8b-c5e9-41cb-bc98-5de5c1f26f2c"
+  - "83c46945-5f3e-4cb4-81d9-edae81ebce26"
+  - "9953284e-8264-4182-aacc-3bd378711d92"
+  - "9a80b552-ca9d-494a-b791-72e125ae57f7"
+  - "c5fca681-22eb-47be-b279-0b53895a6c3c"
+  - "cf82e0fc-b21d-4f42-be0c-365eb8c977db"
+  - "d03506fc-d917-4770-bba8-3d4e8e0303c2"
+
+deprecated_aliases:
+  # Historical filesystem mirrors that should NOT be used for new agents.
+  # These are being removed during BUS-145.
+  - "agents/token-sentry/instructions/"
+  - "agents/cto/instructions/"
+  - "agents/cfo/instructions/"
