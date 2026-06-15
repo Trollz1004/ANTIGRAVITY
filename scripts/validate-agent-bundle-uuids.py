@@ -122,7 +122,40 @@ class AgentBundleValidator:
 
         return is_valid, metadata
 
-    def validate_all(self) -> bool:
+    def check_no_alias_mirrors(self) -> bool:
+        """Enforce: no filesystem mirrors for alias paths.
+
+        Only UUID-based directories allowed under agents/. No role/slug
+        directories like agents/cto/, agents/token-sentry/, etc.
+
+        Returns True if no alias mirrors found (compliant).
+        """
+        if not self.agents_dir.exists():
+            return True
+
+        alias_patterns = ['cto', 'cfo', 'cmo', 'token-sentry', 'cso', 'ux']
+        found_mirrors = []
+
+        for agent_dir in self.agents_dir.iterdir():
+            if agent_dir.is_dir():
+                dir_name = agent_dir.name
+
+                # Check if this looks like an alias (not a UUID)
+                # UUIDs are 36 chars with hyphens in specific positions
+                if len(dir_name) != 36 or dir_name.count('-') != 4:
+                    # This is likely an alias path, not a UUID
+                    if (agent_dir / 'instructions').exists():
+                        found_mirrors.append(str(agent_dir / 'instructions'))
+
+        if found_mirrors:
+            self.errors.append(f"❌ FORWARD LOCK VIOLATION: Found {len(found_mirrors)} alias filesystem mirrors:")
+            for mirror in found_mirrors:
+                self.errors.append(f"   - {mirror} (should not exist)")
+            return False
+
+        return True
+
+    def validate_all(self, check_alias_mirrors: bool = True) -> bool:
         """Validate all agent bundles."""
         if not self.agents_dir.exists():
             self.errors.append(f"Agents directory not found: {self.agents_dir}")
@@ -134,10 +167,19 @@ class AgentBundleValidator:
             self.errors.append("No agent directories found")
             return False
 
+        # Check for alias filesystem mirrors (forward lock enforcement)
+        if check_alias_mirrors:
+            if not self.check_no_alias_mirrors():
+                return False
+
         all_metadata = {}
         all_valid = True
 
         for agent_dir in sorted(agent_dirs):
+            # Skip non-UUID directories (aliases)
+            if len(agent_dir.name) != 36 or agent_dir.name.count('-') != 4:
+                continue
+
             is_valid, metadata = self.validate_agent_bundle(agent_dir)
             if is_valid:
                 all_metadata[agent_dir.name] = metadata
@@ -172,6 +214,10 @@ class AgentBundleValidator:
 def main():
     parser = argparse.ArgumentParser(description='Validate canonical UUID roots')
     parser.add_argument('--check-mode', choices=['strict', 'warn'], default='strict')
+    parser.add_argument('--check-alias-mirrors', action='store_true', default=True,
+                       help='Enforce no filesystem alias mirrors (default: True)')
+    parser.add_argument('--skip-alias-check', action='store_true',
+                       help='Skip the alias mirror check')
     parser.add_argument('--fail-on-missing-uuid', action='store_true')
     parser.add_argument('--repo-root', type=Path, default=Path('.'))
     parser.add_argument('--verbose', action='store_true')
@@ -179,7 +225,8 @@ def main():
     args = parser.parse_args()
 
     validator = AgentBundleValidator(repo_root=args.repo_root)
-    is_valid = validator.validate_all()
+    check_mirrors = not args.skip_alias_check
+    is_valid = validator.validate_all(check_alias_mirrors=check_mirrors)
 
     print(validator.report(verbose=args.verbose))
 
