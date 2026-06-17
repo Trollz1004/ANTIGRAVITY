@@ -16,6 +16,8 @@ export function Header() {
   const toggleCmd = useStore((s) => s.toggleCmd);
   const hermesOn = useStore((s) => s.hermesOn);
   const toggleHermes = useStore((s) => s.toggleHermes);
+  const streamMode = useStore((s) => s.streamMode);
+  const toggleStreamMode = useStore((s) => s.toggleStreamMode);
   const pushToast = useStore((s) => s.pushToast);
   const agents = useStore((s) => s.agents);
   const [provider, setProvider] = useState(PROVIDERS[0]);
@@ -107,6 +109,23 @@ export function Header() {
       </div>
 
       <div className="flex-1" />
+
+      {/* Stream mode toggle */}
+      <button
+        onClick={toggleStreamMode}
+        data-testid="stream-toggle"
+        data-on={streamMode}
+        className={clsx(
+          "flex items-center gap-2 px-3 py-1.5 border rounded-md text-xs font-label uppercase tracking-wider transition-colors",
+          streamMode
+            ? "bg-signal-success/10 border-signal-success/40 text-signal-success"
+            : "bg-ag-surface border-ag-elevated text-ink-dim",
+        )}
+        title="Toggle YouTube-safe stream overlay"
+      >
+        <span className={clsx("heartbeat", streamMode ? "heartbeat--busy" : "heartbeat--offline")} />
+        <span>{streamMode ? "Stream mode" : "Stream off"}</span>
+      </button>
 
       {/* Hermes toggle */}
       <button

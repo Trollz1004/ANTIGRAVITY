@@ -20,9 +20,22 @@ const HB_CLASS: Record<string, string> = {
   offline: "heartbeat--offline",
 };
 
-export function AgentCard({ agent }: { agent: Agent }) {
+const PUBLIC_ROLE: Record<string, string> = {
+  nous: "Lead Orchestrator",
+  gemini: "Strategy Orchestrator",
+  hermes: "Local Router",
+  codex: "Engineering Agent",
+  gemma: "Local Reasoning",
+  grok: "Architecture Agent",
+  cupid: "Creative Agent",
+  perplexity: "Research Agent",
+};
+
+export function AgentCard({ agent, streamMode = false }: { agent: Agent; streamMode?: boolean }) {
   const meta = KIND_GLYPH[agent.kind] ?? KIND_GLYPH.gemma;
   const Glyph = meta.Glyph;
+  const publicTags = agent.tags.filter((tag) => ["LIVE", "RUN", "IDLE", "BUSY", "9020", "OPENCLAW", "OLLAMA", "OSS"].includes(tag.toUpperCase()));
+
   return (
     <article
       className="agent-card"
@@ -31,7 +44,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
     >
       {/* tier badge */}
       <span className="tier-badge" data-testid={`tier-${agent.id}`}>
-        {agent.tier} · {agent.role}
+        {streamMode ? "PUBLIC" : `${agent.tier} · ${agent.role}`}
       </span>
 
       <div className="flex items-start gap-3">
@@ -49,17 +62,19 @@ export function AgentCard({ agent }: { agent: Agent }) {
             <span className={clsx("heartbeat", HB_CLASS[agent.status])} />
           </div>
           <div className="text-[10px] font-label uppercase tracking-wider text-ink-dim mt-0.5 truncate">
-            {agent.vendor}
+            {streamMode ? PUBLIC_ROLE[agent.id] ?? "Mission Agent" : agent.vendor}
           </div>
         </div>
       </div>
 
       <p className="text-xs font-data text-ink-muted line-clamp-2 min-h-[2.5rem]">
-        {agent.body}
+        {streamMode
+          ? `${agent.role} · ${agent.state}`
+          : agent.body}
       </p>
 
       <div className="flex flex-wrap gap-1.5">
-        {agent.tags.map((tag) => (
+        {(streamMode ? publicTags.slice(0, 4) : agent.tags).map((tag) => (
           <span
             key={tag}
             className={clsx(
@@ -80,7 +95,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
 
       <div>
         <div className="flex items-center justify-between text-[10px] font-label uppercase tracking-wider text-ink-dim">
-          <span>Task load</span>
+          <span>{streamMode ? "Public load" : "Task load"}</span>
           <span className="font-data tabular-nums text-ink-muted">
             {agent.taskLoad}/25
           </span>
@@ -95,7 +110,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
 
       <div className="text-[10px] font-label uppercase tracking-wider text-ink-dim flex items-center gap-1.5">
         <Icon.Activity size={10} className="text-brand" />
-        <span className="truncate">{agent.state}</span>
+        <span className="truncate">{streamMode ? agent.status.toUpperCase() : agent.state}</span>
       </div>
     </article>
   );
