@@ -27,6 +27,8 @@ tsconfig.tsbuildinfo
 *.code-workspace
 .claude/settings.local.json
 .claude/skills/
+.claude/pc_*.json
+.claude/ralph-prompts/
 
 # Logs
 logs/
@@ -56,6 +58,7 @@ paperclip-ceo/
 
 # Deploy staging
 _deploy/*/node_modules/
+**/.env-*.txt
 
 # Handoff (keep directory, ignore large sub-items)
 _handoff-staging-*/_deploy/node_modules/
@@ -65,6 +68,9 @@ services/mission-control-api/data/
 infra/paperclip-worker/.wrangler/
 
 # Misc generated
+DIRTY_REPO_ALERT*.md
+output/
+youandinotai*.png
 docs/beta-access-after-click.png
 assets/__pycache__/
 marketing-assets/assets/__pycache__/

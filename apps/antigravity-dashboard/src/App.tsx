@@ -18,6 +18,7 @@ function DashboardHome() {
   const buckets = useStore((s) => s.buckets);
   const missions = useStore((s) => s.missions);
   const tokens = useStore((s) => s.tokens);
+  const streamMode = useStore((s) => s.streamMode);
   const liveAgents = agents.filter((agent) => agent.status === "live" || agent.status === "busy").length;
   const revenue = buckets.reduce((sum, bucket) => sum + bucket.value, 0);
   const activeMissions = missions.filter((mission) => mission.status === "active").length;
@@ -26,6 +27,33 @@ function DashboardHome() {
   return (
     <div className="grid gap-4 xl:grid-cols-[1.25fr_0.95fr]">
       <section className="space-y-4">
+        {streamMode ? (
+          <div className="broadcast-shell rounded-md p-5">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div>
+                <div className="label-cap mb-2">YouTube-safe mission view</div>
+                <h1 className="font-heading text-3xl md:text-5xl tracking-tight">
+                  AI helping society, live on the board.
+                </h1>
+                <p className="mt-3 max-w-2xl text-sm md:text-base text-ink-muted">
+                  Public-safe ANTIGRAVITY operations: agents, missions, and infrastructure are visible;
+                  private details, logs, revenue numbers, and task bodies are hidden.
+                </p>
+              </div>
+              <div className="stream-badge">
+                <span className="heartbeat heartbeat--busy" />
+                STREAM MODE
+              </div>
+            </div>
+            <div className="grid gap-3 mt-5 sm:grid-cols-2 xl:grid-cols-4">
+              <Stat label="Agents live" value={`${liveAgents}/${agents.length}`} tone="brand" icon={<Icon.Users size={16} />} hint="Paperclip adapters ready" spark={<Sparkline values={makeSparkline(liveAgents, 18)} />} />
+              <Stat label="Paperclip" value="3100" tone="success" icon={<Icon.Server size={16} />} hint="Local server · 0 plugins loaded" spark={<Sparkline values={makeSparkline(18, 18)} />} />
+              <Stat label="Mission lanes" value={activeMissions} tone="info" icon={<Icon.Workflow size={16} />} hint="Visible public lanes" spark={<Sparkline values={makeSparkline(14, 18)} />} />
+              <Stat label="OpenClaw" value="READY" tone="success" icon={<Icon.Cpu size={16} />} hint="Hermes router engaged" spark={<Sparkline values={makeSparkline(25, 18)} />} />
+            </div>
+          </div>
+        ) : null}
+
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           <Stat label="Agents live" value={`${liveAgents}/${agents.length}`} tone="brand" icon={<Icon.Users size={16} />} hint="Paperclip adapters ready" spark={<Sparkline values={makeSparkline(liveAgents, 18)} />} />
           <Stat label="Revenue rail" value={`$${revenue.toLocaleString("en-US")}`} delta={8.4} tone="success" icon={<Icon.Banknote size={16} />} hint="Payment surfaces monitored" spark={<Sparkline values={makeSparkline(22, 18)} />} />
@@ -39,7 +67,7 @@ function DashboardHome() {
             <span className="label-cap">Sabretooth orchestration · 9020 dev · T5500 production</span>
           </div>
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {agents.map((agent) => <AgentCard key={agent.id} agent={agent} />)}
+            {agents.map((agent) => <AgentCard key={agent.id} agent={agent} streamMode={streamMode} />)}
           </div>
         </div>
       </section>
@@ -51,7 +79,7 @@ function DashboardHome() {
             <h2 className="font-heading text-lg">Live log</h2>
             <span className="heartbeat heartbeat--busy" />
           </div>
-          <LogFeed limit={12} />
+          <LogFeed limit={12} streamMode={streamMode} />
         </div>
       </section>
     </div>
@@ -60,11 +88,12 @@ function DashboardHome() {
 
 function FleetPage() {
   const agents = useStore((s) => s.agents);
+  const streamMode = useStore((s) => s.streamMode);
   return (
     <div className="panel rounded-md p-4">
       <h2 className="font-heading text-lg mb-4">Agent fleet</h2>
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {agents.map((agent) => <AgentCard key={agent.id} agent={agent} />)}
+        {agents.map((agent) => <AgentCard key={agent.id} agent={agent} streamMode={streamMode} />)}
       </div>
     </div>
   );
@@ -92,16 +121,17 @@ function RevenuePage() {
 
 function MissionsPage() {
   const missions = useStore((s) => s.missions);
+  const streamMode = useStore((s) => s.streamMode);
   return (
     <div className="panel rounded-md p-4">
-      <h2 className="font-heading text-lg mb-4">Paperclip work lanes</h2>
+      <h2 className="font-heading text-lg mb-4">Paperweight work lanes</h2>
       <div className="space-y-3">
         {missions.map((mission) => (
           <div key={mission.id} className="border border-ag-elevated rounded-sm p-3 bg-ag-base/40">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <div className="font-data text-sm text-ink">{mission.id} · {mission.title}</div>
-                <div className="label-cap mt-1">{mission.owner} · {mission.tag} · {mission.status}</div>
+                <div className="font-data text-sm text-ink">{mission.id} · {streamMode ? mission.tag : mission.title}</div>
+                <div className="label-cap mt-1">{streamMode ? "Public mission lane" : `${mission.owner} · ${mission.tag} · ${mission.status}`}</div>
               </div>
               <span className="font-data text-sm tabular-nums text-brand">{mission.progress}%</span>
             </div>

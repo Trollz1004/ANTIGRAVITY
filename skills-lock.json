@@ -1,6 +1,30 @@
 {
   "version": 1,
   "skills": {
+    "devrel-content": {
+      "source": "jonathimer/devmarketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/devrel-content/SKILL.md",
+      "computedHash": "c39354df90a7de112bbf2af8d6ba0cc58fd19b7b72f74c064dea0e2c4814fb1d"
+    },
+    "growth-marketer": {
+      "source": "borghei/claude-skills",
+      "sourceType": "github",
+      "skillPath": "marketing/growth-marketer/SKILL.md",
+      "computedHash": "1f95ccf50f6457c5c4e730c372559ccf6cb2fe48edeb2c0a32914b8a2a6679ec"
+    },
+    "sleek-design-mobile-apps": {
+      "source": "sleekdotdesign/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/design-mobile-apps/SKILL.md",
+      "computedHash": "aafa60cd2532f5f4c917db4880769d8bf0132af5b35eb5d31e72d753e2121c04"
+    },
+    "social-growth-engineer": {
+      "source": "giulioco/skills",
+      "sourceType": "github",
+      "skillPath": "skills/social-growth-engineer/SKILL.md",
+      "computedHash": "1f09f1133cd3da57c7baf66d34f8fb346f7e9bb902d83e46b204b6ea3208d652"
+    },
     "supabase": {
       "source": "supabase/agent-skills",
       "sourceType": "github",
@@ -12,6 +36,12 @@
       "sourceType": "github",
       "skillPath": "skills/supabase-postgres-best-practices/SKILL.md",
       "computedHash": "38fb49d3b57c46cba18b07a44254bd42c4c93903fda1d8cb683429615d32fec4"
+    },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "0a413bf988d06481f69bb81df2070741c3ba12dd9f1be2706d57f259c905992d"
     }
   }
 }

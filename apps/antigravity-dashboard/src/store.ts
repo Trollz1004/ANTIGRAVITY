@@ -50,6 +50,10 @@ interface State {
   pushToast: (t: Omit<Toast, "id" | "ts">) => void;
   dismissToast: (id: number) => void;
 
+  // Stream mode
+  streamMode: boolean;
+  toggleStreamMode: () => void;
+
   // Hermes routing toggle
   hermesOn: boolean;
   toggleHermes: () => void;
@@ -175,6 +179,19 @@ export const useStore = create<State>((set, get) => ({
   },
   dismissToast: (id) =>
     set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
+
+  streamMode: false,
+  toggleStreamMode: () => {
+    const next = !get().streamMode;
+    set({ streamMode: next });
+    get().pushToast({
+      title: next ? "Stream mode enabled" : "Stream mode disabled",
+      body: next
+        ? "Public-safe dashboard overlay is active. Sensitive details are hidden."
+        : "Operator view restored.",
+      tone: next ? "success" : "info",
+    });
+  },
 
   hermesOn: true,
   toggleHermes: () => {

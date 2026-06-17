@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>ANTIGRAVITY Public Mission Control</title>
+  <link rel="stylesheet" href="../../tools/styles.css" />
+  <script defer src="../../tools/_ds_bundle.js"></script>
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: rgba(15, 23, 42, 0.62);
+      --panel-strong: rgba(15, 23, 42, 0.82);
+      --line: rgba(255,255,255,.10);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --cyan: #06b6d4;
+      --rose: #fb7185;
+      --gold: #e9b949;
+      --green: #22c55e;
+      --red: #ef4444;
+      --shadow: 0 0 20px rgba(6,182,212,.18), 0 24px 80px rgba(0,0,0,.42);
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(6,182,212,.30), transparent 34rem),
+        radial-gradient(circle at 88% 100%, rgba(251,113,133,.24), transparent 34rem),
+        linear-gradient(rgba(6,182,212,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(6,182,212,.055) 1px, transparent 1px),
+        var(--bg);
+      background-size: auto, auto, 40px 40px, 40px 40px, auto;
+      color: var(--text);
+      font-family: var(--font);
+      overflow-x: hidden;
+    }
+    button, input { font: inherit; }
+    .shell { width: min(1680px, calc(100vw - 40px)); margin: 0 auto; padding: 28px 0 38px; }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center; gap: 18px;
+      padding: 14px 18px; border: 1px solid var(--line); border-radius: 999px;
+      background: rgba(15,23,42,.48); backdrop-filter: blur(12px); box-shadow: var(--shadow);
+      position: sticky; top: 18px; z-index: 20;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .mark { width: 38px; height: 38px; border-radius: 16px; display: grid; place-items: center; border: 1px solid var(--line); background: linear-gradient(135deg, rgba(6,182,212,.22), rgba(251,113,133,.20)); font-family: var(--mono); font-weight: 800; }
+    .brand-text { min-width: 0; }
+    .eyebrow { font-family: var(--mono); text-transform: uppercase; letter-spacing: .18em; color: var(--muted); font-size: 11px; }
+    .brand-title { font-weight: 800; letter-spacing: -.03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pill-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .pill { font-family: var(--mono); text-transform: uppercase; letter-spacing: .16em; color: var(--muted); font-size: 11px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(2,6,23,.45); }
+    .pill.good { color: var(--green); border-color: rgba(34,197,94,.32); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(380px, .9fr); gap: 22px; margin-top: 24px; align-items: stretch; }
+    .glass { border: 1px solid var(--line); background: var(--panel); backdrop-filter: blur(12px); border-radius: 32px; box-shadow: var(--shadow); }
+    .hero-main { padding: clamp(28px, 5vw, 64px); min-height: 520px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+    .hero-main::after { content: ""; position: absolute; inset: auto -120px -160px auto; width: 420px; height: 420px; border-radius: 999px; background: radial-gradient(circle, rgba(251,113,133,.28), transparent 68%); pointer-events: none; }
+    h1 { margin: 0; font-size: clamp(54px, 8vw, 128px); line-height: .88; letter-spacing: -.075em; max-width: 980px; }
+    .gradient { background: linear-gradient(90deg, var(--cyan), var(--rose)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lead { margin: 24px 0 0; max-width: 820px; font-size: clamp(18px, 2vw, 26px); line-height: 1.3; color: #cbd5e1; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; position: relative; z-index: 2; }
+    .btn { border: 1px solid rgba(255,255,255,.12); border-radius: 999px; padding: 14px 18px; color: var(--text); background: rgba(15,23,42,.72); cursor: pointer; transition: transform .18s ease, filter .18s ease, border-color .18s ease; }
+    .btn.primary { background: var(--cyan); color: #021018; border-color: rgba(6,182,212,.8); font-weight: 800; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+    .btn:active { transform: scale(.95); }
+    .stream-card { padding: 26px; display: flex; flex-direction: column; gap: 18px; }
+    .toggle-wrap { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; padding: 18px; border-radius: 24px; background: rgba(2,6,23,.45); border: 1px solid var(--line); }
+    .switch { width: 76px; height: 42px; border-radius: 999px; border: 1px solid rgba(6,182,212,.45); background: rgba(6,182,212,.24); position: relative; cursor: pointer; }
+    .switch::after { content: ""; position: absolute; width: 32px; height: 32px; border-radius: 999px; background: #fff; right: 5px; top: 4px; box-shadow: 0 8px 24px rgba(0,0,0,.4); transition: transform .2s ease, right .2s ease; }
+    body.operator-preview .switch { background: rgba(251,113,133,.24); border-color: rgba(251,113,133,.45); }
+    body.operator-preview .switch::after { right: 37px; transform: translateX(32px); }
+    .meter { height: 10px; border-radius: 999px; background: rgba(255,255,255,.08); overflow: hidden; }
+    .meter span { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, var(--cyan), var(--rose)); transform-origin: left; animation: breathe 3.8s ease-in-out infinite; }
+    @keyframes breathe { 0%,100% { transform: scaleX(.82); opacity: .72; } 50% { transform: scaleX(1); opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; margin-top: 18px; }
+    .span-4 { grid-column: span 4; } .span-6 { grid-column: span 6; } .span-8 { grid-column: span 8; } .span-12 { grid-column: span 12; }
+    .panel { padding: 22px; border-radius: 28px; min-height: 180px; }
+    .panel h2, .panel h3 { margin: 0; letter-spacing: -.03em; }
+    .label { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; color: var(--muted); text-transform: uppercase; }
+    .service-list { display: grid; gap: 12px; margin-top: 18px; }
+    .service { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; padding: 14px; border-radius: 20px; border: 1px solid var(--line); background: rgba(2,6,23,.35); }
+    .dot { width: 12px; height: 12px; border-radius: 999px; background: var(--gold); box-shadow: 0 0 18px rgba(233,185,73,.7); }
+    .service.green .dot { background: var(--green); box-shadow: 0 0 18px rgba(34,197,94,.75); }
+    .service.red .dot { background: var(--red); box-shadow: 0 0 18px rgba(239,68,68,.75); }
+    .service small, .muted { color: var(--muted); }
+    .port { font-family: var(--mono); font-size: 12px; color: #cbd5e1; }
+    .copy-grid { display: grid; gap: 12px; margin-top: 16px; }
+    .copyline { padding: 14px; border: 1px solid var(--line); border-radius: 18px; background: rgba(2,6,23,.36); color: #dbeafe; }
+    .screen { min-height: 380px; border-radius: 28px; overflow: hidden; position: relative; background: rgba(2,6,23,.72); border: 1px solid var(--line); display: grid; place-items: center; }
+    .screen-safe { text-align: center; max-width: 680px; padding: 32px; }
+    .rings { width: 180px; height: 180px; border-radius: 999px; border: 1px solid rgba(6,182,212,.28); margin: 0 auto 22px; position: relative; display: grid; place-items: center; }
+    .rings::before, .rings::after { content: ""; position: absolute; inset: 24px; border-radius: inherit; border: 1px solid rgba(251,113,133,.24); }
+    .rings::after { inset: 54px; border-color: rgba(233,185,73,.36); }
+    .rings span { font-family: var(--mono); font-size: 13px; letter-spacing: .22em; color: var(--cyan); z-index: 1; }
+    .operator-frame { display: none; width: 100%; height: 100%; grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px; }
+    body.operator-preview .screen-safe { display: none; }
+    body.operator-preview .operator-frame { display: grid; }
+    .blocked-pane { border-radius: 22px; border: 1px dashed rgba(255,255,255,.22); background: repeating-linear-gradient(135deg, rgba(255,255,255,.045), rgba(255,255,255,.045) 8px, transparent 8px, transparent 18px); display: grid; place-items: center; padding: 22px; text-align: center; color: #cbd5e1; }
+    .audit { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .audit span { font-family: var(--mono); text-transform: uppercase; letter-spacing: .14em; font-size: 10px; padding: 9px 10px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid var(--line); color: var(--muted); }
+    .footer { margin-top: 18px; padding: 16px 20px; display: flex; justify-content: space-between; gap: 14px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+    @media (max-width: 980px) { .hero { grid-template-columns: 1fr; } .span-4, .span-6, .span-8 { grid-column: span 12; } h1 { font-size: clamp(46px, 15vw, 84px); } .topbar { border-radius: 28px; align-items: flex-start; flex-direction: column; } .pill-row { justify-content: flex-start; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar" aria-label="Public mission control header">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">o_O</div>
+        <div class="brand-text">
+          <div class="eyebrow">ANTIGRAVITY // PUBLIC OPS</div>
+          <div class="brand-title">Mission Control Live</div>
+        </div>
+      </div>
+      <div class="pill-row">
+        <span class="pill good" id="streamPill">STREAM-SAFE ON</span>
+        <span class="pill" id="updatedPill">UPDATED 2026-06-17T02:32:16Z</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-main glass">
+        <div>
+          <div class="label">v2 stream-safe</div>
+          <h1><span class="gradient">Mission Control,</span><br />without the private layer.</h1>
+          <p class="lead">A non-boring public window into the ANTIGRAVITY build room: live service categories, visible work rhythm, and a hard stream-safe lock for 24/7 YouTube.</p>
+        </div>
+        <div class="hero-actions">
+          <button class="btn primary" id="checkBtn" type="button">Run local checks</button>
+          <button class="btn" id="copyBtn" type="button">Copy OBS note</button>
+          <button class="btn" id="resetBtn" type="button">Force safe mode</button>
+        </div>
+      </div>
+
+      <aside class="stream-card glass" aria-label="Stream safety controls">
+        <div class="toggle-wrap">
+          <div>
+            <div class="label">YouTube 24/7 guard</div>
+            <h2 id="modeTitle">Safe stream mode is locked on.</h2>
+            <p class="muted" id="modeCopy">Private operator panes stay blocked; viewers see only public categories and timestamps.</p>
+          </div>
+          <button class="switch" id="safeToggle" type="button" aria-label="Toggle local operator preview"></button>
+        </div>
+        <div>
+          <div class="label">Public readiness</div>
+          <div class="meter" aria-hidden="true"><span></span></div>
+        </div>
+        <div class="audit" aria-label="Public safety rules">
+          <span>no private panes</span><span>no shell output</span><span>no customer records</span><span>no account screens</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid" aria-label="Mission status grid">
+      <article class="panel glass span-4">
+        <div class="label">Live service ledger</div>
+        <h2>Local checks must prove shape, not just a response.</h2>
+        <div class="service-list" id="serviceList"></div>
+      </article>
+
+      <article class="panel glass span-8">
+        <div class="label">Public stream screen</div>
+        <div class="screen" id="publicScreen">
+          <div class="screen-safe">
+            <div class="rings"><span>SAFE</span></div>
+            <h2>Viewer mode: public status only.</h2>
+            <p class="muted">Hermes on 9119 and Paperclip on 3100 stay represented by health categories. The actual local work surfaces remain off-stream.</p>
+          </div>
+          <div class="operator-frame" aria-hidden="true">
+            <div class="blocked-pane"><div><strong>Hermes 9119</strong><br /><span class="muted">local operator surface blocked here</span></div></div>
+            <div class="blocked-pane"><div><strong>Paperclip 3100</strong><br /><span class="muted">local board surface blocked here</span></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel glass span-6">
+        <div class="label">Headline variations</div>
+        <h3>Blunt, public-safe copy</h3>
+        <div class="copy-grid" id="headlineList"></div>
+      </article>
+
+      <article class="panel glass span-6">
+        <div class="label">CTA variations</div>
+        <h3>Actions for the stream operator</h3>
+        <div class="copy-grid" id="ctaList"></div>
+      </article>
+
+      <article class="panel glass span-12">
+        <div class="label">Audience contract</div>
+        <div class="copy-grid" id="publicCards"></div>
+      </article>
+    </section>
+
+    <footer class="footer glass">
+      <span>#UntilNoKidInNeed stated as mission context, not a pitch.</span>
+      <span id="statusLine">Waiting for local checks.</span>
+    </footer>
+  </main>
+
+  <script>
+    const initialData = {
+      title: "ANTIGRAVITY Public Mission Control",
+      version: "v2 stream-safe",
+      updatedAt: "2026-06-17T02:32:16Z",
+      missionTag: "#UntilNoKidInNeed",
+      services: [
+        { id: "hermes", name: "Hermes Dashboard", publicName: "Hermes operator loop", localUrl: "http://127.0.0.1:9119/", port: 9119, status: "yellow", reason: "local browser probe required" },
+        { id: "paperclip", name: "Paperclip Board", publicName: "Work board loop", localUrl: "http://127.0.0.1:3100/", port: 3100, status: "yellow", reason: "local browser probe required" },
+        { id: "claudeCode", name: "Free Claude Code", publicName: "review lane", localUrl: "local repo package", port: null, status: "yellow", reason: "repo attachment/source present; install and sign-in stay off-stream" }
+      ],
+      publicCards: [
+        { label: "Viewer sees", value: "health categories, queue shape, public mission line" },
+        { label: "Viewer never sees", value: "private panes, shell text, provider account screens, customer records" },
+        { label: "Live proof rule", value: "green only after expected content shape is verified" }
+      ],
+      microcopy: {
+        headline: ["Mission Control, without the private parts.", "The work is live. The sensitive layer is not.", "Public ops board for a private build room."],
+        cta: ["Open safe stream view", "Run local checks", "Keep private panes blocked"]
+      }
+    };
+
+    const state = { data: initialData, streamSafe: true };
+    const serviceList = document.getElementById('serviceList');
+    const headlineList = document.getElementById('headlineList');
+    const ctaList = document.getElementById('ctaList');
+    const publicCards = document.getElementById('publicCards');
+    const statusLine = document.getElementById('statusLine');
+
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+    }
+    function paintServices() {
+      serviceList.innerHTML = state.data.services.map(s => `
+        <div class="service ${esc(s.status)}" data-id="${esc(s.id)}">
+          <span class="dot" aria-hidden="true"></span>
+          <div><strong>${esc(s.publicName)}</strong><br><small>${esc(s.reason)}</small></div>
+          <span class="port">${s.port ? ':' + esc(s.port) : 'repo'}</span>
+        </div>`).join('');
+    }
+    function paintCopy() {
+      headlineList.innerHTML = state.data.microcopy.headline.map(t => `<div class="copyline">${esc(t)}</div>`).join('');
+      ctaList.innerHTML = state.data.microcopy.cta.map(t => `<div class="copyline">${esc(t)}</div>`).join('');
+      publicCards.innerHTML = state.data.publicCards.map(t => `<div class="copyline"><strong>${esc(t.label)}:</strong> ${esc(t.value)}</div>`).join('');
+    }
+    function setSafeMode(on) {
+      state.streamSafe = on;
+      document.body.classList.toggle('operator-preview', !on);
+      document.getElementById('streamPill').textContent = on ? 'STREAM-SAFE ON' : 'LOCAL PREVIEW CHECK';
+      document.getElementById('modeTitle').textContent = on ? 'Safe stream mode is locked on.' : 'Local preview check is temporary.';
+      document.getElementById('modeCopy').textContent = on ? 'Private operator panes stay blocked; viewers see only public categories and timestamps.' : 'Still blocked by design: this preview never embeds the private local apps.';
+    }
+    async function probeService(service) {
+      if (!service.port) return { ...service, status: 'yellow', reason: service.reason };
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 1800);
+      try {
+        await fetch(service.localUrl, { mode: 'no-cors', cache: 'no-store', signal: controller.signal });
+        clearTimeout(timer);
+        return { ...service, status: 'yellow', reason: 'local port responded; content shape still not verified' };
+      } catch (_) {
+        clearTimeout(timer);
+        return { ...service, status: 'red', reason: 'local browser could not reach this port' };
+      }
+    }
+    async function runChecks() {
+      statusLine.textContent = 'Running public-safe local checks...';
+      const updated = [];
+      for (const service of state.data.services) updated.push(await probeService(service));
+      state.data.services = updated;
+      paintServices();
+      const red = updated.filter(s => s.status === 'red').length;
+      const yellow = updated.filter(s => s.status === 'yellow').length;
+      statusLine.textContent = `${red} red / ${yellow} yellow. No green until expected content shape is verified.`;
+    }
+    async function copyObsNote() {
+      const msg = 'ANTIGRAVITY public Mission Control is stream-safe: private local panes are blocked; public status categories only.';
+      try { await navigator.clipboard.writeText(msg); statusLine.textContent = 'OBS note copied.'; }
+      catch (_) { statusLine.textContent = msg; }
+    }
+    async function loadData() {
+      try {
+        const res = await fetch('data.json', { cache: 'no-store' });
+        if (res.ok) state.data = await res.json();
+      } catch (_) {}
+      document.getElementById('updatedPill').textContent = 'UPDATED ' + (state.data.updatedAt || 'local');
+      paintServices(); paintCopy(); setSafeMode(true);
+    }
+    document.getElementById('safeToggle').addEventListener('click', () => setSafeMode(!state.streamSafe));
+    document.getElementById('resetBtn').addEventListener('click', () => setSafeMode(true));
+    document.getElementById('checkBtn').addEventListener('click', runChecks);
+    document.getElementById('copyBtn').addEventListener('click', copyObsNote);
+    loadData();
+  </script>
+</body>
+</html>
