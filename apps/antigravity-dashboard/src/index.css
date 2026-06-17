@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -52,6 +52,33 @@
     background: rgba(255, 107, 53, 0.35);
     color: #f9f6ee;
   }
+
+  .broadcast-shell {
+    @apply relative overflow-hidden border border-brand/30 bg-gradient-to-br from-brand/15 via-ag-surface to-ag-base shadow-[0_0_80px_rgba(255,107,53,0.12)];
+  }
+  .broadcast-shell::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(255,107,53,0.32), transparent 28%),
+      radial-gradient(circle at 88% 18%, rgba(16,185,129,0.18), transparent 24%),
+      linear-gradient(110deg, transparent, rgba(255,255,255,0.06), transparent);
+    pointer-events: none;
+  }
+  .broadcast-shell > * {
+    position: relative;
+    z-index: 1;
+  }
+  .stream-badge {
+    @apply inline-flex items-center gap-2 rounded-sharp border border-signal-success/40 bg-signal-success/10 px-3 py-2 text-xs font-label uppercase tracking-[0.22em] text-signal-success whitespace-nowrap;
+    box-shadow: 0 0 30px rgba(16,185,129,0.16);
+  }
+
+  .log-row--public {
+    @apply border-signal-success/20 bg-signal-success/[0.03];
+  }
+
 }
 
 /* =====================================================================
