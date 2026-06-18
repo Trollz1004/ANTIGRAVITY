@@ -27,10 +27,10 @@
 > # T5500 = POWERSTATION · Sabretooth = DEF NODE (no ad-hoc AI)
 >
 > **T5500 (`192.168.0.15`, dual Xeon, GTX 1050 Ti 4GB, 72GB server RAM) is the powerstation. All existing repo state lives there.**
-> - **Sabretooth (`192.168.0.8`, 64GB, GTX 1070) is PRIMARY.** Runs Hermes agent (WhatsApp/Telegram), cockpit dashboard, all orchestration.
+> - **Sabretooth (`192.168.0.8`, 64GB, GTX 1070) is PRIMARY.** Runs Hermes agent (WhatsApp/Telegram), cockpit dashboard. Josh and Claude direct orchestration; Hermes routes on command.
 > - T5500 (`192.168.0.15`) is OPTIONAL. Cloudflare workers, wranglers, static hosting.
 > - 9020 (`192.168.0.5`) is PENDING WIPE. Being phased out. Preserve branch `9020-preserve-20260511` if data recovery needed.
-> - **Current reality (2026-06-07):** Hermes is the ONE orchestrator. Session `20260607_152323_8d46c712` runs on Sabretooth. No multi-node dispatch.
+> - **Current reality (2026-06-18):** Josh and Claude orchestrate. Hermes is a routing layer — executes only what it is told, uses other providers' APIs (Grok, Gemini, Perplexity). AI must never wire an Anthropic API key into any code or service — causes 3rd-party app usage rate issues. Josh may hold and use keys personally. No multi-node dispatch.
 > - See `ARCHITECTURE-HERMES.md` for current state.
 
 <!-- ============================================================ -->
@@ -341,9 +341,7 @@ This is not a threat — it is his documented standing order to protect the miss
   descriptions, paid ad copy). Agent-internal-only synonym `contractual revenue disbursement`
   permitted in `briefings/`, `hermes/agents/`, `AGENTS.md`, `SOUL.md`, `HEARTBEAT.md`,
   `SKILLS.md`, `TOOLS.md` — NEVER on customer surfaces, not even self-referentially.
-- **Hermes Anthropic hard wall (FOUNDER DOCTRINE rule 6)**: `services/hermes-router/.env*`
-  contains zero `ANTHROPIC_API_KEY` / `CLAUDE_API_KEY`. Build fails on match. Hermes routes
-  everything-but-Anthropic.
+- **Anthropic key rule (FOUNDER DOCTRINE rule 6)**: AI must never wire `ANTHROPIC_API_KEY` / `CLAUDE_API_KEY` into any code, service, or `.env` — causes 3rd-party app usage rate issues. Josh may hold and use keys personally. `services/hermes-router/.env*` enforces this: build fails on key match. Hermes routes via other providers only.
 - **No mock/simulation data** — real or fail honestly.
 - **Retired/recovery-only repos and folders are non-authoritative** — do not use them as
   live doctrine or routing truth.
@@ -378,8 +376,8 @@ This is not a threat — it is his documented standing order to protect the miss
 - Identity: NOT JUST a dating app — a **SOCIAL PLATFORM FOR GOOD** (meetups, volunteering, real-world connection)
 - Stack: FastAPI + React 19 + Square + PostgreSQL
 - Frontend: Cloudflare Pages | Backend: GCP Cloud Run
-- **Revenue: $0** | Customers: 0 | AI infra cost: **~$600/mo**
-- North Star (2026-05-20): first paying customer in 30 days. Governance-token sale ($LOVE first) in 90 days.
+- **Revenue:** verify in Square (real payments have cleared). AI infra cost: **~$600/mo**
+- **LAUNCHING NOW (2026-06-18) — task 1 of 1000 nearly complete.** Date app + DAO going public. Revenue waterfall: 10% kids → Josh catches up on bills → dev equipment → Josh capped $50k/year all platforms → rest staked. If other platforms cover the $50k, all date app / DAO revenue staked perpetually.
 
 ---
 
