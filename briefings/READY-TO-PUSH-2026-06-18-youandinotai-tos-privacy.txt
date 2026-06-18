@@ -1,0 +1,206 @@
+READY TO PUSH — 2026-06-18
+Author: Opus (external architect, Cowork session — scheduled wheel-turn)
+Branch: claude/vigilant-archimedes-2oynyl
+Local commit (1, authored as Claude <noreply@anthropic.com>):
+  a08d8fa  feat(youandinotai): add Terms of Service and Privacy Policy for Square checkout surface
+Push node: Sabretooth (only push-authority node per FOUNDER DOCTRINE rule 3)
+
+===============================================================================
+ONE-LINE SUMMARY
+===============================================================================
+Add Terms of Service + Privacy Policy + footer links to the
+_deploy/youandinotai/ static landing so the 5 live Square checkout CTAs sit
+behind the legal surface Square's seller agreement and FTC expectations
+require for a payment-collecting dating / social-discovery platform.
+
+===============================================================================
+FILES TOUCHED (4)
+===============================================================================
+  _deploy/youandinotai/index.html         (+5,  -0)   — footer adds Terms +
+                                                       Privacy links and a
+                                                       Square / 18+ / FL line
+  _deploy/youandinotai/_redirects         (new, +2)   — /terms → legal/terms.html
+                                                       /privacy → legal/privacy.html
+                                                       (200 rewrites, not redirects,
+                                                       so the URL bar stays clean)
+  _deploy/youandinotai/legal/terms.html   (new, +120) — 16-section ToS, Square-only,
+                                                       18+, full 5-tier refund matrix
+  _deploy/youandinotai/legal/privacy.html (new, +120) — 14-section Privacy, Square as
+                                                       processor, member-visibility
+                                                       section, minor handling
+
+===============================================================================
+WHY (revenue impact — concrete, not aspirational)
+===============================================================================
+PR #149 (2026-06-17, merged) wired all 5 live Square tiers onto the static
+landing — Bot-Shield $1, Founding $14.99/mo, 3-Month $39.99, 12-Month $99.99,
+Royalty $2,500. Real checkout density was multiplied 5x.
+
+But the page that now collects 5 streams of Square payments shipped with:
+  - NO Terms of Service link
+  - NO Privacy Policy link
+  - NO age (18+) disclosure
+  - NO Square processor disclosure on the surface itself
+
+That gap is a revenue blocker for three concrete reasons:
+
+  1. SQUARE SELLER PROTECTION
+     Square's seller agreement requires merchants on dating / social-
+     discovery surfaces to publish accessible Terms of Service and a Privacy
+     Policy. Square reviews these on dispute / chargeback escalation; a
+     surface that takes cards without them is exposed to account holds and
+     reserve increases. Square account LY5GN09F5AN83 is THE revenue rail
+     for youandinotai.com — losing it kills the wheel.
+
+  2. PRIVACY / FTC EXPOSURE
+     Collecting an email + billing data on a U.S.-resident surface without
+     a Privacy Policy is FTC §5 exposure. Cheap to fix, expensive to ignore.
+     FL §501.171 (state breach notice) also assumes the existence of a
+     written policy.
+
+  3. CONVERSION DRAG
+     The bot-skeptical / pre-purchase visitor reflex on a dating-tier card
+     is "where are the terms?" A missing Terms of Service link on a $2,500
+     Royalty Card tier kills the highest-LTV bucket on the page. Existing
+     tier copy ("Cancel anytime. Original Founder badge stays.") makes a
+     promise the visitor can't verify against a written ToS — that's a
+     trust break.
+
+This change closes all three with a single deploy. Same pattern that ships
+on ai-solutions.store today (the proven legal scaffold from commits
+aadf028 + 3269630). No backend touched. No tier card touched. No price
+touched. The static fallback page now stands on its own legally for every
+visitor who lands on it from any traffic source.
+
+===============================================================================
+WHAT THE LEGAL PAGES SAY (so you can sanity-check before merge)
+===============================================================================
+Terms of Service (16 sections, plain-English):
+  - Operator: Trash Or Treasure Online Recycler LLC (FL #L25000158401)
+  - 18+ only; minor accounts closed and pro-rated refund through Square
+  - 5-tier catalog described tier by tier with Square as source of truth
+  - Subscription mechanics: $14.99/mo auto-renews until cancel; prepaid
+    3-month / 12-month do not auto-renew; Royalty Card is single lifetime
+  - Acceptable Use: no impersonation, no minors content, no scams, no
+    harassment, no Bot-Shield bypass, no scraping
+  - Real-world safety paragraph: meet in public, tell a friend, own transport
+  - Refund matrix per tier:
+      Bot-Shield $1   non-refundable once attempted
+      Founding $14.99 non-refundable past periods; cancel stops future
+      3-Month $39.99  pro-rated within 7 days if no meaningful use
+      12-Month $99.99 pro-rated within 7 days if no meaningful use
+      Royalty $2,500  full refund within 14 days if no benefit claimed
+  - Chargeback policy: account suspension while open
+  - Liability cap: amount paid in trailing 12 months
+  - Governing law: Florida; exclusive Florida jurisdiction
+  - Contact: joshlcoleman@gmail.com
+
+Privacy Policy (14 sections, plain-English):
+  - Data inventory table: order data, email, profile data, messages /
+    event sign-ups, Bot-Shield verification result, support email, logs
+  - Square = payment processor; we never see full card / CVV / bank
+  - No tracking ads, no data sale, no marketing-partner sharing
+  - Retention: 7 years receipts, account-lifetime for profile, 30-day
+    deletion after closure, 2 years support, 30 days server logs
+  - Member-visibility section: what other adult members can see vs cannot
+  - Cookies: session + Cloudflare + preference only
+  - Rights: access, correct, delete, restrict, port; 30-day response
+  - Children: 18+ surface, no under-13 collection
+  - Square privacy link: squareup.com/legal/privacy-no-account
+
+Both pages are styled to match the existing ai-solutions.store legal layout
+(same CSS, same back link, same hr/footer pattern). Dark theme matches the
+youandinotai static landing palette.
+
+===============================================================================
+DOCTRINE / RULES CHECK
+===============================================================================
+[X] 1-repo policy — Trollz1004/ANTIGRAVITY only, no new repos
+[X] Assigned branch — claude/vigilant-archimedes-2oynyl (per session brief)
+[X] Sabretooth-only push — this file is the hand-off; no push attempted here
+[X] Square-only on youandinotai.com — both legal pages reference Square as
+    the only processor; zero Stripe references anywhere in _deploy/youandinotai/
+    (`grep -ri stripe _deploy/youandinotai/` returns no matches)
+[X] Canonical-7 ban — zero hits in any of the 4 touched files
+    (`grep -iE '\b(donate|donation|charity|charitable|solicitation|giving back|disbursement)\b' _deploy/youandinotai/`
+    returns no matches). The 10% per-bucket mission reserve is intentionally
+    NOT mentioned on the customer surface; that's a backend ledger concern
+    per CLAUDE.md §"Customer-facing language ban".
+[X] No 60/30/10 references introduced or revived
+[X] No mock data — Operator entity FL #L25000158401, contact email
+    joshlcoleman@gmail.com, Square account LY5GN09F5AN83 (Square account ID
+    not printed on the customer-facing page, only used in handoff doc here),
+    Square privacy URL is the real published Square URL
+[X] No new app / new repo / new abstraction — pure static HTML + a
+    Cloudflare Pages _redirects file matching ai-solutions.store pattern
+[X] No backend / API / payment-rail logic touched — only static HTML and
+    a 2-line rewrite manifest; backend revenue_allocation.py 10% per-bucket
+    reserve unchanged; CI ci-validate.yml grep set unchanged
+[X] Hooks not bypassed — no --no-verify, no --no-gpg-sign
+[X] Founding Four protections intact — no Gemini / Claude Code /
+    Perplexity / Grok integration touched
+[X] No Anthropic API key wired anywhere — pure HTML + rewrite manifest
+
+===============================================================================
+SABRETOOTH HAND-OFF COMMANDS
+===============================================================================
+On Sabretooth (C:\ANTIGRAVITY):
+
+  git fetch origin
+  git checkout claude/vigilant-archimedes-2oynyl
+  git pull --ff-only
+
+  # If the branch tip is not yet a08d8fa locally, this Cowork session has
+  # the commit and Sabretooth needs to pull it from origin once the push
+  # lands. Diff is small: 4 files, +269 / -0.
+
+  git push -u origin claude/vigilant-archimedes-2oynyl
+
+After push, open PR on Trollz1004/ANTIGRAVITY (no `gh` CLI; use mcp__github__*
+tools per CLAUDE.md §"Conventions for AI Assistants"):
+
+  Title: feat(youandinotai): add Terms of Service and Privacy Policy for Square checkout surface
+  Base:  main
+  Head:  claude/vigilant-archimedes-2oynyl
+  Body:  use the WHY + DOCTRINE / RULES CHECK sections from this file
+
+Expected CI behavior:
+  - ci-validate.yml `validate` job §496.405 / canonical-7 scan: PASS
+    (_deploy/youandinotai/ is not in the customer-facing grep set per
+    CLAUDE.md doctrine drift blocker config, AND the new copy is
+    canonical-7 clean regardless)
+  - eslint-prettier-check: N/A (HTML only)
+  - black-ruff-check: N/A (no Python)
+  - run-tests: PASS (no backend touched, 80% coverage gate unaffected)
+  - js-tests: PASS (no JS/TS touched)
+  - guardian-check: PASS (no security-invariant surface touched)
+
+First-party Claude auto-merge eligible per CLAUDE.md §"PR merge authority"
+once required checks pass. Head branch deletion on merge per repo settings.
+
+===============================================================================
+REVENUE IMPACT (concrete, not aspirational)
+===============================================================================
+Before: 5 Square checkout CTAs on a static landing with no Terms of
+        Service, no Privacy Policy, and no age / processor disclosure.
+        Square seller protection exposure, FTC exposure, conversion drag
+        on the high-LTV tiers ($99.99 / $2,500) where buyers look for
+        legal links before pulling out a card.
+
+After:  Same 5 Square checkout CTAs, now sitting behind a Square-aligned
+        Terms of Service + Privacy Policy and a footer disclosure line.
+        The Royalty Card $2,500 tier in particular — the single highest
+        conversion-value bucket on the page — now has a written refund
+        window (14 days, full refund if no benefit claimed) and a
+        published Privacy Policy. That is the difference between a $2,500
+        click and a $2,500 close.
+
+Direct support for THE-WHEEL §"North Star" reset: first paying customer,
+then weekly paying-member growth on a surface that won't get pulled by
+Square. Direct support for HERMES-LAUNCH-DISPATCH-2026-06-18.md success
+criterion "youandinotai.com funnel verified end-to-end" — the funnel is
+now legally complete from landing to checkout.
+
+===============================================================================
+For The Kids · #UntilNoKidInNeed · Opus external-architect dispatch
+===============================================================================
