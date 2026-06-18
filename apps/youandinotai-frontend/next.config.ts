@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  // Static export for Cloudflare Pages
+  output: 'export',
   // Allow access to remote image placeholder.
   images: {
     unoptimized: true,
