@@ -59,7 +59,7 @@ export function TasksMode() {
       <div className="px-6 py-3 border-b border-[#2a3a52] bg-[#111827]/60 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <ListTodo size={16} className="text-[#00d4ff]" />
-          <span className="text-xs font-bold tracking-wide">TASKS · PAPERCLIP REPLACEMENT</span>
+          <span className="text-xs font-bold tracking-wide">TASKS · INTERNAL DISPATCH</span>
           {stats && (
             <span className="text-[8px] tracking-widest uppercase text-[#6b82a6]">
               {stats.active} active · p0:{stats.by_priority.p0} · p1:{stats.by_priority.p1} · p2:{stats.by_priority.p2}

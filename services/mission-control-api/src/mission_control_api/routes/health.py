@@ -7,7 +7,6 @@ from ..probes import (
     http as http_probe_mod,
     tcp as tcp_probe_mod,
     shell as shell_probe_mod,
-    paperclip as paperclip_mod,
     hermes as hermes_mod,
     ollama as ollama_mod,
     openclaw as openclaw_mod,
@@ -36,10 +35,6 @@ async def self_health():
     return make_envelope("ok", 0, details).dict()
 
 # individual probe endpoints
-@router.get("/health/paperclip")
-async def health_paperclip():
-    return (await paperclip_mod.paperclip_probe()).dict()
-
 @router.get("/health/hermes")
 async def health_hermes():
     return (await hermes_mod.hermes_probe()).dict()
@@ -103,9 +98,14 @@ async def health_t5500_postgres():
     return (await t5500_mod.t5500_postgres_probe()).dict()
 
 
-@router.get("/health/t5500/qdrant")
-async def health_t5500_qdrant():
-    return (await t5500_mod.t5500_qdrant_probe()).dict()
+@router.get("/health/t5500/date-app-api")
+async def health_t5500_date_app_api():
+    return (await t5500_mod.t5500_date_app_api_probe()).dict()
+
+
+@router.get("/health/t5500/date-app-static")
+async def health_t5500_date_app_static():
+    return (await t5500_mod.t5500_date_app_static_probe()).dict()
 
 
 @router.get("/health/t5500/redis")
@@ -120,7 +120,6 @@ async def health_t5500_openclaw():
 @router.get("/health/all")
 async def health_all():
     probes = [
-        ("paperclip", paperclip_mod.paperclip_probe()),
         ("hermes", hermes_mod.hermes_probe()),
         ("ollama", ollama_mod.ollama_probe()),
         ("openclaw", openclaw_mod.openclaw_probe()),

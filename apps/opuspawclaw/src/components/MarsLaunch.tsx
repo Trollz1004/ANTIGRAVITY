@@ -11,7 +11,7 @@ interface Momento {
 
 export function MarsLaunch() {
   const [momentos, setMomentos] = useState<Momento[]>([
-    { id: '1', text: 'Squash Paperclip dependencies', type: 'task', timestamp: '12:00' },
+    { id: '1', text: 'Retire legacy support dependencies', type: 'task', timestamp: '12:00' },
     { id: '2', text: 'Initialize Hermes logic gates', type: 'task', timestamp: '12:05' },
     { id: '3', text: 'Sync Antigravity DAO quorum', type: 'memory', timestamp: 'Yesterday' },
   ]);
@@ -23,7 +23,7 @@ export function MarsLaunch() {
     // Simulate Docker start and Hermes launch
     setTimeout(() => {
       setIsLaunching(false);
-      alert("TO MARS: Docker Hermes Engine Online. Paperclip squashed.");
+      alert("TO MARS: Docker Hermes Engine Online. Legacy support overhead removed.");
     }, 3000);
   };
 
@@ -103,7 +103,7 @@ export function MarsLaunch() {
             <Database size={48} className="text-[#00d4ff] opacity-20 mb-4" />
             <h3 className="text-sm font-black text-[#e8f0ff] uppercase tracking-widest mb-2">Paperweight Mode</h3>
             <p className="text-[10px] text-[#6b82a6] leading-relaxed max-w-[200px]">
-              Active compression squashing Paperclip overhead. AntiGravity Platforms cannot be held down by legacy weights.
+              Active compression removes legacy support overhead. AntiGravity Platforms cannot be held down by old weights.
             </p>
           </div>
           

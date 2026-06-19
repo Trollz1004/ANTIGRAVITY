@@ -5,7 +5,7 @@ import { LaunchPanel } from "../components/LaunchPanel";
 import { SystemStatus } from "../components/SystemStatus";
 import { GitPanel } from "../components/GitPanel";
 import { HermesRouterPanel } from "../components/HermesRouterPanel";
-import { PaperclipWorkerPanel } from "../components/PaperclipWorkerPanel";
+import { OpenClawSupportPanel } from "../components/OpenClawSupportPanel";
 import { RunbookViewer } from "../components/RunbookViewer";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -15,7 +15,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
  *
  * Layout (per MISSION-CONTROL-GUI-PROMPT-2026-04-28):
  *   LEFT (240-ish)  · LaunchPanel + Trust Hierarchy
- *   CENTER (flex)   · SystemRibbon + DAOBand + HermesRouterPanel + PaperclipWorkerPanel
+ *   CENTER (flex)   - SystemRibbon + DAOBand + HermesRouterPanel + OpenClawSupportPanel
  *   RIGHT (320)     · GitPanel + RunbookViewer + Mission Footer
  */
 export function MissionMode() {
@@ -53,7 +53,7 @@ export function MissionMode() {
         <div className="col-span-12 lg:col-span-6 flex flex-col gap-4">
           <DAOBand dao={dao} mission={mission} />
           <HermesRouterPanel />
-          <PaperclipWorkerPanel />
+          <OpenClawSupportPanel />
           <BucketEngine dao={dao} />
         </div>
 

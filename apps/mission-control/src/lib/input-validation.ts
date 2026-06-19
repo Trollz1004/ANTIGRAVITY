@@ -79,7 +79,7 @@ const ALLOWED_AGENT_IDS = [
   'claude',
   'hermes',
   'ollama',
-  'paperclip',
+  'openclaw',
 ] as const;
 
 /**

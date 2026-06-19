@@ -2,9 +2,9 @@
 OpusPawClaw / Mission Control backend.
 
 Mirrors the contract of the local Hermes Router (localhost:11435) and the
-Paperclip HQ worker (paperclip-hq.youandinotai.com) so the Mission Control
-web surface works end-to-end in the Emergent preview. When Joshua runs the
-Electron flagship locally, the same UI points at his real local endpoints.
+OpenClaw support gateway so the Mission Control web surface works end-to-end
+in the Emergent preview. When Joshua runs the Electron flagship locally, the
+same UI points at his real local endpoints.
 
 Hard rules enforced here:
   - No "donate" / "donation" / "solicitation" strings anywhere (FL 496.405).
@@ -202,21 +202,21 @@ async def hermes_chat_completions(body: ChatCompletionsRequest, response: Respon
     }
 
 
-# ---------- Paperclip mirror ---------------------------------------------- #
-PAPERCLIP_DEPLOY_COMMIT = os.environ.get("PAPERCLIP_COMMIT", "mirror-build")
+# ---------- OpenClaw support mirror --------------------------------------- #
+OPENCLAW_DEPLOY_COMMIT = os.environ.get("OPENCLAW_COMMIT", "mirror-build")
 
 
-@api.get("/paperclip/health")
-async def paperclip_health():
+@api.get("/openclaw/health")
+async def openclaw_health():
     return {
         "ok": True,
         "source": "mirror",
-        "service": "paperclip-worker (mirror)",
-        "target_real": "https://paperclip-hq.youandinotai.com/api/health",
+        "service": "openclaw-support (mirror)",
+        "target_real": "http://127.0.0.1:18789/healthz",
         "deploy_time": datetime.now(timezone.utc).isoformat(),
-        "commit": PAPERCLIP_DEPLOY_COMMIT,
-        "tunnel_id": "c7bc9665-3923-4977-acd7-2033838cd56e",
-        "tunnel_config": r"C:\ANTIGRAVITY\infra\cloudflare\paperclip-hq.yml",
+        "commit": OPENCLAW_DEPLOY_COMMIT,
+        "gateway_port": 18789,
+        "support_mode": "date-app-customer-service",
     }
 
 
@@ -241,7 +241,7 @@ async def system_status():
     return {
         "services": [
             {"id": "hermes",     "name": "HERMES ROUTER",     "status": "green", "info": "Mirror online"},
-            {"id": "paperclip",  "name": "PAPERCLIP WORKER",  "status": "green", "info": "Mirror online"},
+            {"id": "openclaw",   "name": "OPENCLAW SUPPORT",  "status": "green", "info": "Mirror online"},
             {"id": "opencode",   "name": "OPENCODE",          "status": "green", "info": "Ollama ready"},
             {"id": "gh",         "name": "GH COPILOT",        "status": "green", "info": "Sync active"},
             {"id": "gcr",        "name": "GCR",               "status": "green", "info": "Registry ready"},
@@ -271,7 +271,7 @@ async def dao_stats():
             {"n":  5, "name": "AI-Solutions Store",    "color": "#ffb300"},
             {"n":  6, "name": "Super Likes Match",     "color": "#ec4899"},
             {"n":  7, "name": "Content Sprint",        "color": "#00d4ff"},
-            {"n":  8, "name": "Paperclip Scale",       "color": "#00e676"},
+            {"n":  8, "name": "Support Automation",    "color": "#00e676"},
             {"n":  9, "name": "Antigravity Reserve",   "color": "#ffb300"},
             {"n": 10, "name": "Founder Four Trust",    "color": "#e040fb"},
         ],

@@ -113,7 +113,7 @@ _COMMANDS = [
         "command": "powershell -ExecutionPolicy Bypass -File C:\\ANTIGRAVITY\\scripts\\autostart-mission.ps1",
         "cwd": "C:\\ANTIGRAVITY",
         "timeout_s": 120,
-        "caution": "This starts Docker, Postgres, Hermes Router, Paperclip, and OpenClaw.",
+        "caution": "This starts Docker, Postgres, Hermes Router, the date-app stack, and OpenClaw support.",
     },
     {
         "id": "api",
