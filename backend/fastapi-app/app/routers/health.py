@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.cache import redis_health_check
 from app.config import get_settings
 from app.database import check_db_health, get_db
 from app.error_responses import internal_error
@@ -82,6 +83,7 @@ async def _runtime_payment_proof_labels(db: AsyncSession) -> list[str]:
                     "example": {
                         "status": "ok",
                         "db_connected": True,
+                        "redis_connected": True,
                         "square_connected": True,
                         "square_signature_configured": True,
                         "wallet_rails_proven": False,
@@ -99,6 +101,7 @@ async def _runtime_payment_proof_labels(db: AsyncSession) -> list[str]:
                     "example": {
                         "status": "degraded",
                         "db_connected": False,
+                        "redis_connected": False,
                         "square_connected": True,
                         "square_signature_configured": False,
                         "wallet_rails_proven": False,
@@ -111,7 +114,7 @@ async def _runtime_payment_proof_labels(db: AsyncSession) -> list[str]:
         },
     },
     summary="Health check",
-    description="Returns service health status including database, Square payment, and webhook connectivity.",
+    description="Returns app readiness status including database and Redis, with Square configuration reported separately.",
 )
 async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
     try:
@@ -129,6 +132,12 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
             logger.exception("Health check user count failed")
             db_connected = False
 
+    redis_connected = False
+    try:
+        redis_connected = (await redis_health_check()).get("status") == "ok"
+    except Exception:
+        logger.exception("Health check Redis probe failed")
+
     square_connected = _square_health_ready()
     square_signature_configured = _square_signature_configured()
     payment_proof_labels: list[str] = []
@@ -143,14 +152,11 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
     )
     wallet_rails_status = "proven" if wallet_rails_proven else "unproven"
 
-    status_value = (
-        "ok"
-        if db_connected and square_connected and square_signature_configured
-        else "degraded"
-    )
+    status_value = "ok" if db_connected and redis_connected else "degraded"
     return HealthResponse(
         status=status_value,
         db_connected=db_connected,
+        redis_connected=redis_connected,
         square_connected=square_connected,
         square_signature_configured=square_signature_configured,
         wallet_rails_proven=wallet_rails_proven,

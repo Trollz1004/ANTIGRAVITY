@@ -17,6 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY ./app /app/app
+COPY ./alembic.ini /app/alembic.ini
+COPY ./alembic /app/alembic
 
 # Create non-root user
 RUN addgroup -S appuser && adduser -S appuser -G appuser

@@ -611,7 +611,7 @@ async def detailed_health_dashboard(
     - Endpoint availability summary
     - Rate limiting configuration
 
-    No authentication required. Safe for monitoring tools and load balancers.
+    Authentication is required because this endpoint exposes operational detail.
     """
     from datetime import datetime, timezone
 

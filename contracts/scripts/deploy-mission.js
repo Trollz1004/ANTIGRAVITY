@@ -20,6 +20,13 @@
 
 const hre = require('hardhat');
 
+if (process.env.ALLOW_REVIEW_GATED_MISSION_DEPLOY !== 'YES') {
+  throw new Error(
+    'Mission stack deploy blocked. Date-app product sales use Square/Supabase/FastAPI first; ' +
+      'Base mission contracts require explicit owner signoff, current compliance review, and ALLOW_REVIEW_GATED_MISSION_DEPLOY=YES.',
+  );
+}
+
 async function main() {
   const [deployer] = await hre.ethers.getSigners();
   console.log('\n=== ANTIGRAVITY MISSION DAO DEPLOYMENT ===');
