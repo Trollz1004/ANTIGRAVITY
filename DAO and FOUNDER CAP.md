@@ -27,17 +27,18 @@ The remaining 63 cents are divided into two strict priority tiers:
 - Shareholder / Revenue-share obligations.
 - Hardware / GPU / Off-grid power buildout.
 - Extra founder upside (can be reinvested into new 10% buckets).
+- **Launch Treasury:** up to $10,000 seed per new DAO/bucket (a cap, not a grant), drawn ONLY from a parent bucket's Tier B surplus — never from the 10¢ kids floor, 27¢ tax, or Tier A survival. Each mature DAO seeds the next; bucket #1 (date app) seeds from sale/runway. A DAO may not launch publicly until its treasury covers ≥ 12 months of its own infra + ops.
 
 ---
 
 ## 2. THE FOUNDER COMPENSATION CAP
 
-**The Cap:** Joshua’s total ecosystem-wide compensation is permanently capped at **$50,000 (After Taxes)**.
+**The Cap:** Joshua's founder profit is capped at **$50,000 (After Taxes) PER YEAR, reset each calendar year. Taxes (the 27¢) and Tier A survival are separate and NOT counted against this cap.**
 
-- This is a binding rule. 
-- Hermes must track cumulative payouts.
-- Any payout beyond this cap requires a formal governance process (Token Vote + AI Steward Veto Window).
-- **Survival Exception:** Tier A survival funds (food/rent) are processed to keep the mission alive, but the total "profit" taken by the founder stays capped at $50k.
+- This is a binding rule.
+- Hermes must track cumulative payouts within each calendar year. `founder_compensation_log` resets annually.
+- Any payout beyond this cap within a given calendar year requires a formal governance process (Token Vote + AI Steward Veto Window).
+- **Survival Exception:** Tier A survival funds (food/rent) are processed to keep the mission alive and are NOT counted against the annual $50k profit cap. Taxes (the 27¢) are also separate.
 
 ---
 
@@ -89,7 +90,7 @@ Hermes must execute these checks every 24 hours:
 1. **Integrity Check:** Does Kids Bucket $\ge$ 10% of Total Gross?
 2. **Tax Check:** Does Tax Bucket $\ge$ Projected Liability?
 3. **Survival Check:** Is Tier A (Survival/Infra) funded?
-4. **Cap Check:** Is founder compensation $\le$ $50,000?
+4. **Cap Check:** Is founder profit ≤ $50,000 for the current year? (`founder_compensation_log` resets annually.)
 5. **Drift Check:** Does the code in the repo match these rules?
 
 **If any check fails: CREATE A BLOCKING KANBAN TASK. HALT NEW LAUNCHES.**
