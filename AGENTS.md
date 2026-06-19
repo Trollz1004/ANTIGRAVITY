@@ -8,16 +8,19 @@
 > Canonical skill file: `/mnt/c/antigravity/briefings/SKILL-ONLINERECYCLE-SITE-BUILD.md` (has EVERYTHING)
 > Latest session memory: `/mnt/c/antigravity/briefings/CLAUDE-MEMORY-2026-05-19T103500Z.md`
 
-## LIVE INFRASTRUCTURE STATUS (AS OF 2026-03-19)
+## LIVE INFRASTRUCTURE STATUS (AS OF 2026-06-19)
 
-- **GCR Backend (ai-collab4kids)**: DEPLOYED & LIVE (Built from T5500 node).
-- **Cloudflare Tunnels (Sabretooth)**: LIVE & ROUTING (`openclaw`, `mcp`).
-- **Frontend (youandinotai.com)**: DEPLOYED & LIVE (React 19/Cloudflare Pages).
+- **Frontend (youandinotai.com)**: DEPLOYED & LIVE on Cloudflare Pages project `youandinotai`; HTTP 200 verified 2026-06-19.
+- **Backend / API**: T5500 self-host FastAPI stack is the active recovery target. Local T5500 API health was verified after migrations, but public `https://api.youandinotai.com/api/v1/health` was still abnormal (HTTP 500) on 2026-06-19. Do not call public API green until Cloudflare routing and backend health are rechecked together.
+- **Cloudflare / Wrangler**: T5500 owns Wrangler automation. `wrangler 4.102.0` verified on T5500 using token env from `C:\Users\joshl\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env`; `wrangler pages project list` and `wrangler pages deployment list --project-name youandinotai` passed.
+- **Cloudflare Tunnel**: T5500 named tunnel `t5500` (`55b400f6-76b3-4795-8897-f10b7115b3cd`) is the current public-front-door tunnel lane. Token file: `C:\Users\joshl\.cloudflared\t5500-dateapp.token`; log: `C:\antigravity\logs\t5500-dateapp-tunnel.log`.
+- **Private env authority**: `C:\Users\joshl\OneDrive\JOSHUA's-DO-NOT-COMMIT-TO-GITHUB\JOSHUAS.ENV` is the local do-not-commit env/node handoff generated 2026-06-19. Never commit or paste it.
 - **Daily.co Video Rooms**: INTEGRATED (REST + iframe).
 - **Data Export Worker**: IMPLEMENTED (scheduler.py).
 - **Board Moderation**: IMPLEMENTED (Reporting endpoints).
-- **OpenClaw runtime (Sabretooth / 9020 / T5500)**: SELF-HOSTED ONLY — active configs use Ollama/local inference only. No cloud model providers in the live OpenClaw path.
-- **Git History**: PRISTINE & PURGED.
+- **OpenClaw runtime (Sabretooth / 9020 / T5500)**: SELF-HOSTED SUPPORT ONLY - active configs use Ollama/local inference only. No cloud model providers in the live OpenClaw customer-support path.
+- **WhatsApp support**: Backend support routes are wired, but `WHATSAPP_PHONE_ID` and `WHATSAPP_TOKEN` were still blank in checked private env sources on 2026-06-19.
+- **Historical note**: older GCR/Cloud Run and Sabretooth-tunnel status claims are historical unless reverified against current node routing.
 
 ---
 
@@ -197,7 +200,7 @@ composition may not be altered, reduced, or replaced without Josh's explicit ord
 - **Live repo write scope**: Only Codex, legacy agent, Gemini, and GitHub-approved repo workflows may write directly to `C:\ANTIGRAVITY`.
   All other platforms must work through sandbox lanes and the sandbox repo first.
 - **Auxiliary node restriction**: mirrored clones, helper nodes, and auxiliary workstations such as the ASUS mini are read-only for live repo truth.
-  Only the primary Sabretooth session may make direct live-repo edits or push `C:\ANTIGRAVITY`.
+  Only the primary approved antigravity session on an authoritative working tree may make direct live-repo edits. Final push authority follows the T5500 node-lock unless Josh explicitly authorizes another session.
 - **Worker count max**: 10
 - **Revenue doctrine boundary (2026-06-01)**: no operational or customer-facing surface may claim routing above the current `10% per-bucket mission reserve` (max allowable corporate charitable deduction per legally distinct revenue stream) unless a new canonical legal update replaces it. `/mnt/c/antigravity/briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md` is the canonical text. The pre-2026 "10% personal income to Joshua" framing is dead. `GospelDonation.sol`, `CharityRouter100.sol`, `DatingRevenueRouter.sol`, the `60/30/10` split, and the "100% charity" claim are history only.
 - **FL §496.405 (canonical-7 ban, 2026-06-01)**: NEVER use `donate / donation / solicitation / charity / charitable / giving back / disbursement` in customer-facing code or copy. `contractual revenue disbursement` is for internal briefings/agent files ONLY — not customer-facing, not even self-referentially. Hooks enforce this.
@@ -213,18 +216,18 @@ Nothing merges to main without 100% checks passing AND Josh's explicit approval.
 
 **Secondary drives / isolated repos** = holding area for anything not yet ready for main:
 - Untested LLM setups (openclaw configs, model routing experiments, local inference configs)
- - Note: OpenClaw is exclusively for customer support; any experimental configs must not affect the live OpenClaw support path.
-- Any LLM infrastructure or model configuration that hasn't been validated with confidence
+- Note: OpenClaw is exclusively for customer support; any experimental configs must not affect the live OpenClaw support path.
+- Any LLM infrastructure or model configuration that has not been validated with confidence
 - Experimental AI integrations not yet proven stable enough for production
 
-**Rule:** LLM infrastructure setups, openclaw configurations, and experimental model routing
-stay on a node's secondary drive or in a dedicated sandbox repo until Josh decides they're ready to graduate.
-They do not automatically become part of the live codebase.
-
 **Current isolated node lanes:**
-- **9020 `D:`** -> `D:\claws\openclaw-9020` and `D:\sandbox-repos\...` = openclaw/support sandbox lane only
-- **T5500 `E:`** -> `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian` plus `dispatch`, `memory`, and media folders = Manus / Crossfire / media sandbox lane only
-- **Do not put these lanes on node `C:` drives** except for the existing live support/date-app installs that are already intentionally on `C:`
+- **9020 `D:`** -> `D:\claws\openclaw-9020` and `D:\sandbox-repos\...` = OpenClaw/support sandbox lane only.
+- **T5500 `C:`** -> `C:\antigravity` = public-front-door repo working tree for tunnels, domains, payments, and date-app self-host operations. T5500 owns Wrangler for this lane.
+- **T5500 private vault env** -> `C:\Users\joshl\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env` = Cloudflare token/account env for Wrangler automation. Do not commit.
+- **T5500 `E:`** -> historical vault, Manus, and media archive lane; read-only unless Josh explicitly assigns recovery work.
+- **Sabretooth `C:`** -> `C:\antigravity` parallel agent/brain working tree for Paperclip, agents, and GPU Ollama orchestration. Do not terminate public Cloudflare tunnels here.
+- **Sabretooth `E:`** -> `E:\claudes-claw` legacy agent dispatch/coworker lane only.
+- **Rule:** LLM infrastructure setups, OpenClaw configs, and experimental model routing stay on node secondary drives or sandbox repos until Josh explicitly graduates them.
 
 **Sandbox repo:** `https://github.com/Trollz1004/Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY.git`
 New ideas, experimental platforms, and speculative automation go here first.
@@ -234,7 +237,7 @@ New ideas, experimental platforms, and speculative automation go here first.
 ## SOURCE OF TRUTH — ANTI-DRIFT RULE (HARDCODED)
 
 **AUTHORITATIVE** (use for all coding, payments, governance, deployment):
-- `C:\ANTIGRAVITY` — live repo root, only valid working directory
+- `C:\antigravity` — live repo root, only valid working directory
 - `origin/main` — canonical git truth
 - Canonical docs: `/mnt/c/antigravity/AGENTS.md`, `/mnt/c/antigravity/CLAUDE.md`, `/mnt/c/antigravity/memory/`, `/mnt/c/antigravity/briefings/`
 - One GitHub, one repo, one branch, one live folder: `Trollz1004/ANTIGRAVITY` -> `main` -> `C:\ANTIGRAVITY`
@@ -245,7 +248,7 @@ New ideas, experimental platforms, and speculative automation go here first.
 - OneDrive backup copies (`legacy agent-Code-Backup/`, `ANTIGRAVITY_BACKUPS/`)
 - Orphaned worktrees, archived briefings, stale node memory files
 
-**Rule**: If context was not loaded from `C:\ANTIGRAVITY` on `origin/main`, treat it as unverified.
+**Rule**: If context was not loaded from `C:\antigravity` (Windows), `/mnt/c/antigravity` (WSL), and `origin/main`, treat it as unverified. Preserve lowercase path spelling for Sabretooth/WSL continuity notes; do not normalize it to uppercase in recovery docs.
 
 ---
 
@@ -265,7 +268,7 @@ New ideas, experimental platforms, and speculative automation go here first.
 - Do NOT leave finished work sitting only in local worktree or on unmerged branch.
 - If a temporary branch or side repo is used for isolation/recovery, merge it, push `main`,
   and delete or retire the extra branch/copy before calling the task complete.
-- **T5500 is now the push-to-main authority.** Sabretooth and 9020 are pending wipe.
+- **T5500 remains the push-to-main authority for final approved production state.** Sabretooth is the brain/agent working tree; 9020 is the dev checkout. Older "pending wipe" language is superseded by the 2026-06-13 node lock.
 - Closeout standard: local verification passed, CI passed, `main` clean, `origin/main` updated.
 
 ---
@@ -275,8 +278,8 @@ New ideas, experimental platforms, and speculative automation go here first.
 - Domain: youandinotai.com | Launch: **April 4, 2026**
 - Identity: NOT JUST a dating app — **SOCIAL PLATFORM FOR GOOD** (meetups, volunteering, charity)
 - Stack: FastAPI + React 19 + Square + PostgreSQL
-- Frontend: Cloudflare Pages | Backend: GCP Cloud Run
-- Revenue: $0 | Customers: 0 | AI infra cost: ~$600/mo
+- Frontend: Cloudflare Pages project `youandinotai` | Backend: T5500 self-host FastAPI recovery lane; historical GCP Cloud Run references require recheck before use.
+- Revenue: $0 | Customers: 0 | AI infra target: local/OpenClaw support-only path, no cloud model providers for live support.
 
 ---
 
@@ -292,6 +295,7 @@ New ideas, experimental platforms, and speculative automation go here first.
 
 - Square account: joshlcoleman@gmail.com (all Square lanes including YouAndINotAI)
 - Square location: LY5GN09F5AN83 (Trash Or Treasure - ACTIVE)
+- Founder test transaction truth (2026-06-19): visible Square transactions reviewed on 2026-06-19 were Joshua's own test payments. The `$0.67` Square balance is the net after Square fees from a `$1.00` Bot-Shield test payment; do not classify it as external customer revenue.
 - Stripe: LEGACY ONLY — being phased out
 
 ---
@@ -407,15 +411,26 @@ CI: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405,
 
 ## DEPLOYMENT MAP
 
-| Site | Host | Deploy Dir |
-|------|------|------------|
-| youandinotai.com | Cloudflare Pages | youandinotai/dist |
-| onlinerecycle.org | Cloudflare Pages | _deploy/onlinerecycle |
-| ai-solutions.store | Cloudflare Pages | _deploy/ai-solutions-store |
-| dashboard.aidoesitall.website | Cloudflare Pages | _deploy/dashboard-gateway |
+| Site | Host | Deploy Source |
+|------|------|---------------|
+| youandinotai.com | Cloudflare Pages project `youandinotai` | active Pages deploy; repo source currently routes through `apps/youandinotai-frontend` / direct-upload artifact |
+| onlinerecycle.org | Cloudflare Pages | `_deploy/onlinerecycle` |
+| ai-solutions.store | Cloudflare Pages | `_deploy/ai-solutions-store` |
+| dashboard.aidoesitall.website | Cloudflare Pages project `jules-dashboard` | `_deploy/dashboard-gateway` |
 
-**Cloudflare**: direct-upload Pages projects should use the verified Cloudflare API/upload-token flow; do not treat local Sabretooth Wrangler OAuth as the canonical deploy path for Pages.
+**Cloudflare**: direct-upload Pages projects should use the verified Cloudflare API/upload-token flow or T5500 Wrangler with `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` loaded from the private vault env. Do not treat local Sabretooth Wrangler OAuth as the canonical deploy path for Pages.
 **Domain routing rule**: if Josh owns the domain, keep DNS on Cloudflare and preserve routing to the owned public domain and its intended redirects. Do not treat preview URLs or temporary upload URLs as the final public destination.
+
+---
+
+## PRIVATE ENV AUTHORITY (DO NOT COMMIT)
+
+- Local handoff file: `C:\Users\joshl\OneDrive\JOSHUA's-DO-NOT-COMMIT-TO-GITHUB\JOSHUAS.ENV`.
+- Cloudflare/Wrangler env: `C:\Users\joshl\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env`.
+- Required Cloudflare names for tools: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
+- The legacy `Cloudflare_API_Token` alias may exist for older scripts, but new automation should use the canonical uppercase names.
+- GitHub secrets and runtime envs may contain date-app values, but private vault files remain the local source for node handoff and must never be committed.
+- Known missing support placeholders on 2026-06-19: `WHATSAPP_PHONE_ID`, `WHATSAPP_TOKEN`.
 
 ---
 
