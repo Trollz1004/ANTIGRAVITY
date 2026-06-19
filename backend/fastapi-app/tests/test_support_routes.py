@@ -1,4 +1,7 @@
 import asyncio
+import hashlib
+import hmac
+import json
 import uuid
 from datetime import datetime, timezone
 from types import SimpleNamespace
@@ -128,3 +131,109 @@ def test_support_chat_escalates_and_operator_can_see_ticket(
         assert queue[0]["customer_email"] == "operator@example.com"
     finally:
         app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_whatsapp_webhook_verification_challenge(client, monkeypatch):
+    from app.routers import support as support_router
+
+    monkeypatch.setattr(
+        support_router,
+        "get_settings",
+        lambda: SimpleNamespace(whatsapp_webhook_verify_token="verify-token"),
+    )
+
+    response = client.get(
+        "/api/v1/support/whatsapp/webhook",
+        params={
+            "hub.mode": "subscribe",
+            "hub.verify_token": "verify-token",
+            "hub.challenge": "challenge-123",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.text == "challenge-123"
+
+
+def test_whatsapp_owner_reply_updates_ticket(client, db_session_factory, monkeypatch):
+    from app.routers import support as support_router
+
+    owner = _make_user(email="operator@example.com", display_name="Operator")
+    ticket_id = uuid.uuid4()
+
+    async def seed_data():
+        async with db_session_factory() as session:
+            session.add(owner)
+            session.add(
+                SupportTicket(
+                    id=ticket_id,
+                    user_id=owner.id,
+                    status="open",
+                    category="billing",
+                    subject="Billing: charged twice",
+                    customer_email=owner.email,
+                    customer_message="I was charged twice.",
+                    bot_response="I am opening a billing ticket.",
+                    escalation_reason="billing_review",
+                    transcript=[],
+                )
+            )
+            await session.commit()
+
+    asyncio.run(seed_data())
+
+    secret = "whatsapp-app-secret"
+    monkeypatch.setattr(
+        support_router,
+        "get_settings",
+        lambda: SimpleNamespace(
+            whatsapp_app_secret=secret,
+            whatsapp_owner_phone="13529735909",
+            whatsapp_to="13529735909",
+        ),
+    )
+    payload = {
+        "entry": [
+            {
+                "changes": [
+                    {
+                        "value": {
+                            "messages": [
+                                {
+                                    "from": "13529735909",
+                                    "text": {
+                                        "body": f"close {ticket_id} Customer refunded in Square."
+                                    },
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    body = json.dumps(payload).encode("utf-8")
+    signature = hmac.new(secret.encode("utf-8"), body, hashlib.sha256).hexdigest()
+
+    response = client.post(
+        "/api/v1/support/whatsapp/webhook",
+        content=body,
+        headers={
+            "content-type": "application/json",
+            "x-hub-signature-256": f"sha256={signature}",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["results"] == [
+        {"processed": True, "reason": "ticket_updated"}
+    ]
+
+    async def fetch_ticket():
+        async with db_session_factory() as session:
+            return await session.get(SupportTicket, ticket_id)
+
+    ticket = asyncio.run(fetch_ticket())
+    assert ticket.status == "closed"
+    assert ticket.transcript[-1]["role"] == "assistant"
+    assert "Customer refunded in Square." in ticket.transcript[-1]["content"]
