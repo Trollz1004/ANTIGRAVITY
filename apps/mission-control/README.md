@@ -24,7 +24,7 @@
 
 Mission Control is the primary web-based dashboard for the ANTIGRAVITY ecosystem. It provides real-time visibility into:
 
-- **AI Agent Fleet** — status and health of Claude, Hermes, CodeX, Ollama, and Paperclip workers
+- **AI Agent Fleet** — status and health of Claude, Hermes, CodeX, Ollama, and OpenClaw support
 - **Treasury** — committed funds, kids fund balance, and estimated kids covered
 - **Launch Operations** — initiate and track deployment pipelines
 - **Revenue Engine** — monitor revenue streams and performance
@@ -83,7 +83,7 @@ mission-control/
     │   ├── LaunchPanel.tsx             # Launch/deployment operations panel
     │   ├── TreasuryBand.tsx            # Treasury status indicator band
     │   ├── HermesRouterPanel.tsx       # Hermes AI router status & controls
-    │   ├── PaperclipWorkerPanel.tsx    # Paperclip worker agent status panel
+    │   ├── OpenClawSupportPanel.tsx    # OpenClaw support gateway status panel
     │   ├── RevenueEnginePanel.tsx      # Revenue monitoring panel
     │   ├── TrustHierarchyPanel.tsx     # Trust & governance hierarchy display
     │   ├── StackIntegrityPanel.tsx     # Full stack health monitoring panel
@@ -184,8 +184,8 @@ A horizontal status band showing real-time treasury information pulled from the 
 #### `HermesRouterPanel`
 Displays the status and routing information for the Hermes AI agent router. Shows connected agents, routing tables, and health metrics.
 
-#### `PaperclipWorkerPanel`
-Monitors the Paperclip worker agent — its current task queue, processing status, and throughput metrics.
+#### `OpenClawSupportPanel`
+Monitors the OpenClaw support gateway for date-app customer service.
 
 #### `RevenueEnginePanel`
 Tracks revenue streams, financial performance metrics, and monetization pipeline status.
@@ -301,7 +301,7 @@ The `src/lib/input-validation.ts` module provides strict, allowlist-based input 
 | Function | Description |
 |---|---|
 | `validateTaskBrief(input)` | Validates task brief text (max 500 chars, alphanumeric + punctuation allowlist) |
-| `validateAgentId(input)` | Validates agent ID against allowlist: `codex`, `claude`, `hermes`, `ollama`, `paperclip` |
+| `validateAgentId(input)` | Validates agent ID against allowlist: `codex`, `claude`, `hermes`, `ollama`, `openclaw` |
 | `validateEmail(input)` | Email format validation |
 | `validateRequired(input)` | Non-empty string validation |
 | `validateMinLength(input, min)` | Minimum length check |

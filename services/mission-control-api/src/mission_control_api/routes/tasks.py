@@ -18,7 +18,7 @@ REPO_ROOT = Path(__file__).resolve().parents[5]
 TASK_LOG = REPO_ROOT / "services" / "mission-control-api" / "data" / "tasks.log"
 
 # Allowlist configuration (matches frontend input-validation.ts)
-ALLOWED_AGENTS = {"codex", "claude", "hermes", "ollama", "paperclip"}
+ALLOWED_AGENTS = {"codex", "claude", "hermes", "ollama", "openclaw"}
 MAX_BRIEF_LENGTH = 500
 BRIEF_PATTERN = r'^[a-zA-Z0-9\s.,!?;:\'"()\-]+$'
 

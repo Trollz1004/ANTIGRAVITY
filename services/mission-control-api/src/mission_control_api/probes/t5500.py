@@ -7,10 +7,11 @@ from ..envelope import make_envelope, Envelope
 T5500_HOST = "192.168.0.15"
 
 T5500_SERVICES = [
+    {"name": "date_app_api", "port": 8000, "label": "date app API"},
+    {"name": "date_app_static", "port": 3200, "label": "date app static"},
     {"name": "postgres", "port": 5432, "label": "uandinotai-postgres"},
-    {"name": "qdrant", "port": 6333, "label": "qdrant vectors"},
     {"name": "redis", "port": 6379, "label": "redis cache"},
-    {"name": "openclaw_api", "port": 3200, "label": "OpenClaw API"},
+    {"name": "openclaw_support", "port": 18789, "label": "OpenClaw support"},
 ]
 
 
@@ -21,10 +22,17 @@ async def t5500_postgres_probe() -> Envelope:
     return env
 
 
-async def t5500_qdrant_probe() -> Envelope:
-    env = await tcp_probe(T5500_HOST, 6333)
+async def t5500_date_app_api_probe() -> Envelope:
+    env = await tcp_probe(T5500_HOST, 8000)
     if env.status == "ok":
-        env.details.update({"label": "qdrant vectors", "service": "qdrant"})
+        env.details.update({"label": "date app API", "service": "date_app_api"})
+    return env
+
+
+async def t5500_date_app_static_probe() -> Envelope:
+    env = await tcp_probe(T5500_HOST, 3200)
+    if env.status == "ok":
+        env.details.update({"label": "date app static", "service": "date_app_static"})
     return env
 
 
@@ -36,19 +44,20 @@ async def t5500_redis_probe() -> Envelope:
 
 
 async def t5500_openclaw_probe() -> Envelope:
-    env = await tcp_probe(T5500_HOST, 3200)
+    env = await tcp_probe(T5500_HOST, 18789)
     if env.status == "ok":
-        env.details.update({"label": "OpenClaw API", "service": "openclaw_api"})
+        env.details.update({"label": "OpenClaw support", "service": "openclaw_support"})
     return env
 
 
 async def t5500_stack_probe() -> Envelope:
     started = datetime.now(timezone.utc)
     coros = {
+        "date_app_api": tcp_probe(T5500_HOST, 8000),
+        "date_app_static": tcp_probe(T5500_HOST, 3200),
         "postgres": tcp_probe(T5500_HOST, 5432),
-        "qdrant": tcp_probe(T5500_HOST, 6333),
         "redis": tcp_probe(T5500_HOST, 6379),
-        "openclaw_api": tcp_probe(T5500_HOST, 3200),
+        "openclaw_support": tcp_probe(T5500_HOST, 18789),
     }
     results = await asyncio.gather(*coros.values())
     services = []

@@ -20,7 +20,7 @@ export function AgeGate({ onVerified }) {
 
         <p className="text-sm text-[#6b82a6] leading-relaxed mb-6">
           This is the orchestrator surface for the ANTIGRAVITY stack. Opus conducts; agents
-          execute on Ollama, Hermes Router, and Paperclip. By entering you confirm you are{" "}
+          execute on Ollama, Hermes Router, and OpenClaw support. By entering you confirm you are{" "}
           <span className="text-[#e8f0ff] font-semibold">18 or older</span> and authorized to
           operate this node.
         </p>

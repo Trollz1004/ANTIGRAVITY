@@ -5,7 +5,7 @@ import { SystemStatus } from '../components/SystemStatus';
 import { DAOMonitor } from '../components/DAOMonitor';
 import { GitPanel } from '../components/GitPanel';
 import { HermesRouterPanel } from '../components/HermesRouterPanel';
-import { PaperclipWorkerPanel } from '../components/PaperclipWorkerPanel';
+import { OpenClawSupportPanel } from '../components/OpenClawSupportPanel';
 import { RunbookViewer } from '../components/RunbookViewer';
 
 /**
@@ -13,7 +13,7 @@ import { RunbookViewer } from '../components/RunbookViewer';
  *
  * Layout (3-column grid):
  *   LEFT  240px : LaunchPanel + Trust Hierarchy
- *   CENTER flex : SystemStatus + DAOMonitor + HermesRouterPanel + PaperclipWorkerPanel
+ *   CENTER flex : SystemStatus + DAOMonitor + HermesRouterPanel + OpenClawSupportPanel
  *   RIGHT 320px : GitPanel + RunbookViewer + Mission Footer
  *
  * NOTE: TaskCommander is mounted by App.tsx above every mode — do not include it here.
@@ -71,7 +71,7 @@ export default function MissionMode() {
           </div>
 
           <HermesRouterPanel />
-          <PaperclipWorkerPanel />
+          <OpenClawSupportPanel />
         </div>
 
         {/* ───────── RIGHT COLUMN ───────── */}

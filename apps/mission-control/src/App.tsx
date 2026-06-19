@@ -5,7 +5,7 @@ import { TaskBriefInput } from './components/TaskBriefInput';
 import { LaunchPanel } from './components/LaunchPanel';
 import { TreasuryBand } from './components/TreasuryBand';
 import { HermesRouterPanel } from './components/HermesRouterPanel';
-import { PaperclipWorkerPanel } from './components/PaperclipWorkerPanel';
+import { OpenClawSupportPanel } from './components/OpenClawSupportPanel';
 import { RevenueEnginePanel } from './components/RevenueEnginePanel';
 import { TrustHierarchyPanel } from './components/TrustHierarchyPanel';
 import { StackIntegrityPanel } from './components/StackIntegrityPanel';
@@ -48,7 +48,7 @@ export const App: React.FC = () => {
                 {activePanel === 'mission' && <LaunchPanel />}
                 {activePanel === 'mission' && <TreasuryBand />}
                 {activePanel === 'mission' && <HermesRouterPanel />}
-                {activePanel === 'mission' && <PaperclipWorkerPanel />}
+                {activePanel === 'mission' && <OpenClawSupportPanel />}
                 {activePanel === 'mission' && <T5500Panel />}
                 {activePanel === 'mission' && <RevenueEnginePanel />}
                 {activePanel === 'mission' && <TrustHierarchyPanel />}

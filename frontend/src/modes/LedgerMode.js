@@ -178,7 +178,7 @@ function NewContributionModal({ onClose, onSaved }) {
                 {[
                   [1, "Kids Fund"], [2, "Platform Build"], [3, "Hermes Ops"], [4, "Recycle Intake"],
                   [5, "AI-Solutions Store"], [6, "Super Likes Match"], [7, "Content Sprint"],
-                  [8, "Paperclip Scale"], [9, "Antigravity Reserve"], [10, "Founder Four Trust"],
+                  [8, "Support Automation"], [9, "Antigravity Reserve"], [10, "Founder Four Trust"],
                 ].map(([n, name]) => <option key={n} value={n}>{n}. {name}</option>)}
               </select>
             </Field>

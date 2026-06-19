@@ -5,7 +5,7 @@ Covers:
   - /api/ identity
   - /api/hermes/healthz
   - /api/hermes/v1/chat/completions (real Emergent bridge)
-  - /api/paperclip/health
+  - /api/openclaw/health
   - /api/agents (6 agents, no "Haiku")
   - /api/system/status (6 services)
   - /api/dao/stats (4 tokens cap=2_500_000, 10 buckets)
@@ -104,16 +104,16 @@ def test_hermes_chat_completions_unknown_model(api):
         assert m in detail
 
 
-# ---------- paperclip ---------- #
-def test_paperclip_health(api):
-    r = api.get(f"{BASE_URL}/api/paperclip/health", timeout=10)
+# ---------- OpenClaw support ---------- #
+def test_openclaw_health(api):
+    r = api.get(f"{BASE_URL}/api/openclaw/health", timeout=10)
     assert r.status_code == 200
     d = r.json()
     assert d["ok"] is True
     assert d["source"] == "mirror"
-    for k in ("deploy_time", "commit", "tunnel_id", "tunnel_config"):
+    for k in ("deploy_time", "commit", "gateway_port", "support_mode"):
         assert k in d, f"missing {k}"
-    _assert_no_forbidden(json.dumps(d), "/api/paperclip/health")
+    _assert_no_forbidden(json.dumps(d), "/api/openclaw/health")
 
 
 # ---------- agents ---------- #
@@ -135,7 +135,7 @@ def test_system_status_six_services(api):
     services = r.json()["services"]
     assert len(services) == 6
     names = {s["name"] for s in services}
-    assert names == {"HERMES ROUTER", "PAPERCLIP WORKER", "OPENCODE", "GH COPILOT", "GCR", "OLLAMA CLOUD"}
+    assert names == {"HERMES ROUTER", "OPENCLAW SUPPORT", "OPENCODE", "GH COPILOT", "GCR", "OLLAMA CLOUD"}
 
 
 # ---------- dao ---------- #
@@ -183,7 +183,7 @@ def test_no_forbidden_strings_across_endpoints(api):
     endpoints = [
         "/api/",
         "/api/hermes/healthz",
-        "/api/paperclip/health",
+        "/api/openclaw/health",
         "/api/agents",
         "/api/system/status",
         "/api/dao/stats",

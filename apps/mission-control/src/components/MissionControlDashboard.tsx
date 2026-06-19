@@ -17,12 +17,6 @@ type RepoDetails = {
   changed?: number;
   untracked?: number;
 };
-type PaperclipDetails = {
-  version?: string;
-  deploymentMode?: string;
-  authReady?: boolean;
-  json?: { version?: string; deploymentMode?: string; authReady?: boolean };
-};
 type OllamaDetails = {
   models?: (string | { name?: string; model?: string })[];
   model_count?: number;
@@ -67,7 +61,7 @@ const AGENTS = [
   { id: 'claude', label: 'Claude' },
   { id: 'hermes', label: 'Hermes' },
   { id: 'ollama', label: 'Ollama' },
-  { id: 'paperclip', label: 'Paperclip' },
+  { id: 'openclaw', label: 'OpenClaw' },
 ];
 
 const QUICK_COMMANDS = [
@@ -98,13 +92,6 @@ const SERVICE_META: Record<
   string,
   { label: string; endpoint: string; openUrl?: string; owner: string; hint: string }
 > = {
-  paperclip: {
-    label: 'Paperclip HQ',
-    endpoint: '/health/paperclip',
-    openUrl: 'http://127.0.0.1:3100/',
-    owner: 'Ops',
-    hint: 'Worker and CEO workspace health',
-  },
   hermes: {
     label: 'Hermes Router',
     endpoint: '/health/hermes',
@@ -216,7 +203,7 @@ function healthEntries(health: HealthAll | null): Array<[string, Envelope<any>]>
       return !name.startsWith('_') && Boolean(value) && typeof value === 'object' && 'status' in value;
     })
     .sort(([a], [b]) => {
-      const order = ['repo', 'paperclip', 'hermes', 'ollama', 'openclaw', 't5500', 'stack'];
+      const order = ['repo', 'hermes', 'ollama', 'openclaw', 't5500', 'stack'];
       const ai = order.indexOf(a);
       const bi = order.indexOf(b);
       if (ai !== -1 || bi !== -1) return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
@@ -262,13 +249,6 @@ function detailLine(name: string, env: Envelope<any>) {
     return `${repoDetails.branch ?? 'unknown'} | changed ${repoDetails.changed ?? 0} | untracked ${
       repoDetails.untracked ?? 0
     }${last?.short_sha ? ` | ${last.short_sha}` : ''}`;
-  }
-  if (name === 'paperclip') {
-    const paperclipDetails = details as PaperclipDetails;
-    const json = paperclipDetails.json ?? paperclipDetails;
-    return `${json.version ?? 'unknown'} | ${json.deploymentMode ?? 'mode unknown'} | auth ${
-      json.authReady ? 'ready' : 'unknown'
-    }`;
   }
   if (name === 'ollama') {
     const ollamaDetails = details as OllamaDetails;

@@ -1,6 +1,6 @@
 """
 Iteration-2 regression: hub.py (multi-platform chat + broadcast) + tasks.py
-(Paperclip-replacement task system).
+(internal task system).
 
 Covers:
   - GET /api/providers (12 platforms, tier metadata, broadcast block)

@@ -16,8 +16,8 @@ def register_run(run_id, command):
 
 runs = {}
 
-@router.post("/deploy/paperclip")
-async def deploy_paperclip(background: BackgroundTasks, payload: DeployRequest):
+@router.post("/deploy/openclaw-support")
+async def deploy_openclaw_support(background: BackgroundTasks, payload: DeployRequest):
     run_id = str(uuid.uuid4())
     # placeholder command — environment from validated payload
     command = f"wrangler deploy --env {payload.environment}"
@@ -36,7 +36,7 @@ async def get_deploy(run_id: str):
     return runs.get(run_id, {"error": "not found"})
 
 # SSE stream placeholder (not real streaming)
-@router.get("/deploy/paperclip/stream/{run_id}")
+@router.get("/deploy/openclaw-support/stream/{run_id}")
 async def stream_deploy(run_id: str):
     # return current log as plain text
     run = runs.get(run_id)
