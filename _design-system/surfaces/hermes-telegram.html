@@ -1,0 +1,131 @@
+<!-- @dsCard group="Surfaces" viewport="1100x780" name="Hermes — Telegram bot landing" subtitle="Scan-to-talk-to-Hermes page · o_O mark · agent fleet status" -->
+<!-- @startingPoint section="Surfaces" subtitle="Hermes Telegram bot landing — QR, agent fleet, capabilities" viewport="1100x900" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hermes — Talk to the Fleet</title>
+<link rel="icon" href="../assets/brand/hermes-avatar-256.png" />
+<link rel="stylesheet" href="../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.456.0/dist/umd/lucide.min.js"></script>
+<script src="../_ds_bundle.js"></script>
+<style> body { margin: 0; background: var(--ag-bg); } </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const NS = window.ANTIGRAVITYDesignSystem_58589b;
+function I({ name, size=18, color='currentColor' }) {
+  const r = React.useRef(null);
+  React.useEffect(() => { if (r.current && window.lucide) { r.current.innerHTML=''; const e=document.createElement('i'); e.setAttribute('data-lucide',name); r.current.appendChild(e); window.lucide.createIcons({ attrs:{ width:size, height:size, stroke:color, 'stroke-width':2 }, nameAttr:'data-lucide' }); } });
+  return <span ref={r} style={{ display:'inline-flex', width:size, height:size }} />;
+}
+
+const FLEET = [
+  { role:'CFO', tag:'#UntilNoKidInNeed', cat:'Finance', model:'gemma4-cloud', status:'live' },
+  { role:'CTO', tag:'Software', cat:'Build', model:'qwen2.5:7b', status:'live' },
+  { role:'CMO', tag:'Marketing', cat:'Growth', model:'qwen2.5:7b', status:'active' },
+  { role:'CSO', tag:'Security', cat:'Guard', model:'qwen2.5:7b', status:'pending' },
+];
+const SKILLS = [
+  { icon:'message-square', t:'Ask the fleet', d:'Route a question to any agent — CTO, CFO, CMO, CSO, UX — from one chat.' },
+  { icon:'activity', t:'Mission status', d:'Pull live node health and tracked numbers without opening a dashboard.' },
+  { icon:'list-checks', t:'Queue work', d:'Drop a task on the orchestration board; Hermes assigns the right agent.' },
+  { icon:'bell', t:'Heartbeat alerts', d:'Get pinged when a node drops or a surface needs Joshua\u2019s decision.' },
+];
+
+function App() {
+  const { Button, GlassPanel, MonoLabel, StatusPill, Badge, Avatar } = NS;
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+  return (
+    <div style={{ minHeight:'100vh', position:'relative' }}>
+      <div className="ag-grid-backdrop" style={{ opacity:.07 }} />
+      <div style={{ position:'fixed', inset:0, zIndex:0, pointerEvents:'none', background:'radial-gradient(80% 60% at 85% -5%, rgba(34,211,238,.12), transparent 55%), radial-gradient(80% 60% at 5% 105%, rgba(236,72,153,.12), transparent 55%)' }} />
+      <main style={{ position:'relative', zIndex:10, maxWidth:1100, margin:'0 auto', padding:'40px 24px 64px' }}>
+
+        {/* hero split */}
+        <div style={{ display:'grid', gridTemplateColumns:'1.2fr 0.8fr', gap:28, alignItems:'center' }}>
+          <div>
+            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:18 }}>
+              <img src="../assets/brand/hermes-avatar-256.png" alt="Hermes" style={{ width:52, height:52, borderRadius:'50%', boxShadow:'0 0 18px rgba(34,211,238,.5)' }} />
+              <MonoLabel dot color="var(--ag-cyan)">Hermes · Fleet router · Online</MonoLabel>
+            </div>
+            <h1 style={{ fontSize:'var(--ag-text-5xl)', fontWeight:900, letterSpacing:'-0.03em', lineHeight:1.02, margin:0, color:'var(--ag-text)' }}>
+              Talk to the<br/><span className="ag-brand-heading">whole fleet</span> in one chat.
+            </h1>
+            <p style={{ maxWidth:'46ch', marginTop:18, color:'var(--ag-text-body)', fontSize:'var(--ag-text-lg)', lineHeight:1.6 }}>
+              Hermes is the Telegram front door to the ANTIGRAVITY agent fleet. Scan, say hi,
+              and route work to the right agent across Sabretooth, T5500, and 9020.
+            </p>
+            <div style={{ display:'flex', gap:12, marginTop:26, flexWrap:'wrap' }}>
+              <Button variant="neon" size="lg" icon={<I name="send" size={18} />}>Open in Telegram</Button>
+              <Button variant="outline" size="lg" iconRight={<I name="arrow-up-right" size={16} />}>View the fleet</Button>
+            </div>
+            <p style={{ fontFamily:'var(--ag-font-mono)', fontSize:11, letterSpacing:'.12em', color:'var(--ag-text-muted-deep)', marginTop:20 }}>
+              @HERMES_D2LQX6DX6QYGURKR_BOT
+            </p>
+          </div>
+
+          {/* QR card */}
+          <GlassPanel radius="hero" pad="card" style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:14 }}>
+            <MonoLabel color="var(--ag-text-muted)">Scan to start</MonoLabel>
+            <div style={{ background:'#fff', borderRadius:'var(--ag-radius-xl)', padding:10, boxShadow:'0 0 30px rgba(34,211,238,.25)' }}>
+              <img src="../assets/brand/hermes-telegram-card.png" alt="Hermes Telegram QR" style={{ display:'block', width:260, borderRadius:'12px' }} />
+            </div>
+          </GlassPanel>
+        </div>
+
+        {/* capabilities */}
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(230px, 1fr))', gap:14, marginTop:34 }}>
+          {SKILLS.map(s => (
+            <GlassPanel key={s.t} radius="card" pad="card" hoverLift>
+              <span style={{ color:'var(--ag-cyan)' }}><I name={s.icon} size={22} /></span>
+              <div style={{ fontWeight:700, color:'var(--ag-text)', marginTop:12, fontSize:'var(--ag-text-base)' }}>{s.t}</div>
+              <p style={{ color:'var(--ag-text-muted)', fontSize:'var(--ag-text-sm)', lineHeight:1.55, margin:'8px 0 0' }}>{s.d}</p>
+            </GlassPanel>
+          ))}
+        </div>
+
+        {/* fleet roster */}
+        <GlassPanel radius="panel" pad="panel" style={{ marginTop:28 }}>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:18 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+              <span style={{ color:'var(--ag-pink)' }}><I name="users" size={20} /></span>
+              <h2 className="ag-section-heading" style={{ fontSize:'var(--ag-text-xl)', textTransform:'uppercase' }}>Who you\u2019re talking to</h2>
+            </div>
+            <MonoLabel color="var(--ag-text-muted-deep)">Hermes Side World · Board</MonoLabel>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(220px, 1fr))', gap:12 }}>
+            {FLEET.map(a => (
+              <div key={a.role} style={{ display:'flex', alignItems:'center', gap:12, padding:14, background:'rgba(2,6,23,0.5)', border:'1px solid var(--ag-border-strong)', borderRadius:'var(--ag-radius-lg)' }}>
+                <Avatar name={a.role} ring={a.role==='CFO'?'var(--ag-gold)':'var(--ag-cyan)'} size={40} />
+                <div style={{ flex:1, minWidth:0 }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                    <span style={{ fontWeight:800, color:'var(--ag-text)' }}>{a.role}</span>
+                    <StatusPill status={a.status} />
+                  </div>
+                  <MonoLabel color="var(--ag-text-muted-deep)" style={{ marginTop:4 }}>{a.model}</MonoLabel>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p style={{ color:'var(--ag-text-muted-deep)', fontSize:'var(--ag-text-xs)', marginTop:18, marginBottom:0 }}>
+            One AI does not command another. Hermes routes; Joshua is sole authority on anything that ships.
+          </p>
+        </GlassPanel>
+
+        <footer style={{ textAlign:'center', padding:'30px 0 0', marginTop:8, color:'var(--ag-text-muted-deep)', fontFamily:'var(--ag-font-mono)', fontSize:10, textTransform:'uppercase', letterSpacing:'0.3em' }}>
+          ANTIGRAVITY · Hermes fleet · #UntilNoKidInNeed
+        </footer>
+      </main>
+    </div>
+  );
+}
+(function m(){ const N=window.ANTIGRAVITYDesignSystem_58589b; if(!N||!N.Button){return setTimeout(m,30);} ReactDOM.createRoot(document.getElementById('root')).render(<App/>); })();
+</script>
+</body>
+</html>
