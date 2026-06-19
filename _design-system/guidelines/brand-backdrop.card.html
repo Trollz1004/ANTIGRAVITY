@@ -1,0 +1,26 @@
+<!-- @dsCard group="Brand" viewport="700x200" name="Backdrop — grid + aurora" subtitle="Faint blue plotting grid over deep navy, cyan/pink aurora" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { padding: 0; }
+  .stage { position: relative; min-height: 200px; overflow: hidden;
+    background:
+      radial-gradient(90% 80% at 85% 10%, rgba(34,211,238,.14), transparent 55%),
+      radial-gradient(90% 90% at 10% 100%, rgba(236,72,153,.16), transparent 55%),
+      var(--ag-bg); }
+  .grid { position: absolute; inset: 0; opacity: .07; pointer-events: none;
+    background-image: linear-gradient(#2563eb 1px, transparent 1px), linear-gradient(90deg, #2563eb 1px, transparent 1px);
+    background-size: 40px 40px; }
+  .label { position: absolute; left: 24px; bottom: 20px; font: 500 10px/1.5 var(--ag-font-mono); text-transform: uppercase; letter-spacing: .15em; color: var(--ag-text-muted); }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="grid"></div>
+    <div class="label">40px grid · #2563eb @ 6–7% opacity · cyan + pink corner aurora</div>
+  </div>
+</body>
+</html>

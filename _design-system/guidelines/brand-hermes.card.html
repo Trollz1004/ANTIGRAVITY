@@ -1,0 +1,35 @@
+<!-- @dsCard group="Brand" viewport="700x250" name="Hermes & infrastructure marks" subtitle="The o_O Hermes agent face · multi-node infra emblem" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { padding: 0; }
+  .stage { min-height: 250px; display: flex; align-items: center; gap: 36px; padding: 0 40px;
+    background: radial-gradient(90% 90% at 20% 50%, rgba(34,211,238,.10), transparent 55%), var(--ag-bg-navy); }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .item img { display: block; }
+  .hermes img { width: 116px; height: 116px; border-radius: 50%; box-shadow: 0 0 22px rgba(34,211,238,.45); }
+  .infra img { width: 130px; height: 130px; }
+  .cap { font: 500 9px/1.4 var(--ag-font-mono); text-transform: uppercase; letter-spacing: .15em; color: var(--ag-text-muted); text-align: center; }
+  .cap b { color: var(--ag-text); display: block; font-weight: 700; letter-spacing: .08em; margin-bottom: 2px; }
+  .sep { width: 1px; align-self: stretch; margin: 40px 0; background: var(--ag-border); }
+  .note { font: 400 12px/1.55 var(--ag-font-sans); color: var(--ag-text-muted); max-width: 26ch; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="item hermes">
+      <img src="../assets/brand/hermes-avatar-256.png" alt="Hermes o_O agent avatar" />
+      <span class="cap"><b>Hermes</b>Agent fleet mark</span>
+    </div>
+    <div class="item infra">
+      <img src="../assets/brand/infra-badge-512.png" alt="Multi-node AI infrastructure badge" />
+      <span class="cap"><b>Multi-node infra</b>Sabretooth · T5500 · 9020</span>
+    </div>
+    <div class="sep"></div>
+    <p class="note">The cyan <b style="color:var(--ag-cyan)">o_O</b> face is the orchestration agent; the gold-ringed emblem badges the node cluster. Both ride the cyan→pink / gold trust palette.</p>
+  </div>
+</body>
+</html>

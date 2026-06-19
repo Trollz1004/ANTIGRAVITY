@@ -1,0 +1,25 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Base surfaces" subtitle="Deep-space dark — the app sits on #020617" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { padding: 20px; }
+  .row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .sw { flex: 1; min-width: 120px; border-radius: var(--ag-radius-lg); overflow: hidden; border: 1px solid var(--ag-border); }
+  .chip { height: 64px; }
+  .meta { padding: 8px 10px; background: var(--ag-surface-1); }
+  .name { font: 600 12px/1.3 var(--ag-font-sans); color: var(--ag-text); }
+  .hex { font: 500 10px/1.4 var(--ag-font-mono); color: var(--ag-text-muted); text-transform: uppercase; letter-spacing: .1em; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw"><div class="chip" style="background:#020617"></div><div class="meta"><div class="name">App background</div><div class="hex">--ag-bg · #020617</div></div></div>
+    <div class="sw"><div class="chip" style="background:#0a070f"></div><div class="meta"><div class="name">Brand-mark navy</div><div class="hex">--ag-bg-navy · #0a070f</div></div></div>
+    <div class="sw"><div class="chip" style="background:#0f172a"></div><div class="meta"><div class="name">Raised panel</div><div class="hex">--ag-surface-1 · #0f172a</div></div></div>
+    <div class="sw"><div class="chip" style="background:#1e293b"></div><div class="meta"><div class="name">Inset / hover</div><div class="hex">--ag-surface-2 · #1e293b</div></div></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!-- @dsCard group="Surfaces" viewport="1100x820" name="Connect your stack — provisioning" subtitle="Catalog → add service → synced credentials, ANTIGRAVITY skin" -->
+<!-- @startingPoint section="Surfaces" subtitle="Stack provisioning UI — provider catalog, add, synced env (names only)" viewport="1100x900" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ANTIGRAVITY · Connect Your Stack</title>
+<link rel="icon" href="../assets/logo/logo-favicon-32.png" />
+<link rel="stylesheet" href="../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.456.0/dist/umd/lucide.min.js"></script>
+<script src="../_ds_bundle.js"></script>
+<style> body { margin:0; background:var(--ag-bg); } </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const NS = window.ANTIGRAVITYDesignSystem_58589b;
+function I({ name, size=18, color='currentColor' }) {
+  const r = React.useRef(null);
+  React.useEffect(() => { if (r.current && window.lucide) { r.current.innerHTML=''; const e=document.createElement('i'); e.setAttribute('data-lucide',name); r.current.appendChild(e); window.lucide.createIcons({ attrs:{ width:size, height:size, stroke:color, 'stroke-width':2 }, nameAttr:'data-lucide' }); } });
+  return <span ref={r} style={{ display:'inline-flex', width:size, height:size }} />;
+}
+
+// Real providers from the Stripe Projects catalog, scoped to the ANTIGRAVITY stack.
+const CATALOG = [
+  { id:'supabase/project', name:'Supabase', cat:'Database · Auth · Storage', icon:'database', tone:'success', env:['SUPABASE_URL','SUPABASE_ANON_KEY','SUPABASE_SERVICE_ROLE_KEY'] },
+  { id:'cloudflare/tunnel', name:'Cloudflare', cat:'Tunnels · Domains', icon:'cloud', tone:'amber', env:['CLOUDFLARE_API_TOKEN','CF_TUNNEL_ID'] },
+  { id:'openrouter/ai', name:'OpenRouter', cat:'AI · Models', icon:'sparkles', tone:'cyan', env:['OPENROUTER_API_KEY'] },
+  { id:'twilio/messaging', name:'Twilio', cat:'Communications', icon:'message-circle', tone:'pink', env:['TWILIO_ACCOUNT_SID','TWILIO_AUTH_TOKEN'] },
+  { id:'sentry/observability', name:'Sentry', cat:'Observability', icon:'shield-alert', tone:'rose', env:['SENTRY_DSN'] },
+  { id:'posthog/analytics', name:'PostHog', cat:'Analytics · Flags', icon:'bar-chart-3', tone:'gold', env:['POSTHOG_KEY','POSTHOG_HOST'] },
+];
+
+function App() {
+  const { GlassPanel, MonoLabel, Button, Badge, StatusPill } = NS;
+  const [added, setAdded] = React.useState(['supabase/project']);
+  const [busy, setBusy] = React.useState(null);
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+
+  function toggle(id) {
+    if (added.includes(id)) { setAdded(a => a.filter(x => x !== id)); return; }
+    setBusy(id);
+    setTimeout(() => { setAdded(a => [...a, id]); setBusy(null); }, 900);
+  }
+  const envVars = CATALOG.filter(c => added.includes(c.id)).flatMap(c => c.env);
+  const tones = { success:'var(--ag-success)', amber:'var(--ag-warning)', cyan:'var(--ag-cyan)', pink:'var(--ag-pink)', rose:'var(--ag-rose)', gold:'var(--ag-gold)' };
+
+  return (
+    <div style={{ minHeight:'100vh', position:'relative' }}>
+      <div className="ag-grid-backdrop" style={{ opacity:.06 }} />
+      <main style={{ position:'relative', zIndex:10, maxWidth:1100, margin:'0 auto', padding:'36px 24px 64px' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:6 }}>
+          <img src="../assets/logo/logo-dark-bg-512.png" alt="" style={{ width:38, height:38 }} />
+          <MonoLabel dot color="var(--ag-cyan)">Project · antigravity · main</MonoLabel>
+        </div>
+        <h1 style={{ fontSize:'var(--ag-text-4xl)', fontWeight:900, letterSpacing:'-0.03em', margin:'4px 0 0', color:'var(--ag-text)' }}>
+          Connect your <span className="ag-brand-heading">stack</span>
+        </h1>
+        <p style={{ color:'var(--ag-text-body)', maxWidth:'58ch', marginTop:12, lineHeight:1.6 }}>
+          Provision services, sync credentials to your vault, and wire them into the active
+          environment. One command per service — no dashboards, no copy-pasted keys.
+        </p>
+
+        <div style={{ display:'grid', gridTemplateColumns:'1.4fr 1fr', gap:20, marginTop:28, alignItems:'start' }}>
+          {/* catalog */}
+          <div>
+            <MonoLabel color="var(--ag-text-muted-deep)">Service catalog</MonoLabel>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginTop:12 }}>
+              {CATALOG.map(c => {
+                const on = added.includes(c.id); const loading = busy === c.id;
+                return (
+                  <div key={c.id} style={{ display:'flex', flexDirection:'column', gap:12, padding:16, background:'rgba(2,6,23,0.5)', border:`1px solid ${on?'var(--ag-cyan)':'var(--ag-border-strong)'}`, boxShadow:on?'var(--ag-glow-cyan)':'none', borderRadius:'var(--ag-radius-lg)', transition:'var(--ag-transition)' }}>
+                    <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                      <span style={{ color:tones[c.tone] }}><I name={c.icon} size={22} /></span>
+                      {on && <Badge tone="cyan" solid>Added</Badge>}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight:700, color:'var(--ag-text)' }}>{c.name}</div>
+                      <MonoLabel color="var(--ag-text-muted-deep)" style={{ marginTop:3 }}>{c.cat}</MonoLabel>
+                    </div>
+                    <Button variant={on?'outline':'neon'} size="sm" onClick={() => toggle(c.id)}
+                      icon={loading ? <I name="loader" size={14} /> : <I name={on?'check':'plus'} size={14} />}>
+                      {loading ? 'Provisioning…' : on ? 'Provisioned' : 'Add service'}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* right rail: command + synced env */}
+          <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+            <GlassPanel radius="card" pad="card">
+              <MonoLabel color="var(--ag-text-muted)">CLI · what just ran</MonoLabel>
+              <pre style={{ margin:'12px 0 0', fontFamily:'var(--ag-font-mono)', fontSize:12, lineHeight:1.7, color:'var(--ag-text-body)', whiteSpace:'pre-wrap' }}>
+<span style={{ color:'var(--ag-cyan)' }}>$</span> stripe projects init{'\n'}
+{CATALOG.filter(c=>added.includes(c.id)).map(c => (
+  <span key={c.id}><span style={{ color:'var(--ag-cyan)' }}>$</span> stripe projects add {c.id}{'\n'}</span>
+))}
+<span style={{ color:'var(--ag-cyan)' }}>$</span> stripe projects env --pull
+              </pre>
+            </GlassPanel>
+
+            <GlassPanel radius="card" pad="card">
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                <MonoLabel color="var(--ag-text-muted)">Synced to .env</MonoLabel>
+                <StatusPill status="active" label={`${envVars.length} vars`} />
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:7, marginTop:12 }}>
+                {envVars.map(v => (
+                  <div key={v} style={{ display:'flex', alignItems:'center', gap:9, fontFamily:'var(--ag-font-mono)', fontSize:12, color:'var(--ag-text-body)' }}>
+                    <span style={{ color:'var(--ag-success)' }}><I name="lock" size={13} /></span>
+                    {v}=<span style={{ color:'var(--ag-text-muted-deep)' }}>••••••••</span>
+                  </div>
+                ))}
+                {!envVars.length && <span style={{ color:'var(--ag-text-muted-deep)', fontSize:13 }}>Add a service to sync credentials.</span>}
+              </div>
+              <p style={{ color:'var(--ag-text-muted-deep)', fontSize:11, lineHeight:1.5, marginTop:14, marginBottom:0 }}>
+                Values are encrypted in the vault and never displayed — names only. Output file is written with 600 perms and git-ignored.
+              </p>
+            </GlassPanel>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+(function m(){ const N=window.ANTIGRAVITYDesignSystem_58589b; if(!N||!N.Button){return setTimeout(m,30);} ReactDOM.createRoot(document.getElementById('root')).render(<App/>); })();
+</script>
+</body>
+</html>

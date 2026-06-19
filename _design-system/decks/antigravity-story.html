@@ -1,0 +1,206 @@
+<!-- @dsCard group="Slides" viewport="1280x720" name="ANTIGRAVITY — story deck" subtitle="7-slide stream/pitch deck on the design system" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ANTIGRAVITY — The Story</title>
+<link rel="icon" href="../assets/logo/logo-favicon-32.png" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  deck-stage:not(:defined) { visibility: hidden; }
+  html, body { margin: 0; background: #000; }
+
+  section {
+    width: 1920px; height: 1080px; overflow: hidden;
+    background:
+      radial-gradient(90% 70% at 85% -5%, rgba(34,211,238,.12), transparent 55%),
+      radial-gradient(90% 80% at 5% 105%, rgba(236,72,153,.13), transparent 55%),
+      var(--ag-bg);
+    color: var(--ag-text);
+    font-family: var(--ag-font-sans);
+    box-sizing: border-box;
+  }
+  .grid-bg {
+    position: absolute; inset: 0; pointer-events: none; opacity: .07;
+    background-image: linear-gradient(#2563eb 1px, transparent 1px), linear-gradient(90deg, #2563eb 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .pad { position: relative; z-index: 2; height: 100%; box-sizing: border-box; padding: 120px 140px; display: flex; flex-direction: column; }
+  .eyebrow { font-family: var(--ag-font-mono); font-size: 26px; font-weight: 600; text-transform: uppercase; letter-spacing: .28em; color: var(--ag-cyan); display: inline-flex; align-items: center; gap: 16px; }
+  .eyebrow .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--ag-cyan); box-shadow: 0 0 14px var(--ag-cyan); }
+  h1 { font-size: 132px; font-weight: 900; letter-spacing: -.04em; line-height: .98; margin: 0; }
+  h2 { font-size: 84px; font-weight: 900; letter-spacing: -.03em; line-height: 1.02; margin: 0; }
+  .lead { font-size: 40px; line-height: 1.5; color: var(--ag-text-body); max-width: 30ch; }
+  .muted { color: var(--ag-text-muted); }
+  .brand { background: var(--ag-gradient-brand); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 16px rgba(0,243,255,.4)); }
+  .footer { position: absolute; bottom: 56px; left: 140px; right: 140px; z-index: 3; display: flex; justify-content: space-between; align-items: center; font-family: var(--ag-font-mono); font-size: 22px; text-transform: uppercase; letter-spacing: .2em; color: var(--ag-text-muted-deep); }
+  .glass { background: rgba(15,23,42,.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 0 30px rgba(0,0,0,.5); border-radius: 40px; }
+  .row { display: flex; gap: 28px; }
+  .col { display: flex; flex-direction: column; }
+  .card { padding: 44px; border-radius: 36px; }
+  .card .ic { color: var(--ag-cyan); }
+  .card h3 { font-size: 38px; font-weight: 800; margin: 24px 0 12px; letter-spacing: -.01em; }
+  .card p { font-size: 26px; line-height: 1.5; color: var(--ag-text-muted); margin: 0; }
+  .stat { font-size: 96px; font-weight: 900; letter-spacing: -.03em; line-height: 1; }
+  .stat-lbl { font-family: var(--ag-font-mono); font-size: 24px; text-transform: uppercase; letter-spacing: .2em; color: var(--ag-text-muted-deep); }
+  .stat-note { font-size: 24px; color: var(--ag-text-muted); line-height: 1.45; margin-top: 16px; }
+  .pill { display: inline-flex; align-items: center; gap: 14px; font-family: var(--ag-font-mono); font-size: 24px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; padding: 16px 28px; border-radius: 999px; }
+
+  /* entrance */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-deck-active] .anim { animation: fade-up .6s both; }
+    [data-deck-active] .anim:nth-child(2) { animation-delay: .08s; }
+    [data-deck-active] .anim:nth-child(3) { animation-delay: .16s; }
+    [data-deck-active] .anim:nth-child(4) { animation-delay: .24s; }
+    @keyframes fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  }
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+
+  <!-- 1 · Title -->
+  <section data-label="Title">
+    <div class="grid-bg"></div>
+    <div class="pad" style="justify-content:center;">
+      <div class="row anim" style="align-items:center; gap:40px; margin-bottom:48px;">
+        <img src="../assets/logo/logo-dark-bg-512.png" alt="" style="width:160px;height:160px;" />
+        <span class="eyebrow"><span class="dot"></span>Multi-node AI · for humanity</span>
+      </div>
+      <h1 class="anim">A human-first<br><span class="brand">AI ecosystem.</span></h1>
+      <p class="lead anim" style="margin-top:48px; max-width:42ch;">One agent fleet. Real products. Honest numbers. Built in the open and streamed live.</p>
+    </div>
+    <div class="footer"><span>ANTIGRAVITY</span><span>#UntilNoKidInNeed</span></div>
+  </section>
+
+  <!-- 2 · Problem -->
+  <section data-label="Problem">
+    <div class="grid-bg"></div>
+    <div class="pad" style="justify-content:center;">
+      <span class="eyebrow anim"><span class="dot" style="background:var(--ag-pink);box-shadow:0 0 14px var(--ag-pink);"></span>The problem</span>
+      <h2 class="anim" style="margin-top:36px; max-width:24ch;">The internet is <span style="color:var(--ag-pink)">drowning in bots</span> and broken trust.</h2>
+      <p class="lead anim" style="margin-top:40px; max-width:38ch;">People can\u2019t tell who\u2019s real. Platforms optimize for engagement, not honesty. The work that matters gets buried under theater.</p>
+    </div>
+    <div class="footer"><span>02 · Problem</span><span>ANTIGRAVITY</span></div>
+  </section>
+
+  <!-- 3 · Mission -->
+  <section data-label="Mission">
+    <div class="grid-bg"></div>
+    <div class="pad" style="justify-content:center;">
+      <span class="eyebrow anim">The operating principle</span>
+      <h2 class="anim" style="margin-top:36px; max-width:26ch;">Build useful products. Report only <span class="brand">verified numbers.</span></h2>
+      <div class="row anim" style="margin-top:56px; gap:24px;">
+        <span class="pill" style="background:rgba(34,211,238,.12);color:var(--ag-cyan);border:1px solid rgba(34,211,238,.4);">No bots · real humans</span>
+        <span class="pill" style="background:rgba(233,185,73,.12);color:var(--ag-gold);border:1px solid rgba(233,185,73,.4);">Trust over hype</span>
+        <span class="pill" style="background:rgba(236,72,153,.12);color:var(--ag-pink);border:1px solid rgba(236,72,153,.4);">#UntilNoKidInNeed</span>
+      </div>
+    </div>
+    <div class="footer"><span>03 · Mission</span><span>ANTIGRAVITY</span></div>
+  </section>
+
+  <!-- 4 · Ecosystem -->
+  <section data-label="Ecosystem">
+    <div class="grid-bg"></div>
+    <div class="pad">
+      <span class="eyebrow anim">One system · many surfaces</span>
+      <h2 class="anim" style="margin-top:28px;">The ecosystem</h2>
+      <div class="row" style="margin-top:56px; gap:28px;">
+        <div class="glass card col anim" style="flex:1;">
+          <span class="ic" style="color:var(--ag-pink)">\u2665</span>
+          <h3>YouAndINotAI</h3>
+          <p>Dating & community with Bot-Shield human verification. Square-only payments.</p>
+        </div>
+        <div class="glass card col anim" style="flex:1;">
+          <span class="ic">\u21c4</span>
+          <h3>Business Exchange</h3>
+          <p>Marketplace for services, referrals, and business sales. The B2B routing layer.</p>
+        </div>
+        <div class="glass card col anim" style="flex:1;">
+          <span class="ic" style="color:var(--ag-success)">\u267b</span>
+          <h3>OnlineRecycle</h3>
+          <p>Electronics recycling, pickup, and resale intake for Central Florida.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>04 · Ecosystem</span><span>ANTIGRAVITY</span></div>
+  </section>
+
+  <!-- 5 · How it works -->
+  <section data-label="How it works">
+    <div class="grid-bg"></div>
+    <div class="pad">
+      <span class="eyebrow anim">How it works</span>
+      <h2 class="anim" style="margin-top:28px; max-width:22ch;">An agent fleet across <span class="brand">three nodes.</span></h2>
+      <div class="row anim" style="margin-top:56px; align-items:center; gap:60px;">
+        <img src="../assets/brand/infra-badge-512.png" alt="" style="width:340px;height:340px;flex-shrink:0;" />
+        <div class="col" style="gap:24px;">
+          <div class="glass" style="padding:32px 40px;border-radius:28px;display:flex;align-items:center;gap:24px;">
+            <span class="stat-lbl" style="color:var(--ag-cyan);width:240px;">Sabretooth</span>
+            <span style="font-size:28px;color:var(--ag-text-body)">Orchestration + GPU Ollama · master</span>
+          </div>
+          <div class="glass" style="padding:32px 40px;border-radius:28px;display:flex;align-items:center;gap:24px;">
+            <span class="stat-lbl" style="color:var(--ag-pink);width:240px;">T5500</span>
+            <span style="font-size:28px;color:var(--ag-text-body)">Tunnels · domains · payments rail</span>
+          </div>
+          <div class="glass" style="padding:32px 40px;border-radius:28px;display:flex;align-items:center;gap:24px;">
+            <span class="stat-lbl" style="color:var(--ag-warning);width:240px;">9020</span>
+            <span style="font-size:28px;color:var(--ag-text-body)">Interactive development node</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>05 · Infrastructure</span><span>ANTIGRAVITY</span></div>
+  </section>
+
+  <!-- 6 · Honest numbers -->
+  <section data-label="Numbers">
+    <div class="grid-bg"></div>
+    <div class="pad">
+      <span class="eyebrow anim">Tracked · recorded values only</span>
+      <h2 class="anim" style="margin-top:28px;">Honest numbers</h2>
+      <div class="row" style="margin-top:64px; gap:28px;">
+        <div class="glass card col anim" style="flex:1;">
+          <span class="stat-lbl">Tracked MRR</span>
+          <span class="stat" style="color:var(--ag-cyan);margin-top:16px;">$4,060</span>
+          <span class="stat-note">Sum of recorded recurring revenue across live surfaces.</span>
+        </div>
+        <div class="glass card col anim" style="flex:1;">
+          <span class="stat-lbl">Verified members</span>
+          <span class="stat" style="color:var(--ag-gold);margin-top:16px;">1,204</span>
+          <span class="stat-note">Bot-Shield human verification confirmed.</span>
+        </div>
+        <div class="glass card col anim" style="flex:1;">
+          <span class="stat-lbl">Kids reserve</span>
+          <span class="stat" style="color:var(--ag-pink);margin-top:16px;">10%</span>
+          <span class="stat-note">Reserved share of net. Never projected.</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>06 · Traction</span><span>Sample figures for layout</span></div>
+  </section>
+
+  <!-- 7 · Close -->
+  <section data-label="Talk to Hermes">
+    <div class="grid-bg"></div>
+    <div class="pad" style="justify-content:center;">
+      <div class="row" style="align-items:center; gap:80px;">
+        <div class="col" style="flex:1;">
+          <span class="eyebrow anim"><span class="dot"></span>Meet the fleet</span>
+          <h2 class="anim" style="margin-top:32px;">Talk to <span class="brand">Hermes.</span></h2>
+          <p class="lead anim" style="margin-top:36px; max-width:30ch;">Scan to reach the whole agent fleet on Telegram. Built in the open, for humanity.</p>
+          <span class="pill anim" style="margin-top:40px; background:rgba(236,72,153,.12);color:var(--ag-pink);border:1px solid rgba(236,72,153,.4);align-self:flex-start;">#UntilNoKidInNeed</span>
+        </div>
+        <div class="anim" style="background:#fff;border-radius:48px;padding:32px;box-shadow:0 0 60px rgba(34,211,238,.3);">
+          <img src="../assets/brand/hermes-telegram-card.png" alt="Hermes Telegram QR" style="display:block;width:420px;border-radius:24px;" />
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>ANTIGRAVITY · Hermes fleet</span><span>@HERMES_…_BOT</span></div>
+  </section>
+
+</deck-stage>
+<script src="deck-stage.js"></script>
+</body>
+</html>

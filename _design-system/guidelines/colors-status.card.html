@@ -1,0 +1,24 @@
+<!-- @dsCard group="Colors" viewport="700x130" name="Status & semantic" subtitle="Success · warning · danger · info · paused" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { padding: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .pill { width: 100%; padding: 8px 0; border-radius: var(--ag-radius-pill); text-align: center; font: 600 11px/1 var(--ag-font-mono); text-transform: uppercase; letter-spacing: .08em; }
+  .hex { font: 500 9px/1 var(--ag-font-mono); color: var(--ag-text-muted); }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="item"><div class="pill" style="background:rgba(16,185,129,.14); color:#10b981; border:1px solid rgba(16,185,129,.4)">Active</div><span class="hex">#10b981</span></div>
+    <div class="item"><div class="pill" style="background:rgba(245,158,11,.14); color:#f59e0b; border:1px solid rgba(245,158,11,.4)">Pending</div><span class="hex">#f59e0b</span></div>
+    <div class="item"><div class="pill" style="background:rgba(244,63,94,.14); color:#f43f5e; border:1px solid rgba(244,63,94,.4)">Failed</div><span class="hex">#f43f5e</span></div>
+    <div class="item"><div class="pill" style="background:rgba(34,211,238,.14); color:#22d3ee; border:1px solid rgba(34,211,238,.4)">Live</div><span class="hex">#22d3ee</span></div>
+    <div class="item"><div class="pill" style="background:rgba(168,85,247,.14); color:#a855f7; border:1px solid rgba(168,85,247,.4)">Paused</div><span class="hex">#a855f7</span></div>
+  </div>
+</body>
+</html>

@@ -213,6 +213,7 @@ Nothing merges to main without 100% checks passing AND Josh's explicit approval.
 
 **Secondary drives / isolated repos** = holding area for anything not yet ready for main:
 - Untested LLM setups (openclaw configs, model routing experiments, local inference configs)
+ - Note: OpenClaw is exclusively for customer support; any experimental configs must not affect the live OpenClaw support path.
 - Any LLM infrastructure or model configuration that hasn't been validated with confidence
 - Experimental AI integrations not yet proven stable enough for production
 
@@ -221,7 +222,6 @@ stay on a node's secondary drive or in a dedicated sandbox repo until Josh decid
 They do not automatically become part of the live codebase.
 
 **Current isolated node lanes:**
-- **Sabretooth `E:`** -> `E:\claudes-claw` = legacy agent Dispatch / coworker lane only
 - **9020 `D:`** -> `D:\claws\openclaw-9020` and `D:\sandbox-repos\...` = openclaw/support sandbox lane only
 - **T5500 `E:`** -> `E:\ANTIGRAVITY-CLAWBOTS\manus-claw\ForTheKids-Guardian` plus `dispatch`, `memory`, and media folders = Manus / Crossfire / media sandbox lane only
 - **Do not put these lanes on node `C:` drives** except for the existing live support/date-app installs that are already intentionally on `C:`

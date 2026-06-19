@@ -1,0 +1,41 @@
+<!-- @dsCard group="Spacing" viewport="700x220" name="Glass surface in use" subtitle="The exact formula every card / header / nav shares" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { padding: 0; }
+  .stage {
+    padding: 26px; min-height: 220px; position: relative;
+    background:
+      radial-gradient(120% 90% at 80% 0%, rgba(34,211,238,.10), transparent 55%),
+      radial-gradient(120% 90% at 0% 100%, rgba(236,72,153,.12), transparent 55%),
+      var(--ag-bg);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .grid-bg {
+    position: absolute; inset: 0; opacity: .06; pointer-events: none;
+    background-image: linear-gradient(#2563eb 1px, transparent 1px), linear-gradient(90deg, #2563eb 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .card {
+    position: relative; z-index: 1; width: 100%; max-width: 440px; padding: 22px 24px;
+    border-radius: var(--ag-radius-xl);
+  }
+  .label { font: 500 10px/1 var(--ag-font-mono); text-transform: uppercase; letter-spacing: .2em; color: var(--ag-text-muted); }
+  .val { font: 900 30px/1.1 var(--ag-font-sans); color: var(--ag-text); margin-top: 8px; letter-spacing: -.02em; }
+  .sub { font: 400 13px/1.5 var(--ag-font-sans); color: var(--ag-text-muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="grid-bg"></div>
+    <div class="card ag-glass">
+      <div class="label">Tracked Revenue · Live</div>
+      <div class="val">$24,980</div>
+      <div class="sub">slate-900/60 · backdrop-blur-md · border-white/10 · shadow 0 0 20px</div>
+    </div>
+  </div>
+</body>
+</html>

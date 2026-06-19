@@ -1,0 +1,166 @@
+<!-- @dsCard group="Surfaces" viewport="1280x820" name="Mission Control v2 — stream dashboard" subtitle="Live agent log, node health, company P&L, payments rail" -->
+<!-- @startingPoint section="Surfaces" subtitle="Streamable orchestration dashboard — log, nodes, P&L, payments" viewport="1280x860" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ANTIGRAVITY · Mission Control v2</title>
+<link rel="icon" href="../assets/logo/logo-favicon-32.png" />
+<link rel="stylesheet" href="../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.456.0/dist/umd/lucide.min.js"></script>
+<script src="../_ds_bundle.js"></script>
+<style> body { margin:0; background:var(--ag-bg); } </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const NS = window.ANTIGRAVITYDesignSystem_58589b;
+function I({ name, size=16, color='currentColor' }) {
+  const r = React.useRef(null);
+  React.useEffect(() => { if (r.current && window.lucide) { r.current.innerHTML=''; const e=document.createElement('i'); e.setAttribute('data-lucide',name); r.current.appendChild(e); window.lucide.createIcons({ attrs:{ width:size, height:size, stroke:color, 'stroke-width':2 }, nameAttr:'data-lucide' }); } });
+  return <span ref={r} style={{ display:'inline-flex', width:size, height:size }} />;
+}
+const NODES = [
+  { name:'Sabretooth', ip:'192.168.0.8', load:62, role:'Orchestration + GPU', status:'live', accent:'var(--ag-cyan)' },
+  { name:'T5500', ip:'192.168.0.15', load:38, role:'Tunnels + Payments', status:'active', accent:'var(--ag-pink)' },
+  { name:'9020', ip:'192.168.0.5', load:21, role:'Dev', status:'active', accent:'var(--ag-warning)' },
+];
+const COMPANIES = [
+  { name:'You & I Not Ai', rail:'Square', mrr:'$2,240', status:'active' },
+  { name:'Online Recycle', rail:'—', mrr:'$1,180', status:'live' },
+  { name:'Business Exchange', rail:'—', mrr:'$640', status:'active' },
+  { name:'Hermes Side World', rail:'internal', mrr:'—', status:'live' },
+];
+const LOG_SEED = [
+  ['CFO','gemma4-cloud','Reconciled Square payouts · 3 records', 'var(--ag-gold)'],
+  ['CTO','qwen2.5:7b','Deploy check passed on T5500 tunnel', 'var(--ag-cyan)'],
+  ['CMO','qwen2.5:7b','Drafted 4 social posts · queued for review', 'var(--ag-pink)'],
+  ['HERMES','router','Routed task #4821 → CTO', 'var(--ag-cyan)'],
+  ['CSO','qwen2.5:7b','Scanned public surfaces · 0 exposed secrets', 'var(--ag-rose)'],
+];
+
+function App() {
+  const { GlassPanel, MonoLabel, StatusPill, StatCard, Badge } = NS;
+  const [clock, setClock] = React.useState('');
+  const [log, setLog] = React.useState(() => LOG_SEED.map((l,i)=>({ id:i, t:l, time:'—' })));
+  React.useEffect(() => {
+    const t = setInterval(()=>setClock(new Date().toLocaleTimeString('en-GB')), 1000);
+    let n = LOG_SEED.length;
+    const g = setInterval(()=>{ const seed = LOG_SEED[Math.floor(Math.random()*LOG_SEED.length)]; setLog(prev => [{ id:n++, t:seed, time:new Date().toLocaleTimeString('en-GB') }, ...prev].slice(0,9)); }, 3200);
+    return ()=>{ clearInterval(t); clearInterval(g); };
+  }, []);
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+
+  return (
+    <div style={{ minHeight:'100vh', position:'relative' }}>
+      <div className="ag-grid-backdrop" style={{ opacity:.06 }} />
+      <div style={{ position:'fixed', inset:0, zIndex:0, pointerEvents:'none', background:'radial-gradient(70% 50% at 50% -5%, rgba(34,211,238,.08), transparent 60%)' }} />
+      <header style={{ position:'sticky', top:0, zIndex:50, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'12px 22px', backdropFilter:'blur(12px)', background:'rgba(2,6,23,0.8)', borderBottom:'1px solid var(--ag-border)' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+          <img src="../assets/brand/infra-badge-512.png" alt="" style={{ width:34, height:34 }} />
+          <div>
+            <div style={{ fontFamily:'var(--ag-font-mono)', fontWeight:700, fontSize:13, color:'var(--ag-text)', letterSpacing:'0.04em' }}>MISSION CONTROL · v2</div>
+            <MonoLabel color="var(--ag-text-muted-deep)">Hermes fleet · live stream</MonoLabel>
+          </div>
+        </div>
+        <div style={{ display:'flex', alignItems:'center', gap:14 }}>
+          <StatusPill status="live" label="On Air" />
+          <span style={{ fontFamily:'var(--ag-font-mono)', fontSize:13, color:'var(--ag-cyan)', letterSpacing:'0.08em' }}>{clock}</span>
+        </div>
+      </header>
+
+      <main style={{ position:'relative', zIndex:10, maxWidth:1280, margin:'0 auto', padding:'20px' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:14, marginBottom:16 }}>
+          <StatCard label="Tracked MRR" value="$4,060" note="Sum of recorded recurring revenue across surfaces." accent="cyan" live />
+          <StatCard label="Agents Online" value="5 / 7" note="Heartbeat in the last 60s." accent="pink" live />
+          <StatCard label="Kids Reserve" value="$406" note="10% of net · recorded values only." accent="gold" />
+          <StatCard label="Nodes Healthy" value="3 / 3" note="Sabretooth · T5500 · 9020." accent="success" live />
+        </div>
+
+        <div style={{ display:'grid', gridTemplateColumns:'1.5fr 1fr', gap:16, alignItems:'start' }}>
+          {/* live log */}
+          <GlassPanel radius="card" pad="panel">
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
+              <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                <span style={{ color:'var(--ag-cyan)' }}><I name="terminal" size={18} /></span>
+                <h2 className="ag-section-heading" style={{ fontSize:'var(--ag-text-lg)', textTransform:'uppercase' }}>Live fleet log</h2>
+              </div>
+              <StatusPill status="live" />
+            </div>
+            <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+              {log.map(item => {
+                const [who, model, msg, color] = item.t;
+                return (
+                  <div key={item.id} style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 12px', background:'rgba(2,6,23,0.55)', border:'1px solid var(--ag-border-strong)', borderLeft:`3px solid ${color}`, borderRadius:'var(--ag-radius-md)' }}>
+                    <span style={{ fontFamily:'var(--ag-font-mono)', fontSize:10, fontWeight:700, letterSpacing:'.12em', color, width:64, flexShrink:0 }}>{who}</span>
+                    <span style={{ flex:1, color:'var(--ag-text-body)', fontSize:'var(--ag-text-sm)' }}>{msg}</span>
+                    <span style={{ fontFamily:'var(--ag-font-mono)', fontSize:10, color:'var(--ag-text-muted-deep)' }}>{item.time}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </GlassPanel>
+
+          {/* right rail */}
+          <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+            <GlassPanel radius="card" pad="panel">
+              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14 }}>
+                <span style={{ color:'var(--ag-pink)' }}><I name="cpu" size={18} /></span>
+                <h2 className="ag-section-heading" style={{ fontSize:'var(--ag-text-base)', textTransform:'uppercase' }}>Node health</h2>
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+                {NODES.map(n => (
+                  <div key={n.name}>
+                    <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:6 }}>
+                      <span style={{ display:'flex', alignItems:'center', gap:8 }}>
+                        <span style={{ fontWeight:700, color:'var(--ag-text)', fontSize:'var(--ag-text-sm)' }}>{n.name}</span>
+                        <span style={{ fontFamily:'var(--ag-font-mono)', fontSize:10, color:'var(--ag-text-muted-deep)' }}>{n.ip}</span>
+                      </span>
+                      <span style={{ fontFamily:'var(--ag-font-mono)', fontSize:11, color:n.accent }}>{n.load}%</span>
+                    </div>
+                    <div style={{ height:6, borderRadius:3, background:'var(--ag-surface-2)', overflow:'hidden' }}>
+                      <div style={{ width:n.load+'%', height:'100%', background:n.accent, boxShadow:`0 0 8px ${n.accent}`, borderRadius:3 }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </GlassPanel>
+
+            <GlassPanel radius="card" pad="panel">
+              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14 }}>
+                <span style={{ color:'var(--ag-gold)' }}><I name="building-2" size={18} /></span>
+                <h2 className="ag-section-heading" style={{ fontSize:'var(--ag-text-base)', textTransform:'uppercase' }}>Companies · rails</h2>
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:9 }}>
+                {COMPANIES.map(c => (
+                  <div key={c.name} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:10, padding:'10px 12px', background:'rgba(2,6,23,0.5)', border:'1px solid var(--ag-border-strong)', borderRadius:'var(--ag-radius-md)' }}>
+                    <div style={{ minWidth:0 }}>
+                      <div style={{ fontWeight:700, color:'var(--ag-text)', fontSize:'var(--ag-text-sm)' }}>{c.name}</div>
+                      <MonoLabel color="var(--ag-text-muted-deep)" style={{ marginTop:3 }}>Rail · {c.rail}</MonoLabel>
+                    </div>
+                    <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                      <span style={{ fontFamily:'var(--ag-font-mono)', fontSize:12, color:'var(--ag-cyan)' }}>{c.mrr}</span>
+                      <StatusPill status={c.status} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </GlassPanel>
+          </div>
+        </div>
+
+        <footer style={{ textAlign:'center', padding:'24px 0 8px', marginTop:8, color:'var(--ag-text-muted-deep)', fontFamily:'var(--ag-font-mono)', fontSize:10, textTransform:'uppercase', letterSpacing:'0.3em' }}>
+          No mock data · sample figures shown for layout · Joshua is sole authority on publish
+        </footer>
+      </main>
+    </div>
+  );
+}
+(function m(){ const N=window.ANTIGRAVITYDesignSystem_58589b; if(!N||!N.StatCard){return setTimeout(m,30);} ReactDOM.createRoot(document.getElementById('root')).render(<App/>); })();
+</script>
+</body>
+</html>
