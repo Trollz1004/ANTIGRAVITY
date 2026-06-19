@@ -10,7 +10,7 @@ from app.config import get_settings
 
 settings = get_settings()
 
-_database_url = settings.database_url
+_database_url = settings.primary_database_url
 if _database_url.startswith("postgresql://"):
     _database_url = _database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
 
