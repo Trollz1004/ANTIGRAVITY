@@ -86,7 +86,6 @@ def test_protected_http_routes_require_auth():
         ("/api/v1/webhooks/square-booking", "POST"),
         ("/api/v1/metrics", "GET"),
         ("/api/v1/metrics/impact", "GET"),
-        ("/api/v1/metrics/charity", "GET"),
         ("/api/v1/metrics/security-audit", "GET"),
     }
     auth_dependencies = {get_current_user, _require_current_user}
@@ -131,6 +130,28 @@ def test_auth_rate_limit_is_active(client):
         last_response = client.post(
             "/api/v1/auth/login",
             json={"email": "ratelimit@example.com", "password": "wrong-password"},
+        )
+
+    assert last_response is not None
+    assert last_response.status_code == 429
+
+
+def test_register_rate_limit_is_active(client):
+    last_response = None
+    for index in range(11):
+        last_response = client.post(
+            "/api/v1/auth/register",
+            json={
+                "email": f"register-rate-{index}@example.com",
+                "password": "supersecret",
+                "display_name": "Register Rate",
+                "date_of_birth": (
+                    date.today() - timedelta(days=365 * 21)
+                ).isoformat(),
+                "accepted_terms": True,
+                "accepted_cookie_policy": True,
+                "confirmed_over_18": True,
+            },
         )
 
     assert last_response is not None

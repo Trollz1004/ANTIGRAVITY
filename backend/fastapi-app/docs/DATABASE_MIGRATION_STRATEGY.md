@@ -9,7 +9,9 @@ swipes, matches, verification events, webhook events, video calls, support ticke
 revenue allocations, and volunteer tracking.
 
 Alembic is configured in `alembic.ini` with `script_location = alembic` and reads
-the database URL from `app.config.get_settings().database_url` (see `alembic/env.py`).
+the database URL from `app.config.get_settings().primary_database_url` (see
+`alembic/env.py`). Set `SUPABASE_DB_URL` for the primary Supabase database; if it
+is unset, the backend falls back to `DATABASE_URL` for local development.
 
 ---
 
@@ -82,7 +84,8 @@ python scripts/migration_health_check.py
 ```
 
 This reports the current Alembic revision, the head revision, and any pending
-migrations. It exits `0` if up-to-date and `1` if migrations are pending.
+migrations against the same `primary_database_url` used by Alembic. It exits `0`
+if up-to-date and `1` if migrations are pending.
 
 ---
 

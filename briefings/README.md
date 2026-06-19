@@ -11,8 +11,9 @@ Read from the live repo only: `C:\ANTIGRAVITY` on `main`.
 3. `briefings/UNIVERSAL-SYNC-PROMPT.md`
 4. `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
 5. `briefings/HISTORICAL-ONCHAIN-STATUS.md`
-6. `memory/CODEX-QUICK-MEMORY.md`
-7. `memory/activeContext.md`
+6. `briefings/DATE-APP-SELF-HOST-OPS-FUNDING-2026-06-19.md`
+7. `memory/CODEX-QUICK-MEMORY.md`
+8. `memory/activeContext.md`
 
 ## Team Sync
 

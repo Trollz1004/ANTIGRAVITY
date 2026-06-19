@@ -12,10 +12,10 @@ export const PUBLIC_SURFACES = [
     description: 'Marketplace for services, referrals, and business sales. The B2B routing layer for the ecosystem.',
   },
   {
-    name: 'DAO Roadmap',
+    name: 'Product Roadmap',
     url: 'https://dashboard.aidoesitall.website',
-    status: 'Launching Now',
-    description: 'DAO governance going public. LLC for-profit structure. Join the founding community.',
+    status: 'Review gated',
+    description: 'Current product status, launch readiness, and verified public links.',
   },
   {
     name: 'Customer Support',
