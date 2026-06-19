@@ -17,7 +17,6 @@ src/mission_control_api/probes/hermes.py
 src/mission_control_api/probes/http.py
 src/mission_control_api/probes/ollama.py
 src/mission_control_api/probes/openclaw.py
-src/mission_control_api/probes/paperclip.py
 src/mission_control_api/probes/public_sites.py
 src/mission_control_api/probes/repo.py
 src/mission_control_api/probes/revenue_buckets.py

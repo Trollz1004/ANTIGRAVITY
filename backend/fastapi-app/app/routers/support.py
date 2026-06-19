@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import hashlib
+import hmac
+import re
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -21,6 +24,11 @@ from app.support_service import (
 
 router = APIRouter(prefix="/support")
 
+WHATSAPP_TICKET_ID_PATTERN = re.compile(
+    r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b",
+    re.IGNORECASE,
+)
+
 
 def _serialize_transcript(
     payload: SupportChatRequest, reply: str | None = None
@@ -30,6 +38,75 @@ def _serialize_transcript(
     if reply:
         transcript.append({"role": "assistant", "content": reply})
     return transcript
+
+
+def _normalize_phone(value: str | None) -> str:
+    return re.sub(r"\D+", "", value or "")
+
+
+def _extract_whatsapp_messages(payload: dict) -> list[dict[str, str]]:
+    messages: list[dict[str, str]] = []
+    for entry in payload.get("entry", []) or []:
+        for change in entry.get("changes", []) or []:
+            value = change.get("value") or {}
+            for message in value.get("messages", []) or []:
+                text = (message.get("text") or {}).get("body")
+                sender = message.get("from")
+                if sender and text:
+                    messages.append({"from": str(sender), "text": str(text)})
+    return messages
+
+
+def _verify_whatsapp_signature(
+    *, body: bytes, signature_header: str | None, settings: Settings
+) -> bool:
+    secret = str(settings.whatsapp_app_secret or "").strip()
+    if not secret:
+        return False
+    if not signature_header or not signature_header.startswith("sha256="):
+        return False
+    expected = hmac.new(secret.encode("utf-8"), body, hashlib.sha256).hexdigest()
+    supplied = signature_header.removeprefix("sha256=")
+    return hmac.compare_digest(expected, supplied)
+
+
+def _referenced_ticket_id(text: str) -> uuid.UUID | None:
+    match = WHATSAPP_TICKET_ID_PATTERN.search(text)
+    if not match:
+        return None
+    try:
+        return uuid.UUID(match.group(0))
+    except ValueError:
+        return None
+
+
+async def _record_whatsapp_owner_reply(
+    *,
+    text: str,
+    sender: str,
+    db: AsyncSession,
+) -> dict[str, str | bool]:
+    ticket_id = _referenced_ticket_id(text)
+    if not ticket_id:
+        return {"processed": False, "reason": "no_ticket_id"}
+
+    ticket = await db.get(SupportTicket, ticket_id)
+    if ticket is None:
+        return {"processed": False, "reason": "ticket_not_found"}
+
+    transcript = list(ticket.transcript or [])
+    transcript.append(
+        {
+            "role": "assistant",
+            "content": f"Operator WhatsApp note from {sender}: {text.strip()}",
+        }
+    )
+    ticket.transcript = transcript
+    if text.strip().lower().startswith(("close ", "closed ", "resolve ", "resolved ")):
+        ticket.status = "closed"
+
+    await db.commit()
+    return {"processed": True, "reason": "ticket_updated"}
 
 
 async def _create_ticket(
@@ -155,3 +232,54 @@ async def list_operator_support_tickets(
         )
     ).all()
     return [SupportTicketResponse.model_validate(ticket) for ticket in tickets]
+
+
+@router.get("/whatsapp/webhook")
+async def verify_whatsapp_webhook(
+    hub_mode: str = Query("", alias="hub.mode"),
+    hub_verify_token: str = Query("", alias="hub.verify_token"),
+    hub_challenge: str = Query("", alias="hub.challenge"),
+) -> Response:
+    settings = get_settings()
+    expected_token = str(settings.whatsapp_webhook_verify_token or "").strip()
+    if not expected_token:
+        raise HTTPException(status_code=503, detail="WhatsApp webhook is not configured")
+    if hub_mode == "subscribe" and hmac.compare_digest(hub_verify_token, expected_token):
+        return Response(content=hub_challenge, media_type="text/plain")
+    raise HTTPException(status_code=403, detail="WhatsApp verification failed")
+
+
+@router.post("/whatsapp/webhook")
+async def receive_whatsapp_webhook(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+) -> dict[str, object]:
+    settings = get_settings()
+    body = await request.body()
+    if not _verify_whatsapp_signature(
+        body=body,
+        signature_header=request.headers.get("x-hub-signature-256"),
+        settings=settings,
+    ):
+        raise HTTPException(status_code=403, detail="WhatsApp signature verification failed")
+
+    payload = await request.json()
+    owner_phone = _normalize_phone(settings.whatsapp_owner_phone or settings.whatsapp_to)
+    if not owner_phone:
+        raise HTTPException(status_code=503, detail="WhatsApp owner phone is not configured")
+
+    results = []
+    for message in _extract_whatsapp_messages(payload):
+        sender = _normalize_phone(message["from"])
+        if sender != owner_phone:
+            results.append({"processed": False, "reason": "sender_not_allowed"})
+            continue
+        results.append(
+            await _record_whatsapp_owner_reply(
+                text=message["text"],
+                sender=sender,
+                db=db,
+            )
+        )
+
+    return {"received": True, "results": results}

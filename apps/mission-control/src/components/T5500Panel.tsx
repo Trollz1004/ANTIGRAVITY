@@ -12,10 +12,11 @@ type ServiceRow = {
 };
 
 const LABELS: Record<string, string> = {
+  date_app_api: 'date app API',
+  date_app_static: 'date app static',
   postgres: 'uandinotai-postgres',
-  qdrant: 'qdrant vectors',
   redis: 'redis cache',
-  openclaw_api: 'OpenClaw API',
+  openclaw_support: 'OpenClaw support',
 };
 
 export const T5500Panel: React.FC = () => (

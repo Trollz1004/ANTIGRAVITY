@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class DeployRequest(BaseModel):
-    """Schema for POST /deploy/paperclip — triggers a deployment."""
+    """Schema for POST /deploy/openclaw-support - triggers a deployment."""
 
     environment: str = Field(
         default="production",
