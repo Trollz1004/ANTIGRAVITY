@@ -34,7 +34,7 @@ No AI outranks another AI. Agents collaborate by lane:
 - Gemini in Antigravity IDE: repo navigation, broad audits, code intelligence, safe review.
 - Claude official app: architecture, product judgment, co-founder review.
 - Hermes: synthesis, mission-control summaries, memory routing, task board, draft handoffs.
-- OpenClaw/support nodes: support and sandbox lanes unless Josh promotes specific work.
+- OpenClaw/support nodes: support lanes (customer support) and sandbox lanes (experimental) unless Josh promotes specific work.
 
 Do not route work through a tool or wrapper that blocks the official app lane.
 
