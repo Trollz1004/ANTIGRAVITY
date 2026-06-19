@@ -1,6 +1,6 @@
 # LIVE PAYMENT SOURCE OF TRUTH
 
-Last updated: 2026-04-10
+Last updated: 2026-06-19
 
 ## Authority
 
@@ -17,6 +17,14 @@ If any older doc, node note, export, or backup conflicts with this file:
 - Square account: `joshlcoleman@gmail.com` (all lanes — YouAndINotAI and commerce)
 - Active Square location: `LY5GN09F5AN83`
 - Customer-facing payment copy must stay business-first and must not use `donate`, `donation`, or `solicitation`
+
+## Founder Test Transaction Truth (2026-06-19)
+
+- Joshua confirmed the visible Square transactions reviewed on 2026-06-19 were his own test transactions, not external customer purchases.
+- Do not count those test transactions as customer revenue, customer count, traction proof, or third-party demand.
+- The visible `$0.67` Square balance is the net settlement from a `$1.00` Bot-Shield test payment after Square card-processing fees.
+- The associated gross product truth remains Bot-Shield `$1.00`; the `$0.67` figure is net cash available after fees, not a separate product price.
+- Reconciliation rule: when interpreting Square screenshots or balance exports from this period, classify matching Bot-Shield `$1.00` / `$0.67 net` entries as founder QA/test activity unless a future source-of-truth note explicitly identifies a transaction as a real external customer.
 
 ## Verification-Grade Payment Truth
 
