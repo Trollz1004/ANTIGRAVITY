@@ -60,6 +60,10 @@ class Settings(BaseSettings):
     smtp_use_starttls: bool = True
     telegram_bot_token: str = ""
     telegram_chat_id: str = ""
+    whatsapp_phone_id: str = ""
+    whatsapp_token: str = ""
+    whatsapp_to: str = ""
+    whatsapp_api_version: str = "v21.0"
     support_operator_emails: str = ""
     support_openclaw_url: str = ""
     support_openclaw_timeout_seconds: float = 15.0

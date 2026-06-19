@@ -2,7 +2,6 @@
 
 Coverage targets:
   - GET /api/v1/metrics/impact        — aggregate platform metrics
-  - GET /api/v1/metrics/charity       — deprecated alias for /impact
   - GET /api/v1/metrics/security-audit — security audit endpoint
 
 PII contract: NONE of the following may appear in any /metrics response:
@@ -93,11 +92,6 @@ def test_metrics_impact_happy_path(client):
     assert "users" in data
     assert "engagement" in data
     assert "verification" in data
-
-
-def test_metrics_charity_alias_is_deprecated_but_functional(client):
-    resp = client.get("/api/v1/metrics/charity", headers=_metrics_headers())
-    assert resp.status_code == 200, resp.text
 
 
 def test_metrics_security_audit_happy_path(client):

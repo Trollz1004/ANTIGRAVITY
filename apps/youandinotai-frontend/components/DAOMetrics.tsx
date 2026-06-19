@@ -14,7 +14,7 @@ export default function DAOMetrics({ isDarkMode }: { isDarkMode: boolean }) {
       <div className="text-center mb-10">
         <h2 className="text-3xl font-bold flex items-center justify-center gap-3">
           <Coins className="w-8 h-8 text-amber-500" />
-          DAO Roadmap - Legal Review Required
+          Roadmap Review Required
         </h2>
         <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
           Review-gated roadmap mechanics stay offline until attorney review is complete.
@@ -28,17 +28,17 @@ export default function DAOMetrics({ isDarkMode }: { isDarkMode: boolean }) {
           { name: '$UKID', platform: 'AI-Solutions', color: 'text-blue-500', border: 'border-blue-500/30' },
           { name: '$GREEN', platform: 'OnlineRecycle', color: 'text-emerald-500', border: 'border-emerald-500/30' },
           { name: '$AGRAV', platform: 'Antigravity Infra', color: 'text-purple-500', border: 'border-purple-500/30' },
-        ].map((dao) => (
+        ].map((concept) => (
           <div
-            key={dao.name}
+            key={concept.name}
             className={`p-5 rounded-2xl border text-center ${
               isDarkMode
-                ? `bg-slate-800/50 ${dao.border}`
+                ? `bg-slate-800/50 ${concept.border}`
                 : 'bg-white border-slate-200'
             }`}
           >
-            <p className={`text-2xl font-black ${dao.color}`}>{dao.name}</p>
-            <p className={`text-xs mt-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{dao.platform}</p>
+            <p className={`text-2xl font-black ${concept.color}`}>{concept.name}</p>
+            <p className={`text-xs mt-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{concept.platform}</p>
           </div>
         ))}
       </div>

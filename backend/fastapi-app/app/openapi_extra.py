@@ -18,8 +18,9 @@ TAGS_METADATA: list[dict] = [
             "Health check and monitoring endpoints. "
             "Use these to verify service status, database connectivity, "
             "Square payment integration, and webhook processing health. "
-            "Endpoints include `/health` for overall status, `/health/db` for database, "
-            "and `/health/webhooks` for webhook processing. "
+            "Endpoints include `/health` and `/api/v1/health` for overall status, "
+            "`/api/v1/health/allocations` for allocation ledger checks, "
+            "and `/api/v1/health/webhooks` for webhook processing. "
             "Responses provide detailed status codes and dependency health."
         ),
     },
@@ -121,9 +122,9 @@ TAGS_METADATA: list[dict] = [
     {
         "name": "volunteering",
         "description": (
-            "Volunteering opportunities and community impact. "
+            "Volunteering opportunities and member activity. "
             "Browse and sign up for volunteer opportunities, "
-            "track hours, and view community impact metrics."
+            "track hours, and view aggregate activity metrics."
         ),
     },
     {
@@ -268,12 +269,10 @@ TAGS_METADATA: list[dict] = [
 API_DESCRIPTION: str = """
 # YouAndINotAI API
 
-![Mission Control](https://img.shields.io/badge/Mission%20Control-API%20v1-blue)
+![API Status](https://img.shields.io/badge/API-v1-blue)
 
-**Social Platform for Good** — A dating and community platform that connects
-people while supporting charitable causes. Every interaction on the platform
-contributes to community impact through integrated volunteering and
-charitable giving features.
+**Human-first social platform** - A dating and community product for verified
+members, accountable profiles, support workflows, and real-world plans.
 
 ---
 
@@ -292,7 +291,7 @@ charitable giving features.
 # 1. Register a new account
 curl -X POST https://api.youandinotai.com/api/v1/auth/register \\
   -H "Content-Type: application/json" \\
-  -d '{"email": "user@example.com", "password": "securePass123!", "display_name": "Alex"}'
+  -d '{"email": "user@example.com", "password": "securePass123!", "display_name": "Alex", "date_of_birth": "1995-04-20", "accepted_terms": true}'
 
 # 2. Log in to get tokens
 curl -X POST https://api.youandinotai.com/api/v1/auth/login \\
@@ -483,7 +482,7 @@ See https://opensource.org/licenses/MIT for details.
 CONTACT_INFO: dict = {
     "name": "YouAndINotAI Team",
     "url": "https://youandinotai.com",
-    "email": "[EMAIL]",
+    "email": "joshlcoleman@gmail.com",
 }
 
 LICENSE_INFO: dict = {
@@ -1005,7 +1004,7 @@ def get_custom_swagger_html() -> str:
             <div class="logo-icon">Y</div>
             <div>
                 <div class="logo-text">YouAndINotAI API</div>
-                <div class="logo-subtitle">Social Platform for Good</div>
+                <div class="logo-subtitle">Human-First Social Platform</div>
             </div>
         </div>
         <div class="header-links">

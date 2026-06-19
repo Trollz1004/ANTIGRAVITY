@@ -12,7 +12,6 @@ import {
   ArrowUpRight,
   Mail,
   Handshake,
-  Coins,
   TrendingUp,
 } from 'lucide-react';
 
@@ -23,7 +22,7 @@ import { PUBLIC_SURFACES } from '../lib/constants';
 interface MetricsState {
   revenue: number;
   customers: number;
-  shriners: number;
+  verifiedRecords: number;
   uptime: string;
   lastUpdated?: string;
 }
@@ -31,7 +30,7 @@ interface MetricsState {
 const DEFAULT_METRICS: MetricsState = {
   revenue: 0,
   customers: 0,
-  shriners: 0,
+  verifiedRecords: 0,
   uptime: 'Untracked',
 };
 
@@ -127,7 +126,7 @@ export default function Dashboard() {
             <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
               isDarkMode ? 'bg-purple-500/10 border border-purple-500/30 text-purple-400' : 'bg-purple-50 border border-purple-200 text-purple-600'
             }`}>
-              <Coins className="w-4 h-4" /> DAO - Launching Now
+              <ShieldCheck className="w-4 h-4" /> Roadmap - Review Gated
             </div>
             <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
               isDarkMode ? 'bg-amber-500/10 border border-amber-500/30 text-amber-400' : 'bg-amber-50 border border-amber-200 text-amber-600'
@@ -188,9 +187,9 @@ export default function Dashboard() {
             isDarkMode={isDarkMode}
           />
           <StatCard
-            label="Reserved Allocation"
-            value={`$${metrics.shriners.toLocaleString()}`}
-            note="Reserved share of revenue. Recorded values only, never projections."
+            label="Verified Records"
+            value={metrics.verifiedRecords.toLocaleString()}
+            note="Shown only when backed by production records."
             isDarkMode={isDarkMode}
           />
           <StatCard

@@ -122,6 +122,14 @@ async def register(
     payload: AuthRegisterRequest,
     db: AsyncSession = Depends(get_db),
 ) -> AuthTokenResponse:
+    settings = get_settings()
+    await enforce_route_rate_limit(
+        request,
+        bucket="auth:register",
+        limit=settings.registration_rate_limit_per_minute,
+        window_seconds=settings.redis_rate_limit_window,
+    )
+
     existing = await db.scalar(select(User).where(User.email == payload.email.lower()))
     if existing:
         raise conflict(message="Email already registered")

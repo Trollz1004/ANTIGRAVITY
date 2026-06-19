@@ -129,12 +129,6 @@ async def impact_metrics(db: AsyncSession = Depends(get_db)):
     return await _impact_payload(db)
 
 
-@router.get("/metrics/charity", dependencies=[Depends(_require_metrics_key)])
-async def legacy_impact_alias(db: AsyncSession = Depends(get_db)):
-    """Deprecated compatibility alias for aggregate platform metrics."""
-    return await _impact_payload(db)
-
-
 @router.get("/metrics/security-audit", dependencies=[Depends(_require_metrics_key)])
 async def security_audit_metrics():
     """Expose a minimal aggregate security status for ops dashboards."""

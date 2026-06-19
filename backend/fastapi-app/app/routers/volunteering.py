@@ -1,10 +1,10 @@
-"""Volunteering Hub router — local charity impact for verified humans.
+"""Volunteering hub router for verified member activities.
 
 Endpoints:
 - GET /volunteer — list opportunities (filterable by location, category)
 - POST /volunteer — create opportunity
 - POST /volunteer/{id}/signup — sign up for an opportunity
-- GET /volunteer/impact — aggregate community impact stats
+- GET /volunteer/impact — aggregate volunteer activity stats
 - GET /volunteer/my-signups — user's own volunteer history
 """
 
@@ -32,10 +32,10 @@ async def volunteer_impact(
     _user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
     near: str | None = Query(
-        None, description="Filter impact by location (case-insensitive substring)"
+        None, description="Filter activity by location (case-insensitive substring)"
     ),
 ) -> VolunteerImpactResponse:
-    """Aggregate community impact — shown on the Volunteering Hub dashboard."""
+    """Aggregate volunteer activity shown on the Volunteering Hub dashboard."""
 
     # Base filter for location
     location_filter = VolunteerOpportunity.location.ilike(f"%{near}%") if near else True

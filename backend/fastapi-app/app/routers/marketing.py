@@ -18,10 +18,10 @@ BRANDED_HASHTAGS = {
         "#AIDoesItAll",
         "#AISolutionsStore",
         "#DateWithPurpose",
-        "#LoveFundsKids",
+        "#HumanFirstDating",
         "#DatingApp",
-        "#AIForGood",
-        "#CharityTech",
+        "#BotShield",
+        "#VerifiedMembers",
     ],
 }
 
@@ -54,20 +54,20 @@ class MarketingPost(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "campaign_name": "SpringVolunteerDrive",
-                "objective": "Recruit volunteers for community garden project",
-                "audience": "Environmentally conscious singles",
+                "campaign_name": "SpringMemberLaunch",
+                "objective": "Invite verified members to try local event planning",
+                "audience": "Singles who prefer real-world plans",
                 "platforms": ["instagram", "facebook"],
-                "core_message": "Join our community garden project and make a difference!",
+                "core_message": "Meet verified members who want to make real plans offline.",
                 "post_type": "story",
-                "primary_caption": "Looking to make a real impact this spring? Join our community garden project where you can meet like-minded people while contributing to a greener future. #YouAndINotAI #AIForGood #DateWithPurpose",
+                "primary_caption": "Skip the bot noise. Meet verified members who want real plans, real conversations, and accountable profiles. #YouAndINotAI #BotShield #DateWithPurpose",
                 "call_to_action": "Sign up now",
                 "hashtag_block": [
                     "#YouAndINotAI",
-                    "#AIForGood",
+                    "#BotShield",
                     "#DateWithPurpose",
-                    "#EcoLove",
-                    "#CommunityGarden",
+                    "#VerifiedMembers",
+                    "#HumanFirstDating",
                 ],
             }
         }

@@ -110,8 +110,11 @@ Current posture:
 - Stabilize first.
 - Launch clean product/business surfaces second.
 - Optimize AI spend third.
-- No DAO/token launch until attorney review and a new timestamped doctrine file explicitly
-  re-enables that lane.
+- Date-app ops funding is active under
+  `briefings/DATE-APP-SELF-HOST-OPS-FUNDING-2026-06-19.md`; do not treat that
+  lane as the same category as the future multi-platform DAO/token stack.
+- Future non-date-app DAO/token launches remain gated until Joshua creates the
+  matching current doctrine for that specific lane.
 
 Payment rails:
 
@@ -123,8 +126,11 @@ Payment rails:
 Customer-facing copy:
 
 - Do not use restricted public-benefit language or unverified impact claims.
-- Do not publish old split math, absolute-benefit claims, DAO/token claims, or public crypto
-  fundraising copy.
+- For date-app public sale copy, sell product, membership, access, operations,
+  and platform value only; do not publish split math, tax mechanics,
+  named-beneficiary claims, or investment-return promises.
+- Do not publish old split math, absolute-benefit claims, or public crypto
+  fundraising copy for non-date-app lanes.
 - Internal audit docs may mention prohibited terms only as historical/rejected/warning context.
 
 ## 7. Node Topology

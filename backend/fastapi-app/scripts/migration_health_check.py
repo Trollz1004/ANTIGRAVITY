@@ -59,7 +59,7 @@ def get_current_revision(database_url: str, alembic_cfg: Config) -> str | None:
 def main() -> int:
     """Run the health check and print results. Returns exit code."""
     settings = get_settings()
-    database_url = settings.database_url
+    database_url = settings.primary_database_url
 
     alembic_cfg = Config(
         os.path.join(os.path.dirname(os.path.dirname(__file__)), "alembic.ini")

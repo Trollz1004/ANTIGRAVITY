@@ -1,4 +1,4 @@
-# YouAndINotAI API Documentation
+﻿# YouAndINotAI API Documentation
 
 **Version:** 0.1.0
 **Base URL:** `/api/v1`
@@ -2435,7 +2435,7 @@ Schema: `HTTPValidationError`
 ## volunteering - GET /api/v1/volunteer/impact
 
 **Summary:** Volunteer Impact
-**Description:** Aggregate community impact — shown on the Volunteering Hub dashboard.
+**Description:** Aggregate volunteer activity shown on the Volunteering Hub dashboard.
 
 ### Request
 `GET /api/v1/volunteer/impact`
@@ -2498,7 +2498,7 @@ Schema: `VolunteerImpactResponse`
     "local_opportunities"
   ],
   "title": "VolunteerImpactResponse",
-  "description": "Aggregate community impact \u2014 shown on the volunteering hub dashboard."
+  "description": "Aggregate volunteer activity shown on the volunteering hub dashboard."
 }
 ```
 
@@ -3328,78 +3328,6 @@ Schema: `CheckoutLinkResponse`
     "session_id"
   ],
   "title": "CheckoutLinkResponse"
-}
-```
-
-**422 Validation Error**
-Content-Type: `application/json`
-Schema: `HTTPValidationError`
-```json
-{
-  "properties": {
-    "detail": {
-      "items": {
-        "$ref": "#/components/schemas/ValidationError"
-      },
-      "type": "array",
-      "title": "Detail"
-    }
-  },
-  "type": "object",
-  "title": "HTTPValidationError"
-}
-```
-
----
-
-## metrics - GET /api/v1/metrics/charity
-
-**Summary:** Impact Metrics
-**Description:** Aggregate anonymized platform metrics for the Admin Dashboard.
-
-Returns revenue splits, user counts, engagement totals.
-NO individual user data, emails, names, or payment details.
-
-### Request
-`GET /api/v1/metrics/charity`
-
-### Responses
-**200 Successful Response**
-Content-Type: `application/json`
-Schema: `PlatformMetricsResponse`
-```json
-{
-  "properties": {
-    "generated_at": {
-      "type": "string",
-      "title": "Generated At"
-    },
-    "revenue": {
-      "$ref": "#/components/schemas/RevenuePolicyResponse"
-    },
-    "users": {
-      "type": "object",
-      "title": "Users"
-    },
-    "engagement": {
-      "type": "object",
-      "title": "Engagement"
-    },
-    "verification": {
-      "type": "object",
-      "title": "Verification"
-    }
-  },
-  "type": "object",
-  "required": [
-    "generated_at",
-    "revenue",
-    "users",
-    "engagement",
-    "verification"
-  ],
-  "title": "PlatformMetricsResponse",
-  "description": "Aggregate platform health metrics \u2014 zero PII."
 }
 ```
 

@@ -40,6 +40,7 @@ def test_health_response_schema(status: str, user_count: int):
     response = HealthResponse(
         status=status,
         db_connected=True,
+        redis_connected=True,
         square_connected=False,
         square_signature_configured=True,
         wallet_rails_proven=False,
@@ -64,6 +65,7 @@ def test_health_response_status_logic(db_connected, square_connected, square_sig
             "ok" if (db_connected and square_connected and square_sig) else "degraded"
         ),
         db_connected=db_connected,
+        redis_connected=True,
         square_connected=square_connected,
         square_signature_configured=square_sig,
         wallet_rails_proven=False,
