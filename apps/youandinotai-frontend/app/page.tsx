@@ -127,7 +127,7 @@ export default function Dashboard() {
             <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
               isDarkMode ? 'bg-purple-500/10 border border-purple-500/30 text-purple-400' : 'bg-purple-50 border border-purple-200 text-purple-600'
             }`}>
-              <Coins className="w-4 h-4" /> DAO Roadmap - Legal Review
+              <Coins className="w-4 h-4" /> DAO - Launching Now
             </div>
             <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
               isDarkMode ? 'bg-amber-500/10 border border-amber-500/30 text-amber-400' : 'bg-amber-50 border border-amber-200 text-amber-600'
@@ -280,7 +280,7 @@ export default function Dashboard() {
           <Heart size={32} className="text-emerald-500 mx-auto mb-4" />
           <h2 className="text-2xl font-black italic tracking-tight mb-3">OPERATING PRINCIPLE</h2>
           <p className={`max-w-2xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Build useful products first, report only verified numbers, and keep legal-review items offline until they are ready.
+            Build useful products first, report only verified numbers, and launch when ready — not when it looks good.
           </p>
         </section>
 
