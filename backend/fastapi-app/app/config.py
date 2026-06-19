@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     database_url: str = Field(
         default="postgresql+asyncpg://postgres:postgres@localhost:5432/youandinotai"
     )
+    supabase_db_url: str = Field(
+        default="",
+        description="Primary Supabase Postgres URL. Falls back to DATABASE_URL when unset.",
+    )
     # DEPRECATED: Stripe removed — Square is the sole payment processor.
     # stripe_secret_key: str = ""  # REMOVED — Iron Wall migration to Square
     # stripe_webhook_secret: str = ""  # REMOVED — Iron Wall migration to Square
@@ -82,6 +86,12 @@ class Settings(BaseSettings):
     db_max_overflow: int = 20
     db_pool_timeout: int = 30
     db_pool_recycle: int = 1800
+
+    @property
+    def primary_database_url(self) -> str:
+        """Return Supabase Postgres when configured, otherwise the local/T5500 DB."""
+
+        return self.supabase_db_url or self.database_url
 
     # Monitoring settings
     sentry_dsn: str = ""
