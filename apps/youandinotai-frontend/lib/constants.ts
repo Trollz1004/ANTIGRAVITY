@@ -14,8 +14,8 @@ export const PUBLIC_SURFACES = [
   {
     name: 'DAO Roadmap',
     url: 'https://dashboard.aidoesitall.website',
-    status: 'Paused for legal review',
-    description: 'Review-gated mechanics are offline until attorney review is complete.',
+    status: 'Launching Now',
+    description: 'DAO governance going public. LLC for-profit structure. Join the founding community.',
   },
   {
     name: 'Customer Support',
