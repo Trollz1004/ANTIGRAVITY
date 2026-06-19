@@ -1,5 +1,6 @@
 """Health router for service status and dependency checks."""
 
+import logging
 from collections.abc import Iterable
 
 from fastapi import APIRouter, Depends
@@ -16,6 +17,7 @@ from app.webhook_event_store import recent_processed_payment_payloads
 
 router = APIRouter()
 settings = get_settings()
+logger = logging.getLogger(__name__)
 
 
 def _payment_signature_key() -> str:
@@ -112,18 +114,30 @@ async def _runtime_payment_proof_labels(db: AsyncSession) -> list[str]:
     description="Returns service health status including database, Square payment, and webhook connectivity.",
 )
 async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
-    db_connected = await check_db_health()
+    try:
+        db_connected = await check_db_health()
+    except Exception:
+        logger.exception("Health check database probe failed")
+        db_connected = False
 
     user_count = 0
     if db_connected:
-        count_result = await db.scalar(select(func.count(User.id)))
-        user_count = int(count_result or 0)
+        try:
+            count_result = await db.scalar(select(func.count(User.id)))
+            user_count = int(count_result or 0)
+        except Exception:
+            logger.exception("Health check user count failed")
+            db_connected = False
 
     square_connected = _square_health_ready()
     square_signature_configured = _square_signature_configured()
     payment_proof_labels: list[str] = []
     if db_connected:
-        payment_proof_labels = await _runtime_payment_proof_labels(db)
+        try:
+            payment_proof_labels = await _runtime_payment_proof_labels(db)
+        except Exception:
+            logger.exception("Health check payment proof lookup failed")
+            payment_proof_labels = []
     wallet_rails_proven = any(
         proof_label_is_wallet(label) for label in payment_proof_labels
     )
