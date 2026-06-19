@@ -27,7 +27,7 @@ DEFAULT_BOARDS = [
     ("dating-tips", "Dating Tips", "Share your best dating advice"),
     ("success-stories", "Success Stories", "Celebrate your matches"),
     ("events", "Events & Meetups", "Find local events"),
-    ("volunteering", "Volunteering", "Give back to the community"),
+    ("volunteering", "Volunteering", "Find local volunteer opportunities"),
 ]
 
 

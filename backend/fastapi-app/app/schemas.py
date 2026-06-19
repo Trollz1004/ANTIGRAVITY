@@ -217,6 +217,7 @@ class WaitlistSignupResponse(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     db_connected: bool
+    redis_connected: bool = False
     square_connected: bool
     square_signature_configured: bool
     wallet_rails_proven: bool
@@ -345,7 +346,7 @@ class VolunteerResponse(BaseModel):
 
 
 class VolunteerImpactResponse(BaseModel):
-    """Aggregate community impact — shown on the volunteering hub dashboard."""
+    """Aggregate volunteer activity shown on the volunteering hub dashboard."""
 
     total_opportunities: int
     total_signups: int

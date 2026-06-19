@@ -8,7 +8,7 @@ const guardrails = [
   'Internal node names, SSH reachability, and repo state do not belong on a public dashboard.',
   'Credential entry, .env editing, and admin controls must stay behind private internal tooling.',
   'Financial statements appear here only when they are backed by published, end-to-end proof.',
-  'Mission reserve allocation is tracked and reported when backed by production data.',
+  'Operational financial details stay private until they are verified and approved for publication.',
   'Founder compensation is capped at $50,000 across the entire active platform ecosystem.',
 ];
 
