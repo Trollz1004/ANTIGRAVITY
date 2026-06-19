@@ -35,7 +35,7 @@ def _truncate(value: str, limit: int) -> str:
     clean = _normalize_text(value)
     if len(clean) <= limit:
         return clean
-    return clean[: limit - 1].rstrip() + "…"
+    return clean[: limit - 3].rstrip() + "..."
 
 
 def _build_subject(category: str, message: str) -> str:
@@ -425,21 +425,8 @@ async def generate_support_decision(
     )
 
 
-async def notify_support_ticket(
-    *,
-    ticket: SupportTicket,
-    user: User,
-    settings: Settings,
-) -> bool:
-    token = str(settings.telegram_bot_token or "").strip()
-    chat_id = str(settings.telegram_chat_id or "").strip()
-    if not token or not chat_id:
-        logger.info(
-            "Skipping support ticket Telegram alert; Telegram is not configured."
-        )
-        return False
-
-    message = "\n".join(
+def _support_ticket_alert_message(*, ticket: SupportTicket, user: User) -> str:
+    return "\n".join(
         [
             "New support ticket",
             f"Ticket: {ticket.id}",
@@ -451,6 +438,16 @@ async def notify_support_ticket(
         ]
     )
 
+
+async def _send_telegram_support_alert(*, message: str, settings: Settings) -> bool:
+    token = str(settings.telegram_bot_token or "").strip()
+    chat_id = str(settings.telegram_chat_id or "").strip()
+    if not token or not chat_id:
+        logger.info(
+            "Skipping support ticket Telegram alert; Telegram is not configured."
+        )
+        return False
+
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.post(
@@ -460,12 +457,78 @@ async def notify_support_ticket(
                     "text": message,
                 },
             )
-        response.raise_for_status()
+        if response.is_error:
+            logger.warning(
+                "Support ticket Telegram alert failed with status %s",
+                response.status_code,
+            )
+            return False
     except httpx.HTTPError as exc:
-        logger.warning("Support ticket Telegram alert failed: %s", exc)
+        logger.warning(
+            "Support ticket Telegram alert failed: %s", exc.__class__.__name__
+        )
         return False
 
     return True
+
+
+async def _send_whatsapp_support_alert(*, message: str, settings: Settings) -> bool:
+    phone_id = str(settings.whatsapp_phone_id or "").strip()
+    token = str(settings.whatsapp_token or "").strip()
+    recipient = str(settings.whatsapp_to or "").strip()
+    api_version = str(settings.whatsapp_api_version or "v21.0").strip() or "v21.0"
+    if not (phone_id and token and recipient):
+        logger.info(
+            "Skipping support ticket WhatsApp alert; WhatsApp is not configured."
+        )
+        return False
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(
+                f"https://graph.facebook.com/{api_version}/{phone_id}/messages",
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "messaging_product": "whatsapp",
+                    "to": recipient,
+                    "type": "text",
+                    "text": {"body": message},
+                },
+            )
+        if response.is_error:
+            logger.warning(
+                "Support ticket WhatsApp alert failed with status %s",
+                response.status_code,
+            )
+            return False
+    except httpx.HTTPError as exc:
+        logger.warning(
+            "Support ticket WhatsApp alert failed: %s", exc.__class__.__name__
+        )
+        return False
+
+    return True
+
+
+async def notify_support_ticket(
+    *,
+    ticket: SupportTicket,
+    user: User,
+    settings: Settings,
+) -> bool:
+    message = _support_ticket_alert_message(ticket=ticket, user=user)
+    alert_sent = await _send_whatsapp_support_alert(
+        message=message, settings=settings
+    )
+    alert_sent = (
+        await _send_telegram_support_alert(message=message, settings=settings)
+        or alert_sent
+    )
+
+    return alert_sent
 
 
 def user_can_view_operator_queue(*, user: User, settings: Settings) -> bool:

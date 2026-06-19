@@ -2,24 +2,77 @@
   "openapi": "3.1.0",
   "info": {
     "title": "YouAndINotAI API",
-    "description": "YouAndINotAI - Social Platform for Good",
+    "description": "\n# YouAndINotAI API\n\n![API Status](https://img.shields.io/badge/API-v1-blue)\n\n**Human-first social platform** - A dating and community product for verified\nmembers, accountable profiles, support workflows, and real-world plans.\n\n---\n\n## \ud83d\ude80 Getting Started\n\n### Base URL\n\n| Environment | URL |\n|-------------|-----|\n| **Production** | `https://api.youandinotai.com` |\n| **Local Dev** | `http://localhost:8000` |\n\n### Quick Start\n\n```bash\n# 1. Register a new account\ncurl -X POST https://api.youandinotai.com/api/v1/auth/register \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"email\": \"user@example.com\", \"password\": \"securePass123!\", \"display_name\": \"Alex\", \"date_of_birth\": \"1995-04-20\", \"accepted_terms\": true}'\n\n# 2. Log in to get tokens\ncurl -X POST https://api.youandinotai.com/api/v1/auth/login \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"email\": \"user@example.com\", \"password\": \"securePass123!\"}'\n\n# 3. Use the access token for authenticated requests\ncurl https://api.youandinotai.com/api/v1/auth/me \\\n  -H \"Authorization: Bearer <access_token>\"\n```\n\n---\n\n## \ud83d\udd11 Authentication\n\nMost endpoints require **Bearer JWT** authentication.\n\n### Auth Flow\n\n```\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510    POST /register     \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502  Client  \u2502    POST /login        \u2502   API    \u2502\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 access_token \u2500\u2500\u2500\u2500\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 refresh_token \u2500\u2500\u2500\u2502          \u2502\n\u2502          \u2502                       \u2502          \u2502\n\u2502          \u2502  GET /me (+ Bearer)   \u2502          \u2502\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 user profile \u2500\u2500\u2500\u2502          \u2502\n\u2502          \u2502                       \u2502          \u2502\n\u2502          \u2502  POST /refresh        \u2502          \u2502\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 new tokens \u2500\u2500\u2500\u2500\u2500\u2502          \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518                       \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\n### Token Details\n\n| Token Type | Expiration | Usage |\n|------------|------------|-------|\n| `access_token` | 30 minutes | Include in `Authorization: Bearer <token>` header |\n| `refresh_token` | 7 days | Use with `POST /api/v1/auth/refresh` to get new tokens |\n\n### Example: Authenticated Request\n\n```http\nGET /api/v1/profiles/me HTTP/1.1\nHost: api.youandinotai.com\nAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\n```\n\n---\n\n## \u23f1 Rate Limiting\n\nAll API endpoints are subject to rate limiting to ensure fair usage and\nprotect the service from abuse.\n\n| Environment | Limit | Window |\n|-------------|-------|--------|\n| Production  | 60 requests | Per minute per IP |\n| Test        | 10,000 requests | Per minute per IP |\n\nWhen the rate limit is exceeded, the API returns **HTTP 429** with the error\ncode `RATE_LIMIT_EXCEEDED`.\n\n### Rate Limit Headers\n\nThe following headers are returned on all API responses to indicate rate limit status:\n\n| Header | Description |\n|--------|-------------|\n| `X-RateLimit-Limit` | The maximum number of requests allowed in the current window |\n| `X-RateLimit-Remaining` | The number of requests remaining in the current window |\n| `X-RateLimit-Reset` | The time (in UTC epoch seconds) when the current window resets |\n\n### Rate Limit Exceeded Response\n\n```json\n{\n    \"code\": \"RATE_LIMIT_EXCEEDED\",\n    \"message\": \"Too many requests. Please wait before trying again.\",\n    \"details\": {\n        \"retry_after_seconds\": 42\n    }\n}\n```\n\n---\n\n## \ud83d\udce6 Standard Error Format\n\nAll error responses follow a consistent structure:\n\n```json\n{\n    \"code\": \"ERROR_CODE\",\n    \"message\": \"Human-readable description\",\n    \"details\": null\n}\n```\n\n### Error Codes Reference\n\n| Code | HTTP Status | Meaning |\n|------|-------------|---------|\n| `INVALID_CREDENTIALS` | 401 | Bad email/password or expired token |\n| `INSUFFICIENT_PERMISSIONS` | 403 | Not allowed to access this resource |\n| `NOT_FOUND` | 404 | Resource does not exist |\n| `ALREADY_EXISTS` | 409 | Duplicate resource (e.g. email taken) |\n| `VALIDATION_ERROR` | 422 | Request body failed validation |\n| `RATE_LIMIT_EXCEEDED` | 429 | Too many requests |\n| `INTERNAL_ERROR` | 500 | Unexpected server error |\n| `SERVICE_UNAVAILABLE` | 503 | Service temporarily down |\n\n### Validation Error Example\n\n```json\n{\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": \"Request validation failed\",\n    \"details\": {\n        \"errors\": [\n            {\n                \"loc\": [\"body\", \"email\"],\n                \"msg\": \"value is not a valid email address\",\n                \"type\": \"value_error.email\"\n            }\n        ],\n        \"correlation_id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\"\n    }\n}\n```\n\n---\n\n## \ud83d\udd17 Useful Links\n\n- **Production API:** https://api.youandinotai.com\n- **Website:** https://youandinotai.com\n- **OpenAPI Schema:** `/openapi.json`\n- **Swagger UI:** `/docs`\n- **Health Dashboard:** `/api/v1/health/detailed`\n\n---\n\n## \ud83d\udcda API Sections\n\n| Tag | Description |\n|-----|-------------|\n| **health** | Service health checks and monitoring |\n| **auth** | Registration, login, token refresh |\n| **users** | User account management |\n| **profiles** | Dating profile CRUD |\n| **messaging** | Chat and direct messages |\n| **social** | Swipe, matching, double dates, events |\n| **content** | Boards, volunteering, marketing |\n| **media** | Video calls, video rooms, file uploads |\n| **billing** | Subscriptions, metrics, feature flags |\n| **operations** | Webhooks, ops runs, notifications, support |\n| **safety** | Privacy, safety, verification |\n\n---\n\n## \ud83c\udfd7 Architecture\n\nThe API is built with **FastAPI** and uses:\n- **SQLAlchemy** async ORM for database operations\n- **Redis** for caching and rate limiting\n- **JWT** for stateless authentication\n- **Square** for payment processing\n- **Daily.co** for video room management\n- **OpenTelemetry** for distributed tracing\n\n---\n\n## \ud83d\udcc4 License\n\nThis API is released under the MIT License.\nSee https://opensource.org/licenses/MIT for details.\n",
+    "contact": {
+      "name": "YouAndINotAI Team",
+      "url": "https://youandinotai.com/",
+      "email": "joshlcoleman@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
     "version": "0.1.0"
   },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Local development"
+    },
+    {
+      "url": "https://api.youandinotai.com",
+      "description": "Production"
+    },
+    {
+      "url": "https://staging-api.youandinotai.com",
+      "description": "Staging"
+    }
+  ],
   "paths": {
     "/api/v1/health": {
       "get": {
         "tags": [
           "health"
         ],
-        "summary": "Health Check",
+        "summary": "Health check",
+        "description": "Returns app readiness status including database and Redis, with Square configuration reported separately.",
         "operationId": "health_check_api_v1_health_get",
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Service is healthy",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HealthResponse"
+                },
+                "example": {
+                  "status": "ok",
+                  "db_connected": true,
+                  "redis_connected": true,
+                  "square_connected": true,
+                  "square_signature_configured": true,
+                  "wallet_rails_proven": false,
+                  "wallet_rails_status": "unproven",
+                  "payment_proof_labels": [],
+                  "user_count": 42
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service is degraded",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "degraded",
+                  "db_connected": false,
+                  "redis_connected": false,
+                  "square_connected": true,
+                  "square_signature_configured": false,
+                  "wallet_rails_proven": false,
+                  "wallet_rails_status": "unproven",
+                  "payment_proof_labels": [],
+                  "user_count": 0
                 }
               }
             }
@@ -34,6 +87,26 @@
         ],
         "summary": "Check Allocations",
         "operationId": "check_allocations_api_v1_health_allocations_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health/allocations/summary": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Allocations Summary",
+        "description": "Two-figure revenue summary: gross-with-test vs customer-only.\n\ncustomer_only is the number that actually moves the mission. with_test\nkeeps the full audit trail visible. Both come from the same ledger so\nthe math cannot drift.",
+        "operationId": "allocations_summary_api_v1_health_allocations_summary_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -274,7 +347,8 @@
         "tags": [
           "auth"
         ],
-        "summary": "Register",
+        "summary": "Register a new user",
+        "description": "Create a new user account. Requires email, password (8-128 chars), display name, date of birth, and acceptance of terms.",
         "operationId": "register_api_v1_auth_register_post",
         "requestBody": {
           "content": {
@@ -288,21 +362,42 @@
         },
         "responses": {
           "201": {
-            "description": "Successful Response",
+            "description": "User registered successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AuthTokenResponse"
+                },
+                "example": {
+                  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+                  "refresh_token": "eyJhbGciOiJIUzI1NiIs...",
+                  "token_type": "bearer",
+                  "user_id": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email already registered",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "ALREADY_EXISTS",
+                  "message": "Email already registered"
                 }
               }
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Validation error \u2014 invalid request body",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                "example": {
+                  "code": "VALIDATION_ERROR",
+                  "message": "Request validation failed",
+                  "details": {
+                    "errors": []
+                  }
                 }
               }
             }
@@ -315,7 +410,8 @@
         "tags": [
           "auth"
         ],
-        "summary": "Login",
+        "summary": "Log in",
+        "description": "Authenticate with email and password. Returns JWT access and refresh tokens.",
         "operationId": "login_api_v1_auth_login_post",
         "requestBody": {
           "content": {
@@ -329,11 +425,28 @@
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Login successful",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AuthTokenResponse"
+                },
+                "example": {
+                  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+                  "refresh_token": "eyJhbGciOiJIUzI1NiIs...",
+                  "token_type": "bearer",
+                  "user_id": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid email or password",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "INVALID_CREDENTIALS",
+                  "message": "Invalid email or password"
                 }
               }
             }
@@ -438,7 +551,8 @@
         "tags": [
           "auth"
         ],
-        "summary": "Refresh Token",
+        "summary": "Refresh tokens",
+        "description": "Refresh an access token using refresh token rotation (OPU-47). The old refresh token is validated, revoked, and replaced with a new one.",
         "operationId": "refresh_token_api_v1_auth_refresh_post",
         "requestBody": {
           "content": {
@@ -452,11 +566,28 @@
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Tokens refreshed successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AuthTokenResponse"
+                },
+                "example": {
+                  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+                  "refresh_token": "eyJhbGciOiJIUzI1NiIs...",
+                  "token_type": "bearer",
+                  "user_id": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired refresh token",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TOKEN_INVALID",
+                  "message": "Not a refresh token"
                 }
               }
             }
@@ -479,15 +610,39 @@
         "tags": [
           "auth"
         ],
-        "summary": "Get Me",
+        "summary": "Get current user",
+        "description": "Return the authenticated user's profile including subscription status, verification badges, and mission impact score.",
         "operationId": "get_me_api_v1_auth_me_get",
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Current user profile",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserMeResponse"
+                },
+                "example": {
+                  "user_id": "550e8400-e29b-41d4-a716-446655440000",
+                  "email": "user@example.com",
+                  "display_name": "Jane Doe",
+                  "bot_shield_verified": true,
+                  "subscription_tier": "founding_member",
+                  "subscription_active": true,
+                  "has_profile": true,
+                  "adult_verified": true,
+                  "mission_impact_score": 5.0,
+                  "intent_badge": "Intentional"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "INVALID_CREDENTIALS",
+                  "message": "Authentication required"
                 }
               }
             }
@@ -536,6 +691,50 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ProfileUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "profiles"
+        ],
+        "summary": "Patch My Profile",
+        "operationId": "patch_my_profile_api_v1_profiles_me_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfilePatchRequest"
               }
             }
           },
@@ -1482,7 +1681,7 @@
           "volunteering"
         ],
         "summary": "Volunteer Impact",
-        "description": "Aggregate community impact \u2014 shown on the Volunteering Hub dashboard.",
+        "description": "Aggregate volunteer activity shown on the Volunteering Hub dashboard.",
         "operationId": "volunteer_impact_api_v1_volunteer_impact_get",
         "security": [
           {
@@ -1503,10 +1702,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Filter impact by location (case-insensitive substring)",
+              "description": "Filter activity by location (case-insensitive substring)",
               "title": "Near"
             },
-            "description": "Filter impact by location (case-insensitive substring)"
+            "description": "Filter activity by location (case-insensitive substring)"
           }
         ],
         "responses": {
@@ -1915,6 +2114,184 @@
         }
       }
     },
+    "/api/v1/webhooks/retry/{event_id}": {
+      "post": {
+        "tags": [
+          "webhooks",
+          "webhooks"
+        ],
+        "summary": "Retry Webhook Event",
+        "description": "Manually retry a failed webhook event.\n\nWorks for events in the retry queue or dead-letter table.\nResets the retry count and schedules immediate processing.",
+        "operationId": "retry_webhook_event_api_v1_webhooks_retry__event_id__post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Retry Webhook Event Api V1 Webhooks Retry  Event Id  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/webhooks/dead-letter": {
+      "get": {
+        "tags": [
+          "webhooks",
+          "webhooks"
+        ],
+        "summary": "List Dead Letter",
+        "description": "List webhook events that exhausted all retries and were moved to dead-letter.",
+        "operationId": "list_dead_letter_api_v1_webhooks_dead_letter_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "title": "Response List Dead Letter Api V1 Webhooks Dead Letter Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/webhooks/retry-queue": {
+      "get": {
+        "tags": [
+          "webhooks",
+          "webhooks"
+        ],
+        "summary": "List Retry Queue",
+        "description": "List active webhook events in the retry queue.",
+        "operationId": "list_retry_queue_api_v1_webhooks_retry_queue_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "title": "Response List Retry Queue Api V1 Webhooks Retry Queue Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/verify/challenge": {
       "post": {
         "tags": [
@@ -2090,51 +2467,20 @@
         ]
       }
     },
-    "/api/v1/metrics/charity": {
+    "/api/v1/metrics": {
       "get": {
         "tags": [
           "metrics"
         ],
-        "summary": "Impact Metrics",
-        "description": "Aggregate anonymized platform metrics for the Admin Dashboard.\n\nReturns revenue splits, user counts, engagement totals.\nNO individual user data, emails, names, or payment details.",
-        "operationId": "impact_metrics_api_v1_metrics_charity_get",
-        "deprecated": true,
-        "parameters": [
-          {
-            "name": "X-Metrics-Key",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "X-Metrics-Key"
-            }
-          }
-        ],
+        "summary": "Prometheus Metrics",
+        "description": "Expose Prometheus metrics for scraping.\n\nReturns metrics in Prometheus text format including:\n- youandinotai_http_requests_total: Total HTTP requests (labeled by method, endpoint, status_code)\n- youandinotai_http_request_duration_seconds: Request duration histogram (labeled by method, endpoint)\n- youandinotai_http_requests_in_progress: Currently in-flight requests gauge",
+        "operationId": "prometheus_metrics_api_v1_metrics_get",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PlatformMetricsResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
+                "schema": {}
               }
             }
           }
@@ -2147,7 +2493,7 @@
           "metrics"
         ],
         "summary": "Impact Metrics",
-        "description": "Aggregate anonymized platform metrics for the Admin Dashboard.\n\nReturns revenue splits, user counts, engagement totals.\nNO individual user data, emails, names, or payment details.",
+        "description": "Aggregate platform metrics with no individual user or payment records.",
         "operationId": "impact_metrics_api_v1_metrics_impact_get",
         "parameters": [
           {
@@ -2172,9 +2518,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PlatformMetricsResponse"
-                }
+                "schema": {}
               }
             }
           },
@@ -2196,9 +2540,9 @@
         "tags": [
           "metrics"
         ],
-        "summary": "Get Security Audit",
-        "description": "Run and return security audit results.\n\nThis endpoint performs a comprehensive security audit of the application\nconfiguration and reports any potential security issues found.\n\nNote: This is an administrative endpoint that should only be accessible\nto authorized operators with the metrics API key.",
-        "operationId": "get_security_audit_api_v1_metrics_security_audit_get",
+        "summary": "Security Audit Metrics",
+        "description": "Expose a minimal aggregate security status for ops dashboards.",
+        "operationId": "security_audit_metrics_api_v1_metrics_security_audit_get",
         "parameters": [
           {
             "name": "X-Metrics-Key",
@@ -2222,10 +2566,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "title": "Response Get Security Audit Api V1 Metrics Security Audit Get"
-                }
+                "schema": {}
               }
             }
           },
@@ -2943,7 +3284,8 @@
         "tags": [
           "users"
         ],
-        "summary": "Register User",
+        "summary": "Register a user (legacy)",
+        "description": "Legacy user registration endpoint with IP-based rate limiting. Prefer `POST /api/v1/auth/register` for new integrations.",
         "operationId": "register_user_api_v1_users_register_post",
         "requestBody": {
           "content": {
@@ -2957,11 +3299,37 @@
         },
         "responses": {
           "201": {
-            "description": "Successful Response",
+            "description": "User created successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserRegisterResponse"
+                },
+                "example": {
+                  "user_id": "550e8400-e29b-41d4-a716-446655440000",
+                  "session_token": "dBkFyLXa3RjHmNq8pT..."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email already registered",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "ALREADY_EXISTS",
+                  "message": "Email is already registered."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "RATE_LIMIT_EXCEEDED",
+                  "message": "Rate limit exceeded. Try again in a minute."
                 }
               }
             }
@@ -3152,7 +3520,7 @@
           "marketing"
         ],
         "summary": "Update Content Item",
-        "description": "Update a marketing content item.",
+        "description": "Update a marketing content item (full replace).",
         "operationId": "update_content_item_api_v1_marketing_content__content_id__put",
         "security": [
           {
@@ -3202,6 +3570,961 @@
             }
           }
         }
+      },
+      "patch": {
+        "tags": [
+          "marketing",
+          "marketing"
+        ],
+        "summary": "Patch Content Item",
+        "description": "Partially update a marketing content item.\nOnly fields explicitly provided in the request body are updated;\nomitted fields retain their current values.",
+        "operationId": "patch_content_item_api_v1_marketing_content__content_id__patch",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Content Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarketingPostUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentItem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/flags/": {
+      "get": {
+        "tags": [
+          "feature-flags"
+        ],
+        "summary": "List all feature flags",
+        "operationId": "list_flags_api_v1_admin_flags__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Flags Api V1 Admin Flags  Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/flags/{name}": {
+      "get": {
+        "tags": [
+          "feature-flags"
+        ],
+        "summary": "Get a feature flag value",
+        "operationId": "read_flag_api_v1_admin_flags__name__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Read Flag Api V1 Admin Flags  Name  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "feature-flags"
+        ],
+        "summary": "Update a feature flag value",
+        "operationId": "update_flag_api_v1_admin_flags__name__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlagUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Update Flag Api V1 Admin Flags  Name  Put"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ops-runs": {
+      "post": {
+        "tags": [
+          "ops-runs"
+        ],
+        "summary": "Record an ops run event",
+        "operationId": "create_ops_run_api_v1_ops_runs_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpsRunCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpsRunResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "ops-runs"
+        ],
+        "summary": "List recent ops run events",
+        "operationId": "list_ops_runs_api_v1_ops_runs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OpsRunResponse"
+                  },
+                  "title": "Response List Ops Runs Api V1 Ops Runs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ops-runs/{run_id}": {
+      "get": {
+        "tags": [
+          "ops-runs"
+        ],
+        "summary": "Get a single ops run event",
+        "operationId": "get_ops_run_api_v1_ops_runs__run_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpsRunResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/api/v1/clawx/agents": {
+      "get": {
+        "tags": [
+          "clawx",
+          "clawx"
+        ],
+        "summary": "List ClawX agents",
+        "description": "Return all 6 ClawX council agents and their configuration status.\n\nKeys are never returned \u2014 only a masked prefix for configured agents.",
+        "operationId": "list_clawx_agents_api_v1_api_v1_clawx_agents_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentListResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/api/v1/clawx/agents/{agent_name}/rotate": {
+      "post": {
+        "tags": [
+          "clawx",
+          "clawx"
+        ],
+        "summary": "Rotate an agent's API key",
+        "description": "Replace the API key for *agent_name* with the provided ``new_key``.\n\nThe new key must be at least 16 characters long and contain only\nalphanumeric characters, hyphens, underscores, dots, or colons.",
+        "operationId": "rotate_agent_key_api_v1_api_v1_clawx_agents__agent_name__rotate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "agent_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Agent Name"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeyRotateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RotateResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/api/v1/clawx/health": {
+      "get": {
+        "tags": [
+          "clawx",
+          "clawx"
+        ],
+        "summary": "ClawX health check",
+        "description": "Check connectivity to the ClawX service.\n\nTests the ClawX base URL with a round-robin selected agent key.\nReturns whether the service is reachable and any error details.",
+        "operationId": "clawx_health_api_v1_api_v1_clawx_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/notifications/broadcast": {
+      "post": {
+        "tags": [
+          "notifications"
+        ],
+        "summary": "Broadcast Notification",
+        "description": "Broadcast a notification to all connected WebSocket clients.\n\nThis endpoint is used by other services/routers to trigger real-time\nnotification broadcasts. The payload must include a `type` field\ndescribing the event type.\n\nSupported event types:\n- \"task_status_change\" \u2014 a task changed status\n- \"new_issue\" \u2014 a new issue was created\n- \"agent_activity\" \u2014 an agent performed an action\n\nExample payload:\n{\n    \"type\": \"task_status_change\",\n    \"task_id\": \"abc-123\",\n    \"task_title\": \"Deploy frontend\",\n    \"old_status\": \"in_progress\",\n    \"new_status\": \"completed\"\n}",
+        "operationId": "broadcast_notification_api_v1_notifications_broadcast_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Broadcast Notification Api V1 Notifications Broadcast Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/rate-limits/status": {
+      "get": {
+        "tags": [
+          "rate-limits"
+        ],
+        "summary": "Get Rate Limit Status",
+        "description": "Return current rate limit status and usage statistics.",
+        "operationId": "get_rate_limit_status_api_v1_rate_limits_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitStatus"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/rate-limits/stats": {
+      "get": {
+        "tags": [
+          "rate-limits"
+        ],
+        "summary": "Get Rate Limit Stats",
+        "description": "Return rate limit statistics for authenticated dashboard users.",
+        "operationId": "get_rate_limit_stats_api_v1_rate_limits_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitStatus"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/rate-limits/config": {
+      "get": {
+        "tags": [
+          "rate-limits"
+        ],
+        "summary": "Get Rate Limit Config",
+        "description": "Return rate limit configuration.",
+        "operationId": "get_rate_limit_config_api_v1_rate_limits_config_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitConfig"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/rate-limits/reset": {
+      "post": {
+        "tags": [
+          "rate-limits"
+        ],
+        "summary": "Reset Rate Limit Stats",
+        "description": "Reset rate limit statistics (admin only).",
+        "operationId": "reset_rate_limit_stats_api_v1_rate_limits_reset_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Reset Rate Limit Stats Api V1 Rate Limits Reset Post"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/graphql": {
+      "get": {
+        "summary": "Handle Http Get",
+        "operationId": "handle_http_get_graphql_get",
+        "responses": {
+          "200": {
+            "description": "The GraphiQL integrated development environment.",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found if GraphiQL or query via GET are not enabled."
+          }
+        }
+      },
+      "post": {
+        "summary": "Handle Http Post",
+        "operationId": "handle_http_post_graphql_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/uploads/": {
+      "post": {
+        "tags": [
+          "uploads"
+        ],
+        "summary": "Upload File",
+        "description": "Secure file upload with validation, size limits, and virus scanning.",
+        "operationId": "upload_file_api_v1_uploads__post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_file_api_v1_uploads__post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/uploads/chunked/init": {
+      "post": {
+        "tags": [
+          "uploads"
+        ],
+        "summary": "Init Chunked Upload",
+        "description": "Initialize a chunked upload session.\n\nReturns an upload_id to use for subsequent chunk uploads.",
+        "operationId": "init_chunked_upload_api_v1_uploads_chunked_init_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Original filename",
+              "title": "Filename"
+            },
+            "description": "Original filename"
+          },
+          {
+            "name": "total_bytes",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Total file size in bytes",
+              "title": "Total Bytes"
+            },
+            "description": "Total file size in bytes"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/uploads/chunked/{upload_id}": {
+      "post": {
+        "tags": [
+          "uploads"
+        ],
+        "summary": "Upload Chunk",
+        "description": "Upload a single chunk of a file.\n\nThe Content-Range header must be present and follow the format:\n    bytes <start>-<end>/<total>\n\nChunks are stored in a temporary directory and combined on finalize.",
+        "operationId": "upload_chunk_api_v1_uploads_chunked__upload_id__post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Upload Id"
+            }
+          },
+          {
+            "name": "content-range",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Content-Range"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "uploads"
+        ],
+        "summary": "Cancel Chunked Upload",
+        "description": "Cancel a chunked upload and clean up all temporary data.",
+        "operationId": "cancel_chunked_upload_api_v1_uploads_chunked__upload_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Upload Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/uploads/progress/{upload_id}": {
+      "get": {
+        "tags": [
+          "uploads"
+        ],
+        "summary": "Get Upload Progress",
+        "description": "Get the current progress of an upload.",
+        "operationId": "get_upload_progress_api_v1_uploads_progress__upload_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Upload Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/uploads/chunked/{upload_id}/finalize": {
+      "post": {
+        "tags": [
+          "uploads"
+        ],
+        "summary": "Finalize Chunked Upload",
+        "description": "Combine all uploaded chunks into the final file and run validation.",
+        "operationId": "finalize_chunked_upload_api_v1_uploads_chunked__upload_id__finalize_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Upload Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/": {
@@ -3225,10 +4548,180 @@
           }
         }
       }
+    },
+    "/health": {
+      "get": {
+        "summary": "Root Health Check",
+        "operationId": "root_health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health/telemetry": {
+      "get": {
+        "summary": "Telemetry Health",
+        "description": "Return OpenTelemetry tracer status.",
+        "operationId": "telemetry_health_api_v1_health_telemetry_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/health/detailed": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Detailed API health dashboard",
+        "description": "Returns comprehensive health status including endpoint response times, availability, and dependency checks.",
+        "operationId": "detailed_health_dashboard_api_v1_health_detailed_get",
+        "responses": {
+          "200": {
+            "description": "Detailed health dashboard data",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "service": "youandinotai-api",
+                  "version": "1.0.0",
+                  "status": "healthy",
+                  "timestamp": "2025-01-15T10:30:00Z",
+                  "uptime_seconds": 86400,
+                  "dependencies": {
+                    "database": {
+                      "status": "connected",
+                      "latency_ms": 2.5
+                    },
+                    "redis": {
+                      "status": "connected",
+                      "latency_ms": 1.2
+                    },
+                    "square": {
+                      "status": "connected",
+                      "latency_ms": 45.0
+                    }
+                  },
+                  "endpoints": [
+                    {
+                      "path": "/api/v1/health",
+                      "method": "GET",
+                      "status": "available",
+                      "avg_response_ms": 12.3,
+                      "last_checked": "2025-01-15T10:29:55Z"
+                    }
+                  ],
+                  "rate_limiting": {
+                    "enabled": true,
+                    "requests_per_minute": 60
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service is degraded",
+            "content": {
+              "application/json": {
+                "example": {
+                  "service": "youandinotai-api",
+                  "status": "degraded",
+                  "dependencies": {
+                    "database": {
+                      "status": "disconnected"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
+      "AgentInfo": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "configured": {
+            "type": "boolean",
+            "title": "Configured"
+          },
+          "key_prefix": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key Prefix"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "configured"
+        ],
+        "title": "AgentInfo"
+      },
+      "AgentListResponse": {
+        "properties": {
+          "agents": {
+            "items": {
+              "$ref": "#/components/schemas/AgentInfo"
+            },
+            "type": "array",
+            "title": "Agents"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "configured_count": {
+            "type": "integer",
+            "title": "Configured Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "agents",
+          "total",
+          "configured_count"
+        ],
+        "title": "AgentListResponse"
+      },
       "AuthBetaAccessRequest": {
         "properties": {
           "code": {
@@ -3356,6 +4849,20 @@
           "user_id"
         ],
         "title": "AuthTokenResponse"
+      },
+      "Body_upload_file_api_v1_uploads__post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_file_api_v1_uploads__post"
       },
       "ChallengeResponse": {
         "properties": {
@@ -3854,6 +5361,24 @@
         ],
         "title": "DoubleDateSquadRecommendation"
       },
+      "EndpointStat": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "path",
+          "count"
+        ],
+        "title": "EndpointStat"
+      },
       "EventCreateRequest": {
         "properties": {
           "title": {
@@ -4029,6 +5554,18 @@
         ],
         "title": "EventResponse"
       },
+      "FlagUpdate": {
+        "properties": {
+          "value": {
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "title": "FlagUpdate"
+      },
       "GoogleLoginRequest": {
         "properties": {
           "id_token": {
@@ -4055,6 +5592,68 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "HealthCheckResponse": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "base_url": {
+            "type": "string",
+            "title": "Base Url"
+          },
+          "reachable": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reachable"
+          },
+          "status_code": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status Code"
+          },
+          "agent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agent"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled",
+          "base_url"
+        ],
+        "title": "HealthCheckResponse"
+      },
       "HealthResponse": {
         "properties": {
           "status": {
@@ -4064,6 +5663,11 @@
           "db_connected": {
             "type": "boolean",
             "title": "Db Connected"
+          },
+          "redis_connected": {
+            "type": "boolean",
+            "title": "Redis Connected",
+            "default": false
           },
           "square_connected": {
             "type": "boolean",
@@ -4104,6 +5708,24 @@
           "user_count"
         ],
         "title": "HealthResponse"
+      },
+      "KeyRotateRequest": {
+        "properties": {
+          "new_key": {
+            "type": "string",
+            "minLength": 16,
+            "title": "New Key",
+            "description": "The new API key to assign to the agent.",
+            "examples": [
+              "sk-ant-new-secret-key-here"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "new_key"
+        ],
+        "title": "KeyRotateRequest"
       },
       "LoveBotCompatibilityRequest": {
         "properties": {
@@ -4306,6 +5928,127 @@
           "primary_caption"
         ],
         "title": "MarketingPost"
+      },
+      "MarketingPostUpdate": {
+        "properties": {
+          "campaign_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Campaign Name",
+            "description": "Name of the marketing campaign"
+          },
+          "objective": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Objective",
+            "description": "Campaign objective"
+          },
+          "audience": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audience",
+            "description": "Target audience"
+          },
+          "platforms": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Platforms",
+            "description": "Platforms to publish on"
+          },
+          "core_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Core Message",
+            "description": "Core marketing message"
+          },
+          "post_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Post Type",
+            "description": "Type of post"
+          },
+          "primary_caption": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primary Caption",
+            "description": "Main caption text"
+          },
+          "call_to_action": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Call To Action",
+            "description": "Call to action phrase"
+          },
+          "hashtag_block": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hashtag Block",
+            "description": "Hashtags"
+          }
+        },
+        "type": "object",
+        "title": "MarketingPostUpdate",
+        "description": "Partial update schema \u2014 all fields optional for PATCH semantics."
       },
       "MatchResponse": {
         "properties": {
@@ -4511,38 +6254,97 @@
         ],
         "title": "MySignupResponse"
       },
-      "PlatformMetricsResponse": {
+      "OpsRunCreate": {
         "properties": {
-          "generated_at": {
+          "script": {
             "type": "string",
-            "title": "Generated At"
+            "title": "Script"
           },
-          "revenue": {
-            "$ref": "#/components/schemas/RevenuePolicyResponse"
+          "status": {
+            "type": "string",
+            "title": "Status"
           },
-          "users": {
-            "type": "object",
-            "title": "Users"
+          "duration_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Ms"
           },
-          "engagement": {
-            "type": "object",
-            "title": "Engagement"
-          },
-          "verification": {
-            "type": "object",
-            "title": "Verification"
+          "details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Details"
           }
         },
         "type": "object",
         "required": [
-          "generated_at",
-          "revenue",
-          "users",
-          "engagement",
-          "verification"
+          "script",
+          "status"
         ],
-        "title": "PlatformMetricsResponse",
-        "description": "Aggregate platform health metrics \u2014 zero PII."
+        "title": "OpsRunCreate"
+      },
+      "OpsRunResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "script": {
+            "type": "string",
+            "title": "Script"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "duration_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Ms"
+          },
+          "details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Details"
+          },
+          "recorded_at": {
+            "type": "string",
+            "title": "Recorded At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "script",
+          "status",
+          "duration_ms",
+          "details",
+          "recorded_at"
+        ],
+        "title": "OpsRunResponse"
       },
       "PostCreateRequest": {
         "properties": {
@@ -4871,6 +6673,95 @@
         ],
         "title": "PrivacyRequestResponse"
       },
+      "ProfilePatchRequest": {
+        "properties": {
+          "bio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bio"
+          },
+          "age": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age"
+          },
+          "date_of_birth": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Of Birth"
+          },
+          "gender": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gender"
+          },
+          "looking_for": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Looking For"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "interests": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interests"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ProfilePatchRequest",
+        "description": "Partial update schema \u2014 only fields explicitly sent are applied.\n\n``extra=\"forbid\"`` ensures unknown fields are rejected with 422.\n``model_fields_set`` tracks which fields were explicitly provided\n(distinguishing *absent* from *explicitly null*)."
+      },
       "ProfileResponse": {
         "properties": {
           "user_id": {
@@ -5058,34 +6949,82 @@
         "type": "object",
         "title": "ProfileUpdateRequest"
       },
-      "RevenuePolicyResponse": {
+      "RateLimitConfig": {
         "properties": {
-          "total_revenue_cents": {
+          "requestsPerMinute": {
             "type": "integer",
-            "title": "Total Revenue Cents"
+            "title": "Requestsperminute"
           },
-          "reserve_cents": {
+          "burstSize": {
             "type": "integer",
-            "title": "Reserve Cents"
+            "title": "Burstsize"
           },
-          "operating_cents": {
+          "windowSeconds": {
             "type": "integer",
-            "title": "Operating Cents"
-          },
-          "reserve_percent": {
-            "type": "integer",
-            "title": "Reserve Percent"
+            "title": "Windowseconds"
           }
         },
         "type": "object",
         "required": [
-          "total_revenue_cents",
-          "reserve_cents",
-          "operating_cents",
-          "reserve_percent"
+          "requestsPerMinute",
+          "burstSize",
+          "windowSeconds"
         ],
-        "title": "RevenuePolicyResponse",
-        "description": "Current founder-directed operating policy for LLC revenue."
+        "title": "RateLimitConfig"
+      },
+      "RateLimitStatus": {
+        "properties": {
+          "requestsThisMinute": {
+            "type": "integer",
+            "title": "Requeststhisminute"
+          },
+          "requestsPerMinute": {
+            "type": "integer",
+            "title": "Requestsperminute"
+          },
+          "resetInSeconds": {
+            "type": "integer",
+            "title": "Resetinseconds"
+          },
+          "totalRequestsToday": {
+            "type": "integer",
+            "title": "Totalrequeststoday"
+          },
+          "topEndpoints": {
+            "items": {
+              "$ref": "#/components/schemas/EndpointStat"
+            },
+            "type": "array",
+            "title": "Topendpoints"
+          }
+        },
+        "type": "object",
+        "required": [
+          "requestsThisMinute",
+          "requestsPerMinute",
+          "resetInSeconds",
+          "totalRequestsToday",
+          "topEndpoints"
+        ],
+        "title": "RateLimitStatus"
+      },
+      "RotateResponse": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "rotated"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "RotateResponse"
       },
       "SafetyBlockRequest": {
         "properties": {
@@ -5793,7 +7732,7 @@
           "local_opportunities"
         ],
         "title": "VolunteerImpactResponse",
-        "description": "Aggregate community impact \u2014 shown on the volunteering hub dashboard."
+        "description": "Aggregate volunteer activity shown on the volunteering hub dashboard."
       },
       "VolunteerResponse": {
         "properties": {
@@ -5969,5 +7908,135 @@
         "scheme": "bearer"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "health",
+      "description": "Health check and monitoring endpoints. Use these to verify service status, database connectivity, Square payment integration, and webhook processing health. Endpoints include `/health` and `/api/v1/health` for overall status, `/api/v1/health/allocations` for allocation ledger checks, and `/api/v1/health/webhooks` for webhook processing. Responses provide detailed status codes and dependency health."
+    },
+    {
+      "name": "auth",
+      "description": "Authentication and authorization. Register new accounts via `POST /api/v1/auth/register`, log in with email/password or Google via `POST /api/v1/auth/login` to receive an `access_token` and `refresh_token`. Refresh JWT tokens using `POST /api/v1/auth/refresh`, and retrieve the current user profile (`GET /api/v1/auth/me`). Detailed request/response examples are available for each endpoint."
+    },
+    {
+      "name": "users",
+      "description": "User management and profiles. Register, retrieve, and update user accounts and public profiles."
+    },
+    {
+      "name": "profiles",
+      "description": "Extended profile management. Create, read, patch, and delete rich dating profiles including bio, photos, interests, and verification status."
+    },
+    {
+      "name": "messaging",
+      "description": "Chat, messages, and real-time communication. Send and receive messages within matches, manage conversations, and handle message read receipts."
+    },
+    {
+      "name": "messages",
+      "description": "Direct messaging between matched users. Send text messages, list conversation history, and mark messages as read."
+    },
+    {
+      "name": "lovebot",
+      "description": "AI-powered relationship coaching and conversation assistance. Get personalised advice, ice-breakers, and date planning suggestions."
+    },
+    {
+      "name": "social",
+      "description": "Swipe, matching, double dates, and events. Discover new people, swipe to like/pass, form matches, organise double dates, and browse community events."
+    },
+    {
+      "name": "swipe",
+      "description": "Swipe-based discovery and matching. Browse discover profiles, swipe left (pass) or right (like), and receive match notifications when both users like each other."
+    },
+    {
+      "name": "double-dates",
+      "description": "Double date sessions. Propose double dates between two matches, accept/reject invitations, and manage group date sessions."
+    },
+    {
+      "name": "events",
+      "description": "Community events. Create, browse, RSVP to, and manage local and virtual events."
+    },
+    {
+      "name": "content",
+      "description": "Boards, volunteering opportunities, and marketing content. Community discussion boards, volunteer opportunity listings, and promotional marketing endpoints."
+    },
+    {
+      "name": "boards",
+      "description": "Community discussion boards. Create posts, comment, like, and report content within topic-based boards."
+    },
+    {
+      "name": "volunteering",
+      "description": "Volunteering opportunities and member activity. Browse and sign up for volunteer opportunities, track hours, and view aggregate activity metrics."
+    },
+    {
+      "name": "marketing",
+      "description": "Marketing and promotional endpoints. Landing page content, referral tracking, and campaign management."
+    },
+    {
+      "name": "media",
+      "description": "Video, video rooms, and file uploads. Manage video call sessions, create Daily.co video rooms, and handle secure file uploads (photos, documents)."
+    },
+    {
+      "name": "video",
+      "description": "Video call management. Initiate, join, and end video calls between matched users."
+    },
+    {
+      "name": "video-rooms",
+      "description": "Daily.co video room management. Create, configure, and manage persistent video rooms for dates and group calls."
+    },
+    {
+      "name": "uploads",
+      "description": "Secure file uploads. Upload photos, profile pictures, and other media with type and size validation."
+    },
+    {
+      "name": "billing",
+      "description": "Billing, metrics, and feature flags. Manage subscriptions, view billing history, access platform metrics, and check feature flag status."
+    },
+    {
+      "name": "metrics",
+      "description": "Platform metrics and analytics. Access aggregated usage statistics and performance indicators."
+    },
+    {
+      "name": "feature-flags",
+      "description": "Feature flag management. Check which features are enabled for the current user or environment."
+    },
+    {
+      "name": "operations",
+      "description": "Ops runs, webhooks, notifications, and support. Operational endpoints for managing background jobs, webhook delivery, push notifications, and support tickets."
+    },
+    {
+      "name": "webhooks",
+      "description": "Webhook ingestion and retry management. Receive and process webhooks from external services (Square, etc.) and manage retry queues for failed deliveries."
+    },
+    {
+      "name": "ops-runs",
+      "description": "Operational background job runs. Trigger, monitor, and manage scheduled and on-demand operational tasks."
+    },
+    {
+      "name": "notifications",
+      "description": "Push notifications and in-app alerts. Manage notification preferences, device tokens, and notification history."
+    },
+    {
+      "name": "support",
+      "description": "Customer support. AI-assisted support chat, ticket creation, and escalation workflows."
+    },
+    {
+      "name": "safety",
+      "description": "Privacy, safety, and verification. GDPR data export/deletion requests, content blocking/reporting, identity verification, and account safety settings."
+    },
+    {
+      "name": "privacy",
+      "description": "Privacy and data protection (GDPR). Request data export, initiate account deletion, and manage privacy preferences."
+    },
+    {
+      "name": "verification",
+      "description": "Identity verification. Submit and check identity verification status for profile badges."
+    },
+    {
+      "name": "waitlist",
+      "description": "Waitlist management. Join the beta waitlist and manage waitlist invitations."
+    },
+    {
+      "name": "clawx",
+      "description": "ClawX AI Council integration. Multi-AI governance and deliberation endpoints."
+    }
+  ]
 }

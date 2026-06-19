@@ -57,6 +57,9 @@ def test_health_check_reports_square_connected(monkeypatch):
     monkeypatch.setattr(health, "settings", _settings())
     monkeypatch.setattr(health, "check_db_health", AsyncMock(return_value=True))
     monkeypatch.setattr(
+        health, "redis_health_check", AsyncMock(return_value={"status": "ok"})
+    )
+    monkeypatch.setattr(
         health, "_runtime_payment_proof_labels", AsyncMock(return_value=[])
     )
 
@@ -64,6 +67,7 @@ def test_health_check_reports_square_connected(monkeypatch):
 
     assert response.status == "ok"
     assert response.db_connected is True
+    assert response.redis_connected is True
     assert response.square_connected is True
     assert response.square_signature_configured is True
     assert response.wallet_rails_proven is False
@@ -79,6 +83,9 @@ def test_health_check_reports_wallet_runtime_proof(monkeypatch):
     monkeypatch.setattr(health, "settings", _settings())
     monkeypatch.setattr(health, "check_db_health", AsyncMock(return_value=True))
     monkeypatch.setattr(
+        health, "redis_health_check", AsyncMock(return_value={"status": "ok"})
+    )
+    monkeypatch.setattr(
         health,
         "_runtime_payment_proof_labels",
         AsyncMock(return_value=["wallet:apple_pay", "card:visa"]),
@@ -87,6 +94,7 @@ def test_health_check_reports_wallet_runtime_proof(monkeypatch):
     response = asyncio.run(health.health_check(mock_db))
 
     assert response.status == "ok"
+    assert response.redis_connected is True
     assert response.wallet_rails_proven is True
     assert response.wallet_rails_status == "proven"
     assert response.payment_proof_labels == ["wallet:apple_pay", "card:visa"]

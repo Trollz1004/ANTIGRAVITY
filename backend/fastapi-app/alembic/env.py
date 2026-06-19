@@ -24,6 +24,15 @@ from app.migration_safety import MigrationSafetyChecker, ENV_VAR_DRY_RUN
 
 settings = get_settings()
 
+
+def _migration_database_url() -> str:
+    """Use the same database target as the app runtime."""
+
+    url = settings.primary_database_url
+    if url.startswith("postgresql://"):
+        return url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    return url
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -73,7 +82,7 @@ def run_migrations_offline() -> None:
     script to a buffer.
 
     """
-    url = settings.database_url
+    url = _migration_database_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -123,7 +132,7 @@ async def run_migrations_online() -> None:
 
     """
     configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = settings.database_url
+    configuration["sqlalchemy.url"] = _migration_database_url()
     connectable = AsyncEngine(
         engine_from_config(
             configuration,
