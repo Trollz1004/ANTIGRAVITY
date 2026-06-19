@@ -47,29 +47,25 @@ test('Code chip POSTs to /hermes/active', async ({ page }) => {
   expect(body).toEqual({ model: 'code' });
 });
 
-test('Paperclip Worker details', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
-  await expect(page.getByText('c7bc9665-3923-4977-acd7-2033838cd56e')).toBeVisible();
-  await expect(page.getByText('c:\Antigravity\infra\cloudflare\paperclip-hq.yml')).toBeVisible();
-});
-
 test('T5500 stack', async ({ page }) => {
   await page.route('**/health/t5500', async (route) => {
     await route.fulfill({ json: {
       status: 'ok', checked_at: '', latency_ms: 1, error: null,
-      details: { host: '192.168.0.15', ok: 4, total: 4, services: [
+      details: { host: '192.168.0.15', ok: 5, total: 5, services: [
+        { service: 'date_app_api', status: 'ok', port: 8000, latency_ms: 1, error: null },
+        { service: 'date_app_static', status: 'ok', port: 3200, latency_ms: 1, error: null },
         { service: 'postgres', status: 'ok', port: 5432, latency_ms: 1, error: null },
-        { service: 'qdrant', status: 'ok', port: 6333, latency_ms: 1, error: null },
         { service: 'redis', status: 'ok', port: 6379, latency_ms: 1, error: null },
-        { service: 'openclaw_api', status: 'ok', port: 3200, latency_ms: 1, error: null },
+        { service: 'openclaw_support', status: 'ok', port: 18789, latency_ms: 1, error: null },
       ]}
     }});
   });
   await page.goto('http://localhost:5173/');
+  await expect(page.getByText('date app API')).toBeVisible();
+  await expect(page.getByText('date app static')).toBeVisible();
   await expect(page.getByText('uandinotai-postgres')).toBeVisible();
-  await expect(page.getByText('qdrant vectors')).toBeVisible();
   await expect(page.getByText('redis cache')).toBeVisible();
-  await expect(page.getByText('OpenClaw API')).toBeVisible();
+  await expect(page.getByText('OpenClaw support')).toBeVisible();
 });
 
 test('Runbooks list', async ({ page }) => {

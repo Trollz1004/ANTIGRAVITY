@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_PAPERCLIP_URL: string;
+  readonly VITE_OPENCLAW_SUPPORT_URL: string;
 }
 
 interface ImportMeta {

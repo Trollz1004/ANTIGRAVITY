@@ -3,7 +3,7 @@ import "./index.css";
 import { AgentCardSkeleton, DAOCardSkeleton, BucketMeterSkeleton } from "./Skeletons";
 
 const API_BASE =
-  import.meta.env.VITE_PAPERCLIP_URL || "https://paperclip-hq.youandinotai.com";
+  import.meta.env.VITE_OPENCLAW_SUPPORT_URL || "http://localhost:18789";
 
 interface Agent {
   id: string;
@@ -15,7 +15,7 @@ interface Agent {
 }
 
 interface PlatformHealth {
-  paperclip: boolean;
+  openclaw: boolean;
   agents: Agent[];
   lastCheck: string;
 }
@@ -140,7 +140,7 @@ export function App() {
           <div className="subtitle">Mission Control</div>
           <div className="connection">
             <StatusDot status={connected ? "online" : "offline"} />
-            <span>{connected ? "Paperclip HQ Connected" : "Paperclip HQ Offline"}</span>
+            <span>{connected ? "OpenClaw Support Connected" : "OpenClaw Support Offline"}</span>
             {loading && agents.length > 0 && (
               <span className="refresh-indicator">Refreshing...</span>
             )}
