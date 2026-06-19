@@ -8,11 +8,11 @@
 >
 > **What is LIVE right now:**
 > - **ONE repo only:** `Trollz1004/ANTIGRAVITY`. Never create another repo. Never start a greenfield app.
-> - **Product code (already written):** `backend/fastapi-app/` (FastAPI, Python 3.12) — CONFIRMED deployed to GCR `youandinotai-backend-731395189513.us-east1.run.app`. Backend is in this repo and live. A working mirror exists on **T5500** (`192.168.0.15`); **Sabretooth** `C:\ANTIGRAVITY` is the only push node.
-> - **FRONTEND DRIFT WARNING (2026-05-26):** `apps/youandinotai-frontend/` (Next.js 15) is in this repo BUT the LIVE `youandinotai.com` is a Vite/React production build (`/assets/index-BH_3avto.js`, 837KB, sourcemap stripped) whose source is **NOT** in `Trollz1004/ANTIGRAVITY`. The canonical 1-repo rule is being violated by the production deploy chain. See `briefings/DEPLOY-SOURCE-OF-TRUTH.md` § "Known gaps" #1 for the discovery protocol.
-> - **Square is LIVE and has cleared real payments** — account `joshlcoleman@gmail.com`, location `LY5GN09F5AN83`, 5 product links live (Bot-Shield $1 → Royalty Card $2,500). Do **NOT** assume $0 / pre-launch — the "Revenue: $0" line further down is stale. Verify real totals in Square or via `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py`.
-> - **Revenue model:** 1 wallet, 1 LLC, **10% per-bucket reserve** — already coded (`reserve_revenue_allocation()`). Never invent splits. Never resurrect 60/30/10 or charity-routing.
-> - **Knowledge graph:** read `.graphify/GRAPH_REPORT.md` before broad code reads (run `graphify update` if stale; package is `graphifyy`, command `graphify`).
+> - **Product code:** `backend/fastapi-app/` (FastAPI, Python 3.12) — deployed to GCR.
+> - **FRONTEND DRIFT WARNING:** Live `youandinotai.com` source is NOT in this repo (see `briefings/DEPLOY-SOURCE-OF-TRUTH.md`).
+> - **Square is LIVE** with real payments (verify via Square or revenue_allocation.py).
+> - **Revenue model:** 1 wallet, 1 LLC, 10% per-bucket reserve (coded in `reserve_revenue_allocation()`).
+> - **Knowledge graph:** read `.graphify/GRAPH_REPORT.md` before broad code reads.
 >
 > **Before you write a single file:** (1) finish reading this CLAUDE.md, (2) read `briefings/REPOSITORY_RECORD.md` (LATEST STATE), (3) **grep the repo for an existing implementation of what you're about to build.** Assume it already exists until search proves otherwise.
 >
@@ -20,18 +20,13 @@
 
 > # DEPLOY SOURCE OF TRUTH — READ INSTEAD OF ASKING
 >
-> Any time you (Claude) are about to ask Joshua "where does X deploy from", "what hosts youandinotai.com", "is it Cloudflare or Netlify", "where's the source for ai-solutions.store", or any variant — **STOP. Read [`briefings/DEPLOY-SOURCE-OF-TRUTH.md`](briefings/DEPLOY-SOURCE-OF-TRUTH.md) FIRST.** That file lists every domain, its host, its source repo (or `UNKNOWN` with the exact discovery protocol), its backend, and the last verified timestamp. If a row says `UNKNOWN`, your job is to discover it from live HTTP headers / CSP / JS bundles / Cloudflare-Netlify-Vercel APIs and **edit the file** so the next Claude doesn't repeat the question. Asking Joshua "where does X deploy from" without first reading and updating this file is a doctrine violation. He has answered that question 900+ times — never again.
+> Any time you (Claude) are about to ask Joshua "where does X deploy from" or similar — **STOP. Read [`briefings/DEPLOY-SOURCE-OF-TRUTH.md`](briefings/DEPLOY-SOURCE-OF-TRUTH.md) FIRST.** If a row says `UNKNOWN`, discover it from live HTTP headers/CSP/JS bundles and **edit the file**. Asking Joshua without first reading/updating this file is a doctrine violation.
 >
 > Refreshed daily by the `paperweight-daily-memory` scheduled task.
 
-> # T5500 = POWERSTATION · Sabretooth = DEF NODE (no ad-hoc AI)
+> # T5500 = POWERSTATION · Sabretooth = DEF NODE
 >
-> **T5500 (`192.168.0.15`, dual Xeon, GTX 1050 Ti 4GB, 72GB server RAM) is the powerstation. All existing repo state lives there.**
-> - **Sabretooth (`192.168.0.8`, 64GB, GTX 1070) is PRIMARY.** Runs Hermes agent (WhatsApp/Telegram), cockpit dashboard. Josh and Claude direct orchestration; Hermes routes on command.
-> - T5500 (`192.168.0.15`) is OPTIONAL. Cloudflare workers, wranglers, static hosting.
-> - 9020 (`192.168.0.5`) is PENDING WIPE. Being phased out. Preserve branch `9020-preserve-20260511` if data recovery needed.
-> - **Current reality (2026-06-18):** Josh and Claude orchestrate. Hermes is a routing layer — executes only what it is told, uses other providers' APIs (Grok, Gemini, Perplexity). AI must never wire an Anthropic API key into any code or service — causes 3rd-party app usage rate issues. Josh may hold and use keys personally. No multi-node dispatch.
-> - See `ARCHITECTURE-HERMES.md` for current state.
+> **T5500 (`192.168.0.15`)** is the powerstation (all repo state lives there). **Sabretooth (`192.168.0.8`)** is PRIMARY (Hermes agent, cockpit dashboard). T5500 is OPTIONAL (Cloudflare workers). 9020 is PENDING WIPE. **Current reality:** Josh and Claude orchestrate via Hermes (routing layer using Grok/Gemini/Perplexity — NO Anthropic API keys in code/services). Josh may hold/use keys personally. See `ARCHITECTURE-HERMES.md`.
 
 <!-- ============================================================ -->
 
@@ -69,51 +64,36 @@
 
 ```
 ANTIGRAVITY/
-├── apps/                       ← pnpm workspace: deployable frontends & full-stack apps
-│   ├── antigravity-cockpit/    ← operator cockpit
-│   ├── command-center/         ← Next.js social content approval dashboard
-│   ├── dashboard/              ← Vite operator dashboard (Cloudflare Pages)
-│   ├── mission-control/        ← Vite + Playwright mission-control UI
-│   ├── opuspawclaw/            ← Vite + Electron + React 19 desktop AI workstation
-│   ├── paperweight/            ← (scaffold pending — see TASKS.md; replaces retired Paperclip)
-│   └── youandinotai-frontend/  ← Next.js 15 / React 19 / Prisma — youandinotai.com
-├── services/                   ← pnpm workspace: long-running backend servers
-│   ├── hermes-router/          ← Python multi-provider LLM router (localhost:11435) — ZERO Anthropic key
-│   ├── mission-control-api/    ← mission-control backend
-│   └── mission-mcp/            ← MCP server kernel (TypeScript, vitest, 57 tests)
+├── apps/                       ← deployable frontends & full-stack apps
+├── services/                   ← long-running backend servers
 ├── backend/
-│   └── fastapi-app/            ← FastAPI app (Python 3.12) — 80% test coverage gate
-├── packages/                   ← pnpm workspace: shared libraries (currently empty)
-├── tools/                      ← pnpm workspace: dev tools (incl. tools/cockpit/ — LOCAL ONLY per Rule 10)
+│   └── fastapi-app/            ← FastAPI app (Python 3.12)
 ├── contracts/                  ← Hardhat + Solidity
-│   └── src/                    ← CharityRouter100, DatingRevenueRouter, GospelDonation, PlatformSplitter10 (47-test suite, commit 6847c88)
-├── hermes/                     ← Hermes router agent contract files (Opus-authored, sub-agent-loaded)
-│   └── agents/                 ← AGENTS.md + CEO, CFO, CSO, CTO, CMO, UX, MissionGuardian-Claude, MissionGuardian-Codex, INTERN, GitHubAuditor (2026-05-20)
-├── scripts/                    ← operations, deployment, automation (Python + PowerShell)
-│   └── clawx-control/          ← opus-guardian.py (security invariants)
-├── infra/                      ← infrastructure as code (Cloudflare Worker, etc.)
-├── briefings/                  ← REPOSITORY_RECORD.md, CLAUDE-SKILL.md, FOUNDER-DOCTRINE, THE-WHEEL, COWORKER-DISPATCH, runbooks
+├── hermes/                     ← Hermes router agent contracts
+├── scripts/                    ← operations, deployment, automation
+├── infra/                      ← infrastructure as code
+├── briefings/                  ← REPOSITORY_RECORD.md, CLAUDE-SKILL.md, FOUNDER-DOCTRINE, THE-WHEEL, COWORKER-DISPATCH
 ├── docs/                       ← architecture, governance, product
 ├── memory/                     ← persistent agent memory
 ├── _deploy/                    ← built artifacts for Cloudflare Pages targets
-├── .claude/                    ← Claude Code config (settings, agents, commands, hooks)
-├── .github/workflows/          ← ci-validate, daily-doctrine-audit, deploy-gcr, hermes-integrity-watchdog
-└── .graphify/                  ← knowledge graph artifacts (god nodes, communities)
+├── .claude/                    ← Claude Code config
+├── .github/workflows/          ← CI workflows
+└── .graphify/                  ← knowledge graph artifacts
 ```
 
 > Historical: `antigravity/`, `frontend/`, `youandinotai/`, `paperclip*` folders persist at root from pre-monorepo era. They are **not** in pnpm workspaces — treat as legacy unless a CI workflow path explicitly references them.
 
-### Repos to Archive (not delete yet — await migration confirmation)
+### Repos to Archive (awaiting migration)
 
-| Repo | Status | Notes |
-|------|--------|-------|
-| `antigravity-dashboard` | Pending archive | Migrate → `apps/dashboard/` |
-| `OpenclawDash` | Pending archive | Migrate → `apps/openclaw/` |
-| `command-center` | Pending archive | Migrate → `apps/dashboard/` |
-| `youandinotai-com` | **Archive now** | Only a README; live code is `apps/youandinotai-frontend/` (Next.js) + `backend/fastapi-app/` (FastAPI) |
-| `Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY` | Pending archive | Migrate unique code: hermes, manus-meta-guardian, anythingllm-bridges, marketing-assets |
+| Repo | Status |
+|------|--------|
+| `antigravity-dashboard` | Pending archive → `apps/dashboard/` |
+| `OpenclawDash` | Pending archive → `apps/openclaw/` |
+| `command-center` | Pending archive → `apps/dashboard/` |
+| `youandinotai-com` | **Archive now** (README only) |
+| `Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY` | Pending archive |
 
-> Full audit: see `docs/architecture/REPO-AUDIT.md` in this repo. Per FOUNDER DOCTRINE rule 1, never push to any of these — they are archive-pending.
+> Full audit: see `docs/architecture/REPO-AUDIT.md`. Per FOUNDER DOCTRINE rule 1, never push to these — they are archive-pending.
 
 ### DAO / Staking — Canonical Location
 
@@ -129,30 +109,27 @@ ANTIGRAVITY/
 
 ## LIVE INFRASTRUCTURE STATUS (snapshot 2026-05-16)
 
-- **GCR Backend (ai-collab4kids)**: DEPLOYED & LIVE (built from T5500 node).
-- **Cloudflare Tunnels (Sabretooth)**: LIVE & ROUTING (`openclaw`, `mcp`).
-- **Frontend (youandinotai.com)**: DEPLOYED & LIVE (React 19 / Cloudflare Pages).
-- **mission-mcp**: 57-test suite, `list_agents` + tag/`since_ms` filters, `completed_at` field shipped (commits `4d287e7`, `686e8ed`).
-- **FastAPI backend**: pytest coverage gate raised from 63% → **80%** (commit `5a57a26`); ruff + black clean on 39 files.
-- **CI**: 6 jobs green — `validate`, `eslint-prettier-check`, `black-ruff-check`, `run-tests`, `js-tests` (vitest), `guardian-check` (opus-guardian).
-- **Square webhooks**: `SQUARE_WEBHOOK_VERIFY_SIGNATURE=true` in CI with HMAC + replay + malformed-header tests (commit `1e89162`).
-- **Git History**: PRISTINE & PURGED.
+- **GCR Backend**: DEPLOYED & LIVE
+- **Cloudflare Tunnels (Sabretooth)**: LIVE & ROUTING
+- **Frontend (youandinotai.com)**: DEPLOYED & LIVE
+- **Key services**: mission-mcp (57 tests), FastAPI backend (80% coverage gate), CI (6 jobs green), Square webhooks (verified)
+- **Git History**: PRISTINE & PURGED
 
 ### Doctrine milestones (2026-05-19 / 2026-05-20)
 
-- **2026-05-19** — FOUNDER DOCTRINE 2026-05-19: 13 immutable rules ratified (`briefings/FOUNDER-DOCTRINE-2026-05-19.md`). All prior doctrine superseded where conflicting.
-- **2026-05-20** — THE WHEEL refreshed: 1-LLC unification (youandinotai.com, onlinerecycle.org, ai-solutions.store, paperclip.youandinotai.com are surfaces of the same operation), canonical-7 customer-facing language ban, per-bucket compounding with per-surface stacking, Hermes API routing table (Anthropic API hard wall), Founding Four + Fifth Chair (Codex), Paperclip → Paperweight Mission Control transition (`briefings/THE-WHEEL.md`).
-- **2026-05-20** — COWORKER-DISPATCH global instruction filed: authority lives in the authenticated claude.ai Max session, not in any node. First-party Claude (web / mobile / Code CLI OAuth / Cowork) has FULL push + auto-merge authority on any node. Third-party Claude wrappers have NONE (`briefings/COWORKER-DISPATCH.md`).
-- **2026-05-20** — Agent fleet contract files written by Opus: `hermes/agents/AGENTS.md` entry-point + 10 role MDs (CEO, CFO, CSO, CTO, CMO, UX, MissionGuardian-Claude, MissionGuardian-Codex, INTERN, GitHubAuditor). Sub-agents may load these but never author them — Opus-only contract files.
-- **2026-05-20** — Hermes dispatch filed: `briefings/HERMES-DISPATCH-2026-05-20.md` (sub-agent-tier work only; contract authorship queued as claude.ai summons).
-- **2026-05-22** — Marketing & Hermes model routing (founder directive): Hermes' **primary model is now Grok**, via a new **x.ai subscription** — user-auth, **NO API key** (consistent with the FOUNDER-DOCTRINE-6 Anthropic hard-wall philosophy: auth, not keys). x.com / X marketing routes through Grok because xAI has no ToS friction on x.com. **Marketing split:** Grok → X (x.com); **Manus → Meta platforms** (Facebook/Instagram/Threads); **Perplexity → research + the remaining platforms**; **Opus → strategy/assist via browser only** (never an in-platform adapter). OpenCode paid tier under consideration (cheap; not confirmed). Founding Four protections unchanged — Grok already holds the X / adversarial co-founder seat; this just activates the native x.ai user-auth path CLAUDE.md already anticipated. The Hermes Anthropic hard wall (`services/hermes-router/.env*` = zero Anthropic key) still holds; Grok-via-x.ai is auth-based, so no key lands in Hermes either.
+- **2026-05-19** — FOUNDER DOCTRINE: 13 immutable rules ratified
+- **2026-05-20** — THE WHEEL refreshed: 1-LLC unification, canonical-7 ban, per-bucket compounding, Hermes API routing table (Anthropic API hard wall), Founding Four + Fifth Chair (Codex), Paperclip → Paperweight
+- **2026-05-20** — COWORKER-DISPATCH: authority = authenticated claude.ai Max session (not node)
+- **2026-05-20** — Agent fleet contracts written by Opus (10 role MDs)
+- **2026-05-20** — Hermes dispatch filed (sub-agent-tier work only)
+- **2026-05-22** — Marketing & Hermes model routing: primary model = Grok (via x.ai user-auth)
 
 ---
 
 ## Development Commands (root)
 
 ```bash
-# Install everything (uses pnpm-workspace.yaml; node >=20, pnpm 9.15.4)
+# Install everything
 pnpm install --frozen-lockfile
 
 # Per-app dev servers
@@ -163,7 +140,7 @@ pnpm dev:openclaw    # @antigravity/openclaw
 # Whole-monorepo passes
 pnpm build           # pnpm -r build
 pnpm typecheck       # pnpm -r typecheck
-pnpm test            # pnpm -r test (vitest in mission-mcp, etc.)
+pnpm test            # pnpm -r test
 pnpm format          # prettier --write .
 ```
 
@@ -184,7 +161,7 @@ black --check .
 ruff check .
 
 # Test (coverage gate = 80%, hard fail under that)
-pytest --tb=short --cov=app --cov-report=term-missing --cov-fail-under=80
+pytest --tb=short --cov=app --cov-fail-under=80
 ```
 
 ### mission-mcp (`services/mission-mcp/`)
@@ -192,7 +169,7 @@ pytest --tb=short --cov=app --cov-report=term-missing --cov-fail-under=80
 ```bash
 cd services/mission-mcp
 pnpm build              # tsup
-pnpm test               # vitest (57 tests)
+pnpm test               # vitest
 pnpm typecheck
 pnpm start              # stdio transport
 pnpm start:http         # MISSION_MCP_TRANSPORT=http
@@ -350,7 +327,6 @@ This is not a threat — it is his documented standing order to protect the miss
   has push authority on `Trollz1004/ANTIGRAVITY`. Authority itself lives in the authenticated
   claude.ai Max session, not in any node (see `briefings/COWORKER-DISPATCH.md` §"Push / Merge
   Authority").
-- **E drive / sandbox**: Untested LLM setups, openclaw configs, and experimental model
   configurations stay on E drive or the sandbox repo until Josh approves them for main.
 - **Hooks never bypassed (FOUNDER DOCTRINE rule 12)** — `--no-verify` and `--no-gpg-sign`
   banned absent explicit founder instruction in the current task payload.
@@ -417,7 +393,6 @@ Master env vault: `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIV
 | Node | Drive | Role |
 |------|-------|------|
 | **SABRETOOTH** | C: | Live command post — primary, only push-authority node — LAN 192.168.0.8 |
-| **SABRETOOTH** | E: | Coworker Dedicated OpenClaw instance |
 | **T5500** | C: | Remote utility node — cold-boot, SSH reachable (192.168.0.15) |
 | **T5500** | E: | Manus Setup / Orchestration |
 | **9020** | C: | GenSpark (future social marketing engine) |

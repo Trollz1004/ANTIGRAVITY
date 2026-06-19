@@ -148,7 +148,7 @@ package.json          # scripts: dev (wrangler pages dev --port 8788), deploy (w
 
 ### OpenclawDash
 
-- **Purpose:** A one-shot pitch artifact built by Manus — a public transparency dashboard + OpenAI participation proposal for Team Claude. Includes a live analytics layer tracking slide engagement, visitor flow, and real-time metrics. Also doubles as an OpenClaw dashboard hub with a full-stack Node/Express + Vite/React frontend connected to a MySQL database via Drizzle ORM.
+  - **Purpose:** A one-shot pitch artifact built by Manus — a public transparency dashboard + OpenAI participation proposal for Team Claude. Includes a live analytics layer tracking slide engagement, visitor flow, and real-time metrics. (Note: This dashboard does not utilize OpenClaw; OpenClaw is exclusively for customer support.)
 - **Tech stack:** TypeScript, Vite + React 19, Express (server), Drizzle ORM + MySQL2, tRPC, TanStack Query, Radix UI, Tailwind CSS 4, OpenAI SDK, Framer Motion, AWS S3 SDK. Built with `vite-plugin-manus-runtime`. Full Zod validation throughout.
 - **Top-level structure:**
   ```

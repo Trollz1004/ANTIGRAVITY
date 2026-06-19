@@ -1,0 +1,61 @@
+<!-- @dsCard group="Components" viewport="700x230" name="Feedback — Badges & Status" subtitle="Badge tones & solids · StatusPill states" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { padding: 24px; }
+  .wrap { display: flex; flex-direction: column; gap: 18px; }
+  .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .col-head { font: 500 9px/1 var(--ag-font-mono); text-transform: uppercase; letter-spacing: .2em; color: var(--ag-text-muted-deep); margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  const { Badge, StatusPill } = window.ANTIGRAVITYDesignSystem_58589b;
+  function Demo() {
+    return (
+      <div className="wrap">
+        <div>
+          <div className="col-head">Badges — tinted</div>
+          <div className="row">
+            <Badge tone="cyan">New</Badge>
+            <Badge tone="pink">Beta</Badge>
+            <Badge tone="rose">Hot</Badge>
+            <Badge tone="gold">Verified</Badge>
+            <Badge tone="slate">Draft</Badge>
+            <Badge tone="success">Synced</Badge>
+          </div>
+        </div>
+        <div>
+          <div className="col-head">Badges — solid</div>
+          <div className="row">
+            <Badge tone="pink" solid>Most Popular</Badge>
+            <Badge tone="cyan" solid>Founding</Badge>
+            <Badge tone="gold" solid>18+</Badge>
+          </div>
+        </div>
+        <div>
+          <div className="col-head">Status pills</div>
+          <div className="row">
+            <StatusPill status="live" />
+            <StatusPill status="active" />
+            <StatusPill status="pending" />
+            <StatusPill status="paused" label="Legal review" />
+            <StatusPill status="failed" />
+            <StatusPill status="offline" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>
