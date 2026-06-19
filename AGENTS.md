@@ -295,6 +295,7 @@ New ideas, experimental platforms, and speculative automation go here first.
 
 - Square account: joshlcoleman@gmail.com (all Square lanes including YouAndINotAI)
 - Square location: LY5GN09F5AN83 (Trash Or Treasure - ACTIVE)
+- Founder test transaction truth (2026-06-19): visible Square transactions reviewed on 2026-06-19 were Joshua's own test payments. The `$0.67` Square balance is the net after Square fees from a `$1.00` Bot-Shield test payment; do not classify it as external customer revenue.
 - Stripe: LEGACY ONLY — being phased out
 
 ---
