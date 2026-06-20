@@ -74,7 +74,7 @@ export const MEMBERSHIP_PLANS = [
   },
   {
     id: '3_month',
-    name: '3-Month Founder',
+    name: '3-Month Prepaid',
     price: '$39.99',
     cadence: '3 months',
     blurb: 'A full quarter of Founding Member access, prepaid.',
@@ -83,7 +83,7 @@ export const MEMBERSHIP_PLANS = [
   },
   {
     id: '12_month',
-    name: '12-Month Founder',
+    name: '12-Month Prepaid',
     price: '$99.99',
     cadence: '12 months',
     blurb: 'A full year of Founding Member access at the best rate.',
@@ -95,7 +95,7 @@ export const MEMBERSHIP_PLANS = [
     name: 'Royalty Card',
     price: '$2,500',
     cadence: 'lifetime',
-    blurb: 'Lifetime founder tier with permanent recognition.',
+    blurb: 'Lifetime access with permanent recognition.',
     url: SQUARE_LINK_ROYALTY,
     featured: false,
   },
