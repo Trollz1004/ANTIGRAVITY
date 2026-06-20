@@ -4,7 +4,7 @@ import { Github, Globe, ShieldCheck } from 'lucide-react';
 const sections = [
   {
     title: 'Public repositories',
-    body: 'Public repositories should stay technical and avoid reading like marketing decks, governance manifestos, or admin consoles.',
+    body: 'Public repositories should stay technical and avoid reading like marketing decks, policy manifestos, or admin consoles.',
     icon: <Github className="w-6 h-6 text-slate-800 dark:text-white" />,
   },
   {
