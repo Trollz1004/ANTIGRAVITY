@@ -9,7 +9,7 @@ const guardrails = [
   'Credential entry, .env editing, and admin controls must stay behind private internal tooling.',
   'Financial statements appear here only when they are backed by published, end-to-end proof.',
   'Operational financial details stay private until they are verified and approved for publication.',
-  'Founder compensation is capped at $50,000 across the entire active platform ecosystem.',
+  'Operational financial details stay private unless specifically approved for public release.',
 ];
 
 export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {

@@ -6,7 +6,7 @@ export default function Integrations({ isDarkMode }: { isDarkMode: boolean }) {
     {
       name: 'Square',
       icon: <DollarSign className="w-8 h-8 text-emerald-500" />,
-      description: 'Primary payment gateway for youandinotai.com â€” Bot-Shield, Founding Member, 3/12-Month Founder, and Royalty Card all flow through Square (location LY5GN09F5AN83 / merchant ML3C7FMTQS5KX).',
+      description: 'Primary payment gateway for youandinotai.com — Bot-Shield, Founding Member, prepaid access, and Royalty Card all flow through Square.',
       status: 'Connected',
       color: 'emerald',
     },

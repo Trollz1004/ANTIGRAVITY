@@ -28,7 +28,7 @@ const handoff = await runTool("draft_handoff", { topic: "safe app smoke test" })
 assert.match(handoff.text, /draft-only/);
 
 assert.throws(() => resolveSafeSource("missing"), /Unknown safe source/);
-await assert.rejects(() => readSafeSource("frontendEnvTemplate"), {
+await assert.rejects(() => readSafeSource("missing"), {
   name: "Error"
 });
 

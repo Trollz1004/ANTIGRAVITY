@@ -24,10 +24,10 @@ export default function DAOMetrics({ isDarkMode }: { isDarkMode: boolean }) {
       {/* Review-gated concept grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { name: '$LOVE', platform: 'YouAndINotAI', color: 'text-pink-500', border: 'border-pink-500/30' },
-          { name: '$UKID', platform: 'AI-Solutions', color: 'text-blue-500', border: 'border-blue-500/30' },
-          { name: '$GREEN', platform: 'OnlineRecycle', color: 'text-emerald-500', border: 'border-emerald-500/30' },
-          { name: '$AGRAV', platform: 'Antigravity Infra', color: 'text-purple-500', border: 'border-purple-500/30' },
+          { name: 'Dating', platform: 'YouAndINotAI', color: 'text-pink-500', border: 'border-pink-500/30' },
+          { name: 'Services', platform: 'AI-Solutions', color: 'text-blue-500', border: 'border-blue-500/30' },
+          { name: 'Recycling', platform: 'OnlineRecycle', color: 'text-emerald-500', border: 'border-emerald-500/30' },
+          { name: 'Infrastructure', platform: 'Antigravity', color: 'text-purple-500', border: 'border-purple-500/30' },
         ].map((concept) => (
           <div
             key={concept.name}

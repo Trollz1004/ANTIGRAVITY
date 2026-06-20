@@ -84,6 +84,8 @@ def test_protected_http_routes_require_auth():
         ("/api/v1/webhooks/square", "POST"),
         ("/api/v1/webhooks/square-payment", "POST"),
         ("/api/v1/webhooks/square-booking", "POST"),
+        ("/api/v1/support/whatsapp/webhook", "GET"),
+        ("/api/v1/support/whatsapp/webhook", "POST"),
         ("/api/v1/metrics", "GET"),
         ("/api/v1/metrics/impact", "GET"),
         ("/api/v1/metrics/security-audit", "GET"),
