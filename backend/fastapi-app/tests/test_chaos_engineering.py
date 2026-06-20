@@ -89,8 +89,9 @@ def chaos_client(tmp_path):
     app.dependency_overrides[get_db] = override_get_db
     reset_rate_limits()
 
-    with TestClient(app) as test_client:
-        yield test_client
+    with patch("app.routers.health.redis_health_check", new_callable=AsyncMock, return_value={"status": "ok"}):
+        with TestClient(app) as test_client:
+            yield test_client
 
     app.dependency_overrides.clear()
     reset_rate_limits()
@@ -360,41 +361,43 @@ class TestDegradedHealthStatus:
 
     def test_degraded_when_square_not_configured(self, chaos_client):
         """Health should report degraded when Square credentials are missing."""
-        with patch(
-            "app.routers.health.settings",
-            MagicMock(
-                square_access_token="",
-                square_location_id="",
-                square_webhook_verify_signature=False,
-                square_payment_webhook_signature_key="",
-                square_payment_webhook_notification_url="",
-                square_webhook_signature_key="",
-                square_webhook_notification_url="",
-            ),
-        ):
-            response = chaos_client.get("/api/v1/health")
-            body = response.json()
-            assert body["square_connected"] is False
-            assert body["status"] == "degraded"
+        with patch("app.routers.health.redis_health_check", new_callable=AsyncMock, return_value={"status": "error"}):
+            with patch(
+                "app.routers.health.settings",
+                MagicMock(
+                    square_access_token="",
+                    square_location_id="",
+                    square_webhook_verify_signature=False,
+                    square_payment_webhook_signature_key="",
+                    square_payment_webhook_notification_url="",
+                    square_webhook_signature_key="",
+                    square_webhook_notification_url="",
+                ),
+            ):
+                response = chaos_client.get("/api/v1/health")
+                body = response.json()
+                assert body["square_connected"] is False
+                assert body["status"] == "degraded"
 
     def test_degraded_when_signature_not_configured(self, chaos_client):
         """Health should report degraded when Square signature is not configured."""
-        with patch(
-            "app.routers.health.settings",
-            MagicMock(
-                square_access_token="valid-token",
-                square_location_id="valid-location",
-                square_webhook_verify_signature=True,
-                square_payment_webhook_signature_key="",
-                square_payment_webhook_notification_url="",
-                square_webhook_signature_key="",
-                square_webhook_notification_url="",
-            ),
-        ):
-            response = chaos_client.get("/api/v1/health")
-            body = response.json()
-            assert body["square_signature_configured"] is False
-            assert body["status"] == "degraded"
+        with patch("app.routers.health.redis_health_check", new_callable=AsyncMock, return_value={"status": "error"}):
+            with patch(
+                "app.routers.health.settings",
+                MagicMock(
+                    square_access_token="valid-token",
+                    square_location_id="valid-location",
+                    square_webhook_verify_signature=True,
+                    square_payment_webhook_signature_key="",
+                    square_payment_webhook_notification_url="",
+                    square_webhook_signature_key="",
+                    square_webhook_notification_url="",
+                ),
+            ):
+                response = chaos_client.get("/api/v1/health")
+                body = response.json()
+                assert body["square_signature_configured"] is False
+                assert body["status"] == "degraded"
 
     def test_ok_when_all_dependencies_healthy(self, chaos_client):
         """Health should report ok when all dependencies are healthy."""
