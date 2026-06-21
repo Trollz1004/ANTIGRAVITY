@@ -26,5 +26,10 @@ export default defineConfig({
         singleThread: true,
       },
     },
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json-summary", "lcov"],
+      reportsDirectory: "../../coverage/mission-mcp",
+    },
   },
 });

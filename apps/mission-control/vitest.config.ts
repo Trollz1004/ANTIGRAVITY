@@ -5,8 +5,13 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: 'jsdm',
+    environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     exclude: ['tests/e2e.spec.ts', 'node_modules/**'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json-summary', 'lcov'],
+      reportsDirectory: '../../coverage/mission-control',
+    },
   },
 })

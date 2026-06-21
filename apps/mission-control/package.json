@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest --coverage"
   },
   "dependencies": {
     "@radix-ui/react-popover": "^1.1.15",
@@ -29,6 +31,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
+    "@vitest/coverage-v8": "^4.1.6",
     "autoprefixer": "^10.4.14",
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",

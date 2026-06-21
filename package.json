@@ -15,6 +15,7 @@
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
+    "test:coverage": "pnpm -r test -- --coverage && node scripts/aggregate-coverage.js",
     "format": "prettier --write ."
   },
   "devDependencies": {
