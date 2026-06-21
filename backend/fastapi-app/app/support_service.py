@@ -520,9 +520,7 @@ async def notify_support_ticket(
     settings: Settings,
 ) -> bool:
     message = _support_ticket_alert_message(ticket=ticket, user=user)
-    alert_sent = await _send_whatsapp_support_alert(
-        message=message, settings=settings
-    )
+    alert_sent = await _send_whatsapp_support_alert(message=message, settings=settings)
     alert_sent = (
         await _send_telegram_support_alert(message=message, settings=settings)
         or alert_sent

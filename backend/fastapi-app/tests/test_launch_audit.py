@@ -147,9 +147,7 @@ def test_register_rate_limit_is_active(client):
                 "email": f"register-rate-{index}@example.com",
                 "password": "supersecret",
                 "display_name": "Register Rate",
-                "date_of_birth": (
-                    date.today() - timedelta(days=365 * 21)
-                ).isoformat(),
+                "date_of_birth": (date.today() - timedelta(days=365 * 21)).isoformat(),
                 "accepted_terms": True,
                 "accepted_cookie_policy": True,
                 "confirmed_over_18": True,
