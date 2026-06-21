@@ -645,12 +645,17 @@ describe("PlatformSplitter10", function () {
   // ---------------------------------------------------------------------------
 
   describe("pendingUSDC() view", function () {
-    it("reverts on local network (USDC address is mainnet-only — same behavior as splitUSDC)", async function () {
+    it("is safe on local network when Base USDC is not deployed", async function () {
       // pendingUSDC() calls IERC20(USDC).balanceOf() against the hardcoded Base Mainnet
-      // USDC address (0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913). On Hardhat's local
-      // chain that address is empty bytecode, producing an unexpected-data revert.
-      // This mirrors splitUSDC() — both are production-mainnet-only entry points.
-      await expect(splitter.pendingUSDC()).to.be.reverted;
+      // USDC address (0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913). Hardhat's normal
+      // local network treats the empty-code call as a revert, while solidity-coverage's
+      // instrumented provider can return zero. Both outcomes are safe: no pending USDC
+      // can be split from a non-USDC local address.
+      try {
+        expect(await splitter.pendingUSDC()).to.equal(0n);
+      } catch (error) {
+        expect(String(error)).to.match(/revert|could not decode result data/i);
+      }
     });
   });
 
