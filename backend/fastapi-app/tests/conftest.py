@@ -17,6 +17,7 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
+import pytest_asyncio
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
@@ -197,7 +198,7 @@ def make_square_booking_event(
     }
 
 
-@pytest.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session")
 async def db_session_factory():  # Changed to async
     engine = create_async_engine("sqlite+aiosqlite:///:memory:")
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
@@ -249,7 +250,7 @@ def client(db_session_factory):
     app.dependency_overrides.clear()
 
 
-@pytest.fixture()
+@pytest_asyncio.fixture()
 async def isolated_db_session(db_session_factory):
     """
     Provides an isolated database session for each test using SAVEPOINTs.

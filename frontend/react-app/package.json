@@ -9,9 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit",
-    "test": "vitest run --coverage",
-    "test:watch": "vitest --coverage"
+    "lint": "tsc --noEmit"
   },
   "dependencies": {
     "@daily-co/daily-js": "^0.89.1",

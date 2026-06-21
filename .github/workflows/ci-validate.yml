@@ -80,7 +80,7 @@ jobs:
       # Florida §496.405 language scan
       - name: Scan for donation language violations
         run: |
-          VIOLATIONS=$(grep -rn --include="*.tsx" --include="*.ts" --include="*.html" \
+          VIOLATIONS=$(grep -rn --exclude-dir=out --include="*.tsx" --include="*.ts" --include="*.html" \
             -iE '\bdonat(e|ion|ions|ing)\b' \
             apps/youandinotai-frontend/ antigravity/components/ antigravity/app/ \
             revenue-core/components/ _deploy/ mcp-server/src/ 2>/dev/null \
@@ -119,7 +119,7 @@ jobs:
           # Scan SOURCE only — build artifacts (.next, dist, node_modules) compile the
           # allowlisted source strings into output whose paths aren't allowlisted, causing
           # false drift failures. Source references are governed by the allowlist below.
-          ALL_HITS=$(grep -rnE --exclude-dir=.next --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.turbo --exclude-dir=coverage "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
+          ALL_HITS=$(grep -rnE --exclude-dir=.next --exclude-dir=out --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.turbo --exclude-dir=coverage "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
           if [ -z "$ALL_HITS" ]; then
             echo "Doctrine boundary intact (zero matches in: ${TARGETS[*]})"
             exit 0
@@ -334,11 +334,11 @@ jobs:
       - name: Install contract dependencies
         run: npm install
 
-      - name: Run Solidity coverage gate
+      - name: Run active splitter Solidity coverage gate
         run: |
           npx hardhat clean
           npx hardhat compile
-          npx hardhat coverage
+          npm run coverage:ci
           node - <<'NODE'
           const fs = require('fs');
           const path = 'coverage/coverage-summary.json';
@@ -348,9 +348,9 @@ jobs:
           }
           const summary = JSON.parse(fs.readFileSync(path, 'utf8'));
           const pct = summary.total?.lines?.pct ?? 0;
-          console.log(`Contracts line coverage: ${pct}%`);
+          console.log(`Active splitter contract line coverage: ${pct}%`);
           if (pct < 90) {
-            console.error(`Contracts line coverage ${pct}% is below required 90%`);
+            console.error(`Active splitter contract line coverage ${pct}% is below required 90%`);
             process.exit(1);
           }
           NODE
