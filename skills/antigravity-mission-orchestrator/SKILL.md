@@ -1,9 +1,9 @@
 ---
 name: antigravity-mission-orchestrator
-description: Use this whenever the user asks Codex to coordinate ANTIGRAVITY, Hermes, Slack, GitHub, Browser, Cloudflare, memory, local/cloud AI models, Ollama wrappers, OpenCode, OpenClaw, support nodes, launch readiness, green CI, or mission handoffs. This skill is the default orchestration layer for ANTIGRAVITY platform work, especially when the user says they do not want to repeat context. It must trigger for "orchestrate the mission", "Hermes", "all nodes", "memory across chats", "Slack update", "green state", "OpenClaw/OpenCode", or "ollama wrapper" requests.
+description: Use this whenever the user asks Codex to coordinate ANTIGRAVITY, Hermes, Slack, GitHub, Browser, Cloudflare, memory, local/cloud AI models, Ollama wrappers, OpenCode, OpenClaw, support nodes, launch readiness, green CI, or handoffs. This skill is the default orchestration layer for ANTIGRAVITY platform work, especially when the user says they do not want to repeat context. It must trigger for "orchestrate", "Hermes", "all nodes", "memory across chats", "Slack update", "green state", "OpenClaw/OpenCode", or "ollama wrapper" requests.
 ---
 
-# ANTIGRAVITY Mission Orchestrator
+# ANTIGRAVITY Orchestrator
 
 Use this skill to keep Codex aligned across ANTIGRAVITY, Hermes, Slack, GitHub, local models, cloud models, memory, automations, and deployment/support tooling.
 
@@ -19,7 +19,7 @@ The goal is simple: make Codex a calm coordinator that knows where truth lives, 
 6. Never print, store, test, or copy real secrets, populated `.env` values, tokens, private phone numbers, or raw chat logs.
 7. Slack, Gmail, and social/customer-facing channels are draft-first unless Josh explicitly says to send live.
 8. Do not run autonomous social posting, liking, following, joining, replying, or engagement automation.
-9. No DAO/token/fundraising launch surfaces until attorney review explicitly clears them.
+9. No token, fundraising, or public governance surfaces in the current business-only lane.
 10. Keep Josh's daily Codex/Claude PC as a human-in-the-loop workstation, not the always-on service/security node.
 11. If tool availability differs from this skill, trust live tool discovery and report the missing capability instead of inventing a workaround.
 
@@ -40,7 +40,7 @@ Recommended grounding commands:
 ```powershell
 git -C c:\antigravity status --short --branch
 git -C c:\antigravity log --oneline --decorate -8
-rg -n "workspace_path|ollama launch codex|DAO|token" c:\antigravity -g "*.md" -g "*.yml" -g "*.py" -g "*.ts" -g "*.tsx"
+rg -n "workspace_path|ollama launch codex|token|fundraising|public governance" c:\antigravity -g "*.md" -g "*.yml" -g "*.py" -g "*.ts" -g "*.tsx"
 ```
 
 Narrow searches to the active task when broad scans would expose noisy historical or private artifacts.

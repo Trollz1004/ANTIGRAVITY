@@ -401,7 +401,7 @@ Hooks (`.Codex/settings.json`):
 - PostToolUse: Prettier auto-format on edit
 
 Skills (`/command`): status, health, policy-boundary, launch-checklist, cost-check, my-workflow,
-deploy-check, square-status, restricted-copy-scan, security-review
+deploy-check, square-status, business-surface-scan, security-review
 
 MCP Servers (`.mcp.json`): antigravity-sentry, postgres, playwright, memory
 
