@@ -88,15 +88,15 @@ def test_list_events_category_filter(client, db_session_factory):
     _seed(user, db_session_factory=db_session_factory)
     app.dependency_overrides[get_current_user] = _override_user(user)
     try:
-        client.post("/api/v1/events", json=_event_payload(category="charity"))
+        client.post("/api/v1/events", json=_event_payload(category="community"))
         client.post(
             "/api/v1/events", json=_event_payload(title="Sports Day", category="sports")
         )
-        resp = client.get("/api/v1/events?category=charity")
+        resp = client.get("/api/v1/events?category=community")
         assert resp.status_code == 200
         data = resp.json()
         assert len(data) == 1
-        assert data[0]["category"] == "charity"
+        assert data[0]["category"] == "community"
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 

@@ -13,7 +13,7 @@ value delivered to the customer.
 ## Removed From Active Operations
 
 Agents must not use old non-product framing as a reason to block launch, delay checkout,
-rewrite payments, add governance friction, or require extra legal structure before selling a
+rewrite payments, add control-rights friction, or require extra legal structure before selling a
 normal membership or verification product.
 
 Do not publish or operationalize:
@@ -23,7 +23,7 @@ Do not publish or operationalize:
 - legal or tax treatment promises
 - named third-party benefit promises
 - customer-facing funding claims
-- governance claims as a condition of membership checkout
+- control-rights claims as a condition of membership checkout
 - old non-product slogans as product copy
 
 ## Private Accounting Boundary

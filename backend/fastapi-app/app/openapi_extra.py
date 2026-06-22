@@ -256,8 +256,8 @@ TAGS_METADATA: list[dict] = [
     {
         "name": "clawx",
         "description": (
-            "ClawX AI Council integration. "
-            "Multi-AI governance and deliberation endpoints."
+            "ClawX AI operator integration. "
+            "Multi-AI operator coordination endpoints."
         ),
     },
 ]

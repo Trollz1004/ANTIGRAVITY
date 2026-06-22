@@ -12,10 +12,10 @@ from app.models import User
 
 
 def test_beta_access_issues_real_tokens(client, db_session_factory, monkeypatch):
-    monkeypatch.setenv("BETA_ACCESS_CODES", "FORTHEKIDS,JOKER0001,TWINPOWER")
+    monkeypatch.setenv("BETA_ACCESS_CODES", "FOUNDING100,JOKER0001,TWINPOWER")
     get_settings.cache_clear()
 
-    response = client.post("/api/v1/auth/beta-access", json={"code": "forthekids"})
+    response = client.post("/api/v1/auth/beta-access", json={"code": "founding100"})
 
     assert response.status_code == 200, response.text
     payload = response.json()
@@ -33,14 +33,14 @@ def test_beta_access_issues_real_tokens(client, db_session_factory, monkeypatch)
     assert user.bot_shield_verified is True
     assert user.subscription_active is True
     assert user.subscription_tier == "founding_member"
-    assert user.mission_impact_score == 5.0
-    assert user.intent_badge == "Intentional"
+    assert user.engagement_score == 5.0
+    assert user.member_badge == "Founder"
 
     get_settings.cache_clear()
 
 
 def test_beta_access_rejects_invalid_code(client, monkeypatch):
-    monkeypatch.setenv("BETA_ACCESS_CODES", "FORTHEKIDS")
+    monkeypatch.setenv("BETA_ACCESS_CODES", "FOUNDING100")
     get_settings.cache_clear()
 
     response = client.post("/api/v1/auth/beta-access", json={"code": "NOPE"})

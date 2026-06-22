@@ -308,7 +308,7 @@ async def get_squad_recommendations(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> list[DoubleDateSquadRecommendation]:
-    """Squad Protocol: Recommend matches for double-dates based on Mission Impact Score."""
+    """Recommend matches for double-dates based on engagement score."""
     all_matches = (
         await db.scalars(
             select(Match).where(
@@ -336,8 +336,8 @@ async def get_squad_recommendations(
                 match_id=m.id,
                 display_name=target_user.display_name,
                 photo_url=photo,
-                mission_score=target_user.mission_impact_score,
-                intent_badge=target_user.intent_badge,
+                engagement_score=target_user.engagement_score,
+                member_badge=target_user.member_badge,
             )
         )
-    return sorted(recommended, key=lambda x: x.mission_score, reverse=True)[:10]
+    return sorted(recommended, key=lambda x: x.engagement_score, reverse=True)[:10]

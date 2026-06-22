@@ -6,6 +6,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
+from app.allocation_compat import ENGAGEMENT_SCORE_COLUMN, MEMBER_BADGE_COLUMN
 from app.config import get_settings
 
 settings = get_settings()
@@ -99,8 +100,8 @@ async def reconcile_legacy_schema() -> None:
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS subscription_tier VARCHAR(50)",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS subscription_active BOOLEAN DEFAULT FALSE NOT NULL",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS subscription_expires_at TIMESTAMPTZ",
-            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS mission_impact_score FLOAT DEFAULT 0 NOT NULL",
-            "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS intent_badge VARCHAR(50)",
+            f"ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS {ENGAGEMENT_SCORE_COLUMN} FLOAT DEFAULT 0 NOT NULL",
+            f"ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS {MEMBER_BADGE_COLUMN} VARCHAR(50)",
             "ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255) UNIQUE",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS bio TEXT",
             "ALTER TABLE IF EXISTS profiles ADD COLUMN IF NOT EXISTS age INTEGER",
@@ -258,10 +259,15 @@ async def _reconcile_sqlite_schema(connection) -> None:
     await add_column(
         "users",
         user_columns,
-        "mission_impact_score",
-        "mission_impact_score FLOAT DEFAULT 0 NOT NULL",
+        ENGAGEMENT_SCORE_COLUMN,
+        f"{ENGAGEMENT_SCORE_COLUMN} FLOAT DEFAULT 0 NOT NULL",
     )
-    await add_column("users", user_columns, "intent_badge", "intent_badge VARCHAR(50)")
+    await add_column(
+        "users",
+        user_columns,
+        MEMBER_BADGE_COLUMN,
+        f"{MEMBER_BADGE_COLUMN} VARCHAR(50)",
+    )
     await add_column("users", user_columns, "google_id", "google_id VARCHAR(255)")
 
     await add_column("profiles", profile_columns, "bio", "bio TEXT")

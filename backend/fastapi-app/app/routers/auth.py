@@ -290,8 +290,8 @@ async def beta_access(
             subscription_tier="founding_member",
             subscription_active=True,
             is_active=True,
-            mission_impact_score=5.0,  # Starting boost for mission-aligned entry
-            intent_badge="Intentional" if normalized_code == "FORTHEKIDS" else None,
+            engagement_score=5.0,
+            member_badge="Founder",
         )
         db.add(user)
         await db.commit()
@@ -415,8 +415,8 @@ async def refresh_token(
                         "subscription_expires_at": None,
                         "has_profile": True,
                         "adult_verified": True,
-                        "mission_impact_score": 5.0,
-                        "intent_badge": "Intentional",
+                        "engagement_score": 5.0,
+                        "member_badge": "Founder",
                     }
                 }
             },
@@ -435,7 +435,7 @@ async def refresh_token(
         },
     },
     summary="Get current user",
-    description="Return the authenticated user's profile including subscription status, verification badges, and mission impact score.",
+    description="Return the authenticated user's profile including subscription status, verification badges, and engagement score.",
 )
 async def get_me(
     user: User = Depends(get_current_user),
@@ -452,6 +452,6 @@ async def get_me(
         subscription_expires_at=user.subscription_expires_at,
         has_profile=profile is not None,
         adult_verified=user.date_of_birth is not None,
-        mission_impact_score=user.mission_impact_score,
-        intent_badge=user.intent_badge,
+        engagement_score=user.engagement_score,
+        member_badge=user.member_badge,
     )

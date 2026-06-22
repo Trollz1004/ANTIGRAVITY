@@ -9,6 +9,8 @@ __pycache__/
 dist/
 .next/
 build/
+apps/youandinotai-frontend/out/
+apps/youandinotai-static/assets/*.map
 *.egg-info/
 coverage.xml
 bundle-stats.html
