@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="dark" />
-  <title>ANTIGRAVITY Public Mission Control</title>
+  <title>ANTIGRAVITY Public Ops Control</title>
   <link rel="stylesheet" href="../../tools/styles.css" />
   <script defer src="../../tools/_ds_bundle.js"></script>
   <style>
@@ -109,12 +109,12 @@
 </head>
 <body>
   <main class="shell">
-    <header class="topbar" aria-label="Public mission control header">
+    <header class="topbar" aria-label="Public ops control header">
       <div class="brand">
         <div class="mark" aria-hidden="true">o_O</div>
         <div class="brand-text">
           <div class="eyebrow">ANTIGRAVITY // PUBLIC OPS</div>
-          <div class="brand-title">Mission Control Live</div>
+          <div class="brand-title">Ops Control Live</div>
         </div>
       </div>
       <div class="pill-row">
@@ -127,7 +127,7 @@
       <div class="hero-main glass">
         <div>
           <div class="label">v2 stream-safe</div>
-          <h1><span class="gradient">Mission Control,</span><br />without the private layer.</h1>
+          <h1><span class="gradient">Ops Control,</span><br />without the private layer.</h1>
           <p class="lead">A non-boring public window into the ANTIGRAVITY build room: live service categories, visible work rhythm, and a hard stream-safe lock for 24/7 YouTube.</p>
         </div>
         <div class="hero-actions">
@@ -156,7 +156,7 @@
       </aside>
     </section>
 
-    <section class="grid" aria-label="Mission status grid">
+    <section class="grid" aria-label="Ops status grid">
       <article class="panel glass span-4">
         <div class="label">Live service ledger</div>
         <h2>Local checks must prove shape, not just a response.</h2>
@@ -197,29 +197,29 @@
     </section>
 
     <footer class="footer glass">
-      <span>#UntilNoKidInNeed stated as mission context, not a pitch.</span>
+      <span>Business-only operations view. Private panes stay blocked.</span>
       <span id="statusLine">Waiting for local checks.</span>
     </footer>
   </main>
 
   <script>
     const initialData = {
-      title: "ANTIGRAVITY Public Mission Control",
+      title: "ANTIGRAVITY Public Ops Control",
       version: "v2 stream-safe",
       updatedAt: "2026-06-17T02:32:16Z",
-      missionTag: "#UntilNoKidInNeed",
+      statusTag: "Business-only operations",
       services: [
         { id: "hermes", name: "Hermes Dashboard", publicName: "Hermes operator loop", localUrl: "http://127.0.0.1:9119/", port: 9119, status: "yellow", reason: "local browser probe required" },
         { id: "paperclip", name: "Paperclip Board", publicName: "Work board loop", localUrl: "http://127.0.0.1:3100/", port: 3100, status: "yellow", reason: "local browser probe required" },
         { id: "claudeCode", name: "Free Claude Code", publicName: "review lane", localUrl: "local repo package", port: null, status: "yellow", reason: "repo attachment/source present; install and sign-in stay off-stream" }
       ],
       publicCards: [
-        { label: "Viewer sees", value: "health categories, queue shape, public mission line" },
+        { label: "Viewer sees", value: "health categories, queue shape, public ops line" },
         { label: "Viewer never sees", value: "private panes, shell text, provider account screens, customer records" },
         { label: "Live proof rule", value: "green only after expected content shape is verified" }
       ],
       microcopy: {
-        headline: ["Mission Control, without the private parts.", "The work is live. The sensitive layer is not.", "Public ops board for a private build room."],
+        headline: ["Ops Control, without the private parts.", "The work is live. The sensitive layer is not.", "Public ops board for a private build room."],
         cta: ["Open safe stream view", "Run local checks", "Keep private panes blocked"]
       }
     };
@@ -278,7 +278,7 @@
       statusLine.textContent = `${red} red / ${yellow} yellow. No green until expected content shape is verified.`;
     }
     async function copyObsNote() {
-      const msg = 'ANTIGRAVITY public Mission Control is stream-safe: private local panes are blocked; public status categories only.';
+      const msg = 'ANTIGRAVITY public Ops Control is stream-safe: private local panes are blocked; public status categories only.';
       try { await navigator.clipboard.writeText(msg); statusLine.textContent = 'OBS note copied.'; }
       catch (_) { statusLine.textContent = msg; }
     }

@@ -126,17 +126,11 @@ We use **Google Gemini** to power matchmaking suggestions and generate conversat
 
 Google's privacy practices for Gemini are governed by [Google's Privacy Policy](https://policies.google.com/privacy). We encourage you to review it.
 
-## 8. Mission-Linked Revenue Policy
+## 8. Payment and Business Operations Policy
 
 YouAndINotAI is a for-profit platform. Your payment is for platform access, verification, or membership products.
 
-Our current founder-directed operating rule is conservative:
-
-- charitable support sourced from current LLC platform operations is capped at **10%**
-- the remainder stays available for taxes, platform costs, retained cash, and lawful business operations
-- your payment is **not** a charitable contribution by you
-
-If we publish a different formal structure later, we will update this policy before describing it as current live practice.
+Payments are commercial transactions for product value delivered. We do not attach non-product sales claims or legal/accounting promises to your purchase.
 
 ## 9. Cookies and Tracking Technologies
 

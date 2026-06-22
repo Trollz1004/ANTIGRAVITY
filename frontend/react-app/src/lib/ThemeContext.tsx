@@ -1,7 +1,7 @@
 /**
  * ThemeContext — OPU-17
  *
- * Manages light/dark theme state for the mission-control dashboard.
+ * Manages light/dark theme state for the ops dashboard.
  * Persists user preference in localStorage and applies a `.dark` class
  * to the <html> element so that Tailwind `dark:` variants and custom
  * CSS variable overrides both work.
