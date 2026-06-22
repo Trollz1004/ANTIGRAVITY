@@ -28,7 +28,7 @@ const NAV_ITEMS = [
   { label: 'Human Only', href: '#about' },
   { label: 'The Social', href: '#platform' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Impact', href: '#mission' },
+  { label: 'Trust', href: '#trust' },
   { label: 'Join', href: '#join' },
 ] as const;
 
@@ -859,29 +859,29 @@ export default function App() {
         <PricingSection />
 
         <section
-          id="mission"
+          id="trust"
           className="border-b-4 border-[#111111] bg-white px-4 py-10 md:px-12 md:py-16"
         >
           <div className="mx-auto max-w-5xl">
             <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
-              Section 04 // Impact
+              Section 04 // Trust
             </div>
             <h2 className="text-3xl font-black tracking-tighter md:text-7xl">
-              silent impact.
+              clean business.
             </h2>
             <div className="mt-6 grid gap-4 md:mt-10 md:gap-8 md:grid-cols-2">
               <div className="border-4 border-[#111111] bg-[#f4efe7] p-4 shadow-[6px_6px_0_0_#111111] md:p-6">
                 <p className="text-sm font-medium leading-7 text-[#2f2a24] md:text-lg md:leading-8">
                   This is a product. It has to stand on quality, trust, and real
-                  human value first. The mission rides on top, not in place of,
-                  that foundation.
+                  human value. Checkout buys platform access, verification, and
+                  support.
                 </p>
               </div>
               <div className="border-4 border-[#111111] bg-[#111111] p-4 text-white shadow-[6px_6px_0_0_#ff5a1f] md:p-6">
                 <p className="text-sm font-medium leading-7 text-[#d7d3cc] md:text-lg md:leading-8">
-                  Any later mission support follows the current operating policy
-                  and stays out of the sales pitch. Customer purchases are
-                  commercial transactions for platform value delivered.
+                  Customer purchases are commercial transactions for platform
+                  value delivered. No non-product sales claim is attached to
+                  membership or verification checkout.
                 </p>
               </div>
             </div>

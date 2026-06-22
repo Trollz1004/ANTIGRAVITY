@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import "./index.css";
-import { AgentCardSkeleton, DAOCardSkeleton, BucketMeterSkeleton } from "./Skeletons";
+import { AgentCardSkeleton } from "./Skeletons";
 
 const API_BASE =
   import.meta.env.VITE_OPENCLAW_SUPPORT_URL || "http://localhost:18789";
@@ -28,11 +28,11 @@ const AGENTS: Agent[] = [
   { id: "intern-1", name: "INTERN", role: "DoWhatTold", status: "idle", taskCount: 0, color: "#c4a5ff" },
 ];
 
-const DAO_TOKENS = [
-  { symbol: "$LOVE", platform: "YouAndINotAI", supply: "2,500,000", color: "#ff6eb4" },
-  { symbol: "$UKID", platform: "AI-Solutions", supply: "2,500,000", color: "#66b3ff" },
-  { symbol: "$GREEN", platform: "OnlineRecycle", supply: "2,500,000", color: "#8ff2c7" },
-  { symbol: "$AGRAV", platform: "AiDoesItAll", supply: "2,500,000", color: "#ffd966" },
+const LAUNCH_UNITS = [
+  { symbol: "DATE", platform: "YouAndINotAI", supply: "Memberships", color: "#ff6eb4" },
+  { symbol: "VERIFY", platform: "Bot-Shield", supply: "Verification", color: "#66b3ff" },
+  { symbol: "RECYCLE", platform: "OnlineRecycle", supply: "Service", color: "#8ff2c7" },
+  { symbol: "SUPPORT", platform: "OpenClaw", supply: "Customer Care", color: "#ffd966" },
 ];
 
 function StatusDot({ status }: { status: string }) {
@@ -75,24 +75,24 @@ function AgentCard({ agent }: { agent: Agent }) {
   );
 }
 
-function DAOCard({ dao }: { dao: (typeof DAO_TOKENS)[number] }) {
+function LaunchUnitCard({ unit }: { unit: (typeof LAUNCH_UNITS)[number] }) {
   return (
-    <div className="dao-card">
-      <div className="dao-symbol" style={{ color: dao.color }}>{dao.symbol}</div>
-      <div className="dao-platform">{dao.platform}</div>
-      <div className="dao-supply">{dao.supply} cap</div>
+    <div className="launch-unit-card">
+      <div className="launch-unit-symbol" style={{ color: unit.color }}>{unit.symbol}</div>
+      <div className="launch-unit-platform">{unit.platform}</div>
+      <div className="launch-unit-supply">{unit.supply}</div>
     </div>
   );
 }
 
-function BucketMeter({ id, label, pct }: { id: number; label: string; pct: number }) {
+function RevenueMeter({ id, label, pct }: { id: number; label: string; pct: number }) {
   return (
-    <div className="bucket">
-      <div className="bucket-label">#{id} {label}</div>
-      <div className="bucket-bar-bg">
-        <div className="bucket-bar-fill" style={{ width: `${pct}%` }} />
+    <div className="revenue-item">
+      <div className="revenue-label">#{id} {label}</div>
+      <div className="revenue-bar-bg">
+        <div className="revenue-bar-fill" style={{ width: `${pct}%` }} />
       </div>
-      <span className="bucket-pct">{pct}%</span>
+      <span className="revenue-pct">{pct}%</span>
     </div>
   );
 }
@@ -137,7 +137,7 @@ export function App() {
       <div className="dashboard">
         <header className="top-bar">
           <div className="logo">ANTIGRAVITY</div>
-          <div className="subtitle">Mission Control</div>
+          <div className="subtitle">Business Control</div>
           <div className="connection">
             <StatusDot status={connected ? "online" : "offline"} />
             <span>{connected ? "OpenClaw Support Connected" : "OpenClaw Support Offline"}</span>
@@ -174,33 +174,31 @@ export function App() {
         </section>
 
         <section className="section">
-          <h2 className="section-title">4-DAO Governance Tokens</h2>
-          <div className="dao-grid">
-            {DAO_TOKENS.map((d) => (
-              <DAOCard key={d.symbol} dao={d} />
+          <h2 className="section-title">Launch Operations</h2>
+          <div className="launch-unit-grid">
+            {LAUNCH_UNITS.map((unit) => (
+              <LaunchUnitCard key={unit.symbol} unit={unit} />
             ))}
           </div>
         </section>
 
         <section className="section">
-          <h2 className="section-title">10-Bucket Revenue Engine</h2>
-          <div className="bucket-grid">
-            <BucketMeter id={1} label="Platform Subs" pct={10} />
-            <BucketMeter id={2} label="Super Likes" pct={10} />
-            <BucketMeter id={3} label="$LOVE Yield" pct={10} />
-            <BucketMeter id={4} label="AI-Solutions" pct={10} />
-            <BucketMeter id={5} label="$UKID Yield" pct={10} />
-            <BucketMeter id={6} label="OnlineRecycle" pct={10} />
-            <BucketMeter id={7} label="$GREEN Yield" pct={10} />
-            <BucketMeter id={8} label="Merch Net" pct={10} />
-            <BucketMeter id={9} label="$AGRAV Infra" pct={10} />
-            <BucketMeter id={10} label="$AGRAV Yield" pct={10} />
+          <h2 className="section-title">Revenue Engine</h2>
+          <div className="revenue-grid">
+            <RevenueMeter id={1} label="Platform Subs" pct={100} />
+            <RevenueMeter id={2} label="Verification" pct={100} />
+            <RevenueMeter id={3} label="Memberships" pct={100} />
+            <RevenueMeter id={4} label="AI-Solutions" pct={100} />
+            <RevenueMeter id={5} label="Support" pct={100} />
+            <RevenueMeter id={6} label="OnlineRecycle" pct={100} />
+            <RevenueMeter id={7} label="Merch Net" pct={100} />
+            <RevenueMeter id={8} label="Operations" pct={100} />
           </div>
-          <div className="bucket-note">Each bucket: 10% to kids. More buckets = more kids helped.</div>
+          <div className="revenue-note">Business-only revenue view. Customer purchases buy platform value delivered.</div>
         </section>
 
         <footer className="footer">
-          Until no kid is in need. | Base L2 | Soulbound
+          Business operations | Base L2 | Account-bound
         </footer>
       </div>
     </ErrorBoundary>

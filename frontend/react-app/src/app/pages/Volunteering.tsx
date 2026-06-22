@@ -46,7 +46,7 @@ interface ImpactData {
 
 const CATEGORIES = [
   { value: 'general', label: 'General' },
-  { value: 'children', label: 'Children' },
+  { value: 'youth_programs', label: 'Youth Programs' },
   { value: 'elderly', label: 'Elderly Care' },
   { value: 'environment', label: 'Environment' },
   { value: 'animals', label: 'Animals' },
@@ -58,7 +58,7 @@ const CATEGORIES = [
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
-  children: 'from-pink-500 to-rose-500',
+  youth_programs: 'from-pink-500 to-rose-500',
   elderly: 'from-amber-500 to-orange-500',
   environment: 'from-emerald-500 to-green-500',
   animals: 'from-cyan-500 to-teal-500',
