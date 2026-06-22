@@ -92,56 +92,56 @@ export default function Dashboard() {
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* ===== HERO ===== */}
         <section
-          className={`p-8 md:p-12 rounded-[3rem] border text-center ${
+          className={`w-full min-w-0 p-6 md:p-12 rounded-[2rem] md:rounded-[3rem] border text-center ${
             isDarkMode
               ? 'bg-gradient-to-br from-slate-900/80 via-blue-950/40 to-slate-900/80 border-slate-800'
               : 'bg-gradient-to-br from-white via-blue-50 to-white border-slate-200 shadow-xl'
           }`}
         >
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <Rocket size={28} className="text-blue-500" />
-            <h1 className="text-3xl md:text-4xl font-black tracking-tighter uppercase italic">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+            <Rocket size={28} className="text-blue-500 shrink-0" />
+            <h1 className="max-w-full text-2xl sm:text-3xl md:text-4xl font-black tracking-tight uppercase italic leading-tight break-words">
               YouAndINotAI - human-first social platform.
             </h1>
           </div>
-          <p className={`text-lg max-w-3xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+          <p className={`min-w-0 text-base md:text-lg max-w-3xl mx-auto leading-relaxed break-words ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
             YouAndINotAI is a human-first social platform for builders, operators, and people who actually do the work.
             Verification and moderation claims publish only after implementation proof is recorded.
             Founding-member offers should describe current product access and avoid absolute safety guarantees.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
-            <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
+            <div className={`max-w-full px-4 py-2 rounded-2xl text-sm font-bold inline-flex items-center justify-center gap-2 text-center ${
               isDarkMode ? 'bg-blue-500/10 border border-blue-500/30 text-blue-400' : 'bg-blue-50 border border-blue-200 text-blue-600'
             }`}>
-              <Heart className="w-4 h-4" /> YouAndINotAI â€” Dating &amp; Community
+              <Heart className="w-4 h-4 shrink-0" /> <span className="min-w-0 break-words">YouAndINotAI - Dating &amp; Community</span>
             </div>
-            <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
+            <div className={`max-w-full px-4 py-2 rounded-2xl text-sm font-bold inline-flex items-center justify-center gap-2 text-center ${
               isDarkMode ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' : 'bg-emerald-50 border border-emerald-200 text-emerald-600'
             }`}>
-              <Handshake className="w-4 h-4" /> Business Exchange â€” Marketplace
+              <Handshake className="w-4 h-4 shrink-0" /> <span className="min-w-0 break-words">Business Exchange - Marketplace</span>
             </div>
-            <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
+            <div className={`max-w-full px-4 py-2 rounded-2xl text-sm font-bold inline-flex items-center justify-center gap-2 text-center ${
               isDarkMode ? 'bg-purple-500/10 border border-purple-500/30 text-purple-400' : 'bg-purple-50 border border-purple-200 text-purple-600'
             }`}>
-              <ShieldCheck className="w-4 h-4" /> Roadmap - Review Gated
+              <ShieldCheck className="w-4 h-4 shrink-0" /> <span className="min-w-0 break-words">Roadmap - Review Gated</span>
             </div>
-            <div className={`px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-2 ${
+            <div className={`max-w-full px-4 py-2 rounded-2xl text-sm font-bold inline-flex items-center justify-center gap-2 text-center ${
               isDarkMode ? 'bg-amber-500/10 border border-amber-500/30 text-amber-400' : 'bg-amber-50 border border-amber-200 text-amber-600'
             }`}>
-              <Mail className="w-4 h-4" /> Customer Support â€” Active
+              <Mail className="w-4 h-4 shrink-0" /> <span className="min-w-0 break-words">Customer Support - Active</span>
             </div>
           </div>
         </section>
 
-        {/* ===== MEMBERSHIP (above the fold â€” this is the product) ===== */}
+        {/* ===== MEMBERSHIP (above the fold - this is the product) ===== */}
         <Membership isDarkMode={isDarkMode} />
 
         {/* ===== HOW THE PLATFORMS WORK ===== */}
         <section
-          className={`p-8 rounded-[3rem] border ${
+          className={`w-full min-w-0 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border ${
             isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'
           }`}
         >
@@ -154,26 +154,26 @@ export default function Dashboard() {
           </p>
           <ul className={`mt-4 space-y-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
             <li className="flex items-start gap-2">
-              <span className="text-blue-500 mt-1">â†’</span>
-              <span><strong>YouAndINotAI</strong> â€” memberships, verification, and the founding-member program</span>
+              <span className="text-blue-500 mt-1">-&gt;</span>
+              <span><strong>YouAndINotAI</strong> - memberships, verification, and the founding-member program</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-emerald-500 mt-1">â†’</span>
-              <span><strong>Business Exchange</strong> â€” services, referrals, and business sales for builders</span>
+              <span className="text-emerald-500 mt-1">-&gt;</span>
+              <span><strong>Business Exchange</strong> - services, referrals, and business sales for builders</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-purple-500 mt-1">â†’</span>
-              <span><strong>AI-Solutions Store</strong> â€” digital products and automation offers</span>
+              <span className="text-purple-500 mt-1">-&gt;</span>
+              <span><strong>AI-Solutions Store</strong> - digital products and automation offers</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-amber-500 mt-1">â†’</span>
-              <span><strong>OnlineRecycle</strong> â€” electronics resale and recycling services (Central Florida)</span>
+              <span className="text-amber-500 mt-1">-&gt;</span>
+              <span><strong>OnlineRecycle</strong> - electronics resale and recycling services (Central Florida)</span>
             </li>
           </ul>
         </section>
 
         {/* ===== STATUS METRICS ===== */}
-        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <section className="grid w-full min-w-0 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           <StatCard
             label="Tracked Revenue"
             value={`$${metrics.revenue.toLocaleString()}`}
@@ -202,7 +202,7 @@ export default function Dashboard() {
 
         {/* ===== PUBLIC SURFACES ===== */}
         <section
-          className={`p-8 rounded-[3rem] border ${
+          className={`w-full min-w-0 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border ${
             isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'
           }`}
         >
@@ -240,7 +240,7 @@ export default function Dashboard() {
 
         {/* ===== CUSTOMER SUPPORT ===== */}
         <section
-          className={`p-8 rounded-[3rem] border ${
+          className={`w-full min-w-0 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border ${
             isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'
           }`}
         >
@@ -249,7 +249,7 @@ export default function Dashboard() {
             <h2 className="text-2xl font-black italic tracking-tight">CUSTOMER SUPPORT</h2>
           </div>
           <p className={`max-w-3xl leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Support is not decoration â€” it is a trust signal. Every product in this ecosystem has reachable customer support.
+            Support is not decoration - it is a trust signal. Every product in this ecosystem has reachable customer support.
             If you need help, we are here.
           </p>
           <div className="mt-4">
@@ -270,7 +270,7 @@ export default function Dashboard() {
 
         {/* ===== MISSION ===== */}
         <section
-          className={`p-8 rounded-[3rem] border text-center ${
+          className={`w-full min-w-0 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border text-center ${
             isDarkMode
               ? 'bg-gradient-to-br from-slate-900/80 via-emerald-950/30 to-slate-900/80 border-emerald-500/20'
               : 'bg-gradient-to-br from-white via-emerald-50 to-white border-emerald-200 shadow-sm'
@@ -279,7 +279,7 @@ export default function Dashboard() {
           <Heart size={32} className="text-emerald-500 mx-auto mb-4" />
           <h2 className="text-2xl font-black italic tracking-tight mb-3">OPERATING PRINCIPLE</h2>
           <p className={`max-w-2xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Build useful products first, report only verified numbers, and launch when ready — not when it looks good.
+            Build useful products first, report only verified numbers, and launch when ready - not when it looks good.
           </p>
         </section>
 
@@ -290,7 +290,7 @@ export default function Dashboard() {
             isDarkMode ? 'border-slate-800 text-slate-600' : 'border-slate-200 text-slate-400'
           }`}
         >
-          &copy; 2026 Trash Or Treasure Online Recycler LLC â€¢ Public status only â€¢ No internal admin exposure
+          &copy; 2026 Trash Or Treasure Online Recycler LLC - Public status only - No internal admin exposure
         </footer>
       </div>
     </div>

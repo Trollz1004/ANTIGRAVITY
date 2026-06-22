@@ -18,27 +18,29 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
   return (
     <section
       id="membership"
-      className={`p-8 rounded-[3rem] border ${
+      className={`w-full min-w-0 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border ${
         isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'
       }`}
     >
-      <div className="flex items-center gap-3 mb-2">
-        <Sparkles size={20} className="text-blue-500" />
-        <h2 className="text-2xl font-black italic tracking-tight">BECOME A FOUNDING MEMBER</h2>
+      <div className="flex items-start gap-3 mb-2">
+        <Sparkles size={20} className="text-blue-500 shrink-0 mt-1" />
+        <h2 className="min-w-0 text-xl md:text-2xl font-black italic tracking-tight leading-tight break-words">
+          BECOME A FOUNDING MEMBER
+        </h2>
       </div>
-      <p className={`max-w-3xl leading-relaxed mb-8 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+      <p className={`min-w-0 max-w-3xl leading-relaxed mb-8 break-words ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
         Pick a plan and check out securely through Square. Founding members get full access and permanent recognition as
         the platform grows.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+      <div className="grid w-full min-w-0 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
         {MEMBERSHIP_PLANS.map((plan) => (
           <a
             key={plan.id}
             href={plan.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`group flex flex-col p-6 rounded-3xl border transition-all hover:-translate-y-1 ${cardClass(
+            className={`group flex min-w-0 flex-col p-6 rounded-3xl border transition-all hover:-translate-y-1 ${cardClass(
               plan.featured,
             )}`}
           >
@@ -47,7 +49,7 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
                 Most Popular
               </span>
             )}
-            <div className="flex items-baseline gap-2">
+            <div className="flex min-w-0 items-baseline gap-2">
               <span className="text-3xl font-black tracking-tight">{plan.price}</span>
               <span className={`text-xs font-bold ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
                 {plan.cadence}
