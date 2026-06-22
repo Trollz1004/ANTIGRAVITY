@@ -141,9 +141,9 @@ If **we** terminate your account for violating our Terms of Service:
 
 Merchandise purchased through any separate storefront operated outside the dating app is handled separately from the platform and is not covered by this refund policy. If you need help with a merchandise return, contact us at joshlcoleman@gmail.com and we will handle it directly.
 
-## 9. Mission-Linked Revenue Policy
+## 9. Payment and Business Operations Policy
 
-When we issue a refund, any internal charitable support allocation tied to that transaction is adjusted under our current operating policy. We do not treat a refunded transaction as a completed charitable support event.
+When we issue a refund, the refunded transaction is no longer treated as a completed platform purchase. Refund handling is limited to the product, membership, verification, or service purchased.
 
 ## 10. Changes to This Policy
 

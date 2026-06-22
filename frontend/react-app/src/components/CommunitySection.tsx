@@ -1,13 +1,6 @@
 /*
- * DEPRECATION NOTE — 2026-06-01
- *   The file name `CharitySection.tsx` is an internal legacy label. Per
- *   the corrected revenue model (see
- *   C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md)
- *   customer-facing copy must NOT use the words "charity", "donation",
- *   or "solicitation" (FL §496.405). The current copy in this file is
- *   already compliant; preserve the rule on any future edits. Renaming
- *   the file is out of scope for this commit; do it in a separate PR
- *   that also updates all imports.
+ * CommunitySection
+ *   Customer-facing copy must stay business-only.
  */
 
 import React from 'react';
@@ -74,10 +67,10 @@ function Particle({ delay }: { delay: number }) {
   );
 }
 
-export function CharitySection() {
+export function CommunitySection() {
   return (
     <section
-      id="mission"
+      id="community"
       className="relative overflow-hidden bg-gradient-to-b from-black via-[#08150d] to-[#041109] px-6 py-24"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden">

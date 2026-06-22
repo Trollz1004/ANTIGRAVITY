@@ -23,7 +23,7 @@ import { SkeletonLoader } from './components/SkeletonLoader';
 import './index.css';
 
 // Lazy-loaded heavy components — loaded on demand to reduce initial bundle
-const CharityTab = lazy(() => import('./components/CharityTab'));
+const CommunityTab = lazy(() => import('./components/CommunityTab'));
 const ChatWindow = lazy(() => import('./components/ChatWindow'));
 const VideoChat = lazy(() => import('./components/VideoChat'));
 
@@ -313,14 +313,10 @@ createRoot(document.getElementById('root')!).render(
                           </div>
                         }
                       >
-                        <CharityTab />
+                        <CommunityTab />
                       </Suspense>
                     </ErrorBoundary>
                   }
-                />
-                <Route
-                  path="/app/charity"
-                  element={<Navigate to="/app/impact" replace />}
                 />
                 <Route
                   path="/app/verify"

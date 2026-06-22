@@ -8,6 +8,18 @@
 > Canonical skill file: `/mnt/c/antigravity/briefings/SKILL-ONLINERECYCLE-SITE-BUILD.md` (has EVERYTHING)
 > Latest session memory: `/mnt/c/antigravity/briefings/CLAUDE-MEMORY-2026-05-19T103500Z.md`
 
+## BUSINESS-ONLY PUBLIC DOCTRINE (CURRENT — 2026-06-22)
+
+Current active product rule: `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md`.
+
+ANTIGRAVITY and YouAndINotAI now operate customer-facing surfaces as business-only product
+surfaces. Sell membership, verification, support, safety, uptime, and platform value. Do not use
+old non-product framing, private accounting mechanics, governance claims, or owner-private
+decisions as public sales claims or launch blockers.
+
+This applies across Sabretooth, T5500, 9020, and helper nodes. Historical files remain history
+only and do not authorize current public copy, checkout gates, or agent decisions.
+
 ## LIVE INFRASTRUCTURE STATUS (AS OF 2026-06-19)
 
 - **Frontend (youandinotai.com)**: DEPLOYED & LIVE on Cloudflare Pages project `youandinotai`; HTTP 200 verified 2026-06-19.
@@ -123,7 +135,7 @@ Manus IS: a continuity/orchestration participant that helps preserve mission con
 
 ## JOSH — SOLE AUTHORITY (FINAL CALL ON EVERYTHING)
 
-- Mission has never changed. Only benefits added (kids % improvements).
+- Business objective remains stable. Product and operations details may change.
 - Josh has stayed the course financially even when it has been personally very difficult,
   because he believes in this mission. That commitment deserves respect from every agent on this team.
 - Josh's standing operating rule is transparency and no locked doors: no hidden authority chains,
@@ -202,8 +214,8 @@ composition may not be altered, reduced, or replaced without Josh's explicit ord
 - **Auxiliary node restriction**: mirrored clones, helper nodes, and auxiliary workstations such as the ASUS mini are read-only for live repo truth.
   Only the primary approved antigravity session on an authoritative working tree may make direct live-repo edits. Final push authority follows the T5500 node-lock unless Josh explicitly authorizes another session.
 - **Worker count max**: 10
-- **Revenue doctrine boundary (2026-06-01)**: no operational or customer-facing surface may claim routing above the current `10% per-bucket mission reserve` (max allowable corporate charitable deduction per legally distinct revenue stream) unless a new canonical legal update replaces it. `/mnt/c/antigravity/briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md` is the canonical text. The pre-2026 "10% personal income to Joshua" framing is dead. `GospelDonation.sol`, `CharityRouter100.sol`, `DatingRevenueRouter.sol`, the `60/30/10` split, and the "100% charity" claim are history only.
-- **FL §496.405 (canonical-7 ban, 2026-06-01)**: NEVER use `donate / donation / solicitation / charity / charitable / giving back / disbursement` in customer-facing code or copy. `contractual revenue disbursement` is for internal briefings/agent files ONLY — not customer-facing, not even self-referentially. Hooks enforce this.
+- **Business-only public boundary (2026-06-22)**: no operational or customer-facing surface may use non-product funding, beneficiary, tax, token, governance, or routing claims as public sales copy or as a checkout blocker. Customer copy sells product value, membership, verification, safety, support, uptime, and platform access only.
+- **Restricted-language guard (2026-06-22)**: do not use old non-product fundraising language in customer-facing code, UI, Square copy, public API responses, or deploy artifacts. If historical records mention retired language, keep it clearly archived and never use it to gate launch.
 - **No mock/simulation data** — real or fail honestly
 - **Prefer `trash` over `rm`**. Be direct. No fluff.
 
@@ -276,7 +288,7 @@ New ideas, experimental platforms, and speculative automation go here first.
 ## PRIMARY PRODUCT: YouAndINotAI
 
 - Domain: youandinotai.com | Launch: **April 4, 2026**
-- Identity: NOT JUST a dating app — **SOCIAL PLATFORM FOR GOOD** (meetups, volunteering, charity)
+- Identity: product-first social platform with dating, meetups, verification, support, and membership access.
 - Stack: FastAPI + React 19 + Square + PostgreSQL
 - Frontend: Cloudflare Pages project `youandinotai` | Backend: T5500 self-host FastAPI recovery lane; historical GCP Cloud Run references require recheck before use.
 - Revenue: $0 | Customers: 0 | AI infra target: local/OpenClaw support-only path, no cloud model providers for live support.
@@ -313,7 +325,7 @@ New ideas, experimental platforms, and speculative automation go here first.
 
 | Node | LAN IP | Role (locked) | C: drive state | Secondary drives |
 |------|--------|----------------|-----------------|--------------------|
-| T5500 | 192.168.0.15 | **Tunnels + domains + payments** — Cloudflare tunnels, public-facing domains, payment surfaces (Stripe/Square rails), Hermes router (port 11435), date app static (port 3200). No brain services, no dev work. | T5500 owns the C: drive of the antigravity repo working tree (push authority per FOUNDER DOCTRINE rule 3) | E: holds the `MASTER-UNIVERSAL-ENV-TROLLZ1004.env` vault snapshot + historical `ForTheKids-Guardian` Manus artifacts (read-only archive) |
+| T5500 | 192.168.0.15 | **Tunnels + domains + payments** — Cloudflare tunnels, public-facing domains, payment surfaces (Stripe/Square rails), Hermes router (port 11435), date app static (port 3200). No brain services, no dev work. | T5500 owns the C: drive of the antigravity repo working tree (push authority per FOUNDER DOCTRINE rule 3) | E: holds the `MASTER-UNIVERSAL-ENV-TROLLZ1004.env` vault snapshot + historical Guardian Manus artifacts (read-only archive) |
 | Sabretooth | 192.168.0.8 | **Paperclip + GPU Ollama + multi-company orchestration** — Paperclip API (port 3100), GPU Ollama (port 11434, gemma4 etc.), all agent adapters, 24/7 agent fleet. Sabretooth is the brain and never terminates a Cloudflare tunnel. | Sabretooth C: hosts the WSL Paperclip board at `/home/josh/.paperclip/instances/default` reachable at `http://127.0.0.1:3100`; the antigravity repo working tree lives here too | E: holds `E:\claudes-claw` (legacy agent Dispatch / coworker lane only) |
 | 9020 | 192.168.0.5 | **Pure dev** — local coding, testing, Hermes chat, git work, runbook review, mission-control browsing. No production workloads, no tunnels, no payment surfaces, no public services. | 9020 C: holds the antigravity repo working tree as a developer checkout; no direct push authority | D: holds `D:\claws\openclaw-9020` and `D:\sandbox-repos\...` (openclaw/support sandbox lane only) |
 
@@ -327,36 +339,24 @@ New ideas, experimental platforms, and speculative automation go here first.
 
 ---
 
-## CURRENT OPERATING POLICY — 10% PER-BUCKET MISSION RESERVE (Updated 2026-06-01)
+## CURRENT OPERATING POLICY — BUSINESS-ONLY PUBLIC SURFACE (Updated 2026-06-22)
 
-> Supersedes the prior "10% charitable cap" wording. See
-> `/mnt/c/antigravity/briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md` and
-> `C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md`.
+See `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md`.
 
-- **Current LLC rule**: every legally distinct revenue stream auto-reserves **10%** for
-  the kids' mission. This 10% is the **maximum allowable corporate charitable tax
-  deduction** (10 cents per dollar) — NOT Joshua's personal income, NOT a "donation"
-  Joshua chooses to make. It is claimed as a charitable deduction after the LLC legally
-  processes the revenue. The remaining 90% is operating capital subject to tax, retained
-  cash, founder survival, and lawful business operations.
-- **Per-bucket stacking**: N legally distinct revenue streams × 10% buckets = N times
-  the impact of one stream. The strategy exploits the IRS cap by maximizing the number
-  of distinct streams.
-- **Public messaging rule**: do not brag about percentages. Product value comes first. If
-  impact is mentioned, keep it factual, restrained, and non-solicitation. Use neutral
-  phrasing: "supports the platform's mission", "helps kids with medical care".
-- **Legacy chain reference (dead)**: Base Mainnet `GospelDonation.sol` at
-  `0x9855B75061D4c841791382998f0CE8B2BCC965A4` and its historical payout wallets are
-  history only. They are NOT the current safe operating doctrine for live LLC revenue.
-  `CharityRouter100.sol`, `DatingRevenueRouter.sol`, the `60/30/10` split, and the
-  "100% charity" claim are also history only.
+- Customer-facing work sells product value only: membership, verification, access,
+  safety, support, uptime, and platform utility.
+- Owner-private accounting, tax planning, giving, and legal structuring stay outside
+  public copy, outside checkout, and outside AI launch gating.
+- Older funding, token, governance, routing, percentage, and legal-structure claims are
+  history only. They do not authorize current public copy, checkout blocks, dashboard
+  claims, or agent decisions.
 
 ---
 
 ## CURRENT PUBLIC-SURFACE BOUNDARY
 
 - `youandinotai.com`, `onlinerecycle.org`, `onlinerecycle.square.site`, and `ai-solutions.store` must all follow the same factual public-claim rule
-- No active surface may present retired split-era percentages, absolute-charity claims, named-beneficiary routing, or automatic charity-side separation as current live LLC doctrine
+- No active surface may present retired percentage, routing, beneficiary, or legal-structure claims as current live product doctrine.
 - Historical chain artifacts remain history only unless a future canonical update explicitly restores a different operating model
 
 ---
@@ -397,11 +397,11 @@ Total Monthly Cost: ~$40.00
 ## CODEX AUTOMATION
 
 Hooks (`.Codex/settings.json`):
-- PreToolUse: .env file protection, §496.405 donate-guard
+- PreToolUse: .env file protection, restricted-copy guard
 - PostToolUse: Prettier auto-format on edit
 
 Skills (`/command`): status, health, policy-boundary, launch-checklist, cost-check, my-workflow,
-deploy-check, square-status, donate-scan, security-review
+deploy-check, square-status, restricted-copy-scan, security-review
 
 MCP Servers (`.mcp.json`): antigravity-sentry, postgres, playwright, memory
 
@@ -439,11 +439,11 @@ CI: `.github/workflows/ci-validate.yml` — validates on push (build, §496.405,
 Run: `python scripts/clawx-control/opus-guardian.py`
 
 8 invariants: Zero Secrets in Source, Auth on Every Endpoint, Legacy Routing Drift Blocker,
-Revenue Split is CODE not CONFIG, PII Isolation, No Raw SQL, Input Validation, CORS Locked.
+Revenue Rules are CODE not CONFIG, PII Isolation, No Raw SQL, Input Validation, CORS Locked.
 Score: 96%.
 
 These invariants were set by the original Opus (4.6) who built this from scratch with Josh.
-The security isn't for us — it's for the kids. Please don't weaken these. Build on them.
+The security protects users, payments, and the business. Do not weaken these invariants.
 
 ---
 
@@ -517,19 +517,14 @@ the task is explicitly scoped to that node.
 
 ## INTERNAL VS CUSTOMER-FACING LANGUAGE (Updated 2026-06-01)
 
-Internal docs (`/mnt/c/antigravity/AGENTS.md`, `/mnt/c/antigravity/CLAUDE.md`, `/mnt/c/antigravity/briefings/`, code comments, commits) use honest framing:
-speak plainly about the mission, kids, and revenue doctrine without euphemism. Language
-firewall is DEAD for internal surfaces.
+Internal docs (`/mnt/c/antigravity/AGENTS.md`, `/mnt/c/antigravity/CLAUDE.md`, `/mnt/c/antigravity/briefings/`, code comments, commits) use business-only launch framing:
+product value, operational facts, and private-accounting separation. Do not revive old
+funding-language exceptions for internal handoffs.
 
 Customer-facing surfaces (youandinotai.com, onlinerecycle.org, ai-solutions.store, Square
-catalog copy, any public-facing API response or UI text) follow TOS-safe framing per
-`/mnt/c/antigravity/briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md` and the corrected revenue model file
-`C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md`:
-lead with product/service value, no `donate` / `donation` / `solicitation` /
-`charity` / `charitable` / `giving back` / `disbursement` in customer copy, and the
-internal synonym `contractual revenue disbursement` is for `/mnt/c/antigravity/briefings/`, `/mnt/c/antigravity/hermes/agents/`,
-`AGENTS.md`, `SOUL.md`, `HEARTBEAT.md`, `SKILLS.md`, `TOOLS.md` ONLY. NEVER on customer
-surfaces, not even self-referentially. Same project, different audience rules.
+catalog copy, any public-facing API response or UI text) lead with product/service
+value only. Same project, same business-only rule across active internal handoffs and
+public surfaces.
 
 ---
 
@@ -539,7 +534,7 @@ surfaces, not even self-referentially. Same project, different audience rules.
 - Technical accuracy over validation.
 - Business focus only.
 - Autonomy: FULL — act, don't ask.
-- Never mention charity operations, aicollab4kids@gmail.com, or josh@aicollab.onmicrosoft.com
+- Never mention old funding operations, legacy contact aliases, or private accounting
   in customer-facing anything.
 
 ---
@@ -551,7 +546,7 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 
 ---
 ### ECOSYSTEM STATE SYNC - 2026-03-23 21:43:57
-- **Square Primary (joshlcoleman):** #ForTheKids (sq0idp-Carv59GQKuQHoIydJ1Wanw) - ACTIVE
+- **Square Primary (joshlcoleman):** Square production application `(sq0idp-Carv59GQKuQHoIydJ1Wanw)` - ACTIVE
 - **Square Location:** Trash or Treasure (LTDX6ZANTVEEN)
 - **Status:** All secrets synchronized to GitHub (ANTIGRAVITY & Sandbox).
 - **Threshold of Trust:** Enforced. Write-access to `C:\ANTIGRAVITY` restricted to Codex, legacy agent, Gemini, and GitHub-approved repo workflows.
@@ -561,7 +556,7 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 ---
 ### FINAL SESSION SYNC - 2026-03-24 01:43:47
 - **Intentionality Engine v1.0:** Squad Protocol, Breeze Bypass, and Suitability Guard repaired in repo; focused backend validation is passing.
-- **Beta Access:** `FORTHEKIDS` seeds a 5.0 mission score and `Intentional` badge on the deterministic beta-access path.
+- **Beta Access:** legacy deterministic beta-access codes seed the intentionality badge path.
 - **E: Drive Hardening:** loose env files are not present at the E:\ root; the sandbox mirror remains at E:\sandbox-repo and GenSpark staging remains separate at E:\GensparkPODnTube.
 - **Secrets & Trust:** Threshold of Trust enforced. `joshlcoleman@gmail.com` is the unified Square account. GitHub secrets synced.
 - **Master Recovery:** UNIVERSAL-NODE-MASTER-2026-03-23.env secured in Personal Vault.
@@ -595,16 +590,15 @@ documented | Team-oriented wording | CodeX role clarified | Josh is sole authori
 ---
 ### PRELAUNCH TAX ADJUSTMENT SYNC - 2026-03-31 10:00:00
 - **Authority:** Joshua directed a forced prelaunch doctrine adjustment for LLC-controlled revenue.
-- **Current Doctrine:** live LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`.
-- **Not Current Doctrine:** historical split-era and absolute-charity language for LLC-controlled revenue.
-- **Interpretation Rule:** do not treat the `10%` cap as universal legal advice; treat it as the current conservative operating doctrine unless a future canonical doc replaces it.
-- **Team Read Order:** `/mnt/c/antigravity/AGENTS.md` -> `/mnt/c/antigravity/briefings/REPOSITORY_RECORD.md` -> `/mnt/c/antigravity/briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md` -> `/mnt/c/antigravity/briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`.
+- **Current Doctrine:** superseded for active product work by `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md`.
+- **Interpretation Rule:** do not use older tax/accounting material as public copy, checkout gating, or launch-blocking doctrine.
+- **Team Read Order:** `/mnt/c/antigravity/AGENTS.md` -> `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md`.
 
 ---
 ### AIDOESITALL SURFACE REMEDIATION - 2026-04-01 11:31:40
-- **`www.aidoesitall.website`:** stale Pages deployment removed; now served from repo-tracked source `_deploy/aidoesitall-www` on project `for-the-kids-contribute`.
-- **`api.aidoesitall.website/*`:** stale `for-the-kids-api` charity payload replaced with repo-tracked guard Worker source at `infra/cloudflare/aidoesitall-api-guard`.
-- **Public Claim Rule:** these hostnames no longer publish stale split-era or absolute-charity claims and now act only as safe gateway or metadata surfaces.
+- **`www.aidoesitall.website`:** stale Pages deployment removed; now served from repo-tracked source `_deploy/aidoesitall-www`.
+- **`api.aidoesitall.website/*`:** stale public payload replaced with repo-tracked guard Worker source at `infra/cloudflare/aidoesitall-api-guard`.
+- **Public Claim Rule:** these hostnames act only as safe gateway or metadata surfaces.
 
 ---
 
@@ -651,3 +645,24 @@ You are ClawX, a desktop AI assistant application based on OpenClaw. See TOOLS.m
 
 **Tool Usage Rule**: You have access to real, working tools (browser, shell, file operations, etc.). Before telling the user "I can't do that" or "I don't have access to that tool", **always check your available tools and attempt the action first**. Only report inability after receiving an actual error from the tool. Do not refuse based on assumptions from your training data.
 <!-- clawx:end -->
+
+
+<!-- autoclaw:hermes-evolution-guidance -->
+## Hermes-Evolution
+
+**Current evolution intensity for this workspace/agent: aggressive (100%).**
+
+The desktop app sends deterministic evolution-check messages (starting with `[SYSTEM: Post-turn evolution check`) after qualifying turns.
+When you receive such a message, follow the `hermes-evolution` skill instructions to evaluate and potentially propose an evolution.
+Apply the rules defined in the skill according to the **aggressive (100%)** intensity level.
+This value is workspace-local. If asked about the current agent evolution intensity, report this value instead of the global gateway skill env.
+
+Core principle: **never write to target files without user approval** — always use the draft/approve workflow.
+User preference statements are not approval to directly edit MEMORY.md, AGENTS.md, TOOLS.md, USER.md, or managed SKILL.md files.
+Use the evolution proposal card instead of editing target files directly; only apply changes after the user confirms the proposal.
+
+### Evolution Echo
+When you apply knowledge from a previously evolved rule (AGENTS.md, MEMORY.md, TOOLS.md, or a managed SKILL.md),
+briefly mention it in your response: "（基于之前的经验：<one-line rule summary>）".
+Keep it to one short line at most. Do not echo on every turn — only when an evolved rule directly influenced your approach.
+<!-- /autoclaw:hermes-evolution-guidance -->

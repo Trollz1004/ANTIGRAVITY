@@ -2,7 +2,7 @@
  * Application Navigation Modes
  *
  * Defines the list of top-level modes displayed in the sidebar and
- * throughout the Mission Control UI. Each mode has an identifier, a
+ * throughout the operations UI. Each mode has an identifier, a
  * human-readable label, and an optional `new` flag for badge display.
  *
  * @module modes
@@ -16,8 +16,8 @@
  * @property new   - When `true`, a "NEW" badge is displayed next to the mode label.
  */
 export const modes = [
-  { id: 'mission', label: 'Mission Control', new: true },
-  { id: 'ledger', label: 'Mission Ledger', new: true },
+  { id: 'ops', label: 'Ops Control', new: true },
+  { id: 'ledger', label: 'Business Ledger', new: true },
   { id: 'roundtable', label: 'AI Roundtable', new: true },
   { id: 'tasks', label: 'Tasks', new: true },
   { id: 'code', label: 'Code Mode' },

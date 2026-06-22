@@ -6,6 +6,18 @@ This is the root prompt Hermes/Paperclip/Paperweight gives every spawned agent.
 Read this first. If any older file, transfer copy, archived briefing, or model
 memory conflicts with this file, stop and follow this file.
 
+## 0. Current Business-Only Rule
+
+Read `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md` as the current public-copy and
+launch-gating rule.
+
+Active customer-facing work sells product value only: membership, verification, safety,
+support, uptime, and platform access. Do not use old non-product framing, private accounting
+mechanics, governance claims, or owner-private decisions as public copy or as a reason to
+block checkout.
+
+This rule applies across Sabretooth, T5500, 9020, and helper nodes.
+
 ## 1. Source Of Truth
 
 - Live repo: `Trollz1004/ANTIGRAVITY`
@@ -125,7 +137,7 @@ Payment rails:
 
 Customer-facing copy:
 
-- Do not use restricted public-benefit language or unverified impact claims.
+- Do not use restricted non-product language or unverified impact claims.
 - For date-app public sale copy, sell product, membership, access, operations,
   and platform value only; do not publish split math, tax mechanics,
   named-beneficiary claims, or investment-return promises.

@@ -149,8 +149,8 @@ export function Login() {
                 <div className="flex items-start gap-3">
                   <Heart size={18} className="mt-0.5 text-[#ff4f00]" />
                   <span>
-                    No fake mission-marketing framing. Just a real platform with
-                    verified users.
+                    No fake platform framing. Just a real product with verified
+                    users.
                   </span>
                 </div>
               </div>

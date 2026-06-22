@@ -37,11 +37,11 @@ const DEMO_PROFILES: Profile[] = [
   {
     user_id: 'user-0001',
     display_name: 'Joshua "Tom" Opus',
-    bio: "I'm a busy guy. Not much free time — trying to find Claude's code and filter out bots on other sites. Built this 3 times. Electrician by trade, coder by 3AM. Trying to build something real that can help kids without lying about the math. #ForTheKids",
+    bio: "I'm a busy guy. Not much free time - trying to find Claude's code and filter out bots on other sites. Built this 3 times. Electrician by trade, coder by 3AM. Trying to build something real without fake platform math.",
     age: 35,
     photos: ['/founder-josh.jpg'],
     interests: [
-      '#ForTheKids',
+      'Founder Mode',
       'Human Validated',
       '3AM Commits',
       'EXFOLIATE!',
@@ -56,7 +56,7 @@ const DEMO_PROFILES: Profile[] = [
   {
     user_id: 'demo-tomi',
     display_name: 'Tomi',
-    bio: 'Looking for someone who builds things that matter. Swipe right if you believe AI should help kids, not just corporations.',
+    bio: 'Looking for someone who builds things that matter. Swipe right if you believe AI should protect real users, not fake profiles.',
     age: 29,
     photos: [],
     interests: ['Volunteering', 'Art', 'Music', 'Beach Sunsets', 'Community'],
@@ -75,7 +75,7 @@ const DEMO_PROFILES: Profile[] = [
       'TypeScript',
       'Architecture',
       'Git Hygiene',
-      '#ForTheKids',
+      'Founder Mode',
       'EXFOLIATE',
     ],
     location: 'The Cloud',

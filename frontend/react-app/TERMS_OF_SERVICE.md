@@ -192,18 +192,11 @@ Royalty Cards are non-transferable at launch. We may introduce transferability i
 ### 8.5 Non-Refundable
 Royalty Cards are non-refundable. See our [Refund Policy](REFUND_POLICY.md).
 
-## 9. Mission-Linked Revenue Policy
+## 9. Payment and Business Operations Policy
 
 YouAndINotAI is a for-profit platform operated by Trash Or Treasure Online Recycler LLC. Your payment is for the platform service, verification flow, membership, or product you purchased.
 
-Our current founder-directed operating rule is conservative:
-
-- charitable support sourced from current LLC platform operations is capped at **10%**
-- the remainder stays available for taxes, platform costs, retained cash, and lawful business operations
-- your payment is **not** a charitable contribution by you
-- we do not promise a fixed beneficiary, fixed timing, or fixed on-chain routing to you as part of your purchase
-
-If we later publish a separate formal structure, partner arrangement, or updated routing policy, we will update these Terms before treating it as live operating truth.
+Payments are commercial transactions for product value delivered. We do not attach non-product sales claims, legal/accounting promises, third-party benefit promises, or on-chain routing promises to your purchase.
 
 ## 10. Intellectual Property
 

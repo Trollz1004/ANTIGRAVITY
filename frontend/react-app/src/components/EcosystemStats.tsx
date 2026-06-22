@@ -53,7 +53,7 @@ const systems = [
     icon: Wallet,
     title: 'Revenue Transparency',
     detail:
-      'Public-facing copy stays on contractual revenue split language with the launch plans anchored to Square.',
+      'Public-facing copy stays business-only with launch plans anchored to Square.',
   },
   {
     icon: Sparkles,
@@ -191,7 +191,7 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
                   <Sparkles size={20} className="text-emerald-400" />
                   <div>
                     <div className="text-[10px] font-black uppercase tracking-widest text-emerald-400">
-                      Mission Status
+                      Product Status
                     </div>
                     <div className="text-sm font-bold text-white">
                       Launch-facing surfaces are product-only

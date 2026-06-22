@@ -38,4 +38,4 @@ Source material located in repo: `C:\antigravity\tools\styles.css`, `C:\antigrav
 - Blunt builder-to-builder voice.
 - No fake operational numbers. Unknown values are labeled `not verified` or `placeholder`.
 - Payment/provider internals, auth material, private logs, family details, customer data, and remote-access details stay off-screen.
-- Mission line may state `#UntilNoKidInNeed`; it must not ask the viewer for money.
+- Public status line must stay business-only and must not reference owner-private accounting.
