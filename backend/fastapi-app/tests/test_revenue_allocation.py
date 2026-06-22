@@ -3,27 +3,29 @@ from uuid import uuid4
 import pytest
 from sqlalchemy import select
 
+from app.allocation_compat import (
+    ACCOUNTING_LANE_COLUMN,
+    ACCOUNTING_RESERVE_CENTS_COLUMN,
+    ACCOUNTING_RESERVE_PERCENT_COLUMN,
+)
 from app.models import RevenueAllocation
 from app.revenue_allocation import (
     FOUNDER_TEST_PAYMENT_IDS,
-    calculate_charitable_amount_cents,
+    calculate_platform_reserve_cents,
     classify_payer_type,
     reserve_revenue_allocation,
 )
 
 
-def test_calculate_charitable_amount_cents():
-    # 10% of 100 is 10
-    assert calculate_charitable_amount_cents(100) == 10
-    # 10% of 1000 is 100
-    assert calculate_charitable_amount_cents(1000) == 100
-    # 10% of 1 is 1 (rounded up)
-    assert calculate_charitable_amount_cents(1) == 1
+def test_calculate_platform_reserve_cents():
+    assert calculate_platform_reserve_cents(100) == 0
+    assert calculate_platform_reserve_cents(1000) == 0
+    assert calculate_platform_reserve_cents(1) == 0
     # 0 or negative
-    assert calculate_charitable_amount_cents(0) == 0
-    assert calculate_charitable_amount_cents(-100) == 0
+    assert calculate_platform_reserve_cents(0) == 0
+    assert calculate_platform_reserve_cents(-100) == 0
     # Custom percent
-    assert calculate_charitable_amount_cents(100, 20) == 20
+    assert calculate_platform_reserve_cents(100, 20) == 20
 
 
 @pytest.mark.asyncio
@@ -44,8 +46,8 @@ async def test_reserve_revenue_allocation_success(db_session_factory):
         await db.commit()
 
         assert allocation is not None
-        assert allocation.charitable_amount_cents == 10
-        assert allocation.operating_amount_cents == 90
+        assert allocation.reserve_amount_cents == 0
+        assert allocation.operating_amount_cents == 100
         assert allocation.status == "reserved"
 
         # Verify persistence
@@ -98,6 +100,19 @@ def test_classify_payer_type_known_founder_test():
 def test_classify_payer_type_defaults_to_customer():
     assert classify_payer_type("pay_some_real_customer_id_not_in_list") == "customer"
     assert classify_payer_type("") == "customer"
+
+
+def test_revenue_allocation_uses_legacy_db_columns():
+    mapper = RevenueAllocation.__mapper__
+    assert (
+        mapper.attrs.reserve_amount_cents.columns[0].name
+        == ACCOUNTING_RESERVE_CENTS_COLUMN
+    )
+    assert (
+        mapper.attrs.reserve_percent.columns[0].name
+        == ACCOUNTING_RESERVE_PERCENT_COLUMN
+    )
+    assert mapper.attrs.accounting_lane.columns[0].name == ACCOUNTING_LANE_COLUMN
 
 
 @pytest.mark.asyncio

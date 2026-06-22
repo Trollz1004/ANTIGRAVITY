@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run scripts/deploy.js --network base",
-    "deploy:charity": "npx hardhat run scripts/deploy-charity.js --network base",
-    "verify": "npx hardhat run scripts/verify.js --network base"
+    "compile": "node scripts/deploy.js --check",
+    "deploy": "node scripts/deploy.js",
+    "verify": "node scripts/deploy.js --check"
   },
   "devDependencies": {
     "hardhat": "^2.22.0",

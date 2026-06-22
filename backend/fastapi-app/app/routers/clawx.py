@@ -1,6 +1,6 @@
-"""ClawX 6-AI council integration router.
+"""ClawX 6-AI operator integration router.
 
-Provides endpoints for managing and monitoring the ClawX governance council
+Provides endpoints for managing and monitoring the ClawX operator group
 API keys. All endpoints require authentication.
 
 GET    /api/v1/clawx/agents              — list registered agents
@@ -88,7 +88,7 @@ class HealthCheckResponse(BaseModel):
 async def list_clawx_agents(
     current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
-    """Return all 6 ClawX council agents and their configuration status.
+    """Return all 6 ClawX operator agents and their configuration status.
 
     Keys are never returned — only a masked prefix for configured agents.
     """

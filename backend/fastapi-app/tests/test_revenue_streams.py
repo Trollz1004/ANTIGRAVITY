@@ -302,8 +302,8 @@ def test_calculate_stream_allocation_setup_fee():
 
     allocation = calculate_stream_allocation(10000, "Security Cleanup", config)
 
-    assert allocation["charitable"] == 10.0
-    assert allocation["operating"] == 90.0
+    assert allocation["platform_reserve"] == 0.0
+    assert allocation["operating"] == 100.0
     assert allocation["setup_fee"] == 1500.0
     assert allocation["recurring_fee"] == 0.0
     assert allocation["transaction_fee"] == 0.0
@@ -325,8 +325,8 @@ def test_calculate_stream_allocation_transaction_fee():
 
     allocation = calculate_stream_allocation(10000, "Storefront Deployment", config)
 
-    assert allocation["charitable"] == 10.0
-    assert allocation["operating"] == 90.0
+    assert allocation["platform_reserve"] == 0.0
+    assert allocation["operating"] == 100.0
     assert allocation["setup_fee"] == 0.0
     assert allocation["recurring_fee"] == 0.0
     assert allocation["transaction_fee"] == 3.0
@@ -348,7 +348,7 @@ def test_calculate_stream_allocation_zero_amount():
 
     allocation = calculate_stream_allocation(0, "Security Cleanup", config)
 
-    assert allocation["charitable"] == 0.0
+    assert allocation["platform_reserve"] == 0.0
     assert allocation["operating"] == 0.0
     assert allocation["setup_fee"] == 0.0
     assert allocation["recurring_fee"] == 0.0
@@ -361,7 +361,7 @@ def test_revenue_streams_integration():
     # Test that we can map streams to buckets
     from app.revenue_allocation import REVENUE_STREAM_TO_BUCKET_MAPPING
 
-    # Security Cleanup (Infrastructure Immunity) → Kids Fund (bucket 1)
+    # Security Cleanup maps to product reporting bucket 1.
     bucket = REVENUE_STREAM_TO_BUCKET_MAPPING["Security Cleanup"]
     assert bucket == 1
 

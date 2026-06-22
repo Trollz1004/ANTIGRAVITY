@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.allocation_compat import ACCOUNTING_RESERVE_CENTS_COLUMN
 from app.cache import redis_health_check
 from app.config import get_settings
 from app.database import check_db_health, get_db
@@ -174,7 +175,8 @@ async def check_allocations(db: AsyncSession = Depends(get_db)):
         result = await db.execute(
             text(
                 "SELECT square_payment_id, payer_type, gross_amount_cents, "
-                "charitable_amount_cents, operating_amount_cents, status "
+                f"{ACCOUNTING_RESERVE_CENTS_COLUMN} AS reserve_amount_cents, "
+                "operating_amount_cents, status "
                 "FROM revenue_allocations ORDER BY created_at DESC LIMIT 5"
             )
         )
@@ -188,9 +190,8 @@ async def check_allocations(db: AsyncSession = Depends(get_db)):
 async def allocations_summary(db: AsyncSession = Depends(get_db)):
     """Two-figure revenue summary: gross-with-test vs customer-only.
 
-    customer_only is the number that actually moves the mission. with_test
-    keeps the full audit trail visible. Both come from the same ledger so
-    the math cannot drift.
+    customer_only is real customer revenue. with_test keeps founder-test
+    payments visible for audit without counting them as customers.
     """
     from sqlalchemy import text
 
@@ -200,8 +201,8 @@ async def allocations_summary(db: AsyncSession = Depends(get_db)):
                 "SELECT payer_type, "
                 "COUNT(*) AS payments, "
                 "COALESCE(SUM(gross_amount_cents), 0) AS gross_cents, "
-                "COALESCE(SUM(charitable_amount_cents), 0) AS kids_cents, "
-                "COALESCE(SUM(operating_amount_cents), 0) AS llc_cents "
+                f"COALESCE(SUM({ACCOUNTING_RESERVE_CENTS_COLUMN}), 0) AS reserve_cents, "
+                "COALESCE(SUM(operating_amount_cents), 0) AS operating_cents "
                 "FROM revenue_allocations "
                 "GROUP BY payer_type"
             )
@@ -212,14 +213,14 @@ async def allocations_summary(db: AsyncSession = Depends(get_db)):
             row = by_payer.get(key) or {
                 "payments": 0,
                 "gross_cents": 0,
-                "kids_cents": 0,
-                "llc_cents": 0,
+                "reserve_cents": 0,
+                "operating_cents": 0,
             }
             return {
                 "payments": int(row["payments"]),
                 "gross_cents": int(row["gross_cents"]),
-                "kids_cents": int(row["kids_cents"]),
-                "llc_cents": int(row["llc_cents"]),
+                "reserve_cents": int(row["reserve_cents"]),
+                "operating_cents": int(row["operating_cents"]),
             }
 
         customer = _tot("customer")
@@ -227,8 +228,10 @@ async def allocations_summary(db: AsyncSession = Depends(get_db)):
         with_test = {
             "payments": customer["payments"] + founder_test["payments"],
             "gross_cents": customer["gross_cents"] + founder_test["gross_cents"],
-            "kids_cents": customer["kids_cents"] + founder_test["kids_cents"],
-            "llc_cents": customer["llc_cents"] + founder_test["llc_cents"],
+            "reserve_cents": customer["reserve_cents"] + founder_test["reserve_cents"],
+            "operating_cents": (
+                customer["operating_cents"] + founder_test["operating_cents"]
+            ),
         }
         return {
             "customer_only": customer,

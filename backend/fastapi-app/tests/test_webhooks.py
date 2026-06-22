@@ -430,7 +430,7 @@ def test_completed_bot_shield_payment_requires_checkout_binding(
     assert allocations[0].user_id == user_id
     assert allocations[0].payment_tier == "bot_shield"
     assert allocations[0].gross_amount_cents == 100
-    assert allocations[0].charitable_amount_cents == 10
+    assert allocations[0].reserve_amount_cents == 0
     assert allocations[0].status == "reserved"
 
 
@@ -619,9 +619,9 @@ def test_completed_bot_shield_payment_with_valid_binding_promotes_user(
     assert allocations[0].user_id == user_id
     assert allocations[0].payment_tier == "bot_shield"
     assert allocations[0].gross_amount_cents == 100
-    assert allocations[0].charitable_amount_cents == 10
-    assert allocations[0].operating_amount_cents == 90
-    assert allocations[0].beneficiary_lane == "kids_support"
+    assert allocations[0].reserve_amount_cents == 0
+    assert allocations[0].operating_amount_cents == 100
+    assert allocations[0].accounting_lane == "platform_operations"
     assert allocations[0].status == "reserved"
 
 

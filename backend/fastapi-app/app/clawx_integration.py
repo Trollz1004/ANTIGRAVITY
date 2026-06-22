@@ -1,6 +1,6 @@
-"""ClawX 6-AI council API key integration.
+"""ClawX 6-AI operator API key integration.
 
-Manages API keys for the ClawX governance council — a fleet of 6 AI agents
+Manages API keys for the ClawX operator group — a fleet of 6 AI agents
 that participate in joint deliberation. Keys are loaded from environment
 variables and never hardcoded. Supports registration, rotation, validation,
 round-robin load balancing, and connectivity health checks.
