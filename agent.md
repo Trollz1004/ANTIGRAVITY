@@ -22,7 +22,7 @@ Customer-facing work sells:
 - checkout and receipt facts
 
 Do not use private owner accounting, tax handling, ownership/control promises,
-public-benefit fundraising, or investment-return claims as public copy or checkout blockers.
+non-product fundraising, or investment-return claims as public copy or checkout blockers.
 
 ## Source Of Truth
 
@@ -45,6 +45,35 @@ No AI, wrapper, dashboard, process, or node outranks Joshua or another approved 
 Agents execute assigned work, preserve evidence, and keep public product surfaces clean.
 
 Codex Desktop remains the implementation and verification lane for this thread.
+Codex is also the Paperclip CEO lane when Paperclip/Paperweight coordination is
+in scope. Hermes is optional support/research, not authority.
+
+Current T5500 Paperclip state:
+
+- T5500 package: `C:\antigravity-paperclip-dateapp-ops`
+- T5500 scheduled task: `PaperclipDateAppLoopback`
+- Local Paperclip URL on T5500: `http://127.0.0.1:3100`
+- Scope: date app, customer support, Cloudflare handoff, compact heartbeats
+- Excluded: Hermes
+- Decision lane: Codex CEO only
+- Support lane: Official OpenClaw support-only
+- Worker lane: FCC/OpenCode worker-only
+
+The matching briefing is
+`briefings/PAPERCLIP-DATEAPP-T5500-SETUP-2026-06-22.md`.
+
+9020 Hermes Paperclip work is separate and not yet assigned to marketing or
+AI-solutions/business exchange. Treat 9020 as dev/support checkout until Joshua
+sets that lane.
+
+FCC may be used as a Paperclip worker model through its MCP bridge for OpenCode,
+NVIDIA, and Ollama-backed work. FCC must report evidence and proposed actions to
+Codex unless the active backend is Codex 5.5 or Opus-level and Joshua explicitly
+assigns it as a decision lane.
+
+No model below Codex 5.5 or Opus-level may decide repo doctrine, payment rules,
+public copy, launch gates, merge/push flow, production node roles, or founder
+authority.
 
 ## Boot Order
 
@@ -63,7 +92,7 @@ Then report:
 AGENT BOOTED
 ROOT: c:\antigravity
 TASK: <one line>
-LANE: <Codex|Gemini|Claude|Hermes|OpenClaw|Other>
+LANE: <Codex CEO|FCC Worker|Gemini|Claude|Hermes|OpenClaw|Other>
 STATUS: <starting|blocked>
 BLOCKER: <none or exact blocker>
 ```
