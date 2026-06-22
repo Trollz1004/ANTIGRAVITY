@@ -1,10 +1,10 @@
 {
   "generatedAt": "2026-06-17T02:32:16Z",
-  "artifact": "ANTIGRAVITY Public Mission Control",
+  "artifact": "ANTIGRAVITY Public Ops Control",
   "scope": "Public stream-safe view layered over local Hermes and Paperclip status categories.",
   "sourceNotes": [
     "Read ANTIGRAVITY repo design-system entry at tools/styles.css and linked bundle presence at tools/_ds_bundle.js.",
-    "Read mission-control README and integration files to confirm Hermes/Paperclip context and local service expectations.",
+    "Read ops-control README and integration files to confirm Hermes/Paperclip context and local service expectations.",
     "Used user handoff constraints for stream safety, YouTube 24/7 posture, free Claude Code review lane, and no overwrite policy."
   ],
   "transforms": [

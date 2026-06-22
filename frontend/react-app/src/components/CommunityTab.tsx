@@ -1,14 +1,6 @@
 /**
- * CharityTab (DEPRECATION NOTE 2026-06-01)
- *   The file/component name `CharityTab` is an internal legacy label.
- *   Customer-facing copy in this component is already compliant (uses
- *   "Impact" and "Mission Context" — no "charity/donation/solicitation"
- *   words). Preserve the rule on any future edits. Renaming the file
- *   is out of scope for this commit; do it in a separate PR that also
- *   updates the lazy import in main.tsx.
- *
- *   See C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md
- *
+ * CommunityTab
+ *   Customer-facing copy in this component must stay business-only.
  *   Fetches volunteer metrics from /api/v1/volunteer/impact.
  */
 
@@ -16,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { api } from '../lib/api';
 import { VolunteerImpactResponse } from '../lib/types';
 
-export default function CharityTab() {
+export default function CommunityTab() {
   const [impact, setImpact] = useState<VolunteerImpactResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -52,13 +44,12 @@ export default function CharityTab() {
       <div className="text-center space-y-4">
         <h1 className="text-3xl font-extrabold text-white">Impact</h1>
         <p className="text-xl text-purple-400 font-medium">
-          Volunteer action and mission context, in one place.
+          Volunteer action and community activity, in one place.
         </p>
         <p className="max-w-2xl mx-auto text-gray-400 text-sm leading-relaxed">
           These live cards track community volunteering activity: hours
-          committed, signups, and organizations supported. Any later
-          mission-aligned support follows the separate founder-directed
-          operating policy and is not represented by the volunteer totals below.
+          committed, signups, and organizations supported. They are product
+          metrics, not checkout claims.
         </p>
       </div>
 
@@ -95,7 +86,7 @@ export default function CharityTab() {
         </div>
       </div>
 
-      {/* Mission Details */}
+      {/* Community Details */}
       <div className="glass-strong rounded-3xl p-8 space-y-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-4 opacity-10">
           <p className="text-9xl">🕊️</p>
@@ -103,7 +94,7 @@ export default function CharityTab() {
 
         <div className="relative z-10 space-y-4">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            Mission Context
+            Community Context
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-3">
@@ -111,10 +102,9 @@ export default function CharityTab() {
                 The Iron Wall
               </h3>
               <p className="text-gray-300 text-sm leading-relaxed">
-                We maintain absolute separation between our social mission and
-                corporate operations. Volunteer activity, product revenue, and
-                any later mission-aligned support are tracked separately so the
-                platform does not make fake or unsupported claims.
+                We keep volunteering activity separate from product revenue and
+                checkout. The platform sells access, verification, and product
+                value without unsupported public claims.
               </p>
             </div>
             <div className="space-y-3">
@@ -122,10 +112,10 @@ export default function CharityTab() {
                 Real-World Action
               </h3>
               <p className="text-gray-300 text-sm leading-relaxed">
-                Beyond financial support, the community directly connects
-                volunteers with local non-profits. Matches on YouAndINotAI are
-                meant to create measurable local action, not just in-app
-                engagement.
+                The community tools connect members with real-world plans,
+                local events, and useful follow-through. Matches on
+                YouAndINotAI are meant to create measurable action, not just
+                in-app engagement.
               </p>
             </div>
           </div>

@@ -1,6 +1,6 @@
 {
-  "title": "ANTIGRAVITY Public Mission Control",
-  "description": "Refreshable stream-safe mission-control view for public YouTube monitoring.",
+  "title": "ANTIGRAVITY Public Ops Control",
+  "description": "Refreshable stream-safe operations view for public YouTube monitoring.",
   "version": "v2",
   "preview": {
     "entry": "mission-control-public-live.v2.html",

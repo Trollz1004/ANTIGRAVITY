@@ -20,6 +20,4 @@ View your app in AI Studio: https://ai.studio/apps/2c8050ad-ec52-410c-822c-c083d
    `npm run dev`
 
 ---
-> "AI for kids in need, not adults with greed."
-> 
-> **Until no kid is in need. #FORtheKIDS 🚀**
+Business-only launch surface. Sell product value, verification, safety, support, and platform access.
