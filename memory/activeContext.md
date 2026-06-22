@@ -10,6 +10,14 @@ Current product objective:
 - Keep Sabretooth as the Codex/operator node.
 - Keep 9020 as dev/support checkout.
 - Keep OpenClaw limited to customer support.
+- Keep the current T5500 Paperclip setup date-app/customer-support only at
+  `C:\antigravity-paperclip-dateapp-ops`; Codex CEO is the decision lane,
+  OpenClaw is support-only, FCC/OpenCode is worker-only, and Hermes is excluded.
+- Keep T5500 Paperclip resilient through `PaperclipDateAppLoopback` plus
+  `PaperclipDateAppWatchdog`; the watchdog restarts loopback Paperclip when
+  `http://127.0.0.1:3100/api/adapters` is unhealthy.
+- Treat 9020 Hermes Paperclip as a separate undecided lane until Joshua chooses
+  marketing or AI-solutions/business exchange.
 
 Current cleanup objective:
 

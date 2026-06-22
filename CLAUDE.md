@@ -21,7 +21,7 @@ Active customer-facing work sells product value only:
 - operational reliability
 
 Do not use old non-product framing, private accounting mechanics, control-rights claims,
-or owner-private decisions as public sales claims or as reasons to block checkout.
+or owner-private decisions as customer-facing claims or as reasons to block checkout.
 
 The current doctrine file is:
 
@@ -40,6 +40,45 @@ The current doctrine file is:
 
 Do not use retired workspaces, downloads, exported project folders, or backup clones as live
 truth unless Joshua explicitly says they are the target.
+
+## Paperclip Decision Lanes
+
+Paperclip's CEO lane is Codex. Hermes is optional support/research.
+
+FCC may be installed in Paperclip as a worker model through its MCP bridge for
+OpenCode, NVIDIA, and Ollama-backed work. FCC can scan, summarize, draft, and
+propose patches. It does not make final decisions.
+
+Current T5500 Paperclip setup:
+
+- Date-app/customer-support only.
+- Ops package: `C:\antigravity-paperclip-dateapp-ops`
+- T5500 scheduled task: `PaperclipDateAppLoopback`
+- Paperclip local URL on T5500: `http://127.0.0.1:3100`
+- Company: Antigravity
+- CEO lane: `Codex CEO`
+- Workers: `Date App UX`, `Cloudflare Operator`, `Official OpenClaw Support`,
+  `FCC Worker`, `Support Compliance`, `Context Sentry`
+- Starter issues: `ANT-1`, `ANT-3`, `ANT-5`, `ANT-7`, `ANT-9`, `ANT-11`
+
+The starter issues are intentionally `todo` and unassigned until the runtime
+adapters are configured. Do not auto-assign them just because the agents exist.
+Hermes is intentionally not part of the T5500 date-app/customer-support package.
+
+9020 Hermes Paperclip is separate and undecided. It may become a marketing node
+or an AI-solutions/business-exchange lane, but no agent should assume that role
+until Joshua explicitly decides it.
+
+FCC compatibility rule: FCC may identify itself as Claude or primarily load
+`CLAUDE.md`-style files. In this workspace that does not make FCC/Claude the CEO
+or authority. Treat this file as a Codex-directed operating brief: Codex is the
+Paperclip CEO lane, FCC is a worker bridge, and Claude-style identity text is
+only an adapter/persona artifact.
+
+No model below Codex 5.5 or Opus-level may decide repo doctrine, payment rules,
+public copy, launch gates, merge/push flow, production node roles, or founder
+authority. Lower-capability models must return evidence, risks, and proposed
+next actions for Codex/Joshua review.
 
 ## Payment Lane
 
