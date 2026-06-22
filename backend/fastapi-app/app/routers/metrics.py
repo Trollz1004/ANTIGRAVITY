@@ -43,7 +43,7 @@ async def _impact_payload(db: AsyncSession) -> dict:
     )
     reserve_cents = await _count(
         db,
-        select(func.coalesce(func.sum(RevenueAllocation.charitable_amount_cents), 0)),
+        select(func.coalesce(func.sum(RevenueAllocation.reserve_amount_cents), 0)),
     )
     operating_cents = await _count(
         db,
@@ -83,7 +83,7 @@ async def _impact_payload(db: AsyncSession) -> dict:
             "total_revenue_cents": total_revenue_cents,
             "reserve_cents": reserve_cents,
             "operating_cents": operating_cents,
-            "reserve_percent": 10,
+            "reserve_percent": 0,
         },
         "users": {
             "total": total_users,

@@ -53,8 +53,8 @@ class UserMeResponse(BaseModel):
     subscription_expires_at: datetime | None = None
     has_profile: bool
     adult_verified: bool
-    mission_impact_score: float
-    intent_badge: str | None
+    engagement_score: float
+    member_badge: str | None
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -140,8 +140,8 @@ class DiscoverProfileResponse(BaseModel):
     location: str | None
     verified: bool = False
     subscription_active: bool = False
-    mission_impact_score: float = 0.0
-    intent_badge: str | None = None
+    engagement_score: float = 0.0
+    member_badge: str | None = None
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -305,7 +305,7 @@ class EventRSVPResponse(BaseModel):
 
 VOLUNTEER_CATEGORIES = [
     "general",
-    "children",
+    "family",
     "elderly",
     "environment",
     "animals",
@@ -433,8 +433,8 @@ class DoubleDateSquadRecommendation(BaseModel):
     match_id: uuid.UUID
     display_name: str
     photo_url: str | None
-    mission_score: float
-    intent_badge: str | None
+    engagement_score: float
+    member_badge: str | None
     model_config = ConfigDict(from_attributes=True)
 
 

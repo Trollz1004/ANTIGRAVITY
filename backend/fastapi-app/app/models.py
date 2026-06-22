@@ -19,6 +19,14 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.allocation_compat import (
+    ACCOUNTING_LANE_COLUMN,
+    ACCOUNTING_LANE_DEFAULT,
+    ACCOUNTING_RESERVE_CENTS_COLUMN,
+    ACCOUNTING_RESERVE_PERCENT_COLUMN,
+    ENGAGEMENT_SCORE_COLUMN,
+    MEMBER_BADGE_COLUMN,
+)
 from app.database import Base
 
 
@@ -62,10 +70,12 @@ class User(Base):
         nullable=False,
     )
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-    mission_impact_score: Mapped[float] = mapped_column(
-        Float, default=0.0, nullable=False
+    engagement_score: Mapped[float] = mapped_column(
+        ENGAGEMENT_SCORE_COLUMN, Float, default=0.0, nullable=False
     )
-    intent_badge: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    member_badge: Mapped[str | None] = mapped_column(
+        MEMBER_BADGE_COLUMN, String(50), nullable=True
+    )
 
     profile: Mapped["Profile | None"] = relationship(
         back_populates="user", uselist=False
@@ -267,11 +277,21 @@ class RevenueAllocation(Base):
         String(50), default="unknown", nullable=False
     )
     gross_amount_cents: Mapped[int] = mapped_column(Integer, nullable=False)
-    charitable_amount_cents: Mapped[int] = mapped_column(Integer, nullable=False)
+    reserve_amount_cents: Mapped[int] = mapped_column(
+        ACCOUNTING_RESERVE_CENTS_COLUMN, Integer, nullable=False
+    )
     operating_amount_cents: Mapped[int] = mapped_column(Integer, nullable=False)
-    charitable_percent: Mapped[int] = mapped_column(Integer, default=10, nullable=False)
-    beneficiary_lane: Mapped[str] = mapped_column(
-        String(100), default="kids_support", nullable=False
+    reserve_percent: Mapped[int] = mapped_column(
+        ACCOUNTING_RESERVE_PERCENT_COLUMN,
+        Integer,
+        default=0,
+        nullable=False,
+    )
+    accounting_lane: Mapped[str] = mapped_column(
+        ACCOUNTING_LANE_COLUMN,
+        String(100),
+        default=ACCOUNTING_LANE_DEFAULT,
+        nullable=False,
     )
     status: Mapped[str] = mapped_column(String(20), default="reserved", nullable=False)
     payer_type: Mapped[str] = mapped_column(

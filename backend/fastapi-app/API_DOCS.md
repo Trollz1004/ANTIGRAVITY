@@ -896,11 +896,11 @@ Schema: `UserMeResponse`
       "type": "boolean",
       "title": "Adult Verified"
     },
-    "mission_impact_score": {
+    "engagement_score": {
       "type": "number",
-      "title": "Mission Impact Score"
+      "title": "Engagement Score"
     },
-    "intent_badge": {
+    "member_badge": {
       "anyOf": [
         {
           "type": "string"
@@ -909,7 +909,7 @@ Schema: `UserMeResponse`
           "type": "null"
         }
       ],
-      "title": "Intent Badge"
+      "title": "Member Badge"
     }
   },
   "type": "object",
@@ -922,8 +922,8 @@ Schema: `UserMeResponse`
     "subscription_active",
     "has_profile",
     "adult_verified",
-    "mission_impact_score",
-    "intent_badge"
+    "engagement_score",
+    "member_badge"
   ],
   "title": "UserMeResponse"
 }

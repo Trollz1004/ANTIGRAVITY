@@ -170,7 +170,7 @@ NEW_COLORS = {
     "Study Together / Virtual Coworking":("#2563EB","#3B82F6","#059669","#F8FAFC","Focus blue + session green"),
     # ── G. Education ──
     "Coding Challenge & Practice": ("#22C55E","#059669","#D97706","#0F172A","Code green + difficulty amber on dark"),
-    "Kids Learning (ABC & Math)":  ("#2563EB","#F59E0B","#EC4899","#EFF6FF","Learning blue + play yellow + fun pink"),
+    "Early Learning (ABC & Math)":  ("#2563EB","#F59E0B","#EC4899","#EFF6FF","Learning blue + play yellow + fun pink"),
     "Music Instrument Learning":   ("#DC2626","#9A3412","#D97706","#FFFBEB","Musical red + warm amber"),
     # ── H. Transport ──
     "Parking Finder":              ("#2563EB","#059669","#DC2626","#F0F9FF","Available blue/green + occupied red"),

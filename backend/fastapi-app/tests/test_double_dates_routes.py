@@ -126,7 +126,7 @@ def test_propose_and_accept_double_date(client, db_session_factory):
         app.dependency_overrides.pop(get_current_user, None)
 
 
-def test_squad_recommendations_sort_by_mission_score(client, db_session_factory):
+def test_squad_recommendations_sort_by_engagement_score(client, db_session_factory):
     initiator = User(
         id=uuid.uuid4(),
         email="initiator@example.com",
@@ -140,8 +140,8 @@ def test_squad_recommendations_sort_by_mission_score(client, db_session_factory)
         email="first@example.com",
         password_hash="hashed",
         display_name="First",
-        mission_impact_score=4.5,
-        intent_badge="Intentional",
+        engagement_score=4.5,
+        member_badge="Founder",
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -150,8 +150,8 @@ def test_squad_recommendations_sort_by_mission_score(client, db_session_factory)
         email="second@example.com",
         password_hash="hashed",
         display_name="Second",
-        mission_impact_score=9.0,
-        intent_badge="Mission Lead",
+        engagement_score=9.0,
+        member_badge="Premium",
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -203,7 +203,7 @@ def test_squad_recommendations_sort_by_mission_score(client, db_session_factory)
         assert response.status_code == 200
         payload = response.json()
         assert [item["display_name"] for item in payload] == ["Second", "First"]
-        assert payload[0]["mission_score"] == 9.0
-        assert payload[0]["intent_badge"] == "Mission Lead"
+        assert payload[0]["engagement_score"] == 9.0
+        assert payload[0]["member_badge"] == "Premium"
     finally:
         app.dependency_overrides.pop(get_current_user, None)

@@ -7,7 +7,7 @@ membership, verification, safety, support, uptime, checkout, and platform access
 
 The old non-product public framing is no longer allowed to block checkout, launch,
 or payment collection. Public/customer surfaces must sell the product and keep
-private accounting, legal structure, owner decisions, and future governance work out
+private accounting, legal structure, owner decisions, and future control-rights work out
 of sales copy.
 
 ## Active Repo Scope Checked

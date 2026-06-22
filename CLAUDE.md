@@ -20,7 +20,7 @@ Active customer-facing work sells product value only:
 - platform access
 - operational reliability
 
-Do not use old non-product framing, private accounting mechanics, governance claims,
+Do not use old non-product framing, private accounting mechanics, control-rights claims,
 or owner-private decisions as public sales claims or as reasons to block checkout.
 
 The current doctrine file is:
@@ -46,7 +46,7 @@ truth unless Joshua explicitly says they are the target.
 YouAndINotAI uses Square for live checkout.
 
 Payment copy must describe the actual product being bought. Verification receipts and
-membership checkout are ordinary product transactions. Do not add governance, legal-structure,
+membership checkout are ordinary product transactions. Do not add control-rights, legal-structure,
 private accounting, or owner-planning claims to the checkout flow.
 
 ## Public Copy Boundary
@@ -76,7 +76,7 @@ Not allowed in active public copy:
 - legal/accounting promises
 - third-party benefit promises
 - private owner decisions
-- governance claims as a checkout condition
+- control-rights claims as a checkout condition
 - old slogans or legacy campaign language
 
 ## Node Roles

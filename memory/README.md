@@ -1,39 +1,24 @@
-# MEMORY BANK — OPUS PERSISTENT MEMORY SYSTEM
+# ANTIGRAVITY Active Memory
 
-This directory IS the memory. Every file here is auto-loaded by Claude Code via CLAUDE.md.
-When context resets, this is what survives.
+Updated: 2026-06-22
 
-## HOW IT WORKS
+Current active memory is business-only:
 
-1. Claude Code reads `CLAUDE.md` at session start
-2. `CLAUDE.md` says "read memory-bank/" 
-3. Every new Claude session has FULL context instantly
+- Sell membership, verification, safety, support, uptime, and platform access.
+- Keep private owner accounting and tax decisions out of public copy and agent blockers.
+- Use Square for YouAndINotAI checkout unless Joshua changes the payment lane.
+- Keep OpenClaw support-only.
+- Treat archived memory as historical reference, not current operating truth.
 
-## FILES
+Active read order:
 
-| File | Purpose |
-|------|---------|
-| `activeContext.md` | What you're working on RIGHT NOW |
-| `CODEX-QUICK-MEMORY.md` | Fast re-anchor file for Codex and agent routing truth |
-| `projectState.md` | Complete state of every repo, deployment, domain |
-| `decisions.md` | Every architectural decision + WHY |
-| `credentials-map.md` | Where every key/token/secret lives (paths only, no values) |
-| `identity.md` | Who Joshua is, the mission, the stakes |
-| `techStack.md` | Every technology, version, config across all nodes |
-| `sessionHandoff.md` | Last session's final state — copy-paste for new sessions |
+1. `AGENTS.md`
+2. `CLAUDE.md`
+3. `agent.md`
+4. `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md`
+5. `memory/activeContext.md`
+6. `memory/projectState.md`
+7. `memory/decisions.md`
 
-Historical one-off backups and snapshots belong in `memory/archive/` so the top-level memory lane stays readable.
-
-## RULES
-
-- **NEVER delete files** — append or update
-- **Timestamp every update** with ISO format
-- **Claude Code MUST update activeContext.md** at end of every session
-- **sessionHandoff.md** gets rewritten at end of every session
-- Shared tracked memory stays operational and secret-free
-- Put secret-bearing or node-local notes in `memory/local/` or `memory/private/` so they stay available on the machine but out of git
-
----
-> "AI for kids in need, not adults with greed."
-> 
-> **Until no kid is in need. #FORtheKIDS 🚀**
+Do not revive retired public-benefit, control-rights, accounting-math, or ownership-sale
+language from archived files.

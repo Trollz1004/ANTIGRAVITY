@@ -3,10 +3,7 @@
  *
  * Premium holographic card component showcasing the $2,500 Royalty Card.
  * 3D perspective tilt, holographic shimmer, floating hearts, and
- * founder-tier launch messaging with SPECIFIED revenue share terms.
- *
- * Revenue Share: Each Royalty Card holder receives 1% of net platform
- * revenue under the published Royalty Card terms.
+ * founder-tier launch messaging for premium lifetime access.
  * 5 cards max.
  *
  * @license Apache-2.0
@@ -23,7 +20,7 @@ import {
   Infinity as InfinityIcon,
   Zap,
   FileText,
-  TrendingUp,
+  Sparkles,
 } from 'lucide-react';
 
 const ROYALTY_LINK = '/app/checkout/royalty';
@@ -99,7 +96,7 @@ function HolographicCard() {
     { icon: Shield, text: 'Priority matching & dedicated support' },
     { icon: Star, text: 'Exclusive Royalty badge on your profile' },
     { icon: Zap, text: 'Early access to every new feature' },
-    { icon: TrendingUp, text: '1% net revenue share — paid quarterly' },
+    { icon: Sparkles, text: 'Concierge onboarding for launch-era features' },
   ];
 
   return (
@@ -245,36 +242,30 @@ function HolographicCard() {
             ))}
           </div>
 
-          {/* Revenue Share Terms — SPECIFIED */}
+          {/* Membership terms */}
           <div className="bg-gradient-to-br from-amber-500/[0.08] to-amber-600/[0.04] border border-amber-400/20 rounded-xl p-4 mb-5">
             <div className="flex items-center gap-2 mb-2">
               <FileText size={14} className="text-amber-400" />
               <span className="text-amber-300 text-xs font-black uppercase tracking-wider">
-                Revenue Share Terms
+                Membership Terms
               </span>
             </div>
             <div className="space-y-1.5 text-xs text-gray-400 leading-relaxed">
               <p>
-                Each Royalty Card holder receives{' '}
-                <span className="text-amber-300 font-bold">
-                  1% of net platform revenue
-                </span>
-                , paid{' '}
-                <span className="text-white/80 font-semibold">quarterly</span>{' '}
-                via the method of their choice.
+                Each Royalty Card holder receives lifetime VIP access, priority
+                support, and launch-era premium feature access for the
+                YouAndINotAI dating app.
               </p>
               <p>
-                Revenue share follows the published Royalty Card terms and does
-                not represent equity, governance control, or ownership in Trash
-                Or Treasure Online Recycler LLC.
+                The Royalty Card is a platform membership product. It does not
+                represent equity, ownership, company control rights, or an
+                investment return.
               </p>
               <p>
                 Maximum{' '}
                 <span className="text-amber-300 font-bold">5 cards</span> will
-                be issued. This is a contractual revenue share right —{' '}
-                <span className="text-white/80 font-semibold">not equity</span>.
-                Terms are perpetual and bound to the platform for as long as it
-                generates revenue.
+                be issued. Access remains tied to the purchaser's account under
+                the current Terms of Service.
               </p>
             </div>
           </div>
@@ -285,7 +276,7 @@ function HolographicCard() {
               Only 5 Royalty Cards will be issued at launch
             </p>
             <p className="text-emerald-400/60 text-xs mt-0.5">
-              1% net revenue share each • Quarterly payments • Lifetime VIP
+              Lifetime VIP • Priority support • Premium launch access
             </p>
           </div>
 
@@ -369,9 +360,8 @@ export default function RoyaltyDeck() {
             The Royalty Deck of Hearts
           </h2>
           <p className="text-gray-400 text-sm md:text-base max-w-md mx-auto leading-relaxed">
-            The ultimate founding membership. Lifetime VIP status, 1% quarterly
-            net revenue share, and priority access to every premium feature that
-            follows launch.
+            The ultimate founding membership. Lifetime VIP status, priority
+            support, and premium access for the launch-era experience.
           </p>
         </motion.div>
 
@@ -392,7 +382,7 @@ export default function RoyaltyDeck() {
           </span>
           <span className="flex items-center gap-1.5">
             <Heart size={12} className="text-red-400 fill-red-400" />
-            1% net revenue • quarterly
+            Priority support
           </span>
           <span className="flex items-center gap-1.5">
             <Star size={12} className="text-amber-400" />5 cards total

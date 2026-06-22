@@ -22,8 +22,8 @@ def UserFactory(**kwargs) -> dict:
         "created_at": datetime.now(timezone.utc),
         "updated_at": datetime.now(timezone.utc),
         "is_active": True,
-        "mission_impact_score": 0.0,
-        "intent_badge": None,
+        "engagement_score": 0.0,
+        "member_badge": None,
     }
     defaults.update(kwargs)
     return defaults

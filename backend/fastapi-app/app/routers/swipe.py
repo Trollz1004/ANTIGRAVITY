@@ -205,8 +205,8 @@ async def discover(
                 location=profile.location,
                 verified=profile.verified,
                 subscription_active=user_has_active_subscription(profile_user),
-                mission_impact_score=profile_user.mission_impact_score,
-                intent_badge=profile_user.intent_badge,
+                engagement_score=profile_user.engagement_score,
+                member_badge=profile_user.member_badge,
             )
         )
     return results

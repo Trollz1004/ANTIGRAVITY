@@ -170,26 +170,21 @@ The Royalty Card is a premium, limited-edition product. Only **5 Royalty Cards**
 ### 8.1 What You Get
 Royalty Card holders receive:
 
-- **1% revenue share** of YouAndINotAI dating app **net platform revenue**, paid quarterly under the published Royalty Card terms
 - Lifetime Founding Member access (no monthly fee)
 - All future premium features included at no additional cost
-- Recognition as a founding supporter
+- Priority support and launch-era account concierge handling
+- Recognition as an early platform supporter
 
-### 8.2 Revenue Share Details
-- The 1% is calculated on the dating app's net platform revenue under our published Royalty Card terms
-- Revenue share payments will be made quarterly
-- You will receive a statement showing the calculation basis and your share
-- Minimum payout threshold: $10 (amounts below $10 roll over to the next quarter)
-- Revenue share does not include merchandise sales, separate Square storefront sales, or revenue from other Trash Or Treasure Online Recycler LLC projects
-- Revenue share begins when the Royalty Card is purchased and continues for the lifetime of the dating app
+### 8.2 Membership Details
+- The Royalty Card is a membership and account-access product
+- It does not represent equity, ownership, company control rights, securities, investment return, or profit participation
+- It does not include merchandise sales, separate storefront products, or revenue from other Trash Or Treasure Online Recycler LLC projects
+- Access begins when the Royalty Card is purchased and remains tied to the purchaser's account under these Terms
 
-### 8.3 Tax Responsibility
-You are responsible for all taxes on your revenue share payments. If your annual revenue share exceeds $600, we will issue a 1099 form. You agree to provide us with a valid W-9 (or W-8BEN for non-US holders) before your first payout.
+### 8.3 Non-Transferable
+Royalty Cards are non-transferable at launch unless we provide a written account-transfer process later.
 
-### 8.4 Non-Transferable (Initially)
-Royalty Cards are non-transferable at launch. We may introduce transferability in the future, including potential tokenization on blockchain, but make no promises about if or when this will happen.
-
-### 8.5 Non-Refundable
+### 8.4 Non-Refundable
 Royalty Cards are non-refundable. See our [Refund Policy](REFUND_POLICY.md).
 
 ## 9. Payment and Business Operations Policy
@@ -278,7 +273,7 @@ You can delete your account at any time by contacting us at joshlcoleman@gmail.c
 - Your profile will be removed from the platform
 - Your personal data will be deleted according to our Privacy Policy retention schedule
 - Active subscriptions will be canceled (no refund for the current period)
-- Royalty Card revenue share obligations continue regardless of account status
+- Royalty Card access terms survive only as described in the Royalty Card product terms
 
 ### 15.2 By Us
 We may suspend or terminate your account at any time, with or without cause, with or without notice. Common reasons include:
