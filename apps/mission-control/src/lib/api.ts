@@ -1,7 +1,7 @@
 /**
  * API Client Module
  *
- * Provides typed HTTP helpers for the Mission Control frontend to communicate
+ * Provides typed HTTP helpers for the Ops Control frontend to communicate
  * with the backend API. All requests use AbortController-based timeouts to
  * prevent hanging connections against unresponsive services.
  *
@@ -25,7 +25,7 @@ export const API_BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
 
 /**
  * Standard API response envelope returned by all health-check and service
- * endpoints in the Mission Control backend.
+ * endpoints in the Ops Control backend.
  *
  * @template T - The shape of the `details` payload. Use a specific type
  *               (e.g. `Envelope<RepoDetails>`) for endpoints whose details

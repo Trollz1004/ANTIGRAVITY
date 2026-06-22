@@ -12,7 +12,7 @@ export const BuildAgentPanel: React.FC = () => (
       </div>
     </div>
     <p className="text-xs text-gray-300 leading-relaxed">
-      Built this Mission Control. Now seated at the Roundtable — ask E1 what to ship next.
+      Built this Ops Control. Now seated at the Roundtable — ask E1 what to ship next.
     </p>
     <div className="mt-3 text-[10px] font-mono text-gray-500">bridged · opus + codex</div>
   </div>

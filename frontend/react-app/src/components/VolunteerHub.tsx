@@ -71,7 +71,7 @@ function formatDate(iso: string): string {
 
 const CATEGORY_LABELS: Record<string, string> = {
   general: 'General',
-  children: 'Children',
+  youth_programs: 'Youth Programs',
   elderly: 'Elderly Care',
   environment: 'Environment',
   animals: 'Animals',

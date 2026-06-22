@@ -1,8 +1,8 @@
 {
-  "title": "ANTIGRAVITY Public Mission Control",
+  "title": "ANTIGRAVITY Public Ops Control",
   "version": "v2 stream-safe",
   "updatedAt": "2026-06-17T02:32:16Z",
-  "missionTag": "#UntilNoKidInNeed",
+  "statusTag": "Business-only operations",
   "streamMode": {
     "label": "YouTube 24/7 safe mode",
     "defaultOn": true,
@@ -43,7 +43,7 @@
   "publicCards": [
     {
       "label": "Viewer sees",
-      "value": "health categories, queue shape, public mission line"
+      "value": "health categories, queue shape, public ops line"
     },
     {
       "label": "Viewer never sees",
@@ -56,7 +56,7 @@
   ],
   "microcopy": {
     "headline": [
-      "Mission Control, without the private parts.",
+      "Ops Control, without the private parts.",
       "The work is live. The sensitive layer is not.",
       "Public ops board for a private build room."
     ],

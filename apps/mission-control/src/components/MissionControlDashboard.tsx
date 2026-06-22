@@ -67,12 +67,12 @@ const AGENTS = [
 const QUICK_COMMANDS = [
   {
     id: 'autostart',
-    title: 'Start Mission Stack',
+    title: 'Start Ops Stack',
     command: 'powershell -ExecutionPolicy Bypass -File C:\\ANTIGRAVITY\\scripts\\autostart-mission.ps1',
   },
   {
     id: 'api',
-    title: 'Run Mission Control API',
+    title: 'Run Ops Control API',
     command:
       'python -m uvicorn mission_control_api.main:app --host 0.0.0.0 --port 8787 --app-dir C:\\ANTIGRAVITY\\services\\mission-control-api\\src',
   },
@@ -267,7 +267,7 @@ function detailLine(name: string, env: Envelope<any>) {
     if (details.source === 'mirror') return 'Mirror feed only | live treasury source not wired';
     return details.message ?? `${formatMoney(details.balanceUsd)} | ${details.source ?? 'source unknown'}`;
   }
-  if (name === 'revenue') return `reserve cap ${details.reserve_percent ?? 10}% | ${(details.buckets ?? []).length} buckets`;
+  if (name === 'revenue') return `${(details.streams ?? details.buckets ?? []).length} active revenue streams`;
   if (details.status_code) return `HTTP ${details.status_code} | ${details.url ?? ''}`;
   if (details.port) return `port ${details.port} | ${details.host ?? 'localhost'}`;
   return env.error ?? SERVICE_META[name]?.hint ?? 'No detail returned';
@@ -580,13 +580,13 @@ export const MissionControlDashboard = () => {
   };
 
   return (
-    <div data-testid="mission-dashboard" className="min-h-screen bg-[#080c13] text-slate-100">
+    <div data-testid="ops-dashboard" className="min-h-screen bg-[#080c13] text-slate-100">
       <header className="border-b border-slate-800 bg-slate-950 px-4 py-3">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <div className="flex items-center gap-2 text-sm font-semibold text-cyan-200">
               <HeartPulse size={18} />
-              Antigravity Mission Control
+              Antigravity Ops Control
             </div>
             <p className="mt-1 text-xs text-slate-400">Local cockpit for repo state, runtime health, runbooks, and task dispatch.</p>
           </div>
@@ -617,7 +617,7 @@ export const MissionControlDashboard = () => {
             <div data-testid="operations-list" className="space-y-2">
               {commands.length === 0 ? (
                 <div className="rounded-md border border-slate-800 bg-slate-900 p-3 text-sm text-slate-400">
-                  Operations API unavailable. Restart the Mission Control API so /ops/commands is served by the updated backend.
+                  Operations API unavailable. Restart the Ops Control API so /ops/commands is served by the updated backend.
                 </div>
               ) : (
                 commands.map(command => {
@@ -725,11 +725,11 @@ export const MissionControlDashboard = () => {
           <Section title="Revenue Guard" icon={<Wallet size={16} />}>
             <div className="space-y-2 text-sm text-slate-300">
               <div className="flex items-center justify-between">
-                <span>Operating cap</span>
-                <span className="font-semibold text-cyan-200">10%</span>
+                <span>Operating posture</span>
+                <span className="font-semibold text-cyan-200">business-only</span>
               </div>
               <div className="rounded border border-slate-800 bg-slate-900 p-3 text-xs text-slate-400">
-                Public surfaces stay factual and restrained. Live treasury data must be wired before balances are shown as real.
+                Public surfaces stay business-only. Live treasury data must be wired before balances are shown as real.
               </div>
             </div>
           </Section>
@@ -1063,7 +1063,7 @@ export const MissionControlDashboard = () => {
             <div className="space-y-2 text-sm text-slate-300">
               <div className="flex items-center gap-2">
                 <Server size={14} className="text-cyan-300" />
-                Mission Control API serves UI and backend on :8787.
+                Ops Control API serves UI and backend on :8787.
               </div>
               <div className="flex items-center gap-2">
                 <GitBranch size={14} className="text-cyan-300" />

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { clsx } from 'clsx';
 import {
   LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare, Upload, Shield,
 } from 'lucide-react';
 import { NotificationBell } from './NotificationBell';
 import { StackIntegrityWidget } from './StackIntegrityWidget';
-import { DaoPanel } from './DaoPanel';
+import { TreasuryPanel } from './TreasuryPanel';
 
 /**
  * Navigation modes for the sidebar.
@@ -14,8 +14,8 @@ import { DaoPanel } from './DaoPanel';
  * component, and an optional `new` flag that renders a "NEW" badge.
  */
 const modes = [
-  { id: 'mission', label: 'Mission Control', new: true, icon: LayoutGrid },
-  { id: 'ledger', label: 'Mission Ledger', new: true, icon: BookOpen },
+  { id: 'ops', label: 'Ops Control', new: true, icon: LayoutGrid },
+  { id: 'ledger', label: 'Business Ledger', new: true, icon: BookOpen },
   { id: 'roundtable', label: 'AI Roundtable', new: true, icon: Users },
   { id: 'tasks', label: 'Tasks', new: true, icon: ListChecks },
   { id: 'code', label: 'Code Mode', new: false, icon: Code },
@@ -31,7 +31,7 @@ const modes = [
  * Sidebar Navigation Component
  *
  * Renders the left-hand navigation panel with mode buttons, a history
- * section, the DAO panel, the stack integrity widget, and a settings footer.
+ * section, the treasury panel, the stack integrity widget, and a settings footer.
  *
  * The active mode is tracked internally via `useState` and highlighted with
  * a distinct border/background style.
@@ -84,12 +84,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ active, setActive, unreadCount
         <div className="text-xs font-mono text-gray-500">No recent chats</div>
       </div>
       <div className="px-3 py-2 border-t border-border">
-        <DaoPanel />
+        <TreasuryPanel />
         <StackIntegrityWidget />
       </div>
       <div className="mt-auto p-3 border-t border-border">
         <div className="text-[10px] font-mono text-gray-500">Settings</div>
-        <div className="text-[10px] font-mono text-accentMagenta mt-1">for the kids · #UntilNoKidInNeed</div>
+        <div className="text-[10px] font-mono text-accentMagenta mt-1">business-only operations</div>
       </div>
     </aside>
   );
