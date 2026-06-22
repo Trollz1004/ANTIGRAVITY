@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://youandinotai.com'),
   applicationName: 'YouAndINotAI',
   title: {
-    default: 'YouAndINotAI — Human-first social platform',
+    default: 'YouAndINotAI - Human-first social platform',
     template: '%s · YouAndINotAI',
   },
   description:
@@ -16,13 +16,13 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://youandinotai.com',
     siteName: 'YouAndINotAI',
-    title: 'YouAndINotAI — Human-first social platform',
+    title: 'YouAndINotAI - Human-first social platform',
     description:
       'A human-verified, real-people-only social platform. Bot-shielded by design. Become a founding member.',
   },
   twitter: {
     card: 'summary',
-    title: 'YouAndINotAI — Human-first social platform',
+    title: 'YouAndINotAI - Human-first social platform',
     description: 'A human-verified, real-people-only social platform. Bot-shielded by design.',
   },
 };
