@@ -34,6 +34,10 @@ const DEFAULT_METRICS: MetricsState = {
   uptime: 'Untracked',
 };
 
+const PUBLIC_HEALTH_URL =
+  process.env.NEXT_PUBLIC_PLATFORM_HEALTH_URL ||
+  'https://api.youandinotai.com/api/v1/health';
+
 function StatCard({
   label,
   value,
@@ -67,10 +71,33 @@ export default function Dashboard() {
   const [metrics, setMetrics] = useState<MetricsState>(DEFAULT_METRICS);
 
   useEffect(() => {
-    fetch('/api/metrics', { cache: 'no-store' })
-      .then((res) => res.json())
-      .then((data) => setMetrics({ ...DEFAULT_METRICS, ...data }))
-      .catch((err) => console.error('Error fetching metrics:', err));
+    fetch(PUBLIC_HEALTH_URL, { cache: 'no-store' })
+      .then(async (res) => {
+        const contentType = res.headers.get('content-type') || '';
+        if (!res.ok || !contentType.includes('application/json')) {
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!data) return;
+        setMetrics({
+          ...DEFAULT_METRICS,
+          customers:
+            typeof data.user_count === 'number'
+              ? data.user_count
+              : DEFAULT_METRICS.customers,
+          verifiedRecords: Array.isArray(data.payment_proof_labels)
+            ? data.payment_proof_labels.length
+            : DEFAULT_METRICS.verifiedRecords,
+          uptime:
+            data.status === 'healthy' || data.status === 'ok'
+              ? 'API online'
+              : 'API degraded',
+          lastUpdated: new Date().toISOString(),
+        });
+      })
+      .catch(() => undefined);
   }, []);
 
   useEffect(() => {
