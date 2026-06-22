@@ -18,7 +18,7 @@ $Docker = "C:\Program Files\Docker\Docker\resources\bin\docker.exe"
 $DockerDesktop = "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 $Python = "C:\Users\joshl\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\python.exe"
 $StaticLauncher = Join-Path $LogDir "start-dateapp-static-3200.cmd"
-$TunnelProcessPattern = "cloudflared.*55b400f6-76b3-4795-8897-f10b7115b3cd|cloudflared.*t5500-dateapp"
+$TunnelProcessPattern = "cloudflared.*tunnel.*run.*--token"
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 
