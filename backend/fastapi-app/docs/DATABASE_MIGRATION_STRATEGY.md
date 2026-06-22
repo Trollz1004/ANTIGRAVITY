@@ -130,7 +130,8 @@ legacy production schema.
    statements covering:
    - `users` table: display_name, password_hash, square_customer_id,
      date_of_birth, adult_verified_at, is_active, bot_shield_verified,
-     subscription fields, mission_impact_score, intent_badge, google_id
+     subscription fields, engagement scoring columns, member badge columns,
+     google_id
    - `profiles` table: bio, age, gender, looking_for, location, photos,
      interests, verified, location_enabled, timestamps
    - `verification_events` table: square_payment_id, trust_score, amount_cents

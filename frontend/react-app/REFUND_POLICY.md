@@ -71,15 +71,13 @@ The same rules as the 3-Month Plan apply:
 
 **Non-refundable.**
 
-The Royalty Card is a limited-edition product — only 5 will ever be issued. Because of its scarcity and the nature of the product (which includes a perpetual revenue share), Royalty Card purchases are final and non-refundable.
+The Royalty Card is a limited-edition premium membership product — only 5 will ever be issued. Because of its scarcity and the account-access benefits attached to it, Royalty Card purchases are final and non-refundable.
 
 What you should know before purchasing:
 - Only 5 Royalty Cards exist. This is not a mass-market product.
-- The Royalty Card includes a 1% net platform revenue share of the YouAndINotAI dating app, paid quarterly under the published Royalty Card terms.
-- The revenue share begins at purchase and continues for the lifetime of the dating app.
-- If the dating app has no revenue, your revenue share payment will be $0. We do not guarantee minimum revenue.
-- The Royalty Card is non-transferable at launch (transferability may be introduced in the future).
-- The Royalty Card does not represent equity, ownership, or any governance rights in Trash Or Treasure Online Recycler LLC.
+- The Royalty Card includes lifetime VIP access, priority support, and premium launch-era account benefits.
+- The Royalty Card is non-transferable at launch unless we provide a written account-transfer process later.
+- The Royalty Card does not represent equity, ownership, company control rights, securities, investment return, or profit participation in Trash Or Treasure Online Recycler LLC.
 - See the [Terms of Service](TERMS_OF_SERVICE.md) Section 8 for full Royalty Card terms.
 
 ## 3. How to Request a Refund

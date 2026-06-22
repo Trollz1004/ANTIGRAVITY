@@ -49,7 +49,7 @@ def _opp_payload(**overrides) -> dict:
     payload = {
         "title": "Help at Food Bank",
         "organization": "Orlando Food Bank",
-        "description": "Sort and pack food donations",
+        "description": "Sort and pack pantry supplies",
         "location": "Orlando, FL",
         "category": "food",
         "hours_estimate": 4.0,

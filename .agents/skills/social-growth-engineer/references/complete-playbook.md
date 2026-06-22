@@ -109,7 +109,7 @@ This is the comprehensive guide to growing consumer apps virally through organic
 **3-Tier System**:
 1. **Rising Star**: New ambassadors, milestone bonuses, testing phase
 2. **Star**: Proven performers, higher CPM, consistency bonuses
-3. **Superstar**: Top 10%, revenue share, exclusive perks, VIP management
+3. **Superstar**: Top 10%, performance bonus, exclusive perks, VIP management
 
 **Compensation Models**:
 
@@ -706,7 +706,7 @@ Example: Noise app used this for organic-feeling discovery
 - **Disadvantage**: Complex tracking
 
 **Hybrid Affiliate**:
-- Base CPM + revenue share on referrals
+- Base CPM + referral performance bonus
 - Example: 10 referrals = $150, 500 referrals = $7,500
 - **Advantage**: Aligns incentives
 - **Disadvantage**: Attribution complexity

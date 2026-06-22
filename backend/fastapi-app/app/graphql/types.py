@@ -18,8 +18,8 @@ class UserMeResponse:
     subscription_expires_at: Optional[datetime]
     has_profile: bool
     adult_verified: bool
-    mission_impact_score: float
-    intent_badge: str
+    engagement_score: float
+    member_badge: str
 
 
 @strawberry.type

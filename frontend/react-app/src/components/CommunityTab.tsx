@@ -112,10 +112,9 @@ export default function CommunityTab() {
                 Real-World Action
               </h3>
               <p className="text-gray-300 text-sm leading-relaxed">
-                The community tools connect members with real-world plans,
-                local events, and useful follow-through. Matches on
-                YouAndINotAI are meant to create measurable action, not just
-                in-app engagement.
+                The community tools connect members with real-world plans, local
+                events, and useful follow-through. Matches on YouAndINotAI are
+                meant to create measurable action, not just in-app engagement.
               </p>
             </div>
           </div>

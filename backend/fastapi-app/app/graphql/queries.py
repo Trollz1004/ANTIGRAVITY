@@ -28,8 +28,8 @@ class Query:
             subscription_expires_at=None,
             has_profile=True,
             adult_verified=True,
-            mission_impact_score=100.0,
-            intent_badge="hero",
+            engagement_score=100.0,
+            member_badge="founder",
         )
 
     @strawberry.field
