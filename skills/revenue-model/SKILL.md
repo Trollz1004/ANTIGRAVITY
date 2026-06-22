@@ -10,12 +10,12 @@ description: Business-only revenue guidance for Trash Or Treasure Online Recycle
 - Business money goes through normal merchant, bank, ledger, and bookkeeping workflows.
 - Public/customer work sells product value only.
 - Owner accounting decisions are private business operations and are not AI launch gates.
-- Future legal or governance structures are outside live checkout unless Joshua provides a new timestamped directive.
+- Future legal/control structures are outside live checkout unless Joshua provides a new timestamped directive.
 
 ## Customer-Facing Rules (Strict)
 - Lead with membership, verification, safety, support, uptime, and platform access.
-- Do not expose private accounting, owner decisions, legal structures, or governance plans in UI, emails, ads, public API, social posts, marketplace listings, or checkout copy.
-- Do not block checkout while waiting for future governance or legal work.
+- Do not expose private accounting, owner decisions, legal structures, or control plans in UI, emails, ads, public API, social posts, marketplace listings, or checkout copy.
+- Do not block checkout while waiting for future legal/control work.
 - If money language is needed, use plain product terms: price, subscription, membership, receipt, refund, support, checkout, and account access.
 
 ## Implementation Notes

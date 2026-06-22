@@ -105,7 +105,7 @@
           "health"
         ],
         "summary": "Allocations Summary",
-        "description": "Two-figure revenue summary: gross-with-test vs customer-only.\n\ncustomer_only is the number that actually moves the mission. with_test\nkeeps the full audit trail visible. Both come from the same ledger so\nthe math cannot drift.",
+        "description": "Two-figure revenue summary: gross-with-test vs customer-only.\n\ncustomer_only is real customer revenue. with_test keeps founder-test\npayments visible for audit without counting them as customers.",
         "operationId": "allocations_summary_api_v1_health_allocations_summary_get",
         "responses": {
           "200": {
@@ -611,7 +611,7 @@
           "auth"
         ],
         "summary": "Get current user",
-        "description": "Return the authenticated user's profile including subscription status, verification badges, and mission impact score.",
+        "description": "Return the authenticated user's profile including subscription status, verification badges, and engagement score.",
         "operationId": "get_me_api_v1_auth_me_get",
         "responses": {
           "200": {
@@ -630,8 +630,8 @@
                   "subscription_active": true,
                   "has_profile": true,
                   "adult_verified": true,
-                  "mission_impact_score": 5.0,
-                  "intent_badge": "Intentional"
+                  "engagement_score": 5.0,
+                  "member_badge": "Founder"
                 }
               }
             }
@@ -3029,6 +3029,87 @@
         ]
       }
     },
+    "/api/v1/support/whatsapp/webhook": {
+      "get": {
+        "tags": [
+          "support"
+        ],
+        "summary": "Verify Whatsapp Webhook",
+        "operationId": "verify_whatsapp_webhook_api_v1_support_whatsapp_webhook_get",
+        "parameters": [
+          {
+            "name": "hub.mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Hub.Mode"
+            }
+          },
+          {
+            "name": "hub.verify_token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Hub.Verify Token"
+            }
+          },
+          {
+            "name": "hub.challenge",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Hub.Challenge"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "support"
+        ],
+        "summary": "Receive Whatsapp Webhook",
+        "operationId": "receive_whatsapp_webhook_api_v1_support_whatsapp_webhook_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Receive Whatsapp Webhook Api V1 Support Whatsapp Webhook Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/video/rooms/{match_id}": {
       "post": {
         "tags": [
@@ -3254,7 +3335,7 @@
           "double-dates"
         ],
         "summary": "Get Squad Recommendations",
-        "description": "Squad Protocol: Recommend matches for double-dates based on Mission Impact Score.",
+        "description": "Recommend matches for double-dates based on engagement score.",
         "operationId": "get_squad_recommendations_api_v1_double_dates_squad_recommendations_get",
         "responses": {
           "200": {
@@ -3923,7 +4004,7 @@
           "clawx"
         ],
         "summary": "List ClawX agents",
-        "description": "Return all 6 ClawX council agents and their configuration status.\n\nKeys are never returned \u2014 only a masked prefix for configured agents.",
+        "description": "Return all 6 ClawX operator agents and their configuration status.\n\nKeys are never returned \u2014 only a masked prefix for configured agents.",
         "operationId": "list_clawx_agents_api_v1_api_v1_clawx_agents_get",
         "responses": {
           "200": {
@@ -5147,12 +5228,12 @@
             "title": "Subscription Active",
             "default": false
           },
-          "mission_impact_score": {
+          "engagement_score": {
             "type": "number",
-            "title": "Mission Impact Score",
+            "title": "Engagement Score",
             "default": 0.0
           },
-          "intent_badge": {
+          "member_badge": {
             "anyOf": [
               {
                 "type": "string"
@@ -5161,7 +5242,7 @@
                 "type": "null"
               }
             ],
-            "title": "Intent Badge"
+            "title": "Member Badge"
           }
         },
         "type": "object",
@@ -5335,11 +5416,11 @@
             ],
             "title": "Photo Url"
           },
-          "mission_score": {
+          "engagement_score": {
             "type": "number",
-            "title": "Mission Score"
+            "title": "Engagement Score"
           },
-          "intent_badge": {
+          "member_badge": {
             "anyOf": [
               {
                 "type": "string"
@@ -5348,7 +5429,7 @@
                 "type": "null"
               }
             ],
-            "title": "Intent Badge"
+            "title": "Member Badge"
           }
         },
         "type": "object",
@@ -5356,8 +5437,8 @@
           "match_id",
           "display_name",
           "photo_url",
-          "mission_score",
-          "intent_badge"
+          "engagement_score",
+          "member_badge"
         ],
         "title": "DoubleDateSquadRecommendation"
       },
@@ -5717,7 +5798,7 @@
             "title": "New Key",
             "description": "The new API key to assign to the agent.",
             "examples": [
-              "sk-ant-new-secret-key-here"
+              "sk-REDACTED"
             ]
           }
         },
@@ -7378,11 +7459,11 @@
             "type": "boolean",
             "title": "Adult Verified"
           },
-          "mission_impact_score": {
+          "engagement_score": {
             "type": "number",
-            "title": "Mission Impact Score"
+            "title": "Engagement Score"
           },
-          "intent_badge": {
+          "member_badge": {
             "anyOf": [
               {
                 "type": "string"
@@ -7391,7 +7472,7 @@
                 "type": "null"
               }
             ],
-            "title": "Intent Badge"
+            "title": "Member Badge"
           }
         },
         "type": "object",
@@ -7404,8 +7485,8 @@
           "subscription_active",
           "has_profile",
           "adult_verified",
-          "mission_impact_score",
-          "intent_badge"
+          "engagement_score",
+          "member_badge"
         ],
         "title": "UserMeResponse"
       },
@@ -8036,7 +8117,7 @@
     },
     {
       "name": "clawx",
-      "description": "ClawX AI Council integration. Multi-AI governance and deliberation endpoints."
+      "description": "ClawX AI operator integration. Multi-AI operator coordination endpoints."
     }
   ]
 }
