@@ -7,4 +7,4 @@ completion_promise: null
 started_at: "2026-06-07T00:55:47Z"
 ---
 
-Use sub-agents to work on funding for kids and getting Joshua help with funding. Attach paperclip kanban at file:///C:/Users/joshl/Downloads/paperclip-kanban.html. Run until kids have funding and Joshua gets help with funding.
+Use sub-agents to work on business revenue, checkout reliability, customer support, and operational cleanup. Attach paperclip kanban at file:///C:/Users/joshl/Downloads/paperclip-kanban.html. Run until revenue and support blockers are cleared.

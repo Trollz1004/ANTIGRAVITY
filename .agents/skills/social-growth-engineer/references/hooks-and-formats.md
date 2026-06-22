@@ -449,7 +449,7 @@ This is a comprehensive library of proven viral hooks, video formats, and conten
 
 **Structure**:
 - Numbered list or tier list
-- Workout splits, foods, beauty products, etc.
+- Workout routines, foods, beauty products, etc.
 - App screenshot on slide revealing ranking feature
 - Social proof through expertise
 
