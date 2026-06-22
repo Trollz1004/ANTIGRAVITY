@@ -7,7 +7,7 @@ tags: partitioning, large-tables, time-series, performance
 
 ## Partition Large Tables for Better Performance
 
-Partitioning splits a large table into smaller pieces, improving query performance and maintenance operations.
+Partitioning divides a large table into smaller pieces, improving query performance and maintenance operations.
 
 **Incorrect (single large table):**
 
