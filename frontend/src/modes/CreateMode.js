@@ -6,7 +6,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const PRESETS = [
   "An orange origami rocket gently lifting a small kid above a cyan grid; warm cream sky; minimal, hopeful, mission-control vibes",
-  "A tiny constellation labeled '#UntilNoKidInNeed' over a soft midnight skyline; magenta highlights; quiet, optimistic",
+  "A tiny constellation labeled 'Business-only product operations' over a soft midnight skyline; magenta highlights; quiet, optimistic",
   "An OpusPawClaw mission patch: paw + claw + crescent moon; cyan/magenta/gold on dark navy; embroidered look",
 ];
 

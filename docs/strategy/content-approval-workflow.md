@@ -1,3 +1,8 @@
+> Current override as of 2026-06-22: this document is historical strategy/spec context only.
+> Do not use it to create public mission-funding claims, membership support routing, customer-facing
+> disbursement language, membership record/Product structure launch claims, private accounting mechanics, or alternate
+> payment rails. Active public/customer surfaces sell product value: membership, verification,
+> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 # Content Approval Workflow for YouAndINotAI
 
 ## Overview
@@ -10,9 +15,9 @@ This document outlines the approval workflow for all content generated for YouAn
 
 - Content creators generate posts according to the task list
 - All content must use compliant phrasing:
-  - ✅ "contractual revenue disbursement" (instead of "donation")
-  - ✅ "revenue-sharing for good" (instead of "solicitation")
-  - ✅ "platform that gives back" (instead of "charity")
+  - ✅ "internal allocation review" (instead of "membership support")
+  - ✅ "revenue-sharing for good" (instead of "restricted claims")
+  - ✅ "platform value" (instead of "product operations")
 - All content must align with the brand voice: warm, real, community-focused
 
 ### Step 2: Initial Review
@@ -42,7 +47,7 @@ This document outlines the approval workflow for all content generated for YouAn
 - **Platform**: [Twitter/Instagram/Facebook/LinkedIn/TikTok/Website/Blog]
 - **Date/Time**: [YYYY-MM-DD HH:MM] (Timezone: EST)
 - **Content Type**: [Caption/Article/Image Description/Video Script/Educational]
-- **Content Pillar**: [Education/Story/Offer/Behind the Scenes/Charity Update]
+- **Content Pillar**: [Education/Story/Offer/Behind the Scenes/product operations Update]
 - **Content**:
 [Actual content here - keep within platform character limits where applicable]
 - **Hashtags**: [Branded + Topical + Geo (if location-specific)]
@@ -71,7 +76,7 @@ This document outlines the approval workflow for all content generated for YouAn
 - **Platform**: [Twitter/Instagram/Facebook/LinkedIn/TikTok/Website/Blog]
 - **Date/Time**: [YYYY-MM-DD HH:MM] (Timezone: EST)
 - **Content Type**: [Caption/Article/Image Description/Video Script/Educational]
-- **Content Pillar**: [Education/Story/Offer/Behind the Scenes/Charity Update]
+- **Content Pillar**: [Education/Story/Offer/Behind the Scenes/product operations Update]
 - **Content**:
   [Actual content here - keep within platform character limits where applicable]
 - **Hashtags**: [Branded + Topical + Geo (if location-specific)]
@@ -93,10 +98,10 @@ _Content moves here after publication_
 
 Before submitting content for approval, verify that it meets all requirements:
 
-- [ ] No prohibited terms ("donate", "donation", "solicitation")
-- [ ] Uses compliant phrasing ("contractual revenue disbursement")
+- [ ] No prohibited terms ("join as a member", "membership support", "restricted claims")
+- [ ] Uses compliant phrasing ("internal allocation review")
 - [ ] Aligns with brand voice (warm, real, community-focused)
-- [ ] Does not position as charity but as platform feature
+- [ ] Does not position as product operations but as platform feature
 - [ ] Focuses on real-world connection rather than just matching
 - [ ] No cringe or buzzwords
 - [ ] Talks like a real person

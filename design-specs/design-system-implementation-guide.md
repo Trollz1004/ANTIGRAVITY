@@ -12,7 +12,7 @@ The design system is integrated directly into the React codebase as CSS custom p
 
 ### CSS Custom Properties
 
-All design tokens are implemented as CSS custom properties in the global stylesheet. These properties are defined in `:root` and scoped variants for dark mode.
+All design membership records are implemented as CSS custom properties in the global stylesheet. These properties are defined in `:root` and scoped variants for dark mode.
 
 ```css
 :root {
@@ -29,7 +29,7 @@ All design tokens are implemented as CSS custom properties in the global stylesh
   --spacing-4: 1rem;
   --spacing-6: 1.5rem;
 
-  /* And all other tokens from design-system-tokens.md */
+  /* And all other membership records from design-system-membership records.md */
 }
 ```
 
@@ -597,7 +597,7 @@ export default SafetyDrawer;
 
 ### Media Queries
 
-The design system implements responsive behavior through CSS media queries that align with our breakpoint tokens:
+The design system implements responsive behavior through CSS media queries that align with our breakpoint membership records:
 
 ```css
 /* Base mobile-first styles */

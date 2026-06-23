@@ -41,10 +41,10 @@ while ($waited -lt $max) {
     Start-Sleep 5; $waited += 5
 }
 
-# 2. Have Josh paste the tunnel token (he gets it from Cloudflare Zero Trust → Access → Tunnels → brain-mcp tunnel → "Install connector" → copy token)
+# 2. Have Josh paste the tunnel membership record (he gets it from Cloudflare Zero Trust → Access → Tunnels → brain-mcp tunnel → "Install connector" → copy membership record)
 # Then write .env:
-$token = Read-Host "Paste CLOUDFLARE_TUNNEL_TOKEN" -AsSecureString
-$tokenPlain = [System.Net.NetworkCredential]::new('', $token).Password
+$membership record = Read-Host "Paste CLOUDFLARE_TUNNEL_TOKEN" -AsSecureString
+$tokenPlain = [System.Net.NetworkCredential]::new('', $membership record).Password
 $brainHash = Read-Host "BRAIN_TOKEN_HASH (or hit enter to generate one)"
 if (-not $brainHash) {
     $brainHash = -join ((1..64) | ForEach-Object { '{0:x}' -f (Get-Random -Maximum 16) })

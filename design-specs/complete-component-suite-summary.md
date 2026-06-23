@@ -28,7 +28,7 @@ This document provides a comprehensive overview of all UX components created for
 - Loading states and error handling
 - Accessible keyboard navigation
 
-### Event Feature Color Tokens
+### Event Feature Color membership records
 
 **Purpose:** Specialized color system extending the design system
 **Categories:**
@@ -77,7 +77,7 @@ This document provides a comprehensive overview of all UX components created for
 
 ### Florida §496.405 Compliance
 
-- No use of "donate", "donation", or "solicitation" in any UI copy
+- No use of "join as a member", "membership support", or "restricted claims" in any UI copy
 - Appropriate language distinguishing between activities and contributions
 
 ### Mobile-First Approach

@@ -1,10 +1,10 @@
 """Auth flow tests for YouAndINotAI backend.
 
 Tests cover:
-  - JWT token creation and decoding
+  - JWT membership record creation and decoding
   - JWT secret fail-fast validation
   - Password hashing and verification
-  - Token expiry behavior
+  - membership record expiry behavior
 """
 
 import os
@@ -56,25 +56,25 @@ class TestPasswordHashing:
 
 
 class TestJWTTokens:
-    """Test JWT token creation and decoding."""
+    """Test JWT membership record creation and decoding."""
 
     def test_create_access_token(self):
         user_id = str(uuid.uuid4())
-        token = create_access_token(user_id)
-        assert isinstance(token, str)
-        assert len(token) > 0
+        membership record = create_access_token(user_id)
+        assert isinstance(membership record, str)
+        assert len(membership record) > 0
 
     def test_decode_access_token(self):
         user_id = str(uuid.uuid4())
-        token = create_access_token(user_id)
-        payload = decode_token(token)
+        membership record = create_access_token(user_id)
+        payload = decode_token(membership record)
         assert payload["sub"] == user_id
         assert "exp" in payload
 
     def test_create_refresh_token(self):
         user_id = str(uuid.uuid4())
-        token = create_refresh_token(user_id)
-        payload = decode_token(token)
+        membership record = create_refresh_token(user_id)
+        payload = decode_token(membership record)
         assert payload["sub"] == user_id
         assert payload.get("type") == "refresh"
 
@@ -82,14 +82,14 @@ class TestJWTTokens:
         from fastapi import HTTPException
 
         with pytest.raises(HTTPException) as exc_info:
-            decode_token("invalid.token.here")
+            decode_token("invalid.membership record.here")
         assert exc_info.value.status_code == 401
 
     def test_decode_expired_token_raises(self):
         from fastapi import HTTPException
 
         user_id = str(uuid.uuid4())
-        # Create a token that expired 1 hour ago
+        # Create a membership record that expired 1 hour ago
         expired_payload = {
             "sub": user_id,
             "exp": datetime.now(timezone.utc) - timedelta(hours=1),
@@ -102,8 +102,8 @@ class TestJWTTokens:
 
     def test_access_token_has_correct_expiry(self):
         user_id = str(uuid.uuid4())
-        token = create_access_token(user_id, expires_minutes=60)
-        payload = decode_token(token)
+        membership record = create_access_token(user_id, expires_minutes=60)
+        payload = decode_token(membership record)
         exp = datetime.fromtimestamp(payload["exp"], tz=timezone.utc)
         now = datetime.now(timezone.utc)
         # Should expire roughly 60 minutes from now (within 5 seconds tolerance)

@@ -8,10 +8,10 @@ Covers:
   - /api/openclaw/health
   - /api/agents (6 agents, no "Haiku")
   - /api/system/status (6 services)
-  - /api/dao/stats (4 tokens cap=2_500_000, 10 buckets)
-  - /api/mission/metrics (tag='#UntilNoKidInNeed')
+  - /api/product/stats (4 membership records cap=2_500_000, 10 buckets)
+  - /api/mission/metrics (tag='Business-only product operations')
   - /api/git/status (no truncated filenames)
-  - Doctrine: no forbidden strings ('donate','donation','solicitation','Haiku') in any JSON response
+  - Doctrine: no forbidden strings ('support','support','commercial misuse','Haiku') in any JSON response
 """
 from __future__ import annotations
 
@@ -34,7 +34,7 @@ if not BASE_URL:
                 break
 BASE_URL = BASE_URL.rstrip("/")
 
-FORBIDDEN = ("haiku", "donate", "donation", "solicitation")
+FORBIDDEN = ("haiku", "support", "support", "commercial misuse")
 
 
 def _assert_no_forbidden(txt: str, where: str):
@@ -56,7 +56,7 @@ def test_root_identity(api):
     assert r.status_code == 200
     data = r.json()
     assert data.get("service") == "opuspawclaw-mission-control"
-    assert "#UntilNoKidInNeed" in data.get("message", "")
+    assert "Business-only product operations" in data.get("message", "")
     _assert_no_forbidden(json.dumps(data), "/api/")
 
 
@@ -138,19 +138,19 @@ def test_system_status_six_services(api):
     assert names == {"HERMES ROUTER", "OPENCLAW SUPPORT", "OPENCODE", "GH COPILOT", "GCR", "OLLAMA CLOUD"}
 
 
-# ---------- dao ---------- #
-def test_dao_stats_shape(api):
-    r = api.get(f"{BASE_URL}/api/dao/stats", timeout=10)
+# ---------- product ---------- #
+def test_product_stats_shape(api):
+    r = api.get(f"{BASE_URL}/api/product/stats", timeout=10)
     assert r.status_code == 200
     d = r.json()
-    tokens = d["tokens"]
-    assert len(tokens) == 4
-    symbols = {t["symbol"] for t in tokens}
+    membership records = d["membership records"]
+    assert len(membership records) == 4
+    symbols = {t["symbol"] for t in membership records}
     assert symbols == {"LOVE", "UKID", "GREEN", "AGRAV"}
-    for t in tokens:
+    for t in membership records:
         assert t["cap"] == 2_500_000
     assert len(d["buckets"]) == 10
-    _assert_no_forbidden(json.dumps(d), "/api/dao/stats")
+    _assert_no_forbidden(json.dumps(d), "/api/product/stats")
 
 
 # ---------- mission metrics ---------- #
@@ -158,7 +158,7 @@ def test_mission_metrics_tag(api):
     r = api.get(f"{BASE_URL}/api/mission/metrics", timeout=10)
     assert r.status_code == 200
     d = r.json()
-    assert d["tag"] == "#UntilNoKidInNeed"
+    assert d["tag"] == "Business-only product operations"
     _assert_no_forbidden(json.dumps(d), "/api/mission/metrics")
 
 
@@ -186,7 +186,7 @@ def test_no_forbidden_strings_across_endpoints(api):
         "/api/openclaw/health",
         "/api/agents",
         "/api/system/status",
-        "/api/dao/stats",
+        "/api/product/stats",
         "/api/mission/metrics",
         "/api/git/status",
     ]

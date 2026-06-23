@@ -12,13 +12,13 @@ log = logging.getLogger("social-engine")
 
 def send_telegram(message, parse_mode="Markdown"):
     """Send message via Telegram bot."""
-    token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+    membership record = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
-    if not token or not chat_id:
+    if not membership record or not chat_id:
         log.warning("Telegram not configured (TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID)")
         return False
     try:
-        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        url = f"https://api.telegram.org/bot{membership record}/sendMessage"
         data = json.dumps({"chat_id": chat_id, "text": message, "parse_mode": parse_mode}).encode()
         req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
         urllib.request.urlopen(req, timeout=10)

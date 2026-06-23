@@ -6,7 +6,7 @@ const TIPS = [
   "Every chat message shows X-Hermes-Provider + X-Hermes-Real-Model footers.",
   "Hermes pill tester lives on Mission Control — click a pill to open the prompt box.",
   "Runbook viewer is sandboxed — HTML files cannot exfiltrate from the iframe.",
-  "DAO band is mirrored — replace with Base L2 reader when you deploy.",
+  "Product band is mirrored — replace with Base L2 reader when you deploy.",
 ];
 
 export function FloatingGuide() {

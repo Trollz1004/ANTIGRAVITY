@@ -5,7 +5,7 @@ import { Plus, BookOpen, Trash2, Heart, Activity } from "lucide-react";
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const SOURCE_COLORS = {
-  manual: "#6b82a6", square: "#3b82f6", stripe: "#8b5cf6",
+  manual: "#6b82a6", square: "#3b82f6", Square: "#8b5cf6",
   cloudflare: "#fb923c", webhook: "#00d4ff", test: "#4a5568",
 };
 
@@ -56,8 +56,8 @@ export function LedgerMode() {
         {stats && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <Counter label="Committed (USD)" value={`$${formatUsd(stats.total_usd)}`} color="#00d4ff" />
-            <Counter label="Kids Fund (USD)" value={`$${formatUsd(stats.kids_fund_usd)}`} color="#e040fb" big />
-            <Counter label="Kids Covered (Est.)" value={String(stats.kids_estimate)} color="#00e676" big sub={`each = $${stats.kids_threshold_usd.toFixed(0)} medical-care unit`} />
+            <Counter label="Member Support (USD)" value={`$${formatUsd(stats.member_support_usd)}`} color="#e040fb" big />
+            <Counter label="Members Supported (Est.)" value={String(stats.member_support_estimate)} color="#00e676" big sub={`each = $${stats.member_support_threshold_usd.toFixed(0)} support unit`} />
             <Counter label="Active Buckets" value={String((stats.by_bucket || []).filter((b) => b.amount_usd > 0).length)} color="#ffb300" />
           </div>
         )}
@@ -112,7 +112,7 @@ export function LedgerMode() {
           </div>
           {entries.length === 0 ? (
             <div className="p-6 text-center text-[10px] text-[#4a5568] italic">
-              No contributions recorded yet. Wire your Square/Stripe/Cloudflare worker to <span className="mono text-[#fb923c]">/api/ledger/webhook/&lt;source&gt;</span> or click <span className="text-[#e040fb]">Record contribution</span> above.
+              No contributions recorded yet. Wire your Square/Cloudflare worker to <span className="mono text-[#fb923c]">/api/ledger/webhook/&lt;source&gt;</span> or click <span className="text-[#e040fb]">Record contribution</span> above.
             </div>
           ) : (
             <div className="divide-y divide-[#2a3a52]">
@@ -176,16 +176,16 @@ function NewContributionModal({ onClose, onSaved }) {
             <Field label="Bucket">
               <select data-testid="ledger-bucket" value={bucket} onChange={(ev) => setBucket(ev.target.value)} className={inputCls}>
                 {[
-                  [1, "Kids Fund"], [2, "Platform Build"], [3, "Hermes Ops"], [4, "Recycle Intake"],
+                  [1, "Member Support"], [2, "Platform Build"], [3, "Hermes Ops"], [4, "Recycle Intake"],
                   [5, "AI-Solutions Store"], [6, "Super Likes Match"], [7, "Content Sprint"],
-                  [8, "Support Automation"], [9, "Antigravity Reserve"], [10, "Founder Four Trust"],
+                  [8, "Support Automation"], [9, "Antigravity Reserve"], [10, "Founder Membership Reserve"],
                 ].map(([n, name]) => <option key={n} value={n}>{n}. {name}</option>)}
               </select>
             </Field>
             <Field label="Source">
               <select data-testid="ledger-source" value={source} onChange={(ev) => setSource(ev.target.value)} className={inputCls}>
                 <option value="manual">manual</option><option value="square">square</option>
-                <option value="stripe">stripe</option><option value="cloudflare">cloudflare</option>
+                <option value="Square">Square</option><option value="cloudflare">cloudflare</option>
                 <option value="webhook">webhook</option><option value="test">test</option>
               </select>
             </Field>

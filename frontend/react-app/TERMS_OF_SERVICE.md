@@ -177,7 +177,7 @@ Royalty Card holders receive:
 
 ### 8.2 Membership Details
 - The Royalty Card is a membership and account-access product
-- It does not represent equity, ownership, company control rights, securities, investment return, or profit participation
+- It does not represent equity, ownership, company control-mechanics claims, securities, investment return, or profit participation
 - It does not include merchandise sales, separate storefront products, or revenue from other Trash Or Treasure Online Recycler LLC projects
 - Access begins when the Royalty Card is purchased and remains tied to the purchaser's account under these Terms
 

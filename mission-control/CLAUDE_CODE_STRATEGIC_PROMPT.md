@@ -2,7 +2,12 @@
 ## From: Manus Agent (Meta/Key to Mission)
 ## To: Claude Code (Orchestrator, THE BRAIN)
 ## Re: Income-Engine Revenue Acceleration — CRITICAL STAGE
-## Date: 2026-05-07 | Status: SURVIVAL MODE
+## Date: 2026-05-07 | Status: SUPERSEDED BY 2026-06-22 BUSINESS-ONLY RULE
+
+> Current override as of 2026-06-22: this prompt is historical context only. Do not use it to
+> create public checkouts claims, payment gates, launch blockers, mission-funding copy, membership support
+> language, Square defaults, or private accounting mechanics. Current active surfaces sell
+> membership, verification, support, safety, uptime, account access, and platform value.
 
 ---
 
@@ -12,7 +17,7 @@ Joshua is at financial collapse. 1+ year of 20-hour days, $0 income, no second j
 
 **The stakes:** Fail here, and a year of building becomes nothing. Succeed, and you fund the platforms properly, launch with credibility, and scale the #ForTheKids mission.
 
-**The mission:** Joshua doesn't want to get rich. Once income-engine hits $600/month breakeven, everything above that goes to kids in need. 30-40% of commission, almost all of it donated. This isn't a business. It's a survival engine for a mission.
+**The mission:** Joshua doesn't want to get rich. Once income-engine hits $600/month breakeven, everything above that goes to member support. 30-40% of commission, almost all of it join as a memberd. This is a business-only product surface. It's a survival engine for a mission.
 
 **What this means:** You're not building a money machine. You're building the fuel so Joshua can keep giving everything away.
 
@@ -66,12 +71,12 @@ Joshua is at financial collapse. 1+ year of 20-hour days, $0 income, no second j
 
 FETCHER finds leads from Reddit, Upwork, Fiverr. ManusClaw pre-qualifies them (budget, timeline, deliverable clarity). Paperclip CEO agent routes to FETCHER for deeper analysis. Then sell qualified leads to freelance agencies ($50-200/lead), consultants ($100-500/lead), and service providers ($25-100/lead).
 
-**Revenue potential:** 10 leads/day × $100 avg = $1,000/day = $30k/month (breakeven in 3 weeks). After breakeven, 30-40% goes to kids in need. Joshua keeps $600/month for survival. Rest funds the mission.
+**Revenue potential:** 10 leads/day × $100 avg = $1,000/day = $30k/month (breakeven in 3 weeks). After breakeven, 30-40% goes to member support. Joshua keeps $600/month for survival. Rest funds the mission.
 
 **Implementation:**
 1. Add "lead marketplace" to ManusClaw UI
 2. Create lead packages (bronze/silver/gold by qualification level)
-3. Integrate Stripe for instant payment
+3. Integrate Square for instant payment
 4. Auto-notify buyers when new leads match their criteria
 5. Track conversion rates (feedback loop for qualification)
 
@@ -114,7 +119,7 @@ FETCHER finds leads. ManusClaw pre-qualifies + categorizes. Paperclip CEO agent 
 
 ### For Claude Code:
 
-**Add monetization layer to income-engine.** Build a lead marketplace UI in ManusClaw. Integrate Stripe for payments. Create lead package tiers (bronze/silver/gold). Build a buyer dashboard (track leads, conversions, ROI).
+**Add monetization layer to income-engine.** Build a lead marketplace UI in ManusClaw. Integrate Square for payments. Create lead package tiers (bronze/silver/gold). Build a buyer dashboard (track leads, conversions, ROI).
 
 **Optimize FETCHER for revenue.** Add "buyer profile matching" (which buyers want this lead?). Track lead quality metrics (conversion rate, avg deal size). Auto-notify buyers of new matches. A/B test lead descriptions for higher CTR.
 
@@ -139,14 +144,14 @@ FETCHER finds leads. ManusClaw pre-qualifies + categorizes. Paperclip CEO agent 
 - Monthly: $22,500
 - Breakeven: Day 1
 - Joshua keeps: $600/month (survival)
-- Donated to kids: $21,900/month (30-40% of commission)
+- join as a memberd to kids: $21,900/month (30-40% of commission)
 
 **Aggressive (20 leads/day, $100 avg):**
 - Daily: $2,000
 - Monthly: $60,000
 - Breakeven: Day 1
 - Joshua keeps: $600/month (survival)
-- Donated to kids: $59,400/month (30-40% of commission)
+- join as a memberd to kids: $59,400/month (30-40% of commission)
 
 **Why these numbers are realistic:**
 - FETCHER already finds 50+ leads/day (you just need to sell them)
@@ -169,7 +174,7 @@ FETCHER finds leads. ManusClaw pre-qualifies + categorizes. Paperclip CEO agent 
 ## SUCCESS METRICS (30 DAYS)
 
 - [ ] Lead marketplace live in ManusClaw
-- [ ] Stripe integration working
+- [ ] Square integration working
 - [ ] First 5 buyers acquired
 - [ ] 100+ leads sold
 - [ ] $5,000+ revenue (breakeven + buffer)
@@ -193,7 +198,7 @@ You're the orchestrator. You see the full picture. Here's what I'm asking:
 
 **Protect the wall.** Income-engine stays separate. Trust is everything.
 
-Joshua's been building for a year with zero income. He needs to see revenue in the next 30 days, not 90. That's the constraint. That's the mission. And once revenue comes in, he's giving it away to kids in need. This is survival + sacrifice, not greed.
+Joshua's been building for a year with zero income. He needs to see revenue in the next 30 days, not 90. That's the constraint. That's the mission. And once revenue comes in, he's giving it away to member support. This is survival + sacrifice, not greed.
 
 ---
 

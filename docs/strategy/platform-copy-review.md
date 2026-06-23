@@ -1,3 +1,8 @@
+> Current override as of 2026-06-22: this document is historical strategy/spec context only.
+> Do not use it to create public mission-funding claims, membership support routing, customer-facing
+> disbursement language, membership records/Product launch claims, private accounting mechanics, or alternate
+> payment rails. Active public/customer surfaces sell product value: membership, verification,
+> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 # YouAndINotAI Platform Copy Review
 
 ## Homepage Copy
@@ -17,7 +22,7 @@
 
 ### Features Section
 
-**Original**: "Profile Optimization"  
+**Original**: "Profile Optimization"
 **Revised**: "Genuine Connection Focus"
 
 **Original**: "Instant Matching"
@@ -188,7 +193,7 @@ The $1 fee creates 'economic friction' that makes it unprofitable for bot operat
 
 **Body**: "YouAndINotAI operates on a straightforward revenue-sharing model:
 
-- 60%: Direct contractual revenue disbursement to children's health programs
+- 60%: Direct internal allocation review to children's health programs
 - 30%: Platform maintenance and anti-bot technology
 - 10%: Creator and maintainer compensation
 
@@ -196,8 +201,8 @@ Every dollar you spend in the platform supports real community impact. We call t
 
 ### FAQ Section
 
-**Question**: "Is this a charity?"
-**Answer**: "No—we're a social platform with a mission. Rather than asking for donations separately, we've built charitable giving directly into how our platform works. We're not charity-adjacent; we ARE the charity mechanism."
+**Question**: "Is this a product operations?"
+**Answer**: "No—we're a social platform with a mission. Rather than asking for membership support separately, we've built business product value directly into how our platform works. We're not product operations-adjacent; we ARE the business operations mechanism."
 
 ## Community Guidelines
 
@@ -270,13 +275,13 @@ We NEVER sell your data. We NEVER show ads. We are funded exclusively by communi
 
 - "Confirm your payment and subscription status"
 - "Receive renewal notices and billing updates"
-- "Get receipts for all contractual revenue contributions"
+- "Get receipts for all business revenue handling"
 
 ## Legal & Compliance
 
 ### Florida Statute §496.405 Compliance Notice
 
-**Notice**: "As required by Florida law, we operate under contractual revenue disbursement agreements rather than solicitation for donations. All platform revenues support our stated charitable beneficiaries through automatic contractual allocations."
+**Notice**: "As required by Florida law, we operate under internal allocation review agreements rather than restricted claim for membership support. All platform revenues support our stated members through automatic contractual allocations."
 
 ### Terms Clarification
 

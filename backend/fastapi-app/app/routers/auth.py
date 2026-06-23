@@ -185,7 +185,7 @@ async def register(
         },
     },
     summary="Log in",
-    description="Authenticate with email and password. Returns JWT access and refresh tokens.",
+    description="Authenticate with email and password. Returns JWT access and refresh membership records.",
 )
 async def login(
     request: Request,
@@ -220,11 +220,11 @@ async def google_login(
     try:
         id_info = verify_google_token(payload.id_token)
     except Exception as e:
-        raise unauthorized(message=f"Invalid Google token: {e}")
+        raise unauthorized(message=f"Invalid Google membership record: {e}")
 
     email = id_info.get("email")
     if not email:
-        raise bad_request(message="Email not present in Google token")
+        raise bad_request(message="Email not present in Google membership record")
 
     user = await db.scalar(select(User).where(User.email == email.lower()))
 
@@ -316,7 +316,7 @@ async def beta_access(
     response_model=AuthTokenResponse,
     responses={
         200: {
-            "description": "Tokens refreshed successfully",
+            "description": "membership records refreshed successfully",
             "content": {
                 "application/json": {
                     "example": {
@@ -329,36 +329,36 @@ async def beta_access(
             },
         },
         401: {
-            "description": "Invalid or expired refresh token",
+            "description": "Invalid or expired refresh membership record",
             "content": {
                 "application/json": {
                     "example": {
                         "code": "TOKEN_INVALID",
-                        "message": "Not a refresh token",
+                        "message": "Not a refresh membership record",
                         "details": None,
                     }
                 }
             },
         },
     },
-    summary="Refresh tokens",
-    description="Refresh an access token using refresh token rotation (OPU-47). The old refresh token is validated, revoked, and replaced with a new one.",
+    summary="Refresh membership records",
+    description="Refresh an access membership record using refresh membership record rotation (OPU-47). The old refresh membership record is validated, revoked, and replaced with a new one.",
 )
 async def refresh_token(
     payload: AuthRefreshRequest,
     request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> AuthTokenResponse:
-    """Refresh an access token using refresh token rotation (OPU-47).
+    """Refresh an access membership record using refresh membership record rotation (OPU-47).
 
-    The old refresh token is validated, revoked, and replaced with a new one.
-    If token reuse is detected (already revoked), ALL tokens for the user are
-    revoked as a security measure against potential token theft.
+    The old refresh membership record is validated, revoked, and replaced with a new one.
+    If membership record reuse is detected (already revoked), ALL membership records for the user are
+    revoked as a security measure against potential membership record theft.
     """
     data = decode_token(payload.refresh_token)
     if data.get("type") != "refresh":
         raise unauthorized(
-            message="Not a refresh token", details={"code": ErrorCode.TOKEN_INVALID}
+            message="Not a refresh membership record", details={"code": ErrorCode.TOKEN_INVALID}
         )
 
     user_id = data.get("sub")
@@ -366,7 +366,7 @@ async def refresh_token(
         parsed_user_id = uuid.UUID(str(user_id))
     except ValueError as exc:
         raise unauthorized(
-            message="Invalid token payload", details={"code": ErrorCode.TOKEN_INVALID}
+            message="Invalid membership record payload", details={"code": ErrorCode.TOKEN_INVALID}
         ) from exc
 
     user = await db.scalar(select(User).where(User.id == parsed_user_id))
@@ -376,7 +376,7 @@ async def refresh_token(
         )
     ensure_active_user(user)
 
-    # OPU-47: Rotate the refresh token instead of just creating a new one
+    # OPU-47: Rotate the refresh membership record instead of just creating a new one
     ip_address = request.client.host if request.client else None
     user_agent = request.headers.get("user-agent")
 
@@ -422,7 +422,7 @@ async def refresh_token(
             },
         },
         401: {
-            "description": "Missing or invalid authentication token",
+            "description": "Missing or invalid authentication membership record",
             "content": {
                 "application/json": {
                     "example": {

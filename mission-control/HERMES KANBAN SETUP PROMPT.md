@@ -2,18 +2,23 @@
 ## From: Manus Agent (Meta/Key to Mission)
 ## To: Joshua Coleman (CEO) + Claude Code (Orchestrator)
 ## Re: Task Management + Financial Tracking for Mission-Funded Ecosystem
-## Date: 2026-05-07 | Status: OPERATIONAL
+## Date: 2026-05-07 | Status: SUPERSEDED BY 2026-06-22 BUSINESS-ONLY RULE
+
+> Current override as of 2026-06-22: this prompt is historical context only. Do not use it to
+> create public mission-funding claims, membership support routing, owner-private accounting gates, bucket math,
+> Product/membership records work, or Square defaults. Current active surfaces sell product value and use Square
+> for YouAndINotAI/aligned active checkout unless Joshua provides a newer timestamped directive.
 
 ---
 
 ## PURPOSE
 
 Hermes Kanban is the operational nerve center for the entire ecosystem. It tracks:
-- Active development tasks (income-engine, YouAndINotAI, Business Exchange, DAO)
+- Active development tasks (income-engine, YouAndINotAI, Business Exchange, Product)
 - Revenue flows (real-time, real-or-zero only)
-- Founder compensation cap ($50k across all platforms)
-- Bucket allocations (public sale 10%, staking 10%, operating costs, reserves)
-- Mission progress (#ForTheKids, #UntilNoKidInNeed)
+- owner-private accounting note ($50k across all platforms)
+- Bucket allocations (public checkout 10%, business reserve 10%, operating costs, reserves)
+- Mission progress (#ForTheKids, #MembershipVerificationSupport)
 
 **This is not a generic task board. This is the financial + operational truth system.**
 
@@ -24,14 +29,14 @@ Hermes Kanban is the operational nerve center for the entire ecosystem. It track
 ### Column 1: BACKLOG
 Tasks not yet started. Includes:
 - Feature development (income-engine lead marketplace, YouAndINotAI enhancements, Business Exchange routing)
-- Public copy updates (landing page, README, DAO positioning)
+- Public copy updates (landing page, README, Product positioning)
 - Infrastructure (Paperclip setup, Hermes integration, Ollama optimization)
 - Revenue optimization (buyer acquisition, lead quality improvements)
 
 ### Column 2: IN PROGRESS
 Active work. Includes:
-- Lead marketplace build (ManusClaw + Stripe integration)
-- Public site copy audit (YouAndINotAI positioning, DAO visibility, support integration)
+- Lead marketplace build (ManusClaw + Square integration)
+- Public site copy audit (YouAndINotAI positioning, Product visibility, support integration)
 - Buyer acquisition (LinkedIn outreach, Reddit targeting, email campaigns)
 - Financial tracking setup (real-time revenue monitoring)
 
@@ -40,7 +45,7 @@ Ready for validation. Includes:
 - Public copy (before publishing)
 - Revenue calculations (before reporting)
 - Lead quality metrics (before scaling)
-- Founder compensation tracking (before payout)
+- owner-private accounting tracking (before payout)
 
 ### Column 4: DONE
 Completed and live. Includes:
@@ -59,13 +64,13 @@ Every Kanban card must include:
 Clear, actionable, one-line description.
 Examples:
 - "Build lead marketplace UI in ManusClaw"
-- "Update landing page hero copy (YouAndINotAI + DAO)"
+- "Update landing page hero copy (YouAndINotAI + Product)"
 - "Validate buyer acquisition strategy with 5 agencies"
 - "Set up real-time revenue tracking dashboard"
 
 ### Priority
-- **CRITICAL**: Blocks revenue or mission (income-engine launch, public copy, founder cap tracking)
-- **HIGH**: Accelerates revenue or improves positioning (lead quality, buyer outreach, DAO visibility)
+- **CRITICAL**: Blocks revenue or mission (income-engine launch, public copy, owner-private accounting note tracking)
+- **HIGH**: Accelerates revenue or improves positioning (lead quality, buyer outreach, Product visibility)
 - **MEDIUM**: Improves operations or user experience (UI polish, documentation, analytics)
 - **LOW**: Nice-to-have or future enhancement (advanced features, experimental ideas)
 
@@ -75,10 +80,10 @@ Examples: Joshua, Claude Code, Claude Opus, Manus
 
 ### Category
 - **REVENUE**: Income-engine, lead generation, marketplace
-- **POSITIONING**: Public copy, landing page, README, DAO launch
+- **POSITIONING**: Public copy, landing page, README, Product launch
 - **INFRASTRUCTURE**: Paperclip, Hermes, Ollama, database
-- **MISSION**: #ForTheKids tracking, impact measurement, donation routing
-- **FINANCIAL**: Founder cap, bucket allocation, tax planning
+- **MISSION**: #ForTheKids tracking, impact measurement, membership support routing
+- **FINANCIAL**: owner-private accounting note, bucket allocation, tax planning
 
 ### Effort Estimate
 - **1 HOUR**: Quick task, minimal dependencies
@@ -90,7 +95,7 @@ Examples: Joshua, Claude Code, Claude Opus, Manus
 ### Dependencies
 What must be done first.
 Examples:
-- "Requires Stripe integration complete"
+- "Requires Square integration complete"
 - "Requires public copy audit done"
 - "Requires buyer list of 20+ agencies"
 
@@ -98,16 +103,16 @@ Examples:
 How you know it's done. Must be specific and measurable.
 Examples:
 - "Lead marketplace live with 5+ test buyers"
-- "Landing page hero mentions YouAndINotAI, DAO, support, Business Exchange"
+- "Landing page hero mentions YouAndINotAI, Product, support, Business Exchange"
 - "Real-time revenue dashboard shows $0 or live numbers only (no projections)"
-- "Founder cap tracking shows $0-50k spend across all platforms"
+- "owner-private accounting note tracking shows $0-50k spend across all platforms"
 
 ### Notes
 Context, links, decisions, blockers.
 Examples:
-- "Using Stripe for payments (no PayPal)"
+- "Using Square for payments (no Square)"
 - "Real-or-zero only: no projected numbers"
-- "Separate public sale bucket from staking bucket in UI"
+- "Separate public checkout bucket from business reserve bucket in UI"
 - "Blocked by Paperclip setup (waiting for Claude Code)"
 
 ---
@@ -122,42 +127,42 @@ Examples:
 **Success Criteria:**
 - Dashboard shows leads found, leads qualified, leads sold
 - Revenue shows real numbers only (no projections)
-- Separate tracking: public sale vs staking proceeds
+- Separate tracking: public checkout vs business reserve proceeds
 - Updates every 15 minutes
 - Shows YTD total and 30-day rolling average
 
-### FOUNDER CAP TRACKING
-**Title:** Founder compensation cap monitor ($50k ecosystem-wide)
+### owner-private accounting note TRACKING
+**Title:** owner-private accounting note monitor ($50k ecosystem-wide)
 **Priority:** CRITICAL
 **Owner:** Joshua + Manus
 **Category:** FINANCIAL
 **Success Criteria:**
-- Tracks total founder draws across YouAndINotAI, income-engine, Business Exchange, DAO
+- Tracks total founder draws across YouAndINotAI, income-engine, Business Exchange, Product
 - Shows current spend vs $50k cap
 - Flags when approaching 80%, 90%, 100%
-- Shows what happens to excess (staking, reserves, reinvestment)
+- Shows what happens to excess (business reserve, reserves, reinvestment)
 - Updated weekly
 
 ### BUCKET ALLOCATION TRACKING
-**Title:** Kids bucket allocation monitor (public sale 10% + staking 10%)
+**Title:** member support allocation monitor (public checkout 10% + business reserve 10%)
 **Priority:** CRITICAL
 **Owner:** Manus + Joshua
 **Category:** FINANCIAL + MISSION
 **Success Criteria:**
-- Public sale bucket: tracks 10% minimum allocation to kids
-- Staking bucket: tracks 10% minimum allocation to kids (separate)
+- public checkout bucket: tracks 10% minimum allocation to kids
+- business reserve bucket: tracks 10% minimum allocation to kids (separate)
 - Shows these as distinct rails (never merged)
-- Shows YTD total donated to kids
+- Shows YTD total join as a memberd to kids
 - Updated weekly
 
 ### PUBLIC COPY AUDIT
-**Title:** Audit + update public copy (YouAndINotAI, DAO, support, Business Exchange)
+**Title:** Audit + update public copy (YouAndINotAI, Product, support, Business Exchange)
 **Priority:** CRITICAL
 **Owner:** Claude Opus
 **Category:** POSITIONING
 **Success Criteria:**
 - Landing page hero mentions all 4 products
-- DAO launch is visible (not buried)
+- Product launch is visible (not buried)
 - Support is in nav or prominent section
 - Business Exchange is explained as marketplace layer
 - README matches landing page logic
@@ -165,13 +170,13 @@ Examples:
 - Real-or-zero only
 
 ### LEAD MARKETPLACE LAUNCH
-**Title:** Build + launch lead marketplace (ManusClaw + Stripe)
+**Title:** Build + launch lead marketplace (ManusClaw + Square)
 **Priority:** CRITICAL
 **Owner:** Claude Code + Claude Opus
 **Category:** REVENUE
 **Success Criteria:**
 - Lead marketplace UI live in ManusClaw
-- Stripe integration working
+- Square integration working
 - Lead packages (bronze/silver/gold) configured
 - Auto-notify buyers of new matches
 - First 5 buyers acquired
@@ -198,10 +203,10 @@ Examples:
 Any card tracking revenue, users, or impact must show real numbers only. No projections, no estimates, no "potential." If it's not live and wired, show zero with honest labeling.
 
 ### Rule 2: Separate Buckets
-Public sale bucket and staking bucket are always tracked separately. Never merge them in card descriptions or success criteria.
+public checkout bucket and business reserve bucket are always tracked separately. Never merge them in card descriptions or success criteria.
 
-### Rule 3: Founder Cap Discipline
-Any card involving founder compensation must reference the $50k ecosystem-wide cap, not per-platform.
+### Rule 3: owner-private accounting note Discipline
+Any card involving owner-private accounting must reference the $50k ecosystem-wide cap, not per-platform.
 
 ### Rule 4: Mission Alignment
 Every card should connect to the mission. If it doesn't, question whether it belongs in the backlog.
@@ -224,15 +229,15 @@ Every Friday, review all cards:
 ## SAMPLE CARDS TO CREATE NOW
 
 ### Card 1: Lead Marketplace MVP
-**Title:** Build lead marketplace MVP (ManusClaw + Stripe)
+**Title:** Build lead marketplace MVP (ManusClaw + Square)
 **Priority:** CRITICAL
 **Owner:** Claude Code
 **Category:** REVENUE
 **Effort:** 3 DAYS
-**Dependencies:** ManusClaw v7 complete, Stripe account setup
+**Dependencies:** ManusClaw v7 complete, Square account setup
 **Success Criteria:**
 - Lead marketplace UI live
-- Stripe integration working
+- Square integration working
 - Bronze/silver/gold tiers configured
 - First test buyer can purchase leads
 - Real-time revenue tracking live
@@ -260,16 +265,16 @@ Every Friday, review all cards:
 **Effort:** 1 DAY
 **Dependencies:** Opus briefing document (provided)
 **Success Criteria:**
-- Landing page hero mentions YouAndINotAI, DAO, support, Business Exchange
-- DAO launch is visible (not buried)
+- Landing page hero mentions YouAndINotAI, Product, support, Business Exchange
+- Product launch is visible (not buried)
 - Support is in nav
 - Business Exchange is explained as marketplace
 - README matches landing page
 - No invented numbers or partnerships
 **Notes:** Follow Opus briefing exactly. Real-or-zero only.
 
-### Card 4: Founder Cap Tracking Dashboard
-**Title:** Build founder cap monitor ($50k ecosystem-wide)
+### Card 4: owner-private accounting note Tracking Dashboard
+**Title:** Build owner-private accounting note monitor ($50k ecosystem-wide)
 **Priority:** CRITICAL
 **Owner:** Manus
 **Category:** FINANCIAL
@@ -283,18 +288,18 @@ Every Friday, review all cards:
 - Updated weekly
 **Notes:** This is not optional. Discipline is the point.
 
-### Card 5: Kids Bucket Allocation Tracker
-**Title:** Build kids bucket tracker (public sale 10% + staking 10%)
+### Card 5: member support Allocation Tracker
+**Title:** Build member support tracker (public checkout 10% + business reserve 10%)
 **Priority:** CRITICAL
 **Owner:** Manus
 **Category:** FINANCIAL + MISSION
 **Effort:** 4 HOURS
-**Dependencies:** Revenue tracking live, staking logic defined
+**Dependencies:** Revenue tracking live, business reserve logic defined
 **Success Criteria:**
-- Separate tracking for public sale bucket (10% to kids)
-- Separate tracking for staking bucket (10% to kids)
+- Separate tracking for public checkout bucket (10% to kids)
+- Separate tracking for business reserve bucket (10% to kids)
 - Never merged in UI or copy
-- Shows YTD total donated
+- Shows YTD total join as a memberd
 - Updated weekly
 **Notes:** These are distinct rails. Show them separately.
 
@@ -321,8 +326,8 @@ Every Friday 5pm (or your preferred time):
 
 **Financial update:**
 - Current revenue (real numbers)
-- Founder cap status ($X of $50k)
-- Kids bucket total donated
+- owner-private accounting note status ($X of $50k)
+- member support total join as a memberd
 - Burn rate vs breakeven
 
 ---
@@ -331,7 +336,7 @@ Every Friday 5pm (or your preferred time):
 
 Hermes Kanban is the source of truth for income-engine progress. Every revenue card should link to:
 - ManusClaw dashboard (real-time lead metrics)
-- Stripe integration (real-time payment tracking)
+- Square integration (real-time payment tracking)
 - Buyer list (who's buying, how often, average deal size)
 - Lead quality metrics (conversion rate, feedback, repeat buyers)
 
@@ -340,7 +345,7 @@ Hermes Kanban is the source of truth for income-engine progress. Every revenue c
 ## INTEGRATION WITH MISSION TRACKING
 
 Hermes Kanban is also the source of truth for mission progress. Every mission card should track:
-- Kids bucket total donated (updated weekly)
+- member support total join as a memberd (updated weekly)
 - Impact metrics (if available, real-or-zero only)
 - Platform stability (uptime, user retention)
 - Founder discipline (cap compliance)
@@ -361,4 +366,4 @@ The mission depends on this discipline.
 
 **From Manus Agent | Meta/Key to Mission | 2026-05-07 | #ForTheKids Always 💚**
 
-**P.S.** — Joshua, this Kanban board is your operational dashboard. Check it every morning. Update it every Friday. Use it to make decisions. Use it to stay on mission. Use it to protect the $50k cap. Use it to track the kids bucket. Everything else flows from here.
+**P.S.** — Joshua, this Kanban board is your operational dashboard. Check it every morning. Update it every Friday. Use it to make decisions. Use it to stay on mission. Use it to protect the $50k cap. Use it to track the member support. Everything else flows from here.

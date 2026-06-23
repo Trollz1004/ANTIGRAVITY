@@ -140,7 +140,7 @@ legacy production schema.
    - `matches` table: user_a, user_b, compatibility_score, status,
      matched_at, last_message_at, breeze_bypass_enabled + indexes
 4. Migrates legacy `hashed_password` → `password_hash` in `users`.
-5. Migrates legacy `stripe_event_id` → `event_source_id` in `webhook_events`.
+5. Migrates legacy `alternate processor_event_id` → `event_source_id` in `webhook_events`.
 
 ### When it runs
 

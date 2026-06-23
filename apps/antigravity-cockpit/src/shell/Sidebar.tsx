@@ -81,7 +81,7 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
 
       <div className="sidebar-foot">
         <div className="row"><Icon.Lock size={11} /><span>RESTRICTED · T5500 BLOCKED</span></div>
-        <div className="row"><Icon.Heart size={11} style={{ color: 'var(--rose)' }}/><span>#UntilNoKidInNeed</span></div>
+        <div className="row"><Icon.Heart size={11} style={{ color: 'var(--rose)' }}/><span>Business-only product operations</span></div>
       </div>
     </aside>
   );

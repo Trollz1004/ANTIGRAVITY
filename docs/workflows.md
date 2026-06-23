@@ -11,7 +11,7 @@ This document describes the key workflows in the YouAndINotAI platform and their
 - [Safety Features](#safety-features)
 - [Payment Processing](#payment-processing)
 - [Event and Volunteering Coordination](#event-and-volunteering-coordination)
-- [Charitable Revenue Distribution](#charitable-revenue-distribution)
+- [Revenue Allocation](#revenue-allocation)
 
 ## User Registration and Authentication
 
@@ -35,16 +35,16 @@ This document describes the key workflows in the YouAndINotAI platform and their
 2. System validates credentials:
    - Email exists in database
    - Password matches hash
-3. System generates JWT token
-4. Token is returned to client
-5. Client stores token for authenticated requests
+3. System generates JWT membership record
+4. membership record is returned to client
+5. Client stores membership record for authenticated requests
 
 ### Password Reset Flow
 
 1. User requests password reset with email
 2. System verifies email exists
-3. System generates reset token
-4. System sends reset email with token
+3. System generates reset membership record
+4. System sends reset email with membership record
 5. User clicks reset link
 6. User enters new password
 7. System validates and updates password
@@ -217,10 +217,10 @@ This document describes the key workflows in the YouAndINotAI platform and their
 2. Webhook triggers processing
 3. System calculates:
    - Gross amount: $X.XX
-   - Contractual revenue disbursement: 10% of gross (rounded up)
-   - Operating revenue: Remaining amount
+   - Gateway and processing fees
+   - Net settled amount
 4. Allocation recorded in internal ledger
-5. Reserved funds tracked for disbursement
+5. Settlement and payout status tracked for reconciliation
 
 ### Refund Processing
 
@@ -273,43 +273,39 @@ This document describes the key workflows in the YouAndINotAI platform and their
 4. Event created for tracking
 5. Safety features applied to meetups
 
-## Charitable Revenue Distribution
+## Revenue Allocation
 
 ### Revenue Tracking
 
 1. Monthly revenue calculated
-2. 10% contractual revenue disbursement calculated
-3. Amount reserved in internal ledger
-4. Funds tracked separately from operating revenue
-5. Monthly reports generated
+2. Revenue is tracked in accounting ledger
+3. Gateway fees and payouts are reconciled monthly
+4. Operating and reserve balances are reported for internal oversight
+5. Monthly reports generated for support decisions
 
 ### Disbursement Process
 
-1. Quarterly disbursement review
-2. Amount eligible for disbursement determined
-3. Recipient organizations selected:
-   - Children-focused charities
-   - Educational institutions
-   - Community development projects
-4. Funds distributed according to legal compliance
-5. Documentation maintained for tax purposes
+1. Funds are retained for business operations unless legal obligations require otherwise
+2. Operational reserve and platform obligations are reviewed regularly
+3. Payouts are processed only through approved financial rails
+4. Documentation is maintained for tax and audit readiness
+5. Accounting records include all customer settlements and refunds
 
 ### Transparency Reporting
 
 1. Revenue tracking visible internally
-2. Disbursement records maintained
-3. Impact reports generated quarterly
-4. Community updates shared appropriately
-5. Audit trails preserved for compliance
+2. Reconciliation records maintained
+3. Financial summaries shared when required by policy
+4. Audit trails preserved for compliance
 
 ### Legal Compliance
 
 1. Adherence to Florida §496.405
 2. Proper terminology usage:
-   - "Contractual revenue disbursement"
-   - Avoidance of "donation" or "solicitation"
+   - Settlement and payout language only
+   - Avoidance of membership support/restricted claims wording
 3. Accurate financial record keeping
-4. Transparent reporting on impact
+4. Transparent reporting on platform operations
 5. Regular compliance reviews
 
 ## Integration Points

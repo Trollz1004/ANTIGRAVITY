@@ -126,14 +126,14 @@ class AgentBundleValidator:
         """Enforce: no filesystem mirrors for alias paths.
 
         Only UUID-based directories allowed under agents/. No role/slug
-        directories like agents/cto/, agents/token-sentry/, etc.
+        directories like agents/cto/, agents/membership record-sentry/, etc.
 
         Returns True if no alias mirrors found (compliant).
         """
         if not self.agents_dir.exists():
             return True
 
-        alias_patterns = ['cto', 'cfo', 'cmo', 'token-sentry', 'cso', 'ux']
+        alias_patterns = ['cto', 'cfo', 'cmo', 'membership record-sentry', 'cso', 'ux']
         found_mirrors = []
 
         for agent_dir in self.agents_dir.iterdir():

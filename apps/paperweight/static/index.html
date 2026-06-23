@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Paperclip — #UntilNoKidInNeed</title>
+    <title>Paperclip — Business-only product operations</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -496,7 +496,7 @@
       <div class="tab active" data-view="board">Board</div>
       <div class="tab" data-view="support">Customer Support</div>
       <div class="tab" data-view="governance">Governance</div>
-      <div class="tab" data-view="buckets">Kids Buckets</div>
+      <div class="tab" data-view="buckets">Product Buckets</div>
       <div class="tab" data-view="wheel">The Wheel</div>
       <div class="tab" data-view="notes">Sticky Notes</div>
       <div class="tab" data-view="activity">Activity Log</div>
@@ -580,7 +580,7 @@
       <div id="propList"></div>
     </section>
 
-    <!-- KIDS BUCKETS -->
+    <!-- Product Buckets -->
     <section class="view" id="view-buckets">
       <div id="bk-banner" class="label" style="margin-bottom: 6px">
         Real reserved-for-kids per legally-distinct bucket — 10% max each. Compounding comes from more buckets, never a
@@ -601,7 +601,7 @@
     <!-- THE WHEEL: goals + routines -->
     <section class="view" id="view-wheel">
       <div class="label" style="margin-bottom: 8px">
-        The Wheel — goals (toward 100) + recurring routines. The loop never stops. #UntilNoKidInNeed
+        The Wheel — goals (toward 100) + recurring routines. The loop never stops. Business-only product operations
       </div>
       <div class="row">
         <input id="gl-title" placeholder="New goal…" style="flex: 1; min-width: 200px" />
@@ -651,7 +651,7 @@
       <div class="feed" id="feed"></div>
     </section>
 
-    <div class="ticker"><span>#UntilNoKidInNeed</span><span id="tick-stats">—</span></div>
+    <div class="ticker"><span>Business-only product operations</span><span id="tick-stats">—</span></div>
 
     <script>
       const $ = (s) => document.querySelector(s);
@@ -878,7 +878,7 @@
       $('#pr-add').onclick = async () => {
         const t = $('#pr-title').value.trim();
         if (!t) return;
-        await api('POST', '/api/items', { title: t, kind: 'proposal', company: CURRENT === 'all' ? 'dao' : CURRENT });
+        await api('POST', '/api/items', { title: t, kind: 'proposal', company: CURRENT === 'all' ? 'Product' : CURRENT });
         $('#pr-title').value = '';
         load();
       };
@@ -965,7 +965,7 @@
           load();
         }
       });
-      // Kids Buckets — canonical 10 (DAO-ARCHITECTURE). Amounts are REAL from the live
+      // Product Buckets — canonical 10 (Product-ARCHITECTURE). Amounts are REAL from the live
       // ledger; $0.00 until payments reconcile into revenue_allocations. Never fabricated.
       const BUCKETS = [
         { n: 1, name: 'Platform Subscriptions', surface: 'youandinotai', live: true },
@@ -1005,7 +1005,7 @@
           const j = await r.json();
           const rows = Array.isArray(j) ? j : j.allocations || [];
           // current ledger maps subscription/Bot-Shield tiers to Bucket 1
-          const cents = rows.reduce((s, a) => s + (a.charitable_amount_cents || a.charitable_cents || 0), 0);
+          const cents = rows.reduce((s, a) => s + (a.product_amount_cents || a.product_cents || 0), 0);
           BUCKET_CENTS = { 1: cents };
           $('#bk-source').textContent = rows.length
             ? 'source: live ledger · ' + rows.length + ' allocations'
