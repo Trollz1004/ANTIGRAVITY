@@ -4,7 +4,8 @@ param(
     [string]$RepoRoot = "C:\antigravity",
     [string]$StaticDeployDir = "C:\antigravity\apps\youandinotai-static",
     [string]$PagesProjectName = "youandinotai",
-    [string]$RuntimeEnvFile = "C:\Users\joshl\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env",
+    [string]$RuntimeEnvFile = "C:\ProgramData\Antigravity\secrets\cloudflare-wrangler.env",
+    [string]$FallbackRuntimeEnvFile = "C:\Users\joshl\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env",
     [int]$TimeoutSec = 10
 )
 
@@ -272,7 +273,7 @@ function Invoke-PaperclipAgent {
         Test-HttpHealth -Agent "paperclip-agent" -Name "paperclip private proxy after repair" -Url "http://127.0.0.1:3110/healthz" | Out-Null
     }
 
-    Test-LocalPort -Agent "paperclip-agent" -Name "embedded paperclip postgres" -Port 54329 | Out-Null
+    Test-LocalPort -Agent "paperclip-agent" -Name "embedded paperclip postgres" -Port 54329 -WarnOnly | Out-Null
 }
 
 function Invoke-CloudflaredAgent {
@@ -349,7 +350,11 @@ function Invoke-PublicDateAppAgent {
     }
 }
 
-Import-RuntimeEnvSafe -Path $RuntimeEnvFile
+if (Test-Path -LiteralPath $RuntimeEnvFile) {
+    Import-RuntimeEnvSafe -Path $RuntimeEnvFile
+} else {
+    Import-RuntimeEnvSafe -Path $FallbackRuntimeEnvFile
+}
 
 Write-OpsEvent -Agent "orchestrator" -Level "green" -Message "T5500 date app ops watchdog started" -Data @{
     repo_root = $RepoRoot
@@ -357,6 +362,7 @@ Write-OpsEvent -Agent "orchestrator" -Level "green" -Message "T5500 date app ops
     deploy_pages_on_public_down = [bool]$DeployPagesOnPublicDown
     no_repair = [bool]$NoRepair
     runtime_env_path = $RuntimeEnvFile
+    fallback_runtime_env_path = $FallbackRuntimeEnvFile
 }
 
 Invoke-SystemAgent
