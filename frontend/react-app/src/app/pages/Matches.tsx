@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, MessageCircle } from 'lucide-react';
+import { CalendarCheck, Heart, MessageCircle, ShieldCheck } from 'lucide-react';
 
 import { api } from '../../lib/api';
 
@@ -47,9 +47,29 @@ export function Matches() {
           <div className="app-kicker mb-3">Matches</div>
           <h1 className="app-title">no matches yet.</h1>
           <p className="app-subtitle mt-4">
-            When you and someone else both swipe right, the conversation opens
-            here.
+            Like or comment on a prompt in Discover. Mutual interest opens chat,
+            then Plans helps move the conversation safely offline.
           </p>
+          <div className="mt-6 grid gap-3 text-left sm:grid-cols-3">
+            <div className="rounded-[1.2rem] border-4 border-[#111111] bg-white p-4">
+              <ShieldCheck size={18} className="mb-2 text-[#ff4f00]" />
+              <div className="text-xs font-black uppercase tracking-[0.12em]">
+                Verify
+              </div>
+            </div>
+            <div className="rounded-[1.2rem] border-4 border-[#111111] bg-white p-4">
+              <Heart size={18} className="mb-2 text-[#ff4f00]" />
+              <div className="text-xs font-black uppercase tracking-[0.12em]">
+                Match
+              </div>
+            </div>
+            <div className="rounded-[1.2rem] border-4 border-[#111111] bg-white p-4">
+              <CalendarCheck size={18} className="mb-2 text-[#ff4f00]" />
+              <div className="text-xs font-black uppercase tracking-[0.12em]">
+                Plan
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

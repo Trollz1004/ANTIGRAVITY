@@ -181,47 +181,6 @@ export function SafetyDrawer({
     }
   }
 
-  async function handleReport() {
-    setLoadingAction('report');
-    setError(null);
-    setSuccess(null);
-    try {
-      await api.post(`/safety/users/${targetUserId}/report`, {
-        reason,
-        details: details.trim() || null,
-        source,
-      });
-      setSuccess(`Report queued for moderation review on ${targetName}.`);
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Safety report failed.');
-    } finally {
-      setLoadingAction(null);
-    }
-  }
-
-  async function handleBlock() {
-    const confirmed = window.confirm(
-      `Block ${targetName}? This removes them from your active feed and conversation path.`
-    );
-    if (!confirmed) return;
-
-    setLoadingAction('block');
-    setError(null);
-    setSuccess(null);
-    try {
-      await api.post(`/safety/users/${targetUserId}/block`, {
-        reason: `Blocked from ${source} safety tools`,
-      });
-      await onBlocked?.();
-      setSuccess(`${targetName} was blocked.`);
-      onClose();
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Block action failed.');
-    } finally {
-      setLoadingAction(null);
-    }
-  }
-
   return (
     <>
       <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
@@ -351,7 +310,7 @@ export function SafetyDrawer({
                       className="flex w-full items-center justify-between rounded-xl border-2 border-[#111111] bg-white p-4 text-left disabled:opacity-60"
                     >
                       <div>
-                        <div className="font-bold">🛡️ Block User</div>
+                        <div className="font-bold">Block User</div>
                         <div className="text-sm text-gray-600">
                           Stops all contact permanently
                         </div>
@@ -366,7 +325,7 @@ export function SafetyDrawer({
                       className="flex w-full items-center justify-between rounded-xl border-2 border-[#111111] bg-white p-4 text-left disabled:opacity-60"
                     >
                       <div>
-                        <div className="font-bold">🔕 Mute User</div>
+                        <div className="font-bold">Mute User</div>
                         <div className="text-sm text-gray-600">
                           Hide messages temporarily (24h)
                         </div>
@@ -381,7 +340,7 @@ export function SafetyDrawer({
                       className="flex w-full items-center justify-between rounded-xl border-2 border-[#111111] bg-white p-4 text-left disabled:opacity-60"
                     >
                       <div>
-                        <div className="font-bold">👁️ Restrict Visibility</div>
+                        <div className="font-bold">Restrict Visibility</div>
                         <div className="text-sm text-gray-600">
                           Limit profile access
                         </div>
@@ -396,7 +355,7 @@ export function SafetyDrawer({
                       className="flex w-full items-center justify-between rounded-xl border-2 border-[#111111] bg-white p-4 text-left disabled:opacity-60"
                     >
                       <div>
-                        <div className="font-bold">💬 Freeze Conversation</div>
+                        <div className="font-bold">Freeze Conversation</div>
                         <div className="text-sm text-gray-600">
                           Pause messaging
                         </div>

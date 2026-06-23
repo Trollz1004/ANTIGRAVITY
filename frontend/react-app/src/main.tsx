@@ -6,6 +6,7 @@
 import { StrictMode, lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AlertTriangle, Home, RotateCw } from 'lucide-react';
 import LandingPage, { PublicSupportPage } from './App';
 import { Login } from './app/pages/Login';
 import { Register } from './app/pages/Register';
@@ -59,7 +60,7 @@ function PageErrorFallback({
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-6 py-12">
       <div className="glass-strong glass-highlight max-w-lg rounded-[2rem] p-8 text-center animate-scale-in">
         <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[1.5rem] border-4 border-[#111111] bg-[#111111] text-white shadow-[8px_8px_0_0_#ff4f00]">
-          <span className="text-3xl">⚠️</span>
+          <AlertTriangle size={32} className="text-[#ff4f00]" />
         </div>
         <div className="app-kicker mb-3">Page Error</div>
         <h2 className="app-title mb-3">this page crashed.</h2>
@@ -75,13 +76,13 @@ function PageErrorFallback({
             onClick={resetError}
             className="app-button-accent px-6 py-3 text-sm"
           >
-            🔄 Try Again
+            <RotateCw size={16} /> Try Again
           </button>
           <a
             href="/app"
             className="app-button-dark px-6 py-3 text-sm no-underline"
           >
-            🏠 Go Home
+            <Home size={16} /> Go Home
           </a>
         </div>
       </div>

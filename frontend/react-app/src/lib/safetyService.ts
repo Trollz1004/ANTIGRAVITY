@@ -37,10 +37,10 @@ class SafetyService {
   private listeners: ((event: SafetyEvent) => void)[] = [];
 
   // Initialize WebSocket connection
-  initWebSocket(token: string) {
+  initWebSocket(accessToken: string) {
     try {
       this.socket = io(import.meta.env.VITE_WEBSOCKET_URL || '/', {
-        auth: { token },
+        auth: { token: accessToken },
         transports: ['websocket'],
       });
 
@@ -212,3 +212,4 @@ class SafetyService {
 
 // Singleton instance
 export const safetyService = new SafetyService();
+
