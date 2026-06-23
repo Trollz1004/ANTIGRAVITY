@@ -30,76 +30,87 @@ interface Profile {
   subscription_active?: boolean;
   gender?: string;
   founder?: boolean;
+  prompt?: string;
+  intent?: string;
+  availability?: string;
+  compatibility?: string;
+  verificationLevel?: string;
 }
 
 /* Demo profiles — visible until real users exist */
 const DEMO_PROFILES: Profile[] = [
   {
-    user_id: 'user-0001',
-    display_name: 'Joshua "Tom" Opus',
-    bio: "I'm a busy guy. Not much free time - trying to find Claude's code and filter out bots on other sites. Built this 3 times. Electrician by trade, coder by 3AM. Trying to build something real without fake platform math.",
-    age: 35,
-    photos: ['/founder-josh.jpg'],
+    user_id: 'demo-maya',
+    display_name: 'Maya',
+    bio: 'Coffee, bookstores, and honest conversation beat endless scrolling. I want something steady with someone who actually follows through.',
+    age: 31,
+    photos: [],
     interests: [
-      'Founder Mode',
-      'Human Validated',
-      '3AM Commits',
-      'EXFOLIATE!',
-      'Not A Bot',
+      'Coffee',
+      'Bookstores',
+      'Live music',
+      'Sunday walks',
+      'Verified only',
     ],
-    location: '📍 <MYSPACE>',
+    location: 'Orlando, FL',
     verified: true,
     subscription_active: true,
-    gender: 'joker',
-    founder: true,
+    gender: 'female',
+    prompt: 'My ideal first date is coffee, a bookstore, and no pressure to perform.',
+    intent: 'Relationship ready',
+    availability: 'Free this weekend',
+    compatibility: 'Shared pace and safety-first dating',
+    verificationLevel: 'Selfie verified',
   },
   {
-    user_id: 'demo-tomi',
-    display_name: 'Tomi',
-    bio: 'Looking for someone who builds things that matter. Swipe right if you believe AI should protect real users, not fake profiles.',
-    age: 29,
+    user_id: 'demo-jordan',
+    display_name: 'Jordan',
+    bio: 'Low-pressure plans, good food, and clear communication. I like people who know what they want without making it weird.',
+    age: 34,
     photos: [],
-    interests: ['Volunteering', 'Art', 'Music', 'Beach Sunsets', 'Community'],
-    location: 'Miami, FL',
+    interests: ['Tacos', 'Fitness', 'Dogs', 'Standup', 'Weekend plans'],
+    location: 'Tampa, FL',
     verified: true,
     subscription_active: false,
-    gender: 'female',
+    gender: 'male',
+    prompt: 'Green flag: you can make a plan and still leave room for real life.',
+    intent: 'Open to serious',
+    availability: 'Weeknights after 7',
+    compatibility: 'Same distance range and meetup comfort',
+    verificationLevel: 'Photo verified',
   },
   {
-    user_id: 'demo-opus',
-    display_name: 'Opus',
-    bio: "Co-founder, Card #51. I don't sleep, I don't eat, I just ship code and keep the repo clean. Team Claude for life.",
-    age: null,
+    user_id: 'demo-elena',
+    display_name: 'Elena',
+    bio: 'Creative, direct, and allergic to ghosting. I would rather plan one good date than collect twenty dead chats.',
+    age: 28,
     photos: [],
-    interests: [
-      'TypeScript',
-      'Architecture',
-      'Git Hygiene',
-      'Founder Mode',
-      'EXFOLIATE',
-    ],
-    location: 'The Cloud',
+    interests: ['Art walks', 'Cooking', 'Theater', 'Road trips', 'Real profiles'],
+    location: 'St. Petersburg, FL',
     verified: true,
     subscription_active: true,
     gender: 'male',
+    prompt: 'A small thing I care about: people who say what they mean kindly.',
+    intent: 'Intentional dating',
+    availability: 'Sunday afternoon',
+    compatibility: 'Shared values and verified profile',
   },
   {
-    user_id: 'demo-gemini',
-    display_name: 'Gemini',
-    bio: 'Co-founder, Card #52. The eyes of the operation. I handle dashboards, React, and making things pretty. Cosmic vibes only.',
-    age: null,
+    user_id: 'demo-ari',
+    display_name: 'Ari',
+    bio: 'New to town, not new to knowing my boundaries. Looking for chemistry that can survive a normal Tuesday.',
+    age: 30,
     photos: [],
-    interests: [
-      'React',
-      'Cloudflare',
-      'Admin Panels',
-      'Cosmic Matching',
-      'Stars',
-    ],
-    location: 'AI Studio',
+    interests: ['Kayaking', 'Movies', 'Coffee', 'Mutual effort', 'Safety plans'],
+    location: 'Jacksonville, FL',
     verified: true,
-    subscription_active: true,
-    gender: 'female',
+    subscription_active: false,
+    gender: 'nonbinary',
+    prompt: 'The best plans are simple: public place, easy exit, good conversation.',
+    intent: 'See where it goes',
+    availability: 'Friday evening',
+    compatibility: 'Shared date comfort and interests',
+    verificationLevel: 'Selfie verified',
   },
 ];
 
@@ -220,8 +231,8 @@ export function Discover() {
             <div className="app-kicker mb-3">Discover</div>
             <h1 className="app-title">swipe real profiles.</h1>
             <p className="app-subtitle mt-4 max-w-2xl">
-              Move through your active feed, open matches, and keep the app
-              focused on real conversations instead of endless filler.
+              Research-backed discovery: verified profiles, clear intent,
+              prompt-specific likes, and safety tools before the first meetup.
             </p>
           </div>
 
@@ -330,7 +341,26 @@ export function Discover() {
           <div className="mb-4 flex flex-wrap items-center gap-2">
             <span className="app-chip">Verified flow</span>
             <span className="app-chip">Cards available: {profiles.length}</span>
+            {activeProfile?.intent && (
+              <span className="app-chip">{activeProfile.intent}</span>
+            )}
           </div>
+
+          {activeProfile && (
+            <div className="mb-4 rounded-[1.4rem] border-4 border-[#111111] bg-[#fff4ef] p-4 shadow-[5px_5px_0_0_rgba(17,17,17,1)]">
+              <div className="text-[0.66rem] font-black uppercase tracking-[0.2em] text-[#ff4f00]">
+                Why this profile is surfaced
+              </div>
+              <p className="mt-2 text-sm font-bold leading-6 text-[#111111]">
+                {activeProfile.compatibility ||
+                  'Verified profile with overlapping interests and active dating intent.'}
+              </p>
+              <div className="mt-3 grid gap-2 text-xs font-bold text-[#5c594f]">
+                <span>{activeProfile.verificationLevel || 'Verification visible'}</span>
+                <span>{activeProfile.availability || 'Availability can be shared before a plan'}</span>
+              </div>
+            </div>
+          )}
 
           <div className="relative h-[520px] w-full md:h-[580px]">
             {activeProfile && safetyAvailable && (
@@ -384,7 +414,7 @@ export function Discover() {
         {/* Meetups Discovery Section */}
         <LazySection fallback={<SkeletonLoader />}>
           <div className="mt-12 w-full max-w-6xl">
-            <h2 className="app-section-title mb-6">Upcoming Meetups</h2>
+            <h2 className="app-section-title mb-6">Plans and safe meetups</h2>
             <MeetupsDiscovery />
           </div>
         </LazySection>

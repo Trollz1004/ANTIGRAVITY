@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Camera, Check, MapPin, Sparkles, User } from 'lucide-react';
+import {
+  CalendarCheck,
+  Camera,
+  Check,
+  MapPin,
+  ShieldCheck,
+  Sparkles,
+  User,
+} from 'lucide-react';
 
 import { useAuth } from '../../lib/auth';
 import { api } from '../../lib/api';
@@ -25,6 +33,12 @@ const INTEREST_OPTIONS = [
   'Yoga',
   'Coffee',
   'Wine',
+  'Intentional Dating',
+  'Verified Profiles',
+  'Coffee Dates',
+  'Live Events',
+  'Clear Communication',
+  'Safety First',
 ];
 
 export function ProfileSetup() {
@@ -39,6 +53,9 @@ export function ProfileSetup() {
   const [lookingFor, setLookingFor] = useState('');
   const [location, setLocation] = useState('');
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [promptAnswer, setPromptAnswer] = useState('');
+  const [dateComfort, setDateComfort] = useState('');
+  const [safetyPreference, setSafetyPreference] = useState('');
 
   const toggleInterest = (interest: string) => {
     setSelectedInterests(prev =>
@@ -66,9 +83,18 @@ export function ProfileSetup() {
     const derivedAge = birthDateIso ? calculateAgeUtc(birthDateIso) : null;
     setLoading(true);
     try {
+      const profileBio = [
+        bio,
+        promptAnswer ? `Prompt: ${promptAnswer}` : '',
+        dateComfort ? `Date comfort: ${dateComfort}` : '',
+        safetyPreference ? `Safety preference: ${safetyPreference}` : '',
+      ]
+        .filter(Boolean)
+        .join('\n\n');
+
       await api.put('/profiles/me', {
         display_name: user?.display_name || null,
-        bio: bio || null,
+        bio: profileBio || null,
         age: age ? parseInt(age, 10) : derivedAge,
         date_of_birth: birthDateIso,
         gender: gender || null,
@@ -118,6 +144,42 @@ export function ProfileSetup() {
 
           <div className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
             <div className="grid gap-5">
+              <div className="grid gap-4 rounded-[1.5rem] border-4 border-[#111111] bg-[#fff4ef] p-4 md:grid-cols-3">
+                <div>
+                  <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-[#111111] text-white">
+                    <ShieldCheck size={18} className="text-[#ff4f00]" />
+                  </div>
+                  <h2 className="text-base font-black uppercase tracking-tight text-[#111111]">
+                    Verify first
+                  </h2>
+                  <p className="mt-2 text-sm font-medium leading-6 text-[#5c594f]">
+                    The best feed starts with a visible verification state.
+                  </p>
+                </div>
+                <div>
+                  <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-white text-[#111111]">
+                    <Sparkles size={18} className="text-[#ff4f00]" />
+                  </div>
+                  <h2 className="text-base font-black uppercase tracking-tight text-[#111111]">
+                    Prompt first
+                  </h2>
+                  <p className="mt-2 text-sm font-medium leading-6 text-[#5c594f]">
+                    Make it easy for someone to comment on something specific.
+                  </p>
+                </div>
+                <div>
+                  <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-[1rem] border-4 border-[#111111] bg-white text-[#111111]">
+                    <CalendarCheck size={18} className="text-[#ff4f00]" />
+                  </div>
+                  <h2 className="text-base font-black uppercase tracking-tight text-[#111111]">
+                    Plan safely
+                  </h2>
+                  <p className="mt-2 text-sm font-medium leading-6 text-[#5c594f]">
+                    Share a first-date comfort level before chat turns into a plan.
+                  </p>
+                </div>
+              </div>
+
               <div>
                 <label className="app-panel-title mb-3 block">About You</label>
                 <textarea
@@ -130,6 +192,23 @@ export function ProfileSetup() {
                 />
                 <div className="mt-2 text-right text-xs font-bold uppercase tracking-[0.16em] text-[#5c594f]">
                   {bio.length}/500
+                </div>
+              </div>
+
+              <div>
+                <label className="app-panel-title mb-3 block">
+                  Profile Prompt
+                </label>
+                <textarea
+                  value={promptAnswer}
+                  onChange={e => setPromptAnswer(e.target.value)}
+                  placeholder="Example: My ideal first date is coffee, a bookstore, and no pressure to perform."
+                  maxLength={220}
+                  rows={3}
+                  className="app-textarea input-glow"
+                />
+                <div className="mt-2 text-right text-xs font-bold uppercase tracking-[0.16em] text-[#5c594f]">
+                  {promptAnswer.length}/220
                 </div>
               </div>
 
@@ -196,6 +275,33 @@ export function ProfileSetup() {
                   </select>
                 </div>
                 <div>
+                  <label className="app-panel-title mb-3 block">
+                    Date Comfort
+                  </label>
+                  <select
+                    value={dateComfort}
+                    onChange={e => setDateComfort(e.target.value)}
+                    className="app-select input-glow"
+                  >
+                    <option value="">Select...</option>
+                    <option value="Public coffee or daytime walk first">
+                      Public coffee or daytime walk first
+                    </option>
+                    <option value="Dinner after a short chat">
+                      Dinner after a short chat
+                    </option>
+                    <option value="Group or event meetup first">
+                      Group or event meetup first
+                    </option>
+                    <option value="Video chat before meeting">
+                      Video chat before meeting
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
                   <label className="app-panel-title mb-3 flex items-center gap-2">
                     <MapPin size={15} className="text-[#ff4f00]" />
                     Location
@@ -208,6 +314,31 @@ export function ProfileSetup() {
                     maxLength={200}
                     className="app-input input-glow"
                   />
+                </div>
+                <div>
+                  <label className="app-panel-title mb-3 flex items-center gap-2">
+                    <ShieldCheck size={15} className="text-[#ff4f00]" />
+                    Safety Preference
+                  </label>
+                  <select
+                    value={safetyPreference}
+                    onChange={e => setSafetyPreference(e.target.value)}
+                    className="app-select input-glow"
+                  >
+                    <option value="">Select...</option>
+                    <option value="Share date details before meeting">
+                      Share date details before meeting
+                    </option>
+                    <option value="Keep first meetings public">
+                      Keep first meetings public
+                    </option>
+                    <option value="Use chat check-in before plans">
+                      Use chat check-in before plans
+                    </option>
+                    <option value="Only match with verified profiles">
+                      Only match with verified profiles
+                    </option>
+                  </select>
                 </div>
               </div>
             </div>
