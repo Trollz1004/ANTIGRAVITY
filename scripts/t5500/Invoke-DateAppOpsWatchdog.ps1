@@ -4,6 +4,7 @@ param(
     [string]$RepoRoot = "C:\antigravity",
     [string]$StaticDeployDir = "C:\antigravity\apps\youandinotai-static",
     [string]$PagesProjectName = "youandinotai",
+    [string]$RuntimeEnvFile = "C:\Users\joshl\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env",
     [int]$TimeoutSec = 10
 )
 
@@ -50,6 +51,34 @@ function Add-Failure {
     } else {
         $script:RequiredFailures.Add("${Name}: $Message") | Out-Null
     }
+}
+
+function Import-RuntimeEnvSafe {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        Write-OpsEvent -Agent "env-agent" -Level "warn" -Message "Runtime env file not available" -Data @{ path = $Path }
+        return
+    }
+
+    $loaded = New-Object System.Collections.Generic.List[string]
+    $allowed = "^(CLOUDFLARE_|CF_|WRANGLER_)"
+    foreach ($line in Get-Content -LiteralPath $Path -ErrorAction SilentlyContinue) {
+        $trimmed = $line.Trim()
+        if (-not $trimmed -or $trimmed.StartsWith("#")) { continue }
+        if ($trimmed -notmatch "^([A-Za-z_][A-Za-z0-9_]*)=(.*)$") { continue }
+        $key = $matches[1]
+        $value = $matches[2].Trim()
+        if (($value.StartsWith('"') -and $value.EndsWith('"')) -or ($value.StartsWith("'") -and $value.EndsWith("'"))) {
+            $value = $value.Substring(1, $value.Length - 2)
+        }
+        if ($key -match $allowed) {
+            [Environment]::SetEnvironmentVariable($key, $value, "Process")
+            $loaded.Add($key) | Out-Null
+        }
+    }
+
+    Write-OpsEvent -Agent "env-agent" -Level "green" -Message "Runtime env loaded for Cloudflare/Wrangler" -Data @{ keys = @($loaded) }
 }
 
 function Test-HttpHealth {
@@ -305,11 +334,14 @@ function Invoke-PublicDateAppAgent {
     }
 }
 
+Import-RuntimeEnvSafe -Path $RuntimeEnvFile
+
 Write-OpsEvent -Agent "orchestrator" -Level "green" -Message "T5500 date app ops watchdog started" -Data @{
     repo_root = $RepoRoot
     pages_project = $PagesProjectName
     deploy_pages_on_public_down = [bool]$DeployPagesOnPublicDown
     no_repair = [bool]$NoRepair
+    runtime_env_path = $RuntimeEnvFile
 }
 
 Invoke-SystemAgent

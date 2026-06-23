@@ -15,9 +15,11 @@ $actionArgs = "-NoProfile -ExecutionPolicy Bypass -File `"$watchdog`" -DeployPag
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $actionArgs -WorkingDirectory $RepoRoot
 
 $startupTrigger = New-ScheduledTaskTrigger -AtStartup
-$repeatTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(5)
-$repeatTrigger.Repetition.Interval = "PT${IntervalMinutes}M"
-$repeatTrigger.Repetition.Duration = "P3650D"
+$repeatTrigger = New-ScheduledTaskTrigger `
+    -Once `
+    -At (Get-Date).AddMinutes(5) `
+    -RepetitionInterval (New-TimeSpan -Minutes $IntervalMinutes) `
+    -RepetitionDuration (New-TimeSpan -Days 3650)
 
 $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -RunLevel Highest
 $settings = New-ScheduledTaskSettingsSet `
