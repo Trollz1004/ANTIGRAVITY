@@ -51,7 +51,9 @@ async def _seed_refresh_token(db_session_factory, user_id: uuid.UUID) -> str:
             )
         )
         await session.commit()
-    return raw_token_value  # Return the raw membership record value for the client to use
+    return (
+        raw_token_value  # Return the raw membership record value for the client to use
+    )
 
 
 @pytest.fixture(scope="module")
