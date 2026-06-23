@@ -8,10 +8,10 @@ Production: `https://api.youandinotai.com/api/v1`
 
 ## Authentication
 
-Most endpoints require authentication via JWT Bearer tokens.
+Most endpoints require authentication via JWT Bearer membership records.
 
 ```http
-Authorization: Bearer <your-jwt-token>
+Authorization: Bearer <your-jwt-membership record>
 ```
 
 ## API Endpoints
@@ -60,13 +60,13 @@ Register a new user.
   "user_id": "uuid",
   "email": "user@example.com",
   "display_name": "User Name",
-  "token": "jwt-token"
+  "membership record": "jwt-membership record"
 }
 ```
 
 #### POST /auth/login
 
-Authenticate a user and obtain a JWT token.
+Authenticate a user and obtain a JWT membership record.
 
 **Request:**
 
@@ -84,25 +84,25 @@ Authenticate a user and obtain a JWT token.
   "user_id": "uuid",
   "email": "user@example.com",
   "display_name": "User Name",
-  "token": "jwt-token"
+  "membership record": "jwt-membership record"
 }
 ```
 
 #### POST /auth/refresh
 
-Refresh an expired JWT token.
+Refresh an expired JWT membership record.
 
 **Headers:**
 
 ```http
-Authorization: Bearer <expired-jwt-token>
+Authorization: Bearer <expired-jwt-membership record>
 ```
 
 **Response:**
 
 ```json
 {
-  "token": "new-jwt-token"
+  "membership record": "new-jwt-membership record"
 }
 ```
 
@@ -115,7 +115,7 @@ Get the current user's profile.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Response:**
@@ -137,7 +137,7 @@ Update the current user's profile.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Request:**
@@ -170,7 +170,7 @@ Get a list of blocked users.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Response:**
@@ -193,7 +193,7 @@ Block a user.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Request:**
@@ -221,7 +221,7 @@ Unblock a user.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Response:**
@@ -241,7 +241,7 @@ Report a user.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Request:**
@@ -274,7 +274,7 @@ Create a payment checkout session.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Request:**
@@ -305,7 +305,7 @@ Get upcoming events.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Query Parameters:**
@@ -339,7 +339,7 @@ Create a new event.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Request:**
@@ -380,7 +380,7 @@ Get volunteering opportunities.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Response:**
@@ -408,7 +408,7 @@ Create a new marketing content item from AI agent.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Request:**
@@ -447,7 +447,7 @@ List all marketing content items.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Response:**
@@ -472,7 +472,7 @@ Get a specific marketing content item.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Response:**
@@ -495,7 +495,7 @@ Update a marketing content item.
 **Headers:**
 
 ```http
-Authorization: Bearer <jwt-token>
+Authorization: Bearer <jwt-membership record>
 ```
 
 **Request:**

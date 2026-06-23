@@ -47,7 +47,7 @@ export function Inbox() {
           <div className="app-kicker mb-3">Messages</div>
           <h1 className="app-title">no messages yet.</h1>
           <p className="app-subtitle mt-4">
-            Match first, then start from the prompt or shared interest that made
+            Match first, then start from the profile answer or shared interest that made
             the match happen.
           </p>
           <div className="mt-6 grid gap-3 text-left sm:grid-cols-2">
@@ -57,7 +57,7 @@ export function Inbox() {
                 Better opener
               </h2>
               <p className="mt-2 text-sm font-medium leading-6 text-[#5c594f]">
-                Comment on a prompt instead of sending a blank greeting.
+                Comment on a profile answer instead of sending a blank greeting.
               </p>
             </div>
             <div className="rounded-[1.4rem] border-4 border-[#111111] bg-white p-4">

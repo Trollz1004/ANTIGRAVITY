@@ -59,11 +59,11 @@ async def _seed_events(
 
 @pytest.fixture(scope="module")
 def seeded_events_data(db_session_factory):
-    """Fixture to provide seeded events and an access token."""
+    """Fixture to provide seeded events and an access membership record."""
     user_id = asyncio.run(_seed_user(db_session_factory))
     event_ids = asyncio.run(_seed_events(db_session_factory, user_id, 20))
 
-    # Get an access token for the seeded user
+    # Get an access membership record for the seeded user
     access_token = create_access_token(str(user_id))
     return {"event_ids": event_ids, "access_token": access_token}
 

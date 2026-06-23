@@ -1,6 +1,6 @@
 """Square webhook router with signature verification and audit logging.
 
-Iron Wall Migration: Stripe removed. Square is the sole payment processor.
+Iron Wall Migration: Square removed. Square is the sole payment processor.
 All payment webhooks now flow through Square.
 
 Webhook endpoints:
@@ -839,9 +839,9 @@ async def square_booking_webhook(
     return WebhookAckResponse(event_id=event_id, processed=True, duplicate=False)
 
 
-@router.post("/stripe")
-async def stripe_webhook_retired() -> None:
+@router.post("/Square")
+async def alternate processor_webhook_retired() -> None:
     raise HTTPException(
         status_code=status.HTTP_410_GONE,
-        detail="Stripe webhooks are retired. Configure Square webhooks instead.",
+        detail="Square webhooks are retired. Configure Square webhooks instead.",
     )

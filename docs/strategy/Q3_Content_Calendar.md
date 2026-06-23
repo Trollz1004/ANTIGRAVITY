@@ -1,3 +1,8 @@
+> Current override as of 2026-06-22: this document is historical strategy/spec context only.
+> Do not use it to create public mission-funding claims, membership support routing, customer-facing
+> disbursement language, membership record/Product structure launch claims, private accounting mechanics, or alternate
+> payment rails. Active public/customer surfaces sell product value: membership, verification,
+> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 # Q3 2026 Content Calendar - YouAndINotAI
 
 ## Core Themes
@@ -66,6 +71,6 @@
 
 ## Florida Compliance Reminder
 
-- NEVER use "donate", "donation", or "solicitation" in ANY content
-- ALWAYS use "contractual revenue disbursement", "revenue-sharing for good", or "platform that gives back"
-- Reference platform supporting kids as a feature, not a charity pitch
+- NEVER use "join as a member", "membership support", or "restricted claims" in ANY content
+- ALWAYS use "internal allocation review", "revenue-sharing for good", or "platform value"
+- Reference platform member support as a feature, not a product operations pitch

@@ -5,15 +5,15 @@
 This platform serves as the ultimate developer "Boss Mode" environment. It completely unifies cloud AI, local offline models (Ollama), full file-system management, native Git operations, and code quality checking—all inside an incredibly slick, "elite-tier" interface.
 
 ## 🌟 Open Source & Community Mission
-This flagship platform and all products associated with **Trollz1004 / Antigravity Platforms** are strictly 100% open-source code. We believe in building in public and are open to suggestions, contributions, and feedback to make this the ultimate workstation. 
-**#UntilNoKidInNeed**
+This flagship platform and all products associated with **Trollz1004 / Antigravity Platforms** are strictly 100% open-source code. We believe in building in public and are open to suggestions, contributions, and feedback to make this the ultimate workstation.
+**Business-only product operations**
 
 ---
 
 ## 🔥 Epic Elite Features
 
 ### Dynamic Multi-Agent Orchestration
-*   **Split-Pane Workspaces**: Dynamically add, remove, and manage up to 4 simultaneous AI agent panes side-by-side. 
+*   **Split-Pane Workspaces**: Dynamically add, remove, and manage up to 4 simultaneous AI agent panes side-by-side.
 *   **Global Task Commander**: Shoot a singular "Global Task" command to dispatch workloads to all active AI agents simultaneously via a custom event bus.
 *   **Provider Agnostic**: Bring your own keys! Supports **Claude**, **GPT-4o**, **Gemini**, and **Ollama** natively.
 *   **Intelligent Response UI**: Real-time markdown rendering with professional `vscDarkPlus` syntax-highlighted code blocks.
@@ -21,7 +21,7 @@ This flagship platform and all products associated with **Trollz1004 / Antigravi
 
 ### Advanced Code Mode & Integrated Terminal
 *   **Monaco Engine**: Embedded VS Code-tier editor with an active workspace file tree.
-*   **Integrated xTerm.js**: A fully operational shell runtime embedded in the UI. 
+*   **Integrated xTerm.js**: A fully operational shell runtime embedded in the UI.
 *   **Dynamic Terminal Themes**: Switch color profiles on the fly without losing terminal state (Opus Default, Hacker Green, Monokai, Dracula, PowerShell).
 *   **Local Ollama AI Launchpad**: Launch local coding suites—such as *OpenClaw*, *Claude*, *Codex*, *OpenCode*, *Droid*, and *Pi*—straight into the integrated terminal with zero configuration.
 
@@ -72,7 +72,7 @@ npm run dist
 ## ⚙️ Provider Setup
 Go to **Settings** inside the application to enter your API Keys or configure your custom local `Ollama` port endpoints (Default: `http://localhost:11434`).
 
-## 🤝 Charitable Support
-Every piece of energy put into this goes towards making an impact. Support the cause and know that 10% of any broader ecosystem support is channeled into providing kids' medical care through our founder-directed charity.
+## Support
+Support and purchase flows are product transactions for access, tooling, support, uptime, and platform value. Owner-private giving, tax handling, and LLC accounting are handled outside public product copy.
 
-**#UntilNoKidInNeed**
+**Business-only product operations**

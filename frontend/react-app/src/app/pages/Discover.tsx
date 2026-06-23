@@ -30,7 +30,7 @@ interface Profile {
   subscription_active?: boolean;
   gender?: string;
   founder?: boolean;
-  prompt?: string;
+  conversationStarter?: string;
   intent?: string;
   availability?: string;
   compatibility?: string;
@@ -56,7 +56,7 @@ const DEMO_PROFILES: Profile[] = [
     verified: true,
     subscription_active: true,
     gender: 'female',
-    prompt: 'My ideal first date is coffee, a bookstore, and no pressure to perform.',
+    conversationStarter: 'My ideal first date is coffee, a bookstore, and no pressure to perform.',
     intent: 'Relationship ready',
     availability: 'Free this weekend',
     compatibility: 'Shared pace and safety-first dating',
@@ -73,7 +73,7 @@ const DEMO_PROFILES: Profile[] = [
     verified: true,
     subscription_active: false,
     gender: 'male',
-    prompt: 'Green flag: you can make a plan and still leave room for real life.',
+    conversationStarter: 'Green flag: you can make a plan and still leave room for real life.',
     intent: 'Open to serious',
     availability: 'Weeknights after 7',
     compatibility: 'Same distance range and meetup comfort',
@@ -90,7 +90,7 @@ const DEMO_PROFILES: Profile[] = [
     verified: true,
     subscription_active: true,
     gender: 'male',
-    prompt: 'A small thing I care about: people who say what they mean kindly.',
+    conversationStarter: 'A small thing I care about: people who say what they mean kindly.',
     intent: 'Intentional dating',
     availability: 'Sunday afternoon',
     compatibility: 'Shared values and verified profile',
@@ -106,7 +106,7 @@ const DEMO_PROFILES: Profile[] = [
     verified: true,
     subscription_active: false,
     gender: 'nonbinary',
-    prompt: 'The best plans are simple: public place, easy exit, good conversation.',
+    conversationStarter: 'The best plans are simple: public place, easy exit, good conversation.',
     intent: 'See where it goes',
     availability: 'Friday evening',
     compatibility: 'Shared date comfort and interests',
@@ -231,8 +231,8 @@ export function Discover() {
             <div className="app-kicker mb-3">Discover</div>
             <h1 className="app-title">swipe real profiles.</h1>
             <p className="app-subtitle mt-4 max-w-2xl">
-              Research-backed discovery: verified profiles, clear intent,
-              prompt-specific likes, and safety tools before the first meetup.
+              Verified discovery: real profiles, clear intent, conversation
+              starters, and safety tools before the first meetup.
             </p>
           </div>
 

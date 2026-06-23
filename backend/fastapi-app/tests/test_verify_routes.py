@@ -54,8 +54,8 @@ def _seed(*items, db_session_factory):
 
 
 def _auth_headers(user: User) -> dict[str, str]:
-    token = create_access_token(str(user.id))
-    return {"Authorization": f"Bearer {token}"}
+    membership record = create_access_token(str(user.id))
+    return {"Authorization": f"Bearer {membership record}"}
 
 
 def _override_user(user: User):
@@ -105,7 +105,7 @@ class TestVerifyChallenge:
     def test_challenge_invalid_token_rejected(self, client):
         resp = client.post(
             "/api/v1/verify/challenge",
-            headers={"Authorization": "Bearer not.a.valid.token"},
+            headers={"Authorization": "Bearer not.a.valid.membership record"},
         )
         assert resp.status_code == 401
 

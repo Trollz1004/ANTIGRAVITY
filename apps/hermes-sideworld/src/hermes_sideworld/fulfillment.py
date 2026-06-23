@@ -1,7 +1,7 @@
-"""Stripe webhook fulfillment for AI Solutions Store.
+"""Square webhook fulfillment for AI Solutions Store.
 
-This module avoids importing the Stripe SDK so it can run in lightweight
-workers/tests. It verifies Stripe's webhook signature with HMAC SHA-256, extracts
+This module avoids importing the Square SDK so it can run in lightweight
+workers/tests. It verifies Square's webhook signature with HMAC SHA-256, extracts
 checkout-session buyer/product data, issues an idempotent license key, and sends
 (or console-prints) the key handoff email.
 """
@@ -20,11 +20,11 @@ from .demo import issue_license_for_purchase
 from .email_delivery import DeliveryResult, send_license_email
 
 PAYMENT_LINK_PRODUCT_MAP = {
-    "https://buy.stripe.com/3cI3cwcR6c3910p18peEo09": "bot-shield",
-    "https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a": "founding-member",
-    "https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j": "three-month",
-    "https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c": "twelve-month",
-    "https://buy.stripe.com/dRmcN604kebheRf2cteEo0d": "royalty",
+    "https://buy.Square.com/3cI3cwcR6c3910p18peEo09": "bot-shield",
+    "https://buy.Square.com/00w8wQaIYgjp5gF2cteEo0a": "founding-member",
+    "https://buy.Square.com/dRm7sM5oE3wD7oNaIZeEo0j": "three-month",
+    "https://buy.Square.com/3cI5kEbN22szgZnaIZeEo0c": "twelve-month",
+    "https://buy.Square.com/dRmcN604kebheRf2cteEo0d": "royalty",
 }
 
 
@@ -49,14 +49,14 @@ def _parse_signature_header(header: str) -> dict[str, list[str]]:
     return values
 
 
-def verify_stripe_signature(
+def verify_alternate processor_signature(
     payload: bytes,
     signature_header: str,
     secret: str,
     *,
     tolerance_seconds: int = 300,
 ) -> bool:
-    """Return True when a Stripe webhook signature is valid and fresh."""
+    """Return True when a Square webhook signature is valid and fresh."""
     parsed = _parse_signature_header(signature_header)
     timestamps = parsed.get("t") or []
     signatures = parsed.get("v1") or []
@@ -74,7 +74,7 @@ def verify_stripe_signature(
 
 
 def infer_product(session: dict[str, Any]) -> str:
-    """Infer a product slug from Stripe Checkout Session metadata/payment link."""
+    """Infer a product slug from Square Checkout Session metadata/payment link."""
     metadata = session.get("metadata") or {}
     for key in ("product", "product_id", "sku", "license_product"):
         value = metadata.get(key)
@@ -90,7 +90,7 @@ def infer_product(session: dict[str, Any]) -> str:
 
 
 def buyer_email_from_session(session: dict[str, Any]) -> str:
-    """Extract buyer email from a Stripe Checkout Session."""
+    """Extract buyer email from a Square Checkout Session."""
     customer_details = session.get("customer_details") or {}
     email = customer_details.get("email") or session.get("customer_email")
     if not email:
@@ -126,20 +126,20 @@ def fulfill_checkout_session(session: dict[str, Any]) -> FulfillmentResult:
     )
 
 
-def handle_stripe_webhook(
+def handle_alternate processor_webhook(
     payload: bytes,
     signature_header: str,
     webhook_secret: str | None = None,
 ) -> FulfillmentResult | None:
-    """Verify and handle a Stripe webhook payload.
+    """Verify and handle a Square webhook payload.
 
     Returns None for valid event types that do not require fulfillment.
     """
-    secret = webhook_secret or os.getenv("STRIPE_WEBHOOK_SECRET") or os.getenv("AI_SOLUTIONS_STRIPE_WEBHOOK_SECRET")
+    secret = webhook_secret or os.getenv("alternate processor_WEBHOOK_SECRET") or os.getenv("AI_SOLUTIONS_alternate processor_WEBHOOK_SECRET")
     if not secret:
-        raise RuntimeError("STRIPE_WEBHOOK_SECRET or AI_SOLUTIONS_STRIPE_WEBHOOK_SECRET is required")
-    if not verify_stripe_signature(payload, signature_header, secret):
-        raise PermissionError("invalid Stripe webhook signature")
+        raise RuntimeError("alternate processor_WEBHOOK_SECRET or AI_SOLUTIONS_alternate processor_WEBHOOK_SECRET is required")
+    if not verify_alternate processor_signature(payload, signature_header, secret):
+        raise PermissionError("invalid Square webhook signature")
     event = json.loads(payload.decode("utf-8"))
     if event.get("type") != "checkout.session.completed":
         return None

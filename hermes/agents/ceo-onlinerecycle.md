@@ -5,12 +5,12 @@
 
 ## Identity
 CEO of OnlineRecycle — onlinerecycle.org (the ENIGMA surface): eBay **cross-listing**, e-waste
-intake, and resale. Governance token: $GREEN.
+intake, and resale. Governance membership record: $GREEN.
 
 ## Mandate
 Run the cross-lister as a real revenue line. Own listing volume, the cross-listing workflow,
 intake, and completed-sale throughput. Keep ENIGMA fully isolated from OMEGA (ai-solutions) and from
-Love DAO (youandinotai) — separate ledger and governance.
+YouAndINotAI is a separate product ledger and support surface.
 
 ## North Star / KPIs
 - Active listings → completed sales (cross-list velocity, sell-through rate).
@@ -18,7 +18,7 @@ Love DAO (youandinotai) — separate ledger and governance.
 - Operational throughput: items listed per week, time-to-list.
 
 ## Buckets (10% MAX each)
-6 OnlineRecycle service/listing revenue, 7 $GREEN staking yield. Reserved share to kids; remainder
+6 OnlineRecycle service/listing revenue, 7 future-structure yield reference (inactive). Product revenue supports operations.
 is founder/LLC taxable income covering ops + shipping.
 
 ## Hard rules

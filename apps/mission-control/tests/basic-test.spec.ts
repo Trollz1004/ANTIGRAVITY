@@ -4,10 +4,10 @@ test('basic playwright test', async ({ page }) => {
   // Navigate to a simple HTML file instead of localhost
   await page.goto('about:blank');
   await page.setContent('<html><body><h1>Test Page</h1><button id="test-btn">Click Me</button></body></html>');
-  
+
   // Test basic functionality
   await expect(page.locator('h1')).toHaveText('Test Page');
-  
+
   // Test button click
   await page.locator('#test-btn').click();
   await expect(page.locator('#test-btn')).toBeVisible();
@@ -26,9 +26,9 @@ test.describe('User Registration/Login Flow', () => {
             document.getElementById('login-button').addEventListener('click', () => {
               document.getElementById('login-button').style.display = 'none';
               document.getElementById('logout-button').style.display = 'block';
-              localStorage.setItem('auth_token', 'dummy-jwt-token');
+              localStorage.setItem('auth_token', 'dummy-jwt-membership record');
             });
-            
+
             document.getElementById('logout-button').addEventListener('click', () => {
               document.getElementById('login-button').style.display = 'block';
               document.getElementById('logout-button').style.display = 'none';
@@ -50,7 +50,7 @@ test.describe('User Registration/Login Flow', () => {
     await expect(page.locator('#logout-button')).toBeVisible();
     await expect(page.locator('#login-button')).not.toBeVisible();
 
-    // Logout should clear the token
+    // Logout should clear the membership record
     await page.locator('#logout-button').click();
     await expect(page.locator('#login-button')).toBeVisible();
     await expect(page.locator('#logout-button')).not.toBeVisible();
@@ -78,13 +78,13 @@ test.describe('Dashboard Navigation', () => {
             document.querySelectorAll('.nav-btn').forEach(btn => {
               btn.addEventListener('click', (e) => {
                 const panel = e.target.dataset.panel;
-                
+
                 // Hide all panels
                 document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
-                
+
                 // Show selected panel
                 document.getElementById(panel + '-panel').style.display = 'block';
-                
+
                 // Highlight active button
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
@@ -131,14 +131,14 @@ test.describe('Rate Limit Dashboard', () => {
           </div>
           <script>
             let mockData = { requestsThisMinute: 45, requestsPerMinute: 100 };
-            
+
             function updateDisplay() {
-              document.getElementById('usage-display').textContent = 
+              document.getElementById('usage-display').textContent =
                 mockData.requestsThisMinute + ' / ' + mockData.requestsPerMinute;
             }
-            
+
             updateDisplay();
-            
+
             document.getElementById('refresh-btn').addEventListener('click', () => {
               mockData.requestsThisMinute = Math.floor(Math.random() * 100);
               updateDisplay();

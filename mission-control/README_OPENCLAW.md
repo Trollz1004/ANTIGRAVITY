@@ -14,14 +14,14 @@ A professional dark-themed AI workspace featuring multi-provider chat, Paperclip
 ### Paperclip Business OS Integration
 - **Agent Coordination**: Register OpenClaw as an agent in your Paperclip company
 - **Task Delegation**: Send and receive tasks between OpenClaw and other agents
-- **Budget Tracking**: Monitor token usage and enforce spending limits
+- **Budget Tracking**: Monitor membership record usage and enforce spending limits
 - **Org Chart**: Visualize your autonomous team structure
 - **Company Goals**: Align all agents toward shared objectives
 - **Heartbeat Monitoring**: Real-time agent status and performance tracking
 
 ### Ollama Cloud
 - **100+ Models**: Access hosted models without local GPU
-- **Pay-as-You-Go**: Transparent pricing ($0.001-$0.10 per 1K tokens)
+- **Pay-as-You-Go**: Transparent pricing ($0.001-$0.10 per 1K membership records)
 - **Auto-Scaling**: Infrastructure scales with demand
 - **Model Variety**: Llama, Mistral, Orca, Zephyr, and more
 
@@ -250,7 +250,7 @@ pnpm test --watch
 - `content` - Message text
 - `provider` - Model provider (ollama, openrouter, openai, etc.)
 - `model` - Model name
-- `metadata` - Additional data (tokens, cost, etc.)
+- `metadata` - Additional data (membership records, cost, etc.)
 - `createdAt` - Timestamp
 
 ### providerConfigs

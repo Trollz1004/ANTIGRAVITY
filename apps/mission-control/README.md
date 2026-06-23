@@ -1,6 +1,6 @@
 # Mission Control
 
-> The operational dashboard for the **ANTIGRAVITY** platform — a unified command center for managing AI agents, monitoring system health, tracking treasury, and orchestrating mission-critical workflows.
+> The operational dashboard for the **ANTIGRAVITY** platform — a unified command center for managing AI agents, monitoring system health, tracking business reserve, and orchestrating mission-critical workflows.
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@
 Mission Control is the primary web-based dashboard for the ANTIGRAVITY ecosystem. It provides real-time visibility into:
 
 - **AI Agent Fleet** — status and health of Claude, Hermes, CodeX, Ollama, and OpenClaw support
-- **Treasury** — committed funds, kids fund balance, and estimated kids covered
+- **business reserve** — committed funds, product reserve balance, and estimated kids covered
 - **Launch Operations** — initiate and track deployment pipelines
 - **Revenue Engine** — monitor revenue streams and performance
 - **Stack Integrity** — system health checks across the full technology stack
@@ -33,7 +33,7 @@ Mission Control is the primary web-based dashboard for the ANTIGRAVITY ecosystem
 - **Runbooks** — operational runbooks and standard procedures
 - **Build Agent** — AI-assisted code building and repository management
 - **T5500 Node** — dedicated node status and control panel
-- **DAO Governance** — decentralized governance panel
+- **Product Governance** — decentralized governance panel
 
 The dashboard is served as a static Single Page Application (SPA) built with Vite and React, designed to be deployed alongside the ANTIGRAVITY API server.
 
@@ -76,12 +76,12 @@ mission-control/
     ├── vite-env.d.ts                   # Vite environment type declarations
     ├── components/
     │   ├── Sidebar.tsx                 # Left navigation sidebar with mode switching
-    │   ├── TopBar.tsx                  # Top header bar with treasury info & branding
+    │   ├── TopBar.tsx                  # Top header bar with business reserve info & branding
     │   ├── Footer.tsx                  # Bottom status bar
     │   ├── MissionControlDashboard.tsx # Main dashboard layout wrapper
     │   ├── TaskBriefInput.tsx          # Task input form for dispatching work
     │   ├── LaunchPanel.tsx             # Launch/deployment operations panel
-    │   ├── TreasuryBand.tsx            # Treasury status indicator band
+    │   ├── BusinessReserveBand.tsx            # business reserve status indicator band
     │   ├── HermesRouterPanel.tsx       # Hermes AI router status & controls
     │   ├── OpenClawSupportPanel.tsx    # OpenClaw support gateway status panel
     │   ├── RevenueEnginePanel.tsx      # Revenue monitoring panel
@@ -92,7 +92,7 @@ mission-control/
     │   ├── BuildAgentPanel.tsx         # AI build agent controls
     │   ├── MissionBand.tsx             # Mission status indicator band
     │   ├── T5500Panel.tsx              # T5500 node control panel
-    │   ├── DaoPanel.tsx                # DAO governance panel (in sidebar)
+    │   ├── ProductPanel.tsx                # Product Governance panel (in sidebar)
     │   ├── PanelBase.tsx               # Reusable panel container component
     │   ├── Toast.tsx                   # Toast notification system
     │   ├── ConfirmDialog.tsx           # Confirmation dialog modal
@@ -165,10 +165,10 @@ npm run preview
 ### Layout Components
 
 #### `TopBar`
-The top header bar displays the ANTIGRAVITY mission hashtag (`#UntilNoKidInNeed`), treasury summary (committed amount, kids fund, kids covered estimate), build badge, and a share button.
+The top header bar displays the ANTIGRAVITY mission hashtag (`Business-only product operations`), business reserve summary (committed amount, product reserve, customer support estimate), build badge, and a share button.
 
 #### `Sidebar`
-Left-side navigation with 8 operational modes: Mission Control, Mission Ledger, AI Roundtable, Tasks, Code Mode, Create · Banana, Research Mode, and Chat Mode. Also houses the `StackIntegrityWidget` and `DaoPanel`.
+Left-side navigation with 8 operational modes: Mission Control, Mission Ledger, AI Roundtable, Tasks, Code Mode, Create · Banana, Research Mode, and Chat Mode. Also houses the `StackIntegrityWidget` and `ProductPanel`.
 
 #### `Footer`
 Bottom status bar for additional system information and status indicators.
@@ -178,8 +178,8 @@ Bottom status bar for additional system information and status indicators.
 #### `LaunchPanel`
 Primary panel for initiating and tracking deployment/launch operations. Displays launch status and provides controls for triggering new launches.
 
-#### `TreasuryBand`
-A horizontal status band showing real-time treasury information pulled from the API.
+#### `BusinessReserveBand`
+A horizontal status band showing real-time business reserve information pulled from the API.
 
 #### `HermesRouterPanel`
 Displays the status and routing information for the Hermes AI agent router. Shows connected agents, routing tables, and health metrics.
@@ -208,7 +208,7 @@ Horizontal status band showing overall mission health and key performance indica
 #### `T5500Panel`
 Dedicated control panel for the T5500 node — displays node status, resource utilization, and node-specific controls.
 
-#### `DaoPanel`
+#### `ProductPanel`
 Decentralized Autonomous Organization governance panel accessible from the sidebar, showing proposals, voting status, and governance metrics.
 
 ### Utility Components
@@ -316,7 +316,7 @@ All validators return a `ValidationResult` discriminated union: `{ valid: true, 
 
 The app uses a custom dark theme configured in `tailwind.config.ts`:
 
-| Token | Value | Usage |
+| membership record | Value | Usage |
 |---|---|---|
 | `background` | `#0b0f1a` | Page background |
 | `panel` | `#0f1421` | Panel/card backgrounds |

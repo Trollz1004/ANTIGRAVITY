@@ -110,7 +110,7 @@ export function SignInGate({ children }) {
           </form>
           <div className="mt-4 pt-4 border-t border-[#2a3a52] text-[9px] mono text-[#6b82a6] leading-relaxed">
             8-hour HTTP-only session cookie. Sole authority: Joshua Coleman.
-            <br />#UntilNoKidInNeed · no trust-me-bro doctrine.
+            <br />Business-only product operations · no trust-me-bro doctrine.
           </div>
         </div>
       </div>

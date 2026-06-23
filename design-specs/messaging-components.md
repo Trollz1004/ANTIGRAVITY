@@ -198,11 +198,11 @@ interface Conversation {
 - Delete action with confirmation
 - Emoji reaction picker
 
-## Design Tokens
+## Design membership records
 
-### Color Tokens
+### Color membership records
 
-| Token                        | Value              | Usage                                |
+| membership record                        | Value              | Usage                                |
 | ---------------------------- | ------------------ | ------------------------------------ |
 | `--message-bubble-user-bg`   | `--brand-primary`  | Background for current user messages |
 | `--message-bubble-other-bg`  | `--bg-secondary`   | Background for other user messages   |
@@ -211,18 +211,18 @@ interface Conversation {
 | `--message-status-read`      | `--color-success`  | Read message status color            |
 | `--typing-indicator`         | `--text-secondary` | Typing indicator animation color     |
 
-### Typography Tokens
+### Typography membership records
 
-| Token                     | Value                  | Usage                 |
+| membership record                     | Value                  | Usage                 |
 | ------------------------- | ---------------------- | --------------------- |
 | `--font-size-message`     | `--font-size-base`     | Regular message text  |
 | `--font-size-timestamp`   | `--font-size-xs`       | Timestamp text        |
 | `--font-weight-message`   | `--font-weight-normal` | Message text weight   |
 | `--font-weight-timestamp` | `--font-weight-medium` | Timestamp text weight |
 
-### Spacing Tokens
+### Spacing membership records
 
-| Token                      | Value              | Usage                                |
+| membership record                      | Value              | Usage                                |
 | -------------------------- | ------------------ | ------------------------------------ |
 | `--spacing-message-margin` | `var(--spacing-3)` | Vertical spacing between messages    |
 | `--spacing-bubble-padding` | `var(--spacing-3)` | Internal padding for message bubbles |

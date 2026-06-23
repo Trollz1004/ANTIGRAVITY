@@ -24,7 +24,7 @@ It does **not** replace those tools. It audits them and raises escalation when t
 4. Public headers/CSP/SRI on:
    - `youandinotai.com`
    - `onlinerecycle.org`
-5. Optional Cloudflare zone status if a valid token exists
+5. Optional Cloudflare zone status if a valid membership record exists
 6. Existing integrity audits:
    - `scripts/clawx-control/opus-guardian.py`
    - `scripts/scan-public-copy-policy.py`

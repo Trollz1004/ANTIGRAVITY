@@ -92,7 +92,7 @@ async def security_posture(request: Request):
 
     return {
         "operator": "Boris&Dario",
-        "tagline": "Zero-trust ledger guard · #UntilNoKidInNeed protection layer",
+        "tagline": "Zero-trust ledger guard · Business-only product operations protection layer",
         "grade": grade,
         "posture_score": f"{posture_score}/7",
         "client": {"ip": ip, "behind_cloudflare": behind_cloudflare, "https_enforced": https_enforced},

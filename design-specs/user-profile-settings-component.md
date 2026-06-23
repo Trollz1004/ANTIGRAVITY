@@ -315,7 +315,7 @@ A comprehensive settings interface allowing users to manage their profile inform
 └─────────────────────────────────────────────────┘
 ```
 
-### Design Tokens Usage
+### Design membership records Usage
 
 ```css
 .user-profile-settings {
@@ -780,7 +780,7 @@ const useProfileValidation = (initialValues) => {
 ## Dependencies
 
 - React 19 (front-end framework)
-- Design system tokens (CSS variables)
+- Design system membership records (CSS variables)
 - Form validation utilities
 - Modal and dialog components
 - Icons from design system

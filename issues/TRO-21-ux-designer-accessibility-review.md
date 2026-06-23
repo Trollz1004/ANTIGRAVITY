@@ -30,7 +30,7 @@ Complete final accessibility review and design system documentation to ensure WC
 ### 3. Design System Documentation
 
 - Complete component library with specifications
-- Document design tokens and variables
+- Document design membership records and variables
 - Create usage guidelines for consistent implementation
 - Provide examples and best practices
 

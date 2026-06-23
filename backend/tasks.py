@@ -38,7 +38,7 @@ HEARTBEATS = _db.heartbeats
 AGENT_TIERS = ["ceo", "cfo", "cmo", "cto", "intern", "launch"]
 AGENTS: List[Dict[str, Any]] = [
     {"id": "ceo",       "label": "CEO · Hermes",   "tier": "ceo",    "color": "#00d4ff", "task_cap": 25, "role": "orchestrator"},
-    {"id": "cfo",       "label": "CFO",            "tier": "cfo",    "color": "#ffb300", "task_cap": 25, "role": "treasury · runway · margins"},
+    {"id": "cfo",       "label": "CFO",            "tier": "cfo",    "color": "#ffb300", "task_cap": 25, "role": "business reserve · runway · margins"},
     {"id": "cmo",       "label": "CMO",            "tier": "cmo",    "color": "#e040fb", "task_cap": 25, "role": "content · social · campaigns"},
     {"id": "cto",       "label": "CTO",            "tier": "cto",    "color": "#00e676", "task_cap": 25, "role": "infra · deploys · audits"},
     {"id": "intern-1",  "label": "INTERN-1",       "tier": "intern", "color": "#6b82a6", "task_cap": 5,  "role": "social groundwork (Gemma 1B)"},

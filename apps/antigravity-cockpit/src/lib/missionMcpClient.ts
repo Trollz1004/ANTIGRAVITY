@@ -2,7 +2,7 @@
  * mission-mcp HTTP client
  * Streamable HTTP (MCP protocol) at http://127.0.0.1:3901/mcp
  *
- * Auth: set VITE_MISSION_MCP_TOKEN in .env.local if mission-mcp requires a bearer token.
+ * Auth: set VITE_MISSION_MCP_TOKEN in .env.local if mission-mcp requires a bearer membership record.
  * The UI fails gracefully if the server is unreachable — stub data is shown instead.
  *
  * Wire protocol:

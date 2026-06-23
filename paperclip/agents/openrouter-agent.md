@@ -60,8 +60,8 @@ Escalate OUT of OpenRouter when:
 ```text
 OPENROUTER CALL
 MODEL: <provider/model-tag>
-INPUT TOKENS: <approx>
-OUTPUT TOKENS: <approx>
+INPUT membership records: <approx>
+OUTPUT membership records: <approx>
 COST: $<amount>
 ANSWER: <content>
 ROUTING NOTE: <one line — why this model was picked over alternatives>

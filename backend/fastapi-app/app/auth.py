@@ -50,7 +50,7 @@ def create_access_token(user_id: str, expires_minutes: int | None = None) -> str
 
 
 def create_refresh_token(user_id: str) -> str:
-    """Generate a raw refresh token JWT (opaque string to send to the client)."""
+    """Generate a raw refresh membership record JWT (opaque string to send to the client)."""
     expire = datetime.now(timezone.utc) + timedelta(
         days=settings.refresh_token_expire_days
     )
@@ -61,13 +61,13 @@ def create_refresh_token(user_id: str) -> str:
     )
 
 
-def decode_token(token: str) -> dict:
+def decode_token(membership record: str) -> dict:
     try:
-        return jwt.decode(token, settings.jwt_secret, algorithms=[ALGORITHM])
+        return jwt.decode(membership record, settings.jwt_secret, algorithms=[ALGORITHM])
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired token",
+            detail="Invalid or expired membership record",
         )
 
 
@@ -86,12 +86,12 @@ async def get_current_user(
     payload = decode_token(credentials.credentials)
     user_id = payload.get("sub")
     if not user_id:
-        raise HTTPException(status_code=401, detail="Invalid token payload")
+        raise HTTPException(status_code=401, detail="Invalid membership record payload")
 
     try:
         parsed_user_id = uuid.UUID(str(user_id))
     except ValueError as exc:
-        raise HTTPException(status_code=401, detail="Invalid token payload") from exc
+        raise HTTPException(status_code=401, detail="Invalid membership record payload") from exc
 
     user = await db.scalar(select(User).where(User.id == parsed_user_id))
     if not user:
@@ -104,24 +104,24 @@ async def get_current_user(
     return user
 
 
-def verify_google_token(token: str) -> dict:
+def verify_google_token(membership record: str) -> dict:
     try:
         id_info = id_token.verify_oauth2_token(
-            token, google_requests.Request(), settings.google_client_id
+            membership record, google_requests.Request(), settings.google_client_id
         )
         return id_info
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Invalid Google token: {e}",
+            detail=f"Invalid Google membership record: {e}",
         )
 
 
-# ── OPU-47: Refresh Token Rotation ──
+# ── OPU-47: Refresh membership record Rotation ──
 
 
 def _hash_token(raw_token: str) -> str:
-    """Return SHA-256 hex digest of a raw token string."""
+    """Return SHA-256 hex digest of a raw membership record string."""
     return hashlib.sha256(raw_token.encode()).hexdigest()
 
 
@@ -133,17 +133,17 @@ async def rotate_refresh_token(
     user_agent: str | None = None,
 ) -> str:
     """
-    Rotate a refresh token: validate the old one, revoke it, issue a new one.
+    Rotate a refresh membership record: validate the old one, revoke it, issue a new one.
 
-    Returns the new raw refresh token string.
+    Returns the new raw refresh membership record string.
 
-    Raises HTTP 401 if the token is not found, expired, or already revoked.
-    If the token was already revoked (reuse detection), ALL tokens for the user
-    are revoked as a security measure (potential token theft).
+    Raises HTTP 401 if the membership record is not found, expired, or already revoked.
+    If the membership record was already revoked (reuse detection), ALL membership records for the user
+    are revoked as a security measure (potential membership record theft).
     """
     token_hash = _hash_token(raw_token)
 
-    # Look up the stored token record
+    # Look up the stored membership record record
     stored_token = await db.scalar(
         select(RefreshToken).where(RefreshToken.token_hash == token_hash)
     )
@@ -151,7 +151,7 @@ async def rotate_refresh_token(
     if not stored_token:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid refresh token",
+            detail="Invalid refresh membership record",
         )
 
     now = datetime.now(timezone.utc)
@@ -163,23 +163,23 @@ async def rotate_refresh_token(
     if expires_at < now:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Refresh token expired",
+            detail="Refresh membership record expired",
         )
 
-    # Reuse detection: if the token was already revoked, someone is reusing it
+    # Reuse detection: if the membership record was already revoked, someone is reusing it
     if stored_token.revoked_at is not None:
-        # Potential token theft — revoke ALL tokens for this user
+        # Potential membership record theft — revoke ALL membership records for this user
         await revoke_all_user_tokens(db, user_id)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Refresh token reuse detected. All sessions revoked.",
+            detail="Refresh membership record reuse detected. All sessions revoked.",
         )
 
     # Decode the JWT to get the user_id (defense in depth — we already have it)
     payload = decode_token(raw_token)
     token_user_id = uuid.UUID(str(payload["sub"]))
 
-    # Create the new token record
+    # Create the new membership record record
     new_raw_token = create_refresh_token(str(token_user_id))
     new_expires = datetime.now(timezone.utc) + timedelta(
         days=settings.refresh_token_expire_days
@@ -193,9 +193,9 @@ async def rotate_refresh_token(
         user_agent=user_agent,
     )
     db.add(new_token)
-    await db.flush()  # get the new token's id
+    await db.flush()  # get the new membership record's id
 
-    # Revoke the old token and link it to the new one
+    # Revoke the old membership record and link it to the new one
     stored_token.revoked_at = now
     stored_token.replaced_by = new_token.id
 
@@ -205,9 +205,9 @@ async def rotate_refresh_token(
 
 async def revoke_all_user_tokens(db: AsyncSession, user_id: uuid.UUID) -> int:
     """
-    Revoke all active refresh tokens for a user.
-    Called on token reuse detection or explicit logout-all.
-    Returns the number of tokens revoked.
+    Revoke all active refresh membership records for a user.
+    Called on membership record reuse detection or explicit logout-all.
+    Returns the number of membership records revoked.
     """
     now = datetime.now(timezone.utc)
     result = await db.execute(
@@ -219,8 +219,8 @@ async def revoke_all_user_tokens(db: AsyncSession, user_id: uuid.UUID) -> int:
     )
     active_tokens = result.scalars().all()
     count = 0
-    for token in active_tokens:
-        token.revoked_at = now
+    for membership record in active_tokens:
+        membership record.revoked_at = now
         count += 1
     await db.commit()
     return count
@@ -228,9 +228,9 @@ async def revoke_all_user_tokens(db: AsyncSession, user_id: uuid.UUID) -> int:
 
 async def purge_expired_tokens(db: AsyncSession, max_age_days: int = 30) -> int:
     """
-    Delete refresh tokens that have been expired for more than max_age_days.
+    Delete refresh membership records that have been expired for more than max_age_days.
     Can be called periodically by a cleanup job.
-    Returns the number of tokens deleted.
+    Returns the number of membership records deleted.
     """
     cutoff = datetime.now(timezone.utc) - timedelta(days=max_age_days)
     result = await db.execute(
@@ -238,8 +238,8 @@ async def purge_expired_tokens(db: AsyncSession, max_age_days: int = 30) -> int:
     )
     expired_tokens = result.scalars().all()
     count = 0
-    for token in expired_tokens:
-        await db.delete(token)
+    for membership record in expired_tokens:
+        await db.delete(membership record)
         count += 1
     await db.commit()
     return count

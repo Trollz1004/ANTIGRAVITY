@@ -8,7 +8,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
  * StorefrontMode — public-facing catalogue + admin manage surface.
  *
  * Doctrine compliance:
- *  - "contractual revenue disbursement" wording only (no donate/charity).
+ *  - "internal allocation review" wording only (no support/product).
  *  - Honest empty state: empty catalogue renders a starter-seed CTA, not
  *    a fabricated grid of fake products.
  *  - Square hosted checkout = primary processor (no PCI risk on our box).
@@ -77,7 +77,7 @@ export function StorefrontMode() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2">
               <ShoppingBag size={14} className="text-[#00e676]" />
-              <span className="text-[10px] tracking-[0.3em] uppercase text-[#00e676] font-bold">Public Storefront · Square + Stripe hosted</span>
+              <span className="text-[10px] tracking-[0.3em] uppercase text-[#00e676] font-bold">Public Storefront · Square hosted checkout</span>
             </div>
             <h1 className="text-3xl font-bold tracking-tight">{site?.name || "OpusPawClaw"}</h1>
             <p className="text-sm text-[#6b82a6] mt-1">{site?.tagline}</p>
@@ -110,7 +110,7 @@ export function StorefrontMode() {
         )}
 
         <footer className="mt-12 pt-6 border-t border-[#2a3a52] text-[10px] text-[#4a5568] tracking-widest uppercase">
-          contractual revenue disbursement · 10% hard cap stacked · FL §496.405 compliant · receipts only
+          internal allocation review · 10% hard cap stacked · FL §496.405 compliant · receipts only
         </footer>
       </div>
     </div>
@@ -120,7 +120,7 @@ export function StorefrontMode() {
 function RunwayCard({ runway, site }) {
   if (!runway) return null;
   const tone = runway.emergent_key_configured ? "#00e676" : "#ff1744";
-  const kidsUsd = site?.totals?.kids_fund_usd ?? 0;
+  const reserveUsd = site?.totals?.business_reserve_usd ?? site?.totals?.member_support_usd ?? 0;
   return (
     <div data-testid="storefront-runway-card" className="bg-[#111827] border border-[#2a3a52] rounded-lg px-5 py-3 min-w-[260px]">
       <div className="flex items-center gap-2 mb-2">
@@ -131,7 +131,7 @@ function RunwayCard({ runway, site }) {
         <Cell label="default model" value={`${runway.default_bridge.provider}/${runway.default_bridge.model.replace("gemini-", "")}`} />
         <Cell label="runway" value={`${runway.runway_days}d`} />
         <Cell label="committed" value={`$${Number(runway.committed_usd).toFixed(2)}`} />
-        <Cell label="kids fund" value={`$${Number(kidsUsd).toFixed(2)}`} />
+        <Cell label="reserve bucket" value={`$${Number(reserveUsd).toFixed(2)}`} />
       </div>
       <p className="text-[9px] text-[#6b82a6] mt-2 italic">{runway.note}</p>
     </div>

@@ -15,7 +15,7 @@ You can call `terminal` to run `curl`, `bash`, and `ps` in WSL, and `powershell.
 | Hermes Router (LLM, FastAPI) | WSL, port 11435 | `curl -s http://127.0.0.1:11435/healthz` → 200 |
 | Ollama | Windows, port 11434 | `curl -s http://127.0.0.1:11434/` → `Ollama is running` |
 | OpenClaw Gateway (HTTP) | Windows, port 18789 | `curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:18789/__openclaw__/canvas/` → 200 |
-| OpenClaw Browser Control | Windows, port 18791 | TCP listening (auth=token, no public probe) |
+| OpenClaw Browser Control | Windows, port 18791 | TCP listening (auth=membership record, no public probe) |
 | Hermes Agent CLI (you) | WSL, `/home/josh/.local/bin/hermes` | self-evident — you are running |
 
 ### Layer 2 — Public surfaces (Cloudflare tunnels)
@@ -23,7 +23,7 @@ You can call `terminal` to run `curl`, `bash`, and `ps` in WSL, and `powershell.
 | Hostname | Origin | Tunnel host node |
 |---|---|---|
 | `paperclip-hq.youandinotai.com` | Sabretooth `:3100` | Sabretooth `cloudflared.exe` (tunnel `c7bc9665-3923-4977-acd7-2033838cd56e`) |
-| `mcp.youandinotai.com` | T5500 brain-mcp `:3099` | T5500 docker-compose tunnel (token-based, separate ID) |
+| `mcp.youandinotai.com` | T5500 brain-mcp `:3099` | T5500 docker-compose tunnel (membership record-based, separate ID) |
 
 T5500 is at `192.168.0.15`. If `mcp.youandinotai.com` returns 1033, T5500's brain-mcp tunnel is the issue — not Sabretooth's auth.
 

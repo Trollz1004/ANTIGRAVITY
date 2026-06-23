@@ -229,11 +229,11 @@ A visual indicator that communicates platform trust signals to users, showing th
 └─────────────────────────────────────────────────┘
 ```
 
-### Design Tokens Usage
+### Design membership records Usage
 
 ```css
 .trust-badge {
-  /* Colors based on safety token system */
+  /* Colors based on safety membership record system */
   background-color: var(--safety-safe);
   color: var(--text-inverse);
 

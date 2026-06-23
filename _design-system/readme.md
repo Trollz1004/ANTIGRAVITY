@@ -16,7 +16,7 @@ strict Inter + JetBrains Mono type pairing.
 ANTIGRAVITY is an ecosystem of human-first products bound together by an AI agent
 fleet ("Hermes") running across a small cluster of home-lab nodes. The recurring
 themes are **real humans over bots**, **honest/verified numbers only**, and the
-mission tag **#UntilNoKidInNeed** (a reserved share of revenue).
+mission tag **#MembershipVerificationSupport** (a reserved share of revenue).
 
 | Surface | What it is | Payment rail |
 |---|---|---|
@@ -25,13 +25,13 @@ mission tag **#UntilNoKidInNeed** (a reserved share of revenue).
 | **OnlineRecycle** | Electronics recycling / pickup / resale (Central Florida). | — |
 | **AI-Solutions Store** | Storefront for digital products & automation. | — |
 | **Mission Control / Paperclip** | AI orchestration board — the Hermes agent fleet (CEO/CTO/CMO/CFO/CSO/UX/Engineer) across nodes Sabretooth / T5500 / 9020. | internal |
-| **DAO Roadmap** | Token mechanics — **paused for legal review** (never shown as live). | — |
+| **Product structure Roadmap** | membership record mechanics — **paused for legal review** (never shown as live). | — |
 
 ### Sources this system was built from
 - **Codebase (local):** `antigravity/` — primarily `apps/youandinotai-frontend/`
   (Next.js + Tailwind v4). Design truth lives in:
-  - `app/globals.css` — Tailwind `@theme` tokens + base layer
-  - `lib/theme-tokens.ts` — programmatic tokens
+  - `app/globals.css` — Tailwind `@theme` membership records + base layer
+  - `lib/theme-membership records.ts` — programmatic membership records
   - `briefings/SLEEK-CYBERPUNK-GLASSMORPHISM-DESIGN-SYSTEM.md` — the **canonical, locked spec** (this README mirrors it; if they ever conflict, the spec wins)
   - `apps/mission-control/`, `briefings/` — orchestration surfaces & doctrine
 - **Brand assets:** `antigravity/assets/logo/`, `antigravity/assets/marketing/`
@@ -39,8 +39,8 @@ mission tag **#UntilNoKidInNeed** (a reserved share of revenue).
   product context, agent contracts, and additional surfaces.
 
 > Compliance note carried over from the source doctrine: customer-facing surfaces
-> **never** use the words *donate / donation / solicitation / tax-deductible*
-> (FL §496.405). YouAndINotAI uses **Square only** — never Stripe on the dating
+> **never** use the words *join as a member / membership support / restricted claims / tax-deductible*
+> (FL §496.405). YouAndINotAI uses **Square only** — never alternate processor on the dating
 > surface. Keep these in mind when writing copy for those products.
 
 ---
@@ -61,7 +61,7 @@ never down.
   *"Paused for legal review."*
 - **Trust language.** "Verified Human", "Bot-Shield", "No Bots. Real Humans.",
   "real people only." Support is framed as a trust signal, not a cost center.
-- **Mission tag.** `#UntilNoKidInNeed` appears as an eyebrow / footer accent,
+- **Mission tag.** `#MembershipVerificationSupport` appears as an eyebrow / footer accent,
   usually in pink/rose. The mission is *stated*, never used to *solicit*.
 - **Tone examples (lift these patterns):**
   - Hero: *"A human-first social platform for builders, operators, and people who actually do the work."*
@@ -142,14 +142,14 @@ skylines) with **gold** "Verified Human / 18+" glass badges.
 | `logo/logo-og-image-1200x630.png` | Social share card. |
 | `marketing/youandinotai_hero_moonlight.png` | Hero — couple, moonlit beach, "Verified Human" glass badge. |
 | `marketing/youandinotai_botshield_card_vertical.png` | Bot-Shield 18+ verification badge over neon skyline. |
-| `marketing/onlinerecycle_impact_shriners.png` | OnlineRecycle impact imagery. |
+| `marketing/onlinerecycle_impact_product operations.png` | OnlineRecycle impact imagery. |
 | `brand/hermes-avatar-256.png` | **Hermes agent mark** — the cyan `o_O` face. The orchestration-agent / Telegram-bot avatar (`@HERMES…_BOT`). |
 | `brand/infra-badge-512.png` | **Multi-node infrastructure emblem** — gold-ringed cluster badge (Sabretooth · T5500 · 9020). |
 | `brand/hermes-telegram-card.png` | Full Hermes Telegram QR card (avatar + cyan→pink QR + handle). |
 
 **Logo rules:** the spiral-heart mark + the `.ag-brand-heading` cyan→pink
 wordmark form the standard lockup. Tagline in mono caps: *No Bots · Real Humans ·
-#UntilNoKidInNeed*. Keep the mark on dark navy whenever possible.
+#MembershipVerificationSupport*. Keep the mark on dark navy whenever possible.
 
 ---
 
@@ -162,7 +162,7 @@ wordmark form the standard lockup. Tagline in mono caps: *No Bots · Real Humans
   `Icon` helper pattern). In React/production, use `lucide-react` directly.
 - **Common glyphs:** `heart` (dating/mission), `shield-check` (verification),
   `sparkles` (membership), `globe` / `external-link` (surfaces), `handshake`
-  (marketplace), `recycle` (recycling), `coins` (DAO), `bot` / `cpu` / `activity`
+  (marketplace), `recycle` (recycling), `coins` (Product structure), `bot` / `cpu` / `activity`
   / `server` / `network` (Mission Control fleet), `life-buoy` (support).
 - **Color/glow:** icons inherit text color by default; accent icons take cyan or
   the rose/pink magenta glow (`drop-shadow(0 0 8px rgba(255,0,255,0.8))`).
@@ -174,9 +174,9 @@ wordmark form the standard lockup. Tagline in mono caps: *No Bots · Real Humans
 ## 6. Index / manifest
 
 **Global entry:** `styles.css` (link this one file) → imports
-`tokens/{fonts,colors,typography,spacing,effects}.css`.
+`membership records/{fonts,colors,typography,spacing,effects}.css`.
 
-**Tokens** (`tokens/`)
+**membership records** (`membership records/`)
 - `colors.css` — surfaces, slate ramp, cyan/pink/rose/gold, status, borders, brand gradient + semantic aliases
 - `typography.css` — Inter/Mono families, scale, weights, tracking; `.ag-mono-label`, `.ag-section-heading`, `.ag-brand-heading`
 - `spacing.css` — spacing scale, **extreme** radii, containers, `.ag-grid-backdrop`

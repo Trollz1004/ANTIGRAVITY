@@ -7,7 +7,7 @@ test('page loads with title Mission Control', async ({ page }) => {
 
 test('TopBar contains required text', async ({ page }) => {
   await page.goto('http://localhost:5173/');
-  await expect(page.locator('[data-testid="topbar"]')).toContainText('#UntilNoKidInNeed');
+  await expect(page.locator('[data-testid="topbar"]')).toContainText('Business-only product operations');
   await expect(page.locator('[data-testid="topbar"]')).toContainText('OPUSPAWCLAW · MISSION CONTROL');
   await expect(page.locator('[data-testid="topbar"]')).toContainText('BUILT · E1');
 });

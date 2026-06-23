@@ -1,4 +1,4 @@
-"""RefreshToken ORM model — added for OPU-47 JWT refresh token rotation."""
+"""RefreshToken ORM model — added for OPU-47 JWT refresh membership record rotation."""
 
 import uuid
 from datetime import datetime
@@ -30,7 +30,7 @@ class RefreshToken(Base):
         String(64),
         nullable=False,
         index=True,
-        comment="SHA-256 hex digest of the raw refresh token",
+        comment="SHA-256 hex digest of the raw refresh membership record",
     )
     expires_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False
@@ -42,7 +42,7 @@ class RefreshToken(Base):
         UUID(as_uuid=True),
         ForeignKey("refresh_tokens.id", ondelete="SET NULL"),
         nullable=True,
-        comment="Points to the next token in the rotation chain",
+        comment="Points to the next membership record in the rotation chain",
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

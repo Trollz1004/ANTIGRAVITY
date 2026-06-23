@@ -30,7 +30,7 @@ interface WebSocketStatus {
 const RECONNECT_INTERVAL_MS = 3000;
 const PING_INTERVAL_MS = 25000; // Send ping every 25 seconds
 
-export const useWebSocket = (token: string | null, options?: WebSocketHookOptions) => {
+export const useWebSocket = (membership record: string | null, options?: WebSocketHookOptions) => {
   const [isConnected, setIsConnected] = useState(false);
   const [latency, setLatency] = useState<number | null>(null);
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
@@ -42,12 +42,12 @@ export const useWebSocket = (token: string | null, options?: WebSocketHookOption
   const pingStartTime = useRef<number | null>(null);
 
   const connect = useCallback(() => {
-    if (!token || !shouldConnect.current) return;
+    if (!membership record || !shouldConnect.current) return;
     if (ws.current && (ws.current.readyState === WebSocket.OPEN || ws.current.readyState === WebSocket.CONNECTING)) {
       return;
     }
 
-    const wsUrl = `${API_BASE.replace('http', 'ws')}/api/v1/ws/notifications?token=${token}`;
+    const wsUrl = `${API_BASE.replace('http', 'ws')}/api/v1/ws/notifications?membership record=${membership record}`;
     console.log(`[WebSocket] Attempting to connect to ${wsUrl}`);
     ws.current = new WebSocket(wsUrl);
 
@@ -120,7 +120,7 @@ export const useWebSocket = (token: string | null, options?: WebSocketHookOption
         ws.current.close(); // Force close to trigger onclose and retry logic
       }
     };
-  }, [token, options]);
+  }, [membership record, options]);
 
   const disconnect = useCallback(() => {
     shouldConnect.current = false;
@@ -152,8 +152,8 @@ export const useWebSocket = (token: string | null, options?: WebSocketHookOption
   }, []);
 
   useEffect(() => {
-    shouldConnect.current = !!token;
-    if (token) {
+    shouldConnect.current = !!membership record;
+    if (membership record) {
       connect();
     } else {
       disconnect();
@@ -162,11 +162,11 @@ export const useWebSocket = (token: string | null, options?: WebSocketHookOption
     return () => {
       disconnect();
     };
-  }, [token, connect, disconnect]);
+  }, [membership record, connect, disconnect]);
 
-  return { 
-    isConnected, 
-    send, 
+  return {
+    isConnected,
+    send,
     disconnect,
     latency,
     reconnectAttempts,

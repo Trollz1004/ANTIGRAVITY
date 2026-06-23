@@ -2,7 +2,7 @@
 
 Real data sources:
 - /health/ollama, /health/hermes probes from this same API (TCP + tag list)
-- /health/cloudflare-pages, /health/square, /health/treasury, /health/guardian
+- /health/cloudflare-pages, /health/square, /health/business-reserve, /health/guardian
 - hermes-router `/healthz` (provider table)
 - Ollama `/api/tags` (model list)
 

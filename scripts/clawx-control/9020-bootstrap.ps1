@@ -156,7 +156,7 @@ Write-Host "  6. Open Docker Desktop, then:" -ForegroundColor White
 Write-Host "     cd c:\antigravity && docker compose up -d" -ForegroundColor White
 Write-Host "  7. Copy master .env from 9020 SSD to c:\antigravity\.env" -ForegroundColor White
 Write-Host "  8. Clone OpenClaw workspace or copy from T5500" -ForegroundColor White
-Write-Host "  9. Run: claude setup-token  (auth to Anthropic)" -ForegroundColor White
+Write-Host "  9. Run: claude setup-membership record  (auth to Anthropic)" -ForegroundColor White
 Write-Host " 10. Type: go" -ForegroundColor White
 Write-Host ""
 Write-Host "  Network: T5500 talks to 9020 via LAN IP" -ForegroundColor DarkCyan
@@ -164,4 +164,3 @@ Write-Host "  Ollama: http://192.168.0.X:11434" -ForegroundColor DarkCyan
 Write-Host "  (set OLLAMA_HOST=0.0.0.0 to allow LAN access)" -ForegroundColor DarkCyan
 Write-Host ""
 Write-Host "  DONE. Reboot, then run steps above." -ForegroundColor Green
-

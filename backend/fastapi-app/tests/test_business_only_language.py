@@ -11,7 +11,7 @@ EXCLUDED_PARTS = {
     ".hypothesis",
     ".pytest_cache",
     ".ruff_cache",
-    ".venv",
+    ".venv",  # legacy virtual environment marker
     "__pycache__",
     "alembic",
     "htmlcov",
@@ -61,7 +61,9 @@ def _iter_backend_text_files():
             continue
         if path.suffix.lower() not in TARGET_SUFFIXES:
             continue
-        if any(part in EXCLUDED_PARTS for part in rel.parts):
+        if any(part in EXCLUDED_PARTS for part in rel.parts) or any(
+            part.startswith(".venv") for part in rel.parts
+        ):
             continue
         yield path, rel
 
