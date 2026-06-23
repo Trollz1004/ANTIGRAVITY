@@ -1,9 +1,16 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import { ArrowUpRight, Sparkles } from 'lucide-react';
 
 import { MEMBERSHIP_PLANS } from '../lib/constants';
 
 export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
+  const [acceptedCookies, setAcceptedCookies] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [confirmedAdult, setConfirmedAdult] = useState(false);
+  const canCheckout = acceptedCookies && acceptedTerms && confirmedAdult;
+
   function cardClass(featured: boolean): string {
     if (featured) {
       return isDarkMode
@@ -34,14 +41,97 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
         and launch-year product value.
       </p>
 
+      <div
+        id="checkout-consent"
+        className={`mb-6 rounded-[1.6rem] border p-5 ${
+          isDarkMode
+            ? 'border-slate-800 bg-slate-950/55'
+            : 'border-slate-200 bg-orange-50'
+        }`}
+      >
+        <div className="mb-4 text-xs font-black uppercase tracking-[0.18em] text-blue-500">
+          Required before checkout
+        </div>
+        <div
+          className={`space-y-3 text-sm font-semibold ${
+            isDarkMode ? 'text-slate-300' : 'text-slate-700'
+          }`}
+        >
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={acceptedCookies}
+              onChange={(event) => setAcceptedCookies(event.target.checked)}
+              className="mt-1 h-4 w-4 accent-blue-500"
+            />
+            <span>
+              I understand strictly necessary cookies are used for checkout,
+              sign-in, fraud prevention, and account safety.{' '}
+              <a href="/cookies" className="font-black underline underline-offset-4">
+                Cookie Policy
+              </a>
+            </span>
+          </label>
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={acceptedTerms}
+              onChange={(event) => setAcceptedTerms(event.target.checked)}
+              className="mt-1 h-4 w-4 accent-blue-500"
+            />
+            <span>
+              I accept the{' '}
+              <a href="/terms" className="font-black underline underline-offset-4">
+                Terms of Service
+              </a>{' '}
+              and{' '}
+              <a href="/privacy" className="font-black underline underline-offset-4">
+                Privacy Policy
+              </a>
+              .
+            </span>
+          </label>
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={confirmedAdult}
+              onChange={(event) => setConfirmedAdult(event.target.checked)}
+              className="mt-1 h-4 w-4 accent-blue-500"
+            />
+            <span>
+              I confirm I am at least 18 years old and understand Square will
+              process the membership or verification purchase.
+            </span>
+          </label>
+        </div>
+        {!canCheckout && (
+          <p className={`mt-4 text-xs ${isDarkMode ? 'text-slate-500' : 'text-slate-500'}`}>
+            Select all three boxes to open Square checkout.
+          </p>
+        )}
+      </div>
+
       <div className="grid w-full min-w-0 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
         {MEMBERSHIP_PLANS.map((plan) => (
           <a
             key={plan.id}
-            href={plan.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`group flex min-w-0 flex-col p-6 rounded-3xl border transition-all hover:-translate-y-1 ${cardClass(
+            href={canCheckout ? plan.url : '#checkout-consent'}
+            target={canCheckout ? '_blank' : undefined}
+            rel={canCheckout ? 'noopener noreferrer' : undefined}
+            aria-disabled={!canCheckout}
+            onClick={(event) => {
+              if (!canCheckout) {
+                event.preventDefault();
+                document
+                  .getElementById('checkout-consent')
+                  ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }}
+            className={`group flex min-w-0 flex-col p-6 rounded-3xl border transition-all ${
+              canCheckout
+                ? 'hover:-translate-y-1'
+                : 'cursor-not-allowed opacity-60'
+            } ${cardClass(
               plan.featured,
             )}`}
           >
@@ -59,7 +149,7 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
             <p className="text-sm font-bold mt-3">{plan.name}</p>
             <p className={`text-sm mt-2 flex-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{plan.blurb}</p>
             <span className="mt-5 inline-flex items-center gap-1 text-sm font-black text-blue-500 group-hover:gap-2 transition-all">
-              Check out
+              {canCheckout ? 'Check out' : 'Review terms first'}
               <ArrowUpRight className="w-4 h-4" />
             </span>
           </a>
@@ -67,7 +157,8 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
       </div>
 
       <p className={`text-xs mt-6 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-        Payments are processed by Square. You will be taken to a secure Square-hosted checkout page.
+        Payments are processed by Square. You will be taken to a secure
+        Square-hosted checkout page after confirming the required terms.
       </p>
     </section>
   );
