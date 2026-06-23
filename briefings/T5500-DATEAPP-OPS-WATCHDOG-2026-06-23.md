@@ -46,6 +46,14 @@ Logs:
 C:\antigravity\logs\ops-watchdog\dateapp-ops-watchdog.jsonl
 ```
 
+SYSTEM Cloudflare/Wrangler env cache:
+
+```text
+C:\ProgramData\Antigravity\secrets\cloudflare-wrangler.env
+```
+
+The installer creates this local machine cache from the approved runtime env authority when that source is available. The cache is outside the repo and ACL-limited to `SYSTEM` and `Administrators` so the startup watchdog can run Wrangler after reboot without printing or committing secrets.
+
 ## Repair rules
 
 The watchdog uses small named ops agents:
