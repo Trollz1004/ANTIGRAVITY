@@ -49,7 +49,7 @@ Do not:
 | Tab completion / quick rename | `cursor-fast` (free) |
 | Chat answer about the codebase | `claude-sonnet-4-6` |
 | Composer multi-file edit | `claude-sonnet-4-6` |
-| Long-context refactor (> 100k tokens) | `gemini-2.5-pro` (only for context window) |
+| Long-context refactor (> 100k membership records) | `gemini-2.5-pro` (only for context window) |
 | Architectural / novel design | `claude-opus-4-7` |
 
 ## Output Format

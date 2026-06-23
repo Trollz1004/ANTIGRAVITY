@@ -38,7 +38,7 @@ models: router({
       sessionId: z.number(),
     }))
     .subscription(async ({ ctx, input }) => {
-      // Yield tokens as they arrive
+      // Yield membership records as they arrive
       // Store complete message in DB when done
     }),
 })
@@ -46,13 +46,13 @@ models: router({
 
 **Frontend (client/src/pages/Workspace.tsx):**
 - Connect to streaming subscription
-- Display tokens in real-time as they arrive
+- Display membership records in real-time as they arrive
 - Render markdown on-the-fly
 - Show loading indicator during streaming
 - Handle connection errors gracefully
 
 ### Success Criteria
-- User types message and sees tokens appearing in real-time
+- User types message and sees membership records appearing in real-time
 - Markdown renders correctly (bold, code, tables, etc.)
 - Can cancel streaming mid-response
 - Message saved to database when complete
@@ -123,9 +123,9 @@ models: router({
 async function initializePaperclipAgent() {
   const config = await db.getProviderConfig(ownerUserId, "paperclip");
   if (!config) return;
-  
+
   const client = createPaperclipClient(config);
-  
+
   // Register agent on first run
   const agent = await client.registerAgent({
     name: "OpenClaw",
@@ -134,7 +134,7 @@ async function initializePaperclipAgent() {
     capabilities: ["chat", "image_generation", "lead_hunting"],
     budget: 500, // Monthly budget
   });
-  
+
   // Schedule heartbeat every 5 minutes
   setInterval(() => {
     sendHeartbeat(agent.id, {
@@ -172,14 +172,14 @@ fetcher: router({
         // Get optional API keys for Upwork/Fiverr
         const upworkKey = await getApiKey(ctx.user.id, "upwork");
         const fiverrKey = await getApiKey(ctx.user.id, "fiverr");
-        
+
         // Run full scan
         const result = await fetcherAgent.runFetcherScan(
           ctx.user.id,
           upworkKey,
           fiverrKey
         );
-        
+
         return result;
       } catch (error) {
         throw new TRPCError({
@@ -238,7 +238,7 @@ URL: ${topPick.url}
 Total qualified leads: ${qualifiedLeads.length}
       `.trim(),
     });
-    
+
     // Also send to Paperclip if connected
     const paperclipConfig = await db.getProviderConfig(userId, "paperclip");
     if (paperclipConfig) {
@@ -290,14 +290,14 @@ manus: router({
         // Get Manus API key from env
         const apiKey = process.env.BUILT_IN_FORGE_API_KEY;
         const apiUrl = process.env.BUILT_IN_FORGE_API_URL;
-        
+
         // Send message to Manus task
         const response = await axios.post(
           `${apiUrl}/tasks/${input.taskId}/messages`,
           { content: input.message },
           { headers: { Authorization: `Bearer ${apiKey}` } }
         );
-        
+
         return response.data;
       } catch (error) {
         throw new TRPCError({
@@ -339,7 +339,7 @@ useEffect(() => {
   const interval = setInterval(() => {
     getAgentsMutation.mutate({ companyId });
   }, 10 * 1000);
-  
+
   return () => clearInterval(interval);
 }, [companyId]);
 
@@ -380,12 +380,12 @@ return (
 app.post("/api/paperclip/webhook", async (req, res) => {
   try {
     const { event, data } = req.body;
-    
+
     // Verify webhook signature
     if (!verifyWebhookSignature(req)) {
       return res.status(401).json({ error: "Unauthorized" });
     }
-    
+
     switch (event) {
       case "task.updated":
         await handleTaskUpdate(data);
@@ -397,7 +397,7 @@ app.post("/api/paperclip/webhook", async (req, res) => {
         await handleTaskCompleted(data);
         break;
     }
-    
+
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -461,7 +461,7 @@ paperclip: router({
       const client = createPaperclipClient(config);
       return await client.getOrgChart(input.companyId);
     }),
-    
+
   getGoals: protectedProcedure
     .input(z.object({ companyId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -501,7 +501,7 @@ paperclip: router({
 1. **Set up Manus API integration** - Message sending, task creation
 2. **Configure notification system** - Owner alerts
 3. **Verify Paperclip connectivity** - Webhook setup
-4. **Monitor performance** - Track token usage, costs
+4. **Monitor performance** - Track membership record usage, costs
 
 ### For You
 
@@ -573,7 +573,7 @@ Track these as you build:
 
 | Metric | Target |
 |--------|--------|
-| **Chat Response Time** | < 2 seconds first token |
+| **Chat Response Time** | < 2 seconds first membership record |
 | **Image Generation** | < 20 seconds |
 | **FETCHER Scan** | < 60 seconds |
 | **Lead Qualification** | 100% accuracy |

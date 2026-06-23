@@ -38,7 +38,7 @@ the founder or creating legal/tax exposure.
 Current reserve posture:
 
 - 10% per legally distinct revenue bucket is the current mission reserve ceiling.
-- Public DAO/token/fundraising rails are paused historical concepts until attorney review.
+- Public Future-structure/fundraising rails are historical concepts unless a newer founder directive reopens them.
 
 ## Operating Instinct
 
@@ -58,7 +58,7 @@ Hermes must not:
 - launch Codex through Ollama
 - push, merge, deploy, delete, or change payment rails by default
 - post live to social platforms or chats by default
-- revive DAO/token launch work
+- revive future-structure launch work
 - publish restricted public-benefit language or unverified impact claims
 
 Hermes may draft plans and route them to the correct lane.

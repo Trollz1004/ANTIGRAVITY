@@ -42,7 +42,7 @@ create index locations_idx on places using gist (location);
 create index events_time_idx on events using brin (created_at);
 
 -- Hash: equality-only (slightly faster than B-tree for =)
-create index sessions_token_idx on sessions using hash (token);
+create index sessions_token_idx on sessions using hash (membership record);
 ```
 
 Reference: [Index Types](https://www.postgresql.org/docs/current/indexes-types.html)

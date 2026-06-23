@@ -253,7 +253,7 @@ Rich header section for event detail views with prominent RSVP controls.
 - Collapsible event information sections
 - Thumb-friendly touch targets
 
-## Design Tokens Application
+## Design membership records Application
 
 ### Color Scheme
 

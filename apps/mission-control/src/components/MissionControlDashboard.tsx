@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Activity, AlertTriangle, CheckCircle2, Clipboard, Code2, Copy, ExternalLink, FileText, GitBranch, HeartPulse, ListChecks, Loader2, PlayCircle, RefreshCw, Route, ScrollText, Send, Server, ShieldCheck, TerminalSquare, Wallet, XCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Activity, AlertTriangle, CheckCircle2, Clipboard, Code2, Copy, ExternalLink, FileText, GitBranch, HeartPulse, ListChecks, Loader2, PlayCircle, RefreshCw, Route, ScrollText, Send, Server, ShieldCheck, TerminalSquare, Square payment links, XCircle } from 'lucide-react';
 import { SearchFilter, defaultSearchFilter, isSearchFilterActive, applySearchFilter } from './SearchFilter';
 import { clsx } from 'clsx';
 import { apiGet, apiJson, apiPost, type Envelope } from '../lib/api';
@@ -156,9 +156,9 @@ const SERVICE_META: Record<
     owner: 'Runtime',
     hint: 'Local containers',
   },
-  treasury: {
-    label: 'Treasury',
-    endpoint: '/health/treasury',
+  business reserve: {
+    label: 'business reserve',
+    endpoint: '/health/business reserve',
     owner: 'Finance',
     hint: 'Live source required',
   },
@@ -263,8 +263,8 @@ function detailLine(name: string, env: Envelope<any>) {
   if (name === 'stack') {
     return `score ${details.score ?? 'unknown'} | ok ${details.ok_count ?? 0} | warn ${details.warn_count ?? 0}`;
   }
-  if (name === 'treasury') {
-    if (details.source === 'mirror') return 'Mirror feed only | live treasury source not wired';
+  if (name === 'business reserve') {
+    if (details.source === 'mirror') return 'Mirror feed only | live business reserve source not wired';
     return details.message ?? `${formatMoney(details.balanceUsd)} | ${details.source ?? 'source unknown'}`;
   }
   if (name === 'revenue') return `${(details.streams ?? details.buckets ?? []).length} active revenue streams`;
@@ -722,14 +722,14 @@ export const MissionControlDashboard = () => {
             <div className="mt-3 text-xs text-slate-400">Active: <span className="text-cyan-200">{activeModel}</span></div>
           </Section>
 
-          <Section title="Revenue Guard" icon={<Wallet size={16} />}>
+          <Section title="Revenue Guard" icon={<Square payment links size={16} />}>
             <div className="space-y-2 text-sm text-slate-300">
               <div className="flex items-center justify-between">
                 <span>Operating posture</span>
                 <span className="font-semibold text-cyan-200">business-only</span>
               </div>
               <div className="rounded border border-slate-800 bg-slate-900 p-3 text-xs text-slate-400">
-                Public surfaces stay business-only. Live treasury data must be wired before balances are shown as real.
+                Public surfaces stay business-only. Live business reserve data must be wired before balances are shown as real.
               </div>
             </div>
           </Section>

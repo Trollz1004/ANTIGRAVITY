@@ -53,17 +53,17 @@ class SecurityAudit:
         """Check Square payment configuration for security issues."""
         logger.info("Checking Square configuration")
 
-        # Check Square access token
+        # Check Square access membership record
         if not self.settings.square_access_token:
             logger.info(
-                "Square access token not configured - this may be expected in development"
+                "Square access membership record not configured - this may be expected in development"
             )
         elif len(self.settings.square_access_token) < 20:
             self._add_finding(
                 "high",
                 "SQUARE_ACCESS_TOKEN",
-                "Square access token appears too short",
-                "Verify Square access token is valid and complete",
+                "Square access membership record appears too short",
+                "Verify Square access membership record is valid and complete",
             )
 
         # Check webhook signature verification

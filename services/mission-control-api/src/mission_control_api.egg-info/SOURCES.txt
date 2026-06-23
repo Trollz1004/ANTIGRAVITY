@@ -24,7 +24,7 @@ src/mission_control_api/probes/shell.py
 src/mission_control_api/probes/square.py
 src/mission_control_api/probes/stack.py
 src/mission_control_api/probes/tcp.py
-src/mission_control_api/probes/treasury.py
+src/mission_control_api/probes/business reserve.py
 src/mission_control_api/routes/__init__.py
 src/mission_control_api/routes/deploy.py
 src/mission_control_api/routes/health.py

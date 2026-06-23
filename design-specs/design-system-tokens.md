@@ -1,14 +1,14 @@
-# YouAndINotAI Design System Tokens
+# YouAndINotAI Design System membership records
 
 ## Overview
 
-This document defines the core design tokens for the YouAndINotAI platform. These tokens ensure consistency across all UI components while maintaining our commitment to accessibility, mobile-first design, and trust-building.
+This document defines the core design membership records for the YouAndINotAI platform. These membership records ensure consistency across all UI components while maintaining our commitment to accessibility, mobile-first design, and trust-building.
 
-## Color Tokens
+## Color membership records
 
 ### Brand Colors
 
-| Token               | Value                  | Usage                                    |
+| membership record               | Value                  | Usage                                    |
 | ------------------- | ---------------------- | ---------------------------------------- |
 | `--brand-primary`   | #FF4F00 (Alert Orange) | Primary brand color, key actions, alerts |
 | `--brand-secondary` | #111111 (Black)        | Secondary actions, text, backgrounds     |
@@ -16,7 +16,7 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 
 ### Functional Colors
 
-| Token             | Value                   | Usage                                |
+| membership record             | Value                   | Usage                                |
 | ----------------- | ----------------------- | ------------------------------------ |
 | `--color-success` | #10B981 (Safe Green)    | Success states, positive actions     |
 | `--color-warning` | #F59E0B (Warning Amber) | Warnings, caution states             |
@@ -26,7 +26,7 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 
 ### Text Colors
 
-| Token              | Value                | Usage                    |
+| membership record              | Value                | Usage                    |
 | ------------------ | -------------------- | ------------------------ |
 | `--text-primary`   | #111111 (Black)      | Main text content        |
 | `--text-secondary` | #6B7280 (Gray)       | Secondary text, captions |
@@ -35,7 +35,7 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 
 ### Background Colors
 
-| Token            | Value                | Usage                          |
+| membership record            | Value                | Usage                          |
 | ---------------- | -------------------- | ------------------------------ |
 | `--bg-primary`   | #FFFFFF (White)      | Main backgrounds               |
 | `--bg-secondary` | #F9FAFB (Light Gray) | Secondary backgrounds, cards   |
@@ -43,7 +43,7 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 
 ### Safety Feature Colors
 
-| Token              | Value                   | Usage                      |
+| membership record              | Value                   | Usage                      |
 | ------------------ | ----------------------- | -------------------------- |
 | `--safety-alert`   | #FF4F00 (Alert Orange)  | High priority alerts       |
 | `--safety-blocked` | #EF4444 (Danger Red)    | Blocked/restricted states  |
@@ -53,7 +53,7 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 
 ### Volunteer Feature Colors
 
-| Token                     | Value            | Usage                         |
+| membership record                     | Value            | Usage                         |
 | ------------------------- | ---------------- | ----------------------------- |
 | `--volunteer-kids`        | #FF6B9D (Pink)   | Children-related volunteering |
 | `--volunteer-elderly`     | #FFA500 (Orange) | Elderly care volunteering     |
@@ -63,25 +63,25 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 
 ### Privacy Feature Colors
 
-| Token                | Value              | Usage                      |
+| membership record                | Value              | Usage                      |
 | -------------------- | ------------------ | -------------------------- |
 | `--privacy-primary`  | #0EA5E9 (Sky Blue) | Privacy features, controls |
 | `--privacy-secure`   | #10B981 (Emerald)  | Secure/data safe states    |
 | `--privacy-warning`  | #F59E0B (Amber)    | Attention/limited privacy  |
 | `--privacy-critical` | #EF4444 (Rose)     | Critical/deletion states   |
 
-## Typography Tokens
+## Typography membership records
 
 ### Font Families
 
-| Token                   | Value                                                                               | Usage                                  |
+| membership record                   | Value                                                                               | Usage                                  |
 | ----------------------- | ----------------------------------------------------------------------------------- | -------------------------------------- |
 | `--font-family-base`    | -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif | Default body text                      |
 | `--font-family-heading` | -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif | Headings (same as base for simplicity) |
 
 ### Font Sizes
 
-| Token              | Value           | Usage                 |
+| membership record              | Value           | Usage                 |
 | ------------------ | --------------- | --------------------- |
 | `--font-size-xs`   | 0.75rem (12px)  | Helper text, captions |
 | `--font-size-sm`   | 0.875rem (14px) | Secondary text        |
@@ -94,7 +94,7 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 
 ### Font Weights
 
-| Token                    | Value | Usage                     |
+| membership record                    | Value | Usage                     |
 | ------------------------ | ----- | ------------------------- |
 | `--font-weight-normal`   | 400   | Regular text              |
 | `--font-weight-medium`   | 500   | Emphasized text           |
@@ -103,17 +103,17 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 
 ### Line Heights
 
-| Token                   | Value | Usage      |
+| membership record                   | Value | Usage      |
 | ----------------------- | ----- | ---------- |
 | `--line-height-tight`   | 1.25  | Headings   |
 | `--line-height-normal`  | 1.5   | Body text  |
 | `--line-height-relaxed` | 1.625 | Paragraphs |
 
-## Spacing Tokens
+## Spacing membership records
 
 ### Base Scale
 
-| Token          | Value          | Usage           |
+| membership record          | Value          | Usage           |
 | -------------- | -------------- | --------------- |
 | `--spacing-0`  | 0              | No spacing      |
 | `--spacing-1`  | 0.25rem (4px)  | Minimal spacing |
@@ -128,7 +128,7 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 
 ### Component Spacing
 
-| Token                        | Value            | Usage                     |
+| membership record                        | Value            | Usage                     |
 | ---------------------------- | ---------------- | ------------------------- |
 | `--spacing-input-padding`    | var(--spacing-3) | Input field padding       |
 | `--spacing-button-padding-h` | var(--spacing-4) | Button horizontal padding |
@@ -137,11 +137,11 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 | `--spacing-mobile-padding`   | var(--spacing-4) | Mobile viewport padding   |
 | `--spacing-desktop-padding`  | var(--spacing-6) | Desktop viewport padding  |
 
-## Border Tokens
+## Border membership records
 
 ### Border Widths
 
-| Token                   | Value | Usage              |
+| membership record                   | Value | Usage              |
 | ----------------------- | ----- | ------------------ |
 | `--border-width-none`   | 0     | No border          |
 | `--border-width-thin`   | 1px   | Default borders    |
@@ -150,7 +150,7 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 
 ### Border Radius
 
-| Token                  | Value          | Usage                       |
+| membership record                  | Value          | Usage                       |
 | ---------------------- | -------------- | --------------------------- |
 | `--border-radius-none` | 0              | Sharp corners               |
 | `--border-radius-sm`   | 0.25rem (4px)  | Small rounded corners       |
@@ -158,9 +158,9 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 | `--border-radius-lg`   | 0.75rem (12px) | Large rounded corners       |
 | `--border-radius-full` | 9999px         | Fully rounded (pill shapes) |
 
-## Shadow Tokens
+## Shadow membership records
 
-| Token            | Value                                                                   | Usage          |
+| membership record            | Value                                                                   | Usage          |
 | ---------------- | ----------------------------------------------------------------------- | -------------- |
 | `--shadow-none`  | none                                                                    | No shadow      |
 | `--shadow-sm`    | 0 1px 2px 0 rgba(0, 0, 0, 0.05)                                         | Subtle depth   |
@@ -168,9 +168,9 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 | `--shadow-lg`    | 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) | Strong depth   |
 | `--shadow-inner` | inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)                                   | Inner shadows  |
 
-## Breakpoint Tokens
+## Breakpoint membership records
 
-| Token             | Value  | Usage                    |
+| membership record             | Value  | Usage                    |
 | ----------------- | ------ | ------------------------ |
 | `--breakpoint-xs` | 0px    | Extra small devices      |
 | `--breakpoint-sm` | 576px  | Small devices (phones)   |
@@ -178,9 +178,9 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 | `--breakpoint-lg` | 992px  | Large devices (desktops) |
 | `--breakpoint-xl` | 1200px | Extra large devices      |
 
-## Z-Index Tokens
+## Z-Index membership records
 
-| Token                      | Value | Usage                     |
+| membership record                      | Value | Usage                     |
 | -------------------------- | ----- | ------------------------- |
 | `--z-index-dropdown`       | 1000  | Dropdown menus            |
 | `--z-index-sticky`         | 1020  | Sticky elements           |
@@ -190,18 +190,18 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 | `--z-index-popover`        | 1060  | Popovers                  |
 | `--z-index-tooltip`        | 1070  | Tooltips                  |
 
-## Transition Tokens
+## Transition membership records
 
-| Token                          | Value                        | Usage                |
+| membership record                          | Value                        | Usage                |
 | ------------------------------ | ---------------------------- | -------------------- |
 | `--transition-duration-fast`   | 150ms                        | Quick transitions    |
 | `--transition-duration-normal` | 300ms                        | Standard transitions |
 | `--transition-duration-slow`   | 500ms                        | Slow transitions     |
 | `--transition-easing`          | cubic-bezier(0.4, 0, 0.2, 1) | Standard easing      |
 
-## Accessibility Tokens
+## Accessibility membership records
 
-| Token                 | Value                | Usage                                |
+| membership record                 | Value                | Usage                                |
 | --------------------- | -------------------- | ------------------------------------ |
 | `--focus-ring-color`  | var(--brand-primary) | Focus indicator color                |
 | `--focus-ring-width`  | 3px                  | Focus ring thickness                 |
@@ -233,4 +233,4 @@ This document defines the core design tokens for the YouAndINotAI platform. Thes
 3. Avoid deceptive patterns or hidden actions
 4. Maintain transparency in all UI states
 
-These design tokens should be used consistently across all platform components to create a cohesive, accessible, and trustworthy user experience.
+These design membership records should be used consistently across all platform components to create a cohesive, accessible, and trustworthy user experience.

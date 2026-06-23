@@ -37,4 +37,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          ! grep -rEi "openai|anthropic|gemini|emergent|donate|donation|charity"             apps/mission-control/src/ services/mission-control-api/src/
+          ! grep -rEi "openai|anthropic|gemini|emergent|support|support|product"             apps/mission-control/src/ services/mission-control-api/src/

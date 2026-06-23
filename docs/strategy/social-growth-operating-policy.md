@@ -1,3 +1,8 @@
+> Current override as of 2026-06-22: this document is historical strategy/spec context only.
+> Do not use it to create public mission-funding claims, membership support routing, customer-facing
+> disbursement language, membership record/Product structure launch claims, private accounting mechanics, or alternate
+> payment rails. Active public/customer surfaces sell product value: membership, verification,
+> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 yeap # 24/7 Social Growth Operating Policy
 
 ## YouAndINotAI - Continuous Growth Operations Framework
@@ -136,7 +141,7 @@ For time-sensitive content (press releases, event announcements):
 3. **Brand-Inconsistent Messaging**
    - No negativity toward competitors
    - No misleading claims about platform capabilities
-   - No violation of "contractual revenue disbursement" messaging doctrine
+   - No violation of "internal allocation review" messaging doctrine
 
 ### Required Content Standards
 
@@ -147,17 +152,17 @@ For time-sensitive content (press releases, event announcements):
 
 2. **Compliance Requirements**
    - Always use legal-safe phrasing:
-     ✅ "contractual revenue disbursement"
+     ✅ "internal allocation review"
      ✅ "revenue-sharing for good"
-     ✅ "platform that gives back"
-     ❌ "donate," "donation," "solicitation"
-   - Reference mission as platform feature, not charity appeal
+     ✅ "platform value"
+     ❌ "join as a member," "membership support," "restricted claims"
+   - Reference mission as platform feature, not product operations appeal
    - Emphasize human connection over monetary benefits
 
 3. **Community-Focused Approach**
    - Highlight real user stories and connections
    - Promote offline meetups and volunteer opportunities
-   - Showcase charity impact without direct asking
+   - Showcase product operations impact without direct asking
    - Encourage authentic relationship development
 
 ### Escalation Protocol for Questionable Content
@@ -204,7 +209,7 @@ For time-sensitive content (press releases, event announcements):
 | Metric                              | Measurement         | Reporting Cadence |
 | ----------------------------------- | ------------------- | ----------------- |
 | Volunteer Connections Facilitated   | Direct tracking     | Weekly            |
-| Charity Fundraising Events Promoted | Event participation | Monthly           |
+| product operations Fundraising Events Promoted | Event participation | Monthly           |
 | Community Meetups Organized         | RSVP/tracking       | Monthly           |
 | Success Stories Collected           | User testimonials   | Monthly           |
 

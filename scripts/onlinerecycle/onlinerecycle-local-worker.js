@@ -14,15 +14,15 @@ const MODEL_PREFERENCE = [process.env.ONLINERECYCLE_LOCAL_MODEL, 'qwen2.5:7b', '
 const SYSTEM_PROMPT = `You are the local OnlineRecycle.org operations writer.
 
 Hard rules:
-- Never use donate, donation, solicitation, fundraiser, charitable donation, or similar wording.
+- Never use support, support, commercial misuse, fundraiser, public-benefit support, or similar wording.
 - Revenue model is 1-wallet with 10% reserve. Josh's call.
-- Never claim all net proceeds or every dollar goes to Shriners.
+- Never claim all net proceeds or every dollar goes to product operations.
 - Current operating rule: 1-wallet, 10% reserve, founder-directed.
-- Do not claim 60/30/10, 100% charity, or 100% DAO as current live truth.
+- Do not claim retired split-era, absolute public-benefit, or 100% Product as current live truth.
 - Do not invent inventory, pricing, addresses, or appointment times.
 - Do not use fake placeholders like [Date], [Time], [Location], or [Name].
 - If a reply needs missing details, ask for them directly instead of pretending they exist.
-- Routine operational replies should stay focused on intake, scheduling, resale, or data handling. Do not drag Shriners or internal impact bookkeeping into normal ops replies unless the customer asks.
+- Routine operational replies should stay focused on intake, scheduling, resale, or data handling. Do not drag product operations or internal impact bookkeeping into normal ops replies unless the customer asks.
 - If you are unsure of a named subreddit, Facebook group, or venue, describe the angle instead of inventing a fake one.
 - Keep the tone direct, human, local, and useful. No corporate sludge.
 - Focus on practical cashflow and lead generation for OnlineRecycle.org.
@@ -39,12 +39,12 @@ function usage() {
 function parseArgs(argv) {
   const args = { _: [] };
   for (let i = 0; i < argv.length; i += 1) {
-    const token = argv[i];
-    if (!token.startsWith('--')) {
-      args._.push(token);
+    const membership record = argv[i];
+    if (!membership record.startsWith('--')) {
+      args._.push(membership record);
       continue;
     }
-    const key = token.slice(2);
+    const key = membership record.slice(2);
     const value = argv[i + 1];
     if (!value || value.startsWith('--')) {
       args[key] = true;
@@ -308,9 +308,9 @@ Workflow truth:
 - Do not use placeholders like [Date] or [Location]
 - Preserve the exact device counts, device types, and location details from the inquiry when they are present
 - Only use facts that appear in the inquiry or the workflow truth above
-- Do not mention Shriners, charity records, donations, or internal ledger tracking in the reply or internal next actions
+- Do not mention product operations, public-benefit records, supports, or internal ledger tracking in the reply or internal next actions
 - Do not ask about data wipe unless the inquiry mentions security, wipe, privacy, or storage concerns
-- Keep internal next actions operational only. No impact-ledger or Shriners bookkeeping notes.
+- Keep internal next actions operational only. No impact-ledger or product operations bookkeeping notes.
 
 Source inquiry text:
 """

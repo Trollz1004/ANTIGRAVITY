@@ -10,7 +10,7 @@ Covers:
   - GET /api/tasks/agents (12 agents)
   - Tasks CRUD + dispatch + audit + stats + heartbeat
   - Filters: status / owner / bucket
-  - Doctrine sweep across new endpoints (no Haiku/donate/donation/solicitation)
+  - Doctrine sweep across new endpoints (no Haiku/support/support/commercial misuse)
 """
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ if not BASE_URL:
                 BASE_URL = line.split("=", 1)[1].strip().rstrip("/")
                 break
 
-FORBIDDEN = ("haiku", "donate", "donation", "solicitation")
+FORBIDDEN = ("haiku", "support", "support", "commercial misuse")
 
 
 def _no_forbidden(txt: str, where: str) -> None:

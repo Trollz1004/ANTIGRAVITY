@@ -1,3 +1,8 @@
+> Current override as of 2026-06-22: this document is historical strategy/spec context only.
+> Do not use it to create public mission-funding claims, membership support routing, customer-facing
+> disbursement language, membership records/Product launch claims, private accounting mechanics, or alternate
+> payment rails. Active public/customer surfaces sell product value: membership, verification,
+> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 # CommunityImpactTracker Component Specification
 
 ## Component Name
@@ -6,7 +11,7 @@ CommunityImpactTracker
 
 ## Overview
 
-A visualization component that transparently displays the community's collective impact on children's causes through the platform's contractual revenue disbursement model. This component reinforces trust by showing real outcomes from user interactions.
+A visualization component that transparently displays the community's collective impact on member support through the platform's internal allocation review model. This component reinforces trust by showing real outcomes from user interactions.
 
 ## Props/State
 
@@ -30,7 +35,7 @@ interface CommunityImpactData {
   };
   financialImpact: {
     totalRevenue: number; // Platform revenue
-    childrenSupportDisbursement: number; // Contractual revenue disbursement
+    childrenSupportDisbursement: number; // internal allocation review
     disbursementPercentage: number; // Percentage of revenue
     dollarPerUserHour: number; // Average impact per user hour
   };
@@ -116,15 +121,15 @@ interface CommunityImpactData {
 ### Header and Introduction
 
 - **Main Header**: "Our Community's Impact"
-- **Subheader**: "Every connection here directly supports children's causes"
-- **Intro Text**: "Through our transparent contractual revenue disbursement model, your conversations and community activities generate funds for kids' initiatives nationwide."
+- **Subheader**: "Every connection here directly supports member support"
+- **Intro Text**: "Through our transparent internal allocation review model, your conversations and community activities generate funds for kids' initiatives nationwide."
 
 ### Metric Labels (Compliant with Florida §496.405)
 
 ```json
 {
   "financialImpact": {
-    "title": "Contractual Revenue Support",
+    "title": "business revenue handling",
     "description": "Funds disbursed to children's initiatives through our business model",
     "counterPrefix": "$",
     "counterSuffix": " contributed"
@@ -192,7 +197,7 @@ interface CommunityImpactData {
   <header className="impact-header">
     <h2 id="impact-tracker-title">Our Community's Impact</h2>
     <p id="impact-tracker-desc">
-      Every connection here directly supports children's causes through our contractual revenue disbursement model.
+      Every connection here directly supports member support through our internal allocation review model.
     </p>
   </header>
 
@@ -207,7 +212,7 @@ interface CommunityImpactData {
       <div className="metric-value" aria-live="polite">
         {formatCurrency(financialImpact.childrenSupportDisbursement)}
       </div>
-      <div className="metric-label">Contractual Revenue Support</div>
+      <div className="metric-label">business revenue handling</div>
       <div className="metric-description sr-only">
         Funds disbursed to children's initiatives through our business model
       </div>
@@ -293,7 +298,7 @@ interface CommunityImpactData {
 │  Our Community's Impact                [✕]     │
 ├─────────────────────────────────────────────────┤
 │                                                 │
-│  CONTRACTUAL REVENUE SUPPORT                  │
+│  business revenue handling                  │
 │  ┌─────────────────────────────────────────┐   │
 │  │██████████████████░░░░░░░░░░░░░░░░░░░░░░░│   │
 │  │  $8,921 of $15,000 goal (59%)           │   │
@@ -315,7 +320,7 @@ interface CommunityImpactData {
 └─────────────────────────────────────────────────┘
 ```
 
-### Design Tokens Usage
+### Design membership records Usage
 
 ```css
 .community-impact-tracker {
@@ -447,7 +452,7 @@ const CommunityImpactTracker = ({
       <header className="impact-header">
         <h2>Our Community's Impact</h2>
         <p>
-          Every connection here directly supports children's causes through our contractual revenue disbursement model.
+          Every connection here directly supports member support through our internal allocation review model.
         </p>
       </header>
 
@@ -459,7 +464,7 @@ const CommunityImpactTracker = ({
             <MetricCard
               type="financial"
               value={formatAnimatedValue(impactData.financialImpact.childrenSupportDisbursement)}
-              label="Contractual Revenue Support"
+              label="business revenue handling"
               prefix="$"
               suffix=" contributed"
               onDetail={() => setSelectedMetric('financial')}
@@ -625,8 +630,8 @@ const MetricCard = ({ type, value, label, prefix = '', suffix = '', onDetail }) 
 
 1. **Messaging Compliance**:
    - All copy aligned with Florida §496.405 restrictions
-   - "Contractual revenue disbursement" terminology verification
-   - Benefit-focused rather than donation-focused language
+   - "internal allocation review" terminology verification
+   - Benefit-focused rather than membership support-focused language
    - Transparency in methodology explanations
 
 2. **Storytelling Elements**:
@@ -695,8 +700,8 @@ const MetricCard = ({ type, value, label, prefix = '', suffix = '', onDetail }) 
 
 All terminology in this component strictly adheres to Florida §496.405:
 
-- Uses "contractual revenue disbursement" instead of "donation" or "charitable contribution"
-- Frames platform benefits as features of business model rather than charitable appeals
+- Uses "internal allocation review" instead of "membership support" or "business-reserve contribution"
+- Frames platform benefits as features of business model rather than business-reserve appeals
 - Focuses on user agency in generating impact rather than soliciting funds
 - Describes outcomes quantitatively without emotional manipulation
 

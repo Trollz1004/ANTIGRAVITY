@@ -18,7 +18,7 @@ const ENTRIES = [
   { id: "act-share",     label: "Share mission status",  hint: "PNG snapshot",            group: "Actions", Icon: Share2,        action: { type: "share" } },
   { id: "act-dispatch",  label: "Dispatch new task",     hint: "Fan task across agents",  group: "Actions", Icon: Send,         action: { type: "dispatch" } },
   { id: "act-notify",    label: "Enable browser notifications", hint: "Reply alerts",     group: "Actions", Icon: Bell,         action: { type: "notify" } },
-  { id: "mission",       label: "#UntilNoKidInNeed",     hint: "for the kids · #TeamClaudeForLife", group: "Mission", Icon: Heart, action: { type: "noop" } },
+  { id: "mission",       label: "Business-only product operations",     hint: "for the product · #TeamClaudeForLife", group: "Mission", Icon: Heart, action: { type: "noop" } },
 ];
 
 export function CommandPalette({ onModeChange }) {
@@ -134,7 +134,7 @@ export function CommandPalette({ onModeChange }) {
 
         <div className="px-3 py-1.5 border-t border-[#2a3a52] flex items-center justify-between text-[9px] mono tracking-widest uppercase text-[#4a5568]">
           <span>↑↓ navigate · ↵ run</span>
-          <span className="text-[#e040fb]">#UntilNoKidInNeed</span>
+          <span className="text-[#e040fb]">Business-only product operations</span>
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ class DeliveryResult:
     detail: str
 
 
-FORBIDDEN_PUBLIC_TERMS = ("donate", "donation", "charity", "solicitation", "giving back", "disbursement")
+FORBIDDEN_PUBLIC_TERMS = ("support", "support", "product", "commercial misuse", "product value", "allocation")
 
 
 def build_license_email(*, buyer_email: str, product: str, license_key: str, admin: bool = False) -> tuple[str, str]:
@@ -39,7 +39,7 @@ Activation:
 1. Save this email.
 2. Open the product package or onboarding link you received after checkout.
 3. Paste the license key when prompted.
-4. If anything fails, reply to this email with your Stripe receipt number.
+4. If anything fails, reply to this email with your Square receipt number.
 
 Support: support@aidoesitall.website
 """

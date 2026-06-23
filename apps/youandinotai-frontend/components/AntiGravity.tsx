@@ -3,18 +3,18 @@ import { Eye, Globe, Shield } from 'lucide-react';
 
 const highlights = [
   {
-    title: 'Public-facing status',
-    body: 'This surface is for public status, verified links, and clearly sourced updates only.',
+    title: 'Clear public updates',
+    body: 'This page keeps live links, membership details, and customer-safe updates easy to find.',
     icon: <Eye className="w-6 h-6 text-blue-500" />,
   },
   {
-    title: 'Operational boundaries',
-    body: 'Internal node names, orchestration flows, and credential paths are intentionally kept out of the public UI.',
+    title: 'Protected account details',
+    body: 'Payment, support, and account changes happen only through secure checkout or signed-in account pages.',
     icon: <Shield className="w-6 h-6 text-emerald-500" />,
   },
   {
-    title: 'Platform overview',
-    body: 'Customer-facing products stay separated by role so service pages, storefronts, and dashboards do not bleed into each other.',
+    title: 'Simple product overview',
+    body: 'Each link has a clear purpose so customers know where to join, get support, and check service status.',
     icon: <Globe className="w-6 h-6 text-cyan-500" />,
   },
 ];
@@ -30,7 +30,7 @@ export default function AntiGravity({ isDarkMode }: { isDarkMode: boolean }) {
           ANTIGRAVITY
         </h2>
         <p className={`mt-4 text-sm max-w-2xl mx-auto ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-          Public dashboard copy should stay factual, restrained, and easy to understand.
+          Public updates should stay factual, restrained, and easy to understand.
         </p>
       </div>
 

@@ -12,9 +12,9 @@ YouAndINotAI sells memberships and verification through Square production checko
 - Historical visible Square test payments by Joshua are founder tests, not external customer
   revenue.
 
-## Stripe
+## alternate processor
 
-Stripe is legacy for YouAndINotAI unless Joshua explicitly reopens it for a specific surface.
+alternate processor is legacy for YouAndINotAI unless Joshua explicitly reopens it for a specific surface.
 
 ## Public Copy
 

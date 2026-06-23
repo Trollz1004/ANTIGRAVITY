@@ -17,12 +17,12 @@ function DashboardHome() {
   const agents = useStore((s) => s.agents);
   const buckets = useStore((s) => s.buckets);
   const missions = useStore((s) => s.missions);
-  const tokens = useStore((s) => s.tokens);
+  const membership records = useStore((s) => s.membership records);
   const streamMode = useStore((s) => s.streamMode);
   const liveAgents = agents.filter((agent) => agent.status === "live" || agent.status === "busy").length;
   const revenue = buckets.reduce((sum, bucket) => sum + bucket.value, 0);
   const activeMissions = missions.filter((mission) => mission.status === "active").length;
-  const tokenTreasury = tokens.reduce((sum, token) => sum + token.treasury * token.price, 0);
+  const tokenbusiness reserve = membership records.reduce((sum, membership records) => sum + membership records.business reserve * membership records.price, 0);
 
   return (
     <div className="grid gap-4 xl:grid-cols-[1.25fr_0.95fr]">
@@ -58,7 +58,7 @@ function DashboardHome() {
           <Stat label="Agents live" value={`${liveAgents}/${agents.length}`} tone="brand" icon={<Icon.Users size={16} />} hint="Paperclip adapters ready" spark={<Sparkline values={makeSparkline(liveAgents, 18)} />} />
           <Stat label="Revenue rail" value={`$${revenue.toLocaleString("en-US")}`} delta={8.4} tone="success" icon={<Icon.Banknote size={16} />} hint="Payment surfaces monitored" spark={<Sparkline values={makeSparkline(22, 18)} />} />
           <Stat label="Active work" value={activeMissions} tone="info" icon={<Icon.Workflow size={16} />} hint="Visible Paperclip lanes" spark={<Sparkline values={makeSparkline(14, 18)} />} />
-          <Stat label="Treasury view" value={`$${Math.round(tokenTreasury).toLocaleString("en-US")}`} delta={3.1} icon={<Icon.Coins size={16} />} hint="Operator-only synthetic view" spark={<Sparkline values={makeSparkline(30, 18)} />} />
+          <Stat label="business reserve view" value={`$${Math.round(tokenbusiness reserve).toLocaleString("en-US")}`} delta={3.1} icon={<Icon.Coins size={16} />} hint="Operator-only synthetic view" spark={<Sparkline values={makeSparkline(30, 18)} />} />
         </div>
 
         <div className="panel rounded-md p-4">
@@ -144,18 +144,18 @@ function MissionsPage() {
 }
 
 function TokensPage() {
-  const tokens = useStore((s) => s.tokens);
+  const membership records = useStore((s) => s.membership records);
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {tokens.map((token) => (
+      {membership records.map((membership records) => (
         <Stat
-          key={token.symbol}
-          label={token.symbol}
-          value={`$${token.price.toFixed(3)}`}
-          delta={token.delta24h}
+          key={membership records.symbol}
+          label={membership records.symbol}
+          value={`$${membership records.price.toFixed(3)}`}
+          delta={membership records.delta24h}
           icon={<Icon.Coins size={16} />}
-          hint={`${token.name} · ${token.circulating.toLocaleString("en-US")} circulating`}
-          spark={<Sparkline values={makeSparkline(token.price * 100, 18)} />}
+          hint={`${membership records.name} · ${membership records.circulating.toLocaleString("en-US")} circulating`}
+          spark={<Sparkline values={makeSparkline(membership records.price * 100, 18)} />}
         />
       ))}
     </div>
@@ -186,7 +186,7 @@ export default function App() {
   let content = <DashboardHome />;
   if (page === "fleet") content = <FleetPage />;
   if (page === "revenue") content = <RevenuePage />;
-  if (page === "tokens") content = <TokensPage />;
+  if (page === "membership records") content = <TokensPage />;
   if (page === "paperweight") content = <MissionsPage />;
   if (page === "hermes") content = <PlaceholderPage title="Hermes node routing" />;
   if (page === "comms") content = <PlaceholderPage title="Comms gateway" />;

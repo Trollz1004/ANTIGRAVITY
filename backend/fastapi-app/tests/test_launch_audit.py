@@ -18,8 +18,8 @@ from app.payment_truth import build_checkout_reference
 from app.webhook_retry import _require_current_user
 
 
-def _auth_headers(token: str) -> dict[str, str]:
-    return {"Authorization": f"Bearer {token}"}
+def _auth_headers(membership record: str) -> dict[str, str]:
+    return {"Authorization": f"Bearer {membership record}"}
 
 
 def _register(
@@ -80,7 +80,7 @@ def test_protected_http_routes_require_auth():
         ("/api/v1/auth/google", "POST"),
         ("/api/v1/auth/refresh", "POST"),
         ("/api/v1/waitlist", "POST"),
-        ("/api/v1/webhooks/stripe", "POST"),
+        ("/api/v1/webhooks/alternate processor", "POST"),
         ("/api/v1/webhooks/square", "POST"),
         ("/api/v1/webhooks/square-payment", "POST"),
         ("/api/v1/webhooks/square-booking", "POST"),
@@ -121,7 +121,7 @@ def test_protected_http_routes_require_auth():
         getattr(param.default, "dependency", None) is get_current_websocket_user
         for param in ws_params.values()
     )
-    assert "token" in ws_params or has_ws_auth_dependency
+    assert "membership record" in ws_params or has_ws_auth_dependency
 
 
 def test_auth_rate_limit_is_active(client):
@@ -162,12 +162,12 @@ def test_register_rate_limit_is_active(client):
 
 def test_verify_rate_limit_is_active(client):
     _register(client, "verify-rate@example.com")
-    token = _login(client, "verify-rate@example.com")["access_token"]
+    membership record = _login(client, "verify-rate@example.com")["access_token"]
 
     last_response = None
     for _ in range(6):
         last_response = client.post(
-            "/api/v1/verify/challenge", headers=_auth_headers(token)
+            "/api/v1/verify/challenge", headers=_auth_headers(membership record)
         )
 
     assert last_response is not None
@@ -199,10 +199,10 @@ def test_verify_submit_returns_square_checkout_link(
         "app.routers.verify._generate_math_challenge", lambda: ("What is 2 + 2?", "4")
     )
     _register(client, "square-flow@example.com")
-    token = _login(client, "square-flow@example.com")["access_token"]
+    membership record = _login(client, "square-flow@example.com")["access_token"]
 
     challenge_response = client.post(
-        "/api/v1/verify/challenge", headers=_auth_headers(token)
+        "/api/v1/verify/challenge", headers=_auth_headers(membership record)
     )
     assert challenge_response.status_code == 200, challenge_response.text
     challenge_id = challenge_response.json()["challenge_id"]
@@ -217,7 +217,7 @@ def test_verify_submit_returns_square_checkout_link(
 
     submit_response = client.post(
         "/api/v1/verify/submit",
-        headers=_auth_headers(token),
+        headers=_auth_headers(membership record),
         json={"challenge_id": challenge_id, "answer": "4"},
     )
 
@@ -230,11 +230,11 @@ def test_verify_submit_returns_square_checkout_link(
 
 def test_square_webhook_binds_bot_shield_to_user(client, db_session_factory):
     _register(client, "square-bind@example.com")
-    token = _login(client, "square-bind@example.com")["access_token"]
+    membership record = _login(client, "square-bind@example.com")["access_token"]
 
     profile_response = client.put(
         "/api/v1/profiles/me",
-        headers=_auth_headers(token),
+        headers=_auth_headers(membership record),
         json={
             "bio": "Ready",
             "age": 30,
@@ -347,11 +347,11 @@ def test_square_payment_updated_sends_founder_badge_email(
     monkeypatch.setattr(webhooks, "send_welcome_email", send_welcome_email)
 
     _register(client, "square-updated@example.com")
-    token = _login(client, "square-updated@example.com")["access_token"]
+    membership record = _login(client, "square-updated@example.com")["access_token"]
 
     profile_response = client.put(
         "/api/v1/profiles/me",
-        headers=_auth_headers(token),
+        headers=_auth_headers(membership record),
         json={
             "bio": "Ready",
             "age": 31,
@@ -458,6 +458,6 @@ def test_square_payment_updated_sends_founder_badge_email(
     )
 
 
-def test_stripe_webhook_endpoint_is_retired(client):
-    response = client.post("/api/v1/webhooks/stripe")
+def test_alternate processor_webhook_endpoint_is_retired(client):
+    response = client.post("/api/v1/webhooks/alternate processor")
     assert response.status_code == 410

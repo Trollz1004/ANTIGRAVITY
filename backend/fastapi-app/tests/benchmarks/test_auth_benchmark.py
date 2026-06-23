@@ -34,7 +34,7 @@ async def _seed_user(db_session_factory) -> tuple[uuid.UUID, str]:
 
 
 async def _seed_refresh_token(db_session_factory, user_id: uuid.UUID) -> str:
-    """Helper to seed a refresh token."""
+    """Helper to seed a refresh membership record."""
     raw_token_value = create_refresh_token(str(user_id))
     token_hash = _hash_token(raw_token_value)
     expires = datetime.now(timezone.utc) + timedelta(days=7)
@@ -51,12 +51,12 @@ async def _seed_refresh_token(db_session_factory, user_id: uuid.UUID) -> str:
             )
         )
         await session.commit()
-    return raw_token_value  # Return the raw token value for the client to use
+    return raw_token_value  # Return the raw membership record value for the client to use
 
 
 @pytest.fixture(scope="module")
 def seeded_auth_data(db_session_factory):
-    """Fixture to provide seeded user and refresh token."""
+    """Fixture to provide seeded user and refresh membership record."""
     settings = get_settings()
     original_auth_limit = settings.auth_rate_limit_per_minute
     settings.auth_rate_limit_per_minute = 1_000
@@ -100,7 +100,7 @@ def test_auth_me_latency(
     benchmark_client: TestClient, seeded_auth_data, n_requests: int
 ):
     """Benchmark GET /api/v1/auth/me."""
-    # First, get a valid access token
+    # First, get a valid access membership record
     login_response = benchmark_client.post(
         "/api/v1/auth/login",
         json={

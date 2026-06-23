@@ -3052,7 +3052,7 @@ function MCApp() {
   }), /*#__PURE__*/React.createElement(MC_Stat, {
     label: "Kids Reserve",
     value: "10%",
-    note: "Reserved share of net \xB7 #UntilNoKidInNeed.",
+    note: "Reserved share of net \xB7 #MembershipVerificationSupport.",
     accent: "success"
   })), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -3386,7 +3386,7 @@ function YINApp() {
       textTransform: 'uppercase',
       letterSpacing: '0.3em'
     }
-  }, "\xA9 2026 Trash Or Treasure Online Recycler LLC \xB7 Public status only \xB7 #UntilNoKidInNeed")));
+  }, "\xA9 2026 Trash Or Treasure Online Recycler LLC \xB7 Public status only \xB7 #MembershipVerificationSupport")));
 }
 
 // Define the mount on window (assignment only — safe when this file is also
@@ -3515,7 +3515,7 @@ const SURFACES = [{
   icon: 'shopping-bag',
   desc: 'Storefront for digital products and automation offers.'
 }, {
-  name: 'DAO Roadmap',
+  name: 'Product Roadmap',
   status: 'Paused for legal review',
   tone: 'paused',
   icon: 'coins',
@@ -3604,7 +3604,7 @@ function Hero() {
       name: "coins",
       size: 15
     })
-  }, "DAO \u2014 Legal Review"), /*#__PURE__*/React.createElement(ProductChip, {
+  }, "Product \u2014 Legal Review"), /*#__PURE__*/React.createElement(ProductChip, {
     tone: "amber",
     icon: /*#__PURE__*/React.createElement(Icon, {
       name: "life-buoy",
@@ -3881,7 +3881,7 @@ function MissionPanel() {
       color: 'var(--ag-pink)',
       fontWeight: 700
     }
-  }, "#UntilNoKidInNeed")));
+  }, "#MembershipVerificationSupport")));
 }
 Object.assign(window, {
   YIN_Hero: Hero,

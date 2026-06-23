@@ -19,14 +19,14 @@ const publicSurfaces = [
   {
     name: 'Antigravity Dashboard',
     url: 'https://dashboard.aidoesitall.website',
-    label: 'Public status board',
+    label: 'Public status page',
   },
 ] as const;
 
 const privateItems = [
-  'Publishing queues, creator workflows, and platform dashboards stay on approved internal lanes.',
-  'Internal node operations, credential flows, and unfinished rollout tooling do not belong on a public route.',
-  'This public dashboard only keeps high-level status, verified links, and explicitly tracked information.',
+  'Private account details are never shown on a public page.',
+  'Payment changes happen through Square or signed-in account pages.',
+  'This page keeps only customer-safe status, verified links, and support information.',
 ] as const;
 
 export default function SccBoundaryPage() {
@@ -49,15 +49,15 @@ export default function SccBoundaryPage() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
-                Non-Indexed Boundary Page
+                Customer Status Page
               </p>
-              <h1 className="text-3xl font-black tracking-tight">Internal Workflow Tools Stay Private</h1>
+              <h1 className="text-3xl font-black tracking-tight">Public Updates Stay Simple</h1>
             </div>
           </div>
 
           <p className="max-w-3xl text-sm leading-7 text-slate-300">
-            This route is intentionally limited to a public-safe boundary note. Operational workspaces, publishing
-            controls, platform dashboards, and internal automation lanes are handled outside the public status surface.
+            This page is limited to customer-safe updates, verified links, and support information. Account,
+            payment, and support changes happen through secure pages.
           </p>
         </section>
 
@@ -90,7 +90,7 @@ export default function SccBoundaryPage() {
           <section className="rounded-[2rem] border border-slate-800 bg-slate-900/50 p-6">
             <div className="mb-4 flex items-center gap-2">
               <Lock className="h-5 w-5 text-blue-400" />
-              <h2 className="text-lg font-black tracking-tight">What Stays Private</h2>
+            <h2 className="text-lg font-black tracking-tight">What This Page Does Not Show</h2>
             </div>
 
             <div className="space-y-3">
@@ -107,13 +107,12 @@ export default function SccBoundaryPage() {
         </div>
 
         <section className="rounded-[2rem] border border-slate-800 bg-slate-900/40 p-6 text-sm leading-7 text-slate-300">
-          If you reached this page from an old bookmark or indexed link, return to the main dashboard for the current
-          public status view. Private workflow tooling is intentionally separated from public product and status
-          surfaces.
+          If you reached this page from an old bookmark or indexed link, return to the main site for the current
+          dating app, membership, and support information.
         </section>
 
         <footer className="border-t border-slate-800 py-6 text-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-600">
-          ANTIGRAVITY public boundary page
+          YouAndINotAI public status page
         </footer>
       </main>
     </div>

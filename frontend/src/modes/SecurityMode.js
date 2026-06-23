@@ -44,7 +44,7 @@ export function SecurityMode() {
               <span className="text-[10px] tracking-[0.3em] uppercase text-[#e040fb] font-bold">Boris&Dario · Zero-trust ledger guard</span>
             </div>
             <h1 className="text-3xl font-bold tracking-tight">Mission Security Posture</h1>
-            <p className="text-sm text-[#6b82a6] mt-1">{posture?.tagline || "Zero-trust ledger guard · #UntilNoKidInNeed protection layer"}</p>
+            <p className="text-sm text-[#6b82a6] mt-1">{posture?.tagline || "Zero-trust ledger guard · Business-only product operations protection layer"}</p>
           </div>
           {posture && <GradeBadge grade={posture.grade} score={posture.posture_score} />}
         </header>
@@ -115,7 +115,7 @@ export function SecurityMode() {
         )}
 
         <footer className="mt-12 pt-6 border-t border-[#2a3a52] text-[10px] text-[#4a5568] tracking-widest uppercase">
-          Boris&Dario protect the kids fund · #UntilNoKidInNeed · no trust-me-bro
+          Boris&Dario protect the product reserve · Business-only product operations · no trust-me-bro
         </footer>
       </div>
     </div>

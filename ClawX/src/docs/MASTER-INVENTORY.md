@@ -13,7 +13,7 @@ Use these files first:
 
 - Canonical repo: `C:\ANTIGRAVITY`
 - Canonical branch: `main`
-- Current LLC-controlled revenue doctrine: founder-directed conservative `10% charitable cap`
+- Current LLC-controlled revenue doctrine: business-only product surfaces; owner accounting stays private and outside public sales claims
 - Historical split-era chain artifacts remain history only and must not be reused as current live doctrine
 
 ## Product / Site Inventory
@@ -48,7 +48,7 @@ Use these files first:
 | --- | --- | --- |
 | `YouAndINotAI` | Square | Live |
 | `OnlineRecycle / commerce` | Square | Live |
-| `Stripe` | Legacy only | Retired from live doctrine |
+| `Stripe` | Historical / separate-lane context | Not an active checkout default in this repo |
 
 ## Historical Contract Note
 
