@@ -14,10 +14,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap");
 
 /* ----------------------------------------------------------------------------
-   Tailwind v4 theme tokens — exposed as utilities + CSS vars
+   Tailwind v4 theme membership records — exposed as utilities + CSS vars
    ----------------------------------------------------------------------------*/
 @theme {
-  /* Brand palette — keep in lockstep with theme-tokens.ts */
+  /* Brand palette — keep in lockstep with theme-membership records.ts */
   --color-brand-bg: #020617;          /* slate-950 — global app background */
   --color-brand-cyan: #22d3ee;        /* cyan-400 — primary action */
   --color-brand-cyan-deep: #06b6d4;   /* cyan-500 */
@@ -26,7 +26,7 @@
   --color-brand-rose: #f43f5e;        /* rose-500 — icon accent */
   --color-brand-text: #f8fafc;        /* slate-50 — base text */
 
-  /* Glow tokens — used in shadow-[var(--shadow-glow-cyan)] etc. */
+  /* Glow membership records — used in shadow-[var(--shadow-glow-cyan)] etc. */
   --shadow-glow-cyan: 0 0 15px rgba(34, 211, 238, 0.5);
   --shadow-glow-pink: 0 0 8px rgba(255, 0, 255, 0.8);
   --shadow-glow-brand: 0 0 8px rgba(0, 243, 255, 0.4);

@@ -11,14 +11,14 @@ $Log = Join-Path $LogDir "youandinotai-public-stack.log"
 $ApiOut = Join-Path $LogDir "youandinotai-api.out.log"
 $ApiErr = Join-Path $LogDir "youandinotai-api.err.log"
 $Cloudflared = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
-$TunnelTokenPath = "C:\Users\joshl\.cloudflared\t5500-dateapp.token"
+$TunnelTokenPath = "C:\Users\joshl\.cloudflared\t5500-dateapp.membership record"
 $TunnelOut = Join-Path $LogDir "t5500-dateapp-tunnel.log"
 $TunnelErr = Join-Path $LogDir "t5500-dateapp-tunnel.err.log"
 $Docker = "C:\Program Files\Docker\Docker\resources\bin\docker.exe"
 $DockerDesktop = "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 $Python = "C:\Users\joshl\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\python.exe"
 $StaticLauncher = Join-Path $LogDir "start-dateapp-static-3200.cmd"
-$TunnelProcessPattern = "cloudflared.*tunnel.*run.*--token"
+$TunnelProcessPattern = "cloudflared.*tunnel.*run.*--membership record"
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 
@@ -169,11 +169,11 @@ function Start-TunnelForeground {
         throw "cloudflared not found at $Cloudflared"
     }
     if (-not (Test-Path -LiteralPath $TunnelTokenPath)) {
-        throw "tunnel token not found at $TunnelTokenPath"
+        throw "tunnel membership record not found at $TunnelTokenPath"
     }
 
-    $token = (Get-Content -LiteralPath $TunnelTokenPath -Raw).Trim()
-    $args = @("tunnel", "--no-autoupdate", "run", "--token", $token)
+    $membership record = (Get-Content -LiteralPath $TunnelTokenPath -Raw).Trim()
+    $args = @("tunnel", "--no-autoupdate", "run", "--membership record", $membership record)
     Write-StackLog "starting cloudflared in foreground"
     Write-StackLog "startup complete; task will remain running while tunnel is active"
     & $Cloudflared @args >> $TunnelOut 2>> $TunnelErr

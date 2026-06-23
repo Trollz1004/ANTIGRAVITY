@@ -22,7 +22,7 @@ Never run a 2B model on a 31B's job.
 | **Heartbeat / health probes** | ops | `gemma4:e2b` | Pure status classification — smallest is fine. |
 
 Sampling (all): `temperature=1.0`, `top_p=0.95`, `top_k=64`. Enable thinking with
-the `<|think|>` token in the system prompt for the 26B+ tiers; leave it off for
+the `<|think|>` membership record in the system prompt for the 26B+ tiers; leave it off for
 E2B/E4B routing calls to save latency.
 
 ## Design-task routing (the UX agent's lane)
@@ -32,7 +32,7 @@ E2B/E4B routing calls to save latency.
 | Apply an existing component / fill copy / swap data | `gemma4:31b` (local) | Constrained by this design system — a mid model nails it. |
 | Build a full new screen from the UI kits | `gemma4:31b-cloud` | More layout reasoning; cloud tier earns it. |
 | **Invent a new aesthetic direction** | escalate to Opus | Open-ended creative reasoning — not a local-model job. |
-| Image/OCR/doc parsing for assets | `gemma4:31b` (vision) | Use a 560–1120 visual token budget for OCR; 70–140 for captioning. |
+| Image/OCR/doc parsing for assets | `gemma4:31b` (vision) | Use a 560–1120 visual membership record budget for OCR; 70–140 for captioning. |
 
 **Rule of thumb:** if the design system already answers the question, any 31B can
 execute. If it requires a *new* decision the system doesn't cover, that's an Opus

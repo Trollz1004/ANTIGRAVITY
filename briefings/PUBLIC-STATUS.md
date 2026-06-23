@@ -6,7 +6,7 @@ Current public operating rule: business-only product surfaces.
 
 Active customer-facing work sells membership, verification, safety, support,
 uptime, checkout, and platform access. Private accounting, owner decisions,
-legal structures, and future community structures are not public sales copy and
+legal structures, and future community structures are not public checkouts copy and
 are not checkout blockers.
 
 Source of truth:

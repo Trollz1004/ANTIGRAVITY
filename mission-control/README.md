@@ -212,7 +212,7 @@ See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for Railway, Render, Vercel, et
 ## 🔐 Security
 
 - **OAuth 2.0** with Manus authentication
-- **JWT** session tokens
+- **JWT** session membership records
 - **Environment variables** for secrets
 - **HTTPS** enforced in production
 - **Database encryption** recommended

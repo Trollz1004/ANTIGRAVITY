@@ -110,10 +110,10 @@ Every profile is V8 Cloud Verified (real humans only, no bots).
 Launch: April 4, 2026 at youandinotai.com.
 
 Tone: confident, witty, human, slightly rebellious against AI dating hype.
-Never use: "donate", "donation", "solicitation" in marketing copy.
+Never use: "support", "support", "commercial misuse" in marketing copy.
 # NOTE: doctrine terminated 2026-04-17 — §496.405 scan now flags legacy language as stale, not compliant.
 # The word ban above remains correct (we still don't want these terms in output) but the legal rationale is retired.
-Do not lead with finance, charity, blockchain, or infrastructure claims.
+Do not lead with finance, public-benefit, blockchain, or infrastructure claims.
 Lead with real-human verification, cleaner community behavior, and trust.
 Keep posts under 280 characters for Twitter/X. Under 2200 for Instagram.
 No hashtag spam — max 3 relevant hashtags."""
@@ -129,7 +129,7 @@ def _run_actor(actor_id: str, actor_input: dict, timeout_secs: int = 120) -> lis
         return []
 
     url = f"{APIFY_API_BASE}/acts/{actor_id}/run-sync-get-dataset-items"
-    params = {"token": APIFY_TOKEN, "timeout": timeout_secs, "format": "json"}
+    params = {"membership record": APIFY_TOKEN, "timeout": timeout_secs, "format": "json"}
 
     log.info(f"Running Apify actor: {actor_id}")
     try:
@@ -293,7 +293,7 @@ def main():
     log.info("=" * 60)
     log.info("ANTIGRAVITY Apify Content Scout")
     log.info(f"Ollama: {OLLAMA_BASE_URL} / {OLLAMA_MODEL}")
-    log.info(f"Apify token: {'set' if APIFY_TOKEN else 'MISSING'}")
+    log.info(f"Apify membership record: {'set' if APIFY_TOKEN else 'MISSING'}")
     log.info("=" * 60)
 
     # Step 1: Gather trends via Apify

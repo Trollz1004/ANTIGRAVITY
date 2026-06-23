@@ -35,13 +35,13 @@ Intuitive RSVP (Yes, Maybe, No) controls for community events with clear visual 
 - Accessible keyboard navigation
 - Multiple layout variants
 
-### 3. Event Feature Color Tokens
+### 3. Event Feature Color membership records
 
 **File:** `event-feature-colors.md`
 
-Specialized color tokens extending the base design system for consistent visual language across event features.
+Specialized color membership records extending the base design system for consistent visual language across event features.
 
-**Token Categories:**
+**membership record Categories:**
 
 - Event Category Colors (meetup, volunteer, workshop, etc.)
 - Event Status Colors (draft, published, cancelled, etc.)
@@ -66,7 +66,7 @@ Comprehensive design specification integrating all event-related components into
 
 ### Florida §496.405 Compliance
 
-- No use of "donate", "donation", or "solicitation" in any UI copy
+- No use of "join as a member", "membership support", or "restricted claims" in any UI copy
 - Appropriate language distinguishing between activities
 
 ### Mobile-First Approach

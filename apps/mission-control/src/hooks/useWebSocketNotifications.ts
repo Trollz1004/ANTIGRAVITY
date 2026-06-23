@@ -6,7 +6,7 @@ import { useToast } from '../lib/useToast';
 const NOTIFICATIONS_STORAGE_KEY = 'mission-control-notifications';
 
 export const useWebSocketNotifications = () => {
-  const { token } = useAuth();
+  const { membership record } = useAuth();
   const { toast: showToast } = useToast(); // Rename to avoid conflict with history 'toast' variable
 
   const [historyNotifications, setHistoryNotifications] = useState<Notification[]>(() => {
@@ -37,7 +37,7 @@ export const useWebSocketNotifications = () => {
 
   }, [showToast]);
 
-  const { isConnected, send, latency, reconnectAttempts, lastError } = useWebSocket(token, {
+  const { isConnected, send, latency, reconnectAttempts, lastError } = useWebSocket(membership record, {
     onMessage: handleNewNotification,
     onConnected: () => console.log('Notifications WebSocket connected'),
     onDisconnected: (event) => console.log('Notifications WebSocket disconnected:', event.reason),

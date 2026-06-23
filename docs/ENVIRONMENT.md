@@ -54,8 +54,8 @@ cp .env.example .env
 |----------|-------------|---------|
 | `RATE_LIMIT_ENABLED` | Enable rate limiting | `true` |
 | `RATE_LIMIT_PER_MINUTE` | Requests per minute | `60` |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | Access token TTL | `30` |
-| `REFRESH_TOKEN_EXPIRE_DAYS` | Refresh token TTL | `7` |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Access membership record TTL | `30` |
+| `REFRESH_TOKEN_EXPIRE_DAYS` | Refresh membership record TTL | `7` |
 
 ### Frontend (Vite)
 | Variable | Description | Default |
@@ -70,7 +70,7 @@ Before deploying to production:
 2. [ ] Set `NODE_ENV=production`
 3. [ ] Configure real DATABASE_URL
 4. [ ] Set up Redis and configure REDIS_URL
-5. [ ] Configure Square payment tokens
+5. [ ] Configure Square payment membership records
 6. [ ] Set up AI/LLM API keys
 7. [ ] Configure SMTP for email
 8. [ ] Set up monitoring (Sentry DSN, Prometheus)

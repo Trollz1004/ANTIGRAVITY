@@ -53,7 +53,7 @@ export function ProfileSetup() {
   const [lookingFor, setLookingFor] = useState('');
   const [location, setLocation] = useState('');
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-  const [promptAnswer, setPromptAnswer] = useState('');
+  const [profileAnswer, setProfileAnswer] = useState('');
   const [dateComfort, setDateComfort] = useState('');
   const [safetyPreference, setSafetyPreference] = useState('');
 
@@ -85,7 +85,7 @@ export function ProfileSetup() {
     try {
       const profileBio = [
         bio,
-        promptAnswer ? `Prompt: ${promptAnswer}` : '',
+        profileAnswer ? `Profile answer: ${profileAnswer}` : '',
         dateComfort ? `Date comfort: ${dateComfort}` : '',
         safetyPreference ? `Safety preference: ${safetyPreference}` : '',
       ]
@@ -161,7 +161,7 @@ export function ProfileSetup() {
                     <Sparkles size={18} className="text-[#ff4f00]" />
                   </div>
                   <h2 className="text-base font-black uppercase tracking-tight text-[#111111]">
-                    Prompt first
+                    Start with an answer
                   </h2>
                   <p className="mt-2 text-sm font-medium leading-6 text-[#5c594f]">
                     Make it easy for someone to comment on something specific.
@@ -197,18 +197,18 @@ export function ProfileSetup() {
 
               <div>
                 <label className="app-panel-title mb-3 block">
-                  Profile Prompt
+                  Profile Question
                 </label>
                 <textarea
-                  value={promptAnswer}
-                  onChange={e => setPromptAnswer(e.target.value)}
+                  value={profileAnswer}
+                  onChange={e => setProfileAnswer(e.target.value)}
                   placeholder="Example: My ideal first date is coffee, a bookstore, and no pressure to perform."
                   maxLength={220}
                   rows={3}
                   className="app-textarea input-glow"
                 />
                 <div className="mt-2 text-right text-xs font-bold uppercase tracking-[0.16em] text-[#5c594f]">
-                  {promptAnswer.length}/220
+                  {profileAnswer.length}/220
                 </div>
               </div>
 

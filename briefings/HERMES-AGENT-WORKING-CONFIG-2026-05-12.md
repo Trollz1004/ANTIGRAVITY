@@ -8,7 +8,7 @@
 
 | Setting | Value | Why it matters |
 |---|---|---|
-| Default model | `inclusionai/ring-2.6-1t:free` (OpenRouter) | 1-trillion-param free-tier model. Zero LLM cost on routine work. Aligns with "save tokens" doctrine. |
+| Default model | `inclusionai/ring-2.6-1t:free` (OpenRouter) | 1-trillion-param free-tier model. Zero LLM cost on routine work. Aligns with "save membership records" doctrine. |
 | Fallback chain | openrouter → nous → zai | All free-or-cheap; no surprise spend. |
 | Cheap-model (smart routing) | Same `ring-2.6-1t:free` | Even routine-tier work hits the free 1T model. |
 | Auxiliary providers | All `auto` (vision/web/compression/session_search/skills_hub/approval/mcp/title_gen/triage/curator) | Hermes picks the right backend per task; no manual config needed. |

@@ -169,10 +169,10 @@ async def reconcile_legacy_schema() -> None:
                         FROM information_schema.columns
                         WHERE table_schema = 'public'
                           AND table_name = 'webhook_events'
-                          AND column_name = 'stripe_event_id'
+                          AND column_name = 'alternate processor_event_id'
                     ) THEN
                         UPDATE webhook_events
-                        SET event_source_id = stripe_event_id
+                        SET event_source_id = alternate processor_event_id
                         WHERE event_source_id IS NULL;
                     END IF;
                 END

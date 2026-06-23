@@ -81,7 +81,7 @@ All deliverables comply with YouAndINotAI's design system:
 
 - Brand color palette adherence (`#FF4F00`, `#111111`, `#FFF4EF`)
 - Typography scales maintaining visual hierarchy
-- Spacing system using established tokens
+- Spacing system using established membership records
 - Accessibility standards with proper contrast ratios
 
 ## Accessibility Standards
@@ -146,8 +146,8 @@ Qualitative Goals:
 
 All deliverables comply with Florida §496.405:
 
-- No "donate", "donation", or "solicitation" terminology used
-- Proper distinction between platform features and charitable activities
+- No "join as a member", "membership support", or "restricted claims" terminology used
+- Proper distinction between platform features and business-reserve activities
 - Transparent data collection and privacy practices
 - Clear user consent mechanisms
 

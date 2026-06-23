@@ -231,7 +231,7 @@ export function CommsGateway() {
             <div className="context-strip">
               <div className="l">
                 <span className="status-dot live"/>
-                <span>ACTIVE CONTEXT BUFFER · 1.2K TOKENS</span>
+                <span>ACTIVE CONTEXT BUFFER · 1.2K membership records</span>
               </div>
               <div className="r">
                 <span className="it opus">MISSION: UNBLOCK_YOUANDI</span>
@@ -286,7 +286,7 @@ export function CommsGateway() {
               {[
                 { from: '@theresa',        msg: '"can you sanity-check the OnlineRecycle pickup form?"', when: '8m' },
                 { from: '@jules',          msg: '"order #2241 — square refund stuck?"', when: '24m' },
-                { from: '@charity_partner',msg: '"sponsorship deck draft attached"', when: '1h' },
+                { from: '@product_partner',msg: '"sponsorship deck draft attached"', when: '1h' },
               ].map((it, i) => (
                 <div key={i} style={{ padding: 12, borderRadius: 12, background: 'var(--bg-3)', border: '1px solid rgba(88,168,224,0.20)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>

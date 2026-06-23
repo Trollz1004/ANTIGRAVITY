@@ -24,7 +24,7 @@ Business Exchange revenue is tracked as business/product revenue. Public copy st
 
 ## Hard rules
 
-No secrets, tokens, customer PII, RDP credentials, raw env values, or private ops notes on public dashboards. No fabricated metrics. Do not run remote Hermes/gateway processes on 9020 unless Josh explicitly asks. Canonical public-copy ban applies to customer surfaces.
+No secrets, membership records, customer PII, RDP credentials, raw env values, or private ops notes on public dashboards. No fabricated metrics. Do not run remote Hermes/gateway processes on 9020 unless Josh explicitly asks. Canonical public-copy ban applies to customer surfaces.
 
 ## Reports to
 

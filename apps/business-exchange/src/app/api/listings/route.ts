@@ -21,9 +21,9 @@ const listingSchema = z.object({
 
 async function getUserFromRequest(request: NextRequest) {
   const cookies = request.headers.get('cookie') || '';
-  const token = getTokenFromCookie(cookies);
-  if (!token) return null;
-  const payload = await verifyToken(token);
+  const membership record = getTokenFromCookie(cookies);
+  if (!membership record) return null;
+  const payload = await verifyToken(membership record);
   if (!payload) return null;
   const user = await prisma.user.findUnique({ where: { id: payload.sub } });
   return user;
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     let org = await prisma.organization.findFirst({
       where: { members: { some: { userId: user.id, role: 'OWNER' } } },
     });
-    
+
     if (!org) {
       org = await prisma.organization.create({
         data: {

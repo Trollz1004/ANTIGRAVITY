@@ -182,11 +182,11 @@ interface ActivityFilters {
 - Engagement analytics display
 - Accessibility-compliant controls
 
-## Design Tokens
+## Design membership records
 
-### Color Tokens
+### Color membership records
 
-| Token                        | Value              | Usage                      |
+| membership record                        | Value              | Usage                      |
 | ---------------------------- | ------------------ | -------------------------- |
 | `--activity-feed-bg`         | `--bg-primary`     | Activity feed background   |
 | `--activity-item-border`     | `--text-tertiary`  | Divider between activities |
@@ -196,9 +196,9 @@ interface ActivityFilters {
 | `--activity-privacy-private` | `--text-secondary` | Private activity indicator |
 | `--activity-composer-bg`     | `--bg-secondary`   | Composer background        |
 
-### Typography Tokens
+### Typography membership records
 
-| Token                            | Value                    | Usage             |
+| membership record                            | Value                    | Usage             |
 | -------------------------------- | ------------------------ | ----------------- |
 | `--font-size-activity-actor`     | `--font-size-base`       | Actor name text   |
 | `--font-size-activity-content`   | `--font-size-base`       | Activity content  |
@@ -206,9 +206,9 @@ interface ActivityFilters {
 | `--font-size-activity-timestamp` | `--font-size-xs`         | Timestamp text    |
 | `--font-weight-activity-actor`   | `--font-weight-semibold` | Actor name weight |
 
-### Spacing Tokens
+### Spacing membership records
 
-| Token                           | Value              | Usage                          |
+| membership record                           | Value              | Usage                          |
 | ------------------------------- | ------------------ | ------------------------------ |
 | `--spacing-activity-item`       | `var(--spacing-4)` | Padding for activity items     |
 | `--spacing-activity-meta`       | `var(--spacing-2)` | Gap between meta elements      |

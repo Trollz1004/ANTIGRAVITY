@@ -17,11 +17,11 @@ This document represents the final update to copy requirements for the YouAndINo
 
 ### Language Rules - Legal Compliance Confirmation
 
-1. **Prohibited Terms**: ❌ donate, donation, solicitation (Florida §496.405 compliance)
+1. **Prohibited Terms**: ❌ join as a member, membership support, restricted claims (Florida §496.405 compliance)
 2. **Gamification Terms**: ❌ Avoid points, levels, achievements, badges, streaks
 3. **Manipulative Urgency**: ❌ Avoid limited time, hurry, exclusive access
 4. **Preference**: ✅ Direct, clear language over marketing speak
-5. **Support**: ✅ Florida charity registration disclosures where required
+5. **Support**: ✅ Florida product operations registration disclosures where required
 
 ## Accessibility-Enhanced UI Copy
 
@@ -218,10 +218,10 @@ Emoji [Button with aria-label: "Add emoji to message"]
 
 ## Legal & Compliance Copy - Enhanced Disclosure
 
-### Florida Charity Registration Update
+### Florida product operations Registration Update
 
 ```
-Charitable Solicitation Notice:
+business-reserve restricted claims Notice:
 YouAndINotAI is registered with the State of Florida.
 A COPY OF THE OFFICIAL REGISTRATION AND FINANCIAL INFORMATION MAY BE OBTAINED FROM THE DIVISION OF CONSUMER SERVICES BY CALLING TOLL-FREE 1-800-HELP-FLA (435-7352) WITHIN THE STATE OR VISITING www.FloridaConsumerHelp.com.
 REGISTRATION DOES NOT IMPLY ENDORSEMENT, APPROVAL, OR RECOMMENDATION BY THE STATE.

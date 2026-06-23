@@ -1,10 +1,12 @@
-# Supabase Integration Implementation Plan
+# Supabase Integration Implementation Plan (Archived)
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Integrate Supabase as the primary PostgreSQL database for the ANTIGRAVITY platform while maintaining a fallback to the existing T5500 PostgreSQL instance.
+**Goal:** Evaluate Supabase as a potential PostgreSQL option for ANTIGRAVITY while maintaining a fallback to the existing T5500 PostgreSQL instance.
 
-**Architecture:** 
+Status: Archived until finance policy and schema review is completed.
+
+**Architecture:**
 - Add Supabase connection URL to environment variables with fallback logic in the FastAPI backend database configuration.
 - Create necessary Supabase tables (`members` and `revenue_allocations`) with Row Level Security (RLS) policies.
 - Install Supabase client in the Next.js frontend and create a centralized client instance.
@@ -19,7 +21,7 @@
 
 - Secrets must be stored in the vault only — never in git or PR bodies.
 - No new repositories; all work must occur within `Trollz1004/ANTIGRAVITY`.
-- Kids 13 and under must be free — enforce `is_minor` + `free_tier` boolean columns on the `members` table.
+- `is_minor` and `free_tier` columns are not required by current business policy.
 - Row Level Security (RLS) must be enabled on all exposed tables; initial policy: `service_role` only.
 - 80% pytest coverage gate must still pass for the FastAPI backend.
 - Supabase project reference: `jmvgdqomvnkfgknmgwxp`, region: `us-east-2`.
@@ -52,7 +54,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     # ... existing fields ...
     SUPABASE_DB_URL: PostgresDsn = ""
-    
+
     @property
     def database_url(self) -> PostgresDsn:
         """Use Supabase if configured, otherwise fallback to local/T5500 Docker Postgres."""
@@ -112,9 +114,7 @@ CREATE TABLE members (
     plan TEXT NOT NULL CHECK (plan IN ('bot_shield', 'founding', '3month', '12month', 'royalty')),
     square_payment_id TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
-    active BOOLEAN DEFAULT TRUE,
-    is_minor BOOLEAN DEFAULT FALSE,
-    free_tier BOOLEAN DEFAULT FALSE
+    active BOOLEAN DEFAULT TRUE
 );
 ```
 
@@ -125,7 +125,7 @@ CREATE TABLE revenue_allocations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     amount_cents INTEGER NOT NULL CHECK (amount_cents >= 0),
     source TEXT NOT NULL CHECK (source = 'square'),
-    bucket TEXT NOT NULL CHECK (bucket IN ('kids_reserve', 'ops', 'staked')),
+    bucket TEXT NOT NULL CHECK (bucket IN ('platform_operations', 'platform_reserve', 'staked')),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 ```

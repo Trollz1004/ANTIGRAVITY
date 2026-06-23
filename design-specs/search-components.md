@@ -223,11 +223,11 @@ interface SearchQuery {
 - Real-time update as user types
 - Keyboard navigation support
 
-## Design Tokens
+## Design membership records
 
-### Color Tokens
+### Color membership records
 
-| Token                       | Value              | Usage                       |
+| membership record                       | Value              | Usage                       |
 | --------------------------- | ------------------ | --------------------------- |
 | `--search-bar-bg`           | `--bg-primary`     | Search bar background       |
 | `--search-result-highlight` | `--brand-primary`  | Highlighted search terms    |
@@ -235,9 +235,9 @@ interface SearchQuery {
 | `--search-suggestion-hover` | `--bg-secondary`   | Hover state for suggestions |
 | `--search-history-item`     | `--text-secondary` | History item text color     |
 
-### Typography Tokens
+### Typography membership records
 
-| Token                               | Value                    | Usage                |
+| membership record                               | Value                    | Usage                |
 | ----------------------------------- | ------------------------ | -------------------- |
 | `--font-size-search-input`          | `--font-size-base`       | Search input text    |
 | `--font-size-search-result-title`   | `--font-size-lg`         | Result title text    |
@@ -245,9 +245,9 @@ interface SearchQuery {
 | `--font-size-search-suggestion`     | `--font-size-base`       | Suggestion text      |
 | `--font-weight-search-result-title` | `--font-weight-semibold` | Result title weight  |
 
-### Spacing Tokens
+### Spacing membership records
 
-| Token                                 | Value              | Usage                       |
+| membership record                                 | Value              | Usage                       |
 | ------------------------------------- | ------------------ | --------------------------- |
 | `--spacing-search-bar-padding`        | `var(--spacing-3)` | Search bar internal padding |
 | `--spacing-search-result-margin`      | `var(--spacing-3)` | Margin between results      |

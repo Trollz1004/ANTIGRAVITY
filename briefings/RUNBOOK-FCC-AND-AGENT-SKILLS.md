@@ -54,10 +54,10 @@ Recommended first additions (priority order):
 | Provider  | Why                                                       | Cost                |
 | --------- | --------------------------------------------------------- | ------------------- |
 | Ollama    | Local, free, unlimited; Sabertooth already runs :11434    | $0                  |
-| DeepSeek  | Best price/quality ratio for cheap fallback               | ~$0.27/M tokens     |
+| DeepSeek  | Best price/quality ratio for cheap fallback               | ~$0.27/M membership records     |
 | Groq      | Fastest inference; useful free tier                       | Free tier first     |
 | Z.ai      | glm-5.1 etc. — already used by Hermes-in-Paperclip       | Cheap               |
-| OpenRouter| Unified gateway if Joshua wants pay-per-token GPT-5/Opus  | Pay-per-token       |
+| OpenRouter| Unified gateway if Joshua wants pay-per-membership record GPT-5/Opus  | Pay-per-membership record       |
 
 Gemini intentionally last in priority: free tier exists but data may be used for
 training; route only non-sensitive prompts there.
@@ -72,7 +72,7 @@ setx CLAUDE_CODE_AUTO_COMPACT_WINDOW "190000"
 ```
 
 `CLAUDE_CODE_AUTO_COMPACT_WINDOW=190000` directly addresses the "compaction
-steers me away every 300k tokens" complaint Joshua raised earlier this session.
+steers me away every 300k membership records" complaint Joshua raised earlier this session.
 It pushes the auto-summarize threshold way out so it triggers far less often.
 
 ### 1.4 Close and reopen the terminal (env vars only load on new shells), then:

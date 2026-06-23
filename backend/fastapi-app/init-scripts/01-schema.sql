@@ -10,7 +10,7 @@ CREATE TABLE users (
     password_hash VARCHAR(255),
     date_of_birth DATE,
     adult_verified_at TIMESTAMPTZ,
-    stripe_customer_id VARCHAR(255),
+    external_processor_customer_id VARCHAR(255),
     bot_shield_verified BOOLEAN DEFAULT FALSE,
     bot_shield_verified_at TIMESTAMPTZ,
     subscription_tier VARCHAR(50) DEFAULT 'free',
@@ -22,10 +22,10 @@ CREATE TABLE users (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Webhook events table (Stripe)
+-- Webhook events table (external_processor)
 CREATE TABLE webhook_events (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    stripe_event_id VARCHAR(255) UNIQUE NOT NULL,
+    external_processor_event_id VARCHAR(255) UNIQUE NOT NULL,
     event_type VARCHAR(100) NOT NULL,
     payload JSONB NOT NULL,
     processed BOOLEAN DEFAULT FALSE,
@@ -80,8 +80,8 @@ CREATE TABLE messages (
 CREATE TABLE subscriptions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    stripe_subscription_id VARCHAR(255) UNIQUE,
-    stripe_price_id VARCHAR(255),
+    external_processor_subscription_id VARCHAR(255) UNIQUE,
+    external_processor_price_id VARCHAR(255),
     tier VARCHAR(50) NOT NULL,
     status VARCHAR(50) DEFAULT 'active',
     current_period_start TIMESTAMPTZ,
@@ -95,7 +95,7 @@ CREATE TABLE subscriptions (
 CREATE TABLE payments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    stripe_payment_intent_id VARCHAR(255) UNIQUE,
+    external_processor_payment_intent_id VARCHAR(255) UNIQUE,
     amount_cents INT NOT NULL,
     currency VARCHAR(3) DEFAULT 'USD',
     status VARCHAR(50),
@@ -106,9 +106,9 @@ CREATE TABLE payments (
 
 -- Create indexes
 CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_stripe_customer_id ON users(stripe_customer_id);
+CREATE INDEX idx_users_external_processor_customer_id ON users(external_processor_customer_id);
 CREATE INDEX idx_users_created_at ON users(created_at);
-CREATE INDEX idx_webhook_events_stripe_event_id ON webhook_events(stripe_event_id);
+CREATE INDEX idx_webhook_events_external_processor_event_id ON webhook_events(external_processor_event_id);
 CREATE INDEX idx_webhook_events_processed ON webhook_events(processed);
 CREATE INDEX idx_matches_user_a ON matches(user_a);
 CREATE INDEX idx_matches_user_b ON matches(user_b);
@@ -118,7 +118,7 @@ CREATE INDEX idx_messages_match_id ON messages(match_id);
 CREATE INDEX idx_messages_sender_id ON messages(sender_id);
 CREATE INDEX idx_messages_read ON messages(read);
 CREATE INDEX idx_subscriptions_user_id ON subscriptions(user_id);
-CREATE INDEX idx_subscriptions_stripe_subscription_id ON subscriptions(stripe_subscription_id);
+CREATE INDEX idx_subscriptions_external_processor_subscription_id ON subscriptions(external_processor_subscription_id);
 CREATE INDEX idx_payments_user_id ON payments(user_id);
 
 -- Create updated_at trigger function

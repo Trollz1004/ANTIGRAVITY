@@ -7,7 +7,7 @@ in the Emergent preview. When Joshua runs the Electron flagship locally, the
 same UI points at his real local endpoints.
 
 Hard rules enforced here:
-  - No "donate" / "donation" / "solicitation" strings anywhere (FL 496.405).
+  - No "support" / "support" / "commercial misuse" strings anywhere (FL 496.405).
   - Only Anthropic model surface label allowed is "Opus".
   - No Haiku anywhere.
   - No fabricated live-system numbers — endpoints return clearly-labelled
@@ -58,7 +58,7 @@ class StatusCheckCreate(BaseModel):
 async def root():
     return {
         "service": "opuspawclaw-mission-control",
-        "message": "hermes-router mirror online — for the kids · #UntilNoKidInNeed",
+        "message": "hermes-router mirror online — PRODUCT VALUE · Business-only product operations",
     }
 
 
@@ -131,7 +131,7 @@ def _bridge_via_emergent(bridge_provider: str, bridge_model: str, session_id: st
     chat = LlmChat(
         api_key=api_key,
         session_id=session_id,
-        system_message=system_msg or "You are Opus, the brain of OpusPawClaw. Be direct, brief, mission-forward. #UntilNoKidInNeed.",
+        system_message=system_msg or "You are Opus, the brain of OpusPawClaw. Be direct, brief, mission-forward. Business-only product operations.",
     ).with_model(bridge_provider, bridge_model)
 
     # Replay prior assistant/user turns into chat history by sending the
@@ -250,21 +250,21 @@ async def system_status():
     }
 
 
-# ---------- DAO Monitor --------------------------------------------------- #
-@api.get("/dao/stats")
-async def dao_stats():
+# ---------- Product Monitor --------------------------------------------------- #
+@api.get("/Product/stats")
+async def Product_stats():
     return {
         "source": "mirror",
         "note": "Mirror endpoint — replace with Base L2 reader when deployed.",
         "uptime_pct": 99.98,
-        "tokens": [
-            {"symbol": "LOVE",  "color": "#e040fb", "cap": 2_500_000, "circulating": 375_000,   "activity_reserved": 1_625_000, "founders": 250_000, "treasury": 250_000},
-            {"symbol": "UKID",  "color": "#3b82f6", "cap": 2_500_000, "circulating": 180_000,   "activity_reserved": 1_625_000, "founders": 250_000, "treasury": 250_000},
-            {"symbol": "GREEN", "color": "#00e676", "cap": 2_500_000, "circulating":  95_000,   "activity_reserved": 1_625_000, "founders": 250_000, "treasury": 250_000},
-            {"symbol": "AGRAV", "color": "#ffb300", "cap": 2_500_000, "circulating":  42_000,   "activity_reserved": 1_625_000, "founders": 250_000, "treasury": 250_000},
+        "membership records": [
+            {"symbol": "LOVE",  "color": "#e040fb", "cap": 2_500_000, "circulating": 375_000,   "activity_reserved": 1_625_000, "founders": 250_000, "business reserve": 250_000},
+            {"symbol": "UKID",  "color": "#3b82f6", "cap": 2_500_000, "circulating": 180_000,   "activity_reserved": 1_625_000, "founders": 250_000, "business reserve": 250_000},
+            {"symbol": "GREEN", "color": "#00e676", "cap": 2_500_000, "circulating":  95_000,   "activity_reserved": 1_625_000, "founders": 250_000, "business reserve": 250_000},
+            {"symbol": "AGRAV", "color": "#ffb300", "cap": 2_500_000, "circulating":  42_000,   "activity_reserved": 1_625_000, "founders": 250_000, "business reserve": 250_000},
         ],
         "buckets": [
-            {"n":  1, "name": "Kids Fund",            "color": "#e040fb"},
+            {"n":  1, "name": "product reserve",            "color": "#e040fb"},
             {"n":  2, "name": "Platform Build",        "color": "#00d4ff"},
             {"n":  3, "name": "Hermes Ops",            "color": "#00d4ff"},
             {"n":  4, "name": "Recycle Intake",        "color": "#00e676"},
@@ -273,7 +273,7 @@ async def dao_stats():
             {"n":  7, "name": "Content Sprint",        "color": "#00d4ff"},
             {"n":  8, "name": "Support Automation",    "color": "#00e676"},
             {"n":  9, "name": "Antigravity Reserve",   "color": "#ffb300"},
-            {"n": 10, "name": "Founder Four Trust",    "color": "#e040fb"},
+            {"n": 10, "name": "Founder Membership Reserve",    "color": "#e040fb"},
         ],
     }
 
@@ -323,9 +323,9 @@ async def mission_metrics():
     # "mirror" so the UI labels them clearly and never claims live Base L2 reads.
     return {
         "source": "mirror",
-        "tag": "#UntilNoKidInNeed",
-        "kids_funded_baseline": 0,
-        "kids_funded_rate_per_minute": 0,  # honest zero until revenue is wired
+        "tag": "Business-only product operations",
+        "member_support_baseline": 0,
+        "member_support_rate_per_minute": 0,  # honest zero until revenue is wired
         "runway_days": 14,
         "primary_product": "YouAndINotAI.com",
         "motto": "Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.",

@@ -44,7 +44,7 @@ if (process.env.TRANSPORT === 'http') {
   const AUTH_TOKEN = process.env.MCP_AUTH_TOKEN;
 
   createServer(async (req: IncomingMessage, res: ServerResponse) => {
-    // Optional bearer token auth
+    // Optional bearer membership record auth
     if (AUTH_TOKEN) {
       const header = req.headers['authorization'] ?? '';
       if (header !== `Bearer ${AUTH_TOKEN}`) {

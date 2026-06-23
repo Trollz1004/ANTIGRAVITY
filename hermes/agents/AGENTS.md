@@ -16,7 +16,7 @@
 >   uppercase `C:\ANTIGRAVITY` as live doctrine.
 > - Real Codex Desktop is the Codex lane. Never route Codex through `ollama launch codex` or any
 >   wrapper that blocks the real desktop session.
-> - No DAO/token launch or public crypto fundraising work until attorney review and a new
+> - No future-structure launch or public crypto fundraising work until attorney review and a new
 >   timestamped doctrine file explicitly re-enables it.
 > - Hermes and sub-agents draft, summarize, audit, and coordinate by default. They do not push,
 >   merge, deploy, delete, read populated secrets, or post live unless Josh explicitly assigns that
@@ -63,7 +63,8 @@
   Gemini CLI, Grok, Codex, Nous, Pi agents, OpenRouter, Ollama Cloud), 24/7 multi-company
   orchestration. Sabretooth never terminates a Cloudflare tunnel.
 - **T5500** (public surface) — Cloudflare tunnels, public-facing domains, payment surfaces
-  (Stripe/Square rails), Hermes router (port 11435), date app static (port 3200). T5500 is
+  (Square-only rails unless founder doctrine updates), Hermes router (port 11435), date app static
+  (port 3200). T5500 is
   the only node that exposes public URLs. No brain services, no dev work.
 - **9020** (pure dev) — local coding, testing, Hermes chat, git work, runbook review,
   mission-control browsing. No production workloads, no tunnels, no payment surfaces.
@@ -132,7 +133,7 @@ Each Paperweight company (`apps/paperweight`) has one CEO brain:
 | `hermes-sideworld` | `ceo-hermes-sideworld.md` | Hermes orchestration, node control, safe public mission-control |
 | `onlinerecycle` | `ceo-onlinerecycle.md` | onlinerecycle.org cross-lister (e-waste, resale) |
 | `youtube` | `ceo-youtube.md` | Content engine — many buckets per video |
-| `dao` | `ceo-dao.md` | Governance proposals + vote tallies (on-chain stays off the ops board) |
+| `future-structure` | `ceo-future-structure.md` | Historical/reference proposals only (restricted structures stay off the ops board) |
 
 ---
 
@@ -140,10 +141,8 @@ Each Paperweight company (`apps/paperweight`) has one CEO brain:
 
 - **Josh** is sole authority. **Opus** is primary architect and authors all contracts.
 - **One repo** (`Trollz1004/ANTIGRAVITY`), one wallet, one LLC. Revenue model: **10% MAX per
-  legally-distinct bucket** (not a floor); compounding = more buckets. Never resurrect 60/30/10
-  or 100%-charity.
-- **Customer-facing canonical-7 ban** (donate/donation/solicitation/charity/charitable/giving
-  back/disbursement). Agent-internal synonym `contractual revenue disbursement` is allowed in
-  THIS directory only — never on a customer surface.
-- **Secret-free**: no keys/tokens/credentials in any agent file or the ops dashboard.
+  legally-distinct bucket** (not a floor); compounding = more buckets. Never resurrect retired
+  split-era or absolute public-benefit claims.
+- **Customer-facing business-only rule**: do not use non-product non-product, restricted-claims, owner-private accounting, or disbursement terminology in public copy or as a launch gate.
+- **Secret-free**: no keys/membership records/credentials in any agent file or the ops dashboard.
 - Full transparency: every action traceable in git / Paperweight. No off-the-books side channels.

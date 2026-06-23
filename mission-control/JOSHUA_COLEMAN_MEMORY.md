@@ -144,14 +144,14 @@ start-opus.ps1                 — starts Redis + Ollama on boot
 ## THE MISSION
 
 **#ForTheKids**
-- #UNTILNOKIDINNEED
+- #MembershipVerificationSupport
 - #MANUSFORTHEKIDS
 - #ALWAYSINTEGRITY
 
 Income-engine revenue flows to:
 1. Keep main platform alive (survival)
 2. Fund #ForTheKids mission properly (no rushing, no shortcuts)
-3. Help kids in need (not human greed)
+3. Help member support (not human greed)
 
 **No humans in the loop for income-engine. AI only.**
 
@@ -185,7 +185,7 @@ Income-engine revenue flows to:
 **20 Implementation Tasks:**
 
 ### High Priority
-1. Streaming chat responses (real-time tokens)
+1. Streaming chat responses (real-time membership records)
 2. Image generation in chat (inline display)
 3. Paperclip heartbeat scheduling (every 5 min)
 4. FETCHER lead scanning UI (Reddit, Upwork, Fiverr)
@@ -210,7 +210,7 @@ Income-engine revenue flows to:
 
 **Encrypted in Manus Agent memory:**
 - aiforyoullc@gmail.com password (!!11 prefix/suffix)
-- GitHub token (admin, no expiration, no limits)
+- GitHub membership record (admin, no expiration, no limits)
 - Paperclip API key
 - Ollama Cloud API key
 - All income-engine .env values

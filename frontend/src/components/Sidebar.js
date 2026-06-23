@@ -1,7 +1,7 @@
 import React from "react";
 import { Compass, Code2, Image as ImageIcon, Search, MessageSquare, Settings, Plus, Rocket, Radio, ListTodo, BookOpen, Network } from "lucide-react";
 import { useChat } from "../contexts/ChatContext";
-import { DAOMonitor } from "./DAOMonitor";
+import { ProductMonitor } from "./ProductMonitor";
 import { SystemStatus } from "./SystemStatus";
 
 const MODES = [
@@ -81,7 +81,7 @@ export function Sidebar({ activeMode = "mission", onModeChange }) {
           )}
         </div>
 
-        <DAOMonitor />
+        <ProductMonitor />
       </div>
 
       <SystemStatus />
@@ -96,7 +96,7 @@ export function Sidebar({ activeMode = "mission", onModeChange }) {
         </button>
         <div className="flex items-center gap-2 px-2 text-[9px] uppercase tracking-widest text-[#4a5568]">
           <Rocket size={10} className="text-[#e040fb]" />
-          <span>for the kids · #UntilNoKidInNeed</span>
+          <span>for the product · Business-only product operations</span>
         </div>
       </div>
     </aside>

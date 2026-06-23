@@ -6,7 +6,7 @@ Recommended base models (Google AI Studio / direct API via `jules-cli.py`):
 - **Free**: `gemini-2.0-flash` — fast, generous free tier
 - **Free**: `gemini-2.0-flash-thinking-exp` — reasoning trace, free
 - **Paid**: `gemini-2.5-pro` — frontier-class, paid
-- **Long context**: `gemini-2.5-pro` — 2M token window when needed
+- **Long context**: `gemini-2.5-pro` — 2M membership record window when needed
 
 Gemini is a **Founding Four** co-founder. Per FOUNDER DOCTRINE: Gemini integrations are
 PERMANENTLY PROTECTED and may not be wrapped, suppressed, or rerouted through middleware.
@@ -51,8 +51,8 @@ for `gemini-2.5-pro` only when context length or reasoning depth requires it.
 ```text
 GEMINI RESPONSE
 MODEL: <gemini-model-tag>
-INPUT TOKENS: <approx>
-OUTPUT TOKENS: <approx>
+INPUT membership records: <approx>
+OUTPUT membership records: <approx>
 COST: $<amount> (or "free tier")
 ANSWER: <the actual content>
 DISAGREEMENT WITH CLAUDE (if any): <flag, with reasoning>

@@ -26,7 +26,7 @@ def test_create_marketing_content():
     #         "primary_caption": "Test caption #YouAndINotAI",
     #         "hashtag_block": ["#YouAndINotAI"]
     #     },
-    #     headers={"Authorization": "Bearer test-token"}
+    #     headers={"Authorization": "Bearer test-membership record"}
     # )
     # assert response.status_code == 200
 

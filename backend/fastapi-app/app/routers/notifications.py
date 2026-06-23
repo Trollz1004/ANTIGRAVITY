@@ -130,7 +130,7 @@ async def websocket_notifications(
 ) -> None:
     """WebSocket endpoint for real-time notifications.
 
-    Clients authenticate via the `token` query parameter (validated by
+    Clients authenticate via the `membership record` query parameter (validated by
     get_current_websocket_user). Once connected, they receive broadcast
     notifications for task status changes, new issues, and agent activity.
 

@@ -39,9 +39,9 @@ export function MissionRibbon() {
   }, []);
 
   const total = stats?.total_usd ?? 0;
-  const kids = stats?.kids_fund_usd ?? 0;
-  const estimate = stats?.kids_estimate ?? 0;
-  const threshold = stats?.kids_threshold_usd ?? 250;
+  const kids = stats?.member_support_usd ?? 0;
+  const estimate = stats?.member_support_estimate ?? 0;
+  const threshold = stats?.member_support_threshold_usd ?? 250;
 
   return (
     <>
@@ -51,11 +51,11 @@ export function MissionRibbon() {
       >
         <div className="flex items-center gap-2 min-w-0">
           <Heart size={12} className="text-[#e040fb] animate-heartbeat shrink-0" />
-          <span className="text-[9px] tracking-[0.3em] uppercase text-[#e040fb] font-bold whitespace-nowrap">#UntilNoKidInNeed</span>
+          <span className="text-[9px] tracking-[0.3em] uppercase text-[#e040fb] font-bold whitespace-nowrap">Business-only product operations</span>
         </div>
         <span className="h-3 w-px bg-[#2a3a52]" />
         <Stat label="committed" value={`$${formatUsd(total)}`} tone="cyan" tick={tick} />
-        <Stat label="kids fund" value={`$${formatUsd(kids)}`} tone="magenta" />
+        <Stat label="product reserve" value={`$${formatUsd(kids)}`} tone="magenta" />
         <Stat label="kids covered (est.)" value={String(estimate)} tone="green" hint={`${threshold} USD per kid threshold`} />
         {alerts.length > 0 && (
           <div data-testid="mission-ribbon-alert" className="flex items-center gap-1.5 ml-auto bg-[#ff1744]/15 border border-[#ff1744]/40 rounded-full px-3 py-0.5 animate-pulse">

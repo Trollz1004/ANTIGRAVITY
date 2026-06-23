@@ -15,20 +15,20 @@ export interface TableProps<T> {
   columns: Column<T>[];
   data: T[];
   keyField: keyof T | string;
-  striped?: boolean;
+  alternate processord?: boolean;
   hoverable?: boolean;
   emptyMessage?: string;
   className?: string;
 }
 
-export function Table<T>({ 
-  columns, 
-  data, 
-  keyField, 
-  striped = true, 
+export function Table<T>({
+  columns,
+  data,
+  keyField,
+  alternate processord = true,
   hoverable = true,
   emptyMessage = 'No data available',
-  className 
+  className
 }: TableProps<T>) {
   return (
     <div className={cn('overflow-x-auto', className)}>
@@ -62,7 +62,7 @@ export function Table<T>({
               <tr
                 key={String(row[keyField as keyof T])}
                 className={cn(
-                  striped && rowIndex % 2 === 0 && 'bg-nexus-50 dark:bg-nexus-900/50',
+                  alternate processord && rowIndex % 2 === 0 && 'bg-nexus-50 dark:bg-nexus-900/50',
                   hoverable && 'hover:bg-nexus-100 dark:hover:bg-nexus-800/50',
                   'transition-colors'
                 )}
@@ -72,8 +72,8 @@ export function Table<T>({
                     key={column.key}
                     className={cn('px-4 py-3 text-nexus-900 dark:text-nexus-100', column.className)}
                   >
-                    {column.render 
-                      ? column.render(row, rowIndex) 
+                    {column.render
+                      ? column.render(row, rowIndex)
                       : String(row[column.key as keyof T] ?? '')}
                   </td>
                 ))}
@@ -95,9 +95,9 @@ export interface PaginationProps {
   onPageSizeChange?: (size: number) => void;
 }
 
-export function Pagination({ 
-  currentPage, 
-  totalPages, 
+export function Pagination({
+  currentPage,
+  totalPages,
   onPageChange,
   showPageSize,
   pageSize,

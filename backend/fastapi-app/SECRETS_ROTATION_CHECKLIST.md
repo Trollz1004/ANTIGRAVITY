@@ -78,10 +78,10 @@ Follow these steps for each secret type identified by the script. Update configu
 *   **Action:**
     1.  Log in to your Square Developer Dashboard: `https://developer.squareup.com/apps`
     2.  Navigate to your ANTIGRAVITY application, then to the 'Credentials' section.
-    3.  Generate a **new Production Access Token**.
-    4.  Update the `SQUARE_ACCESS_TOKEN` environment variable in your deployment environment with the new token.
-    5.  **Grace Period:** Keep the old token active for a short grace period (e.g., 1-2 days) if possible, to allow all services to transition.
-    6.  **Delete Old Token:** After verification and grace period, delete the old access token from the Square Dashboard.
+    3.  Generate a **new Production Access membership record**.
+    4.  Update the `SQUARE_ACCESS_TOKEN` environment variable in your deployment environment with the new membership record.
+    5.  **Grace Period:** Keep the old membership record active for a short grace period (e.g., 1-2 days) if possible, to allow all services to transition.
+    6.  **Delete Old membership record:** After verification and grace period, delete the old access membership record from the Square Dashboard.
 *   **Verification:**
     1.  Restart the FastAPI application.
     2.  Perform Square-related operations (e.g., process a test payment, retrieve a customer) through the application to confirm the new key is working.

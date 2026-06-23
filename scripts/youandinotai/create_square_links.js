@@ -1,11 +1,11 @@
 const https = require('https');
 const crypto = require('crypto');
 
-// Load from .env — NEVER hardcode tokens
+// Load from .env — NEVER hardcode membership records
 require('dotenv').config({ path: require('path').resolve(__dirname, '..', '.env') });
-const TOKEN = process.env.SQUARE_ACCESS_TOKEN;
+const membership record = process.env.SQUARE_ACCESS_TOKEN;
 const LOCATION_ID = process.env.SQUARE_LOCATION_ID || 'LY5GN09F5AN83';
-if (!TOKEN) {
+if (!membership record) {
   console.error('ERROR: SQUARE_ACCESS_TOKEN not set in .env');
   process.exit(1);
 }
@@ -40,7 +40,7 @@ const createLink = (name, desc, priceCents, isSub) => {
         method: 'POST',
         headers: {
           'Square-Version': '2024-01-18',
-          Authorization: `Bearer ${TOKEN}`,
+          Authorization: `Bearer ${membership record}`,
           'Content-Type': 'application/json',
           'Content-Length': payload.length,
         },

@@ -1,12 +1,12 @@
-# Event Feature Color Tokens
+# Event Feature Color membership records
 
 ## Overview
 
-This document defines specialized color tokens for the event features within YouAndINotAI. These tokens extend the base design system to provide consistent visual language for community events, meetups, and gatherings.
+This document defines specialized color membership records for the event features within YouAndINotAI. These membership records extend the base design system to provide consistent visual language for community events, meetups, and gatherings.
 
 ## Event Category Colors
 
-| Token               | Value            | Usage                                |
+| membership record               | Value            | Usage                                |
 | ------------------- | ---------------- | ------------------------------------ |
 | `--event-meetup`    | #8B5CF6 (Purple) | Social meetups and casual gatherings |
 | `--event-volunteer` | #06B6D4 (Cyan)   | Volunteer opportunities              |
@@ -17,7 +17,7 @@ This document defines specialized color tokens for the event features within You
 
 ## Event Status Colors
 
-| Token               | Value           | Usage                      |
+| membership record               | Value           | Usage                      |
 | ------------------- | --------------- | -------------------------- |
 | `--event-draft`     | #9CA3AF (Gray)  | Unpublished/private events |
 | `--event-published` | #10B981 (Green) | Published public events    |
@@ -27,7 +27,7 @@ This document defines specialized color tokens for the event features within You
 
 ## Attendance Status Colors
 
-| Token                    | Value            | Usage                          |
+| membership record                    | Value            | Usage                          |
 | ------------------------ | ---------------- | ------------------------------ |
 | `--attendance-going`     | #10B981 (Green)  | Confirmed attendance           |
 | `--attendance-maybe`     | #F59E0B (Amber)  | Tentative attendance           |
@@ -37,7 +37,7 @@ This document defines specialized color tokens for the event features within You
 
 ## Accessibility Feature Colors
 
-| Token                            | Value            | Usage                              |
+| membership record                            | Value            | Usage                              |
 | -------------------------------- | ---------------- | ---------------------------------- |
 | `--accessibility-wheelchair`     | #3B82F6 (Blue)   | Wheelchair accessible              |
 | `--accessibility-asl`            | #10B981 (Green)  | American Sign Language interpreter |
@@ -47,7 +47,7 @@ This document defines specialized color tokens for the event features within You
 
 ## Safety Feature Colors
 
-| Token                       | Value           | Usage                            |
+| membership record                       | Value           | Usage                            |
 | --------------------------- | --------------- | -------------------------------- |
 | `--safety-mask-required`    | #F59E0B (Amber) | Face coverings required          |
 | `--safety-vaccination`      | #10B981 (Green) | Vaccination documentation needed |
@@ -57,7 +57,7 @@ This document defines specialized color tokens for the event features within You
 
 ## RSVP Action Colors
 
-| Token                     | Value            | Usage                  |
+| membership record                     | Value            | Usage                  |
 | ------------------------- | ---------------- | ---------------------- |
 | `--rsvp-action-primary`   | #FF4F00 (Orange) | Primary RSVP action    |
 | `--rsvp-action-secondary` | #6B7280 (Gray)   | Secondary RSVP actions |
@@ -86,10 +86,10 @@ This document defines specialized color tokens for the event features within You
 3. Test color visibility under different lighting conditions
 4. Maintain consistent meaning across all breakpoints
 
-These color tokens should be implemented as CSS custom properties and imported into the main design system stylesheet.
+These color membership records should be implemented as CSS custom properties and imported into the main design system stylesheet.
 
 ```css
-/* Event Feature Color Tokens */
+/* Event Feature Color membership records */
 --event-meetup: #8b5cf6;
 --event-volunteer: #06b6d4;
 --event-workshop: #f59e0b;
@@ -126,4 +126,4 @@ These color tokens should be implemented as CSS custom properties and imported i
 --rsvp-action-danger: #ef4444;
 ```
 
-These tokens ensure visual consistency across all event components while maintaining accessibility standards and supporting YouAndINotAI's mobile-first, trust-building design philosophy.
+These membership records ensure visual consistency across all event components while maintaining accessibility standards and supporting YouAndINotAI's mobile-first, trust-building design philosophy.

@@ -103,4 +103,4 @@ Edit `sentry.py`:
 
 Then `git push` from any node; bootstraps on the others pull it on next logon.
 
-#UntilNoKidInNeed
+Business-only product operations

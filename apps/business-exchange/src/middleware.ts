@@ -8,24 +8,24 @@ const adminPaths = ['/admin'];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const cookies = request.headers.get('cookie') || '';
-  const token = getTokenFromCookie(cookies);
+  const membership record = getTokenFromCookie(cookies);
 
   // Check if path is public
   const isPublic = publicPaths.some(path => pathname.startsWith(path));
   const isAdminPath = adminPaths.some(path => pathname.startsWith(path));
 
-  // If no token and not public, redirect to login
-  if (!token && !isPublic) {
+  // If no membership record and not public, redirect to login
+  if (!membership record && !isPublic) {
     const loginUrl = new URL('/auth/login', request.url);
     loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // If token exists, verify it
-  if (token) {
-    const payload = await verifyToken(token);
-    
-    // Invalid token
+  // If membership record exists, verify it
+  if (membership record) {
+    const payload = await verifyToken(membership record);
+
+    // Invalid membership record
     if (!payload) {
       const response = NextResponse.redirect(new URL('/auth/login', request.url));
       response.headers.set('Set-Cookie', 'be_session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0');
@@ -38,9 +38,9 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // If accessing login/register with valid token, redirect to dashboard
-  if (token && (pathname === '/auth/login' || pathname === '/auth/register')) {
-    const payload = await verifyToken(token);
+  // If accessing login/register with valid membership record, redirect to dashboard
+  if (membership record && (pathname === '/auth/login' || pathname === '/auth/register')) {
+    const payload = await verifyToken(membership record);
     if (payload) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }

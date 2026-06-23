@@ -1,10 +1,10 @@
 /**
- * YouAndINotAI — Sleek Cyberpunk Glassmorphism design tokens
+ * YouAndINotAI — Sleek Cyberpunk Glassmorphism design membership records
  *
  * Canonical spec: briefings/SLEEK-CYBERPUNK-GLASSMORPHISM-DESIGN-SYSTEM.md
  * Live CSS:       app/globals.css
  *
- * Use these tokens when you need programmatic access (dynamic styles,
+ * Use these membership records when you need programmatic access (dynamic styles,
  * chart libs, framer-motion variants, tailwind-merge composition).
  * For raw Tailwind utility classes in JSX, prefer the className strings
  * directly — they're already in the spec and don't need to round-trip through TS.

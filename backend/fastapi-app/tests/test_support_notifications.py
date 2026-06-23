@@ -59,7 +59,7 @@ def test_support_ticket_alert_sends_whatsapp_when_configured(monkeypatch):
     user = _user()
     settings = SimpleNamespace(
         whatsapp_phone_id="phone-id",
-        whatsapp_token="whatsapp-token",
+        whatsapp_token="whatsapp-membership record",
         whatsapp_to="15551234567",
         whatsapp_api_version="v21.0",
         telegram_bot_token="",
@@ -74,7 +74,7 @@ def test_support_ticket_alert_sends_whatsapp_when_configured(monkeypatch):
     assert len(calls) == 1
     call = calls[0]
     assert call["url"] == "https://graph.facebook.com/v21.0/phone-id/messages"
-    assert call["headers"]["Authorization"] == "Bearer whatsapp-token"
+    assert call["headers"]["Authorization"] == "Bearer whatsapp-membership record"
     assert call["json"]["messaging_product"] == "whatsapp"
     assert call["json"]["to"] == "15551234567"
     assert "New support ticket" in call["json"]["text"]["body"]

@@ -5,11 +5,10 @@ import { ExternalLink, Globe, Lock, ShieldCheck } from 'lucide-react';
 import { PUBLIC_SURFACES } from '../lib/constants';
 
 const guardrails = [
-  'Internal node names, SSH reachability, and repo state do not belong on a public dashboard.',
-  'Credential entry, .env editing, and admin controls must stay behind private internal tooling.',
-  'Financial statements appear here only when they are backed by published, end-to-end proof.',
-  'Operational financial details stay private until they are verified and approved for publication.',
-  'Operational financial details stay private unless specifically approved for public release.',
+  'Only live links, product status, dates, prices, and customer-safe updates appear here.',
+  'Payment changes happen through Square or signed-in account pages.',
+  'Private account details are never shown on a public page.',
+  'Numbers are posted only when they are checked and ready for customers.',
 ];
 
 export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {
@@ -18,10 +17,10 @@ export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {
       <div className="text-center">
         <h2 className="text-3xl font-bold flex items-center justify-center gap-3">
           <ShieldCheck className="w-8 h-8 text-blue-500" />
-          Public Guardrails
+          Customer-Safe Updates
         </h2>
         <p className={`mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-          This page is intentionally scoped to public status, public links, and explicitly tracked numbers.
+          This page is scoped to product status, public links, and customer-safe updates.
         </p>
       </div>
 
@@ -33,7 +32,7 @@ export default function Transparency({ isDarkMode }: { isDarkMode: boolean }) {
         >
           <h3 className="text-xl font-bold flex items-center gap-2 mb-4">
             <Lock className="w-5 h-5 text-blue-500" />
-            What Stays Private
+            What This Page Does Not Show
           </h3>
           <div className="space-y-3 text-sm">
             {guardrails.map((item) => (

@@ -92,7 +92,7 @@ business-exchange/
 │   │   │   ├── messages/      # Messaging
 │   │   │   ├── connectors/    # Connector management
 │   │   │   └── admin/         # Admin APIs
-│   │   ├── globals.css        # Global styles + design tokens
+│   │   ├── globals.css        # Global styles + design membership records
 │   │   ├── layout.tsx         # Root layout
 │   │   └── page.tsx           # Redirect to dashboard/login
 │   ├── components/

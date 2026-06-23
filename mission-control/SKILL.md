@@ -11,7 +11,7 @@ This file is the **routing and decision guide**. Keep implementation details in 
 
 **Version policy.** Use **API v2** for all new work. Use `docs/v1/` only when the user is maintaining an existing v1 integration, because v1 is deprecated.
 
-**Base URL.** Send requests to `https://api.manus.ai`. Authenticate with either `x-manus-api-key: <key>` (for your own integrations) or `Authorization: Bearer <access_token>` (for third-party OAuth2 apps acting on behalf of a user). Successful responses use an `ok: true` envelope; failures use `ok: false` with `error.code`, `error.message`, and `request_id`. API keys are managed from the Manus API integration settings. Some endpoints are **API Key only** and do not accept standard OAuth tokens (trusted team/public apps can access all endpoints) — each endpoint doc notes the supported auth methods.
+**Base URL.** Send requests to `https://api.manus.ai`. Authenticate with either `x-manus-api-key: <key>` (for your own integrations) or `Authorization: Bearer <access_token>` (for third-party OAuth2 apps acting on behalf of a user). Successful responses use an `ok: true` envelope; failures use `ok: false` with `error.code`, `error.message`, and `request_id`. API keys are managed from the Manus API integration settings. Some endpoints are **API Key only** and do not accept standard OAuth membership records (trusted team/public apps can access all endpoints) — each endpoint doc notes the supported auth methods.
 
 ---
 

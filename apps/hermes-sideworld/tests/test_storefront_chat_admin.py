@@ -33,25 +33,25 @@ def _parser() -> LinkParser:
     return parser
 
 
-def test_storefront_is_stripe_only_no_square_or_cashapp() -> None:
+def test_storefront_is_alternate processor_only_no_square_or_cashapp() -> None:
     html = _index().lower()
-    assert "buy.stripe.com" in html
+    assert "buy.alternate processor.com" in html
     assert "square.link" not in html
     assert "checkout.square.site" not in html
     assert "cash.app" not in html
     assert "$youandinotai" not in html
 
 
-def test_all_scan_to_pay_qr_links_are_stripe_and_assets_exist() -> None:
+def test_all_scan_to_pay_qr_links_are_alternate processor_and_assets_exist() -> None:
     parser = _parser()
     qr_images = [img for img in parser.images if img.get("src", "").startswith("assets/qr/")]
     assert len(qr_images) == 5
     for img in qr_images:
         assert (STORE_ROOT / img["src"]).exists()
-        assert "Stripe QR" in img.get("alt", "")
+        assert "alternate processor QR" in img.get("alt", "")
     qr_links = [a["href"] for a in parser.links if a.get("class") == "qr-card"]
     assert len(qr_links) == 5
-    assert all(link.startswith("https://buy.stripe.com/") for link in qr_links)
+    assert all(link.startswith("https://buy.alternate processor.com/") for link in qr_links)
 
 
 def test_admin_key_tester_is_on_site_without_exposing_secret() -> None:

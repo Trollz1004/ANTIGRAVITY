@@ -108,16 +108,16 @@ def admin_key(email: str, product: str, secret: str, name: str, send_email: bool
 
 
 @main.command("webhook-file")
-@click.option("--payload", "payload_path", required=True, help="Path to a Stripe webhook JSON payload")
-@click.option("--signature", required=True, help="Stripe-Signature header value")
-@click.option("--secret", envvar="STRIPE_WEBHOOK_SECRET", required=True, help="Stripe webhook signing secret")
+@click.option("--payload", "payload_path", required=True, help="Path to a Square webhook JSON payload")
+@click.option("--signature", required=True, help="Square-Signature header value")
+@click.option("--secret", envvar="alternate processor_WEBHOOK_SECRET", required=True, help="Square webhook signing secret")
 def webhook_file(payload_path: str, signature: str, secret: str) -> None:
-    """Process a saved Stripe webhook payload for local testing."""
+    """Process a saved Square webhook payload for local testing."""
     from pathlib import Path
 
-    from .fulfillment import handle_stripe_webhook
+    from .fulfillment import handle_alternate processor_webhook
 
-    result = handle_stripe_webhook(Path(payload_path).read_bytes(), signature, secret)
+    result = handle_alternate processor_webhook(Path(payload_path).read_bytes(), signature, secret)
     if result is None:
         console.print("[yellow]Webhook verified; no fulfillment needed for this event type.[/]")
         return

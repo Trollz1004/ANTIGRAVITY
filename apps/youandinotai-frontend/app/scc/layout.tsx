@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Internal Workspace Boundary — ANTIGRAVITY',
-  description: 'Non-indexed public note explaining that internal workflow tooling is not exposed on this dashboard.',
+  title: 'Customer Status - YouAndINotAI',
+  description: 'Customer-safe status page with verified links and support information.',
   robots: {
     index: false,
     follow: false,

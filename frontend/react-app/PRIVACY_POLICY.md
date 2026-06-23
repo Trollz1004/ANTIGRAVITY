@@ -138,7 +138,7 @@ Payments are commercial transactions for product value delivered. We do not atta
 
 | Cookie Type | Purpose | Required? |
 |-------------|---------|-----------|
-| **Essential / Session** | Keeping you logged in, security tokens, CSRF protection | Yes — the site cannot function without these |
+| **Essential / Session** | Keeping you logged in, security membership records, CSRF protection | Yes — the site cannot function without these |
 | **Analytics** | Understanding how users interact with the platform (page views, feature usage) | No — you can opt out |
 | **Cloudflare** | Security (bot detection, DDoS protection) | Yes — required for security |
 | **Square** | Payment processing (fraud detection) | Yes — required to process payments |

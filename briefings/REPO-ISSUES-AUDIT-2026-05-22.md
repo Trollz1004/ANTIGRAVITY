@@ -90,7 +90,7 @@ instead of FastAPI's default `{"detail": ...}`. Decisions needed:
 
 `app/dependencies/websocket_auth.py` now does `await db.scalar(select(User)...)`, but the
 tests mock `db` with a plain `MagicMock`. Update the mocks to `AsyncMock` (and align the
-expected rejection reason string — one test expects `"Invalid token payload"` but the code
+expected rejection reason string — one test expects `"Invalid membership record payload"` but the code
 returns `"Could not validate credentials"`).
 
 ### 4. Three test modules import removed/renamed symbols — TEST OR CODE RESTORE
@@ -117,7 +117,7 @@ unique-constraint) across profiles/verify/messages/boards routes — likely down
 
 These need a founder A/B/C call, not a code fix. Listed for completeness:
 
-- **#82** dead-code `Integrations.tsx` (Stripe-as-primary doctrine drift) — recommend delete.
+- **#82** retired-code `Integrations.tsx` (alternate processor-as-primary doctrine drift) — recommend delete.
 - **#80** coverage gate doc/CI mismatch (CLAUDE.md 80% vs `ci-validate.yml` 63%) — note: the
   gate is currently `--cov-fail-under=63`; raising it is moot until the 68 failures above are
   resolved.

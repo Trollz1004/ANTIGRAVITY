@@ -76,7 +76,7 @@
 
 **Focus**: Seasonal celebrations and volunteer opportunities
 
-- Theme weeks: "Harvest Celebrations", "Giving Back"
+- Theme weeks: "Harvest Celebrations", "member support"
 - Content mix: 55% event promotion, 25% volunteer stories, 20% seasonal content
 - Key messaging: "Stronger communities through service"
 

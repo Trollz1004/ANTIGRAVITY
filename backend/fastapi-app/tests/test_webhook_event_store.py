@@ -24,7 +24,7 @@ def test_legacy_webhook_event_schema_supports_payment_audit(tmp_path: Path):
         "webhook_events",
         MetaData(),
         Column("id", String(36), primary_key=True),
-        Column("stripe_event_id", String(255), nullable=False, unique=True),
+        Column("alternate processor_event_id", String(255), nullable=False, unique=True),
         Column("event_type", String(100), nullable=False),
         Column("payload", JSON, nullable=False),
         Column("processed", Boolean, nullable=False, server_default="0"),
@@ -43,7 +43,7 @@ def test_legacy_webhook_event_schema_supports_payment_audit(tmp_path: Path):
         async with session_factory() as session:
             schema = await get_webhook_event_schema(session)
             assert schema is not None
-            assert schema.external_id_column == "stripe_event_id"
+            assert schema.external_id_column == "alternate processor_event_id"
             assert schema.has_event_source is False
 
             assert await webhook_event_exists(session, "evt_legacy_1") is False

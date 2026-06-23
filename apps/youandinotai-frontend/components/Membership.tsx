@@ -30,7 +30,7 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
       </div>
       <p className={`min-w-0 max-w-3xl leading-relaxed mb-8 break-words ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
         Pick a plan and check out securely through Square. Membership buys
-        platform access, verification support, safety tooling, account support,
+        platform access, verification support, safety features, account support,
         and launch-year product value.
       </p>
 

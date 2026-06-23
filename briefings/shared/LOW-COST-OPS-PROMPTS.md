@@ -1,6 +1,6 @@
 # LOW-COST OPS PROMPTS
 
-> Goal: preserve Codex context/tokens by using local models + Haiku relay where possible.
+> Goal: preserve Codex context/membership records by using local models + Haiku relay where possible.
 > Last updated: 2026-03-05
 
 ---
@@ -31,7 +31,7 @@ Rules:
 
 ---
 
-## Prompt 2: 9020 Marketing Run (No Stripe Blocking)
+## Prompt 2: 9020 Marketing Run (No alternate processor Blocking)
 
 Paste to Claude on 9020:
 
@@ -39,7 +39,7 @@ Paste to Claude on 9020:
 APPLY_CHANGES=YES
 MODE=LOW_COST_MARKETING
 
-Use local/Ollama + browser automation. Keep Stripe non-blocking.
+Use local/Ollama + browser automation. Keep alternate processor non-blocking.
 
 Do now:
 1) Verify repo at origin/main.

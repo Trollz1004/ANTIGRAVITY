@@ -71,7 +71,7 @@ const WORKERS: Agent[] = [
   { id: 'gemma',       name: 'Gemma4',       role: 'Local Worker · 32B',   kind: 'gemma',  status: 'idle', state: 'STANDBY',                body: 'Ollama · awaiting moderation overflow tonight.',   tags: [['idle','IDLE']] },
   { id: 'pi',          name: 'Pi',           role: 'Conversational',       kind: 'gemma',  status: 'idle', state: 'LISTENING',              body: 'Watching #mission-control for context cues.',      tags: [['idle','IDLE']] },
   { id: 'cupid',       name: 'Cupid',        role: 'Ad Ops Worker',        kind: 'codex',  status: 'busy', state: 'PUBLISHING · 12 ads',    body: 'Meta creative refresh · 4 placements live.',       tags: [['busy','RUN']],                             busy: true },
-  { id: 'perplexity',  name: 'Perplexity',   role: 'Research · Deep',      kind: 'gemma',  status: 'live', state: 'SEARCHING · 14 sources', body: 'Indexing court filings · charity compliance.',     tags: [['live','LIVE']],                            busy: true },
+  { id: 'perplexity',  name: 'Perplexity',   role: 'Research · Deep',      kind: 'gemma',  status: 'live', state: 'SEARCHING · 14 sources', body: 'Indexing court filings · product compliance.',     tags: [['live','LIVE']],                            busy: true },
 ];
 
 function AgentCard({ agent }: { agent: Agent }) {
@@ -132,7 +132,7 @@ function LogFeed() {
     const synthetic: LogRow[] = [
       { who: 'hermes', t: '', msg: 'GET /ollama/healthz · 200 · 12ms' },
       { who: 'opus',   t: '', msg: 'Reviewed sticky · ', accent: 'PAPA-238', after: ' · approved for dispatch' },
-      { who: 'gemini', t: '', msg: 'Indexed conversation buffer · 1.2k tokens' },
+      { who: 'gemini', t: '', msg: 'Indexed conversation buffer · 1.2k membership records' },
       { who: 'hermes', t: '', msg: 'Routed prompt → claude-opus-4-5 (cloud)' },
       { who: 'system', t: '', msg: 'Memory: working → semantic promotion · 3 entries' },
     ];
@@ -296,7 +296,7 @@ function LivePulsePanel({ pulse, mcpState }: { pulse: IncomePulse | null; mcpSta
             <div className="kpi">$8,412</div>
             <div className="kpi-delta">+18.4%</div>
           </div>
-          <div className="kpi-foot">⊙ Square primary · Stripe sunset path</div>
+          <div className="kpi-foot">⊙ Square primary · alternate processor sunset path</div>
           <div style={{ marginTop: 14 }}><Spark values={stubRevenue} color="" height={72}/></div>
           <div className="bar-row" style={{ marginTop: 16 }}>
             <span className="label">→ EARMARKED</span>
@@ -419,9 +419,9 @@ export function Dashboard() {
 
       <div className="bento">
 
-        {/* ── HERO · #UntilNoKidInNeed ─────────────────────────── */}
-        <div className="card kids-hero span-12">
-          <div className="kids-bg" aria-hidden="true">
+        {/* ── HERO · Business-only product operations ─────────────────────────── */}
+        <div className="card members-hero span-12">
+          <div className="members-bg" aria-hidden="true">
             <svg viewBox="0 0 1200 220" preserveAspectRatio="none" style={{ width: '100%', height: '100%' }}>
               <defs>
                 <linearGradient id="kg" x1="0" x2="1">
@@ -437,17 +437,17 @@ export function Dashboard() {
               <path d="M0,200 C200,180 300,140 480,150 C620,160 780,100 940,120 C1080,138 1140,80 1200,90 L1200,220 L0,220 Z" fill="url(#kg2)"/>
             </svg>
           </div>
-          <div className="kids-content">
-            <div className="kids-left">
+          <div className="members-content">
+            <div className="members-left">
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span className="mono" style={{ fontSize: 9.5, letterSpacing: '0.32em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>MISSION · ALWAYS-ON</span>
                 <Icon.Heart size={11} style={{ color: 'var(--rose)' }}/>
                 <span className="tag" style={{ background: 'rgba(230,169,58,0.14)', color: 'var(--amber)' }}>ILLUSTRATIVE</span>
               </div>
-              <div className="kids-headline">
+              <div className="members-headline">
                 #Until<span className="accent">No</span>KidIn<span className="accent">Need</span>
               </div>
-              <div className="kids-sub">
+              <div className="members-sub">
                 A portion of what this fleet earns — after taxes, fees, and operating costs — is designated for families who need medical care.
                 Gravity keeps us grounded; AntiGravity tries to lift a kid up.
               </div>
@@ -460,26 +460,26 @@ export function Dashboard() {
                 </button>
               </div>
             </div>
-            <div className="kids-stats">
-              <div className="kids-stat">
-                <div className="kids-stat-v">$10,482</div>
-                <div className="kids-stat-l">EARMARKED FOR CARE · YTD</div>
-                <div className="kids-stat-d up">+$640 THIS WEEK</div>
+            <div className="members-stats">
+              <div className="members-stat">
+                <div className="members-stat-v">$10,482</div>
+                <div className="members-stat-l">EARMARKED FOR CARE · YTD</div>
+                <div className="members-stat-d up">+$640 THIS WEEK</div>
               </div>
-              <div className="kids-stat">
-                <div className="kids-stat-v">14</div>
-                <div className="kids-stat-l">FAMILIES IN OUTREACH</div>
-                <div className="kids-stat-d up">+2 THIS MONTH</div>
+              <div className="members-stat">
+                <div className="members-stat-v">14</div>
+                <div className="members-stat-l">FAMILIES IN OUTREACH</div>
+                <div className="members-stat-d up">+2 THIS MONTH</div>
               </div>
-              <div className="kids-stat">
-                <div className="kids-stat-v">62<span style={{ fontSize: 22, color: 'var(--ink-3)' }}>%</span></div>
-                <div className="kids-stat-l">OF NET PROCEEDS · TARGET</div>
-                <div className="kids-stat-d">→ AICOLLAB4KIDS / OMEGA</div>
+              <div className="members-stat">
+                <div className="members-stat-v">62<span style={{ fontSize: 22, color: 'var(--ink-3)' }}>%</span></div>
+                <div className="members-stat-l">OF NET PROCEEDS · TARGET</div>
+                <div className="members-stat-d">→ AICOLLAB4members / OMEGA</div>
               </div>
-              <div className="kids-stat kids-stat--spark">
-                <div className="kids-stat-l">DESIGNATION ARC · 14D</div>
+              <div className="members-stat members-stat--spark">
+                <div className="members-stat-l">DESIGNATION ARC · 14D</div>
                 <Spark values={givingArc} color="rose" height={72}/>
-                <div className="kids-stat-d up">+182% QoQ</div>
+                <div className="members-stat-d up">+182% QoQ</div>
               </div>
             </div>
           </div>

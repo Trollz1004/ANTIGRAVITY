@@ -19,9 +19,9 @@ const updateConnectorSchema = z.object({
 
 async function getUserFromRequest(request: NextRequest) {
   const cookies = request.headers.get('cookie') || '';
-  const token = getTokenFromCookie(cookies);
-  if (!token) return null;
-  const payload = await verifyToken(token);
+  const membership record = getTokenFromCookie(cookies);
+  if (!membership record) return null;
+  const payload = await verifyToken(membership record);
   if (!payload) return null;
   return prisma.user.findUnique({ where: { id: payload.sub } });
 }

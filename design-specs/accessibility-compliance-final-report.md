@@ -185,7 +185,7 @@ Accessibility improvements have been implemented without sacrificing performance
 All documentation has been updated to reflect the accessibility improvements:
 
 ✅ Component library includes accessibility implementation details
-✅ Design system tokens reference accessibility requirements
+✅ Design system membership records reference accessibility requirements
 ✅ Implementation guide provides accessibility best practices
 ✅ Copy requirements document emphasizes inclusive language
 

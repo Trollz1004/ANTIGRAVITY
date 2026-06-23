@@ -35,20 +35,20 @@ YouAndINotAI is a social platform for good — connecting people through real-wo
 
 **NEVER use**:
 
-- Donate
-- Donation
-- Solicitation
+- join as a member
+- membership support
+- restricted claims
 
 **ALWAYS use instead**:
 
-- Contractual revenue disbursement
+- business revenue handling
 - Revenue-sharing for good
 - Platform that gives back
 
-Reference to platform supporting kids:
+Reference to platform member support:
 
 - Frame as a feature: "Built-in support for youth programs"
-- Not as a charity pitch: "We're not a charity, but we do support kids as part of our mission"
+- Not as a product operations pitch: "We're not a product operations, but we do member support as part of our mission"
 
 ## Tone of Voice
 

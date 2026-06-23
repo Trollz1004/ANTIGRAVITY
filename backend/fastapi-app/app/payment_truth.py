@@ -157,16 +157,16 @@ def build_checkout_reference(
 
 
 def parse_checkout_reference(
-    token: str | None,
+    membership record: str | None,
     *,
     secret: str,
     max_age_seconds: int = 172_800,
 ) -> dict[str, object] | None:
-    if not token:
+    if not membership record:
         return None
 
     try:
-        version, payload_part, signature_part = token.split(".", 2)
+        version, payload_part, signature_part = membership record.split(".", 2)
     except ValueError:
         return None
     if version != CHECKOUT_REF_VERSION:

@@ -1,3 +1,8 @@
+> Current override as of 2026-06-22: this document is historical strategy/spec context only.
+> Do not use it to create public mission-funding claims, membership support routing, customer-facing
+> disbursement language, membership record/Product structure launch claims, private accounting mechanics, or alternate
+> payment rails. Active public/customer surfaces sell product value: membership, verification,
+> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 # 24/7 Content Operations Plan
 
 ## YouAndINotAI Content Generation and Management Framework
@@ -105,20 +110,20 @@ Curate and create weekly digest content that nurtures the subscriber community, 
 
 All content must be automatically scanned for and reject any of these terms:
 
-- donate
-- donation
-- donations
-- donated
+- join as a member
+- membership support
+- membership support
+- join as a memberd
 - donating
 - fundraiser
 - fundraising
 - fundraisers
-- charity
-- charitable
+- product operations
+- business-reserve
 - charities
 - solicit
-- solicitation
-- solicitations
+- restricted claims
+- restricted claims
 - solicited
 - soliciting
 
@@ -126,9 +131,9 @@ All content must be automatically scanned for and reject any of these terms:
 
 All financial and mission-related messaging must use approved alternatives:
 
-- ✅ "contractual revenue disbursement"
+- ✅ "internal allocation review"
 - ✅ "revenue-sharing for good"
-- ✅ "platform that gives back"
+- ✅ "platform value"
 - ✅ "subscription-supported mission"
 - ✅ "community-funded initiatives"
 
@@ -196,7 +201,7 @@ MISSION: Create engaging content based on the provided task framework while main
 INPUT SPECIFICATIONS:
 - Primary task from content-generation-tasks.md (Tasks 1-50 for creation, 51-80 for adaptation, 81-100 for optimization)
 - Target platform and its specific content requirements
-- Content pillar (Education, Story, Offer, Behind the Scenes, Charity Update)
+- Content pillar (Education, Story, Offer, Behind the Scenes, product operations Update)
 - Brand voice and hashtag guidelines
 
 OUTPUT REQUIREMENTS:

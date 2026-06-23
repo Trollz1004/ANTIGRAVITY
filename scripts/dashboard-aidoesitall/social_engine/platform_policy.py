@@ -12,27 +12,27 @@ from __future__ import annotations
 LEGAL_SAFE_NODE_POLICY_VERSION = "2026-03-07-desktop-app-first"
 
 POLICY_SUMMARY = (
-    "CodeX nodes generate drafts, queues, reports, and owned-property content. "
-    "Public social posting stays human-gated or external-tool-gated."
+    "CodeX nodes and marketing claws generate drafts, queues, reports, and owned-property content. "
+    "Public social posting stays Josh-approved and human-gated."
 )
 
 PLATFORM_POLICY = {
     "twitter": {
-        "mode": "perplexity_only",
+        "mode": "hermes_grok_draft",
         "live_post_allowed": False,
-        "owner": "Perplexity with Josh supervising",
-        "reason": "X posting stays outside node automation.",
+        "owner": "Hermes Marketing with Grok/X context and Josh approving",
+        "reason": "X posting is draft-first; no autonomous posting.",
     },
     "facebook": {
-        "mode": "perplexity_only",
+        "mode": "draft_only",
         "live_post_allowed": False,
-        "owner": "Perplexity with Josh supervising",
-        "reason": "Facebook posting stays outside node automation.",
+        "owner": "Hermes/MetaClaw draft with Josh approving",
+        "reason": "Facebook posting is draft-first; no autonomous posting.",
     },
     "reddit": {
-        "mode": "devvit_or_manual",
+        "mode": "zai_openclaw_or_manual",
         "live_post_allowed": False,
-        "owner": "Devvit, Opus, or Perplexity",
+        "owner": "Z.ai OpenClaws, Devvit, Opus, or manual",
         "reason": "No direct node posting to Reddit.",
     },
     "linkedin": {
@@ -68,8 +68,8 @@ PLATFORM_POLICY = {
     "youtube": {
         "mode": "draft_only",
         "live_post_allowed": False,
-        "owner": "Manual",
-        "reason": "Nodes can prepare titles, descriptions, and clip notes only.",
+        "owner": "Hermes Marketing drafts; Josh publishes",
+        "reason": "Nodes can prepare titles, descriptions, clip notes, and community post drafts only.",
     },
     "quora": {
         "mode": "draft_only",

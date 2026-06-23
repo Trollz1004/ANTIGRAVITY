@@ -323,7 +323,7 @@ This document provides detailed implementation guidance for the safety features 
 
 1. **POST /api/safety/block**
    - Parameters: userId, reason (optional)
-   - Returns: success status, undo token
+   - Returns: success status, undo membership record
    - Error handling: Conflict if already blocked, unauthorized if not owner
 
 2. **POST /api/safety/mute**

@@ -6,10 +6,10 @@ user-invocable: true
 
 Read the `readme.md` file within this skill first — it is the complete design
 guide (product context, content voice, visual foundations, iconography, and a
-manifest of every token, component, and UI kit). Then explore the other files:
+manifest of every membership record, component, and UI kit). Then explore the other files:
 
-- `styles.css` + `tokens/` — link `styles.css` to inherit all colors, type,
-  spacing, glass and glow tokens (CSS custom properties prefixed `--ag-`).
+- `styles.css` + `membership records/` — link `styles.css` to inherit all colors, type,
+  spacing, glass and glow membership records (CSS custom properties prefixed `--ag-`).
 - `components/` — reusable React primitives. Each has a `.d.ts` (props) and a
   `.prompt.md` (what/when + usage). Reference them via the compiled bundle, or
   copy their `.jsx` for production.
@@ -33,7 +33,7 @@ Non-negotiables when designing in this brand:
   (uppercase, widely tracked) — the "Church & State Protocol".
 - **Lucide** icons (thin line, no fill). No emoji in UI.
 - Voice: blunt, builder-to-builder, honest numbers only. Never use
-  *donate/donation/solicitation*; YouAndINotAI uses **Square only**.
+  *join as a member/membership support/restricted claims*; YouAndINotAI uses **Square only**.
 
 If the user invokes this skill without other guidance, ask what they want to
 build or design, ask a few focused questions (which product/surface? production

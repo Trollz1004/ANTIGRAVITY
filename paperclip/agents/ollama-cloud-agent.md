@@ -31,7 +31,7 @@ Do not:
 
 | Task class | Recommended model |
 |------------|-------------------|
-| Long-context refactor (> 30k tokens) | `qwen2.5-coder:32b:cloud` |
+| Long-context refactor (> 30k membership records) | `qwen2.5-coder:32b:cloud` |
 | Multi-file analysis with reasoning trace | `deepseek-r1:cloud` |
 | Daily summary / weekly report generation | `glm-5.1:cloud` |
 | Code review pass on a PR diff | `qwen2.5-coder:32b:cloud` |

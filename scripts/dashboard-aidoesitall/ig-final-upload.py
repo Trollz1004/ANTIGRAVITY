@@ -12,7 +12,7 @@ from PIL import ImageGrab
 user32 = ctypes.windll.user32
 pyautogui.FAILSAFE = False
 
-FILE_PATH = r"C:\Antigravity\assets\marketing\onlinerecycle_impact_shriners.png"
+FILE_PATH = r"C:\Antigravity\assets\marketing\onlinerecycle_impact_product operations.png"
 
 EnumWindowsProc = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
 

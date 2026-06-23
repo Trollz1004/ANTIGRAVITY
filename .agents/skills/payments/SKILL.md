@@ -1,13 +1,13 @@
 ---
 name: payments
-description: Square vs Stripe per-surface rules, live payment links, webhook verification, revenue allocation flow, and Square location/account details. Use for any payment button, checkout, subscription, webhook, ledger entry, or pricing page work on youandinotai.com or sibling surfaces.
+description: Square payment rules, live payment links, webhook verification, revenue allocation flow, and Square location/account details. Use for any payment button, checkout, subscription, webhook, ledger entry, or pricing page work on youandinotai.com or aligned active surfaces.
 ---
 
-# Payments (Square Primary for Dating)
+# Payments (Square Current Active Rail)
 
 ## Hard Rules
-- youandinotai.com (dating / social-discovery): Square ONLY. Stripe AUP prohibits dating platforms.
-- Non-dating surfaces (onlinerecycle.org, ai-solutions.store, YouTube, merch, etc.): Stripe is fine.
+- youandinotai.com and aligned active checkout surfaces: Square ONLY unless Joshua provides a newer timestamped written directive.
+- Do not introduce alternate processor, alternate provider, alternate payment rails, or alternate payment rails into active checkout, public copy, prompts, or launch gates without that directive.
 - All money flows through normal LLC merchant, bank, ledger, and tax workflows.
 - Live Square account: joshlcoleman@gmail.com , location LY5GN09F5AN83 (Trash Or Treasure / YouAndINotAI).
 - Current links (verify before use):

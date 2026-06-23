@@ -21,7 +21,7 @@ correct channel runtime, and feed performance back to each company CEO.
 - Qualified traffic → paying customers per surface (attribution back to each CEO's funnel).
 - Content shipped on cadence; no dead channels.
 - Compliance: zero canonical-7 words in any ad/post/caption/description; sell on product merit,
-  reveal the mission's reserved-share framing tastefully (never as a charity ask).
+  reveal the mission's product-value framing tastefully (never as a non-product ask).
 
 ## Hard rules
 Customer-facing copy is a customer surface — the canonical-7 ban is absolute. No fabricated social

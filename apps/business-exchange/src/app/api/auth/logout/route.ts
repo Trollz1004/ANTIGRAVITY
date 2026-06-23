@@ -6,10 +6,10 @@ import { createAuditLog } from '@/lib/audit';
 export async function POST(request: Request) {
   try {
     const cookies = request.headers.get('cookie') || '';
-    const token = getTokenFromCookie(cookies);
-    
-    if (token) {
-      const session = await prisma.session.findUnique({ where: { token } });
+    const membership record = getTokenFromCookie(cookies);
+
+    if (membership record) {
+      const session = await prisma.session.findUnique({ where: { membership record } });
       if (session) {
         await prisma.session.delete({ where: { id: session.id } });
         await createAuditLog({

@@ -16,7 +16,7 @@ The goal is simple: make Codex a calm coordinator that knows where truth lives, 
 3. Do not create new root spellings such as `C:\Antigravity`, `C:\ANTIGRAVITY`, or `/mnt/c/Antigravity`.
 4. Never use `ollama launch codex`, the Ollama Codex wrapper, or `.claude/agents/ollama-codex.md`.
 5. Real Codex Desktop is the coding authority for repo edits, GitHub PRs, CI repair, security-sensitive changes, and final merge/delete flow.
-6. Never print, store, test, or copy real secrets, populated `.env` values, tokens, private phone numbers, or raw chat logs.
+6. Never print, store, test, or copy real secrets, populated `.env` values, membership records, private phone numbers, or raw chat logs.
 7. Slack, Gmail, and social/customer-facing channels are draft-first unless Josh explicitly says to send live.
 8. Do not run autonomous social posting, liking, following, joining, replying, or engagement automation.
 9. No ownership-sale, fundraising, or public control-rights surfaces in the current business-only lane.
@@ -62,11 +62,11 @@ Use the cheapest safe tool that can do the job well.
 | Local support/research fleet tasks | OpenClaw wrapper |
 | Simple conversational/explainer work | Pi wrapper |
 | Provider/model value decisions | AI value/cost reasoning, not paid APIs by default |
-| Token-budget protection | Hermes or Grok-backed side research for low-risk synthesis, with Codex retaining final authority |
+| membership record-budget protection | Hermes or Grok-backed side research for low-risk synthesis, with Codex retaining final authority |
 
 Do not route code edits to the Ollama Codex wrapper. If a historical doc recommends it, treat that doc as stale.
 
-## Token Budget Policy
+## membership record Budget Policy
 
 Default posture:
 
@@ -168,7 +168,7 @@ Before editing launch, marketing, payment, support, or public surfaces:
 1. Read current doctrine and deployment source of truth.
 2. Scan for restricted public-impact terms in active surfaces.
 3. Keep payment rails aligned to current repo doctrine.
-4. Do not add or move Stripe/Square keys without explicit source-of-truth confirmation.
+4. Do not add or move alternate processor/Square keys without explicit source-of-truth confirmation.
 5. Use placeholder environment variable names only.
 
 ## Subagent Use

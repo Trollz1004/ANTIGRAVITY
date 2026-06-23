@@ -13,7 +13,7 @@ export function MarsLaunch() {
   const [momentos, setMomentos] = useState<Momento[]>([
     { id: '1', text: 'Retire legacy support dependencies', type: 'task', timestamp: '12:00' },
     { id: '2', text: 'Initialize Hermes logic gates', type: 'task', timestamp: '12:05' },
-    { id: '3', text: 'Sync Antigravity DAO quorum', type: 'memory', timestamp: 'Yesterday' },
+    { id: '3', text: 'Sync Antigravity product readiness', type: 'memory', timestamp: 'Yesterday' },
   ]);
 
   const [isLaunching, setIsLaunching] = useState(false);
@@ -37,8 +37,8 @@ export function MarsLaunch() {
             <span className="text-[10px] font-bold text-[#6b82a6] uppercase tracking-widest">AntiGravity Engine v4.6</span>
           </div>
         </div>
-        
-        <button 
+
+        <button
           onClick={startLiftoff}
           disabled={isLaunching}
           className={`relative px-8 py-3 rounded-xl font-black uppercase tracking-[0.2em] transition-all active:scale-95 overflow-hidden group ${
@@ -50,7 +50,7 @@ export function MarsLaunch() {
             {isLaunching ? 'LIFTING OFF...' : 'ONE CLICK TO MARS'}
           </div>
           {isLaunching && (
-             <motion.div 
+             <motion.div
                className="absolute inset-0 bg-white/20"
                initial={{ x: '-100%' }}
                animate={{ x: '100%' }}
@@ -70,11 +70,11 @@ export function MarsLaunch() {
             </div>
             <span className="text-[9px] font-bold text-[#4a5568] uppercase">{momentos.length} Memories</span>
           </div>
-          
+
           <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
             <AnimatePresence>
               {momentos.map((m) => (
-                <motion.div 
+                <motion.div
                   key={m.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -106,7 +106,7 @@ export function MarsLaunch() {
               Active compression removes legacy support overhead. AntiGravity Platforms cannot be held down by old weights.
             </p>
           </div>
-          
+
           <div className="p-5 rounded-2xl bg-gradient-to-br from-[#1a2332] to-[#0a0f1a] border border-[#2a3a52] relative overflow-hidden">
              <div className="absolute top-0 right-0 p-4 opacity-10">
                <Cpu size={64} className="text-[#00e676]" />

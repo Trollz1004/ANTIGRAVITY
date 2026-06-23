@@ -242,7 +242,7 @@ export function Verify() {
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-[#111111] bg-white font-black text-[#111111]">
                     1
                   </span>
-                  <span>Answer a short liveness prompt.</span>
+                  <span>Answer a short liveness check.</span>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-[#111111] bg-white font-black text-[#111111]">
@@ -259,8 +259,7 @@ export function Verify() {
               </div>
               <p className="mt-4 text-xs font-medium leading-6 text-[#5c594f]">
                 Square-hosted checkout always supports card entry. Apple Pay and
-                Google Pay appear on supported devices and browsers. Cash App
-                Pay is not configured right now, and Afterpay is currently
+                Google Pay appear on supported devices and browsers. wallet pay is not configured right now, and Afterpay is currently
                 disabled.
               </p>
             </div>

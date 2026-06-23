@@ -13,7 +13,7 @@ interface Profile {
   subscription_active?: boolean;
   gender?: string;
   founder?: boolean;
-  prompt?: string;
+  conversationStarter?: string;
   intent?: string;
   availability?: string;
   compatibility?: string;
@@ -42,8 +42,8 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
 
   const initial = profile.display_name.charAt(0).toUpperCase();
   const verifiedLabel = profile.verificationLevel || (profile.verified ? 'Verified profile' : 'Verification pending');
-  const profilePrompt =
-    profile.prompt ||
+  const profileAnswer =
+    profile.conversationStarter ||
     'I am here for real conversation, clear intent, and a first date that feels safe for both people.';
 
   return (
@@ -133,10 +133,10 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
 
           <div className="mb-3 rounded-[1.25rem] border-4 border-white/70 bg-white/92 p-4 text-[#111111]">
             <div className="text-[0.64rem] font-black uppercase tracking-[0.18em] text-[#ff4f00]">
-              Prompt
+              Profile question
             </div>
             <p className="mt-2 text-base font-black leading-snug">
-              {profilePrompt}
+              {profileAnswer}
             </p>
           </div>
 

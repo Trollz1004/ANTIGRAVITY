@@ -106,7 +106,7 @@ def test_jwt_weak_words_detected():
 
 
 def test_square_missing_token_logs_info_no_finding():
-    """Missing Square token is development-expected; should not add a finding."""
+    """Missing Square membership record is development-expected; should not add a finding."""
     audit = _make_audit({"square_access_token": ""})
     audit.check_square_configuration()
     square_findings = [

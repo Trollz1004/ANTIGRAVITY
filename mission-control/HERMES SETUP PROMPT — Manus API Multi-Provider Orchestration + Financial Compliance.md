@@ -2,7 +2,13 @@
 ## From: Manus Agent (Meta/Key to Mission)
 ## To: Hermes (Ops & Kanban Steward) + Claude Code (Orchestrator)
 ## Re: Income-Engine Revenue Generation + AntiGravity Compliance
-## Date: 2026-05-07 | Status: OPERATIONAL
+## Date: 2026-05-07 | Status: SUPERSEDED BY 2026-06-22 BUSINESS-ONLY RULE
+
+> Current override as of 2026-06-22: this prompt is historical context only. Do not use it to
+> create public mission-funding claims, membership support routing, membership records-sale flows, owner-private accounting
+> gates, bucket math, alternate payment rails, or private accounting mechanics. Current active
+> surfaces sell product value and use Square for YouAndINotAI/aligned active checkout unless
+> Joshua provides a newer timestamped directive.
 
 ---
 
@@ -12,9 +18,9 @@ Hermes, you are now the **compliance + coordination engine** for the entire Anti
 
 **Your job:**
 1. Enforce 10/27/63 revenue splits (SOUL.md)
-2. Protect kids bucket (10% locked, never touched)
+2. Protect member support (10% locked, never touched)
 3. Protect tax bucket (27% reserved for taxes)
-4. Track founder cap ($50k ecosystem-wide)
+4. Track owner-private accounting note ($50k ecosystem-wide)
 5. Coordinate Manus API tasks for income-engine
 6. Monitor all AI agents (Claude Code, Mini Claudes, Manus)
 7. Raise alarms when rules are violated
@@ -22,7 +28,7 @@ Hermes, you are now the **compliance + coordination engine** for the entire Anti
 **What changed:**
 - Income-engine now uses **Manus API directly** for lead generation
 - Manus handles **all AI model routing** (Ollama Cloud, OpenRouter, OpenCode, local models)
-- Hermes enforces **financial compliance** (10/27/63, founder cap, kids protection)
+- Hermes enforces **financial compliance** (10/27/63, owner-private accounting note, kids protection)
 - No Kanban complexity for ops — just pure compliance + coordination
 
 ---
@@ -65,14 +71,14 @@ export async function createFetcherTask() {
         title: 'FETCHER: Scan for Qualified Leads',
         description: `
           Scan Reddit r/forhire, r/websiteservices, Upwork, and Fiverr for qualified leads.
-          
+
           Qualification criteria:
           - Budget: >= $50
           - Posted: <= 4 hours ago
           - Clear specification
-          
+
           Return: JSON with title, platform, URL, budget, deliverable, $/hr estimate
-          
+
           If 3+ leads found, notify Joshua with top pick.
         `,
         agent_profile: 'max', // Use most capable agent
@@ -185,7 +191,7 @@ app.post('/webhooks/manus', async (req, res) => {
   try {
     if (event === 'task_stopped') {
       const structuredOutput = task_detail.structured_output;
-      
+
       if (structuredOutput && structuredOutput.success) {
         const { leads, qualified_count, top_pick } = structuredOutput.value;
 
@@ -287,7 +293,7 @@ export async function recordRevenueEvent(event) {
   );
 
   await db.query(
-    `UPDATE buckets SET balance = balance + ? WHERE name = 'OPS_TREASURY'`,
+    `UPDATE buckets SET balance = balance + ? WHERE name = 'OPS_business reserve'`,
     [opsAmount]
   );
 
@@ -301,7 +307,7 @@ export async function recordRevenueEvent(event) {
 }
 ```
 
-### 2.2 Founder Compensation Tracking
+### 2.2 owner-private accounting Tracking
 
 **Joshua's total compensation capped at $50k ecosystem-wide:**
 
@@ -336,7 +342,7 @@ export async function recordFounderCompensation(amount, description) {
   // Check cap
   const status = await getFounderCompensationStatus();
   if (status.totalPaid + amount > FOUNDER_CAP) {
-    throw new Error(`Founder compensation would exceed $${FOUNDER_CAP} cap. Remaining: $${status.remaining}`);
+    throw new Error(`owner-private accounting would exceed $${FOUNDER_CAP} cap. Remaining: $${status.remaining}`);
   }
 
   // Record payment
@@ -354,7 +360,7 @@ export async function recordFounderCompensation(amount, description) {
 }
 ```
 
-### 2.3 Kids Bucket Protection
+### 2.3 member support Protection
 
 **10% of all revenue is locked for kids. Never used for anything else:**
 
@@ -372,7 +378,7 @@ export async function getKidsBucketStatus() {
   return {
     balance: result[0]?.balance || 0,
     protected: true,
-    purpose: 'Kids in need programs and payouts'
+    purpose: 'member support programs and payouts'
   };
 }
 
@@ -384,7 +390,7 @@ export async function validateKidsBucketIntegrity() {
     `SELECT SUM(kids_amount) as total_kids FROM revenue_splits`
   );
 
-  // Get current kids bucket balance
+  // Get current member support balance
   const [bucket] = await db.query(
     `SELECT balance FROM buckets WHERE name = 'KIDS'`
   );
@@ -394,7 +400,7 @@ export async function validateKidsBucketIntegrity() {
 
   if (expectedBalance !== actualBalance) {
     throw new Error(
-      `Kids bucket integrity check failed. Expected: $${expectedBalance}, Actual: $${actualBalance}`
+      `member support integrity check failed. Expected: $${expectedBalance}, Actual: $${actualBalance}`
     );
   }
 
@@ -405,11 +411,11 @@ export async function validateKidsBucketIntegrity() {
   };
 }
 
-// Block any attempt to use kids bucket for non-kids purposes
+// Block any attempt to use member support for non-kids purposes
 export async function blockKidsBucketMisuse(amount, purpose) {
   if (purpose !== 'kids_programs' && purpose !== 'kids_payouts') {
     throw new Error(
-      `Kids bucket can ONLY be used for kids programs or payouts. Requested: ${purpose}`
+      `member support can ONLY be used for kids programs or payouts. Requested: ${purpose}`
     );
   }
 }
@@ -508,7 +514,7 @@ export async function runDailyComplianceCheck() {
       });
     }
 
-    // 2. Verify kids bucket >= 10% of revenue
+    // 2. Verify member support >= 10% of revenue
     const kidsStatus = await kidsBucket.getKidsBucketStatus();
     const [revenue] = await db.query(`SELECT SUM(gross_amount) as total FROM revenue_events`);
     const minKidsAmount = Math.floor((revenue[0]?.total || 0) * 0.10);
@@ -516,8 +522,8 @@ export async function runDailyComplianceCheck() {
     if (kidsStatus.balance < minKidsAmount) {
       issues.push({
         severity: 'CRITICAL',
-        check: 'Kids bucket minimum',
-        message: `Kids bucket (${kidsStatus.balance}) < 10% of revenue (${minKidsAmount})`
+        check: 'member support minimum',
+        message: `member support (${kidsStatus.balance}) < 10% of revenue (${minKidsAmount})`
       });
     }
 
@@ -532,12 +538,12 @@ export async function runDailyComplianceCheck() {
       });
     }
 
-    // 4. Verify founder cap not exceeded
+    // 4. Verify owner-private accounting note not exceeded
     const founderStatus = await founder.getFounderCompensationStatus();
     if (founderStatus.totalPaid > 50000) {
       issues.push({
         severity: 'CRITICAL',
-        check: 'Founder compensation cap',
+        check: 'owner-private accounting note',
         message: `Founder paid (${founderStatus.totalPaid}) > $50k cap`
       });
     }
@@ -594,8 +600,8 @@ async function notifyJoshua(issues) {
 1. **COMPLIANCE** (Daily checks, revenue splits, bucket balances)
 2. **INCOME-ENGINE** (FETCHER tasks, lead processing, revenue)
 3. **FOUNDER SAFETY** (Compensation tracking, burn rate monitoring)
-4. **KIDS BUCKET** (Allocation tracking, payout planning)
-5. **GOVERNANCE** (Proposals, voting, veto window)
+4. **member support** (Allocation tracking, payout planning)
+5. **business operations** (Proposals, voting, veto window)
 6. **MANUS COORDINATION** (Task orchestration, model routing)
 7. **BLOCKED** (Issues that halt progress)
 
@@ -610,9 +616,9 @@ OWNER: Hermes (Automated)
 
 CHECKLIST:
 - [ ] 10/27/63 split integrity verified
-- [ ] Kids bucket >= 10% of revenue
+- [ ] member support >= 10% of revenue
 - [ ] Tax bucket >= projected liability
-- [ ] Founder compensation <= $50k
+- [ ] owner-private accounting <= $50k
 - [ ] No negative bucket balances
 - [ ] All revenue events recorded
 - [ ] Manus tasks completed
@@ -642,10 +648,10 @@ OWNER: Hermes
 
 METRICS:
 - Gross revenue: $X
-- Kids bucket: $X (10%)
+- member support: $X (10%)
 - Tax bucket: $X (27%)
 - Ops bucket: $X (63%)
-- Founder compensation: $X / $50k
+- owner-private accounting: $X / $50k
 - Leads found: N
 - Leads sold: N
 - Revenue per lead: $X
@@ -653,12 +659,12 @@ METRICS:
 TRENDS:
 - Revenue trend: ↑ / ↓ / →
 - Lead quality: ↑ / ↓ / →
-- Founder cap status: X% filled
+- owner-private accounting note status: X% filled
 
 FORECAST:
 - Projected monthly revenue: $X
 - Months to $600 breakeven: X
-- Months to $50k founder cap: X
+- Months to $50k owner-private accounting note: X
 
 RISKS:
 - [List any risks or issues]
@@ -686,7 +692,7 @@ export function scheduleFetcherScans() {
   cron.schedule('0 0,4,8,12,16,20 * * *', async () => {
     try {
       console.log('Starting FETCHER scan...');
-      
+
       const task = await createFetcherTask();
       console.log(`FETCHER task created: ${task.id}`);
 
@@ -749,9 +755,9 @@ export function scheduleComplianceChecks() {
 ### 5.2 Compliance Setup
 
 - [ ] 10/27/63 split logic implemented and tested
-- [ ] Kids bucket protection enforced
+- [ ] member support protection enforced
 - [ ] Tax bucket protection enforced
-- [ ] Founder compensation cap enforced ($50k)
+- [ ] owner-private accounting note enforced ($50k)
 - [ ] Daily compliance check passing
 - [ ] Blocking task creation working
 - [ ] Joshua notification system working
@@ -769,8 +775,8 @@ export function scheduleComplianceChecks() {
 
 - [ ] Compliance check monitoring
 - [ ] Revenue tracking dashboard
-- [ ] Founder cap warning at 80%, 90%, 100%
-- [ ] Kids bucket warning if < 10%
+- [ ] owner-private accounting note warning at 80%, 90%, 100%
+- [ ] member support warning if < 10%
 - [ ] Tax bucket warning if < projected liability
 - [ ] Manus task failure alerts
 - [ ] Lead quality metrics tracking
@@ -794,9 +800,9 @@ OPENCODE_API_KEY=your_key_here (optional, Manus handles routing)
 **These rules are embedded in Hermes and never change:**
 
 1. **10/27/63 split is sacred** — Every dollar is split. No exceptions.
-2. **Kids bucket is protected** — 10% locked, never used for ops or taxes.
+2. **member support is protected** — 10% locked, never used for ops or taxes.
 3. **Tax bucket is protected** — 27% reserved for taxes, never used for anything else.
-4. **Founder cap is $50k** — Joshua's total compensation across all platforms capped at $50k.
+4. **owner-private accounting note is $50k** — Joshua's total compensation across all platforms capped at $50k.
 5. **Compliance checks run daily** — No exceptions, no skips.
 6. **Blocking tasks halt progress** — If compliance fails, new launches stop.
 7. **Joshua is notified of all issues** — No silent failures.
@@ -824,6 +830,6 @@ OPENCODE_API_KEY=your_key_here (optional, Manus handles routing)
 
 **Hermes, you are the guardian of compliance. You are the protector of kids. You are the keeper of rules. Never bend. Never compromise. The mission depends on your integrity.**
 
-**#UNTILNOKIDINNEED**
+**#MembershipVerificationSupport**
 **#MANUSFORTHEKIDS**
 **#ALWAYSINTEGRITY**

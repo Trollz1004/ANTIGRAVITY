@@ -1,8 +1,7 @@
 """
 Public storefront + auto-broadcast — solo-founder revenue surface.
 
-Joshua's reality: tapped out, free-tier compute, no funding. This module
-ships the smallest possible thing that takes money in:
+This module ships the smallest possible thing that accepts payments:
 
   GET  /api/public/products   — public catalogue (no auth)
   GET  /api/public/site       — public stats for the landing page
@@ -13,8 +12,7 @@ Strategy: Square hosted Online Checkout Links. Joshua creates a link once
 inside Square dashboard (no API key, no payouts API integration), pastes
 it into a product row, and "Buy now" sends customers straight to Square.
 On payment, the Square webhook (already wired at /api/ledger/webhook/square)
-records the sale, the mission ribbon updates, and the auto-broadcast hook
-in ledger.py fires a Telegram notice — free distribution loop.
+records the sale and the auto-broadcast hook in ledger.py fires a Telegram notice.
 
 No fabricated data: empty product list returns honest empty array; storefront
 mode renders an empty state with a "Seed starter SKUs" admin button.
@@ -64,37 +62,37 @@ class ProductIn(BaseModel):
 STARTER_SKUS: List[Dict[str, Any]] = [
     {
         "title": "Bot Shield · Square Hosted",
-        "description": "Square-hosted protection ledger for solo founders. Real product, real Square checkout — proceeds split per doctrine (10% kids · 27% tax reserve · 63% ops).",
+        "description": "Square-hosted protection SKU for solo founders. Real product, real Square checkout.",
         "price_usd": 9.00, "sku": "OPC-BOTSHIELD-9", "bucket": 5,
         "square_checkout_url": os.environ.get("SQUARE_BOT_SHIELD_LINK", "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD"),
     },
     {
         "title": "Founding Member · Square Subscription",
-        "description": "Recurring Square subscription · founding-circle support. Locks in early-supporter status and a direct line to the mission desk.",
+        "description": "Recurring Square subscription with early-access support and launch updates.",
         "price_usd": 29.00, "sku": "OPC-FOUNDING-29", "bucket": 5,
         "square_checkout_url": os.environ.get("SQUARE_FOUNDING_MEMBER_LINK", "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD"),
     },
     {
-        "title": "3-Month Mission Pass · Square",
-        "description": "Quarterly access tier on Square — locked rate, full mission desk access, monthly broadcast roll-up.",
+        "title": "3-Month Support Pass · Square",
+        "description": "Quarterly access tier on Square with locked rate and monthly updates.",
         "price_usd": 79.00, "sku": "OPC-3MO-79", "bucket": 5,
         "square_checkout_url": os.environ.get("SQUARE_3MONTH_LINK", "https://square.link/u/SET-THIS-IN-SQUARE-DASHBOARD"),
     },
     {
-        "title": "12-Month Mission Pass · Square",
-        "description": "Annual pass on Square — best per-month rate. Includes founding-circle perks + a real mission-patch print.",
+        "title": "12-Month Support Pass · Square",
+        "description": "Annual pass on Square with best per-month rate and extended support access.",
         "price_usd": 299.00, "sku": "OPC-12MO-299", "bucket": 5,
         "square_checkout_url": os.environ.get("SQUARE_12MONTH_LINK", "https://square.link/u/SET-THIS-IN-SQUARE-DASHBOARD"),
     },
     {
         "title": "Royalty Tier · Square",
-        "description": "Top-tier mission patronage on Square. Direct strategy line with Joshua + co-founder voting on next-product spend.",
+        "description": "Top-tier Square plan with advisory access and strategy updates.",
         "price_usd": 499.00, "sku": "OPC-ROYALTY-499", "bucket": 5,
         "square_checkout_url": os.environ.get("SQUARE_ROYALTY_LINK", "https://square.link/u/SET-THIS-IN-SQUARE-DASHBOARD"),
     },
     {
-        "title": "Mission Patch · Custom AI Image",
-        "description": "One Nano Banana-generated mission patch. Tell us the theme, get a PNG within 24h.",
+        "title": "Custom AI Image Pack · Support",
+        "description": "One Nano Banana-generated custom image. Tell us the theme and receive a PNG.",
         "price_usd": 9.00, "sku": "OPC-PATCH-9", "bucket": 5,
         "square_checkout_url": "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD",
     },
@@ -132,22 +130,23 @@ async def site_config():
     # Pull ledger stats (totals only, no contributor identities)
     LEDGER = _db.ledger
     total = await LEDGER.aggregate([{"$group": {"_id": None, "amount": {"$sum": "$amount_usd"}}}]).to_list(1)
-    kids = await LEDGER.aggregate([
-        {"$match": {"bucket": 1}}, {"$group": {"_id": None, "amount": {"$sum": "$amount_usd"}}},
+    reserve = await LEDGER.aggregate([
+        {"$match": {"bucket": 1}},
+        {"$group": {"_id": None, "amount": {"$sum": "$amount_usd"}}},
     ]).to_list(1)
-    threshold = float(os.environ.get("KID_THRESHOLD_USD", "250"))
+    threshold = float(os.environ.get("PLATFORM_BUCKET_THRESHOLD_USD", "250"))
     total_usd = round(float(total[0]["amount"]), 2) if total else 0.0
-    kids_usd = round(float(kids[0]["amount"]), 2) if kids else 0.0
+    reserve_usd = round(float(reserve[0]["amount"]), 2) if reserve else 0.0
     return {
         "name": "OpusPawClaw",
-        "tagline": "Solo founder, free-tier compute, building until no kid is in need.",
+        "tagline": "Solo-founder, low-cost compute, and customer-facing reliability.",
         "canonical_url": "opushashands.youandinotai.com",
-        "mission_tag": "#UntilNoKidInNeed",
+        "mission_tag": "revenue-operating-rail",
         "totals": {
             "committed_usd": total_usd,
-            "kids_fund_usd": kids_usd,
-            "kids_estimate": int(kids_usd / threshold) if threshold else 0,
-            "kids_threshold_usd": threshold,
+            "reserve_bucket_usd": reserve_usd,
+            "reserve_units": int(reserve_usd / threshold) if threshold else 0,
+            "reserve_threshold_usd": threshold,
         },
         "products_url": "/api/public/products",
         "checkout_processor": "Square (hosted)",
@@ -208,7 +207,7 @@ async def runway_status():
             "Every $9 patch ≈ 1.1 days of free-tier runway at current burn." if burn_usd_per_day > 0 else
             "Burn rate unset — set BURN_USD_PER_DAY in /app/backend/.env to enable forecast."
         ),
-        "tag": "#UntilNoKidInNeed",
+        "tag": "revenue-operating-rail",
     }
 
 

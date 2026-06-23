@@ -6,11 +6,11 @@
    Everything reachable from here ships to consumers.
    ============================================================================ */
 
-@import "tokens/fonts.css";
-@import "tokens/colors.css";
-@import "tokens/typography.css";
-@import "tokens/spacing.css";
-@import "tokens/effects.css";
+@import "membership records/fonts.css";
+@import "membership records/colors.css";
+@import "membership records/typography.css";
+@import "membership records/spacing.css";
+@import "membership records/effects.css";
 
 /* ---- Base reset / app shell -------------------------------------------- */
 *,

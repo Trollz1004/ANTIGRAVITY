@@ -39,13 +39,13 @@ export interface Agent {
 
 export type TokenSymbol = "LOVE" | "UKID" | "GREEN" | "AGRAV";
 
-export interface Token {
+export interface membership record {
   symbol: TokenSymbol;
   name: string;
   color: string; // hex
   supplyCap: number; // 2_500_000
   circulating: number;
-  treasury: number;
+  business reserve: number;
   burned: number;
   price: number; // USD
   delta24h: number; // -100..100
@@ -72,7 +72,7 @@ export type PageId =
   | "dashboard"
   | "fleet"
   | "revenue"
-  | "tokens"
+  | "membership records"
   | "comms"
   | "paperweight"
   | "hermes"

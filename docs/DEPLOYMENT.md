@@ -71,7 +71,7 @@ cp .env.example .env
 |----------|---------|-------------|
 | `DATABASE_URL` | Backend | PostgreSQL connection string |
 | `JWT_SECRET` | Backend | JWT signing key (min 32 chars) |
-| `SQUARE_ACCESS_TOKEN` | Backend | Square payment processor token |
+| `SQUARE_ACCESS_TOKEN` | Backend | Square payment processor membership record |
 | `SQUARE_LOCATION_ID` | Backend | Square location ID |
 | `REDIS_HOST` | All | Redis hostname |
 | `REDIS_PORT` | All | Redis port (default: 6379) |

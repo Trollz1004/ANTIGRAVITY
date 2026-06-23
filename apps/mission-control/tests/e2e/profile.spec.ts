@@ -5,7 +5,7 @@ test.describe('Profile & User Settings', () => {
     await page.goto('/');
     const topbar = page.locator('[data-testid="topbar"]');
     await expect(topbar).toContainText('committed');
-    await expect(topbar).toContainText('kids fund');
+    await expect(topbar).toContainText('product reserve');
     await expect(topbar).toContainText('kids covered (est.)');
   });
 
@@ -35,6 +35,6 @@ test.describe('Profile & User Settings', () => {
     await page.goto('/');
     const sidebar = page.locator('[data-testid="sidebar"]');
     await expect(sidebar.getByText('Settings')).toBeVisible();
-    await expect(sidebar.getByText('for the kids · #UntilNoKidInNeed')).toBeVisible();
+    await expect(sidebar.getByText('for the product · Business-only product operations')).toBeVisible();
   });
 });

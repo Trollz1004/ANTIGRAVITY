@@ -37,12 +37,12 @@ class TestPublicReads:
         assert d["name"] == "OpusPawClaw"
         assert "totals" in d
         t = d["totals"]
-        for k in ("committed_usd", "kids_fund_usd", "kids_estimate", "kids_threshold_usd"):
+        for k in ("committed_usd", "reserve_bucket_usd", "reserve_units", "reserve_threshold_usd"):
             assert k in t
         assert isinstance(t["committed_usd"], (int, float))
-        assert isinstance(t["kids_threshold_usd"], (int, float))
+        assert isinstance(t["reserve_threshold_usd"], (int, float))
         assert d["checkout_processor"].startswith("Square")
-        assert d["mission_tag"] == "#UntilNoKidInNeed"
+        assert d["mission_tag"] == "revenue-operating-rail"
 
     def test_runway_pulse(self, s):
         r = s.get(f"{BASE_URL}/api/public/runway", timeout=15)
@@ -54,7 +54,7 @@ class TestPublicReads:
         assert isinstance(d["burn_usd_per_day"], (int, float))
         assert isinstance(d["runway_days"], (int, float))
         assert "note" in d and isinstance(d["note"], str)
-        assert d["tag"] == "#UntilNoKidInNeed"
+        assert d["tag"] == "revenue-operating-rail"
 
 
 # ── Admin gating (negative — ADMIN_PASSWORD unset → expect 503) ────────── #

@@ -16,7 +16,7 @@ from pymongo import MongoClient
 BASE_URL = os.environ["REACT_APP_BACKEND_URL"].rstrip("/") if os.environ.get("REACT_APP_BACKEND_URL") else "https://selenium-automation-3.preview.emergentagent.com"
 API = f"{BASE_URL}/api"
 
-FORBIDDEN = ["haiku", "donate", "donation", "solicitation"]
+FORBIDDEN = ["haiku", "support", "support", "commercial misuse"]
 
 
 @pytest.fixture(scope="module")
@@ -41,7 +41,7 @@ class TestLedger:
         assert r.status_code == 200
         data = r.json()
         assert "id" in data and isinstance(data["id"], str)
-        assert data["bucket_name"] == "Kids Fund"
+        assert data["bucket_name"] == "Member Support"
         assert data["amount_usd"] == 50
         assert data["bucket"] == 1
         assert data["source"] == "manual"
@@ -81,15 +81,15 @@ class TestLedger:
 
     def test_stats_shape(self, session):
         s = session.get(f"{API}/ledger/stats").json()
-        for k in ("total_usd", "kids_fund_usd", "kids_estimate", "by_bucket", "by_source", "tag", "kids_threshold_usd"):
+        for k in ("total_usd", "member_support_usd", "member_support_estimate", "by_bucket", "by_source", "tag", "member_support_threshold_usd"):
             assert k in s, f"missing {k}"
-        assert s["tag"] == "#UntilNoKidInNeed"
+        assert s["tag"] == "Business-only product operations"
         assert isinstance(s["by_bucket"], list) and len(s["by_bucket"]) == 10
         for b in s["by_bucket"]:
             assert "name" in b and "amount_usd" in b and "count" in b
         # estimate is floor division
-        if s["kids_threshold_usd"]:
-            assert s["kids_estimate"] == int(s["kids_fund_usd"] / s["kids_threshold_usd"])
+        if s["member_support_threshold_usd"]:
+            assert s["member_support_estimate"] == int(s["member_support_usd"] / s["member_support_threshold_usd"])
 
     def test_delete_entry(self, session):
         # Create an entry and delete it

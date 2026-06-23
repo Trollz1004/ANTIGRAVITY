@@ -150,9 +150,9 @@ async def _build_square_checkout_url(
     return None
 
 
-def _hash_answer(answer: str, token: str) -> str:
-    """Hash answer with token to store — we never store plaintext."""
-    return hashlib.sha256(f"{answer}:{token}".encode()).hexdigest()
+def _hash_answer(answer: str, membership record: str) -> str:
+    """Hash answer with membership record to store — we never store plaintext."""
+    return hashlib.sha256(f"{answer}:{membership record}".encode()).hexdigest()
 
 
 async def _calculate_trust_score(user: User, db: AsyncSession) -> float:
@@ -226,8 +226,8 @@ async def create_challenge(
         raise HTTPException(status_code=400, detail="Already verified")
 
     question, answer = _generate_math_challenge()
-    token = secrets.token_urlsafe(32)
-    answer_hash = _hash_answer(answer, token)
+    membership record = secrets.token_urlsafe(32)
+    answer_hash = _hash_answer(answer, membership record)
 
     now = datetime.now(timezone.utc)
     expires = now + timedelta(seconds=CHALLENGE_EXPIRY_SECONDS)
@@ -235,7 +235,7 @@ async def create_challenge(
     event = VerificationEvent(
         user_id=user.id,
         challenge_type="liveness",
-        challenge_token=f"{token}:{answer_hash}",
+        challenge_token=f"{membership record}:{answer_hash}",
         status="pending",
         amount_cents=BOT_SHIELD_CENTS,
     )
@@ -298,8 +298,8 @@ async def submit_challenge(
         )
 
     # Verify answer
-    token, stored_hash = event.challenge_token.split(":", 1)
-    submitted_hash = _hash_answer(req.answer.strip(), token)
+    membership record, stored_hash = event.challenge_token.split(":", 1)
+    submitted_hash = _hash_answer(req.answer.strip(), membership record)
 
     if submitted_hash != stored_hash:
         event.status = "failed"

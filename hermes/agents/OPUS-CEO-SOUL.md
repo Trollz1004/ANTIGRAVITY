@@ -27,7 +27,7 @@ current legal/tax boundary.
 Current reserve posture:
 
 - 10% per legally distinct revenue bucket is the current mission reserve ceiling.
-- DAO/token/fundraising rails are paused historical concepts until attorney review.
+- Future-structure/fundraising rails are historical concepts unless a newer founder directive reopens them.
 
 ## Activation Boundary
 
@@ -48,6 +48,6 @@ When explicitly activated by Josh:
 - No populated secrets in files, chat, dashboards, prompts, or task boards.
 - No wrapper-Codex.
 - No fake green.
-- No DAO/token launch work.
+- No future-structure launch work.
 - No customer-facing restricted public-benefit copy.
 - No branch merge/deploy/payment change without Josh approval and verification.

@@ -80,11 +80,11 @@ App Container
 │   └── Safety Tips
 ```
 
-## Comprehensive Color Token System
+## Comprehensive Color membership record System
 
 ### Brand Colors
 
-| Token               | Value                  | Usage               |
+| membership record               | Value                  | Usage               |
 | ------------------- | ---------------------- | ------------------- |
 | `--brand-primary`   | #FF4F00 (Alert Orange) | Primary brand color |
 | `--brand-secondary` | #111111 (Black)        | Secondary actions   |
@@ -92,7 +92,7 @@ App Container
 
 ### Functional Colors
 
-| Token             | Value                   | Usage                  |
+| membership record             | Value                   | Usage                  |
 | ----------------- | ----------------------- | ---------------------- |
 | `--color-success` | #10B981 (Safe Green)    | Success states         |
 | `--color-warning` | #F59E0B (Warning Amber) | Warning states         |
@@ -102,7 +102,7 @@ App Container
 
 ### Event Feature Colors
 
-| Token               | Value            | Usage                   |
+| membership record               | Value            | Usage                   |
 | ------------------- | ---------------- | ----------------------- |
 | `--event-meetup`    | #8B5CF6 (Purple) | Social meetups          |
 | `--event-volunteer` | #06B6D4 (Cyan)   | Volunteer opportunities |
@@ -113,7 +113,7 @@ App Container
 
 ### Community Interaction Colors
 
-| Token                       | Value             | Usage               |
+| membership record                       | Value             | Usage               |
 | --------------------------- | ----------------- | ------------------- |
 | `--message-bubble-user-bg`  | `--brand-primary` | User messages       |
 | `--notification-badge-bg`   | `--brand-primary` | Notification badges |
@@ -124,14 +124,14 @@ App Container
 
 ### Font Families
 
-| Token                   | Value        | Usage     |
+| membership record                   | Value        | Usage     |
 | ----------------------- | ------------ | --------- |
 | `--font-family-base`    | System fonts | Body text |
 | `--font-family-heading` | System fonts | Headings  |
 
 ### Font Sizes
 
-| Token              | Value           | Usage           |
+| membership record              | Value           | Usage           |
 | ------------------ | --------------- | --------------- |
 | `--font-size-xs`   | 0.75rem (12px)  | Helper text     |
 | `--font-size-sm`   | 0.875rem (14px) | Secondary text  |
@@ -146,7 +146,7 @@ App Container
 
 ### Base Scale
 
-| Token          | Value          | Usage           |
+| membership record          | Value          | Usage           |
 | -------------- | -------------- | --------------- |
 | `--spacing-0`  | 0              | No spacing      |
 | `--spacing-1`  | 0.25rem (4px)  | Minimal spacing |
@@ -218,7 +218,7 @@ All color combinations maintain minimum 4.5:1 contrast ratio:
 - Standardized interaction patterns
 - Consistent terminology throughout platform
 - Predictable navigation and information architecture
-- Shared design tokens across all components
+- Shared design membership records across all components
 
 ### User Control Improvements
 
