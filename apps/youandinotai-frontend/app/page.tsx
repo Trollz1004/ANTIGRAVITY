@@ -1,326 +1,322 @@
-﻿'use client';
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import {
-  ExternalLink,
-  Globe,
+  ArrowUpRight,
+  BadgeCheck,
+  CalendarCheck,
+  Heart,
+  MessageCircle,
   Moon,
   ShieldCheck,
+  Sparkles,
   Sun,
-  Rocket,
-  Heart,
-  ArrowUpRight,
-  Mail,
-  Handshake,
-  TrendingUp,
+  UserCheck,
 } from 'lucide-react';
 
 import Membership from '../components/Membership';
-import Transparency from '../components/Transparency';
-import { PUBLIC_SURFACES } from '../lib/constants';
 
-interface MetricsState {
-  revenue: number;
-  customers: number;
-  verifiedRecords: number;
-  uptime: string;
-  lastUpdated?: string;
-}
+const featureCards = [
+  {
+    icon: UserCheck,
+    title: 'Verified profiles',
+    body: 'Selfie verification, account status, and visible trust cues make real people easier to spot before matching.',
+  },
+  {
+    icon: MessageCircle,
+    title: 'Prompt-first matching',
+    body: 'Users like or comment on a specific prompt, photo, or interest so the first message has context.',
+  },
+  {
+    icon: CalendarCheck,
+    title: 'Plans and check-ins',
+    body: 'Move from chat to a clear date plan with public meetup context and a share-date/check-in path.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Safety stays visible',
+    body: 'Report, block, restrict, freeze, and support actions stay reachable from profile and chat surfaces.',
+  },
+];
 
-const DEFAULT_METRICS: MetricsState = {
-  revenue: 0,
-  customers: 0,
-  verifiedRecords: 0,
-  uptime: 'Untracked',
-};
+const mvpFlow = [
+  'Create a profile with intent, interests, and one strong prompt.',
+  'Verify the account before entering the main discovery lane.',
+  'Discover profiles with verification, intent, availability, and compatibility context.',
+  'Like or comment on a prompt to open better conversations.',
+  'Use Plans to prepare a safer first meetup when chat is ready.',
+];
 
-const PUBLIC_HEALTH_URL =
-  process.env.NEXT_PUBLIC_PLATFORM_HEALTH_URL ||
-  'https://api.youandinotai.com/api/v1/health';
-
-function StatCard({
-  label,
-  value,
-  note,
-  isDarkMode,
-}: {
-  label: string;
-  value: string;
-  note: string;
-  isDarkMode: boolean;
-}) {
+function PhonePreview({ isDarkMode }: { isDarkMode: boolean }) {
   return (
     <div
-      className={`p-6 rounded-[2rem] border transition-all duration-300 ${
+      className={`mx-auto w-full max-w-[24rem] rounded-[2.4rem] border p-3 shadow-2xl ${
         isDarkMode
-          ? 'bg-slate-900/60 border-slate-800 shadow-[0_0_40px_rgba(0,0,0,0.35)]'
-          : 'bg-white border-slate-200 shadow-xl'
+          ? 'border-slate-700 bg-slate-950 shadow-blue-950/30'
+          : 'border-slate-200 bg-slate-950 shadow-slate-300'
       }`}
     >
-      <p className={`text-xs font-bold uppercase tracking-[0.2em] ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-        {label}
-      </p>
-      <p className="text-3xl font-black tracking-tight mt-2">{value}</p>
-      <p className={`text-xs mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{note}</p>
+      <div className="overflow-hidden rounded-[2rem] bg-[#fff7ea] text-slate-950">
+        <div className="flex items-center justify-between border-b-4 border-slate-950 px-5 py-4">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#dc2626]">
+              Verified lane
+            </p>
+            <h2 className="text-xl font-black tracking-[-0.06em]">
+              Discover
+            </h2>
+          </div>
+          <BadgeCheck className="text-[#2563eb]" size={24} />
+        </div>
+
+        <div className="p-4">
+          <div className="mb-4 rounded-[1.5rem] border-4 border-slate-950 bg-[#ffe4e6] p-4 shadow-[6px_6px_0_0_rgba(15,23,42,1)]">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#dc2626]">
+              Tonight's best-fit pick
+            </p>
+            <p className="mt-2 text-sm font-bold leading-6">
+              Verified, relationship-ready, and available within your distance
+              range.
+            </p>
+          </div>
+
+          <div className="relative overflow-hidden rounded-[2rem] border-4 border-slate-950 bg-gradient-to-br from-[#fecaca] via-[#fff7ed] to-[#dbeafe] shadow-[8px_8px_0_0_rgba(15,23,42,1)]">
+            <div className="flex min-h-[21rem] items-end p-5">
+              <div className="w-full">
+                <div className="mb-3 inline-flex items-center gap-2 rounded-full border-2 border-slate-950 bg-white px-3 py-1 text-xs font-black">
+                  <ShieldCheck size={14} className="text-[#dc2626]" />
+                  Selfie verified
+                </div>
+                <h3 className="text-4xl font-black tracking-[-0.08em]">
+                  Maya, 31
+                </h3>
+                <p className="mt-2 text-sm font-bold text-slate-700">
+                  Relationship ready - Orlando, FL
+                </p>
+              </div>
+            </div>
+            <div className="border-t-4 border-slate-950 bg-white p-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#dc2626]">
+                Prompt
+              </p>
+              <p className="mt-2 text-lg font-black leading-snug">
+                My ideal first date is coffee, a bookstore, and no pressure to
+                perform.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-5 grid grid-cols-3 gap-3">
+            <button className="min-h-12 rounded-[1rem] border-4 border-slate-950 bg-white text-sm font-black">
+              Pass
+            </button>
+            <button className="min-h-12 rounded-[1rem] border-4 border-slate-950 bg-[#dc2626] text-sm font-black text-white">
+              Comment
+            </button>
+            <button className="min-h-12 rounded-[1rem] border-4 border-slate-950 bg-[#2563eb] text-sm font-black text-white">
+              Like
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-5 gap-1 border-t-4 border-slate-950 bg-white px-2 py-2 text-[10px] font-black uppercase">
+          {['Discover', 'Matches', 'Chat', 'Plans', 'Profile'].map((item) => (
+            <div
+              key={item}
+              className={`rounded-xl px-1 py-2 text-center ${
+                item === 'Discover' ? 'bg-slate-950 text-white' : 'text-slate-500'
+              }`}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
 export default function Dashboard() {
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [metrics, setMetrics] = useState<MetricsState>(DEFAULT_METRICS);
-
-  useEffect(() => {
-    fetch(PUBLIC_HEALTH_URL, { cache: 'no-store' })
-      .then(async (res) => {
-        const contentType = res.headers.get('content-type') || '';
-        if (!res.ok || !contentType.includes('application/json')) {
-          return null;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (!data) return;
-        setMetrics({
-          ...DEFAULT_METRICS,
-          customers:
-            typeof data.user_count === 'number'
-              ? data.user_count
-              : DEFAULT_METRICS.customers,
-          verifiedRecords: Array.isArray(data.payment_proof_labels)
-            ? data.payment_proof_labels.length
-            : DEFAULT_METRICS.verifiedRecords,
-          uptime:
-            data.status === 'healthy' || data.status === 'ok'
-              ? 'API online'
-              : 'API degraded',
-          lastUpdated: new Date().toISOString(),
-        });
-      })
-      .catch(() => undefined);
-  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDarkMode);
   }, [isDarkMode]);
 
   return (
-    <div
-      className={`min-h-screen font-sans transition-all duration-700 ${
-        isDarkMode ? 'bg-[#020617] text-slate-100' : 'bg-slate-50 text-slate-900'
-      } selection:bg-blue-500/30 overflow-x-hidden`}
+    <main
+      className={`min-h-screen overflow-x-hidden transition-all duration-500 ${
+        isDarkMode ? 'bg-[#020617] text-slate-100' : 'bg-[#fff7ed] text-slate-950'
+      }`}
     >
       <div
-        className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] dark:opacity-[0.07]"
+        className="fixed inset-0 z-0 pointer-events-none opacity-30"
         style={{
-          backgroundImage:
-            'linear-gradient(#2563eb 1px, transparent 1px), linear-gradient(90deg, #2563eb 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
+          background:
+            'radial-gradient(circle at 12% 16%, rgba(220,38,38,0.22), transparent 24%), radial-gradient(circle at 86% 8%, rgba(37,99,235,0.18), transparent 22%)',
         }}
       />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* ===== HERO ===== */}
-        <section
-          className={`w-full min-w-0 p-6 md:p-12 rounded-[2rem] md:rounded-[3rem] border text-center ${
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+        <header
+          className={`flex flex-wrap items-center justify-between gap-4 rounded-[2rem] border px-5 py-4 ${
             isDarkMode
-              ? 'bg-gradient-to-br from-slate-900/80 via-blue-950/40 to-slate-900/80 border-slate-800'
-              : 'bg-gradient-to-br from-white via-blue-50 to-white border-slate-200 shadow-xl'
+              ? 'border-slate-800 bg-slate-950/70'
+              : 'border-slate-200 bg-white/80 shadow-sm'
           }`}
         >
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-            <Rocket size={28} className="text-blue-500 shrink-0" />
-            <h1 className="max-w-full text-2xl sm:text-3xl md:text-4xl font-black tracking-tight uppercase italic leading-tight break-words">
-              YouAndINotAI - human-first social platform.
+          <div>
+            <p className="text-[11px] font-black uppercase tracking-[0.24em] text-red-500">
+              YouAndINotAI
+            </p>
+            <h1 className="text-2xl font-black tracking-[-0.08em]">
+              verified dating, safer plans.
             </h1>
           </div>
-          <p className={`min-w-0 text-base md:text-lg max-w-3xl mx-auto leading-relaxed break-words ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            YouAndINotAI is a human-first social platform for builders, operators, and people who actually do the work.
-            Verification and moderation claims publish only after implementation proof is recorded.
-            Founding-member offers should describe current product access and avoid absolute safety guarantees.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
-            <div className={`max-w-full px-4 py-2 rounded-2xl text-sm font-bold inline-flex items-center justify-center gap-2 text-center ${
-              isDarkMode ? 'bg-blue-500/10 border border-blue-500/30 text-blue-400' : 'bg-blue-50 border border-blue-200 text-blue-600'
-            }`}>
-              <Heart className="w-4 h-4 shrink-0" /> <span className="min-w-0 break-words">YouAndINotAI - Dating &amp; Community</span>
-            </div>
-            <div className={`max-w-full px-4 py-2 rounded-2xl text-sm font-bold inline-flex items-center justify-center gap-2 text-center ${
-              isDarkMode ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' : 'bg-emerald-50 border border-emerald-200 text-emerald-600'
-            }`}>
-              <Handshake className="w-4 h-4 shrink-0" /> <span className="min-w-0 break-words">Business Exchange - Marketplace</span>
-            </div>
-            <div className={`max-w-full px-4 py-2 rounded-2xl text-sm font-bold inline-flex items-center justify-center gap-2 text-center ${
-              isDarkMode ? 'bg-purple-500/10 border border-purple-500/30 text-purple-400' : 'bg-purple-50 border border-purple-200 text-purple-600'
-            }`}>
-              <ShieldCheck className="w-4 h-4 shrink-0" /> <span className="min-w-0 break-words">Roadmap - Review Gated</span>
-            </div>
-            <div className={`max-w-full px-4 py-2 rounded-2xl text-sm font-bold inline-flex items-center justify-center gap-2 text-center ${
-              isDarkMode ? 'bg-amber-500/10 border border-amber-500/30 text-amber-400' : 'bg-amber-50 border border-amber-200 text-amber-600'
-            }`}>
-              <Mail className="w-4 h-4 shrink-0" /> <span className="min-w-0 break-words">Customer Support - Active</span>
-            </div>
-          </div>
-        </section>
+          <button
+            type="button"
+            onClick={() => setIsDarkMode((value) => !value)}
+            className={`inline-flex min-h-11 items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-black uppercase tracking-[0.12em] ${
+              isDarkMode
+                ? 'border-slate-700 bg-slate-900 text-slate-100'
+                : 'border-slate-300 bg-white text-slate-900'
+            }`}
+          >
+            {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+            Theme
+          </button>
+        </header>
 
-        {/* ===== MEMBERSHIP (above the fold - this is the product) ===== */}
-        <Membership isDarkMode={isDarkMode} />
-
-        {/* ===== HOW THE PLATFORMS WORK ===== */}
         <section
-          className={`w-full min-w-0 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border ${
-            isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'
+          className={`grid gap-8 rounded-[2.5rem] border p-6 md:grid-cols-[1.05fr_0.95fr] md:p-10 ${
+            isDarkMode
+              ? 'border-slate-800 bg-slate-950/72'
+              : 'border-slate-200 bg-white/80 shadow-xl'
           }`}
         >
-          <div className="flex items-center gap-3 mb-4">
-            <TrendingUp size={22} className="text-emerald-500" />
-            <h2 className="text-2xl font-black italic tracking-tight">WHAT YOU CAN USE TODAY</h2>
-          </div>
-          <p className={`max-w-3xl leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            One ecosystem, four live surfaces, all reachable from one account. Pick what you need:
-          </p>
-          <ul className={`mt-4 space-y-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            <li className="flex items-start gap-2">
-              <span className="text-blue-500 mt-1">-&gt;</span>
-              <span><strong>YouAndINotAI</strong> - memberships, verification, and the founding-member program</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-500 mt-1">-&gt;</span>
-              <span><strong>Business Exchange</strong> - services, referrals, and business sales for builders</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-purple-500 mt-1">-&gt;</span>
-              <span><strong>AI-Solutions Store</strong> - digital products and automation offers</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-amber-500 mt-1">-&gt;</span>
-              <span><strong>OnlineRecycle</strong> - electronics resale and recycling services (Central Florida)</span>
-            </li>
-          </ul>
-        </section>
-
-        {/* ===== STATUS METRICS ===== */}
-        <section className="grid w-full min-w-0 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-          <StatCard
-            label="Tracked Revenue"
-            value={`$${metrics.revenue.toLocaleString()}`}
-            note="Shown only when backed by a production data source."
-            isDarkMode={isDarkMode}
-          />
-          <StatCard
-            label="Tracked Customers"
-            value={metrics.customers.toLocaleString()}
-            note="Customer counts stay at zero here until they are read from live records."
-            isDarkMode={isDarkMode}
-          />
-          <StatCard
-            label="Verified Records"
-            value={metrics.verifiedRecords.toLocaleString()}
-            note="Shown only when backed by production records."
-            isDarkMode={isDarkMode}
-          />
-          <StatCard
-            label="Tracking Status"
-            value={metrics.uptime}
-            note="Operational detail stays private until it is safe and necessary to publish."
-            isDarkMode={isDarkMode}
-          />
-        </section>
-
-        {/* ===== PUBLIC SURFACES ===== */}
-        <section
-          className={`w-full min-w-0 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border ${
-            isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'
-          }`}
-        >
-          <div className="flex items-center gap-3 mb-6">
-            <Globe size={20} className="text-blue-500" />
-            <h2 className="text-xl font-black italic tracking-tight">PUBLIC SURFACES</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {PUBLIC_SURFACES.map((surface) => (
-              <a
-                key={surface.url}
-                href={surface.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`p-5 rounded-2xl border transition-all hover:-translate-y-1 ${
-                  isDarkMode
-                    ? 'bg-slate-950/50 border-slate-800 hover:border-blue-500'
-                    : 'bg-slate-50 border-slate-200 hover:border-blue-400'
-                }`}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-black tracking-[0.2em] uppercase text-slate-500">{surface.status}</p>
-                    <p className="text-sm font-bold mt-1">{surface.name}</p>
-                  </div>
-                  <ExternalLink className="w-4 h-4 text-slate-400" />
-                </div>
-                <p className={`text-sm mt-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                  {surface.description}
-                </p>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        {/* ===== CUSTOMER SUPPORT ===== */}
-        <section
-          className={`w-full min-w-0 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border ${
-            isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-100 shadow-sm'
-          }`}
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <Mail size={22} className="text-amber-500" />
-            <h2 className="text-2xl font-black italic tracking-tight">CUSTOMER SUPPORT</h2>
-          </div>
-          <p className={`max-w-3xl leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Support is not decoration - it is a trust signal. Every product in this ecosystem has reachable customer support.
-            If you need help, we are here.
-          </p>
-          <div className="mt-4">
-            <a
-              href="https://dashboard.aidoesitall.website"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-bold text-sm transition-all ${
-                isDarkMode
-                  ? 'bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20'
-                  : 'bg-amber-50 border border-amber-200 text-amber-600 hover:bg-amber-100'
+          <div className="flex flex-col justify-center">
+            <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-red-500/40 bg-red-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-red-400">
+              <Heart size={15} />
+              Google Play MVP path
+            </div>
+            <h2 className="max-w-4xl text-5xl font-black leading-[0.88] tracking-[-0.09em] sm:text-6xl lg:text-7xl">
+              real profiles before real dates.
+            </h2>
+            <p
+              className={`mt-6 max-w-2xl text-lg leading-8 ${
+                isDarkMode ? 'text-slate-300' : 'text-slate-600'
               }`}
             >
-              Contact Support <ArrowUpRight size={16} />
-            </a>
+              YouAndINotAI is being built around the patterns users already
+              trust in top dating apps: verification, prompt-rich profiles,
+              safer chat, clear intent, and simple date planning.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="#membership"
+                className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-red-600 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-white shadow-lg shadow-red-950/30"
+              >
+                Get verified <ArrowUpRight size={16} />
+              </a>
+              <a
+                href="#features"
+                className={`inline-flex min-h-12 items-center gap-2 rounded-2xl border px-5 py-3 text-sm font-black uppercase tracking-[0.14em] ${
+                  isDarkMode
+                    ? 'border-slate-700 bg-slate-900 text-slate-100'
+                    : 'border-slate-300 bg-white text-slate-950'
+                }`}
+              >
+                See features
+              </a>
+            </div>
           </div>
+
+          <PhonePreview isDarkMode={isDarkMode} />
         </section>
 
-        {/* ===== MISSION ===== */}
         <section
-          className={`w-full min-w-0 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border text-center ${
+          id="features"
+          className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
+        >
+          {featureCards.map((feature) => (
+            <article
+              key={feature.title}
+              className={`rounded-[2rem] border p-6 transition-transform hover:-translate-y-1 ${
+                isDarkMode
+                  ? 'border-slate-800 bg-slate-950/70'
+                  : 'border-slate-200 bg-white shadow-sm'
+              }`}
+            >
+              <feature.icon className="mb-5 text-red-500" size={26} />
+              <h3 className="text-xl font-black tracking-[-0.04em]">
+                {feature.title}
+              </h3>
+              <p
+                className={`mt-3 text-sm leading-7 ${
+                  isDarkMode ? 'text-slate-400' : 'text-slate-600'
+                }`}
+              >
+                {feature.body}
+              </p>
+            </article>
+          ))}
+        </section>
+
+        <section
+          className={`grid gap-8 rounded-[2.5rem] border p-6 md:grid-cols-[0.9fr_1.1fr] md:p-8 ${
             isDarkMode
-              ? 'bg-gradient-to-br from-slate-900/80 via-emerald-950/30 to-slate-900/80 border-emerald-500/20'
-              : 'bg-gradient-to-br from-white via-emerald-50 to-white border-emerald-200 shadow-sm'
+              ? 'border-slate-800 bg-slate-950/70'
+              : 'border-slate-200 bg-white shadow-sm'
           }`}
         >
-          <Heart size={32} className="text-emerald-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-black italic tracking-tight mb-3">OPERATING PRINCIPLE</h2>
-          <p className={`max-w-2xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-            Build useful products first, report only verified numbers, and launch when ready - not when it looks good.
-          </p>
+          <div>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white">
+              <Sparkles size={15} />
+              Build order
+            </div>
+            <h2 className="text-4xl font-black leading-none tracking-[-0.08em]">
+              ship the trust loop first.
+            </h2>
+            <p
+              className={`mt-4 leading-7 ${
+                isDarkMode ? 'text-slate-400' : 'text-slate-600'
+              }`}
+            >
+              AI chemistry, group dates, and event-heavy recommendations can
+              wait. The first Google Play path needs profile, verification,
+              discovery, match, chat, and safe plan flow.
+            </p>
+          </div>
+          <ol className="grid gap-3">
+            {mvpFlow.map((item, index) => (
+              <li
+                key={item}
+                className={`flex gap-4 rounded-[1.4rem] border p-4 ${
+                  isDarkMode
+                    ? 'border-slate-800 bg-slate-900/70'
+                    : 'border-slate-200 bg-orange-50'
+                }`}
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-red-600 text-sm font-black text-white">
+                  {index + 1}
+                </span>
+                <span className="font-semibold leading-7">{item}</span>
+              </li>
+            ))}
+          </ol>
         </section>
 
-        <Transparency isDarkMode={isDarkMode} />
+        <Membership isDarkMode={isDarkMode} />
 
         <footer
-          className={`py-8 border-t text-center text-[10px] font-black uppercase tracking-[0.3em] ${
-            isDarkMode ? 'border-slate-800 text-slate-600' : 'border-slate-200 text-slate-400'
+          className={`py-8 text-center text-[10px] font-black uppercase tracking-[0.24em] ${
+            isDarkMode ? 'text-slate-600' : 'text-slate-500'
           }`}
         >
-          &copy; 2026 Trash Or Treasure Online Recycler LLC - Public status only - No internal admin exposure
+          Payments are processed by Square. Membership and verification are
+          product access transactions.
         </footer>
       </div>
-    </div>
+    </main>
   );
 }
-
