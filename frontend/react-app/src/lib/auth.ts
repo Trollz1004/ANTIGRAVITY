@@ -115,8 +115,8 @@ export const useAuth = create<AuthState>(set => ({
   },
 
   fetchUser: async () => {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
+    const accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
       set({ user: null, loading: false });
       return;
     }
@@ -128,3 +128,4 @@ export const useAuth = create<AuthState>(set => ({
     }
   },
 }));
+
