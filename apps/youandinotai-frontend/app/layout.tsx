@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css'; // Global styles
 import PublicBanner from '../components/PublicBanner';
+import CookieConsentBanner from '../components/CookieConsentBanner';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://youandinotai.com'),
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning>
         <PublicBanner />
         {children}
+        <CookieConsentBanner />
       </body>
     </html>
   );

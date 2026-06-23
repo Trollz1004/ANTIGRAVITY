@@ -24,8 +24,8 @@ const featureCards = [
   },
   {
     icon: MessageCircle,
-    title: 'Easy first messages',
-    body: 'Users can like or comment on a profile answer, photo, or shared interest so the first message feels natural.',
+    title: 'Match and chat',
+    body: 'Like or comment on a profile answer, photo, or shared interest, then keep the conversation moving in one clear chat flow.',
   },
   {
     icon: CalendarCheck,
@@ -40,11 +40,12 @@ const featureCards = [
 ];
 
 const mvpFlow = [
-  'Create a profile with intent, interests, and one clear answer.',
-  'Verify the account before entering the main discovery lane.',
-  'Discover profiles with verification, intent, availability, and compatibility context.',
-  'Like or comment on a photo, answer, or shared interest to start better conversations.',
-  'Use Plans to prepare a safer first meetup when chat is ready.',
+  'Set up a real profile with intent, interests, photos, and one clear answer.',
+  'Verify before entering discovery.',
+  'Discover verified people with clear intent, distance, and availability.',
+  'Match from a like or comment on a photo, answer, or shared interest.',
+  'Chat with report, block, and support actions close by.',
+  'Use Plans to choose a public first meetup and share/check in when ready.',
 ];
 
 function PhonePreview({ isDarkMode }: { isDarkMode: boolean }) {
@@ -208,8 +209,8 @@ export default function Dashboard() {
               }`}
             >
               YouAndINotAI is being built around simple dating features people
-              already understand: verified profiles, real answers, safer chat,
-              clear intent, and easy date planning.
+              already understand: a real profile, verification, discovery,
+              matches, chat, and safer first-date planning.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
@@ -282,8 +283,8 @@ export default function Dashboard() {
                 isDarkMode ? 'text-slate-400' : 'text-slate-600'
               }`}
             >
-              Fancy extras can wait. The first version needs profile setup,
-              verification, discovery, matches, chat, and safer date planning.
+              The first experience focuses on the trust loop: profile,
+              verification, discovery, match, chat, and a simple safe plan flow.
             </p>
           </div>
           <ol className="grid gap-3">
@@ -312,8 +313,21 @@ export default function Dashboard() {
             isDarkMode ? 'text-slate-600' : 'text-slate-500'
           }`}
         >
-          Payments are processed by Square. Membership and verification are
-          secure purchases for app access and account verification.
+          <div className="mb-3 flex flex-wrap justify-center gap-4">
+            <a href="/terms" className="underline underline-offset-4">
+              Terms
+            </a>
+            <a href="/privacy" className="underline underline-offset-4">
+              Privacy
+            </a>
+            <a href="/cookies" className="underline underline-offset-4">
+              Cookies
+            </a>
+          </div>
+          <p>
+            Payments are processed by Square. Membership and verification are
+            secure purchases for app access and account verification.
+          </p>
         </footer>
       </div>
     </main>
