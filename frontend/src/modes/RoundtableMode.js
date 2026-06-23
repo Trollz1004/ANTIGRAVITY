@@ -307,7 +307,7 @@ export function RoundtableMode() {
               </button>
             </div>
             <div className="mt-2 text-center text-[9px] tracking-widest uppercase text-[#4a5568]">
-              fan-out across {Object.keys(active).length} platform{Object.keys(active).length === 1 ? "" : "s"} · #UntilNoKidInNeed
+              fan-out across {Object.keys(active).length} platform{Object.keys(active).length === 1 ? "" : "s"} · Business-only product operations
             </div>
           </form>
         </main>

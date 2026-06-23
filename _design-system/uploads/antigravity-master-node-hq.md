@@ -29,15 +29,15 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { 
-      background: var(--bg); color: var(--ink); 
-      font-family: var(--sans); font-size: 13px; 
+    body {
+      background: var(--bg); color: var(--ink);
+      font-family: var(--sans); font-size: 13px;
       height: 100vh; overflow: hidden;
       display: flex; flex-direction: column;
     }
 
     .doctrine {
-      display: flex; justify-content: space-between; align-items: center; 
+      display: flex; justify-content: space-between; align-items: center;
       padding: 6px 12px; background: #000; border-bottom: 1px solid var(--line);
       font: 700 9px/1 var(--mono); letter-spacing: 0.2em; text-transform: uppercase;
       color: var(--ink-3); z-index: 100;
@@ -45,7 +45,7 @@
     .highlight { color: var(--rose); }
 
     .hdr {
-      display: flex; align-items: center; justify-content: space-between; 
+      display: flex; align-items: center; justify-content: space-between;
       padding: 10px 20px; background: var(--surface); border-bottom: 1px solid var(--line);
     }
     .brand { display: flex; align-items: center; gap: 12px; }
@@ -57,16 +57,16 @@
     .brand-text .h { font: 800 14px/1 var(--mono); letter-spacing: 0.05em; }
     .brand-text .s { font: 600 9px/1 var(--mono); color: var(--ink-3); text-transform: uppercase; }
 
-    .ops-container { 
-      display: grid; 
-      grid-template-columns: 320px 1fr 320px; 
-      flex: 1; 
+    .ops-container {
+      display: grid;
+      grid-template-columns: 320px 1fr 320px;
+      flex: 1;
       overflow: hidden;
     }
 
-    .panel-rail { 
-      background: var(--surface); 
-      border-right: 1px solid var(--line); 
+    .panel-rail {
+      background: var(--surface);
+      border-right: 1px solid var(--line);
       border-left: 1px solid var(--line);
       display: flex; flex-direction: column;
       overflow-y: auto;
@@ -74,15 +74,15 @@
       gap: 20px;
     }
     .panel { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-    .panel-head { 
+    .panel-head {
       padding: 8px 12px; background: var(--surface-3); border-bottom: 1px solid var(--line);
       font: 700 10px/1 var(--mono); text-transform: uppercase; color: var(--ink-2);
     }
     .panel-body { padding: 12px; }
 
     /* THE GLASS PANE */
-    .center-stage { 
-      display: flex; flex-direction: column; 
+    .center-stage {
+      display: flex; flex-direction: column;
       background: #000; position: relative;
     }
     .browser-nav {
@@ -90,33 +90,33 @@
       display: flex; align-items: center; padding: 0 15px; gap: 10px;
     }
     .browser-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
-    .url-bar { 
-      flex: 1; background: var(--bg); border: 1px solid var(--line); 
-      border-radius: 4px; font: 600 11px/1 var(--mono); color: var(--green); 
+    .url-bar {
+      flex: 1; background: var(--bg); border: 1px solid var(--line);
+      border-radius: 4px; font: 600 11px/1 var(--mono); color: var(--green);
       padding: 4px 12px; text-align: center;
     }
-    .main-frame { 
-      flex: 1; width: 100%; border: none; 
+    .main-frame {
+      flex: 1; width: 100%; border: none;
       background: #fff;
     }
 
     /* RDP Access Matrix */
-    .rdp-card { 
-      background: var(--surface-3); border: 1px solid var(--line-strong); 
+    .rdp-card {
+      background: var(--surface-3); border: 1px solid var(--line-strong);
       border-radius: 6px; padding: 10px; margin-bottom: 10px;
       border-left: 3px solid var(--copper);
     }
     .rdp-card .node-name { font: 800 11px/1 var(--mono); color: var(--copper); margin-bottom: 6px; display: block; }
-    .rdp-card .cred-row { 
-      display: flex; justify-content: space-between; 
+    .rdp-card .cred-row {
+      display: flex; justify-content: space-between;
       font: 600 10px/1 var(--mono); color: var(--ink-2); margin-bottom: 4px;
     }
-    .rdp-card .copy-btn { 
-      cursor: pointer; color: var(--sky); font-size: 9px; text-decoration: underline; 
+    .rdp-card .copy-btn {
+      cursor: pointer; color: var(--sky); font-size: 9px; text-decoration: underline;
     }
 
-    /* DAO & Buckets */
-    .dao-row { display: flex; justify-content: space-between; padding: 4px 0; font: 600 10px/1 var(--mono); }
+    /* Product structure & Buckets */
+    .Product structure-row { display: flex; justify-content: space-between; padding: 4px 0; font: 600 10px/1 var(--mono); }
     .bucket-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
     .bucket-bar { flex: 1; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
     .bucket-fill { height: 100%; background: var(--copper); }
@@ -179,7 +179,7 @@
       <div class="panel-head">10% Kids Reserve</div>
       <div class="panel-body" id="bucket-root"></div>
     </div>
-    
+
     <div class="panel">
       <div class="panel-head">Node Topology</div>
       <div class="panel-body">
@@ -228,19 +228,19 @@
       </div>
     </div>
     <div class="panel">
-      <div class="panel-head">DAO Staking</div>
-      <div class="panel-body" id="dao-root"></div>
+      <div class="panel-head">Product structure Staking</div>
+      <div class="panel-body" id="Product structure-root"></div>
     </div>
   </div>
 </div>
 
 <div class="footer">
-  <span class="highlight">#UntilNoKidInNeed · Base L2 · Soulbound</span>
+  <span class="highlight">#MembershipVerificationSupport · Base L2 · Soulbound</span>
   <span style="font-family:var(--mono)">SABRETOOTH-NODE-v4.2 :: <span id="clock">00:00:00</span></span>
 </div>
 
 <script>
-  const DAO = [
+  const Product structure = [
     { s: '$LOVE', v: '2.5M', c: '#ff6eb4' }, { s: '$UKID', v: '2.5M', c: '#66b3ff' },
     { s: '$GREEN', v: '2.5M', c: '#8ff2c7' }, { s: '$AGRAV', v: '2.5M', c: '#ffd9 de la-mono' }
   ];
@@ -259,9 +259,9 @@
   }
 
   function init() {
-    const dRoot = document.getElementById('dao-root');
-    dRoot.innerHTML = DAO.map(x => `<div class="dao-row"><span>${x.s}</span><span style="color:${x.c}">${x.v}</span></div>`).join('');
-    
+    const dRoot = document.getElementById('Product structure-root');
+    dRoot.innerHTML = Product structure.map(x => `<div class="Product structure-row"><span>${x.s}</span><span style="color:${x.c}">${x.v}</span></div>`).join('');
+
     const bRoot = document.getElementById('bucket-root');
     bRoot.innerHTML = BUCKETS.map(x => `
       <div class="bucket-row">

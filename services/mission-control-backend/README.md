@@ -1,4 +1,4 @@
-﻿# Mission Control Backend Services
+# Mission Control Backend Services
 
 These three services power the live data for `apps/mission-control/index.html`:
 
@@ -8,7 +8,7 @@ These three services power the live data for `apps/mission-control/index.html`:
 
 ## Routing Reality (as of this branch)
 - All Grok traffic **must** go through Hermes (`127.0.0.1:11435`) using **xAI user-auth sign-in** (no raw OpenRouter keys).
-- Hermes is the single router. CFO local model and Grok (xAI) are the primary brains for #UntilNoKidInNeed work.
+- Hermes is the single router. CFO local model and Grok (xAI) are primary brains for product, ops, and doctrine-alignment work.
 - These backends report real-time activity so the dashboard never shows "idle".
 
 ## Quick Start (Sabretooth primary)
@@ -28,9 +28,9 @@ python T5500_CREDIT_MONITOR.py
 The dashboard at `apps/mission-control/index.html` will then show live activity with **who** is working and current status.
 
 ## Doctrine Notes
-- 1 wallet · 1 LLC · 10% max per bucket as contractual revenue disbursement
+- Business-only product surfaces; owner accounting and reserve decisions stay private.
 - Square only (LY5GN09F5AN83)
-- No "donate/donation" language on any surface
+- No restricted-claims, control-mechanics, or private-accounting claims on customer surfaces.
 - Everything stays inside Trollz1004/ANTIGRAVITY on this branch
 
 Part of the `feature/mission-control-hermes-live` integration.

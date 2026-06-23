@@ -1,0 +1,36 @@
+{
+  "general": [
+    {
+      "text": "YouAndINotAI is built for real profiles, verified access, and human support. Membership gives people a cleaner way to meet without bot-heavy noise. youandinotai.com #YouAndINotAI",
+      "pillar": "product_value",
+      "day": 1
+    },
+    {
+      "text": "Dating apps should make trust easier. YouAndINotAI focuses on verification, account access, support, and safer real-world matching. youandinotai.com #RealPeople #NoBots",
+      "pillar": "verification",
+      "day": 2
+    },
+    {
+      "text": "Founding Member access is $14.99/mo while spots remain. Real profiles, support, verification, and a platform built for people who want better signal. youandinotai.com #YouAndINotAI",
+      "pillar": "membership",
+      "day": 3
+    },
+    {
+      "text": "We are competing on trust: verified access, real support, safer matching, and a membership model that keeps the platform accountable to users. youandinotai.com #YouAndINotAI",
+      "pillar": "trust_safety",
+      "day": 4
+    }
+  ],
+  "twitter": [
+    {
+      "text": "THREAD: Most dating apps make it hard to know who is real. YouAndINotAI starts with verification, support, and account access so trust is part of the product from day one. youandinotai.com",
+      "pillar": "verification",
+      "day": 1
+    },
+    {
+      "text": "Founding Member access is simple: $14.99/mo, verification-focused onboarding, and support when something breaks. No bots, no fake promises, just a better dating surface. youandinotai.com",
+      "pillar": "membership",
+      "day": 2
+    }
+  ]
+}

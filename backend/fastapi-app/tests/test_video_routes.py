@@ -7,9 +7,9 @@ Coverage targets:
   - WS /api/v1/ws/video/{call_id}  — WebRTC signaling endpoint
 
 Risk surface:
-  - Invalid token rejected at connection time
+  - Invalid membership record rejected at connection time
   - Invalid (non-UUID) call_id rejected at connection time
-  - Valid token + valid call_id connects successfully
+  - Valid membership record + valid call_id connects successfully
   - Room full (>2 peers) closes new connection with code 4008
   - Only allowed signal types are relayed; unknown types are dropped
 """
@@ -54,7 +54,7 @@ def _seed_user(user: User, db_session_factory) -> None:
     asyncio.run(_run())
 
 
-# ── Auth boundary — invalid token closes with code 4001 ──────────────────────
+# ── Auth boundary — invalid membership record closes with code 4001 ──────────────────────
 
 
 def test_video_ws_invalid_token_rejected(client):
@@ -62,7 +62,7 @@ def test_video_ws_invalid_token_rejected(client):
     with pytest.raises(Exception):  # noqa: B017
         # TestClient raises on abnormal WS close; exception type varies by version
         with client.websocket_connect(
-            f"/api/v1/ws/video/{call_id}?token=bad.token.here"
+            f"/api/v1/ws/video/{call_id}?membership record=bad.membership record.here"
         ) as ws:
             ws.receive_json()
 
@@ -79,10 +79,10 @@ def test_video_ws_missing_token_rejected(client):
 
 def test_video_ws_non_uuid_call_id_rejected(client):
     user = _make_user("video_badcallid@example.com")
-    token = _valid_token(user)
+    membership record = _valid_token(user)
     with pytest.raises(Exception):  # noqa: B017
         with client.websocket_connect(
-            f"/api/v1/ws/video/not-a-uuid?token={token}"
+            f"/api/v1/ws/video/not-a-uuid?membership record={membership record}"
         ) as ws:
             ws.receive_json()
 
@@ -95,7 +95,7 @@ def test_video_ws_connects_with_valid_token_and_call_id(client, db_session_facto
     a second peer joins, so a solo connection is accepted."""
     user = _make_user("video_valid@example.com")
     _seed_user(user, db_session_factory)
-    token = _valid_token(user)
+    membership record = _valid_token(user)
     call_id = str(uuid.uuid4())
 
     # Patch _find_active_match so it never queries the real DB (solo connection
@@ -109,7 +109,7 @@ def test_video_ws_connects_with_valid_token_and_call_id(client, db_session_facto
             new=AsyncMock(return_value=None),
         ):
             with client.websocket_connect(
-                f"/api/v1/ws/video/{call_id}?token={token}"
+                f"/api/v1/ws/video/{call_id}?membership record={membership record}"
             ) as ws:
                 # Connection accepted — send a hang_up to close cleanly
                 ws.send_json({"type": "hang_up"})
@@ -120,7 +120,7 @@ def test_video_ws_unknown_signal_type_is_silently_dropped(client, db_session_fac
     """Messages with type not in ALLOWED_SIGNAL_TYPES must be ignored."""
     user = _make_user("video_unknown_signal@example.com")
     _seed_user(user, db_session_factory)
-    token = _valid_token(user)
+    membership record = _valid_token(user)
     call_id = str(uuid.uuid4())
 
     with patch(
@@ -132,7 +132,7 @@ def test_video_ws_unknown_signal_type_is_silently_dropped(client, db_session_fac
             new=AsyncMock(return_value=None),
         ):
             with client.websocket_connect(
-                f"/api/v1/ws/video/{call_id}?token={token}"
+                f"/api/v1/ws/video/{call_id}?membership record={membership record}"
             ) as ws:
                 # Send an unknown signal type
                 ws.send_json({"type": "ADMIN_OVERRIDE", "data": "hack"})
@@ -145,7 +145,7 @@ def test_video_ws_non_json_payload_is_silently_dropped(client, db_session_factor
     """Non-JSON frames must not crash the handler."""
     user = _make_user("video_nonjson@example.com")
     _seed_user(user, db_session_factory)
-    token = _valid_token(user)
+    membership record = _valid_token(user)
     call_id = str(uuid.uuid4())
 
     with patch(
@@ -157,7 +157,7 @@ def test_video_ws_non_json_payload_is_silently_dropped(client, db_session_factor
             new=AsyncMock(return_value=None),
         ):
             with client.websocket_connect(
-                f"/api/v1/ws/video/{call_id}?token={token}"
+                f"/api/v1/ws/video/{call_id}?membership record={membership record}"
             ) as ws:
                 ws.send_text("this is not json {{")
                 ws.send_json({"type": "hang_up"})
@@ -184,7 +184,7 @@ def test_video_ws_room_full_rejects_third_peer(client, db_session_factory):
     try:
         with pytest.raises(Exception):  # noqa: B017
             with client.websocket_connect(
-                f"/api/v1/ws/video/{call_id}?token={token_c}"
+                f"/api/v1/ws/video/{call_id}?membership record={token_c}"
             ) as ws:
                 ws.receive_json()
     finally:
@@ -199,7 +199,7 @@ def test_video_ws_signal_buffered_when_no_peer(client, db_session_factory):
     """SDP offer sent to an empty room should be buffered (no exception)."""
     user = _make_user("video_buffer@example.com")
     _seed_user(user, db_session_factory)
-    token = _valid_token(user)
+    membership record = _valid_token(user)
     call_id = str(uuid.uuid4())
 
     with patch(
@@ -211,7 +211,7 @@ def test_video_ws_signal_buffered_when_no_peer(client, db_session_factory):
             new=AsyncMock(return_value=None),
         ):
             with client.websocket_connect(
-                f"/api/v1/ws/video/{call_id}?token={token}"
+                f"/api/v1/ws/video/{call_id}?membership record={membership record}"
             ) as ws:
                 # Send an allowed signal type with no peer connected
                 ws.send_json({"type": "sdp_offer", "sdp": "v=0..."})
@@ -242,12 +242,12 @@ def test_video_ws_two_peers_no_match_kicks_second(client, db_session_factory):
             "app.routers.video._ensure_call_record", new=AsyncMock(return_value=None)
         ):
             with client.websocket_connect(
-                f"/api/v1/ws/video/{call_id}?token={token_a}"
+                f"/api/v1/ws/video/{call_id}?membership record={token_a}"
             ) as ws_a:
                 # Now try to connect user_b — this triggers match check which returns None
                 with pytest.raises(Exception):  # noqa: B017
                     with client.websocket_connect(
-                        f"/api/v1/ws/video/{call_id}?token={token_b}"
+                        f"/api/v1/ws/video/{call_id}?membership record={token_b}"
                     ) as ws_b:
                         ws_b.receive_json()
                 ws_a.send_json({"type": "hang_up"})

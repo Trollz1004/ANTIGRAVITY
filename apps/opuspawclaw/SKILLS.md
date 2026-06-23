@@ -9,7 +9,7 @@
 ### Specialized Agent Skillsets
 - **Launchpad Specialist**: Expert in initializing and zero-config deployment of local LLMs.
 - **Jules Security Layer**: Real-time cross-model vulnerability assessment.
-- **DAO Governance**: Technical monitoring of Antigravity DAO metrics.
+- **Product Governance**: Technical monitoring of Antigravity product metrics.
 
 ### Advanced Shell Scripting
 - Automated heartbeats for self-healing and optimization.

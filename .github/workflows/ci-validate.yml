@@ -44,17 +44,17 @@ jobs:
           npm ci
           npm run build
 
-      # Verify no Stripe links in built output
-      - name: Check for stale Stripe links
+      # Verify no alternate processor links in built output
+      - name: Check for stale alternate processor links
         run: |
-          if grep -r "buy\.stripe\.com" apps/youandinotai-frontend/.next/ 2>/dev/null; then
-            echo "::error::Found Stripe links in built output — should be Square"
+          if grep -r "buy\.alternate processor\.com" apps/youandinotai-frontend/.next/ 2>/dev/null; then
+            echo "::error::Found alternate processor links in built output — should be Square"
             exit 1
           fi
-          echo "No Stripe links found in build output"
+          echo "No alternate processor links found in build output"
 
-      # Stripe AUP guard -- dating surfaces must never initialize Stripe.
-      - name: Block Stripe wiring on dating surfaces
+      # alternate processor AUP guard -- dating surfaces must never initialize alternate processor.
+      - name: Block alternate processor wiring on dating surfaces
         run: |
           set -u
           CANDIDATES=(apps/youandinotai-frontend backend/fastapi-app/app apps/mission-control-public)
@@ -65,28 +65,28 @@ jobs:
             fi
           done
           if [ ${#TARGETS[@]} -eq 0 ]; then
-            echo "::error::Stripe dating-surface guard has no valid target directories -- repo layout changed; update ci-validate.yml"
+            echo "::error::alternate processor dating-surface guard has no valid target directories -- repo layout changed; update ci-validate.yml"
             exit 1
           fi
-          PATTERN='import[[:space:]]+stripe|from[[:space:]]+stripe|Stripe\(|stripe\.PaymentIntent\.create|stripe\.checkout\.Session\.create|stripe\.Customer\.create|STRIPE_SECRET_KEY|js\.stripe\.com|stripe-buy-button'
+          PATTERN='import[[:space:]]+alternate processor|from[[:space:]]+alternate processor|alternate processor\(|alternate processor\.PaymentIntent\.create|alternate processor\.checkout\.Session\.create|alternate processor\.Customer\.create|alternate processor_SECRET_KEY|js\.alternate processor\.com|alternate processor-buy-button'
           HITS=$(grep -RInE --exclude-dir=.next --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.turbo --exclude-dir=coverage "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
           if [ -n "$HITS" ]; then
-            echo "::error::Stripe wiring is prohibited on youandinotai/dating surfaces. Use Square."
+            echo "::error::alternate processor wiring is prohibited on youandinotai/dating surfaces. Use Square."
             echo "$HITS"
             exit 1
           fi
-          echo "No Stripe wiring found on dating surfaces: ${TARGETS[*]}"
+          echo "No alternate processor wiring found on dating surfaces: ${TARGETS[*]}"
 
       # Florida §496.405 language scan
-      - name: Scan for donation language violations
+      - name: Scan for support language violations
         run: |
           VIOLATIONS=$(grep -rn --include="*.tsx" --include="*.ts" --include="*.html" \
             -iE '\bdonat(e|ion|ions|ing)\b' \
             apps/youandinotai-frontend/ antigravity/components/ antigravity/app/ \
             revenue-core/components/ _deploy/ mcp-server/src/ 2>/dev/null \
-            | grep -ivE 'not.*(charit|donat)|not a.*(donat|solicitat)|donate\.lovetotherescue' || true)
+            | grep -ivE 'not.*(charit|donat)|not a.*(donat|solicitat)|support\.lovetotherescue' || true)
           if [ -n "$VIOLATIONS" ]; then
-            echo "::warning::§496.405 — Found donation language that may need review:"
+            echo "::warning::§496.405 — Found support language that may need review:"
             echo "$VIOLATIONS"
           else
             echo "No §496.405 violations found"
@@ -112,7 +112,7 @@ jobs:
             echo "::error::Doctrine drift scan has no valid target directories — repo layout changed; update ci-validate.yml"
             exit 1
           fi
-          PATTERN='ai-solutions\.store|CharityRouter100|60/30/10|100% to charity'
+          PATTERN='ai-solutions\.store|productRouter100|retired split-era|absolute public-benefit'
           # grep exit codes: 0=match, 1=no match, 2=error. Trailing `|| true` collapses
           # 1 (no match) into a clean empty result; an actual error would surface via set -u
           # on an unset later var, but we explicitly guard the empty case below.

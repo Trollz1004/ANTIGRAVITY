@@ -24,7 +24,7 @@ Josh wants OpenAI in the mission loop permanently without replacing the verified
 - No payment rail changes.
 - No deployment tools.
 - No branch merge/delete tools.
-- No DAO/token/fundraising surface.
+- No Product structure/membership record/fundraising surface.
 
 ## Verification
 

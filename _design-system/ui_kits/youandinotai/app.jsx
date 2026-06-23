@@ -61,7 +61,7 @@ function YINApp() {
         <div id="sec-surfaces"><window.YIN_SurfacesGrid /></div>
         <div id="sec-mission"><window.YIN_MissionPanel /></div>
         <footer style={{ textAlign: 'center', padding: '24px 0 0', borderTop: '1px solid var(--ag-border)', color: 'var(--ag-text-muted-deep)', fontFamily: 'var(--ag-font-mono)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.3em' }}>
-          © 2026 Trash Or Treasure Online Recycler LLC · Public status only · #UntilNoKidInNeed
+          © 2026 Trash Or Treasure Online Recycler LLC · Public status only · #MembershipVerificationSupport
         </footer>
       </main>
     </div>

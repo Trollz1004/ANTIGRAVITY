@@ -440,9 +440,9 @@ def _support_ticket_alert_message(*, ticket: SupportTicket, user: User) -> str:
 
 
 async def _send_telegram_support_alert(*, message: str, settings: Settings) -> bool:
-    token = str(settings.telegram_bot_token or "").strip()
+    membership record = str(settings.telegram_bot_token or "").strip()
     chat_id = str(settings.telegram_chat_id or "").strip()
-    if not token or not chat_id:
+    if not membership record or not chat_id:
         logger.info(
             "Skipping support ticket Telegram alert; Telegram is not configured."
         )
@@ -451,7 +451,7 @@ async def _send_telegram_support_alert(*, message: str, settings: Settings) -> b
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.post(
-                f"https://api.telegram.org/bot{token}/sendMessage",
+                f"https://api.telegram.org/bot{membership record}/sendMessage",
                 json={
                     "chat_id": chat_id,
                     "text": message,
@@ -474,10 +474,10 @@ async def _send_telegram_support_alert(*, message: str, settings: Settings) -> b
 
 async def _send_whatsapp_support_alert(*, message: str, settings: Settings) -> bool:
     phone_id = str(settings.whatsapp_phone_id or "").strip()
-    token = str(settings.whatsapp_token or "").strip()
+    membership record = str(settings.whatsapp_token or "").strip()
     recipient = str(settings.whatsapp_to or "").strip()
     api_version = str(settings.whatsapp_api_version or "v21.0").strip() or "v21.0"
-    if not (phone_id and token and recipient):
+    if not (phone_id and membership record and recipient):
         logger.info(
             "Skipping support ticket WhatsApp alert; WhatsApp is not configured."
         )
@@ -488,7 +488,7 @@ async def _send_whatsapp_support_alert(*, message: str, settings: Settings) -> b
             response = await client.post(
                 f"https://graph.facebook.com/{api_version}/{phone_id}/messages",
                 headers={
-                    "Authorization": f"Bearer {token}",
+                    "Authorization": f"Bearer {membership record}",
                     "Content-Type": "application/json",
                 },
                 json={

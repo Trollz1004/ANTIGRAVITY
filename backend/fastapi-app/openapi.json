@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "YouAndINotAI API",
-    "description": "\n# YouAndINotAI API\n\n![API Status](https://img.shields.io/badge/API-v1-blue)\n\n**Human-first social platform** - A dating and community product for verified\nmembers, accountable profiles, support workflows, and real-world plans.\n\n---\n\n## \ud83d\ude80 Getting Started\n\n### Base URL\n\n| Environment | URL |\n|-------------|-----|\n| **Production** | `https://api.youandinotai.com` |\n| **Local Dev** | `http://localhost:8000` |\n\n### Quick Start\n\n```bash\n# 1. Register a new account\ncurl -X POST https://api.youandinotai.com/api/v1/auth/register \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"email\": \"user@example.com\", \"password\": \"securePass123!\", \"display_name\": \"Alex\", \"date_of_birth\": \"1995-04-20\", \"accepted_terms\": true}'\n\n# 2. Log in to get tokens\ncurl -X POST https://api.youandinotai.com/api/v1/auth/login \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"email\": \"user@example.com\", \"password\": \"securePass123!\"}'\n\n# 3. Use the access token for authenticated requests\ncurl https://api.youandinotai.com/api/v1/auth/me \\\n  -H \"Authorization: Bearer <access_token>\"\n```\n\n---\n\n## \ud83d\udd11 Authentication\n\nMost endpoints require **Bearer JWT** authentication.\n\n### Auth Flow\n\n```\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510    POST /register     \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502  Client  \u2502    POST /login        \u2502   API    \u2502\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 access_token \u2500\u2500\u2500\u2500\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 refresh_token \u2500\u2500\u2500\u2502          \u2502\n\u2502          \u2502                       \u2502          \u2502\n\u2502          \u2502  GET /me (+ Bearer)   \u2502          \u2502\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 user profile \u2500\u2500\u2500\u2502          \u2502\n\u2502          \u2502                       \u2502          \u2502\n\u2502          \u2502  POST /refresh        \u2502          \u2502\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 new tokens \u2500\u2500\u2500\u2500\u2500\u2502          \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518                       \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\n### Token Details\n\n| Token Type | Expiration | Usage |\n|------------|------------|-------|\n| `access_token` | 30 minutes | Include in `Authorization: Bearer <token>` header |\n| `refresh_token` | 7 days | Use with `POST /api/v1/auth/refresh` to get new tokens |\n\n### Example: Authenticated Request\n\n```http\nGET /api/v1/profiles/me HTTP/1.1\nHost: api.youandinotai.com\nAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\n```\n\n---\n\n## \u23f1 Rate Limiting\n\nAll API endpoints are subject to rate limiting to ensure fair usage and\nprotect the service from abuse.\n\n| Environment | Limit | Window |\n|-------------|-------|--------|\n| Production  | 60 requests | Per minute per IP |\n| Test        | 10,000 requests | Per minute per IP |\n\nWhen the rate limit is exceeded, the API returns **HTTP 429** with the error\ncode `RATE_LIMIT_EXCEEDED`.\n\n### Rate Limit Headers\n\nThe following headers are returned on all API responses to indicate rate limit status:\n\n| Header | Description |\n|--------|-------------|\n| `X-RateLimit-Limit` | The maximum number of requests allowed in the current window |\n| `X-RateLimit-Remaining` | The number of requests remaining in the current window |\n| `X-RateLimit-Reset` | The time (in UTC epoch seconds) when the current window resets |\n\n### Rate Limit Exceeded Response\n\n```json\n{\n    \"code\": \"RATE_LIMIT_EXCEEDED\",\n    \"message\": \"Too many requests. Please wait before trying again.\",\n    \"details\": {\n        \"retry_after_seconds\": 42\n    }\n}\n```\n\n---\n\n## \ud83d\udce6 Standard Error Format\n\nAll error responses follow a consistent structure:\n\n```json\n{\n    \"code\": \"ERROR_CODE\",\n    \"message\": \"Human-readable description\",\n    \"details\": null\n}\n```\n\n### Error Codes Reference\n\n| Code | HTTP Status | Meaning |\n|------|-------------|---------|\n| `INVALID_CREDENTIALS` | 401 | Bad email/password or expired token |\n| `INSUFFICIENT_PERMISSIONS` | 403 | Not allowed to access this resource |\n| `NOT_FOUND` | 404 | Resource does not exist |\n| `ALREADY_EXISTS` | 409 | Duplicate resource (e.g. email taken) |\n| `VALIDATION_ERROR` | 422 | Request body failed validation |\n| `RATE_LIMIT_EXCEEDED` | 429 | Too many requests |\n| `INTERNAL_ERROR` | 500 | Unexpected server error |\n| `SERVICE_UNAVAILABLE` | 503 | Service temporarily down |\n\n### Validation Error Example\n\n```json\n{\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": \"Request validation failed\",\n    \"details\": {\n        \"errors\": [\n            {\n                \"loc\": [\"body\", \"email\"],\n                \"msg\": \"value is not a valid email address\",\n                \"type\": \"value_error.email\"\n            }\n        ],\n        \"correlation_id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\"\n    }\n}\n```\n\n---\n\n## \ud83d\udd17 Useful Links\n\n- **Production API:** https://api.youandinotai.com\n- **Website:** https://youandinotai.com\n- **OpenAPI Schema:** `/openapi.json`\n- **Swagger UI:** `/docs`\n- **Health Dashboard:** `/api/v1/health/detailed`\n\n---\n\n## \ud83d\udcda API Sections\n\n| Tag | Description |\n|-----|-------------|\n| **health** | Service health checks and monitoring |\n| **auth** | Registration, login, token refresh |\n| **users** | User account management |\n| **profiles** | Dating profile CRUD |\n| **messaging** | Chat and direct messages |\n| **social** | Swipe, matching, double dates, events |\n| **content** | Boards, volunteering, marketing |\n| **media** | Video calls, video rooms, file uploads |\n| **billing** | Subscriptions, metrics, feature flags |\n| **operations** | Webhooks, ops runs, notifications, support |\n| **safety** | Privacy, safety, verification |\n\n---\n\n## \ud83c\udfd7 Architecture\n\nThe API is built with **FastAPI** and uses:\n- **SQLAlchemy** async ORM for database operations\n- **Redis** for caching and rate limiting\n- **JWT** for stateless authentication\n- **Square** for payment processing\n- **Daily.co** for video room management\n- **OpenTelemetry** for distributed tracing\n\n---\n\n## \ud83d\udcc4 License\n\nThis API is released under the MIT License.\nSee https://opensource.org/licenses/MIT for details.\n",
+    "description": "\n# YouAndINotAI API\n\n![API Status](https://img.shields.io/badge/API-v1-blue)\n\n**Human-first social platform** - A dating and community product for verified\nmembers, accountable profiles, support workflows, and real-world plans.\n\n---\n\n## \ud83d\ude80 Getting Started\n\n### Base URL\n\n| Environment | URL |\n|-------------|-----|\n| **Production** | `https://api.youandinotai.com` |\n| **Local Dev** | `http://localhost:8000` |\n\n### Quick Start\n\n```bash\n# 1. Register a new account\ncurl -X POST https://api.youandinotai.com/api/v1/auth/register \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"email\": \"user@example.com\", \"password\": \"securePass123!\", \"display_name\": \"Alex\", \"date_of_birth\": \"1995-04-20\", \"accepted_terms\": true}'\n\n# 2. Log in to get membership records\ncurl -X POST https://api.youandinotai.com/api/v1/auth/login \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"email\": \"user@example.com\", \"password\": \"securePass123!\"}'\n\n# 3. Use the access membership record for authenticated requests\ncurl https://api.youandinotai.com/api/v1/auth/me \\\n  -H \"Authorization: Bearer <access_token>\"\n```\n\n---\n\n## \ud83d\udd11 Authentication\n\nMost endpoints require **Bearer JWT** authentication.\n\n### Auth Flow\n\n```\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510    POST /register     \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502  Client  \u2502    POST /login        \u2502   API    \u2502\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 access_token \u2500\u2500\u2500\u2500\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 refresh_token \u2500\u2500\u2500\u2502          \u2502\n\u2502          \u2502                       \u2502          \u2502\n\u2502          \u2502  GET /me (+ Bearer)   \u2502          \u2502\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 user profile \u2500\u2500\u2500\u2502          \u2502\n\u2502          \u2502                       \u2502          \u2502\n\u2502          \u2502  POST /refresh        \u2502          \u2502\n\u2502          \u2502 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25b6\u2502          \u2502\n\u2502          \u2502 \u25c0\u2500\u2500\u2500\u2500 new membership records \u2500\u2500\u2500\u2500\u2500\u2502          \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518                       \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\n### membership record Details\n\n| membership record Type | Expiration | Usage |\n|------------|------------|-------|\n| `access_token` | 30 minutes | Include in `Authorization: Bearer <membership record>` header |\n| `refresh_token` | 7 days | Use with `POST /api/v1/auth/refresh` to get new membership records |\n\n### Example: Authenticated Request\n\n```http\nGET /api/v1/profiles/me HTTP/1.1\nHost: api.youandinotai.com\nAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\n```\n\n---\n\n## \u23f1 Rate Limiting\n\nAll API endpoints are subject to rate limiting to ensure fair usage and\nprotect the service from abuse.\n\n| Environment | Limit | Window |\n|-------------|-------|--------|\n| Production  | 60 requests | Per minute per IP |\n| Test        | 10,000 requests | Per minute per IP |\n\nWhen the rate limit is exceeded, the API returns **HTTP 429** with the error\ncode `RATE_LIMIT_EXCEEDED`.\n\n### Rate Limit Headers\n\nThe following headers are returned on all API responses to indicate rate limit status:\n\n| Header | Description |\n|--------|-------------|\n| `X-RateLimit-Limit` | The maximum number of requests allowed in the current window |\n| `X-RateLimit-Remaining` | The number of requests remaining in the current window |\n| `X-RateLimit-Reset` | The time (in UTC epoch seconds) when the current window resets |\n\n### Rate Limit Exceeded Response\n\n```json\n{\n    \"code\": \"RATE_LIMIT_EXCEEDED\",\n    \"message\": \"Too many requests. Please wait before trying again.\",\n    \"details\": {\n        \"retry_after_seconds\": 42\n    }\n}\n```\n\n---\n\n## \ud83d\udce6 Standard Error Format\n\nAll error responses follow a consistent structure:\n\n```json\n{\n    \"code\": \"ERROR_CODE\",\n    \"message\": \"Human-readable description\",\n    \"details\": null\n}\n```\n\n### Error Codes Reference\n\n| Code | HTTP Status | Meaning |\n|------|-------------|---------|\n| `INVALID_CREDENTIALS` | 401 | Bad email/password or expired membership record |\n| `INSUFFICIENT_PERMISSIONS` | 403 | Not allowed to access this resource |\n| `NOT_FOUND` | 404 | Resource does not exist |\n| `ALREADY_EXISTS` | 409 | Duplicate resource (e.g. email taken) |\n| `VALIDATION_ERROR` | 422 | Request body failed validation |\n| `RATE_LIMIT_EXCEEDED` | 429 | Too many requests |\n| `INTERNAL_ERROR` | 500 | Unexpected server error |\n| `SERVICE_UNAVAILABLE` | 503 | Service temporarily down |\n\n### Validation Error Example\n\n```json\n{\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": \"Request validation failed\",\n    \"details\": {\n        \"errors\": [\n            {\n                \"loc\": [\"body\", \"email\"],\n                \"msg\": \"value is not a valid email address\",\n                \"type\": \"value_error.email\"\n            }\n        ],\n        \"correlation_id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\"\n    }\n}\n```\n\n---\n\n## \ud83d\udd17 Useful Links\n\n- **Production API:** https://api.youandinotai.com\n- **Website:** https://youandinotai.com\n- **OpenAPI Schema:** `/openapi.json`\n- **Swagger UI:** `/docs`\n- **Health Dashboard:** `/api/v1/health/detailed`\n\n---\n\n## \ud83d\udcda API Sections\n\n| Tag | Description |\n|-----|-------------|\n| **health** | Service health checks and monitoring |\n| **auth** | Registration, login, membership record refresh |\n| **users** | User account management |\n| **profiles** | Dating profile CRUD |\n| **messaging** | Chat and direct messages |\n| **social** | Swipe, matching, double dates, events |\n| **content** | Boards, volunteering, marketing |\n| **media** | Video calls, video rooms, file uploads |\n| **billing** | Subscriptions, metrics, feature flags |\n| **operations** | Webhooks, ops runs, notifications, support |\n| **safety** | Privacy, safety, verification |\n\n---\n\n## \ud83c\udfd7 Architecture\n\nThe API is built with **FastAPI** and uses:\n- **SQLAlchemy** async ORM for database operations\n- **Redis** for caching and rate limiting\n- **JWT** for stateless authentication\n- **Square** for payment processing\n- **Daily.co** for video room management\n- **OpenTelemetry** for distributed tracing\n\n---\n\n## \ud83d\udcc4 License\n\nThis API is released under the MIT License.\nSee https://opensource.org/licenses/MIT for details.\n",
     "contact": {
       "name": "YouAndINotAI Team",
       "url": "https://youandinotai.com/",
@@ -411,7 +411,7 @@
           "auth"
         ],
         "summary": "Log in",
-        "description": "Authenticate with email and password. Returns JWT access and refresh tokens.",
+        "description": "Authenticate with email and password. Returns JWT access and refresh membership records.",
         "operationId": "login_api_v1_auth_login_post",
         "requestBody": {
           "content": {
@@ -551,8 +551,8 @@
         "tags": [
           "auth"
         ],
-        "summary": "Refresh tokens",
-        "description": "Refresh an access token using refresh token rotation (OPU-47). The old refresh token is validated, revoked, and replaced with a new one.",
+        "summary": "Refresh membership records",
+        "description": "Refresh an access membership record using refresh membership record rotation (OPU-47). The old refresh membership record is validated, revoked, and replaced with a new one.",
         "operationId": "refresh_token_api_v1_auth_refresh_post",
         "requestBody": {
           "content": {
@@ -566,7 +566,7 @@
         },
         "responses": {
           "200": {
-            "description": "Tokens refreshed successfully",
+            "description": "membership records refreshed successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -582,12 +582,12 @@
             }
           },
           "401": {
-            "description": "Invalid or expired refresh token",
+            "description": "Invalid or expired refresh membership record",
             "content": {
               "application/json": {
                 "example": {
                   "code": "TOKEN_INVALID",
-                  "message": "Not a refresh token"
+                  "message": "Not a refresh membership record"
                 }
               }
             }
@@ -637,7 +637,7 @@
             }
           },
           "401": {
-            "description": "Missing or invalid authentication token",
+            "description": "Missing or invalid authentication membership record",
             "content": {
               "application/json": {
                 "example": {
@@ -2092,13 +2092,13 @@
         }
       }
     },
-    "/api/v1/webhooks/stripe": {
+    "/api/v1/webhooks/alternate processor": {
       "post": {
         "tags": [
           "webhooks"
         ],
-        "summary": "Stripe Webhook Retired",
-        "operationId": "stripe_webhook_retired_api_v1_webhooks_stripe_post",
+        "summary": "alternate processor Webhook Retired",
+        "operationId": "alternate processor_webhook_retired_api_v1_webhooks_alternate processor_post",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -2106,7 +2106,7 @@
               "application/json": {
                 "schema": {
                   "type": "null",
-                  "title": "Response Stripe Webhook Retired Api V1 Webhooks Stripe Post"
+                  "title": "Response alternate processor Webhook Retired Api V1 Webhooks alternate processor Post"
                 }
               }
             }
@@ -3054,7 +3054,7 @@
             "schema": {
               "type": "string",
               "default": "",
-              "title": "Hub.Verify Token"
+              "title": "Hub.Verify membership record"
             }
           },
           {
@@ -4841,7 +4841,7 @@
         "properties": {
           "refresh_token": {
             "type": "string",
-            "title": "Refresh Token"
+            "title": "Refresh membership record"
           }
         },
         "type": "object",
@@ -4906,15 +4906,15 @@
         "properties": {
           "access_token": {
             "type": "string",
-            "title": "Access Token"
+            "title": "Access membership record"
           },
           "refresh_token": {
             "type": "string",
-            "title": "Refresh Token"
+            "title": "Refresh membership record"
           },
           "token_type": {
             "type": "string",
-            "title": "Token Type",
+            "title": "membership record Type",
             "default": "bearer"
           },
           "user_id": {
@@ -5651,7 +5651,7 @@
         "properties": {
           "id_token": {
             "type": "string",
-            "title": "Id Token"
+            "title": "Id membership record"
           }
         },
         "type": "object",
@@ -7520,7 +7520,7 @@
           },
           "session_token": {
             "type": "string",
-            "title": "Session Token"
+            "title": "Session membership record"
           }
         },
         "type": "object",
@@ -7997,7 +7997,7 @@
     },
     {
       "name": "auth",
-      "description": "Authentication and authorization. Register new accounts via `POST /api/v1/auth/register`, log in with email/password or Google via `POST /api/v1/auth/login` to receive an `access_token` and `refresh_token`. Refresh JWT tokens using `POST /api/v1/auth/refresh`, and retrieve the current user profile (`GET /api/v1/auth/me`). Detailed request/response examples are available for each endpoint."
+      "description": "Authentication and authorization. Register new accounts via `POST /api/v1/auth/register`, log in with email/password or Google via `POST /api/v1/auth/login` to receive an `access_token` and `refresh_token`. Refresh JWT membership records using `POST /api/v1/auth/refresh`, and retrieve the current user profile (`GET /api/v1/auth/me`). Detailed request/response examples are available for each endpoint."
     },
     {
       "name": "users",
@@ -8093,7 +8093,7 @@
     },
     {
       "name": "notifications",
-      "description": "Push notifications and in-app alerts. Manage notification preferences, device tokens, and notification history."
+      "description": "Push notifications and in-app alerts. Manage notification preferences, device membership records, and notification history."
     },
     {
       "name": "support",

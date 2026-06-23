@@ -51,7 +51,7 @@ def _doctrine_splits() -> Dict[str, float]:
 
 def _bucket_to_category(bucket: int) -> str:
     """Map the 10-bucket ledger taxonomy → 3-axis doctrine."""
-    # buckets 1-2 → kids fund; 3-4 → tax reserve; 5-10 → ops
+    # buckets 1-2 → Member Support; 3-4 → tax reserve; 5-10 → ops
     if bucket in (1, 2):
         return "kids"
     if bucket in (3, 4):
@@ -72,7 +72,7 @@ async def compliance_status():
             "checked_at": latest.get("checked_at") if latest else None,
             "deviation_pct": latest.get("deviation_pct") if latest else None,
         } if latest else None,
-        "tag": "#UntilNoKidInNeed",
+        "tag": "Business-only product operations",
     }
 
 

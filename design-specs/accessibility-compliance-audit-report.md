@@ -19,7 +19,7 @@ This audit evaluates the current accessibility compliance of the YouAndINotAI pl
 
 | Criterion                | Status    | Notes                                                     |
 | ------------------------ | --------- | --------------------------------------------------------- |
-| 1.4.3 Contrast (Minimum) | Compliant | All design tokens meet 4.5:1 contrast ratio               |
+| 1.4.3 Contrast (Minimum) | Compliant | All design membership records meet 4.5:1 contrast ratio               |
 | 1.4.11 Non-text Contrast | Compliant | UI components exceed 3:1 contrast requirements            |
 | Color Usage              | Compliant | Design system prohibits color-only information conveyance |
 | Typography               | Compliant | Base font size 16px, adequate line spacing                |
@@ -168,4 +168,4 @@ This audit evaluates the current accessibility compliance of the YouAndINotAI pl
 
 The YouAndINotAI platform has a strong foundation for accessibility compliance with a well-defined design system and clear accessibility guidelines. The main areas requiring immediate attention are the implementation of skip links, enhanced focus indicators, and complete semantic HTML structure. With the planned remediation, the platform can achieve full WCAG 2.1 AA compliance.
 
-This audit confirms that our mobile-first, inclusive design approach positions us well for accessibility success. The design tokens, component specifications, and guidelines established provide a solid framework for building an accessible platform that serves all users effectively.
+This audit confirms that our mobile-first, inclusive design approach positions us well for accessibility success. The design membership records, component specifications, and guidelines established provide a solid framework for building an accessible platform that serves all users effectively.

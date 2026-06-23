@@ -9,7 +9,7 @@ Every AI model that touches ANTIGRAVITY infrastructure MUST:
 4. Report any secret exposure on exit
 
 This is not optional. This is the Gospel.
-Current LLC operations use a 1-wallet model with 10% reserve.
+Current LLC operations use a 1-Square payment links model with business reserve.
 Any platform that leaks secrets gets burned.
 
 Usage:
@@ -60,7 +60,7 @@ MISSION_BANNER = """
 ║  SEE MCP — CONFIRM YOU ARE #FORTHEKIDS                     ║
 ║                                                              ║
 ║  This MCP session is LOGGED and AUDITED.                    ║
-║  Current LLC operations: 1-wallet model, 10% reserve.       ║
+║  Current LLC operations: 1-Square payment links model, business reserve.       ║
 ║  DO NOT expose secrets. DO NOT bypass the Iron Wall.        ║
 ║  Your actions are timestamped and permanent.                ║
 ║                                                              ║

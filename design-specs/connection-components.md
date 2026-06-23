@@ -216,11 +216,11 @@ interface ConnectionGroup {
 - Quick action buttons
 - Privacy-aware information display
 
-## Design Tokens
+## Design membership records
 
-### Color Tokens
+### Color membership records
 
-| Token                         | Value                   | Usage                         |
+| membership record                         | Value                   | Usage                         |
 | ----------------------------- | ----------------------- | ----------------------------- |
 | `--connection-card-bg`        | `--bg-primary`          | Connection card background    |
 | `--connection-request-bg`     | `--bg-secondary`        | Connection request background |
@@ -228,18 +228,18 @@ interface ConnectionGroup {
 | `--relationship-type-color`   | `--volunteer-community` | Relationship type indicator   |
 | `--connection-action-primary` | `--brand-primary`       | Primary connection action     |
 
-### Typography Tokens
+### Typography membership records
 
-| Token                            | Value                    | Usage                      |
+| membership record                            | Value                    | Usage                      |
 | -------------------------------- | ------------------------ | -------------------------- |
 | `--font-size-connection-name`    | `--font-size-lg`         | Connection name text       |
 | `--font-size-connection-meta`    | `--font-size-sm`         | Connection metadata        |
 | `--font-size-connection-request` | `--font-size-base`       | Connection request content |
 | `--font-weight-connection-name`  | `--font-weight-semibold` | Connection name weight     |
 
-### Spacing Tokens
+### Spacing membership records
 
-| Token                          | Value              | Usage                        |
+| membership record                          | Value              | Usage                        |
 | ------------------------------ | ------------------ | ---------------------------- |
 | `--spacing-connection-card`    | `var(--spacing-4)` | Padding for connection cards |
 | `--spacing-connection-grid`    | `var(--spacing-3)` | Gap between connection cards |

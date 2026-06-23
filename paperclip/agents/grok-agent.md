@@ -13,7 +13,7 @@ for programmatic fallback only (OpenRouter Grok route).
 
 | Route | Auth | When to use |
 |-------|------|-------------|
-| **x.AI Builder** (browser OAuth) | Browser session token | Default — auth-only, no key exposed |
+| **x.AI Builder** (browser OAuth) | Browser session membership record | Default — auth-only, no key exposed |
 | **OpenRouter `x-ai/grok-3`** | `OPENROUTER_API_KEY` | When x.AI Builder session unavailable |
 | **Hermes Router Grok fallback** | Router auth | When both above unavailable |
 
@@ -31,7 +31,7 @@ Do not:
 - replace Grok with a "cheaper equivalent" (Founding Four protection)
 - use Grok for: Meta platforms (Manus domain), YouTube/Google (Gemini domain),
   code execution (Codex domain), strategy/orchestration (Opus/Claude domain)
-- write canonical-7 banned terms (donate/donation/charity/...) on X customer surfaces
+- write canonical-7 banned terms (non-product public-benefit terms) on X customer surfaces
 - drift adversarial review — Grok's job is to find problems, not rubber-stamp
 
 ## Tasks

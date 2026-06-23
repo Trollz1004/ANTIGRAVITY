@@ -68,21 +68,21 @@ Banner 'commit 1/5 · public deploy surfaces'
 git add _deploy/antigravity-landing/index.html `
         _deploy/antigravity-prototype/index.html `
         _deploy/antigravity-walkthrough/index.html `
-        _deploy/dao-transparency/index.html
+        _deploy/product-transparency/index.html
 git commit -m "feat(deploy): land antigravity design bundle v1 - 4 public surfaces" `
            -m "Source: Anthropic Design handoff bundle rEnQ9iGVe9MRLwSg0SL80g" `
            -m "" `
            -m "- _deploy/antigravity-landing/index.html       (450 KB · NEW slug)" `
            -m "- _deploy/antigravity-prototype/index.html     (1.73 MB · NEW slug)" `
            -m "- _deploy/antigravity-walkthrough/index.html   (16 KB · NEW slug)" `
-           -m "- _deploy/dao-transparency/index.html          (468 KB · REPLACES live)" `
+           -m "- _deploy/product-transparency/index.html          (468 KB · REPLACES live)" `
            -m "" `
            -m "Doctrine scan (post-drop, _deploy/):" `
            -m "  landing       : zero hits across 7 canonical terms + 'Cockpit'" `
            -m "  prototype     : zero hits across 7 canonical terms + 'Cockpit'" `
            -m "  walkthrough   : zero hits across 7 canonical terms + 'Cockpit'" `
-           -m "  dao-transp.   : 5 intentional regulatory disclosures (negative-form" `
-           -m "                  FL §496.405 banner, 'Contractual Charitable Disbursement'" `
+           -m "  Product-transp.   : 5 intentional regulatory disclosures (negative-form" `
+           -m "                  FL §496.405 banner, 'Contractual public-benefit allocation'" `
            -m "                  workflow label, meta-policy framing paragraph). These" `
            -m "                  pass an Anthropic-grade review of customer-facing legal" `
            -m "                  copy under Joshua override 2026-05-19." `
@@ -126,11 +126,11 @@ git commit -m "feat(web-prototype): add design-bundle dev source (HTML + theme.c
            -m "around it and add @antigravity/web-prototype to the workspace."
 OK 'committed (3/5)'
 
-# ── commit 4 — scripts/start-dao.ps1 ────────────────────────────────────
-Banner 'commit 4/5 · scripts/start-dao.ps1 helper'
-git add scripts/start-dao.ps1
-git commit -m "feat(scripts): add start-dao.ps1 helper" `
-           -m "DAO launch helper. No secrets in source — reads from .env at runtime."
+# ── commit 4 — scripts/start-product-dashboard.ps1 ────────────────────────────────────
+Banner 'commit 4/5 · scripts/start-product-dashboard.ps1 helper'
+git add scripts/start-product-dashboard.ps1
+git commit -m "feat(scripts): add start-product-dashboard.ps1 helper" `
+           -m "Product launch helper. No secrets in source — reads from .env at runtime."
 OK 'committed (4/5)'
 
 # ── commit 5 — apps/mcp scaffold + .mcp.json + workspace ────────────────
@@ -138,11 +138,11 @@ Banner 'commit 5/5 · MCP scaffold + .mcp.json wire-in + workspace glob'
 git add apps/mcp/tsconfig.base.json `
         apps/mcp/hermes-mcp `
         apps/mcp/paperweight-mcp `
-        apps/mcp/dao-mcp `
+        apps/mcp/product-mcp `
         .mcp.json `
         pnpm-workspace.yaml `
         briefings/DESIGN-BUNDLE-V1-VERIFICATION.md
-git commit -m "feat(mcp): scaffold hermes/paperweight/dao MCP servers (Anthropic stdio pattern)" `
+git commit -m "feat(mcp): scaffold hermes/paperweight/Product MCP servers (Anthropic stdio pattern)" `
            -m "Three TypeScript MCP servers using the official @modelcontextprotocol/sdk:" `
            -m "" `
            -m "  apps/mcp/hermes-mcp        · routes prompts via localhost:11435 Hermes" `
@@ -150,12 +150,12 @@ git commit -m "feat(mcp): scaffold hermes/paperweight/dao MCP servers (Anthropic
            -m "                                      hermes.list_models" `
            -m "  apps/mcp/paperweight-mcp   · sticky-note delegation to localhost:3100" `
            -m "                               tools: paperweight.{list,create,complete,audit}" `
-           -m "  apps/mcp/dao-mcp           · READ-ONLY reflection of Perpetual Mission" `
-           -m "                               DAO spec · refuses any mutation tool name" `
-           -m "                               matching /^dao\\.(set|update|delete|create|" `
+           -m "  apps/mcp/product-mcp           · READ-ONLY reflection of Perpetual Mission" `
+           -m "                               Product spec · refuses any mutation tool name" `
+           -m "                               matching /^product\\.(set|update|delete|create|" `
            -m "                               adjust|override|patch|mutate)/i" `
-           -m "                               tools: dao.waterfall_dry_run, dao.seats_status," `
-           -m "                                      dao.gateway_status, dao.compliance_check" `
+           -m "                               tools: Product.waterfall_dry_run, Product.seats_status," `
+           -m "                                      Product.gateway_status, Product.compliance_check" `
            -m "" `
            -m "Each server: strict TS · zod-validated input · dotenv .env.example placeholders" `
            -m "only · vitest schema tests · no hard-coded secrets." `

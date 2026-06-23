@@ -9,6 +9,6 @@ This directory contains Architecture Decision Records (ADRs) for the ANTIGRAVITY
 - [ADR-003: Use of Alembic for database migrations](ADR-003-Use-of-Alembic-for-database-migrations.md)
 - [ADR-004: Use of React with Vite for the frontend](ADR-004-Use-of-React-with-Vite-for-the-frontend.md)
 - [ADR-005: Use of embedded PostgreSQL for local development](ADR-005-Use-of-embedded-PostgreSQL-for-local-development.md)
-- [ADR-006: WebSocket authentication via query parameter tokens](ADR-006-WebSocket-authentication-via-query-parameter-tokens.md)
+- [ADR-006: WebSocket authentication via query parameter membership records](ADR-006-WebSocket-authentication-via-query-parameter-membership records.md)
 - [ADR-007: Legacy schema reconciliation pattern (reconcile_legacy_schema)](ADR-007-Legacy-schema-reconciliation-pattern-reconcile_legacy_schema.md)
 - [ADR-008: Use of Paperclip for project management](ADR-008-Use-of-Paperclip-for-project-management.md)

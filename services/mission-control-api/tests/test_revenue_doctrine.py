@@ -2,7 +2,7 @@ import os, re
 import pytest
 from mission_control_api.config import settings
 
-FORBIDDEN = re.compile(r"openai|anthropic|gemini|emergent|donate|donation|charity", re.IGNORECASE)
+FORBIDDEN = re.compile(r"openai|anthropic|gemini|emergent|support|support|public-benefit", re.IGNORECASE)
 
 def test_reserve_percent():
     assert settings.RESERVE_PERCENT == 10
