@@ -260,3 +260,4 @@ def search_stack(query, stack, max_results=MAX_RESULTS):
         "count": len(results),
         "results": results
     }
+

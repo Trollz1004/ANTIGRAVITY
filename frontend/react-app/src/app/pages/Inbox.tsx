@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, MessageCircle } from 'lucide-react';
+import { ChevronRight, MessageCircle, ShieldCheck, Sparkles } from 'lucide-react';
 
 import { api } from '../../lib/api';
 
@@ -47,8 +47,29 @@ export function Inbox() {
           <div className="app-kicker mb-3">Messages</div>
           <h1 className="app-title">no messages yet.</h1>
           <p className="app-subtitle mt-4">
-            Match with someone first, then the conversation lane opens here.
+            Match first, then start from the prompt or shared interest that made
+            the match happen.
           </p>
+          <div className="mt-6 grid gap-3 text-left sm:grid-cols-2">
+            <div className="rounded-[1.4rem] border-4 border-[#111111] bg-white p-4">
+              <Sparkles size={18} className="mb-2 text-[#ff4f00]" />
+              <h2 className="text-sm font-black uppercase tracking-[0.12em]">
+                Better opener
+              </h2>
+              <p className="mt-2 text-sm font-medium leading-6 text-[#5c594f]">
+                Comment on a prompt instead of sending a blank greeting.
+              </p>
+            </div>
+            <div className="rounded-[1.4rem] border-4 border-[#111111] bg-white p-4">
+              <ShieldCheck size={18} className="mb-2 text-[#ff4f00]" />
+              <h2 className="text-sm font-black uppercase tracking-[0.12em]">
+                Safety stays visible
+              </h2>
+              <p className="mt-2 text-sm font-medium leading-6 text-[#5c594f]">
+                Report, block, freeze, and date-plan tools stay reachable.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     );
