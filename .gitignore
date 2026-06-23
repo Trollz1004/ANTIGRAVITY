@@ -77,6 +77,7 @@ docs/beta-access-after-click.png
 assets/__pycache__/
 marketing-assets/assets/__pycache__/
 scripts/__pycache__/
+scripts/CodeX/state/
 services/*/src/*/__pycache__/
 services/*/tests/__pycache__/
 services/health-aggregator/app/__pycache__/
