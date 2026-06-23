@@ -21,6 +21,13 @@
       "env": {
         "HOME": "C:\\Users\\joshl"
       }
+    },
+    "youandinotai-paperclip-memory": {
+      "command": "node",
+      "args": [
+        "C:\\antigravity-paperclip-dateapp-ops\\mcp\\dateapp-paperclip-memory-server.cjs"
+      ],
+      "env": {}
     }
   }
 }
