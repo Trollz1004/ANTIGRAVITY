@@ -81,6 +81,25 @@ function Import-RuntimeEnvSafe {
     Write-OpsEvent -Agent "env-agent" -Level "green" -Message "Runtime env loaded for Cloudflare/Wrangler" -Data @{ keys = @($loaded) }
 }
 
+function Get-WranglerPath {
+    $cmd = Get-Command wrangler.cmd -ErrorAction SilentlyContinue
+    if ($cmd -and (Test-Path -LiteralPath $cmd.Source)) { return $cmd.Source }
+
+    $cmd = Get-Command wrangler -ErrorAction SilentlyContinue
+    if ($cmd -and (Test-Path -LiteralPath $cmd.Source)) { return $cmd.Source }
+
+    $candidates = @(
+        "C:\Users\joshl\AppData\Roaming\npm\wrangler.cmd",
+        "C:\Program Files\nodejs\wrangler.cmd"
+    )
+
+    foreach ($candidate in $candidates) {
+        if (Test-Path -LiteralPath $candidate) { return $candidate }
+    }
+
+    return $null
+}
+
 function Test-HttpHealth {
     param(
         [string]$Agent,
@@ -188,10 +207,7 @@ function Invoke-SystemAgent {
 }
 
 function Invoke-WranglerPagesAgent {
-    $wrangler = Get-Command wrangler.cmd -ErrorAction SilentlyContinue
-    if (-not $wrangler) {
-        $wrangler = Get-Command wrangler -ErrorAction SilentlyContinue
-    }
+    $wrangler = Get-WranglerPath
 
     if (-not $wrangler) {
         Write-OpsEvent -Agent "wrangler-pages-agent" -Level "red" -Message "Wrangler is not on PATH"
@@ -199,10 +215,10 @@ function Invoke-WranglerPagesAgent {
         return
     }
 
-    $version = & $wrangler.Source --version 2>&1
-    Write-OpsEvent -Agent "wrangler-pages-agent" -Level "green" -Message "Wrangler available" -Data @{ version = ($version -join "`n") }
+    $version = & $wrangler --version 2>&1
+    Write-OpsEvent -Agent "wrangler-pages-agent" -Level "green" -Message "Wrangler available" -Data @{ path = $wrangler; version = ($version -join "`n") }
 
-    $whoami = & $wrangler.Source whoami 2>&1
+    $whoami = & $wrangler whoami 2>&1
     $whoamiText = ($whoami -join "`n")
     if ($LASTEXITCODE -eq 0) {
         Write-OpsEvent -Agent "wrangler-pages-agent" -Level "green" -Message "Wrangler auth available" -Data @{ result = $whoamiText }
@@ -212,7 +228,7 @@ function Invoke-WranglerPagesAgent {
         return
     }
 
-    $deployments = & $wrangler.Source pages deployment list --project-name $PagesProjectName 2>&1
+    $deployments = & $wrangler pages deployment list --project-name $PagesProjectName 2>&1
     if ($LASTEXITCODE -eq 0) {
         Write-OpsEvent -Agent "wrangler-pages-agent" -Level "green" -Message "Cloudflare Pages deployment list reachable" -Data @{
             project = $PagesProjectName
@@ -305,8 +321,7 @@ function Invoke-PublicDateAppAgent {
     Test-HttpHealth -Agent "public-dateapp-agent" -Name "youandinotai api v1 health" -Url "https://api.youandinotai.com/api/v1/health" -WarnOnly | Out-Null
 
     if ($DeployPagesOnPublicDown -and (-not $rootOk -or -not $appOk) -and -not $NoRepair) {
-        $wrangler = Get-Command wrangler.cmd -ErrorAction SilentlyContinue
-        if (-not $wrangler) { $wrangler = Get-Command wrangler -ErrorAction SilentlyContinue }
+        $wrangler = Get-WranglerPath
         if ($wrangler -and (Test-Path -LiteralPath $StaticDeployDir)) {
             Write-OpsEvent -Agent "public-dateapp-agent" -Level "warn" -Message "Public Pages host down; redeploying static output with Wrangler" -Data @{
                 project = $PagesProjectName
@@ -314,7 +329,7 @@ function Invoke-PublicDateAppAgent {
             }
             Push-Location $RepoRoot
             try {
-                $deploy = & $wrangler.Source pages deploy $StaticDeployDir --project-name $PagesProjectName --branch main 2>&1
+                $deploy = & $wrangler pages deploy $StaticDeployDir --project-name $PagesProjectName --branch main 2>&1
                 $code = $LASTEXITCODE
                 Write-OpsEvent -Agent "public-dateapp-agent" -Level ($(if ($code -eq 0) { "green" } else { "red" })) -Message "Wrangler Pages deploy completed" -Data @{
                     exit_code = $code
