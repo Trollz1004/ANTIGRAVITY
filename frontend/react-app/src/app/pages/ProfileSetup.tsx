@@ -175,7 +175,8 @@ export function ProfileSetup() {
                     Plan safely
                   </h2>
                   <p className="mt-2 text-sm font-medium leading-6 text-[#5c594f]">
-                    Share a first-date comfort level before chat turns into a plan.
+                    Share a first-date comfort level before chat turns into a
+                    plan.
                   </p>
                 </div>
               </div>

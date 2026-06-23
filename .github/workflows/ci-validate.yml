@@ -119,7 +119,7 @@ jobs:
           # Scan SOURCE only — build artifacts (.next, dist, node_modules) compile the
           # allowlisted source strings into output whose paths aren't allowlisted, causing
           # false drift failures. Source references are governed by the allowlist below.
-          ALL_HITS=$(grep -rnE --exclude-dir=.next --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.turbo --exclude-dir=coverage "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
+          ALL_HITS=$(grep -rnE --exclude-dir=.next --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=out --exclude-dir=.turbo --exclude-dir=coverage "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
           if [ -z "$ALL_HITS" ]; then
             echo "Doctrine boundary intact (zero matches in: ${TARGETS[*]})"
             exit 0

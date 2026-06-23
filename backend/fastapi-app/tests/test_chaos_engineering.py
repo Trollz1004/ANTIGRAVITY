@@ -89,7 +89,11 @@ def chaos_client(tmp_path):
     app.dependency_overrides[get_db] = override_get_db
     reset_rate_limits()
 
-    with patch("app.routers.health.redis_health_check", new_callable=AsyncMock, return_value={"status": "ok"}):
+    with patch(
+        "app.routers.health.redis_health_check",
+        new_callable=AsyncMock,
+        return_value={"status": "ok"},
+    ):
         with TestClient(app) as test_client:
             yield test_client
 
@@ -361,7 +365,11 @@ class TestDegradedHealthStatus:
 
     def test_degraded_when_square_not_configured(self, chaos_client):
         """Health should report degraded when Square credentials are missing."""
-        with patch("app.routers.health.redis_health_check", new_callable=AsyncMock, return_value={"status": "error"}):
+        with patch(
+            "app.routers.health.redis_health_check",
+            new_callable=AsyncMock,
+            return_value={"status": "error"},
+        ):
             with patch(
                 "app.routers.health.settings",
                 MagicMock(
@@ -381,7 +389,11 @@ class TestDegradedHealthStatus:
 
     def test_degraded_when_signature_not_configured(self, chaos_client):
         """Health should report degraded when Square signature is not configured."""
-        with patch("app.routers.health.redis_health_check", new_callable=AsyncMock, return_value={"status": "error"}):
+        with patch(
+            "app.routers.health.redis_health_check",
+            new_callable=AsyncMock,
+            return_value={"status": "error"},
+        ):
             with patch(
                 "app.routers.health.settings",
                 MagicMock(

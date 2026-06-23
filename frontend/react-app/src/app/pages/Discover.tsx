@@ -56,7 +56,8 @@ const DEMO_PROFILES: Profile[] = [
     verified: true,
     subscription_active: true,
     gender: 'female',
-    prompt: 'My ideal first date is coffee, a bookstore, and no pressure to perform.',
+    prompt:
+      'My ideal first date is coffee, a bookstore, and no pressure to perform.',
     intent: 'Relationship ready',
     availability: 'Free this weekend',
     compatibility: 'Shared pace and safety-first dating',
@@ -73,7 +74,8 @@ const DEMO_PROFILES: Profile[] = [
     verified: true,
     subscription_active: false,
     gender: 'male',
-    prompt: 'Green flag: you can make a plan and still leave room for real life.',
+    prompt:
+      'Green flag: you can make a plan and still leave room for real life.',
     intent: 'Open to serious',
     availability: 'Weeknights after 7',
     compatibility: 'Same distance range and meetup comfort',
@@ -85,7 +87,13 @@ const DEMO_PROFILES: Profile[] = [
     bio: 'Creative, direct, and allergic to ghosting. I would rather plan one good date than collect twenty dead chats.',
     age: 28,
     photos: [],
-    interests: ['Art walks', 'Cooking', 'Theater', 'Road trips', 'Real profiles'],
+    interests: [
+      'Art walks',
+      'Cooking',
+      'Theater',
+      'Road trips',
+      'Real profiles',
+    ],
     location: 'St. Petersburg, FL',
     verified: true,
     subscription_active: true,
@@ -101,12 +109,19 @@ const DEMO_PROFILES: Profile[] = [
     bio: 'New to town, not new to knowing my boundaries. Looking for chemistry that can survive a normal Tuesday.',
     age: 30,
     photos: [],
-    interests: ['Kayaking', 'Movies', 'Coffee', 'Mutual effort', 'Safety plans'],
+    interests: [
+      'Kayaking',
+      'Movies',
+      'Coffee',
+      'Mutual effort',
+      'Safety plans',
+    ],
     location: 'Jacksonville, FL',
     verified: true,
     subscription_active: false,
     gender: 'nonbinary',
-    prompt: 'The best plans are simple: public place, easy exit, good conversation.',
+    prompt:
+      'The best plans are simple: public place, easy exit, good conversation.',
     intent: 'See where it goes',
     availability: 'Friday evening',
     compatibility: 'Shared date comfort and interests',
@@ -356,8 +371,13 @@ export function Discover() {
                   'Verified profile with overlapping interests and active dating intent.'}
               </p>
               <div className="mt-3 grid gap-2 text-xs font-bold text-[#5c594f]">
-                <span>{activeProfile.verificationLevel || 'Verification visible'}</span>
-                <span>{activeProfile.availability || 'Availability can be shared before a plan'}</span>
+                <span>
+                  {activeProfile.verificationLevel || 'Verification visible'}
+                </span>
+                <span>
+                  {activeProfile.availability ||
+                    'Availability can be shared before a plan'}
+                </span>
               </div>
             </div>
           )}

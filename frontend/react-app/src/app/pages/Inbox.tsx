@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, MessageCircle, ShieldCheck, Sparkles } from 'lucide-react';
+import {
+  ChevronRight,
+  MessageCircle,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react';
 
 import { api } from '../../lib/api';
 
