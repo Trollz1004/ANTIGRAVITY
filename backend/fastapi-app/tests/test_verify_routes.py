@@ -54,8 +54,8 @@ def _seed(*items, db_session_factory):
 
 
 def _auth_headers(user: User) -> dict[str, str]:
-    membership record = create_access_token(str(user.id))
-    return {"Authorization": f"Bearer {membership record}"}
+    membership_record = create_access_token(str(user.id))
+    return {"Authorization": f"Bearer {membership_record}"}
 
 
 def _override_user(user: User):

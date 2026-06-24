@@ -676,10 +676,10 @@ def test_payment_webhook_skips_signature_check_when_material_missing(
     get_settings.cache_clear()
 
 
-class TestNoalternate processorReferences:
+class TestNoAlternateProcessorReferences:
     """Ensure alternate processor has been fully removed from the codebase."""
 
-    def test_webhooks_no_active_alternate processor(self):
+    def test_webhooks_no_active_alternate_processor(self):
         """webhooks.py must not contain active alternate processor code."""
         import inspect
 
@@ -687,7 +687,7 @@ class TestNoalternate processorReferences:
 
         source = inspect.getsource(webhooks)
         lines = source.split("\n")
-        active_alternate processor = [
+        active_alternate_processor = [
             line.strip()
             for line in lines
             if "alternate processor" in line.lower()
@@ -699,13 +699,13 @@ class TestNoalternate processorReferences:
             and "Iron Wall" not in line
             and "migration" not in line.lower()
             and "retired" not in line.lower()
-            and '"/alternate processor"' not in line
+            and '"/alternate-processor"' not in line
         ]
         assert (
-            len(active_alternate processor) == 0
-        ), f"Active alternate processor references found in webhooks.py: {active_alternate processor}"
+            len(active_alternate_processor) == 0
+        ), f"Active alternate processor references found in webhooks.py: {active_alternate_processor}"
 
-    def test_config_no_active_alternate processor(self):
+    def test_config_no_active_alternate_processor(self):
         """config.py must not have active alternate processor settings."""
         import inspect
 
@@ -713,7 +713,7 @@ class TestNoalternate processorReferences:
 
         source = inspect.getsource(config)
         lines = source.split("\n")
-        active_alternate processor = [
+        active_alternate_processor = [
             line.strip()
             for line in lines
             if "alternate processor" in line.lower()
@@ -723,5 +723,5 @@ class TestNoalternate processorReferences:
             and "REMOVED" not in line
         ]
         assert (
-            len(active_alternate processor) == 0
-        ), f"Active alternate processor references found in config.py: {active_alternate processor}"
+            len(active_alternate_processor) == 0
+        ), f"Active alternate processor references found in config.py: {active_alternate_processor}"
