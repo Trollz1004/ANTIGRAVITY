@@ -131,4 +131,18 @@ if (-not $depsCurrent) {
 
 Write-Log "starting Hermes Router on 0.0.0.0:$env:HERMES_ROUTER_PORT"
 Set-Location $ServiceDir
-& $venvPython (Join-Path $ServiceDir 'hermes_router.py') *>> $LogFile
+
+$routerScript = Join-Path $ServiceDir 'hermes_router.py'
+$runArgs = "/c `"cd /d `"$ServiceDir`" && set PYTHONIOENCODING=utf-8 && set PYTHONUNBUFFERED=1 && set HERMES_ROUTER_PORT=$env:HERMES_ROUTER_PORT && set HERMES_ROUTER_CONFIG=$env:HERMES_ROUTER_CONFIG && `"$venvPython`" `"$routerScript`" >> `"$LogFile`" 2>&1`""
+$process = Start-Process -FilePath 'cmd.exe' -ArgumentList $runArgs -PassThru -WindowStyle Hidden
+Write-Log "spawned Hermes Router process wrapper pid=$($process.Id)"
+
+for ($i = 0; $i -lt 30; $i++) {
+    Start-Sleep -Seconds 1
+    if (Test-HermesRouterHealthy) {
+        Write-Log "Hermes Router healthy on 127.0.0.1:$env:HERMES_ROUTER_PORT"
+        exit 0
+    }
+}
+
+throw "Hermes Router did not become healthy on 127.0.0.1:$env:HERMES_ROUTER_PORT"
