@@ -2,12 +2,14 @@ $ErrorActionPreference = 'Stop'
 
 $RepoRoot = 'C:\antigravity'
 $ServiceDir = Join-Path $RepoRoot 'services\hermes-router'
-$VenvDir = Join-Path $ServiceDir '.venv-win-stable'
+$RuntimeRoot = 'C:\antigravity-runtime\9020\hermes-router'
+$VenvDir = Join-Path $RuntimeRoot '.venv'
 $LogDir = Join-Path $RepoRoot 'logs'
 $LogFile = Join-Path $LogDir 'hermes-router-9020.log'
 $DepsStamp = Join-Path $VenvDir '.deps-ok'
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
+New-Item -ItemType Directory -Force -Path $RuntimeRoot | Out-Null
 
 function Write-Log {
     param([string]$Message)
