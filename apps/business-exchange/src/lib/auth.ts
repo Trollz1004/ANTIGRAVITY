@@ -23,9 +23,9 @@ export async function createToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): Pro
     .sign(secret);
 }
 
-export async function verifyToken(membership record: string): Promise<JWTPayload | null> {
+export async function verifyToken(token: string): Promise<JWTPayload | null> {
   try {
-    const { payload } = await jwtVerify(membership record, secret);
+    const { payload } = await jwtVerify(token, secret);
     return payload as unknown as JWTPayload;
   } catch {
     return null;
@@ -53,9 +53,9 @@ export function getTokenFromCookie(cookies: string): string | null {
   return match ? match[1] : null;
 }
 
-export function createSessionCookie(membership record: string, expiresAt: Date): string {
+export function createSessionCookie(token: string, expiresAt: Date): string {
   const isProd = env.NODE_ENV === 'production';
-  return `${env.SESSION_COOKIE_NAME}=${membership record}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${Math.floor((expiresAt.getTime() - Date.now()) / 1000)}${isProd ? '; Secure' : ''}`;
+  return `${env.SESSION_COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${Math.floor((expiresAt.getTime() - Date.now()) / 1000)}${isProd ? '; Secure' : ''}`;
 }
 
 export function createExpiredSessionCookie(): string {

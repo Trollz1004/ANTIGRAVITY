@@ -11,14 +11,14 @@ $Log = Join-Path $LogDir "youandinotai-public-stack.log"
 $ApiOut = Join-Path $LogDir "youandinotai-api.out.log"
 $ApiErr = Join-Path $LogDir "youandinotai-api.err.log"
 $Cloudflared = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
-$TunnelTokenPath = "C:\Users\joshl\.cloudflared\t5500-dateapp.membership record"
+$TunnelTokenPath = "C:\Users\joshl\.cloudflared\t5500-dateapp.token"
 $TunnelOut = Join-Path $LogDir "t5500-dateapp-tunnel.log"
 $TunnelErr = Join-Path $LogDir "t5500-dateapp-tunnel.err.log"
 $Docker = "C:\Program Files\Docker\Docker\resources\bin\docker.exe"
 $DockerDesktop = "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 $Python = "C:\Users\joshl\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\python.exe"
 $StaticLauncher = Join-Path $LogDir "start-dateapp-static-3200.cmd"
-$TunnelProcessPattern = "cloudflared.*tunnel.*run.*--membership record"
+$TunnelProcessPattern = "cloudflared.*tunnel.*run.*--token"
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 
@@ -147,20 +147,26 @@ function Start-StaticIfNeeded {
     }
 
     if (-not (Test-Path -LiteralPath $StaticLauncher)) {
-        throw "static frontend task and launcher are missing"
+        Write-StackLog "static frontend task and launcher are missing; continuing because backend serves the public root"
+        return
     }
     Write-StackLog "starting static frontend launcher"
     Start-Process -FilePath $StaticLauncher -WindowStyle Hidden
 }
 
 function Test-TunnelRunning {
+    $service = Get-Service -Name "cloudflared" -ErrorAction SilentlyContinue
+    if ($service -and $service.Status -eq "Running") {
+        return $true
+    }
+
     $match = Get-CimInstance Win32_Process |
         Where-Object { $_.CommandLine -match $TunnelProcessPattern } |
         Select-Object -First 1
     return [bool]$match
 }
 
-function Start-TunnelForeground {
+function Start-TunnelIfNeeded {
     if (Test-TunnelRunning) {
         Write-StackLog "cloudflared tunnel already running"
         return
@@ -169,13 +175,25 @@ function Start-TunnelForeground {
         throw "cloudflared not found at $Cloudflared"
     }
     if (-not (Test-Path -LiteralPath $TunnelTokenPath)) {
-        throw "tunnel membership record not found at $TunnelTokenPath"
+        throw "tunnel token not found at $TunnelTokenPath"
     }
 
-    $membership record = (Get-Content -LiteralPath $TunnelTokenPath -Raw).Trim()
-    $args = @("tunnel", "--no-autoupdate", "run", "--membership record", $membership record)
-    Write-StackLog "starting cloudflared in foreground"
-    Write-StackLog "startup complete; task will remain running while tunnel is active"
+    $tunnelToken = (Get-Content -LiteralPath $TunnelTokenPath -Raw).Trim()
+    Write-StackLog "installing/starting cloudflared Windows service"
+    $service = Get-Service -Name "cloudflared" -ErrorAction SilentlyContinue
+    if (-not $service) {
+        & $Cloudflared service install $tunnelToken >> $TunnelOut 2>> $TunnelErr
+    }
+    Set-Service -Name "cloudflared" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "cloudflared" -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 5
+    if (Test-TunnelRunning) {
+        Write-StackLog "cloudflared Windows service is running"
+        return
+    }
+
+    $args = @("tunnel", "--no-autoupdate", "run", "--token", $tunnelToken)
+    Write-StackLog "service unavailable; starting cloudflared in foreground"
     & $Cloudflared @args >> $TunnelOut 2>> $TunnelErr
     throw "cloudflared exited with code $LASTEXITCODE; see $TunnelErr"
 }
@@ -187,7 +205,6 @@ Start-StaticIfNeeded
 Wait-TcpPort -Port 5432 -TimeoutSeconds 180
 Wait-TcpPort -Port 6379 -TimeoutSeconds 180
 Wait-TcpPort -Port 8000 -TimeoutSeconds 240
-Wait-TcpPort -Port 3200 -TimeoutSeconds 120
 Wait-HttpOk -Url "http://127.0.0.1:8000/api/v1/health" -TimeoutSeconds 240
-Start-TunnelForeground
+Start-TunnelIfNeeded
 Write-StackLog "startup complete; stack already running"

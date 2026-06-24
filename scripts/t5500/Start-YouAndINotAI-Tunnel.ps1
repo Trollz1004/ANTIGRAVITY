@@ -6,7 +6,7 @@ $ErrorActionPreference = "Stop"
 
 $LogDir = "C:\ANTIGRAVITY\logs"
 $Cloudflared = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
-$TunnelTokenPath = "C:\Users\joshl\.cloudflared\t5500-dateapp.membership record"
+$TunnelTokenPath = "C:\Users\joshl\.cloudflared\t5500-dateapp.token"
 $TunnelOut = Join-Path $LogDir "t5500-dateapp-tunnel.log"
 $TunnelErr = Join-Path $LogDir "t5500-dateapp-tunnel.err.log"
 $WrapperLog = Join-Path $LogDir "t5500-dateapp-tunnel-task.log"
@@ -22,14 +22,14 @@ if (-not (Test-Path $Cloudflared)) {
     throw "cloudflared not found at $Cloudflared"
 }
 if (-not (Test-Path $TunnelTokenPath)) {
-    throw "tunnel membership record not found at $TunnelTokenPath"
+    throw "tunnel token not found at $TunnelTokenPath"
 }
 
-$membership record = (Get-Content -LiteralPath $TunnelTokenPath -Raw).Trim()
+$tunnelToken = (Get-Content -LiteralPath $TunnelTokenPath -Raw).Trim()
 Write-TunnelLog "starting cloudflared foreground"
 try {
     $ErrorActionPreference = "Continue"
-    & $Cloudflared tunnel --no-autoupdate run --membership record $membership record >> $TunnelOut 2>> $TunnelErr
+    & $Cloudflared tunnel --no-autoupdate run --token $tunnelToken >> $TunnelOut 2>> $TunnelErr
     $code = $LASTEXITCODE
 } catch {
     $code = 1
