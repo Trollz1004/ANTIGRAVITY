@@ -243,8 +243,12 @@ async def verify_whatsapp_webhook(
     settings = get_settings()
     expected_token = str(settings.whatsapp_webhook_verify_token or "").strip()
     if not expected_token:
-        raise HTTPException(status_code=503, detail="WhatsApp webhook is not configured")
-    if hub_mode == "subscribe" and hmac.compare_digest(hub_verify_token, expected_token):
+        raise HTTPException(
+            status_code=503, detail="WhatsApp webhook is not configured"
+        )
+    if hub_mode == "subscribe" and hmac.compare_digest(
+        hub_verify_token, expected_token
+    ):
         return Response(content=hub_challenge, media_type="text/plain")
     raise HTTPException(status_code=403, detail="WhatsApp verification failed")
 
@@ -261,12 +265,18 @@ async def receive_whatsapp_webhook(
         signature_header=request.headers.get("x-hub-signature-256"),
         settings=settings,
     ):
-        raise HTTPException(status_code=403, detail="WhatsApp signature verification failed")
+        raise HTTPException(
+            status_code=403, detail="WhatsApp signature verification failed"
+        )
 
     payload = await request.json()
-    owner_phone = _normalize_phone(settings.whatsapp_owner_phone or settings.whatsapp_to)
+    owner_phone = _normalize_phone(
+        settings.whatsapp_owner_phone or settings.whatsapp_to
+    )
     if not owner_phone:
-        raise HTTPException(status_code=503, detail="WhatsApp owner phone is not configured")
+        raise HTTPException(
+            status_code=503, detail="WhatsApp owner phone is not configured"
+        )
 
     results = []
     for message in _extract_whatsapp_messages(payload):

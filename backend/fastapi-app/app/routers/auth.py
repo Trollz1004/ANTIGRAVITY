@@ -358,7 +358,8 @@ async def refresh_token(
     data = decode_token(payload.refresh_token)
     if data.get("type") != "refresh":
         raise unauthorized(
-            message="Not a refresh membership record", details={"code": ErrorCode.TOKEN_INVALID}
+            message="Not a refresh membership record",
+            details={"code": ErrorCode.TOKEN_INVALID},
         )
 
     user_id = data.get("sub")
@@ -366,7 +367,8 @@ async def refresh_token(
         parsed_user_id = uuid.UUID(str(user_id))
     except ValueError as exc:
         raise unauthorized(
-            message="Invalid membership record payload", details={"code": ErrorCode.TOKEN_INVALID}
+            message="Invalid membership record payload",
+            details={"code": ErrorCode.TOKEN_INVALID},
         ) from exc
 
     user = await db.scalar(select(User).where(User.id == parsed_user_id))

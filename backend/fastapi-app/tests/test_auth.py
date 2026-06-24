@@ -60,21 +60,21 @@ class TestJWTTokens:
 
     def test_create_access_token(self):
         user_id = str(uuid.uuid4())
-        membership record = create_access_token(user_id)
-        assert isinstance(membership record, str)
-        assert len(membership record) > 0
+        membership_record = create_access_token(user_id)
+        assert isinstance(membership_record, str)
+        assert len(membership_record) > 0
 
     def test_decode_access_token(self):
         user_id = str(uuid.uuid4())
-        membership record = create_access_token(user_id)
-        payload = decode_token(membership record)
+        membership_record = create_access_token(user_id)
+        payload = decode_token(membership_record)
         assert payload["sub"] == user_id
         assert "exp" in payload
 
     def test_create_refresh_token(self):
         user_id = str(uuid.uuid4())
-        membership record = create_refresh_token(user_id)
-        payload = decode_token(membership record)
+        membership_record = create_refresh_token(user_id)
+        payload = decode_token(membership_record)
         assert payload["sub"] == user_id
         assert payload.get("type") == "refresh"
 
@@ -82,7 +82,7 @@ class TestJWTTokens:
         from fastapi import HTTPException
 
         with pytest.raises(HTTPException) as exc_info:
-            decode_token("invalid.membership record.here")
+            decode_token("invalid.membership_record.here")
         assert exc_info.value.status_code == 401
 
     def test_decode_expired_token_raises(self):
@@ -102,8 +102,8 @@ class TestJWTTokens:
 
     def test_access_token_has_correct_expiry(self):
         user_id = str(uuid.uuid4())
-        membership record = create_access_token(user_id, expires_minutes=60)
-        payload = decode_token(membership record)
+        membership_record = create_access_token(user_id, expires_minutes=60)
+        payload = decode_token(membership_record)
         exp = datetime.fromtimestamp(payload["exp"], tz=timezone.utc)
         now = datetime.now(timezone.utc)
         # Should expire roughly 60 minutes from now (within 5 seconds tolerance)
