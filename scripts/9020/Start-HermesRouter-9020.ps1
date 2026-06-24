@@ -6,6 +6,7 @@ $RuntimeRoot = 'C:\antigravity-runtime\9020\hermes-router'
 $VenvDir = Join-Path $RuntimeRoot '.venv'
 $LogDir = Join-Path $RepoRoot 'logs'
 $LogFile = Join-Path $LogDir 'hermes-router-9020.log'
+$StartupLogFile = Join-Path $LogDir 'hermes-router-9020-startup.log'
 $DepsStamp = Join-Path $VenvDir '.deps-ok'
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
@@ -13,7 +14,11 @@ New-Item -ItemType Directory -Force -Path $RuntimeRoot | Out-Null
 
 function Write-Log {
     param([string]$Message)
-    Add-Content -Path $LogFile -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $Message"
+    try {
+        Add-Content -Path $StartupLogFile -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $Message" -ErrorAction Stop
+    } catch {
+        Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $Message"
+    }
 }
 
 function Import-EnvFile {

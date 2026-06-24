@@ -4,12 +4,28 @@ $RepoRoot = 'C:\antigravity'
 $AppDir = Join-Path $RepoRoot 'apps\business-exchange'
 $LogDir = Join-Path $RepoRoot 'logs'
 $LogFile = Join-Path $LogDir 'business-exchange-9020.log'
+$StartupLogFile = Join-Path $LogDir 'business-exchange-9020-startup.log'
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 
 function Write-Log {
     param([string]$Message)
-    Add-Content -Path $LogFile -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $Message"
+    try {
+        Add-Content -Path $StartupLogFile -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $Message" -ErrorAction Stop
+    } catch {
+        Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $Message"
+    }
+}
+
+function Test-BusinessExchangeHealthy {
+    param([string]$Port = '3050')
+
+    try {
+        $response = Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:$Port/api/health" -TimeoutSec 3 -MaximumRedirection 0
+        return $response.StatusCode -eq 200 -and $response.Content -match '"service"\s*:\s*"business-exchange"'
+    } catch {
+        return $false
+    }
 }
 
 function Import-EnvFile {
@@ -41,6 +57,11 @@ function Import-EnvFile {
 }
 
 Write-Log '=== Start-BusinessExchange-9020 ==='
+
+if (Test-BusinessExchangeHealthy -Port '3050') {
+    Write-Log 'Business Exchange already healthy on 127.0.0.1:3050'
+    exit 0
+}
 
 $envCandidates = @(
     'C:\Users\joshl\OneDrive\JOSHUA''s-DO-NOT-COMMIT-TO-GITHUB\JOSHUAS.ENV',
