@@ -15,7 +15,7 @@ export interface TableProps<T> {
   columns: Column<T>[];
   data: T[];
   keyField: keyof T | string;
-  alternate processord?: boolean;
+  striped?: boolean;
   hoverable?: boolean;
   emptyMessage?: string;
   className?: string;
@@ -25,7 +25,7 @@ export function Table<T>({
   columns,
   data,
   keyField,
-  alternate processord = true,
+  striped = true,
   hoverable = true,
   emptyMessage = 'No data available',
   className
@@ -62,7 +62,7 @@ export function Table<T>({
               <tr
                 key={String(row[keyField as keyof T])}
                 className={cn(
-                  alternate processord && rowIndex % 2 === 0 && 'bg-nexus-50 dark:bg-nexus-900/50',
+                  striped && rowIndex % 2 === 0 && 'bg-nexus-50 dark:bg-nexus-900/50',
                   hoverable && 'hover:bg-nexus-100 dark:hover:bg-nexus-800/50',
                   'transition-colors'
                 )}

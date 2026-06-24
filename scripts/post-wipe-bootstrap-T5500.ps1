@@ -485,7 +485,7 @@ if (-not $cfExe) {
         Write-Host "    cloudflared service install && Start-Service cloudflared" -ForegroundColor Gray
         Write-Host ""
         Write-Host "  NOTE: CLOUDFLARE_API_TOKEN was dead as of 2026-05-12." -ForegroundColor Red
-        Write-Host "  Mint a fresh membership record at https://dash.cloudflare.com/profile/api-membership records" -ForegroundColor Red
+        Write-Host "  Mint a fresh API token at https://dash.cloudflare.com/profile/api-tokens" -ForegroundColor Red
         Write-Host "  Required perms: Zone:Zone:Read, Zone:DNS:Edit, Account:Cloudflare Tunnel:Edit" -ForegroundColor Red
         Write-Host ""
     }

@@ -18,9 +18,9 @@ const updateDealSchema = z.object({
 
 async function getUserFromRequest(request: NextRequest) {
   const cookies = request.headers.get('cookie') || '';
-  const membership record = getTokenFromCookie(cookies);
-  if (!membership record) return null;
-  const payload = await verifyToken(membership record);
+  const token = getTokenFromCookie(cookies);
+  if (!token) return null;
+  const payload = await verifyToken(token);
   if (!payload) return null;
   return prisma.user.findUnique({ where: { id: payload.sub } });
 }
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       where: { userId: user.id },
       select: { organizationId: true },
     });
-    const orgIds = memberships.map(m => m.organizationId);
+    const orgIds = memberships.map((membership: { organizationId: string }) => membership.organizationId);
 
     const where: Record<string, unknown> = {
       OR: [
