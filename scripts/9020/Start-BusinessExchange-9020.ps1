@@ -64,6 +64,7 @@ if (-not $loaded) {
 $env:NODE_ENV = 'production'
 $env:PORT = '3050'
 $env:APP_URL = if ($env:APP_URL) { $env:APP_URL } else { 'http://localhost:3050' }
+$env:NEXT_TELEMETRY_DISABLED = '1'
 
 Set-Location $AppDir
 
@@ -75,11 +76,25 @@ if (-not (Test-Path -LiteralPath (Join-Path $AppDir 'node_modules'))) {
 Write-Log 'generating Prisma client'
 npm run db:generate *>> $LogFile
 
-if (-not (Test-Path -LiteralPath (Join-Path $AppDir '.next\BUILD_ID')) -or $env:BUSINESS_EXCHANGE_REBUILD_ON_START -eq '1') {
+$buildOk = Test-Path -LiteralPath (Join-Path $AppDir '.next\BUILD_ID')
+if (-not $buildOk -or $env:BUSINESS_EXCHANGE_REBUILD_ON_START -eq '1') {
     Write-Log 'building Business Exchange'
+    $oldPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
     npm run build -- --no-lint *>> $LogFile
+    $buildExit = $LASTEXITCODE
+    $ErrorActionPreference = $oldPreference
+    $buildOk = $buildExit -eq 0 -and (Test-Path -LiteralPath (Join-Path $AppDir '.next\BUILD_ID'))
+    if (-not $buildOk) {
+        Write-Log "production build unavailable; falling back to next dev on 0.0.0.0:3050"
+    }
 }
 
-Write-Log 'starting Business Exchange on 0.0.0.0:3050'
-npm run start *>> $LogFile
-
+if ($buildOk) {
+    Write-Log 'starting Business Exchange production server on 0.0.0.0:3050'
+    npm run start *>> $LogFile
+} else {
+    $env:NODE_ENV = 'development'
+    Write-Log 'starting Business Exchange dev server on 0.0.0.0:3050'
+    npx next dev -H 0.0.0.0 -p 3050 *>> $LogFile
+}
