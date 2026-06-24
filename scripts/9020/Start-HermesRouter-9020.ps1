@@ -5,6 +5,7 @@ $ServiceDir = Join-Path $RepoRoot 'services\hermes-router'
 $VenvDir = Join-Path $ServiceDir '.venv-win-stable'
 $LogDir = Join-Path $RepoRoot 'logs'
 $LogFile = Join-Path $LogDir 'hermes-router-9020.log'
+$DepsStamp = Join-Path $VenvDir '.deps-ok'
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 
@@ -62,6 +63,15 @@ function Resolve-Python {
     throw 'python.exe or py.exe is required for Hermes Router on 9020.'
 }
 
+function Test-HermesRouterHealthy {
+    try {
+        $response = Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:$env:HERMES_ROUTER_PORT/healthz" -TimeoutSec 3
+        return $response.StatusCode -eq 200
+    } catch {
+        return $false
+    }
+}
+
 Write-Log '=== Start-HermesRouter-9020 ==='
 
 $envCandidates = @(
@@ -88,6 +98,11 @@ $env:PIP_NO_CACHE_DIR = '1'
 $env:HERMES_ROUTER_PORT = if ($env:HERMES_ROUTER_PORT) { $env:HERMES_ROUTER_PORT } else { '11435' }
 $env:HERMES_ROUTER_CONFIG = Join-Path $ServiceDir 'config.yaml'
 
+if (Test-HermesRouterHealthy) {
+    Write-Log "Hermes Router already healthy on 127.0.0.1:$env:HERMES_ROUTER_PORT"
+    exit 0
+}
+
 $python = Resolve-Python
 $venvPython = Join-Path $VenvDir 'Scripts\python.exe'
 
@@ -100,14 +115,18 @@ if (-not (Test-Path -LiteralPath $venvPython)) {
     }
 }
 
-Write-Log 'installing Hermes Router dependencies'
-$oldPreference = $ErrorActionPreference
-$ErrorActionPreference = 'Continue'
-& $venvPython -m pip install --no-cache-dir --quiet -r (Join-Path $ServiceDir 'requirements.txt') *>> $LogFile
-$pipExit = $LASTEXITCODE
-$ErrorActionPreference = $oldPreference
-if ($pipExit -ne 0) {
-    throw "pip install failed with exit code $pipExit"
+$requirements = Join-Path $ServiceDir 'requirements.txt'
+$depsCurrent = (Test-Path -LiteralPath $DepsStamp) -and ((Get-Item -LiteralPath $DepsStamp).LastWriteTimeUtc -ge (Get-Item -LiteralPath $requirements).LastWriteTimeUtc)
+if (-not $depsCurrent) {
+    Write-Log 'installing Hermes Router dependencies'
+    $installArgs = "/c `"`"$venvPython`" -m pip install --disable-pip-version-check --no-cache-dir --quiet -r `"$requirements`" >> `"$LogFile`" 2>&1`""
+    $proc = Start-Process -FilePath 'cmd.exe' -ArgumentList $installArgs -Wait -PassThru -WindowStyle Hidden
+    if ($proc.ExitCode -ne 0) {
+        throw "pip install failed with exit code $($proc.ExitCode)"
+    }
+    New-Item -ItemType File -Force -Path $DepsStamp | Out-Null
+} else {
+    Write-Log 'Hermes Router dependencies already current'
 }
 
 Write-Log "starting Hermes Router on 0.0.0.0:$env:HERMES_ROUTER_PORT"
