@@ -15,11 +15,12 @@ from app.auth import get_current_user
 from app.dependencies.websocket_auth import get_current_websocket_user
 from app.models import Profile, User, VerificationEvent
 from app.payment_truth import build_checkout_reference
+from app.routers.messages import router as messages_router
 from app.webhook_retry import _require_current_user
 
 
-def _auth_headers(membership record: str) -> dict[str, str]:
-    return {"Authorization": f"Bearer {membership record}"}
+def _auth_headers(membership_record: str) -> dict[str, str]:
+    return {"Authorization": f"Bearer {membership_record}"}
 
 
 def _register(
@@ -80,7 +81,7 @@ def test_protected_http_routes_require_auth():
         ("/api/v1/auth/google", "POST"),
         ("/api/v1/auth/refresh", "POST"),
         ("/api/v1/waitlist", "POST"),
-        ("/api/v1/webhooks/alternate processor", "POST"),
+        ("/api/v1/webhooks/alternate-processor", "POST"),
         ("/api/v1/webhooks/square", "POST"),
         ("/api/v1/webhooks/square-payment", "POST"),
         ("/api/v1/webhooks/square-booking", "POST"),
@@ -111,9 +112,8 @@ def test_protected_http_routes_require_auth():
 
     ws_routes = [
         route
-        for route in app.routes
-        if isinstance(route, APIWebSocketRoute)
-        and route.path == "/api/v1/ws/chat/{match_id}"
+        for route in messages_router.routes
+        if isinstance(route, APIWebSocketRoute) and route.path == "/ws/chat/{match_id}"
     ]
     assert ws_routes, "Expected the authenticated chat websocket route to exist"
     ws_params = inspect.signature(ws_routes[0].endpoint).parameters
@@ -121,7 +121,9 @@ def test_protected_http_routes_require_auth():
         getattr(param.default, "dependency", None) is get_current_websocket_user
         for param in ws_params.values()
     )
-    assert "membership record" in ws_params or has_ws_auth_dependency
+    ws_dependency_params = inspect.signature(get_current_websocket_user).parameters
+    assert "token" in ws_dependency_params
+    assert has_ws_auth_dependency
 
 
 def test_auth_rate_limit_is_active(client):
@@ -147,9 +149,7 @@ def test_register_rate_limit_is_active(client):
                 "email": f"register-rate-{index}@example.com",
                 "password": "supersecret",
                 "display_name": "Register Rate",
-                "date_of_birth": (
-                    date.today() - timedelta(days=365 * 21)
-                ).isoformat(),
+                "date_of_birth": (date.today() - timedelta(days=365 * 21)).isoformat(),
                 "accepted_terms": True,
                 "accepted_cookie_policy": True,
                 "confirmed_over_18": True,
@@ -162,12 +162,12 @@ def test_register_rate_limit_is_active(client):
 
 def test_verify_rate_limit_is_active(client):
     _register(client, "verify-rate@example.com")
-    membership record = _login(client, "verify-rate@example.com")["access_token"]
+    membership_record = _login(client, "verify-rate@example.com")["access_token"]
 
     last_response = None
     for _ in range(6):
         last_response = client.post(
-            "/api/v1/verify/challenge", headers=_auth_headers(membership record)
+            "/api/v1/verify/challenge", headers=_auth_headers(membership_record)
         )
 
     assert last_response is not None
@@ -199,10 +199,10 @@ def test_verify_submit_returns_square_checkout_link(
         "app.routers.verify._generate_math_challenge", lambda: ("What is 2 + 2?", "4")
     )
     _register(client, "square-flow@example.com")
-    membership record = _login(client, "square-flow@example.com")["access_token"]
+    membership_record = _login(client, "square-flow@example.com")["access_token"]
 
     challenge_response = client.post(
-        "/api/v1/verify/challenge", headers=_auth_headers(membership record)
+        "/api/v1/verify/challenge", headers=_auth_headers(membership_record)
     )
     assert challenge_response.status_code == 200, challenge_response.text
     challenge_id = challenge_response.json()["challenge_id"]
@@ -217,7 +217,7 @@ def test_verify_submit_returns_square_checkout_link(
 
     submit_response = client.post(
         "/api/v1/verify/submit",
-        headers=_auth_headers(membership record),
+        headers=_auth_headers(membership_record),
         json={"challenge_id": challenge_id, "answer": "4"},
     )
 
@@ -230,11 +230,11 @@ def test_verify_submit_returns_square_checkout_link(
 
 def test_square_webhook_binds_bot_shield_to_user(client, db_session_factory):
     _register(client, "square-bind@example.com")
-    membership record = _login(client, "square-bind@example.com")["access_token"]
+    membership_record = _login(client, "square-bind@example.com")["access_token"]
 
     profile_response = client.put(
         "/api/v1/profiles/me",
-        headers=_auth_headers(membership record),
+        headers=_auth_headers(membership_record),
         json={
             "bio": "Ready",
             "age": 30,
@@ -347,11 +347,11 @@ def test_square_payment_updated_sends_founder_badge_email(
     monkeypatch.setattr(webhooks, "send_welcome_email", send_welcome_email)
 
     _register(client, "square-updated@example.com")
-    membership record = _login(client, "square-updated@example.com")["access_token"]
+    membership_record = _login(client, "square-updated@example.com")["access_token"]
 
     profile_response = client.put(
         "/api/v1/profiles/me",
-        headers=_auth_headers(membership record),
+        headers=_auth_headers(membership_record),
         json={
             "bio": "Ready",
             "age": 31,
@@ -458,6 +458,6 @@ def test_square_payment_updated_sends_founder_badge_email(
     )
 
 
-def test_alternate processor_webhook_endpoint_is_retired(client):
-    response = client.post("/api/v1/webhooks/alternate processor")
+def test_alternate_processor_webhook_endpoint_is_retired(client):
+    response = client.post("/api/v1/webhooks/alternate-processor")
     assert response.status_code == 410

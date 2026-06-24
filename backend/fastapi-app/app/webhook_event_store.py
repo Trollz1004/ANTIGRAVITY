@@ -48,7 +48,9 @@ async def get_webhook_event_schema(
 
         columns = frozenset(column.name for column in table.columns)
         external_id_column = (
-            "event_source_id" if "event_source_id" in columns else "alternate processor_event_id"
+            "event_source_id"
+            if "event_source_id" in columns
+            else "alternate processor_event_id"
         )
         return WebhookEventSchema(
             table=table,

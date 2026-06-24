@@ -75,7 +75,7 @@ async def _seed_posts(
 
 @pytest.fixture(scope="module")
 def seeded_posts_data(db_session_factory):
-    """Fixture to provide seeded posts and an access membership record."""
+    """Fixture to provide seeded posts and an access membership_record."""
     user_id = asyncio.run(_seed_user(db_session_factory))
     board_id = asyncio.run(_seed_board(db_session_factory))
     post_ids = asyncio.run(_seed_posts(db_session_factory, board_id, user_id, 20))

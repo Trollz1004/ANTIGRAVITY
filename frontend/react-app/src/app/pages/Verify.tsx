@@ -259,8 +259,8 @@ export function Verify() {
               </div>
               <p className="mt-4 text-xs font-medium leading-6 text-[#5c594f]">
                 Square-hosted checkout always supports card entry. Apple Pay and
-                Google Pay appear on supported devices and browsers. wallet pay is not configured right now, and Afterpay is currently
-                disabled.
+                Google Pay appear on supported devices and browsers. wallet pay
+                is not configured right now, and Afterpay is currently disabled.
               </p>
             </div>
           </section>

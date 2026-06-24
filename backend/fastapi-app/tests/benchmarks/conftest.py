@@ -14,6 +14,8 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
+RUN_BENCHMARKS = os.getenv("RUN_BENCHMARKS") == "1"
+
 # Set environment variables before any app imports
 os.environ["JWT_SECRET"] = (
     "test-secret-that-is-at-least-32-characters-long-for-security"
@@ -50,6 +52,20 @@ from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
 from app.rate_limit import reset_rate_limits  # noqa: E402
 from app.rate_limit_redis import reset_test_rate_limits  # noqa: E402
+
+
+def pytest_collection_modifyitems(items):
+    """Keep latency benchmarks opt-in so normal CI is not load-sensitive."""
+    if RUN_BENCHMARKS:
+        return
+
+    skip_benchmark = pytest.mark.skip(
+        reason="Set RUN_BENCHMARKS=1 to run latency benchmarks"
+    )
+    for item in items:
+        item_path = str(item.fspath).replace("\\", "/")
+        if "/tests/benchmarks/" in item_path:
+            item.add_marker(skip_benchmark)
 
 
 @pytest.fixture(scope="module")

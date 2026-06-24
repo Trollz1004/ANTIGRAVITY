@@ -24,7 +24,9 @@ def test_legacy_webhook_event_schema_supports_payment_audit(tmp_path: Path):
         "webhook_events",
         MetaData(),
         Column("id", String(36), primary_key=True),
-        Column("alternate processor_event_id", String(255), nullable=False, unique=True),
+        Column(
+            "alternate processor_event_id", String(255), nullable=False, unique=True
+        ),
         Column("event_type", String(100), nullable=False),
         Column("payload", JSON, nullable=False),
         Column("processed", Boolean, nullable=False, server_default="0"),

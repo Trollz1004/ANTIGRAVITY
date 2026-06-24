@@ -172,7 +172,7 @@ async def reconcile_legacy_schema() -> None:
                           AND column_name = 'alternate processor_event_id'
                     ) THEN
                         UPDATE webhook_events
-                        SET event_source_id = alternate processor_event_id
+                        SET event_source_id = "alternate processor_event_id"
                         WHERE event_source_id IS NULL;
                     END IF;
                 END

@@ -33,6 +33,7 @@ def _migration_database_url() -> str:
         return url.replace("postgresql://", "postgresql+asyncpg://", 1)
     return url
 
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

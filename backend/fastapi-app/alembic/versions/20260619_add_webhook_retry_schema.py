@@ -26,8 +26,7 @@ def upgrade() -> None:
         "ON webhook_events(retry_parent_event_id)"
     )
 
-    op.execute(
-        """
+    op.execute("""
         CREATE TABLE IF NOT EXISTS webhook_retry_queue (
             id UUID PRIMARY KEY,
             event_id VARCHAR(255) NOT NULL,
@@ -42,8 +41,7 @@ def upgrade() -> None:
             updated_at TIMESTAMPTZ DEFAULT now() NOT NULL,
             moved_to_dead_letter BOOLEAN DEFAULT false NOT NULL
         )
-        """
-    )
+        """)
     op.execute(
         "CREATE INDEX IF NOT EXISTS ix_webhook_retry_queue_event_id "
         "ON webhook_retry_queue(event_id)"
@@ -53,8 +51,7 @@ def upgrade() -> None:
         "ON webhook_retry_queue(next_retry_at, moved_to_dead_letter)"
     )
 
-    op.execute(
-        """
+    op.execute("""
         CREATE TABLE IF NOT EXISTS webhook_dead_letter (
             id UUID PRIMARY KEY,
             event_id VARCHAR(255) NOT NULL,
@@ -66,8 +63,7 @@ def upgrade() -> None:
             created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
             moved_at TIMESTAMPTZ DEFAULT now() NOT NULL
         )
-        """
-    )
+        """)
     op.execute(
         "CREATE INDEX IF NOT EXISTS ix_webhook_dead_letter_event_id "
         "ON webhook_dead_letter(event_id)"

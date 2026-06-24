@@ -47,7 +47,7 @@ def _make_user(*, is_active: bool = True) -> MagicMock:
 def _make_websocket() -> MagicMock:
     """Return a minimal mock WebSocket object."""
     ws = MagicMock()
-    ws.query_params = {"membership record": "valid-membership record"}
+    ws.query_params = {"token": "valid-membership record"}
     return ws
 
 
@@ -69,7 +69,7 @@ async def test_valid_token_returns_user():
     user = _make_user()
     db = _make_db_session(return_value=user)
     websocket = _make_websocket()
-    membership record = "valid-membership record"
+    membership_record = "valid-membership record"
     user_id_str = str(user.id)
 
     with patch(
@@ -78,7 +78,7 @@ async def test_valid_token_returns_user():
     ):
         result = await get_current_websocket_user(
             websocket=websocket,
-            membership record=membership record,
+            token=membership_record,
             db=db,
         )
 
@@ -99,7 +99,7 @@ async def test_invalid_token_raises_websocket_exception():
         with pytest.raises(WebSocketException) as exc_info:
             await get_current_websocket_user(
                 websocket=websocket,
-                membership record="bad-membership record",
+                token="bad-membership record",
                 db=db,
             )
 
@@ -115,7 +115,7 @@ async def test_missing_token_raises_websocket_exception():
     websocket.query_params = {}
 
     # FastAPI will not even call the dependency when the Query param is
-    # missing, but if it does (e.g. membership record=""), decode_token will fail.
+    # missing, but if it does (e.g. token=""), decode_token will fail.
     with patch(
         "app.dependencies.websocket_auth.decode_token",
         side_effect=Exception("missing membership record"),
@@ -123,7 +123,7 @@ async def test_missing_token_raises_websocket_exception():
         with pytest.raises(WebSocketException) as exc_info:
             await get_current_websocket_user(
                 websocket=websocket,
-                membership record="",
+                token="",
                 db=db,
             )
 
@@ -143,7 +143,7 @@ async def test_token_missing_sub_claim_raises_websocket_exception():
         with pytest.raises(WebSocketException) as exc_info:
             await get_current_websocket_user(
                 websocket=websocket,
-                membership record="membership record-without-sub",
+                token="membership record-without-sub",
                 db=db,
             )
 
@@ -165,7 +165,7 @@ async def test_user_not_found_raises_websocket_exception():
         with pytest.raises(WebSocketException) as exc_info:
             await get_current_websocket_user(
                 websocket=websocket,
-                membership record="valid-membership record-but-no-user",
+                token="valid-membership record-but-no-user",
                 db=db,
             )
 
@@ -188,7 +188,7 @@ async def test_inactive_user_raises_websocket_exception():
         with pytest.raises(WebSocketException) as exc_info:
             await get_current_websocket_user(
                 websocket=websocket,
-                membership record="valid-membership record-inactive-user",
+                token="valid-membership record-inactive-user",
                 db=db,
             )
 
@@ -211,7 +211,7 @@ async def test_sub_is_uuid_string():
     ) as mock_decode:
         result = await get_current_websocket_user(
             websocket=websocket,
-            membership record="valid-membership record",
+            token="valid-membership record",
             db=db,
         )
 

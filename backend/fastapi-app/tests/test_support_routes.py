@@ -139,7 +139,9 @@ def test_whatsapp_webhook_verification_challenge(client, monkeypatch):
     monkeypatch.setattr(
         support_router,
         "get_settings",
-        lambda: SimpleNamespace(whatsapp_webhook_verify_token="verify-membership record"),
+        lambda: SimpleNamespace(
+            whatsapp_webhook_verify_token="verify-membership record"
+        ),
     )
 
     response = client.get(

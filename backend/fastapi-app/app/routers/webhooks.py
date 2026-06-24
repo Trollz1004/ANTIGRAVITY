@@ -839,9 +839,9 @@ async def square_booking_webhook(
     return WebhookAckResponse(event_id=event_id, processed=True, duplicate=False)
 
 
-@router.post("/Square")
-async def alternate processor_webhook_retired() -> None:
+@router.post("/alternate-processor")
+async def alternate_processor_webhook_retired() -> None:
     raise HTTPException(
         status_code=status.HTTP_410_GONE,
-        detail="Square webhooks are retired. Configure Square webhooks instead.",
+        detail="Legacy payment webhooks are retired. Configure Square webhooks instead.",
     )

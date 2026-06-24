@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, MessageCircle, ShieldCheck, Sparkles } from 'lucide-react';
+import {
+  ChevronRight,
+  MessageCircle,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react';
 
 import { api } from '../../lib/api';
 
@@ -47,8 +52,8 @@ export function Inbox() {
           <div className="app-kicker mb-3">Messages</div>
           <h1 className="app-title">no messages yet.</h1>
           <p className="app-subtitle mt-4">
-            Match first, then start from the profile answer or shared interest that made
-            the match happen.
+            Match first, then start from the profile answer or shared interest
+            that made the match happen.
           </p>
           <div className="mt-6 grid gap-3 text-left sm:grid-cols-2">
             <div className="rounded-[1.4rem] border-4 border-[#111111] bg-white p-4">

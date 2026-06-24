@@ -1,4 +1,11 @@
-import { CalendarCheck, Diamond, Heart, MapPin, ShieldCheck, X } from 'lucide-react';
+import {
+  CalendarCheck,
+  Diamond,
+  Heart,
+  MapPin,
+  ShieldCheck,
+  X,
+} from 'lucide-react';
 import { motion, PanInfo, useMotionValue, useTransform } from 'motion/react';
 
 interface Profile {
@@ -41,7 +48,9 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
   };
 
   const initial = profile.display_name.charAt(0).toUpperCase();
-  const verifiedLabel = profile.verificationLevel || (profile.verified ? 'Verified profile' : 'Verification pending');
+  const verifiedLabel =
+    profile.verificationLevel ||
+    (profile.verified ? 'Verified profile' : 'Verification pending');
   const profileAnswer =
     profile.conversationStarter ||
     'I am here for real conversation, clear intent, and a first date that feels safe for both people.';
@@ -197,11 +206,7 @@ export function SwipeButtons({
         aria-label="Like profile"
         className="flex h-20 w-20 items-center justify-center rounded-[1.5rem] border-[4px] border-[#111111] bg-[#111111] shadow-[8px_8px_0_0_rgba(17,17,17,1)] transition-all duration-200 hover:scale-105 active:scale-95"
       >
-        <Heart
-          size={32}
-          className="text-[#ff4f00]"
-          fill="currentColor"
-        />
+        <Heart size={32} className="text-[#ff4f00]" fill="currentColor" />
       </button>
 
       <button

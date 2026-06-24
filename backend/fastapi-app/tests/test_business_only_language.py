@@ -5,7 +5,6 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 EXCLUDED_PARTS = {
     ".hypothesis",
@@ -73,10 +72,10 @@ def test_backend_runtime_language_is_business_only():
     for path, rel in _iter_backend_text_files():
         if rel in ALLOWED_COMPATIBILITY_FILES:
             continue
-        for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        for line_number, line in enumerate(
+            path.read_text(encoding="utf-8").splitlines(), 1
+        ):
             if FORBIDDEN_PATTERN.search(line):
                 violations.append(f"{rel}:{line_number}: {line.strip()}")
 
-    assert not violations, "Retired backend language remains:\n" + "\n".join(
-        violations
-    )
+    assert not violations, "Retired backend language remains:\n" + "\n".join(violations)

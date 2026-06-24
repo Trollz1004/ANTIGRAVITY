@@ -59,7 +59,7 @@ async def _seed_events(
 
 @pytest.fixture(scope="module")
 def seeded_events_data(db_session_factory):
-    """Fixture to provide seeded events and an access membership record."""
+    """Fixture to provide seeded events and an access membership_record."""
     user_id = asyncio.run(_seed_user(db_session_factory))
     event_ids = asyncio.run(_seed_events(db_session_factory, user_id, 20))
 

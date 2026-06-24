@@ -212,4 +212,3 @@ class SafetyService {
 
 // Singleton instance
 export const safetyService = new SafetyService();
-
