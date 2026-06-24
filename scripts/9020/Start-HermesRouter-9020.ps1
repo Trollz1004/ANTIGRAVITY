@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 
 $RepoRoot = 'C:\antigravity'
 $ServiceDir = Join-Path $RepoRoot 'services\hermes-router'
-$VenvDir = Join-Path $ServiceDir '.venv-win'
+$VenvDir = Join-Path $ServiceDir '.venv-win-stable'
 $LogDir = Join-Path $RepoRoot 'logs'
 $LogFile = Join-Path $LogDir 'hermes-router-9020.log'
 
@@ -42,6 +42,17 @@ function Import-EnvFile {
 }
 
 function Resolve-Python {
+    $preferred = @(
+        'C:\Users\joshl\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\python.exe',
+        'C:\Users\joshl\AppData\Roaming\uv\python\cpython-3.11.15-windows-x86_64-none\python.exe',
+        'C:\Users\joshl\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\python.exe'
+    )
+    foreach ($candidate in $preferred) {
+        if (Test-Path -LiteralPath $candidate) {
+            return $candidate
+        }
+    }
+
     $cmd = Get-Command python.exe -ErrorAction SilentlyContinue
     if ($cmd) { return $cmd.Source }
 
@@ -73,6 +84,7 @@ if (-not $loaded) {
 
 $env:PYTHONIOENCODING = 'utf-8'
 $env:PYTHONUNBUFFERED = '1'
+$env:PIP_NO_CACHE_DIR = '1'
 $env:HERMES_ROUTER_PORT = if ($env:HERMES_ROUTER_PORT) { $env:HERMES_ROUTER_PORT } else { '11435' }
 $env:HERMES_ROUTER_CONFIG = Join-Path $ServiceDir 'config.yaml'
 
@@ -89,9 +101,15 @@ if (-not (Test-Path -LiteralPath $venvPython)) {
 }
 
 Write-Log 'installing Hermes Router dependencies'
-& $venvPython -m pip install --quiet -r (Join-Path $ServiceDir 'requirements.txt') *>> $LogFile
+$oldPreference = $ErrorActionPreference
+$ErrorActionPreference = 'Continue'
+& $venvPython -m pip install --no-cache-dir --quiet -r (Join-Path $ServiceDir 'requirements.txt') *>> $LogFile
+$pipExit = $LASTEXITCODE
+$ErrorActionPreference = $oldPreference
+if ($pipExit -ne 0) {
+    throw "pip install failed with exit code $pipExit"
+}
 
 Write-Log "starting Hermes Router on 0.0.0.0:$env:HERMES_ROUTER_PORT"
 Set-Location $ServiceDir
 & $venvPython (Join-Path $ServiceDir 'hermes_router.py') *>> $LogFile
-
