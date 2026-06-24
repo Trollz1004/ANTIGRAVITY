@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       text: response.message.content,
       model: response.model,
       latencyMs: response.total_duration ? Math.round(response.total_duration / 1e6) : null,
-      membership records: response.eval_count || 0,
+      tokens: response.eval_count || 0,
     });
   } catch (error) {
     console.error('Assist error:', error);

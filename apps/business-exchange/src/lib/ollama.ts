@@ -105,7 +105,7 @@ export class OllamaClient {
         model: options.model || this.defaultModel,
         preset,
         latencyMs,
-        membership records: data.eval_count || 0,
+        tokens: data.eval_count || 0,
       },
     });
 

@@ -4,9 +4,9 @@ import { getTokenFromCookie, verifyToken } from '@/lib/auth';
 
 async function getAdminUser(request: NextRequest) {
   const cookies = request.headers.get('cookie') || '';
-  const membership record = getTokenFromCookie(cookies);
-  if (!membership record) return null;
-  const payload = await verifyToken(membership record);
+  const token = getTokenFromCookie(cookies);
+  if (!token) return null;
+  const payload = await verifyToken(token);
   if (!payload) return null;
   const user = await prisma.user.findUnique({ where: { id: payload.sub } });
   if (!user || user.role !== 'ADMIN') return null;

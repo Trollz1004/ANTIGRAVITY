@@ -1,22 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { verifyToken, createToken, createSessionCookie, generateSessionToken, getTokenFromCookie } from '@/lib/auth';
+import { verifyToken, createToken, createSessionCookie, getTokenFromCookie } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
     const cookies = request.headers.get('cookie') || '';
-    const membership record = getTokenFromCookie(cookies);
+    const token = getTokenFromCookie(cookies);
 
-    if (!membership record) {
+    if (!token) {
       return NextResponse.json({ success: false }, { status: 401 });
     }
 
-    const payload = await verifyToken(membership record);
+    const payload = await verifyToken(token);
     if (!payload) {
       return NextResponse.json({ success: false }, { status: 401 });
     }
 
-    const session = await prisma.session.findUnique({ where: { membership record } });
+    const session = await prisma.session.findUnique({ where: { token } });
     if (!session || session.expiresAt < new Date()) {
       return NextResponse.json({ success: false }, { status: 401 });
     }
@@ -28,15 +28,14 @@ export async function POST(request: NextRequest) {
     });
 
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    const sessionToken = generateSessionToken();
 
     await prisma.session.update({
       where: { id: session.id },
-      data: { membership record: sessionToken, expiresAt },
+      data: { token: newToken, expiresAt },
     });
 
     const response = NextResponse.json({ success: true });
-    response.headers.set('Set-Cookie', createSessionCookie(sessionToken, expiresAt));
+    response.headers.set('Set-Cookie', createSessionCookie(newToken, expiresAt));
     return response;
   } catch (error) {
     console.error('Session refresh error:', error);

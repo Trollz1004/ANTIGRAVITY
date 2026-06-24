@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { verifyPassword, createToken, createSessionCookie, generateSessionToken } from '@/lib/auth';
+import { verifyPassword, createToken, createSessionCookie } from '@/lib/auth';
 import { createAuditLog } from '@/lib/audit';
 import { sendLoginAlert } from '@/lib/email';
 import { z } from 'zod';
@@ -42,19 +42,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const membership record = await createToken({
+    const token = await createToken({
       sub: user.id,
       email: user.email,
       role: user.role,
     });
 
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    const sessionToken = generateSessionToken();
 
     await prisma.session.create({
       data: {
         userId: user.id,
-        membership record: sessionToken,
+        token,
         expiresAt,
         ipAddress: ip,
         userAgent,
@@ -81,7 +80,7 @@ export async function POST(request: NextRequest) {
       user: { id: user.id, email: user.email, name: user.name, role: user.role },
     });
 
-    response.headers.set('Set-Cookie', createSessionCookie(sessionToken, expiresAt));
+    response.headers.set('Set-Cookie', createSessionCookie(token, expiresAt));
 
     return response;
   } catch (error) {
