@@ -77,7 +77,7 @@ print("OK delegation updated")
 FAST_TASKS   = {"title_generation", "approval", "mcp", "skills_hub"}
 VISION_TASKS = {"vision"}
 WORK_MODEL   = "qwen2.5:7b"
-FAST_MODEL   = "gemma3:1b"
+FAST_MODEL   = "gemma4:latest"
 VISION_MODEL = "gemma4:latest"
 LOCAL_BASE   = "http://localhost:11434/v1"
 

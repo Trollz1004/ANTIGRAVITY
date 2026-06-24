@@ -53,7 +53,7 @@ routes:
 
   fast:
     provider: ollama-local
-    model: gemma3:1b
+    model: gemma4:latest
 
   claude:
     provider: openrouter

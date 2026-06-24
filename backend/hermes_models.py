@@ -19,5 +19,5 @@ HERMES_VIRTUAL_MODELS: Dict[str, Dict[str, str]] = {
     "code":         {"provider": "ollama-cloud",  "real_model": "joshlcoleman/dateapp",                   "bridge_provider": "openai",    "bridge_model": "gpt-5.1"},
     "marketing":    {"provider": "ollama-cloud",  "real_model": "joshlcoleman/dateapp",                   "bridge_provider": "anthropic", "bridge_model": "claude-opus-4-5-20251101"},
     "kimi":         {"provider": "openrouter",    "real_model": "moonshotai/kimi-k2-1205",                "bridge_provider": "gemini",    "bridge_model": "gemini-2.5-pro"},
-    "fast":         {"provider": "ollama-local",  "real_model": "gemma3:1b",                              "bridge_provider": "gemini",    "bridge_model": "gemini-2.5-flash"},
+    "fast":         {"provider": "ollama-local",  "real_model": "gemma4:latest",                          "bridge_provider": "gemini",    "bridge_model": "gemini-2.5-flash"},
 }
