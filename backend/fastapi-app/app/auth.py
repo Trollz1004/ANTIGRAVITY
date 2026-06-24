@@ -61,9 +61,9 @@ def create_refresh_token(user_id: str) -> str:
     )
 
 
-def decode_token(membership record: str) -> dict:
+def decode_token(token: str) -> dict:
     try:
-        return jwt.decode(membership record, settings.jwt_secret, algorithms=[ALGORITHM])
+        return jwt.decode(token, settings.jwt_secret, algorithms=[ALGORITHM])
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -91,7 +91,9 @@ async def get_current_user(
     try:
         parsed_user_id = uuid.UUID(str(user_id))
     except ValueError as exc:
-        raise HTTPException(status_code=401, detail="Invalid membership record payload") from exc
+        raise HTTPException(
+            status_code=401, detail="Invalid membership record payload"
+        ) from exc
 
     user = await db.scalar(select(User).where(User.id == parsed_user_id))
     if not user:
@@ -104,10 +106,10 @@ async def get_current_user(
     return user
 
 
-def verify_google_token(membership record: str) -> dict:
+def verify_google_token(token: str) -> dict:
     try:
         id_info = id_token.verify_oauth2_token(
-            membership record, google_requests.Request(), settings.google_client_id
+            token, google_requests.Request(), settings.google_client_id
         )
         return id_info
     except ValueError as e:
@@ -219,8 +221,8 @@ async def revoke_all_user_tokens(db: AsyncSession, user_id: uuid.UUID) -> int:
     )
     active_tokens = result.scalars().all()
     count = 0
-    for membership record in active_tokens:
-        membership record.revoked_at = now
+    for token in active_tokens:
+        token.revoked_at = now
         count += 1
     await db.commit()
     return count
@@ -238,8 +240,8 @@ async def purge_expired_tokens(db: AsyncSession, max_age_days: int = 30) -> int:
     )
     expired_tokens = result.scalars().all()
     count = 0
-    for membership record in expired_tokens:
-        await db.delete(membership record)
+    for token in expired_tokens:
+        await db.delete(token)
         count += 1
     await db.commit()
     return count
