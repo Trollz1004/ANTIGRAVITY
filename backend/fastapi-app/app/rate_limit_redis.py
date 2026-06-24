@@ -21,7 +21,7 @@ from app.config import get_settings
 
 logger = logging.getLogger("youandinotai.rate_limit")
 
-_test_rate_limit_counts: dict[tuple[str, str, int], int] = {}
+_test_rate_limit_counts: dict[tuple[str, str], tuple[float, int]] = {}
 
 
 def reset_test_rate_limits() -> None:
@@ -109,14 +109,17 @@ async def enforce_route_rate_limit(
     client_ip = _client_ip(request)
 
     if settings.app_env == "test":
-        now = time.time()
-        window_bucket = int(now // window_seconds)
-        key = (bucket, client_ip, window_bucket)
-        count = _test_rate_limit_counts.get(key, 0) + 1
-        _test_rate_limit_counts[key] = count
+        now = time.monotonic()
+        key = (bucket, client_ip)
+        window_started_at, count = _test_rate_limit_counts.get(key, (now, 0))
+        elapsed = now - window_started_at
+        if elapsed >= window_seconds:
+            window_started_at, elapsed, count = now, 0, 0
+        count += 1
+        _test_rate_limit_counts[key] = (window_started_at, count)
         if count <= limit:
             return
-        reset_time = (window_bucket + 1) * window_seconds
+        reset_time = time.time() + max(0, window_seconds - elapsed)
     else:
         allowed, _remaining, reset_time = await check_rate_limit(
             key=f"rl:{bucket}:{client_ip}",
