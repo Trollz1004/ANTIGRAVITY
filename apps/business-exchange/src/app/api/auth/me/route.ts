@@ -5,13 +5,13 @@ import { verifyToken, getTokenFromCookie } from '@/lib/auth';
 export async function GET(request: NextRequest) {
   try {
     const cookies = request.headers.get('cookie') || '';
-    const membership record = getTokenFromCookie(cookies);
+    const token = getTokenFromCookie(cookies);
 
-    if (!membership record) {
+    if (!token) {
       return NextResponse.json({ user: null }, { status: 401 });
     }
 
-    const payload = await verifyToken(membership record);
+    const payload = await verifyToken(token);
     if (!payload) {
       return NextResponse.json({ user: null }, { status: 401 });
     }
