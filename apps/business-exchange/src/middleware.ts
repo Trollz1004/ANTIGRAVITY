@@ -2,7 +2,14 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { verifyToken, getTokenFromCookie } from '@/lib/auth';
 
-const publicPaths = ['/auth/login', '/auth/register', '/api/auth/login', '/api/auth/register', '/api/auth/me'];
+const publicPaths = [
+  '/auth/login',
+  '/auth/register',
+  '/api/auth/login',
+  '/api/auth/register',
+  '/api/auth/me',
+  '/api/health',
+];
 const adminPaths = ['/admin'];
 
 export async function middleware(request: NextRequest) {
