@@ -12,11 +12,11 @@ from app.models import User
 
 async def get_current_websocket_user(
     websocket: WebSocket,
-    membership record: Annotated[str, Query(alias="membership record")],
+    token: Annotated[str, Query(alias="token")],
     db: AsyncSession = Depends(get_db),
 ) -> User:
     try:
-        payload = decode_token(membership record)
+        payload = decode_token(token)
     except Exception:
         raise WebSocketException(
             code=status.WS_1008_POLICY_VIOLATION,
@@ -26,14 +26,16 @@ async def get_current_websocket_user(
     user_id = payload.get("sub")
     if not user_id:
         raise WebSocketException(
-            code=status.WS_1008_POLICY_VIOLATION, reason="Invalid membership record payload"
+            code=status.WS_1008_POLICY_VIOLATION,
+            reason="Invalid membership record payload",
         )
 
     try:
         parsed_user_id = uuid.UUID(str(user_id))
     except ValueError:
         raise WebSocketException(
-            code=status.WS_1008_POLICY_VIOLATION, reason="Invalid membership record payload"
+            code=status.WS_1008_POLICY_VIOLATION,
+            reason="Invalid membership record payload",
         )
 
     user = await db.scalar(select(User).where(User.id == parsed_user_id))
