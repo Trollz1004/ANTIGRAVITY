@@ -27,7 +27,7 @@ export default {
           danger: "#EF4444",
           info: "#3B82F6",
         },
-        membership record: {
+        token: {
           LOVE: "#EF4444",
           UKID: "#3B82F6",
           GREEN: "#10B981",

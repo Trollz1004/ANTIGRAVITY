@@ -39,7 +39,7 @@ const { chromium } = require('C:\\Antigravity\\apps\\mission-control\\node_modul
       txt.includes('Square-only revenue') &&
       txt.includes('no Anthropic key') &&
       txt.includes('Hermes-routed') &&
-      txt.includes('membership') || txt.includes('verification') || txt.includes('support');
+      txt.includes('#UntilNoKidInNeed');
     // adapter row states
     const rows = Array.from(document.querySelectorAll('#adapters-body tr'));
     const rowStates = rows.map(r => {

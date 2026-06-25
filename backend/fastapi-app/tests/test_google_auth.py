@@ -105,14 +105,14 @@ async def test_google_login_existing_user(async_client: AsyncClient):
 @pytest.mark.asyncio
 async def test_google_login_invalid_token(async_client: AsyncClient):
     with patch("app.routers.auth.verify_google_token") as mock_verify:
-        mock_verify.side_effect = Exception("Invalid membership record")
+        mock_verify.side_effect = Exception("Invalid token")
 
         response = await async_client.post(
             "/api/v1/auth/google", json={"id_token": "invalid_token"}
         )
 
         assert response.status_code == 401
-        assert "Invalid Google membership record" in response.text
+        assert "Invalid Google token" in response.text
 
 
 @pytest.mark.asyncio
@@ -129,4 +129,4 @@ async def test_google_login_no_email_in_token(async_client: AsyncClient):
         )
 
         assert response.status_code == 400
-        assert "Email not present in Google membership record" in response.text
+        assert "Email not present in Google token" in response.text

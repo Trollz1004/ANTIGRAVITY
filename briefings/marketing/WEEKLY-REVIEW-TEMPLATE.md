@@ -6,7 +6,7 @@
 - New vs returning:
 
 ## Conversions
-- alternate processor checkouts initiated:
+- Stripe checkouts initiated:
 - Completed purchases:
 - Revenue: $
 - Best-converting product:

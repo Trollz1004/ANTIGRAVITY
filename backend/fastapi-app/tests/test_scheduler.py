@@ -620,10 +620,10 @@ def test_feature_flags_router_list_returns_flags(client):
 
     app.dependency_overrides[get_current_user] = _override
     try:
-        membership_record = create_access_token(str(mock_user.id))
+        token = create_access_token(str(mock_user.id))
         response = client.get(
             "/api/v1/admin/flags/",
-            headers={"Authorization": f"Bearer {membership_record}"},
+            headers={"Authorization": f"Bearer {token}"},
         )
         assert response.status_code == 200
         data = response.json()
@@ -645,10 +645,10 @@ def test_feature_flags_router_read_existing_flag(client):
 
     app.dependency_overrides[get_current_user] = _override
     try:
-        membership_record = create_access_token(str(mock_user.id))
+        token = create_access_token(str(mock_user.id))
         response = client.get(
             "/api/v1/admin/flags/lovebot_enabled",
-            headers={"Authorization": f"Bearer {membership_record}"},
+            headers={"Authorization": f"Bearer {token}"},
         )
         assert response.status_code == 200
     finally:
@@ -668,10 +668,10 @@ def test_feature_flags_router_read_unknown_flag_returns_404(client):
 
     app.dependency_overrides[get_current_user] = _override
     try:
-        membership_record = create_access_token(str(mock_user.id))
+        token = create_access_token(str(mock_user.id))
         response = client.get(
             "/api/v1/admin/flags/nonexistent_xyz_flag",
-            headers={"Authorization": f"Bearer {membership_record}"},
+            headers={"Authorization": f"Bearer {token}"},
         )
         assert response.status_code == 404
     finally:
@@ -691,11 +691,11 @@ def test_feature_flags_router_update_flag(client):
 
     app.dependency_overrides[get_current_user] = _override
     try:
-        membership_record = create_access_token(str(mock_user.id))
+        token = create_access_token(str(mock_user.id))
         response = client.put(
             "/api/v1/admin/flags/lovebot_enabled",
             json={"value": False},
-            headers={"Authorization": f"Bearer {membership_record}"},
+            headers={"Authorization": f"Bearer {token}"},
         )
         assert response.status_code == 200
         assert response.json()["lovebot_enabled"] is False
@@ -703,7 +703,7 @@ def test_feature_flags_router_update_flag(client):
         client.put(
             "/api/v1/admin/flags/lovebot_enabled",
             json={"value": True},
-            headers={"Authorization": f"Bearer {membership_record}"},
+            headers={"Authorization": f"Bearer {token}"},
         )
     finally:
         app.dependency_overrides.pop(get_current_user, None)
@@ -722,11 +722,11 @@ def test_feature_flags_router_update_unknown_flag_returns_404(client):
 
     app.dependency_overrides[get_current_user] = _override
     try:
-        membership_record = create_access_token(str(mock_user.id))
+        token = create_access_token(str(mock_user.id))
         response = client.put(
             "/api/v1/admin/flags/no_such_flag",
             json={"value": True},
-            headers={"Authorization": f"Bearer {membership_record}"},
+            headers={"Authorization": f"Bearer {token}"},
         )
         assert response.status_code == 404
     finally:

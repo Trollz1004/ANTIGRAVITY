@@ -1,7 +1,7 @@
 # ANTIGRAVITY Repo Consolidation Audit
 
-> **Policy**: 1 repo · 1 folder tree · 1 Node policy.
-> **Canonical repo**: `Trollz1004/ANTIGRAVITY`
+> **Policy**: 1 repo · 1 folder tree · 1 Node policy.  
+> **Canonical repo**: `Trollz1004/ANTIGRAVITY`  
 > All other repos listed below should be archived or deleted after their unique code is migrated here.
 
 ---
@@ -13,7 +13,7 @@
 | Folder | What it is |
 |--------|------------|
 | `antigravity/` | Next.js 14 main frontend app |
-| `contracts/src/` | Hardhat + 3 Solidity contracts (see Product structure section) |
+| `contracts/src/` | Hardhat + 3 Solidity contracts (see DAO section) |
 | `crossfire/` | Backend + frontend sub-app |
 | `ClawX/` | ClawX sub-project |
 | `CodeX/` | CodeX sub-project |
@@ -63,8 +63,8 @@
 | `shared/` | Shared types |
 | `drizzle/` | Drizzle ORM migrations |
 
-**Package name**: `openai-proposal` (temp name — needs renaming to `openclaw-dash`)
-**Stack**: React 19 · tRPC · Express · Drizzle · MySQL · pnpm
+**Package name**: `openai-proposal` (temp name — needs renaming to `openclaw-dash`)  
+**Stack**: React 19 · tRPC · Express · Drizzle · MySQL · pnpm  
 **Action**: Migrate to `ANTIGRAVITY/apps/openclaw/` then archive this repo.
 
 ---
@@ -76,15 +76,15 @@
 | `app/` | Next.js app directory |
 | `lib/` | Shared utilities |
 
-**Stack**: Next.js
+**Stack**: Next.js  
 **Action**: Determine overlap with `antigravity-dashboard`. Merge unique routes into `apps/dashboard/` then archive this repo.
 
 ---
 
 ### 5. `youandinotai-com` — ARCHIVE (empty)
 
-Contains only a README.
-Code already lives in `ANTIGRAVITY/youandinotai/`.
+Contains only a README.  
+Code already lives in `ANTIGRAVITY/youandinotai/`.  
 **Action**: Archive/delete immediately.
 
 ---
@@ -93,7 +93,7 @@ Code already lives in `ANTIGRAVITY/youandinotai/`.
 
 | Folder | What it is | Status |
 |--------|------------|--------|
-| `Product structure-patches/` | **Paperclip AI platform** (package name = `paperclip`, pnpm workspace, 446KB lockfile) — newer/more complete version of `ANTIGRAVITY/paperclip/` | **DUPLICATE** — migrate newer version to `packages/paperclip/` |
+| `dao-patches/` | **Paperclip AI platform** (package name = `paperclip`, pnpm workspace, 446KB lockfile) — newer/more complete version of `ANTIGRAVITY/paperclip/` | **DUPLICATE** — migrate newer version to `packages/paperclip/` |
 | `openclaw/` | OpenClaw app code | **DUPLICATE** of `OpenclawDash` repo |
 | `paperclip-antigravity/` | Paperclip adapters | **DUPLICATE** of `ANTIGRAVITY/paperclip-adapters/` |
 | `hermes/` | Messaging dispatch system | **UNIQUE** — migrate to `services/hermes/` |
@@ -102,13 +102,13 @@ Code already lives in `ANTIGRAVITY/youandinotai/`.
 | `manus-meta-guardian/` | Meta guardian agent | **UNIQUE** — migrate to `tools/manus-meta-guardian/` |
 | `marketing-assets/` | Marketing materials | **UNIQUE** — migrate to `docs/marketing/` |
 
-> ⚠️ `Product structure-patches/` is NOT a Product structure/staking contract. It's the Paperclip AI coding assistant platform. The name is misleading.
+> ⚠️ `dao-patches/` is NOT a DAO/staking contract. It's the Paperclip AI coding assistant platform. The name is misleading.
 
 ---
 
 ### 7. `Electrician-who-lies-i-KNIOW-CODE-ELECTRICAL-CODE---ForTheKIDS-` — KEEP SEPARATE
 
-Educational electrical code reference docs.
+Educational electrical code reference docs.  
 No overlap with the ANTIGRAVITY tech stack. Keep as a standalone repo.
 
 ---
@@ -125,7 +125,7 @@ Standard GitHub profile README repo. Keep as-is.
 
 ---
 
-## Product structure / Staking Duplicate Findings
+## DAO / Staking Duplicate Findings
 
 ### Smart Contracts (Solidity)
 
@@ -133,31 +133,31 @@ Standard GitHub profile README repo. Keep as-is.
 
 | Contract | Purpose |
 |----------|---------|
-| `product operationsRouter100.sol` | product operations revenue routing |
+| `CharityRouter100.sol` | Charity revenue routing |
 | `DatingRevenueRouter.sol` | Dating platform revenue routing |
-| `Gospelmembership support.sol` | membership support contract |
+| `GospelDonation.sol` | Donation contract |
 
 **Result**: ✅ No duplicate smart contracts found across repos. These live in exactly one place.
 
-### Governance / Product structure Docs
+### Governance / DAO Docs
 
 | File | Location |
 |------|----------|
 | `GOVERNANCE.md` | `ANTIGRAVITY/` root only |
-| `Product structure-RECOVERY-CANDIDATES.md` | `ANTIGRAVITY/briefings/` only |
+| `DAO-RECOVERY-CANDIDATES.md` | `ANTIGRAVITY/briefings/` only |
 
 **Result**: ✅ No duplicate governance docs.
 
-### Paperclip AI Platform (misnamed "Product structure-patches" in sandbox)
+### Paperclip AI Platform (misnamed "dao-patches" in sandbox)
 
 | Location | Status | Notes |
 |----------|--------|-------|
 | `ANTIGRAVITY/paperclip/` | Older version | Keep for reference during migration |
 | `ANTIGRAVITY/paperclip-adapters/` | Adapters | Merge into canonical packages/paperclip |
-| `sandbox/Product structure-patches/` | **Newer/more complete** | pnpm workspace, full test suite, evals, CLI |
+| `sandbox/dao-patches/` | **Newer/more complete** | pnpm workspace, full test suite, evals, CLI | 
 | `sandbox/paperclip-antigravity/` | Duplicate of adapters | Archive after migration |
 
-**Action**: Use `sandbox/Product structure-patches/` as the canonical source, migrate to `ANTIGRAVITY/packages/paperclip/`. Archive all others.
+**Action**: Use `sandbox/dao-patches/` as the canonical source, migrate to `ANTIGRAVITY/packages/paperclip/`. Archive all others.
 
 ---
 
@@ -179,7 +179,7 @@ ANTIGRAVITY/
 │
 ├── packages/
 │   ├── contracts/          ← keep: Hardhat + 3 Solidity contracts
-│   ├── paperclip/          ← consolidate: sandbox/Product structure-patches (primary source)
+│   ├── paperclip/          ← consolidate: sandbox/dao-patches (primary source)
 │   ├── brain-mcp/          ← keep
 │   ├── mcp-server/         ← keep
 │   └── anythingllm-bridges/ ← migrate from sandbox
@@ -231,7 +231,7 @@ ANTIGRAVITY/
 - [ ] `sandbox/manus-meta-guardian/` → `tools/manus-meta-guardian/`
 - [ ] `sandbox/migrated-claws-from-c/` → `tools/migrated-claws/`
 - [ ] `sandbox/marketing-assets/` → `docs/marketing/`
-- [ ] `sandbox/Product structure-patches/` (Paperclip) → `packages/paperclip/` ← PRIMARY SOURCE
+- [ ] `sandbox/dao-patches/` (Paperclip) → `packages/paperclip/` ← PRIMARY SOURCE
 
 ### Archive after migration confirmed
 - [ ] `antigravity-dashboard`
@@ -254,6 +254,6 @@ Based on the scan, the sprawl happened because:
 2. **Dashboard was built externally** (Cloudflare Workers) without integrating back
 3. **OpenclawDash** was scaffolded from a template (`openai-proposal` name) as a throwaway that became real
 4. **Sandbox repo** became a staging area but never got merged back
-5. **`Product structure-patches/` naming** confused the Paperclip platform with Product structure contracts
+5. **`dao-patches/` naming** confused the Paperclip platform with DAO contracts
 
 The fix is to enforce the 1-repo rule in CLAUDE.md so AI agents always branch inside ANTIGRAVITY.

@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const cookies = request.headers.get('cookie') || '';
     const token = getTokenFromCookie(cookies);
-
+    
     if (token) {
       const session = await prisma.session.findUnique({ where: { token } });
       if (session) {

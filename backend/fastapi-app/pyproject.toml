@@ -101,7 +101,7 @@ dependencies = [
     "asyncpg==0.30.0",
     "alembic==1.14.0",
     "apscheduler==3.11.0",
-    "psycopg[binary]==3.2.13",
+    "psycopg[binary]==3.2.3",
     "pydantic==2.10.3",
     "pydantic-settings==2.6.1",
     "python-dotenv==1.0.1",

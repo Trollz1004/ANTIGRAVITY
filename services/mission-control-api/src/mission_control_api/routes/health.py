@@ -16,7 +16,7 @@ from ..probes import (
     guardian as guardian_mod,
     repo as repo_mod,
     docker as docker_mod,
-    business reserve as business reserve_mod,
+    treasury as treasury_mod,
     revenue_buckets as revenue_mod,
     stack as stack_mod,
     t5500 as t5500_mod,
@@ -75,9 +75,9 @@ async def health_repo():
 async def health_docker():
     return (await docker_mod.docker_probe()).dict()
 
-@router.get("/health/business-reserve")
-async def health_business reserve():
-    return (await business reserve_mod.business reserve_probe()).dict()
+@router.get("/health/treasury")
+async def health_treasury():
+    return (await treasury_mod.treasury_probe()).dict()
 
 @router.get("/health/revenue-buckets")
 async def health_revenue():
@@ -130,7 +130,7 @@ async def health_all():
         ("guardian", guardian_mod.guardian_probe()),
         ("repo", repo_mod.repo_probe()),
         ("docker", docker_mod.docker_probe()),
-        ("business reserve", business reserve_mod.business reserve_probe()),
+        ("treasury", treasury_mod.treasury_probe()),
         ("revenue", revenue_mod.revenue_buckets_probe()),
         ("stack", stack_mod.stack_probe()),
         ("t5500", t5500_mod.t5500_stack_probe()),

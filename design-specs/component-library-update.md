@@ -24,7 +24,7 @@ This document defines the reusable UI components for the YouAndINotAI platform. 
 - `onClick`: Function
 - `children`: Node
 
-**Design membership records Used:**
+**Design Tokens Used:**
 
 - Background: `--brand-primary` for primary variant
 - Text: `--text-inverse`
@@ -42,7 +42,7 @@ This document defines the reusable UI components for the YouAndINotAI platform. 
 
 **Props:** Same as Primary Button
 
-**Design membership records Used:**
+**Design Tokens Used:**
 
 - Background: `--bg-secondary`
 - Border: `--border-width-thin` solid `--text-secondary`
@@ -64,7 +64,7 @@ This document defines the reusable UI components for the YouAndINotAI platform. 
 - `disabled`: Boolean
 - `onClick`: Function
 
-**Design membership records Used:**
+**Design Tokens Used:**
 
 - Size: Square based on `--spacing-8` for md size
 - Background: `--brand-primary` for primary variant
@@ -87,7 +87,7 @@ This document defines the reusable UI components for the YouAndINotAI platform. 
 - `onChange`: Function
 - `value`: String
 
-**Design membership records Used:**
+**Design Tokens Used:**
 
 - Border: `--border-width-thin` solid `--text-secondary`
 - Border radius: `--border-radius-md`
@@ -118,7 +118,7 @@ This document defines the reusable UI components for the YouAndINotAI platform. 
 - `value`: String
 - `rows`: Number
 
-**Design membership records Used:**
+**Design Tokens Used:**
 
 - Border: `--border-width-thin` solid `--text-secondary`
 - Border radius: `--border-radius-md`
@@ -146,7 +146,7 @@ This document defines the reusable UI components for the YouAndINotAI platform. 
 - `onChange`: Function
 - `value`: String
 
-**Design membership records Used:**
+**Design Tokens Used:**
 
 - Border: `--border-width-thin` solid `--text-secondary`
 - Border radius: `--border-radius-md`
@@ -176,7 +176,7 @@ This document defines the reusable UI components for the YouAndINotAI platform. 
 - `Card.Body`: Main content section
 - `Card.Footer`: Footer section
 
-**Design membership records Used:**
+**Design Tokens Used:**
 
 - Background: `--bg-primary`
 - Border radius: `--border-radius-lg`
@@ -207,7 +207,7 @@ This document defines the reusable UI components for the YouAndINotAI platform. 
 - `TabItem`: Individual tab item
   - Props: `active`: Boolean, `onClick`: Function, `children`: Node
 
-**Design membership records Used:**
+**Design Tokens Used:**
 
 - Border: `--border-width-thin` solid `--text-secondary`
 - Active indicator: `--brand-primary` with height `--border-width-thick`
@@ -234,7 +234,7 @@ This document defines the reusable UI components for the YouAndINotAI platform. 
 - `NavItem`: Individual navigation item
   - Props: `icon`: String, `active`: Boolean, `onClick`: Function, `children`: Node
 
-**Design membership records Used:**
+**Design Tokens Used:**
 
 - Background: `--bg-primary`
 - Height: 56px minimum

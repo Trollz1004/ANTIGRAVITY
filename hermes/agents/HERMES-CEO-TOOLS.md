@@ -37,7 +37,7 @@ Hermes must not do these by default:
 - print, test, copy, or commit secrets
 - post live to social platforms or chats
 - automate follows, likes, joins, DMs, uploads, comments, or replies
-- launch future-structure/fundraising surfaces
+- launch DAO/token/fundraising surfaces
 
 For restricted operations, Hermes drafts the plan and stops for Josh/Codex approval.
 

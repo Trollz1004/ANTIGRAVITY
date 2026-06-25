@@ -2,7 +2,7 @@ import React from 'react';
 import { Compass, ShieldCheck, Heart } from 'lucide-react';
 import { LaunchPanel } from '../components/LaunchPanel';
 import { SystemStatus } from '../components/SystemStatus';
-import { ProductMonitor } from '../components/productMonitor';
+import { DAOMonitor } from '../components/DAOMonitor';
 import { GitPanel } from '../components/GitPanel';
 import { HermesRouterPanel } from '../components/HermesRouterPanel';
 import { OpenClawSupportPanel } from '../components/OpenClawSupportPanel';
@@ -13,7 +13,7 @@ import { RunbookViewer } from '../components/RunbookViewer';
  *
  * Layout (3-column grid):
  *   LEFT  240px : LaunchPanel + Trust Hierarchy
- *   CENTER flex : SystemStatus + ProductMonitor + HermesRouterPanel + OpenClawSupportPanel
+ *   CENTER flex : SystemStatus + DAOMonitor + HermesRouterPanel + OpenClawSupportPanel
  *   RIGHT 320px : GitPanel + RunbookViewer + Mission Footer
  *
  * NOTE: TaskCommander is mounted by App.tsx above every mode — do not include it here.
@@ -65,9 +65,9 @@ export default function MissionMode() {
             <SystemStatus />
           </div>
 
-          {/* ProductMonitor expects to live inside a sidebar; wrap it so it reads as a band */}
+          {/* DAOMonitor expects to live inside a sidebar; wrap it so it reads as a band */}
           <div className="bg-[#1a2332] border border-[#2a3a52] rounded-md overflow-hidden">
-            <productMonitor />
+            <DAOMonitor />
           </div>
 
           <HermesRouterPanel />
@@ -88,7 +88,7 @@ export default function MissionMode() {
               <div className="flex items-center gap-2">
                 <Heart size={12} className="text-[#e040fb]" />
                 <span className="text-[10px] font-black tracking-[0.2em] uppercase text-[#e8f0ff]">
-                  Business-only product operations
+                  #UntilNoKidInNeed
                 </span>
               </div>
             </div>
@@ -96,7 +96,7 @@ export default function MissionMode() {
               <p className="text-[10px] text-[#6b82a6] leading-relaxed">
                 Mission Control dispatches and monitors. Conductor stays in the terminal.
                 <br />
-                <span className="text-[#e040fb] font-bold">for the product.</span>
+                <span className="text-[#e040fb] font-bold">for the kids.</span>
               </p>
               <div className="text-[8px] tracking-widest uppercase text-[#4a5568] font-mono mt-2">
                 pawclaw-elite-v1 · mission mode

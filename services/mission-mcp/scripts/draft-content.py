@@ -21,13 +21,13 @@ Usage:
 
 Environment:
   MISSION_MCP_URL       base URL for mission-mcp (default: http://127.0.0.1:3901)
-  MISSION_MCP_TOKEN     bearer membership record if auth enabled (optional)
+  MISSION_MCP_TOKEN     bearer token if auth enabled (optional)
   HERMES_URL            Hermes Router URL (default: http://127.0.0.1:11435)
   DRAFTS_DIR            override drafts output dir
 
 TOS constraints enforced:
-  - Prompt instructs LLM: no "support"/"support"/"commercial misuse"/"tax-deductible"
-  - Lead with product value, not public-benefit framing
+  - Prompt instructs LLM: no "donate"/"donation"/"solicitation"/"tax-deductible"
+  - Lead with product value, not charity framing
   - Draft is NOT posted — human approval required before any post
 """
 
@@ -64,7 +64,7 @@ SYSTEM_PROMPT = """You are a content assistant for youandinotai.com, an AI-power
 Your role is to draft organic growth content (Reddit comments, Discord messages, social posts) that Joshua will review and post manually.
 
 CRITICAL RULES:
-- Never use the words: support, support, supports, commercial misuse, tax-deductible
+- Never use the words: donate, donation, donations, solicitation, tax-deductible
 - Lead with genuine product value — AI-powered compatibility, better matches, smarter dating
 - 80% helpful value, 20% max subtle promotion
 - Write like a real person, not a marketer
@@ -100,10 +100,10 @@ def http_post_json(url: str, payload: dict, headers: dict | None = None, timeout
         return json.loads(raw)
 
 
-def mcp_call_tool(url: str, membership record: str | None, tool_name: str, arguments: dict) -> dict:
+def mcp_call_tool(url: str, token: str | None, tool_name: str, arguments: dict) -> dict:
     headers = {}
-    if membership record:
-        headers["Authorization"] = f"Bearer {membership record}"
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
     payload = {
         "jsonrpc": "2.0",
         "id": 1,
@@ -173,8 +173,8 @@ def generate_draft(hermes_url: str, ollama_url: str, model: str, prompt: str) ->
 
 # ── Task helpers ──────────────────────────────────────────────────────────────
 
-def get_task(mcp_url: str, membership record: str | None, task_id: str) -> dict:
-    result = mcp_call_tool(mcp_url, membership record, "list_tasks", {"limit": 500})
+def get_task(mcp_url: str, token: str | None, task_id: str) -> dict:
+    result = mcp_call_tool(mcp_url, token, "list_tasks", {"limit": 500})
     if isinstance(result, list):
         for t in result:
             if t.get("id") == task_id:
@@ -228,7 +228,7 @@ def build_prompt(ctx: dict, variations: int) -> str:
         f"Requirements:\n"
         f"- Vary length across drafts\n"
         f"- Sound like a real person, not a marketer\n"
-        f"- Never use: support, support, commercial misuse, tax-deductible\n"
+        f"- Never use: donate, donation, solicitation, tax-deductible\n"
         f"- Lead with value to the reader"
     )
 
@@ -262,7 +262,7 @@ def main():
     )
     args = parser.parse_args()
 
-    membership record = os.environ.get("MISSION_MCP_TOKEN")
+    token = os.environ.get("MISSION_MCP_TOKEN")
     drafts_dir = Path(args.drafts_dir)
 
     print(f"[draft-content] task_id={args.task_id}")
@@ -271,7 +271,7 @@ def main():
     # Fetch task
     print("[draft-content] Fetching task from mission-mcp...")
     try:
-        task = get_task(args.mcp_url, membership record, args.task_id)
+        task = get_task(args.mcp_url, token, args.task_id)
     except RuntimeError as e:
         print(f"ERROR: {e}")
         sys.exit(1)
@@ -320,7 +320,7 @@ def main():
     # Update task in mission-mcp
     result_note = f"drafts at income-engine/drafts/{args.task_id}/{out_path.name}"
     try:
-        mcp_call_tool(args.mcp_url, membership record, "update_task", {
+        mcp_call_tool(args.mcp_url, token, "update_task", {
             "id": args.task_id,
             "result": result_note,
         })

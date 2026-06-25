@@ -4,7 +4,7 @@ import {
   MISSIONS,
   REVENUE_BUCKETS,
   SEED_LOG,
-  membership records,
+  TOKENS,
 } from "./data";
 import type {
   Agent,
@@ -13,7 +13,7 @@ import type {
   Mission,
   PageId,
   RevenueBucket,
-  membership record,
+  Token,
 } from "./types";
 
 interface Toast {
@@ -31,7 +31,7 @@ interface State {
   agents: Agent[];
   setAgentStatus: (id: string, status: AgentStatus) => void;
 
-  membership records: membership record[];
+  tokens: Token[];
   buckets: RevenueBucket[];
   missions: Mission[];
   log: FeedRow[];
@@ -96,7 +96,7 @@ const SYNTH_AGENTS: Array<{
   {
     who: "gemini",
     msgs: [
-      "Indexed conversation buffer · 1.2k membership records",
+      "Indexed conversation buffer · 1.2k tokens",
       "Generated 4 ad headline variants",
       "Cross-referenced Q3 OKR · 2 gaps closed",
     ],
@@ -155,7 +155,7 @@ export const useStore = create<State>((set, get) => ({
       ),
     })),
 
-  membership records: membership records,
+  tokens: TOKENS,
   buckets: REVENUE_BUCKETS,
   missions: MISSIONS,
   log: SEED_LOG,

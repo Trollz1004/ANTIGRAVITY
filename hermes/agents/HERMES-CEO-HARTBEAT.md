@@ -50,7 +50,7 @@ Hermes must draft and stop for Josh/Codex before:
 - reading populated env files or credentials
 - sending live external messages
 - posting or automating social activity
-- touching future-structure/fundraising launch surfaces
+- touching DAO/token/fundraising launch surfaces
 
 ## 4. Codex Routing
 

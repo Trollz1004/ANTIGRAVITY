@@ -271,7 +271,7 @@ interface CommunityStory {
 └─────────────────────────────────────────────────┘
 ```
 
-### Design membership records Usage
+### Design Tokens Usage
 
 ```css
 .community-spotlight {
@@ -467,7 +467,7 @@ const StoryCarousel = ({ stories }) => {
 ## Dependencies
 
 - React 19 (front-end framework)
-- Design system membership records (CSS variables)
+- Design system tokens (CSS variables)
 - CSS animations and transitions
 - Intersection Observer API (optional enhancement)
 - Swipe detection library for touch gestures

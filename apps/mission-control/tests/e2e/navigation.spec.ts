@@ -49,11 +49,11 @@ test.describe('Sidebar Navigation & Panel Switching', () => {
     await expect(page.getByTestId('task-input')).toBeVisible();
   });
 
-  test('sidebar contains History, Product, Settings sections', async ({ page }) => {
+  test('sidebar contains History, DAO, Settings sections', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('[data-testid="sidebar"]').getByText('History')).toBeVisible();
     await expect(page.locator('[data-testid="sidebar"]').getByText('Settings')).toBeVisible();
-    await expect(page.locator('[data-testid="sidebar"]').getByText('for the product · Business-only product operations')).toBeVisible();
+    await expect(page.locator('[data-testid="sidebar"]').getByText('for the kids · #UntilNoKidInNeed')).toBeVisible();
   });
 
   test('navigating to File Uploads shows the upload panel', async ({ page }) => {
@@ -76,9 +76,9 @@ test.describe('Sidebar Navigation & Panel Switching', () => {
       await page.goto('/');
 
       await expect(page.getByTestId('topbar')).toBeVisible();
-      // Sidebar might be hidden or have a different trigger on mobile,
+      // Sidebar might be hidden or have a different trigger on mobile, 
       // for now, just check if it's rendered, even if hidden behind a hamburger menu.
-      await expect(page.getByTestId('sidebar')).toBeVisible();
+      await expect(page.getByTestId('sidebar')).toBeVisible(); 
       await expect(page.locator('main')).toBeVisible();
     });
   });

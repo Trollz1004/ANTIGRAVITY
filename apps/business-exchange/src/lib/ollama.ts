@@ -191,7 +191,7 @@ export class OllamaClient {
 
   async checkHealth(): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}/tags`, {
+      const response = await fetch(`${this.baseUrl}/tags`, { 
         method: 'GET',
         headers: { 'Authorization': `Bearer ${this.apiKey}` },
         signal: AbortSignal.timeout(5000),

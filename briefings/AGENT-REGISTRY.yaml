@@ -30,18 +30,18 @@ active_agents:
     aliases: ["cto", "chief-technology"]
     last_updated: "2026-06-15T00:00:00Z"
 
-  # membership record SENTRY — Auditor / Fleet Heartbeat Monitor
-  membership record-sentry:
+  # TOKEN SENTRY — Auditor / Fleet Heartbeat Monitor
+  token-sentry:
     canonical_id: "3ea582ea-5b87-4659-a649-631b6cb8a22c"
     paperclip_agent_id: "3ea582ea-5b87-4659-a649-631b6cb8a22c"
     instruction_root_source: "https://github.com/Trollz1004/ANTIGRAVITY/blob/main/paperclip/agents/3ea582ea-5b87-4659-a649-631b6cb8a22c/instructions/AGENTS.md"
-    role: "membership record SENTRY"
+    role: "TOKEN SENTRY"
     status: "active"
-    aliases: ["membership record-sentry", "auditor", "sentry"]
+    aliases: ["token-sentry", "auditor", "sentry"]
     last_updated: "2026-06-15T00:00:00Z"
 
   # Additional active agents (to be populated during migration)
-  # UUIDs from membership record SENTRY audit with AGENTS.md present:
+  # UUIDs from TOKEN SENTRY audit with AGENTS.md present:
   genSpark:
     canonical_id: "20909d8e-3905-44d6-915e-6e1451d33e55"
     paperclip_agent_id: "20909d8e-3905-44d6-915e-6e1451d33e55"
@@ -60,7 +60,7 @@ resolver_behavior:
   description: "When a tool or system requests an agent by alias, follow this logic"
   algorithm:
     - step: 1
-      action: "Receive alias (e.g., 'membership record-sentry', 'cto')"
+      action: "Receive alias (e.g., 'token-sentry', 'cto')"
     - step: 2
       action: "Look up alias in this registry (case-insensitive)"
     - step: 3
@@ -106,6 +106,6 @@ unclear_agents:
 deprecated_aliases:
   # Historical filesystem mirrors that should NOT be used for new agents.
   # These are being removed during BUS-145.
-  - "agents/membership record-sentry/instructions/"
+  - "agents/token-sentry/instructions/"
   - "agents/cto/instructions/"
   - "agents/cfo/instructions/"
