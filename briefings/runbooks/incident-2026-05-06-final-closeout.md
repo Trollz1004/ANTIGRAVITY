@@ -36,7 +36,7 @@ Time to recover:     90 seconds
 Final /health:       {"status":"ok","latency_ms":368}
 ```
 
-The watchdog detected the retired API within its 30s polling cycle and
+The watchdog detected the dead API within its 30s polling cycle and
 respawned uvicorn cleanly. Three watchdog cycles is the cap. Cockpit
 survives `Stop-Process -Force` of the API process; no human needed.
 
@@ -56,14 +56,14 @@ ok=13  degraded=2  unreachable=0
   guardian:         ok
   repo:             ok
   docker:           ok
-  business reserve:         ok
+  treasury:         ok
   revenue:          ok
   stack:            ok
   t5500:            ok    ← was BLOCKED in Dario report; LAN-bind landed
 ```
 
 **Both Dario-report BLOCKED items are now PASSED.** Two cosmetic
-degradeds remain (`square` membership record missing, `api_youandinotai` /health
+degradeds remain (`square` token missing, `api_youandinotai` /health
 route doesn't exist on T5500-side API). Neither blocks anything.
 
 ## BLOCKERS
@@ -86,8 +86,8 @@ route doesn't exist on T5500-side API). Neither blocks anything.
 ## What Joshua does for the cosmetic green
 
 ```
-# Square membership record (when ready):
-echo 'SQUARE_ACCESS_TOKEN=<membership record>' >> 'C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
+# Square token (when ready):
+echo 'SQUARE_ACCESS_TOKEN=<token>' >> 'C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
 # (and add SQUARE_ACCESS_TOKEN: str = "" line in services/mission-control-api/src/mission_control_api/config.py
 #  is already there — pydantic-settings reads .env. Restart MC API to pick up.)
 

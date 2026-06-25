@@ -19,7 +19,7 @@
 C:\Antigravity\
 ├── apps/            KEEP — every product lives here, nowhere else
 ├── backend/         KEEP — fastapi-app + shared backend code
-├── contracts/       KEEP — solidity / Product structure contracts
+├── contracts/       KEEP — solidity / DAO contracts
 ├── infra/           KEEP — cloudflare workers, tunnels, deploy config
 ├── _deploy/         KEEP — live deploy targets (Cloudflare Pages serves from here)
 ├── brain-mcp/       KEEP — MCP server, real running service
@@ -50,15 +50,15 @@ C:\Antigravity\
 
 **KEEP at root (canonical, do not move):**
 
-- `Product structure and FOUNDER CAP.md` — **THE money law (100-CENT RULE v2.0). Source of truth. Lives at repo root, not briefings.**
+- `DAO and FOUNDER CAP.md` — **THE money law (100-CENT RULE v2.0). Source of truth. Lives at repo root, not briefings.**
 
 **KEEP at `briefings/` root (the canonical few):**
 
 - `CLAUDE-DOCTRINE.md`
 - `REPOSITORY_RECORD.md` — **promote out of `archive/` back to root. This is the status file and it's currently buried.**
 - `CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
-- `Product structure-MONEY-PLAIN-ENGLISH-COMPANION.md` — plain-language mirror that DEFERS to `Product structure and FOUNDER CAP.md`; carries the per-year $50k ruling + the exact repo fix
-- `Product structure-ARCHITECTURE-CANONICAL.md`
+- `DAO-MONEY-PLAIN-ENGLISH-COMPANION.md` — plain-language mirror that DEFERS to `DAO and FOUNDER CAP.md`; carries the per-year $50k ruling + the exact repo fix
+- `DAO-ARCHITECTURE-CANONICAL.md`
 - `BUSINESS-PROFILE-CANONICAL.md`
 - `AGENT-REGISTRY.yaml`
 - **ONE** memory file: latest `CLAUDE-MEMORY-2026-06-17T1522Z.md` only
@@ -74,7 +74,7 @@ C:\Antigravity\
 
 - `DEPLOY-PAPERCLoudflare.md` — corrupted filename, broken artifact
 - Exact-duplicate pairs (e.g. `claude-ai-user-preferences.md` vs `CLAUDE-AI-USER-PREFERENCES-2026-04-28.md` — keep one, delete the other)
-- `Product structure-TOKENOMICS-FINAL.md` → **do NOT delete; add a one-line pointer at the top** to `Product structure and FOUNDER CAP.md` (the 100-cent rule) so it stops contradicting on money. membership record/governance content stays; money question is settled in the root doc.
+- `DAO-TOKENOMICS-FINAL.md` → **do NOT delete; add a one-line pointer at the top** to `DAO and FOUNDER CAP.md` (the 100-cent rule) so it stops contradicting on money. Token/governance content stays; money question is settled in the root doc.
 
 ---
 

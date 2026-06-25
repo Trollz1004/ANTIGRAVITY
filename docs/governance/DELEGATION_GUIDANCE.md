@@ -33,7 +33,7 @@ Description: Implement comprehensive testing with:
 
 1. Unit tests for core backend logic (FastAPI services)
 2. Unit tests for frontend components and utilities
-3. Integration tests for signup, verification, matching, product operations flows
+3. Integration tests for signup, verification, matching, charity flows
 4. Test coverage requirements (80%+ target)
 
 ### Monitoring and Error Handling
@@ -79,8 +79,8 @@ The proper way to delegate this work would be through Paperclip issues assigned 
 
 All implementation work should continue to adhere to:
 
-- Florida Statute §496.405 (no "join as a member"/"membership support" terminology)
-- product operations-first mission requirements (10% revenue disbursement)
+- Florida Statute §496.405 (no "donate"/"donation" terminology)
+- Charity-first mission requirements (10% revenue disbursement)
 - Transparency and auditability principles
 - Single-human-control prevention after founder lifetime
 

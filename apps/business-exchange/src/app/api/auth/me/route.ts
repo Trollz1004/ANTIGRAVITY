@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     const cookies = request.headers.get('cookie') || '';
     const token = getTokenFromCookie(cookies);
-
+    
     if (!token) {
       return NextResponse.json({ user: null }, { status: 401 });
     }

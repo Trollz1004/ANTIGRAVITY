@@ -58,7 +58,7 @@ def test_upload_invalid_token_rejected(client):
     resp = client.post(
         "/api/v1/uploads/",
         files={"file": ("test.jpg", b"fake_data", "image/jpeg")},
-        headers={"Authorization": "Bearer invalid.membership_record.here"},
+        headers={"Authorization": "Bearer invalid.token.here"},
     )
     assert resp.status_code == 401
 

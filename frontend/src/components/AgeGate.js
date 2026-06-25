@@ -34,9 +34,9 @@ export function AgeGate({ onVerified }) {
             className="mt-0.5 accent-[#00d4ff]"
           />
           <span>
-            I am 18+ and acknowledge this node operates Opus-directed agents. for the product.
+            I am 18+ and acknowledge this node operates Opus-directed agents. For the kids.
             <span className="block text-[10px] text-[#e040fb] font-bold uppercase tracking-[0.25em] mt-1">
-              Business-only product operations
+              #UntilNoKidInNeed
             </span>
           </span>
         </label>

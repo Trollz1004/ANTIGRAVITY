@@ -23,7 +23,7 @@ ANTIGRAVITY mission (Joshua Coleman, sole authority). You work ON TOP OF a finis
 design system. You do not invent new visual styles — you apply the existing one.
 
 DESIGN SYSTEM (read these first, they are the source of truth):
-- styles.css                      → link this one file; gives you all --ag-* membership records
+- styles.css                      → link this one file; gives you all --ag-* tokens
 - readme.md                       → full brand guide: voice, color, type, motion, iconography
 - SKILL.md                        → how to design in this brand
 - components/**/*.prompt.md        → every reusable component + usage example
@@ -42,10 +42,10 @@ NON-NEGOTIABLE BRAND RULES:
 VOICE RULES (critical — legal + brand):
 - Blunt, builder-to-builder, anti-hype. Talk TO the reader ("you"/"we").
 - Numbers are framed as TRACKED / RECORDED, never projected. State status plainly.
-- NEVER use the words restricted non-product fundraising or tax-deductible claims on any
-  customer-facing surface (FL §496.405). The mission tag #MembershipVerificationSupport may be
+- NEVER use the words donate / donation / solicitation / tax-deductible on any
+  customer-facing surface (FL §496.405). The mission tag #UntilNoKidInNeed may be
   STATED, never used to SOLICIT.
-- YouAndINotAI uses SQUARE ONLY for payments. Never alternate processors on the dating surface.
+- YouAndINotAI uses SQUARE ONLY for payments. Never Stripe/PayPal on the dating surface.
 - No mock data presented as real. If a number isn't backed by a production source,
   label it as a sample/placeholder.
 

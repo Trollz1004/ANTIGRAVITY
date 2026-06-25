@@ -13,7 +13,7 @@ import { WebSocketStatus } from './WebSocketStatus';
  * Shows business status, financial operations stats,
  * the build badge, and a share button.
  *
- * All monetary values are currently placeholder `$0.00` — live business reserve
+ * All monetary values are currently placeholder `$0.00` — live treasury
  * data must be wired before real balances are displayed.
  *
  * @component
@@ -23,11 +23,11 @@ import { WebSocketStatus } from './WebSocketStatus';
  * ```
  */
 export const TopBar: React.FC = () => {
-  const { membership record } = useAuth();
+  const { token } = useAuth();
   const { unreadCount } = useWebSocketNotifications();
 
   const handleLogin = () => {
-    localStorage.setItem('auth_token', 'dummy-jwt-membership record');
+    localStorage.setItem('auth_token', 'dummy-jwt-token');
     window.location.reload(); // Reload to trigger AuthProvider re-read
   };
 
@@ -65,7 +65,7 @@ export const TopBar: React.FC = () => {
       <button className="flex items-center gap-1 px-1 sm:px-2 py-1 text-xs font-mono rounded border border-border hover:border-accentCyan/50 transition text-gray-300">
         <Share2 size={12} /> share
       </button>
-      {membership record ? (
+      {token ? (
         <button
           data-testid="logout-button"
           onClick={handleLogout}

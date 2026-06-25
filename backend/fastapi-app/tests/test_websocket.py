@@ -1,7 +1,7 @@
 """Tests for WebSocket authentication handler.
 
 Covers the get_current_websocket_user dependency in
-app/dependencies/websocket_auth.py with mocked membership record decode
+app/dependencies/websocket_auth.py with mocked token decode
 and database session to avoid needing a real DB or JWT secret.
 """
 
@@ -47,7 +47,7 @@ def _make_user(*, is_active: bool = True) -> MagicMock:
 def _make_websocket() -> MagicMock:
     """Return a minimal mock WebSocket object."""
     ws = MagicMock()
-    ws.query_params = {"token": "valid-membership record"}
+    ws.query_params = {"token": "valid-token"}
     return ws
 
 
@@ -69,7 +69,7 @@ async def test_valid_token_returns_user():
     user = _make_user()
     db = _make_db_session(return_value=user)
     websocket = _make_websocket()
-    membership_record = "valid-membership record"
+    token = "valid-token"
     user_id_str = str(user.id)
 
     with patch(
@@ -78,7 +78,7 @@ async def test_valid_token_returns_user():
     ):
         result = await get_current_websocket_user(
             websocket=websocket,
-            token=membership_record,
+            token=token,
             db=db,
         )
 
@@ -88,18 +88,18 @@ async def test_valid_token_returns_user():
 
 @pytest.mark.asyncio
 async def test_invalid_token_raises_websocket_exception():
-    """An invalid (malformed / expired) membership record should raise WS 1008."""
+    """An invalid (malformed / expired) token should raise WS 1008."""
     db = _make_db_session()
     websocket = _make_websocket()
 
     with patch(
         "app.dependencies.websocket_auth.decode_token",
-        side_effect=Exception("membership record expired"),
+        side_effect=Exception("token expired"),
     ):
         with pytest.raises(WebSocketException) as exc_info:
             await get_current_websocket_user(
                 websocket=websocket,
-                token="bad-membership record",
+                token="bad-token",
                 db=db,
             )
 
@@ -109,7 +109,7 @@ async def test_invalid_token_raises_websocket_exception():
 
 @pytest.mark.asyncio
 async def test_missing_token_raises_websocket_exception():
-    """A missing/empty membership record string should raise WS 1008."""
+    """A missing/empty token string should raise WS 1008."""
     db = _make_db_session()
     websocket = MagicMock()
     websocket.query_params = {}
@@ -118,7 +118,7 @@ async def test_missing_token_raises_websocket_exception():
     # missing, but if it does (e.g. token=""), decode_token will fail.
     with patch(
         "app.dependencies.websocket_auth.decode_token",
-        side_effect=Exception("missing membership record"),
+        side_effect=Exception("missing token"),
     ):
         with pytest.raises(WebSocketException) as exc_info:
             await get_current_websocket_user(
@@ -132,7 +132,7 @@ async def test_missing_token_raises_websocket_exception():
 
 @pytest.mark.asyncio
 async def test_token_missing_sub_claim_raises_websocket_exception():
-    """A membership record payload without a 'sub' key should raise WS 1008."""
+    """A token payload without a 'sub' key should raise WS 1008."""
     db = _make_db_session()
     websocket = _make_websocket()
 
@@ -143,17 +143,17 @@ async def test_token_missing_sub_claim_raises_websocket_exception():
         with pytest.raises(WebSocketException) as exc_info:
             await get_current_websocket_user(
                 websocket=websocket,
-                token="membership record-without-sub",
+                token="token-without-sub",
                 db=db,
             )
 
     assert exc_info.value.code == status.WS_1008_POLICY_VIOLATION
-    assert exc_info.value.reason == "Invalid membership record payload"
+    assert exc_info.value.reason == "Invalid token payload"
 
 
 @pytest.mark.asyncio
 async def test_user_not_found_raises_websocket_exception():
-    """When the user ID from the membership record doesn't exist in DB → WS 1008."""
+    """When the user ID from the token doesn't exist in DB → WS 1008."""
     db = _make_db_session(return_value=None)
     websocket = _make_websocket()
     fake_user_id = str(uuid.uuid4())
@@ -165,7 +165,7 @@ async def test_user_not_found_raises_websocket_exception():
         with pytest.raises(WebSocketException) as exc_info:
             await get_current_websocket_user(
                 websocket=websocket,
-                token="valid-membership record-but-no-user",
+                token="valid-token-but-no-user",
                 db=db,
             )
 
@@ -188,7 +188,7 @@ async def test_inactive_user_raises_websocket_exception():
         with pytest.raises(WebSocketException) as exc_info:
             await get_current_websocket_user(
                 websocket=websocket,
-                token="valid-membership record-inactive-user",
+                token="valid-token-inactive-user",
                 db=db,
             )
 
@@ -211,9 +211,9 @@ async def test_sub_is_uuid_string():
     ) as mock_decode:
         result = await get_current_websocket_user(
             websocket=websocket,
-            token="valid-membership record",
+            token="valid-token",
             db=db,
         )
 
     assert result is user
-    mock_decode.assert_called_once_with("valid-membership record")
+    mock_decode.assert_called_once_with("valid-token")

@@ -19,8 +19,8 @@ description: Business-only revenue guidance for Trash Or Treasure Online Recycle
 - If money language is needed, use plain product terms: price, subscription, membership, receipt, refund, support, checkout, and account access.
 
 ## Implementation Notes
-- Square is the active payment rail for YouAndINotAI and aligned active checkout surfaces unless Joshua provides a newer timestamped written directive.
-- alternate processor and other alternate rails are historical or separate-lane context, not active checkout defaults in this repo.
+- Square is primary for YouAndINotAI.
+- Stripe is legacy unless a non-dating surface explicitly uses it.
 - All processors consolidate at the single LLC bank account.
 - Reconcile via internal ledger tables and payment processor reports.
 

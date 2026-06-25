@@ -190,7 +190,7 @@ Step 'Ollama Cloud models'
 $cloudModels = @(
     'jeffreyvandekorput/korpohermes-prime:latest',  # Joshua's preferred default brain (cloud-backed)
     'minimax-m2.7:cloud',                            # confirmed in OpenClaw gateway log
-    'glm-4.6:cloud'                                  # per CLAUDE.md GLM membership record policy
+    'glm-4.6:cloud'                                  # per CLAUDE.md GLM token policy
 )
 Write-Host '  Cloud models require `ollama signin` to be done at least once.'
 foreach ($m in $cloudModels) {

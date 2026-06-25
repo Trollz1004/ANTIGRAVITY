@@ -21,14 +21,14 @@ export interface TableProps<T> {
   className?: string;
 }
 
-export function Table<T>({
-  columns,
-  data,
-  keyField,
-  striped = true,
+export function Table<T>({ 
+  columns, 
+  data, 
+  keyField, 
+  striped = true, 
   hoverable = true,
   emptyMessage = 'No data available',
-  className
+  className 
 }: TableProps<T>) {
   return (
     <div className={cn('overflow-x-auto', className)}>
@@ -72,8 +72,8 @@ export function Table<T>({
                     key={column.key}
                     className={cn('px-4 py-3 text-nexus-900 dark:text-nexus-100', column.className)}
                   >
-                    {column.render
-                      ? column.render(row, rowIndex)
+                    {column.render 
+                      ? column.render(row, rowIndex) 
                       : String(row[column.key as keyof T] ?? '')}
                   </td>
                 ))}
@@ -95,9 +95,9 @@ export interface PaginationProps {
   onPageSizeChange?: (size: number) => void;
 }
 
-export function Pagination({
-  currentPage,
-  totalPages,
+export function Pagination({ 
+  currentPage, 
+  totalPages, 
   onPageChange,
   showPageSize,
   pageSize,

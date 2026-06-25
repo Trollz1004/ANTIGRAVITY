@@ -95,11 +95,11 @@ CODEOWNERS are senior contributors with:
 
 ## Mission Alignment Principles
 
-### Commercial Alignment
+### Charity-First Mission
 
-- Revenue and operations are managed for reliable customer service and long-term mission continuity.
-- Marketing emphasizes practical platform value.
-- Operational decisions prioritize product quality, safety, and support reliability.
+- 10% of LLC-controlled revenue directed to children's charities
+- All features evaluated for alignment with connecting humans for good
+- Marketing emphasizes real-world connection over transaction
 
 ### Transparency and Auditability
 
@@ -112,14 +112,14 @@ CODEOWNERS are senior contributors with:
 - Multiple administrators for critical services
 - Key rotation procedures documented
 - Succession planning for founder roles
-- Documented escalation paths for high-impact changes
+- Decentralized decision-making where possible
 
 ## Compliance Requirements
 
 ### Florida Statute §496.405
 
-- No use of "join as a member," "membership support," or "restricted claims" terminology
-- Use settlement and payout terminology for user-facing finance references
+- No use of "donate," "donation," or "solicitation" terminology
+- Use "contractual revenue disbursement" instead
 - Regular scanning for compliance violations
 - Legal review of user-facing copy
 
@@ -191,7 +191,7 @@ CODEOWNERS are senior contributors with:
 
 ### Founder Transition
 
-- Controlled ownership and documented runbooks to prevent single-person bottlenecks
+- Decentralized governance to prevent single-person bottleneck
 - Documentation-first approach to institutional knowledge
 - Regular cross-training among team members
 - External advisors for critical decisions

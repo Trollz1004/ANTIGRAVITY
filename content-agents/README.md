@@ -23,8 +23,8 @@ This directory contains the 24/7 content generation agents for YouAndINotAI mark
 ## Compliance Features
 
 All agents automatically:
-- Filter prohibited terms ("join as a member", "membership support", "restricted claim")
-- Substitute with business-only product phrasing for public copy
+- Filter prohibited terms ("donate", "donation", "solicitation")
+- Substitute with compliant phrasing ("contractual revenue disbursement")
 - Maintain brand voice consistency
 - Enforce hashtag policy per platform
 

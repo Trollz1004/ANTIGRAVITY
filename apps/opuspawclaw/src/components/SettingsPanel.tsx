@@ -91,26 +91,26 @@ export function SettingsPanel() {
             <Globe size={18} className="text-[#ffb300]" />
             <h3 className="font-bold text-sm uppercase tracking-widest text-[#ffb300]">Cloud Intelligence</h3>
           </div>
-
+          
           <div className="bg-[#111827] p-6 rounded-2xl border border-[#2a3a52] space-y-4 shadow-2xl">
             <div>
               <label className="block text-[10px] font-bold text-[#6b82a6] uppercase tracking-widest mb-2">Anthropic API Key</label>
-              <input
-                type="password"
+              <input 
+                type="password" 
                 value={anthropicKey}
                 onChange={e => setAnthropicKey(e.target.value)}
-                placeholder="sk-ant-..."
-                className="w-full bg-[#0a0f1a] border border-[#2a3a52] rounded-xl px-4 py-2.5 text-sm font-mono focus:border-[#00d4ff] focus:ring-1 focus:ring-[#00d4ff]/20 outline-none transition-all"
+                placeholder="sk-ant-..." 
+                className="w-full bg-[#0a0f1a] border border-[#2a3a52] rounded-xl px-4 py-2.5 text-sm font-mono focus:border-[#00d4ff] focus:ring-1 focus:ring-[#00d4ff]/20 outline-none transition-all" 
               />
             </div>
             <div>
               <label className="block text-[10px] font-bold text-[#6b82a6] uppercase tracking-widest mb-2">Google AI Studio Key</label>
-              <input
-                type="password"
+              <input 
+                type="password" 
                 value={googleKey}
                 onChange={e => setGoogleKey(e.target.value)}
-                placeholder="AIza..."
-                className="w-full bg-[#0a0f1a] border border-[#2a3a52] rounded-xl px-4 py-2.5 text-sm font-mono focus:border-[#00d4ff] focus:ring-1 focus:ring-[#00d4ff]/20 outline-none transition-all"
+                placeholder="AIza..." 
+                className="w-full bg-[#0a0f1a] border border-[#2a3a52] rounded-xl px-4 py-2.5 text-sm font-mono focus:border-[#00d4ff] focus:ring-1 focus:ring-[#00d4ff]/20 outline-none transition-all" 
               />
             </div>
           </div>
@@ -122,22 +122,22 @@ export function SettingsPanel() {
             <Cpu size={18} className="text-[#00e676]" />
             <h3 className="font-bold text-sm uppercase tracking-widest text-[#00e676]">Local Compute (Ollama)</h3>
           </div>
-
+          
           <div className="bg-[#111827] p-6 rounded-2xl border border-[#2a3a52] space-y-4 shadow-2xl">
             <div>
               <label className="block text-[10px] font-bold text-[#6b82a6] uppercase tracking-widest mb-2">Ollama Base URL</label>
-              <input
-                type="text"
+              <input 
+                type="text" 
                 value={ollamaUrl}
                 onChange={e => setOllamaUrl(e.target.value)}
-                placeholder="http://localhost:11434"
-                className="w-full bg-[#0a0f1a] border border-[#2a3a52] rounded-xl px-4 py-2.5 text-sm font-mono focus:border-[#00e676] focus:ring-1 focus:ring-[#00e676]/20 outline-none transition-all"
+                placeholder="http://localhost:11434" 
+                className="w-full bg-[#0a0f1a] border border-[#2a3a52] rounded-xl px-4 py-2.5 text-sm font-mono focus:border-[#00e676] focus:ring-1 focus:ring-[#00e676]/20 outline-none transition-all" 
               />
             </div>
             <div>
               <label className="block text-[10px] font-bold text-[#6b82a6] uppercase tracking-widest mb-2">Default Model</label>
               <div className="relative">
-                <select
+                <select 
                   value={activeModel}
                   onChange={e => setActiveModel(e.target.value)}
                   className="w-full bg-[#0a0f1a] border border-[#2a3a52] rounded-xl px-4 py-2.5 text-sm focus:border-[#00e676] outline-none appearance-none"
@@ -165,7 +165,7 @@ export function SettingsPanel() {
             <Download size={18} className="text-[#e040fb]" />
             <h3 className="font-bold text-sm uppercase tracking-widest text-[#e040fb]">Model Repository</h3>
           </div>
-          <button
+          <button 
             onClick={fetchModels}
             className="text-[10px] font-bold text-[#6b82a6] hover:text-[#e040fb] transition-colors uppercase tracking-widest flex items-center gap-1"
           >
@@ -184,19 +184,19 @@ export function SettingsPanel() {
                   Enter model name (e.g. 'llama3', 'mistral', 'codellama') to download to local cache.
                 </p>
               </div>
-              <input
+              <input 
                 type="text"
                 value={newModelName}
                 onChange={e => setNewModelName(e.target.value)}
                 placeholder="model:tag"
                 className="w-full bg-[#0a0f1a] border border-[#2a3a52] rounded-xl px-4 py-2.5 text-sm font-mono focus:border-[#e040fb] focus:ring-1 focus:ring-[#e040fb]/20 outline-none transition-all"
               />
-              <button
+              <button 
                 onClick={handlePullModel}
                 disabled={isPulling || !newModelName}
                 className={`w-full py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${
-                  isPulling
-                    ? 'bg-[#1a2332] text-[#4a5568] cursor-not-allowed'
+                  isPulling 
+                    ? 'bg-[#1a2332] text-[#4a5568] cursor-not-allowed' 
                     : 'bg-[#e040fb]/10 hover:bg-[#e040fb]/20 border border-[#e040fb]/30 text-[#e040fb] active:scale-95'
                 }`}
               >
@@ -232,7 +232,7 @@ export function SettingsPanel() {
                   className="w-full bg-[#0a0f1a] border border-[#2a3a52] rounded text-[10px] px-3 py-1.5 text-[#e8f0ff] focus:border-[#00e676] outline-none"
                 />
              </div>
-
+             
              <div className="flex-1 overflow-y-auto custom-scrollbar p-2 max-h-[400px]">
                {models.length === 0 ? (
                  <div className="h-full flex flex-col items-center justify-center py-12 opacity-30 text-center">
@@ -252,7 +252,7 @@ export function SettingsPanel() {
                             {(model.size / (1024 * 1024 * 1024)).toFixed(2)} GB • {model.details?.family || 'N/A'}
                           </span>
                         </div>
-                        <button
+                        <button 
                           onClick={() => handleDeleteModel(model.name)}
                           className="p-2 rounded-lg text-[#4a5568] hover:text-red-400 hover:bg-red-400/10 transition-all opacity-0 group-hover:opacity-100"
                         >
@@ -277,8 +277,8 @@ export function SettingsPanel() {
             <p className="text-xs text-[#6b82a6]">Your credentials are encrypted and stored in your local Opus vault.</p>
           </div>
         </div>
-        <button
-          onClick={handleSave}
+        <button 
+          onClick={handleSave} 
           className="px-8 py-3 bg-[#00d4ff] hover:bg-[#00b8e6] text-[#0a0f1a] font-black uppercase tracking-widest rounded-xl transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(0,212,255,0.3)]"
         >
           Save Changes
@@ -298,7 +298,7 @@ export function SettingsPanel() {
               This flagship platform and all products associated with <strong className="text-[#00d4ff]">Trollz1004 / Antigravity Platforms</strong> are strictly 100% open-source code. We believe in building in public and are open to suggestions, contributions, and feedback to make this the ultimate workstation.
             </p>
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#e040fb]/10 border border-[#e040fb]/30 rounded-full shadow-[0_0_10px_rgba(224,64,251,0.1)]">
-              <span className="text-[10px] font-bold text-[#e040fb] uppercase tracking-widest">Business-only product operations</span>
+              <span className="text-[10px] font-bold text-[#e040fb] uppercase tracking-widest">#UntilNoKidInNeed</span>
             </div>
           </div>
         </div>

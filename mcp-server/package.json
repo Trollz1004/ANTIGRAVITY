@@ -1,7 +1,7 @@
 {
   "name": "antigravity-sentry-mcp",
   "version": "1.0.1",
-  "description": "ANTIGRAVITY Sentry MCP Server — Square, content, and protocol tools for Claude Code & Gemini",
+  "description": "ANTIGRAVITY Sentry MCP Server — Stripe, content, and protocol tools for Claude Code & Gemini",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {

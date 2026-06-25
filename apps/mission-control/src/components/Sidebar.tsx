@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import { NotificationBell } from './NotificationBell';
 import { StackIntegrityWidget } from './StackIntegrityWidget';
-import { BusinessReservePanel } from './BusinessReservePanel';
+import { TreasuryPanel } from './TreasuryPanel';
 
 /**
  * Navigation modes for the sidebar.
@@ -31,7 +31,7 @@ const modes = [
  * Sidebar Navigation Component
  *
  * Renders the left-hand navigation panel with mode buttons, a history
- * section, the business reserve panel, the stack integrity widget, and a settings footer.
+ * section, the treasury panel, the stack integrity widget, and a settings footer.
  *
  * The active mode is tracked internally via `useState` and highlighted with
  * a distinct border/background style.
@@ -84,7 +84,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ active, setActive, unreadCount
         <div className="text-xs font-mono text-gray-500">No recent chats</div>
       </div>
       <div className="px-3 py-2 border-t border-border">
-        <BusinessReservePanel />
+        <TreasuryPanel />
         <StackIntegrityWidget />
       </div>
       <div className="mt-auto p-3 border-t border-border">

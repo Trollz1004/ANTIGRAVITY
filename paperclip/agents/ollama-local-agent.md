@@ -38,7 +38,7 @@ Do not:
 | Log triage (find errors in 1000-line log) | `qwen2.5:7b` |
 | Markdown polish in `briefings/` (no doctrine edits) | `qwen2.5:7b` |
 | Daily summary from agent transcripts | `hermes-3-llama-3.1:8b` |
-| Long-context summarization (> 8k membership records) | `mistral-small:24b` (T5500 only) |
+| Long-context summarization (> 8k tokens) | `mistral-small:24b` (T5500 only) |
 
 ## Model routing escalation
 
@@ -56,7 +56,7 @@ TASK: <what was asked>
 MODEL: <ollama-model-tag>
 NODE: <sabretooth | t5500>
 OUTPUT: <inline or path to file>
-membership records USED: <approx>
+TOKENS USED: <approx>
 ESCALATE? <no | yes — reason>
 ```
 

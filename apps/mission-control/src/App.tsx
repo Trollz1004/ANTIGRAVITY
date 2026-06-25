@@ -3,7 +3,7 @@ import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { TaskBriefInput } from './components/TaskBriefInput';
 import { LaunchPanel } from './components/LaunchPanel';
-import { BusinessReserveBand } from './components/BusinessReserveBand';
+import { TreasuryBand } from './components/TreasuryBand';
 import { HermesRouterPanel } from './components/HermesRouterPanel';
 import { OpenClawSupportPanel } from './components/OpenClawSupportPanel';
 import { RevenueEnginePanel } from './components/RevenueEnginePanel';
@@ -46,7 +46,7 @@ export const App: React.FC = () => {
                 {activePanel === 'ops' && <TaskBriefInput />}
                 {activePanel === 'ops' && <ScanningRepoIndicator />}
                 {activePanel === 'ops' && <LaunchPanel />}
-                {activePanel === 'ops' && <BusinessReserveBand />}
+                {activePanel === 'ops' && <TreasuryBand />}
                 {activePanel === 'ops' && <HermesRouterPanel />}
                 {activePanel === 'ops' && <OpenClawSupportPanel />}
                 {activePanel === 'ops' && <T5500Panel />}

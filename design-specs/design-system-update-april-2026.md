@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document represents the updated design system for YouAndINotAI as of April 2026, incorporating new components and color membership records to support the platform's evolving community features. The system maintains our core principles of mobile-first design, accessibility, and trust-building.
+This document represents the updated design system for YouAndINotAI as of April 2026, incorporating new components and color tokens to support the platform's evolving community features. The system maintains our core principles of mobile-first design, accessibility, and trust-building.
 
 ## Updated Component Library Structure
 
@@ -23,13 +23,13 @@ With the addition of new components, the component library has evolved to includ
 - User Profile Components
 - Community Spotlight Components
 
-## New Color membership record Categories
+## New Color Token Categories
 
 ### Event Feature Colors
 
 Extending our functional color palette to support event categorization and status:
 
-| membership record               | Value            | Usage                                |
+| Token               | Value            | Usage                                |
 | ------------------- | ---------------- | ------------------------------------ |
 | `--event-meetup`    | #8B5CF6 (Purple) | Social meetups and casual gatherings |
 | `--event-volunteer` | #06B6D4 (Cyan)   | Volunteer opportunities              |
@@ -38,7 +38,7 @@ Extending our functional color palette to support event categorization and statu
 | `--event-outdoor`   | #10B981 (Green)  | Outdoor activities and adventures    |
 | `--event-learning`  | #3B82F6 (Blue)   | Learning-focused events              |
 
-| membership record               | Value           | Usage                      |
+| Token               | Value           | Usage                      |
 | ------------------- | --------------- | -------------------------- |
 | `--event-draft`     | #9CA3AF (Gray)  | Unpublished/private events |
 | `--event-published` | #10B981 (Green) | Published public events    |
@@ -46,7 +46,7 @@ Extending our functional color palette to support event categorization and statu
 | `--event-ongoing`   | #F59E0B (Amber) | Currently happening events |
 | `--event-completed` | #6B7280 (Gray)  | Past events                |
 
-| membership record                    | Value            | Usage                          |
+| Token                    | Value            | Usage                          |
 | ------------------------ | ---------------- | ------------------------------ |
 | `--attendance-going`     | #10B981 (Green)  | Confirmed attendance           |
 | `--attendance-maybe`     | #F59E0B (Amber)  | Tentative attendance           |
@@ -58,7 +58,7 @@ Extending our functional color palette to support event categorization and statu
 
 Ensuring visual communication of important user needs:
 
-| membership record                            | Value            | Usage                              |
+| Token                            | Value            | Usage                              |
 | -------------------------------- | ---------------- | ---------------------------------- |
 | `--accessibility-wheelchair`     | #3B82F6 (Blue)   | Wheelchair accessible              |
 | `--accessibility-asl`            | #10B981 (Green)  | American Sign Language interpreter |
@@ -66,7 +66,7 @@ Ensuring visual communication of important user needs:
 | `--accessibility-sensory`        | #F59E0B (Amber)  | Sensory-friendly accommodations    |
 | `--accessibility-service-animal` | #06B6D4 (Cyan)   | Service animal welcome             |
 
-| membership record                       | Value           | Usage                            |
+| Token                       | Value           | Usage                            |
 | --------------------------- | --------------- | -------------------------------- |
 | `--safety-mask-required`    | #F59E0B (Amber) | Face coverings required          |
 | `--safety-vaccination`      | #10B981 (Green) | Vaccination documentation needed |
@@ -160,7 +160,7 @@ As of April 2026, all new components meet or exceed WCAG 2.1 AA standards:
 
 ### Color Contrast Ratios
 
-All new color membership records maintain minimum 4.5:1 contrast ratio against appropriate backgrounds:
+All new color tokens maintain minimum 4.5:1 contrast ratio against appropriate backgrounds:
 
 - Text colors: ≥ 4.5:1 against background
 - UI controls: ≥ 3:1 against background
@@ -208,7 +208,7 @@ All new color membership records maintain minimum 4.5:1 contrast ratio against a
 ### Phase 2: System Integration (In Progress)
 
 - 🔄 Component library documentation update
-- 🔄 Design membership record consolidation
+- 🔄 Design token consolidation
 - 🔄 Accessibility audit completion
 
 ### Phase 3: Future Enhancements (Planned)
@@ -250,7 +250,7 @@ Components tested on:
 
 ### For CTO (b02a21c7)
 
-1. Update design membership record implementation across all components
+1. Update design token implementation across all components
 2. Ensure API contracts match component specifications
 3. Implement performance monitoring for new components
 4. Conduct security review of user profile features

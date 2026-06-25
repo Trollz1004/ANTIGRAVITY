@@ -23,7 +23,7 @@ const path = require('path');
 // Ref: https://squareup.com/help/us/en/article/5153-import-items-online
 // ---------------------------------------------------------------------------
 const SQUARE_HEADERS = [
-  'membership record', // leave blank on first import; Square fills it in on export
+  'Token', // leave blank on first import; Square fills it in on export
   'Item Name',
   'Variation Name',
   'SKU',
@@ -191,7 +191,7 @@ function convert(inputPath, outputPath) {
 
     outputRows.push(
       toCsvLine([
-        '', // membership record — blank for new import
+        '', // Token — blank for new import
         title, // Item Name
         'Default', // Variation Name
         sku, // SKU
