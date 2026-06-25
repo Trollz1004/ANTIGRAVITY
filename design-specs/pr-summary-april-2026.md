@@ -12,7 +12,7 @@ This PR introduces comprehensive enhancements to the YouAndINotAI design system,
 
 1. **CommunityEventCard** - Detailed card for displaying community events
 2. **RSVPButtonGroup** - Intuitive RSVP controls with visual feedback
-3. **Event Feature Color membership records** - Specialized color system for event features
+3. **Event Feature Color Tokens** - Specialized color system for event features
 4. **Event Discovery Flow** - Complete user journey specification
 
 #### User Profile Components
@@ -22,7 +22,7 @@ This PR introduces comprehensive enhancements to the YouAndINotAI design system,
 
 ### Updated Documentation
 
-1. **Design System Update** - Incorporating new components and color membership records
+1. **Design System Update** - Incorporating new components and color tokens
 2. **Complete Component Suite Summary** - Overview of all components created
 3. **Implementation Task Documents** - For CTO team development
 4. **Copy Review Documents** - For CMO team alignment
@@ -55,7 +55,7 @@ This PR introduces comprehensive enhancements to the YouAndINotAI design system,
 ### Legal Compliance
 
 - Florida §496.405 adherence maintained
-- No "join as a member", "membership support", or "restricted claims" in UI copy
+- No "donate", "donation", or "solicitation" in UI copy
 - Appropriate language for community engagement
 
 ## File Listing

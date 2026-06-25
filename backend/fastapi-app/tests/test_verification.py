@@ -76,13 +76,13 @@ class TestSquarePaymentLinkGeneration:
         event_id = uuid.uuid4()
         secret = "test-secret-that-is-at-least-32-characters-long-for-security"
 
-        membership_record = build_checkout_reference(
+        token = build_checkout_reference(
             user_id=user_id,
             event_id=event_id,
             tier="bot_shield",
             secret=secret,
         )
-        parsed = parse_checkout_reference(membership_record, secret=secret)
+        parsed = parse_checkout_reference(token, secret=secret)
 
         assert parsed is not None
         assert parsed["user_id"] == user_id
@@ -146,28 +146,28 @@ class TestSquarePaymentLinkGeneration:
 
         assert checkout_url == "https://square.link/u/mock-bot-shield"
 
-    def test_no_alternate_processor_references_in_verify(self):
-        """verify.py must not contain any alternate processor imports or references."""
+    def test_no_stripe_references_in_verify(self):
+        """verify.py must not contain any Stripe imports or references."""
         import inspect
 
         from app.routers import verify
 
         source = inspect.getsource(verify)
-        # The word "alternate processor" should only appear in comments (DEPRECATED markers)
+        # The word "stripe" should only appear in comments (DEPRECATED markers)
         # or not at all in active code
         lines = source.split("\n")
-        active_alternate_processor_refs = [
+        active_stripe_refs = [
             line
             for line in lines
-            if "alternate processor" in line.lower()
+            if "stripe" in line.lower()
             and not line.strip().startswith("#")
             and not line.strip().startswith("//")
             and "DEPRECATED" not in line
             and "REMOVED" not in line
         ]
         assert (
-            len(active_alternate_processor_refs) == 0
-        ), f"Found active alternate processor references in verify.py: {active_alternate_processor_refs}"
+            len(active_stripe_refs) == 0
+        ), f"Found active Stripe references in verify.py: {active_stripe_refs}"
 
 
 class TestVerificationPromotion:

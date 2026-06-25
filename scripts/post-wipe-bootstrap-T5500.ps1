@@ -435,7 +435,7 @@ Log-Step "STEP 11 — Credential restore from Personal Vault"
 if ($vaultAvailable) {
     # All keys are already loaded into the Process env scope (STEP 0).
     # Persist critical ones to Machine/User scope so services see them at reboot.
-    $persistKeys = @('OPENROUTER_API_KEY','ANTHROPIC_API_KEY','SQUARE_ACCESS_TOKEN',
+    $persistKeys = @('OPENROUTER_API_KEY','ANTHROPIC_API_KEY','STRIPE_SECRET_KEY',
                      'SENDGRID_API_KEY','TELEGRAM_BOT_TOKEN','SQUARE_ACCESS_TOKEN',
                      'GEMINI_API_KEY','GROK_API_KEY','STABILITY_API_KEY')
     foreach ($k in $persistKeys) {
@@ -485,7 +485,8 @@ if (-not $cfExe) {
         Write-Host "    cloudflared service install && Start-Service cloudflared" -ForegroundColor Gray
         Write-Host ""
         Write-Host "  NOTE: CLOUDFLARE_API_TOKEN was dead as of 2026-05-12." -ForegroundColor Red
-        Write-Host "  Mint a fresh API token at https://dash.cloudflare.com/profile/api-tokens" -ForegroundColor Red
+        Write-Host "  Mint a fresh token at https://dash.cloudflare.com/profile/api-tokens" -ForegroundColor Red
+parent of 22d51cba (chore: clean business-only public surfaces)
         Write-Host "  Required perms: Zone:Zone:Read, Zone:DNS:Edit, Account:Cloudflare Tunnel:Edit" -ForegroundColor Red
         Write-Host ""
     }

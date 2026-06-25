@@ -36,7 +36,7 @@ marketing-assets/
 │   │   ├── variations/            # A/B test variations (launch, verify, urgency)
 │   │   └── grok-video-*.mp4       # Generated video content
 │   ├── marketing/                 # Standalone marketing images
-│   │   ├── onlinerecycle_product_operations.png
+│   │   ├── onlinerecycle_impact_shriners.png
 │   │   ├── youandinotai_botshield_card_vertical.png
 │   │   └── youandinotai_hero_moonlight.png
 │   ├── archive/                   # Deprecated/legacy assets (see Archive Policy)
@@ -238,6 +238,6 @@ The `assets/archive/` and `data/archive/` directories contain deprecated assets 
 
 ---
 
-> "AI for member support, not adults with greed."
+> "AI for kids in need, not adults with greed."
 >
 > **Until no kid is in need. #FORtheKIDS 🚀**

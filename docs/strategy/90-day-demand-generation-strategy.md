@@ -29,7 +29,7 @@ YouAndINotAI sells a product:
 ## Messaging
 
 Lead with product utility and trust. Do not use private owner decisions,
-future community structures, or payment-routing claims as public checkouts copy.
+future community structures, or payment-routing claims as public sales copy.
 
 ## KPIs
 

@@ -207,11 +207,11 @@ def test_metrics_response_contains_no_user_ids(client, db_session_factory):
 
 
 def test_metrics_response_contains_no_forbidden_revenue_labels(client):
-    """Response must not contain retired revenue split labels or commercial misuse language."""
+    """Response must not contain retired revenue split labels or solicitation language."""
     forbidden_terms = [
         "don" + "ate",
         "don" + "ation",
-        "commercial misuse",
+        "solicitation",
         "tax-deductible",
         "char" + "ity_percent",
     ]

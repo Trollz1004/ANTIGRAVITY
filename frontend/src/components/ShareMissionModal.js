@@ -48,12 +48,12 @@ export function ShareMissionModal({ stats, onClose }) {
 
     ctx.fillStyle = "#e040fb";
     ctx.font = "bold 18px ui-monospace, Menlo, Consolas, monospace";
-    ctx.fillText("Business-only product operations", 56, 100);
+    ctx.fillText("#UntilNoKidInNeed", 56, 100);
 
     // kids estimate — the headline number
     ctx.fillStyle = "#00e676";
     ctx.font = "bold 110px ui-monospace, Menlo, Consolas, monospace";
-    ctx.fillText(String(stats.member_support_estimate || 0), 56, 240);
+    ctx.fillText(String(stats.kids_estimate || 0), 56, 240);
 
     ctx.fillStyle = "#e8f0ff";
     ctx.font = "bold 18px ui-sans-serif, system-ui, sans-serif";
@@ -61,17 +61,17 @@ export function ShareMissionModal({ stats, onClose }) {
 
     ctx.fillStyle = "#6b82a6";
     ctx.font = "12px ui-monospace, Menlo, Consolas, monospace";
-    ctx.fillText(`each support unit = $${(stats.member_support_threshold_usd || 250).toFixed(0)} member-support unit`, 56, 290);
+    ctx.fillText(`each kid = $${(stats.kids_threshold_usd || 250).toFixed(0)} medical-care unit`, 56, 290);
 
     // counters row
     drawStat(ctx, 56, 360,  "COMMITTED",  `$${(stats.total_usd || 0).toFixed(2)}`,    "#00d4ff");
-    drawStat(ctx, 280, 360, "product reserve",  `$${(stats.member_support_usd || 0).toFixed(2)}`, "#e040fb");
+    drawStat(ctx, 280, 360, "KIDS FUND",  `$${(stats.kids_fund_usd || 0).toFixed(2)}`, "#e040fb");
     drawStat(ctx, 504, 360, "BUCKETS",    String((stats.by_bucket || []).filter((b) => b.amount_usd > 0).length || 0), "#ffb300");
 
     // footer
     ctx.fillStyle = "#6b82a6";
     ctx.font = "10px ui-monospace, Menlo, Consolas, monospace";
-    ctx.fillText("for the product · #TeamClaudeForLife · YouAndINotAI.com", 56, H - 48);
+    ctx.fillText("for the kids · #TeamClaudeForLife · YouAndINotAI.com", 56, H - 48);
 
     ctx.fillStyle = "#fb923c";
     ctx.font = "bold 10px ui-monospace, Menlo, Consolas, monospace";
@@ -100,7 +100,7 @@ export function ShareMissionModal({ stats, onClose }) {
     const blob = await new Promise((res) => canvasRef.current.toBlob(res, "image/png"));
     const file = new File([blob], "mission.png", { type: "image/png" });
     try {
-      await navigator.share({ files: [file], title: "OpusPawClaw Mission Control", text: "for the product · Business-only product operations" });
+      await navigator.share({ files: [file], title: "OpusPawClaw Mission Control", text: "for the kids · #UntilNoKidInNeed" });
     } catch { download(); }
   };
 

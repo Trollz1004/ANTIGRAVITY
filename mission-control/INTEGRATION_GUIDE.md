@@ -6,7 +6,7 @@ OpenClaw seamlessly integrates with **Paperclip**, the open-source business OS f
 
 - **Coordinate Multiple Agents**: Manage OpenClaw alongside other agents (Claude Code, Codex, Cursor, etc.) in a unified org chart
 - **Delegate Tasks**: Assign work from Paperclip directly to OpenClaw or vice versa
-- **Track Budgets**: Monitor membership record usage and enforce spending limits per agent
+- **Track Budgets**: Monitor token usage and enforce spending limits per agent
 - **Align Goals**: Ensure all agents work toward company-wide objectives
 - **Monitor Performance**: Track agent status, task completion, and costs in real-time
 
@@ -66,7 +66,7 @@ In OpenClaw Settings → Paperclip:
 Once connected, OpenClaw will appear in your Paperclip org chart with:
 - **Role**: "AI Workspace & Chat Interface"
 - **Capabilities**: Multi-provider chat, task execution, lead hunting
-- **Budget**: Set monthly membership record budget (e.g., $500)
+- **Budget**: Set monthly token budget (e.g., $500)
 - **Heartbeat**: Automatic status updates every 5 minutes
 
 ### Features
@@ -88,7 +88,7 @@ Once connected, OpenClaw will appear in your Paperclip org chart with:
 #### Budget Control
 
 - **Monthly Budget**: Set spending limit per agent
-- **membership record Tracking**: Real-time membership record usage monitoring
+- **Token Tracking**: Real-time token usage monitoring
 - **Alerts**: Notifications when budget reaches 80%, 95%, 100%
 - **Auto-Pause**: Agents pause when budget exhausted
 
@@ -220,7 +220,7 @@ Ollama Cloud hosts models including:
 
 ### Pricing
 
-- **Pay-as-you-go**: $0.001 - $0.10 per 1K membership records (varies by model)
+- **Pay-as-you-go**: $0.001 - $0.10 per 1K tokens (varies by model)
 - **No minimum**: Start small, scale as needed
 - **Transparent**: See costs in real-time dashboard
 

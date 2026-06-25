@@ -1,5 +1,5 @@
 /* ============================================================================
-   ANTIGRAVITY — Typography membership records
+   ANTIGRAVITY — Typography tokens
    "Church & State Protocol":
      · Inter (sans)        → names, bios, body reading text, headings
      · JetBrains Mono      → system stats, labels, timestamps, nav labels
@@ -53,7 +53,7 @@
   --font-mono: var(--ag-font-mono);
 
   /* The signature "mono UI label": 10px, uppercase, widest tracking, slate-400.
-     Apply via .ag-mono-label or these membership records. */
+     Apply via .ag-mono-label or these tokens. */
   --label-size: var(--ag-text-3xs);
   --label-tracking: var(--ag-tracking-widest);
 }

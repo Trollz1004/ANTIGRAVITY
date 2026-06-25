@@ -1,8 +1,3 @@
-> Current override as of 2026-06-22: this document is historical strategy/spec context only.
-> Do not use it to create public mission-funding claims, membership support routing, customer-facing
-> disbursement language, membership records/Product launch claims, private accounting mechanics, or alternate
-> payment rails. Active public/customer surfaces sell product value: membership, verification,
-> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 # ImpactVisualization Component Specification
 
 ## Component Name
@@ -87,7 +82,7 @@ interface ImpactStat {
 ### Section Header
 
 - title: "Our Community's Impact"
-- description: "Every connection made here directly supports member support in our communities. These numbers represent real contributions from real users like you."
+- description: "Every connection made here directly supports children's causes in our communities. These numbers represent real contributions from real users like you."
 
 ### Sample Stats
 
@@ -112,7 +107,7 @@ interface ImpactStat {
   {
     "id": "revenue",
     "value": "$8,921",
-    "label": "internal allocation review to kids' initiatives",
+    "label": "contractual revenue disbursement to kids' initiatives",
     "icon": "💰",
     "trend": "up",
     "change": 15
@@ -132,7 +127,7 @@ interface ImpactStat {
 
 - Users Tooltip: "Verified users are those who have attended at least one real-world event through ANTIGRAVITY."
 - Hours Tooltip: "Volunteer hours contributed by our community members to local causes and initiatives."
-- Revenue Tooltip: "internal allocation review to children's initiatives through our transparent business model."
+- Revenue Tooltip: "Contractual revenue disbursement to children's initiatives through our transparent business model."
 - Connections Tooltip: "Meaningful connections formed through platform events and activities."
 
 ## Accessibility Notes
@@ -143,7 +138,7 @@ interface ImpactStat {
 <section aria-labelledby="impact-section-title" aria-describedby="impact-section-desc">
   <header>
     <h2 id="impact-section-title">Our Community's Impact</h2>
-    <p id="impact-section-desc">Every connection made here directly supports member support...</p>
+    <p id="impact-section-desc">Every connection made here directly supports children's causes...</p>
   </header>
   <div role="group" aria-label="Impact statistics carousel" aria-roledescription="carousel">
     {/* Stat items with proper ARIA */}
@@ -354,7 +349,7 @@ const StatGrid = ({ stats }) => {
 ## Dependencies
 
 - React 19 (front-end framework)
-- Design system membership records (CSS variables)
+- Design system tokens (CSS variables)
 - CSS animations and transitions
 - Intersection Observer API (optional enhancement)
 - Number formatting utilities

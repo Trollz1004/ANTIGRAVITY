@@ -2,7 +2,7 @@
 Admin sign-in + Sabretooth dev-node SSH relay.
 
 Sign-in: per directive ("admin dashboard must require sign in"). Simple HMAC
-session membership record. Joshua sets ADMIN_PASSWORD + ADMIN_SESSION_SECRET in
+session token. Joshua sets ADMIN_PASSWORD + ADMIN_SESSION_SECRET in
 /app/backend/.env; the frontend gates the dashboard behind sign-in. If
 ADMIN_PASSWORD is empty, /api/auth/status reports unconfigured and the UI
 shows an honest "auth not configured — set ADMIN_PASSWORD" banner. NO
@@ -59,10 +59,10 @@ def _mint_token() -> str:
     return f"{payload}.{_sign(payload)}"
 
 
-def _verify_token(membership record: str) -> bool:
-    if not membership record or not _session_secret():
+def _verify_token(token: str) -> bool:
+    if not token or not _session_secret():
         return False
-    parts = membership record.split(".")
+    parts = token.split(".")
     if len(parts) != 4:
         return False
     payload = ".".join(parts[:3])
@@ -84,11 +84,11 @@ class LoginRequest(BaseModel):
 async def auth_status(request: Request):
     """Honest readout: is admin auth configured at all? Is THIS session valid?"""
     configured = bool(_admin_password() and _session_secret())
-    membership record = request.cookies.get(SESSION_COOKIE, "")
+    token = request.cookies.get(SESSION_COOKIE, "")
     return {
         "configured": configured,
         "missing_env": [v for v in ("ADMIN_PASSWORD", "ADMIN_SESSION_SECRET") if not os.environ.get(v, "").strip()],
-        "signed_in": configured and _verify_token(membership record),
+        "signed_in": configured and _verify_token(token),
         "session_ttl_s": SESSION_TTL_S,
     }
 
@@ -104,9 +104,9 @@ async def auth_login(body: LoginRequest, response: Response):
     # constant-time compare to avoid timing oracles
     if not hmac.compare_digest(body.password, pw):
         raise HTTPException(status_code=401, detail="invalid password")
-    membership record = _mint_token()
+    token = _mint_token()
     response.set_cookie(
-        key=SESSION_COOKIE, value=membership record,
+        key=SESSION_COOKIE, value=token,
         max_age=SESSION_TTL_S, httponly=True, samesite="lax",
         secure=False,  # local-deploy compatible; Cloudflare-fronted edge will upgrade
         path="/",
@@ -139,8 +139,8 @@ def require_admin(request: Request) -> None:
               or (request.client.host if request.client else ""))
         if ip not in allow:
             raise HTTPException(status_code=403, detail=f"caller IP {ip} not in ADMIN_IP_ALLOWLIST")
-    membership record = request.cookies.get(SESSION_COOKIE, "")
-    if not _verify_token(membership record):
+    token = request.cookies.get(SESSION_COOKIE, "")
+    if not _verify_token(token):
         raise HTTPException(status_code=401, detail="sign-in required")
 
 
@@ -151,7 +151,7 @@ SABRETOOTH_KEY = os.environ.get("SABRETOOTH_KEY_PATH", "").strip()
 
 # Whitelist of safe commands the relay will execute. Anything else returns 400.
 # Joshua extends this list by editing /app/backend/auth_relay.py — keeps the
-# blast radius small even if a membership record leaks.
+# blast radius small even if a token leaks.
 ALLOWED_COMMANDS: Dict[str, List[str]] = {
     "status":       ["uptime"],
     "disk":         ["df", "-h", "/"],

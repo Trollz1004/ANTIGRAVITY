@@ -113,8 +113,8 @@ cp .env.example .env
 | Variable | Required By | Description |
 |----------|-------------|-------------|
 | `DATABASE_URL` | Paperclip, FastAPI | PostgreSQL connection string |
-| `JWT_SECRET` | FastAPI services | Secret key for JWT membership record signing |
-| `SQUARE_ACCESS_TOKEN` | Payment flows | Square API access membership record |
+| `JWT_SECRET` | FastAPI services | Secret key for JWT token signing |
+| `SQUARE_ACCESS_TOKEN` | Payment flows | Square API access token |
 | `SQUARE_ENVIRONMENT` | Payment flows | `sandbox` or `production` |
 | `GOOGLE_API_KEY` | Gemini integrations | Google AI Studio API key |
 | `ANTHROPIC_API_KEY` | Claude integrations | Anthropic API key |

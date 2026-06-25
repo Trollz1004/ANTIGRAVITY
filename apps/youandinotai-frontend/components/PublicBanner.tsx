@@ -7,7 +7,7 @@ export default function PublicBanner() {
   if (pathname.startsWith('/scc')) return null;
   return (
     <div className="bg-emerald-500 text-black text-center py-2 px-4 font-bold text-xs md:text-sm relative z-[100]">
-      Live dating app updates: verified links, membership details, and support status.
+      Public status board: verified links and tracked updates only. Internal workflow tools are not exposed here.
     </div>
   );
 }

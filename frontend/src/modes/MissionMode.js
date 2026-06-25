@@ -15,15 +15,15 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
  *
  * Layout (per MISSION-CONTROL-GUI-PROMPT-2026-04-28):
  *   LEFT (240-ish)  · LaunchPanel + Trust Hierarchy
- *   CENTER (flex)   - SystemRibbon + ProductBand + HermesRouterPanel + OpenClawSupportPanel
+ *   CENTER (flex)   - SystemRibbon + DAOBand + HermesRouterPanel + OpenClawSupportPanel
  *   RIGHT (320)     · GitPanel + RunbookViewer + Mission Footer
  */
 export function MissionMode() {
-  const [Product, setProduct] = useState(null);
+  const [dao, setDao] = useState(null);
   const [mission, setMission] = useState(null);
 
   useEffect(() => {
-    axios.get(`${API}/Product/stats`, { timeout: 4000 }).then((r) => setProduct(r.data)).catch(() => setProduct(null));
+    axios.get(`${API}/dao/stats`, { timeout: 4000 }).then((r) => setDao(r.data)).catch(() => setDao(null));
     axios.get(`${API}/mission/metrics`, { timeout: 4000 }).then((r) => setMission(r.data)).catch(() => setMission(null));
   }, []);
 
@@ -51,10 +51,10 @@ export function MissionMode() {
 
         {/* CENTER COLUMN */}
         <div className="col-span-12 lg:col-span-6 flex flex-col gap-4">
-          <ProductBand Product={Product} mission={mission} />
+          <DAOBand dao={dao} mission={mission} />
           <HermesRouterPanel />
           <OpenClawSupportPanel />
-          <BucketEngine Product={Product} />
+          <BucketEngine dao={dao} />
         </div>
 
         {/* RIGHT COLUMN */}
@@ -89,10 +89,10 @@ export function MissionMode() {
             <div className="relative z-10">
               <div className="text-[8px] tracking-[0.3em] uppercase text-[#ffb300] font-bold mb-1">mission</div>
               <div className="text-lg font-bold text-[#e8f0ff] leading-tight mb-2">
-                Business-only product operations
+                #UntilNoKidInNeed
               </div>
               <div className="mono text-[10px] text-[#e8f0ff]/80 leading-relaxed">
-                Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up. PRODUCT VALUE.
+                Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up. For the kids.
               </div>
               <div className="mt-3 pt-3 border-t border-[#e040fb]/20 text-[8px] tracking-widest uppercase text-[#6b82a6]">
                 Runway · {mission?.runway_days ?? "—"} days · primary · {mission?.primary_product ?? "youandinotai.com"}
@@ -130,23 +130,23 @@ function SystemRibbon() {
   );
 }
 
-function ProductBand({ Product, mission }) {
+function DAOBand({ dao, mission }) {
   return (
     <div className="bg-[#1a2332] border border-[#2a3a52] rounded-md">
       <div className="bg-[#111827] border-b border-[#2a3a52] px-3 py-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#ffb300] shadow-[0_0_5px_#ffb300]" />
-          <span className="text-xs font-bold tracking-wide">4-Product business reserve BAND</span>
+          <span className="text-xs font-bold tracking-wide">4-DAO TREASURY BAND</span>
         </div>
         <span className="text-[8px] tracking-widest uppercase text-[#6b82a6]">
-          {Product?.source === "mirror" ? "mirror · replace with Base L2" : "live"}
+          {dao?.source === "mirror" ? "mirror · replace with Base L2" : "live"}
         </span>
       </div>
       <div className="p-3 grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {(Product?.membership records || []).map((t) => {
+        {(dao?.tokens || []).map((t) => {
           const pct = (t.circulating / t.cap) * 100;
           return (
-            <div key={t.symbol} data-testid={`Product-membership records-${t.symbol}`} className="bg-[#0a0f1a] border border-[#2a3a52] rounded p-3">
+            <div key={t.symbol} data-testid={`dao-token-${t.symbol}`} className="bg-[#0a0f1a] border border-[#2a3a52] rounded p-3">
               <div className="flex items-center justify-between mb-2">
                 <span className="mono text-sm font-bold" style={{ color: t.color }}>${t.symbol}</span>
                 <span className="text-[8px] tracking-widest uppercase text-[#6b82a6]">
@@ -165,7 +165,7 @@ function ProductBand({ Product, mission }) {
             </div>
           );
         })}
-        {(!Product || !Product.membership records?.length) && (
+        {(!dao || !dao.tokens?.length) && (
           <div className="col-span-full text-[10px] text-[#4a5568] italic">endpoint unreachable — retry</div>
         )}
       </div>
@@ -180,8 +180,8 @@ function ProductBand({ Product, mission }) {
   );
 }
 
-function BucketEngine({ Product }) {
-  const buckets = Product?.buckets || [];
+function BucketEngine({ dao }) {
+  const buckets = dao?.buckets || [];
   return (
     <div className="bg-[#1a2332] border border-[#2a3a52] rounded-md">
       <div className="bg-[#111827] border-b border-[#2a3a52] px-3 py-2 flex items-center gap-2">

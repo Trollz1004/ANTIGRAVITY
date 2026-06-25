@@ -394,7 +394,7 @@ $fallbackSummary = @"
 5. Push a new checkpoint after any significant architecture change.
 
 ## Open Risks
-- membership record/context limits can still drop live chat state between sessions.
+- Token/context limits can still drop live chat state between sessions.
 - If Ollama has no local model, summaries degrade to template fallback.
 - Memory files are only useful if actively updated each session.
 

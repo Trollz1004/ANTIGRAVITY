@@ -1,7 +1,7 @@
-"""Iteration 4 tests — Graphify + Doctrine + Node Identity + alternate processor-410 webhook.
+"""Iteration 4 tests — Graphify + Doctrine + Node Identity + Stripe-410 webhook.
 
 Covers Joshua's GLOBAL SYSTEM DIRECTIVE (Graphify integration, persistent
-memory, for-profit LLC 10% hard cap, Square-only payments, alternate processor retired)."""
+memory, for-profit LLC 10% hard cap, Square-only payments, Stripe dead)."""
 from __future__ import annotations
 
 import os
@@ -67,20 +67,20 @@ class TestDoctrine:
         d = r.json()
         # Forbidden words
         fw = [w.lower() for w in d["forbidden_words_in_ui"]]
-        for w in ("product", "haiku", "support", "support", "commercial misuse"):
+        for w in ("charity", "haiku", "donate", "donation", "solicitation"):
             assert w in fw, f"'{w}' missing from forbidden_words_in_ui"
         # Revenue doctrine
         rd = d["revenue_doctrine"]
         assert rd["hard_cap_pct"] == 10
         assert rd["entity_type"] == "for-profit LLC"
         assert "§496.405" in rd["fl_compliance"]
-        for w in ("support", "support", "product"):
+        for w in ("donate", "donation", "charity"):
             assert w in rd["fl_compliance"].lower()
         assert rd["mission_surface_rule"] == "Mission revealed on receipts only."
         # Infrastructure doctrine
         infra = d["infrastructure_doctrine"]
         assert "Square" in infra["payments_live"] and "LY5GN09F5AN83" in infra["payments_live"]
-        assert any("alternate processor" in x and "410" in x for x in infra["retired_payment_paths"])
+        assert any("Stripe" in x and "410" in x for x in infra["payments_dead"])
         assert infra["hosting"] == "Cloudflare only. Netlify banned."
         assert "jules-cli.py" in infra["orchestration"]
         assert infra["founding_four_peer_level"] == ["Claude", "Gemini", "Perplexity", "Grok"]
@@ -108,18 +108,18 @@ class TestNodeIdentity:
         assert "Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY" in data["repos"]["sandbox"]
 
 
-# ── Ledger webhooks (alternate processor 410, unknown 400, Square 200) ────────────────
+# ── Ledger webhooks (Stripe 410, unknown 400, Square 200) ────────────────
 class TestLedgerWebhooks:
-    def test_alternate processor_is_retired_410(self, client):
-        r = client.post(f"{API}/ledger/webhook/alternate processor", json={"amount_usd": 10}, timeout=10)
+    def test_stripe_is_dead_410(self, client):
+        r = client.post(f"{API}/ledger/webhook/stripe", json={"amount_usd": 10}, timeout=10)
         assert r.status_code == 410
         detail = r.json().get("detail", "").lower()
-        assert "alternate processor is retired" in detail
+        assert "stripe is dead" in detail
         assert "square" in detail
         assert "ly5gn09f5an83" in detail
 
-    def test_unsupported_payment_source_400(self, client):
-        r = client.post(f"{API}/ledger/webhook/unsupported", json={"amount_usd": 10}, timeout=10)
+    def test_paypal_unknown_source_400(self, client):
+        r = client.post(f"{API}/ledger/webhook/paypal", json={"amount_usd": 10}, timeout=10)
         assert r.status_code == 400
         assert "unknown source" in r.json()["detail"].lower()
 
@@ -133,7 +133,7 @@ class TestLedgerWebhooks:
 
 
 # ── Doctrine sweep — forbidden words must NOT appear in user-facing API output
-FORBIDDEN = ["support", "support", "product", "commercial misuse", "haiku"]
+FORBIDDEN = ["donate", "donation", "charity", "solicitation", "haiku"]
 
 
 def _sweep(text: str) -> list[str]:
@@ -147,7 +147,7 @@ def _sweep(text: str) -> list[str]:
 
 class TestDoctrineSweep:
     @pytest.mark.parametrize("path", [
-        "/providers", "/tasks/agents", "/ledger/stats", "/product/stats",
+        "/providers", "/tasks/agents", "/ledger/stats", "/dao/stats",
         "/system/status", "/mission/metrics", "/agents", "/node/identity",
     ])
     def test_endpoint_clean(self, client, path):
@@ -196,7 +196,7 @@ class TestRegression:
         r = client.get(f"{API}/ledger/stats", timeout=10)
         assert r.status_code == 200
         d = r.json()
-        assert "total_usd" in d and "member_support_usd" in d
+        assert "total_usd" in d and "kids_fund_usd" in d
 
     def test_watchdog_status(self, client):
         r = client.get(f"{API}/watchdog/status", timeout=10)

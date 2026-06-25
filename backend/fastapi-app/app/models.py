@@ -46,7 +46,7 @@ class User(Base):
     google_id: Mapped[str | None] = mapped_column(
         String(255), unique=True, nullable=True
     )
-    # DEPRECATED: alternate processor_customer_id removed — Square is sole payment processor
+    # DEPRECATED: stripe_customer_id removed — Square is sole payment processor
     bot_shield_verified: Mapped[bool] = mapped_column(
         Boolean, default=False, nullable=False
     )
@@ -471,7 +471,7 @@ class VerificationEvent(Base):
     )  # pending, passed, failed, expired
     trust_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     square_payment_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    # DEPRECATED: alternate processor_checkout_id removed — Square is sole payment processor
+    # DEPRECATED: stripe_checkout_id removed — Square is sole payment processor
     amount_cents: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
@@ -623,7 +623,7 @@ class DoubleDateAcceptance(Base):
     )
 
 
-# RefreshToken model for OPU-47 JWT refresh membership record rotation
+# RefreshToken model for OPU-47 JWT refresh token rotation
 from app.models_refresh_token import RefreshToken  # noqa: F401, E402
 
 # Import webhook retry models for table creation and scheduler access

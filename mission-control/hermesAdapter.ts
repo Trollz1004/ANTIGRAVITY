@@ -8,7 +8,7 @@ import axios, { AxiosInstance } from "axios";
 
 export interface PaperclipConfig {
   apiUrl: string; // e.g., "http://localhost:3000"
-  apiKey?: string; // JWT membership record or API key
+  apiKey?: string; // JWT token or API key
   companyId: string;
 }
 

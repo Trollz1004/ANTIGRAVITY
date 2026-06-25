@@ -174,7 +174,7 @@ $cashflowChecklist = @"
 - Review what made money fastest and repeat that first next week.
 
 ## Non-Negotiables
-- No non-product public-benefit language in any public or customer-facing copy.
+- No donation language in any public or customer-facing copy.
 - Every lead gets a same-day reply when possible.
 - Every pickup or drop-off needs a clear next action.
 - eBay throughput matters more than perfect formatting.

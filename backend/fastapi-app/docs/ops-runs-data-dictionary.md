@@ -88,7 +88,7 @@ Returned by all endpoints. Contains all `OpsRunCreate` fields plus server-genera
 
 ## API Endpoints
 
-All endpoints require **JWT authentication** (via `Authorization: Bearer <membership record>` header). The `get_current_user` dependency enforces active-user checks.
+All endpoints require **JWT authentication** (via `Authorization: Bearer <token>` header). The `get_current_user` dependency enforces active-user checks.
 
 ### POST `/api/v1/ops-runs`
 
@@ -98,7 +98,7 @@ Record a new ops-run event.
 | -------- | ----- |
 | **Method** | `POST` |
 | **Path** | `/api/v1/ops-runs` |
-| **Auth** | Required (JWT Bearer membership record) |
+| **Auth** | Required (JWT Bearer token) |
 | **Status Code** | `201 Created` |
 | **Request Model** | `OpsRunCreate` |
 | **Response Model** | `OpsRunResponse` |
@@ -137,7 +137,7 @@ List recent ops-run events, most-recent-first (sliced from the in-memory list).
 | -------- | ----- |
 | **Method** | `GET` |
 | **Path** | `/api/v1/ops-runs` |
-| **Auth** | Required (JWT Bearer membership record) |
+| **Auth** | Required (JWT Bearer token) |
 | **Query Params** | `limit` (integer, default `50`) — max number of records to return |
 | **Response Model** | `list[OpsRunResponse]` |
 
@@ -168,7 +168,7 @@ Retrieve a single ops-run event by its UUID.
 | -------- | ----- |
 | **Method** | `GET` |
 | **Path** | `/api/v1/ops-runs/{run_id}` |
-| **Auth** | Required (JWT Bearer membership record) |
+| **Auth** | Required (JWT Bearer token) |
 | **Path Params** | `run_id` (string, UUID v4) — the unique run identifier |
 | **Response Model** | `OpsRunResponse` |
 | **Error** | `404 Not Found` with code `NOT_FOUND` if the ID does not exist |
@@ -201,7 +201,7 @@ All error responses follow the standard `ErrorResponse` format from `app.error_r
 
 | HTTP Status | Error Code              | When                                      |
 | ----------- | ----------------------- | ----------------------------------------- |
-| 401         | `INVALID_CREDENTIALS`   | Missing or invalid JWT membership record              |
+| 401         | `INVALID_CREDENTIALS`   | Missing or invalid JWT token              |
 | 403         | `INSUFFICIENT_PERMISSIONS` | User account is inactive               |
 | 404         | `NOT_FOUND`             | `run_id` does not match any recorded run  |
 | 422         | `VALIDATION_ERROR`      | Request body fails Pydantic validation    |

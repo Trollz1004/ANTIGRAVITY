@@ -7,8 +7,8 @@ vi.mock('../../src/components/StackIntegrityWidget', () => ({
   StackIntegrityWidget: () => <div data-testid="stack-integrity-widget">Stack Integrity</div>,
 }));
 
-vi.mock('../../src/components/ProductPanel', () => ({
-  ProductPanel: () => <div data-testid="product-panel">Product Panel</div>,
+vi.mock('../../src/components/DaoPanel', () => ({
+  DaoPanel: () => <div data-testid="dao-panel">DAO Panel</div>,
 }));
 
 describe('Sidebar', () => {

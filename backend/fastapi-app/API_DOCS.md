@@ -1,4 +1,4 @@
-# YouAndINotAI API Documentation
+﻿# YouAndINotAI API Documentation
 
 **Version:** 0.1.0
 **Base URL:** `/api/v1`
@@ -446,15 +446,15 @@ Schema: `AuthTokenResponse`
   "properties": {
     "access_token": {
       "type": "string",
-      "title": "Access membership record"
+      "title": "Access Token"
     },
     "refresh_token": {
       "type": "string",
-      "title": "Refresh membership record"
+      "title": "Refresh Token"
     },
     "token_type": {
       "type": "string",
-      "title": "membership record Type",
+      "title": "Token Type",
       "default": "bearer"
     },
     "user_id": {
@@ -534,15 +534,15 @@ Schema: `AuthTokenResponse`
   "properties": {
     "access_token": {
       "type": "string",
-      "title": "Access membership record"
+      "title": "Access Token"
     },
     "refresh_token": {
       "type": "string",
-      "title": "Refresh membership record"
+      "title": "Refresh Token"
     },
     "token_type": {
       "type": "string",
-      "title": "membership record Type",
+      "title": "Token Type",
       "default": "bearer"
     },
     "user_id": {
@@ -596,7 +596,7 @@ Schema: `HTTPValidationError`
   "properties": {
     "id_token": {
       "type": "string",
-      "title": "Id membership record"
+      "title": "Id Token"
     }
   },
   "type": "object",
@@ -616,15 +616,15 @@ Schema: `AuthTokenResponse`
   "properties": {
     "access_token": {
       "type": "string",
-      "title": "Access membership record"
+      "title": "Access Token"
     },
     "refresh_token": {
       "type": "string",
-      "title": "Refresh membership record"
+      "title": "Refresh Token"
     },
     "token_type": {
       "type": "string",
-      "title": "membership record Type",
+      "title": "Token Type",
       "default": "bearer"
     },
     "user_id": {
@@ -700,15 +700,15 @@ Schema: `AuthTokenResponse`
   "properties": {
     "access_token": {
       "type": "string",
-      "title": "Access membership record"
+      "title": "Access Token"
     },
     "refresh_token": {
       "type": "string",
-      "title": "Refresh membership record"
+      "title": "Refresh Token"
     },
     "token_type": {
       "type": "string",
-      "title": "membership record Type",
+      "title": "Token Type",
       "default": "bearer"
     },
     "user_id": {
@@ -750,7 +750,7 @@ Schema: `HTTPValidationError`
 
 ## auth - POST /api/v1/auth/refresh
 
-**Summary:** Refresh membership record
+**Summary:** Refresh Token
 
 ### Request
 `POST /api/v1/auth/refresh`
@@ -762,7 +762,7 @@ Schema: `HTTPValidationError`
   "properties": {
     "refresh_token": {
       "type": "string",
-      "title": "Refresh membership record"
+      "title": "Refresh Token"
     }
   },
   "type": "object",
@@ -782,15 +782,15 @@ Schema: `AuthTokenResponse`
   "properties": {
     "access_token": {
       "type": "string",
-      "title": "Access membership record"
+      "title": "Access Token"
     },
     "refresh_token": {
       "type": "string",
-      "title": "Refresh membership record"
+      "title": "Refresh Token"
     },
     "token_type": {
       "type": "string",
-      "title": "membership record Type",
+      "title": "Token Type",
       "default": "bearer"
     },
     "user_id": {
@@ -3043,12 +3043,12 @@ Schema: `HTTPValidationError`
 
 ---
 
-## webhooks - POST /api/v1/webhooks/alternate processor
+## webhooks - POST /api/v1/webhooks/stripe
 
-**Summary:** alternate processor Webhook Retired
+**Summary:** Stripe Webhook Retired
 
 ### Request
-`POST /api/v1/webhooks/alternate processor`
+`POST /api/v1/webhooks/stripe`
 
 ### Responses
 **200 Successful Response**
@@ -4684,7 +4684,7 @@ Schema: `UserRegisterResponse`
     },
     "session_token": {
       "type": "string",
-      "title": "Session membership record"
+      "title": "Session Token"
     }
   },
   "type": "object",

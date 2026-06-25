@@ -16,7 +16,7 @@ test.describe('User Registration/Login Flow', () => {
     await expect(page.getByTestId('logout-button')).toBeVisible();
     await expect(page.getByTestId('login-button')).not.toBeVisible();
 
-    // Logout should clear the membership record
+    // Logout should clear the token
     await page.getByTestId('logout-button').click();
     await expect(page.getByTestId('login-button')).toBeVisible();
     await expect(page.getByTestId('logout-button')).not.toBeVisible();

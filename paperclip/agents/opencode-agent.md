@@ -22,10 +22,10 @@ paragraph about what the patch would do.
 Do not:
 - push to `main` directly — branch + PR only
 - create a new repo or app (1-repo policy: `Trollz1004/ANTIGRAVITY` is the only target)
-- write `non-product non-product or commercial misuse terms`
+- write `donate / donation / charity / charitable / solicitation / giving back / disbursement`
   on customer surfaces (canonical-7 ban, FL §496.405)
-- resurrect alternate processor on `youandinotai.com` (Square only there)
-- resurrect retired split-era splits or `productRouter100` / `Gospelsupport` chain artifacts
+- resurrect Stripe on `youandinotai.com` (Square only there)
+- resurrect 60/30/10 splits or `CharityRouter100` / `GospelDonation` chain artifacts
 - use `--no-verify` or `--no-gpg-sign` on commits
 - touch `services/hermes-router/.env*` to add Anthropic keys (hard wall per FOUNDER DOCTRINE 6)
 - read or output secrets from `.env`, the vault, or Credential Manager

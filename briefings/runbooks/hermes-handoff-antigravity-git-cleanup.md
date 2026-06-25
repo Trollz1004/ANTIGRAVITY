@@ -59,7 +59,7 @@ diff -q "/mnt/c/ANTIGRAVITY-git/MASTER-UNIVERSAL-ENV-TROLLZ1004.env" \
         "/mnt/c/Users/joshl/OneDrive/Personal Vault-Sabretooth/MASTER-UNIVERSAL-ENV-TROLLZ1004.env"
 ```
 
-If identical → mark 🟢 DROP. If different → mark 🟡 REVIEW with full diff (do NOT print the file content, just the diff lines that differ — and even then, redact any value that looks like a secret membership record to `***REDACTED***` before reporting).
+If identical → mark 🟢 DROP. If different → mark 🟡 REVIEW with full diff (do NOT print the file content, just the diff lines that differ — and even then, redact any value that looks like a secret token to `***REDACTED***` before reporting).
 
 ## Phase 2 — Punch list (for Joshua)
 

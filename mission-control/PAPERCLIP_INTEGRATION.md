@@ -20,7 +20,7 @@ ManusClaw integrates with Paperclip (https://github.com/paperclipai/paperclip) t
 2. Find the **Paperclip** section
 3. Enter your Paperclip configuration:
    - **API URL**: Your Paperclip instance URL (e.g., `http://localhost:3000`)
-   - **API Key**: Your Paperclip API key or JWT membership record
+   - **API Key**: Your Paperclip API key or JWT token
    - **Company ID**: Your Paperclip company ID
 
 4. Click **Save Configuration**
@@ -239,7 +239,7 @@ Upload files to tasks:
 
 ### Tasks not appearing
 
-**Solution:**
+**Solution:** 
 - Refresh the page
 - Check filters aren't hiding tasks
 - Verify Paperclip connection status

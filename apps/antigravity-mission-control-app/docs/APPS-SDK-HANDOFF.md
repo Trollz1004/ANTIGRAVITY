@@ -34,7 +34,7 @@ When Josh is ready to publish or connect it directly inside ChatGPT, wire the sa
 - This is not a wrapper for `ollama launch codex`.
 - This is not an autonomous ops agent.
 - This is not a secret manager.
-- This is not a Product/membership record/fundraising surface.
+- This is not a DAO/token/fundraising surface.
 
 ## Official References
 

@@ -171,11 +171,11 @@ interface NotificationCategory {
 - Click-through to relevant content
 - Analytics tracking for engagement
 
-## Design membership records
+## Design Tokens
 
-### Color membership records
+### Color Tokens
 
-| membership record                          | Value             | Usage                               |
+| Token                          | Value             | Usage                               |
 | ------------------------------ | ----------------- | ----------------------------------- |
 | `--notification-unread-bg`     | `--brand-accent`  | Background for unread notifications |
 | `--notification-high-priority` | `--color-warning` | High priority notification accent   |
@@ -183,18 +183,18 @@ interface NotificationCategory {
 | `--notification-badge-text`    | `--text-inverse`  | Notification badge text color       |
 | `--notification-border`        | `--text-tertiary` | Divider between notifications       |
 
-### Typography membership records
+### Typography Tokens
 
-| membership record                                | Value                    | Usage                     |
+| Token                                | Value                    | Usage                     |
 | ------------------------------------ | ------------------------ | ------------------------- |
 | `--font-size-notification-title`     | `--font-size-base`       | Notification title text   |
 | `--font-size-notification-content`   | `--font-size-sm`         | Notification content text |
 | `--font-size-notification-timestamp` | `--font-size-xs`         | Notification timestamp    |
 | `--font-weight-notification-title`   | `--font-weight-semibold` | Notification title weight |
 
-### Spacing membership records
+### Spacing Tokens
 
-| membership record                            | Value              | Usage                              |
+| Token                            | Value              | Usage                              |
 | -------------------------------- | ------------------ | ---------------------------------- |
 | `--spacing-notification-padding` | `var(--spacing-3)` | Internal padding for notifications |
 | `--spacing-notification-margin`  | `var(--spacing-2)` | Margin between notifications       |

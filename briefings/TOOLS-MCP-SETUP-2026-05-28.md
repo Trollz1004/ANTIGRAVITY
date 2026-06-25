@@ -22,7 +22,7 @@
 - ollama-claude.md — Hermes dispatcher, NO Anthropic key ✅
 - ollama-codex.md, ollama-hermes.md, ollama-openclaw.md, ollama-opencode.md, ollama-pi.md
 - paperclip-worker.md
-- router.md — membership record router, invoke FIRST for cost routing ✅
+- router.md — token router, invoke FIRST for cost routing ✅
 
 ### Skills
 - ClawX/skills/marketing-distributor.yaml ✅ — distribution layer for X/Discord/Bluesky/WhatsApp

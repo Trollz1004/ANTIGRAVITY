@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
   // If token exists, verify it
   if (token) {
     const payload = await verifyToken(token);
-
+    
     // Invalid token
     if (!payload) {
       const response = NextResponse.redirect(new URL('/auth/login', request.url));

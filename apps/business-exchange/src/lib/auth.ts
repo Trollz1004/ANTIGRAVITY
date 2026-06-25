@@ -14,7 +14,7 @@ export interface JWTPayload {
 export async function createToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): Promise<string> {
   const now = Math.floor(Date.now() / 1000);
   const expiresIn = 7 * 24 * 60 * 60; // 7 days
-
+  
   return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt(now)

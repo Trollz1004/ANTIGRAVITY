@@ -230,7 +230,7 @@ Home > Events > Create Event
 
 ## Visual Design Integration
 
-### Design membership record Application
+### Design Token Application
 
 ```css
 :root {

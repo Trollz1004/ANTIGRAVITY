@@ -1,6 +1,6 @@
 # GitHub Actions Secrets Checklist
 
-Repo: `Trollz1004/ANTIGRAVITY`
+Repo: `Trollz1004/ANTIGRAVITY`  
 Add these in GitHub repo settings:
 `https://github.com/Trollz1004/ANTIGRAVITY/settings/secrets/actions`
 
@@ -13,9 +13,9 @@ Add these in GitHub repo settings:
 ## Cloudflare / Deploy
 
 - [ ] `CLOUDFLARE_API_TOKEN`
-- [ ] `CF_API_TOKEN`
+- [ ] `CF_API_TOKEN`  
 Same value as `CLOUDFLARE_API_TOKEN` for scripts that still read the shorter alias.
-- [ ] `CLOUDFLARE_ADMIN_TOKEN`
+- [ ] `CLOUDFLARE_ADMIN_TOKEN`  
 Optional workflow alias; `.github/workflows/deploy-cloudflare-pages.yml` accepts this or `CLOUDFLARE_API_TOKEN`.
 
 ## Square
@@ -60,7 +60,7 @@ Optional workflow alias; `.github/workflows/deploy-cloudflare-pages.yml` accepts
 
 ## GitHub Automation
 
-- [ ] `GITHUB_PAT`
+- [ ] `GITHUB_PAT`  
 Not used by the app runtime. Keep only if repo scripts or local automation still depend on it.
-- [ ] `GITHUB_ADMIN`
-Optional admin-scoped alias if you intentionally maintain a second GitHub membership record.
+- [ ] `GITHUB_ADMIN`  
+Optional admin-scoped alias if you intentionally maintain a second GitHub token.

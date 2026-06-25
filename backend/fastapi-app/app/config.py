@@ -27,9 +27,9 @@ class Settings(BaseSettings):
         default="",
         description="Primary Supabase Postgres URL. Falls back to DATABASE_URL when unset.",
     )
-    # DEPRECATED: alternate processor removed — Square is the sole payment processor.
-    # alternate processor_secret_key: str = ""  # REMOVED — Iron Wall migration to Square
-    # alternate processor_webhook_secret: str = ""  # REMOVED — Iron Wall migration to Square
+    # DEPRECATED: Stripe removed — Square is the sole payment processor.
+    # stripe_secret_key: str = ""  # REMOVED — Iron Wall migration to Square
+    # stripe_webhook_secret: str = ""  # REMOVED — Iron Wall migration to Square
     square_access_token: str = ""
     square_location_id: str = ""
     square_bot_shield_payment_link: str = (

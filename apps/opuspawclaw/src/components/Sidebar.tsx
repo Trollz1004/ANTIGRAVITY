@@ -1,7 +1,7 @@
 import React from 'react';
 import { Code2, Image as ImageIcon, Search, MessageSquare, Settings, Plus, Rocket, Ticket, Compass } from 'lucide-react';
 import { useChat } from '../contexts/ChatContext';
-import { ProductMonitor } from './productMonitor';
+import { DAOMonitor } from './DAOMonitor';
 import { SystemStatus } from './SystemStatus';
 
 interface SidebarProps {
@@ -12,7 +12,7 @@ interface SidebarProps {
 export function Sidebar({ activeMode = 'code', onModeChange }: SidebarProps) {
   const { conversations, activeConversationId, selectConversation, createNewConversation } = useChat();
 
-  const getBtnClass = (mode: string) =>
+  const getBtnClass = (mode: string) => 
     `p-2 rounded-lg transition-colors flex items-center gap-3 w-full text-left ${activeMode === mode ? 'bg-[#1a2332] text-[#00d4ff]' : 'text-[#6b82a6] hover:text-[#e8f0ff] hover:bg-[#1a2332]'}`;
 
   return (
@@ -29,14 +29,14 @@ export function Sidebar({ activeMode = 'code', onModeChange }: SidebarProps) {
       <div className="flex-1 flex flex-col min-h-0">
         <div className="px-4 mb-2 flex items-center justify-between">
           <span className="text-[10px] font-bold text-[#4a5568] uppercase tracking-widest">History</span>
-          <button
+          <button 
             onClick={() => createNewConversation('New Chat', activeMode)}
             className="p-1 text-[#6b82a6] hover:text-[#00d4ff] transition-colors"
           >
             <Plus size={14} />
           </button>
         </div>
-
+        
         <div className="flex-1 overflow-y-auto px-2 space-y-1 custom-scrollbar">
           {conversations.map((conv) => (
             <button
@@ -46,8 +46,8 @@ export function Sidebar({ activeMode = 'code', onModeChange }: SidebarProps) {
                 onModeChange?.('chat');
               }}
               className={`w-full text-left px-3 py-2 rounded-md text-xs transition-all truncate border ${
-                activeConversationId === conv.id
-                  ? 'bg-[#1a2332] border-[#00d4ff]/30 text-[#00d4ff]'
+                activeConversationId === conv.id 
+                  ? 'bg-[#1a2332] border-[#00d4ff]/30 text-[#00d4ff]' 
                   : 'border-transparent text-[#6b82a6] hover:bg-[#1a2332] hover:text-[#e8f0ff]'
               }`}
             >
@@ -61,7 +61,7 @@ export function Sidebar({ activeMode = 'code', onModeChange }: SidebarProps) {
           )}
         </div>
 
-        <productMonitor />
+        <DAOMonitor />
       </div>
 
       <SystemStatus />

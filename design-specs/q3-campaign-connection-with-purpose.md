@@ -1,8 +1,3 @@
-> Current override as of 2026-06-22: this document is historical strategy/spec context only.
-> Do not use it to create public mission-funding claims, membership support routing, customer-facing
-> disbursement language, membership record/Product structure launch claims, private accounting mechanics, or alternate
-> payment rails. Active public/customer surfaces sell product value: membership, verification,
-> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 # Q3 Campaign: "Connection with Purpose" Design Specification
 
 ## Overview
@@ -46,7 +41,7 @@ Design specifications for the Q3 2026 "Connection with Purpose" campaign focused
 
 ### Primary Campaign Colors
 
-Using existing design system membership records with emphasis on:
+Using existing design system tokens with emphasis on:
 
 - `--brand-primary`: #FF4F00 (Alert Orange) - for primary actions and key messaging
 - `--volunteer-community`: #8B5CF6 (Purple) - for community and volunteering elements
@@ -90,7 +85,7 @@ Using existing design system membership records with emphasis on:
 
 - Features prominent headline "Connection with Purpose"
 - Clear call-to-action button: "Join Community Events"
-- Subtext highlighting internal allocation review model
+- Subtext highlighting contractual revenue disbursement model
 - Responsive image optimization for mobile bandwidth
 
 **Copy Stubs:**
@@ -138,7 +133,7 @@ Using existing design system membership records with emphasis on:
 **Copy Stubs:**
 
 - "Users have contributed \_\_\_ volunteer hours"
-- "$\_\_\_ in internal allocation review to children's initiatives"
+- "$\_\_\_ in contractual revenue disbursement to children's initiatives"
 - "\_\_\_ real-world connections formed this quarter"
 - "Active in \_\_\_ foundation cities"
 

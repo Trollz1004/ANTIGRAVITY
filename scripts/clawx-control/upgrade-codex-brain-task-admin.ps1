@@ -73,7 +73,7 @@ Register-ScheduledTask `
     -Trigger @($triggerBoot, $triggerLogon, $triggerLoop) `
     -Settings $settings `
     -Principal $principal `
-    -Description "Creates CodeX orchestrator checkpoints and handoff files for membership record-safe recovery." `
+    -Description "Creates CodeX orchestrator checkpoints and handoff files for token-safe recovery." `
     -Force | Out-Null
 
 Start-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue

@@ -68,7 +68,7 @@ NODE_AUTOMATION_MATRIX = {
         "automated": [
             "Refresh the safe-node control pack in CodeX/state/marketing.",
             "Publish the current node/platform matrix with automated vs not-automated boundaries.",
-            "Run the public-copy policy audit to catch banned non-product wording and stale payment/copy drift.",
+            "Run the public-copy policy audit to catch banned donation-style wording and stale payment/copy drift.",
             "Keep the Perplexity / Devvit / LinkedIn handoff files current for human-gated publishing.",
         ],
         "not_automated": [
@@ -247,7 +247,7 @@ def build_perplexity_handoff(articles: list[dict]) -> str:
             "## Guardrails",
             "- Keep tone human and non-spammy.",
             "- Avoid automation-looking reply chains or duplicate blasts.",
-            "- Avoid revenue-split, public-benefit, blockchain, or governance claims in public marketing drafts unless a specific review requires them.",
+            "- Avoid revenue-split, charity, blockchain, or governance claims in public marketing drafts unless a specific review requires them.",
         ]
     )
     return "\n".join(lines)

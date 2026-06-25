@@ -85,7 +85,7 @@ Facilitates finding, connecting with, and maintaining community relationships.
 
 ### Existing Design System
 
-- All new components utilize existing design membership records
+- All new components utilize existing design tokens
 - Mobile-first principles maintained across all implementations
 - Accessibility standards (WCAG 2.1 AA) applied consistently
 - Trust-building patterns integrated throughout
@@ -114,7 +114,7 @@ Core Component Foundation
 └── Modal/Dialog (existing)
 
 Design System Foundation
-├── Color membership records (extended)
+├── Color Tokens (extended)
 ├── Typography (existing)
 ├── Spacing System (existing)
 └── Accessibility Patterns (enhanced)
@@ -122,11 +122,11 @@ Design System Foundation
 
 ## Design System Extensions
 
-### New Color membership records
+### New Color Tokens
 
-Additional membership records to support communication features:
+Additional tokens to support communication features:
 
-| Category         | membership records Added                   |
+| Category         | Tokens Added                   |
 | ---------------- | ------------------------------ |
 | Message States   | `--message-status-*` series    |
 | Notification UI  | `--notification-*` series      |

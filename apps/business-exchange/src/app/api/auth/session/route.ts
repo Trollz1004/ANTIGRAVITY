@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const cookies = request.headers.get('cookie') || '';
     const token = getTokenFromCookie(cookies);
-
+    
     if (!token) {
       return NextResponse.json({ success: false }, { status: 401 });
     }
@@ -28,10 +28,11 @@ export async function POST(request: NextRequest) {
     });
 
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-
+    const sessionToken = generateSessionToken();
+    
     await prisma.session.update({
       where: { id: session.id },
-      data: { token: newToken, expiresAt },
+      data: { token: sessionToken, expiresAt },
     });
 
     const response = NextResponse.json({ success: true });

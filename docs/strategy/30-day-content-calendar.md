@@ -167,7 +167,7 @@
 ### Day 27 (Saturday) - Social Impact Saturday
 
 **Channel**: Instagram Stories, newsletter
-**Content**: "Social Impact Saturday: Check the app's business-reserve Hours Tracker for this weekend's opportunities to earn hours toward your personal impact badge."
+**Content**: "Social Impact Saturday: Check the app's Charitable Hours Tracker for this weekend's opportunities to earn hours toward your personal impact badge."
 **Visual**: Badge progression system showcase
 
 ### Day 28 (Sunday) - Month End Reflection

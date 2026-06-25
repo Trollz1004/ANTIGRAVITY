@@ -10,7 +10,7 @@ Square payments are recorded in the revenue ledger with:
 - internal reserve amount, currently `0`
 - payer type, so founder tests stay separate from customer revenue
 
-The ledger must not create public funding claims, investment promises, membership record
+The ledger must not create public funding claims, investment promises, token
 claims, or restricted reserve obligations.
 
 ## Files

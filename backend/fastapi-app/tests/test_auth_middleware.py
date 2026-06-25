@@ -2,8 +2,8 @@
 
 Covers:
   - get_current_user (auth middleware) behavior
-  - Refresh membership record flow
-  - membership record revocation via user inactive status
+  - Refresh token flow
+  - Token revocation via user inactive status
 """
 
 import os
@@ -66,10 +66,8 @@ async def inactive_user():
 # Tests for get_current_user (auth middleware)
 class TestGetCurrentUser:
     async def test_valid_token_returns_user(self, mock_db, active_user):
-        membership_record = create_access_token(str(active_user.id))
-        creds = HTTPAuthorizationCredentials(
-            scheme="Bearer", credentials=membership_record
-        )
+        token = create_access_token(str(active_user.id))
+        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
         mock_db.scalar.return_value = active_user
 
         user = await get_current_user(creds, mock_db)
@@ -78,7 +76,7 @@ class TestGetCurrentUser:
 
     async def test_invalid_token_raises_401(self, mock_db):
         creds = HTTPAuthorizationCredentials(
-            scheme="Bearer", credentials="invalid.membership record"
+            scheme="Bearer", credentials="invalid.token"
         )
         with pytest.raises(HTTPException) as exc:
             await get_current_user(creds, mock_db)
@@ -86,10 +84,8 @@ class TestGetCurrentUser:
 
     async def test_user_not_found_raises_401(self, mock_db):
         user_id = str(uuid.uuid4())
-        membership_record = create_access_token(user_id)
-        creds = HTTPAuthorizationCredentials(
-            scheme="Bearer", credentials=membership_record
-        )
+        token = create_access_token(user_id)
+        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
         mock_db.scalar.return_value = None
 
         with pytest.raises(HTTPException) as exc:
@@ -97,10 +93,8 @@ class TestGetCurrentUser:
         assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_inactive_user_raises_403(self, mock_db, inactive_user):
-        membership_record = create_access_token(str(inactive_user.id))
-        creds = HTTPAuthorizationCredentials(
-            scheme="Bearer", credentials=membership_record
-        )
+        token = create_access_token(str(inactive_user.id))
+        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
         mock_db.scalar.return_value = inactive_user
 
         with pytest.raises(HTTPException) as exc:
@@ -109,10 +103,8 @@ class TestGetCurrentUser:
 
     async def test_subscription_sync_commits_on_change(self, mock_db, active_user):
         active_user.subscription_active = False
-        membership_record = create_access_token(str(active_user.id))
-        creds = HTTPAuthorizationCredentials(
-            scheme="Bearer", credentials=membership_record
-        )
+        token = create_access_token(str(active_user.id))
+        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
 
         # Mock sync_subscription_state to flip the flag
         with patch("app.auth.sync_subscription_state") as mock_sync:
@@ -128,7 +120,7 @@ class TestGetCurrentUser:
             assert user.subscription_active is True
 
     async def test_expired_access_token_raises_401(self, mock_db, active_user):
-        """Test that an expired access membership record is rejected."""
+        """Test that an expired access token is rejected."""
         expired_payload = {
             "sub": str(active_user.id),
             "exp": datetime.now(timezone.utc) - timedelta(minutes=1),
@@ -143,10 +135,10 @@ class TestGetCurrentUser:
         assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_token_wrong_signature_raises_401(self, mock_db, active_user):
-        """Test that a membership record signed with wrong secret is rejected."""
-        membership_record = create_access_token(str(active_user.id))
-        # Tamper with the membership record signature
-        parts = membership_record.split(".")
+        """Test that a token signed with wrong secret is rejected."""
+        token = create_access_token(str(active_user.id))
+        # Tamper with the token signature
+        parts = token.split(".")
         tampered_token = f"{parts[0]}.{parts[1]}.invalidsignature"
         creds = HTTPAuthorizationCredentials(
             scheme="Bearer", credentials=tampered_token
@@ -157,13 +149,11 @@ class TestGetCurrentUser:
         assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_revoked_token_after_user_deactivation(self, mock_db, active_user):
-        """Test membership record issued before user deactivation is rejected."""
-        membership_record = create_access_token(str(active_user.id))
-        # Deactivate user after membership record issuance (simulate revocation)
+        """Test token issued before user deactivation is rejected."""
+        token = create_access_token(str(active_user.id))
+        # Deactivate user after token issuance (simulate revocation)
         active_user.is_active = False
-        creds = HTTPAuthorizationCredentials(
-            scheme="Bearer", credentials=membership_record
-        )
+        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
         mock_db.scalar.return_value = active_user
 
         with pytest.raises(HTTPException) as exc:
@@ -171,7 +161,7 @@ class TestGetCurrentUser:
         assert exc.value.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_malformed_token_raises_401(self, mock_db):
-        """Test that a membership record with wrong number of parts is rejected."""
+        """Test that a token with wrong number of parts is rejected."""
         creds = HTTPAuthorizationCredentials(
             scheme="Bearer", credentials="part1.part2"
         )  # Only 2 parts
@@ -180,38 +170,32 @@ class TestGetCurrentUser:
         assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_token_missing_sub_claim_raises_401(self, mock_db):
-        """Test that a membership record without 'sub' claim is rejected."""
+        """Test that a token without 'sub' claim is rejected."""
         payload = {"exp": datetime.now(timezone.utc) + timedelta(minutes=30)}
-        membership_record = jwt.encode(
-            payload, os.environ["JWT_SECRET"], algorithm=ALGORITHM
-        )
-        creds = HTTPAuthorizationCredentials(
-            scheme="Bearer", credentials=membership_record
-        )
+        token = jwt.encode(payload, os.environ["JWT_SECRET"], algorithm=ALGORITHM)
+        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
         with pytest.raises(HTTPException) as exc:
             await get_current_user(creds, mock_db)
         assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED
-        assert "Invalid membership record payload" in exc.value.detail
+        assert "Invalid token payload" in exc.value.detail
 
     async def test_token_wrong_algorithm_raises_401(self, mock_db):
-        """Test that a membership record using wrong algorithm is rejected."""
+        """Test that a token using wrong algorithm is rejected."""
         user_id = str(uuid.uuid4())
         payload = {
             "sub": user_id,
             "exp": datetime.now(timezone.utc) + timedelta(minutes=30),
         }
-        membership_record = jwt.encode(
+        token = jwt.encode(
             payload, os.environ["JWT_SECRET"], algorithm="HS384"
         )  # Wrong algo
-        creds = HTTPAuthorizationCredentials(
-            scheme="Bearer", credentials=membership_record
-        )
+        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
         with pytest.raises(HTTPException) as exc:
             await get_current_user(creds, mock_db)
         assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-# Tests for refresh membership record flow
+# Tests for refresh token flow
 class TestRefreshFlow:
     async def test_valid_refresh_token_returns_new_tokens(self):
         from fastapi.testclient import TestClient
@@ -264,7 +248,7 @@ class TestRefreshFlow:
             json={"refresh_token": access_token},
         )
         assert response.status_code == 401
-        assert "Not a refresh membership record" in response.json()["message"]
+        assert "Not a refresh token" in response.json()["message"]
 
     async def test_expired_refresh_token_raises_401(self):
         from fastapi.testclient import TestClient
@@ -289,7 +273,7 @@ class TestRefreshFlow:
         assert response.status_code == 401
 
     async def test_refresh_token_non_existent_user_raises_401(self):
-        """Test refresh membership record with non-existent user returns 401."""
+        """Test refresh token with non-existent user returns 401."""
         from fastapi.testclient import TestClient
 
         from app.main import app
@@ -343,51 +327,47 @@ class TestAuthUtils:
         assert verify_password("password", "invalid-hash") is False
 
     async def test_decode_token_valid(self):
-        """Test that decode_token returns payload for valid membership_record."""
+        """Test that decode_token returns payload for valid token."""
         user_id = str(uuid.uuid4())
-        membership_record = create_access_token(user_id)
-        payload = decode_token(membership_record)
+        token = create_access_token(user_id)
+        payload = decode_token(token)
         assert payload["sub"] == user_id
 
     async def test_decode_token_invalid_raises_401(self):
-        """Test that decode_token raises 401 for invalid membership_record."""
+        """Test that decode_token raises 401 for invalid token."""
         with pytest.raises(HTTPException) as exc:
-            decode_token("invalid.membership_record.here")
+            decode_token("invalid.token.here")
         assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_get_current_user_invalid_uuid(self, mock_db):
-        """Test that get_current_user raises 401 for invalid UUID in membership_record."""
-        # Create a membership record with an invalid UUID in sub
+        """Test that get_current_user raises 401 for invalid UUID in token."""
+        # Create a token with an invalid UUID in sub
         payload = {
             "sub": "not-a-uuid",
             "exp": datetime.now(timezone.utc) + timedelta(minutes=30),
         }
-        membership_record = jwt.encode(
-            payload, os.environ["JWT_SECRET"], algorithm=ALGORITHM
-        )
-        creds = HTTPAuthorizationCredentials(
-            scheme="Bearer", credentials=membership_record
-        )
+        token = jwt.encode(payload, os.environ["JWT_SECRET"], algorithm=ALGORITHM)
+        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
         with pytest.raises(HTTPException) as exc:
             await get_current_user(creds, mock_db)
         assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED
-        assert "Invalid membership record payload" in exc.value.detail
+        assert "Invalid token payload" in exc.value.detail
 
     # Note: verify_google_token requires network call to Google, so we mock it
     async def test_verify_google_token_valid(self):
-        """Test verify_google_token returns payload for valid Google membership_record."""
+        """Test verify_google_token returns payload for valid Google token."""
         with patch("app.auth.id_token.verify_oauth2_token") as mock_verify:
             mock_verify.return_value = {
                 "email": "test@example.com",
                 "sub": "google-123",
             }
-            result = verify_google_token("valid-google-membership record")
+            result = verify_google_token("valid-google-token")
             assert result["email"] == "test@example.com"
 
     async def test_verify_google_token_invalid(self):
-        """Test verify_google_token raises 401 for invalid membership_record."""
+        """Test verify_google_token raises 401 for invalid token."""
         with patch("app.auth.id_token.verify_oauth2_token") as mock_verify:
-            mock_verify.side_effect = ValueError("Invalid membership record")
+            mock_verify.side_effect = ValueError("Invalid token")
             with pytest.raises(HTTPException) as exc:
-                verify_google_token("invalid-google-membership record")
+                verify_google_token("invalid-google-token")
             assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED

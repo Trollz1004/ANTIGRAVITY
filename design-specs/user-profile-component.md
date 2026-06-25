@@ -352,7 +352,7 @@ interface UserProfileData {
 └─────────────────────────────────────────────┘
 ```
 
-### Design membership records Usage
+### Design Tokens Usage
 
 ```css
 .user-profile {
@@ -701,7 +701,7 @@ const UserProfile = ({
 ## Dependencies
 
 - React 19 (front-end framework)
-- Design system membership records (CSS variables)
+- Design system tokens (CSS variables)
 - Icons from design system
 - CSS animations and transitions
 - Date formatting utility

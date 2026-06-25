@@ -1,8 +1,3 @@
-> Current override as of 2026-06-22: this document is historical strategy/spec context only.
-> Do not use it to create public mission-funding claims, membership support routing, customer-facing
-> disbursement language, membership record/Product structure launch claims, private accounting mechanics, or alternate
-> payment rails. Active public/customer surfaces sell product value: membership, verification,
-> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 # Detailed Volunteer Features Enhancement Specification
 
 ## Overview
@@ -112,7 +107,7 @@ interface EnhancedVolunteerOpportunity {
 
 ##### Default State
 
-- Category-colored header bar using design system membership records
+- Category-colored header bar using design system tokens
 - Organization name with verification badge
 - Clear title and descriptive excerpt
 - Impact projection badge with children's support visualization
@@ -173,7 +168,7 @@ interface EnhancedVolunteerOpportunity {
   <div className="impact-summary" id={`opportunity-impact-${opportunity.id}`}>
     <span className="sr-only">
       This opportunity supports approximately {opportunity.impactProjection.childrenSupported} children through
-      internal allocation review.
+      contractual revenue disbursement.
     </span>
     <div className="impact-badge" aria-hidden="true">
       {/* Visual representation */}
@@ -764,11 +759,11 @@ const VirtualizedDashboard = ({ userData, communityData }) => {
 
 1. **Messaging Integration Points**:
    - Impact projection phrasing that emphasizes community benefit without violating Florida §496.405
-   - Achievement recognition language that celebrates contribution without implying membership support
+   - Achievement recognition language that celebrates contribution without implying donation
    - Testimonial gathering framework that focuses on connection rather than contribution amount
 
 2. **Legal Compliance Updates**:
-   - Review of all "internal allocation review" phrasing
+   - Review of all "contractual revenue disbursement" phrasing
    - Clear separation of platform benefit descriptions from fundraising language
    - Accessibility statement alignment for marketing materials
    - Privacy notice updates for enhanced tracking features

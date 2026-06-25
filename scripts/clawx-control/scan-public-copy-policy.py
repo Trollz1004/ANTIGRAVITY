@@ -83,15 +83,15 @@ RULES = [
         "id": "payment_provider_drift",
         "label": "Legacy payment drift",
         "patterns": [
-            r"\balternate processor\b",
+            r"\bstripe\b",
         ],
     },
     {
-        "id": "public-benefit_copy_drift",
-        "label": "public-benefit copy drift",
+        "id": "charity_copy_drift",
+        "label": "Charity copy drift",
         "patterns": [
-            r"public-benefit impact",
-            r"projected public-benefit",
+            r"charity impact",
+            r"projected charity",
             r"every dollar goes to",
         ],
     },

@@ -34,12 +34,12 @@ function Resolve-GitHubToken {
     }
 
     try {
-        $membership record = (gh auth membership record 2>$null).Trim()
-        if (-not [string]::IsNullOrWhiteSpace($membership record)) {
-            return $membership record
+        $token = (gh auth token 2>$null).Trim()
+        if (-not [string]::IsNullOrWhiteSpace($token)) {
+            return $token
         }
     } catch {
-        # Ignore and continue without a membership record.
+        # Ignore and continue without a token.
     }
 
     return $null
@@ -75,7 +75,7 @@ foreach ($server in $ConfigObj.mcpServers.PSObject.Properties) {
     $server.Value.env | Add-Member -NotePropertyName "HOME" -NotePropertyValue $UserProfile -Force
 }
 
-# Codex project-local MCP file should stay membership record-free and local-only.
+# Codex project-local MCP file should stay token-free and local-only.
 $ProjectConfig = $ConfigObj | ConvertTo-Json -Depth 5
 
 $githubToken = Resolve-GitHubToken
@@ -84,12 +84,12 @@ if (-not $ConfigObj.mcpServers.github.env) {
 }
 if (-not [string]::IsNullOrWhiteSpace($githubToken)) {
     $ConfigObj.mcpServers.github.env | Add-Member -NotePropertyName "GITHUB_PERSONAL_ACCESS_TOKEN" -NotePropertyValue $githubToken -Force
-    Write-Host "  ✅ GitHub MCP membership record configured from env/keyring"
+    Write-Host "  ✅ GitHub MCP token configured from env/keyring"
 } else {
     if ($ConfigObj.mcpServers.github.env.PSObject.Properties.Name -contains "GITHUB_PERSONAL_ACCESS_TOKEN") {
         $ConfigObj.mcpServers.github.env.PSObject.Properties.Remove("GITHUB_PERSONAL_ACCESS_TOKEN")
     }
-    Write-Host "  ⚠️  GitHub MCP membership record not found in env/keyring (github MCP may be limited)" -ForegroundColor Yellow
+    Write-Host "  ⚠️  GitHub MCP token not found in env/keyring (github MCP may be limited)" -ForegroundColor Yellow
 }
 
 $FinalConfig = $ConfigObj | ConvertTo-Json -Depth 5

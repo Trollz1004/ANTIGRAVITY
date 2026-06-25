@@ -82,7 +82,7 @@ from app.session_store import create_session, get_session, delete_session, touch
 async def login_user(user_id: str):
     session_data = {"user_agent": "...", "last_login_ip": "..."}
     session_id = await create_session(user_id, session_data, ttl=3600)
-    # Return session_id to client (e.g., as a cookie or membership record)
+    # Return session_id to client (e.g., as a cookie or token)
 
 async def authenticate_request(session_id: str):
     session = await get_session(session_id)

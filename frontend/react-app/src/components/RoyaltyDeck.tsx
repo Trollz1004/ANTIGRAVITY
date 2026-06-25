@@ -258,8 +258,8 @@ function HolographicCard() {
               </p>
               <p>
                 The Royalty Card is a platform membership product. It does not
-                represent equity, ownership, company control-mechanics claims,
-                or an investment return.
+                represent equity, ownership, company control rights, or an
+                investment return.
               </p>
               <p>
                 Maximum{' '}

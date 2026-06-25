@@ -4,7 +4,7 @@ import type {
   Mission,
   NavItem,
   RevenueBucket,
-  membership records,
+  Token,
 } from "./types";
 
 // ---------------------------------------------------------------------
@@ -141,17 +141,17 @@ export const WORKERS: Agent[] = [
 export const AGENTS: Agent[] = [...ORCHESTRATORS, ...WORKERS];
 
 // ---------------------------------------------------------------------
-// Product catalog — the 4-Product membership records set per design_guidelines.json
+// Tokenomics — the 4-DAO token set per design_guidelines.json
 // ---------------------------------------------------------------------
 
-export const membership records: membership records[] = [
+export const TOKENS: Token[] = [
   {
     symbol: "LOVE",
-    name: "Love Product",
+    name: "Love DAO",
     color: "#EF4444",
     supplyCap: 2_500_000,
     circulating: 1_240_000,
-    business reserve: 980_000,
+    treasury: 980_000,
     burned: 280_000,
     price: 0.142,
     delta24h: 4.2,
@@ -162,7 +162,7 @@ export const membership records: membership records[] = [
     color: "#3B82F6",
     supplyCap: 2_500_000,
     circulating: 980_000,
-    business reserve: 1_320_000,
+    treasury: 1_320_000,
     burned: 200_000,
     price: 0.087,
     delta24h: -1.8,
@@ -173,7 +173,7 @@ export const membership records: membership records[] = [
     color: "#10B981",
     supplyCap: 2_500_000,
     circulating: 1_650_000,
-    business reserve: 720_000,
+    treasury: 720_000,
     burned: 130_000,
     price: 0.214,
     delta24h: 2.1,
@@ -184,7 +184,7 @@ export const membership records: membership records[] = [
     color: "#F59E0B",
     supplyCap: 2_500_000,
     circulating: 1_410_000,
-    business reserve: 870_000,
+    treasury: 870_000,
     burned: 220_000,
     price: 0.331,
     delta24h: 6.4,
@@ -204,7 +204,7 @@ export const REVENUE_BUCKETS: RevenueBucket[] = [
   { id: 6, name: "Data Licensing",     value:  4_310, streams:  2, compounding: true,  trend: 0.41 },
   { id: 7, name: "Tool Marketplace",   value:  3_870, streams:  7, compounding: true,  trend: 0.08 },
   { id: 8, name: "Consulting",         value:  2_640, streams:  5, compounding: false, trend: -0.04 },
-  { id: 9, name: "Product Support", value:  1_980, streams:  3, compounding: false, trend: 0.12 },
+  { id: 9, name: "Grants & Donations", value:  1_980, streams:  3, compounding: false, trend: 0.12 },
   { id: 10,name: "Royalty Pool",       value:  1_120, streams:  2, compounding: true,  trend: 0.07 },
 ];
 
@@ -248,7 +248,7 @@ export const NAV: NavItem[] = [
   { group: "Orchestration", id: "comms",      label: "Comms Gateway",   icon: "Radio" },
   { group: "Orchestration", id: "paperweight",label: "Paperweight",     icon: "StickyNote",       badge: "8" },
   { group: "Engine",        id: "revenue",    label: "Revenue Engine",  icon: "Banknote" },
-  { group: "Engine",        id: "membership records",     label: "Product catalog",      icon: "Coins" },
+  { group: "Engine",        id: "tokens",     label: "Tokenomics",      icon: "Coins" },
   { group: "System",        id: "settings",   label: "Settings",        icon: "Settings" },
 ];
 
@@ -282,8 +282,8 @@ export function makeSparkline(
 }
 
 // ---------------------------------------------------------------------
-// members-funded counter — ticks up while the dashboard is open.
+// Kids-funded counter — ticks up while the dashboard is open.
 // Source: design_guidelines.json ("MissionTicker" + "ticker" motion).
 // ---------------------------------------------------------------------
 
-export const member_supportED_START = 10_482;
+export const KIDS_FUNDED_START = 10_482;

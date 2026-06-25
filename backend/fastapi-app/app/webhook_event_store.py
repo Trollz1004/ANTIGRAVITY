@@ -1,6 +1,6 @@
 """Schema-aware access helpers for webhook_events.
 
-Production has older webhook_events tables that still use `alternate processor_event_id`,
+Production has older webhook_events tables that still use `stripe_event_id`,
 while newer local databases use `event_source_id` + `event_source`.
 These helpers keep runtime behavior compatible with either layout.
 """
@@ -48,9 +48,7 @@ async def get_webhook_event_schema(
 
         columns = frozenset(column.name for column in table.columns)
         external_id_column = (
-            "event_source_id"
-            if "event_source_id" in columns
-            else "alternate processor_event_id"
+            "event_source_id" if "event_source_id" in columns else "stripe_event_id"
         )
         return WebhookEventSchema(
             table=table,

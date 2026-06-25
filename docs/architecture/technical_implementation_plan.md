@@ -1,8 +1,3 @@
-> Current override as of 2026-06-22: this document is historical strategy/spec context only.
-> Do not use it to create public mission-funding claims, membership support routing, customer-facing
-> disbursement language, membership record/Product structure launch claims, private accounting mechanics, or alternate
-> payment rails. Active public/customer surfaces sell product value: membership, verification,
-> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 # Technical Implementation Plan for CTO
 
 ## Overview
@@ -85,7 +80,7 @@ This document outlines the specific technical implementation tasks that need to 
 
 1. Unit tests for core backend logic (FastAPI services)
 2. Unit tests for frontend components and utilities
-3. Integration tests for signup, verification, matching, product operations flows
+3. Integration tests for signup, verification, matching, charity flows
 4. Test coverage requirements (80%+ target)
 
 ## Implementation Guidelines
@@ -98,8 +93,8 @@ This document outlines the specific technical implementation tasks that need to 
 
 ### Security Compliance
 
-- Maintain Florida Statute §496.405 compliance (no "join as a member"/"membership support" terminology)
-- Ensure all product operations-related features use "internal allocation review" terminology
+- Maintain Florida Statute §496.405 compliance (no "donate"/"donation" terminology)
+- Ensure all charity-related features use "contractual revenue disbursement" terminology
 - Regular security audits and vulnerability scans
 
 ### Performance Requirements

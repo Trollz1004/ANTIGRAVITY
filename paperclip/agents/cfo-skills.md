@@ -1,6 +1,6 @@
 # SKILLS.md — CFO (from consolidated hermes/agents/roles/CFO.md + memory)
 
-- Payment rail ownership (alternate processor vs Square separation, merchant accounts)
+- Payment rail ownership (Stripe vs Square separation, merchant accounts)
 - Bucket floor monitoring (10% cap internal only)
 - Live surface doctrine verification (no §496.405 trap language)
 - Revenue allocation ledger tracking

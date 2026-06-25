@@ -24,8 +24,8 @@ const featureCards = [
   },
   {
     icon: MessageCircle,
-    title: 'Match and chat',
-    body: 'Like or comment on a profile answer, photo, or shared interest, then keep the conversation moving in one clear chat flow.',
+    title: 'Prompt-first matching',
+    body: 'Users like or comment on a specific prompt, photo, or interest so the first message has context.',
   },
   {
     icon: CalendarCheck,
@@ -40,12 +40,11 @@ const featureCards = [
 ];
 
 const mvpFlow = [
-  'Set up a real profile with intent, interests, photos, and one clear answer.',
-  'Verify before entering discovery.',
-  'Discover verified people with clear intent, distance, and availability.',
-  'Match from a like or comment on a photo, answer, or shared interest.',
-  'Chat with report, block, and support actions close by.',
-  'Use Plans to choose a public first meetup and share/check in when ready.',
+  'Create a profile with intent, interests, and one strong prompt.',
+  'Verify the account before entering the main discovery lane.',
+  'Discover profiles with verification, intent, availability, and compatibility context.',
+  'Like or comment on a prompt to open better conversations.',
+  'Use Plans to prepare a safer first meetup when chat is ready.',
 ];
 
 function PhonePreview({ isDarkMode }: { isDarkMode: boolean }) {
@@ -92,13 +91,13 @@ function PhonePreview({ isDarkMode }: { isDarkMode: boolean }) {
                   Maya, 31
                 </h3>
                 <p className="mt-2 text-sm font-bold text-slate-700">
-                Relationship-minded in Orlando, FL
+                  Relationship ready - Orlando, FL
                 </p>
               </div>
             </div>
             <div className="border-t-4 border-slate-950 bg-white p-4">
               <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#dc2626]">
-                Profile question
+                Prompt
               </p>
               <p className="mt-2 text-lg font-black leading-snug">
                 My ideal first date is coffee, a bookstore, and no pressure to
@@ -198,7 +197,7 @@ export default function Dashboard() {
           <div className="flex flex-col justify-center">
             <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-red-500/40 bg-red-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-red-400">
               <Heart size={15} />
-              Dating app preview
+              Google Play MVP path
             </div>
             <h2 className="max-w-4xl text-5xl font-black leading-[0.88] tracking-[-0.09em] sm:text-6xl lg:text-7xl">
               real profiles before real dates.
@@ -208,9 +207,9 @@ export default function Dashboard() {
                 isDarkMode ? 'text-slate-300' : 'text-slate-600'
               }`}
             >
-              YouAndINotAI is being built around simple dating features people
-              already understand: a real profile, verification, discovery,
-              matches, chat, and safer first-date planning.
+              YouAndINotAI is being built around the patterns users already
+              trust in top dating apps: verification, prompt-rich profiles,
+              safer chat, clear intent, and simple date planning.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
@@ -273,18 +272,19 @@ export default function Dashboard() {
           <div>
             <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white">
               <Sparkles size={15} />
-              First things first
+              Build order
             </div>
             <h2 className="text-4xl font-black leading-none tracking-[-0.08em]">
-              start with safer real connections.
+              ship the trust loop first.
             </h2>
             <p
               className={`mt-4 leading-7 ${
                 isDarkMode ? 'text-slate-400' : 'text-slate-600'
               }`}
             >
-              The first experience focuses on the trust loop: profile,
-              verification, discovery, match, chat, and a simple safe plan flow.
+              AI chemistry, group dates, and event-heavy recommendations can
+              wait. The first Google Play path needs profile, verification,
+              discovery, match, chat, and safe plan flow.
             </p>
           </div>
           <ol className="grid gap-3">
@@ -313,21 +313,8 @@ export default function Dashboard() {
             isDarkMode ? 'text-slate-600' : 'text-slate-500'
           }`}
         >
-          <div className="mb-3 flex flex-wrap justify-center gap-4">
-            <a href="/terms" className="underline underline-offset-4">
-              Terms
-            </a>
-            <a href="/privacy" className="underline underline-offset-4">
-              Privacy
-            </a>
-            <a href="/cookies" className="underline underline-offset-4">
-              Cookies
-            </a>
-          </div>
-          <p>
-            Payments are processed by Square. Membership and verification are
-            secure purchases for app access and account verification.
-          </p>
+          Payments are processed by Square. Membership and verification are
+          product access transactions.
         </footer>
       </div>
     </main>

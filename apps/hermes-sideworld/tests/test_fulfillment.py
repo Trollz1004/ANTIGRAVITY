@@ -11,7 +11,7 @@ import pytest
 
 from hermes_sideworld.demo import issue_admin_license, issue_license_for_purchase, list_contacts
 from hermes_sideworld.email_delivery import build_license_email
-from hermes_sideworld.fulfillment import handle_alternate processor_webhook, verify_alternate processor_signature
+from hermes_sideworld.fulfillment import handle_stripe_webhook, verify_stripe_signature
 
 
 @pytest.fixture(autouse=True)
@@ -66,18 +66,18 @@ def test_license_email_has_no_blocked_public_terms():
         license_key="AIS-BOT-SHIELD-12345678-90abcdef-12345678",
     )
     combined = f"{subject}\n{body}".lower()
-    for term in ("support", "support", "product", "commercial misuse", "product value", "allocation"):
+    for term in ("donate", "donation", "charity", "solicitation", "giving back", "disbursement"):
         assert term not in combined
 
 
-def test_verify_alternate processor_signature():
+def test_verify_stripe_signature():
     secret = "whsec_test"
     payload = b'{"type":"checkout.session.completed"}'
-    assert verify_alternate processor_signature(payload, _signature(payload, secret), secret)
-    assert not verify_alternate processor_signature(payload, "t=1,v1=bad", secret)
+    assert verify_stripe_signature(payload, _signature(payload, secret), secret)
+    assert not verify_stripe_signature(payload, "t=1,v1=bad", secret)
 
 
-def test_handle_alternate processor_webhook_issues_and_delivers(monkeypatch):
+def test_handle_stripe_webhook_issues_and_delivers(monkeypatch):
     secret = "whsec_test"
     event = {
         "id": "evt_123",
@@ -85,13 +85,13 @@ def test_handle_alternate processor_webhook_issues_and_delivers(monkeypatch):
         "data": {
             "object": {
                 "id": "cs_live_123",
-                "payment_link": "https://buy.alternate processor.com/3cI3cwcR6c3910p18peEo09",
+                "payment_link": "https://buy.stripe.com/3cI3cwcR6c3910p18peEo09",
                 "customer_details": {"email": "buyer@example.com", "name": "Buyer"},
             }
         },
     }
     payload = json.dumps(event, separators=(",", ":")).encode()
-    result = handle_alternate processor_webhook(payload, _signature(payload, secret), secret)
+    result = handle_stripe_webhook(payload, _signature(payload, secret), secret)
     assert result is not None
     assert result.ok
     assert result.product == "bot-shield"
@@ -100,7 +100,7 @@ def test_handle_alternate processor_webhook_issues_and_delivers(monkeypatch):
     assert result.delivery.provider == "console"
 
 
-def test_handle_alternate processor_webhook_rejects_bad_signature():
+def test_handle_stripe_webhook_rejects_bad_signature():
     payload = json.dumps({"type": "checkout.session.completed"}).encode()
     with pytest.raises(PermissionError):
-        handle_alternate processor_webhook(payload, "t=1,v1=bad", "whsec_test")
+        handle_stripe_webhook(payload, "t=1,v1=bad", "whsec_test")

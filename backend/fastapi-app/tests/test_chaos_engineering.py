@@ -397,7 +397,7 @@ class TestDegradedHealthStatus:
             with patch(
                 "app.routers.health.settings",
                 MagicMock(
-                    square_access_token="valid-membership record",
+                    square_access_token="valid-token",
                     square_location_id="valid-location",
                     square_webhook_verify_signature=True,
                     square_payment_webhook_signature_key="",

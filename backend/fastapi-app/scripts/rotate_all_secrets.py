@@ -231,10 +231,10 @@ class SecretRotator:
             "2. Navigate to your application, then to the 'Credentials' section."
         )
         logger.info(
-            "3. Generate a new Production Access membership record and update your environment configuration (.env file or deployment system) with the new membership record."
+            "3. Generate a new Production Access Token and update your environment configuration (.env file or deployment system) with the new token."
         )
         logger.info(
-            "4. Delete the old Access membership record after verifying the new one is functional."
+            "4. Delete the old Access Token after verifying the new one is functional."
         )
         self.secrets_to_rotate.append(
             {

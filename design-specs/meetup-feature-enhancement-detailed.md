@@ -342,7 +342,7 @@ This document provides detailed design specifications building upon the existing
 ### Color Application
 
 ```css
-/* Using existing design membership records */
+/* Using existing design tokens */
 .event-card {
   background: var(--bg-primary);
   border: var(--border-width-thin) solid var(--bg-tertiary);

@@ -4,12 +4,12 @@ from .http import http_probe
 from ..config import settings
 
 async def square_probe():
-    membership record = settings.SQUARE_ACCESS_TOKEN
-    if not membership record:
-        # degraded if missing membership record
+    token = settings.SQUARE_ACCESS_TOKEN
+    if not token:
+        # degraded if missing token
         from ..envelope import make_envelope
         return make_envelope("degraded", 0, {"location_count": 0}, error="Missing SQUARE_ACCESS_TOKEN")
-    headers = {"Authorization": f"Bearer {membership record}"}
+    headers = {"Authorization": f"Bearer {token}"}
     # Use httpx directly with headers
     import httpx
     start = asyncio.get_event_loop().time()

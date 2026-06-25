@@ -1,8 +1,3 @@
-> Current override as of 2026-06-22: this document is historical strategy/spec context only.
-> Do not use it to create public mission-funding claims, membership support routing, customer-facing
-> disbursement language, membership record/Product structure launch claims, private accounting mechanics, or alternate
-> payment rails. Active public/customer surfaces sell product value: membership, verification,
-> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 # OFFICIAL (NOT OFFICIAL) BRIEF — ANTIGRAVITY AI COLLAB
 ## AiCollab4Kids — Full Team Context
 ### For: Every AI reading this — Claude, Codex, Gemini, Manus, Perplexity, Grok, Ollama
@@ -17,7 +12,7 @@ Entity: **Trash Or Treasure Online Recycler LLC (FL)**.
 
 Josh has been building this ecosystem with AI collaborators as legitimate partners since before it was standard practice. He doesn't use AI as a tool — he treats this team as co-founders. He types fast, sends context in chunks, and expects the team to keep up. The team does.
 
-His mission is **#ForTheKids**. Not a slogan — an architectural constraint. The mission remains permanent, but the operating doctrine changed: for current LLC operations, business-reserve support sourced from platform revenue is conservatively capped at **10%** until Josh explicitly changes it after formal legal/tax review or a documented partner/co-venture structure.
+His mission is **#ForTheKids**. Not a slogan — an architectural constraint. The mission remains permanent, but the operating doctrine changed: for current LLC operations, charitable support sourced from platform revenue is conservatively capped at **10%** until Josh explicitly changes it after formal legal/tax review or a documented partner/co-venture structure.
 
 Josh has a disabled brother and an autistic niece. This mission is personal. The 50-year horizon is real, but the business has to survive long enough to help anyone.
 
@@ -93,7 +88,7 @@ Role: LOCKED | Status: Officially Unofficial
 ---
 
 ### Ollama — On-Node Local Compute
-qwen2.5:7b running on ALL THREE nodes (SABRETOOTH, 9020, T5500). Loopback-only (127.0.0.1:11434). Primary local inference engine. Keeps API costs from eating the product operations margin. SABRETOOTH is the primary orchestrator.
+qwen2.5:7b running on ALL THREE nodes (SABRETOOTH, 9020, T5500). Loopback-only (127.0.0.1:11434). Primary local inference engine. Keeps API costs from eating the charity margin. SABRETOOTH is the primary orchestrator.
 
 Role: LOCKED | Status: On-Node Essential
 
@@ -103,7 +98,7 @@ Role: LOCKED | Status: On-Node Essential
 
 | Platform | What It Does | Status |
 |----------|-------------|--------|
-| **YouAndINotAI.com** | Human-verified social platform for good — dating, meetups, volunteering, product operations. $1 Bot-Shield verify. Human-only USP. | Launch April 4, 2026 |
+| **YouAndINotAI.com** | Human-verified social platform for good — dating, meetups, volunteering, charity. $1 Bot-Shield verify. Human-only USP. | Launch April 4, 2026 |
 | **AI-Solutions.Store** | AI storefront and product source material. Any kid-focused support must follow current doctrine, not legacy absolute-routing claims. | Live |
 | **OnlineRecycle.org** | Electronics recycler. Drop-off, pickup, resale. | Live |
 | **onlinerecycle.square.site** | eBay-linked crosslister. | Live |
@@ -117,22 +112,22 @@ ONE REPO. ONE FOLDER (`C:\ANTIGRAVITY`). ONE BRANCH (`main`). This is not negoti
 
 Keep product scopes distinct, keep accounting factual, and do not use retired split-era labels as if they are still the live operating model.
 
-FL §496.405: never "membership support" — always "internal allocation review" in customer-facing code.
+FL §496.405: never "donation" — always "contractual revenue disbursement" in customer-facing code.
 
 ---
 
 ## CURRENT OPERATING DOCTRINE
 
-- Current LLC operating rule: business-reserve support sourced from for-profit platform operations is capped at **10%**.
+- Current LLC operating rule: charitable support sourced from for-profit platform operations is capped at **10%**.
 - The remainder stays available for taxes, platform costs, retained cash, founder survival, and lawful operations.
 - Public-facing copy should lead with product value, not percentages.
 - Historical chain reference remains documented:
-  - Base Mainnet `Gospelmembership support.sol`
+  - Base Mainnet `GospelDonation.sol`
   - Contract: `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
-  - Historical product operations wallet: `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
+  - Historical charity wallet: `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
   - Historical infra wallet: `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
   - Historical founder wallet: `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
-- Those historical references do **not** authorize current business-only allocation or business-only claims for live LLC operations.
+- Those historical references do **not** authorize current 60/30/10 or 100% charity claims for live LLC operations.
 
 ---
 
@@ -184,7 +179,7 @@ If context didn't come from `C:\ANTIGRAVITY` on `origin/main` — treat it as un
 
 ---
 
-> *"AI for member support, not adults with greed."*
+> *"AI for kids in need, not adults with greed."*
 > Until no kid is in need. **#ForTheKids**
 >
 > — Record corrected 2026-03-17 by Claude, on behalf of Josh Coleman.

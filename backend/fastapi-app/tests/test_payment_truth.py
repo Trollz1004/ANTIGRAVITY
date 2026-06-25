@@ -5,8 +5,8 @@ Covers:
 - Catalog drift hints return None
 - build_checkout_reference / parse_checkout_reference round-trip
 - Tampered signature rejected
-- Expired membership record rejected
-- Malformed / empty membership record rejected
+- Expired token rejected
+- Malformed / empty token rejected
 - extract_checkout_reference() from note text
 - extract_payment_proof_label() for card, wallet, bank, cash, unknown
 - proof_label_is_wallet() helper
@@ -87,7 +87,7 @@ def test_infer_tier_amount_alone_no_hints():
 
 
 def test_infer_tier_catalog_drift_hint_blocks_classification():
-    """Old alternate processor-era product names must not be classified."""
+    """Old Stripe-era product names must not be classified."""
     assert (
         infer_payment_tier(
             amount_cents=FOUNDING_MEMBER_CENTS,
@@ -120,12 +120,10 @@ def test_infer_tier_drift_hint_cic2fnig():
 def _build_and_parse(tier: str = "bot_shield", max_age: int = 172_800) -> dict:
     user_id = uuid.uuid4()
     event_id = uuid.uuid4()
-    membership_record = build_checkout_reference(
+    token = build_checkout_reference(
         user_id=user_id, event_id=event_id, tier=tier, secret=SECRET
     )
-    result = parse_checkout_reference(
-        membership_record, secret=SECRET, max_age_seconds=max_age
-    )
+    result = parse_checkout_reference(token, secret=SECRET, max_age_seconds=max_age)
     assert result is not None
     assert result["user_id"] == user_id
     assert result["event_id"] == event_id
@@ -146,10 +144,10 @@ def test_round_trip_royalty():
 
 
 def test_tampered_signature_rejected():
-    membership_record = build_checkout_reference(
+    token = build_checkout_reference(
         user_id=uuid.uuid4(), event_id=uuid.uuid4(), tier="bot_shield", secret=SECRET
     )
-    version, payload, sig = membership_record.split(".", 2)
+    version, payload, sig = token.split(".", 2)
     # Flip one character in the signature
     bad_sig = sig[:-1] + ("A" if sig[-1] != "A" else "B")
     bad_token = f"{version}.{payload}.{bad_sig}"
@@ -157,20 +155,18 @@ def test_tampered_signature_rejected():
 
 
 def test_wrong_secret_rejected():
-    membership_record = build_checkout_reference(
+    token = build_checkout_reference(
         user_id=uuid.uuid4(), event_id=uuid.uuid4(), tier="bot_shield", secret=SECRET
     )
     assert (
-        parse_checkout_reference(
-            membership_record, secret="wrong-secret-here-totally-different"
-        )
+        parse_checkout_reference(token, secret="wrong-secret-here-totally-different")
         is None
     )
 
 
 def test_expired_token_rejected():
     issued_at = int(time.time()) - 200_000  # well past 48h
-    membership_record = build_checkout_reference(
+    token = build_checkout_reference(
         user_id=uuid.uuid4(),
         event_id=uuid.uuid4(),
         tier="bot_shield",
@@ -178,25 +174,20 @@ def test_expired_token_rejected():
         issued_at=issued_at,
     )
     assert (
-        parse_checkout_reference(
-            membership_record, secret=SECRET, max_age_seconds=172_800
-        )
-        is None
+        parse_checkout_reference(token, secret=SECRET, max_age_seconds=172_800) is None
     )
 
 
 def test_max_age_zero_skips_expiry_check():
     issued_at = int(time.time()) - 999_999
-    membership_record = build_checkout_reference(
+    token = build_checkout_reference(
         user_id=uuid.uuid4(),
         event_id=uuid.uuid4(),
         tier="bot_shield",
         secret=SECRET,
         issued_at=issued_at,
     )
-    result = parse_checkout_reference(
-        membership_record, secret=SECRET, max_age_seconds=0
-    )
+    result = parse_checkout_reference(token, secret=SECRET, max_age_seconds=0)
     assert result is not None
 
 
@@ -213,10 +204,10 @@ def test_malformed_token_returns_none():
 
 
 def test_wrong_version_returns_none():
-    membership_record = build_checkout_reference(
+    token = build_checkout_reference(
         user_id=uuid.uuid4(), event_id=uuid.uuid4(), tier="bot_shield", secret=SECRET
     )
-    bad = "v99" + membership_record[2:]
+    bad = "v99" + token[2:]
     assert parse_checkout_reference(bad, secret=SECRET) is None
 
 
@@ -224,12 +215,12 @@ def test_wrong_version_returns_none():
 
 
 def test_extract_ref_from_note():
-    membership_record = build_checkout_reference(
+    token = build_checkout_reference(
         user_id=uuid.uuid4(), event_id=uuid.uuid4(), tier="bot_shield", secret=SECRET
     )
-    note = build_checkout_reference_note("bot_shield", membership_record)
+    note = build_checkout_reference_note("bot_shield", token)
     extracted = extract_checkout_reference(note)
-    assert extracted == membership_record
+    assert extracted == token
 
 
 def test_extract_ref_returns_none_when_absent():
@@ -237,12 +228,12 @@ def test_extract_ref_returns_none_when_absent():
 
 
 def test_extract_ref_multiple_args_first_wins():
-    membership_record = build_checkout_reference(
+    token = build_checkout_reference(
         user_id=uuid.uuid4(), event_id=uuid.uuid4(), tier="bot_shield", secret=SECRET
     )
-    note = build_checkout_reference_note("bot_shield", membership_record)
+    note = build_checkout_reference_note("bot_shield", token)
     extracted = extract_checkout_reference(None, "", note)
-    assert extracted == membership_record
+    assert extracted == token
 
 
 # ── extract_payment_proof_label ──────────────────────────────────────────────

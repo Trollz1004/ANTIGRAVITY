@@ -156,7 +156,7 @@ Implementation emphasizes:
 
 All deliverables reference existing design system assets:
 
-- `design-system-membership records.md` - Core design membership records
+- `design-system-tokens.md` - Core design tokens
 - `component-library.md` - Component specifications
 - `mobile-first-principles.md` - Mobile design guidelines
 - `accessibility-checklist.md` - WCAG compliance checklist

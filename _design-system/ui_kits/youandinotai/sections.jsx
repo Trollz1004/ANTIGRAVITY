@@ -18,7 +18,7 @@ const SURFACES = [
   { name: 'Business Exchange', status: 'Live marketplace', tone: 'cyan', icon: 'handshake', desc: 'Marketplace for services, referrals, and business sales. The B2B routing layer for the ecosystem.' },
   { name: 'OnlineRecycle', status: 'Live product', tone: 'success', icon: 'recycle', desc: 'Electronics recycling, pickup, and resale intake for Central Florida customers.' },
   { name: 'AI-Solutions Store', status: 'Live storefront', tone: 'cyan', icon: 'shopping-bag', desc: 'Storefront for digital products and automation offers.' },
-  { name: 'Product structure Roadmap', status: 'Paused for legal review', tone: 'paused', icon: 'coins', desc: 'Review-gated mechanics are offline until attorney review is complete.' },
+  { name: 'DAO Roadmap', status: 'Paused for legal review', tone: 'paused', icon: 'coins', desc: 'Review-gated mechanics are offline until attorney review is complete.' },
   { name: 'Customer Support', status: 'Active', tone: 'gold', icon: 'life-buoy', desc: 'Direct support surface — visible, reachable, not buried. A trust signal and conversion layer.' },
 ];
 
@@ -42,7 +42,7 @@ function Hero() {
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12, marginTop: 28 }}>
         <ProductChip tone="pink" icon={<Icon name="heart" size={15} />}>Dating &amp; Community</ProductChip>
         <ProductChip tone="success" icon={<Icon name="handshake" size={15} />}>Business Exchange</ProductChip>
-        <ProductChip tone="purple" icon={<Icon name="coins" size={15} />}>Product structure — Legal Review</ProductChip>
+        <ProductChip tone="purple" icon={<Icon name="coins" size={15} />}>DAO — Legal Review</ProductChip>
         <ProductChip tone="amber" icon={<Icon name="life-buoy" size={15} />}>Support — Active</ProductChip>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 30 }}>
@@ -141,7 +141,7 @@ function MissionPanel() {
       <h2 className="ag-section-heading" style={{ fontSize: 'var(--ag-text-2xl)', textTransform: 'uppercase', marginBottom: 12 }}>Operating principle</h2>
       <p style={{ maxWidth: '52ch', margin: '0 auto', color: 'var(--ag-text-body)', lineHeight: 1.65 }}>
         Build useful products first, report only verified numbers, and keep legal-review items
-        offline until they are ready. <span style={{ color: 'var(--ag-pink)', fontWeight: 700 }}>#MembershipVerificationSupport</span>
+        offline until they are ready. <span style={{ color: 'var(--ag-pink)', fontWeight: 700 }}>#UntilNoKidInNeed</span>
       </p>
     </GlassPanel>
   );

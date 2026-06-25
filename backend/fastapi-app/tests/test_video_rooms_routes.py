@@ -58,7 +58,7 @@ def test_create_room_invalid_token_rejected(client):
     match_id = str(uuid.uuid4())
     resp = client.post(
         f"/api/v1/video/rooms/{match_id}",
-        headers={"Authorization": "Bearer bad.membership_record.value"},
+        headers={"Authorization": "Bearer bad.token.value"},
     )
     assert resp.status_code == 401
 

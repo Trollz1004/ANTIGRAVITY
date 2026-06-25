@@ -147,7 +147,7 @@ export function ChatMode() {
         </form>
         <div className="mt-3 text-center">
           <p className="text-[10px] text-[#4a5568] uppercase tracking-widest">
-            Business-only product operations · bridged via Emergent Universal LLM key
+            #UntilNoKidInNeed · bridged via Emergent Universal LLM key
           </p>
         </div>
       </div>

@@ -82,12 +82,12 @@ This opens a browser window. Approve the `Trollz1004`-owned domains. Saves cert 
 
 ### 0.4 — Confirm `CLOUDFLARE_API_TOKEN` is live
 
-Per `briefings/PLATFORM-LIVENESS-2026-05-12.md`, the Cloudflare membership record was DEAD as of 2026-05-12. **Josh must mint a fresh membership record** at https://dash.cloudflare.com/profile/api-membership records before this migration runs. membership record needs at minimum:
+Per `briefings/PLATFORM-LIVENESS-2026-05-12.md`, the Cloudflare token was DEAD as of 2026-05-12. **Josh must mint a fresh token** at https://dash.cloudflare.com/profile/api-tokens before this migration runs. Token needs at minimum:
 - Zone:Zone:Read
 - Zone:DNS:Edit
 - Account:Cloudflare Tunnel:Edit
 
-Save updated membership record to vault and load into shell:
+Save updated token to vault and load into shell:
 ```powershell
 $env:CLOUDFLARE_API_TOKEN = (gc 'C:\Users\joshl\OneDrive\Personal Vault\MASTER-UNIVERSAL-ENV-TROLLZ1004.env' | sls '^CLOUDFLARE_API_TOKEN=' | %{ ($_ -split '=', 2)[1] })
 ```
@@ -233,7 +233,7 @@ The migration is reversible at the DNS layer (the safest place to roll back from
 
 - Migrating the actual services (MCP server, Hermes router, OpenClaw gateway) from Sabretooth to T5500. That's a separate task — likely already partially done since most code is in the ANTIGRAVITY repo and on T5500's filesystem, but the running processes need to actually be running on T5500.
 - The youandinotai.com apex Cloudflare Pages binding (that's the 27K-view bleed fix Gemini described — done via Pages → Custom domains UI, separate from this tunnel work).
-- Re-issuing the Cloudflare API membership record (currently dead per platform liveness audit).
+- Re-issuing the Cloudflare API token (currently dead per platform liveness audit).
 
 ---
 
@@ -242,7 +242,7 @@ The migration is reversible at the DNS layer (the safest place to roll back from
 This runbook is a draft. Do not execute Phase 1+ without:
 1. Josh's go on the migration timing
 2. Verification that services are running on T5500 (Phase 0.1)
-3. Fresh Cloudflare API membership record in vault (Phase 0.4)
+3. Fresh Cloudflare API token in vault (Phase 0.4)
 4. Opus + Josh dual sign-off if any phase changes scope
 
 Per the Financial Protection Rule + Officially Unofficial doctrine: this touches DNS for live revenue-adjacent domains. Treat as a production change.

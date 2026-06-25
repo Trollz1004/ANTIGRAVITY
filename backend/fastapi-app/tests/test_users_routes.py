@@ -82,7 +82,7 @@ def test_register_user_happy_path(client):
 
 
 def test_register_user_returns_unique_session_token(client):
-    """Two registrations must return different session membership records.
+    """Two registrations must return different session tokens.
 
     NOTE: Will xfail until users.py is fixed to include password_hash.
     """

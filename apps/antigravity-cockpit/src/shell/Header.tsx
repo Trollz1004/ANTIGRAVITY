@@ -31,7 +31,7 @@ export function Header({ activePage, hermesOn, onToggleHermes, onOpenCmd }: Head
       <div className="strip">
         <span>◆ PERSONAL USE · INDEPENDENT PROJECT</span>
         <span style={{ color: 'var(--amber)' }}>◆ PROTOTYPE PREVIEW · ALL FIGURES ILLUSTRATIVE</span>
-        <span className="hot">♡ PRODUCT VALUE · Business-only product operations</span>
+        <span className="hot">♡ FOR THE KIDS · #UntilNoKidInNeed</span>
         <span>SABERTOOTH NODE · PORT 9999 ACTIVE</span>
       </div>
       <div className="header">

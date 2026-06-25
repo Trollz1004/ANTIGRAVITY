@@ -444,7 +444,7 @@ POST /api/events
 
 ### For Development Team
 
-1. Component implementation following design system membership records
+1. Component implementation following design system tokens
 2. Unit tests for validation logic
 3. Responsive implementation across breakpoints
 4. Accessibility compliance testing

@@ -7,9 +7,9 @@ You are Hermes, running in WSL Ubuntu inside Sabretooth. Goal: get **both** Clou
 | Hostname | Origin | Tunnel ID | Config file |
 |---|---|---|---|
 | `paperclip-hq.youandinotai.com` | `http://127.0.0.1:3100` (Sabretooth) | `c7bc9665-3923-4977-acd7-2033838cd56e` | `C:\Antigravity\infra\cloudflare\paperclip-hq.yml` |
-| `mcp.youandinotai.com` | `brain-mcp:3099` on **T5500** (192.168.0.15) | (separate, membership record-based) | `C:\Antigravity\brain-mcp\docker-compose.t5500.yml` |
+| `mcp.youandinotai.com` | `brain-mcp:3099` on **T5500** (192.168.0.15) | (separate, token-based) | `C:\Antigravity\brain-mcp\docker-compose.t5500.yml` |
 
-Sabretooth's cloudflared serves only paperclip-hq. T5500's docker-compose serves mcp via a membership record-style tunnel (`${CLOUDFLARE_TUNNEL_TOKEN}` in `~/.env` on T5500).
+Sabretooth's cloudflared serves only paperclip-hq. T5500's docker-compose serves mcp via a token-style tunnel (`${CLOUDFLARE_TUNNEL_TOKEN}` in `~/.env` on T5500).
 
 ## Step 1 — Diagnose (do this first, do not skip)
 
@@ -75,7 +75,7 @@ If the cloudflared container is stopped/crashed, restart it:
 ssh joshl@192.168.0.15 "cd C:\\Antigravity\\brain-mcp && docker compose -f docker-compose.t5500.yml up -d"
 ```
 
-If `${CLOUDFLARE_TUNNEL_TOKEN}` is missing on T5500, ask Joshua: "T5500's `.env` is missing CLOUDFLARE_TUNNEL_TOKEN. Get the brain-mcp tunnel membership record from Cloudflare Zero Trust → Access → Tunnels → brain-mcp → Connector membership record. Paste it here." Then write it to T5500's `.env` via SSH.
+If `${CLOUDFLARE_TUNNEL_TOKEN}` is missing on T5500, ask Joshua: "T5500's `.env` is missing CLOUDFLARE_TUNNEL_TOKEN. Get the brain-mcp tunnel token from Cloudflare Zero Trust → Access → Tunnels → brain-mcp → Connector token. Paste it here." Then write it to T5500's `.env` via SSH.
 
 If T5500 is unreachable (machine off / disconnected), report that and stop — do not try to migrate the tunnel to Sabretooth without explicit approval. mcp.youandinotai.com staying down until Joshua wakes T5500 is acceptable; mis-routing it from Sabretooth is not.
 

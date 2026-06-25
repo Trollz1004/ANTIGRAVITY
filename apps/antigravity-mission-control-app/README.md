@@ -17,7 +17,7 @@ Safe local scaffold for a future ChatGPT App that keeps OpenAI in the ANTIGRAVIT
 - It will not print, test, or copy secrets.
 - It will not delete files, merge branches, deploy services, change payment rails, or post messages live.
 - It will not run wrapper-Codex through Ollama.
-- It will not revive Product/membership record/fundraising surfaces.
+- It will not revive DAO/token/fundraising surfaces.
 
 ## Run Locally
 

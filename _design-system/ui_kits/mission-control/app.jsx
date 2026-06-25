@@ -113,7 +113,7 @@ function MCApp() {
           <MC_Stat label="Agents Online" value="4 / 7" note="Hermes fleet heartbeat in the last 60s." accent="cyan" live />
           <MC_Stat label="Companies" value="4" note="Active boards wired to the fleet." accent="pink" />
           <MC_Stat label="Default Model" value="qwen2.5:7b" note="Ollama @ 192.168.0.8 · GPU node." accent="gold" />
-          <MC_Stat label="Kids Reserve" value="10%" note="Reserved share of net · #MembershipVerificationSupport." accent="success" />
+          <MC_Stat label="Kids Reserve" value="10%" note="Reserved share of net · #UntilNoKidInNeed." accent="success" />
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 18, alignItems: 'start' }}>

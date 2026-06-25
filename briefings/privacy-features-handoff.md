@@ -310,7 +310,7 @@ This document provides detailed implementation guidance for the privacy center a
 4. **POST /api/privacy/delete**
    - Parameters: userId, verificationToken
    - Returns: DeletionRequest object with confirmation
-   - Error handling: Invalid membership record, account recovery period
+   - Error handling: Invalid token, account recovery period
 
 ### Data Visualization Endpoints
 

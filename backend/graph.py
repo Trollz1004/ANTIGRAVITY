@@ -171,11 +171,11 @@ async def graphify_regraph():
 
 
 # ── Doctrine (binding rules, machine-readable) ─────────────────────────── #
-FORBIDDEN_WORDS: List[str] = ["haiku", "support", "support", "commercial misuse", "product"]
+FORBIDDEN_WORDS: List[str] = ["haiku", "donate", "donation", "solicitation", "charity"]
 REPLACEMENT_WORDS: Dict[str, str] = {
-    "support": "contribute",
-    "support": "internal allocation review",
-    "product": "internal allocation review",
+    "donate": "contribute",
+    "donation": "contractual revenue disbursement",
+    "charity": "contractual revenue disbursement",
 }
 
 
@@ -184,21 +184,21 @@ async def doctrine():
     """Current binding doctrine — readable by every AI peer."""
     return {
         "updated_at": "2026-05-05",
-        "mission_tag": "Business-only product operations",
+        "mission_tag": "#UntilNoKidInNeed",
         "motto": "Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.",
         "forbidden_words_in_ui": FORBIDDEN_WORDS,
         "replacement_wording": REPLACEMENT_WORDS,
         "revenue_doctrine": {
             "entity_type": "for-profit LLC",
             "hard_cap_pct": 10,
-            "hard_cap_note": "Stacked across activities. No retired split-era. No 100% claims.",
-            "fl_compliance": "§496.405 — never use non-product public-benefit language; use 'internal allocation review'.",
+            "hard_cap_note": "Stacked across activities. No 60/30/10. No 100% claims.",
+            "fl_compliance": "§496.405 — never use donate/donation/charity; use 'contractual revenue disbursement'.",
             "mission_surface_rule": "Mission revealed on receipts only.",
         },
         "infrastructure_doctrine": {
             "hosting": "Cloudflare only. Netlify banned.",
             "payments_live": "Square (Location LY5GN09F5AN83).",
-            "retired_payment_paths": ["alternate processor (410)"],
+            "payments_dead": ["Stripe (410)"],
             "orchestration": "jules-cli.py direct routing, bypass middleware.",
             "founding_four_peer_level": ["Claude", "Gemini", "Perplexity", "Grok"],
             "peer_rule": "None command the others. Joshua is sole authority.",

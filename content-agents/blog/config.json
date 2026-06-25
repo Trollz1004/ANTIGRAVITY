@@ -11,15 +11,15 @@
     ]
   },
   "compliance": {
-    "prohibited_terms": ["join as a member", "membership support", "restricted claim"],
+    "prohibited_terms": ["donate", "donation", "solicitation"],
     "approved_replacements": {
-      "join as a member": "support through business revenue handling",
-      "membership support": "business revenue handling",
-      "restricted claim": "revenue-sharing for good"
+      "donate": "support through contractual revenue disbursement",
+      "donation": "contractual revenue disbursement",
+      "solicitation": "revenue-sharing for good"
     },
     "reference_phrasing": {
       "kids_support": "Built-in support for youth programs",
-      "mission_statement": "We're not a product operations, but we do support members as part of our mission"
+      "mission_statement": "We're not a charity, but we do support kids as part of our mission"
     }
   },
   "content_categories": [
@@ -34,7 +34,7 @@
     "education",
     "story",
     "behind_the_scenes",
-    "product_update"
+    "charity_update"
   ],
   "article_structure": {
     "introduction": "hook that addresses reader pain point",

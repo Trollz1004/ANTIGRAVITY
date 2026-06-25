@@ -1,7 +1,7 @@
 """
 Station 4 — Uptime & Payment Link Monitor.
 Checks site and payment links are alive.
-Square-specific alerts are optional and controlled by env vars.
+Stripe-specific alerts are optional and controlled by env vars.
 """
 import logging
 import os
@@ -19,11 +19,11 @@ SITES = [
 ]
 
 DEFAULT_PAYMENT_LINKS = [
-    {"name": "Bot-Shield $1", "url": "https://buy.Square.com/3cI3cwcR6c3910p18peEo09"},
-    {"name": "Founding Member $14.99/mo", "url": "https://buy.Square.com/00w8wQaIYgjp5gF2cteEo0a"},
-    {"name": "3-Month $39.99", "url": "https://buy.Square.com/dRm7sM5oE3wD7oNaIZeEo0j"},
-    {"name": "12-Month $99.99", "url": "https://buy.Square.com/3cI5kEbN22szgZnaIZeEo0c"},
-    {"name": "Royalty $2,500", "url": "https://buy.Square.com/dRmcN604kebheRf2cteEo0d"},
+    {"name": "Bot-Shield $1", "url": "https://buy.stripe.com/3cI3cwcR6c3910p18peEo09"},
+    {"name": "Founding Member $14.99/mo", "url": "https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a"},
+    {"name": "3-Month $39.99", "url": "https://buy.stripe.com/dRm7sM5oE3wD7oNaIZeEo0j"},
+    {"name": "12-Month $99.99", "url": "https://buy.stripe.com/3cI5kEbN22szgZnaIZeEo0c"},
+    {"name": "Royalty $2,500", "url": "https://buy.stripe.com/dRmcN604kebheRf2cteEo0d"},
 ]
 
 # Track consecutive failures to avoid spam
@@ -81,7 +81,7 @@ def run_uptime_check():
                 alerts.append(f"RECOVERED: {site['name']} is back UP ({ms}ms)")
             _fail_counts[key] = 0
 
-    # Check payment links (less frequently — only if Square key expiry is near)
+    # Check payment links (less frequently — only if Stripe key expiry is near)
     for link in payment_links:
         ok, status, ms = check_url(link["name"], link["url"])
         summary["payment_links"][link["name"]] = {"ok": ok, "status": status, "ms": ms}
@@ -96,19 +96,19 @@ def run_uptime_check():
                 alerts.append(f"RECOVERED: {link['name']} payment link OK")
             _fail_counts[key] = 0
 
-    # Optional Square-specific expiry warning
+    # Optional Stripe-specific expiry warning
     provider = os.environ.get("PAYMENT_MONITOR_PROVIDER", "generic").strip().lower()
-    expiry_raw = os.environ.get("alternate processor_EXPIRY_DATE", "").strip()
-    if provider in {"Square", "multi"} and expiry_raw:
+    expiry_raw = os.environ.get("STRIPE_EXPIRY_DATE", "").strip()
+    if provider in {"stripe", "multi"} and expiry_raw:
         try:
-            alternate processor_expiry = datetime.fromisoformat(expiry_raw)
+            stripe_expiry = datetime.fromisoformat(expiry_raw)
             now = datetime.now()
-            days_to_expiry = (alternate processor_expiry - now).days
+            days_to_expiry = (stripe_expiry - now).days
             if days_to_expiry <= 7:
-                alerts.append(f"Square KEY EXPIRES IN {days_to_expiry} DAYS — rotate NOW at dashboard.Square.com")
-                summary["alternate processor_key_warning"] = f"{days_to_expiry} days until expiry"
+                alerts.append(f"STRIPE KEY EXPIRES IN {days_to_expiry} DAYS — rotate NOW at dashboard.stripe.com")
+                summary["stripe_key_warning"] = f"{days_to_expiry} days until expiry"
         except Exception:
-            log.warning("Invalid alternate processor_EXPIRY_DATE format; expected YYYY-MM-DD")
+            log.warning("Invalid STRIPE_EXPIRY_DATE format; expected YYYY-MM-DD")
 
     all_ok = len(alerts) == 0
     return all_ok, alerts, summary
@@ -134,7 +134,7 @@ def format_uptime_report(summary):
             if not data["ok"]:
                 lines.append(f"  BROKEN: {name}")
 
-    if "alternate processor_key_warning" in summary:
-        lines.append(f"\n*{summary['alternate processor_key_warning']}*")
+    if "stripe_key_warning" in summary:
+        lines.append(f"\n*{summary['stripe_key_warning']}*")
 
     return "\n".join(lines)

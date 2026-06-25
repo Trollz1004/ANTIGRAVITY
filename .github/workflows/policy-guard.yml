@@ -35,8 +35,8 @@ jobs:
         run: |
           echo "=== Scanning for forbidden patterns ==="
           # Scan tracked files for actual secret values — not env var names or URL strings.
-          # Scans for: GitHub PATs, OpenAI/anthropic sk- membership records, AWS key IDs,
-          # Cloudflare Wrangler membership records, PEM certificate anchors.
+          # Scans for: GitHub PATs, OpenAI/anthropic sk- tokens, AWS key IDs,
+          # Cloudflare Wrangler tokens, PEM certificate anchors.
           # NOTE: .github/workflows/ excluded — CI configs document their own scan patterns
           # and would self-trigger. Secrets in workflow files must be injected via env/secrets.
           PATTERNS="ghp_[a-zA-Z0-9]{20,}|sk-[a-zA-Z0-9]{20,}|-----BEGIN CERTIFICATE|AKIA[0-9A-Z]{16}|WRANGLER_[A-Z0-9]{20,}"

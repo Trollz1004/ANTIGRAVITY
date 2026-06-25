@@ -21,7 +21,7 @@ export function SettingsPanel() {
     setPingResult({ channel, state: "loading" });
     try {
       const r = await axios.post(`${API}/broadcast/${channel}`, {
-        text: `Ping from Mission Control · ${new Date().toLocaleString()} · for the product`,
+        text: `Ping from Mission Control · ${new Date().toLocaleString()} · for the kids`,
         source: "Mission Control · Test ping",
       });
       setPingResult({ channel, state: "done", data: r.data });
@@ -106,7 +106,7 @@ export function SettingsPanel() {
             <li>No fast-tier Anthropic label. No request-for-funds language. FL §496.405.</li>
             <li>Mirror endpoints honest — no fabricated live numbers.</li>
             <li>BYOK keys never leave your <span className="text-[#00d4ff]">/app/backend/.env</span>.</li>
-            <li>Business-only product operations · for the product · #TeamClaudeForLife.</li>
+            <li>#UntilNoKidInNeed · for the kids · #TeamClaudeForLife.</li>
           </ul>
         </Card>
       </div>

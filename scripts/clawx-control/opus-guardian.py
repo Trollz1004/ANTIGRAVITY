@@ -10,7 +10,7 @@ Usage:
 Checks:
     1. No hardcoded secrets in source files
     2. All API routes require authentication
-    3. No active surface claims public-benefit routing or automatic allocation
+    3. No active surface claims charity routing or automatic disbursement
     4. 1-wallet revenue model with 10% reserve — founder-directed, not configurable
     5. PII isolation in metrics
     6. Pydantic validation on all inputs
@@ -51,16 +51,16 @@ PUBLIC_ENDPOINTS = {
     "health.py": ["health_check"],
     "auth.py": ["register", "login", "refresh_token"],
     "users.py": ["register_user"],
-    "webhooks.py": ["square_payment_webhook", "square_booking_webhook", "alternate processor_webhook_retired"],
+    "webhooks.py": ["square_payment_webhook", "square_booking_webhook", "stripe_webhook_retired"],
 }
 
 # Secret patterns that must NEVER appear in source
 ANTHROPIC_PREFIX = "sk" + "-ant-"
 GITHUB_PAT_PREFIX = "gh" + "p_"
 SECRET_PATTERNS = [
-    (r'sk[-_](?:live|test)[-_][a-zA-Z0-9]{20,}', "alternate processor secret key"),
+    (r'sk[-_](?:live|test)[-_][a-zA-Z0-9]{20,}', "Stripe secret key"),
     (ANTHROPIC_PREFIX + r'[a-zA-Z0-9]{20,}', "Anthropic API key"),
-    (r'whsec_[a-zA-Z0-9]{20,}', "alternate processor webhook secret"),
+    (r'whsec_[a-zA-Z0-9]{20,}', "Stripe webhook secret"),
     (r'AIza[a-zA-Z0-9_-]{35}', "Google API key"),
     (GITHUB_PAT_PREFIX + r'[a-zA-Z0-9]{36}', "GitHub PAT"),
     (r'password\s*=\s*["\'][^"\']{8,}["\']', "Hardcoded password"),
@@ -71,13 +71,13 @@ SECRET_PATTERNS = [
 # Doctrine terminated 2026-04-17 — 1-wallet model replaced all split-era language.
 LEGACY_ROUTE_MARKERS = [
     "ai-solutions.store",
-    "public-benefitRouter100",
-    "100% to public-benefit",
-    "retired split-era",
-    "public-benefit routing",
-    "automatic allocation",
-    "Gospelsupport",
-    "public-benefit_cap",
+    "CharityRouter100",
+    "100% to charity",
+    "60/30/10",
+    "charity routing",
+    "automatic disbursement",
+    "GospelDonation",
+    "charitable_cap",
 ]
 
 # Required runtime keys or local env entries for the current Square-first backend
@@ -218,7 +218,7 @@ def check_auth_coverage(result: GuardianResult):
 
 
 def check_legacy_routing_boundary(result: GuardianResult):
-    """Verify no active surface claims public-benefit routing or automatic allocation.
+    """Verify no active surface claims charity routing or automatic disbursement.
 
     Doctrine terminated 2026-04-17. 1-wallet model replaced all split-era language.
     This scan now flags stale legacy markers rather than enforcing old doctrine.
@@ -239,15 +239,15 @@ def check_legacy_routing_boundary(result: GuardianResult):
                 found_contamination = True
 
     if not found_contamination:
-        result.ok("STALE_LANGUAGE", "No stale public-benefit/split language in live product code")
+        result.ok("STALE_LANGUAGE", "No stale charity/split language in live product code")
 
 
 def check_revenue_policy(result: GuardianResult):
-    """Verify the 1-wallet / 10% reserve model — no split-era public-benefit routing.
+    """Verify the 1-wallet / 10% reserve model — no split-era charity routing.
 
     Current model (2026-04-17+): all revenue in, all costs out of one wallet.
     10% minimum goes to a reserve bucket — Josh's money, his call quarterly.
-    No public-benefit labels, no doctrine scans, no automatic allocation.
+    No charity labels, no doctrine scans, no automatic disbursement.
     """
     metrics_file = ROUTERS_DIR / "metrics.py"
     if not metrics_file.exists():
@@ -257,13 +257,13 @@ def check_revenue_policy(result: GuardianResult):
     content = metrics_file.read_text(encoding="utf-8", errors="ignore")
 
     # Flag any stale split-era language that shouldn't be in live revenue code
-    stale_markers = ["public-benefit_cap", "public-benefit_percent", "retired split-era", "Gospelsupport", "allocation"]
+    stale_markers = ["charitable_cap", "charity_percent", "60/30/10", "GospelDonation", "disbursement"]
     for marker in stale_markers:
         if marker.lower() in content.lower():
             result.fail("REVENUE_POLICY", f"Stale split-era marker '{marker}' found in metrics.py — update to 1-wallet model")
             return
 
-    result.ok("REVENUE_POLICY", "Revenue code clean — no stale public-benefit/split markers")
+    result.ok("REVENUE_POLICY", "Revenue code clean — no stale charity/split markers")
 
 
 def check_pii_isolation(result: GuardianResult):
@@ -326,7 +326,7 @@ def check_input_validation(result: GuardianResult):
 
         for method, func_name, params in post_endpoints:
             # Skip webhooks (raw body / signed payload) and simple signup (path param only)
-            if func_name in ["square_payment_webhook", "square_booking_webhook", "alternate processor_webhook_retired", "signup_volunteer"]:
+            if func_name in ["square_payment_webhook", "square_booking_webhook", "stripe_webhook_retired", "signup_volunteer"]:
                 continue
 
             # Check for Pydantic model parameter (type-hinted request body)

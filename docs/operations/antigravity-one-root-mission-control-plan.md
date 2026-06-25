@@ -29,9 +29,9 @@ Paperweight company IDs and CEO contracts:
 
 The YouTube stream can show public work and public mission programming intentionally. The stream-safe dashboard must never show:
 
-- credentials, membership records, RDP passwords, auth file paths, raw env values, or API keys;
+- credentials, tokens, RDP passwords, auth file paths, raw env values, or API keys;
 - customer PII or payment-provider raw responses;
-- private family/business reserve/internal doctrine notes;
+- private family/treasury/internal doctrine notes;
 - terminal panes that might print secrets;
 - fake green health states.
 

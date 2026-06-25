@@ -56,13 +56,13 @@ def test_webhook_file_cli_fulfills_saved_checkout_event(tmp_path):
         "data": {
             "object": {
                 "id": "cs_test_cli_123",
-                "payment_link": "https://buy.alternate processor.com/3cI3cwcR6c3910p18peEo09",
+                "payment_link": "https://buy.stripe.com/3cI3cwcR6c3910p18peEo09",
                 "customer_details": {"email": "buyer@example.com", "name": "Buyer"},
             }
         },
     }
     payload = json.dumps(event, separators=(",", ":")).encode()
-    payload_path = tmp_path / "alternate processor-event.json"
+    payload_path = tmp_path / "stripe-event.json"
     payload_path.write_bytes(payload)
     result = CliRunner().invoke(
         main,

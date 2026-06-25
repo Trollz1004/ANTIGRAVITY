@@ -35,7 +35,7 @@ Do not:
 
 - use restricted public-benefit language in customer-facing outreach
 - promise impact numbers
-- mention Product/future-structure upside
+- mention DAO/token upside
 - present public crypto fundraising
 - automate logins, follows, likes, joins, posts, replies, comments, uploads, DMs, or scraping
   unless Josh separately approves a platform-compliant API flow

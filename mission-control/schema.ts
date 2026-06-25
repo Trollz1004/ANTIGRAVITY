@@ -50,7 +50,7 @@ export const chatMessages = mysqlTable("chatMessages", {
   content: text("content").notNull(),
   provider: varchar("provider", { length: 64 }).notNull(), // "ollama", "openrouter", "openai", "manus"
   model: varchar("model", { length: 255 }).notNull(),
-  metadata: json("metadata"), // Store additional info like membership records, latency, etc.
+  metadata: json("metadata"), // Store additional info like tokens, latency, etc.
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

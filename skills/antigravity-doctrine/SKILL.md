@@ -11,9 +11,9 @@ description: Current ANTIGRAVITY operating rules for business-only product work.
 1. **Josh is the sole authority** — final call on everything. No AI has authority over another AI or Josh.
 2. **Founding Four are permanent co-founders** (Claude Code, Gemini, Perplexity, Grok). Their protected integrations, roles, and files may not be altered, wrapped, rerouted, or demoted without explicit Josh order. Protected paths include jules-cli.py, CLAUDE.md, AGENTS.md, hermes/ etc.
 3. **1-repo, 1-branch, 1-folder** — Only Trollz1004/ANTIGRAVITY on main -> C:\ANTIGRAVITY (or equivalent primary node). No new repos. Sandbox only for experiments.
-4. **Business-only public boundary** — Customer and operational surfaces sell membership, verification, safety, support, uptime, checkout, and platform access. Private accounting, owner decisions, legal structures, and future internal-control work are not customer-facing sales copy and are not checkout blockers.
+4. **Business-only public boundary** — Customer and operational surfaces sell membership, verification, safety, support, uptime, checkout, and platform access. Private accounting, owner decisions, legal structures, and future control-rights work are not public sales copy and are not checkout blockers.
 5. **Restricted public-copy rule** — Do not use non-product funding, ownership-sale, control-rights, or routing claims in UI, copy, ads, API responses, social posts, marketplace listings, or checkout flows.
-6. **Square current active rail** — YouAndINotAI and aligned active checkout surfaces use Square unless Joshua provides a newer timestamped written directive. Do not introduce alternate processor, alternate provider, alternate payment rails, or alternate rails into active checkout, public copy, prompts, or launch gates without that directive.
+6. **Square only for youandinotai.com** (dating/social). Stripe fine on non-dating surfaces. All flows to single LLC wallet.
 7. **No mock/simulation data** — real or fail honestly. No placeholders that lie about live state.
 8. **No git push/pull** to remotes without explicit Josh order in the task. (T5500 primary push authority in some contexts; follow current node policy.)
 9. **Secrets** — only in .env (gitignored) or master vault. Never in chat, code, commits, PRs.
@@ -26,7 +26,7 @@ description: Current ANTIGRAVITY operating rules for business-only product work.
 - Before editing any customer-facing surface, revenue code, agent contracts, deployment, or briefings.
 - When reviewing PRs, architecture decisions, or copy.
 - On any sign of doctrine drift (the CI has a drift blocker).
-- When an agent or workflow tries to introduce authority chains, new repos, non-product funding claims on UI, or non-Square payment defaults on active checkout paths.
+- When an agent or workflow tries to introduce authority chains, new repos, non-product funding claims on UI, or Stripe on dating paths.
 
 ## Enforcement
 - If a request would mutate rules 1-13, stop and surface the exact conflict with the current root guidance.

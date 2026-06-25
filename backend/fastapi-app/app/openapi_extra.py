@@ -31,7 +31,7 @@ TAGS_METADATA: list[dict] = [
             "Register new accounts via `POST /api/v1/auth/register`, "
             "log in with email/password or Google via `POST /api/v1/auth/login` to receive "
             "an `access_token` and `refresh_token`. "
-            "Refresh JWT membership records using `POST /api/v1/auth/refresh`, and "
+            "Refresh JWT tokens using `POST /api/v1/auth/refresh`, and "
             "retrieve the current user profile (`GET /api/v1/auth/me`). "
             "Detailed request/response examples are available for each endpoint."
         ),
@@ -213,7 +213,7 @@ TAGS_METADATA: list[dict] = [
         "name": "notifications",
         "description": (
             "Push notifications and in-app alerts. "
-            "Manage notification preferences, device membership records, and notification history."
+            "Manage notification preferences, device tokens, and notification history."
         ),
     },
     {
@@ -293,12 +293,12 @@ curl -X POST https://api.youandinotai.com/api/v1/auth/register \\
   -H "Content-Type: application/json" \\
   -d '{"email": "user@example.com", "password": "securePass123!", "display_name": "Alex", "date_of_birth": "1995-04-20", "accepted_terms": true}'
 
-# 2. Log in to get membership records
+# 2. Log in to get tokens
 curl -X POST https://api.youandinotai.com/api/v1/auth/login \\
   -H "Content-Type: application/json" \\
   -d '{"email": "user@example.com", "password": "securePass123!"}'
 
-# 3. Use the access membership record for authenticated requests
+# 3. Use the access token for authenticated requests
 curl https://api.youandinotai.com/api/v1/auth/me \\
   -H "Authorization: Bearer <access_token>"
 ```
@@ -325,16 +325,16 @@ Most endpoints require **Bearer JWT** authentication.
 │          │                       │          │
 │          │  POST /refresh        │          │
 │          │ ──────────────────────▶│          │
-│          │ ◀──── new membership records ─────│          │
+│          │ ◀──── new tokens ─────│          │
 └──────────┘                       └──────────┘
 ```
 
-### membership record Details
+### Token Details
 
-| membership record Type | Expiration | Usage |
+| Token Type | Expiration | Usage |
 |------------|------------|-------|
-| `access_token` | 30 minutes | Include in `Authorization: Bearer <membership record>` header |
-| `refresh_token` | 7 days | Use with `POST /api/v1/auth/refresh` to get new membership records |
+| `access_token` | 30 minutes | Include in `Authorization: Bearer <token>` header |
+| `refresh_token` | 7 days | Use with `POST /api/v1/auth/refresh` to get new tokens |
 
 ### Example: Authenticated Request
 
@@ -399,7 +399,7 @@ All error responses follow a consistent structure:
 
 | Code | HTTP Status | Meaning |
 |------|-------------|---------|
-| `INVALID_CREDENTIALS` | 401 | Bad email/password or expired membership record |
+| `INVALID_CREDENTIALS` | 401 | Bad email/password or expired token |
 | `INSUFFICIENT_PERMISSIONS` | 403 | Not allowed to access this resource |
 | `NOT_FOUND` | 404 | Resource does not exist |
 | `ALREADY_EXISTS` | 409 | Duplicate resource (e.g. email taken) |
@@ -444,7 +444,7 @@ All error responses follow a consistent structure:
 | Tag | Description |
 |-----|-------------|
 | **health** | Service health checks and monitoring |
-| **auth** | Registration, login, membership record refresh |
+| **auth** | Registration, login, token refresh |
 | **users** | User account management |
 | **profiles** | Dating profile CRUD |
 | **messaging** | Chat and direct messages |

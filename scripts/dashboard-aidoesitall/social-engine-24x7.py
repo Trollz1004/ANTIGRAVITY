@@ -301,19 +301,19 @@ def show_status(state):
 
 
 def _run_station2(state):
-    """Station 2 — Payment monitor (provider-agnostic, alternate processor optional)."""
+    """Station 2 — Payment monitor (provider-agnostic, Stripe optional)."""
     provider = os.environ.get("PAYMENT_MONITOR_PROVIDER", "generic").strip().lower()
     if provider in {"none", "disabled", "off"}:
         log.info("[Station 2] Payment monitor disabled via PAYMENT_MONITOR_PROVIDER")
         return
 
-    if provider not in {"alternate processor", "multi"}:
-        # Generic/multi-provider mode: do not hard-fail on alternate processor.
-        log.info(f"[Station 2] Payment monitor provider='{provider}' (alternate processor monitor skipped)")
+    if provider not in {"stripe", "multi"}:
+        # Generic/multi-provider mode: do not hard-fail on Stripe.
+        log.info(f"[Station 2] Payment monitor provider='{provider}' (Stripe monitor skipped)")
         return
 
     try:
-        from social_engine.alternate processor_monitor import check_new_payments, format_payment_alert, get_revenue_snapshot
+        from social_engine.stripe_monitor import check_new_payments, format_payment_alert, get_revenue_snapshot
         new_charges = check_new_payments()
         if new_charges:
             alert = format_payment_alert(new_charges)
@@ -325,7 +325,7 @@ def _run_station2(state):
         else:
             log.debug("[Station 2] No new payments")
     except Exception as e:
-        log.error(f"[Station 2] alternate processor monitor error: {e}")
+        log.error(f"[Station 2] Stripe monitor error: {e}")
 
 
 def _run_station4(cycle_count):
@@ -353,7 +353,7 @@ def _run_station4(cycle_count):
 def daemon_loop():
     """Run the 24/7 daemon with 30-minute cycles.
     Station 1: Content posting (every cycle, schedule-gated)
-    Station 2: Payment monitor (every cycle, alternate processor optional)
+    Station 2: Payment monitor (every cycle, Stripe optional)
     Station 4: Uptime check (every cycle, full report every 6h)
     """
     log.info("=" * 60)
@@ -390,7 +390,7 @@ def daemon_loop():
                 send_telegram(alert)
                 log.warning(f"[Watchdog] {alert[:100]}")
 
-            # Station 2 — alternate processor payment monitor
+            # Station 2 — Stripe payment monitor
             _run_station2(state)
 
             # Station 4 — Uptime & oversight (every cycle)

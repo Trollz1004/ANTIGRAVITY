@@ -356,7 +356,7 @@ A comprehensive design specification for the event discovery experience within Y
 ### Legal Compliance
 
 1. **Florida §496.405 Adherence**:
-   - No "join as a member" or "membership support" in event descriptions
+   - No "donate" or "donation" in event descriptions
    - "Support" or "contribute" used instead
    - Clear distinction between nonprofit and commercial events
 

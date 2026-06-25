@@ -4,14 +4,14 @@
 - Generated: 2026-03-05T04:34:46.242Z
 - Items: 1
 
-## EW-20260304-0001 - Dell Latitude 7420 laptop Intel i7-1185G7 16GB RAM 512GB NVMe SSD Tested product operations
+## EW-20260304-0001 - Dell Latitude 7420 laptop Intel i7-1185G7 16GB RAM 512GB NVMe SSD Tested Charity
 
 - Suggested Price: $279.99
 - Format: buy_it_now
 - Condition: B - minor lid scratches, no cracks
 - Test Summary: BIOS POST, OS Boot, CPU Stress 15m, Memtest, Storage SMART, Network, USB Ports, Video Output, Keyboard/Trackpad
 - Shipping: Ships in 1-2 business days with tracking. Anti-static + foam packaging. Heavy units ship UPS/FedEx Ground.
-- product operations Line: a business-defined share of net proceeds supports children in medical need (#ForTheKids).
+- Charity Line: 60% of net proceeds supports children in medical need (#ForTheKids).
 
 ### Description HTML
 
@@ -27,6 +27,6 @@
 <li><strong>Power adapter included:</strong> yes</li>
 </ul>
 <p><strong>Shipping:</strong> Ships in 1-2 business days, anti-static packed, tracking included, no PO boxes for oversized hardware.</p>
-<p><strong>product operations impact:</strong> a business-defined share of net proceeds allocated to kids in medical need. Projected product operations from this item: $119.91.</p>
+<p><strong>Charity impact:</strong> 60% of net proceeds allocated to kids in medical need. Projected charity from this item: $119.91.</p>
 <p><em>Policy note:</em> Serials are asset-tracked; only items shown/listed are included; any untested function is explicitly disclosed.</p>
 ```

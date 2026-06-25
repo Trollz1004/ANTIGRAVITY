@@ -90,7 +90,7 @@ class TestLedgerWebhooks:
         assert d.get("auto_split") is True
         entries = {e["bucket"]: e["amount_usd"] for e in d["entries"]}
         # 10/27/63 split of $100
-        assert entries[1] == 10.00, f"product reserve should be $10.00, got {entries.get(1)}"
+        assert entries[1] == 10.00, f"kids bucket should be $10.00, got {entries.get(1)}"
         assert entries[3] == 27.00, f"tax bucket should be $27.00, got {entries.get(3)}"
         assert entries[5] == 63.00, f"ops bucket should be $63.00, got {entries.get(5)}"
 
@@ -126,7 +126,7 @@ class TestLedgerWebhooks:
         assert r.status_code == 400
         detail = r.json().get("detail", "")
         # should mention allowed list
-        for src in ("buymeacoffee", "github_sponsors", "kofi", "patreon", "gospel", "square", "alternate processor"):
+        for src in ("buymeacoffee", "github_sponsors", "kofi", "patreon", "gospel", "square", "stripe"):
             assert src in detail, f"missing '{src}' in allowed-list error: {detail}"
 
 
@@ -153,7 +153,7 @@ class TestRegression:
         r = api.get(f"{BASE_URL}/api/ledger/stats")
         assert r.status_code == 200
         d = r.json()
-        for k in ("total_usd", "member_support_usd", "by_bucket", "by_source"):
+        for k in ("total_usd", "kids_fund_usd", "by_bucket", "by_source"):
             assert k in d
 
     def test_tasks_list(self, api):
@@ -179,7 +179,7 @@ class TestRegression:
         # Telegram is LIVE — this WILL ping Joshua's DM (expected per iter10 note)
         r = admin.post(
             f"{BASE_URL}/api/broadcast/telegram",
-            json={"text": "TEST_iter10 regression ping · Business-only product operations"},
+            json={"text": "TEST_iter10 regression ping · #UntilNoKidInNeed"},
         )
         assert r.status_code == 200, r.text
         d = r.json()

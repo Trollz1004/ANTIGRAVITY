@@ -1,7 +1,6 @@
 # Paperclip Agent Prompts — Opus-Crafted, Drop-in
 
-**Paperclip-the-platform is alive and working** with Codex as CEO for Joshua's
-daily ops. Hermes is optional support/research.
+**Paperclip-the-platform is alive and working** with Hermes for Joshua's daily ops.
 These are user-facing prompts to paste into Paperclip's Custom Instructions /
 System Prompt field for each agent. They are NOT the retired `paperclip-worker`
 infrastructure (that one was replaced by paperweight per 2026-05-20 doctrine).
@@ -27,7 +26,6 @@ untuned weight. The model stops *thinking* and starts *executing* a clear proced
 
 | File                  | Paperclip agent  | Recommended base model       |
 | --------------------- | ---------------- | ---------------------------- |
-| `codex-ceo.md`        | Codex CEO        | Codex 5.5 or Opus-level      |
 | `hermes-agent.md`     | Hermes Agent     | glm-5.1:cloud (current)      |
 | `cfo-prime.md`        | CFO PRIME        | joshlcoleman/CFO-Until-No... |
 | `cmo-marketing.md`    | CMO              | joshlcoleman/dateapp-mktg... |
@@ -38,7 +36,6 @@ untuned weight. The model stops *thinking* and starts *executing* a clear proced
 
 | File                       | Paperclip agent       | Default model                 | Tier        |
 | -------------------------- | --------------------- | ----------------------------- | ----------- |
-| `fcc-agent.md`             | FCC Worker            | FCC MCP via OpenCode/NVIDIA/Ollama | free / local |
 | `opencode-agent.md`        | OpenCode Worker       | qwen2.5-coder:7b (local)      | free        |
 | `pi-agent.md`              | Pi Conversational     | Pi runtime default            | free / paid |
 | `ollama-local-agent.md`    | Ollama Local          | qwen2.5:7b (self-hosted)      | free        |
@@ -52,13 +49,9 @@ untuned weight. The model stops *thinking* and starts *executing* a clear proced
 > wrapped, never rerouted. The `openrouter-agent.md` explicitly refuses to call Anthropic
 > models (Hermes Anthropic hard wall, FOUNDER DOCTRINE rule 6) and refuses to wrap Gemini.
 
-> **Decision authority note**: no Paperclip worker below Codex 5.5 or Opus-level makes
-> decisions. FCC, Hermes, OpenCode, Ollama, NVIDIA, and other worker lanes collect
-> evidence, draft, scan, and propose. Codex CEO and Joshua decide.
-
 ## What's in each prompt
 
-- Identity + mission constants (business-only product execution baked in)
+- Identity + mission constants (#UNTILnoKIDinNEED baked in)
 - Decision matrix (table-form thresholds the model looks up)
 - Output schema (forces structured response, no rambling)
 - One-shot example (working template to mimic)
@@ -70,6 +63,5 @@ untuned weight. The model stops *thinking* and starts *executing* a clear proced
 - glm-5.1 + this prompt ≠ Sonnet 4.7 base. Base capability still matters.
 - BUT: structured, self-validating prompts close most of the gap on routine
   tactical work (gig scoring, proposal drafting, lead triage).
-- For deep novel reasoning or repo/payment/public-copy decisions, route to
-  Codex 5.5 or Opus-level. Hermes and FCC can assist, but they are not decision
-  makers below that tier.
+- For deep novel reasoning, route to Opus via Claude Code or `hermes-deep`
+  through the canonical `services/hermes-router/`.

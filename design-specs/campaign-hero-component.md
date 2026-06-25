@@ -1,8 +1,3 @@
-> Current override as of 2026-06-22: this document is historical strategy/spec context only.
-> Do not use it to create public mission-funding claims, membership support routing, customer-facing
-> disbursement language, membership records/Product launch claims, private accounting mechanics, or alternate
-> payment rails. Active public/customer surfaces sell product value: membership, verification,
-> support, safety, uptime, pricing, checkout, refunds, receipts, and account access.
 # CampaignHero Component Specification
 
 ## Component Name
@@ -70,7 +65,7 @@ Primary hero component for the Q3 "Connection with Purpose" campaign landing pag
 **Volunteer Variant:**
 
 - headline: "Volunteer While You Connect"
-- subheadline: "Join events that bring people together AND support member support through our transparent internal allocation review model."
+- subheadline: "Join events that bring people together AND support children's causes through our transparent contractual revenue disbursement model."
 - ctaText: "Find Service Opportunities"
 
 **Community Variant:**
@@ -88,7 +83,7 @@ Primary hero component for the Q3 "Connection with Purpose" campaign landing pag
 ### Impact Statistics
 
 - stat1: { value: "1000+", label: "verified users attending events" }
-- stat2: { value: "$15K", label: "internal allocation review goal" }
+- stat2: { value: "$15K", label: "contractual revenue disbursement goal" }
 - stat3: { value: "8", label: "foundation cities expanding to" }
 
 ## Accessibility Notes
@@ -142,7 +137,7 @@ Primary hero component for the Q3 "Connection with Purpose" campaign landing pag
 
 ```css
 .campaign-hero {
-  /* Base styles using design membership records */
+  /* Base styles using design tokens */
   background-color: var(--bg-primary);
   color: var(--text-primary);
   padding: var(--spacing-mobile-padding);
@@ -199,7 +194,7 @@ const CampaignHero = ({ variant, headline, subheadline, ctaText, imageUrl, impac
 ## Dependencies
 
 - React 19 (front-end framework)
-- Design system membership records (CSS variables)
+- Design system tokens (CSS variables)
 - Intersection Observer API (for animations)
 - CSS Grid/Flexbox (layout)
 

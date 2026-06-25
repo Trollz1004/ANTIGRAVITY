@@ -146,7 +146,7 @@ def scan_env_files(root):
                             if '=' in line and not line.startswith('#'):
                                 key = line.split('=')[0].strip()
                                 if any(svc in key.upper() for svc in [
-                                    'API_KEY', 'SECRET', 'membership record', 'alternate processor', 'SENDGRID',
+                                    'API_KEY', 'SECRET', 'TOKEN', 'STRIPE', 'SENDGRID',
                                     'TWILIO', 'AWS', 'GOOGLE', 'GITHUB', 'SENTRY',
                                     'ANALYTICS', 'TRACKING', 'PAGERDUTY', 'DISCORD'
                                 ]):

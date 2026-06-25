@@ -65,7 +65,7 @@ Do not publish:
 - restricted public-benefit language
 - unverified impact claims
 - old split math
-- future-structure launch claims
+- DAO/token launch claims
 - public crypto fundraising copy
 
 Internal audit files may mention prohibited terms only as rejected/historical/warning context.

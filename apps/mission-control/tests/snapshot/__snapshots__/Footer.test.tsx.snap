@@ -28,7 +28,7 @@ exports[`Footer > renders correctly 1`] = `
       <span
         class="text-accentMagenta"
       >
-        #MembershipVerificationSupport
+        #UntilNoKidInNeed
       </span>
       <span
         class="text-accentCyan"
