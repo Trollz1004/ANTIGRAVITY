@@ -214,7 +214,7 @@ This report validates the mobile responsiveness of the YouAndINotAI platform acr
 
 ✅ High contrast mode compatible
 ✅ Text resizing supported to 200%
-✅ Colorblind-friendly design membership records
+✅ Colorblind-friendly design tokens
 ✅ Reduced motion preferences respected
 ✅ Customizable display options
 

@@ -13,7 +13,7 @@ Usage:
 
 Environment:
   MISSION_MCP_URL   base URL for mission-mcp (default: http://127.0.0.1:3901)
-  MISSION_MCP_TOKEN bearer membership record if auth is enabled (optional; loopback needs none)
+  MISSION_MCP_TOKEN bearer token if auth is enabled (optional; loopback needs none)
   XLSX_PATH         override the xlsx path
 
 Idempotency:
@@ -21,7 +21,7 @@ Idempotency:
   Before creating, the script fetches existing task titles and skips duplicates.
 
 Constraints enforced:
-  - No "support", "support", "commercial misuse", "tax-deductible" in any emitted string
+  - No "donate", "donation", "solicitation", "tax-deductible" in any emitted string
   - No live posting — this only creates planning tasks
   - No credentials in code
 """
@@ -61,7 +61,7 @@ FORBIDDEN_WORDS = re.compile(
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def check_forbidden(text: str) -> None:
-    """Raise if text contains TOS-unsafe public-benefit framing."""
+    """Raise if text contains TOS-unsafe charity framing."""
     m = FORBIDDEN_WORDS.search(text)
     if m:
         raise ValueError(
@@ -70,7 +70,7 @@ def check_forbidden(text: str) -> None:
         )
 
 
-def mcp_post(url: str, membership record: str | None, payload: dict) -> dict:
+def mcp_post(url: str, token: str | None, payload: dict) -> dict:
     """POST JSON-RPC request to mission-mcp HTTP endpoint.
 
     MCP streamable-HTTP transport requires Accept: application/json, text/event-stream
@@ -82,8 +82,8 @@ def mcp_post(url: str, membership record: str | None, payload: dict) -> dict:
         "Content-Type": "application/json",
         "Accept": "application/json, text/event-stream",
     }
-    if membership record:
-        headers["Authorization"] = f"Bearer {membership record}"
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
     req = urllib.request.Request(f"{url}/mcp", data=body, headers=headers, method="POST")
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
@@ -100,14 +100,14 @@ def mcp_post(url: str, membership record: str | None, payload: dict) -> dict:
         raise RuntimeError(f"mission-mcp unreachable at {url}: {e}") from e
 
 
-def call_tool(url: str, membership record: str | None, tool_name: str, arguments: dict) -> dict:
+def call_tool(url: str, token: str | None, tool_name: str, arguments: dict) -> dict:
     payload = {
         "jsonrpc": "2.0",
         "id": 1,
         "method": "tools/call",
         "params": {"name": tool_name, "arguments": arguments},
     }
-    resp = mcp_post(url, membership record, payload)
+    resp = mcp_post(url, token, payload)
     if "error" in resp:
         raise RuntimeError(f"tool error: {resp['error']}")
     content = resp.get("result", {}).get("content", [])
@@ -125,11 +125,11 @@ def tag_block(tags: list[str]) -> str:
     return "\n\n<!-- income-engine-tags: " + json.dumps(tags) + " -->"
 
 
-def existing_titles(url: str, membership record: str | None) -> set[str]:
+def existing_titles(url: str, token: str | None) -> set[str]:
     """Fetch all pending/in_progress task titles for dedup."""
     titles = set()
     for status in ("pending", "in_progress"):
-        result = call_tool(url, membership record, "list_tasks", {"status": status, "limit": 500})
+        result = call_tool(url, token, "list_tasks", {"status": status, "limit": 500})
         if isinstance(result, list):
             for t in result:
                 titles.add(t.get("title", ""))
@@ -274,7 +274,7 @@ def main():
     )
     args = parser.parse_args()
 
-    membership record = os.environ.get("MISSION_MCP_TOKEN")
+    token = os.environ.get("MISSION_MCP_TOKEN")
     dry_run = not args.commit
 
     print(f"[seed-income-engine] mode={'DRY-RUN' if dry_run else 'COMMIT'}")
@@ -305,7 +305,7 @@ def main():
     # Live run — check existing tasks first
     print("\n[seed-income-engine] Fetching existing task titles for dedup...")
     try:
-        existing = existing_titles(args.mcp_url, membership record)
+        existing = existing_titles(args.mcp_url, token)
     except RuntimeError as e:
         print(f"ERROR: {e}")
         print("Is mission-mcp running? Start with: cd services/mission-mcp && npm run start:http")
@@ -321,7 +321,7 @@ def main():
             skipped += 1
             continue
 
-        result = call_tool(args.mcp_url, membership record, "create_task", {
+        result = call_tool(args.mcp_url, token, "create_task", {
             "title": t["title"],
             "description": t["description"],
             "priority": t["priority"],

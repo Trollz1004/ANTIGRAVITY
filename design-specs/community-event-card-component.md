@@ -281,7 +281,7 @@ interface CommunityEvent {
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Design membership records Usage
+### Design Tokens Usage
 
 ```css
 .community-event-card {
@@ -533,7 +533,7 @@ const VirtualizedEventList = ({ events, ...props }) => {
 ## Dependencies
 
 - React 19 (front-end framework)
-- Design system membership records (CSS variables)
+- Design system tokens (CSS variables)
 - Icons from design system
 - CSS animations and transitions
 - Intersection Observer API for lazy loading

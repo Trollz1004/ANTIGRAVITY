@@ -265,7 +265,7 @@ The enhanced ReportForm gathers rich context to help moderators understand and r
 │ │ [Inappropriate Content]         │ │
 │ │ [Underage User]                 │ │
 │ │ [Impersonation]                 │ │
-│ │ [Spam or restricted claims]          │ │
+│ │ [Spam or Solicitation]          │ │
 │ └─────────────────────────────────┘ │
 │                                     │
 │ When did this happen?               │

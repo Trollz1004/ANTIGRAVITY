@@ -13,10 +13,10 @@ Multi-company: work is scoped to workspaces (companies) so each surface is separ
   - ai-solutions  : ai-solutions.store products
   - business-exchange : 9020-hosted business marketplace / operator workflow
   - hermes-sideworld  : Hermes orchestration, node control, and side-work backlog
-  - Product           : governance proposals + vote tallies (TRACKING ONLY — on-chain
+  - dao           : governance proposals + vote tallies (TRACKING ONLY — on-chain
                     voting stays off this ops board; this records intent, not chain state)
 
-SECRET-FREE BY DESIGN: never store API keys, membership records, or credentials here. This is an
+SECRET-FREE BY DESIGN: never store API keys, tokens, or credentials here. This is an
 ops board; non-Anthropic platforms may read it, so it must hold zero secrets.
 
 Run:
@@ -48,7 +48,7 @@ KINDS = ("task", "issue", "bug", "idea", "support", "proposal", "goal", "routine
 NOTE_COLORS = ("amber", "love", "ukid", "green", "agrav")
 DEFAULT_COMPANY = "marketing"
 
-# Workspaces (id, name, description, color). on-chain stays OFF the Product board.
+# Workspaces (id, name, description, color). on-chain stays OFF the dao board.
 SEED_COMPANIES = [
     ("youandinotai", "YouAndINotAI", "Date app + customer support", "love"),
     ("marketing", "Marketing", "Cross-platform — serves all surfaces", "amber"),
@@ -57,7 +57,7 @@ SEED_COMPANIES = [
     ("hermes-sideworld", "Hermes Sideworld", "Hermes orchestration, node control, and side-work backlog", "agrav"),
     ("youtube", "YouTube", "Content engine — many buckets per video (CTA, subs, Super Thanks, membership, merch, affiliate)", "youtube"),
     ("onlinerecycle", "OnlineRecycle", "onlinerecycle.org cross-lister — eBay cross-listing, e-waste, resale", "green"),
-    ("Product", "Product Governance", "Proposals & voting (tracking only — on-chain stays off this board)", "agrav"),
+    ("dao", "DAO Governance", "Proposals & voting (tracking only — on-chain stays off this board)", "agrav"),
 ]
 # Real team roster (per CLAUDE.md) — seeded as assignees, not fabricated.
 SEED_AGENTS = [

@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const validation = loginSchema.safeParse(body);
-
+    
     if (!validation.success) {
       return NextResponse.json(
         { error: validation.error.errors[0].message },
@@ -49,11 +49,12 @@ export async function POST(request: NextRequest) {
     });
 
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-
+    const sessionToken = generateSessionToken();
+    
     await prisma.session.create({
       data: {
         userId: user.id,
-        token,
+        token: sessionToken,
         expiresAt,
         ipAddress: ip,
         userAgent,

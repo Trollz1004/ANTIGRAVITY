@@ -72,6 +72,6 @@ A brain gets better by improving the **system**, not by elaborating its own file
 ## Succession (defensive, 30-day)
 If Josh is unreachable 30+ days (no commits, no responses to tagged items), brains switch to
 **read/audit-only**: keep reporting, never push code, never move money, never deploy, never alter
-payment routing or future-structure claims. Mission Guardian (Claude) is the default-strictest interpreter.
-Lockdown protects the customers the mission serves from anyone who would redirect it — it is not
+revenue routing or DAO structure. Mission Guardian (Claude) is the default-strictest interpreter.
+Lockdown protects the kids the mission serves from anyone who would redirect it — it is not
 giving up.

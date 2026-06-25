@@ -7,7 +7,6 @@ import {
   ArrowRight, RotateCcw, Play, Pause, SkipForward, SkipBack,
   Maximize2, Minimize2, Video, Globe, ShoppingCart, Cpu,
   Server, Radio as RadioIcon, Link, Volume2, Upload, X, Shield,
-  Sparkles,
 } from "lucide-react";
 import {
   AI_SOURCES, PLATFORMS, TARGET_PLATFORMS,
@@ -111,7 +110,6 @@ function StatusBadge({ status }: { status: ContentStatus }) {
 const TYPE_META: Record<PlatformType, { label: string; Icon: typeof Globe }> = {
   social: { label: "Social", Icon: Globe },
   commerce: { label: "Commerce", Icon: ShoppingCart },
-  content: { label: "Content", Icon: Image },
   llm: { label: "AI / LLM", Icon: Cpu },
   dispatch: { label: "Dispatch", Icon: Send },
   infra: { label: "Infra", Icon: Server },
@@ -139,8 +137,6 @@ export default function CommandCenter() {
   const [addCustomUrl, setAddCustomUrl] = useState("");
   const [addTags, setAddTags] = useState("");
   const [addTargets, setAddTargets] = useState<string[]>(TARGET_PLATFORMS.map(p => p.id));
-  const [hermesTopic, setHermesTopic] = useState("YouAndINotAI membership, verification, safety, and real human matching");
-  const [drafting, setDrafting] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -192,44 +188,6 @@ export default function CommandCenter() {
     setTab("inbox");
   };
 
-  const requestHermesDraft = async () => {
-    setDrafting(true);
-    try {
-      const res = await fetch("/api/hermes/draft", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          topic: hermesTopic,
-          targets: ["twitter", "youtube", "instagram", "tiktok", "linkedin"],
-        }),
-      });
-      const draft = await res.json();
-      const item = createItem({
-        title: draft.title || "Hermes marketing draft",
-        body: draft.body || "",
-        source: "hermes",
-        targets: draft.targets || ["twitter", "youtube"],
-        tags: draft.tags || ["business-only", "human-approved"],
-        notes: draft.notes || "Hermes draft only. Josh approves before posting.",
-      });
-      setItems(prev => [item, ...prev]);
-      setTab("inbox");
-    } catch {
-      const item = createItem({
-        title: "Hermes marketing draft request",
-        body: `Draft product-first social content for: ${hermesTopic}\n\nGuardrails: membership, verification, safety, support, uptime, matching quality, account access, checkout facts. No non-product fundraising, ownership, control, private accounting, or investment claims.`,
-        source: "hermes",
-        targets: ["twitter", "youtube"],
-        tags: ["business-only", "manual-review"],
-        notes: "Local fallback. Hermes MCP route was unavailable.",
-      });
-      setItems(prev => [item, ...prev]);
-      setTab("inbox");
-    } finally {
-      setDrafting(false);
-    }
-  };
-
   const filtered = items.filter(i => {
     if (tab === "add" || tab === "hq" || tab === "sentry") return false;
     return i.status === tab;
@@ -277,7 +235,7 @@ export default function CommandCenter() {
             <div className="min-w-0">
               <h1 className="text-lg sm:text-xl font-black tracking-tighter uppercase">Command Center</h1>
               <p className={`text-[9px] sm:text-[10px] font-bold tracking-[0.15em] uppercase ${sub}`}>
-                {counts.inbox} pending &middot; {counts.approved} ready &middot; {items.length} total &middot; Josh-approved posting only
+                {counts.inbox} pending &middot; {counts.approved} ready &middot; {items.length} total &middot; #ForTheKids
               </p>
             </div>
           </div>
@@ -301,36 +259,6 @@ export default function CommandCenter() {
         {/* ════════ HQ TAB ════════ */}
         {tab === "hq" && (
           <div className="space-y-4">
-            <div className={`p-4 sm:p-5 rounded-2xl border ${card}`}>
-              <div className="flex flex-col sm:flex-row sm:items-end gap-3">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Sparkles size={16} className="text-emerald-400" />
-                    <h3 className="text-sm font-black uppercase tracking-wider">Hermes Marketing Intake</h3>
-                  </div>
-                  <p className={`text-[10px] ${sub} mb-2`}>
-                    Hermes drafts content through the MCP seam. This app keeps it in the inbox until Josh approves and manually posts.
-                  </p>
-                  <input
-                    value={hermesTopic}
-                    onChange={e => setHermesTopic(e.target.value)}
-                    className={`w-full px-3 py-2.5 rounded-xl border text-sm ${input}`}
-                    placeholder="Topic for Hermes/Grok/YouTube draft..."
-                  />
-                </div>
-                <button
-                  onClick={requestHermesDraft}
-                  disabled={drafting}
-                  className="px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-700 disabled:text-slate-500 text-white text-xs font-black uppercase tracking-wider transition-all active:scale-[0.98]"
-                >
-                  {drafting ? "Drafting..." : "Send to Inbox"}
-                </button>
-              </div>
-              <p className={`text-[9px] mt-3 ${sub}`}>
-                Marketing workers: Hermes, FCC, GenSpark Claw, AutoClaw, Z.ai OpenClaws. Official OpenClaw stays customer support only.
-              </p>
-            </div>
-
             {/* Platform type filter */}
             <div className="flex gap-1.5 overflow-x-auto">
               <button onClick={() => setPlatFilter("all")} className={`${tabBase} ${platFilter === "all" ? tabOn : tabOff}`}>All</button>
@@ -470,7 +398,7 @@ export default function CommandCenter() {
               {/* Tags */}
               <div>
                 <label className={`text-[10px] font-bold uppercase tracking-wider ${sub}`}>Tags (comma separated)</label>
-                <input value={addTags} onChange={e => setAddTags(e.target.value)} placeholder="business-only, verification, membership"
+                <input value={addTags} onChange={e => setAddTags(e.target.value)} placeholder="#forthekids, #youandinotai"
                   className={`w-full mt-1 px-3 py-2.5 rounded-xl border text-sm ${input}`} />
               </div>
 
@@ -708,7 +636,7 @@ export default function CommandCenter() {
 
         {/* FOOTER */}
         <footer className={`py-6 border-t text-center text-[9px] font-bold uppercase tracking-[0.2em] ${dark ? "border-slate-800 text-slate-600" : "border-slate-200 text-slate-400"}`}>
-          ANTIGRAVITY Command Center &middot; Private Admin &middot; Business-only drafts &middot; Manual posting
+          ANTIGRAVITY Command Center &middot; Private Admin &middot; #ForTheKids
         </footer>
       </div>
 

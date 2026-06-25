@@ -40,7 +40,7 @@ A comprehensive settings interface allowing users to manage their profile inform
 
 ### Florida §496.405 Compliance
 
-- No use of "join as a member", "membership support", or "restricted claims" in any UI copy
+- No use of "donate", "donation", or "solicitation" in any UI copy
 - Appropriate language distinguishing between activities and contributions
 
 ### Mobile-First Approach

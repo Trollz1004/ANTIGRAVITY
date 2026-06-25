@@ -79,7 +79,8 @@ Repo MCP config currently includes:
 
 - Live LLC model: 1 LLC / 1 wallet / 10% mission reserve per legally distinct revenue bucket.
 - Do not revive old 60/30/10, 100% charity, split-era, named-beneficiary, or DAO-current claims as live doctrine.
-- Square is the live payment rail for YouAndINotAI and aligned active dating surfaces unless a canonical update says otherwise.
+- Square is the live payment rail for YouAndINotAI/dating surfaces unless a canonical update says otherwise.
+- Stripe may exist for clean non-dating product-sales lanes, but do not route dating products through Stripe.
 - Customer-facing copy must not use FL §496.405 banned terms:
   - donate
   - donation
@@ -88,7 +89,7 @@ Repo MCP config currently includes:
   - charitable
   - giving back
   - disbursement
-- Do not use older disbursement terminology in public copy or as a launch gate.
+- Internal-only phrase: `contractual revenue disbursement`.
 - Customer surfaces sell product/service value first. Mission accounting stays internal/backend unless canonical docs allow restrained factual phrasing.
 
 ## Crossfire / OnlineRecycle / eBay Verified Notes

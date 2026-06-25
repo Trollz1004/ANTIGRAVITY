@@ -689,7 +689,7 @@ def format_master_md(design_system: dict) -> str:
     # Spacing Variables
     lines.append("### Spacing Variables")
     lines.append("")
-    lines.append("| membership record | Value | Usage |")
+    lines.append("| Token | Value | Usage |")
     lines.append("|-------|-------|-------|")
     lines.append("| `--space-xs` | `4px` / `0.25rem` | Tight gaps |")
     lines.append("| `--space-sm` | `8px` / `0.5rem` | Icon gaps, inline spacing |")

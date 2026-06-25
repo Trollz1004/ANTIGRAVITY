@@ -178,22 +178,11 @@ function Start-TunnelIfNeeded {
         throw "tunnel token not found at $TunnelTokenPath"
     }
 
-    $tunnelToken = (Get-Content -LiteralPath $TunnelTokenPath -Raw).Trim()
-    Write-StackLog "installing/starting cloudflared Windows service"
-    $service = Get-Service -Name "cloudflared" -ErrorAction SilentlyContinue
-    if (-not $service) {
-        & $Cloudflared service install $tunnelToken >> $TunnelOut 2>> $TunnelErr
-    }
-    Set-Service -Name "cloudflared" -StartupType Automatic -ErrorAction SilentlyContinue
-    Start-Service -Name "cloudflared" -ErrorAction SilentlyContinue
-    Start-Sleep -Seconds 5
-    if (Test-TunnelRunning) {
-        Write-StackLog "cloudflared Windows service is running"
-        return
-    }
-
-    $args = @("tunnel", "--no-autoupdate", "run", "--token", $tunnelToken)
-    Write-StackLog "service unavailable; starting cloudflared in foreground"
+    $token = (Get-Content -LiteralPath $TunnelTokenPath -Raw).Trim()
+    $args = @("tunnel", "--no-autoupdate", "run", "--token", $token)
+    Write-StackLog "starting cloudflared in foreground"
+    Write-StackLog "startup complete; task will remain running while tunnel is active"
+parent of 22d51cba (chore: clean business-only public surfaces)
     & $Cloudflared @args >> $TunnelOut 2>> $TunnelErr
     throw "cloudflared exited with code $LASTEXITCODE; see $TunnelErr"
 }

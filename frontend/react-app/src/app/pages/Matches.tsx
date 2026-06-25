@@ -47,8 +47,8 @@ export function Matches() {
           <div className="app-kicker mb-3">Matches</div>
           <h1 className="app-title">no matches yet.</h1>
           <p className="app-subtitle mt-4">
-            Like or comment on a profile answer in Discover. Mutual interest
-            opens chat, then Plans helps move the conversation safely offline.
+            Like or comment on a prompt in Discover. Mutual interest opens chat,
+            then Plans helps move the conversation safely offline.
           </p>
           <div className="mt-6 grid gap-3 text-left sm:grid-cols-3">
             <div className="rounded-[1.2rem] border-4 border-[#111111] bg-white p-4">

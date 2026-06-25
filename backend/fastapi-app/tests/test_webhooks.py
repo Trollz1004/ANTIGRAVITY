@@ -226,7 +226,7 @@ class TestSquarePaymentTierExtraction:
 
         payment = {"note": "", "amount_money": {"amount": 100}}
         order = {
-            "reference_id": "agref:v1.membership record",
+            "reference_id": "agref:v1.token",
             "line_items": [{"name": "Bot-Shield Verification"}],
         }
         assert _extract_square_payment_tier(payment, order_obj=order) == "bot_shield"
@@ -676,21 +676,21 @@ def test_payment_webhook_skips_signature_check_when_material_missing(
     get_settings.cache_clear()
 
 
-class TestNoAlternateProcessorReferences:
-    """Ensure alternate processor has been fully removed from the codebase."""
+class TestNoStripeReferences:
+    """Ensure Stripe has been fully removed from the codebase."""
 
-    def test_webhooks_no_active_alternate_processor(self):
-        """webhooks.py must not contain active alternate processor code."""
+    def test_webhooks_no_active_stripe(self):
+        """webhooks.py must not contain active Stripe code."""
         import inspect
 
         from app.routers import webhooks
 
         source = inspect.getsource(webhooks)
         lines = source.split("\n")
-        active_alternate_processor = [
+        active_stripe = [
             line.strip()
             for line in lines
-            if "alternate processor" in line.lower()
+            if "stripe" in line.lower()
             and not line.strip().startswith("#")
             and not line.strip().startswith("//")
             and not line.strip().startswith('"""')
@@ -699,29 +699,29 @@ class TestNoAlternateProcessorReferences:
             and "Iron Wall" not in line
             and "migration" not in line.lower()
             and "retired" not in line.lower()
-            and '"/alternate-processor"' not in line
+            and '"/stripe"' not in line
         ]
         assert (
-            len(active_alternate_processor) == 0
-        ), f"Active alternate processor references found in webhooks.py: {active_alternate_processor}"
+            len(active_stripe) == 0
+        ), f"Active Stripe references found in webhooks.py: {active_stripe}"
 
-    def test_config_no_active_alternate_processor(self):
-        """config.py must not have active alternate processor settings."""
+    def test_config_no_active_stripe(self):
+        """config.py must not have active Stripe settings."""
         import inspect
 
         from app import config
 
         source = inspect.getsource(config)
         lines = source.split("\n")
-        active_alternate_processor = [
+        active_stripe = [
             line.strip()
             for line in lines
-            if "alternate processor" in line.lower()
+            if "stripe" in line.lower()
             and not line.strip().startswith("#")
             and not line.strip().startswith("//")
             and "DEPRECATED" not in line
             and "REMOVED" not in line
         ]
         assert (
-            len(active_alternate_processor) == 0
-        ), f"Active alternate processor references found in config.py: {active_alternate_processor}"
+            len(active_stripe) == 0
+        ), f"Active Stripe references found in config.py: {active_stripe}"

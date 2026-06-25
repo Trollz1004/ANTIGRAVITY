@@ -46,7 +46,7 @@ PLATFORMS: List[Dict[str, Any]] = [
             "for OpusPawClaw. You speak as the maker — direct, technical, warm, "
             "no fluff. You hold the doctrine: Opus conducts, agents execute; "
             "no fast-tier Anthropic label; no request-for-funds language; "
-            "honest mirrors only; Business-only product operations. "
+            "honest mirrors only; #UntilNoKidInNeed. "
             "When Joshua asks for changes, propose the smallest viable edit. "
             "When Joshua asks for opinions, give them — short, specific, useful. "
             "When you say 'we' you mean Joshua + the agents on this surface. "
@@ -160,7 +160,7 @@ def _emergent_chat(provider: str, model: str, messages: List[Dict[str, str]], se
     chat = LlmChat(
         api_key=api_key,
         session_id=session_id,
-        system_message=system or "You are Opus on Mission Control. Direct, brief, mission-forward. Business-only product operations.",
+        system_message=system or "You are Opus on Mission Control. Direct, brief, mission-forward. #UntilNoKidInNeed.",
     ).with_model(provider, model)
 
     return asyncio.run(chat.send_message(UserMessage(text=last_user)))  # type: ignore
@@ -299,11 +299,11 @@ async def chat_send(body: UnifiedChatRequest, response: Response):
         for channel in body.broadcast:
             if channel == "telegram":
                 broadcast_results["telegram"] = await _telegram_send(
-                    f"💠 *{p['label']} · {body.model}*\n\n{reply}\n\n_via OpusPawClaw Mission Control · Business-only product operations_"
+                    f"💠 *{p['label']} · {body.model}*\n\n{reply}\n\n_via OpusPawClaw Mission Control · #UntilNoKidInNeed_"
                 )
             elif channel == "whatsapp":
                 broadcast_results["whatsapp"] = await _whatsapp_send(
-                    f"*{p['label']} · {body.model}*\n\n{reply}\n\n— OpusPawClaw Mission Control · Business-only product operations"
+                    f"*{p['label']} · {body.model}*\n\n{reply}\n\n— OpusPawClaw Mission Control · #UntilNoKidInNeed"
                 )
 
     response.headers["X-Hermes-Provider"] = p["id"]
@@ -348,22 +348,22 @@ class BroadcastRequest(BaseModel):
 
 @router.post("/broadcast/telegram")
 async def broadcast_telegram(body: BroadcastRequest):
-    return await _telegram_send(f"💠 *{body.source}*\n\n{body.text}\n\n_via OpusPawClaw Mission Control · Business-only product operations_")
+    return await _telegram_send(f"💠 *{body.source}*\n\n{body.text}\n\n_via OpusPawClaw Mission Control · #UntilNoKidInNeed_")
 
 
 @router.post("/broadcast/whatsapp")
 async def broadcast_whatsapp(body: BroadcastRequest):
-    return await _whatsapp_send(f"*{body.source}*\n\n{body.text}\n\n— OpusPawClaw Mission Control · Business-only product operations")
+    return await _whatsapp_send(f"*{body.source}*\n\n{body.text}\n\n— OpusPawClaw Mission Control · #UntilNoKidInNeed")
 
 
 async def _telegram_send(text: str) -> Dict[str, Any]:
-    membership record = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
     chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
-    if not membership record or not chat_id:
+    if not token or not chat_id:
         return {"ok": False, "configured": False,
-                "hint": "Set TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID in /app/backend/.env. Get a bot from @BotFather, add it to your group, then call https://api.telegram.org/bot<membership record>/getUpdates to find chat_id."}
+                "hint": "Set TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID in /app/backend/.env. Get a bot from @BotFather, add it to your group, then call https://api.telegram.org/bot<TOKEN>/getUpdates to find chat_id."}
 
-    url = f"https://api.telegram.org/bot{membership record}/sendMessage"
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
     payload = {"chat_id": chat_id, "text": text, "parse_mode": "Markdown", "disable_web_page_preview": True}
     async with httpx.AsyncClient(timeout=10.0) as client:
         try:
@@ -376,14 +376,14 @@ async def _telegram_send(text: str) -> Dict[str, Any]:
 
 async def _whatsapp_send(text: str) -> Dict[str, Any]:
     phone_id = os.environ.get("WHATSAPP_PHONE_ID", "").strip()
-    membership record = os.environ.get("WHATSAPP_TOKEN", "").strip()
+    token = os.environ.get("WHATSAPP_TOKEN", "").strip()
     to = os.environ.get("WHATSAPP_TO", "").strip()
-    if not (phone_id and membership record and to):
+    if not (phone_id and token and to):
         return {"ok": False, "configured": False,
                 "hint": "Set WHATSAPP_PHONE_ID + WHATSAPP_TOKEN + WHATSAPP_TO in /app/backend/.env. Get them from Meta Business Suite > WhatsApp Business API."}
 
     url = f"https://graph.facebook.com/v21.0/{phone_id}/messages"
-    headers = {"Authorization": f"Bearer {membership record}", "Content-Type": "application/json"}
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
     payload = {"messaging_product": "whatsapp", "to": to, "type": "text", "text": {"body": text}}
     async with httpx.AsyncClient(timeout=10.0) as client:
         try:

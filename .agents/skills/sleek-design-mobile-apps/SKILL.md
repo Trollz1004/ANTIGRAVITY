@@ -13,7 +13,7 @@ metadata:
 
 ## Overview
 
-[sleek.design](https://sleek.design) is an AI-powered mobile app design tool. You interact with it via a REST API at `/api/v1/*` to create projects, describe what you want built in plain language, and get back rendered screens. All communication is standard HTTP with bearer membership record auth.
+[sleek.design](https://sleek.design) is an AI-powered mobile app design tool. You interact with it via a REST API at `/api/v1/*` to create projects, describe what you want built in plain language, and get back rendered screens. All communication is standard HTTP with bearer token auth.
 
 **Base URL**: `https://sleek.design`
 **Auth**: `Authorization: Bearer $SLEEK_API_KEY` on every `/api/v1/*` request
@@ -502,7 +502,7 @@ GET /api/v1/projects?limit=10&offset=20
 
 ### Saving component HTML to files
 
-Component code can be large. When saving it to `.html` files, avoid writing the content through your text output — this is slow and wastes membership records. Instead, use shell commands to fetch the API response and write it directly to disk (e.g., pipe the response body into a file). This applies to both single and multiple components.
+Component code can be large. When saving it to `.html` files, avoid writing the content through your text output — this is slow and wastes tokens. Instead, use shell commands to fetch the API response and write it directly to disk (e.g., pipe the response body into a file). This applies to both single and multiple components.
 
 ---
 

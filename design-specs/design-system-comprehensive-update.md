@@ -4,11 +4,11 @@
 
 This document represents the final comprehensive update to the YouAndINotAI design system, incorporating all accessibility improvements, mobile responsiveness enhancements, and trust-building features. It supersedes all previous design system documentation and serves as the definitive reference for current design practices.
 
-## Updated Design membership records
+## Updated Design Tokens
 
-All design membership records remain consistent with previous versions but now include explicit accessibility considerations.
+All design tokens remain consistent with previous versions but now include explicit accessibility considerations.
 
-### Accessibility-Enhanced Color membership records
+### Accessibility-Enhanced Color Tokens
 
 ```css
 :root {

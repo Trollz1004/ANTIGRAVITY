@@ -4,11 +4,11 @@ Catalog of all third-party services used by the ANTIGRAVITY platform.
 
 ## Payment Processing
 
-### alternate processor
+### Stripe
 - **Purpose**: Payment processing, subscriptions, billing
-- **Data shared**: Customer email, payment membership records, billing address
+- **Data shared**: Customer email, payment tokens, billing address
 - **Config**: `backend/fastapi-app/app/routers/billing.py`
-- **API keys**: `alternate processor_SECRET_KEY`, `alternate processor_WEBHOOK_SECRET` (env vars)
+- **API keys**: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (env vars)
 
 ## Authentication
 
