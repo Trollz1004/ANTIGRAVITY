@@ -1,0 +1,195 @@
+name: "ANTIGRAVITY 三节点 CEO 协作"
+description: "3 个 CEO 分别驻守 Sabretooth / 9020 / T5500 节点，分析任务后分发到对应节点执行，汇总决策"
+
+agents_dir: "agency-agents"
+
+llm:
+  provider: "openai"
+  base_url: "http://localhost:8082/v1"
+  model: "nousresearch/hermes-3-llama-3.1-405b:free"
+  max_tokens: 4096
+
+concurrency: 3
+
+inputs:
+  - name: mission
+    description: "ANTIGRAVITY 任务/需求/问题（如：新功能规划、竞对应对、技术决策、收入增长策略）"
+    required: true
+  - name: context
+    description: "背景信息（项目阶段、团队情况、预算约束等）"
+    required: false
+    default: "ANTIGRAVITY — ForTheKids 社交+约会平台，初创阶段，3 节点集群"
+
+steps:
+  # ═══════════════════════════════════════
+  # 第一层：主控 CEO — 分析需求，决定路由到哪些节点
+  # ═══════════════════════════════════════
+  - id: ceo_analyze
+    role: "project-management/project-manager-senior"
+    task: |
+      你是 ANTIGRAVITY 主控 CEO。请分析以下任务需求，决定需要路由到哪些节点 CEO。
+
+      任务：{{mission}}
+      背景：{{context}}
+
+      你可以调动的节点 CEO：
+      - **Sabretooth CEO**（i7-4960X, 64GB, 1050Ti）：负责 Hermes 网关、AI 模型路由、本地 Ollama、Dashboard
+      - **9020 CEO**（i7K, 32GB, 1050Ti）：负责业务交换、Square 支付、产品前端、OpenClaw WhatsApp 支持
+      - **T5500 CEO**（远程节点）：负责 Cloudflare Workers、域名管理、外部 API、生产部署
+
+      请输出：
+      1. **任务解读**：一句话总结核心问题
+      2. **需要参与的节点**（必须明确：Sabretooth / 9020 / T5500）
+      3. **每个节点 CEO 的具体任务**
+      4. **优先级和截止时间**
+      5. **节点间依赖关系**
+      6. **#ForTheKids 关联**：此任务如何服务于 UntilNoKidInNeed 使命
+    output: ceo_decision
+
+  # ═══════════════════════════════════════
+  # 第二层：节点 CEO — 在各自节点上展开工作
+  # ═══════════════════════════════════════
+  - id: sabretooth_ceo
+    role: "engineering/engineering-software-architect"
+    task: |
+      你是 Sabretooth 节点 CEO（i7-4960X, 64GB, 1050Ti, WSL Linux）。
+
+      主控 CEO 的指示：
+      {{ceo_decision}}
+
+      原始任务：{{mission}}
+
+      Sabretooth 节点职责：
+      - Hermes 网关和代理路由（端口 9119）
+      - 本地 Ollama 模型服务（localhost:11434）
+      - Hermes Dashboard
+      - AI 模型路由和故障转移
+      - 开发环境和脚本运行
+
+      请作为 Sabretooth CEO 输出：
+      1. **本节点技术评估**（能做什么、限制在哪）
+      2. **执行方案**（具体步骤、命令、配置）
+      3. **资源需求**（CPU/GPU/内存/磁盘）
+      4. **时间估算**
+      5. **给其他节点 CEO 的依赖/接口说明**
+      6. **ForTheKids 影响**
+    depends_on: [ceo_analyze]
+    condition: "{{ceo_decision}} contains Sabretooth"
+    output: sabretooth_report
+
+  - id: node_9020_ceo
+    role: "product/product-manager"
+    task: |
+      你是 9020 节点 CEO（i7K, 32GB, 1050Ti, Windows）。
+
+      主控 CEO 的指示：
+      {{ceo_decision}}
+
+      原始任务：{{mission}}
+
+      9020 节点职责：
+      - 业务交换（Business Exchange，端口 3050）
+      - Square 支付集成
+      - 产品前端（YouAndINotAI 社交平台）
+      - OpenClaw WhatsApp 支持（端口 8082）
+      - Paperclip AI 代理管理
+
+      请作为 9020 CEO 输出：
+      1. **本节点技术评估**（能做什么、限制在哪）
+      2. **执行方案**（具体步骤、配置修改、部署流程）
+      3. **与 Sabretooth 的交互点**（API 调用、数据流）
+      4. **与 T5500 的交互点**（部署、CDN、域名）
+      5. **时间估算**
+      6. **ForTheKids 影响**
+    depends_on: [ceo_analyze]
+    condition: "{{ceo_decision}} contains 9020"
+    output: node_9020_report
+
+  - id: t5500_ceo
+    role: "engineering/engineering-sre"
+    task: |
+      你是 T5500 节点 CEO（远程服务器）。
+
+      主控 CEO 的指示：
+      {{ceo_decision}}
+
+      原始任务：{{mission}}
+
+      T5500 节点职责：
+      - Cloudflare Workers 部署
+      - 域名管理（youandinotai.com, dashboard.youandinotai.com）
+      - 外部 API 网关
+      - 生产环境部署
+      - 监控和告警
+
+      请作为 T5500 CEO 输出：
+      1. **本节点技术评估**（能做什么、当前状态）
+      2. **部署方案**（Workers 更新、域名配置、SSL）
+      3. **与 9020 的集成点**（前端部署、API 路由）
+      4. **与 Sabretooth 的集成点**（Dashboard 代理、模型路由）
+      5. **时间估算**
+      6. **ForTheKids 影响**
+    depends_on: [ceo_analyze]
+    condition: "{{ceo_decision}} contains T5500"
+    output: t5500_report
+
+  # ═══════════════════════════════════════
+  # 第三层：主控 CEO 汇总 — 综合各节点意见做最终决策
+  # ═══════════════════════════════════════
+  - id: ceo_final_decision
+    role: "support/support-executive-summary-generator"
+    task: |
+      你是 ANTIGRAVITY 主控 CEO。各节点 CEO 已提交工作报告，请综合所有信息做最终决策。
+
+      原始任务：{{mission}}
+
+      主控 CEO 初步分析：
+      {{ceo_decision}}
+
+      各节点 CEO 报告（仅包含被激活的节点）：
+
+      Sabretooth CEO 报告：
+      {{sabretooth_report}}
+
+      9020 CEO 报告：
+      {{node_9020_report}}
+
+      T5500 CEO 报告：
+      {{t5500_report}}
+
+      请输出最终决策文档：
+
+      # ANTIGRAVITY CEO 决策备忘录
+
+      ## 执行摘要
+      [一段话总结决策和理由，包含 #ForTheKids 使命关联]
+
+      ## 决策要点
+      1. [做什么 / 不做什么]
+      2. [优先级排序]
+      3. [资源分配]
+
+      ## 各节点行动项
+      | 节点 | 行动项 | 负责人 | 截止日期 |
+      |------|--------|--------|---------|
+      [从各节点报告中提取具体可执行的行动]
+
+      ## 节点间依赖
+      [明确哪些节点需要等另一个节点完成才能开始]
+
+      ## 里程碑
+      [关键节点和检查点]
+
+      ## 预算总览
+      [API 费用、基础设施成本等]
+
+      ## 风险与应对
+      [综合各节点提出的风险，给出应对策略]
+
+      ## #ForTheKids 影响评估
+      [此决策如何直接或间接服务于 UntilNoKidInNeed 使命]
+
+      ## 下次复盘时间
+      [建议的复盘节点]
+    depends_on: [sabretooth_ceo, node_9020_ceo, t5500_ceo]
+    depends_on_mode: any_completed
