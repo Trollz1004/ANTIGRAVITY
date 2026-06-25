@@ -21,7 +21,7 @@ Complete final UX design work to prepare for full platform implementation.
 ### 3. Design System Documentation
 
 - Complete component library documentation with usage guidelines
-- Create design membership records specification for consistent implementation
+- Create design tokens specification for consistent implementation
 - Document animation and transition standards
 
 ### 4. Copy Review Coordination

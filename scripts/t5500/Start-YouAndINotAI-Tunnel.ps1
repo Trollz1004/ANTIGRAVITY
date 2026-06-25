@@ -25,11 +25,12 @@ if (-not (Test-Path $TunnelTokenPath)) {
     throw "tunnel token not found at $TunnelTokenPath"
 }
 
-$tunnelToken = (Get-Content -LiteralPath $TunnelTokenPath -Raw).Trim()
+$token = (Get-Content -LiteralPath $TunnelTokenPath -Raw).Trim()
 Write-TunnelLog "starting cloudflared foreground"
 try {
     $ErrorActionPreference = "Continue"
-    & $Cloudflared tunnel --no-autoupdate run --token $tunnelToken >> $TunnelOut 2>> $TunnelErr
+    & $Cloudflared tunnel --no-autoupdate run --token $token >> $TunnelOut 2>> $TunnelErr
+parent of 22d51cba (chore: clean business-only public surfaces)
     $code = $LASTEXITCODE
 } catch {
     $code = 1

@@ -3,7 +3,7 @@ Rate limiting middleware for Mission Control API.
 
 Implements a sliding window rate limiter:
   - 100 requests per 60-second window per client identifier
-  - Per-IP tracking (falls back to per-API-membership record when present)
+  - Per-IP tracking (falls back to per-API-token when present)
   - Returns 429 Too Many Requests with Retry-After header when exceeded
   - Pure stdlib — no external dependencies
 
@@ -44,7 +44,7 @@ class SlidingWindowRateLimiter:
     """
     In-memory sliding window rate limiter.
 
-    Maps client identifiers (IP or membership record) to a list of request timestamps.
+    Maps client identifiers (IP or token) to a list of request timestamps.
     On each check, timestamps outside the current window are evicted and the
     remaining count is compared against the limit.
     """
@@ -102,22 +102,22 @@ def _get_client_id(request: Request) -> str:
     Determine the rate-limit key for a given request.
 
     Priority:
-      1. API membership record from the Authorization header (Bearer membership record)
+      1. API token from the Authorization header (Bearer token)
       2. X-API-Key header
       3. Client IP address (from request.client.host)
       4. Fallback "unknown" (should never happen in practice)
     """
-    # Check for Bearer membership record
+    # Check for Bearer token
     auth = request.headers.get("authorization", "")
     if auth.lower().startswith("bearer "):
-        membership record = auth[7:].strip()
-        if membership record:
-            return f"membership record:{membership record}"
+        token = auth[7:].strip()
+        if token:
+            return f"token:{token}"
 
     # Check for API key header
     api_key = request.headers.get("x-api-key", "")
     if api_key:
-        return f"membership record:{api_key}"
+        return f"token:{api_key}"
 
     # Fall back to IP address
     host: Optional[str] = request.client.host if request.client else None

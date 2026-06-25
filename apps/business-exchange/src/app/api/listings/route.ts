@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     let org = await prisma.organization.findFirst({
       where: { members: { some: { userId: user.id, role: 'OWNER' } } },
     });
-
+    
     if (!org) {
       org = await prisma.organization.create({
         data: {

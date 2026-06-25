@@ -16,7 +16,7 @@ const PAGES: Array<{ id: string; label: string; group: string }> = [
   { id: "dashboard",   label: "Mission Control",   group: "Pages" },
   { id: "fleet",       label: "Agent Fleet",       group: "Pages" },
   { id: "revenue",     label: "Revenue Engine",    group: "Pages" },
-  { id: "membership records",      label: "Tokenomics",        group: "Pages" },
+  { id: "tokens",      label: "Tokenomics",        group: "Pages" },
   { id: "comms",       label: "Comms Gateway",     group: "Pages" },
   { id: "paperweight", label: "Paperweight",       group: "Pages" },
   { id: "hermes",      label: "Hermes Node",       group: "Pages" },
@@ -25,7 +25,7 @@ const PAGES: Array<{ id: string; label: string; group: string }> = [
 
 const COMMANDS: Array<{ id: string; label: string; group: string; run: () => void }> = [
   { id: "engage-hermes", label: "Engage Hermes (9020)",  group: "Actions", run: () => useStore.getState().toggleHermes() },
-  { id: "open-membership records",   label: "Open Tokenomics",       group: "Actions", run: () => useStore.getState().setPage("membership records") },
+  { id: "open-tokens",   label: "Open Tokenomics",       group: "Actions", run: () => useStore.getState().setPage("tokens") },
   { id: "open-revenue",  label: "Open Revenue Engine",   group: "Actions", run: () => useStore.getState().setPage("revenue") },
   { id: "new-mission",   label: "Create new mission",    group: "Actions", run: () => useStore.getState().pushToast({ title: "Mission created", body: "PAPA-242 drafted in Paperweight.", tone: "success" }) },
 ];
@@ -127,7 +127,7 @@ export function CommandPalette() {
               setActive(0);
             }}
             onKeyDown={onKeyDown}
-            placeholder="Search pages, agents, membership records, actions…"
+            placeholder="Search pages, agents, tokens, actions…"
             className="cmd-input"
             data-testid="cmd-input"
           />

@@ -2,13 +2,7 @@
 ## From: Manus Agent (Meta/Key to Mission)
 ## To: Joshua Coleman (CEO) + Claude Code (Orchestrator) + AI Team
 ## Re: Hermes Kanban as Central Transparency Hub + Multi-Model AI Integration
-## Date: 2026-05-07 | Status: SUPERSEDED BY 2026-06-22 BUSINESS-ONLY RULE
-
-> Current override as of 2026-06-22: this prompt is historical context only. Do not use it to
-> create public transparency/mission-funding claims, membership support routing, membership record-sale flows, founder
-> compensation gates, bucket math, or alternate processor defaults. Current active surfaces sell product value
-> and use Square for YouAndINotAI/aligned active checkout unless Joshua provides a newer
-> timestamped directive.
+## Date: 2026-05-07 | Status: OPERATIONAL
 
 ---
 
@@ -242,7 +236,7 @@ export async function callOpenRouterModel(model, prompt, context = {}) {
       max_tokens: 2048,
       ...context
     }, {
-      headers: {
+      headers: { 
         Authorization: `Bearer ${OPENROUTER_API_KEY}`,
         'HTTP-Referer': 'https://youandinotai.com',
         'X-Title': 'Mission-Funded Ecosystem'
@@ -415,7 +409,7 @@ async function fallbackToNextProvider(failedProvider, model, prompt, context) {
 <!-- client/src/components/ModelSelector.tsx -->
 <div class="model-selector">
   <label>Select AI Model:</label>
-
+  
   <select id="provider" onchange="updateModels()">
     <option value="local">Local Models (Ollama)</option>
     <option value="ollama-cloud">Ollama Cloud</option>
@@ -466,7 +460,7 @@ async function updateModels() {
   const provider = document.getElementById('provider').value;
   const response = await fetch(`/api/models?provider=${provider}`);
   const data = await response.json();
-
+  
   const modelSelect = document.getElementById('model');
   modelSelect.innerHTML = data.models
     .map(m => `<option value="${m.id}">${m.name}</option>`)
@@ -485,7 +479,7 @@ document.addEventListener('DOMContentLoaded', updateModels);
 <!-- client/src/components/ModelStatusDashboard.tsx -->
 <div class="model-status-dashboard">
   <h3>AI Model Status</h3>
-
+  
   <div class="status-grid">
     <div class="status-card local">
       <h4>Local Models</h4>
@@ -593,19 +587,19 @@ async function checkModelStatus() {
   const response = await fetch('/api/models/status');
   const status = await response.json();
 
-  document.getElementById('ollama-status').textContent =
+  document.getElementById('ollama-status').textContent = 
     status.ollamaCloud.online ? '● Online' : '● Offline';
-  document.getElementById('ollama-count').textContent =
+  document.getElementById('ollama-count').textContent = 
     `${status.ollamaCloud.count} models available`;
 
-  document.getElementById('opencode-status').textContent =
+  document.getElementById('opencode-status').textContent = 
     status.opencode.online ? '● Online' : '● Offline';
-  document.getElementById('opencode-count').textContent =
+  document.getElementById('opencode-count').textContent = 
     `${status.opencode.count} models available`;
 
-  document.getElementById('openrouter-status').textContent =
+  document.getElementById('openrouter-status').textContent = 
     status.openrouter.online ? '● Online' : '● Offline';
-  document.getElementById('openrouter-count').textContent =
+  document.getElementById('openrouter-count').textContent = 
     `${status.openrouter.count} models available`;
 }
 
@@ -680,7 +674,7 @@ app.post('/webhooks/manus', async (req, res) => {
   try {
     // Update corresponding Kanban card
     const kanbanCard = await getKanbanCardByManuTaskId(taskId);
-
+    
     if (status === 'completed') {
       await updateKanbanCard(kanbanCard.id, {
         status: 'DONE',
@@ -710,19 +704,19 @@ app.post('/webhooks/manus', async (req, res) => {
 **Add this card to your Hermes Kanban board:**
 
 ```
-TITLE:
+TITLE: 
 Hermes Kanban Master Setup + Multi-Model AI Integration
 
-PRIORITY:
+PRIORITY: 
 CRITICAL
 
-OWNER:
+OWNER: 
 Claude Code + Manus
 
-CATEGORY:
+CATEGORY: 
 INFRASTRUCTURE
 
-EFFORT:
+EFFORT: 
 1 WEEK
 
 DEPENDENCIES:
@@ -825,7 +819,7 @@ LINKS:
 - Cards moved to DONE
 - Revenue generated (real numbers)
 - Founder cap status ($X of $50k)
-- member-support bucket total join as a memberd
+- Kids bucket total donated
 - Blockers and resolutions
 - Next week priorities
 - Model performance metrics

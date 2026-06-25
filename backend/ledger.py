@@ -1,15 +1,15 @@
 """
-Mission Ledger — every dollar committed to the product reserve, tracked.
+Mission Ledger — every dollar committed to the kids fund, tracked.
 
-Replaces the mirror product band with real persistent revenue tracking. External
-systems (Square, Cloudflare workers, etc.) post to the webhook
+Replaces the mirror DAO band with real persistent revenue tracking. External
+systems (Square, Stripe, Cloudflare workers, etc.) post to the webhook
 endpoints and the totals propagate to the Mission ribbon visible on every
 screen.
 
 Doctrine compliance:
   - All amounts are recorded — never claim contributions or requests.
   - "contributed" / "committed" wording only.
-  - The kids-funded estimate uses a configurable per-member support threshold so the UI
+  - The kids-funded estimate uses a configurable per-kid threshold so the UI
     can render an honest count, not a fabricated one.
 """
 from __future__ import annotations
@@ -34,13 +34,13 @@ LEDGER = _db.ledger
 
 # Per-kid funding threshold — covers a meaningful unit of medical-care
 # contribution (configurable so Joshua can adjust as the program scales).
-MEMBER_SUPPORT_THRESHOLD_USD = float(os.environ.get("MEMBER_SUPPORT_THRESHOLD_USD", "250"))
+KID_THRESHOLD_USD = float(os.environ.get("KID_THRESHOLD_USD", "250"))
 
 BUCKET_NAMES = {
-    1: "product reserve - Infrastructure Immunity (Security Cleanup)",          2: "Platform Build - Orchestration Engine (Agentic Workflows)",     3: "Hermes Ops",
+    1: "Kids Fund - Infrastructure Immunity (Security Cleanup)",          2: "Platform Build - Orchestration Engine (Agentic Workflows)",     3: "Hermes Ops",
     4: "Recycle Intake",     5: "AI-Solutions Store - Digital Storefront Accelerator (Storefront Deployment)", 6: "Super Likes Match",
     7: "Content Sprint - Legacy Modernizer (Tech Debt Cleanup)",     8: "Paperclip Scale - Guardian Gateway (API Management)",    9: "Antigravity Reserve",
-    10: "Founder Membership Reserve",
+    10: "Founder Four Trust",
 }
 
 
@@ -55,7 +55,7 @@ def _new_id() -> str:
 class ContributionCreate(BaseModel):
     amount_usd: float = Field(gt=0)
     bucket: int = Field(ge=1, le=10)
-    source: str = "manual"   # square | Square | cloudflare | manual | webhook
+    source: str = "manual"   # square | stripe | cloudflare | manual | webhook
     note: Optional[str] = ""
     actor: Optional[str] = "Mission Control"
 
@@ -107,19 +107,19 @@ async def stats():
         total += amount
         by_bucket.append({"bucket": n, "name": BUCKET_NAMES[n], "amount_usd": round(amount, 2), "count": count})
 
-    member_support = next((b for b in by_bucket if b["bucket"] == 1), {"amount_usd": 0})
+    kids_fund = next((b for b in by_bucket if b["bucket"] == 1), {"amount_usd": 0})
     by_source_raw = await LEDGER.aggregate([
         {"$group": {"_id": "$source", "amount": {"$sum": "$amount_usd"}, "count": {"$sum": 1}}},
     ]).to_list(20)
 
     return {
         "total_usd": round(total, 2),
-        "member_support_usd": round(member_support["amount_usd"], 2),
-        "member_support_threshold_usd": MEMBER_SUPPORT_THRESHOLD_USD,
-        "member_support_estimate": int(member_support["amount_usd"] / MEMBER_SUPPORT_THRESHOLD_USD) if MEMBER_SUPPORT_THRESHOLD_USD else 0,
+        "kids_fund_usd": round(kids_fund["amount_usd"], 2),
+        "kids_threshold_usd": KID_THRESHOLD_USD,
+        "kids_estimate": int(kids_fund["amount_usd"] / KID_THRESHOLD_USD) if KID_THRESHOLD_USD else 0,
         "by_bucket": by_bucket,
         "by_source": [{"source": r["_id"], "amount_usd": round(float(r["amount"]), 2), "count": int(r["count"])} for r in by_source_raw],
-        "tag": "Business-only product operations",
+        "tag": "#UntilNoKidInNeed",
     }
 
 
@@ -135,12 +135,12 @@ class WebhookPayload(BaseModel):
 @router.post("/webhook/{source}")
 async def webhook(source: str, body: WebhookPayload):
     """Permissive intake. Square (Location LY5GN09F5AN83) is the only live
-    payment processor — Square is dead per doctrine, any Square hit returns 410.
-    Cloudflare workers + manual + test accepted. Default bucket 1 (product reserve)."""
-    if source == "Square":
+    payment processor — Stripe is dead per doctrine, any stripe hit returns 410.
+    Cloudflare workers + manual + test accepted. Default bucket 1 (Kids Fund)."""
+    if source == "stripe":
         raise HTTPException(
             status_code=410,
-            detail="Square is dead per doctrine — use /api/ledger/webhook/square (Location LY5GN09F5AN83)",
+            detail="stripe is dead per doctrine — use /api/ledger/webhook/square (Location LY5GN09F5AN83)",
         )
     if source not in {"square", "cloudflare", "manual", "test"}:
         raise HTTPException(status_code=400, detail=f"unknown source '{source}' — use square|cloudflare|manual|test")

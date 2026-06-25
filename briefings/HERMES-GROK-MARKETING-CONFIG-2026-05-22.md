@@ -6,7 +6,7 @@
 > **The principle:** Grok is "main on Hermes" **for X/marketing** — via your x.ai *subscription*
 > (user-auth, no API key, no ToS friction on x.com). The general brain stays on the **free** tier
 > so Hermes orchestration costs $0 per call. Grok-as-global-default would route through OpenRouter
-> (paid per-membership record) and would NOT use your x.ai sub — wrong path, so we don't do that.
+> (paid per-token) and would NOT use your x.ai sub — wrong path, so we don't do that.
 
 ---
 

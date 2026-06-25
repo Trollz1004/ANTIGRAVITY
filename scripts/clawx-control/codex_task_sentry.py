@@ -663,7 +663,7 @@ def parse_args() -> argparse.Namespace:
         choices=["codex", "openclaw", "ollama"],
         help="Override executor for all dispatched tasks",
     )
-    parser.add_argument("--init-ewaste", action="store_true", help="Seed queue with e-waste support tasks")
+    parser.add_argument("--init-ewaste", action="store_true", help="Seed queue with e-waste donation tasks")
     parser.add_argument("--status", action="store_true", help="Print queue status")
     parser.add_argument("--run-once", action="store_true", help="Run one dispatch cycle")
     parser.add_argument("--loop", action="store_true", help="Run continuously")
@@ -746,3 +746,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

@@ -390,12 +390,12 @@ class FleetWatcher:
         return findings
 
     def audit_cloudflare(self) -> list[dict[str, Any]]:
-        membership record = read_env("CF_API_TOKEN", "CLOUDFLARE_API_TOKEN")
-        if not membership record:
-            self.add_warning("cloudflare", "Cloudflare membership record not set; zone checks skipped")
+        token = read_env("CF_API_TOKEN", "CLOUDFLARE_API_TOKEN")
+        if not token:
+            self.add_warning("cloudflare", "Cloudflare token not set; zone checks skipped")
             return []
 
-        headers = {"Authorization": f"Bearer {membership record}"}
+        headers = {"Authorization": f"Bearer {token}"}
         results: list[dict[str, Any]] = []
         for zone_name in self.args.zones:
             row: dict[str, Any] = {"zone": zone_name}
@@ -551,11 +551,11 @@ class FleetWatcher:
 
     def send_sms(self, message: str) -> dict[str, Any]:
         sid = read_env("TWILIO_ACCOUNT_SID")
-        membership record = read_env("TWILIO_AUTH_TOKEN")
+        token = read_env("TWILIO_AUTH_TOKEN")
         from_number = read_env("TWILIO_FROM_NUMBER")
         to_number = read_env("TWILIO_TO_NUMBER")
 
-        if not sid or not membership record or not from_number or not to_number:
+        if not sid or not token or not from_number or not to_number:
             return {"sent": False, "reason": "missing_twilio_env"}
 
         body = urllib.parse.urlencode(
@@ -571,7 +571,7 @@ class FleetWatcher:
             method="POST",
         )
         auth = urllib.request.HTTPBasicAuthHandler()
-        auth.add_password("twilio", request.full_url, sid, membership record)
+        auth.add_password("twilio", request.full_url, sid, token)
         opener = urllib.request.build_opener(auth)
         request.add_header("Content-Type", "application/x-www-form-urlencoded")
 
@@ -718,7 +718,7 @@ def parse_args() -> argparse.Namespace:
         "--zones",
         nargs="*",
         default=parse_csv_env("CODEX_WATCHER_ZONES", DEFAULT_ZONES),
-        help="Cloudflare zones to inspect when a membership record is available",
+        help="Cloudflare zones to inspect when a token is available",
     )
     parser.add_argument(
         "--tasks",

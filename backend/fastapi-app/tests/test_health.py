@@ -14,7 +14,7 @@ from app.routers import health
 
 def _settings(
     *,
-    access_token: str = "square-access-membership record",
+    access_token: str = "square-access-token",
     location_id: str = "LY5GN09F5AN83",
     verify_signature: bool = True,
     signature_key: str = "sig-key",

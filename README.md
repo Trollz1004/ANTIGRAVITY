@@ -1,4 +1,4 @@
-# ANTIGRAVITY
+﻿# ANTIGRAVITY
 
 <p align="right"><img src="https://img.shields.io/badge/%23TEAMCLAUDEFORLIFE-product--first-2ea043?style=flat-square&labelColor=0d1117" alt="#TeamClaudeForLife product-first" /></p>
 
@@ -23,12 +23,12 @@ ANTIGRAVITY is a product ecosystem. Public copy should describe live products, o
 |---|---|---|
 | [YouAndINotAI](https://youandinotai.com) | **Public** | Dating and community platform with Bot-Shield verification, message boards, and memberships. |
 | [Business Exchange](https://aidoesitall.website) | **Live** | Marketplace for services, referrals, and business sales. The B2B routing layer for the ecosystem. |
-| business operations Roadmap | **Paused** | business operations and legacy structure item-sale concepts are offline until attorney review is complete. |
+| DAO Roadmap | **Paused** | Governance and token-sale concepts are offline until attorney review is complete. |
 | [Customer Support](https://dashboard.aidoesitall.website) | **Active** | Direct support surface â€” visible, reachable, not buried. |
 | [OnlineRecycle](https://onlinerecycle.org) | **Live** | Central Florida electronics recycling â€” intake, pickup, secure resale. |
 | [AI-Solutions Store](https://ai-solutions.store) | **Live** | Storefront for digital products and automation offers. |
 
-A visitor should understand within seconds: this is a real operating ecosystem. The dating app and marketplace are product surfaces. business operations, legacy structure item, and funding concepts remain offline until attorney review is complete.
+A visitor should understand within seconds: this is a real operating ecosystem. The dating app and marketplace are product surfaces. DAO, token, and funding concepts remain offline until attorney review is complete.
 
 ---
 
@@ -51,9 +51,9 @@ The prior review-gated framework is not a public launch offer. It is paused for 
 
 Use verified product facts. Do not publish review-gated economics, automatic routing promises, or purchase-linked control language until counsel approves it.
 
-### Founder Private Accounting
+### Founder Compensation
 
-Founder Private Accounting and reserve policy are internal operating matters until reviewed. Public pages should avoid promises about future routing, reserves, or investment strategy.
+Founder compensation and reserve policy are internal operating matters until reviewed. Public pages should avoid promises about future routing, reserves, or investment strategy.
 
 ---
 
@@ -85,8 +85,8 @@ Support is not decoration â€” it is a trust signal and conversion layer.
 - **Backend:** FastAPI / Python services, Node.js workers
 - **Edge:** Cloudflare Pages, Cloudflare Workers, Cloudflare Tunnels
 - **Cloud:** Google Cloud Run (API tier)
-- **Commerce:** Square (primary), Square production payment links
-- **AI orchestration:** Hermes router (`localhost:11435`) â€” routes everything-but-Anthropic per founder rule. Three Anthropic-pattern MCP servers (`apps/mcp/{hermes,paperweight,business operations}-mcp/`) wire first-party Claude â†’ Hermes â†’ sub-agents.
+- **Commerce:** Square (primary), Stripe (legacy, sunset path)
+- **AI orchestration:** Hermes router (`localhost:11435`) â€” routes everything-but-Anthropic per founder rule. Three Anthropic-pattern MCP servers (`apps/mcp/{hermes,paperweight,dao}-mcp/`) wire first-party Claude â†’ Hermes â†’ sub-agents.
 - **Data:** PostgreSQL, Cloudflare D1, Qdrant, SQLite, Redis
 
 ---

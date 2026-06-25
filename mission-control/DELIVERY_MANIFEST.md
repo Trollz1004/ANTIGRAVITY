@@ -1,10 +1,10 @@
 # 📦 ManusClaw → Income Engine Delivery Manifest
 
-**From:** Manus Agent
-**To:** Claude Code + Josh
-**Destination:** C:/income-engine
-**Date:** 2026-05-07
-**Mission:** #ForTheKids
+**From:** Manus Agent  
+**To:** Claude Code + Josh  
+**Destination:** C:/income-engine  
+**Date:** 2026-05-07  
+**Mission:** #ForTheKids  
 
 ---
 
@@ -213,7 +213,7 @@ Before deploying to 9020:
 - [ ] .env file created and filled with real credentials
 - [ ] .env is in .gitignore (never commit)
 - [ ] Database password is strong (16+ characters)
-- [ ] GitHub membership record verified (admin, no expiration)
+- [ ] GitHub token verified (admin, no expiration)
 - [ ] Paperclip API key validated
 - [ ] JWT_SECRET is unique and strong
 - [ ] No Antigravity paths referenced
@@ -375,11 +375,11 @@ Get-Content C:\income-engine\.manus-logs\devserver.log
 
 ## 📝 Deployment Notes
 
-**Date:** 2026-05-07
-**Version:** ManusClaw v4
-**Hardware:** 9020 (i7-4790, 32GB, GTX 1070)
-**Repo:** Trollz1004/income-engine (private)
-**Mission:** #ForTheKids
+**Date:** 2026-05-07  
+**Version:** ManusClaw v4  
+**Hardware:** 9020 (i7-4790, 32GB, GTX 1070)  
+**Repo:** Trollz1004/income-engine (private)  
+**Mission:** #ForTheKids  
 
 **The wall is absolute. Antigravity stays separate. Trust is preserved.**
 

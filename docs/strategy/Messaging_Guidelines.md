@@ -35,20 +35,20 @@ DON'T: "Don't miss out on your soulmate"
 
 NEVER use:
 
-- join as a member
-- membership support
-- restricted claims
+- donate
+- donation
+- solicitation
 
 ALWAYS use instead:
 
-- business revenue handling
+- Contractual revenue disbursement
 - Revenue-sharing for good
 - Platform that gives back
 
-Reference to platform member support:
+Reference to platform supporting kids:
 
 - Frame as a feature: "Built-in support for youth programs"
-- Not as a product operations pitch: "We're not a product operations, but we do member support as part of our mission"
+- Not as a charity pitch: "We're not a charity, but we do support kids as part of our mission"
 
 ## Tone of Voice
 

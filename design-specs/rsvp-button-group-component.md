@@ -254,7 +254,7 @@ A component providing intuitive RSVP (Yes, Maybe, No) controls for community eve
 └──────────────────────────────────────────┘
 ```
 
-### Design membership records Usage
+### Design Tokens Usage
 
 ```css
 .rsvp-button-group {
@@ -562,7 +562,7 @@ const useRSVP = (initialStatus) => {
 ## Dependencies
 
 - React 19 (front-end framework)
-- Design system membership records (CSS variables)
+- Design system tokens (CSS variables)
 - Spinner/Loading component from design system
 - Icons from design system
 - CSS animations and transitions

@@ -1,15 +1,10 @@
-> Current override as of 2026-06-22: this file is historical setup context only.
-> Active work is business-only product execution. Do not use this file to create public mission
-> claims, non-product routing, future-structure launch claims, private accounting mechanics, or
-> alternate payment rails. Current customer surfaces sell membership, verification, support,
-> safety, uptime, account access, and platform value.
 # HERMES + MANUS CEO ORCHESTRATOR SETUP GUIDE
 
-**Status:** Production v2.0
-**Authority:** Joshua Coleman
-**Repo:** Trollz1004/ANTIGRAVITY (1-repo policy, non-negotiable)
-**Date:** 2026-06-05
-**Mission:** business-only product execution business-only product execution #AlwaysIntegrity
+**Status:** Production v2.0  
+**Authority:** Joshua Coleman  
+**Repo:** Trollz1004/ANTIGRAVITY (1-repo policy, non-negotiable)  
+**Date:** 2026-06-05  
+**Mission:** #ForTheKids #UntilNoKidInNeed #AlwaysIntegrity
 
 ---
 
@@ -111,7 +106,7 @@ For every gross dollar that enters the ecosystem:
 | A2 Human | $2,500 | Joshua's survival (rent, food, kids) |
 | Breakeven | $3,100 | A1 + A2 = minimum viable operation |
 
-### private owner planning
+### Founder Cap
 
 **$50,000 cumulative ecosystem-wide** (after taxes). Hermes tracks every payout. If cap is approached, Hermes creates a blocking Kanban task.
 
@@ -128,7 +123,7 @@ IF ANY CHECK FAILS:
   → CREATE BLOCKING KANBAN TASK
   → NOTIFY JOSHUA via Telegram
   → HALT NEW LAUNCHES in affected lane
-  → WAIT for business operations override
+  → WAIT for governance override
 ```
 
 ---
@@ -151,8 +146,8 @@ Manus is the orchestrator. Like Paperclip but with compliance enforcement and mu
 | **Vercel** | Deployment management | MCP (vercel server) |
 | **Zapier** | Workflow automation | MCP (zapier server) |
 | **Meta/Instagram** | Marketing, creator partnerships | MCP (instagram, meta-marketing) |
-| **Financial Datasets** | Market data for product strategy | MCP (financial-datasets) |
-| **Polygon.io** | Stock/Square payment data | REST API |
+| **Financial Datasets** | Market data for DAO | MCP (financial-datasets) |
+| **Polygon.io** | Stock/crypto data | REST API |
 
 ### Manus Scheduled Tasks
 
@@ -160,7 +155,7 @@ Manus can run recurring compliance checks:
 - **Every transaction:** Telegram broadcast + Hermes check
 - **Daily:** Notion memory snapshot (Paperweight Daily Memory)
 - **Weekly:** Runway report, burn rate assessment
-- **Monthly:** Tax reserve adequacy check, private owner planning audit
+- **Monthly:** Tax reserve adequacy check, founder cap audit
 
 ---
 
@@ -168,9 +163,9 @@ Manus can run recurring compliance checks:
 
 ClawX (clawx-aihub-zwxfcstm.manus.space) is the public-facing dashboard. It already has:
 
-- **Command Center** — AI Fleet status, active providers, membership records usage
+- **Command Center** — AI Fleet status, active providers, token usage
 - **Chat** — Multi-provider chat (routes through hub.py)
-- **Analytics** — membership records usage, costs, performance
+- **Analytics** — Token usage, costs, performance
 - **JoshuaCLAW** — Personal agent interface
 
 ### What ClawX Shows (Paperclip-style visibility)
@@ -180,7 +175,7 @@ ClawX (clawx-aihub-zwxfcstm.manus.space) is the public-facing dashboard. It alre
 - Cost per task
 - Compliance status (green/yellow/red)
 - Runway countdown
-- Product revenue running total
+- Kids bucket running total
 
 ### Hermes Virtual Models (from hermes_models.py)
 
@@ -231,7 +226,7 @@ Tax: $X.XX (27% ✓)
 Founder: $X/$50k cap
 Status: ✅ COMPLIANT
 ━━━━━━━━━━━━━━━━━━━━━
-business-only product execution business-only product execution
+#ForTheKids #UntilNoKidInNeed
 ```
 
 Manus monitors the Telegram channel. If a transaction triggers a compliance violation, Manus:
@@ -255,23 +250,23 @@ Ordered by speed-to-revenue:
 4. **Marketing 30-Day Brief** — Already written (Genspark), agent can execute daily rhythm
 
 ### P2 — THIS MONTH
-5. **Historical future-structure concept** — Inactive future-structure concept; not current product work
+5. **DAO Kickstarter** — Token sale with profit shares to fund the mission and hire help
 
-### Historical future-structure context (from historical future-structure context.md)
+### DAO Structure (from DAOandFOUNDERCAP.md)
 
 | Parameter | Value |
 |-----------|-------|
-| Total Supply | 10,000,000 membership records |
-| Historical Sale Concept | 2,000,000 (20%) |
+| Total Supply | 10,000,000 tokens |
+| Public Sale | 2,000,000 (20%) |
 | Activity Reserved | 6,500,000 (65%) |
 | Founders | 1,000,000 (10%) |
-| internal reserve | 500,000 (5%) |
+| Treasury | 500,000 (5%) |
 | Profit Share | P% rule — holders share = % of 10M supply held (capped 20%) |
-| business operations | Two-layer: membership records Vote + AI Steward Veto (72hr window) |
+| Governance | Two-layer: Token Vote + AI Steward Veto (72hr window) |
 | AI Steward Council | Claude, Gemini, Perplexity, Grok, Codex, Manus |
-| Chain | Base L2 (low gas, payments ecosystem) |
+| Chain | Base L2 (low gas, Coinbase ecosystem) |
 
-**World's first:** Competing AI systems from different corporations voting together in a business operations structure for children's welfare. Documented in repo. That's not marketing — that's history.
+**World's first:** Competing AI systems from different corporations voting together in a governance structure for children's welfare. Documented in repo. That's not marketing — that's history.
 
 ---
 
@@ -301,12 +296,12 @@ Manus reads/writes to Notion workspace (YouAndiNotAi HQ):
 |------|---------|-----------------|
 | Paperweight Daily Memory | Connector snapshot, repo state, doctrine check | Daily (scheduled) |
 | Hermes + Manus CEO Setup Guide | This document (living reference) | On architecture changes |
-| FUTURE-STRUCTURE WORK PAUSED | membership records economics, business operations rules | On business operations votes |
+| DAO LAUNCH | Token economics, governance rules | On governance votes |
 | ANTIGRAVITY Combined Claude Brief | Deployment doctrine | On deploy changes |
 
 ### JSONBin (Project State)
 - **Bin ID:** `6a230263f5f4af5e29beef15`
-- **Contents:** Doctrine config, agent registry, Historical future-structure context, network topology, funding strategy
+- **Contents:** Doctrine config, agent registry, DAO structure, network topology, funding strategy
 - **Access:** Private, X-Master-Key auth
 
 ---
@@ -324,13 +319,13 @@ If Manus is down (credits depleted, service outage):
 Hermes logs per task:
 - Provider used
 - Model used
-- membership records consumed
+- Tokens consumed
 - Latency (ms)
 - Cost ($)
 - Compliance status
 
 ### Iron Wall (from ClawX)
-- No unauthorized internal reserve changes
+- No unauthorized treasury changes
 - No unapproved deployments
 - No secret exposure
 - No breaking 1-repo policy
@@ -348,7 +343,7 @@ Trollz1004/ANTIGRAVITY/
 │   └── agents/
 │       ├── manus-ceo.md               ← Manus orchestrator contract
 │       ├── claude-code.md             ← Claude Code CLI contract
-│       ├── codex-internal reserve.md          ← Codex internal reserve guardian
+│       ├── codex-treasury.md          ← Codex treasury guardian
 │       ├── gemini-cheap.md            ← Gemini cheap ops contract
 │       └── marketing-operator.md      ← 30-day marketing brief
 ├── apps/
@@ -382,10 +377,10 @@ storefront.py all stay. Just swap the _emergent_chat() bridge calls to use
 OpenRouter BYOK path instead. Same contract, different pipe.
 
 Marketing 30-day brief executes on Gemini cheap profile (free).
-Historical future-structure concept deploys on Base L2 with AI Steward Council business operations.
+DAO kickstarter deploys on Base L2 with AI Steward Council governance.
 
 Nothing stops the wheel like the plan.
-business-only product execution
+#ForTheKids
 ```
 
 ---
@@ -399,11 +394,11 @@ business-only product execution
 | P0 | Seed 4 SKUs with real Square checkout URLs | 10 min | Square dashboard |
 | P1 | Tune BURN_USD_PER_DAY (currently $8/day default) | 1 min | None |
 | P1 | Set KID_THRESHOLD_USD in .env | 1 min | None |
-| P2 | Do not deploy future-structure contracts without newer founder directive | 30 min | Square payment links funded |
+| P2 | Deploy DAO contract to Base L2 testnet | 30 min | Wallet funded |
 | P2 | Execute Week 1 of marketing brief | Ongoing | None |
 
 ---
 
-**Nothing stops the wheel like the plan.**
-**Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.**
-**business-only product execution business-only product execution #AlwaysIntegrity**
+**Nothing stops the wheel like the plan.**  
+**Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.**  
+**#ForTheKids #UntilNoKidInNeed #AlwaysIntegrity**

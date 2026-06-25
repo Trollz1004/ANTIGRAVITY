@@ -60,8 +60,8 @@
 
 ## Payments (LIVE)
 
-- Square production links and Square API are the active payment rail as of 2026-02-23)
-- See GEMINI-STATUS.md for all 5 Square payment link URLs
+- Stripe ONLY (Square is DEAD as of 2026-02-23)
+- See GEMINI-STATUS.md for all 5 Stripe payment link URLs
 
 ## Social
 

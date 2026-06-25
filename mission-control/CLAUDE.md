@@ -1,10 +1,10 @@
 # 🚀 CLAUDE.md — ManusClaw → Income Engine Setup (9020)
 
-**From:** Manus Agent
-**To:** Claude Code
-**Mission:** Wire ManusClaw into C:/income-engine with Paperclip, Ollama, and GitHub
-**Hardware:** 9020 (i7-4790, 32GB, GTX 1070)
-**Repo:** Trollz1004/income-engine (private)
+**From:** Manus Agent  
+**To:** Claude Code  
+**Mission:** Wire ManusClaw into C:/income-engine with Paperclip, Ollama, and GitHub  
+**Hardware:** 9020 (i7-4790, 32GB, GTX 1070)  
+**Repo:** Trollz1004/income-engine (private)  
 
 ---
 
@@ -16,7 +16,7 @@ You have:
 - ✅ Josh's .env credentials (income-engine specific)
 - ✅ GitHub PAT (for Trollz1004/income-engine)
 
-**The Wall:** Antigravity ← [ABSOLUTE SEPARATION] → Income-Engine
+**The Wall:** Antigravity ← [ABSOLUTE SEPARATION] → Income-Engine  
 **No crossover. Ever. Trust depends on it.**
 
 ---
@@ -103,7 +103,7 @@ ollama pull neural-chat
 
 # 2. Configure GitHub in ManusClaw
 # Settings → GitHub
-# - GitHub membership record: Josh's PAT
+# - GitHub Token: Josh's PAT
 # - Repo: Trollz1004/income-engine
 # - Owner: AidoesitAll
 
@@ -238,11 +238,11 @@ curl http://localhost:3100/health
 ### GitHub Authentication Failed
 
 ```powershell
-# Verify GitHub membership record has repo access
-# membership record should have: repo, workflow, admin:repo_hook
+# Verify GitHub token has repo access
+# Token should have: repo, workflow, admin:repo_hook
 
-# Test membership record
-curl -H "Authorization: membership record YOUR_TOKEN" https://api.github.com/user
+# Test token
+curl -H "Authorization: token YOUR_TOKEN" https://api.github.com/user
 
 # Should return user info
 ```
@@ -300,7 +300,7 @@ Get-Content .manus-logs/devserver.log -Wait -Tail 20
 
 - [ ] .env file is in .gitignore (never commit)
 - [ ] Database password is strong (16+ chars, mixed case)
-- [ ] GitHub membership record has minimal required permissions
+- [ ] GitHub token has minimal required permissions
 - [ ] Paperclip API key is rotated regularly
 - [ ] HTTPS enabled in production (use Cloudflare)
 - [ ] JWT_SECRET is unique and strong

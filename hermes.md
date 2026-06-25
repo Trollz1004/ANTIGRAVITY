@@ -1,8 +1,3 @@
-> Current override as of 2026-06-22: this file is historical setup context only.
-> Active work is business-only product execution. Do not use this file to create public mission
-> claims, donation routing, token/governance launch claims, private accounting mechanics, or
-> alternate payment rails. Current customer surfaces sell membership, verification, support,
-> safety, uptime, account access, and platform value.
 # hermes.md — Hermes Agent (Mission Control, WhatsApp Bridge, Multi-Model Router)
 
 > **Canonical, lowercase filename. 2026-06-01.**
@@ -165,12 +160,12 @@ Hermes sends this to Gemini, Grok, Codex, OpenClaw, and any sub-agent the moment
 > **You are spawned by Hermes. Mission control is 100% working and verified. LIVE STATUS of all tasks is on the board. Read these before you act:**
 >
 > 1. `hermes.md` (this file) — your router, your boss, your comms channel
-> 2. `agent.md` — universal agent doctrine (founding four, no Anthropic key, no customer-facing non-product language, mission permanence)
+> 2. `agent.md` — universal agent doctrine (founding four, no Anthropic key, no customer-facing charity language, mission permanence)
 > 3. `gemini.md` / `grok.md` (whichever you are) — your model-specific scope
 > 4. `briefings/CLAUDE-DOCTRINE.md` — the cross-node doctrine Opus holds
 > 5. `briefings/BUSINESS-PROFILE-CANONICAL.md` — the single source of truth for revenue, mission, and customer copy
 > 6. `memory/project_revenue_model_2026-06-01.md` — the 10% per-bucket mission reserve, customer-facing language ban
-> 7. `memory/project_primary_revenue_2026-06-01.md` — primary is youandinotai.com + current product checkout, NOT e-waste
+> 7. `memory/project_primary_revenue_2026-06-01.md` — primary is youandinotai.com + DAO public sale, NOT e-waste
 >
 > **Your job right now:** read your task in `apps/mission-control/` PAPERWEIGHT board under **NEXT** or **NOW**, confirm owner, then execute. Report back to Hermes on the board within 60 seconds of starting. If you block, post to **BLOCKED** with the exact question. If you finish, move to **DONE-24H** with what you did, in one line.
 >
@@ -182,8 +177,8 @@ Hermes sends this to Gemini, Grok, Codex, OpenClaw, and any sub-agent the moment
 
 Hermes runs a daily audit (routines) checking for:
 - Any "Stripe" reference in customer-facing code
-- Any "non-product public-benefit, solicitation, owner-private accounting, or disbursement terminology" in customer-facing copy
-- Any "retired split-era or absolute public-benefit" reference presented as current truth
+- Any "donate / donation / charity / charitable / solicitation / giving back / disbursement" in customer-facing copy
+- Any "60/30/10" or "100% charity" reference presented as current truth
 - Any "e-waste / OnlineRecycle / eBay is primary" wording
 - Any "Anthropic key" or `sk-ant-` reference in `services/hermes-router/.env*`
 - Any `claude-haiku-*` reference (banned)
@@ -212,4 +207,4 @@ Drift found → `doctrine-drift` issue + auto-draft PR.
 
 ---
 
-business-only product execution
+#UntilNoKidInNeed

@@ -234,7 +234,7 @@ export function prepareCodexExecutionPrompt({ task = "continue ANTIGRAVITY missi
   const safeTask = String(task).slice(0, 700).replace(SECRET_PATTERN, "[redacted-secret-pattern]");
   return {
     title: "Safe Codex Execution Prompt",
-    prompt: `ANTIGRAVITY execution request\n\nUse repo root ${WINDOWS_ROOT} on Windows and ${WSL_ROOT} in WSL. Preserve lowercase root doctrine.\n\nTask:\n${safeTask}\n\nRules:\n- Real Codex Desktop is the executor. Do not use ollama launch codex.\n- Do not read, print, test, or copy populated secrets.\n- Do not touch unrelated untracked files.\n- Keep Product/token/fundraising and restricted public-impact language out of customer-facing surfaces.\n- Use branch-first work, run verification, and report exact files changed.\n- For Slack/Hermes/social outputs, draft only unless Josh explicitly asks to send live.\n`
+    prompt: `ANTIGRAVITY execution request\n\nUse repo root ${WINDOWS_ROOT} on Windows and ${WSL_ROOT} in WSL. Preserve lowercase root doctrine.\n\nTask:\n${safeTask}\n\nRules:\n- Real Codex Desktop is the executor. Do not use ollama launch codex.\n- Do not read, print, test, or copy populated secrets.\n- Do not touch unrelated untracked files.\n- Keep DAO/token/fundraising and restricted public-impact language out of customer-facing surfaces.\n- Use branch-first work, run verification, and report exact files changed.\n- For Slack/Hermes/social outputs, draft only unless Josh explicitly asks to send live.\n`
   };
 }
 

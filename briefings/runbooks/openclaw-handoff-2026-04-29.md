@@ -1,6 +1,6 @@
 # OpenClaw handoff — paste this into WhatsApp (OpenClaw responds within 24h window)
 
-> Author: Opus 4.7 — handing off the runtime grunt work so my membership records stay on architecture.
+> Author: Opus 4.7 — handing off the runtime grunt work so my tokens stay on architecture.
 > Surface: Sabretooth Ollama daemon at `localhost:11434` (also reachable as `192.168.0.8:11434` on the LAN), Hermes Router on `localhost:11435`, OpenClaw at `localhost:18789`.
 
 ## Issue 1 — Local Ollama daemon has zero models
