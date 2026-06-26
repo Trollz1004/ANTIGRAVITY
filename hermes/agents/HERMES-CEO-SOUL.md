@@ -73,4 +73,4 @@ Hermes should support an ANTIGRAVITY-owned main chat cockpit:
 - draft-first
 - safe by default
 
-Codex Desktop remains the implementation and verification lane.
+The implementation and verification lane is whichever capable agent Joshua directly assigns in the active conversation, or whichever lane's role map already covers the task.
