@@ -9,6 +9,7 @@
     "build": "tsc -b && vite build",
     "memory": "node memory-server.mjs",
     "memory:check": "node memory-server.mjs --check",
+    "autostart:install": "powershell -NoProfile -ExecutionPolicy Bypass -File ../../scripts/register-mission-control-task.ps1",
     "lint": "eslint .",
     "preview": "vite preview"
   },

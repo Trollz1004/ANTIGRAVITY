@@ -49,7 +49,7 @@ The dashboard is served as a static Single Page Application (SPA) built with Vit
 | Vite | 8.0.10 | Build tool & dev server |
 | Tailwind CSS | 3.4.1 | Utility-first styling |
 | React Router DOM | 6.0.2 | Client-side routing |
-| Lucide React | 0.378.0 | Icon library |
+| Lucide React | 1.21.0 | Icon library |
 | clsx | 2.1.0 | Conditional class composition |
 | Vitest | 4.1.6 | Unit testing framework |
 | @testing-library/react | 16.3.2 | React component testing |
@@ -137,6 +137,30 @@ npm start
 
 Open `http://127.0.0.1:8787`. This serves the built GUI and the direct `/memory/*` and `/tasks` endpoints from one local process.
 
+### Auto-start After Reboot
+
+Register the Windows scheduled tasks from a clean checkout:
+
+```powershell
+npm run autostart:install
+```
+
+When run from an Administrator PowerShell, that command installs:
+
+- `MissionControlGUI` - runs `scripts/start-mission-control.ps1` at startup and logon, builds the GUI, and starts `memory-server.mjs` on `127.0.0.1:8787`.
+- `MissionControlWatchdog` - checks `/health` and `/memory/status` every 30 seconds and restarts the GUI server if it drops.
+
+When run from a normal non-elevated shell, Windows may block `AtStartup` scheduled-task registration. In that case, the installer writes a Startup-folder fallback at `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\MissionControlGUI.cmd`, which starts Mission Control after the user logs in following reboot or power loss.
+
+The installer also tries to remove the retired `MissionControlAPI` scheduled task so the old Python API cannot compete for port `8787`.
+
+Logs are written under `C:\antigravity\logs\`:
+
+- `mission-control-start.log`
+- `mission-control-watchdog.log`
+- `mission-control-memory.out.log`
+- `mission-control-memory.err.log`
+
 ### Development
 
 Start the Vite dev server (default port 5173):
@@ -170,6 +194,7 @@ npm run preview
 | `build` | `tsc -b && vite build` | Type-check and build for production |
 | `memory` | `node memory-server.mjs` | Serve an already-built GUI plus direct `/memory/*` and `/tasks` JSONL endpoints |
 | `memory:check` | `node memory-server.mjs --check` | Verify the built GUI and memory server paths |
+| `autostart:install` | `powershell -NoProfile -ExecutionPolicy Bypass -File ../../scripts/register-mission-control-task.ps1` | Register boot/logon scheduled tasks for the GUI server and watchdog |
 | `lint` | `eslint .` | Run ESLint across the project |
 | `preview` | `vite preview` | Serve the production build locally |
 

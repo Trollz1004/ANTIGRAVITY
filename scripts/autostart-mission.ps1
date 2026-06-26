@@ -3,7 +3,7 @@
 # Brings up the entire Sabretooth cockpit in dependency order:
 #   1. Docker Desktop
 #   2. WSL Hermes Router (:11435) + watchdog
-#   3. Mission Control API (:8787) — verify only (Scheduled Task starts it)
+#   3. Mission Control GUI + memory server (:8787) — verify only (Scheduled Task starts it)
 #   4. Mission Control Watchdog — verify only (Scheduled Task starts it)
 #   5. OpusHasHands hub (:4200)
 #   6. OpenClaw Gateway browser-open (waits for :18789)
@@ -114,17 +114,16 @@ if ((-not $hermesWatchdogRunning) -and (Test-Path $hermesWatchdogScript)) {
     Log '      Hermes Router watchdog already running (or script missing)'
 }
 
-# ---------- 3. Mission Control API (:8787) ----------
-# Scheduled Task "MissionControlAPI" boots this at startup. Verify only.
+# ---------- 3. Mission Control GUI + memory server (:8787) ----------
+# Scheduled Task "MissionControlGUI" boots this at startup. Verify only.
 if (Test-LocalPort 8787) {
-    Log '[5/8] Mission Control API up on :8787'
+    Log '[5/8] Mission Control up on :8787'
 } else {
-    Log '[5/8] Mission Control API not yet on :8787 — Scheduled Task should start it; bootstrapping fallback'
-    Start-Process -FilePath 'python.exe' `
-        -ArgumentList '-m','uvicorn','mission_control_api.main:app','--host','127.0.0.1','--port','8787' `
-        -WorkingDirectory "$Repo\services\mission-control-api" `
+    Log '[5/8] Mission Control not yet on :8787 — Scheduled Task should start it; bootstrapping fallback'
+    Start-Process -FilePath 'powershell.exe' `
+        -ArgumentList '-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-File',"$Repo\scripts\start-mission-control.ps1",'-RepoRoot',$Repo,'-Port','8787' `
         -WindowStyle Hidden -ErrorAction SilentlyContinue
-    Wait-ForPort 8787 30 'Mission Control API' | Out-Null
+    Wait-ForPort 8787 60 'Mission Control' | Out-Null
 }
 
 # ---------- 6. Mission Control Watchdog ----------
