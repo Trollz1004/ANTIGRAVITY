@@ -47,7 +47,7 @@ function Install-StartupFallback {
     $startupCmd = Join-Path $startupDir 'MissionControlGUI.cmd'
     $contents = @"
 @echo off
-start "" /min powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File "$startScript" -RepoRoot "$RepoRoot" -Port $Port
+start "" /min powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File "$startScript" -RepoRoot "$RepoRoot" -Port $Port -Foreground
 start "" /min powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File "$watchdogScript" -RepoRoot "$RepoRoot" -Port $Port
 "@
     Set-Content -LiteralPath $startupCmd -Value $contents -Encoding ascii
@@ -69,7 +69,8 @@ if (-not $isAdmin) {
             '-RepoRoot',
             $RepoRoot,
             '-Port',
-            [string]$Port
+            [string]$Port,
+            '-Foreground'
         ) `
         -WindowStyle Hidden | Out-Null
     $watchdogRunning = $false
@@ -102,12 +103,28 @@ function Register-MissionTask {
     param(
         [string]$TaskName,
         [string]$ScriptPath,
-        [string]$Description
+        [string]$Description,
+        [string[]]$ExtraArguments = @()
     )
+
+    $argumentParts = @(
+        '-NoProfile',
+        '-NonInteractive',
+        '-ExecutionPolicy',
+        'Bypass',
+        '-WindowStyle',
+        'Hidden',
+        '-File',
+        "`"$ScriptPath`"",
+        '-RepoRoot',
+        "`"$RepoRoot`"",
+        '-Port',
+        [string]$Port
+    ) + $ExtraArguments
 
     $action = New-ScheduledTaskAction `
         -Execute 'powershell.exe' `
-        -Argument "-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$ScriptPath`" -RepoRoot `"$RepoRoot`" -Port $Port"
+        -Argument ($argumentParts -join ' ')
 
     $principalCandidates = if ($isAdmin) { @(
         (New-ScheduledTaskPrincipal -UserId $principalUser -LogonType S4U -RunLevel Highest),
@@ -145,7 +162,8 @@ try {
     Register-MissionTask `
         -TaskName 'MissionControlGUI' `
         -ScriptPath $startScript `
-        -Description 'Starts the ANTIGRAVITY Mission Control GUI and shared memory server on localhost:8787 at boot and login.'
+        -Description 'Starts the ANTIGRAVITY Mission Control GUI and shared memory server on localhost:8787 at boot and login.' `
+        -ExtraArguments @('-Foreground')
 
     Register-MissionTask `
         -TaskName 'MissionControlWatchdog' `
