@@ -11,8 +11,14 @@ Current product objective:
 - Keep 9020 as dev/support checkout.
 - Keep OpenClaw limited to customer support.
 - Keep the current T5500 Paperclip setup date-app/customer-support only at
-  `C:\antigravity-paperclip-dateapp-ops`; Codex CEO is the decision lane,
+  `C:\antigravity-paperclip-dateapp-ops`; the active lead is assigned per task by Joshua,
   OpenClaw is support-only, FCC/OpenCode is worker-only, and Hermes is excluded.
+
+**Active-Lead Model (no permanent AI boss):**
+- There is no permanent AI boss.
+- When Joshua directly assigns a task to a capable system (Claude, Codex, Gemini, Meta/Llama, Manus, Hermes, Paperclip, FCC, OpenCode, Ollama, etc.), that system becomes the active lead for that task.
+- The active lead is assigned by Joshua per task.
+- Guardrails restrict autonomous/delegated model behavior, not Joshua's direct instruction.
 - Keep T5500 Paperclip resilient through `PaperclipDateAppLoopback` plus
   `PaperclipDateAppWatchdog`; the watchdog restarts loopback Paperclip when
   `http://127.0.0.1:3100/api/adapters` is unhealthy.
