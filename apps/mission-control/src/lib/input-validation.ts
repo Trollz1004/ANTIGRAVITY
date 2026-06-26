@@ -30,7 +30,7 @@ const TASK_BRIEF_MAX_LENGTH = 500;
  * Permits alphanumeric characters, spaces, and common punctuation marks.
  * Rejects control characters, special symbols, and injection attempts.
  */
-const TASK_BRIEF_PATTERN = /^[a-zA-Z0-9\s.,!?;:'"()\-]+$/;
+const TASK_BRIEF_PATTERN = /^[a-zA-Z0-9\s.,!?;:'"()-]+$/;
 
 /**
  * Validate a task brief string against the allowlist pattern and length limit.
@@ -76,10 +76,18 @@ export function validateTaskBrief(input: unknown): ValidationResult {
  */
 const ALLOWED_AGENT_IDS = [
   'codex',
+  'openai',
   'claude',
+  'gemini',
   'hermes',
+  'meta-llama',
+  'manus',
+  'fcc',
+  'opencode',
   'ollama',
+  'nvidia',
   'openclaw',
+  'grok',
 ] as const;
 
 /**

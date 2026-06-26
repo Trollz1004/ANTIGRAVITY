@@ -25,6 +25,7 @@
 Mission Control is the primary web-based dashboard for the ANTIGRAVITY ecosystem. It provides real-time visibility into:
 
 - **AI Agent Fleet** — status and health of Claude, Hermes, CodeX, Ollama, and OpenClaw support
+- **Agent Memory Mesh** — direct shared memory for Codex/OpenAI, Claude, Gemini, Hermes, Meta/Llama, Manus, FCC, OpenCode, Ollama, NVIDIA, and OpenClaw support across the repo nodes
 - **Treasury** — committed funds, kids fund balance, and estimated kids covered
 - **Launch Operations** — initiate and track deployment pipelines
 - **Revenue Engine** — monitor revenue streams and performance
@@ -79,6 +80,7 @@ mission-control/
     │   ├── TopBar.tsx                  # Top header bar with treasury info & branding
     │   ├── Footer.tsx                  # Bottom status bar
     │   ├── MissionControlDashboard.tsx # Main dashboard layout wrapper
+    │   ├── AgentMemoryPanel.tsx        # Shared non-Paperclip memory panel for agent/node handoff
     │   ├── TaskBriefInput.tsx          # Task input form for dispatching work
     │   ├── LaunchPanel.tsx             # Launch/deployment operations panel
     │   ├── TreasuryBand.tsx            # Treasury status indicator band
@@ -115,7 +117,7 @@ mission-control/
 
 ### Prerequisites
 
-- **Node.js** — v18 or later recommended
+- **Node.js** — v20 or later
 - **npm** — v9 or later
 
 ### Installation
@@ -124,6 +126,16 @@ mission-control/
 cd apps/mission-control
 npm install
 ```
+
+### GUI + Memory Server
+
+For a clean clone, build the dashboard and start the bundled memory server:
+
+```bash
+npm start
+```
+
+Open `http://127.0.0.1:8787`. This serves the built GUI and the direct `/memory/*` and `/tasks` endpoints from one local process.
 
 ### Development
 
@@ -154,7 +166,10 @@ npm run preview
 | Script | Command | Description |
 |---|---|---|
 | `dev` | `vite` | Start the Vite development server with HMR |
+| `start` | `npm run build && node memory-server.mjs` | Build the GUI, then serve it with the direct memory endpoints on `127.0.0.1:8787` |
 | `build` | `tsc -b && vite build` | Type-check and build for production |
+| `memory` | `node memory-server.mjs` | Serve an already-built GUI plus direct `/memory/*` and `/tasks` JSONL endpoints |
+| `memory:check` | `node memory-server.mjs --check` | Verify the built GUI and memory server paths |
 | `lint` | `eslint .` | Run ESLint across the project |
 | `preview` | `vite preview` | Serve the production build locally |
 
@@ -165,10 +180,10 @@ npm run preview
 ### Layout Components
 
 #### `TopBar`
-The top header bar displays the ANTIGRAVITY mission hashtag (`#UntilNoKidInNeed`), treasury summary (committed amount, kids fund, kids covered estimate), build badge, and a share button.
+The top header bar displays current business operations status, local connection state, notifications, the build badge, and basic login/logout controls.
 
 #### `Sidebar`
-Left-side navigation with 8 operational modes: Mission Control, Mission Ledger, AI Roundtable, Tasks, Code Mode, Create · Banana, Research Mode, and Chat Mode. Also houses the `StackIntegrityWidget` and `DaoPanel`.
+Left-side navigation for Ops Control, Agent Memory, Business Ledger, AI Roundtable, Tasks, Code Mode, Create, Research, Chat, uploads, and rate-limit views. It also houses the `TreasuryPanel` and `StackIntegrityWidget`.
 
 #### `Footer`
 Bottom status bar for additional system information and status indicators.
@@ -177,6 +192,9 @@ Bottom status bar for additional system information and status indicators.
 
 #### `LaunchPanel`
 Primary panel for initiating and tracking deployment/launch operations. Displays launch status and provides controls for triggering new launches.
+
+#### `AgentMemoryPanel`
+Direct Mission Control shared memory for approved AI lanes and nodes. It reads `/memory/status`, `/memory/entries`, and `/memory/bootstrap`, and writes short operational entries to `memory/mission-control-agent-memory.jsonl`.
 
 #### `TreasuryBand`
 A horizontal status band showing real-time treasury information pulled from the API.

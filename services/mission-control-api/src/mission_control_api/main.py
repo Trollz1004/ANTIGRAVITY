@@ -2,6 +2,7 @@ import time
 import asyncio
 import json
 import hashlib
+from contextlib import asynccontextmanager
 from collections import deque
 from pathlib import Path
 
@@ -13,7 +14,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from .config import settings
 from .logging_config import setup_logging, get_logger, new_request_id, LogContext
-from .routes import health, deploy, runbooks, hermes, tasks, ops_runs, adapters, goals
+from .routes import health, deploy, runbooks, hermes, tasks, ops_runs, adapters, goals, memory
 from .middleware.sanitization import SanitizationMiddleware
 from .middleware.rate_limiting import RateLimitingMiddleware
 from .middleware.idempotency import IdempotencyMiddleware
@@ -27,8 +28,32 @@ cache_cleanup_queue = deque() # Stores (expiration_time, request_key) for effici
 setup_logging(level="INFO")
 logger = get_logger(__name__)
 
+REPO_ROOT = Path(__file__).resolve().parents[4]
+DASHBOARD_DIST = REPO_ROOT / "apps" / "mission-control" / "dist"
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    endpoints = []
+    for route in app.routes:
+        if hasattr(route, "methods") and hasattr(route, "path"):
+            for method in route.methods:
+                endpoints.append({"method": method, "path": route.path})
+
+    logger.info(
+        "Mission Control API started",
+        extra={
+            "version": "0.1.0",
+            "environment": "development" if settings.ALLOWED_ORIGINS else "production",
+            "endpoints": endpoints,
+            "dashboard_built": DASHBOARD_DIST.exists(),
+        },
+    )
+    yield
+
+
 # ── App ──────────────────────────────────────────────────────────────────────
-app = FastAPI(title="Mission Control API")
+app = FastAPI(title="Mission Control API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -202,12 +227,9 @@ app.include_router(tasks.router)
 app.include_router(ops_runs.router)
 app.include_router(adapters.router)
 app.include_router(goals.router)
+app.include_router(memory.router)
 
 # ── Dashboard static mount ───────────────────────────────────────────────────
-REPO_ROOT = Path(__file__).resolve().parents[4]
-DASHBOARD_DIST = REPO_ROOT / "apps" / "mission-control" / "dist"
-
-
 @app.get("/", include_in_schema=False)
 async def root_index():
     index = DASHBOARD_DIST / "index.html"
@@ -216,9 +238,9 @@ async def root_index():
     return JSONResponse(
         {
             "status": "api_ok_dashboard_unbuilt",
-            "message": "Mission Control API is running. Build the dashboard with: pnpm --dir apps/mission-control build",
+            "message": "Mission Control API is running. Build the dashboard with: npm --prefix apps/mission-control run build",
             "api_base": "http://[IP_ADDRESS]:8787",
-            "endpoints": ["/health/all", "/runbooks/list", "/hermes/models", "/tasks"],
+            "endpoints": ["/health/all", "/runbooks/list", "/hermes/models", "/tasks", "/memory/status", "/memory/bootstrap"],
         }
     )
 
@@ -229,29 +251,9 @@ if DASHBOARD_DIST.exists():
 
     @app.get("/{full_path:path}", include_in_schema=False)
     async def spa_fallback(full_path: str, request: Request):
-        if full_path.startswith(("health", "deploy", "runbooks", "hermes", "tasks", "assets", "api")):
+        if full_path.startswith(("health", "deploy", "runbooks", "hermes", "tasks", "memory", "assets", "api")):
             return JSONResponse({"detail": "Not Found"}, status_code=404)
         index = DASHBOARD_DIST / "index.html"
         if index.exists():
             return FileResponse(index)
         return JSONResponse({"detail": "Not Found"}, status_code=404)
-
-
-# ── Startup event ────────────────────────────────────────────────────────────
-@app.on_event("startup")
-async def log_startup():
-    endpoints = []
-    for route in app.routes:
-        if hasattr(route, "methods") and hasattr(route, "path"):
-            for method in route.methods:
-                endpoints.append({"method": method, "path": route.path})
-
-    logger.info(
-        "Mission Control API started",
-        extra={
-            "version": "0.1.0",
-            "environment": "development" if settings.ALLOWED_ORIGINS else "production",
-            "endpoints": endpoints,
-            "dashboard_built": DASHBOARD_DIST.exists(),
-        },
-    )

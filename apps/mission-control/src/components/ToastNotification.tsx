@@ -1,5 +1,4 @@
 import React from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import {
   Info, CheckCircle, AlertTriangle, XCircle, X
 } from 'lucide-react';
@@ -43,24 +42,18 @@ export const ToastNotification: React.FC<ToastNotificationProps> = ({
   }, [id, onDismiss, autoDismissTimeout]);
 
   return (
-    <AnimatePresence>
-      <motion.div
-        layout
-        initial={{ opacity: 0, y: 50, scale: 0.3 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-        className={`flex items-center gap-3 p-4 rounded-lg shadow-lg backdrop-blur-sm border ${colorMap[type]} text-white max-w-sm w-full`}
+    <div
+      className={`flex w-full max-w-sm animate-in fade-in slide-in-from-top-2 items-center gap-3 rounded-lg border p-4 text-white shadow-lg backdrop-blur-sm ${colorMap[type]}`}
+    >
+      {iconMap[type]}
+      <p className="flex-1 text-sm">{message}</p>
+      <button
+        onClick={() => onDismiss(id)}
+        className="text-gray-400 transition-colors hover:text-gray-200"
+        aria-label="Dismiss notification"
       >
-        {iconMap[type]}
-        <p className="flex-1 text-sm">{message}</p>
-        <button
-          onClick={() => onDismiss(id)}
-          className="text-gray-400 hover:text-gray-200 transition-colors"
-          aria-label="Dismiss notification"
-        >
-          <X size={16} />
-        </button>
-      </motion.div>
-    </AnimatePresence>
+        <X size={16} />
+      </button>
+    </div>
   );
 };

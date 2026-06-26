@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from mission_control_api.logging_config import get_logger
+from datetime import datetime, timezone
 
 logger = get_logger(__name__)
 
@@ -29,8 +30,7 @@ router = APIRouter()
 @router.get("/health")
 async def self_health():
     # simple self health
-    from datetime import datetime
-    details = {"status": "ok", "version": "0.1.0", "started_at": datetime.utcnow().isoformat() + "Z", "uptime_s": 0}
+    details = {"status": "ok", "version": "0.1.0", "started_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(), "uptime_s": 0}
     from ..envelope import make_envelope
     return make_envelope("ok", 0, details).dict()
 

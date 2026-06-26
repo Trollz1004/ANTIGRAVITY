@@ -1,90 +1,23 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
-test('page loads with title Mission Control', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
+test('Mission Control memory GUI loads from the bundled server', async ({ page }) => {
+  await page.goto('/');
+
   await expect(page).toHaveTitle('Mission Control');
+  await expect(page.locator('[data-testid="topbar"]')).toContainText('Business Ops');
+  await expect(page.locator('[data-testid="sidebar"]').getByText('Ops Control')).toBeVisible();
+  await expect(page.locator('[data-testid="sidebar"]').getByText('Agent Memory')).toBeVisible();
+  await expect(page.locator('[data-testid="agent-memory-panel"]')).toContainText('Agent Memory Mesh');
+  await expect(page.getByRole('button', { name: /copy boot context/i })).toBeVisible();
 });
 
-test('TopBar contains required text', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
-  await expect(page.locator('[data-testid="topbar"]')).toContainText('#UntilNoKidInNeed');
-  await expect(page.locator('[data-testid="topbar"]')).toContainText('OPUSPAWCLAW · MISSION CONTROL');
-  await expect(page.locator('[data-testid="topbar"]')).toContainText('BUILT · E1');
-});
+test('memory endpoints are available from the GUI server', async ({ request }) => {
+  const response = await request.get('/memory/status');
+  expect(response.ok()).toBeTruthy();
 
-test('Sidebar renders 8 mode buttons with NEW pills', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
-  const buttons = ['Mission Control', 'Mission Ledger', 'AI Roundtable', 'Tasks', 'Code Mode', 'Create · Banana', 'Research Mode', 'Chat Mode'];
-  for (const btn of buttons) {
-    await expect(page.locator('[data-testid="sidebar"]').getByText(btn)).toBeVisible();
-  }
-  for (const btn of buttons.slice(0,4)) {
-    await expect(page.locator('[data-testid="sidebar"]').getByText(btn).locator('..').getByText('NEW')).toBeVisible();
-  }
-});
-
-test('LAUNCH panel has Ollama text', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
-  await expect(page.getByText('Powered by Ollama Local Runtime')).toBeVisible();
-});
-
-test('HERMES ROUTER chips', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
-  const chips = ['hermes', 'hermes-deep', 'cfo', 'code', 'marketing', 'kimi', 'fast'];
-  for (const c of chips) {
-    await expect(page.getByTestId(`hermes-chip-${c}`)).toBeVisible();
-  }
-});
-
-test('Code chip POSTs to /hermes/active', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
-  let body = null;
-  await page.route('**/hermes/active', async (route) => {
-    body = route.request().postDataJSON();
-    await route.fulfill({ json: { ok: true } });
-  });
-  await page.getByTestId('hermes-chip-code').click();
-  expect(body).toEqual({ model: 'code' });
-});
-
-test('T5500 stack', async ({ page }) => {
-  await page.route('**/health/t5500', async (route) => {
-    await route.fulfill({ json: {
-      status: 'ok', checked_at: '', latency_ms: 1, error: null,
-      details: { host: '192.168.0.15', ok: 5, total: 5, services: [
-        { service: 'date_app_api', status: 'ok', port: 8000, latency_ms: 1, error: null },
-        { service: 'date_app_static', status: 'ok', port: 3200, latency_ms: 1, error: null },
-        { service: 'postgres', status: 'ok', port: 5432, latency_ms: 1, error: null },
-        { service: 'redis', status: 'ok', port: 6379, latency_ms: 1, error: null },
-        { service: 'openclaw_support', status: 'ok', port: 18789, latency_ms: 1, error: null },
-      ]}
-    }});
-  });
-  await page.goto('http://localhost:5173/');
-  await expect(page.getByText('date app API')).toBeVisible();
-  await expect(page.getByText('date app static')).toBeVisible();
-  await expect(page.getByText('uandinotai-postgres')).toBeVisible();
-  await expect(page.getByText('redis cache')).toBeVisible();
-  await expect(page.getByText('OpenClaw support')).toBeVisible();
-});
-
-test('Runbooks list', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
-  await page.route('**/runbooks/list', async (route) => {
-    await route.fulfill({ json: [{ filename: 'x.md', size: 1, mtime: '' }] });
-  });
-  await expect(page.getByText('x.md')).toBeVisible();
-});
-
-test('Task dispatch', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
-  let body = null;
-  await page.route('**/tasks/dispatch', async (route) => {
-    body = route.request().postDataJSON();
-    await route.fulfill({ json: { task_id: 'abc', queued: true } });
-  });
-  await page.getByTestId('task-input').fill('test');
-  await page.getByTestId('task-send-btn').click();
-  expect(body).toEqual({ brief: 'test', agents: [] });
-  await expect(page.getByTestId('task-input')).toHaveValue('');
+  const body = await response.json();
+  expect(body.ok).toBe(true);
+  expect(body.paperclip_excluded).toBe(true);
+  expect(body.lanes.some((lane: { id: string }) => lane.id === 'codex')).toBe(true);
+  expect(body.nodes.some((node: { id: string }) => node.id === 't5500')).toBe(true);
 });

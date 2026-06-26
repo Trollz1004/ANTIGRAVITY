@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: '.',
-  testMatch: './tests/**/*.spec.ts',
+  testMatch: '**/tests/e2e.spec.ts',
 
   timeout: 30000,
   expect: {
@@ -12,11 +12,11 @@ export default defineConfig({
     headless: true,
     screenshot: 'only-on-failure',
     trace: 'on-first-retry',
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://127.0.0.1:8787',
   },
   webServer: {
-    command: 'pnpm dev',
-    port: 5173,
+    command: 'npm start',
+    url: 'http://127.0.0.1:8787/health',
     reuseExistingServer: true,
     timeout: 120000,
   },

@@ -6,12 +6,14 @@ const variantStyles: Record<ToastVariant, string> = {
   success: 'border-teal-400/40 bg-teal-400/10 text-teal-200',
   error: 'border-rose-400/40 bg-rose-400/10 text-rose-200',
   info: 'border-cyan-400/40 bg-cyan-400/10 text-cyan-200',
+  warning: 'border-amber-400/40 bg-amber-400/10 text-amber-200',
 };
 
 const variantIcons: Record<ToastVariant, typeof CheckCircle2> = {
   success: CheckCircle2,
   error: AlertTriangle,
   info: Info,
+  warning: AlertTriangle,
 };
 
 function ToastItem({ toast }: { toast: ToastType }) {

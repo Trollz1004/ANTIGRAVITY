@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "npm run build && node memory-server.mjs",
     "build": "tsc -b && vite build",
+    "memory": "node memory-server.mjs",
+    "memory:check": "node memory-server.mjs --check",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -13,7 +16,7 @@
     "@radix-ui/react-popover": "^1.1.15",
     "clsx": "^2.1.0",
     "date-fns": "^4.2.1",
-    "lucide-react": "^0.378.0",
+    "lucide-react": "^1.21.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^6.0.2",

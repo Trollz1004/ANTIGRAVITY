@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(() => {
   const apiUrl = process.env.VITE_API_URL
   // Defensive guard: VITE_API_URL should be empty (relative paths) or a localhost
   // address. Baked-in LAN IPs (e.g. 192.168.x.x) lock the bundle to a single host

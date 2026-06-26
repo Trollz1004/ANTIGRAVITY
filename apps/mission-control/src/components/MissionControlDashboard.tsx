@@ -58,10 +58,18 @@ const FALLBACK_MODELS = ['hermes', 'hermes-deep', 'cfo', 'code', 'marketing', 'k
 
 const AGENTS = [
   { id: 'codex', label: 'Codex' },
+  { id: 'openai', label: 'OpenAI' },
   { id: 'claude', label: 'Claude' },
+  { id: 'gemini', label: 'Gemini' },
   { id: 'hermes', label: 'Hermes' },
+  { id: 'meta-llama', label: 'Meta/Llama' },
+  { id: 'manus', label: 'Manus' },
+  { id: 'fcc', label: 'FCC' },
+  { id: 'opencode', label: 'OpenCode' },
   { id: 'ollama', label: 'Ollama' },
+  { id: 'nvidia', label: 'NVIDIA' },
   { id: 'openclaw', label: 'OpenClaw' },
+  { id: 'grok', label: 'Grok' },
 ];
 
 const QUICK_COMMANDS = [
@@ -475,6 +483,8 @@ export const MissionControlDashboard = () => {
       window.clearInterval(healthId);
       window.clearInterval(runsId);
     };
+    // Pollers intentionally capture the initial load functions for this legacy dashboard.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleAgent = (id: string) => {

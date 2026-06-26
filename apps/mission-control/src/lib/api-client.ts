@@ -8,7 +8,6 @@
 
 import {
   validate,
-  ValidationError,
   PaginationSchema,
   IssueSortSchema,
   CreateIssueSchema,
@@ -18,21 +17,24 @@ import type {
   Pagination,
   IssueFilter,
   IssueSort,
-  CreateIssue,
-  UpdateIssue,
   IssueResponse,
 } from './validation-schemas';
 
 const BASE_URL = '/api/v1';
 
 export class ApiError extends Error {
+  public readonly status: number;
+  public readonly body?: unknown;
+
   constructor(
     message: string,
-    public readonly status: number,
-    public readonly body?: unknown,
+    status: number,
+    body?: unknown,
   ) {
     super(message);
     this.name = 'ApiError';
+    this.status = status;
+    this.body = body;
   }
 }
 
