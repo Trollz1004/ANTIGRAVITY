@@ -19,7 +19,7 @@ if (-not (Test-Path -LiteralPath $watchdogScript)) {
     throw "Mission Control watchdog script missing: $watchdogScript"
 }
 
-$principalUser = if ($env:USERDOMAIN) { "$env:USERDOMAIN\$env:USERNAME" } else { $env:USERNAME }
+$principalUser = [Security.Principal.WindowsIdentity]::GetCurrent().Name
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
     [Security.Principal.WindowsBuiltInRole]::Administrator
 )
@@ -52,6 +52,50 @@ start "" /min powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass 
 "@
     Set-Content -LiteralPath $startupCmd -Value $contents -Encoding ascii
     Write-Output "OK: installed Startup-folder fallback at $startupCmd"
+}
+
+if (-not $isAdmin) {
+    Install-StartupFallback
+    Start-Process -FilePath 'powershell.exe' `
+        -ArgumentList @(
+            '-NoProfile',
+            '-NonInteractive',
+            '-ExecutionPolicy',
+            'Bypass',
+            '-WindowStyle',
+            'Hidden',
+            '-File',
+            $startScript,
+            '-RepoRoot',
+            $RepoRoot,
+            '-Port',
+            [string]$Port
+        ) `
+        -WindowStyle Hidden | Out-Null
+    $watchdogRunning = $false
+    Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -ErrorAction SilentlyContinue |
+        Where-Object { $_.CommandLine -match 'mission-control-watchdog\.ps1' } |
+        ForEach-Object { $watchdogRunning = $true }
+    if (-not $watchdogRunning) {
+        Start-Process -FilePath 'powershell.exe' `
+            -ArgumentList @(
+                '-NoProfile',
+                '-NonInteractive',
+                '-ExecutionPolicy',
+                'Bypass',
+                '-WindowStyle',
+                'Hidden',
+                '-File',
+                $watchdogScript,
+                '-RepoRoot',
+                $RepoRoot,
+                '-Port',
+                [string]$Port
+            ) `
+            -WindowStyle Hidden | Out-Null
+    }
+    Write-Output 'NOTE: Startup-folder fallback starts Mission Control after user login. Run this command from Administrator PowerShell for true AtStartup boot-before-login registration.'
+    return
 }
 
 function Register-MissionTask {
@@ -115,9 +159,6 @@ try {
     Get-ScheduledTask -TaskName 'MissionControlGUI','MissionControlWatchdog' |
         Select-Object TaskName, State, @{ Name = 'Triggers'; Expression = { ($_.Triggers | ForEach-Object { $_.Subscription + $_.StartBoundary + $_.Enabled }) -join '; ' } }
 
-    if (-not $isAdmin) {
-        Write-Output 'NOTE: registered logon tasks only because this shell is not elevated. Run this command from Administrator PowerShell for true AtStartup boot-before-login registration.'
-    }
 } catch {
     Write-Output "WARN: scheduled task registration failed: $($_.Exception.Message)"
     Install-StartupFallback
