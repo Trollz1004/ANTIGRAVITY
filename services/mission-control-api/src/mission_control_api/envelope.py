@@ -14,7 +14,7 @@ class Envelope:
         return asdict(self)
 
 def now_iso():
-    return datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    return datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat()
 
 def make_envelope(status, latency_ms, details, error=None):
     return Envelope(status=status, checked_at=now_iso(), latency_ms=latency_ms, details=details, error=error)

@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import List
 
 from fastapi import APIRouter
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 from mission_control_api.logging_config import get_logger
 
@@ -18,16 +18,31 @@ REPO_ROOT = Path(__file__).resolve().parents[5]
 TASK_LOG = REPO_ROOT / "services" / "mission-control-api" / "data" / "tasks.log"
 
 # Allowlist configuration (matches frontend input-validation.ts)
-ALLOWED_AGENTS = {"codex", "claude", "hermes", "ollama", "openclaw"}
+ALLOWED_AGENTS = {
+    "codex",
+    "openai",
+    "claude",
+    "gemini",
+    "hermes",
+    "meta-llama",
+    "manus",
+    "fcc",
+    "opencode",
+    "ollama",
+    "nvidia",
+    "openclaw",
+    "grok",
+}
 MAX_BRIEF_LENGTH = 500
 BRIEF_PATTERN = r'^[a-zA-Z0-9\s.,!?;:\'"()\-]+$'
 
 
 class TaskBrief(BaseModel):
     brief: str = Field(..., max_length=MAX_BRIEF_LENGTH)
-    agents: List[str] = []
+    agents: List[str] = Field(default_factory=list)
 
-    @validator('brief')
+    @field_validator('brief')
+    @classmethod
     def validate_brief(cls, v):
         """Validate task brief against allowlist: max length, allowed characters."""
         if not v.strip():
@@ -38,7 +53,8 @@ class TaskBrief(BaseModel):
             raise ValueError('Task brief contains invalid characters')
         return v.strip()
 
-    @validator('agents')
+    @field_validator('agents')
+    @classmethod
     def validate_agents(cls, v):
         """Validate all agent IDs against allowlist."""
         for agent in v:
