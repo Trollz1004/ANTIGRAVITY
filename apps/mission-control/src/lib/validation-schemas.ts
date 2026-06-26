@@ -122,11 +122,14 @@ export function validate<T>(schema: z.ZodSchema<T>, data: unknown): T {
 }
 
 export class ValidationError extends Error {
+  public readonly issues: z.ZodIssue[];
+
   constructor(
     message: string,
-    public readonly issues: z.ZodIssue[],
+    issues: z.ZodIssue[],
   ) {
     super(message);
     this.name = 'ValidationError';
+    this.issues = issues;
   }
 }

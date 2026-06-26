@@ -1,0 +1,1 @@
+{"id":"1400f7160142","created_at":"2026-06-26T14:52:46.246Z","title":"Mission Control memory GUI online","body":"The non-Paperclip Mission Control memory server is serving the built GUI and shared memory endpoints on localhost port 8787.","scope":"global","source_agent":"codex","agents":[],"nodes":[],"tags":["mission-control","memory","verification"],"visibility":"all-agents"}

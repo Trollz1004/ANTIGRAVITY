@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { X, UploadCloud, FileText, CheckCircle, AlertTriangle, Loader, RefreshCw, XCircle } from 'lucide-react';
+import { X, UploadCloud, CheckCircle, AlertTriangle, Loader, RefreshCw, XCircle } from 'lucide-react';
 import { clsx } from 'clsx';
 
 interface Upload {
@@ -20,7 +19,9 @@ const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
 
 export const UploadProgressPanel: React.FC = () => {
   const [uploads, setUploads] = useState<Upload[]>([]);
+  const [isDragActive, setIsDragActive] = useState(false);
   const uploadQueue = useRef<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const processingUploads = useRef<Set<string>>(new Set());
   const maxConcurrentUploads = 3;
 
@@ -75,19 +76,29 @@ export const UploadProgressPanel: React.FC = () => {
       processingUploads.current.delete(uploadId);
       processQueue(); // Try to process the next item in queue
     }
-  }, [updateUpload, removeUpload]);
+  }, [updateUpload]);
 
 
   useEffect(() => {
     processQueue();
   }, [uploads, processQueue]); // Rerun when uploads state changes to trigger queue processing
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const queueFiles = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles.length === 0) return;
     uploadQueue.current = [...uploadQueue.current, ...acceptedFiles];
     processQueue();
   }, [processQueue]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragActive(false);
+    queueFiles(Array.from(event.dataTransfer.files));
+  }, [queueFiles]);
+
+  const handleFileSelect = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    queueFiles(Array.from(event.target.files ?? []));
+    event.target.value = '';
+  }, [queueFiles]);
 
   const handleCancel = useCallback(async (uploadId: string) => {
     const uploadToCancel = uploads.find(u => u.id === uploadId);
@@ -130,13 +141,27 @@ export const UploadProgressPanel: React.FC = () => {
       </h3>
 
       <div
-        {...getRootProps()}
+        role="button"
+        tabIndex={0}
+        onClick={() => fileInputRef.current?.click()}
+        onKeyDown={event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            fileInputRef.current?.click();
+          }
+        }}
+        onDragOver={event => {
+          event.preventDefault();
+          setIsDragActive(true);
+        }}
+        onDragLeave={() => setIsDragActive(false)}
+        onDrop={handleDrop}
         className={clsx(
-          'border-2 border-dashed rounded-lg p-6 text-center transition-colors mb-4',
+          'border-2 border-dashed rounded-lg p-6 text-center transition-colors mb-4 cursor-pointer focus-visible:outline-2 focus-visible:outline-accentCyan focus-visible:outline-offset-2',
           isDragActive ? 'border-accentCyan bg-accentCyan/10 text-accentCyan' : 'border-gray-600 bg-background hover:border-gray-400 text-gray-400'
         )}
       >
-        <input {...getInputProps()} />
+        <input ref={fileInputRef} type="file" multiple className="sr-only" onChange={handleFileSelect} />
         <UploadCloud size={24} className="mx-auto mb-2" />
         {isDragActive ? (
           <p>Drop the files here ...</p>

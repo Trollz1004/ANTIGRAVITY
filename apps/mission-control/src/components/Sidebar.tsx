@@ -1,7 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 import {
-  LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare, Upload, Shield,
+  LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare, Upload, Shield, Database,
 } from 'lucide-react';
 import { NotificationBell } from './NotificationBell';
 import { StackIntegrityWidget } from './StackIntegrityWidget';
@@ -15,6 +15,7 @@ import { TreasuryPanel } from './TreasuryPanel';
  */
 const modes = [
   { id: 'ops', label: 'Ops Control', new: true, icon: LayoutGrid },
+  { id: 'memory', label: 'Agent Memory', new: true, icon: Database },
   { id: 'ledger', label: 'Business Ledger', new: true, icon: BookOpen },
   { id: 'roundtable', label: 'AI Roundtable', new: true, icon: Users },
   { id: 'tasks', label: 'Tasks', new: true, icon: ListChecks },
