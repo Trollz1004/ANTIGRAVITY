@@ -1,13 +1,28 @@
-# Register Mission Control API as a Windows Scheduled Task
-# Always-on: starts at boot + login, auto-restarts on crash every 1 min, no time limit
-$action = New-ScheduledTaskAction `
-    -Execute 'python.exe' `
-    -Argument '-m uvicorn mission_control_api.main:app --host 127.0.0.1 --port 8787' `
-    -WorkingDirectory 'c:\antigravity\services\mission-control-api'
+# Registers Mission Control GUI auto-start tasks.
+# Safe to run repeatedly. It removes the retired Python API task that used port 8787.
 
-$triggerBoot = New-ScheduledTaskTrigger -AtStartup
-$triggerLogon = New-ScheduledTaskTrigger -AtLogOn
+[CmdletBinding()]
+param(
+    [string]$RepoRoot = 'C:\antigravity',
+    [int]$Port = 8787
+)
 
+$ErrorActionPreference = 'Stop'
+
+$startScript = Join-Path $RepoRoot 'scripts\start-mission-control.ps1'
+$watchdogScript = Join-Path $RepoRoot 'scripts\mission-control-watchdog.ps1'
+
+if (-not (Test-Path -LiteralPath $startScript)) {
+    throw "Mission Control start script missing: $startScript"
+}
+if (-not (Test-Path -LiteralPath $watchdogScript)) {
+    throw "Mission Control watchdog script missing: $watchdogScript"
+}
+
+$principalUser = if ($env:USERDOMAIN) { "$env:USERDOMAIN\$env:USERNAME" } else { $env:USERNAME }
+$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+    [Security.Principal.WindowsBuiltInRole]::Administrator
+)
 $settings = New-ScheduledTaskSettingsSet `
     -RestartCount 999 `
     -RestartInterval (New-TimeSpan -Minutes 1) `
@@ -16,21 +31,95 @@ $settings = New-ScheduledTaskSettingsSet `
     -DontStopIfGoingOnBatteries `
     -ExecutionTimeLimit (New-TimeSpan -Days 0)
 
-$principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType S4U -RunLevel Limited
+$triggers = if ($isAdmin) {
+    @(
+        (New-ScheduledTaskTrigger -AtStartup),
+        (New-ScheduledTaskTrigger -AtLogOn)
+    )
+} else {
+    @(
+        (New-ScheduledTaskTrigger -AtLogOn)
+    )
+}
+
+function Install-StartupFallback {
+    $startupDir = [Environment]::GetFolderPath('Startup')
+    $startupCmd = Join-Path $startupDir 'MissionControlGUI.cmd'
+    $contents = @"
+@echo off
+start "" /min powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File "$startScript" -RepoRoot "$RepoRoot" -Port $Port
+start "" /min powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File "$watchdogScript" -RepoRoot "$RepoRoot" -Port $Port
+"@
+    Set-Content -LiteralPath $startupCmd -Value $contents -Encoding ascii
+    Write-Output "OK: installed Startup-folder fallback at $startupCmd"
+}
+
+function Register-MissionTask {
+    param(
+        [string]$TaskName,
+        [string]$ScriptPath,
+        [string]$Description
+    )
+
+    $action = New-ScheduledTaskAction `
+        -Execute 'powershell.exe' `
+        -Argument "-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$ScriptPath`" -RepoRoot `"$RepoRoot`" -Port $Port"
+
+    $principalCandidates = if ($isAdmin) { @(
+        (New-ScheduledTaskPrincipal -UserId $principalUser -LogonType S4U -RunLevel Highest),
+        (New-ScheduledTaskPrincipal -UserId $principalUser -LogonType S4U -RunLevel Limited),
+        (New-ScheduledTaskPrincipal -UserId $principalUser -LogonType Interactive -RunLevel Limited)
+    ) } else { @(
+        (New-ScheduledTaskPrincipal -UserId $principalUser -LogonType Interactive -RunLevel Limited)
+    ) }
+
+    $lastError = $null
+    foreach ($principal in $principalCandidates) {
+        try {
+            Register-ScheduledTask `
+                -TaskName $TaskName `
+                -Action $action `
+                -Trigger $triggers `
+                -Settings $settings `
+                -Principal $principal `
+                -Description $Description `
+                -Force | Out-Null
+            Write-Output "OK: registered $TaskName as $($principal.UserId) with $($principal.LogonType)/$($principal.RunLevel)"
+            return
+        } catch {
+            $lastError = $_
+        }
+    }
+
+    throw "Failed to register $TaskName. Last error: $($lastError.Exception.Message)"
+}
+
+# Remove the retired Python API task so it cannot fight the GUI server for port 8787.
+Unregister-ScheduledTask -TaskName 'MissionControlAPI' -Confirm:$false -ErrorAction SilentlyContinue
 
 try {
-    Register-ScheduledTask `
-        -TaskName 'MissionControlAPI' `
-        -Action $action `
-        -Trigger @($triggerBoot, $triggerLogon) `
-        -Settings $settings `
-        -Principal $principal `
-        -Description 'Mission Control API on 127.0.0.1:8787 — auto-restart on crash, runs at boot' `
-        -Force | Out-Null
-    Write-Output 'OK: MissionControlAPI scheduled task registered'
-    Get-ScheduledTask -TaskName 'MissionControlAPI' | Format-List TaskName, State, Author
-    (Get-ScheduledTask -TaskName 'MissionControlAPI').Settings | Format-List RestartCount, RestartInterval, ExecutionTimeLimit
+    Register-MissionTask `
+        -TaskName 'MissionControlGUI' `
+        -ScriptPath $startScript `
+        -Description 'Starts the ANTIGRAVITY Mission Control GUI and shared memory server on localhost:8787 at boot and login.'
+
+    Register-MissionTask `
+        -TaskName 'MissionControlWatchdog' `
+        -ScriptPath $watchdogScript `
+        -Description 'Keeps the ANTIGRAVITY Mission Control GUI and memory server healthy after reboot or process failure.'
+
+    Start-ScheduledTask -TaskName 'MissionControlGUI'
+    Start-ScheduledTask -TaskName 'MissionControlWatchdog'
+    Start-Sleep -Seconds 5
+
+    Get-ScheduledTask -TaskName 'MissionControlGUI','MissionControlWatchdog' |
+        Select-Object TaskName, State, @{ Name = 'Triggers'; Expression = { ($_.Triggers | ForEach-Object { $_.Subscription + $_.StartBoundary + $_.Enabled }) -join '; ' } }
+
+    if (-not $isAdmin) {
+        Write-Output 'NOTE: registered logon tasks only because this shell is not elevated. Run this command from Administrator PowerShell for true AtStartup boot-before-login registration.'
+    }
 } catch {
-    Write-Output ('FAIL: ' + $_.Exception.Message)
-    exit 1
+    Write-Output "WARN: scheduled task registration failed: $($_.Exception.Message)"
+    Install-StartupFallback
+    Write-Output 'NOTE: Startup-folder fallback starts Mission Control after user login. Run this command from Administrator PowerShell for true AtStartup boot-before-login registration.'
 }
