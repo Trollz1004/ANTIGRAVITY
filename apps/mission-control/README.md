@@ -150,6 +150,8 @@ When run from an Administrator PowerShell, that command installs:
 - `MissionControlGUI` - runs `scripts/start-mission-control.ps1` at startup and logon, builds the GUI, and starts `memory-server.mjs` on `127.0.0.1:8787`.
 - `MissionControlWatchdog` - checks `/health` and `/memory/status` every 30 seconds and restarts the GUI server if it drops.
 
+On a clean checkout, `scripts/start-mission-control.ps1` runs `npm ci` automatically only when dependencies are missing and it must build `dist/index.html`.
+
 When run from a normal non-elevated shell, Windows may block `AtStartup` scheduled-task registration. In that case, the installer writes a Startup-folder fallback at `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\MissionControlGUI.cmd`, which starts Mission Control after the user logs in following reboot or power loss.
 
 The installer also tries to remove the retired `MissionControlAPI` scheduled task so the old Python API cannot compete for port `8787`.
