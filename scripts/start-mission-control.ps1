@@ -6,7 +6,8 @@ param(
     [string]$RepoRoot = 'C:\antigravity',
     [int]$Port = 8787,
     [switch]$ForceRestart,
-    [switch]$Rebuild
+    [switch]$Rebuild,
+    [switch]$Foreground
 )
 
 $ErrorActionPreference = 'Stop'
@@ -106,6 +107,17 @@ $envBlock = @{
 
 foreach ($key in $envBlock.Keys) {
     [System.Environment]::SetEnvironmentVariable($key, $envBlock[$key], 'Process')
+}
+
+if ($Foreground) {
+    Write-MissionLog "running Mission Control memory server in foreground for Task Scheduler"
+    Push-Location $AppDir
+    try {
+        & $node.Source 'memory-server.mjs' >> $OutLog 2>> $ErrLog
+        exit $LASTEXITCODE
+    } finally {
+        Pop-Location
+    }
 }
 
 $process = Start-Process -FilePath $node.Source `

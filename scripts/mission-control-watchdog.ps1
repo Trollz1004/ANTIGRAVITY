@@ -68,7 +68,8 @@ function Restart-MissionControl {
             $RepoRoot,
             '-Port',
             [string]$Port,
-            '-ForceRestart'
+            '-ForceRestart',
+            '-Foreground'
         ) `
         -WindowStyle Hidden `
         -PassThru
