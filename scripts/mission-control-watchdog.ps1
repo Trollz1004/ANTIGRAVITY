@@ -1,43 +1,90 @@
-# Mission Control API Watchdog
-# Purpose: Monitor MC API (8787) and restart if down, log all checks
-# How to run: .\mission-control-watchdog.ps1 from elevated PowerShell
-# How to stop: Ctrl+C or stop scheduled task
+# Keeps the Mission Control GUI + shared memory server alive.
+# Intended to run as a Windows Scheduled Task.
 
-$logPath = "c:\antigravity\logs\mission-control-watchdog.log"
-$apiPort = 8787
-$portsToCheck = @(3100, 11434, 11435, 18789)
-$restartCounts = @{}
-$startTime = Get-Date
-Add-Content -Path $logPath -Value "watchdog started at $(Get-Date -Format o)"
+[CmdletBinding()]
+param(
+    [string]$RepoRoot = 'C:\antigravity',
+    [int]$Port = 8787,
+    [int]$IntervalSeconds = 30
+)
+
+$ErrorActionPreference = 'Continue'
+
+$LogDir = Join-Path $RepoRoot 'logs'
+$LogPath = Join-Path $LogDir 'mission-control-watchdog.log'
+$StartScript = Join-Path $RepoRoot 'scripts\start-mission-control.ps1'
+$RecentRestarts = @()
+
+New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
+
+function Write-WatchdogLog {
+    param([string]$Message)
+    $line = "[{0}] {1}" -f (Get-Date -Format o), $Message
+    Add-Content -LiteralPath $LogPath -Value $line -ErrorAction SilentlyContinue
+    Write-Output $line
+}
+
+function Test-MissionControlHealthy {
+    try {
+        $health = Invoke-RestMethod -Uri "http://127.0.0.1:$Port/health" -Method Get -TimeoutSec 3
+        if ($health.ok -ne $true -or $health.app -ne 'mission-control-memory-gui') {
+            return $false
+        }
+
+        $memory = Invoke-RestMethod -Uri "http://127.0.0.1:$Port/memory/status" -Method Get -TimeoutSec 3
+        return ($memory.ok -eq $true -and $memory.paperclip_excluded -eq $true)
+    } catch {
+        return $false
+    }
+}
+
+function Restart-MissionControl {
+    $now = Get-Date
+    $script:RecentRestarts = @($script:RecentRestarts | Where-Object { ($now - $_).TotalMinutes -lt 5 })
+    if ($script:RecentRestarts.Count -ge 3) {
+        Write-WatchdogLog 'restart cap reached; sleeping 10 minutes before next attempt'
+        Start-Sleep -Seconds 600
+        $script:RecentRestarts = @()
+        return
+    }
+
+    if (-not (Test-Path -LiteralPath $StartScript)) {
+        Write-WatchdogLog "start script missing: $StartScript"
+        return
+    }
+
+    Write-WatchdogLog "Mission Control unhealthy on port $Port; restarting"
+    $process = Start-Process -FilePath 'powershell.exe' `
+        -ArgumentList @(
+            '-NoProfile',
+            '-NonInteractive',
+            '-ExecutionPolicy',
+            'Bypass',
+            '-WindowStyle',
+            'Hidden',
+            '-File',
+            $StartScript,
+            '-RepoRoot',
+            $RepoRoot,
+            '-Port',
+            [string]$Port,
+            '-ForceRestart'
+        ) `
+        -WindowStyle Hidden `
+        -PassThru
+
+    $script:RecentRestarts += $now
+    Write-WatchdogLog "restart launcher PID $($process.Id)"
+}
+
+Write-WatchdogLog "Mission Control watchdog started for http://127.0.0.1:$Port/"
 
 while ($true) {
-  $timestamp = Get-Date -Format "HH:mm:ss"
-  
-  # Check MC API (8787)
-  $conn = Get-NetTCPConnection -LocalPort $apiPort -State Listen -ErrorAction SilentlyContinue
-  if (-not $conn) {
-    $key = "api"
-    $now = Get-Date
-    if (-not $restartCounts[$key]) { $restartCounts[$key] = @() }
-    $restartCounts[$key] = $restartCounts[$key] | Where-Object { ($now - $_).TotalMinutes -lt 5 }
-    if ($restartCounts[$key].Count -lt 3) {
-      Add-Content -Path $logPath -Value "[$timestamp] MC API down, restarting"
-      Start-Process python -ArgumentList "-m","uvicorn","mission_control_api.main:app","--host","127.0.0.1","--port","8787" -WorkingDirectory "c:\antigravity\services\mission-control-api" -WindowStyle Hidden
-      $restartCounts[$key] += $now
+    if (Test-MissionControlHealthy) {
+        Write-WatchdogLog "Mission Control healthy on port $Port"
     } else {
-      Add-Content -Path $logPath -Value "[$timestamp] ALERT: MC API restart cap reached"
-      Start-Sleep -Seconds 600
+        Restart-MissionControl
     }
-  } else {
-    Add-Content -Path $logPath -Value "[$timestamp] MC API ok"
-  }
 
-  # Check other ports (log only)
-  foreach ($port in $portsToCheck) {
-    $pConn = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
-    $status = if ($pConn) { "ok" } else { "down" }
-    Add-Content -Path $logPath -Value "[$timestamp] port $port $status"
-  }
-
-  Start-Sleep -Seconds 30
+    Start-Sleep -Seconds $IntervalSeconds
 }
