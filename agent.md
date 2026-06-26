@@ -44,9 +44,7 @@ Joshua Coleman is the sole human authority.
 No AI, wrapper, dashboard, process, or node outranks Joshua or another approved AI lane.
 Agents execute assigned work, preserve evidence, and keep public product surfaces clean.
 
-Codex Desktop remains the implementation and verification lane for this thread.
-Codex is also the Paperclip CEO lane when Paperclip/Paperweight coordination is
-in scope. Hermes is optional support/research, not authority.
+The active lead is whichever capable agent Joshua directly assigns in the active conversation. Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollama, and other lanes may lead only when Joshua directly assigns them or when their role map already covers the task. Otherwise they collect evidence, draft proposals, and report to the active lead.
 
 Current T5500 Paperclip state:
 
@@ -55,7 +53,7 @@ Current T5500 Paperclip state:
 - Local Paperclip URL on T5500: `http://127.0.0.1:3100`
 - Scope: date app, customer support, Cloudflare handoff, compact heartbeats
 - Excluded: Hermes
-- Decision lane: Codex CEO only
+- Decision lane: active lead assigned by Joshua per task
 - Support lane: Official OpenClaw support-only
 - Worker lane: FCC/OpenCode worker-only
 
@@ -68,12 +66,17 @@ sets that lane.
 
 FCC may be used as a Paperclip worker model through its MCP bridge for OpenCode,
 NVIDIA, and Ollama-backed work. FCC must report evidence and proposed actions to
-Codex unless the active backend is Codex 5.5 or Opus-level and Joshua explicitly
-assigns it as a decision lane.
+the active lead unless Joshua explicitly assigns it as a decision lane for a specific task.
 
 No model below Codex 5.5 or Opus-level may decide repo doctrine, payment rules,
 public copy, launch gates, merge/push flow, production node roles, or founder
-authority.
+authority. Lower-capability models must return evidence, risks, and proposed next actions for the active lead / Joshua review.
+
+There is no permanent AI boss.
+
+When Joshua directly assigns a task to Claude, Codex/OpenAI, Gemini, Meta/Llama, Manus, Hermes, Paperclip, FCC, OpenCode, Ollama, or another capable system, that named system becomes the active lead for that task.
+
+The guardrails restrict autonomous or delegated model behavior, not Joshua's direct instruction.
 
 ## Boot Order
 
@@ -92,7 +95,7 @@ Then report:
 AGENT BOOTED
 ROOT: c:\antigravity
 TASK: <one line>
-LANE: <Codex CEO|FCC Worker|Gemini|Claude|Hermes|OpenClaw|Other>
+LANE: <active lead assigned by Joshua|FCC Worker|Gemini|Claude|Hermes|OpenClaw|Other>
 STATUS: <starting|blocked>
 BLOCKER: <none or exact blocker>
 ```
