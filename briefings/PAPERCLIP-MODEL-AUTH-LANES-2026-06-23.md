@@ -3,9 +3,9 @@
 Scope: T5500 Paperclip date-app/customer-support ops package at
 `C:\antigravity-paperclip-dateapp-ops`.
 
-Codex remains the Paperclip CEO and decision lane. FCC, OpenCode, Ollama,
-OpenRouter, NVIDIA, Grok/xAI, Gemini, Pi, and OpenClaw are worker/support lanes
-unless Joshua explicitly assigns an Opus-level or Codex 5.5 decision model.
+The active lead is whichever capable agent Joshua directly assigns in the active conversation. Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollama, and other lanes may lead only when Joshua directly assigns them or when their role map already covers the task. Otherwise they collect evidence, draft proposals, and report to the active lead.
+
+There is no permanent AI boss. The guardrails restrict autonomous or delegated model behavior, not Joshua's direct instruction. When Joshua directly assigns a task to Claude, Codex/OpenAI, Gemini, Meta/Llama, Manus, Hermes, Paperclip, FCC, OpenCode, Ollama, or another capable system, that named system becomes the active lead for that task.
 
 Secret source:
 
@@ -32,9 +32,9 @@ Model lanes registered/tracked:
 - OpenCode Free Cloud Worker: `opencode_local`, executable model
   `opencode/big-pickle`.
 - OpenRouter OpenAI Codex Worker: `process`, executable model
-  `openrouter/openai/gpt-5.1-codex-max`.
+  `openrouter/openai/gpt-5.1-codex-codex-max`.
 - OpenRouter OpenAI Regular Worker: `process`, executable model
-  `openrouter/openai/gpt-5.5`, worker-only fallback and not Codex CEO.
+  `openrouter/openai/gpt-5.5`, worker-only fallback.
 - OpenRouter NVIDIA Worker: `process`, executable model
   `openrouter/nvidia/nemotron-3-super-120b-a12b`.
 - OpenRouter Grok Worker: `process`, executable model

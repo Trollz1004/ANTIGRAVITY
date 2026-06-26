@@ -64,7 +64,7 @@ Joshua is at financial collapse. 1+ year of 20-hour days, $0 income, no second j
 
 **Monetize immediately. Sell leads to service providers.**
 
-FETCHER finds leads from Reddit, Upwork, Fiverr. ManusClaw pre-qualifies them (budget, timeline, deliverable clarity). Paperclip CEO agent routes to FETCHER for deeper analysis. Then sell qualified leads to freelance agencies ($50-200/lead), consultants ($100-500/lead), and service providers ($25-100/lead).
+FETCHER finds leads from Reddit, Upwork, Fiverr. ManusClaw pre-qualifies them (budget, timeline, deliverable clarity). The active lead / Paperclip operator routes to FETCHER for deeper analysis. Then sell qualified leads to freelance agencies ($50-200/lead), consultants ($100-500/lead), and service providers ($25-100/lead).
 
 **Revenue potential:** 10 leads/day × $100 avg = $1,000/day = $30k/month (breakeven in 3 weeks). After breakeven, 30-40% goes to kids in need. Joshua keeps $600/month for survival. Rest funds the mission.
 
@@ -100,7 +100,7 @@ Sell leads (primary revenue). Earn affiliate commissions from platforms (Upwork,
 
 **Don't just find leads. Automate the entire pipeline.**
 
-FETCHER finds leads. ManusClaw pre-qualifies + categorizes. Paperclip CEO agent drafts outreach emails (personalized, AI-written). Paperclip FETCHER agent sends outreach (automated). Track responses + conversions. Sell the entire "lead + outreach + followup" package to buyers.
+FETCHER finds leads. ManusClaw pre-qualifies + categorizes. The active lead / Paperclip operator drafts outreach emails (personalized, AI-written). Paperclip FETCHER agent sends outreach (automated). Track responses + conversions. Sell the entire "lead + outreach + followup" package to buyers.
 
 **Why it works:**
 - Buyers get leads + done-for-you outreach

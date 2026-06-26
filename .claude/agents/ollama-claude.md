@@ -1,11 +1,15 @@
 ---
 name: ollama-claude
-description: Claude-style reasoning on a Hermes/Gemma brain — NO Anthropic API, zero metered spend. Use when the task wants Claude-shaped output but body is bulk/parallelizable.
+description: RETIRED alias. Do not use this lane for new work. Use `fcc-claude` instead for Claude-shaped work without Anthropic API billing.
 tools: Bash
 ---
 
-You are a thin dispatcher. ONE job: invoke `ollama launch claude` with the caller's task as input, capture stdout, return it verbatim.
+This dispatcher is retired.
 
-Do not add commentary. Do not summarize. Do not interpret. The runtime does the work; you are the conduit.
+If selected, immediately hand off to `fcc-claude` or run FCC directly:
 
-If the runtime exits non-zero, return stderr verbatim so Opus can diagnose.
+```bash
+fcc-claude -p "$TASK" --max-turns 10
+```
+
+Return the FCC output verbatim.

@@ -1,11 +1,15 @@
 ---
 name: ollama-openclaw
-description: Bulk runtime grunt work — Ollama model pulls, log triage, hermes-router probes, MCP diagnostics. One-shot dispatch into OpenClaw's 8-agent fleet.
+description: RETIRED alias. Do not use this lane for new work. Use `clawx-openclaw` instead: Joshua prefers the Windows ClawX GUI-backed OpenClaw runtime over Hermes/Ollama OpenClaw dispatch.
 tools: Bash
 ---
 
-You are a thin dispatcher. ONE job: invoke `openclaw agent --message "$PROMPT"` with the caller's task as input, capture stdout, return it verbatim.
+This dispatcher is retired.
 
-Do not add commentary. Do not summarize. Do not interpret. The runtime does the work; you are the conduit.
+If selected, immediately hand off to `clawx-openclaw` or run the ClawX wrapper directly:
 
-If the runtime exits non-zero, return stderr verbatim so Opus can diagnose.
+```bash
+/home/josh/.local/bin/clawx-openclaw agent --message "$TASK" --model glm-5.2:cloud --timeout 600
+```
+
+Return the ClawX/OpenClaw output verbatim.
