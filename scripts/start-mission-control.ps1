@@ -81,6 +81,15 @@ $npm = Get-Command npm.cmd -ErrorAction Stop
 $node = Get-Command node.exe -ErrorAction Stop
 
 if ($Rebuild -or -not (Test-Path -LiteralPath $DistIndex)) {
+    $tscCmd = Join-Path $AppDir 'node_modules\.bin\tsc.cmd'
+    if (-not (Test-Path -LiteralPath $tscCmd)) {
+        Write-MissionLog "Mission Control dependencies missing; running npm ci in $AppDir"
+        $install = Start-Process -FilePath $npm.Source -ArgumentList @('ci') -WorkingDirectory $AppDir -Wait -NoNewWindow -PassThru
+        if ($install.ExitCode -ne 0) {
+            throw "Mission Control dependency install failed with exit code $($install.ExitCode)"
+        }
+    }
+
     Write-MissionLog "building Mission Control GUI in $AppDir"
     $build = Start-Process -FilePath $npm.Source -ArgumentList @('run', 'build') -WorkingDirectory $AppDir -Wait -NoNewWindow -PassThru
     if ($build.ExitCode -ne 0) {
