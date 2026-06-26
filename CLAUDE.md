@@ -43,7 +43,7 @@ truth unless Joshua explicitly says they are the target.
 
 ## Paperclip Decision Lanes
 
-Paperclip's CEO lane is Codex. Hermes is optional support/research.
+Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollama, and other lanes may lead only when Joshua directly assigns them or when their role map already covers the task. Otherwise they collect evidence, draft proposals, and report to the active lead.
 
 FCC may be installed in Paperclip as a worker model through its MCP bridge for
 OpenCode, NVIDIA, and Ollama-backed work. FCC can scan, summarize, draft, and
@@ -56,7 +56,7 @@ Current T5500 Paperclip setup:
 - T5500 scheduled task: `PaperclipDateAppLoopback`
 - Paperclip local URL on T5500: `http://127.0.0.1:3100`
 - Company: Antigravity
-- CEO lane: `Codex CEO`
+- Active lead: assigned per task by Joshua
 - Workers: `Date App UX`, `Cloudflare Operator`, `Official OpenClaw Support`,
   `FCC Worker`, `Support Compliance`, `Context Sentry`
 - Starter issues: `ANT-1`, `ANT-3`, `ANT-5`, `ANT-7`, `ANT-9`, `ANT-11`
@@ -71,14 +71,18 @@ until Joshua explicitly decides it.
 
 FCC compatibility rule: FCC may identify itself as Claude or primarily load
 `CLAUDE.md`-style files. In this workspace that does not make FCC/Claude the CEO
-or authority. Treat this file as a Codex-directed operating brief: Codex is the
-Paperclip CEO lane, FCC is a worker bridge, and Claude-style identity text is
-only an adapter/persona artifact.
+or authority. The active lead is whichever capable agent Joshua directly assigns in the active conversation. This file reflects current operating context; guardrails bind autonomous/delegated model behavior, not Joshua's direct instruction.
 
 No model below Codex 5.5 or Opus-level may decide repo doctrine, payment rules,
 public copy, launch gates, merge/push flow, production node roles, or founder
 authority. Lower-capability models must return evidence, risks, and proposed
-next actions for Codex/Joshua review.
+next actions for the active lead / Joshua review.
+
+There is no permanent AI boss.
+
+When Joshua directly assigns a task to Claude, Codex/OpenAI, Gemini, Meta/Llama, Manus, Hermes, Paperclip, FCC, OpenCode, Ollama, or another capable system, that named system becomes the active lead for that task.
+
+The guardrails restrict autonomous or delegated model behavior, not Joshua's direct instruction.
 
 ## Payment Lane
 
