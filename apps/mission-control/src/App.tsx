@@ -23,59 +23,68 @@ import { AuthProvider } from './lib/useAuth';
 import { ThemeProvider } from './context/ThemeContext';
 import { RateLimitDashboard } from './components/RateLimitDashboard';
 import { UploadProgressPanel } from './components/UploadProgressPanel';
+import { AgentMemoryPanel } from './components/AgentMemoryPanel';
 
-export const App: React.FC = () => {
+const MissionControlShell: React.FC = () => {
   const [activePanel, setActivePanel] = useState('ops'); // Default active panel
   const [showNotificationPanel, setShowNotificationPanel] = useState(false);
   const { notifications, unreadCount, markAsRead, clearAllNotifications } = useWebSocketNotifications();
 
   return (
+    <div className="flex flex-col h-screen bg-background text-white font-sans">
+      <TopBar />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar
+          active={activePanel}
+          setActive={setActivePanel}
+          unreadCount={unreadCount}
+          onNotificationBellClick={() => setShowNotificationPanel(prev => !prev)}
+        /> {/* Pass active and setActive to Sidebar */}
+        <main className="flex-1 overflow-auto p-4">
+          {activePanel === 'ops' && <TaskBriefInput />}
+          {activePanel === 'ops' && <ScanningRepoIndicator />}
+          {activePanel === 'ops' && <AgentMemoryPanel />}
+          {activePanel === 'memory' && <AgentMemoryPanel />}
+          {activePanel === 'ops' && <LaunchPanel />}
+          {activePanel === 'ops' && <TreasuryBand />}
+          {activePanel === 'ops' && <HermesRouterPanel />}
+          {activePanel === 'ops' && <OpenClawSupportPanel />}
+          {activePanel === 'ops' && <T5500Panel />}
+          {activePanel === 'ops' && <RevenueEnginePanel />}
+          {activePanel === 'ops' && <TrustHierarchyPanel />}
+          {activePanel === 'ops' && <StackIntegrityPanel />}
+          {activePanel === 'uploads' && <UploadProgressPanel />}
+          {activePanel === 'rate-limits' && <RateLimitDashboard />}
+          {/* Add other panels here based on activePanel */}
+        </main>
+        <aside className="w-64 bg-panel p-4 overflow-auto">
+          <RunbooksPanel />
+          <BuildAgentPanel />
+          <OpsBand />
+        </aside>
+      </div>
+      <Footer />
+      <ToastContainer />
+      {showNotificationPanel && (
+        <div className="absolute top-16 right-4 z-50">
+          <NotificationPanel
+            notifications={notifications}
+            markAsRead={markAsRead}
+            clearAllNotifications={clearAllNotifications}
+            onClose={() => setShowNotificationPanel(false)}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
     <ThemeProvider>
       <AuthProvider>
         <ToastProvider>
-          <div className="flex flex-col h-screen bg-background text-white font-sans">
-            <TopBar />
-            <div className="flex flex-1 overflow-hidden">
-              <Sidebar
-                active={activePanel}
-                setActive={setActivePanel}
-                unreadCount={unreadCount}
-                onNotificationBellClick={() => setShowNotificationPanel(prev => !prev)}
-              /> {/* Pass active and setActive to Sidebar */}
-              <main className="flex-1 overflow-auto p-4">
-                {activePanel === 'ops' && <TaskBriefInput />}
-                {activePanel === 'ops' && <ScanningRepoIndicator />}
-                {activePanel === 'ops' && <LaunchPanel />}
-                {activePanel === 'ops' && <TreasuryBand />}
-                {activePanel === 'ops' && <HermesRouterPanel />}
-                {activePanel === 'ops' && <OpenClawSupportPanel />}
-                {activePanel === 'ops' && <T5500Panel />}
-                {activePanel === 'ops' && <RevenueEnginePanel />}
-                {activePanel === 'ops' && <TrustHierarchyPanel />}
-                {activePanel === 'ops' && <StackIntegrityPanel />}
-                {activePanel === 'uploads' && <UploadProgressPanel />}
-                {activePanel === 'rate-limits' && <RateLimitDashboard />}
-                {/* Add other panels here based on activePanel */}
-              </main>
-              <aside className="w-64 bg-panel p-4 overflow-auto">
-                <RunbooksPanel />
-                <BuildAgentPanel />
-                <OpsBand />
-              </aside>
-            </div>
-            <Footer />
-            <ToastContainer />
-            {showNotificationPanel && (
-              <div className="absolute top-16 right-4 z-50">
-                <NotificationPanel
-                  notifications={notifications}
-                  markAsRead={markAsRead}
-                  clearAllNotifications={clearAllNotifications}
-                  onClose={() => setShowNotificationPanel(false)}
-                />
-              </div>
-            )}
-          </div>
+          <MissionControlShell />
         </ToastProvider>
       </AuthProvider>
     </ThemeProvider>

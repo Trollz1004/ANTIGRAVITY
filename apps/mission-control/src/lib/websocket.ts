@@ -20,13 +20,6 @@ interface WebSocketHookOptions {
   retryInterval?: number;
 }
 
-interface WebSocketStatus {
-  isConnected: boolean;
-  latency: number | null;
-  reconnectAttempts: number;
-  lastError: string | null;
-}
-
 const RECONNECT_INTERVAL_MS = 3000;
 const PING_INTERVAL_MS = 25000; // Send ping every 25 seconds
 
