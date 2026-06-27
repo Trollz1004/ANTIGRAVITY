@@ -18,7 +18,7 @@ const modes = [
   { id: 'memory', label: 'Agent Memory', new: true, icon: Database },
   { id: 'ledger', label: 'Business Ledger', new: true, icon: BookOpen },
   { id: 'roundtable', label: 'AI Roundtable', new: true, icon: Users },
-  { id: 'tasks', label: 'Tasks', new: true, icon: ListChecks },
+  { id: 'tasks', label: 'Mission Progress', new: true, icon: ListChecks },
   { id: 'code', label: 'Code Mode', new: false, icon: Code },
   { id: 'banana', label: 'Create · Banana', new: false, icon: ImagePlus },
   { id: 'research', label: 'Research Mode', new: false, icon: Search },
