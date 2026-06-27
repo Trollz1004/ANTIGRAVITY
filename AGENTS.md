@@ -163,7 +163,6 @@ A task is not complete until the current state proves it:
 If completion is not proven, report the one current blocker and the next concrete
 action.
 
-
 <!-- autoclaw:hermes-evolution-guidance -->
 ## Hermes-Evolution
 
