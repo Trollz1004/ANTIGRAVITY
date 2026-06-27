@@ -3,6 +3,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import crypto from "node:crypto";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 
 const APP_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(APP_DIR, "..", "..");
@@ -11,7 +13,9 @@ const MEMORY_DIR = path.join(REPO_ROOT, "memory");
 const MEMORY_LOG = path.join(MEMORY_DIR, "mission-control-agent-memory.jsonl");
 const BOOTSTRAP_FILE = path.join(MEMORY_DIR, "MISSION-CONTROL-AGENT-MEMORY.md");
 const TASK_LOG = path.join(REPO_ROOT, "services", "mission-control-api", "data", "tasks.log");
+const PROGRESS_TASKS = path.join(MEMORY_DIR, "mission-control-progress-tasks.json");
 const PORT = Number(process.env.PORT || 8787);
+const execFileAsync = promisify(execFile);
 
 const ALLOWED_AGENTS = [
   "codex",
@@ -104,6 +108,148 @@ async function readRequestJson(request) {
   const text = Buffer.concat(chunks).toString("utf8");
   if (!text.trim()) return {};
   return JSON.parse(text);
+}
+
+
+async function runCommand(command, args = [], options = {}) {
+  try {
+    const result = await execFileAsync(command, args, {
+      timeout: options.timeout || 12000,
+      cwd: options.cwd || REPO_ROOT,
+      windowsHide: true,
+      maxBuffer: 1024 * 256,
+    });
+    return { ok: true, out: String(result.stdout || "").trim(), err: String(result.stderr || "").trim() };
+  } catch (error) {
+    return { ok: false, out: String(error.stdout || "").trim(), err: String(error.stderr || error.message || "").trim() };
+  }
+}
+
+function parseHermesStatus(text) {
+  const parsed = { model: "unknown", provider: "unknown", gateway: "unknown" };
+  for (const line of String(text || "").split(/\r?\n/)) {
+    if (line.includes("Model:")) parsed.model = line.split("Model:").pop().trim();
+    if (line.includes("Provider:")) parsed.provider = line.split("Provider:").pop().trim();
+    if (line.includes("Status:") && parsed.gateway === "unknown") parsed.gateway = line.split("Status:").pop().trim();
+  }
+  return parsed;
+}
+
+async function localNodeProgress() {
+  const hermes = await runCommand("hermes", ["status"], { timeout: 20000 });
+  const head = await runCommand("git", ["-C", REPO_ROOT, "rev-parse", "HEAD"]);
+  const branches = await runCommand("git", ["-C", REPO_ROOT, "branch", "-a", "--no-color"]);
+  return {
+    name: "Sabretooth / local",
+    online: hermes.ok,
+    hermes: parseHermesStatus(hermes.out),
+    repoHead: head.out.split(/\r?\n/).find((line) => /^[0-9a-f]{40}$/.test(line.trim())) || "",
+    branches: branches.out.split(/\r?\n/).filter(Boolean).slice(0, 12),
+    error: hermes.ok ? "" : hermes.err,
+  };
+}
+
+async function sshWindowsNodeProgress(name, host) {
+  const remote = `hermes status | findstr /C:"Model:" /C:"Provider:" /C:"Status:" & git -C C:\\antigravity rev-parse HEAD & git -C C:\\antigravity branch -a --no-color`;
+  const result = await runCommand("ssh", ["-o", "BatchMode=yes", "-o", "ConnectTimeout=5", `joshl@${host}`, remote], { timeout: 30000 });
+  const lines = result.out.split(/\r?\n/).filter(Boolean);
+  return {
+    name,
+    online: result.ok,
+    hermes: parseHermesStatus(lines.filter((line) => line.includes("Model:") || line.includes("Provider:") || line.includes("Status:")).join("\n")),
+    repoHead: lines.find((line) => /^[0-9a-f]{40}$/.test(line.trim())) || "",
+    branches: lines.filter((line) => line.includes("origin/") || line.trim().startsWith("*")).slice(0, 12),
+    error: result.ok ? "" : result.err,
+  };
+}
+
+async function readProgressTasks() {
+  try {
+    return JSON.parse(await fs.readFile(PROGRESS_TASKS, "utf8"));
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+    const seed = [
+      { id: "mission-gui", title: "Mission Control owns the progression board", status: "doing", owner: "Hermes", note: "Integrated into http://127.0.0.1:8787/ Mission Progress", updatedAt: Date.now() / 1000 },
+      { id: "repo-sync", title: "Repo/model aligned across nodes", status: "done", owner: "Hermes", note: "All nodes on origin/main + gpt-5.5/OpenAI Codex", updatedAt: Date.now() / 1000 },
+    ];
+    await writeProgressTasks(seed);
+    return seed;
+  }
+}
+
+async function writeProgressTasks(tasks) {
+  await fs.mkdir(path.dirname(PROGRESS_TASKS), { recursive: true });
+  await fs.writeFile(PROGRESS_TASKS, `${JSON.stringify(tasks, null, 2)}\n`, "utf8");
+}
+
+async function activeSignals() {
+  const processes = await runCommand("bash", ["-lc", "ps -eo pid,comm,args --sort=-etime | grep -E 'hermes|codex|claude|openclaw|paperclip|fcc-claude|free-claude-code' | grep -v grep | head -60"], { timeout: 12000 });
+  return processes.out.split(/\r?\n/).filter(Boolean).map((line) => line.slice(0, 260));
+}
+
+async function recentHermesSessions() {
+  const sessions = await runCommand("bash", ["-lc", "hermes sessions list 2>/dev/null | head -25"], { timeout: 12000 });
+  return sessions.out.split(/\r?\n/).filter((line) => line.trim()).slice(0, 25);
+}
+
+async function progressStatus() {
+  const nodes = await Promise.all([
+    localNodeProgress(),
+    sshWindowsNodeProgress("T5500", "192.168.0.15"),
+    sshWindowsNodeProgress("9020", "192.168.0.5"),
+  ]);
+  const tasks = await readProgressTasks();
+  const columns = { todo: [], doing: [], blocked: [], done: [] };
+  for (const task of tasks) {
+    const status = ["todo", "doing", "blocked", "done"].includes(task.status) ? task.status : "todo";
+    columns[status].push(task);
+  }
+  const heads = new Set(nodes.map((node) => node.repoHead).filter(Boolean));
+  return {
+    ok: true,
+    updatedAt: Date.now() / 1000,
+    sameRepoHead: heads.size === 1,
+    nodes,
+    columns,
+    signals: await activeSignals(),
+    sessions: await recentHermesSessions(),
+  };
+}
+
+async function updateProgressTask(input) {
+  const tasks = await readProgressTasks();
+  const action = String(input.action || "add");
+  const now = Date.now() / 1000;
+  if (action === "add") {
+    const title = String(input.title || "").trim();
+    if (title.length < 1 || title.length > 180) throw new Error("title must be 1-180 characters");
+    tasks.push({
+      id: String(input.id || `task-${Math.round(now)}`).replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 40),
+      title,
+      status: ["todo", "doing", "blocked", "done"].includes(input.status) ? input.status : "todo",
+      owner: String(input.owner || "").slice(0, 80),
+      note: String(input.note || "").slice(0, 500),
+      updatedAt: now,
+    });
+  } else if (action === "update") {
+    const id = String(input.id || "");
+    for (const task of tasks) {
+      if (task.id !== id) continue;
+      for (const key of ["title", "status", "owner", "note"]) {
+        if (Object.hasOwn(input, key)) task[key] = String(input[key]).slice(0, key === "note" ? 500 : 180);
+      }
+      if (!["todo", "doing", "blocked", "done"].includes(task.status)) task.status = "todo";
+      task.updatedAt = now;
+    }
+  } else if (action === "delete") {
+    const id = String(input.id || "");
+    await writeProgressTasks(tasks.filter((task) => task.id !== id));
+    return { ok: true };
+  } else {
+    throw new Error("unsupported action");
+  }
+  await writeProgressTasks(tasks);
+  return { ok: true, tasks };
 }
 
 function hasSecretLikeValue(value) {
@@ -275,6 +421,17 @@ async function handleRequest(request, response) {
         lanes: LANES,
         source_files: ["AGENTS.md", "CLAUDE.md", "agent.md", "memory/MISSION-CONTROL-AGENT-MEMORY.md"],
       });
+      return;
+    }
+
+
+    if (request.method === "GET" && url.pathname === "/progress/status") {
+      sendJson(response, 200, await progressStatus());
+      return;
+    }
+
+    if (request.method === "POST" && url.pathname === "/progress/tasks") {
+      sendJson(response, 200, await updateProgressTask(await readRequestJson(request)));
       return;
     }
 
