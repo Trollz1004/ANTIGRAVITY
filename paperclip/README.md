@@ -65,3 +65,57 @@ untuned weight. The model stops *thinking* and starts *executing* a clear proced
   tactical work (gig scoring, proposal drafting, lead triage).
 - For deep novel reasoning, route to Opus via Claude Code or `hermes-deep`
   through the canonical `services/hermes-router/`.
+
+## Agency Skills Integration
+
+**The Agency** roster (144+ specialized AI agents) is integrated into this workspace
+and available as Antigravity skills under `.agents/skills/agency-*`.
+
+### Available Agent Skills
+
+Run the following to list all available agency skills:
+
+```bash
+ls .agents/skills | grep "^agency-"
+```
+
+### Activate an Agency Skill
+
+In Antigravity, activate any agent by its slug:
+
+```
+Use the agency-frontend-developer skill to review this component.
+Use the agency-backend-architect skill to design an API endpoint.
+Use the agency-growth-hacker skill to plan user acquisition.
+```
+
+### Agent Divisions
+
+| Division | Count | Examples |
+|----------|-------|----------|
+| Engineering | 23 | frontend-developer, backend-architect, mobile-app-builder, devops-automator |
+| Design | 8 | ui-designer, ux-researcher, brand-guardian, whimsy-injector |
+| Marketing | 22 | growth-hacker, content-creator, tiktok-strategist, seo-specialist |
+| Sales | 9 | outbound-strategist, deal-strategist, sales-engineer |
+| Product | 5 | sprint-prioritizer, product-manager, trend-researcher |
+| Project Management | 6 | project-shepherd, studio-producer, experiment-tracker |
+| Testing | 8 | reality-checker, evidence-collector, api-tester |
+| Support | 6 | support-responder, analytics-reporter, infrastructure-maintainer |
+| Paid Media | 7 | ppc-campaign-strategist, paid-social-strategist, search-query-analyst |
+| Spatial Computing | 5 | xr-interface-architect, visionos-spatial-engineer, xr-immersive-developer |
+| Specialized | 30+ | agents-orchestrator, mcp-builder, blockchain-security-auditor |
+| Finance | 5 | bookkeeper-controller, financial-analyst, tax-strategist |
+| Game Development | 20+ | game-designer, unity-architect, unreal-systems-engineer, godot-shader-developer |
+| Strategy | 2 | chief-of-staff |
+| Academic | 5 | anthropologist, historian, psychologist |
+
+### Regenerate Agency Skills
+
+After modifying agent definitions in `agency-agents/`:
+
+```bash
+./agency-agents/scripts/convert.sh --tool antigravity
+./agency-agents/scripts/install.sh --tool antigravity --no-interactive
+```
+
+This regenerates and installs skill files to `.agents/skills/`.
