@@ -68,6 +68,7 @@ _handoff-staging-*/_deploy/node_modules/
 # Service runtime data
 services/mission-control-api/data/
 infra/paperclip-worker/.wrangler/
+apps/paperweight/data/
 
 # Misc generated
 DIRTY_REPO_ALERT*.md
