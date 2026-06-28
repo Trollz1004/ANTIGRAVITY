@@ -1,6 +1,6 @@
 # Self-Improving Agent Skills Reference
 
-**Last updated:** 2026-06-27  
+**Last updated:** 2026-06-28  
 **Purpose:** Reduce context window by pointing to file locations instead of embedding large text.
 
 ## Skills Index (Read This First)
