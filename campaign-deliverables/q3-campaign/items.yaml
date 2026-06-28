@@ -6,7 +6,7 @@
 
 - id: 2
   type: brand_guideline
-  content: Never use "restricted-term", "customer payments", or "review-gated offer" - use "reserved allocation review" instead
+  content: Never use restricted terms on customer surfaces. Focus on platform access, verification, support, and community features.
   status: active
   created: 2026-04-17
 

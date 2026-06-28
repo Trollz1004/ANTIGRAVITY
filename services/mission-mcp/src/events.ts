@@ -3,6 +3,8 @@ import type Database from "better-sqlite3";
 export type EventKind =
   | "task_created"
   | "task_updated"
+  | "task_pool_refill"
+  | "task_pool_alert"
   | "issue_created"
   | "issue_resolved"
   | "memory_stored"
@@ -22,7 +24,7 @@ export interface EventRow {
 export interface LogEventOptions {
   task_id?: string | null;
   kind: EventKind;
-  payload: Record<string, unknown>;
+  payload: object;
 }
 
 export function logEvent(db: Database.Database, opts: LogEventOptions): void {

@@ -39,6 +39,23 @@ _client = AsyncIOMotorClient(os.environ["MONGO_URL"])
 _db = _client[os.environ["DB_NAME"]]
 PRODUCTS = _db.products
 
+
+def _is_production() -> bool:
+    return os.environ.get("APP_ENV", "").strip().lower() == "production"
+
+
+def _bot_shield_checkout_url() -> Optional[str]:
+    configured = (
+        os.environ.get("SQUARE_BOT_SHIELD_LINK")
+        or os.environ.get("SQUARE_BOT_SHIELD_PAYMENT_LINK")
+        or ""
+    ).strip()
+    if configured:
+        return configured
+    if _is_production():
+        return None
+    return "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD"
+
 # Reuse the admin-auth gate from auth_relay
 from auth_relay import require_admin  # noqa: E402
 
@@ -66,7 +83,7 @@ STARTER_SKUS: List[Dict[str, Any]] = [
         "title": "Bot Shield · Square Hosted",
         "description": "Square-hosted protection ledger for solo founders. Real product, real Square checkout — proceeds split per doctrine (10% kids · 27% tax reserve · 63% ops).",
         "price_usd": 9.00, "sku": "OPC-BOTSHIELD-9", "bucket": 5,
-        "square_checkout_url": os.environ.get("SQUARE_BOT_SHIELD_LINK", "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD"),
+        "square_checkout_url": _bot_shield_checkout_url(),
     },
     {
         "title": "Founding Member · Square Subscription",

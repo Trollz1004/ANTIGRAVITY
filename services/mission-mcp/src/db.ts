@@ -3,6 +3,7 @@ import { mkdirSync } from "fs";
 import { dirname } from "path";
 import migration001 from "./migrations/001_initial.sql";
 import migration002 from "./migrations/002_agents_and_completed_at.sql";
+import migration003 from "./migrations/003_task_pool_batch_fields.sql";
 
 const DEFAULT_DB_PATH = "C:\\Users\\joshl\\.hermes\\state.db";
 
@@ -12,6 +13,7 @@ export function openDb(dbPath?: string): Database.Database {
   const db = new Database(path);
   db.pragma("journal_mode = WAL");
   db.pragma("foreign_keys = ON");
+  db.pragma("busy_timeout = 5000");
   applyMigrations(db);
   return db;
 }
@@ -24,6 +26,7 @@ export function applyMigrations(db: Database.Database): void {
 
   runMigration(db, "001_initial", migration001);
   runMigration(db, "002_agents_and_completed_at", migration002);
+  runMigration(db, "003_task_pool_batch_fields", migration003);
 }
 
 function runMigration(
