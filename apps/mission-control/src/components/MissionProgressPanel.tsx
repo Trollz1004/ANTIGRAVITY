@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { CommandCenterPanel } from './CommandCenterPanel';
 
 type TaskStatus = 'todo' | 'doing' | 'blocked' | 'done';
 
@@ -155,6 +156,8 @@ export const MissionProgressPanel: React.FC = () => {
         </select>
         <button onClick={() => void addTask()} className="rounded bg-accentCyan px-4 py-2 text-sm font-semibold text-background hover:opacity-90">Add</button>
       </div>
+
+      <CommandCenterPanel />
 
       <div className="grid gap-3 xl:grid-cols-4">
         {statuses.map((column) => (
