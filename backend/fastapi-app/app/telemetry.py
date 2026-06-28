@@ -1,12 +1,22 @@
 """OpenTelemetry setup for the YouAndINotAI backend."""
 
-from opentelemetry import trace
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
-from opentelemetry.sdk.resources import SERVICE_NAME, Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
+try:
+    from opentelemetry import trace
+    from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+    from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+    from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
+    from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor
+except ModuleNotFoundError:
+    trace = None
+    OTLPSpanExporter = None
+    FastAPIInstrumentor = None
+    SQLAlchemyInstrumentor = None
+    SERVICE_NAME = None
+    Resource = None
+    TracerProvider = None
+    BatchSpanProcessor = None
 
 
 def setup_telemetry(app=None, engine=None):
@@ -19,6 +29,17 @@ def setup_telemetry(app=None, engine=None):
     Returns:
         dict with tracer status information.
     """
+    if trace is None:
+        return {
+            "service_name": "youandinotai-api",
+            "endpoint": None,
+            "instrumented": {
+                "fastapi": False,
+                "sqlalchemy": False,
+            },
+            "available": False,
+        }
+
     resource = Resource.create({SERVICE_NAME: "youandinotai-api"})
     tracer_provider = TracerProvider(resource=resource)
 
@@ -54,8 +75,16 @@ def setup_telemetry(app=None, engine=None):
 
 def get_tracer_status():
     """Return current tracer provider status for health checks."""
+    if trace is None:
+        return {
+            "tracer_provider_type": None,
+            "has_span_processor": False,
+            "available": False,
+        }
+
     tracer_provider = trace.get_tracer_provider()
     return {
         "tracer_provider_type": type(tracer_provider).__name__,
         "has_span_processor": hasattr(tracer_provider, "_active_span_processor"),
+        "available": True,
     }
