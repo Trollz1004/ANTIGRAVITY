@@ -6,8 +6,8 @@ Env overrides (one-line link swap without code change):
   SQUARE_3MONTH_PAYMENT_LINK
   SQUARE_12MONTH_PAYMENT_LINK
   SQUARE_ROYALTY_PAYMENT_LINK
-Hardcoded values are the fallback when env is unset, so the live site
-never breaks on a missing env var.
+Hardcoded values are the fallback when env is unset in non-production.
+Production must be explicitly configured for BotShield checkout.
 """
 
 from __future__ import annotations
@@ -20,9 +20,22 @@ _3MONTH = "https://square.link/u/oY7qEfRM"
 _12MONTH = "https://square.link/u/6GHpbvvl"
 _ROYALTY = "https://square.link/u/CafhorUS"
 
-BOT_SHIELD_PAYMENT_LINK = (
-    os.environ.get("SQUARE_BOT_SHIELD_PAYMENT_LINK") or _BOT_SHIELD
-)
+
+def _is_production() -> bool:
+    return os.environ.get("APP_ENV", "").strip().lower() == "production"
+
+
+def _bot_shield_payment_link() -> str:
+    configured = (
+        os.environ.get("SQUARE_BOT_SHIELD_PAYMENT_LINK")
+        or os.environ.get("SQUARE_BOT_SHIELD_LINK")
+        or ""
+    ).strip()
+    if configured:
+        return configured
+    return "" if _is_production() else _BOT_SHIELD
+
+BOT_SHIELD_PAYMENT_LINK = _bot_shield_payment_link()
 
 PLAN_LINKS: dict[str, str] = {
     "bot_shield": BOT_SHIELD_PAYMENT_LINK,

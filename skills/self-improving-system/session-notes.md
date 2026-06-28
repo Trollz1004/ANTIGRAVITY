@@ -48,3 +48,13 @@
 
 - PaperClip-agents library at `/mnt/c/antigravity/PaperClip-agents/` contains 30+ pre-built specialists
 - Key candidates for future hires: Security Engineer, DevOps Automator, AI Engineer, Sales Closer
+
+## 2026-06-28 Session - CEO (FUNA-50)
+
+- Improved `skills/self-improving-system/skills.md` to include all 184 agency skills
+- Added comprehensive categorization: Engineering, Design, Marketing, Sales, Product, Management, QA & Testing, Support, Finance, Specialized Domains, Retail
+- Added search commands for skill discovery
+- Reduced need to embed large skill descriptions in agent prompts
+- Skills used: self-improving-system
+- Effectiveness notes: Full skills index now available; agents can reference file location instead of full skill text
+- Timestamp: 2026-06-28T11:35:00Z

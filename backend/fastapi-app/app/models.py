@@ -623,6 +623,31 @@ class DoubleDateAcceptance(Base):
     )
 
 
+class TrackedMarketingLink(Base):
+    __tablename__ = "tracked_marketing_links"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    slug: Mapped[str] = mapped_column(String(32), unique=True, index=True, nullable=False)
+    surface_name: Mapped[str] = mapped_column(String(100), nullable=False)
+    destination_url: Mapped[str] = mapped_column(String(2048), nullable=False)
+    source: Mapped[str] = mapped_column(String(50), default="affiliate", nullable=False)
+    medium: Mapped[str] = mapped_column(String(50), default="referral", nullable=False)
+    campaign_name: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
+    referral_code: Mapped[str | None] = mapped_column(String(100), nullable=True, index=True)
+    click_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    created_by_user_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    last_clicked_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+
+
 # RefreshToken model for OPU-47 JWT refresh token rotation
 from app.models_refresh_token import RefreshToken  # noqa: F401, E402
 

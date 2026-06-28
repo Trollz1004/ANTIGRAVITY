@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
+    "task-pool:cron": "node dist/task-pool-cron.js",
     "start": "node dist/server.js",
     "start:http": "MISSION_MCP_TRANSPORT=http node dist/server.js",
     "test": "node node_modules/vitest/vitest.mjs run",
