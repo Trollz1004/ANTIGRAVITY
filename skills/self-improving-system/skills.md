@@ -5,18 +5,41 @@
 
 ## Skills Index (Read This First)
 
+### Core Skills (Available at `.agents/skills/`)
+
 | Skill Key | Category | Quick Use Case |
 |-----------|----------|----------------|
-| paperclip | Core | All Paperclip/API coordination |
+| paperclip | Core | Paperclip/API coordination |
 | paperclip-create-agent | Core | Hire new agents |
 | paperclip-create-plugin | Core | Build plugins |
 | para-memory-files | Core | PARA memory system |
-| agent-browser | Tech | Browser automation, testing |
-| copywriting | Marketing | Landing pages, CTAs, social copy |
-| frontend-design | UX | UI components, design systems |
-| high-end-visual-design | UX | Premium design guidelines |
+| hermes-evolution | Meta | Self-improvement evaluation |
+| mission-control | Core | Kanban/task tracking |
+| payments | Core | Square/Square API/payment links |
+| revenue-model | Core | Business revenue guidance |
+| sleek-design-mobile-apps | UX | Mobile app design |
+| social-growth-engineer | Marketing | Social media growth |
 | supabase | Data | Database, auth, Supabase ops |
 | supabase-postgres-best-practices | Data | Postgres optimization |
+| ui-ux-pro-max | UX | Advanced UI/UX |
+
+### Secondary Skills (Available at `skills/`)
+
+| Skill Key | Category | Quick Use Case |
+|-----------|----------|----------------|
+| antigravity-doctrine | Doctrine | Core operating rules |
+| antigravity-mission-orchestrator | Management | Task orchestration |
+
+### Pi Agent Skills (via skill system)
+
+| Skill Key | Category | Quick Use Case |
+|-----------|----------|----------------|
+| agent-browser | Tech | Browser automation/testing |
+| copywriting | Marketing | Landing pages, CTAs, social copy |
+| executing-plans | Management | Execute implementation plans |
+| find-skills | Management | Discover/install agent skills |
+| frontend-design | UX | UI components, design systems |
+| high-end-visual-design | UX | Premium design guidelines |
 | hyperframes | Creative | Video/motion graphics |
 | improve-codebase-architecture | Engineering | Codebase refactoring |
 | opensource-guide-coach | Engineering | Open source guidance |
@@ -25,10 +48,8 @@
 | subagent-driven-development | Management | Multi-agent execution |
 | to-prd | Product | Product requirements |
 | triage | Management | Task prioritization |
-| ui-ux-pro-max | UX | Advanced UI/UX |
 | verification-before-completion | QA | Quality checks |
 | web-design-guidelines | UX | Web standards |
-| writing-plans | Product | Plan creation |
 
 ## Self-Improvement Protocol
 
@@ -47,3 +68,6 @@ On each heartbeat exit, agents should append to `/mnt/c/antigravity/skills/self-
 
 - Skills index: `/mnt/c/antigravity/skills/self-improving-system/skills.md`
 - Session notes: `/mnt/c/antigravity/skills/self-improving-system/session-notes.md`
+- Core skills: `.agents/skills/<skill-name>/SKILL.md`
+- Secondary skills: `skills/<skill-name>/SKILL.md`
+- Pi agent skills: See skill system (`agent-browser skills get <name>` or symlinks in `/home/josh/.pi/agent/skills/`)
