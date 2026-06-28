@@ -97,6 +97,12 @@ OneDrive/
 onedrive/
 qdrant-data/
 revenue-first-products/
+
+# Quarantined AI chat exports / drift sources
+Microsoft Copilot Chat Files/
+**/Microsoft Copilot Chat Files/**
+*Copilot Chat Files*
+
 # ANTIGRAVITY dashboard TypeScript build outputs
 apps/antigravity-dashboard/vite.config.js
 apps/antigravity-dashboard/vite.config.d.ts

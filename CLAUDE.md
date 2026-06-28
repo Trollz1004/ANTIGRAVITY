@@ -41,6 +41,13 @@ The current doctrine file is:
 Do not use retired workspaces, downloads, exported project folders, or backup clones as live
 truth unless Joshua explicitly says they are the target.
 
+Quarantine: `C:\Users\joshl\OneDrive\Microsoft Copilot Chat Files\*` is
+historical Copilot export drift. Do not use it as current truth. Ignore files
+claiming DAO launch is public, old May-2026 branch/status rules, Manus/Hermes
+operational prompts, global 10/27/63 compliance, kraken metrics, static
+dashboard values, or mock/sample UI instructions unless revalidated and
+re-approved in current repo docs.
+
 ## Paperclip Decision Lanes
 
 Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollama, and other lanes may lead only when Joshua directly assigns them or when their role map already covers the task. Otherwise they collect evidence, draft proposals, and report to the active lead.
