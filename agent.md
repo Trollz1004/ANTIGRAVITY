@@ -37,6 +37,10 @@ non-product fundraising, or investment-return claims as public copy or checkout 
 Do not use OneDrive copies, downloads, backup clones, archived briefings, exported chats,
 or cached project folders as current operating truth unless Joshua points to them for recovery.
 
+The Microsoft Copilot Chat Files OneDrive folder is explicitly quarantined.
+Do not load it at boot. It is recovery-only and requires live verification plus
+a dated repo briefing before any extracted fact can become active context.
+
 ## Authority
 
 Joshua Coleman is the sole human authority.
