@@ -57,6 +57,7 @@ docker-compose.override.yml
 # Paperclip (decommissioned)
 paperclip-ceo/
 .paperclip-context.json
+.paperclip/
 
 # OpenCode local config
 .opencode/
