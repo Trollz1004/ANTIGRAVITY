@@ -62,6 +62,7 @@ from app.routers import (
     profiles,
     rate_limits,
     safety,
+    skills,
     support,
     swipe,
     uploads,
@@ -477,6 +478,7 @@ app.include_router(billing.router, prefix="/api/v1", tags=["billing"])
 app.include_router(metrics.router, prefix="/api/v1", tags=["metrics"])
 app.include_router(privacy.router, prefix="/api/v1", tags=["privacy"])
 app.include_router(safety.router, prefix="/api/v1", tags=["safety"])
+app.include_router(skills.router, prefix="/api/v1", tags=["skills"])
 app.include_router(support.router, prefix="/api/v1", tags=["support"])
 app.include_router(video.router, prefix="/api/v1", tags=["video"])
 app.include_router(video_rooms.router, prefix="/api/v1", tags=["video-rooms"])
