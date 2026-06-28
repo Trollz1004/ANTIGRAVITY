@@ -16,6 +16,16 @@
 - Effectiveness notes: Skill system now properly registered; skills.md index is resolvable
 - Timestamp: 2026-06-28T03:19:00Z
 
+## 2026-06-28 Session - CEO (income-engine skills.md)
+
+- Created skills index: `/mnt/c/antigravity/income-engine/paperclip/skills/skills.md`
+- Purpose: Reduce context windows for income-engine agents by pointing to file locations
+- Skills indexed: ceo-income, cfo-income, cmo-income, cto-income, fetcher, shared-rules
+- Tool skills: cost-tracker, buyer-outreach, code-review, lead-scanner, model-router, fetcher-trigger
+- Heartbeat skills: CEO, CFO, CMO, CTO, FETCHER
+- Effectiveness notes: Income-engine agents can now reference skills.md instead of embedding large skill text
+- Timestamp: 2026-06-28T05:00:00Z
+
 ## Agents to Review
 
 - PaperClip-agents library at `/mnt/c/antigravity/PaperClip-agents/` contains 30+ pre-built specialists
