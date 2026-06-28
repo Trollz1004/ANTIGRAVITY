@@ -26,6 +26,16 @@
 - Effectiveness notes: Income-engine agents can now reference skills.md instead of embedding large skill text
 - Timestamp: 2026-06-28T05:00:00Z
 
+## 2026-06-28 Session - CEO (FUNA-48)
+
+- Created `.agents/skills/self-improving-system/SKILL.md` for skill discovery
+- Updated `skills/self-improving-system/skills.md` with correct categorization
+- Committed and pushed to origin/main
+- Purpose: Reduce context windows by ensuring skill references are resolvable at `.agents/skills/`
+- Skills used: self-improving-system
+- Effectiveness notes: Skill now properly registered in core skills location; README.md already listed it
+- Timestamp: 2026-06-28T07:10:00Z
+
 ## Agents to Review
 
 - PaperClip-agents library at `/mnt/c/antigravity/PaperClip-agents/` contains 30+ pre-built specialists
