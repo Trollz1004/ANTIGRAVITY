@@ -527,6 +527,56 @@ Authorization: Bearer <jwt-token>
 }
 ```
 
+#### POST /marketing/referral-kit
+
+Create a tracked referral kit with tracked links for the core public surfaces.
+
+**Headers:**
+
+```http
+Authorization: Bearer <jwt-token>
+```
+
+**Request:**
+
+```json
+{
+  "campaign_name": "SpringPartnerPush",
+  "referral_code": "partner-42",
+  "source": "affiliate",
+  "medium": "referral"
+}
+```
+
+**Response:**
+
+```json
+{
+  "campaign_name": "SpringPartnerPush",
+  "source": "affiliate",
+  "medium": "referral",
+  "referral_code": "partner-42",
+  "links": [
+    {
+      "surface_name": "YouAndINotAI",
+      "destination_url": "https://youandinotai.com",
+      "tracked_url": "https://api.youandinotai.com/api/v1/marketing/tracked-links/abc123def456",
+      "slug": "abc123def456",
+      "source": "affiliate",
+      "medium": "referral",
+      "campaign_name": "SpringPartnerPush",
+      "referral_code": "partner-42",
+      "click_count": 0,
+      "created_at": "2026-06-28T18:30:00Z"
+    }
+  ]
+}
+```
+
+#### GET /marketing/tracked-links/{slug}
+
+Redirect through a tracked marketing link and increment its click count.
+
 ## Error Responses
 
 All error responses follow this format:

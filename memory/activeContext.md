@@ -31,3 +31,8 @@ Current cleanup objective:
   from active prompts, handoffs, skills, memory, public UI, generated bundles, and node mirrors.
 - Do not read, print, or commit secret-bearing files during cleanup.
 - Historical/archive folders are not active operating truth.
+- Drift quarantine: `/mnt/c/Users/joshl/OneDrive/Microsoft Copilot Chat Files`
+  is non-authoritative historical export material. Current business-only lane
+  supersedes it. Agents must not import its prompts, public DAO/funding copy,
+  old branch/status rules, static dashboard numbers, OpenRouter/Manus demos, or
+  marketing templates into active memory or public product surfaces.

@@ -42,6 +42,9 @@ Paperclip is not required for this memory path.
 - Do not store secrets, populated env values, private keys, tokens, passwords, or vault content.
 - Do not add private owner accounting, tax handling, giving decisions, control-rights claims, or non-product fundraising logic to public product execution.
 - Customer/public surfaces stay focused on membership, verification, support, safety, uptime, account access, matching quality, checkout, receipts, refunds, and platform value.
+- Do not store excerpts from quarantined Copilot/OneDrive chat exports as active
+  memory. If a historical fact is needed, verify it against current repo/live
+  systems and record the validated result in a dated briefing first.
 
 ## Entry Shape
 
