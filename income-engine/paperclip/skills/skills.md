@@ -5,6 +5,11 @@
 
 ## Skills Index (Read This First)
 
+### Meta Skills
+| Skill Key | Path | Quick Use Case |
+|-----------|------|----------------|
+| self-improving-system | `skills/self-improving-system/SKILL.md` | Skills reference index for context window reduction |
+
 ### Executive Skills
 
 | Skill Key | Path | Quick Use Case |
@@ -74,6 +79,7 @@ For cost tracking, see skills/cfo/tools/cost-tracker/SKILL.md
 ## File Locations Summary
 
 - **Skills index:** `skills/skills.md` (this file)
+- **Meta skills:** `skills/self-improving-system/SKILL.md`
 - **Executive skills:** `skills/{ceo,cfo,cmo,cto}/SKILL.md`
 - **Operating skills:** `skills/{fetcher,shared}/SKILL.md`
 - **Tool skills:** `skills/{agent}/tools/{tool}/SKILL.md`
