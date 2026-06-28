@@ -38,7 +38,6 @@
 | agency-devops-automator | CI/CD, infrastructure |
 | agency-embedded-firmware-engineer | ESP32, STM32, RTOS |
 | agency-frontend-developer | React, Vue, Angular |
-| agency-full-stack-developer | *See senior-developer* |
 | agency-mcp-builder | Model Context Protocol servers |
 | agency-mobile-app-builder | iOS/Android apps |
 | agency-api-tester | API validation/testing |
@@ -46,7 +45,6 @@
 | agency-codebase-onboarding-engineer | Code navigation help |
 | agency-software-architect | System architecture design |
 | agency-sre-site-reliability-engineer | SLOs, reliability |
-| agency-cloud-architect | *See backend-architect* |
 | agency-automation-governance-architect | n8n automation governance |
 | agency-autonomous-optimization-architect | API performance tuning |
 | agency-blockchain-security-auditor | Smart contract audits |
@@ -55,6 +53,8 @@
 | agency-performance-benchmarker | Performance testing |
 | agency-solidity-smart-contract-engineer | EVM contracts |
 | agency-blender-add-on-engineer | Blender Python tooling |
+| agency-ai-data-remediation-engineer | Data anomaly remediation |
+| agency-git-workflow-master | Git workflows/best practices |
 | agency-godot-gameplay-scripter | GDScript systems |
 | agency-unity-architect | Unity modular design |
 | agency-unreal-systems-engineer | UE5 C++/Blueprint |
@@ -62,11 +62,8 @@
 | agency-godot-multiplayer-engineer | Godot networking |
 | agency-unity-multiplayer-engineer | Unity Netcode |
 | agency-unreal-multiplayer-architect | UE5 replication |
-| agency-godot-shader-developer | Godot visual effects |
-| agency-unity-shader-graph-artist | Unity materials |
-| agency-unreal-technical-artist | UE5 shaders/VFX |
 
-#### Design (20 skills)
+#### Design (21 skills)
 | Skill Key | Quick Use |
 |-----------|-----------|
 | agency-ui-designer | Interface design |
@@ -88,10 +85,11 @@
 | agency-roblox-avatar-creator | Roblox UGC |
 | agency-roblox-experience-designer | Roblox monetization |
 | agency-unity-editor-tool-developer | Editor automation |
+| agency-technical-writer | Documentation writing |
 | agency-godot-shader-developer | Godot shaders |
 | agency-unity-shader-graph-artist | Unity shader graphs |
 
-#### Marketing (25 skills)
+#### Marketing (27 skills)
 | Skill Key | Quick Use |
 |-----------|-----------|
 | agency-growth-hacker | Viral growth, funnels |
@@ -120,9 +118,11 @@
 | agency-image-prompt-engineer | AI image prompts |
 | agency-ai-citation-strategist | ChatGPT citations |
 | agency-inclusive-visuals-specialist | Diverse representation |
+| agency-tracking-measurement-specialist | Ad tracking/analytics |
+| agency-trend-researcher | Trend analysis |
 | agency-cross-border-e-commerce-specialist | Global e-commerce |
 
-#### Sales (15 skills)
+#### Sales (14 skills)
 | Skill Key | Quick Use |
 |-----------|-----------|
 | agency-outbound-strategist | Cold outreach |
@@ -135,13 +135,11 @@
 | agency-salesforce-architect | SFDC solutions |
 | agency-discovery-coach | Discovery calls |
 | agency-private-domain-operator | WeCom ecosystem |
-| agency-lead-scanner | Lead identification |
-| agency-buyer-outreach | Procurement outreach |
 | agency-sales-data-extraction-agent | Excel metrics |
 | agency-report-distribution-agent | Report distribution |
 | agency-data-consolidation-agent | Dashboard consolidation |
 
-#### Product (10 skills)
+#### Product (6 skills)
 | Skill Key | Quick Use |
 |-----------|-----------|
 | agency-product-manager | Product lifecycle |
@@ -149,25 +147,19 @@
 | agency-proposal-strategist | RFP responses |
 | agency-experiment-tracker | A/B testing |
 | agency-rapid-prototyper | MVP creation |
-| agency-ui-ux-pro-max | UI/UX design |
-| agency-sleek-design-mobile-apps | Mobile design |
-| agency-redesign-existing-projects | UI upgrades |
-| agency-frontend-design | Design guidance |
-| agency-to-prd | Requirements docs |
 
-#### Management (10 skills)
+#### Management (9 skills)
 | Skill Key | Quick Use |
 |-----------|-----------|
 | agency-project-shepherd | Cross-team coordination |
 | agency-studio-producer | Creative production |
 | agency-studio-operations | Studio efficiency |
 | agency-chief-of-staff | Executive coordination |
-| agency-senior-project-manager | Project planning |
 | agency-jira-workflow-steward | Git/Jira workflow |
 | agency-workflow-architect | Process design |
 | agency-workflow-optimizer | Process improvement |
 | agency-agents-orchestrator | Agent pipeline |
-| agency-antigravity-mission-orchestrator | Workspace orchestration |
+| agency-senior-project-manager | Project planning |
 
 #### QA & Testing (5 skills)
 | Skill Key | Quick Use |
@@ -187,7 +179,7 @@
 | agency-analytics-reporter | Business insights |
 | agency-model-qa-specialist | ML model QA |
 
-#### Finance (10 skills)
+#### Finance (9 skills)
 | Skill Key | Quick Use |
 |-----------|-----------|
 | agency-bookkeeper-controller | Day-to-day accounting |
@@ -197,11 +189,10 @@
 | agency-tax-strategist | Tax optimization |
 | agency-accounts-payable-agent | Payments processing |
 | agency-investment-researcher | Due diligence |
-| agency-cost-tracker | Cost monitoring |
 | agency-legal-billing-time-tracking | Legal billing |
 | agency-book-co-author | Thought leadership |
 
-#### Specialized Domains (29 skills)
+#### Specialized Domains (26 skills)
 | Skill Key | Quick Use |
 |-----------|-----------|
 | agency-china-market-localization-strategist | China go-to-market |
@@ -226,7 +217,6 @@
 | agency-feishu-integration-developer | Lark integrations |
 | agency-korean-business-navigator | Korean business |
 | agency-french-consulting-market-navigator | French freelance |
-| agency-opensource-guide-coach | Open source projects |
 | agency-tool-evaluator | Tool assessment |
 | agency-ad-creative-strategist | Ad creative |
 | agency-livestream-commerce-coach | Live commerce |
@@ -236,21 +226,35 @@
 | agency-historian | Historical accuracy |
 | agency-psychologist | Character psychology |
 | agency-identity-graph-operator | Identity resolution |
-| agency-inclusive-visuals-specialist | Visual diversity |
 | agency-email-intelligence-engineer | Email parsing |
 | agency-voice-ai-integration-engineer | Speech pipelines |
+| agency-incident-response-commander | Incident response |
+| agency-infrastructure-maintainer | Infrastructure ops |
+| agency-minimal-change-engineer | Minimal code changes |
+| agency-developer-advocate | Developer relations |
+| agency-language-translator | Translation services |
+| agency-linkedin-content-creator | LinkedIn content |
+| agency-corporate-training-designer | Training programs |
+| agency-feedback-synthesizer | Feedback analysis |
+| agency-document-generator | PDF/DOCX generation |
+| agency-narratologist | Narrative theory |
+| agency-executive-summary-generator | Executive summaries |
+| agency-agentic-identity-trust-architect | Agent identity systems |
+| agency-agentic-search-optimizer | AI task completion |
+| agency-geographer | Physical geography |
+| agency-zk-steward | ZK proof systems |
 | agency-terminal-integration-specialist | Terminal apps |
 | agency-lsp-index-engineer | Code intelligence |
-| agency-macos-spatial-metal-engineer | visionOS apps |
-| agency-agentic-identity-trust-architect | Agent identity |
-| agency-agentic-search-optimizer | AI task completion |
+| agency-macos-spatial-metal-engineer | visionOS native Swift |
+| agency-reddit-community-builder | Reddit community |
+| agency-senior-developer | Senior code implementation |
+| agency-unreal-technical-artist | UE5 shaders/VFX |
 
-#### Retail & Customer Operations (5 skills)
+#### Retail & Customer Operations (3 skills)
 | Skill Key | Quick Use |
 |-----------|-----------|
 | agency-retail-customer-returns | Returns processing |
 | agency-hospitality-guest-services | Hotel/resort service |
-| agency-hospitality-revenue-manager | *See finance-tracker* |
 
 ### Secondary Skills (Available at `skills/`)
 
