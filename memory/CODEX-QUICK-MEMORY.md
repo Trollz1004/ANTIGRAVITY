@@ -11,6 +11,8 @@ Use this compact rule before acting:
 - keep support reliable
 - keep private owner decisions out of public copy
 - do not let old planning files block subscriptions, verification, receipts, or account access
+- quarantine OneDrive Microsoft Copilot Chat Files unless Joshua explicitly requests recovery
+- metrics/status come from live tools only, never exported dashboards or kraken JSON
 
 Current source of truth:
 
