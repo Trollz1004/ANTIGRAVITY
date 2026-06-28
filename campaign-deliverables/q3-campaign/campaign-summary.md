@@ -28,9 +28,9 @@ Position ANTIGRAVITY as the premier platform for meaningful, community-focused s
 
 ## Legal Compliance
 All materials strictly adhere to Florida Â§496.405:
-- No use of "restricted-term," "customer payments," or "review-gated offer"
-- Reference to "reserved allocation review" when discussing financial contributions
-- Frame platform benefits as features, not reserved appeals
+- No use of restricted terms on customer surfaces
+- Focus messaging on platform features, not non-product claims
+- Frame platform benefits as features, not external appeals
 
 ## Success Metrics
 - 1000 verified users attending real-world events across 8 cities
