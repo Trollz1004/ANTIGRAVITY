@@ -17,6 +17,7 @@
 | mission-control | Core | Kanban/task tracking |
 | payments | Core | Square/Square API/payment links |
 | revenue-model | Core | Business revenue guidance |
+| self-improving-system | Meta | Skills reference index to reduce context window |
 | sleek-design-mobile-apps | UX | Mobile app design |
 | social-growth-engineer | Marketing | Social media growth |
 | supabase | Data | Database, auth, Supabase ops |
