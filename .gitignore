@@ -58,6 +58,9 @@ docker-compose.override.yml
 paperclip-ceo/
 .paperclip-context.json
 
+# OpenCode local config
+.opencode/
+
 # Deploy staging
 _deploy/*/node_modules/
 **/.env-*.txt
