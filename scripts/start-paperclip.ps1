@@ -51,13 +51,15 @@ foreach ($p in $envPaths) {
     if (Import-EnvFile $p) { $loaded = $true; break }
 }
 if (-not $loaded) {
-    Log 'WARN: no env vault found — Paperclip may fail without DATABASE_URL etc.'
+    Log 'WARN: no env vault found ï¿½ Paperclip may fail without DATABASE_URL etc.'
 }
 
-# Sanity defaults — only set if env vault didn't already provide them.
+# Sanity defaults - only set if env vault didn't already provide them.
+# Do not fabricate DATABASE_URL here: Paperclip's own config already points at
+# the embedded Postgres instance for local_trusted mode. Supplying a masked
+# fallback password breaks startup with `password authentication failed`.
 if (-not $env:DATABASE_URL) {
-    $env:DATABASE_URL = 'postgres://paperclip:paperclip_local_only@localhost:5432/paperclip'
-    Log 'DATABASE_URL not in vault; defaulting to local docker postgres'
+    Log 'DATABASE_URL not in vault; leaving unset so Paperclip uses configured embedded Postgres'
 }
 if (-not $env:PAPERCLIP_PUBLIC_URL) {
     $env:PAPERCLIP_PUBLIC_URL = 'http://localhost:3100'
