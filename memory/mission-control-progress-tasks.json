@@ -4,8 +4,8 @@
     "title": "Mission Control owns the progression board",
     "status": "doing",
     "owner": "Hermes",
-    "note": "Integrated into http://127.0.0.1:8787/ Mission Progress",
-    "updatedAt": 1782509532.125
+    "note": "Integrated into http://[IP_ADDRESS]:8787/ Mission Progress",
+    "updatedAt": [PHONE].125
   },
   {
     "id": "repo-sync",
@@ -13,7 +13,7 @@
     "status": "done",
     "owner": "Hermes",
     "note": "All nodes on origin/main + gpt-5.5/OpenAI Codex",
-    "updatedAt": 1782509532.125
+    "updatedAt": [PHONE].125
   },
   {
     "id": "verify-mission-control-progress",
@@ -21,7 +21,7 @@
     "status": "done",
     "owner": "Hermes",
     "note": "Created via /progress/tasks API",
-    "updatedAt": 1782509559.318
+    "updatedAt": [PHONE].318
   },
   {
     "id": "i-see-message",
@@ -29,7 +29,7 @@
     "status": "done",
     "owner": "Hermes",
     "note": "Created from Telegram request so it appears in Mission Control > Mission Progress.",
-    "updatedAt": 1782510692.092
+    "updatedAt": [PHONE].092
   },
   {
     "id": "hospital-game-loop",
@@ -37,6 +37,38 @@
     "status": "todo",
     "owner": "Josh/Hermes",
     "note": "Hard boundary from Josh: kids are never marketed as prompts/props/examples/lead magnets. Build as player-first game with private impact accounting only.",
-    "updatedAt": 1782511797.688
+    "updatedAt": [PHONE].688
+  },
+  {
+    "id": "q3-roadmap",
+    "title": "Write strategic roadmap for Q3 2026",
+    "status": "done",
+    "owner": "CEO",
+    "note": "Created Q3-2026-STRATEGIC-ROADMAP.md aligned with master roadmap and business-only doctrine.",
+    "updatedAt": 20260628
+  },
+  {
+    "id": "t-001-blocker",
+    "title": "Cloudflare UI promotion (yni-landing -> youandinotai.com) blocking 27K/day view bleed",
+    "status": "blocked",
+    "owner": "Josh",
+    "note": "Requires Josh interactive login to Cloudflare dashboard. Critical revenue unlock.",
+    "updatedAt": 20260628
+  },
+  {
+    "id": "t-006-audit",
+    "title": "TOS audit on customer surfaces",
+    "status": "todo",
+    "owner": "Sonnet",
+    "note": "Run pre-deploy TOS grep on apps/youandinotai-frontend, _deploy/onlinerecycle, ads/dashboard, apps/mission-control.",
+    "updatedAt": 20260628
+  },
+  {
+    "id": "genspark-seed",
+    "title": "Seed Genspark playbook to mission-mcp (56 tasks)",
+    "status": "todo",
+    "owner": "Sonnet",
+    "note": "Run seed-income-engine.py --commit to create 26 submission + 30 content calendar tasks.",
+    "updatedAt": 20260628
   }
 ]
