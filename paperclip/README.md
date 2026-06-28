@@ -119,3 +119,49 @@ After modifying agent definitions in `agency-agents/`:
 ```
 
 This regenerates and installs skill files to `.agents/skills/`.
+
+## Paperclip MCP Plugins
+
+**The Agency MCP plugin** exposes all 184+ specialized agents as callable tools within Paperclip.
+
+### Available MCP Plugins
+
+| Plugin | Purpose |
+|--------|---------|
+| `agency-agents` | Invoke any Agency skill directly from Paperclip |
+| `github-mcp` | GitHub repository and issue management |
+
+### Agency Agents MCP Plugin Tools
+
+```bash
+# List all Agency divisions
+agency-agents.list_agency_divisions
+
+# List all available skills
+agency-agents.list_agency_skills
+
+# Read a specific skill
+agency-agents.invoke_agency_skill --skill_slug agency-frontend-developer
+
+# Activate an agent with a task
+agency-agents.activate_agency_agent --agent_slug agency-backend-architect --task_description "Design API endpoint"
+```
+
+### Add Skills to Paperclip
+
+1. Pull the latest repo on Sabretooth
+2. The MCP plugins in `paperclip-mcp-plugins/` are available for Paperclip integration
+3. Restart Paperclip gateway to load new plugins
+
+---
+
+## Current Status: ✅ FUNA-23 COMPLETE
+
+All 184+ Agency skills are integrated and available:
+
+- `.agents/skills/agency-*` — 184 specialized AI agents
+- `paperclip-mcp-plugins/agency-agents/` — MCP plugin to invoke skills
+- `skills/self-improving-system/skills.md` — Complete skills index
+- `paperclip/README.md` — Updated with Agency division counts (30/21/27/14/6/9/5/5/9/26/3)
+
+**Last verified:** 2026-06-28
