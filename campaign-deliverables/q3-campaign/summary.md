@@ -4,9 +4,9 @@
 Create awareness and drive authentic user engagement for the ANTIGRAVITY platform, emphasizing real-world connections and community building over traditional dating app features.
 
 ## Key Messages
-- Connect with people who genuinely care about making a difference
+- Connect with people who genuinely care about their community
 - Real-world meetups and volunteer events as primary features
-- Platform supports reserved program through reserved allocation review
+- Verified platform with support access for all members
 - Community-focused experience that builds meaningful relationships
 
 ## Target Audience

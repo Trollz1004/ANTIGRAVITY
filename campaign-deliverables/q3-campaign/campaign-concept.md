@@ -16,11 +16,11 @@ Share authentic stories from users who met at their first ANTIGRAVITY organized 
 - Include metrics on volunteer hours contributed since meeting
 
 ### 2. "Event Impact Tracker"
-Visual showcase of community impact generated through platform-organized events:
-- Map of events held across different cities
-- Volunteer hours logged collectively
-- New friendships formed through the platform
-- review-gated public-impact programs supported through reserved allocation review
+Visual showcase of platform activity and events:
+- Map of verified events held across different cities
+- Participation numbers showing platform engagement
+- New connections formed through the platform
+- Growth metrics for community features
 
 ### 3. "Purpose Partners" Initiative
 Highlight partnerships with local nonprofits and the mutual benefits:
@@ -43,14 +43,14 @@ Spotlight users who have gone beyond initial connections:
 - Before/after images showing event impact on locations/community
 
 ## Taglines
-- "Friends who serve together, stay together"
-- "Connections that count for something"
+- "Friends who do together, stay together"
+- "Connections that build community"
 - "Where real people meet for real reasons"
 - "Better relationships. Better community."
 
 ## Sample Campaign Flow
-1. Teaser phase: "What if dating apps actually helped your community?"
+1. Teaser phase: "What if dating apps were actually about community?"
 2. Reveal phase: Introduce real users and their stories
 3. Engagement phase: Encourage prospective users to sign up for upcoming events
-4. Community proof phase: Showcase growing impact metrics and testimonials
+4. Community proof phase: Showcase growing metrics and testimonials
 

@@ -28,19 +28,19 @@
 - "Find your people through shared service opportunities"
 - "Make friends who also want to make a difference"
 
-## Pillar 3: Supporting reserved program Through Ethical review-gated allocation
-**Primary Message:** Our platform creates value that flows back to review-gated public-impact programs.
+## Pillar 3: Platform Reliability & Support
+**Primary Message:** Built-in support and verified events make real connection reliable.
 
 **Supporting Points:**
-- reserved allocation review model supporting reserved program
-- Transparent business model aligned with social good
-- Platform growth directly contributes to positive impact
-- Financial success tied to community benefit
+- In-app support center for event and account questions
+- Verified community events with clear logistics
+- Square-secured payments for premium access
+- 24-hour email response guarantee
 
 **Sample Applications:**
-- "Every interaction helps support children's initiatives"
-- "Build your network while contributing to a greater cause"
-- "Real connections with real impact for reserved review program"
+- "Every verified plan includes support access"
+- "Real events, real support when you need it"
+- "Verified human connection with reliable platform access"
 
 ## Pillar 4: Genuine Alternative to Traditional Dating
 **Primary Message:** For those who want more than casual swiping - a platform with purpose.

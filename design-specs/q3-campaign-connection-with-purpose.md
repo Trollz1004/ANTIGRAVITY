@@ -85,13 +85,13 @@ Using existing design system tokens with emphasis on:
 
 - Features prominent headline "Connection with Purpose"
 - Clear call-to-action button: "Join Community Events"
-- Subtext highlighting contractual revenue disbursement model
+- Subtext highlighting verified platform access
 - Responsive image optimization for mobile bandwidth
 
 **Copy Stubs:**
 
-- Headline: "Real Connections. Real Impact."
-- Subheadline: "Meet people who share your values while supporting children's causes through every interaction."
+- Headline: "Real Connections. Real Community."
+- Subheadline: "Meet people through shared activities and verified events."
 - CTA: "Find Your Community"
 
 ### Value Proposition Cards
@@ -111,9 +111,9 @@ Using existing design system tokens with emphasis on:
 
 **Copy Stubs:**
 
-- Community Events: "Face-to-face meetups designed around shared interests and service"
-- Volunteer Opportunities: "Make friends while making a difference in your community"
-- Impact Stories: "See how connections made here support children's initiatives"
+- Community Events: "Face-to-face meetups designed around shared interests"
+- Volunteer Opportunities: "Make friends while contributing to community"
+- Impact Stories: "See connections made through shared activities"
 
 ### Impact Visualization
 
@@ -125,17 +125,17 @@ Using existing design system tokens with emphasis on:
 
 **Behavior:**
 
-- Animated counters showing real-time impact metrics
-- Interactive map showing foundation cities
-- Progress bars for quarterly goals
+- Animated counters showing platform activity
+- Interactive map showing event locations
+- Progress bars for event goals
 - Auto-refreshing data displays
 
 **Copy Stubs:**
 
-- "Users have contributed \_\_\_ volunteer hours"
-- "$\_\_\_ in contractual revenue disbursement to children's initiatives"
+- "Users have participated in \_\_\_ events"
+- "$\_\_\_ in platform revenue supports verified operations"
 - "\_\_\_ real-world connections formed this quarter"
-- "Active in \_\_\_ foundation cities"
+- "Active in \_\_\_ cities nationwide"
 
 ### User Testimonial Carousel
 
@@ -154,9 +154,9 @@ Using existing design system tokens with emphasis on:
 
 **Copy Stubs:**
 
-- Testimonial 1: "I didn't just find friends, I found my purpose in helping local kids."
-- Testimonial 2: "The events here actually mean something beyond just meeting people."
-- Testimonial 3: "Every connection feels valuable - to me and to the community."
+- Testimonial 1: "I found friends who share my values through real events."
+- Testimonial 2: "The events here create genuine connections, not just matches."
+- Testimonial 3: "Every connection feels valuable - to me and my community."
 
 ### Call-to-Action Banner
 
@@ -176,8 +176,8 @@ Using existing design system tokens with emphasis on:
 **Copy Stubs:**
 
 - "Ready to make meaningful connections?"
-- "Join thousands building community through ANTIGRAVITY"
-- CTA: "Start Making an Impact"
+- "Join thousands already building community through ANTIGRAVITY"
+- CTA: "Start Connecting"
 
 ## Layout Grid System
 
