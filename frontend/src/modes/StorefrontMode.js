@@ -8,7 +8,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
  * StorefrontMode — public-facing catalogue + admin manage surface.
  *
  * Doctrine compliance:
- *  - "contractual revenue disbursement" wording only (no donate/charity).
+ *  - Square hosted checkout wording only (no donate/charity).
  *  - Honest empty state: empty catalogue renders a starter-seed CTA, not
  *    a fabricated grid of fake products.
  *  - Square hosted checkout = primary processor (no PCI risk on our box).
@@ -77,7 +77,7 @@ export function StorefrontMode() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2">
               <ShoppingBag size={14} className="text-[#00e676]" />
-              <span className="text-[10px] tracking-[0.3em] uppercase text-[#00e676] font-bold">Public Storefront · Square + Stripe hosted</span>
+              <span className="text-[10px] tracking-[0.3em] uppercase text-[#00e676] font-bold">Public Storefront · Square hosted</span>
             </div>
             <h1 className="text-3xl font-bold tracking-tight">{site?.name || "OpusPawClaw"}</h1>
             <p className="text-sm text-[#6b82a6] mt-1">{site?.tagline}</p>
@@ -110,7 +110,7 @@ export function StorefrontMode() {
         )}
 
         <footer className="mt-12 pt-6 border-t border-[#2a3a52] text-[10px] text-[#4a5568] tracking-widest uppercase">
-          contractual revenue disbursement · 10% hard cap stacked · FL §496.405 compliant · receipts only
+          Square hosted checkout · receipts only · membership, verification, support
         </footer>
       </div>
     </div>
@@ -153,7 +153,7 @@ function EmptyCatalogue({ admin, onSeed, busy }) {
       <Sprout size={28} className="mx-auto text-[#00e676] mb-3" />
       <h2 className="text-lg font-bold mb-2">Honest empty state · no SKUs yet</h2>
       <p className="text-sm text-[#6b82a6] max-w-md mx-auto mb-5">
-        No fabricated products. {admin ? "Seed the 4 starter SKUs and paste real Square checkout URLs from your dashboard." : "Sign in as admin to seed starter SKUs."}
+        No fabricated products. {admin ? "Seed the starter SKUs and paste real Square checkout URLs from your dashboard." : "Sign in as admin to seed starter SKUs."}
       </p>
       {admin && (
         <button
@@ -162,7 +162,7 @@ function EmptyCatalogue({ admin, onSeed, busy }) {
           disabled={busy}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#00e676]/15 border border-[#00e676]/40 text-[#00e676] text-xs font-bold uppercase tracking-widest hover:bg-[#00e676]/25 disabled:opacity-50"
         >
-          {busy ? <Loader2 size={12} className="animate-spin" /> : <Sprout size={12} />} seed 4 starter SKUs
+          {busy ? <Loader2 size={12} className="animate-spin" /> : <Sprout size={12} />} seed starter SKUs
         </button>
       )}
     </div>
