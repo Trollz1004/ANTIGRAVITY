@@ -131,7 +131,7 @@ TAGS_METADATA: list[dict] = [
         "name": "marketing",
         "description": (
             "Marketing and promotional endpoints. "
-            "Landing page content, referral tracking, and campaign management."
+            "Landing page content, referral kits, tracked links, and campaign management."
         ),
     },
     {

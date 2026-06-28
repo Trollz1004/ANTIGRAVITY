@@ -1,13 +1,19 @@
 """Marketing automation and AI agent content integration router."""
 
-from datetime import datetime
+from datetime import datetime, timezone
+from uuid import uuid4
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
-from app.models import User
+from app.database import get_db
+from app.models import TrackedMarketingLink, User
 
 router = APIRouter(prefix="/marketing", tags=["marketing"])
 
@@ -33,6 +39,14 @@ PLATFORM_HASHTAG_LIMITS = {
     "tiktok": (3, 5),
     "facebook": 2,
 }
+
+REFERRAL_KIT_DESTINATIONS = [
+    ("YouAndINotAI", "https://youandinotai.com"),
+    ("Business Exchange", "https://aidoesitall.website"),
+    ("Antigravity Dashboard", "https://dashboard.aidoesitall.website"),
+    ("OnlineRecycle", "https://onlinerecycle.org"),
+    ("AI-Solutions Store", "https://ai-solutions.store"),
+]
 
 
 class MarketingPost(BaseModel):
@@ -80,6 +94,71 @@ class ContentItem(BaseModel):
     tags: List[str]
     created_at: datetime
     published: bool
+
+
+class ReferralKitRequest(BaseModel):
+    campaign_name: str = Field(..., description="Name of the referral campaign")
+    referral_code: Optional[str] = Field(None, description="Optional referral code")
+    source: str = Field(default="affiliate", description="Tracking source")
+    medium: str = Field(default="referral", description="Tracking medium")
+
+
+class ReferralKitLink(BaseModel):
+    surface_name: str
+    destination_url: str
+    tracked_url: str
+    slug: str
+    source: str
+    medium: str
+    campaign_name: str
+    referral_code: Optional[str] = None
+    click_count: int
+    created_at: datetime
+
+
+class ReferralKitResponse(BaseModel):
+    campaign_name: str
+    source: str
+    medium: str
+    referral_code: Optional[str] = None
+    links: list[ReferralKitLink]
+
+
+def _with_tracking_params(
+    destination_url: str,
+    *,
+    source: str,
+    medium: str,
+    campaign_name: str,
+    referral_code: str | None,
+) -> str:
+    parsed = urlparse(destination_url)
+    query = dict(parse_qsl(parsed.query, keep_blank_values=True))
+    query["utm_source"] = source
+    query["utm_medium"] = medium
+    query["utm_campaign"] = campaign_name
+    if referral_code:
+        query["ref"] = referral_code
+    return urlunparse(parsed._replace(query=urlencode(query)))
+
+
+def _serialize_tracked_link(
+    link: TrackedMarketingLink,
+    request: Request,
+) -> ReferralKitLink:
+    tracked_url = str(request.url_for("resolve_tracked_link", slug=link.slug))
+    return ReferralKitLink(
+        surface_name=link.surface_name,
+        destination_url=link.destination_url,
+        tracked_url=tracked_url,
+        slug=link.slug,
+        source=link.source,
+        medium=link.medium,
+        campaign_name=link.campaign_name,
+        referral_code=link.referral_code,
+        click_count=link.click_count,
+        created_at=link.created_at,
+    )
 
 
 @router.post("/content", response_model=ContentItem)
@@ -135,6 +214,44 @@ async def create_content_item(
     )
 
 
+@router.post("/referral-kit", response_model=ReferralKitResponse)
+async def create_referral_kit(
+    payload: ReferralKitRequest,
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> ReferralKitResponse:
+    now = datetime.now(timezone.utc)
+    links: list[ReferralKitLink] = []
+
+    for surface_name, destination_url in REFERRAL_KIT_DESTINATIONS:
+        slug = uuid4().hex[:12]
+        link = TrackedMarketingLink(
+            slug=slug,
+            surface_name=surface_name,
+            destination_url=destination_url,
+            source=payload.source,
+            medium=payload.medium,
+            campaign_name=payload.campaign_name,
+            referral_code=payload.referral_code,
+            click_count=0,
+            created_by_user_id=current_user.id,
+            created_at=now,
+        )
+        db.add(link)
+        await db.flush()
+        links.append(_serialize_tracked_link(link, request))
+
+    await db.commit()
+    return ReferralKitResponse(
+        campaign_name=payload.campaign_name,
+        source=payload.source,
+        medium=payload.medium,
+        referral_code=payload.referral_code,
+        links=links,
+    )
+
+
 @router.get("/content", response_model=List[ContentItem])
 async def list_content_items(current_user: User = Depends(get_current_user)):
     """
@@ -142,6 +259,28 @@ async def list_content_items(current_user: User = Depends(get_current_user)):
     """
     # In a real implementation, this would fetch from database
     return []
+
+
+@router.get("/tracked-links/{slug}", name="resolve_tracked_link")
+async def resolve_tracked_link(slug: str, db: AsyncSession = Depends(get_db)):
+    link = await db.scalar(
+        select(TrackedMarketingLink).where(TrackedMarketingLink.slug == slug)
+    )
+    if link is None:
+        raise HTTPException(status_code=404, detail="Tracked link not found")
+
+    link.click_count += 1
+    link.last_clicked_at = datetime.now(timezone.utc)
+    await db.commit()
+
+    redirect_url = _with_tracking_params(
+        link.destination_url,
+        source=link.source,
+        medium=link.medium,
+        campaign_name=link.campaign_name,
+        referral_code=link.referral_code,
+    )
+    return RedirectResponse(url=redirect_url, status_code=307)
 
 
 @router.get("/content/{content_id}", response_model=ContentItem)
