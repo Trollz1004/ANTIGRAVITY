@@ -14,6 +14,7 @@ Skills are organized by category:
 | `mission-control` | Task tracking, agent reporting, status queries |
 | `payments` | Square/Stripe payment processing, checkout flows |
 | `revenue-model` | Business revenue guidance, pricing decisions |
+| `self-improving-system` | Skills reference index to reduce context window usage |
 | `sleek-design-mobile-apps` | Mobile app design via Sleek platform |
 | `social-growth-engineer` | TikTok/Instagram viral growth engineering |
 | `supabase` | Supabase database, auth, edge functions integration |
