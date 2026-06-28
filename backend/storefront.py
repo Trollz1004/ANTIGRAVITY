@@ -13,8 +13,7 @@ Strategy: Square hosted Online Checkout Links. Joshua creates a link once
 inside Square dashboard (no API key, no payouts API integration), pastes
 it into a product row, and "Buy now" sends customers straight to Square.
 On payment, the Square webhook (already wired at /api/ledger/webhook/square)
-records the sale, the mission ribbon updates, and the auto-broadcast hook
-in ledger.py fires a Telegram notice — free distribution loop.
+records the sale and updates the public totals.
 
 No fabricated data: empty product list returns honest empty array; storefront
 mode renders an empty state with a "Seed starter SKUs" admin button.
@@ -54,7 +53,7 @@ def _bot_shield_checkout_url() -> Optional[str]:
         return configured
     if _is_production():
         return None
-    return "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD"
+    return "https://square.link/u/Qc5mxUy7"
 
 # Reuse the admin-auth gate from auth_relay
 from auth_relay import require_admin  # noqa: E402
@@ -80,58 +79,34 @@ class ProductIn(BaseModel):
 
 STARTER_SKUS: List[Dict[str, Any]] = [
     {
-        "title": "Bot Shield · Square Hosted",
-        "description": "Square-hosted protection ledger for solo founders. Real product, real Square checkout — proceeds split per doctrine (10% kids · 27% tax reserve · 63% ops).",
-        "price_usd": 9.00, "sku": "OPC-BOTSHIELD-9", "bucket": 5,
+        "title": "Bot-Shield Verification",
+        "description": "One-time verification purchase that helps keep fake profiles out and account trust high.",
+        "price_usd": 1.00, "sku": "BOT-SHIELD-1", "bucket": 5,
         "square_checkout_url": _bot_shield_checkout_url(),
     },
     {
-        "title": "Founding Member · Square Subscription",
-        "description": "Recurring Square subscription · founding-circle support. Locks in early-supporter status and a direct line to the mission desk.",
-        "price_usd": 29.00, "sku": "OPC-FOUNDING-29", "bucket": 5,
-        "square_checkout_url": os.environ.get("SQUARE_FOUNDING_MEMBER_LINK", "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD"),
+        "title": "Founding Member",
+        "description": "Monthly membership for early supporters who want account access, uptime, and priority support.",
+        "price_usd": 14.99, "sku": "FOUNDING-14-99", "bucket": 5,
+        "square_checkout_url": os.environ.get("SQUARE_FOUNDING_MEMBER_LINK", "https://square.link/u/cxwjcn0s"),
     },
     {
-        "title": "3-Month Mission Pass · Square",
-        "description": "Quarterly access tier on Square — locked rate, full mission desk access, monthly broadcast roll-up.",
-        "price_usd": 79.00, "sku": "OPC-3MO-79", "bucket": 5,
-        "square_checkout_url": os.environ.get("SQUARE_3MONTH_LINK", "https://square.link/u/SET-THIS-IN-SQUARE-DASHBOARD"),
+        "title": "3-Month Founder",
+        "description": "Three-month membership for users who want a longer runway on the founding rate.",
+        "price_usd": 39.99, "sku": "FOUNDER-3MO-39-99", "bucket": 5,
+        "square_checkout_url": os.environ.get("SQUARE_3MONTH_LINK", "https://square.link/u/oY7qEfRM"),
     },
     {
-        "title": "12-Month Mission Pass · Square",
-        "description": "Annual pass on Square — best per-month rate. Includes founding-circle perks + a real mission-patch print.",
-        "price_usd": 299.00, "sku": "OPC-12MO-299", "bucket": 5,
-        "square_checkout_url": os.environ.get("SQUARE_12MONTH_LINK", "https://square.link/u/SET-THIS-IN-SQUARE-DASHBOARD"),
+        "title": "12-Month Founder",
+        "description": "Annual membership with the best monthly rate for committed supporters.",
+        "price_usd": 99.99, "sku": "FOUNDER-12MO-99-99", "bucket": 5,
+        "square_checkout_url": os.environ.get("SQUARE_12MONTH_LINK", "https://square.link/u/6GHpbvvl"),
     },
     {
-        "title": "Royalty Tier · Square",
-        "description": "Top-tier mission patronage on Square. Direct strategy line with Joshua + co-founder voting on next-product spend.",
-        "price_usd": 499.00, "sku": "OPC-ROYALTY-499", "bucket": 5,
-        "square_checkout_url": os.environ.get("SQUARE_ROYALTY_LINK", "https://square.link/u/SET-THIS-IN-SQUARE-DASHBOARD"),
-    },
-    {
-        "title": "Mission Patch · Custom AI Image",
-        "description": "One Nano Banana-generated mission patch. Tell us the theme, get a PNG within 24h.",
-        "price_usd": 9.00, "sku": "OPC-PATCH-9", "bucket": 5,
-        "square_checkout_url": "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD",
-    },
-    {
-        "title": "AI Prompt Pack · Solo Founders",
-        "description": "50 battle-tested prompts for solo founders running on free-tier compute. Marketing, ops, hiring.",
-        "price_usd": 29.00, "sku": "OPC-PROMPT-29", "bucket": 5,
-        "square_checkout_url": "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD",
-    },
-    {
-        "title": "Mission Control Drop-in · Electron",
-        "description": "The 4 TSX files that ship the Mission Control surface into an Electron flagship. Drop in, run.",
-        "price_usd": 99.00, "sku": "OPC-DROPIN-99", "bucket": 5,
-        "square_checkout_url": "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD",
-    },
-    {
-        "title": "Agent Setup Consultation · 30 min",
-        "description": "Joshua + you, 30 minutes, screen-share. We get your Hermes/Ollama/agent fleet wired live.",
-        "price_usd": 49.00, "sku": "OPC-CONSULT-49", "bucket": 5,
-        "square_checkout_url": "https://checkout.square.site/SET-THIS-IN-SQUARE-DASHBOARD",
+        "title": "Royalty Card",
+        "description": "Premium access tier for supporters who want the highest-touch account experience.",
+        "price_usd": 2500.00, "sku": "ROYALTY-2500", "bucket": 5,
+        "square_checkout_url": os.environ.get("SQUARE_ROYALTY_LINK", "https://square.link/u/CafhorUS"),
     },
 ]
 

@@ -70,5 +70,13 @@
     "owner": "Sonnet",
     "note": "Run seed-income-engine.py --commit to create 26 submission + 30 content calendar tasks.",
     "updatedAt": 20260628
+  },
+  {
+    "id": "task-1782657260",
+    "title": "Caretaker note: repair Mission Progress command-center doctrine drift labels",
+    "status": "done",
+    "owner": "CTO/Hermes",
+    "note": "Caretaker 2026-06-28T11:58-04:00 verified served bundle now contains PAPERWEIGHT Command Center + 34 agents and no forbidden/public doctrine terms; Hermes kanban task t_86f971ab completed. No push/deploy performed.",
+    "updatedAt": 1782662319.628
   }
 ]

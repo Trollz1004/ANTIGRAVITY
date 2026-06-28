@@ -1,0 +1,20 @@
+{
+  "Conservative": {
+    "ending_cash": 11056.596842306897,
+    "cash_out_month": 13,
+    "break_even_month": 19,
+    "self_sustain_month": 19
+  },
+  "Base": {
+    "ending_cash": 304041.2517650718,
+    "cash_out_month": null,
+    "break_even_month": 9,
+    "self_sustain_month": 9
+  },
+  "Optimistic": {
+    "ending_cash": 2993518.6728898133,
+    "cash_out_month": null,
+    "break_even_month": 3,
+    "self_sustain_month": 3
+  }
+}
