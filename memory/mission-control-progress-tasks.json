@@ -5,7 +5,7 @@
     "status": "doing",
     "owner": "Hermes",
     "note": "Integrated into http://[IP_ADDRESS]:8787/ Mission Progress",
-    "updatedAt": [PHONE].125
+    "updatedAt": 1782641640.4265385
   },
   {
     "id": "repo-sync",
@@ -13,7 +13,7 @@
     "status": "done",
     "owner": "Hermes",
     "note": "All nodes on origin/main + gpt-5.5/OpenAI Codex",
-    "updatedAt": [PHONE].125
+    "updatedAt": 1782641640.426548
   },
   {
     "id": "verify-mission-control-progress",
@@ -21,7 +21,7 @@
     "status": "done",
     "owner": "Hermes",
     "note": "Created via /progress/tasks API",
-    "updatedAt": [PHONE].318
+    "updatedAt": 1782641640.4265513
   },
   {
     "id": "i-see-message",
@@ -29,7 +29,7 @@
     "status": "done",
     "owner": "Hermes",
     "note": "Created from Telegram request so it appears in Mission Control > Mission Progress.",
-    "updatedAt": [PHONE].092
+    "updatedAt": 1782641640.4265544
   },
   {
     "id": "hospital-game-loop",
@@ -37,7 +37,7 @@
     "status": "todo",
     "owner": "Josh/Hermes",
     "note": "Hard boundary from Josh: kids are never marketed as prompts/props/examples/lead magnets. Build as player-first game with private impact accounting only.",
-    "updatedAt": [PHONE].688
+    "updatedAt": 1782641640.4265578
   },
   {
     "id": "q3-roadmap",
