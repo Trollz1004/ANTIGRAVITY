@@ -175,7 +175,7 @@ if ($allmOK) {
     Write-Status "Updating My Workspace..."
     Invoke-API "POST" "/workspace/my-workspace/update" @{
         openAiTemp = 0.7; openAiHistory = 30; chatMode = "chat"
-        openAiPrompt = "You are an ANTIGRAVITY assistant focused on the date app and current repo truth. Use embedded docs for context. Current LLC operating doctrine uses a conservative 10% charitable cap; do not restate retired split-era or absolute-charity claims as current truth."
+        openAiPrompt = "You are an ANTIGRAVITY assistant focused on the date app and current repo truth. Use embedded docs for context. Follow the business-only product doctrine: membership, verification, safety, support, account access, and product value. Do not invent private accounting, fundraising, or split logic."
     } | Out-Null
     Write-OK "My Workspace updated"
 
@@ -187,7 +187,7 @@ if ($allmOK) {
         Write-Status "Creating ANTIGRAVITY workspace..."
         Invoke-API "POST" "/workspace/new" @{
             name = "ANTIGRAVITY"; openAiTemp = 0.7; openAiHistory = 40; chatMode = "chat"
-            openAiPrompt = "ANTIGRAVITY project assistant. Date app, sandbox systems, and mission-connected work. Anchor on current repo doctrine and do not restate retired split-era or absolute-charity claims as current truth."
+            openAiPrompt = "ANTIGRAVITY project assistant. Date app and sandbox systems. Anchor on current repo doctrine, keep outputs product-first, and do not restate retired charity, reserve, or split-era claims as current truth."
         } | Out-Null
         Write-OK "ANTIGRAVITY workspace created"
     } else { Write-OK "ANTIGRAVITY workspace exists" }
@@ -197,7 +197,7 @@ if ($allmOK) {
         Write-Status "Creating Date App workspace..."
         Invoke-API "POST" "/workspace/new" @{
             name = "Date App"; openAiTemp = 0.6; openAiHistory = 30; chatMode = "chat"
-            openAiPrompt = "Date App dev assistant. Marketing, UX, matchmaking, and factual product-first copy. Current LLC operating doctrine uses a conservative 10% charitable cap; do not frame purchases as donations."
+            openAiPrompt = "Date App dev assistant. Marketing, UX, matchmaking, and factual product-first copy. Do not frame purchases as donations, fundraising, or private-fund routing."
         } | Out-Null
         Write-OK "Date App workspace created"
     } else { Write-OK "Date App workspace exists" }

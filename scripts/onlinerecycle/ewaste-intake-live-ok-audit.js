@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '../..');
 const INTAKE_DIR = path.join(ROOT, 'data', 'ewaste-intake');
 const BOOKINGS_DIR = path.join(INTAKE_DIR, 'bookings');
 const CODEX_STATE_DIR = path.join(ROOT, 'CodeX', 'state');

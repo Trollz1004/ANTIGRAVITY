@@ -1,202 +1,183 @@
-# YouAndINotAI 14-Day Community Growth Playbook
+# YouAndINotAI 14-Day Organic Growth Playbook
 
-## Our Mission
+## Doctrine
 
-We connect people who give a damn about meaningful AI conversations happening in real communities.
+YouAndINotAI is a commercial dating product. This playbook must stay product-first and business-first.
 
-## Day 1-2: Foundation & Local Discovery
+Do not use charity, nonprofit, donation, fundraising, beneficiary, revenue split, automatic allocation, disbursement, reserve, or percentage-to-cause language. See `../NO-CHARITY-NO-SPLIT-DOCTRINE.md`.
 
-### Activity: Community Mapping
+## Mission
 
-**Objective:** Identify key local meetup groups, volunteer organizations, and community spaces
+Help dating-app-fatigued singles find verified real people, better conversations, and safer first-date planning.
 
-**Actions:**
+## Day 1-2: Foundation & Community Research
 
-- Research 10-15 active tech/innovation meetups in your area using Eventbrite, Meetup.com, and Facebook Groups
-- Identify 5-7 organizations hosting community volunteer events monthly
-- Map local coworking spaces, libraries, and cafes that welcome community gatherings
-- Document contact information and typical event formats for each
+### Activity: Target Community Mapping
 
-**Voice Note:** We're not looking for large audiences yet – we're seeking thoughtful communities where genuine conversations already happen. These are our people.
-
-### Activity: Contractual Partnership Outreach
-
-**Objective:** Establish initial connections using compliant terminology
+**Objective:** Identify high-value dating communities where helpful participation is allowed.
 
 **Actions:**
 
-- Reach out to 3-5 meetup organizers via email with this framing:
+- Review rules for r/dating_advice, r/relationship_advice, r/Tinder, r/OnlineDating, and r/DatingApps.
+- Identify Discord servers where dating advice, social connection, or adult dating conversation is active.
+- Document posting rules, self-promotion limits, peak activity times, and recurring topics.
+- Build a swipe file of common pain points: bots, ghosting, low reply rates, unsafe first dates, bad prompts, and match quality.
 
-  _"Hello! I represent YouAndINotAI, a community initiative connecting people passionate about meaningful AI dialogue. We're exploring contractual revenue disbursement opportunities for venues hosting our discussion series alongside their existing events. Would you be interested in learning how we support community gathering spaces?"_
+**Voice Note:** Earn trust first. Do not promote before understanding each community’s rules and tone.
 
-- Focus on spaces that already host 20-50 person educational or networking events
+### Activity: Product Positioning Notes
 
-## Day 3-4: Value Proposition Development
-
-### Activity: Community-Centric Messaging Workshop
-
-**Objective:** Refine how we present YouAndINotAI to community partners
-
-**Actions:**
-
-- Draft 3 variations of your 30-second introduction that lead with community benefit
-- Create a simple one-page sheet explaining:
-  - What YouAndINotAI offers (facilitated AI ethics discussions)
-  - How community partners benefit (enhanced programming, attendee engagement)
-  - Revenue disbursement model (clear percentage or flat fee for hosting)
-
-**Voice Note:** Every community group wants to know "What's in it for us?" – show them tangible benefits beyond just content.
-
-### Activity: Volunteer Integration Strategy
-
-**Objective:** Connect with existing volunteer-driven events authentically
+**Objective:** Create concise product talking points.
 
 **Actions:**
 
-- Contact organizers of upcoming volunteer fairs or community service events
-- Propose having YouAndINotAI representatives facilitate a 20-minute "Ethics & AI" micro-session during their next gathering
-- Emphasize shared values around intentional community building
+- Draft 3 versions of the product one-liner.
+- Draft short explanations for verification, AI compatibility, prompt-first matching, and safe date planning.
+- Prepare a plain FAQ for pricing, verification, cancellation, and privacy.
 
-## Day 5-6: Partnership Pilot Launch
+## Day 3-4: Comment Drafting & Human Review
 
-### Activity: First Collaborative Event Setup
+### Activity: Reddit Comment Library
 
-**Objective:** Host one low-key collaborative discussion with an existing group
-
-**Actions:**
-
-- Choose one partner from Days 1-2 outreach who responded positively
-- Co-develop event theme (suggest "AI in Daily Life: A Community Conversation")
-- Finalize venue agreement including revenue sharing terms
-- Promote through partner's existing channels only
-
-**Voice Note:** This isn't about bringing _our_ audience – it's about integrating genuinely into _their_ community.
-
-### Activity: Documentation & Feedback Collection
-
-**Objective:** Capture learnings early to scale successfully
+**Objective:** Prepare helpful, varied comment drafts for common threads.
 
 **Actions:**
 
-- Create brief post-event questionnaire for participating community members
-- Take photos (with permission) of authentic interactions during the event
-- Schedule debrief with partner organization within 48 hours
+- Write 10 comments for profile reviews.
+- Write 10 comments for dating-app frustration threads.
+- Write 10 comments for relationship/dating advice threads.
+- Mention YouAndINotAI only when directly relevant and only after value is provided.
+- Never auto-post. Never post identical comments.
 
-## Day 7-8: Visibility Through Service
+### Activity: Discord Intro Library
 
-### Activity: Volunteer Event Shadowing
-
-**Objective:** Build relationships by supporting existing community initiatives
-
-**Actions:**
-
-- Attend 2-3 volunteer-led community events as participants, not promoters
-- Bring business cards that highlight community support role rather than services offered
-- Listen actively and identify gaps where YouAndINotAI conversations could naturally add value
-
-**Voice Note:** Sometimes showing up consistently is more powerful than promoting constantly.
-
-### Activity: Social Media Storytelling
-
-**Objective:** Share authentic moments from community engagement respectfully
+**Objective:** Prepare natural intros and conversation starters.
 
 **Actions:**
 
-- Post 3-4 behind-the-scenes moments from collaborative events (with permission)
-- Focus captions on community partners and their missions first
-- Mention YouAndINotAI presence briefly, emphasizing mutual support
+- Draft 5 short intro messages.
+- Draft 5 responses to dating frustration.
+- Draft 5 “asking for product feedback” messages that do not sound like ads.
 
-## Day 9-10: Expanding Collaborative Networks
+## Day 5-6: Soft Launch Content
 
-### Activity: Cross-Pollination Introduction
+### Activity: Short-Form Hook Testing
 
-**Objective:** Help community partners discover each other, positioning YouAndINotAI as connector
-
-**Actions:**
-
-- Organize informal coffee meetup between 2 partner organizations
-- Facilitate introductions around shared interests or complementary missions
-- Follow up individually to confirm new connections formed
-
-### Activity: Resource Library Development
-
-**Objective:** Offer genuine utility to community partners through curated content
+**Objective:** Test product angles for TikTok/Instagram/Threads.
 
 **Actions:**
 
-- Compile 10-15 articles/videos about ethical AI accessible to general audiences
-- Create simple sharing guide titled "Conversations We're Having About AI"
-- Distribute to collaborating organizations for their internal use
+- Create 10 hooks about swipe fatigue.
+- Create 10 hooks about bot/catfish fatigue.
+- Create 10 hooks about better first messages.
+- Create 5 UI demo captions.
 
-## Day 11-12: Deeper Engagement Opportunities
+### Activity: Landing Page Feedback
 
-### Activity: Listening Session Series Planning
-
-**Objective:** Demonstrate commitment to understanding community concerns
-
-**Actions:**
-
-- Schedule 3 listening sessions with different community stakeholder groups:
-  1. Local small business owners
-  2. Educators/Education advocates
-  3. Social service organization leaders
-- Prepare neutral questions about technology adoption challenges
-- Define potential future contractual partnerships based on expressed needs
-
-### Activity: Revenue Disbursement Model Refinement
-
-**Objective:** Clarify financial aspects while maintaining compliance
+**Objective:** Improve conversion before wider launch.
 
 **Actions:**
 
-- Review all partnership agreements for consistent contractual language
-- Calculate projected revenue sharing for next 3 planned events
-- Prepare transparent reporting template showing funds distribution
+- Share screenshots privately with trusted reviewers.
+- Ask what feels unclear, unsafe, too expensive, or too generic.
+- Update copy based on recurring objections.
 
-## Day 13-14: Sustainable Momentum Planning
+## Day 7-8: Value-First Engagement
 
-### Activity: Community Calendar Integration
+### Activity: Reddit Participation
 
-**Objective:** Establish consistent presence without overwhelming partners
-
-**Actions:**
-
-- Work with 3 organizations to place recurring YouAndINotAI discussions in their quarterly calendars
-- Set up shared Google calendar showing all collaborative community events
-- Create gentle reminder system for upcoming co-hosted gatherings
-
-### Activity: Reflection & Next Steps Documentation
-
-**Objective:** Preserve institutional knowledge and plan for continued growth
+**Objective:** Build credibility through useful replies.
 
 **Actions:**
 
-- Record top 3 lessons learned about successful community partnerships
-- List 5 highest-potential new partners identified during 14 days
-- Draft outline for monthly community collaborator check-ins moving forward
+- Leave 3-5 thoughtful comments on current threads.
+- Avoid promotion unless someone directly asks for tools/apps or the context clearly fits.
+- Track which comment angles get replies.
 
----
+### Activity: Discord Participation
 
-## Florida Statute Compliance Notice
+**Objective:** Build normal human presence.
 
-Throughout this playbook, all financial arrangements should be structured as contractual agreements wherein YouAndINotAI provides documented services (event facilitation, content development, educational materials) in exchange for standard commercial consideration. Revenue sharing with hosts constitutes payment for venue access, promotional support, and attendee management services performed by the partnering organization.
+**Actions:**
 
-Avoid any use of terms including but not limited to:
-❌ donate ❌ donation ❌ solicit ❌ solicitation ❌ charitable contribution ❌ fundraising
+- Join active text conversations.
+- Spend 10-30 minutes in voice if appropriate.
+- Ask for feedback after rapport, not immediately on entry.
 
-Instead consistently reference:
-✅ contractual revenue disbursement ✅ service agreements ✅ commercial consideration ✅ partnership fees ✅ collaborative arrangement payments
+## Day 9-10: Product Proof
 
-For additional legal review, consult with counsel familiar with Florida §496.405 compliance regarding professional fundraiser regulation.
+### Activity: UI Demo Content
 
----
+**Objective:** Show what makes the app different.
 
-## Measuring Success Beyond Numbers
+**Actions:**
 
-Our greatest victories won't appear in spreadsheets:
+- Post screenshots or short videos showing verification, prompt-first matching, and safer date planning.
+- Keep captions concrete and product-based.
+- Use one CTA: visit youandinotai.com or join as a founding member.
 
-- New friendships forming between organizations introduced through YouAndINotAI
-- Community members expressing increased confidence discussing AI topics ethically
-- Partner organizations requesting continued collaboration because value exceeded expectations
+### Activity: Objection Handling
 
-These outcomes matter more than follower counts because _we connect people who give a damn_ – and that connection creates lasting positive impact in communities touched by artificial intelligence decisions.
+**Objective:** Prepare answers for common concerns.
+
+**Actions:**
+
+- Why pay?
+- How does verification work?
+- How is this different from Tinder/Bumble/Hinge?
+- How do you handle safety and reports?
+- What happens after signup?
+
+## Day 11-12: Launch Directory Prep
+
+### Activity: Directory Copy
+
+**Objective:** Prepare Product Hunt, MicroLaunch, and related launch copy.
+
+**Actions:**
+
+- Write a tagline under 60 characters.
+- Write a description under 260 characters.
+- Write 3 bullets focused on verification, compatibility, and safety.
+- Prepare screenshots and founder comment.
+
+### Activity: Metrics Setup
+
+**Objective:** Track what actually works.
+
+**Actions:**
+
+- Track visits, CTA clicks, signups, checkout clicks, and paid conversions.
+- Log platform source when possible.
+- Review daily and double down on high-quality channels.
+
+## Day 13-14: Conversion Loop
+
+### Activity: Warm Lead Follow-Up
+
+**Objective:** Convert interested users without pressure.
+
+**Actions:**
+
+- Follow up with people who positively engaged.
+- Offer beta/founding member access.
+- Ask for one specific piece of feedback.
+
+### Activity: Retrospective
+
+**Objective:** Improve next sprint.
+
+**Actions:**
+
+- Identify top 3 traffic sources.
+- Identify top 3 objections.
+- Update landing page copy and content prompts.
+- Remove low-quality or spam-risk tactics.
+
+## Rules
+
+- No bots or auto-posting.
+- No identical copy-paste comments.
+- No pretending to be a user with fake success stories.
+- No charity/split/disbursement doctrine.
+- Product value first: verification, compatibility, safety, paid access, customer trust.

@@ -17,7 +17,7 @@
 | Max turns / timeout | 150 turns / 1800s gateway | Long autonomous sessions supported. |
 | Approvals | mode `manual`, mcp_reload_confirm `true`, destructive_slash_confirm `true` | Safe-by-default for sensitive ops. |
 | Plugins enabled | `Antigravity`, `disk-cleanup`, `google_meet`, `spotify`, `teams_pipeline` | There's an "Antigravity" plugin specifically — worth investigating what it does. |
-| Toolsets (CLI) | 22 toolsets including browser, code_execution, computer_use, delegation, terminal, vision, web | Hermes is feature-complete as a standalone agent; not just LLM routing. |
+| Toolsets (CLI) | 19 toolsets including browser, code_execution, computer_use, delegation, terminal, vision, web | Hermes is feature-complete as a standalone agent; not just LLM routing. |
 | Bindings | Slack / Discord / WhatsApp (allowlisted to +13529735909) / Telegram / Mattermost / Matrix | Multi-platform messaging surface live. |
 | TTS / STT | TTS multi-provider (edge default, elevenlabs/openai/xai/mistral/piper available); STT local Whisper base | Voice in/out wired. |
 | Theme / TUI | midnight theme, kaomoji status indicator, compact, show_reasoning, streaming on | Display tuned. |
@@ -354,10 +354,10 @@ model_preferences:
 session_reset:
   mode: none
 platform_toolsets:
-  cli: [browser, clarify, code_execution, computer_use, cronjob, delegation, file, homeassistant, image_gen, memory, messaging, moa, rl, session_search, skills, spotify, terminal, todo, tts, vision, web]
-  api_server: [browser, clarify, cronjob, delegation, file, homeassistant, image_gen, memory, messaging, moa, rl, session_search, skills, terminal, todo, tts, vision, web, spotify]
-  telegram: [browser, clarify, code_execution, computer_use, cronjob, delegation, file, homeassistant, image_gen, memory, messaging, moa, rl, session_search, skills, spotify, terminal, todo, tts, vision, web]
-  whatsapp: [browser, clarify, code_execution, computer_use, cronjob, delegation, file, homeassistant, image_gen, memory, messaging, moa, rl, session_search, skills, spotify, terminal, todo, tts, vision, web]
+  cli: [browser, clarify, code_execution, computer_use, cronjob, delegation, file, homeassistant, image_gen, memory, rl, session_search, skills, spotify, terminal, todo, tts, vision, web]
+  api_server: [browser, clarify, cronjob, delegation, file, homeassistant, image_gen, memory, rl, session_search, skills, terminal, todo, tts, vision, web, spotify]
+  telegram: [browser, clarify, code_execution, computer_use, cronjob, delegation, file, homeassistant, image_gen, memory, rl, session_search, skills, spotify, terminal, todo, tts, vision, web]
+  whatsapp: [browser, clarify, code_execution, computer_use, cronjob, delegation, file, homeassistant, image_gen, memory, rl, session_search, skills, spotify, terminal, todo, tts, vision, web]
 smart_model_routing:
   cheap_model: inclusionai/ring-2.6-1t:free
 plugins:

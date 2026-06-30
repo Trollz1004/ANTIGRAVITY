@@ -11,15 +11,11 @@
     ]
   },
   "compliance": {
-    "prohibited_terms": ["donate", "donation", "solicitation"],
-    "approved_replacements": {
-      "donate": "support through contractual revenue disbursement",
-      "donation": "contractual revenue disbursement",
-      "solicitation": "revenue-sharing for good"
-    },
+    "prohibited_terms": ["donate", "donation", "solicitation", "charity", "fundraiser"],
+    "approved_replacements": {},
     "reference_phrasing": {
-      "kids_support": "Built-in support for youth programs",
-      "mission_statement": "We're not a charity, but we do support kids as part of our mission"
+      "product_focus": "Talk about membership, safety, support, events, and feature updates",
+      "platform_statement": "Treat the newsletter as a product update, not a mission appeal"
     }
   },
   "newsletter_sections": [
@@ -27,12 +23,12 @@
     "upcoming_events",
     "member_spotlight",
     "feature_update",
-    "volunteer_impact",
+    "support_and_safety",
     "tips_and_tricks"
   ],
   "content_pillars": [
     "community_first",
-    "volunteer_life",
+    "member_experience",
     "real_connections",
     "behind_the_scenes"
   ],

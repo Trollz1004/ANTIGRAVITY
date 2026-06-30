@@ -48,9 +48,9 @@ The webhook handler also processes subscription events:
 1. Subscription creation: Activates the user's subscription
 2. Subscription updates: Updates the subscription status (active/canceled)
 
-### 4. Revenue Allocation
+### 4. Payment Records
 
-For each completed payment, the system reserves a revenue allocation record to track contractual revenue disbursement.
+For each completed payment, the system records the transaction for customer access, reconciliation, refunds, support, analytics, and standard business reporting.
 
 ## Key Security Measures
 

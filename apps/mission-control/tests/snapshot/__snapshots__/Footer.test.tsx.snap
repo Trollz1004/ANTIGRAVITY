@@ -14,7 +14,7 @@ exports[`Footer > renders correctly 1`] = `
         <span
           class="w-2 h-2 rounded-full bg-accentCyan animate-pulse"
         />
-        Mission Control Online
+        Ops Control Online
       </span>
       <span
         class="text-gray-500"
@@ -28,7 +28,7 @@ exports[`Footer > renders correctly 1`] = `
       <span
         class="text-accentMagenta"
       >
-        #UntilNoKidInNeed
+        business-only operations
       </span>
       <span
         class="text-accentCyan"
