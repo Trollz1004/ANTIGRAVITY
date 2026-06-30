@@ -15,19 +15,19 @@
       "name": "list_agency_skills",
       "description": "List all 184+ Agency skills available in this workspace",
       "parameters": {"type": "object", "properties": {"division": {"type": "string", "description": "Filter by division (optional)"}}, "required": []},
-      "command": "ls /mnt/c/antigravity/.agents/skills | grep '^agency-' | sort"
+      "command": "powershell -Command \"Get-ChildItem C:\\\\antigravity\\\\.agents\\\\skills -Directory | Where-Object { $_.Name -like 'agency-*' } | Select-Object -ExpandProperty Name | Sort-Object\""
     },
     {
       "name": "invoke_agency_skill",
       "description": "Read and invoke an Agency skill by its slug",
       "parameters": {"type": "object", "properties": {"skill_slug": {"type": "string", "description": "The skill slug (e.g., agency-frontend-developer)"}}, "required": ["skill_slug"]},
-      "command": "cat /mnt/c/antigravity/.agents/skills/{skill_slug}/SKILL.md"
+      "command": "powershell -Command \"Get-Content C:\\\\antigravity\\\\.agents\\\\skills\\\\{skill_slug}\\\\SKILL.md\""
     },
     {
       "name": "activate_agency_agent",
       "description": "Activate an Agency agent for a specific task in Paperclip",
       "parameters": {"type": "object", "properties": {"agent_slug": {"type": "string", "description": "The agent slug"}, "task_description": {"type": "string", "description": "What to do with this agent"}}, "required": ["agent_slug", "task_description"]},
-      "command": "echo 'ACTIVATE: {agent_slug} for task: {task_description}' && head -40 /mnt/c/antigravity/.agents/skills/{agent_slug}/SKILL.md"
+      "command": "powershell -Command \"Write-Output 'ACTIVATE: {agent_slug} for task: {task_description}'; Get-Content C:\\\\antigravity\\\\.agents\\\\skills\\\\{agent_slug}\\\\SKILL.md | Select-Object -First 40\""
     }
   ]
 }
