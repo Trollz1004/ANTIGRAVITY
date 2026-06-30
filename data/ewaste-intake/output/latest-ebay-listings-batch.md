@@ -1,7 +1,7 @@
 # eBay Crosslister Batch
 
-- Batch ID: CODEX-EBAY-REVENUE-20260304-20260307
-- Generated: 2026-03-07T20:30:33.570Z
+- Batch ID: CODEX-EBAY-REVENUE-20260304-20260629
+- Generated: 2026-06-29T00:17:42.374Z
 - Items: 5
 
 ## EW-20260304-0001 - Dell Latitude 7420 laptop Intel i7-1185G7 16GB RAM 512GB NVMe SSD Tested Ready

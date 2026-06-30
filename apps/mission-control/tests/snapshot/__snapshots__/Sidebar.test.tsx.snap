@@ -10,10 +10,36 @@ exports[`Sidebar > renders correctly 1`] = `
       class="p-3 space-y-1"
     >
       <button
-        class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition bg-accentCyan/15 text-accentCyan border border-accentCyan/40"
+        aria-label="Notifications"
+        class="relative p-2 rounded-full hover:bg-zinc-700 transition-colors focus:outline-none focus:ring-2 focus:ring-accentCyan"
       >
         <svg
-          class="lucide lucide-layout-grid text-accentCyan"
+          aria-hidden="true"
+          class="lucide lucide-bell text-gray-300"
+          fill="none"
+          height="20"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.268 21a2 2 0 0 0 3.464 0"
+          />
+          <path
+            d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+          />
+        </svg>
+      </button>
+      <button
+        class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition text-gray-300 hover:text-white hover:bg-background border border-transparent"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-layout-grid text-gray-500"
           fill="none"
           height="14"
           stroke="currentColor"
@@ -56,7 +82,7 @@ exports[`Sidebar > renders correctly 1`] = `
         <span
           class="flex-1 text-left normal-case"
         >
-          Mission Control
+          Ops Control
         </span>
         <span
           class="text-[9px] px-1.5 py-0.5 rounded bg-accentMagenta/20 text-accentMagenta border border-accentMagenta/40"
@@ -68,6 +94,47 @@ exports[`Sidebar > renders correctly 1`] = `
         class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition text-gray-300 hover:text-white hover:bg-background border border-transparent"
       >
         <svg
+          aria-hidden="true"
+          class="lucide lucide-database text-gray-500"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse
+            cx="12"
+            cy="5"
+            rx="9"
+            ry="3"
+          />
+          <path
+            d="M3 5V19A9 3 0 0 0 21 19V5"
+          />
+          <path
+            d="M3 12A9 3 0 0 0 21 12"
+          />
+        </svg>
+        <span
+          class="flex-1 text-left normal-case"
+        >
+          Agent Memory
+        </span>
+        <span
+          class="text-[9px] px-1.5 py-0.5 rounded bg-accentMagenta/20 text-accentMagenta border border-accentMagenta/40"
+        >
+          NEW
+        </span>
+      </button>
+      <button
+        class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition text-gray-300 hover:text-white hover:bg-background border border-transparent"
+      >
+        <svg
+          aria-hidden="true"
           class="lucide lucide-book-open text-gray-500"
           fill="none"
           height="14"
@@ -80,16 +147,16 @@ exports[`Sidebar > renders correctly 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"
+            d="M12 7v14"
           />
           <path
-            d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"
+            d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
           />
         </svg>
         <span
           class="flex-1 text-left normal-case"
         >
-          Mission Ledger
+          Business Ledger
         </span>
         <span
           class="text-[9px] px-1.5 py-0.5 rounded bg-accentMagenta/20 text-accentMagenta border border-accentMagenta/40"
@@ -101,6 +168,7 @@ exports[`Sidebar > renders correctly 1`] = `
         class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition text-gray-300 hover:text-white hover:bg-background border border-transparent"
       >
         <svg
+          aria-hidden="true"
           class="lucide lucide-users text-gray-500"
           fill="none"
           height="14"
@@ -115,16 +183,16 @@ exports[`Sidebar > renders correctly 1`] = `
           <path
             d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
           />
-          <circle
-            cx="9"
-            cy="7"
-            r="4"
+          <path
+            d="M16 3.128a4 4 0 0 1 0 7.744"
           />
           <path
             d="M22 21v-2a4 4 0 0 0-3-3.87"
           />
-          <path
-            d="M16 3.13a4 4 0 0 1 0 7.75"
+          <circle
+            cx="9"
+            cy="7"
+            r="4"
           />
         </svg>
         <span
@@ -142,6 +210,7 @@ exports[`Sidebar > renders correctly 1`] = `
         class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition text-gray-300 hover:text-white hover:bg-background border border-transparent"
       >
         <svg
+          aria-hidden="true"
           class="lucide lucide-list-checks text-gray-500"
           fill="none"
           height="14"
@@ -154,25 +223,25 @@ exports[`Sidebar > renders correctly 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="m3 17 2 2 4-4"
-          />
-          <path
-            d="m3 7 2 2 4-4"
-          />
-          <path
-            d="M13 6h8"
+            d="M13 5h8"
           />
           <path
             d="M13 12h8"
           />
           <path
-            d="M13 18h8"
+            d="M13 19h8"
+          />
+          <path
+            d="m3 17 2 2 4-4"
+          />
+          <path
+            d="m3 7 2 2 4-4"
           />
         </svg>
         <span
           class="flex-1 text-left normal-case"
         >
-          Tasks
+          Mission Progress
         </span>
         <span
           class="text-[9px] px-1.5 py-0.5 rounded bg-accentMagenta/20 text-accentMagenta border border-accentMagenta/40"
@@ -184,6 +253,7 @@ exports[`Sidebar > renders correctly 1`] = `
         class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition text-gray-300 hover:text-white hover:bg-background border border-transparent"
       >
         <svg
+          aria-hidden="true"
           class="lucide lucide-code text-gray-500"
           fill="none"
           height="14"
@@ -195,11 +265,11 @@ exports[`Sidebar > renders correctly 1`] = `
           width="14"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <polyline
-            points="16 18 22 12 16 6"
+          <path
+            d="m16 18 6-6-6-6"
           />
-          <polyline
-            points="8 6 2 12 8 18"
+          <path
+            d="m8 6-6 6 6 6"
           />
         </svg>
         <span
@@ -212,6 +282,7 @@ exports[`Sidebar > renders correctly 1`] = `
         class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition text-gray-300 hover:text-white hover:bg-background border border-transparent"
       >
         <svg
+          aria-hidden="true"
           class="lucide lucide-image-plus text-gray-500"
           fill="none"
           height="14"
@@ -224,27 +295,21 @@ exports[`Sidebar > renders correctly 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"
+            d="M16 5h6"
           />
-          <line
-            x1="16"
-            x2="22"
-            y1="5"
-            y2="5"
+          <path
+            d="M19 2v6"
           />
-          <line
-            x1="19"
-            x2="19"
-            y1="2"
-            y2="8"
+          <path
+            d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"
+          />
+          <path
+            d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"
           />
           <circle
             cx="9"
             cy="9"
             r="2"
-          />
-          <path
-            d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"
           />
         </svg>
         <span
@@ -257,6 +322,7 @@ exports[`Sidebar > renders correctly 1`] = `
         class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition text-gray-300 hover:text-white hover:bg-background border border-transparent"
       >
         <svg
+          aria-hidden="true"
           class="lucide lucide-search text-gray-500"
           fill="none"
           height="14"
@@ -268,13 +334,13 @@ exports[`Sidebar > renders correctly 1`] = `
           width="14"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <path
+            d="m21 21-4.34-4.34"
+          />
           <circle
             cx="11"
             cy="11"
             r="8"
-          />
-          <path
-            d="m21 21-4.3-4.3"
           />
         </svg>
         <span
@@ -287,6 +353,7 @@ exports[`Sidebar > renders correctly 1`] = `
         class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition text-gray-300 hover:text-white hover:bg-background border border-transparent"
       >
         <svg
+          aria-hidden="true"
           class="lucide lucide-message-square text-gray-500"
           fill="none"
           height="14"
@@ -299,13 +366,81 @@ exports[`Sidebar > renders correctly 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"
           />
         </svg>
         <span
           class="flex-1 text-left normal-case"
         >
           Chat Mode
+        </span>
+      </button>
+      <button
+        class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition text-gray-300 hover:text-white hover:bg-background border border-transparent"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-upload text-gray-500"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 3v12"
+          />
+          <path
+            d="m17 8-5-5-5 5"
+          />
+          <path
+            d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+          />
+        </svg>
+        <span
+          class="flex-1 text-left normal-case"
+        >
+          File Uploads
+        </span>
+        <span
+          class="text-[9px] px-1.5 py-0.5 rounded bg-accentMagenta/20 text-accentMagenta border border-accentMagenta/40"
+        >
+          NEW
+        </span>
+      </button>
+      <button
+        class="w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono uppercase tracking-wider transition text-gray-300 hover:text-white hover:bg-background border border-transparent"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-shield text-gray-500"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+          />
+        </svg>
+        <span
+          class="flex-1 text-left normal-case"
+        >
+          Rate Limits
+        </span>
+        <span
+          class="text-[9px] px-1.5 py-0.5 rounded bg-accentMagenta/20 text-accentMagenta border border-accentMagenta/40"
+        >
+          NEW
         </span>
       </button>
     </div>
@@ -327,9 +462,101 @@ exports[`Sidebar > renders correctly 1`] = `
       class="px-3 py-2 border-t border-border"
     >
       <div
-        data-testid="dao-panel"
+        class="bg-panel rounded border border-border p-4 mb-4"
       >
-        DAO Panel
+        <h2
+          class="text-sm font-mono uppercase tracking-wider text-white mb-2"
+        >
+          Antigravity Treasury
+        </h2>
+        <div
+          class="text-xs font-mono text-gray-300 mb-2 flex items-center gap-2"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-globe text-accentCyan"
+            fill="none"
+            height="12"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="12"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+            />
+            <path
+              d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"
+            />
+            <path
+              d="M2 12h20"
+            />
+          </svg>
+          Base L2 · 
+          99.98%
+           uptime
+        </div>
+        <div
+          class="text-xs font-mono text-gray-400 mb-2"
+        >
+          Treasury view · 
+          <span
+            class="text-gray-200"
+          >
+            $
+            0
+          </span>
+           · 
+          mirror
+        </div>
+        <div
+          class="text-xs font-mono text-gray-400 mb-3"
+        >
+          Actions · 
+          0
+           · 
+          0
+           queued
+        </div>
+        <button
+          class="w-full flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-wider bg-accentMagenta/20 border border-accentMagenta/50 text-accentMagenta py-2 rounded hover:bg-accentMagenta/30 transition"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-settings"
+            fill="none"
+            height="12"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="12"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="3"
+            />
+          </svg>
+           Operations Hub
+        </button>
+        <p
+          class="mt-3 text-[10px] font-mono text-gray-500 leading-relaxed"
+        >
+          Antigravity business operations
+          <br />
+          customer value first
+        </p>
       </div>
       <div
         data-testid="stack-integrity-widget"
@@ -348,7 +575,7 @@ exports[`Sidebar > renders correctly 1`] = `
       <div
         class="text-[10px] font-mono text-accentMagenta mt-1"
       >
-        for the kids · #UntilNoKidInNeed
+        business-only operations
       </div>
     </div>
   </aside>

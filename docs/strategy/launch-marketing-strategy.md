@@ -2,308 +2,215 @@
 
 ## Executive Summary
 
-YouAndINotAI is positioned to disrupt the dating app market by focusing on genuine human connection through real-world interactions. Our marketing strategy emphasizes community-building, volunteer opportunities, and meaningful relationships over superficial matching algorithms.
+YouAndINotAI is a commercial dating product focused on verified real users, AI-assisted compatibility signals, safer first-date planning, and a cleaner alternative to endless swipe loops.
 
-This document outlines our comprehensive launch marketing strategy, focusing on authentic human connection and charitable giving mission while maintaining strict compliance with Florida Statute §496.405.
+This launch strategy is business-first. It must not use charity, nonprofit, donation, fundraising, revenue-split, disbursement, reserve, percentage allocation, or social-good revenue claims. See `../NO-CHARITY-NO-SPLIT-DOCTRINE.md`.
 
 ## Brand Positioning
 
 ### Core Value Proposition
 
-YouAndINotAI is a social platform for good — connecting people through real-world meetups, volunteering, and genuine human connection. We're not just another dating app; we're building communities of people who care.
+Verified dating for real people: fewer fake accounts, better conversation context, clearer intent, and safer first-date planning.
 
 ### Differentiation Strategy
 
-Unlike traditional dating apps that focus on digital swiping and profile optimization, YouAndINotAI prioritizes:
+Unlike traditional dating apps that optimize for endless browsing, YouAndINotAI prioritizes:
 
-- Face-to-face community events
-- Volunteer opportunities that create shared purpose
-- Account-bound verification ensuring real human connections
-- Built-in support for youth programs through contractual revenue disbursement
+- Verified profiles and bot resistance
+- AI-assisted compatibility signals
+- Prompt-first discovery and contextual openers
+- Clear checkout and paid access
+- Safety tools that stay visible in profile, match, chat, and date-planning flows
 
 ### Messaging Framework
 
-Our messaging consistently reinforces:
+Use these pillars consistently:
 
-- Community > Compatibility
-- Real-world action > Digital swiping
-- Shared purpose > Personal gain
-- Volunteer impact > Profile perfection
-- Genuine connections > Artificial urgency
+- Trust > noise
+- Better matches > endless swiping
+- Safety > guesswork
+- Product value > mission claims
+- Clear paid access > gimmicks
 
 ## Target Audience
 
-### Primary Persona: Community-Minded Singles
+### Primary Persona: Dating-App-Fatigued Singles
 
 - Age: 25-45
-- Location: Urban/suburban areas with active community organizations
-- Values: Volunteering, local community involvement, meaningful relationships
-- Pain Points: Traditional dating apps feel shallow, desire genuine connection
-- Motivations: Looking for both romantic and platonic connections rooted in shared values
+- Values: real profiles, meaningful conversation, safety, practical matching
+- Pain Points: bots, low response rates, ghosting, shallow swiping, unsafe or unclear first-date logistics
+- Motivations: wants a dating app that feels more intentional and less manipulative
 
 ### Secondary Personas
 
-1. **Social Changemakers** - Young professionals passionate about causes
-2. **Empty Nesters** - Older adults seeking purpose-filled social connections
-3. **Young Adults** - College students/new graduates wanting to build local networks
+1. **Busy Professionals** - Want fewer, better matches and practical date planning.
+2. **Safety-Minded Daters** - Prioritize verification, reporting, and public first-date defaults.
+3. **Newly Single Users** - Need simple onboarding, clear expectations, and low-pressure matching.
 
 ## Launch Campaign Strategy
 
-### Pre-Launch Phase (2 Weeks Before Launch)
+### Pre-Launch Phase
 
 #### Awareness Building Activities
 
-- Soft launch blog posts about the evolution from dating app to social platform
-- Influencer seeding with local community leaders and volunteers
-- Teaser social media content highlighting real-world meetups
-- Press release to local media about innovative approach to social connection
+- Landing page focused on verification, compatibility, and safer first dates
+- Short videos about swipe fatigue, bot fatigue, and better opening messages
+- Founder/build-in-public updates about product progress and pricing
+- Email capture for early access and launch updates
 
 #### Email Marketing Foundation
 
-- VIP early access list for community leaders and volunteers
-- Educational content about account-bound verification and Bot-Shield technology
-- Preview access to real-world event calendar
+- Early access list for beta users and founding members
+- Educational content about verification, prompts, matching, and safety features
+- Preview access to UI screenshots and product updates
 
-### Launch Week (April 4)
+### Launch Week
 
 #### Day 1: Official Launch
 
-- Coordinated social media announcement across all platforms
-- Blog post detailing the platform's mission and features
-- Email blast to pre-launch list with special early-bird incentives
-- Influencer activation with community-focused testimonials
+- Coordinated social announcement across X/Twitter, Threads, TikTok, Instagram, Reddit, and Discord
+- Launch email to early access list
+- Product Hunt/MicroLaunch directory submissions where appropriate
+- Founder post explaining the product problem and the business value
 
-#### Day 2-3: Community Showcase
+#### Day 2-3: Product Proof
 
-- Highlight different local meetup groups and volunteer opportunities
-- Share user stories (real or anticipated) about meaningful connections
-- Partner spotlight featuring local organizations supported through platform
+- Showcase verification flow, discovery cards, and chat/date-planning surfaces
+- Share short demos and screenshots
+- Ask for user feedback on onboarding friction, pricing clarity, and profile prompts
 
 #### Day 4-7: Engagement Drive
 
-- Interactive social media campaigns encouraging event participation
-- User-generated content prompts for first-week experiences
-- Referral program activation with bonus entries for bringing friends
+- Post helpful dating-app advice without spam or identical comments
+- Use Reddit/Discord only for value-first conversation and human review
+- Invite warm, interested users to try the product
 
-### Post-Launch (1-3 Months)
+### Post-Launch
 
 #### Retention Strategy
 
-- Automated welcome email series focusing on community discovery
-- Weekly event recommendations based on user interests
-- Achievement badges for attending events and volunteering
-- Progress tracking for community impact through contractual revenue disbursement
+- Welcome email series focused on completing profiles and verification
+- Product tips for better prompts and safer first messages
+- Feedback loop for bugs, friction, and requested features
+- Churn review for pricing, onboarding, and match quality
 
 #### Growth Strategy
 
-- Referral incentives tied to real-world event attendance
-- Corporate partnership program for workplace volunteer initiatives
-- Content marketing highlighting success stories from local communities
-- Strategic partnerships with volunteer organizations and meetup groups
+- Organic content around swipe fatigue, bot detection, first-message quality, and safer first dates
+- Product-led referrals once core onboarding and matching are stable
+- Directory launches and review-site submissions
+- Partnerships with creators, reviewers, and dating-advice publishers where commercially relevant
 
 ## Channel-Specific Strategies
 
-### Social Media
+### TikTok / Instagram Reels
 
-#### Instagram
+- Hooks about swipe fatigue, bot fatigue, dating app red flags, and better profile prompts
+- Short UI demos with captions and clear CTA
+- Founder/build-in-public updates
 
-- Visual storytelling showcasing real community events
-- Behind-the-scenes content of volunteer activities
-- User-generated content from meetups
-- Stories featuring local community heroes
+### Reddit
 
-#### Facebook
+- No bots, no auto-posting, no identical copy-paste spam
+- Join relevant communities, read rules, answer honestly, and mention the app only when contextual
+- Focus on helpful advice first
 
-- Event listings for local community gatherings
-- Community group engagement and discussions
-- Longer-form content about platform philosophy
-- Volunteer opportunity announcements
+### Discord
 
-#### Twitter/X
+- Join relevant servers manually
+- Build rapport through normal conversation before mentioning the app
+- Use voice/chat for feedback, not drive-by promotion
 
-- Real-time event updates and community conversations
-- Quick tips for meaningful connections
-- Engagement with local community hashtags
-- Thought leadership content about social connection trends
+### X/Twitter / Threads
 
-#### LinkedIn
+- Build in public
+- Poll users about dating-app frustrations
+- Share product screenshots and launch milestones
 
-- Professional networking events and community building
-- Thought leadership about innovation in social technology
-- Partner organization spotlights
-- Career-focused networking opportunities
+### Email
 
-### Content Marketing
-
-#### Blog Strategy
-
-- "Community Spotlight" series featuring different neighborhoods
-- "Volunteer Impact" reports showcasing actual outcomes
-- "Connection Stories" highlighting meaningful relationships formed
-- "How-To" guides for organizing local meetups
-
-#### Email Marketing
-
-- Weekly community roundups with event recommendations
-- Personalized suggestions based on interest areas
-- Success stories from other users in similar situations
-- Educational content about maximizing platform benefits
-
-### Public Relations
-
-#### Media Outreach
-
-- Pitch stories about innovative approach to social connection
-- Highlight local volunteer impact and community building
-- Secure interviews with founder about platform vision
-- Target lifestyle and tech publications with human-interest angles
-
-#### Speaking Opportunities
-
-- Conference presentations on future of social technology
-- Local meetup group speaking engagements
-- Volunteer organization summits and community events
-
-## Partnership Strategy
-
-### Community Organizations
-
-- Volunteer centers and nonprofits
-- Local meetup groups and hobby clubs
-- Religious organizations and community centers
-- Educational institutions with student organizations
-
-### Corporate Partnerships
-
-- Companies with strong CSR programs
-- Coworking spaces and professional associations
-- Local businesses interested in community engagement
-- Healthcare systems promoting mental wellness through social connection
-
-### Influencer Relations
-
-- Local community leaders and activists
-- Volunteer coordinators and nonprofit staff
-- Social media personalities focused on lifestyle and community
-- Podcast hosts covering relationship and community topics
+- Clear launch updates
+- One CTA per message
+- Product-first copy: verification, matching, safety, pricing
 
 ## Success Metrics and KPIs
 
 ### Awareness Metrics
 
-- Brand awareness surveys in key markets
-- Social media follower growth rate
-- Website traffic and referral sources
-- Media mentions and press coverage
+- Website visits
+- Social follower growth
+- Launch directory traffic
+- Email list growth
 
 ### Engagement Metrics
 
-- Event attendance rates for promoted activities
-- Time spent on platform and feature adoption
-- User-generated content submissions
-- Social media engagement rates
+- Landing page CTA clicks
+- Email open/click rate
+- Content engagement rate
+- Reddit/Discord reply quality
 
 ### Conversion Metrics
 
-- Registration rates and completion funnel
-- Verified account creation (Bot-Shield conversion)
-- Real-world event attendance post-registration
-- Subscription upgrade rates to premium tiers
+- Verification starts/completions
+- Paid checkout clicks
+- Subscription starts
+- Refund/cancellation rate
 
-### Retention Metrics
+### Product Metrics
 
-- 30-day and 90-day retention rates
-- Average number of real-world events attended per month
-- Friend/referral connections made through platform
-- Customer satisfaction scores for community experience
-
-### Impact Metrics
-
-- Volunteer hours logged through platform
-- Funds distributed through contractual revenue disbursement
-- Number of local partnerships established
-- Community feedback and testimonials
-
-## Budget Allocation
-
-### Phase 1: Pre-Launch (30%)
-
-- Influencer seeding and relationship building
-- Content creation for initial campaign assets
-- Email marketing platform setup and initial list building
-
-### Phase 2: Launch (40%)
-
-- Paid social media advertising for initial awareness
-- PR distribution and media outreach campaigns
-- Launch event coordination and promotional materials
-
-### Phase 3: Post-Launch (30%)
-
-- Ongoing content creation and community management
-- Performance marketing for sustained growth
-- Analytics tools and measurement platform
+- Profile completion rate
+- Match creation rate
+- First-message rate
+- Report/block rate
+- Date-plan feature adoption
 
 ## Risk Management
 
 ### Brand Risks
 
-- Misinterpretation as traditional dating app
-- Legal compliance violations regarding donation terminology
-- Negative perception of monetization approach
+- Sounding like every other dating app
+- Overpromising AI matching outcomes
+- Spammy community marketing
+- Reintroducing old charity/split doctrine
 
 ### Mitigation Strategies
 
-- Consistent messaging emphasizing community and real-world connection
-- Strict adherence to approved terminology guidelines
-- Transparent communication about contractual revenue model
-
-### Market Risks
-
-- Competition from established dating platforms
-- Slow adoption due to unfamiliar value proposition
-- Economic downturn affecting discretionary spending
-
-### Mitigation Strategies
-
-- Focus on differentiated community features competitors lack
-- Extensive education about unique value proposition
-- Tiered pricing options to accommodate various budgets
+- Keep claims concrete and product-based
+- Human-review all community posts
+- Vary all drafted content; never auto-post
+- Run doctrine scans before deploys and launches
 
 ## Implementation Timeline
 
 ### 4 Weeks Before Launch
 
-- Finalize all creative assets and messaging
-- Establish influencer partnerships and content calendar
-- Complete email marketing setup and initial list segmentation
+- Finalize landing page and checkout links
+- Prepare short-form video scripts and Reddit/Discord draft libraries
+- Prepare directory launch assets
 
 ### 2 Weeks Before Launch
 
-- Begin soft-launch awareness campaign
-- Distribute press materials to target media outlets
-- Activate VIP early access program
+- Begin organic conversation and rule-reading in target communities
+- Collect user feedback on product screenshots and pricing
+- Prepare launch email and Product Hunt/MicroLaunch copy
 
 ### Launch Week
 
-- Execute coordinated launch campaign across all channels
-- Monitor and respond to initial user feedback
-- Track all KPIs and adjust tactics in real-time
+- Ship public landing page
+- Submit launch directories
+- Post daily product-focused content
+- Log visits, engagements, signups, and paid conversions
 
-### Month 1 Post-Launch
+### 1-3 Months After Launch
 
-- Analyze initial performance data and optimize campaigns
-- Expand partnership network based on early success
-- Refine targeting based on best-performing audience segments
+- Improve onboarding, verification, matching, and date planning based on data
+- Expand content that converts
+- Retire channels that create low-quality traffic
 
-### Months 2-3 Post-Launch
+## Doctrine Check
 
-- Scale successful initiatives and sunset underperforming ones
-- Plan next phase growth strategies based on learned insights
-- Prepare detailed performance report for stakeholder review
+Before any launch asset ships, scan for and remove:
 
-## Conclusion
-
-This marketing strategy positions YouAndINotAI as the premier platform for meaningful social connection through real-world community engagement. By focusing on authentic human relationships rather than digital swiping, we differentiate ourselves in a crowded market while fulfilling our mission to build communities of people who care.
-
-Success depends on consistent messaging that emphasizes our unique value proposition, community-first approach, and commitment to genuine connection—all while maintaining strict compliance with Florida legal requirements.
+- charity / charitable / nonprofit / donation / fundraising / beneficiary language
+- revenue split / percentage allocation / automatic routing / disbursement / reserve claims
+- historical contract names or split-era doctrine references

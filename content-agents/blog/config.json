@@ -11,15 +11,11 @@
     ]
   },
   "compliance": {
-    "prohibited_terms": ["donate", "donation", "solicitation"],
-    "approved_replacements": {
-      "donate": "support through contractual revenue disbursement",
-      "donation": "contractual revenue disbursement",
-      "solicitation": "revenue-sharing for good"
-    },
+    "prohibited_terms": ["donate", "donation", "solicitation", "charity", "fundraiser"],
+    "approved_replacements": {},
     "reference_phrasing": {
-      "kids_support": "Built-in support for youth programs",
-      "mission_statement": "We're not a charity, but we do support kids as part of our mission"
+      "product_focus": "Write about dating safety, trust, real profiles, member support, and product improvements",
+      "platform_statement": "Keep the blog grounded in platform value and member outcomes"
     }
   },
   "content_categories": [
@@ -27,14 +23,14 @@
     "relationship_building",
     "online_dating_etiquette",
     "real_world_connections",
-    "community_volunteering",
+    "events_and_meetups",
     "platform_features"
   ],
   "content_pillars": [
     "education",
     "story",
     "behind_the_scenes",
-    "charity_update"
+    "product_update"
   ],
   "article_structure": {
     "introduction": "hook that addresses reader pain point",

@@ -1,5 +1,5 @@
 /**
- * Platform doctrine tools — current policy, historical chain context, and launch status
+ * Platform doctrine tools — current product policy and launch status
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -14,46 +14,18 @@ const PROTOCOL = {
     state: 'Florida',
     owner: 'Joshua Coleman',
   },
-  wallets: {
-    historical_gospel_contract: '0x9855B75061D4c841791382998f0CE8B2BCC965A4',
-    historical_charity_wallet: '0x8d3dEADbE2b4B857A43331D459270B5eedC7084e',
-    historical_infrastructure_wallet: '0xe0a42f83900af719019eBeD3D9473BE8E8f2920b',
-    historical_founder_wallet: '0x7c3E283119718395Ef5EfBAC4F52738C2018daA7',
-  },
-  contracts: {
-    historical_gospel_disbursement: {
-      name: 'GospelDonation.sol',
-      address: '0x9855B75061D4c841791382998f0CE8B2BCC965A4',
-      network: 'Base Mainnet (Chain 8453)',
-      purpose: 'Historical on-chain routing reference',
-      status: 'DEPLOYED — historical chain context',
-      note: 'Do not treat this historical contract as current automatic LLC operating doctrine.',
-    },
-    intended_next_router: {
-      name: 'DatingRevenueRouter.sol',
-      status: 'REPO ARTIFACT ONLY',
-      note: 'Not current live state unless separately deployed, verified, and documented.',
-    },
-  },
   policy: {
     current_llc_policy: {
-      model: '1-wallet',
-      reserve_pct: 10,
-      note: '1 wallet. All revenue in, all costs out. 10% reserve — founder-directed, his call quarterly. No automatic charity routing.',
-    },
-    historical_gospel_disbursement: {
-      charity_pct: 60,
-      infrastructure_pct: 30,
-      founder_pct: 10,
-      note: '[HISTORICAL ONLY] On-chain split from GospelDonation.sol. Not current LLC operating doctrine.',
+      model: 'business-only product surface',
+      note: 'Customer-facing work sells membership, verification, safety, support, account access, events, matching quality, and uptime.',
     },
     public_claim_boundary: {
-      note: 'No active surface may claim automatic charity routing or disbursement. Revenue model is 1-wallet with 10% reserve.',
+      note: 'No active surface may invent private accounting, fundraising, ownership, control, or investment claims.',
     },
   },
   governance: {
     doctrine_boundary:
-      '1-wallet model: all LLC revenue flows into one wallet. 10% reserve is founder-directed. No automatic charity routing. Fact-only public claims.',
+      'Business-only product doctrine. Keep public claims factual and product-first. Do not seed AI prompts with charity, donation, split, or private-fund-routing logic.',
     clawx: {
       status: 'LIVE EXTERNAL DASHBOARD',
       url: 'https://clawx-aihub-zwxfcstm.manus.space',
@@ -87,7 +59,7 @@ const PROTOCOL = {
 export function registerProtocolTools(server: McpServer) {
   server.tool(
     'platform_protocol_info',
-    'Return the current doctrine plus historical chain context for live platform revenue references',
+    'Return the current business-only doctrine for live platform references',
     {},
     async () => ({
       content: [
@@ -101,7 +73,7 @@ export function registerProtocolTools(server: McpServer) {
 
   server.tool(
     'platform_wallet_history',
-    'Return historical Base Mainnet wallet references with current-doctrine warnings',
+    'Return the current policy warning against using historical routing doctrine as live product truth',
     {},
     async () => ({
       content: [
@@ -110,9 +82,8 @@ export function registerProtocolTools(server: McpServer) {
           text: JSON.stringify(
             {
               chain: PROTOCOL.chain,
-              wallets: PROTOCOL.wallets,
               current_llc_policy: PROTOCOL.policy.current_llc_policy,
-              warning: 'Historical chain references do not by themselves define current LLC operating doctrine.',
+              warning: 'Historical chain references do not define current product policy or public copy.',
             },
             null,
             2,
@@ -136,7 +107,6 @@ export function registerProtocolTools(server: McpServer) {
               rule: PROTOCOL.governance.doctrine_boundary,
               public_surfaces: Object.values(PROTOCOL.sites).map((site) => site.url),
               current_llc_policy: PROTOCOL.policy.current_llc_policy,
-              historical_gospel_disbursement: PROTOCOL.policy.historical_gospel_disbursement,
               public_claim_boundary: PROTOCOL.policy.public_claim_boundary,
             },
             null,

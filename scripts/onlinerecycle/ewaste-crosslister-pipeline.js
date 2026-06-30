@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '../..');
 const INTAKE_DIR = path.join(ROOT, 'data', 'ewaste-intake');
 const OUTPUT_DIR = path.join(INTAKE_DIR, 'output');
 const DEFAULT_BATCH_SIZE = 5;
