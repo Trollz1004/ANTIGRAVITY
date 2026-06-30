@@ -28,7 +28,7 @@ if [ ! -d "paperclip/agents" ]; then
 fi
 
 mapfile -t AGENT_DIRS < <(find paperclip/agents -mindepth 1 -maxdepth 1 -type d ! -name audit | sort)
-mapfile -t MONITORED_FILES < <(find paperclip/agents -mindepth 2 -maxdepth 2 -type f \( -name 'AGENTS.md' -o -name 'HEARTBEAT.md' -o -name 'TOOLS.md' \) | sort)
+mapfile -t MONITORED_FILES < <(find paperclip/agents -mindepth 2 -maxdepth 2 -type f \( -name 'AGENTS.md' -o -name 'HEARTBEAT.md' -o -name 'TOOLS.md' -o -name 'STATE.md' \) | sort)
 
 FAIL=0
 UNAUTHORIZED_CHANGE=0
@@ -56,7 +56,7 @@ else
 fi
 
 for dir in "${AGENT_DIRS[@]}"; do
-  for req in AGENTS.md TOOLS.md; do
+  for req in AGENTS.md TOOLS.md STATE.md; do
     if [ ! -f "$dir/$req" ]; then
       MISSING_COUNT=$((MISSING_COUNT + 1))
     fi
@@ -102,6 +102,7 @@ if [ "$EVENT_NAME" = "push" ]; then
       'paperclip/agents/*/AGENTS.md' \
       'paperclip/agents/*/HEARTBEAT.md' \
       'paperclip/agents/*/TOOLS.md' \
+      'paperclip/agents/*/STATE.md' \
       'paperclip/agents/audit/AUDIT-*.md' || true)
   else
     PREV_SHA="$(git rev-parse "$HEAD_SHA^" 2>/dev/null || true)"
@@ -110,6 +111,7 @@ if [ "$EVENT_NAME" = "push" ]; then
         'paperclip/agents/*/AGENTS.md' \
         'paperclip/agents/*/HEARTBEAT.md' \
         'paperclip/agents/*/TOOLS.md' \
+        'paperclip/agents/*/STATE.md' \
         'paperclip/agents/audit/AUDIT-*.md' || true)
     fi
   fi

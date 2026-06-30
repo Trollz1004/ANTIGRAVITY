@@ -1,5 +1,7 @@
 # Paperclip Agent Prompts — Opus-Crafted, Drop-in
 
+> **Memory-first rule (new):** every canonical agent under `paperclip/agents/*/` now keeps a compact `STATE.md` file that is read on entry and written on exit, with a strict size cap and a Supabase-backed brain mirror. See [`paperclip/agents/memory-architecture.md`](agents/memory-architecture.md) and the per-agent `STATE.md` files.
+
 **Paperclip-the-platform is alive and working** with Hermes for Joshua's daily ops.
 These are user-facing prompts to paste into Paperclip's Custom Instructions /
 System Prompt field for each agent. They are NOT the retired `paperclip-worker`
