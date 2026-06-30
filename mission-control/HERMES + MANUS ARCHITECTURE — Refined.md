@@ -47,7 +47,7 @@
 **The Roles:**
 
 - **Manus**: Model router. Handles provider failover, usage caps, model selection. Apps never talk to providers directly.
-- **Hermes**: Compliance brain. Enforces 10/27/63 split, founder cap, cost budgets, latency constraints. Watches Manus metrics.
+- **Hermes**: Coordination brain. Enforces current product doctrine, cost budgets, latency constraints, and prompt hygiene. Watches Manus metrics.
 - **Apps**: Create jobs via thin client. Don't care which provider. Don't care about failover. Just get results.
 
 **The Benefit:**

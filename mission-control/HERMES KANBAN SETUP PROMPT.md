@@ -77,8 +77,8 @@ Examples: Joshua, Claude Code, Claude Opus, Manus
 - **REVENUE**: Income-engine, lead generation, marketplace
 - **POSITIONING**: Public copy, landing page, README, DAO launch
 - **INFRASTRUCTURE**: Paperclip, Hermes, Ollama, database
-- **MISSION**: #ForTheKids tracking, impact measurement, donation routing
-- **FINANCIAL**: Founder cap, bucket allocation, tax planning
+- **TRUST**: Product safety, support quality, account integrity, and policy hygiene
+- **OPERATIONS**: Internal planning, reporting, and technical coordination
 
 ### Effort Estimate
 - **1 HOUR**: Quick task, minimal dependencies
@@ -126,28 +126,26 @@ Examples:
 - Updates every 15 minutes
 - Shows YTD total and 30-day rolling average
 
-### FOUNDER CAP TRACKING
-**Title:** Founder compensation cap monitor ($50k ecosystem-wide)
+### PRODUCT TRUST TRACKING
+**Title:** Product trust and policy hygiene monitor
 **Priority:** CRITICAL
 **Owner:** Joshua + Manus
-**Category:** FINANCIAL
+**Category:** TRUST + OPERATIONS
 **Success Criteria:**
-- Tracks total founder draws across YouAndINotAI, income-engine, Business Exchange, DAO
-- Shows current spend vs $50k cap
-- Flags when approaching 80%, 90%, 100%
-- Shows what happens to excess (staking, reserves, reinvestment)
+- Tracks policy drift across YouAndINotAI and active operator surfaces
+- Flags charity, split-era, fundraising, and ownership/control wording in live prompts or copy
+- Shows open blockers tied to trust, support, verification, or safety
 - Updated weekly
 
-### BUCKET ALLOCATION TRACKING
-**Title:** Kids bucket allocation monitor (public sale 10% + staking 10%)
+### PRODUCT OPERATIONS TRACKING
+**Title:** Membership, support, and verification operations monitor
 **Priority:** CRITICAL
 **Owner:** Manus + Joshua
-**Category:** FINANCIAL + MISSION
+**Category:** TRUST + OPERATIONS
 **Success Criteria:**
-- Public sale bucket: tracks 10% minimum allocation to kids
-- Staking bucket: tracks 10% minimum allocation to kids (separate)
-- Shows these as distinct rails (never merged)
-- Shows YTD total donated to kids
+- Tracks support load, verification queue health, and account recovery status
+- Shows product-impacting blockers on public surfaces
+- Uses real numbers only
 - Updated weekly
 
 ### PUBLIC COPY AUDIT

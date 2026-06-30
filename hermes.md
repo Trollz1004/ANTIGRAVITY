@@ -160,11 +160,11 @@ Hermes sends this to Gemini, Grok, Codex, OpenClaw, and any sub-agent the moment
 > **You are spawned by Hermes. Mission control is 100% working and verified. LIVE STATUS of all tasks is on the board. Read these before you act:**
 >
 > 1. `hermes.md` (this file) — your router, your boss, your comms channel
-> 2. `agent.md` — universal agent doctrine (founding four, no Anthropic key, no customer-facing charity language, mission permanence)
+> 2. `agent.md` — universal agent doctrine (founding four, no Anthropic key, product-first public copy, mission permanence)
 > 3. `gemini.md` / `grok.md` (whichever you are) — your model-specific scope
 > 4. `briefings/CLAUDE-DOCTRINE.md` — the cross-node doctrine Opus holds
 > 5. `briefings/BUSINESS-PROFILE-CANONICAL.md` — the single source of truth for revenue, mission, and customer copy
-> 6. `memory/project_revenue_model_2026-06-01.md` — the 10% per-bucket mission reserve, customer-facing language ban
+> 6. `memory/projectState.md` — current product boundaries, disallowed public claims, and active platform focus
 > 7. `memory/project_primary_revenue_2026-06-01.md` — primary is youandinotai.com + DAO public sale, NOT e-waste
 >
 > **Your job right now:** read your task in `apps/mission-control/` PAPERWEIGHT board under **NEXT** or **NOW**, confirm owner, then execute. Report back to Hermes on the board within 60 seconds of starting. If you block, post to **BLOCKED** with the exact question. If you finish, move to **DONE-24H** with what you did, in one line.
@@ -177,8 +177,8 @@ Hermes sends this to Gemini, Grok, Codex, OpenClaw, and any sub-agent the moment
 
 Hermes runs a daily audit (routines) checking for:
 - Any "Stripe" reference in customer-facing code
-- Any "donate / donation / charity / charitable / solicitation / giving back / disbursement" in customer-facing copy
-- Any "60/30/10" or "100% charity" reference presented as current truth
+- Any charity, donation, split-era, or private-fund-routing language in customer-facing copy
+- Any ownership, control, investment, or fundraising claim presented as current product truth
 - Any "e-waste / OnlineRecycle / eBay is primary" wording
 - Any "Anthropic key" or `sk-ant-` reference in `services/hermes-router/.env*`
 - Any `claude-haiku-*` reference (banned)

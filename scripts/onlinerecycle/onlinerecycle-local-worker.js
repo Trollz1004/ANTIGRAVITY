@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '../..');
 const OUTPUT_ROOT = path.join(ROOT, 'data', 'local', 'onlinerecycle-worker');
 const OLLAMA_URL = process.env.OLLAMA_URL || process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434';
 const MODEL_PREFERENCE = [process.env.ONLINERECYCLE_LOCAL_MODEL, 'qwen2.5:7b', 'llama3.1:8b', 'qwen2.5:3b'].filter(

@@ -2,53 +2,46 @@
 
 ## Core Positioning Statement
 
-YouAndINotAI is a social platform for good — connecting people through real-world meetups, volunteering, and genuine human connection. We're not just another dating app; we're building communities of people who care.
+YouAndINotAI is a commercial dating product for verified real people, better conversations, safer first dates, and practical trust-building.
 
 ## Key Messaging Pillars
 
-### 1. Community Over Compatibility
+### 1. Trust Over Noise
 
-DO: "We connect people who give a damn about their community"
-DON'T: "Find your perfect match with our algorithm"
+DO: "Meet verified real people, not bots or dead profiles"
+DON'T: "Join a movement for social good"
 
-### 2. Real-World Action Over Digital Swiping
+### 2. Better Matches Over Endless Swiping
 
-DO: "Meet people who show up, not just swipe"
+DO: "See fewer, better matches with compatibility signals that actually help"
 DON'T: "Thousands of potential matches at your fingertips"
 
-### 3. Shared Purpose Over Personal Gain
+### 3. Safety Over Guesswork
 
-DO: "Find people passionate about the same causes you care about"
-DON'T: "Expand your network with like-minded individuals"
+DO: "Plan first dates with clearer context and safer defaults"
+DON'T: "Support causes through your conversations"
 
-### 4. Volunteer Impact Over Profile Perfection
+### 4. Product Value Over Mission Claims
 
-DO: "See the difference you're making in your community"
-DON'T: "Showcase your best qualities in your profile"
+DO: "A dating app built around verification, context, and useful matching"
+DON'T: "Every connection funds a cause"
 
-### 5. Genuine Connections Over Artificial Urgency
+### 5. Clear Business Copy Over Legal Workarounds
 
-DO: "Build meaningful relationships that last"
-DON'T: "Don't miss out on your soulmate"
+DO: "Simple paid access, clear checkout, cancel anytime"
+DON'T: "Revenue-sharing for good" or any similar substitute for charity positioning
 
-## Florida Compliance Terms (Legal Requirement)
+## Permanent Language Rules
 
-NEVER use:
+Follow `docs/NO-CHARITY-NO-SPLIT-DOCTRINE.md`.
 
-- donate
-- donation
-- solicitation
+Never use active product, marketing, backend, frontend, prompt, or agent copy that claims or implies:
 
-ALWAYS use instead:
+- donations, fundraising, charitable giving, nonprofit status, or beneficiary support
+- revenue split, percentage allocation, routing, reserve, disbursement, or payout doctrine
+- charity-safe synonyms such as "revenue-sharing for good," "platform that gives back," or "contractual revenue disbursement"
 
-- Contractual revenue disbursement
-- Revenue-sharing for good
-- Platform that gives back
-
-Reference to platform supporting kids:
-
-- Frame as a feature: "Built-in support for youth programs"
-- Not as a charity pitch: "We're not a charity, but we do support kids as part of our mission"
+Use plain business/product language instead.
 
 ## Tone of Voice
 
