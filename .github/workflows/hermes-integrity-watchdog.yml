@@ -1,18 +1,14 @@
-name: Hermes Integrity Watchdog
+name: Paperclip CEO + Hermes Integrity Watchdog
 
 on:
   push:
     paths:
-      - 'paperclip-9020/agents/hermes-ceo/**.md'
-      - 'paperclip-9020/config/integrity-watchdog.json'
-      - 'paperclip-9020/config/adapter-allowlist.json'
-      - 'paperclip-9020/config/plugins.json'
+      - 'paperclip/agents/ceo/*.md'
+      - 'paperclip/agents/hermes/*.md'
   pull_request:
     paths:
-      - 'paperclip-9020/agents/hermes-ceo/**.md'
-      - 'paperclip-9020/config/integrity-watchdog.json'
-      - 'paperclip-9020/config/adapter-allowlist.json'
-      - 'paperclip-9020/config/plugins.json'
+      - 'paperclip/agents/ceo/*.md'
+      - 'paperclip/agents/hermes/*.md'
 
 permissions:
   contents: read
@@ -21,7 +17,7 @@ permissions:
 
 jobs:
   watchdog:
-    name: Flag MD + config drift (do NOT auto-resolve)
+    name: Flag CEO/Hermes MD drift (do NOT auto-resolve)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout full history
@@ -37,10 +33,8 @@ jobs:
           HEAD_SHA="${{ github.sha }}"
           echo "Comparing $BASE_SHA..$HEAD_SHA"
           git diff "$BASE_SHA" "$HEAD_SHA" -- \
-            'paperclip-9020/agents/hermes-ceo/*.md' \
-            'paperclip-9020/config/integrity-watchdog.json' \
-            'paperclip-9020/config/adapter-allowlist.json' \
-            'paperclip-9020/config/plugins.json' > /tmp/hermes.diff || true
+            'paperclip/agents/ceo/*.md' \
+            'paperclip/agents/hermes/*.md' > /tmp/hermes.diff || true
           {
             echo 'diff<<DIFFEOF'
             cat /tmp/hermes.diff
@@ -65,14 +59,12 @@ jobs:
           {
             echo 'hashes<<HASHEOF'
             sha256sum \
-              paperclip-9020/agents/hermes-ceo/AGENTS.md \
-              paperclip-9020/agents/hermes-ceo/TOOLS.md \
-              paperclip-9020/agents/hermes-ceo/HEARTBEAT.md \
-              paperclip-9020/agents/hermes-ceo/SOUL.md \
-              paperclip-9020/agents/hermes-ceo/SKILLS.md \
-              paperclip-9020/config/integrity-watchdog.json \
-              paperclip-9020/config/adapter-allowlist.json \
-              paperclip-9020/config/plugins.json 2>/dev/null || true
+              paperclip/agents/ceo/AGENTS.md \
+              paperclip/agents/ceo/TOOLS.md \
+              paperclip/agents/ceo/HEARTBEAT.md \
+              paperclip/agents/hermes/AGENTS.md \
+              paperclip/agents/hermes/TOOLS.md \
+              paperclip/agents/hermes/HEARTBEAT.md 2>/dev/null || true
             echo 'HASHEOF'
           } >> "$GITHUB_OUTPUT"
 
@@ -93,9 +85,9 @@ jobs:
             const actor = process.env.ACTOR;
             const sha = process.env.SHA;
             const severity = authorized === 'true' ? 'REVIEW' : 'URGENT-UNAUTHORIZED';
-            const title = `INTEGRITY [${severity}]: Hermes MD/config modified by ${actor}`;
+            const title = `INTEGRITY [${severity}]: Paperclip CEO/Hermes agent files modified by ${actor}`;
             const body = [
-              '## Hermes Integrity Watchdog',
+              '## Paperclip CEO + Hermes Integrity Watchdog',
               '',
               `**Severity:** ${severity}`,
               `**Actor:** ${actor}`,
@@ -105,7 +97,15 @@ jobs:
               '> This watchdog FLAGS drift only. It does NOT auto-resolve, revert, or close.',
               '> Joshua Coleman is the sole authority to resolve this issue.',
               '',
-              '### New SHA-256 baselines (update `integrity-watchdog.json` if approved)',
+              '### Protected files',
+              '- `paperclip/agents/ceo/AGENTS.md`',
+              '- `paperclip/agents/ceo/TOOLS.md`',
+              '- `paperclip/agents/ceo/HEARTBEAT.md`',
+              '- `paperclip/agents/hermes/AGENTS.md`',
+              '- `paperclip/agents/hermes/TOOLS.md`',
+              '- `paperclip/agents/hermes/HEARTBEAT.md`',
+              '',
+              '### New SHA-256 baselines (for Josh\'s review)',
               '```',
               hashes,
               '```',
@@ -117,15 +117,15 @@ jobs:
               '',
               '### Next steps for Josh',
               '1. Review the diff above',
-              '2. If legit: update `integrity-watchdog.json` baselines and close this issue',
+              '2. If legit: close this issue after updating any dependent baselines',
               '3. If not legit: `git revert` the commit and rotate credentials of the actor',
               '',
-              'Hermes is in `safe_mode` until this issue closes.'
+              'Protected Paperclip agents are in `safe_mode` until this issue closes.'
             ].join('\n');
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title,
               body,
-              labels: ['integrity', 'hermes', severity === 'URGENT-UNAUTHORIZED' ? 'urgent' : 'review']
+              labels: ['integrity', 'paperclip', severity === 'URGENT-UNAUTHORIZED' ? 'urgent' : 'review']
             });
