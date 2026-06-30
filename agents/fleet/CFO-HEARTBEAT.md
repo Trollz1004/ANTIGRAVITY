@@ -12,7 +12,7 @@
 - SOUL.md: /mnt/c/antigravity/agents/fleet/CFO-SOUL.md
 - HEARTBEAT.md: /mnt/c/antigravity/agents/fleet/CFO-HEARTBEAT.md
 - Consolidated role: /mnt/c/antigravity/hermes/agents/roles/CFO.md
-- Paperclip prime: /mnt/c/antigravity/paperclip/agents/cfo-prime.md
+- Paperclip agent: /mnt/c/antigravity/paperclip/agents/cfo/
 - Claude agent: /mnt/c/antigravity/.claude/agents/cfo.md
 
 This heartbeat references canonical locations to save tokens on every cycle.

@@ -15,7 +15,7 @@ Deliverables:
 
 ## What drives the model
 
-The model uses the repository's architecture and go-to-market documents instead of inventing a new operating plan. Costs mirror `docs/architecture.md` (Cloudflare frontend/CDN/tunnel, FastAPI API, Postgres, Square payments, monitoring), `hermes.md` (free-first model routing with paid tool buckets), and `docs/dao-architecture-plan.md` (DAO/legal/security milestones). Revenue follows `docs/strategy/growth-playbook.md` for community partnerships/events, `paperclip/agents/cmo-marketing.md` for automation/service proposals, plus product revenue allowed by `AGENTS.md` and `agent.md`: membership, verification, safety, support, access, uptime, matching quality, and pricing.
+The model uses the repository's architecture and go-to-market documents instead of inventing a new operating plan. Costs mirror `docs/architecture.md` (Cloudflare frontend/CDN/tunnel, FastAPI API, Postgres, Square payments, monitoring), `hermes.md` (free-first model routing with paid tool buckets), and `docs/dao-architecture-plan.md` (DAO/legal/security milestones). Revenue follows `docs/strategy/growth-playbook.md` for community partnerships/events, `paperclip/agents/cmo/` for automation/service proposals, plus product revenue allowed by `AGENTS.md` and `agent.md`: membership, verification, safety, support, access, uptime, matching quality, and pricing.
 
 ## Base-case readout
 
