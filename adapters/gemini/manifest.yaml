@@ -5,7 +5,8 @@ description: "Google Gemini — auth sign-in via Google AI Studio / gcloud. Uses
 owner: sabretooth
 node_id: sabretooth
 cli_command: "gemini"
-health_check: "echo %GEMINI_API_KEY%"
+health_check: "gemini --version"
 paperclip_alias: "gemini"
 opencode_provider: "google"
+opencode_model: "gemini-2.5-pro"
 notes: "Gemini requires Google auth sign-in or API key from AI Studio. The opencode/google provider reads GEMINI_API_KEY."
