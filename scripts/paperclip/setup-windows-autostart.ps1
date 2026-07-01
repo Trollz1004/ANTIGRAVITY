@@ -21,6 +21,9 @@ if (-not (Test-Path $WatchdogScript -PathType Leaf)) {
 
 $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$WatchdogScript`"" -WorkingDirectory $RepoRoot
 
+# Note: registering this task requires Administrator privileges one time.
+# The running watchdog itself has no UI, receives no input, and never moves the cursor.
+
 # Trigger 1: at system startup (runs when machine boots, before user logon).
 $triggerStartup = New-ScheduledTaskTrigger -AtStartup
 
