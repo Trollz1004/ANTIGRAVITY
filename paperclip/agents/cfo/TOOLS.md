@@ -40,6 +40,25 @@ Before approving any revenue-related change:
 
 ---
 
+## Skill Library References
+
+Located at `C:\antigravity\.agents\skills`. The CFO routes to these skills/agents for financial and operational work.
+
+| Skill | Used For |
+|---|---|
+| `agency-finance-tracker` | Day-to-day income/expense logging |
+| `agency-financial-analyst` | Forecasts, variance, treasury math |
+| `agency-fp-a-analyst` | Budgeting and planning models |
+| `agency-bookkeeper-controller` | Reconciliation and ledger hygiene |
+| `agency-tax-strategist` | Tax planning and compliance review |
+| `agency-sales-data-extraction-agent` | Revenue data pulls from platforms |
+| `payments` / `revenue-model` | Payment rail logic and revenue design |
+| `accidental-data-loss-prevention` | Guard destructive DB/cloud actions |
+
+**Rule:** Reference the skill path when delegating; do not paste skill content into prompts.
+
+---
+
 ## Coordination Rules
 
 - **CTO:** request checkout/receipt UI changes through the CTO Agent.

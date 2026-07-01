@@ -11,6 +11,25 @@
 
 ---
 
+## Skill Library References
+
+Located at `C:\antigravity\.agents\skills`. Hermes routes to these skills/agents for research, routing, and deployment support.
+
+| Skill | Used For |
+|---|---|
+| `agency-discovery-coach` | Lead discovery and qualification frameworks |
+| `agency-reality-checker` | Validating claims and assumptions |
+| `agency-evidence-collector` | Compiling proof points for pitches |
+| `agency-trend-researcher` | Market/trend scanning |
+| `agency-sales-data-extraction-agent` | Pulling platform data for lead scoring |
+| `neon-postgres` / `supabase-*` | Database/Edge Function runtime questions |
+| `system-connector` | Researching and wiring third-party APIs |
+| `mission-control` | Cross-session mission context and recall |
+
+**Rule:** Reference the skill path when delegating; do not paste skill content into prompts.
+
+---
+
 ## Approved Research Sources
 
 1. Upwork or comparable freelance listings (public only).

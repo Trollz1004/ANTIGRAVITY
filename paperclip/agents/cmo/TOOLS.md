@@ -14,6 +14,28 @@
 
 ---
 
+## Skill Library References
+
+Located at `C:\antigravity\.agents\skills`. The CMO routes to these skills/agents for growth, copy, and outbound work.
+
+| Skill | Used For |
+|---|---|
+| `agency-content-creator` | Blog, landing, and product copy |
+| `agency-social-media-strategist` | Channel strategy and scheduling |
+| `agency-linkedin-content-creator` | LinkedIn outbound and thought leadership |
+| `agency-twitter-engager` / `agency-reddit-community-builder` | Community engagement |
+| `agency-outbound-strategist` | Lead generation sequences |
+| `agency-growth-hacker` / `growth-marketer` | Growth experiments and funnels |
+| `agency-seo-specialist` / `agency-search-query-analyst` | Organic search and keyword work |
+| `agency-paid-social-strategist` / `agency-ppc-campaign-strategist` | Paid acquisition |
+| `agency-email-intelligence-engineer` | Email campaigns and automation |
+| `agency-brand-guardian` | Brand consistency checks |
+| `docs/NO-CHARITY-NO-SPLIT-DOCTRINE.md` | Doctrine filter (not a skill, but mandatory) |
+
+**Rule:** Reference the skill path when delegating; do not paste skill content into prompts.
+
+---
+
 ## Copy Templates
 
 ### Proposal (≤150 words)
