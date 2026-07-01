@@ -1,11 +1,12 @@
 name: hermes
 version: 0.1
 source: local-cli
-description: "Hermes Agent CLI — CEO runtime for ANTIGRAVITY. Local-only execution via `hermes` command. No remote API usage permitted."
+description: "Hermes Agent CLI — CEO runtime for ANTIGRAVITY. Local-only execution via `hermes` command. Routes through OpenAI Codex, OpenRouter, Ollama, xAI, Gemini. No remote API usage without auth."
 owner: sabretooth
 node_id: sabretooth
 cli_command: "hermes"
 health_check: "hermes --version"
 paperclip_alias: "hermes"
 opencode_provider: "hermes-router"
-notes: "Hermes is the CEO runtime. It operates inside Paperclip HQ and executes against the ANTIGRAVITY repo on main."
+opencode_model: "hermes"
+notes: "Hermes is the CEO runtime. Dashboard on :9119. Router on :11435 powers OpusPawClaw workspace on :3000. No Anthropic/Claude providers."
