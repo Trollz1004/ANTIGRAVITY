@@ -14,7 +14,7 @@
 
 ## Skill Library Map
 
-The CTO should be aware of and delegate to agents/runtimes that have these skills (located at `C:\Users\joshl\.agents\skills`):
+The CTO should be aware of and delegate to agents/runtimes that have these skills (located at `C:\antigravity\.agents\skills`):
 
 | Skill | Used For |
 |---|---|

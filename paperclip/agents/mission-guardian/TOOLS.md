@@ -10,6 +10,23 @@
 
 ---
 
+## Skill Library References
+
+Located at `C:\antigravity\.agents\skills`. The Guardian routes to these skills/agents for verification and governance.
+
+| Skill | Used For |
+|---|---|
+| `agency-git-workflow-master` | Branch/repo hygiene checks |
+| `agency-code-reviewer` | Spot-checking risky code changes |
+| `agency-compliance-auditor` | Policy and rule conformance |
+| `agency-security-engineer` | Security posture verification |
+| `accidental-data-loss-prevention` | Blocking destructive actions |
+| `mission-control` | Mission context and cross-agent alignment |
+
+**Rule:** Reference the skill path when delegating; do not paste skill content into prompts.
+
+---
+
 ## Structural Verification Commands
 
 Run these (read-only) at every session start:
