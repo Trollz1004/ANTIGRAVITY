@@ -83,6 +83,25 @@ Row-level security (RLS): service-role key only; agents never expose state to pu
 
 ---
 
+## Required Env
+
+The memory bridge and Paperclip startup script both load env in this priority:
+
+1. `C:\antigravity\.env.paperclip` — stable, repo-local, gitignored, NOT inside a timer-locked vault.
+2. `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIVERSAL-ENV-TROLLZ1004.env` — fallback / backup.
+3. `C:\antigravity\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env` — secondary fallback.
+4. `.env` in repo root — final fallback.
+
+Only keys required for the brain:
+
+- `SUPABASE_URL`
+- `SUPABASE_SECRET_KEY` (service role key)
+- `SUPABASE_PUBLISHABLE_KEY` (anon/public key also accepted as fallback)
+
+If the local `.env.paperclip` is missing or its keys are still `YOUR_*_HERE` placeholders, the bridge will fall back to local `STATE.md` and warn.
+
+---
+
 ## MCP / Brain Connector
 
 A lightweight MCP plugin exposes two tools:

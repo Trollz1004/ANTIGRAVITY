@@ -1,6 +1,8 @@
 # Start Paperclip HQ on :3100 with all required env vars loaded from the
-# OneDrive-backed master env vault. The active instance lives at
-# C:\Users\joshl\.paperclip\instances\default.
+# stable, repo-local env file `C:\antigravity\.env.paperclip` (gitignored, NOT
+# in the OneDrive timer-locked vault). Falls back to the OneDrive vault or a
+# briefings copy if the local file is absent.
+# The active instance lives at C:\Users\joshl\.paperclip\instances\default.
 #
 # Postgres is the docker container `paperclip-postgres` on 127.0.0.1:5432
 # (started by scripts/autostart-mission.ps1 phase 2).
@@ -41,8 +43,9 @@ function Import-EnvFile($path) {
 
 Log '=== start-paperclip.ps1 ==='
 
-# Try the OneDrive vault first, then a repo-local fallback.
+# Try the local repo env first, then the OneDrive vault, then a briefings fallback.
 $envPaths = @(
+    'c:\antigravity\.env.paperclip',
     'C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIVERSAL-ENV-TROLLZ1004.env',
     'c:\antigravity\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
 )
@@ -51,7 +54,8 @@ foreach ($p in $envPaths) {
     if (Import-EnvFile $p) { $loaded = $true; break }
 }
 if (-not $loaded) {
-    Log 'WARN: no env vault found � Paperclip may fail without DATABASE_URL etc.'
+    Log 'WARN: no env file found - Paperclip may fail without DATABASE_URL etc.'
+} � Paperclip may fail without DATABASE_URL etc.'
 }
 
 # Sanity defaults - only set if env vault didn't already provide them.

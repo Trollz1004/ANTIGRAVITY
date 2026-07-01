@@ -30,7 +30,9 @@
 
 ## Required Credentials / Env
 
-Paperclip env is loaded from the OneDrive master vault by `scripts/start-paperclip.ps1`.
+Paperclip env is loaded from the stable, repo-local file `C:\antigravity\.env.paperclip`.
+This file is gitignored and lives outside the OneDrive timer-locked vault.
+`scripts/start-paperclip.ps1` and `scripts/paperclip/mcp-memory-bridge.js` both read `.env.paperclip` first and only fall back to the OneDrive vault or `briefings/` copy if the local file is missing.
 
 Keys required for the memory brain:
 
