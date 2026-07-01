@@ -2,10 +2,7 @@ $ErrorActionPreference = 'Continue'
 $RepoRoot = 'c:\antigravity'
 $LogDir = Join-Path $RepoRoot 'logs'
 $PaperclipLog = Join-Path $LogDir 'paperclip.log'
-$TunnelLog = Join-Path $LogDir 'paperclip-tunnel.log'
 $StartPaperclip = Join-Path $RepoRoot 'scripts\start-paperclip.ps1'
-$TunnelConfig = 'C:\Users\joshl\.cloudflared\config.yml'
-$Cloudflared = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 
@@ -23,9 +20,13 @@ function Test-Url($Url) {
         return $null
     }
 }
-Log 'Checking Paperclip local listener on :3100.'
-$localStatus = Test-Url 'http://127.0.0.1:3100/api/health'
-if (-not $localStatus) { $localStatus = Test-Url 'http://127.0.0.1:3100' }
+
+# This launcher is meant to be run non-elevated. The called start-paperclip.ps1
+# will refuse to run if it detects an admin token, because Paperclip's embedded
+# PostgreSQL rejects administrative Windows accounts.
+Log 'Checking Paperclip local listener on :3110.'
+$localStatus = Test-Url 'http://127.0.0.1:3110/api/health'
+if (-not $localStatus) { $localStatus = Test-Url 'http://127.0.0.1:3110' }
 
 if ($localStatus) {
     Log "Paperclip already responding locally with HTTP $localStatus."
@@ -37,54 +38,26 @@ if ($localStatus) {
 
     for ($i = 0; $i -lt 45; $i++) {
         Start-Sleep -Seconds 2
-        $localStatus = Test-Url 'http://127.0.0.1:3100/api/health'
-        if (-not $localStatus) { $localStatus = Test-Url 'http://127.0.0.1:3100' }
+        $localStatus = Test-Url 'http://127.0.0.1:3110/api/health'
+        if (-not $localStatus) { $localStatus = Test-Url 'http://127.0.0.1:3110' }
         if ($localStatus) { break }
     }
     if ($localStatus) { Log "Paperclip local runtime is responding with HTTP $localStatus." }
     else { Log 'Paperclip local runtime did not respond before timeout.' }
 }
-Log 'Checking Paperclip Cloudflare tunnel.'
-$existingTunnel = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
-    Where-Object { [string]$_.CommandLine -like "*$TunnelConfig*" } |
-    Select-Object -First 1
 
-if ($existingTunnel) {
-    Log "Cloudflared tunnel already running as PID $($existingTunnel.ProcessId)."
-} elseif ((Test-Path $Cloudflared) -and (Test-Path $TunnelConfig)) {
-    Log 'Starting cloudflared Paperclip tunnel.'
-    $command = "& '$Cloudflared' tunnel --config '$TunnelConfig' run *>> '$TunnelLog' 2>&1"
-    Start-Process -FilePath 'powershell.exe' -ArgumentList @(
-        '-NoProfile', '-WindowStyle', 'Hidden', '-Command', $command
-    ) -WorkingDirectory $RepoRoot | Out-Null
-    Start-Sleep -Seconds 5
-} else {
-    Log 'Cloudflared executable or tunnel config is missing.'
-}
-
-$publicStatus = Test-Url 'https://paperclip-hq.youandinotai.com/api/health'
-if (-not $publicStatus) { $publicStatus = Test-Url 'https://paperclip-hq.youandinotai.com' }
-if ($publicStatus) { Log "Paperclip public endpoint responded with HTTP $publicStatus." }
-else { Log 'Paperclip public endpoint did not respond.' }
-Write-Output '=== WRANGLER ==='
-$wrangler = Get-Command wrangler -ErrorAction SilentlyContinue
-if ($wrangler) {
-    Write-Output "wrangler=$($wrangler.Source)"
-    try { & wrangler --version } catch { Write-Output "wrangler version failed: $($_.Exception.Message)" }
-} else {
-    Write-Output 'wrangler=MISSING'
-}
+# Public URL exposure is handled by Port Warp (or optionally Cloudflare tunnel).
+# This launcher only ensures the local :3110 listener is up.
+Log 'Local Paperclip HQ launch complete. Expose via Port Warp if public URL is needed.'
 
 Write-Output '=== FINAL PROCESS STATE ==='
 Get-CimInstance Win32_Process |
-    Where-Object { $_.CommandLine -match 'paperclip|cloudflared|wrangler' } |
+    Where-Object { $_.CommandLine -match 'paperclip|cloudflared|portwarp' } |
     Select-Object ProcessId, Name, CommandLine |
     Format-List
 
 Write-Output '=== FINAL PORTS ==='
-foreach ($port in @(3100, 54329)) {
+foreach ($port in @(3110, 54329)) {
     Write-Output "PORT $port"
-    Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue |
-        Select-Object LocalAddress, LocalPort, State, OwningProcess |
-        Format-Table -AutoSize
+    netstat -ano | findstr ":$port " | findstr LISTENING | ForEach-Object { Write-Output $_ }
 }
