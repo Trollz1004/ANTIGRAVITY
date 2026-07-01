@@ -8,14 +8,17 @@ The CEO delegates execution to specialized agents and uses skills from the works
 
 | Domain | Responsible Agent | Folder | Key Output |
 |---|---|---|---|
+| CEO executive runtime / repo HQ pulse | **Hermes Agent** | `paperclip/agents/hermes/` (also CEO) | Strategic decisions, Paperclip health, drift alerts |
 | Financial truth, payment rails, treasury math | CFO Agent | `paperclip/agents/cfo/` | Balance, forecasts, audit reports |
 | Public marketing, growth, social automation | CMO Agent | `paperclip/agents/cmo/` | Copy, campaigns, growth playbooks |
 | Technical architecture, builds, quality | CTO Agent | `paperclip/agents/cto/` | Refactors, specs, tests |
 | Structural integrity across nodes | Mission Guardian | `paperclip/agents/mission-guardian/` | Drift detection, node sync reports |
-| Date app runtime / Cloudflare / DNS | Hermes Agent | `paperclip/agents/hermes/` | T5500 deployment status |
+| Date app runtime / Cloudflare / DNS / T5500 | Hermes / delegated runtime | `paperclip/agents/hermes/` | T5500 deployment status |
 | Multi-model coding delegation | OpenClaw / Cursor / Codex / Gemini / Grok | Runtime contracts | Code changes within CTO specs |
 
 **CEO rule:** Never duplicate a delegated agent’s work. Route the task instead.
+
+**Paperclip HQ rule:** Any task initiated inside the Paperclip UI (`http://127.0.0.1:3110`) is operating on `Trollz1004/ANTIGRAVITY` and must follow this delegation map.
 
 ---
 
