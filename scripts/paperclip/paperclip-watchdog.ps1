@@ -30,8 +30,8 @@ function Test-PaperclipHealth {
 function Start-PaperclipHQ {
     Log 'Watchdog: Paperclip not healthy; relaunching via launch-paperclip-hq.ps1.'
     Start-Process -FilePath 'powershell.exe' -ArgumentList @(
-        '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $LaunchScript
-    ) -WorkingDirectory $RepoRoot -WindowStyle Minimized | Out-Null
+        '-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-File', $LaunchScript
+    ) -WorkingDirectory $RepoRoot -WindowStyle Hidden | Out-Null
 }
 
 Log 'Paperclip watchdog started. Monitoring :3100 every 60s.'
