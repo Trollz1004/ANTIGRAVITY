@@ -4,21 +4,13 @@
   "autoshare": false,
   "autoupdate": true,
   "provider": {
-    "anthropic": {
-      "options": { "apiKey": "{env:ANTHROPIC_API_KEY}" },
-      "models": {
-        "claude-opus-4-7":         { "name": "Opus 4.7 (deep)" },
-        "claude-sonnet-4-6":       { "name": "Sonnet 4.6 (workhorse)" },
-        "claude-haiku-4-5-20251001": { "name": "Haiku 4.5 (fast)" }
-      }
-    },
     "codex": {
-      "npm": "@ai-sdk/anthropic",
-      "name": "Codex (auth — Anthropic API)",
-      "options": { "apiKey": "{env:ANTHROPIC_API_KEY}" },
+      "npm": "@ai-sdk/openai",
+      "name": "Codex (auth — OpenAI / ChatGPT)",
+      "options": { "apiKey": "{env:OPENAI_API_KEY}" },
       "models": {
-        "claude-opus-4-7":   { "name": "Codex Opus 4.7 (orchestrator)" },
-        "claude-sonnet-4-6": { "name": "Codex Sonnet 4.6 (executor)" }
+        "gpt-5.5": { "name": "Codex 5.5 (orchestrator)" },
+        "gpt-5":   { "name": "Codex 5 (executor)" }
       }
     },
     "openai": {
@@ -182,8 +174,8 @@
   "model": "hermes-router/hermes",
   "agent": {
     "orchestrator": {
-      "description": "High-quality orchestrator. Use Opus for planning, route execution to cheaper models.",
-      "model": "anthropic/claude-opus-4-7"
+      "description": "High-quality orchestrator. Route planning to OpenAI/Codex or OpenRouter free, execution to cheaper models.",
+      "model": "codex/gpt-5.5"
     },
     "coder": {
       "description": "Code writer. Prefers local or free models first.",

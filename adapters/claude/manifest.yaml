@@ -1,11 +1,12 @@
 name: claude
 version: 0.1
 source: local-cli
-description: "Free Claude Code (FCC) — local `fcc-claude` / `fcc-server` lane. MUST be invoked via local CLI or internal binary only. No Anthropic API key storage in repo."
+description: "Free Claude Code (FCC) — local `fcc-claude` / `fcc-server` lane. Routes through OpenCode/OpenAI (no Anthropic). No API key storage in repo."
 owner: sabretooth
 node_id: sabretooth
 cli_command: "fcc-claude"
 health_check: "fcc-claude --version"
 paperclip_alias: "claude"
-opencode_provider: "claude"
-notes: "FCC proxy runs on localhost:8082. Requires fcc-server to be running before fcc-claude is invoked."
+opencode_provider: "openai"
+opencode_model: "gpt-5.5"
+notes: "FCC proxy runs on localhost:8082. Requires fcc-server running. Model env vars must use opencode/openai/gpt-5.5 format."
