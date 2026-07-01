@@ -25,6 +25,9 @@
 ---
 
 ## Recent Decisions
+- 2026-07-01T00:26:27.459Z (sabretooth): Brain table confirmed present. Writing first Supabase-backed state row from Sabretooth node.
+- 2026-07-01T00:12:28.445Z (sabretooth): Supabase service-role key received and saved to .env.paperclip. Brain connection test in progress.
+- 2026-07-01T00:06:59.436Z (sabretooth): Updated SUPABASE_PUBLISHABLE_KEY in .env.paperclip from user-provided credential.
 - 2026-07-01T00:00:04.156Z (sabretooth): Moved Paperclip env out of OneDrive timer-locked vault into stable, repo-local C:\antigravity\.env.paperclip (gitignored). Updated start-paperclip.ps1 and mcp-memory-bridge.js to load .env.paperclip first. Supabase brain still blocked until real SUPABASE_SECRET_KEY/PUBLISHABLE_KEY are supplied.
 - 2026-06-30T23:57:01.054Z (sabretooth): Memory bridge now loads env from OneDrive master vault.
 - 2026-06-30T23:38:11.494Z (sabretooth): Initial memory-bridge smoke test succeeded.
