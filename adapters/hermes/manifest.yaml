@@ -1,0 +1,11 @@
+name: hermes
+version: 0.1
+source: local-cli
+description: "Hermes Agent CLI — CEO runtime for ANTIGRAVITY. Local-only execution via `hermes` command. No remote API usage permitted."
+owner: sabretooth
+node_id: sabretooth
+cli_command: "hermes"
+health_check: "hermes --version"
+paperclip_alias: "hermes"
+opencode_provider: "hermes-router"
+notes: "Hermes is the CEO runtime. It operates inside Paperclip HQ and executes against the ANTIGRAVITY repo on main."

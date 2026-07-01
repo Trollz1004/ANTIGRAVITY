@@ -1,0 +1,11 @@
+name: pi
+version: 0.1
+source: local-cli
+description: "Pi runtime — conversational / explanatory tasks. Invoked via `pi` npm CLI or `ollama launch pi`. No remote API usage permitted."
+owner: sabretooth
+node_id: sabretooth
+cli_command: "pi"
+health_check: "pi --version"
+paperclip_alias: "pi"
+opencode_provider: "ollama-local"
+notes: "Pi is a local conversational runtime. Falls back to Ollama local models if the pi CLI is unavailable."
