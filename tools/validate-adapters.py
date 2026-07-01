@@ -10,8 +10,9 @@ import yaml
 from pathlib import Path
 
 ADAPTERS_DIR = Path("adapters")
-REQUIRED_ADAPTERS = ["claude"]
+REQUIRED_ADAPTERS = ["claude", "hermes", "pi", "codex", "gemini"]
 CLAUDE_REQUIRED_SOURCE = "local-cli"
+LOCAL_ONLY_ADAPTERS = {"claude", "hermes", "pi"}
 
 
 def validate():
@@ -43,13 +44,16 @@ def validate():
             errors.append(f"Invalid manifest in {manifest_path}: expected dict, got {type(manifest).__name__}")
             continue
 
-        # Enforce claude must be local-cli
-        if manifest.get("source") != CLAUDE_REQUIRED_SOURCE:
+        adapter_name = manifest.get("name", adapter_name)
+        source = manifest.get("source", "unknown")
+
+        # Enforce local-only adapters must be local-cli
+        if adapter_name in LOCAL_ONLY_ADAPTERS and source != CLAUDE_REQUIRED_SOURCE:
             errors.append(
                 f"POLICY VIOLATION: {manifest_path} — "
-                f"adapter 'claude' MUST have source='{CLAUDE_REQUIRED_SOURCE}' "
-                f"(got source='{manifest.get('source')}'). "
-                f"No remote API usage permitted for claude adapter."
+                f"adapter '{adapter_name}' MUST have source='{CLAUDE_REQUIRED_SOURCE}' "
+                f"(got source='{source}'). "
+                f"No remote API usage permitted for {adapter_name} adapter."
             )
 
         # Warn if description is missing or too vague
@@ -57,8 +61,8 @@ def validate():
         if not desc:
             warnings.append(f"WARNING: {manifest_path} — description is empty")
 
-    # Warn on any adapter with remote-only source not in allowlist
-    REMOTE_ALLOWLIST = {"local-cli", "internal-binary", "local-model"}
+    # Warn on any adapter with source not in allowlist
+    SOURCE_ALLOWLIST = {"local-cli", "internal-binary", "local-model", "auth-signin", "browser-auth"}
     for adapter_dir in adapter_dirs:
         manifest_path = adapter_dir / "manifest.yaml"
         if not manifest_path.exists():
@@ -70,9 +74,9 @@ def validate():
             continue
 
         source = manifest.get("source", "unknown")
-        if source not in REMOTE_ALLOWLIST:
+        if source not in SOURCE_ALLOWLIST:
             warnings.append(
-                f"AUDIT: {manifest_path} — source='{source}' not in allowlist {REMOTE_ALLOWLIST}"
+                f"AUDIT: {manifest_path} — source='{source}' not in allowlist {SOURCE_ALLOWLIST}"
             )
 
     return errors, warnings
