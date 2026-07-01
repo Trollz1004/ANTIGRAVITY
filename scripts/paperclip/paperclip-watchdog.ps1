@@ -34,7 +34,7 @@ function Start-PaperclipHQ {
     ) -WorkingDirectory $RepoRoot -WindowStyle Hidden | Out-Null
 }
 
-Log 'Paperclip watchdog started. Monitoring :3110 every 60s.'
+Log 'Paperclip watchdog started. Monitoring :3110 every 60s. This is the CEO heartbeat loop for ANTIGRAVITY HQ.'
 
 # Ensure at least one launch at startup.
 if (-not (Test-PaperclipHealth)) {
