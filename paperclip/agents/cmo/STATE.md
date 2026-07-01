@@ -22,6 +22,7 @@
 ---
 
 ## Recent Decisions
+- 2026-07-01T00:27:04.740Z (sabretooth): Initial Supabase brain row seeded on Sabretooth node.
 
 - [Decision or action taken]
 
