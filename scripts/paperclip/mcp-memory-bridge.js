@@ -38,7 +38,8 @@ function loadEnvFile(envPath, env) {
 
 function loadEnv() {
   const env = { ...process.env };
-  // Stable, repo-local env first; timer-locked OneDrive vault is a fallback only.
+  // Source-of-truth master env first, then stable repo-local override, then vault/briefings fallbacks.
+  loadEnvFile("C:\\Users\\joshl\\OneDrive\\JOSHUA's-DO-NOT-COMMIT-TO-GITHUB\\MASTER-ANTIGRAVITY-ENV-2026-06-29T041901Z.env", env);
   loadEnvFile(path.resolve('.env.paperclip'), env);
   loadEnvFile('C:\\Users\\joshl\\OneDrive\\Personal Vault-Sabretooth\\MASTER-UNIVERSAL-ENV-TROLLZ1004.env', env);
   loadEnvFile(path.join('briefings', 'MASTER-UNIVERSAL-ENV-TROLLZ1004.env'), env);

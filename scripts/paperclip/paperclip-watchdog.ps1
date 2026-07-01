@@ -15,11 +15,11 @@ function Log($Message) {
 
 function Test-PaperclipHealth {
     try {
-        $r = Invoke-WebRequest -Uri 'http://127.0.0.1:3100/api/health' -UseBasicParsing -TimeoutSec 8
+        $r = Invoke-WebRequest -Uri 'http://127.0.0.1:3110/api/health' -UseBasicParsing -TimeoutSec 8
         return $r.StatusCode -eq 200
     } catch {
         try {
-            $r = Invoke-WebRequest -Uri 'http://127.0.0.1:3100' -UseBasicParsing -TimeoutSec 8
+            $r = Invoke-WebRequest -Uri 'http://127.0.0.1:3110' -UseBasicParsing -TimeoutSec 8
             return $r.StatusCode -in 200, 301, 302
         } catch {
             return $false
@@ -34,7 +34,7 @@ function Start-PaperclipHQ {
     ) -WorkingDirectory $RepoRoot -WindowStyle Hidden | Out-Null
 }
 
-Log 'Paperclip watchdog started. Monitoring :3100 every 60s.'
+Log 'Paperclip watchdog started. Monitoring :3110 every 60s.'
 
 # Ensure at least one launch at startup.
 if (-not (Test-PaperclipHealth)) {

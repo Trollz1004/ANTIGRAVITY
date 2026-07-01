@@ -1,11 +1,16 @@
-# Start Paperclip HQ on :3100 with all required env vars loaded from the
-# stable, repo-local env file `C:\antigravity\.env.paperclip` (gitignored, NOT
-# in the OneDrive timer-locked vault). Falls back to the OneDrive vault or a
-# briefings copy if the local file is absent.
-# The active instance lives at C:\Users\joshl\.paperclip\instances\default.
+# Start Paperclip HQ on :3110.
+# IMPORTANT: This script must be run from a NON-ELEVATED shell. Paperclip's
+# embedded PostgreSQL refuses to start under a Windows account with
+# administrative privileges. Running it as admin will fail.
 #
-# Postgres is the docker container `paperclip-postgres` on 127.0.0.1:5432
-# (started by scripts/autostart-mission.ps1 phase 2).
+# Primary env source:
+#   C:\Users\joshl\OneDrive\JOSHUA's-DO-NOT-COMMIT-TO-GITHUB\MASTER-ANTIGRAVITY-ENV-2026-06-29T041901Z.env
+# Stable repo-local override:
+#   C:\antigravity\.env.paperclip
+#
+# Public exposure is handled externally (Port Warp / Cloudflare tunnel), so
+# Paperclip stays in local_trusted/private mode on loopback only.
+# The active instance lives at C:\Users\joshl\.paperclip\instances\default.
 
 $ErrorActionPreference = 'Continue'
 $LogDir  = 'c:\antigravity\logs'
@@ -15,10 +20,20 @@ New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 function Log($msg) {
     $line = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $msg"
     Add-Content -Path $LogFile -Value $line -ErrorAction SilentlyContinue
+    Write-Output $line
 }
 
-# Parse a bash-style env file (`KEY=value`, `export KEY=value`, with optional quotes)
-# and inject into the current process environment.
+# Guard: refuse to run with an elevated/administrator token.
+$identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+$principal = New-Object Security.Principal.WindowsPrincipal($identity)
+$isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+if ($isAdmin) {
+    Log 'ERROR: Running as administrator. Paperclip embedded PostgreSQL will refuse to start.'
+    Log 'Run this script from a normal (non-elevated) PowerShell or Command Prompt.'
+    exit 1
+}
+
+# Parse a bash-style env file and inject into the current process environment.
 function Import-EnvFile($path) {
     if (-not (Test-Path $path)) { return $false }
     $count = 0
@@ -43,39 +58,43 @@ function Import-EnvFile($path) {
 
 Log '=== start-paperclip.ps1 ==='
 
-# Try the local repo env first, then the OneDrive vault, then a briefings fallback.
+# Priority: real master env > repo-local override > vault > briefings
 $envPaths = @(
+    'C:\Users\joshl\OneDrive\JOSHUA''s-DO-NOT-COMMIT-TO-GITHUB\MASTER-ANTIGRAVITY-ENV-2026-06-29T041901Z.env',
     'c:\antigravity\.env.paperclip',
     'C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIVERSAL-ENV-TROLLZ1004.env',
     'c:\antigravity\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
 )
 $loaded = $false
 foreach ($p in $envPaths) {
-    if (Import-EnvFile $p) { $loaded = $true; break }
+    if (Import-EnvFile $p) { $loaded = $true }
 }
 if (-not $loaded) {
-    Log 'WARN: no env file found - Paperclip may fail without DATABASE_URL etc.'
-} � Paperclip may fail without DATABASE_URL etc.'
+    Log 'WARN: no env file found - Paperclip may fail without API keys etc.'
 }
 
-# Sanity defaults - only set if env vault didn't already provide them.
-# Do not fabricate DATABASE_URL here: Paperclip's own config already points at
-# the embedded Postgres instance for local_trusted mode. Supplying a masked
-# fallback password breaks startup with `password authentication failed`.
-if (-not $env:DATABASE_URL) {
-    Log 'DATABASE_URL not in vault; leaving unset so Paperclip uses configured embedded Postgres'
+# The real master env currently carries an outdated DATABASE_URL pointing at a
+# local crosslist DB on localhost:5432. Remove it so Paperclip uses its configured
+# embedded PostgreSQL instance (local_trusted mode). If you ever want to switch
+# to an external DB (e.g. Supabase), set DATABASE_URL before running this script.
+if ($env:DATABASE_URL -match 'localhost:5432/crosslist') {
+    Remove-Item -Path 'Env:DATABASE_URL' -ErrorAction SilentlyContinue
+    Log 'cleared stale DATABASE_URL (localhost:5432/crosslist) so Paperclip uses embedded Postgres'
 }
+if (-not $env:DATABASE_URL) {
+    Log 'DATABASE_URL not set; Paperclip will use configured embedded Postgres'
+}
+
+# Keep Paperclip bound to the local loopback port the tunnel/Port Warp expects.
+$env:PORT = '3110'
 if (-not $env:PAPERCLIP_PUBLIC_URL) {
-    $env:PAPERCLIP_PUBLIC_URL = 'http://localhost:3100'
+    $env:PAPERCLIP_PUBLIC_URL = 'http://localhost:3110'
 }
 if (-not $env:BETTER_AUTH_TRUSTED_ORIGINS) {
-    $env:BETTER_AUTH_TRUSTED_ORIGINS = 'http://localhost:3100,http://127.0.0.1:3100'
-}
-if (-not $env:PORT) {
-    $env:PORT = '3100'
+    $env:BETTER_AUTH_TRUSTED_ORIGINS = 'http://localhost:3110,http://127.0.0.1:3110'
 }
 
-Log "Starting Paperclip HQ on port $env:PORT (DATABASE_URL set, env loaded=$loaded)"
+Log "Starting Paperclip HQ on port $env:PORT (env loaded=$loaded)"
 
 try {
     & 'C:\Users\joshl\AppData\Roaming\npm\paperclipai.cmd' run *>> $LogFile 2>&1

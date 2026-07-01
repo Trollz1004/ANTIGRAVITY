@@ -8,9 +8,9 @@
 
 | Setting | Value | Why it matters |
 |---|---|---|
-| Default model | `inclusionai/ring-2.6-1t:free` (OpenRouter) | 1-trillion-param free-tier model. Zero LLM cost on routine work. Aligns with "save tokens" doctrine. |
-| Fallback chain | openrouter → nous → zai | All free-or-cheap; no surprise spend. |
-| Cheap-model (smart routing) | Same `ring-2.6-1t:free` | Even routine-tier work hits the free 1T model. |
+| Default model | `gpt-5.5` (OpenAI Codex) via `https://chatgpt.com/backend-api/codex` | Primary reasoning/coding model. Browser-based ChatGPT auth; no API key stored in config. |
+| Fallback chain | openai-codex → openrouter → nous → zai | Codex first; OpenRouter free-tier fallback if no active ChatGPT session. |
+| Cheap-model (smart routing) | `inclusionai/ring-2.6-1t:free` (OpenRouter) | Zero-cost fallback for routine work. Aligns with "save tokens" doctrine. |
 | Auxiliary providers | All `auto` (vision/web/compression/session_search/skills_hub/approval/mcp/title_gen/triage/curator) | Hermes picks the right backend per task; no manual config needed. |
 | Memory | enabled, 2200 char per memory + 1375 char user profile, curator on weekly | Hermes maintains its own memory layer separate from Claude's. |
 | Delegation | orchestrator_enabled, max 3 concurrent children, max spawn depth 1, 50 max iterations | Hermes IS itself an orchestrator. Can be delegated to. |
@@ -36,11 +36,12 @@
 
 ```yaml
 model:
-  default: inclusionai/ring-2.6-1t:free
-  provider: openrouter
-  base_url: https://openrouter.ai/api/v1
+  default: gpt-5.5
+  provider: openai-codex
+  base_url: https://chatgpt.com/backend-api/codex
 providers: {}
 fallback_providers:
+- openai-codex
 - openrouter
 - nous
 - zai
@@ -343,11 +344,11 @@ updates:
   backup_keep: 5
 _config_version: 23
 models:
+- { name: gpt-5.5, provider: openai-codex, max_tokens: 32000, temperature: 0.7, top_p: 0.95, frequency_penalty: 0, presence_penalty: 0 }
 - { name: inclusionai/ring-2.6-1t:free, provider: openrouter, max_tokens: 4096, temperature: 0.7, top_p: 0.95, frequency_penalty: 0, presence_penalty: 0 }
-- { name: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free, provider: openrouter, max_tokens: 4096, temperature: 0.7, top_p: 0.95, frequency_penalty: 0, presence_penalty: 0 }
-- { name: openai/gpt-4o-mini, provider: openrouter, max_tokens: 4096, temperature: 0.7, top_p: 0.95, frequency_penalty: 0, presence_penalty: 0 }
-default_model: inclusionai/ring-2.6-1t:free
+default_model: gpt-5.5
 model_preferences:
+- { model: gpt-5.5, provider: openai-codex }
 - { model: inclusionai/ring-2.6-1t:free, provider: openrouter }
 - { model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free, provider: openrouter }
 - { model: openai/gpt-4o-mini, provider: openrouter }
@@ -370,8 +371,8 @@ known_plugin_toolsets:
   whatsapp: [spotify]
 
 fallback_model:
-  provider: openrouter
-  model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+  provider: openai-codex
+  model: gpt-5.5
 ```
 
 ## Post-wipe restoration on T5500
@@ -382,8 +383,8 @@ When T5500 becomes the sole node, install hermes-agent and apply this config:
 2. Locate the hermes-agent config dir on T5500 (likely `C:\Users\joshl\AppData\Local\hermes\hermes-agent\` per the 9020 path)
 3. Copy this YAML to the equivalent config location
 4. Adjust `terminal.cwd` to `c:\Antigravity` (same — both nodes use that path)
-5. Run `hermes auth login` to wire OAuth (nous, openai-codex, etc.)
-6. Set OpenRouter API key in `OPENROUTER_API_KEY` env var (from vault)
+5. Run `hermes auth login` and sign in with the ChatGPT account that has Codex access. No API key is required for the default `openai-codex` provider.
+6. Set OpenRouter API key in `OPENROUTER_API_KEY` env var (from vault) for the free-tier fallback chain
 7. Verify with `hermes dashboard` — should bind to `:9119`
 8. If T5500 has anything already on `:9119`, override via `--port` flag or `HERMES_DASHBOARD_PORT` env
 
