@@ -6,8 +6,9 @@
 
 - `SOL.md` — system operating logic.
 - `docs/NO-CHARITY-NO-SPLIT-DOCTRINE.md` — public copy rules.
-- `paperclip/agents/ceo/AGENTS.md` — escalation path.
+- `paperclip/agents/ceo/AGENTS.md` — CEO doctrine (Hermes is the CEO runtime).
 - `paperclip/agents/cmo/AGENTS.md` — lead handoff.
+- `briefings/PAPERCLIP-HQ-RUNTIME.md` — Paperclip server / Hermes wiring.
 
 ---
 
@@ -59,15 +60,17 @@ For each lead:
 - **Ready to pitch →** CMO Agent (`paperclip/agents/cmo/`)
 - **Requires technical scoping →** CTO Agent (`paperclip/agents/cto/`)
 - **Involves payment/checkout surface →** CFO Agent (`paperclip/agents/cfo/`)
-- **Structural/repo drift detected →** Mission Guardian + CEO (`paperclip/agents/mission-guardian/` + `paperclip/agents/ceo/`)
-- **Real money or legal authority needed →** Joshua Coleman
+- **Structural/repo drift detected →** Mission Guardian (`paperclip/agents/mission-guardian/`)
+- **Human authority or legal exposure →** Joshua Coleman
+- **Paperclip HQ server issue →** Check `scripts/paperclip/paperclip-watchdog.ps1`; escalate to Joshua if watchdog fails.
 
 ---
 
 ## Output Template
 
 ```text
-HERMES STATUS: <researching|ready|routed|blocked>
+HERMES STATUS: <ceo-pulse|researching|ready|routed|blocked>
+PAPERCLIP HQ: <ok|down>
 LEADS FOUND: <N>
 QUALIFIED: <N>
 TOP LEAD: <LEAD #N - title>
