@@ -85,7 +85,31 @@
         "liquid/lfm-2.5-1.2b-instruct:free":                      { "name": "LFM 2.5 1.2B (free)" },
         "cognitivecomputations/dolphin-mistral-24b-venice-edition:free": { "name": "Dolphin Mistral 24B (free)" },
         "x-ai/grok-3:free":                                       { "name": "Grok 3 (free — OpenRouter)" },
-        "x-ai/grok-3-mini:free":                                  { "name": "Grok 3 Mini (free — OpenRouter)" }
+        "x-ai/grok-3-mini:free":                                  { "name": "Grok 3 Mini (free — OpenRouter)" },
+        "cohere/north-mini-code:free":                            { "name": "Cohere North Mini Code (free)" },
+        "nvidia/nemotron-3.5-content-safety:free":                { "name": "Nemotron 3.5 Content Safety (free)" },
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free":     { "name": "Nemotron 3 Nano Omni Reasoning (free)" },
+        "poolside/laguna-xs.2:free":                              { "name": "Poolside Laguna XS.2 (free)" },
+        "poolside/laguna-m.1:free":                               { "name": "Poolside Laguna M.1 (free)" },
+        "liquid/lfm-2.5-1.2b-thinking:free":                      { "name": "LFM 2.5 1.2B Thinking (free)" },
+        "nvidia/nemotron-3-nano-30b-a3b:free":                    { "name": "Nemotron 3 Nano 30B (free)" },
+        "nvidia/nemotron-nano-12b-v2-vl:free":                    { "name": "Nemotron Nano 12B VL (free)" },
+        "nvidia/nemotron-nano-9b-v2:free":                        { "name": "Nemotron Nano 9B V2 (free)" }
+      }
+    },
+    "opencode": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenCode (Zen free models + curated)",
+      "options": {
+        "baseURL": "https://opencode.ai/zen/v1",
+        "apiKey":  "{env:OPENCODE_API_KEY}"
+      },
+      "models": {
+        "big-pickle":            { "name": "Big Pickle (free)" },
+        "deepseek-v4-flash-free": { "name": "DeepSeek V4 Flash Free" },
+        "mimo-v2.5-free":        { "name": "MiMo V2.5 Free" },
+        "north-mini-code-free":  { "name": "North Mini Code Free" },
+        "nemotron-3-ultra-free": { "name": "Nemotron 3 Ultra Free" }
       }
     },
     "ollama-cloud": {
@@ -105,7 +129,7 @@
     },
     "ollama-local": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Local Ollama (FREE — snap, 11 models installed)",
+      "name": "Local Ollama (FREE — canonical self-hosted for Paperclip/OpenCode; attach via http://localhost:11434/v1)",
       "options": {
         "baseURL": "http://localhost:11434/v1",
         "apiKey":  "ollama"
@@ -121,6 +145,18 @@
         "joshlcoleman/CFO-Until-No-Kid-In-Need:latest": { "name": "CFO PRIME (fine-tune)" },
         "joshlcoleman/dateapp:latest":                   { "name": "DateApp (fine-tune)" },
         "joshlcoleman/dateapp-marketing:latest":         { "name": "DateApp Marketing (fine-tune)" }
+      }
+    },
+    "ollama-opencode": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama-OpenCode (local bridge for Paperclip adapters; delegates to canonical ollama-local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1",
+        "apiKey":  "ollama"
+      },
+      "models": {
+        "qwen2.5-coder:7b": { "name": "Qwen2.5-Coder 7B (opencode bridge)" },
+        "gemma4:latest":    { "name": "Gemma 4 8B (opencode bridge)" }
       }
     },
     "hermes-router": {
