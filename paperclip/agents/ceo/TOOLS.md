@@ -21,7 +21,7 @@ The CEO delegates execution to specialized agents and uses skills from the works
 
 ## Skill Library References
 
-Located at `C:\Users\joshl\.agents\skills`. The CEO should be aware of these capabilities and direct work to the agent best able to apply them.
+Located at `C:\antigravity\.agents\skills` (canonical repo path). The CEO should be aware of these capabilities and direct work to the agent best able to apply them.
 
 | Skill Area | Skill Path | Used By | Purpose |
 |---|---|---|---|

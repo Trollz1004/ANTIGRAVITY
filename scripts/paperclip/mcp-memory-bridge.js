@@ -38,7 +38,8 @@ function loadEnvFile(envPath, env) {
 
 function loadEnv() {
   const env = { ...process.env };
-  // Match the priority order in scripts/start-paperclip.ps1.
+  // Stable, repo-local env first; timer-locked OneDrive vault is a fallback only.
+  loadEnvFile(path.resolve('.env.paperclip'), env);
   loadEnvFile('C:\\Users\\joshl\\OneDrive\\Personal Vault-Sabretooth\\MASTER-UNIVERSAL-ENV-TROLLZ1004.env', env);
   loadEnvFile(path.join('briefings', 'MASTER-UNIVERSAL-ENV-TROLLZ1004.env'), env);
   loadEnvFile(path.resolve('.env'), env);
