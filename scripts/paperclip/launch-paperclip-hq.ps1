@@ -4,7 +4,7 @@ $LogDir = Join-Path $RepoRoot 'logs'
 $PaperclipLog = Join-Path $LogDir 'paperclip.log'
 $TunnelLog = Join-Path $LogDir 'paperclip-tunnel.log'
 $StartPaperclip = Join-Path $RepoRoot 'scripts\start-paperclip.ps1'
-$TunnelConfig = Join-Path $RepoRoot 'infra\cloudflare\paperclip-hq.yml'
+$TunnelConfig = 'C:\Users\joshl\.cloudflared\config.yml'
 $Cloudflared = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
