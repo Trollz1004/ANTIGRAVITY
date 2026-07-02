@@ -25,3 +25,6 @@
 ## For Profit Sustainment
 
 Income engine funds long-term kids' platform maintenance (50+ years).
+
+## Content / Lead Assets
+Genspark playbook seeded for product-focused assets (BotShield, TRA tiers, Content Droid, Agent Ops, Founding Stack). See briefings/income-engine-genspark-playbook-TRO15.md + income-engine-genspark-playbook-seed.json (TRO-15 / INFRA-2).

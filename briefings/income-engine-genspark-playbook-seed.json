@@ -1,0 +1,76 @@
+{
+  "issueId": "33604bc1-0381-4b18-b2bb-31e9d140d455",
+  "identifier": "TRO-15",
+  "title": "INFRA-2: Income-engine Genspark playbook seeding",
+  "seededAt": "2026-07-01T23:20:00Z",
+  "source": "grok-agent",
+  "target": "income-engine + ai-solutions-store + TRA marketplace",
+  "notes": "Business-only product value framing. Prompts generate assets for catalog products (BotShield, Founding Stack, Content Droid, Agent Ops Kit) and TRA tiers. Use for lead-gen, social, explainers, nurture. Avoid any internal sustainment/ownership language in outputs intended for public.",
+  "playbook": [
+    {
+      "id": "ie-gs-001",
+      "category": "bot-shield",
+      "product": "BotShield Checkout Guard",
+      "query": "Write a 6-slide carousel for X and LinkedIn explaining BotShield Checkout Guard: bot heuristics, rate controls, receipt-linked buyer records, and admin review trail. Emphasize how it protects payment surfaces and builds buyer trust. Include 2 CTA variants for $299 purchase.",
+      "tags": ["security", "trust", "checkout", "carousel"],
+      "platform_hints": "X, LinkedIn, IG"
+    },
+    {
+      "id": "ie-gs-002",
+      "category": "founding",
+      "product": "Founding Member Stack",
+      "query": "Draft a short product hunt / beta announcement style post for Founding Member Stack at $499. Focus on early access to full AI app catalog, private update drops, member license key, and priority onboarding. Keep tone premium but accessible.",
+      "tags": ["founder", "early-access", "bundle"],
+      "platform_hints": "ProductHunt, X, email"
+    },
+    {
+      "id": "ie-gs-003",
+      "category": "content-droid",
+      "product": "Content Droid Suite",
+      "query": "Create 3 ready-to-post short-form video scripts (15-30s) using Content Droid Suite workflow: script + voice + render. Topics: one on verification trust, one on scheduled marketing output, one on analytics loops. Include posting schedule template mention.",
+      "tags": ["content", "automation", "short-video"],
+      "platform_hints": "TikTok, Reels, X"
+    },
+    {
+      "id": "ie-gs-004",
+      "category": "agent-ops",
+      "product": "Agent Operations Kit",
+      "query": "Explain the Agent Operations Kit ($999) as runbooks + workflow templates + deployment checklists for GitHub, cloud tasks, and message routing. Write a founder-focused email nurture sequence (3 emails) that positions it as the automation layer for repetitive ops.",
+      "tags": ["ops", "automation", "runbooks", "email"],
+      "platform_hints": "email, LinkedIn"
+    },
+    {
+      "id": "ie-gs-005",
+      "category": "tra",
+      "product": "TRA Marketplace tiers",
+      "query": "Produce comparison table copy + 1 hero paragraph for TRA Marketplace tiers: Basic Trade Assist ($99 matching), Verified Trade ($299 with BotShield + trust), Pro Marketplace ($799 full tools + calendar), Enterprise (custom), Royalty (lifetime). Frame as real matching + verification value for recyclers and traders.",
+      "tags": ["tra", "marketplace", "tiers", "matching"],
+      "platform_hints": "landing, catalog, Reddit"
+    },
+    {
+      "id": "ie-gs-006",
+      "category": "lead-gen",
+      "product": "Income engine angle (internal)",
+      "query": "Generate 5 lead magnet title + hook ideas that surface the value of verified AI tools (BotShield, Content Droid, Agent Kit) for builders running stores, waitlists, or marketplaces. Focus on reducing fraud, increasing velocity, and auditable delivery. Output as list only.",
+      "tags": ["lead-gen", "magnets", "hooks"],
+      "platform_hints": "inbound, landing"
+    },
+    {
+      "id": "ie-gs-007",
+      "category": "case",
+      "product": "BotShield + TRA Verified",
+      "query": "Write a concise 180-220 word case-style snippet: 'How one payment surface cut bot traffic and increased verified buyer confidence using BotShield + Verified Trade tier.' Include measurable framing (heuristics, trails) without invented numbers. End with soft link to catalog.",
+      "tags": ["case", "social-proof", "verified"],
+      "platform_hints": "X thread, blog, email"
+    },
+    {
+      "id": "ie-gs-008",
+      "category": "implementation",
+      "product": "Implementation passes",
+      "query": "Draft landing section copy for 'Implementation Passes' (3-month for Content Droid, 12-month for Agent Ops). Emphasize verified install, wiring, handoff, and support. Use the store's verified license + audit trail language.",
+      "tags": ["pass", "implementation", "support"],
+      "platform_hints": "catalog, sales page"
+    }
+  ],
+  "usage": "Copy query into Genspark (or equiv). Vary for platform length. Tag outputs with product for later catalog or calendar integration. Combine with content-calendar-seed and social cadence artifacts."
+}

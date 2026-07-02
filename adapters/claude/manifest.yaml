@@ -6,7 +6,19 @@ owner: sabretooth
 node_id: sabretooth
 cli_command: "fcc-claude"
 health_check: "fcc-claude --version"
+# PAPERCLIP INTEGRATION (2026-07-02, Fable — respects CLI-text + timed-run constraints):
+# Do NOT use wrapper scripts in Paperclip. Use the NATIVE claude adapter (claude_local)
+# with these ENV VARS on the agent — native adapter passes prompts correctly (no argv
+# limit) and claude becomes FCC purely through environment:
+paperclip_native_env:
+  ANTHROPIC_BASE_URL: "http://127.0.0.1:8082"
+  ANTHROPIC_AUTH_TOKEN: "freecc"
+  CLAUDE_CONFIG_DIR: "C:/Users/joshl/.claude-fcc"   # isolated lane; zero MCP servers seeded = no 78K tool bloat
+  CLAUDE_CODE_MAX_OUTPUT_TOKENS: "8192"             # fits free-provider limits
+# Model in Paperclip UI: any claude-sonnet-* name — FCC's prefix detection maps
+# opus/sonnet/haiku tier words to MODEL_OPUS/SONNET/HAIKU in ~/.fcc/.env.
+# Timed runs: sonnet/haiku tiers route to fast free models; keep board tasks small.
 paperclip_alias: "claude"
 opencode_provider: "openai"
 opencode_model: "gpt-5.5"
-notes: "FCC proxy runs on localhost:8082. Requires fcc-server running. Model env vars must use opencode/openai/gpt-5.5 format."
+notes: "FCC proxy runs on localhost:8082. Requires fcc-server running. Dedicated separate provider 'openai' (gpt-5.5) for fcc-claude / CEO lane. Do NOT share 'codex' provider with codex adapter. Model must be gpt-5.5 style, never claude-sonnet-*."

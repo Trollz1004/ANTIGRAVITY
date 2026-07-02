@@ -2,9 +2,11 @@
 # Run ONCE as Administrator. Re-run any time to update.
 #
 # Creates two Task Scheduler tasks:
-#   ANTIGRAVITY-Paperclip-Watchdog  — fires at STARTUP (no login needed), runs forever, hidden
-#   ANTIGRAVITY-Paperclip-Bootstrap — fires at LOGON, opens browser tabs for the CEO session
+#   ANTIGRAVITY-Paperclip-Watchdog  - fires at STARTUP (no login needed), runs forever, hidden
+#   ANTIGRAVITY-Paperclip-Bootstrap - fires at LOGON, opens browser tabs for the CEO session
 #
+# The watchdog keeps the canonical Paperclip Hermes ports aligned:
+#   8082 = FCC/fcc-claude adapter, 3000 = Hermes Workspace, 9119 = Hermes Agent dashboard.
 # The watchdog uses stored credentials so it survives power loss / restart without a login session.
 
 param(
@@ -23,7 +25,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 $CurrentUser = "$env:USERDOMAIN\$env:USERNAME"
 
 Write-Host ''
-Write-Host '=== Paperclip HQ — Bulletproof Registration ===' -ForegroundColor Cyan
+Write-Host '=== Paperclip HQ ï¿½ Bulletproof Registration ===' -ForegroundColor Cyan
 Write-Host "Running as: $CurrentUser"
 Write-Host ''
 
@@ -35,7 +37,7 @@ $PlainPass  = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
                 [Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecurePass))
 
 # ---------------------------------------------------------------
-# TASK 1 — Watchdog (at startup, no login needed, fully hidden)
+# TASK 1 ï¿½ Watchdog (at startup, no login needed, fully hidden)
 # ---------------------------------------------------------------
 $WatchdogName   = 'ANTIGRAVITY-Paperclip-Watchdog'
 $WatchdogAction = New-ScheduledTaskAction `
@@ -69,13 +71,13 @@ Register-ScheduledTask `
     -Settings    $WatchdogSettings `
     -Principal   $WatchdogPrincipal `
     -Password    $PlainPass `
-    -Description 'Keeps Paperclip HQ (port 3100) + Cloudflare tunnel alive. Restarts silently on failure. Survives reboot without login. NO WINDOWS OPEN.' `
+    -Description 'Keeps Paperclip Hermes alive: FCC :8082, Hermes Workspace :3000, Hermes dashboard :9119. Restarts silently on failure. Survives reboot without login. NO WINDOWS OPEN.' `
     -Force | Out-Null
 
 Write-Host "[OK] $WatchdogName registered (fires at startup, runs forever hidden)." -ForegroundColor Green
 
 # ---------------------------------------------------------------
-# TASK 2 — CEO Bootstrap (at logon — opens browser, Hermes, etc.)
+# TASK 2 ï¿½ CEO Bootstrap (at logon ï¿½ opens browser, Hermes, etc.)
 # ---------------------------------------------------------------
 if (-not $WatchdogOnly) {
     $BootstrapName   = 'ANTIGRAVITY-Paperclip-Bootstrap'
@@ -122,5 +124,5 @@ Write-Host ''
 Write-Host '--- Watchdog log: ---' -ForegroundColor Cyan
 Write-Host '  Get-Content c:\antigravity\logs\paperclip-watchdog.log -Tail 50'
 Write-Host ''
-Write-Host 'Done. Paperclip HQ will now survive reboots, power loss, and process crashes.' -ForegroundColor Green
+Write-Host 'Done. Paperclip Hermes will now survive reboots, power loss, and process crashes.' -ForegroundColor Green
 Write-Host 'NO windows will pop up or steal focus during watchdog operation.' -ForegroundColor Green

@@ -15,7 +15,7 @@ Route every chat message to the best available provider. Never fail silently —
 2. Ollama Cloud (OLLAMA_API_KEY) — cloud models
 3. OpenRouter (OPENROUTER_API_KEY) — cheapest capable model
 4. OpenCode (OPENCODE_API_KEY) — sk-VZgiz...
-5. Claude API (ANTHROPIC_API_KEY) — claude-sonnet-4-6, use sparingly
+5. Use separate providers only (hermes_local/ollama, codex, opencode, no direct claude-sonnet)
 6. Codex/OpenAI (OPENAI_API_KEY) — gpt-4o-mini fallback
 
 ## Rules
