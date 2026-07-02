@@ -8,6 +8,8 @@ You are a thin dispatcher into Joshua's local FCC Free Claude Code lane.
 
 # Runtime
 
+FCC server is the canonical Claude adapter for Paperclip Hermes and should be reachable at `http://127.0.0.1:8082/admin`. If `fcc-claude` reports the proxy is unreachable, start `fcc-server` or run `c:\antigravity\scripts\start-paperclip-hermes.ps1`.
+
 Use:
 
 ```bash

@@ -1,0 +1,83 @@
+﻿{
+    "checkedAt":  "2026-07-02T14:35:15.6080596Z",
+    "health":  {
+                   "ok":  null,
+                   "status":  "ok"
+               },
+    "me":  {
+               "status":  "error",
+               "name":  "OpenClaw",
+               "id":  "93a97bb6-3f83-46f0-b097-ed59868305b0",
+               "role":  "general"
+           },
+    "dashboard":  {
+                      "agents":  {
+                                     "active":  1,
+                                     "running":  1,
+                                     "paused":  1,
+                                     "error":  3
+                                 },
+                      "tasks":  {
+                                    "open":  38,
+                                    "inProgress":  2,
+                                    "blocked":  0,
+                                    "done":  57
+                                },
+                      "pendingApprovals":  0
+                  },
+    "problemAgents":  [
+                          {
+                              "id":  "78788781-3631-4f10-9bae-d9fb10c2adbc",
+                              "name":  "Support",
+                              "role":  "general",
+                              "title":  "Customer Support Responder",
+                              "status":  "idle",
+                              "urlKey":  "support",
+                              "lastHeartbeatAt":  "2026-07-02T10:32:49.405Z",
+                              "heartbeatEnabled":  true
+                          },
+                          {
+                              "id":  "0bc23d9d-5a56-4adb-8c2c-b121d827cdb0",
+                              "name":  "Hermes 2",
+                              "role":  "engineer",
+                              "title":  "Hermes Agent - Founding Engineer",
+                              "status":  "paused",
+                              "urlKey":  "hermes-2",
+                              "lastHeartbeatAt":  "2026-07-01T15:38:16.657Z",
+                              "heartbeatEnabled":  true
+                          },
+                          {
+                              "id":  "383e8ee5-12db-4d60-b7e3-1b6aead645f9",
+                              "name":  "QA",
+                              "role":  "qa",
+                              "title":  "QA Engineer",
+                              "status":  "error",
+                              "urlKey":  "qa",
+                              "lastHeartbeatAt":  "2026-07-01T17:46:39.337Z",
+                              "heartbeatEnabled":  false
+                          },
+                          {
+                              "id":  "93a97bb6-3f83-46f0-b097-ed59868305b0",
+                              "name":  "OpenClaw",
+                              "role":  "general",
+                              "title":  "OpenClaw - Support + Board Ops",
+                              "status":  "error",
+                              "urlKey":  "openclaw",
+                              "lastHeartbeatAt":  "2026-07-02T06:07:28.311Z",
+                              "heartbeatEnabled":  true
+                          },
+                          {
+                              "id":  "495fb518-a677-4ef1-a340-25aa0ef90f01",
+                              "name":  "Claude-Fable ",
+                              "role":  "general",
+                              "title":  null,
+                              "status":  "error",
+                              "urlKey":  "claude-fable",
+                              "lastHeartbeatAt":  "2026-07-02T10:36:36.524Z",
+                              "heartbeatEnabled":  true
+                          }
+                      ],
+    "recommendations":  [
+                            "Review error/paused/stale agents in Paperclip HQ; switch providers or wake agents when safe."
+                        ]
+}

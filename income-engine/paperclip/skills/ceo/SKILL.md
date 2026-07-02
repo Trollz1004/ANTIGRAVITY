@@ -3,8 +3,8 @@ name: "ceo-income"
 description: "CEO agent for CLAUDE's Antigravity income-engine. Orchestrates lead pipeline and model fleet."
 version: "1.0.0"
 category: "ceo"
-model: "claude-sonnet-4-6"
-provider: "anthropic"
+model: "ollama-launch/glm-5.1:cloud"
+provider: "hermes_local / ollama (separate; no anthropic)"
 paperclip_port: 3101
 company: "CLAUDE's Antigravity"
 ---

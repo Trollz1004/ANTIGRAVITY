@@ -1,0 +1,12 @@
+name: ollama-local
+version: 0.1
+source: local-cli
+description: "Local Ollama via OpenCode bridge or direct. Self-hosted free models from http://localhost:11434 (ollama-local provider in opencode.json). For batch, dev, low-cost workers."
+owner: sabretooth
+node_id: sabretooth
+cli_command: "opencode"
+health_check: "curl -s http://localhost:11434/api/tags -o NUL && echo ollama-local:healthy || echo 'ollama may be at alt host; check 192.168.0.x:11434'"
+paperclip_alias: "ollama-local"
+opencode_provider: "ollama-local"
+opencode_model: "qwen2.5-coder:7b"
+notes: "Separated from cloud providers. Agents using this get local-only routing. Configure per-agent in AGENT.md + opencode.json models. Fallbacks via hermes-router if configured. No cloud cost."

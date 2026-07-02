@@ -30,7 +30,6 @@ Write-TunnelLog "starting cloudflared foreground"
 try {
     $ErrorActionPreference = "Continue"
     & $Cloudflared tunnel --no-autoupdate run --token $token >> $TunnelOut 2>> $TunnelErr
-parent of 22d51cba (chore: clean business-only public surfaces)
     $code = $LASTEXITCODE
 } catch {
     $code = 1

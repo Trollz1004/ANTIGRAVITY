@@ -24,6 +24,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 os.environ["JWT_SECRET"] = (
     "test-secret-that-is-at-least-32-characters-long-for-security"
 )
+os.environ["METRICS_API_KEY"] = ""  # Use empty string so fallback to JWT_SECRET works in tests
 os.environ["APP_ENV"] = "test"
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
 os.environ["SQUARE_WEBHOOK_VERIFY_SIGNATURE"] = "true"
