@@ -22,6 +22,7 @@ export function Register() {
   const [acceptedCookiePolicy, setAcceptedCookiePolicy] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [confirmedOver18, setConfirmedOver18] = useState(false);
+  const [confirmedBotShieldStep, setConfirmedBotShieldStep] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
@@ -49,7 +50,7 @@ export function Register() {
       setError('YouAndINotAI is strictly 18+ only');
       return;
     }
-    if (!acceptedCookiePolicy || !acceptedTerms || !confirmedOver18) {
+    if (!acceptedCookiePolicy || !acceptedTerms || !confirmedOver18 || !confirmedBotShieldStep) {
       setError(
         'All required consent boxes must be checked before you can register'
       );
@@ -77,38 +78,38 @@ export function Register() {
   return (
     <div className="mesh-gradient min-h-screen px-4 py-6 md:px-8 md:py-8">
       <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl gap-6 md:grid-cols-[0.98fr_1.02fr]">
-        <section className="hidden rounded-[2rem] border-4 border-[#111111] bg-[#ff4f00] p-10 text-white shadow-[12px_12px_0_0_rgba(17,17,17,1)] md:flex md:flex-col md:justify-between">
+        <section className="sharp-card yellow-glow hidden rounded-[2px] bg-[#141414] p-10 text-[#ededed] md:flex md:flex-col md:justify-between">
           <div>
-            <div className="text-xs font-black uppercase tracking-[0.24em] text-white/80">
+            <div className="overline text-[#ffd700]">
               Join YouAndINotAI
             </div>
-            <h1 className="mt-4 text-[clamp(3rem,7vw,5.5rem)] font-black uppercase leading-[0.86] tracking-[-0.09em]">
+            <h1 className="display mt-4 text-[clamp(3rem,7vw,5.5rem)] font-black uppercase leading-[0.86] tracking-[-0.09em]">
               Human first.
               <br />
               Verified next.
             </h1>
-            <p className="mt-6 max-w-md text-base leading-7 text-white/82">
+            <p className="mt-6 max-w-md text-base leading-7 text-[#a1a1aa]">
               Create the account first, then finish profile setup, matching, and
               Bot-Shield verification in the right order.
             </p>
           </div>
 
-          <div className="rounded-[1.6rem] border-4 border-[#111111] bg-[#fffaf2] p-5 text-[#111111] shadow-[8px_8px_0_0_rgba(17,17,17,1)]">
+          <div className="rounded-[2px] border border-[#27272a] bg-[#1e1e1e] p-5 text-[#ededed]">
             <div className="app-panel-title mb-3">Before matching</div>
-            <div className="space-y-3 text-sm font-medium text-[#5c594f]">
+            <div className="space-y-3 text-sm font-medium text-[#a1a1aa]">
               <div className="flex items-start gap-3">
-                <ShieldCheck size={18} className="mt-0.5 text-[#ff4f00]" />
+                <ShieldCheck size={18} className="mt-0.5 text-[#ffd700]" />
                 <span>18+ only. Real date of birth required.</span>
               </div>
               <div className="flex items-start gap-3">
-                <Mail size={18} className="mt-0.5 text-[#ff4f00]" />
+                <Mail size={18} className="mt-0.5 text-[#ffd700]" />
                 <span>
                   Use the email you want tied to receipts, support, and account
                   recovery.
                 </span>
               </div>
               <div className="flex items-start gap-3">
-                <Heart size={18} className="mt-0.5 text-[#ff4f00]" />
+                <Heart size={18} className="mt-0.5 text-[#ffd700]" />
                 <span>
                   Account creation is separate from paid founder plans and
                   Bot-Shield.
@@ -119,7 +120,7 @@ export function Register() {
         </section>
 
         <section className="flex items-center">
-          <div className="glass-strong glass-highlight w-full rounded-[2rem] p-6 md:p-8">
+          <div className="glass-strong glass-highlight w-full rounded-[2px] p-6 md:p-8">
             <div className="mb-8">
               <div className="app-kicker mb-3">Create Account</div>
               <h1 className="app-title">join the platform.</h1>
@@ -131,7 +132,7 @@ export function Register() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               {error && (
-                <div className="rounded-[1.4rem] border-4 border-[#111111] bg-[#ffd9c7] px-4 py-3 text-sm font-semibold text-[#111111]">
+                <div className="rounded-[2px] border border-[#ff2a2a] bg-[#1e1e1e] px-4 py-3 text-sm font-semibold text-[#ededed]">
                   {error}
                 </div>
               )}
@@ -140,7 +141,7 @@ export function Register() {
                 <label className="relative block md:col-span-2">
                   <User
                     size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a1a1aa]"
                   />
                   <input
                     type="text"
@@ -156,7 +157,7 @@ export function Register() {
                 <label className="relative block">
                   <Mail
                     size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a1a1aa]"
                   />
                   <input
                     type="email"
@@ -171,7 +172,7 @@ export function Register() {
                 <label className="relative block">
                   <CalendarDays
                     size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a1a1aa]"
                   />
                   <input
                     type="text"
@@ -190,7 +191,7 @@ export function Register() {
                 <label className="relative block md:col-span-2">
                   <Lock
                     size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a1a1aa]"
                   />
                   <input
                     type="password"
@@ -204,17 +205,17 @@ export function Register() {
                 </label>
               </div>
 
-              <div className="glass rounded-[1.6rem] p-5">
+              <div className="glass rounded-[2px] p-5">
                 <div className="app-panel-title mb-4">
                   Required before account creation
                 </div>
-                <div className="space-y-3 text-sm font-medium text-[#5c594f]">
+                <div className="space-y-3 text-sm font-medium text-[#a1a1aa]">
                   <label className="flex items-start gap-3">
                     <input
                       type="checkbox"
                       checked={acceptedCookiePolicy}
                       onChange={e => setAcceptedCookiePolicy(e.target.checked)}
-                      className="mt-1 h-4 w-4 accent-[#ff4f00]"
+                      className="mt-1 h-4 w-4 accent-[#ffd700]"
                     />
                     <span>
                       I agree to the cookie policy required for sign-in, safety,
@@ -226,7 +227,7 @@ export function Register() {
                       type="checkbox"
                       checked={acceptedTerms}
                       onChange={e => setAcceptedTerms(e.target.checked)}
-                      className="mt-1 h-4 w-4 accent-[#ff4f00]"
+                      className="mt-1 h-4 w-4 accent-[#ffd700]"
                     />
                     <span>
                       I accept the platform rules and privacy terms, and I
@@ -238,11 +239,23 @@ export function Register() {
                       type="checkbox"
                       checked={confirmedOver18}
                       onChange={e => setConfirmedOver18(e.target.checked)}
-                      className="mt-1 h-4 w-4 accent-[#ff4f00]"
+                      className="mt-1 h-4 w-4 accent-[#ffd700]"
                     />
                     <span>
                       I confirm I am at least 18 years old and that my date of
                       birth is accurate.
+                    </span>
+                  </label>
+                  {/* TRO-68: new field/step in signup that surfaces bot-shield verification requirement */}
+                  <label className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={confirmedBotShieldStep}
+                      onChange={e => setConfirmedBotShieldStep(e.target.checked)}
+                      className="mt-1 h-4 w-4 accent-[#ffd700]"
+                    />
+                    <span>
+                      I understand Bot-Shield verification (liveness + one-time $1 check) is the next required step after profile setup to get verified status and access full platform.
                     </span>
                   </label>
                 </div>
@@ -263,11 +276,11 @@ export function Register() {
               </button>
             </form>
 
-            <p className="mt-6 text-center text-sm font-medium text-[#5c594f]">
+            <p className="mt-6 text-center text-sm font-medium text-[#a1a1aa]">
               Already have an account?{' '}
               <Link
                 to={`/login?next=${encodeURIComponent(nextPath)}`}
-                className="font-black uppercase tracking-[0.14em] text-[#111111] underline decoration-[3px] underline-offset-4"
+                className="mono font-black uppercase tracking-[0.14em] text-[#ffd700] underline decoration-[3px] underline-offset-4"
               >
                 Sign in
               </Link>
@@ -275,7 +288,7 @@ export function Register() {
 
             <div className="mt-4 text-center">
               <Link to="/" className="app-back-link">
-                <Heart size={14} className="text-[#ff4f00]" /> Back to
+                <Heart size={14} className="text-[#ffd700]" /> Back to
                 YouAndINotAI
               </Link>
             </div>

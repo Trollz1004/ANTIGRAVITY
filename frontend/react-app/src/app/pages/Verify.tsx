@@ -166,11 +166,11 @@ export function Verify() {
   if (loading) {
     return (
       <div className="app-page flex items-center justify-center">
-        <div className="glass-strong rounded-[2rem] p-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-[1.4rem] border-4 border-[#111111] bg-[#111111] text-white">
+        <div className="sharp-card yellow-glow rounded-[2px] p-8 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-[2px] border border-[#ffd700] bg-[#1e1e1e] text-[#ffd700]">
             <ShieldCheck size={26} className="animate-pulse" />
           </div>
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">
+          <p className="mono text-sm font-bold uppercase tracking-[0.18em] text-[#a1a1aa]">
             Loading verification
           </p>
         </div>
@@ -190,14 +190,14 @@ export function Verify() {
               activate the badge tied to your account.
             </p>
           </div>
-          <div className="glass rounded-[1.6rem] p-5">
+          <div className="glass rounded-[2px] p-5">
             <div className="app-panel-title mb-3">Current status</div>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-[#5c594f]">
+                <p className="text-sm font-semibold text-[#a1a1aa]">
                   Trust score
                 </p>
-                <p className="mt-1 text-3xl font-black tracking-[-0.08em] text-[#111111]">
+                <p className="mono mt-1 text-3xl font-black tracking-[-0.08em] text-[#ededed]">
                   {status?.trust_score ?? 0}
                 </p>
               </div>
@@ -207,57 +207,57 @@ export function Verify() {
         </div>
 
         <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-          <section className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
+          <section className="glass-strong glass-highlight rounded-[2px] p-6 md:p-8">
             <div className="app-panel-title mb-4">Verification summary</div>
-            <div className="space-y-4 text-sm font-medium text-[#5c594f]">
-              <div className="flex items-center justify-between gap-3 border-b-2 border-[#111111] pb-3">
+            <div className="space-y-4 text-sm font-medium text-[#a1a1aa]">
+              <div className="flex items-center justify-between gap-3 border-b border-[#27272a] pb-3">
                 <span>Verification tier</span>
                 <div className="flex items-center gap-2">
                   {status && <VerifiedBadge tier={status.tier} size="sm" />}
                   {status?.tier === 'unverified' && (
-                    <span className="font-bold text-[#111111]">
+                    <span className="font-bold text-[#ededed]">
                       Not verified
                     </span>
                   )}
                 </div>
               </div>
-              <div className="flex items-center justify-between gap-3 border-b-2 border-[#111111] pb-3">
+              <div className="flex items-center justify-between gap-3 border-b border-[#27272a] pb-3">
                 <span>Bot-Shield paid</span>
-                <span className="font-bold text-[#111111]">
+                <span className="font-bold text-[#ededed]">
                   {status?.bot_shield_paid ? 'Yes' : 'No'}
                 </span>
               </div>
               <div className="flex items-center justify-between gap-3">
                 <span>Checks completed</span>
-                <span className="font-bold text-[#111111]">
+                <span className="font-bold text-[#ededed]">
                   {status?.checks_completed ?? 0}
                 </span>
               </div>
             </div>
 
-            <div className="mt-6 rounded-[1.5rem] border-4 border-[#111111] bg-[#efe6d8] p-5">
+            <div className="mt-6 rounded-[2px] border border-[#27272a] bg-[#1e1e1e] p-5">
               <div className="app-panel-title mb-3">How the flow works</div>
-              <div className="space-y-3 text-sm font-medium text-[#5c594f]">
+              <div className="space-y-3 text-sm font-medium text-[#a1a1aa]">
                 <div className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-[#111111] bg-white font-black text-[#111111]">
+                  <span className="mono flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#ffd700] bg-[#141414] font-black text-[#ffd700]">
                     1
                   </span>
                   <span>Answer a short liveness prompt.</span>
                 </div>
                 <div className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-[#111111] bg-white font-black text-[#111111]">
+                  <span className="mono flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#ffd700] bg-[#141414] font-black text-[#ffd700]">
                     2
                   </span>
                   <span>Complete the $1 Bot-Shield checkout in Square.</span>
                 </div>
                 <div className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-[#111111] bg-white font-black text-[#111111]">
+                  <span className="mono flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#ffd700] bg-[#141414] font-black text-[#ffd700]">
                     3
                   </span>
                   <span>Sync the badge back to your account.</span>
                 </div>
               </div>
-              <p className="mt-4 text-xs font-medium leading-6 text-[#5c594f]">
+              <p className="mt-4 text-xs font-medium leading-6 text-[#a1a1aa]">
                 Square-hosted checkout always supports card entry. Apple Pay and
                 Google Pay appear on supported devices and browsers. Cash App
                 Pay is not configured right now, and Afterpay is currently
@@ -268,8 +268,8 @@ export function Verify() {
 
           <section className="space-y-6">
             {status?.verified && (
-              <div className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-[1.4rem] border-4 border-[#111111] bg-[#111111] text-white">
+              <div className="glass-strong glass-highlight yellow-glow rounded-[2px] p-6 md:p-8">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-[2px] border border-[#ffd700] bg-[#1e1e1e] text-[#ffd700]">
                   <CheckCircle size={28} />
                 </div>
                 <div className="app-kicker mb-3">Verified</div>
@@ -285,12 +285,12 @@ export function Verify() {
             )}
 
             {!status?.verified && challenge && !result && (
-              <div className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
+              <div className="glass-strong glass-highlight rounded-[2px] p-6 md:p-8">
                 <div className="app-panel-title mb-4 flex items-center gap-2">
-                  <Zap size={16} className="text-[#ff4f00]" />
+                  <Zap size={16} className="text-[#ffd700]" />
                   Liveness challenge
                 </div>
-                <p className="mb-4 text-2xl font-black tracking-[-0.05em] text-[#111111]">
+                <p className="mb-4 text-2xl font-black tracking-[-0.05em] text-[#ededed]">
                   {challenge.question}
                 </p>
                 <div className="flex flex-col gap-3 md:flex-row">
@@ -311,25 +311,25 @@ export function Verify() {
                     {submitting ? 'Submitting...' : 'Submit'}
                   </button>
                 </div>
-                <p className="mt-3 text-sm font-medium text-[#5c594f]">
+                <p className="mt-3 text-sm font-medium text-[#a1a1aa]">
                   Take your time. Fast guesses are usually the wrong move.
                 </p>
               </div>
             )}
 
             {result && (
-              <div className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
+              <div className="glass-strong glass-highlight rounded-[2px] p-6 md:p-8">
                 <div className="mb-4 flex items-center gap-3">
                   {result.passed ? (
-                    <CheckCircle size={26} className="text-[#ff4f00]" />
+                    <CheckCircle size={26} className="text-[#ffd700]" />
                   ) : (
-                    <XCircle size={26} className="text-[#111111]" />
+                    <XCircle size={26} className="text-[#ff2a2a]" />
                   )}
                   <div className="app-panel-title">
                     {result.passed ? 'Challenge passed' : 'Challenge failed'}
                   </div>
                 </div>
-                <p className="text-base font-medium text-[#5c594f]">
+                <p className="text-base font-medium text-[#a1a1aa]">
                   {result.message}
                 </p>
 
@@ -365,7 +365,7 @@ export function Verify() {
                 )}
 
                 {syncMessage && (
-                  <p className="mt-4 text-sm font-medium text-[#5c594f]">
+                  <p className="mt-4 text-sm font-medium text-[#a1a1aa]">
                     {syncMessage}
                   </p>
                 )}
@@ -373,7 +373,7 @@ export function Verify() {
             )}
 
             {!status?.verified && !challenge && !result && (
-              <div className="glass-strong glass-highlight rounded-[2rem] p-6 md:p-8">
+              <div className="glass-strong glass-highlight rounded-[2px] p-6 md:p-8">
                 <div className="app-kicker mb-3">Start</div>
                 <h2 className="app-title">ready for badge activation?</h2>
                 <p className="app-subtitle mt-4">

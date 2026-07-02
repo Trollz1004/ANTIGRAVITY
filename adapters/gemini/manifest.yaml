@@ -5,8 +5,8 @@ description: "Google Gemini — auth sign-in via Google AI Studio / gcloud. Uses
 owner: sabretooth
 node_id: sabretooth
 cli_command: "gemini"
-health_check: "gemini --version"
+health_check: "opencode --version && echo 'gemini: use google provider in opencode.json (hermes-router fallback preferred per wheel)' || echo 'gemini health: provider google via opencode (cli gemini may be sabretooth-only)'"
 paperclip_alias: "gemini"
 opencode_provider: "google"
 opencode_model: "gemini-2.5-pro"
-notes: "Gemini requires Google auth sign-in or API key from AI Studio. The opencode/google provider reads GEMINI_API_KEY."
+notes: "Gemini requires Google auth sign-in or API key from AI Studio. The opencode/google provider reads GEMINI_API_KEY. CEO wheel: on FAIL swap to hermes-router/ollama-local first per opencode providers. Updated health for cross-node."

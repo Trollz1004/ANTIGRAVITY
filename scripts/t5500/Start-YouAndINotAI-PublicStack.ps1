@@ -182,7 +182,6 @@ function Start-TunnelIfNeeded {
     $args = @("tunnel", "--no-autoupdate", "run", "--token", $token)
     Write-StackLog "starting cloudflared in foreground"
     Write-StackLog "startup complete; task will remain running while tunnel is active"
-parent of 22d51cba (chore: clean business-only public surfaces)
     & $Cloudflared @args >> $TunnelOut 2>> $TunnelErr
     throw "cloudflared exited with code $LASTEXITCODE; see $TunnelErr"
 }

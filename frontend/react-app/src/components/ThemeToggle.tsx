@@ -27,10 +27,10 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
         theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
       }
       title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-      className={`group relative flex h-11 w-11 items-center justify-center rounded-[1rem] border-[3px] border-[var(--app-line,#111111)] transition-all hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--app-accent,#ff4f00)] focus-visible:ring-offset-2 ${
+      className={`group relative flex h-11 w-11 items-center justify-center rounded-[2px] border border-[var(--app-line,#27272a)] transition-transform duration-200 ease-out hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--app-accent,#ffd700)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a] ${
         theme === 'dark'
-          ? 'bg-[#111111] text-white shadow-[4px_4px_0_0_rgba(255,255,255,0.15)]'
-          : 'bg-[#fffaf2] text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]'
+          ? 'bg-[#141414] text-[#ffd700] shadow-[4px_4px_0_0_rgba(255,215,0,0.18)]'
+          : 'bg-[#141414] text-[#ededed] shadow-[4px_4px_0_0_rgba(255,215,0,0.18)]'
       } ${className}`}
     >
       {theme === 'dark' ? (
