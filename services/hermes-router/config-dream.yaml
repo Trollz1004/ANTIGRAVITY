@@ -23,32 +23,31 @@ providers:
     api_key_env: ""
 
 # Virtual model aliases → provider + real model
-# All free routes go through OpenRouter. Direct-API routes for paid/auth models.
+# All paid models — no free tiers. Joshua pays for everything.
 routes:
-  # --- Free defaults (OpenRouter) ---
   default:
     provider: openrouter
-    model: openrouter/free
+    model: openrouter/auto
 
   hermes:
     provider: openrouter
-    model: nousresearch/hermes-3-llama-3.1-405b:free
+    model: nousresearch/hermes-3-llama-3.1-405b
 
   hermes-deep:
     provider: openrouter
-    model: nousresearch/hermes-3-llama-3.1-405b:free
+    model: nousresearch/hermes-3-llama-3.1-405b
 
   hermes-fast:
     provider: openrouter
-    model: nousresearch/hermes-3-llama-3.1-405b:free
+    model: nousresearch/hermes-3-llama-3.1-405b
 
   hermes-reason:
     provider: openrouter
-    model: qwen/qwen3-235b-a22b:free
+    model: qwen/qwen3-235b-a22b
 
   code:
     provider: openrouter
-    model: qwen/qwen3-coder:free
+    model: qwen/qwen3-coder
 
   fast:
     provider: ollama-local
@@ -56,7 +55,7 @@ routes:
 
   kimi:
     provider: openrouter
-    model: moonshotai/kimi-k2:free
+    model: moonshotai/kimi-k2
 
   # --- Ollama local models ---
   cfo:
@@ -67,7 +66,7 @@ routes:
     provider: ollama-local
     model: joshlcoleman/dateapp-marketing:latest
 
-  # --- Free-via-OpenRouter versions of paid models ---
+  # --- Paid OpenRouter models ---
   codex:
     provider: openrouter
     model: openai/gpt-5
@@ -82,7 +81,7 @@ routes:
 
   grok:
     provider: openrouter
-    model: x-ai/grok-3:free
+    model: x-ai/grok-3
 
   # --- NPC cost-tier routing (Dream-specific) ---
   npc-t0:
@@ -91,12 +90,12 @@ routes:
 
   npc-t1:
     provider: openrouter
-    model: meta-llama/llama-3.3-70b-instruct:free
+    model: meta-llama/llama-3.3-70b-instruct
 
   npc-t2:
     provider: openrouter
-    model: nousresearch/hermes-3-llama-3.1-405b:free
+    model: nousresearch/hermes-3-llama-3.1-405b
 
   npc-t3:
     provider: openrouter
-    model: openrouter/free
+    model: openrouter/auto
