@@ -1,0 +1,11 @@
+agent: ant-compliance
+project: ANT-DATEAPP
+node: sabretooth
+config: paperclip-tro/agents/ant-compliance/AGENT.md
+state: paperclip-tro/agents/ant-compliance/STATE.md
+skills: [.agents/skills/agency-legal-compliance-checker]
+adapter: gemini
+model: gemini-2.5-pro
+provider: google
+last_beat: 2026-07-03T00:00:00Z
+status: idle
