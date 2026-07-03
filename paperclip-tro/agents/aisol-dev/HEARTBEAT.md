@@ -1,6 +1,6 @@
 agent: aisol-dev
 project: ANT-AISOLUTIONS
-node: sabretooth
+node: 9020
 config: paperclip-tro/agents/aisol-dev/AGENT.md
 state: paperclip-tro/agents/aisol-dev/STATE.md
 skills: [.agents/skills/agency-backend-architect]

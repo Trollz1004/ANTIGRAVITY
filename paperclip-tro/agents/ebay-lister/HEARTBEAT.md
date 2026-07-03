@@ -1,6 +1,6 @@
 agent: ebay-lister
 project: ANT-EBAY
-node: sabretooth
+node: 9020
 config: paperclip-tro/agents/ebay-lister/AGENT.md
 state: paperclip-tro/agents/ebay-lister/STATE.md
 skills: [.agents/skills/agency-cross-border-e-commerce-specialist]

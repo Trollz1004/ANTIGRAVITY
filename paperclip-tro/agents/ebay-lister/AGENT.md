@@ -7,7 +7,7 @@ model: hermes-3-405b
 provider: openrouter
 reports_to: ceo
 project: ANT-EBAY
-node: sabretooth
+node: 9020
 heartbeat_minutes: 60
 ---
 
