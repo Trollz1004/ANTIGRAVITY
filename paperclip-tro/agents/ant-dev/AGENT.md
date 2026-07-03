@@ -1,13 +1,14 @@
 ---
 name: ant-dev
 title: ant-dev — ANT
-adapter: grok_local  # prefer direct/local stable for first engineer; switch to hermes after TRO-41 cmdline fix
-model: inherit
-provider: local-grok / openrouter-fallback (no Anthropic)
+adapter: opencode
+paperclip_adapter_type: opencode_local
+model: hermes-router/hermes
+provider: hermes-router (auto-fallback via opencode.json)
 reports_to: tro-ceo
 manages: []
 budget_monthly_usd: 0
-heartbeat_minutes: <30-120; workers slower than CEO>
+heartbeat_minutes: 60
 ---
 
 # ant-dev Agent Config
