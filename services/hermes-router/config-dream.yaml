@@ -1,0 +1,102 @@
+# Hermes Router configuration — DREAM Online (9020 node)
+# Separate instance from Antigravity. Port: 11436 (env HERMES_ROUTER_PORT=11436)
+# Same two-upstream architecture:
+#   1) OpenRouter — all hosted models via single OPENROUTER_API_KEY
+#   2) Ollama local — custom Modelfile brains on Sabretooth GPU (LAN)
+# Codex/Grok/Gemini use browser sign-in on their own CLIs — no API keys
+# through Hermes. They run standalone. Hermes routes the free/shared work.
+
+providers:
+  - name: openrouter
+    base_url: https://openrouter.ai/api/v1
+    enabled: true
+    api_key_env: OPENROUTER_API_KEY
+
+  - name: ollama-local
+    base_url: http://127.0.0.1:11434/v1
+    enabled: true
+    api_key_env: ""
+
+  - name: ollama-sabretooth
+    base_url: http://192.168.0.8:11434/v1
+    enabled: true
+    api_key_env: ""
+
+# Virtual model aliases → provider + real model
+# All free routes go through OpenRouter. Direct-API routes for paid/auth models.
+routes:
+  # --- Free defaults (OpenRouter) ---
+  default:
+    provider: openrouter
+    model: openrouter/free
+
+  hermes:
+    provider: openrouter
+    model: nousresearch/hermes-3-llama-3.1-405b:free
+
+  hermes-deep:
+    provider: openrouter
+    model: nousresearch/hermes-3-llama-3.1-405b:free
+
+  hermes-fast:
+    provider: openrouter
+    model: nousresearch/hermes-3-llama-3.1-405b:free
+
+  hermes-reason:
+    provider: openrouter
+    model: qwen/qwen3-235b-a22b:free
+
+  code:
+    provider: openrouter
+    model: qwen/qwen3-coder:free
+
+  fast:
+    provider: ollama-local
+    model: gemma4:latest
+
+  kimi:
+    provider: openrouter
+    model: moonshotai/kimi-k2:free
+
+  # --- Ollama local models ---
+  cfo:
+    provider: ollama-local
+    model: joshlcoleman/CFO-Until-No-Kid-In-Need:latest
+
+  marketing:
+    provider: ollama-local
+    model: joshlcoleman/dateapp-marketing:latest
+
+  # --- Free-via-OpenRouter versions of paid models ---
+  codex:
+    provider: openrouter
+    model: openai/gpt-5
+
+  gpt:
+    provider: openrouter
+    model: openai/gpt-5
+
+  gemini:
+    provider: openrouter
+    model: google/gemini-2.5-pro
+
+  grok:
+    provider: openrouter
+    model: x-ai/grok-3:free
+
+  # --- NPC cost-tier routing (Dream-specific) ---
+  npc-t0:
+    provider: ollama-local
+    model: gemma4:latest
+
+  npc-t1:
+    provider: openrouter
+    model: meta-llama/llama-3.3-70b-instruct:free
+
+  npc-t2:
+    provider: openrouter
+    model: nousresearch/hermes-3-llama-3.1-405b:free
+
+  npc-t3:
+    provider: openrouter
+    model: openrouter/free
