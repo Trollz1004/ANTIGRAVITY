@@ -1,9 +1,9 @@
 """Marketing automation and AI agent content integration router."""
 
 from datetime import datetime, timezone
-from uuid import uuid4
-from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 from typing import List, Optional
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
+from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
