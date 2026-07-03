@@ -1,7 +1,7 @@
 name: pi
-version: 0.2
+version: 0.3
 source: local-cli
-description: "Pi runtime — conversational / explanatory tasks. Uses Ollama local and OpenRouter free-tier fallbacks. No Anthropic."
+description: "Pi runtime — conversational / explanatory tasks. Routes through Hermes router (same as OpenCode). No direct API keys needed."
 owner: sabretooth
 node_id: sabretooth
 cli_command: "pi"
@@ -9,13 +9,11 @@ health_check: "pi --version"
 paperclip_adapter_type: "pi_local"
 paperclip_adapter_config:
   cwd: "C:\\antigravity"
-  model: "openrouter/free"
+  model: "hermes-router/hermes"
 paperclip_alias: "pi"
-opencode_provider: "openrouter"
-opencode_model: "openrouter/free"
+opencode_provider: "hermes-router"
+opencode_model: "hermes"
 auth:
-  type: api-key
-  env_var: OPENROUTER_API_KEY
-  signup_url: "https://openrouter.ai"
-  instructions: "Sign up at openrouter.ai, create API key, set OPENROUTER_API_KEY in local env. Free tier models work without payment."
-notes: "Uses `pi_local` Paperclip adapter type. OPENROUTER_API_KEY for cloud models; Ollama local fallback is free/no-auth. Shared OpenRouter key with Hermes/OpenCode."
+  type: none
+  instructions: "Routes through Hermes router (localhost:11435). Same OpenRouter/Ollama backends as OpenCode. No separate key needed."
+notes: "Uses `pi_local` Paperclip adapter type. Routes through Hermes router same as OpenCode — Hermes handles OpenRouter/Ollama fallback. No separate API key."
