@@ -7,14 +7,15 @@
 - `SOL.md` — system operating logic.
 - `docs/NO-CHARITY-NO-SPLIT-DOCTRINE.md` — public copy rules.
 - `paperclip/agents/ceo/AGENTS.md` — CEO doctrine (Hermes is the CEO runtime).
-- `paperclip/agents/cmo/AGENTS.md` — lead handoff.
+- `paperclip-tro/ROSTER.md` — active Paperclip seat list (Hermes only).
+- `.agents/skills/*/SKILL.md` — department skills Hermes loads on demand.
 - `briefings/PAPERCLIP-HQ-RUNTIME.md` — Paperclip server / Hermes wiring.
 
 ---
 
 ## Skill Library References
 
-Located at `C:\antigravity\.agents\skills`. Hermes routes to these skills/agents for research, routing, and deployment support.
+Located at `C:\antigravity\.agents\skills`. Hermes loads these as department skills for research, routing, and deployment support. They are not permanent Paperclip agents by default.
 
 | Skill | Used For |
 |---|---|
@@ -57,12 +58,12 @@ For each lead:
 
 ## Routing Rules
 
-- **Ready to pitch →** CMO Agent (`paperclip/agents/cmo/`)
-- **Requires technical scoping →** CTO Agent (`paperclip/agents/cto/`)
-- **Involves payment/checkout surface →** CFO Agent (`paperclip/agents/cfo/`)
-- **Structural/repo drift detected →** Mission Guardian (`paperclip/agents/mission-guardian/`)
+- **Ready to pitch →** load relevant sales/content/growth skill; spawn temporary reviewer only if needed.
+- **Requires technical scoping →** load engineering/code-review skill; spawn Codex/OpenCode only for concrete implementation/review.
+- **Involves payment/checkout surface →** load finance/payment evidence skill; escalate money authority to Joshua.
+- **Structural/repo drift detected →** Hermes handles directly using repo doctrine; spawn evidence/reality-checker only if useful.
 - **Human authority or legal exposure →** Joshua Coleman
-- **Paperclip HQ server issue →** Check `scripts/paperclip/paperclip-watchdog.ps1`; escalate to Joshua if watchdog fails.
+- **Hermes/Paperclip feed issue →** probe `http://127.0.0.1:9119/api/status`; repair/restart Hermes if safe, then verify body shape.
 
 ---
 
@@ -70,11 +71,11 @@ For each lead:
 
 ```text
 HERMES STATUS: <ceo-pulse|researching|ready|routed|blocked>
-PAPERCLIP HQ: <ok|down>
+HERMES/PAPERCLIP FEED: <ok|down|wrong-shape>
 LEADS FOUND: <N>
 QUALIFIED: <N>
 TOP LEAD: <LEAD #N - title>
-ROUTED TO: <agent or Joshua>
+ROUTED TO: <Hermes skill/subagent/helper or Joshua>
 BLOCKERS: <none or exact>
 NEXT ACTION: <concrete step>
 ```
