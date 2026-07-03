@@ -1,66 +1,46 @@
-# ROSTER — All Agent Hires
+# ROSTER — Paperclip active seats
 
-> Updated 2026-07-03. Self-improving doctrine: every agent reads STATE.md on
-> start, writes on exit. 4k max. Failure = removal.
+> Updated 2026-07-03 by Joshua directive.
+> Architecture: Hermes is the only active Paperclip agent. Paperclip is the visible, timestamped work/status board over Hermes work, not a separate agent company.
 
-## Node Assignment
+## Active architecture
 
-- **9020** (:3120): Business projects — DateApp, eBay, AI-Solutions+BizExchange
-- **Sabretooth** (:3110): Dream Online ONLY — game agents + GPU inference
-- **T5500**: Gateway only — no agents
-
-## Provider Distribution (concurrent limits)
-
-| Provider | Limit | Assigned Agents |
-|---|---|---|
-| FCC/Claude (claude_local) | 1 | ceo |
-| Codex Desktop (codex_local) | 1 | ant-dev |
-| Grok CLI (opencode_local/xai) | 1 | ant-reviewer |
-| Gemini CLI (opencode_local/google) | 1 | ant-compliance |
-| Ollama local slot 1 | 1/3 | ant-devops |
-| Ollama local slot 2 | 1/3 | ant-support |
-| Ollama local slot 3 | 1/3 | ant-growth |
-| OpenRouter (hermes-router) | 1 | ebay-lister |
-| Hermes router | 1 | aisol-dev |
-
-## Project ANT-DATEAPP (9020 :3120 — deploys to T5500 via wrangler)
-
-| Agent | Provider | Model | Skill | Ships |
+| Seat | Runtime | Adapter | Port/feed | Purpose |
 |---|---|---|---|---|
-| ceo | FCC/claude_local | claude-sonnet-4-5 | agency-chief-of-staff | project mgmt, escalation |
-| ant-dev | Codex/codex_local | codex-mini-5.3 | agency-senior-developer | backend/frontend, Square checkout |
-| ant-reviewer | Grok/opencode_local | grok-3-mini | agency-code-reviewer | PR review before push |
-| ant-devops | Ollama/opencode_local | gemma4:latest | agency-devops-automator | wrangler deploy to T5500, CI |
-| ant-compliance | Gemini/opencode_local | gemini-2.5-pro | agency-legal-compliance-checker | banned-term scans |
-| ant-support | Ollama/opencode_local | qwen2.5-coder:7b | agency-support-responder | customer tickets (OpenClaw) |
-| ant-growth | Ollama/opencode_local | qwen3.5:latest | agency-growth-hacker | founding-member onboarding |
+| hermes-ceo | Hermes Agent | `hermes` / `pi_local` | `http://127.0.0.1:9119` | CEO/operator brain, work execution, tool/API access, subagent spawning when useful, status updates to Paperclip |
 
-## Project ANT-EBAY (9020 :3120)
+## Paperclip role
 
-| Agent | Provider | Model | Skill | Ships |
-|---|---|---|---|---|
-| ebay-lister | OpenRouter/hermes | hermes-3-405b | agency-cross-border-e-commerce-specialist | listing sync, pricing |
+Paperclip is organizational visibility:
 
-## Project ANT-AISOLUTIONS (9020 :3120 — ai-solutions.store + business exchange)
+- tasks
+- routines
+- issues
+- goals
+- timestamps
+- evidence / verification notes
+- done log
 
-| Agent | Provider | Model | Skill | Ships |
-|---|---|---|---|---|
-| aisol-dev | Hermes/hermes-router | hermes | agency-backend-architect | API, storefront |
+Paperclip does not need a permanent staff of CFO/CTO/CMO/etc agents. Those are now department skills that Hermes loads from `.agents/skills/` when needed.
 
-## Project DREAM (Sabretooth :3110 — Hermes World :9119 third-party browser MMO, GPU inference)
+## Department library, not permanent agents
 
-| Agent | Provider | Model | Skill | Ships |
-|---|---|---|---|---|
-| dream-ceo | FCC/claude_local | claude-sonnet-4-5 | agency-chief-of-staff | Dream project mgmt |
-| dream-design | Hermes/hermes-router | hermes | agency-game-designer | core loop, economy |
-| dream-narrative | Ollama/opencode_local | gemma4:latest | agency-narrative-designer | world bible, NPCs |
-| dream-mcp | FCC/claude_local | claude-sonnet-4-5 | agency-mcp-builder | live-NPC bridge |
-| dream-proto | Grok/opencode_local | grok-3-mini | agency-rapid-prototyper | playable slices |
+The old roster below is inactive as permanent board seats. Treat these as skill lanes / reference folders only:
 
-### Unfilled (pending engine decision)
+- `ant-dev` -> use `.agents/skills/agency-senior-developer/SKILL.md` or spawn Codex/OpenCode only for a concrete coding task.
+- `ant-reviewer` -> use `.agents/skills/agency-code-reviewer/SKILL.md` or spawn a reviewer subagent only when a change exists.
+- `ant-devops` -> use `.agents/skills/agency-devops-automator/SKILL.md` only for deploy/infra tasks.
+- `ant-compliance` -> use `.agents/skills/agency-compliance-auditor/SKILL.md` or legal/compliance skills only for actual scans.
+- `ant-support` -> use `.agents/skills/agency-support-responder/SKILL.md` only for customer-support work.
+- `ant-growth` -> use `.agents/skills/agency-growth-hacker/SKILL.md` only for growth tasks.
+- `ebay-lister` -> use `.agents/skills/agency-cross-border-e-commerce-specialist/SKILL.md` only for listing work.
+- `aisol-dev` -> use `.agents/skills/agency-backend-architect/SKILL.md` only for AI-solutions/business-exchange implementation.
+- `dream-*` -> use game/design/MCP skills only when DREAM work is active.
 
-| Agent | Skill | Blocked on |
-|---|---|---|
-| dream-level | agency-level-designer | engine pick |
-| dream-tech-art | agency-technical-artist | engine pick |
-| dream-audio | agency-game-audio-engineer | engine pick |
+## Optional helper runtime
+
+FCC-Claude may be used as a helper/browser-controlled CEO hand if Josh explicitly wants it for a task. It is not a required permanent Paperclip agent. If used, it is controlled/monitored by Hermes and Opus via browser, and its work is still represented in Paperclip as Hermes-owned work.
+
+## Subagent rule
+
+Hermes may spawn temporary subagents through built-in tools/APIs for parallel work. Subagents are not standing Paperclip employees. They exist for one task, produce evidence, and exit. Paperclip shows the task/routine/issue/goal status; Hermes remains accountable.
