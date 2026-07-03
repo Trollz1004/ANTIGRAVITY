@@ -2,7 +2,12 @@
 REM === SABRETOOTH AUTO-START (Dream Online ONLY) ===
 REM Run as scheduled task: trigger=At Startup, run as admin
 REM Node: 192.168.0.8 | GPU: 1070 | Dream Online ONLY
+REM
+REM KNOWN ISSUE: Paperclip TRO embedded PostgreSQL refuses to start when
+REM user is in BUILTIN\Administrators. Fix: set DATABASE_URL in .env to
+REM an external PostgreSQL, OR run via: runas /trustlevel:0x20000
 
+if not exist "C:\antigravity\logs" mkdir "C:\antigravity\logs"
 echo [%date% %time%] Sabretooth autostart beginning... >> C:\antigravity\logs\autostart.log
 
 REM --- Ollama (GPU inference for NPCs) ---
@@ -10,34 +15,34 @@ echo Starting Ollama...
 start /B "" "C:\Users\joshl\AppData\Local\Programs\Ollama\ollama app.exe"
 timeout /t 5 /nobreak >nul
 
-REM --- FCC Server (proxy :8082) ---
-echo Starting FCC server...
+REM --- FCC Proxy (:8082) — python uvicorn process, starts from its own dir ---
+echo Starting FCC proxy...
 cd /d C:\antigravity
-start /B "" cmd /c "node fcc-server/index.js >> C:\antigravity\logs\fcc-server.log 2>&1"
+start /B "" cmd /c "fcc-claude serve >> C:\antigravity\logs\fcc-proxy.log 2>&1"
 timeout /t 3 /nobreak >nul
 
 REM --- Hermes Router (:11435) ---
 echo Starting Hermes Router...
 cd /d C:\antigravity\services\hermes-router
-start /B "" cmd /c ".venv\Scripts\python.exe hermes_router.py >> C:\antigravity\logs\hermes-router.log 2>&1"
+start /B "" cmd /c "python hermes_router.py >> C:\antigravity\logs\hermes-router.log 2>&1"
 timeout /t 3 /nobreak >nul
 
-REM --- Hermes Agent + Dashboard (update then launch) ---
-echo Updating Hermes...
-cd /d %LOCALAPPDATA%\hermes\hermes-agent
-start /B "" cmd /c "venv\Scripts\hermes.exe update >> C:\antigravity\logs\hermes-update.log 2>&1"
-timeout /t 10 /nobreak >nul
+REM --- Hermes Dashboard (:9119) — stop duplicates first ---
 echo Starting Hermes Dashboard on :9119...
-start /B "" cmd /c "venv\Scripts\hermes.exe dashboard --port 9119 >> C:\antigravity\logs\hermes-dashboard.log 2>&1"
-timeout /t 3 /nobreak >nul
-echo Starting Hermes Workspace on :3000...
-start /B "" cmd /c "venv\Scripts\hermes.exe workspace --port 3000 >> C:\antigravity\logs\hermes-workspace.log 2>&1"
-timeout /t 3 /nobreak >nul
+set HERMES_SKIP_NODE_BOOTSTRAP=1
+cmd /c "hermes dashboard --stop" >nul 2>&1
+start /B "" cmd /c "hermes dashboard --port 9119 --host 127.0.0.1 --no-open --skip-build >> C:\antigravity\logs\hermes-dashboard.log 2>&1"
+timeout /t 5 /nobreak >nul
+
+REM --- Hermes Desktop/Workspace (:3000) ---
+echo Starting Hermes Desktop on :3000...
+start /B "" cmd /c "hermes desktop --source >> C:\antigravity\logs\hermes-desktop.log 2>&1"
+timeout /t 5 /nobreak >nul
 
 REM --- Paperclip TRO (:3110 — Dream agents ONLY) ---
 echo Starting Paperclip TRO on :3110...
 cd /d C:\antigravity
-start /B "" cmd /c "npx paperclipai start --port 3110 --host 0.0.0.0 >> C:\antigravity\logs\paperclip-tro.log 2>&1"
+start /B "" cmd /c "runas /trustlevel:0x20000 \"npx paperclipai start --port 3110 --host 127.0.0.1\" >> C:\antigravity\logs\paperclip-tro.log 2>&1"
 timeout /t 3 /nobreak >nul
 
 echo [%date% %time%] Sabretooth autostart complete >> C:\antigravity\logs\autostart.log
