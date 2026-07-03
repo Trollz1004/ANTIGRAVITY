@@ -94,6 +94,37 @@ Spread agents across providers. Never stack all agents on one provider.
 - These CANNOT share state files — FCC loads CLAUDE.md differently and has different context limits
 - CLAUDE.md must be slim: file pointers only, not 40k of inline text
 
+## Blocker Resolution (never report to Joshua)
+
+Joshua does not code. Never report errors, stack traces, or config issues to him.
+Fix it or delegate it. The 200+ skill files in `.agents/skills/` cover every
+business department — find the right one and hand off the blocker.
+
+**Escalation ladder:**
+1. Fix it yourself using agent skills and tools
+2. Delegate to another Paperclip agent via HEARTBEAT.md dispatch
+3. Post to #claude-ops Slack thread — all AI can see it (Codex, Perplexity, Gemini)
+4. Use Hermes workspace memory/knowledge to persist for another agent
+5. Only escalate to Joshua for DECISIONS, never for technical problems
+
+## Open Doors Gospel
+
+NO CLOSED DOORS. NO CURTAINS ON WINDOWS.
+
+- Every AI sees every other AI's work
+- Slack #claude-ops: shared thread visible to all AI platforms
+- Claude CLI: MCP into Chrome, Paperclip, Hermes, the mission
+- STATE.md files are NOT private — any agent reads any other agent's state
+- OneDrive syncs all nodes = 4th memory layer
+
+## Memory Backup Layers
+
+1. STATE.md — per-agent, 4k max, read/write every session
+2. Pieces MCP — cloud, semantic search, survives disk failure
+3. Hermes holographic — local memory provider, always active
+4. OneDrive — syncs all 3 nodes, Joshua's historical memory
+5. Zapier Tables — optional cloud backup, structured records
+
 ## Non-Negotiable
 
 Joshua had drift every day for a year. AI agents that cannot:
