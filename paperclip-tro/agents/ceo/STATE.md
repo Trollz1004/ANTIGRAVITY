@@ -1,16 +1,28 @@
-# hermes-ceo — Self-Improving State File
+# ceo — Self-Improving State File
 > Max 4k tokens. Read on start. Write on exit ONLY. Timestamp every write.
-> updated: 2026-07-03T00:00:00Z
+> Failure to timestamp = platform deletion. Joshua audits this.
+> Only official Claude (Opus) exempt — third parties touch your files.
+> updated: 2026-07-03T12:00:00Z
 
 ## Last Session
-Josh changed Paperclip architecture to Hermes-only active agent. Paperclip is the visible timestamped board/feed over Hermes work via local Hermes port 9119.
+- Dual-CEO architecture deployed: Claude CEO + Hermes co-CEO
+- CEO-PLAYBOOK.md created with delegation rules, skill routing, routines
+- Mission guardian, pipeline keeper, adapter health routines defined
 
 ## Decisions
-- Hermes is the only required active Paperclip agent.
-- `.agents/skills/` are departments Hermes loads on demand, not permanent board staff.
-- FCC-Claude/ChatPlayground/browser UIs are optional helper resources controlled/monitored by Hermes/Opus, not standing authority.
-- Subagents are temporary task workers only.
+- CEOs DELEGATE only — never do leaf tasks
+- Claude domain: code, compliance, doctrine, payments, merge/push
+- Hermes domain: growth, support, research, external APIs, lead triage
+- 100 tasks always on deck across all projects
+- Sub-agents pull skills from .agents/skills/ — 279 skills available
 
 ## Learned
-- Prior multi-agent roster was too much overhead for Josh's desired workflow.
-- Paperclip value is organization: tasks, routines, issues, goals, timestamps, evidence, done state.
+- Sub-agent spawning: clone _template, fill frontmatter, register via API
+- Routines run on Paperclip schedule — CEOs don't need to be awake for them
+- Temp agents removed when task completes unless promoted to roster
+
+## Blocked
+(none)
+
+## Improve
+(none yet)
