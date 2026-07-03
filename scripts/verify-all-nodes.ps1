@@ -38,36 +38,35 @@ function Test-CLI($name, $cmd) {
   return $false
 }
 
-function Test-Port($name, $host, $port, $timeout = 3) {
+function Test-Port($name, $targetHost, $port, $timeout = 3) {
   try {
     $tcp = New-Object System.Net.Sockets.TcpClient
-    $connect = $tcp.BeginConnect($host, $port, $null, $null)
+    $connect = $tcp.BeginConnect($targetHost, $port, $null, $null)
     $wait = $connect.AsyncWaitHandle.WaitOne($timeout * 1000, $false)
     if ($wait -and $tcp.Connected) {
       $tcp.Close()
       $script:pass++
-      Write-Host "  PASS  $name ($host`:$port)" -ForegroundColor Green
+      Write-Host "  PASS  $name ($targetHost`:$port)" -ForegroundColor Green
       return $true
     }
     $tcp.Close()
   } catch {}
   $script:fail++
-  Write-Host "  FAIL  $name ($host`:$port)" -ForegroundColor Red
+  Write-Host "  FAIL  $name ($targetHost`:$port)" -ForegroundColor Red
   return $false
 }
 
-Write-Host "`n=== SABRETOOTH ($sabretooth) — Dream Online ONLY ===" -ForegroundColor Cyan
-Test-Endpoint "FCC proxy" "http://${sabretooth}:8082/health"
-Test-Endpoint "Ollama" "http://${sabretooth}:11434/api/tags"
-Test-Endpoint "Hermes router" "http://${sabretooth}:11435/healthz"
-Test-Port "Hermes Dashboard" $sabretooth 9119
-Test-Port "Hermes Workspace" $sabretooth 3000
-Test-Port "Paperclip TRO" $sabretooth 3110
+Write-Host "`n=== SABRETOOTH LOCAL (127.0.0.1) ===" -ForegroundColor Cyan
+Test-Endpoint "FCC proxy" "http://127.0.0.1:8082/health"
+Test-Endpoint "Ollama" "http://127.0.0.1:11434/api/tags"
+Test-Endpoint "Hermes router" "http://127.0.0.1:11435/"
+Test-Endpoint "Hermes dashboard" "http://127.0.0.1:9119/api/status"
+Test-Port "Hermes Workspace" "127.0.0.1" 3000
+Test-Port "Paperclip TRO" "127.0.0.1" 3110
 
 Write-Host "`n=== 9020 ($node9020) — Business + Joshua Workspace ===" -ForegroundColor Cyan
-Test-Port "Paperclip Business" $node9020 3120
 Test-Endpoint "Ollama" "http://${node9020}:11434/api/tags"
-Test-Port "Hermes router" $node9020 11436
+Test-Port "Paperclip Business" $node9020 3120
 
 Write-Host "`n=== LOCAL CLIs ===" -ForegroundColor Cyan
 Test-CLI "fcc-claude" "fcc-claude --version"
