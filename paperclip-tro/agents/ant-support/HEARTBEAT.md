@@ -9,3 +9,5 @@ model: qwen2.5-coder:7b
 provider: ollama-local
 last_beat: 2026-07-03T00:00:00Z
 status: idle
+
+skills_dir: .agents/skills/
