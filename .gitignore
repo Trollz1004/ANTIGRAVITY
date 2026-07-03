@@ -114,3 +114,5 @@ apps/antigravity-dashboard/tsconfig*.tsbuildinfo
 blobs/
 nul
 
+tmp_*
+DIRTY_REPO_ALERT*
