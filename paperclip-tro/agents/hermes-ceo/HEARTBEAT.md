@@ -1,0 +1,11 @@
+agent: hermes-ceo
+project: ANT-DATEAPP
+node: sabretooth
+config: paperclip-tro/agents/hermes-ceo/AGENT.md
+state: paperclip-tro/agents/hermes-ceo/STATE.md
+skills_dir: .agents/skills/
+adapter: hermes
+model: openai/gpt-5.5-pro
+provider: hermes-router
+last_beat: 2026-07-03T00:00:00Z
+status: idle
