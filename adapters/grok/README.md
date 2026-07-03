@@ -6,13 +6,13 @@ CLI: `grok` (v0.2.60+ alpha, at `~/.grok/bin/grok`)
 
 ## Auth
 
-Grok requires an xAI API key:
+Browser sign-in only — no API keys:
 
-1. Sign up at https://console.x.ai
-2. Create an API key
-3. Set `XAI_API_KEY` in local env (vault file, never git)
+1. Run `grok` CLI
+2. Sign in with xAI account via browser when prompted
+3. Session persists locally
 
-Free alternative: Use `x-ai/grok-3:free` via OpenRouter (no xAI account needed).
+Free alternative: Use `x-ai/grok-3:free` via OpenRouter (no sign-in needed).
 
 ## Registering an agent with this adapter
 
