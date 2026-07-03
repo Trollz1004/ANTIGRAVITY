@@ -1,12 +1,16 @@
 name: opencode
-version: 0.1
+version: 0.2
 source: local-cli
-description: "OpenCode CLI multi-provider. Wires opencode.json for separated providers: local Ollama (ollama-local), opencode free, openrouter free, hermes-router, codex, google/gemini, xai, etc. Primary adapter for free/local models."
+description: "OpenCode CLI multi-provider. Primary adapter for free/local models. Uses opencode.json for all provider/model separation."
 owner: sabretooth
 node_id: sabretooth
 cli_command: "opencode"
 health_check: "opencode --version || echo 'opencode present (via npm -g opencode-ai)'"
+paperclip_adapter_type: "opencode_local"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  model: "hermes"
 paperclip_alias: "opencode"
 opencode_provider: "hermes-router"
 opencode_model: "hermes"
-notes: "Uses ./opencode/opencode.json for all provider/model separation. Supports ollama-local for free unlimited local, openrouter:free, opencode free models. Agents must specify distinct provider in their AGENT.md for separation. Never routes Anthropic unless explicitly configured per Joshua. (TRO-41) opencode adapter passes prompt via stdin so large wake is safer than argv; still ensure renderPaperclipWakePrompt / wake details stay manageable and prefer env for very large payloads."
+notes: "Uses ./opencode/opencode.json for all provider/model separation. Uses `opencode_local` Paperclip adapter type. Agents specify distinct providers. Prompt via stdin (argv safe). Never routes Anthropic unless Joshua configures it."
