@@ -1,6 +1,6 @@
 agent: ant-support
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 config: paperclip-tro/agents/ant-support/AGENT.md
 state: paperclip-tro/agents/ant-support/STATE.md
 skills: [.agents/skills/agency-support-responder]

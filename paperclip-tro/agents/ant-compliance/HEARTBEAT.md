@@ -1,6 +1,6 @@
 agent: ant-compliance
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 config: paperclip-tro/agents/ant-compliance/AGENT.md
 state: paperclip-tro/agents/ant-compliance/STATE.md
 skills: [.agents/skills/agency-legal-compliance-checker]

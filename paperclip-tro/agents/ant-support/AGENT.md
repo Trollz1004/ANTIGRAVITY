@@ -7,7 +7,7 @@ model: qwen2.5-coder:7b
 provider: ollama-local
 reports_to: ceo
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 heartbeat_minutes: 60
 ---
 

@@ -1,6 +1,6 @@
 agent: ant-devops
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 config: paperclip-tro/agents/ant-devops/AGENT.md
 state: paperclip-tro/agents/ant-devops/STATE.md
 skills: [.agents/skills/agency-devops-automator]
