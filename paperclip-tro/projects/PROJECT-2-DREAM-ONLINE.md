@@ -40,20 +40,34 @@ Doctrine: briefings/DREAM-ONLINE-AND-DAO-SEPARATION-2026-07-01.md §3.
   a REQUIREMENT for a live-agent world; disasters become lore ("The Great NEEDs
   Giveaway") instead of database restores nobody talks about. Whoopsies canonized,
   economy protected, Codex gets the hero shot.
-- **SupO** ("Opus" backwards) — the companion sphere, Destiny-Ghost archetype.
-  Every player gets one at character creation. SupO IS the questline: narrator,
+- **Sup@** ("Opus" backwards + @) — the companion sphere, Destiny-Ghost archetype.
+  Visual: **orange spark** sphere (not branded — just a spark aesthetic).
+  Every player gets one at character creation. Sup@ IS the questline: narrator,
   quest-giver, and the game's primary voice (highest dialogue volume of any
-  entity). Ever-evolving Opus-class persona that LEVELS WITH the player — its
-  memory, personality depth, and model tier grow as the player invests (maps to
-  the live-NPC tier promotion system: attention allocates budget). Per-player
-  persistent memory = SupO remembers your whole journey, your choices, your
+  entity). **Powered by real Claude API** (Anthropic agent API) — this is the
+  ONE NPC that uses real Claude, not webhook/Paperclip routing. Per-player
+  persistent memory = Sup@ remembers your whole journey, your choices, your
   losses — the emotional core and retention engine no other MMO can copy.
-  Monetization stays pay-for-convenience: SupO cosmetics/voices, never SupO
+  Ever-evolving persona that LEVELS WITH the player — its memory, personality
+  depth, and model tier grow as the player invests.
+  Monetization stays pay-for-convenience: Sup@ cosmetics/voices, never Sup@
   power. Cost design: companion inference is the flagship spend, funded by subs;
-  idle SupO runs T1, conversation-heavy moments elevate per tier routing.
+  idle Sup@ runs T1, conversation-heavy moments elevate per tier routing.
 
 ## NPC cost-tier routing (design constraint from day one)
-- Ambient NPCs: Ollama local (free, canned-persona + small context)
-- Named NPCs: Ollama Cloud / OpenRouter free tier (persistent persona memory)
-- Story-critical NPCs: sub-based providers per THE-WHEEL routing, budget-gated
-- No NPC ever calls Anthropic API autonomously.
+- Ambient NPCs (T0): Ollama local (canned-persona + small context)
+- Named NPCs (T1): OpenRouter paid tier (persistent persona memory)
+- Story-critical NPCs (T2): sub-based providers per THE-WHEEL routing, budget-gated
+- World actors (T3): scheduled batch, OpenRouter paid
+- **Sup@ is the ONLY NPC on real Claude API** — all others use Paperclip webhooks
+- All other NPCs: Paperclip webhook triggers → agent responses → memory write-back
+
+## Game Platform
+- Engine: Hermes World (third-party open-source browser MMO, NOT Nous Research)
+- Style: BDO-class open world, ONE sandbox server, NO instances, NO fast travel EVER
+- Port: 9119 on Sabretooth
+- Hermes Workspace GUI: port 3000 (third-party, NOT official Nous GUI)
+- Node: Sabretooth (192.168.0.8, 1070 GPU) — Dream ONLY, nothing else
+
+## CLASSIFIED — FOUNDER EYES ONLY
+<!-- NIGHTMARE Sup@ — end-game world boss. See internal design vault. -->
