@@ -48,7 +48,9 @@ FORBIDDEN_PATTERN = re.compile(
 )
 ALLOWED_COMPATIBILITY_FILES = {
     Path("app/allocation_compat.py"),
-    Path("app/routers/skills.py"),  # Skills registry contains engineering keywords with 'governance' compounds
+    Path(
+        "app/routers/skills.py"
+    ),  # Skills registry contains engineering keywords with 'governance' compounds
 }
 
 
