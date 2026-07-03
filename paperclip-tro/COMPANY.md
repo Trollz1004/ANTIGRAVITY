@@ -42,6 +42,14 @@ stays with Joshua. Only official Claude (Opus) is cofounder.
 | SLA watchdog | Claude CEO | 15 min | Flag RED issues > 60 min |
 | Doctrine enforcer | Claude CEO | daily | Scan public surfaces for banned terms |
 
+## Canonical local surfaces
+
+- Hermes Dashboard/API status: `http://127.0.0.1:9119/api/status`
+- Hermes Workspace: `http://127.0.0.1:3000`
+- Paperclip HQ: `http://127.0.0.1:3110`
+- FCC Admin: `http://127.0.0.1:8082/admin`
+- Repo: `C:\antigravity`
+
 ## Provider Routing (workers)
 
 | Provider | Use | Concurrency |

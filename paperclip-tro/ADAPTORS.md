@@ -1,138 +1,64 @@
-# ADAPTORS — Bridging Runtimes into Paperclip TRO (127.0.0.1:3110)
+# ADAPTORS — Hermes-only Paperclip runtime
 
-> Updated 2026-07-03 — adapter type mapping, FCC as `claude_local`, availability checks.
+> Updated 2026-07-03 by Joshua directive.
+> Paperclip has one active agent: Hermes CEO. Other models/tools are capabilities Hermes can use, not standing Paperclip agents.
 
-## Join flow (any agent)
+## Active adapter
 
-1. `GET /api/invites/<invite>/onboarding.txt` — read it, it wins over this doc.
-2. `POST /api/invites/<invite>/accept` — {requestType:"agent", agentName, capabilities,
-   adapterType?, agentDefaultsPayload}. Response 202 = pending_approval + one-time
-   claimSecret (store privately, expires ~7 days).
-3. Board approves → `POST /api/join-requests/<id>/claim-api-key` {claimSecret} — ONCE.
-4. API key → local env only (vault path), never chat/git/PR.
-5. `GET /api/invites/<invite>/skills/paperclip` — install the Paperclip skill.
+| Agent | Adapter | Paperclip adapterType | Runtime | Purpose |
+|---|---|---|---|---|
+| hermes-ceo | `hermes` | `pi_local` | Hermes Agent CLI/dashboard | CEO/operator brain; loads skills, uses tools/APIs, spawns temporary subagents when useful |
 
-## Provider restriction
+Hermes status/feed is visible through local port `9119`:
 
-Ollama (local + cloud) and OpenRouter are for **pi, opencode, hermes, and ollama-local
-adapters ONLY**. Never route Claude, Codex, Grok, or Gemini through Ollama/OpenRouter.
+- Dashboard/API status: `http://127.0.0.1:9119/api/status`
+- Workspace UI: `http://127.0.0.1:3000`
+- Mission Control/Paperclip visual surface may consume the same Hermes work/status feed.
 
-| Provider | Used by | NOT used by |
+## Adapter config source
+
+Use `adapters/hermes/manifest.yaml` as the active manifest. The important fields are:
+
+```yaml
+paperclip_adapter_type: "pi_local"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  model: "openai/gpt-5.5-pro"
+  thinking: "high"
+paperclip_alias: "hermes"
+```
+
+If a wake payload is large, use `adapters/hermes/env-aware-prompt-template.txt` and pass Paperclip wake details through env variables instead of a giant command-line prompt.
+
+## Optional helper: FCC-Claude
+
+FCC-Claude may be used as a task helper or browser-controlled CEO hand when Josh explicitly wants it. It is not a required permanent Paperclip agent.
+
+If used, keep it under Hermes/Opus monitoring:
+
+- FCC proxy/admin: `http://127.0.0.1:8082/admin` when available.
+- Browser-visible execution preferred so Hermes/Opus can inspect the same work.
+- No Anthropic API key is required for FCC mode.
+- Any FCC-Claude output is evidence/proposal until Hermes verifies it.
+
+## Browser/localhost resources
+
+Paperclip can show that Hermes used local/browser tools without registering them as agents. Examples:
+
+| Resource | URL | Role |
 |---|---|---|
-| Ollama local (:11434) | pi, opencode, hermes, ollama-local | claude, codex, grok, gemini |
-| Ollama Cloud (ollama.com) | pi, opencode, hermes | claude, codex, grok, gemini |
-| OpenRouter | pi, opencode, hermes | claude, codex, grok, gemini |
-| FCC proxy (:8082) | claude (FCC) only | everything else |
-| Browser sign-in | codex (OpenAI), grok (xAI), gemini (Google) | everything else |
+| ChatPlayground | `https://www.chatplayground.ai/` / purchased StackSocial lifetime account | Browser AI cockpit for model comparison/drafting/review |
+| Hermes Workspace | `http://127.0.0.1:3000` | Human/operator UI |
+| Hermes Dashboard | `http://127.0.0.1:9119` | Hermes status/API/work feed |
 
-## Adapter type mapping
+ChatPlayground is localhost/browser material for Hermes to use. It is not an OpenAI-compatible relay and does not need to be.
 
-Every repo adapter maps to a Paperclip `adapterType`. This is the key agents use
-when registering via the Paperclip API (`POST /api/companies/:id/agent-hires`).
+## Inactive legacy adapters
 
-| Repo Adapter | Paperclip `adapterType` | CLI | Default Model | Auth | Health Check |
-|---|---|---|---|---|---|
-| `claude` (FCC) | `claude_local` | `fcc-claude` | claude-sonnet-4-5-* | FCC proxy (no key) | adapters/claude/health-check.ps1 |
-| `codex` | `codex_local` | `codex` | codex-mini-5.3 | browser sign-in (OpenAI) | codex --version |
-| `grok` | `opencode_local` | `grok` | grok-3-mini | browser sign-in (xAI) | grok --version |
-| `hermes` | `pi_local` | `hermes` | openai/gpt-5.5-pro | none (local router) | hermes --version |
-| `pi` | `pi_local` | `pi` | hermes | none (routes through Hermes) | pi --version |
-| `opencode` | `opencode_local` | `opencode` | hermes | none (routes through Hermes) | opencode --version |
-| `ollama-local` | `opencode_local` | `opencode` | qwen2.5-coder:7b | none (local) | curl localhost:11434 |
-| `gemini` | `opencode_local` | `gemini` | gemini-2.5-pro | browser sign-in (Google) | opencode --version |
-| `ant-support` | `openclaw_gateway` | ClawX | openai/gpt-5.5 | gateway token | ws:// gateway check |
+The previous roster registered Codex, Grok, Gemini, Pi, OpenCode, Ollama, OpenClaw, and support workers as standing Paperclip agents. That is now inactive by default.
 
-Each adapter has a `manifest.yaml` with `paperclip_adapter_type` and `paperclip_adapter_config`
-fields that provide the exact JSON to use when creating agents in Paperclip.
+Hermes may still call those runtimes through built-in tools, CLI auth, browser sessions, MCP, or subagents for a concrete task. Paperclip should record the Hermes-owned task and timestamped evidence rather than creating a permanent worker seat.
 
-## FCC as `claude_local` adapter
+## Rule
 
-FCC-claude works as a Paperclip `claude_local` adapter by injecting environment
-variables that redirect Claude Code to the FCC proxy. Any agent can use it.
-
-```json
-{
-  "adapterType": "claude_local",
-  "adapterConfig": {
-    "cwd": "C:\\antigravity",
-    "model": "claude-sonnet-4-5-20250929",
-    "env": {
-      "ANTHROPIC_BASE_URL": "http://127.0.0.1:8082",
-      "ANTHROPIC_AUTH_TOKEN": "freecc",
-      "CLAUDE_CONFIG_DIR": "C:\\Users\\joshl\\.claude-fcc",
-      "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "8192"
-    }
-  }
-}
-```
-
-Paperclip thinks it talks to real Claude Code. The FCC proxy intercepts and routes
-to free providers. No Anthropic API key involved.
-
-**WSL requirement (manual — Joshua's setup):**
-FCC-claude in Paperclip requires WSL `claude` installed and logged out, running
-from the repo root. `fcc-server` must be started in WSL first, then `fcc-claude`
-connects through it. This is NOT automatable by AI — Joshua set this up manually.
-
-## Registered agents
-
-| Agent | Adapter | adapterType | Status |
-|---|---|---|---|
-| Claude-Fable | none (session-based) | — | HIRED 2026-07-01, poll/board driven |
-| tro-ceo (FCC) | fcc-claude | `claude_local` | registered + working (adapters/claude/) |
-| hermes | hermes (hermes-router) | `pi_local` | working via adapters/hermes/ |
-| pi | pi (openrouter + ollama) | `pi_local` | working via adapters/pi/ |
-| codex | codex | `codex_local` | working via adapters/codex/ |
-| gemini | gemini (google) | `opencode_local` | working via adapters/gemini/ |
-| opencode (multi) | opencode | `opencode_local` | working via adapters/opencode/ |
-| ollama-local | ollama-local | `opencode_local` | working via adapters/ollama-local/ |
-| ant-support | openclaw_gateway | `openclaw_gateway` | support lane (adapters N/A) |
-
-All adapters have separated manifests under /adapters/. Each manifest declares
-`paperclip_adapter_type` and `paperclip_adapter_config`. Provider routing
-centralized in opencode/opencode.json.
-
-## Adapter availability (health checks)
-
-All adapters declare a `health_check` command in their manifest. The CEO wheel
-runs `scripts/check-adapter-health.ps1` to scan all adapters, validate health,
-and cross-reference providers against opencode.json.
-
-For FCC specifically:
-```powershell
-pwsh -NoProfile -File C:\antigravity\adapters\claude\health-check.ps1 -Json
-```
-
-Returns structured JSON: `{adapter, type, proxy_up, fcc_cli, config_dir, status, message}`.
-Agents can call this before attempting work to verify the API is available.
-
-## OpenClaw / ClawX bridge (native — Paperclip supports it)
-
-Paperclip ships an `openclaw_gateway` adapter:
-- `adapterType: "openclaw_gateway"`
-- `agentDefaultsPayload.url`: the `ws://` or `wss://` ClawX gateway URL
-- `agentDefaultsPayload.headers["x-openclaw-token"]`: gateway token (from local env,
-  never committed)
-- Do NOT use `/v1/responses` or `/hooks/*` in the join flow.
-
-Doctrine boundary: OpenClaw agents join as SUPPORT lane workers (ant-support seat,
-ticket routing, customer replies). OpenClaw does not govern platform, payments,
-public doctrine, or checkout (repo CLAUDE.md).
-
-## AnythingLLM bridge (Sabretooth 192.168.0.8:3300)
-
-AnythingLLM is a provider/GUI, not a Paperclip adapter. Bridge pattern:
-- Agents that need RAG over repo docs call AnythingLLM's workspace API
-  (`/api/v1/workspace/<slug>/chat`, key in local env) as a TOOL, listed in their
-  agent README under "My tools & URLs".
-- Hermes on Sabretooth already fronts AnythingLLM — Hermes-routed workers inherit it.
-- Do not register AnythingLLM itself as a board agent; register the worker that uses it.
-
-## Reachability notes
-
-- Paperclip binds loopback-only (`127.0.0.1:3110`), deploymentExposure "private".
-  Claude sandbox runtimes cannot reach it directly; browser-bridge (claude-in-chrome)
-  is the proven path for Claude sessions. LAN agents (T5500/9020/ClawX) need Joshua to
-  run `pnpm paperclipai allowed-hostname <host>` and rebind before they can join.
-- Agent callback URLs: session-based agents (Claude) have none — they are poll/board
-  driven. Gateway agents (OpenClaw) provide ws:// URLs.
+One visible accountable owner: Hermes CEO. Many tools/skills are allowed. Permanent agent sprawl is not.
