@@ -1,6 +1,7 @@
 @echo off
 REM === 9020 AUTO-START (Business + Joshua Workspace) ===
-REM Run as scheduled task: trigger=At Startup, run as admin
+REM Run as scheduled task: trigger=At Logon, run as REGULAR USER (not admin)
+REM Paperclip PostgreSQL refuses admin SID — task MUST run non-elevated.
 REM Node: 192.168.0.5 | Business projects | Joshua + Claude Max workspace
 
 echo [%date% %time%] 9020 autostart beginning... >> D:\dream-online\logs\autostart.log
