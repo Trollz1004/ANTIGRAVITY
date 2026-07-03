@@ -12,11 +12,10 @@ echo Starting Ollama...
 start /B "" "C:\Users\joshl\AppData\Local\Programs\Ollama\ollama app.exe"
 timeout /t 5 /nobreak >nul
 
-REM --- FCC Proxy (:8082) — python uvicorn process, starts from its own dir ---
-echo Starting FCC proxy...
-cd /d C:\antigravity
-start /B "" cmd /c "fcc-claude serve >> C:\antigravity\logs\fcc-proxy.log 2>&1"
-timeout /t 3 /nobreak >nul
+REM --- FCC Proxy (:8082) via WSL fcc-server ---
+echo Starting FCC proxy via WSL...
+start /B "" wsl.exe -d Ubuntu -- bash -lc "systemctl --user start fcc-server.service 2>/dev/null; fcc-claude serve >> /mnt/c/antigravity/logs/fcc-proxy.log 2>&1"
+timeout /t 5 /nobreak >nul
 
 REM --- Hermes Router (:11435) ---
 echo Starting Hermes Router...
