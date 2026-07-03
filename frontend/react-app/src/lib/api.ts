@@ -2,7 +2,7 @@
  * API client with JWT auth for the YouAndiNotAi backend.
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
+import { API_BASE } from './apiBase';
 
 class ApiError extends Error {
   constructor(

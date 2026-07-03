@@ -6,6 +6,7 @@
 
 import React, { Component, ReactNode, ErrorInfo } from 'react';
 import { ErrorFallback } from './ErrorFallback';
+import { API_BASE } from '../lib/apiBase';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -84,7 +85,6 @@ export class ErrorBoundary extends Component<
     boundaryName: string
   ): Promise<void> {
     try {
-      const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
       await fetch(`${API_BASE}/errors`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
