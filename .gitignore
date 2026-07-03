@@ -110,3 +110,7 @@ Microsoft Copilot Chat Files/
 apps/antigravity-dashboard/vite.config.js
 apps/antigravity-dashboard/vite.config.d.ts
 apps/antigravity-dashboard/tsconfig*.tsbuildinfo
+
+blobs/
+nul
+
