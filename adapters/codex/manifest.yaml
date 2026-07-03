@@ -13,4 +13,9 @@ paperclip_adapter_config:
 paperclip_alias: "codex"
 opencode_provider: "codex"
 opencode_model: "gpt-5.5"
-notes: "Requires active Codex Desktop session and authenticated OpenAI account. Uses `codex_local` Paperclip adapter type. Only gpt-5.5 model for opencode routing."
+auth:
+  type: desktop-signin
+  env_var: OPENAI_API_KEY
+  signup_url: "https://platform.openai.com"
+  instructions: "Install Codex Desktop, sign in with OpenAI account. Or set OPENAI_API_KEY in env for CLI-only."
+notes: "Requires active Codex Desktop session OR OPENAI_API_KEY. Uses `codex_local` Paperclip adapter type. gpt-5.5 for opencode routing."

@@ -1,0 +1,21 @@
+name: grok
+version: 0.1
+source: auth-signin
+description: "Grok CLI (xAI) — API key sign-in via x.AI Builder. Uses XAI_API_KEY env. Adversarial/red-team and general coding."
+owner: sabretooth
+node_id: sabretooth
+cli_command: "grok"
+health_check: "grok --version"
+paperclip_adapter_type: "opencode_local"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  model: "grok-3-mini"
+paperclip_alias: "grok"
+opencode_provider: "xai"
+opencode_model: "grok-3"
+auth:
+  type: api-key
+  env_var: XAI_API_KEY
+  signup_url: "https://console.x.ai"
+  instructions: "Sign up at console.x.ai, create API key, set XAI_API_KEY in local env"
+notes: "Grok CLI v0.2.60+ (alpha). Requires XAI_API_KEY. Uses `opencode_local` Paperclip adapter type with xai provider. Good for adversarial review, red-team, general coding. Free tier available via OpenRouter (x-ai/grok-3:free)."

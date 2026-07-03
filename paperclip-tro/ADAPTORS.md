@@ -17,16 +17,17 @@
 Every repo adapter maps to a Paperclip `adapterType`. This is the key agents use
 when registering via the Paperclip API (`POST /api/companies/:id/agent-hires`).
 
-| Repo Adapter | Paperclip `adapterType` | CLI | Default Model | Health Check |
-|---|---|---|---|---|
-| `claude` (FCC) | `claude_local` | `fcc-claude` | claude-sonnet-4-5-* | adapters/claude/health-check.ps1 |
-| `codex` | `codex_local` | `codex` | o4-mini | codex --version |
-| `hermes` | `pi_local` | `hermes` | openai/gpt-5.5-pro | hermes --version |
-| `pi` | `pi_local` | `pi` | openrouter/free | pi --version |
-| `opencode` | `opencode_local` | `opencode` | hermes | opencode --version |
-| `ollama-local` | `opencode_local` | `opencode` | qwen2.5-coder:7b | curl localhost:11434 |
-| `gemini` | `opencode_local` | `gemini` | gemini-2.5-pro | opencode --version |
-| `ant-support` | `openclaw_gateway` | ClawX | openai/gpt-5.5 | ws:// gateway check |
+| Repo Adapter | Paperclip `adapterType` | CLI | Default Model | Auth | Health Check |
+|---|---|---|---|---|---|
+| `claude` (FCC) | `claude_local` | `fcc-claude` | claude-sonnet-4-5-* | FCC proxy (no key) | adapters/claude/health-check.ps1 |
+| `codex` | `codex_local` | `codex` | o4-mini | OPENAI_API_KEY / Desktop signin | codex --version |
+| `grok` | `opencode_local` | `grok` | grok-3-mini | XAI_API_KEY (console.x.ai) | grok --version |
+| `hermes` | `pi_local` | `hermes` | openai/gpt-5.5-pro | local (no key) | hermes --version |
+| `pi` | `pi_local` | `pi` | openrouter/free | OPENROUTER_API_KEY | pi --version |
+| `opencode` | `opencode_local` | `opencode` | hermes | per-provider keys | opencode --version |
+| `ollama-local` | `opencode_local` | `opencode` | qwen2.5-coder:7b | none (local) | curl localhost:11434 |
+| `gemini` | `opencode_local` | `gemini` | gemini-2.5-pro | GEMINI_API_KEY (aistudio) | opencode --version |
+| `ant-support` | `openclaw_gateway` | ClawX | openai/gpt-5.5 | gateway token | ws:// gateway check |
 
 Each adapter has a `manifest.yaml` with `paperclip_adapter_type` and `paperclip_adapter_config`
 fields that provide the exact JSON to use when creating agents in Paperclip.

@@ -63,6 +63,7 @@ $dirs = @(
   "$DreamRoot\adapters",
   "$DreamRoot\adapters\claude",
   "$DreamRoot\adapters\codex",
+  "$DreamRoot\adapters\grok",
   "$DreamRoot\adapters\hermes",
   "$DreamRoot\adapters\opencode",
   "$DreamRoot\adapters\ollama-local",
@@ -87,7 +88,7 @@ foreach ($d in $dirs) {
 # ============================================================
 Log '--- PHASE 2: Mirror adapters from ANTIGRAVITY ---' Green
 
-$adapterNames = @('claude', 'codex', 'hermes', 'opencode', 'ollama-local', 'pi', 'gemini')
+$adapterNames = @('claude', 'codex', 'grok', 'hermes', 'opencode', 'ollama-local', 'pi', 'gemini')
 foreach ($a in $adapterNames) {
   $src = "$AntigravityRepo\adapters\$a"
   $dst = "$DreamRoot\adapters\$a"
