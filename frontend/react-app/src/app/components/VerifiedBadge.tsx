@@ -12,21 +12,21 @@ const TIER_CONFIG = {
   gold: {
     icon: ShieldCheck,
     label: 'Verified Human',
-    gradient: 'from-[#ff4f00] via-[#ff7b40] to-[#ff4f00]',
-    bgGlow: 'bg-[#ff4f00]/10',
-    borderGlow: 'border-[#111111]',
-    shadowGlow: 'shadow-[#111111]/15',
-    textColor: 'text-[#111111]',
+    gradient: 'from-[#ffd700] via-[#e6c200] to-[#ffd700]',
+    bgGlow: 'bg-[#ffd700]/10',
+    borderGlow: 'border-[#ffd700]',
+    shadowGlow: 'shadow-[#ffd700]/15',
+    textColor: 'text-[#ffd700]',
     iconFill: true,
   },
   platinum: {
     icon: Crown,
     label: 'Founding Member',
-    gradient: 'from-[#111111] via-[#444444] to-[#111111]',
-    bgGlow: 'bg-[#111111]/10',
-    borderGlow: 'border-[#111111]',
-    shadowGlow: 'shadow-[#111111]/15',
-    textColor: 'text-[#111111]',
+    gradient: 'from-[#0044ff] via-[#3366ff] to-[#0044ff]',
+    bgGlow: 'bg-[#0044ff]/10',
+    borderGlow: 'border-[#0044ff]',
+    shadowGlow: 'shadow-[#0044ff]/15',
+    textColor: 'text-[#0044ff]',
     iconFill: false,
   },
 } as const;
@@ -105,7 +105,7 @@ export function TrustScoreRing({
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (score / 100) * circumference;
 
-  const color = score >= 80 ? '#ff4f00' : score >= 50 ? '#111111' : '#8a8478';
+  const color = score >= 80 ? '#ffd700' : score >= 50 ? '#0044ff' : '#a1a1aa';
 
   return (
     <div
@@ -119,7 +119,7 @@ export function TrustScoreRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(17,17,17,0.12)"
+          stroke="rgba(237,237,237,0.12)"
           strokeWidth={3}
         />
         {/* Progress ring */}
@@ -136,7 +136,7 @@ export function TrustScoreRing({
           style={{ transition: 'stroke-dashoffset 1s ease' }}
         />
       </svg>
-      <span className="absolute text-[10px] font-black text-[#111111]">
+      <span className="absolute text-[10px] font-black text-[#ededed]">
         {Math.round(score)}
       </span>
     </div>

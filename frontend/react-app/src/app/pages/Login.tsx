@@ -117,37 +117,37 @@ export function Login() {
   return (
     <div className="mesh-gradient min-h-screen px-4 py-6 md:px-8 md:py-8">
       <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl gap-6 md:grid-cols-[1.05fr_0.95fr]">
-        <section className="hidden rounded-[2rem] border-4 border-[#111111] bg-[#111111] p-10 text-white shadow-[12px_12px_0_0_rgba(17,17,17,1)] md:flex md:flex-col md:justify-between">
+        <section className="sharp-card hidden rounded-[2px] p-10 text-[#ededed] md:flex md:flex-col md:justify-between">
           <div>
             <div className="app-kicker mb-4">YouAndINotAI</div>
-            <h1 className="text-[clamp(3rem,7vw,5.5rem)] font-black uppercase leading-[0.86] tracking-[-0.09em]">
+            <h1 className="display text-[clamp(3rem,7vw,5.5rem)] font-black uppercase leading-[0.86] tracking-[-0.09em]">
               Real people.
               <br />
               Zero noise.
             </h1>
-            <p className="mt-6 max-w-md text-base leading-7 text-white/72">
+            <p className="mt-6 max-w-md text-base leading-7 text-[#a1a1aa]">
               Sign in to the verified side of the platform. Matching, meetups,
               boards, and support all stay tied to a real account.
             </p>
           </div>
 
           <div className="space-y-4">
-            <div className="rounded-[1.6rem] border-4 border-white bg-[#fffaf2] p-5 text-[#111111] shadow-[8px_8px_0_0_rgba(255,255,255,0.18)]">
+            <div className="yellow-glow rounded-[2px] border border-[#ffd700] bg-[#1e1e1e] p-5 text-[#ededed]">
               <div className="app-panel-title mb-3">Inside the account</div>
-              <div className="space-y-3 text-sm font-medium text-[#5c594f]">
+              <div className="space-y-3 text-sm font-medium text-[#a1a1aa]">
                 <div className="flex items-start gap-3">
-                  <ShieldCheck size={18} className="mt-0.5 text-[#ff4f00]" />
+                  <ShieldCheck size={18} className="mt-0.5 text-[#ffd700]" />
                   <span>Account-bound verification and support handling.</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Sparkles size={18} className="mt-0.5 text-[#ff4f00]" />
+                  <Sparkles size={18} className="mt-0.5 text-[#ffd700]" />
                   <span>
                     Dating, social boards, meetups, and volunteer surfaces in
                     one shell.
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Heart size={18} className="mt-0.5 text-[#ff4f00]" />
+                  <Heart size={18} className="mt-0.5 text-[#ffd700]" />
                   <span>
                     No fake platform framing. Just a real product with verified
                     users.
@@ -159,7 +159,7 @@ export function Login() {
         </section>
 
         <section className="flex items-center">
-          <div className="glass-strong glass-highlight w-full rounded-[2rem] p-6 md:p-8">
+          <div className="glass-strong glass-highlight w-full rounded-[2px] p-6 md:p-8">
             <div className="mb-8 md:hidden">
               <div className="app-kicker mb-3">YouAndINotAI</div>
               <h1 className="app-title">welcome back.</h1>
@@ -179,7 +179,7 @@ export function Login() {
 
             <form onSubmit={handleSubmit} className="space-y-5" noValidate>
               {error && (
-                <div className="rounded-[1.4rem] border-4 border-[#111111] bg-[#ffd9c7] px-4 py-3 text-sm font-semibold text-[#111111]">
+                <div className="rounded-[2px] border border-[#ff2a2a] bg-[#1e1e1e] px-4 py-3 text-sm font-semibold text-[#ededed]">
                   {error}
                 </div>
               )}
@@ -232,28 +232,28 @@ export function Login() {
             </form>
 
             <div className="my-6 flex items-center gap-3">
-              <div className="h-[3px] flex-1 bg-[#111111]" />
-              <span className="text-xs font-black uppercase tracking-[0.2em] text-[#5c594f]">
+              <div className="h-px flex-1 bg-[#27272a]" />
+              <span className="mono text-xs font-black uppercase tracking-[0.2em] text-[#a1a1aa]">
                 or
               </span>
-              <div className="h-[3px] flex-1 bg-[#111111]" />
+              <div className="h-px flex-1 bg-[#27272a]" />
             </div>
 
-            <div className="rounded-[1.5rem] border-4 border-[#111111] bg-white p-3 shadow-[6px_6px_0_0_rgba(17,17,17,1)]">
+            <div className="rounded-[2px] border border-[#27272a] bg-[#141414] p-3">
               <GoogleSignInButton />
             </div>
 
-            <div className="mt-5 rounded-[1.5rem] border-4 border-[#111111] bg-[#efe6d8] p-4 shadow-[6px_6px_0_0_rgba(17,17,17,1)]">
+            <div className="mt-5 rounded-[2px] border border-[#27272a] bg-[#1e1e1e] p-4">
               <button
                 type="button"
                 onClick={() => setShowBeta(!showBeta)}
-                className="flex w-full items-center justify-between gap-3 text-left text-sm font-black uppercase tracking-[0.16em] text-[#111111]"
+                className="mono flex w-full items-center justify-between gap-3 text-left text-sm font-black uppercase tracking-[0.16em] text-[#ededed]"
               >
                 <span className="flex items-center gap-2">
-                  <KeyRound size={16} className="text-[#ff4f00]" />
+                  <KeyRound size={16} className="text-[#ffd700]" />
                   Beta access code
                 </span>
-                <Sparkles size={14} className="text-[#ff4f00]" />
+                <Sparkles size={14} className="text-[#ffd700]" />
               </button>
 
               {showBeta && (
@@ -263,7 +263,7 @@ export function Login() {
                   noValidate
                 >
                   {betaError && (
-                    <p className="text-sm font-semibold text-red-600">
+                    <p className="text-sm font-semibold text-[#ff2a2a]">
                       {betaError}
                     </p>
                   )}
@@ -288,11 +288,11 @@ export function Login() {
               )}
             </div>
 
-            <p className="mt-6 text-center text-sm font-medium text-[#5c594f]">
+            <p className="mt-6 text-center text-sm font-medium text-[#a1a1aa]">
               Need an account?{' '}
               <Link
                 to={registerHref}
-                className="font-black uppercase tracking-[0.14em] text-[#111111] underline decoration-[3px] underline-offset-4"
+                className="mono font-black uppercase tracking-[0.14em] text-[#ffd700] underline decoration-[3px] underline-offset-4"
               >
                 Create one
               </Link>
@@ -300,7 +300,7 @@ export function Login() {
 
             <div className="mt-4 text-center">
               <Link to="/" className="app-back-link">
-                <Heart size={14} className="text-[#ff4f00]" /> Back to
+                <Heart size={14} className="text-[#ffd700]" /> Back to
                 YouAndINotAI
               </Link>
             </div>

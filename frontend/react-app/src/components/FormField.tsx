@@ -79,7 +79,7 @@ export function FormField({
         : 'app-input',
     'input-glow',
     icon ? 'pl-12' : '',
-    showError ? 'border-red-500 ring-2 ring-red-500/30' : '',
+    showError ? 'border-[#ff2a2a] ring-2 ring-[#ff2a2a]/30' : '',
     disabled ? 'opacity-60 cursor-not-allowed' : '',
     className,
   ]
@@ -155,15 +155,15 @@ export function FormField({
     <div className="space-y-1.5">
       <label
         htmlFor={inputId}
-        className="flex items-center gap-1 text-sm font-black uppercase tracking-[0.14em] text-[#5c594f]"
+        className="mono flex items-center gap-1 text-sm font-black uppercase tracking-[0.14em] text-[#a1a1aa]"
       >
         {label}
-        {required && <span className="text-red-500 font-black">*</span>}
+        {required && <span className="text-[#ff2a2a] font-black">*</span>}
       </label>
 
       <div className="relative">
         {icon && (
-          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5c594f]">
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a1a1aa]">
             {icon}
           </span>
         )}
@@ -171,7 +171,7 @@ export function FormField({
       </div>
 
       {showError && (
-        <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-red-600">
+        <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-[#ff2a2a]">
           <svg
             className="h-4 w-4 shrink-0"
             viewBox="0 0 20 20"
