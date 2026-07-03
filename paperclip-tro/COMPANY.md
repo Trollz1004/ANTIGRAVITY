@@ -1,51 +1,48 @@
-# TRO — Paperclip Company (127.0.0.1:3110)
+# TRO — Paperclip Company / Hermes CEO board
 
-> Owner: Joshua Coleman. Architecture: Claude Fable one-shot, 2026-07-01.
-> Instance: TRO company @ `http://127.0.0.1:3110`. Distinct from Sabretooth (3100)
-> and income-engine (3101). The Wall applies: this instance knows nothing of siblings.
+> Owner: Joshua Coleman.
+> Updated 2026-07-03: Hermes-only active agent architecture.
+> Paperclip is the visual work board over Hermes work/status, not a separate multi-agent authority layer.
 
 ## Structure
 
-ONE company, TWO projects:
+ONE company, ONE active agent:
 
-| Project | Slug | Mission |
+| Active seat | Runtime | Feed |
 |---|---|---|
-| ANTIGRAVITY Product Lane | `ANT` | Ship revenue: Square memberships/verification on youandinotai.com, repo health, compliance |
-| DREAM Online | `DREAM` | MMORPG build: live-agent NPCs, NEEDs currency, pay-for-convenience |
+| Hermes CEO | Hermes Agent | `http://127.0.0.1:9119` |
 
-Project charters: `projects/PROJECT-1-ANTIGRAVITY.md`, `projects/PROJECT-2-DREAM-ONLINE.md`.
+Paperclip exists to make Hermes work visible and organized: tasks, routines, issues, goals, timestamps, evidence, and done history.
 
 ## CEO
 
-FCC via the `fcc-claude` cmd adaptor is the CEO's hands. Config: `agents/ceo/AGENT.md`.
-FCC NEVER holds an Anthropic API key. FCC identifying as Claude does not grant doctrine
-authority (per repo CLAUDE.md) — the CEO executes and manages; doctrine stays with Joshua.
+Hermes is the CEO/operator brain for Paperclip. Hermes has the built-in APIs/tools, can load `.agents/skills/*/SKILL.md` as department expertise, and may spawn temporary subagents when parallel work actually helps.
 
-## Provider Routing (workers)
+FCC-Claude can be used as an optional browser-controlled helper/CEO hand if Josh explicitly wants it for a task. FCC-Claude is not a separate permanent board authority; Hermes and Opus monitor/control it through browser-visible work.
 
-| Provider | Use | Concurrency |
-|---|---|---|
-| Ollama local (9020 :11434) | free batch/routine | local cap |
-| Ollama Cloud | heavy parallel work | 3 |
-| OpenCode (NVIDIA free) | code tasks | 1 |
-| OpenRouter free tier | fallback routing | per MCP |
-| Grok / Codex / Gemini / Perplexity subs | per THE-WHEEL routing | 1 each |
-| claude.ai summon | Opus-grade only, Joshua-approved | 1 |
+## No agent sprawl
 
-## Non-Negotiables (inherited, pointers not copies)
+Do not hire or keep permanent CFO/CTO/CMO/dev/support/growth workers just to make Paperclip look staffed. Use skills as departments:
 
-- Soul: `hermes/agents/SOUL.md` — mission, values, language bans
-- Doctrine: repo `CLAUDE.md` + `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md`
-- Boot: `paperclip-tro/BOOT-PROTOCOL.md` (token-frugal, mandatory)
-- Escalation: `paperclip-tro/ESCALATION.md` (red < 1hr, mandatory)
+- Engineering/code -> `.agents/skills/agency-senior-developer/`, `agency-code-reviewer/`, Codex/OpenCode subagent only when useful.
+- Ops/devops -> `.agents/skills/agency-devops-automator/`.
+- Support -> `.agents/skills/agency-support-responder/`.
+- Growth/sales/content -> `.agents/skills/agency-growth-hacker/`, `agency-sales-outreach/`, `agency-content-creator/`.
+- Compliance/reality/evidence -> `.agents/skills/agency-compliance-auditor/`, `agency-reality-checker/`, `agency-evidence-collector/`.
 
-## Setup (runs on Joshua's machine — localhost only)
+Paperclip rows should show what Hermes is doing, not pretend every department is an always-on AI person.
 
-1. Store invite token in local `.env` as `PAPERCLIP_TRO_INVITE` (token provided by
-   Joshua out-of-band; NEVER committed).
-2. Accept invite at `http://127.0.0.1:3110/invite/<token>`; create company `TRO`.
-3. Create projects `ANT` and `DREAM`.
-4. Register CEO with adaptor `fcc-claude` per `agents/ceo/AGENT.md`.
-5. Hire initial roster per `ROSTER.md` — each hire gets a folder cloned from
-   `agents/_template/` with pointers filled in.
-6. Verify: CEO heartbeat runs, opens one test issue per project, resolves both.
+## Canonical local surfaces
+
+- Hermes Dashboard/API status: `http://127.0.0.1:9119/api/status`
+- Hermes Workspace: `http://127.0.0.1:3000`
+- Mission Control view: `http://127.0.0.1:4200`
+- Repo: `C:\antigravity`
+
+## Non-negotiables
+
+- Joshua is the sole human authority.
+- Hermes owns the active task/routine/issue/goal loop unless Josh assigns another lead explicitly.
+- Subagents are temporary task workers, not permanent Paperclip authority.
+- Public-facing work stays business/product-only per repo `AGENTS.md` and current doctrine.
+- Secrets stay local; Paperclip never stores or displays populated credentials.
