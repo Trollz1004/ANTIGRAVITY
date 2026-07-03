@@ -35,6 +35,7 @@ def _bot_shield_payment_link() -> str:
         return configured
     return "" if _is_production() else _BOT_SHIELD
 
+
 BOT_SHIELD_PAYMENT_LINK = _bot_shield_payment_link()
 
 PLAN_LINKS: dict[str, str] = {

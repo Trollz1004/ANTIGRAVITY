@@ -9,7 +9,9 @@ def _reload_payments():
 
 def test_bot_shield_link_uses_configured_env(monkeypatch):
     monkeypatch.setenv("APP_ENV", "production")
-    monkeypatch.setenv("SQUARE_BOT_SHIELD_PAYMENT_LINK", "https://square.link/u/prod-bot")
+    monkeypatch.setenv(
+        "SQUARE_BOT_SHIELD_PAYMENT_LINK", "https://square.link/u/prod-bot"
+    )
     monkeypatch.delenv("SQUARE_BOT_SHIELD_LINK", raising=False)
 
     payments = _reload_payments()

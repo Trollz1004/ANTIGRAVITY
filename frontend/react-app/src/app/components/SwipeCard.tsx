@@ -48,7 +48,9 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
   };
 
   const initial = profile.display_name.charAt(0).toUpperCase();
-  const verifiedLabel = profile.verificationLevel || (profile.verified ? 'Verified profile' : 'Verification pending');
+  const verifiedLabel =
+    profile.verificationLevel ||
+    (profile.verified ? 'Verified profile' : 'Verification pending');
   const profilePrompt =
     profile.prompt ||
     'I am here for real conversation, clear intent, and a first date that feels safe for both people.';

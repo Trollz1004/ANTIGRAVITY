@@ -50,7 +50,12 @@ export function Register() {
       setError('YouAndINotAI is strictly 18+ only');
       return;
     }
-    if (!acceptedCookiePolicy || !acceptedTerms || !confirmedOver18 || !confirmedBotShieldStep) {
+    if (
+      !acceptedCookiePolicy ||
+      !acceptedTerms ||
+      !confirmedOver18 ||
+      !confirmedBotShieldStep
+    ) {
       setError(
         'All required consent boxes must be checked before you can register'
       );
@@ -80,9 +85,7 @@ export function Register() {
       <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl gap-6 md:grid-cols-[0.98fr_1.02fr]">
         <section className="sharp-card yellow-glow hidden rounded-[2px] bg-[#141414] p-10 text-[#ededed] md:flex md:flex-col md:justify-between">
           <div>
-            <div className="overline text-[#ffd700]">
-              Join YouAndINotAI
-            </div>
+            <div className="overline text-[#ffd700]">Join YouAndINotAI</div>
             <h1 className="display mt-4 text-[clamp(3rem,7vw,5.5rem)] font-black uppercase leading-[0.86] tracking-[-0.09em]">
               Human first.
               <br />
@@ -251,11 +254,15 @@ export function Register() {
                     <input
                       type="checkbox"
                       checked={confirmedBotShieldStep}
-                      onChange={e => setConfirmedBotShieldStep(e.target.checked)}
+                      onChange={e =>
+                        setConfirmedBotShieldStep(e.target.checked)
+                      }
                       className="mt-1 h-4 w-4 accent-[#ffd700]"
                     />
                     <span>
-                      I understand Bot-Shield verification (liveness + one-time $1 check) is the next required step after profile setup to get verified status and access full platform.
+                      I understand Bot-Shield verification (liveness + one-time
+                      $1 check) is the next required step after profile setup to
+                      get verified status and access full platform.
                     </span>
                   </label>
                 </div>

@@ -106,7 +106,9 @@ export function ProfileSetup() {
       await fetchUser();
       // NEW: Bot-Shield verification step added to onboarding flow (TRO-68)
       // After profile (real profile data), require verification using existing liveness+payment+trust logic before full app/membership surfaces.
-      const latest = (useAuth as any).getState ? (useAuth as any).getState().user : user;
+      const latest = (useAuth as any).getState
+        ? (useAuth as any).getState().user
+        : user;
       if (latest && !latest.bot_shield_verified) {
         navigate('/app/verify');
       } else {
@@ -414,9 +416,14 @@ export function ProfileSetup() {
             <div className="flex items-start gap-3 mb-3">
               <ShieldCheck size={20} className="text-[#ffd700] mt-0.5" />
               <div>
-                <div className="app-panel-title">Bot-Shield verification step</div>
+                <div className="app-panel-title">
+                  Bot-Shield verification step
+                </div>
                 <p className="text-sm font-medium text-[#5c594f] mt-1">
-                  Complete the liveness challenge + $1 Square Bot-Shield to activate verified status. This uses real profile checks and existing bot-reject logic (min solve time + payment required) before full discovery/membership surfaces.
+                  Complete the liveness challenge + $1 Square Bot-Shield to
+                  activate verified status. This uses real profile checks and
+                  existing bot-reject logic (min solve time + payment required)
+                  before full discovery/membership surfaces.
                 </p>
               </div>
             </div>
@@ -425,9 +432,13 @@ export function ProfileSetup() {
               onClick={() => navigate('/app/verify')}
               className="app-button-accent w-full md:w-auto px-5 py-3 text-sm"
             >
-              Go to Bot-Shield verification <ArrowRight size={16} className="inline ml-1" />
+              Go to Bot-Shield verification{' '}
+              <ArrowRight size={16} className="inline ml-1" />
             </button>
-            <p className="mt-2 text-xs text-[#5c594f]">After profile save, flow now routes unverified accounts here automatically.</p>
+            <p className="mt-2 text-xs text-[#5c594f]">
+              After profile save, flow now routes unverified accounts here
+              automatically.
+            </p>
           </div>
         </form>
       </div>

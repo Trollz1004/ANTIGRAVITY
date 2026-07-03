@@ -247,15 +247,10 @@ function VerificationSteps() {
       className="border-b border-[#27272a] bg-[#0a0a0a] px-4 py-10 text-[#ededed] md:px-12 md:py-16"
     >
       <div className="mx-auto max-w-7xl">
-        <div className="overline mb-4 md:mb-8">
-          Section 02 // Verification
-        </div>
+        <div className="overline mb-4 md:mb-8">Section 02 // Verification</div>
         <div className="grid gap-4 md:gap-6 md:grid-cols-3">
           {steps.map(step => (
-            <div
-              key={step.num}
-              className="sharp-card p-4 md:p-6"
-            >
+            <div key={step.num} className="sharp-card p-4 md:p-6">
               <div className="display mb-2 text-3xl font-black tracking-tighter text-[#ffd700] md:mb-4 md:text-5xl">
                 {step.num}
               </div>
@@ -359,9 +354,7 @@ function WaitlistForm() {
       className="border-b border-[#27272a] bg-[#0a0a0a] px-4 py-10 text-[#ededed] md:px-12 md:py-16"
     >
       <div className="mx-auto max-w-3xl">
-        <div className="overline mb-3 md:mb-4">
-          Section 05 // Join
-        </div>
+        <div className="overline mb-3 md:mb-4">Section 05 // Join</div>
         <h2 className="display text-3xl font-black tracking-tighter md:text-7xl">
           join the list.
         </h2>
@@ -623,9 +616,7 @@ export function PublicSupportPage() {
             </div>
 
             <section className="sharp-card yellow-glow p-8 text-[#ededed]">
-              <p className="overline text-[#ffd700]">
-                YouAndiNotAi Support
-              </p>
+              <p className="overline text-[#ffd700]">YouAndiNotAi Support</p>
               <h1 className="display mt-4 text-4xl font-black tracking-tighter md:text-6xl">
                 help for receipts, verification, privacy, and account issues.
               </h1>
@@ -814,9 +805,7 @@ export default function App() {
                   </p>
                 </div>
                 <div className="sharp-card p-4 md:p-5">
-                  <div className="overline text-[#ffd700]">
-                    Launch
-                  </div>
+                  <div className="overline text-[#ffd700]">Launch</div>
                   <div className="display mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
                     April 4, 2026
                   </div>
@@ -835,9 +824,7 @@ export default function App() {
           className="border-b border-[#27272a] bg-[#0a0a0a] px-4 py-10 md:px-12 md:py-16"
         >
           <div className="mx-auto max-w-7xl">
-            <div className="overline mb-3 md:mb-4">
-              The Social
-            </div>
+            <div className="overline mb-3 md:mb-4">The Social</div>
             <h2 className="display mb-6 text-3xl font-black tracking-tighter text-[#ededed] md:mb-10 md:text-7xl">
               how we connect.
             </h2>
@@ -872,9 +859,7 @@ export default function App() {
           className="border-b border-[#27272a] bg-[#0a0a0a] px-4 py-10 md:px-12 md:py-16"
         >
           <div className="mx-auto max-w-5xl">
-            <div className="overline mb-3 md:mb-4">
-              Section 04 // Trust
-            </div>
+            <div className="overline mb-3 md:mb-4">Section 04 // Trust</div>
             <h2 className="display text-3xl font-black tracking-tighter text-[#ededed] md:text-7xl">
               clean business.
             </h2>
@@ -905,9 +890,7 @@ export default function App() {
 
         <section className="border-b border-[#27272a] bg-[#0a0a0a] px-4 py-10 text-center md:px-12 md:py-16">
           <div className="mx-auto max-w-xl">
-            <div className="overline mb-3 md:mb-4">
-              Section 06 // Share
-            </div>
+            <div className="overline mb-3 md:mb-4">Section 06 // Share</div>
             <h2 className="display text-3xl font-black tracking-tighter text-[#ededed] md:text-6xl">
               share the platform.
             </h2>

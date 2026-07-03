@@ -57,7 +57,11 @@ body {
 body {
   min-height: 100vh;
   background-image:
-    radial-gradient(circle at 18% 20%, rgba(255, 215, 0, 0.06), transparent 22%),
+    radial-gradient(
+      circle at 18% 20%,
+      rgba(255, 215, 0, 0.06),
+      transparent 22%
+    ),
     radial-gradient(circle at 82% 12%, rgba(0, 68, 255, 0.05), transparent 16%),
     linear-gradient(180deg, rgba(10, 10, 10, 0.98), rgba(10, 10, 10, 1));
 }
@@ -65,7 +69,11 @@ body {
 /* Dark body background (OPU-17) — same as light now; Gold Terminal is dark-first */
 .dark body {
   background-image:
-    radial-gradient(circle at 18% 20%, rgba(255, 215, 0, 0.06), transparent 22%),
+    radial-gradient(
+      circle at 18% 20%,
+      rgba(255, 215, 0, 0.06),
+      transparent 22%
+    ),
     radial-gradient(circle at 82% 12%, rgba(0, 68, 255, 0.05), transparent 16%),
     linear-gradient(180deg, rgba(10, 10, 10, 0.98), rgba(10, 10, 10, 1));
 }
@@ -415,7 +423,11 @@ section[id] {
 .mesh-gradient {
   position: relative;
   background:
-    radial-gradient(circle at 12% 12%, rgba(255, 215, 0, 0.08), transparent 22%),
+    radial-gradient(
+      circle at 12% 12%,
+      rgba(255, 215, 0, 0.08),
+      transparent 22%
+    ),
     radial-gradient(circle at 88% 16%, rgba(0, 68, 255, 0.06), transparent 16%),
     linear-gradient(180deg, #0a0a0a 0%, #101010 100%);
 }
@@ -458,7 +470,11 @@ section[id] {
 
 .discover-mesh {
   background:
-    radial-gradient(circle at 18% 20%, rgba(255, 215, 0, 0.08), transparent 18%),
+    radial-gradient(
+      circle at 18% 20%,
+      rgba(255, 215, 0, 0.08),
+      transparent 18%
+    ),
     radial-gradient(circle at 82% 24%, rgba(0, 68, 255, 0.05), transparent 16%);
 }
 
