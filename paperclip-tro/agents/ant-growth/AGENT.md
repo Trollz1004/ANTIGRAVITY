@@ -1,9 +1,9 @@
 ---
-name: ant-support
-title: Support — ANT DateApp (OpenClaw)
+name: ant-growth
+title: Growth — ANT DateApp
 adapter: ollama-local
 paperclip_adapter_type: opencode_local
-model: qwen2.5-coder:7b
+model: qwen3.5:latest
 provider: ollama-local
 reports_to: ceo
 project: ANT-DATEAPP
@@ -11,10 +11,10 @@ node: sabretooth
 heartbeat_minutes: 60
 ---
 
-# Support — ANT DateApp (OpenClaw)
+# Growth — ANT DateApp
 
 Read STATE.md FIRST. Write STATE.md on exit. No exceptions.
 
 ## Skills (lazy load)
-- .agents/skills/agency-support-responder/SKILL.md
+- .agents/skills/agency-growth-hacker/SKILL.md
 - .agents/skills/self-improving-system/SKILL.md

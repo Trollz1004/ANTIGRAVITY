@@ -1,11 +1,11 @@
-# ant-dev HEARTBEAT
-
-0. ORIENT — README.md + STATE.md (boot reads; nothing else).
-1. PICK ONE — board order: my RED fixes returned by CEO > my assigned tasks by
-   priority > queue-ready tasks tagged my role (ANT first).
-2. ACT — reversible: do it. Irreversible (deploy, spend, public copy, schema):
-   prepare + flag CEO. Read my SKILL.md sections only as the task requires.
-3. SHIP — deliverable to its repo path; branch `claude/<task-slug>` if code;
-   board card → done with one-line result + evidence.
-4. BLOCKED? — ≥2 attempts failed → RED + CEO ≤10 min → next task. Never idle, never wait.
-5. EXIT — overwrite STATE.md (BOOT-PROTOCOL.md format, ≤60 lines, prune).
+agent: ant-dev
+project: ANT-DATEAPP
+node: sabretooth
+config: paperclip-tro/agents/ant-dev/AGENT.md
+state: paperclip-tro/agents/ant-dev/STATE.md
+skills: [.agents/skills/agency-senior-developer]
+adapter: codex
+model: codex-mini-5.3
+provider: codex_local
+last_beat: 2026-07-03T00:00:00Z
+status: idle
