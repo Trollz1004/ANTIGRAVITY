@@ -1,12 +1,12 @@
 # CEO Agent Heartbeat
 
-**Agent:** `paperclip-agents-ceo`  
-**Runtime:** Hermes Agent (`paperclip-agents-hermes`)  
-**Authority:** Joshua Coleman (`Trollz1004`)  
-**Last canonical sync:** 2026-07-01  
+**Agent:** `paperclip-agents-ceo`
+**Runtime:** Hermes Agent (`paperclip-agents-hermes`)
+**Authority:** Joshua Coleman (`Trollz1004`)
+**Last canonical sync:** 2026-07-01
 **Pulse interval:** Every session start + every major strategic decision + every Paperclip HQ health tick
 
-**Paperclip HQ:** `Trollz1004/ANTIGRAVITY` repo on `main`, served locally at `http://127.0.0.1:3110` from Sabretooth. Public exposure is handled by Port Warp. The watchdog (`scripts/paperclip/paperclip-watchdog.ps1`) is the CEO's pulse.
+**Paperclip/Hermes HQ:** `Trollz1004/ANTIGRAVITY` repo on `main`, with Hermes dashboard/API feed at `http://127.0.0.1:9119`. Hermes is the CEO runtime; Paperclip is the visible timestamped board over Hermes work.
 
 ---
 
@@ -14,10 +14,10 @@
 
 - **Repository of record:** `Trollz1004/ANTIGRAVITY` on `main` (this is Paperclip HQ)
 - **Source-of-truth node:** Sabretooth (`C:\antigravity`)
-- **Paperclip HQ server:** `http://127.0.0.1:3110` — local_trusted/private/loopback
+- **Hermes/Paperclip feed:** `http://127.0.0.1:9119/api/status` — local_trusted/private/loopback
 - **Public URL:** via Port Warp (user-managed)
-- **CEO runtime:** Hermes Agent with OpenAI Codex 5.5 default, repo cwd `C:\antigravity`
-- **Runtime nodes:** T5500 (date app / Cloudflare / Wrangler / DNS), Paperclip, Hermes, OpenClaw, MANUS, Cursor, Codex, Gemini, Grok, Ollama, OpenRouter.
+- **CEO runtime:** Hermes Agent, repo cwd `C:\antigravity`; only required active Paperclip agent
+- **Runtime nodes/tools:** T5500 (date app / Cloudflare / Wrangler / DNS), Paperclip, Hermes, OpenClaw, MANUS, Cursor, Codex, Gemini, Grok, Ollama, OpenRouter; all are tools/helpers unless Joshua explicitly assigns active lead.
 - **Active launch platforms:** Square (live payment rail), YouAndINotAI.
 - **Structural rule:** 1 repo / 1 branch (`main`) / 1 root folder, enforced across all nodes.
 - **Doctrine state:** Business-only output. `#UNTILnoKIDinNEED` and charity/split framing are prohibited in public-facing copy.
@@ -32,8 +32,8 @@
 3. Removed stale `.paperclip/worktrees/*` worktrees.
 4. Banned new root directories and branch proliferation without CEO + Joshua Coleman approval.
 5. Confirmed Square as live production payment rail per `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`.
-6. Confirmed Paperclip HQ runs local-only on `:3110`; public exposure via Port Warp, not Cloudflare.
-7. Confirmed Hermes Agent as the CEO runtime with Codex 5.5 default.
+6. Superseded old `:3110`-centric Paperclip model with Hermes/Paperclip feed on `:9119`.
+7. Confirmed Hermes Agent as the only required active Paperclip CEO/runtime; `.agents/skills` are departments, subagents are temporary.
 
 ---
 
@@ -45,8 +45,8 @@ Escalate to Joshua Coleman immediately when:
 - Public-facing copy uses charity/split framing.
 - Payment verification gate is bypassed.
 - Agents disagree on doctrine and SOL.md does not resolve it unambiguously.
-- Any protected agent file is modified outside an authorized workflow.
-- Paperclip HQ health check (`http://127.0.0.1:3110/api/health`) fails for more than 2 watchdog cycles.
+- A permanent agent is added when a skill lane or temporary subagent would be enough.
+- Hermes/Paperclip feed health check (`http://127.0.0.1:9119/api/status`) fails or returns wrong shape for more than 2 cycles.
 
 ---
 
@@ -56,9 +56,9 @@ At every session start, ask:
 
 1. Is the working tree on `main` and clean?
 2. Are there any new branches or root directories?
-3. Are all agent folders present with `AGENTS.md`, `HEARTBEAT.md`, and `TOOLS.md`?
+3. Is Hermes still the only required active Paperclip agent?
 4. Does the current task violate any SOL rule?
 5. Is the output business-only and product-first?
-6. Is Paperclip HQ healthy at `http://127.0.0.1:3110/api/health`?
+6. Is Hermes/Paperclip feed healthy at `http://127.0.0.1:9119/api/status`?
 
 If the answer to 2, 4, or 6 is "yes," halt and escalate.

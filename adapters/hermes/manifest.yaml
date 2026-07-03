@@ -1,7 +1,7 @@
 name: hermes
 version: 0.2
 source: local-cli
-description: "Hermes Agent CLI — CEO runtime for ANTIGRAVITY. Routes through hermes-router auto-fallback. No Anthropic."
+description: "Hermes Agent CLI — single active Paperclip CEO/operator for ANTIGRAVITY. Paperclip visualizes Hermes work/status via :9119; skills are departments; subagents are temporary."
 owner: sabretooth
 node_id: sabretooth
 cli_command: "hermes"

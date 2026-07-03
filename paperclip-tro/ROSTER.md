@@ -78,6 +78,20 @@ CEOs run 24/7 routines via Paperclip scheduler. See CEO-PLAYBOOK.md.
 | dream-tech-art | agency-technical-artist | engine pick |
 | dream-audio | agency-game-audio-engineer | engine pick |
 
+## Department Library (.agents/skills/)
+
+Sub-agents load skills on demand — they are NOT permanent board seats:
+
+- `agency-senior-developer` — code/backend/frontend tasks
+- `agency-code-reviewer` — PR review when a change exists
+- `agency-devops-automator` — deploy/infra tasks
+- `agency-compliance-auditor` — compliance/legal scans
+- `agency-support-responder` — customer support work
+- `agency-growth-hacker` — growth/marketing tasks
+- `agency-cross-border-e-commerce-specialist` — listing work
+- `agency-backend-architect` — API/storefront implementation
+- 270+ more in `.agents/skills/`
+
 ## Sub-Agent Spawning Rules
 
 1. CEOs can spawn temp agents from any of the 279 skills in `.agents/skills/`
