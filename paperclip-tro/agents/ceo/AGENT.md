@@ -7,7 +7,7 @@ model: claude-sonnet-4-5-20250929
 provider: claude_local
 reports_to: ceo
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 heartbeat_minutes: 60
 ---
 

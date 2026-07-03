@@ -7,7 +7,7 @@ model: codex-mini-5.3
 provider: codex_local
 reports_to: ceo
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 heartbeat_minutes: 60
 ---
 
