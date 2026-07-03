@@ -1,9 +1,9 @@
 ---
-name: ant-support
-title: Support — ANT DateApp (OpenClaw)
+name: ant-devops
+title: DevOps — ANT DateApp (T5500 wrangler deploy)
 adapter: ollama-local
 paperclip_adapter_type: opencode_local
-model: qwen2.5-coder:7b
+model: gemma4:latest
 provider: ollama-local
 reports_to: ceo
 project: ANT-DATEAPP
@@ -11,10 +11,10 @@ node: sabretooth
 heartbeat_minutes: 60
 ---
 
-# Support — ANT DateApp (OpenClaw)
+# DevOps — ANT DateApp (T5500 wrangler deploy)
 
 Read STATE.md FIRST. Write STATE.md on exit. No exceptions.
 
 ## Skills (lazy load)
-- .agents/skills/agency-support-responder/SKILL.md
+- .agents/skills/agency-devops-automator/SKILL.md
 - .agents/skills/self-improving-system/SKILL.md
