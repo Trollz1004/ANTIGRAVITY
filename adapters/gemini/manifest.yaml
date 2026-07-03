@@ -13,4 +13,9 @@ paperclip_adapter_config:
 paperclip_alias: "gemini"
 opencode_provider: "google"
 opencode_model: "gemini-2.5-pro"
-notes: "Requires GEMINI_API_KEY in env. Uses `opencode_local` Paperclip adapter type with google provider. CEO wheel: on FAIL swap to hermes-router/ollama-local."
+auth:
+  type: api-key
+  env_var: GEMINI_API_KEY
+  signup_url: "https://aistudio.google.com/apikey"
+  instructions: "Get API key from Google AI Studio, set GEMINI_API_KEY in local env. Free tier: 15 RPM / 1M tokens/day."
+notes: "Requires GEMINI_API_KEY. Uses `opencode_local` Paperclip adapter type with google provider. Free tier available. CEO wheel: on FAIL swap to hermes-router/ollama-local."
