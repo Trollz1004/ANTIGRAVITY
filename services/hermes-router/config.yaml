@@ -20,28 +20,28 @@ providers:
 # Virtual model aliases → provider + real model
 # Aliases match what HermesRouterPanel.tsx renders.
 #
-# CEO/Hermes routing: OpenAI Codex gpt-5.5 primary; OpenRouter free fallback.
-# Ollama custom Modelfiles stay local on Sabretooth.
+# All paid models — no free tiers. Joshua pays for everything.
+# Ollama custom Modelfiles stay local on Sabretooth (paid Ollama Cloud).
 routes:
   default:
     provider: openrouter
-    model: openrouter/free
+    model: openrouter/auto
 
   hermes:
     provider: openrouter
-    model: nousresearch/hermes-3-llama-3.1-405b:free
+    model: nousresearch/hermes-3-llama-3.1-405b
 
   hermes-deep:
     provider: openrouter
-    model: nousresearch/hermes-3-llama-3.1-405b:free
+    model: nousresearch/hermes-3-llama-3.1-405b
 
   hermes-fast:
     provider: openrouter
-    model: nousresearch/hermes-3-llama-3.1-405b:free
+    model: nousresearch/hermes-3-llama-3.1-405b
 
   hermes-reason:
     provider: openrouter
-    model: qwen/qwen3-235b-a22b:free
+    model: qwen/qwen3-235b-a22b
 
   cfo:
     provider: ollama-local
@@ -49,7 +49,7 @@ routes:
 
   code:
     provider: openrouter
-    model: qwen/qwen3-coder:free
+    model: qwen/qwen3-coder
 
   marketing:
     provider: ollama-local
@@ -57,7 +57,7 @@ routes:
 
   kimi:
     provider: openrouter
-    model: moonshotai/kimi-k2:free
+    model: moonshotai/kimi-k2
 
   fast:
     provider: ollama-local
@@ -77,4 +77,4 @@ routes:
 
   grok:
     provider: openrouter
-    model: x-ai/grok-3:free
+    model: x-ai/grok-3
