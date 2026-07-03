@@ -14,8 +14,6 @@ paperclip_alias: "grok"
 opencode_provider: "xai"
 opencode_model: "grok-3"
 auth:
-  type: api-key
-  env_var: XAI_API_KEY
-  signup_url: "https://console.x.ai"
-  instructions: "Sign up at console.x.ai, create API key, set XAI_API_KEY in local env"
-notes: "Grok CLI v0.2.60+ (alpha). Requires XAI_API_KEY. Uses `opencode_local` Paperclip adapter type with xai provider. Good for adversarial review, red-team, general coding. Free tier available via OpenRouter (x-ai/grok-3:free)."
+  type: browser-signin
+  instructions: "Open Grok CLI, sign in with xAI account via browser. No API key needed."
+notes: "Browser sign-in only — no API keys. Grok CLI v0.2.60+ (alpha). Uses `opencode_local` Paperclip adapter type with xai provider. Good for adversarial review, red-team, general coding. Free via OpenRouter (x-ai/grok-3:free)."
