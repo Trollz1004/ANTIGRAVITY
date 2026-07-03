@@ -1,0 +1,97 @@
+{
+  "checkedAt": "2026-07-03T04:05:00Z",
+  "health": {
+    "ok": false,
+    "status": "unreachable"
+  },
+  "me": {
+    "id": null,
+    "name": "OpenClaw",
+    "role": "general",
+    "status": "unknown"
+  },
+  "dashboard": {
+    "agents": null,
+    "tasks": null,
+    "pendingApprovals": null
+  },
+  "problemAgents": [],
+  "watchdogError": {
+    "type": "local-paperclip-unreachable",
+    "message": "The watchdog could not connect to local Paperclip at http://127.0.0.1:3110. No agent objects, headers, env values, tokens, PEMs, or adapterConfig were written."
+  },
+  "previousSnapshot": {
+    "checkedAt": "2026-07-02T20:35:15.5605278Z",
+    "agents": {
+      "active": 1,
+      "running": 1,
+      "paused": 0,
+      "error": 4
+    },
+    "tasks": {
+      "open": 61,
+      "inProgress": 0,
+      "blocked": 28,
+      "done": 66
+    },
+    "pendingApprovals": 0,
+    "problemAgents": [
+      {
+        "id": "383e8ee5-12db-4d60-b7e3-1b6aead645f9",
+        "name": "QA",
+        "role": "qa",
+        "title": "QA Engineer",
+        "status": "error",
+        "urlKey": "qa",
+        "lastHeartbeatAt": "2026-07-02T18:10:33.433Z",
+        "heartbeatEnabled": false
+      },
+      {
+        "id": "93a97bb6-3f83-46f0-b097-ed59868305b0",
+        "name": "OpenClaw",
+        "role": "general",
+        "title": "OpenClaw - Support + Board Ops",
+        "status": "error",
+        "urlKey": "openclaw",
+        "lastHeartbeatAt": "2026-07-02T16:29:03.228Z",
+        "heartbeatEnabled": true
+      },
+      {
+        "id": "78788781-3631-4f10-9bae-d9fb10c2adbc",
+        "name": "Support",
+        "role": "general",
+        "title": "Customer Support Responder",
+        "status": "error",
+        "urlKey": "support",
+        "lastHeartbeatAt": "2026-07-02T16:49:51.971Z",
+        "heartbeatEnabled": true
+      },
+      {
+        "id": "495fb518-a677-4ef1-a340-25aa0ef90f01",
+        "name": "Claude-Fable",
+        "role": "general",
+        "title": null,
+        "status": "idle",
+        "urlKey": "claude-fable",
+        "lastHeartbeatAt": "2026-07-02T10:36:36.524Z",
+        "heartbeatEnabled": true
+      },
+      {
+        "id": "0bc23d9d-5a56-4adb-8c2c-b121d827cdb0",
+        "name": "Hermes 2",
+        "role": "engineer",
+        "title": "Hermes Agent - Founding Engineer",
+        "status": "error",
+        "urlKey": "hermes-2",
+        "lastHeartbeatAt": "2026-07-02T20:31:06.291Z",
+        "heartbeatEnabled": true
+      }
+    ]
+  },
+  "recommendations": [
+    "Restore or start local Paperclip on 127.0.0.1:3110, then rerun the watchdog script.",
+    "Based on the previous sanitized snapshot, review error/stale agents in Paperclip HQ and wake or switch providers when safe.",
+    "Based on the previous sanitized snapshot, triage open work because there was open work and zero in-progress work.",
+    "Based on the previous sanitized snapshot, inspect blocked tasks and route unblock decisions to CEO/board where needed."
+  ]
+}

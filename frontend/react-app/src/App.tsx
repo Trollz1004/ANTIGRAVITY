@@ -37,22 +37,22 @@ const PLATFORM_CARDS = [
     icon: ShieldCheck,
     title: 'Identity First',
     body: 'Bot-Shield verification and account-bound checkout are built into launch. The platform is designed to make human validation the default.',
-    tone: 'bg-white',
-    iconTone: 'bg-[#111111] text-white',
+    tone: 'bg-[#141414] text-[#ededed]',
+    iconTone: 'bg-[#ffd700] text-black',
   },
   {
     icon: Heart,
     title: 'AI as a Shield',
     body: 'AI stays behind the scenes for fraud pressure, safety signals, and launch operations. It does not fake your personality or your connection.',
-    tone: 'bg-[#111111] text-white',
-    iconTone: 'bg-[#ff5a1f] text-white',
+    tone: 'bg-[#141414] text-[#ededed]',
+    iconTone: 'bg-[#0044ff] text-white',
   },
   {
     icon: Users,
     title: 'Built for Real Life',
     body: 'Dating, meetups, and real-world follow-through live in one product flow. The goal is less swiping theater and more actual conversation off-screen.',
-    tone: 'bg-[#ff5a1f] text-[#111111]',
-    iconTone: 'bg-white text-[#111111]',
+    tone: 'bg-[#141414] text-[#ededed]',
+    iconTone: 'bg-[#ededed] text-black',
   },
 ] as const;
 
@@ -62,35 +62,35 @@ const PRICING_PLANS = [
     price: '$1',
     desc: 'Human checkpoint before the badge is awarded.',
     link: SECURE_PLAN_LINKS.bot_shield,
-    tone: 'bg-[#111111] text-white',
+    tone: 'bg-[#141414] text-[#ededed] border-[#27272a]',
   },
   {
     name: 'Founding Member',
     price: '$14.99/mo',
     desc: 'Locked founder rate with account-bound checkout.',
     link: SECURE_PLAN_LINKS.founding_member,
-    tone: 'bg-white',
+    tone: 'bg-[#141414] text-[#ededed] border-[#ffd700] yellow-glow',
   },
   {
     name: '3-Month Founder',
     price: '$39.99',
     desc: 'Short-term founder access with one upfront payment.',
     link: SECURE_PLAN_LINKS['3_month'],
-    tone: 'bg-[#efe8da]',
+    tone: 'bg-[#141414] text-[#ededed] border-[#27272a]',
   },
   {
     name: '12-Month Founder',
     price: '$99.99',
     desc: 'Best value for launch-year access.',
     link: SECURE_PLAN_LINKS['12_month'],
-    tone: 'bg-[#efe8da]',
+    tone: 'bg-[#141414] text-[#ededed] border-[#27272a]',
   },
   {
     name: 'Royalty Card',
     price: '$2,500',
     desc: 'Premium founder product. Current terms are provided privately at checkout.',
     link: SECURE_PLAN_LINKS.royalty,
-    tone: 'bg-[#ff5a1f] text-white',
+    tone: 'bg-[#141414] text-[#ededed] border-[#0044ff] blue-glow',
   },
 ] as const;
 
@@ -115,9 +115,11 @@ function BrutalButton({
   return (
     <a
       href={href}
-      className={`inline-flex items-center justify-center border-4 border-[#111111] px-6 py-3 text-sm font-black uppercase tracking-[0.18em] no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 ${
-        dark ? 'bg-[#111111] text-white' : 'bg-[#ff5a1f] text-white'
-      } shadow-[6px_6px_0_0_#111111]`}
+      className={`mono inline-flex items-center justify-center rounded-[2px] border-2 px-6 py-3 text-sm font-black uppercase tracking-[0.18em] no-underline transition-transform duration-200 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 ${
+        dark
+          ? 'border-[#27272a] bg-[#141414] text-[#ededed] shadow-[6px_6px_0_0_#ffd700]'
+          : 'border-[#ffd700] bg-[#ffd700] text-black shadow-[6px_6px_0_0_#0a0a0a]'
+      }`}
     >
       {children}
     </a>
@@ -126,14 +128,15 @@ function BrutalButton({
 
 function SignupCTA() {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t-4 border-[#111111] bg-[#111111] px-3 py-2 text-white md:px-4 md:py-3">
+    <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#27272a] bg-[#0a0a0a]/95 backdrop-blur px-3 py-2 text-[#ededed] md:px-4 md:py-3">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 md:gap-3">
-        <span className="text-[10px] font-black uppercase tracking-[0.12em] text-[#f4efe7] md:text-sm md:tracking-[0.18em]">
+        <span className="mono flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.12em] text-[#a1a1aa] md:text-sm md:tracking-[0.18em]">
+          <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-[#ffd700]" />
           Bot-Shield verification is live now.
         </span>
         <a
           href={SECURE_PLAN_LINKS.bot_shield}
-          className="inline-flex items-center justify-center border-4 border-white bg-[#ff5a1f] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-white no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[3px_3px_0_0_#ffffff] md:px-5 md:py-2 md:text-xs md:tracking-[0.18em] md:shadow-[4px_4px_0_0_#ffffff]"
+          className="mono inline-flex items-center justify-center rounded-[2px] border-2 border-[#ffd700] bg-[#ffd700] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-black no-underline transition-transform duration-200 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 md:px-5 md:py-2 md:text-xs md:tracking-[0.18em]"
         >
           Get Verified
         </a>
@@ -169,8 +172,8 @@ function BetaCodeEntry() {
 
   if (success) {
     return (
-      <div className="mt-4 inline-flex items-center gap-2 border-4 border-[#111111] bg-[#dff6e6] px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-[#111111] shadow-[4px_4px_0_0_#111111]">
-        <Check size={16} />
+      <div className="mono mt-4 inline-flex items-center gap-2 rounded-[2px] border border-[#0044ff] bg-[#141414] px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-[#ededed] blue-glow">
+        <Check size={16} className="text-[#0044ff]" />
         Access granted
       </div>
     );
@@ -181,10 +184,10 @@ function BetaCodeEntry() {
       {!showInput ? (
         <button
           onClick={() => setShowInput(true)}
-          className="border-4 border-[#111111] bg-white px-4 py-3 text-xs font-black uppercase tracking-[0.18em] text-[#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111]"
+          className="mono rounded-[2px] border border-[#27272a] bg-[#141414] px-4 py-3 text-xs font-black uppercase tracking-[0.18em] text-[#ededed] transition-transform duration-200 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:border-[#3a3a3a]"
         >
           <span className="inline-flex items-center gap-2">
-            <KeyRound size={12} />
+            <KeyRound size={12} className="text-[#ffd700]" />
             Beta Tester? Enter Access Code
           </span>
         </button>
@@ -198,20 +201,20 @@ function BetaCodeEntry() {
             value={code}
             onChange={e => setCode(e.target.value)}
             placeholder="Access code"
-            className="min-w-0 flex-1 border-4 border-[#111111] bg-white px-4 py-3 text-sm font-bold uppercase tracking-[0.16em] text-[#111111] outline-none placeholder:text-[#7a746d]"
+            className="mono min-w-0 flex-1 rounded-[2px] border border-[#27272a] bg-[#141414] px-4 py-3 text-sm font-bold uppercase tracking-[0.16em] text-[#ededed] outline-none placeholder:text-[#a1a1aa] focus:border-[#ffd700]"
             autoFocus
           />
           <button
             type="submit"
             disabled={loading}
-            className="border-4 border-[#111111] bg-[#111111] px-5 py-3 text-sm font-black uppercase tracking-[0.18em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 disabled:opacity-60 shadow-[4px_4px_0_0_#111111]"
+            className="mono rounded-[2px] border border-[#ffd700] bg-[#ffd700] px-5 py-3 text-sm font-black uppercase tracking-[0.18em] text-black transition-transform duration-200 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 disabled:opacity-60"
           >
             {loading ? '...' : 'Enter'}
           </button>
         </form>
       )}
       {error && (
-        <p className="mt-3 text-sm font-bold uppercase tracking-[0.16em] text-[#b42318]">
+        <p className="mono mt-3 text-sm font-bold uppercase tracking-[0.16em] text-[#ff2a2a]">
           {error}
         </p>
       )}
@@ -241,25 +244,25 @@ function VerificationSteps() {
   return (
     <section
       id="verification"
-      className="border-b-4 border-[#111111] bg-[#111111] px-4 py-10 text-white md:px-12 md:py-16"
+      className="border-b border-[#27272a] bg-[#0a0a0a] px-4 py-10 text-[#ededed] md:px-12 md:py-16"
     >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff8b61] md:mb-8 md:text-xs md:tracking-[0.24em]">
+        <div className="overline mb-4 md:mb-8">
           Section 02 // Verification
         </div>
         <div className="grid gap-4 md:gap-6 md:grid-cols-3">
           {steps.map(step => (
             <div
               key={step.num}
-              className="border-4 border-white bg-[#1a1a1a] p-4 shadow-[6px_6px_0_0_#ff5a1f] md:p-6"
+              className="sharp-card p-4 md:p-6"
             >
-              <div className="mb-2 text-3xl font-black tracking-tighter text-[#ff8b61] md:mb-4 md:text-5xl">
+              <div className="display mb-2 text-3xl font-black tracking-tighter text-[#ffd700] md:mb-4 md:text-5xl">
                 {step.num}
               </div>
-              <h3 className="mb-2 text-xl font-black uppercase tracking-tight md:mb-3 md:text-2xl">
+              <h3 className="display mb-2 text-xl font-black uppercase tracking-tight md:mb-3 md:text-2xl">
                 {step.title}
               </h3>
-              <p className="text-xs font-medium leading-6 text-[#d7d3cc] md:text-sm md:leading-7">
+              <p className="text-xs font-medium leading-6 text-[#a1a1aa] md:text-sm md:leading-7">
                 {step.desc}
               </p>
             </div>
@@ -274,16 +277,16 @@ function PricingSection() {
   return (
     <section
       id="pricing"
-      className="border-b-4 border-[#111111] bg-[#f4efe7] px-4 py-10 md:px-12 md:py-16"
+      className="border-b border-[#27272a] bg-[#0a0a0a] px-4 py-10 md:px-12 md:py-16"
     >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+        <div className="overline mb-3 md:mb-4">
           Section 03 // Founder Pricing
         </div>
-        <h2 className="mb-3 text-3xl font-black tracking-tighter text-[#111111] md:mb-4 md:text-7xl">
+        <h2 className="display mb-3 text-3xl font-black tracking-tighter text-[#ededed] md:mb-4 md:text-7xl">
           pick your lane.
         </h2>
-        <p className="mb-6 max-w-3xl text-sm font-medium leading-7 text-[#38322b] md:mb-10 md:text-lg md:leading-8">
+        <p className="mb-6 max-w-3xl text-sm font-medium leading-7 text-[#a1a1aa] md:mb-10 md:text-lg md:leading-8">
           Every checkout route is account-bound. Public pricing is live, plain,
           and tied to the actual launch flow.
         </p>
@@ -292,15 +295,16 @@ function PricingSection() {
             <a
               key={plan.name}
               href={plan.link}
-              className={`block border-4 border-[#111111] p-4 no-underline shadow-[6px_6px_0_0_#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 md:p-6 ${plan.tone}`}
+              className={`sharp-card block border p-4 no-underline transition-transform duration-200 ease-out hover:-translate-y-0.5 md:p-6 ${plan.tone}`}
             >
-              <div className="text-[10px] font-black uppercase tracking-[0.14em] opacity-70 md:text-xs md:tracking-[0.18em]">
+              <div className="overline flex items-center gap-2 opacity-90">
+                <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-[#ffd700]" />
                 Live
               </div>
-              <div className="mt-2 text-2xl font-black tracking-tighter md:mt-4 md:text-3xl">
+              <div className="mono mt-2 text-2xl font-black tracking-tighter md:mt-4 md:text-3xl">
                 {plan.price}
               </div>
-              <h3 className="mt-2 text-lg font-black uppercase tracking-tight md:mt-4 md:text-2xl">
+              <h3 className="display mt-2 text-lg font-black uppercase tracking-tight md:mt-4 md:text-2xl">
                 {plan.name}
               </h3>
               <p className="mt-2 text-xs font-medium leading-6 opacity-80 md:mt-3 md:text-sm md:leading-7">
@@ -309,7 +313,7 @@ function PricingSection() {
             </a>
           ))}
         </div>
-        <p className="mt-5 max-w-4xl text-xs font-bold uppercase tracking-[0.12em] text-[#5c554d] md:mt-8 md:text-sm md:tracking-[0.16em]">
+        <p className="mono mt-5 max-w-4xl text-xs font-bold uppercase tracking-[0.12em] text-[#a1a1aa] md:mt-8 md:text-sm md:tracking-[0.16em]">
           Securely processed by Square. Customer purchases buy platform access
           and founder products. They are commercial transactions, not gifts.
         </p>
@@ -352,27 +356,27 @@ function WaitlistForm() {
   return (
     <section
       id="join"
-      className="border-b-4 border-[#111111] bg-[#111111] px-4 py-10 text-white md:px-12 md:py-16"
+      className="border-b border-[#27272a] bg-[#0a0a0a] px-4 py-10 text-[#ededed] md:px-12 md:py-16"
     >
       <div className="mx-auto max-w-3xl">
-        <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff8b61] md:mb-4 md:text-xs md:tracking-[0.24em]">
+        <div className="overline mb-3 md:mb-4">
           Section 05 // Join
         </div>
-        <h2 className="text-3xl font-black tracking-tighter md:text-7xl">
+        <h2 className="display text-3xl font-black tracking-tighter md:text-7xl">
           join the list.
         </h2>
-        <p className="mt-3 max-w-2xl text-sm font-medium leading-7 text-[#d7d3cc] md:mt-4 md:text-lg md:leading-8">
+        <p className="mt-3 max-w-2xl text-sm font-medium leading-7 text-[#a1a1aa] md:mt-4 md:text-lg md:leading-8">
           Get early access updates without the noise. The waitlist is simple by
           design.
         </p>
-        <div className="mt-5 border-4 border-white bg-[#f4efe7] p-4 text-[#111111] shadow-[8px_8px_0_0_#ff5a1f] md:mt-8 md:p-6">
+        <div className="sharp-card yellow-glow mt-5 p-4 text-[#ededed] md:mt-8 md:p-6">
           {submitted ? (
             <div className="space-y-2 text-center md:space-y-3">
-              <div className="flex items-center justify-center gap-2 text-xs font-black uppercase tracking-[0.14em] md:gap-3 md:text-sm md:tracking-[0.18em]">
-                <Check size={16} />
+              <div className="mono flex items-center justify-center gap-2 text-xs font-black uppercase tracking-[0.14em] md:gap-3 md:text-sm md:tracking-[0.18em]">
+                <Check size={16} className="text-[#ffd700]" />
                 You&apos;re on the list.
               </div>
-              <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#5c554d] md:text-xs md:tracking-[0.16em]">
+              <p className="mono text-[10px] font-black uppercase tracking-[0.12em] text-[#a1a1aa] md:text-xs md:tracking-[0.16em]">
                 Launch updates will go to this address. Need help? Email
                 support.
               </p>
@@ -399,7 +403,7 @@ function WaitlistForm() {
               <div className="relative min-w-0 flex-1">
                 <Mail
                   size={16}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7a746d] md:left-4"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] md:left-4"
                 />
                 <input
                   type="email"
@@ -408,18 +412,18 @@ function WaitlistForm() {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   placeholder="[EMAIL]"
-                  className="w-full border-4 border-[#111111] bg-white py-3 pl-10 pr-3 text-sm font-bold text-[#111111] outline-none placeholder:text-[#7a746d] md:py-4 md:pl-12 md:pr-4 md:text-base"
+                  className="mono w-full rounded-[2px] border border-[#27272a] bg-[#141414] py-3 pl-10 pr-3 text-sm font-bold text-[#ededed] outline-none placeholder:text-[#a1a1aa] focus:border-[#ffd700] md:py-4 md:pl-12 md:pr-4 md:text-base"
                 />
               </div>
               <button
                 type="submit"
-                className="border-4 border-[#111111] bg-[#ff5a1f] px-6 py-3 text-xs font-black uppercase tracking-[0.14em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 disabled:opacity-60 shadow-[6px_6px_0_0_#111111] md:px-8 md:text-sm md:tracking-[0.18em]"
+                className="mono rounded-[2px] border border-[#ffd700] bg-[#ffd700] px-6 py-3 text-xs font-black uppercase tracking-[0.14em] text-black transition-transform duration-200 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 disabled:opacity-60 md:px-8 md:text-sm md:tracking-[0.18em]"
               >
                 Join Now
               </button>
             </form>
           )}
-          <p className="mt-3 text-[10px] font-black uppercase tracking-[0.14em] text-[#5c554d] md:mt-4 md:text-xs md:tracking-[0.18em]">
+          <p className="mono mt-3 text-[10px] font-black uppercase tracking-[0.14em] text-[#a1a1aa] md:mt-4 md:text-xs md:tracking-[0.18em]">
             No spam. No bots. Just launch updates.
           </p>
         </div>
@@ -457,28 +461,30 @@ function LegalModal({ type, onClose }: { type: string; onClose: () => void }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 p-4"
+      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 p-4"
       onClick={onClose}
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="max-h-[85vh] w-full max-w-3xl overflow-y-auto border-4 border-[#111111] bg-[#f4efe7] p-6 shadow-[10px_10px_0_0_#111111]"
+        exit={{ opacity: 0, scale: 0.97 }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className="sharp-card max-h-[85vh] w-full max-w-3xl overflow-y-auto bg-[#141414] p-6"
         onClick={e => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between gap-4">
-          <h3 className="text-2xl font-black uppercase tracking-tight text-[#111111]">
+          <h3 className="display text-2xl font-black uppercase tracking-tight text-[#ededed]">
             {content.title}
           </h3>
           <button
             onClick={onClose}
-            className="border-4 border-[#111111] bg-white p-2 text-[#111111] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111]"
+            className="rounded-[2px] border border-[#27272a] bg-[#1e1e1e] p-2 text-[#ededed] transition-transform duration-200 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:border-[#ffd700]"
           >
             <X size={18} />
           </button>
         </div>
-        <div className="whitespace-pre-line text-sm font-medium leading-7 text-[#2c2924]">
+        <div className="whitespace-pre-line text-sm font-medium leading-7 text-[#a1a1aa]">
           {content.body}
         </div>
       </motion.div>
@@ -492,33 +498,35 @@ function SuccessModal({ onClose }: { onClose: () => void }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/75 p-4"
+      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 p-4"
       onClick={onClose}
     >
       <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        initial={{ opacity: 0, y: 20, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 20, scale: 0.95 }}
-        className="w-full max-w-md border-4 border-[#111111] bg-[#dff6e6] p-8 text-center text-[#111111] shadow-[10px_10px_0_0_#111111]"
+        exit={{ opacity: 0, y: 20, scale: 0.97 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="sharp-card yellow-glow w-full max-w-md bg-[#141414] p-8 text-center text-[#ededed]"
         onClick={e => e.stopPropagation()}
       >
-        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border-4 border-[#111111] bg-white">
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#ffd700] bg-[#1e1e1e]">
           <img
             src="/bot-shield-logo.png"
             alt="Bot-Shield Verified"
             className="h-10 w-10 object-contain"
           />
         </div>
-        <h3 className="text-3xl font-black uppercase tracking-tight">
+        <h3 className="display text-3xl font-black uppercase tracking-tight">
           Bot-Shield Verified
         </h3>
-        <p className="mt-3 text-sm font-medium leading-7">
+        <p className="mt-3 text-sm font-medium leading-7 text-[#a1a1aa]">
           Your verification is complete. Square handles receipt delivery for the
           payment email used at checkout.
         </p>
         <button
           onClick={onClose}
-          className="mt-6 border-4 border-[#111111] bg-[#111111] px-6 py-3 text-sm font-black uppercase tracking-[0.18em] text-white transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[6px_6px_0_0_#111111]"
+          className="mono mt-6 rounded-[2px] border border-[#ffd700] bg-[#ffd700] px-6 py-3 text-sm font-black uppercase tracking-[0.18em] text-black transition-transform duration-200 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5"
         >
           Let&apos;s Go
         </button>
@@ -531,13 +539,13 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
   const legalKeys = ['terms', 'privacy', 'age', 'refund'] as const;
 
   return (
-    <footer className="border-t-4 border-[#111111] bg-[#efe8da] px-4 py-6 text-[#111111] md:px-12 md:py-10">
+    <footer className="mono border-t border-[#27272a] bg-[#0a0a0a] px-4 py-6 text-[#ededed] md:px-12 md:py-10">
       <div className="mx-auto grid max-w-7xl gap-6 md:gap-8 md:grid-cols-[1.2fr_0.8fr_1fr]">
         <div>
-          <div className="text-2xl font-black uppercase tracking-tighter md:text-3xl">
-            YOUANDINOTAI<span className="text-[#ff5a1f]">.</span>
+          <div className="display text-2xl font-black uppercase tracking-tighter md:text-3xl">
+            YOUANDINOTAI<span className="text-[#ffd700]">.</span>
           </div>
-          <p className="mt-3 max-w-lg text-xs font-medium leading-6 text-[#3f3a34] md:mt-4 md:text-sm md:leading-7">
+          <p className="mt-3 max-w-lg text-xs font-medium leading-6 text-[#a1a1aa] md:mt-4 md:text-sm md:leading-7">
             Human-first social platform for dating, meetups, and real-world
             connection. Bot-Shield and account-bound checkout are live now.
           </p>
@@ -546,19 +554,19 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
           <h4 className="text-xs font-black uppercase tracking-[0.14em] md:text-sm md:tracking-[0.18em]">
             Launch Links
           </h4>
-          <div className="mt-3 flex flex-col gap-2 text-xs font-bold uppercase tracking-[0.1em] md:mt-4 md:gap-3 md:text-sm md:tracking-[0.12em]">
-            <a href="#pricing" className="no-underline hover:text-[#ff5a1f]">
+          <div className="mt-3 flex flex-col gap-2 text-xs font-bold uppercase tracking-[0.1em] text-[#a1a1aa] md:mt-4 md:gap-3 md:text-sm md:tracking-[0.12em]">
+            <a href="#pricing" className="no-underline hover:text-[#ffd700]">
               Pricing
             </a>
-            <a href="#join" className="no-underline hover:text-[#ff5a1f]">
+            <a href="#join" className="no-underline hover:text-[#ffd700]">
               Waitlist
             </a>
-            <a href="/support" className="no-underline hover:text-[#ff5a1f]">
+            <a href="/support" className="no-underline hover:text-[#ffd700]">
               Support
             </a>
             <a
               href="mailto:[EMAIL]"
-              className="no-underline hover:text-[#ff5a1f]"
+              className="no-underline hover:text-[#ffd700]"
             >
               Contact
             </a>
@@ -573,7 +581,7 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
               <button
                 key={key}
                 onClick={() => onLegal(key)}
-                className="border-4 border-[#111111] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#111111] md:px-4 md:py-2 md:text-xs md:tracking-[0.16em]"
+                className="rounded-[2px] border border-[#27272a] bg-[#141414] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#ededed] transition-transform duration-200 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:border-[#ffd700] md:px-4 md:py-2 md:text-xs md:tracking-[0.16em]"
               >
                 {LEGAL_CONTENT[key].title
                   .replace(' Policy', '')
@@ -583,8 +591,8 @@ function Footer({ onLegal }: { onLegal: (type: string) => void }) {
           </div>
         </div>
       </div>
-      <div className="mx-auto mt-5 max-w-7xl border-t-4 border-[#111111] pt-4 md:mt-8 md:pt-6">
-        <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#5c554d] md:text-xs md:tracking-[0.16em]">
+      <div className="mx-auto mt-5 max-w-7xl border-t border-[#27272a] pt-4 md:mt-8 md:pt-6">
+        <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#a1a1aa] md:text-xs md:tracking-[0.16em]">
           © 2026 Trash Or Treasure Online Recycler LLC. YouAndiNotAi.com is a
           for-profit platform.
         </p>
@@ -597,7 +605,7 @@ export function PublicSupportPage() {
   const [legalModal, setLegalModal] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#111111] text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-[#ededed]">
       <HeroBackground />
       <div className="relative z-10 flex min-h-screen flex-col">
         <main className="flex-1 px-6 py-12 md:px-12">
@@ -605,23 +613,23 @@ export function PublicSupportPage() {
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
               <a
                 href="/"
-                className="border-4 border-white bg-[#111111] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white no-underline transition-transform hover:-translate-x-1 hover:-translate-y-1 shadow-[4px_4px_0_0_#ffffff]"
+                className="mono rounded-[2px] border border-[#27272a] bg-[#141414] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#ededed] no-underline transition-transform duration-200 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:border-[#ffd700]"
               >
                 Back Home
               </a>
-              <div className="border-4 border-white bg-[#ff5a1f] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_0_#ffffff]">
+              <div className="mono rounded-[2px] border border-[#ffd700] bg-[#ffd700] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-black">
                 Support
               </div>
             </div>
 
-            <section className="border-4 border-white bg-[#f4efe7] p-8 text-[#111111] shadow-[10px_10px_0_0_#ff5a1f]">
-              <p className="text-xs font-black uppercase tracking-[0.24em] text-[#ff5a1f]">
+            <section className="sharp-card yellow-glow p-8 text-[#ededed]">
+              <p className="overline text-[#ffd700]">
                 YouAndiNotAi Support
               </p>
-              <h1 className="mt-4 text-4xl font-black tracking-tighter md:text-6xl">
+              <h1 className="display mt-4 text-4xl font-black tracking-tighter md:text-6xl">
                 help for receipts, verification, privacy, and account issues.
               </h1>
-              <p className="mt-4 max-w-3xl text-base font-medium leading-8 text-[#3f3a34]">
+              <p className="mt-4 max-w-3xl text-base font-medium leading-8 text-[#a1a1aa]">
                 Signed-in members can use the in-app support center to chat with
                 support, escalate a ticket, and review prior requests. If you
                 are not signed in yet, use the email contact below or create an
@@ -629,21 +637,21 @@ export function PublicSupportPage() {
               </p>
 
               <div className="mt-8 grid gap-4 md:grid-cols-2">
-                <div className="border-4 border-[#111111] bg-white p-5 shadow-[6px_6px_0_0_#111111]">
-                  <h2 className="text-xl font-black uppercase tracking-tight">
+                <div className="sharp-card p-5">
+                  <h2 className="display text-xl font-black uppercase tracking-tight">
                     Account Support
                   </h2>
-                  <p className="mt-3 text-sm font-medium leading-7 text-[#3f3a34]">
+                  <p className="mt-3 text-sm font-medium leading-7 text-[#a1a1aa]">
                     Use the support center after sign-in for payment receipts,
                     Bot-Shield verification, privacy requests, and account
                     troubleshooting.
                   </p>
                 </div>
-                <div className="border-4 border-[#111111] bg-white p-5 shadow-[6px_6px_0_0_#111111]">
-                  <h2 className="text-xl font-black uppercase tracking-tight">
+                <div className="sharp-card p-5">
+                  <h2 className="display text-xl font-black uppercase tracking-tight">
                     Direct Contact
                   </h2>
-                  <p className="mt-3 text-sm font-medium leading-7 text-[#3f3a34]">
+                  <p className="mt-3 text-sm font-medium leading-7 text-[#a1a1aa]">
                     For general support or login issues, email the support inbox
                     and include the address tied to your account when possible.
                   </p>
@@ -690,11 +698,11 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <div className="mx-auto min-h-screen max-w-[1600px] border-x-4 border-[#111111] bg-[#f4efe7] text-[#111111] pb-cta">
-        <nav className="sticky top-0 z-50 border-b-4 border-[#111111] bg-white px-4 py-3 md:px-12 md:py-5">
+      <div className="mx-auto min-h-screen max-w-[1600px] border-x border-[#27272a] bg-[#0a0a0a] text-[#ededed] pb-cta">
+        <nav className="glass sticky top-0 z-50 px-4 py-3 md:px-12 md:py-5">
           <div className="flex items-center justify-between gap-2 md:gap-4">
-            <div className="text-xl font-black uppercase tracking-tighter md:text-3xl">
-              YOUANDINOTAI<span className="text-[#ff5a1f]">.</span>
+            <div className="display text-xl font-black uppercase tracking-tighter md:text-3xl">
+              YOUANDINOTAI<span className="text-[#ffd700]">.</span>
             </div>
 
             <div className="hidden items-center gap-8 md:flex">
@@ -702,7 +710,7 @@ export default function App() {
                 <a
                   key={item.label}
                   href={item.href}
-                  className="text-sm font-black uppercase tracking-[0.16em] no-underline hover:text-[#ff5a1f]"
+                  className="overline relative no-underline hover:text-[#ffd700] after:absolute after:-bottom-1 after:left-0 after:h-[1px] after:w-0 after:bg-[#ffd700] after:transition-all after:duration-200 hover:after:w-full"
                 >
                   {item.label}
                 </a>
@@ -718,20 +726,20 @@ export default function App() {
 
             <button
               onClick={() => setMenuOpen(value => !value)}
-              className="inline-flex items-center justify-center border-4 border-[#111111] bg-white p-2 md:hidden shadow-[4px_4px_0_0_#111111]"
+              className="inline-flex items-center justify-center rounded-[2px] border border-[#27272a] bg-[#141414] p-2 text-[#ededed] md:hidden"
             >
               {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
 
           {menuOpen && (
-            <div className="mt-5 flex flex-col gap-3 border-t-4 border-[#111111] pt-5 md:hidden">
+            <div className="mt-5 flex flex-col gap-3 border-t border-[#27272a] pt-5 md:hidden">
               {NAV_ITEMS.map(item => (
                 <a
                   key={item.label}
                   href={item.href}
                   onClick={() => setMenuOpen(false)}
-                  className="border-4 border-[#111111] bg-[#f4efe7] px-4 py-3 text-sm font-black uppercase tracking-[0.16em] no-underline shadow-[4px_4px_0_0_#111111]"
+                  className="overline rounded-[2px] border border-[#27272a] bg-[#141414] px-4 py-3 no-underline"
                 >
                   {item.label}
                 </a>
@@ -743,30 +751,30 @@ export default function App() {
           )}
         </nav>
 
-        <div className="border-b-4 border-[#111111] bg-[#111111] px-3 py-2 text-center text-[10px] font-black uppercase tracking-[0.16em] text-[#f4efe7] md:px-12 md:py-3 md:text-xs md:tracking-[0.2em]">
+        <div className="mono border-b border-[#27272a] bg-[#141414] px-3 py-2 text-center text-[10px] font-black uppercase tracking-[0.16em] text-[#a1a1aa] md:px-12 md:py-3 md:text-xs md:tracking-[0.2em]">
           Founder pricing is live. Launch day is April 4, 2026.
         </div>
 
         <section
           id="about"
-          className="grid border-b-4 border-[#111111] md:min-h-[78vh] md:grid-cols-12"
+          className="grid-bg grid border-b border-[#27272a] bg-[#0a0a0a] md:min-h-[78vh] md:grid-cols-12"
         >
-          <div className="border-b-4 border-[#111111] bg-white px-4 py-8 md:col-span-8 md:border-b-0 md:border-r-4 md:px-12 md:py-20">
+          <div className="border-b border-[#27272a] px-4 py-8 md:col-span-8 md:border-b-0 md:border-r md:px-12 md:py-20">
             <div className="max-w-4xl">
-              <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+              <div className="overline mb-3 md:mb-4">
                 Section 01 // Human Only
               </div>
-              <h1 className="text-4xl font-black lowercase leading-[0.9] tracking-tighter md:text-8xl xl:text-9xl">
+              <h1 className="scanline display text-4xl font-black lowercase leading-[0.9] tracking-tighter text-[#ededed] md:text-8xl xl:text-9xl">
                 real people.
                 <br />
                 zero bot noise.
               </h1>
-              <p className="mt-5 max-w-3xl text-lg font-medium leading-snug text-[#2f2a24] md:mt-8 md:text-3xl md:leading-tight">
+              <p className="mt-5 max-w-3xl text-lg font-medium leading-snug text-[#a1a1aa] md:mt-8 md:text-3xl md:leading-tight">
                 A human-first social platform for dating, meetups, and
                 real-world connection. AI is used to protect the experience, not
                 perform it.
               </p>
-              <div className="mt-5 inline-block border-l-4 border-[#ff5a1f] bg-[#fff6f1] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#111111] md:mt-8 md:px-4 md:py-3 md:text-sm md:tracking-[0.16em]">
+              <div className="blue-glow mt-5 inline-block border-l-2 border-[#0044ff] bg-[#141414] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#ededed] md:mt-8 md:px-4 md:py-3 md:text-sm md:tracking-[0.16em]">
                 Bot-Shield verification and account-bound checkout are live now.
               </div>
 
@@ -779,39 +787,40 @@ export default function App() {
             </div>
           </div>
 
-          <div className="bg-[#ff5a1f] px-4 py-8 text-[#111111] md:col-span-4 md:px-10 md:py-16">
+          <div className="bg-[#141414] px-4 py-8 text-[#ededed] md:col-span-4 md:px-10 md:py-16">
             <div className="space-y-4 md:space-y-6">
-              <div className="border-t-4 border-[#111111] pt-4 md:pt-6">
-                <h2 className="text-2xl font-black uppercase tracking-tighter md:text-4xl">
+              <div className="border-t border-[#27272a] pt-4 md:pt-6">
+                <h2 className="display text-2xl font-black uppercase tracking-tighter md:text-4xl">
                   Launch Status
                 </h2>
-                <p className="mt-2 text-base font-bold leading-7 md:mt-4 md:text-lg md:leading-8">
+                <p className="mt-2 text-base font-bold leading-7 text-[#a1a1aa] md:mt-4 md:text-lg md:leading-8">
                   The public surface is product-first: verification, pricing,
                   support, and profile flow.
                 </p>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2 md:gap-4">
-                <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
-                  <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#ff5a1f] md:text-xs md:tracking-[0.18em]">
+                <div className="sharp-card p-4 md:p-5">
+                  <div className="overline flex items-center gap-2 text-[#ffd700]">
+                    <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-[#ffd700]" />
                     Live
                   </div>
-                  <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
+                  <div className="display mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
                     Bot-Shield Flow
                   </div>
-                  <p className="mt-1 text-xs font-medium leading-6 text-[#38322b] md:mt-2 md:text-sm md:leading-7">
+                  <p className="mt-1 text-xs font-medium leading-6 text-[#a1a1aa] md:mt-2 md:text-sm md:leading-7">
                     Verification stays tied to the real checkout path instead of
                     anonymous payment links.
                   </p>
                 </div>
-                <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
-                  <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#ff5a1f] md:text-xs md:tracking-[0.18em]">
+                <div className="sharp-card p-4 md:p-5">
+                  <div className="overline text-[#ffd700]">
                     Launch
                   </div>
-                  <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
+                  <div className="display mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
                     April 4, 2026
                   </div>
-                  <p className="mt-1 text-xs font-medium leading-6 text-[#38322b] md:mt-2 md:text-sm md:leading-7">
+                  <p className="mt-1 text-xs font-medium leading-6 text-[#a1a1aa] md:mt-2 md:text-sm md:leading-7">
                     Founder pricing, support, and early-access capture are all
                     wired into the same surface.
                   </p>
@@ -823,27 +832,27 @@ export default function App() {
 
         <section
           id="platform"
-          className="border-b-4 border-[#111111] bg-[#f4efe7] px-4 py-10 md:px-12 md:py-16"
+          className="border-b border-[#27272a] bg-[#0a0a0a] px-4 py-10 md:px-12 md:py-16"
         >
           <div className="mx-auto max-w-7xl">
-            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+            <div className="overline mb-3 md:mb-4">
               The Social
             </div>
-            <h2 className="mb-6 text-3xl font-black tracking-tighter md:mb-10 md:text-7xl">
+            <h2 className="display mb-6 text-3xl font-black tracking-tighter text-[#ededed] md:mb-10 md:text-7xl">
               how we connect.
             </h2>
             <div className="grid gap-4 md:gap-6 md:grid-cols-3">
               {PLATFORM_CARDS.map(card => (
                 <div
                   key={card.title}
-                  className={`border-4 border-[#111111] p-5 shadow-[6px_6px_0_0_#111111] md:p-8 ${card.tone}`}
+                  className={`sharp-card border p-5 md:p-8 ${card.tone}`}
                 >
                   <div
-                    className={`mb-4 inline-flex h-10 w-10 items-center justify-center border-4 border-[#111111] md:mb-6 md:h-14 md:w-14 ${card.iconTone}`}
+                    className={`mb-4 inline-flex h-10 w-10 items-center justify-center rounded-[2px] md:mb-6 md:h-14 md:w-14 ${card.iconTone}`}
                   >
                     <card.icon size={20} />
                   </div>
-                  <h3 className="text-xl font-black uppercase tracking-tight md:text-2xl">
+                  <h3 className="display text-xl font-black uppercase tracking-tight md:text-2xl">
                     {card.title}
                   </h3>
                   <p className="mt-3 text-xs font-medium leading-6 opacity-85 md:mt-4 md:text-sm md:leading-7">
@@ -860,32 +869,32 @@ export default function App() {
 
         <section
           id="trust"
-          className="border-b-4 border-[#111111] bg-white px-4 py-10 md:px-12 md:py-16"
+          className="border-b border-[#27272a] bg-[#0a0a0a] px-4 py-10 md:px-12 md:py-16"
         >
           <div className="mx-auto max-w-5xl">
-            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+            <div className="overline mb-3 md:mb-4">
               Section 04 // Trust
             </div>
-            <h2 className="text-3xl font-black tracking-tighter md:text-7xl">
+            <h2 className="display text-3xl font-black tracking-tighter text-[#ededed] md:text-7xl">
               clean business.
             </h2>
             <div className="mt-6 grid gap-4 md:mt-10 md:gap-8 md:grid-cols-2">
-              <div className="border-4 border-[#111111] bg-[#f4efe7] p-4 shadow-[6px_6px_0_0_#111111] md:p-6">
-                <p className="text-sm font-medium leading-7 text-[#2f2a24] md:text-lg md:leading-8">
+              <div className="sharp-card p-4 md:p-6">
+                <p className="text-sm font-medium leading-7 text-[#a1a1aa] md:text-lg md:leading-8">
                   This is a product. It has to stand on quality, trust, and real
                   human value. Checkout buys platform access, verification, and
                   support.
                 </p>
               </div>
-              <div className="border-4 border-[#111111] bg-[#111111] p-4 text-white shadow-[6px_6px_0_0_#ff5a1f] md:p-6">
-                <p className="text-sm font-medium leading-7 text-[#d7d3cc] md:text-lg md:leading-8">
+              <div className="sharp-card blue-glow border-[#0044ff] p-4 text-[#ededed] md:p-6">
+                <p className="text-sm font-medium leading-7 text-[#a1a1aa] md:text-lg md:leading-8">
                   Customer purchases are commercial transactions for platform
                   value delivered. No non-product sales claim is attached to
                   membership or verification checkout.
                 </p>
               </div>
             </div>
-            <div className="mt-6 border-4 border-[#111111] bg-[#ff5a1f] px-4 py-5 text-center text-lg font-black italic tracking-tight text-white shadow-[8px_8px_0_0_#111111] md:mt-10 md:px-6 md:py-8 md:text-2xl">
+            <div className="yellow-glow mt-6 rounded-[2px] border border-[#ffd700] bg-[#141414] px-4 py-5 text-center text-lg font-black italic tracking-tight text-[#ffd700] md:mt-10 md:px-6 md:py-8 md:text-2xl">
               &quot;The Silent Founder would thank you, but he stays
               silent.&quot;
             </div>
@@ -894,19 +903,19 @@ export default function App() {
 
         <WaitlistForm />
 
-        <section className="border-b-4 border-[#111111] bg-white px-4 py-10 text-center md:px-12 md:py-16">
+        <section className="border-b border-[#27272a] bg-[#0a0a0a] px-4 py-10 text-center md:px-12 md:py-16">
           <div className="mx-auto max-w-xl">
-            <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#ff5a1f] md:mb-4 md:text-xs md:tracking-[0.24em]">
+            <div className="overline mb-3 md:mb-4">
               Section 06 // Share
             </div>
-            <h2 className="text-3xl font-black tracking-tighter md:text-6xl">
+            <h2 className="display text-3xl font-black tracking-tighter text-[#ededed] md:text-6xl">
               share the platform.
             </h2>
-            <p className="mt-3 text-sm font-medium leading-7 text-[#3f3a34] md:mt-4 md:text-lg md:leading-8">
+            <p className="mt-3 text-sm font-medium leading-7 text-[#a1a1aa] md:mt-4 md:text-lg md:leading-8">
               Scan to visit or pass it to someone who is tired of fake profiles
               and low-trust noise.
             </p>
-            <div className="mx-auto mt-5 inline-block border-4 border-[#111111] bg-[#f4efe7] p-3 shadow-[8px_8px_0_0_#111111] md:mt-8 md:p-4">
+            <div className="sharp-card mx-auto mt-5 inline-block p-3 md:mt-8 md:p-4">
               <img
                 src="/qrcode.png"
                 alt="Scan to visit youandinotai.com"

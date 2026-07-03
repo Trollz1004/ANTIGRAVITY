@@ -90,6 +90,8 @@ def test_protected_http_routes_require_auth():
         ("/api/v1/metrics", "GET"),
         ("/api/v1/metrics/impact", "GET"),
         ("/api/v1/metrics/security-audit", "GET"),
+        ("/api/v1/skills", "GET"),
+        ("/api/v1/marketing/tracked-links/{slug}", "GET"),  # Public redirect resolver for tracked links
     }
     auth_dependencies = {get_current_user, _require_current_user}
     protected_routes = []

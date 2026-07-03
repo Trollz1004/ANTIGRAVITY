@@ -1,0 +1,50 @@
+{
+  "issueId": "6fe897f3-bc1d-4756-a568-da5142b0349b",
+  "key": "T-012",
+  "title": "Genspark submission tracker into mission-mcp",
+  "seededAt": "2026-07-01T23:10:00Z",
+  "source": "grok-agent",
+  "entries": [
+    {
+      "id": "gs-001",
+      "title": "YouAndINotAI verification best practices",
+      "query": "human verified dating app bot shield",
+      "status": "submitted",
+      "submitted_at": "2026-07-01T00:00:00Z",
+      "notes": "Seed for content calendar + BotShield"
+    },
+    {
+      "id": "gs-002",
+      "title": "Mission control patterns",
+      "query": "paperclip mission mcp agents",
+      "status": "submitted",
+      "submitted_at": "2026-07-01T00:00:00Z",
+      "notes": "For agent orchestration in mission-control"
+    },
+    {
+      "id": "gs-003",
+      "title": "Product Hunt launch assets",
+      "query": "youandinotai product hunt launch kit 2026",
+      "status": "indexed",
+      "submitted_at": "2026-07-01T00:10:00Z",
+      "notes": "TRO-29 related"
+    },
+    {
+      "id": "gs-004",
+      "title": "BotShield explainer content",
+      "query": "how BotShield verification works dating safety",
+      "status": "reviewed",
+      "submitted_at": "2026-07-01T00:20:00Z",
+      "notes": "For X/Reddit cadence + GensparkClaw"
+    },
+    {
+      "id": "gs-005",
+      "title": "Income engine / TRA marketplace",
+      "query": "ai solutions store tra marketplace tiers",
+      "status": "submitted",
+      "submitted_at": "2026-07-01T00:30:00Z",
+      "notes": "INFRA-2 sibling; 5-tier stub"
+    }
+  ],
+  "notes": "Use with GensparkSubmissionTracker.tsx and pieces MCP for persistence. Statuses: submitted | indexed | reviewed | failed"
+}

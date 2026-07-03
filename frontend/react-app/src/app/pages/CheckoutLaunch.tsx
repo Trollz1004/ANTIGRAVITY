@@ -57,9 +57,9 @@ export function CheckoutLaunch() {
   return (
     <div className="mesh-gradient min-h-screen px-4 py-8">
       <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-3xl items-center justify-center">
-        <div className="glass-strong glass-highlight w-full rounded-[2rem] p-8 text-center md:p-10">
+        <div className="glass-strong glass-highlight yellow-glow w-full rounded-[2px] p-8 text-center md:p-10">
           <div className="app-kicker mb-3">Secure Checkout</div>
-          <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-[1.8rem] border-4 border-[#111111] bg-[#111111] text-white shadow-[8px_8px_0_0_rgba(17,17,17,1)]">
+          <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-[2px] border border-[#ffd700] bg-[#1e1e1e] text-[#ffd700]">
             <LoaderCircle className="h-8 w-8 animate-spin" />
           </div>
 
@@ -73,11 +73,11 @@ export function CheckoutLaunch() {
           </p>
 
           {error ? (
-            <div className="mt-6 rounded-[1.4rem] border-4 border-[#111111] bg-[#ffd9c7] px-4 py-4 text-sm font-semibold text-[#111111]">
+            <div className="mt-6 rounded-[2px] border border-[#ff2a2a] bg-[#1e1e1e] px-4 py-4 text-sm font-semibold text-[#ededed]">
               {error}
             </div>
           ) : (
-            <p className="mt-6 text-sm font-bold uppercase tracking-[0.18em] text-[#5c594f]">
+            <p className="mono mt-6 text-sm font-bold uppercase tracking-[0.18em] text-[#a1a1aa]">
               Redirecting automatically
             </p>
           )}

@@ -143,9 +143,12 @@ Status: Active task buffer (100 tasks)
 
 ## Wheel Status
 
-- Current task count: **100** (full)
+- Current task count: **100** (full aspirational charter)
 - Last generated: 2026-06-28
 - Threshold for refill: ≤20 tasks remaining
+- Live board (2026-07-02 Wheel audit): 29 ready (todo), 0 blocked, 1 in_progress (Wheel), 1 in_review (TRO-1), 42 done, 5 cancelled.
+- This pass: 0 blocked (red sweep pass); assigned 4 high-pri ANT tasks to idle Support (TRO-75 T5500 health, TRO-70 Square webhook, TRO-68 bot-shield onboarding, TRO-64 public copy scan); TRO-1 in_review is valid (awaiting Joshua confirmation per hiring plan); queue 29 >20 (no refill); worker health: 1 running (self), 1 idle (Support, now loaded), 5 error/paused.
+- Updated by TRO-81 (Grok/Hermes CEO) run 4c430373-ad65-48be-a96d-eb797ae02303
 
 ## Refill Protocol
 

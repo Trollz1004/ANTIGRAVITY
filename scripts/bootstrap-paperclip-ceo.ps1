@@ -1,4 +1,4 @@
-param(
+﻿param(
   [switch]$StartupMode
 )
 
@@ -19,7 +19,10 @@ $HermesWrapper = 'c:\antigravity\paperclip-adapters\hermes.cmd'
 $WslHermesLauncher = 'c:\antigravity\scripts\launch-hermes-paperclip-ceo-wsl.cmd'
 $ChromeExe = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
 $BootstrapUrls = @(
-  'http://localhost:3100',
+  'http://localhost:3110',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:9119',
+  'http://127.0.0.1:8082/admin',
   'https://paperclip-hq.youandinotai.com',
   'https://mcp.youandinotai.com'
 )
@@ -89,7 +92,7 @@ function Ensure-LiteLLMRunning {
 
 function Ensure-PaperclipPortAvailable {
   try {
-    $healthResponse = Invoke-WebRequest -Uri 'http://127.0.0.1:3100/api/health' -TimeoutSec 2 -UseBasicParsing
+    $healthResponse = Invoke-WebRequest -Uri 'http://127.0.0.1:3110/api/health' -TimeoutSec 2 -UseBasicParsing
     if ($healthResponse.StatusCode -ge 200 -and $healthResponse.StatusCode -lt 500) {
       Log 'Existing canonical Paperclip listener is already healthy.'
       return $false
@@ -98,7 +101,7 @@ function Ensure-PaperclipPortAvailable {
   catch {
   }
 
-  $listener = Get-NetTCPConnection -LocalPort 3100 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+  $listener = Get-NetTCPConnection -LocalPort 3110 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
   if ($null -eq $listener) {
     return $true
   }
@@ -144,7 +147,7 @@ function Start-PaperclipWithRetry {
 
     for ($i = 0; $i -lt 20; $i++) {
       try {
-        $response = Invoke-WebRequest -Uri 'http://127.0.0.1:3100/api/health' -TimeoutSec 3 -UseBasicParsing
+        $response = Invoke-WebRequest -Uri 'http://127.0.0.1:3110/api/health' -TimeoutSec 3 -UseBasicParsing
         if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 500) {
           Log 'Paperclip is responding.'
           return
@@ -191,10 +194,10 @@ function Ensure-PaperclipTunnelRunning {
 }
 
 function Wait-ForPaperclip {
-  Log 'Waiting for Paperclip to answer on http://127.0.0.1:3100/api/health...'
+  Log 'Waiting for Paperclip to answer on http://127.0.0.1:3110/api/health...'
   for ($i = 0; $i -lt 30; $i++) {
     try {
-      $response = Invoke-WebRequest -Uri 'http://127.0.0.1:3100/api/health' -TimeoutSec 3 -UseBasicParsing
+      $response = Invoke-WebRequest -Uri 'http://127.0.0.1:3110/api/health' -TimeoutSec 3 -UseBasicParsing
       if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 500) {
         Log 'Paperclip is responding.'
         return
@@ -245,11 +248,15 @@ try {
   catch {
     Log "Docker/LiteLLM optional startup skipped: $($_.Exception.Message)"
   }
+  & (Join-Path $RepoRoot 'scripts\start-paperclip-hermes.ps1')
   Start-WSLOrchestration
   Open-BrowserTabs
   Log '=== Paperclip CEO bootstrap complete ==='
   Log '  Hermes chat: opens in a new terminal window'
-  Log '  Paperclip:   http://localhost:3100'
+  Log '  Paperclip:   http://localhost:3110'
+  Log '  Hermes UI:   http://localhost:3000'
+  Log '  Hermes old:  http://localhost:9119 -> :3000'
+  Log '  FCC admin:   http://localhost:8082/admin'
   Log '  Public HQ:   https://paperclip-hq.youandinotai.com'
   Log '  MCP:         https://mcp.youandinotai.com'
   Log '  LiteLLM:     http://localhost:11436'
@@ -260,3 +267,4 @@ try {
   Log "ERROR: $($_.Exception.Message)"
   exit 1
 }
+
