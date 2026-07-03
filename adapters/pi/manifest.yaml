@@ -13,4 +13,9 @@ paperclip_adapter_config:
 paperclip_alias: "pi"
 opencode_provider: "openrouter"
 opencode_model: "openrouter/free"
-notes: "Uses `pi_local` Paperclip adapter type. Falls back to Ollama local and OpenRouter free models. Shared OpenRouter key with Hermes/OpenCode."
+auth:
+  type: api-key
+  env_var: OPENROUTER_API_KEY
+  signup_url: "https://openrouter.ai"
+  instructions: "Sign up at openrouter.ai, create API key, set OPENROUTER_API_KEY in local env. Free tier models work without payment."
+notes: "Uses `pi_local` Paperclip adapter type. OPENROUTER_API_KEY for cloud models; Ollama local fallback is free/no-auth. Shared OpenRouter key with Hermes/OpenCode."
