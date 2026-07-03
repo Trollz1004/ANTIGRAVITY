@@ -10,7 +10,6 @@ This enables programmatic access to skills for Paperclip and other agent systems
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from typing import Any
 
@@ -298,43 +297,6 @@ async def list_agency_skills(
         "legal-billing",
     ]
     retail_keywords = ["retail-customer-returns", "hospitality-guest"]
-    specialized_keywords = [
-        "agentic-identity",
-        "agentic-search",
-        "civil-engineer",
-        "app-store-optimizer",
-        "cms-developer",
-        "filament",
-        "wechat",
-        "feishu",
-        "korean",
-        "french",
-        "tool-evaluator",
-        "ad-creative",
-        "behavioral-nudge",
-        "cultural-intelligence",
-        "anthropologist",
-        "historian",
-        "psychologist",
-        "identity-graph",
-        "email-intelligence",
-        "voice-ai",
-        "incidents",
-        "infrastructure-maintainer",
-        "minimal-change-engineer",
-        "developer-advocate",
-        "language-translator",
-        "linkedin-content",
-        "corporate-training",
-        "feedback-synthesizer",
-        "document-generator",
-        "narratologist",
-        "executive-summary",
-        "geographer",
-        "zk-steward",
-        "reddit-community",
-        "mcp-builder",
-    ]
     game_dev_keywords = ["game-", "unity-", "unreal-", "godot-", "roblox-"]
 
     for skill in agency:
