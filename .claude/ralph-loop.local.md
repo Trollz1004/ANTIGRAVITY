@@ -1,10 +1,10 @@
 ---
 active: true
 iteration: 1
-session_id: 1a3012b9-ea67-4735-ab6b-dd4a9e6a7ce4
+session_id: 532024cc-621e-4eba-8e40-f17abc704f52
 max_iterations: 0
 completion_promise: null
-started_at: "2026-06-07T00:55:47Z"
+started_at: "2026-07-02T10:42:21Z"
 ---
 
-Use sub-agents to work on business revenue, checkout reliability, customer support, and operational cleanup. Attach paperclip kanban at file:///C:/Users/joshl/Downloads/paperclip-kanban.html. Run until revenue and support blockers are cleared.
+make fcc-claude work in paperclipai OS adapter and all agent adapters to work if api available i want it to work as an adaptor

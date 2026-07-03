@@ -12,6 +12,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const PORT = Number(process.env.PORT || 8080);
+const UPSTREAM_BASE =
+  process.env.UPSTREAM_API_BASE_URL ||
+  'https://dateapp-backend-io5tscl75a-ue.a.run.app';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -63,6 +66,58 @@ function broadcast(data: any, excludeId?: string) {
 async function startServer() {
   const app = express();
   const server = http.createServer(app);
+  async function proxyUpstream(req: express.Request, res: express.Response) {
+    const originalPath = req.originalUrl.split('?')[0];
+    const upstreamPath = originalPath.startsWith('/webhooks/')
+      ? `/api/v1${originalPath}`
+      : originalPath;
+    const upstreamUrl = new URL(upstreamPath, UPSTREAM_BASE);
+    const query = req.originalUrl.includes('?') ? req.originalUrl.slice(req.originalUrl.indexOf('?')) : '';
+    upstreamUrl.search = query.startsWith('?') ? query.slice(1) : query;
+
+    const chunks: Buffer[] = [];
+    for await (const chunk of req) {
+      chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+    }
+    const body = chunks.length > 0 ? Buffer.concat(chunks) : undefined;
+
+    const headers = new Headers();
+    for (const [name, value] of Object.entries(req.headers)) {
+      if (typeof value === 'string') headers.set(name, value);
+      else if (Array.isArray(value)) headers.set(name, value.join(','));
+    }
+    headers.set('x-forwarded-host', req.headers.host || '');
+    headers.set('x-forwarded-proto', req.protocol);
+    headers.set('x-original-url', `${req.protocol}://${req.headers.host}${req.originalUrl}`);
+    headers.delete('host');
+    headers.delete('content-length');
+    headers.delete('connection');
+    headers.delete('accept-encoding');
+
+    try {
+      const upstreamResponse = await fetch(upstreamUrl.toString(), {
+        method: req.method,
+        headers,
+        body: req.method === 'GET' || req.method === 'HEAD' ? undefined : body,
+        redirect: 'manual',
+      });
+
+      res.status(upstreamResponse.status);
+      upstreamResponse.headers.forEach((value, name) => {
+        if (!['content-encoding', 'content-length', 'transfer-encoding'].includes(name.toLowerCase())) {
+          res.setHeader(name, value);
+        }
+      });
+      const responseBody = Buffer.from(await upstreamResponse.arrayBuffer());
+      res.send(responseBody);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : 'Unexpected proxy error';
+      res.status(502).json({ detail });
+    }
+  }
+
+  app.use('/api/v1', proxyUpstream);
+  app.use('/webhooks', proxyUpstream);
 
   // WebSocket Server
   const wss = new WebSocketServer({ server });

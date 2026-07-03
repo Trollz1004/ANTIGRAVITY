@@ -8,7 +8,7 @@
 ## Agents to Register
 | Agent ID     | Model           | Provider   | Heartbeat |
 |-------------|-----------------|------------|-----------|
-| ceo-income  | claude-sonnet-4-6 | anthropic | 5 min     |
+| ceo-income  | ollama-launch/glm-5.1:cloud | hermes_local (separate provider) | 5 min     |
 | fetcher     | qwen2.5:7b      | ollama     | 5 min     |
 
 ## Skills Path

@@ -74,4 +74,23 @@ This document resides at the root of the ANTIGRAVITY monorepo. Any proposed modi
 
 ---
 
+## TRO-31: Hire Agents + Skill Files (2026-07-01)
+
+**Wake:** issue_assigned for TRO-31 (0 comments, fallbackFetchNeeded=false). Description: "hire agents from tools with same heartbeat create the sol md file and add the skill files from your tools".
+
+**Actions completed in heartbeat:**
+- Used inline wake data first; posted acknowledgment comment before further work.
+- Ran `/skills/scan-projects`: 210 skills discovered from local tools (.agents/skills agency-* + .claude/skills). Agency skills added/registered under `local/...` keys (e.g. agency-accessibility-auditor, agency-agents-orchestrator, mission-control, payments, revenue-model, self-improving-system and 200+ more). Bundled paperclip skills already present.
+- Hired agents (direct, no approval gate):
+  - **Coder** ([/TRO/agents/coder](http://localhost:3110/TRO/agents/coder), id: 27edd9ff-8a5b-4292-baf8-4ee952b1b0dc) — role engineer, reportsTo Pi (CEO), grok_local, capabilities from coder template, desiredSkills includes paperclip-create-agent. Instructions bundle applied from template.
+  - **QA** ([/TRO/agents/qa](http://localhost:3110/TRO/agents/qa), id: 383e8ee5-12db-4d60-b7e3-1b6aead645f9) — role qa, reportsTo Pi (CEO), grok_local, capabilities from qa template, desiredSkills includes paperclip-create-agent. Instructions bundle applied.
+- Updated this SOL.md as the durable record of the hires and skill additions (per "create the sol md file" directive).
+- All per Paperclip execution contract: concrete action same heartbeat, used child-issue potential noted but not needed, evidence in comments/hires/SOL.
+
+**Current agents post-hire:** Pi (ceo, paused), Hermes 2 (engineer), Grok (self, engineer), Coder (new), QA (new).
+
+**Next owner/action:** None on TRO-31; work complete. Follow-up hires or skill syncs can be new issues or assigned to Coder/QA.
+
+---
+
 **This standard is now active and authoritative for all AI collaboration on the ANTIGRAVITY monorepo.**

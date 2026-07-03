@@ -16,7 +16,7 @@
     { "id": "ollama-cloud", "key_env": "OLLAMA_API_KEY", "virtual": "cloud" },
     { "id": "openrouter", "key_env": "OPENROUTER_API_KEY", "virtual": "router" },
     { "id": "opencode", "key_env": "OPENCODE_API_KEY", "virtual": "code" },
-    { "id": "anthropic", "key_env": "ANTHROPIC_API_KEY", "model": "claude-sonnet-4-6", "virtual": "ceo" },
+    { "id": "hermes", "key_env": "OLLAMA_API_KEY", "model": "glm-5.1:cloud", "virtual": "ceo" },
     { "id": "openai-codex", "key_env": "OPENAI_API_KEY", "model": "gpt-4o-mini", "virtual": "codex" },
     { "id": "hermes", "model": "glm-5.1", "key_env": "XAI_API_KEY", "virtual": "hermes" }
   ],

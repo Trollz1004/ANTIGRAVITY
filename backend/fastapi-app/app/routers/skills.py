@@ -14,9 +14,11 @@ import os
 from pathlib import Path
 from typing import Any
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-router = APIRouter(prefix="/api/v1/skills", tags=["skills"])
+from app.auth import get_current_user
+
+router = APIRouter(prefix="/skills", tags=["skills"])
 
 # Base directories for skills
 BASE_DIR = Path(__file__).parent.parent.parent.parent  # repo root
@@ -85,7 +87,7 @@ def _list_skills_in_dir(dir_path: Path, prefix: str = "") -> list[dict[str, Any]
 
 
 @router.get("", summary="List all available skills")
-async def list_skills() -> dict[str, Any]:
+async def list_skills(_current_user: None = Depends(get_current_user)) -> dict[str, Any]:
     """Return all available Antigravity skills.
 
     Skills are organized into categories:
@@ -116,7 +118,7 @@ async def list_skills() -> dict[str, Any]:
 
 
 @router.get("/agency", summary="List all Agency skills")
-async def list_agency_skills() -> dict[str, Any]:
+async def list_agency_skills(_current_user: None = Depends(get_current_user)) -> dict[str, Any]:
     """Return all 184+ Agency skills with metadata.
 
     Agency skills are specialized AI agents for various business functions:
@@ -151,7 +153,7 @@ async def list_agency_skills() -> dict[str, Any]:
         "retail-customer-operations": [],
     }
 
-    engineering_keywords = ["frontend", "backend", "mobile", "devops", "ai-engineer", "api-tester", "code-reviewer", "database", "data-engineer", "mcp-builder", "security-engineer", "performance-benchmarker", "solid", "blockchain", "blender", "embedded", "git-workflow", "data-remediation", "automation-governance", "autonomous-optimization", "lsp-index", "senior-developer", "unity", "unreal", "godot", "roblox", "macos-spatial", "terminal-integration"]
+    engineering_keywords = ["frontend", "backend", "mobile", "devops", "ai-engineer", "api-tester", "code-reviewer", "database", "data-engineer", "mcp-builder", "security-engineer", "performance-benchmarker", "solid", "blockchain", "blender", "embedded", "git-workflow", "data-remediation", "automation-compliance", "autonomous-optimization", "lsp-index", "senior-developer", "unity", "unreal", "godot", "roblox", "macos-spatial", "terminal-integration"]
     design_keywords = ["ui-designer", "ux-", "brand-guardian", "level-designer", "narrative-designer", "technical-artist", "game-audio", "visual-storyteller", "whimsy-injector", "unreal-world", "xr-interface", "visionos", "xr-immersive", "xr-cockpit", "roblox-avatar", "roblox-experience", "editor-tool", "unity-shader", "godot-shader", "technical-writer", "terminal-integration", "lsp-index"]
     marketing_keywords = ["growth-hacker", "content-creator", "social-media", "ad-creative", "ppc-", "paid-", "programmatic", "search-query", "seo", "baidu-seo", "tiktok", "instagram", "twitter", "douyin", "kuaishou", "xiaohongshu", "weibo", "bilibili", "zhihu", "podcast", "video-optimization", "short-video", "carousel", "image-prompt", "ai-citation", "inclusive-visuals", "tracking-measurement", "trend-researcher", "cross-border-e-commerce"]
     sales_keywords = ["outbound", "sales-", "deal-strategist", "pipeline-analyst", "account-strategist", "salesforce", "discovery-coach", "private-domain", "data-extraction", "report-distribution", "data-consolidation"]
@@ -248,7 +250,7 @@ async def list_agency_skills() -> dict[str, Any]:
 
 
 @router.get("/agency/{skill_name}", summary="Get specific Agency skill details")
-async def get_agency_skill(skill_name: str) -> dict[str, Any]:
+async def get_agency_skill(skill_name: str, _current_user: None = Depends(get_current_user)) -> dict[str, Any]:
     """Return details for a specific Agency skill.
 
     Includes full frontmatter metadata and relative file path.
@@ -261,7 +263,7 @@ async def get_agency_skill(skill_name: str) -> dict[str, Any]:
 
 
 @router.get("/core", summary="List core skills")
-async def list_core_skills() -> dict[str, Any]:
+async def list_core_skills(_current_user: None = Depends(get_current_user)) -> dict[str, Any]:
     """Return core Antigravity skills (non-agency).
 
     Core skills provide fundamental capabilities:
@@ -286,7 +288,7 @@ async def list_core_skills() -> dict[str, Any]:
 
 
 @router.get("/self-improving-system/skills.md", summary="Get skills index markdown")
-async def get_skills_index() -> dict[str, Any]:
+async def get_skills_index(_current_user: None = Depends(get_current_user)) -> dict[str, Any]:
     """Return the skills.md index content for reducing context window usage.
 
     Points to file locations instead of embedding large skill text.

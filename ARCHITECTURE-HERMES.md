@@ -11,6 +11,17 @@
 
 **HERMES** is the one orchestrator agent. It runs via WhatsApp and Telegram. Every contract file in `hermes/agents/` is executed via Hermes routing.
 
+### Paperclip Hermes Canonical Ports
+
+Paperclip Hermes is the same Hermes identity everywhere:
+
+- `http://127.0.0.1:3000` — canonical Hermes Workspace / CEO web UI
+- `http://127.0.0.1:9119` — Hermes Agent dashboard with real dashboard APIs
+- `http://127.0.0.1:8082/admin` — FCC / `fcc-claude` Claude adapter admin UI
+- `http://127.0.0.1:3110` — Paperclip HQ local app
+
+Use `scripts/start-paperclip-hermes.ps1` to start or repair the Hermes/FCC surfaces. Use `scripts/paperclip-watchdog.ps1` or `scripts/register-paperclip-forever.ps1` to keep them alive. Details live in `docs/PAPERCLIP-HERMES-CANONICAL.md`.
+
 ---
 
 ## Node Distribution

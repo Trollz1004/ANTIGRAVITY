@@ -33,7 +33,7 @@ export default function SafetyBadge({
     <div className="flex flex-wrap gap-2">
       {verified && (
         <div
-          className={`flex items-center bg-green-500/10 border border-green-500/20 text-green-400 rounded-full font-bold ${sizeClasses[size]}`}
+          className={`mono flex items-center bg-[#ffd700]/10 border border-[#ffd700]/30 text-[#ffd700] rounded-full font-bold ${sizeClasses[size]}`}
         >
           <svg
             className={iconSizes[size]}
@@ -48,7 +48,7 @@ export default function SafetyBadge({
 
       {botShieldVerified && (
         <div
-          className={`flex items-center bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-full font-bold ${sizeClasses[size]}`}
+          className={`mono flex items-center bg-[#0044ff]/10 border border-[#0044ff]/30 text-[#3366ff] rounded-full font-bold ${sizeClasses[size]}`}
         >
           <svg
             className={iconSizes[size]}
