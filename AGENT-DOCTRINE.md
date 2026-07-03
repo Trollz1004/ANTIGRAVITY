@@ -105,6 +105,19 @@ Agents that fail to timestamp their self-improving files get their platform dele
 No bypass for any agent. Only official Claude (Max/Opus) is exempt because third
 parties touch its files.
 
+## Dual-CEO Architecture (deployed 2026-07-03)
+
+Claude (Opus/FCC) and Hermes are co-CEOs. They DELEGATE — never do leaf tasks.
+Sub-agents do all work. CEOs spawn, route, monitor, and unblock.
+
+| CEO | Adapter | Domain |
+|---|---|---|
+| ceo (Claude) | fcc-claude / claude_local | code, compliance, doctrine, payments, merge/push |
+| hermes-ceo | hermes / pi_local | growth, support, research, external APIs, leads |
+
+Rules: `paperclip-tro/CEO-PLAYBOOK.md`. Routines: mission guardian, pipeline keeper,
+adapter health, revenue scout. 100 tasks always on deck. Skills in `.agents/skills/`.
+
 ## Claude-Specific
 
 - Real Claude (Max): state file is `opushashands.md` in OneDrive do-not-commit folder
