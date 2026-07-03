@@ -1,7 +1,7 @@
 # ROSTER — Paperclip active seats
 
 > Updated 2026-07-03 by Joshua directive.
-> Architecture: Hermes is the only active Paperclip agent. Paperclip is the visible, timestamped work/status board over Hermes work, not a separate agent company.
+> Architecture: Hermes is the only required active Paperclip agent. Paperclip is the visible, timestamped work/status board over Hermes work, not a separate agent company.
 
 ## Active architecture
 
