@@ -9,8 +9,7 @@
       "name": "Codex (auth — OpenAI / ChatGPT)",
       "options": { "apiKey": "{env:OPENAI_API_KEY}" },
       "models": {
-        "gpt-5.5": { "name": "Codex 5.5 (orchestrator)" },
-        "gpt-5":   { "name": "Codex 5 (executor)" }
+        "codex-mini-5.3": { "name": "Codex Mini 5.3 (browser sign-in only)" }
       }
     },
     "openai": {
