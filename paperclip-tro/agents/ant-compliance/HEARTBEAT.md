@@ -9,3 +9,5 @@ model: gemini-2.5-pro
 provider: google
 last_beat: 2026-07-03T00:00:00Z
 status: idle
+
+skills_dir: .agents/skills/
