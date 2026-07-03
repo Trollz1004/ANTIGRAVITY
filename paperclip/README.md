@@ -1,11 +1,17 @@
 # Paperclip Agent Prompts — Opus-Crafted, Drop-in
 
+> **Current operating mode (2026-07-03): Hermes-only active agent.**
+> Joshua's Paperclip architecture is now: Hermes does the work; Paperclip shows
+> timestamped tasks/routines/issues/goals/evidence/done state from the Hermes
+> work feed on `127.0.0.1:9119`. The agency roster below is a skill library,
+> not a requirement to run permanent CFO/CMO/CTO/etc board agents.
+
 > **Memory-first rule (new):** every canonical agent under `paperclip/agents/*/` now keeps a compact `STATE.md` file that is read on entry and written on exit, with a strict size cap and a Supabase-backed brain mirror. See [`paperclip/agents/memory-architecture.md`](agents/memory-architecture.md) and the per-agent `STATE.md` files.
 
 **Paperclip-the-platform is alive and working** with Hermes for Joshua's daily ops.
-These are user-facing prompts to paste into Paperclip's Custom Instructions /
-System Prompt field for each agent. They are NOT the retired `paperclip-worker`
-infrastructure (that one was replaced by paperweight per 2026-05-20 doctrine).
+Hermes is the active CEO/operator. These older prompts remain as reference
+material only when Hermes deliberately creates a temporary subagent or skill lane.
+They are NOT instructions to keep a permanent multi-agent company running.
 
 The thesis: a smaller base model + an Opus-crafted prompt with strict structure,
 explicit decision tables, and forced output schemas performs 2–3 tiers above its
@@ -24,7 +30,7 @@ untuned weight. The model stops *thinking* and starts *executing* a clear proced
 
 ## Files in this folder
 
-### Role agents (business function)
+### Legacy role prompts (reference only)
 
 | File                  | Paperclip agent  | Recommended base model       |
 | --------------------- | ---------------- | ---------------------------- |
@@ -34,7 +40,7 @@ untuned weight. The model stops *thinking* and starts *executing* a clear proced
 | `cto-builder.md`      | CTO              | qwen2.5-coder:7b (local)     |
 | `closer.md`           | Closer           | korpohermes-prime:latest     |
 
-### Runtime / model agents (added 2026-06-14 per founder directive — all models, free and paid)
+### Legacy runtime / model prompts (reference only)
 
 | File                       | Paperclip agent       | Default model                 | Tier        |
 | -------------------------- | --------------------- | ----------------------------- | ----------- |
@@ -70,8 +76,9 @@ untuned weight. The model stops *thinking* and starts *executing* a clear proced
 
 ## Agency Skills Integration
 
-**The Agency** roster (144+ specialized AI agents) is integrated into this workspace
-and available as Antigravity skills under `.agents/skills/agency-*`.
+**The Agency** roster (144+ specialized AI roles) is integrated into this workspace
+as Antigravity skills under `.agents/skills/agency-*`. Hermes loads these as
+department expertise. They are not permanent Paperclip employees by default.
 
 ### Available Agent Skills
 
@@ -81,9 +88,9 @@ Run the following to list all available agency skills:
 ls .agents/skills | grep "^agency-"
 ```
 
-### Activate an Agency Skill
+### Load an Agency Skill
 
-In Antigravity, activate any agent by its slug:
+In Antigravity, Hermes can load any department skill by its slug:
 
 ```
 Use the agency-frontend-developer skill to review this component.
@@ -149,11 +156,11 @@ agency-agents.invoke_agency_skill --skill_slug agency-frontend-developer
 agency-agents.activate_agency_agent --agent_slug agency-backend-architect --task_description "Design API endpoint"
 ```
 
-### Add Skills to Paperclip
+### Add Skills to Paperclip/Hermes
 
 1. Pull the latest repo on Sabretooth
 2. The MCP plugins in `paperclip-mcp-plugins/` are available for Paperclip integration
-3. Restart Paperclip gateway to load new plugins
+3. Restart the Hermes/Paperclip visual surface if plugin discovery changes
 
 ---
 
