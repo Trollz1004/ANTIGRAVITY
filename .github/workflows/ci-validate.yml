@@ -273,7 +273,6 @@ jobs:
           SQUARE_BOT_SHIELD_PAYMENT_LINK: 'https://square.link/u/Qc5mxUy7'
           SQUARE_PAYMENT_WEBHOOK_SIGNATURE_KEY: 'test-square-signature'
           SQUARE_PAYMENT_WEBHOOK_NOTIFICATION_URL: 'http://testserver/api/v1/webhooks/square-payment'
-parent of 22d51cba (chore: clean business-only public surfaces)
           SQUARE_BOOKING_WEBHOOK_SIGNATURE_KEY: 'test-square-signature'
           SQUARE_BOOKING_WEBHOOK_NOTIFICATION_URL: 'http://testserver/api/v1/webhooks/square-booking'
         run: |
