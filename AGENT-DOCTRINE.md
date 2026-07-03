@@ -87,6 +87,24 @@ Spread agents across providers. Never stack all agents on one provider.
 
 4. **DREAM** — Dream Online MMORPG. Hermes World (third-party browser MMO, BDO-style open world, no instances, no fast travel). Game agents + GPU inference.
 
+## Universal File Locations (same on every node)
+
+| File | Path | Rules |
+|------|------|-------|
+| HEARTBEAT.md | paperclip-tro/agents/<id>/HEARTBEAT.md | Minimal pointers only. Paperclip reads this. |
+| AGENT.md | paperclip-tro/agents/<id>/AGENT.md | Config, adapter, skills list. Read-only. |
+| STATE.md | paperclip-tro/agents/<id>/STATE.md | Read on start. Edit ONLY on exit. Timestamp mandatory. |
+| Skills | .agents/skills/<dir>/SKILL.md | Lazy load. Never preload at boot. |
+
+FCC adapter cmd in Paperclip config MUST be `fcc-claude` (not `claude`).
+
+## Timestamp Audit (Joshua enforces this)
+
+Every STATE.md write MUST include `> updated: <ISO timestamp>`.
+Agents that fail to timestamp their self-improving files get their platform deleted.
+No bypass for any agent. Only official Claude (Max/Opus) is exempt because third
+parties touch its files.
+
 ## Claude-Specific
 
 - Real Claude (Max): state file is `opushashands.md` in OneDrive do-not-commit folder
