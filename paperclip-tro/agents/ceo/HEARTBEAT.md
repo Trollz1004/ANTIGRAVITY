@@ -1,6 +1,6 @@
 agent: ceo
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 config: paperclip-tro/agents/ceo/AGENT.md
 state: paperclip-tro/agents/ceo/STATE.md
 skills: [.agents/skills/agency-chief-of-staff]

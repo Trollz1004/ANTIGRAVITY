@@ -7,7 +7,7 @@ model: grok-3-mini
 provider: xai
 reports_to: ceo
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 heartbeat_minutes: 60
 ---
 
