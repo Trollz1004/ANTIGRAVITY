@@ -12,6 +12,19 @@
 4. API key → local env only (vault path), never chat/git/PR.
 5. `GET /api/invites/<invite>/skills/paperclip` — install the Paperclip skill.
 
+## Provider restriction
+
+Ollama (local + cloud) and OpenRouter are for **pi, opencode, hermes, and ollama-local
+adapters ONLY**. Never route Claude, Codex, Grok, or Gemini through Ollama/OpenRouter.
+
+| Provider | Used by | NOT used by |
+|---|---|---|
+| Ollama local (:11434) | pi, opencode, hermes, ollama-local | claude, codex, grok, gemini |
+| Ollama Cloud (ollama.com) | pi, opencode, hermes | claude, codex, grok, gemini |
+| OpenRouter | pi, opencode, hermes | claude, codex, grok, gemini |
+| FCC proxy (:8082) | claude (FCC) only | everything else |
+| Browser sign-in | codex (OpenAI), grok (xAI), gemini (Google) | everything else |
+
 ## Adapter type mapping
 
 Every repo adapter maps to a Paperclip `adapterType`. This is the key agents use
@@ -55,6 +68,11 @@ variables that redirect Claude Code to the FCC proxy. Any agent can use it.
 
 Paperclip thinks it talks to real Claude Code. The FCC proxy intercepts and routes
 to free providers. No Anthropic API key involved.
+
+**WSL requirement (manual — Joshua's setup):**
+FCC-claude in Paperclip requires WSL `claude` installed and logged out, running
+from the repo root. `fcc-server` must be started in WSL first, then `fcc-claude`
+connects through it. This is NOT automatable by AI — Joshua set this up manually.
 
 ## Registered agents
 
