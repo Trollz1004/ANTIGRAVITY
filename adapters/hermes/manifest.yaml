@@ -1,12 +1,17 @@
 name: hermes
-version: 0.1
+version: 0.2
 source: local-cli
-description: "Hermes Agent CLI — CEO runtime for ANTIGRAVITY. Local-only execution via `hermes` command. Routes through OpenAI Codex, OpenRouter, Ollama, xAI, Gemini. No remote API usage without auth."
+description: "Hermes Agent CLI — CEO runtime for ANTIGRAVITY. Routes through hermes-router auto-fallback. No Anthropic."
 owner: sabretooth
 node_id: sabretooth
 cli_command: "hermes"
 health_check: "hermes --version"
+paperclip_adapter_type: "pi_local"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  model: "openai/gpt-5.5-pro"
+  thinking: "high"
 paperclip_alias: "hermes"
 opencode_provider: "hermes-router"
 opencode_model: "hermes"
-notes: "Hermes is the CEO runtime. Dashboard on :9119. Router on :11435 powers OpusPawClaw workspace on :3000. No Anthropic/Claude providers. Wake payload switched to PAPERCLIP_WAKE_PAYLOAD_JSON env var (see env-aware-prompt-template.txt) to avoid command line too long on large issues. When configuring hermes_local / hermes adapterConfig, set promptTemplate to the content of env-aware-prompt-template.txt (or equivalent short instruction) so -q arg stays tiny; full wake lives in env only (buildPaperclipEnv + direct sets)."
+notes: "Dashboard on :9119. Router on :11435. Wake payload via PAPERCLIP_WAKE_PAYLOAD_JSON env var to avoid argv overflow. Uses `pi_local` Paperclip adapter type (same runner as Pi). Set promptTemplate to env-aware-prompt-template.txt content."

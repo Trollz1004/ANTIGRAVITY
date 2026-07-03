@@ -2,9 +2,9 @@
 name: ant-support
 title: OpenClaw — Support + Board Ops
 adapter: openclaw_gateway
+paperclip_adapter_type: openclaw_gateway
 model: openai/gpt-5.5
 provider: OpenClaw / ClawX Gateway
-# Note: openclaw_gateway is support-only adapter (native). All LLM providers use the separated adapters/ (fcc-claude, opencode, ollama-local, hermes, pi, codex, gemini). See adapters/ and paperclip-tro/ADAPTORS.md.
 reports_to: tro-ceo
 manages: []
 budget_monthly_usd: 0

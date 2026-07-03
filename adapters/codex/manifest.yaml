@@ -1,12 +1,16 @@
 name: codex
-version: 0.1
+version: 0.2
 source: auth-signin
 description: "Codex Desktop — OpenAI auth sign-in required. Canonical Paperclip adapter uses `gpt-5.5` via Codex CLI. No API key storage in repo."
 owner: sabretooth
 node_id: sabretooth
 cli_command: "codex"
 health_check: "codex --version"
+paperclip_adapter_type: "codex_local"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  model: "o4-mini"
 paperclip_alias: "codex"
 opencode_provider: "codex"
 opencode_model: "gpt-5.5"
-notes: "Requires active Codex Desktop session and authenticated OpenAI account. Only gpt-5.5 model is supported inside Paperclip adapter."
+notes: "Requires active Codex Desktop session and authenticated OpenAI account. Uses `codex_local` Paperclip adapter type. Only gpt-5.5 model for opencode routing."
