@@ -19,6 +19,11 @@ set HERMES_ROUTER_CONFIG=D:\dream-online\services\hermes-router\config-dream.yam
 start /B "" cmd /c "python hermes_router.py >> D:\dream-online\logs\hermes-router.log 2>&1"
 timeout /t 3 /nobreak >nul
 
+REM --- FCC Proxy (:8082) via WSL fcc-server ---
+echo Starting FCC proxy via WSL...
+start /B "" wsl.exe -d Ubuntu -- bash -lc "systemctl --user start fcc-server.service 2>/dev/null; fcc-claude serve >> /mnt/c/antigravity/logs/fcc-proxy.log 2>&1"
+timeout /t 5 /nobreak >nul
+
 REM --- Paperclip Business (:3120 — DateApp + eBay + AI-Solutions) ---
 echo Starting Paperclip Business on :3120...
 cd /d D:\dream-online
