@@ -1,11 +1,8 @@
 @echo off
 REM === SABRETOOTH AUTO-START (Dream Online ONLY) ===
-REM Run as scheduled task: trigger=At Startup, run as admin
+REM Run as scheduled task: trigger=At Logon, run as REGULAR USER (not admin)
 REM Node: 192.168.0.8 | GPU: 1070 | Dream Online ONLY
-REM
-REM KNOWN ISSUE: Paperclip TRO embedded PostgreSQL refuses to start when
-REM user is in BUILTIN\Administrators. Fix: set DATABASE_URL in .env to
-REM an external PostgreSQL, OR run via: runas /trustlevel:0x20000
+REM Paperclip PostgreSQL refuses admin SID — task MUST run non-elevated.
 
 if not exist "C:\antigravity\logs" mkdir "C:\antigravity\logs"
 echo [%date% %time%] Sabretooth autostart beginning... >> C:\antigravity\logs\autostart.log
@@ -42,7 +39,7 @@ timeout /t 5 /nobreak >nul
 REM --- Paperclip TRO (:3110 — Dream agents ONLY) ---
 echo Starting Paperclip TRO on :3110...
 cd /d C:\antigravity
-start /B "" cmd /c "runas /trustlevel:0x20000 \"npx paperclipai start --port 3110 --host 127.0.0.1\" >> C:\antigravity\logs\paperclip-tro.log 2>&1"
+start /B "" cmd /c "npx paperclipai start --port 3110 --host 127.0.0.1 >> C:\antigravity\logs\paperclip-tro.log 2>&1"
 timeout /t 3 /nobreak >nul
 
 echo [%date% %time%] Sabretooth autostart complete >> C:\antigravity\logs\autostart.log

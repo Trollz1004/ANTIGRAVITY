@@ -1,5 +1,5 @@
 # register-autostart-task.ps1 — Register autostart as Windows Scheduled Task
-# RUN AS ADMINISTRATOR on each node
+# Runs as REGULAR USER (not admin) — Paperclip PostgreSQL refuses admin SID.
 # Usage: pwsh -NoProfile -File scripts/register-autostart-task.ps1 -Node sabretooth
 
 param(
@@ -23,14 +23,14 @@ if ($existing) {
 }
 
 $action = New-ScheduledTaskAction -Execute $scriptPath
-$trigger = New-ScheduledTaskTrigger -AtStartup
+$trigger = New-ScheduledTaskTrigger -AtLogon
 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 1)
-$principal = New-ScheduledTaskPrincipal -UserId "$env:USERDOMAIN\$env:USERNAME" -RunLevel Highest -LogonType S4U
+$principal = New-ScheduledTaskPrincipal -UserId "$env:USERDOMAIN\$env:USERNAME" -RunLevel Limited -LogonType Interactive
 
-Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Description "Auto-start ANTIGRAVITY services on $Node after reboot"
+Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Description "Auto-start ANTIGRAVITY services on $Node at logon (non-admin for Paperclip PG)"
 
 Write-Host "Registered: $taskName" -ForegroundColor Green
 Write-Host "Script: $scriptPath" -ForegroundColor Green
-Write-Host "Trigger: At Startup, run as admin" -ForegroundColor Green
+Write-Host "Trigger: At Logon, run as regular user (not admin)" -ForegroundColor Green
 Write-Host ""
 Write-Host "Test with: Start-ScheduledTask -TaskName '$taskName'" -ForegroundColor Cyan
