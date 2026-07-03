@@ -7,7 +7,7 @@ model: gemini-2.5-pro
 provider: google
 reports_to: ceo
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 heartbeat_minutes: 60
 ---
 

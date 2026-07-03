@@ -1,6 +1,6 @@
 agent: ant-growth
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 config: paperclip-tro/agents/ant-growth/AGENT.md
 state: paperclip-tro/agents/ant-growth/STATE.md
 skills: [.agents/skills/agency-growth-hacker]

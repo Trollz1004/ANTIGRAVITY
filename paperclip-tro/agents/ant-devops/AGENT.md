@@ -7,7 +7,7 @@ model: gemma4:latest
 provider: ollama-local
 reports_to: ceo
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 heartbeat_minutes: 60
 ---
 
