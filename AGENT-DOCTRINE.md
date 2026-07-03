@@ -58,15 +58,34 @@ status: <active|idle|error>
 
 Spread agents across providers. Never stack all agents on one provider.
 
-## Projects (Sabretooth :3110)
+## Node Roles (FINAL — Claude's pick, Joshua approved 2026-07-03)
 
-1. **ANT-DATEAPP** — youandinotai.com. Runs on T5500. All updates wrangler-push to Cloudflare.
-2. **ANT-EBAY** — eBay cross-lister. Own project, own agents.
-3. **ANT-AISOLUTIONS** — ai-solutions.store + business exchange. Combined.
+**Sabretooth** (192.168.0.8, 1070 GPU) = Dream Online ONLY
+- Paperclip :3110 — game agents only
+- Hermes World game :9119 (third-party open-source browser MMO, NOT Nous Research)
+- Hermes workspace :3000
+- Ollama :11434 (GPU for NPC inference)
+- FCC proxy :8082
+- NOTHING else on this box
+
+**9020** (192.168.0.5, WIPED CLEAN) = Business + Joshua workspace
+- Paperclip :3120 — all 3 business projects
+- Hermes router :11436
+- Joshua + Claude Max primary workspace
+
+**T5500** = Public gateway ONLY
+- Cloudflare tunnels, DNS, wrangler deploy
+- No Paperclip, no agents, no dev
 
 ## Projects (9020 :3120)
 
-4. **DREAM** — Dream Online MMORPG. Game creators. Separate node, separate company.
+1. **ANT-DATEAPP** — youandinotai.com. Deploys to T5500 via wrangler.
+2. **ANT-EBAY** — eBay cross-lister. Own project.
+3. **ANT-AISOLUTIONS** — ai-solutions.store + business exchange.
+
+## Projects (Sabretooth :3110)
+
+4. **DREAM** — Dream Online MMORPG. Hermes World (third-party browser MMO, BDO-style open world, no instances, no fast travel). Game agents + GPU inference.
 
 ## Claude-Specific
 

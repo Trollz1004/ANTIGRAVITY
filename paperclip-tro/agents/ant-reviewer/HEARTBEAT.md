@@ -1,6 +1,6 @@
 agent: ant-reviewer
 project: ANT-DATEAPP
-node: sabretooth
+node: 9020
 config: paperclip-tro/agents/ant-reviewer/AGENT.md
 state: paperclip-tro/agents/ant-reviewer/STATE.md
 skills: [.agents/skills/agency-code-reviewer]

@@ -7,7 +7,7 @@ model: hermes
 provider: hermes-router
 reports_to: ceo
 project: ANT-AISOLUTIONS
-node: sabretooth
+node: 9020
 heartbeat_minutes: 60
 ---
 
