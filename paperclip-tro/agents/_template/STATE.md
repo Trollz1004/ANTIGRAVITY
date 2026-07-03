@@ -1,13 +1,16 @@
-# STATE — <agent-id> — <ISO timestamp>
+# STATE — <agent-id>
+> Max 4k tokens. Read on start. Write on exit ONLY. Timestamp every write.
+> Failure to timestamp = platform deletion. Joshua audits this.
+> updated: <ISO timestamp>
 
-## In flight
-- none (fresh hire)
+## Last Session
+(none yet)
+
+## Decisions
+(none yet)
 
 ## Learned
-- Fresh install. My README.md pointers are the map; BOOT-PROTOCOL.md is the law.
+(none yet)
 
 ## Blocked
-- none
-
-## Improve
-- (one concrete change per session; applied if reversible)
+(none)

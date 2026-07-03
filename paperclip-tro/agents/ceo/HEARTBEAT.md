@@ -9,3 +9,5 @@ model: claude-sonnet-4-5-20250929
 provider: claude_local
 last_beat: 2026-07-03T00:00:00Z
 status: idle
+
+skills_dir: .agents/skills/
