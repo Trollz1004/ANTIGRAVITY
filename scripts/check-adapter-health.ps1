@@ -98,8 +98,9 @@ foreach ($mf in $manifests) {
   $hc = $m['health_check']
   $prov = $m['opencode_provider']
   $model = $m['opencode_model']
+  $adapterType = $m['paperclip_adapter_type']
 
-  Log "--- $name (alias=$alias cli=$cli prov=$prov model=$model) ---"
+  Log "--- $name (alias=$alias type=$adapterType cli=$cli prov=$prov model=$model) ---"
   Log "  health_check: $hc"
 
   $r = Run-Health $hc
@@ -109,6 +110,7 @@ foreach ($mf in $manifests) {
   $res = [pscustomobject]@{
     adapter = $name
     alias = $alias
+    adapterType = $adapterType
     status = $status
     detail = $r.out
     provider = $prov
