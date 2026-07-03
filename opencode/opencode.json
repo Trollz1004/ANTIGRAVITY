@@ -105,7 +105,7 @@
     },
     "ollama-cloud": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama Cloud (CAPPED 4 days)",
+      "name": "Ollama Cloud",
       "options": {
         "baseURL": "https://ollama.com/v1",
         "apiKey":  "{env:OLLAMA_API_KEY}"
@@ -114,7 +114,11 @@
         "joshlcoleman/CFO-Until-No-Kid-In-Need:latest":   { "name": "CFO PRIME (your model)" },
         "joshlcoleman/dateapp-marketing:latest":          { "name": "Marketing (your model)" },
         "jeffreyvandekorput/korpohermes-prime:latest":    { "name": "Hermes Prime (cloud)" },
+        "kimi-k2.7-code:cloud":                            { "name": "Kimi K2.7 Code (frontier coding)" },
         "kimi-k2.6:cloud":                                 { "name": "Kimi K2.6" },
+        "gemma4:cloud":                                    { "name": "Gemma 4 (cloud)" },
+        "qwen3.5:cloud":                                   { "name": "Qwen 3.5 (cloud)" },
+        "minimax-m3:cloud":                                { "name": "MiniMax M3 (1M context)" },
         "glm-5.1:cloud":                                   { "name": "GLM 5.1" }
       }
     },
