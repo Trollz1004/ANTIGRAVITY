@@ -24,22 +24,40 @@ FCC-Claude (co-CEO)┘                                           │
                                                                └── PostgreSQL (T5500)
 ```
 
-## Auth Model
+## Platforms (20)
 
-| Platform | Auth type | Hub holds key? |
+| Platform | Node | Auth | Access |
+|---|---|---|---|
+| `hermes` | Sabretooth | none (localhost) | Hermes router :11435 |
+| `fcc-claude` | Sabretooth | none (FCC proxy) | FCC :8082 |
+| `claude` | 9020 | browser sign-in | Claude desktop app |
+| `codex` | 9020 | browser sign-in | OpenAI Codex desktop |
+| `opencode` | Sabretooth | none (NVIDIA free) | OpenCode CLI via Hermes |
+| `openai` | 9020 | browser sign-in | OpenAI API/ChatGPT |
+| `ollama` | Sabretooth | none (localhost GPU) | Ollama :11434 |
+| `cloud` | Sabretooth | openrouter key | OpenRouter / Ollama Cloud / 1min-relay |
+| `grok` | 9020 | browser sign-in | xAI Grok desktop |
+| `gemini` | 9020 | browser sign-in | Google Gemini desktop |
+| `chatgpt` | 9020 | browser sign-in | ChatGPT web/desktop |
+| `github` | T5500 | PAT token | GitHub API |
+| `1minai` | Sabretooth | desktop app | 1min.AI Windows app |
+| `perplexity` | 9020 | browser sign-in | Perplexity Pro |
+| `cursor` | 9020 | desktop app | Cursor IDE |
+| `clawx` | Sabretooth | gateway token | ClawX/OpenClaw |
+| `pi` | Sabretooth | none | Pi via Hermes router |
+| `slack` | T5500 | bot token | Slack API |
+| `desktop` | 9020 | manual | Any GUI desktop tool |
+| `commander` | 9020 | none | Windows Terminal tasks |
+
+## Auth Model (what the hub holds)
+
+| Secret | Env var | Purpose |
 |---|---|---|
-| Slack | Bot token | YES (SLACK_BOT_TOKEN) |
-| GitHub | PAT | YES (GITHUB_TOKEN) |
-| Hub internal | API key header | YES (AGENT_HUB_API_KEY) |
-| Codex (OpenAI) | Browser sign-in | NO — desktop app |
-| Grok (xAI) | Browser sign-in | NO — desktop app |
-| Claude official | Browser sign-in | NO — desktop app |
-| Gemini (Google) | Browser sign-in | NO — desktop app |
-| FCC proxy | None (localhost) | NO |
-| Ollama | None (localhost) | NO |
-| Hermes | None (localhost) | NO |
+| Hub internal API key | AGENT_HUB_API_KEY | Agents calling the hub REST API |
+| Slack bot token | SLACK_BOT_TOKEN | Post notifications to channels |
+| GitHub PAT | GITHUB_TOKEN | Issue sync with Trollz1004/ANTIGRAVITY |
 
-The hub TRACKS tasks assigned to browser-auth platforms but never calls their APIs directly.
+Browser-auth platforms (codex, grok, claude, gemini, chatgpt, openai, perplexity) — the hub TRACKS tasks assigned to them but never calls their APIs. They're desktop apps with browser sign-in.
 
 ## Queue Rules
 

@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS agent_tasks (
   priority        TEXT DEFAULT 'medium'
                   CHECK (priority IN ('low', 'medium', 'high', 'critical')),
   priority_order  INTEGER DEFAULT 2,
-  platform        TEXT NOT NULL
-                  CHECK (platform IN ('hermes', 'codex', 'claude', 'github', 'ollama', 'chatgpt', 'gemini', 'grok', 'cloud', '1minai')),
+  platform        TEXT NOT NULL,
+  -- No CHECK constraint — platforms are validated at app layer to allow easy expansion
   repo_path       TEXT,
   github_repo     TEXT,
   github_issue_number INTEGER,
