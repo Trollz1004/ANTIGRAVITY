@@ -60,12 +60,12 @@ export function validatePattern(value: string, regex: RegExp): boolean {
   return regex.test(value);
 }
 
-export function validateMin(value: number, min: number): boolean {
+export function validateMin(value: number | string, min: number): boolean {
   if (value === null || value === undefined || value === '') return false;
   return Number(value) >= min;
 }
 
-export function validateMax(value: number, max: number): boolean {
+export function validateMax(value: number | string, max: number): boolean {
   if (value === null || value === undefined || value === '') return true;
   return Number(value) <= max;
 }
