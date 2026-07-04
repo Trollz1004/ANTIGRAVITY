@@ -1,31 +1,32 @@
-# Sabretooth Node — Paperclip TRO (:3110)
+# Sabretooth Node — DREAM ONLINE ONLY
 
-> IP: 192.168.0.8 | GPU: 1070 | Dream Online ONLY
-> Paperclip: 127.0.0.1:3110 | Repo: C:\antigravity
+> IP: 192.168.0.8 | GPU: 1070 8GB = game rendering ONLY
+> Cloud AI via 1min.ai + Claude Max for fast real-time events
+> NO local AI models for DREAM. NO Agent Hub. NO Hermes. NO FCC.
 
-## Services (autostart via scripts/node-sabretooth-autostart.bat)
+## Services (autostart via scripts/bootstrap-sabretooth.ps1)
 
 | Service | Port | Purpose |
 |---|---|---|
-| Paperclip TRO | :3110 | Dream agents only |
-| Ollama | :11434 | GPU inference for NPCs |
-| FCC proxy | :8082 | claude_local adapter |
-| Hermes Router | :11435 | Agent routing |
-| Hermes Dashboard | :9119 | Monitoring |
-| Hermes Desktop | :3000 | Workspace |
+| 1min.AI Desktop | — | Cloud AI for DREAM events (Windows app) |
+| Hermes Workspace | :9119 | Knowledge + Memory UI (all agents read) |
+| Paperclip | :3110 | DREAM-specific task orchestration |
+| DREAM Game Server | TBD | Open world sandbox (no instances) |
 
-## CEO Config
+## Architecture
 
-Both CEOs access this node. Dream sub-agents run here.
-- Claude CEO: FCC adapter, spawns dream-mcp, dream-proto
-- Hermes CEO: hermes adapter, spawns dream-design, dream-narrative
+GPU 1070 8GB is reserved for game rendering — NOT AI inference.
+DREAM needs fast cloud inference for real-time open world events:
+- **Claude Max** (cloud subscription via 9020 browser)
+- **1min.ai** (cloud subscription, desktop app on this node)
 
-## Agents on this node
+NO Ollama, NO Hermes Router, NO FCC Proxy, NO Agent Hub on this node.
+All other AI work routes through T5500 :3130.
 
-| Agent | Adapter | Project |
-|---|---|---|
-| dream-ceo | fcc-claude | DREAM |
-| dream-design | hermes | DREAM |
-| dream-narrative | ollama-local | DREAM |
-| dream-mcp | fcc-claude | DREAM |
-| dream-proto | opencode (grok) | DREAM |
+## Bootstrap
+
+```powershell
+cd C:\antigravity
+git pull origin main
+powershell -ExecutionPolicy Bypass -File scripts\bootstrap-sabretooth.ps1
+```
