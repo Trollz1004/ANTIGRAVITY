@@ -15,5 +15,11 @@ echo Starting Cloudflared tunnel...
 start /B "" cmd /c "cloudflared tunnel run >> C:\antigravity\logs\cloudflared.log 2>&1"
 timeout /t 5 /nobreak >nul
 
+REM --- Agent Hub (:3130) ---
+echo Starting Agent Hub on :3130...
+cd /d C:\antigravity\services\agent-hub
+start /B "" cmd /c "node src/index.js >> C:\antigravity\logs\agent-hub.log 2>&1"
+timeout /t 3 /nobreak >nul
+
 echo [%date% %time%] T5500 autostart complete >> C:\antigravity\logs\autostart.log
-echo === Cloudflared + FCC started. Gateway + FCC — no agents, no Paperclip. ===
+echo === Cloudflared + FCC + Agent Hub started. Gateway — no Paperclip. ===
