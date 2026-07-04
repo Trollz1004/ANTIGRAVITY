@@ -14,12 +14,15 @@
 #
 # When the scan is FIXED on 2026-05-17 (PR — restores the broken drift scan
 # that had been silently passing since `youandinotai-api/app/` was removed
-# from the layout), four pre-existing `ai-solutions.store` references in
+# from the layout), pre-existing `ai-solutions.store` references in
 # apps/youandinotai-frontend/ remain. None are explicit donation/charity
 # routing claims — they are cross-references to the AI-Solutions Store
-# public surface from neighbouring surfaces. The doctrine blocker, as
-# currently written in CLAUDE.md, lists `ai-solutions.store` as a banned
-# string in apps/youandinotai-frontend/ (lane separation rule).
+# public surface from neighbouring surfaces. The 2026-07-03 FastAPI target
+# restore surfaced the authenticated marketing referral kit's matching
+# cross-surface destination list in backend/fastapi-app/app/routers/marketing.py.
+# The doctrine blocker, as currently written in CLAUDE.md, lists
+# `ai-solutions.store` as a banned string in apps/youandinotai-frontend/
+# (lane separation rule).
 #
 # Triage options for Josh (tracked in awaiting-josh issue — see PR body):
 #   A. Remove the cross-references entirely (strict lane separation).
@@ -35,3 +38,4 @@
 apps/youandinotai-frontend/lib/constants.ts
 apps/youandinotai-frontend/app/api/node-watch/route.ts
 apps/youandinotai-frontend/app/scc/page.tsx
+backend/fastapi-app/app/routers/marketing.py
