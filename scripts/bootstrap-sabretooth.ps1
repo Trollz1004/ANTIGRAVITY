@@ -16,6 +16,7 @@ $taskSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopI
 # --- 1. 1min.AI Desktop App (cloud AI for DREAM) ---
 Write-Host "`n[1/3] 1min.AI Desktop App" -ForegroundColor Green
 $oneMinPaths = @(
+    "$env:LOCALAPPDATA\1minAI\1min AI.exe",
     "$env:LOCALAPPDATA\Programs\1min.ai\1min.ai.exe",
     "$env:ProgramFiles\1min.ai\1min.ai.exe",
     "${env:ProgramFiles(x86)}\1min.ai\1min.ai.exe"
@@ -56,6 +57,18 @@ if (Test-Path $paperclipExe) {
     Write-Host "  Registered: DREAM-Paperclip :3110 (auto-start)"
 } else {
     Write-Host "  SKIP: Paperclip not found" -ForegroundColor Yellow
+}
+
+# --- 4. Hermes Workspace Dashboard (:9119) ---
+Write-Host "`n[4/4] Hermes Workspace :9119" -ForegroundColor Green
+$hermesWsPath = 'C:\Users\joshl\hermes-workspace'
+if (Test-Path "$hermesWsPath\package.json") {
+    $hwAction = New-ScheduledTaskAction -Execute 'cmd' -Argument "/c cd /d $hermesWsPath && pnpm dev >> C:\antigravity\logs\hermes-workspace.log 2>&1" -WorkingDirectory $hermesWsPath
+    $hwTrigger = New-ScheduledTaskTrigger -AtLogOn
+    Register-ScheduledTask -TaskName 'HERMES-Workspace' -Action $hwAction -Trigger $hwTrigger -Settings $taskSettings -Force | Out-Null
+    Write-Host "  Registered: HERMES-Workspace :9119 (auto-start on login)"
+} else {
+    Write-Host "  SKIP: Hermes Workspace not found at $hermesWsPath" -ForegroundColor Yellow
 }
 
 # --- Remove NON-DREAM services if they exist ---
