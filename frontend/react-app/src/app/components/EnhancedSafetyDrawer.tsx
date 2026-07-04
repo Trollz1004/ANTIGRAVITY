@@ -11,7 +11,7 @@ import {
 
 import { api, ApiError } from '../../lib/api';
 import { ReportForm } from './ReportForm';
-import { BlockConfirmationDialog } from './BlockConfirmationDialog';
+import { EnhancedBlockConfirmationDialog } from './EnhancedBlockConfirmationDialog';
 
 type SafetySource = 'profile' | 'chat' | 'match' | 'board' | 'other';
 
@@ -394,22 +394,14 @@ export function EnhancedSafetyDrawer({
       </div>
 
       {showBlockConfirmation && (
-        <BlockConfirmationDialog
+        <EnhancedBlockConfirmationDialog
           targetName={targetName}
           onConfirm={handleBlock}
           onCancel={() => setShowBlockConfirmation(false)}
           isLoading={loadingAction === 'block'}
           onMuteInstead={() => {
             setShowBlockConfirmation(false);
-            // Scroll to mute section and trigger mute
-            setTimeout(() => {
-              const muteButton = document.querySelector(
-                'button:contains("Mute User")'
-              );
-              if (muteButton) {
-                muteButton.scrollIntoView({ behavior: 'smooth' });
-              }
-            }, 100);
+            void handleMute();
           }}
           onRestrictInstead={() => {
             setShowBlockConfirmation(false);
