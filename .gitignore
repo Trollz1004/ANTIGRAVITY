@@ -120,3 +120,6 @@ nul
 
 tmp_*
 DIRTY_REPO_ALERT*
+
+# Supabase management PAT (never commit)
+paperclip-tro/supabase.env
