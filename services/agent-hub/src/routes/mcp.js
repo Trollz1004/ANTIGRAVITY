@@ -28,7 +28,7 @@ router.get('/tools', (req, res) => {
             description: { type: 'string' },
             status: { type: 'string', enum: ['backlog', 'todo', 'in_progress', 'review', 'done'] },
             priority: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
-            platform: { type: 'string', enum: ['hermes', 'codex', 'claude', 'github', 'ollama', 'chatgpt', 'gemini', 'grok', 'cloud', '1minai'] },
+            platform: { type: 'string', description: 'Target platform: hermes, fcc-claude, claude, codex, opencode, openai, ollama, cloud, grok, gemini, chatgpt, github, 1minai, perplexity, cursor, clawx, pi, slack, desktop, commander' },
             skill_id: { type: 'string' },
             tags: { type: 'array', items: { type: 'string' } }
           },
