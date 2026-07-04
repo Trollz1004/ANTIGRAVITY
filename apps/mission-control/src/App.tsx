@@ -25,6 +25,7 @@ import { RateLimitDashboard } from './components/RateLimitDashboard';
 import { UploadProgressPanel } from './components/UploadProgressPanel';
 import { AgentMemoryPanel } from './components/AgentMemoryPanel';
 import { MissionProgressPanel } from './components/MissionProgressPanel';
+import { MissionGamePanel } from './components/MissionGamePanel';
 
 const MissionControlShell: React.FC = () => {
   const [activePanel, setActivePanel] = useState('ops'); // Default active panel
@@ -47,6 +48,7 @@ const MissionControlShell: React.FC = () => {
           {activePanel === 'ops' && <AgentMemoryPanel />}
           {activePanel === 'memory' && <AgentMemoryPanel />}
           {activePanel === 'tasks' && <MissionProgressPanel />}
+          {activePanel === 'mission-game' && <MissionGamePanel />}
           {activePanel === 'ops' && <LaunchPanel />}
           {activePanel === 'ops' && <TreasuryBand />}
           {activePanel === 'ops' && <HermesRouterPanel />}
