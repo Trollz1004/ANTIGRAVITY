@@ -39,3 +39,10 @@ checkout or receipts.
 - payment completes with a real card/payment method
 - Square dashboard shows the completed transaction
 - app account state reflects the purchase where applicable
+
+Future external-customer payment evidence must also follow
+`briefings/FUTURE-EXTERNAL-CUSTOMER-PAYMENT-EVIDENCE-GUARDRAIL.md`:
+do not count historical Joshua/founder Square tests as customer revenue, and do
+not mark first-dollar/payment evidence green without a future Square
+`COMPLETED` event plus matching internal `revenue_allocations` row with
+`payer_type = customer`.

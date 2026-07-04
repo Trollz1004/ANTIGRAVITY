@@ -23,6 +23,41 @@ class LinkParser(HTMLParser):
             self.images.append(data)
 
 
+class ProductCatalogParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.in_apps = False
+        self.in_card = False
+        self.in_h3 = False
+        self.card_count = 0
+        self.card_titles: list[str] = []
+        self._current_title: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        data = {k: v or "" for k, v in attrs}
+        if tag == "section" and data.get("id") == "apps":
+            self.in_apps = True
+        if self.in_apps and tag == "article" and "card" in data.get("class", "").split():
+            self.in_card = True
+            self.card_count += 1
+        if self.in_card and tag == "h3":
+            self.in_h3 = True
+            self._current_title = []
+
+    def handle_data(self, data: str) -> None:
+        if self.in_h3:
+            self._current_title.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "h3" and self.in_h3:
+            self.card_titles.append("".join(self._current_title).strip())
+            self.in_h3 = False
+        if tag == "article" and self.in_card:
+            self.in_card = False
+        if tag == "section" and self.in_apps:
+            self.in_apps = False
+
+
 def _index() -> str:
     return INDEX.read_text(encoding="utf-8")
 
@@ -33,6 +68,21 @@ def _parser() -> LinkParser:
     return parser
 
 
+def _catalog_parser() -> ProductCatalogParser:
+    parser = ProductCatalogParser()
+    parser.feed(_index())
+    return parser
+
+
+FIVE_Q3_SERVICE_LISTINGS = [
+    "BotShield Checkout Guard Setup",
+    "AI Storefront Starter Setup",
+    "SupportClaw Customer Support Setup",
+    "Content Droid Automation Suite Setup",
+    "Agent Operations Kit + Uptime Review",
+]
+
+
 def test_storefront_is_stripe_only_no_square_or_cashapp() -> None:
     html = _index().lower()
     assert "buy.stripe.com" in html
@@ -40,6 +90,38 @@ def test_storefront_is_stripe_only_no_square_or_cashapp() -> None:
     assert "checkout.square.site" not in html
     assert "cash.app" not in html
     assert "$youandinotai" not in html
+
+
+def test_public_catalog_presents_exactly_five_q3_ai_service_listings() -> None:
+    parser = _catalog_parser()
+    assert parser.card_count == 5
+    assert parser.card_titles == FIVE_Q3_SERVICE_LISTINGS
+
+
+def test_public_catalog_excludes_previous_non_q3_listing_labels_and_blocked_terms() -> None:
+    html = _index().lower()
+    for old_label in [
+        "founding member stack",
+        "content droid suite",
+        "agent operations kit</h3>",
+        "white-label platform modules",
+        "human verification layer",
+        "tra marketplace",
+        "royalty deck",
+    ]:
+        assert old_label not in html
+    for blocked_term in [
+        "charity",
+        "donation",
+        "fundraising",
+        "investment",
+        "equity",
+        "ownership",
+        "e-waste",
+        "onlinerecycle",
+        "royalty",
+    ]:
+        assert blocked_term not in html
 
 
 def test_all_scan_to_pay_qr_links_are_stripe_and_assets_exist() -> None:
@@ -52,6 +134,9 @@ def test_all_scan_to_pay_qr_links_are_stripe_and_assets_exist() -> None:
     qr_links = [a["href"] for a in parser.links if a.get("class") == "qr-card"]
     assert len(qr_links) == 5
     assert all(link.startswith("https://buy.stripe.com/") for link in qr_links)
+    html = _index()
+    for label in FIVE_Q3_SERVICE_LISTINGS:
+        assert label in html
 
 
 def test_admin_key_tester_is_on_site_without_exposing_secret() -> None:
