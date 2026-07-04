@@ -1,7 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 import {
-  LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare, Upload, Shield, Database,
+  LayoutGrid, BookOpen, Users, ListChecks, Code, ImagePlus, Search, MessageSquare, Upload, Shield, Database, Trophy,
 } from 'lucide-react';
 import { NotificationBell } from './NotificationBell';
 import { StackIntegrityWidget } from './StackIntegrityWidget';
@@ -19,6 +19,7 @@ const modes = [
   { id: 'ledger', label: 'Business Ledger', new: true, icon: BookOpen },
   { id: 'roundtable', label: 'AI Roundtable', new: true, icon: Users },
   { id: 'tasks', label: 'Mission Progress', new: true, icon: ListChecks },
+  { id: 'mission-game', label: 'Mission Game', new: true, icon: Trophy },
   { id: 'code', label: 'Code Mode', new: false, icon: Code },
   { id: 'banana', label: 'Create · Banana', new: false, icon: ImagePlus },
   { id: 'research', label: 'Research Mode', new: false, icon: Search },
