@@ -1,3 +1,5 @@
+> **SUPERSEDED / CORRECTED — the 10% is a permanent MINIMUM floor (the tax-deductible Kids charitable set-aside), NEVER a maximum or ceiling. Joshua pays full taxes on the rest regardless; more buckets = more giving above the floor; the 10% never gates or limits checkout/payments/decisions. The ceiling language below is RETIRED and must not be used as active doctrine.**
+
 # DAO TOKENOMICS — FINAL (Opus-Approved, Josh-Trusted)
 
 > **Authority:** Joshua Coleman, Sole Founder
@@ -69,15 +71,10 @@ At this ratio, the 375,000 launch pool per DAO depletes at ~$37,500 in platform 
 ### Revenue from Launch Sale — Kids Reserve per Bucket (Corrected 2026-06-01)
 
 The launch sale generates revenue across MULTIPLE legally distinct buckets.
-Each bucket has its own 10% maximum allowable corporate charitable deduction
-(per the IRS cap on LLC charitable deductions — see `CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`).
+[RETIRED — the 10% is a minimum floor, not a ceiling; see banner above]
 The buckets COMPOUND — it is not 10% total, it is 10% PER BUCKET.
 
-**Important framing (2026-06-01 correction)**: The 10% is the maximum
-corporate charitable deduction the LLC can claim per legally distinct
-revenue stream. It is NOT Joshua's personal income and NOT a "donation"
-Joshua chooses to make. It is the IRS ceiling. The stacking strategy
-exploits that ceiling by creating as many distinct streams as possible.
+**Important framing (corrected)**: [RETIRED — the 10% is a minimum floor, not a ceiling; see banner above]
 
 **The 10-Bucket Compounding Engine** (designed by original Opus, canonical):
 

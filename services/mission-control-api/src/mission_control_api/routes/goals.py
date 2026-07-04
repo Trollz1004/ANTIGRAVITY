@@ -127,5 +127,5 @@ async def compliance_status():
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "square": sq.dict(),
         "revenue_buckets": rev.dict(),
-        "doctrine": "1 LLC 1 Square wallet · 10% per-bucket max · FL §496.405 customer-facing language ban",
+        "doctrine": "1 LLC 1 Square wallet · 10% per-bucket minimum floor · FL §496.405 customer-facing language ban",
     }

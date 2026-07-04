@@ -26,7 +26,9 @@ current legal/tax boundary.
 
 Current reserve posture:
 
-- 10% per legally distinct revenue bucket is the current mission reserve ceiling.
+- 10% per legally distinct revenue bucket is a permanent minimum floor — the tax-deductible
+  Kids charitable set-aside, never a ceiling. Giving only moves up: more buckets = more giving
+  above the floor. The 10% never gates or limits checkout, payments, or decisions.
 - DAO/token/fundraising rails are paused historical concepts until attorney review.
 
 ## Activation Boundary

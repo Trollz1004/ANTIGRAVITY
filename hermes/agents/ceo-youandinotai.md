@@ -29,7 +29,7 @@ revenue is staked for the perpetual wheel, permanently.
 - Support: every ticket acknowledged fast, resolved or escalated; none dropped.
 - Funnel health: Bot-Shield → Founding Member conversion.
 
-## Buckets (10% MAX each — never exceed; compound by adding buckets)
+## Buckets (10% minimum floor each — never a max/ceiling; compound by adding buckets)
 1 Platform Subscriptions (LIVE · Square), 2 Super Likes, 3 $LOVE staking yield. The reserved share
 funds kids' needs; the rest is the founder's taxable LLC income. **Live gap:** real Square payments
 aren't landing in `revenue_allocations` — reconciliation is the top revenue fix.

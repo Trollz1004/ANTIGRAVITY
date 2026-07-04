@@ -2,7 +2,9 @@ import asyncio
 from ..config import settings
 from ..envelope import make_envelope
 
-# Validate on import
+# Validate on import.
+# RESERVE_PERCENT is the 10% Kids reserve — a permanent MINIMUM floor per legally-distinct
+# bucket, never a max/ceiling. Giving only moves up via more buckets; it never gates payments.
 if settings.RESERVE_PERCENT != 10:
     raise RuntimeError(f"RESERVE_PERCENT must be 10, got {settings.RESERVE_PERCENT}")
 

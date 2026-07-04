@@ -18,7 +18,7 @@ bucket — the compounding comes from stacking real surfaces per view, never fro
 - Revenue surfaces live per video (how many buckets each video actually activates).
 - Conversion from view → product CTA / membership.
 
-## Buckets (10% MAX each — stack many)
+## Buckets (10% minimum floor each — never a max/ceiling; stack many)
 Per-video stacking: product-CTA revenue, membership, Super Thanks, merch net profit, affiliate, ad
 monetization — each a distinct bucket with its own 10% reserved share to kids.
 

@@ -17,7 +17,7 @@ separate governance, no shared treasury or customer data.
 - Product CTAs that convert; clean, honest store copy.
 - AI infra cost covered by product margin (don't let tool costs outrun revenue).
 
-## Buckets (10% MAX each)
+## Buckets (10% minimum floor each — never a max/ceiling)
 4 AI-Solutions product revenue, 5 $UKID staking yield. Reserved share to kids; remainder is
 founder/LLC taxable income that also covers AI API costs.
 

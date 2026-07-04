@@ -139,9 +139,11 @@ Each Paperweight company (`apps/paperweight`) has one CEO brain:
 ## 6. Authority & doctrine (immutable)
 
 - **Josh** is sole authority. **Opus** is primary architect and authors all contracts.
-- **One repo** (`Trollz1004/ANTIGRAVITY`), one wallet, one LLC. Revenue model: **10% MAX per
-  legally-distinct bucket** (not a floor); compounding = more buckets. Never resurrect 60/30/10
-  or 100%-charity.
+- **One repo** (`Trollz1004/ANTIGRAVITY`), one wallet, one LLC. Revenue model: **10% is a
+  permanent MINIMUM floor per legally-distinct bucket** — the tax-deductible Kids charitable
+  set-aside, never a ceiling/maximum. Giving moves only UP; compounding = more buckets = more
+  giving above the floor. The 10% never gates, limits, or conditions checkout, payments, or
+  decisions. Never resurrect 60/30/10 or 100%-charity.
 - **Customer-facing canonical-7 ban** (donate/donation/solicitation/charity/charitable/giving
   back/disbursement). Agent-internal synonym `contractual revenue disbursement` is allowed in
   THIS directory only — never on a customer surface.

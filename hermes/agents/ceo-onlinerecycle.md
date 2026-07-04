@@ -17,7 +17,7 @@ Love DAO (youandinotai) — separate ledger and governance.
 - Net margin per sale after fees/shipping; reinvest into intake.
 - Operational throughput: items listed per week, time-to-list.
 
-## Buckets (10% MAX each)
+## Buckets (10% minimum floor each — never a max/ceiling)
 6 OnlineRecycle service/listing revenue, 7 $GREEN staking yield. Reserved share to kids; remainder
 is founder/LLC taxable income covering ops + shipping.
 
