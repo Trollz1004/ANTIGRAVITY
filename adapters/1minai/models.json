@@ -1,7 +1,7 @@
 {
   "platform": "1minai",
   "api_base": "https://api.1min.ai",
-  "auth_header": "Authorization: Bearer {1MINAI_API_KEY}",
+  "auth_header": "Authorization: Bearer {ONEMINAI_API_KEY}",
   "chat_endpoint": "/api/v1/oneai/chat",
   "feature_endpoint": "/api/v1/oneai/features",
   "asset_endpoint": "/api/v1/oneai/assets",
