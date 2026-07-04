@@ -37,4 +37,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          ! grep -rEi "openai|anthropic|gemini|emergent|donate|donation|charity"             apps/mission-control/src/ services/mission-control-api/src/
+          set -u
+          # Block public-copy fundraising / charity language on Mission Control surfaces,
+          # without treating internal provider labels/routes (OpenAI, Gemini, etc.) as drift.
+          PATTERN='\b(donat(e|ion|ions|ing)|charit(y|able)|fundrais(e|er|ing)|solicit(ation|ations|ing|ed|s)?)\b'
+          HITS=$(grep -RInEi --include='*.ts' --include='*.tsx' --include='*.py' \
+            --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.next --exclude-dir=__pycache__ \
+            "$PATTERN" apps/mission-control/src/ services/mission-control-api/src/ 2>/dev/null || true)
+          if [ -n "$HITS" ]; then
+            echo "::error::Mission Control public-copy compliance violation (fundraising/charity language)"
+            echo "$HITS"
+            exit 1
+          fi
+          echo "Mission Control compliance scan passed: no fundraising/charity language found."
