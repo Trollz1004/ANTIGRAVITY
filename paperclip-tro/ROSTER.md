@@ -14,34 +14,34 @@
 
 | Node | IP | Role | Orchestration |
 |---|---|---|---|
-| T5500 | gateway | ALL services + Agent Hub :3130 | Agent Hub |
-| Sabretooth | 192.168.0.8 | DREAM ONLINE ONLY (GPU for game) | Paperclip :3110 |
-| 9020 | 192.168.0.5 | Joshua workspace (browser sign-in apps) | none |
+| Sabretooth | 192.168.0.8 | ALL services + Agent Hub :3130 + DREAM on D:\ | Agent Hub + Paperclip |
+| T5500 | gateway | Gateway only — Cloudflare tunnels for youandinotai.com | none |
+| 9020 | 192.168.0.5 | Inactive — nothing running | none |
 
-## Platforms (20) — routed by Agent Hub
+## Platforms (20) — ALL on Sabretooth, routed by Agent Hub
 
-| Platform | Node | Auth | Use |
-|---|---|---|---|
-| hermes | T5500 | localhost | Co-CEO, routing, research |
-| fcc-claude | T5500 | FCC proxy | Co-CEO, code, compliance |
-| opencode | T5500 | NVIDIA free | Code tasks |
-| ollama | T5500 | localhost | Light local models |
-| cloud | T5500 | openrouter | Cloud relay via Hermes |
-| clawx | T5500 | gateway | ClawX/OpenClaw |
-| pi | T5500 | localhost | Conversational |
-| github | T5500 | PAT | Issue sync |
-| slack | T5500 | bot token | Notifications |
-| 1minai | Sabretooth | desktop app | DREAM cloud AI |
-| claude | 9020 | browser | Claude Max (cloud) |
-| codex | 9020 | browser | OpenAI Codex |
-| openai | 9020 | browser | OpenAI API |
-| grok | 9020 | browser | xAI Grok |
-| gemini | 9020 | browser | Google Gemini |
-| chatgpt | 9020 | browser | ChatGPT |
-| perplexity | 9020 | browser | Perplexity Pro |
-| cursor | 9020 | desktop | Cursor IDE |
-| desktop | 9020 | manual | Any GUI tool |
-| commander | 9020 | none | Terminal tasks |
+| Platform | Auth | Use |
+|---|---|---|
+| hermes | localhost | Co-CEO, routing, research |
+| fcc-claude | FCC proxy | Co-CEO, code, compliance |
+| claude | Max subscription | Sup@ user guide sphere (DREAM) |
+| opencode | NVIDIA free | Code tasks |
+| ollama | localhost | Local models |
+| cloud | openrouter | Cloud relay via Hermes |
+| 1minai | desktop app | DREAM NPC AI |
+| clawx | gateway | ClawX/OpenClaw |
+| pi | localhost | Conversational |
+| github | PAT | Issue sync |
+| slack | bot token | Notifications |
+| codex | browser | OpenAI Codex |
+| openai | browser | OpenAI API |
+| grok | browser | xAI Grok |
+| gemini | browser | Google Gemini |
+| chatgpt | browser | ChatGPT |
+| perplexity | browser | Perplexity Pro |
+| cursor | desktop | Cursor IDE |
+| desktop | manual | Any GUI tool |
+| commander | none | Terminal tasks |
 
 ## Skills
 
@@ -56,11 +56,11 @@ Every platform session reads `.agents/BOOT.md` first. No exceptions.
 | #dream-online | DREAM tasks (platform: 1minai) |
 | #fcc-claude | Claude tasks (platform: claude, fcc-claude) |
 
-## Agent Hub API
+## Agent Hub API (Sabretooth :3130)
 
 ```
-http://T5500:3130/api/entities/AgentTask    — CRUD
-http://T5500:3130/api/mcp/tools             — MCP for FCC-Claude
-http://T5500:3130/api/dispatch/routes       — Platform routing
-http://T5500:3130/health                    — Health check
+http://192.168.0.8:3130/api/entities/AgentTask    — CRUD
+http://192.168.0.8:3130/api/mcp/tools             — MCP for FCC-Claude
+http://192.168.0.8:3130/api/dispatch/routes       — Platform routing
+http://192.168.0.8:3130/health                    — Health check
 ```
