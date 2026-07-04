@@ -9,6 +9,7 @@ __pycache__/
 dist/
 .next/
 build/
+graphify-out/
 apps/youandinotai-frontend/out/
 apps/youandinotai-static/assets/*.map
 *.egg-info/
