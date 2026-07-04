@@ -47,7 +47,7 @@ npm start                  # listens on :3130
 | `pi` | T5500 | none | Pi via Hermes router |
 | `github` | T5500 | PAT token | GitHub API |
 | `slack` | T5500 | bot token | Slack API |
-| `1minai` | Sabretooth | cloud subscription | 1min.AI — fast cloud for DREAM events |
+| `1minai` | Sabretooth | desktop app | 1min.AI Windows app — cloud AI via app interface |
 | `claude` | 9020 | browser sign-in | Claude Max (cloud subscription) |
 | `codex` | 9020 | browser sign-in | OpenAI Codex desktop |
 | `openai` | 9020 | browser sign-in | OpenAI API |
