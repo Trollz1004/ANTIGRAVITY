@@ -18,7 +18,7 @@
 | T5500 | gateway | Gateway only — Cloudflare tunnels for youandinotai.com | none |
 | 9020 | 192.168.0.5 | Inactive — nothing running | none |
 
-## Platforms (20) — ALL on Sabretooth, routed by Agent Hub
+## Platforms (21) — ALL on Sabretooth, routed by Agent Hub
 
 | Platform | Auth | Use |
 |---|---|---|
@@ -29,6 +29,7 @@
 | ollama | localhost | Local models |
 | cloud | openrouter | Cloud relay via Hermes |
 | 1minai | desktop app | DREAM NPC AI |
+| odysseus | localhost :7000 | Odysseus AI |
 | clawx | gateway | ClawX/OpenClaw |
 | pi | localhost | Conversational |
 | github | PAT | Issue sync |

@@ -128,6 +128,12 @@ const PLATFORM_ROUTING = {
     access: 'local-service',
     endpoint: null,
     auth: 'none (Windows Terminal tasks)'
+  },
+  odysseus: {
+    node: 'sabretooth',
+    access: 'local-service',
+    endpoint: 'http://127.0.0.1:7000',
+    auth: 'admin login (local only)'
   }
 };
 
