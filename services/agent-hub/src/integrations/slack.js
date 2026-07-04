@@ -4,17 +4,31 @@ const slack = process.env.SLACK_BOT_TOKEN
   ? new WebClient(process.env.SLACK_BOT_TOKEN)
   : null;
 
+const PLATFORM = process.env.SLACK_CHANNEL_PLATFORM || 'antigravity-platform';
+const DREAM = process.env.SLACK_CHANNEL_DREAM || 'dream-online';
+const FCC = process.env.SLACK_CHANNEL_FCC || 'fcc-claude';
+
 const CHANNEL_MAP = {
-  hermes: process.env.SLACK_CHANNEL_PLATFORM || 'antigravity-platform',
-  codex: process.env.SLACK_CHANNEL_PLATFORM || 'antigravity-platform',
-  claude: process.env.SLACK_CHANNEL_FCC || 'fcc-claude',
-  github: process.env.SLACK_CHANNEL_PLATFORM || 'antigravity-platform',
-  ollama: process.env.SLACK_CHANNEL_DREAM || 'dream-online',
-  chatgpt: process.env.SLACK_CHANNEL_PLATFORM || 'antigravity-platform',
-  gemini: process.env.SLACK_CHANNEL_PLATFORM || 'antigravity-platform',
-  grok: process.env.SLACK_CHANNEL_PLATFORM || 'antigravity-platform',
-  cloud: process.env.SLACK_CHANNEL_PLATFORM || 'antigravity-platform',
-  '1minai': process.env.SLACK_CHANNEL_PLATFORM || 'antigravity-platform'
+  hermes: PLATFORM,
+  'fcc-claude': FCC,
+  claude: FCC,
+  codex: PLATFORM,
+  opencode: PLATFORM,
+  openai: PLATFORM,
+  ollama: DREAM,
+  cloud: PLATFORM,
+  grok: PLATFORM,
+  gemini: PLATFORM,
+  chatgpt: PLATFORM,
+  github: PLATFORM,
+  '1minai': PLATFORM,
+  perplexity: PLATFORM,
+  cursor: PLATFORM,
+  clawx: PLATFORM,
+  pi: PLATFORM,
+  slack: PLATFORM,
+  desktop: PLATFORM,
+  commander: PLATFORM
 };
 
 const STATUS_EMOJI = {
