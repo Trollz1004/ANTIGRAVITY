@@ -116,10 +116,10 @@ jobs:
           # grep exit codes: 0=match, 1=no match, 2=error. Trailing `|| true` collapses
           # 1 (no match) into a clean empty result; an actual error would surface via set -u
           # on an unset later var, but we explicitly guard the empty case below.
-          # Scan SOURCE only — build artifacts (.next, dist, node_modules) compile the
+          # Scan SOURCE only — build artifacts (.next, out, dist, node_modules) compile the
           # allowlisted source strings into output whose paths aren't allowlisted, causing
           # false drift failures. Source references are governed by the allowlist below.
-          ALL_HITS=$(grep -rnE --exclude-dir=.next --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.turbo --exclude-dir=coverage "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
+          ALL_HITS=$(grep -rnE --exclude-dir=.next --exclude-dir=out --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.turbo --exclude-dir=coverage --exclude-dir=__pycache__ "$PATTERN" "${TARGETS[@]}" 2>/dev/null || true)
           if [ -z "$ALL_HITS" ]; then
             echo "Doctrine boundary intact (zero matches in: ${TARGETS[*]})"
             exit 0
