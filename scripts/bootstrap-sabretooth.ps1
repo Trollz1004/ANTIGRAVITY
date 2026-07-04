@@ -1,51 +1,87 @@
-# Sabretooth Bootstrap — DREAM ONLINE ONLY
+# Sabretooth Bootstrap — Agent Hub + DREAM ONLINE + ALL services
+# This is the ONLY active node. Everything runs here.
 # GPU 1070 8GB reserved for game rendering
-# Cloud AI (1min.ai desktop app) for fast real-time events
-# NO local AI models for DREAM — cloud only for speed
+# DREAM files on D:\dream-online\
 
 $ErrorActionPreference = 'Stop'
 $REPO = 'C:\antigravity'
 $LOGS = "$REPO\logs"
+$DREAM = 'D:\dream-online'
 
-Write-Host "=== SABRETOOTH BOOTSTRAP — DREAM ONLINE ONLY ===" -ForegroundColor Magenta
+Write-Host "=== SABRETOOTH BOOTSTRAP — ALL SERVICES ===" -ForegroundColor Magenta
 
 if (-not (Test-Path $LOGS)) { New-Item -ItemType Directory -Path $LOGS -Force | Out-Null }
 
+# Ensure DREAM directories on D:\
+$dreamDirs = @("$DREAM\assets", "$DREAM\server", "$DREAM\config", "$DREAM\saves", "$DREAM\logs")
+foreach ($dir in $dreamDirs) {
+    if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+}
+Write-Host "DREAM directories ready on D:\"
+
 $taskSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 1)
 
-# --- 1. 1min.AI Desktop App (cloud AI for DREAM) ---
-Write-Host "`n[1/3] 1min.AI Desktop App" -ForegroundColor Green
-$oneMinPaths = @(
-    "$env:LOCALAPPDATA\1minAI\1min AI.exe",
-    "$env:LOCALAPPDATA\Programs\1min.ai\1min.ai.exe",
-    "$env:ProgramFiles\1min.ai\1min.ai.exe",
-    "${env:ProgramFiles(x86)}\1min.ai\1min.ai.exe"
-)
-$oneMinExe = $oneMinPaths | Where-Object { Test-Path $_ } | Select-Object -First 1
-if ($oneMinExe) {
-    $action = New-ScheduledTaskAction -Execute $oneMinExe
-    $trigger = New-ScheduledTaskTrigger -AtLogOn
-    Register-ScheduledTask -TaskName 'DREAM-1minAI' -Action $action -Trigger $trigger -Settings $taskSettings -Force | Out-Null
-    Write-Host "  Registered: DREAM-1minAI ($oneMinExe)"
+# --- 1. Agent Hub (Node.js :3130) ---
+Write-Host "`n[1/8] Agent Hub :3130" -ForegroundColor Green
+$hubPath = "$REPO\services\agent-hub"
+if (Test-Path "$hubPath\package.json") {
+    if (-not (Test-Path "$hubPath\node_modules")) {
+        Write-Host "  Installing dependencies..."
+        Push-Location $hubPath
+        npm install --production 2>&1 | Out-Null
+        Pop-Location
+    }
+    $hubAction = New-ScheduledTaskAction -Execute 'node' -Argument 'src/index.js' -WorkingDirectory $hubPath
+    $hubTrigger = New-ScheduledTaskTrigger -AtStartup
+    Register-ScheduledTask -TaskName 'ANTIGRAVITY-AgentHub' -Action $hubAction -Trigger $hubTrigger -Settings $taskSettings -User 'SYSTEM' -RunLevel Highest -Force | Out-Null
+    Write-Host "  Registered: ANTIGRAVITY-AgentHub (auto-start)"
 } else {
-    Write-Host "  SKIP: 1min.AI not found — install from https://1min.ai/download" -ForegroundColor Yellow
-    Write-Host "  Expected paths: $($oneMinPaths -join ', ')"
+    Write-Host "  SKIP: Agent Hub not found at $hubPath" -ForegroundColor Yellow
 }
 
-# --- 2. DREAM Game Server (if configured) ---
-Write-Host "`n[2/3] DREAM Game Server" -ForegroundColor Green
-$dreamServerPath = 'D:\dream-online\server'
-if (Test-Path "$dreamServerPath\server.js") {
-    $dreamAction = New-ScheduledTaskAction -Execute 'node' -Argument 'server.js' -WorkingDirectory $dreamServerPath
-    $dreamTrigger = New-ScheduledTaskTrigger -AtStartup
-    Register-ScheduledTask -TaskName 'DREAM-GameServer' -Action $dreamAction -Trigger $dreamTrigger -Settings $taskSettings -User 'SYSTEM' -RunLevel Highest -Force | Out-Null
-    Write-Host "  Registered: DREAM-GameServer (auto-start)"
+# --- 2. Hermes Router (:11435) ---
+Write-Host "`n[2/8] Hermes Router :11435" -ForegroundColor Green
+$hermesExe = (Get-Command hermes -ErrorAction SilentlyContinue).Source
+if ($hermesExe) {
+    $hermesAction = New-ScheduledTaskAction -Execute $hermesExe -Argument '--port 11435'
+    $hermesTrigger = New-ScheduledTaskTrigger -AtStartup
+    Register-ScheduledTask -TaskName 'ANTIGRAVITY-Hermes' -Action $hermesAction -Trigger $hermesTrigger -Settings $taskSettings -User 'SYSTEM' -RunLevel Highest -Force | Out-Null
+    Write-Host "  Registered: ANTIGRAVITY-Hermes (auto-start)"
 } else {
-    Write-Host "  SKIP: $dreamServerPath\server.js not found yet" -ForegroundColor Yellow
+    Write-Host "  SKIP: hermes not found in PATH" -ForegroundColor Yellow
 }
 
-# --- 3. Paperclip (DREAM-specific orchestration) ---
-Write-Host "`n[3/3] Paperclip (DREAM orchestration)" -ForegroundColor Green
+# --- 3. FCC Proxy (:8082) ---
+Write-Host "`n[3/8] FCC Proxy :8082" -ForegroundColor Green
+$fccAction = New-ScheduledTaskAction -Execute 'cmd' -Argument '/c fcc-claude --port 8082 >> C:\antigravity\logs\fcc-proxy.log 2>&1' -WorkingDirectory $REPO
+$fccTrigger = New-ScheduledTaskTrigger -AtStartup
+Register-ScheduledTask -TaskName 'ANTIGRAVITY-FCC' -Action $fccAction -Trigger $fccTrigger -Settings $taskSettings -User 'SYSTEM' -RunLevel Highest -Force | Out-Null
+Write-Host "  Registered: ANTIGRAVITY-FCC (auto-start)"
+
+# --- 4. Ollama (:11434) ---
+Write-Host "`n[4/8] Ollama :11434" -ForegroundColor Green
+$ollamaExe = (Get-Command ollama -ErrorAction SilentlyContinue).Source
+if ($ollamaExe) {
+    $ollamaAction = New-ScheduledTaskAction -Execute $ollamaExe -Argument 'serve'
+    $ollamaTrigger = New-ScheduledTaskTrigger -AtStartup
+    Register-ScheduledTask -TaskName 'ANTIGRAVITY-Ollama' -Action $ollamaAction -Trigger $ollamaTrigger -Settings $taskSettings -User 'SYSTEM' -RunLevel Highest -Force | Out-Null
+    Write-Host "  Registered: ANTIGRAVITY-Ollama (auto-start)"
+} else {
+    Write-Host "  SKIP: ollama not found in PATH" -ForegroundColor Yellow
+}
+
+# --- 5. PostgreSQL ---
+Write-Host "`n[5/8] PostgreSQL" -ForegroundColor Green
+$pgService = Get-Service -Name 'postgresql*' -ErrorAction SilentlyContinue
+if ($pgService) {
+    Set-Service -Name $pgService.Name -StartupType Automatic
+    Write-Host "  PostgreSQL ($($pgService.Name)) set to Automatic start"
+} else {
+    Write-Host "  SKIP: PostgreSQL service not found" -ForegroundColor Yellow
+}
+
+# --- 6. Paperclip (DREAM orchestration :3110) ---
+Write-Host "`n[6/8] Paperclip :3110 (DREAM)" -ForegroundColor Green
 $paperclipExe = (Get-Command paperclip -ErrorAction SilentlyContinue).Source
 if (-not $paperclipExe) {
     $paperclipExe = "$env:LOCALAPPDATA\Programs\paperclip\paperclip.exe"
@@ -59,8 +95,26 @@ if (Test-Path $paperclipExe) {
     Write-Host "  SKIP: Paperclip not found" -ForegroundColor Yellow
 }
 
-# --- 4. Hermes Workspace Dashboard (:9119) ---
-Write-Host "`n[4/4] Hermes Workspace :9119" -ForegroundColor Green
+# --- 7. 1min.AI Desktop App (DREAM NPC AI) ---
+Write-Host "`n[7/8] 1min.AI Desktop App (NPC AI)" -ForegroundColor Green
+$oneMinPaths = @(
+    "$env:LOCALAPPDATA\1minAI\1min AI.exe",
+    "$env:LOCALAPPDATA\Programs\1min.ai\1min.ai.exe",
+    "$env:ProgramFiles\1min.ai\1min.ai.exe",
+    "${env:ProgramFiles(x86)}\1min.ai\1min.ai.exe"
+)
+$oneMinExe = $oneMinPaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+if ($oneMinExe) {
+    $action = New-ScheduledTaskAction -Execute $oneMinExe
+    $trigger = New-ScheduledTaskTrigger -AtLogOn
+    Register-ScheduledTask -TaskName 'DREAM-1minAI' -Action $action -Trigger $trigger -Settings $taskSettings -Force | Out-Null
+    Write-Host "  Registered: DREAM-1minAI ($oneMinExe)"
+} else {
+    Write-Host "  SKIP: 1min.AI not found" -ForegroundColor Yellow
+}
+
+# --- 8. Hermes Workspace Dashboard (:9119) ---
+Write-Host "`n[8/8] Hermes Workspace :9119" -ForegroundColor Green
 $hermesWsPath = 'C:\Users\joshl\hermes-workspace'
 if (Test-Path "$hermesWsPath\package.json") {
     $hwAction = New-ScheduledTaskAction -Execute 'cmd' -Argument "/c cd /d $hermesWsPath && pnpm dev >> C:\antigravity\logs\hermes-workspace.log 2>&1" -WorkingDirectory $hermesWsPath
@@ -71,27 +125,39 @@ if (Test-Path "$hermesWsPath\package.json") {
     Write-Host "  SKIP: Hermes Workspace not found at $hermesWsPath" -ForegroundColor Yellow
 }
 
-# --- Remove NON-DREAM services if they exist ---
-Write-Host "`n[cleanup] Removing non-DREAM services from Sabretooth..." -ForegroundColor Yellow
-$removeTasks = @('ANTIGRAVITY-AgentHub', 'ANTIGRAVITY-Hermes', 'ANTIGRAVITY-FCC', 'ANTIGRAVITY-Ollama')
-foreach ($task in $removeTasks) {
-    $existing = Get-ScheduledTask -TaskName $task -ErrorAction SilentlyContinue
-    if ($existing) {
-        Unregister-ScheduledTask -TaskName $task -Confirm:$false
-        Write-Host "  Removed: $task (belongs on T5500, not here)"
-    }
+# --- DREAM Game Server (if configured) ---
+$dreamServerPath = "$DREAM\server"
+if (Test-Path "$dreamServerPath\server.js") {
+    $dreamAction = New-ScheduledTaskAction -Execute 'node' -Argument 'server.js' -WorkingDirectory $dreamServerPath
+    $dreamTrigger = New-ScheduledTaskTrigger -AtStartup
+    Register-ScheduledTask -TaskName 'DREAM-GameServer' -Action $dreamAction -Trigger $dreamTrigger -Settings $taskSettings -User 'SYSTEM' -RunLevel Highest -Force | Out-Null
+    Write-Host "`n  Registered: DREAM-GameServer (auto-start)"
 }
 
-# --- Start now ---
-Write-Host "`n=== Starting DREAM services NOW ===" -ForegroundColor Magenta
-Start-ScheduledTask -TaskName 'DREAM-1minAI' -ErrorAction SilentlyContinue
-Start-ScheduledTask -TaskName 'DREAM-GameServer' -ErrorAction SilentlyContinue
-Start-ScheduledTask -TaskName 'DREAM-Paperclip' -ErrorAction SilentlyContinue
+# --- Run DB migration ---
+Write-Host "`n[+] Running DB migration..." -ForegroundColor Green
+if (Test-Path "$hubPath\migrations\run.js") {
+    Push-Location $hubPath
+    try { node migrations/run.js 2>&1; Write-Host "  Migration complete" }
+    catch { Write-Host "  Migration skipped (DB may not be configured)" -ForegroundColor Yellow }
+    Pop-Location
+}
+
+# --- Start services now ---
+Write-Host "`n=== Starting ALL services NOW ===" -ForegroundColor Magenta
+$startTasks = @('ANTIGRAVITY-AgentHub', 'ANTIGRAVITY-Hermes', 'ANTIGRAVITY-FCC', 'ANTIGRAVITY-Ollama', 'DREAM-Paperclip', 'DREAM-1minAI', 'HERMES-Workspace')
+foreach ($t in $startTasks) { Start-ScheduledTask -TaskName $t -ErrorAction SilentlyContinue }
 
 Write-Host "`n=== SABRETOOTH BOOTSTRAP COMPLETE ===" -ForegroundColor Magenta
-Write-Host "This node is DREAM ONLINE ONLY:"
-Write-Host "  - GPU 1070 8GB = game rendering (NOT AI inference)"
-Write-Host "  - 1min.AI desktop = cloud AI for fast real-time events"
-Write-Host "  - Paperclip = DREAM-specific task orchestration"
-Write-Host "  - NO Ollama, NO Hermes, NO FCC, NO Agent Hub here"
-Write-Host "`nAll other AI work routes through T5500 :3130 (Agent Hub)."
+Write-Host "ALL services on this node:"
+Write-Host "  - Agent Hub       :3130  (task routing)"
+Write-Host "  - Hermes Router   :11435 (agent routing)"
+Write-Host "  - FCC Proxy       :8082  (FCC-Claude)"
+Write-Host "  - Ollama          :11434 (local models)"
+Write-Host "  - PostgreSQL      :5432  (database)"
+Write-Host "  - Paperclip       :3110  (DREAM orchestration)"
+Write-Host "  - 1min.AI         desktop (NPC AI)"
+Write-Host "  - Hermes Workspace :9119 (knowledge UI)"
+Write-Host "  - DREAM on D:\dream-online\"
+Write-Host "`nClaude Official = Sup@ (user guide sphere)"
+Write-Host "1min.ai = NPC AI (cloud inference)"

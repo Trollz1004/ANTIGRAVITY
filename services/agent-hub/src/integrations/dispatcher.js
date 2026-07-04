@@ -1,147 +1,137 @@
-// Dispatcher — routes tasks to the right platform on the right node.
-// Every AI sends to ONE location (T5500 :3130). This module decides where it goes.
+// Dispatcher — routes tasks to the right platform.
+// ALL platforms run on Sabretooth :3130. T5500 = gateway only. 9020 = inactive.
 
 const NODE_MAP = {
-  t5500: { ip: 'localhost', name: 'T5500', role: 'Gateway + Agent Hub + all orchestration' },
-  sabretooth: { ip: '192.168.0.8', name: 'Sabretooth', role: 'DREAM ONLINE ONLY — GPU 1070 8GB for game, cloud AI for events' },
-  '9020': { ip: '192.168.0.5', name: '9020', role: 'Joshua workspace + browser-auth platforms' }
+  sabretooth: { ip: '192.168.0.8', name: 'Sabretooth', role: 'Agent Hub + DREAM + all services' },
+  t5500: { ip: 'localhost', name: 'T5500', role: 'Gateway only — Cloudflare tunnels' },
+  '9020': { ip: '192.168.0.5', name: '9020', role: 'Inactive' }
 };
 
-// Platform → which node runs it, how it's accessed, auth model
 const PLATFORM_ROUTING = {
-  // === T5500 — GATEWAY (all orchestration lives here) ===
+  // === ALL on Sabretooth ===
   hermes: {
-    node: 't5500',
+    node: 'sabretooth',
     access: 'local-service',
     endpoint: 'http://localhost:11435',
     auth: 'none (localhost)'
   },
   'fcc-claude': {
-    node: 't5500',
+    node: 'sabretooth',
     access: 'fcc-proxy',
     endpoint: 'http://localhost:8082',
     auth: 'none (FCC proxy)'
   },
+  claude: {
+    node: 'sabretooth',
+    access: 'cloud-subscription',
+    endpoint: null,
+    auth: 'Claude Max subscription — Sup@ user guide sphere in DREAM'
+  },
   opencode: {
-    node: 't5500',
+    node: 'sabretooth',
     access: 'local-service',
     endpoint: 'http://localhost:11435',
     auth: 'none (NVIDIA free tier via Hermes)'
   },
-  github: {
-    node: 't5500',
-    access: 'api',
-    endpoint: 'https://api.github.com',
-    auth: 'token (GITHUB_TOKEN)'
+  ollama: {
+    node: 'sabretooth',
+    access: 'local-service',
+    endpoint: 'http://localhost:11434',
+    auth: 'none (localhost)'
   },
-  slack: {
-    node: 't5500',
-    access: 'api',
-    endpoint: 'https://slack.com/api',
-    auth: 'bot token (SLACK_BOT_TOKEN)'
+  cloud: {
+    node: 'sabretooth',
+    access: 'openrouter',
+    endpoint: 'http://localhost:11435',
+    auth: 'openrouter key (via Hermes)'
+  },
+  '1minai': {
+    node: 'sabretooth',
+    access: 'desktop-app',
+    endpoint: null,
+    auth: 'desktop app — cloud AI for DREAM NPCs'
   },
   clawx: {
-    node: 't5500',
+    node: 'sabretooth',
     access: 'local-service',
     endpoint: 'ws://localhost:3110',
     auth: 'gateway token (openclaw)'
   },
   pi: {
-    node: 't5500',
+    node: 'sabretooth',
     access: 'local-service',
     endpoint: 'http://localhost:11435',
     auth: 'none (via Hermes router)'
   },
-  cloud: {
-    node: 't5500',
-    access: 'openrouter',
-    endpoint: 'http://localhost:11435',
-    auth: 'openrouter key (via Hermes)'
-  },
-  ollama: {
-    node: 't5500',
-    access: 'local-service',
-    endpoint: 'http://localhost:11434',
-    auth: 'none (localhost — light models only, NOT for DREAM)'
-  },
-
-  // === SABRETOOTH — DREAM ONLINE ONLY (GPU reserved for game) ===
-  '1minai': {
+  github: {
     node: 'sabretooth',
-    access: 'desktop-app',
-    endpoint: null,
-    auth: 'desktop app (Windows, Sabretooth only — cloud AI via app)'
+    access: 'api',
+    endpoint: 'https://api.github.com',
+    auth: 'token (GITHUB_TOKEN)'
   },
-
-  // === 9020 — JOSHUA WORKSPACE (browser sign-in platforms) ===
-  claude: {
-    node: '9020',
-    access: 'browser-signin',
-    endpoint: null,
-    auth: 'browser (Claude Max subscription — cloud)'
+  slack: {
+    node: 'sabretooth',
+    access: 'api',
+    endpoint: 'https://slack.com/api',
+    auth: 'bot token (SLACK_BOT_TOKEN)'
   },
   codex: {
-    node: '9020',
+    node: 'sabretooth',
     access: 'browser-signin',
     endpoint: null,
     auth: 'browser (OpenAI desktop)'
   },
   openai: {
-    node: '9020',
+    node: 'sabretooth',
     access: 'browser-signin',
     endpoint: null,
     auth: 'browser (OpenAI)'
   },
   grok: {
-    node: '9020',
+    node: 'sabretooth',
     access: 'browser-signin',
     endpoint: null,
     auth: 'browser (xAI desktop)'
   },
   gemini: {
-    node: '9020',
+    node: 'sabretooth',
     access: 'browser-signin',
     endpoint: null,
     auth: 'browser (Google desktop)'
   },
   chatgpt: {
-    node: '9020',
+    node: 'sabretooth',
     access: 'browser-signin',
     endpoint: null,
     auth: 'browser (OpenAI ChatGPT)'
   },
   perplexity: {
-    node: '9020',
+    node: 'sabretooth',
     access: 'browser-signin',
     endpoint: null,
     auth: 'browser (Perplexity Pro)'
   },
   cursor: {
-    node: '9020',
+    node: 'sabretooth',
     access: 'desktop-app',
     endpoint: null,
     auth: 'desktop app (IDE)'
   },
   desktop: {
-    node: '9020',
+    node: 'sabretooth',
     access: 'desktop-app',
     endpoint: null,
     auth: 'manual (any GUI desktop tool)'
   },
   commander: {
-    node: '9020',
+    node: 'sabretooth',
     access: 'local-service',
     endpoint: null,
     auth: 'none (Windows Terminal tasks)'
   }
 };
 
-// Fallback: T5500 is primary for everything except DREAM and browser-auth
-const FALLBACK_ROUTING = {
-  hermes: { fallback_node: '9020', fallback_endpoint: 'http://192.168.0.5:11436' },
-  'fcc-claude': { fallback_node: '9020', fallback_endpoint: 'http://192.168.0.5:8082' },
-  opencode: { fallback_node: '9020', fallback_endpoint: 'http://192.168.0.5:11436' }
-};
+const FALLBACK_ROUTING = {};
 
 function getRouting(platform) {
   return PLATFORM_ROUTING[platform] || null;

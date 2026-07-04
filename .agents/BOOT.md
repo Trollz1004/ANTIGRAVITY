@@ -14,7 +14,7 @@ Every AI agent on every platform — Claude, Hermes, Codex, Grok, Gemini, ChatGP
    - Skills: `C:\antigravity\.agents\skills\`
    - Agent configs: `C:\antigravity\paperclip-tro\agents\{your-agent}\`
    - Adapters: `C:\antigravity\adapters\{your-platform}\`
-   - Agent Hub API: `http://T5500:3130/api/`
+   - Agent Hub API: `http://192.168.0.8:3130/api/`
    - Slack channels: #antigravity-platform, #dream-online, #fcc-claude
 
 ## ON SESSION CLOSE (before exiting)
@@ -67,8 +67,8 @@ Joshua has DiskGenius. He will zero-fill the platters. This is not a threat. Thi
 
 | Node | Role | What belongs there |
 |---|---|---|
-| T5500 | Gateway + Agent Hub | Agent Hub :3130, Hermes :11435, FCC :8082, Ollama :11434, PostgreSQL |
-| Sabretooth | DREAM ONLINE ONLY | GPU for game, 1min.ai desktop, Paperclip for DREAM |
-| 9020 | Joshua workspace | Browser sign-in apps: Claude Max, Codex, Grok, Gemini, ChatGPT, Perplexity, Cursor |
+| Sabretooth | ALL services + DREAM | Agent Hub :3130, Hermes :11435, FCC :8082, Ollama :11434, PostgreSQL, Paperclip :3110, DREAM on D:\ |
+| T5500 | Gateway only | Cloudflare tunnels for youandinotai.com |
+| 9020 | Inactive | Nothing running |
 
 **NOTHING else runs on any node. No drift. No extras. No "temporary" services.**
