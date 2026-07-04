@@ -34,7 +34,7 @@ npm run migrate            # creates PostgreSQL tables
 npm start                  # listens on :3130
 ```
 
-## Platforms (20) — ALL on Sabretooth
+## Platforms (21) — ALL on Sabretooth
 
 | Platform | Auth | Use |
 |---|---|---|
@@ -58,6 +58,7 @@ npm start                  # listens on :3130
 | `cursor` | desktop | Cursor IDE |
 | `desktop` | manual | Any GUI tool |
 | `commander` | none | Terminal tasks |
+| `odysseus` | admin login (local only) | Odysseus AI — sabretooth local-service :7000 |
 
 ## Auth Model (what the hub holds)
 
@@ -123,7 +124,7 @@ FCC-Claude accesses tasks via the MCP interface:
 
 ## Architecture Notes
 
-1. Agent Hub handles ANTIGRAVITY task routing (all 20 platforms)
+1. Agent Hub handles ANTIGRAVITY task routing (all 21 platforms)
 2. Paperclip :3110 handles DREAM game orchestration (webhooks, triggers, events)
 3. Both run on Sabretooth — the ONLY active node
 4. T5500 = gateway only (Cloudflare tunnels), 9020 = inactive
