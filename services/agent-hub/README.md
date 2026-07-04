@@ -108,6 +108,56 @@ POST   /api/dispatch/health                 check which platforms are reachable
 GET    /health                              health check (no auth)
 ```
 
+## Leads CRM (`src/leads/`)
+
+Ported from the Emergent lead-gen CRM for youandinotai.com (volunteer-lead capture,
+email campaigns/templates). Data lives in Supabase (project `jmvgdqomvnkfgknmgwxp`),
+schema in `migrations/002_create_leads.sql`. Six tables: `leads`, `campaigns`,
+`templates`, `rules`, `pages`, `platforms` — all with RLS enabled (hub connects as a
+BYPASSRLS service role; there are no anon/authenticated policies, all writes route
+through the Express layer).
+
+```
+GET    /api/leads                     list, paginated + filterable (?platform=, ?stage=, ?status=, ?source=, ?min_score=, ?q=, ?limit=, ?skip=)
+POST   /api/leads                     create — scored via heuristic_score() if no explicit score given
+GET    /api/leads/:id
+PUT    /api/leads/:id
+DELETE /api/leads/:id
+POST   /api/leads/convert             { id | email } → stage='won', score=100, fires conversion hooks
+GET    /api/leads/reports/funnel      real counts grouped by stage
+
+GET    /api/campaigns                 CRUD
+POST   /api/campaigns
+GET    /api/campaigns/:id
+PUT    /api/campaigns/:id
+DELETE /api/campaigns/:id
+
+GET    /api/templates                 CRUD
+POST   /api/templates
+GET    /api/templates/:id
+PUT    /api/templates/:id
+DELETE /api/templates/:id
+```
+
+**Scoring** (`src/leads/scoring.js`): `heuristic_score(lead)` is a pure, DB-free
+function (unit tested in `tests/scoring.test.js`). `oneMinScore(lead)` is an optional
+AI-assisted scorer behind `ONEMINAI_API_KEY` (absent from the vault as of this
+writing — dead code until provisioned); it always falls back to `heuristic_score`
+on missing key, timeout, or non-2xx response, and never throws.
+
+**Hooks** (`src/leads/hooks.js`): fire-and-forget, non-blocking side effects on
+lead create/convert — Slack notify, Hermes memory upsert
+(`POST http://localhost:9119/memory/upsert`), Telegram broadcast. All are env-gated
+and default-off; a failure in any hook is logged and swallowed, never surfaced to
+the caller and never blocks the lead API response. `EMERGENT_LEDGER_URL` /
+`EMERGENT_BROADCAST_URL` are legacy optional integrations, also env-gated
+default-OFF, with no hard dependency on any `*.emergent*` host.
+
+**Data provenance note**: the live source system stored `api_key` in plaintext and
+served it over an unauthenticated `GET /api/platforms`. Those 4 keys should be
+treated as burned/rotation-listed. This port stores `api_key_hash` (sha256) only —
+plaintext values were never written to this repo or to Supabase.
+
 ## MCP Integration (FCC-Claude)
 
 FCC-Claude accesses tasks via the MCP interface:

@@ -4,6 +4,7 @@ const taskRoutes = require('./routes/tasks');
 const syncRoute = require('./routes/sync');
 const mcpRoute = require('./routes/mcp');
 const dispatchRoute = require('./routes/dispatch');
+const leadsRoutes = require('./leads');
 const { validatePlatformRouting } = require('./integrations/dispatcher');
 
 // Fail-closed: refuse to start without an API key. Without this, the auth
@@ -43,6 +44,7 @@ app.use('/api/entities/AgentTask', taskRoutes);
 app.use('/api/functions', syncRoute);
 app.use('/api/mcp', mcpRoute);
 app.use('/api/dispatch', dispatchRoute);
+app.use('/api', leadsRoutes);
 
 const PORT = process.env.PORT || 3130;
 app.listen(PORT, '0.0.0.0', () => {
