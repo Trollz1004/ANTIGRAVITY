@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { validate, buildTask, PRIORITY_MAP, ACTIVE_STATUSES, MAX_ACTIVE, enforceQueueCap } = require('../models/task');
+const { PLATFORMS } = require('../platforms');
 
 const router = Router();
 
@@ -28,7 +29,7 @@ router.get('/tools', (req, res) => {
             description: { type: 'string' },
             status: { type: 'string', enum: ['backlog', 'todo', 'in_progress', 'review', 'done'] },
             priority: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
-            platform: { type: 'string', description: 'Target platform: hermes, fcc-claude, claude, codex, opencode, openai, ollama, cloud, grok, gemini, chatgpt, github, 1minai, perplexity, cursor, clawx, pi, slack, desktop, commander' },
+            platform: { type: 'string', description: `Target platform: ${PLATFORMS.join(', ')}` },
             skill_id: { type: 'string' },
             tags: { type: 'array', items: { type: 'string' } }
           },
