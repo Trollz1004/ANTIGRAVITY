@@ -11,7 +11,12 @@
     },
     "playwright": {
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@playwright/mcp@latest"
+      ]
     },
     "mission-mcp": {
       "command": "node",
@@ -28,6 +33,10 @@
         "C:\\antigravity-paperclip-dateapp-ops\\mcp\\dateapp-paperclip-memory-server.cjs"
       ],
       "env": {}
+    },
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=jmvgdqomvnkfgknmgwxp&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching%2Cstorage"
     }
   }
 }
