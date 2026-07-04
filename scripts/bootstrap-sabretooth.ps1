@@ -34,7 +34,7 @@ if ($oneMinExe) {
 
 # --- 2. DREAM Game Server (if configured) ---
 Write-Host "`n[2/3] DREAM Game Server" -ForegroundColor Green
-$dreamServerPath = "$REPO\services\dream-online"
+$dreamServerPath = 'D:\dream-online\server'
 if (Test-Path "$dreamServerPath\server.js") {
     $dreamAction = New-ScheduledTaskAction -Execute 'node' -Argument 'server.js' -WorkingDirectory $dreamServerPath
     $dreamTrigger = New-ScheduledTaskTrigger -AtStartup
