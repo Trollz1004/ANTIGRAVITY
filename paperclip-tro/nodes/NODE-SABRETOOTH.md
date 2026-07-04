@@ -21,8 +21,9 @@
 
 ## Architecture
 
-**Agent Hub** handles all ANTIGRAVITY task routing across 20 platforms.
-**Paperclip** stays for DREAM — webhooks, triggers, game events need it.
+**Agent Hub** handles all ANTIGRAVITY task routing across 21 platforms.
+**Paperclip** :3110 — DREAM orchestration (webhooks, triggers, game events).
+**Paperclip Agents** — 2 CEOs only: Claude + Hermes. Sub-agents are external via Agent Hub.
 **GPU 1070 8GB** reserved for game rendering — NOT AI inference.
 
 ### DREAM AI Roles
@@ -30,7 +31,7 @@
 - **Claude Official** (Max subscription) = Sup@ — the user's floating electrical sphere guide. Uses official Claude Code for updated use cases over time. No TOS violations.
 - **1min.ai** (desktop app) = NPC AI — cloud inference for real-time NPC behavior, world events, dialogue.
 
-## DREAM File Layout (D:\)
+## D:\ Layout
 
 ```
 D:\dream-online\
@@ -38,11 +39,18 @@ D:\dream-online\
 ├── server\       — game server code
 ├── config\       — game configuration
 ├── saves\        — world state / player data
-└── logs\         — game server logs
+├── logs\         — game server logs
+└── paperclip\    — Paperclip memory architecture
+    ├── SOL.md            — Source of Law (2 CEOs only)
+    ├── agents\
+    │   ├── ceo-claude\   — AGENTS.md, HEARTBEAT.md, TOOLS.md, STATE.md
+    │   └── ceo-hermes\   — AGENTS.md, HEARTBEAT.md, TOOLS.md, STATE.md
+    └── mcp-plugins\
+        └── paperclip-memory\  — Supabase brain bridge
 ```
 
 C:\ has the ANTIGRAVITY repo (adapters, skills, Agent Hub code).
-D:\ has DREAM-specific game files.
+D:\ has DREAM + Paperclip agent state.
 
 ## Bootstrap
 
