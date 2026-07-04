@@ -9,8 +9,6 @@ import { Dashboard } from './pages/Dashboard';
 import { CommsGateway } from './pages/CommsGateway';
 import { Paperweight } from './pages/Paperweight';
 import { HermesNode } from './pages/HermesNode';
-import { HermesSideworld } from './pages/HermesSideworld';
-import { CupidAdOps } from './pages/CupidAdOps';
 import { StubPage } from './pages/StubPage';
 
 type PageId =
@@ -97,13 +95,13 @@ export default function App() {
           />
         );
       case 'clawx':
-        return <HermesSideworld />;
+        return <StubPage title="Hermes Sideworld" sub="ClawX cockpit · browser-visible helper lane" icon="Hermes" />;
       case 'llm':
         return <StubPage title="LLM Forge" sub="Chief-of-staff logic · creative ops · prompt foundry" icon="Brain" />;
       case 'crossfire':
         return <StubPage title="CROSSFIRE Engine" sub="6-platform price engine · listings sync" icon="Bolt" />;
       case 'marketing':
-        return <CupidAdOps />;
+        return <StubPage title="Cupid Ad Ops" sub="Lead-gen loops · creative ops · campaign cockpit" icon="Megaphone" />;
       case 'catalog':
         return <StubPage title="Sabertooth Catalog" sub="Local inventory · Orbital sync · resale ops" icon="Coins" />;
       case 'separation':
