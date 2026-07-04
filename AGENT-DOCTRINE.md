@@ -58,34 +58,51 @@ status: <active|idle|error>
 
 Spread agents across providers. Never stack all agents on one provider.
 
-## Node Roles (FINAL — Claude's pick, Joshua approved 2026-07-03)
+## Node Roles (FINAL FORM — updated 2026-07-04: Agent Hub replaces Paperclip+Base44)
 
-**Sabretooth** (192.168.0.8, 1070 GPU) = Dream Online ONLY
-- Paperclip :3110 — game agents only
+**Agent Hub** (`services/agent-hub`, port **:3130**) is now the canonical task-orchestration
+layer, replacing Paperclip TRO (:3110) and Paperclip DREAM (:3120). It also owns the
+leads CRM ported from the Emergent lead-gen system (`src/leads/` — leads, campaigns,
+templates, rules, pages, platforms — data in Supabase project `jmvgdqomvnkfgknmgwxp`).
+Paperclip TRO and DREAM are **being retired but NOT yet deleted** — removal is a later
+gated phase, do not delete `paperclip-tro/` yet.
+
+Roster (Agent Hub platforms — see `src/platforms.js` for the full validated list):
+- `claude-gm` — Claude Max, on-demand (governance, doctrine, merges)
+- `hermes-marketer` — Hermes router, growth/leads/support
+- `fcc-claude` — FCC-Claude via proxy :8082, free executor (code, compliance)
+- `clawx` — ClawX/OpenClaw, support tickets
+- `1minai` — 1min.AI cloud, optional AI lead scoring (env-gated)
+
+**Sabretooth `C:\`** (192.168.0.8, dev machine) = all-AI agent coordination
+- Agent Hub :3130 — task orchestration + leads CRM (canonical, replaces Paperclip)
+- FCC proxy :8082
+- Ollama :11434 (GPU inference)
+- Hermes router :11435
+- One repo (`C:\antigravity`), one branch (`main`) — this is THE dev tree
+
+**Sabretooth `E:\`** = DREAM ONLINE root (`DREAM_ROOT` env var)
+- Separate game project tree, not part of this repo's `main`
 - Hermes World game :9119 (third-party open-source browser MMO, NOT Nous Research)
 - Hermes workspace :3000
-- Ollama :11434 (GPU for NPC inference)
-- FCC proxy :8082
-- NOTHING else on this box
-
-**9020** (192.168.0.5, WIPED CLEAN) = Business + Joshua workspace
-- Paperclip :3120 — all 3 business projects
-- Hermes router :11436
-- Joshua + Claude Max primary workspace
 
 **T5500** = Public gateway ONLY
-- Cloudflare tunnels, DNS, wrangler deploy
-- No Paperclip, no agents, no dev
+- Cloudflare tunnels, DNS, wrangler deploy for youandinotai.com
+- No Paperclip, no agents, no dev — gateway + dateapp deploy target only
 
-## Projects (9020 :3120)
+**9020** (192.168.0.5) = legacy Paperclip DREAM :3120 — retiring, not yet removed.
+
+## Projects (Agent Hub, all on Sabretooth `C:\` :3130)
 
 1. **ANT-DATEAPP** — youandinotai.com. Deploys to T5500 via wrangler.
 2. **ANT-EBAY** — eBay cross-lister. Own project.
 3. **ANT-AISOLUTIONS** — ai-solutions.store + business exchange.
+4. **LEADS-CRM** — ported Emergent lead-gen CRM (`src/leads/`), youandinotai.com volunteer
+   leads, campaigns, email templates. Supabase-backed.
 
-## Projects (Sabretooth :3110)
+## Projects (Sabretooth `E:\`, DREAM_ROOT)
 
-4. **DREAM** — Dream Online MMORPG. Hermes World (third-party browser MMO, BDO-style open world, no instances, no fast travel). Game agents + GPU inference.
+5. **DREAM** — Dream Online MMORPG. Hermes World (third-party browser MMO, BDO-style open world, no instances, no fast travel). Game agents + GPU inference. Separate tree from `C:\antigravity` main.
 
 ## Universal File Locations (same on every node)
 
