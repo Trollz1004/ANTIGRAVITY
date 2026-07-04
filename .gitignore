@@ -32,6 +32,10 @@ tsconfig.tsbuildinfo
 .claude/pc_*.json
 .claude/ralph-prompts/
 
+# Local agent worktree containers
+.claude/worktrees/
+.worktrees/
+
 # Logs
 logs/
 *.log
