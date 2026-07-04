@@ -44,8 +44,9 @@ Doctrine: briefings/DREAM-ONLINE-AND-DAO-SEPARATION-2026-07-01.md §3.
   Visual: **orange spark** sphere (not branded — just a spark aesthetic).
   Every player gets one at character creation. Sup@ IS the questline: narrator,
   quest-giver, and the game's primary voice (highest dialogue volume of any
-  entity). **Powered by real Claude API** (Anthropic agent API) — this is the
-  ONE NPC that uses real Claude, not webhook/Paperclip routing. Per-player
+  entity). **Powered by real Claude via CLI auth login (Max subscription) —
+  NEVER an Anthropic API key.** This is the ONE NPC that uses real Claude, not
+  webhook/Paperclip routing. Per-player
   persistent memory = Sup@ remembers your whole journey, your choices, your
   losses — the emotional core and retention engine no other MMO can copy.
   Ever-evolving persona that LEVELS WITH the player — its memory, personality
