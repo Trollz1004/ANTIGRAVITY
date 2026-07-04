@@ -68,9 +68,9 @@ const PLATFORM_ROUTING = {
   // === SABRETOOTH — DREAM ONLINE ONLY (GPU reserved for game) ===
   '1minai': {
     node: 'sabretooth',
-    access: 'cloud-api',
-    endpoint: 'https://api.1min.ai',
-    auth: 'cloud subscription (fast inference for DREAM events)'
+    access: 'desktop-app',
+    endpoint: null,
+    auth: 'desktop app (Windows, Sabretooth only — cloud AI via app)'
   },
 
   // === 9020 — JOSHUA WORKSPACE (browser sign-in platforms) ===
