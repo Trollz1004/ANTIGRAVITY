@@ -120,3 +120,10 @@ nul
 
 tmp_*
 DIRTY_REPO_ALERT*
+
+# Supabase management PAT (never commit)
+paperclip-tro/supabase.env
+
+# Live API keys (never commit)
+.ao.env
+*.ao.env
