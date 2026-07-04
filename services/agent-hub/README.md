@@ -1,30 +1,30 @@
 # Agent Hub — ANTIGRAVITY Task Orchestration
 
-In-house replacement for Paperclip. All code in `Trollz1004/ANTIGRAVITY`.
-Runs on **T5500 at `:3130`** — the ONE location every AI sends work to.
+In-house task orchestration. All code in `Trollz1004/ANTIGRAVITY`.
+Runs on **Sabretooth at `:3130`** — the ONE location every AI sends work to.
 
 ## Architecture
 
 ```
-T5500 :3130 (Agent Hub) ← ALL AI sends work HERE
+Sabretooth :3130 (Agent Hub) ← ALL AI sends work HERE
        │
-       ├── Routes to T5500 services: Hermes, FCC-Claude, OpenCode, Ollama, ClawX, Pi
-       ├── Routes to 9020 (browser-auth): Claude Max, Codex, Grok, Gemini, ChatGPT, Perplexity
-       ├── Routes to Sabretooth (DREAM ONLY): 1min.ai cloud for fast game events
+       ├── Local services: Hermes :11435, FCC :8082, Ollama :11434, ClawX, Pi
+       ├── DREAM: Paperclip :3110, 1min.ai (NPC AI), Claude Official (Sup@)
+       ├── Browser-auth: Codex, Grok, Gemini, ChatGPT, Perplexity
        ├── Slack notifications (#antigravity-platform, #dream-online, #fcc-claude)
        ├── GitHub issue sync
-       └── PostgreSQL (T5500 local)
+       └── PostgreSQL (local)
 ```
 
 ## Node Roles (FINAL)
 
 | Node | Role | What runs there |
 |---|---|---|
-| **T5500** | Gateway + all orchestration | Agent Hub :3130, Hermes :11435, FCC :8082, Ollama :11434, ClawX :3110, GitHub API, Slack API |
-| **Sabretooth** | DREAM ONLINE ONLY | GPU 1070 8GB = game rendering. Cloud AI (Claude Max + 1min.ai) for fast real-time events. NO local models for DREAM. |
-| **9020** | Joshua workspace | Browser sign-in platforms (Claude, Codex, Grok, Gemini, ChatGPT, Perplexity, Cursor) |
+| **Sabretooth** | ALL services + DREAM | Agent Hub :3130, Hermes, FCC, Ollama, PostgreSQL, Paperclip :3110, DREAM on D:\, GPU for game |
+| **T5500** | Gateway only | Cloudflare tunnels for youandinotai.com |
+| **9020** | Inactive | Nothing |
 
-## Quick Start (on T5500)
+## Quick Start (on Sabretooth)
 
 ```powershell
 cd C:\antigravity\services\agent-hub
@@ -34,30 +34,30 @@ npm run migrate            # creates PostgreSQL tables
 npm start                  # listens on :3130
 ```
 
-## Platforms (20)
+## Platforms (20) — ALL on Sabretooth
 
-| Platform | Node | Auth | Access |
-|---|---|---|---|
-| `hermes` | T5500 | none (localhost) | Hermes router :11435 |
-| `fcc-claude` | T5500 | none (FCC proxy) | FCC :8082 |
-| `opencode` | T5500 | none (NVIDIA free) | OpenCode CLI via Hermes |
-| `ollama` | T5500 | none (localhost) | Ollama :11434 — light models, NOT for DREAM |
-| `cloud` | T5500 | openrouter key | OpenRouter via Hermes |
-| `clawx` | T5500 | gateway token | ClawX/OpenClaw :3110 |
-| `pi` | T5500 | none | Pi via Hermes router |
-| `github` | T5500 | PAT token | GitHub API |
-| `slack` | T5500 | bot token | Slack API |
-| `1minai` | Sabretooth | desktop app | 1min.AI Windows app — cloud AI via app interface |
-| `claude` | 9020 | browser sign-in | Claude Max (cloud subscription) |
-| `codex` | 9020 | browser sign-in | OpenAI Codex desktop |
-| `openai` | 9020 | browser sign-in | OpenAI API |
-| `grok` | 9020 | browser sign-in | xAI Grok desktop |
-| `gemini` | 9020 | browser sign-in | Google Gemini desktop |
-| `chatgpt` | 9020 | browser sign-in | ChatGPT web/desktop |
-| `perplexity` | 9020 | browser sign-in | Perplexity Pro |
-| `cursor` | 9020 | desktop app | Cursor IDE |
-| `desktop` | 9020 | manual | Any GUI desktop tool |
-| `commander` | 9020 | none | Windows Terminal tasks |
+| Platform | Auth | Use |
+|---|---|---|
+| `hermes` | localhost | Co-CEO, routing, research |
+| `fcc-claude` | FCC proxy | Co-CEO, code, compliance |
+| `claude` | Max subscription | Sup@ user guide sphere (DREAM) |
+| `opencode` | NVIDIA free | Code tasks |
+| `ollama` | localhost | Local models |
+| `cloud` | openrouter | Cloud relay via Hermes |
+| `1minai` | desktop app | DREAM NPC AI |
+| `clawx` | gateway | ClawX/OpenClaw |
+| `pi` | localhost | Conversational |
+| `github` | PAT | Issue sync |
+| `slack` | bot token | Notifications |
+| `codex` | browser | OpenAI Codex |
+| `openai` | browser | OpenAI API |
+| `grok` | browser | xAI Grok |
+| `gemini` | browser | Google Gemini |
+| `chatgpt` | browser | ChatGPT |
+| `perplexity` | browser | Perplexity Pro |
+| `cursor` | desktop | Cursor IDE |
+| `desktop` | manual | Any GUI tool |
+| `commander` | none | Terminal tasks |
 
 ## Auth Model (what the hub holds)
 
@@ -69,16 +69,16 @@ npm start                  # listens on :3130
 
 Browser-auth platforms (claude, codex, grok, gemini, chatgpt, openai, perplexity) — the hub TRACKS tasks but never calls their APIs. They're desktop apps with browser sign-in.
 
-## DREAM ONLINE — Sabretooth
+## DREAM ONLINE
 
-Sabretooth's GPU (1070 8GB) is reserved for game rendering ONLY.
-AI for DREAM uses **cloud** inference:
-- **Claude Max** (cloud subscription) — via 9020 browser
-- **1min.ai** (cloud subscription) — fast API on Sabretooth for real-time events
+GPU 1070 8GB reserved for game rendering — NOT AI inference.
+DREAM files on D:\dream-online\ (assets, server, config, saves, logs).
+Paperclip :3110 handles DREAM webhooks, triggers, and game events.
 
-NO local Ollama models for DREAM. Open world sandbox with no instances needs fast cloud, not slow GPU inference competing with game rendering.
+### DREAM AI Roles
 
-DREAM may keep Paperclip on Sabretooth for game-specific task orchestration separate from Agent Hub.
+- **Claude Official** (Max subscription) = Sup@ — the user's floating electrical sphere guide. No TOS violations.
+- **1min.ai** (desktop app) = NPC AI — cloud inference for real-time NPC behavior, world events, dialogue.
 
 ## Queue Rules
 
@@ -121,8 +121,9 @@ FCC-Claude accesses tasks via the MCP interface:
 | #dream-online | Tasks with platform: 1minai (DREAM events) |
 | #fcc-claude | Tasks with platform: claude or fcc-claude |
 
-## Replacing Paperclip (on T5500 + 9020)
+## Architecture Notes
 
-1. Agent Hub replaces Paperclip for ANTIGRAVITY orchestration
-2. Sabretooth keeps Paperclip for DREAM-specific game orchestration
-3. All other AI work routes through T5500 :3130
+1. Agent Hub handles ANTIGRAVITY task routing (all 20 platforms)
+2. Paperclip :3110 handles DREAM game orchestration (webhooks, triggers, events)
+3. Both run on Sabretooth — the ONLY active node
+4. T5500 = gateway only (Cloudflare tunnels), 9020 = inactive
