@@ -1,6 +1,8 @@
 # Sabretooth Node — DREAM ONLINE ONLY
 
 > IP: 192.168.0.8 | GPU: 1070 8GB = game rendering ONLY
+> DREAM files: D:\dream-online\ (assets, server, config, saves, logs)
+> Repo: C:\antigravity (main branch) | DREAM branch: dream-online
 > Cloud AI via 1min.ai + Claude Max for fast real-time events
 > NO local AI models for DREAM. NO Agent Hub. NO Hermes. NO FCC.
 
@@ -22,6 +24,20 @@ DREAM needs fast cloud inference for real-time open world events:
 
 NO Ollama, NO Hermes Router, NO FCC Proxy, NO Agent Hub on this node.
 All other AI work routes through T5500 :3130.
+
+## DREAM File Layout (D:\)
+
+```
+D:\dream-online\
+├── assets\       — game assets (models, textures, audio, maps)
+├── server\       — game server code
+├── config\       — game configuration
+├── saves\        — world state / player data
+└── logs\         — game server logs
+```
+
+C:\ has the ANTIGRAVITY repo with adapters, skills, and Agent Hub code.
+D:\ has DREAM-specific game files that don't belong in the repo.
 
 ## Bootstrap
 
