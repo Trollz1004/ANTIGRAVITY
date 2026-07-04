@@ -22,7 +22,8 @@ const PLATFORMS = [
   'pi',           // Pi conversational AI
   'slack',        // Slack bot/automations
   'desktop',      // Generic desktop app (any GUI tool)
-  'commander'     // Windows Terminal/Commander tasks
+  'commander',    // Windows Terminal/Commander tasks
+  'odysseus'      // Odysseus AI — local service :7000
 ];
 const ACTIVE_STATUSES = ['todo', 'in_progress', 'review'];
 const MAX_ACTIVE = 100;
