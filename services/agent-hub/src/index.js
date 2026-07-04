@@ -4,6 +4,21 @@ const taskRoutes = require('./routes/tasks');
 const syncRoute = require('./routes/sync');
 const mcpRoute = require('./routes/mcp');
 const dispatchRoute = require('./routes/dispatch');
+const { validatePlatformRouting } = require('./integrations/dispatcher');
+
+// Fail-closed: refuse to start without an API key. Without this, the auth
+// middleware has nothing to check requests against and every /api request
+// would need to be rejected — better to never come up in that state.
+if (!process.env.AGENT_HUB_API_KEY || !process.env.AGENT_HUB_API_KEY.trim()) {
+  console.error(
+    '[agent-hub] FATAL: AGENT_HUB_API_KEY is missing or empty. ' +
+    'Set it in the environment (see .env.example) before starting the service.'
+  );
+  process.exit(1);
+}
+
+// Warn (don't crash) if PLATFORMS and PLATFORM_ROUTING have drifted apart.
+validatePlatformRouting();
 
 const app = express();
 app.use(express.json());
