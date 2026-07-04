@@ -60,7 +60,7 @@ Doctrine: briefings/DREAM-ONLINE-AND-DAO-SEPARATION-2026-07-01.md §3.
 - Named NPCs (T1): OpenRouter paid tier (persistent persona memory)
 - Story-critical NPCs (T2): sub-based providers per THE-WHEEL routing, budget-gated
 - World actors (T3): scheduled batch, OpenRouter paid
-- **Sup@ is the ONLY NPC on real Claude API** — all others use Paperclip webhooks
+- **Sup@ is the ONLY NPC on real Claude (CLI auth login, Max subscription — never an Anthropic API key)** — all others use Paperclip webhooks
 - All other NPCs: Paperclip webhook triggers → agent responses → memory write-back
 
 ## Game Platform
