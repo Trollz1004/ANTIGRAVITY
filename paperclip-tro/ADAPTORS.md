@@ -52,13 +52,28 @@ third CEO.
 - No Anthropic API key is required for FCC mode.
 - Any FCC-Claude output is evidence/proposal until Claude CEO or Joshua verifies it.
 
-## Codex helper
+## CLI login helpers
 
-Codex may be joined to PaperclipAI as a task-specific helper with
-`adapterType: codex_local`. It is not a third CEO lane. Use OpenAI/Codex auth
-sign-in, `cwd: C:\antigravity`, and `model: codex-mini-5.3`.
+Codex, Grok, Gemini, and similar hosted coding/review tools are CLI login lanes.
+They run from `cwd: C:\antigravity` when touching this repo, authenticate through
+their own CLI/browser login flows, and report evidence back to Claude CEO,
+Hermes CEO, or Joshua.
 
-Codex helper work reports evidence back to Claude CEO, Hermes CEO, or Joshua.
+Codex specifically should run as real `codex` CLI after `codex login` /
+`codex login --device-auth`; on Sabretooth the Codex config is `gpt-5.5`.
+Do not use a `codex-mini` placeholder for real Codex work.
+
+Pi can use the Codex provider path `openai-codex/gpt-5.5`. Codex CLI itself
+cannot use that Pi endpoint; it uses its own ChatGPT-authenticated Codex
+backend.
+
+When the task is routed through OpenCode/Hermes instead of a direct CLI login
+lane, keep the model path Codex-specific: use `opencode/gpt-5.3-codex` or
+`openrouter/openai/gpt-5.3-codex`. Generic `openai/*` is a standard OpenAI route,
+not Codex auth.
+
+Hermes and FCC-Claude are the Python/MCP-style bridge lanes. Keep them separate
+from the normal CLI-login helpers.
 
 ## OpenCode fallback ladder
 

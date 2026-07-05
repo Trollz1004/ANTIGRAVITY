@@ -6,7 +6,10 @@ from datetime import datetime, timedelta, timezone
 
 from app.models import User
 
+LAUNCH_TRIAL_TIER = "launch_trial"
+
 PREPAID_SUBSCRIPTION_DURATIONS = {
+    LAUNCH_TRIAL_TIER: timedelta(days=3),
     "3_month": timedelta(days=90),
     "12_month": timedelta(days=365),
 }

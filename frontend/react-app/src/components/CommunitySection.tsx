@@ -34,17 +34,17 @@ const cards = [
   {
     icon: Users,
     title: 'Profiles First',
-    body: 'Profiles, founder perks, and the waitlist all stay inside one product flow. No off-platform detours needed.',
+    body: 'Profiles, trial access, founder perks, and support all stay inside one product flow. No off-platform detours needed.',
     href: '/register',
-    cta: 'Join Early',
+    cta: 'Start Trial',
     color: 'from-rose-400 to-orange-500',
   },
 ];
 
 const stats = [
   { icon: ShieldCheck, label: 'Bot-Shield', value: '$1 Human Check' },
-  { icon: Heart, label: 'Launch Date', value: 'April 4, 2026' },
-  { icon: Sparkles, label: 'Waitlist', value: 'Live Now' },
+  { icon: Heart, label: 'Launch Trial', value: '3 Days' },
+  { icon: Sparkles, label: 'Launch', value: 'Live Now' },
 ];
 
 function Particle({ delay }: { delay: number }) {
@@ -115,8 +115,8 @@ export function CommunitySection() {
             className="mx-auto max-w-3xl text-lg font-light text-gray-400"
           >
             YouAndiNotAi keeps its launch story inside the product: Bot-Shield
-            verification, public founder pricing, and a prelaunch flow built to
-            move from waitlist to profile setup without friction.
+            verification, public founder pricing, and a three-day member trial
+            built to move from signup to profile setup without friction.
           </motion.p>
         </div>
 

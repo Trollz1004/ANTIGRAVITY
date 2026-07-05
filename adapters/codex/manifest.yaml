@@ -1,7 +1,7 @@
 name: codex
 version: 0.3
 source: auth-signin
-description: "Codex Desktop — browser sign-in via OpenAI. Uses codex-mini-5.3 only. No API keys."
+description: "Codex CLI — OpenAI auth sign-in from C:\\antigravity. Direct CLI lane; do not use Paperclip codex_local mini routing for real work."
 owner: sabretooth
 node_id: sabretooth
 cli_command: "codex"
@@ -9,11 +9,9 @@ health_check: "codex --version"
 paperclip_adapter_type: "codex_local"
 paperclip_adapter_config:
   cwd: "C:\\antigravity"
-  model: "codex-mini-5.3"
+  model: "codex"
 paperclip_alias: "codex"
-opencode_provider: "codex"
-opencode_model: "codex-mini-5.3"
 auth:
   type: browser-signin
-  instructions: "Open Codex Desktop, sign in with OpenAI account via browser. No API key needed."
-notes: "Browser sign-in only — no API keys. codex-mini-5.3 model only. Requires active Codex Desktop session. Uses `codex_local` Paperclip adapter type."
+  instructions: "Run `codex login` from C:\\antigravity, or `codex login --device-auth` if device/browser auth is needed. Check with `codex login status`."
+notes: "Codex CLI auth lane. No adapter API key. Use direct Codex CLI with local config (gpt-5.5 on this machine). Do not route real Codex work through codex-mini. Pi can use openai-codex/gpt-5.5; OpenCode/Hermes fallback routes must use Codex-named models such as opencode/gpt-5.3-codex or openrouter/openai/gpt-5.3-codex, not generic openai/*."

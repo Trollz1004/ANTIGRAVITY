@@ -4,9 +4,21 @@ Paperclip alias: `pi`
 
 CLI: `pi`
 
-Provider: openrouter (with Ollama fallbacks). opencode_provider: "openrouter"
+Provider: Pi CLI login lane.
 
-Separation: Conversational / explanatory tasks. Local Ollama + OpenRouter free fallbacks. No Anthropic. Pi-specific runtime.
+Codex-class route for Pi:
+
+```powershell
+pi --model openai-codex/gpt-5.5
+```
+
+That `openai-codex` provider prefix matters. Generic `openai/*` is a standard
+OpenAI route and is not the Codex-auth lane.
+
+Separation: Pi can use `openai-codex/gpt-5.5`; Codex CLI cannot use Pi's
+provider endpoint. Codex itself runs via `codex login` and Codex config.
+Hermes/OpenRouter fallback routes must use Codex-named models such as
+`openai/gpt-5.3-codex`, not generic `openai/gpt-5`.
 
 Agents: declare adapter: pi for pi lane tasks.
 

@@ -39,7 +39,11 @@ from app.schemas import (
     GoogleLoginRequest,
     UserMeResponse,
 )
-from app.subscriptions import user_has_active_subscription
+from app.subscriptions import (
+    LAUNCH_TRIAL_TIER,
+    build_subscription_expiry,
+    user_has_active_subscription,
+)
 
 router = APIRouter(prefix="/auth")
 
@@ -141,6 +145,9 @@ async def register(
         display_name=payload.display_name.strip(),
         date_of_birth=payload.date_of_birth,
         adult_verified_at=datetime.now(timezone.utc),
+        subscription_tier=LAUNCH_TRIAL_TIER,
+        subscription_active=True,
+        subscription_expires_at=build_subscription_expiry(LAUNCH_TRIAL_TIER),
     )
     ensure_adult(payload.date_of_birth)
     db.add(user)

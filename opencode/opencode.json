@@ -4,14 +4,6 @@
   "autoshare": false,
   "autoupdate": true,
   "provider": {
-    "codex": {
-      "npm": "@ai-sdk/openai",
-      "name": "Codex (auth — OpenAI / ChatGPT)",
-      "options": { "apiKey": "{env:OPENAI_API_KEY}" },
-      "models": {
-        "codex-mini-5.3": { "name": "Codex Mini 5.3 (browser sign-in only)" }
-      }
-    },
     "openai": {
       "options": { "apiKey": "{env:OPENAI_API_KEY}" },
       "models": {
@@ -98,6 +90,10 @@
         "apiKey":  "{env:OPENCODE_API_KEY}"
       },
       "models": {
+        "gpt-5-codex":          { "name": "GPT-5 Codex (OpenCode codex route)" },
+        "gpt-5.1-codex":        { "name": "GPT-5.1 Codex (OpenCode codex route)" },
+        "gpt-5.2-codex":        { "name": "GPT-5.2 Codex (OpenCode codex route)" },
+        "gpt-5.3-codex":        { "name": "GPT-5.3 Codex (OpenCode codex route)" },
         "big-pickle":            { "name": "Big Pickle (free)" },
         "deepseek-v4-flash-free": { "name": "DeepSeek V4 Flash Free" },
         "mimo-v2.5-free":        { "name": "MiMo V2.5 Free" },
@@ -179,8 +175,8 @@
   "model": "hermes-router/hermes",
   "agent": {
     "orchestrator": {
-      "description": "High-quality orchestrator. Route planning to OpenAI/Codex or OpenRouter free, execution to cheaper models.",
-      "model": "codex/codex-mini-5.3"
+      "description": "High-quality orchestrator. Uses a Codex-named route; generic openai/* is not the Codex-auth lane.",
+      "model": "opencode/gpt-5.3-codex"
     },
     "coder": {
       "description": "Code writer. Prefers local or free models first.",

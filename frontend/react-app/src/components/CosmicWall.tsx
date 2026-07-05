@@ -142,14 +142,14 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
                     Be one of the first to leave your mark
                   </div>
                   <div className="mt-2 text-pink-400 font-black text-xs tracking-widest">
-                    Launching April 4, 2026
+                    Launch trial live now
                   </div>
                 </div>
               </motion.div>
 
               <div className="p-6 bg-pink-500/10 rounded-3xl border border-pink-500/20 space-y-4">
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  Sign the wall before launch and be recognized as a founding
+                  Sign the wall during launch and be recognized as an early
                   member of the YouAndiNotAi community. Every signature is a
                   statement: real humans, real connections.
                 </p>

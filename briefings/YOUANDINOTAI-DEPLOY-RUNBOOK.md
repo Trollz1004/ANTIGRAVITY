@@ -15,14 +15,15 @@ Set-Location C:\antigravity\frontend\react-app
 npm run build
 ```
 
-Static direct-upload artifact:
+Cloudflare Pages direct-upload artifact:
 
 ```text
-C:\antigravity\apps\youandinotai-static
+C:\antigravity\frontend\react-app\dist
 ```
 
-When regenerating static output, remove stale assets first so old bundle chunks cannot keep
-serving retired copy.
+`frontend\react-app\wrangler.toml` sets `pages_build_output_dir = "dist"`.
+`apps\youandinotai-static` is a legacy snapshot and should not be redeployed
+unless it is deliberately regenerated from the current source first.
 
 ## Backend Health
 
