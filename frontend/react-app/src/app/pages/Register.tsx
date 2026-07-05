@@ -129,8 +129,8 @@ export function Register() {
               <div className="app-kicker mb-3">Create Account</div>
               <h1 className="app-title">join the platform.</h1>
               <p className="app-subtitle mt-3">
-                Start the three-day launch trial, confirm the required
-                policies, and move into your profile flow.
+                Start the three-day launch trial, confirm the required policies,
+                and move into your profile flow.
               </p>
             </div>
 
