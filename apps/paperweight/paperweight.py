@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
 """
-Paperweight — self-owned, multi-company task/issue/sticky-note tracker for ANTIGRAVITY.
+Paperweight — self-owned mission-control task/issue/sticky-note tracker for ANTIGRAVITY.
 
 A non-third-party "Paperclip clone": your own SQLite database, your data, zero
 external services and zero pip installs (Python stdlib only). Issues and tasks live
 on one board; sticky notes are a freeform wall; every create/update/vote is written
 to an immutable `events` audit log so everything is logged + tracked.
 
-Multi-company: work is scoped to workspaces (companies) so each surface is separate:
+Multi-surface: work is scoped to workspaces (companies) so each surface is separate:
+  - agent-hub    : Sabretooth orchestration and cross-AI dispatch
   - youandinotai  : date app + Customer Support tickets
   - marketing     : cross-platform, serves all surfaces
   - ai-solutions  : ai-solutions.store products
   - business-exchange : 9020-hosted business marketplace / operator workflow
   - hermes-sideworld  : Hermes orchestration, node control, and side-work backlog
-  - dao           : governance proposals + vote tallies (TRACKING ONLY — on-chain
-                    voting stays off this ops board; this records intent, not chain state)
+  - dream-online : DREAM ONLINE drive and game work
 
 SECRET-FREE BY DESIGN: never store API keys, tokens, or credentials here. This is an
-ops board; non-Anthropic platforms may read it, so it must hold zero secrets.
+ops board; multiple AI platforms may read it, so it must hold zero secrets and no
+private owner/accounting doctrine.
 
 Run:
     python apps/paperweight/paperweight.py            # http://127.0.0.1:4200
@@ -46,25 +47,25 @@ STATIC = ROOT / "static"
 STATUSES = ("todo", "doing", "blocked", "done", "archived")
 KINDS = ("task", "issue", "bug", "idea", "support", "proposal", "goal", "routine")
 NOTE_COLORS = ("amber", "love", "ukid", "green", "agrav")
-DEFAULT_COMPANY = "marketing"
+DEFAULT_COMPANY = "agent-hub"
 
-# Workspaces (id, name, description, color). on-chain stays OFF the dao board.
+# Workspaces (id, name, description, color).
 SEED_COMPANIES = [
+    ("agent-hub", "Agent Hub", "Sabretooth orchestration and cross-AI dispatch", "agrav"),
     ("youandinotai", "YouAndINotAI", "Date app + customer support", "love"),
     ("marketing", "Marketing", "Cross-platform — serves all surfaces", "amber"),
     ("ai-solutions", "AI-Solutions", "ai-solutions.store products", "ukid"),
     ("business-exchange", "Business Exchange", "9020-hosted business marketplace and operator workflow", "copper"),
     ("hermes-sideworld", "Hermes Sideworld", "Hermes orchestration, node control, and side-work backlog", "agrav"),
+    ("dream-online", "DREAM Online", "DREAM ONLINE MMORPG drive and Agent Hub lanes", "ukid"),
     ("youtube", "YouTube", "Content engine — many buckets per video (CTA, subs, Super Thanks, membership, merch, affiliate)", "youtube"),
     ("onlinerecycle", "OnlineRecycle", "onlinerecycle.org cross-lister — eBay cross-listing, e-waste, resale", "green"),
-    ("dao", "DAO Governance", "Proposals & voting (tracking only — on-chain stays off this board)", "agrav"),
 ]
-# Real team roster (per CLAUDE.md) — seeded as assignees, not fabricated.
+# Standing Paperweight assignees. Other runtimes are tools/subagents under these CEOs,
+# not permanent dashboard seats.
 SEED_AGENTS = [
-    ("Opus", "architect"), ("Codex", "executor"), ("Hermes", "orchestrator"),
-    ("CEO", "strategy"), ("CFO", "ledger"), ("CMO", "marketing"),
-    ("CTO", "backend"), ("INTERN", "audits"),
-    ("Gemini", "co-founder"), ("Perplexity", "research"), ("Grok", "adversarial/X"),
+    ("Claude CEO", "code, compliance, doctrine, payments, merge/push"),
+    ("Hermes CEO", "growth, support, research, external APIs, leads"),
 ]
 
 
@@ -127,15 +128,31 @@ def init_db() -> None:
     con.execute("CREATE INDEX IF NOT EXISTS idx_items_status ON items(status)")
     con.execute("CREATE INDEX IF NOT EXISTS idx_events_ts ON events(ts)")
 
-    # Always upsert seed companies (INSERT OR IGNORE) so newly-added workspaces
-    # (e.g. youtube) land on existing DBs without wiping data.
+    canonical_companies = {cid for cid, *_ in SEED_COMPANIES}
+    placeholders = ",".join("?" for _ in canonical_companies)
+    con.execute("UPDATE items SET company=? WHERE company='dao'", (DEFAULT_COMPANY,))
+    con.execute("UPDATE notes SET company=? WHERE company='dao'", (DEFAULT_COMPANY,))
+    con.execute("UPDATE events SET company=? WHERE company='dao'", (DEFAULT_COMPANY,))
+
+    # Always upsert seed companies so newly-added workspaces land on existing DBs
+    # without wiping data, then prune obsolete surface chips that cause drift.
     for cid, name, desc, color in SEED_COMPANIES:
         con.execute("INSERT OR IGNORE INTO companies (id,name,description,color,created_at) VALUES (?,?,?,?,?)",
                     (cid, name, desc, color, now_ms()))
-    if con.execute("SELECT COUNT(*) c FROM agents").fetchone()["c"] == 0:
-        for name, role in SEED_AGENTS:
-            con.execute("INSERT OR IGNORE INTO agents (id,name,role,created_at) VALUES (?,?,?,?)",
-                        (new_id("agent"), name, role, now_ms()))
+        con.execute("UPDATE companies SET name=?, description=?, color=? WHERE id=?", (name, desc, color, cid))
+    con.execute(f"DELETE FROM companies WHERE id NOT IN ({placeholders})", tuple(canonical_companies))
+
+    canonical_agents = {name for name, _ in SEED_AGENTS}
+    agent_placeholders = ",".join("?" for _ in canonical_agents)
+    for name, role in SEED_AGENTS:
+        con.execute("INSERT OR IGNORE INTO agents (id,name,role,created_at) VALUES (?,?,?,?)",
+                    (new_id("agent"), name, role, now_ms()))
+        con.execute("UPDATE agents SET role=? WHERE name=?", (role, name))
+    con.execute(f"DELETE FROM agents WHERE name NOT IN ({agent_placeholders})", tuple(canonical_agents))
+    con.execute(
+        f"UPDATE items SET assignee=NULL WHERE assignee IS NOT NULL AND assignee NOT IN ({agent_placeholders})",
+        tuple(canonical_agents),
+    )
     con.commit()
     con.close()
 

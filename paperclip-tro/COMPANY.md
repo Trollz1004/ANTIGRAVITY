@@ -1,8 +1,8 @@
-# TRO — Paperclip Company (127.0.0.1:3110)
+# TRO — PaperclipAI Company (127.0.0.1:3110)
 
 > Owner: Joshua Coleman. Dual-CEO: Claude (Opus/FCC) + Hermes.
 > Instance: TRO company @ `http://127.0.0.1:3110`.
-> Mission: UNTIL NO KID IN NEED
+> One human-facing board. Agent Hub `:3130` is the dispatcher/backend.
 
 ## Structure
 
@@ -22,15 +22,15 @@ Project charters: `projects/PROJECT-1-ANTIGRAVITY.md`, `projects/PROJECT-2-DREAM
 | Claude (ceo) | fcc-claude / claude_local | code, compliance, doctrine, payments, merge/push | ant-dev, ant-reviewer, ant-devops, ant-compliance |
 | Hermes (hermes-ceo) | hermes / pi_local | growth, support, research, external APIs, leads | ant-growth, ant-support, ebay-lister, aisol-dev |
 
-CEOs DELEGATE only — they never do leaf tasks. They spawn sub-agents, assign
-skills from `.agents/skills/`, monitor heartbeats, and unblock blockers.
+CEOs DELEGATE only. They spawn task-specific subagents, assign skills from
+`.agents/skills/`, monitor heartbeats, and unblock blockers.
 See `CEO-PLAYBOOK.md` for rules, routines, and skill routing.
 
 FCC NEVER holds an Anthropic API key. FCC identifying as Claude does not grant
 doctrine authority (per repo CLAUDE.md) — the CEO executes and manages; doctrine
 stays with Joshua. Only official Claude (Opus) is cofounder.
 
-## Routines (24/7 — Paperclip scheduled)
+## Routines (PaperclipAI scheduled)
 
 | Routine | Owner | Interval | Purpose |
 |---|---|---|---|
@@ -46,7 +46,8 @@ stays with Joshua. Only official Claude (Opus) is cofounder.
 
 - Hermes Dashboard/API status: `http://127.0.0.1:9119/api/status`
 - Hermes Workspace: `http://127.0.0.1:3000`
-- Paperclip HQ: `http://127.0.0.1:3110`
+- PaperclipAI HQ: `http://127.0.0.1:3110`
+- Agent Hub dispatcher: `http://127.0.0.1:3130`
 - FCC Admin: `http://127.0.0.1:8082/admin`
 - Repo: `C:\antigravity`
 
@@ -76,6 +77,6 @@ stays with Joshua. Only official Claude (Opus) is cofounder.
 3. Create projects `ANT` and `DREAM`.
 4. Register Claude CEO with adaptor `fcc-claude` per `agents/ceo/AGENT.md`.
 5. Register Hermes co-CEO with adaptor `hermes` per `agents/hermes-ceo/AGENT.md`.
-6. Hire initial roster per `ROSTER.md`.
+6. Register only the two standing CEOs; all other work is temporary subagents/tools.
 7. Set up routines per CEO-PLAYBOOK.md.
 8. Verify: both CEOs heartbeat, open test issue each, resolve, sub-agents respond.

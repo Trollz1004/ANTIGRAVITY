@@ -77,18 +77,32 @@ T5500 (`192.168.0.15`) is the public-front-door node for domains, tunnels,
 payments, Wrangler, and the date-app backend.
 
 Sabretooth (`192.168.0.8`) is the brain/operator node for Codex, local model
-workloads, Paperclip-style agent coordination, and repo maintenance.
+workloads, the single PaperclipAI mission-control entrypoint, Agent Hub dispatch,
+and repo maintenance.
+
+### One Entrypoint Rule
+
+PaperclipAI on Sabretooth `http://127.0.0.1:3110` is the one human-facing board,
+CEO cockpit, routine runner, and evidence surface. Agent Hub on Sabretooth
+`http://127.0.0.1:3130` is the one rate-limited task dispatcher/backend bridge.
+
+Standing PaperclipAI lanes are Claude CEO and Hermes CEO only. Codex, Gemini,
+Meta/Llama, Manus, FCC, OpenCode, Ollama, OpenClaw, browser AIs, and other tools
+may be used as task-specific helpers or temporary subagents, but they must not
+create private backlogs, side boards, permanent seats, or alternate doctrine.
+
+All PaperclipAI/Agent Hub/Hermes/Claude/FCC/subagent sessions must read
+`paperclip-tro/README.md` before work and must write only their own compact
+`STATE.md` on exit.
 
 Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollama, and other lanes may lead only when Joshua directly assigns them or when their role map already covers the task. Otherwise they collect evidence, draft proposals, and report to the active lead.
 
 FCC may be registered as a Paperclip worker model through its MCP bridge for OpenCode, NVIDIA, and Ollama-backed work, but FCC reports proposals/evidence to the active lead unless Joshua explicitly assigns it as a decision lane for a specific task.
 
-Current T5500 Paperclip setup is date-app/customer-support only. The generated
-ops package lives at `C:\antigravity-paperclip-dateapp-ops` on this workstation
-and on T5500. It runs Paperclip loopback through scheduled task
-`PaperclipDateAppLoopback` on T5500, with the active lead assigned by Joshua per task as the decision lane.
-Official OpenClaw is support-only, FCC/OpenCode is worker-only, and Hermes is
-intentionally excluded from this T5500 package.
+T5500 Paperclip/date-app material is legacy gateway support only. Do not expand it
+or treat it as a second Paperclip command center. The active PaperclipAI entrypoint
+is Sabretooth `:3110`; T5500 remains gateway/dateapp unless Joshua explicitly
+changes the role map.
 
 Current setup briefing:
 

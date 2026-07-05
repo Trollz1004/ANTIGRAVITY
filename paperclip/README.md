@@ -1,17 +1,24 @@
-# Paperclip Agent Prompts — Opus-Crafted, Drop-in
+# PaperclipAI — Two-CEO Mission Control
 
-> **Current operating mode (2026-07-03): Hermes-only active agent.**
-> Joshua's Paperclip architecture is now: Hermes does the work; Paperclip shows
-> timestamped tasks/routines/issues/goals/evidence/done state from the Hermes
-> work feed on `127.0.0.1:9119`. The agency roster below is a skill library,
-> not a requirement to run permanent CFO/CMO/CTO/etc board agents.
+> **Current operating mode (2026-07-05): PaperclipAI + Agent Hub.**
+> PaperclipAI on `127.0.0.1:3110` is the human-facing board, routine runner,
+> CEO cockpit, and manual execution surface. Agent Hub on `127.0.0.1:3130`
+> is the canonical cross-AI task routing/backend bridge. Paperweight `:4200`
+> is only a local fallback/viewer, not the preferred operator cockpit.
+
+> **Standing CEO lanes:** Claude CEO owns code, compliance, doctrine, payments,
+> merge/push, and PR gates. Hermes CEO owns growth, support, research, external
+> APIs, leads, and workspace memory. Every other model, tool, prompt, agency
+> role, or runtime is a subagent/skill under one of those two lanes, not a
+> permanent Paperclip seat.
 
 > **Memory-first rule (new):** every canonical agent under `paperclip/agents/*/` now keeps a compact `STATE.md` file that is read on entry and written on exit, with a strict size cap and a Supabase-backed brain mirror. See [`paperclip/agents/memory-architecture.md`](agents/memory-architecture.md) and the per-agent `STATE.md` files.
 
-**Paperclip-the-platform is alive and working** with Hermes for Joshua's daily ops.
-Hermes is the active CEO/operator. These older prompts remain as reference
-material only when Hermes deliberately creates a temporary subagent or skill lane.
-They are NOT instructions to keep a permanent multi-agent company running.
+**PaperclipAI stays in the stack** because it gives Joshua the board and manual
+control surface that actually keeps work moving. These older prompts remain as
+reference material only when Claude CEO or Hermes CEO deliberately creates a
+temporary subagent or skill lane. They are NOT instructions to keep a permanent
+multi-agent company running.
 
 The thesis: a smaller base model + an Opus-crafted prompt with strict structure,
 explicit decision tables, and forced output schemas performs 2–3 tiers above its

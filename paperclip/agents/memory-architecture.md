@@ -18,10 +18,10 @@
 
 ## Core Pattern: 1 File Per Agent
 
-Every canonical Paperclip agent has:
+Every canonical PaperclipAI standing CEO or temporary subagent has:
 
 ```text
-paperclip/agents/{agent}/
+paperclip-tro/agents/{agent}/
 ├── AGENTS.md      # static identity + rules (protected, read-only)
 ├── HEARTBEAT.md   # current status + pulse checks (read-only entry snapshot)
 ├── TOOLS.md       # capability map + skills index (read-only entry snapshot)
@@ -55,12 +55,9 @@ paperclip/agents/{agent}/
 
 | Agent | STATE.md cap | Rationale |
 |---|---|---|
-| `ceo` | 16 KB | Highest context, must remember cross-agent decisions. |
-| `cfo` | 12 KB | Financial trail, but numbers compress well. |
-| `cmo` | 12 KB | Campaign queue + copy decisions. |
-| `cto` | 14 KB | Build specs, tech decisions, open PRs. |
-| `mission-guardian` | 10 KB | Structural checks are repetitive, summaries suffice. |
-| `hermes` | 10 KB | Lead queue, research snapshots. |
+| `ceo` / `claude-ceo` | 16 KB | Code, compliance, doctrine, payments, merge/push, PR gates. |
+| `hermes-ceo` | 14 KB | Growth, support, research, external APIs, leads, workspace memory. |
+| temporary subagent | 8 KB | Task-specific state only; archive/delete when task closes unless promoted. |
 
 **Audit rule:** Mission Guardian checks each `STATE.md` size on every run. Any file > cap is flagged.
 
@@ -115,16 +112,16 @@ The connector lives in `paperclip-mcp-plugins/paperclip-memory/` and uses the ex
 
 ## CEO Enforcement Rule
 
-Any new agent created under Paperclip must:
+Any new agent created under PaperclipAI must:
 
-1. Live in `paperclip/agents/{slug}/` on `main`.
+1. Live in `paperclip-tro/agents/{slug}/` on `main`.
 2. Have `AGENTS.md`, `HEARTBEAT.md`, `TOOLS.md`, and `STATE.md`.
 3. Use the read-on-entry / write-on-exit protocol.
 4. Have a documented `STATE.md` size cap ≤ 16 KB.
 5. Mirror state to Supabase `paperclip_agent_state` on exit.
 6. Reference `.agents/skills` via `TOOLS.md` index, never by embedding skill text.
 
-CEO blocks any agent that does not meet these criteria.
+Claude CEO or Hermes CEO blocks any agent that does not meet these criteria.
 
 ---
 
@@ -140,8 +137,8 @@ CEO blocks any agent that does not meet these criteria.
 
 ## Recovery After Power Loss
 
-1. Paperclip restarts automatically via the Windows Scheduled Task `PaperclipHQ-Watchdog` (registered by `scripts/paperclip/setup-windows-autostart.ps1`).
-2. The watchdog starts the local Paperclip listener on `:3100` and the Cloudflare tunnel.
+1. PaperclipAI restarts automatically via the Windows Scheduled Task `PaperclipHQ-Watchdog` (registered by `scripts/paperclip/setup-windows-autostart.ps1`).
+2. The watchdog starts the local PaperclipAI listener on `:3110`; Agent Hub remains the dispatcher on `:3130`.
 3. Agent reads local `STATE.md`. If missing or older than Supabase `updated_at`, pulls from Supabase.
 4. Agent reads `AGENTS.md`, `HEARTBEAT.md`, `TOOLS.md` (small static files).
 5. Agent resumes from the last exit summary + open blockers.
