@@ -72,7 +72,10 @@ Updated: 2026-07-05 (final form — one PaperclipAI entrypoint + Agent Hub dispa
 ```powershell
 cd C:\antigravity\frontend\react-app && npm run build
 ```
-Output: `C:\antigravity\apps\youandinotai-static`
+Output: `C:\antigravity\frontend\react-app\dist`
+
+`apps\youandinotai-static` is a legacy snapshot. Do not redeploy it unless a
+newer runbook explicitly says to refresh that snapshot first.
 
 ## Quarantine
 

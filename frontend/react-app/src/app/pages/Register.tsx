@@ -92,8 +92,9 @@ export function Register() {
               Verified next.
             </h1>
             <p className="mt-6 max-w-md text-base leading-7 text-[#a1a1aa]">
-              Create the account first, then finish profile setup, matching, and
-              Bot-Shield verification in the right order.
+              Create the account first, start the three-day member trial, then
+              finish profile setup and Bot-Shield verification in the right
+              order.
             </p>
           </div>
 
@@ -114,8 +115,8 @@ export function Register() {
               <div className="flex items-start gap-3">
                 <Heart size={18} className="mt-0.5 text-[#ffd700]" />
                 <span>
-                  Account creation is separate from paid founder plans and
-                  Bot-Shield.
+                  Account creation starts the three-day member trial. Paid
+                  founder plans and Bot-Shield stay separate.
                 </span>
               </div>
             </div>
@@ -128,8 +129,8 @@ export function Register() {
               <div className="app-kicker mb-3">Create Account</div>
               <h1 className="app-title">join the platform.</h1>
               <p className="app-subtitle mt-3">
-                Set up the account, confirm the required policies, and move into
-                your profile flow.
+                Start the three-day launch trial, confirm the required
+                policies, and move into your profile flow.
               </p>
             </div>
 
@@ -260,9 +261,10 @@ export function Register() {
                       className="mt-1 h-4 w-4 accent-[#ffd700]"
                     />
                     <span>
-                      I understand Bot-Shield verification (liveness + one-time
-                      $1 check) is the next required step after profile setup to
-                      get verified status and access full platform.
+                      I understand the trial unlocks member features for three
+                      days, and Bot-Shield verification (liveness + one-time $1
+                      check) is still required to get verified status and full
+                      platform trust features.
                     </span>
                   </label>
                 </div>

@@ -2,7 +2,7 @@ param(
     [switch]$NoRepair,
     [switch]$DeployPagesOnPublicDown,
     [string]$RepoRoot = "C:\antigravity",
-    [string]$StaticDeployDir = "C:\antigravity\apps\youandinotai-static",
+    [string]$StaticDeployDir = "C:\antigravity\frontend\react-app\dist",
     [string]$PagesProjectName = "youandinotai",
     [string]$RuntimeEnvFile = "C:\ProgramData\Antigravity\secrets\cloudflare-wrangler.env",
     [string]$FallbackRuntimeEnvFile = "C:\Users\joshl\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env",

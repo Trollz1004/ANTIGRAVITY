@@ -18,14 +18,14 @@ interface EcosystemStatsProps {
 const stats = [
   {
     label: 'Launch Window',
-    value: 'April 4',
-    growth: '2026',
+    value: 'Live',
+    growth: '3-day trial',
     color: 'text-emerald-500',
   },
   {
-    label: 'Waitlist',
-    value: 'Live',
-    growth: 'Email capture ready',
+    label: 'Trial',
+    value: '3 Days',
+    growth: 'No card required',
     color: 'text-blue-500',
   },
   {
@@ -65,7 +65,7 @@ const systems = [
     icon: Rocket,
     title: 'Launch Readiness',
     detail:
-      'Countdown, OG sharing tags, waitlist capture, and the mobile landing flow are all part of the pre-launch checklist.',
+      'Trial signup, OG sharing tags, account setup, and the mobile landing flow are all part of the launch checklist.',
   },
 ];
 
@@ -179,7 +179,7 @@ export function EcosystemStats({ onClose }: EcosystemStatsProps) {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
-                  <span>Waitlist + countdown are live on the landing page</span>
+                  <span>Trial signup is live on the landing page</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />

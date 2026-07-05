@@ -58,6 +58,13 @@ const PLATFORM_CARDS = [
 
 const PRICING_PLANS = [
   {
+    name: '3-Day Launch Trial',
+    price: '$0',
+    desc: 'Starts when you create an account. No card required. Bot-Shield remains separate.',
+    link: '/register',
+    tone: 'bg-[#141414] text-[#ededed] border-[#0044ff] blue-glow',
+  },
+  {
     name: 'Bot-Shield Verification',
     price: '$1',
     desc: 'Human checkpoint before the badge is awarded.',
@@ -132,13 +139,13 @@ function SignupCTA() {
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 md:gap-3">
         <span className="mono flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.12em] text-[#a1a1aa] md:text-sm md:tracking-[0.18em]">
           <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-[#ffd700]" />
-          Bot-Shield verification is live now.
+          3-day launch trial is live now.
         </span>
         <a
-          href={SECURE_PLAN_LINKS.bot_shield}
+          href="/register"
           className="mono inline-flex items-center justify-center rounded-[2px] border-2 border-[#ffd700] bg-[#ffd700] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-black no-underline transition-transform duration-200 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 md:px-5 md:py-2 md:text-xs md:tracking-[0.18em]"
         >
-          Get Verified
+          Start Trial
         </a>
       </div>
     </div>
@@ -282,10 +289,10 @@ function PricingSection() {
           pick your lane.
         </h2>
         <p className="mb-6 max-w-3xl text-sm font-medium leading-7 text-[#a1a1aa] md:mb-10 md:text-lg md:leading-8">
-          Every checkout route is account-bound. Public pricing is live, plain,
-          and tied to the actual launch flow.
+          New accounts start with a three-day member trial. Paid plans still use
+          account-bound Square checkout tied to the actual launch flow.
         </p>
-        <div className="grid gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-5">
+        <div className="grid gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-6">
           {PRICING_PLANS.map(plan => (
             <a
               key={plan.name}
@@ -309,8 +316,9 @@ function PricingSection() {
           ))}
         </div>
         <p className="mono mt-5 max-w-4xl text-xs font-bold uppercase tracking-[0.12em] text-[#a1a1aa] md:mt-8 md:text-sm md:tracking-[0.16em]">
-          Securely processed by Square. Customer purchases buy platform access
-          and founder products. They are commercial transactions, not gifts.
+          Trial access needs no card. Paid purchases are securely processed by
+          Square and buy platform access or founder products as commercial
+          transactions, not gifts.
         </p>
       </div>
     </section>
@@ -429,7 +437,7 @@ function WaitlistForm() {
 const LEGAL_CONTENT: Record<string, { title: string; body: string }> = {
   terms: {
     title: 'Terms of Service',
-    body: `By using YouAndiNotAi ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. VERIFICATION FLOW — Bot-Shield verification may be required for protected features. Fraudulent verification attempts result in account action or removal.\n3. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations can result in immediate account termination.\n4. PAYMENTS — All payments are processed through secure account-bound Square checkout. Recurring subscriptions auto-renew unless canceled.\n5. CONTENT — You retain ownership of content you post. By posting, you grant YouAndiNotAi a license to display it on the Platform.\n6. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n7. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n8. BILLING — The current Bot-Shield launch flow requires both a passed liveness challenge and a completed Square payment before the verified badge is granted.\n\nLast updated: March 2026. Contact: contact@youandinotai.com`,
+    body: `By using YouAndiNotAi ("the Platform"), you agree to these Terms of Service.\n\n1. ELIGIBILITY — You must be 18+ years old to use the Platform.\n2. VERIFICATION FLOW — Bot-Shield verification may be required for protected features. Fraudulent verification attempts result in account action or removal.\n3. TRIALS — New email registrations start a three-day launch trial of member features. The trial does not grant Bot-Shield verification and expires automatically unless a paid plan is active.\n4. CONDUCT — No harassment, spam, hate speech, or impersonation. Violations can result in immediate account termination.\n5. PAYMENTS — All payments are processed through secure account-bound Square checkout. Recurring subscriptions auto-renew unless canceled.\n6. CONTENT — You retain ownership of content you post. By posting, you grant YouAndiNotAi a license to display it on the Platform.\n7. DISCLAIMER — The Platform is provided "as is." We do not guarantee matches or outcomes.\n8. LIABILITY — Trash Or Treasure Online Recycler LLC's total liability is limited to fees paid in the prior 12 months.\n9. BILLING — The current Bot-Shield launch flow requires both a passed liveness challenge and a completed Square payment before the verified badge is granted.\n\nLast updated: July 2026. Contact: contact@youandinotai.com`,
   },
   privacy: {
     title: 'Privacy Policy',
@@ -743,7 +751,7 @@ export default function App() {
         </nav>
 
         <div className="mono border-b border-[#27272a] bg-[#141414] px-3 py-2 text-center text-[10px] font-black uppercase tracking-[0.16em] text-[#a1a1aa] md:px-12 md:py-3 md:text-xs md:tracking-[0.2em]">
-          Founder pricing is live. Launch day is April 4, 2026.
+          Launch weekend is live. 3-day member trial starts at signup.
         </div>
 
         <section
@@ -770,8 +778,8 @@ export default function App() {
               </div>
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4 md:mt-10">
-                <BrutalButton href={SECURE_PLAN_LINKS.bot_shield} dark>
-                  Get Verified
+                <BrutalButton href="/register" dark>
+                  Start Trial
                 </BrutalButton>
                 <BrutalButton href="#pricing">See Pricing</BrutalButton>
               </div>
@@ -805,13 +813,13 @@ export default function App() {
                   </p>
                 </div>
                 <div className="sharp-card p-4 md:p-5">
-                  <div className="overline text-[#ffd700]">Launch</div>
+                  <div className="overline text-[#ffd700]">Launch Weekend</div>
                   <div className="display mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
-                    April 4, 2026
+                    Live Now
                   </div>
                   <p className="mt-1 text-xs font-medium leading-6 text-[#a1a1aa] md:mt-2 md:text-sm md:leading-7">
-                    Founder pricing, support, and early-access capture are all
-                    wired into the same surface.
+                    Trial access, founder pricing, support, and account setup
+                    are all wired into the same surface.
                   </p>
                 </div>
               </div>

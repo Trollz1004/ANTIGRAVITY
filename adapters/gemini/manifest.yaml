@@ -1,7 +1,7 @@
 name: gemini
 version: 0.2
 source: auth-signin
-description: "Google Gemini — auth sign-in via Google AI Studio / gcloud. Uses `GEMINI_API_KEY` env. No hardcoded credentials."
+description: "Google Gemini CLI — CLI/browser auth sign-in via Google account / Google AI Studio. No hardcoded credentials."
 owner: sabretooth
 node_id: sabretooth
 cli_command: "gemini"
@@ -16,4 +16,4 @@ opencode_model: "gemini-2.5-pro"
 auth:
   type: browser-signin
   instructions: "Open Gemini CLI, sign in with Google account via browser. No API key needed."
-notes: "Browser sign-in only — no API keys. Uses `opencode_local` Paperclip adapter type with google provider. CEO wheel: on FAIL swap to hermes-router/ollama-local."
+notes: "CLI/browser sign-in lane. No hardcoded credentials. Uses `opencode_local` Paperclip adapter type with google provider when routed through OpenCode. CEO wheel: on FAIL swap to hermes-router/ollama-local."

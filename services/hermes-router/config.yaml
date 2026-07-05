@@ -17,6 +17,14 @@ providers:
     enabled: true
     api_key_env: ""
 
+  # Disabled until the real Codex-auth base URL is confirmed.
+  # Do not substitute generic OpenAI/OpenRouter here; Codex auth rejects standard
+  # OpenAI endpoints even when the user is signed in.
+  - name: codex-auth
+    base_url: TODO_CODEX_AUTH_ENDPOINT
+    enabled: false
+    api_key_env: ""
+
 # Virtual model aliases → provider + real model
 # Aliases match what HermesRouterPanel.tsx renders.
 #
@@ -64,8 +72,8 @@ routes:
     model: gemma4:latest
 
   codex:
-    provider: openrouter
-    model: openai/gpt-5
+    provider: codex-auth
+    model: gpt-5.5
 
   gpt:
     provider: openrouter

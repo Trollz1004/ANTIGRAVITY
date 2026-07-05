@@ -21,14 +21,14 @@ Free alternative: Use `x-ai/grok-3:free` via OpenRouter (no sign-in needed).
   "adapterType": "opencode_local",
   "adapterConfig": {
     "cwd": "C:\\antigravity",
-    "model": "grok-3-mini"
+    "model": "grok-3"
   }
 }
 ```
 
 ## Provider routing
 
-- Direct: `xai` provider in opencode.json → `XAI_API_KEY`
+- Canonical local: run `grok` and use the persisted CLI/browser login session
 - Free: `openrouter` provider → `x-ai/grok-3:free` or `x-ai/grok-3-mini:free`
 
 ## Use cases

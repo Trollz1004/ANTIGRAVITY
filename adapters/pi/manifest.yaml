@@ -1,7 +1,7 @@
 name: pi
 version: 0.3
 source: local-cli
-description: "Pi runtime — conversational / explanatory tasks. Routes through Hermes router (same as OpenCode). No direct API keys needed."
+description: "Pi runtime — CLI login lane. Can use Pi's openai-codex provider path for Codex-class work; not a Python/MCP bridge."
 owner: sabretooth
 node_id: sabretooth
 cli_command: "pi"
@@ -9,11 +9,13 @@ health_check: "pi --version"
 paperclip_adapter_type: "pi_local"
 paperclip_adapter_config:
   cwd: "C:\\antigravity"
-  model: "hermes-router/hermes"
+  model: "openai-codex/gpt-5.5"
 paperclip_alias: "pi"
-opencode_provider: "hermes-router"
-opencode_model: "hermes"
+pi_provider: "openai-codex"
+pi_model: "gpt-5.5"
+opencode_provider: "openrouter"
+opencode_model: "openai/gpt-5.3-codex"
 auth:
-  type: none
-  instructions: "Routes through Hermes router (localhost:11435). Same OpenRouter/Ollama backends as OpenCode. No separate key needed."
-notes: "Uses `pi_local` Paperclip adapter type. Routes through Hermes router same as OpenCode — Hermes handles OpenRouter/Ollama fallback. No separate API key."
+  type: browser-signin
+  instructions: "Use Pi CLI login/session auth. For Codex-class work use `pi --model openai-codex/gpt-5.5` from C:\\antigravity. The provider name must include `codex`; generic `openai/*` is a different route."
+notes: "Uses `pi_local` Paperclip adapter type. Pi can use openai-codex/gpt-5.5. Codex CLI itself cannot use this Pi endpoint; Codex runs through `codex login` and its own config. Hermes/OpenRouter codex fallback must use a Codex-named model such as openai/gpt-5.3-codex."
