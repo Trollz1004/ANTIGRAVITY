@@ -52,6 +52,24 @@ third CEO.
 - No Anthropic API key is required for FCC mode.
 - Any FCC-Claude output is evidence/proposal until Claude CEO or Joshua verifies it.
 
+## Codex helper
+
+Codex may be joined to PaperclipAI as a task-specific helper with
+`adapterType: codex_local`. It is not a third CEO lane. Use OpenAI/Codex auth
+sign-in, `cwd: C:\antigravity`, and `model: codex-mini-5.3`.
+
+Codex helper work reports evidence back to Claude CEO, Hermes CEO, or Joshua.
+
+## OpenCode fallback ladder
+
+OpenCode helpers use `adapterType: opencode_local`. The fallback ladder is:
+
+1. `ollama-local/*` for zero-cloud local coding and support work.
+2. `ollama-cloud/*` for Joshua-owned cloud models when local capacity is not enough.
+3. `openrouter/*:free` for free cloud fallbacks.
+4. `openai/gpt-5.5-pro`, Grok, Gemini, or other paid/auth lanes only when the
+   active CEO or Joshua explicitly chooses quality over cost.
+
 ## Browser/localhost resources
 
 PaperclipAI can show that a CEO lane used local/browser tools without registering
