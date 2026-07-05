@@ -15,6 +15,7 @@ from app.models import SupportTicket, User
 logger = logging.getLogger(__name__)
 
 MAX_SUBJECT_LENGTH = 120
+ANYTHINGLLM_RESPONSE_KEYS = ("textResponse", "response", "text")
 
 
 @dataclass(slots=True)
@@ -255,6 +256,9 @@ def _build_ollama_prompt(message: str, transcript: list[dict[str, str]]) -> str:
     return (
         "You are the YouAndINotAI support assistant. "
         "Answer in 1-3 short sentences. Never invent refunds, policy exceptions, or account actions. "
+        "Never invent links, forms, phone numbers, emails, or support portals. "
+        "Square receipts go to the email used at checkout. If a receipt email is missing, "
+        "ask for the account email, payment email, approximate checkout date/time, and short issue summary. "
         "Escalate for safety, billing disputes, account-access problems, legal/privacy exceptions, or anything uncertain. "
         "Return JSON only with keys: reply, should_escalate, category, subject, escalation_reason.\n\n"
         f"Recent transcript:\n{transcript_lines or '(none)'}\n\n"
@@ -262,37 +266,44 @@ def _build_ollama_prompt(message: str, transcript: list[dict[str, str]]) -> str:
     )
 
 
-async def _ask_ollama_support(
-    *,
-    message: str,
-    transcript: list[dict[str, str]],
-    settings: Settings,
-) -> SupportDecision | None:
-    base_url = str(settings.support_ollama_base_url or "").strip().rstrip("/")
-    if not base_url:
+def _json_payload_from_text(raw: str) -> dict[str, object] | None:
+    clean = raw.strip()
+    if not clean:
         return None
+    if clean.startswith("```"):
+        clean = re.sub(r"^```(?:json)?\s*", "", clean, flags=re.IGNORECASE)
+        clean = re.sub(r"\s*```$", "", clean)
 
     try:
-        async with httpx.AsyncClient(
-            base_url=base_url, timeout=settings.support_ollama_timeout_seconds
-        ) as client:
-            response = await client.post(
-                "/api/generate",
-                json={
-                    "model": settings.support_ollama_model,
-                    "prompt": _build_ollama_prompt(message, transcript),
-                    "stream": False,
-                    "format": "json",
-                },
-            )
-        response.raise_for_status()
-        payload = response.json()
-        raw = payload.get("response") or ""
-        parsed = json.loads(raw)
-    except (httpx.HTTPError, ValueError, json.JSONDecodeError) as exc:
-        logger.warning("Support Ollama reply failed: %s", exc)
-        return None
+        parsed = json.loads(clean)
+    except json.JSONDecodeError:
+        match = re.search(r"\{.*\}", clean, flags=re.DOTALL)
+        if not match:
+            return None
+        try:
+            parsed = json.loads(match.group(0))
+        except json.JSONDecodeError:
+            return None
 
+    if isinstance(parsed, dict):
+        return parsed
+    return None
+
+
+def _payload_bool(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes"}
+    return bool(value)
+
+
+def _decision_from_payload(
+    *,
+    parsed: dict[str, object],
+    message: str,
+    preset_key: str,
+) -> SupportDecision | None:
     reply = _normalize_text(str(parsed.get("reply") or ""))
     if not reply:
         return None
@@ -314,10 +325,122 @@ async def _ask_ollama_support(
     return SupportDecision(
         reply=reply,
         category=category or "general",
-        preset_key="ollama_support",
-        should_escalate=bool(parsed.get("should_escalate")),
+        preset_key=preset_key,
+        should_escalate=_payload_bool(parsed.get("should_escalate")),
         escalation_reason=escalation_reason,
         subject=subject,
+    )
+
+
+async def _ask_anythingllm_support(
+    *,
+    message: str,
+    transcript: list[dict[str, str]],
+    settings: Settings,
+) -> SupportDecision | None:
+    api_url = str(settings.support_anythingllm_api_url or "").strip().rstrip("/")
+    api_key = str(settings.support_anythingllm_api_key or "").strip()
+    workspace_slug = str(settings.support_anythingllm_workspace_slug or "").strip()
+    if not (api_url and api_key and workspace_slug):
+        return None
+
+    try:
+        async with httpx.AsyncClient(
+            base_url=api_url,
+            timeout=settings.support_anythingllm_timeout_seconds,
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+        ) as client:
+            response = await client.post(
+                f"/workspace/{workspace_slug}/chat",
+                json={
+                    "message": _build_ollama_prompt(message, transcript),
+                    "mode": "chat",
+                },
+            )
+        response.raise_for_status()
+        payload = response.json()
+    except (httpx.HTTPError, ValueError) as exc:
+        logger.warning("Support AnythingLLM reply failed: %s", exc)
+        return None
+
+    if isinstance(payload, dict) and payload.get("reply"):
+        parsed = payload
+    elif isinstance(payload, dict):
+        raw = ""
+        for key in ANYTHINGLLM_RESPONSE_KEYS:
+            value = payload.get(key)
+            if value:
+                raw = str(value)
+                break
+        parsed = _json_payload_from_text(raw) if raw else None
+    else:
+        parsed = None
+
+    if not parsed:
+        logger.warning("Support AnythingLLM reply was not structured JSON.")
+        return None
+
+    return _decision_from_payload(
+        parsed=parsed,
+        message=message,
+        preset_key="anythingllm_support",
+    )
+
+
+async def _ask_ollama_support(
+    *,
+    message: str,
+    transcript: list[dict[str, str]],
+    settings: Settings,
+) -> SupportDecision | None:
+    base_url = str(settings.support_ollama_base_url or "").strip().rstrip("/")
+    if not base_url:
+        return None
+
+    try:
+        options = {
+            "num_ctx": max(
+                256, int(getattr(settings, "support_ollama_context_tokens", 1024))
+            ),
+            "num_predict": max(
+                64, int(getattr(settings, "support_ollama_num_predict", 220))
+            ),
+        }
+        num_gpu = int(getattr(settings, "support_ollama_num_gpu", 0))
+        if num_gpu >= 0:
+            options["num_gpu"] = num_gpu
+
+        async with httpx.AsyncClient(
+            base_url=base_url, timeout=settings.support_ollama_timeout_seconds
+        ) as client:
+            response = await client.post(
+                "/api/generate",
+                json={
+                    "model": settings.support_ollama_model,
+                    "prompt": _build_ollama_prompt(message, transcript),
+                    "stream": False,
+                    "format": "json",
+                    "options": options,
+                },
+            )
+        response.raise_for_status()
+        payload = response.json()
+        raw = payload.get("response") or ""
+        parsed = _json_payload_from_text(raw)
+    except (httpx.HTTPError, ValueError, json.JSONDecodeError) as exc:
+        logger.warning("Support Ollama reply failed: %s", exc)
+        return None
+
+    if not parsed:
+        return None
+
+    return _decision_from_payload(
+        parsed=parsed,
+        message=message,
+        preset_key="ollama_support",
     )
 
 
@@ -351,36 +474,18 @@ async def _ask_support_openclaw(
             parsed = payload
         else:
             raw = str(payload.get("response") or "").strip()
-            parsed = json.loads(raw)
+            parsed = _json_payload_from_text(raw)
     except (httpx.HTTPError, ValueError, json.JSONDecodeError, AttributeError) as exc:
         logger.warning("Support OpenClaw reply failed: %s", exc)
         return None
 
-    reply = _normalize_text(str(parsed.get("reply") or ""))
-    if not reply:
+    if not parsed:
         return None
 
-    category = (
-        _normalize_text(str(parsed.get("category") or "general"))
-        .lower()
-        .replace(" ", "_")
-    )
-    subject = _truncate(
-        _normalize_text(str(parsed.get("subject") or ""))
-        or _build_subject(category, message),
-        MAX_SUBJECT_LENGTH,
-    )
-    escalation_reason = (
-        _normalize_text(str(parsed.get("escalation_reason") or "")) or None
-    )
-
-    return SupportDecision(
-        reply=reply,
-        category=category or "general",
+    return _decision_from_payload(
+        parsed=parsed,
+        message=message,
         preset_key="supportclaw",
-        should_escalate=bool(parsed.get("should_escalate")),
-        escalation_reason=escalation_reason,
-        subject=subject,
     )
 
 
@@ -394,6 +499,14 @@ async def generate_support_decision(
     preset = _match_preset_support_reply(message)
     if preset:
         return preset
+
+    anythingllm_decision = await _ask_anythingllm_support(
+        message=message,
+        transcript=transcript,
+        settings=settings,
+    )
+    if anythingllm_decision:
+        return anythingllm_decision
 
     openclaw_decision = await _ask_support_openclaw(
         message=message,
