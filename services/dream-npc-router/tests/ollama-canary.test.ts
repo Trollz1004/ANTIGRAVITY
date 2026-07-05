@@ -41,10 +41,16 @@ describe.skipIf(!reachable)("ollama live canary (skipped if :11434 unreachable)"
       );
       expect(result.response.npc_dialogue).toBeTruthy();
     } catch (err) {
+      // Skip on upstream Ollama issues the adapter already wrapped as a
+      // ProviderError (HTTP 5xx, timeout, CUDA/model crash) — the adapter
+      // itself completed correctly. Rethrow anything unwrapped (TypeError,
+      // contract-coercion crash) since that IS an adapter bug and this
+      // canary should still catch it.
+      const { ProviderError } = await import("../src/providers/types.js");
+      if (!(err instanceof ProviderError)) throw err;
+      const message = err instanceof Error ? err.message : String(err);
       console.warn(
-        `ollama canary: reachable but did not complete in time (local model load/inference variance) — treating as skip: ${
-          err instanceof Error ? err.message : String(err)
-        }`,
+        `ollama canary: reachable but adapter reported upstream error — treating as skip: ${message}`,
       );
     }
   }, 95000);

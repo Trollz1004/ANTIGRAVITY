@@ -42,47 +42,45 @@ function shortLocalFallback(reason: string): NpcResponse {
   };
 }
 
-async function callOllama(input: ProviderChatInput): Promise<ProviderChatResult> {
-  if (!breakers.ollama.canAttempt()) {
-    throw new Error("ollama circuit open");
+/** Minimum ms we still bother trying a rail with, to avoid firing calls with a near-zero budget. */
+const MIN_RAIL_BUDGET_MS = 25;
+
+function remainingBudgetMs(deadlineMs: number): number {
+  return Math.max(0, deadlineMs - Date.now());
+}
+
+async function withBreaker(
+  breaker: CircuitBreaker,
+  name: string,
+  deadlineMs: number,
+  chat: (budget: number) => Promise<ProviderChatResult>,
+): Promise<ProviderChatResult> {
+  if (!breaker.canAttempt()) {
+    throw new Error(`${name} circuit open`);
+  }
+  const budget = remainingBudgetMs(deadlineMs);
+  if (budget < MIN_RAIL_BUDGET_MS) {
+    breaker.recordFailure();
+    throw new Error(`${name} deadline exceeded before attempt`);
   }
   try {
-    const result = await ollamaAdapter.chat(input, config.router.timeoutMs);
-    breakers.ollama.recordSuccess();
+    const result = await chat(budget);
+    breaker.recordSuccess();
     return result;
   } catch (err) {
-    breakers.ollama.recordFailure();
+    breaker.recordFailure();
     throw err;
   }
 }
 
-async function callOneMin(input: ProviderChatInput): Promise<ProviderChatResult> {
-  if (!breakers.onemin.canAttempt()) {
-    throw new Error("onemin circuit open");
-  }
-  try {
-    const result = await oneMinAdapter.chat(input, config.router.timeoutMs);
-    breakers.onemin.recordSuccess();
-    return result;
-  } catch (err) {
-    breakers.onemin.recordFailure();
-    throw err;
-  }
-}
+const callOllama = (input: ProviderChatInput, deadlineMs: number) =>
+  withBreaker(breakers.ollama, "ollama", deadlineMs, (budget) => ollamaAdapter.chat(input, budget));
 
-async function callAiHubMix(input: ProviderChatInput): Promise<ProviderChatResult> {
-  if (!breakers.aihubmix.canAttempt()) {
-    throw new Error("aihubmix circuit open");
-  }
-  try {
-    const result = await aiHubMixAdapter.chat(input, config.router.timeoutMs);
-    breakers.aihubmix.recordSuccess();
-    return result;
-  } catch (err) {
-    breakers.aihubmix.recordFailure();
-    throw err;
-  }
-}
+const callOneMin = (input: ProviderChatInput, deadlineMs: number) =>
+  withBreaker(breakers.onemin, "onemin", deadlineMs, (budget) => oneMinAdapter.chat(input, budget));
+
+const callAiHubMix = (input: ProviderChatInput, deadlineMs: number) =>
+  withBreaker(breakers.aihubmix, "aihubmix", deadlineMs, (budget) => aiHubMixAdapter.chat(input, budget));
 
 /**
  * Decides the provider chain for a request and executes it with fallback.
@@ -122,6 +120,11 @@ export async function routeNpcRequest(req: NpcRequest, reqId: string): Promise<R
     memoryContext,
   };
 
+  // One shared deadline across the whole fallback chain — a degraded T1
+  // request should never wait N-times the configured timeout just because
+  // three rails each got the full budget.
+  const deadlineMs = Date.now() + config.router.timeoutMs;
+
   let result: ProviderChatResult | undefined;
   let providerUsed = "";
   let fallbackReason: string | undefined;
@@ -147,34 +150,34 @@ export async function routeNpcRequest(req: NpcRequest, reqId: string): Promise<R
 
   if (childSafe && !config.childMode.enableCloud) {
     try {
-      result = await runWithLogging("ollama", () => callOllama(input));
+      result = await runWithLogging("ollama", () => callOllama(input, deadlineMs));
       providerUsed = "ollama";
     } catch (err) {
       fallbackReason = `child_mode_ollama_failed: ${err instanceof Error ? err.message : String(err)}`;
     }
   } else if (req.npcTier === "T0") {
     try {
-      result = await runWithLogging("ollama", () => callOllama(input));
+      result = await runWithLogging("ollama", () => callOllama(input, deadlineMs));
       providerUsed = "ollama";
     } catch (err) {
       fallbackReason = `t0_ollama_failed: ${err instanceof Error ? err.message : String(err)}`;
     }
   } else if (req.npcTier === "T1") {
     try {
-      result = await runWithLogging("onemin", () => callOneMin(input));
+      result = await runWithLogging("onemin", () => callOneMin(input, deadlineMs));
       providerUsed = "onemin";
     } catch (oneMinErr) {
       const reason = oneMinErr instanceof Error ? oneMinErr.message : String(oneMinErr);
       logger.warn({ reqId, reason }, "onemin_failed_overflowing_to_aihubmix");
       try {
-        result = await runWithLogging("aihubmix", () => callAiHubMix(input));
+        result = await runWithLogging("aihubmix", () => callAiHubMix(input, deadlineMs));
         providerUsed = "aihubmix";
         fallbackReason = `onemin_failed: ${reason}`;
       } catch (aihubErr) {
         const aihubReason = aihubErr instanceof Error ? aihubErr.message : String(aihubErr);
         logger.warn({ reqId, reason: aihubReason }, "aihubmix_failed_degrading_to_ollama");
         try {
-          result = await runWithLogging("ollama", () => callOllama(input));
+          result = await runWithLogging("ollama", () => callOllama(input, deadlineMs));
           providerUsed = "ollama";
           fallbackReason = `onemin_failed: ${reason}; aihubmix_failed: ${aihubReason}`;
         } catch (ollamaErr) {
@@ -189,13 +192,13 @@ export async function routeNpcRequest(req: NpcRequest, reqId: string): Promise<R
     // documented budget-ceiling stub, degrading to local on failure.
     // TODO(dream): replace with real premium-tier policy + budget ceiling once defined.
     try {
-      result = await runWithLogging("aihubmix", () => callAiHubMix(input));
+      result = await runWithLogging("aihubmix", () => callAiHubMix(input, deadlineMs));
       providerUsed = "aihubmix";
     } catch (err) {
       const reason = err instanceof Error ? err.message : String(err);
       logger.warn({ reqId, reason }, "t2_aihubmix_failed_degrading_to_ollama");
       try {
-        result = await runWithLogging("ollama", () => callOllama(input));
+        result = await runWithLogging("ollama", () => callOllama(input, deadlineMs));
         providerUsed = "ollama";
         fallbackReason = `t2_aihubmix_failed: ${reason}`;
       } catch (ollamaErr) {
@@ -214,14 +217,23 @@ export async function routeNpcRequest(req: NpcRequest, reqId: string): Promise<R
     logger.warn({ reqId, violations: guardrailResult.violations }, "guardrail_violation");
   }
 
-  await writeMemory({
-    npcId: req.npcId,
-    playerId: req.playerId,
-    importance: guardrailResult.sanitized.memory_writeback.importance,
-    summary: guardrailResult.sanitized.memory_writeback.summary,
-    tags: guardrailResult.sanitized.memory_writeback.tags,
-    createdAt: new Date().toISOString(),
-  });
+  // Memory writeback is a side effect and must not fail a guardrail-passed
+  // response the caller should have received. Log-and-continue on failure.
+  try {
+    await writeMemory({
+      npcId: req.npcId,
+      playerId: req.playerId,
+      importance: guardrailResult.sanitized.memory_writeback.importance,
+      summary: guardrailResult.sanitized.memory_writeback.summary,
+      tags: guardrailResult.sanitized.memory_writeback.tags,
+      createdAt: new Date().toISOString(),
+    });
+  } catch (err) {
+    logger.warn(
+      { reqId, err: err instanceof Error ? err.message : String(err) },
+      "memory_writeback_failed",
+    );
+  }
 
   return { response: guardrailResult.sanitized, providerUsed, fallbackReason };
 }

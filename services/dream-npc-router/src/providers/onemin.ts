@@ -123,37 +123,41 @@ export class OneMinAdapter implements ProviderAdapter {
 
     logger.info({ reqId: input.reqId, provider: this.name, authStyle: config.onemin.authStyle }, "onemin_auth_style_used");
 
-    let res;
     try {
-      res = await withTimeout(
-        request(url, { method: "POST", headers, body: JSON.stringify(body) }),
+      // AbortSignal.timeout for real socket cancellation; withTimeout as
+      // an outer race for callers where the underlying transport ignores
+      // the signal (e.g. mocked undici in unit tests).
+      const signal = AbortSignal.timeout(timeoutMs);
+      const res = await withTimeout(
+        request(url, { method: "POST", headers, body: JSON.stringify(body), signal }),
         timeoutMs,
         this.name,
       );
+
+      if (res.statusCode === 429) {
+        const text = await res.body.text();
+        throw new ProviderRateLimitError(this.name, `onemin rate-limited: ${text.slice(0, 200)}`);
+      }
+      if (res.statusCode === 402 || res.statusCode === 403) {
+        const text = await res.body.text();
+        throw new ProviderRateLimitError(this.name, `onemin credit/auth issue (${res.statusCode}): ${text.slice(0, 200)}`);
+      }
+      if (res.statusCode >= 400) {
+        const text = await res.body.text();
+        throw new ProviderError(this.name, `onemin http ${res.statusCode}: ${text.slice(0, 300)}`);
+      }
+
+      const json = await res.body.json();
+      const parsed = parseResponse(json);
+
+      return {
+        response: coerceToContract(parsed, "1Min NPC response (unverified schema)"),
+        latencyMs: Date.now() - started,
+      };
     } catch (err) {
+      if (err instanceof ProviderError || err instanceof ProviderRateLimitError) throw err;
       throw new ProviderError(this.name, err instanceof Error ? err.message : String(err));
     }
-
-    if (res.statusCode === 429) {
-      const text = await res.body.text();
-      throw new ProviderRateLimitError(this.name, `onemin rate-limited: ${text.slice(0, 200)}`);
-    }
-    if (res.statusCode === 402 || res.statusCode === 403) {
-      const text = await res.body.text();
-      throw new ProviderRateLimitError(this.name, `onemin credit/auth issue (${res.statusCode}): ${text.slice(0, 200)}`);
-    }
-    if (res.statusCode >= 400) {
-      const text = await res.body.text();
-      throw new ProviderError(this.name, `onemin http ${res.statusCode}: ${text.slice(0, 300)}`);
-    }
-
-    const json = await res.body.json();
-    const parsed = parseResponse(json);
-
-    return {
-      response: coerceToContract(parsed, "1Min NPC response (unverified schema)"),
-      latencyMs: Date.now() - started,
-    };
   }
 }
 

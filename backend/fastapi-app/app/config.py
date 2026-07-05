@@ -80,6 +80,11 @@ class Settings(BaseSettings):
     support_ollama_context_tokens: int = 1024
     support_ollama_num_predict: int = 220
     support_ollama_num_gpu: int = 0
+    # Hard overall deadline across the whole provider chain
+    # (AnythingLLM -> OpenClaw -> Ollama). Without this each provider's own
+    # timeout stacks additively, so a slow rail could push total latency to
+    # ~40s under the individual defaults.
+    support_total_timeout_seconds: float = 20.0
     gemini_api_key: str = ""
     gemini_model: str = "gemini-2.5-pro"
     kimi_api_key: str = ""

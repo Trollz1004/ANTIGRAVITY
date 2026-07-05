@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import re
@@ -247,7 +248,7 @@ def _match_preset_support_reply(message: str) -> SupportDecision | None:
     return None
 
 
-def _build_ollama_prompt(message: str, transcript: list[dict[str, str]]) -> str:
+def _build_support_prompt(message: str, transcript: list[dict[str, str]]) -> str:
     transcript_lines = "\n".join(
         f"{item.get('role', 'user')}: {item.get('content', '').strip()}"
         for item in transcript[-6:]
@@ -277,11 +278,11 @@ def _json_payload_from_text(raw: str) -> dict[str, object] | None:
     try:
         parsed = json.loads(clean)
     except json.JSONDecodeError:
-        match = re.search(r"\{.*\}", clean, flags=re.DOTALL)
-        if not match:
+        start = clean.find("{")
+        if start == -1:
             return None
         try:
-            parsed = json.loads(match.group(0))
+            parsed, _ = json.JSONDecoder().raw_decode(clean[start:])
         except json.JSONDecodeError:
             return None
 
@@ -356,7 +357,7 @@ async def _ask_anythingllm_support(
             response = await client.post(
                 f"/workspace/{workspace_slug}/chat",
                 json={
-                    "message": _build_ollama_prompt(message, transcript),
+                    "message": _build_support_prompt(message, transcript),
                     "mode": "chat",
                 },
             )
@@ -420,7 +421,7 @@ async def _ask_ollama_support(
                 "/api/generate",
                 json={
                     "model": settings.support_ollama_model,
-                    "prompt": _build_ollama_prompt(message, transcript),
+                    "prompt": _build_support_prompt(message, transcript),
                     "stream": False,
                     "format": "json",
                     "options": options,
@@ -455,7 +456,7 @@ async def _ask_support_openclaw(
     if not base_url:
         return None
 
-    prompt = _build_ollama_prompt(message, transcript)
+    prompt = _build_support_prompt(message, transcript)
 
     try:
         async with httpx.AsyncClient(
@@ -500,30 +501,52 @@ async def generate_support_decision(
     if preset:
         return preset
 
-    anythingllm_decision = await _ask_anythingllm_support(
-        message=message,
-        transcript=transcript,
-        settings=settings,
+    # One shared deadline across the full AnythingLLM -> OpenClaw -> Ollama
+    # chain — otherwise the per-provider timeouts stack additively and a slow
+    # rail can push total latency past ~40s under the individual defaults.
+    total_budget = max(
+        1.0, float(getattr(settings, "support_total_timeout_seconds", 20.0))
     )
-    if anythingllm_decision:
-        return anythingllm_decision
 
-    openclaw_decision = await _ask_support_openclaw(
-        message=message,
-        transcript=transcript,
-        session_key=session_key,
-        settings=settings,
-    )
-    if openclaw_decision:
-        return openclaw_decision
+    async def _run_chain() -> SupportDecision | None:
+        anythingllm_decision = await _ask_anythingllm_support(
+            message=message,
+            transcript=transcript,
+            settings=settings,
+        )
+        if anythingllm_decision:
+            return anythingllm_decision
 
-    ollama_decision = await _ask_ollama_support(
-        message=message,
-        transcript=transcript,
-        settings=settings,
-    )
-    if ollama_decision:
-        return ollama_decision
+        openclaw_decision = await _ask_support_openclaw(
+            message=message,
+            transcript=transcript,
+            session_key=session_key,
+            settings=settings,
+        )
+        if openclaw_decision:
+            return openclaw_decision
+
+        ollama_decision = await _ask_ollama_support(
+            message=message,
+            transcript=transcript,
+            settings=settings,
+        )
+        if ollama_decision:
+            return ollama_decision
+
+        return None
+
+    try:
+        decision = await asyncio.wait_for(_run_chain(), timeout=total_budget)
+    except asyncio.TimeoutError:
+        logger.warning(
+            "Support decision chain exceeded overall budget %.1fs; falling back to escalation.",
+            total_budget,
+        )
+        decision = None
+
+    if decision:
+        return decision
 
     return _decision(
         reply=(

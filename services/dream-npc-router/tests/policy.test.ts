@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock undici's `request` globally — no live HTTP calls, cloud or local, in these tests.
 const requestMock = vi.fn();
@@ -13,6 +13,19 @@ function jsonBody(payload: unknown) {
   };
 }
 
+// Track any real timers a scenario opens so they can be cleared in teardown —
+// otherwise scenario 4's mock delays outlive the test and Vitest warns about
+// "did not exit cleanly."
+const pendingTimers = new Set<ReturnType<typeof setTimeout>>();
+function trackedSetTimeout(fn: () => void, ms: number): ReturnType<typeof setTimeout> {
+  const handle = setTimeout(() => {
+    pendingTimers.delete(handle);
+    fn();
+  }, ms);
+  pendingTimers.add(handle);
+  return handle;
+}
+
 describe("policy routing", () => {
   beforeEach(() => {
     vi.resetModules();
@@ -23,6 +36,11 @@ describe("policy routing", () => {
     process.env.AIHUBMIX_MODEL_OVERFLOW = "auto";
     process.env.ENABLE_CHILD_MODE_CLOUD = "false";
     process.env.ROUTER_TIMEOUT_MS = "8000";
+  });
+
+  afterEach(() => {
+    for (const handle of pendingTimers) clearTimeout(handle);
+    pendingTimers.clear();
   });
 
   it("scenario 1: T1 primary routes to the 1Min adapter", async () => {
@@ -157,7 +175,7 @@ describe("policy routing", () => {
     requestMock.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
-          setTimeout(
+          trackedSetTimeout(
             () =>
               resolve({
                 statusCode: 200,
@@ -171,7 +189,7 @@ describe("policy routing", () => {
     requestMock.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
-          setTimeout(
+          trackedSetTimeout(
             () =>
               resolve({
                 statusCode: 200,
@@ -186,7 +204,7 @@ describe("policy routing", () => {
     requestMock.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
-          setTimeout(
+          trackedSetTimeout(
             () =>
               resolve({
                 statusCode: 200,

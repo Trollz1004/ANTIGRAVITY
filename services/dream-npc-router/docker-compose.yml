@@ -2,7 +2,11 @@ version: "3.9"
 
 services:
   dream-npc-router:
-    build: .
+    build:
+      # Build context is the repo root so the pnpm workspace lockfile is
+      # available inside the Dockerfile — required for --frozen-lockfile.
+      context: ../..
+      dockerfile: services/dream-npc-router/Dockerfile
     ports:
       - "8090:8090"
     env_file:

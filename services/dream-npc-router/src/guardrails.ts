@@ -18,6 +18,7 @@ export const BASE_SYSTEM_PROMPT = [
 ].join(" ");
 
 const VENDOR_TERMS = [
+  // Vendor + product names
   "openai",
   "anthropic",
   "claude",
@@ -25,14 +26,31 @@ const VENDOR_TERMS = [
   "gpt4",
   "gpt-4",
   "1min.ai",
+  "1min ai",
   "aihubmix",
+  "ai hub mix",
   "ollama",
+  // Model families local Ollama models frequently self-identify as
+  "llama",
+  "meta ai",
+  "mistral",
+  "qwen",
+  "gemma",
+  "phi-3",
+  "deepseek",
+  // Infra / prompt leaks
   "api key",
   "api-key",
   "system prompt",
+  // Self-identification giveaways
   "language model",
   "large language model",
   "llm",
+  "as an ai",
+  "as an assistant",
+  "as an ai assistant",
+  "trained by",
+  "trained on",
 ];
 
 const REWARD_INVENTION_PATTERNS = [
@@ -84,10 +102,42 @@ export function applyGuardrails(response: NpcResponse, opts: { childSafe: boolea
     }
   }
 
+  // Sanitize memory_writeback too — its fields are provider-controlled and
+  // get persisted + re-injected into future prompts, so any vendor leak or
+  // invented-reward text hiding here would silently bypass the dialogue
+  // scrub and resurface later (including in a later child-mode session).
+  const rawSummary = response.memory_writeback.summary ?? "";
+  let summary = rawSummary;
+  const memoryVendorHits = containsVendorLeak(rawSummary);
+  if (memoryVendorHits.length > 0) {
+    violations.push(`memory_vendor_leak:${memoryVendorHits.join(",")}`);
+    summary = "";
+  }
+  if (containsInventedReward(summary)) {
+    violations.push("memory_invented_reward");
+    summary = "";
+  }
+
+  const rawTags = Array.isArray(response.memory_writeback.tags) ? response.memory_writeback.tags : [];
+  const sanitizedTags: string[] = [];
+  for (const tag of rawTags) {
+    const value = String(tag);
+    if (containsVendorLeak(value).length > 0 || containsInventedReward(value)) {
+      violations.push("memory_tag_scrubbed");
+      continue;
+    }
+    sanitizedTags.push(value);
+  }
+
   const sanitized: NpcResponse = {
     ...response,
     npc_dialogue: dialogue,
     action_intent: response.action_intent === "grant_reward" ? "idle" : response.action_intent,
+    memory_writeback: {
+      ...response.memory_writeback,
+      summary,
+      tags: sanitizedTags,
+    },
   };
 
   return { safe: violations.length === 0, violations, sanitized };

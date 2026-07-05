@@ -33,11 +33,17 @@ export class OllamaAdapter implements ProviderAdapter {
     };
 
     try {
+      // AbortSignal.timeout aborts the underlying socket so timeoutMs
+      // actually covers the body-read phase; withTimeout is kept as a
+      // hard outer race for callers whose transport ignores signals
+      // (mocked undici in unit tests, and any future custom fetch).
+      const signal = AbortSignal.timeout(timeoutMs);
       const res = await withTimeout(
         request(url, {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify(body),
+          signal,
         }),
         timeoutMs,
         this.name,

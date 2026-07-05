@@ -32,9 +32,12 @@ export class AiHubMixAdapter implements ProviderAdapter {
       response_format: { type: "json_object" },
     };
 
-    let res;
     try {
-      res = await withTimeout(
+      // AbortSignal.timeout for real socket cancellation; withTimeout as
+      // an outer race for callers where the underlying transport ignores
+      // the signal (e.g. mocked undici in unit tests).
+      const signal = AbortSignal.timeout(timeoutMs);
+      const res = await withTimeout(
         request(url, {
           method: "POST",
           headers: {
@@ -42,44 +45,46 @@ export class AiHubMixAdapter implements ProviderAdapter {
             authorization: `Bearer ${config.aihubmix.apiKey}`,
           },
           body: JSON.stringify(body),
+          signal,
         }),
         timeoutMs,
         this.name,
       );
+
+      if (res.statusCode === 429) {
+        const text = await res.body.text();
+        throw new ProviderRateLimitError(this.name, `aihubmix rate-limited: ${text.slice(0, 200)}`);
+      }
+      if (res.statusCode >= 400) {
+        const text = await res.body.text();
+        throw new ProviderError(this.name, `aihubmix http ${res.statusCode}: ${text.slice(0, 300)}`);
+      }
+
+      const json = (await res.body.json()) as {
+        choices?: Array<{ message?: { content?: string } }>;
+        usage?: { prompt_tokens?: number; completion_tokens?: number };
+      };
+
+      const content = json.choices?.[0]?.message?.content ?? "";
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(content);
+      } catch {
+        parsed = { npc_dialogue: content };
+      }
+
+      return {
+        response: coerceToContract(parsed, "overflow NPC response"),
+        latencyMs: Date.now() - started,
+        tokenUsage: {
+          promptTokens: json.usage?.prompt_tokens,
+          completionTokens: json.usage?.completion_tokens,
+        },
+      };
     } catch (err) {
+      if (err instanceof ProviderError || err instanceof ProviderRateLimitError) throw err;
       throw new ProviderError(this.name, err instanceof Error ? err.message : String(err));
     }
-
-    if (res.statusCode === 429) {
-      const text = await res.body.text();
-      throw new ProviderRateLimitError(this.name, `aihubmix rate-limited: ${text.slice(0, 200)}`);
-    }
-    if (res.statusCode >= 400) {
-      const text = await res.body.text();
-      throw new ProviderError(this.name, `aihubmix http ${res.statusCode}: ${text.slice(0, 300)}`);
-    }
-
-    const json = (await res.body.json()) as {
-      choices?: Array<{ message?: { content?: string } }>;
-      usage?: { prompt_tokens?: number; completion_tokens?: number };
-    };
-
-    const content = json.choices?.[0]?.message?.content ?? "";
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(content);
-    } catch {
-      parsed = { npc_dialogue: content };
-    }
-
-    return {
-      response: coerceToContract(parsed, "overflow NPC response"),
-      latencyMs: Date.now() - started,
-      tokenUsage: {
-        promptTokens: json.usage?.prompt_tokens,
-        completionTokens: json.usage?.completion_tokens,
-      },
-    };
   }
 }
 

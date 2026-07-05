@@ -104,6 +104,7 @@ def test_support_chat_escalates_and_operator_can_see_ticket(
             support_ollama_context_tokens=1024,
             support_ollama_num_predict=220,
             support_ollama_num_gpu=0,
+            support_total_timeout_seconds=20.0,
         ),
     )
 

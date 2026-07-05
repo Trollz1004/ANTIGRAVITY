@@ -18,6 +18,10 @@ export const config = {
     timeoutMs: num(process.env.ROUTER_TIMEOUT_MS, 8000),
     circuitBreakerThreshold: num(process.env.CIRCUIT_BREAKER_THRESHOLD, 5),
     circuitBreakerCooldownMs: num(process.env.CIRCUIT_BREAKER_COOLDOWN_MS, 30000),
+    // Optional API-key gate for /npc/respond and /providers. When unset the
+    // service is treated as internal-only and bound behind a trusted gateway.
+    // When set, callers must send `X-API-Key: <value>` on gated routes.
+    apiKey: (process.env.ROUTER_API_KEY ?? "").trim(),
   },
 
   childMode: {
@@ -33,7 +37,8 @@ export const config = {
     apiKey: process.env.ONEMIN_API_KEY ?? "",
     baseUrl: process.env.ONEMIN_BASE_URL ?? "https://api.1min.ai",
     modelT1: process.env.ONEMIN_MODEL_T1 ?? "",
-    authStyle: (process.env.ONEMIN_AUTH_STYLE ?? "api-key") as "api-key" | "bearer",
+    authStyle: ((): "api-key" | "bearer" =>
+      process.env.ONEMIN_AUTH_STYLE === "bearer" ? "bearer" : "api-key")(),
     rateLimitPerMin: num(process.env.ONEMIN_RATE_LIMIT_PER_MIN, 180),
   },
 
