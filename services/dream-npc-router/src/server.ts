@@ -1,6 +1,6 @@
 import express from "express";
 import helmet from "helmet";
-import { randomUUID } from "node:crypto";
+import { randomUUID, timingSafeEqual } from "node:crypto";
 import { config } from "./config.js";
 import { logger } from "./logger.js";
 import { NpcRequestSchema } from "./contract.js";
@@ -18,8 +18,17 @@ function requireApiKey(req: express.Request, res: express.Response, next: expres
     next();
     return;
   }
-  const provided = req.header("x-api-key");
-  if (provided && provided === configured) {
+  const provided = req.header("x-api-key") ?? "";
+  // Constant-time comparison so the key check doesn't leak length/content via
+  // response-time timing side-channels. timingSafeEqual requires equal-length
+  // buffers, so gate on length first with a plain check that reveals nothing
+  // beyond "wrong length."
+  const providedBuf = Buffer.from(provided);
+  const configuredBuf = Buffer.from(configured);
+  if (
+    providedBuf.length === configuredBuf.length &&
+    timingSafeEqual(providedBuf, configuredBuf)
+  ) {
     next();
     return;
   }
