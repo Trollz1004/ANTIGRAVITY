@@ -11,7 +11,7 @@
 | Software | Purpose | Verify command |
 |---|---|---|
 | Node.js ≥ 18 | MCP memory bridge, Paperclip backend deps | `node --version` |
-| `paperclipai` (npm) | Local Paperclip runtime on `:3100` | `Get-Command paperclipai` |
+| `paperclipai` (npm) | Local PaperclipAI runtime on `:3110` | `Get-Command paperclipai` |
 | Git / `gh` CLI | GitHub MCP plugin + repo ops | `gh auth status` |
 | cloudflared | Public tunnel to `paperclip-hq.youandinotai.com` | `cloudflared --version` |
 | PowerShell | Watchdog + autostart scripts | ships with Windows |
@@ -22,7 +22,8 @@
 
 | Endpoint | Expected | Checked by |
 |---|---|---|
-| `http://127.0.0.1:3100/api/health` or `/` | Paperclip local listener | `scripts/paperclip/paperclip-watchdog.ps1` every 60s |
+| `http://127.0.0.1:3110/api/health` or `/` | PaperclipAI local listener | `scripts/paperclip/paperclip-watchdog.ps1` every 60s |
+| `http://127.0.0.1:3130/health` | Agent Hub dispatcher | `scripts/start-agent-hub.ps1` / service watchdog |
 | `https://paperclip-hq.youandinotai.com/api/health` | Public tunnel | `scripts/paperclip/launch-paperclip-hq.ps1` |
 | Supabase project REST endpoint | Brain persistence | `scripts/paperclip/mcp-memory-bridge.js` on write |
 
@@ -50,7 +51,7 @@ After running `scripts/paperclip/setup-windows-autostart.ps1` as Administrator, 
 
 1. **Paperclip Watchdog** — Scheduled task `PaperclipHQ-Watchdog` runs at startup/logon as the current user.
    - Executes `scripts/paperclip/paperclip-watchdog.ps1`.
-   - Relaunches Paperclip if `:3100` health fails.
+   - Relaunches PaperclipAI if `:3110` health fails.
    - Writes to `logs/paperclip-watchdog.log`.
 
 2. **MCP Plugins** — Paperclip itself loads plugins from `paperclip-mcp-plugins/*/manifest.json` when it starts.
@@ -99,4 +100,6 @@ Should print the current `STATE.md` content.
 
 ## Node: T5500 Date App
 
-The T5500 node runs the Cloudflare Pages / Wrangler date app and is **not** part of this Sabretooth Paperclip watchdog. T5500 should have its own startup/watchdog for Wrangler/pages dev if required. The Supabase brain is shared, so Paperclip state persists across both nodes.
+The T5500 node runs the Cloudflare Pages / Wrangler date app and is **not** a
+second PaperclipAI command center. T5500 should have its own startup/watchdog for
+Wrangler/pages dev if required. PaperclipAI authority remains on Sabretooth.

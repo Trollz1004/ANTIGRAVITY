@@ -2,7 +2,7 @@
 name: ant-compliance
 title: Compliance — ANT DateApp
 adapter: gemini
-paperclip_adapter_type: opencode_local_local
+paperclip_adapter_type: opencode_local
 model: gemini-2.5-pro
 provider: google
 reports_to: ceo

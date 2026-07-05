@@ -50,14 +50,15 @@ class TestSeed(PaperweightTestBase):
         self.assertEqual(
             ids,
             {
+                "agent-hub",
                 "youandinotai",
                 "marketing",
                 "ai-solutions",
                 "business-exchange",
                 "hermes-sideworld",
+                "dream-online",
                 "youtube",
                 "onlinerecycle",
-                "dao",
             },
         )
 
@@ -67,7 +68,7 @@ class TestSeed(PaperweightTestBase):
         _, state = pw.get_state()
         names = [a["name"] for a in state["agents"]]
         self.assertEqual(len(names), len(set(names)), "duplicate agents after re-init")
-        self.assertIn("Opus", names)
+        self.assertEqual(names, ["Claude CEO", "Hermes CEO"])
 
 
 class TestItems(PaperweightTestBase):
@@ -103,7 +104,7 @@ class TestItems(PaperweightTestBase):
 
     def test_assign_logs_assigned(self):
         _, row = pw.create_item({"title": "x"})
-        pw.update_item(row["id"], {"assignee": "Codex"})
+        pw.update_item(row["id"], {"assignee": "Claude CEO"})
         self.assertEqual(len(self._events("assigned")), 1)
 
     def test_invalid_status_ignored(self):
@@ -120,14 +121,14 @@ class TestProposalsAndVoting(PaperweightTestBase):
     def test_proposal_inits_tally(self):
         import json
 
-        _, row = pw.create_item({"title": "ratify", "kind": "proposal", "company": "dao"})
+        _, row = pw.create_item({"title": "ratify", "kind": "proposal", "company": "agent-hub"})
         meta = json.loads(row["meta"])
         self.assertEqual(meta, {"for": 0, "against": 0, "vote_status": "open"})
 
     def test_vote_increments_and_logs(self):
         import json
 
-        _, row = pw.create_item({"title": "p", "kind": "proposal", "company": "dao"})
+        _, row = pw.create_item({"title": "p", "kind": "proposal", "company": "agent-hub"})
         pw.vote_item(row["id"], {"dir": "for"})
         _, after = pw.vote_item(row["id"], {"dir": "against"})
         meta = json.loads(after["meta"])
@@ -135,7 +136,7 @@ class TestProposalsAndVoting(PaperweightTestBase):
         self.assertEqual(len(self._events("voted")), 2)
 
     def test_vote_rejects_bad_direction(self):
-        _, row = pw.create_item({"title": "p", "kind": "proposal", "company": "dao"})
+        _, row = pw.create_item({"title": "p", "kind": "proposal", "company": "agent-hub"})
         code, _ = pw.vote_item(row["id"], {"dir": "sideways"})
         self.assertEqual(code, 400)
 
@@ -170,13 +171,13 @@ class TestCompanyScoping(PaperweightTestBase):
 
 class TestNotes(PaperweightTestBase):
     def test_note_lifecycle(self):
-        code, note = pw.create_note({"body": "remember the kids", "color": "love", "company": "dao"})
+        code, note = pw.create_note({"body": "remember the handoff", "color": "love", "company": "dream-online"})
         self.assertEqual(code, 201)
-        _, state = pw.get_state("dao")
+        _, state = pw.get_state("dream-online")
         self.assertEqual(len(state["notes"]), 1)
         code, _ = pw.delete_note(note["id"])
         self.assertEqual(code, 200)
-        _, state2 = pw.get_state("dao")
+        _, state2 = pw.get_state("dream-online")
         self.assertEqual(len(state2["notes"]), 0)
 
     def test_delete_missing_note_404(self):

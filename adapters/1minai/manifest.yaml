@@ -4,6 +4,10 @@ type: cloud-api
 node: sabretooth
 access: desktop-app
 description: All-in-one AI platform — chat, image, audio, video, code via cloud API and Windows desktop app
+paperclip_adapter_type: "cloud_api"
+paperclip_alias: "1minai"
+cli_command: "powershell"
+health_check: "powershell -NoProfile -Command if (Test-Path 'adapters\\1minai\\models.json') { '1minai:config-present' } else { '1minai:models-missing'; exit 1 }"
 
 api:
   base_url: https://api.1min.ai

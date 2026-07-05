@@ -2,7 +2,7 @@
 name: ant-reviewer
 title: Code Reviewer — ANT DateApp
 adapter: grok
-paperclip_adapter_type: opencode_local_local
+paperclip_adapter_type: opencode_local
 model: grok-3-mini
 provider: xai
 reports_to: ceo

@@ -8,8 +8,10 @@ Runs on **Sabretooth at `:3130`** — the ONE location every AI sends work to.
 ```
 Sabretooth :3130 (Agent Hub) ← ALL AI sends work HERE
        │
-       ├── Local services: Hermes :11435, FCC :8082, Ollama :11434, ClawX, Pi
-       ├── DREAM: Paperclip :3110, 1min.ai (NPC AI), Claude Official (Sup@)
+       ├── Local services: Hermes :9119/:3000, FCC :8082, Ollama :11434, ClawX, Pi
+       ├── Mission Control: PaperclipAI :3110 (board/CEO cockpit/routines)
+       ├── Optional local viewer: Paperweight :4200
+       ├── DREAM: E:\CLAUDE's-N-Joshua's-Dream-Online-MMORPG, 1min.ai (NPC AI), Claude Official (Sup@)
        ├── Browser-auth: Codex, Grok, Gemini, ChatGPT, Perplexity
        ├── Slack notifications (#antigravity-platform, #dream-online, #fcc-claude)
        ├── GitHub issue sync
@@ -20,9 +22,10 @@ Sabretooth :3130 (Agent Hub) ← ALL AI sends work HERE
 
 | Node | Role | What runs there |
 |---|---|---|
-| **Sabretooth** | ALL services + DREAM | Agent Hub :3130, Hermes, FCC, Ollama, PostgreSQL, Paperclip :3110, DREAM on D:\, GPU for game |
-| **T5500** | Gateway only | Cloudflare tunnels for youandinotai.com |
-| **9020** | Inactive | Nothing |
+| **Sabretooth C:** | Dev/control plane | Agent Hub :3130, PaperclipAI :3110, optional Paperweight :4200, Hermes :3000/:9119, FCC :8082, Ollama, PostgreSQL |
+| **Sabretooth E:** | DREAM ONLINE drive | `E:\CLAUDE's-N-Joshua's-Dream-Online-MMORPG` game files, memory, saves, backups |
+| **T5500** | Gateway + dateapp | Cloudflare tunnels and public gateway duties |
+| **9020** | Legacy support | No new production ownership unless Joshua explicitly changes it |
 
 ## Quick Start (on Sabretooth)
 
@@ -38,8 +41,8 @@ npm start                  # listens on :3130
 
 | Platform | Auth | Use |
 |---|---|---|
-| `hermes` | localhost | Co-CEO, routing, research |
-| `fcc-claude` | FCC proxy | Co-CEO, code, compliance |
+| `hermes` | localhost | Hermes CEO lane: growth, support, research, leads |
+| `fcc-claude` | FCC proxy | Claude CEO helper lane: code, compliance, PR/payment gates |
 | `claude` | Max subscription | Sup@ user guide sphere (DREAM) |
 | `opencode` | NVIDIA free | Code tasks |
 | `ollama` | localhost | Local models |
@@ -72,9 +75,11 @@ Browser-auth platforms (claude, codex, grok, gemini, chatgpt, openai, perplexity
 
 ## DREAM ONLINE
 
-GPU 1070 8GB reserved for game rendering — NOT AI inference.
-DREAM files on D:\dream-online\ (assets, server, config, saves, logs).
-Paperclip :3110 handles DREAM webhooks, triggers, and game events.
+DREAM root is `E:\CLAUDE's-N-Joshua's-Dream-Online-MMORPG`.
+GPU 1070 8GB is reserved for game rendering — NOT AI inference.
+Agent Hub handles DREAM task routing and cross-AI dispatch. PaperclipAI :3110 is
+the human-facing board, two-CEO cockpit, routine runner, and evidence surface.
+Paperweight :4200 is only a fallback/local viewer.
 
 ### DREAM AI Roles
 
@@ -158,9 +163,13 @@ served it over an unauthenticated `GET /api/platforms`. Those 4 keys should be
 treated as burned/rotation-listed. This port stores `api_key_hash` (sha256) only —
 plaintext values were never written to this repo or to Supabase.
 
-## MCP Integration (FCC-Claude)
+## MCP Integration
 
-FCC-Claude accesses tasks via the MCP interface:
+External AI clients should use Agent Hub as the stable bridge. MCP is the right
+shape for cross-platform tools because clients can discover/call tools without
+custom per-model wiring.
+
+FCC-Claude and other compatible clients access tasks via the MCP interface:
 - `GET /api/mcp/tools` — returns tool definitions
 - `POST /api/mcp/call` — executes tools: list_tasks, create_task, update_task, get_queue_status
 
@@ -174,7 +183,8 @@ FCC-Claude accesses tasks via the MCP interface:
 
 ## Architecture Notes
 
-1. Agent Hub handles ANTIGRAVITY task routing (all 21 platforms)
-2. Paperclip :3110 handles DREAM game orchestration (webhooks, triggers, events)
-3. Both run on Sabretooth — the ONLY active node
-4. T5500 = gateway only (Cloudflare tunnels), 9020 = inactive
+1. Agent Hub handles ANTIGRAVITY and DREAM task routing across the platform roster.
+2. PaperclipAI :3110 is the human-facing board/manual cockpit; Agent Hub remains the backend source of truth.
+3. Standing mission-control lanes are Claude CEO and Hermes CEO only; other models are tools/subagents.
+4. Sabretooth C: is the control plane; Sabretooth E: is the DREAM drive.
+5. T5500 remains gateway/dateapp; 9020 is legacy support unless Joshua explicitly changes it.

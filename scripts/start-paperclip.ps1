@@ -97,7 +97,25 @@ if (-not $env:BETTER_AUTH_TRUSTED_ORIGINS) {
 Log "Starting Paperclip HQ on port $env:PORT (env loaded=$loaded)"
 
 try {
-    & 'C:\Users\joshl\AppData\Roaming\npm\paperclipai.cmd' run *>> $LogFile 2>&1
+    $paperclipCmd = Get-Command paperclipai.cmd -ErrorAction SilentlyContinue
+    if (-not $paperclipCmd) {
+        $paperclipCmd = Get-Command paperclipai -ErrorAction SilentlyContinue
+    }
+
+    if ($paperclipCmd) {
+        Log "Using PaperclipAI command: $($paperclipCmd.Source)"
+        & $paperclipCmd.Source run *>> $LogFile 2>&1
+    } else {
+        $npxCmd = Get-Command npx.cmd -ErrorAction SilentlyContinue
+        if (-not $npxCmd) {
+            $npxCmd = Get-Command npx -ErrorAction SilentlyContinue
+        }
+        if (-not $npxCmd) {
+            throw 'paperclipai is not on PATH and npx was not found.'
+        }
+        Log "paperclipai command not found; falling back to npx: $($npxCmd.Source)"
+        & $npxCmd.Source --yes paperclipai run *>> $LogFile 2>&1
+    }
 } catch {
     Log "ERROR: $($_.Exception.Message)"
     exit 1

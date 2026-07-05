@@ -1,13 +1,13 @@
 # CEO PLAYBOOK — Dual-CEO Delegation Architecture
 
 > Claude (Opus/FCC) + Hermes = co-CEOs. They DELEGATE. They never do tasks.
-> Mission: UNTIL NO KID IN NEED
+> PaperclipAI :3110 is the visible board; Agent Hub :3130 is the dispatcher.
 
 ## The Rule
 
-CEOs exist to spawn, route, monitor, and unblock sub-agents. A CEO that writes
-code, drafts copy, or does any leaf-node work has failed. If a task exists, a
-sub-agent does it. If no sub-agent fits, create one or pull a skill.
+CEOs exist to spawn, route, monitor, and unblock subagents/tools while preserving
+one visible board and one dispatch backend. If no subagent fits, create a
+temporary one or pull a skill. Do not create a new standing PaperclipAI seat.
 
 ## Claude CEO (FCC — claude_local)
 
@@ -59,7 +59,7 @@ When no existing agent fits a task, CEOs create one:
 1. Pick skill from `.agents/skills/<skill-dir>/SKILL.md`
 2. Clone `paperclip-tro/agents/_template/` to new agent dir
 3. Fill in AGENT.md frontmatter (adapter, model, project, node)
-4. Register via Paperclip API: `POST /api/companies/:id/agent-hires`
+4. Register via PaperclipAI only if the worker must be visible during the task
 5. Assign task immediately — no idle agents
 6. Temp agents are removed when their task completes (unless promoted)
 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Paperclip — #UntilNoKidInNeed</title>
+    <title>Paperweight Mission Control</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -485,8 +485,8 @@
   <body>
     <header>
       <span class="dot"></span>
-      <h1>Paperclip</h1>
-      <span class="sub mono">self-owned · multi-company · all logged &amp; tracked · secret-free</span>
+      <h1>Mission Control</h1>
+      <span class="sub mono">self-owned · Agent Hub aligned · two CEO lanes · secret-free</span>
       <span id="conn" class="label">connecting…</span>
     </header>
 
@@ -495,8 +495,7 @@
     <div class="tabs">
       <div class="tab active" data-view="board">Board</div>
       <div class="tab" data-view="support">Customer Support</div>
-      <div class="tab" data-view="governance">Governance</div>
-      <div class="tab" data-view="buckets">Kids Buckets</div>
+      <div class="tab" data-view="governance">Decisions</div>
       <div class="tab" data-view="wheel">The Wheel</div>
       <div class="tab" data-view="notes">Sticky Notes</div>
       <div class="tab" data-view="activity">Activity Log</div>
@@ -571,7 +570,7 @@
     <!-- GOVERNANCE -->
     <section class="view" id="view-governance">
       <div class="label" style="margin-bottom: 10px">
-        Proposals &amp; vote tallies — tracking only. On-chain voting stays off this ops board.
+        Internal proposals and decisions. No public funding, token, or private accounting claims.
       </div>
       <div class="row">
         <input id="pr-title" placeholder="New proposal…" style="flex: 1; min-width: 220px" />
@@ -580,28 +579,10 @@
       <div id="propList"></div>
     </section>
 
-    <!-- KIDS BUCKETS -->
-    <section class="view" id="view-buckets">
-      <div id="bk-banner" class="label" style="margin-bottom: 6px">
-        Real reserved-for-kids per legally-distinct bucket — 10% max each. Compounding comes from more buckets, never a
-        bigger %.
-      </div>
-      <div class="row" style="justify-content: space-between; align-items: baseline">
-        <div>
-          <span class="label">Total reserved for kids</span>
-          <span id="bk-total" style="font-family: var(--font-heading); font-size: 34px; color: var(--accent)"
-            >$0.00</span
-          >
-        </div>
-        <div id="bk-source" class="mono" style="font-size: 11px; color: var(--text-muted)">source: live ledger</div>
-      </div>
-      <div class="board" id="bucketGrid" style="grid-template-columns: repeat(2, 1fr)"></div>
-    </section>
-
     <!-- THE WHEEL: goals + routines -->
     <section class="view" id="view-wheel">
       <div class="label" style="margin-bottom: 8px">
-        The Wheel — goals (toward 100) + recurring routines. The loop never stops. #UntilNoKidInNeed
+        The Wheel — goals, routines, and recurring operator checks. Keep active work moving without agent sprawl.
       </div>
       <div class="row">
         <input id="gl-title" placeholder="New goal…" style="flex: 1; min-width: 200px" />
@@ -651,7 +632,7 @@
       <div class="feed" id="feed"></div>
     </section>
 
-    <div class="ticker"><span>#UntilNoKidInNeed</span><span id="tick-stats">—</span></div>
+    <div class="ticker"><span>AGENT HUB MISSION CONTROL</span><span id="tick-stats">—</span></div>
 
     <script>
       const $ = (s) => document.querySelector(s);
@@ -878,7 +859,7 @@
       $('#pr-add').onclick = async () => {
         const t = $('#pr-title').value.trim();
         if (!t) return;
-        await api('POST', '/api/items', { title: t, kind: 'proposal', company: CURRENT === 'all' ? 'dao' : CURRENT });
+        await api('POST', '/api/items', { title: t, kind: 'proposal', company: createCompany() });
         $('#pr-title').value = '';
         load();
       };
@@ -965,58 +946,6 @@
           load();
         }
       });
-      // Kids Buckets — canonical 10 (DAO-ARCHITECTURE). Amounts are REAL from the live
-      // ledger; $0.00 until payments reconcile into revenue_allocations. Never fabricated.
-      const BUCKETS = [
-        { n: 1, name: 'Platform Subscriptions', surface: 'youandinotai', live: true },
-        { n: 2, name: 'Super Likes', surface: 'youandinotai', live: false },
-        { n: 3, name: '$LOVE Staking Yield', surface: 'youandinotai', live: false },
-        { n: 4, name: 'AI-Solutions Products', surface: 'ai-solutions', live: false },
-        { n: 5, name: '$UKID Staking Yield', surface: 'ai-solutions', live: false },
-        { n: 6, name: 'OnlineRecycle Services', surface: 'onlinerecycle', live: false },
-        { n: 7, name: '$GREEN Staking Yield', surface: 'onlinerecycle', live: false },
-        { n: 8, name: 'Merch Net Profit', surface: 'all', live: false },
-        { n: 9, name: '$AGRAV Infra Revenue', surface: 'aidoesitall', live: false },
-        { n: 10, name: '$AGRAV Staking Yield', surface: 'aidoesitall', live: false },
-      ];
-      let BUCKET_CENTS = {}; // bucket# -> reserved cents (real)
-      function fmt(c) {
-        return '$' + ((c || 0) / 100).toFixed(2);
-      }
-      function renderBuckets() {
-        let total = 0;
-        $('#bucketGrid').innerHTML = BUCKETS.map((b) => {
-          const c = BUCKET_CENTS[b.n] || 0;
-          total += c;
-          return `<div class="card" style="margin:0">
-      <div class="top"><span class="kind ${b.live ? 'idea' : 'task'}" style="${b.live ? 'color:var(--success);border-color:var(--success)' : ''}">${b.live ? 'LIVE' : 'pending'}</span>
-        <span class="mono" style="font-size:10px;color:var(--text-muted)">Bucket ${b.n} · ${esc(b.surface)}</span></div>
-      <div class="title">${esc(b.name)}</div>
-      <div style="font-family:var(--font-heading);font-size:26px;color:${c > 0 ? 'var(--accent)' : 'var(--text-muted)'};margin-top:4px">${fmt(c)}</div>
-      <div class="mono" style="font-size:10px;color:var(--text-muted)">reserved for kids (10% max)</div>
-    </div>`;
-        }).join('');
-        $('#bk-total').textContent = fmt(total);
-      }
-      async function probeBuckets() {
-        renderBuckets();
-        try {
-          const r = await fetch('https://api.youandinotai.com/api/v1/health/allocations');
-          const j = await r.json();
-          const rows = Array.isArray(j) ? j : j.allocations || [];
-          // current ledger maps subscription/Bot-Shield tiers to Bucket 1
-          const cents = rows.reduce((s, a) => s + (a.charitable_amount_cents || a.charitable_cents || 0), 0);
-          BUCKET_CENTS = { 1: cents };
-          $('#bk-source').textContent = rows.length
-            ? 'source: live ledger · ' + rows.length + ' allocations'
-            : 'source: live ledger · 0 reconciled yet';
-          renderBuckets();
-        } catch (e) {
-          $('#bk-source').textContent = 'source: live ledger unreachable (CORS/offline) — showing $0.00';
-          renderBuckets();
-        }
-      }
-      probeBuckets();
       load();
       setInterval(load, 20000);
     </script>
