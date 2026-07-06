@@ -99,8 +99,12 @@ def test_support_chat_escalates_and_operator_can_see_ticket(
             telegram_bot_token="",
             telegram_chat_id="",
             support_ollama_base_url="",
-            support_ollama_model="qwen2.5:7b",
+            support_ollama_model="qwen2.5:0.5b",
             support_ollama_timeout_seconds=10.0,
+            support_ollama_context_tokens=1024,
+            support_ollama_num_predict=220,
+            support_ollama_num_gpu=0,
+            support_total_timeout_seconds=20.0,
         ),
     )
 

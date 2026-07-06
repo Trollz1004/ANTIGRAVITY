@@ -70,9 +70,21 @@ class Settings(BaseSettings):
     support_operator_emails: str = ""
     support_openclaw_url: str = ""
     support_openclaw_timeout_seconds: float = 15.0
+    support_anythingllm_api_url: str = ""
+    support_anythingllm_api_key: str = ""
+    support_anythingllm_workspace_slug: str = "antigravity-support"
+    support_anythingllm_timeout_seconds: float = 15.0
     support_ollama_base_url: str = ""
-    support_ollama_model: str = "qwen2.5:7b"
+    support_ollama_model: str = "qwen2.5:0.5b"
     support_ollama_timeout_seconds: float = 10.0
+    support_ollama_context_tokens: int = 1024
+    support_ollama_num_predict: int = 220
+    support_ollama_num_gpu: int = 0
+    # Hard overall deadline across the whole provider chain
+    # (AnythingLLM -> OpenClaw -> Ollama). Without this each provider's own
+    # timeout stacks additively, so a slow rail could push total latency to
+    # ~40s under the individual defaults.
+    support_total_timeout_seconds: float = 20.0
     gemini_api_key: str = ""
     gemini_model: str = "gemini-2.5-pro"
     kimi_api_key: str = ""
