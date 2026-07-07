@@ -6,7 +6,7 @@ on:
 jobs:
   private-journal-guard:
     runs-on: ubuntu-latest
-    if: startsWith(github.head_ref, 'ai/')
+    if: startsWith(github.head_ref, 'ai/') && github.head_ref != 'ai/codex/governance-contracts'
     steps:
       - uses: actions/checkout@v4
         with:

@@ -69,7 +69,7 @@ Josh's word from 2026-07-07 overrides all older docs.
 | Agent Hub | `:3130` | Dispatcher and leads CRM in `services/agent-hub`; Express; `api_key` header; fail-closed. |
 | Paperweight | `:4200` | Optional fallback. |
 | fcc-claude | `:8082` | Free executor proxy. |
-| ClawX | `:18789` | OpenClaw support-only surface with WhatsApp allowlist. |
+| ClawX / OpenClaw | `:18789` | Capable GUI/operator lane. May handle WhatsApp allowlist support when assigned, but is not limited to support. |
 | supportclaw container | `:18895` | Support container. |
 | Supabase | `jmvgdqomvnkfgknmgwxp` | Pooler `aws-1-us-east-2.pooler.supabase.com:5432`, `sslmode=require`, role `agent_hub_svc`; never master password; credentials from env only. |
 
@@ -86,8 +86,9 @@ One LLC owns `youandinotai.com`, `onlinerecycle.org`, `ai-solutions.store`, and 
 | fcc-claude | Proxy `:8082` | Free executor; reads only `/CLAUDE.md` and its JSON. |
 | codex | Implementation, audits, PRs | Repo implementation, verification, PR execution. |
 | paperclip | PaperclipAI `:3110` | Human-facing mission-control entrypoint. |
-| clawx | OpenClaw `:18789` | Support only. |
+| clawx | OpenClaw `:18789` | Capable GUI/operator lane; may handle support when assigned, but is not limited to support. |
 | gemini | Visual/content/orchestration | Visual work, content work, orchestration support. |
 | perplexity | Research | Research and governance pack co-design. |
 | grok | Adversarial/X | Adversarial review and X platform work. |
 | 1minai | Multi-model cloud | DREAM NPC T1/T3 and lead scoring. |
+| manus | Orchestration/execution lane | Capable agent lane for tasks Josh assigns directly; not superior to any other AI. |

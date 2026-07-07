@@ -19,7 +19,7 @@ v1.0.0 — 2026-07-07 — Architecture truth. Josh's word from 2026-07-07 overri
 | Agent Hub | `:3130` | Dispatcher and leads CRM in `services/agent-hub`; Express; `api_key` header; fail-closed. |
 | Paperweight | `:4200` | Optional fallback. |
 | fcc-claude | `:8082` | Free executor proxy. |
-| ClawX | `:18789` | OpenClaw support-only surface with WhatsApp allowlist. |
+| ClawX / OpenClaw | `:18789` | Capable GUI/operator lane. May handle WhatsApp allowlist support when assigned, but is not limited to support. |
 | supportclaw container | `:18895` | Support container. |
 | Supabase | `jmvgdqomvnkfgknmgwxp` | Uses pooler `aws-1-us-east-2.pooler.supabase.com:5432`, `sslmode=require`, role `agent_hub_svc`; never master password; credentials from env only. |
 
