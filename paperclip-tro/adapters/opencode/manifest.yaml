@@ -1,0 +1,41 @@
+# OpenCode Adapter - NVIDIA free coding assistant
+# Updated: 2026-07-05
+# Uses NVIDIA endpoint for free tier access
+
+adapterType: opencode_local
+paperclip_adapter_type: "opencode_local"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  cli_path: "opencode"  # Assumes opencode CLI installed
+  default_model: "gpt-5.3-codex"
+  fallback_models:
+    - "ollama-local/gemma2:2b"
+    - "openrouter/mistralai/mistral-7b-instruct:free"
+  supported_models:
+    - "opencode/gpt-5.3-codex"
+    - "openrouter/openai/gpt-5.3-codex"
+    - "gpt-5.5"  # Codex-specific
+  temperature: 0.3  # Lower for code
+  max_tokens: 4096
+
+# Authentication: CLI login flow
+paperclip_alias: "opencode"
+
+# Provider metadata
+provider_info:
+  name: "OpenCode"
+  type: "cloud"
+  auth_method: "cli_login"
+  auth_command: "opencode login"
+  fallback_ladder:
+    - "ollama-local/*"  # First: local zero-cloud
+    - "ollama-cloud/*"  # Second: Joshua cloud models
+    - "openrouter/*:free"  # Third: free cloud
+    - "openai/gpt-5.5-pro"  # Fourth: paid/auth
+
+# Fallback strategy per ADAPTORS.md
+fallback_strategy:
+  priority:
+    - "local"
+    - "cloud_free"
+    - "cloud_paid"

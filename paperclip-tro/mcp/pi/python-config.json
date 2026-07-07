@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "pi-provider-bridge": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/pi/provider_bridge.py"
+      ],
+      "env": {
+        "PROVIDER_PATH": "openai-codex/gpt-5.5-pro",
+        "STYLE": "empathetic",
+        "IDEAL_FOR": "customer_support,emotional_intelligence"
+      }
+    }
+  }
+}

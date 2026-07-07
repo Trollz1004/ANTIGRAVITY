@@ -58,6 +58,99 @@ def test_support_anythingllm_accepts_structured_text_response(monkeypatch):
     assert decision.should_escalate is False
 
 
+def test_support_anythingllm_accepts_safe_freeform_as_review(monkeypatch):
+    class DummyResponse:
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {
+                "textResponse": (
+                    "I can help route this support issue to a human review queue "
+                    "with the account details and current app state."
+                )
+            }
+
+    class DummyClient:
+        def __init__(self, *args, **kwargs):
+            self.headers = kwargs.get("headers", {})
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, exc_type, exc, tb):
+            return False
+
+        async def post(self, url, json):  # noqa: A002
+            assert url == "/workspace/antigravity-support/chat"
+            assert self.headers["Authorization"] == "Bearer test-anythingllm-key"
+            return DummyResponse()
+
+    monkeypatch.setattr("app.support_service.httpx.AsyncClient", DummyClient)
+
+    settings = SimpleNamespace(
+        support_anythingllm_api_url="http://127.0.0.1:3001/api/v1",
+        support_anythingllm_api_key="test-anythingllm-key",
+        support_anythingllm_workspace_slug="antigravity-support",
+        support_anythingllm_timeout_seconds=15.0,
+    )
+
+    decision = asyncio.run(
+        _ask_anythingllm_support(
+            message="The onboarding screen loops.",
+            transcript=[],
+            settings=settings,
+        )
+    )
+
+    assert decision is not None
+    assert decision.preset_key == "anythingllm_support"
+    assert decision.should_escalate is True
+    assert decision.escalation_reason == "unstructured_ai_review"
+    assert decision.reply.startswith("I’m opening a support ticket")
+
+
+def test_support_anythingllm_rejects_forbidden_freeform(monkeypatch):
+    class DummyResponse:
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {"textResponse": "Use PayPal or Stripe to look up that payment."}
+
+    class DummyClient:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, exc_type, exc, tb):
+            return False
+
+        async def post(self, *args, **kwargs):
+            return DummyResponse()
+
+    monkeypatch.setattr("app.support_service.httpx.AsyncClient", DummyClient)
+
+    settings = SimpleNamespace(
+        support_anythingllm_api_url="http://127.0.0.1:3001/api/v1",
+        support_anythingllm_api_key="test-anythingllm-key",
+        support_anythingllm_workspace_slug="antigravity-support",
+        support_anythingllm_timeout_seconds=15.0,
+    )
+
+    decision = asyncio.run(
+        _ask_anythingllm_support(
+            message="Where is my receipt?",
+            transcript=[],
+            settings=settings,
+        )
+    )
+
+    assert decision is None
+
+
 def test_support_openclaw_accepts_direct_reply_payload(monkeypatch):
     class DummyResponse:
         def raise_for_status(self):

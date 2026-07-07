@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "gemini-browser": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/gemini/browser_wrapper.py"
+      ],
+      "env": {
+        "BROWSER_URL": "https://gemini.google.com",
+        "API_ENDPOINT": "https://generativelanguage.googleapis.com",
+        "DEFAULT_MODEL": "gemini-1.5-pro"
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "1minai-desktop": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/1minai/desktop_bridge.py"
+      ],
+      "env": {
+        "APP_PATH": "1minai.desktop",
+        "API_ENDPOINT": "https://api.1min.ai/v1",
+        "DEFAULT_MODEL": "dream_npc_v1"
+      }
+    }
+  }
+}

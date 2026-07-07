@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "opencode-fallback-ladder": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/opencode/fallback_ladder.py"
+      ],
+      "env": {
+        "PRIMARY": "opencode/gpt-5.3-codex",
+        "FALLBACK_1": "ollama-local/gemma2:2b",
+        "FALLBACK_2": "openrouter/mistralai/mistral-7b-instruct:free",
+        "FALLBACK_3": "openai/gpt-5.5-pro"
+      }
+    }
+  }
+}

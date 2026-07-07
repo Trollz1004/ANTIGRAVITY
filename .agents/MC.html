@@ -1,0 +1,56 @@
+<!-- @dsCard group="Self-Improving Agents" -->
+# Self-Improving Agent Protocol (MC.html)
+
+> MCP Server: Paperclip Agent Memory
+> Updated: 2026-07-05
+
+## Core Principle
+
+Every agent reads STATE.md on start, writes on exit. This is MANDATORY.
+
+## File Structure
+
+```
+paperclip-tro/agents/<agent-id>/
+  HEARTBEAT.md    ← Pointers only. Paperclip reads this.
+  STATE.md        ← Self-improving session log. 4k max.
+  AGENT.md        ← Full config. Read-only.
+```
+
+## HEARTBEAT.md Format
+
+```yaml
+agent: <agent-id>
+config: paperclip-tro/agents/<agent-id>/AGENT.md
+state: paperclip-tro/agents/<agent-id>/STATE.md
+skills_dir: .agents/skills/
+adapter: <adapter-name>
+mcp_config: paperclip-tro/mcp/<adapter>/config.json
+last_beat: <ISO timestamp>
+status: <active|idle|error>
+```
+
+## STATE.md Rules
+
+1. **Max 4k tokens** - prune/trim on write
+2. **Read FIRST** - before any work
+3. **Write LAST** - on session exit
+4. **Timestamp mandatory** - `> updated: <ISO>`
+5. **Prune strategy** - keep last 3 sessions
+
+## MCP Config Location
+
+Each adapter has MCP config in:
+```
+paperclip-tro/mcp/<adapter>/
+  config.json       ← JSON MCP servers
+  python-config.json ← Python MCP servers
+```
+
+## Skills Location
+
+```
+.agents/skills/<skill-dir>/SKILL.md
+```
+
+Agents lazy-load skills, never preload at boot.

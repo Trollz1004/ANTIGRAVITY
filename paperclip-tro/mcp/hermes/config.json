@@ -1,0 +1,47 @@
+# Hermes MCP Configuration
+# Updated: 2026-07-05
+# Required for Hermes to access Agent Hub and workspace tools
+
+{
+  "mcpServers": {
+    "agent-hub": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "http://127.0.0.1:3130/api/mcp/tools"
+      ],
+      "env": {
+        "AGENT_HUB_URL": "http://127.0.0.1:3130",
+        "PROJECT": "ANTIGRAVITY",
+        "CEO_LANE": "hermes"
+      }
+    },
+    "hermes-workspace": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "C:/Antigravity", "E:/CLAUDE's-N-Joshua's-Dream-Online-MMORPG"]
+    },
+    "hermes-dashboard": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/services/hermes-dashboard/mcp/tools.py"
+      ],
+      "env": {
+        "DASHBOARD_URL": "http://127.0.0.1:9119",
+        "WORKSPACE_URL": "http://127.0.0.1:3000"
+      }
+    },
+    "leads-crm": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/src/leads/mcp/leads.py"
+      ],
+      "env": {
+        "SUPABASE_URL": "https://jmvgdqomvnkfgknmgwxp.supabase.co"
+      }
+    },
+    "git": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git"]
+    }
+  }
+}

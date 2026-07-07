@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "grok-cli": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/grok/cli_wrapper.py"
+      ],
+      "env": {
+        "AUTH_COMMAND": "Visit grok.x.ai and sign in with X (Twitter) account",
+        "API_KEY_URL": "https://docs.x.ai"
+      }
+    }
+  }
+}

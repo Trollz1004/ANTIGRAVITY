@@ -1,0 +1,45 @@
+# Hermes Adapter - Router for growth, support, research, leads
+# Updated: 2026-07-05
+# Canonical workspace/memory provider
+
+adapterType: hermes_router
+paperclip_adapter_type: "hermes"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  workspace_url: "http://127.0.0.1:3000"
+  dashboard_url: "http://127.0.0.1:9119"
+  router_endpoint: "http://localhost:11435"
+  model: "openrouter/free"
+  temperature: 0.7
+  max_tokens: 4096
+  # Falls back to OpenRouter/Ollama
+  fallback_providers:
+    - "openrouter"
+    - "ollama"
+
+# Authentication: Workspace browser
+paperclip_alias: "hermes"
+
+# Provider metadata
+provider_info:
+  name: "Hermes"
+  type: "local_router"
+  auth_method: "browser_workspace"
+  endpoints:
+    workspace: "http://127.0.0.1:3000"
+    dashboard: "http://127.0.0.1:9119"
+    router: "http://localhost:11435"
+  # Per ROSTER.md - CEO lane
+  role: "CEO lane: growth, support, research, leads"
+
+# Per ADAPTORS.md requirements
+deployment:
+  workspace_port: 3000
+  dashboard_port: 9119
+  router_port: 11435
+  memory_provider: "always_active"
+
+# Claude/FCC integration
+mcp_integration:
+  enabled: true
+  config_dir: "paperclip-tro/mcp/hermes"

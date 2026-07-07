@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "fcc-claude-bridge": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/fcc-server/claude_bridge.py"
+      ],
+      "env": {
+        "FCC_PROXY": "http://127.0.0.1:8082",
+        "FCC_ADMIN": "http://127.0.0.1:8082/admin",
+        "CLI_COMMAND": "fcc-claude",
+        "ROLE": "CEO helper lane - code, compliance, doctrine"
+      }
+    },
+    "fcc-session-manager": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/fcc-server/session_manager.py"
+      ],
+      "env": {
+        "STATE_DIR": "~/.claude-fcc",
+        "MAX_CONTEXT_TOKENS": "40000"
+      }
+    }
+  }
+}

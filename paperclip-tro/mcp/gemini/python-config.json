@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "gemini-cli": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/gemini/cli_wrapper.py"
+      ],
+      "env": {
+        "CLI_COMMAND": "gemini",
+        "AUTH_COMMAND": "Visit gemini.google.com and sign in with Google account",
+        "API_KEY_URL": "https://aistudio.google.com/apikey"
+      }
+    }
+  }
+}

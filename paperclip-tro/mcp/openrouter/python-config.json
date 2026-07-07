@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "openrouter-free-tier": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/openrouter/free_tier.py"
+      ],
+      "env": {
+        "OPENROUTER_API_KEY": "${OPENROUTER_API_KEY}",
+        "FREE_MODELS": [
+          "mistralai/mistral-7b-instruct:free",
+          "google/gemini-flash-1.5:free"
+        ]
+      }
+    }
+  }
+}
