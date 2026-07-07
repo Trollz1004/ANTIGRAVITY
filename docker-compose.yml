@@ -136,6 +136,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    profiles:
+      - openclaw
 
   whatsapp-bridge:
     build:
@@ -170,6 +172,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    profiles:
+      - openclaw
 
   date-service:
     image: node:22-alpine
@@ -200,10 +204,10 @@ services:
   cloudflare-tunnel:
     image: cloudflare/cloudflared:latest
     container_name: cloudflare-tunnel
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN:-placeholder}
     restart: unless-stopped
     environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:-}
     profiles:
       - cloudflare
 
