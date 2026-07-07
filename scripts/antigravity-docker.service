@@ -1,0 +1,34 @@
+# ANTIGRAVITY Docker Stack Systemd Service
+# Place this file at: /etc/systemd/system/antigravity-docker.service
+#
+# Install:
+#   sudo cp scripts/antigravity-docker.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable antigravity-docker
+#   sudo systemctl start antigravity-docker
+#
+# Check status:
+#   sudo systemctl status antigravity-docker
+#   sudo journalctl -u antigravity-docker -f
+
+[Unit]
+Description=ANTIGRAVITY Docker Compose Stack
+Documentation=file:///opt/antigravity/DOCKER-STACK-README.md
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/antigravity
+EnvironmentFile=/opt/antigravity/.env.docker
+ExecStartPre=/usr/bin/docker-compose pull
+ExecStart=/usr/bin/docker-compose up -d
+ExecStop=/usr/bin/docker-compose down
+Restart=on-failure
+RestartSec=10s
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
