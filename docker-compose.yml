@@ -1,8 +1,83 @@
-# T5500 OPUS Stack — Docker Services
-# Usage: docker-compose up -d
-# Auto-starts on reboot via Task Scheduler (see scripts/STARTUP.bat)
+version: '3.9'
 
 services:
+  hermes-agent:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes-agent
+    ports:
+      - "127.0.0.1:8642:8642"
+    environment:
+      - API_SERVER_ENABLED=true
+      - API_SERVER_HOST=0.0.0.0
+      - API_SERVER_PORT=8642
+      - GATEWAY_ALLOW_ALL_USERS=true
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+    volumes:
+      - hermes-data:/root/.hermes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8642/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  hermes-dashboard:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes-dashboard
+    command: hermes dashboard
+    ports:
+      - "127.0.0.1:9119:9119"
+    environment:
+      - DASHBOARD_HOST=0.0.0.0
+      - DASHBOARD_PORT=9119
+    volumes:
+      - hermes-data:/root/.hermes
+    depends_on:
+      hermes-agent:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9119/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  hermes-workspace:
+    build:
+      context: ./hermes
+      dockerfile: Dockerfile
+    container_name: hermes-workspace
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST=0.0.0.0
+      - HERMES_API_URL=http://hermes-agent:8642
+      - HERMES_DASHBOARD_URL=http://hermes-dashboard:9119
+      - HERMES_PASSWORD=${HERMES_PASSWORD:-antigravity}
+      - COOKIE_SECURE=0
+      - TRUST_PROXY=1
+    volumes:
+      - hermes-workspace-data:/app/dist
+    depends_on:
+      hermes-agent:
+        condition: service_healthy
+      hermes-dashboard:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
   redis:
     image: redis:alpine
     container_name: redis
@@ -15,9 +90,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    labels:
-      - "logging=promtail"
-      - "logging.jobname=redis"
 
   qdrant:
     image: qdrant/qdrant
@@ -34,19 +106,16 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
-    labels:
-      - "logging=promtail"
-      - "logging.jobname=qdrant"
 
   openclaw:
     build:
-      context: ../openclaw
+      context: ./openclaw
       dockerfile: Dockerfile
     container_name: openclaw
     ports:
       - "3200:3200"
     env_file:
-      - ../openclaw/.env
+      - ./openclaw/.env
     environment:
       - REDIS_URL=redis://redis:6379
       - QDRANT_URL=http://qdrant:6333
@@ -54,7 +123,7 @@ services:
       - ./logs:/logs
       - openclaw_wwebjs:/app/.wwebjs_auth
       - openclaw_wwebjs_cache:/app/.wwebjs_cache
-      - ../openclaw/.env:/app/.env:ro
+      - ./openclaw/.env:/app/.env:ro
     depends_on:
       redis:
         condition: service_healthy
@@ -67,19 +136,16 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    labels:
-      - "logging=promtail"
-      - "logging.jobname=openclaw"
 
   whatsapp-bridge:
     build:
-      context: ../openclaw
+      context: ./openclaw
       dockerfile: Dockerfile
     container_name: whatsapp-bridge
     user: root
     command: node whatsapp-bridge.js
     env_file:
-      - ../openclaw/.env
+      - ./openclaw/.env
     environment:
       - REDIS_URL=redis://redis:6379
       - QDRANT_URL=http://qdrant:6333
@@ -104,10 +170,68 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    labels:
-      - "logging=promtail"
-      - "logging.jobname=whatsapp-bridge"
+
+  date-service:
+    image: node:22-alpine
+    container_name: date-service
+    ports:
+      - "127.0.0.1:8888:8888"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8888/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        cat > /tmp/date-server.js << 'EOF'
+        const http = require('http');
+        const server = http.createServer((req, res) => {
+          res.writeHead(200, {'Content-Type': 'application/json'});
+          res.end(JSON.stringify({timestamp: new Date().toISOString(), unix: Date.now()}));
+        });
+        server.listen(8888, '0.0.0.0', () => console.log('Date service on :8888'));
+        EOF
+        node /tmp/date-server.js
+
+  cloudflare-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflare-tunnel
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    restart: unless-stopped
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    profiles:
+      - cloudflare
+
+  wrangler-dev:
+    build:
+      context: ./.wrangler
+      dockerfile: Dockerfile
+    container_name: wrangler-dev
+    working_dir: /app
+    command: wrangler dev --host 0.0.0.0 --port 8787
+    ports:
+      - "127.0.0.1:8787:8787"
+    environment:
+      - WRANGLER_SEND_METRICS=false
+    volumes:
+      - ./.wrangler:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8787/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    profiles:
+      - wrangler
 
 volumes:
   openclaw_wwebjs:
   openclaw_wwebjs_cache:
+  hermes-data:
+  hermes-workspace-data:
