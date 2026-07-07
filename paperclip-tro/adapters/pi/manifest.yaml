@@ -1,0 +1,32 @@
+# Pi Adapter - Conversational AI
+# Updated: 2026-07-05
+
+adapterType: pi_local
+paperclip_adapter_type: "pi_local"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  # Pi runs locally or via OpenCode provider path
+  model_endpoint: "openai-codex/gpt-5.5-pro"
+  temperature: 0.8  # Higher for conversation
+  max_tokens: 2048
+  context_window: 4096
+
+# Authentication: Uses Codex provider path
+paperclip_alias: "pi"
+
+# Provider metadata
+provider_info:
+  name: "Pi"
+  type: "local"
+  auth_method: "provider_redirect"
+  note: "Uses Codex provider path: openai-codex/gpt-5.5-pro"
+  # Codex CLI uses its own ChatGPT auth backend
+  # Cannot use Pi endpoint directly in Codex CLI
+
+# Conversational characteristics
+conversation:
+  style: "empathetic"
+  ideal_for:
+    - "customer_support"
+    - "user_interaction"
+    - "emotional_intelligence"

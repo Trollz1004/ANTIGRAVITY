@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "openai-production": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/openai/production_client.py"
+      ],
+      "env": {
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}",
+        "MODEL": "gpt-4o",
+        "MAX_TOKENS": "128000",
+        "USE_CASE": "production-grade tasks, less drift"
+      }
+    }
+  }
+}

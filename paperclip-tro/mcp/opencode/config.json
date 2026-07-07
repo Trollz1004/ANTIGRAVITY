@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "opencode-cli": {
+      "command": "opencode",
+      "args": [
+        "--mcp"
+      ],
+      "env": {
+        "CWD": "C:/Antigravity",
+        "MODEL": "gpt-5.3-codex"
+      }
+    }
+  }
+}

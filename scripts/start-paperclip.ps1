@@ -73,13 +73,20 @@ if (-not $loaded) {
     Log 'WARN: no env file found - Paperclip may fail without API keys etc.'
 }
 
-# The real master env currently carries an outdated DATABASE_URL pointing at a
-# local crosslist DB on localhost:5432. Remove it so Paperclip uses its configured
-# embedded PostgreSQL instance (local_trusted mode). If you ever want to switch
-# to an external DB (e.g. Supabase), set DATABASE_URL before running this script.
-if ($env:DATABASE_URL -match 'localhost:5432/crosslist') {
+# Paperclip's local_trusted instance is configured for embedded PostgreSQL.
+# Some machine-wide env files use DATABASE_URL for unrelated apps such as
+# AnythingLLM. Clear inherited DATABASE_URL unless explicitly allowed so
+# Paperclip does not silently try the wrong database.
+if ($env:DATABASE_URL -and $env:PAPERCLIP_ALLOW_EXTERNAL_DATABASE_URL -ne '1') {
+    $dbSummary = 'set'
+    try {
+        $dbUri = [uri]$env:DATABASE_URL
+        $dbSummary = if ($dbUri.Host) { "$($dbUri.Scheme)://$($dbUri.Host):$($dbUri.Port)$($dbUri.AbsolutePath)" } else { "$($dbUri.Scheme):$($dbUri.AbsolutePath)" }
+    } catch {
+        $dbSummary = 'set but unparseable'
+    }
     Remove-Item -Path 'Env:DATABASE_URL' -ErrorAction SilentlyContinue
-    Log 'cleared stale DATABASE_URL (localhost:5432/crosslist) so Paperclip uses embedded Postgres'
+    Log "cleared inherited DATABASE_URL ($dbSummary) so Paperclip uses embedded Postgres"
 }
 if (-not $env:DATABASE_URL) {
     Log 'DATABASE_URL not set; Paperclip will use configured embedded Postgres'

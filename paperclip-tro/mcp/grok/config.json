@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "grok-browser": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/grok/browser_wrapper.py"
+      ],
+      "env": {
+        "BROWSER_URL": "https://grok.x.ai",
+        "API_ENDPOINT": "https://api.x.ai/v1",
+        "DEFAULT_MODEL": "grok-beta"
+      }
+    }
+  }
+}

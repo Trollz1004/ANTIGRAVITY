@@ -1,0 +1,48 @@
+# Ollama Local Adapter - Local model inference
+# Updated: 2026-07-05
+# Node: sabretooth (localhost:11434)
+
+adapterType: ollama_local
+paperclip_adapter_type: "ollama_local"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  host: "localhost"
+  port: 11434
+  base_url: "http://localhost:11434"
+  # Available local models:
+  # - gemma2:2b (lightweight, fast)
+  # - gemma2:4b (balanced)
+  # - custom models (user-defined)
+  default_model: "gemma2:2b"
+  models:
+    - "gemma2:2b"
+    - "gemma2:4b"
+    - "llama3.1:8b"
+    - "mistral:7b"
+  # Resource limits
+  max_context_tokens: 4096
+  concurrent_requests: 3
+  timeout_seconds: 120
+  # GPU offloading (if available)
+  gpu_layers: -1  # -1 = all layers on GPU
+  num_thread: 8   # CPU threads if GPU unavailable
+
+# Authentication: Local - no auth required
+# Models pulled via: ollama pull <model-name>
+paperclip_alias: "ollama"
+
+# Provider metadata
+provider_info:
+  name: "Ollama"
+  type: "local"
+  auth_method: "none"
+  auth_command: "ollama pull <model-name>"
+  endpoints:
+    api: "http://localhost:11434/api/chat"
+    generate: "http://localhost:11434/api/generate"
+    pull: "http://localhost:11434/api/pull"
+
+# Cost: Free (local inference)
+pricing:
+  type: "free"
+  note: "Local GPU/CPU inference"

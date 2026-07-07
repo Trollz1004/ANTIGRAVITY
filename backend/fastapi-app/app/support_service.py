@@ -17,6 +17,26 @@ logger = logging.getLogger(__name__)
 
 MAX_SUBJECT_LENGTH = 120
 ANYTHINGLLM_RESPONSE_KEYS = ("textResponse", "response", "text")
+FREEFORM_SUPPORT_BLOCKLIST = (
+    "paypal",
+    "stripe",
+    "aws",
+    "tax",
+    "taxes",
+    "donation",
+    "donations",
+    "dao",
+    "token",
+    "investment",
+    "investor",
+    "medical-benefit",
+    "beneficiary",
+    "nonprofit",
+    "non-profit",
+    "charity",
+    "private accounting",
+    "refund guarantee",
+)
 
 
 @dataclass(slots=True)
@@ -333,6 +353,33 @@ def _decision_from_payload(
     )
 
 
+def _decision_from_safe_freeform(
+    *,
+    raw: str,
+    message: str,
+    preset_key: str,
+) -> SupportDecision | None:
+    reply = _normalize_text(raw)
+    if len(reply) < 12:
+        return None
+
+    lowered = reply.lower()
+    if any(term in lowered for term in FREEFORM_SUPPORT_BLOCKLIST):
+        return None
+
+    return _decision(
+        reply=(
+            "I’m opening a support ticket so a human can review this with the "
+            "conversation context."
+        ),
+        category="general",
+        preset_key=preset_key,
+        should_escalate=True,
+        escalation_reason="unstructured_ai_review",
+        message=message,
+    )
+
+
 async def _ask_anythingllm_support(
     *,
     message: str,
@@ -367,10 +414,10 @@ async def _ask_anythingllm_support(
         logger.warning("Support AnythingLLM reply failed: %s", exc)
         return None
 
+    raw = ""
     if isinstance(payload, dict) and payload.get("reply"):
         parsed = payload
     elif isinstance(payload, dict):
-        raw = ""
         for key in ANYTHINGLLM_RESPONSE_KEYS:
             value = payload.get(key)
             if value:
@@ -381,6 +428,14 @@ async def _ask_anythingllm_support(
         parsed = None
 
     if not parsed:
+        decision = _decision_from_safe_freeform(
+            raw=raw,
+            message=message,
+            preset_key="anythingllm_support",
+        )
+        if decision:
+            logger.info("Support AnythingLLM reply was safe freeform text.")
+            return decision
         logger.warning("Support AnythingLLM reply was not structured JSON.")
         return None
 

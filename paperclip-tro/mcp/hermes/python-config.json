@@ -1,0 +1,39 @@
+# Hermes MCP Python Configuration
+# Updated: 2026-07-05
+# Python-based MCP servers for Hermes operations
+
+{
+  "mcpServers": {
+    "hermes-growth": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/services/hermes/mcp/growth.py"
+      ],
+      "env": {
+        "HERMES_URL": "http://127.0.0.1:3000"
+      }
+    },
+    "hermes-support": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/services/hermes/mcp/support.py"
+      ]
+    },
+    "supabase-client": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/services/supabase/mcp/client.py"
+      ],
+      "env": {
+        "SUPABASE_URL": "https://jmvgdqomvnkfgknmgwxp.supabase.co",
+        "SUPABASE_KEY": "${SUPABASE_ANON_KEY}"
+      }
+    },
+    "temperature": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/services/temperature/mcp/temp.py"
+      ]
+    }
+  }
+}

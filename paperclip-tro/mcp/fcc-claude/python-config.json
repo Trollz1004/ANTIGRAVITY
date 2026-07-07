@@ -1,0 +1,34 @@
+# FCC-Claude MCP Python Configuration
+# Updated: 2026-07-05
+# Python-based MCP server config for FCC-Claude
+
+{
+  "mcpServers": {
+    "agent-hub-task-router": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/services/agent-hub/mcp/task_router.py"
+      ],
+      "env": {
+        "AGENT_HUB_URL": "http://127.0.0.1:3130",
+        "TASK_API": "/api/entities/AgentTask",
+        "DISPATCH_API": "/api/dispatch/routes"
+      }
+    },
+    "hcp-dashboard": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/services/hcp-dashboard/mcp/tools.py"
+      ],
+      "env": {
+        "HCP_URL": "http://127.0.0.1:8083"
+      }
+    },
+    "project-export": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/services/project-export/mcp/export.py"
+      ]
+    }
+  }
+}

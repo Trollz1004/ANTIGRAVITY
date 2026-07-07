@@ -1,0 +1,38 @@
+# FCC-Claude Adapter - Free Claude Code via proxy
+# Updated: 2026-07-05
+# Canonical helper lane for code, compliance, doctrine, payments
+
+adapterType: fcc_claude_proxy
+paperclip_adapter_type: "fcc_claude"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  proxy_url: "http://127.0.0.1:8082"
+  admin_url: "http://127.0.0.1:8082/admin"
+  cli_command: "fcc-claude"  # Per AGENT-DOCTRINE.md
+  state_file: "~/.claude-fcc"  # FCC-specific config dir
+  # FCC context limit
+  max_context_tokens: 40000
+  model: "claude-3-sonnet"
+  temperature: 0.3  # Lower for compliance/code
+
+# Authentication: FCC proxy (no Anthropic API key required)
+paperclip_alias: "fcc-claude"
+
+# Provider metadata
+provider_info:
+  name: "FCC Claude"
+  type: "local_proxy"
+  auth_method: "browser_controlled"
+  note: "No Anthropic API key required - FCC proxy handles auth"
+  endpoints:
+    proxy: "http://127.0.0.1:8082"
+    admin: "http://127.0.0.1:8082/admin"
+  # Per ROSTER.md - CEO lane capability
+  role: "CEO helper lane - code, compliance, doctrine"
+
+# Per ADAPTORS.md requirements
+deployment:
+  fcc_proxy_port: 8082
+  admin_panel: "http://127.0.0.1:8082/admin"
+  requires_anthropic_key: false
+  browser_visible: true

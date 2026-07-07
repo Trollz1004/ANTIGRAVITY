@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "1minai-dream-npc": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/1minai/dream_npc.py"
+      ],
+      "env": {
+        "PURPOSE": "NPC AI for DREAM ONLINE",
+        "CHANNEL": "#dream-online",
+        "TEMPERATURE": "0.9"
+      }
+    }
+  }
+}

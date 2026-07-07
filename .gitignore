@@ -117,6 +117,7 @@ apps/antigravity-dashboard/vite.config.d.ts
 apps/antigravity-dashboard/tsconfig*.tsbuildinfo
 
 blobs/
+manifests/registry.ollama.ai/
 nul
 
 tmp_*

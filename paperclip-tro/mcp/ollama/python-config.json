@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "ollama-local-inference": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/ollama/local_inference.py"
+      ],
+      "env": {
+        "OLLAMA_HOST": "http://localhost:11434",
+        "MODELS_DIR": "C:/Antigravity/models/ollama",
+        "GPU_LAYRES": "-1",
+        "NUM_THREAD": "8"
+      }
+    }
+  }
+}

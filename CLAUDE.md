@@ -37,9 +37,12 @@ Updated: 2026-07-05 (final form — one PaperclipAI entrypoint + Agent Hub dispa
 
 - `paperclip-tro/README.md` — one-entrypoint boot readme for all AI lanes
 - `AGENT-DOCTRINE.md` — self-improving state protocol, provider distribution
+- `.agents/UNIVERSAL-AGENT-BOOT.md` — compact model-agnostic boot checklist for spawned sessions
+- `.agents/skills/self-improving-system/skills.md` — compact index of available skills; read this before loading specific skill files
 - `services/agent-hub/README.md` — Agent Hub service docs (tasks + leads CRM)
 - `services/agent-hub/migrations/002_create_leads.sql` — leads/campaigns/templates/rules/pages/platforms schema
 - `paperclip-tro/ROSTER.md` — PaperclipAI + Agent Hub roster and node roles
+- `paperclip-tro/projects/FCC-CLAUDE-overlay.md` — optional FCC Claude-compatible behavior overlay; read only for `fcc-claude` tuning/operation
 - `paperclip-tro/ADAPTORS.md` — adapter type mapping
 - `paperclip-tro/COMPANY.md` — TRO company structure
 - `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md` — public copy rules

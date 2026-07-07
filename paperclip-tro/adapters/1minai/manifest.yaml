@@ -1,0 +1,34 @@
+# 1min.AI Adapter - Desktop app cloud provider
+# Updated: 2026-07-05
+# Used for DREAM NPC AI
+
+adapterType: 1minai_desktop
+paperclip_adapter_type: "1minai_cloud"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  app_path: "1minai.desktop"  # Desktop app reference
+  api_endpoint: "https://api.1min.ai/v1"
+  default_model: "dream_npc_v1"  # DREAM-specific NPC model
+  models:
+    - "dream_npc_v1"
+    - "dream_npc_v2"
+    - "general_conversational"
+  temperature: 0.9  # Creative for NPCs
+  max_tokens: 1024
+
+# Authentication: Desktop app login
+paperclip_alias: "1minai"
+
+# Provider metadata
+provider_info:
+  name: "1min.AI"
+  type: "cloud_desktop"
+  auth_method: "desktop_app_login"
+  auth_command: "Open 1min.AI desktop app and sign in"
+  app_url: "https://1min.ai"
+
+# DREAM-specific usage
+dream_integration:
+  purpose: "NPC AI for DREAM ONLINE"
+  channel: "#dream-online"
+  enabled: true

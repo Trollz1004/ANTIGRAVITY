@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "ollama-chat": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "ollama-llm-mcp",
+        "--host",
+        "localhost:11434"
+      ],
+      "env": {
+        "OLLAMA_HOST": "http://localhost:11434",
+        "DEFAULT_MODEL": "gemma2:2b"
+      }
+    },
+    "ollama-models": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/ollama/model_manager.py"
+      ]
+    }
+  }
+}

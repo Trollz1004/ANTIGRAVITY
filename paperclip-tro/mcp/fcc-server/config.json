@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "fcc-admin": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "http://127.0.0.1:8082/admin/mcp/tools"
+      ],
+      "env": {
+        "FCC_ADMIN_URL": "http://127.0.0.1:8082/admin",
+        "FCC_PROXY_URL": "http://127.0.0.1:8082",
+        "PROJECT": "ANTIGRAVITY",
+        "CEO_LANE": "claude"
+      }
+    },
+    "fcc-proxy-tunnel": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/fcc-server/proxy_tunnel.py"
+      ],
+      "env": {
+        "PROXY_URL": "http://127.0.0.1:8082",
+        "ADMIN_URL": "http://127.0.0.1:8082/admin"
+      }
+    }
+  }
+}

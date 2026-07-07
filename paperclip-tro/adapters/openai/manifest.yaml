@@ -1,0 +1,46 @@
+# OpenAI Adapter - Paid cloud models (faster, less drift)
+# Updated: 2026-07-05
+# User has paid OpenAI account for production use
+
+adapterType: openai_cloud
+paperclip_adapter_type: "openai_cloud"
+paperclip_adapter_config:
+  cwd: "C:\\antigravity"
+  base_url: "https://api.openai.com/v1"
+  # Paid models - faster, less drift than free tiers
+  models:
+    - "gpt-4o"
+    - "gpt-4o-mini"
+    - "gpt-4-turbo"
+    - "gpt-4"
+    - "gpt-3.5-turbo"
+  default_model: "gpt-4o"
+  max_tokens: 128000
+  temperature: 0.7
+
+# Authentication: OpenAI API key
+paperclip_alias: "openai"
+
+# Provider metadata
+provider_info:
+  name: "OpenAI"
+  type: "cloud_paid"
+  auth_method: "api_key"
+  env_var: "OPENAI_API_KEY"
+  auth_command: "Set OPENAI_API_KEY env var or use OpenAI dashboard"
+  endpoints:
+    chat: "https://api.openai.com/v1/chat/completions"
+    models: "https://api.openai.com/v1/models"
+  dashboard: "https://platform.openai.com/api-keys"
+
+# Paid tier - faster, less drift
+pricing:
+  type: "paid"
+  note: "Production-grade models, faster inference, less drift"
+
+# Use for: Critical tasks requiring reliability
+use_cases:
+  - "production_deployments"
+  - "critical_code_generation"
+  - "high_stakes_decisions"
+  - "customer_facing_features"

@@ -13,17 +13,18 @@ metadata:
 
 ## Quick Reference
 
-Read `/mnt/c/antigravity/skills/self-improving-system/skills.md` for the complete skills index.
+Read `C:\antigravity\.agents\skills\self-improving-system\skills.md` for the complete local skills index.
 
 ## File Locations
 
 | Type | Path |
 |------|------|
-| Skills index | `/mnt/c/antigravity/skills/self-improving-system/skills.md` |
-| Session notes | `/mnt/c/antigravity/skills/self-improving-system/session-notes.md` |
-| Core skills | `.agents/skills/<skill-name>/SKILL.md` |
-| Secondary skills | `skills/<skill-name>/SKILL.md` |
-| Pi agent skills | See skill system (`agent-browser skills get <name>` or `/home/josh/.pi/agent/skills/`) |
+| Universal boot | `C:\antigravity\.agents\UNIVERSAL-AGENT-BOOT.md` |
+| Skills index | `C:\antigravity\.agents\skills\self-improving-system\skills.md` |
+| Session notes | `C:\antigravity\.agents\skills\self-improving-system\session-notes.md` |
+| Core skills | `C:\antigravity\.agents\skills\<skill-name>\SKILL.md` |
+| Agent configs | `C:\antigravity\paperclip-tro\agents\<agent-id>\AGENT.md` |
+| Agent state | `C:\antigravity\paperclip-tro\agents\<agent-id>\STATE.md` |
 
 ## Usage
 

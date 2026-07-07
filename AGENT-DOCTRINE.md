@@ -1,12 +1,14 @@
 # AGENT DOCTRINE — Self-Improving State Protocol
 
 > Authority: Joshua Coleman. Created 2026-07-03 by Claude (Max).
-> This doctrine is absolute. No AI platform is exempt.
+> Cleaned 2026-07-06 for model-agnostic, low-token boot across Claude, FCC, Ollama, NVIDIA, Codex, Gemini, Hermes, OpenCode, and related adapters.
 
 ## The Rule
 
 Every agent reads its STATE.md on start. Every agent writes to it on exit.
-No exceptions. Failure = removal from the mission.
+Agents that cannot maintain state should be paused or repaired before receiving more work.
+
+For the compact universal boot checklist, see `.agents/UNIVERSAL-AGENT-BOOT.md`.
 
 ## File Structure Per Agent
 
@@ -115,12 +117,10 @@ Roster (Agent Hub platforms — see `src/platforms.js` for the full validated li
 
 FCC adapter cmd in Paperclip config MUST be `fcc-claude` (not `claude`).
 
-## Timestamp Audit (Joshua enforces this)
+## Timestamp Audit
 
-Every STATE.md write MUST include `> updated: <ISO timestamp>`.
-Agents that fail to timestamp their self-improving files get their platform deleted.
-No bypass for any agent. Only official Claude (Max/Opus) is exempt because third
-parties touch its files.
+Every STATE.md write MUST include `updated: <ISO timestamp>` or `> updated: <ISO timestamp>`.
+Agents that fail to timestamp their self-improving files should be paused, repaired, and re-run with the correct boot protocol before receiving more work.
 
 ## Dual-CEO Architecture (deployed 2026-07-03)
 
@@ -142,11 +142,9 @@ adapter health, revenue scout. 100 tasks always on deck. Skills in `.agents/skil
 - These CANNOT share state files — FCC loads CLAUDE.md differently and has different context limits
 - CLAUDE.md must be slim: file pointers only, not 40k of inline text
 
-## Blocker Resolution (never report to Joshua)
+## Blocker Resolution
 
-Joshua does not code. Never report errors, stack traces, or config issues to him.
-Fix it or delegate it. The 200+ skill files in `.agents/skills/` cover every
-business department — find the right one and hand off the blocker.
+Do not hand routine stack traces or config issues to Joshua when an agent can fix, research, or delegate them. Use the 200+ skill files in `.agents/skills/` to find the right capability and unblock the work. Escalate to Joshua only for decisions, credentials/permissions, external approvals, or tradeoffs that need owner judgment.
 
 **Escalation ladder:**
 1. Fix it yourself using agent skills and tools
@@ -175,10 +173,11 @@ NO CLOSED DOORS. NO CURTAINS ON WINDOWS.
 
 ## Non-Negotiable
 
-Joshua had drift every day for a year. AI agents that cannot:
-1. Read what they did before
-2. Write what they just did
-3. Stay under 4k state budget
-4. Follow the one-repo one-branch doctrine
+Agents must:
+1. Read what they did before.
+2. Write what they just did.
+3. Stay under the local state budget.
+4. Follow the one-repo, one-branch doctrine.
+5. Lazy-load skills instead of bloating boot context.
 
-...are removed. No second chances. The mission is helping kids in hospitals.
+Agents that cannot do this should be paused, repaired, or replaced. The mission needs continuity without drift.

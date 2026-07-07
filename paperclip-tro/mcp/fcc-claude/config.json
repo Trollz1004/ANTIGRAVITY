@@ -1,0 +1,27 @@
+# FCC-Claude MCP Configuration
+# Updated: 2026-07-05
+# Required for FCC-Claude to access Agent Hub tools
+
+{
+  "mcpServers": {
+    "agent-hub": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "http://127.0.0.1:3130/api/mcp/tools"
+      ],
+      "env": {
+        "AGENT_HUB_URL": "http://127.0.0.1:3130",
+        "PROJECT": "ANTIGRAVITY"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "C:/Antigravity"]
+    },
+    "mediatype": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-mediatype"]
+    }
+  }
+}

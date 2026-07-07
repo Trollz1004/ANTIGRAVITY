@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "pi-conversational": {
+      "command": "python",
+      "args": [
+        "C:/Antigravity/paperclip-tro/mcp/pi/conversational.py"
+      ],
+      "env": {
+        "MODEL_ENDPOINT": "openai-codex/gpt-5.5-pro",
+        "TEMPERATURE": "0.8",
+        "CONTEXT_WINDOW": "4096"
+      }
+    }
+  }
+}
