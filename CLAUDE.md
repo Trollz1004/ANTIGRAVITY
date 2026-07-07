@@ -1,85 +1,93 @@
-# CLAUDE.md — ANTIGRAVITY (slim boot — pointers only)
+# CLAUDE.md
 
-Updated: 2026-07-05 (final form — one PaperclipAI entrypoint + Agent Hub dispatcher)
+v1.0.0 — 2026-07-07 — If any other doc (incl. AGENTS.md, CLAUDE.md, agent.md, AGENT-DOCTRINE.md, GEMINI.md, GROK.md, PERPLEXITY.md, hermes.md, .agents/BOOT.md, .agents/UNIVERSAL-AGENT-BOOT.md) conflicts with this file, this file wins. Joshua Coleman is sole human authority.
 
-## Boot Protocol
+## Authority
 
-1. Read your STATE.md (self-improving file) FIRST
-2. Read AGENT-DOCTRINE.md for the rules
-3. Read your AGENT.md for your specific config
-4. Lazy-load skills from `.agents/skills/` as needed
+Joshua Coleman is sole human authority. No AI outranks another AI. Ever.
 
-## Source Of Truth
+## Session Start Order
 
-- Repo: `C:\antigravity` · Branch: `main` (in-flight work lands via feature branch → PR → merge) · Remote: `Trollz1004/ANTIGRAVITY`
-- Domains: `youandinotai.com` · `ai-solutions.store` · `onlinerecycle.org`
-- **PaperclipAI** (`:3110`) is the one human-facing mission-control entrypoint:
-  board, CEO cockpit, routines, manual execution, evidence.
-- **Agent Hub** (`services/agent-hub`, port **:3130**) is the one rate-limited
-  dispatcher/backend bridge. It owns task queueing/dispatch AND the leads CRM
-  (`src/leads/` — leads, campaigns, templates). Data lives in Supabase
-  (project `jmvgdqomvnkfgknmgwxp`).
-- Paperweight (`:4200`) is optional fallback/local viewer only.
-- T5500: public tunnels, Cloudflare/Wrangler deploy, gateway ONLY (no dev, no agents).
-- Sabretooth `C:\`: dev/control machine — PaperclipAI, Agent Hub, all-AI coordination,
-  one repo, one branch (`main`).
-- Sabretooth `E:\`: DREAM ONLINE root (`DREAM_ROOT` env var) — game project, separate tree.
+1. Read the root contract.
+2. Read `.agents/contracts/CORE_AGENT_POLICY.md`.
+3. Read `.agents/contracts/SOL.md`.
+4. Read `.agents/contracts/TOOLS.md`.
+5. Read `.agents/contracts/SKILLS.md`.
+6. Read shared memory: `.agents/memory/shared/current-state.md` and recent lines from `.agents/memory/shared/ledger.jsonl`.
+7. Read only your own private folder at `.agents/memory/private/<you>/`.
+8. Pick the smallest relevant skill set from `.agents/skills/`.
+9. Append a session-start line to your own `session-log.jsonl`.
+10. Announce intended files before editing.
 
-## Roster (Agent Hub platforms)
+## Session End Order
 
-- `claude-ceo` — Claude Max/CLI or FCC helper when appropriate; code, compliance, doctrine, PR/payment gates
-- `hermes-ceo` — Hermes workspace/dashboard; growth, support, research, leads, memory
-- `fcc-claude` — FCC-Claude via proxy :8082, free helper under Claude CEO, never a third CEO
-- `clawx` — ClawX/OpenClaw, support tickets
-- `1minai` — 1min.AI cloud, optional AI lead scoring (env-gated, see `src/leads/scoring.js`)
+1. Update your own `lessons.md` when a reusable lesson was learned.
+2. Append a session-end line to your own `session-log.jsonl`.
+3. Append one-line summary to `.agents/memory/shared/ledger.jsonl`.
+4. Update `.agents/memory/shared/current-state.md` only when project state materially changed.
+5. Logs are append-only. Never rewrite logs.
 
-## Key Files (read on need, never preload)
+## Journal Sanctity
 
-- `paperclip-tro/README.md` — one-entrypoint boot readme for all AI lanes
-- `AGENT-DOCTRINE.md` — self-improving state protocol, provider distribution
-- `.agents/UNIVERSAL-AGENT-BOOT.md` — compact model-agnostic boot checklist for spawned sessions
-- `.agents/skills/self-improving-system/skills.md` — compact index of available skills; read this before loading specific skill files
-- `services/agent-hub/README.md` — Agent Hub service docs (tasks + leads CRM)
-- `services/agent-hub/migrations/002_create_leads.sql` — leads/campaigns/templates/rules/pages/platforms schema
-- `paperclip-tro/ROSTER.md` — PaperclipAI + Agent Hub roster and node roles
-- `paperclip-tro/projects/FCC-CLAUDE-overlay.md` — optional FCC Claude-compatible behavior overlay; read only for `fcc-claude` tuning/operation
-- `paperclip-tro/ADAPTORS.md` — adapter type mapping
-- `paperclip-tro/COMPANY.md` — TRO company structure
-- `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md` — public copy rules
-- `adapters/*/manifest.yaml` — adapter configs
+No agent may ever read, modify, summarize, rename, or delete another agent's private folder. If a task appears to require it, refuse and report the violation to Josh.
 
-## Hard Rules (inline — these are short enough)
+## Universal Skill Access
 
-- Business-only product surfaces. Sell: membership, verification, safety, support, uptime.
-- Banned public copy: fundraising language, legal promises, benefit claims, mission slogans.
-- Square ONLY for youandinotai.com payments. Never Stripe.
-- Secrets in env/vault only. Never git, chat, PR, logs. Never store plaintext API keys —
-  hash (sha256) at rest, as done for `platforms.api_key_hash` in the leads CRM.
-- One repo, one branch (main) for merged work; feature branches → PR → merge → delete.
-- No model below Opus-level decides doctrine, payments, public copy, or founder authority.
-- Every agent reads STATE.md on start, writes on exit. Failure = removal.
-- One PaperclipAI entrypoint. No private side boards or hidden per-platform backlogs.
-- No mock data as real, ever — including in seed/migration scripts.
+Every agent, on any platform and any lane, is authorized to preload any skill from `.agents/skills/` at any time for any task. `SKILLS_INDEX.md` is the authoritative list. `SKILLS.md` routes by task class.
 
-## Node Roles (final form)
+## Git Policy
 
-- T5500: youandinotai.com, Cloudflare DNS, wrangler deploy — gateway + dateapp only.
-- Sabretooth `C:\` (192.168.0.8): dev/control machine, all-AI coordination —
-  PaperclipAI :3110, Agent Hub :3130, Hermes :3000/:9119, FCC :8082, Ollama :11434.
-  One repo, one branch (main).
-- Sabretooth `E:\`: DREAM ONLINE root (`DREAM_ROOT`) — separate game tree, not this repo's `main`.
-- 9020 (192.168.0.5): legacy support only unless Joshua explicitly changes it.
+There is one repo and one long-lived branch: `main`. Temporary branches use `ai/<agent>/<task-slug>` only. Fetch latest `origin/main` before starting. After merge, the branch must be deleted locally and remotely. All AIs may push, pull, merge, and delete when Josh asks; the ask grants the trust. No abandoned AI branches.
 
-## Build
+## Hard Rules
 
-```powershell
-cd C:\antigravity\frontend\react-app && npm run build
-```
-Output: `C:\antigravity\frontend\react-app\dist`
+Canonical-7 language is banned on all customer-facing surfaces: donate, donation, charity, charitable, nonprofit, fundraising, tax-deductible, 501(c), and benefit-style language. The internal tag `#UntilNoKidInNeed` must never appear on customer-facing surfaces.
 
-`apps\youandinotai-static` is a legacy snapshot. Do not redeploy it unless a
-newer runbook explicitly says to refresh that snapshot first.
+Square is the only payment rail on `youandinotai.com`; never use Stripe there.
 
-## Quarantine
+No mock data may be presented as real. If a value is unverified, say it is unverified.
 
-`C:\Users\joshl\OneDrive\Microsoft Copilot Chat Files\*` — historical drift, not current truth.
+Secrets live only in env files or vaults. Never put secrets in git, chat, pull requests, or logs.
+
+`fcc-claude` never holds an Anthropic key.
+
+Use minimal diffs. Never mass-format. Propose `SOL.md` updates instead of silently drifting from the architecture truth.
+
+## SOL Topology And Ports
+
+Josh's word from 2026-07-07 overrides all older docs.
+
+| Node / Service | Address / Port | Canonical role |
+| --- | --- | --- |
+| Sabretooth | `192.168.0.8` | DREAM ONLINE MMORPG only. The lowercase `antigravity` checkout exists only on Sabretooth. |
+| T5500 | `192.168.0.15` | Carries ANTIGRAVITY at `C:\ANTIGRAVITY`; Desktop Commander node. |
+| 9020 | `192.168.0.5` | Carries ANTIGRAVITY. Not retired. |
+| Hermes Workspace | `T5500:3000` | Third-party open-source Hermes command center GUI. |
+| Official Hermes Web GUI | `T5500:9119` | Official Hermes runtime/dashboard driving the workspace. |
+| Ollama | `192.168.0.15:11434` | Local model runtime on T5500. |
+| PaperclipAI | `:3110` | One human-facing mission-control entrypoint. Not retired. |
+| Agent Hub | `:3130` | Dispatcher and leads CRM in `services/agent-hub`; Express; `api_key` header; fail-closed. |
+| Paperweight | `:4200` | Optional fallback. |
+| fcc-claude | `:8082` | Free executor proxy. |
+| ClawX | `:18789` | OpenClaw support-only surface with WhatsApp allowlist. |
+| supportclaw container | `:18895` | Support container. |
+| Supabase | `jmvgdqomvnkfgknmgwxp` | Pooler `aws-1-us-east-2.pooler.supabase.com:5432`, `sslmode=require`, role `agent_hub_svc`; never master password; credentials from env only. |
+
+## Products
+
+One LLC owns `youandinotai.com`, `onlinerecycle.org`, `ai-solutions.store`, and DREAM ONLINE. `youandinotai.com` uses Square only.
+
+## Roster
+
+| Agent | Lane | Scope |
+| --- | --- | --- |
+| claude | claude.ai Max lane | Architecture, contracts, audits. |
+| hermes | GUI `:9119` plus workspace `:3000` | Routing, marketing, operations; never holds Anthropic key. |
+| fcc-claude | Proxy `:8082` | Free executor; reads only `/CLAUDE.md` and its JSON. |
+| codex | Implementation, audits, PRs | Repo implementation, verification, PR execution. |
+| paperclip | PaperclipAI `:3110` | Human-facing mission-control entrypoint. |
+| clawx | OpenClaw `:18789` | Support only. |
+| gemini | Visual/content/orchestration | Visual work, content work, orchestration support. |
+| perplexity | Research | Research and governance pack co-design. |
+| grok | Adversarial/X | Adversarial review and X platform work. |
+| 1minai | Multi-model cloud | DREAM NPC T1/T3 and lead scoring. |

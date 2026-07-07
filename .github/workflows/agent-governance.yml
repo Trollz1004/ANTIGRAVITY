@@ -1,0 +1,27 @@
+name: Agent Governance
+
+on:
+  pull_request:
+
+jobs:
+  private-journal-guard:
+    runs-on: ubuntu-latest
+    if: startsWith(github.head_ref, 'ai/')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Block cross-agent private journal changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="${GITHUB_HEAD_REF}"
+          agent="$(printf '%s' "$branch" | cut -d/ -f2)"
+          base="origin/${GITHUB_BASE_REF}"
+          git fetch origin "${GITHUB_BASE_REF}" --quiet
+          bad="$(git diff --name-only "$base...HEAD" -- '.agents/memory/private/**' | awk -F/ -v a="$agent" '$4 != a { print }')"
+          if [ -n "$bad" ]; then
+            echo "Agent branch '$branch' may not touch another agent's private journal:"
+            printf '%s\n' "$bad"
+            exit 1
+          fi
