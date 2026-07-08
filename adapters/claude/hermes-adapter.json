@@ -1,0 +1,19 @@
+{
+  "name": "hermes-dashboard",
+  "description": "Hermes Agent dashboard on port 9119. CEO agent in Paperclip. Routes through Ollama, FCC proxy, OpenRouter.",
+  "runtime": "windows",
+  "binary": "C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes.exe",
+  "command": "hermes dashboard --port 9119 --host 127.0.0.1 --no-open",
+  "config": "C:\\Users\\joshl\\.hermes\\config.yaml",
+  "dashboard_config": "C:\\ANTIGRAVITY\\hermes\\hermes-dashboard.yaml",
+  "env": "C:\\Users\\joshl\\AppData\\Local\\hermes\\.env",
+  "port": 9119,
+  "gateway_port": 8642,
+  "workspace_port": 3000,
+  "providers": {
+    "ollama": { "base_url": "http://127.0.0.1:11434/v1", "default_model": "jeffreyvandekorput/ultimatekorpo" },
+    "fcc_proxy": { "base_url": "http://127.0.0.1:8082/v1" },
+    "openrouter": { "api_key_env": "OPENROUTER_API_KEY" }
+  },
+  "paperclip_role": "CEO — orchestrates sub-agents in WSL via OpenCode"
+}
