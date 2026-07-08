@@ -1,0 +1,22 @@
+{
+  "name": "fcc-claude",
+  "description": "Free Claude Code via FCC proxy on :8082. Routes through NVIDIA NIM, OpenRouter, Gemini, Groq, Ollama.",
+  "runtime": "wsl",
+  "command": "bash -lc 'export PATH=\"$HOME/.local/bin:$PATH\" && cd /mnt/c/ANTIGRAVITY && fcc-claude --model \"${FCC_MODEL:-nvidia_nim/nvidia/nemotron-3-super-120b-a12b}\" -p \"$TASK\" --max-turns 10'",
+  "env_source": "~/.fcc/.env",
+  "port": 8082,
+  "admin_ui": "http://localhost:8082/admin",
+  "models": {
+    "opus": "nvidia_nim/nvidia/nemotron-3-super-120b-a12b",
+    "sonnet": "nvidia_nim/nvidia/nemotron-3-super-120b-a12b",
+    "haiku": "nvidia_nim/nvidia/nemotron-3-super-120b-a12b",
+    "fallback": "open_router/meta-llama/llama-3.3-70b-instruct:free"
+  },
+  "providers": {
+    "nvidia_nim": { "enabled": true, "model": "nvidia/nemotron-3-super-120b-a12b" },
+    "open_router": { "enabled": true, "model": "meta-llama/llama-3.3-70b-instruct:free" },
+    "gemini": { "enabled": true, "model": "gemini-2.5-flash" },
+    "groq": { "enabled": true, "model": "llama-3.3-70b-versatile" },
+    "ollama": { "enabled": true, "model": "qwen2.5:7b" }
+  }
+}
