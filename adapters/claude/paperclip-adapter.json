@@ -1,0 +1,27 @@
+{
+  "name": "paperclip",
+  "description": "Paperclip agent orchestration engine. Routes tasks to sub-agents via OpenCode WSL.",
+  "runtime": "windows",
+  "npm_package": "paperclipai",
+  "version": "2026.428.0",
+  "instance_config": "C:\\ANTIGRAVITY\\income-engine\\paperclip-data\\instances\\default\\config.json",
+  "port": 3101,
+  "agents_dir": "C:\\ANTIGRAVITY\\paperclip\\agents",
+  "agents": {
+    "ceo": { "file": "ceo-agent.md", "model": "hermes-router/hermes" },
+    "hermes": { "file": "hermes-agent.md", "model": "hermes-router/hermes-fast" },
+    "opencode": { "file": "opencode-agent.md", "model": "ollama-local/qwen2.5-coder:7b" },
+    "cto": { "file": "cto-builder.md", "model": "ollama-local/qwen2.5-coder:7b" },
+    "cmo": { "file": "cmo-marketing.md", "model": "hermes-router/marketing" },
+    "cfo": { "file": "cfo-prime.md", "model": "hermes-router/cfo" },
+    "closer": { "file": "closer.md", "model": "openrouter/meta-llama/llama-3.3-70b-instruct:free" },
+    "pi": { "file": "pi-agent.md", "model": "openrouter/openrouter/free" },
+    "grok": { "file": "grok-agent.md", "model": "xai/grok-3" },
+    "fcc": { "file": null, "model": "anthropic/claude-opus-4-7", "runtime": "fcc-claude" }
+  },
+  "runtime_map": {
+    "opencode_wsl": "/home/trollz/.opencode/bin/opencode",
+    "fcc_wsl": "bash -lc 'source ~/.fcc/.env && fcc-claude -p \"$TASK\"'",
+    "hermes_win": "C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes.exe"
+  }
+}

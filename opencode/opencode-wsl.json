@@ -1,0 +1,122 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "opencode",
+  "autoshare": false,
+  "autoupdate": true,
+  "provider": {
+    "anthropic": {
+      "options": {
+        "baseURL": "http://localhost:8082",
+        "apiKey": "fcc-no-auth"
+      },
+      "models": {
+        "claude-opus-4-7":         { "name": "Opus 4.7 → FCC/Ollama/OpenRouter" },
+        "claude-sonnet-4-6":       { "name": "Sonnet 4.6 → FCC proxy" },
+        "claude-haiku-4-5":        { "name": "Haiku 4.5 → FCC proxy" }
+      }
+    },
+    "codex": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "Codex (auth — Anthropic API key / CLI)",
+      "options": { "apiKey": "{env:ANTHROPIC_API_KEY}" },
+      "models": {
+        "claude-opus-4-7":   { "name": "Codex Opus 4.7 (orchestrator)" },
+        "claude-sonnet-4-6": { "name": "Codex Sonnet 4.6 (executor)" }
+      }
+    },
+    "google": {
+      "options": { "apiKey": "{env:GEMINI_API_KEY}" },
+      "models": {
+        "gemini-2.5-pro":   { "name": "Gemini 2.5 Pro" },
+        "gemini-2.5-flash": { "name": "Gemini 2.5 Flash (FREE 15 RPM)" }
+      }
+    },
+    "xai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "xAI Grok (builder — CLI auth via `xai auth login`)",
+      "options": {
+        "baseURL": "https://api.x.ai/v1",
+        "apiKey":  "{env:XAI_API_KEY}"
+      },
+      "models": {
+        "grok-3":             { "name": "Grok 3 (builder primary)" },
+        "grok-3-mini":        { "name": "Grok 3 Mini (fast builder)" },
+        "grok-3-reasoning":   { "name": "Grok 3 Reasoning (deep build)" }
+      }
+    },
+    "openrouter": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenRouter (FREE models)",
+      "options": {
+        "baseURL": "https://openrouter.ai/api/v1",
+        "apiKey":  "{env:OPENROUTER_API_KEY}"
+      },
+      "models": {
+        "openrouter/free":           { "name": "OpenRouter Free (auto-best)" },
+        "meta-llama/llama-3.3-70b-instruct:free":  { "name": "Llama 3.3 70B (free)" },
+        "google/gemma-4-31b-it:free":              { "name": "Gemma 4 31B (free)" },
+        "qwen/qwen3-coder:free":                   { "name": "Qwen3 Coder (free)" },
+        "nousresearch/hermes-3-llama-3.1-405b:free": { "name": "Hermes 3 405B (free)" },
+        "openai/gpt-oss-120b:free":                { "name": "GPT-OSS 120B (free)" },
+        "x-ai/grok-3:free":                        { "name": "Grok 3 (free OR)" },
+        "x-ai/grok-3-mini:free":                   { "name": "Grok 3 Mini (free OR)" }
+      }
+    },
+    "ollama-local": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Local Ollama (FREE)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1",
+        "apiKey":  "ollama"
+      },
+      "models": {
+        "gemma4:latest":            { "name": "Gemma 4 8B" },
+        "qwen2.5:7b":               { "name": "Qwen2.5 7B" },
+        "qwen2.5-coder:7b":        { "name": "Qwen2.5-Coder 7B" },
+        "qwen3.5:latest":           { "name": "Qwen3.5 9.7B" },
+        "nomic-embed-text:latest":  { "name": "Nomic Embed Text" }
+      }
+    },
+    "hermes-router": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Hermes Router (auto-fallback)",
+      "options": {
+        "baseURL": "http://localhost:11435/v1",
+        "apiKey":  "router-auth"
+      },
+      "models": {
+        "hermes":        { "name": "Hermes (default)" },
+        "hermes-fast":   { "name": "Hermes Fast (36B)" },
+        "code":          { "name": "Code (local Qwen + fallback)" },
+        "fast":          { "name": "Fast (local Llama)" }
+      }
+    }
+  },
+  "model": "hermes-router/hermes",
+  "agent": {
+    "orchestrator": {
+      "description": "High-quality orchestrator via FCC proxy (NVIDIA/OpenRouter/Ollama)",
+      "model": "anthropic/claude-opus-4-7"
+    },
+    "builder": {
+      "description": "Builder agent — Grok 3 primary, same CLI auth as Codex",
+      "model": "xai/grok-3"
+    },
+    "coder": {
+      "description": "Code writer using local or free models first",
+      "model": "ollama-local/qwen2.5-coder:7b"
+    },
+    "hunter": {
+      "description": "Fast research using Hermes Fast via router",
+      "model": "hermes-router/hermes-fast"
+    },
+    "free-fast": {
+      "description": "Quick tasks using free OpenRouter models",
+      "model": "openrouter/openrouter/free"
+    },
+    "grok-adversarial": {
+      "description": "Red-team review via Grok",
+      "model": "xai/grok-3"
+    }
+  }
+}
