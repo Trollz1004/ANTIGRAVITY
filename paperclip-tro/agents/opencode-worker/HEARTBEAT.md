@@ -1,0 +1,11 @@
+agent: opencode-worker
+project: ANT-DATEAPP
+node: t5500
+config: paperclip-tro/agents/opencode-worker/AGENT.md
+state: paperclip-tro/agents/opencode-worker/STATE.md
+skills_dir: .agents/skills/
+adapter: opencode
+model: claude-sonnet-4-6
+provider: opencode
+last_beat: 2026-07-09T07:41:00Z
+status: idle
