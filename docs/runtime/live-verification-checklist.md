@@ -47,6 +47,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\worke
 powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\workers\Register-NodeInPool.ps1 -NodeId mini-asus -HostAddress 192.168.0.Z -Role thin-display-manual-checkin -Hardware "Mini ASUS"
 ```
 
+Before routing work to a new worker, install its restart task and 30-minute
+health task with `scripts\workers\Install-WorkerNodeTask.ps1`. Worker logs must
+show either `PASS worker health` or `FAIL_CLOSED Agent Hub unreachable`; a worker
+that cannot reach Agent Hub is not considered available.
+
 ## DNS / Proxy
 
 Evidence required before saying a domain is routed:

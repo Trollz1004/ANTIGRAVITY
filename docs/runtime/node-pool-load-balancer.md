@@ -43,6 +43,8 @@ Then run:
 powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Invoke-AllNodeTopologyVerification.ps1
 ```
 
+For full per-node setup, use `docs/runtime/worker-node-onboarding.md`.
+
 ## Public Traffic Shape
 
 ```text

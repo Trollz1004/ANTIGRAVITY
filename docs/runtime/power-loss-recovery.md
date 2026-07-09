@@ -39,6 +39,9 @@ powershell -ExecutionPolicy Bypass -File C:\antigravity\scripts\workers\Install-
 ```
 
 Worker nodes start role-specific services only and report back to Sabretooth/T5500.
+The worker installer also creates a 30-minute health task by default. Worker
+health checks fail closed when Sabretooth Agent Hub is unreachable, so worker
+nodes do not create private task backlogs during a hub outage.
 
 ## Verification Required Before Claiming Complete
 
