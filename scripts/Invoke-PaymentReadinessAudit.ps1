@@ -81,6 +81,33 @@ function Get-ProofForLane {
   return @($Proof.lanes | Where-Object { $_.lane -eq $Lane } | Select-Object -First 1)
 }
 
+function Test-ProofPlaceholder {
+  param(
+    [string]$Field,
+    [object]$Value
+  )
+  if ($null -eq $Value) { return $true }
+  $text = ([string]$Value).Trim()
+  if ([string]::IsNullOrWhiteSpace($text)) { return $true }
+  $placeholderValues = @(
+    'YYYY-MM-DDTHH:mm:ssZ',
+    'sandbox-or-production',
+    'redacted-provider-transaction-id',
+    'redacted-receipt-id',
+    'redacted-webhook-event-id'
+  )
+  if ($placeholderValues -contains $text) { return $true }
+  if ($text -match '^example-' -or $text -match '^todo-' -or $text -match '^placeholder-') { return $true }
+  return $false
+}
+
+function Test-IsoTimestamp {
+  param([object]$Value)
+  if (Test-ProofPlaceholder 'timestamp' $Value) { return $false }
+  $parsed = [DateTimeOffset]::MinValue
+  return [DateTimeOffset]::TryParse([string]$Value, [ref]$parsed)
+}
+
 function Test-ProofComplete {
   param([object]$LaneProof)
   if (-not $LaneProof) { return $false }
@@ -98,8 +125,15 @@ function Test-ProofComplete {
   )
   foreach ($field in $required) {
     if (-not ($LaneProof.PSObject.Properties.Name -contains $field)) { return $false }
-    if ($null -eq $LaneProof.$field -or [string]::IsNullOrWhiteSpace([string]$LaneProof.$field)) { return $false }
+    if (Test-ProofPlaceholder $field $LaneProof.$field) { return $false }
   }
+  if (@('sandbox','production') -notcontains ([string]$LaneProof.environment).ToLowerInvariant()) { return $false }
+  if (@('square') -notcontains ([string]$LaneProof.provider).ToLowerInvariant()) { return $false }
+  if (-not (Test-IsoTimestamp $LaneProof.approvedAt)) { return $false }
+  if (-not (Test-IsoTimestamp $LaneProof.webhookReceivedAt)) { return $false }
+  $amount = 0
+  if (-not [int]::TryParse([string]$LaneProof.amountCents, [ref]$amount)) { return $false }
+  if ($amount -le 0) { return $false }
   return $true
 }
 
