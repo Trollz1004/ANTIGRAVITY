@@ -2,8 +2,10 @@
 > Each agent appends blockers here. CEOs triage and assign resolution.
 
 ## CRITICAL
-- [ ] RESTORE: Run Desktop\RUN-NOW-restore-and-verify.bat on T5500. True git tip 66c8390 orphaned by Gordon force-push. All code work blocked until restored.
-- [ ] GitHub branch protection on main: enable after restore (block force pushes)
+- [ ] GitHub branch protection on main: enable now (block force pushes going forward). 30-sec job in GitHub Settings → Branches → Add rule for `main`.
+
+## RESOLVED 2026-07-09
+- Restore of 66c8390: OBSOLETE — origin/main moved 4 commits past Gordon's force-push (78272ada → 360e652a) with real work. Restoring would have destroyed those commits. Agent-setup landed via fast-forward as 25c63dde onto current main instead. No restore needed.
 
 ## HIGH
 - [ ] Codex governance prompt: run after restore (adds gordon to roster, bundles fixes)
