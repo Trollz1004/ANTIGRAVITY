@@ -1,0 +1,147 @@
+openapi: 3.1.0
+info:
+  title: ANTIGRAVITY Node Worker API
+  version: 0.1.0
+  description: Private node worker APIs for T5500 support intake and 9020 draft-only marketing tasks.
+servers:
+  - url: http://192.168.0.15:9110
+    description: T5500 Hermes support gateway
+  - url: http://192.168.0.5:3120
+    description: 9020 marketing worker
+paths:
+  /health:
+    get:
+      summary: Worker liveness and Agent Hub reachability
+      responses:
+        '200':
+          description: Worker is configured and Agent Hub is reachable
+        '503':
+          description: Worker is blocked or Agent Hub is unreachable
+  /adapters/health:
+    get:
+      summary: T5500 support gateway adapter health via Agent Hub
+      security:
+        - NodeApiKey: []
+      responses:
+        '200':
+          description: Agent Hub adapter health returned
+        '401':
+          description: Missing or invalid node API key
+        '503':
+          description: Agent Hub key missing or Agent Hub unavailable
+  /support/session:
+    post:
+      summary: Queue a support-only task through Agent Hub
+      security:
+        - NodeApiKey: []
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupportSessionRequest'
+      responses:
+        '201':
+          description: Agent Hub task created
+        '401':
+          description: Missing or invalid node API key
+        '422':
+          description: Blocked public-copy terms detected
+        '503':
+          description: Agent Hub unavailable; no local backlog stored
+  /queue/status:
+    get:
+      summary: 9020 marketing worker queue preview via Agent Hub
+      security:
+        - NodeApiKey: []
+      responses:
+        '200':
+          description: Agent Hub task preview returned
+        '401':
+          description: Missing or invalid node API key
+        '503':
+          description: Agent Hub unavailable; no local backlog stored
+  /draft-task:
+    post:
+      summary: Queue a draft-only marketing or sales task through Agent Hub
+      security:
+        - NodeApiKey: []
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DraftTaskRequest'
+      responses:
+        '201':
+          description: Agent Hub task created with no_send guardrails
+        '401':
+          description: Missing or invalid node API key
+        '422':
+          description: Blocked public-copy terms detected
+        '503':
+          description: Agent Hub unavailable; no local backlog stored
+components:
+  securitySchemes:
+    NodeApiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    SupportSessionRequest:
+      type: object
+      required: [summary]
+      properties:
+        source:
+          type: string
+          default: date-app-browser
+        topic:
+          type: string
+          default: support
+        summary:
+          type: string
+        severity:
+          type: string
+          enum: [normal, urgent]
+          default: normal
+    DraftTaskRequest:
+      type: object
+      required: [lane, brief]
+      properties:
+        lane:
+          type: string
+          enum: [date-app, ai-solutions, business-exchange, dream-online, general]
+        channel:
+          type: string
+        audience:
+          type: string
+        offer:
+          type: string
+        cta:
+          type: string
+        brief:
+          type: string
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: string
+        local_backlog:
+          type: boolean

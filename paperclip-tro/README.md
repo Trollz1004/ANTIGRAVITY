@@ -8,9 +8,9 @@
 PaperclipAI on Sabretooth is the single human-facing mission-control entrypoint.
 
 - URL: `http://127.0.0.1:3110`
-- Start/repair: `powershell -NoProfile -ExecutionPolicy Bypass -File c:\antigravity\scripts\start-paperclip-hermes.ps1 -AlsoStartPaperclip`
-- First-run setup: `npx --yes paperclipai onboard --run`
-- Normal run: `npx --yes paperclipai run` or `c:\antigravity\scripts\start-paperclip.ps1`
+- Start/repair: `powershell -NoProfile -ExecutionPolicy Bypass -File c:\antigravity\scripts\start-mission-control.ps1`
+- Runtime: first-party Mission Control in `services/mission-control`
+- Normal run: `c:\antigravity\scripts\start-paperclip.ps1`
 - Standing agents: Claude CEO and Hermes CEO only.
 - Everything else is a tool, platform, skill, browser session, or temporary subagent.
 

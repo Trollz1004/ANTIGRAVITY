@@ -16,9 +16,9 @@
 
 | Surface | URL | Role |
 |---|---|---|
-| PaperclipAI HQ | `http://127.0.0.1:3110` | Human-facing board, CEO cockpit, routines, evidence |
+| First-party Mission Control | `http://127.0.0.1:3110` | Human-facing board, agent visibility, routines, issues, evidence |
 | Agent Hub | `http://127.0.0.1:3130` | Canonical task/orchestration backend |
-| Paperweight Mission Control | `http://127.0.0.1:4200` | Optional fallback/local viewer |
+| Paperweight Mission Control | `http://127.0.0.1:4200` | Legacy fallback/local viewer, not authority |
 | Hermes Workspace | `http://127.0.0.1:3000` | Human/operator workspace UI |
 | Hermes Dashboard | `http://127.0.0.1:9119` | Hermes status/API/work feed |
 | FCC admin | `http://127.0.0.1:8082/admin` | Claude/FCC helper lane when explicitly used |

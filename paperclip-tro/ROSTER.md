@@ -14,7 +14,7 @@
 
 | Node | IP | Role | Orchestration |
 |---|---|---|---|
-| Sabretooth C: | 192.168.0.8 | Dev/control plane: PaperclipAI :3110, Agent Hub :3130, optional Paperweight :4200, Hermes, FCC | PaperclipAI + Agent Hub |
+| Sabretooth C: | 192.168.0.8 | Dev/control plane: first-party Mission Control :3110, Agent Hub :3130, legacy Paperweight :4200, OpenClaw, Hermes, FCC, OpenCode/Ollama, Grok | Mission Control + Agent Hub |
 | Sabretooth E: | portable drive | DREAM ONLINE root: `E:\CLAUDE's-N-Joshua's-Dream-Online-MMORPG` | Agent Hub tasks, local DREAM memory |
 | T5500 | gateway | Gateway/dateapp — Cloudflare tunnels for youandinotai.com | none |
 | 9020 | 192.168.0.5 | Legacy support only unless Joshua explicitly changes it | none |

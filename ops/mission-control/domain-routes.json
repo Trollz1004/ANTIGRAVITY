@@ -1,0 +1,105 @@
+{
+  "lastUpdated": "2026-07-08",
+  "authority": "Mission Control is the source of truth. T5500 owns Cloudflared/proxy/front-door. Sabretooth is a dev workstation and must not run Cloudflared, watchdogs, sentries, or always-on workbench loops.",
+  "routes": [
+    {
+      "domain": "aidesistail.online",
+      "aliases": ["aidesistail.info", "aidesistail.store", "aidesistail.website"],
+      "lane": "Date App",
+      "service": "date-app public frontend",
+      "node": "T5500",
+      "localTarget": "date-app frontend/backend gateway; T5500 :3200 is pending confirmation",
+      "publicMethod": "Cloudflare Pages or T5500 Cloudflared Tunnel after approval",
+      "status": "route-required",
+      "approval": "required before DNS mutation"
+    },
+    {
+      "domain": "ai-solutions.store",
+      "aliases": [],
+      "lane": "AI-Solutions / Business Exchange",
+      "service": "real business exchange and AI solutions storefront",
+      "node": "T5500 public front door; Sabretooth control plane only",
+      "localTarget": "business exchange frontend/API when active",
+      "publicMethod": "Cloudflare Pages for static/app frontend; T5500 tunnel/API route for backend",
+      "status": "route-required",
+      "approval": "required before DNS mutation"
+    },
+    {
+      "domain": "onlinerecycle.net",
+      "aliases": [],
+      "lane": "Online Recycle",
+      "service": "online recycle public site",
+      "node": "T5500 public front door",
+      "localTarget": "online recycle frontend/API when active",
+      "publicMethod": "Cloudflare Pages or T5500 tunnel after service target is confirmed",
+      "status": "needs-online",
+      "approval": "required before DNS mutation"
+    },
+    {
+      "domain": "untilnokidinneed.com",
+      "aliases": ["untilnokidinneed.online", "untilnokidinneed.org", "untilnokidinneed.store"],
+      "lane": "Holding / Boundary",
+      "service": "holding, noindex boundary, or redirect only",
+      "node": "T5500 public front door or Cloudflare static redirect",
+      "localTarget": "none unless Joshua approves a product surface",
+      "publicMethod": "Cloudflare redirect/noindex holding page after public-copy approval",
+      "status": "parked",
+      "approval": "required before DNS mutation and public copy"
+    },
+    {
+      "domain": "dream-online.org",
+      "aliases": ["dream-online.net", "dream-online.info", "dream-online.store"],
+      "lane": "DREAM ONLINE",
+      "service": "game public site, docs, future account portal",
+      "node": "Sabretooth game development, future production node TBD",
+      "localTarget": "E:\\CLAUDE's-N-Joshua's-Dream-Online-MMORPG",
+      "publicMethod": "static landing first; game services stay private until production plan",
+      "status": "reserved",
+      "approval": "required before DNS mutation"
+    },
+    {
+      "domain": "mission.ai-solutions.store",
+      "aliases": ["control.ai-solutions.store"],
+      "lane": "Mission Control",
+      "service": "private Mission Control proxy",
+      "node": "Sabretooth",
+      "localTarget": "127.0.0.1:3222 now, intended 127.0.0.1:3110 when port is free",
+      "publicMethod": "T5500 Cloudflare Access protected tunnel only if Joshua explicitly wants phone/browser access",
+      "status": "private-route-proposed",
+      "approval": "required before any public DNS or tunnel exposure"
+    },
+    {
+      "domain": "paperclip.ai-solutions.store",
+      "aliases": [],
+      "lane": "Optional Workbench",
+      "service": "optional third-party Paperclip standby workbench",
+      "node": "Sabretooth manual workbench or isolated worker node",
+      "localTarget": "127.0.0.1:3111 when launched",
+      "publicMethod": "T5500 Cloudflare Access protected tunnel only if needed",
+      "status": "standby",
+      "approval": "required before any public DNS or tunnel exposure"
+    },
+    {
+      "domain": "hermes.ai-solutions.store",
+      "aliases": [],
+      "lane": "Hermes Workbench",
+      "service": "Hermes dashboard/workspace link",
+      "node": "T5500 for date-app support; not Sabretooth autostart",
+      "localTarget": "dashboard fixed at :9119; workspace should move off :3000 when contested",
+      "publicMethod": "T5500 Cloudflare Access protected tunnel only if needed",
+      "status": "standby",
+      "approval": "required before any public DNS or tunnel exposure"
+    },
+    {
+      "domain": "fcc.ai-solutions.store",
+      "aliases": [],
+      "lane": "FCC",
+      "service": "FCC server and admin UI",
+      "node": "T5500 or worker node; Sabretooth manual only",
+      "localTarget": "127.0.0.1:8082 and 127.0.0.1:8082/admin",
+      "publicMethod": "private LAN first; T5500 Access protected tunnel only if approved",
+      "status": "active-local",
+      "approval": "required before any public DNS or tunnel exposure"
+    }
+  ]
+}

@@ -1,31 +1,39 @@
-# Sabretooth Node — Agent Hub + DREAM ONLINE
+# Sabretooth Node — Dev Workstation + Mission Control
 
 > IP: 192.168.0.8 | GPU: 1070 8GB = game rendering
-> PaperclipAI :3110 | Agent Hub :3130 | Hermes :3000/:9119 | FCC :8082
+> Mission Control :3110 | optional/manual workbenches only
 > Repo/control plane: C:\antigravity (main)
 > DREAM drive: E:\CLAUDE's-N-Joshua's-Dream-Online-MMORPG
-> Sabretooth is the active dev/control node. T5500 remains gateway/dateapp.
+> Sabretooth is the active dev/control workstation. T5500 remains gateway/dateapp/proxy.
 
-## Services (autostart via scripts/bootstrap-sabretooth.ps1)
+## Safe Autostart
 
 | Service | Port | Purpose |
 |---|---|---|
-| PaperclipAI | :3110 | Single human-facing board, CEO cockpit, routines, evidence |
-| Agent Hub | :3130 | Rate-limited dispatcher/backend — ALL AI sends work HERE |
-| Paperweight | :4200 | Optional fallback/local viewer |
-| Hermes Workspace | :3000 | Knowledge + memory workspace |
-| Hermes Dashboard | :9119 | Hermes agent status/API/work feed |
-| FCC Proxy | :8082 | FCC-Claude adapter |
-| Ollama | :11434 | Local models |
-| PostgreSQL | :5432 | Agent Hub database |
-| 1min.AI Desktop | — | Cloud AI for DREAM NPCs |
-| DREAM Game Server | TBD | Open world sandbox (no instances) |
+| Mission Control | :3110 | Single human-facing board, routines, issues, tools, evidence |
+
+Do not autostart Cloudflared, watchdogs, sentries, Hermes workspace/dashboard
+loops, FCC/MCP proxies, browser controllers, Ollama, PostgreSQL, or other
+always-on repair jobs on Sabretooth. They interrupt the dev workstation and
+belong on T5500 or an isolated worker node when needed.
+
+Optional/manual workbenches may be opened when Joshua asks:
+
+| Workbench | Port | Boundary |
+|---|---|---|
+| Third-party Paperclip | :3111 preferred | Standby tool only, not authority |
+| Hermes Dashboard | :9119 | Manual only on Sabretooth |
+| Hermes Workspace | movable | Manual only; do not assume :3000 |
+| FCC Server/Admin | :8082 | Manual only; `/admin` for config |
+| OpenClaw / ClawX / NemoClaw | app-specific | Preferred operator lane when installed/approved |
+| Ollama/OpenCode | app-specific | Worker lane, not doctrine authority |
 
 ## Architecture
 
-**PaperclipAI** :3110 is the one visible command center.
+**Mission Control** :3110 is the one visible command center.
 **Agent Hub** :3130 handles all ANTIGRAVITY task routing across platforms.
-**Standing lanes** — 2 CEOs only: Claude + Hermes. Subagents are task/skill execution under those lanes.
+Optional workbenches can sit idle, but they report back to Mission Control and
+must not create hidden backlogs or separate command centers.
 **GPU 1070 8GB** reserved for game rendering — NOT AI inference.
 
 ### DREAM AI Roles
@@ -53,5 +61,5 @@ E:\ has DREAM game data, docs, saves, backups, and local memory.
 ```powershell
 cd C:\antigravity
 git pull origin main
-powershell -ExecutionPolicy Bypass -File scripts\bootstrap-sabretooth.ps1
+powershell -ExecutionPolicy Bypass -File scripts\start-mission-control.ps1
 ```

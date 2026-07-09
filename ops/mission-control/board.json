@@ -1,0 +1,278 @@
+{
+  "lanes": [
+    {
+      "id": "now",
+      "name": "Now",
+      "tasks": [
+        {
+          "id": "single-control-plane",
+          "title": "Single Mission Control",
+          "summary": "Sabretooth :3110 is the only human-facing command board. T5500, 9020, and future nodes report here.",
+          "owner": "Codex",
+          "status": "active"
+        },
+        {
+          "id": "agent-hub-source",
+          "title": "Agent Hub dispatcher",
+          "summary": "Agent Hub :3130 remains the backend task bridge and fail-closed authority for worker nodes.",
+          "owner": "Agent Hub",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "name": "Next",
+      "tasks": [
+        {
+          "id": "agency-memory-layer",
+          "title": "Agency memory layer",
+          "summary": "Use agency skills plus compact STATE, HEARTBEAT, and JSONL event logs before buying Obsidian or graph tools.",
+          "owner": "Mission Control",
+          "status": "active"
+        },
+        {
+          "id": "openclaw-operator-lane",
+          "title": "OpenClaw operator lane",
+          "summary": "Prefer OpenClaw/ClawX/NemoClaw as the hands-on operator workbench when installed and approved.",
+          "owner": "OpenClaw",
+          "status": "planned"
+        },
+    {
+      "id": "t5500-gateway",
+      "title": "T5500 gateway report-in",
+      "summary": "T5500 runs date-app support gateway and reports status to Mission Control, not a second board.",
+      "owner": "T5500",
+      "status": "planned"
+    },
+    {
+      "id": "domain-routing-authority",
+      "title": "Domain routing authority",
+      "summary": "Date app, AI-Solutions/Business Exchange, Online Recycle, holding domains, DREAM, and private tool routes are tracked in ops/mission-control/domain-routes.json.",
+      "owner": "Codex",
+      "status": "active"
+    },
+    {
+      "id": "sabretooth-safe-workstation",
+      "title": "Sabretooth safe workstation",
+      "summary": "Sabretooth autostart is Mission Control only. No Cloudflared, Hermes, FCC, MCP, watchdog, sentry, or cursor-stealing background loops.",
+      "owner": "Codex",
+      "status": "active"
+    }
+      ]
+    },
+    {
+      "id": "blocked",
+      "name": "Blocked / Needs Approval",
+      "tasks": [
+        {
+          "id": "external-install-approval",
+          "title": "External installs and credentials",
+          "summary": "NemoClaw, Cloudflare, credentials, charges, deployments, and public outreach require explicit approval.",
+          "owner": "Joshua",
+          "status": "approval required"
+        }
+      ]
+    }
+  ],
+  "routines": [
+    {
+      "id": "heartbeat-audit",
+      "name": "Agent heartbeat audit",
+      "summary": "Check that each visible agent writes compact STATE and HEARTBEAT files with timestamps and paths.",
+      "cadence": "30 minutes",
+      "owner": "Mission Control",
+      "mode": "observe and report"
+    },
+    {
+      "id": "adapter-health",
+      "name": "Adapter health",
+      "summary": "Check Agent Hub, FCC, OpenCode/Ollama, OpenClaw, Codex, Claude, Hermes, and Grok availability without secrets.",
+      "cadence": "30 minutes",
+      "owner": "Agent Hub",
+      "mode": "fail closed"
+    },
+    {
+      "id": "memory-compaction",
+      "name": "Memory compaction",
+      "summary": "Each agent reads its own STATE first, lazy-loads skills, and writes path-based summaries instead of pasted context.",
+      "cadence": "on session start and exit",
+      "owner": "Context manager",
+      "mode": "required"
+    },
+    {
+      "id": "public-copy-guard",
+      "name": "Public copy guard",
+      "summary": "Block charity, split, tax, DAO, ownership, voting, investment, or private accounting claims from public surfaces.",
+      "cadence": "on draft",
+      "owner": "Content gate",
+      "mode": "approval required"
+    }
+  ],
+  "issues": [
+    {
+      "id": "third-party-paperclip-drift",
+      "title": "Third-party Paperclip removed from active path",
+      "summary": "The old paperclipai runtime is unreliable and no longer owns the mission board.",
+      "severity": "high",
+      "owner": "Codex",
+      "status": "being replaced"
+    },
+    {
+      "id": "side-board-risk",
+      "title": "Side board drift",
+      "summary": "Optional idle browser workbenches are allowed, but no node may create a separate durable command center unless Joshua explicitly changes the role map.",
+      "severity": "high",
+      "owner": "Mission Control",
+      "status": "guarded"
+    },
+    {
+      "id": "hermes-background-work",
+      "title": "Hermes background work must stay bounded",
+      "summary": "Hermes can be used as a tool lane, but autonomous background work is disabled unless explicitly approved. Do not autostart Hermes loops on Sabretooth.",
+      "severity": "medium",
+      "owner": "Hermes",
+      "status": "bounded"
+    },
+    {
+      "id": "workstation-background-loops",
+      "title": "No background loops on Sabretooth",
+      "summary": "Cloudflared, watchdogs, sentries, Hermes workspace loops, FCC/MCP autostarts, and browser controllers stay off the dev workstation.",
+      "severity": "high",
+      "owner": "Mission Control",
+      "status": "guarded"
+    },
+    {
+      "id": "memory-tool-sprawl",
+      "title": "Memory tool sprawl",
+      "summary": "Do not buy or route through Obsidian, Graphy, or graph memory until local file memory proves insufficient.",
+      "severity": "medium",
+      "owner": "Mission Control",
+      "status": "watch"
+    }
+  ],
+  "tools": [
+    {
+      "id": "agency-skills",
+      "name": "Agency skill directory",
+      "role": "Task-specific skill loading from .agents/skills with compact memory writeback.",
+      "status": "active",
+      "boundary": "Lazy-load only what the task needs"
+    },
+    {
+      "id": "local-memory",
+      "name": "Local memory ledger",
+      "role": "STATE, HEARTBEAT, memory, and JSONL event files used as durable source of truth.",
+      "status": "active",
+      "boundary": "No secrets, no context dumps"
+    },
+    {
+      "id": "openclaw",
+      "name": "OpenClaw / ClawX / NemoClaw",
+      "role": "Preferred operator workbench when installed and approved.",
+      "status": "preferred",
+      "boundary": "No credentials or install without approval"
+    },
+    {
+      "id": "codex",
+      "name": "Codex official",
+      "role": "Primary code/design decision lane when directly assigned.",
+      "status": "active",
+      "boundary": "Founder-approved changes only"
+    },
+    {
+      "id": "claude",
+      "name": "Claude official",
+      "role": "Official app lane for review, writing, and selected code support.",
+      "status": "available",
+      "boundary": "No hidden background loops"
+    },
+    {
+      "id": "fcc",
+      "name": "FCC bridge",
+      "role": "Free Claude Code / OpenCode / NVIDIA / Ollama evidence and proposal worker.",
+      "status": "worker",
+      "boundary": "Not a decision maker",
+      "url": "http://127.0.0.1:8082/health"
+    },
+    {
+      "id": "opencode-ollama",
+      "name": "OpenCode + Ollama",
+      "role": "Local model and adapter lane for low-cost worker tasks.",
+      "status": "worker",
+      "boundary": "Evidence/proposals only",
+      "url": "http://127.0.0.1:11434/api/tags"
+    },
+    {
+      "id": "hermes",
+      "name": "Hermes",
+      "role": "Optional tool lane, dashboard, and bounded support workflow.",
+      "status": "optional",
+      "boundary": "No autonomous backlog",
+      "url": "http://127.0.0.1:9119"
+    },
+    {
+      "id": "optional-paperclip",
+      "name": "Optional third-party Paperclip",
+      "role": "Idle browser workbench when useful, not the authority board.",
+      "status": "optional",
+      "boundary": "Use :3111 unless Joshua explicitly moves it"
+    },
+    {
+      "id": "openai-gpt-app",
+      "name": "OpenAI GPT app",
+      "role": "Official OpenAI app/tool lane for broader app tools and Slack-connected work.",
+      "status": "external",
+      "boundary": "No autonomous posting or credential changes",
+      "url": "https://chatgpt.com/"
+    },
+    {
+      "id": "claude-official",
+      "name": "Claude official",
+      "role": "Official Claude app coworker lane.",
+      "status": "external",
+      "boundary": "Official app only; wrappers are lower authority",
+      "url": "https://claude.ai/"
+    },
+    {
+      "id": "slack",
+      "name": "Slack",
+      "role": "Collaboration and notification surface.",
+      "status": "external",
+      "boundary": "No send/post without approval"
+    },
+    {
+      "id": "grok",
+      "name": "Grok",
+      "role": "Low-token social/research assistant when available.",
+      "status": "standby",
+      "boundary": "Draft-only"
+    },
+    {
+      "id": "agent-hub",
+      "name": "Agent Hub",
+      "role": "Dispatcher and task bridge.",
+      "status": "source of truth",
+      "boundary": "Workers fail closed when unreachable",
+      "url": "http://127.0.0.1:3130/health"
+    }
+  ],
+  "terminal": [
+    {
+      "id": "powershell",
+      "label": "Open PowerShell"
+    },
+    {
+      "id": "wsl",
+      "label": "Open WSL"
+    },
+    {
+      "id": "bash",
+      "label": "Open Bash"
+    },
+    {
+      "id": "cmd",
+      "label": "Open CMD"
+    }
+  ]
+}

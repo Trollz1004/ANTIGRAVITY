@@ -1,0 +1,14 @@
+{
+  "name": "@antigravity/hermes-support-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "T5500 support-only gateway that forwards date-app support sessions into Sabretooth Agent Hub.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@antigravity/mission-control",
+  "version": "0.2.2",
+  "private": true,
+  "description": "First-party local mission control board for ANTIGRAVITY.",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
