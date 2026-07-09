@@ -31,6 +31,18 @@ These stay single-writer until explicit replication and locking are designed.
 4. Register IP, RAM, and health URLs in `ops/mission-control/node-pool.json`.
 5. T5500 routes only to targets with passing health checks.
 
+Use the registration helper:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\workers\Register-NodeInPool.ps1 -NodeId worker-ai-1 -HostAddress 192.168.0.X -Role ai-adapter-worker -Hardware "i5-6600 32GB"
+```
+
+Then run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Invoke-AllNodeTopologyVerification.ps1
+```
+
 ## Public Traffic Shape
 
 ```text
