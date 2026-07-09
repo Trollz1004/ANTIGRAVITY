@@ -1,21 +1,21 @@
 {
   "lastUpdated": "2026-07-09",
-  "authority": "T5500 is the public front door and load-balancer node. Sabretooth is control/dev authority. Extra nodes are workers, not separate brains.",
+  "authority": "T5500 is the ANTIGRAVITY business/payment/domain authority and public front door. Sabretooth is Dream Online/game-first and must not be treated as business payment/DNS authority. Extra nodes are workers, not separate brains.",
   "nodes": [
     {
       "id": "sabretooth",
       "host": "192.168.0.8",
-      "role": "control-dev",
-      "authority": "mission-control-agent-hub",
-      "autostart": "Mission Control and Agent Hub only",
+      "role": "dream-online-game-workstation",
+      "authority": "dream-online-local-dashboard-only",
+      "autostart": "Dream Online and local visibility only; no payment/DNS/business authority",
       "health": ["http://127.0.0.1:3110/api/health", "http://127.0.0.1:3130/health"]
     },
     {
       "id": "t5500",
       "host": "192.168.0.15",
-      "role": "front-door-load-balancer-hermes-workbench",
-      "authority": "public-proxy-only",
-      "autostart": "Public stack, Cloudflared, Hermes dashboard/workspace, support gateway, OmniRouter",
+      "role": "business-payment-domain-authority-front-door-load-balancer-hermes-workbench",
+      "authority": "antigravity-business-payment-domain-runtime",
+      "autostart": "Public stack, Cloudflared, Wrangler/domain ops, Hermes dashboard/workspace, support gateway, OmniRouter",
       "health": [
         "http://127.0.0.1:8000/api/v1/health",
         "http://127.0.0.1:3200/",

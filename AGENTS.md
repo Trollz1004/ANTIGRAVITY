@@ -73,18 +73,22 @@ Recovery from quarantine requires:
 
 ## Node Roles
 
-T5500 (`192.168.0.15`) is the public-front-door node for domains, tunnels,
-payments, Wrangler, and the date-app backend.
+T5500 (`192.168.0.15`) is the ANTIGRAVITY business/payment/domain authority and
+public-front-door node for domains, tunnels, payments, Wrangler, date-app runtime,
+Hermes/workspace, support gateway, OmniRouter, and business runtime routing.
 
-Sabretooth (`192.168.0.8`) is the brain/operator node for Codex, local model
-workloads, the single PaperclipAI mission-control entrypoint, Agent Hub dispatch,
-and repo maintenance.
+Sabretooth (`192.168.0.8`) is DREAM ONLINE/game-first going forward. It may host
+local mission-dashboard/game visibility work, but agents must not treat it as
+ANTIGRAVITY payment, DNS, domain, or business runtime authority unless Joshua
+explicitly reassigns that role in a newer written directive.
 
 ### One Entrypoint Rule
 
-PaperclipAI on Sabretooth `http://127.0.0.1:3110` is the one human-facing board,
-CEO cockpit, routine runner, and evidence surface. Agent Hub on Sabretooth
-`http://127.0.0.1:3130` is the one rate-limited task dispatcher/backend bridge.
+PaperclipAI/mission-control for ANTIGRAVITY must move toward T5500 as the
+business authority. Any Sabretooth dashboard is local visibility only and must
+not be used as payment/domain/business authority. Agent Hub dispatch for
+business work must route through the active T5500-owned control path once
+migrated.
 
 Standing PaperclipAI lanes are Claude CEO and Hermes CEO only. Codex, Gemini,
 Meta/Llama, Manus, FCC, OpenCode, Ollama, OpenClaw, browser AIs, and other tools
@@ -99,10 +103,9 @@ Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Olla
 
 FCC may be registered as a Paperclip worker model through its MCP bridge for OpenCode, NVIDIA, and Ollama-backed work, but FCC reports proposals/evidence to the active lead unless Joshua explicitly assigns it as a decision lane for a specific task.
 
-T5500 Paperclip/date-app material is legacy gateway support only. Do not expand it
-or treat it as a second Paperclip command center. The active PaperclipAI entrypoint
-is Sabretooth `:3110`; T5500 remains gateway/dateapp unless Joshua explicitly
-changes the role map.
+T5500 Paperclip/date-app/Hermes material is now the ANTIGRAVITY business lane.
+Do not expand Sabretooth into a competing business command center. Sabretooth is
+for DREAM ONLINE/game work unless Joshua explicitly changes the role map again.
 
 Current setup briefing:
 

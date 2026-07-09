@@ -1,6 +1,6 @@
 {
   "lastUpdated": "2026-07-08",
-  "authority": "Mission Control is the source of truth. T5500 owns Cloudflared/proxy/front-door. Sabretooth is a dev workstation and must not run Cloudflared, watchdogs, sentries, or always-on workbench loops.",
+  "authority": "T5500 is the ANTIGRAVITY business/payment/domain authority and owns Wrangler, Cloudflared, proxy/front-door, payment/webhook ops, and business runtime routing. Sabretooth is Dream Online/game-first and must not be treated as payment/DNS/business authority.",
   "routes": [
     {
       "domain": "aidesistail.online",
@@ -18,7 +18,7 @@
       "aliases": [],
       "lane": "AI-Solutions / Business Exchange",
       "service": "real business exchange and AI solutions storefront",
-      "node": "T5500 public front door; Sabretooth control plane only",
+      "node": "T5500 public front door and business authority",
       "localTarget": "business exchange frontend/API when active",
       "publicMethod": "Cloudflare Pages for static/app frontend; T5500 tunnel/API route for backend",
       "status": "route-required",
@@ -62,8 +62,8 @@
       "aliases": ["control.ai-solutions.store"],
       "lane": "Mission Control",
       "service": "private Mission Control proxy",
-      "node": "Sabretooth authority via T5500 Access proxy only if approved",
-      "localTarget": "127.0.0.1:3222 now, intended 127.0.0.1:3110 when port is free",
+      "node": "T5500 Access proxy if approved; Sabretooth is not business authority",
+      "localTarget": "T5500 mission-control/Agent Hub target after migration; do not expose Sabretooth as payment/domain authority",
       "publicMethod": "T5500 Cloudflare Access protected tunnel only if Joshua explicitly wants phone/browser access",
       "status": "private-route-proposed",
       "approval": "required before any public DNS or tunnel exposure"

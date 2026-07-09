@@ -50,6 +50,7 @@ function New-Result {
 function Get-VerifyRole {
   param($Node)
   $roleText = "$($Node.role) $($Node.id)".ToLowerInvariant()
+  if ($roleText -match 'dream-online|game') { return 'Display' }
   if ($roleText -match 'sabretooth|control-dev') { return 'Sabretooth' }
   if ($roleText -match 't5500|front-door|load-balancer|hermes') { return 'T5500' }
   if ($roleText -match 'ai-adapter|omnirouter|ollama|openclaw|fcc') { return 'WorkerAi' }

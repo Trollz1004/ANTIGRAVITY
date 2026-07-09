@@ -1,6 +1,6 @@
 # CLAUDE.md — ANTIGRAVITY (slim boot — pointers only)
 
-Updated: 2026-07-05 (final form — one PaperclipAI entrypoint + Agent Hub dispatcher)
+Updated: 2026-07-09 (T5500 business authority; Sabretooth Dream/game-first)
 
 ## Boot Protocol
 
@@ -12,7 +12,7 @@ Updated: 2026-07-05 (final form — one PaperclipAI entrypoint + Agent Hub dispa
 ## Source Of Truth
 
 - Repo: `C:\antigravity` · Branch: `main` (in-flight work lands via feature branch → PR → merge) · Remote: `Trollz1004/ANTIGRAVITY`
-- Domains: `youandinotai.com` · `ai-solutions.store` · `onlinerecycle.org`
+- Domains: `youandinotai.com` · `ai-solutions.store` · `onlinerecycle.net`
 - **PaperclipAI** (`:3110`) is the one human-facing mission-control entrypoint:
   board, CEO cockpit, routines, manual execution, evidence.
 - **Agent Hub** (`services/agent-hub`, port **:3130**) is the one rate-limited
@@ -20,9 +20,12 @@ Updated: 2026-07-05 (final form — one PaperclipAI entrypoint + Agent Hub dispa
   (`src/leads/` — leads, campaigns, templates). Data lives in Supabase
   (project `jmvgdqomvnkfgknmgwxp`).
 - Paperweight (`:4200`) is optional fallback/local viewer only.
-- T5500: public tunnels, Cloudflare/Wrangler deploy, gateway ONLY (no dev, no agents).
-- Sabretooth `C:\`: dev/control machine — PaperclipAI, Agent Hub, all-AI coordination,
-  one repo, one branch (`main`).
+- T5500: ANTIGRAVITY business/payment/domain ops authority — public tunnels,
+  Cloudflare/Wrangler deploy, date-app runtime, support gateway, Hermes/workspace,
+  OmniRouter, and business surfaces.
+- Sabretooth `C:\`: DREAM ONLINE/game-first workstation. It may host local mission
+  dashboard/game work, but it is not the source of truth for ANTIGRAVITY payment,
+  DNS, domain, or business runtime authority.
 - Sabretooth `E:\`: DREAM ONLINE root (`DREAM_ROOT` env var) — game project, separate tree.
 
 ## Roster (Agent Hub platforms)
@@ -63,10 +66,12 @@ Updated: 2026-07-05 (final form — one PaperclipAI entrypoint + Agent Hub dispa
 
 ## Node Roles (final form)
 
-- T5500: youandinotai.com, Cloudflare DNS, wrangler deploy — gateway + dateapp only.
-- Sabretooth `C:\` (192.168.0.8): dev/control machine, all-AI coordination —
-  PaperclipAI :3110, Agent Hub :3130, Hermes :3000/:9119, FCC :8082, Ollama :11434.
-  One repo, one branch (main).
+- T5500 (192.168.0.15): ANTIGRAVITY business authority — youandinotai.com,
+  ai-solutions.store, onlinerecycle.net, Cloudflare DNS, Wrangler deploy, date-app
+  runtime, support gateway, Hermes/workspace, OmniRouter, and payment/webhook ops.
+- Sabretooth `C:\` (192.168.0.8): DREAM ONLINE/game-first workstation. Local
+  dashboards may be used for visibility, but payment/domain/business control moves
+  to T5500 unless Joshua explicitly reassigns it.
 - Sabretooth `E:\`: DREAM ONLINE root (`DREAM_ROOT`) — separate game tree, not this repo's `main`.
 - 9020 (192.168.0.5): legacy support only unless Joshua explicitly changes it.
 

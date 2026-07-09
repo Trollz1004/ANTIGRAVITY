@@ -54,6 +54,63 @@ function Test-Http {
   }
 }
 
+function Test-HttpJson {
+  param(
+    [string]$Name,
+    [string]$Url,
+    [string[]]$RequiredFields = @(),
+    [int]$TimeoutSec = 5
+  )
+  try {
+    $response = Invoke-WebRequest -UseBasicParsing -Uri $Url -TimeoutSec $TimeoutSec
+    $contentType = [string]$response.Headers['Content-Type']
+    $json = $response.Content | ConvertFrom-Json
+    $missing = @()
+    foreach ($field in $RequiredFields) {
+      if (-not ($json.PSObject.Properties.Name -contains $field)) {
+        $missing += $field
+      }
+    }
+    if ($response.StatusCode -lt 200 -or $response.StatusCode -ge 500) {
+      return New-Check $Name 'fail' "HTTP $($response.StatusCode)" @{ url = $Url; code = $response.StatusCode; contentType = $contentType }
+    }
+    if ($missing.Count -gt 0) {
+      return New-Check $Name 'fail' "JSON response is missing required fields: $($missing -join ', ')" @{ url = $Url; code = $response.StatusCode; contentType = $contentType; missing = $missing }
+    }
+    return New-Check $Name 'pass' "HTTP $($response.StatusCode) JSON" @{ url = $Url; code = $response.StatusCode; contentType = $contentType }
+  } catch {
+    return New-Check $Name 'fail' $_.Exception.Message @{ url = $Url }
+  }
+}
+
+function Test-NotDateAppApi {
+  param(
+    [string]$Name,
+    [string]$Url,
+    [int]$TimeoutSec = 5
+  )
+  try {
+    $response = Invoke-WebRequest -UseBasicParsing -Uri $Url -TimeoutSec $TimeoutSec
+    $contentType = [string]$response.Headers['Content-Type']
+    try {
+      $json = $response.Content | ConvertFrom-Json
+      $fields = @($json.PSObject.Properties.Name)
+      $looksLikeDateAppHealth = (
+        ($fields -contains 'status') -and
+        (($fields -contains 'db_connected') -or ($fields -contains 'square_connected') -or ($fields -contains 'redis_connected'))
+      )
+      if ($looksLikeDateAppHealth) {
+        return New-Check $Name 'fail' 'T5500 port 3000 is serving date-app API JSON; API routing must use :8000 / api.youandinotai.com instead.' @{ url = $Url; code = $response.StatusCode; contentType = $contentType }
+      }
+    } catch {
+      return New-Check $Name 'pass' 'T5500 port 3000 did not return date-app API JSON.' @{ url = $Url; code = $response.StatusCode; contentType = $contentType }
+    }
+    return New-Check $Name 'pass' 'T5500 port 3000 is not date-app API health.' @{ url = $Url; code = $response.StatusCode; contentType = $contentType }
+  } catch {
+    return New-Check $Name 'pass' 'No date-app API response on T5500 port 3000.' @{ url = $Url }
+  }
+}
+
 function Test-PortClosed {
   param(
     [string]$Name,
@@ -134,6 +191,9 @@ if ($Role -eq 'Sabretooth') {
 
 if ($Role -eq 'T5500' -or $Role -eq 'AllHttp') {
   $checks.Add((Test-Http 't5500 date-app backend' 'http://127.0.0.1:8000/api/v1/health'))
+  $checks.Add((Test-HttpJson 't5500 date-app backend json truth' 'http://127.0.0.1:8000/api/v1/health' @('status','db_connected','redis_connected','square_connected')))
+  $checks.Add((Test-HttpJson 't5500 public api json truth' 'https://api.youandinotai.com/api/v1/health' @('status','db_connected','redis_connected','square_connected')))
+  $checks.Add((Test-NotDateAppApi 't5500 port 3000 not date-app api' 'http://127.0.0.1:3000/api/v1/health'))
   $checks.Add((Test-Http 't5500 date-app frontend' 'http://127.0.0.1:3200/'))
   $checks.Add((Test-Http 't5500 node-balancer' 'http://127.0.0.1:4180/health'))
   $checks.Add((Test-Http 't5500 hermes-support-gateway' 'http://127.0.0.1:9110/health'))

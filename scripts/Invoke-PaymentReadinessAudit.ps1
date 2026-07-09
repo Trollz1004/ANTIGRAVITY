@@ -170,6 +170,14 @@ Add-StaticCheck $checks 'date-app-payment-tests' 'backend\fastapi-app\tests\test
   'x-square-hmacsha256-signature'
 ) 'Square webhook security tests are present.' 'Square webhook security tests are incomplete.'
 
+Add-StaticCheck $checks 'square-sandbox-payment-probe' 'scripts\payments\Invoke-SquareSandboxPaymentProbe.ps1' @(
+  'connect\.squareupsandbox\.com/v2/payments',
+  'cnon:card-nonce-ok',
+  'bnon:bank-nonce-ok',
+  'SQUARE_SANDBOX_ACCESS_TOKEN',
+  'payment-sandbox-proofs'
+) 'Square sandbox payment probe exists for no-live-dollar verification.' 'Square sandbox payment probe is missing or incomplete.'
+
 Add-StaticCheck $checks 'online-recycle-square-booking-webhook' 'backend\fastapi-app\app\routers\webhooks.py' @(
   '@router\.post\("/square-booking"',
   'square_booking_webhook',
