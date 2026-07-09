@@ -37,6 +37,13 @@ Worker nodes start role-specific services only and report back to Sabretooth/T55
 
 ## Verification Required Before Claiming Complete
 
+Run the verifier:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\verify-node-topology.ps1 -Role Sabretooth
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\verify-node-topology.ps1 -Role T5500
+```
+
 - T5500 public stack health passes.
 - Cloudflared is running on T5500.
 - Hermes dashboard answers on T5500 `:9119`.
