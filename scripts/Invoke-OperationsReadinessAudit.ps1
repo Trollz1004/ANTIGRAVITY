@@ -190,7 +190,23 @@ if (Test-Path -LiteralPath $domainAuditScript) {
 } else {
   $gates.Add((New-Gate 'dns-routing' 'incomplete' "Domain audit script is missing: $domainAuditScript"))
 }
-$gates.Add((New-Gate 'payment-transactions' 'incomplete' 'Date app, Business Exchange, and Online Recycle payment transactions have not been charged or webhook-verified by this audit.'))
+$paymentAuditScript = Join-Path $RepoRoot 'scripts\Invoke-PaymentReadinessAudit.ps1'
+if (Test-Path -LiteralPath $paymentAuditScript) {
+  $paymentRaw = & powershell -NoProfile -ExecutionPolicy Bypass -File $paymentAuditScript 2>&1
+  $paymentExit = $LASTEXITCODE
+  $paymentText = ($paymentRaw -join "`n")
+  $paymentReport = $null
+  try { $paymentReport = $paymentText | ConvertFrom-Json } catch {}
+  if ($paymentExit -eq 0) {
+    $gates.Add((New-Gate 'payment-transactions' 'pass' 'Payment readiness and transaction proof audit passed for date app, Business Exchange, and Online Recycle.' $paymentReport))
+  } elseif ($paymentExit -eq 2) {
+    $gates.Add((New-Gate 'payment-transactions' 'incomplete' 'Payment audit found code readiness or transaction proof still incomplete.' $paymentReport))
+  } else {
+    $gates.Add((New-Gate 'payment-transactions' 'fail' "Payment audit failed with exit=$paymentExit." @{ raw = $paymentText; report = $paymentReport }))
+  }
+} else {
+  $gates.Add((New-Gate 'payment-transactions' 'incomplete' "Payment audit script is missing: $paymentAuditScript"))
+}
 $gates.Add((New-Gate 'physical-power-loss' 'incomplete' 'No physical reboot or power-loss cycle was performed by this audit.'))
 
 $summary = @{

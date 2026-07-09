@@ -32,6 +32,12 @@ For DNS/public-route evidence only, run:
 powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Invoke-DomainReadinessAudit.ps1
 ```
 
+For payment readiness evidence only, run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Invoke-PaymentReadinessAudit.ps1
+```
+
 Evidence required:
 
 - JSON report in `C:\antigravity\logs\node-topology-verification-*.json`
@@ -41,6 +47,8 @@ Evidence required:
   `C:\antigravity\logs\operations-readiness-audit-*.json`
 - For domain audits, JSON report in
   `C:\antigravity\logs\domain-readiness-audit-*.json`
+- For payment audits, JSON report in
+  `C:\antigravity\logs\payment-readiness-audit-*.json`
 - zero `fail` checks
 - any `warn` checks explained with a concrete next action
 - `skip` is allowed only for worker nodes whose host is still `pending`

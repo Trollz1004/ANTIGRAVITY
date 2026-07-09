@@ -217,7 +217,7 @@ function seedEwasteTasks(queue) {
               priority: 78,
               tags: ['ewaste', 'responses', 'onlinerecycle'],
               prompt:
-                'Draft concise email reply templates for OnlineRecycle.org intake leads: drop-off confirmation, pickup lead confirmation, business bulk inventory response, scheduling follow-up, and decline/unsupported items. ' +
+                'Draft concise email reply templates for OnlineRecycle.net intake leads: drop-off confirmation, pickup lead confirmation, business bulk inventory response, scheduling follow-up, and decline/unsupported items. ' +
                 'Keep them direct, respectful, local to Central Florida, and free of donation language. Mention Square booking only where useful.',
             },
           ],

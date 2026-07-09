@@ -11,7 +11,7 @@ const MODEL_PREFERENCE = [process.env.ONLINERECYCLE_LOCAL_MODEL, 'qwen2.5:7b', '
   Boolean,
 );
 
-const SYSTEM_PROMPT = `You are the local OnlineRecycle.org operations writer.
+const SYSTEM_PROMPT = `You are the local OnlineRecycle.net operations writer.
 
 Hard rules:
 - Never use donate, donation, solicitation, fundraiser, charitable donation, or similar wording.
@@ -25,7 +25,7 @@ Hard rules:
 - Routine operational replies should stay focused on intake, scheduling, resale, or data handling. Do not drag Shriners or internal impact bookkeeping into normal ops replies unless the customer asks.
 - If you are unsure of a named subreddit, Facebook group, or venue, describe the angle instead of inventing a fake one.
 - Keep the tone direct, human, local, and useful. No corporate sludge.
-- Focus on practical cashflow and lead generation for OnlineRecycle.org.
+- Focus on practical cashflow and lead generation for OnlineRecycle.net.
 `;
 
 function usage() {
@@ -270,7 +270,7 @@ function replyTemplate(kind, sourcePath, fields) {
     'If anything in the device list, count, or timing changes, reply here and I will update the request before scheduling.',
     '',
     'Best,',
-    'OnlineRecycle.org',
+    'OnlineRecycle.net',
     '',
     '## Internal Next Actions',
     internalActions,
@@ -280,10 +280,10 @@ function replyTemplate(kind, sourcePath, fields) {
 }
 
 function marketingContext() {
-  return `OnlineRecycle.org local revenue context:
+  return `OnlineRecycle.net local revenue context:
 
 Business context:
-- OnlineRecycle.org is a Florida electronics recycler
+- OnlineRecycle.net is a Florida electronics recycler
 - Focus region: Sorrento, Lake County, Central Florida
 - Main lead flow: website intake form first, then Square booking
 - Primary money path right now: eBay resale of intake-ready devices
@@ -295,7 +295,7 @@ ${latestEbayContext()}
 }
 
 function replyPrompt(kind, sourceText) {
-  return `Draft one OnlineRecycle.org reply.
+  return `Draft one OnlineRecycle.net reply.
 
 Inquiry type: ${kind}
 
@@ -370,10 +370,10 @@ async function marketingPack(model) {
     listingLines,
     '',
     '## Local Posts',
-    '- Lake County / Sorrento pitch: Free electronics drop-off and pickup in Central Florida. If it plugs in or has a battery, I can usually take it. OnlineRecycle.org handles intake first, then booking, then tested resale where it makes sense.',
+    '- Lake County / Sorrento pitch: Free electronics drop-off and pickup in Central Florida. If it plugs in or has a battery, I can usually take it. OnlineRecycle.net handles intake first, then booking, then tested resale where it makes sense.',
     `- Cashflow angle: I am actively moving tested inventory like ${firstTitle}. If you have old laptops, desktops, or printers collecting dust, I can turn that stack into usable resale inventory instead of landfill weight.`,
     `- Trust angle: Devices get logged, triaged, and either recycled responsibly or resold with clear condition notes. Current ready inventory includes ${secondTitle}, so this is not vapor.`,
-    '- Simple CTA: Got a garage, office, or storage unit full of old tech? Send the intake through OnlineRecycle.org and I will sort pickup or drop-off from there.',
+    '- Simple CTA: Got a garage, office, or storage unit full of old tech? Send the intake through OnlineRecycle.net and I will sort pickup or drop-off from there.',
     '',
     '## Reddit Angles',
     "- r/orlando or local Florida tech/community angle: 'Free electronics pickup/drop-off in Lake County - turning old tech into tested resale inventory instead of trash.'",
@@ -386,7 +386,7 @@ async function marketingPack(model) {
     '',
     '## Outreach Messages',
     "- Business IT cleanout: 'If your office has retired laptops, desktops, docks, or printers piling up, I can handle pickup or drop-off intake in Lake County and sort what can be resold or recycled cleanly.'",
-    "- Apartment / storage cleanout: 'If you are clearing a storage unit or move-out and have old electronics in the pile, send the intake through OnlineRecycle.org and I can line up pickup or a drop-off slot.'",
+    "- Apartment / storage cleanout: 'If you are clearing a storage unit or move-out and have old electronics in the pile, send the intake through OnlineRecycle.net and I can line up pickup or a drop-off slot.'",
     '',
     '## Quick Replies',
     "- Data wipe: 'Yes. Storage is logged and wipe status is tracked as part of intake/testing before anything goes near resale.'",

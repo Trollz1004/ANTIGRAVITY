@@ -5,7 +5,7 @@ All payment webhooks now flow through Square.
 
 Webhook endpoints:
   POST /webhooks/square-payment  — Bot-Shield $1 payments + subscription purchases
-  POST /webhooks/square-booking  — E-waste booking events (OnlineRecycle.org)
+  POST /webhooks/square-booking  — E-waste booking events (OnlineRecycle.net)
 """
 
 from __future__ import annotations
@@ -666,7 +666,7 @@ async def square_payment_webhook(
     return WebhookAckResponse(event_id=event_id, processed=True, duplicate=False)
 
 
-# ── Square Booking Webhook (E-Waste / OnlineRecycle.org) ──
+# ── Square Booking Webhook (E-Waste / OnlineRecycle.net) ──
 
 
 def _resolve_square_log_dir(settings: Any) -> Path:
@@ -794,7 +794,7 @@ async def square_booking_webhook(
         default=None, alias="x-square-hmacsha256-signature"
     ),
 ) -> WebhookAckResponse:
-    """Handle Square booking webhooks for e-waste pickups (OnlineRecycle.org)."""
+    """Handle Square booking webhooks for e-waste pickups (OnlineRecycle.net)."""
     settings = get_settings()
     payload = await request.body()
 

@@ -1,0 +1,41 @@
+{
+  "instructions": "Copy to payment-transaction-proofs.json only after Joshua explicitly approves a sandbox or live test. Do not include card numbers, secrets, raw provider payloads, or customer PII.",
+  "lanes": [
+    {
+      "lane": "date-app",
+      "provider": "square",
+      "environment": "sandbox-or-production",
+      "approvedBy": "Joshua",
+      "approvedAt": "YYYY-MM-DDTHH:mm:ssZ",
+      "transactionId": "redacted-provider-transaction-id",
+      "receiptId": "redacted-receipt-id",
+      "webhookEventId": "redacted-webhook-event-id",
+      "webhookReceivedAt": "YYYY-MM-DDTHH:mm:ssZ",
+      "amountCents": 100
+    },
+    {
+      "lane": "business-exchange",
+      "provider": "square",
+      "environment": "sandbox-or-production",
+      "approvedBy": "Joshua",
+      "approvedAt": "YYYY-MM-DDTHH:mm:ssZ",
+      "transactionId": "redacted-provider-transaction-id",
+      "receiptId": "redacted-receipt-id",
+      "webhookEventId": "redacted-webhook-event-id",
+      "webhookReceivedAt": "YYYY-MM-DDTHH:mm:ssZ",
+      "amountCents": 100
+    },
+    {
+      "lane": "online-recycle",
+      "provider": "square",
+      "environment": "sandbox-or-production",
+      "approvedBy": "Joshua",
+      "approvedAt": "YYYY-MM-DDTHH:mm:ssZ",
+      "transactionId": "redacted-provider-transaction-id",
+      "receiptId": "redacted-receipt-id",
+      "webhookEventId": "redacted-webhook-event-id",
+      "webhookReceivedAt": "YYYY-MM-DDTHH:mm:ssZ",
+      "amountCents": 100
+    }
+  ]
+}

@@ -2048,7 +2048,7 @@
           "webhooks"
         ],
         "summary": "Square Booking Webhook",
-        "description": "Handle Square booking webhooks for e-waste pickups (OnlineRecycle.org).",
+        "description": "Handle Square booking webhooks for e-waste pickups (OnlineRecycle.net).",
         "operationId": "square_booking_webhook_api_v1_webhooks_square_booking_post",
         "parameters": [
           {

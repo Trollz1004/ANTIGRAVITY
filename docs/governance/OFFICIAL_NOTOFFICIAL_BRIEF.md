@@ -100,7 +100,7 @@ Role: LOCKED | Status: On-Node Essential
 |----------|-------------|--------|
 | **YouAndINotAI.com** | Human-verified social platform for good — dating, meetups, volunteering, charity. $1 Bot-Shield verify. Human-only USP. | Launch April 4, 2026 |
 | **AI-Solutions.Store** | AI storefront and product source material. Any kid-focused support must follow current doctrine, not legacy absolute-routing claims. | Live |
-| **OnlineRecycle.org** | Electronics recycler. Drop-off, pickup, resale. | Live |
+| **OnlineRecycle.net** | Electronics recycler. Drop-off, pickup, resale. | Live |
 | **onlinerecycle.square.site** | eBay-linked crosslister. | Live |
 | **dashboard.aidoesitall.website** | No-index business-access gateway that hands trusted users to authenticated internal workspace surfaces. | Live |
 

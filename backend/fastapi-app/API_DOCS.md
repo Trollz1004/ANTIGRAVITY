@@ -1,4 +1,4 @@
-﻿# YouAndINotAI API Documentation
+# YouAndINotAI API Documentation
 
 **Version:** 0.1.0
 **Base URL:** `/api/v1`
@@ -2982,7 +2982,7 @@ Schema: `HTTPValidationError`
 ## webhooks - POST /api/v1/webhooks/square-booking
 
 **Summary:** Square Booking Webhook
-**Description:** Handle Square booking webhooks for e-waste pickups (OnlineRecycle.org).
+**Description:** Handle Square booking webhooks for e-waste pickups (OnlineRecycle.net).
 
 ### Request
 `POST /api/v1/webhooks/square-booking`

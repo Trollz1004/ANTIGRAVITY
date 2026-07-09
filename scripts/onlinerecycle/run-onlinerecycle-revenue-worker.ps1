@@ -122,7 +122,7 @@ $replyTemplatePack = @"
 "@
 
 $cashflowChecklist = @"
-# 7-Day Cashflow Checklist for OnlineRecycle.org
+# 7-Day Cashflow Checklist for OnlineRecycle.net
 
 ## Day 1
 - List 5 intake-ready items on eBay before noon.
