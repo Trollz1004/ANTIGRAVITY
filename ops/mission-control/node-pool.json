@@ -7,8 +7,8 @@
       "host": "192.168.0.8",
       "role": "control-dev",
       "authority": "mission-control-agent-hub",
-      "autostart": "Mission Control only",
-      "health": ["http://127.0.0.1:3110/api/health"]
+      "autostart": "Mission Control and Agent Hub only",
+      "health": ["http://127.0.0.1:3110/api/health", "http://127.0.0.1:3130/health"]
     },
     {
       "id": "t5500",

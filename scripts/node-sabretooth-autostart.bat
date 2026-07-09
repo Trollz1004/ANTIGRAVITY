@@ -9,12 +9,17 @@ REM T5500 owns Cloudflared, public proxy/front-door, and always-on service repai
 if not exist "C:\antigravity\logs" mkdir "C:\antigravity\logs"
 echo [%date% %time%] Sabretooth safe autostart beginning... >> C:\antigravity\logs\autostart.log
 
-REM --- Mission Control only ---
-REM Local browser board. Does not start background workbenches or remote proxies.
+REM --- Mission Control + Agent Hub only ---
+REM Local browser board and one dispatcher backend. Does not start background
+REM workbenches, remote proxies, Cloudflared, Hermes, FCC, watchdogs, or sentries.
 echo Starting first-party Mission Control...
 cd /d C:\antigravity
 start /B "" powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\start-mission-control.ps1
 timeout /t 3 /nobreak >nul
 
+echo Starting Agent Hub dispatcher...
+start /B "" powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\start-agent-hub.ps1
+timeout /t 3 /nobreak >nul
+
 echo [%date% %time%] Sabretooth safe autostart complete >> C:\antigravity\logs\autostart.log
-echo === Sabretooth safe autostart complete. Mission Control only. ===
+echo === Sabretooth safe autostart complete. Mission Control + Agent Hub only. ===

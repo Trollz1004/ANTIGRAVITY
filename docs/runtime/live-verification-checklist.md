@@ -20,11 +20,19 @@ Or from Sabretooth, after node IPs are registered:
 powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Invoke-AllNodeTopologyVerification.ps1
 ```
 
+For the full read-only operations gate, run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Invoke-OperationsReadinessAudit.ps1
+```
+
 Evidence required:
 
 - JSON report in `C:\antigravity\logs\node-topology-verification-*.json`
 - For all-node runs, JSON report in
   `C:\antigravity\logs\all-node-topology-verification-*.json`
+- For full operations audits, JSON report in
+  `C:\antigravity\logs\operations-readiness-audit-*.json`
 - zero `fail` checks
 - any `warn` checks explained with a concrete next action
 - `skip` is allowed only for worker nodes whose host is still `pending`
@@ -37,6 +45,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Disab
 ```
 
 Then rerun `verify-node-topology.ps1 -Role Sabretooth`.
+
+Sabretooth restart proof also requires an enabled scheduled task:
+
+```text
+ANTIGRAVITY-Sabretooth-Control -> scripts\node-sabretooth-autostart.bat
+```
+
+That task must start Mission Control and Agent Hub only.
 
 ## Node Registration
 

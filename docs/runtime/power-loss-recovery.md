@@ -6,13 +6,19 @@ the Sabretooth dev workstation.
 ## Sabretooth
 
 - Autostart: `scripts/node-sabretooth-autostart.bat`
-- Starts: Mission Control only.
+- Starts: Mission Control and Agent Hub only.
 - Does not start: Cloudflared, Hermes loops, FCC/MCP proxies, watchdogs,
   sentries, browser controllers.
 - If drift reintroduces cursor-stealing loops, run:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Disable-Sabretooth-BackgroundLoops.ps1
+```
+
+Install the clean restart task with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Install-SabretoothControlTask.ps1
 ```
 
 ## T5500
