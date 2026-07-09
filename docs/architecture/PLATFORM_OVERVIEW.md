@@ -4,7 +4,7 @@
 - **YouAndINotAI** (`youandinotai.com`): social platform with verification, moderation, and subscription flows.
 
 ## Additional Public Surfaces
-- **OnlineRecycle** (`onlinerecycle.org`): recycling service surface.
+- **OnlineRecycle** (`onlinerecycle.net`): recycling service surface.
 - **AI-Solutions Store** (`ai-solutions.store`): storefront surface.
 - **AIDoesItAll Website** (`www.aidoesitall.website`): safe gateway surface.
 - **Antigravity Dashboard** (`dashboard.aidoesitall.website`): public access gateway to authenticated internal workspace.

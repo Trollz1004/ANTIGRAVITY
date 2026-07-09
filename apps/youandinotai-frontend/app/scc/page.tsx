@@ -8,7 +8,7 @@ const publicSurfaces = [
   },
   {
     name: 'OnlineRecycle',
-    url: 'https://onlinerecycle.org',
+    url: 'https://onlinerecycle.net',
     label: 'Central Florida electronics recycling service',
   },
   {

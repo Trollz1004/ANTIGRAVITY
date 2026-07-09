@@ -25,7 +25,7 @@ export const PUBLIC_SURFACES = [
   },
   {
     name: 'OnlineRecycle',
-    url: 'https://onlinerecycle.org',
+    url: 'https://onlinerecycle.net',
     status: 'Live product',
     description: 'Electronics recycling, pickup, and resale intake for Central Florida customers.',
   },

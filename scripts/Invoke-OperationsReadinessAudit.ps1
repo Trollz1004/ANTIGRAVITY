@@ -173,7 +173,23 @@ if (Test-Path -LiteralPath $nodePoolPath) {
   $gates.Add((New-Gate 'worker-node-registration' 'fail' "Missing node-pool config: $nodePoolPath"))
 }
 
-$gates.Add((New-Gate 'dns-routing' 'incomplete' 'DNS/Wrangler/Cloudflare mutation and public URL proof have not been run by this audit.'))
+$domainAuditScript = Join-Path $RepoRoot 'scripts\Invoke-DomainReadinessAudit.ps1'
+if (Test-Path -LiteralPath $domainAuditScript) {
+  $domainRaw = & powershell -NoProfile -ExecutionPolicy Bypass -File $domainAuditScript 2>&1
+  $domainExit = $LASTEXITCODE
+  $domainText = ($domainRaw -join "`n")
+  $domainReport = $null
+  try { $domainReport = $domainText | ConvertFrom-Json } catch {}
+  if ($domainExit -eq 0) {
+    $gates.Add((New-Gate 'dns-routing' 'pass' 'Domain route audit passed for DNS/HTTP and canonical OnlineRecycle .net references.' $domainReport))
+  } elseif ($domainExit -eq 2) {
+    $gates.Add((New-Gate 'dns-routing' 'incomplete' 'Domain route audit found routes that still need DNS/public HTTP work.' $domainReport))
+  } else {
+    $gates.Add((New-Gate 'dns-routing' 'fail' "Domain route audit failed with exit=$domainExit." @{ raw = $domainText; report = $domainReport }))
+  }
+} else {
+  $gates.Add((New-Gate 'dns-routing' 'incomplete' "Domain audit script is missing: $domainAuditScript"))
+}
 $gates.Add((New-Gate 'payment-transactions' 'incomplete' 'Date app, Business Exchange, and Online Recycle payment transactions have not been charged or webhook-verified by this audit.'))
 $gates.Add((New-Gate 'physical-power-loss' 'incomplete' 'No physical reboot or power-loss cycle was performed by this audit.'))
 

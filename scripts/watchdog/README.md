@@ -62,7 +62,7 @@ Each node card shows three groups of green/red checks:
 - **docker** — docker_engine + each of the 5 prod containers
   (`uandinotai-app-prod`, `uandinotai-postgres-prod`, `uandinotai-redis-prod`,
   `uandinotai-nginx-prod`, `uandinotai-backup`)
-- **public surfaces** — youandinotai.com / onlinerecycle.org /
+- **public surfaces** — youandinotai.com / onlinerecycle.net /
   ai-solutions.store / dashboard.aidoesitall.website, with **content
   verification by `<title>` fragment match**, not just HTTP 200 (Josh's "200
   ≠ verified" rule)

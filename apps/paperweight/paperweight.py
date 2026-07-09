@@ -59,7 +59,7 @@ SEED_COMPANIES = [
     ("hermes-sideworld", "Hermes Sideworld", "Hermes orchestration, node control, and side-work backlog", "agrav"),
     ("dream-online", "DREAM Online", "DREAM ONLINE MMORPG drive and Agent Hub lanes", "ukid"),
     ("youtube", "YouTube", "Content engine — many buckets per video (CTA, subs, Super Thanks, membership, merch, affiliate)", "youtube"),
-    ("onlinerecycle", "OnlineRecycle", "onlinerecycle.org cross-lister — eBay cross-listing, e-waste, resale", "green"),
+    ("onlinerecycle", "OnlineRecycle", "onlinerecycle.net cross-lister — eBay cross-listing, e-waste, resale", "green"),
 ]
 # Standing Paperweight assignees. Other runtimes are tools/subagents under these CEOs,
 # not permanent dashboard seats.

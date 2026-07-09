@@ -69,7 +69,7 @@ DOCKER_CHECKS = [
 # actually serving" question without claiming "200 = verified")
 URL_CHECKS = {
     "apex_youandinotai": "https://youandinotai.com",
-    "apex_onlinerecycle": "https://onlinerecycle.org",
+    "apex_onlinerecycle": "https://onlinerecycle.net",
     "apex_ai_solutions": "https://ai-solutions.store",
     "apex_dashboard": "https://dashboard.aidoesitall.website",
 }

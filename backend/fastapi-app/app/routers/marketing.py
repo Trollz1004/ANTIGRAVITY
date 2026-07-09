@@ -44,7 +44,7 @@ REFERRAL_KIT_DESTINATIONS = [
     ("YouAndINotAI", "https://youandinotai.com"),
     ("Business Exchange", "https://aidoesitall.website"),
     ("Antigravity Dashboard", "https://dashboard.aidoesitall.website"),
-    ("OnlineRecycle", "https://onlinerecycle.org"),
+    ("OnlineRecycle", "https://onlinerecycle.net"),
     ("AI-Solutions Store", "https://ai-solutions.store"),
 ]
 
