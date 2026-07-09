@@ -1,135 +1,173 @@
-// Dispatcher — routes tasks to the right platform.
-// ALL platforms run on Sabretooth :3130. T5500 = gateway only. 9020 = inactive.
+// Dispatcher - routes tasks to the right platform/node.
+// Sabretooth owns Agent Hub authority. T5500 is front-door/workbench.
+// Worker nodes return evidence/drafts and do not make doctrine/payment/launch decisions.
 
 const { PLATFORMS } = require('../platforms');
 
 const NODE_MAP = {
-  sabretooth: { ip: '192.168.0.8', name: 'Sabretooth', role: 'Agent Hub + DREAM + all services' },
-  t5500: { ip: 'localhost', name: 'T5500', role: 'Gateway only — Cloudflare tunnels' },
-  '9020': { ip: '192.168.0.5', name: '9020', role: 'Inactive' }
+  sabretooth: {
+    ip: '192.168.0.8',
+    name: 'Sabretooth',
+    role: 'Mission Control + Agent Hub authority + repo/dev workstation'
+  },
+  t5500: {
+    ip: '192.168.0.15',
+    name: 'T5500',
+    role: 'Cloudflared/front-door + Hermes workbench + support gateway + OmniRouter'
+  },
+  '9020': {
+    ip: '192.168.0.5',
+    name: '9020',
+    role: 'Marketing/support worker only'
+  },
+  'worker-web-1': {
+    ip: process.env.WORKER_WEB_1_HOST || 'pending',
+    name: 'worker-web-1',
+    role: 'Stateless web/API replica worker'
+  },
+  'worker-ai-1': {
+    ip: process.env.WORKER_AI_1_HOST || 'pending',
+    name: 'worker-ai-1',
+    role: 'AI adapter worker for OmniRouter/FCC/OpenCode/Ollama/OpenClaw'
+  }
+};
+
+const urls = {
+  agentHub: process.env.AGENT_HUB_URL || 'http://192.168.0.8:3130',
+  hermesDashboard: process.env.HERMES_DASHBOARD_URL || 'http://192.168.0.15:9119',
+  hermesWorkspace: process.env.HERMES_WORKSPACE_URL || 'http://192.168.0.15:3010',
+  hermesSupport: process.env.HERMES_SUPPORT_GATEWAY_URL || 'http://192.168.0.15:9110',
+  omniRouter: process.env.OMNI_ROUTER_URL || 'http://192.168.0.15:11436',
+  fcc: process.env.FCC_SERVER_URL || 'http://192.168.0.15:8082',
+  ollama: process.env.OLLAMA_BASE_URL || 'http://192.168.0.15:11434'
 };
 
 const PLATFORM_ROUTING = {
-  // === ALL on Sabretooth ===
   hermes: {
-    node: 'sabretooth',
+    node: 't5500',
     access: 'local-service',
-    endpoint: 'http://localhost:11435',
-    auth: 'none (localhost)'
+    endpoint: urls.hermesDashboard,
+    auth: 'none or local dashboard session'
   },
   'fcc-claude': {
-    node: 'sabretooth',
+    node: 't5500',
     access: 'fcc-proxy',
-    endpoint: 'http://localhost:8082',
-    auth: 'none (FCC proxy)'
+    endpoint: urls.fcc,
+    auth: 'none (FCC proxy) or local admin config'
   },
   claude: {
-    node: 'sabretooth',
+    node: 'external',
     access: 'cloud-subscription',
     endpoint: null,
-    auth: 'Claude Max subscription — Sup@ user guide sphere in DREAM'
+    auth: 'Official Claude app/sign-in'
   },
   opencode: {
-    node: 'sabretooth',
-    access: 'local-service',
-    endpoint: 'http://localhost:11435',
-    auth: 'none (NVIDIA free tier via Hermes)'
+    node: 'worker-ai-1',
+    access: 'omni-router',
+    endpoint: urls.omniRouter,
+    auth: 'routed through OmniRouter/provider env'
   },
   ollama: {
-    node: 'sabretooth',
+    node: 'worker-ai-1',
     access: 'local-service',
-    endpoint: 'http://localhost:11434',
-    auth: 'none (localhost)'
+    endpoint: urls.ollama,
+    auth: 'none on private LAN'
   },
   cloud: {
-    node: 'sabretooth',
-    access: 'openrouter',
-    endpoint: 'http://localhost:11435',
-    auth: 'openrouter key (via Hermes)'
+    node: 't5500',
+    access: 'omni-router',
+    endpoint: urls.omniRouter,
+    auth: 'provider keys via node env only'
+  },
+  'omni-router': {
+    node: 't5500',
+    access: 'local-service',
+    endpoint: urls.omniRouter,
+    auth: 'provider keys via node env only'
   },
   '1minai': {
-    node: 'sabretooth',
+    node: 'external',
     access: 'desktop-app',
     endpoint: null,
-    auth: 'desktop app — cloud AI for DREAM NPCs'
+    auth: 'desktop app/cloud subscription'
   },
   clawx: {
-    node: 'sabretooth',
-    access: 'local-service',
-    endpoint: 'ws://localhost:3110',
-    auth: 'gateway token (openclaw)'
+    node: 'worker-ai-1',
+    access: 'desktop-app',
+    endpoint: null,
+    auth: 'OpenClaw/ClawX local app; task card only'
   },
   pi: {
-    node: 'sabretooth',
-    access: 'local-service',
-    endpoint: 'http://localhost:11435',
-    auth: 'none (via Hermes router)'
+    node: 'worker-ai-1',
+    access: 'omni-router',
+    endpoint: urls.omniRouter,
+    auth: 'Pi provider/model format through configured adapter'
   },
   github: {
-    node: 'sabretooth',
+    node: 'external',
     access: 'api',
     endpoint: 'https://api.github.com',
     auth: 'token (GITHUB_TOKEN)'
   },
   slack: {
-    node: 'sabretooth',
+    node: 'external',
     access: 'api',
     endpoint: 'https://slack.com/api',
-    auth: 'bot token (SLACK_BOT_TOKEN)'
+    auth: 'bot token; no posting without approval'
   },
   codex: {
     node: 'sabretooth',
     access: 'browser-signin',
     endpoint: null,
-    auth: 'browser (OpenAI desktop)'
+    auth: 'Official Codex/OpenAI desktop session'
   },
   openai: {
-    node: 'sabretooth',
-    access: 'browser-signin',
-    endpoint: null,
-    auth: 'browser (OpenAI)'
+    node: 'external',
+    access: 'api-or-browser',
+    endpoint: urls.omniRouter,
+    auth: 'OpenAI API key via OmniRouter env or official app sign-in'
   },
   grok: {
-    node: 'sabretooth',
-    access: 'browser-signin',
-    endpoint: null,
-    auth: 'browser (xAI desktop)'
+    node: 'external',
+    access: 'browser-signin-or-api',
+    endpoint: urls.omniRouter,
+    auth: 'xAI/Grok key via OmniRouter env or official app sign-in'
   },
   gemini: {
-    node: 'sabretooth',
-    access: 'browser-signin',
-    endpoint: null,
-    auth: 'browser (Google desktop)'
+    node: 'external',
+    access: 'browser-signin-or-api',
+    endpoint: urls.omniRouter,
+    auth: 'Gemini key via OmniRouter env or official app sign-in'
   },
   chatgpt: {
-    node: 'sabretooth',
+    node: 'external',
     access: 'browser-signin',
     endpoint: null,
-    auth: 'browser (OpenAI ChatGPT)'
+    auth: 'Official ChatGPT app/web'
   },
   perplexity: {
-    node: 'sabretooth',
+    node: 'external',
     access: 'browser-signin',
     endpoint: null,
-    auth: 'browser (Perplexity Pro)'
+    auth: 'Perplexity account'
   },
   cursor: {
     node: 'sabretooth',
     access: 'desktop-app',
     endpoint: null,
-    auth: 'desktop app (IDE)'
+    auth: 'IDE app'
   },
   desktop: {
     node: 'sabretooth',
     access: 'desktop-app',
     endpoint: null,
-    auth: 'manual (any GUI desktop tool)'
+    auth: 'manual GUI desktop tool'
   },
   commander: {
     node: 'sabretooth',
     access: 'local-service',
     endpoint: null,
-    auth: 'none (Windows Terminal tasks)'
+    auth: 'manual Windows Terminal tasks'
   },
   odysseus: {
     node: 'sabretooth',
@@ -139,7 +177,13 @@ const PLATFORM_ROUTING = {
   }
 };
 
-const FALLBACK_ROUTING = {};
+const FALLBACK_ROUTING = {
+  codex: ['omni-router', 'opencode', 'fcc-claude'],
+  claude: ['fcc-claude', 'omni-router'],
+  cloud: ['omni-router', 'ollama'],
+  grok: ['omni-router'],
+  openai: ['omni-router']
+};
 
 function getRouting(platform) {
   return PLATFORM_ROUTING[platform] || null;
@@ -161,12 +205,9 @@ function getAllRoutes() {
 function canAutoDispatch(platform) {
   const route = PLATFORM_ROUTING[platform];
   if (!route) return false;
-  return ['local-service', 'fcc-proxy', 'api', 'openrouter', 'cloud-api'].includes(route.access);
+  return ['local-service', 'fcc-proxy', 'api', 'openrouter', 'cloud-api', 'omni-router', 'api-or-browser', 'browser-signin-or-api'].includes(route.access);
 }
 
-// Validates that every entry in the single source-of-truth PLATFORMS list
-// (src/platforms.js) has a matching PLATFORM_ROUTING entry here, and vice
-// versa. Mismatches are logged as warnings — this must never crash startup.
 function validatePlatformRouting() {
   const routingKeys = Object.keys(PLATFORM_ROUTING);
   const missingRouting = PLATFORMS.filter((p) => !routingKeys.includes(p));

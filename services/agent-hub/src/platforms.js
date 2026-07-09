@@ -14,6 +14,7 @@ const PLATFORMS = [
   'openai',       // OpenAI API (ChatGPT, GPT-5.5)
   'ollama',       // Local Ollama (GPU inference)
   'cloud',        // Cloud models (OpenRouter, Ollama Cloud, 1min-relay)
+  'omni-router',  // OmniRouter token/API routing layer
   'grok',         // xAI Grok desktop — browser sign-in
   'gemini',       // Google Gemini desktop — browser sign-in
   'chatgpt',      // ChatGPT web/desktop — browser sign-in

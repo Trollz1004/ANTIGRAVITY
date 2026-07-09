@@ -23,6 +23,7 @@ sentries, Hermes loops, or MCP proxy autostarts on Sabretooth.
 | `paperclip.ai-solutions.store` | Optional Paperclip | Standby workbench | T5500 Access tunnel only if approved |
 | `hermes.ai-solutions.store` | Hermes workbench | T5500 dashboard/workspace links | T5500 Access tunnel only if approved |
 | `fcc.ai-solutions.store` | FCC | `:8082` and `/admin` | Private LAN first; T5500 Access only if approved |
+| `omni.ai-solutions.store` | OmniRouter | `:11436` token/API router | Private LAN first; T5500 Access only if approved |
 
 ## Port Rules
 
@@ -32,8 +33,10 @@ sentries, Hermes loops, or MCP proxy autostarts on Sabretooth.
 - Optional third-party Paperclip: standby workbench, default `:3111`.
 - Hermes dashboard: official dashboard stays on `:9119`.
 - Hermes workspace: movable workbench. Do not assume `:3000`; move it when it
-  conflicts with date-app or other APIs.
+  conflicts with date-app or other APIs. T5500 preferred workspace port is
+  `:3010`.
 - FCC server: `:8082`; admin UI is `/admin`.
+- OmniRouter: `:11436`; token-saving/API routing layer.
 - Claude official: `https://claude.ai`.
 - Codex official/OpenAI GPT app: external tool link only unless an official local
   integration is configured.

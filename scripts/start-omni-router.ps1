@@ -1,14 +1,14 @@
 [CmdletBinding()]
 param(
   [string]$RepoRoot = 'C:\antigravity',
-  [int]$Port = 9110
+  [int]$Port = 11436
 )
 
 $ErrorActionPreference = 'Stop'
-$serviceDir = Join-Path $RepoRoot 'services\hermes-support-gateway'
+$serviceDir = Join-Path $RepoRoot 'services\omni-router'
 $envFile = Join-Path $serviceDir '.env.local'
 $logDir = Join-Path $RepoRoot 'logs'
-$logPath = Join-Path $logDir 'hermes-support-gateway.log'
+$logPath = Join-Path $logDir 'omni-router.log'
 
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 
@@ -22,9 +22,8 @@ if (Test-Path $envFile) {
 }
 
 if (-not $env:PORT) { $env:PORT = [string]$Port }
-if (-not $env:NODE_NAME) { $env:NODE_NAME = 't5500' }
-if (-not $env:AGENT_HUB_URL) { $env:AGENT_HUB_URL = 'http://192.168.0.8:3130' }
+if (-not $env:HOST) { $env:HOST = '127.0.0.1' }
 
 Set-Location $serviceDir
-"[$(Get-Date -Format o)] Starting hermes-support-gateway port=$env:PORT node=$env:NODE_NAME" | Add-Content -Path $logPath -Encoding UTF8
+"[$(Get-Date -Format o)] Starting omni-router port=$env:PORT proxy=$env:OMNI_ROUTER_PROXY_ENABLED" | Add-Content -Path $logPath -Encoding UTF8
 & node src\index.js *>> $logPath

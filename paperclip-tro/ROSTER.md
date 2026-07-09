@@ -14,21 +14,25 @@
 
 | Node | IP | Role | Orchestration |
 |---|---|---|---|
-| Sabretooth C: | 192.168.0.8 | Dev/control plane: first-party Mission Control :3110, Agent Hub :3130, legacy Paperweight :4200, OpenClaw, Hermes, FCC, OpenCode/Ollama, Grok | Mission Control + Agent Hub |
+| Sabretooth C: | 192.168.0.8 | Dev/control plane: first-party Mission Control :3110, Agent Hub :3130, official Codex/OpenAI work, repo authority | Mission Control + Agent Hub |
 | Sabretooth E: | portable drive | DREAM ONLINE root: `E:\CLAUDE's-N-Joshua's-Dream-Online-MMORPG` | Agent Hub tasks, local DREAM memory |
-| T5500 | gateway | Gateway/dateapp — Cloudflare tunnels for youandinotai.com | none |
+| T5500 | 192.168.0.15 | Front door/dateapp/Hermes workbench/OmniRouter/node balancer. No Agent Hub authority. | Cloudflared + Hermes + OmniRouter |
 | 9020 | 192.168.0.5 | Legacy support only unless Joshua explicitly changes it | none |
+| worker-web-1 | pending | i5-6600 web/API replica worker | none |
+| worker-ai-1 | pending | i5-6600 AI adapter worker for OmniRouter/FCC/OpenCode/Ollama/OpenClaw | none |
+| mini-asus | pending | Thin display/manual check-in only | none |
 
-## Platforms (21) — ALL on Sabretooth, routed by Agent Hub
+## Platforms - routed by Agent Hub, not all running on Sabretooth
 
 | Platform | Auth | Use |
 |---|---|---|
-| hermes | localhost | Hermes CEO lane: growth, support, research, leads |
-| fcc-claude | FCC proxy | Claude CEO helper lane: code, compliance, PR/payment gates |
+| hermes | T5500/dashboard | Hermes workbench lane: growth, support, research, leads |
+| fcc-claude | FCC proxy | Claude helper lane: code, compliance, PR/payment gates |
 | claude | Max subscription | Sup@ user guide sphere (DREAM) |
 | opencode | NVIDIA free | Code tasks |
 | ollama | localhost | Local models |
 | cloud | openrouter | Cloud relay via Hermes |
+| omni-router | node env | Token-saving/API routing for worker tasks |
 | 1minai | desktop app | DREAM NPC AI |
 | odysseus | localhost :7000 | Odysseus AI |
 | clawx | gateway | ClawX/OpenClaw |

@@ -6,7 +6,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $serviceDir = Join-Path $RepoRoot 'services\marketing-worker'
-$envFile = Join-Path $serviceDir '.env'
+$envFile = Join-Path $serviceDir '.env.local'
 $logDir = Join-Path $RepoRoot 'logs'
 $logPath = Join-Path $logDir 'marketing-worker.log'
 

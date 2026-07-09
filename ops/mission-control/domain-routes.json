@@ -62,7 +62,7 @@
       "aliases": ["control.ai-solutions.store"],
       "lane": "Mission Control",
       "service": "private Mission Control proxy",
-      "node": "Sabretooth",
+      "node": "Sabretooth authority via T5500 Access proxy only if approved",
       "localTarget": "127.0.0.1:3222 now, intended 127.0.0.1:3110 when port is free",
       "publicMethod": "T5500 Cloudflare Access protected tunnel only if Joshua explicitly wants phone/browser access",
       "status": "private-route-proposed",
@@ -84,8 +84,8 @@
       "aliases": [],
       "lane": "Hermes Workbench",
       "service": "Hermes dashboard/workspace link",
-      "node": "T5500 for date-app support; not Sabretooth autostart",
-      "localTarget": "dashboard fixed at :9119; workspace should move off :3000 when contested",
+      "node": "T5500 for date-app support/workbench; not Sabretooth autostart",
+      "localTarget": "dashboard fixed at :9119; workspace preferred :3010 and should move off :3000 when contested",
       "publicMethod": "T5500 Cloudflare Access protected tunnel only if needed",
       "status": "standby",
       "approval": "required before any public DNS or tunnel exposure"
@@ -99,6 +99,17 @@
       "localTarget": "127.0.0.1:8082 and 127.0.0.1:8082/admin",
       "publicMethod": "private LAN first; T5500 Access protected tunnel only if approved",
       "status": "active-local",
+      "approval": "required before any public DNS or tunnel exposure"
+    },
+    {
+      "domain": "omni.ai-solutions.store",
+      "aliases": ["router.ai-solutions.store"],
+      "lane": "OmniRouter",
+      "service": "token-saving/API routing layer for worker models",
+      "node": "T5500 or AI worker node",
+      "localTarget": "127.0.0.1:11436",
+      "publicMethod": "private LAN first; T5500 Access protected tunnel only if approved",
+      "status": "planned",
       "approval": "required before any public DNS or tunnel exposure"
     }
   ]

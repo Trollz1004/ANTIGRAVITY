@@ -1,0 +1,13 @@
+{
+  "name": "@antigravity/omni-router",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local API/token routing layer for ANTIGRAVITY worker models.",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

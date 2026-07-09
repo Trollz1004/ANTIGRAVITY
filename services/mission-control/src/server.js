@@ -13,6 +13,7 @@ const port = Number(process.env.PORT || 3110);
 const agentHubUrl = process.env.AGENT_HUB_URL || 'http://127.0.0.1:3130';
 const boardPath = path.join(repoRoot, 'ops', 'mission-control', 'board.json');
 const domainRoutesPath = path.join(repoRoot, 'ops', 'mission-control', 'domain-routes.json');
+const nodePoolPath = path.join(repoRoot, 'ops', 'mission-control', 'node-pool.json');
 const eventLogPath = path.join(repoRoot, 'logs', 'mission-control-events.jsonl');
 const startedAt = new Date();
 
@@ -231,6 +232,7 @@ function openShell(shell) {
 async function statusPayload() {
   const currentBoard = board();
   const domainRoutes = safeReadJson(domainRoutesPath, { routes: [] });
+  const nodePool = safeReadJson(nodePoolPath, { nodes: [], loadBalancer: {} });
   const hub = await fetchHealth(`${agentHubUrl.replace(/\/$/, '')}/health`);
   return {
     ok: true,
@@ -254,6 +256,11 @@ async function statusPayload() {
     tools: currentBoard.tools || [],
     terminal: currentBoard.terminal || [],
     domains: domainRoutes.routes || [],
+    nodePool: {
+      nodes: nodePool.nodes || [],
+      loadBalancer: nodePool.loadBalancer || {},
+      doNotBalance: nodePool.doNotBalance || []
+    },
     events: readEvents()
   };
 }
@@ -421,6 +428,11 @@ function page() {
     <h2>Domain Routes</h2>
     <div class="cards" id="domains"></div>
   </section>
+
+  <section class="panel" style="margin-top:16px">
+    <h2>Node Pool</h2>
+    <div class="cards" id="node-pool"></div>
+  </section>
 </main>
 
 <script>
@@ -466,6 +478,7 @@ async function boot() {
   document.getElementById('issues').innerHTML = data.issues.map((issue) => card(issue.title, issue.summary, ['severity: ' + issue.severity, 'owner: ' + issue.owner, 'status: ' + issue.status])).join('');
   document.getElementById('routines').innerHTML = data.routines.map((routine) => card(routine.name, routine.summary, ['cadence: ' + routine.cadence, 'owner: ' + routine.owner, 'mode: ' + routine.mode])).join('');
   document.getElementById('domains').innerHTML = data.domains.map((route) => card(route.domain, route.service, ['lane: ' + route.lane, 'node: ' + route.node, 'target: ' + route.localTarget, 'status: ' + route.status])).join('');
+  document.getElementById('node-pool').innerHTML = data.nodePool.nodes.map((node) => card(node.id, node.role, ['host: ' + node.host, 'authority: ' + node.authority, 'autostart: ' + node.autostart])).join('');
   document.getElementById('events').innerHTML = data.events.map((event) => '<div class="event">' + esc(event.timestamp + ' ' + event.type + ' ' + (event.message || event.shell || '')) + '</div>').join('') || '<p>No events yet.</p>';
 }
 boot();

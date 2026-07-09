@@ -14,7 +14,7 @@ log = logging.getLogger("social-engine")
 
 SITES = [
     {"name": "youandinotai.com", "url": "https://youandinotai.com", "critical": True},
-    {"name": "onlinerecycle.org", "url": "https://onlinerecycle.org", "critical": False},
+    {"name": "onlinerecycle.net", "url": "https://onlinerecycle.net", "critical": False},
     {"name": "ai-solutions.store", "url": "https://ai-solutions.store", "critical": False},
 ]
 

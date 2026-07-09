@@ -8,7 +8,7 @@ Runs on **Sabretooth at `:3130`** — the ONE location every AI sends work to.
 ```
 Sabretooth :3130 (Agent Hub) ← ALL AI sends work HERE
        │
-       ├── Local services: Hermes :9119/:3000, FCC :8082, Ollama :11434, ClawX, Pi
+       ├── T5500/workers: Hermes :9119/:3010, OmniRouter :11436, FCC :8082, Ollama/OpenCode, ClawX, Pi
        ├── Mission Control: first-party board :3110 (agents/tasks/routines/issues)
        ├── Legacy local viewer: Paperweight :4200
        ├── DREAM: E:\CLAUDE's-N-Joshua's-Dream-Online-MMORPG, 1min.ai (NPC AI), Claude Official (Sup@)
@@ -22,9 +22,9 @@ Sabretooth :3130 (Agent Hub) ← ALL AI sends work HERE
 
 | Node | Role | What runs there |
 |---|---|---|
-| **Sabretooth C:** | Dev/control plane | Agent Hub :3130, first-party Mission Control :3110, legacy Paperweight :4200, OpenClaw, Hermes :3000/:9119, FCC :8082, Ollama/OpenCode, Grok, PostgreSQL |
+| **Sabretooth C:** | Dev/control plane | Agent Hub :3130, first-party Mission Control :3110, legacy Paperweight :4200, Codex/OpenAI official, repo authority |
 | **Sabretooth E:** | DREAM ONLINE drive | `E:\CLAUDE's-N-Joshua's-Dream-Online-MMORPG` game files, memory, saves, backups |
-| **T5500** | Gateway + dateapp | Cloudflare tunnels and public gateway duties |
+| **T5500** | Front door + dateapp + workbench | Cloudflare tunnels, public gateway duties, Hermes dashboard/workspace, support gateway, OmniRouter, node balancer |
 | **9020** | Legacy support | No new production ownership unless Joshua explicitly changes it |
 
 ## Quick Start (on Sabretooth)
@@ -187,4 +187,4 @@ FCC-Claude and other compatible clients access tasks via the MCP interface:
 2. Mission Control :3110 is the human-facing board/manual cockpit; Agent Hub remains the backend source of truth.
 3. Standing mission-control lanes are Claude CEO and Hermes CEO only; other models are tools/subagents.
 4. Sabretooth C: is the control plane; Sabretooth E: is the DREAM drive.
-5. T5500 remains gateway/dateapp; 9020 is legacy support unless Joshua explicitly changes it.
+5. T5500 remains front-door/dateapp/Hermes-workbench/OmniRouter; 9020 and added nodes are workers unless Joshua explicitly changes it.

@@ -41,7 +41,7 @@
     {
       "id": "t5500-gateway",
       "title": "T5500 gateway report-in",
-      "summary": "T5500 runs date-app support gateway and reports status to Mission Control, not a second board.",
+      "summary": "T5500 runs Cloudflared/front-door, node balancer, date-app stack, Hermes dashboard/workspace, support gateway, and OmniRouter. It reports status to Mission Control, not a second board.",
       "owner": "T5500",
       "status": "planned"
     },
@@ -58,6 +58,13 @@
       "summary": "Sabretooth autostart is Mission Control only. No Cloudflared, Hermes, FCC, MCP, watchdog, sentry, or cursor-stealing background loops.",
       "owner": "Codex",
       "status": "active"
+    },
+    {
+      "id": "node-pool-load-balancer",
+      "title": "Node pool load balancer",
+      "summary": "T5500 routes public/stateless traffic to healthy web/AI workers from ops/mission-control/node-pool.json without balancing authority services.",
+      "owner": "T5500",
+      "status": "planned"
     }
       ]
     },
@@ -87,7 +94,7 @@
     {
       "id": "adapter-health",
       "name": "Adapter health",
-      "summary": "Check Agent Hub, FCC, OpenCode/Ollama, OpenClaw, Codex, Claude, Hermes, and Grok availability without secrets.",
+      "summary": "Check Agent Hub, OmniRouter, FCC, OpenCode/Ollama, OpenClaw, Codex, Claude, Hermes, Grok, and worker node availability without secrets.",
       "cadence": "30 minutes",
       "owner": "Agent Hub",
       "mode": "fail closed"
@@ -206,10 +213,26 @@
     {
       "id": "hermes",
       "name": "Hermes",
-      "role": "Optional tool lane, dashboard, and bounded support workflow.",
-      "status": "optional",
-      "boundary": "No autonomous backlog",
+      "role": "T5500 dashboard/workspace and bounded support workflow.",
+      "status": "t5500-workbench",
+      "boundary": "No autonomous backlog; no Sabretooth autostart",
       "url": "http://127.0.0.1:9119"
+    },
+    {
+      "id": "omni-router",
+      "name": "OmniRouter",
+      "role": "Token-saving and API routing layer for worker models.",
+      "status": "t5500-worker",
+      "boundary": "Worker routing only; Codex/Opus-level lanes decide doctrine and launch gates",
+      "url": "http://127.0.0.1:11436/health"
+    },
+    {
+      "id": "node-balancer",
+      "name": "T5500 Node Balancer",
+      "role": "Routes public/stateless traffic to healthy worker nodes.",
+      "status": "planned",
+      "boundary": "Do not balance Mission Control, Agent Hub writes, payments, databases, or memory doctrine",
+      "url": "http://127.0.0.1:4180/health"
     },
     {
       "id": "optional-paperclip",

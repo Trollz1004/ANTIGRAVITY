@@ -154,7 +154,7 @@ PLATFORM_POLICY = {
 OWNED_AUTOMATION_TARGETS = {
     "owned_sites": [
         "youandinotai.com",
-        "onlinerecycle.org",
+        "onlinerecycle.net",
         "dashboard.aidoesitall.website",
     ],
     "internal_outputs": [

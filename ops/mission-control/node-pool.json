@@ -1,0 +1,84 @@
+{
+  "lastUpdated": "2026-07-09",
+  "authority": "T5500 is the public front door and load-balancer node. Sabretooth is control/dev authority. Extra nodes are workers, not separate brains.",
+  "nodes": [
+    {
+      "id": "sabretooth",
+      "host": "192.168.0.8",
+      "role": "control-dev",
+      "authority": "mission-control-agent-hub",
+      "autostart": "Mission Control only",
+      "health": ["http://127.0.0.1:3110/api/health"]
+    },
+    {
+      "id": "t5500",
+      "host": "192.168.0.15",
+      "role": "front-door-load-balancer-hermes-workbench",
+      "authority": "public-proxy-only",
+      "autostart": "Public stack, Cloudflared, Hermes dashboard/workspace, support gateway, OmniRouter",
+      "health": [
+        "http://127.0.0.1:8000/api/v1/health",
+        "http://127.0.0.1:3200/",
+        "http://127.0.0.1:9110/health",
+        "http://127.0.0.1:9119/api/status",
+        "http://127.0.0.1:11436/health"
+      ]
+    },
+    {
+      "id": "worker-web-1",
+      "host": "pending",
+      "hardware": "i5-6600, 16-32 GB RAM pending",
+      "role": "stateless-web-worker",
+      "authority": "none",
+      "autostart": "web/API replicas only",
+      "health": []
+    },
+    {
+      "id": "worker-ai-1",
+      "host": "pending",
+      "hardware": "i5-6600, 16-32 GB RAM pending",
+      "role": "ai-adapter-worker",
+      "authority": "none",
+      "autostart": "OmniRouter/FCC/OpenCode/Ollama/OpenClaw workers only",
+      "health": []
+    },
+    {
+      "id": "mini-asus",
+      "host": "pending",
+      "hardware": "Mini ASUS pending",
+      "role": "thin-display-manual-checkin",
+      "authority": "none",
+      "autostart": "browser/display/manual check-in only",
+      "health": []
+    }
+  ],
+  "loadBalancer": {
+    "node": "t5500",
+    "port": 4180,
+    "rules": [
+      {
+        "id": "date-app",
+        "hostnames": ["aidesistail.online", "aidesistail.info", "aidesistail.store", "aidesistail.website"],
+        "targets": ["http://127.0.0.1:3200", "http://127.0.0.1:8000"]
+      },
+      {
+        "id": "ai-solutions-business-exchange",
+        "hostnames": ["ai-solutions.store"],
+        "targets": ["pending-business-exchange-frontend", "pending-business-exchange-api"]
+      },
+      {
+        "id": "online-recycle",
+        "hostnames": ["onlinerecycle.net"],
+        "targets": ["pending-online-recycle-frontend", "pending-online-recycle-api"]
+      }
+    ]
+  },
+  "doNotBalance": [
+    "Mission Control write authority",
+    "Agent Hub write authority",
+    "database primaries",
+    "payment webhooks",
+    "checkout ownership",
+    "memory doctrine"
+  ]
+}

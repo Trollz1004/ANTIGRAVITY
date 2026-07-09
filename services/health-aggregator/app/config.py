@@ -30,7 +30,7 @@ AUTHORIZED_NODES: tuple[Node, ...] = (
 
 PUBLIC_SURFACES: tuple[str, ...] = (
     "https://youandinotai.com/",
-    "https://onlinerecycle.org/",
+    "https://onlinerecycle.net/",
     "https://ai-solutions.store/",
     "https://dashboard.aidoesitall.website/",
 )

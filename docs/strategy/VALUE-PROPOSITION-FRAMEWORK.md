@@ -68,7 +68,7 @@ Mission language must never imply:
 
 **Core Hook:** "Digital tools that work, backed by support."
 
-### OnlineRecycle (onlinerecycle.org)
+### OnlineRecycle (onlinerecycle.net)
 
 | Theme | Value Proposition |
 |-------|-------------------|

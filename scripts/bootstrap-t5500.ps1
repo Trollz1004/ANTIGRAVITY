@@ -1,33 +1,58 @@
-# T5500 Bootstrap — Gateway Only
-# Cloudflare tunnels for youandinotai.com
-# NO Agent Hub, NO Hermes, NO FCC, NO Ollama — all on Sabretooth
+# T5500 Bootstrap - Front Door + Hermes Workbench
+# Cloudflare tunnels, date-app public stack, node balancer, Hermes dashboard/workspace,
+# support gateway, and OmniRouter belong here.
+# Mission Control and Agent Hub authority stay on Sabretooth.
 
 $ErrorActionPreference = 'Stop'
 
-Write-Host "=== T5500 BOOTSTRAP — Gateway Only ===" -ForegroundColor Cyan
+$RepoRoot = 'C:\antigravity'
+$Autostart = Join-Path $RepoRoot 'scripts\node-t5500-autostart.bat'
 
-# --- Remove services that don't belong here ---
-Write-Host "`n[1/2] Removing misplaced services..." -ForegroundColor Yellow
-$removeTasks = @('ANTIGRAVITY-AgentHub', 'ANTIGRAVITY-Hermes', 'ANTIGRAVITY-FCC', 'ANTIGRAVITY-Ollama', 'DREAM-GameServer', 'DREAM-Paperclip', 'DREAM-1minAI', 'HERMES-Workspace')
+Write-Host "=== T5500 BOOTSTRAP - Front Door + Workbench ===" -ForegroundColor Cyan
+
+Write-Host "`n[1/3] Removing services that do not belong on T5500..." -ForegroundColor Yellow
+$removeTasks = @(
+    'ANTIGRAVITY-AgentHub',
+    'ANTIGRAVITY-Ollama',
+    'DREAM-GameServer',
+    'DREAM-Paperclip',
+    'DREAM-1minAI'
+)
 foreach ($task in $removeTasks) {
     $existing = Get-ScheduledTask -TaskName $task -ErrorAction SilentlyContinue
     if ($existing) {
         Unregister-ScheduledTask -TaskName $task -Confirm:$false
-        Write-Host "  Removed: $task (belongs on Sabretooth)"
+        Write-Host "  Removed: $task"
     }
 }
 
-# --- Ensure Cloudflared is running ---
-Write-Host "`n[2/2] Cloudflared tunnel" -ForegroundColor Green
-$cfService = Get-Service -Name 'cloudflared*' -ErrorAction SilentlyContinue
+Write-Host "`n[2/3] Cloudflared tunnel service..." -ForegroundColor Green
+$cfService = Get-Service -Name 'cloudflared*' -ErrorAction SilentlyContinue | Select-Object -First 1
 if ($cfService) {
     Set-Service -Name $cfService.Name -StartupType Automatic
     Write-Host "  Cloudflared ($($cfService.Name)) set to Automatic"
 } else {
-    Write-Host "  Cloudflared not found as service — may be running as user" -ForegroundColor Yellow
+    Write-Host "  Cloudflared service not found; Start-YouAndINotAI-PublicStack.ps1 can run token-mode tunnel if token exists." -ForegroundColor Yellow
 }
 
+Write-Host "`n[3/3] T5500 autostart task..." -ForegroundColor Green
+if (-not (Test-Path -LiteralPath $Autostart)) {
+    throw "Missing autostart script: $Autostart"
+}
+
+$taskName = 'ANTIGRAVITY-T5500-FrontDoor-Workbench'
+$action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument "/c `"$Autostart`"" -WorkingDirectory $RepoRoot
+$trigger = New-ScheduledTaskTrigger -AtLogOn
+$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 2)
+Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Force | Out-Null
+Write-Host "  Registered: $taskName"
+
 Write-Host "`n=== T5500 BOOTSTRAP COMPLETE ===" -ForegroundColor Cyan
-Write-Host "This node is gateway only:"
-Write-Host "  - Cloudflared tunnel for youandinotai.com"
-Write-Host "`nAll AI work routes through Sabretooth :3130 (Agent Hub)."
+Write-Host "This node owns:"
+Write-Host "  - Cloudflared/front-door routing"
+Write-Host "  - Date-app public stack"
+Write-Host "  - Node balancer for stateless worker pool"
+Write-Host "  - Hermes dashboard/workspace"
+Write-Host "  - Hermes support gateway"
+Write-Host "  - OmniRouter token/API routing"
+Write-Host "`nAgent Hub and Mission Control authority stay on Sabretooth."

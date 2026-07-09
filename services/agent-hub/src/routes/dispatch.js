@@ -6,8 +6,9 @@ const router = Router();
 // GET /api/dispatch/routes — show all platform routing
 router.get('/routes', (req, res) => {
   res.json({
-    gateway: 'T5500 :3130',
-    description: 'All AI sends work here. Hub dispatches to the right platform/node.',
+    hub: 'Sabretooth :3130',
+    front_door: 'T5500 Cloudflared/proxy',
+    description: 'Agent Hub authority stays on Sabretooth. T5500 is front-door/workbench and worker nodes report back here.',
     routes: getAllRoutes(),
     nodes: NODE_MAP
   });

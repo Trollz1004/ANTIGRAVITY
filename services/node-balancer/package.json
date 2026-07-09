@@ -1,0 +1,13 @@
+{
+  "name": "@antigravity/node-balancer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Small local node-pool balancer for T5500 front-door routing.",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

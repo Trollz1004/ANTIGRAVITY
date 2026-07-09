@@ -432,7 +432,7 @@ $httpProbes = @(
   'https://api.youandinotai.com',
   'https://paperclip-hq.youandinotai.com',
   'https://mcp.youandinotai.com',
-  'https://onlinerecycle.org',
+  'https://onlinerecycle.net',
   'https://ai-solutions.store',
   'https://dashboard.aidoesitall.website'
 )
