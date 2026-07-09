@@ -27,6 +27,7 @@ Evidence required:
   `C:\antigravity\logs\all-node-topology-verification-*.json`
 - zero `fail` checks
 - any `warn` checks explained with a concrete next action
+- `skip` is allowed only for worker nodes whose host is still `pending`
 
 If Sabretooth fails on forbidden watchdog/sentry/Hermes/FCC/Cloudflared loops,
 run:
@@ -80,7 +81,10 @@ card only in sandbox mode.
 
 ## Current Known Incomplete Items
 
-- Live T5500 restart verification has not been run in this session.
+- Live T5500 verification passed after runtime bundle start for date-app backend,
+  frontend, node balancer, Hermes support gateway, Hermes dashboard, and
+  OmniRouter. A physical reboot/power-loss cycle still has not been performed in
+  this session.
 - Live DNS mutation has not been run in this session.
 - Date-app transaction has not been charged in this session.
 - Business Exchange transaction has not been charged in this session.

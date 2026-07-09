@@ -23,6 +23,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Disab
   Hermes dashboard/workspace, OmniRouter.
 - Does not own: Agent Hub authority, Mission Control authority, payment webhook
   ownership, database primaries, doctrine.
+- If the T5500 `C:\antigravity` checkout is dirty or not safe to pull, deploy
+  runtime-only services under `C:\antigravity-runtime` and register:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity-runtime\scripts\t5500\Install-T5500RuntimeTask.ps1 -RepoRoot C:\antigravity-runtime
+```
+
+This registers a logon task plus a 30-minute repair task for node balancer,
+Hermes support gateway, and OmniRouter only.
 
 ## Worker Nodes
 

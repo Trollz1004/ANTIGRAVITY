@@ -11,6 +11,7 @@
 param(
   [string]$RepoRoot = 'C:\antigravity',
   [string]$NodePoolPath = '',
+  [string]$RemoteTempRoot = '',
   [switch]$IncludePending,
   [switch]$NoSsh
 )
@@ -91,12 +92,61 @@ function Invoke-RemoteVerify {
   if (-not $ssh) {
     return New-Result $NodeId $HostName $Role 'warn' 'ssh command not found'
   }
+  if (-not (Test-Path -LiteralPath $LocalVerifier)) {
+    return New-Result $NodeId $HostName $Role 'fail' "Missing local verifier: $LocalVerifier"
+  }
   $remote = "$UserName@$HostName"
-  $remoteCommand = "powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\verify-node-topology.ps1 -Role $Role"
+  $remoteVerifier = 'C:\antigravity\scripts\verify-node-topology.ps1'
+  $remoteRepoRoot = 'C:\antigravity'
+  $usedTempVerifier = $false
+
+  $probeCommand = "powershell -NoProfile -Command `"if (Test-Path -LiteralPath '$remoteVerifier') { exit 0 } else { exit 44 }`""
+  $probeRaw = & $ssh.Source -o BatchMode=yes -o ConnectTimeout=8 $remote $probeCommand 2>&1
+  $probeExit = $LASTEXITCODE
+
+  if ($probeExit -eq 44) {
+    $scp = Get-Command scp -ErrorAction SilentlyContinue
+    if (-not $scp) {
+      return New-Result $NodeId $HostName $Role 'fail' "Remote verifier missing and scp command not found" @{ probeRaw = ($probeRaw -join "`n") }
+    }
+
+    if (-not $RemoteTempRoot) {
+      $RemoteTempRoot = "C:\Users\$UserName\AppData\Local\Temp\antigravity-verify"
+    }
+    $remoteTempVerifier = Join-Path $RemoteTempRoot 'verify-node-topology.ps1'
+    $remoteTempVerifierUnix = $remoteTempVerifier -replace '\\','/'
+
+    $mkdirCommand = "powershell -NoProfile -Command New-Item -ItemType Directory -Force -Path '$RemoteTempRoot'"
+    $mkdirRaw = & $ssh.Source -o BatchMode=yes -o ConnectTimeout=8 $remote $mkdirCommand 2>&1
+    $mkdirExit = $LASTEXITCODE
+    if ($mkdirExit -ne 0) {
+      return New-Result $NodeId $HostName $Role 'fail' "Could not create remote temp verifier dir" @{ raw = ($mkdirRaw -join "`n"); tempRoot = $RemoteTempRoot }
+    }
+
+    $target = "${remote}:$remoteTempVerifierUnix"
+    $copyRaw = & $scp.Source -o BatchMode=yes -o ConnectTimeout=8 $LocalVerifier $target 2>&1
+    $copyExit = $LASTEXITCODE
+    if ($copyExit -ne 0) {
+      return New-Result $NodeId $HostName $Role 'fail' "Could not copy verifier helper to remote temp dir" @{ raw = ($copyRaw -join "`n"); target = $target }
+    }
+
+    $remoteVerifier = $remoteTempVerifier
+    $remoteRepoRoot = $RemoteTempRoot
+    $usedTempVerifier = $true
+  } elseif ($probeExit -ne 0) {
+    return New-Result $NodeId $HostName $Role 'fail' "Could not probe remote verifier path" @{ raw = ($probeRaw -join "`n"); path = $remoteVerifier; exit = $probeExit }
+  }
+
+  $remoteCommand = "powershell -NoProfile -ExecutionPolicy Bypass -File $remoteVerifier -Role $Role -RepoRoot $remoteRepoRoot"
   $raw = & $ssh.Source -o BatchMode=yes -o ConnectTimeout=8 $remote $remoteCommand 2>&1
   $exit = $LASTEXITCODE
   $status = if ($exit -eq 0) { 'pass' } elseif ($exit -eq 2) { 'warn' } else { 'fail' }
-  return New-Result $NodeId $HostName $Role $status "ssh verifier exit=$exit" @{ raw = ($raw -join "`n") }
+  return New-Result $NodeId $HostName $Role $status "ssh verifier exit=$exit" @{
+    raw = ($raw -join "`n")
+    verifier = $remoteVerifier
+    repoRoot = $remoteRepoRoot
+    usedTempVerifier = $usedTempVerifier
+  }
 }
 
 if (-not (Test-Path -LiteralPath $NodePoolPath)) {
@@ -116,7 +166,7 @@ foreach ($node in $pool.nodes) {
   $role = Get-VerifyRole $node
   $hostName = [string]$node.host
   if ((-not $IncludePending) -and (-not $hostName -or $hostName -eq 'pending')) {
-    $results.Add((New-Result $node.id $hostName $role 'warn' 'node host pending; skipped'))
+    $results.Add((New-Result $node.id $hostName $role 'skip' 'node host pending; skipped'))
     continue
   }
 
@@ -131,6 +181,7 @@ $summary = @{
   pass = @($results | Where-Object status -eq 'pass').Count
   fail = @($results | Where-Object status -eq 'fail').Count
   warn = @($results | Where-Object status -eq 'warn').Count
+  skip = @($results | Where-Object status -eq 'skip').Count
 }
 
 $report = [pscustomobject]@{
