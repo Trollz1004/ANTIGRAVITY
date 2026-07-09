@@ -9,6 +9,11 @@ the Sabretooth dev workstation.
 - Starts: Mission Control only.
 - Does not start: Cloudflared, Hermes loops, FCC/MCP proxies, watchdogs,
   sentries, browser controllers.
+- If drift reintroduces cursor-stealing loops, run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Disable-Sabretooth-BackgroundLoops.ps1
+```
 
 ## T5500
 

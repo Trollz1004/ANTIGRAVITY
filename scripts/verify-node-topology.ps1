@@ -73,18 +73,33 @@ function Test-PortClosed {
 function Test-ProcessAbsent {
   param(
     [string]$Name,
-    [string]$Pattern
+    [string]$NamePattern = '',
+    [string]$CommandPattern = ''
   )
   try {
     $matches = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
-      Where-Object { $_.Name -match $Pattern -or $_.CommandLine -match $Pattern } |
+      Where-Object {
+        (($NamePattern -ne '') -and ($_.Name -match $NamePattern)) -or
+        (($CommandPattern -ne '') -and ($_.CommandLine -match $CommandPattern))
+      } |
       Select-Object -First 5 Name,ProcessId
     if ($matches) {
-      return New-Check $Name 'fail' "Forbidden process pattern found: $Pattern" @{ pattern = $Pattern; count = @($matches).Count }
+      return New-Check $Name 'fail' 'Forbidden process pattern found' @{
+        namePattern = $NamePattern
+        commandPattern = $CommandPattern
+        count = @($matches).Count
+        processes = @($matches | ForEach-Object { "$($_.Name):$($_.ProcessId)" })
+      }
     }
-    return New-Check $Name 'pass' "No process pattern found: $Pattern" @{ pattern = $Pattern }
+    return New-Check $Name 'pass' 'No forbidden process pattern found' @{
+      namePattern = $NamePattern
+      commandPattern = $CommandPattern
+    }
   } catch {
-    return New-Check $Name 'warn' $_.Exception.Message @{ pattern = $Pattern }
+    return New-Check $Name 'warn' $_.Exception.Message @{
+      namePattern = $NamePattern
+      commandPattern = $CommandPattern
+    }
   }
 }
 
@@ -109,9 +124,12 @@ if ($Role -eq 'Sabretooth') {
   foreach ($port in @(3000, 8082, 9119, 11435)) {
     $checks.Add((Test-PortClosed "sabretooth forbidden port $port" $port))
   }
-  foreach ($pattern in @('cloudflared', 'hermes.*dashboard', 'hermes.*desktop', 'fcc-server', 'watchdog', 'sentry')) {
-    $checks.Add((Test-ProcessAbsent "sabretooth forbidden process $pattern" $pattern))
-  }
+  $checks.Add((Test-ProcessAbsent 'sabretooth forbidden process cloudflared' -NamePattern '^cloudflared\.exe$' -CommandPattern 'cloudflared'))
+  $checks.Add((Test-ProcessAbsent 'sabretooth forbidden process hermes dashboard' -CommandPattern 'hermes.*dashboard'))
+  $checks.Add((Test-ProcessAbsent 'sabretooth forbidden process hermes desktop' -CommandPattern 'hermes.*desktop'))
+  $checks.Add((Test-ProcessAbsent 'sabretooth forbidden process fcc server' -CommandPattern 'fcc-server|fcc-claude'))
+  $checks.Add((Test-ProcessAbsent 'sabretooth forbidden process antigravity watchdog' -CommandPattern 'antigravity.*watchdog|watchdog.*antigravity|paperclip-watchdog|sabretooth-watchdog|openclaw-paperclip-agent-watchdog|Invoke-DateAppOpsWatchdog'))
+  $checks.Add((Test-ProcessAbsent 'sabretooth forbidden process antigravity sentry' -CommandPattern 'antigravity.*sentry|sentry.*antigravity'))
 }
 
 if ($Role -eq 'T5500' -or $Role -eq 'AllHttp') {

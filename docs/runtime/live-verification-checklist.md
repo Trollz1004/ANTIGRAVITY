@@ -28,6 +28,15 @@ Evidence required:
 - zero `fail` checks
 - any `warn` checks explained with a concrete next action
 
+If Sabretooth fails on forbidden watchdog/sentry/Hermes/FCC/Cloudflared loops,
+run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\Disable-Sabretooth-BackgroundLoops.ps1
+```
+
+Then rerun `verify-node-topology.ps1 -Role Sabretooth`.
+
 ## Node Registration
 
 When the Mini ASUS or i5-6600 nodes come online, register them before routing:
