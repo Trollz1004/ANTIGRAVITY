@@ -23,7 +23,7 @@ If this is not literally true, open an ops-drift issue.
 - Adapter health every 15m
 - Business-only public-surface audit hourly
 - Payment reconciliation daily 06:00
-- T5500 customer-service OpenClaw health every 5m
+- T5500 date-app and runtime health every 5m
 - Weekly agent/fleet check-in
 
 ## When to Use
@@ -32,4 +32,9 @@ If this is not literally true, open an ops-drift issue.
 - Building or fixing the HTML/TSX at apps/mission-control/ or the backend that feeds it.
 - Checking "is ops control working?" - compare against the verified statement.
 
-Deployed at https://mission-control.youandinotai.com (or current). Customer-service OpenClaw on T5500 pins it always-on.
+Deployed at https://mission-control.youandinotai.com (or current).
+
+OpenClaw/ClawX is a hands-on operator and orchestration peer when Joshua assigns
+it. It may use approved keyboard/tools and spawn task-scoped subagents assigned
+to explicit nodes. AnythingLLM is the preferred customer-support and grounded
+knowledge-retrieval lane. Neither role creates authority over another AI.

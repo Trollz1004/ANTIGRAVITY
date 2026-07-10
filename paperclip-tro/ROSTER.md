@@ -35,7 +35,8 @@
 | omni-router | node env | Token-saving/API routing for worker tasks |
 | 1minai | desktop app | DREAM NPC AI |
 | odysseus | localhost :7000 | Odysseus AI |
-| clawx | gateway | ClawX/OpenClaw |
+| clawx | local GUI/gateway | Hands-on operator/orchestration peer; approved keyboard tools and task-scoped subagents assigned to explicit nodes by Joshua |
+| anythingllm | local knowledge workspace | Preferred customer-support and grounded retrieval lane |
 | pi | localhost | Conversational |
 | github | PAT | Issue sync |
 | slack | bot token | Notifications |
@@ -51,7 +52,7 @@
 
 ## Skills
 
-279 skills in `.agents/skills/`. Every agent loads skills on demand.
+201 skills in `.agents/skills/` at the 2026-07-10 verified index. Every agent loads skills on demand.
 Every platform session reads `.agents/BOOT.md` first. No exceptions.
 
 ## Slack Channels
@@ -60,7 +61,6 @@ Every platform session reads `.agents/BOOT.md` first. No exceptions.
 |---|---|
 | #antigravity-platform | All task events (default) |
 | #dream-online | DREAM tasks (platform: 1minai) |
-| #fcc-claude | Claude tasks (platform: claude, fcc-claude) |
 
 ## Agent Hub API (Sabretooth :3130)
 

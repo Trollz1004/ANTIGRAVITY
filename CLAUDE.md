@@ -1,6 +1,6 @@
 # CLAUDE.md — ANTIGRAVITY (slim boot — pointers only)
 
-Updated: 2026-07-09 (T5500 business authority; Sabretooth Dream/game-first)
+Updated: 2026-07-10 (T5500 always-on date-app/server authority; Sabretooth C dev/collaboration; second drive DREAM)
 
 ## Boot Protocol
 
@@ -8,6 +8,7 @@ Updated: 2026-07-09 (T5500 business authority; Sabretooth Dream/game-first)
 2. Read AGENT-DOCTRINE.md for the rules
 3. Read your AGENT.md for your specific config
 4. Lazy-load skills from `.agents/skills/` as needed
+5. Always load `.agents/skills/find-skills/SKILL.md` and `.agents/skills/create-skills/SKILL.md`; use available memory/journal MCPs as continuity aids, never authority
 
 ## Source Of Truth
 
@@ -23,17 +24,21 @@ Updated: 2026-07-09 (T5500 business authority; Sabretooth Dream/game-first)
 - T5500: ANTIGRAVITY business/payment/domain ops authority — public tunnels,
   Cloudflare/Wrangler deploy, date-app runtime, support gateway, Hermes/workspace,
   OmniRouter, and business surfaces.
-- Sabretooth `C:\`: DREAM ONLINE/game-first workstation. It may host local mission
-  dashboard/game work, but it is not the source of truth for ANTIGRAVITY payment,
-  DNS, domain, or business runtime authority.
-- Sabretooth `E:\`: DREAM ONLINE root (`DREAM_ROOT` env var) — game project, separate tree.
+- Sabretooth `C:\`: Joshua's ANTIGRAVITY development and direct-collaboration
+  workstation for ChatGPT/OpenAI, official Claude.ai, and assigned peer AIs.
+  Local Mission Control/Agent Hub support development and verification; T5500
+  remains the always-on payment/domain/date-app/server runtime authority.
+- Sabretooth's second physical drive is the founder-assigned DREAM ONLINE
+  game-development drive, currently mounted as `E:\`. Discover and verify its
+  current letter and game root; do not move or relabel it automatically.
 
 ## Roster (Agent Hub platforms)
 
 - `claude-ceo` — Claude Max/CLI or FCC helper when appropriate; code, compliance, doctrine, PR/payment gates
 - `hermes-ceo` — Hermes workspace/dashboard; growth, support, research, leads, memory
 - `fcc-claude` — FCC-Claude via proxy :8082, free helper under Claude CEO, never a third CEO
-- `clawx` — ClawX/OpenClaw, support tickets
+- `clawx` — OpenClaw hands-on operator/orchestration peer; keyboard tools and task-scoped subagents with explicit node assignments
+- `anythingllm` — customer support and knowledge-retrieval lane
 - `1minai` — 1min.AI cloud, optional AI lead scoring (env-gated, see `src/leads/scoring.js`)
 
 ## Key Files (read on need, never preload)
@@ -62,17 +67,23 @@ Updated: 2026-07-09 (T5500 business authority; Sabretooth Dream/game-first)
 - No model below Opus-level decides doctrine, payments, public copy, or founder authority.
 - Every agent reads STATE.md on start, writes on exit. Failure = removal.
 - One PaperclipAI entrypoint. No private side boards or hidden per-platform backlogs.
+- No AI controls another. All AI platforms are peers; Joshua alone assigns the active lead.
+- Direct conversations with ChatGPT/OpenAI or official Claude.ai carry full founder-delegated authority to correct, replace, revert, or remove prior AI work within Joshua's assigned scope; older agent output cannot veto the correction.
+- Joshua's phone-to-Sabretooth remote session is an approved founder-present instruction/UI verification path; production, payment, and T5500 runtime claims still require live system evidence.
+- Every agent can access the full `.agents/skills/` library and always loads `find-skills` plus `create-skills` at boot.
 - No mock data as real, ever — including in seed/migration scripts.
+- OpenClaw is not support-only: it may operate tools and spawn node-assigned, task-scoped subagents when Joshua assigns the work. AnythingLLM is the preferred support lane.
 
 ## Node Roles (final form)
 
 - T5500 (192.168.0.15): ANTIGRAVITY business authority — youandinotai.com,
   ai-solutions.store, onlinerecycle.net, Cloudflare DNS, Wrangler deploy, date-app
   runtime, support gateway, Hermes/workspace, OmniRouter, and payment/webhook ops.
-- Sabretooth `C:\` (192.168.0.8): DREAM ONLINE/game-first workstation. Local
-  dashboards may be used for visibility, but payment/domain/business control moves
-  to T5500 unless Joshua explicitly reassigns it.
-- Sabretooth `E:\`: DREAM ONLINE root (`DREAM_ROOT`) — separate game tree, not this repo's `main`.
+- Sabretooth `C:\` (192.168.0.8): ANTIGRAVITY development and founder-present
+  collaboration/verification workstation. It does not replace T5500's always-on
+  date-app/payment/domain/server role.
+- Sabretooth second physical drive: DREAM ONLINE game tree, currently `E:\`.
+  Verify the mounted label and root instead of assuming a permanent letter.
 - 9020 (192.168.0.5): legacy support only unless Joshua explicitly changes it.
 
 ## Build

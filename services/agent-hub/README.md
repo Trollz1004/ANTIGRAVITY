@@ -48,7 +48,7 @@ npm start                  # listens on :3130
 | `ollama` | localhost | Local models |
 | `cloud` | openrouter | Cloud relay via Hermes |
 | `1minai` | desktop app | DREAM NPC AI |
-| `clawx` | gateway | ClawX/OpenClaw |
+| `clawx` | local GUI/gateway | Hands-on operator/orchestration peer with approved keyboard tools and task-scoped, node-assigned subagents |
 | `pi` | localhost | Conversational |
 | `github` | PAT | Issue sync |
 | `slack` | bot token | Notifications |

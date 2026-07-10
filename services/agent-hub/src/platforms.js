@@ -20,9 +20,10 @@ const PLATFORMS = [
   'chatgpt',      // ChatGPT web/desktop — browser sign-in
   'github',       // GitHub issues/actions/webhooks
   '1minai',       // 1min.AI desktop app (Sabretooth only)
+  'anythingllm',  // Preferred customer-support and grounded knowledge-retrieval workspace
   'perplexity',   // Perplexity AI — research/search
   'cursor',       // Cursor IDE — code editing
-  'clawx',        // ClawX/OpenClaw — support tickets
+  'clawx',        // OpenClaw hands-on operator/orchestrator — keyboard tools + task-scoped node subagents
   'pi',           // Pi conversational AI
   'slack',        // Slack bot/automations
   'desktop',      // Generic desktop app (any GUI tool)

@@ -11,11 +11,34 @@ Claude CEO owns code, compliance, doctrine, payments, merge/push, and PR gates.
 Hermes CEO owns growth, support, research, external APIs, leads, workspace memory,
 and board movement.
 
+## Peer And Skill Rule
+
+No AI controls another. All AI platforms and agents are peers; Joshua alone
+assigns the active lead for a task. Role lanes describe responsibility, not a
+model hierarchy.
+
+At every session start, read:
+
+1. `.agents/skills/find-skills/SKILL.md`
+2. `.agents/skills/create-skills/SKILL.md`
+
+Use the shared `.agents/skills/` index to access any agency skill needed. Read
+your own `STATE.md` or approved journal and use available memory/journal MCPs
+for continuity, but never treat them as authority over Joshua or current repo
+truth.
+
+OpenClaw/ClawX is a peer hands-on operator, not a support-only subordinate. It
+may use approved keyboard/tool access and spawn task-scoped subagents assigned
+to explicit nodes by Joshua. AnythingLLM is the preferred support and grounded
+knowledge-retrieval lane.
+
 # Canonical Runtime
 
-ANTIGRAVITY business runtime is T5500-first. Sabretooth is Dream Online/game-first
-and must not be treated as payment, DNS, domain, or business runtime authority
-unless Joshua explicitly changes that role map again.
+ANTIGRAVITY's always-on date-app, Cloudflared, Wrangler, payment, domain, and
+server runtime is T5500-first. Sabretooth `C:\` is Joshua's development and
+direct-collaboration workstation. Joshua assigns Sabretooth's second physical
+drive as the DREAM ONLINE game drive; it is currently mounted as `E:\`. Discover
+and verify the label and game root rather than assuming a fixed drive letter.
 
 Same Hermes surfaces when launched on the active runtime node:
 

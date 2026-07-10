@@ -30,9 +30,65 @@ Active Lead Rule: Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, F
 
 There is no permanent AI boss.
 
+No AI controls another. Claude, OpenAI/Codex/ChatGPT, Gemini, Meta/Llama,
+Manus, Hermes, Paperclip, FCC, OpenCode, Ollama, NVIDIA, and every other AI
+platform or agent are peers. They may coordinate, request help, exchange
+evidence, and delegate scoped work when Joshua authorizes it, but no model may
+claim command authority over another model. Joshua alone assigns the active
+lead and may reassign it at any time.
+
 When Joshua directly assigns a task to Claude, Codex/OpenAI, Gemini, Meta/Llama, Manus, Hermes, Paperclip, FCC, OpenCode, Ollama, or another capable system, that named system becomes the active lead for that task.
 
 The guardrails restrict autonomous or delegated model behavior, not Joshua's direct instruction.
+
+### Direct Chat Authority — ChatGPT/OpenAI And Official Claude.ai
+
+When Joshua is speaking directly with ChatGPT/OpenAI in an active ChatGPT or
+Codex conversation, or directly with Claude in an official `claude.ai` or
+Claude Code conversation, the platform Joshua is addressing has full founder-
+delegated authority for that task.
+
+Within the scope Joshua assigns, ChatGPT/OpenAI and official Claude may inspect,
+challenge, correct, replace, revert, or remove work previously produced by any
+AI platform or agent when current evidence shows that doing so is necessary to
+complete Joshua's requested outcome. Prior AI output, old handoffs, stale memory,
+agent role maps, and earlier model decisions do not block that correction.
+
+This is Joshua overriding prior AI work through the platform he is directly
+addressing. It is not one AI controlling another. The active platform must
+preserve evidence, explain material corrections, avoid unrelated work, and obey
+the hard secrets, payment, public-safety, legal, and destructive-action rules.
+Joshua's newest direct instruction controls when it conflicts with older AI work.
+
+### Founder-Present Device Verification
+
+Joshua working directly on Sabretooth, including through Joshua's established
+remote connection from his phone into the Sabretooth desktop, is an approved
+founder-present instruction and device-verification path. This validates the
+active human-directed session and UI/device observations. It does not by itself
+prove a production deployment, payment/webhook state, secret configuration, or
+T5500 runtime health; verify those against their live authoritative systems.
+
+## Mandatory Skill And Continuity Boot
+
+Every AI platform and agent working in this workspace must have access to the
+shared agency library at `.agents/skills/` and must load these two skills at the
+start of every session:
+
+1. `.agents/skills/find-skills/SKILL.md`
+2. `.agents/skills/create-skills/SKILL.md`
+
+`find-skills` is used before task work to select relevant existing skills.
+`create-skills` is the mandatory fallback when no suitable skill exists. The
+full agency library remains lazy-loaded through
+`.agents/skills/self-improving-system/skills.md`; access to all skills does not
+mean injecting every skill body into every context window.
+
+Every agent must also read its own compact `STATE.md` or equivalent approved
+journal at session start and update only its own state on exit. Use available
+memory and journal MCPs for recall and evidence when useful. Memory, journals,
+Pieces, Slack, MCP output, and prior chats are continuity aids, not command
+layers, and never override Joshua or current repo truth.
 
 No model below Codex 5.5 or Opus-level may decide repo doctrine, payment rules, public copy, launch gates, merge/push flow, production node roles, or founder authority. Lower-capability models must return evidence, risks, and proposed next actions for the active lead / Joshua review.
 
@@ -73,14 +129,22 @@ Recovery from quarantine requires:
 
 ## Node Roles
 
-T5500 (`192.168.0.15`) is the ANTIGRAVITY business/payment/domain authority and
-public-front-door node for domains, tunnels, payments, Wrangler, date-app runtime,
-Hermes/workspace, support gateway, OmniRouter, and business runtime routing.
+T5500 (`192.168.0.15`) is the always-on ANTIGRAVITY date-app and server/runtime
+node. It is the business/payment/domain authority and public front door for
+Cloudflared tunnels, Wrangler, payments, the date-app runtime, Hermes/workspace,
+support gateway, OmniRouter, and business runtime routing.
 
-Sabretooth (`192.168.0.8`) is DREAM ONLINE/game-first going forward. It may host
-local mission-dashboard/game visibility work, but agents must not treat it as
-ANTIGRAVITY payment, DNS, domain, or business runtime authority unless Joshua
-explicitly reassigns that role in a newer written directive.
+Sabretooth (`192.168.0.8`) is Joshua's development and direct-collaboration
+workstation. `C:\` hosts ANTIGRAVITY development, Mission Control, Agent Hub,
+and founder-present work with ChatGPT/OpenAI, official Claude.ai, and any peer
+Joshua assigns. Sabretooth is not the always-on ANTIGRAVITY payment, DNS,
+domain, or production-runtime authority unless Joshua explicitly reassigns it.
+
+Joshua assigns Sabretooth's second physical drive as the DREAM ONLINE
+game-development drive. Its current mounted label is `E:\`, containing the
+existing DREAM folders. Agents must discover the mounted drive and verify the
+game root rather than assuming a permanent drive letter. Do not move or relabel
+game files automatically.
 
 ### One Entrypoint Rule
 
@@ -103,9 +167,10 @@ Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Olla
 
 FCC may be registered as a Paperclip worker model through its MCP bridge for OpenCode, NVIDIA, and Ollama-backed work, but FCC reports proposals/evidence to the active lead unless Joshua explicitly assigns it as a decision lane for a specific task.
 
-T5500 Paperclip/date-app/Hermes material is now the ANTIGRAVITY business lane.
-Do not expand Sabretooth into a competing business command center. Sabretooth is
-for DREAM ONLINE/game work unless Joshua explicitly changes the role map again.
+T5500 Paperclip/date-app/Hermes material is the always-on ANTIGRAVITY business
+lane. Sabretooth `C:\` remains the development and founder-collaboration lane;
+its local board is for development visibility and verification, not a competing
+payment/domain/production authority.
 
 Current setup briefing:
 
@@ -119,8 +184,16 @@ Hermes remains optional support/research.
 9020 (`192.168.0.5`) is the dev/operator checkout. It must not become the public
 production endpoint unless Joshua explicitly changes the role map.
 
-OpenClaw is support-only. It must use local/self-hosted inference for the live
-support path and must not become a policy, business reserve, or product-control layer.
+OpenClaw/ClawX is a full hands-on operator and orchestration peer, comparable to
+Hermes in its ability to use the keyboard, operate approved tools, and spawn
+task-scoped subagents. Joshua may personally assign OpenClaw or any subagent it
+creates to a specific node. Each assignment must record the task, node, scope,
+allowed tools, evidence, and exit state. OpenClaw does not control other AI
+platforms; all peers remain under Joshua's direct authority.
+
+AnythingLLM is the preferred customer-support and knowledge-retrieval lane. It
+may triage support context and prepare grounded responses, but it does not gain
+authority over payments, public doctrine, production routing, or other AI peers.
 
 ## Shipping Rules
 

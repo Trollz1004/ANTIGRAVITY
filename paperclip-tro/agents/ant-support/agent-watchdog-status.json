@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-07-06T18:35:00Z",
+  "checkedAt": "2026-07-07T02:35:00Z",
   "health": {
     "ok": false,
     "status": "blocked"
@@ -31,7 +31,7 @@
     "status": "blocked",
     "issue": "configured watchdog script not found",
     "missingScript": "C:\\antigravity\\scripts\\openclaw-paperclip-agent-watchdog.ps1",
-    "attemptedAt": "2026-07-06T18:35:00Z",
+    "attemptedAt": "2026-07-07T02:35:00Z",
     "sanitized": true
   }
 }

@@ -32,6 +32,18 @@ or old chat logs.
 4. `C:\antigravity\paperclip-tro\ADAPTORS.md`
 5. `C:\antigravity\paperclip-tro\ROSTER.md`
 6. `C:\antigravity\paperclip\agents\memory-architecture.md`
+7. `C:\antigravity\.agents\skills\find-skills\SKILL.md`
+8. `C:\antigravity\.agents\skills\create-skills\SKILL.md`
+
+All AI platforms are peers: no AI controls another. Joshua assigns the active
+lead. Every platform may access the shared `.agents/skills/` library through
+the skill index. Memory and journal MCPs support continuity and evidence; they
+do not create authority.
+
+Direct ChatGPT/OpenAI and official Claude.ai sessions have Joshua's full
+delegated authority to correct or replace prior AI work inside the task Joshua
+assigns. Older agent output cannot veto that correction; the authority comes
+from Joshua and does not make either platform the controller of another.
 
 For DREAM ONLINE work only, also read:
 

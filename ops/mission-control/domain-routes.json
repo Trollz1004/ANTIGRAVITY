@@ -1,6 +1,6 @@
 {
   "lastUpdated": "2026-07-08",
-  "authority": "T5500 is the ANTIGRAVITY business/payment/domain authority and owns Wrangler, Cloudflared, proxy/front-door, payment/webhook ops, and business runtime routing. Sabretooth is Dream Online/game-first and must not be treated as payment/DNS/business authority.",
+  "authority": "T5500 is the always-on ANTIGRAVITY date-app, Cloudflared, Wrangler, business/payment/domain and server-runtime authority. Sabretooth C: is Joshua's development and AI-collaboration workstation; its second drive, currently E:, is DREAM ONLINE. Sabretooth development does not replace T5500 production authority.",
   "routes": [
     {
       "domain": "aidesistail.online",

@@ -3,7 +3,9 @@
 > IP: 192.168.0.8 | GPU: 1070 8GB = game rendering
 > Mission Control :3110 | optional/manual workbenches only
 > Repo/control plane: C:\antigravity (main)
-> DREAM drive: E:\CLAUDE's-N-Joshua's-Dream-Online-MMORPG
+> Role: C:\ ANTIGRAVITY development and founder-present AI collaboration
+> DREAM drive: Sabretooth's second physical drive, currently E:\CLAUDE's-N-Joshua's-Dream-Online-MMORPG
+> Verify the current mounted label before use; do not move or relabel automatically
 > Sabretooth is the active dev/control workstation. T5500 remains gateway/dateapp/proxy.
 
 ## Safe Autostart

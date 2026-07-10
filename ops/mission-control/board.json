@@ -7,14 +7,14 @@
         {
           "id": "single-control-plane",
           "title": "Single Mission Control",
-          "summary": "Sabretooth :3110 is the only human-facing command board. T5500, 9020, and future nodes report here.",
+          "summary": "Sabretooth :3110 is Joshua's local development and collaboration board. T5500 remains the always-on date-app, Cloudflared, Wrangler, payment/domain, and server-runtime node.",
           "owner": "Codex",
           "status": "active"
         },
         {
           "id": "agent-hub-source",
           "title": "Agent Hub dispatcher",
-          "summary": "Agent Hub :3130 remains the backend task bridge and fail-closed authority for worker nodes.",
+          "summary": "Agent Hub :3130 is the authenticated backend task and MCP bridge. It tracks routing and evidence; it does not create authority over AI peers.",
           "owner": "Agent Hub",
           "status": "active"
         }
@@ -33,10 +33,10 @@
         },
         {
           "id": "openclaw-operator-lane",
-          "title": "OpenClaw operator lane",
-          "summary": "Prefer OpenClaw/ClawX/NemoClaw as the hands-on operator workbench when installed and approved.",
+          "title": "OpenClaw hands-on operator lane",
+          "summary": "OpenClaw/ClawX may use approved keyboard/tools and spawn task-scoped subagents that Joshua assigns to explicit nodes. It coordinates work without controlling AI peers.",
           "owner": "OpenClaw",
-          "status": "planned"
+          "status": "active"
         },
     {
       "id": "t5500-gateway",
@@ -62,7 +62,7 @@
     {
       "id": "node-pool-load-balancer",
       "title": "Node pool load balancer",
-      "summary": "T5500 routes public/stateless traffic to healthy web/AI workers from ops/mission-control/node-pool.json without balancing authority services.",
+      "summary": "T5500 routes public/stateless traffic to healthy web/AI service nodes from ops/mission-control/node-pool.json without balancing authority services.",
       "owner": "T5500",
       "status": "planned"
     }
@@ -94,7 +94,7 @@
     {
       "id": "adapter-health",
       "name": "Adapter health",
-      "summary": "Check Agent Hub, OmniRouter, FCC, OpenCode/Ollama, OpenClaw, Codex, Claude, Hermes, Grok, and worker node availability without secrets.",
+      "summary": "Check Agent Hub, OmniRouter, FCC, OpenCode/Ollama, OpenClaw, Codex, Claude, Hermes, Grok, and connected node availability without secrets.",
       "cadence": "30 minutes",
       "owner": "Agent Hub",
       "mode": "fail closed"
@@ -176,14 +176,23 @@
     {
       "id": "openclaw",
       "name": "OpenClaw / ClawX / NemoClaw",
-      "role": "Preferred operator workbench when installed and approved.",
-      "status": "preferred",
-      "boundary": "No credentials or install without approval"
+      "role": "Hands-on operator/orchestration peer with approved keyboard tools and node-assigned subagents.",
+      "status": "available",
+      "boundary": "Joshua assigns task, node, scope, tools, and exit evidence; no peer control",
+      "url": "http://127.0.0.1:18789/chat?session=main"
+    },
+    {
+      "id": "anythingllm-support",
+      "name": "AnythingLLM Support",
+      "role": "Preferred customer-support and grounded knowledge-retrieval lane.",
+      "status": "configured-when-running",
+      "boundary": "Support context only; no payment, doctrine, routing, or peer authority",
+      "url": "http://127.0.0.1:3001"
     },
     {
       "id": "codex",
       "name": "Codex official",
-      "role": "Primary code/design decision lane when directly assigned.",
+      "role": "Official peer capability for code, design, verification, and implementation when Joshua assigns it.",
       "status": "active",
       "boundary": "Founder-approved changes only"
     },
@@ -197,39 +206,39 @@
     {
       "id": "fcc",
       "name": "FCC bridge",
-      "role": "Free Claude Code / OpenCode / NVIDIA / Ollama evidence and proposal worker.",
-      "status": "worker",
-      "boundary": "Not a decision maker",
+      "role": "Claude-compatible bridge for evidence, proposals, and scoped execution when Joshua assigns it.",
+      "status": "available",
+      "boundary": "Peer capability; Joshua assigns the active lead",
       "url": "http://127.0.0.1:8082/health"
     },
     {
       "id": "opencode-ollama",
       "name": "OpenCode + Ollama",
-      "role": "Local model and adapter lane for low-cost worker tasks.",
-      "status": "worker",
-      "boundary": "Evidence/proposals only",
+      "role": "Local model and adapter capability for cost-controlled tasks.",
+      "status": "available",
+      "boundary": "Peer capability; scope follows Joshua's assignment",
       "url": "http://127.0.0.1:11434/api/tags"
     },
     {
       "id": "hermes",
       "name": "Hermes",
-      "role": "T5500 dashboard/workspace and bounded support workflow.",
+      "role": "Hands-on orchestration peer and node/workflow operator when Joshua assigns it.",
       "status": "t5500-workbench",
-      "boundary": "No autonomous backlog; no Sabretooth autostart",
+      "boundary": "No peer control or hidden autonomous backlog; browser tab may be used manually on Sabretooth",
       "url": "http://127.0.0.1:9119"
     },
     {
       "id": "omni-router",
       "name": "OmniRouter",
-      "role": "Token-saving and API routing layer for worker models.",
-      "status": "t5500-worker",
-      "boundary": "Worker routing only; Codex/Opus-level lanes decide doctrine and launch gates",
+      "role": "Token-saving and API routing layer for connected peer models.",
+      "status": "t5500-routing",
+      "boundary": "Routing does not create model authority; Joshua assigns decisions",
       "url": "http://127.0.0.1:11436/health"
     },
     {
       "id": "node-balancer",
       "name": "T5500 Node Balancer",
-      "role": "Routes public/stateless traffic to healthy worker nodes.",
+      "role": "Routes public/stateless traffic to healthy service nodes.",
       "status": "planned",
       "boundary": "Do not balance Mission Control, Agent Hub writes, payments, databases, or memory doctrine",
       "url": "http://127.0.0.1:4180/health"
@@ -254,7 +263,7 @@
       "name": "Claude official",
       "role": "Official Claude app coworker lane.",
       "status": "external",
-      "boundary": "Official app only; wrappers are lower authority",
+      "boundary": "Official app; all AI platforms remain peers under Joshua",
       "url": "https://claude.ai/"
     },
     {
@@ -276,7 +285,7 @@
       "name": "Agent Hub",
       "role": "Dispatcher and task bridge.",
       "status": "source of truth",
-      "boundary": "Workers fail closed when unreachable",
+      "boundary": "Task routing fails closed when unreachable; no model hierarchy",
       "url": "http://127.0.0.1:3130/health"
     }
   ],

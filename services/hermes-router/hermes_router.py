@@ -12,8 +12,17 @@ Contract: HermesRouterPanel.tsx expects
 
 import logging
 import os
+import sys
 from pathlib import Path
 from typing import Any
+
+_DISABLED_SENTINEL = Path(os.environ.get(
+    "HERMES_ROUTER_DISABLED_SENTINEL",
+    r"C:\Users\joshl\.openclaw\workspace\DISABLE_SABRETOOTH_HERMES_ROUTER",
+))
+if _DISABLED_SENTINEL.exists():
+    print(f"Hermes Router disabled by sentinel: {_DISABLED_SENTINEL}")
+    sys.exit(0)
 
 import httpx
 import uvicorn

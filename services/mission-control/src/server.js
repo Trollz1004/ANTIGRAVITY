@@ -376,7 +376,7 @@ function page() {
   <header>
     <section class="hero">
       <h1>Mission<br>Control</h1>
-      <p class="subtitle">One local command board for OpenClaw, Hermes, Codex, Claude, FCC, OpenCode/Ollama, Grok, routines, issues, and accountability. Workers report in; they do not create side command centers.</p>
+      <p class="subtitle">Joshua's local development and collaboration board for peer AI platforms, routines, issues, and evidence. No AI controls another; Joshua assigns the active lead.</p>
       <div class="strip" id="strip"><span class="pill">Loading...</span></div>
     </section>
     <section class="panel control">

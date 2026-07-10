@@ -38,7 +38,16 @@ test('getRouting returns null for unknown platform', () => {
 test('getRouting returns config for a known platform', () => {
   const route = getRouting('hermes');
   assert.ok(route);
-  assert.equal(route.node, 'sabretooth');
+  assert.equal(route.node, 't5500');
+});
+
+test('OpenClaw is explicitly assigned and AnythingLLM owns the support lane', () => {
+  const openClaw = getRouting('clawx');
+  const support = getRouting('anythingllm');
+  assert.equal(openClaw.node, 'explicit-assignment');
+  assert.equal(openClaw.endpoint, 'http://127.0.0.1:18789');
+  assert.equal(support.node, 'sabretooth');
+  assert.equal(support.access, 'local-service');
 });
 
 test('getNodeForPlatform returns node name for known platform', () => {
@@ -60,9 +69,9 @@ test('canAutoDispatch is true for local-service platforms', () => {
   assert.equal(canAutoDispatch('odysseus'), true);
 });
 
-test('canAutoDispatch is false for browser-signin platforms', () => {
+test('canAutoDispatch is false for browser-only platforms and true when an API route exists', () => {
   assert.equal(canAutoDispatch('codex'), false);
-  assert.equal(canAutoDispatch('grok'), false);
+  assert.equal(canAutoDispatch('grok'), true);
 });
 
 test('canAutoDispatch is false for unknown platform', () => {

@@ -8,9 +8,11 @@ const assert = require('node:assert/strict');
 
 const { validate, buildTask, PLATFORMS, STATUSES, PRIORITIES, PRIORITY_MAP } = require('../src/models/task');
 
-test('platforms list has exactly 21 entries including odysseus', () => {
-  assert.equal(PLATFORMS.length, 21);
+test('platforms list includes the current operator and support lanes without duplicates', () => {
   assert.ok(PLATFORMS.includes('odysseus'));
+  assert.ok(PLATFORMS.includes('clawx'));
+  assert.ok(PLATFORMS.includes('anythingllm'));
+  assert.equal(new Set(PLATFORMS).size, PLATFORMS.length);
 });
 
 test('validate: accepts a minimal valid task', () => {

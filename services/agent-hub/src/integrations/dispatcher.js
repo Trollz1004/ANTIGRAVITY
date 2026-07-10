@@ -1,6 +1,7 @@
 // Dispatcher - routes tasks to the right platform/node.
-// Sabretooth owns Agent Hub authority. T5500 is front-door/workbench.
-// Worker nodes return evidence/drafts and do not make doctrine/payment/launch decisions.
+// Sabretooth C: is Joshua's development/collaboration workstation.
+// T5500 is the always-on date-app, Cloudflared, Wrangler, payment/domain, and server runtime.
+// AI platforms are peers; Joshua assigns the active lead, task scope, and node.
 
 const { PLATFORMS } = require('../platforms');
 
@@ -8,17 +9,17 @@ const NODE_MAP = {
   sabretooth: {
     ip: '192.168.0.8',
     name: 'Sabretooth',
-    role: 'Mission Control + Agent Hub authority + repo/dev workstation'
+    role: 'Joshua development/collaboration workstation + local Mission Control/Agent Hub'
   },
   t5500: {
     ip: '192.168.0.15',
     name: 'T5500',
-    role: 'Cloudflared/front-door + Hermes workbench + support gateway + OmniRouter'
+    role: 'Always-on date app + Cloudflared/Wrangler + payment/domain + server runtime + Hermes workbench'
   },
   '9020': {
     ip: '192.168.0.5',
     name: '9020',
-    role: 'Marketing/support worker only'
+    role: 'Legacy support node unless Joshua reassigns it'
   },
   'worker-web-1': {
     ip: process.env.WORKER_WEB_1_HOST || 'pending',
@@ -39,7 +40,8 @@ const urls = {
   hermesSupport: process.env.HERMES_SUPPORT_GATEWAY_URL || 'http://192.168.0.15:9110',
   omniRouter: process.env.OMNI_ROUTER_URL || 'http://192.168.0.15:11436',
   fcc: process.env.FCC_SERVER_URL || 'http://192.168.0.15:8082',
-  ollama: process.env.OLLAMA_BASE_URL || 'http://192.168.0.15:11434'
+  ollama: process.env.OLLAMA_BASE_URL || 'http://192.168.0.15:11434',
+  anythingllm: process.env.ANYTHINGLLM_BASE_URL || 'http://127.0.0.1:3001'
 };
 
 const PLATFORM_ROUTING = {
@@ -91,11 +93,17 @@ const PLATFORM_ROUTING = {
     endpoint: null,
     auth: 'desktop app/cloud subscription'
   },
+  anythingllm: {
+    node: 'sabretooth',
+    access: 'local-service',
+    endpoint: urls.anythingllm,
+    auth: 'AnythingLLM credential via server-side env only; preferred support/retrieval lane'
+  },
   clawx: {
-    node: 'worker-ai-1',
+    node: 'explicit-assignment',
     access: 'desktop-app',
-    endpoint: null,
-    auth: 'OpenClaw/ClawX local app; task card only'
+    endpoint: 'http://127.0.0.1:18789',
+    auth: 'OpenClaw/ClawX local app; Joshua assigns task, node, scope, and subagent permissions'
   },
   pi: {
     node: 'worker-ai-1',

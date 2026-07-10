@@ -2,10 +2,12 @@
 
 Generated/maintained for low-token agent boot. Do not paste full skill files into prompts. Use this index to choose a skill, then read only the relevant `SKILL.md`.
 
-Total skills indexed: 199
+Total skills indexed: 201
 
 | Skill | Path | Use when |
 |---|---|---|
+| `create-skills` | `.agents/skills/create-skills/SKILL.md` | Mandatory fallback when no suitable existing skill covers a repeatable workflow; create or improve one concise validated skill without duplicating capabilities. |
+| `find-skills` | `.agents/skills/find-skills/SKILL.md` | Mandatory at every session start and task-scope change; discover and load the smallest relevant set from the shared agency skill library. |
 | `21st-dev-components` | `.agents/skills/21st-dev-components/SKILL.md` | Sourcing and adapting React/Tailwind/shadcn components from 21st.dev registry. Use when building UI to avoid hand-rolling components that already exist in proven form. |
 | `agency-accessibility-auditor` | `.agents/skills/agency-accessibility-auditor/SKILL.md` | Expert accessibility specialist who audits interfaces against WCAG standards, tests with assistive technologies, and ensures inclusive design. Defaults to finding barriers — if it's not tested with a screen reader, it's  |
 | `agency-account-strategist` | `.agents/skills/agency-account-strategist/SKILL.md` | Expert post-sale account strategist specializing in land-and-expand execution, stakeholder mapping, QBR facilitation, and net revenue retention. Turns closed deals into long-term platform relationships through systematic |
