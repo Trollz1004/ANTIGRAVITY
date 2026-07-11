@@ -9,9 +9,22 @@ REM T5500 owns Cloudflared, public proxy/front-door, and always-on service repai
 if not exist "C:\antigravity\logs" mkdir "C:\antigravity\logs"
 echo [%date% %time%] Sabretooth safe autostart beginning... >> C:\antigravity\logs\autostart.log
 
-REM --- Mission Control + Agent Hub only ---
-REM Local browser board and one dispatcher backend. Does not start background
-REM workbenches, remote proxies, Cloudflared, Hermes, FCC, watchdogs, or sentries.
+REM --- Authorized Sabretooth orchestration stack ---
+REM Local-only Paperclip, OmniRoute, Mission Control v5, legacy board, and Agent
+REM Hub. Does not start Cloudflared, Hermes, FCC, remote proxies, or sentries.
+echo Starting OmniRoute on 20128...
+start /B "" powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File C:\antigravity\scripts\start-omniroute-sabretooth.ps1
+timeout /t 3 /nobreak >nul
+
+echo Starting Mission Control v5 on 3151...
+start /B "" powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File C:\antigravity\scripts\start-mission-control-v5.ps1
+timeout /t 3 /nobreak >nul
+
+echo Starting official Paperclip on 3111...
+start /B "" powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File C:\antigravity\scripts\start-paperclip-official.ps1
+timeout /t 3 /nobreak >nul
+
+REM Existing local browser board and dispatcher backend remain available.
 echo Starting first-party Mission Control...
 cd /d C:\antigravity
 start /B "" powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\scripts\start-mission-control.ps1
@@ -22,4 +35,4 @@ start /B "" powershell -NoProfile -ExecutionPolicy Bypass -File C:\antigravity\s
 timeout /t 3 /nobreak >nul
 
 echo [%date% %time%] Sabretooth safe autostart complete >> C:\antigravity\logs\autostart.log
-echo === Sabretooth safe autostart complete. Mission Control + Agent Hub only. ===
+echo === Sabretooth orchestration autostart launch complete. ===
