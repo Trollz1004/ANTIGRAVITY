@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "wake_id": "wk_demo_001",
+  "npc_id": "npc.vendor.harbor_quartermaster",
+  "tier": "T1",
+  "trigger": {
+    "event_id": "c3333333-3333-4333-8333-333333333333",
+    "event_type": "npc.spoken_to",
+    "occurred_at": "2026-07-11T14:03:00.000Z"
+  },
+  "context_refs": [
+    { "kind": "persona", "id": "npc.vendor.harbor_quartermaster" },
+    { "kind": "relationship", "id": "npc.vendor.harbor_quartermaster:ply_1001" },
+    { "kind": "episode_query", "id": "top_k=8" },
+    { "kind": "trigger_event", "id": "c3333333-3333-4333-8333-333333333333" }
+  ],
+  "budget": {
+    "latency_ms": 2000,
+    "model_class": "T1"
+  },
+  "payload_ref": {
+    "kind": "trigger_event",
+    "id": "c3333333-3333-4333-8333-333333333333"
+  }
+}

@@ -40,27 +40,50 @@ the orchestrator; ignored T2s demote. Attention allocates budget.
 
 ## Trigger Vocabulary (game → orchestrator)
 
-Canonical event types, versioned, small payloads:
+**Canonical contract (TRO-87, schema_version 1.0.0):**
 
-- `npc.approached` {npc_id, player_id, relationship_score, location}
-- `npc.spoken_to` {npc_id, player_id, utterance, convo_id}
-- `npc.witnessed` {npc_id, event_type, actors[], location} — theft, combat, gift, death
-- `npc.affected` {npc_id, effect, source} — robbed, helped, saved, insulted
-- `world.tick` {region, day_phase, economy_deltas} — T3 batch input
-- `npc.idle_heartbeat` {npc_id} — low-frequency; lets NPCs *initiate* (write letters,
-  move house, start rumors) instead of only reacting
+- Human doc: `docs/dream/live-npc-trigger-vocabulary.md`
+- JSON Schema: `docs/dream/schemas/live-npc-webhook.schema.json`
+- Skill stub + samples: `schemas/` (this skill)
+
+Canonical event types (dotted). Snake aliases at the game edge
+(`player_enter_zone` → `player.enter_zone`, `need_spend` → `need.spend`).
+
+| Event | Payload (summary) |
+|---|---|
+| `player.enter_zone` | `{zone_id, from_zone_id?, position?, reason?}` |
+| `player.leave_zone` | same shape as enter |
+| `need.spend` | `{amount, sku, tx_id, merchant_npc_id?, balance_after?, location_id?}` |
+| `need.earn` | same shape as spend (credit) |
+| `npc.approached` | `{npc_id, player_id, relationship_score?, location_id?, distance_m?}` |
+| `npc.spoken_to` | `{npc_id, player_id, utterance, convo_id, channel?}` |
+| `npc.witnessed` | `{npc_id, event_kind, actors[], location_id?, salience?}` |
+| `npc.affected` | `{npc_id, effect, source_player_id?, source_npc_id?, magnitude?}` |
+| `npc.idle_heartbeat` | `{npc_id, day_phase?, idle_seconds?}` |
+| `world.tick` | `{region_id, day_phase, tick_index, economy_deltas?}` |
+| `quest.updated` | `{quest_id, player_id, from_state, to_state, npc_id?}` |
+| `combat.ended` | `{encounter_id, winners[], losers[], location_id?, flags?}` |
+
+Every game→orchestrator message uses the **envelope**:
+`{schema_version, event_id, event_type, occurred_at, source, actor, context_refs, payload}`.
 
 Payloads carry IDs and deltas, never full state — the agent pulls what it needs
 (pointer-based context assembly, same law as BOOT-PROTOCOL.md).
 
+Samples: `schemas/samples/player_enter_zone.json`, `need_spend.json`,
+`npc_spoken_to.json`.
+
 ## Webhook Contract (orchestrator → agent → game)
 
 ```
-POST /npc/{npc_id}/wake   body: {trigger, context_refs[]}
+POST /npc/{npc_id}/wake
+body: agent_wake schema (see schemas/samples/agent_wake.json)
+  {schema_version, wake_id, npc_id, tier, trigger, context_refs, budget, payload_ref?}
 Agent assembles context: persona core (≤40 lines) + top-k episodic memories
 (vector recall, k≤8) + relationship row for player_id + location state.
-Response ≤2s for T1 (else fallback), ≤5s T2:
-{say?: string, do?: action[], remember: memory_writes[], mood_delta?, world_effects?}
+Response ≤2s for T1 (else fallback), ≤5s T2 — agent_response schema:
+{schema_version, wake_id, npc_id, ok, say?, do?, remember[], mood_delta?,
+ world_effects?, fallback_used, latency_ms?}
 ```
 
 Fallback law: if the agent misses budget, the NPC plays a tier-appropriate canned
@@ -69,6 +92,10 @@ line and the trigger is queued for async memory write anyway — the NPC still
 never see a timeout; they see a terse NPC.
 
 ## Memory Schema (persistent, per NPC)
+
+**Formal write-back contract:** [`MEMORY-SCHEMA.md`](./MEMORY-SCHEMA.md) +
+[`schemas/memory-writeback.v1.schema.json`](./schemas/memory-writeback.v1.schema.json).
+**Persisted example state:** [`examples/mira-dockwarden.state.json`](./examples/mira-dockwarden.state.json).
 
 - **Persona core** (stable): identity, drives, fears, faction, speech style. ≤40 lines.
 - **Episodic** (vector store — Qdrant): {ts, event, actors, salience 0-1, decay_class}.

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://antigravity.local/schemas/dream.npc.writeback_batch.v1.json",
+  "title": "DREAM Live-NPC Memory Write-Back Batch (orchestrator expansion)",
+  "description": "Internal batch after expanding agent_response.remember[]. Wire remember[] shapes remain defined in live-npc-webhook.schema.json (TRO-87).",
+  "type": "object",
+  "required": ["schema_version", "kind", "npc_id", "wake_id", "event_id", "writes"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "kind": { "const": "writeback_batch" },
+    "npc_id": { "type": "string", "minLength": 1 },
+    "wake_id": { "type": "string", "minLength": 1 },
+    "event_id": { "type": "string", "minLength": 1 },
+    "writes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "event", "actors", "salience"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["episodic", "relationship", "world_ledger"]
+          },
+          "event": { "type": "string", "minLength": 1 },
+          "actors": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "salience": { "type": "number", "minimum": 0, "maximum": 1 },
+          "decay_class": {
+            "type": "string",
+            "enum": ["ephemeral", "normal", "sticky"]
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "location_id": { "type": "string" },
+          "score_delta": { "type": "number", "minimum": -1, "maximum": 1 },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

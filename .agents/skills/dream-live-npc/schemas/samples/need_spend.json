@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "b2222222-2222-4222-8222-222222222222",
+  "event_type": "need.spend",
+  "occurred_at": "2026-07-11T14:02:00.000Z",
+  "source": {
+    "server_id": "dream-main",
+    "region_id": "zone.harbor.a1",
+    "shard": "default",
+    "engine": "unreal",
+    "build": "0.0.0-dev"
+  },
+  "actor": {
+    "player_id": "ply_1001",
+    "npc_id": null,
+    "session_id": "sess_abc"
+  },
+  "context_refs": [
+    { "kind": "player", "id": "ply_1001" },
+    { "kind": "npc", "id": "npc.vendor.harbor_quartermaster" },
+    { "kind": "sku", "id": "cosmetic.cloak.harbor_blue" }
+  ],
+  "payload": {
+    "amount": 50,
+    "balance_after": 450,
+    "sku": "cosmetic.cloak.harbor_blue",
+    "merchant_npc_id": "npc.vendor.harbor_quartermaster",
+    "location_id": "stall.harbor.q1",
+    "tx_id": "need_tx_7781"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "wake_id": "wk_demo_001",
+  "npc_id": "npc.vendor.harbor_quartermaster",
+  "ok": true,
+  "latency_ms": 840,
+  "say": "Harbor blue suits you. Wear it where the salt can see it.",
+  "do": [
+    { "action": "emote", "name": "nod" }
+  ],
+  "remember": [
+    {
+      "kind": "episodic",
+      "event": "player_asked_about_stock",
+      "actors": ["ply_1001"],
+      "salience": 0.4,
+      "decay_class": "normal"
+    }
+  ],
+  "mood_delta": 0.05,
+  "world_effects": [],
+  "fallback_used": false
+}

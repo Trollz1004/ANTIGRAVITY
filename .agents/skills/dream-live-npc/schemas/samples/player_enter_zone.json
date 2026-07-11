@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "a1111111-1111-4111-8111-111111111111",
+  "event_type": "player.enter_zone",
+  "occurred_at": "2026-07-11T14:01:00.000Z",
+  "source": {
+    "server_id": "dream-main",
+    "region_id": "zone.harbor.a1",
+    "shard": "default",
+    "engine": "unreal",
+    "build": "0.0.0-dev"
+  },
+  "actor": {
+    "player_id": "ply_1001",
+    "npc_id": null,
+    "session_id": "sess_abc"
+  },
+  "context_refs": [
+    { "kind": "zone", "id": "zone.harbor.a1" },
+    { "kind": "player", "id": "ply_1001" }
+  ],
+  "payload": {
+    "zone_id": "zone.harbor.a1",
+    "from_zone_id": "zone.road.north",
+    "position": { "x": 120.5, "y": 2.0, "z": -44.1 },
+    "reason": "walk"
+  }
+}

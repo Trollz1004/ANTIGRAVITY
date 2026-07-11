@@ -1,0 +1,481 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://youandinotai.com/schemas/dream/live-npc-webhook.schema.json",
+  "title": "DREAM Live-NPC Webhook Contracts",
+  "description": "Envelope + event payloads for game→orchestrator triggers and orchestrator→agent wake/response. schema_version 1.0.0 (TRO-87).",
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "iso8601": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "vec3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "z"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "z": { "type": "number" }
+      }
+    },
+    "context_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "zone",
+            "player",
+            "npc",
+            "sku",
+            "quest",
+            "persona",
+            "relationship",
+            "episode_query",
+            "trigger_event",
+            "world_ledger"
+          ]
+        },
+        "id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["server_id", "region_id", "shard", "engine"],
+      "properties": {
+        "server_id": { "type": "string" },
+        "region_id": { "type": "string" },
+        "shard": { "type": "string" },
+        "engine": { "type": "string", "enum": ["unreal", "godot", "unity", "sim"] },
+        "build": { "type": "string" }
+      }
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "player_id": { "type": ["string", "null"] },
+        "npc_id": { "type": ["string", "null"] },
+        "session_id": { "type": ["string", "null"] }
+      }
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "player.enter_zone",
+        "player.leave_zone",
+        "need.spend",
+        "need.earn",
+        "npc.approached",
+        "npc.spoken_to",
+        "npc.witnessed",
+        "npc.affected",
+        "npc.idle_heartbeat",
+        "world.tick",
+        "quest.updated",
+        "combat.ended"
+      ]
+    },
+    "payload_player_enter_zone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["zone_id"],
+      "properties": {
+        "zone_id": { "type": "string" },
+        "from_zone_id": { "type": ["string", "null"] },
+        "position": { "$ref": "#/$defs/vec3" },
+        "reason": {
+          "type": "string",
+          "enum": ["walk", "spawn", "teleport_denied_fallback", "login"]
+        }
+      }
+    },
+    "payload_need_spend": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["amount", "sku", "tx_id"],
+      "properties": {
+        "amount": { "type": "integer", "minimum": 1 },
+        "balance_after": { "type": "integer", "minimum": 0 },
+        "sku": { "type": "string", "minLength": 1 },
+        "merchant_npc_id": { "type": ["string", "null"] },
+        "location_id": { "type": "string" },
+        "tx_id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "payload_npc_spoken_to": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["npc_id", "player_id", "utterance", "convo_id"],
+      "properties": {
+        "npc_id": { "type": "string" },
+        "player_id": { "type": "string" },
+        "utterance": { "type": "string", "maxLength": 2000 },
+        "convo_id": { "type": "string" },
+        "channel": { "type": "string", "enum": ["say", "whisper", "emote"] }
+      }
+    },
+    "payload_npc_approached": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["npc_id", "player_id"],
+      "properties": {
+        "npc_id": { "type": "string" },
+        "player_id": { "type": "string" },
+        "relationship_score": { "type": "number" },
+        "location_id": { "type": "string" },
+        "distance_m": { "type": "number", "minimum": 0 }
+      }
+    },
+    "payload_npc_witnessed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["npc_id", "event_kind", "actors"],
+      "properties": {
+        "npc_id": { "type": "string" },
+        "event_kind": {
+          "type": "string",
+          "enum": ["theft", "combat", "gift", "death", "cheat_flag", "other"]
+        },
+        "actors": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "location_id": { "type": "string" },
+        "salience": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "payload_npc_affected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["npc_id", "effect"],
+      "properties": {
+        "npc_id": { "type": "string" },
+        "effect": {
+          "type": "string",
+          "enum": ["robbed", "helped", "saved", "insulted", "gifted", "other"]
+        },
+        "source_player_id": { "type": "string" },
+        "source_npc_id": { "type": "string" },
+        "magnitude": { "type": "number" }
+      }
+    },
+    "payload_npc_idle_heartbeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["npc_id"],
+      "properties": {
+        "npc_id": { "type": "string" },
+        "day_phase": { "type": "string" },
+        "idle_seconds": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "payload_world_tick": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["region_id", "day_phase", "tick_index"],
+      "properties": {
+        "region_id": { "type": "string" },
+        "day_phase": { "type": "string" },
+        "economy_deltas": { "type": "object" },
+        "tick_index": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "payload_quest_updated": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quest_id", "player_id", "from_state", "to_state"],
+      "properties": {
+        "quest_id": { "type": "string" },
+        "player_id": { "type": "string" },
+        "from_state": { "type": "string" },
+        "to_state": { "type": "string" },
+        "npc_id": { "type": "string" }
+      }
+    },
+    "payload_combat_ended": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encounter_id", "winners", "losers"],
+      "properties": {
+        "encounter_id": { "type": "string" },
+        "winners": { "type": "array", "items": { "type": "string" } },
+        "losers": { "type": "array", "items": { "type": "string" } },
+        "location_id": { "type": "string" },
+        "flags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "trigger_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "event_id",
+        "event_type",
+        "occurred_at",
+        "source",
+        "actor",
+        "context_refs",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/semver" },
+        "event_id": { "$ref": "#/$defs/uuid" },
+        "event_type": { "$ref": "#/$defs/event_type" },
+        "occurred_at": { "$ref": "#/$defs/iso8601" },
+        "trace_id": { "type": "string" },
+        "source": { "$ref": "#/$defs/source" },
+        "actor": { "$ref": "#/$defs/actor" },
+        "context_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/context_ref" }
+        },
+        "payload": { "type": "object" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "event_type": { "const": "player.enter_zone" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_player_enter_zone" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event_type": { "const": "player.leave_zone" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_player_enter_zone" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event_type": { "const": "need.spend" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_need_spend" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event_type": { "const": "need.earn" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_need_spend" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event_type": { "const": "npc.spoken_to" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_npc_spoken_to" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event_type": { "const": "npc.approached" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_npc_approached" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event_type": { "const": "npc.witnessed" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_npc_witnessed" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event_type": { "const": "npc.affected" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_npc_affected" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event_type": { "const": "npc.idle_heartbeat" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_npc_idle_heartbeat" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event_type": { "const": "world.tick" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_world_tick" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event_type": { "const": "quest.updated" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_quest_updated" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event_type": { "const": "combat.ended" } }
+          },
+          "then": {
+            "properties": {
+              "payload": { "$ref": "#/$defs/payload_combat_ended" }
+            }
+          }
+        }
+      ]
+    },
+    "agent_wake": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "wake_id",
+        "npc_id",
+        "tier",
+        "trigger",
+        "context_refs",
+        "budget"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/semver" },
+        "wake_id": { "type": "string" },
+        "npc_id": { "type": "string" },
+        "tier": { "type": "string", "enum": ["T0", "T1", "T2", "T3"] },
+        "trigger": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["event_id", "event_type", "occurred_at"],
+          "properties": {
+            "event_id": { "$ref": "#/$defs/uuid" },
+            "event_type": { "$ref": "#/$defs/event_type" },
+            "occurred_at": { "$ref": "#/$defs/iso8601" }
+          }
+        },
+        "context_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/context_ref" }
+        },
+        "budget": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["latency_ms", "model_class"],
+          "properties": {
+            "latency_ms": { "type": "integer", "minimum": 1 },
+            "model_class": { "type": "string" }
+          }
+        },
+        "payload_ref": { "$ref": "#/$defs/context_ref" }
+      }
+    },
+    "agent_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "wake_id",
+        "npc_id",
+        "ok",
+        "remember",
+        "fallback_used"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/semver" },
+        "wake_id": { "type": "string" },
+        "npc_id": { "type": "string" },
+        "ok": { "type": "boolean" },
+        "latency_ms": { "type": "integer", "minimum": 0 },
+        "say": { "type": "string" },
+        "do": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["action"],
+            "properties": {
+              "action": { "type": "string" },
+              "name": { "type": "string" },
+              "target_id": { "type": "string" },
+              "params": { "type": "object" }
+            }
+          }
+        },
+        "remember": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kind", "event", "actors", "salience"],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": ["episodic", "relationship", "world_ledger"]
+              },
+              "event": { "type": "string" },
+              "actors": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "salience": { "type": "number", "minimum": 0, "maximum": 1 },
+              "decay_class": {
+                "type": "string",
+                "enum": ["ephemeral", "normal", "sticky"]
+              }
+            }
+          }
+        },
+        "mood_delta": { "type": "number" },
+        "world_effects": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "fallback_used": { "type": "boolean" }
+      }
+    }
+  },
+  "oneOf": [
+    { "$ref": "#/$defs/trigger_event" },
+    { "$ref": "#/$defs/agent_wake" },
+    { "$ref": "#/$defs/agent_response" }
+  ]
+}
