@@ -7,6 +7,8 @@ Doctrine: briefings/DREAM-ONLINE-AND-DAO-SEPARATION-2026-07-01.md §3.
 
 ## Phase order
 1. Design docs: core loop, economy (NEEDs), NPC persona framework, world bible.
+   - Core loop + economy: `paperclip-tro/projects/DREAM-CORE-LOOP-ECONOMY-DESIGN.md` (TRO-44)
+   - NPC persona bibles (3 ambient + 2 named): `paperclip-tro/projects/DREAM-NPC-PERSONA-FRAMEWORK.md` (TRO-63)
 2. Live-NPC bridge prototype: one NPC, one trigger vocabulary, one memory schema,
    webhook round-trip under 2s (dream-mcp + dream-proto).
 3. Engine decision (Joshua) → then hire engine seats.
@@ -64,11 +66,12 @@ Doctrine: briefings/DREAM-ONLINE-AND-DAO-SEPARATION-2026-07-01.md §3.
 - All other NPCs: Paperclip webhook triggers → agent responses → memory write-back
 
 ## Game Platform
-- Engine: Hermes World (third-party open-source browser MMO, NOT Nous Research)
+- Engine: Unreal engine
 - Style: BDO-class open world, ONE sandbox server, NO instances, NO fast travel EVER
-- Port: 9119 on Sabretooth
-- Hermes Workspace GUI: port 3000 (third-party, NOT official Nous GUI)
-- Node: Sabretooth (192.168.0.8, 1070 GPU) — Dream ONLY, nothing else
+- Port:  on Sabretooth
+- Hermes Workspace GUI: port 3000 (third-party, NOT official Nous GUI) needs 9119 to wo;
+- Node: Sabretooth (192.168.0.8, 1070 GPU) — Dream ONLY, nothing else E:/ 
+
 
 ## CLASSIFIED — FOUNDER EYES ONLY
 <!-- NIGHTMARE Sup@ — end-game world boss. See internal design vault. -->
