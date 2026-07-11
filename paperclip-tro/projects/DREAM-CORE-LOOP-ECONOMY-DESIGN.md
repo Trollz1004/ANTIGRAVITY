@@ -155,6 +155,9 @@ Skill baseline: **T0 ambient / T1 named / T2 story-critical / T3 world actors** 
 
 T0 brain: canned pools + local Ollama flavor. **No persistent memory.**
 
+**Full persona bibles (voice pillars, canned pools, YAML cores, cost routing):**  
+`paperclip-tro/projects/DREAM-NPC-PERSONA-FRAMEWORK.md` (TRO-63) covers dockhand, haggler, guard + named Mira/Brann.
+
 ### 3.2 Named / live slice NPCs (phase-4 five)
 
 These five are the **playable-slice live set**. Founder-locked boss roster (Ban Hammer, etc.) can appear as spectacle overlays but the slice must ship without depending on full boss infrastructure.
