@@ -219,7 +219,11 @@ export async function routeNpcRequest(req: NpcRequest, reqId: string): Promise<R
 
   // Memory writeback is a side effect and must not fail a guardrail-passed
   // response the caller should have received. Log-and-continue on failure.
+  // TRO-121: attach event_id/wake_id when present for idempotent storage paths.
   try {
+    const ctx = req.context ?? {};
+    const eventId = typeof ctx.event_id === "string" ? ctx.event_id : undefined;
+    const wakeId = typeof ctx.wake_id === "string" ? ctx.wake_id : undefined;
     await writeMemory({
       npcId: req.npcId,
       playerId: req.playerId,
@@ -227,6 +231,8 @@ export async function routeNpcRequest(req: NpcRequest, reqId: string): Promise<R
       summary: guardrailResult.sanitized.memory_writeback.summary,
       tags: guardrailResult.sanitized.memory_writeback.tags,
       createdAt: new Date().toISOString(),
+      eventId,
+      wakeId,
     });
   } catch (err) {
     logger.warn(

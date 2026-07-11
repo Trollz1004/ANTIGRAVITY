@@ -53,8 +53,8 @@ hard-fails just because 1Min's schema turns out to be wrong.
 - `GET /webhooks/events/:eventType/schema` — JSON Schema for `player_enter` | `need_change` | `interaction`.
 - `GET /webhooks/events/:eventType/sample` — sample payload for that event type.
 - `POST /webhooks/events` — validates a game webhook event and returns a **stub** agent-call envelope (`dispatch: "stub_only"`). With `?dispatch=1` (or `X-Dream-Dispatch: 1`) executes the TRO-48 agent → memory write-back roundtrip and returns `roundtrip.agentResponse`.
-- `POST /npc/:npcId/wake` — dream-live-npc skill wake contract: agent response + memory write-back (≤2s budget, canned fallback on timeout).
-- `GET /npc/:npcId/memory?playerId=` — list in-memory write-back rows for verification.
+- `POST /npc/:npcId/wake` — dream-live-npc skill wake contract: agent response + memory write-back (≤2s budget, canned fallback on timeout). TRO-121 contract: `.agents/skills/dream-live-npc/WRITEBACK-CONTRACT.md`.
+- `GET /npc/:npcId/memory?playerId=` — list in-memory write-back rows for verification (logical paths `npc/{id}/episodic/{memId}`).
 
 ### Live-NPC webhook events (TRO-114)
 

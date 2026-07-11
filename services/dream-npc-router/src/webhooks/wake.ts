@@ -221,7 +221,7 @@ export async function processAgentWake(
         tags: ["fallback", "async_memory", wake.trigger.event_type],
       },
     };
-    // Still persist memory (skill fallback law).
+    // Still persist memory (skill fallback law + TRO-121 storage path).
     const { writeMemory } = await import("../memory.js");
     await writeMemory({
       npcId: wake.npc_id,
@@ -230,6 +230,8 @@ export async function processAgentWake(
       summary: npcResponse.memory_writeback.summary,
       tags: npcResponse.memory_writeback.tags,
       createdAt: new Date().toISOString(),
+      eventId: wake.trigger.event_id,
+      wakeId: wake.wake_id,
     });
     providerUsed = "canned-fallback";
   } else {
@@ -253,9 +255,24 @@ export async function processAgentWake(
   const latency_ms = Date.now() - started;
   const remember = mapRemember(response, wake, playerId);
 
-  // routeNpcRequest already wrote memory on success path; on fallback we wrote above.
-  // Re-read to prove writeback for the caller.
-  const after = await retrieveMemory(wake.npc_id, playerId, []);
+  // routeNpcRequest writes memory on normal provider paths; reserved/early
+  // returns (e.g. SUPA stub) skip writeMemory — guarantee write-back here so
+  // every wake leaves a durable row (TRO-48 acceptance).
+  let after = await retrieveMemory(wake.npc_id, playerId, []);
+  if (after.length === 0 && response.memory_writeback.summary) {
+    const { writeMemory } = await import("../memory.js");
+    await writeMemory({
+      npcId: wake.npc_id,
+      playerId,
+      importance: response.memory_writeback.importance,
+      summary: response.memory_writeback.summary,
+      tags: response.memory_writeback.tags,
+      createdAt: new Date().toISOString(),
+      eventId: wake.trigger.event_id,
+      wakeId: wake.wake_id,
+    });
+    after = await retrieveMemory(wake.npc_id, playerId, []);
+  }
   const memoryWritten = after.length > 0 ? after[after.length - 1]! : null;
 
   const agentResponse: AgentResponse = {

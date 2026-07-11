@@ -85,7 +85,32 @@ describe("TRO-48 webhook → agent → memory write-back roundtrip", () => {
     const mem = await retrieveMemory("npc.vendor.harbor_quartermaster", "ply_1001", []);
     expect(mem.length).toBeGreaterThanOrEqual(1);
     expect(mem[mem.length - 1]!.summary).toMatch(/stock|player/i);
+    // TRO-121: logical storage path + event lineage on write-back rows
+    expect(mem[mem.length - 1]!.storagePath).toMatch(
+      /^npc\/npc\.vendor\.harbor_quartermaster\/episodic\//,
+    );
+    expect(mem[mem.length - 1]!.eventId).toBeTruthy();
     expect(requestMock).toHaveBeenCalled();
+  });
+
+  it("writeMemory is idempotent by (npcId, eventId)", async () => {
+    const { writeMemory, retrieveMemory } = await import("../src/memory.js");
+    const base = {
+      npcId: "npc.vendor.harbor_quartermaster",
+      playerId: "ply_idem",
+      importance: 0.5,
+      summary: "first write",
+      tags: ["idem"],
+      createdAt: new Date().toISOString(),
+      eventId: "evt_idem_1",
+      wakeId: "wk_idem_1",
+    };
+    const a = await writeMemory(base);
+    const b = await writeMemory({ ...base, summary: "second write should no-op" });
+    expect(a.memoryId).toBe(b.memoryId);
+    expect(b.summary).toBe("first write");
+    const mem = await retrieveMemory("npc.vendor.harbor_quartermaster", "ply_idem", []);
+    expect(mem.length).toBe(1);
   });
 
   it("processAgentWake maps skill agent_response shape", async () => {

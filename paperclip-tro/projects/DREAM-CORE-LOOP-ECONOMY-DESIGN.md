@@ -1,8 +1,8 @@
 # DREAM Online — Core Loop, Economy (NEEDs), NPC Personas & Trigger Vocabulary
 
 > **Issue:** TRO-44 · **Project:** PROJECT-2 phase 1 · **Tag:** DREAM design  
-> **Status:** Phase-1 design deliverable (implementation-ready)  
-> **Date:** 2026-07-11  
+> **Status:** Phase-1 design deliverable (implementation-ready) · recovery-aligned 2026-07-11  
+> **Date:** 2026-07-11 (rev: trigger vocab → TRO-87 v1.0.0; sibling design links)  
 > **Authority:** Joshua Coleman / Trash Or Treasure Online Recycler LLC  
 > **Skill link:** `.agents/skills/dream-live-npc/SKILL.md` (live-agent NPC orchestration)  
 > **Charter:** `paperclip-tro/projects/PROJECT-2-DREAM-ONLINE.md`  
@@ -141,6 +141,8 @@ T3 world actors write ledger deltas on `world.tick`; named NPCs *read* ledger fo
 
 Skill baseline: **T0 ambient / T1 named / T2 story-critical / T3 world actors** — see `dream-live-npc`.
 
+**Implementation-ready bibles (TRO-63):** `paperclip-tro/projects/DREAM-NPC-PERSONA-FRAMEWORK.md` covers 3 densest ambient templates + Mira/Brann. This section remains the **full playable-slice five** plus ambient pool for phase-4 planning.
+
 ### 3.1 Ambient pool (T0) — reusable templates
 
 | Persona ID | Role | Speech style | Default triggers |
@@ -245,32 +247,47 @@ routing:
 
 ## 4. Trigger vocabulary (game → orchestrator)
 
-Canonical, versioned, small payloads. **IDs and deltas only** — agents pull state by pointer (same law as BOOT-PROTOCOL).
+**Canonical contract (TRO-87, schema_version 1.0.0):**
 
-### 4.1 Event types
+- Human doc: `docs/dream/live-npc-trigger-vocabulary.md`
+- JSON Schema: `docs/dream/schemas/live-npc-webhook.schema.json`
+- Skill: `.agents/skills/dream-live-npc/SKILL.md`
 
-| Event | Payload (minimal) | Primary consumers |
+**IDs and deltas only** — agents pull state by pointer (same law as BOOT-PROTOCOL). Every game→orchestrator message uses the **envelope**:
+`{schema_version, event_id, event_type, occurred_at, source, actor, context_refs, payload}`.
+
+Snake aliases at the game edge (`player_enter_zone` → `player.enter_zone`, `need_spend` → `need.spend`).
+
+### 4.1 Canonical event types (v1.0.0)
+
+| Event | Payload (summary) | Primary consumers |
 |---|---|---|
-| `npc.approached` | `{npc_id, player_id, relationship_score, location}` | T0/T1 greetings |
-| `npc.spoken_to` | `{npc_id, player_id, utterance, convo_id}` | Live dialogue |
-| `npc.witnessed` | `{npc_id, event_type, actors[], location}` | Theft, combat, gift, death |
-| `npc.affected` | `{npc_id, effect, source}` | Robbed, helped, saved, insulted |
-| `world.tick` | `{region, day_phase, economy_deltas}` | T3 batch |
-| `npc.idle_heartbeat` | `{npc_id}` | NPC-initiated acts (letters, move, rumor) |
+| `player.enter_zone` | `{zone_id, from_zone_id?, position?, reason?}` | Zone greetings, ambient density |
+| `player.leave_zone` | same shape as enter | Zone exit memory / patrol |
+| `need.spend` | `{amount, sku, tx_id, merchant_npc_id?, balance_after?, location_id?}` | Mira trade memory; economy ledger |
+| `need.earn` | same shape as spend (credit) | Brann craft earn; economy ledger |
+| `npc.approached` | `{npc_id, player_id, relationship_score?, location_id?, distance_m?}` | T0/T1 greetings |
+| `npc.spoken_to` | `{npc_id, player_id, utterance, convo_id, channel?}` | Live dialogue (first webhook) |
+| `npc.witnessed` | `{npc_id, event_kind, actors[], location_id?, salience?}` | Theft, combat, gift, death |
+| `npc.affected` | `{npc_id, effect, source_player_id?, source_npc_id?, magnitude?}` | Robbed, helped, saved, insulted |
+| `npc.idle_heartbeat` | `{npc_id, day_phase?, idle_seconds?}` | NPC-initiated acts (letters, move, rumor) |
+| `world.tick` | `{region_id, day_phase, tick_index, economy_deltas?}` | T3 batch / price drift |
+| `quest.updated` | `{quest_id, player_id, from_state, to_state, npc_id?}` | Sup@ + named quest anchors |
+| `combat.ended` | `{encounter_id, winners[], losers[], location_id?, flags?}` | Guard/Voss memory, rumor seeds |
 
-Optional slice extensions (v1.1, not required for first webhook):
+Optional later extensions (not in v1.0.0 schema; do not invent parallel names in adapters):
 
 | Event | Purpose |
 |---|---|
-| `player.needs_spent` | `{player_id, sku, amount, location}` — economy analytics, not NPC-required |
-| `npc.trade_completed` | `{npc_id, player_id, items[], needs_delta}` — Mira/Brann memory hooks |
-| `enforcement.ban_hammer` | `{target_player_id, reason_code, spectators[]}` — spectacle pipeline |
+| `npc.trade_completed` | Explicit trade bundle memory for Mira/Brann (may fold into `need.*` + inventory deltas) |
+| `enforcement.ban_hammer` | Spectacle pipeline for THE BAN HAMMER |
 
 ### 4.2 Webhook contract (orchestrator → agent → game)
 
 ```
 POST /npc/{npc_id}/wake
-body: { trigger, context_refs[] }
+body: agent_wake schema
+  {schema_version, wake_id, npc_id, tier, trigger, context_refs, budget, payload_ref?}
 
 # Agent assembles:
 #   persona core (≤40 lines)
@@ -281,18 +298,22 @@ body: { trigger, context_refs[] }
 # Response budgets:
 #   T1 ≤ 2s  |  T2 ≤ 5s  |  else fallback
 
-response: {
+response (agent_response schema): {
+  schema_version, wake_id, npc_id, ok,
   say?: string,
   do?: action[],
   remember: memory_writes[],
   mood_delta?: number,
-  world_effects?: effect[]
+  world_effects?: effect[],
+  fallback_used, latency_ms?
 }
 ```
 
 **Fallback law:** miss latency budget → tier-appropriate canned line + queue async memory write. Players never see timeouts; they see a terse NPC. The encounter is still remembered.
 
 ### 4.3 Memory schema (pointer summary)
+
+Formal write-back: `.agents/skills/dream-live-npc/MEMORY-SCHEMA.md` + `docs/dream/live-npc-memory-schema.md`.
 
 | Store | Contents |
 |---|---|
@@ -311,6 +332,7 @@ When multiple NPC agents contend or outputs violate invariants (quest integrity,
 - Rating compliance at judge layer pre-render.
 - No NPC calls Anthropic API autonomously; **Sup@ is the only Claude/CLI Max path**.
 - Player data in memory is game-scoped IDs/acts only — never real-world PII.
+- `need.spend` / `need.earn` are in-game currency events only — never mission/benefit framing.
 
 ---
 
@@ -335,25 +357,41 @@ Engine decision remains Joshua-gated (Unreal target in charter) before heavy eng
 - [x] Core gameplay loop outlined (minute / session / week + pillars)
 - [x] Economy: NEEDs public-only product framing; sinks/sources; P2W ban; whitelist
 - [x] 5 ambient templates + 5 named slice personas (incl. Sup@)
-- [x] Trigger vocabulary + webhook contract + fallback law
+- [x] Trigger vocabulary + webhook contract + fallback law (aligned to TRO-87 v1.0.0)
 - [x] Linked to `dream-live-npc` skill and PROJECT-2 / doctrine
-- [ ] World bible (separate design issue — not this ticket’s full scope)
-- [ ] Live-NPC bridge prototype (phase 2 — child/follow-up)
+
+**Sibling design (done elsewhere — not re-opened here):**
+
+- [x] World bible stub — [TRO-52](/TRO/issues/TRO-52) → `docs/dream/world-bible-stub.md`
+- [x] Formal NEED sources/sinks/decay — [TRO-113](/TRO/issues/TRO-113) → `docs/dream/needs-sources-sinks-decay.md`
+- [x] Persona bibles (3 ambient + 2 named) — [TRO-63](/TRO/issues/TRO-63) → `paperclip-tro/projects/DREAM-NPC-PERSONA-FRAMEWORK.md`
+- [x] Trigger vocabulary contract — [TRO-87](/TRO/issues/TRO-87) → `docs/dream/live-npc-trigger-vocabulary.md`
+
+**Out of scope for TRO-44 (phase 2+):**
+
+- [ ] Live-NPC bridge prototype (PROJECT-2 phase 2)
+- [ ] Pay-for-convenience SKU sheet (shop prices for slice UI)
+- [ ] Sup@ companion channel implementation spec
 
 ---
 
 ## 7. Recommended follow-up issues
 
-1. **DREAM world bible (starter zone)** — places, factions, day/night, rumor seeds.
-2. **Live-NPC bridge prototype** — one NPC, one trigger, memory write-back (PROJECT-2 phase 2).
-3. **Pay-for-convenience SKU sheet** — concrete shop SKUs + NEEDs prices for slice (seeded by TRO-113 sinks in `docs/dream/needs-sources-sinks-decay.md` §5).
-4. **Sup@ companion channel spec** — CLI Max routing, per-player memory, elevation rules.
+1. **Live-NPC bridge prototype** — one NPC, one trigger (`npc.spoken_to`), memory write-back (PROJECT-2 phase 2).
+2. **Pay-for-convenience SKU sheet** — concrete shop SKUs + NEEDs prices for slice (seeded by TRO-113 sinks in `docs/dream/needs-sources-sinks-decay.md`).
+3. **Sup@ companion channel spec** — CLI Max routing, per-player memory, elevation rules.
+4. **World bible expansion** beyond Harbor Ward (depth beyond TRO-52 stub).
 
 ---
 
 ## 8. References
 
 - `.agents/skills/dream-live-npc/SKILL.md`
+- `docs/dream/live-npc-trigger-vocabulary.md` (TRO-87 canonical)
+- `docs/dream/schemas/live-npc-webhook.schema.json`
+- `docs/dream/needs-sources-sinks-decay.md` (TRO-113)
+- `docs/dream/world-bible-stub.md` (TRO-52)
+- `paperclip-tro/projects/DREAM-NPC-PERSONA-FRAMEWORK.md` (TRO-63)
 - `paperclip-tro/projects/PROJECT-2-DREAM-ONLINE.md`
 - `briefings/DREAM-ONLINE-AND-DAO-SEPARATION-2026-07-01.md`
 - `briefings/FABLE-DESIGN-PROMPT-2026-07-01.md` (public copy wall)
