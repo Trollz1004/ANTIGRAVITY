@@ -1,0 +1,94 @@
+{
+  "reqId": "40db1e05-1c27-45b9-aa58-2e302ae48999",
+  "ok": true,
+  "accepted": true,
+  "eventType": "npc.spoken_to",
+  "eventId": "c3333333-3333-4333-8333-333333333333",
+  "npcId": "npc.vendor.harbor_quartermaster",
+  "playerId": "ply_1001",
+  "agentCall": {
+    "wakePath": "/npc/npc.vendor.harbor_quartermaster/wake",
+    "method": "POST",
+    "body": {
+      "schema_version": "1.0.0",
+      "wake_id": "wake_c3333333-3333-4333-8333-333333333333",
+      "npc_id": "npc.vendor.harbor_quartermaster",
+      "tier": "T1",
+      "trigger": {
+        "event_id": "c3333333-3333-4333-8333-333333333333",
+        "event_type": "npc.spoken_to",
+        "occurred_at": "2026-07-11T14:03:00Z"
+      },
+      "context_refs": [
+        {
+          "kind": "npc",
+          "id": "npc.vendor.harbor_quartermaster"
+        },
+        {
+          "kind": "player",
+          "id": "ply_1001"
+        }
+      ],
+      "budget": {
+        "max_latency_ms": 2000,
+        "fallback": "canned_line"
+      },
+      "payload_ref": "event:c3333333-3333-4333-8333-333333333333",
+      "message": "Got anything new on the rack?",
+      "player_id": "ply_1001"
+    },
+    "dispatch": "executed",
+    "note": "TRO-48: agent wake executed with memory write-back."
+  },
+  "readyForAgentCall": true,
+  "roundtrip": {
+    "ok": true,
+    "agentResponse": {
+      "schema_version": "1.0.0",
+      "wake_id": "wake_c3333333-3333-4333-8333-333333333333",
+      "npc_id": "npc.vendor.harbor_quartermaster",
+      "ok": true,
+      "say": "...",
+      "do": [
+        {
+          "action": "emote",
+          "name": "nod"
+        }
+      ],
+      "remember": [
+        {
+          "kind": "episodic",
+          "event": "local_npc_response",
+          "actors": [
+            "ply_1001"
+          ],
+          "salience": 0.1,
+          "decay_class": "ephemeral"
+        }
+      ],
+      "mood_delta": 0,
+      "world_effects": [],
+      "fallback_used": true,
+      "latency_ms": 1384,
+      "emotion": "neutral",
+      "action_intent": "idle",
+      "provider": "ollama"
+    },
+    "memoryWritten": {
+      "npcId": "npc.vendor.harbor_quartermaster",
+      "playerId": "ply_1001",
+      "importance": 0.1,
+      "summary": "local NPC response",
+      "tags": [],
+      "createdAt": "2026-07-11T15:13:20.78Z",
+      "eventId": "c3333333-3333-4333-8333-333333333333",
+      "wakeId": "wake_c3333333-3333-4333-8333-333333333333",
+      "memoryId": "mem_mrgi81vx_nqbqoo",
+      "storagePath": "npc/npc.vendor.harbor_quartermaster/episodic/mem_mrgi81vx_nqbqoo"
+    },
+    "memoryCountAfter": 1,
+    "providerUsed": "ollama",
+    "fallbackReason": "onemin_failed: ONEMIN_API_KEY not configured; aihubmix_failed: AIHUBMIX_API_KEY not configured"
+  },
+  "latency_ms": 1385
+}

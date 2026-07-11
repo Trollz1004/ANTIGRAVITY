@@ -197,8 +197,57 @@ describe("TRO-48 webhook → agent → memory write-back roundtrip", () => {
 
     expect(out.agentResponse.fallback_used).toBe(true);
     expect(out.agentResponse.say).toBeTruthy();
+    // Must still finish under the published budget even after post-process reserve.
     expect(out.agentResponse.latency_ms).toBeLessThan(500);
     const mem = await retrieveMemory("npc.vendor.harbor_quartermaster", "ply_timeout", []);
     expect(mem.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("wake budget race reserves time so total latency stays under max_latency_ms", async () => {
+    // Provider hangs longer than race window; fallback + memory write must still
+    // return under the full 2000ms budget (TRO-66 live acceptance).
+    requestMock.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve({
+              statusCode: 200,
+              body: jsonBody({
+                result: {
+                  npc_dialogue: "too late",
+                  emotion: "neutral",
+                  action_intent: "idle",
+                  memory_writeback: { importance: 0.1, summary: "late", tags: [] },
+                },
+              }),
+            });
+          }, 5000);
+        }),
+    );
+
+    const { processAgentWake } = await import("../src/webhooks/wake.js");
+    const started = Date.now();
+    const out = await processAgentWake({
+      schema_version: "1.0.0",
+      wake_id: "wk_budget_2s",
+      npc_id: "npc.vendor.harbor_quartermaster",
+      tier: "T1",
+      trigger: {
+        event_id: "evt_budget_2s",
+        event_type: "npc.spoken_to",
+        occurred_at: "2026-07-11T14:03:00.000Z",
+      },
+      context_refs: [{ kind: "player", id: "ply_budget_2s" }],
+      budget: { max_latency_ms: 2000, fallback: "canned_line" },
+      message: "hello?",
+      player_id: "ply_budget_2s",
+    });
+    const wall = Date.now() - started;
+
+    expect(out.agentResponse.fallback_used).toBe(true);
+    expect(out.agentResponse.latency_ms).toBeLessThan(2000);
+    expect(wall).toBeLessThan(2000);
+    expect(out.memoryWritten).not.toBeNull();
+    expect(out.memoryCountAfter).toBeGreaterThanOrEqual(1);
   });
 });

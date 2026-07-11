@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import type { NpcRequest, NpcResponse } from "../contract.js";
 import { routeNpcRequest } from "../policy.js";
-import { retrieveMemory, type MemoryEvent } from "../memory.js";
+import { retrieveMemory, writeMemory, type MemoryEvent } from "../memory.js";
 import type { CanonicalEventType } from "./events.js";
 
 /**
@@ -174,11 +174,16 @@ export async function processAgentWake(
   const playerId = resolvePlayerId(wake);
   const message = resolveMessage(wake);
   const maxMs = budgetMs(wake);
+  // Reserve wall-clock for memory write-back so total roundtrip stays ≤ budget
+  // even when the provider race hits the limit (TRO-66 / T1 ≤2s law).
+  const POST_PROCESS_RESERVE_MS = 250;
+  const raceMs = Math.max(50, maxMs - POST_PROCESS_RESERVE_MS);
 
   let providerUsed = "local-degraded-stub";
   let fallbackReason: string | undefined;
   let npcResponse: NpcResponse | undefined;
   let fallbackUsed = false;
+  let memoryWritten: MemoryEvent | null = null;
 
   // Enforce wake budget with Promise.race (T1 law: ≤2s). Provider chain may use
   // a longer router timeout internally; the race returns canned line + still
@@ -204,13 +209,13 @@ export async function processAgentWake(
   const timed = await Promise.race([
     routePromise.then((r) => ({ kind: "ok" as const, r })),
     new Promise<{ kind: "timeout" }>((resolve) =>
-      setTimeout(() => resolve({ kind: "timeout" }), maxMs),
+      setTimeout(() => resolve({ kind: "timeout" }), raceMs),
     ),
   ]);
 
   if (timed.kind === "timeout") {
     fallbackUsed = true;
-    fallbackReason = `wake_budget_exceeded_${maxMs}ms`;
+    fallbackReason = `wake_budget_exceeded_${raceMs}ms`;
     npcResponse = {
       npc_dialogue: cannedLine(wake.trigger.event_type),
       emotion: "neutral",
@@ -222,8 +227,7 @@ export async function processAgentWake(
       },
     };
     // Still persist memory (skill fallback law + TRO-121 storage path).
-    const { writeMemory } = await import("../memory.js");
-    await writeMemory({
+    memoryWritten = await writeMemory({
       npcId: wake.npc_id,
       playerId,
       importance: npcResponse.memory_writeback.importance,
@@ -252,28 +256,34 @@ export async function processAgentWake(
     },
   };
 
-  const latency_ms = Date.now() - started;
   const remember = mapRemember(response, wake, playerId);
 
   // routeNpcRequest writes memory on normal provider paths; reserved/early
   // returns (e.g. SUPA stub) skip writeMemory — guarantee write-back here so
   // every wake leaves a durable row (TRO-48 acceptance).
-  let after = await retrieveMemory(wake.npc_id, playerId, []);
-  if (after.length === 0 && response.memory_writeback.summary) {
-    const { writeMemory } = await import("../memory.js");
-    await writeMemory({
-      npcId: wake.npc_id,
-      playerId,
-      importance: response.memory_writeback.importance,
-      summary: response.memory_writeback.summary,
-      tags: response.memory_writeback.tags,
-      createdAt: new Date().toISOString(),
-      eventId: wake.trigger.event_id,
-      wakeId: wake.wake_id,
-    });
-    after = await retrieveMemory(wake.npc_id, playerId, []);
+  if (!memoryWritten) {
+    let after = await retrieveMemory(wake.npc_id, playerId, []);
+    if (after.length === 0 && response.memory_writeback.summary) {
+      memoryWritten = await writeMemory({
+        npcId: wake.npc_id,
+        playerId,
+        importance: response.memory_writeback.importance,
+        summary: response.memory_writeback.summary,
+        tags: response.memory_writeback.tags,
+        createdAt: new Date().toISOString(),
+        eventId: wake.trigger.event_id,
+        wakeId: wake.wake_id,
+      });
+      after = [memoryWritten];
+    } else if (after.length > 0) {
+      memoryWritten = after[after.length - 1]!;
+    }
   }
-  const memoryWritten = after.length > 0 ? after[after.length - 1]! : null;
+
+  const after = memoryWritten
+    ? await retrieveMemory(wake.npc_id, playerId, [])
+    : [];
+  const latency_ms = Date.now() - started;
 
   const agentResponse: AgentResponse = {
     schema_version: wake.schema_version,
@@ -298,7 +308,7 @@ export async function processAgentWake(
     ok: true,
     agentResponse,
     memoryWritten,
-    memoryCountAfter: after.length,
+    memoryCountAfter: after.length > 0 ? after.length : memoryWritten ? 1 : 0,
     providerUsed,
     fallbackReason,
   };
