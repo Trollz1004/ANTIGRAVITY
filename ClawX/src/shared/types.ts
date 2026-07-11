@@ -125,7 +125,7 @@ export interface TreasuryAsset {
   asset: string;
   amount: number;
   valueUsd: number;
-  allocation: 'Charity (50%)' | 'Operations (50%)';
+  purpose: 'Platform operations';
 }
 
 // File System Types (Shim for TypeScript)

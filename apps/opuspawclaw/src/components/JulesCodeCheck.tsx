@@ -173,7 +173,7 @@ export function JulesCodeCheck({ code, onApprove, onFail }: JulesCodeCheckProps)
         <h3 className="text-[#00d4ff] font-bold uppercase tracking-widest text-[11px]">Free Enterprise CODE CHECK</h3>
       </div>
       <p className="text-xs text-[#6b82a6] mb-5 leading-relaxed">
-        The silent founder offers this as thanks for your 10% allocation to platform-supported pediatric care. He is personally matching the 10% allocation and providing this code security check completely free.
+        The founder provides this complimentary code security check as part of platform support.
       </p>
       <div className="flex gap-3">
         <button 

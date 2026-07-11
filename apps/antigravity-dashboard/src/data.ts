@@ -204,7 +204,7 @@ export const REVENUE_BUCKETS: RevenueBucket[] = [
   { id: 6, name: "Data Licensing",     value:  4_310, streams:  2, compounding: true,  trend: 0.41 },
   { id: 7, name: "Tool Marketplace",   value:  3_870, streams:  7, compounding: true,  trend: 0.08 },
   { id: 8, name: "Consulting",         value:  2_640, streams:  5, compounding: false, trend: -0.04 },
-  { id: 9, name: "Grants & Donations", value:  1_980, streams:  3, compounding: false, trend: 0.12 },
+  { id: 9, name: "Partner Programs",    value:  1_980, streams:  3, compounding: false, trend: 0.12 },
   { id: 10,name: "Royalty Pool",       value:  1_120, streams:  2, compounding: true,  trend: 0.07 },
 ];
 
