@@ -12,6 +12,7 @@ Related contracts:
 - Live-NPC skill: `.agents/skills/dream-live-npc/SKILL.md`
 - Memory write-back: `.agents/skills/dream-live-npc/MEMORY-SCHEMA.md`
 - Trigger vocabulary: `docs/dream/live-npc-trigger-vocabulary.md`
+- NEED sources/sinks + decay: `docs/dream/needs-sources-sinks-decay.md`
 - Example NPC state: `.agents/skills/dream-live-npc/examples/mira-dockwarden.state.json`
 
 ---
@@ -218,7 +219,7 @@ If inference budget fails, use a short canned line and still queue memory write-
 ## 8. Next design slices (not this issue)
 
 1. Expand world bible beyond Harbor Ward (TRO-76 outline depth).
-2. Formal NEED earn/spend anti-inflation rules (TRO-90).
+2. Formal NEED earn/spend anti-inflation rules (TRO-90) — **delivered as** `docs/dream/needs-sources-sinks-decay.md` (TRO-113).
 3. Handler stubs for three sample webhooks (TRO-114) using these zone_ids.
 4. Engine decision brief remains separate (TRO-72).
 
