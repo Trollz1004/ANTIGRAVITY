@@ -1,0 +1,31 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "kind":  "example_verify",
+    "issue":  "TRO-62",
+    "verified_at":  "2026-07-11T14:53:40.2745959Z",
+    "state_path":  "examples/mira-dockwarden.state.json",
+    "trigger_types":  [
+                          "player.enter_zone",
+                          "npc.approached",
+                          "npc.spoken_to",
+                          "npc.witnessed",
+                          "npc.affected",
+                          "world.tick",
+                          "npc.idle_heartbeat",
+                          "need.spend",
+                          "quest.updated",
+                          "combat.ended"
+                      ],
+    "trigger_type_count":  10,
+    "episodic_count":  2,
+    "relationship_count":  1,
+    "remember_count":  2,
+    "writeback_count":  2,
+    "anthropic_forbidden":  true,
+    "aligned_with_tro87":  true,
+    "ac":  {
+               "doc_in_skill":  true,
+               "at_least_5_trigger_types":  true,
+               "example_state_persisted":  true
+           }
+}

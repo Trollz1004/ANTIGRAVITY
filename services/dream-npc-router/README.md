@@ -49,6 +49,47 @@ hard-fails just because 1Min's schema turns out to be wrong.
 - `GET /health` — liveness.
 - `GET /providers` — lists each provider's config status, the 1Min UNVERIFIED canary note, and current circuit breaker states.
 - `POST /npc/respond` — routes an NPC turn through policy and returns the response contract.
+- `GET /webhooks/events` — lists the three live-NPC sample webhook event types + schema/sample paths.
+- `GET /webhooks/events/:eventType/schema` — JSON Schema for `player_enter` | `need_change` | `interaction`.
+- `GET /webhooks/events/:eventType/sample` — sample payload for that event type.
+- `POST /webhooks/events` — validates a game webhook event and returns a **stub** agent-call envelope (`dispatch: "stub_only"`). Does not call a provider.
+
+### Live-NPC webhook events (TRO-114)
+
+Extends TRO-87. **Canonical envelope + schema** live in the dream skill / docs tree
+(not a second contract):
+
+- Schema: `.agents/skills/dream-live-npc/schemas/live-npc-webhook.schema.json`
+- Samples: `.agents/skills/dream-live-npc/schemas/samples/`
+- Doc: `docs/dream/live-npc-trigger-vocabulary.md`
+
+Router code: `src/webhooks/events.ts` (parse + alias map), `src/webhooks/handler.ts` (agent_wake stub).
+
+| TRO-114 alias | Canonical `event_type` | Skill sample |
+| --- | --- | --- |
+| `player_enter` | `player.enter_zone` | `player_enter_zone.json` |
+| `need_change` | `need.spend` (or `need.earn` if payload.direction=earn) | `need_spend.json` |
+| `interaction` | `npc.spoken_to` | `npc_spoken_to.json` |
+
+```bash
+# Index
+curl http://127.0.0.1:8090/webhooks/events
+
+# Canonical schema
+curl http://127.0.0.1:8090/webhooks/events/schema
+
+# Sample by TRO-114 alias
+curl http://127.0.0.1:8090/webhooks/events/interaction/sample
+
+# Accept event (TRO-87 envelope; aliases allowed on event_type)
+curl -X POST http://127.0.0.1:8090/webhooks/events \
+  -H "content-type: application/json" \
+  -d @../../.agents/skills/dream-live-npc/schemas/samples/npc_spoken_to.json
+```
+
+Response is `202` with `agentCall.wakePath` like `/npc/{npcId}/wake`,
+`dispatch: "stub_only"`, and `readyForAgentCall: true`. Wire dispatch to Agent Hub
+/ provider in a follow-up — this path intentionally does not call a model.
 
 ### Response contract
 
