@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "artifact_store_roundtrip",
+  "issue": "TRO-126",
+  "written_at": "2026-07-11T15:02:11.5512059Z",
+  "store_path": "examples/mira-dockwarden.state.json",
+  "write": {
+    "schema_version": "1.0.0",
+    "kind": "episodic",
+    "memory_id": "mem_tro126_demo",
+    "npc_id": "npc.mira.dockwarden",
+    "wake_id": "wk_tro126_demo",
+    "event_id": "e_tro126_write_read",
+    "ts": "2026-07-11T15:02:11.5512059Z",
+    "event": "tro126_artifact_store_roundtrip",
+    "actors": [
+      "agent.grok"
+    ],
+    "location_id": "zone.harbor.pier",
+    "salience": 0.2,
+    "decay_class": "ephemeral",
+    "tags": [
+      "tro-126",
+      "artifact_store",
+      "demo"
+    ],
+    "embedding_text": "TRO-126 write then read persona artifact store demo"
+  },
+  "persona_core_npc_id": "npc.mira.dockwarden",
+  "pre_existing_episodic_count": 2
+}

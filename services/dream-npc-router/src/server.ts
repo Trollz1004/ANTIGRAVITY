@@ -19,6 +19,8 @@ import {
   type SampleEventAlias,
 } from "./webhooks/events.js";
 import { handleGameWebhookEvent } from "./webhooks/handler.js";
+import { processAgentWake } from "./webhooks/wake.js";
+import { retrieveMemory } from "./memory.js";
 
 const SERVICE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 /** Monorepo root (services/dream-npc-router → ../..). */
@@ -127,6 +129,74 @@ export function buildServer(): express.Express {
   });
 
   /**
+   * TRO-48 / dream-live-npc skill contract:
+   *   POST /npc/{npc_id}/wake  → agent_response + memory write-back (≤2s budget)
+   */
+  app.post("/npc/:npcId/wake", requireApiKey, async (req, res) => {
+    const reqId = randomUUID();
+    const npcId = decodeURIComponent(req.params.npcId);
+    const body =
+      typeof req.body === "object" && req.body !== null
+        ? { ...(req.body as Record<string, unknown>), npc_id: (req.body as { npc_id?: string }).npc_id ?? npcId }
+        : { npc_id: npcId };
+
+    try {
+      const result = await processAgentWake(body, reqId);
+      logger.info(
+        {
+          reqId,
+          npcId,
+          wakeId: result.agentResponse.wake_id,
+          latencyMs: result.agentResponse.latency_ms,
+          provider: result.providerUsed,
+          memoryCount: result.memoryCountAfter,
+          fallback: result.agentResponse.fallback_used,
+        },
+        "npc_wake_roundtrip_complete",
+      );
+      res.json({
+        reqId,
+        ...result.agentResponse,
+        memory: {
+          written: Boolean(result.memoryWritten),
+          count: result.memoryCountAfter,
+          last: result.memoryWritten,
+        },
+        provider: result.providerUsed,
+        fallbackReason: result.fallbackReason,
+      });
+    } catch (err) {
+      const status = (err as { status?: number }).status ?? 500;
+      if (status === 400) {
+        res.status(400).json({
+          error: "invalid_agent_wake",
+          reqId,
+          details: (err as { details?: unknown }).details,
+        });
+        return;
+      }
+      logger.error({ reqId, err: err instanceof Error ? err.message : String(err) }, "npc_wake_unhandled_error");
+      res.status(500).json({ error: "internal_error", reqId });
+    }
+  });
+
+  /** Dev/verification: list in-memory NPC/player memory rows after a write-back. */
+  app.get("/npc/:npcId/memory", requireApiKey, async (req, res) => {
+    const npcId = decodeURIComponent(req.params.npcId);
+    const playerId = typeof req.query.playerId === "string" ? req.query.playerId : "";
+    if (!playerId) {
+      res.status(400).json({ error: "playerId_query_required" });
+      return;
+    }
+    const tags =
+      typeof req.query.tags === "string" && req.query.tags.length > 0
+        ? req.query.tags.split(",").map((t) => t.trim()).filter(Boolean)
+        : [];
+    const events = await retrieveMemory(npcId, playerId, tags);
+    res.json({ npcId, playerId, count: events.length, events });
+  });
+
+  /**
    * TRO-114 — live-NPC sample webhook surface.
    * Validates TRO-87 envelope (with player_enter / need_change / interaction aliases)
    * and returns a stub agent_wake envelope. No provider dispatch.
@@ -180,7 +250,7 @@ export function buildServer(): express.Express {
     }
   });
 
-  app.post("/webhooks/events", requireApiKey, (req, res) => {
+  app.post("/webhooks/events", requireApiKey, async (req, res) => {
     const reqId = randomUUID();
     const parsed = parseGameWebhookEvent(req.body);
     if (!parsed.success) {
@@ -192,18 +262,35 @@ export function buildServer(): express.Express {
       return;
     }
 
-    const result = handleGameWebhookEvent(parsed.data);
-    logger.info(
-      {
-        reqId,
-        eventType: result.eventType,
-        eventId: result.eventId,
-        npcId: result.npcId,
-        dispatch: result.agentCall.dispatch,
-      },
-      "webhook_event_accepted_stub",
-    );
-    res.status(202).json({ reqId, ...result });
+    // TRO-48: ?dispatch=1|true or header X-Dream-Dispatch: 1 executes agent + memory write-back.
+    const q = req.query.dispatch;
+    const header = req.header("x-dream-dispatch") ?? "";
+    const dispatch =
+      q === "1" ||
+      q === "true" ||
+      header === "1" ||
+      header.toLowerCase() === "true";
+
+    try {
+      const result = await handleGameWebhookEvent(parsed.data, { dispatch, reqId });
+      logger.info(
+        {
+          reqId,
+          eventType: result.eventType,
+          eventId: result.eventId,
+          npcId: result.npcId,
+          dispatch: result.agentCall.dispatch,
+          latencyMs: result.latency_ms,
+          memoryCount: result.roundtrip?.memoryCountAfter,
+        },
+        dispatch ? "webhook_event_roundtrip_complete" : "webhook_event_accepted_stub",
+      );
+      // 200 when fully executed (caller needs agent_response); 202 when accepted-as-stub.
+      res.status(dispatch ? 200 : 202).json({ reqId, ...result });
+    } catch (err) {
+      logger.error({ reqId, err: err instanceof Error ? err.message : String(err) }, "webhook_event_unhandled_error");
+      res.status(500).json({ error: "internal_error", reqId });
+    }
   });
 
   return app;

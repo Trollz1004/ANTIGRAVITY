@@ -61,13 +61,13 @@ describe("live-NPC webhook events (TRO-114 on TRO-87 envelope)", () => {
     expect(bad.success).toBe(false);
   });
 
-  it("handler stub returns ready agent_wake envelope without dispatching", () => {
+  it("handler stub returns ready agent_wake envelope without dispatching", async () => {
     const sample = loadSkillSample("npc_spoken_to.json");
     const parsed = parseGameWebhookEvent(sample);
     expect(parsed.success).toBe(true);
     if (!parsed.success) return;
 
-    const result = handleGameWebhookEvent(parsed.data);
+    const result = await handleGameWebhookEvent(parsed.data);
     expect(result.ok).toBe(true);
     expect(result.readyForAgentCall).toBe(true);
     expect(result.agentCall.dispatch).toBe("stub_only");
@@ -76,13 +76,14 @@ describe("live-NPC webhook events (TRO-114 on TRO-87 envelope)", () => {
     expect(result.agentCall.body.trigger.event_type).toBe("npc.spoken_to");
     expect(result.agentCall.body.budget.fallback).toBe("canned_line");
     expect(result.agentCall.body.context_refs.length).toBeGreaterThan(0);
+    expect(result.roundtrip).toBeUndefined();
   });
 
-  it("player_enter and need_change stubs resolve npc targets", () => {
+  it("player_enter and need_change stubs resolve npc targets", async () => {
     const enter = parseGameWebhookEvent(loadSkillSample("player_enter_zone.json"));
     expect(enter.success).toBe(true);
     if (enter.success) {
-      const result = handleGameWebhookEvent(enter.data);
+      const result = await handleGameWebhookEvent(enter.data);
       // No npc on enter — ambient zone target.
       expect(result.agentCall.body.npc_id).toContain("zone-ambient:");
     }
@@ -90,7 +91,7 @@ describe("live-NPC webhook events (TRO-114 on TRO-87 envelope)", () => {
     const need = parseGameWebhookEvent(loadSkillSample("need_spend.json"));
     expect(need.success).toBe(true);
     if (need.success) {
-      const result = handleGameWebhookEvent(need.data);
+      const result = await handleGameWebhookEvent(need.data);
       expect(result.agentCall.body.npc_id).toBe("npc.vendor.harbor_quartermaster");
     }
   });

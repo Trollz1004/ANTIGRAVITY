@@ -52,7 +52,9 @@ hard-fails just because 1Min's schema turns out to be wrong.
 - `GET /webhooks/events` — lists the three live-NPC sample webhook event types + schema/sample paths.
 - `GET /webhooks/events/:eventType/schema` — JSON Schema for `player_enter` | `need_change` | `interaction`.
 - `GET /webhooks/events/:eventType/sample` — sample payload for that event type.
-- `POST /webhooks/events` — validates a game webhook event and returns a **stub** agent-call envelope (`dispatch: "stub_only"`). Does not call a provider.
+- `POST /webhooks/events` — validates a game webhook event and returns a **stub** agent-call envelope (`dispatch: "stub_only"`). With `?dispatch=1` (or `X-Dream-Dispatch: 1`) executes the TRO-48 agent → memory write-back roundtrip and returns `roundtrip.agentResponse`.
+- `POST /npc/:npcId/wake` — dream-live-npc skill wake contract: agent response + memory write-back (≤2s budget, canned fallback on timeout).
+- `GET /npc/:npcId/memory?playerId=` — list in-memory write-back rows for verification.
 
 ### Live-NPC webhook events (TRO-114)
 
@@ -81,15 +83,29 @@ curl http://127.0.0.1:8090/webhooks/events/schema
 # Sample by TRO-114 alias
 curl http://127.0.0.1:8090/webhooks/events/interaction/sample
 
-# Accept event (TRO-87 envelope; aliases allowed on event_type)
+# Accept event stub only (TRO-114)
 curl -X POST http://127.0.0.1:8090/webhooks/events \
   -H "content-type: application/json" \
   -d @../../.agents/skills/dream-live-npc/schemas/samples/npc_spoken_to.json
+
+# Full TRO-48 roundtrip: game event → agent → memory write-back
+curl -X POST "http://127.0.0.1:8090/webhooks/events?dispatch=1" \
+  -H "content-type: application/json" \
+  -d @../../.agents/skills/dream-live-npc/schemas/samples/npc_spoken_to.json
+
+# Direct skill wake
+curl -X POST http://127.0.0.1:8090/npc/npc.vendor.harbor_quartermaster/wake \
+  -H "content-type: application/json" \
+  -d @../../.agents/skills/dream-live-npc/schemas/samples/agent_wake.json
+
+# Verify memory rows
+curl "http://127.0.0.1:8090/npc/npc.vendor.harbor_quartermaster/memory?playerId=ply_1001"
 ```
 
-Response is `202` with `agentCall.wakePath` like `/npc/{npcId}/wake`,
-`dispatch: "stub_only"`, and `readyForAgentCall: true`. Wire dispatch to Agent Hub
-/ provider in a follow-up — this path intentionally does not call a model.
+- Stub path: `202` with `agentCall.dispatch: "stub_only"`.
+- Dispatch path (`?dispatch=1`): `200` with `agentCall.dispatch: "executed"`,
+  `roundtrip.agentResponse` (skill shape: `say`, `remember[]`, `latency_ms`),
+  and durable rows in the memory store (query via `GET /npc/:npcId/memory`).
 
 ### Response contract
 

@@ -2,7 +2,7 @@
     "schema_version":  "1.0.0",
     "kind":  "example_verify",
     "issue":  "TRO-62",
-    "verified_at":  "2026-07-11T14:53:40.2745959Z",
+    "verified_at":  "2026-07-11T15:01:21.4515927Z",
     "state_path":  "examples/mira-dockwarden.state.json",
     "trigger_types":  [
                           "player.enter_zone",
