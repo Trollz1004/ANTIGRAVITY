@@ -20,7 +20,7 @@ from app.schemas import (
     UserReportRequest,
     UserReportResponse,
 )
-from app.support_service import notify_support_ticket
+from app.support_service import build_bot_likelihood_profile, notify_support_ticket
 
 router = APIRouter(prefix="/safety")
 
@@ -166,6 +166,13 @@ async def report_user(
                 ),
             },
         ],
+    )
+    ticket.bot_likelihood_score, ticket.bot_likelihood_signals = (
+        await build_bot_likelihood_profile(
+            db=db,
+            user=user,
+            customer_message=f"{payload.reason} {payload.details or ''}".strip(),
+        )
     )
     db.add(ticket)
     await db.flush()

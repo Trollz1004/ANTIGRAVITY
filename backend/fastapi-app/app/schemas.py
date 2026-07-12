@@ -496,6 +496,11 @@ class SupportTicketResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class SupportTicketOperatorResponse(SupportTicketResponse):
+    bot_likelihood_score: float = 0.0
+    bot_likelihood_signals: dict = Field(default_factory=dict)
+
+
 class SupportChatResponse(BaseModel):
     reply: str
     escalated: bool

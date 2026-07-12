@@ -15,8 +15,14 @@ from app.auth import get_current_user
 from app.config import Settings, get_settings
 from app.database import get_db
 from app.models import SupportTicket, User
-from app.schemas import SupportChatRequest, SupportChatResponse, SupportTicketResponse
+from app.schemas import (
+    SupportChatRequest,
+    SupportChatResponse,
+    SupportTicketOperatorResponse,
+    SupportTicketResponse,
+)
 from app.support_service import (
+    build_bot_likelihood_profile,
     generate_support_decision,
     notify_support_ticket,
     user_can_view_operator_queue,
@@ -120,6 +126,11 @@ async def _create_ticket(
     db: AsyncSession,
     settings: Settings,
 ) -> SupportTicket:
+    bot_likelihood_score, bot_likelihood_signals = await build_bot_likelihood_profile(
+        db=db,
+        user=user,
+        customer_message=payload.message,
+    )
     ticket = SupportTicket(
         id=uuid.uuid4(),
         user_id=user.id,
@@ -131,6 +142,8 @@ async def _create_ticket(
         bot_response=decision_reply,
         escalation_reason=escalation_reason,
         transcript=_serialize_transcript(payload, decision_reply),
+        bot_likelihood_score=bot_likelihood_score,
+        bot_likelihood_signals=bot_likelihood_signals,
     )
     db.add(ticket)
     await db.commit()
@@ -217,7 +230,7 @@ async def list_my_support_tickets(
     return [SupportTicketResponse.model_validate(ticket) for ticket in tickets]
 
 
-@router.get("/operator/tickets", response_model=list[SupportTicketResponse])
+@router.get("/operator/tickets", response_model=list[SupportTicketOperatorResponse])
 async def list_operator_support_tickets(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
@@ -231,7 +244,7 @@ async def list_operator_support_tickets(
             select(SupportTicket).order_by(SupportTicket.created_at.desc())
         )
     ).all()
-    return [SupportTicketResponse.model_validate(ticket) for ticket in tickets]
+    return [SupportTicketOperatorResponse.model_validate(ticket) for ticket in tickets]
 
 
 @router.get("/whatsapp/webhook")

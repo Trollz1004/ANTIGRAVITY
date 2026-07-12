@@ -7,11 +7,14 @@ import json
 import logging
 import re
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 
 import httpx
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import Settings
-from app.models import SupportTicket, User
+from app.models import Profile, SupportTicket, User
 
 logger = logging.getLogger(__name__)
 
@@ -21,20 +24,20 @@ FREEFORM_SUPPORT_BLOCKLIST = (
     "paypal",
     "stripe",
     "aws",
-    "tax",
-    "taxes",
     "donation",
     "donations",
+    "tax",
+    "taxes",
     "dao",
     "token",
     "investment",
     "investor",
-    "medical-benefit",
     "beneficiary",
     "nonprofit",
     "non-profit",
     "charity",
     "private accounting",
+    "medical-benefit",
     "refund guarantee",
 )
 
@@ -84,6 +87,129 @@ def _decision(
         escalation_reason=escalation_reason,
         subject=_build_subject(category, message),
     )
+
+
+def _analyze_profile_completeness(profile: Profile | None) -> dict[str, object]:
+    if profile is None:
+        return {
+            "score": 25.0,
+            "missing_fields": [
+                "bio",
+                "age",
+                "gender",
+                "looking_for",
+                "location",
+                "photos",
+                "interests",
+            ],
+        }
+
+    missing_fields: list[str] = []
+    if not (profile.bio and profile.bio.strip()):
+        missing_fields.append("bio")
+    if profile.age is None:
+        missing_fields.append("age")
+    if not (profile.gender and profile.gender.strip()):
+        missing_fields.append("gender")
+    if not (profile.looking_for and profile.looking_for.strip()):
+        missing_fields.append("looking_for")
+    if not (profile.location and profile.location.strip()):
+        missing_fields.append("location")
+    if not (isinstance(profile.photos, list) and len(profile.photos) > 0):
+        missing_fields.append("photos")
+    if not (isinstance(profile.interests, list) and len(profile.interests) > 0):
+        missing_fields.append("interests")
+
+    missing_ratio = len(missing_fields) / 7.0
+    return {
+        "score": round(missing_ratio * 20.0, 1),
+        "missing_fields": missing_fields,
+    }
+
+
+def _analyze_rapid_signup_patterns(users_created_last_hour: int) -> dict[str, object]:
+    rolling_count = max(0, users_created_last_hour)
+    score = 0.0
+    if rolling_count >= 5:
+        score += 8.0
+    if rolling_count >= 8:
+        score += 8.0
+    if rolling_count >= 12:
+        score += 8.0
+
+    return {
+        "score": min(score, 24.0),
+        "recent_signups_last_60m": rolling_count,
+    }
+
+
+def _analyze_text_patterns(message: str) -> dict[str, object]:
+    normalized = (message or "").strip()
+    if not normalized:
+        return {"score": 9.0, "matches": ["empty_message"]}
+
+    lowered = normalized.lower()
+    matches: list[str] = []
+    pattern_tests = {
+        "has_link": r"https?://",
+        "contains_email": r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}",
+        "contains_phone": r"\+?\d[\d\-\s]{7,}\d",
+        "repeated_chars": r"(.)\\1{4,}",
+        "excessive_caps": r"[A-Z]{10,}",
+        "bot_prompts": r"\b(urgent|immediate|contact me|dm me|click here|join now)\b",
+    }
+    for label, pattern in pattern_tests.items():
+        if re.search(pattern, normalized if label == "excessive_caps" else lowered, re.IGNORECASE):
+            matches.append(label)
+
+    score = min(len(matches) * 7.0, 27.0)
+    upper_ratio = sum(1 for c in normalized if c.isupper()) / max(
+        1, len(normalized)
+    )
+    if upper_ratio >= 0.22:
+        score += 4.0
+
+    return {
+        "score": round(min(score, 33.0), 1),
+        "matches": matches,
+        "length": len(normalized),
+    }
+
+
+async def build_bot_likelihood_profile(
+    *, db: AsyncSession, user: User, customer_message: str
+) -> tuple[float, dict[str, object]]:
+    """Build a support-safe bot-likelihood score and red-flag summary."""
+    now = datetime.now(timezone.utc)
+    profile = await db.scalar(
+        select(Profile).where(Profile.user_id == user.id).limit(1)
+    )
+    domain = (user.email.split("@", 1)[1] if "@" in user.email else "").lower()
+    one_hour_cutoff = now - timedelta(hours=1)
+    users_created_last_hour = (
+        await db.scalar(
+            select(func.count(User.id))
+            .where(User.created_at >= one_hour_cutoff)
+            .where(User.email.ilike(f"%@{domain}"))
+        )
+    ) or 0
+
+    profile_risk = _analyze_profile_completeness(profile)
+    signup_risk = _analyze_rapid_signup_patterns(users_created_last_hour)
+    text_risk = _analyze_text_patterns(customer_message)
+
+    score = min(
+        round(
+            profile_risk["score"] + signup_risk["score"] + text_risk["score"], 1
+        ),
+        100.0,
+    )
+    signals = {
+        "profile": profile_risk,
+        "rapid_signup": signup_risk,
+        "text_patterns": text_risk,
+    }
+    return score, signals
 
 
 def _match_preset_support_reply(message: str) -> SupportDecision | None:

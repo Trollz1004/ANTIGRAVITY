@@ -297,6 +297,9 @@ class RevenueAllocation(Base):
     payer_type: Mapped[str] = mapped_column(
         String(20), default="customer", nullable=False, index=True
     )
+    has_square_receipt: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
@@ -520,6 +523,12 @@ class SupportTicket(Base):
     bot_response: Mapped[str | None] = mapped_column(Text, nullable=True)
     escalation_reason: Mapped[str | None] = mapped_column(String(100), nullable=True)
     transcript: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    bot_likelihood_score: Mapped[float] = mapped_column(
+        Float, default=0.0, nullable=False
+    )
+    bot_likelihood_signals: Mapped[dict | list | None] = mapped_column(
+        JSON, default=dict, nullable=True
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

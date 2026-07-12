@@ -133,6 +133,11 @@ def test_support_chat_escalates_and_operator_can_see_ticket(
         queue = operator_queue.json()
         assert len(queue) == 1
         assert queue[0]["customer_email"] == "operator@example.com"
+        assert "bot_likelihood_score" in queue[0]
+        assert isinstance(queue[0]["bot_likelihood_score"], float)
+        assert "bot_likelihood_signals" in queue[0]
+        assert isinstance(queue[0]["bot_likelihood_signals"], dict)
+        assert queue[0]["bot_likelihood_signals"]["rapid_signup"]["score"] >= 0
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 

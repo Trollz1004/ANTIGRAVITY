@@ -119,6 +119,7 @@ async def reconcile_legacy_schema() -> None:
             "ALTER TABLE IF EXISTS verification_events ADD COLUMN IF NOT EXISTS amount_cents INTEGER",
             "ALTER TABLE IF EXISTS webhook_events ADD COLUMN IF NOT EXISTS event_source_id VARCHAR(255)",
             "ALTER TABLE IF EXISTS webhook_events ADD COLUMN IF NOT EXISTS event_source VARCHAR(50) DEFAULT 'square' NOT NULL",
+            "ALTER TABLE IF EXISTS revenue_allocations ADD COLUMN IF NOT EXISTS has_square_receipt BOOLEAN DEFAULT FALSE NOT NULL",
             "ALTER TABLE IF EXISTS swipes ADD COLUMN IF NOT EXISTS user_id UUID",
             "ALTER TABLE IF EXISTS swipes ADD COLUMN IF NOT EXISTS target_id UUID",
             "ALTER TABLE IF EXISTS swipes ADD COLUMN IF NOT EXISTS direction VARCHAR(10)",
@@ -130,6 +131,8 @@ async def reconcile_legacy_schema() -> None:
             "ALTER TABLE IF EXISTS matches ADD COLUMN IF NOT EXISTS matched_at TIMESTAMPTZ DEFAULT NOW() NOT NULL",
             "ALTER TABLE IF EXISTS matches ADD COLUMN IF NOT EXISTS last_message_at TIMESTAMPTZ",
             "ALTER TABLE IF EXISTS matches ADD COLUMN IF NOT EXISTS breeze_bypass_enabled BOOLEAN DEFAULT FALSE NOT NULL",
+            "ALTER TABLE IF EXISTS support_tickets ADD COLUMN IF NOT EXISTS bot_likelihood_score FLOAT DEFAULT 0 NOT NULL",
+            "ALTER TABLE IF EXISTS support_tickets ADD COLUMN IF NOT EXISTS bot_likelihood_signals JSON",
             "CREATE INDEX IF NOT EXISTS ix_swipes_user_id ON swipes(user_id)",
             "CREATE INDEX IF NOT EXISTS ix_swipes_target_id ON swipes(target_id)",
             "CREATE INDEX IF NOT EXISTS ix_matches_user_a ON matches(user_a)",
@@ -201,9 +204,19 @@ async def _reconcile_sqlite_schema(connection) -> None:
             await connection.execute(text("PRAGMA table_info(verification_events)"))
         )
     }
+    support_ticket_columns = {
+        row[1]
+        for row in (await connection.execute(text("PRAGMA table_info(support_tickets)")))
+    }
     webhook_columns = {
         row[1]
         for row in (await connection.execute(text("PRAGMA table_info(webhook_events)")))
+    }
+    revenue_allocation_columns = {
+        row[1]
+        for row in (
+            await connection.execute(text("PRAGMA table_info(revenue_allocations)"))
+        )
     }
 
     async def add_column(
@@ -299,6 +312,19 @@ async def _reconcile_sqlite_schema(connection) -> None:
     await add_column("profiles", profile_columns, "updated_at", "updated_at DATETIME")
 
     await add_column(
+        "support_tickets",
+        support_ticket_columns,
+        "bot_likelihood_score",
+        "bot_likelihood_score FLOAT DEFAULT 0 NOT NULL",
+    )
+    await add_column(
+        "support_tickets",
+        support_ticket_columns,
+        "bot_likelihood_signals",
+        "bot_likelihood_signals JSON",
+    )
+
+    await add_column(
         "verification_events",
         verification_columns,
         "square_payment_id",
@@ -324,6 +350,12 @@ async def _reconcile_sqlite_schema(connection) -> None:
         webhook_columns,
         "event_source",
         "event_source VARCHAR(50) DEFAULT 'square' NOT NULL",
+    )
+    await add_column(
+        "revenue_allocations",
+        revenue_allocation_columns,
+        "has_square_receipt",
+        "has_square_receipt BOOLEAN DEFAULT 0 NOT NULL",
     )
 
     await connection.execute(
