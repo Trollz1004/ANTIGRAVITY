@@ -17,3 +17,19 @@ I can help with that. Please send the email address used at checkout or the Squa
 ## Bug Report
 
 Thanks — that does sound like something we should fix. I’m logging it with the exact steps you shared so we can reproduce it, confirm the impact, and follow up with the next update.
+
+## Membership Status / Eligibility
+
+I can check your membership status for you. Please send the email address or phone number tied to your account, and I’ll confirm whether your membership is active and what access it includes.
+
+## Account / Identity Verification Help
+
+If your verification is still pending, please make sure the profile photo clearly shows your face and that your ID image is well-lit and unobstructed. Most reviews complete within a few hours; if it’s been longer than 24 hours, reply here and I’ll escalate it for a manual review.
+
+## Square Receipt Question
+
+I can look into a charge or receipt for you. Please send the Square receipt ID or the last four digits of the card used, plus the date and amount, and I’ll pull up the transaction details.
+
+## Membership / Access Issue
+
+If you expected membership access but don’t see it, please confirm the email you used to sign up and, if you have one, the receipt or confirmation number. I’ll match it to your account and restore the right access.
