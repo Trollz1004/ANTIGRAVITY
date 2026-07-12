@@ -101,3 +101,7 @@ revenue-first-products/
 apps/antigravity-dashboard/vite.config.js
 apps/antigravity-dashboard/vite.config.d.ts
 apps/antigravity-dashboard/tsconfig*.tsbuildinfo
+
+# Nested repo checkouts kept out of the canonical root
+ANTIGRAVITY/
+hermes-workspace/
