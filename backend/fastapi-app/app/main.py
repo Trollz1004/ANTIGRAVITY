@@ -58,6 +58,7 @@ from app.routers import (
     metrics,
     notifications,
     ops_runs,
+    pitches,
     privacy,
     profiles,
     rate_limits,
@@ -488,6 +489,7 @@ app.include_router(waitlist.router, prefix="/api/v1", tags=["waitlist"])
 app.include_router(marketing.router, prefix="/api/v1", tags=["marketing"])
 app.include_router(feature_flags.router)
 app.include_router(ops_runs.router, prefix="/api/v1", tags=["ops-runs"])
+app.include_router(pitches.router, prefix="/api/v1", tags=["pitches"])
 app.include_router(clawx.router, prefix="/api/v1", tags=["clawx"])
 app.include_router(notifications.router, prefix="/api/v1", tags=["notifications"])
 
