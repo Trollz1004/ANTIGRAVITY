@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "writeback_batch",
+  "npc_id": "npc.vendor.harbor_quartermaster",
+  "wake_id": "wk_demo_001",
+  "event_id": "c3333333-3333-4333-8333-333333333333",
+  "writes": [
+    {
+      "kind": "episodic",
+      "event": "player_asked_about_stock",
+      "actors": ["ply_1001"],
+      "salience": 0.4,
+      "decay_class": "normal",
+      "tags": ["stock", "harbor"],
+      "location_id": "zone.harbor.pier"
+    },
+    {
+      "kind": "relationship",
+      "event": "relationship_delta",
+      "actors": ["ply_1001"],
+      "salience": 0.3,
+      "decay_class": "sticky",
+      "score_delta": 0.05,
+      "notes": "Asked about stock; polite regular"
+    }
+  ]
+}

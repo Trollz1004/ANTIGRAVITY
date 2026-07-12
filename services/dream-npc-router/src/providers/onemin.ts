@@ -133,6 +133,9 @@ export class OneMinAdapter implements ProviderAdapter {
         timeoutMs,
         this.name,
       );
+      if (!res || typeof res.statusCode !== "number") {
+        throw new ProviderError(this.name, "onemin empty/invalid response (no statusCode)");
+      }
 
       if (res.statusCode === 429) {
         const text = await res.body.text();

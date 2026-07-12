@@ -48,6 +48,9 @@ export class OllamaAdapter implements ProviderAdapter {
         timeoutMs,
         this.name,
       );
+      if (!res || typeof res.statusCode !== "number") {
+        throw new ProviderError(this.name, "ollama empty/invalid response (no statusCode)");
+      }
 
       if (res.statusCode >= 400) {
         const text = await res.body.text();

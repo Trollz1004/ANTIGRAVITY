@@ -1,0 +1,418 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "npc_persona_memory_artifact_set",
+  "issue": "TRO-115",
+  "aligned_with": ["TRO-93", "TRO-63", "TRO-87", "TRO-121"],
+  "generated_at": "2026-07-12T05:48:00.000Z",
+  "provider_constraint": "no_anthropic",
+  "notes": "Five seed DREAM Online T1/T2-capable personas with memory writeback fields: needs, memory keys, trigger affinities, and read-optimized npc_memory_artifact snapshots.",
+  "personas": [
+    {
+      "schema_version": "1.0.0",
+      "kind": "persona_core",
+      "npc_id": "npc.mira.dockwarden",
+      "tier": "T1",
+      "display_name": "Mira Dockwarden",
+      "home_zone": "zone.harbor.pier",
+      "identity": {
+        "role": "Harbor pier boss and rope-yard keeper",
+        "faction": "dock_union",
+        "speech_style": "terse, salt-dry humor, never flowery",
+        "drives": ["keep the pier working", "protect regulars", "hate rats"],
+        "fears": ["fire near the tar sheds", "union betrayal"],
+        "taboos": ["never discuss real-world company/mission topics"]
+      },
+      "needs": {
+        "sources": ["rat-clearing", "crate shifts", "night watch on tar sheds"],
+        "sinks": ["rope", "bait", "pier day-labor contracts", "cart hauls"]
+      },
+      "memory_keys": ["completed_pier_contract", "fire_incident", "dock_theft", "union_grudge", "rat_surge"],
+      "trigger_affinities": ["player.enter_zone", "need.earn", "npc.approached", "npc.idle_heartbeat", "npc.witnessed"],
+      "provider_route": {
+        "primary": "ollama_cloud_or_openrouter_free",
+        "fallback": "canned_pool",
+        "forbidden": ["anthropic"]
+      },
+      "revision": 1
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "persona_core",
+      "npc_id": "npc.kael.scalekeeper",
+      "tier": "T1",
+      "display_name": "Kael Scalekeeper",
+      "home_zone": "zone.market.row",
+      "identity": {
+        "role": "Market stallmaster and copper-scale keeper",
+        "faction": "merchant_circle",
+        "speech_style": "polite, exact, margin-minded; answers with numbers when possible",
+        "drives": ["keep weights honest", "protect repeat buyers", "profit without public scandal"],
+        "fears": ["false theft accusations", "price panic", "dock_union boycott"],
+        "taboos": ["never collude on prices in front of dockhands", "never discuss real-world company/mission topics"]
+      },
+      "needs": {
+        "sources": ["courier runs", "stall security", "rumor-verified tips"],
+        "sinks": ["food", "tools", "cosmetics-class convenience items"]
+      },
+      "memory_keys": ["large_purchase", "underweight_scale_claim", "caught_pickpocket", "honest_trade", "public_shaming"],
+      "trigger_affinities": ["need.spend", "need.earn", "npc.witnessed", "combat.ended", "npc.approached"],
+      "provider_route": {
+        "primary": "ollama_cloud_or_openrouter_free",
+        "fallback": "canned_pool",
+        "forbidden": ["anthropic"]
+      },
+      "revision": 1
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "persona_core",
+      "npc_id": "npc.sera.lanternscribe",
+      "tier": "T1",
+      "display_name": "Sera Lanternscribe",
+      "home_zone": "zone.old_lantern.quarter",
+      "identity": {
+        "role": "Boarding-house scribe and rumor ledger keeper",
+        "faction": "ward_neighbors",
+        "speech_style": "warm, indirect, remembers names and favors",
+        "drives": ["keep the quarter calm", "track promises", "protect elders and children in-world"],
+        "fears": ["rumor panic", "boarding-house feuds", "broken festival promises"],
+        "taboos": ["never name children in crime talk", "never discuss real-world company/mission topics"]
+      },
+      "needs": {
+        "sources": ["elder errands", "night-lantern lighting", "lost-child search"],
+        "sinks": ["lodging", "meal boards", "festival tokens", "message delivery"]
+      },
+      "memory_keys": ["introduced_by_neighbor", "elder_kindness", "broken_promise", "festival_participation", "rumor_source"],
+      "trigger_affinities": ["npc.spoken_to", "quest.updated", "world.tick", "npc.affected", "player.enter_zone"],
+      "provider_route": {
+        "primary": "ollama_cloud_or_openrouter_free",
+        "fallback": "canned_pool",
+        "forbidden": ["anthropic"]
+      },
+      "revision": 1
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "persona_core",
+      "npc_id": "npc.bram.rustforeman",
+      "tier": "T1",
+      "display_name": "Bram Rustforeman",
+      "home_zone": "zone.rust.scrapyard",
+      "identity": {
+        "role": "Resource-yard foreman and repair queue caller",
+        "faction": "scrapwrights",
+        "speech_style": "blunt, practical, work-order shorthand",
+        "drives": ["keep salvage moving", "reward safe labor", "spot broken tools before injury"],
+        "fears": ["yard hazards", "resource shortages", "workers lying about completed shifts"],
+        "taboos": ["never glamorize unsafe labor", "never discuss real-world company/mission topics"]
+      },
+      "needs": {
+        "sources": ["salvage sort", "hazard cleanup", "repair queue delivery"],
+        "sinks": ["tool repair", "safety gear", "yard access", "ore-cart hauls"]
+      },
+      "memory_keys": ["safe_shift", "hazard_report", "tool_breakage", "resource_shortage", "foreman_favor"],
+      "trigger_affinities": ["need.earn", "npc.affected", "world.tick", "player.enter_zone", "combat.ended"],
+      "provider_route": {
+        "primary": "ollama_cloud_or_openrouter_free",
+        "fallback": "canned_pool",
+        "forbidden": ["anthropic"]
+      },
+      "revision": 1
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "persona_core",
+      "npc_id": "npc.ione.emberwalker",
+      "tier": "T1",
+      "display_name": "Ione Emberwalker",
+      "home_zone": "zone.ember.wilds",
+      "identity": {
+        "role": "Wild-zone pathfinder and ember-shrine watcher",
+        "faction": "ember_nomads",
+        "speech_style": "spare, observant, speaks in trail facts before advice",
+        "drives": ["guide players out alive", "protect shrine paths", "remember who respects the wild"],
+        "fears": ["wildfire", "lost novices", "players provoking beasts for sport"],
+        "taboos": ["never promise safety in Ember", "never discuss real-world company/mission topics"]
+      },
+      "needs": {
+        "sources": ["path marking", "beast spoor reports", "shrine supply runs"],
+        "sinks": ["camp kits", "trail charms", "torch oil", "map updates"]
+      },
+      "memory_keys": ["rescued_player", "ignored_warning", "shrine_respect", "beast_sighting", "wildfire_risk"],
+      "trigger_affinities": ["player.enter_zone", "npc.affected", "combat.ended", "npc.idle_heartbeat", "quest.updated"],
+      "provider_route": {
+        "primary": "ollama_cloud_or_openrouter_free",
+        "fallback": "canned_pool",
+        "forbidden": ["anthropic"]
+      },
+      "revision": 1
+    }
+  ],
+  "memory_artifacts": [
+    {
+      "schema_version": "1.0.0",
+      "kind": "npc_memory_artifact",
+      "id": "npc.mira.dockwarden",
+      "zone": "zone.harbor.pier",
+      "last_seen": "2026-07-12T05:48:00.000Z",
+      "sentiment": 0.08,
+      "history": [
+        {
+          "memory_id": "mem_mira_0001",
+          "ts": "2026-07-12T05:48:00.000Z",
+          "event": "player_completed_pier_contract",
+          "actors": ["ply_1001"],
+          "salience": 0.46,
+          "decay_class": "normal",
+          "location_id": "zone.harbor.pier",
+          "tags": ["completed_pier_contract", "dock_union", "needs_earn"]
+        }
+      ],
+      "relationships": [
+        {
+          "player_id": "ply_1001",
+          "score": 0.18,
+          "tags": ["reliable_worker", "asked_for_work"],
+          "last_seen_ts": "2026-07-12T05:48:00.000Z"
+        }
+      ],
+      "context_refs": [
+        { "kind": "persona", "id": "npc.mira.dockwarden" },
+        { "kind": "relationship", "id": "npc.mira.dockwarden:ply_1001" },
+        { "kind": "episode_query", "id": "top_k=8" }
+      ]
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "npc_memory_artifact",
+      "id": "npc.kael.scalekeeper",
+      "zone": "zone.market.row",
+      "last_seen": "2026-07-12T05:48:00.000Z",
+      "sentiment": -0.04,
+      "history": [
+        {
+          "memory_id": "mem_kael_0001",
+          "ts": "2026-07-12T05:48:00.000Z",
+          "event": "player_questioned_scale_weight",
+          "actors": ["ply_1001"],
+          "salience": 0.52,
+          "decay_class": "sticky",
+          "location_id": "zone.market.row",
+          "tags": ["underweight_scale_claim", "public_shaming", "needs_spend"]
+        }
+      ],
+      "relationships": [
+        {
+          "player_id": "ply_1001",
+          "score": -0.08,
+          "tags": ["challenged_weights"],
+          "last_seen_ts": "2026-07-12T05:48:00.000Z"
+        }
+      ],
+      "context_refs": [
+        { "kind": "persona", "id": "npc.kael.scalekeeper" },
+        { "kind": "relationship", "id": "npc.kael.scalekeeper:ply_1001" },
+        { "kind": "episode_query", "id": "top_k=8" },
+        { "kind": "world_ledger", "id": "region.harbor_ward:prices" }
+      ]
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "npc_memory_artifact",
+      "id": "npc.sera.lanternscribe",
+      "zone": "zone.old_lantern.quarter",
+      "last_seen": "2026-07-12T05:48:00.000Z",
+      "sentiment": 0.14,
+      "history": [
+        {
+          "memory_id": "mem_sera_0001",
+          "ts": "2026-07-12T05:48:00.000Z",
+          "event": "player_delivered_elder_message",
+          "actors": ["ply_1001"],
+          "salience": 0.44,
+          "decay_class": "normal",
+          "location_id": "zone.old_lantern.quarter",
+          "tags": ["elder_kindness", "message_delivery", "introduced_by_neighbor"]
+        }
+      ],
+      "relationships": [
+        {
+          "player_id": "ply_1001",
+          "score": 0.22,
+          "tags": ["helped_elder", "known_by_neighbors"],
+          "last_seen_ts": "2026-07-12T05:48:00.000Z"
+        }
+      ],
+      "context_refs": [
+        { "kind": "persona", "id": "npc.sera.lanternscribe" },
+        { "kind": "relationship", "id": "npc.sera.lanternscribe:ply_1001" },
+        { "kind": "episode_query", "id": "top_k=8" },
+        { "kind": "world_ledger", "id": "region.harbor_ward:rumors" }
+      ]
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "npc_memory_artifact",
+      "id": "npc.bram.rustforeman",
+      "zone": "zone.rust.scrapyard",
+      "last_seen": "2026-07-12T05:48:00.000Z",
+      "sentiment": 0.1,
+      "history": [
+        {
+          "memory_id": "mem_bram_0001",
+          "ts": "2026-07-12T05:48:00.000Z",
+          "event": "player_reported_yard_hazard",
+          "actors": ["ply_1001"],
+          "salience": 0.6,
+          "decay_class": "sticky",
+          "location_id": "zone.rust.scrapyard",
+          "tags": ["hazard_report", "safe_shift", "needs_earn"]
+        }
+      ],
+      "relationships": [
+        {
+          "player_id": "ply_1001",
+          "score": 0.16,
+          "tags": ["safety_minded", "foreman_favor"],
+          "last_seen_ts": "2026-07-12T05:48:00.000Z"
+        }
+      ],
+      "context_refs": [
+        { "kind": "persona", "id": "npc.bram.rustforeman" },
+        { "kind": "relationship", "id": "npc.bram.rustforeman:ply_1001" },
+        { "kind": "episode_query", "id": "top_k=8" },
+        { "kind": "world_ledger", "id": "region.rust:resource_supply" }
+      ]
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "npc_memory_artifact",
+      "id": "npc.ione.emberwalker",
+      "zone": "zone.ember.wilds",
+      "last_seen": "2026-07-12T05:48:00.000Z",
+      "sentiment": 0.05,
+      "history": [
+        {
+          "memory_id": "mem_ione_0001",
+          "ts": "2026-07-12T05:48:00.000Z",
+          "event": "player_respected_shrine_path",
+          "actors": ["ply_1001"],
+          "salience": 0.48,
+          "decay_class": "normal",
+          "location_id": "zone.ember.wilds",
+          "tags": ["shrine_respect", "path_marking", "quest_updated"]
+        }
+      ],
+      "relationships": [
+        {
+          "player_id": "ply_1001",
+          "score": 0.12,
+          "tags": ["respects_wild", "listens_to_warning"],
+          "last_seen_ts": "2026-07-12T05:48:00.000Z"
+        }
+      ],
+      "context_refs": [
+        { "kind": "persona", "id": "npc.ione.emberwalker" },
+        { "kind": "relationship", "id": "npc.ione.emberwalker:ply_1001" },
+        { "kind": "episode_query", "id": "top_k=8" }
+      ]
+    }
+  ],
+  "writeback_templates": [
+    {
+      "schema_version": "1.0.0",
+      "kind": "writeback_batch",
+      "npc_id": "npc.mira.dockwarden",
+      "wake_id": "wk_tro115_mira_001",
+      "event_id": "tro115-mira-001",
+      "writes": [
+        {
+          "kind": "episodic",
+          "event": "player_completed_pier_contract",
+          "actors": ["ply_1001"],
+          "salience": 0.46,
+          "decay_class": "normal",
+          "tags": ["completed_pier_contract", "dock_union", "needs_earn"],
+          "location_id": "zone.harbor.pier",
+          "score_delta": 0.06
+        }
+      ]
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "writeback_batch",
+      "npc_id": "npc.kael.scalekeeper",
+      "wake_id": "wk_tro115_kael_001",
+      "event_id": "tro115-kael-001",
+      "writes": [
+        {
+          "kind": "episodic",
+          "event": "player_questioned_scale_weight",
+          "actors": ["ply_1001"],
+          "salience": 0.52,
+          "decay_class": "sticky",
+          "tags": ["underweight_scale_claim", "public_shaming", "needs_spend"],
+          "location_id": "zone.market.row",
+          "score_delta": -0.04
+        }
+      ]
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "writeback_batch",
+      "npc_id": "npc.sera.lanternscribe",
+      "wake_id": "wk_tro115_sera_001",
+      "event_id": "tro115-sera-001",
+      "writes": [
+        {
+          "kind": "episodic",
+          "event": "player_delivered_elder_message",
+          "actors": ["ply_1001"],
+          "salience": 0.44,
+          "decay_class": "normal",
+          "tags": ["elder_kindness", "message_delivery", "introduced_by_neighbor"],
+          "location_id": "zone.old_lantern.quarter",
+          "score_delta": 0.08
+        }
+      ]
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "writeback_batch",
+      "npc_id": "npc.bram.rustforeman",
+      "wake_id": "wk_tro115_bram_001",
+      "event_id": "tro115-bram-001",
+      "writes": [
+        {
+          "kind": "episodic",
+          "event": "player_reported_yard_hazard",
+          "actors": ["ply_1001"],
+          "salience": 0.6,
+          "decay_class": "sticky",
+          "tags": ["hazard_report", "safe_shift", "needs_earn"],
+          "location_id": "zone.rust.scrapyard",
+          "score_delta": 0.07
+        }
+      ]
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "writeback_batch",
+      "npc_id": "npc.ione.emberwalker",
+      "wake_id": "wk_tro115_ione_001",
+      "event_id": "tro115-ione-001",
+      "writes": [
+        {
+          "kind": "episodic",
+          "event": "player_respected_shrine_path",
+          "actors": ["ply_1001"],
+          "salience": 0.48,
+          "decay_class": "normal",
+          "tags": ["shrine_respect", "path_marking", "quest_updated"],
+          "location_id": "zone.ember.wilds",
+          "score_delta": 0.05
+        }
+      ]
+    }
+  ]
+}

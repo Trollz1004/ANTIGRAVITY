@@ -131,23 +131,23 @@ function mapRemember(
   playerId: string,
 ): RememberItem[] {
   const summary = npcResponse.memory_writeback.summary?.trim();
-  if (!summary) return [];
-
   const salience = Math.max(0, Math.min(1, npcResponse.memory_writeback.importance ?? 0.1));
   const decay: RememberItem["decay_class"] =
     salience >= 0.7 ? "sticky" : salience <= 0.15 ? "ephemeral" : "normal";
+  const eventSlug = (summary || wake.trigger.event_type)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 80) || wake.trigger.event_type.replace(/\./g, "_");
 
+  // Always emit at least one remember[] row (TRO-48 acceptance / fallback law).
   return [
     {
       kind: "episodic",
-      event: summary
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "_")
-        .replace(/^_+|_+$/g, "")
-        .slice(0, 80) || wake.trigger.event_type.replace(/\./g, "_"),
+      event: eventSlug,
       actors: [playerId].filter(Boolean),
-      salience,
-      decay_class: decay,
+      salience: summary ? salience : Math.min(salience, 0.15),
+      decay_class: summary ? decay : "ephemeral",
     },
   ];
 }
@@ -262,21 +262,25 @@ export async function processAgentWake(
   // returns (e.g. SUPA stub) skip writeMemory — guarantee write-back here so
   // every wake leaves a durable row (TRO-48 acceptance).
   if (!memoryWritten) {
-    let after = await retrieveMemory(wake.npc_id, playerId, []);
-    if (after.length === 0 && response.memory_writeback.summary) {
+    const after = await retrieveMemory(wake.npc_id, playerId, []);
+    if (after.length > 0) {
+      memoryWritten = after[after.length - 1]!;
+    } else {
+      const summary =
+        response.memory_writeback.summary?.trim() ||
+        `wake:${wake.trigger.event_type}`;
       memoryWritten = await writeMemory({
         npcId: wake.npc_id,
         playerId,
-        importance: response.memory_writeback.importance,
-        summary: response.memory_writeback.summary,
-        tags: response.memory_writeback.tags,
+        importance: response.memory_writeback.importance ?? 0.1,
+        summary,
+        tags: response.memory_writeback.tags?.length
+          ? response.memory_writeback.tags
+          : ["wake"],
         createdAt: new Date().toISOString(),
         eventId: wake.trigger.event_id,
         wakeId: wake.wake_id,
       });
-      after = [memoryWritten];
-    } else if (after.length > 0) {
-      memoryWritten = after[after.length - 1]!;
     }
   }
 

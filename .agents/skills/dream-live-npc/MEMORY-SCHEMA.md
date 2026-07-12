@@ -1,10 +1,11 @@
 # Live-NPC Persona Memory Write-Back Schema (DREAM Online)
 
-**Issue:** TRO-62  
+**Issue:** TRO-62 (fields) · **TRO-121** (minimal event→agent→persist + ≤2s path)  
 **Status:** design-complete (implementation-ready)  
 **Provider constraint:** no Anthropic  
 **Aligns with:** trigger/webhook `schema_version` **1.0.0** (TRO-87)  
 **Skill:** `.agents/skills/dream-live-npc/`  
+**Pipeline contract:** [`WRITEBACK-CONTRACT.md`](./WRITEBACK-CONTRACT.md)  
 **Persisted example:** [`examples/mira-dockwarden.state.json`](./examples/mira-dockwarden.state.json)
 
 ## Purpose
@@ -234,10 +235,29 @@ Machine schema for expanded batch: [`schemas/memory-writeback.v1.schema.json`](.
 
 ---
 
-## 6. AC map (TRO-62)
+## 6. Persona seed set (TRO-115)
+
+TRO-115 extends the single Mira example into a five-NPC seed set with explicit persona fields, NEED sources/sinks, memory keys, trigger affinities, and memory writeback templates.
+
+Canonical example: [`examples/five-npc-personas.memory-artifacts.json`](./examples/five-npc-personas.memory-artifacts.json)
+
+| NPC | Zone | Tier | Memory keys | Trigger affinities |
+|---|---|---|---|---|
+| `npc.mira.dockwarden` | `zone.harbor.pier` | T1 | `completed_pier_contract`, `fire_incident`, `dock_theft`, `union_grudge`, `rat_surge` | `player.enter_zone`, `need.earn`, `npc.approached`, `npc.idle_heartbeat`, `npc.witnessed` |
+| `npc.kael.scalekeeper` | `zone.market.row` | T1 | `large_purchase`, `underweight_scale_claim`, `caught_pickpocket`, `honest_trade`, `public_shaming` | `need.spend`, `need.earn`, `npc.witnessed`, `combat.ended`, `npc.approached` |
+| `npc.sera.lanternscribe` | `zone.old_lantern.quarter` | T1 | `introduced_by_neighbor`, `elder_kindness`, `broken_promise`, `festival_participation`, `rumor_source` | `npc.spoken_to`, `quest.updated`, `world.tick`, `npc.affected`, `player.enter_zone` |
+| `npc.bram.rustforeman` | `zone.rust.scrapyard` | T1 | `safe_shift`, `hazard_report`, `tool_breakage`, `resource_shortage`, `foreman_favor` | `need.earn`, `npc.affected`, `world.tick`, `player.enter_zone`, `combat.ended` |
+| `npc.ione.emberwalker` | `zone.ember.wilds` | T1 | `rescued_player`, `ignored_warning`, `shrine_respect`, `beast_sighting`, `wildfire_risk` | `player.enter_zone`, `npc.affected`, `combat.ended`, `npc.idle_heartbeat`, `quest.updated` |
+
+All five keep the same safety rail: no real-world mission/company/canonical-7 language and `provider_route.forbidden: ["anthropic"]`.
+
+---
+
+## 7. AC map (TRO-62 / TRO-115)
 
 | AC | Artifact |
 |---|---|
 | Doc in skill | this file + `TRIGGER-VOCABULARY.md` pointer + `SKILL.md` |
 | ≥5 trigger types | 12 types in TRO-87 canonical vocabulary |
 | Persist example state | `examples/mira-dockwarden.state.json` (+ verify stamp) |
+| 5 NPC personas with memory writeback fields | `examples/five-npc-personas.memory-artifacts.json` |

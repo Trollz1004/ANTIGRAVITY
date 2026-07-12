@@ -12,6 +12,7 @@ Related contracts:
 - Live-NPC skill: `.agents/skills/dream-live-npc/SKILL.md`
 - Memory write-back: `.agents/skills/dream-live-npc/MEMORY-SCHEMA.md`
 - Trigger vocabulary: `docs/dream/live-npc-trigger-vocabulary.md`
+- Zone archetypes + spawn density: `docs/dream/zone-types-spawn-density-ambient-triggers.md`
 - NEED sources/sinks + decay: `docs/dream/needs-sources-sinks-decay.md`
 - Example NPC state: `.agents/skills/dream-live-npc/examples/mira-dockwarden.state.json`
 

@@ -5,6 +5,9 @@ export default defineConfig({
     environment: "node",
     include: ["tests/**/*.test.ts"],
     fileParallelism: false,
-    testTimeout: 20000,
+    // Cold transform on Windows can exceed 20s; keep per-test budget generous
+    // while individual roundtrip assertions still enforce ≤2s wall latency.
+    testTimeout: 60000,
+    hookTimeout: 60000,
   },
 });

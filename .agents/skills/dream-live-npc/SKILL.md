@@ -93,9 +93,12 @@ never see a timeout; they see a terse NPC.
 
 ## Memory Schema (persistent, per NPC)
 
-**Formal write-back contract:** [`MEMORY-SCHEMA.md`](./MEMORY-SCHEMA.md) +
-[`schemas/memory-writeback.v1.schema.json`](./schemas/memory-writeback.v1.schema.json).
-**Persisted example state:** [`examples/mira-dockwarden.state.json`](./examples/mira-dockwarden.state.json).
+**Minimal event→agent→persist contract (TRO-121, ≤2s):** [`WRITEBACK-CONTRACT.md`](./WRITEBACK-CONTRACT.md)  
+**Field design:** [`MEMORY-SCHEMA.md`](./MEMORY-SCHEMA.md) +
+[`schemas/memory-writeback.v1.schema.json`](./schemas/memory-writeback.v1.schema.json).  
+**Example batch:** [`schemas/samples/memory_writeback_batch.json`](./schemas/samples/memory_writeback_batch.json).  
+**Persisted example state:** [`examples/mira-dockwarden.state.json`](./examples/mira-dockwarden.state.json).  
+**Five-persona seed set (TRO-115):** [`examples/five-npc-personas.memory-artifacts.json`](./examples/five-npc-personas.memory-artifacts.json).
 
 - **Persona core** (stable): identity, drives, fears, faction, speech style. ≤40 lines.
 - **Episodic** (vector store — Qdrant): {ts, event, actors, salience 0-1, decay_class}.

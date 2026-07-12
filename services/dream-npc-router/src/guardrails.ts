@@ -65,9 +65,25 @@ export interface GuardrailResult {
   sanitized: NpcResponse;
 }
 
+function escapeRegex(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * Detect vendor/model leaks without false positives from substrings
+ * (e.g. "llama" must not match inside "ollama").
+ */
 function containsVendorLeak(text: string): string[] {
   const lower = text.toLowerCase();
-  return VENDOR_TERMS.filter((term) => lower.includes(term));
+  return VENDOR_TERMS.filter((term) => {
+    // Phrases and punctuated tokens: simple includes is correct.
+    if (/[\s.\-]/.test(term)) {
+      return lower.includes(term);
+    }
+    // Whole-token match so short model names do not hit provider names.
+    const re = new RegExp(`(?:^|[^a-z0-9])${escapeRegex(term)}(?:$|[^a-z0-9])`, "i");
+    return re.test(lower);
+  });
 }
 
 function containsInventedReward(text: string): boolean {

@@ -58,4 +58,38 @@ describe("guardrails", () => {
     );
     expect(result.violations).toContain("child_unsafe_content");
   });
+
+  it("does not treat ollama as a llama model leak in memory summaries", () => {
+    const result = applyGuardrails(
+      {
+        npc_dialogue: "Welcome to the harbor.",
+        emotion: "friendly",
+        action_intent: "greet",
+        memory_writeback: {
+          importance: 0.2,
+          summary: "degraded after ollama path",
+          tags: ["degraded"],
+        },
+      },
+      { childSafe: false },
+    );
+    // "ollama" is a real vendor hit; "llama" must not also fire as a substring.
+    expect(result.violations.some((v) => v.includes("llama") && !v.includes("ollama"))).toBe(false);
+    // Clean in-world memory with no vendor tokens must pass.
+    const clean = applyGuardrails(
+      {
+        npc_dialogue: "Harbor blue suits you.",
+        emotion: "friendly",
+        action_intent: "offer_goods",
+        memory_writeback: {
+          importance: 0.4,
+          summary: "player asked about stock",
+          tags: ["stock", "harbor"],
+        },
+      },
+      { childSafe: false },
+    );
+    expect(clean.safe).toBe(true);
+    expect(clean.sanitized.memory_writeback.summary).toBe("player asked about stock");
+  });
 });

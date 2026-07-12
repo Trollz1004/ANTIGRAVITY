@@ -33,12 +33,14 @@ export interface RouteResult {
   reserved?: boolean;
 }
 
-function shortLocalFallback(reason: string): NpcResponse {
+function shortLocalFallback(_reason: string): NpcResponse {
+  // Keep summary free of vendor/provider names — fallbackReason is logged
+  // separately and must not poison memory_writeback (guardrails scrub leaks).
   return {
     npc_dialogue: "...",
     emotion: "neutral",
     action_intent: "idle",
-    memory_writeback: { importance: 0, summary: `degraded response (${reason})`, tags: ["degraded"] },
+    memory_writeback: { importance: 0, summary: "degraded response", tags: ["degraded"] },
   };
 }
 
