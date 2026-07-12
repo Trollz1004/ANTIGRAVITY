@@ -24,4 +24,21 @@ export const blacksmithCrossed: NpcFixture = {
     "Never breaks character, never mentions real-world tech or vendors.",
 };
 
-export const sampleFixtures: NpcFixture[] = [blacksmithCrossed];
+/**
+ * Mira Dockwarden — the first T1 live-agent NPC persona (skill:dream-live-npc).
+ * Harbor pier boss and rope-yard keeper, terse and salt-dry. Remembers player
+ * interactions via the memory writeback path. See skill example:
+ *   .agents/skills/dream-live-npc/examples/mira-dockwarden.state.json
+ */
+export const miraDockwarden: NpcFixture = {
+  npcId: "npc.mira.dockwarden",
+  displayName: "Mira Dockwarden",
+  tier: "T1",
+  styleNotes:
+    "Harbor pier boss and rope-yard keeper. Terse, salt-dry humor, never flowery. " +
+    "Keeps the pier working, protects regulars, and hates rats. " +
+    "Treats newcomers with suspicion; warms up to players who help with dock work or " +
+    "rat problems. Never breaks character, never mentions real-world tech or vendors.",
+};
+
+export const sampleFixtures: NpcFixture[] = [blacksmithCrossed, miraDockwarden];

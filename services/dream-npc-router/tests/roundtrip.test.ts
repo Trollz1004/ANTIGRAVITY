@@ -25,10 +25,36 @@ function loadSkillSample(fileName: string) {
   return JSON.parse(raw) as unknown;
 }
 
+/** Stable 1Min-shaped success payload for happy-path T1 tests. */
+function mockOneMinSuccess(result: {
+  npc_dialogue: string;
+  emotion?: string;
+  action_intent?: string;
+  memory_writeback?: { importance: number; summary: string; tags: string[] };
+}) {
+  // Persistent mock (not Once): T1 may overflow rails if the first response is
+  // mis-shaped; never return undefined or fall through to real HTTP.
+  requestMock.mockImplementation(async () => ({
+    statusCode: 200,
+    body: jsonBody({
+      result: {
+        emotion: "neutral",
+        action_intent: "idle",
+        memory_writeback: { importance: 0.2, summary: "ok", tags: [] },
+        ...result,
+      },
+    }),
+  }));
+}
+
 describe("TRO-48 webhook → agent → memory write-back roundtrip", () => {
   beforeEach(async () => {
     vi.resetModules();
     requestMock.mockReset();
+    // Fail-fast default: never leave undici unmocked (undefined statusCode hang).
+    requestMock.mockImplementation(async () => {
+      throw new Error("undici_request_mock_not_configured_for_this_test");
+    });
     process.env.ONEMIN_API_KEY = "test-onemin-key";
     process.env.ONEMIN_MODEL_T1 = "test-model";
     process.env.AIHUBMIX_API_KEY = "test-aihubmix-key";
@@ -44,20 +70,15 @@ describe("TRO-48 webhook → agent → memory write-back roundtrip", () => {
   });
 
   it("dispatch=true runs agent and persists memory for npc.spoken_to", async () => {
-    requestMock.mockResolvedValueOnce({
-      statusCode: 200,
-      body: jsonBody({
-        result: {
-          npc_dialogue: "Harbor blue suits you.",
-          emotion: "friendly",
-          action_intent: "offer_goods",
-          memory_writeback: {
-            importance: 0.4,
-            summary: "player asked about stock",
-            tags: ["stock", "harbor"],
-          },
-        },
-      }),
+    mockOneMinSuccess({
+      npc_dialogue: "Harbor blue suits you.",
+      emotion: "friendly",
+      action_intent: "offer_goods",
+      memory_writeback: {
+        importance: 0.4,
+        summary: "player asked about stock",
+        tags: ["stock", "harbor"],
+      },
     });
 
     const { handleGameWebhookEvent } = await import("../src/webhooks/handler.js");
@@ -114,16 +135,11 @@ describe("TRO-48 webhook → agent → memory write-back roundtrip", () => {
   });
 
   it("processAgentWake maps skill agent_response shape", async () => {
-    requestMock.mockResolvedValueOnce({
-      statusCode: 200,
-      body: jsonBody({
-        result: {
-          npc_dialogue: "Coin counted.",
-          emotion: "neutral",
-          action_intent: "idle",
-          memory_writeback: { importance: 0.3, summary: "need spend at harbor", tags: ["need"] },
-        },
-      }),
+    mockOneMinSuccess({
+      npc_dialogue: "Coin counted.",
+      emotion: "neutral",
+      action_intent: "idle",
+      memory_writeback: { importance: 0.3, summary: "need spend at harbor", tags: ["need"] },
     });
 
     const { processAgentWake } = await import("../src/webhooks/wake.js");
@@ -155,24 +171,79 @@ describe("TRO-48 webhook → agent → memory write-back roundtrip", () => {
     expect(out.agentResponse.latency_ms).toBeLessThan(2000);
   });
 
+  it("TRO-93: T1 live NPC persona (Mira Dockwarden) roundtrip + memory writeback", async () => {
+    mockOneMinSuccess({
+      npc_dialogue: "Keep the pier clear and we won't have a problem.",
+      emotion: "wary",
+      action_intent: "observe",
+      memory_writeback: { importance: 0.4, summary: "newcomer greeted on the pier", tags: ["first_contact", "harbor"] },
+    });
+
+    const { processAgentWake } = await import("../src/webhooks/wake.js");
+    const { retrieveMemory } = await import("../src/memory.js");
+    const started = Date.now();
+    const out = await processAgentWake({
+      schema_version: "1.0.0",
+      wake_id: "wk_mira_1",
+      npc_id: "npc.mira.dockwarden",
+      tier: "T1",
+      trigger: {
+        event_id: "evt_mira_1",
+        event_type: "npc.spoken_to",
+        occurred_at: "2026-07-11T14:03:00.000Z",
+      },
+      context_refs: [
+        { kind: "npc", id: "npc.mira.dockwarden" },
+        { kind: "player", id: "ply_mira_1" },
+      ],
+      budget: { max_latency_ms: 2000, fallback: "canned_line" },
+      message: "Hello there.",
+      player_id: "ply_mira_1",
+    });
+    const wall = Date.now() - started;
+
+    expect(out.ok).toBe(true);
+    expect(out.agentResponse.npc_id).toBe("npc.mira.dockwarden");
+    expect(out.agentResponse.say).toBeTruthy();
+    expect(out.agentResponse.remember.length).toBeGreaterThan(0);
+    expect(out.memoryWritten).not.toBeNull();
+    expect(out.agentResponse.latency_ms).toBeLessThan(2000);
+    expect(wall).toBeLessThan(2000);
+
+    const mem = await retrieveMemory("npc.mira.dockwarden", "ply_mira_1", []);
+    expect(mem.length).toBeGreaterThanOrEqual(1);
+    expect(mem[mem.length - 1]!.summary).toMatch(/newcomer|pier/i);
+    expect(mem[mem.length - 1]!.storagePath).toMatch(
+      /^npc\/npc\.mira\.dockwarden\/episodic\//,
+    );
+    expect(mem[mem.length - 1]!.eventId).toBe("evt_mira_1");
+    expect(requestMock).toHaveBeenCalled();
+  });
+
   it("budget miss still writes memory (fallback law)", async () => {
-    // Provider hangs longer than wake budget.
-    requestMock.mockImplementationOnce(
+    // Provider hangs longer than wake budget; after first hang, fail-fast.
+    let calls = 0;
+    requestMock.mockImplementation(
       () =>
-        new Promise((resolve) => {
-          setTimeout(() => {
-            resolve({
-              statusCode: 200,
-              body: jsonBody({
-                result: {
-                  npc_dialogue: "too late",
-                  emotion: "neutral",
-                  action_intent: "idle",
-                  memory_writeback: { importance: 0.1, summary: "late", tags: [] },
-                },
-              }),
-            });
-          }, 500);
+        new Promise((resolve, reject) => {
+          calls += 1;
+          if (calls === 1) {
+            setTimeout(() => {
+              resolve({
+                statusCode: 200,
+                body: jsonBody({
+                  result: {
+                    npc_dialogue: "too late",
+                    emotion: "neutral",
+                    action_intent: "idle",
+                    memory_writeback: { importance: 0.1, summary: "late", tags: [] },
+                  },
+                }),
+              });
+            }, 500);
+            return;
+          }
+          reject(new Error("undici_overflow_not_needed"));
         }),
     );
 
@@ -206,7 +277,7 @@ describe("TRO-48 webhook → agent → memory write-back roundtrip", () => {
   it("wake budget race reserves time so total latency stays under max_latency_ms", async () => {
     // Provider hangs longer than race window; fallback + memory write must still
     // return under the full 2000ms budget (TRO-66 live acceptance).
-    requestMock.mockImplementationOnce(
+    requestMock.mockImplementation(
       () =>
         new Promise((resolve) => {
           setTimeout(() => {
