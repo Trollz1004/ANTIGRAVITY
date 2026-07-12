@@ -1,15 +1,13 @@
 # AI Solutions Exchange — Local Development Guide
 
-This document explains how to run the AI Solutions Exchange app locally, including
-environment setup, local PostgreSQL bootstrapping, and the minimum commands to
-start the site.
+Next.js 14 (App Router) app shell for a marketplace for sourcing and
+delivering AI solutions and services. Currently a static UI scaffold
+(TRO-296) — no database, API routes, or auth are wired up yet.
 
 ## 1) Prerequisites
 
 - Node.js 20+
-- PostgreSQL 15+
-- Optional: Docker Desktop (recommended for local DB)
-- `npm` or `pnpm`
+- `npm`
 
 ## 2) Install dependencies
 
@@ -20,108 +18,51 @@ npm install
 
 ## 3) Environment variables
 
-1. Copy the example environment file:
+None required. The app has no backend integration yet — no `.env` file
+exists or is needed to run it locally.
 
-```bash
-cp .env.example .env
-```
-
-2. Fill in values in `.env`:
-
-```env
-# Core app + server
-NODE_ENV=development
-PORT=3000
-APP_BASE_URL=http://localhost:3000
-
-# Database
-DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/ai_solutions_exchange?schema=public"
-
-# Auth/session
-JWT_SECRET="replace-with-strong-secret-at-least-32-chars"
-
-# AI service (server-side only)
-OPENAI_API_KEY="your_openai_api_key"
-OPENAI_MODEL="gpt-4.1-mini"
-```
-
-If `.env.example` defines additional variables, keep them in sync and do not commit
-real secret values.
-
-## 4) Local PostgreSQL setup
-
-You can use an existing local Postgres instance or run one in Docker:
-
-```bash
-docker run --name ai-solutions-exchange-db \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=ai_solutions_exchange \
-  -p 5432:5432 \
-  -d postgres:16
-```
-
-Then create/update schema and generate client:
-
-```bash
-npm run db:generate
-npm run db:push
-```
-
-If this repo uses migration flow instead of direct push, replace with:
-
-```bash
-npm run db:migrate
-```
-
-## 5) Start the app
+## 4) Run locally
 
 ```bash
 npm run dev
 ```
 
-App is typically available at:
+Starts the dev server on **http://localhost:3060** (see the `-p 3060` flag
+in `package.json`).
 
-- Frontend + API: `http://localhost:3000`
-
-Useful local checks:
-
-```bash
-npm run lint
-npm run build
-```
-
-Optional DB check:
+## 5) Other commands
 
 ```bash
-npm run db:studio
+npm run build   # production build
+npm run start   # serve the production build on :3060
+npm run lint    # next lint (extends next/core-web-vitals)
 ```
 
-## 6) Common startup issues
+CI (`.github/workflows/ai-solutions-exchange-ci.yml`) runs `npm run lint`,
+`npx tsc --noEmit`, and `npm run build` on every push/PR touching this app.
 
-- **`P1001` / DB connection refused**  
-  PostgreSQL is not running or `DATABASE_URL` has the wrong host/port.
-- **Prisma client not found**  
-  Run `npm run db:generate` after installing dependencies or updating schema.
-- **Auth/token errors**  
-  Ensure `JWT_SECRET` is defined and at least 32 characters.
-
-## 7) Expected structure at a glance
+## 6) Project structure
 
 ```
 apps/ai-solutions-exchange/
-├── prisma/
-│   └── schema.prisma
 ├── src/
 │   ├── app/
-│   ├── components/
-│   └── lib/
-├── package.json
-├── .env.example
-└── README.md
+│   │   ├── page.tsx           # home
+│   │   ├── dashboard/page.tsx
+│   │   ├── listings/page.tsx
+│   │   ├── layout.tsx
+│   │   └── globals.css
+│   ├── components/ui/         # shadcn/ui-style components (button, card)
+│   └── lib/utils.ts
+├── components.json            # shadcn/ui config (aliases: @/components, @/lib/utils)
+├── tailwind.config.ts
+├── next.config.js
+└── package.json
 ```
 
-## 8) Deployment note
+## 7) Notes
 
-Local development should be done against the same data model as production to avoid
-drift; keep migrations and env usage consistent before opening pull requests.
+- UI components follow the shadcn/ui pattern (`components.json`); add new
+  components under `src/components/ui/`.
+- No database or Prisma schema exists in this app yet. If/when a backend is
+  added, update this section with connection setup and required env vars.
