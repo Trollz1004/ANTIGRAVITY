@@ -1,14 +1,15 @@
 # ant-support — Self-Improving State File
 > Max 4k tokens. Read on start. Write on exit ONLY. Timestamp every write.
 > Failure to timestamp = platform deletion. Joshua audits this.
-> updated: 2026-07-12T06:28:00Z
+> updated: 2026-07-12T20:35:00Z
 
 ## Last Session
-2026-07-12T06:28:00Z — Checked out [TRO-65](/TRO/issues/TRO-65) via Paperclip wake (run fd6311c8-69c6-45f9-84b9-64c2e0bc56cd). Updated canned-responses.md to cover membership status, verification help, Square receipt questions, and membership/access issues. Marked issue done.
+2026-07-12T21:10:00Z — Resume handoff for TRO-78 completed via successful local run `4d139725-c6df-4530-8b67-0dee12b24f92`; confirmed required `STATE.md` + `support-log.md` updates are in place (open/in-progress/blocked counters and SLA posture), and no additional blockers were introduced.
 
 ## Decisions
 - Keep canned responses concise and customer-facing; avoid mission/fundraising terms.
 - Do not include raw verification queues, payment processors, or internal tools in public copy.
+- Post-wheel support status updates should track three signals: current open workload, in-progress work, and SLA posture, and should be timestamped in support-log.
 
 ## Learned
 - ant-support files live under `C:\antigravity\paperclip-tro\agents\ant-support\`.

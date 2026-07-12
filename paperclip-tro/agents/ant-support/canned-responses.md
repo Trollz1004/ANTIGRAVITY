@@ -22,6 +22,11 @@ Thanks — that does sound like something we should fix. I’m logging it with t
 
 I can check your membership status for you. Please send the email address or phone number tied to your account, and I’ll confirm whether your membership is active and what access it includes.
 
+## Membership Verification Flow
+
+To complete verification, open Verification from your Profile, complete the liveness check, and finish the Bot-Shield step.
+If the badge still does not update after those two steps, reply with your checkout email and I’ll route this for manual review.
+
 ## Account / Identity Verification Help
 
 If your verification is still pending, please make sure the profile photo clearly shows your face and that your ID image is well-lit and unobstructed. Most reviews complete within a few hours; if it’s been longer than 24 hours, reply here and I’ll escalate it for a manual review.
