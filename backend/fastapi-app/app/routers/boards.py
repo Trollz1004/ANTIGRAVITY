@@ -230,6 +230,9 @@ async def report_post(
             customer_message=f"{payload.reason} {payload.details or ''}".strip(),
         )
     )
+    ticket.profile_completeness_score = ticket.bot_likelihood_signals.get(
+        "profile_completeness_score", 0.0
+    )
     db.add(ticket)
     await db.commit()
     await db.refresh(ticket)

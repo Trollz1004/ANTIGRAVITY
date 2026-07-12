@@ -14,6 +14,7 @@ from app.error_responses import conflict, not_found
 from app.models import Profile, User
 from app.moderation import has_block_relationship
 from app.schemas import ProfilePatchRequest, ProfileResponse, ProfileUpdateRequest
+from app.support_service import refresh_profile_completeness_score
 from app.utils import patch_model
 
 router = APIRouter(prefix="/profiles")
@@ -28,6 +29,10 @@ async def get_my_profile(
     if not profile:
         raise not_found(message="Profile not created yet")
 
+    profile = await refresh_profile_completeness_score(
+        db=db, user=user, create_if_missing=False
+    )
+
     return ProfileResponse(
         user_id=user.id,
         display_name=user.display_name,
@@ -39,6 +44,7 @@ async def get_my_profile(
         photos=profile.photos or [],
         interests=profile.interests or [],
         verified=profile.verified,
+        profile_completeness_score=profile.profile_completeness_score,
     )
 
 
@@ -79,6 +85,7 @@ async def update_my_profile(
 
     await db.commit()
     await db.refresh(profile)
+    profile = await refresh_profile_completeness_score(db=db, user=user)
 
     return ProfileResponse(
         user_id=user.id,
@@ -91,6 +98,7 @@ async def update_my_profile(
         photos=profile.photos or [],
         interests=profile.interests or [],
         verified=profile.verified,
+        profile_completeness_score=profile.profile_completeness_score,
     )
 
 
@@ -123,6 +131,7 @@ async def patch_my_profile(
 
     await db.commit()
     await db.refresh(profile)
+    profile = await refresh_profile_completeness_score(db=db, user=user)
 
     return ProfileResponse(
         user_id=user.id,
@@ -135,6 +144,7 @@ async def patch_my_profile(
         photos=profile.photos or [],
         interests=profile.interests or [],
         verified=profile.verified,
+        profile_completeness_score=profile.profile_completeness_score,
     )
 
 
@@ -147,13 +157,17 @@ async def get_user_profile(
     if await has_block_relationship(db, user_a=current_user.id, user_b=user_id):
         raise not_found(message="Profile not found")
 
+    user = await db.get(User, user_id)
+    if not user:
+        raise not_found(message="User not found")
+
     profile = await db.scalar(select(Profile).where(Profile.user_id == user_id))
     if not profile:
         raise not_found(message="Profile not found")
 
-    user = await db.get(User, user_id)
-    if not user:
-        raise not_found(message="User not found")
+    profile = await refresh_profile_completeness_score(
+        db=db, user=user, create_if_missing=False
+    )
 
     return ProfileResponse(
         user_id=user.id,
@@ -166,4 +180,5 @@ async def get_user_profile(
         photos=profile.photos or [],
         interests=profile.interests or [],
         verified=profile.verified,
+        profile_completeness_score=profile.profile_completeness_score,
     )

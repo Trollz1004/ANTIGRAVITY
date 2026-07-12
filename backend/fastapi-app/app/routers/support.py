@@ -144,6 +144,9 @@ async def _create_ticket(
         transcript=_serialize_transcript(payload, decision_reply),
         bot_likelihood_score=bot_likelihood_score,
         bot_likelihood_signals=bot_likelihood_signals,
+        profile_completeness_score=bot_likelihood_signals.get(
+            "profile_completeness_score", 0.0
+        ),
     )
     db.add(ticket)
     await db.commit()

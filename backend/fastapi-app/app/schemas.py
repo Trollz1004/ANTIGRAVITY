@@ -101,6 +101,7 @@ class ProfileResponse(BaseModel):
     photos: list[str]
     interests: list[str]
     verified: bool
+    profile_completeness_score: float = 0.0
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -493,6 +494,7 @@ class SupportTicketResponse(BaseModel):
     transcript: list[SupportChatMessage] = Field(default_factory=list)
     created_at: datetime
     updated_at: datetime
+    profile_completeness_score: float = 0.0
     model_config = ConfigDict(from_attributes=True)
 
 

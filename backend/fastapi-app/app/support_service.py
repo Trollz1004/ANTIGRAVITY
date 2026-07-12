@@ -6,6 +6,7 @@ import asyncio
 import json
 import logging
 import re
+import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 
@@ -89,6 +90,90 @@ def _decision(
     )
 
 
+PROFILE_COMPLETENESS_FIELDS = [
+    "bio",
+    "age",
+    "gender",
+    "looking_for",
+    "location",
+    "photos",
+    "interests",
+]
+
+
+def _profile_field_filled(profile: Profile | None, field: str) -> bool:
+    if profile is None:
+        return False
+    value = getattr(profile, field, None)
+    if field in ("photos", "interests"):
+        return isinstance(value, list) and len(value) > 0
+    if field == "age":
+        return value is not None
+    return bool(value and str(value).strip())
+
+
+def _count_filled_profile_fields(profile: Profile | None) -> int:
+    return sum(
+        1 for field in PROFILE_COMPLETENESS_FIELDS
+        if _profile_field_filled(profile, field)
+    )
+
+
+def compute_profile_completeness_score(
+    profile: Profile | None,
+    recent_signups_last_hour: int,
+) -> float:
+    """Return a 0-100 completeness score: 70% profile fields, 30% signup velocity.
+
+    More filled fields increase the score. Rapid signups from the same email
+    domain in the last hour reduce the velocity portion.
+    """
+    filled_count = _count_filled_profile_fields(profile)
+    field_score = (filled_count / len(PROFILE_COMPLETENESS_FIELDS)) * 70.0
+
+    signup_risk = _analyze_rapid_signup_patterns(recent_signups_last_hour)["score"]
+    # Map the 0-24 risk scale onto a 0-30 completeness bonus.
+    velocity_score = max(0.0, 30.0 - (signup_risk * 30.0 / 24.0))
+
+    return round(min(field_score + velocity_score, 100.0), 1)
+
+
+async def refresh_profile_completeness_score(
+    *, db: AsyncSession, user: User, create_if_missing: bool = True
+) -> Profile | None:
+    """Compute and persist the user's profile completeness score.
+
+    Creates a blank profile only when ``create_if_missing`` is ``True``.
+    Returns ``None`` if no profile exists and creation is disabled.
+    """
+    now = datetime.now(timezone.utc)
+    profile = await db.scalar(
+        select(Profile).where(Profile.user_id == user.id).limit(1)
+    )
+    if profile is None:
+        if not create_if_missing:
+            return None
+        profile = Profile(id=uuid.uuid4(), user_id=user.id)
+        db.add(profile)
+
+    domain = (user.email.split("@", 1)[1] if "@" in user.email else "").lower()
+    one_hour_cutoff = now - timedelta(hours=1)
+    recent_signups = (
+        await db.scalar(
+            select(func.count(User.id))
+            .where(User.created_at >= one_hour_cutoff)
+            .where(User.email.ilike(f"%@{domain}"))
+        )
+    ) or 0
+
+    profile.profile_completeness_score = compute_profile_completeness_score(
+        profile, recent_signups
+    )
+    await db.commit()
+    await db.refresh(profile)
+    return profile
+
+
 def _analyze_profile_completeness(profile: Profile | None) -> dict[str, object]:
     if profile is None:
         return {
@@ -104,23 +189,13 @@ def _analyze_profile_completeness(profile: Profile | None) -> dict[str, object]:
             ],
         }
 
-    missing_fields: list[str] = []
-    if not (profile.bio and profile.bio.strip()):
-        missing_fields.append("bio")
-    if profile.age is None:
-        missing_fields.append("age")
-    if not (profile.gender and profile.gender.strip()):
-        missing_fields.append("gender")
-    if not (profile.looking_for and profile.looking_for.strip()):
-        missing_fields.append("looking_for")
-    if not (profile.location and profile.location.strip()):
-        missing_fields.append("location")
-    if not (isinstance(profile.photos, list) and len(profile.photos) > 0):
-        missing_fields.append("photos")
-    if not (isinstance(profile.interests, list) and len(profile.interests) > 0):
-        missing_fields.append("interests")
+    missing_fields: list[str] = [
+        field
+        for field in PROFILE_COMPLETENESS_FIELDS
+        if not _profile_field_filled(profile, field)
+    ]
 
-    missing_ratio = len(missing_fields) / 7.0
+    missing_ratio = len(missing_fields) / len(PROFILE_COMPLETENESS_FIELDS)
     return {
         "score": round(missing_ratio * 20.0, 1),
         "missing_fields": missing_fields,
@@ -198,6 +273,8 @@ async def build_bot_likelihood_profile(
     signup_risk = _analyze_rapid_signup_patterns(users_created_last_hour)
     text_risk = _analyze_text_patterns(customer_message)
 
+    # Persist the dedicated profile completeness score and expose it to support.
+    refreshed_profile = await refresh_profile_completeness_score(db=db, user=user)
     score = min(
         round(
             profile_risk["score"] + signup_risk["score"] + text_risk["score"], 1
@@ -208,6 +285,7 @@ async def build_bot_likelihood_profile(
         "profile": profile_risk,
         "rapid_signup": signup_risk,
         "text_patterns": text_risk,
+        "profile_completeness_score": refreshed_profile.profile_completeness_score,
     }
     return score, signals
 

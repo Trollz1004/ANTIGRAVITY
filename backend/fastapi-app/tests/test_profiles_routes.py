@@ -287,3 +287,56 @@ def test_get_user_profile_nonexistent_user_returns_404(client, db_session_factor
         assert resp.status_code == 404
     finally:
         app.dependency_overrides.pop(get_current_user, None)
+
+
+# ── Profile completeness score ───────────────────────────────────────────────
+
+
+def test_put_profile_calculates_completeness_score(client, db_session_factory):
+    """Updating the profile recomputes and stores the 0-100 completeness score."""
+    user = _make_user(email="completeness@example.com")
+    _seed(user, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = _override_user(user)
+    try:
+        resp = client.put(
+            "/api/v1/profiles/me",
+            json={
+                "bio": "A bio",
+                "age": 30,
+                "gender": "female",
+                "looking_for": "friends",
+                "location": "NYC",
+                "interests": ["hiking", "music"],
+            },
+        )
+        assert resp.status_code == 200
+        data = resp.json()
+        # 6 of 7 fields filled (photos missing) -> 60, zero signup velocity -> +30
+        assert data["profile_completeness_score"] == 90.0
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+
+def test_get_my_profile_returns_completeness_score(client, db_session_factory):
+    """Fetching a profile refreshes and returns its completeness score."""
+    user = _make_user(email="getcompleteness@example.com")
+    profile = Profile(
+        id=uuid.uuid4(),
+        user_id=user.id,
+        bio="Has bio",
+        age=25,
+        gender="non-binary",
+        looking_for="dates",
+        location="Austin",
+        interests=["coding"],
+    )
+    _seed(user, profile, db_session_factory=db_session_factory)
+    app.dependency_overrides[get_current_user] = _override_user(user)
+    try:
+        resp = client.get("/api/v1/profiles/me")
+        assert resp.status_code == 200
+        assert "profile_completeness_score" in resp.json()
+        # 6 of 7 fields filled -> 90.0 with no rapid signups.
+        assert resp.json()["profile_completeness_score"] == 90.0
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
