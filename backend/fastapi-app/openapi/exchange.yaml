@@ -1,0 +1,788 @@
+openapi: 3.1.0
+info:
+  title: YouAndINotAI Exchange & Funding API
+  description: |
+    Business-exchange and funding-platform endpoints for the ANTIGRAVITY ecosystem.
+
+    This specification documents the core endpoints used by founders, backers, and
+    platform operators to create pitches, list investment opportunities, propose
+    deals, record investments, and track funding progress.
+
+    ## Authentication
+
+    All endpoints require a valid Bearer JWT obtained from
+    `POST /api/v1/auth/login` or `POST /api/v1/auth/register`.
+
+    ## Base URL
+
+    | Environment | URL |
+    |-------------|-----|
+    | Local Dev   | `http://localhost:8000` |
+    | Production  | `https://api.youandinotai.com` |
+
+  version: 0.1.0
+  contact:
+    name: YouAndINotAI Team
+    url: https://youandinotai.com/
+    email: joshlcoleman@gmail.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8000
+    description: Local development
+  - url: https://api.youandinotai.com
+    description: Production
+  - url: https://staging-api.youandinotai.com
+    description: Staging
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: pitches
+    description: Founder pitch creation and management
+  - name: deals
+    description: Funding deal listing and discovery
+  - name: investments
+    description: Investment commitments and backing records
+  - name: funding-platform
+    description: Platform-wide funding summaries and operator actions
+
+paths:
+  /api/v1/pitches:
+    get:
+      tags: [pitches]
+      summary: List my pitches
+      description: |
+        Returns a paginated list of pitches created by the authenticated user,
+        optionally filtered by status.
+      operationId: listMyPitches
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [draft, published, archived]
+          description: Filter pitches by status.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        "200":
+          description: Paginated list of pitches
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PitchListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      tags: [pitches]
+      summary: Create a pitch
+      description: |
+        Creates a new founder pitch. The authenticated user becomes the founder
+        of the pitch.
+      operationId: createPitch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PitchCreateRequest"
+      responses:
+        "201":
+          description: Pitch created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PitchResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/v1/pitches/{pitch_id}:
+    get:
+      tags: [pitches]
+      summary: Get a pitch
+      description: |
+        Retrieves a single pitch by ID. The caller must be the founder of the
+        pitch.
+      operationId: getPitch
+      parameters:
+        - name: pitch_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Pitch details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PitchResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    patch:
+      tags: [pitches]
+      summary: Update a pitch
+      description: |
+        Updates a pitch. Only the founder may update the pitch. Status transitions
+        are restricted to the allowed enum values.
+      operationId: updatePitch
+      parameters:
+        - name: pitch_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PitchUpdateRequest"
+      responses:
+        "200":
+          description: Updated pitch
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PitchResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/v1/deals:
+    get:
+      tags: [deals]
+      summary: List deals
+      description: |
+        Returns a paginated list of funding deals visible to the authenticated
+        user, with optional status filter and sorting.
+      operationId: listDeals
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [open, closing, closed, cancelled]
+          description: Filter deals by status.
+        - name: sort_by
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [created_at, updated_at, target_amount_cents, raised_amount_cents]
+            default: created_at
+        - name: sort_dir
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        "200":
+          description: Paginated list of deals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DealListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/v1/deals/{deal_id}:
+    get:
+      tags: [deals]
+      summary: Get a deal
+      description: Retrieves a single funding deal by ID.
+      operationId: getDeal
+      parameters:
+        - name: deal_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Deal details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DealResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/v1/deals/{deal_id}/invest:
+    post:
+      tags: [investments]
+      summary: Commit to invest in a deal
+      description: |
+        Records an authenticated user's investment commitment in an open deal.
+      operationId: createInvestment
+      parameters:
+        - name: deal_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InvestmentCreateRequest"
+      responses:
+        "201":
+          description: Investment commitment recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvestmentResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/v1/investments:
+    get:
+      tags: [investments]
+      summary: List my investments
+      description: |
+        Returns a paginated list of investment commitments made by the
+        authenticated user.
+      operationId: listMyInvestments
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [committed, funded, cancelled, refunded]
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        "200":
+          description: Paginated list of investments
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvestmentListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/v1/investments/{investment_id}:
+    get:
+      tags: [investments]
+      summary: Get an investment
+      description: Retrieves a single investment commitment by ID.
+      operationId: getInvestment
+      parameters:
+        - name: investment_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Investment details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvestmentResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    patch:
+      tags: [investments]
+      summary: Update investment status
+      description: |
+        Allows an investor or operator to update the status of an investment
+        commitment (for example, mark it as cancelled).
+      operationId: updateInvestment
+      parameters:
+        - name: investment_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InvestmentUpdateRequest"
+      responses:
+        "200":
+          description: Updated investment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvestmentResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/v1/funding-platform/summary:
+    get:
+      tags: [funding-platform]
+      summary: Funding platform summary
+      description: |
+        Returns aggregate funding metrics such as total deals, total committed
+        capital, and closed deal count.
+      operationId: getFundingSummary
+      responses:
+        "200":
+          description: Aggregate funding metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FundingSummaryResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    PitchCreateRequest:
+      type: object
+      required: [title, summary]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 5000
+        category:
+          type: string
+          nullable: true
+          maxLength: 50
+        ask_amount_cents:
+          type: integer
+          nullable: true
+          minimum: 0
+        pitch_deck_url:
+          type: string
+          nullable: true
+          maxLength: 500
+
+    PitchUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 5000
+        category:
+          type: string
+          nullable: true
+          maxLength: 50
+        ask_amount_cents:
+          type: integer
+          nullable: true
+          minimum: 0
+        pitch_deck_url:
+          type: string
+          nullable: true
+          maxLength: 500
+        status:
+          type: string
+          enum: [draft, published, archived]
+
+    PitchResponse:
+      type: object
+      required:
+        - id
+        - founder_id
+        - title
+        - summary
+        - status
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        founder_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        summary:
+          type: string
+        category:
+          type: string
+          nullable: true
+        ask_amount_cents:
+          type: integer
+          nullable: true
+        pitch_deck_url:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [draft, published, archived]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    PitchListResponse:
+      type: object
+      required: [items, total, limit, offset]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/PitchResponse"
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    DealResponse:
+      type: object
+      required:
+        - id
+        - pitch_id
+        - status
+        - target_amount_cents
+        - raised_amount_cents
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        pitch_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [open, closing, closed, cancelled]
+        target_amount_cents:
+          type: integer
+          minimum: 0
+        raised_amount_cents:
+          type: integer
+          minimum: 0
+        minimum_investment_cents:
+          type: integer
+          nullable: true
+          minimum: 0
+        closes_at:
+          type: string
+          nullable: true
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    DealListResponse:
+      type: object
+      required: [items, total, limit, offset]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/DealResponse"
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    InvestmentCreateRequest:
+      type: object
+      required: [amount_cents]
+      properties:
+        amount_cents:
+          type: integer
+          minimum: 1
+        note:
+          type: string
+          nullable: true
+          maxLength: 1000
+
+    InvestmentUpdateRequest:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [committed, funded, cancelled, refunded]
+        note:
+          type: string
+          nullable: true
+          maxLength: 1000
+
+    InvestmentResponse:
+      type: object
+      required:
+        - id
+        - investor_id
+        - deal_id
+        - amount_cents
+        - status
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        investor_id:
+          type: string
+          format: uuid
+        deal_id:
+          type: string
+          format: uuid
+        amount_cents:
+          type: integer
+          minimum: 0
+        status:
+          type: string
+          enum: [committed, funded, cancelled, refunded]
+        note:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    InvestmentListResponse:
+      type: object
+      required: [items, total, limit, offset]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/InvestmentResponse"
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    FundingSummaryResponse:
+      type: object
+      required:
+        - total_deals
+        - open_deals
+        - closed_deals
+        - total_committed_cents
+        - total_raised_cents
+      properties:
+        total_deals:
+          type: integer
+        open_deals:
+          type: integer
+        closed_deals:
+          type: integer
+        total_committed_cents:
+          type: integer
+        total_raised_cents:
+          type: integer
+
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          nullable: true
+
+  responses:
+    Unauthorized:
+      description: Authentication required or invalid credentials
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            code: INVALID_CREDENTIALS
+            message: Authentication required
+            details: null
+
+    Forbidden:
+      description: Caller is not authorized to access this resource
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            code: INSUFFICIENT_PERMISSIONS
+            message: Not authorized to access this resource
+            details: null
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            code: NOT_FOUND
+            message: Resource not found
+            details: null
+
+    Conflict:
+      description: Resource conflict
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            code: ALREADY_EXISTS
+            message: Investment already committed
+            details: null
+
+    ValidationError:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            code: VALIDATION_ERROR
+            message: Request validation failed
+            details:
+              errors:
+                - loc: [body, title]
+                  msg: value is too short
+                  type: value_error.any_str.min_length
+
+    InternalError:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            code: INTERNAL_ERROR
+            message: An unexpected error occurred
+            details: null
