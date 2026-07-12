@@ -47,6 +47,8 @@ tags:
     description: Funding deal listing and discovery
   - name: investments
     description: Investment commitments and backing records
+  - name: billing
+    description: Square checkout link generation for memberships
   - name: funding-platform
     description: Platform-wide funding summaries and operator actions
 
@@ -419,6 +421,42 @@ paths:
         "500":
           $ref: "#/components/responses/InternalError"
 
+  /api/v1/billing/checkout-link:
+    post:
+      tags: [billing]
+      summary: Create a Square checkout link
+      description: |
+        Generates a Square payment link for the specified membership tier.
+        The link is bound to the authenticated user's account.
+      operationId: createCheckoutLink
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckoutLinkRequest"
+      responses:
+        "200":
+          description: Checkout URL generated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckoutLinkResponse"
+        "400":
+          description: Invalid email or tier
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "503":
+          description: Square checkout temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/v1/funding-platform/summary:
     get:
       tags: [funding-platform]
@@ -683,6 +721,25 @@ components:
           type: integer
         offset:
           type: integer
+
+    CheckoutLinkRequest:
+      type: object
+      required: [tier]
+      properties:
+        tier:
+          type: string
+          enum: [founding_member, 3_month, 12_month, royalty]
+
+    CheckoutLinkResponse:
+      type: object
+      required: [checkout_url, session_id]
+      properties:
+        checkout_url:
+          type: string
+          format: uri
+        session_id:
+          type: string
+          format: uuid
 
     FundingSummaryResponse:
       type: object
