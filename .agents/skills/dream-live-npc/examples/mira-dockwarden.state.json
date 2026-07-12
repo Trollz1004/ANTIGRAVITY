@@ -3,7 +3,7 @@
   "kind": "example_npc_state",
   "issue": "TRO-62",
   "aligned_with": "TRO-87 trigger/webhook schema_version 1.0.0",
-  "generated_at": "2026-07-11T15:05:00.000Z",
+  "generated_at": "2026-07-12T05:52:57.4800375Z",
   "provider_constraint": "no_anthropic",
   "persona": {
     "schema_version": "1.0.0",
@@ -15,16 +15,27 @@
       "role": "Harbor pier boss and rope-yard keeper",
       "faction": "dock_union",
       "speech_style": "terse, salt-dry humor, never flowery",
-      "drives": ["keep the pier working", "protect regulars", "hate rats"],
-      "fears": ["fire near the tar sheds", "union betrayal"],
-      "taboos": ["never discuss real-world company/mission topics"]
+      "drives": [
+        "keep the pier working",
+        "protect regulars",
+        "hate rats"
+      ],
+      "fears": [
+        "fire near the tar sheds",
+        "union betrayal"
+      ],
+      "taboos": [
+        "never discuss real-world company/mission topics"
+      ]
     },
     "mood_baseline": 0.0,
     "mood_current": 0.05,
     "provider_route": {
       "primary": "ollama_cloud_or_openrouter_free",
       "fallback": "canned_pool",
-      "forbidden": ["anthropic"]
+      "forbidden": [
+        "anthropic"
+      ]
     },
     "revision": 1
   },
@@ -36,8 +47,11 @@
       "player_id": "ply_1001",
       "score": 0.18,
       "score_delta_applied": 0.06,
-      "tags": ["asked_for_work", "first_contact"],
-      "last_seen": "2026-07-11T14:03:01.000Z",
+      "tags": [
+        "asked_for_work",
+        "first_contact"
+      ],
+      "last_seen": "2026-07-11T14:03:01Z",
       "last_location_id": "zone.harbor.pier",
       "notes": "Offered rat job; wariness slightly up"
     }
@@ -50,13 +64,19 @@
       "npc_id": "npc.mira.dockwarden",
       "wake_id": "wk_demo_001",
       "event_id": "c3333333-3333-4333-8333-333333333333",
-      "ts": "2026-07-11T14:03:01.000Z",
+      "ts": "2026-07-11T14:03:01Z",
       "event": "player_asked_about_pier_work",
-      "actors": ["ply_1001"],
+      "actors": [
+        "ply_1001"
+      ],
       "location_id": "zone.harbor.pier",
       "salience": 0.35,
       "decay_class": "normal",
-      "tags": ["work", "rats", "first_contact"],
+      "tags": [
+        "work",
+        "rats",
+        "first_contact"
+      ],
       "embedding_text": "Mira: ply_1001 asked for pier work; rats mentioned"
     },
     {
@@ -66,22 +86,51 @@
       "npc_id": "npc.mira.dockwarden",
       "wake_id": "wk_demo_014",
       "event_id": "d4444444-4444-4444-8444-444444444444",
-      "ts": "2026-07-10T18:22:00.000Z",
+      "ts": "2026-07-10T18:22:00Z",
       "event": "witnessed_theft_copper_lockbox",
-      "actors": ["ply_x991", "npc.market_guard_03"],
+      "actors": [
+        "ply_x991",
+        "npc.market_guard_03"
+      ],
       "location_id": "zone.market.row",
       "salience": 0.7,
       "decay_class": "sticky",
-      "tags": ["theft", "witness"],
+      "tags": [
+        "theft",
+        "witness"
+      ],
       "embedding_text": "Mira witnessed ply_x991 steal copper lockbox on market row"
+    },
+    {
+      "schema_version": "1.0.0",
+      "kind": "episodic",
+      "memory_id": "mem_wk_demo_001_9a17e747",
+      "npc_id": "npc.mira.dockwarden",
+      "wake_id": "wk_demo_001",
+      "event_id": "wb_9a17e747_c3333333-3333-4333-8333-333333333333",
+      "ts": "2026-07-12T05:52:57.4504624Z",
+      "event": "npc.spoken_to_handled",
+      "actors": "ply_1001",
+      "location_id": "zone.harbor.pier",
+      "salience": 0.3,
+      "decay_class": "normal",
+      "tags": [
+        "npc.spoken_to",
+        "stub",
+        "tro-93"
+      ],
+      "embedding_text": "npc.mira.dockwarden: handled npc.spoken_to from player (stub roundtrip)"
     }
   ],
   "world_ledger_slice": {
     "schema_version": "1.0.0",
     "kind": "world_ledger",
     "region_id": "zone.harbor.a1",
-    "ts": "2026-07-11T14:00:00.000Z",
-    "prices": { "fish": 1.08, "rope": 0.95 },
+    "ts": "2026-07-11T14:00:00Z",
+    "prices": {
+      "fish": 1.08,
+      "rope": 0.95
+    },
     "rumors": [
       {
         "rumor_id": "rumor.rats_surge",
@@ -90,14 +139,17 @@
         "source_npc": "npc.mira.dockwarden"
       }
     ],
-    "faction_standing": { "dock_union": 0.52, "harbor_guard": 0.48 }
+    "faction_standing": {
+      "dock_union": 0.52,
+      "harbor_guard": 0.48
+    }
   },
   "sample_triggers": [
     {
       "schema_version": "1.0.0",
       "event_id": "a1111111-1111-4111-8111-111111111111",
       "event_type": "player.enter_zone",
-      "occurred_at": "2026-07-11T13:59:40.000Z",
+      "occurred_at": "2026-07-11T13:59:40Z",
       "source": {
         "server_id": "dream-main",
         "region_id": "zone.harbor.a1",
@@ -105,15 +157,29 @@
         "engine": "unreal",
         "build": "0.0.0-dev"
       },
-      "actor": { "player_id": "ply_1001", "npc_id": null, "session_id": "sess_abc" },
+      "actor": {
+        "player_id": "ply_1001",
+        "npc_id": null,
+        "session_id": "sess_abc"
+      },
       "context_refs": [
-        { "kind": "zone", "id": "zone.harbor.a1" },
-        { "kind": "player", "id": "ply_1001" }
+        {
+          "kind": "zone",
+          "id": "zone.harbor.a1"
+        },
+        {
+          "kind": "player",
+          "id": "ply_1001"
+        }
       ],
       "payload": {
         "zone_id": "zone.harbor.a1",
         "from_zone_id": "zone.road.north",
-        "position": { "x": 120.5, "y": 2.0, "z": -44.1 },
+        "position": {
+          "x": 120.5,
+          "y": 2.0,
+          "z": -44.1
+        },
         "reason": "walk"
       }
     },
@@ -121,7 +187,7 @@
       "schema_version": "1.0.0",
       "event_id": "a1111111-1111-4111-8111-111111111112",
       "event_type": "npc.approached",
-      "occurred_at": "2026-07-11T13:59:50.000Z",
+      "occurred_at": "2026-07-11T13:59:50Z",
       "source": {
         "server_id": "dream-main",
         "region_id": "zone.harbor.a1",
@@ -135,8 +201,14 @@
         "session_id": "sess_abc"
       },
       "context_refs": [
-        { "kind": "npc", "id": "npc.mira.dockwarden" },
-        { "kind": "player", "id": "ply_1001" }
+        {
+          "kind": "npc",
+          "id": "npc.mira.dockwarden"
+        },
+        {
+          "kind": "player",
+          "id": "ply_1001"
+        }
       ],
       "payload": {
         "npc_id": "npc.mira.dockwarden",
@@ -150,7 +222,7 @@
       "schema_version": "1.0.0",
       "event_id": "c3333333-3333-4333-8333-333333333333",
       "event_type": "npc.spoken_to",
-      "occurred_at": "2026-07-11T14:03:00.000Z",
+      "occurred_at": "2026-07-11T14:03:00Z",
       "source": {
         "server_id": "dream-main",
         "region_id": "zone.harbor.a1",
@@ -164,8 +236,14 @@
         "session_id": "sess_abc"
       },
       "context_refs": [
-        { "kind": "npc", "id": "npc.mira.dockwarden" },
-        { "kind": "player", "id": "ply_1001" }
+        {
+          "kind": "npc",
+          "id": "npc.mira.dockwarden"
+        },
+        {
+          "kind": "player",
+          "id": "ply_1001"
+        }
       ],
       "payload": {
         "npc_id": "npc.mira.dockwarden",
@@ -179,7 +257,7 @@
       "schema_version": "1.0.0",
       "event_id": "d4444444-4444-4444-8444-444444444444",
       "event_type": "npc.witnessed",
-      "occurred_at": "2026-07-10T18:22:00.000Z",
+      "occurred_at": "2026-07-10T18:22:00Z",
       "source": {
         "server_id": "dream-main",
         "region_id": "zone.harbor.a1",
@@ -193,12 +271,18 @@
         "session_id": "sess_x"
       },
       "context_refs": [
-        { "kind": "npc", "id": "npc.mira.dockwarden" }
+        {
+          "kind": "npc",
+          "id": "npc.mira.dockwarden"
+        }
       ],
       "payload": {
         "npc_id": "npc.mira.dockwarden",
         "event_kind": "theft",
-        "actors": ["ply_x991", "npc.market_guard_03"],
+        "actors": [
+          "ply_x991",
+          "npc.market_guard_03"
+        ],
         "location_id": "zone.market.row",
         "salience": 0.7
       }
@@ -207,7 +291,7 @@
       "schema_version": "1.0.0",
       "event_id": "e5555555-5555-4555-8555-555555555555",
       "event_type": "npc.affected",
-      "occurred_at": "2026-07-09T11:00:00.000Z",
+      "occurred_at": "2026-07-09T11:00:00Z",
       "source": {
         "server_id": "dream-main",
         "region_id": "zone.harbor.a1",
@@ -221,8 +305,14 @@
         "session_id": "sess_abc"
       },
       "context_refs": [
-        { "kind": "npc", "id": "npc.mira.dockwarden" },
-        { "kind": "player", "id": "ply_1001" }
+        {
+          "kind": "npc",
+          "id": "npc.mira.dockwarden"
+        },
+        {
+          "kind": "player",
+          "id": "ply_1001"
+        }
       ],
       "payload": {
         "npc_id": "npc.mira.dockwarden",
@@ -235,7 +325,7 @@
       "schema_version": "1.0.0",
       "event_id": "f6666666-6666-4666-8666-666666666666",
       "event_type": "world.tick",
-      "occurred_at": "2026-07-11T13:00:00.000Z",
+      "occurred_at": "2026-07-11T13:00:00Z",
       "source": {
         "server_id": "dream-main",
         "region_id": "zone.harbor.a1",
@@ -243,22 +333,32 @@
         "engine": "unreal",
         "build": "0.0.0-dev"
       },
-      "actor": { "player_id": null, "npc_id": null, "session_id": null },
+      "actor": {
+        "player_id": null,
+        "npc_id": null,
+        "session_id": null
+      },
       "context_refs": [
-        { "kind": "zone", "id": "zone.harbor.a1" }
+        {
+          "kind": "zone",
+          "id": "zone.harbor.a1"
+        }
       ],
       "payload": {
         "region_id": "zone.harbor.a1",
         "day_phase": "afternoon",
         "tick_index": 88,
-        "economy_deltas": { "fish_price": 0.08, "rumor_pressure": 0.15 }
+        "economy_deltas": {
+          "fish_price": 0.08,
+          "rumor_pressure": 0.15
+        }
       }
     },
     {
       "schema_version": "1.0.0",
       "event_id": "a7777777-7777-4777-8777-777777777777",
       "event_type": "npc.idle_heartbeat",
-      "occurred_at": "2026-07-11T12:30:00.000Z",
+      "occurred_at": "2026-07-11T12:30:00Z",
       "source": {
         "server_id": "dream-main",
         "region_id": "zone.harbor.a1",
@@ -272,7 +372,10 @@
         "session_id": null
       },
       "context_refs": [
-        { "kind": "npc", "id": "npc.mira.dockwarden" }
+        {
+          "kind": "npc",
+          "id": "npc.mira.dockwarden"
+        }
       ],
       "payload": {
         "npc_id": "npc.mira.dockwarden",
@@ -284,7 +387,7 @@
       "schema_version": "1.0.0",
       "event_id": "b8888888-8888-4888-8888-888888888888",
       "event_type": "need.spend",
-      "occurred_at": "2026-07-11T14:02:00.000Z",
+      "occurred_at": "2026-07-11T14:02:00Z",
       "source": {
         "server_id": "dream-main",
         "region_id": "zone.harbor.a1",
@@ -292,11 +395,24 @@
         "engine": "unreal",
         "build": "0.0.0-dev"
       },
-      "actor": { "player_id": "ply_1001", "npc_id": null, "session_id": "sess_abc" },
+      "actor": {
+        "player_id": "ply_1001",
+        "npc_id": null,
+        "session_id": "sess_abc"
+      },
       "context_refs": [
-        { "kind": "player", "id": "ply_1001" },
-        { "kind": "npc", "id": "npc.mira.dockwarden" },
-        { "kind": "sku", "id": "consumable.rope_repair_kit" }
+        {
+          "kind": "player",
+          "id": "ply_1001"
+        },
+        {
+          "kind": "npc",
+          "id": "npc.mira.dockwarden"
+        },
+        {
+          "kind": "sku",
+          "id": "consumable.rope_repair_kit"
+        }
       ],
       "payload": {
         "amount": 15,
@@ -311,7 +427,7 @@
       "schema_version": "1.0.0",
       "event_id": "c9999999-9999-4999-8999-999999999999",
       "event_type": "quest.updated",
-      "occurred_at": "2026-07-11T10:15:00.000Z",
+      "occurred_at": "2026-07-11T10:15:00Z",
       "source": {
         "server_id": "dream-main",
         "region_id": "zone.harbor.a1",
@@ -325,8 +441,14 @@
         "session_id": "sess_abc"
       },
       "context_refs": [
-        { "kind": "npc", "id": "npc.mira.dockwarden" },
-        { "kind": "player", "id": "ply_1001" }
+        {
+          "kind": "npc",
+          "id": "npc.mira.dockwarden"
+        },
+        {
+          "kind": "player",
+          "id": "ply_1001"
+        }
       ],
       "payload": {
         "quest_id": "quest.dock_rats",
@@ -340,7 +462,7 @@
       "schema_version": "1.0.0",
       "event_id": "d0a0a0a0-a0a0-40a0-80a0-a0a0a0a0a0a0",
       "event_type": "combat.ended",
-      "occurred_at": "2026-07-10T19:00:00.000Z",
+      "occurred_at": "2026-07-10T19:00:00Z",
       "source": {
         "server_id": "dream-main",
         "region_id": "zone.harbor.a1",
@@ -348,14 +470,25 @@
         "engine": "unreal",
         "build": "0.0.0-dev"
       },
-      "actor": { "player_id": "ply_x991", "npc_id": null, "session_id": "sess_x" },
+      "actor": {
+        "player_id": "ply_x991",
+        "npc_id": null,
+        "session_id": "sess_x"
+      },
       "context_refs": [
-        { "kind": "zone", "id": "zone.market.row" }
+        {
+          "kind": "zone",
+          "id": "zone.market.row"
+        }
       ],
       "payload": {
         "encounter_id": "enc_441",
-        "winners": ["ply_x991"],
-        "losers": ["npc.market_guard_03"],
+        "winners": [
+          "ply_x991"
+        ],
+        "losers": [
+          "npc.market_guard_03"
+        ],
         "location_id": "zone.market.row",
         "flags": []
       }
@@ -368,19 +501,28 @@
     "ok": true,
     "latency_ms": 920,
     "say": "Pier work? Only if you can keep rats off my lines.",
-    "do": [{ "action": "emote", "name": "point" }],
+    "do": [
+      {
+        "action": "emote",
+        "name": "point"
+      }
+    ],
     "remember": [
       {
         "kind": "episodic",
         "event": "player_asked_about_pier_work",
-        "actors": ["ply_1001"],
+        "actors": [
+          "ply_1001"
+        ],
         "salience": 0.35,
         "decay_class": "normal"
       },
       {
         "kind": "relationship",
         "event": "relationship_delta_asked_for_work",
-        "actors": ["ply_1001"],
+        "actors": [
+          "ply_1001"
+        ],
         "salience": 0.3,
         "decay_class": "sticky"
       }
@@ -399,16 +541,24 @@
       {
         "kind": "episodic",
         "event": "player_asked_about_pier_work",
-        "actors": ["ply_1001"],
+        "actors": [
+          "ply_1001"
+        ],
         "salience": 0.35,
         "decay_class": "normal",
-        "tags": ["work", "rats", "first_contact"],
+        "tags": [
+          "work",
+          "rats",
+          "first_contact"
+        ],
         "location_id": "zone.harbor.pier"
       },
       {
         "kind": "relationship",
         "event": "relationship_delta_asked_for_work",
-        "actors": ["ply_1001"],
+        "actors": [
+          "ply_1001"
+        ],
         "salience": 0.3,
         "decay_class": "sticky",
         "score_delta": 0.06,
