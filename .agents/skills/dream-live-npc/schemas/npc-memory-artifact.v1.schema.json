@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://antigravity.local/schemas/dream.npc.memory_artifact.v1.json",
+  "title": "DREAM Live-NPC Memory Artifact v1",
+  "description": "Read-optimized NPC memory snapshot assembled at wake time. Holds current zone, sentiment, and recent episodic history. Written back after each encounter via memory-writeback.v1 batch. Supports read/write round-trip <2s for T1 NPCs.",
+  "type": "object",
+  "required": ["schema_version", "kind", "id", "zone", "last_seen", "sentiment", "history"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "description": "Always '1.0.0' for this revision."
+    },
+    "kind": {
+      "const": "npc_memory_artifact",
+      "description": "Discriminator so loaders can branch on artifact type."
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical NPC identifier. Format: 'npc.<name>.<role>'. Example: 'npc.mira.dockwarden'."
+    },
+    "zone": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Last known zone/location id. Format: 'zone.<region>.<sub>'. Example: 'zone.harbor.pier'."
+    },
+    "last_seen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp of the NPC's most recent player encounter or wake."
+    },
+    "sentiment": {
+      "type": "number",
+      "minimum": -1.0,
+      "maximum": 1.0,
+      "description": "Current mood offset from persona baseline. -1=hostile, 0=neutral/baseline, +1=elated. Persisted across wakes; decays toward 0 over time."
+    },
+    "history": {
+      "type": "array",
+      "maxItems": 8,
+      "description": "Top-k episodic memories by salience (k<=8). Assembled from the episodic vector store at wake time — NOT a full dump. Ordered descending by effective salience (salience * decay_factor).",
+      "items": {
+        "type": "object",
+        "required": ["memory_id", "ts", "event", "salience", "decay_class"],
+        "additionalProperties": false,
+        "properties": {
+          "memory_id": {
+            "type": "string",
+            "description": "Unique episodic row id. Format: 'mem_<hex4>'. Example: 'mem_e1a9'."
+          },
+          "ts": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the event occurred (game time, UTC)."
+          },
+          "event": {
+            "type": "string",
+            "description": "Short snake-case slug or prose describing what happened. No PII. Example: 'player_asked_about_pier_work'."
+          },
+          "actors": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Game-scoped ids of participants. Format: 'ply_<id>' or 'npc.<name>.<role>'."
+          },
+          "salience": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Original recall weight at write time."
+          },
+          "decay_class": {
+            "type": "string",
+            "enum": ["ephemeral", "normal", "sticky"],
+            "description": "Decay schedule: ephemeral=hours, normal=days, sticky=weeks+."
+          },
+          "location_id": {
+            "type": "string",
+            "description": "Zone where the event happened. Optional."
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Free tags for filtering and prompt assembly. Example: ['first_contact','work']."
+          }
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "description": "Relationship rows for players relevant to this wake. Optional — omitted when no prior relationship exists.",
+      "items": {
+        "type": "object",
+        "required": ["player_id", "score"],
+        "additionalProperties": false,
+        "properties": {
+          "player_id": {
+            "type": "string",
+            "description": "Game-scoped player id. Format: 'ply_<id>'."
+          },
+          "score": {
+            "type": "number",
+            "minimum": -1.0,
+            "maximum": 1.0,
+            "description": "Relationship score. -1=hostile, 0=stranger, +1=trusted."
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Relationship tags. Examples: ['grateful','regular','robbed_me']."
+          },
+          "last_seen_ts": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last encounter timestamp with this player."
+          }
+        }
+      }
+    },
+    "context_refs": {
+      "type": "array",
+      "description": "Pointer set assembled by the orchestrator for lazy-loading additional context (persona core, extra episodic queries). Present when assembling a wake body; may be omitted in storage form.",
+      "items": {
+        "type": "object",
+        "required": ["kind", "id"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["persona", "relationship", "episode_query", "world_ledger"]
+          },
+          "id": { "type": "string" }
+        }
+      }
+    }
+  }
+}

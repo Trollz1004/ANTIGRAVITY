@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "npc_memory_artifact",
+  "id": "npc.mira.dockwarden",
+  "zone": "zone.harbor.pier",
+  "last_seen": "2026-07-11T14:03:01.000Z",
+  "sentiment": 0.08,
+  "history": [
+    {
+      "memory_id": "mem_e1a9",
+      "ts": "2026-07-11T14:03:01.000Z",
+      "event": "player_asked_about_pier_work",
+      "actors": ["ply_1001"],
+      "salience": 0.35,
+      "decay_class": "normal",
+      "location_id": "zone.harbor.pier",
+      "tags": ["work", "rats", "first_contact"]
+    },
+    {
+      "memory_id": "mem_b77f",
+      "ts": "2026-07-10T09:15:00.000Z",
+      "event": "caught_player_stealing_rope",
+      "actors": ["ply_9142"],
+      "salience": 0.72,
+      "decay_class": "sticky",
+      "location_id": "zone.harbor.rope_yard",
+      "tags": ["theft", "anger", "watchlist"]
+    },
+    {
+      "memory_id": "mem_c22d",
+      "ts": "2026-07-09T17:30:00.000Z",
+      "event": "player_helped_unload_freighter",
+      "actors": ["ply_1001"],
+      "salience": 0.45,
+      "decay_class": "normal",
+      "location_id": "zone.harbor.dock_3",
+      "tags": ["helpful", "dock_union", "favor_owed"]
+    }
+  ],
+  "relationships": [
+    {
+      "player_id": "ply_1001",
+      "score": 0.18,
+      "tags": ["asked_for_work", "first_contact", "helped_unload"],
+      "last_seen_ts": "2026-07-11T14:03:01.000Z"
+    },
+    {
+      "player_id": "ply_9142",
+      "score": -0.55,
+      "tags": ["thief", "watchlist"],
+      "last_seen_ts": "2026-07-10T09:15:00.000Z"
+    }
+  ],
+  "context_refs": [
+    { "kind": "persona", "id": "npc.mira.dockwarden" },
+    { "kind": "relationship", "id": "npc.mira.dockwarden:ply_1001" },
+    { "kind": "episode_query", "id": "top_k=8" }
+  ]
+}
