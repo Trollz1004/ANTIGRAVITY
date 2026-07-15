@@ -4,7 +4,7 @@ import uuid
 from datetime import date, datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 # ── Auth ──
 
@@ -299,6 +299,51 @@ class EventRSVPResponse(BaseModel):
     user_id: uuid.UUID
     status: str
     created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ── Pitches ──
+
+PITCH_STATUSES = ["draft", "submitted", "withdrawn"]
+
+
+class PitchCreateRequest(BaseModel):
+    title: str = Field(min_length=1, max_length=200)
+    summary: str = Field(min_length=1, max_length=5000)
+    ask: str | None = Field(None, max_length=500)
+    status: str = "draft"
+
+    @field_validator("status")
+    @classmethod
+    def validate_status(cls, value: str) -> str:
+        if value not in PITCH_STATUSES:
+            raise ValueError(f"status must be one of {PITCH_STATUSES}")
+        return value
+
+
+class PitchUpdateRequest(BaseModel):
+    title: str | None = Field(None, min_length=1, max_length=200)
+    summary: str | None = Field(None, min_length=1, max_length=5000)
+    ask: str | None = Field(None, max_length=500)
+    status: str | None = None
+
+    @field_validator("status")
+    @classmethod
+    def validate_status(cls, value: str | None) -> str | None:
+        if value is not None and value not in PITCH_STATUSES:
+            raise ValueError(f"status must be one of {PITCH_STATUSES}")
+        return value
+
+
+class PitchResponse(BaseModel):
+    id: uuid.UUID
+    founder_id: uuid.UUID
+    title: str
+    summary: str
+    ask: str | None
+    status: str
+    created_at: datetime
+    updated_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
 

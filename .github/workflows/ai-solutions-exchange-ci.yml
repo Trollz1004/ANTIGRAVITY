@@ -1,0 +1,39 @@
+name: ai-solutions-exchange-ci
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/ai-solutions-exchange/**'
+      - '.github/workflows/ai-solutions-exchange-ci.yml'
+  pull_request:
+    paths:
+      - 'apps/ai-solutions-exchange/**'
+      - '.github/workflows/ai-solutions-exchange-ci.yml'
+
+jobs:
+  lint-typecheck-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/ai-solutions-exchange
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: apps/ai-solutions-exchange/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run type-check
+        run: npx tsc --noEmit
+
+      - name: Run build
+        run: npm run build
