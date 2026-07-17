@@ -60,33 +60,26 @@ services:
       retries: 3
       start_period: 30s
 
-  hermes-workspace:
-    build:
-      context: ./hermes
-      dockerfile: Dockerfile
-    container_name: hermes-workspace
+  localstack:
+    image: localstack/localstack-pro:latest
+    container_name: localstack
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4571:4571"
     environment:
-      - NODE_ENV=production
-      - PORT=3000
-      - HOST=0.0.0.0
-      - HERMES_API_URL=http://hermes-agent:8642
-      - HERMES_PASSWORD=${HERMES_PASSWORD:-antigravity}
-      - COOKIE_SECURE=0
-      - TRUST_PROXY=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY:-}
+      - DEBUG=1
     volumes:
-      - hermes-workspace-data:/app/dist
-    depends_on:
-      hermes-agent:
-        condition: service_healthy
+      - /var/run/docker.sock:/var/run/docker.sock
+      - localstack-data:/tmp/localstack
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      test: ["CMD", "curl", "-f", "http://localhost:4566/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 30s
 
   redis:
     image: redis:alpine
@@ -272,6 +265,6 @@ volumes:
   openclaw_wwebjs:
   openclaw_wwebjs_cache:
   hermes-data:
-  hermes-workspace-data:
   omniroute-data:
   omniroute-logs:
+  localstack-data:
