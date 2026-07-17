@@ -1,0 +1,57 @@
+# Minimal OmniRouter docker-compose for immediate setup
+# Full source to be copied from sabretooth C:\paperclip\omniroute
+
+version: '3.9'
+
+services:
+  omniroute:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: omniroute
+    ports:
+      - "127.0.0.1:20128:20128"  # Dashboard
+      - "127.0.0.1:20129:20129"  # API
+    environment:
+      - NODE_ENV=production
+      - NODE_OPTIONS=--max-old-space-size=1024
+      - DASHBOARD_PORT=20128
+      - API_PORT=20129
+      - HOST=0.0.0.0
+      - JWT_SECRET=${JWT_SECRET:-your-jwt-secret-change-this}
+      - API_KEY_SECRET=${API_KEY_SECRET:-your-api-key-secret-change-this}
+      - INITIAL_PASSWORD=${INITIAL_PASSWORD:-omniroute}
+      - REDIS_URL=redis://redis:6379
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+    volumes:
+      - omniroute-data:/app/data
+      - omniroute-logs:/app/logs
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:20128/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  redis:
+    image: redis:7-alpine
+    container_name: omniroute-redis
+    ports:
+      - "127.0.0.1:6379:6379"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  omniroute-data:
+  omniroute-logs:
