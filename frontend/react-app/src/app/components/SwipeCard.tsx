@@ -3,10 +3,10 @@ import {
   Diamond,
   Heart,
   MapPin,
-  ShieldCheck,
   X,
 } from 'lucide-react';
 import { motion, PanInfo, useMotionValue, useTransform } from 'motion/react';
+import { VerifiedBadge } from './VerifiedBadge';
 
 interface Profile {
   user_id: string;
@@ -48,7 +48,11 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
   };
 
   const initial = profile.display_name.charAt(0).toUpperCase();
-  const verifiedLabel = profile.verificationLevel || (profile.verified ? 'Verified profile' : 'Verification pending');
+  const verificationTier = profile.verified
+    ? profile.subscription_active
+      ? 'platinum'
+      : 'gold'
+    : 'unverified';
   const profilePrompt =
     profile.prompt ||
     'I am here for real conversation, clear intent, and a first date that feels safe for both people.';
@@ -108,9 +112,14 @@ export function SwipeCard({ profile, onSwipe, isTop }: SwipeCardProps) {
         </motion.div>
 
         <div className="absolute left-4 right-4 top-4 z-20 flex items-center justify-between gap-3">
-          <div className="inline-flex items-center gap-2 rounded-[1rem] border-4 border-[#111111] bg-[#fffaf2] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#111111] shadow-[4px_4px_0_0_rgba(17,17,17,1)]">
-            <ShieldCheck size={15} className="text-[#ff4f00]" />
-            {verifiedLabel}
+          <div className="inline-flex">
+            {verificationTier !== 'unverified' ? (
+              <VerifiedBadge tier={verificationTier} size="sm" />
+            ) : (
+              <div className="inline-flex items-center gap-1.5 rounded-full border-2 border-[#111111]/30 bg-[#fffaf2]/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#5c594f]">
+                {profile.verificationLevel || 'Unverified'}
+              </div>
+            )}
           </div>
           {profile.intent && (
             <div className="rounded-[1rem] border-4 border-[#111111] bg-[#ff4f00] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)]">
