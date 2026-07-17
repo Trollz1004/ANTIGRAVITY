@@ -129,6 +129,58 @@ async def impact_metrics(db: AsyncSession = Depends(get_db)):
     return await _impact_payload(db)
 
 
+@router.get(
+    "/metrics/founding-members", dependencies=[Depends(_require_metrics_key)]
+)
+async def founding_member_funnel(db: AsyncSession = Depends(get_db)):
+    """Report progress toward the first 50 real founding-member conversions.
+
+    Sourced from RevenueAllocation rows with a confirmed Square receipt
+    (has_square_receipt=True) and payment_tier='founding_member' — never
+    seeded/mock data.
+    """
+    target = 50
+    base = select(RevenueAllocation).where(
+        RevenueAllocation.payment_tier == "founding_member",
+        RevenueAllocation.has_square_receipt.is_(True),
+    )
+
+    total = await _count(
+        db,
+        select(func.count()).select_from(base.subquery()),
+    )
+
+    rows = (
+        (
+            await db.execute(
+                base.order_by(RevenueAllocation.created_at.asc()).limit(target)
+            )
+        )
+        .scalars()
+        .all()
+    )
+
+    conversions = [
+        {
+            "sequence": index + 1,
+            "user_id": str(row.user_id) if row.user_id else None,
+            "square_payment_id": row.square_payment_id,
+            "gross_amount_cents": row.gross_amount_cents,
+            "converted_at": row.created_at.isoformat(),
+        }
+        for index, row in enumerate(rows)
+    ]
+
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "target": target,
+        "confirmed_conversions": total,
+        "remaining_to_target": max(target - total, 0),
+        "target_reached": total >= target,
+        "conversions": conversions,
+    }
+
+
 @router.get("/metrics/security-audit", dependencies=[Depends(_require_metrics_key)])
 async def security_audit_metrics():
     """Expose a minimal aggregate security status for ops dashboards."""
