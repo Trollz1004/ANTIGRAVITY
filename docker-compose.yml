@@ -25,28 +25,6 @@ services:
       retries: 3
       start_period: 30s
 
-  hermes-dashboard:
-    image: nousresearch/hermes-agent:latest
-    container_name: hermes-dashboard
-    command: hermes dashboard
-    ports:
-      - "127.0.0.1:9119:9119"
-    environment:
-      - DASHBOARD_HOST=0.0.0.0
-      - DASHBOARD_PORT=9119
-    volumes:
-      - hermes-data:/root/.hermes
-    depends_on:
-      hermes-agent:
-        condition: service_healthy
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9119/api/status"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-
   hermes-workspace:
     build:
       context: ./hermes
@@ -59,7 +37,6 @@ services:
       - PORT=3000
       - HOST=0.0.0.0
       - HERMES_API_URL=http://hermes-agent:8642
-      - HERMES_DASHBOARD_URL=http://hermes-dashboard:9119
       - HERMES_PASSWORD=${HERMES_PASSWORD:-antigravity}
       - COOKIE_SECURE=0
       - TRUST_PROXY=1
@@ -67,8 +44,6 @@ services:
       - hermes-workspace-data:/app/dist
     depends_on:
       hermes-agent:
-        condition: service_healthy
-      hermes-dashboard:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
@@ -233,6 +208,30 @@ services:
       start_period: 15s
     profiles:
       - wrangler
+
+  hermes-mcp:
+    build:
+      context: ./hermes/mcp-server
+      dockerfile: Dockerfile
+    container_name: hermes-mcp
+    ports:
+      - "127.0.0.1:8700:8700"
+    env_file:
+      - .env.docker
+    environment:
+      - MCP_OAUTH_SECRET=${MCP_OAUTH_SECRET}
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=8700
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/app/repo:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8700/mcp"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 volumes:
   openclaw_wwebjs:
