@@ -1,0 +1,54 @@
+{
+  "name": "grok-agent",
+  "description": "Grok (xAI) adapter — Founding Four co-founder. Adversarial red-team review, X/x.com real-time engagement, doctrine drift audit. Auth via x.AI Builder browser OAuth (preferred, no API key) with OpenRouter free fallback.",
+  "runtime": "windows",
+  "binary": "opencode",
+  "command": "opencode --provider hermes-router --model \"grok-4.5\" --print \"$TASK\"",
+  "paperclip_role": "Adversarial reviewer + X platform engagement (Founding Four protected)",
+  "primary_route": {
+    "kind": "xai_builder_browser_oauth",
+    "note": "Auth-only, no key exposed. See GROK.md for canonical auth flow."
+  },
+  "fallback_routes": [
+    {
+      "kind": "openrouter",
+      "auth": "OPENROUTER_API_KEY env var",
+      "model": "x-ai/grok-3:free",
+      "when": "x.AI Builder session unavailable"
+    },
+    {
+      "kind": "hermes_router",
+      "auth": "router-auth (localhost:11435)",
+      "model": "hermes-router/grok-4.5",
+      "when": "Both above unavailable"
+    }
+  ],
+  "providers": {
+    "xai_builder": {
+      "auth": "browser OAuth sign-in only, NO API key",
+      "models": ["grok-4", "grok-4-mini", "grok-4-reasoning"]
+    },
+    "openrouter": {
+      "auth": "OPENROUTER_API_KEY env var",
+      "free_models": ["x-ai/grok-3:free", "x-ai/grok-3-mini:free"]
+    },
+    "hermes_router": {
+      "auth": "router-auth (local proxy on :11435)",
+      "models": ["hermes-router/grok-4.5"]
+    }
+  },
+  "protected_status": {
+    "tier": "founding_four",
+    "rules": [
+      "no demotion, replacement, wrapping, or rerouting",
+      "primary X work must use direct x.AI Builder auth (not hermes-router)",
+      "XAI_API_KEY reserved for programmatic fallback only"
+    ]
+  },
+  "hard_boundaries": [
+    "no code execution — route to Codex/OpenCode for code tasks",
+    "no Meta platform work (Manus domain) or Google work (Gemini domain)",
+    "no canonical-7 banned terms on customer-facing X surfaces",
+    "never echo XAI_API_KEY or GROK_API_KEY"
+  ]
+}

@@ -17,8 +17,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY ./app /app/app
-COPY ./alembic.ini /app/alembic.ini
-COPY ./alembic /app/alembic
 
 # Create non-root user
 RUN addgroup -S appuser && adduser -S appuser -G appuser
@@ -28,10 +26,14 @@ USER appuser
 # Expose port
 EXPOSE 8000
 
-# Healthcheck
+# Healthcheck — uses /api/v1/health (handles DB + Redis status)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
+    CMD curl -f http://localhost:8000/api/v1/health || exit 1
 
-# Cloud Run compatible — uses $PORT env or defaults to 8000
-# Run Alembic migrations before starting the app
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Cloud Run compatible — uses $PORT env or defaults to 8000.
+# Schema reconciliation runs inside app lifespan (reconcile_legacy_schema).
+# alembic is NOT run here — it caused container restart loops when DB timing
+# or migration state didn't align (alembic failure → uvicorn never starts →
+# healthcheck fails → Docker restart loop). Run migrations manually or via
+# a separate init container when needed.
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

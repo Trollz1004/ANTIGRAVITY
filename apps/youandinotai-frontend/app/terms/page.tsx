@@ -45,7 +45,7 @@ export default function TermsPage() {
   return (
     <main className="min-h-screen bg-[#fff7ed] px-4 py-10 text-slate-950 sm:px-6 lg:px-8">
       <section className="mx-auto max-w-4xl rounded-[2.4rem] border-4 border-slate-950 bg-white p-6 shadow-[10px_10px_0_0_rgba(15,23,42,1)] md:p-10">
-        <p className="text-xs font-black uppercase tracking-[0.22em] text-red-600">
+        <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-400">
           YouAndINotAI
         </p>
         <h1 className="mt-3 text-4xl font-black tracking-[-0.08em] md:text-6xl">
@@ -74,6 +74,7 @@ export default function TermsPage() {
           <a
             href="/"
             className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-white"
+            aria-label="Back to YouAndINotAI app"
           >
             Back to app
           </a>

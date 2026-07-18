@@ -1,71 +1,66 @@
-# Q3 2026 Content Calendar - YouAndINotAI
+# Q3 2026 Content Calendar — YouAndINotAI
+
+**Doctrine:** Product-first, business-only. No charity/donation language.
 
 ## Core Themes
 
-- Human Connection Over Digital Substitutes
-- Local Community Spotlight
-- Shared Experiences & Genuine Moments
-- Volunteer Impact Stories
-- Real-World Meetup Highlights
+- Verification as the product differentiator
+- Bot-Shield and trust infrastructure
+- Safety tools as core features (not afterthoughts)
+- Prompt-first matching vs. swipe fatigue
+- Build-in-public transparency
+- Founding Member value and locked pricing
 
 ## Key Messaging Points
 
-- "Connect Where It Counts"
-- "Meet People Who Give a Damn"
-- "Real Relationships Start Offline"
-- "Your Community Needs You"
-- "Good Things Happen When People Show Up"
+- "Real profiles before real dates"
+- "Every profile is human-verified"
+- "Prompt-first matching = better conversations"
+- "Safety tools visible on every screen"
+- "Founding Member pricing locked forever"
 
 ## Content Types & Distribution Schedule
 
 ### Weekly Features
 
-- **Monday**: Community Hero Monday (Spotlight local volunteers/members)
-- **Wednesday**: Event Highlight Wednesday (Preview upcoming meetups)
-- **Friday**: Feature Friday (User-generated content from real events)
+- **Monday**: Product Feature Monday (Bot-Shield, Plans, Safety, Matching)
+- **Wednesday**: Industry Wednesday (dating app problems, verification gaps)
+- **Friday**: Building Friday (dev updates, feature ships, transparent stats)
 
 ### Monthly Deep Dives
 
-- **Month 1**: "Volunteer Impact Report" - Showcase actual community service outcomes
-- **Month 2**: "Member Success Story" - Feature long-term relationships formed offline
-- **Month 3**: "Neighborhood Spotlight" - Highlight different local communities served
+- **Month 1**: "How Bot-Shield Verification Works"
+- **Month 2**: "The Dating App Bot Problem — By the Numbers"
+- **Month 3**: "Building a Dating App Without VC Money"
 
-## Channels & Platforms
+## Q3 Monthly Focus
 
-- Instagram (Stories, Reels, Posts)
-- Facebook (Events, Community Groups)
-- Newsletter (Weekly Roundup)
-- Blog (Long-form stories)
-- TikTok (Event Teasers, Community Challenges)
+### July: Verification Launch
+- Bot-Shield rollout content
+- Early member onboarding
+- Founding Member access campaign
 
-## July Focus: Summer of Service
+### August: Trust & Safety
+- Safety feature walkthroughs
+- Privacy and data handling explainers
+- Member testimonials on safety value
 
-- Emphasis on outdoor volunteer opportunities
-- Highlight summer youth programs supported
-- Showcase family-friendly meetup events
-
-## August Focus: Back to School Community Support
-
-- Feature educational volunteer opportunities
-- Highlight mentorship programs
-- Promote family engagement events
-
-## September Focus: Harvest Season Giving
-
-- Showcase fall harvest volunteer events
-- Highlight gratitude and community appreciation
-- Promote end-of-year giving campaigns (revenue-sharing for good)
+### September: Growth & Retention
+- Matching quality stories
+- Product roadmap previews
+- Referral program activation
 
 ## Success Metrics
 
-- Actual attendance at promoted events
-- Number of new members joining local groups
-- Volunteer hours contributed by community
-- Stories/shared moments captured offline
-- Platform reviews mentioning real-world connections
+- Verification starts and completion rate
+- Founding Member signups
+- Member match count (self-reported)
+- Support contact volume (aiming low via clear copy)
+- 30-day retention of paying members
 
 ## Florida Compliance Reminder
 
 - NEVER use "donate", "donation", or "solicitation" in ANY content
-- ALWAYS use "contractual revenue disbursement", "revenue-sharing for good", or "platform that gives back"
-- Reference platform supporting kids as a feature, not a charity pitch
+- No charity/non-profit framing on customer surfaces
+- Support for youth programs referenced only in legal/terms pages
+- All revenue described as product access transactions

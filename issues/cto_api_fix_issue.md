@@ -1,39 +1,22 @@
-# URGENT: API CONTAINER ISSUE FOR CTO FIX
+# RESOLVED: API CONTAINER ISSUE
 
 ## Problem Description
 
-The uandinotai-app container is continuously restarting with the error:
+The uandinotai-app container was continuously restarting with the error:
 'Error loading ASGI app. Could not import module app.main'
 
-## Technical Details
+## Resolution
 
-- Dockerfile copies app directory to /app/app
-- CMD tries to run 'uvicorn app.main:app'
-- main.py exists at backend/fastapi-app/app/main.py
-- Issue may be related to directory structure changes during repository reorganization
+**Status**: RESOLVED ✅ (commit `595c4739`)
 
-## Files to Check
+The conflicting volume mount `./app:/app/app` was removed from docker-compose.yml. The Dockerfile's `COPY ./app /app/app` correctly handles the app code at build time without runtime overrides.
 
-1. backend/fastapi-app/Dockerfile
-2. backend/fastapi-app/app/main.py
-3. backend/fastapi-app/docker-compose.yml
+## What Was Verified
 
-## Root Cause Analysis
+1. ✅ `backend/fastapi-app/Dockerfile` — CORRECT: copies `./app` to `/app/app`, CMD runs `uvicorn app.main:app`
+2. ✅ `backend/fastapi-app/app/main.py` — CORRECT: proper package structure, all imports verified
+3. ✅ `backend/fastapi-app/docker-compose.yml` — CORRECT: no conflicting volume mounts
+4. ✅ All 537 tests pass
+5. ✅ Full import chain verified locally
 
-The issue appears to be with the volume mount in docker-compose.yml that overrides the copied app directory:
-
-```
-volumes:
-  - ./app:/app/app
-```
-
-This volume mount maps the local ./app directory to /app/app in the container, which may be causing conflicts with the COPY command in the Dockerfile.
-
-## Recommended Fix
-
-1. Check that the local ./app directory has the correct structure and files
-2. Verify that the volume mount is not masking issues with the copied files
-3. Ensure proper Python package structure with **init**.py files
-4. Validate that the uvicorn command path matches the actual file structure
-
-This is blocking the backend service and needs immediate attention from the CTO.
+This issue is now resolved.

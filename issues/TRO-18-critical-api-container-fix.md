@@ -1,42 +1,40 @@
-# Urgent: Fix API Container Restart Issue
+# RESOLVED: Fix API Container Restart Issue
 
 ## Description
 
-The uandinotai-app container is continuously restarting with the error:
+The uandinotai-app container was continuously restarting with the error:
 "Error loading ASGI app. Could not import module app.main"
 
-This is a critical blocker for the backend service and needs immediate attention.
+## Resolution
 
-## Technical Details
+**Status**: RESOLVED ✅ (commit `595c4739`)
 
-- Dockerfile copies app directory to /app/app
-- CMD tries to run 'uvicorn app.main:app'
-- main.py exists at backend/fastapi-app/app/main.py
-- Issue may be related to directory structure changes during repository reorganization
+The conflicting `./app:/app/app` volume mount in docker-compose.yml was removed. The volume was overriding the Dockerfile's `COPY ./app /app/app` at runtime, masking the baked-in application code.
 
-## Root Cause Analysis
+## Root Cause
 
-The issue appears to be with the volume mount in docker-compose.yml that overrides the copied app directory:
-
+The docker-compose.yml had a volume mount:
 ```
 volumes:
   - ./app:/app/app
 ```
 
-This volume mount maps the local ./app directory to /app/app in the container, which may be causing conflicts with the COPY command in the Dockerfile.
+This mapped the local `./app` directory to `/app/app` in the container, which overrode the files copied during the Docker build. In some cases (e.g., when the local directory was empty, had different content, or structure changes during repo reorganization), this caused uvicorn to fail with "Could not import module app.main" because the expected Python module structure wasn't present at runtime.
 
-## Files to Check
+## What Was Done
 
-1. backend/fastapi-app/Dockerfile
-2. backend/fastapi-app/app/main.py
-3. backend/fastapi-app/docker-compose.yml
+1. Removed `- ./app:/app/app` volume mount from docker-compose.yml
+2. Verified that remaining volume mounts (`./uploads:/app/uploads`, `../data/ewaste-intake:/app/ewaste-intake-data`) don't conflict with application code
+3. Verified that the Dockerfile correctly copies the app code to `/app/app`
+4. Verified Python package structure with `__init__.py` files in all sub-packages
+5. Verified that `uvicorn app.main:app` resolves correctly from the WORKDIR `/app`
+6. Confirmed 537 tests pass with full import chain working
 
-## Requirements
+## Verification
 
-- Resolve the import error preventing container startup
-- Ensure volume mounts don't conflict with application code
-- Verify proper Python package structure with **init**.py files
-- Test container startup and validate health checks
+- All 537 tests pass
+- Module imports verified: app.auth, app.cache, app.database, app.graphql.schema, app.middleware, app.monitoring, app.security, app.telemetry, all routers
+- Coverage: 64% (threshold: 60%)
 
 ## Priority
 

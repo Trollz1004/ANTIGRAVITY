@@ -1,0 +1,118 @@
+<!-- @dsCard group="Surfaces" viewport="1100x820" name="AI Solutions Store — Product catalog" subtitle="Production AI apps · ANTIGRAVITY skin · Stripe checkout" -->
+<!-- @startingPoint section="Surfaces" subtitle="Storefront for AI automation products — catalog, implementation tiers, admin console" viewport="1100x900" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Solutions Store · Production AI Apps</title>
+<link rel="icon" href="../assets/logo/logo-favicon-32.png" />
+<link rel="stylesheet" href="../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.456.0/dist/umd/lucide.min.js"></script>
+<script src="../_ds_bundle.js"></script>
+<style>
+  body { margin:0; background:var(--ag-bg); }
+  .product-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--ag-space-4); }
+  .product-card { display:flex; flex-direction:column; }
+  .product-card .tag { align-self:flex-start; }
+  .product-card ul { padding-left:var(--ag-space-4); color:var(--ag-text-body); font-size:var(--ag-text-sm); line-height:1.7; }
+  .product-card .btn { margin-top:auto; }
+  .badge-gold { background:rgba(233,185,73,0.15); color:var(--ag-gold); border:1px solid rgba(233,185,73,0.3); border-radius:var(--ag-radius-sm); padding:0 var(--ag-space-2); font-size:var(--ag-text-3xs); font-weight:var(--ag-weight-black); text-transform:uppercase; letter-spacing:var(--ag-tracking-widest); }
+  .impl-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--ag-space-4); }
+  @media(max-width:800px) { .product-grid, .impl-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const NS = window.ANTIGRAVITYDesignSystem_58589b;
+function I({ name, size=18, color='currentColor' }) {
+  const r = React.useRef(null);
+  React.useEffect(() => { if (r.current && window.lucide) { r.current.innerHTML=''; const e=document.createElement('i'); e.setAttribute('data-lucide',name); r.current.appendChild(e); window.lucide.createIcons({ attrs:{ width:size, height:size, stroke:color, 'stroke-width':2 }, nameAttr:'data-lucide' }); } });
+  return <span ref={r} style={{ display:'inline-flex', width:size, height:size }} />;
+}
+
+const PRODUCTS = [
+  { id:'bot-shield', name:'BotShield Checkout Guard', tag:'Security', price:'$299', cadence:'one-time', desc:'Hardened intake and checkout protection. Bot heuristics, rate controls, receipt-linked buyer records, admin review trail.', features:['bot heuristics + rate controls','receipt-linked buyer records','admin review trail'], stripe:'https://buy.stripe.com/3cI3cwcR6c3910p18peEo09' },
+  { id:'founding-stack', name:'Founding Member Stack', tag:'Founder', price:'$499', cadence:'one-time', desc:'Access pass for the core AI app catalog plus private update drops as the platform expands.', features:['member license key','release channel access','priority onboarding queue'], stripe:'https://buy.stripe.com/00w8wQaIYgjp5gF2cteEo0a', featured:true },
+  { id:'content-droid', name:'Content Droid Suite', tag:'Automation', price:'$799', cadence:'one-time', desc:'Multi-platform content generation and syndication for teams that need consistent output across channels.', features:['multi-platform generation','bulk schedule + publish','analytics dashboard'], stripe:'#' },
+  { id:'agent-ops', name:'Agent Operations Kit', tag:'Infrastructure', price:'$999', cadence:'one-time', desc:'Deploy and monitor autonomous AI agents with logging, task queuing, and safety guards.', features:['agent lifecycle management','task queue + retry logic','safety guardrails'], stripe:'#' },
+  { id:'white-label', name:'White-Label Modules', tag:'Enterprise', price:'Custom', cadence:'', desc:'Rebrandable versions of core products for agencies and integrators. Includes source access.', features:['full source access','custom branding','deployment support'], stripe:'#' },
+  { id:'human-verify', name:'Human Verification Layer', tag:'Private', price:'Private', cadence:'', desc:'Enterprise-grade verification infrastructure for platforms that need proven-human guarantees.', features:['selfie + liveness check','identity scoring','audit log export'], stripe:'#' },
+];
+
+const TIERS = [
+  { name:'3-Month Implementation Pass', price:'$2,500', blurb:'Verified install, configuration, and handoff for one product. Includes remote screen-share sessions, environment review, deployment wiring, and a close-out summary.', tag:'Popular' },
+  { name:'12-Month Implementation Pass', price:'$7,500', blurb:'Full-year deployment partnership. Up to 6 product installs, quarterly architecture reviews, priority support, and dedicated engineer access for custom integrations.', tag:'Best Value', featured:true },
+];
+
+function App() {
+  const { GlassPanel, MonoLabel, Button, Badge, StatCard, StatusPill } = NS;
+  return <>
+    <div style={{ position:'fixed', inset:0, zIndex:0, pointerEvents:'none', opacity:0.12, background:'radial-gradient(circle at 75% 10%, rgba(110,231,249,0.25), transparent 40%), radial-gradient(circle at 25% 80%, rgba(167,139,250,0.15), transparent 40%)' }} />
+    <div style={{ position:'relative', zIndex:1, maxWidth:'var(--ag-container-xl)', margin:'0 auto', padding:'var(--ag-space-8) var(--ag-space-6)', display:'flex', flexDirection:'column', gap:'var(--ag-space-10)' }}>
+      <GlassPanel>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:'var(--ag-space-4)', padding:'var(--ag-space-4) var(--ag-space-6)' }}>
+          <div>
+            <MonoLabel>AI Solutions Store</MonoLabel>
+            <h1 style={{ fontSize:'var(--ag-text-3xl)', fontWeight:'var(--ag-weight-black)', letterSpacing:'var(--ag-tracking-tighter)', margin:'var(--ag-space-2) 0 0', color:'var(--ag-text)' }}>Production AI automation, <span class="ag-brand-heading">ready for your stack.</span></h1>
+          </div>
+          <Button tone="cyan" href="#catalog">Browse catalog</Button>
+        </div>
+      </GlassPanel>
+
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'var(--ag-space-3)' }}>
+        {[{ label:'Verified', value:'receipt-linked keys' }, { label:'Premium', value:'deployment-ready' }, { label:'Auditable', value:'full purchase trail' }, { label:'Support', value:'implementation options' }].map(s => <StatCard key={s.label} label={s.label} value={s.value} />)}
+      </div>
+
+      <section id="catalog">
+        <div style={{ marginBottom:'var(--ag-space-6)' }}>
+          <h2 style={{ fontSize:'var(--ag-text-2xl)', fontWeight:'var(--ag-weight-black)', letterSpacing:'var(--ag-tracking-tighter)', margin:0, color:'var(--ag-text)' }}>Production catalog</h2>
+          <p style={{ color:'var(--ag-text-body)', margin:'var(--ag-space-2) 0 0', maxWidth:540 }}>Focused, deployment-ready products. Choose implementation passes when you want verified install and handoff for your environment.</p>
+        </div>
+        <div className="product-grid">
+          {PRODUCTS.map(p => <GlassPanel key={p.id}><div className="product-card" style={{ padding:'var(--ag-space-5)' }}>
+            <div style={{ display:'flex', gap:'var(--ag-space-2)', marginBottom:'var(--ag-space-3)' }}>
+              <StatusPill tone={p.featured ? 'gold' : 'cyan'}>{p.tag}</StatusPill>
+              {p.featured && <StatusPill tone="gold">Featured</StatusPill>}
+            </div>
+            <h3 style={{ fontSize:'var(--ag-text-lg)', fontWeight:'var(--ag-weight-black)', margin:'0 0 var(--ag-space-1)', color:'var(--ag-text)' }}>{p.name}</h3>
+            <MonoLabel>{p.cadence || 'Custom pricing'}</MonoLabel>
+            <p style={{ color:'var(--ag-text-body)', fontSize:'var(--ag-text-sm)', lineHeight:1.6, margin:'var(--ag-space-2) 0 var(--ag-space-3)' }}>{p.desc}</p>
+            <ul>{p.features.map(f => <li key={f}>{f}</li>)}</ul>
+            <div style={{ display:'flex', alignItems:'baseline', gap:'var(--ag-space-2)', margin:'var(--ag-space-4) 0 var(--ag-space-3)' }}>
+              <span style={{ fontSize:'var(--ag-text-3xl)', fontWeight:'var(--ag-weight-black)', letterSpacing:'var(--ag-tracking-tighter)', color:'var(--ag-text)' }}>{p.price}</span>
+            </div>
+            <Button tone="cyan" href={p.stripe}>Buy with Stripe</Button>
+          </div></GlassPanel>)}
+        </div>
+      </section>
+
+      <section>
+        <GlassPanel style={{ padding:'var(--ag-space-6)' }}>
+          <h2 style={{ fontSize:'var(--ag-text-2xl)', fontWeight:'var(--ag-weight-black)', letterSpacing:'var(--ag-tracking-tighter)', margin:'0 0 var(--ag-space-4)', color:'var(--ag-text)' }}>Implementation passes</h2>
+          <div className="impl-grid">
+            {TIERS.map(t => <div key={t.name} style={{ padding:'var(--ag-space-5)', borderRadius:'var(--ag-radius-2xl)', border:t.featured ? '1px solid rgba(233,185,73,0.4)' : '1px solid var(--ag-border)', background:t.featured ? 'rgba(233,185,73,0.06)' : 'transparent' }}>
+              {t.featured && <StatusPill tone="gold" style={{ marginBottom:'var(--ag-space-2)' }}>{t.tag}</StatusPill>}
+              <h3 style={{ fontSize:'var(--ag-text-xl)', fontWeight:'var(--ag-weight-black)', margin:'0 0 var(--ag-space-1)', color:'var(--ag-text)' }}>{t.name}</h3>
+              <span style={{ fontSize:'var(--ag-text-3xl)', fontWeight:'var(--ag-weight-black)', letterSpacing:'var(--ag-tracking-tighter)', color:'var(--ag-gold)' }}>{t.price}</span>
+              <p style={{ color:'var(--ag-text-body)', fontSize:'var(--ag-text-sm)', lineHeight:1.6, margin:'var(--ag-space-2) 0 var(--ag-space-4)' }}>{t.blurb}</p>
+              <Button tone="cyan" href="#">Get started</Button>
+            </div>)}
+          </div>
+        </GlassPanel>
+      </section>
+
+      <footer style={{ textAlign:'center', padding:'var(--ag-space-6) 0 0', borderTop:'1px solid var(--ag-border)' }}>
+        <MonoLabel>Payments are processed by Stripe. All purchases are product access transactions.</MonoLabel>
+      </footer>
+    </div>
+  </>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

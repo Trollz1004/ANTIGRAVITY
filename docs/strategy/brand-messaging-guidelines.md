@@ -1,76 +1,126 @@
 # YouAndINotAI Brand Messaging Guidelines
 
+**Doctrine:** Business-only. Sell membership, verification, safety, support, uptime, matching quality. No charity/donation language.
+
 ## Core Positioning Statement
 
-YouAndINotAI is a social platform for good — connecting people through real-world meetups, volunteering, and genuine human connection. We're not just another dating app; we're building communities of people who care.
+YouAndINotAI is a verified-first dating platform where every profile passes a human check. Bot-Shield stops bots. Prompt-first matching starts better conversations. Safety tools stay visible on every screen.
+
+**Core Hook:** Real profiles before real dates.
 
 ## Key Messaging Pillars
 
-### 1. Community Over Compatibility
+### 1. Verification Is the Product
 
-**DO**: "We connect people who give a damn about their community"
-**DON'T**: "Find your perfect match with our algorithm"
+**DO**: "Every profile you see is human-verified. Selfie check. Behavior signals. Bot-Shield active."
 
-### 2. Real-World Action Over Digital Swiping
+**DON'T**: "We guarantee 100% safety" or "We keep you completely safe"
 
-**DO**: "Meet people who show up, not just swipe"
-**DON'T**: "Thousands of potential matches at your fingertips"
+### 2. Prompt-First, Not Swipe-First
 
-### 3. Shared Purpose Over Personal Gain
+**DO**: "Like or comment on a specific prompt, photo, or interest. The first message has context."
 
-**DO**: "Find people passionate about the same causes you care about"
-**DON'T**: "Expand your network with like-minded individuals"
+**DON'T**: "Our algorithm finds your perfect match" or "Thousands of compatible singles"
 
-### 4. Volunteer Impact Over Profile Perfection
+### 3. Safety Tools, Visible Always
 
-**DO**: "See the difference you're making in your community"
-**DON'T**: "Showcase your best qualities in your profile"
+**DO**: "Report, block, restrict, freeze, and support are reachable from every profile and chat."
 
-### 5. Genuine Connections Over Artificial Urgency
+**DON'T**: "We moderate everything" or "You're protected at all times"
 
-**DO**: "Build meaningful relationships that last"
-**DON'T**: "Don't miss out on your soulmate"
+### 4. Membership That Stays Locked
 
-## Florida Compliance Terms (Legal Requirement)
+**DO**: "Founding Member pricing never increases. Lock it at signup."
 
-**NEVER use**:
+**DON'T**: "Invest in the platform" or "Early backers get returns"
 
-- Donate
-- Donation
-- Solicitation
+### 5. Real Support That Answers
 
-**ALWAYS use instead**:
+**DO**: "In-app help center with email response within 24 hours and clear escalation."
 
-- Contractual revenue disbursement
-- Revenue-sharing for good
-- Platform that gives back
+**DON'T**: "24/7 live support" or "Instant response always"
 
-Reference to platform supporting kids:
+## Florida Compliance (Required)
 
-- Frame as a feature: "Built-in support for youth programs"
-- Not as a charity pitch: "We're not a charity, but we do support kids as part of our mission"
+**NEVER use:**
+- Donate / Donation / Solicitation
+- Charity / Charitable
+- Non-profit language in customer-facing copy
+
+**Approved alternatives:**
+- "Support" (not donate)
+- "Platform access" (not charitable contribution)
+- "Membership benefits" (not impact claims)
+- Verified human connection / Bot-Shield verification / account-bound checkout
+
+**Court-ordered support:** Reference only in legal/terms pages. Never as marketing copy.
 
 ## Tone of Voice
 
-- Warm, not corporate
-- Conversational, not formal
-- Encouraging, not pushy
-- Realistic, not hyperbolic
+- Direct, not corporate
+- Honest, not hyperbolic
+- Product-focused, not mission-focused
+- Warm, not pushy
+- Transparent about being early stage
 
 ## Sample Messaging
 
-### Website Headline
+### Website Hero
 
-"We connect people who give a damn—with real events where you actually meet others who care about your community."
+"Real profiles. Zero bot noise. Prompt-first matching with verified humans only."
 
-### Social Media Post
+### Feature Card
 
-"Tonight at 7 PM: Join us at Riverside Park for our neighborhood cleanup. Bring friends, bring family, just show up! #CommunityFirst #VolunteerLife"
+"Selfie verification, account status, and visible trust cues make real people easier to spot before matching."
 
-### Email Subject Line
+### Social Post
 
-"You're invited to Saturday's food bank shift—neighbors helping neighbors"
+"Every profile in your discovery lane passed a human check. Bot-Shield catches the rest. Verified dating starts here."
 
-### App Onboarding Text
+### Email Subject
 
-"Welcome to YouAndINotAI! Before you start connecting digitally, check out our real-world events happening near you this week."
+"You're verified. Start matching with real humans."
+
+### App Onboarding
+
+"Verify your profile to enter the discovery lane. Selfie check takes under 3 minutes."
+
+### CTA Buttons
+
+- "Get Verified" → Bot-Shield verification flow
+- "See Pricing" → Membership tiers
+- "View Safety Tools" → Feature overview
+- "Contact Support" → Help center
+
+## Approved Copy Patterns
+
+### Trust-First Pattern
+
+[TRUST SIGNAL] + [PLATFORM FEATURE] + [USER OUTCOME]
+
+"Every profile is verified. Bot-Shield stops bots. You match with real humans only."
+
+### Feature-Benefit Pattern
+
+[FEATURE] + [WHAT IT DOES] + [WHY IT MATTERS]
+
+"Prompt-first matching. Comment on what interests you. Better conversations from the first message."
+
+## Prohibited Copy
+
+| Phrase | Why Banned | Use Instead |
+|--------|------------|-------------|
+| Donate / Donation | FL §496.405 violation | "Support" |
+| Solicitation | FL §496.405 violation | "Invite" / "Ask" |
+| 100% safe / completely safe | Unverifiable guarantee | "Safety tools available" |
+| Perfect match / soulmate | Hyperbolic, unproven | "Compatible humans" |
+| Thousands of matches | Unverified claim at early stage | "Real profiles, verified" |
+| Invest / investor / returns | Implies non-product financial claim | "Member" / "Subscription" |
+
+## Review Process
+
+1. All copy reviewed by CEO before publishing
+2. No claims about features not yet live (coordinate with CTO)
+3. No comparison claims about competitors without legal review
+4. No charity, donation, or non-profit framing on customer surfaces
+5. All pricing mentioned as product access transactions

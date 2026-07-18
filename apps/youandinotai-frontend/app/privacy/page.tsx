@@ -41,7 +41,7 @@ export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-[#020617] px-4 py-10 text-slate-100 sm:px-6 lg:px-8">
       <section className="mx-auto max-w-4xl rounded-[2.4rem] border border-slate-800 bg-slate-950 p-6 shadow-2xl md:p-10">
-        <p className="text-xs font-black uppercase tracking-[0.22em] text-blue-400">
+        <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-400">
           YouAndINotAI
         </p>
         <h1 className="mt-3 text-4xl font-black tracking-[-0.08em] md:text-6xl">
@@ -69,7 +69,8 @@ export default function PrivacyPage() {
         <div className="mt-8 flex flex-wrap gap-3">
           <a
             href="/"
-            className="rounded-2xl bg-blue-500 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-white"
+            className="rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-white"
+            aria-label="Back to YouAndINotAI app"
           >
             Back to app
           </a>

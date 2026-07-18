@@ -1,0 +1,119 @@
+<!-- @dsCard group="Surfaces" viewport="1100x820" name="OnlineRecycle.org — Electronics Recycling" subtitle="Central Florida e-waste · ANTIGRAVITY skin · Scheduling UI" -->
+<!-- @startingPoint section="Surfaces" subtitle="Electronics recycling service — drop-off, pickup, secure device handling" viewport="1100x900" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OnlineRecycle.org · Florida Electronics Recycling</title>
+<link rel="icon" href="../assets/logo/logo-favicon-32.png" />
+<link rel="stylesheet" href="../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.456.0/dist/umd/lucide.min.js"></script>
+<script src="../_ds_bundle.js"></script>
+<style>
+  body { margin:0; background:var(--ag-bg); color:var(--ag-text); }
+  .hero-section { text-align:center; padding:var(--ag-space-12) 0 var(--ag-space-6); }
+  .service-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--ag-space-4); }
+  .faq-item { border-bottom:1px solid var(--ag-border); padding:var(--ag-space-3) 0; }
+  .faq-item:last-child { border-bottom:0; }
+  @media(max-width:768px) { .service-grid { grid-template-columns:1fr; } .hero-section { padding:var(--ag-space-6) 0; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const NS = window.ANTIGRAVITYDesignSystem_58589b;
+const { GlassPanel, MonoLabel, Button, Badge, StatCard, StatusPill } = NS;
+
+const SERVICES = [
+  { id:'drop-off', title:'Free Drop-Off', icon:'map-pin', desc:'Bring your devices to our Central Florida location. We accept computers, phones, tablets, monitors, printers, cables, and most household electronics.', hours:'Mon–Fri 9a–5p · Sat 9a–12p', note:'No appointment needed' },
+  { id:'pickup', title:'Free Pickup', icon:'truck', desc:'Within a 30-mile radius of Sorrento, FL. We collect from your home or small business. Minimum 5 items for pickup.', hours:'Tue & Thu · 10a–4p', note:'Schedule via call or text' },
+  { id:'secure', title:'Secure Handling', icon:'shield', desc:'All drives shredded or wiped to DoD 5220.22-M standards. Certificates of destruction provided for business accounts.', hours:'N/A', note:'Data security guaranteed' },
+];
+
+const FAQ = [
+  { q:'What items do you accept?', a:'Desktop and laptop computers, mobile phones, tablets, monitors, printers, cables, keyboards, mice, speakers, gaming consoles, and most consumer electronics. We do not accept large appliances, batteries alone, or hazardous waste.' },
+  { q:'Is there a cost?', a:'Drop-off and pickup within our service area are free for households and small businesses. Large-volume commercial pickups may have a nominal fee. Cash paid for select reusable equipment.' },
+  { q:'How is data handled?', a:'All storage devices are physically destroyed or wiped to DoD 5220.22-M standards. Business clients receive a certificate of destruction.' },
+  { q:'Where are you located?', a:'Sorrento, FL — Lake County. Exact address provided upon booking. We serve all of Central Florida.' },
+  { q:'Do you buy used electronics?', a:'We purchase select reusable devices — recent-model smartphones, laptops, and servers. Call or text for a quote.' },
+];
+
+const CONTACT = { phone:'(321) 396-2008', email:'info@onlinerecycle.org' };
+
+function App() {
+  return <>
+    <div style={{ position:'fixed', inset:0, zIndex:0, pointerEvents:'none', opacity:0.08, background:'radial-gradient(circle at 50% 0%, rgba(52,211,153,0.2), transparent 50%), radial-gradient(circle at 80% 90%, rgba(34,211,238,0.1), transparent 40%)' }} />
+    <div style={{ position:'relative', zIndex:1 }}>
+
+      <GlassPanel style={{ margin:'var(--ag-space-4) var(--ag-space-6)', borderRadius:'var(--ag-radius-2xl)' }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:'var(--ag-space-4)', padding:'var(--ag-space-3) var(--ag-space-5)' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:'var(--ag-space-3)' }}>
+            <span style={{ fontSize:28 }} role="img" aria-label="Recycling symbol">♻️</span>
+            <MonoLabel>OnlineRecycle.org</MonoLabel>
+          </div>
+          <div style={{ display:'flex', flexWrap:'wrap', gap:'var(--ag-space-3)', alignItems:'center' }}>
+            <StatusPill tone="cyan">{CONTACT.phone}</StatusPill>
+            <Button tone="ghost" href="mailto:info@onlinerecycle.org">Email</Button>
+          </div>
+        </div>
+      </GlassPanel>
+
+      <div className="hero-section" style={{ maxWidth:'var(--ag-container-lg)', margin:'0 auto', padding:'var(--ag-space-8) var(--ag-space-6)' }}>
+        <Badge tone="cyan">Central Florida · Est. 2024</Badge>
+        <h1 style={{ fontSize:'clamp(var(--ag-text-3xl), 5vw, var(--ag-text-5xl))', fontWeight:'var(--ag-weight-black)', letterSpacing:'var(--ag-tracking-tighter)', lineHeight:1.1, margin:'var(--ag-space-4) auto var(--ag-space-3)', maxWidth:720, color:'var(--ag-text)' }}>
+          Free electronics recycling for <span style={{ color:'var(--ag-cyan)' }}>Central Florida.</span>
+        </h1>
+        <p style={{ color:'var(--ag-text-body)', fontSize:'var(--ag-text-lg)', maxWidth:520, margin:'0 auto var(--ag-space-5)', lineHeight:1.6 }}>
+          Drop off or schedule a free pickup. Secure device handling. Responsible recycling for homes and small businesses.
+        </p>
+        <div style={{ display:'flex', gap:'var(--ag-space-3)', justifyContent:'center', flexWrap:'wrap' }}>
+          <Button tone="cyan" href={`tel:${CONTACT.phone}`}>Call {CONTACT.phone}</Button>
+          <Button tone="ghost" href="#schedule">Schedule pickup</Button>
+        </div>
+      </div>
+
+      <div style={{ maxWidth:'var(--ag-container-lg)', margin:'0 auto', padding:'0 var(--ag-space-6) var(--ag-space-6)' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'var(--ag-space-3)', marginBottom:'var(--ag-space-10)' }}>
+          <StatCard label="Service area" value="Central Florida · 30-mi radius" />
+          <StatCard label="Response time" value="Same-day for urgent" />
+          <StatCard label="Data standard" value="DoD 5220.22-M" />
+        </div>
+      </div>
+
+      <div style={{ maxWidth:'var(--ag-container-lg)', margin:'0 auto', padding:'0 var(--ag-space-6) var(--ag-space-10)' }}>
+        <h2 style={{ fontSize:'var(--ag-text-2xl)', fontWeight:'var(--ag-weight-black)', letterSpacing:'var(--ag-tracking-tighter)', margin:'0 0 var(--ag-space-6)', color:'var(--ag-text)' }}>How it works</h2>
+        <div className="service-grid">
+          {SERVICES.map(s => <GlassPanel key={s.id}><div style={{ padding:'var(--ag-space-5)' }}>
+            <h3 style={{ fontSize:'var(--ag-text-lg)', fontWeight:'var(--ag-weight-black)', margin:'0 0 var(--ag-space-1)', color:'var(--ag-text)' }}>{s.title}</h3>
+            <MonoLabel>{s.note}</MonoLabel>
+            <p style={{ color:'var(--ag-text-body)', fontSize:'var(--ag-text-sm)', lineHeight:1.6, margin:'var(--ag-space-2) 0 var(--ag-space-2)' }}>{s.desc}</p>
+            <Badge tone="emerald">{s.hours}</Badge>
+          </div></GlassPanel>)}
+        </div>
+      </div>
+
+      <div style={{ maxWidth:'var(--ag-container-lg)', margin:'0 auto', padding:'0 var(--ag-space-6) var(--ag-space-10)' }}>
+        <GlassPanel style={{ padding:'var(--ag-space-6)' }}>
+          <h2 style={{ fontSize:'var(--ag-text-2xl)', fontWeight:'var(--ag-weight-black)', letterSpacing:'var(--ag-tracking-tighter)', margin:'0 0 var(--ag-space-5)', color:'var(--ag-text)' }}>Frequently asked questions</h2>
+          {FAQ.map(item => <div key={item.q} className="faq-item">
+            <h3 style={{ fontSize:'var(--ag-text-base)', fontWeight:'var(--ag-weight-bold)', margin:'0 0 var(--ag-space-1)', color:'var(--ag-text)' }}>{item.q}</h3>
+            <p style={{ color:'var(--ag-text-body)', fontSize:'var(--ag-text-sm)', margin:0, lineHeight:1.6 }}>{item.a}</p>
+          </div>)}
+        </GlassPanel>
+      </div>
+
+      <footer style={{ textAlign:'center', padding:'var(--ag-space-6) var(--ag-space-6)', borderTop:'1px solid var(--ag-border)', maxWidth:'var(--ag-container-lg)', margin:'0 auto' }}>
+        <MonoLabel>OnlineRecycle.org · {CONTACT.phone} · {CONTACT.email}</MonoLabel>
+        <p style={{ color:'var(--ag-text-muted)', fontSize:'var(--ag-text-sm)', margin:'var(--ag-space-2) 0 0' }}>Trash Or Treasure Online Recycler LLC. All rights reserved.</p>
+      </footer>
+    </div>
+  </>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "fdir": "^6.5.0",
+    "paperclipai": "^2026.428.0",
     "typescript": "^6.0.3"
   }
 }

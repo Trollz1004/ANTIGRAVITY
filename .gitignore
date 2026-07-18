@@ -105,3 +105,20 @@ apps/antigravity-dashboard/tsconfig*.tsbuildinfo
 # Nested repo checkouts kept out of the canonical root
 ANTIGRAVITY/
 hermes-workspace/
+
+# Coverage / test residue
+.coverage
+htmlcov/
+.pytest_cache/
+coverage/
+
+# Paperclip runtime exhaust (never commit agent poop trails)
+income-engine/paperclip-data/**/run-logs/
+income-engine/paperclip-data/**/workspace-operation-logs/
+income-engine/paperclip-data/**/memory/
+**/paperclip-data/**/run-logs/
+**/paperclip-data/**/*.ndjson
+
+# Accidental AI dump files
+omniroute/httpsgithub.com*.txt
+**/httpsgithub.com*.txt

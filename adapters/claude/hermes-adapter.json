@@ -1,6 +1,6 @@
 {
   "name": "hermes-dashboard",
-  "description": "Hermes Agent dashboard on port 9119. CEO agent in Paperclip. Routes through Ollama, FCC proxy, OpenRouter.",
+  "description": "Hermes Agent dashboard on port 9119. CEO agent in Paperclip. Routes through ALL cloud providers: OpenCode Zen, Ollama Cloud, OpenRouter free, Grok/xAI, OpenAI/GPT, Codex/Claude. Auth via API keys, OAuth, or CLI login.",
   "runtime": "windows",
   "binary": "C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes.exe",
   "command": "hermes dashboard --port 9119 --host 127.0.0.1 --no-open",
@@ -10,10 +10,53 @@
   "port": 9119,
   "gateway_port": 8642,
   "workspace_port": 3000,
+  "paperclip_role": "CEO — orchestrates sub-agents with cloud models for less local compute",
   "providers": {
-    "ollama": { "base_url": "http://127.0.0.1:11434/v1", "default_model": "jeffreyvandekorput/ultimatekorpo" },
-    "fcc_proxy": { "base_url": "http://127.0.0.1:8082/v1" },
-    "openrouter": { "api_key_env": "OPENROUTER_API_KEY" }
-  },
-  "paperclip_role": "CEO — orchestrates sub-agents in WSL via OpenCode"
+    "opencode_zen": {
+      "auth": "opencode /connect → zen (browser OAuth), or paste API key from opencode.ai/auth",
+      "base_url": "https://api.opencode.ai/v1",
+      "free_models": ["deepseek-v4-flash-free", "hy3-free", "mimo-v2.5-free", "nemotron-3-ultra-free"],
+      "paid_models": ["gpt-5.1-codex", "claude-sonnet-4-5", "claude-opus-4-5", "grok-4.5", "gemini-3-flash"]
+    },
+    "ollama_cloud": {
+      "auth": "OLLAMA_API_KEY env (ollama.com/settings/keys), cloud hosted models",
+      "base_url": "https://ollama.com/v1",
+      "default_model": "glm-5.1:cloud",
+      "models": ["glm-5.1:cloud", "kimi-k2.6:cloud", "deepseek-r1:cloud", "qwen2.5-coder:32b:cloud"]
+    },
+    "openrouter": {
+      "auth": "OPENROUTER_API_KEY env (openrouter.ai/keys) or OAuth sign-in",
+      "base_url": "https://openrouter.ai/api/v1",
+      "free_models": true,
+      "models": ["meta-llama/llama-3.3-70b-instruct:free", "google/gemma-4-31b-it:free", "qwen/qwen3-coder:free", "openai/gpt-oss-120b:free", "x-ai/grok-3:free", "anthropic/claude-sonnet-4-6:free"]
+    },
+    "xai_grok": {
+      "auth": "XAI_API_KEY env (x.ai/api) or xAI Builder CLI auth (xai auth login)",
+      "base_url": "https://api.x.ai/v1",
+      "models": ["grok-3", "grok-3-mini", "grok-3-reasoning"],
+      "free_via_openrouter": true
+    },
+    "openai": {
+      "auth": "OPENAI_API_KEY env or ChatGPT Plus/Pro OAuth (opencode /connect → openai)",
+      "models": ["gpt-5", "gpt-5-codex", "gpt-5-mini", "o3"]
+    },
+    "anthropic": {
+      "auth": "ANTHROPIC_API_KEY env or Claude Pro/Max OAuth (opencode /connect → anthropic)",
+      "models": ["claude-opus-4-7", "claude-sonnet-4-6", "claude-haiku-4-5"]
+    },
+    "github_copilot": {
+      "auth": "GitHub device code flow (opencode /connect → GitHub Copilot)",
+      "models": ["gpt-5-codex", "claude-sonnet-4-6"]
+    },
+    "google_gemini": {
+      "auth": "GEMINI_API_KEY env (Google AI Studio) or OAuth",
+      "free_tier": true,
+      "models": ["gemini-2.5-flash", "gemini-2.5-pro"]
+    },
+    "fcc_proxy": {
+      "auth": "FCC Claude proxy via NVIDIA NIM/OpenRouter/Ollama (local:8082)",
+      "base_url": "http://127.0.0.1:8082/v1",
+      "models": ["nvidia/nemotron-3-super-120b-a12b"]
+    }
+  }
 }

@@ -1,236 +1,312 @@
-# YouAndINotAI Design System Tokens
+# ANTIGRAVITY Design System Tokens (Canonical)
 
-## Overview
+**Source of truth:** `_design-system/tokens/` — This document mirrors the canonical CSS token files. If they conflict, the CSS tokens win.
 
-This document defines the core design tokens for the YouAndINotAI platform. These tokens ensure consistency across all UI components while maintaining our commitment to accessibility, mobile-first design, and trust-building.
-
-## Color Tokens
-
-### Brand Colors
-
-| Token               | Value                  | Usage                                    |
-| ------------------- | ---------------------- | ---------------------------------------- |
-| `--brand-primary`   | #FF4F00 (Alert Orange) | Primary brand color, key actions, alerts |
-| `--brand-secondary` | #111111 (Black)        | Secondary actions, text, backgrounds     |
-| `--brand-accent`    | #FFF4EF (Warm Cream)   | Backgrounds, subtle UI elements          |
-
-### Functional Colors
-
-| Token             | Value                   | Usage                                |
-| ----------------- | ----------------------- | ------------------------------------ |
-| `--color-success` | #10B981 (Safe Green)    | Success states, positive actions     |
-| `--color-warning` | #F59E0B (Warning Amber) | Warnings, caution states             |
-| `--color-error`   | #EF4444 (Danger Red)    | Errors, dangerous actions            |
-| `--color-info`    | #3B82F6 (Blue)          | Informational messages, links        |
-| `--color-neutral` | #6B7280 (Gray)          | Neutral information, disabled states |
-
-### Text Colors
-
-| Token              | Value                | Usage                    |
-| ------------------ | -------------------- | ------------------------ |
-| `--text-primary`   | #111111 (Black)      | Main text content        |
-| `--text-secondary` | #6B7280 (Gray)       | Secondary text, captions |
-| `--text-tertiary`  | #9CA3AF (Light Gray) | Placeholder text, hints  |
-| `--text-inverse`   | #FFFFFF (White)      | Text on dark backgrounds |
-
-### Background Colors
-
-| Token            | Value                | Usage                          |
-| ---------------- | -------------------- | ------------------------------ |
-| `--bg-primary`   | #FFFFFF (White)      | Main backgrounds               |
-| `--bg-secondary` | #F9FAFB (Light Gray) | Secondary backgrounds, cards   |
-| `--bg-tertiary`  | #F3F4F6 (Light Gray) | Tertiary backgrounds, dividers |
-
-### Safety Feature Colors
-
-| Token              | Value                   | Usage                      |
-| ------------------ | ----------------------- | -------------------------- |
-| `--safety-alert`   | #FF4F00 (Alert Orange)  | High priority alerts       |
-| `--safety-blocked` | #EF4444 (Danger Red)    | Blocked/restricted states  |
-| `--safety-muted`   | #F59E0B (Warning Amber) | Muted/temporary states     |
-| `--safety-safe`    | #10B981 (Safe Green)    | Protected/safe states      |
-| `--safety-neutral` | #6B7280 (Gray)          | Neutral safety information |
-
-### Volunteer Feature Colors
-
-| Token                     | Value            | Usage                         |
-| ------------------------- | ---------------- | ----------------------------- |
-| `--volunteer-kids`        | #FF6B9D (Pink)   | Children-related volunteering |
-| `--volunteer-elderly`     | #FFA500 (Orange) | Elderly care volunteering     |
-| `--volunteer-environment` | #4ADE80 (Green)  | Environmental volunteering    |
-| `--volunteer-animals`     | #06B6D4 (Cyan)   | Animal care volunteering      |
-| `--volunteer-community`   | #8B5CF6 (Purple) | Community service             |
-
-### Privacy Feature Colors
-
-| Token                | Value              | Usage                      |
-| -------------------- | ------------------ | -------------------------- |
-| `--privacy-primary`  | #0EA5E9 (Sky Blue) | Privacy features, controls |
-| `--privacy-secure`   | #10B981 (Emerald)  | Secure/data safe states    |
-| `--privacy-warning`  | #F59E0B (Amber)    | Attention/limited privacy  |
-| `--privacy-critical` | #EF4444 (Rose)     | Critical/deletion states   |
-
-## Typography Tokens
-
-### Font Families
-
-| Token                   | Value                                                                               | Usage                                  |
-| ----------------------- | ----------------------------------------------------------------------------------- | -------------------------------------- |
-| `--font-family-base`    | -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif | Default body text                      |
-| `--font-family-heading` | -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif | Headings (same as base for simplicity) |
-
-### Font Sizes
-
-| Token              | Value           | Usage                 |
-| ------------------ | --------------- | --------------------- |
-| `--font-size-xs`   | 0.75rem (12px)  | Helper text, captions |
-| `--font-size-sm`   | 0.875rem (14px) | Secondary text        |
-| `--font-size-base` | 1rem (16px)     | Body text             |
-| `--font-size-lg`   | 1.125rem (18px) | Lead paragraphs       |
-| `--font-size-xl`   | 1.25rem (20px)  | Subheadings           |
-| `--font-size-2xl`  | 1.5rem (24px)   | Headings              |
-| `--font-size-3xl`  | 1.875rem (30px) | Large headings        |
-| `--font-size-4xl`  | 2.25rem (36px)  | Page titles           |
-
-### Font Weights
-
-| Token                    | Value | Usage                     |
-| ------------------------ | ----- | ------------------------- |
-| `--font-weight-normal`   | 400   | Regular text              |
-| `--font-weight-medium`   | 500   | Emphasized text           |
-| `--font-weight-semibold` | 600   | Subheadings               |
-| `--font-weight-bold`     | 700   | Headings, strong emphasis |
-
-### Line Heights
-
-| Token                   | Value | Usage      |
-| ----------------------- | ----- | ---------- |
-| `--line-height-tight`   | 1.25  | Headings   |
-| `--line-height-normal`  | 1.5   | Body text  |
-| `--line-height-relaxed` | 1.625 | Paragraphs |
-
-## Spacing Tokens
-
-### Base Scale
-
-| Token          | Value          | Usage           |
-| -------------- | -------------- | --------------- |
-| `--spacing-0`  | 0              | No spacing      |
-| `--spacing-1`  | 0.25rem (4px)  | Minimal spacing |
-| `--spacing-2`  | 0.5rem (8px)   | Small spacing   |
-| `--spacing-3`  | 0.75rem (12px) | Compact spacing |
-| `--spacing-4`  | 1rem (16px)    | Default spacing |
-| `--spacing-5`  | 1.25rem (20px) | Medium spacing  |
-| `--spacing-6`  | 1.5rem (24px)  | Large spacing   |
-| `--spacing-8`  | 2rem (32px)    | XL spacing      |
-| `--spacing-10` | 2.5rem (40px)  | XXL spacing     |
-| `--spacing-12` | 3rem (48px)    | XXXL spacing    |
-
-### Component Spacing
-
-| Token                        | Value            | Usage                     |
-| ---------------------------- | ---------------- | ------------------------- |
-| `--spacing-input-padding`    | var(--spacing-3) | Input field padding       |
-| `--spacing-button-padding-h` | var(--spacing-4) | Button horizontal padding |
-| `--spacing-button-padding-v` | var(--spacing-2) | Button vertical padding   |
-| `--spacing-card-padding`     | var(--spacing-4) | Card inner padding        |
-| `--spacing-mobile-padding`   | var(--spacing-4) | Mobile viewport padding   |
-| `--spacing-desktop-padding`  | var(--spacing-6) | Desktop viewport padding  |
-
-## Border Tokens
-
-### Border Widths
-
-| Token                   | Value | Usage              |
-| ----------------------- | ----- | ------------------ |
-| `--border-width-none`   | 0     | No border          |
-| `--border-width-thin`   | 1px   | Default borders    |
-| `--border-width-medium` | 2px   | Emphasized borders |
-| `--border-width-thick`  | 4px   | Strong borders     |
-
-### Border Radius
-
-| Token                  | Value          | Usage                       |
-| ---------------------- | -------------- | --------------------------- |
-| `--border-radius-none` | 0              | Sharp corners               |
-| `--border-radius-sm`   | 0.25rem (4px)  | Small rounded corners       |
-| `--border-radius-md`   | 0.5rem (8px)   | Medium rounded corners      |
-| `--border-radius-lg`   | 0.75rem (12px) | Large rounded corners       |
-| `--border-radius-full` | 9999px         | Fully rounded (pill shapes) |
-
-## Shadow Tokens
-
-| Token            | Value                                                                   | Usage          |
-| ---------------- | ----------------------------------------------------------------------- | -------------- |
-| `--shadow-none`  | none                                                                    | No shadow      |
-| `--shadow-sm`    | 0 1px 2px 0 rgba(0, 0, 0, 0.05)                                         | Subtle depth   |
-| `--shadow-md`    | 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)   | Moderate depth |
-| `--shadow-lg`    | 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) | Strong depth   |
-| `--shadow-inner` | inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)                                   | Inner shadows  |
-
-## Breakpoint Tokens
-
-| Token             | Value  | Usage                    |
-| ----------------- | ------ | ------------------------ |
-| `--breakpoint-xs` | 0px    | Extra small devices      |
-| `--breakpoint-sm` | 576px  | Small devices (phones)   |
-| `--breakpoint-md` | 768px  | Medium devices (tablets) |
-| `--breakpoint-lg` | 992px  | Large devices (desktops) |
-| `--breakpoint-xl` | 1200px | Extra large devices      |
-
-## Z-Index Tokens
-
-| Token                      | Value | Usage                     |
-| -------------------------- | ----- | ------------------------- |
-| `--z-index-dropdown`       | 1000  | Dropdown menus            |
-| `--z-index-sticky`         | 1020  | Sticky elements           |
-| `--z-index-fixed`          | 1030  | Fixed positioned elements |
-| `--z-index-modal-backdrop` | 1040  | Modal backdrop            |
-| `--z-index-modal`          | 1050  | Modals                    |
-| `--z-index-popover`        | 1060  | Popovers                  |
-| `--z-index-tooltip`        | 1070  | Tooltips                  |
-
-## Transition Tokens
-
-| Token                          | Value                        | Usage                |
-| ------------------------------ | ---------------------------- | -------------------- |
-| `--transition-duration-fast`   | 150ms                        | Quick transitions    |
-| `--transition-duration-normal` | 300ms                        | Standard transitions |
-| `--transition-duration-slow`   | 500ms                        | Slow transitions     |
-| `--transition-easing`          | cubic-bezier(0.4, 0, 0.2, 1) | Standard easing      |
-
-## Accessibility Tokens
-
-| Token                 | Value                | Usage                                |
-| --------------------- | -------------------- | ------------------------------------ |
-| `--focus-ring-color`  | var(--brand-primary) | Focus indicator color                |
-| `--focus-ring-width`  | 3px                  | Focus ring thickness                 |
-| `--focus-ring-offset` | 2px                  | Space between element and focus ring |
-| `--min-target-size`   | 48px                 | Minimum touch target size            |
+**System:** Sleek Cyberpunk Glassmorphism — deep-space dark surfaces, neon-cyan and neon-pink accents, frosted-glass cards, gold trust badges.
 
 ---
 
-## Usage Guidelines
+## 1. Color Tokens
 
-### Mobile-First Implementation
+Source: `_design-system/tokens/colors.css`
 
-1. Design for the smallest breakpoint first (`--breakpoint-xs`)
-2. Use relative units (rem) for consistent scaling
-3. Ensure all touch targets meet minimum size requirements
-4. Prioritize vertical spacing over horizontal spacing
+### Base Surfaces
 
-### Accessibility Compliance
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-bg` | `#020617` | Global app background (slate-950) |
+| `--ag-bg-navy` | `#0a070f` | Brand-mark backdrop (logo plate) |
+| `--ag-surface-1` | `#0f172a` | Raised panel (slate-900) |
+| `--ag-surface-2` | `#1e293b` | Hover / inset (slate-800) |
+| `--ag-surface-3` | `#334155` | Strong inset (slate-700) |
 
-1. Maintain minimum 4.5:1 color contrast ratios
-2. Use semantic HTML with proper ARIA attributes
-3. Ensure focus states are visible and consistent
-4. Support reduced motion preferences
+### Slate Neutral Ramp
 
-### Trust-Building Considerations
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-slate-950` | `#020617` | Deepest background |
+| `--ag-slate-900` | `#0f172a` | Raised surface |
+| `--ag-slate-800` | `#1e293b` | Hover/inset |
+| `--ag-slate-700` | `#334155` | Strong inset |
+| `--ag-slate-600` | `#475569` | Muted border |
+| `--ag-slate-500` | `#64748b` | Inactive text |
+| `--ag-slate-400` | `#94a3b8` | Muted label text |
+| `--ag-slate-300` | `#cbd5e1` | Body text |
+| `--ag-slate-200` | `#e2e8f0` | Light border |
+| `--ag-slate-50` | `#f8fafc` | Base text (on dark) |
 
-1. Use consistent colors for similar actions
-2. Provide clear visual feedback for all interactions
-3. Avoid deceptive patterns or hidden actions
-4. Maintain transparency in all UI states
+### Text
 
-These design tokens should be used consistently across all platform components to create a cohesive, accessible, and trustworthy user experience.
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-text` | `#f8fafc` | Base text |
+| `--ag-text-body` | `#cbd5e1` | Readable body |
+| `--ag-text-muted` | `#94a3b8` | Muted UI |
+| `--ag-text-muted-deep` | `#64748b` | Deep muted |
+
+### Primary — Neon Cyan
+
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-cyan` | `#22d3ee` | Primary action (cyan-400) |
+| `--ag-cyan-deep` | `#06b6d4` | Primary hover (cyan-500) |
+| `--ag-cyan-bright` | `#00f3ff` | Brand-gradient hot edge |
+
+### Secondary — Neon Pink / Rose
+
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-pink` | `#f472b6` | Secondary action (pink-400) |
+| `--ag-pink-deep` | `#ec4899` | Secondary hover (pink-500) |
+| `--ag-rose` | `#f43f5e` | Icon accent (rose-500) |
+| `--ag-magenta` | `#ff00ff` | Neon glow source |
+
+### Trust Gold
+
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-gold` | `#e9b949` | Verification badges |
+| `--ag-gold-deep` | `#b8860b` | Gold hover/active |
+
+### Status / Semantic
+
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-success` | `#10b981` | Emerald — active/success |
+| `--ag-warning` | `#f59e0b` | Amber — pending/warning |
+| `--ag-danger` | `#f43f5e` | Rose — error/danger |
+| `--ag-info` | `#22d3ee` | Cyan — informational |
+| `--ag-paused` | `#a855f7` | Purple — paused/legal-review |
+
+### Borders
+
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-border` | `rgba(255,255,255,0.10)` | Glass hairline |
+| `--ag-border-strong` | `#1e293b` | Solid border |
+| `--ag-border-cyan` | `rgba(34,211,238,0.40)` | Focus/hover border |
+| `--ag-grid-line` | `#2563eb` | Faint backdrop grid |
+
+### Brand Gradient
+
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-gradient-brand` | `linear-gradient(to right, #22d3ee, #ec4899)` | Logos, hero headings |
+
+### Brand-Mark Spiral (Logo)
+
+| Token | Value |
+|---|---|
+| `--ag-spiral-pink` | `#e85b9e` |
+| `--ag-spiral-orange` | `#f0913e` |
+
+### Semantic Aliases
+
+| Token | Maps To | Usage |
+|---|---|---|
+| `--surface-app` | `--ag-bg` | App background |
+| `--surface-glass` | `rgba(15,23,42,0.60)` | Glass card fill |
+| `--surface-card` | `--ag-surface-1` | Card surface |
+| `--surface-inset` | `--ag-surface-2` | Inset surface |
+| `--action-primary` | `--ag-cyan-deep` | Primary button |
+| `--action-primary-glow` | `--ag-cyan` | Primary glow |
+| `--action-secondary` | `--ag-pink-deep` | Secondary button |
+| `--accent-icon` | `--ag-rose` | Icon accent |
+| `--border-glass` | `--ag-border` | Glass border |
+| `--border-solid` | `--ag-border-strong` | Solid border |
+
+---
+
+## 2. Typography Tokens
+
+Source: `_design-system/tokens/typography.css`
+
+**Church & State Protocol:** Inter for humans (names, bios, body, headings); JetBrains Mono for system (labels, stats, timestamps, nav).
+
+### Font Families
+
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-font-sans` | `"Inter", ui-sans-serif, system-ui, -apple-system, sans-serif` | Body, headings |
+| `--ag-font-mono` | `"JetBrains Mono", ui-monospace, "SFMono-Regular", "Courier New", monospace` | System labels |
+
+### Weights
+
+| Token | Value |
+|---|---|
+| `--ag-weight-light` | 300 |
+| `--ag-weight-regular` | 400 |
+| `--ag-weight-medium` | 500 |
+| `--ag-weight-semibold` | 600 |
+| `--ag-weight-bold` | 700 |
+| `--ag-weight-black` | 900 |
+
+### Type Scale
+
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-text-3xs` | 0.625rem (10px) | Universal mono UI label |
+| `--ag-text-2xs` | 0.6875rem (11px) | Small label |
+| `--ag-text-xs` | 0.75rem (12px) | Caption |
+| `--ag-text-sm` | 0.875rem (14px) | Secondary text |
+| `--ag-text-base` | 1rem (16px) | Body |
+| `--ag-text-lg` | 1.125rem (18px) | Lead paragraph |
+| `--ag-text-xl` | 1.25rem (20px) | Small section heading |
+| `--ag-text-2xl` | 1.5rem (24px) | Section heading |
+| `--ag-text-3xl` | 1.875rem (30px) | Stat value |
+| `--ag-text-4xl` | 2.25rem (36px) | Hero |
+| `--ag-text-5xl` | 3rem (48px) | Display hero |
+
+### Line Heights
+
+| Token | Value |
+|---|---|
+| `--ag-leading-tight` | 1.15 |
+| `--ag-leading-snug` | 1.3 |
+| `--ag-leading-normal` | 1.5 |
+| `--ag-leading-relaxed` | 1.65 |
+
+### Letter Spacing
+
+| Token | Value |
+|---|---|
+| `--ag-tracking-tighter` | -0.04em |
+| `--ag-tracking-tight` | -0.02em |
+| `--ag-tracking-normal` | 0 |
+| `--ag-tracking-wide` | 0.05em |
+| `--ag-tracking-widest` | 0.2em |
+| `--ag-tracking-mega` | 0.3em |
+
+---
+
+## 3. Spacing Tokens
+
+Source: `_design-system/tokens/spacing.css`
+
+### Scale
+
+| Token | Value |
+|---|---|
+| `--ag-space-0` | 0 |
+| `--ag-space-1` | 0.25rem |
+| `--ag-space-2` | 0.5rem |
+| `--ag-space-3` | 0.75rem |
+| `--ag-space-4` | 1rem |
+| `--ag-space-5` | 1.25rem |
+| `--ag-space-6` | 1.5rem |
+| `--ag-space-8` | 2rem |
+| `--ag-space-10` | 2.5rem |
+| `--ag-space-12` | 3rem |
+| `--ag-space-16` | 4rem |
+| `--ag-space-20` | 5rem |
+| `--ag-space-24` | 6rem |
+
+### Corner Radii (Extreme by Design)
+
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-radius-sm` | 0.5rem | Controls |
+| `--ag-radius-md` | 0.75rem | Small cards |
+| `--ag-radius-lg` | 1rem | Cards |
+| `--ag-radius-xl` | 1.5rem | Large cards |
+| `--ag-radius-2xl` | 2rem | Hero panels |
+| `--ag-radius-3xl` | 3rem | Top-level sections |
+
+### Container Max-Width
+
+| Token | Value |
+|---|---|
+| `--ag-container-sm` | 640px |
+| `--ag-container-md` | 768px |
+| `--ag-container-lg` | 1024px |
+| `--ag-container-xl` | 1280px |
+
+---
+
+## 4. Effects Tokens
+
+Source: `_design-system/tokens/effects.css`
+
+### Glassmorphism
+
+| Token | Value |
+|---|---|
+| `--ag-glass-fill` | `rgba(15,23,42,0.60)` |
+| `--ag-glass-blur` | 12px |
+| `--ag-glass-border` | `rgba(255,255,255,0.10)` |
+
+### Shadows
+
+| Token | Value |
+|---|---|
+| `--ag-shadow-glass` | `0 0 20px rgba(0,0,0,0.5)` |
+| `--ag-shadow-glass-deep` | `0 0 40px rgba(0,0,0,0.35)` |
+| `--ag-shadow-lift` | `0 12px 32px rgba(0,0,0,0.45)` |
+
+### Neon Glows
+
+| Token | Value | Usage |
+|---|---|---|
+| `--ag-glow-cyan` | `0 0 15px rgba(34,211,238,0.5)` | Primary button |
+| `--ag-glow-cyan-soft` | `0 0 8px rgba(0,243,255,0.4)` | Brand heading |
+| `--ag-glow-pink` | `0 0 8px rgba(255,0,255,0.8)` | Pink icon |
+| `--ag-glow-gold` | `0 0 18px rgba(233,185,73,0.45)` | Verified badge |
+
+### Motion
+
+| Token | Value |
+|---|---|
+| `--ag-ease` | `cubic-bezier(0.4, 0, 0.2, 1)` |
+| `--ag-dur-fast` | 150ms |
+| `--ag-dur-base` | 300ms |
+| `--ag-dur-slow` | 700ms |
+| `--ag-hover-brightness` | 1.1 |
+| `--ag-active-scale` | 0.95 |
+
+---
+
+## 5. Accessibility Tokens
+
+| Token | Value | WCAG Ref |
+|---|---|---|
+| Focus ring width | 3px | 2.4.7 Focus Visible |
+| Focus ring offset | 2px | 2.4.7 |
+| Focus ring color | `#22d3ee` (cyan-400) | 1.4.11 Non-text Contrast |
+| Min touch target | 48px | 2.5.5 Target Size |
+| Base font size | 16px (1rem) | 1.4.4 Resize Text |
+| Body contrast ratio | 4.5:1+ | 1.4.3 Contrast Minimum |
+| Reduced motion | `prefers-reduced-motion: reduce` | 2.2.2 Pause/Stop/Hide |
+
+---
+
+## 6. CSS Class Utilities
+
+| Class | Purpose |
+|---|---|
+| `.ag-glass` | Glass card surface |
+| `.ag-glow-cyan` | Cyan neon box-shadow |
+| `.ag-glow-pink` | Pink neon drop-shadow |
+| `.ag-glow-gold` | Gold neon drop-shadow |
+| `.ag-interactive` | Hover brighten + press scale |
+| `.ag-mono-label` | System label (10px, mono, uppercase) |
+| `.ag-section-heading` | Black italic heading |
+| `.ag-brand-heading` | Gradient clip-text heading |
+| `.glass-card` | Tailwind equivalent of `ag-glass` |
+| `.btn-neon-cyan` | Primary button style |
+| `.btn-outline` | Outline button style |
+| `.brand-heading` | Tailwind brand gradient heading |
+| `.mono-label` | Tailwind mono label utility |
+| `.skip-link` | Screen reader skip link |
+| `.sr-only` | Screen reader only utility |
+
+---
+
+## 7. Cross-Surface Design Reference
+
+| Surface | Base BG | Primary Accent | Payment Rail | Status |
+|---|---|---|---|---|
+| YouAndINotAI | `#020617` | Cyan `#22d3ee` | Square only | Active development |
+| ai-solutions.store | `#020617` | Cyan `#22d3ee` | Stripe | Live, standalone |
+| OnlineRecycle.org | `#020617` | Cyan `#22d3ee` | Square | Live, standalone |
+
+All surfaces should converge on the ANTIGRAVITY design system over time. The deep-space dark base (`#020617`), glass cards, cyan/pink accents, and Inter + JetBrains Mono type pairing are the canonical shared language.

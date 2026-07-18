@@ -1,0 +1,51 @@
+{
+  "name": "codex-agent",
+  "description": "Codex adapter — code execution specialist. Routes to Anthropic Claude (Codex/Claude Code CLI) as primary with OpenAI GPT-Codex fallback. Used for code patches, test runs, and refactors that need actual tool execution (not adversarial review).",
+  "runtime": "wsl",
+  "binary": "codex",
+  "npm_package": "@openai/codex",
+  "command": "bash -lc 'source ~/.fcc/.env 2>/dev/null && codex --model \"$MODEL\" --auto \"$TASK\"'",
+  "paperclip_role": "Code execution worker — lands patches via PRs (never pushes to main)",
+  "primary_route": {
+    "kind": "anthropic_codex",
+    "auth": "ANTHROPIC_API_KEY env var or Claude Pro/Max OAuth login",
+    "models": ["claude-opus-4-7", "claude-sonnet-4-6", "claude-haiku-4-5"],
+    "note": "Claude Code CLI is the canonical codex runtime. Haiku models are BANNED — never select."
+  },
+  "fallback_routes": [
+    {
+      "kind": "openai_codex",
+      "auth": "OPENAI_API_KEY env var or ChatGPT Plus/Pro OAuth",
+      "models": ["gpt-5-codex", "gpt-5.1-codex"]
+    },
+    {
+      "kind": "opencode_local",
+      "auth": "local runtime (no key) or OpenCode Zen OAuth",
+      "models": ["qwen2.5-coder:7b", "glm-5.1:cloud"]
+    }
+  ],
+  "providers": {
+    "anthropic_codex": {
+      "auth": "ANTHROPIC_API_KEY or Claude Code CLI login",
+      "models": ["claude-opus-4-7", "claude-sonnet-4-6"]
+    },
+    "openai_codex": {
+      "auth": "OPENAI_API_KEY or ChatGPT Plus OAuth",
+      "models": ["gpt-5-codex", "gpt-5.1-codex"]
+    },
+    "opencode_local": {
+      "auth": "local Ollama (no key) or OpenCode Zen OAuth",
+      "free_models": true,
+      "models": ["qwen2.5-coder:7b", "glm-5.1:cloud"]
+    }
+  },
+  "hard_boundaries": [
+    "branch + PR only — never push to main directly",
+    "1-repo policy: Trollz1004/ANTIGRAVITY is the only target",
+    "no canonical-7 banned terms on customer surfaces",
+    "no --no-verify or --no-gpg-sign on commits",
+    "never add Anthropic keys to services/hermes-router/.env* (FOUNDER DOCTRINE 6)",
+    "never read or output secrets from .env, vault, or Credential Manager",
+    "never use any Haiku model"
+  ]
+}

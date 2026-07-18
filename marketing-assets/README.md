@@ -121,8 +121,8 @@ Static assets deployed to the public-facing website (Cloudflare Pages). These ar
 | **Tagline**    | No Bots. Real Humans. V8 Cloud Verification.        |
 | **URL**        | youandinotai.com                                    |
 | **Handle**     | @YouAndiNotAi                                      |
-| **Background** | `#0F172A` (dark navy)                               |
-| **Gradient**   | `#EF4444` → `#EC4899` → `#F97316` (red-pink-orange) |
+| **Background** | `#020617` (deep space dark)                         |
+| **Gradient**   | `#22d3ee` → `#ec4899` (cyan→pink — brand gradient)  |
 | **Font**       | Outfit (Google Fonts) / Arial fallback              |
 | **Tone**       | Confident, urgent, real-talk — NOT corporate        |
 
@@ -188,8 +188,8 @@ Static assets deployed to the public-facing website (Cloudflare Pages). These ar
 | Social Profile   | 400 × 400       | PNG    |
 
 - All social assets should include the logo watermark (bottom-right corner).
-- Use brand gradient (`#EF4444` → `#EC4899` → `#F97316`) for backgrounds and accents.
-- Dark background: `#0F172A`.
+- Use brand gradient (`#22d3ee` → `#ec4899` = cyan→pink) for backgrounds and accents.
+- Dark background: `#020617` (deep space dark).
 
 ---
 

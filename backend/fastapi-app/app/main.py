@@ -44,6 +44,7 @@ from app.openapi_extra import (
 )
 from app.rate_limit_redis import RedisRateLimitMiddleware
 from app.routers import (
+    affiliates,
     auth,
     billing,
     boards,
@@ -488,6 +489,7 @@ app.include_router(feature_flags.router)
 app.include_router(ops_runs.router, prefix="/api/v1", tags=["ops-runs"])
 app.include_router(clawx.router, prefix="/api/v1", tags=["clawx"])
 app.include_router(notifications.router, prefix="/api/v1", tags=["notifications"])
+app.include_router(affiliates.router, prefix="/api/v1", tags=["affiliate"])
 
 app.include_router(rate_limits.router)
 

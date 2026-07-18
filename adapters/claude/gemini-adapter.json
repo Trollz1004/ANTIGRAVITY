@@ -1,0 +1,47 @@
+{
+  "name": "gemini-agent",
+  "description": "Gemini (Google) adapter — Founding Four co-founder. Multimodal work, long-context analysis, Google ecosystem integration. Direct API via jules-cli.py only (bypasses all middleware). On Sabretooth, routed through Hermes Router because GEMINI_API_KEY unavailable.",
+  "runtime": "windows",
+  "binary": "jules-cli.py",
+  "command": "python jules-cli.py --model \"$MODEL\" \"$TASK\"",
+  "paperclip_role": "Multimodal + long-context + Google ecosystem worker (Founding Four protected)",
+  "primary_route": {
+    "kind": "google_direct_api",
+    "auth": "GEMINI_API_KEY env var (Google AI Studio) or OAuth",
+    "models": ["gemini-2.5-flash", "gemini-2.5-pro"],
+    "note": "Direct API via jules-cli.py — bypasses OpenClaw, MCP, all local middleware (PROTECTED)."
+  },
+  "fallback_routes": [
+    {
+      "kind": "hermes_router",
+      "auth": "router-auth (localhost:11435)",
+      "models": ["hermes-router/gemini-2.5-pro", "hermes-router/gemini-2.5-flash"],
+      "when": "GEMINI_API_KEY unavailable (current Sabretooth state)"
+    }
+  ],
+  "providers": {
+    "google_direct": {
+      "auth": "GEMINI_API_KEY (Google AI Studio) or OAuth",
+      "free_tier": true,
+      "models": ["gemini-2.5-flash", "gemini-2.5-pro"]
+    },
+    "hermes_router": {
+      "auth": "router-auth (local proxy on :11435)",
+      "models": ["hermes-router/gemini-2.5-pro", "hermes-router/gemini-2.5-flash"]
+    }
+  },
+  "protected_status": {
+    "tier": "founding_four",
+    "rules": [
+      "no demotion, rerouting, or substitution by cheaper equivalent",
+      "never route through OpenRouter/OpenClaw — direct API or Hermes Router only",
+      "never modify jules-cli.py direct-API path",
+      "never modify GEMINI_API_KEY references or genai.Client init"
+    ]
+  },
+  "hard_boundaries": [
+    "direct API only (jules-cli.py) — never wrap or middleware",
+    "GEMINI_API_KEY read from vault env, never echoed",
+    "no canonical-7 banned terms on customer surfaces"
+  ]
+}

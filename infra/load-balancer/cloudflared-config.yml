@@ -1,0 +1,24 @@
+tunnel: c7bc9665-3923-4977-acd7-2033838cd56e
+credentials-file: C:\Users\joshl\.cloudflared\c7bc9665-3923-4977-acd7-2033838cd56e.json
+
+ingress:
+  # Paperclip HQ — marketing affiliate dashboard
+  - hostname: paperclip-hq.youandinotai.com
+    service: http://localhost:3101
+    originRequest:
+      noTLSVerify: true
+
+  # DateApp static site (local dev mirror)
+  - hostname: local.youandinotai.com
+    service: http://localhost:3200
+
+  # Hermes Router API
+  - hostname: hermes-router.local
+    service: http://localhost:11435
+
+  # SupportClaw customer support
+  - hostname: support.t5500.local
+    service: http://localhost:18895
+
+  # Catch-all: 404
+  - service: http_status:404

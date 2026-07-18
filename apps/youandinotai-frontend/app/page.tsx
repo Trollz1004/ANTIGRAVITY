@@ -136,12 +136,25 @@ function PhonePreview({ isDarkMode }: { isDarkMode: boolean }) {
   );
 }
 
+const STORAGE_KEY = 'youandinotai_theme_v1';
+
 export default function Dashboard() {
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    const isDark = document.documentElement.classList.contains('dark');
+    setIsDarkMode(isDark);
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     document.documentElement.classList.toggle('dark', isDarkMode);
-  }, [isDarkMode]);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, isDarkMode ? 'dark' : 'light');
+    } catch {}
+  }, [isDarkMode, mounted]);
 
   return (
     <main
@@ -166,23 +179,24 @@ export default function Dashboard() {
           }`}
         >
           <div>
-            <p className="text-[11px] font-black uppercase tracking-[0.24em] text-red-500">
+            <p className="text-[11px] font-black uppercase tracking-[0.24em] text-cyan-400">
               YouAndINotAI
             </p>
-            <h1 className="text-2xl font-black tracking-[-0.08em]">
-              verified dating, safer plans.
+            <h1 className="text-2xl font-black tracking-[-0.08em] bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">
+              verified profiles, safety tools, real plans.
             </h1>
           </div>
           <button
             type="button"
             onClick={() => setIsDarkMode((value) => !value)}
+            aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} theme`}
             className={`inline-flex min-h-11 items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-black uppercase tracking-[0.12em] ${
               isDarkMode
                 ? 'border-slate-700 bg-slate-900 text-slate-100'
                 : 'border-slate-300 bg-white text-slate-900'
             }`}
           >
-            {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+            {isDarkMode ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
             Theme
           </button>
         </header>
@@ -195,8 +209,12 @@ export default function Dashboard() {
           }`}
         >
           <div className="flex flex-col justify-center">
-            <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-red-500/40 bg-red-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-red-400">
-              <Heart size={15} />
+            <div
+              className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-400"
+              role="status"
+              aria-label="Current milestone"
+            >
+              <Heart size={15} aria-hidden="true" />
               Google Play MVP path
             </div>
             <h2 className="max-w-4xl text-5xl font-black leading-[0.88] tracking-[-0.09em] sm:text-6xl lg:text-7xl">
@@ -209,14 +227,15 @@ export default function Dashboard() {
             >
               YouAndINotAI is being built around the patterns users already
               trust in top dating apps: verification, prompt-rich profiles,
-              safer chat, clear intent, and simple date planning.
+              safety tools, clear intent, and simple date planning.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
                 href="#membership"
-                className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-red-600 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-white shadow-lg shadow-red-950/30"
+                className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950 shadow-lg shadow-cyan-950/30"
+                aria-label="Get verified — view membership options"
               >
-                Get verified <ArrowUpRight size={16} />
+                Get verified <ArrowUpRight size={16} aria-hidden="true" />
               </a>
               <a
                 href="#features"
@@ -247,7 +266,7 @@ export default function Dashboard() {
                   : 'border-slate-200 bg-white shadow-sm'
               }`}
             >
-              <feature.icon className="mb-5 text-red-500" size={26} />
+              <feature.icon className="mb-5 text-rose-500" size={26} aria-hidden="true" />
               <h3 className="text-xl font-black tracking-[-0.04em]">
                 {feature.title}
               </h3>
@@ -270,8 +289,8 @@ export default function Dashboard() {
           }`}
         >
           <div>
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white">
-              <Sparkles size={15} />
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-pink-500 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-slate-950">
+              <Sparkles size={15} aria-hidden="true" />
               Build order
             </div>
             <h2 className="text-4xl font-black leading-none tracking-[-0.08em]">
@@ -297,7 +316,7 @@ export default function Dashboard() {
                     : 'border-slate-200 bg-orange-50'
                 }`}
               >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-red-600 text-sm font-black text-white">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-500 text-sm font-black text-slate-950">
                   {index + 1}
                 </span>
                 <span className="font-semibold leading-7">{item}</span>
@@ -310,7 +329,7 @@ export default function Dashboard() {
 
         <footer
           className={`py-8 text-center text-[10px] font-black uppercase tracking-[0.24em] ${
-            isDarkMode ? 'text-slate-600' : 'text-slate-500'
+            isDarkMode ? 'text-slate-400' : 'text-slate-500'
           }`}
         >
           Payments are processed by Square. Membership and verification are

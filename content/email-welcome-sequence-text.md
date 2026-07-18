@@ -14,12 +14,12 @@ You're officially a founding member of YouAndINotAI. Thanks for trusting us with
 
 Here's what you signed up for:
 - $14.99/mo founding member rate (locked in for life)
-- Bot-Shield verification â€” the only dating app that guarantees real humans
+- Bot-Shield verification â€” a dating app built around verified humans
 - Early access when we launch
 
 Over the next few days, we'll walk you through what makes us different. Spoiler: it's the Bot-Shield verification. We'll explain why it matters and how it works.
 
-For now, just know this â€” you won't be matching with bots, catfish, or fake profiles. That's the promise.
+For now, just know this â€” Bot-Shield is designed to stop bots before they reach you. Real profiles in your discovery lane.
 
 Welcome aboard.
 
@@ -38,7 +38,7 @@ Norton reports that 60% of dating app profiles are fake. That's not a typo. More
 
 We're fixing that.
 
-When you verify with YouAndINotAI, you'll pay $1 to confirm your identity through planned identity provider â€” the same secure tech your bank uses. It's not a paywall. It's a bot filter.
+When you verify with YouAndINotAI, you'll pay $1 to confirm your identity through verified identity â€” multi-signal verification. It's not a paywall. It's a bot filter.
 
 Bots don't have bank accounts. Scammers won't pay a dollar to get blocked. Real humans? They'll gladly spend $1 to meet other real humans.
 

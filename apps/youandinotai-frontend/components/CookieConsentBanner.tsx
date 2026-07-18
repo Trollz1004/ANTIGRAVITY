@@ -52,8 +52,8 @@ export default function CookieConsentBanner() {
     <div className="fixed inset-x-0 bottom-0 z-[10000] px-4 pb-4">
       <div className="mx-auto max-w-4xl rounded-[1.8rem] border border-slate-700 bg-slate-950/95 p-5 text-white shadow-2xl backdrop-blur">
         <div className="flex items-start gap-3">
-          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-blue-500/15">
-            <ShieldCheck size={20} className="text-blue-300" />
+          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-cyan-500/15">
+            <ShieldCheck size={20} className="text-cyan-300" />
           </div>
           <div className="min-w-0 flex-1">
             <h2 className="text-sm font-black uppercase tracking-[0.16em]">
@@ -70,7 +70,7 @@ export default function CookieConsentBanner() {
                   type="checkbox"
                   checked={necessary}
                   onChange={(event) => setNecessary(event.target.checked)}
-                  className="mt-1 h-4 w-4 accent-blue-400"
+                  className="mt-1 h-4 w-4 accent-cyan-400"
                 />
                 <span>
                   <span className="block text-sm font-black">
@@ -88,7 +88,7 @@ export default function CookieConsentBanner() {
                   type="checkbox"
                   checked={preferences}
                   onChange={(event) => setPreferences(event.target.checked)}
-                  className="mt-1 h-4 w-4 accent-blue-400"
+                  className="mt-1 h-4 w-4 accent-cyan-400"
                 />
                 <span>
                   <span className="block text-sm font-black">
@@ -106,7 +106,7 @@ export default function CookieConsentBanner() {
                   type="checkbox"
                   checked={performance}
                   onChange={(event) => setPerformance(event.target.checked)}
-                  className="mt-1 h-4 w-4 accent-blue-400"
+                  className="mt-1 h-4 w-4 accent-cyan-400"
                 />
                 <span>
                   <span className="block text-sm font-black">
@@ -125,7 +125,7 @@ export default function CookieConsentBanner() {
                 type="button"
                 onClick={saveChoices}
                 disabled={!necessary}
-                className="rounded-full bg-blue-500 px-5 py-2 text-sm font-black text-white transition hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-full bg-cyan-500 px-5 py-2 text-sm font-black text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Save cookie choices
               </button>

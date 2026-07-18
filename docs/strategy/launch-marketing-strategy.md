@@ -1,309 +1,247 @@
 # YouAndINotAI Launch Marketing Strategy
 
+**Owner:** CMO
+**Status:** Active (2026-07-17)
+**Doctrine:** Product-first, business-only. Sell membership, verification, safety, support, uptime, matching quality.
+
 ## Executive Summary
 
-YouAndINotAI is positioned to disrupt the dating app market by focusing on genuine human connection through real-world interactions. Our marketing strategy emphasizes community-building, volunteer opportunities, and meaningful relationships over superficial matching algorithms.
+Most dating apps make money by keeping you swiping — fake profiles, inflating match counts, charging for visibility. YouAndINotAI does the opposite: verified profiles, prompt-first matching, and built-in safety tools. This strategy drives paid memberships through product value, verification trust, and measurable safety guarantees — not charity claims, impact metrics, or non-product hooks.
 
-This document outlines our comprehensive launch marketing strategy, focusing on authentic human connection and charitable giving mission while maintaining strict compliance with Florida Statute §496.405.
+All copy complies with Florida Statute §496.405. No "donate," "donation," or "solicitation" on any customer surface.
+
+## Current State (July 2026)
+
+The platform is **live and operational** — past the April 4 launch. All core features are shipped. Current focus: member growth, retention, and feature education.
+
+**What's live:**
+- Bot-Shield verification ($1, one-time)
+- Founding Member subscriptions ($14.99/mo, $39.99/3mo, $99.99/yr, $2,500 lifetime)
+- Profile creation, swipe matching, real-time messaging
+- Event discovery, discussion boards, double dates
+- Safety tools: block, report, restrict, freeze
+- Video chat, AI compatibility (LoveBot)
+- In-app support, privacy controls, data export/deletion
+
+**Current metrics target (30 days):**
+- 5,000 unique visitors
+- 200+ Bot-Shield verifications
+- 50+ Founding Member signups
+- $750+ revenue
 
 ## Brand Positioning
 
 ### Core Value Proposition
 
-YouAndINotAI is a social platform for good — connecting people through real-world meetups, volunteering, and genuine human connection. We're not just another dating app; we're building communities of people who care.
+**Real profiles before real dates.** YouAndINotAI verifies every human. Bot-Shield stops bots before they reach the discovery lane. Profiles show verification status, relationship intent, and availability — not inflated numbers.
 
-### Differentiation Strategy
+### Product Pillars
 
-Unlike traditional dating apps that focus on digital swiping and profile optimization, YouAndINotAI prioritizes:
+| Pillar | What It Means | Customer Benefit |
+|--------|--------------|------------------|
+| **Verification** | Selfie + behavioral check on every account | Trust who you're talking to |
+| **Safety** | Report, block, freeze, restrict always accessible | Control your experience |
+| **Matching** | Prompt-first discovery, not swipe fatigue | Better conversations from message one |
+| **Membership** | Founding Member pricing locked at signup | Price never increases |
+| **Support** | In-app help center, email within 24h | Someone's there when you need them |
 
-- Face-to-face community events
-- Volunteer opportunities that create shared purpose
-- Account-bound verification ensuring real human connections
-- Built-in support for youth programs through contractual revenue disbursement
+### Differentiation
 
-### Messaging Framework
-
-Our messaging consistently reinforces:
-
-- Community > Compatibility
-- Real-world action > Digital swiping
-- Shared purpose > Personal gain
-- Volunteer impact > Profile perfection
-- Genuine connections > Artificial urgency
+| Market Norm | YouAndINotAI |
+|-------------|--------------|
+| Inflated profile counts | Verified-only discovery lane |
+| Swipe-to-match | Prompt-first conversation starters |
+| Hidden safety tools | Surface-level report, block, freeze |
+| Investor-driven growth | Build-in-public, member-funded |
 
 ## Target Audience
 
-### Primary Persona: Community-Minded Singles
+### Primary: Verification-First Daters (25-40)
 
-- Age: 25-45
-- Location: Urban/suburban areas with active community organizations
-- Values: Volunteering, local community involvement, meaningful relationships
-- Pain Points: Traditional dating apps feel shallow, desire genuine connection
-- Motivations: Looking for both romantic and platonic connections rooted in shared values
+- **Problem:** Burned out by bots, catfish, and fake profiles on Tinder/Bumble/Hinge
+- **Motivation:** Will pay for trust — a platform where matches are real
+- **Channels:** Reddit (r/OnlineDating, r/datingoverthirty), Twitter/X, dating subreddits
+- **Message:** "Every profile you see passed a human check. No bots in the lane."
 
-### Secondary Personas
+### Secondary: Privacy-Conscious Singles (28-45)
 
-1. **Social Changemakers** - Young professionals passionate about causes
-2. **Empty Nesters** - Older adults seeking purpose-filled social connections
-3. **Young Adults** - College students/new graduates wanting to build local networks
+- **Problem:** Worried about data misuse, profile leaks, and platform monetization of personal info
+- **Motivation:** Wants a platform that doesn't sell their data or optimize for addiction
+- **Channels:** LinkedIn, blog, tech publications
+- **Message:** "No personal data sold. Minimal data collected. Verification is product access, not surveillance."
 
-## Launch Campaign Strategy
+### Tertiary: Build-in-Public Followers (20-35)
 
-### Pre-Launch Phase (2 Weeks Before Launch)
+- **Problem:** Cynical about VC-funded startups that extract users
+- **Motivation:** Want to support independent, transparent product development
+- **Channels:** Twitter/X, Reddit (r/SideProject, r/startups), Discord
+- **Message:** "Independent team. Build-in-public. Founding Members shape the roadmap."
 
-#### Awareness Building Activities
+## Growth Phase Campaign (July-August 2026)
 
-- Soft launch blog posts about the evolution from dating app to social platform
-- Influencer seeding with local community leaders and volunteers
-- Teaser social media content highlighting real-world meetups
-- Press release to local media about innovative approach to social connection
+### Phase 1: Verification Momentum (Weeks 1-2)
 
-#### Email Marketing Foundation
+Goal: Drive verification starts by re-positioning Bot-Shield as the platform's core differentiator.
 
-- VIP early access list for community leaders and volunteers
-- Educational content about account-bound verification and Bot-Shield technology
-- Preview access to real-world event calendar
+| Activity | Channel | Target |
+|----------|---------|--------|
+| "Why we verify every profile" — evergreen blog | Blog, Reddit, Twitter | Primary |
+| Bot-Shield explainer thread (updated for live product) | Twitter/X | Primary, Tertiary |
+| Before/after: dating app with bots vs. without | Instagram, Facebook | Primary |
+| Founding Member spot reminder (limited to 100) | Landing page, Twitter | All |
 
-### Launch Week (April 4)
+### Phase 2: Feature Education (Weeks 3-4)
 
-#### Day 1: Official Launch
+Goal: Convert visitors to members by demonstrating product value.
 
-- Coordinated social media announcement across all platforms
-- Blog post detailing the platform's mission and features
-- Email blast to pre-launch list with special early-bird incentives
-- Influencer activation with community-focused testimonials
+| Activity | Channel | Target |
+|----------|---------|--------|
+| Prompt-first matching walkthrough | Twitter/X, Reddit | Primary |
+| Safety tools demo (Reel) | Instagram, TikTok | Primary |
+| Support response time transparency | LinkedIn, Blog | Secondary |
+| Tech stack + build-in-public update | Reddit (r/startups), Twitter | Tertiary |
 
-#### Day 2-3: Community Showcase
+### Phase 3: Conversion (Weeks 5-8)
 
-- Highlight different local meetup groups and volunteer opportunities
-- Share user stories (real or anticipated) about meaningful connections
-- Partner spotlight featuring local organizations supported through platform
+Goal: Drive Founding Member subscriptions through urgency and proof.
 
-#### Day 4-7: Engagement Drive
+| Activity | Channel | Target |
+|----------|---------|--------|
+| Founding Member pricing locked forever campaign | Email, Twitter, Reddit | All |
+| Member spotlight (with permission) | Instagram, Twitter | Primary |
+| Platform stats: verified profiles, matches, events | Blog, Newsletter | All |
+| Founding Member countdown (remaining spots visible) | Landing page, social | All |
 
-- Interactive social media campaigns encouraging event participation
-- User-generated content prompts for first-week experiences
-- Referral program activation with bonus entries for bringing friends
+## Channel Strategy
 
-### Post-Launch (1-3 Months)
+### Twitter/X
 
-#### Retention Strategy
+- 4-6 posts/day: product updates, verification insights, build-in-public, dating industry critique
+- Format: threads for deep dives, single posts for quick takes, media for product screenshots
+- Target: @ mentions to dating app discourse, reply to relevant conversations
+- CTA: link to youandinotai.com
 
-- Automated welcome email series focusing on community discovery
-- Weekly event recommendations based on user interests
-- Achievement badges for attending events and volunteering
-- Progress tracking for community impact through contractual revenue disbursement
+### Reddit
 
-#### Growth Strategy
+- Subreddits: r/OnlineDating, r/datingoverthirty, r/SideProject, r/startups, r/privacy
+- Content: honest posts about dating app problems, verification-first solution, build-in-public updates
+- Format: text posts with value, not link drops. Engage in comments.
+- CTA: organic signups through credibility, not ads
 
-- Referral incentives tied to real-world event attendance
-- Corporate partnership program for workplace volunteer initiatives
-- Content marketing highlighting success stories from local communities
-- Strategic partnerships with volunteer organizations and meetup groups
+### Instagram
 
-## Channel-Specific Strategies
+- Content format: Reels (product demos, comparison content), posts (profile previews), Stories (QA, polls)
+- Visual identity: dark theme, red accent, product screenshots, verification badge icon
+- CTA: link in bio to youandinotai.com
 
-### Social Media
+### LinkedIn
 
-#### Instagram
+- Content: Founder story, dating industry analysis, build-in-public updates
+- Audience: professionals 28-45, privacy-conscious workers
+- CTA: Founding Member access
 
-- Visual storytelling showcasing real community events
-- Behind-the-scenes content of volunteer activities
-- User-generated content from meetups
-- Stories featuring local community heroes
+### Blog / SEO
 
-#### Facebook
+- Core articles:
+  - "Why dating apps have a bot problem" (live)
+  - "How to spot fake dating profiles" (live)
+  - "What is Bot-Shield verification" (live)
+  - "Prompt-first matching vs. swipe fatigue" (needs drafting)
+- Distribution: cross-post to Medium, Reddit, Twitter threads
 
-- Event listings for local community gatherings
-- Community group engagement and discussions
-- Longer-form content about platform philosophy
-- Volunteer opportunity announcements
+### Email
 
-#### Twitter/X
+- Welcome sequence (3 emails): verify → discover → upgrade
+- Weekly digest: new features, member stories, product updates
+- Transactional: verification confirmation, membership receipts
 
-- Real-time event updates and community conversations
-- Quick tips for meaningful connections
-- Engagement with local community hashtags
-- Thought leadership content about social connection trends
+## Key Performance Indicators
 
-#### LinkedIn
+### Awareness
 
-- Professional networking events and community building
-- Thought leadership about innovation in social technology
-- Partner organization spotlights
-- Career-focused networking opportunities
+- Website traffic: 5,000 unique visitors / 30 days
+- Social followers: 500+ across primary channels
+- Blog traffic: 2,000 article reads / month
 
-### Content Marketing
+### Verification
 
-#### Blog Strategy
+- Bot-Shield verifications started: 200+ / 30 days
+- Verification completion rate: 60%+
+- Time to verify: under 3 minutes average
 
-- "Community Spotlight" series featuring different neighborhoods
-- "Volunteer Impact" reports showcasing actual outcomes
-- "Connection Stories" highlighting meaningful relationships formed
-- "How-To" guides for organizing local meetups
+### Conversion
 
-#### Email Marketing
+- Founding Member signups: 50+ / 30 days
+- Revenue: $750+ / 30 days (verification + memberships)
+- Free → paid conversion rate: 15%+ of verified users
 
-- Weekly community roundups with event recommendations
-- Personalized suggestions based on interest areas
-- Success stories from other users in similar situations
-- Educational content about maximizing platform benefits
+### Retention
 
-### Public Relations
-
-#### Media Outreach
-
-- Pitch stories about innovative approach to social connection
-- Highlight local volunteer impact and community building
-- Secure interviews with founder about platform vision
-- Target lifestyle and tech publications with human-interest angles
-
-#### Speaking Opportunities
-
-- Conference presentations on future of social technology
-- Local meetup group speaking engagements
-- Volunteer organization summits and community events
-
-## Partnership Strategy
-
-### Community Organizations
-
-- Volunteer centers and nonprofits
-- Local meetup groups and hobby clubs
-- Religious organizations and community centers
-- Educational institutions with student organizations
-
-### Corporate Partnerships
-
-- Companies with strong CSR programs
-- Coworking spaces and professional associations
-- Local businesses interested in community engagement
-- Healthcare systems promoting mental wellness through social connection
-
-### Influencer Relations
-
-- Local community leaders and activists
-- Volunteer coordinators and nonprofit staff
-- Social media personalities focused on lifestyle and community
-- Podcast hosts covering relationship and community topics
-
-## Success Metrics and KPIs
-
-### Awareness Metrics
-
-- Brand awareness surveys in key markets
-- Social media follower growth rate
-- Website traffic and referral sources
-- Media mentions and press coverage
-
-### Engagement Metrics
-
-- Event attendance rates for promoted activities
-- Time spent on platform and feature adoption
-- User-generated content submissions
-- Social media engagement rates
-
-### Conversion Metrics
-
-- Registration rates and completion funnel
-- Verified account creation (Bot-Shield conversion)
-- Real-world event attendance post-registration
-- Subscription upgrade rates to premium tiers
-
-### Retention Metrics
-
-- 30-day and 90-day retention rates
-- Average number of real-world events attended per month
-- Friend/referral connections made through platform
-- Customer satisfaction scores for community experience
-
-### Impact Metrics
-
-- Volunteer hours logged through platform
-- Funds distributed through contractual revenue disbursement
-- Number of local partnerships established
-- Community feedback and testimonials
+- 30-day retention: 40%+ paying members active
+- Member-reported matches: 100+ / 90 days
+- Support satisfaction: 90%+ positive rating
+- Monthly churn: under 15%
 
 ## Budget Allocation
 
-### Phase 1: Pre-Launch (30%)
+| Category | % | Primary Use |
+|----------|---|-------------|
+| Content production | 35% | Blog posts, social media assets, video, screenshots |
+| Community management | 20% | Reddit engagement, Discord, support |
+| Paid acquisition (test) | 20% | Small-budget ad tests on Reddit/Twitter |
+| Tools & infrastructure | 15% | Analytics, email platform, scheduling |
+| PR and outreach | 10% | Relevant podcast/bookings, dating columnist outreach |
 
-- Influencer seeding and relationship building
-- Content creation for initial campaign assets
-- Email marketing platform setup and initial list building
+## Compliance & Risk
 
-### Phase 2: Launch (40%)
+### Florida Statute §496.405
 
-- Paid social media advertising for initial awareness
-- PR distribution and media outreach campaigns
-- Launch event coordination and promotional materials
+- No "donate," "donation," "solicitation" anywhere in customer-facing copy
+- All revenue references are product access transactions
+- Court-ordered support contributions referenced only in legal/terms pages, never as marketing copy
+- Copy reviewed by CEO before publishing
 
-### Phase 3: Post-Launch (30%)
+### Messaging Risks
 
-- Ongoing content creation and community management
-- Performance marketing for sustained growth
-- Analytics tools and measurement platform
+| Risk | Mitigation |
+|------|-----------|
+| App perceived as "not enough members yet" | Lead with verification quality, not quantity. Honest about early stage. |
+| Verification seen as expensive friction | $1 is lowest barrier of any verification system. Frame as trust investment. |
+| Comparison to Tinder/Bumble | Don't compete on volume. Compete on trust. Different product entirely. |
+| Safety guarantee backlash | Safety features are tools, not guarantees. Language is always "tools available to you." |
 
-## Risk Management
+## Feature Availability Timeline (CTO Confirmed)
 
-### Brand Risks
+| Feature | Status | Marketing Ready |
+|---------|--------|----------------|
+| Bot-Shield verification | LIVE | Yes — promote as core differentiator |
+| Profile creation + swipe matching | LIVE | Yes — demonstrate in product screenshots |
+| Real-time messaging | LIVE | Yes — mention in feature content |
+| Events + boards + double dates | LIVE | Yes — unique selling point |
+| Safety tools (block, report, freeze) | LIVE | Yes — safety-first messaging |
+| Video chat | LIVE | Yes — premium feature showcase |
+| LoveBot AI compatibility | LIVE | Yes — but avoid over-promising AI |
+| In-app support | LIVE | Yes — support quality is differentiator |
+| Privacy controls / data export | LIVE | Yes — privacy-conscious messaging |
+| Affiliate program | LIVE | Internal — not customer-facing |
+| Founding Member tiers | LIVE | Yes — primary conversion target |
+| Landing page (static) | LIVE | Needs copy refresh |
+| Marketing API router | MOCK DATA | Do NOT market — internal only |
+| Public API endpoints | NOT BUILT | Do not reference |
+| Dashboard analytics (public) | NOT BUILT | Do not reference |
 
-- Misinterpretation as traditional dating app
-- Legal compliance violations regarding donation terminology
-- Negative perception of monetization approach
+## Content Creation Workflow
 
-### Mitigation Strategies
+1. Write draft in shared doc
+2. Run through compliance check (no charity/donation/solicitation)
+3. Verify feature claims with CTO
+4. CEO review before publishing
+5. Schedule via social automation
+6. Monitor engagement and adjust
 
-- Consistent messaging emphasizing community and real-world connection
-- Strict adherence to approved terminology guidelines
-- Transparent communication about contractual revenue model
+## Escalation Path
 
-### Market Risks
-
-- Competition from established dating platforms
-- Slow adoption due to unfamiliar value proposition
-- Economic downturn affecting discretionary spending
-
-### Mitigation Strategies
-
-- Focus on differentiated community features competitors lack
-- Extensive education about unique value proposition
-- Tiered pricing options to accommodate various budgets
-
-## Implementation Timeline
-
-### 4 Weeks Before Launch
-
-- Finalize all creative assets and messaging
-- Establish influencer partnerships and content calendar
-- Complete email marketing setup and initial list segmentation
-
-### 2 Weeks Before Launch
-
-- Begin soft-launch awareness campaign
-- Distribute press materials to target media outlets
-- Activate VIP early access program
-
-### Launch Week
-
-- Execute coordinated launch campaign across all channels
-- Monitor and respond to initial user feedback
-- Track all KPIs and adjust tactics in real-time
-
-### Month 1 Post-Launch
-
-- Analyze initial performance data and optimize campaigns
-- Expand partnership network based on early success
-- Refine targeting based on best-performing audience segments
-
-### Months 2-3 Post-Launch
-
-- Scale successful initiatives and sunset underperforming ones
-- Plan next phase growth strategies based on learned insights
-- Prepare detailed performance report for stakeholder review
-
-## Conclusion
-
-This marketing strategy positions YouAndINotAI as the premier platform for meaningful social connection through real-world community engagement. By focusing on authentic human relationships rather than digital swiping, we differentiate ourselves in a crowded market while fulfilling our mission to build communities of people who care.
-
-Success depends on consistent messaging that emphasizes our unique value proposition, community-first approach, and commitment to genuine connection—all while maintaining strict compliance with Florida legal requirements.
+- **Copy compliance questions:** Escalate to CEO before publishing
+- **Feature claims verification:** Coordinate with CTO before making public claims
+- **Legal/compliance questions:** Hold copy until CEO reviews
+- **PR crisis:** CEO makes all public statements

@@ -1,6 +1,6 @@
 {
   "name": "paperclip",
-  "description": "Paperclip agent orchestration engine. Routes tasks to sub-agents via OpenCode WSL.",
+  "description": "Paperclip agent orchestration engine — primary focus: marketing affiliate links for YouAndINotAI date app. Routes to sub-agents via cloud models (OpenCode Zen free, Ollama Cloud, OpenRouter free) for less local compute.",
   "runtime": "windows",
   "npm_package": "paperclipai",
   "version": "2026.428.0",
@@ -8,16 +8,25 @@
   "port": 3101,
   "agents_dir": "C:\\ANTIGRAVITY\\paperclip\\agents",
   "agents": {
-    "ceo": { "file": "ceo-agent.md", "model": "hermes-router/hermes" },
-    "hermes": { "file": "hermes-agent.md", "model": "hermes-router/hermes-fast" },
-    "opencode": { "file": "opencode-agent.md", "model": "ollama-local/qwen2.5-coder:7b" },
-    "cto": { "file": "cto-builder.md", "model": "ollama-local/qwen2.5-coder:7b" },
-    "cmo": { "file": "cmo-marketing.md", "model": "hermes-router/marketing" },
-    "cfo": { "file": "cfo-prime.md", "model": "hermes-router/cfo" },
-    "closer": { "file": "closer.md", "model": "openrouter/meta-llama/llama-3.3-70b-instruct:free" },
-    "pi": { "file": "pi-agent.md", "model": "openrouter/openrouter/free" },
-    "grok": { "file": "grok-agent.md", "model": "xai/grok-3" },
-    "fcc": { "file": null, "model": "anthropic/claude-opus-4-7", "runtime": "fcc-claude" }
+    "ceo": { "file": "ceo-agent.md", "model": "hermes-router/hermes", "cloud": true },
+    "hermes": { "file": "hermes-agent.md", "model": "hermes-router/hermes-fast", "cloud": true },
+    "opencode": { "file": "opencode-agent.md", "model": "openrouter/qwen/qwen3-coder:free", "cloud": true },
+    "cto": { "file": "cto-builder.md", "model": "ollama-local/qwen2.5-coder:7b", "cloud": false },
+    "cmo": { "file": "cmo-marketing.md", "model": "hermes-router/marketing", "cloud": true },
+    "cfo": { "file": "cfo-prime.md", "model": "hermes-router/cfo", "cloud": true },
+    "closer": { "file": "closer.md", "model": "openrouter/meta-llama/llama-3.3-70b-instruct:free", "cloud": true },
+    "pi": { "file": "pi-agent.md", "model": "openrouter/openrouter/free", "cloud": true },
+    "grok": { "file": "grok-agent.md", "model": "opencode/grok-4.5", "cloud": true },
+    "marketing-affiliate": { "file": "marketing-affiliate.md", "model": "openrouter/openrouter/free", "cloud": true, "primary_focus": true },
+    "fcc": { "file": null, "model": "opencode/claude-sonnet-4-5", "runtime": "fcc-claude", "cloud": true }
+  },
+  "cloud_providers": {
+    "opencode_zen": { "auth": "opencode /connect → zen (browser OAuth)", "free": true },
+    "ollama_cloud": { "auth": "OLLAMA_API_KEY env var", "free": true },
+    "openrouter": { "auth": "OPENROUTER_API_KEY env var", "free": true },
+    "xai_grok": { "auth": "XAI_API_KEY or xai auth login", "free_via_openrouter": true },
+    "openai_gpt": { "auth": "OPENAI_API_KEY or ChatGPT Plus OAuth" },
+    "anthropic_codex": { "auth": "ANTHROPIC_API_KEY or Claude Pro/Max OAuth" }
   },
   "runtime_map": {
     "opencode_wsl": "/home/trollz/.opencode/bin/opencode",

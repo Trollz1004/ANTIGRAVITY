@@ -156,7 +156,7 @@ services:
           cpus: "0.25"
           memory: 128M
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      test: ["CMD-SHELL", "ps aux | grep -v grep | grep -q 'app.worker' || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3

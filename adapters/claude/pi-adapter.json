@@ -1,10 +1,51 @@
 {
   "name": "pi-agent",
-  "description": "PI coding agent — lightweight assistant for quick tasks. Runs via npm global install.",
+  "description": "PI coding agent — lightweight assistant for quick tasks. Routes through ALL cloud model providers: OpenCode Zen free, Ollama Cloud, OpenRouter free, Grok/xAI, OpenAI/GPT, Codex/Claude. Auth via API keys or OAuth sign-in.",
   "runtime": "windows",
   "binary": "pi",
   "npm_package": "@mariozechner/pi-coding-agent",
   "version": "0.71.1",
-  "command": "pi \"$TASK\"",
-  "paperclip_role": "Quick task executor — cheap/fast for simple operations"
+  "command": "pi --provider auto --model \"$MODEL\" \"$TASK\"",
+  "paperclip_role": "Quick task executor — routes to cheapest cloud model first",
+  "providers": {
+    "opencode_zen": {
+      "auth": "opencode providers login zen (OAuth via browser)",
+      "free_models": ["deepseek-v4-flash-free", "hy3-free", "mimo-v2.5-free", "north-mini-code-free", "nemotron-3-ultra-free"],
+      "paid_models": ["gpt-5.1-codex", "claude-sonnet-4-5", "grok-4.5"]
+    },
+    "ollama_cloud": {
+      "auth": "OLLAMA_API_KEY env var (from ollama.com/settings/keys)",
+      "url": "https://ollama.com/v1",
+      "free_tier": true,
+      "models": ["glm-5.1:cloud", "kimi-k2.6:cloud", "qwen2.5-coder:32b:cloud"]
+    },
+    "openrouter": {
+      "auth": "OPENROUTER_API_KEY env var (from openrouter.ai/keys) or OAuth",
+      "url": "https://openrouter.ai/api/v1",
+      "free_models": true,
+      "models": ["meta-llama/llama-3.3-70b-instruct:free", "qwen/qwen3-coder:free", "google/gemma-4-31b-it:free", "x-ai/grok-3:free"]
+    },
+    "xai_grok": {
+      "auth": "XAI_API_KEY env var (from x.ai/api) or X Premium login",
+      "url": "https://api.x.ai/v1",
+      "models": ["grok-3", "grok-3-mini", "grok-3-reasoning"]
+    },
+    "openai": {
+      "auth": "OPENAI_API_KEY env var or ChatGPT Plus/Pro OAuth login",
+      "models": ["gpt-5", "gpt-5-codex", "gpt-5-mini"]
+    },
+    "anthropic": {
+      "auth": "ANTHROPIC_API_KEY env var or Claude Pro/Max OAuth login",
+      "models": ["claude-opus-4-7", "claude-sonnet-4-6", "claude-haiku-4-5"]
+    },
+    "github_copilot": {
+      "auth": "GitHub device code login (opencode providers login github-copilot)",
+      "models": ["gpt-5-codex", "claude-sonnet-4-6"]
+    },
+    "google_gemini": {
+      "auth": "GEMINI_API_KEY env var (from Google AI Studio) or OAuth",
+      "free_tier": true,
+      "models": ["gemini-2.5-flash", "gemini-2.5-pro"]
+    }
+  }
 }

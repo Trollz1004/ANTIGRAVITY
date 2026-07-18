@@ -546,3 +546,108 @@ class LoveBotTipResponse(BaseModel):
 class LoveBotGiftResponse(BaseModel):
     recipient: str
     ideas: list[str]
+
+
+# ── Affiliates / Link Forge ──
+
+
+class AffiliateLinkCreateRequest(BaseModel):
+    affiliate_id: str = Field(min_length=1, max_length=100)
+    campaign: str = Field(min_length=1, max_length=100)
+    destination_url: str = Field(min_length=1, max_length=2048)
+    utm_source: str | None = Field(None, max_length=200)
+    utm_medium: str | None = Field(None, max_length=200)
+    utm_campaign: str | None = Field(None, max_length=200)
+    utm_term: str | None = Field(None, max_length=200)
+    utm_content: str | None = Field(None, max_length=200)
+
+
+class AffiliateLinkResponse(BaseModel):
+    id: uuid.UUID
+    affiliate_id: str
+    user_id: uuid.UUID | None
+    campaign: str
+    destination_url: str
+    short_code: str
+    short_url: str = ""
+    utm_source: str | None
+    utm_medium: str | None
+    utm_campaign: str | None
+    utm_term: str | None
+    utm_content: str | None
+    active: bool
+    approved: bool
+    approved_at: datetime | None
+    click_count: int
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+class AffiliateClickResponse(BaseModel):
+    id: uuid.UUID
+    link_id: uuid.UUID
+    ip_address: str | None
+    user_agent: str | None
+    referer: str | None
+    country: str | None
+    converted: bool
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+class AffiliateConversionResponse(BaseModel):
+    id: uuid.UUID
+    click_id: uuid.UUID
+    link_id: uuid.UUID
+    user_id: uuid.UUID | None
+    conversion_type: str
+    revenue_cents: int
+    commission_cents: int
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+class AffiliateStatsResponse(BaseModel):
+    total_links: int
+    total_clicks: int
+    total_conversions: int
+    total_revenue_cents: int
+    total_commission_cents: int
+    conversion_rate: float
+
+
+class AffiliateChannelGenerateRequest(BaseModel):
+    channel: str = Field(min_length=1, max_length=20)
+    ref_id: str = Field(min_length=1, max_length=100)
+    campaign: str | None = Field(None, max_length=100)
+    term: str | None = Field(None, max_length=200)
+    content: str | None = Field(None, max_length=200)
+
+
+class AffiliateForgedLinkResponse(BaseModel):
+    channel: str
+    destination_url: str
+    utm_source: str
+    utm_medium: str
+    utm_campaign: str
+    utm_term: str | None
+    utm_content: str | None
+    purpose: str
+    presentation_copy: str
+
+
+class AffiliateApprovedLinkRow(BaseModel):
+    channel: str
+    url: str
+    purpose: str
+    date_approved: datetime | None
+    short_code: str
+    campaign: str
+    click_count: int
+
+
+class AffiliateApprovedLinksDoc(BaseModel):
+    title: str = "APPROVED LINKS — Link Forge"
+    generated_at: datetime
+    total_links: int
+    links: list[AffiliateApprovedLinkRow]

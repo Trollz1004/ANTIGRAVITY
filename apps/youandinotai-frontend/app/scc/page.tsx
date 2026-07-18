@@ -44,8 +44,8 @@ export default function SccBoundaryPage() {
       <main className="relative z-10 max-w-5xl mx-auto px-6 py-10 space-y-8">
         <section className="rounded-[2rem] border border-slate-800 bg-slate-900/60 p-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="rounded-2xl border border-blue-500/30 bg-blue-500/10 p-3">
-              <ShieldCheck className="h-7 w-7 text-blue-400" />
+            <div className="rounded-2xl border border-cyan-500/30 bg-cyan-500/10 p-3" aria-hidden="true">
+              <ShieldCheck className="h-7 w-7 text-cyan-400" />
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
@@ -64,7 +64,7 @@ export default function SccBoundaryPage() {
         <div className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-[2rem] border border-slate-800 bg-slate-900/50 p-6">
             <div className="mb-4 flex items-center gap-2">
-              <Globe className="h-5 w-5 text-blue-400" />
+              <Globe className="h-5 w-5 text-cyan-400" aria-hidden="true" />
               <h2 className="text-lg font-black tracking-tight">Verified Public Surfaces</h2>
             </div>
 
@@ -75,13 +75,14 @@ export default function SccBoundaryPage() {
                   href={surface.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-950/50 p-4 transition-all hover:-translate-y-1 hover:border-blue-500"
+                  aria-label={`${surface.name} — ${surface.label} (opens in new tab)`}
+                  className="flex items-start justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-950/50 p-4 transition-all hover:-translate-y-1 hover:border-cyan-500"
                 >
                   <div>
                     <p className="text-sm font-bold">{surface.name}</p>
                     <p className="mt-1 text-xs text-slate-400">{surface.label}</p>
                   </div>
-                  <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-slate-500" />
+                  <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-slate-500" aria-hidden="true" />
                 </a>
               ))}
             </div>
@@ -89,7 +90,7 @@ export default function SccBoundaryPage() {
 
           <section className="rounded-[2rem] border border-slate-800 bg-slate-900/50 p-6">
             <div className="mb-4 flex items-center gap-2">
-              <Lock className="h-5 w-5 text-blue-400" />
+              <Lock className="h-5 w-5 text-cyan-400" aria-hidden="true" />
               <h2 className="text-lg font-black tracking-tight">What Stays Private</h2>
             </div>
 

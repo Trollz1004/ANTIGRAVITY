@@ -1,0 +1,71 @@
+{
+  "node": "T5500",
+  "hostname": "t5500-sabretooth",
+  "ip": "192.168.0.5",
+  "gpu": "NVIDIA GTX 1050 Ti (4GB VRAM)",
+  "cpu": "Intel Xeon X5675 @ 3.07GHz (12 cores)",
+  "ram": "48GB DDR3",
+  "paperclip_port": 3101,
+  "hermes_router_port": 11435,
+  "ollama_port": 11434,
+  "dateapp_static_port": 3200,
+  "supportclaw_port": 18895,
+  "cloudflared_tunnel_id": "c7bc9665-3923-4977-acd7-2033838cd56e",
+  "load_balancer": {
+    "type": "cloudflared + round-robin",
+    "strategy": "cloud_first",
+    "description": "Route compute to cloud models (OpenCode Zen, OpenRouter, Ollama Cloud) first. Local GPU only when cloud unavailable. Reduces T5500 GPU/CPU load.",
+    "rules": [
+      {
+        "name": "paperclip-marketing",
+        "service": "paperclip (port 3101)",
+        "primary": "cloud",
+        "cloud_providers": ["opencode_zen", "openrouter", "ollama_cloud"],
+        "local_fallback": "ollama-local (port 11434)",
+        "models_cloud": ["openrouter/openrouter/free", "opencode/deepseek-v4-flash-free", "ollama-cloud/glm-5.1:cloud"],
+        "models_local": ["ollama-local/qwen2.5-coder:7b", "ollama-local/gemma4:latest"]
+      },
+      {
+        "name": "dateapp-static",
+        "service": "youandinotai.com static site (port 3200)",
+        "type": "static_serve",
+        "cdn": "Cloudflare Pages",
+        "load": "minimal"
+      },
+      {
+        "name": "hermes-router",
+        "service": "Hermes Router (port 11435)",
+        "primary": "cloud",
+        "cloud_providers": ["openrouter", "opencode_zen", "ollama_cloud"],
+        "local_fallback": "ollama-local (port 11434)",
+        "auto_fallback": true
+      },
+      {
+        "name": "supportclaw",
+        "service": "SupportClaw (port 18895)",
+        "primary": "local",
+        "model": "ollama-local/qwen2.5:7b",
+        "description": "Customer support — uses local model for privacy"
+      },
+      {
+        "name": "fcc-claude-proxy",
+        "service": "FCC Claude proxy (port 8082)",
+        "upstreams": ["nvidia_nim", "open_router", "groq", "gemini", "ollama"],
+        "primary": "nvidia_nim/nvidia/nemotron-3-super-120b-a12b",
+        "fallback": "open_router/meta-llama/llama-3.3-70b-instruct:free"
+      }
+    ],
+    "health_checks": {
+      "ollama_local": { "endpoint": "http://localhost:11434/api/tags", "interval_sec": 30 },
+      "hermes_router": { "endpoint": "http://localhost:11435/v1/models", "interval_sec": 15 },
+      "paperclip": { "endpoint": "http://localhost:3101/health", "interval_sec": 30 },
+      "cloudflare_tunnel": { "endpoint": "https://paperclip-hq.youandinotai.com/health", "interval_sec": 60 }
+    },
+    "cost_optimization": {
+      "strategy": "free_models_first",
+      "providers_by_cost": ["opencode_zen_free", "openrouter_free", "ollama_cloud_free", "ollama_local", "openrouter_paid", "opencode_zen_paid"],
+      "monthly_budget_cloud": 10.00,
+      "alert_at_percent": 80
+    }
+  }
+}

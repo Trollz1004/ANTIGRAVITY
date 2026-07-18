@@ -4,6 +4,24 @@
   "autoshare": false,
   "autoupdate": true,
   "provider": {
+    "opencode": {
+      "name": "OpenCode Zen (free + paid — logged in via /connect)",
+      "models": {
+        "deepseek-v4-flash-free": { "name": "DeepSeek V4 Flash (free)" },
+        "hy3-free":               { "name": "Hy3 (free)" },
+        "mimo-v2.5-free":         { "name": "Mimo v2.5 (free)" },
+        "north-mini-code-free":   { "name": "North Mini Code (free)" },
+        "nemotron-3-ultra-free":  { "name": "Nemotron 3 Ultra (free)" },
+        "gpt-5.1-codex":          { "name": "GPT 5.1 Codex (zen paid)" },
+        "gpt-5.2-codex":          { "name": "GPT 5.2 Codex (zen paid)" },
+        "claude-sonnet-4-5":      { "name": "Claude Sonnet 4.5 (zen paid)" },
+        "claude-opus-4-5":        { "name": "Claude Opus 4.5 (zen paid)" },
+        "grok-4.5":               { "name": "Grok 4.5 (zen paid)" },
+        "gemini-3-flash":         { "name": "Gemini 3 Flash (zen)" },
+        "gemini-3.1-pro":         { "name": "Gemini 3.1 Pro (zen)" },
+        "qwen3.5-plus":           { "name": "Qwen 3.5 Plus (zen)" }
+      }
+    },
     "anthropic": {
       "options": { "apiKey": "{env:ANTHROPIC_API_KEY}" },
       "models": {
@@ -14,7 +32,7 @@
     },
     "codex": {
       "npm": "@ai-sdk/anthropic",
-      "name": "Codex (auth — Anthropic API)",
+      "name": "Codex (auth — Anthropic API / CLI login)",
       "options": { "apiKey": "{env:ANTHROPIC_API_KEY}" },
       "models": {
         "claude-opus-4-7":   { "name": "Codex Opus 4.7 (orchestrator)" },
@@ -22,14 +40,17 @@
       }
     },
     "openai": {
+      "name": "OpenAI (auth — API key / ChatGPT Plus login)",
       "options": { "apiKey": "{env:OPENAI_API_KEY}" },
       "models": {
         "gpt-5":      { "name": "GPT-5 (deep)" },
+        "gpt-5-codex": { "name": "GPT-5 Codex (coding)" },
         "gpt-5-mini": { "name": "GPT-5 mini (cheap)" },
         "o3":         { "name": "o3 (reasoning)" }
       }
     },
     "google": {
+      "name": "Google Gemini (auth — API key / Google AI Studio)",
       "options": { "apiKey": "{env:GEMINI_API_KEY}" },
       "models": {
         "gemini-2.5-pro":   { "name": "Gemini 2.5 Pro" },
@@ -38,7 +59,7 @@
     },
     "xai": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "xAI Grok (auth — x.AI Builder / API key)",
+      "name": "xAI Grok (auth — xAI Builder / API key / X Premium)",
       "options": {
         "baseURL": "https://api.x.ai/v1",
         "apiKey":  "{env:XAI_API_KEY}"
@@ -49,9 +70,16 @@
         "grok-3-reasoning": { "name": "Grok 3 Reasoning (deep)" }
       }
     },
+    "github-copilot": {
+      "name": "GitHub Copilot (auth — GitHub login / device code)",
+      "models": {
+        "gpt-5-codex": { "name": "GPT-5 Codex (copilot)" },
+        "claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 (copilot)" }
+      }
+    },
     "nous": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Nous Research",
+      "name": "Nous Research (auth — API key)",
       "options": {
         "baseURL": "https://inference-api.nousresearch.com/v1",
         "apiKey":  "{env:NOUS_API_KEY}"
@@ -64,7 +92,7 @@
     },
     "openrouter": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "OpenRouter (FREE + paid models)",
+      "name": "OpenRouter (auth — API key, FREE models available)",
       "options": {
         "baseURL": "https://openrouter.ai/api/v1",
         "apiKey":  "{env:OPENROUTER_API_KEY}"
@@ -85,27 +113,31 @@
         "liquid/lfm-2.5-1.2b-instruct:free":                      { "name": "LFM 2.5 1.2B (free)" },
         "cognitivecomputations/dolphin-mistral-24b-venice-edition:free": { "name": "Dolphin Mistral 24B (free)" },
         "x-ai/grok-3:free":                                       { "name": "Grok 3 (free — OpenRouter)" },
-        "x-ai/grok-3-mini:free":                                  { "name": "Grok 3 Mini (free — OpenRouter)" }
+        "x-ai/grok-3-mini:free":                                  { "name": "Grok 3 Mini (free — OpenRouter)" },
+        "anthropic/claude-sonnet-4-6:free":                       { "name": "Claude Sonnet 4.6 (free tier)" },
+        "openai/gpt-5-codex:free":                                { "name": "GPT-5 Codex (free tier)" }
       }
     },
     "ollama-cloud": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama Cloud (CAPPED 4 days)",
+      "name": "Ollama Cloud (auth — ollama.com API key, cloud hosted models)",
       "options": {
         "baseURL": "https://ollama.com/v1",
         "apiKey":  "{env:OLLAMA_API_KEY}"
       },
       "models": {
-        "joshlcoleman/CFO-Until-No-Kid-In-Need:latest":   { "name": "CFO PRIME (your model)" },
-        "joshlcoleman/dateapp-marketing:latest":          { "name": "Marketing (your model)" },
+        "joshlcoleman/CFO-Until-No-Kid-In-Need:latest":   { "name": "CFO PRIME (custom)" },
+        "joshlcoleman/dateapp-marketing:latest":          { "name": "DateApp Marketing (custom)" },
         "jeffreyvandekorput/korpohermes-prime:latest":    { "name": "Hermes Prime (cloud)" },
         "kimi-k2.6:cloud":                                 { "name": "Kimi K2.6" },
-        "glm-5.1:cloud":                                   { "name": "GLM 5.1" }
+        "glm-5.1:cloud":                                   { "name": "GLM 5.1" },
+        "deepseek-r1:cloud":                               { "name": "DeepSeek R1 (cloud)" },
+        "qwen2.5-coder:32b:cloud":                         { "name": "Qwen 2.5 Coder 32B (cloud)" }
       }
     },
     "ollama-local": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Local Ollama (FREE — snap, 11 models installed)",
+      "name": "Local Ollama (FREE — T5500 GPU, 11 models installed)",
       "options": {
         "baseURL": "http://localhost:11434/v1",
         "apiKey":  "ollama"
@@ -125,21 +157,21 @@
     },
     "hermes-router": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Hermes Router (services/hermes-router — auto-fallback)",
+      "name": "Hermes Router (port 11435 — auto-fallback across all providers)",
       "options": {
         "baseURL": "http://localhost:11435/v1",
         "apiKey":  "router-auth"
       },
       "models": {
-        "hermes":        { "name": "Hermes (default)" },
-        "hermes-deep":   { "name": "Hermes Deep (405B)" },
-        "hermes-fast":   { "name": "Hermes Fast (36B)" },
+        "hermes":        { "name": "Hermes (default — auto-fallback)" },
+        "hermes-deep":   { "name": "Hermes Deep (405B cloud)" },
+        "hermes-fast":   { "name": "Hermes Fast (36B local)" },
         "hermes-reason": { "name": "Hermes Reason (think tags)" },
         "code":          { "name": "Code (local Qwen + fallback)" },
         "fast":          { "name": "Fast (local Llama)" },
-        "cfo":           { "name": "CFO (cloud + fallback)" },
-        "marketing":     { "name": "Marketing (cloud + fallback)" },
-        "kimi":          { "name": "Kimi (cloud + fallback)" }
+        "cfo":           { "name": "CFO (cloud ollama + fallback)" },
+        "marketing":     { "name": "Marketing (cloud ollama + fallback)" },
+        "kimi":          { "name": "Kimi (ollama cloud + fallback)" }
       }
     }
   },
@@ -147,11 +179,15 @@
   "agent": {
     "orchestrator": {
       "description": "High-quality orchestrator. Use Opus for planning, route execution to cheaper models.",
-      "model": "anthropic/claude-opus-4-7"
+      "model": "opencode/claude-sonnet-4-5"
     },
     "coder": {
       "description": "Code writer. Prefers local or free models first.",
       "model": "ollama-local/qwen2.5-coder:7b"
+    },
+    "marketing-affiliate": {
+      "description": "Paperclip marketing affiliate link generator for date app. Uses cloud models for less local compute.",
+      "model": "openrouter/meta-llama/llama-3.3-70b-instruct:free"
     },
     "closer": {
       "description": "Demo + proposal builder for paid gigs. Max quality.",
@@ -167,11 +203,15 @@
     },
     "grok-adversarial": {
       "description": "Red-team / adversarial review via Grok.",
-      "model": "xai/grok-3"
+      "model": "opencode/grok-4.5"
     },
     "free-fast": {
-      "description": "Quick tasks using free OpenRouter models.",
+      "description": "Quick tasks using free OpenRouter or zen free models.",
       "model": "openrouter/openrouter/free"
+    },
+    "paperclip-ceo": {
+      "description": "Paperclip CEO agent — routes marketing affiliate tasks to right model.",
+      "model": "hermes-router/hermes"
     }
   }
 }

@@ -45,6 +45,9 @@
     background-color: #020617;
     color-scheme: dark;
   }
+  html:not(.dark) {
+    color-scheme: light;
+  }
 
   body {
     background-color: #020617; /* deep space dark — bg-slate-950 */
@@ -62,6 +65,47 @@
   code, kbd, samp, pre {
     font-family: var(--font-mono);
   }
+}
+
+/* ----------------------------------------------------------------------------
+   Global focus indicators — WCAG 2.1 AA 2.4.7 Focus Visible + 2.4.3 Focus Order
+   ----------------------------------------------------------------------------*/
+:focus-visible {
+  outline: 3px solid #22d3ee;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ----------------------------------------------------------------------------
+   Reduced motion — respects prefers-reduced-motion
+   ----------------------------------------------------------------------------*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Screen reader only utility
+   ----------------------------------------------------------------------------*/
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ----------------------------------------------------------------------------
@@ -125,6 +169,42 @@
     letter-spacing: 0.1em;
     color: #94a3b8; /* slate-400 */
   }
+}
+
+/* ----------------------------------------------------------------------------
+   Accessibility — skip link (visually hidden until focused)
+   WCAG 2.4.1 Bypass Blocks
+   ----------------------------------------------------------------------------*/
+.skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link:focus {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  width: auto;
+  height: auto;
+  padding: 12px 20px;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  z-index: 99999;
+  background: #06b6d4;
+  color: #020617;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 8px;
+  outline: 3px solid #22d3ee;
+  outline-offset: 2px;
 }
 
 /* ----------------------------------------------------------------------------

@@ -1,239 +1,230 @@
 # YouAndINotAI 30-Day Content Calendar
 
-## Week 1: Platform Introduction & Core Features
+**Doctrine:** Product-first. All content sells verification, membership, safety, support, matching quality. No charity/donation language.
 
-### Day 1 (Monday) - Launch Announcement
+## Week 1: Launch & Verification Trust
 
-**Channel**: All platforms
-**Content**: "YouAndINotAI is LIVE! Connect with people who give a damn about real-world community. No bots, no swiping—just genuine human connection IRL. #CommunityFirst #RealConnections"
-**Visual**: Platform screenshot collage
+### Day 1 (Monday) - Product Launch
 
-### Day 2 (Tuesday) - Bot-Shield Feature Highlight
+**Channel:** All
+**Content:** "YouAndINotAI is live. Verified profiles. Prompt-first matching. Safer plans. Founding Member access is open."
+**Format:** Announcement post + link to youandinotai.com
 
-**Channel**: Social media, blog
-**Content**: "Why Bot-Shield Verification Matters: Your safety and authenticity guaranteed. Learn how our account-bound system keeps real people connected. [Link to blog]"
-**Visual**: Infographic explaining verification process
+### Day 2 (Tuesday) - Bot-Shield Deep Dive
 
-### Day 3 (Wednesday) - Community Hero Spotlight
+**Channel:** Twitter/X, Reddit
+**Content:** "How Bot-Shield verification works: selfie check + behavioral signals. Every profile in discovery passed a human check."
+**Format:** Twitter thread (5-7 tweets), Reddit text post
+**Supporting blog:** "What Is Bot-Shield Verification"
 
-**Channel**: Instagram, Facebook
-**Content**: "Meet Sarah from Denver who organized our first neighborhood cleanup. Real people making real differences. Tag someone who'd love our community events!"
-**Visual**: Photo collage from neighborhood event
+### Day 3 (Wednesday) - Problem Post
 
-### Day 4 (Thursday) - How It Works Series
+**Channel:** Reddit (r/OnlineDating), Twitter/X
+**Content:** "Most dating apps profit from fake profiles. Verified accounts cost them money. We built the opposite."
+**Format:** Honest take on industry problem, no competitor naming
 
-**Channel**: LinkedIn, blog
-**Content**: "Getting Started Guide: From profile to your first real-world meetup in 5 easy steps. [Link to guide]"
-**Visual**: Step-by-step illustrated guide
+### Day 4 (Thursday) - Safety Feature Walkthrough
 
-### Day 5 (Friday) - User Testimonial
+**Channel:** Instagram, Twitter/X
+**Content:** "Report, block, restrict, freeze, support — all reachable from profile and chat. Safety tools stay visible."
+**Format:** Carousel post (Instagram), screenshot thread (Twitter)
 
-**Channel**: Twitter/X, Facebook
-**Content**: "Early adopter testimonial about first real-world connection through our platform. 'I actually had coffee with someone—and talked about books!' #RealDates #Community"
-**Visual**: Quote graphic with user avatar
+### Day 5 (Friday) - Founder Story
 
-### Day 6 (Saturday) - Weekend Event Promotion
+**Channel:** LinkedIn, Reddit (r/SideProject)
+**Content:** "I was an electrician for 10 years. Now I'm building a dating app around accountable verification."
+**Format:** Personal narrative post
 
-**Channel**: All platforms
-**Content**: "This Weekend: Join our Saturday morning hiking group or Sunday volunteer shift at the local food bank. Check the app for events near you!"
-**Visual**: Weekend event collage
+### Day 6 (Saturday) - Matching Quality
 
-### Day 7 (Sunday) - Reflection Post
+**Channel:** Twitter/X, Instagram
+**Content:** "Prompt-first matching: comment on what interests you. Better conversations start with context, not 'hey.'"
+**Format:** Product screenshot + short caption
 
-**Channel**: Instagram Stories, newsletter
-**Content**: "Weekend reflection: How small acts of community connection can change everything. Share your weekend community moments!"
-**Visual**: Inspirational quote overlay on scenic community photo
+### Day 7 (Sunday) - Week One Wrap
 
-## Week 2: Community Engagement Focus
+**Channel:** Twitter/X, Newsletter
+**Content:** "Week one stats: [X] verified profiles, [Y] Founding Members, [Z] matches started. Building in public."
+**Format:** Honest update, no inflated numbers. Use "not verified" labels where needed.
 
-### Day 8 (Monday) - Volunteer Impact Highlight
+## Week 2: Product Education
 
-**Channel**: All platforms
-**Content**: "Last month, our community members volunteered 247 hours locally—that's nearly 2 full workweeks of service. See your impact in the app! #ForTheCommunity"
-**Visual**: Volunteer hours infographic
+### Day 8 (Monday) - Verification Walkthrough
 
-### Day 9 (Tuesday) - Tips Tuesday
+**Channel:** Blog, Twitter/X
+**Content:** "Step-by-step: create profile, verify identity, enter discovery lane. Under 5 minutes total."
+**Format:** Blog post + condensed thread
 
-**Channel**: LinkedIn, blog
-**Content**: "Tips for Starting Conversations at Real-World Events: Breaking the ice when meeting IRL. [Link to article]"
-**Visual**: Conversation starter ideas graphic
+### Day 9 (Tuesday) - Prompt-First Explained
 
-### Day 10 (Wednesday) - Meet the Developers
+**Channel:** Reddit (r/datingoverthirty), Twitter/X
+**Content:** "Why commenting on prompts beats swiping: context creates better conversations."
+**Format:** Text post, anecdotal data
 
-**Channel**: Twitter/X, blog
-**Content**: "Behind the Scenes: Meet the team building honest social connection technology. No algorithms—just thoughtful design for real people."
-**Visual**: Team photo with personalized quote bubbles
+### Day 10 (Wednesday) - Safety Tools Tutorial
 
-### Day 11 (Thursday) - Community Challenge
+**Channel:** Instagram, Twitter/X
+**Content:** "How to use freeze, restrict, and report. Every tool available from the profile screen."
+**Format:** Screen recording / Reel
 
-**Channel**: Instagram, Facebook
-**Content**: "This Week's Challenge: Invite someone to a community event through the app. Tag us in your invitation screenshot for a chance to WIN community swag!"
-**Visual**: Challenge banner with instructions
+### Day 11 (Thursday) - Industry Critique
 
-### Day 12 (Friday) - Success Story Friday
+**Channel:** Twitter/X, LinkedIn
+**Content:** "The dating app business model is engagement at all costs. Verified profiles don't fit that model. That's the point."
+**Format:** Opinion post
 
-**Channel**: All platforms
-**Content**: "Success Story: How Jake and Maria met at our volunteer orientation and are now co-organizing neighborhood movie nights. Real connections = ❤️"
-**Visual**: Before/after photos of couple with community event
+### Day 12 (Friday) - Member Preview
 
-### Day 13 (Saturday) - Weekend Events Series
+**Channel:** Instagram, Facebook
+**Content:** "What verified profiles look like: badge, intent tag, prompt preview, safety cues."
+**Format:** Profile mockup image
 
-**Channel**: All platforms
-**Content**: "Weekend Plans? Check out these events near you this Saturday: [Event list]. Meeting people IRL creates memories that last forever."
-**Visual**: Interactive event map
+### Day 13 (Saturday) - Pricing Transparency
 
-### Day 14 (Sunday) - User-Generated Content Feature
+**Channel:** Twitter/X, Reddit
+**Content:** "$1 verification. $14.99/mo Founding Member. No hidden fees. Cancel anytime. Badge stays."
+**Format:** Simple pricing graphic
 
-**Channel**: Instagram, Facebook
-**Content**: "Favorite User Post: '@communitybuilder took this amazing shot at yesterday's pottery workshop meetup!' Thanks for sharing your moments!"
-**Visual**: Reposted user photo with credit
+### Day 14 (Sunday) - Biweekly Update
 
-## Week 3: Feature Deep Dive & Educational Content
+**Channel:** Newsletter, Twitter/X
+**Content:** "Two weeks in: what's working, what's being fixed, what's next. Build-in-public accountability."
+**Format:** Honest progress post
 
-### Day 15 (Monday) - App Feature Spotlight
+## Week 3: Feature Deep Dive
 
-**Channel**: All platforms
-**Content**: "Did You Know?: Our Event Radius Feature lets you discover community activities within walking distance. Perfect for spontaneous connections!"
-**Visual**: Screen recording of feature in action
+### Day 15 (Monday) - Plans Feature
 
-### Day 16 (Tuesday) - Thought Leadership Post
+**Channel:** Twitter/X, Instagram
+**Content:** "Move from chat to a date plan with context, check-in, and share-date path. Plans are built for safer first meetups."
+**Format:** Feature screenshot + description
 
-**Channel**: LinkedIn, blog
-**Content**: "Why Digital Dating Failed Us: The crisis of superficial connection and how YouAndINotAI offers a better way. [Link to opinion piece]"
-**Visual**: Professional headshot with article preview
+### Day 16 (Tuesday) - Verification FAQ
 
-### Day 17 (Wednesday) - Midweek Motivation
+**Channel:** Blog, Reddit
+**Content:** "Does Bot-Shield store my selfie? How long does verification take? What happens if I fail?"
+**Format:** FAQ blog post
 
-**Channel**: Instagram Stories, Twitter/X
-**Content**: "Midweek motivation: Small community actions add up to big social impact. Have you checked tonight's local events yet?"
-**Visual**: Motivational quote with gradient background
+### Day 17 (Wednesday) - Trust Signals
 
-### Day 18 (Thursday) - Partnership Highlight
+**Channel:** Twitter/X, LinkedIn
+**Content:** "Verification badge. Account status. Trust cues on every profile. You see what you're getting before you match."
+**Format:** Comparison before/after graphic
 
-**Channel**: All platforms
-**Content**: "Partner Spotlight: Working with Local Good Food Bank to bring neighbors together through shared service experiences. Their impact = ⬆️"
-**Visual**: Partner logo with collaborative event photos
+### Day 18 (Thursday) - Behind the Build
 
-### Day 19 (Friday) - Fun Friday Facts
+**Channel:** Reddit (r/startups), Twitter/X
+**Content:** "Stack: Next.js, Prisma, Supabase, Socket.io, Square. One dev. Zero VC money."
+**Format:** Tech stack post
 
-**Channel**: Twitter/X, Facebook
-**Content**: "Fun Fact Friday: Our community members attend an average of 3 events before finding their 'click.' Patience builds stronger bonds than instant matches!"
-**Visual**: Statistical infographic with light colors
+### Day 19 (Friday) - Support Philosophy
 
-### Day 20 (Saturday) - Community Spotlight Story
+**Channel:** LinkedIn, Blog
+**Content:** "In-app support center. Email response within 24 hours. Escalation path to a human. Support is a feature, not an afterthought."
+**Format:** Blog post
 
-**Channel**: Instagram, blog
-**Content**: "Community Spotlight: Riverside Neighborhood Association transformed their monthly meetings with our discussion features. Read their story:"
-**Visual**: Neighborhood photos with community leader quotes
+### Day 20 (Saturday) - Match Quality
 
-### Day 21 (Sunday) - Weekly Wrap-Up
+**Channel:** Twitter/X, Instagram
+**Content:** "Intent tags: relationship-ready, casual, open. Availability filters. Distance ranges. Match on what matters."
+**Format:** Feature screenshot
 
-**Channel**: Newsletter, Facebook
-**Content**: "Week in Review: 87 new community connections made, 154 volunteer hours logged. Together we're building neighborhoods that matter."
-**Visual**: Weekly stats dashboard design
+### Day 21 (Sunday) - Three-Week Update
 
-## Week 4: Advanced Features & Retention Focus
+**Channel:** Newsletter, Twitter/X
+**Content:** "Week 3: feature ship progress, member feedback, what changed based on user input."
+**Format:** Transparent update post
 
-### Day 22 (Monday) - Advanced Feature Tutorial
+## Week 4: Conversion & Retention
 
-**Channel**: YouTube Shorts, blog
-**Content**: "Advanced Tip: Use Interest Group Filters to find people passionate about exactly what you care about. Tutorial video now live!"
-**Visual**: Video thumbnail with play button
+### Day 22 (Monday) - Founding Member Value
 
-### Day 23 (Tuesday) - Relationship Advice Series
+**Channel:** Twitter/X, Email
+**Content:** "Founding Member pricing is locked for life. Price never increases. Original badge never re-mints."
+**Format:** Urgency + value post
 
-**Channel**: LinkedIn, blog
-**Content**: "From Digital to IRL: Transitioning virtual connections to real-world friendships. Expert tips inside the blog."
-**Visual**: Advice checklist graphic
+### Day 23 (Tuesday) - Safety Feature Roundup
 
-### Day 24 (Wednesday) - Community Heroes Continued
+**Channel:** Instagram, Facebook
+**Content:** "All safety tools in one place: block, report, restrict, freeze, support. Every tool, one screen."
+**Format:** Infographic carousel
 
-**Channel**: Instagram, Facebook
-**Content**: "More Community Heroes: Celebrating members who create welcoming spaces wherever they go. Nominate your community connector! [Link to form]"
-**Visual**: Community hero photo collage
+### Day 24 (Wednesday) - Build Update
 
-### Day 25 (Thursday) - Data Privacy Focus
+**Channel:** Reddit, Twitter/X
+**Content:** "Shipped this week: [feature]. Fixing: [bug]. Next up: [roadmap item]. Build-in-public continues."
+**Format:** Dev log style post
 
-**Channel**: Twitter/X, blog
-**Content**: "Transparency Report: Zero personal data sold, ever. Only essential information shared with verified event partners. Privacy = 🛡️"
-**Visual**: Privacy shield icon with clean design
+### Day 25 (Thursday) - Privacy Post
 
-### Day 26 (Friday) - Weekend Planning Series
+**Channel:** LinkedIn, Blog
+**Content:** "No personal data sold. No third-party tracking. Minimal data collection. Verification data is verification only."
+**Format:** Privacy explainer
 
-**Channel**: All platforms
-**Content**: "Plan Ahead Saturday: Browse next weekend's events to RSVP early and secure your spot in popular gatherings. Early birds thrive!"
-**Visual**: Calendar view screen capture
+### Day 26 (Friday) - Member Spotlight
 
-### Day 27 (Saturday) - Social Impact Saturday
+**Channel:** Instagram, Twitter/X
+**Content:** "Founding Member profile preview with their prompt, intent, and verification badge. Real profiles, real humans."
+**Format:** Profile mockup (with permission)
 
-**Channel**: Instagram Stories, newsletter
-**Content**: "Social Impact Saturday: Check the app's Charitable Hours Tracker for this weekend's opportunities to earn hours toward your personal impact badge."
-**Visual**: Badge progression system showcase
+### Day 27 (Saturday) - Weekend Push
 
-### Day 28 (Sunday) - Month End Reflection
+**Channel:** Twitter/X, Instagram
+**Content:** "Weekend plans? Verified profiles are matching now. Prompt-first conversations start better than swipes."
+**Format:** Short social post
 
-**Channel**: Blog, newsletter
-**Content**: "Month One Milestone: What we've learned about building communities that connect. Plus what's coming next..."
-**Visual**: Milestone timeline graphic
+### Day 28 (Sunday) - Month One Recap
 
-### Day 29 (Monday) - Loyalty Program Launch Teaser
+**Channel:** Newsletter, Blog, All social
+**Content:** "30 days of YouAndINotAI: total verified profiles, members, matches facilitated. Honest numbers. What we learned."
+**Format:** Blog post + social summary
 
-**Channel**: All platforms
-**Content**: "Coming Soon: Community Champion Program with rewards for active members. Early participants get exclusive perks. Stay tuned!"
-**Visual**: Teaser graphic with mystery elements
+### Day 29 (Monday) - Next Month Preview
 
-### Day 30 (Tuesday) - 30-Day Challenge Celebration
+**Channel:** Twitter/X, Newsletter
+**Content:** "Month 2: [feature] shipping, [improvement] based on feedback, [new initiative]. Founding Member pricing still open."
+**Format:** Roadmap preview
 
-**Channel**: All platforms
-**Content**: "30 Days Strong! Thank you for choosing real connection over digital swiping. Here's to many more community moments together!"
-**Visual**: Collage of user photos and app screenshots
+### Day 30 (Tuesday) - Membership Push
 
-## Content Themes & Hashtags
+**Channel:** All
+**Content:** "Founding Member access is open. $14.99/mo. Price locked. Badge permanent. Join the first wave of verified dating."
+**Format:** Direct conversion post
 
-### Consistent Hashtags
+## Weekly Post Mix
 
-#CommunityFirst #RealConnections #VolunteerLife #YouAndINotAI #HumanConnection #CommunityHeroes #LocalLove #MeaningfulMeetups
+| Content Type | Posts/Week | Purpose |
+|-------------|-----------|---------|
+| Product / Feature | 4 | Educate on verification, safety, matching |
+| Industry / Problem | 2 | Frame the problem YouAndINotAI solves |
+| Build-in-Public | 2 | Transparency, trust, community building |
+| Conversion / CTA | 2 | Membership and verification signups |
+| Member / Profile | 1 | Social proof, community showcase |
+| Support / Safety | 1 | Recurring trust reinforcement |
 
-### Content Type Tags
+## Hashtag Strategy
 
-#FeatureFriday #TipTuesday #SuccessStory #CommunitySpotlight #VolunteerImpact #PlatformUpdate #UserGenerated #EventAlert
+**Brand:** #YouAndINotAI
+**Product:** #VerifiedDating #BotShield #RealProfiles
+**Trust:** #DatingAppSafety #VerificationMatters
+**Industry:** #OnlineDating #DatingAppProblems
 
-## Call-to-Action Framework
+## Content Creation Workflow
 
-### Primary CTAs
+1. Write draft in shared doc
+2. Run through compliance check (no charity/donation/solicitation)
+3. Verify feature claims with CTO
+4. CEO review before publishing
+5. Schedule via social automation
+6. Monitor engagement and adjust
 
-- Download the app and verify your identity with Bot-Shield
-- RSVP to a real-world event this week
-- Connect with at least one new person this month
-- Share your community moments with us
+## Success Metrics
 
-### Engagement CTAs
-
-- Comment with your favorite community memory
-- Tag friends you'd bring to events
-- Share what kind of gathering you'd like to see
-- Nominate someone who builds community well
-- Tell us about your neighborhood traditions
-
-## Measurement & Success Tracking
-
-### Daily Metrics
-
-- Post engagement rates (likes, shares, comments)
-- Link click-through rates to app/event pages
-- Hashtag performance and reach
-- User-generated content submissions
-
-### Weekly Reports
-
-- Overall follower growth across platforms
-- Event RSVP increases from social promotion
-- App download spikes correlating with posts
-- Sentiment analysis of comments and mentions
-
-### Monthly Evaluation
-
-- Brand awareness survey in key demographics
-- Conversion rate from social to verified user
-- Retention metrics of users acquired through content
-- Community event attendance attributed to platform promotion
+| Metric | Target (30 Days) | Measurement |
+|--------|-----------------|-------------|
+| Post engagement rate | 3%+ | Native platform analytics |
+| Link click-through | 2%+ | UTM-tracked links |
+| Verification starts | 200+ | Backend analytics |
+| Founding Member signups | 50+ | Square payment records |
+| Support contacts | <10 from copy confusion | Support ticket tagging |
+| Compliance incidents | 0 | CEO copy review log |

@@ -23,7 +23,7 @@
 
         <p style="margin: 0 0 16px 0; font-size: 16px;">You just signed up for YouAndINotAI â€” a dating app where everyone's actually a real person. Bot reduction is the goal. Fake-profile reduction is the goal. Just verified people looking to connect.</p>
 
-        <p style="margin: 0 0 24px 0; font-size: 16px;">We use Bot-Shield verification to check you're really you. It's bank-level ID verification through planned identity provider. Not a selfie, not a photo game. Actually real.</p>
+        <p style="margin: 0 0 24px 0; font-size: 16px;">We use Bot-Shield verification to check you're really you. Selfie check, liveness detection, and behavioral signals confirm real humans. Not just a photo game.</p>
 
         <div style="background-color: #f0f0f0; padding: 20px; margin: 24px 0; border-left: 4px solid #2563eb;">
             <p style="margin: 0; font-size: 14px; font-weight: 600;">What's next</p>
@@ -69,21 +69,20 @@
 
         <p style="margin: 0 0 16px 0; font-size: 16px;">Most dating apps use photo verification. That's it. One selfie. One chance for a catfish.</p>
 
-        <p style="margin: 0 0 24px 0; font-size: 16px;">YouAndINotAI does eight things:</p>
+        <p style="margin: 0 0 24px 0; font-size: 16px;">Our Bot-Shield framework layers multiple verification signals:</p>
 
-        <ol style="margin: 0 0 24px 0; padding-left: 20px; font-size: 16px;">
-            <li style="margin: 0 0 12px 0;">Bank-level ID check through planned identity provider (same tech that powers your bank app)</li>
+        <ul style="margin: 0 0 24px 0; padding-left: 20px; font-size: 16px;">
             <li style="margin: 0 0 12px 0;">Real name matching against government IDs</li>
             <li style="margin: 0 0 12px 0;">Age verification cross-referenced</li>
             <li style="margin: 0 0 12px 0;">Device fingerprinting (one real person, not five profiles)</li>
             <li style="margin: 0 0 12px 0;">Liveness check (you're actually the person in your photo)</li>
             <li style="margin: 0 0 12px 0;">Network analysis (spotting coordinated fake accounts)</li>
             <li style="margin: 0 0 12px 0;">Behavioral signals (how you interact on the app)</li>
-            <li style="margin: 0 0 12px 0;">Continuous monitoring (not just at signup)</li>
-        </ol>
+            <li style="margin: 0 0 12px 0;">Continuous monitoring to maintain verification status</li>
+        </ul>
 
         <div style="background-color: #f0f0f0; padding: 20px; margin: 24px 0; border-left: 4px solid #2563eb;">
-            <p style="margin: 0; font-size: 14px;"><strong>Why planned identity provider matters:</strong> It's not a photo selfie. It's your actual identity verified against the banking system. You can't fake a bank account. That's the difference.</p>
+            <p style="margin: 0; font-size: 14px;"><strong>Why verified identity matters:</strong> It's not just a photo selfie. Multiple verification signals confirm you're a real person. That's the difference.</p>
         </div>
 
         <p style="margin: 0 0 16px 0; font-size: 16px;">Here's what people deal with now: 60% of app users suspect they've matched with bots. That's not paranoia. That's the current reality.</p>

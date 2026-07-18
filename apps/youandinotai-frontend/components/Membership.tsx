@@ -14,12 +14,12 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
   function cardClass(featured: boolean): string {
     if (featured) {
       return isDarkMode
-        ? 'bg-slate-950/70 border-blue-500 ring-1 ring-blue-500/40'
-        : 'bg-blue-50/60 border-blue-500 ring-1 ring-blue-500/40';
+        ? 'bg-slate-950/70 border-cyan-500 ring-1 ring-cyan-500/40'
+        : 'bg-cyan-50/60 border-cyan-500 ring-1 ring-cyan-500/40';
     }
     return isDarkMode
-      ? 'bg-slate-950/50 border-slate-800 hover:border-blue-500'
-      : 'bg-slate-50 border-slate-200 hover:border-blue-400';
+      ? 'bg-slate-950/50 border-slate-800 hover:border-cyan-500'
+      : 'bg-slate-50 border-slate-200 hover:border-cyan-400';
   }
 
   return (
@@ -30,7 +30,7 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
       }`}
     >
       <div className="flex items-start gap-3 mb-2">
-        <Sparkles size={20} className="text-blue-500 shrink-0 mt-1" />
+        <Sparkles size={20} className="text-cyan-400 shrink-0 mt-1" aria-hidden="true" />
         <h2 className="min-w-0 text-xl md:text-2xl font-black italic tracking-tight leading-tight break-words">
           BECOME A FOUNDING MEMBER
         </h2>
@@ -49,7 +49,7 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
             : 'border-slate-200 bg-orange-50'
         }`}
       >
-        <div className="mb-4 text-xs font-black uppercase tracking-[0.18em] text-blue-500">
+          <div className="mb-4 text-xs font-black uppercase tracking-[0.18em] text-cyan-400">
           Required before checkout
         </div>
         <div
@@ -62,7 +62,7 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
               type="checkbox"
               checked={acceptedCookies}
               onChange={(event) => setAcceptedCookies(event.target.checked)}
-              className="mt-1 h-4 w-4 accent-blue-500"
+              className="mt-1 h-4 w-4 accent-cyan-500"
             />
             <span>
               I understand strictly necessary cookies are used for checkout,
@@ -77,10 +77,10 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
               type="checkbox"
               checked={acceptedTerms}
               onChange={(event) => setAcceptedTerms(event.target.checked)}
-              className="mt-1 h-4 w-4 accent-blue-500"
+                            className="mt-1 h-4 w-4 accent-cyan-500"
             />
             <span>
-              I accept the{' '}
+              I accept the {' '}
               <a href="/terms" className="font-black underline underline-offset-4">
                 Terms of Service
               </a>{' '}
@@ -96,7 +96,7 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
               type="checkbox"
               checked={confirmedAdult}
               onChange={(event) => setConfirmedAdult(event.target.checked)}
-              className="mt-1 h-4 w-4 accent-blue-500"
+              className="mt-1 h-4 w-4 accent-cyan-500"
             />
             <span>
               I confirm I am at least 18 years old and understand Square will
@@ -136,7 +136,7 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
             )}`}
           >
             {plan.featured && (
-              <span className="self-start mb-3 px-3 py-1 text-[10px] font-black uppercase tracking-wider bg-blue-500 text-white rounded-full">
+              <span className="self-start mb-3 px-3 py-1 text-[10px] font-black uppercase tracking-wider bg-cyan-500 text-slate-950 rounded-full">
                 Most Popular
               </span>
             )}
@@ -148,7 +148,7 @@ export default function Membership({ isDarkMode }: { isDarkMode: boolean }) {
             </div>
             <p className="text-sm font-bold mt-3">{plan.name}</p>
             <p className={`text-sm mt-2 flex-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{plan.blurb}</p>
-            <span className="mt-5 inline-flex items-center gap-1 text-sm font-black text-blue-500 group-hover:gap-2 transition-all">
+            <span className="mt-5 inline-flex items-center gap-1 text-sm font-black text-cyan-400 group-hover:gap-2 transition-all">
               {canCheckout ? 'Check out' : 'Review terms first'}
               <ArrowUpRight className="w-4 h-4" />
             </span>
