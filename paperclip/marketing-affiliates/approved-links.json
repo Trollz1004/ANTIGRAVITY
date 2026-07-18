@@ -79,6 +79,10 @@
       "disclosure": "#ad affiliate link"
     }
   ],
+  "legal": {
+    "attorney_review": "not required — standard FL LLC business, no special provisions",
+    "pages_live": "privacy, terms, child-safety, community-guidelines, delete-account, safety"
+  },
   "banned_vocabulary": ["donate", "donation", "charity", "charitable", "solicitation", "giving back", "disbursement", "tax-deductible"],
   "revenue_goal_usd": 5000,
   "revenue_math": {
