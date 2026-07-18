@@ -149,3 +149,11 @@ forever.
 
 **If the AI is not making this cheaper for Josh and closer to helping kids, it is
 failing. Fix that first.**
+
+2026-07-18T18:53:40Z | ISSUE-PAPERCLIP-20260718T185052Z | restore funding orchestration service
+- What changed: Laptop Paperclip 2026.428.0 started on loopback port 3101; pre-start physical PostgreSQL snapshot created at C:\income-engine\paperclip-data\instances\default\data\backups\paperclip-physical-20260718T185124Z.tar.gz
+- Why: Paperclip funding orchestration endpoint was not running
+- Actions taken: confirmed funding blocker; verified ports 3101 and 54329 were stopped; created and checksummed database snapshot; started Paperclip with isolated config and data directory; verified health, UI, and companies API
+- Tests: unit:N/A documentation-only; integration:PASS /api/companies HTTP 200; smoke:PASS /api/health HTTP 200 and / HTTP 200; monitor:PASS 59/60 within 5m plus 6/6 final checks, 0 funding 5xx
+- Next steps: MONITOR 30m; human approval required to merge
+- Contact: ONCALL_FUNDING
