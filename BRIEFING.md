@@ -157,3 +157,11 @@ failing. Fix that first.**
 - Tests: unit:N/A documentation-only; integration:PASS /api/companies HTTP 200; smoke:PASS /api/health HTTP 200 and / HTTP 200; monitor:PASS 59/60 within 5m plus 6/6 final checks, 0 funding 5xx
 - Next steps: MONITOR 30m; human approval required to merge
 - Contact: ONCALL_FUNDING
+
+2026-07-18T22:27:00Z | ISSUE-5K-SQUARE-GOAL | deploy $5k Square revenue path
+- What changed: Created approved-links.json (gates marketing routine); initialized kanban board; created 10 tasks (7 ready, 3 blocked-for-Josh); set hourly cron job 9852014caa6c to message Josh the $5k status
+- Why: Site and Square checkout are live but zero traffic driving exists; $0 revenue. The path works, the pipeline to fill it didn't.
+- Actions taken: extracted handoff files; read deploy/ship/compliance directives; verified site 200 on all routes; verified all 5 Square links resolve to checkout.square.site; verified all 6 legal pages 200; verified all 3 /go/ links 200; created approved-links.json with 10 approved links + revenue math; initialized hermes kanban; created 7 ready traffic/conversion tasks (X/Grok, Reddit, Meta/Manus, YouTube/Gemini, A/B test, email funnel, Play Store PWA) and 3 blocked tasks (D-U-N-S, Cloudflare email routing, attorney review); created hourly cron job delivering status to Josh's Telegram
+- Tests: unit:N/A; integration:PASS youandinotai.com / + /affiliate/ + /privacy + /terms + /delete-account + /child-safety + /community-guidelines + /safety + /go/* + /dao all HTTP 200; smoke:PASS all 5 Square checkout links resolve to checkout.square.site merchant ML3C7FMTQS5KX
+- Next steps: cron runs hourly; Josh action needed on D-U-N-S + email routing + attorney review; traffic tasks ready for execution
+- Contact: ONCALL_FUNDING

@@ -1,0 +1,91 @@
+{
+  "doc": "approved-links",
+  "version": "1.0.0",
+  "updated": "2026-07-18",
+  "authority": "Josh Coleman — sole approver",
+  "purpose": "Gates the daily marketing routine. Paperclip may only generate and place links listed here. Adding a link requires Josh's approval.",
+  "platform_url": "https://youandinotai.com",
+  "processor": "Square",
+  "surface_rule": "No donate/donation/charity/charitable/solicitation/giving-back/disbursement/tax-deductible language anywhere these links appear. #ad or #affiliate disclosure required on every placement.",
+  "approved_links": [
+    {
+      "id": "homepage",
+      "label": "YouAndINotAI homepage (verified-human dating)",
+      "url": "https://youandinotai.com/",
+      "use": "Primary landing. All campaigns may use this.",
+      "disclosure": "#ad affiliate link"
+    },
+    {
+      "id": "founding-member",
+      "label": "Founding Member checkout — $14.99/mo (locked price)",
+      "url": "https://square.link/u/cxwjcn0s",
+      "use": "Primary revenue target. 334 conversions = $5k.",
+      "disclosure": "#ad affiliate link"
+    },
+    {
+      "id": "bot-shield-verify",
+      "label": "Bot-Shield verification — $1 one-time",
+      "url": "https://square.link/u/Qc5mxUy7",
+      "use": "Entry-tier funnel. Low-friction first step.",
+      "disclosure": "#ad affiliate link"
+    },
+    {
+      "id": "3-month-prepaid",
+      "label": "3-Month Prepaid — $39.99",
+      "url": "https://square.link/u/oY7qEfRM",
+      "use": "Mid-tier. 125 conversions = $5k.",
+      "disclosure": "#ad affiliate link"
+    },
+    {
+      "id": "12-month-prepaid",
+      "label": "12-Month Prepaid — $99.99",
+      "url": "https://square.link/u/6GHpbvvl",
+      "use": "Annual tier. 50 conversions = $5k.",
+      "disclosure": "#ad affiliate link"
+    },
+    {
+      "id": "royalty-card",
+      "label": "Royalty Card — $2,500 lifetime",
+      "url": "https://square.link/u/CafhorUS",
+      "use": "Top tier. 2 conversions = $5k.",
+      "disclosure": "#ad affiliate link"
+    },
+    {
+      "id": "affiliate-program",
+      "label": "Affiliate program recruitment page",
+      "url": "https://youandinotai.com/affiliate/",
+      "use": "Recruit partners who earn 25/35/50% on paid signups.",
+      "disclosure": "not required (program page, not ad)"
+    },
+    {
+      "id": "go-josh",
+      "label": "Founder short link — /go/josh",
+      "url": "https://youandinotai.com/go/josh",
+      "use": "Josh's personal affiliate link for organic posts.",
+      "disclosure": "#ad affiliate link"
+    },
+    {
+      "id": "go-launch",
+      "label": "Launch short link — /go/launch",
+      "url": "https://youandinotai.com/go/launch",
+      "use": "Launch campaign short link.",
+      "disclosure": "#ad affiliate link"
+    },
+    {
+      "id": "go-partner",
+      "label": "Partner short link — /go/partner",
+      "url": "https://youandinotai.com/go/partner",
+      "use": "Partner recruitment short link.",
+      "disclosure": "#ad affiliate link"
+    }
+  ],
+  "banned_vocabulary": ["donate", "donation", "charity", "charitable", "solicitation", "giving back", "disbursement", "tax-deductible"],
+  "revenue_goal_usd": 5000,
+  "revenue_math": {
+    "founding_member_1499": "334 members = $5,006",
+    "annual_9999": "50 annuals = $4,999",
+    "quarterly_3999": "125 quarterlies = $4,998",
+    "royalty_2500": "2 royalty cards = $5,000",
+    "verify_1": "5000 verifications = $5,000"
+  }
+}
