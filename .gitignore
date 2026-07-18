@@ -122,3 +122,6 @@ income-engine/paperclip-data/**/memory/
 # Accidental AI dump files
 omniroute/httpsgithub.com*.txt
 **/httpsgithub.com*.txt
+
+# Entire Paperclip local runtime tree
+income-engine/paperclip-data/
