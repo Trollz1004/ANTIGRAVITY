@@ -93,10 +93,8 @@ IF ERRORLEVEL 1 (
     ECHO   OpenClaw already running on :18895
 )
 
-REM === STEP 5: Start T5500 Load Balancer Watchdog ===
-ECHO [5/6] Starting T5500 Watchdog...
-START "Watchdog" /MIN powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\ANTIGRAVITY\infra\load-balancer\t5500-watchdog.ps1"
-ECHO   Watchdog started
+REM === STEP 5: Watchdog FORBIDDEN on laptop ===
+ECHO [5/6] Skipping watchdog (HARD RULE: no laptop watchdogs)
 
 REM === STEP 6: Health Check ===
 ECHO [6/6] Running health checks...

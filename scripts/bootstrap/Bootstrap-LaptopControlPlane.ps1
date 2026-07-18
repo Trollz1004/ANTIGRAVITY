@@ -2,13 +2,13 @@
 <#
 .SYNOPSIS
   Laptop control-plane bootstrap: Hermes, Paperclip (marketing), OmniRoute if present,
-  Ollama, OpenClaw support, health checks + self-heal loop.
+  Ollama, OpenClaw support, ONE-SHOT health check only (no loops).
 
 .NOTES
   - OmniRoute belongs on the LAPTOP only (not T5500).
   - Marketing Paperclip is separate from T5500 date-app Paperclip (:3100).
   - Does not close on error. Logs to C:\antigravity\logs\bootstrap-laptop.
-  - Safe for Scheduled Task / SYSTEM (no interactive browser when -ServiceMode).
+  - NEVER register as a repeating heal/watchdog task on the laptop.
 #>
 [CmdletBinding()]
 param(
@@ -257,20 +257,14 @@ function Invoke-SelfHeal {
 }
 
 # --- main ---
-$fail = Invoke-BootstrapOnce
-
-if ($WatchOnce -or $ServiceMode) {
-    $cycle = 0
-    while ($true) {
-        $cycle++
-        if ($MaxHealCycles -gt 0 -and $cycle -gt $MaxHealCycles) { break }
-        Start-Sleep -Seconds $HealIntervalSec
-        Write-BootLog 'info' "heal cycle $cycle"
-        Invoke-SelfHeal
-        $fail = Invoke-HealthReport
-        if (-not $ServiceMode -and $WatchOnce) { break }
-    }
+# HARD STOP: never enter ServiceMode/heal loops on laptop (cursor interference).
+if ($ServiceMode -or $WatchOnce -or $MaxHealCycles -ne 0) {
+    Write-BootLog 'warn' 'ServiceMode/WatchOnce/heal ignored on laptop - one-shot only (no watchdogs)'
 }
+
+$fail = Invoke-BootstrapOnce
+# Do not call Invoke-SelfHeal in a loop. Ever.
+
 
 if (-not $ServiceMode) {
     if ($fail -gt 0) {

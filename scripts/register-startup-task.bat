@@ -1,18 +1,11 @@
 @ECHO off
-TITLE Register ANTIGRAVITY Bootstrap Tasks
+TITLE ANTIGRAVITY - NO laptop watchdogs
 CD /D "%~dp0"
-
-ECHO ============================================
-ECHO  Delegates to scripts\bootstrap\Register-BootstrapTasks.ps1
-ECHO  SYSTEM / no-login / self-heal
-ECHO ============================================
 ECHO.
-
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0bootstrap\Register-BootstrapTasks.ps1" -Target Laptop
-IF ERRORLEVEL 1 (
-  ECHO Register failed.
-  PAUSE
-  EXIT /B 1
-)
+ECHO Laptop heal/watchdog registration is DISABLED by Joshua hard rule.
+ECHO Use one-shot only:
+ECHO   scripts\bootstrap\bootstrap-laptop.bat
+ECHO.
+ECHO Server watchdogs: run Register-BootstrapTasks.ps1 -Target T5500 ON THE SERVER.
 ECHO.
 PAUSE

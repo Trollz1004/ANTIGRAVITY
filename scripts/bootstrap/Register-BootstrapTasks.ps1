@@ -1,5 +1,5 @@
 #Requires -Version 5.1
-# Register SYSTEM startup + heal tasks. Run elevated once per machine.
+# Register SYSTEM startup + heal tasks for SERVERS only. Never laptop watchdogs.
 [CmdletBinding()]
 param(
     [ValidateSet('Laptop','T5500','Both')]
@@ -65,10 +65,21 @@ $laptopPs1 = Join-Path $RepoRoot 'scripts\bootstrap\Bootstrap-LaptopControlPlane
 $t5500Ps1  = Join-Path $RepoRoot 'scripts\bootstrap\Bootstrap-T5500DateApp.ps1'
 
 if ($Target -in @('Laptop','Both')) {
-    Register-BootTask -TaskName 'ANTIGRAVITY-Laptop-ControlPlane-Bootstrap' `
-        -ScriptPath $laptopPs1 `
-        -Description 'Laptop: Paperclip marketing, Hermes, OmniRoute(if present), Ollama, health+self-heal. No login.' `
-        -HealMinutes 5
+    Write-Host 'LAPTOP: refusing watchdog/heal scheduled tasks (Joshua hard rule).'
+    Write-Host '  Manual one-shot only: scripts\bootstrap\bootstrap-laptop.bat'
+    # Ensure any prior laptop heal task is gone
+    foreach ($dead in @('ANTIGRAVITY-Laptop-ControlPlane-Bootstrap','PaperclipLaptopStack')) {
+        $existing = Get-ScheduledTask -TaskName $dead -ErrorAction SilentlyContinue
+        if ($existing) {
+            try {
+                Stop-ScheduledTask -TaskName $dead -ErrorAction SilentlyContinue
+                Unregister-ScheduledTask -TaskName $dead -Confirm:$false
+                Write-Host "  Removed $dead"
+            } catch {
+                Write-Host "  Could not remove $dead : $($_.Exception.Message)"
+            }
+        }
+    }
 }
 
 if ($Target -in @('T5500','Both')) {
@@ -113,8 +124,8 @@ if ($Target -in @('T5500','Both')) {
 Write-Host ''
 Write-Host 'Done. Test now:'
 if ($Target -in @('Laptop','Both')) {
-    Write-Host '  schtasks /Run /TN "ANTIGRAVITY-Laptop-ControlPlane-Bootstrap"'
-    Write-Host '  or: scripts\bootstrap\bootstrap-laptop.bat'
+    Write-Host '  LAPTOP: no scheduled heal task. Run manually if needed:'
+    Write-Host '    scripts\bootstrap\bootstrap-laptop.bat'
 }
 if ($Target -in @('T5500','Both')) {
     Write-Host '  schtasks /Run /TN "ANTIGRAVITY-T5500-FullStack-Bootstrap"'
