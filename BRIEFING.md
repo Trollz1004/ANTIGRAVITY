@@ -50,3 +50,4 @@ UTC_TIMESTAMP | ISSUE-ID | ONE-LINE
 - Next steps: Manually verify Square dashboard for completed volume ≥$5k (per handoff §6); if shortfall, continue outreach per CASH-SPRINT plan; escalate any webhook/payout issues; human approval for merge
 - Contact: ONCALL_FUNDING
 2026-07-20T17:35Z | 5K-GOAL | not complete. no verified 5k affiliate/subs square. incomplete until dashboard
+2026-07-20T17:36Z | 5K-VERIFY | no. not verified in subs/affiliate. square only. goal incomplete.
