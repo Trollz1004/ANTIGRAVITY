@@ -206,3 +206,16 @@ Code
 ## 16. Enforcement
 - CI job `ci/sol-checks` enforces SOL.md presence and validates commit/PR templates.
 - Any PR that does not follow templates is blocked.
+
+---
+
+## 17. Current Directive — Master Plan Setup via Kanban (overrides day-to-day scope until setup complete)
+- **Canonical spec:** `C:\antigravity\ANTIGRAVITY Master Plan.html` (ANTIGRAVITY Master Plan, handoff to Hermes 2026-07-19). Read it before acting; do not invent setup steps.
+- **Board:** Paperweight kanban at `apps/paperweight/` (stdlib Python + SQLite, serve on `:4200`). Seed it with the full setup tree:
+  - **Week One** goals D1–D7 (verify OmniRoute cascade + Command Center → fix SSH aliases/workers → 50-creator prospect list → posting lane live → founding-member push → track into CRM → weekly review to Josh).
+  - **Node setups:** Paperclip Laptop (control plane, :20128/:20129 OmniRoute, :3101 Paperclip, :9119 Hermes dash), Sabretooth (affiliate node 1, ornith:9b → OmniRoute), 9020 (affiliate node 2, same worker stack). **T5500 = PRODUCTION / UNTOUCHED — board item status `blocked`, never modify.**
+  - **5-stage affiliate pipeline:** 01 Scout → 02 Forge → 03 Approve (Command Center desk) → 04 Post (Grok X / Meta Manus / browser others) → 05 Track (real or zero).
+  - **Support layer:** Memory (Pieces LTM + brain-mcp), Data (Supabase Agent Hub :3130 CRM), MCP (mission-mcp board bridge), Deploy (Vercel + Cloudflare Wrangler tunnels), Ops (Slack), Glue (Zapier optional).
+- **Max agents:** assign the full roster — Opus, Codex, Hermes, CEO, CFO, CMO, CTO, INTERN, Gemini, Perplexity, Grok — across setup tasks. No task unassigned, no agent idle. No AI outranks another; no hiring without Josh.
+- **Funding mission (§1–§16) stays the standing sub-mission:** any board item tagged funding/payment/payout/webhook that blocks a funding platform is handled per those rules.
+- **"Complete setup" =** board fully seeded + server live + every setup item has owner + status. Node-execution items (drive backups, model pulls, SSH auth) remain `todo` until Josh/node access exists. **Real or zero — never mark an infra task `done` without verified execution.**

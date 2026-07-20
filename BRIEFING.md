@@ -20,3 +20,13 @@ UTC_TIMESTAMP | ISSUE-ID | ONE-LINE
 - Tests: N/A (documentation only)
 - Next steps: Agent ready to monitor and auto-fix funding platform blockers
 - Contact: ONCALL_FUNDING
+
+---
+
+### 2026-07-20T015458Z | ISSUE-MASTERPLAN-SETUP | SOL.md updated + Paperweight board seeded with full Master Plan setup tree
+- What changed: SOL.md §17 added (Master Plan setup directive via kanban, max-agent rule); apps/paperweight/seed_masterplan.py created; Paperweight board live on :4200 seeded with 23 items (8 goals + 15 tasks).
+- Why: User directive — drive ANTIGRAVITY Master Plan setup through the kanban board with max agents, per C:\antigravity\ANTIGRAVITY Master Plan.html (handoff 2026-07-19).
+- Actions taken: Read Master Plan (bundled React artifact) + paperweight.py/DB; updated SOL.md §17; started Paperweight server (:4200); ran seed script → Week One D1-D7 goals, 4 node setups (T5500=blocked/untouched), 5-stage affiliate pipeline (Scout→Forge→Approve→Post→Track), support layer (Memory/Data/MCP/Deploy/Ops/Glue); every task assigned to full 11-agent roster.
+- Tests: board health ok (/api/health 200); seed script 23/23 items created; 0 unassigned; 11/11 agents have tasks; T5500 status=blocked.
+- Next steps: Node-execution items (OmniRoute verify, SSH aliases, model pulls, drive backups) stay todo until Josh/node access exists — verify live before marking done. PR to main blocked: gh CLI not authenticated (escalate to Josh/ONCALL_FUNDING to open PR). Human approval required to merge.
+- Contact: ONCALL_FUNDING
