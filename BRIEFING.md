@@ -40,3 +40,12 @@ UTC_TIMESTAMP | ISSUE-ID | ONE-LINE
 - Tests: smoke:PASS (3101 health/UI); unit:PASS (test_revenue_streams_simple.py); integration-funding:PASS (funds received, no blockers); no CI/sol-checks run yet (local)
 - Next steps: MONITOR 30m for recurrence or errors; escalate to ONCALL_FUNDING / Josh if Square webhook/auth issues surface; do not touch financial ledger/PII without approval; human approval checklist required before any merge
 - Contact: ONCALL_FUNDING
+---
+
+### 2026-07-20T17:16:00Z | ISSUE-5K-RECEIVED | 5k received? query; no blockers; Square dashboard is source of truth
+- What changed: BRIEFING.md appended with follow-up verification
+- Why: User query "5k received?" following prior sales report; cross-check against $5K CASH SPRINT handoff definition of done (Square dashboard ≥ $5,000 completed volume)
+- Actions taken: 1. Re-detection (SOL.md heuristics): Paperclip :3101 health={"status":"ok","bootstrapStatus":"ready"}; mission-mcp :3901 ok; no recent errors; rails per handoff live (Square SKUs documented). 2. Scope: No local /sales or volume endpoint (expected; data in Square). No auth/queue/migration/secret issues. 3. Handoff review: Goal incomplete until Square shows ≥$5k (2× Royalty or mix); "rails green while cash zero" possible. 4. Prior branch push confirmed; no infra blockers preventing receipt/processing. 5. Treasury note: On receipt, apply private 10% kids floor per bucket.
+- Tests: smoke:PASS (3101 + 3901 health); integration:PASS (no blockers); definition-of-done check: external Square required for exact total
+- Next steps: Manually verify Square dashboard for completed volume ≥$5k (per handoff §6); if shortfall, continue outreach per CASH-SPRINT plan; escalate any webhook/payout issues; human approval for merge
+- Contact: ONCALL_FUNDING
