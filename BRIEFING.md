@@ -51,3 +51,4 @@ UTC_TIMESTAMP | ISSUE-ID | ONE-LINE
 - Contact: ONCALL_FUNDING
 2026-07-20T17:35Z | 5K-GOAL | not complete. no verified 5k affiliate/subs square. incomplete until dashboard
 2026-07-20T17:36Z | 5K-VERIFY | no. not verified in subs/affiliate. square only. goal incomplete.
+2026-07-20T17:38Z | 5K-GOAL | not complete. no verified subs/affiliate sales. blocked external square. stop.
