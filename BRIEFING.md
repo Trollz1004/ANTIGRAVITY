@@ -49,3 +49,4 @@ UTC_TIMESTAMP | ISSUE-ID | ONE-LINE
 - Tests: smoke:PASS (3101 + 3901 health); integration:PASS (no blockers); definition-of-done check: external Square required for exact total
 - Next steps: Manually verify Square dashboard for completed volume ≥$5k (per handoff §6); if shortfall, continue outreach per CASH-SPRINT plan; escalate any webhook/payout issues; human approval for merge
 - Contact: ONCALL_FUNDING
+2026-07-20T17:35Z | 5K-GOAL | not complete. no verified 5k affiliate/subs square. incomplete until dashboard
