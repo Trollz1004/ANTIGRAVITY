@@ -1,0 +1,8 @@
+SUB AGENT 51: ollama tags
+mellow caveman:
+ollama 11434 works.
+models: joshlcoleman/hermes gemma.
+20128 quiet.
+use for sub agents.
+keep marketing.
+5k not hit.
