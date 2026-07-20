@@ -123,3 +123,4 @@ UTC_TIMESTAMP | ISSUE-ID | ONE-LINE
 2026-07-20T19:05Z | 5K-MARKET | sub agents. 3 IG + 3 creator from delegations. 15 posts. ollama tags ok. keep. 5k not hit.
 2026-07-20T19:06Z | 5K-MARKET | sub agents. IG + creator mellow from delegations. 15 posts. ollama tags ok. keep. 5k not hit.
 2026-07-20T19:07Z | 5K-MARKET | sub agents. 100+ new caveman posts. 5k-caveman pack in. ollama local. keep. 5k not hit.
+2026-07-20T19:08Z | 5K-MARKET | sub agents. new x + recruit posts from delegation. 100+ caveman. keep. 5k not hit.
