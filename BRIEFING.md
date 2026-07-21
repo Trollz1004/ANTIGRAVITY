@@ -198,6 +198,17 @@ UTC_TIMESTAMP | ISSUE-ID | ONE-LINE
 - What changed: BRIEFING.md appended (status only)
 - Why: [Tue 2026-07-21 04:26 EDT] Status trigger; SOL.md heuristics
 - Actions taken: detection run (3101 health ok ready 200; 54329 PG listening; no Square/provider/5xx/queue/migration/auth errors recent; prior DB transient resolved; webhook/links code present; 5k pending Square dashboard + marketing active)
+- Tests: smoke:PASS; integration:PASS
+- Next steps: MONITOR; human approval if merge
+- Contact: ONCALL_FUNDING
+
+2026-07-21T08:29Z | LAST-DAY-5K-AUTO | X compose blocked — no working GUI/browser path
+- What changed: attempted X compose publish via browser automation
+- Why: browser_navigate failed (Camofox at localhost:9377 not running); computer_use list_apps returned 0 apps (possible Session 0 / interactive desktop unavailable); playwright-cli timeout
+- Actions taken: 1) picked fresh mellow post (social-post-library Post 2 — LA founding member) 2) browser_navigate https://x.com/compose/post → Camofox connection refused 3) computer_use list_apps → empty 4) playwright-cli --help → timeout
+- Tests: N/A — blocked before posting
+- Next steps: human must verify interactive desktop session, start Camofox, or confirm Playwright setup; retry next cron cycle; do not retry this run
+- Contact: ONCALL_FUNDING
 - Tests: smoke:PASS (health/bootstrap); integration-funding:PASS (no blockers in scope)
 - Next steps: MONITOR 30m; external Square dashboard verify for volume; escalate only funding flow issues; human approval if merge needed
 - Contact: ONCALL_FUNDING

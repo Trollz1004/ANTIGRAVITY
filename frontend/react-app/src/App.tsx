@@ -14,6 +14,9 @@ import { useAuth } from './lib/auth';
 import { ThemeProvider } from './lib/ThemeContext';
 import { ThemeToggle } from './components/ThemeToggle';
 
+const LAST_DAY_BANNER=true
+const AFFILIATE_LINK='https://square.link/u/cxwjcn0s'
+const BOT_SHIELD_LINK='https://square.link/u/Qc5mxUy7'
 const WAITLIST_FORM_ACTION = 'https://formsubmit.co/contact@youandinotai.com';
 
 const SECURE_PLAN_LINKS = {
