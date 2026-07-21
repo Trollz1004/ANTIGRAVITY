@@ -253,3 +253,75 @@ UTC_TIMESTAMP | ISSUE-ID | ONE-LINE
 - Contact: ONCALL_FUNDING
 
 ---
+
+2026-07-21T10:25Z | LAST-DAY-5K-BLOCKED | browser automation blocked; X login required
+|- What changed: BRIEFING.md appended with failure entry
+|- Why: no accessible X/Twitter login session; browser automation paths failed (Camofox down, cua-driver session ended, Playwright profile not logged in)
+|- Actions taken: attempted browser_navigate (Camofox offline); attempted computer_use (session ended); attempted Playwright persistent profile (redirected to login); attempted PowerShell SendKeys navigation (still login page)
+|- Tests: browser:PASS (Chrome responsive); login:N/A (no credentials available); posting:BLOCKED
+|- Next steps: human must log into X/Twitter in Chrome or provide a logged-in browser profile; only then can automated posting resume; do not loop without login
+|- Contact: ONCALL_FUNDING
+|---
+
+2026-07-21T10:50Z | LAST-DAY-5K-AUTO | platform: X | outcome: failed
+|- What changed: no post made; browser session unavailable
+|- Why: X login required; Chrome not running; no logged-in browser session accessible
+|- Actions taken: list_apps confirmed no active apps; Paperclip workspace verified at C:\ANTIGRAVITY\income-engine\paperclip-data\instances\default; prior browser automation block documented at 10:25Z persists
+|- Tests: browser:BLOCKED; posting:BLOCKED
+|- Next steps: human must log into X/Twitter in Chrome or provide logged-in profile; only then can automated posting resume
+|- Contact: ONCALL_FUNDING
+|---
+|---
+2026-07-21T11:06Z | LAST-DAY-5K-BLOCKED | browser blocker persists; automation stopped per 2x-failure rule
+|- What changed: BRIEFING.md appended; automation halted
+|- Why: list_apps returns zero running apps; no browser session with X/Twitter login; prior 10:25Z and 10:50Z failures already documented same blocker
+|- Actions taken: verified Paperclip workspace path exists; detected zero apps; stopped per safety rule (no third consecutive attempt)
+|- Tests: browser:BLOCKED; posting:BLOCKED; smoke:PASS (workspace exists)
+|- Next steps: human must open Chrome, navigate to x.com, complete Google login, and leave session active; only then should cron resume; monitor Square dashboard independently
+|- Contact: ONCALL_FUNDING
+2026-07-21T11:25Z | LAST-DAY-5K-AUTO | platform: X | outcome: failed
+2026-07-21T11:42Z | LAST-DAY-5K-AUTO | platform: X | outcome: failed
+|- What changed: no post made; browser session unavailable
+|- Why: list_apps confirmed zero running apps; no Chrome/X session accessible; prior 10:25Z/10:50Z/11:06Z/11:25Z failures show persistent login blocker
+|- Actions taken: verified Paperclip workspace at C:\ANTIGRAVITY\income-engine\paperclip-data\instances\default; list_apps returned 0 apps; stopped per 2x-failure rule
+|- Tests: browser:BLOCKED; posting:BLOCKED; workspace:PASS
+|- Next steps: human must open Chrome, log into x.com, leave session active; only then resume cron; monitor Square dashboard independently
+|- Contact: ONCALL_FUNDING
+---
+
+2026-07-21T12:09Z | LAST-DAY-5K-AUTO | platform: X | outcome: failed
+- What changed: no post made; browser automation blocked
+- Why: computer_use session dead/revive unsupported; Camofox not running; Chrome launched but cua-driver UIA capture failed; entry is 2nd consecutive failure so stopped per rule
+|- Actions taken: launched Chrome to x.com/compose/post; list_apps returned 0 apps; capture failed with session-ended error; killed stuck Playwright CLI after 19s no-output
+|- Tests: browser:PASS (Chrome running, tasklist confirmed); cua-driver:BLOCKED; posting:BLOCKED
+|- Next steps: human must verify Chrome is logged into x.com; if logged in, restart cua-driver session or start Camofox (`npm start` in camofox-browser dir) to unblock automated posting; do not retry automation until session is healthy
+|- Contact: ONCALL_FUNDING
+```
+
+---
+
+2026-07-21T12:26Z | LAST-DAY-5K-AUTO | platform: X | outcome: failed
+- What changed: no post made; browser automation blocked
+- Why: computer_use list_apps returned 0 apps; no Chrome/X session accessible; prior 10:25Z/10:50Z/11:06Z/11:25Z/12:09Z failures show persistent login blocker
+- Actions taken: verified Paperclip workspace at C:\ANTIGRAVITY\income-engine\paperclip-data\instances\default; list_apps returned 0 apps; stopped per 2x-failure rule
+- Tests: browser:BLOCKED; posting:BLOCKED; workspace:PASS
+- Next steps: human must open Chrome, navigate to x.com, complete Google login, and leave session active; only then should cron resume; monitor Square dashboard independently
+- Contact: ONCALL_FUNDING
+---
+2026-07-21T12:45Z | LAST-DAY-5K-AUTO | platform: X | outcome: failed
+- What changed: no post made; browser automation blocked
+- Why: browser_navigate Camofox offline; computer_use list_apps returned 0 apps; no Chrome/X session accessible; repeated blocker since 10:25Z
+- Actions taken: verified Paperclip workspace at C:\ANTIGRAVITY\income-engine\paperclip-data\instances\default; selected fresh post from POST-NOW.md; browser_navigate failed (Camofox offline); computer_use list_apps returned 0 apps; stopped per 2x-failure rule
+- Tests: browser:BLOCKED; posting:BLOCKED; workspace:PASS
+- Next steps: human must open Chrome, navigate to x.com, complete Google login, and leave session active; or start Camofox browser server; only then should cron resume; monitor Square dashboard independently
+- Contact: ONCALL_FUNDING
+
+2026-07-21T13:04Z | LAST-DAY-EXEC | x blocker pivot; creator emails + landing urgency
+- What changed: dispatch-ready/LAST-DAY-EXEC.md created; X posting blocked indefinitely
+- Why: user confirmed no X access on this machine and wants non-X marketing; last day requires non-X channels
+- Actions taken: inventoried creator contacts (Cody Ko, Matthew Hussey, Hunter Williams); isolated email/linkedin/landing as viable paths; prepared exec hub
+- Tests: contacts present; approved links only; no PII writes
+- Next steps: landing page urgency update (frontend/react-app); creator outreach emails drafted/sent via available mail path; monitor Square
+- Contact: ONCALL_FUNDING
+
+---
