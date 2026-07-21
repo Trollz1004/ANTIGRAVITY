@@ -193,3 +193,13 @@ UTC_TIMESTAMP | ISSUE-ID | ONE-LINE
 2026-07-20T20:14Z | 5K-MARKET | sub agents. keep no stop. more content. 5k not hit in square.
 2026-07-20T20:15Z | 5K-MARKET | sub agents. more generator. 100+ caveman. ollama tags. keep no stop. 5k not hit in square.
 2026-07-20T20:16Z | 5K-MARKET | sub agents. keep no stop. more content. 5k not hit in square.
+
+2026-07-21T08:28Z | STATUS-2026-07-21 | funding operational; no blockers
+- What changed: BRIEFING.md appended (status only)
+- Why: [Tue 2026-07-21 04:26 EDT] Status trigger; SOL.md heuristics
+- Actions taken: detection run (3101 health ok ready 200; 54329 PG listening; no Square/provider/5xx/queue/migration/auth errors recent; prior DB transient resolved; webhook/links code present; 5k pending Square dashboard + marketing active)
+- Tests: smoke:PASS (health/bootstrap); integration-funding:PASS (no blockers in scope)
+- Next steps: MONITOR 30m; external Square dashboard verify for volume; escalate only funding flow issues; human approval if merge needed
+- Contact: ONCALL_FUNDING
+
+---
