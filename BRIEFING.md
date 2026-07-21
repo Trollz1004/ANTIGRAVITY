@@ -223,3 +223,13 @@ UTC_TIMESTAMP | ISSUE-ID | ONE-LINE
 - Contact: ONCALL_FUNDING
 
 ---
+
+2026-07-21T08:53:11Z | LAST-DAY-5K-FORMAT | platform bundles + outreach drafting via subagents (in progress; not complete)
+- What changed: BRIEFING.md appended; dispatched platform bundle subagents + outreach draft subagent
+- Why: user approved posts and pushed "market until k verified"; last day; execution only
+- Actions taken: verified approved-links.json gating; generated 230+ mellow posts in marketing-subagents-lastday/; 4 subagents dispatched to build platform bundles and 3 outreach drafts; human must post/send
+- Tests: approved links only; disclosure #ad required; no banned vocabulary; past blocker issues confirmed safe
+- Next steps: wait subagent outputs, review post-queue/platform bundles, user posts manually; monitor Square dashboard for verification; append final outcome after subagent completion or new dispatch
+- Contact: ONCALL_FUNDING
+
+---
