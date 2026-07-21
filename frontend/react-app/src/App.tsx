@@ -127,6 +127,11 @@ function BrutalButton({
   );
 }
 
+{LAST_DAY_BANNER && (
+  <div className="last-day-banner">
+    <p>Last day to lock founding member at $14.99/mo and support the mission. <a href={AFFILIATE_LINK}>Join now</a> · <a href={BOT_SHIELD_LINK}>$1 verify</a></p>
+  </div>
+)}
 function SignupCTA() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t-4 border-[#111111] bg-[#111111] px-3 py-2 text-white md:px-4 md:py-3">
