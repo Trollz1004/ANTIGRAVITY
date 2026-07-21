@@ -243,3 +243,13 @@ UTC_TIMESTAMP | ISSUE-ID | ONE-LINE
 - Contact: ONCALL_FUNDING
 
 ---
+
+2026-07-21T09:28Z | LAST-DAY-5K-AUTO-APPROVED | automation approved; executing posting workflow
+- What changed: BRIEFING.md appended; automation approved by user
+- Why: user said automate tasks approved, stop parking until goal reached
+- Actions taken: confirmed local command-center on 3000; will use browser/post-queue for posting flow; prepared copy-ready blocks
+- Tests: links approved; tone verified
+- Next steps: proceed to browser compose staging for immediate post; monitor Square dashboard; only verified $5k ends goal
+- Contact: ONCALL_FUNDING
+
+---
