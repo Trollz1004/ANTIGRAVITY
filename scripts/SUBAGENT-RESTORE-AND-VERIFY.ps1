@@ -3,13 +3,13 @@
 #          clone, replay Gordon's Docker commits on top, then run safe Docker
 #          cleanup + boot verification. Logs everything.
 # Usage:
-#   Step 1:  powershell -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\SUBAGENT-RESTORE-AND-VERIFY.ps1
+#   Step 1:  powershell -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\SUBAGENT-RESTORE-AND-VERIFY.ps1
 #   Step 2 (only if Step 1 prints PREPARED_OK):
-#            powershell -ExecutionPolicy Bypass -File C:\ANTIGRAVITY\scripts\SUBAGENT-RESTORE-AND-VERIFY.ps1 -Push
+#            powershell -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\SUBAGENT-RESTORE-AND-VERIFY.ps1 -Push
 param([switch]$Push)
 
 $ErrorActionPreference = 'Continue'
-$repo   = 'C:\ANTIGRAVITY'
+$repo   = 'E:\ANTIGRAVITY'
 $oldTip = '66c839034cb86ab6ee09838733d5b90c1b2006d8'   # true main tip before force-push
 $gordon = @('940d0d3b','78272ada')                      # Gordon's commits, oldest first
 $rbr    = 'restore/main-66c8390'

@@ -7,7 +7,7 @@ REM
 REM To create the task (run in Admin PowerShell):
 REM   $taskName = "ANTIGRAVITY-Docker-Stack"
 REM   $taskPath = "\ANTIGRAVITY\"
-REM   $scriptPath = "C:\ANTIGRAVITY\scripts\AUTOSTART-DOCKER-BOOT.bat"
+REM   $scriptPath = "E:\ANTIGRAVITY\scripts\AUTOSTART-DOCKER-BOOT.bat"
 REM   $trigger = New-ScheduledTaskTrigger -AtStartup
 REM   $principal = New-ScheduledTaskPrincipal -UserId SYSTEM -LogonType ServiceAccount -RunLevel Highest
 REM   $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
@@ -16,12 +16,12 @@ REM   Register-ScheduledTask -TaskName $taskName -TaskPath $taskPath -Trigger $t
 REM
 REM Or use the setup script: scripts\SETUP-AUTOSTART.ps1
 
-cd /d C:\ANTIGRAVITY
+cd /d E:\ANTIGRAVITY
 setlocal enabledelayedexpansion
 
 REM Log file for debugging
-set LOGFILE=C:\ANTIGRAVITY\logs\autostart-%date:~-4%%date:~-10,2%%date:~-7,2%-%time:~0,2%%time:~3,2%-%time:~6,2%.log
-if not exist "C:\ANTIGRAVITY\logs" mkdir C:\ANTIGRAVITY\logs
+set LOGFILE=E:\ANTIGRAVITY\logs\autostart-%date:~-4%%date:~-10,2%%date:~-7,2%-%time:~0,2%%time:~3,2%-%time:~6,2%.log
+if not exist "E:\ANTIGRAVITY\logs" mkdir E:\ANTIGRAVITY\logs
 
 echo. >> "%LOGFILE%"
 echo ======================================== >> "%LOGFILE%"
