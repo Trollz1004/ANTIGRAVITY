@@ -105,3 +105,6 @@ apps/antigravity-dashboard/tsconfig*.tsbuildinfo
 # Nested repo checkouts kept out of the canonical root
 ANTIGRAVITY/
 hermes-workspace/
+
+# runtime instance data (never commit)
+.paperclip-laptop/

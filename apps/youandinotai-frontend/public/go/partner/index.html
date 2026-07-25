@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Redirecting — You and I, Not AI</title>
+<meta name="robots" content="noindex"/>
+<script>
+const SLUGS = {
+  josh: { ref: 'josh', name: 'Founder' },
+  launch: { ref: 'launch', name: 'Launch' },
+  partner: { ref: 'partner', name: 'Partner' }
+};
+(function () {
+  const forced = 'partner';
+  const parts = location.pathname.replace(/\/+$/,'').split('/');
+  const slug = (forced || parts[parts.length - 1] || '').toLowerCase();
+  const entry = SLUGS[slug];
+  const ref = entry ? entry.ref : (slug || 'unknown');
+  const params = new URLSearchParams({
+    ref: ref,
+    utm_source: 'affiliate',
+    utm_medium: 'link',
+    utm_campaign: entry ? entry.ref : 'unmapped',
+    a: ref
+  });
+  const exp = new Date(Date.now() + 30*24*3600*1000).toUTCString();
+  document.cookie = 'yni_aff=' + encodeURIComponent(ref) + '; path=/; expires=' + exp + '; SameSite=Lax';
+  location.replace('/?' + params.toString() + '#membership');
+})();
+</script>
+</head>
+<body style="background:#020617;color:#cbd5e1;font-family:Inter,system-ui,sans-serif;display:grid;place-items:center;min-height:100vh">
+  <p>Taking you to You and I, Not AI…</p>
+</body>
+</html>

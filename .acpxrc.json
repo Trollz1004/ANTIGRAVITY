@@ -1,0 +1,17 @@
+{
+  "defaultAgent": "codex",
+  "defaultPermissions": "approve-all",
+  "nonInteractivePermissions": "deny",
+  "authPolicy": "skip",
+  "ttl": 300,
+  "agents": {
+    "openclaw": {
+      "command": "openclaw",
+      "args": ["acp", "--url", "ws://127.0.0.1:9119"]
+    },
+    "claude": {
+      "command": "npx",
+      "args": ["-y", "@agentclientprotocol/claude-agent-acp@^0.37.0"]
+    }
+  }
+}
