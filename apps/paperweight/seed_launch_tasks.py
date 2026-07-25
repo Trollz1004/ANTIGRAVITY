@@ -37,7 +37,7 @@ items = [
         "title": "DAO for sale launch prep & transparency materials",
         "kind": "goal",
         "company": "dao",
-        "body": "Prepare compliant public sale/transparency assets per doctrine (BUSINESS-ONLY). LLC facts only: Trash Or Treasure Online Recycler LLC · FL #L25000158401. Real-or-zero only. No investment/donation/securities language in public. Update dashboards/pages. Seed actionable steps. Integrate paperweight dao board + mission-control/public-stream. Private 506(c) prep stays internal.",
+        "body": "Prepare compliant public sale/transparency assets per doctrine (BUSINESS-ONLY). LLC facts only: Trash Or Treasure Online Recycler LLC · FL #L25000158401. Real-or-zero only. No investment/payment/securities language in public. Update dashboards/pages. Seed actionable steps. Integrate paperweight dao board + mission-control/public-stream. Private 506(c) prep stays internal.",
         "status": "doing",
         "priority": 1,
         "assignee": "Hermes"

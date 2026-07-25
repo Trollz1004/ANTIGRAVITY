@@ -136,7 +136,7 @@ For time-sensitive content (press releases, event announcements):
 3. **Brand-Inconsistent Messaging**
    - No negativity toward competitors
    - No misleading claims about platform capabilities
-   - No violation of "contractual revenue disbursement" messaging doctrine
+   - No violation of "contractual revenue payout" messaging doctrine
 
 ### Required Content Standards
 
@@ -147,17 +147,17 @@ For time-sensitive content (press releases, event announcements):
 
 2. **Compliance Requirements**
    - Always use legal-safe phrasing:
-     ✅ "contractual revenue disbursement"
+     ✅ "contractual revenue payout"
      ✅ "revenue-sharing for good"
      ✅ "platform that gives back"
-     ❌ "donate," "donation," "solicitation"
-   - Reference mission as platform feature, not charity appeal
+     ❌ "payment," "payment," "outreach"
+   - Reference mission as platform feature, not  appeal
    - Emphasize human connection over monetary benefits
 
 3. **Community-Focused Approach**
    - Highlight real user stories and connections
    - Promote offline meetups and volunteer opportunities
-   - Showcase charity impact without direct asking
+   - Showcase  impact without direct asking
    - Encourage authentic relationship development
 
 ### Escalation Protocol for Questionable Content
@@ -204,7 +204,7 @@ For time-sensitive content (press releases, event announcements):
 | Metric                              | Measurement         | Reporting Cadence |
 | ----------------------------------- | ------------------- | ----------------- |
 | Volunteer Connections Facilitated   | Direct tracking     | Weekly            |
-| Charity Fundraising Events Promoted | Event participation | Monthly           |
+|  Fundraising Events Promoted | Event participation | Monthly           |
 | Community Meetups Organized         | RSVP/tracking       | Monthly           |
 | Success Stories Collected           | User testimonials   | Monthly           |
 

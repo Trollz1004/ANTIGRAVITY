@@ -95,9 +95,9 @@ CODEOWNERS are senior contributors with:
 
 ## Mission Alignment Principles
 
-### Charity-First Mission
+### -First Mission
 
-- 10% of LLC-controlled revenue directed to children's charities
+- 10% of LLC-controlled revenue directed to 
 - All features evaluated for alignment with connecting humans for good
 - Marketing emphasizes real-world connection over transaction
 
@@ -118,8 +118,8 @@ CODEOWNERS are senior contributors with:
 
 ### Florida Statute §496.405
 
-- No use of "donate," "donation," or "solicitation" terminology
-- Use "contractual revenue disbursement" instead
+- No use of "payment," "payment," or "outreach" terminology
+- Use "contractual revenue payout" instead
 - Regular scanning for compliance violations
 - Legal review of user-facing copy
 

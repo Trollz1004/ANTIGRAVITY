@@ -5,7 +5,7 @@ This shared copy was retired on 2026-03-31 during the prelaunch doctrine cleanup
 Do not use older listing copy from this file for live or draft listings.
 
 Reason:
-- older versions contained legacy `60/30/10`, `100% charity`, named-beneficiary, and raffle-style wording
+- older versions contained legacy ``, `100% `, named-beneficiary, and raffle-style wording
 - those statements are not approved as current operating truth for LLC-controlled revenue
 
 Use these canonical sources instead:

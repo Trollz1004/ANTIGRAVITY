@@ -2,7 +2,7 @@
 
 Superseded.
 
-This file must not be used by itself for revenue doctrine, named-beneficiary claims, charity routing language, or governance assertions.
+This file must not be used by itself for revenue doctrine, named-beneficiary claims,  routing language, or governance assertions.
 
 Use current canonical repo truth instead:
 

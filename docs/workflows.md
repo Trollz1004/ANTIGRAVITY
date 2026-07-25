@@ -11,7 +11,7 @@ This document describes the key workflows in the YouAndINotAI platform and their
 - [Safety Features](#safety-features)
 - [Payment Processing](#payment-processing)
 - [Event and Volunteering Coordination](#event-and-volunteering-coordination)
-- [Charitable Revenue Distribution](#charitable-revenue-distribution)
+- [ Revenue Distribution](#-revenue-distribution)
 
 ## User Registration and Authentication
 
@@ -217,10 +217,10 @@ This document describes the key workflows in the YouAndINotAI platform and their
 2. Webhook triggers processing
 3. System calculates:
    - Gross amount: $X.XX
-   - Contractual revenue disbursement: 10% of gross (rounded up)
+   - Contractual revenue payout: 10% of gross (rounded up)
    - Operating revenue: Remaining amount
 4. Allocation recorded in internal ledger
-5. Reserved funds tracked for disbursement
+5. Reserved funds tracked for payout
 
 ### Refund Processing
 
@@ -273,22 +273,22 @@ This document describes the key workflows in the YouAndINotAI platform and their
 4. Event created for tracking
 5. Safety features applied to meetups
 
-## Charitable Revenue Distribution
+##  Revenue Distribution
 
 ### Revenue Tracking
 
 1. Monthly revenue calculated
-2. 10% contractual revenue disbursement calculated
+2. 10% contractual revenue payout calculated
 3. Amount reserved in internal ledger
 4. Funds tracked separately from operating revenue
 5. Monthly reports generated
 
-### Disbursement Process
+### payout Process
 
-1. Quarterly disbursement review
-2. Amount eligible for disbursement determined
+1. Quarterly payout review
+2. Amount eligible for payout determined
 3. Recipient organizations selected:
-   - Children-focused charities
+   - Children-focused 
    - Educational institutions
    - Community development projects
 4. Funds distributed according to legal compliance
@@ -297,7 +297,7 @@ This document describes the key workflows in the YouAndINotAI platform and their
 ### Transparency Reporting
 
 1. Revenue tracking visible internally
-2. Disbursement records maintained
+2. payout records maintained
 3. Impact reports generated quarterly
 4. Community updates shared appropriately
 5. Audit trails preserved for compliance
@@ -306,8 +306,8 @@ This document describes the key workflows in the YouAndINotAI platform and their
 
 1. Adherence to Florida §496.405
 2. Proper terminology usage:
-   - "Contractual revenue disbursement"
-   - Avoidance of "donation" or "solicitation"
+   - "Contractual revenue payout"
+   - Avoidance of "payment" or "outreach"
 3. Accurate financial record keeping
 4. Transparent reporting on impact
 5. Regular compliance reviews

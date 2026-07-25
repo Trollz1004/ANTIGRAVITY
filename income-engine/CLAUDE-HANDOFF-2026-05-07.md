@@ -12,7 +12,7 @@
 - Scanned C:/, D:/, home directory, OneDrive
 - Purged: stale logs, old installers, zip archives, chat transcript .md files, old backups, IDE tool configs (.aitk, .continue, .copilot, .codegpt, .adal, .agents), misplaced project folders (Music/, content/, paperclip-local, venv, go, nssm)
 - Paperclip: wiped completely clean — fresh install coming for this project
-- ENIGMA plugin: deleted (no charity issues, Josh confirmed)
+- ENIGMA plugin: deleted (no  issues, Josh confirmed)
 - D:/OPUSONLY/.pnpm-store: purged (regenerable cache)
 
 ### What Stayed on 9020
@@ -35,7 +35,7 @@
 ### The Wall (Non-Negotiable)
 - income-engine NEVER references Antigravity or Trollz1004
 - Separate GitHub account, separate stack, separate everything
-- Iron Wall: ENIGMA (profit) never crosses OMEGA (charity)
+- Iron Wall: ENIGMA (profit) never crosses OMEGA ()
 
 ## ⚠ Action Required — PAT Rotation
 - AidoesitAll PAT was exposed in chat session today

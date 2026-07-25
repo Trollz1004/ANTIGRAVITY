@@ -44,7 +44,7 @@ The live repo is **not yet at that target state**:
 - The live hub (`backend/hub.py:147-166`) still routes 5 of 13 platforms through the Emergent bridge. `EMERGENT_LLM_KEY` is the engine.
 - The live revenue code (`/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:97-100`) does a **2-way** split (10% / 90%) at the **LLC** layer. The guide's **3-way** 10/27/63 split is the **DAO PlatformSplitter** at the **DAO** layer, not the LLC layer.
 - The live agent fleet (`hermes/agents/AGENTS.md`, Opus-authored 2026-05-22) has Hermes as the **internal** orchestrator routing to Opus-authored CEOs. Manus is on the extended team and not in the fleet diagram.
-- The 100-Cent Rule, the $50k founder cap, and the ENIGMA 60/30/10 are **three different things on three different layers** — the guide collapsed them.
+- The 100-Cent Rule, the $50k founder cap, and the ENIGMA  are **three different things on three different layers** — the guide collapsed them.
 
 This briefing draws the layer lines so neither file has to be edited to resolve the conflicts. Both stay canonical for what they describe.
 
@@ -54,15 +54,15 @@ This briefing draws the layer lines so neither file has to be edited to resolve 
 
 | # | Layer | Split | Status | Source of truth |
 |---|-------|-------|--------|-----------------|
-| 1 | **LLC operating** (every Square merchant receipt) | **10% kids bucket (IRS LLC charitable-deduction cap) + 90% operating** | **LIVE — coded** | `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:97-100`; `CLAUDE.md` §"Revenue Model" (2026-06-01 restatement); `REPOSITORY_RECORD.md` §"Current Financial Doctrine" (2026-04-17) |
+| 1 | **LLC operating** (every Square merchant receipt) | **10% kids bucket (IRS LLC -deduction cap) + 90% operating** | **LIVE — coded** | `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:97-100`; `CLAUDE.md` §"Revenue Model" (2026-06-01 restatement); `REPOSITORY_RECORD.md` §"Current Financial Doctrine" (2026-04-17) |
 | 2 | **DAO PlatformSplitter** (gross token-sale proceeds, post-LLC formation) | **10% kids (stacked per activity) / min 27% tax reserve / 63% priority tiers (A1 survival + A2 human + Breakeven; then B growth)** | **LIVE at DAO layer only** | `briefings/DAO-ARCHITECTURE-CANONICAL.md:799` (calibrated 2026-04-19); `briefings/DAO-LAUNCH-ARCHITECTURE.md:9-15` (2026-06-04); contract `contracts/src/PlatformSplitter10.sol` (47-test suite, commit `6847c88`) |
-| 3 | **ENIGMA 60/30/10** (historical charity-routing) | 60% ops / 30% growth / 10% kids | **DEAD — never resurrect** | Historical only: `GospelDonation.sol`, pre-April-17 docs. Killed 2026-04-17 per `REPOSITORY_RECORD.md` §"Current Financial Doctrine" and `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`. Joshua confirmed 2026-06-05. |
+| 3 | **ENIGMA ** (historical -routing) | 60% ops / 30% growth / 10% kids | **DEAD — never resurrect** | Historical only: `Gospelpayment.sol`, pre-April-17 docs. Killed 2026-04-17 per `REPOSITORY_RECORD.md` §"Current Financial Doctrine" and `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`. Joshua confirmed 2026-06-05. |
 
-### 2.1 · The 10/27/63 (DAO PlatformSplitter) is the SUCCESSOR to the 60/30/10
+### 2.1 · The 10/27/63 (DAO PlatformSplitter) is the SUCCESSOR to the 
 
-The guide's 100-Cent Rule (10/27/63) is **not** a parallel rule to the 60/30/10. It is the **successor** to the 60/30/10 at the **DAO PlatformSplitter** layer, after the LLC formation pivot. The 10% kids number survived the 2026-04-17 kill; the 27% tax reserve and 63% priority tiers replaced the 60/30 charity-routing structure with a Tier A (survival) / Tier B (growth) sovereignty pool funded from the 63%.
+The guide's 100-Cent Rule (10/27/63) is **not** a parallel rule to the . It is the **successor** to the  at the **DAO PlatformSplitter** layer, after the LLC formation pivot. The 10% kids number survived the 2026-04-17 kill; the 27% tax reserve and 63% priority tiers replaced the 60/30 -routing structure with a Tier A (survival) / Tier B (growth) sovereignty pool funded from the 63%.
 
-**Per-bucket compounding still holds at the LLC layer** (`revenue_allocation.py`): N legally-distinct revenue streams × 10% buckets = N×10% corporate charitable deduction, per the IRS LLC for-profit charitable cap. The DAO PlatformSplitter is the **secondary**, governance-voteable layer on top.
+**Per-bucket compounding still holds at the LLC layer** (`revenue_allocation.py`): N legally-distinct revenue streams × 10% buckets = N×10% corporate  deduction, per the IRS LLC for-profit  cap. The DAO PlatformSplitter is the **secondary**, governance-voteable layer on top.
 
 ### 2.2 · The 100-Cent Rule is NOT a single LLC operating rule
 
@@ -104,7 +104,7 @@ The cap is real. The framing in the guide ("If cap is approached, Hermes creates
 - **What Hermes does:** flags the cap approach in a Kanban task, surfaces it to Joshua and the AI Steward Council. The Kanban task is a **flag**, not a vote.
 - **What Hermes does NOT do:** unilaterally block DAO payouts or modify founder comp. That would be governance theatre.
 
-**Joshua's draw on the LLC operating share is at his quarterly discretion** per `REPOSITORY_RECORD.md` §"Current Financial Doctrine": "the reserve is Joshua Coleman's taxable income … and is held until he decides quarterly whether to donate, reinvest, stake, or hold." There is **no $50k cap on the LLC operating share**. The $50k cap is a DAO governance cap, not an LLC operating cap.
+**Joshua's draw on the LLC operating share is at his quarterly discretion** per `REPOSITORY_RECORD.md` §"Current Financial Doctrine": "the reserve is Joshua Coleman's taxable income … and is held until he decides quarterly whether to payment, reinvest, stake, or hold." There is **no $50k cap on the LLC operating share**. The $50k cap is a DAO governance cap, not an LLC operating cap.
 
 ---
 
@@ -133,7 +133,7 @@ The cap is real. The framing in the guide ("If cap is approached, Hermes creates
 
 The live compliance monitor is `backend/compliance.py` (10/27/63 audit on the **DAO PlatformSplitter** layer, using `REVENUE_SPLIT_KIDS=10`, `REVENUE_SPLIT_TAX=27`, `REVENUE_SPLIT_OPS=63` env defaults). The live `revenue_allocation.py` does the **LLC** 10/90 split.
 
-**These are not in conflict because they are at different layers.** The monitor is checking the **DAO treasury** (which is funded by the LLC's charitable-deduction bucket + DAO sale proceeds). The allocation is checking the **LLC merchant receipts**.
+**These are not in conflict because they are at different layers.** The monitor is checking the **DAO treasury** (which is funded by the LLC's -deduction bucket + DAO sale proceeds). The allocation is checking the **LLC merchant receipts**.
 
 | Check | Target | Layer | Where it lives |
 |-------|--------|-------|----------------|
@@ -216,7 +216,7 @@ This briefing **does not**:
 - ❌ Open a PR
 - ❌ Push to `Trollz1004/ANTIGRAVITY`
 - ❌ Trigger any CI workflow
-- ❌ Resurrect 60/30/10 or 100%-charity framing
+- ❌ Resurrect  or 100%- framing
 
 This briefing **does**:
 - ✅ Document the LLC / DAO / ENIGMA-dead layer split

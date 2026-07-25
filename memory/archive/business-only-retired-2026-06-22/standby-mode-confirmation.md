@@ -43,7 +43,7 @@ All core work principles remain active and ready for application:
 - **Design Specs Production**: Ready to create new specifications when needed
 - **Mobile-First Focus**: All future work will maintain touch optimization
 - **Ethical Design**: No dark patterns, fake urgency, or manipulation will be employed
-- **Legal Compliance**: "Donate/donation/solicitation" language avoidance maintained
+- **Legal Compliance**: "payment/payment/outreach" language avoidance maintained
 - **Implementation Support**: CTO subtask creation capability ready
 
 ### Coordination Framework Active ✅

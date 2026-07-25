@@ -6,7 +6,7 @@ CommunityImpactTracker
 
 ## Overview
 
-A visualization component that transparently displays the community's collective impact on children's causes through the platform's contractual revenue disbursement model. This component reinforces trust by showing real outcomes from user interactions.
+A visualization component that transparently displays the community's collective impact on children's causes through the platform's contractual revenue payout model. This component reinforces trust by showing real outcomes from user interactions.
 
 ## Props/State
 
@@ -30,8 +30,8 @@ interface CommunityImpactData {
   };
   financialImpact: {
     totalRevenue: number; // Platform revenue
-    childrenSupportDisbursement: number; // Contractual revenue disbursement
-    disbursementPercentage: number; // Percentage of revenue
+    childrenSupportpayout: number; // Contractual revenue payout
+    payoutPercentage: number; // Percentage of revenue
     dollarPerUserHour: number; // Average impact per user hour
   };
   communityEngagement: {
@@ -86,7 +86,7 @@ interface CommunityImpactData {
 
 ### Data Visualization
 
-1. **Financial Impact**: Progress bar showing disbursement percentage
+1. **Financial Impact**: Progress bar showing payout percentage
 2. **Community Engagement**: Icon-based metrics with trend indicators
 3. **Children Benefited**: Illustrated representations of impact types
 4. **Impact Projection**: Forward-looking trend visualization
@@ -117,7 +117,7 @@ interface CommunityImpactData {
 
 - **Main Header**: "Our Community's Impact"
 - **Subheader**: "Every connection here directly supports children's causes"
-- **Intro Text**: "Through our transparent contractual revenue disbursement model, your conversations and community activities generate funds for kids' initiatives nationwide."
+- **Intro Text**: "Through our transparent contractual revenue payout model, your conversations and community activities generate funds for kids' initiatives nationwide."
 
 ### Metric Labels (Compliant with Florida §496.405)
 
@@ -125,7 +125,7 @@ interface CommunityImpactData {
 {
   "financialImpact": {
     "title": "Contractual Revenue Support",
-    "description": "Funds disbursed to children's initiatives through our business model",
+    "description": "Funds payout to children's initiatives through our business model",
     "counterPrefix": "$",
     "counterSuffix": " contributed"
   },
@@ -192,7 +192,7 @@ interface CommunityImpactData {
   <header className="impact-header">
     <h2 id="impact-tracker-title">Our Community's Impact</h2>
     <p id="impact-tracker-desc">
-      Every connection here directly supports children's causes through our contractual revenue disbursement model.
+      Every connection here directly supports children's causes through our contractual revenue payout model.
     </p>
   </header>
 
@@ -205,11 +205,11 @@ interface CommunityImpactData {
       onKeyDown={handleMetricKeyDown}
     >
       <div className="metric-value" aria-live="polite">
-        {formatCurrency(financialImpact.childrenSupportDisbursement)}
+        {formatCurrency(financialImpact.childrenSupportpayout)}
       </div>
       <div className="metric-label">Contractual Revenue Support</div>
       <div className="metric-description sr-only">
-        Funds disbursed to children's initiatives through our business model
+        Funds payout to children's initiatives through our business model
       </div>
     </div>
 
@@ -447,7 +447,7 @@ const CommunityImpactTracker = ({
       <header className="impact-header">
         <h2>Our Community's Impact</h2>
         <p>
-          Every connection here directly supports children's causes through our contractual revenue disbursement model.
+          Every connection here directly supports children's causes through our contractual revenue payout model.
         </p>
       </header>
 
@@ -458,7 +458,7 @@ const CommunityImpactTracker = ({
           <div className="impact-metrics">
             <MetricCard
               type="financial"
-              value={formatAnimatedValue(impactData.financialImpact.childrenSupportDisbursement)}
+              value={formatAnimatedValue(impactData.financialImpact.childrenSupportpayout)}
               label="Contractual Revenue Support"
               prefix="$"
               suffix=" contributed"
@@ -625,8 +625,8 @@ const MetricCard = ({ type, value, label, prefix = '', suffix = '', onDetail }) 
 
 1. **Messaging Compliance**:
    - All copy aligned with Florida §496.405 restrictions
-   - "Contractual revenue disbursement" terminology verification
-   - Benefit-focused rather than donation-focused language
+   - "Contractual revenue payout" terminology verification
+   - Benefit-focused rather than payment-focused language
    - Transparency in methodology explanations
 
 2. **Storytelling Elements**:
@@ -672,7 +672,7 @@ const MetricCard = ({ type, value, label, prefix = '', suffix = '', onDetail }) 
 
 ### Impact Awareness
 
-- User comprehension of disbursement model
+- User comprehension of payout model
 - Correlation between awareness and participation
 - Voluntary contribution to community activities
 - Positive sentiment in user feedback surveys
@@ -695,9 +695,9 @@ const MetricCard = ({ type, value, label, prefix = '', suffix = '', onDetail }) 
 
 All terminology in this component strictly adheres to Florida §496.405:
 
-- Uses "contractual revenue disbursement" instead of "donation" or "charitable contribution"
-- Frames platform benefits as features of business model rather than charitable appeals
-- Focuses on user agency in generating impact rather than soliciting funds
+- Uses "contractual revenue payout" instead of "payment" or " contribution"
+- Frames platform benefits as features of business model rather than  appeals
+- Focuses on user agency in generating impact rather than outreach funds
 - Describes outcomes quantitatively without emotional manipulation
 
 ---

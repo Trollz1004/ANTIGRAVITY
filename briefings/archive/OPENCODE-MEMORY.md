@@ -91,8 +91,8 @@
 - Secrets in .env ONLY — never in chat, never in git; real env in OneDrive Personal Vault
 - No git push without explicit Josh order
 - Square payment links are LIVE — see AGENTS.md for full table
-- 10% charitable cap on LLC-controlled revenue (current conservative doctrine)
-- FL §496.405: never use "donate"/"donation"/"solicitation" in customer-facing code
+- 10%  cap on LLC-controlled revenue (current conservative doctrine)
+- FL §496.405: never use "payment"/"payment"/"outreach" in customer-facing code
 
 ## Desktop & Documents Audit
 - **Documents/Downloads**: CLEAN — no Antigravity-related files found

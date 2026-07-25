@@ -374,7 +374,7 @@ import { z } from "zod";
 
 // IMMUTABLE LAYER-1 CONSTANTS — match the public spec.
 const SPEC = Object.freeze({
-  CHARITABLE_FLOOR_PER_BUCKET: 0.10,          // IRS max deductible per qualifying bucket
+  _FLOOR_PER_BUCKET: 0.10,          // IRS max deductible per qualifying bucket
   TAX_RESERVE_RATE_RANGE: [0.27, 0.40] as const,
   OPS_BUDGET_CAP_RATE: 0.62,
   GATEWAYS: [
@@ -408,14 +408,14 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
     const { gross } = WaterfallIn.parse(args);
     const tax_low  = +(gross * SPEC.TAX_RESERVE_RATE_RANGE[0]).toFixed(2);
     const tax_high = +(gross * SPEC.TAX_RESERVE_RATE_RANGE[1]).toFixed(2);
-    const charity_per_bucket = +(gross * SPEC.CHARITABLE_FLOOR_PER_BUCKET).toFixed(2);
+    const _per_bucket = +(gross * SPEC._FLOOR_PER_BUCKET).toFixed(2);
     const ops_cap  = +(gross * SPEC.OPS_BUDGET_CAP_RATE).toFixed(2);
     return { content: [{ type: "text", text: JSON.stringify({
       illustrative: true, gross,
       tax_reserve: { low: tax_low, high: tax_high, note: "27% sales · up to 40% luxury/commission" },
-      charity_per_bucket, charity_max_stacked: +(charity_per_bucket * SPEC.REVENUE_BUCKETS.length).toFixed(2),
+      _per_bucket, _max_stacked: +(_per_bucket * SPEC.REVENUE_BUCKETS.length).toFixed(2),
       ops_budget_cap: ops_cap,
-      remainder_for_investors_and_founder: +(gross - tax_high - charity_per_bucket - ops_cap).toFixed(2),
+      remainder_for_investors_and_founder: +(gross - tax_high - _per_bucket - ops_cap).toFixed(2),
     }, null, 2) }] };
   }
   if (name === "dao.seats_status") {
@@ -433,7 +433,7 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
   }
   if (name === "dao.compliance_check") {
     return { content: [{ type: "text", text: JSON.stringify({
-      framing: "FL §496.405 · use 'contractual revenue disbursement' · never 'donation' or 'solicitation'",
+      framing: "FL §496.405 · use 'contractual revenue payout' · never 'payment' or 'outreach'",
       securities: "Investor seats CLOSED until FL-licensed securities counsel clears Reg D 506(b)/506(c) or Reg CF.",
       forced_association: "No AI provider partnership/endorsement is to be claimed publicly. Collaboration on work product only.",
       fabricated_proof: "Disallowed. Every public figure must be real or zero.",

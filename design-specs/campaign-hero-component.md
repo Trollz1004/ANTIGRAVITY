@@ -65,7 +65,7 @@ Primary hero component for the Q3 "Connection with Purpose" campaign landing pag
 **Volunteer Variant:**
 
 - headline: "Volunteer While You Connect"
-- subheadline: "Join events that bring people together AND support children's causes through our transparent contractual revenue disbursement model."
+- subheadline: "Join events that bring people together AND support children's causes through our transparent contractual revenue payout model."
 - ctaText: "Find Service Opportunities"
 
 **Community Variant:**
@@ -83,7 +83,7 @@ Primary hero component for the Q3 "Connection with Purpose" campaign landing pag
 ### Impact Statistics
 
 - stat1: { value: "1000+", label: "verified users attending events" }
-- stat2: { value: "$15K", label: "contractual revenue disbursement goal" }
+- stat2: { value: "$15K", label: "contractual revenue payout goal" }
 - stat3: { value: "8", label: "foundation cities expanding to" }
 
 ## Accessibility Notes

@@ -18,7 +18,7 @@ Not Haiku. Not Sonnet. Not Ollama. Not OpenClaw. **OPUS ONLY.**
 
 ### If you are Codex on Sabretooth (192.168.0.8)
 - Do NOT start any posting, content generation, or social engine
-- Your role: task sentry, e-waste/donation pipeline, vault operations
+- Your role: task sentry, e-waste/payment pipeline, vault operations
 - To relay a marketing task: put it in `data/codex-task-queue.json`
 
 ### If you are Opus on T5500 (192.168.0.15)

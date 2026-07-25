@@ -21,7 +21,7 @@ Love the product? Support the mission through our Business Exchange marketplace 
 
 ## Compliance-Aligned Notes
 - Product-first language only
-- No charity/donation wording on customer surfaces
+- No /payment wording on customer surfaces
 - Focus on quality, verification, and user value
 - All CTAs lead to signup or store
 

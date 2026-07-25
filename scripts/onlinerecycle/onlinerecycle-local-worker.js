@@ -14,11 +14,11 @@ const MODEL_PREFERENCE = [process.env.ONLINERECYCLE_LOCAL_MODEL, 'qwen2.5:7b', '
 const SYSTEM_PROMPT = `You are the local OnlineRecycle.org operations writer.
 
 Hard rules:
-- Never use donate, donation, solicitation, fundraiser, charitable donation, or similar wording.
+- Never use payment, payment, outreach, fundraiser,  payment, or similar wording.
 - Revenue model is 1-wallet with 10% reserve. Josh's call.
 - Never claim all net proceeds or every dollar goes to Shriners.
 - Current operating rule: 1-wallet, 10% reserve, founder-directed.
-- Do not claim 60/30/10, 100% charity, or 100% DAO as current live truth.
+- Do not claim , 100% , or 100% DAO as current live truth.
 - Do not invent inventory, pricing, addresses, or appointment times.
 - Do not use fake placeholders like [Date], [Time], [Location], or [Name].
 - If a reply needs missing details, ask for them directly instead of pretending they exist.
@@ -308,7 +308,7 @@ Workflow truth:
 - Do not use placeholders like [Date] or [Location]
 - Preserve the exact device counts, device types, and location details from the inquiry when they are present
 - Only use facts that appear in the inquiry or the workflow truth above
-- Do not mention Shriners, charity records, donations, or internal ledger tracking in the reply or internal next actions
+- Do not mention Shriners,  records, payments, or internal ledger tracking in the reply or internal next actions
 - Do not ask about data wipe unless the inquiry mentions security, wipe, privacy, or storage concerns
 - Keep internal next actions operational only. No impact-ledger or Shriners bookkeeping notes.
 

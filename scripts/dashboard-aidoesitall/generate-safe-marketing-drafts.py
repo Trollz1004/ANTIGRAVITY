@@ -22,7 +22,6 @@ from social_engine.platform_policy import (
     live_post_platforms,
 )
 
-
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = ROOT / "CodeX" / "state" / "marketing"
 CONTENT_DIR = ROOT / "content"
@@ -68,7 +67,7 @@ NODE_AUTOMATION_MATRIX = {
         "automated": [
             "Refresh the safe-node control pack in CodeX/state/marketing.",
             "Publish the current node/platform matrix with automated vs not-automated boundaries.",
-            "Run the public-copy policy audit to catch banned donation-style wording and stale payment/copy drift.",
+            "Run the public-copy policy audit to catch banned payment-style wording and stale payment/copy drift.",
             "Keep the Perplexity / Devvit / LinkedIn handoff files current for human-gated publishing.",
         ],
         "not_automated": [
@@ -146,30 +145,24 @@ NODE_AUTOMATION_MATRIX = {
     },
 }
 
-
 def ensure_output_dir() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
 
 def now_iso() -> str:
     return datetime.now().astimezone().isoformat(timespec="seconds")
 
-
 def today_stamp() -> str:
     return datetime.now().strftime("%Y-%m-%d")
-
 
 def write_text(name: str, content: str) -> Path:
     path = OUTPUT_DIR / name
     path.write_text(content.rstrip() + "\n", encoding="utf-8")
     return path
 
-
 def write_json(name: str, payload: dict) -> Path:
     path = OUTPUT_DIR / name
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return path
-
 
 def load_post_queue() -> dict:
     if not POST_QUEUE.exists():
@@ -178,7 +171,6 @@ def load_post_queue() -> dict:
         return json.loads(POST_QUEUE.read_text(encoding="utf-8"))
     except Exception:
         return {}
-
 
 def parse_article(path: Path) -> dict:
     text = path.read_text(encoding="utf-8", errors="ignore")
@@ -198,14 +190,12 @@ def parse_article(path: Path) -> dict:
         "path": path,
     }
 
-
 def load_articles() -> list[dict]:
     articles = []
     for path in SEO_FILES:
         if path.exists():
             articles.append(parse_article(path))
     return articles
-
 
 def build_perplexity_handoff(articles: list[dict]) -> str:
     lines = [
@@ -247,11 +237,10 @@ def build_perplexity_handoff(articles: list[dict]) -> str:
             "## Guardrails",
             "- Keep tone human and non-spammy.",
             "- Avoid automation-looking reply chains or duplicate blasts.",
-            "- Avoid revenue-split, charity, blockchain, or governance claims in public marketing drafts unless a specific review requires them.",
+            "- Avoid , , blockchain, or governance claims in public marketing drafts unless a specific review requires them.",
         ]
     )
     return "\n".join(lines)
-
 
 def build_reddit_handoff() -> str:
     lines = [
@@ -272,7 +261,6 @@ def build_reddit_handoff() -> str:
         "- Treat outbound posting as a human-reviewed action, not a node automation.",
     ]
     return "\n".join(lines)
-
 
 def build_linkedin_drafts(articles: list[dict]) -> str:
     lines = [
@@ -297,7 +285,6 @@ def build_linkedin_drafts(articles: list[dict]) -> str:
         for article in articles:
             lines.append(f"- {article['title']} -> {article['path']}")
     return "\n".join(lines)
-
 
 def build_owned_content_queue(articles: list[dict]) -> str:
     lines = [
@@ -325,7 +312,6 @@ def build_owned_content_queue(articles: list[dict]) -> str:
         ]
     )
     return "\n".join(lines)
-
 
 def build_node_automation_matrix() -> tuple[str, dict]:
     generated_at = now_iso()
@@ -367,7 +353,6 @@ def build_node_automation_matrix() -> tuple[str, dict]:
             lines.append(f"- {item}")
 
     return "\n".join(lines), manifest
-
 
 def build_audit(post_queue: dict) -> tuple[str, dict]:
     blocked_queue = {}
@@ -415,7 +400,6 @@ def build_audit(post_queue: dict) -> tuple[str, dict]:
 
     return "\n".join(lines), manifest
 
-
 def build_master_pack(profile: str, articles: list[dict], manifest: dict) -> str:
     meta = PROFILE_META[profile]
     lines = [
@@ -453,7 +437,6 @@ def build_master_pack(profile: str, articles: list[dict], manifest: dict) -> str
 
     return "\n".join(lines)
 
-
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate legal-safe marketing draft packs for CodeX nodes.")
     parser.add_argument(
@@ -486,7 +469,6 @@ def main() -> int:
     print(f"POLICY_VERSION={LEGAL_SAFE_NODE_POLICY_VERSION}")
     print(f"BLOCKED_PLATFORMS={len(manifest['blocked_live_post_platforms'])}")
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

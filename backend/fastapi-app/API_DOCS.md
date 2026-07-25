@@ -3357,7 +3357,7 @@ Schema: `HTTPValidationError`
 **Summary:** Impact Metrics
 **Description:** Aggregate anonymized platform metrics for the Admin Dashboard.
 
-Returns revenue splits, user counts, engagement totals.
+Returns s, user counts, engagement totals.
 NO individual user data, emails, names, or payment details.
 
 ### Request

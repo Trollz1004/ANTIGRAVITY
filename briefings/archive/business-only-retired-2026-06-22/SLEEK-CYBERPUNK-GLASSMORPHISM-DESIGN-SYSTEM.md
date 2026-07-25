@@ -146,5 +146,5 @@ If the live CSS or TS tokens ever conflict with this doc, **this doc wins** — 
 ## TOS-doctrine cross-check (Officially Unofficial)
 
 - ✅ Visual aesthetic only — no AI-attribution claims in this spec
-- ✅ No `donate`/`donation`/`solicitation`/`tax-deductible` language at any layer
+- ✅ No `payment`/`payment`/`outreach`/`tax-deductible` language at any layer
 - ✅ Brand headings allow "YouAndINotAI" gradient treatment without triggering Anthropic/Google/OpenAI attribution rules

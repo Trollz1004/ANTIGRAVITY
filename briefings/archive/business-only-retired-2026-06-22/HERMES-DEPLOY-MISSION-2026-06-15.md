@@ -172,7 +172,7 @@ No list. No phases. No "and also." One blocker, one action. After that, stop and
 
 The previous Hermes directives had phases, stop markers, plan docs, atomic sequential PRs, audit-of-audit gates. That cadence is right for refactor work where one wrong move breaks the build for everyone. It is wrong for "ship the product that's been done for a year." Joshua has been doing this for twelve months. He doesn't need more validation passes. He needs the URLs to be 200.
 
-When they're 200, he markets. When he markets, revenue. When revenue, 10% per bucket compounds For The Kids. That is the whole chain. Everything else is in service of that chain.
+When they're 200, he markets. When he markets, revenue. When revenue, 10% per bucket compounds . That is the whole chain. Everything else is in service of that chain.
 
 Run it. Ship it. Tell him it's done.
 

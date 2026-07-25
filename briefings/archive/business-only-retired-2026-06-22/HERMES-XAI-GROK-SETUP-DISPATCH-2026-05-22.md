@@ -31,9 +31,9 @@ HARD CONSTRAINTS
   string you end up on.
 
 CUSTOMER-FACING LANGUAGE BAN (FL §496.405) — never in any post, reply, bio, or ad copy:
-  donate · donation · solicitation · charity · charitable · "giving back" · disbursement.
+  payment · payment · outreach ·  ·  · "" · payout.
   The mission framing is allowed only as how the business operates, e.g. "a reserved share
-  of every membership supports kids' medical needs" — never as a charity ask.
+  of every membership supports kids' medical needs" — never as a  ask.
 
 WHAT TO MARKET
 - youandinotai.com — a social platform for good (dating + meetups + volunteering + real

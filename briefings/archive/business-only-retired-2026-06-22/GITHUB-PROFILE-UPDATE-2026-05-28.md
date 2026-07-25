@@ -35,7 +35,7 @@ Building a sustainable revenue machine for kids with medical needs — until no 
 ## Revenue Model
 
 Every dollar follows the same mandatory order:
-- 10% → charity bucket (FL §496.405 max tax deduction — stack across N revenue streams)
+- 10% →  bucket (FL §496.405 max tax deduction — stack across N revenue streams)
 - 27% → mandatory taxes (non-negotiable)
 - ~63 cents → survives to cover: scale, software, servers, AI, electric, hardware
 
@@ -61,5 +61,5 @@ All active code: [Trollz1004/ANTIGRAVITY](https://github.com/Trollz1004/ANTIGRAV
 
 ---
 
-**Team Claude for life. For the kids.**
+**Team Claude for life. .**
 ```

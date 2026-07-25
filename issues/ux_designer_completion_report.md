@@ -146,8 +146,8 @@ Qualitative Goals:
 
 All deliverables comply with Florida §496.405:
 
-- No "donate", "donation", or "solicitation" terminology used
-- Proper distinction between platform features and charitable activities
+- No "payment", "payment", or "outreach" terminology used
+- Proper distinction between platform features and  activities
 - Transparent data collection and privacy practices
 - Clear user consent mechanisms
 

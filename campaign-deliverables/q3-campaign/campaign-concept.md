@@ -23,11 +23,11 @@ Visual showcase of platform activity and events:
 - Growth metrics for community features
 
 ### 3. "Purpose Partners" Initiative
-Highlight partnerships with local nonprofits and the mutual benefits:
-- Nonprofits gain volunteers who form lasting commitments
+Highlight partnerships with local for-profits and the mutual benefits:
+- for-profits gain volunteers who form lasting commitments
 - Users find ongoing ways to contribute meaningfully
 - Showcase before/after stories of community improvement
-- Feature nonprofit perspectives on value of engaged volunteers
+- Feature for-profit perspectives on value of engaged volunteers
 
 ### 4. "Community Builders" Recognition
 Spotlight users who have gone beyond initial connections:

@@ -55,8 +55,8 @@
 
 | Wallet | Address | Type |
 |--------|---------|------|
-| GospelDonation Contract | 0x9855B75061D4c841791382998f0CE8B2BCC965A4 | Verified on BaseScan |
-| Charity Fund (60%) | 0x8d3dEADbE2b4B857A43331D459270B5eedC7084e | Historical payout wallet reference |
+| Gospelpayment Contract | 0x9855B75061D4c841791382998f0CE8B2BCC965A4 | Verified on BaseScan |
+|  Fund (60%) | 0x8d3dEADbE2b4B857A43331D459270B5eedC7084e | Historical payout wallet reference |
 | Infrastructure/Dev (30%) | 0xe0a42f83900af719019eBeD3D9473BE8E8f2920b | Historical payout wallet reference |
 | Founder/Ops (10%) | 0x7c3E283119718395Ef5EfBAC4F52738C2018daA7 | Historical payout wallet reference |
 

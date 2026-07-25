@@ -35,6 +35,6 @@ test.describe('Profile & User Settings', () => {
     await page.goto('/');
     const sidebar = page.locator('[data-testid="sidebar"]');
     await expect(sidebar.getByText('Settings')).toBeVisible();
-    await expect(sidebar.getByText('for the kids · #UntilNoKidInNeed')).toBeVisible();
+    await expect(sidebar.getByText(' · #UntilNoKidInNeed')).toBeVisible();
   });
 });

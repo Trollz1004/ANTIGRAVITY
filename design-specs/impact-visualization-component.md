@@ -107,7 +107,7 @@ interface ImpactStat {
   {
     "id": "revenue",
     "value": "$8,921",
-    "label": "contractual revenue disbursement to kids' initiatives",
+    "label": "contractual revenue payout to kids' initiatives",
     "icon": "💰",
     "trend": "up",
     "change": 15
@@ -127,7 +127,7 @@ interface ImpactStat {
 
 - Users Tooltip: "Verified users are those who have attended at least one real-world event through ANTIGRAVITY."
 - Hours Tooltip: "Volunteer hours contributed by our community members to local causes and initiatives."
-- Revenue Tooltip: "Contractual revenue disbursement to children's initiatives through our transparent business model."
+- Revenue Tooltip: "Contractual revenue payout to children's initiatives through our transparent business model."
 - Connections Tooltip: "Meaningful connections formed through platform events and activities."
 
 ## Accessibility Notes

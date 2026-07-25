@@ -98,11 +98,11 @@ If any tool, model, or exported note conflicts with the live repo:
 - Sabretooth is the only Telegram-owning OpenClaw orchestrator
 - No mock data
 - No false live claims
-- No customer-facing `donate`, `donation`, or `solicitation`
+- No customer-facing `payment`, `payment`, or `outreach`
 - If a temporary branch is ever used, Codex must merge, push `main`, and delete the branch before calling the task done
 - No AI rewrites another AI's personal memory/briefing/core protocol by default
 - Shared repo docs and briefings can be updated to restore operational truth, but protected AI-specific core files stay intact unless Josh explicitly says otherwise
-- No resurrecting 60/30/10, 100%-charity, or split-era revenue framing
+- No resurrecting , 100%-, or split-era revenue framing
 
 ## Current Team Priorities
 

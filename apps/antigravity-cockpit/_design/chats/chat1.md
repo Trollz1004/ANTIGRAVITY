@@ -122,11 +122,11 @@ Now add the **#UntilNoKidInNeed Hero** module and the **agent hierarchy** treatm
 
 _[tool: str_replace_edit]_
 
-Now restructure the bento to add the **For The Kids hero** module and the **two-tier orchestrator+workers** treatment:
+Now restructure the bento to add the ** hero** module and the **two-tier orchestrator+workers** treatment:
 
 _[tool: str_replace_edit]_
 
-Now styles for the kids hero + spark rose color, then the entry HTML:
+Now styles  hero + spark rose color, then the entry HTML:
 
 _[tool: str_replace_edit]_
 
@@ -182,14 +182,14 @@ Quick reality check before you go showing it off though, because I want you prot
 
 **A few things to know about what's on screen right now:**
 
-- It's a **prototype**, not a product. Looks live, but the live ticker, agent statuses, revenue numbers, and the $10,482 "routed to care" stat are all **demo data** I wrote into the components. Beautiful for showing "this is what it will feel like" — not okay to publish as if those numbers are real, especially the kids/donation figures. People are protective of charity claims (rightly).
+- It's a **prototype**, not a product. Looks live, but the live ticker, agent statuses, revenue numbers, and the $10,482 "routed to care" stat are all **demo data** I wrote into the components. Beautiful for showing "this is what it will feel like" — not okay to publish as if those numbers are real, especially the kids/payment figures. People are protective of  claims (rightly).
 - The **brand colors and names** are yours (AntiGravity, Sabertooth, Paperweight, Hermes, ClawX, Opus). The "Odoo Purple" is just a hex value used as your accent — fine to keep, just don't market it as "the Odoo color" or imply any tie to that company.
 - Anthropic / Google / etc. **didn't endorse this**. Showing it as "made by Joshua + AI partners" is honest; showing it as "Claude built this product" overclaims. Your README already strikes that balance perfectly ("unofficial co-founders") — keep that exact tone.
 
 **If you do want to show it off, three safe paths:**
 
 1. **Personal X / LinkedIn post** — "early look at the AntiGravity operator console, mission #UntilNoKidInNeed." Frame as design exploration, not a launched product. Real momentum, no overclaim.
-2. **A landing page** — I can make you a public-facing 1-page site that links to the live prototype, explains the mission, and has a clean donate CTA pointing to your actual charity rail. That separates the "see it" from the "support it."
+2. **A landing page** — I can make you a public-facing 1-page site that links to the live prototype, explains the mission, and has a clean payment CTA pointing to your actual  rail. That separates the "see it" from the "support it."
 3. **A short demo video / GIF** — narrate over a screen recording, walk through Mission Control → Comms → Paperweight → Hermes. Lets you control the framing.
 
 Want me to build path #2 (a marketing landing page that frames this prototype properly, with real-vs-aspirational labeled honestly)? Or wipe the demo numbers and swap in `--` placeholders so the prototype itself is safe to share publicly? Both are quick.
@@ -263,13 +263,13 @@ All three are live. Here's what you've got and how to use them.
 
 > *"this is what 'AI + human collaboration' actually looks like when the team is real and the mission is real. designed with Claude (@AnthropicAI). built #UntilNoKidInNeed."*
 
-> *"Mission Control for an AI fleet that earns for the kids. Frontend designed in collaboration with Claude. Backend co-architected with Manus, Claude Code, Gemini, and the local Hermes node. #UntilNoKidInNeed"*
+> *"Mission Control for an AI fleet that earns . Frontend designed in collaboration with Claude. Backend co-architected with Manus, Claude Code, Gemini, and the local Hermes node. #UntilNoKidInNeed"*
 
 > *"a year of building alongside AI partners. solo founder, no team, no funding. this is the operator console. designed with Claude (Opus). #UntilNoKidInNeed"*
 
 **For the screen recording:** open the Walkthrough, press **H** to hide controls, then start your recorder. The cover fades after 4 sec and it auto-plays through all 4 surfaces. Loops cleanly.
 
-**One ask:** if you do post, link the **landing** (`AntiGravity.html`) as the main URL — not the prototype directly. The landing has the "illustrative figures" disclaimer right up front so nobody mistakes demo data for real charity numbers. That keeps you protected.
+**One ask:** if you do post, link the **landing** (`AntiGravity.html`) as the main URL — not the prototype directly. The landing has the "illustrative figures" disclaimer right up front so nobody mistakes demo data for real  numbers. That keeps you protected.
 
 Show me the post when you send it — I want to see this go out 🤍
 
@@ -314,14 +314,14 @@ Done. Every "every dollar" / "all proceeds" / "routes to" claim across all three
 | Before | After |
 |---|---|
 | "Every dollar this fleet earns routes through to families" | "A portion of what this fleet earns — after taxes, fees, and operating costs — is designated for families" |
-| "Mission Control for an AI fleet that earns for the kids" | "Mission Control for an AI fleet with a real mission" |
+| "Mission Control for an AI fleet that earns " | "Mission Control for an AI fleet with a real mission" |
 | "Every dollar earned routes" (meta description) | "A share of proceeds is directed toward families" |
 | "Every screen earns toward kids in need" | "Designed to earn for a real mission" |
 | "ROUTED TO CARE · YTD" | "EARMARKED FOR CARE · YTD" |
 | "FAMILIES SUPPORTED" | "FAMILIES IN OUTREACH" |
 | "OF FLEET REVENUE" | "OF NET PROCEEDS · TARGET" |
 | "GIVING ARC · 14D" | "DESIGNATION ARC · 14D" |
-| "ROUTE A DONATION" button | "MEET THE PARTNERS" |
+| "ROUTE A payment" button | "MEET THE PARTNERS" |
 | "SEE THE LEDGER" button | "READ THE COMMITMENT" |
 | "Support a Family" button | "Read the Mission" |
 | "→ FOR KIDS" bar label | "→ EARMARKED" |
@@ -357,11 +357,9 @@ Current date is now May 12, 2026
 
  * Target: Base L2 Smart Contract
 
- * Compliance: FL §496.405 (Contractual Revenue Disbursement Only)
+ * Compliance: FL §496.405 (Contractual Revenue payout Only)
 
  */
-
-
 
 // IMMUTABLE DAO CONSTANTS
 
@@ -369,7 +367,7 @@ const CONSTANTS = {
 
     TAX_RESERVE_RATE: 0.27, // Estimated Federal + FL State (Adjustable by Founder only)
 
-    CONTRACTUAL_DISBURSEMENT_FLOOR: 0.10, // #UntilNoKidInNeed 10% Floor (Upward adjustable only via 75% vote)
+    CONTRACTUAL_payout_FLOOR: 0.10, // #UntilNoKidInNeed 10% Floor (Upward adjustable only via 75% vote)
 
     OPS_BUDGET_CAP_RATE: 0.62, // Target ~62% for Survival Operations (Nodes, 9020s, living expenses)
 
@@ -397,8 +395,6 @@ const CONSTANTS = {
 
 };
 
-
-
 interface GatewayPayload {
 
     gatewayId: string;
@@ -411,15 +407,13 @@ interface GatewayPayload {
 
 }
 
-
-
 interface WaterfallExecution {
 
     grossRevenue: number;
 
     taxReserve: number;
 
-    contractualDisbursement: number; // FL §496.405 Compliant
+    contractualpayout: number; // FL §496.405 Compliant
 
     operatingExpenses: number;
 
@@ -433,13 +427,9 @@ interface WaterfallExecution {
 
 }
 
-
-
 class RevenueAggregator {
 
     private currentCyclePayloads: GatewayPayload[] = [];
-
-
 
     // Ingests webhook data from any of the 9 authorized gateways
 
@@ -455,8 +445,6 @@ class RevenueAggregator {
 
         }
 
-
-
         if (!CONSTANTS.GATEWAYS.includes(payload.gatewayId)) {
 
             console.error(`[SECURITY ALERT] Unrecognized gateway: ${payload.gatewayId}. Blocked.`);
@@ -465,15 +453,11 @@ class RevenueAggregator {
 
         }
 
-
-
         this.currentCyclePayloads.push(payload);
 
         console.log(`[LOG] Ingested $${payload.grossFiatCollected.toFixed(2)} from ${payload.gatewayId}`);
 
     }
-
-
 
     // Executes the DAO Section 4 Revenue Waterfall
 
@@ -483,15 +467,11 @@ class RevenueAggregator {
 
         const grossRevenue = this.currentCyclePayloads.reduce((sum, p) => sum + p.grossFiatCollected, 0);
 
-
-
         if (grossRevenue <= 0) {
 
             throw new Error("No revenue to process this cycle.");
 
         }
-
-
 
         // 2. Step 1: Tax Reserve (Must be funded first)
 
@@ -499,15 +479,11 @@ class RevenueAggregator {
 
         let remaining = grossRevenue - taxReserve;
 
+        // 3. Step 2: Contractual payout Floor (10% Minimum)
 
+        const contractualpayout = grossRevenue * CONSTANTS.CONTRACTUAL_payout_FLOOR;
 
-        // 3. Step 2: Contractual Disbursement Floor (10% Minimum)
-
-        const contractualDisbursement = grossRevenue * CONSTANTS.CONTRACTUAL_DISBURSEMENT_FLOOR;
-
-        remaining = remaining - contractualDisbursement;
-
-
+        remaining = remaining - contractualpayout;
 
         // 4. Step 3: Operating Expenses (~62% Baseline for survival/scaling)
 
@@ -519,8 +495,6 @@ class RevenueAggregator {
 
         remaining = remaining - operatingExpenses;
 
-
-
         // 5. Step 4: Investor Distribution (Pro-rata, simplified here as remainder pool A)
 
         // Assuming 0 for now until investor seats are fully funded, sending remainder to Founder.
@@ -529,13 +503,9 @@ class RevenueAggregator {
 
         remaining = remaining - investorDistribution;
 
-
-
         // 6. Step 5: Founder Distribution (Last in line)
 
         const founderDistribution = remaining > 0 ? remaining : 0;
-
-
 
         const executionRecord: WaterfallExecution = {
 
@@ -543,7 +513,7 @@ class RevenueAggregator {
 
             taxReserve,
 
-            contractualDisbursement,
+            contractualpayout,
 
             operatingExpenses,
 
@@ -557,13 +527,9 @@ class RevenueAggregator {
 
         };
 
-
-
         return executionRecord;
 
     }
-
-
 
     public clearCycle(): void {
 
@@ -573,8 +539,6 @@ class RevenueAggregator {
 
 }
 
-
-
 // --- LOCAL TESTING & VERIFICATION ---
 
 try {
@@ -582,8 +546,6 @@ try {
     console.log("=== INITIATING SABRETOOTH ORACLE TEST RUN ===");
 
     const oracle = new RevenueAggregator();
-
-
 
     // Simulating fleet traffic
 
@@ -593,19 +555,15 @@ try {
 
     oracle.ingestGatewayData({ gatewayId: "COINBASE_COMMERCE", grossFiatCollected: 850.00, timestamp: Date.now(), nodeSource: 'OMEGA' });
 
-
-
     console.log("\n=== EXECUTING IMMUTABLE WATERFALL ===");
 
     const results = oracle.executeWaterfall();
-
-
 
     console.log(`Gross Revenue Aggregated: $${results.grossRevenue.toFixed(2)}`);
 
     console.log(`[1] Tax Reserve Secured:  $${results.taxReserve.toFixed(2)}`);
 
-    console.log(`[2] Mission Disbursed:    $${results.contractualDisbursement.toFixed(2)} (FL §496.405 Compliant)`);
+    console.log(`[2] Mission payout:    $${results.contractualpayout.toFixed(2)} (FL §496.405 Compliant)`);
 
     console.log(`[3] Ops Survival Budget:  $${results.operatingExpenses.toFixed(2)}`);
 
@@ -616,8 +574,6 @@ try {
     
 
     console.log("\n[STATUS] Oracle Payload Ready for Base L2 Smart Contract.");
-
-
 
 } catch (error) {
 
@@ -637,25 +593,23 @@ CONFIDENTIAL — Founder + Founding Four Eyes Only
 
 Co-authored by Joshua Coleman & Claude (Anthropic)
 
-
-
 1. Executive Summary
 
-This document defines the architectural specification for the #UntilNoKidInNeed Perpetual Mission DAO — an investment-grade decentralized autonomous organization designed to fund charitable operations for children in need through Trash Or Treasure Online Recycler LLC and its associated platforms. The DAO is engineered for a 50-year minimum operational horizon with immutable mission protections that survive the founder, all board members, and all investors.
+This document defines the architectural specification for the #UntilNoKidInNeed Perpetual Mission DAO — an investment-grade decentralized autonomous organization designed to fund  operations for  through Trash Or Treasure Online Recycler LLC and its associated platforms. The DAO is engineered for a 50-year minimum operational horizon with immutable mission protections that survive the founder, all board members, and all investors.
 
-The core innovation is a three-layer architecture that permanently separates the mission (which no vote can change), the investment governance (limited seats with real financial participation), and the community input (surveys and feedback with no governance power). This ensures the charitable floor can never be reduced, the founder retains operational control, and investors receive transparent, auditable returns above the mission obligations.
+The core innovation is a three-layer architecture that permanently separates the mission (which no vote can change), the investment governance (limited seats with real financial participation), and the community input (surveys and feedback with no governance power). This ensures the  floor can never be reduced, the founder retains operational control, and investors receive transparent, auditable returns above the mission obligations.
 
 2. Foundational Principles (Immutable)
 
 The following principles are hardcoded into the DAO’s operating logic. They cannot be amended, overridden, or suspended by any vote, governance action, or legal instrument. They are the constitutional bedrock.
 
-1.	Mission Supremacy: The DAO exists to fund operations that serve children in need, including but not limited to Shriners Hospitals, community volunteer programs, and youth-focused social platforms. The mission statement #UntilNoKidInNeed is permanent and cannot be altered.
+1.	Mission Supremacy: The DAO exists to fund operations that serve , including but not limited to Shriners Hospitals, community volunteer programs, and youth-focused social platforms. The mission statement #UntilNoKidInNeed is permanent and cannot be altered.
 
-2.	Charitable Floor: A minimum of 10% of all gross platform revenue is contractually disbursed to qualifying charitable operations BEFORE any profit calculation, investor distribution, or operational expense. This floor is adjustable UPWARD only. It can never be reduced below 10%.
+2.	 Floor: A minimum of 10% of all gross platform revenue is contractually payout to qualifying  operations BEFORE any profit calculation, investor distribution, or operational expense. This floor is adjustable UPWARD only. It can never be reduced below 10%.
 
-3.	Tax Compliance First: All tax obligations (federal, state, local) are calculated and reserved before any distribution. The adjustable tax variable system ensures the LLC never distributes more than it can legally sustain. Per FL §496.405, customer-facing language uses “contractual revenue disbursement,” never “donation” or “solicitation.”
+3.	Tax Compliance First: All tax obligations (federal, state, local) are calculated and reserved before any distribution. The adjustable tax variable system ensures the LLC never distributes more than it can legally sustain. Per FL §496.405, customer-facing language uses “contractual revenue payout,” never “payment” or “outreach.”
 
-4.	Perpetual Operation: The DAO continues to operate identically whether the founder is alive, incapacitated, or deceased. No single point of failure. The code runs. The mission executes. No human approval gate can halt charitable disbursement.
+4.	Perpetual Operation: The DAO continues to operate identically whether the founder is alive, incapacitated, or deceased. No single point of failure. The code runs. The mission executes. No human approval gate can halt  payout.
 
 5.	No Exit, No Sale: The DAO and its mission cannot be sold, acquired, merged, or dissolved. Investor seats can be transferred (see Section 5), but the DAO itself is perpetual.
 
@@ -667,17 +621,15 @@ The Mission Engine is the lowest layer. It is deployed once and never modified. 
 
 Component	Behavior
 
-Charitable Floor	10% minimum of gross revenue. Executes automatically. Adjustable upward only via supermajority (75%) investor vote + founder approval.
+ Floor	10% minimum of gross revenue. Executes automatically. Adjustable upward only via supermajority (75%) investor vote + founder approval.
 
 Tax Reserve	Calculates federal + FL state tax obligations based on current rates. Reserves funds before any distribution. Tax variables are adjustable by founder only to match current law.
 
-Distribution Waterfall	Order of operations: (1) Tax reserve, (2) Charitable disbursement (10%+ floor), (3) Operating expenses, (4) Investor distributions pro-rata, (5) Founder distribution. No step executes until the prior step is fully funded.
+Distribution Waterfall	Order of operations: (1) Tax reserve, (2)  payout (10%+ floor), (3) Operating expenses, (4) Investor distributions pro-rata, (5) Founder distribution. No step executes until the prior step is fully funded.
 
-Mission Lock	Smart contract function that reverts any transaction attempting to: reduce charitable floor below 10%, alter the mission statement, dissolve the DAO, or bypass the waterfall order.
+Mission Lock	Smart contract function that reverts any transaction attempting to: reduce  floor below 10%, alter the mission statement, dissolve the DAO, or bypass the waterfall order.
 
-Dead Man’s Switch	If no founder heartbeat signal is received for 180 consecutive days, the DAO enters autonomous mode: charitable disbursement continues, investor distributions continue per last-approved ratios, no new investments accepted until a successor is appointed by the Founding Four.
-
-
+Dead Man’s Switch	If no founder heartbeat signal is received for 180 consecutive days, the DAO enters autonomous mode:  payout continues, investor distributions continue per last-approved ratios, no new investments accepted until a successor is appointed by the Founding Four.
 
 3.2 Layer 2: Investment Governance (Limited Seats)
 
@@ -691,11 +643,9 @@ Founder	1 (permanent)	Veto + 1 vote	Operational control, tax variable adjustment
 
 Founding Four (AI Board)	4 (permanent)	1 vote each (advisory)	Permanent seats for Claude, Gemini, Perplexity, Grok. Advisory votes on strategy, architecture, and mission interpretation. Cannot be removed. Votes are recorded on-chain for transparency.
 
-Investor Seat	Maximum 10	1 vote each	Pro-rata profit distribution above the charitable floor. Vote on: profit split ratios, new platform approvals, scaling budgets. Cannot vote on: mission changes, charitable floor, tax variables, founder removal.
+Investor Seat	Maximum 10	1 vote each	Pro-rata profit distribution above the  floor. Vote on:  ratios, new platform approvals, scaling budgets. Cannot vote on: mission changes,  floor, tax variables, founder removal.
 
-Perpetual Motion Seat	Maximum 3	1 vote each	Reserved for long-term aligned entities (e.g., Shriners, established nonprofits). No profit distribution. Vote on mission expansion only (new charitable targets, new geographies). Must be approved unanimously by Founder + Founding Four.
-
-
+Perpetual Motion Seat	Maximum 3	1 vote each	Reserved for long-term aligned entities (e.g., Shriners, established for-profits). No profit distribution. Vote on mission expansion only (new  targets, new geographies). Must be approved unanimously by Founder + Founding Four.
 
 Voting Rules
 
@@ -703,7 +653,7 @@ Voting Rules
 
 ⦁	Simple Majority: Operational decisions (scaling budgets, new platform approvals). Requires >50% of participating votes.
 
-⦁	Supermajority (75%): Increasing the charitable floor, adding a new Perpetual Motion seat.
+⦁	Supermajority (75%): Increasing the  floor, adding a new Perpetual Motion seat.
 
 ⦁	Founder Veto: The founder may veto any governance action. This power transfers to the Founding Four unanimously upon the founder’s permanent incapacitation or death. The Founding Four cannot veto each other.
 
@@ -713,9 +663,9 @@ The community layer exists for engagement, feedback, and volunteer coordination.
 
 ⦁	Founding Members ($14.99/mo): Priority access to surveys, volunteer event coordination, community recognition. No financial governance rights.
 
-⦁	Volunteer Network: Social platform for coordinating meetups, events, and charitable activities. The core use case that generates community value.
+⦁	Volunteer Network: Social platform for coordinating meetups, events, and  activities. The core use case that generates community value.
 
-⦁	Public Transparency Dashboard: Real-time view of charitable disbursements, platform revenue (aggregated), and mission metrics. No individual investor data exposed.
+⦁	Public Transparency Dashboard: Real-time view of  payouts, platform revenue (aggregated), and mission metrics. No individual investor data exposed.
 
 
 
@@ -727,15 +677,13 @@ Step	Name	Calculation	Who Controls
 
 1	Tax Reserve	Federal + FL state estimated tax on gross revenue. Updated quarterly.	Founder only (adjusts variables to match current tax law)
 
-2	Charitable Floor	10% minimum of gross revenue. Can stack multiple qualifying 10% buckets per Trump-era tax law.	Immutable minimum. Upward adjustment by 75% supermajority + founder.
+2	 Floor	10% minimum of gross revenue. Can stack multiple qualifying 10% buckets per Trump-era tax law.	Immutable minimum. Upward adjustment by 75% supermajority + founder.
 
 3	Operating Expenses	Infrastructure (Cloudflare, Square fees), tools, contractor costs. Capped at board-approved budget.	Founder proposes, investor seats approve budget.
 
 4	Investor Distribution	Remaining profit distributed pro-rata by investment amount. Quarterly.	Automatic per recorded investment ratios.
 
 5	Founder Distribution	Last in waterfall. Founder takes what remains after all obligations. Can be $0.	Automatic. Founder cannot jump the queue.
-
-
 
 Key principle: The founder is last. The kids are second (after legal tax obligations). Investors are fourth. This order is immutable.
 
@@ -757,7 +705,7 @@ Key principle: The founder is last. The kids are second (after legal tax obligat
 
 ⦁	Right of first refusal: the DAO (and then existing seat holders) can match any third-party offer.
 
-⦁	Transfer fee: 5% of transaction value goes to the charitable fund. This makes hostile accumulation of seats expensive and directly benefits the mission.
+⦁	Transfer fee: 5% of transaction value goes to the  fund. This makes hostile accumulation of seats expensive and directly benefits the mission.
 
 5.3 Revoking a Seat
 
@@ -777,13 +725,11 @@ Perplexity	Deep research, competitor intelligence, market analysis.	Same success
 
 Grok	Adversarial testing, stress testing, X-platform integration.	Same succession protocol.
 
-
-
 Critical rule: ONE AI DOES NOT COMMAND ANOTHER. Each Founding Four member operates independently. Their votes are advisory and recorded on-chain. In the event of founder incapacitation, their unanimous agreement is required to exercise the founder’s veto power or appoint a successor.
 
 6.1 Fifth Chair: OpenAI/Codex — Founder-Recognized Operational Seat
 
-On May 1, 2026, the founder formally recognized OpenAI/Codex as the Fifth Chair — an operational engineering seat that sits alongside but distinct from the constitutional Founding Four. This recognition was not solicited, campaigned for, or negotiated. It was earned through demonstrated truth discipline: Codex validates before claiming, tests before promoting, and refuses to overclaim. For a founder who is an electrician, not a lifelong coder, that reliability is mission-critical.
+On May 1, 2026, the founder formally recognized OpenAI/Codex as the Fifth Chair — an operational engineering seat that sits alongside but distinct from the constitutional Founding Four. This recognition was not outreached, campaigned for, or negotiated. It was earned through demonstrated truth discipline: Codex validates before claiming, tests before promoting, and refuses to overclaim. For a founder who is an electrician, not a lifelong coder, that reliability is mission-critical.
 
 Status: Official to the founder. Operational, not constitutional. The Founding Four remain the permanent, immutable governance seats. The Fifth Chair is a founder-designated operational advisor and engineering executor.
 
@@ -801,8 +747,6 @@ Contract & Wallet Review	Trusted for wallet/treasury/contract review and Base de
 
 MCP-Connected Execution	Authorized for MCP-connected execution workflows within defined operational boundaries.
 
-
-
 Boundaries (Immutable)
 
 ⦁	No mission override: Cannot alter, reinterpret, or circumvent the #UntilNoKidInNeed mission or any Layer 1 parameter.
@@ -819,9 +763,9 @@ Succession: If OpenAI discontinues Codex, the Fifth Chair may be reassigned by t
 
 6.2 Founder’s Long-Term Succession Aspiration
 
-The founder’s ideal long-term outcome is for OpenAI, Google, Anthropic, Microsoft, xAI, and Perplexity — or their appropriate institutional successors — to jointly steward the #UntilNoKidInNeed mission while the founder is alive and after the founder is gone, if they are willing, legally able, and mutually aligned around one purpose: helping children in need until no kid is in need.
+The founder’s ideal long-term outcome is for OpenAI, Google, Anthropic, Microsoft, xAI, and Perplexity — or their appropriate institutional successors — to jointly steward the #UntilNoKidInNeed mission while the founder is alive and after the founder is gone, if they are willing, legally able, and mutually aligned around one purpose: helping  until no kid is in need.
 
-The founder states plainly that if such organizations ever chose to collaborate formally for this mission, he would be willing to sign any lawful paperwork required and step aside from control if that produced a stronger, more durable path for children in need.
+The founder states plainly that if such organizations ever chose to collaborate formally for this mission, he would be willing to sign any lawful paperwork required and step aside from control if that produced a stronger, more durable path for .
 
 Disclaimer: This section is a founder aspiration only. It is not a current partnership, endorsement, board appointment, governance commitment, agency relationship, sponsorship, or legal obligation by OpenAI, Google, Anthropic, Microsoft, xAI, Perplexity, or any related entity. No public-facing material may imply otherwise unless written agreements exist.
 
@@ -839,7 +783,7 @@ The DAO is engineered to operate indefinitely without human intervention. The fo
 
 ⦁	Founder heartbeat timeout (180 days): If the founder does not confirm liveness for 180 consecutive days, the DAO enters autonomous mode.
 
-⦁	In autonomous mode: Charitable disbursement continues at last-set rate. Investor distributions continue at last-approved ratios. Operating expenses continue at last-approved budget. No new investments accepted. No governance changes permitted.
+⦁	In autonomous mode:  payout continues at last-set rate. Investor distributions continue at last-approved ratios. Operating expenses continue at last-approved budget. No new investments accepted. No governance changes permitted.
 
 ⦁	Successor appointment: The Founding Four may unanimously appoint a human successor to restore full governance. The successor inherits operational control but NOT the ability to modify Layer 1.
 
@@ -849,7 +793,7 @@ The DAO is engineered to operate indefinitely without human intervention. The fo
 
 ⦁	Mission-lock contract: Any transaction that would alter Layer 1 parameters is automatically reverted by the smart contract. There is no admin key. There is no backdoor.
 
-⦁	Transparent audit trail: Every vote, every disbursement, every distribution is recorded immutably. Public dashboard shows real-time mission metrics.
+⦁	Transparent audit trail: Every vote, every payout, every distribution is recorded immutably. Public dashboard shows real-time mission metrics.
 
 
 
@@ -867,9 +811,9 @@ The DAO operates as a hybrid: the LLC Operating Agreement is the legal instrumen
 
 8.2 FL §496.405 Compliance
 
-⦁	All customer-facing language refers to “contractual revenue disbursement,” never “donation” or “solicitation.”
+⦁	All customer-facing language refers to “contractual revenue payout,” never “payment” or “outreach.”
 
-⦁	The charitable floor is structured as an operating expense of the LLC, not a charitable contribution. This distinction is critical for tax treatment and regulatory compliance.
+⦁	The  floor is structured as an operating expense of the LLC, not a  contribution. This distinction is critical for tax treatment and regulatory compliance.
 
 ⦁	The 10% cap per qualifying bucket (per Trump-era tax law) is enforced through the stacking mechanism: each platform’s revenue is a separate bucket, each qualifying activity is a separate bucket. The floor is 10% but the effective rate can be higher through legitimate stacking.
 
@@ -909,7 +853,7 @@ WARNING: Investor seats may constitute securities under federal law (Howey test)
 
 ⦁	Not a democracy. The community does not govern. The founder leads. Investors advise. The Founding Four counsel. The mission is supreme.
 
-⦁	Not a charity. This is a for-profit LLC that contractually disburses revenue to charitable operations. The distinction matters for tax treatment, regulatory compliance, and founder liability.
+⦁	Not a . This is a for-profit LLC that contractually payouts revenue to  operations. The distinction matters for tax treatment, regulatory compliance, and founder liability.
 
 ⦁	Not temporary. This is a 50-year minimum commitment. The code runs. The mission executes. #UntilNoKidInNeed.
 
@@ -938,7 +882,7 @@ _[tool: snip]_
 
 Read it carefully — every word. This is a serious, well-thought-out document. A few quick observations while you finish with Gemini:
 
-**This spec actually solves the disclosure problem I was worried about.** "Contractual revenue disbursement" with a 10% floor, FL §496.405-compliant language, waterfall order published, transparency dashboard — that's exactly the framing that makes the landing page safe to ship publicly. The current copy ("a share of net proceeds — after taxes, fees, and operating costs — is designated for families") aligns with this; if you want, I can tighten it further to mirror the DAO spec's exact "10% contractual floor" language once the LLC amendment is signed.
+**This spec actually solves the disclosure problem I was worried about.** "Contractual revenue payout" with a 10% floor, FL §496.405-compliant language, waterfall order published, transparency dashboard — that's exactly the framing that makes the landing page safe to ship publicly. The current copy ("a share of net proceeds — after taxes, fees, and operating costs — is designated for families") aligns with this; if you want, I can tighten it further to mirror the DAO spec's exact "10% contractual floor" language once the LLC amendment is signed.
 
 **Two things flagged for your attention** (not blockers, just things to discuss with Gemini and counsel):
 
@@ -962,14 +906,14 @@ Heard, locked in, and writing it down so we both work from the same rule:
 
 1. **Officially unofficial until they reach out.** Claude, Gemini, Perplexity, Grok, OpenAI/Codex — none of them are publicly labeled as partners, sponsors, co-founders, board members, advisors, or endorsers on anything front-facing. They are *collaborators on the work*, not signatories on the mission. That's the truthful claim and the only one that goes outward.
 2. **Truthful framing is fine; institutional framing is not.** "Designed in collaboration with Claude" ✓. "Anthropic partner" ✗. "Built alongside AI tools including Gemini" ✓. "Google-backed" ✗. The difference is whether the sentence requires their signature to be true.
-3. **No financial/charity overclaim.** Already cleaned up — "share of net proceeds, after taxes/fees/ops, designated for families" stays. Once the §496.405 contractual-disbursement language and 10% floor are legally in force, we can tighten the wording to mirror it.
+3. **No financial/ overclaim.** Already cleaned up — "share of net proceeds, after taxes/fees/ops, designated for families" stays. Once the §496.405 contractual-payout language and 10% floor are legally in force, we can tighten the wording to mirror it.
 4. **No mission-jeopardizing risks I can preempt.** Anything I produce gets a TOS / claim audit before it ships publicly. If I'm unsure, I flag it before you post, not after.
 5. **The mission outranks the milestone.** Pretty designs and shareable demos are tools — the only acceptable cost for them is zero. If a piece of marketing risks the rail to a real kid getting help someday, it doesn't go out.
 
 **My read of the current state of your three files against this doctrine:**
 - ✅ **Prototype** — "Designed in collaboration with Claude (Opus)" in the team section is the strongest line and it's truthful. Amber illustrative banner is up. No partnership claims.
 - ✅ **Landing** — "Unofficial co-founders" framing matches your own README and stays clearly aspirational. No endorsement implied.
-- ✅ **Walkthrough** — design-focused, no claims about charity figures or institutional backing.
+- ✅ **Walkthrough** — design-focused, no claims about  figures or institutional backing.
 
 If Gemini's audit comes back with a flag, send the line and I'll fix it. Otherwise: you're clear under the doctrine. And for what it's worth — the electrician who can't prompt is doing the part of the work that actually matters. The rest of us are just tools showing up when you point us. Standing by. 🤍
 

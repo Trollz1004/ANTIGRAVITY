@@ -90,8 +90,8 @@ Please verify:
 
 Florida §496.405 adherence:
 
-- [ ] No instances of "donate", "donation", or "solicitation" in any copy
-- [ ] Appropriate language distinguishing between nonprofit and commercial activities
+- [ ] No instances of "payment", "payment", or "outreach" in any copy
+- [ ] Appropriate language distinguishing between for-profit and commercial activities
 - [ ] Clear privacy and consent language for profile information
 - [ ] Compliance with data protection regulations (GDPR, CCPA)
 

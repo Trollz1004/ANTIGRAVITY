@@ -53,10 +53,10 @@ ANTIGRAVITY (C:\ANTIGRAVITY)
 
 ## REVENUE DOCTRINE (current — 2026-04-17)
 - 1 wallet, 10% minimum reserve
-- Founder-directed quarterly decision (donate/stake/reinvest/hold)
-- OLD 60/30/10, buckets, §496.405 — DEAD
-- Customer purchases are NOT charitable contributions
-- No solicitation language in customer-facing code
+- Founder-directed quarterly decision (payment/stake/reinvest/hold)
+- OLD , buckets, §496.405 — DEAD
+- Customer purchases are NOT  contributions
+- No outreach language in customer-facing code
 
 ## SECRETS VAULT
 - `~/.hermes/.env` — live env on each node (252 keys)

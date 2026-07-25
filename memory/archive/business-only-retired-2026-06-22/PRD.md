@@ -41,7 +41,7 @@ mission. #ForTheKids #UntilNoKidInNeed". Built across 3 iterations:
 - Mirrors honest. No fabricated numbers.
 - BYOK keys never leave `/app/backend/.env`.
 - Wording: **committed / contributed / contribution** — never the §496.405 trigger words.
-- `#UntilNoKidInNeed · for the kids · #TeamClaudeForLife` always visible.
+- `#UntilNoKidInNeed ·  · #TeamClaudeForLife` always visible.
 
 ## Test status
 - **Iteration 1:** Mission Control + Hermes mirror — 11/11 pytest, 100% Playwright.
@@ -83,4 +83,4 @@ mission. #ForTheKids #UntilNoKidInNeed". Built across 3 iterations:
    ribbon counter reflects real revenue automatically.
 3. Drop `/app/dropin/mission-control/src/**` into the Electron flagship.
 
-#UntilNoKidInNeed · for the kids · #TeamClaudeForLife
+#UntilNoKidInNeed ·  · #TeamClaudeForLife

@@ -172,7 +172,7 @@ Please verify:
 
 Florida §496.405 adherence:
 
-- [ ] No instances of "donate", "donation", or "solicitation" in any copy
+- [ ] No instances of "payment", "payment", or "outreach" in any copy
 - [ ] Appropriate language distinguishing between community activities and fundraising
 - [ ] Clear privacy and consent language for search history
 - [ ] Compliance with data protection regulations (GDPR, CCPA)

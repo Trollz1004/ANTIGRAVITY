@@ -24,7 +24,7 @@ import type {
 } from "../common";
 
 export declare namespace MissionTreasury {
-  export type DisbursementStruct = {
+  export type payoutStruct = {
     recipient: AddressLike;
     amount: BigNumberish;
     bucketId: string;
@@ -32,7 +32,7 @@ export declare namespace MissionTreasury {
     timestamp: BigNumberish;
   };
 
-  export type DisbursementStructOutput = [
+  export type payoutStructOutput = [
     recipient: string,
     amount: bigint,
     bucketId: string,
@@ -54,13 +54,13 @@ export interface MissionTreasuryInterface extends Interface {
       | "activateStateB"
       | "approveRecipient"
       | "approvedRecipients"
-      | "bucketDisbursed"
+      | "bucketpayout"
       | "bucketReceived"
       | "deadManSwitch"
-      | "disburse"
-      | "disbursementCount"
-      | "disbursements"
-      | "getDisbursement"
+      | "payout"
+      | "payoutCount"
+      | "payouts"
+      | "getpayout"
       | "gnosisSafe"
       | "isApproved"
       | "owner"
@@ -74,7 +74,7 @@ export interface MissionTreasuryInterface extends Interface {
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "Disbursed"
+      | "payout"
       | "FundsReceived"
       | "OwnershipTransferred"
       | "RecipientApproved"
@@ -96,7 +96,7 @@ export interface MissionTreasuryInterface extends Interface {
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "bucketDisbursed",
+    functionFragment: "bucketpayout",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -108,19 +108,19 @@ export interface MissionTreasuryInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "disburse",
+    functionFragment: "payout",
     values: [AddressLike, BigNumberish, string, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "disbursementCount",
+    functionFragment: "payoutCount",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "disbursements",
+    functionFragment: "payouts",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getDisbursement",
+    functionFragment: "getpayout",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -171,7 +171,7 @@ export interface MissionTreasuryInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "bucketDisbursed",
+    functionFragment: "bucketpayout",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -182,17 +182,17 @@ export interface MissionTreasuryInterface extends Interface {
     functionFragment: "deadManSwitch",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "disburse", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "payout", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "disbursementCount",
+    functionFragment: "payoutCount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "disbursements",
+    functionFragment: "payouts",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getDisbursement",
+    functionFragment: "getpayout",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "gnosisSafe", data: BytesLike): Result;
@@ -224,7 +224,7 @@ export interface MissionTreasuryInterface extends Interface {
   ): Result;
 }
 
-export namespace DisbursedEvent {
+export namespace payoutEvent {
   export type InputTuple = [
     recipient: AddressLike,
     amount: BigNumberish,
@@ -384,13 +384,13 @@ export interface MissionTreasury extends BaseContract {
     "view"
   >;
 
-  bucketDisbursed: TypedContractMethod<[arg0: string], [bigint], "view">;
+  bucketpayout: TypedContractMethod<[arg0: string], [bigint], "view">;
 
   bucketReceived: TypedContractMethod<[arg0: string], [bigint], "view">;
 
   deadManSwitch: TypedContractMethod<[], [string], "view">;
 
-  disburse: TypedContractMethod<
+  payout: TypedContractMethod<
     [
       recipient: AddressLike,
       amount: BigNumberish,
@@ -401,9 +401,9 @@ export interface MissionTreasury extends BaseContract {
     "nonpayable"
   >;
 
-  disbursementCount: TypedContractMethod<[], [bigint], "view">;
+  payoutCount: TypedContractMethod<[], [bigint], "view">;
 
-  disbursements: TypedContractMethod<
+  payouts: TypedContractMethod<
     [arg0: BigNumberish],
     [
       [string, bigint, string, string, bigint] & {
@@ -417,9 +417,9 @@ export interface MissionTreasury extends BaseContract {
     "view"
   >;
 
-  getDisbursement: TypedContractMethod<
+  getpayout: TypedContractMethod<
     [index: BigNumberish],
-    [MissionTreasury.DisbursementStructOutput],
+    [MissionTreasury.payoutStructOutput],
     "view"
   >;
 
@@ -474,7 +474,7 @@ export interface MissionTreasury extends BaseContract {
     nameOrSignature: "approvedRecipients"
   ): TypedContractMethod<[arg0: AddressLike], [string], "view">;
   getFunction(
-    nameOrSignature: "bucketDisbursed"
+    nameOrSignature: "bucketpayout"
   ): TypedContractMethod<[arg0: string], [bigint], "view">;
   getFunction(
     nameOrSignature: "bucketReceived"
@@ -483,7 +483,7 @@ export interface MissionTreasury extends BaseContract {
     nameOrSignature: "deadManSwitch"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "disburse"
+    nameOrSignature: "payout"
   ): TypedContractMethod<
     [
       recipient: AddressLike,
@@ -495,10 +495,10 @@ export interface MissionTreasury extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "disbursementCount"
+    nameOrSignature: "payoutCount"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "disbursements"
+    nameOrSignature: "payouts"
   ): TypedContractMethod<
     [arg0: BigNumberish],
     [
@@ -513,10 +513,10 @@ export interface MissionTreasury extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "getDisbursement"
+    nameOrSignature: "getpayout"
   ): TypedContractMethod<
     [index: BigNumberish],
-    [MissionTreasury.DisbursementStructOutput],
+    [MissionTreasury.payoutStructOutput],
     "view"
   >;
   getFunction(
@@ -552,11 +552,11 @@ export interface MissionTreasury extends BaseContract {
   ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
 
   getEvent(
-    key: "Disbursed"
+    key: "payout"
   ): TypedContractEvent<
-    DisbursedEvent.InputTuple,
-    DisbursedEvent.OutputTuple,
-    DisbursedEvent.OutputObject
+    payoutEvent.InputTuple,
+    payoutEvent.OutputTuple,
+    payoutEvent.OutputObject
   >;
   getEvent(
     key: "FundsReceived"
@@ -595,15 +595,15 @@ export interface MissionTreasury extends BaseContract {
   >;
 
   filters: {
-    "Disbursed(address,uint256,string,string)": TypedContractEvent<
-      DisbursedEvent.InputTuple,
-      DisbursedEvent.OutputTuple,
-      DisbursedEvent.OutputObject
+    "payout(address,uint256,string,string)": TypedContractEvent<
+      payoutEvent.InputTuple,
+      payoutEvent.OutputTuple,
+      payoutEvent.OutputObject
     >;
-    Disbursed: TypedContractEvent<
-      DisbursedEvent.InputTuple,
-      DisbursedEvent.OutputTuple,
-      DisbursedEvent.OutputObject
+    payout: TypedContractEvent<
+      payoutEvent.InputTuple,
+      payoutEvent.OutputTuple,
+      payoutEvent.OutputObject
     >;
 
     "FundsReceived(address,uint256,string)": TypedContractEvent<

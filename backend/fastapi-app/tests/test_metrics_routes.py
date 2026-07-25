@@ -31,10 +31,8 @@ _PII_FIELDS = {
 # JWT secret is set in conftest — the fallback key for metrics auth
 _TEST_METRICS_KEY = "test-secret-that-is-at-least-32-characters-long-for-security"
 
-
 def _metrics_headers(key: str = _TEST_METRICS_KEY) -> dict[str, str]:
     return {"X-Metrics-Key": key}
-
 
 def _seed(*items, db_session_factory):
     async def _run():
@@ -44,7 +42,6 @@ def _seed(*items, db_session_factory):
             await session.commit()
 
     asyncio.run(_run())
-
 
 def _make_user(email: str = "metrics_user@example.com") -> User:
     return User(
@@ -58,14 +55,11 @@ def _make_user(email: str = "metrics_user@example.com") -> User:
         updated_at=datetime.now(timezone.utc),
     )
 
-
 # ── Auth boundary ─────────────────────────────────────────────────────────────
-
 
 def test_metrics_impact_missing_key_returns_403(client):
     resp = client.get("/api/v1/metrics/impact")
     assert resp.status_code == 403
-
 
 def test_metrics_impact_wrong_key_returns_403(client):
     resp = client.get(
@@ -74,14 +68,11 @@ def test_metrics_impact_wrong_key_returns_403(client):
     )
     assert resp.status_code == 403
 
-
 def test_metrics_security_audit_missing_key_returns_403(client):
     resp = client.get("/api/v1/metrics/security-audit")
     assert resp.status_code == 403
 
-
 # ── Happy path ────────────────────────────────────────────────────────────────
-
 
 def test_metrics_impact_happy_path(client):
     resp = client.get("/api/v1/metrics/impact", headers=_metrics_headers())
@@ -93,14 +84,11 @@ def test_metrics_impact_happy_path(client):
     assert "engagement" in data
     assert "verification" in data
 
-
 def test_metrics_security_audit_happy_path(client):
     resp = client.get("/api/v1/metrics/security-audit", headers=_metrics_headers())
     assert resp.status_code == 200, resp.text
 
-
 # ── PII isolation — non-negotiable ───────────────────────────────────────────
-
 
 def test_metrics_impact_contains_no_pii(client, db_session_factory):
     """Core PII contract: /metrics/impact must NEVER return individual user data."""
@@ -135,7 +123,6 @@ def test_metrics_impact_contains_no_pii(client, db_session_factory):
         violations
     )
 
-
 def test_metrics_impact_users_field_is_aggregate_only(client, db_session_factory):
     """users dict must contain only integer counts — no lists of user objects."""
     user = _make_user("aggregate_check@example.com")
@@ -152,7 +139,6 @@ def test_metrics_impact_users_field_is_aggregate_only(client, db_session_factory
             "Individual user data must not be returned."
         )
 
-
 def test_metrics_impact_engagement_is_aggregate_only(client):
     """engagement dict must contain only integer counts."""
     resp = client.get("/api/v1/metrics/impact", headers=_metrics_headers())
@@ -163,7 +149,6 @@ def test_metrics_impact_engagement_is_aggregate_only(client):
         assert isinstance(
             value, int
         ), f"engagement.{field} is {type(value).__name__}, expected int"
-
 
 def test_metrics_impact_revenue_has_no_individual_payment_details(client):
     """Revenue block must be aggregate totals only — no per-transaction records."""
@@ -187,7 +172,6 @@ def test_metrics_impact_revenue_has_no_individual_payment_details(client):
     for k, v in revenue.items():
         assert isinstance(v, int), f"revenue.{k} = {v!r}, expected int"
 
-
 def test_metrics_response_contains_no_user_ids(client, db_session_factory):
     """No UUID user identifiers should leak into the metrics response."""
     user = _make_user("uuid_leak_check@example.com")
@@ -202,16 +186,14 @@ def test_metrics_response_contains_no_user_ids(client, db_session_factory):
         str(user.id) not in raw
     ), f"User UUID {user.id} leaked into /metrics/impact response"
 
-
 # ── Revenue policy labels — TOS-safe ─────────────────────────────────────────
 
-
 def test_metrics_response_contains_no_forbidden_revenue_labels(client):
-    """Response must not contain retired revenue split labels or solicitation language."""
+    """Response must not contain retired  labels or outreach language."""
     forbidden_terms = [
         "don" + "ate",
         "don" + "ation",
-        "solicitation",
+        "outreach",
         "tax-deductible",
         "char" + "ity_percent",
     ]

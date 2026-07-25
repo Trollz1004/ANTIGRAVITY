@@ -18,12 +18,12 @@ Read this as current truth before researching:
 - live payment rail: Square
 - Stripe is legacy only
 - `dashboard.aidoesitall.website` is now a gateway surface, not the old public dashboard
-- live LLC-controlled revenue uses a founder-directed conservative 10% charitable cap
-- historical `60/30/10`, `100% charity`, and `100% DAO` references are legacy unless current canonical docs restore them
-- customer-facing copy must avoid donate, donation, solicitation, and tax-deductible language
+- live LLC-controlled revenue uses a founder-directed conservative 10%  cap
+- historical ``, `100% `, and `100% DAO` references are legacy unless current canonical docs restore them
+- customer-facing copy must avoid payment, payment, outreach, and tax-deductible language
 
 Research tasks:
-1. Audit current public surfaces for stale percentage claims, stale dashboard copy, stale payment/deploy claims, or misleading tax/charity language.
+1. Audit current public surfaces for stale percentage claims, stale dashboard copy, stale payment/deploy claims, or misleading tax/ language.
 2. If you discuss legal or tax topics, use primary sources only and separate source-backed fact from inference.
 3. Identify search/indexing drift that still reflects older marketing or doctrine.
 4. Flag only launch-relevant, trust-relevant, compliance-relevant findings.

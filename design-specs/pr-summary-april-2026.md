@@ -55,7 +55,7 @@ This PR introduces comprehensive enhancements to the YouAndINotAI design system,
 ### Legal Compliance
 
 - Florida §496.405 adherence maintained
-- No "donate", "donation", or "solicitation" in UI copy
+- No "payment", "payment", or "outreach" in UI copy
 - Appropriate language for community engagement
 
 ## File Listing

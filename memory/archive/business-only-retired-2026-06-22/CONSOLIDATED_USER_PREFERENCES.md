@@ -37,11 +37,11 @@ Purpose: current shared continuity doc for repo truth, working style, and non-ne
 
 ## Current Financial Doctrine
 
-- Live LLC-controlled revenue currently follows a founder-directed conservative `10% charitable cap`
+- Live LLC-controlled revenue currently follows a founder-directed conservative `10%  cap`
 - This doctrine exists to avoid unsupported tax exposure and keep the business alive close to launch
 - It is an operating doctrine, not a blanket legal conclusion for every entity or structure
-- Historical `60/30/10`, `100% charity`, and `100% DAO` language is not current live doctrine for LLC-controlled revenue
-- Customer purchases must not be framed as donations
+- Historical ``, `100% `, and `100% DAO` language is not current live doctrine for LLC-controlled revenue
+- Customer purchases must not be framed as payments
 
 ## Repo / Node Truth
 
@@ -55,11 +55,11 @@ Purpose: current shared continuity doc for repo truth, working style, and non-ne
 
 - No secret values in chat, git, or tracked docs
 - No retired or recovery-only repo work from live tasks
-- No customer-facing `donate`, `donation`, `solicitation`, or `tax-deductible` language
+- No customer-facing `payment`, `payment`, `outreach`, or `tax-deductible` language
 - No stale `E:\ANTIGRAVITY`, `C:\OPUSONLY`, or archived exports as live truth
 - No git drift left behind after a completed task
 
 ## Historical Context Rule
 
-- Older files may still reference `60/30/10`, named beneficiaries, 100% charity surfaces, or dead-man's-switch logic
+- Older files may still reference ``, named beneficiaries, 100%  surfaces, or dead-man's-switch logic
 - Treat those as historical context unless `AGENTS.md`, `REPOSITORY_RECORD.md`, and the current briefings explicitly restore them

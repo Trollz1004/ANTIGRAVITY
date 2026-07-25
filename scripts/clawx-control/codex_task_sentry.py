@@ -34,7 +34,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_DIR = SCRIPT_DIR.parent
 DATA_DIR = PROJECT_DIR / "data"
@@ -52,16 +51,13 @@ DEFAULT_OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3.2")
 
 VALID_STATUSES = {"pending", "in_progress", "done", "failed"}
 
-
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
-
 
 def safe_truncate(value: str, max_chars: int) -> str:
     if len(value) <= max_chars:
         return value
     return value[: max_chars - 3] + "..."
-
 
 def read_json(path: Path, default: Any) -> Any:
     if not path.exists():
@@ -72,13 +68,11 @@ def read_json(path: Path, default: Any) -> Any:
     except Exception:
         return default
 
-
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2)
         f.write("\n")
-
 
 def setup_logger(log_path: Path) -> logging.Logger:
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -98,14 +92,12 @@ def setup_logger(log_path: Path) -> logging.Logger:
 
     return logger
 
-
 def default_queue() -> dict[str, Any]:
     return {
         "version": "1.0",
         "updated_at": utc_now(),
         "tasks": [],
     }
-
 
 def normalize_task(task: dict[str, Any]) -> dict[str, Any]:
     now = utc_now()
@@ -128,7 +120,6 @@ def normalize_task(task: dict[str, Any]) -> dict[str, Any]:
         normalized["status"] = "pending"
     return normalized
 
-
 def load_queue(queue_file: Path) -> dict[str, Any]:
     queue = read_json(queue_file, default_queue())
     if not isinstance(queue, dict):
@@ -141,11 +132,9 @@ def load_queue(queue_file: Path) -> dict[str, Any]:
     queue.setdefault("updated_at", utc_now())
     return queue
 
-
 def save_queue(queue_file: Path, queue: dict[str, Any]) -> None:
     queue["updated_at"] = utc_now()
     write_json(queue_file, queue)
-
 
 def queue_counts(queue: dict[str, Any]) -> dict[str, int]:
     counts = {status: 0 for status in VALID_STATUSES}
@@ -155,18 +144,15 @@ def queue_counts(queue: dict[str, Any]) -> dict[str, int]:
             counts[status] += 1
     return counts
 
-
 def task_exists(queue: dict[str, Any], task_id: str) -> bool:
     for task in queue.get("tasks", []):
         if task.get("id") == task_id:
             return True
     return False
 
-
 class SafeDict(dict):
     def __missing__(self, key: str) -> str:
         return "{" + key + "}"
-
 
 def render_templates(obj: Any, context: dict[str, str]) -> Any:
     if isinstance(obj, str):
@@ -177,7 +163,6 @@ def render_templates(obj: Any, context: dict[str, str]) -> Any:
         return {k: render_templates(v, context) for k, v in obj.items()}
     return obj
 
-
 def append_task(queue: dict[str, Any], task: dict[str, Any]) -> bool:
     normalized = normalize_task(task)
     if task_exists(queue, normalized["id"]):
@@ -185,7 +170,6 @@ def append_task(queue: dict[str, Any], task: dict[str, Any]) -> bool:
     queue.setdefault("tasks", []).append(normalized)
     queue["updated_at"] = utc_now()
     return True
-
 
 def seed_ewaste_tasks(queue: dict[str, Any]) -> int:
     day = datetime.now().strftime("%Y%m%d")
@@ -278,7 +262,6 @@ def seed_ewaste_tasks(queue: dict[str, Any]) -> int:
             added += 1
     return added
 
-
 def select_next_task(queue: dict[str, Any]) -> dict[str, Any] | None:
     pending = [t for t in queue.get("tasks", []) if t.get("status") == "pending"]
     if not pending:
@@ -292,7 +275,6 @@ def select_next_task(queue: dict[str, Any]) -> dict[str, Any] | None:
     )
     return pending[0]
 
-
 def http_json(url: str, payload: dict[str, Any], timeout_seconds: int) -> dict[str, Any]:
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
@@ -301,7 +283,6 @@ def http_json(url: str, payload: dict[str, Any], timeout_seconds: int) -> dict[s
     if not raw.strip():
         return {}
     return json.loads(raw)
-
 
 def run_codex_task(task: dict[str, Any], max_result_chars: int) -> tuple[bool, str]:
     prompt = str(task.get("prompt", "")).strip()
@@ -375,7 +356,6 @@ def run_codex_task(task: dict[str, Any], max_result_chars: int) -> tuple[bool, s
     combined = safe_truncate("\n\n".join(parts), max_result_chars)
     return result.returncode == 0, combined
 
-
 def run_openclaw_task(task: dict[str, Any], openclaw_url: str, max_result_chars: int) -> tuple[bool, str]:
     prompt = str(task.get("prompt", "")).strip()
     if not prompt:
@@ -399,7 +379,6 @@ def run_openclaw_task(task: dict[str, Any], openclaw_url: str, max_result_chars:
     if not message:
         return False, f"OpenClaw response missing 'response' field: {response}"
     return True, safe_truncate(message, max_result_chars)
-
 
 def run_ollama_task(task: dict[str, Any], ollama_url: str, max_result_chars: int) -> tuple[bool, str]:
     prompt = str(task.get("prompt", "")).strip()
@@ -426,7 +405,6 @@ def run_ollama_task(task: dict[str, Any], ollama_url: str, max_result_chars: int
         return False, f"Ollama response missing 'response' field: {response}"
     return True, safe_truncate(message, max_result_chars)
 
-
 def dispatch_task(
     task: dict[str, Any],
     force_executor: str | None,
@@ -446,7 +424,6 @@ def dispatch_task(
         ok, result = run_ollama_task(task, ollama_url, max_result_chars=max_result_chars)
         return ok, result, executor
     return False, f"Unknown executor '{executor}'.", executor
-
 
 def spawn_followups(task: dict[str, Any], queue: dict[str, Any]) -> int:
     followups = task.get("spawn_on_done", [])
@@ -468,7 +445,6 @@ def spawn_followups(task: dict[str, Any], queue: dict[str, Any]) -> int:
         if append_task(queue, rendered):
             added += 1
     return added
-
 
 def export_markdown(queue: dict[str, Any], markdown_file: Path) -> None:
     groups = {
@@ -535,7 +511,6 @@ def export_markdown(queue: dict[str, Any], markdown_file: Path) -> None:
     markdown_file.parent.mkdir(parents=True, exist_ok=True)
     markdown_file.write_text("\n".join(lines).strip() + "\n", encoding="utf-8")
 
-
 def write_state(
     state_file: Path,
     queue: dict[str, Any],
@@ -551,7 +526,6 @@ def write_state(
         "counts": queue_counts(queue),
     }
     write_json(state_file, state)
-
 
 def print_status(queue: dict[str, Any]) -> None:
     counts = queue_counts(queue)
@@ -569,7 +543,6 @@ def print_status(queue: dict[str, Any]) -> None:
     else:
         print("")
         print("Next Task   : none")
-
 
 def run_one_cycle(
     queue_file: Path,
@@ -645,7 +618,6 @@ def run_one_cycle(
         export_markdown(queue, markdown_file)
     return True
 
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="CodeX Task Sentry")
     parser.add_argument("--queue-file", type=Path, default=DEFAULT_QUEUE_FILE, help="Path to queue JSON")
@@ -663,7 +635,7 @@ def parse_args() -> argparse.Namespace:
         choices=["codex", "openclaw", "ollama"],
         help="Override executor for all dispatched tasks",
     )
-    parser.add_argument("--init-ewaste", action="store_true", help="Seed queue with e-waste donation tasks")
+    parser.add_argument("--init-ewaste", action="store_true", help="Seed queue with e-waste payment tasks")
     parser.add_argument("--status", action="store_true", help="Print queue status")
     parser.add_argument("--run-once", action="store_true", help="Run one dispatch cycle")
     parser.add_argument("--loop", action="store_true", help="Run continuously")
@@ -671,7 +643,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--export-markdown", action="store_true", help="Write TASK-QUEUE-100.md snapshot")
     parser.add_argument("--max-result-chars", type=int, default=4000, help="Max task result length")
     return parser.parse_args()
-
 
 def main() -> int:
     args = parse_args()
@@ -742,7 +713,6 @@ def main() -> int:
     # Default action with no mode flags: print status.
     print_status(queue)
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

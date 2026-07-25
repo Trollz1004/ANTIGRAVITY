@@ -38,8 +38,8 @@ Located at `youandinotai/server.ts`. Express + WS on port 3000:
 | 12-Month Founder | $99.99 one-time | 3cI5kEbN22szgZnaIZeEo0c |
 | Royalty Card | $2,500 one-time | dRmcN604kebheRf2cteEo0d |
 
-### Revenue Split (PERMANENT)
-- **60%** to Shriners Children's Hospitals
+###  (PERMANENT)
+- **60%** to Shriners s
 - **40%** to founder (Josh Coleman)
 - Enforced from dollar one. No phases. No exceptions.
 
@@ -171,7 +171,7 @@ youandinotai-api/
 
 1. **No mock data** — real Stripe events, real DB, or fail honestly
 2. **Secrets in .env ONLY** — never hardcoded, never in git
-3. **Revenue split is 60/40** — if you build any revenue tracking, this ratio is immutable
+3. ** is 60/40** — if you build any revenue tracking, this ratio is immutable
 4. **CORS**: Allow `https://youandinotai.com` and `http://localhost:3000` in dev
 5. **Rate limiting**: Add basic rate limiting on registration (10 req/min per IP)
 6. **DO NOT touch server.ts** — that's Gemini's WebSocket server, it stays separate

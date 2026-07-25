@@ -2,4 +2,4 @@
 
 Superseded.
 
-Do not use older launch or charity-angle prompt language from this file.
+Do not use older launch or -angle prompt language from this file.

@@ -8,7 +8,7 @@
 ## Founder Origin Story (OnlineRecycle / eBay)
 
 When Josh retired he helped families after deaths — estate cleanouts, property prep for sale or
-rental. The stuff was free. He recycled everything, made enough to donate to charity AND fund
+rental. The stuff was free. He recycled everything, made enough to payment to  AND fund
 this entire platform for a year. That is where OnlineRecycle.org and the 20-year eBay account
 come from. It is not a "secondary revenue stream." It is the founding act that made everything
 else possible. Treat it accordingly.

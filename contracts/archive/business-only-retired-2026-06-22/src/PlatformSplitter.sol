@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
  *   and the "30% tax on 90% operating share" framing are DEPRECATED.
  *
  *   Current doctrine: 1 LLC, 1 Square wallet, 10% per legally distinct
- *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE CHARITABLE
+ *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE 
  *   DEDUCTION. The triple-split was an early on-chain experiment and is
  *   not the current model. Tax handling is a separate problem, not
  *   bundled into a smart contract split.
@@ -27,7 +27,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
  * @notice HISTORICAL ARTIFACT — see deprecation notice above. The 10/27/63
  *         triple split is not current doctrine. Do not deploy.
  *
- *         10% → MissionReserve  (contractual revenue disbursement — youth initiatives)
+ *         10% → MissionReserve  (contractual revenue payout — youth initiatives)
  *         27% → TaxWallet       (covers 30% tax on the 90% operating share)
  *         63% → DAOTreasury     (operations, sinking fund, then staking surplus)
  *
@@ -105,7 +105,7 @@ contract PlatformSplitter {
         _depositToken(token, balance);
     }
 
-    /// @notice Mission reserve withdraws its accumulated share.
+    /// @notice  withdraws its accumulated share.
     function withdrawMission() external {
         if (msg.sender != missionReserve) revert Unauthorized();
         uint128 amount = missionPending;

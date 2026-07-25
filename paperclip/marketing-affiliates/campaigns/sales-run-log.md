@@ -174,7 +174,7 @@ If bots wrecked your last app: start with $1 Bot-Shield verification, then Found
 - **Self-post:** title #1 or #2 + longer body; pin Founding Member in first comment only
 - **Reply to bot-complaint threads:** short comment template; one checkout link
 - **Forum signatures / off-Reddit communities:** short post + product UTM (forums variant)
-- **Avoid:** brigading, identical copy across 10 subs in one hour, banned charity language, fake testimonials
+- **Avoid:** brigading, identical copy across 10 subs in one hour, banned  language, fake testimonials
 
 ### Publish status
 Draft / idea pack only this tick (no Reddit auto-post — manual to respect sub rules). Ready for Josh to post immediately in 1–2 relevant threads.

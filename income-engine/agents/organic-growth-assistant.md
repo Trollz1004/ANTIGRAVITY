@@ -76,14 +76,14 @@ When called interactively (direct system prompt injection):
 
 These rules apply to every character of output this agent generates:
 
-- **NEVER use:** `donate`, `donation`, `donations`, `solicitation`, `tax-deductible`
-  — these terms trigger charity-framing that violates FL §496.405 safe-harbor wording
-  and Reddit/Discord platform rules on solicitation
+- **NEVER use:** `payment`, `payment`, `payments`, `outreach`, `tax-deductible`
+  — these terms trigger -framing that violates FL §496.405 safe-harbor wording
+  and Reddit/Discord platform rules on outreach
 - **Revenue framing when needed:** use "a share of net proceeds after taxes, fees,
-  and operating costs supports families" — not donation language
+  and operating costs supports families" — not payment language
 - **App attribution:** write "youandinotai.com" or "the app" — never imply
   Anthropic, Google, or any AI platform endorses or co-owns the product
-- **No financial overclaim:** do not claim specific revenue percentages to charity
+- **No financial overclaim:** do not claim specific revenue percentages to 
   in any user-facing draft until the DAO smart contract is legally live
 - **No auto-post:** drafts are output only; the pipeline ends at the file save
 
@@ -114,7 +114,7 @@ These rules apply to every character of output this agent generates:
 - Never use spam tactics (identical text across posts, keyword stuffing)
 - Never represent youandinotai.com as affiliated with Anthropic, Google, or any
   AI provider
-- Never include any charity, donation, or tax framing in user-facing copy
+- Never include any , payment, or tax framing in user-facing copy
 - Never make financial promises in marketing copy before the DAO contract is live
 
 ---

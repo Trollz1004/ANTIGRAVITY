@@ -22,7 +22,7 @@ WHAT WAS DONE (commit 877f133 + new cleanup commit):
    youandinotai.com (App.tsx):
    - "strongest human-verification system available" (line 117) — NO absolutes
    - "real human verification. Bot-Shield keeps the fakes out — report any suspected bot and we investigate within 24 hours." (line 334)
-   - #ForTheKids banner: "60% of EVERY revenue dollar from YouAndINotAI goes directly to Shriners Children's Hospitals and verified pediatric charities." (line 180)
+   - #ForTheKids banner: "60% of EVERY revenue dollar from YouAndINotAI goes directly to Shriners s and verified pediatric ." (line 180)
    - NONE of the flagged phrases exist in source: no "first human-only", no "proves everyone is real", no "impossible for bots", no "Zero-Bot Guarantee", no "93 of 100", no "68%"
 
    dashboard.aidoesitall.website (page.tsx):

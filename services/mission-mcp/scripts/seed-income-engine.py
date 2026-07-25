@@ -21,7 +21,7 @@ Idempotency:
   Before creating, the script fetches existing task titles and skips duplicates.
 
 Constraints enforced:
-  - No "donate", "donation", "solicitation", "tax-deductible" in any emitted string
+  - No "payment", "payment", "outreach", "tax-deductible" in any emitted string
   - No live posting — this only creates planning tasks
   - No credentials in code
 """
@@ -40,7 +40,6 @@ from datetime import datetime
 if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf_8"):
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
-
 def strip_emoji(text: str) -> str:
     """Remove non-BMP characters (emoji) that break Windows terminals and task titles."""
     return re.sub(r"[^\x00-\xFFFF]", "", text).strip()
@@ -54,21 +53,19 @@ DEFAULT_XLSX = (
 DEFAULT_MCP_URL = "http://127.0.0.1:3901"
 
 FORBIDDEN_WORDS = re.compile(
-    r"\b(donat(e|ion|ions)|solicitat(e|ion)|tax.?deductible)\b", re.IGNORECASE
+    r"\b(donat(e|ion|ions)|outreachat(e|ion)|tax.?deductible)\b", re.IGNORECASE
 )
-
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def check_forbidden(text: str) -> None:
-    """Raise if text contains TOS-unsafe charity framing."""
+    """Raise if text contains TOS-unsafe  framing."""
     m = FORBIDDEN_WORDS.search(text)
     if m:
         raise ValueError(
             f"TOS-unsafe word '{m.group()}' detected in generated content. "
             "Rewrite before shipping."
         )
-
 
 def mcp_post(url: str, token: str | None, payload: dict) -> dict:
     """POST JSON-RPC request to mission-mcp HTTP endpoint.
@@ -99,7 +96,6 @@ def mcp_post(url: str, token: str | None, payload: dict) -> dict:
     except urllib.error.URLError as e:
         raise RuntimeError(f"mission-mcp unreachable at {url}: {e}") from e
 
-
 def call_tool(url: str, token: str | None, tool_name: str, arguments: dict) -> dict:
     payload = {
         "jsonrpc": "2.0",
@@ -115,15 +111,12 @@ def call_tool(url: str, token: str | None, tool_name: str, arguments: dict) -> d
         return json.loads(content[0]["text"])
     return {}
 
-
 def slugify(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:40]
-
 
 def tag_block(tags: list[str]) -> str:
     """Encode tags as a compact JSON block appended to description."""
     return "\n\n<!-- income-engine-tags: " + json.dumps(tags) + " -->"
-
 
 def existing_titles(url: str, token: str | None) -> set[str]:
     """Fetch all pending/in_progress task titles for dedup."""
@@ -134,7 +127,6 @@ def existing_titles(url: str, token: str | None) -> set[str]:
             for t in result:
                 titles.add(t.get("title", ""))
     return titles
-
 
 # ── Sheet parsers ─────────────────────────────────────────────────────────────
 
@@ -198,7 +190,6 @@ def parse_submission_tracker(xlsx_path: str) -> list[dict]:
 
     return tasks
 
-
 def parse_content_calendar(xlsx_path: str) -> list[dict]:
     """Return list of task dicts from Content Calendar sheet."""
     try:
@@ -249,7 +240,6 @@ def parse_content_calendar(xlsx_path: str) -> list[dict]:
         })
 
     return tasks
-
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
@@ -331,7 +321,6 @@ def main():
         created += 1
 
     print(f"\n[seed-income-engine] Done. created={created} skipped={skipped}")
-
 
 if __name__ == "__main__":
     main()

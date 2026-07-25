@@ -1,19 +1,19 @@
 /**
  * PlatformSplitter10 — Test Suite
  *
- * Current-doctrine immutable 10/90 revenue splitter for the ANTIGRAVITY
+ * Current-doctrine immutable 10/90 ter for the ANTIGRAVITY
  * multi-DAO ecosystem on Base L2.
  *
  * Split ratios (hardcoded in bytecode — immutable):
- *   10%  → missionTreasury  (contractual revenue disbursement — youth initiatives)
+ *   10%  → missionTreasury  (contractual revenue payout — youth initiatives)
  *   90%  → operatingWallet  (LLC taxable operating revenue)
  *
  * Deployed once per revenue bucket. No owner. No admin. No upgrades.
  * Each revenue stream (bucket) is a separate deployment, ensuring per-bucket
  * accounting isolation.
  *
- * Language: "contractual revenue disbursement" / "charitable disbursement"
- * per FL §496.405 — no solicitation/donation/tax-deductible language in this file.
+ * Language: "contractual revenue payout" / " payout"
+ * per FL §496.405 — no outreach/payment/tax-deductible language in this file.
  *
  * Per-bucket 10/90 doctrine source:
  *   briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md
@@ -235,7 +235,7 @@ describe("PlatformSplitter10", function () {
   // 3. Per-Bucket Isolation
   //
   // Each revenue stream = separate deployed instance with its own bucketId.
-  // Bucket A's disbursements don't affect Bucket B's accounting.
+  // Bucket A's payouts don't affect Bucket B's accounting.
   // ---------------------------------------------------------------------------
 
   describe("Per-bucket isolation", function () {
@@ -552,7 +552,7 @@ describe("PlatformSplitter10", function () {
   // Per DAO-ARCHITECTURE-SPEC-v1.0-2026-05-01.md §4:
   //   "Founder receives last in all distribution waterfalls"
   //
-  // In PlatformSplitter10, missionTreasury (contractual disbursement floor) is
+  // In PlatformSplitter10, missionTreasury (contractual payout floor) is
   // transferred FIRST in _split(). operatingWallet (LLC / founder-controlled)
   // receives the remainder AFTER the mission transfer settles.
   //

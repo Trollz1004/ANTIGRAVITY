@@ -18,7 +18,7 @@ const ENTRIES = [
   { id: "act-share",     label: "Share mission status",  hint: "PNG snapshot",            group: "Actions", Icon: Share2,        action: { type: "share" } },
   { id: "act-dispatch",  label: "Dispatch new task",     hint: "Fan task across agents",  group: "Actions", Icon: Send,         action: { type: "dispatch" } },
   { id: "act-notify",    label: "Enable browser notifications", hint: "Reply alerts",     group: "Actions", Icon: Bell,         action: { type: "notify" } },
-  { id: "mission",       label: "#UntilNoKidInNeed",     hint: "for the kids · #TeamClaudeForLife", group: "Mission", Icon: Heart, action: { type: "noop" } },
+  { id: "mission",       label: "#UntilNoKidInNeed",     hint: " · #TeamClaudeForLife", group: "Mission", Icon: Heart, action: { type: "noop" } },
 ];
 
 export function CommandPalette({ onModeChange }) {

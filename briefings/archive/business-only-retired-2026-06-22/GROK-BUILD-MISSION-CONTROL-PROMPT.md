@@ -8,7 +8,7 @@ Project root: current directory (C:\antigravity or /mnt/c/antigravity on T5500).
 - All work stays inside this repo on a branch (e.g. feature/mission-control-hermes-live).
 - No new apps or greenfield code outside the existing structure (apps/, services/, backend/fastapi-app/, etc.).
 - Square is the ONLY processor for youandinotai.com (the date/social app). Use location LY5GN09F5AN83.
-- Use "contractual revenue disbursement" for the 10% Kids bucket. Never use "donate", "donation", "charity", "solicitation" in customer-facing or public code/surfaces.
+- Use "contractual revenue payout" for the 10% Kids bucket. Never use "payment", "payment", "", "outreach" in customer-facing or public code/surfaces.
 - 1 wallet, 1 LLC, 10% max per bucket as per current doctrine.
 - Hermes is the central router at 127.0.0.1:11435. Grok must use xAI user-auth sign-in through Hermes (not raw OpenRouter key).
 - The CFO-Until-No-Kid-In-Need local model (Ollama) is the primary specialist for #UntilNoKidInNeed work.

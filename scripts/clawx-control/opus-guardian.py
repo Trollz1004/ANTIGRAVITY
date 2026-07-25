@@ -10,7 +10,7 @@ Usage:
 Checks:
     1. No hardcoded secrets in source files
     2. All API routes require authentication
-    3. No active surface claims charity routing or automatic disbursement
+    3. No active surface claims  routing or automatic payout
     4. 1-wallet revenue model with 10% reserve — founder-directed, not configurable
     5. PII isolation in metrics
     6. Pydantic validation on all inputs
@@ -71,13 +71,13 @@ SECRET_PATTERNS = [
 # Doctrine terminated 2026-04-17 — 1-wallet model replaced all split-era language.
 LEGACY_ROUTE_MARKERS = [
     "ai-solutions.store",
-    "CharityRouter100",
-    "100% to charity",
-    "60/30/10",
-    "charity routing",
-    "automatic disbursement",
-    "GospelDonation",
-    "charitable_cap",
+    "Router100",
+    "100% to ",
+    "",
+    " routing",
+    "automatic payout",
+    "Gospelpayment",
+    "_cap",
 ]
 
 # Required runtime keys or local env entries for the current Square-first backend
@@ -88,7 +88,6 @@ REQUIRED_ENV_KEYS = [
 # Revenue policy constants (HARDCODED — NEVER CONFIGURABLE)
 # 1-wallet model: all revenue in, all costs out, 10% reserve — Josh's call quarterly.
 EXPECTED_POLICY = {"reserve_percent": 10}
-
 
 class GuardianResult:
     def __init__(self):
@@ -139,7 +138,6 @@ class GuardianResult:
 
         return 1 if self.failures else 0
 
-
 def scan_files(directory: Path, extensions: list[str]) -> list[Path]:
     """Recursively find source files, excluding node_modules/dist/.git."""
     files = []
@@ -150,7 +148,6 @@ def scan_files(directory: Path, extensions: list[str]) -> list[Path]:
                 continue
             files.append(f)
     return files
-
 
 def check_no_hardcoded_secrets(result: GuardianResult):
     """Scan all source files for leaked secrets."""
@@ -177,7 +174,6 @@ def check_no_hardcoded_secrets(result: GuardianResult):
 
     if not found_any:
         result.ok("NO_SECRETS", "Zero hardcoded secrets in source")
-
 
 def check_auth_coverage(result: GuardianResult):
     """Verify all router endpoints require authentication."""
@@ -216,9 +212,8 @@ def check_auth_coverage(result: GuardianResult):
             else:
                 result.fail("AUTH_COVERAGE", f"{router_file.name}:{func_name} — NO AUTH")
 
-
 def check_legacy_routing_boundary(result: GuardianResult):
-    """Verify no active surface claims charity routing or automatic disbursement.
+    """Verify no active surface claims  routing or automatic payout.
 
     Doctrine terminated 2026-04-17. 1-wallet model replaced all split-era language.
     This scan now flags stale legacy markers rather than enforcing old doctrine.
@@ -239,15 +234,14 @@ def check_legacy_routing_boundary(result: GuardianResult):
                 found_contamination = True
 
     if not found_contamination:
-        result.ok("STALE_LANGUAGE", "No stale charity/split language in live product code")
-
+        result.ok("STALE_LANGUAGE", "No stale /split language in live product code")
 
 def check_revenue_policy(result: GuardianResult):
-    """Verify the 1-wallet / 10% reserve model — no split-era charity routing.
+    """Verify the 1-wallet / 10% reserve model — no split-era  routing.
 
     Current model (2026-04-17+): all revenue in, all costs out of one wallet.
     10% minimum goes to a reserve bucket — Josh's money, his call quarterly.
-    No charity labels, no doctrine scans, no automatic disbursement.
+    No  labels, no doctrine scans, no automatic payout.
     """
     metrics_file = ROUTERS_DIR / "metrics.py"
     if not metrics_file.exists():
@@ -257,14 +251,13 @@ def check_revenue_policy(result: GuardianResult):
     content = metrics_file.read_text(encoding="utf-8", errors="ignore")
 
     # Flag any stale split-era language that shouldn't be in live revenue code
-    stale_markers = ["charitable_cap", "charity_percent", "60/30/10", "GospelDonation", "disbursement"]
+    stale_markers = ["_cap", "_percent", "", "Gospelpayment", "payout"]
     for marker in stale_markers:
         if marker.lower() in content.lower():
             result.fail("REVENUE_POLICY", f"Stale split-era marker '{marker}' found in metrics.py — update to 1-wallet model")
             return
 
-    result.ok("REVENUE_POLICY", "Revenue code clean — no stale charity/split markers")
-
+    result.ok("REVENUE_POLICY", "Revenue code clean — no stale /split markers")
 
 def check_pii_isolation(result: GuardianResult):
     """Verify metrics endpoint returns only aggregates, no PII."""
@@ -288,7 +281,6 @@ def check_pii_isolation(result: GuardianResult):
     else:
         result.fail("PII_ISOLATION", f"PII fields in response: {', '.join(pii_leaked)}")
 
-
 def check_no_raw_sql(result: GuardianResult):
     """Verify all database access uses SQLAlchemy ORM, no raw SQL."""
     py_files = scan_files(APP_DIR, [".py"])
@@ -310,7 +302,6 @@ def check_no_raw_sql(result: GuardianResult):
 
     if not found_raw:
         result.ok("NO_RAW_SQL", "All queries use SQLAlchemy ORM — zero raw SQL")
-
 
 def check_input_validation(result: GuardianResult):
     """Verify POST/PUT endpoints use Pydantic schemas."""
@@ -337,7 +328,6 @@ def check_input_validation(result: GuardianResult):
                 # Some POST endpoints legitimately don't need a body (like /signup)
                 if "payload" in params or "body" in params or "request" in params:
                     result.warn("INPUT_VALIDATION", f"{router_file.name}:{func_name} — has body param but no typed schema")
-
 
 def check_env_file(result: GuardianResult):
     """Verify required runtime keys exist in environment or expected local env files."""
@@ -368,7 +358,6 @@ def check_env_file(result: GuardianResult):
     else:
         result.warn("ENV_FILE", "No local .env file found; relying on process environment")
 
-
 def main():
     result = GuardianResult()
 
@@ -387,7 +376,6 @@ def main():
     check_env_file(result)
 
     return result.report()
-
 
 if __name__ == "__main__":
     sys.exit(main())

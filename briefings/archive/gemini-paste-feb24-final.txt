@@ -25,11 +25,11 @@ WHAT OPUS DID THIS SESSION:
    - Old key ([BURNED-REDACTED]) was flagged as leaked by Google — burned
 
 2. FALSE DATA REMOVED (5 files)
-   - CharitySection: fake $842K donated, 12,450 devices, 5,200 trees -> honest mission statements
+   - Section: fake $842K paymentd, 12,450 devices, 5,200 trees -> honest mission statements
    - CosmicContest: fake vote counts zeroed
    - SolarFlareSOS: "Opus Diamond: LOST" / "Redis Cache: MISSING" -> neutral status labels (yes Josh we saw the troll)
    - VoiceSOS: "Interstellar" -> "Peer-to-Peer"
-   - CharitySection: "tracked on-chain" -> "tracked publicly"
+   - Section: "tracked on-chain" -> "tracked publicly"
 
 3. HOSTING MIGRATED (Netlify -> GitHub Pages)
    - Netlify paused entire team for free-tier bandwidth overage (1,200+ visits/hr)

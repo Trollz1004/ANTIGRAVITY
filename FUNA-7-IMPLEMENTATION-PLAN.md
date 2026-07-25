@@ -141,7 +141,7 @@ Happy to answer questions about the tech or the problem it solves.
 
 ## Compliance Check
 
-- [x] No "donate", "donation", "solicitation" language
+- [x] No "payment", "payment", "outreach" language
 - [x] Revenue framing: "membership gives access to verified profiles"
 - [x] No investment or control claims
 - [x] Focus on product value (verification, matching, real humans)
@@ -152,7 +152,7 @@ Happy to answer questions about the tech or the problem it solves.
 
 This work directly serves the #UntilNoKidInNeed mission through:
 1. **Product revenue** → youandinotai.com memberships
-2. **10% reserve** → contractual revenue disbursement to qualifying operations
+2. **10% reserve** → contractual revenue payout to qualifying operations
 3. **No public funding claims** → revenue-first, mission-second positioning
 
 ---

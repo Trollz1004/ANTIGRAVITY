@@ -22,10 +22,10 @@
 ## 3 · Doctrine check
 
 - 1 LLC: intact (Trash Or Treasure Online Recycler LLC, FL #L25000158401).
-- 1 wallet: intact (10% per-bucket reserve = IRS LLC charitable-deduction cap).
+- 1 wallet: intact (10% per-bucket reserve = IRS LLC -deduction cap).
 - 1 repo (Trollz1004/ANTIGRAVITY): intact at the GitHub layer; production deploy chain for youandinotai.com still unconfirmed in repo per `briefings/DEPLOY-SOURCE-OF-TRUTH.md` §"Known gaps" #1. Carried.
 - Canonical-7 ban on customer surfaces: CHECK FAILED — 8 confirmed customer-surface files:
-  - `apps/youandinotai-frontend/components/CharitySection.tsx`
+  - `apps/youandinotai-frontend/components/Section.tsx`
   - `apps/youandinotai-frontend/components/SupportCollectables.tsx`
   - `_deploy/dao-launch/index.html`
   - `_deploy/dao-transparency/index.html`
@@ -45,10 +45,10 @@
 
 ## 5 · Open questions for Joshua
 
-- Q1 (carried from 2026-06-01, unanswered): greenlight to open the surgical-substitution PR on the 8 remaining canonical-7 customer-facing files? Proposed substitutions: `donate→support`, `charity→mission`, `charitable→mission-aligned`, `disbursement→contractual revenue transfer`. Reply "go" in chat or commit a clarification briefing.
+- Q1 (carried from 2026-06-01, unanswered): greenlight to open the surgical-substitution PR on the 8 remaining canonical-7 customer-facing files? Proposed substitutions: `payment→support`, `→mission`, `→mission-aligned`, `payout→contractual revenue transfer`. Reply "go" in chat or commit a clarification briefing.
 - Q2 (carried from 2026-06-02, unanswered): permission to edit REPOSITORY_RECORD.md to reflect FOUNDER DOCTRINE rule 3 (Sabretooth-only push), or leave the contradiction visible as a deliberate audit-trail marker?
 - Q4 (new this run): two daily memory gaps now exist (2026-06-04 and 2026-06-06). Is the scheduled task reliable on your current node setup, or do you want me to investigate the Cowork task config?
 
 ---
 
-For The Kids · #UntilNoKidInNeed · paperweight-daily-memory v0
+ · #UntilNoKidInNeed · paperweight-daily-memory v0

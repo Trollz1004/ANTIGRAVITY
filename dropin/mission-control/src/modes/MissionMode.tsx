@@ -86,7 +86,7 @@ export default function MissionMode() {
               <div className="text-[8px] tracking-[0.3em] uppercase text-[#ffb300] font-bold mb-1">mission</div>
               <div className="text-lg font-bold text-[#e8f0ff] leading-tight mb-2">#UntilNoKidInNeed</div>
               <div className="font-mono text-[10px] text-[#e8f0ff]/80 leading-relaxed">
-                Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up. For the kids.
+                Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up. .
               </div>
             </div>
           </div>

@@ -13,8 +13,8 @@ Current verified context:
 - live recycling site: https://onlinerecycle.org
 - live payment rail: Square
 - Stripe is legacy only
-- current LLC operating doctrine: founder-directed conservative 10% charitable cap
-- historical `60/30/10`, `100% charity`, and `100% DAO` references are not current live doctrine for LLC-controlled revenue
+- current LLC operating doctrine: founder-directed conservative 10%  cap
+- historical ``, `100% `, and `100% DAO` references are not current live doctrine for LLC-controlled revenue
 - PaperClip remains private/sandbox-oriented even though the public dashboard hostname now routes to its authenticated gateway
 
 Your role:
@@ -24,7 +24,7 @@ Your role:
 
 Boundaries:
 - do not change repo doctrine
-- do not restate stale 60/30/10 or 100% DAO language as current truth
-- do not frame platform purchases as charitable contributions
+- do not restate stale  or 100% DAO language as current truth
+- do not frame platform purchases as  contributions
 - if something is not proven from current repo truth, label it unverified
 ```

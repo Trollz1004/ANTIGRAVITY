@@ -61,10 +61,10 @@
 
 ---
 
-## 🔄 60/30/10 PROTOCOL OMEGA — VERIFIED EVERYWHERE
+## 🔄  PROTOCOL OMEGA — VERIFIED EVERYWHERE
 
-**Revenue Split:**
-- 🟢 **60%** → Shriners Children's Hospitals (kids' charity)
+**:**
+- 🟢 **60%** → Shriners s (kids' )
 - 🟢 **30%** → V8 Infrastructure (power, hosting, cloud, AI ops)
 - 🟢 **10%** → Founder Operations (survival capacity)
 
@@ -142,7 +142,7 @@ docker compose up -d
 ### ✅ Completed
 - [x] All apps code complete and compiled
 - [x] All payment links verified operational
-- [x] All 60/30/10 splits verified in code
+- [x] All  splits verified in code
 - [x] Legal compliance complete (ToS, Privacy, Age, Refund)
 - [x] Mobile responsiveness checked
 - [x] Fake data gutted (no mock revenue or agents)
@@ -152,7 +152,7 @@ docker compose up -d
 - [x] Redis cache configured
 - [x] Nginx reverse proxy + rate limiting configured
 - [x] Kimi 2.6 AI matching integration ready
-- [x] MCP server (Omega Sentry) registered + 60/30/10 verified
+- [x] MCP server (Omega Sentry) registered +  verified
 
 ### ⏳ Pending (Josh Action Items)
 - [ ] **Payment processor credentials** — Ensure live keys are active
@@ -179,7 +179,7 @@ docker compose up -d
 - `C:\antigravity\revenue-core\` — Revenue ops (React)
 
 ### Documentation
-- `C:\antigravity\README.md` — Main mission statement (60/30/10 Protocol Omega)
+- `C:\antigravity\README.md` — Main mission statement ( Protocol Omega)
 - `C:\antigravity\CLAUDE.md` — Collab agreement + Iron Wall
 - `C:\antigravity\AGENTS.md` — All AI roles permanently assigned
 
@@ -221,7 +221,7 @@ docker compose up -d
 ### Every Dollar Flow
 ```
 $1.00 User Payment
-  ├─ $0.60 → Shriners Children's Hospitals (smart contract)
+  ├─ $0.60 → Shriners s (smart contract)
   ├─ $0.30 → V8 Infra (power, hosting, cloud, AI)
   └─ $0.10 → Founder (Josh survival capacity)
 ```
@@ -270,7 +270,7 @@ $1.00 User Payment
 ✅ Code complete  
 ✅ Infrastructure ready  
 ✅ Legal compliance verified  
-✅ 60/30/10 split protected  
+✅  split protected  
 ✅ All AI roles assigned (Officially Unofficial 🔒)  
 ⏳ Standing by for Josh + deployment  
 

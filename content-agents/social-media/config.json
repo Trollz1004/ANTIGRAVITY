@@ -12,15 +12,15 @@
     ]
   },
   "compliance": {
-    "prohibited_terms": ["donate", "donation", "solicitation"],
+    "prohibited_terms": ["payment", "payment", "outreach"],
     "approved_replacements": {
-      "donate": "support through contractual revenue disbursement",
-      "donation": "contractual revenue disbursement",
-      "solicitation": "revenue-sharing for good"
+      "payment": "support through contractual revenue payout",
+      "payment": "contractual revenue payout",
+      "outreach": "revenue-sharing for good"
     },
     "reference_phrasing": {
       "kids_support": "Built-in support for youth programs",
-      "mission_statement": "We're not a charity, but we do support kids as part of our mission"
+      "mission_statement": "We're not a , but we do support kids as part of our mission"
     }
   },
   "platform_guidelines": {

@@ -12,7 +12,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
  *   file is DEPRECATED.
  *
  *   Current doctrine: 1 LLC, 1 Square wallet, 10% per legally distinct
- *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE CHARITABLE
+ *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE 
  *   DEDUCTION. The legacy "10% to founder / 30% to DAO / 60% to Shriners"
  *   triple is not the current operating model.
  *
@@ -24,7 +24,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 /**
  * @title DatingRevenueRouter (DEPRECATED)
- * @author FOR THE KIDS Platform — historical draft artifact
+ * @author  Platform — historical draft artifact
  * @notice HISTORICAL ARTIFACT — see deprecation notice above. Not deployed.
  *         Do not deploy. Not current doctrine.
  *
@@ -40,12 +40,12 @@ contract DatingRevenueRouter {
     uint256 public constant BASIS_POINTS = 10000;
 
     /// @notice Immutable split percentages (basis points)
-    uint256 public constant PCT_CHARITY = 6000;  // 60% → Shriners Children's Hospitals
+    uint256 public constant PCT_ = 6000;  // 60% → Shriners s
     uint256 public constant PCT_DAO     = 3000;  // 30% → Mission Infrastructure / AI Operations Treasury
     uint256 public constant PCT_FOUNDER = 1000;  // 10% → Founder Operations
 
     /// @notice Immutable wallet addresses
-    address public immutable charitySafe;    // Shriners
+    address public immutable Safe;    // Shriners
     address public immutable daoTreasury;    // Mission infra + AI ops
     address public immutable founderWallet;  // Ops
 
@@ -56,13 +56,13 @@ contract DatingRevenueRouter {
     event Distribution(
         address indexed token,
         uint256 totalAmount,
-        uint256 charityAmount,
+        uint256 Amount,
         uint256 daoAmount,
         uint256 founderAmount
     );
 
     event RouterDeployed(
-        address indexed charitySafe,
+        address indexed Safe,
         address indexed daoTreasury,
         address indexed founderWallet,
         address deployer
@@ -73,19 +73,19 @@ contract DatingRevenueRouter {
     error ETHTransferFailed();
 
     constructor(
-        address _charitySafe,
+        address _Safe,
         address _daoTreasury,
         address _founderWallet
     ) {
-        if (_charitySafe == address(0)) revert InvalidAddress();
+        if (_Safe == address(0)) revert InvalidAddress();
         if (_daoTreasury == address(0)) revert InvalidAddress();
         if (_founderWallet == address(0)) revert InvalidAddress();
 
-        charitySafe = _charitySafe;
+        Safe = _Safe;
         daoTreasury = _daoTreasury;
         founderWallet = _founderWallet;
 
-        emit RouterDeployed(_charitySafe, _daoTreasury, _founderWallet, msg.sender);
+        emit RouterDeployed(_Safe, _daoTreasury, _founderWallet, msg.sender);
     }
 
     /// @notice Accept ETH deposits
@@ -115,11 +115,11 @@ contract DatingRevenueRouter {
 
     /// @notice Preview how an amount would be split
     function previewSplit(uint256 amount) external pure returns (
-        uint256 charityAmt, uint256 daoAmt, uint256 founderAmt
+        uint256 Amt, uint256 daoAmt, uint256 founderAmt
     ) {
         founderAmt = (amount * PCT_FOUNDER) / BASIS_POINTS;
         daoAmt = (amount * PCT_DAO) / BASIS_POINTS;
-        charityAmt = amount - founderAmt - daoAmt; // remainder to charity
+        Amt = amount - founderAmt - daoAmt; // remainder to 
     }
 
     /// @notice View pending balances
@@ -140,22 +140,22 @@ contract DatingRevenueRouter {
     function _distributeToken(address token, uint256 total) internal {
         uint256 founderAmt = (total * PCT_FOUNDER) / BASIS_POINTS;
         uint256 daoAmt = (total * PCT_DAO) / BASIS_POINTS;
-        uint256 charityAmt = total - founderAmt - daoAmt; // remainder to charity
+        uint256 Amt = total - founderAmt - daoAmt; // remainder to 
 
-        IERC20(token).safeTransfer(charitySafe, charityAmt);
+        IERC20(token).safeTransfer(Safe, Amt);
         IERC20(token).safeTransfer(daoTreasury, daoAmt);
         IERC20(token).safeTransfer(founderWallet, founderAmt);
 
         totalDistributed += total;
-        emit Distribution(token, total, charityAmt, daoAmt, founderAmt);
+        emit Distribution(token, total, Amt, daoAmt, founderAmt);
     }
 
     function _distributeETH(uint256 total) internal {
         uint256 founderAmt = (total * PCT_FOUNDER) / BASIS_POINTS;
         uint256 daoAmt = (total * PCT_DAO) / BASIS_POINTS;
-        uint256 charityAmt = total - founderAmt - daoAmt;
+        uint256 Amt = total - founderAmt - daoAmt;
 
-        (bool s1, ) = charitySafe.call{value: charityAmt}("");
+        (bool s1, ) = Safe.call{value: Amt}("");
         if (!s1) revert ETHTransferFailed();
 
         (bool s2, ) = daoTreasury.call{value: daoAmt}("");
@@ -165,6 +165,6 @@ contract DatingRevenueRouter {
         if (!s3) revert ETHTransferFailed();
 
         totalDistributedETH += total;
-        emit Distribution(address(0), total, charityAmt, daoAmt, founderAmt);
+        emit Distribution(address(0), total, Amt, daoAmt, founderAmt);
     }
 }

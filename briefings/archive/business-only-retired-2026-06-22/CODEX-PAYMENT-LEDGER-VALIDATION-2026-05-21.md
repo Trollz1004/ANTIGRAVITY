@@ -8,7 +8,7 @@ Per Joshua's correction and the repo's current DAO/payment doctrine, the operati
 
 ```text
 $1.00 gross platform receipt
-- $0.10 max kids/mission reserve for that legally distinct bucket
+- $0.10 max kids/ for that legally distinct bucket
 = $0.90 Joshua/LLC taxable operating share
 - about $0.27 tax reserve when using Joshua's 30% working tax assumption
 = about $0.63 available for AI fees, power, hosting, hardware, founder survival, family support, and scaling
@@ -72,4 +72,4 @@ Conclusion: Square itself has real completed YouAndiNotAi payments, but the depl
 2. For each completed payment not already in `revenue_allocations`, insert a `reserved` allocation row using the current gross-receipt 10% rule.
 3. Store Square processing fees separately or add fee fields so dashboards can show gross, fees, tax reserve, and operating survival funds honestly.
 4. Keep wallet-rail proof red/unproven unless Square payment details expose actual wallet labels.
-5. Do not change customer-facing copy to mention percentages, kids, tax treatment, or charitable claims.
+5. Do not change customer-facing copy to mention percentages, kids, tax treatment, or  claims.

@@ -17,16 +17,16 @@
 - Previous memory file: `CLAUDE-MEMORY-2026-06-01T2309Z.md` (≈11h ago).
 - Delta since previous:
   - No founder commits / no founder Slack activity / no new Sentry errors in the 11h window. Quiet night.
-  - Canonical-7 customer-facing hits unchanged: 6 files in `_deploy/` (`onlinerecycle/terms.html`, `onlinerecycle/index.html`, `onlinerecycle/disclaimer.html`, `onlinerecycle/about.html`, `dao-transparency/index.html`, `dao-launch/index.html`) + 2 customer-facing components in `apps/youandinotai-frontend/components/` (`CharitySection.tsx`, `SupportCollectables.tsx`). Founder has not yet greenlit the surgical-substitution PR — still queued from 2026-06-01.
+  - Canonical-7 customer-facing hits unchanged: 6 files in `_deploy/` (`onlinerecycle/terms.html`, `onlinerecycle/index.html`, `onlinerecycle/disclaimer.html`, `onlinerecycle/about.html`, `dao-transparency/index.html`, `dao-launch/index.html`) + 2 customer-facing components in `apps/youandinotai-frontend/components/` (`Section.tsx`, `SupportCollectables.tsx`). Founder has not yet greenlit the surgical-substitution PR — still queued from 2026-06-01.
   - Additional canonical-7 hits in agent-internal surfaces (`apps/antigravity-cockpit/`, `apps/paperweight/`, `apps/mission-control/`, `apps/web-prototype/`, `apps/opuspawclaw/README.md`) are NOT customer-facing per FOUNDER DOCTRINE; the internal synonym is permitted there. Excluded from CHECK FAILED list below.
 
 ## 3 · Doctrine check
 
 - 1 LLC: intact (Trash Or Treasure Online Recycler LLC, FL #L25000158401).
-- 1 wallet: intact (10% per-bucket reserve / IRS LLC charitable-deduction cap).
+- 1 wallet: intact (10% per-bucket reserve / IRS LLC -deduction cap).
 - 1 repo (Trollz1004/ANTIGRAVITY): intact at the GitHub layer; production deploy chain for youandinotai.com still violates the rule (live Vite/React bundle source not in this repo per `briefings/DEPLOY-SOURCE-OF-TRUTH.md` §"Known gaps" #1).
 - Canonical-7 ban on customer surfaces: CHECK FAILED — still 8 files (unchanged from 2026-06-01):
-  - `apps/youandinotai-frontend/components/CharitySection.tsx`
+  - `apps/youandinotai-frontend/components/Section.tsx`
   - `apps/youandinotai-frontend/components/SupportCollectables.tsx`
   - `_deploy/dao-launch/index.html`
   - `_deploy/dao-transparency/index.html`
@@ -45,9 +45,9 @@
 
 ## 5 · Open questions for Joshua
 
-- Q1 (carried from 2026-06-01, unanswered): clear to schedule the surgical-substitution PR on the 8 canonical-7 customer-facing files? Proposed agent-internal-only substitutions: `donate→support`, `charity→mission`, `charitable→mission-aligned`, `disbursement→contractual revenue transfer`. Reply "go" in chat or commit a clarification briefing to greenlight.
+- Q1 (carried from 2026-06-01, unanswered): clear to schedule the surgical-substitution PR on the 8 canonical-7 customer-facing files? Proposed agent-internal-only substitutions: `payment→support`, `→mission`, `→mission-aligned`, `payout→contractual revenue transfer`. Reply "go" in chat or commit a clarification briefing to greenlight.
 - Q2 (new): REPOSITORY_RECORD.md still names T5500 as push-authority, contradicting FOUNDER DOCTRINE rule 3 (Sabretooth-only push). Permission to edit REPOSITORY_RECORD.md to reflect the doctrine, or do you want the contradiction left visible as a deliberate audit-trail marker?
 
 ---
 
-For The Kids · #UntilNoKidInNeed · paperweight-daily-memory v0
+ · #UntilNoKidInNeed · paperweight-daily-memory v0

@@ -58,7 +58,7 @@ Long-form is where the story breathes. Joshua on camera. Florida electrician. Br
 2. **Anti-bot positioning is the wedge, not a defensive crouch.** We are not apologizing for using AI to build. We are punching at the products that use AI to replace the user-facing experience.
 3. **Founder story compounds in every channel.** Joshua's biography is the brand's biography. Lead with it.
 4. **10% mission math is the close, not the lead.** First we win attention with the brand name. Then we hold attention with the founder story. Then we close with the math: "10% of every dollar goes toward kids who need medical care."
-5. **Canonical-7 ban (`donate, donation, solicitation, charity, charitable, giving back, disbursement`) applies on every customer surface, every time, no exceptions.** The mission math is the substitute. "10% goes toward kids who need medical care" says the same thing legally.
+5. **Canonical-7 ban (`payment, payment, outreach, , , , payout`) applies on every customer surface, every time, no exceptions.** The mission math is the substitute. "10% goes toward kids who need medical care" says the same thing legally.
 6. **Real or zero (FOUNDER DOCTRINE rule 8).** No invented metrics. The first real customer is its own video, its own thread, its own post when it arrives. Until then, mission and founder and build are what's true.
 
 ## The compounding pattern
@@ -69,7 +69,7 @@ The flywheel doesn't depend on virality. It depends on repetition. The brand nam
 
 ## The standing order
 
-When a marketing agent is unsure what to post, default to the thesis. When a marketing agent is unsure how to phrase a CTA, default to the brand name. When a marketing agent is unsure how to refuse a customer-facing word, default to "For The Kids. Until No Kid In Need."
+When a marketing agent is unsure what to post, default to the thesis. When a marketing agent is unsure how to phrase a CTA, default to the brand name. When a marketing agent is unsure how to refuse a customer-facing word, default to ". Until No Kid In Need."
 
 When a marketing agent finds themselves drafting a post that doesn't contain "You and I, Not AI" anywhere — verify the draft is doing something the brand name can't do better. Most of the time the answer is to add the brand name and ship.
 

@@ -118,19 +118,19 @@ This document aligns the existing YouAndINotAI system architecture with the comp
 - Accessibility features for users with mobility considerations
 - Social features showing friend attendance and participation
 
-### 8. Charitable Revenue Distribution
+### 8.  Revenue Distribution
 
 **Existing System**:
 
-- Automated 10% contractual revenue disbursement calculation
+- Automated 10% contractual revenue payout calculation
 - Internal ledger tracking for reserved funds
 - Compliance with Florida §496.405 regulations
 
 **UX Design Alignment**:
 
-- Transparent communication about revenue allocation (avoiding "donation" language)
+- Transparent communication about revenue allocation (avoiding "payment" language)
 - Impact dashboard showing community benefits without monetary references
-- Educational content about platform's charitable mission using compliant terminology
+- Educational content about platform's  mission using compliant terminology
 - User interface that builds trust through transparency about fund usage
 
 ## API Endpoint Enhancement Requirements

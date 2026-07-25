@@ -15,7 +15,7 @@
 - NEVER edit, move, or display contents of `.env`, `.env.*`, `*.key`, `*.pem`, `*.vault`, `*.secret`.
 - The PreToolUse hook will block these anyway — don't fight it.
 
-**§496.405 rule:** No file rename/edit may introduce the word "donate" / "donation" / "solicitation" in customer-facing copy. (You're moving files, not editing copy, so this is just a guardrail.)
+**§496.405 rule:** No file rename/edit may introduce the word "payment" / "payment" / "outreach" in customer-facing copy. (You're moving files, not editing copy, so this is just a guardrail.)
 
 ---
 
