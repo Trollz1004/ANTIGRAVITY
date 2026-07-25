@@ -4,8 +4,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$RepoRoot = 'c:\antigravity'
-$LogDir = 'c:\antigravity\logs'
+$RepoRoot = 'E:\ANTIGRAVITY'
+$LogDir = 'E:\ANTIGRAVITY\logs'
 $LogFile = Join-Path $LogDir 'paperclip-ceo-bootstrap.log'
 $PaperclipLog = Join-Path $LogDir 'paperclip.log'
 $PaperclipTunnelLog = Join-Path $LogDir 'paperclip-tunnel.log'
@@ -13,10 +13,10 @@ $PowerShellExe = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $DockerComposeExe = 'C:\Program Files\Docker\Docker\resources\bin\docker-compose.exe'
 $DockerExe = 'C:\Program Files\Docker\Docker\resources\bin\docker.exe'
 $CloudflaredExe = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
-$PaperclipTunnelConfig = 'c:\antigravity\infra\cloudflare\paperclip-hq.yml'
-$StartPaperclipScript = 'c:\antigravity\scripts\start-paperclip.ps1'
-$HermesWrapper = 'c:\antigravity\paperclip-adapters\hermes.cmd'
-$WslHermesLauncher = 'c:\antigravity\scripts\launch-hermes-paperclip-ceo-wsl.cmd'
+$PaperclipTunnelConfig = 'E:\ANTIGRAVITY\infra\cloudflare\paperclip-hq.yml'
+$StartPaperclipScript = 'E:\ANTIGRAVITY\scripts\start-paperclip.ps1'
+$HermesWrapper = 'E:\ANTIGRAVITY\paperclip-adapters\hermes.cmd'
+$WslHermesLauncher = 'E:\ANTIGRAVITY\scripts\launch-hermes-paperclip-ceo-wsl.cmd'
 $ChromeExe = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
 $BootstrapUrls = @(
   'http://localhost:3100',
@@ -57,7 +57,7 @@ function Ensure-MainStack {
   }
 
   Log 'Starting main docker stack...'
-  & $DockerComposeExe -f 'c:\antigravity\docker-compose.yml' up -d 2>&1 | ForEach-Object { Log $_ }
+  & $DockerComposeExe -f 'E:\ANTIGRAVITY\docker-compose.yml' up -d 2>&1 | ForEach-Object { Log $_ }
   if ($LASTEXITCODE -ne 0) {
     throw "Main docker stack failed with exit code $LASTEXITCODE."
   }
@@ -81,7 +81,7 @@ function Ensure-LiteLLMRunning {
   }
 
   Log 'Starting LiteLLM proxy...'
-  & $DockerComposeExe -f 'c:\antigravity\docker-compose.litellm.yml' up -d 2>&1 | ForEach-Object { Log $_ }
+  & $DockerComposeExe -f 'E:\ANTIGRAVITY\docker-compose.litellm.yml' up -d 2>&1 | ForEach-Object { Log $_ }
   if ($LASTEXITCODE -ne 0) {
     throw "LiteLLM proxy failed with exit code $LASTEXITCODE."
   }
@@ -109,7 +109,7 @@ function Ensure-PaperclipPortAvailable {
   }
 
   $commandLine = [string]$processInfo.CommandLine
-  if ($commandLine -like '*c:\antigravity*') {
+  if ($commandLine -like '*E:\ANTIGRAVITY*') {
     Log 'Existing Paperclip listener already belongs to ANTIGRAVITY.'
     return $false
   }
@@ -214,7 +214,7 @@ function Start-WSLOrchestration {
   }
 
   Log 'WSL launcher missing, falling back to Windows Hermes chat.'
-  $command = 'title Hermes Paperclip CEO && cd /d c:\antigravity && "c:\antigravity\paperclip-adapters\hermes.cmd" chat'
+  $command = 'title Hermes Paperclip CEO && cd /d E:\ANTIGRAVITY && "E:\ANTIGRAVITY\paperclip-adapters\hermes.cmd" chat'
   Start-Process -FilePath 'cmd.exe' -ArgumentList '/k', $command -WorkingDirectory $RepoRoot | Out-Null
 }
 
@@ -254,7 +254,7 @@ try {
   Log '  MCP:         https://mcp.youandinotai.com'
   Log '  LiteLLM:     http://localhost:11436'
   Log '  Hermes Rtr:  http://localhost:11435'
-  Log '  Log file:    c:\antigravity\logs\paperclip-ceo-bootstrap.log'
+  Log '  Log file:    E:\ANTIGRAVITY\logs\paperclip-ceo-bootstrap.log'
   exit 0
 } catch {
   Log "ERROR: $($_.Exception.Message)"

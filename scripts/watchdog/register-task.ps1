@@ -3,8 +3,8 @@
   at user logon. Same script on every node — pass -Role to choose the variant.
 
   Examples (run in elevated PowerShell once per node):
-      pwsh c:\antigravity\scripts\watchdog\register-task.ps1 -Role node
-      pwsh c:\antigravity\scripts\watchdog\register-task.ps1 -Role display
+      pwsh E:\ANTIGRAVITY\scripts\watchdog\register-task.ps1 -Role node
+      pwsh E:\ANTIGRAVITY\scripts\watchdog\register-task.ps1 -Role display
 
   Roles:
     node    — T5500 / Sabretooth / 9020 → run bootstrap-claude-node.cmd
@@ -23,7 +23,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$repo = 'c:\antigravity'
+$repo = 'E:\ANTIGRAVITY'
 $watchdog = Join-Path $repo 'scripts\watchdog'
 
 $taskName = if ($Role -eq 'display') { 'ANTIGRAVITY-Dashboard' } else { 'ANTIGRAVITY-Bootstrap' }

@@ -164,7 +164,7 @@ if (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
 # ────────────────────────────────────────────────────────────────────────────
 Log-Step "STEP 3 — ANTIGRAVITY repo"
 
-$antigravityPath = "c:\antigravity"
+$antigravityPath = "E:\ANTIGRAVITY"
 $repoUrl         = "https://github.com/Trollz1004/ANTIGRAVITY.git"
 
 if (Test-Path "$antigravityPath\.git") {
@@ -228,7 +228,7 @@ Log-Ok "Cloud model routing (deepseek-v3.1:671b, glm-4.6, minimax-m2.5) handled 
 Log-Step "STEP 5 — Hermes Workspace (full GUI + Conductor orchestrator)"
 
 $hwPath      = "C:\Users\joshl\hermes-workspace"
-$hwAntiPath  = "c:\antigravity\hermes-workspace"
+$hwAntiPath  = "E:\ANTIGRAVITY\hermes-workspace"
 
 # Prefer the OneDrive-synced or ANTIGRAVITY-resident copy if already present
 if (Test-Path "$hwPath\package.json") {
@@ -291,7 +291,7 @@ if ($hwServiceExe -and (Test-Path "$hwStartScript\package.json")) {
 # ────────────────────────────────────────────────────────────────────────────
 Log-Step "STEP 6 — Hermes Agent CLI + preserved YAML config"
 
-$hermesConfigBriefing = "c:\antigravity\briefings\HERMES-AGENT-WORKING-CONFIG-2026-05-12.md"
+$hermesConfigBriefing = "E:\ANTIGRAVITY\briefings\HERMES-AGENT-WORKING-CONFIG-2026-05-12.md"
 
 if (Get-Command hermes -ErrorAction SilentlyContinue) {
     Log-Skip "hermes CLI already installed"
@@ -374,7 +374,7 @@ if (Get-Command codex -ErrorAction SilentlyContinue) {
 # ────────────────────────────────────────────────────────────────────────────
 Log-Step "STEP 9 — mission-mcp install + Windows service"
 
-$mcpPath = "c:\antigravity\services\mission-mcp"
+$mcpPath = "E:\ANTIGRAVITY\services\mission-mcp"
 if (Test-Path "$mcpPath\package.json") {
     Push-Location $mcpPath
     if (-not (Test-Path 'node_modules')) {
@@ -414,7 +414,7 @@ if (Test-Path "$mcpPath\package.json") {
 # ────────────────────────────────────────────────────────────────────────────
 Log-Step "STEP 10 — antigravity-cockpit"
 
-$cockpitPath = "c:\antigravity\apps\antigravity-cockpit"
+$cockpitPath = "E:\ANTIGRAVITY\apps\antigravity-cockpit"
 if (Test-Path "$cockpitPath\package.json") {
     Push-Location $cockpitPath
     if (-not (Test-Path 'node_modules')) { pnpm install; Log-Ok "antigravity-cockpit: deps installed" }
@@ -475,7 +475,7 @@ if (-not $cfExe) {
         Write-Host "  ACTION REQUIRED (interactive, ~2 min):" -ForegroundColor Yellow
         Write-Host "  Run: cloudflared tunnel login" -ForegroundColor Yellow
         Write-Host "  Then follow the tunnel migration runbook:" -ForegroundColor Yellow
-        Write-Host "  c:\antigravity\briefings\TUNNEL-MIGRATION-RUNBOOK-2026-05-12.md" -ForegroundColor Yellow
+        Write-Host "  E:\ANTIGRAVITY\briefings\TUNNEL-MIGRATION-RUNBOOK-2026-05-12.md" -ForegroundColor Yellow
         Write-Host "  Summary:" -ForegroundColor Yellow
         Write-Host "    cloudflared tunnel create t5500" -ForegroundColor Gray
         Write-Host "    (create config.yml per runbook Phase 2)" -ForegroundColor Gray
@@ -575,7 +575,7 @@ $tests['gh_cli']           = [bool](Get-Command gh     -ErrorAction SilentlyCont
 $tests['claude_cli']       = [bool](Get-Command claude -ErrorAction SilentlyContinue)
 $tests['codex_cli']        = [bool](Get-Command codex  -ErrorAction SilentlyContinue)
 $tests['cloudflared']      = [bool](Get-Command cloudflared -ErrorAction SilentlyContinue)
-$tests['antigravity_repo'] = (Test-Path "c:\antigravity\.git")
+$tests['antigravity_repo'] = (Test-Path "E:\ANTIGRAVITY\.git")
 $tests['hermes_workspace'] = (Test-Path "$hwPath\package.json") -or (Test-Path "$hwAntiPath\package.json")
 $tests['memory_synced']    = (Test-Path $memoryDest) -and ((Get-ChildItem $memoryDest -File -ErrorAction SilentlyContinue).Count -gt 0)
 

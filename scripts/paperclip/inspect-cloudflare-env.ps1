@@ -1,10 +1,10 @@
 $ErrorActionPreference = 'Continue'
 
 $files = @(
-  'c:\antigravity\.env',
-  'c:\antigravity\.env.opencode',
-  'c:\antigravity\paperclip-runtime\.env',
-  'c:\antigravity\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
+  'E:\ANTIGRAVITY\.env',
+  'E:\ANTIGRAVITY\.env.opencode',
+  'E:\ANTIGRAVITY\paperclip-runtime\.env',
+  'E:\ANTIGRAVITY\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
 )
 
 $patterns = 'CLOUDFLARE|CF_|TUNNEL|WRANGLER'

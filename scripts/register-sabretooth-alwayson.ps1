@@ -36,7 +36,7 @@ foreach ($old in @('ANTIGRAVITY-Paperclip-Watchdog', 'ANTIGRAVITY-Paperclip-Boot
 $WatchdogName   = 'ANTIGRAVITY-Sabretooth-Watchdog'
 $WatchdogAction = New-ScheduledTaskAction `
     -Execute 'powershell.exe' `
-    -Argument '-NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File "c:\antigravity\scripts\sabretooth-watchdog.ps1"'
+    -Argument '-NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File "E:\ANTIGRAVITY\scripts\sabretooth-watchdog.ps1"'
 
 $WatchdogTrigger        = New-ScheduledTaskTrigger -AtStartup
 $WatchdogTrigger.Delay  = 'PT10S'
@@ -75,7 +75,7 @@ if (-not $WatchdogOnly) {
     $BootstrapName   = 'ANTIGRAVITY-Bootstrap-Login'
     $BootstrapAction = New-ScheduledTaskAction `
         -Execute 'powershell.exe' `
-        -Argument '-NonInteractive -WindowStyle Minimized -ExecutionPolicy Bypass -File "c:\antigravity\scripts\bootstrap-paperclip-ceo.ps1"'
+        -Argument '-NonInteractive -WindowStyle Minimized -ExecutionPolicy Bypass -File "E:\ANTIGRAVITY\scripts\bootstrap-paperclip-ceo.ps1"'
 
     $BootstrapTrigger       = New-ScheduledTaskTrigger -AtLogOn -User $CurrentUser
     $BootstrapTrigger.Delay = 'PT30S'
@@ -153,7 +153,7 @@ Write-Host '--- Check watchdog status: ---' -ForegroundColor Cyan
 Write-Host "  Get-ScheduledTaskInfo -TaskName '$WatchdogName'"
 Write-Host ''
 Write-Host '--- Watchdog log: ---' -ForegroundColor Cyan
-Write-Host '  Get-Content c:\antigravity\logs\sabretooth-watchdog.log -Tail 50'
+Write-Host '  Get-Content E:\ANTIGRAVITY\logs\sabretooth-watchdog.log -Tail 50'
 Write-Host ''
 Write-Host 'Done. Sabretooth is now bulletproof: power loss, crash, reboot — all services auto-recover.' -ForegroundColor Green
 Write-Host 'Ollama | Paperclip | Cloudflared | Claude CLI | OpenCode CLI — all always-on.' -ForegroundColor Green

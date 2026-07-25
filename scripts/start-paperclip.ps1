@@ -6,7 +6,7 @@
 # (started by scripts/autostart-mission.ps1 phase 2).
 
 $ErrorActionPreference = 'Continue'
-$LogDir  = 'c:\antigravity\logs'
+$LogDir  = 'E:\ANTIGRAVITY\logs'
 $LogFile = "$LogDir\paperclip.log"
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 
@@ -44,7 +44,7 @@ Log '=== start-paperclip.ps1 ==='
 # Try the OneDrive vault first, then a repo-local fallback.
 $envPaths = @(
     'C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIVERSAL-ENV-TROLLZ1004.env',
-    'c:\antigravity\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
+    'E:\ANTIGRAVITY\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env'
 )
 $loaded = $false
 foreach ($p in $envPaths) {

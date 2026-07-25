@@ -40,7 +40,7 @@ $PlainPass  = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
 $WatchdogName   = 'ANTIGRAVITY-Paperclip-Watchdog'
 $WatchdogAction = New-ScheduledTaskAction `
     -Execute 'powershell.exe' `
-    -Argument '-NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File "c:\antigravity\scripts\paperclip-watchdog.ps1"'
+    -Argument '-NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File "E:\ANTIGRAVITY\scripts\paperclip-watchdog.ps1"'
 
 $WatchdogTrigger        = New-ScheduledTaskTrigger -AtStartup
 $WatchdogTrigger.Delay  = 'PT15S'   # 15s after boot so network/disk settle
@@ -81,7 +81,7 @@ if (-not $WatchdogOnly) {
     $BootstrapName   = 'ANTIGRAVITY-Paperclip-Bootstrap'
     $BootstrapAction = New-ScheduledTaskAction `
         -Execute 'powershell.exe' `
-        -Argument '-NonInteractive -WindowStyle Minimized -ExecutionPolicy Bypass -File "c:\antigravity\scripts\bootstrap-paperclip-ceo.ps1"'
+        -Argument '-NonInteractive -WindowStyle Minimized -ExecutionPolicy Bypass -File "E:\ANTIGRAVITY\scripts\bootstrap-paperclip-ceo.ps1"'
 
     $BootstrapTrigger       = New-ScheduledTaskTrigger -AtLogOn -User $CurrentUser
     $BootstrapTrigger.Delay = 'PT30S'   # 30s after login so watchdog is already up
@@ -120,7 +120,7 @@ Write-Host '--- Check watchdog status: ---' -ForegroundColor Cyan
 Write-Host "  Get-ScheduledTaskInfo -TaskName '$WatchdogName'"
 Write-Host ''
 Write-Host '--- Watchdog log: ---' -ForegroundColor Cyan
-Write-Host '  Get-Content c:\antigravity\logs\paperclip-watchdog.log -Tail 50'
+Write-Host '  Get-Content E:\ANTIGRAVITY\logs\paperclip-watchdog.log -Tail 50'
 Write-Host ''
 Write-Host 'Done. Paperclip HQ will now survive reboots, power loss, and process crashes.' -ForegroundColor Green
 Write-Host 'NO windows will pop up or steal focus during watchdog operation.' -ForegroundColor Green

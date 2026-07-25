@@ -25,7 +25,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 
 Write-Host "`n=== 1. cloudflared as Windows Service ===" -ForegroundColor Cyan
 
-$src = 'c:\antigravity\infra\cloudflare\paperclip-hq.yml'
+$src = 'E:\ANTIGRAVITY\infra\cloudflare\paperclip-hq.yml'
 $dst = "$env:USERPROFILE\.cloudflared\config.yml"
 $cf  = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
 
@@ -59,7 +59,7 @@ Write-Host ("  service: {0} ({1})" -f $svc.Status, $svc.StartType)
 Write-Host "`n=== 2. Paperclip auto-start at boot (Task Scheduler S4U as joshl) ===" -ForegroundColor Cyan
 
 $taskName    = 'Antigravity-Paperclip-Boot'
-$startScript = 'c:\antigravity\scripts\start-paperclip.ps1'
+$startScript = 'E:\ANTIGRAVITY\scripts\start-paperclip.ps1'
 if (-not (Test-Path $startScript)) { throw "start-paperclip.ps1 missing at $startScript" }
 
 # Idempotent: remove prior version of this task if it exists
@@ -81,8 +81,8 @@ Write-Host "  task: $taskName registered (AtStartup, S4U as joshl)"
 
 # Also register the watchdogs at boot so they catch any drift
 $watchdogs = @(
-    @{ name='Antigravity-Paperclip-Watchdog-Boot'; script='c:\antigravity\scripts\paperclip-watchdog.ps1' }
-    @{ name='Antigravity-Hermes-Watchdog-Boot';    script='c:\antigravity\scripts\hermes-watchdog.ps1'    }
+    @{ name='Antigravity-Paperclip-Watchdog-Boot'; script='E:\ANTIGRAVITY\scripts\paperclip-watchdog.ps1' }
+    @{ name='Antigravity-Hermes-Watchdog-Boot';    script='E:\ANTIGRAVITY\scripts\hermes-watchdog.ps1'    }
 )
 foreach ($w in $watchdogs) {
     if (-not (Test-Path $w.script)) { Write-Host "  skip $($w.name): script missing"; continue }
@@ -100,4 +100,4 @@ Get-ScheduledTask -TaskName 'Antigravity-*-Boot' | Format-Table TaskName, State 
 
 Write-Host ""
 Write-Host "DONE. Reboot to verify: Sabretooth boots -> tunnel + paperclip alive before login." -ForegroundColor Green
-Write-Host "If anything fails after reboot, logs are at c:\antigravity\logs\."
+Write-Host "If anything fails after reboot, logs are at E:\ANTIGRAVITY\logs\."

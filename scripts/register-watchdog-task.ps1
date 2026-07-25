@@ -1,6 +1,6 @@
 # Run once from elevated PowerShell. Requires admin.
 
-$action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File c:\antigravity\scripts\mission-control-watchdog.ps1"
+$action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File E:\ANTIGRAVITY\scripts\mission-control-watchdog.ps1"
 $trigger1 = New-ScheduledTaskTrigger -AtStartup
 $trigger2 = New-ScheduledTaskTrigger -AtLogOn
 $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType S4U -RunLevel Limited
