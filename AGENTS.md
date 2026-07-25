@@ -1,7 +1,7 @@
 # AGENTS.md - ANTIGRAVITY Current Operating Rules
 
 This file is loaded at session start. Treat it as the current operating brief for
-`C:\antigravity` unless Joshua gives a newer timestamped written directive.
+`E:\ANTIGRAVITY` unless Joshua gives a newer timestamped written directive.
 
 ## Current Business Rule - 2026-06-22
 
@@ -38,7 +38,7 @@ No model below Codex 5.5 or Opus-level may decide repo doctrine, payment rules, 
 
 ## Canonical Workspace
 
-- Live repo: `C:\antigravity`
+- Live repo: `E:\ANTIGRAVITY`
 - Canonical branch: `origin/main`
 - Product domain: `youandinotai.com`
 - API domain: `api.youandinotai.com`
