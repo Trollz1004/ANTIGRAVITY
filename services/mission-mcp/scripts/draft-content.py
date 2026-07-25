@@ -26,8 +26,8 @@ Environment:
   DRAFTS_DIR            override drafts output dir
 
 TOS constraints enforced:
-  - Prompt instructs LLM: no "donate"/"donation"/"solicitation"/"tax-deductible"
-  - Lead with product value, not charity framing
+  - Prompt instructs LLM: no "payment"/"payment"/"outreach"/"tax-deductible"
+  - Lead with product value, not  framing
   - Draft is NOT posted — human approval required before any post
 """
 
@@ -64,7 +64,7 @@ SYSTEM_PROMPT = """You are a content assistant for youandinotai.com, an AI-power
 Your role is to draft organic growth content (Reddit comments, Discord messages, social posts) that Joshua will review and post manually.
 
 CRITICAL RULES:
-- Never use the words: donate, donation, donations, solicitation, tax-deductible
+- Never use the words: payment, payment, payments, outreach, tax-deductible
 - Lead with genuine product value — AI-powered compatibility, better matches, smarter dating
 - 80% helpful value, 20% max subtle promotion
 - Write like a real person, not a marketer
@@ -73,7 +73,6 @@ CRITICAL RULES:
 - Joshua posts; you only draft"""
 
 CONTENT_CALENDAR_TAG = "income-engine-tags"
-
 
 # ── HTTP helpers ──────────────────────────────────────────────────────────────
 
@@ -99,7 +98,6 @@ def http_post_json(url: str, payload: dict, headers: dict | None = None, timeout
             raise RuntimeError(f"SSE response had no data: line. Raw: {raw[:200]}")
         return json.loads(raw)
 
-
 def mcp_call_tool(url: str, token: str | None, tool_name: str, arguments: dict) -> dict:
     headers = {}
     if token:
@@ -118,7 +116,6 @@ def mcp_call_tool(url: str, token: str | None, tool_name: str, arguments: dict) 
         return json.loads(content[0]["text"])
     return {}
 
-
 # ── LLM calls ─────────────────────────────────────────────────────────────────
 
 def call_hermes(hermes_url: str, prompt: str) -> str:
@@ -135,7 +132,6 @@ def call_hermes(hermes_url: str, prompt: str) -> str:
     resp = http_post_json(f"{hermes_url}/v1/chat/completions", payload, timeout=90)
     return resp["choices"][0]["message"]["content"]
 
-
 def call_ollama(ollama_url: str, model: str, prompt: str) -> str:
     """Call local Ollama generate endpoint."""
     full_prompt = f"{SYSTEM_PROMPT}\n\n---\n\n{prompt}"
@@ -147,7 +143,6 @@ def call_ollama(ollama_url: str, model: str, prompt: str) -> str:
     }
     resp = http_post_json(f"{ollama_url}/api/generate", payload, timeout=120)
     return resp["response"]
-
 
 def generate_draft(hermes_url: str, ollama_url: str, model: str, prompt: str) -> tuple[str, str]:
     """Try Hermes Router first; fall back to Ollama. Returns (text, source)."""
@@ -170,7 +165,6 @@ def generate_draft(hermes_url: str, ollama_url: str, model: str, prompt: str) ->
             f"Start one of these services and retry."
         ) from e
 
-
 # ── Task helpers ──────────────────────────────────────────────────────────────
 
 def get_task(mcp_url: str, token: str | None, task_id: str) -> dict:
@@ -181,11 +175,9 @@ def get_task(mcp_url: str, token: str | None, task_id: str) -> dict:
                 return t
     raise RuntimeError(f"Task not found: {task_id}")
 
-
 def is_content_calendar_task(task: dict) -> bool:
     desc = task.get("description", "")
     return "content-calendar" in desc and "income-engine-tags" in desc
-
 
 def extract_task_context(task: dict) -> dict:
     """Pull platform/action/hashtags from task description."""
@@ -210,7 +202,6 @@ def extract_task_context(task: dict) -> dict:
 
     return ctx
 
-
 def build_prompt(ctx: dict, variations: int) -> str:
     action = ctx.get("action", ctx["topic"])
     return (
@@ -228,10 +219,9 @@ def build_prompt(ctx: dict, variations: int) -> str:
         f"Requirements:\n"
         f"- Vary length across drafts\n"
         f"- Sound like a real person, not a marketer\n"
-        f"- Never use: donate, donation, solicitation, tax-deductible\n"
+        f"- Never use: payment, payment, outreach, tax-deductible\n"
         f"- Lead with value to the reader"
     )
-
 
 def next_version_path(drafts_dir: Path, task_id: str) -> Path:
     task_dir = drafts_dir / task_id
@@ -240,7 +230,6 @@ def next_version_path(drafts_dir: Path, task_id: str) -> Path:
     while (task_dir / f"v{n}.md").exists():
         n += 1
     return task_dir / f"v{n}.md"
-
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
@@ -330,7 +319,6 @@ def main():
 
     print(f"\n[draft-content] Done. Draft at: {out_path}")
     print(f"[draft-content] Review before posting. Never auto-post.")
-
 
 if __name__ == "__main__":
     main()

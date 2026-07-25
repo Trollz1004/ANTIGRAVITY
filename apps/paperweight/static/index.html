@@ -1005,7 +1005,7 @@
           const j = await r.json();
           const rows = Array.isArray(j) ? j : j.allocations || [];
           // current ledger maps subscription/Bot-Shield tiers to Bucket 1
-          const cents = rows.reduce((s, a) => s + (a.charitable_amount_cents || a.charitable_cents || 0), 0);
+          const cents = rows.reduce((s, a) => s + (a._amount_cents || a._cents || 0), 0);
           BUCKET_CENTS = { 1: cents };
           $('#bk-source').textContent = rows.length
             ? 'source: live ledger · ' + rows.length + ' allocations'

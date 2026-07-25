@@ -18,7 +18,7 @@
 | File | What Was Fake | What It Says Now |
 |------|--------------|-----------------|
 | `App.tsx` | "99.9% Match Rate", "Interstellar user base", "1,240+ matches today", fake testimonial from "Lyra, Star-Traveler" | Bot-Shield V8, Gemini Powered, April 4 2026 launch date, honest founding member preview quote |
-| `CharitySection.tsx` | "12,450+ Devices Recycled", "$842,000+ Donated to Shriners", "5,200+ Trees Saved", "tracked on-chain" | "E-Waste" / "Device Recycling Program", "100%" / "Proceeds to Shriners", "Green" / "Sustainable Mission", "tracked publicly" |
+| `Section.tsx` | "12,450+ Devices Recycled", "$842,000+ paymentd to Shriners", "5,200+ Trees Saved", "tracked on-chain" | "E-Waste" / "Device Recycling Program", "100%" / "Proceeds to Shriners", "Green" / "Sustainable Mission", "tracked publicly" |
 | `CosmicContest.tsx` | Mock entries with 1240, 980, 450, 120 fake votes | All votes zeroed to 0 |
 | `SolarFlareSOS.tsx` | "Opus Diamond: LOST", "Redis Cache: MISSING" | "System Status: OK", "Connection: SECURE" |
 | `VoiceSOS.tsx` | "Interstellar" capability claim | "Peer-to-Peer" |

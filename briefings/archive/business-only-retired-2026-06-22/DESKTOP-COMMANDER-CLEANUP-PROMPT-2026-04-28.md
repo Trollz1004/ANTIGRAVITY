@@ -20,7 +20,7 @@ You are operating on Joshua Coleman's primary Windows workstation, executing a d
 4. NEVER run: `git push`, `git commit`, `wrangler deploy`, `docker-compose up`, `docker run`, `npm publish`. Cleanup only.
 5. Use `git mv` (not plain `mv`) inside `c:\Antigravity` to preserve git history.
 6. If any command fails, log the error and continue with the next task. Do not retry destructive commands.
-7. Customer-facing copy rule: never introduce the words "donate", "donation", or "solicitation" into any moved/edited file. (You're moving, not editing copy — guardrail only.)
+7. Customer-facing copy rule: never introduce the words "payment", "payment", or "outreach" into any moved/edited file. (You're moving, not editing copy — guardrail only.)
 
 ## Stage 1 — Execute these moves (already approved)
 

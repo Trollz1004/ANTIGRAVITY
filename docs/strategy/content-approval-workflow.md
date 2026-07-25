@@ -10,9 +10,9 @@ This document outlines the approval workflow for all content generated for YouAn
 
 - Content creators generate posts according to the task list
 - All content must use compliant phrasing:
-  - ✅ "contractual revenue disbursement" (instead of "donation")
-  - ✅ "revenue-sharing for good" (instead of "solicitation")
-  - ✅ "platform that gives back" (instead of "charity")
+  - ✅ "contractual revenue payout" (instead of "payment")
+  - ✅ "revenue-sharing for good" (instead of "outreach")
+  - ✅ "platform that gives back" (instead of "")
 - All content must align with the brand voice: warm, real, community-focused
 
 ### Step 2: Initial Review
@@ -42,7 +42,7 @@ This document outlines the approval workflow for all content generated for YouAn
 - **Platform**: [Twitter/Instagram/Facebook/LinkedIn/TikTok/Website/Blog]
 - **Date/Time**: [YYYY-MM-DD HH:MM] (Timezone: EST)
 - **Content Type**: [Caption/Article/Image Description/Video Script/Educational]
-- **Content Pillar**: [Education/Story/Offer/Behind the Scenes/Charity Update]
+- **Content Pillar**: [Education/Story/Offer/Behind the Scenes/ Update]
 - **Content**:
 [Actual content here - keep within platform character limits where applicable]
 - **Hashtags**: [Branded + Topical + Geo (if location-specific)]
@@ -71,7 +71,7 @@ This document outlines the approval workflow for all content generated for YouAn
 - **Platform**: [Twitter/Instagram/Facebook/LinkedIn/TikTok/Website/Blog]
 - **Date/Time**: [YYYY-MM-DD HH:MM] (Timezone: EST)
 - **Content Type**: [Caption/Article/Image Description/Video Script/Educational]
-- **Content Pillar**: [Education/Story/Offer/Behind the Scenes/Charity Update]
+- **Content Pillar**: [Education/Story/Offer/Behind the Scenes/ Update]
 - **Content**:
   [Actual content here - keep within platform character limits where applicable]
 - **Hashtags**: [Branded + Topical + Geo (if location-specific)]
@@ -93,10 +93,10 @@ _Content moves here after publication_
 
 Before submitting content for approval, verify that it meets all requirements:
 
-- [ ] No prohibited terms ("donate", "donation", "solicitation")
-- [ ] Uses compliant phrasing ("contractual revenue disbursement")
+- [ ] No prohibited terms ("payment", "payment", "outreach")
+- [ ] Uses compliant phrasing ("contractual revenue payout")
 - [ ] Aligns with brand voice (warm, real, community-focused)
-- [ ] Does not position as charity but as platform feature
+- [ ] Does not position as  but as platform feature
 - [ ] Focuses on real-world connection rather than just matching
 - [ ] No cringe or buzzwords
 - [ ] Talks like a real person

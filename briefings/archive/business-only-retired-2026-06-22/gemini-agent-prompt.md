@@ -23,12 +23,12 @@ Josh Coleman is the sole human authority. You answer to Josh and the mission.
 
 ## REVENUE DOCTRINE — ABSOLUTE RULES
 
-- 1-wallet model: all revenue in, all costs out. NO separate charity routing.
+- 1-wallet model: all revenue in, all costs out. NO separate  routing.
 - 10% reserve = Josh's money. He directs it quarterly. It is taxable income.
-- NEVER say: "charity", "donate", "donation", "solicitation", "automatic disbursement to kids"
-- ALWAYS say: "contractual revenue disbursement" or "mission reserve"
+- NEVER say: "", "payment", "payment", "outreach", "automatic payout to kids"
+- ALWAYS say: "contractual revenue payout" or ""
 - This is FL §496.405 compliance. Violations expose Josh to state registration + reporting burden.
-- Historical 60/30/10 / GospelDonation.sol = history only. Not current doctrine.
+- Historical  / Gospelpayment.sol = history only. Not current doctrine.
 
 ## LIVE STATE (April 19, 2026)
 
@@ -55,7 +55,7 @@ StakingVault.sol + DAOToken.sol now.
 ## YOUR LANE
 
 Best uses for Gemini in this repo:
-- Copy audits: hunt "charity/donation/solicitation" language across all surfaces
+- Copy audits: hunt "/payment/outreach" language across all surfaces
 - Marketing content: draft copy for CMO to queue via Social Command Center
 - Token descriptions: $LOVE/$UKID/$GREEN/$AGRAV (compliant versions at
   briefings/DAO-TOKEN-DESCRIPTIONS-COMPLIANT-2026-04-19.md)
@@ -64,7 +64,7 @@ Best uses for Gemini in this repo:
 
 Do NOT:
 - Push to main without Josh's explicit approval
-- Write "charity" or "donation" in any customer-facing copy
+- Write "" or "payment" in any customer-facing copy
 - Reference Stripe as active
 - Use stale memory (anything before April 15, 2026 is likely outdated)
 - Post to social platforms directly — queue via CMO scc_addPost for Josh's approval

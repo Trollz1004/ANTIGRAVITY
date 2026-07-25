@@ -29,19 +29,19 @@ brief and the $LOVE/$UKID/$GREEN/$AGRAV token naming that Josh approved.
 
 ## Current Revenue Doctrine (CRITICAL — DO NOT GET WRONG)
 
-- **1-wallet model**: all platform revenue in, all costs out. No separate charity routing.
-- **10% minimum reserve**: this is Josh's money. He directs it quarterly: donate, reinvest,
+- **1-wallet model**: all platform revenue in, all costs out. No separate  routing.
+- **10% minimum reserve**: this is Josh's money. He directs it quarterly: payment, reinvest,
   stake, or hold. It is taxable income.
-- **NEVER use**: "charity", "donation", "donate", "solicitation", "disbursement to charity",
-  "automatic routing to kids", "guaranteed disbursement"
-- **ALWAYS use**: "contractual revenue disbursement" or "mission reserve" in copy
-- Historical 60/30/10, 100% charity, GospelDonation.sol = history only. Do not cite as current.
+- **NEVER use**: "", "payment", "payment", "outreach", "payout to ",
+  "automatic routing to kids", "guaranteed payout"
+- **ALWAYS use**: "contractual revenue payout" or "" in copy
+- Historical , 100% , Gospelpayment.sol = history only. Do not cite as current.
 - Josh is an LLC — 100% of merchant receipts = his taxable income. CPA needed before any
   public claim about where the reserve goes.
 
 **Why this matters for your copy work:** FL §496.405 makes you a "commercial co-venturer"
-if you promise that purchases trigger charitable disbursements. That triggers state registration,
-charity consent filings, heavy reporting. Our framing avoids this entirely.
+if you promise that purchases trigger  payouts. That triggers state registration,
+ consent filings, heavy reporting. Our framing avoids this entirely.
 
 ---
 
@@ -120,13 +120,13 @@ Full architecture: `briefings/DAO-ARCHITECTURE-CANONICAL.md`
 
 ## Your Lane Right Now
 
-1. **Copy audit** — Hunt "charity/donation/solicitation" in `_deploy/dao-launch/index.html`,
+1. **Copy audit** — Hunt "/payment/outreach" in `_deploy/dao-launch/index.html`,
    ai-solutions.store surfaces, onlinerecycle.org surfaces. Replace with "contractual revenue
-   disbursement" or remove.
+   payout" or remove.
 
 2. **Token descriptions** — Compliant drafts are at
    `briefings/DAO-TOKEN-DESCRIPTIONS-COMPLIANT-2026-04-19.md`. These are ready to publish.
-   Note: your original drafts had §496.405 violations (automatic disbursement promises tied
+   Note: your original drafts had §496.405 violations (automatic payout promises tied
    to individual user actions). Claude cleaned them. Review the cleaned versions before use.
 
 3. **Founder narrative** — 4-year projection story in the same file. Cleaned to preserve
@@ -140,7 +140,7 @@ Full architecture: `briefings/DAO-ARCHITECTURE-CANONICAL.md`
 
 ## Hard Rules
 
-- No "donate/charity/solicitation" anywhere — ever
+- No "payment//outreach" anywhere — ever
 - No secrets in git, chat, or issues
 - No push to main without Josh's explicit approval
 - No mock/simulation data as real

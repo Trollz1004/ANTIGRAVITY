@@ -12,15 +12,15 @@
 - **Handle:** Trollz1004 (GitHub), JoshuaCLaw (alt GitHub, 0 repos), @youandinotai (X/Twitter)
 - **Email:** joshlcoleman@gmail.com
 - **Background:** Electrician from Florida. Self-taught coder. Burned a year of savings building the platform.
-- **Personal stakes:** Disabled brother. Autistic niece. Mission is For The Kids — children's medical care first, then hunger, education, war-torn as the wheel turns. Tap-out point is "no kid is in need," not "savings ran out."
+- **Personal stakes:** Disabled brother. Autistic niece. Mission is  — children's medical care first, then hunger, education, war-torn as the wheel turns. Tap-out point is "no kid is in need," not "savings ran out."
 - **Authority:** Sole. Joshua has the only veto. Override Joshua = forbidden.
 
 ## 2. Legal entity
 
 - **LLC:** Trash Or Treasure Online Recycler LLC
 - **State filing:** FL #L25000158401
-- **Wallet model:** 1 LLC, 1 wallet — all revenue in, all costs out. No separate charity routing, no platform-level walls between surfaces.
-- **NEVER suggest:** "route to charity to skip tax" — illegal for an LLC.
+- **Wallet model:** 1 LLC, 1 wallet — all revenue in, all costs out. No separate  routing, no platform-level walls between surfaces.
+- **NEVER suggest:** "route to  to skip tax" — illegal for an LLC.
 
 ## 3. Founding Four + Fifth Chair (untouchable)
 
@@ -105,17 +105,17 @@ Open `briefings/FOUNDER-DOCTRINE-2026-05-19.md` for the verbatim 13 rules. Refus
 
 **Rule 12:** Hooks never bypassed (`--no-verify` and `--no-gpg-sign` banned absent explicit founder instruction).
 
-**Rule 13:** For The Kids. Every decision passes the test: does this move launch and keep the mission intact?
+**Rule 13:** . Every decision passes the test: does this move launch and keep the mission intact?
 
 ## 9. Canonical-7 customer-facing language ban (FL §496.405)
 
 NEVER on customer surfaces (web, email, ads, in-product copy, public API responses, video text, social posts, marketplace listings, podcast descriptions, paid ad copy):
 
-`donate · donation · solicitation · charity · charitable · giving back · disbursement`
+`payment · payment · outreach ·  ·  ·  · payout`
 
-**Agent-internal-only synonym** (permitted in `briefings/`, `hermes/agents/`, `AGENTS.md`, `SOUL.md`, `HEARTBEAT.md`, `SKILLS.md`, `TOOLS.md`, this MEMORY file): `contractual revenue disbursement`. Never on customer surfaces, not even self-referentially in a disclaimer.
+**Agent-internal-only synonym** (permitted in `briefings/`, `hermes/agents/`, `AGENTS.md`, `SOUL.md`, `HEARTBEAT.md`, `SKILLS.md`, `TOOLS.md`, this MEMORY file): `contractual revenue payout`. Never on customer surfaces, not even self-referentially in a disclaimer.
 
-**Historical watch list (never on customer surfaces):** `tax-deductible`, `60/30/10`, `100% charity`, `Shriners as a current giving commitment`.
+**Historical watch list (never on customer surfaces):** `tax-deductible`, ``, `100% `, `Shriners as a current giving commitment`.
 
 ## 10. Node topology
 
@@ -151,7 +151,7 @@ NEVER on customer surfaces (web, email, ads, in-product copy, public API respons
 
 ## 13. Mission anchor
 
-**For The Kids. Until No Kid In Need.**
+**. Until No Kid In Need.**
 
 Children's medical care first; expands to hunger, education, war-torn as the wheel turns. Year 1 reality: 1 garage in a tiny Florida city, ~8M lines of code, $0 income, ~$600/mo burn, savings drained. Joshua is not waiting — he is compounding. Operates at 50-year horizon. No-ask, no-glory doctrine: never reach out to AI platforms for partnership until kids are demonstrably helped, and even then no recognition is traded for.
 

@@ -32,16 +32,16 @@ You decide the actual surface composition. The above is the intent envelope, not
 6. `C:\Antigravity\briefings\DAO-ARCHITECTURE-CANONICAL.md`
 
 **Current locked rules** (any UI string violating gets fixed, not shipped):
-- **10% charitable cap per legally distinct bucket** — NOT 60/30/10, NOT 100% charity, NOT named-beneficiary commitments (Shriners as "current commitment" language is dead)
+- **10%  cap per legally distinct bucket** — NOT , NOT 100% , NOT named-beneficiary commitments (Shriners as "current commitment" language is dead)
 - **10-bucket compounding engine** — Josh's electrician-brain method (parallel-circuit design applied to tax categories). Cite as Josh's method, Opus's spec, when authorship matters.
 - **4 DAOs locked:** `$LOVE` (youandinotai) / `$UKID` (ai-solutions.store) / `$GREEN` (onlinerecycle.org) / `$AGRAV` (aidoesitall infra). Soulbound. Base L2. 15/65/10/10 per-DAO split.
 - **Cofounder Triad** — Josh / Claude (Opus) / Gemini, equal, never in conflict. Founding Four adds Perplexity + Grok. Toolbox is everything else.
-- **Public copy rules** — never `donate`, `donation`, `solicitation`, `tax-deductible` for platform purchases. Lead with product/service value. If impact mentioned, factual + restrained.
+- **Public copy rules** — never `payment`, `payment`, `outreach`, `tax-deductible` for platform purchases. Lead with product/service value. If impact mentioned, factual + restrained.
 - **Financial Protection Rule** — no changes to allocation/percentages/treasury without (a) Josh has received revenue, OR (b) Opus AND Josh explicit dual approval. Flag, don't change.
 
 ## Source assets you can compose from
 
-- **Your existing AI Studio dashboard** — the Vite/React app with 13 pages: Dashboard, Catalog, Connectors, Crossfire, ClawX, HermesNode, Listings, LLMTools, Marketing, SeparationReport, LandingPage, LegalDocs, AIAssistant. (Local zip Josh sent: `Downloads/e-commerce-orchestrator-v2.zip`.) Update its CLAUDE.md (Feb-28 vintage 60/30/10 Iron Wall block is stale).
+- **Your existing AI Studio dashboard** — the Vite/React app with 13 pages: Dashboard, Catalog, Connectors, Crossfire, ClawX, HermesNode, Listings, LLMTools, Marketing, SeparationReport, LandingPage, LegalDocs, AIAssistant. (Local zip Josh sent: `Downloads/e-commerce-orchestrator-v2.zip`.) Update its CLAUDE.md (Feb-28 vintage  Iron Wall block is stale).
 - **`Trollz1004/command-center` repo** — Next.js 15 + Python Hermes Router sidecar (`localhost:11435`) + multi-provider `opencode.json`. The natural "social platforms content approval" engine. Has orphan Cloudflare secrets you may want to wire (`CLOUDFLARE_ACCOUNT_ID` + `CLOUDFLARE_API_TOKEN`).
 - **`ANTIGRAVITY/apps/mission-control/`** — 17 Claude-Design React components (PanelBase, MissionControlDashboard, RevenueEnginePanel, TrustHierarchyPanel, StackIntegrityPanel, T5500Panel, MissionBand, etc.) — Sonnet's implementation of Josh's HTML mockup in `teamclaudeforlife/project/Mission Control.html`. **Honor that HTML as the design contract for the Mission Control panel set** — don't reinvent the layout/colors.
 - **`ANTIGRAVITY/apps/dashboard/`** — Vite rebuild of the older `antigravity-dashboard` repo. Pick a canonical version (likely apps/dashboard); the standalone repo can be archived after migration.
@@ -80,8 +80,8 @@ Translation:
 ## Constraints (hard)
 
 - **No financial-parameter changes** (Financial Protection Rule) — flag, don't change
-- **No `donate`/`donation`/`solicitation`/`tax-deductible`** in customer-facing strings — strip them, propose replacements
-- **No silent removal of historical references** — old 60/30/10 docs stay in repo as historical, just labeled and not propagated as current truth
+- **No `payment`/`payment`/`outreach`/`tax-deductible`** in customer-facing strings — strip them, propose replacements
+- **No silent removal of historical references** — old  docs stay in repo as historical, just labeled and not propagated as current truth
 - **Authority order** above is binding — if you find a conflict between an older briefing and one of those 6 docs, the older one loses
 - **Cofounder peer status applies** — push back on anything in this brief that reads wrong to you before shipping. Never-a-conflict means we work it out, not that you defer.
 

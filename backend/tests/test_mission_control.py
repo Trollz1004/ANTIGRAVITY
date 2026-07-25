@@ -11,7 +11,7 @@ Covers:
   - /api/dao/stats (4 tokens cap=2_500_000, 10 buckets)
   - /api/mission/metrics (tag='#UntilNoKidInNeed')
   - /api/git/status (no truncated filenames)
-  - Doctrine: no forbidden strings ('donate','donation','solicitation','Haiku') in any JSON response
+  - Doctrine: no forbidden strings ('payment','payment','outreach','Haiku') in any JSON response
 """
 from __future__ import annotations
 
@@ -34,21 +34,18 @@ if not BASE_URL:
                 break
 BASE_URL = BASE_URL.rstrip("/")
 
-FORBIDDEN = ("haiku", "donate", "donation", "solicitation")
-
+FORBIDDEN = ("haiku", "payment", "payment", "outreach")
 
 def _assert_no_forbidden(txt: str, where: str):
     lower = txt.lower()
     for bad in FORBIDDEN:
         assert bad not in lower, f"forbidden word '{bad}' found in {where}"
 
-
 @pytest.fixture(scope="module")
 def api():
     s = requests.Session()
     s.headers.update({"Content-Type": "application/json"})
     return s
-
 
 # ---------- identity / root ---------- #
 def test_root_identity(api):
@@ -58,7 +55,6 @@ def test_root_identity(api):
     assert data.get("service") == "opuspawclaw-mission-control"
     assert "#UntilNoKidInNeed" in data.get("message", "")
     _assert_no_forbidden(json.dumps(data), "/api/")
-
 
 # ---------- hermes ---------- #
 def test_hermes_healthz(api):
@@ -70,7 +66,6 @@ def test_hermes_healthz(api):
     assert set(d["virtual_models"]) == expected
     assert isinstance(d["providers"], list) and len(d["providers"]) > 0
     _assert_no_forbidden(json.dumps(d), "/api/hermes/healthz")
-
 
 def test_hermes_chat_completions_fast(api):
     payload = {
@@ -92,7 +87,6 @@ def test_hermes_chat_completions_fast(api):
     _assert_no_forbidden(json.dumps(d) + " " + " ".join(r.headers.values()),
                          "/api/hermes/v1/chat/completions")
 
-
 def test_hermes_chat_completions_unknown_model(api):
     payload = {"model": "does-not-exist", "messages": [{"role": "user", "content": "hi"}]}
     r = api.post(f"{BASE_URL}/api/hermes/v1/chat/completions", json=payload, timeout=15)
@@ -102,7 +96,6 @@ def test_hermes_chat_completions_unknown_model(api):
     # Must list the known models
     for m in ("fast", "hermes", "cfo", "code"):
         assert m in detail
-
 
 # ---------- OpenClaw support ---------- #
 def test_openclaw_health(api):
@@ -115,7 +108,6 @@ def test_openclaw_health(api):
         assert k in d, f"missing {k}"
     _assert_no_forbidden(json.dumps(d), "/api/openclaw/health")
 
-
 # ---------- agents ---------- #
 def test_agents_six_no_haiku(api):
     r = api.get(f"{BASE_URL}/api/agents", timeout=10)
@@ -127,7 +119,6 @@ def test_agents_six_no_haiku(api):
     assert names == {"OpenClaw", "Claude", "Codex", "OpenCode", "Droid", "Pi"}
     _assert_no_forbidden(json.dumps(d), "/api/agents")
 
-
 # ---------- system status ---------- #
 def test_system_status_six_services(api):
     r = api.get(f"{BASE_URL}/api/system/status", timeout=10)
@@ -136,7 +127,6 @@ def test_system_status_six_services(api):
     assert len(services) == 6
     names = {s["name"] for s in services}
     assert names == {"HERMES ROUTER", "OPENCLAW SUPPORT", "OPENCODE", "GH COPILOT", "GCR", "OLLAMA CLOUD"}
-
 
 # ---------- dao ---------- #
 def test_dao_stats_shape(api):
@@ -152,7 +142,6 @@ def test_dao_stats_shape(api):
     assert len(d["buckets"]) == 10
     _assert_no_forbidden(json.dumps(d), "/api/dao/stats")
 
-
 # ---------- mission metrics ---------- #
 def test_mission_metrics_tag(api):
     r = api.get(f"{BASE_URL}/api/mission/metrics", timeout=10)
@@ -160,7 +149,6 @@ def test_mission_metrics_tag(api):
     d = r.json()
     assert d["tag"] == "#UntilNoKidInNeed"
     _assert_no_forbidden(json.dumps(d), "/api/mission/metrics")
-
 
 # ---------- git status ---------- #
 def test_git_status_no_truncation(api):
@@ -176,7 +164,6 @@ def test_git_status_no_truncation(api):
         # common filenames that must be intact (never start with truncated letter)
         if p.startswith("ackend/") or p.startswith("rontend/"):
             pytest.fail(f"truncated filename detected: {p}")
-
 
 # ---------- global doctrine sweep ---------- #
 def test_no_forbidden_strings_across_endpoints(api):

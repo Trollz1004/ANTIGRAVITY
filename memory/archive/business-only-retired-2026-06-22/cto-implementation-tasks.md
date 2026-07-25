@@ -146,7 +146,7 @@ All copy and microcopy in these implementations should be reviewed for:
 - Brand voice and messaging consistency
 - Tone and voice alignment with community-focused values
 - Clear communication of safety and privacy features
-- Compliance with Florida §496.405 (no donate/donation/solicitation language)
+- Compliance with Florida §496.405 (no payment/payment/outreach language)
 
 ### With QA Team
 

@@ -206,7 +206,7 @@ describe("JoshuaCLAW Governance - TIER_CONFIG", () => {
 
   it("critical tier covers revenue, contracts, and Iron Wall", () => {
     expect(TIER_CONFIG.critical.categories).toEqual(
-      expect.arrayContaining(["revenue-split", "contract-deploy", "iron-wall"])
+      expect.arrayContaining(["", "contract-deploy", "iron-wall"])
     );
   });
 

@@ -82,7 +82,7 @@ git commit -m "feat(deploy): land antigravity design bundle v1 - 4 public surfac
            -m "  prototype     : zero hits across 7 canonical terms + 'Cockpit'" `
            -m "  walkthrough   : zero hits across 7 canonical terms + 'Cockpit'" `
            -m "  dao-transp.   : 5 intentional regulatory disclosures (negative-form" `
-           -m "                  FL §496.405 banner, 'Contractual Charitable Disbursement'" `
+           -m "                  FL §496.405 banner, 'Contractual  payout'" `
            -m "                  workflow label, meta-policy framing paragraph). These" `
            -m "                  pass an Anthropic-grade review of customer-facing legal" `
            -m "                  copy under Joshua override 2026-05-19." `

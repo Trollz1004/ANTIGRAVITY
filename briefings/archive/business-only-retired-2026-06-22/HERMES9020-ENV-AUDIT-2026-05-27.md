@@ -12,8 +12,8 @@
 - **Retired naming (per CLAUDE.md):** `ENIGMA_*`, `OMEGA_*` prefixes pre-date the 1-LLC unification (THE-WHEEL 2026-05-20). Reference-only; never use in new code.
 - **Paperclip retired as agent host (2026-05-20):** `PAPERCLIP_*` keys still readable for archaeology but not for new runtime wiring. Replacement is Paperweight Mission Control.
 - **AWS retired (Joshua 2026-05-26):** `AWS_*` keys are old setup, not part of current stack (GCR Cloud Run + T5500 Docker host).
-- **Multi-wallet keys retired:** `CHARITY_REVENUE_WALLET`, `DATING_REVENUE_WALLET`, `DAO_TREASURY_WALLET`, `OPS_WALLET`, `PROFIT_TO_CHARITY_ALLOCATION` — superseded by 1-LLC / 1-wallet / 10% per-bucket doctrine.
-- **CHARITY-prefixed repo metadata:** `REPO_CHARITY_OPS`, `REPO_CHARITY_STORE`, etc. — these are key-NAME-internal references to retired charity-routing repos. Not customer-facing, but stale.
+- **Multi-wallet keys retired:** `_REVENUE_WALLET`, `DATING_REVENUE_WALLET`, `DAO_TREASURY_WALLET`, `OPS_WALLET`, `PROFIT_TO__ALLOCATION` — superseded by 1-LLC / 1-wallet / 10% per-bucket doctrine.
+- **-prefixed repo metadata:** `REPO__OPS`, `REPO__STORE`, etc. — these are key-NAME-internal references to retired -routing repos. Not customer-facing, but stale.
 
 ## Verdict summary
 
@@ -23,7 +23,7 @@
 - **RETIRED_aws_old_setup:** 4
 - **KEEP_canonical_payments:** 19 (Square — sole processor for dating surface)
 - **KEEP_node_identity:** 26 (Sabretooth, T5500 hardware/role facts)
-- **KEEP_repo_metadata:** 10 (some include retired CHARITY repo names — see below)
+- **KEEP_repo_metadata:** 10 (some include retired  repo names — see below)
 - **KEEP_founding_four:** 5 (Gemini, xAI/Grok)
 - **KEEP_db / vector / tunnels / cloud_run:** ~16 (Postgres, Qdrant, Cloudflare, GCP)
 - **KEEP_domain_registry / mission_meta / repo / content_engine / status_hooks / ai_solutions / owner / prompt / doctrine_ref:** ~37
@@ -58,8 +58,8 @@
 | `CELERY_BROKER_URL` | VERIFY_uncategorized |
 | `CF_API_TOKEN` | VERIFY_uncategorized |
 | `CHAIN_ID` | VERIFY_uncategorized |
-| `CHARITY_CROSSLISTER` | RETIRED_multi_wallet_or_charity_routing |
-| `CHARITY_REVENUE_WALLET` | RETIRED_multi_wallet_or_charity_routing |
+| `_CROSSLISTER` | RETIRED_multi_wallet_or__routing |
+| `_REVENUE_WALLET` | RETIRED_multi_wallet_or__routing |
 | `CLAUDE_CODE_PROMPT` | KEEP_prompt_config |
 | `CLAUDE_DESKTOP_PROMPT` | KEEP_prompt_config |
 | `CLAUDE_MODEL` | KEEP_prompt_config |
@@ -70,13 +70,13 @@
 | `CLOUDFLARE_GLOBAL_API_KEY` | KEEP_tunnels_pages |
 | `CONSOLIDATED_PREFS` | VERIFY_uncategorized |
 | `CROSSLISTER_DEV_DIR` | VERIFY_uncategorized |
-| `DAO_TREASURY_WALLET` | RETIRED_multi_wallet_or_charity_routing |
+| `DAO_TREASURY_WALLET` | RETIRED_multi_wallet_or__routing |
 | `DATABASE_URL` | KEEP_db |
 | `DATEAPP_DEV_DIR` | VERIFY_uncategorized |
 | `DATEAPP_DIR` | VERIFY_uncategorized |
-| `DATING_REVENUE_WALLET` | RETIRED_multi_wallet_or_charity_routing |
+| `DATING_REVENUE_WALLET` | RETIRED_multi_wallet_or__routing |
 | `DOMAIN` | VERIFY_uncategorized |
-| `DOMAIN_CHARITY` | RETIRED_multi_wallet_or_charity_routing |
+| `DOMAIN_` | RETIRED_multi_wallet_or__routing |
 | `DOMAIN_CROSSLISTER` | KEEP_domain_registry |
 | `DOMAIN_DATEAPP` | KEEP_domain_registry |
 | `DOMAIN_DATEAPP_REDIRECT` | KEEP_domain_registry |
@@ -119,7 +119,7 @@
 | `LEGAL_STATE` | KEEP_doctrine_ref |
 | `MASTER_ENV` | KEEP_vault_pointer |
 | `MASTER_WORKSPACE` | KEEP_vault_pointer |
-| `MISSION_CHARITY` | RETIRED_charity_naming_on_key |
+| `MISSION_` | RETIRED__naming_on_key |
 | `MISSION_CONTINUITY` | KEEP_mission_meta |
 | `MISSION_DURATION` | KEEP_mission_meta |
 | `MISSION_PARTNERS` | KEEP_mission_meta |
@@ -131,14 +131,14 @@
 | `NODE_MANIFEST` | KEEP_node_identity |
 | `OLLAMA_API_KEY` | KEEP_provider |
 | `OLLAMA_BASE_URL` | KEEP_provider |
-| `OMEGA_CHARITY_ALLOCATION` | RETIRED_naming |
+| `OMEGA__ALLOCATION` | RETIRED_naming |
 | `OMEGA_DOMAIN` | RETIRED_naming |
 | `OMEGA_DURATION` | RETIRED_naming |
 | `OMEGA_MISSION` | RETIRED_naming |
 | `OPENAI_ALT_KEY` | VERIFY_openai_use |
 | `OPENAI_API_KEY` | VERIFY_openai_use |
 | `OPENROUTER_API_KEY` | KEEP_provider |
-| `OPS_WALLET` | RETIRED_multi_wallet_or_charity_routing |
+| `OPS_WALLET` | RETIRED_multi_wallet_or__routing |
 | `OPUS_DATA_DIR` | VERIFY_opus_hub |
 | `OPUS_DIR` | VERIFY_opus_hub |
 | `OPUS_HAS_HANDS_CLAUDE_PW` | VERIFY_opus_hub |
@@ -172,7 +172,7 @@
 | `POSTGRES_PASSWORD` | KEEP_db |
 | `POSTGRES_USER` | KEEP_db |
 | `PROFIT_OPS_EMAIL` | RETIRED_profit_split_naming |
-| `PROFIT_TO_CHARITY_ALLOCATION` | RETIRED_multi_wallet_or_charity_routing |
+| `PROFIT_TO__ALLOCATION` | RETIRED_multi_wallet_or__routing |
 | `PROJECT_INDEX` | VERIFY_uncategorized |
 | `PUBLIC_ARTIFACT_PROMPT` | VERIFY_uncategorized |
 | `QDRANT_API_KEY` | KEEP_vector_db |
@@ -181,10 +181,10 @@
 | `REDIS_URL` | KEEP_db |
 | `REFRESH_TOKEN_EXPIRE_DAYS` | KEEP_auth |
 | `REPLICATE_API_KEY` | VERIFY_uncategorized |
-| `REPO_CHARITY_OPS` | RETIRED_charity_repo_naming |
-| `REPO_CHARITY_OPS_PURPOSE` | RETIRED_charity_repo_naming |
-| `REPO_CHARITY_STORE` | RETIRED_charity_repo_naming |
-| `REPO_CHARITY_STORE_PURPOSE` | RETIRED_charity_repo_naming |
+| `REPO__OPS` | RETIRED__repo_naming |
+| `REPO__OPS_PURPOSE` | RETIRED__repo_naming |
+| `REPO__STORE` | RETIRED__repo_naming |
+| `REPO__STORE_PURPOSE` | RETIRED__repo_naming |
 | `REPO_CROSSLISTER` | KEEP_repo_metadata |
 | `REPO_CROSSLISTER_PURPOSE` | KEEP_repo_metadata |
 | `REPO_DASHBOARD` | KEEP_repo_metadata |
@@ -276,7 +276,7 @@
 
 1. **File is unused for runtime** — rename or move it so future env-scan scripts skip it. Suggested rename: `HERMES9020-ENV-2026-05-18T043653Z.env.retired-2026-05-27` (or move to a `Personal Vault-Sabretooth/archive/` subdir if you want one).
 2. **Keys flagged `KEEP_*`** are presumed already in `MASTER-UNIVERSAL-ENV-TROLLZ1004.env`. No re-export needed. Confirmed live during today's session: `OPENROUTER_API_KEY`, `XAI_API_KEY`, `GEMINI_API_KEY`, `OLLAMA_API_KEY` — all present in master vault.
-3. **Keys flagged `RETIRED_*`** should never appear in any new `.env` writes. CI doctrine drift scan could grow to ban these prefixes outright: `ENIGMA_`, `OMEGA_`, `CHARITY_REVENUE_WALLET`, `DATING_REVENUE_WALLET`, `DAO_TREASURY_WALLET`, `OPS_WALLET`, `PROFIT_TO_CHARITY_*`, `REPO_CHARITY_*`, `PAPERCLIP_*`, `CLAWDBOT_*`, `AWS_*`, `MISSION_CHARITY`, `SABRETOOTH_ENIGMA_DIR`, `HENTAI_MODEL`, `DROID_CLAWDBOT`.
+3. **Keys flagged `RETIRED_*`** should never appear in any new `.env` writes. CI doctrine drift scan could grow to ban these prefixes outright: `ENIGMA_`, `OMEGA_`, `_REVENUE_WALLET`, `DATING_REVENUE_WALLET`, `DAO_TREASURY_WALLET`, `OPS_WALLET`, `PROFIT_TO__*`, `REPO__*`, `PAPERCLIP_*`, `CLAWDBOT_*`, `AWS_*`, `MISSION_`, `SABRETOOTH_ENIGMA_DIR`, `HENTAI_MODEL`, `DROID_CLAWDBOT`.
 4. **Keys flagged `VERIFY_uncategorized`** (61 keys) need a founder eyeball — mostly standard secrets without doctrine prefixes (Postgres URLs, JWT secret, OpenAI keys, blockchain wallet config, etc.). Not urgent if file is retired.
 
 ## R6 invariant restated

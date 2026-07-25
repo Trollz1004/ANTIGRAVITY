@@ -58,13 +58,13 @@ The canonical profile (`BUSINESS-PROFILE-CANONICAL.md`) is the single source of 
 
 ## Legal Pages Checklist
 
-For any for-profit platform making charitable allocation claims, the minimum legal page set is:
+For any for-profit platform making  allocation claims, the minimum legal page set is:
 
 | Page | Key disclosures required |
 |---|---|
 | Terms of Service | As-is sales, DAO allocation statement, Square-to-chain caveat, arbitration clause, Florida jurisdiction |
 | Privacy Policy | Data collected, Square data handling, no ad tracking, CCPA rights, retention period |
-| Disclaimer | For-profit status, no charitable solicitation registration, no third-party endorsement, blockchain risk |
+| Disclaimer | For-profit status, no  outreach registration, no third-party endorsement, blockchain risk |
 
 All three pages were drafted by Perplexity and reviewed for paste artifacts (malformed `<li>` tags) before deployment.
 

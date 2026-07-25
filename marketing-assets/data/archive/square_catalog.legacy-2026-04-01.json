@@ -9,8 +9,8 @@
       "is_deleted": false,
       "present_at_all_locations": true,
       "item_data": {
-        "name": "Support OnlineRecycle — E-Waste Resale & Revenue Disbursement",
-        "description": "Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically disbursed via Protocol Omega smart contract on Base Mainnet: 60% to Shriners Children's Hospitals, 30% operations, 10% reinvestment. This is a contractual revenue split, not a charitable solicitation. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai",
+        "name": "Support OnlineRecycle — E-Waste Resale & Revenue payout",
+        "description": "Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically payout via Protocol Omega smart contract on Base Mainnet: 60% to Shriners s, 30% operations, 10% reinvestment. This is a contractual , not a  outreach. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -184,9 +184,9 @@
             }
           }
         ],
-        "product_type": "DONATION",
+        "product_type": "payment",
         "skip_modifier_screen": true,
-        "ecom_uri": "https://onlinerecycle.square.site/product/donate-to-help-our-mission-to-recycle-online-for-charity-/797",
+        "ecom_uri": "https://onlinerecycle.square.site/product/payment-to-help-our-mission-to-recycle-online-for--/797",
         "ecom_image_uris": [
           "https://onlinerecycle.square.site/uploads/1/5/2/7/152793008/s689372832412502406_p797_i1_w808.png"
         ],
@@ -201,15 +201,15 @@
             "ordinal": -2251799813685248
           }
         ],
-        "description_html": "<p>Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically disbursed via Protocol Omega smart contract on Base Mainnet: 60% to Shriners Children&#39;s Hospitals, 30% operations, 10% reinvestment. This is a contractual revenue split, not a charitable solicitation. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai</p>",
-        "description_plaintext": "Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically disbursed via Protocol Omega smart contract on Base Mainnet: 60% to Shriners Children's Hospitals, 30% operations, 10% reinvestment. This is a contractual revenue split, not a charitable solicitation. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai",
+        "description_html": "<p>Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically payout via Protocol Omega smart contract on Base Mainnet: 60% to Shriners Children&#39;s Hospitals, 30% operations, 10% reinvestment. This is a contractual , not a  outreach. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai</p>",
+        "description_plaintext": "Drop off or schedule pickup for your old electronics — computers, laptops, TVs, phones, tablets, and e-waste. Recovered resale value is automatically payout via Protocol Omega smart contract on Base Mainnet: 60% to Shriners s, 30% operations, 10% reinvestment. This is a contractual , not a  outreach. OnlineRecycle.org | Trash Or Treasure Online Recycler LLC | Florida. Powered by Perplexity AI — perplexity.ai",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
         ],
         "is_archived": false,
         "ecom_seo_data": {
-          "page_description": "Help support our mission of Recycle online for Charity fundraising! "
+          "page_description": "Help support our mission of Recycle online for  fundraising! "
         },
         "reporting_category": {
           "id": "R24DGZV7LPULZCRH7DJONYGK",
@@ -236,8 +236,8 @@
         "LY5GN09F5AN83"
       ],
       "item_data": {
-        "name": "Donation",
-        "description": "Donate to Support Recycling Online For Charity",
+        "name": "payment",
+        "description": "payment to Support Recycling Online For ",
         "abbreviation": "Do",
         "label_color": "F25B3D",
         "is_taxable": false,
@@ -446,8 +446,8 @@
             "ordinal": -2251731094208512
           }
         ],
-        "description_html": "<p>Donate to Support Recycling Online For Charity</p>",
-        "description_plaintext": "Donate to Support Recycling Online For Charity",
+        "description_html": "<p>payment to Support Recycling Online For </p>",
+        "description_plaintext": "payment to Support Recycling Online For ",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -468,8 +468,8 @@
       "is_deleted": false,
       "present_at_all_locations": true,
       "item_data": {
-        "name": "Drop off Donations",
-        "description": "Embark on a heartwarming journey of giving back with our convenient drop-off donation service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your donation drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your donations spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
+        "name": "Drop off payments",
+        "description": "Embark on a heartwarming journey of  with our convenient drop-off payment service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your payment drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your payments spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
         "abbreviation": "Recycle",
         "label_color": "00B23B",
         "is_taxable": false,
@@ -553,8 +553,8 @@
         "skip_modifier_screen": false,
         "ecom_available": false,
         "ecom_visibility": "UNAVAILABLE",
-        "description_html": "Embark on a heartwarming journey of giving back with our convenient drop-off donation service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your donation drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your donations spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
-        "description_plaintext": "Embark on a heartwarming journey of giving back with our convenient drop-off donation service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your donation drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your donations spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
+        "description_html": "Embark on a heartwarming journey of  with our convenient drop-off payment service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your payment drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your payments spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
+        "description_plaintext": "Embark on a heartwarming journey of  with our convenient drop-off payment service. At our easily accessible locations, you can make a difference effortlessly by booking an appointment for your payment drop-off. Support a noble cause and spread kindness as you contribute to those in need. The process is simple and seamless, ensuring that your act of generosity leaves a lasting impact. Book your appointment today, and let your payments spark hope and joy in the lives of others. Join us in making a difference, one drop-off at a time!",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -581,8 +581,8 @@
       },
       "present_at_all_locations": true,
       "item_data": {
-        "name": "Cash Donations",
-        "description": "Experience the convenience and security of making cash donations through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your donation appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your donation is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
+        "name": "Cash payments",
+        "description": "Experience the convenience and security of making cash payments through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your payment appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your payment is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -598,7 +598,7 @@
             "present_at_all_locations": true,
             "item_variation_data": {
               "item_id": "5TTNJLFAP6RMBNBOZSIRA7KF",
-              "name": "In Person Cash Donation",
+              "name": "In Person Cash payment",
               "ordinal": 0,
               "pricing_type": "VARIABLE_PRICING",
               "service_duration": 0,
@@ -625,7 +625,7 @@
             "present_at_all_locations": true,
             "item_variation_data": {
               "item_id": "5TTNJLFAP6RMBNBOZSIRA7KF",
-              "name": "Online Donation",
+              "name": "Online payment",
               "ordinal": 1,
               "pricing_type": "FIXED_PRICING",
               "price_money": {
@@ -652,8 +652,8 @@
         "image_ids": [
           "W3P26ADFNIYLL3FZUKCVXLTB"
         ],
-        "description_html": "Experience the convenience and security of making cash donations through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your donation appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your donation is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
-        "description_plaintext": "Experience the convenience and security of making cash donations through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your donation appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your donation is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
+        "description_html": "Experience the convenience and security of making cash payments through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your payment appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your payment is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
+        "description_plaintext": "Experience the convenience and security of making cash payments through our streamlined appointment booking service. With a user-friendly platform and easy payment process, you can schedule an appointment to make your contribution hassle-free. By booking a dedicated time slot for your payment appointment, you ensure a smooth and efficient transaction process. Your support for the cause is invaluable, and our appointment service ensures that your payment is received promptly and securely. Book now to make a difference and join us in our mission to create a positive impact in the community.",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -1702,7 +1702,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Stanley Pushbutton Key Lock Conversion Kit   Black #22-0843✅️h",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The Stanley Pushbutton Key Lock Conversion Kit in Black (#22-0843) includes a keyed lock suitable for a screen door. It comes with a key and is designed to convert a pushbutton lock to a key lock. This product is made by Stanley and is a convenient addition to your home security hardware.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n The Stanley Pushbutton Key Lock Conversion Kit in Black (#22-0843) includes a keyed lock suitable for a screen door. It comes with a key and is designed to convert a pushbutton lock to a key lock. This product is made by Stanley and is a convenient addition to your home security hardware.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -1763,8 +1763,8 @@
             "ordinal": -2251524935778304
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n The Stanley Pushbutton Key Lock Conversion Kit in Black (#22-0843) includes a keyed lock suitable for a screen door. It comes with a key and is designed to convert a pushbutton lock to a key lock. This product is made by Stanley and is a convenient addition to your home security hardware.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The Stanley Pushbutton Key Lock Conversion Kit in Black (#22-0843) includes a keyed lock suitable for a screen door. It comes with a key and is designed to convert a pushbutton lock to a key lock. This product is made by Stanley and is a convenient addition to your home security hardware.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n The Stanley Pushbutton Key Lock Conversion Kit in Black (#22-0843) includes a keyed lock suitable for a screen door. It comes with a key and is designed to convert a pushbutton lock to a key lock. This product is made by Stanley and is a convenient addition to your home security hardware.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n The Stanley Pushbutton Key Lock Conversion Kit in Black (#22-0843) includes a keyed lock suitable for a screen door. It comes with a key and is designed to convert a pushbutton lock to a key lock. This product is made by Stanley and is a convenient addition to your home security hardware.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_vzRj9Y3iYat6p0WoBeejaeSMn8baatogLxofYRlQuYC",
@@ -1786,7 +1786,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Marijuana Is Safer : So Why Are We Driving People to Drink? ✅️hpr",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is a trade paperback book titled \"Marijuana Is Safer : So Why Are We Driving People to Drink?\" published by Chelsea Green Publishing in 2009. It is written by Paul Armentano, Norm Stamper, Steve Fox, and Mason Tvert, and falls under the genres of Social Science and Political Science. The book discusses the comparison between marijuana and alcohol, focusing on health issues and societal impact.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n The product is a trade paperback book titled \"Marijuana Is Safer : So Why Are We Driving People to Drink?\" published by Chelsea Green Publishing in 2009. It is written by Paul Armentano, Norm Stamper, Steve Fox, and Mason Tvert, and falls under the genres of Social Science and Political Science. The book discusses the comparison between marijuana and alcohol, focusing on health issues and societal impact.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -1855,8 +1855,8 @@
             "ordinal": -2251524935778304
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n The product is a trade paperback book titled &#34;Marijuana Is Safer : So Why Are We Driving People to Drink?&#34; published by Chelsea Green Publishing in 2009. It is written by Paul Armentano, Norm Stamper, Steve Fox, and Mason Tvert, and falls under the genres of Social Science and Political Science. The book discusses the comparison between marijuana and alcohol, focusing on health issues and societal impact.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is a trade paperback book titled \"Marijuana Is Safer : So Why Are We Driving People to Drink?\" published by Chelsea Green Publishing in 2009. It is written by Paul Armentano, Norm Stamper, Steve Fox, and Mason Tvert, and falls under the genres of Social Science and Political Science. The book discusses the comparison between marijuana and alcohol, focusing on health issues and societal impact.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n The product is a trade paperback book titled &#34;Marijuana Is Safer : So Why Are We Driving People to Drink?&#34; published by Chelsea Green Publishing in 2009. It is written by Paul Armentano, Norm Stamper, Steve Fox, and Mason Tvert, and falls under the genres of Social Science and Political Science. The book discusses the comparison between marijuana and alcohol, focusing on health issues and societal impact.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n The product is a trade paperback book titled \"Marijuana Is Safer : So Why Are We Driving People to Drink?\" published by Chelsea Green Publishing in 2009. It is written by Paul Armentano, Norm Stamper, Steve Fox, and Mason Tvert, and falls under the genres of Social Science and Political Science. The book discusses the comparison between marijuana and alcohol, focusing on health issues and societal impact.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
@@ -1878,7 +1878,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Camino Winds : A Novel by John Grisham (2021, Trade Paperback)✅️hpr",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n \"Camino Winds\" is a novel by John Grisham published in 2021 as part of the Camino Ser. series. This trade paperback edition from Knopf Doubleday Publishing Group is written in English and contains 304 pages. The book falls under the genres of fiction, thriller, crime, and suspense, making it a compelling read for fans of mystery and detective stories.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n \"Camino Winds\" is a novel by John Grisham published in 2021 as part of the Camino Ser. series. This trade paperback edition from Knopf Doubleday Publishing Group is written in English and contains 304 pages. The book falls under the genres of fiction, thriller, crime, and suspense, making it a compelling read for fans of mystery and detective stories.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -1946,8 +1946,8 @@
             "ordinal": -2251456216301568
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n &#34;Camino Winds&#34; is a novel by John Grisham published in 2021 as part of the Camino Ser. series. This trade paperback edition from Knopf Doubleday Publishing Group is written in English and contains 304 pages. The book falls under the genres of fiction, thriller, crime, and suspense, making it a compelling read for fans of mystery and detective stories.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n \"Camino Winds\" is a novel by John Grisham published in 2021 as part of the Camino Ser. series. This trade paperback edition from Knopf Doubleday Publishing Group is written in English and contains 304 pages. The book falls under the genres of fiction, thriller, crime, and suspense, making it a compelling read for fans of mystery and detective stories.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n &#34;Camino Winds&#34; is a novel by John Grisham published in 2021 as part of the Camino Ser. series. This trade paperback edition from Knopf Doubleday Publishing Group is written in English and contains 304 pages. The book falls under the genres of fiction, thriller, crime, and suspense, making it a compelling read for fans of mystery and detective stories.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n \"Camino Winds\" is a novel by John Grisham published in 2021 as part of the Camino Ser. series. This trade paperback edition from Knopf Doubleday Publishing Group is written in English and contains 304 pages. The book falls under the genres of fiction, thriller, crime, and suspense, making it a compelling read for fans of mystery and detective stories.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_dZj0TKjbUnrRd2kZedejaeSMn8baatogLxofYRlQuYC",
@@ -1969,7 +1969,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Recovery Options : The Complete Guide ✅️hpr",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is a book titled \"Recovery Options: The Complete Guide\" by authors Joseph Volpicelli and Maia Szalavitz. Published by Wiley & Sons Canada, it is a trade paperback in English, with a total of 320 pages. The book covers topics related to mood disorders, depression, and addiction, offering self-help and psychology insights.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n The product is a book titled \"Recovery Options: The Complete Guide\" by authors Joseph Volpicelli and Maia Szalavitz. Published by Wiley & Sons Canada, it is a trade paperback in English, with a total of 320 pages. The book covers topics related to mood disorders, depression, and addiction, offering self-help and psychology insights.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -2037,8 +2037,8 @@
             "ordinal": -2251387496824832
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n The product is a book titled &#34;Recovery Options: The Complete Guide&#34; by authors Joseph Volpicelli and Maia Szalavitz. Published by Wiley &amp; Sons Canada, it is a trade paperback in English, with a total of 320 pages. The book covers topics related to mood disorders, depression, and addiction, offering self-help and psychology insights.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is a book titled \"Recovery Options: The Complete Guide\" by authors Joseph Volpicelli and Maia Szalavitz. Published by Wiley & Sons Canada, it is a trade paperback in English, with a total of 320 pages. The book covers topics related to mood disorders, depression, and addiction, offering self-help and psychology insights.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n The product is a book titled &#34;Recovery Options: The Complete Guide&#34; by authors Joseph Volpicelli and Maia Szalavitz. Published by Wiley &amp; Sons Canada, it is a trade paperback in English, with a total of 320 pages. The book covers topics related to mood disorders, depression, and addiction, offering self-help and psychology insights.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n The product is a book titled \"Recovery Options: The Complete Guide\" by authors Joseph Volpicelli and Maia Szalavitz. Published by Wiley & Sons Canada, it is a trade paperback in English, with a total of 320 pages. The book covers topics related to mood disorders, depression, and addiction, offering self-help and psychology insights.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
@@ -2060,7 +2060,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "TIME Magazine Abe Lincoln - An Illustrated History of His Life and Times 2012✅H",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n TIME Magazine Abe Lincoln - An Illustrated History of His Life and Times 2012 is a special issue publication in English. It features illustrations and focuses on the topic of Abraham Lincoln. The magazine was published by Time Magazine in December 2012 in the United States. It is a physical format with paid circulation distribution, offering a detailed look into the life and times of Abraham Lincoln.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n TIME Magazine Abe Lincoln - An Illustrated History of His Life and Times 2012 is a special issue publication in English. It features illustrations and focuses on the topic of Abraham Lincoln. The magazine was published by Time Magazine in December 2012 in the United States. It is a physical format with paid circulation distribution, offering a detailed look into the life and times of Abraham Lincoln.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -2128,8 +2128,8 @@
             "ordinal": -2251456216301568
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n TIME Magazine Abe Lincoln - An Illustrated History of His Life and Times 2012 is a special issue publication in English. It features illustrations and focuses on the topic of Abraham Lincoln. The magazine was published by Time Magazine in December 2012 in the United States. It is a physical format with paid circulation distribution, offering a detailed look into the life and times of Abraham Lincoln.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n TIME Magazine Abe Lincoln - An Illustrated History of His Life and Times 2012 is a special issue publication in English. It features illustrations and focuses on the topic of Abraham Lincoln. The magazine was published by Time Magazine in December 2012 in the United States. It is a physical format with paid circulation distribution, offering a detailed look into the life and times of Abraham Lincoln.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n TIME Magazine Abe Lincoln - An Illustrated History of His Life and Times 2012 is a special issue publication in English. It features illustrations and focuses on the topic of Abraham Lincoln. The magazine was published by Time Magazine in December 2012 in the United States. It is a physical format with paid circulation distribution, offering a detailed look into the life and times of Abraham Lincoln.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n TIME Magazine Abe Lincoln - An Illustrated History of His Life and Times 2012 is a special issue publication in English. It features illustrations and focuses on the topic of Abraham Lincoln. The magazine was published by Time Magazine in December 2012 in the United States. It is a physical format with paid circulation distribution, offering a detailed look into the life and times of Abraham Lincoln.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
@@ -2151,7 +2151,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Steve Jobs TIME Magazine Special Commemorative Issue 2012 Collectors 300✅️h",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\nSteve Jobs TIME Magazine Special Commemorative Issue 2012 Collectors 300✅️h. Condition is Very Good. Shipped with USPS Priority Mail.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\nSteve Jobs TIME Magazine Special Commemorative Issue 2012 Collectors 300✅️h. Condition is Very Good. Shipped with USPS Priority Mail.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -2216,8 +2216,8 @@
             "ordinal": -2251387496824832
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\nSteve Jobs TIME Magazine Special Commemorative Issue 2012 Collectors 300✅️h. Condition is Very Good. Shipped with USPS Priority Mail.\n",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\nSteve Jobs TIME Magazine Special Commemorative Issue 2012 Collectors 300✅️h. Condition is Very Good. Shipped with USPS Priority Mail.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\nSteve Jobs TIME Magazine Special Commemorative Issue 2012 Collectors 300✅️h. Condition is Very Good. Shipped with USPS Priority Mail.\n",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\nSteve Jobs TIME Magazine Special Commemorative Issue 2012 Collectors 300✅️h. Condition is Very Good. Shipped with USPS Priority Mail.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_dZj0TKjbUnrRd2kZedejaeSMn8baatogLxofYRlQuYC",
@@ -2239,7 +2239,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Complete Tiling by Stanley Complete Projects Staff and Ken Sidey 2004 ✅️H",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is a book titled \"Complete Tiling\" by Stanley Complete Projects Staff and Ken Sidey, published by Wiley & Sons in 2004. It is a trade paperback written in English with illustrations. The book covers topics related to house and home improvement, specifically in the area of tiling. It has 240 pages and dimensions of 9.8 inches in length, 9.2 inches in width, and 0.6 inches in height.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n The product is a book titled \"Complete Tiling\" by Stanley Complete Projects Staff and Ken Sidey, published by Wiley & Sons in 2004. It is a trade paperback written in English with illustrations. The book covers topics related to house and home improvement, specifically in the area of tiling. It has 240 pages and dimensions of 9.8 inches in length, 9.2 inches in width, and 0.6 inches in height.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -2304,8 +2304,8 @@
             "ordinal": -2251318777348096
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n The product is a book titled &#34;Complete Tiling&#34; by Stanley Complete Projects Staff and Ken Sidey, published by Wiley &amp; Sons in 2004. It is a trade paperback written in English with illustrations. The book covers topics related to house and home improvement, specifically in the area of tiling. It has 240 pages and dimensions of 9.8 inches in length, 9.2 inches in width, and 0.6 inches in height.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is a book titled \"Complete Tiling\" by Stanley Complete Projects Staff and Ken Sidey, published by Wiley & Sons in 2004. It is a trade paperback written in English with illustrations. The book covers topics related to house and home improvement, specifically in the area of tiling. It has 240 pages and dimensions of 9.8 inches in length, 9.2 inches in width, and 0.6 inches in height.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n The product is a book titled &#34;Complete Tiling&#34; by Stanley Complete Projects Staff and Ken Sidey, published by Wiley &amp; Sons in 2004. It is a trade paperback written in English with illustrations. The book covers topics related to house and home improvement, specifically in the area of tiling. It has 240 pages and dimensions of 9.8 inches in length, 9.2 inches in width, and 0.6 inches in height.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n The product is a book titled \"Complete Tiling\" by Stanley Complete Projects Staff and Ken Sidey, published by Wiley & Sons in 2004. It is a trade paperback written in English with illustrations. The book covers topics related to house and home improvement, specifically in the area of tiling. It has 240 pages and dimensions of 9.8 inches in length, 9.2 inches in width, and 0.6 inches in height.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_vzRj9Y3iYat6p0WoBeejaeSMn8baatogLxofYRlQuYC",
@@ -2327,7 +2327,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Cat's Cradle, Owl's Eyes: A Book Of String Games By Camilla Gryski 1983✅️H",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n \"Cat's Cradle, Owl's Eyes: A Book of String Games\" by Camilla Gryski is a nonfiction book published by HarperCollins in 1984. It is a paperback book with 80 pages, written in English. The book features illustrations and provides instructions on various string games, making it suitable for both games & activities enthusiasts and young readers.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n \"Cat's Cradle, Owl's Eyes: A Book of String Games\" by Camilla Gryski is a nonfiction book published by HarperCollins in 1984. It is a paperback book with 80 pages, written in English. The book features illustrations and provides instructions on various string games, making it suitable for both games & activities enthusiasts and young readers.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -2392,8 +2392,8 @@
             "ordinal": -2251318777348096
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n &#34;Cat&#39;s Cradle, Owl&#39;s Eyes: A Book of String Games&#34; by Camilla Gryski is a nonfiction book published by HarperCollins in 1984. It is a paperback book with 80 pages, written in English. The book features illustrations and provides instructions on various string games, making it suitable for both games &amp; activities enthusiasts and young readers.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n \"Cat's Cradle, Owl's Eyes: A Book of String Games\" by Camilla Gryski is a nonfiction book published by HarperCollins in 1984. It is a paperback book with 80 pages, written in English. The book features illustrations and provides instructions on various string games, making it suitable for both games & activities enthusiasts and young readers.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n &#34;Cat&#39;s Cradle, Owl&#39;s Eyes: A Book of String Games&#34; by Camilla Gryski is a nonfiction book published by HarperCollins in 1984. It is a paperback book with 80 pages, written in English. The book features illustrations and provides instructions on various string games, making it suitable for both games &amp; activities enthusiasts and young readers.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n \"Cat's Cradle, Owl's Eyes: A Book of String Games\" by Camilla Gryski is a nonfiction book published by HarperCollins in 1984. It is a paperback book with 80 pages, written in English. The book features illustrations and provides instructions on various string games, making it suitable for both games & activities enthusiasts and young readers.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_dZj0TKjbUnrRd2kZedejaeSMn8baatogLxofYRlQuYC",
@@ -2415,7 +2415,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Fifa 16 - Microsoft Xbox One Soccer Football",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is \"FIFA 16\" for Microsoft Xbox One, developed by Electronic Arts. It falls under the Sub-Genre of Soccer and is a football simulation video game.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n The product is \"FIFA 16\" for Microsoft Xbox One, developed by Electronic Arts. It falls under the Sub-Genre of Soccer and is a football simulation video game.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -2484,8 +2484,8 @@
             "ordinal": -2251250057871360
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n The product is &#34;FIFA 16&#34; for Microsoft Xbox One, developed by Electronic Arts. It falls under the Sub-Genre of Soccer and is a football simulation video game.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is \"FIFA 16\" for Microsoft Xbox One, developed by Electronic Arts. It falls under the Sub-Genre of Soccer and is a football simulation video game.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n The product is &#34;FIFA 16&#34; for Microsoft Xbox One, developed by Electronic Arts. It falls under the Sub-Genre of Soccer and is a football simulation video game.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n The product is \"FIFA 16\" for Microsoft Xbox One, developed by Electronic Arts. It falls under the Sub-Genre of Soccer and is a football simulation video game.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_dZj0TKjbUnrRd2kZedejaeSMn8baatogLxofYRlQuYC",
@@ -2507,7 +2507,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "High Heat Major League Baseball 2004 (Sony PlayStation 2, 2003)MLB",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n High Heat Major League Baseball 2004 is a sports video game part of the High Heat Baseball Series. Released in 2004 by The 3DO Company for Sony PlayStation 2, it features MLB teams and players. The game is rated E for Everyone and offers gameplay within the baseball genre.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n High Heat Major League Baseball 2004 is a sports video game part of the High Heat Baseball Series. Released in 2004 by The 3DO Company for Sony PlayStation 2, it features MLB teams and players. The game is rated E for Everyone and offers gameplay within the baseball genre.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -2574,8 +2574,8 @@
             "ordinal": -2251181338394624
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n High Heat Major League Baseball 2004 is a sports video game part of the High Heat Baseball Series. Released in 2004 by The 3DO Company for Sony PlayStation 2, it features MLB teams and players. The game is rated E for Everyone and offers gameplay within the baseball genre.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n High Heat Major League Baseball 2004 is a sports video game part of the High Heat Baseball Series. Released in 2004 by The 3DO Company for Sony PlayStation 2, it features MLB teams and players. The game is rated E for Everyone and offers gameplay within the baseball genre.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n High Heat Major League Baseball 2004 is a sports video game part of the High Heat Baseball Series. Released in 2004 by The 3DO Company for Sony PlayStation 2, it features MLB teams and players. The game is rated E for Everyone and offers gameplay within the baseball genre.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n High Heat Major League Baseball 2004 is a sports video game part of the High Heat Baseball Series. Released in 2004 by The 3DO Company for Sony PlayStation 2, it features MLB teams and players. The game is rated E for Everyone and offers gameplay within the baseball genre.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_dZj0TKjbUnrRd2kZedejaeSMn8baatogLxofYRlQuYC",
@@ -2597,7 +2597,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Madden NFL 2004 (Sony PlayStation 2, 2003)Vick Cover",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is \"Madden NFL 2004\" for Sony PlayStation 2, released in 2003. It is part of the Madden NFL Series by EA SPORTS, with a rating of E-Everyone. The game falls under the sports genre and features Michael Vick on the cover.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n The product is \"Madden NFL 2004\" for Sony PlayStation 2, released in 2003. It is part of the Madden NFL Series by EA SPORTS, with a rating of E-Everyone. The game falls under the sports genre and features Michael Vick on the cover.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -2666,8 +2666,8 @@
             "ordinal": -2251112618917888
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n The product is &#34;Madden NFL 2004&#34; for Sony PlayStation 2, released in 2003. It is part of the Madden NFL Series by EA SPORTS, with a rating of E-Everyone. The game falls under the sports genre and features Michael Vick on the cover.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is \"Madden NFL 2004\" for Sony PlayStation 2, released in 2003. It is part of the Madden NFL Series by EA SPORTS, with a rating of E-Everyone. The game falls under the sports genre and features Michael Vick on the cover.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n The product is &#34;Madden NFL 2004&#34; for Sony PlayStation 2, released in 2003. It is part of the Madden NFL Series by EA SPORTS, with a rating of E-Everyone. The game falls under the sports genre and features Michael Vick on the cover.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n The product is \"Madden NFL 2004\" for Sony PlayStation 2, released in 2003. It is part of the Madden NFL Series by EA SPORTS, with a rating of E-Everyone. The game falls under the sports genre and features Michael Vick on the cover.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_7cdUgUaHiY2LBxvGvdejaeSMn8baatogLxofYRlQuYC",
@@ -2689,7 +2689,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Nba Live 09 - Sony PlayStation 2 Basketball",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n \"NBA Live 09\" is a basketball video game published by Electronic Arts for the Sony PlayStation 2. It is rated E for Everyone, making it suitable for players of all ages. This game allows players to experience basketball gameplay on the PlayStation 2 console.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n \"NBA Live 09\" is a basketball video game published by Electronic Arts for the Sony PlayStation 2. It is rated E for Everyone, making it suitable for players of all ages. This game allows players to experience basketball gameplay on the PlayStation 2 console.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -2755,8 +2755,8 @@
             "ordinal": -2251043899441152
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n &#34;NBA Live 09&#34; is a basketball video game published by Electronic Arts for the Sony PlayStation 2. It is rated E for Everyone, making it suitable for players of all ages. This game allows players to experience basketball gameplay on the PlayStation 2 console.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n \"NBA Live 09\" is a basketball video game published by Electronic Arts for the Sony PlayStation 2. It is rated E for Everyone, making it suitable for players of all ages. This game allows players to experience basketball gameplay on the PlayStation 2 console.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n &#34;NBA Live 09&#34; is a basketball video game published by Electronic Arts for the Sony PlayStation 2. It is rated E for Everyone, making it suitable for players of all ages. This game allows players to experience basketball gameplay on the PlayStation 2 console.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n \"NBA Live 09\" is a basketball video game published by Electronic Arts for the Sony PlayStation 2. It is rated E for Everyone, making it suitable for players of all ages. This game allows players to experience basketball gameplay on the PlayStation 2 console.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_vzRj9Y3iYat6p0WoBeejaeSMn8baatogLxofYRlQuYC",
@@ -2778,7 +2778,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Professor and the Madman : A Tale of Murder, Making Of Dictionary ✅️hpr",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is a trade paperback book titled \"Professor and the Madman: A Tale of Murder, Insanity, and the Making of the Oxford English Dictionary\" by Simon Winchester. Published by HarperCollins in 1999, this biography delves into the history of lexicography and the creation of the dictionary. Illustrated, it has 272 pages and covers topics such as linguistics, etymology, and the Civil War period in the United States.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n The product is a trade paperback book titled \"Professor and the Madman: A Tale of Murder, Insanity, and the Making of the Oxford English Dictionary\" by Simon Winchester. Published by HarperCollins in 1999, this biography delves into the history of lexicography and the creation of the dictionary. Illustrated, it has 272 pages and covers topics such as linguistics, etymology, and the Civil War period in the United States.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -2852,8 +2852,8 @@
             "ordinal": -2250975179964416
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n The product is a trade paperback book titled &#34;Professor and the Madman: A Tale of Murder, Insanity, and the Making of the Oxford English Dictionary&#34; by Simon Winchester. Published by HarperCollins in 1999, this biography delves into the history of lexicography and the creation of the dictionary. Illustrated, it has 272 pages and covers topics such as linguistics, etymology, and the Civil War period in the United States.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is a trade paperback book titled \"Professor and the Madman: A Tale of Murder, Insanity, and the Making of the Oxford English Dictionary\" by Simon Winchester. Published by HarperCollins in 1999, this biography delves into the history of lexicography and the creation of the dictionary. Illustrated, it has 272 pages and covers topics such as linguistics, etymology, and the Civil War period in the United States.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n The product is a trade paperback book titled &#34;Professor and the Madman: A Tale of Murder, Insanity, and the Making of the Oxford English Dictionary&#34; by Simon Winchester. Published by HarperCollins in 1999, this biography delves into the history of lexicography and the creation of the dictionary. Illustrated, it has 272 pages and covers topics such as linguistics, etymology, and the Civil War period in the United States.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n The product is a trade paperback book titled \"Professor and the Madman: A Tale of Murder, Insanity, and the Making of the Oxford English Dictionary\" by Simon Winchester. Published by HarperCollins in 1999, this biography delves into the history of lexicography and the creation of the dictionary. Illustrated, it has 272 pages and covers topics such as linguistics, etymology, and the Civil War period in the United States.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
@@ -2875,7 +2875,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Make Mead Like a Viking : Traditional Techniques for Brewing ✅️hpr",
-        "description": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is a book titled \"Make Mead Like a Viking\" by Jereme Zimmerman, published by Chelsea Green Publishing in 2015. It is a trade paperback written in English with illustrations. The book covers traditional techniques for brewing natural, wild-fermented, honey-based wines and beers. It has 240 pages and explores topics in beverages, alcoholic drinks, beer, canning, and preserving methods.",
+        "description": "ONLINE\n\n RECYCLE FOR \n\n The product is a book titled \"Make Mead Like a Viking\" by Jereme Zimmerman, published by Chelsea Green Publishing in 2015. It is a trade paperback written in English with illustrations. The book covers traditional techniques for brewing natural, wild-fermented, honey-based wines and beers. It has 240 pages and explores topics in beverages, alcoholic drinks, beer, canning, and preserving methods.",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -2928,8 +2928,8 @@
             "ordinal": -2250906460487680
           }
         ],
-        "description_html": "ONLINE\n<strong>\n RECYCLE FOR CHARITY\n</strong>\n<p>\n The product is a book titled &#34;Make Mead Like a Viking&#34; by Jereme Zimmerman, published by Chelsea Green Publishing in 2015. It is a trade paperback written in English with illustrations. The book covers traditional techniques for brewing natural, wild-fermented, honey-based wines and beers. It has 240 pages and explores topics in beverages, alcoholic drinks, beer, canning, and preserving methods.\n</p>",
-        "description_plaintext": "ONLINE\n\n RECYCLE FOR CHARITY\n\n The product is a book titled \"Make Mead Like a Viking\" by Jereme Zimmerman, published by Chelsea Green Publishing in 2015. It is a trade paperback written in English with illustrations. The book covers traditional techniques for brewing natural, wild-fermented, honey-based wines and beers. It has 240 pages and explores topics in beverages, alcoholic drinks, beer, canning, and preserving methods.",
+        "description_html": "ONLINE\n<strong>\n RECYCLE FOR \n</strong>\n<p>\n The product is a book titled &#34;Make Mead Like a Viking&#34; by Jereme Zimmerman, published by Chelsea Green Publishing in 2015. It is a trade paperback written in English with illustrations. The book covers traditional techniques for brewing natural, wild-fermented, honey-based wines and beers. It has 240 pages and explores topics in beverages, alcoholic drinks, beer, canning, and preserving methods.\n</p>",
+        "description_plaintext": "ONLINE\n\n RECYCLE FOR \n\n The product is a book titled \"Make Mead Like a Viking\" by Jereme Zimmerman, published by Chelsea Green Publishing in 2015. It is a trade paperback written in English with illustrations. The book covers traditional techniques for brewing natural, wild-fermented, honey-based wines and beers. It has 240 pages and explores topics in beverages, alcoholic drinks, beer, canning, and preserving methods.",
         "channels": [
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o",
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
@@ -3155,7 +3155,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "Test - Dating App",
-        "description": "Payment flow test - FOR THE KIDS",
+        "description": "Payment flow test - ",
         "is_taxable": true,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -3190,8 +3190,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>Payment flow test - FOR THE KIDS</p>",
-        "description_plaintext": "Payment flow test - FOR THE KIDS",
+        "description_html": "<p>Payment flow test - </p>",
+        "description_plaintext": "Payment flow test - ",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -3911,7 +3911,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI 3-Month Founder Preorder",
-        "description": "3 months Premium access at launch + Joker drawing entry. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "3 months Premium access at launch + Joker drawing entry.  - 60% to Verified Pediatric ",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -3946,8 +3946,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>3 months Premium access at launch + Joker drawing entry. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "3 months Premium access at launch + Joker drawing entry. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>3 months Premium access at launch + Joker drawing entry.  - 60% to Verified Pediatric </p>",
+        "description_plaintext": "3 months Premium access at launch + Joker drawing entry.  - 60% to Verified Pediatric ",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -3965,7 +3965,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI 12-Month Founder Preorder",
-        "description": "Full year Premium + Exclusive Founder Badge + 5x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "Full year Premium + Exclusive Founder Badge + 5x Joker entries.  - 60% to Verified Pediatric ",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -4000,8 +4000,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>Full year Premium + Exclusive Founder Badge + 5x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "Full year Premium + Exclusive Founder Badge + 5x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>Full year Premium + Exclusive Founder Badge + 5x Joker entries.  - 60% to Verified Pediatric </p>",
+        "description_plaintext": "Full year Premium + Exclusive Founder Badge + 5x Joker entries.  - 60% to Verified Pediatric ",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -4019,7 +4019,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI Diamond Founder",
-        "description": "Premium for LIFE + Diamond Badge + 10x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "Premium for LIFE + Diamond Badge + 10x Joker entries.  - 60% to Verified Pediatric ",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -4054,8 +4054,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>Premium for LIFE + Diamond Badge + 10x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "Premium for LIFE + Diamond Badge + 10x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>Premium for LIFE + Diamond Badge + 10x Joker entries.  - 60% to Verified Pediatric </p>",
+        "description_plaintext": "Premium for LIFE + Diamond Badge + 10x Joker entries.  - 60% to Verified Pediatric ",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -4073,7 +4073,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI Platinum Founder",
-        "description": "Everything + Early Beta Access + Platinum Badge + 25x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "Everything + Early Beta Access + Platinum Badge + 25x Joker entries.  - 60% to Verified Pediatric ",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -4108,8 +4108,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>Everything + Early Beta Access + Platinum Badge + 25x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "Everything + Early Beta Access + Platinum Badge + 25x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>Everything + Early Beta Access + Platinum Badge + 25x Joker entries.  - 60% to Verified Pediatric </p>",
+        "description_plaintext": "Everything + Early Beta Access + Platinum Badge + 25x Joker entries.  - 60% to Verified Pediatric ",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -4127,7 +4127,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI Elite Founder",
-        "description": "VIP Matching + Concierge Service + Elite Badge + 50x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "VIP Matching + Concierge Service + Elite Badge + 50x Joker entries.  - 60% to Verified Pediatric ",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -4162,8 +4162,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>VIP Matching + Concierge Service + Elite Badge + 50x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "VIP Matching + Concierge Service + Elite Badge + 50x Joker entries. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>VIP Matching + Concierge Service + Elite Badge + 50x Joker entries.  - 60% to Verified Pediatric </p>",
+        "description_plaintext": "VIP Matching + Concierge Service + Elite Badge + 50x Joker entries.  - 60% to Verified Pediatric ",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -4181,7 +4181,7 @@
       "present_at_all_locations": true,
       "item_data": {
         "name": "YouAndINotAI Royalty Founder Card",
-        "description": "One of 5 exclusive Royalty Cards - Premium FREE FOR LIFE + All perks + Governance rights. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description": "One of 5 exclusive Royalty Cards - Premium FREE FOR LIFE + All perks + Governance rights.  - 60% to Verified Pediatric ",
         "is_taxable": false,
         "tax_ids": [
           "F654GP44762YZEA4VNOHBLUA"
@@ -4216,8 +4216,8 @@
         ],
         "product_type": "REGULAR",
         "ecom_visibility": "VISIBLE",
-        "description_html": "<p>One of 5 exclusive Royalty Cards - Premium FREE FOR LIFE + All perks + Governance rights. FOR THE KIDS - 60% to Verified Pediatric Charities</p>",
-        "description_plaintext": "One of 5 exclusive Royalty Cards - Premium FREE FOR LIFE + All perks + Governance rights. FOR THE KIDS - 60% to Verified Pediatric Charities",
+        "description_html": "<p>One of 5 exclusive Royalty Cards - Premium FREE FOR LIFE + All perks + Governance rights.  - 60% to Verified Pediatric </p>",
+        "description_plaintext": "One of 5 exclusive Royalty Cards - Premium FREE FOR LIFE + All perks + Governance rights.  - 60% to Verified Pediatric ",
         "channels": [
           "CH_BzOdKOlh9Fc6RizaZdejaeSMn8baatogLxofYRlQuYC",
           "CH_hsPxzpIRllxj5lb1ZukmMiZw8wI70pFgP3DyvTR29945o"
@@ -4234,7 +4234,7 @@
       "is_deleted": false,
       "present_at_all_locations": true,
       "category_data": {
-        "name": "Donate",
+        "name": "payment",
         "image_ids": [
           "IN2CFRQZ5TTCAJQY5WDNSRYO"
         ],
@@ -4249,7 +4249,7 @@
         ],
         "online_visibility": true,
         "ecom_seo_data": {
-          "page_title": "Donate to Support Online Recycling for Charity Fundraising",
+          "page_title": "payment to Support Online Recycling for  Fundraising",
           "page_description": "Support for a greener environment and a good cause. Funds are for day to day operations and Shriners Childrens Hospital. ",
           "permalink": ""
         }

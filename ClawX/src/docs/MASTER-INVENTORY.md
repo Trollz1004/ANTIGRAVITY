@@ -13,7 +13,7 @@ Use these files first:
 
 - Canonical repo: `C:\ANTIGRAVITY`
 - Canonical branch: `main`
-- Current LLC-controlled revenue doctrine: founder-directed conservative `10% charitable cap`
+- Current LLC-controlled revenue doctrine: founder-directed conservative `10%  cap`
 - Historical split-era chain artifacts remain history only and must not be reused as current live doctrine
 
 ## Product / Site Inventory
@@ -52,8 +52,8 @@ Use these files first:
 
 ## Historical Contract Note
 
-- Base Mainnet `GospelDonation.sol` and related historical wallets remain part of project history
-- they do not authorize a current live gross-revenue split for LLC-controlled commerce
+- Base Mainnet `Gospelpayment.sol` and related historical wallets remain part of project history
+- they do not authorize a current live gross- for LLC-controlled commerce
 - guarded deploy scripts in `contracts/scripts/` prevent accidental reuse of historical contract paths
 
 ## Archive Note

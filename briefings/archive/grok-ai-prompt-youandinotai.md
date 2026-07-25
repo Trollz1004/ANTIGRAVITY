@@ -110,7 +110,7 @@ All keys are in the vault at `C:\ANTIGRAVITY\_ARCHIVE\dot-dirs\.vault\MASTER-ENV
 - PostgreSQL (local: cl_user/cl_pass on port 5432)
 
 ## Rules
-- This is ENIGMA (profit) — never mix with OMEGA (charity / ai-solutions.store)
+- This is ENIGMA (profit) — never mix with OMEGA ( / ai-solutions.store)
 - No mock data — real or fail honestly
 - Secrets in .env only, never in git
 - XAI API key available: `***REMOVED***`

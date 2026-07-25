@@ -356,9 +356,9 @@ A comprehensive design specification for the event discovery experience within Y
 ### Legal Compliance
 
 1. **Florida §496.405 Adherence**:
-   - No "donate" or "donation" in event descriptions
+   - No "payment" or "payment" in event descriptions
    - "Support" or "contribute" used instead
-   - Clear distinction between nonprofit and commercial events
+   - Clear distinction between for-profit and commercial events
 
 2. **Privacy Considerations**:
    - Explicit consent for photo/video sharing

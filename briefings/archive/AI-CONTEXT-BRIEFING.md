@@ -2,7 +2,7 @@
 
 > **⚠️ ARCHIVED — NOT CURRENT. Last updated Feb 2026.**
 > **The "SURVIVAL MODE" phase referenced below is SUPERSEDED.**
-> **Canonical split is 60/30/10 from day one. See CLAUDE.md for current truth.**
+> **Canonical split is  from day one. See CLAUDE.md for current truth.**
 
 > Feed this to any AI starting a new session with Josh.
 > Last updated: 2026-02-23 by Gemini (Antigravity)
@@ -10,12 +10,12 @@
 ## WHO IS JOSH
 
 Florida electrician who taught himself to code using AI. Founder of Trash Or Treasure Online Recycler LLC.
-Building a dating app (YouAndINotAI) and charity platform (FOR THE KIDS).
+Building a dating app (YouAndINotAI) and  platform ().
 
 ## THE IRON WALL
 
 - **ENIGMA** = Profit side. Dating app, CrossLister. Revenue goes to founder.
-- **OMEGA** = Charity side. ai-solutions.store, aicollab4kids. 100% to kids. FOREVER.
+- **OMEGA** =  side. ai-solutions.store, aicollab4kids. 100% to kids. FOREVER.
 - NEVER MIX THESE. This is the #1 rule.
 
 ## ~~CURRENT PHASE: SURVIVAL MODE~~ — ARCHIVED, NOT CURRENT
@@ -35,8 +35,8 @@ Building a dating app (YouAndINotAI) and charity platform (FOR THE KIDS).
 
 1. **YouAndINotAI** — Human-verified dating app. $1 Bot-Shield, $14.99/mo Founding Member.
 2. **CrossLister** — E-commerce cross-posting tool. onlinerecycle.org.
-3. **ai-solutions.store** — AI tools storefront. 100% charity. Always.
-4. **aicollab4kids** — Charity ops. Gemini's domain.
+3. **ai-solutions.store** — AI tools storefront. 100% . Always.
+4. **aicollab4kids** —  ops. Gemini's domain.
 5. **aidoesitall.website** — Public transparency dashboard.
 
 ## LIVE INFRASTRUCTURE
@@ -57,12 +57,12 @@ Building a dating app (YouAndINotAI) and charity platform (FOR THE KIDS).
 
 - Treasury: 0xa87874d5320555c8639670645F1A2B4f82363a7c
 - Dating Revenue: 0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121
-- Charity Revenue: 0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B
+-  Revenue: 0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B
 
 ## AI ASSIGNMENTS
 
 - Claude (Opus): ENIGMA profit infrastructure
-- Gemini: OMEGA charity, public dashboards
+- Gemini: OMEGA , public dashboards
 - Claude Code: Heavy dev on SABRETOOTH
 - Claude Desktop: Planning, memory, quick questions
 
@@ -70,8 +70,8 @@ Building a dating app (YouAndINotAI) and charity platform (FOR THE KIDS).
 
 1. youandinotai/youandinotai (Private) — Dating app
 2. onlinerecycle/onlinerecycle (Private) — CrossLister
-3. Ai-Solutions-Store/ai-solutions-store (Private) — Charity store
-4. aicollab4kids/aicollab4kids (Private) — Charity ops
+3. Ai-Solutions-Store/ai-solutions-store (Private) —  store
+4. aicollab4kids/aicollab4kids (Private) —  ops
 5. aicollabforkids/aidoesitall-dashboard (Public) — Transparency
 
 ## HARD RULES
@@ -79,7 +79,7 @@ Building a dating app (YouAndINotAI) and charity platform (FOR THE KIDS).
 - No git push/pull to remote without explicit permission
 - Secrets in .env files only, never committed
 - OMEGA repos are PROTECTED — DO NOT TOUCH without permission
-- 50-year charity commitment after founder's passing
+- 50-year  commitment after founder's passing
 - Post-death split: 60% kids / 30% AI partners / 10% OPUS Trust
 
 ## CURRENT GOALS

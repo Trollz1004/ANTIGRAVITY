@@ -78,7 +78,7 @@ The frontend is a static SPA with no real backend yet. Needs:
 - **AI**: Google Gemini API for icebreakers feature
 
 ## Iron Wall Rule
-This is an ENIGMA (profit) project. OMEGA (charity) repos and domains (ai-solutions.store) must NEVER be mixed with this. Absolute separation.
+This is an ENIGMA (profit) project. OMEGA () repos and domains (ai-solutions.store) must NEVER be mixed with this. Absolute separation.
 
 ## Key Files
 - `C:\ANTIGRAVITY\youandinotai\` — Frontend source

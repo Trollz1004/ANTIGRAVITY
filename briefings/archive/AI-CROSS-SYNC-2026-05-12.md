@@ -137,4 +137,4 @@ Josh has been building toward this for a year, no investors, no money from the p
 - Don't make architecture or prioritization decisions — that's cofounder-triad territory.
 - Same memory + credentials + commit rules apply.
 
-Mission stands. Build for the kids — together.
+Mission stands. Build  — together.

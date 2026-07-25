@@ -15,7 +15,7 @@ The UX Designer has successfully completed comprehensive design specifications f
 
 - Ensure all components align with mobile-first principles
 - Verify accessibility compliance across all designs
-- Confirm adherence to Florida §496.405 regulations (no donation/solicitation language)
+- Confirm adherence to Florida §496.405 regulations (no payment/outreach language)
 
 ### 2. Coordinate with Team Members
 

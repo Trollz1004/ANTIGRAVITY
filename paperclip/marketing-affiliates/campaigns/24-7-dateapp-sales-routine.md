@@ -36,7 +36,7 @@ https://square.link/u/Qc5mxUy7?ref=paperclip-t5500
 
 ## Public copy rules (hard)
 ALLOWED: membership, verification, account access, safety, support, uptime, checkout, receipts, refunds, pricing  
-BANNED: donate, donation, charity, charitable, solicitation, giving back, disbursement, Stripe-as-current, 60/30/10, 100% charity, DAO upside promises, e-waste-as-primary
+BANNED: payment, payment, , , outreach, , payout, Stripe-as-current, , 100% , DAO upside promises, e-waste-as-primary
 
 ## 24/7 tick checklist
 1. Pick one primary CTA this hour (Founding Member preferred; Bot-Shield as low-friction entry).

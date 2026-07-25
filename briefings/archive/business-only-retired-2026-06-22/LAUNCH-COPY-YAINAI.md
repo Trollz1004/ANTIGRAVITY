@@ -1,7 +1,7 @@
 # LAUNCH-COPY-YAINAI.md
 # YouAndINotAI Dating App — Marketing Posts (2026-06-04 Executive Override)
 # Prepared for immediate deployment. Real revenue. Real Square (Location LY5GN09F5AN83).
-# Doctrine: Every qualifying activity triggers a new, stacked 10% bucket for contractual revenue disbursement. 27% tax reserve locked. No exceptions.
+# Doctrine: Every qualifying activity triggers a new, stacked 10% bucket for contractual revenue payout. 27% tax reserve locked. No exceptions.
 
 ## Post 1 — Direct Founder Launch (X / LinkedIn style, short & punchy)
 "Real talk: the dating apps out there treat you like a product.
@@ -25,7 +25,7 @@ YouAndINotAI is the dating platform for builders, operators, and people who actu
 
 - Verified profiles only (no bots, no catfishing)
 - Mission-aligned matching: connect with people who are building, not just scrolling
-- Revenue model is locked: every new activity is a fresh 10% bucket — contractual revenue disbursement, 27% tax reserve, founder survival first. No hidden games.
+- Revenue model is locked: every new activity is a fresh 10% bucket — contractual revenue payout, 27% tax reserve, founder survival first. No hidden games.
 - Square checkout. Real transactions. No Stripe. No drama.
 
 Founding members lock in early rates and direct line to the product roadmap.
@@ -47,7 +47,7 @@ This is the platform where real builders find real partners who understand the g
 
 - Bot-shielded from day one
 - Square powered (Location LY5GN09F5AN83) — every payment is real, auditable, and routes through the 100-cent rule
-- Every new qualifying activity = new stacked 10% bucket for contractual revenue disbursement
+- Every new qualifying activity = new stacked 10% bucket for contractual revenue payout
 - Founding members get permanent recognition + early product access
 
 The first 500 signups lock in the best rates.

@@ -14,9 +14,9 @@ Current truth:
 - live payment rail: Square
 - live frontend: `https://youandinotai.com`
 - live API host: `https://api.youandinotai.com`
-- current LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`
-- historical `60/30/10`, `100% charity`, and `100% DAO` references are legacy unless current canonical docs restore them
-- customer-facing code must avoid `donate`, `donation`, `solicitation`, and `tax-deductible`
+- current LLC-controlled revenue uses a founder-directed conservative `10%  cap`
+- historical ``, `100% `, and `100% DAO` references are legacy unless current canonical docs restore them
+- customer-facing code must avoid `payment`, `payment`, `outreach`, and `tax-deductible`
 - OpenClaw is not the canonical live repo-truth source
 
 Your role:

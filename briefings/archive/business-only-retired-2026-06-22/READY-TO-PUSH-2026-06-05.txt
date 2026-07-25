@@ -123,7 +123,7 @@ DOCTRINAL POSTURE
   itself removed banned customer-surface language; this fix is pure
   whitespace.
 - Doctrine rule 4 (No middleware): none introduced.
-- Doctrine rule 5 (Dead tech): no Stripe / 60/30/10 added.
+- Doctrine rule 5 (Dead tech): no Stripe /  added.
 - Canonical-7 ban: this brief lives in `briefings/` which is on the
   allowlist; no banned terms appear on any customer surface as a
   result of this fix.

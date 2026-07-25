@@ -133,9 +133,9 @@ Standard GitHub profile README repo. Keep as-is.
 
 | Contract | Purpose |
 |----------|---------|
-| `CharityRouter100.sol` | Charity revenue routing |
+| `Router100.sol` |  revenue routing |
 | `DatingRevenueRouter.sol` | Dating platform revenue routing |
-| `GospelDonation.sol` | Donation contract |
+| `Gospelpayment.sol` | payment contract |
 
 **Result**: ✅ No duplicate smart contracts found across repos. These live in exactly one place.
 

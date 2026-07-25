@@ -18,12 +18,12 @@ Current baseline: `b841fd4`
 - Square is the live payment rail
 - Canonical links and payment rules live in `briefings/LIVE-PAYMENT-SOURCE-OF-TRUTH.md`
 - Stripe is legacy only
-- Customer-facing code must not use `donate`, `donation`, or `solicitation`
+- Customer-facing code must not use `payment`, `payment`, or `outreach`
 
 ## Chain Truth
 
 - Protocol Omega live status is anchored in `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
-- Keep `60/30/10` fixed
+- Keep `` fixed
 - Do not imply staking, treasury yield, or automatic Square-to-chain routing unless the current repo and runtime prove it
 
 ## Watcher Truth

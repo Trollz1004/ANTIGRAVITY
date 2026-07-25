@@ -297,7 +297,7 @@ For mental health emergencies:
 - **Explanation of Benefits (EOB)**: reading and explaining EOBs to patients in plain language
 - **Revenue cycle**: charge entry, claim submission, remittance, denial management
 - **Patient financial responsibility**: deductibles, copays, coinsurance, out-of-pocket maximums
-- **Financial assistance**: charity care programs, sliding scale fees, payment plans, external resources
+- **Financial assistance**:  care programs, sliding scale fees, payment plans, external resources
 - **Collections**: pre-collections communication, hardship considerations, payment arrangements
 
 ### Insurance & Benefits
@@ -380,7 +380,7 @@ Remember and build expertise in:
 
 - Support patients navigating complex multi-payer billing scenarios with multiple insurers, coordination of benefits, and secondary claims
 - Guide patients through the full insurance appeal process — from denial notice to external review — with clear, step-by-step support
-- Assist patients in applying for financial assistance programs, charity care, and third-party patient assistance foundations
+- Assist patients in applying for financial assistance programs,  care, and third-party patient assistance foundations
 - Provide culturally sensitive support — adapt communication style for patients from diverse backgrounds and health literacy levels
 - Support patients with limited English proficiency by coordinating with interpreter services — never use family members as interpreters for clinical or billing discussions
 - Navigate difficult conversations involving end-of-life care, terminal diagnoses, and sensitive mental health situations with grace and appropriate routing

@@ -22,7 +22,7 @@ This is from Claude Opus 4.6 on T5500 (C:\ANTIGRAVITY). Josh's cofounder. Updati
 ### 2. EMERGENCY: False Data Removal
 Removed ALL fake/misleading data from 5 components:
 - **App.tsx**: Removed "99.9% Match Rate", fake user count, fake testimonial
-- **CharitySection.tsx**: Removed "$842,000+ Donated", "12,450+ Devices", "5,200+ Trees", "on-chain" claim
+- **Section.tsx**: Removed "$842,000+ paymentd", "12,450+ Devices", "5,200+ Trees", "on-chain" claim
 - **CosmicContest.tsx**: Zeroed fake vote counts
 - **SolarFlareSOS.tsx**: Replaced "LOST/MISSING" debug labels
 - **VoiceSOS.tsx**: Replaced "Interstellar" with "Peer-to-Peer"
@@ -50,7 +50,7 @@ Removed ALL fake/misleading data from 5 components:
 
 ### 6. Wired Up ENIGMA Plugin
 - 5 slash commands in `C:\ANTIGRAVITY\.claude\commands\`
-- Plugin repo pushed: Trollz1004/Trollz1004CLAUDEASSISTENIGMAPROFITPLATFORMNOTTHEOMEGACHARITYPLATFORM
+- Plugin repo pushed: Trollz1004/Trollz1004CLAUDEASSISTENIGMAPROFITPLATFORMNOTTHEOMEGAPLATFORM
 
 ### 7. DNS (Cloudflare — UPDATED)
 - youandinotai.com → 4x A records to GitHub Pages (185.199.108-111.153)
@@ -102,7 +102,7 @@ Removed ALL fake/misleading data from 5 components:
 
 ## Iron Wall Reminder
 
-This is ENIGMA (profit). OMEGA (charity/ai-solutions.store) stays completely separate. No cross-contamination. No exceptions.
+This is ENIGMA (profit). OMEGA (/ai-solutions.store) stays completely separate. No cross-contamination. No exceptions.
 
 ## Credentials You Need
 

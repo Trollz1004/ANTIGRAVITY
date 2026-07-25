@@ -27,10 +27,10 @@ Current truth:
 - https://youandinotai-backend-731395189513.us-east1.run.app is the live multiplayer backend
 - https://api.youandinotai.com is the live FastAPI API host
 - youandinotai.online is a redirect domain, not the primary app host
-- retired repo assumptions and unsupported charity-side routing claims are off-limits
+- retired repo assumptions and unsupported -side routing claims are off-limits
 - No mock data
 - No false live claims
-- No customer-facing use of donate, donation, or solicitation
+- No customer-facing use of payment, payment, or outreach
 
 Use RANDOM salvage only for:
 - design palette

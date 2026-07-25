@@ -27,7 +27,7 @@ We connect people who give a damn about meaningful AI conversations happening in
 
 - Reach out to 3-5 meetup organizers via email with this framing:
 
-  _"Hello! I represent YouAndINotAI, a community initiative connecting people passionate about meaningful AI dialogue. We're exploring contractual revenue disbursement opportunities for venues hosting our discussion series alongside their existing events. Would you be interested in learning how we support community gathering spaces?"_
+  _"Hello! I represent YouAndINotAI, a community initiative connecting people passionate about meaningful AI dialogue. We're exploring contractual revenue payout opportunities for venues hosting our discussion series alongside their existing events. Would you be interested in learning how we support community gathering spaces?"_
 
 - Focus on spaces that already host 20-50 person educational or networking events
 
@@ -43,7 +43,7 @@ We connect people who give a damn about meaningful AI conversations happening in
 - Create a simple one-page sheet explaining:
   - What YouAndINotAI offers (facilitated AI ethics discussions)
   - How community partners benefit (enhanced programming, attendee engagement)
-  - Revenue disbursement model (clear percentage or flat fee for hosting)
+  - Revenue payout model (clear percentage or flat fee for hosting)
 
 **Voice Note:** Every community group wants to know "What's in it for us?" – show them tangible benefits beyond just content.
 
@@ -143,7 +143,7 @@ We connect people who give a damn about meaningful AI conversations happening in
 - Prepare neutral questions about technology adoption challenges
 - Define potential future contractual partnerships based on expressed needs
 
-### Activity: Revenue Disbursement Model Refinement
+### Activity: Revenue payout Model Refinement
 
 **Objective:** Clarify financial aspects while maintaining compliance
 
@@ -182,10 +182,10 @@ We connect people who give a damn about meaningful AI conversations happening in
 Throughout this playbook, all financial arrangements should be structured as contractual agreements wherein YouAndINotAI provides documented services (event facilitation, content development, educational materials) in exchange for standard commercial consideration. Revenue sharing with hosts constitutes payment for venue access, promotional support, and attendee management services performed by the partnering organization.
 
 Avoid any use of terms including but not limited to:
-❌ donate ❌ donation ❌ solicit ❌ solicitation ❌ charitable contribution ❌ fundraising
+❌ payment ❌ payment ❌ outreach ❌ outreach ❌  contribution ❌ fundraising
 
 Instead consistently reference:
-✅ contractual revenue disbursement ✅ service agreements ✅ commercial consideration ✅ partnership fees ✅ collaborative arrangement payments
+✅ contractual revenue payout ✅ service agreements ✅ commercial consideration ✅ partnership fees ✅ collaborative arrangement payments
 
 For additional legal review, consult with counsel familiar with Florida §496.405 compliance regarding professional fundraiser regulation.
 

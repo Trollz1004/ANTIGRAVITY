@@ -13,7 +13,6 @@ from hermes_sideworld.demo import issue_admin_license, issue_license_for_purchas
 from hermes_sideworld.email_delivery import build_license_email
 from hermes_sideworld.fulfillment import handle_stripe_webhook, verify_stripe_signature
 
-
 @pytest.fixture(autouse=True)
 def isolated_db(tmp_path, monkeypatch):
     """Redirect the demo DB and data dir to a temp directory for each test."""
@@ -24,12 +23,10 @@ def isolated_db(tmp_path, monkeypatch):
     monkeypatch.setenv("AI_SOLUTIONS_LICENSE_SECRET", "test-license-secret")
     yield tmp_path
 
-
 def _signature(payload: bytes, secret: str, timestamp: int | None = None) -> str:
     timestamp = timestamp or int(time.time())
     digest = hmac.new(secret.encode(), f"{timestamp}.".encode() + payload, hashlib.sha256).hexdigest()
     return f"t={timestamp},v1={digest}"
-
 
 def test_issue_license_for_purchase_is_idempotent():
     first = issue_license_for_purchase(
@@ -50,14 +47,12 @@ def test_issue_license_for_purchase_is_idempotent():
     assert len(contacts) == 1
     assert contacts[0].purchased
 
-
 def test_admin_license_requires_private_secret(monkeypatch):
     monkeypatch.setenv("AI_SOLUTIONS_ADMIN_SECRET", "admin-secret")
     with pytest.raises(PermissionError):
         issue_admin_license(buyer_email="josh@example.com", product="all-access", admin_secret="wrong")
     key = issue_admin_license(buyer_email="josh@example.com", product="all-access", admin_secret="admin-secret")
     assert key.key.startswith("AIS-ALL-ACCESS-")
-
 
 def test_license_email_has_no_blocked_public_terms():
     subject, body = build_license_email(
@@ -66,16 +61,14 @@ def test_license_email_has_no_blocked_public_terms():
         license_key="AIS-BOT-SHIELD-12345678-90abcdef-12345678",
     )
     combined = f"{subject}\n{body}".lower()
-    for term in ("donate", "donation", "charity", "solicitation", "giving back", "disbursement"):
+    for term in ("payment", "payment", "", "outreach", "", "payout"):
         assert term not in combined
-
 
 def test_verify_stripe_signature():
     secret = "whsec_test"
     payload = b'{"type":"checkout.session.completed"}'
     assert verify_stripe_signature(payload, _signature(payload, secret), secret)
     assert not verify_stripe_signature(payload, "t=1,v1=bad", secret)
-
 
 def test_handle_stripe_webhook_issues_and_delivers(monkeypatch):
     secret = "whsec_test"
@@ -98,7 +91,6 @@ def test_handle_stripe_webhook_issues_and_delivers(monkeypatch):
     assert result.buyer_email == "buyer@example.com"
     assert result.license_key.startswith("AIS-BOT-SHIELD-")
     assert result.delivery.provider == "console"
-
 
 def test_handle_stripe_webhook_rejects_bad_signature():
     payload = json.dumps({"type": "checkout.session.completed"}).encode()

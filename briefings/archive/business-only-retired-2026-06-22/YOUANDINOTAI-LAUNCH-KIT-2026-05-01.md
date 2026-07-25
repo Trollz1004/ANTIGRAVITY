@@ -1,8 +1,8 @@
 # YouAndINotAI Founders Membership — ready-to-post launch kit
 
 **Target:** https://square.link/u/cxwjcn0s ($14.99/mo Founding Member)
-**Audience:** people fed up with dating apps; people who want real-world connection, meetups, volunteering, charity events. Pre-launch / early-supporter angle.
-**Compliance:** copy below avoids any charity-routing or "your money goes to" language. The platform pitch is the platform itself. Joshua's reserve allocation is internal.
+**Audience:** people fed up with dating apps; people who want real-world connection, meetups, volunteering,  events. Pre-launch / early-supporter angle.
+**Compliance:** copy below avoids any -routing or "your money goes to" language. The platform pitch is the platform itself. Joshua's reserve allocation is internal.
 
 Pick 1-2 posts a day for 5 days. Don't dump them all at once. Times in ET.
 
@@ -23,7 +23,7 @@ Founders are getting locked in now. → square.link/u/cxwjcn0s
 ```
 Saw a stat: average dating-app user has 0 in-person dates per match.
 
-We're flipping it. YouAndINotAI: the connection is the meetup. Volunteer day, hike, board-game night, charity 5K. The platform is the doorway, not the destination.
+We're flipping it. YouAndINotAI: the connection is the meetup. Volunteer day, hike, board-game night,  5K. The platform is the doorway, not the destination.
 
 Founding members in early: square.link/u/cxwjcn0s
 ```

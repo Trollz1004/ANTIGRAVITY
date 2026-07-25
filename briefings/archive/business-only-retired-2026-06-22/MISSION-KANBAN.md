@@ -1,6 +1,6 @@
 # MISSION-KANBAN | ANTIGRAVITY
 **Fiscal Doctrine: The 100-Cent Rule**
-- 10% $\rightarrow$ Contractual Revenue Disbursement (Kids Bucket)
+- 10% $\rightarrow$ Contractual Revenue payout (Kids Bucket)
 - 27% $\rightarrow$ Tax Reserve
 - 63% $\rightarrow$ Founder/Mission Operations (Capped at $50k)
 

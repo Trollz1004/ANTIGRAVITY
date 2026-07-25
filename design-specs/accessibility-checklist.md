@@ -257,7 +257,7 @@ This checklist ensures all UI components and features meet WCAG 2.1 AA complianc
 ### Monitoring
 
 - [ ] Accessibility metrics tracked in analytics
-- [ ] User feedback regularly solicited and analyzed
+- [ ] User feedback regularly outreached and analyzed
 - [ ] Automated accessibility testing integrated in CI/CD
 - [ ] Periodic manual accessibility audits conducted
 - [ ] Third-party accessibility audits performed annually

@@ -5,15 +5,15 @@ Last updated: 2026-03-30
 ## Current Doctrine Warning
 
 - This file documents a **historical on-chain contract state**
-- It does **not** override the current founder-directed conservative **10% charitable cap** for LLC operations
-- Do not use this file by itself to justify live `60/30/10`, `100% charity`, or named-beneficiary claims in public or customer-facing copy
+- It does **not** override the current founder-directed conservative **10%  cap** for LLC operations
+- Do not use this file by itself to justify live ``, `100% `, or named-beneficiary claims in public or customer-facing copy
 
 ## Verified Live Base State
 
-- Live verified split contract: `GospelDonation.sol`
+- Live verified split contract: `Gospelpayment.sol`
 - Live verified Base address: `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
 - BaseScan confirms internal split payouts from that contract to:
-  - Charity `60%`: `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
+  -  `60%`: `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
   - Infrastructure treasury `30%`: `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
   - Founder ops `10%`: `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
 
@@ -31,16 +31,16 @@ Codex re-verified the live Base state on 2026-03-13 using:
 What was confirmed:
 - the contract is live on Base Mainnet, not an undeployed placeholder
 - the verified source still hardcodes the same three payout destinations
-- the observed ETH internal transfers still match the `60/30/10` pattern:
+- the observed ETH internal transfers still match the `` pattern:
   - `0.00006 ETH` to `0x8d3d...` (60%)
   - `0.00003 ETH` to `0xe0a42...` (30%)
   - `0.00001 ETH` to `0x7c3E...` (10%)
 
 Inference:
 - Grok's "vaporware" concern is not supported by the live chain evidence for the currently documented contract and payout addresses
-- the current live proof applies to the legacy verified `GospelDonation.sol` deployment at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
+- the current live proof applies to the legacy verified `Gospelpayment.sol` deployment at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
 - this does not make the intended-next repo router live; that remains a separate, not-yet-cut-over path
-- this also does not make the historical `60/30/10` contract the current safe operating doctrine for live LLC-controlled revenue
+- this also does not make the historical `` contract the current safe operating doctrine for live LLC-controlled revenue
 
 ## Meaning Of The Historical 30% Treasury
 
@@ -59,10 +59,10 @@ It does not mean founder personal income.
 
 The `10%` bucket is the founder survival and work-capacity bucket.
 
-## GospelDonation.sol In Repo
+## Gospelpayment.sol In Repo
 
 The live contract source is now tracked at:
-- `contracts/src/GospelDonation.sol`
+- `contracts/src/Gospelpayment.sol`
 
 This matches the deployed bytecode at `0x9855B75061D4c841791382998f0CE8B2BCC965A4`.
 Constructor wallet args at deployment were the canonical set above.
@@ -73,8 +73,8 @@ The repo also contains a newer router path:
 - `contracts/src/DatingRevenueRouter.sol`
 - `contracts/scripts/deploy.js`
 
-**`deploy.js` now uses the same canonical live wallet addresses** as `GospelDonation.sol`:
-- Charity: `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
+**`deploy.js` now uses the same canonical live wallet addresses** as `Gospelpayment.sol`:
+- : `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
 - DAO treasury: `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
 - Founder ops: `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
 
@@ -84,34 +84,34 @@ As of 2026-04-01, `contracts/scripts/deploy.js` is explicitly guarded and will n
 ## Two-Manus-Account Discrepancy (RESOLVED)
 
 Earlier versions of this file referenced a second set of wallet addresses:
-- Charity: `0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B`
+- : `0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B`
 - DAO: `0xa87874d5320555c8639670645F1A2B4f82363a7c`
 - Founder: `0xc043F5D516ee024d1dB812cb81fB64302b0Fe2B4`
 
 **Origin:** These came from a second Manus account session that generated fresh wallet
-addresses not tied to the live GospelDonation deployment.  They were never used as
+addresses not tied to the live Gospelpayment deployment.  They were never used as
 constructor args for any deployed contract.
 
 **Resolution:** They are NOT canonical. Do not use them for any live deployment or routing
 deployment.  The canonical set is the live-verified one listed above.
 
 **Exception:** `0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B` is used in
-`contracts/scripts/deploy-charity.js` for the `CharityRouter100.sol` deployment
-(historical dedicated charity-side contract). That is a separate historical path and is
+`contracts/scripts/deploy-.js` for the `Router100.sol` deployment
+(historical dedicated -side contract). That is a separate historical path and is
 correct for that specific purpose. It is not part of the current LLC operating doctrine.
-As of 2026-04-01, `contracts/scripts/deploy-charity.js` is explicitly guarded and will not run unless `ALLOW_HISTORICAL_CHARITY_DEPLOY=YES` is set.
+As of 2026-04-01, `contracts/scripts/deploy-.js` is explicitly guarded and will not run unless `ALLOW_HISTORICAL__DEPLOY=YES` is set.
 
 ## Historical Contract Rule
 
-- The historical `GospelDonation.sol` contract is immutable once deployed
+- The historical `Gospelpayment.sol` contract is immutable once deployed
 - If payout destinations tied to that contract ever need to change, a new contract would have to be deployed and documented
-- Contract immutability does **not** mean current LLC operating doctrine is locked to historical 60/30/10 forever
+- Contract immutability does **not** mean current LLC operating doctrine is locked to historical  forever
 
 ## 3-of-5 Gnosis Safe — Multi-Sig Governance (PLANNED)
 
 Status: **DESIGNED, NOT YET DEPLOYED**
 
-The GospelDonation contract currently uses single-key `Ownable`. The planned governance
+The Gospelpayment contract currently uses single-key `Ownable`. The planned governance
 upgrade transfers ownership to a 3-of-5 Gnosis Safe on Base Mainnet.
 
 ### Signers (5 keys, 3 required to act)

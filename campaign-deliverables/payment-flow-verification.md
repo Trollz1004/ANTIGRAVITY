@@ -24,7 +24,7 @@
 4. Square returns hosted checkout URL
 5. User completes payment on Square's secure page
 6. Webhook fires â†’ backend records RevenueAllocation
-7. Revenue splits: 10% â†’ reserved program_support, 90% â†’ operating (within 100-Cent Rule: 10% reserved program, 27% tax reserve, 63% ops/growth)
+7. s: 10% â†’ reserved program_support, 90% â†’ operating (within 100-Cent Rule: 10% reserved program, 27% tax reserve, 63% ops/growth)
 
 ### Direct Payment Links (No Auth Required)
 For fastest-path conversion (social media â†’ payment), direct Square links work without login:
@@ -46,7 +46,7 @@ Social Post â†’ youandinotai.com â†’ Membership Section â†’ Squar
   - `reserved_amount_cents` = 10% of gross (rounds up)
   - `operating_amount_cents` = 90% of gross
 - Beneficiary lane: `reserved program_support`
-- Status: `reserved` â†’ quarterly disbursement by founder
+- Status: `reserved` â†’ quarterly payout by founder
 - Payer type classification: `founder_test` (6 known test IDs) vs `customer` (real revenue)
 - Transparency API: `/api/transparency` (stub â€” needs live data connection)
 

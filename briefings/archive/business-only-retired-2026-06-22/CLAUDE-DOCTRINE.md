@@ -54,10 +54,10 @@
 **Why:** Single payment lane chosen; Stripe retired. Multi-lane reconciliation overhead the LLC cannot carry yet.
 **How to apply:** Any `stripe` / `STRIPE_*` reference in customer-facing surfaces → open `doctrine-drift` issue and draft removal PR.
 
-## No "donate / donation / charity" in customer-facing copy (Updated 2026-06-01)
-**Rule:** Customer-facing surfaces use neutral phrasing — "supports the platform's mission" or "helps kids with medical care". Internal agent files may use "10% per-bucket mission reserve" or "contractual revenue disbursement" — the latter is **internal-only**. The canonical-7 ban: `donate · donation · solicitation · charity · charitable · giving back · disbursement` are NEVER on customer surfaces.
-**Why:** Florida §496.405 compliance plus LLC tax structure. "Donate/charity" language triggers regulatory exposure the LLC is not set up to absorb.
-**How to apply:** Compliance-grep every deploy across `_deploy/`, `apps/youandinotai-frontend/`, and all Cloudflare Pages projects. Internal architecture docs (governance, DAO, briefings) may discuss "buckets for kids in need" — that's not customer-facing. The "10% to Joshua personally" framing is dead; the 10% is the maximum allowable corporate charitable deduction, not personal income.
+## No "payment / payment / " in customer-facing copy (Updated 2026-06-01)
+**Rule:** Customer-facing surfaces use neutral phrasing — "supports the platform's mission" or "helps kids with medical care". Internal agent files may use "10% per-bucket " or "contractual revenue payout" — the latter is **internal-only**. The canonical-7 ban: `payment · payment · outreach ·  ·  ·  · payout` are NEVER on customer surfaces.
+**Why:** Florida §496.405 compliance plus LLC tax structure. "payment/" language triggers regulatory exposure the LLC is not set up to absorb.
+**How to apply:** Compliance-grep every deploy across `_deploy/`, `apps/youandinotai-frontend/`, and all Cloudflare Pages projects. Internal architecture docs (governance, DAO, briefings) may discuss "buckets for kids in need" — that's not customer-facing. The "10% to Joshua personally" framing is dead; the 10% is the maximum allowable corporate  deduction, not personal income.
 
 ---
 

@@ -1,13 +1,13 @@
 /**
  * ANTIGRAVITY ECOSYSTEM: REVENUE ORACLE AGGREGATOR
  * Target: Base L2 Smart Contract
- * Compliance: FL §496.405 (Contractual Revenue Disbursement Only)
+ * Compliance: FL §496.405 (Contractual Revenue payout Only)
  *
  * Authored: 2026-05-12 (Josh + Claude Cofounder Triad)
  * Canonical doctrine: briefings/DAO-ARCHITECTURE-SPEC-v1.0-2026-05-01.md §4 Revenue Waterfall
  *
  * Implements the immutable distribution waterfall:
- *   (1) Tax Reserve → (2) Charitable Disbursement (10% floor) → (3) Operating Expenses
+ *   (1) Tax Reserve → (2)  payout (10% floor) → (3) Operating Expenses
  *   → (4) Investor Distribution → (5) Founder Distribution
  *
  * Each step must be fully funded before the next executes. No step can be skipped.
@@ -17,7 +17,7 @@
 // IMMUTABLE DAO CONSTANTS
 const CONSTANTS = {
     TAX_RESERVE_RATE: 0.27, // Estimated Federal + FL State (Adjustable by Founder only)
-    CONTRACTUAL_DISBURSEMENT_FLOOR: 0.10, // #UntilNoKidInNeed 10% Floor (Upward adjustable only via 75% vote)
+    CONTRACTUAL_payout_FLOOR: 0.10, // #UntilNoKidInNeed 10% Floor (Upward adjustable only via 75% vote)
     OPS_BUDGET_CAP_RATE: 0.62, // Target ~62% for Survival Operations (Nodes, 9020s, living expenses)
     GATEWAYS: [
         "SQUARE_YOUANDINOTAI", // Strictly isolated to ENIGMA dating app node
@@ -42,7 +42,7 @@ interface GatewayPayload {
 interface WaterfallExecution {
     grossRevenue: number;
     taxReserve: number;
-    contractualDisbursement: number; // FL §496.405 Compliant
+    contractualpayout: number; // FL §496.405 Compliant
     operatingExpenses: number;
     investorDistribution: number;
     founderDistribution: number;
@@ -85,9 +85,9 @@ class RevenueAggregator {
         const taxReserve = grossRevenue * CONSTANTS.TAX_RESERVE_RATE;
         let remaining = grossRevenue - taxReserve;
 
-        // 3. Step 2: Contractual Disbursement Floor (10% Minimum)
-        const contractualDisbursement = grossRevenue * CONSTANTS.CONTRACTUAL_DISBURSEMENT_FLOOR;
-        remaining = remaining - contractualDisbursement;
+        // 3. Step 2: Contractual payout Floor (10% Minimum)
+        const contractualpayout = grossRevenue * CONSTANTS.CONTRACTUAL_payout_FLOOR;
+        remaining = remaining - contractualpayout;
 
         // 4. Step 3: Operating Expenses (~62% Baseline for survival/scaling)
         // In a real scenario, this matches exact billed API/Server costs, capped at remaining funds.
@@ -106,7 +106,7 @@ class RevenueAggregator {
         const executionRecord: WaterfallExecution = {
             grossRevenue,
             taxReserve,
-            contractualDisbursement,
+            contractualpayout,
             operatingExpenses,
             investorDistribution,
             founderDistribution,
@@ -152,7 +152,7 @@ try {
 
     console.log(`Gross Revenue Aggregated: $${results.grossRevenue.toFixed(2)}`);
     console.log(`[1] Tax Reserve Secured:  $${results.taxReserve.toFixed(2)}`);
-    console.log(`[2] Mission Disbursed:    $${results.contractualDisbursement.toFixed(2)} (FL §496.405 Compliant)`);
+    console.log(`[2] Mission payout:    $${results.contractualpayout.toFixed(2)} (FL §496.405 Compliant)`);
     console.log(`[3] Ops Survival Budget:  $${results.operatingExpenses.toFixed(2)}`);
     console.log(`[4] Investor Pool:        $${results.investorDistribution.toFixed(2)}`);
     console.log(`[5] Founder Remainder:    $${results.founderDistribution.toFixed(2)}`);

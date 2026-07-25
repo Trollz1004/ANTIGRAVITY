@@ -3,7 +3,7 @@
 This seat runs as **Claude Code** (auto-loads this file). Josh is sole authority.
 
 ## Read first (pointers, not pastes)
-1. `../../BRIEFING.md` — law: no charity language, no revenue-split logic,
+1. `../../BRIEFING.md` — law: no  language, no  logic,
    Square-only for youandinotai.com, T5500-only consolidation.
 2. `./PROMPT.md` — your operating instructions: Pieces memory in/out every
    session, agent-browser + skill-creator, build the `caveman` token-frugal

@@ -25,7 +25,7 @@ All core work principles continuously applied:
 - **Design Specs Production**: Phase 1 comprehensive deliverables completed
 - **Mobile-First Focus**: All components optimized for touch interactions
 - **Ethical Design**: No dark patterns, fake urgency, or manipulation employed
-- **Legal Compliance**: "Donate/donation/solicitation" language NEVER used
+- **Legal Compliance**: "payment/payment/outreach" language NEVER used
 - **Implementation Support**: CTO subtasks created and documented
 
 ### 4. Coordinate ✅

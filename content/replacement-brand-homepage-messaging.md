@@ -25,4 +25,4 @@ Discover premium tools and upgrades in the JoinForReal Store — everything desi
 Browse the store at joinforreal.com/store
 
 ## Compliance Note
-Messaging stays strictly product-first. No mission language, no charity references, no AI emphasis on the customer surface. Focus remains on superior quality, trust, and real human interaction.
+Messaging stays strictly product-first. No mission language, no  references, no AI emphasis on the customer surface. Focus remains on superior quality, trust, and real human interaction.

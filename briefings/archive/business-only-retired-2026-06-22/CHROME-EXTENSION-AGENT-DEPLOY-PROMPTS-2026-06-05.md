@@ -59,12 +59,12 @@ STEPS:
 5. **Doctrine constraints (non-negotiable):**
    - 1 repo: `Trollz1004/ANTIGRAVITY`. Branch off `main`, PR back.
    - Sabretooth (`C:\antigravity`) is the only push-authority node.
-   - Canonical-7 banned on customer surfaces: `donate · donation ·
-     solicitation · charity · charitable · giving back · disbursement`.
+   - Canonical-7 banned on customer surfaces: `payment · payment ·
+     outreach ·  ·  ·  · payout`.
    - No `--no-verify`, no `--no-gpg-sign`, no skipped hooks.
    - No mock data. Real values or fail honestly.
-   - Per-bucket 10% mission reserve; never resurrect 60/30/10 or
-     "100% to charity" — the 10% is a deduction cap, not a routing.
+   - Per-bucket 10% ; never resurrect  or
+     "100% to " — the 10% is a deduction cap, not a routing.
    - **Above industry standard bar (Joshua's standing order):** every
      fix ships with a regression test AND a harden layer (a CI lint,
      a weekly drift scan, a dependabot config — something that makes
@@ -116,11 +116,11 @@ STEPS:
      customer-facing copy.
    - 1 wallet, 1 LLC (Trash Or Treasure Online Recycler LLC, FL
      #L25000158401). The 10% is a deduction cap, never a routing,
-     never a "donation" Joshua makes — that framing is illegal
-     (LLC-100%-to-charity is fraud, see the §496.405 clause).
-   - No historical-chain artifacts resurrected: `GospelDonation.sol`,
-     `CharityRouter100.sol`, `DatingRevenueRouter.sol`, `60/30/10`,
-     "100% to charity" — all permanently deprecated.
+     never a "payment" Joshua makes — that framing is illegal
+     (LLC-100%-to- is fraud, see the §496.405 clause).
+   - No historical-chain artifacts resurrected: `Gospelpayment.sol`,
+     `Router100.sol`, `DatingRevenueRouter.sol`, ``,
+     "100% to " — all permanently deprecated.
    - No mock data, no `TODO: real impl` placeholders, no simulated
      revenue numbers. Real totals from Square or
      `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py` or fail
@@ -166,8 +166,8 @@ STEPS:
    - Canonical-7 language ban on customer surfaces. The CMO
      authors ads, social posts, video descriptions, marketplace
      listings — every one of those is a customer surface. **No**
-     `donate`, `donation`, `solicitation`, `charity`,
-     `charitable`, `giving back`, `disbursement` in any of them.
+     `payment`, `payment`, `outreach`, ``,
+     ``, ``, `payout` in any of them.
    - The CMO writes to `briefings/` and `hermes/agents/` for
      internal marketing doctrine; that path is allowlisted.
    - Marketing copy must reflect real surfaces and real revenue
@@ -208,7 +208,7 @@ STEPS:
    - Zero Secrets in Source
    - Auth on Every Endpoint
    - Legacy Routing Drift Blocker
-   - Revenue Split is CODE not CONFIG
+   -  is CODE not CONFIG
    - PII Isolation
    - No Raw SQL
    - Input Validation
@@ -297,9 +297,9 @@ STEPS:
 
 4. **Initial task** — audit the youandinotai.com landing page
    for §496.405 compliance on customer-facing copy. The
-   customer-facing language ban means: no `donate`, `donation`,
-   `solicitation`, `charity`, `charitable`, `giving back`,
-   `disbursement` on web pages, email copy, ads, in-product
+   customer-facing language ban means: no `payment`, `payment`,
+   `outreach`, ``, ``, ``,
+   `payout` on web pages, email copy, ads, in-product
    copy, public API responses, YouTube descriptions, on-screen
    text, social posts, marketplace listings, podcast
    descriptions, or paid ad copy. The UX agent reads the
@@ -311,7 +311,7 @@ STEPS:
      last line of defense on this — anything the agent team
      authors must be reviewed by UX before it lands on a
      customer surface.
-   - Internal synonym `contractual revenue disbursement` is
+   - Internal synonym `contractual revenue payout` is
      allowed only in `briefings/`, `hermes/agents/`,
      `AGENTS.md`, `SOUL.md`, `HEARTBEAT.md`, `SKILLS.md`,
      `TOOLS.md`. NEVER on customer surfaces, not even

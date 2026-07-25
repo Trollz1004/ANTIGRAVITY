@@ -10,7 +10,7 @@ Covers:
   - GET /api/tasks/agents (12 agents)
   - Tasks CRUD + dispatch + audit + stats + heartbeat
   - Filters: status / owner / bucket
-  - Doctrine sweep across new endpoints (no Haiku/donate/donation/solicitation)
+  - Doctrine sweep across new endpoints (no Haiku/payment/payment/outreach)
 """
 from __future__ import annotations
 
@@ -28,14 +28,12 @@ if not BASE_URL:
                 BASE_URL = line.split("=", 1)[1].strip().rstrip("/")
                 break
 
-FORBIDDEN = ("haiku", "donate", "donation", "solicitation")
-
+FORBIDDEN = ("haiku", "payment", "payment", "outreach")
 
 def _no_forbidden(txt: str, where: str) -> None:
     low = txt.lower()
     for w in FORBIDDEN:
         assert w not in low, f"forbidden '{w}' in {where}"
-
 
 @pytest.fixture(scope="module")
 def api():
@@ -43,12 +41,10 @@ def api():
     s.headers.update({"Content-Type": "application/json"})
     return s
 
-
 @pytest.fixture(scope="module")
 def created_task_ids():
     """Track ids created in this module so we can cleanup at end."""
     return []
-
 
 # ── /api/providers ──────────────────────────────────────────────── #
 def test_providers_lists_twelve_platforms(api):
@@ -75,7 +71,6 @@ def test_providers_lists_twelve_platforms(api):
     assert "configured" in bc["whatsapp"]
     _no_forbidden(json.dumps(d), "/api/providers")
 
-
 # ── POST /api/chat/send ────────────────────────────────────────── #
 def test_chat_send_hermes_fast_real_bridge(api):
     payload = {
@@ -93,7 +88,6 @@ def test_chat_send_hermes_fast_real_bridge(api):
     assert isinstance(content, str) and len(content) > 0
     _no_forbidden(json.dumps(d), "/api/chat/send hermes")
 
-
 def test_chat_send_byok_missing_key_returns_503(api):
     # XAI_API_KEY is intentionally blank
     payload = {
@@ -106,7 +100,6 @@ def test_chat_send_byok_missing_key_returns_503(api):
     detail = r.json().get("detail", "")
     assert "XAI_API_KEY" in detail
 
-
 def test_chat_send_unknown_provider(api):
     r = api.post(
         f"{BASE_URL}/api/chat/send",
@@ -114,7 +107,6 @@ def test_chat_send_unknown_provider(api):
         timeout=10,
     )
     assert r.status_code == 400
-
 
 # ── Broadcast ──────────────────────────────────────────────────── #
 def test_broadcast_telegram_unconfigured_graceful(api):
@@ -126,7 +118,6 @@ def test_broadcast_telegram_unconfigured_graceful(api):
     assert d["configured"] is False
     assert "hint" in d
 
-
 def test_broadcast_whatsapp_unconfigured_graceful(api):
     r = api.post(f"{BASE_URL}/api/broadcast/whatsapp",
                  json={"text": "hello", "source": "pytest"}, timeout=10)
@@ -135,7 +126,6 @@ def test_broadcast_whatsapp_unconfigured_graceful(api):
     assert d["ok"] is False
     assert d["configured"] is False
     assert "hint" in d
-
 
 # ── /api/tasks/agents ──────────────────────────────────────────── #
 def test_tasks_agents_twelve(api):
@@ -151,7 +141,6 @@ def test_tasks_agents_twelve(api):
         assert "task_cap" in a
         assert "active_tasks" in a
     _no_forbidden(json.dumps(d), "/api/tasks/agents")
-
 
 # ── Tasks CRUD ─────────────────────────────────────────────────── #
 def test_create_task_then_get(api, created_task_ids):
@@ -171,12 +160,10 @@ def test_create_task_then_get(api, created_task_ids):
     ids = {x["id"] for x in r2.json()["tasks"]}
     assert t["id"] in ids
 
-
 def test_create_task_unknown_owner(api):
     r = api.post(f"{BASE_URL}/api/tasks",
                  json={"title": "TEST_bad_owner", "owner": "ghost"}, timeout=10)
     assert r.status_code == 400
-
 
 def test_dispatch_fanout(api, created_task_ids):
     payload = {
@@ -195,7 +182,6 @@ def test_dispatch_fanout(api, created_task_ids):
         assert t["status"] == "open"
         created_task_ids.append(t["id"])
 
-
 def test_patch_task_audit(api, created_task_ids):
     assert created_task_ids, "previous test must have created a task"
     tid = created_task_ids[0]
@@ -211,7 +197,6 @@ def test_patch_task_audit(api, created_task_ids):
     assert any(e["action"] == "update" for e in entries)
     assert any(e["action"] == "create" for e in entries)
 
-
 def test_filters_status_owner_bucket(api):
     r = api.get(f"{BASE_URL}/api/tasks?status=open", timeout=10)
     assert r.status_code == 200
@@ -226,7 +211,6 @@ def test_filters_status_owner_bucket(api):
     for t in r.json()["tasks"]:
         assert t["bucket"] == 4
 
-
 def test_audit_log_newest_first(api):
     r = api.get(f"{BASE_URL}/api/tasks/audit?limit=20", timeout=10)
     assert r.status_code == 200
@@ -234,7 +218,6 @@ def test_audit_log_newest_first(api):
     assert len(entries) >= 2
     times = [e["at"] for e in entries]
     assert times == sorted(times, reverse=True)
-
 
 def test_stats_shape(api):
     r = api.get(f"{BASE_URL}/api/tasks/stats", timeout=10)
@@ -248,7 +231,6 @@ def test_stats_shape(api):
     assert {b["bucket"] for b in d["by_bucket"]} == set(range(1, 11))
     assert "total" in d and "active" in d
 
-
 def test_heartbeat_surfaces_in_agents(api):
     r = api.post(f"{BASE_URL}/api/tasks/agents/cto/heartbeat",
                  json={"state": "alive", "note": "wiring deploy"}, timeout=10)
@@ -260,12 +242,10 @@ def test_heartbeat_surfaces_in_agents(api):
     assert cto["heartbeat"] is not None
     assert cto["heartbeat"]["note"] == "wiring deploy"
 
-
 def test_heartbeat_unknown_agent(api):
     r = api.post(f"{BASE_URL}/api/tasks/agents/nobody/heartbeat",
                  json={"state": "alive"}, timeout=10)
     assert r.status_code == 404
-
 
 # ── Cleanup + DELETE verification ─────────────────────────────── #
 def test_delete_task_and_audit(api, created_task_ids):
@@ -280,13 +260,11 @@ def test_delete_task_and_audit(api, created_task_ids):
     a = api.get(f"{BASE_URL}/api/tasks/audit?task_id={tid}", timeout=10)
     assert any(e["action"] == "delete" for e in a.json()["entries"])
 
-
 def test_cleanup_remaining(api, created_task_ids):
     """Best-effort cleanup of TEST_-prefixed tasks created above."""
     while created_task_ids:
         tid = created_task_ids.pop()
         api.delete(f"{BASE_URL}/api/tasks/{tid}", timeout=10)
-
 
 # ── Doctrine sweep on new endpoints ──────────────────────────── #
 def test_no_forbidden_strings_new_endpoints(api):

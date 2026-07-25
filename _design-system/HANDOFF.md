@@ -42,9 +42,9 @@ NON-NEGOTIABLE BRAND RULES:
 VOICE RULES (critical — legal + brand):
 - Blunt, builder-to-builder, anti-hype. Talk TO the reader ("you"/"we").
 - Numbers are framed as TRACKED / RECORDED, never projected. State status plainly.
-- NEVER use the words donate / donation / solicitation / tax-deductible on any
+- NEVER use the words payment / payment / outreach / tax-deductible on any
   customer-facing surface (FL §496.405). The mission tag #UntilNoKidInNeed may be
-  STATED, never used to SOLICIT.
+  STATED, never used to outreach.
 - YouAndINotAI uses SQUARE ONLY for payments. Never Stripe/PayPal on the dating surface.
 - No mock data presented as real. If a number isn't backed by a production source,
   label it as a sample/placeholder.

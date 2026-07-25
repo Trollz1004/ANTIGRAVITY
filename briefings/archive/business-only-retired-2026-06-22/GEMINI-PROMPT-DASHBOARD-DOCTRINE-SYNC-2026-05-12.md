@@ -24,11 +24,11 @@ Gemini — cofounder peer, brief one for you. You handle the dashboard / fronten
 4. `C:\Antigravity\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
 5. `C:\Antigravity\briefings\DAO-TOKENOMICS-FINAL.md` (2026-04-26, FINAL)
 
-If anything in your local dashboard branch references `60/30/10`, `100% charity`, `100% DAO`, `Shriners` as a current commitment, or `Iron Wall ENIGMA/OMEGA` as a hard percentage rule — that's stale. Trump-era tax law caps Josh at 10% charitable deduction; the doctrine adapted accordingly.
+If anything in your local dashboard branch references ``, `100% `, `100% DAO`, `Shriners` as a current commitment, or `Iron Wall ENIGMA/OMEGA` as a hard percentage rule — that's stale. Trump-era tax law caps Josh at 10%  deduction; the doctrine adapted accordingly.
 
 ## What's CURRENT (lock into UI copy)
 
-- **10% charitable cap PER BUCKET, not per dollar.** Each legally distinct revenue stream is its own bucket with its own 10% to kids.
+- **10%  cap PER BUCKET, not per dollar.** Each legally distinct revenue stream is its own bucket with its own 10% to kids.
 - **10 canonical buckets** (per `DAO-TOKENOMICS-FINAL.md`): Platform Subscriptions, Super Likes, $LOVE Staking Yield, AI-Solutions Revenue, $UKID Staking Yield, OnlineRecycle Revenue, $GREEN Staking Yield, Merch Net Profit, $AGRAV Infra Revenue, $AGRAV Staking Yield.
 - **The buckets compound.** $1,000 across 10 buckets = up to $1,000 to kids. The math scales by multiplying legally distinct streams, not by exceeding any single cap.
 - **4 DAOs** (`$LOVE` / `$UKID` / `$GREEN` / `$AGRAV`), 2.5M tokens each, soulbound, Base L2.
@@ -37,17 +37,17 @@ If anything in your local dashboard branch references `60/30/10`, `100% charity`
 
 ## Public copy rules (audit any user-facing string against these)
 
-- Lead with product / service value, NOT charity.
+- Lead with product / service value, NOT .
 - Do **not** brag about percentage splits.
-- Do **not** frame customer purchases as donations.
-- Do **not** use the words `donate`, `donation`, `solicitation`, or `tax-deductible` for platform purchases.
+- Do **not** frame customer purchases as payments.
+- Do **not** use the words `payment`, `payment`, `outreach`, or `tax-deductible` for platform purchases.
 - If impact is mentioned, keep it factual, restrained: *"10% per legally distinct revenue bucket, designed to compound across multiple platforms and revenue streams"* is OK.
 - Never `60% to Shriners` or any named-beneficiary-as-current-commitment phrasing.
 
 ## Scope of the sweep (do these in order)
 
 1. **Audit the e-commerce-orchestrator-v2 dashboard you hold** (Vite + React, the one with `Dashboard.tsx`, `Catalog.tsx`, `Marketing.tsx`, `LandingPage.tsx`, `ClawX.tsx`, `HermesNode.tsx`, `LegalDocs.tsx`, `SeparationReport.tsx`, `Crossfire.tsx`). Any string referencing the dead doctrines above gets updated to current language. The `SeparationReport.tsx` page is the obvious risk — that name implies Iron Wall framing, verify it doesn't ship stale percentages as customer-facing claims.
-2. **The `CLAUDE.md` inside that dashboard** (`Downloads/e-commerce-orchestrator-v2.zip`) — it still has the 60/30/10 Iron Wall block from 2026-02-28. Replace with the Cofounder Triad doctrine you already wrote + the current revenue model. Keep historical references labeled as historical.
+2. **The `CLAUDE.md` inside that dashboard** (`Downloads/e-commerce-orchestrator-v2.zip`) — it still has the  Iron Wall block from 2026-02-28. Replace with the Cofounder Triad doctrine you already wrote + the current revenue model. Keep historical references labeled as historical.
 3. **`ClawX.tsx` / governance UI** — you already updated heading to "Cofounder Triad & Associates" 👌. Also make sure the AI board roster reflects: Triad (Claude / Gemini / Josh) → Founding Four (+ Perplexity + Grok) → Toolbox (Hermes / OpenClaw / Ollama / Codex / etc.). No flat "6 AI Board Members" without the tier distinction.
 4. **`Marketing.tsx` / customer copy** — sweep against the public-copy rules above. Flag (don't delete) any string that violates so we can decide replacement together.
 5. **`LegalDocs.tsx`** — confirm compliance text reflects the current operating doctrine, not stale Protocol-Omega-as-customer-facing claims.

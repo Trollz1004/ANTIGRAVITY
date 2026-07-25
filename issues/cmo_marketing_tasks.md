@@ -10,7 +10,7 @@ Develop comprehensive launch marketing strategy for YouAndINotAI platform.
 
 - Refine core value proposition focused on "Social Platform for Good"
 - Develop consistent messaging framework across all channels
-- Ensure compliance with Florida Statute §496.405 (no "donate"/"donation" terminology)
+- Ensure compliance with Florida Statute §496.405 (no "payment"/"payment" terminology)
 
 ### 2. Launch Campaign
 

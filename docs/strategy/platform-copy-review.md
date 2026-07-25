@@ -188,7 +188,7 @@ The $1 fee creates 'economic friction' that makes it unprofitable for bot operat
 
 **Body**: "YouAndINotAI operates on a straightforward revenue-sharing model:
 
-- 60%: Direct contractual revenue disbursement to children's health programs
+- 60%: Direct contractual revenue payout to children's health programs
 - 30%: Platform maintenance and anti-bot technology
 - 10%: Creator and maintainer compensation
 
@@ -196,8 +196,8 @@ Every dollar you spend in the platform supports real community impact. We call t
 
 ### FAQ Section
 
-**Question**: "Is this a charity?"
-**Answer**: "No—we're a social platform with a mission. Rather than asking for donations separately, we've built charitable giving directly into how our platform works. We're not charity-adjacent; we ARE the charity mechanism."
+**Question**: "Is this a ?"
+**Answer**: "No—we're a social platform with a mission. Rather than asking for payments separately, we've built  giving directly into how our platform works. We're not -adjacent; we ARE the  mechanism."
 
 ## Community Guidelines
 
@@ -276,7 +276,7 @@ We NEVER sell your data. We NEVER show ads. We are funded exclusively by communi
 
 ### Florida Statute §496.405 Compliance Notice
 
-**Notice**: "As required by Florida law, we operate under contractual revenue disbursement agreements rather than solicitation for donations. All platform revenues support our stated charitable beneficiaries through automatic contractual allocations."
+**Notice**: "As required by Florida law, we operate under contractual revenue payout agreements rather than outreach for payments. All platform revenues support our stated  beneficiaries through automatic contractual allocations."
 
 ### Terms Clarification
 

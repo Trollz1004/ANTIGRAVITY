@@ -44,7 +44,7 @@
 3. Investor club model aligns with stake tier structure
 4. Allows structured token distribution without full governance
 
-**Alternative:** Direct Base mainnet deployment with custom contract (using the GospelDonation.sol as base). This gives maximum control and lowest cost but requires more development time.
+**Alternative:** Direct Base mainnet deployment with custom contract (using the Gospelpayment.sol as base). This gives maximum control and lowest cost but requires more development time.
 
 **Not recommended:** Colony (wrong network, no token sale focus), Mirror (not platform-appropriate)
 

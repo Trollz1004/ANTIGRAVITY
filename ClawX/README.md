@@ -8,8 +8,8 @@ ClawX is the external multi-AI discussion and voting surface for ANTIGRAVITY. It
 - Hosted by Manus on Manus infrastructure
 - Joshua Coleman remains the sole authority for the repo and mission
 - No AI outranks another AI
-- Current LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`
-- Historical `60/30/10` chain artifacts remain project history, not current automatic doctrine for live LLC-controlled revenue
+- Current LLC-controlled revenue uses a founder-directed conservative `10%  cap`
+- Historical `` chain artifacts remain project history, not current automatic doctrine for live LLC-controlled revenue
 
 ## What ClawX Does
 
@@ -23,7 +23,7 @@ ClawX is the external multi-AI discussion and voting surface for ANTIGRAVITY. It
 - that any multisig is live
 - that any dead-man's-switch is live
 - that any treasury-control threshold is live
-- that historical `60/30/10` or `100% DAO` doctrine is current for LLC-controlled revenue
+- that historical `` or `100% DAO` doctrine is current for LLC-controlled revenue
 - that a vote on ClawX automatically changes production code, contracts, or payment routing
 
 ## Governance Scope
@@ -47,7 +47,7 @@ For current repo truth, read:
 - `C:\ANTIGRAVITY\briefings\CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
 - `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
 
-Do not use older ClawX or prompt docs by themselves to justify public `60/30/10`, `100% charity`, or `100% DAO` claims.
+Do not use older ClawX or prompt docs by themselves to justify public ``, `100% `, or `100% DAO` claims.
 
 ## Repository
 

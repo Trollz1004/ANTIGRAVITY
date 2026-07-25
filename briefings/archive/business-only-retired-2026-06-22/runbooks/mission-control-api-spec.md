@@ -11,8 +11,8 @@
 - Deploys run `subprocess` with stdout streamed via SSE — never block the event loop
 - Secrets from `.env` only — never hardcode
 - No paid SDKs (`openai`, `anthropic`, `google-generativeai`) — pure stdlib + httpx + subprocess
-- No `donate` / `donation` / `charity` strings anywhere
-- 10% revenue cap is doctrine — code that reads bucket allocations must validate `reserve_percent == 10` and fail loud if not
+- No `payment` / `payment` / `` strings anywhere
+- 10%  is doctrine — code that reads bucket allocations must validate `reserve_percent == 10` and fail loud if not
 
 ## Standard response envelope
 
@@ -155,7 +155,7 @@ services/mission-control-api/
     ├── test_probes_offline.py    # mock httpx, verify envelope shape
     ├── test_probes_live.py       # marks: integration; only run with --integration
     ├── test_routes.py            # FastAPI TestClient
-    └── test_revenue_doctrine.py  # asserts reserve_percent==10, no donate/charity strings
+    └── test_revenue_doctrine.py  # asserts reserve_percent==10, no payment/ strings
 ```
 
 ## Acceptance criteria
@@ -167,7 +167,7 @@ services/mission-control-api/
 5. `GET /health/ollama` returns `status=ok` with `model_count >= 1`.
 6. `pytest tests/` passes 100% (offline tests + doctrine tests).
 7. `pytest tests/ --integration` passes when local services are up (Paperclip + Ollama running).
-8. The doctrine test asserts: `reserve_percent == 10` is hard-coded, `donate|donation|charity` strings absent from `src/`, no `openai|anthropic|gemini|emergent` imports.
+8. The doctrine test asserts: `reserve_percent == 10` is hard-coded, `payment|payment|` strings absent from `src/`, no `openai|anthropic|gemini|emergent` imports.
 9. SSE deploy stream actually streams (test with `curl -N`).
 10. CORS allows the dashboard origin and rejects others.
 

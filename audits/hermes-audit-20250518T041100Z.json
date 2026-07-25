@@ -29,7 +29,7 @@
   ],
   "files_preview": {
     ".env.example": "Placeholder template — 67 keys, all descriptive strings. .gitignore excludes all real .env files. No secrets.",
-    ".github/workflows/ci-validate.yml": "Full CI: ESLint/Prettier, Black/Ruff, pytest --cov-fail-under=63, §496.405 donation-language scan, doctrine-drift scan, secret scanner. No hardcoded tokens.",
+    ".github/workflows/ci-validate.yml": "Full CI: ESLint/Prettier, Black/Ruff, pytest --cov-fail-under=63, §496.405 payment-language scan, doctrine-drift scan, secret scanner. No hardcoded tokens.",
     ".gitignore": ".claude/settings.local.json covered (SECURITY-FLAG remediation). Also: .env, *.env, secrets/, *.key, node_modules/, .venv/, .paperclip/instances/*/secrets/. Comprehensive.",
     "infra/cloudflare/": "Cloudflare Workers deploy. Files: aidoesitall-api-guard, paperclip-hq.yml, setup-tunnel-dns.ps1, start-tunnel.ps1. No Kubernetes."
   },

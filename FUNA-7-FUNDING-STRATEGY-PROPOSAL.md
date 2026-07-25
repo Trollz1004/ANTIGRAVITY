@@ -49,7 +49,7 @@ This proposal focuses on **business-only product revenue** through youandinotai.
 Use the `seed-income-engine.py` to create tasks, then draft content via `draft-content.py`:
 - Focus on product value: "AI-powered compatibility matching"
 - Lead with verification: "V8 Cloud Verification eliminates bots"
-- Never mention donations or charity on public surfaces
+- Never mention payments or  on public surfaces
 
 ---
 
@@ -125,9 +125,9 @@ Use the `seed-income-engine.py` to create tasks, then draft content via `draft-c
 ## Constraints & Compliance
 
 ### Customer-Facing Language Rules (Non-Negotiable)
-- **NEVER use:** `donate`, `donation`, `solicitation`, `tax-deductible`, `charity`
+- **NEVER use:** `payment`, `payment`, `outreach`, `tax-deductible`, ``
 - **Revenue framing:** "Membership gives you access to verified profiles and smarter matching"
-- **Mission mention:** "a share of net proceeds after taxes and operating costs supports families through contractual revenue disbursement"
+- **Mission mention:** "a share of net proceeds after taxes and operating costs supports families through contractual revenue payout"
 - **AI attribution:** "designed in collaboration with AI tools" (never platform-specific)
 
 ### Platform Compliance

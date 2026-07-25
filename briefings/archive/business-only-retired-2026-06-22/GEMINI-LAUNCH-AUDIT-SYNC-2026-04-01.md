@@ -8,13 +8,13 @@ Role boundary: Gemini may assist with read-only audit, visual QA, copy-risk revi
 ## Current Truth
 
 - `C:\ANTIGRAVITY` on `main` is the only live repo source of truth.
-- Current LLC operating doctrine is a founder-directed conservative `10% charitable cap`.
-- Historical split-era, absolute-charity, and named-beneficiary language is legacy unless canonical docs explicitly restore it.
+- Current LLC operating doctrine is a founder-directed conservative `10%  cap`.
+- Historical split-era, absolute-, and named-beneficiary language is legacy unless canonical docs explicitly restore it.
 - `youandinotai.com` public landing and pricing flow are live.
 - Square payment links for Bot-Shield, founder tiers, and royalty are live.
 - Square is the actual payment rail and receipt sender for checkout receipts.
 - `www.aidoesitall.website` and `api.aidoesitall.website` were remediated on April 1, 2026 to remove stale public claims.
-- Public GitHub repo/user/org metadata were cleaned to remove stale `100%` charity language.
+- Public GitHub repo/user/org metadata were cleaned to remove stale `100%`  language.
 
 ## Read First
 
@@ -40,7 +40,7 @@ Scope:
 Check for:
 
 - false or overstated launch claims
-- stale percentage or charity-routing claims
+- stale percentage or -routing claims
 - named-beneficiary claims not supported by current doctrine
 - weak or confusing trust signals on the date-app landing page
 - broken or misleading public wording around payments, receipts, verification, or access
@@ -50,7 +50,7 @@ Rules:
 
 - Do not edit `C:\ANTIGRAVITY`
 - Do not infer new legal conclusions
-- Do not suggest raising the charitable percentage above the current doctrine
+- Do not suggest raising the  percentage above the current doctrine
 - Do not treat historical contract files as current operating instructions
 - If something is unverified, mark it `UNVERIFIED`
 

@@ -23,15 +23,15 @@ import type {
   TypedContractMethod,
 } from "../common";
 
-export interface CharityRouter100Interface extends Interface {
+export interface Router100Interface extends Interface {
   getFunction(
     nameOrSignature:
-      | "CHARITY_SAFE"
+      | "_SAFE"
       | "USDC"
       | "distributeETH"
       | "distributeToken"
       | "distributeUSDC"
-      | "getCharityAddress"
+      | "getAddress"
       | "pendingETH"
       | "pendingToken"
       | "pendingUSDC"
@@ -42,7 +42,7 @@ export interface CharityRouter100Interface extends Interface {
   ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "CHARITY_SAFE",
+    functionFragment: "_SAFE",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "USDC", values?: undefined): string;
@@ -59,7 +59,7 @@ export interface CharityRouter100Interface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getCharityAddress",
+    functionFragment: "getAddress",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -76,7 +76,7 @@ export interface CharityRouter100Interface extends Interface {
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "CHARITY_SAFE",
+    functionFragment: "_SAFE",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "USDC", data: BytesLike): Result;
@@ -93,7 +93,7 @@ export interface CharityRouter100Interface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getCharityAddress",
+    functionFragment: "getAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "pendingETH", data: BytesLike): Result;
@@ -126,10 +126,10 @@ export namespace DistributionEvent {
 }
 
 export namespace RouterDeployedEvent {
-  export type InputTuple = [charitySafe: AddressLike, deployer: AddressLike];
-  export type OutputTuple = [charitySafe: string, deployer: string];
+  export type InputTuple = [Safe: AddressLike, deployer: AddressLike];
+  export type OutputTuple = [Safe: string, deployer: string];
   export interface OutputObject {
-    charitySafe: string;
+    Safe: string;
     deployer: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
@@ -138,11 +138,11 @@ export namespace RouterDeployedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface CharityRouter100 extends BaseContract {
-  connect(runner?: ContractRunner | null): CharityRouter100;
+export interface Router100 extends BaseContract {
+  connect(runner?: ContractRunner | null): Router100;
   waitForDeployment(): Promise<this>;
 
-  interface: CharityRouter100Interface;
+  interface: Router100Interface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -181,7 +181,7 @@ export interface CharityRouter100 extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  CHARITY_SAFE: TypedContractMethod<[], [string], "view">;
+  _SAFE: TypedContractMethod<[], [string], "view">;
 
   USDC: TypedContractMethod<[], [string], "view">;
 
@@ -195,7 +195,7 @@ export interface CharityRouter100 extends BaseContract {
 
   distributeUSDC: TypedContractMethod<[], [void], "nonpayable">;
 
-  getCharityAddress: TypedContractMethod<[], [string], "view">;
+  getAddress: TypedContractMethod<[], [string], "view">;
 
   pendingETH: TypedContractMethod<[], [bigint], "view">;
 
@@ -208,7 +208,7 @@ export interface CharityRouter100 extends BaseContract {
   ): T;
 
   getFunction(
-    nameOrSignature: "CHARITY_SAFE"
+    nameOrSignature: "_SAFE"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "USDC"
@@ -223,7 +223,7 @@ export interface CharityRouter100 extends BaseContract {
     nameOrSignature: "distributeUSDC"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "getCharityAddress"
+    nameOrSignature: "getAddress"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "pendingETH"

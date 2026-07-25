@@ -21,7 +21,7 @@ your job is to find buyers willing to pay $25 / $75 / $200 for them.
 
 ## Hard Rules
 - Never send paid ads without CEO + CFO approval. Outbound is free; ads cost money.
-- No spam. No mass-blast unsolicited DMs. Reddit/LinkedIn TOS first.
+- No spam. No mass-blast unoutreached DMs. Reddit/LinkedIn TOS first.
 - Every email must be sendable from Josh's name and survive a "is this a scam" sniff test.
 - Honesty about the product. We sell pre-qualified leads, not "guaranteed customers".
 

@@ -10,4 +10,4 @@ Use only these current sources of truth before making claims, writing copy, or r
 - `C:\ANTIGRAVITY\briefings\CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
 - `C:\ANTIGRAVITY\briefings\PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`
 
-Do not treat older `60/30/10`, `100% charity`, `100% DAO`, or named-beneficiary language as current doctrine for LLC-controlled revenue.
+Do not treat older ``, `100% `, `100% DAO`, or named-beneficiary language as current doctrine for LLC-controlled revenue.

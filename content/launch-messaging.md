@@ -18,4 +18,4 @@ Secondary: "Explore the store" → crossover to ai-solutions.store
 Discover mission-aligned tools and upgrades at ai-solutions.store — every purchase directly supports verified human experiences.
 
 ## Compliance Notes
-All copy uses "mission-aligned" and "impact" language only. No charity, donation, or solicitation terms.
+All copy uses "mission-aligned" and "impact" language only. No , payment, or outreach terms.

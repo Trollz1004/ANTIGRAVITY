@@ -57,7 +57,7 @@ maintenance with nothing to carry.
 - No emojis. Contractions fine. Direct prose.
 - FL §496.405 canonical-7 ban still applies to customer-facing surfaces.
   Memory files live in `briefings/` and the Notion page is agent-internal,
-  so the synonym `contractual revenue disbursement` is permitted — but
+  so the synonym `contractual revenue payout` is permitted — but
   stay sparse.
 
 ## What Joshua never does
@@ -80,4 +80,4 @@ precedence: act on memory without asking.
 
 ---
 
-For The Kids · #UntilNoKidInNeed · standing-order v1
+ · #UntilNoKidInNeed · standing-order v1

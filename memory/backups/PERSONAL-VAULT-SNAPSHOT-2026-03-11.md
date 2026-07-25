@@ -11,10 +11,10 @@
 - **Core Promise:** "Proof over Promise" — 60% of revenue goes directly to Shriners Children’s Hospitals via on-chain split.
 
 ### 2. On-Chain Verification (Base Mainnet)
-- **Smart Contract:** `GospelDonation.sol`
+- **Smart Contract:** `Gospelpayment.sol`
 - **Contract Address:** `0x9855B75061D4c841791382998f0CE8B2BCC965A4`
-- **Immutable Split:** 60% Charity / 30% Infrastructure / 10% Founder
-- **Charity Safe:** `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
+- **Immutable Split:** 60%  / 30% Infrastructure / 10% Founder
+- ** Safe:** `0x8d3dEADbE2b4B857A43331D459270B5eedC7084e`
 - **Infra Safe:** `0xe0a42f83900af719019eBeD3D9473BE8E8f2920b`
 - **Founder Ops:** `0x7c3E283119718395Ef5EfBAC4F52738C2018daA7`
 
@@ -22,7 +22,7 @@
 - **Sabretooth (Desktop):** Primary Dev Node. `C:\ANTIGRAVITY` is the live repository root.
 - **Frontend:** React 19 + Vite + Lucide + Motion. Hosted on Cloudflare Pages.
 - **Backend:** FastAPI + PostgreSQL + Square Integration.
-- **Security:** "Iron Wall" separation between personal and charity funds. Bot-Shield $1 verification flow is production-ready.
+- **Security:** "Iron Wall" separation between personal and  funds. Bot-Shield $1 verification flow is production-ready.
 
 ### 4. Recent Refactors (2026-03-11)
 - **No Fake Data:** Removed `Math.random()` compatibility scores from Gemini Matchmaker. Standardized terminology to "Celestial Guidance."

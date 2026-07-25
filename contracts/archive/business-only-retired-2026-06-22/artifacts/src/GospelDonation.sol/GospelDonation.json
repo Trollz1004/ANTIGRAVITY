@@ -1,13 +1,13 @@
 {
   "_format": "hh-sol-artifact-1",
-  "contractName": "GospelDonation",
-  "sourceName": "src/GospelDonation.sol",
+  "contractName": "Gospelpayment",
+  "sourceName": "src/Gospelpayment.sol",
   "abi": [
     {
       "inputs": [
         {
           "internalType": "address",
-          "name": "_charityWallet",
+          "name": "_Wallet",
           "type": "address"
         },
         {
@@ -95,7 +95,7 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "charityShare",
+          "name": "Share",
           "type": "uint256"
         },
         {
@@ -117,7 +117,7 @@
           "type": "uint256"
         }
       ],
-      "name": "EthDonationReceived",
+      "name": "EthpaymentReceived",
       "type": "event"
     },
     {
@@ -138,7 +138,7 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "charityAmount",
+          "name": "Amount",
           "type": "uint256"
         },
         {
@@ -220,7 +220,7 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "charityShare",
+          "name": "Share",
           "type": "uint256"
         },
         {
@@ -242,12 +242,12 @@
           "type": "uint256"
         }
       ],
-      "name": "UsdcDonationReceived",
+      "name": "UsdcpaymentReceived",
       "type": "event"
     },
     {
       "inputs": [],
-      "name": "CHARITY_PERCENT",
+      "name": "_PERCENT",
       "outputs": [
         {
           "internalType": "uint256",
@@ -309,7 +309,7 @@
       "outputs": [
         {
           "internalType": "uint256",
-          "name": "charityShare",
+          "name": "Share",
           "type": "uint256"
         },
         {
@@ -328,7 +328,7 @@
     },
     {
       "inputs": [],
-      "name": "charityWallet",
+      "name": "Wallet",
       "outputs": [
         {
           "internalType": "address",
@@ -341,14 +341,14 @@
     },
     {
       "inputs": [],
-      "name": "donateEth",
+      "name": "paymentEth",
       "outputs": [],
       "stateMutability": "payable",
       "type": "function"
     },
     {
       "inputs": [],
-      "name": "donationCount",
+      "name": "paymentCount",
       "outputs": [
         {
           "internalType": "uint256",
@@ -440,7 +440,7 @@
       "outputs": [
         {
           "internalType": "uint256",
-          "name": "charity",
+          "name": "",
           "type": "uint256"
         },
         {
@@ -459,7 +459,7 @@
     },
     {
       "inputs": [],
-      "name": "getTotalDonations",
+      "name": "getTotalpayments",
       "outputs": [
         {
           "internalType": "uint256",
@@ -534,7 +534,7 @@
           "type": "uint256"
         }
       ],
-      "name": "receiveCryptoDonation",
+      "name": "receiveCryptopayment",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -566,7 +566,7 @@
     },
     {
       "inputs": [],
-      "name": "totalEthDonations",
+      "name": "totalEthpayments",
       "outputs": [
         {
           "internalType": "uint256",
@@ -579,7 +579,7 @@
     },
     {
       "inputs": [],
-      "name": "totalUsdcDonations",
+      "name": "totalUsdcpayments",
       "outputs": [
         {
           "internalType": "uint256",

@@ -8,7 +8,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
  * StorefrontMode — public-facing catalogue + admin manage surface.
  *
  * Doctrine compliance:
- *  - "contractual revenue disbursement" wording only (no donate/charity).
+ *  - "contractual revenue payout" wording only (no payment/).
  *  - Honest empty state: empty catalogue renders a starter-seed CTA, not
  *    a fabricated grid of fake products.
  *  - Square hosted checkout = primary processor (no PCI risk on our box).
@@ -110,7 +110,7 @@ export function StorefrontMode() {
         )}
 
         <footer className="mt-12 pt-6 border-t border-[#2a3a52] text-[10px] text-[#4a5568] tracking-widest uppercase">
-          contractual revenue disbursement · 10% hard cap stacked · FL §496.405 compliant · receipts only
+          contractual revenue payout · 10% hard cap stacked · FL §496.405 compliant · receipts only
         </footer>
       </div>
     </div>

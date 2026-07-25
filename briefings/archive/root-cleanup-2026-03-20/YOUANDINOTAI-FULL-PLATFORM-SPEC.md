@@ -20,10 +20,10 @@
 ### 3. SOCIAL PLATFORMS ✅ REQUIRED
 - **Dating Tab:** Verified users, Bot-Shield confirmed
 - **Meetups Tab:** Group meetups, location-based discovery
-- **Volunteer Hub:** Charity events, time banking, skill matching
+- **Volunteer Hub:**  events, time banking, skill matching
 - **Double Dates:** Group matching (2 couples), activity suggestions
 - **Social Boards:** Location-based discussion boards (no data harvesting)
-- **Charity Tab:** Active fundraising, Protocol Omega 60% routing display
+- ** Tab:** Active fundraising, Protocol Omega 60% routing display
 
 ### 4. LOCATION-BASED FEATURES ✅ REQUIRED
 - User location privacy (opt-in, user controls)
@@ -64,7 +64,7 @@
 
 ### Volunteer Hub
 ```
-❌ CHARITY EVENT DISCOVERY (MISSING)
+❌  EVENT DISCOVERY (MISSING)
 ❌ TIME BANKING (MISSING)
 ❌ SKILL MATCHING (MISSING)
 ❌ IMPACT TRACKING (MISSING)
@@ -97,7 +97,7 @@
 ### Week 2: Meetups + Volunteer Hub
 - [ ] Meetup creation + discovery (location-based)
 - [ ] Event calendar (Ical export for user control)
-- [ ] Volunteer event scraper (from charity APIs, NOT harvesting)
+- [ ] Volunteer event scraper (from  APIs, NOT harvesting)
 - [ ] Time banking system (hours → impact metrics)
 
 ### Week 3: Double Dates + Social Boards + Data Privacy
@@ -157,7 +157,7 @@ CREATE TABLE volunteer_events (
   location POINT,
   event_date TIMESTAMP,
   time_commitment_hours INT,
-  charity_id UUID,
+  _id UUID,
   created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -191,7 +191,7 @@ src/components/
 ├── VideoChat.tsx (WebRTC peer)
 ├── ChatWindow.tsx (Real-time messages)
 ├── MeetupsDiscovery.tsx (Location-based)
-├── VolunteerHub.tsx (Charity events)
+├── VolunteerHub.tsx ( events)
 ├── DoubleDateMatcher.tsx (2-couple matching)
 ├── SocialBoards.tsx (Location-scoped)
 └── DataPrivacyDashboard.tsx (GDPR controls)
@@ -256,7 +256,7 @@ export async function deleteUserAccount(userId: string) {
 - [ ] **Video chat working** (daily.co SDK integrated)
 - [ ] **Real-time messaging working** (Socket.io live)
 - [ ] **Meetups discoverable** (location-based)
-- [ ] **Volunteer hub live** (charity events)
+- [ ] **Volunteer hub live** ( events)
 - [ ] **Double dates matcher working** (Gemini 2-couple chemistry)
 - [ ] **Social boards functional** (neighborhood scoped)
 - [ ] **Data privacy dashboard live** (export/delete/audit)
@@ -277,7 +277,7 @@ If YouAndINotAI launches as **just a dating app with cosmetic features**, Josh l
 - Volunteer opportunities + time banking
 - Location-based social boards
 - **Full control of their own data**
-- **60% of revenue goes to kids' charities** (visible in app)
+- **60% of revenue goes to kids' ** (visible in app)
 
 **What they don't get:**
 - Data harvested and sold

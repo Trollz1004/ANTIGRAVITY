@@ -31,7 +31,7 @@
 
 - `powershell -ExecutionPolicy Bypass -File scripts/hermes-env-audit.ps1`
 - `rg -n "ANTHROPIC_API_KEY|CLAUDE_API_KEY" services/health-aggregator .github/workflows/aggregator-env-audit.yml`
-- `rg -n "donate|donation|solicitation|charity|charitable|giving back|disbursement" tools/watchdog-sentry services/health-aggregator`
+- `rg -n "payment|payment|outreach||||payout" tools/watchdog-sentry services/health-aggregator`
 - `python scripts/clawx-control/opus-guardian.py`
 
 ## Vault monitoring

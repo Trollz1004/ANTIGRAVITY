@@ -854,7 +854,7 @@ export async function getKidsBucketStatus() {
 export async function validateKidsBucketIntegrity() {
   const db = await getDb();
 
-  // Sum all kids allocations from revenue splits
+  // Sum all kids allocations from s
   const [splits] = await db.query(
     `SELECT SUM(kids_amount) as total_kids FROM revenue_splits`
   );
@@ -1060,7 +1060,7 @@ async function notifyJoshua(issues: any[]) {
 
 Keep these lanes in your Hermes Kanban:
 
-1. **COMPLIANCE** - Daily checks, revenue splits, bucket balances
+1. **COMPLIANCE** - Daily checks, s, bucket balances
 2. **INCOME-ENGINE** - FETCHER tasks, lead processing, revenue
 3. **FOUNDER SAFETY** - Compensation tracking, burn rate monitoring
 4. **KIDS BUCKET** - Allocation tracking, payout planning

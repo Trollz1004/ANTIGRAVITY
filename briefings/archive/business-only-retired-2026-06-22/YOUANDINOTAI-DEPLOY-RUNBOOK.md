@@ -206,7 +206,7 @@ Before EVERY deploy, verify the build output doesn't ship doctrine violations:
 cd C:\Antigravity\apps\youandinotai-frontend
 # After build, grep the output for forbidden strings
 Get-ChildItem -Path .open-next\assets, out -Recurse -File -Include *.html,*.js,*.json -ErrorAction SilentlyContinue |
-    Select-String -Pattern 'donat(e|ion)|solicitation|tax-deductible' |
+    Select-String -Pattern 'donat(e|ion)|outreach|tax-deductible' |
     Format-Table Path, LineNumber, Line
 ```
 

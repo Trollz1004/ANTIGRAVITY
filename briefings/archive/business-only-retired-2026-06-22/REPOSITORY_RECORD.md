@@ -9,7 +9,7 @@
 > - **ONE repo only:** `Trollz1004/ANTIGRAVITY`. Never create another repo or greenfield app.
 > - **Product code (already written):** `apps/youandinotai-frontend/` (Next.js 15 → youandinotai.com) + `backend/fastapi-app/` (FastAPI). GCR backend deployed & live. Mirror on **T5500** (`192.168.0.15`); **Sabretooth** `C:\ANTIGRAVITY` is the only push node.
 > - **Square is LIVE and has cleared real payments** — `joshlcoleman@gmail.com`, location `LY5GN09F5AN83`. Do **NOT** assume $0 / pre-launch. Verify in Square or `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py`.
-> - **Revenue model:** 1 wallet, 1 LLC, **10% per-bucket reserve** (coded: `reserve_revenue_allocation()`). Never invent splits; never resurrect 60/30/10 or charity-routing.
+> - **Revenue model:** 1 wallet, 1 LLC, **10% per-bucket reserve** (coded: `reserve_revenue_allocation()`). Never invent splits; never resurrect  or -routing.
 > - **Before writing anything:** read `CLAUDE.md` fully, then this file, then **grep for an existing implementation.** Assume it exists until search proves otherwise.
 
 <!-- ============================================================ -->
@@ -18,7 +18,7 @@
 
 Date: May 13, 2026 (node-primary updated; prior content from 2026-05-11 ONE-repo sweep preserved below)
 Authority: Joshua Coleman
-Status: **T5500 is now the primary node** per the 2026-05-11/12 node-consolidation plan (`T5500-CONSOLIDATION.md`). Sabretooth was the primary node through 2026-05-11 and is pending factory wipe after the `sabretooth-preserve-20260511` branch is confirmed on origin. 9020 is also pending wipe. All prior Sabretooth-era history below remains accurate as historical record. Updated after the 2026-05-11 ONE-repo consolidation (income-engine merged in, second repo archived, Paperclip companies created), the April 15 PaperClip HQ cutover, the April 17 1-wallet revenue-model pivot (charity-routing language removed from all active surfaces), the April 19 4-DAO architecture finalization and Gemini memory refresh, the April 27 OpenCode / Paperclip Worker finalization, and the April 28 doctrine sweep that moved the env vault to OneDrive, locked the 1-folder rule, migrated OpusPawClaw to `c:\Antigravity\apps\opuspawclaw`, added the Sabretooth always-on watchdog, stood up Hermes Router on `:11435`, and wired the Playwright browser MCP into the project
+Status: **T5500 is now the primary node** per the 2026-05-11/12 node-consolidation plan (`T5500-CONSOLIDATION.md`). Sabretooth was the primary node through 2026-05-11 and is pending factory wipe after the `sabretooth-preserve-20260511` branch is confirmed on origin. 9020 is also pending wipe. All prior Sabretooth-era history below remains accurate as historical record. Updated after the 2026-05-11 ONE-repo consolidation (income-engine merged in, second repo archived, Paperclip companies created), the April 15 PaperClip HQ cutover, the April 17 1-wallet revenue-model pivot (-routing language removed from all active surfaces), the April 19 4-DAO architecture finalization and Gemini memory refresh, the April 27 OpenCode / Paperclip Worker finalization, and the April 28 doctrine sweep that moved the env vault to OneDrive, locked the 1-folder rule, migrated OpusPawClaw to `c:\Antigravity\apps\opuspawclaw`, added the Sabretooth always-on watchdog, stood up Hermes Router on `:11435`, and wired the Playwright browser MCP into the project
 
 ## 2026-05-11 ONE-Repo Consolidation (canonical)
 
@@ -38,9 +38,7 @@ Status: **T5500 is now the primary node** per the 2026-05-11/12 node-consolidati
 | Paperclip companies | `Trash Or Treasure Online Recycler LLC` (TRA), `ai-solutions.store` (AIS), `youandinotai.com` (YOU), `marketing` (MAR, unified for now) |
 | Hermes config (Sabretooth) | `AppData\Local\hermes\config.yaml` — model `inclusionai/ring-2.6-1t:free`, provider `openrouter`, fallbacks `openrouter/nous/zai` |
 | Hermes `.env` (Sabretooth) | not yet created — keys not pasted through chat per session rule |
-| Language firewall | **DEAD** — mission is helping kids with medical care; speak honestly in code/commits/docs. FL §496.405 (avoid "donate/donation/solicitation" in customer-facing copy) remains the one real legal constraint. |
-
-
+| Language firewall | **DEAD** — mission is helping kids with medical care; speak honestly in code/commits/docs. FL §496.405 (avoid "payment/payment/outreach" in customer-facing copy) remains the one real legal constraint. |
 
 ## Repository Truth
 
@@ -65,10 +63,10 @@ Status: **T5500 is now the primary node** per the 2026-05-11/12 node-consolidati
 
 ## Current Financial Doctrine (as of April 17, 2026)
 
-- **One wallet model.** All platform revenue lands in a single founder-controlled wallet; all costs leave from the same wallet. There is no separate charity rail, no automatic-disbursement contract on the live revenue path, and no named-beneficiary split logic in active code.
-- **10% reserve, founder-directed quarterly.** A minimum of 10% of merchant receipts is set aside automatically as a reserve. That reserve is Joshua Coleman's taxable income (the LLC receives 100% of merchant receipts) and is held until he decides quarterly whether to donate, reinvest, stake, or hold. No agent, surface, or doc may pre-commit that reserve to a beneficiary.
-- **No charity-routing language on active surfaces.** No active surface (code, UI, marketing copy, docs) may claim charity routing, automatic disbursement, percent-to-charity splits, or §496.405-style language. The pre-April-17 "10% charitable cap" framing is retired and superseded.
-- **History is preserved, not authoritative.** Historical `60/30/10`, `100% charity`, `100% DAO`, and split-era percentages remain in clearly-historical files only. Historical Base Mainnet `GospelDonation.sol` is real chain history and must not be presented as current automatic doctrine for live LLC-controlled revenue.
+- **One wallet model.** All platform revenue lands in a single founder-controlled wallet; all costs leave from the same wallet. There is no separate  rail, no automatic-payout contract on the live revenue path, and no named-beneficiary split logic in active code.
+- **10% reserve, founder-directed quarterly.** A minimum of 10% of merchant receipts is set aside automatically as a reserve. That reserve is Joshua Coleman's taxable income (the LLC receives 100% of merchant receipts) and is held until he decides quarterly whether to payment, reinvest, stake, or hold. No agent, surface, or doc may pre-commit that reserve to a beneficiary.
+- **No -routing language on active surfaces.** No active surface (code, UI, marketing copy, docs) may claim  routing, automatic payout, percent-to- splits, or §496.405-style language. The pre-April-17 "10%  cap" framing is retired and superseded.
+- **History is preserved, not authoritative.** Historical ``, `100% `, `100% DAO`, and split-era percentages remain in clearly-historical files only. Historical Base Mainnet `Gospelpayment.sol` is real chain history and must not be presented as current automatic doctrine for live LLC-controlled revenue.
 - **Canonical reference.** `CLAUDE.md` (Revenue Model section, footer dated `2026-04-17`) is the source of truth. This block restates that doctrine for the repo-level status file.
 
 ## March 31 Audit Sweep
@@ -96,20 +94,20 @@ Primary adjustment record:
 
 - lead with product and service value
 - do not market percentages
-- do not frame purchases as donations
-- keep impact claims factual, restrained, and non-solicitation
+- do not frame purchases as payments
+- keep impact claims factual, restrained, and non-outreach
 
 ## April 1 Public-Surface Remediation
 
 - `www.aidoesitall.website` stale Pages deployment was replaced with the safe repo-tracked handoff surface at `_deploy/aidoesitall-www`
 - Cloudflare Pages project `for-the-kids-contribute` now serves that replacement on production deployment `0e318f27`
 - stale Worker `for-the-kids-api` on route `api.aidoesitall.website/*` was replaced with the repo-tracked guard Worker at `infra/cloudflare/aidoesitall-api-guard`
-- verified live result: both `www.aidoesitall.website` and `api.aidoesitall.website` now avoid stale `60%` / `100% charity` public claims
+- verified live result: both `www.aidoesitall.website` and `api.aidoesitall.website` now avoid stale `60%` / `100% ` public claims
 
 ## April 1 Control-Surface Doctrine Cleanup
 
 - `AGENTS.md`, `CLAUDE.md`, canonical memory files, Brain/MCP config examples, and active OpenClaw/control scripts were normalized away from retired split-separation doctrine
-- current control surfaces now treat the conservative `10%` charitable cap as the only live LLC operating doctrine unless a future canonical legal update replaces it
+- current control surfaces now treat the conservative `10%`  cap as the only live LLC operating doctrine unless a future canonical legal update replaces it
 - historical chain and contract artifacts remain in explicitly historical files only and do not control current operational truth
 - `briefings/ACTIVE-PROMPTS.md` was reduced to a superseded notice so old prompt copy cannot masquerade as current operating instructions
 - canonical briefing names were normalized to:
@@ -142,7 +140,7 @@ Primary adjustment record:
   - `/app/privacy`
   - `/app/verify`
 - founder pricing and Square commerce links were rechecked on April 2, 2026 and all five live checkout rails still return `303` redirects into Square checkout
-- the customer-facing login copy leak using `donation checkout` wording was removed before final deploy
+- the customer-facing login copy leak using `payment checkout` wording was removed before final deploy
 - frontend-only deploy was pushed to Cloudflare Pages project `youandinotai`; no GCR / Cloud Run backend deploy was required because this pass did not change backend code
 - one residual remains: Cloudflare JavaScript detections inject an inline challenge script that produces a CSP console error on production pages; page behavior is still correct and this is not sourced from the repo bundle
 
@@ -272,7 +270,7 @@ Validated on April 2, 2026:
 - this means the `$1` is not routed into a mystery pool inside the app code; it enters the Square-hosted checkout, and the repo-tracked state is the verification event plus webhook-backed badge promotion path
 - date-app backend accounting now includes a `revenue_allocations` ledger that reserves exactly `10%` of each authoritative Square `payment.completed` event into the internal `kids_support` lane, rounded up to whole cents
 - for a `$1.00` Bot-Shield payment, the ledger reserves `10` cents and leaves `90` cents as the operating amount
-- this is verified internal allocation tracking, not a claim that an external payout has already been sent; external disbursement still requires a separate verified payout/reconciliation path
+- this is verified internal allocation tracking, not a claim that an external payout has already been sent; external payout still requires a separate verified payout/reconciliation path
 
 ## April 11 Orphaned Cloudflare Workers Service — snowy-wave-bf78
 
@@ -294,13 +292,13 @@ Validated on April 2, 2026:
 
 ## April 17 Revenue Model Pivot — 1-Wallet / 10% Reserve
 
-- the pre-April-17 "10% charitable cap" framing was retired and superseded by the **1-wallet model**: all platform revenue in, all costs out of one founder-controlled wallet
-- a minimum **10% reserve** is set aside automatically; that reserve is Joshua Coleman's taxable income (LLC receives 100% of merchant receipts) and is held for founder-directed quarterly disposition (donate, reinvest, stake, or hold)
-- charity-routing language, automatic-disbursement claims, percent-to-charity splits, and §496.405-style framing are no longer permitted on any active surface (code, UI, marketing copy, docs)
-- the donate-guard hook was removed in this pivot
+- the pre-April-17 "10%  cap" framing was retired and superseded by the **1-wallet model**: all platform revenue in, all costs out of one founder-controlled wallet
+- a minimum **10% reserve** is set aside automatically; that reserve is Joshua Coleman's taxable income (LLC receives 100% of merchant receipts) and is held for founder-directed quarterly disposition (payment, reinvest, stake, or hold)
+- -routing language, automatic-payout claims, percent-to- splits, and §496.405-style framing are no longer permitted on any active surface (code, UI, marketing copy, docs)
+- the payment-guard hook was removed in this pivot
 - a GLM-5.1:cloud token policy was set in the same sweep
 - canonical reference for the post-pivot doctrine: `CLAUDE.md` (Revenue Model section, footer dated `2026-04-17`)
-- historical chain artifacts (`GospelDonation.sol`, split-era 60/30/10, 100% charity language) remain valid history-only artifacts and must not be presented as current automatic doctrine
+- historical chain artifacts (`Gospelpayment.sol`, split-era , 100%  language) remain valid history-only artifacts and must not be presented as current automatic doctrine
 
 ## April 19 4-DAO Architecture and Gemini Memory Refresh
 

@@ -170,7 +170,7 @@ The Command Center is a content approval workflow. Here's how each agent interac
 
 1. **CMO generates content** → creates a content item with: title, body, source ("gemini"/"opus"/"perplexity"/"grok"/"manus"), target platforms, tags, mediaUrl (optional)
 
-2. **CFO reviews for financial/legal risk** → flags items that mention money, prices, "donate", "charity", or any FL §496.405 prohibited language. If flagged, item gets a note and stays in inbox for Joshua.
+2. **CFO reviews for financial/legal risk** → flags items that mention money, prices, "payment", "", or any FL §496.405 prohibited language. If flagged, item gets a note and stays in inbox for Joshua.
 
 3. **CEO reviews for quality** → checks brand consistency, tone, messaging alignment with 4-DAO mission. Approves or rejects.
 
@@ -221,7 +221,7 @@ The Command Center is a content approval workflow. Here's how each agent interac
 
 1. ONE AI DOES NOT COMMAND ANOTHER. Joshua is sole authority.
 2. No financial changes without revenue flowing OR Opus+Josh explicit approval.
-3. FL §496.405: NEVER "donate/donation/solicitation" in customer-facing copy. Always "contractual revenue disbursement."
+3. FL §496.405: NEVER "payment/payment/outreach" in customer-facing copy. Always "contractual revenue payout."
 4. Payment: Square only (Location LY5GN09F5AN83). Stripe is dead.
 5. Hosting: Cloudflare only. Netlify banned.
 6. No git push/pull without Joshua's explicit order.

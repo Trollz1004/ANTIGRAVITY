@@ -28,9 +28,9 @@ python T5500_CREDIT_MONITOR.py
 The dashboard at `apps/mission-control/index.html` will then show live activity with **who** is working and current status.
 
 ## Doctrine Notes
-- 1 wallet · 1 LLC · 10% max per bucket as contractual revenue disbursement
+- 1 wallet · 1 LLC · 10% max per bucket as contractual revenue payout
 - Square only (LY5GN09F5AN83)
-- No "donate/donation" language on any surface
+- No "payment/payment" language on any surface
 - Everything stays inside Trollz1004/ANTIGRAVITY on this branch
 
 Part of the `feature/mission-control-hermes-live` integration.

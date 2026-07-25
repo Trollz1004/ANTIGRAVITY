@@ -475,7 +475,7 @@ function CreateProposalForm({ onSuccess }: { onSuccess: () => void }) {
 
   const categories =
     tier === 'critical'
-      ? ['revenue-split', 'contract-deploy', 'iron-wall', 'team-member', 'governance-change']
+      ? ['', 'contract-deploy', 'iron-wall', 'team-member', 'governance-change']
       : ['bug-fix', 'ui-update', 'marketing', 'documentation', 'feature-add'];
 
   return (
@@ -486,7 +486,7 @@ function CreateProposalForm({ onSuccess }: { onSuccess: () => void }) {
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="e.g., Update revenue split to 70/20/10"
+          placeholder="e.g., Update  to 70/20/10"
         />
       </div>
       <div>

@@ -39,7 +39,7 @@ mission tag **#UntilNoKidInNeed** (a reserved share of revenue).
   product context, agent contracts, and additional surfaces.
 
 > Compliance note carried over from the source doctrine: customer-facing surfaces
-> **never** use the words *donate / donation / solicitation / tax-deductible*
+> **never** use the words *payment / payment / outreach / tax-deductible*
 > (FL §496.405). YouAndINotAI uses **Square only** — never Stripe on the dating
 > surface. Keep these in mind when writing copy for those products.
 
@@ -62,7 +62,7 @@ never down.
 - **Trust language.** "Verified Human", "Bot-Shield", "No Bots. Real Humans.",
   "real people only." Support is framed as a trust signal, not a cost center.
 - **Mission tag.** `#UntilNoKidInNeed` appears as an eyebrow / footer accent,
-  usually in pink/rose. The mission is *stated*, never used to *solicit*.
+  usually in pink/rose. The mission is *stated*, never used to *outreach*.
 - **Tone examples (lift these patterns):**
   - Hero: *"A human-first social platform for builders, operators, and people who actually do the work."*
   - Plan blurb: *"Full access plus permanent founding-member status as the platform grows."*

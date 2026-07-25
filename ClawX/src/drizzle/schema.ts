@@ -96,7 +96,7 @@ export type InsertUsageLog = typeof usageLogs.$inferInsert;
  * JoshuaCLAW Governance System
  * 7 voters: Joshua (human, odd tiebreaker) + 6 AI platforms (even)
  * Majority = 4/7 votes to pass
- * Tier 1 (Critical): Revenue splits, contract deployments, Iron Wall changes
+ * Tier 1 (Critical): s, contract deployments, Iron Wall changes
  * Tier 2 (Operational): Bug fixes, UI updates, marketing pushes
  */
 export const governanceProposals = mysqlTable('governance_proposals', {

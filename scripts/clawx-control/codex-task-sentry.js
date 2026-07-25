@@ -207,7 +207,7 @@ function seedEwasteTasks(queue) {
               tags: ['ewaste', 'outreach', 'inventory'],
               prompt:
                 'Write concise outreach templates to source surplus e-waste from businesses and schools. ' +
-                'Tone must be transparent, respectful, local, and focused on fast intake plus responsible recycling without donation language.',
+                'Tone must be transparent, respectful, local, and focused on fast intake plus responsible recycling without payment language.',
             },
             {
               id: `EW-RESPONSES-${day}`,
@@ -218,7 +218,7 @@ function seedEwasteTasks(queue) {
               tags: ['ewaste', 'responses', 'onlinerecycle'],
               prompt:
                 'Draft concise email reply templates for OnlineRecycle.org intake leads: drop-off confirmation, pickup lead confirmation, business bulk inventory response, scheduling follow-up, and decline/unsupported items. ' +
-                'Keep them direct, respectful, local to Central Florida, and free of donation language. Mention Square booking only where useful.',
+                'Keep them direct, respectful, local to Central Florida, and free of payment language. Mention Square booking only where useful.',
             },
           ],
         },

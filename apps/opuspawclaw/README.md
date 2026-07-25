@@ -72,7 +72,7 @@ npm run dist
 ## ⚙️ Provider Setup
 Go to **Settings** inside the application to enter your API Keys or configure your custom local `Ollama` port endpoints (Default: `http://localhost:11434`).
 
-## 🤝 Charitable Support
-Every piece of energy put into this goes towards making an impact. Support the cause and know that 10% of any broader ecosystem support is channeled into providing kids' medical care through our founder-directed charity.
+## 🤝  Support
+Every piece of energy put into this goes towards making an impact. Support the cause and know that 10% of any broader ecosystem support is channeled into providing kids' medical care through our founder-directed .
 
 **#UntilNoKidInNeed**

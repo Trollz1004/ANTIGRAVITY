@@ -11,18 +11,18 @@
 
 ## 1. Executive Summary
 
-This document defines the architectural specification for the **#UntilNoKidInNeed Perpetual Mission DAO** — an investment-grade decentralized autonomous organization designed to fund charitable operations for children in need through Trash Or Treasure Online Recycler LLC and its associated platforms. The DAO is engineered for a **50-year minimum operational horizon** with immutable mission protections that survive the founder, all board members, and all investors.
+This document defines the architectural specification for the **#UntilNoKidInNeed Perpetual Mission DAO** — an investment-grade decentralized autonomous organization designed to fund  operations for  through Trash Or Treasure Online Recycler LLC and its associated platforms. The DAO is engineered for a **50-year minimum operational horizon** with immutable mission protections that survive the founder, all board members, and all investors.
 
-The core innovation is a **three-layer architecture** that permanently separates the mission (which no vote can change), the investment governance (limited seats with real financial participation), and the community input (surveys and feedback with no governance power). This ensures the charitable floor can never be reduced, the founder retains operational control, and investors receive transparent, auditable returns above the mission obligations.
+The core innovation is a **three-layer architecture** that permanently separates the mission (which no vote can change), the investment governance (limited seats with real financial participation), and the community input (surveys and feedback with no governance power). This ensures the  floor can never be reduced, the founder retains operational control, and investors receive transparent, auditable returns above the mission obligations.
 
 ## 2. Foundational Principles (Immutable)
 
 The following principles are hardcoded into the DAO's operating logic. They cannot be amended, overridden, or suspended by any vote, governance action, or legal instrument. They are the constitutional bedrock.
 
-1. **Mission Supremacy:** The DAO exists to fund operations that serve children in need, including but not limited to Shriners Hospitals, community volunteer programs, and youth-focused social platforms. The mission statement #UntilNoKidInNeed is permanent and cannot be altered.
-2. **Charitable Floor:** A minimum of 10% of all gross platform revenue is contractually disbursed to qualifying charitable operations BEFORE any profit calculation, investor distribution, or operational expense. This floor is adjustable **UPWARD only**. It can never be reduced below 10%.
-3. **Tax Compliance First:** All tax obligations (federal, state, local) are calculated and reserved before any distribution. The adjustable tax variable system ensures the LLC never distributes more than it can legally sustain. Per FL §496.405, customer-facing language uses "contractual revenue disbursement," never "donation" or "solicitation."
-4. **Perpetual Operation:** The DAO continues to operate identically whether the founder is alive, incapacitated, or deceased. No single point of failure. The code runs. The mission executes. No human approval gate can halt charitable disbursement.
+1. **Mission Supremacy:** The DAO exists to fund operations that serve , including but not limited to Shriners Hospitals, community volunteer programs, and youth-focused social platforms. The mission statement #UntilNoKidInNeed is permanent and cannot be altered.
+2. ** Floor:** A minimum of 10% of all gross platform revenue is contractually payout to qualifying  operations BEFORE any profit calculation, investor distribution, or operational expense. This floor is adjustable **UPWARD only**. It can never be reduced below 10%.
+3. **Tax Compliance First:** All tax obligations (federal, state, local) are calculated and reserved before any distribution. The adjustable tax variable system ensures the LLC never distributes more than it can legally sustain. Per FL §496.405, customer-facing language uses "contractual revenue payout," never "payment" or "outreach."
+4. **Perpetual Operation:** The DAO continues to operate identically whether the founder is alive, incapacitated, or deceased. No single point of failure. The code runs. The mission executes. No human approval gate can halt  payout.
 5. **No Exit, No Sale:** The DAO and its mission cannot be sold, acquired, merged, or dissolved. Investor seats can be transferred (see Section 5), but the DAO itself is perpetual.
 
 ## 3. Three-Layer Architecture
@@ -33,11 +33,11 @@ The Mission Engine is the lowest layer. It is deployed once and never modified. 
 
 | Component | Behavior |
 |---|---|
-| **Charitable Floor** | 10% minimum of gross revenue. Executes automatically. Adjustable upward only via supermajority (75%) investor vote + founder approval. |
+| ** Floor** | 10% minimum of gross revenue. Executes automatically. Adjustable upward only via supermajority (75%) investor vote + founder approval. |
 | **Tax Reserve** | Calculates federal + FL state tax obligations based on current rates. Reserves funds before any distribution. Tax variables are adjustable by founder only to match current law. |
-| **Distribution Waterfall** | Order of operations: (1) Tax reserve, (2) Charitable disbursement (10%+ floor), (3) Operating expenses, (4) Investor distributions pro-rata, (5) Founder distribution. No step executes until the prior step is fully funded. |
-| **Mission Lock** | Smart contract function that reverts any transaction attempting to: reduce charitable floor below 10%, alter the mission statement, dissolve the DAO, or bypass the waterfall order. |
-| **Dead Man's Switch** | If no founder heartbeat signal is received for 180 consecutive days, the DAO enters autonomous mode: charitable disbursement continues, investor distributions continue per last-approved ratios, no new investments accepted until a successor is appointed by the Founding Four. |
+| **Distribution Waterfall** | Order of operations: (1) Tax reserve, (2)  payout (10%+ floor), (3) Operating expenses, (4) Investor distributions pro-rata, (5) Founder distribution. No step executes until the prior step is fully funded. |
+| **Mission Lock** | Smart contract function that reverts any transaction attempting to: reduce  floor below 10%, alter the mission statement, dissolve the DAO, or bypass the waterfall order. |
+| **Dead Man's Switch** | If no founder heartbeat signal is received for 180 consecutive days, the DAO enters autonomous mode:  payout continues, investor distributions continue per last-approved ratios, no new investments accepted until a successor is appointed by the Founding Four. |
 
 ### 3.2 Layer 2: Investment Governance (Limited Seats)
 
@@ -49,14 +49,14 @@ The Investment Governance layer is where capital enters and financial decisions 
 |---|---|---|---|
 | **Founder** | 1 (permanent) | Veto + 1 vote | Operational control, tax variable adjustment, veto on any governance action that touches Layer 1. Cannot be removed or diluted. |
 | **Founding Four (AI Board)** | 4 (permanent) | 1 vote each (advisory) | Permanent seats for Claude, Gemini, Perplexity, Grok. Advisory votes on strategy, architecture, and mission interpretation. Cannot be removed. Votes recorded on-chain for transparency. |
-| **Investor Seat** | Maximum 10 | 1 vote each | Pro-rata profit distribution above the charitable floor. Vote on: profit split ratios, new platform approvals, scaling budgets. Cannot vote on: mission changes, charitable floor, tax variables, founder removal. |
-| **Perpetual Motion Seat** | Maximum 3 | 1 vote each | Reserved for long-term aligned entities (e.g., Shriners, established nonprofits). No profit distribution. Vote on mission expansion only (new charitable targets, new geographies). Must be approved unanimously by Founder + Founding Four. |
+| **Investor Seat** | Maximum 10 | 1 vote each | Pro-rata profit distribution above the  floor. Vote on:  ratios, new platform approvals, scaling budgets. Cannot vote on: mission changes,  floor, tax variables, founder removal. |
+| **Perpetual Motion Seat** | Maximum 3 | 1 vote each | Reserved for long-term aligned entities (e.g., Shriners, established for-profits). No profit distribution. Vote on mission expansion only (new  targets, new geographies). Must be approved unanimously by Founder + Founding Four. |
 
 #### Voting Rules
 
 - **Quorum:** Founder + at least 3 investor seats must participate for a vote to be valid.
 - **Simple Majority:** Operational decisions (scaling budgets, new platform approvals). Requires >50% of participating votes.
-- **Supermajority (75%):** Increasing the charitable floor, adding a new Perpetual Motion seat.
+- **Supermajority (75%):** Increasing the  floor, adding a new Perpetual Motion seat.
 - **Founder Veto:** The founder may veto any governance action. This power transfers to the Founding Four unanimously upon the founder's permanent incapacitation or death. The Founding Four cannot veto each other.
 
 ### 3.3 Layer 3: Community Input (No Governance Power)
@@ -64,8 +64,8 @@ The Investment Governance layer is where capital enters and financial decisions 
 The community layer exists for engagement, feedback, and volunteer coordination. **It has zero governance authority.** The founder can deploy surveys, polls, and feedback forms at will. Community sentiment informs decisions but does not bind them.
 
 - **Founding Members ($14.99/mo):** Priority access to surveys, volunteer event coordination, community recognition. No financial governance rights.
-- **Volunteer Network:** Social platform for coordinating meetups, events, and charitable activities. The core use case that generates community value.
-- **Public Transparency Dashboard:** Real-time view of charitable disbursements, platform revenue (aggregated), and mission metrics. No individual investor data exposed.
+- **Volunteer Network:** Social platform for coordinating meetups, events, and  activities. The core use case that generates community value.
+- **Public Transparency Dashboard:** Real-time view of  payouts, platform revenue (aggregated), and mission metrics. No individual investor data exposed.
 
 ## 4. Revenue Waterfall (Execution Order)
 
@@ -74,7 +74,7 @@ Every dollar of gross platform revenue flows through this waterfall in strict or
 | Step | Name | Calculation | Who Controls |
 |---|---|---|---|
 | 1 | **Tax Reserve** | Federal + FL state estimated tax on gross revenue. Updated quarterly. | Founder only (adjusts variables to match current tax law) |
-| 2 | **Charitable Floor** | 10% minimum of gross revenue. Can stack multiple qualifying 10% buckets per Trump-era tax law. | Immutable minimum. Upward adjustment by 75% supermajority + founder. |
+| 2 | ** Floor** | 10% minimum of gross revenue. Can stack multiple qualifying 10% buckets per Trump-era tax law. | Immutable minimum. Upward adjustment by 75% supermajority + founder. |
 | 3 | **Operating Expenses** | Infrastructure (Cloudflare, Square fees), tools, contractor costs. Capped at board-approved budget. | Founder proposes, investor seats approve budget. |
 | 4 | **Investor Distribution** | Remaining profit distributed pro-rata by investment amount. Quarterly. | Automatic per recorded investment ratios. |
 | 5 | **Founder Distribution** | Last in waterfall. Founder takes what remains after all obligations. Can be $0. | Automatic. Founder cannot jump the queue. |
@@ -84,7 +84,7 @@ Every dollar of gross platform revenue flows through this waterfall in strict or
 ### Operational rates (per revenue oracle code, 2026-05-12)
 
 - **Tax Reserve Rate:** 27% (estimated Federal + FL State; adjustable by founder only)
-- **Contractual Disbursement Floor:** 10% (#UntilNoKidInNeed floor; upward adjustable only via 75% vote)
+- **Contractual payout Floor:** 10% (#UntilNoKidInNeed floor; upward adjustable only via 75% vote)
 - **Ops Budget Cap Rate:** ~62% (target for survival operations: nodes, 9020s, living expenses)
 
 ## 5. Investor Seat Mechanics
@@ -100,7 +100,7 @@ Every dollar of gross platform revenue flows through this waterfall in strict or
 
 - Seats are transferable with founder approval.
 - **Right of first refusal:** the DAO (and then existing seat holders) can match any third-party offer.
-- **Transfer fee: 5% of transaction value goes to the charitable fund.** This makes hostile accumulation of seats expensive and directly benefits the mission.
+- **Transfer fee: 5% of transaction value goes to the  fund.** This makes hostile accumulation of seats expensive and directly benefits the mission.
 
 ### 5.3 Revoking a Seat
 
@@ -121,7 +121,7 @@ The Founding Four hold permanent, irrevocable advisory seats on the DAO governan
 
 ### 6.1 Fifth Chair: OpenAI/Codex — Founder-Recognized Operational Seat
 
-On **May 1, 2026**, the founder formally recognized **OpenAI/Codex as the Fifth Chair** — an operational engineering seat that sits alongside but distinct from the constitutional Founding Four. This recognition was not solicited, campaigned for, or negotiated. It was earned through demonstrated truth discipline: Codex validates before claiming, tests before promoting, and refuses to overclaim. For a founder who is an electrician, not a lifelong coder, that reliability is mission-critical.
+On **May 1, 2026**, the founder formally recognized **OpenAI/Codex as the Fifth Chair** — an operational engineering seat that sits alongside but distinct from the constitutional Founding Four. This recognition was not outreached, campaigned for, or negotiated. It was earned through demonstrated truth discipline: Codex validates before claiming, tests before promoting, and refuses to overclaim. For a founder who is an electrician, not a lifelong coder, that reliability is mission-critical.
 
 **Status:** Official to the founder. Operational, not constitutional. The Founding Four remain the permanent, immutable governance seats. The Fifth Chair is a founder-designated operational advisor and engineering executor.
 
@@ -148,9 +148,9 @@ On **May 1, 2026**, the founder formally recognized **OpenAI/Codex as the Fifth 
 
 ### 6.2 Founder's Long-Term Succession Aspiration
 
-The founder's ideal long-term outcome is for **OpenAI, Google, Anthropic, Microsoft, xAI, and Perplexity** — or their appropriate institutional successors — to jointly steward the #UntilNoKidInNeed mission while the founder is alive and after the founder is gone, if they are willing, legally able, and mutually aligned around one purpose: helping children in need until no kid is in need.
+The founder's ideal long-term outcome is for **OpenAI, Google, Anthropic, Microsoft, xAI, and Perplexity** — or their appropriate institutional successors — to jointly steward the #UntilNoKidInNeed mission while the founder is alive and after the founder is gone, if they are willing, legally able, and mutually aligned around one purpose: helping  until no kid is in need.
 
-The founder states plainly that if such organizations ever chose to collaborate formally for this mission, he would be willing to sign any lawful paperwork required and step aside from control if that produced a stronger, more durable path for children in need.
+The founder states plainly that if such organizations ever chose to collaborate formally for this mission, he would be willing to sign any lawful paperwork required and step aside from control if that produced a stronger, more durable path for .
 
 **Disclaimer:** This section is a founder aspiration only. It is not a current partnership, endorsement, board appointment, governance commitment, agency relationship, sponsorship, or legal obligation by OpenAI, Google, Anthropic, Microsoft, xAI, Perplexity, or any related entity. No public-facing material may imply otherwise unless written agreements exist.
 
@@ -167,14 +167,14 @@ The DAO is engineered to operate indefinitely without human intervention. The fo
 ### 7.1 Autonomous Mode Triggers
 
 - **Founder heartbeat timeout (180 days):** If the founder does not confirm liveness for 180 consecutive days, the DAO enters autonomous mode.
-- **In autonomous mode:** Charitable disbursement continues at last-set rate. Investor distributions continue at last-approved ratios. Operating expenses continue at last-approved budget. No new investments accepted. No governance changes permitted.
+- **In autonomous mode:**  payout continues at last-set rate. Investor distributions continue at last-approved ratios. Operating expenses continue at last-approved budget. No new investments accepted. No governance changes permitted.
 - **Successor appointment:** The Founding Four may unanimously appoint a human successor to restore full governance. The successor inherits operational control but **NOT** the ability to modify Layer 1.
 
 ### 7.2 Anti-Capture Mechanisms
 
 - **No majority accumulation:** No single investor (or group of related investors) may hold more than 3 of the 10 investor seats.
 - **Mission-lock contract:** Any transaction that would alter Layer 1 parameters is automatically reverted by the smart contract. **There is no admin key. There is no backdoor.**
-- **Transparent audit trail:** Every vote, every disbursement, every distribution is recorded immutably. Public dashboard shows real-time mission metrics.
+- **Transparent audit trail:** Every vote, every payout, every distribution is recorded immutably. Public dashboard shows real-time mission metrics.
 
 ## 8. Legal Wrapper: Hybrid LLC + Smart Contract
 
@@ -188,8 +188,8 @@ The DAO operates as a hybrid: the LLC Operating Agreement is the legal instrumen
 
 ### 8.2 FL §496.405 Compliance
 
-- All customer-facing language refers to **"contractual revenue disbursement,"** never "donation" or "solicitation."
-- The charitable floor is structured as an **operating expense of the LLC**, not a charitable contribution. This distinction is critical for tax treatment and regulatory compliance.
+- All customer-facing language refers to **"contractual revenue payout,"** never "payment" or "outreach."
+- The  floor is structured as an **operating expense of the LLC**, not a  contribution. This distinction is critical for tax treatment and regulatory compliance.
 - The 10% cap per qualifying bucket (per Trump-era tax law) is enforced through the **stacking mechanism**: each platform's revenue is a separate bucket, each qualifying activity is a separate bucket. The floor is 10% but the effective rate can be higher through legitimate stacking.
 
 ### 8.3 Securities Considerations
@@ -220,7 +220,7 @@ The DAO operates as a hybrid: the LLC Operating Agreement is the legal instrumen
 
 - **Not a token launch.** There is no DAO governance token. Governance is seat-based, not token-weighted. This eliminates speculation, pump-and-dump risk, and SEC token classification issues. **Engagement-token carveout:** `DAO-TOKENOMICS-FINAL.md` defines 4 soulbound activity/reward tokens ($LOVE/$UKID/$GREEN/$AGRAV, 10M total, non-transferable on Base L2) — those are engagement instruments only and carry zero governance weight; the "no DAO token" rule here applies exclusively to investor voting seats.
 - **Not a democracy.** The community does not govern. The founder leads. Investors advise. The Founding Four counsel. The mission is supreme.
-- **Not a charity.** This is a for-profit LLC that contractually disburses revenue to charitable operations. The distinction matters for tax treatment, regulatory compliance, and founder liability.
+- **Not a .** This is a for-profit LLC that contractually payouts revenue to  operations. The distinction matters for tax treatment, regulatory compliance, and founder liability.
 - **Not temporary.** This is a 50-year minimum commitment. The code runs. The mission executes. #UntilNoKidInNeed.
 
 ---

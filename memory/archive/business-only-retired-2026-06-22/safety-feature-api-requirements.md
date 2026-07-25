@@ -69,7 +69,7 @@ This document outlines the API requirements needed to support the enhanced safet
 - GDPR compliant data handling
 - User control over data retention
 - Clear audit trails for moderator actions
-- Compliance with Florida §496.405 (no donation/solicitation features)
+- Compliance with Florida §496.405 (no payment/outreach features)
 
 ### Performance Requirements:
 

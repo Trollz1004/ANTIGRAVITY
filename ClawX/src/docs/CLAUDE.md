@@ -5,8 +5,8 @@ Historical ClawX briefing only. Superseded for current operations.
 Current doctrine:
 
 - product-first public copy
-- founder-directed conservative `10%` charitable cap for current LLC-controlled revenue
-- no restoration of historical `60/30/10`, `100% charity`, or `100% DAO` claims without explicit canonical approval
+- founder-directed conservative `10%`  cap for current LLC-controlled revenue
+- no restoration of historical ``, `100% `, or `100% DAO` claims without explicit canonical approval
 
 Canonical files:
 

@@ -70,7 +70,7 @@ Then inside the top button stack (where Code/Create/Research/Chat/Mars currently
 - Polling pauses when `document.visibilityState === 'hidden'`.
 - No fabricated data. On unreachable: "endpoint unreachable — retry".
 - No Haiku string anywhere; only "Opus" as the Anthropic surface label.
-- No §496.405 trigger words ("donate/donation/solicitation"). "for the kids" is allowed.
+- No §496.405 trigger words ("payment/payment/outreach"). "" is allowed.
 - Tailwind tokens reused from `src/index.css`: cyan/magenta/gold/green on `#0a0f1a`. No new colors.
 - Lucide icons only. No new fonts.
 
@@ -82,4 +82,4 @@ mirror at `/api/hermes/*` and a Paperclip mirror at `/api/paperclip/health`,
 both powered by the Emergent Universal LLM key. Use that to demo Mission
 Control from any browser while Joshua's workstation is offline.
 
-#UntilNoKidInNeed · for the kids
+#UntilNoKidInNeed · 

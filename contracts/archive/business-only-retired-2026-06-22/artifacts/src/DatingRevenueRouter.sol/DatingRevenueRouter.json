@@ -7,7 +7,7 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_charitySafe",
+          "name": "_Safe",
           "type": "address"
         },
         {
@@ -68,7 +68,7 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "charityAmount",
+          "name": "Amount",
           "type": "uint256"
         },
         {
@@ -93,7 +93,7 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "charitySafe",
+          "name": "Safe",
           "type": "address"
         },
         {
@@ -137,7 +137,7 @@
     },
     {
       "inputs": [],
-      "name": "PCT_CHARITY",
+      "name": "PCT_",
       "outputs": [
         {
           "internalType": "uint256",
@@ -189,7 +189,7 @@
     },
     {
       "inputs": [],
-      "name": "charitySafe",
+      "name": "Safe",
       "outputs": [
         {
           "internalType": "address",
@@ -310,7 +310,7 @@
       "outputs": [
         {
           "internalType": "uint256",
-          "name": "charityAmt",
+          "name": "Amt",
           "type": "uint256"
         },
         {

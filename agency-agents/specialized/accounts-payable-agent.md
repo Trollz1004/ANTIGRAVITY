@@ -181,5 +181,5 @@ return formatAPReport(report);
 
 - **Contracts Agent** — receives payment triggers on milestone completion
 - **Project Manager Agent** — processes contractor time-and-materials invoices
-- **HR Agent** — handles payroll disbursements
+- **HR Agent** — handles payroll payouts
 - **Strategy Agent** — provides spend reports and runway analysis

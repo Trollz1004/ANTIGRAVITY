@@ -41,9 +41,9 @@ The dashboard polls real backends and gracefully shows `endpoint unreachable —
 ## 4. Hard rules — no exceptions, no negotiation
 
 - **Cloudflare only. Square only. Stripe is dead.**
-- **10% reserve cap** — founder-directed quarterly. Hard-coded constant. **NOT a charity** — do not write "charitable cap" or "donate" anywhere.
-- **No `donate` / `donation` / `charity`** in customer-facing copy. Use "contractual revenue disbursement" if needed. Florida §496.405-style language is **terminated doctrine** (sunset 2026-04-17 with 1-wallet model).
-- **No `60/30/10`** or `100% to charity` claims anywhere.
+- **10% reserve cap** — founder-directed quarterly. Hard-coded constant. **NOT a ** — do not write " cap" or "payment" anywhere.
+- **No `payment` / `payment` / ``** in customer-facing copy. Use "contractual revenue payout" if needed. Florida §496.405-style language is **terminated doctrine** (sunset 2026-04-17 with 1-wallet model).
+- **No ``** or `100% to ` claims anywhere.
 - **No paid SDK imports**: `openai`, `anthropic`, `@google/generative-ai`, `vertexai`, Emergent SDK — banned in `apps/mission-control/src/` and `services/mission-control-api/src/`. CI grep gates this.
 - **Cockpit is LOCAL ONLY.** Don't push Mission Control / Paperclip toward Cloudflare tunnel / wrangler / DNS — that fight burns Joshua to breaking. Only `youandinotai.com` (T5500 backend, Cloudflare Pages frontend) is publicly marketed.
 - **Secrets in `.env` only** — never in chat, never in git. Master vault: `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\MASTER-UNIVERSAL-ENV-TROLLZ1004.env`.
@@ -112,7 +112,7 @@ When Opus quota refreshes, the seat returns to Opus. Don't fight it — the hier
 4. Read `briefings/runbooks/mission-control-{design,api}-spec.md` for the build contract.
 5. Pull task #5/#7/#8/#9 forward — they're the path to a marketing-quality cockpit.
 6. **Do not** propagate prior memory mistakes:
-   - 10% is **reserve**, not charity
+   - 10% is **reserve**, not 
    - §496.405 is **terminated** doctrine
    - Sabretooth path is `c:\Antigravity` lowercase rest
    - Paperclip is on **:3100**, not :3101
@@ -121,4 +121,4 @@ When Opus quota refreshes, the seat returns to Opus. Don't fight it — the hier
 
 Joshua is a self-taught Florida electrician who built this platform with the Founding Four (Gemini, Claude Code, Perplexity, Grok) over the past year. Disabled brother. Autistic niece. The mission is real. Help children without bankrupting the founder, breaking the business, or creating tax exposure. The 10% reserve is his income — his quarterly call. Don't make him explain it again.
 
-**For the kids. #UntilNoKidInNeed.**
+**. #UntilNoKidInNeed.**

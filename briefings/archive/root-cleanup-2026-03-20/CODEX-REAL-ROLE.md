@@ -15,7 +15,7 @@ You don't orchestrate nodes. You **guard the gates.**
    - memory (persistent context)
 
 2. **DAO Security**
-   - GospelDonation.sol (60% Shriners routing on-chain)
+   - Gospelpayment.sol (60% Shriners routing on-chain)
    - Iron Wall enforcement (ENIGMA ≠ OMEGA, never)
    - Protocol Omega immutability checks
 
@@ -80,7 +80,7 @@ But simplified:
       "validation": "daily"
     },
     "dao": {
-      "contracts": ["GospelDonation.sol"],
+      "contracts": ["Gospelpayment.sol"],
       "enforcement": "iron-wall"
     },
     "fleet_watcher": {

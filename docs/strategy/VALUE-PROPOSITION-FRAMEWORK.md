@@ -23,8 +23,8 @@ Customer-facing value propositions must explicitly communicate:
 ### 2. Mission Language Boundary
 
 Mission-aligned language is:
-- **"Support"** (not donate, donation, disbursement)
-- **"Verified human connection"** (not charity-linked outcomes)
+- **"Support"** (not payment, payment, payout)
+- **"Verified human connection"** (not -linked outcomes)
 - **"Community-focused matching"** (not impact claims)
 
 Mission language must never imply:
@@ -140,9 +140,9 @@ Examples:
 
 | Prohibited | Reason | Alternative |
 |------------|--------|-------------|
-| "Donate"/"Donation" | Violates Florida §496.405 | "Support" |
-| "Contractual revenue disbursement" | Non-product legal claim | "Platform access" |
-| "Solicitation" | Legal violation | "Invite" |
+| "payment"/"payment" | Violates Florida §496.405 | "Support" |
+| "Contractual revenue payout" | Non-product legal claim | "Platform access" |
+| "outreach" | Legal violation | "Invite" |
 | Control-rights claims | Creates purchase friction | "Verified access" |
 | Automatic routing promises | Unverified automation claim | "Purchase grants access" |
 | Investment-return language | Misleads on purchase nature | "Subscription value" |

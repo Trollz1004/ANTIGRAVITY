@@ -11,7 +11,7 @@ It is no longer an active source of truth for:
 - launch doctrine
 - legal/revenue assumptions
 - payment routing
-- charity/impact percentages
+- /impact percentages
 - named-beneficiary claims
 - agent authority or node orchestration
 
@@ -25,5 +25,5 @@ Use these files instead:
 Rule:
 
 - Do not copy prompts out of older screenshots, archived chats, or previous versions of this file.
-- Do not restate split-era, absolute-charity, named-beneficiary, or old-launch claims as current truth.
+- Do not restate split-era, absolute-, named-beneficiary, or old-launch claims as current truth.
 - If a prompt conflicts with the files above, the canonical files win.

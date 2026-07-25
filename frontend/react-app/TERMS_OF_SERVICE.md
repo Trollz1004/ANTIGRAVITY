@@ -69,7 +69,7 @@ You agree not to:
 
 ### 5.1 Safety Violations
 - Harass, threaten, stalk, or intimidate other users
-- Send unsolicited sexual content or explicit messages without mutual consent
+- Send unoutreached sexual content or explicit messages without mutual consent
 - Use the platform to facilitate any illegal activity
 - Engage in any form of discrimination, hate speech, or abuse
 - Attempt to meet minors through the platform (automatic permanent ban and report to law enforcement)

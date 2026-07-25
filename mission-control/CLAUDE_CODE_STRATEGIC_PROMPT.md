@@ -12,7 +12,7 @@ Joshua is at financial collapse. 1+ year of 20-hour days, $0 income, no second j
 
 **The stakes:** Fail here, and a year of building becomes nothing. Succeed, and you fund the platforms properly, launch with credibility, and scale the #ForTheKids mission.
 
-**The mission:** Joshua doesn't want to get rich. Once income-engine hits $600/month breakeven, everything above that goes to kids in need. 30-40% of commission, almost all of it donated. This isn't a business. It's a survival engine for a mission.
+**The mission:** Joshua doesn't want to get rich. Once income-engine hits $600/month breakeven, everything above that goes to kids in need. 30-40% of commission, almost all of it paymentd. This isn't a business. It's a survival engine for a mission.
 
 **What this means:** You're not building a money machine. You're building the fuel so Joshua can keep giving everything away.
 
@@ -139,14 +139,14 @@ FETCHER finds leads. ManusClaw pre-qualifies + categorizes. The active lead / Pa
 - Monthly: $22,500
 - Breakeven: Day 1
 - Joshua keeps: $600/month (survival)
-- Donated to kids: $21,900/month (30-40% of commission)
+- paymentd to kids: $21,900/month (30-40% of commission)
 
 **Aggressive (20 leads/day, $100 avg):**
 - Daily: $2,000
 - Monthly: $60,000
 - Breakeven: Day 1
 - Joshua keeps: $600/month (survival)
-- Donated to kids: $59,400/month (30-40% of commission)
+- paymentd to kids: $59,400/month (30-40% of commission)
 
 **Why these numbers are realistic:**
 - FETCHER already finds 50+ leads/day (you just need to sell them)

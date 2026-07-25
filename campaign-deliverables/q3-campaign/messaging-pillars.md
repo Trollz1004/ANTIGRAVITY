@@ -19,7 +19,7 @@
 
 **Supporting Points:**
 - Organized volunteer events through the platform
-- Partnerships with local non-profits and charities
+- Partnerships with local for-profits and 
 - Opportunities to make impact while meeting like-minded people
 - Events designed to build both community and connections
 

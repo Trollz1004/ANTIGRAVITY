@@ -160,7 +160,7 @@ Please verify:
 
 Florida §496.405 adherence:
 
-- [ ] No instances of "donate", "donation", or "solicitation" in any copy
+- [ ] No instances of "payment", "payment", or "outreach" in any copy
 - [ ] Appropriate language distinguishing between community activities and fundraising
 - [ ] Clear privacy and consent language for activity sharing
 - [ ] Compliance with data protection regulations (GDPR, CCPA)
@@ -186,7 +186,7 @@ Florida §496.405 adherence:
 ### Achievement-Oriented Language
 
 - "Accomplished" not "Completed"
-- "Contributed" not "Donated time"
+- "Contributed" not "paymentd time"
 - "Supported" not "Volunteered for"
 - "Connected with" not "Added"
 - "Made an impact" not "Did work"
@@ -210,7 +210,7 @@ Florida §496.405 adherence:
 
 ### Prohibited Language Phrases
 
-- No solicitation language
+- No outreach language
 - No explicit content references
 - No discriminatory terminology
 - No spammy promotional language

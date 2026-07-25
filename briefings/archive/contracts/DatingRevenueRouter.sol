@@ -9,9 +9,9 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 /**
  * @title DatingRevenueRouter
- * @author FOR THE KIDS Platform
+ * @author  Platform
  * @notice ARCHIVED — This contract is NOT DEPLOYED. The phased model below is SUPERSEDED.
- * @dev ARCHIVED: Canonical split is 60/30/10 from day one (Protocol Omega).
+ * @dev ARCHIVED: Canonical split is  from day one (Protocol Omega).
  *      The survival mode / phased model was never deployed.
  *      See briefings/CLAUDE-SKILL.md for current truth.
  *
@@ -19,14 +19,14 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
  *      - 100% to founder for platform sustainability
  *
  *      [LEGACY — NOT CURRENT] TRANSITION MODE (Phase 2):
- *      - Gradual shift toward charity allocation
+ *      - Gradual shift toward  allocation
  *      - Changes require 7-30 day timelock
  *      - Democratic governance via GOVERNOR_ROLE
  *
  *      [LEGACY — NOT CURRENT] PERMANENT MODE (Phase 3):
  *      - IRREVERSIBLE - cannot go back to earlier phases
  *      - Founder capped at maximum 10%
- *      - DAO and Charity receive the rest permanently
+ *      - DAO and  receive the rest permanently
  *
  *      "Until no kid is in need"
  */
@@ -49,23 +49,23 @@ contract DatingRevenueRouter is
     Phase public currentPhase;
     address public founderWallet;
     address public daoTreasury;
-    address public charitySafe;
+    address public Safe;
     uint256 public pctFounder;
     uint256 public pctDao;
-    uint256 public pctCharity;
+    uint256 public pct;
 
     uint256 public scheduledPctFounder;
     uint256 public scheduledPctDao;
-    uint256 public scheduledPctCharity;
+    uint256 public scheduledPct;
     uint256 public scheduledSplitTime;
     bool public splitScheduled;
 
-    event Distribution(address indexed token, uint256 totalAmount, uint256 founderAmount, uint256 daoAmount, uint256 charityAmount);
-    event SplitScheduled(uint256 pctFounder, uint256 pctDao, uint256 pctCharity, uint256 effectiveTime);
-    event SplitApplied(uint256 pctFounder, uint256 pctDao, uint256 pctCharity);
-    event PermanentActivated(uint256 founderCap, uint256 daoAllocation, uint256 charityAllocation);
+    event Distribution(address indexed token, uint256 totalAmount, uint256 founderAmount, uint256 daoAmount, uint256 Amount);
+    event SplitScheduled(uint256 pctFounder, uint256 pctDao, uint256 pct, uint256 effectiveTime);
+    event SplitApplied(uint256 pctFounder, uint256 pctDao, uint256 pct);
+    event PermanentActivated(uint256 founderCap, uint256 daoAllocation, uint256 Allocation);
     event PhaseChanged(Phase indexed oldPhase, Phase indexed newPhase);
-    event WalletsUpdated(address indexed founder, address indexed dao, address indexed charity);
+    event WalletsUpdated(address indexed founder, address indexed dao, address indexed );
     event SplitCancelled();
 
     error InvalidAddress();
@@ -97,13 +97,13 @@ contract DatingRevenueRouter is
     function initialize(
         address _founderWallet,
         address _daoTreasury,
-        address _charitySafe,
+        address _Safe,
         address _admin,
         address _governor
     ) external initializer {
         if (_founderWallet == address(0)) revert InvalidAddress();
         if (_daoTreasury == address(0)) revert InvalidAddress();
-        if (_charitySafe == address(0)) revert InvalidAddress();
+        if (_Safe == address(0)) revert InvalidAddress();
         if (_admin == address(0)) revert InvalidAddress();
         if (_governor == address(0)) revert InvalidAddress();
 
@@ -115,15 +115,15 @@ contract DatingRevenueRouter is
 
         founderWallet = _founderWallet;
         daoTreasury = _daoTreasury;
-        charitySafe = _charitySafe;
+        Safe = _Safe;
 
         currentPhase = Phase.SURVIVAL;
         pctFounder = 10000;
         pctDao = 0;
-        pctCharity = 0;
+        pct = 0;
 
         emit PhaseChanged(Phase.SURVIVAL, Phase.SURVIVAL);
-        emit WalletsUpdated(_founderWallet, _daoTreasury, _charitySafe);
+        emit WalletsUpdated(_founderWallet, _daoTreasury, _Safe);
     }
 
     function distributeUSDC() external {
@@ -154,20 +154,20 @@ contract DatingRevenueRouter is
     }
 
     function scheduleSplit(
-        uint256 _pctFounder, uint256 _pctDao, uint256 _pctCharity, uint256 _timelock
+        uint256 _pctFounder, uint256 _pctDao, uint256 _pct, uint256 _timelock
     ) external onlyRole(GOVERNOR_ROLE) onlyPhase(Phase.TRANSITION) {
         if (splitScheduled) revert SplitAlreadyScheduled();
-        if (_pctFounder + _pctDao + _pctCharity != BASIS_POINTS) revert InvalidPercentages();
+        if (_pctFounder + _pctDao + _pct != BASIS_POINTS) revert InvalidPercentages();
         if (_timelock < MIN_TIMELOCK) revert TimelockTooShort();
         if (_timelock > MAX_TIMELOCK) revert TimelockTooLong();
 
         scheduledPctFounder = _pctFounder;
         scheduledPctDao = _pctDao;
-        scheduledPctCharity = _pctCharity;
+        scheduledPct = _pct;
         scheduledSplitTime = block.timestamp + _timelock;
         splitScheduled = true;
 
-        emit SplitScheduled(_pctFounder, _pctDao, _pctCharity, scheduledSplitTime);
+        emit SplitScheduled(_pctFounder, _pctDao, _pct, scheduledSplitTime);
     }
 
     function applySplit() external onlyPhase(Phase.TRANSITION) {
@@ -176,15 +176,15 @@ contract DatingRevenueRouter is
 
         pctFounder = scheduledPctFounder;
         pctDao = scheduledPctDao;
-        pctCharity = scheduledPctCharity;
+        pct = scheduledPct;
 
         splitScheduled = false;
         scheduledPctFounder = 0;
         scheduledPctDao = 0;
-        scheduledPctCharity = 0;
+        scheduledPct = 0;
         scheduledSplitTime = 0;
 
-        emit SplitApplied(pctFounder, pctDao, pctCharity);
+        emit SplitApplied(pctFounder, pctDao, pct);
     }
 
     function cancelScheduledSplit() external onlyPhase(Phase.TRANSITION) {
@@ -196,89 +196,89 @@ contract DatingRevenueRouter is
         splitScheduled = false;
         scheduledPctFounder = 0;
         scheduledPctDao = 0;
-        scheduledPctCharity = 0;
+        scheduledPct = 0;
         scheduledSplitTime = 0;
 
         emit SplitCancelled();
     }
 
     function activatePermanentSplit(
-        uint256 _founderCap, uint256 _daoAllocation, uint256 _charityAllocation
+        uint256 _founderCap, uint256 _daoAllocation, uint256 _Allocation
     ) external onlyRole(DEFAULT_ADMIN_ROLE) notPermanent {
         if (_founderCap > MAX_FOUNDER_PERMANENT) revert FounderCapExceeded();
-        if (_founderCap + _daoAllocation + _charityAllocation != BASIS_POINTS) revert InvalidPercentages();
+        if (_founderCap + _daoAllocation + _Allocation != BASIS_POINTS) revert InvalidPercentages();
 
         Phase oldPhase = currentPhase;
         currentPhase = Phase.PERMANENT;
         pctFounder = _founderCap;
         pctDao = _daoAllocation;
-        pctCharity = _charityAllocation;
+        pct = _Allocation;
 
         splitScheduled = false;
         scheduledPctFounder = 0;
         scheduledPctDao = 0;
-        scheduledPctCharity = 0;
+        scheduledPct = 0;
         scheduledSplitTime = 0;
 
         emit PhaseChanged(oldPhase, Phase.PERMANENT);
-        emit PermanentActivated(_founderCap, _daoAllocation, _charityAllocation);
+        emit PermanentActivated(_founderCap, _daoAllocation, _Allocation);
     }
 
     function updateWallets(
-        address _founderWallet, address _daoTreasury, address _charitySafe
+        address _founderWallet, address _daoTreasury, address _Safe
     ) external onlyRole(DEFAULT_ADMIN_ROLE) notPermanent {
         if (_founderWallet == address(0)) revert InvalidAddress();
         if (_daoTreasury == address(0)) revert InvalidAddress();
-        if (_charitySafe == address(0)) revert InvalidAddress();
+        if (_Safe == address(0)) revert InvalidAddress();
 
         founderWallet = _founderWallet;
         daoTreasury = _daoTreasury;
-        charitySafe = _charitySafe;
+        Safe = _Safe;
 
-        emit WalletsUpdated(_founderWallet, _daoTreasury, _charitySafe);
+        emit WalletsUpdated(_founderWallet, _daoTreasury, _Safe);
     }
 
-    function getCurrentSplit() external view returns (uint256 founder, uint256 dao, uint256 charity) {
-        return (pctFounder, pctDao, pctCharity);
+    function getCurrentSplit() external view returns (uint256 founder, uint256 dao, uint256 ) {
+        return (pctFounder, pctDao, pct);
     }
 
     function getScheduledSplit() external view returns (
-        uint256 founder, uint256 dao, uint256 charity, uint256 effectiveTime, bool isScheduled
+        uint256 founder, uint256 dao, uint256 , uint256 effectiveTime, bool isScheduled
     ) {
-        return (scheduledPctFounder, scheduledPctDao, scheduledPctCharity, scheduledSplitTime, splitScheduled);
+        return (scheduledPctFounder, scheduledPctDao, scheduledPct, scheduledSplitTime, splitScheduled);
     }
 
     function pendingUSDC() external view returns (uint256) { return IERC20(USDC).balanceOf(address(this)); }
     function pendingETH() external view returns (uint256) { return address(this).balance; }
 
-    function calculateDistribution(uint256 totalAmount) external view returns (uint256 founderAmt, uint256 daoAmt, uint256 charityAmt) {
+    function calculateDistribution(uint256 totalAmount) external view returns (uint256 founderAmt, uint256 daoAmt, uint256 Amt) {
         founderAmt = (totalAmount * pctFounder) / BASIS_POINTS;
         daoAmt = (totalAmount * pctDao) / BASIS_POINTS;
-        charityAmt = totalAmount - founderAmt - daoAmt;
+        Amt = totalAmount - founderAmt - daoAmt;
     }
 
     function _distribute(address token, uint256 totalAmount) internal {
         uint256 founderAmount = (totalAmount * pctFounder) / BASIS_POINTS;
         uint256 daoAmount = (totalAmount * pctDao) / BASIS_POINTS;
-        uint256 charityAmount = totalAmount - founderAmount - daoAmount;
+        uint256 Amount = totalAmount - founderAmount - daoAmount;
 
         if (founderAmount > 0) IERC20(token).safeTransfer(founderWallet, founderAmount);
         if (daoAmount > 0) IERC20(token).safeTransfer(daoTreasury, daoAmount);
-        if (charityAmount > 0) IERC20(token).safeTransfer(charitySafe, charityAmount);
+        if (Amount > 0) IERC20(token).safeTransfer(Safe, Amount);
 
-        emit Distribution(token, totalAmount, founderAmount, daoAmount, charityAmount);
+        emit Distribution(token, totalAmount, founderAmount, daoAmount, Amount);
     }
 
     function _distributeETH(uint256 totalAmount) internal {
         uint256 founderAmount = (totalAmount * pctFounder) / BASIS_POINTS;
         uint256 daoAmount = (totalAmount * pctDao) / BASIS_POINTS;
-        uint256 charityAmount = totalAmount - founderAmount - daoAmount;
+        uint256 Amount = totalAmount - founderAmount - daoAmount;
 
         if (founderAmount > 0) { (bool s, ) = founderWallet.call{value: founderAmount}(""); if (!s) revert ETHTransferFailed(); }
         if (daoAmount > 0) { (bool s, ) = daoTreasury.call{value: daoAmount}(""); if (!s) revert ETHTransferFailed(); }
-        if (charityAmount > 0) { (bool s, ) = charitySafe.call{value: charityAmount}(""); if (!s) revert ETHTransferFailed(); }
+        if (Amount > 0) { (bool s, ) = Safe.call{value: Amount}(""); if (!s) revert ETHTransferFailed(); }
 
-        emit Distribution(address(0), totalAmount, founderAmount, daoAmount, charityAmount);
+        emit Distribution(address(0), totalAmount, founderAmount, daoAmount, Amount);
     }
 
     function _authorizeUpgrade(address) internal override onlyRole(DEFAULT_ADMIN_ROLE) notPermanent {}

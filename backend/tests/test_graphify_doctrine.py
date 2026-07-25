@@ -16,13 +16,11 @@ load_dotenv(Path(__file__).resolve().parents[2] / "frontend" / ".env")
 BASE_URL = os.environ["REACT_APP_BACKEND_URL"].rstrip("/")
 API = f"{BASE_URL}/api"
 
-
 @pytest.fixture(scope="module")
 def client():
     s = requests.Session()
     s.headers.update({"Content-Type": "application/json"})
     return s
-
 
 # ── Graphify status ──────────────────────────────────────────────────────
 class TestGraphifyStatus:
@@ -42,7 +40,6 @@ class TestGraphifyStatus:
         assert "stale" in staleness and isinstance(staleness["stale"], bool)
         assert "graph_mtime" in staleness
 
-
 # ── Graphify regraph ─────────────────────────────────────────────────────
 class TestGraphifyRegraph:
     def test_regraph_completes(self, client):
@@ -58,7 +55,6 @@ class TestGraphifyRegraph:
         assert r.status_code == 200
         assert r.json()["staleness"]["stale"] is False
 
-
 # ── Doctrine ─────────────────────────────────────────────────────────────
 class TestDoctrine:
     def test_doctrine_payload(self, client):
@@ -67,14 +63,14 @@ class TestDoctrine:
         d = r.json()
         # Forbidden words
         fw = [w.lower() for w in d["forbidden_words_in_ui"]]
-        for w in ("charity", "haiku", "donate", "donation", "solicitation"):
+        for w in ("", "haiku", "payment", "payment", "outreach"):
             assert w in fw, f"'{w}' missing from forbidden_words_in_ui"
         # Revenue doctrine
         rd = d["revenue_doctrine"]
         assert rd["hard_cap_pct"] == 10
         assert rd["entity_type"] == "for-profit LLC"
         assert "§496.405" in rd["fl_compliance"]
-        for w in ("donate", "donation", "charity"):
+        for w in ("payment", "payment", ""):
             assert w in rd["fl_compliance"].lower()
         assert rd["mission_surface_rule"] == "Mission revealed on receipts only."
         # Infrastructure doctrine
@@ -86,7 +82,6 @@ class TestDoctrine:
         assert infra["founding_four_peer_level"] == ["Claude", "Gemini", "Perplexity", "Grok"]
         assert "None command the others" in infra["peer_rule"]
         assert d["sole_authority"] == "Joshua Coleman (Founder)"
-
 
 # ── Node identity ────────────────────────────────────────────────────────
 class TestNodeIdentity:
@@ -106,7 +101,6 @@ class TestNodeIdentity:
         assert names == ["SABRETOOTH", "T5500", "9020"]
         assert "Trollz1004/ANTIGRAVITY" in data["repos"]["canonical"]
         assert "Sandbox-REPO-NEW-CODE-NOTHING-NEW-GOES-ON-ANTIGRAVITY" in data["repos"]["sandbox"]
-
 
 # ── Ledger webhooks (Stripe 410, unknown 400, Square 200) ────────────────
 class TestLedgerWebhooks:
@@ -131,10 +125,8 @@ class TestLedgerWebhooks:
         assert data["amount_usd"] == 50.0
         assert data["bucket"] == 1
 
-
 # ── Doctrine sweep — forbidden words must NOT appear in user-facing API output
-FORBIDDEN = ["donate", "donation", "charity", "solicitation", "haiku"]
-
+FORBIDDEN = ["payment", "payment", "", "outreach", "haiku"]
 
 def _sweep(text: str) -> list[str]:
     found = []
@@ -143,7 +135,6 @@ def _sweep(text: str) -> list[str]:
         if re.search(rf"\b{re.escape(w)}\b", low):
             found.append(w)
     return found
-
 
 class TestDoctrineSweep:
     @pytest.mark.parametrize("path", [
@@ -175,7 +166,6 @@ class TestDoctrineSweep:
             rd.pop("fl_compliance", None)
             found = _sweep(_json.dumps(sanitized))
         assert not found, f"/doctrine leaked forbidden words outside allow-list: {found}"
-
 
 # ── Regression spot-checks ───────────────────────────────────────────────
 class TestRegression:

@@ -37,7 +37,7 @@ This document outlines the recruitment plan for Phase 2 user research execution,
    - Quality screened participants with varied backgrounds
 
 2. **Community Organization Partnerships**
-   - Local volunteer groups and nonprofits
+   - Local volunteer groups and for-profits
    - Community centers and civic organizations
    - Accessibility advocacy groups
    - Youth and senior community programs
@@ -112,7 +112,7 @@ With live safety features now available, refine recruitment criteria to specific
 
 - Digital gift cards (Amazon, Visa)
 - Platform credit or subscription discounts
-- Contractual revenue disbursement in participant's name (compliant with Florida §496.405)
+- Contractual revenue payout in participant's name (compliant with Florida §496.405)
 - Entry into prize drawings for larger value rewards
 
 ## Screening Process

@@ -53,7 +53,7 @@ test.describe('Sidebar Navigation & Panel Switching', () => {
     await page.goto('/');
     await expect(page.locator('[data-testid="sidebar"]').getByText('History')).toBeVisible();
     await expect(page.locator('[data-testid="sidebar"]').getByText('Settings')).toBeVisible();
-    await expect(page.locator('[data-testid="sidebar"]').getByText('for the kids · #UntilNoKidInNeed')).toBeVisible();
+    await expect(page.locator('[data-testid="sidebar"]').getByText(' · #UntilNoKidInNeed')).toBeVisible();
   });
 
   test('navigating to File Uploads shows the upload panel', async ({ page }) => {

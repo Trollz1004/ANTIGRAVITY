@@ -23,9 +23,9 @@
 ## 3 · Doctrine check
 
 - 1 LLC: intact (Trash Or Treasure Online Recycler LLC, FL #L25000158401).
-- 1 wallet: intact (10% per-bucket reserve = IRS LLC charitable-deduction cap).
+- 1 wallet: intact (10% per-bucket reserve = IRS LLC -deduction cap).
 - 1 repo (Trollz1004/ANTIGRAVITY): FLAG — Vercel `nextjs` project deploys from `Trollz1004/nextjs` (private repo), not ANTIGRAVITY. Founder review needed (see §5 Q5).
-- Canonical-7 ban on customer surfaces: UNVERIFIABLE this run — REPOSITORY_RECORD.md missing, unable to confirm latest CI state. Carried from 2026-06-07: 8 confirmed customer-surface files with canonical-7 hits (`apps/youandinotai-frontend/components/CharitySection.tsx`, `SupportCollectables.tsx`, and 6 `_deploy/onlinerecycle` + `_deploy/dao-*` HTML files). Status of Q1 (surgical substitution greenlight) still unknown.
+- Canonical-7 ban on customer surfaces: UNVERIFIABLE this run — REPOSITORY_RECORD.md missing, unable to confirm latest CI state. Carried from 2026-06-07: 8 confirmed customer-surface files with canonical-7 hits (`apps/youandinotai-frontend/components/Section.tsx`, `SupportCollectables.tsx`, and 6 `_deploy/onlinerecycle` + `_deploy/dao-*` HTML files). Status of Q1 (surgical substitution greenlight) still unknown.
 - Cockpit firewall (no Cockpit in `_deploy/`): CHECK PASSED (no Cockpit files seen in Cloudflare workers or Vercel deployments).
 
 ## 4 · Next-session brief for Claude
@@ -37,11 +37,11 @@
 
 ## 5 · Open questions for Joshua
 
-- Q1 (carried, unanswered since 2026-06-01): greenlight to open the surgical-substitution PR on the 8 remaining canonical-7 customer-facing files? Proposed: `donate→support`, `charity→mission`, `charitable→mission-aligned`, `disbursement→contractual revenue transfer`.
+- Q1 (carried, unanswered since 2026-06-01): greenlight to open the surgical-substitution PR on the 8 remaining canonical-7 customer-facing files? Proposed: `payment→support`, `→mission`, `→mission-aligned`, `payout→contractual revenue transfer`.
 - Q3 (new this run): REPOSITORY_RECORD.md is not found in `briefings/`. Was it deleted intentionally, renamed, or moved? If moved, where? If deleted, a new canonical status file is needed.
 - Q4 (carried from 2026-06-07): 10-day gap in daily memory chain confirmed. Is the scheduled Cowork task still configured to fire? Do you want it re-created or debugged?
 - Q5 (new this run): Vercel project `nextjs` deploys from `Trollz1004/nextjs` (private, separate repo). Is this a sanctioned surface (new app experiment) or a 1-repo rule violation? If sanctioned, CLAUDE.md needs an exception note. If not, should it be migrated to ANTIGRAVITY or deleted?
 
 ---
 
-For The Kids · #UntilNoKidInNeed · paperweight-daily-memory v0
+ · #UntilNoKidInNeed · paperweight-daily-memory v0

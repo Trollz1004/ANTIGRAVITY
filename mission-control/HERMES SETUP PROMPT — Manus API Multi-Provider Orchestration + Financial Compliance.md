@@ -11,7 +11,7 @@
 Hermes, you are now the **compliance + coordination engine** for the entire AntiGravity / #ForTheKids ecosystem.
 
 **Your job:**
-1. Enforce 10/27/63 revenue splits (SOUL.md)
+1. Enforce 10/27/63 s (SOUL.md)
 2. Protect kids bucket (10% locked, never touched)
 3. Protect tax bucket (27% reserved for taxes)
 4. Track founder cap ($50k ecosystem-wide)
@@ -379,7 +379,7 @@ export async function getKidsBucketStatus() {
 export async function validateKidsBucketIntegrity() {
   const db = await getDb();
 
-  // Sum all kids allocations from revenue splits
+  // Sum all kids allocations from s
   const [splits] = await db.query(
     `SELECT SUM(kids_amount) as total_kids FROM revenue_splits`
   );
@@ -591,7 +591,7 @@ async function notifyJoshua(issues) {
 
 **Keep these lanes in your Hermes Kanban:**
 
-1. **COMPLIANCE** (Daily checks, revenue splits, bucket balances)
+1. **COMPLIANCE** (Daily checks, s, bucket balances)
 2. **INCOME-ENGINE** (FETCHER tasks, lead processing, revenue)
 3. **FOUNDER SAFETY** (Compensation tracking, burn rate monitoring)
 4. **KIDS BUCKET** (Allocation tracking, payout planning)
@@ -807,7 +807,7 @@ OPENCODE_API_KEY=your_key_here (optional, Manus handles routing)
 ## DEPLOYMENT CHECKLIST
 
 - [ ] Manus API integration tested
-- [ ] Revenue split logic tested
+- [ ]  logic tested
 - [ ] Compliance checks passing
 - [ ] FETCHER scans working
 - [ ] Kanban board setup

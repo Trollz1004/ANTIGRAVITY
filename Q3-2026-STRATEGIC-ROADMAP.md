@@ -167,7 +167,7 @@ Based on the master roadmap (May 13, 2026), Q3 overlaps with:
 |---|---|
 | eBay listing management | $25-100 per item |
 | Recycling consultation | $75-200 per session |
-| Bulk donation pickup coordination | $150-500 per pickup |
+| Bulk payment pickup coordination | $150-500 per pickup |
 
 ---
 

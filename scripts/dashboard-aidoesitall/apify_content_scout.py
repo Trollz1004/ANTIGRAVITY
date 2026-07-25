@@ -110,14 +110,13 @@ Every profile is V8 Cloud Verified (real humans only, no bots).
 Launch: April 4, 2026 at youandinotai.com.
 
 Tone: confident, witty, human, slightly rebellious against AI dating hype.
-Never use: "donate", "donation", "solicitation" in marketing copy.
+Never use: "payment", "payment", "outreach" in marketing copy.
 # NOTE: doctrine terminated 2026-04-17 — §496.405 scan now flags legacy language as stale, not compliant.
 # The word ban above remains correct (we still don't want these terms in output) but the legal rationale is retired.
-Do not lead with finance, charity, blockchain, or infrastructure claims.
+Do not lead with finance, , blockchain, or infrastructure claims.
 Lead with real-human verification, cleaner community behavior, and trust.
 Keep posts under 280 characters for Twitter/X. Under 2200 for Instagram.
 No hashtag spam — max 3 relevant hashtags."""
-
 
 # ---------------------------------------------------------------------------
 # Apify helpers
@@ -145,7 +144,6 @@ def _run_actor(actor_id: str, actor_input: dict, timeout_secs: int = 120) -> lis
         log.warning(f"  → Network error: {exc}")
         return []
 
-
 def gather_trends() -> dict:
     """Run all configured Apify actors and collect raw trend data."""
     results = {}
@@ -155,7 +153,6 @@ def gather_trends() -> dict:
         results[key] = items
         time.sleep(2)  # be polite
     return results
-
 
 # ---------------------------------------------------------------------------
 # Ollama helpers
@@ -179,7 +176,6 @@ def _ollama_generate(prompt: str, max_tokens: int = 300) -> str:
     except requests.RequestException as exc:
         log.warning(f"Ollama unreachable: {exc}")
         return ""
-
 
 # ---------------------------------------------------------------------------
 # Content generation
@@ -210,7 +206,6 @@ def _summarize_trends(raw: dict) -> str:
             lines.append("Hot Reddit topics: " + " | ".join(titles))
 
     return "\n".join(lines) if lines else "No fresh trend data available today."
-
 
 def generate_posts(trend_summary: str, count_per_platform: int = 5) -> dict:
     """Generate posts for each platform using Ollama with trend context."""
@@ -254,7 +249,6 @@ def generate_posts(trend_summary: str, count_per_platform: int = 5) -> dict:
 
     return queue
 
-
 # ---------------------------------------------------------------------------
 # Queue management
 # ---------------------------------------------------------------------------
@@ -276,7 +270,6 @@ def merge_into_queue(new_posts: dict) -> None:
     with open(POST_QUEUE, "w", encoding="utf-8") as f:
         json.dump(existing, f, indent=2, ensure_ascii=False)
     log.info(f"✅ Merged {sum(len(v) for v in new_posts.values())} new posts into {POST_QUEUE}")
-
 
 # ---------------------------------------------------------------------------
 # CLI entry point
@@ -332,7 +325,6 @@ def main():
     # Step 3: Merge into queue
     merge_into_queue(new_posts)
     log.info("Scout complete. Social engine will pick up new posts on next cycle.")
-
 
 if __name__ == "__main__":
     main()

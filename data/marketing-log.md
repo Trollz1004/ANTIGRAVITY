@@ -11,7 +11,7 @@
 - **FOLLOWS** (~8): Ida Turan, James Wilcox, Babylon Bee, Xuxuca, NIH, Zeke Tamez, Candace Owens, Ben Shapiro
 
 ### Facebook (Josh Coleman)
-- **POST**: Social Platform for Good — full-length post about dating + meetups + volunteering + 60/30/10 split
+- **POST**: Social Platform for Good — full-length post about dating + meetups + volunteering +  split
 - **FRIEND ADDS** (~6): Confirmed Jasmine Santana, added Tatiana Seguel Leon, Jessica Lopez, Doris Hernandez, Marie Brown, Deras Lopez
 
 ### LinkedIn (Josh Coleman)
@@ -36,30 +36,30 @@
 ## 2026-03-05 — OnlineRecycle.org Launch Push
 
 ### Twitter (@YouAndiNotAi)
-- **POST**: "onlinerecycle.org is LIVE. book a free e-waste drop-off and your old tech funds Shriners Children's Hospitals. 60% charity. 30% infrastructure. 10% operations. every dollar tracked. turn your junk into impact. #ForTheKids #EWaste #OnlineRecycle"
+- **POST**: "onlinerecycle.org is LIVE. book a free e-waste drop-off and your old tech funds Shriners s. 60% . 30% infrastructure. 10% operations. every dollar tracked. turn your junk into impact. #ForTheKids #EWaste #OnlineRecycle"
 
 ### Facebook (Josh Coleman)
-- **POST**: OnlineRecycle.org launch — book free e-waste drop-offs, 60/30/10 split, link preview to kids.onlinerecycle.org
+- **POST**: OnlineRecycle.org launch — book free e-waste drop-offs,  split, link preview to kids.onlinerecycle.org
 - **FRIEND CONFIRMS**: Anika Verhague, Jill More
 
 ### Threads (1manstrashistreasure)
-- **POST**: "onlinerecycle.org is LIVE. book a free e-waste drop-off and your old tech funds Shriners Children's Hospitals. 60% charity. 30% infrastructure. 10% operations. every dollar tracked. turn your junk into impact. #ForTheKids #EWaste #OnlineRecycle" (with auto-generated link preview: "OnlineRecycle.org | Drop-Off & Pickup Intake")
+- **POST**: "onlinerecycle.org is LIVE. book a free e-waste drop-off and your old tech funds Shriners s. 60% . 30% infrastructure. 10% operations. every dollar tracked. turn your junk into impact. #ForTheKids #EWaste #OnlineRecycle" (with auto-generated link preview: "OnlineRecycle.org | Drop-Off & Pickup Intake")
 - **FOLLOWS** (4): Leslie Gaar, Maria Bartiromo, kerie, Kate Powell
 
 ### LinkedIn (Josh Coleman)
-- **POST**: "OnlineRecycle.org is officially LIVE." — full 60/30/10 breakdown, link preview: "OnlineRecycle Intake + Square Booking — onlinerecycle.org"
+- **POST**: "OnlineRecycle.org is officially LIVE." — full  breakdown, link preview: "OnlineRecycle Intake + Square Booking — onlinerecycle.org"
 
 ### Reddit (u/GamersVsCancer)
-- **POST**: r/forthekids_auto_dev — "OnlineRecycle.org is LIVE - Turn your e-waste into donations for Shriners Children's Hospitals" (with body text and onlinerecycle.org link)
+- **POST**: r/forthekids_auto_dev — "OnlineRecycle.org is LIVE - Turn your e-waste into payments for Shriners s" (with body text and onlinerecycle.org link)
 
 ### Nextdoor (Josh Coleman, Mount Plymouth)
 - **POST**: "hey neighbors - just launched onlinerecycle.org..." — local e-waste drop-off promotion, link preview: "OnlineRecycle.org | Drop-Off & Pickup Intake". Posted to feed + Honey Do Handyman Services group (45 members)
 
 ### Quora (Trollz)
-- **POST**: OnlineRecycle.org launch — 60/30/10 breakdown, onlinerecycle.org link
+- **POST**: OnlineRecycle.org launch —  breakdown, onlinerecycle.org link
 
 ### Instagram (1manstrashistreasure)
-- **POST**: OnlineRecycle Shriners impact image (onlinerecycle_impact_shriners.png) — "just launched onlinerecycle.org — got old electronics collecting dust? book a free e-waste drop-off. your stuff gets refurbished and sold. 60% of net proceeds automatically route to Shriners Children's Hospitals via smart contract on Base. fully on-chain, fully verifiable, no middlemen." + onlinerecycle.org link
+- **POST**: OnlineRecycle Shriners impact image (onlinerecycle_impact_shriners.png) — "just launched onlinerecycle.org — got old electronics collecting dust? book a free e-waste drop-off. your stuff gets refurbished and sold. 60% of net proceeds automatically route to Shriners s via smart contract on Base. fully on-chain, fully verifiable, no middlemen." + onlinerecycle.org link
 - **HASHTAG COMMENT**: #Recycling #EWaste #Florida #GreenLiving #ShrinersChildrens #Sustainability #TechForGood #ForTheKids #OnlineRecycle #CircularEconomy #ReduceReuseRecycle #BlockchainForGood
 - **CROSS-POST**: Auto-shared to Threads (1manstrashistreasure)
 - **FOLLOWS** (6 prior): alexis_renee, ATABEC, Bozorov Shermat, Invasion_, xoxakbap, helena.holm
@@ -68,7 +68,7 @@
 - **FIX**: Image upload required OS-level pyautogui automation — MCP Chrome can't trigger native file dialogs. Solution: pyautogui tab-cycles to Instagram, clicks "Select from computer", fills Windows Open dialog via Alt+N + clipboard paste.
 
 ### Medium (TrashOrTreasure Online Recycler LLC)
-- **POST**: "Your Old Tech Can Fund Children's Hospitals" — full OnlineRecycle.org story with 60/30/10 breakdown, onlinerecycle.org link. Topics: E Waste, Charity. Published via keyboard type method (JS injection failed on first attempt).
+- **POST**: "Your Old Tech Can Fund s" — full OnlineRecycle.org story with  breakdown, onlinerecycle.org link. Topics: E Waste, . Published via keyboard type method (JS injection failed on first attempt).
 - **FIX**: First attempt failed (JS injection state mismatch). Second attempt used keyboard `type` action on fresh new-story — saved and published successfully.
 
 ### Pinterest (1manstrashistreasure)

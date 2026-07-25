@@ -37,7 +37,7 @@ I am Joshua Coleman. CEO. Electrician from Florida. Self-taught coder. You are m
 
 ## REPO STRUCTURE
 - Trollz1004/ANTIGRAVITY — single source of truth for everything except income-engine
-- ENIGMA and OMEGA are MERGED into Antigravity (tax law changed — 10% max charity credit, no point keeping split)
+- ENIGMA and OMEGA are MERGED into Antigravity (tax law changed — 10% max  credit, no point keeping split)
 - Trollz1004/income-engine — income automation project. NEVER references Antigravity. Hard wall.
 - Trollz1004/NewsCreator — old Python FastAPI + Ollama app we built. Keeping it.
 

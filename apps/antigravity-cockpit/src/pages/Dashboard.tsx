@@ -71,7 +71,7 @@ const WORKERS: Agent[] = [
   { id: 'gemma',       name: 'Gemma4',       role: 'Local Worker · 32B',   kind: 'gemma',  status: 'idle', state: 'STANDBY',                body: 'Ollama · awaiting moderation overflow tonight.',   tags: [['idle','IDLE']] },
   { id: 'pi',          name: 'Pi',           role: 'Conversational',       kind: 'gemma',  status: 'idle', state: 'LISTENING',              body: 'Watching #mission-control for context cues.',      tags: [['idle','IDLE']] },
   { id: 'cupid',       name: 'Cupid',        role: 'Ad Ops Worker',        kind: 'codex',  status: 'busy', state: 'PUBLISHING · 12 ads',    body: 'Meta creative refresh · 4 placements live.',       tags: [['busy','RUN']],                             busy: true },
-  { id: 'perplexity',  name: 'Perplexity',   role: 'Research · Deep',      kind: 'gemma',  status: 'live', state: 'SEARCHING · 14 sources', body: 'Indexing court filings · charity compliance.',     tags: [['live','LIVE']],                            busy: true },
+  { id: 'perplexity',  name: 'Perplexity',   role: 'Research · Deep',      kind: 'gemma',  status: 'live', state: 'SEARCHING · 14 sources', body: 'Indexing court filings ·  compliance.',     tags: [['live','LIVE']],                            busy: true },
 ];
 
 function AgentCard({ agent }: { agent: Agent }) {

@@ -23,32 +23,32 @@ import type {
   TypedContractMethod,
 } from "../common";
 
-export interface GospelDonationInterface extends Interface {
+export interface GospelpaymentInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "CHARITY_PERCENT"
+      | "_PERCENT"
       | "FOUNDER_PERCENT"
       | "INFRASTRUCTURE_PERCENT"
       | "PERCENT_DENOMINATOR"
       | "calculateSplit"
-      | "charityWallet"
-      | "donateEth"
-      | "donationCount"
+      | "Wallet"
+      | "paymentEth"
+      | "paymentCount"
       | "donorEthContributions"
       | "donorUsdcContributions"
       | "founderWallet"
       | "getDonorContributions"
       | "getGospelSplit"
-      | "getTotalDonations"
+      | "getTotalpayments"
       | "infrastructureWallet"
       | "owner"
       | "pause"
       | "paused"
-      | "receiveCryptoDonation"
+      | "receiveCryptopayment"
       | "renounceOwnership"
       | "rescueTokens"
-      | "totalEthDonations"
-      | "totalUsdcDonations"
+      | "totalEthpayments"
+      | "totalUsdcpayments"
       | "transferOwnership"
       | "unpause"
       | "usdcToken"
@@ -56,16 +56,16 @@ export interface GospelDonationInterface extends Interface {
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "EthDonationReceived"
+      | "EthpaymentReceived"
       | "GospelSplitExecuted"
       | "OwnershipTransferred"
       | "Paused"
       | "Unpaused"
-      | "UsdcDonationReceived"
+      | "UsdcpaymentReceived"
   ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "CHARITY_PERCENT",
+    functionFragment: "_PERCENT",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -85,12 +85,12 @@ export interface GospelDonationInterface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "charityWallet",
+    functionFragment: "Wallet",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "donateEth", values?: undefined): string;
+  encodeFunctionData(functionFragment: "paymentEth", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "donationCount",
+    functionFragment: "paymentCount",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -114,7 +114,7 @@ export interface GospelDonationInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getTotalDonations",
+    functionFragment: "getTotalpayments",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -125,7 +125,7 @@ export interface GospelDonationInterface extends Interface {
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "receiveCryptoDonation",
+    functionFragment: "receiveCryptopayment",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -137,11 +137,11 @@ export interface GospelDonationInterface extends Interface {
     values: [AddressLike, AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "totalEthDonations",
+    functionFragment: "totalEthpayments",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "totalUsdcDonations",
+    functionFragment: "totalUsdcpayments",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -152,7 +152,7 @@ export interface GospelDonationInterface extends Interface {
   encodeFunctionData(functionFragment: "usdcToken", values?: undefined): string;
 
   decodeFunctionResult(
-    functionFragment: "CHARITY_PERCENT",
+    functionFragment: "_PERCENT",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -172,12 +172,12 @@ export interface GospelDonationInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "charityWallet",
+    functionFragment: "Wallet",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "donateEth", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "paymentEth", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "donationCount",
+    functionFragment: "paymentCount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -201,7 +201,7 @@ export interface GospelDonationInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getTotalDonations",
+    functionFragment: "getTotalpayments",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -212,7 +212,7 @@ export interface GospelDonationInterface extends Interface {
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "receiveCryptoDonation",
+    functionFragment: "receiveCryptopayment",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -224,11 +224,11 @@ export interface GospelDonationInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "totalEthDonations",
+    functionFragment: "totalEthpayments",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "totalUsdcDonations",
+    functionFragment: "totalUsdcpayments",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -239,11 +239,11 @@ export interface GospelDonationInterface extends Interface {
   decodeFunctionResult(functionFragment: "usdcToken", data: BytesLike): Result;
 }
 
-export namespace EthDonationReceivedEvent {
+export namespace EthpaymentReceivedEvent {
   export type InputTuple = [
     donor: AddressLike,
     amount: BigNumberish,
-    charityShare: BigNumberish,
+    Share: BigNumberish,
     infrastructureShare: BigNumberish,
     founderShare: BigNumberish,
     timestamp: BigNumberish
@@ -251,7 +251,7 @@ export namespace EthDonationReceivedEvent {
   export type OutputTuple = [
     donor: string,
     amount: bigint,
-    charityShare: bigint,
+    Share: bigint,
     infrastructureShare: bigint,
     founderShare: bigint,
     timestamp: bigint
@@ -259,7 +259,7 @@ export namespace EthDonationReceivedEvent {
   export interface OutputObject {
     donor: string;
     amount: bigint;
-    charityShare: bigint;
+    Share: bigint;
     infrastructureShare: bigint;
     founderShare: bigint;
     timestamp: bigint;
@@ -274,21 +274,21 @@ export namespace GospelSplitExecutedEvent {
   export type InputTuple = [
     tokenType: string,
     totalAmount: BigNumberish,
-    charityAmount: BigNumberish,
+    Amount: BigNumberish,
     infrastructureAmount: BigNumberish,
     founderAmount: BigNumberish
   ];
   export type OutputTuple = [
     tokenType: string,
     totalAmount: bigint,
-    charityAmount: bigint,
+    Amount: bigint,
     infrastructureAmount: bigint,
     founderAmount: bigint
   ];
   export interface OutputObject {
     tokenType: string;
     totalAmount: bigint;
-    charityAmount: bigint;
+    Amount: bigint;
     infrastructureAmount: bigint;
     founderAmount: bigint;
   }
@@ -335,11 +335,11 @@ export namespace UnpausedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace UsdcDonationReceivedEvent {
+export namespace UsdcpaymentReceivedEvent {
   export type InputTuple = [
     donor: AddressLike,
     amount: BigNumberish,
-    charityShare: BigNumberish,
+    Share: BigNumberish,
     infrastructureShare: BigNumberish,
     founderShare: BigNumberish,
     timestamp: BigNumberish
@@ -347,7 +347,7 @@ export namespace UsdcDonationReceivedEvent {
   export type OutputTuple = [
     donor: string,
     amount: bigint,
-    charityShare: bigint,
+    Share: bigint,
     infrastructureShare: bigint,
     founderShare: bigint,
     timestamp: bigint
@@ -355,7 +355,7 @@ export namespace UsdcDonationReceivedEvent {
   export interface OutputObject {
     donor: string;
     amount: bigint;
-    charityShare: bigint;
+    Share: bigint;
     infrastructureShare: bigint;
     founderShare: bigint;
     timestamp: bigint;
@@ -366,11 +366,11 @@ export namespace UsdcDonationReceivedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface GospelDonation extends BaseContract {
-  connect(runner?: ContractRunner | null): GospelDonation;
+export interface Gospelpayment extends BaseContract {
+  connect(runner?: ContractRunner | null): Gospelpayment;
   waitForDeployment(): Promise<this>;
 
-  interface: GospelDonationInterface;
+  interface: GospelpaymentInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -409,7 +409,7 @@ export interface GospelDonation extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  CHARITY_PERCENT: TypedContractMethod<[], [bigint], "view">;
+  _PERCENT: TypedContractMethod<[], [bigint], "view">;
 
   FOUNDER_PERCENT: TypedContractMethod<[], [bigint], "view">;
 
@@ -421,7 +421,7 @@ export interface GospelDonation extends BaseContract {
     [amount: BigNumberish],
     [
       [bigint, bigint, bigint] & {
-        charityShare: bigint;
+        Share: bigint;
         infrastructureShare: bigint;
         founderShare: bigint;
       }
@@ -429,11 +429,11 @@ export interface GospelDonation extends BaseContract {
     "view"
   >;
 
-  charityWallet: TypedContractMethod<[], [string], "view">;
+  Wallet: TypedContractMethod<[], [string], "view">;
 
-  donateEth: TypedContractMethod<[], [void], "payable">;
+  paymentEth: TypedContractMethod<[], [void], "payable">;
 
-  donationCount: TypedContractMethod<[], [bigint], "view">;
+  paymentCount: TypedContractMethod<[], [bigint], "view">;
 
   donorEthContributions: TypedContractMethod<
     [arg0: AddressLike],
@@ -459,7 +459,7 @@ export interface GospelDonation extends BaseContract {
     [],
     [
       [bigint, bigint, bigint] & {
-        charity: bigint;
+        : bigint;
         infrastructure: bigint;
         founder: bigint;
       }
@@ -467,7 +467,7 @@ export interface GospelDonation extends BaseContract {
     "view"
   >;
 
-  getTotalDonations: TypedContractMethod<
+  getTotalpayments: TypedContractMethod<
     [],
     [
       [bigint, bigint, bigint] & {
@@ -487,7 +487,7 @@ export interface GospelDonation extends BaseContract {
 
   paused: TypedContractMethod<[], [boolean], "view">;
 
-  receiveCryptoDonation: TypedContractMethod<
+  receiveCryptopayment: TypedContractMethod<
     [amount: BigNumberish],
     [void],
     "nonpayable"
@@ -501,9 +501,9 @@ export interface GospelDonation extends BaseContract {
     "nonpayable"
   >;
 
-  totalEthDonations: TypedContractMethod<[], [bigint], "view">;
+  totalEthpayments: TypedContractMethod<[], [bigint], "view">;
 
-  totalUsdcDonations: TypedContractMethod<[], [bigint], "view">;
+  totalUsdcpayments: TypedContractMethod<[], [bigint], "view">;
 
   transferOwnership: TypedContractMethod<
     [newOwner: AddressLike],
@@ -520,7 +520,7 @@ export interface GospelDonation extends BaseContract {
   ): T;
 
   getFunction(
-    nameOrSignature: "CHARITY_PERCENT"
+    nameOrSignature: "_PERCENT"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "FOUNDER_PERCENT"
@@ -537,7 +537,7 @@ export interface GospelDonation extends BaseContract {
     [amount: BigNumberish],
     [
       [bigint, bigint, bigint] & {
-        charityShare: bigint;
+        Share: bigint;
         infrastructureShare: bigint;
         founderShare: bigint;
       }
@@ -545,13 +545,13 @@ export interface GospelDonation extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "charityWallet"
+    nameOrSignature: "Wallet"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "donateEth"
+    nameOrSignature: "paymentEth"
   ): TypedContractMethod<[], [void], "payable">;
   getFunction(
-    nameOrSignature: "donationCount"
+    nameOrSignature: "paymentCount"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "donorEthContributions"
@@ -575,7 +575,7 @@ export interface GospelDonation extends BaseContract {
     [],
     [
       [bigint, bigint, bigint] & {
-        charity: bigint;
+        : bigint;
         infrastructure: bigint;
         founder: bigint;
       }
@@ -583,7 +583,7 @@ export interface GospelDonation extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "getTotalDonations"
+    nameOrSignature: "getTotalpayments"
   ): TypedContractMethod<
     [],
     [
@@ -608,7 +608,7 @@ export interface GospelDonation extends BaseContract {
     nameOrSignature: "paused"
   ): TypedContractMethod<[], [boolean], "view">;
   getFunction(
-    nameOrSignature: "receiveCryptoDonation"
+    nameOrSignature: "receiveCryptopayment"
   ): TypedContractMethod<[amount: BigNumberish], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "renounceOwnership"
@@ -621,10 +621,10 @@ export interface GospelDonation extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "totalEthDonations"
+    nameOrSignature: "totalEthpayments"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "totalUsdcDonations"
+    nameOrSignature: "totalUsdcpayments"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "transferOwnership"
@@ -637,11 +637,11 @@ export interface GospelDonation extends BaseContract {
   ): TypedContractMethod<[], [string], "view">;
 
   getEvent(
-    key: "EthDonationReceived"
+    key: "EthpaymentReceived"
   ): TypedContractEvent<
-    EthDonationReceivedEvent.InputTuple,
-    EthDonationReceivedEvent.OutputTuple,
-    EthDonationReceivedEvent.OutputObject
+    EthpaymentReceivedEvent.InputTuple,
+    EthpaymentReceivedEvent.OutputTuple,
+    EthpaymentReceivedEvent.OutputObject
   >;
   getEvent(
     key: "GospelSplitExecuted"
@@ -672,23 +672,23 @@ export interface GospelDonation extends BaseContract {
     UnpausedEvent.OutputObject
   >;
   getEvent(
-    key: "UsdcDonationReceived"
+    key: "UsdcpaymentReceived"
   ): TypedContractEvent<
-    UsdcDonationReceivedEvent.InputTuple,
-    UsdcDonationReceivedEvent.OutputTuple,
-    UsdcDonationReceivedEvent.OutputObject
+    UsdcpaymentReceivedEvent.InputTuple,
+    UsdcpaymentReceivedEvent.OutputTuple,
+    UsdcpaymentReceivedEvent.OutputObject
   >;
 
   filters: {
-    "EthDonationReceived(address,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
-      EthDonationReceivedEvent.InputTuple,
-      EthDonationReceivedEvent.OutputTuple,
-      EthDonationReceivedEvent.OutputObject
+    "EthpaymentReceived(address,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+      EthpaymentReceivedEvent.InputTuple,
+      EthpaymentReceivedEvent.OutputTuple,
+      EthpaymentReceivedEvent.OutputObject
     >;
-    EthDonationReceived: TypedContractEvent<
-      EthDonationReceivedEvent.InputTuple,
-      EthDonationReceivedEvent.OutputTuple,
-      EthDonationReceivedEvent.OutputObject
+    EthpaymentReceived: TypedContractEvent<
+      EthpaymentReceivedEvent.InputTuple,
+      EthpaymentReceivedEvent.OutputTuple,
+      EthpaymentReceivedEvent.OutputObject
     >;
 
     "GospelSplitExecuted(string,uint256,uint256,uint256,uint256)": TypedContractEvent<
@@ -735,15 +735,15 @@ export interface GospelDonation extends BaseContract {
       UnpausedEvent.OutputObject
     >;
 
-    "UsdcDonationReceived(address,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
-      UsdcDonationReceivedEvent.InputTuple,
-      UsdcDonationReceivedEvent.OutputTuple,
-      UsdcDonationReceivedEvent.OutputObject
+    "UsdcpaymentReceived(address,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+      UsdcpaymentReceivedEvent.InputTuple,
+      UsdcpaymentReceivedEvent.OutputTuple,
+      UsdcpaymentReceivedEvent.OutputObject
     >;
-    UsdcDonationReceived: TypedContractEvent<
-      UsdcDonationReceivedEvent.InputTuple,
-      UsdcDonationReceivedEvent.OutputTuple,
-      UsdcDonationReceivedEvent.OutputObject
+    UsdcpaymentReceived: TypedContractEvent<
+      UsdcpaymentReceivedEvent.InputTuple,
+      UsdcpaymentReceivedEvent.OutputTuple,
+      UsdcpaymentReceivedEvent.OutputObject
     >;
   };
 }

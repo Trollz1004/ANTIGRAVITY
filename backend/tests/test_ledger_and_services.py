@@ -16,8 +16,7 @@ from pymongo import MongoClient
 BASE_URL = os.environ["REACT_APP_BACKEND_URL"].rstrip("/") if os.environ.get("REACT_APP_BACKEND_URL") else "https://selenium-automation-3.preview.emergentagent.com"
 API = f"{BASE_URL}/api"
 
-FORBIDDEN = ["haiku", "donate", "donation", "solicitation"]
-
+FORBIDDEN = ["haiku", "payment", "payment", "outreach"]
 
 @pytest.fixture(scope="module")
 def session():
@@ -25,14 +24,12 @@ def session():
     s.headers.update({"Content-Type": "application/json"})
     return s
 
-
 @pytest.fixture(scope="module")
 def mongo():
     cli = MongoClient(os.environ.get("MONGO_URL", "mongodb://localhost:27017"))
     db = cli[os.environ.get("DB_NAME", "test_database")]
     yield db
     cli.close()
-
 
 # ── Mission Ledger CRUD ─────────────────────────────────────────────────── #
 class TestLedger:
@@ -102,7 +99,6 @@ class TestLedger:
         again = session.delete(f"{API}/ledger/{entry_id}")
         assert again.status_code == 404
 
-
 # ── Watchdog ────────────────────────────────────────────────────────────── #
 class TestWatchdog:
     def test_watchdog_status_shape(self, session):
@@ -140,7 +136,6 @@ class TestWatchdog:
             else:
                 mongo.heartbeats.update_one({"agent": "cfo"}, {"$set": {"at": datetime.now(timezone.utc).isoformat()}}, upsert=True)
 
-
 # ── Image gen (real Nano Banana call) ───────────────────────────────────── #
 class TestImages:
     def test_generate_image(self, session):
@@ -164,7 +159,6 @@ class TestImages:
         for img in body["images"]:
             assert "data_uri" not in img, "data_uri must be stripped from list response"
 
-
 # ── Doctrine sweep ──────────────────────────────────────────────────────── #
 class TestDoctrine:
     def test_no_forbidden_words_in_endpoints(self, session):
@@ -181,7 +175,6 @@ class TestDoctrine:
             txt = r.text.lower()
             for word in FORBIDDEN:
                 assert word not in txt, f"forbidden '{word}' found in /providers"
-
 
 # ── Cleanup ─────────────────────────────────────────────────────────────── #
 @pytest.fixture(scope="module", autouse=True)

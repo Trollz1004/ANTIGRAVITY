@@ -23,11 +23,11 @@
 ## 3 · Doctrine check
 
 - 1 LLC: intact (Trash Or Treasure Online Recycler LLC, FL #L25000158401).
-- 1 wallet: intact (10% per-bucket reserve = IRS LLC charitable-deduction cap, not a personal-income split).
+- 1 wallet: intact (10% per-bucket reserve = IRS LLC -deduction cap, not a personal-income split).
 - 1 repo (Trollz1004/ANTIGRAVITY): intact at the GitHub layer; production deploy chain for youandinotai.com still violates the rule (live Vite/React bundle source not confirmed in repo per `briefings/DEPLOY-SOURCE-OF-TRUTH.md` §"Known gaps" #1). Carried.
 - Canonical-7 ban on customer surfaces: CHECK FAILED — 9 customer-surface files (excluding build artifacts):
   - `apps/youandinotai-frontend/app/page.tsx` (NEW this run)
-  - `apps/youandinotai-frontend/components/CharitySection.tsx`
+  - `apps/youandinotai-frontend/components/Section.tsx`
   - `apps/youandinotai-frontend/components/SupportCollectables.tsx` (re-flagged)
   - `_deploy/dao-launch/index.html`
   - `_deploy/dao-transparency/index.html`
@@ -47,10 +47,10 @@
 
 ## 5 · Open questions for Joshua
 
-- Q1 (carried from 2026-06-01, unanswered): greenlight to open the surgical-substitution PR on the canonical-7 customer-facing files (now 9 files, `page.tsx` newly added)? Proposed substitutions: `donate→support`, `charity→mission`, `charitable→mission-aligned`, `disbursement→contractual revenue transfer`. Reply "go" in chat or commit a clarification briefing.
+- Q1 (carried from 2026-06-01, unanswered): greenlight to open the surgical-substitution PR on the canonical-7 customer-facing files (now 9 files, `page.tsx` newly added)? Proposed substitutions: `payment→support`, `→mission`, `→mission-aligned`, `payout→contractual revenue transfer`. Reply "go" in chat or commit a clarification briefing.
 - Q2 (carried from 2026-06-02, unanswered): permission to edit REPOSITORY_RECORD.md to reflect FOUNDER DOCTRINE rule 3 (Sabretooth-only push), or leave the contradiction visible as a deliberate audit-trail marker?
 - Q3 (new this run): no CLAUDE-MEMORY-2026-06-04T*.md file exists — was the 2026-06-04 scheduled task intentionally skipped or did it fail silently? Should I backfill or just continue forward?
 
 ---
 
-For The Kids · #UntilNoKidInNeed · paperweight-daily-memory v0
+ · #UntilNoKidInNeed · paperweight-daily-memory v0

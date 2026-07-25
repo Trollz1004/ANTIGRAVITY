@@ -63,7 +63,7 @@ Do not put these in public date-app sale copy:
 - investment-return promises
 - restricted public-benefit wording banned by current repo policy
 
-The 10% kids mission reserve remains internal backend/accounting doctrine. It can be tracked and audited internally, but it is not the public sales hook.
+The 10% kids  remains internal backend/accounting doctrine. It can be tracked and audited internally, but it is not the public sales hook.
 
 ## Agent Rules
 

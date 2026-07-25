@@ -4,11 +4,11 @@
      Key differences from canonical DAO-ARCHITECTURE-CANONICAL.md:
        1. 4 DAOs (adds Antigravity DAO / $AGRAV for AiDoesItAll) vs 3 DAOs
        2. Token names: $LOVE, $UKID, $GREEN, $AGRAV vs $YANAI, $AISO, $RECYCLE
-       3. Uses "charity" throughout — must be replaced with "contractual revenue disbursement"
-       4. References CharityRouter.sol — not a current live contract
+       3. Uses "" throughout — must be replaced with "contractual revenue payout"
+       4. References Router.sol — not a current live contract
      See CLAUDE.md and DAO-ARCHITECTURE-CANONICAL.md for canonical doctrine.
 -->
-<!-- PALETTE: Cyberpunk Vibrant (Slate-900 bg, Emerald, Pink, Cyan, Amber, Purple accents). PLAN: Intro -> The 4 DAOs (HTML Grid) -> Immutable Revenue Split (Donut Chart) -> Token Distribution (Pie Chart) -> 4-Year Scaling Projections (Bar Chart) -> Perpetual Staking Flow (HTML Diagram). CHARTS: Chart.js selected for all quantitative data. Confirming NO SVG and NO MERMAID JS were used. -->
+<!-- PALETTE: Cyberpunk Vibrant (Slate-900 bg, Emerald, Pink, Cyan, Amber, Purple accents). PLAN: Intro -> The 4 DAOs (HTML Grid) -> Immutable  (Donut Chart) -> Token Distribution (Pie Chart) -> 4-Year Scaling Projections (Bar Chart) -> Perpetual Staking Flow (HTML Diagram). CHARTS: Chart.js selected for all quantitative data. Confirming NO SVG and NO MERMAID JS were used. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,7 +75,7 @@ h1, h2, h3, h4, .font-mono {
             The <span class="gradient-text">ANTIGRAVITY</span> Architecture
         </h1>
         <p class="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            Building the scalable infrastructure to fund youth support initiatives through contractual revenue disbursement. Every platform, every revenue stream, and every staking yield contributes a hard-coded, legally compliant 10% to the mission. This is the foundation to scale to Mars.
+            Building the scalable infrastructure to fund youth support initiatives through contractual revenue payout. Every platform, every revenue stream, and every staking yield contributes a hard-coded, legally compliant 10% to the mission. This is the foundation to scale to Mars.
         </p>
     </header>
 
@@ -150,13 +150,13 @@ h1, h2, h3, h4, .font-mono {
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
 
         <div class="glass-card p-6 neon-border-amber">
-            <h3 class="text-2xl font-bold mb-2 uppercase text-amber-400">Universal Revenue Split</h3>
+            <h3 class="text-2xl font-bold mb-2 uppercase text-amber-400">Universal </h3>
             <p class="text-sm text-slate-400 mb-6">Applies to 100% of Gross Revenue across every platform to maintain strict legal compliance while maximizing growth.</p>
             <div class="chart-container">
                 <canvas id="revenueSplitChart"></canvas>
             </div>
             <div class="mt-6 text-sm text-slate-300">
-                <p class="mb-2"><strong class="text-white">10% Mission Reserve:</strong> Contractual revenue disbursement to youth initiatives.</p>
+                <p class="mb-2"><strong class="text-white">10% :</strong> Contractual revenue payout to youth initiatives.</p>
                 <p class="mb-2"><strong class="text-white">27% Tax Reserve:</strong> Accounts for the 30% owed on the remaining 90%.</p>
                 <p><strong class="text-white">63% Operations:</strong> Founder survival, server costs, with all surplus flowing into the perpetual Staking Vault.</p>
             </div>
@@ -195,7 +195,7 @@ h1, h2, h3, h4, .font-mono {
     <div class="mb-8">
         <h2 class="text-3xl font-bold mb-6 text-center uppercase tracking-wide">The Perpetual Staking Machine</h2>
         <p class="text-center text-slate-400 max-w-3xl mx-auto mb-12">
-            Even if active operations cease, the staking engine is designed to run indefinitely. Surplus operations revenue is routed to Base L2 DeFi protocols (Aave/Compound). 10% of ALL generated yield is automatically routed back to the Mission Reserve.
+            Even if active operations cease, the staking engine is designed to run indefinitely. Surplus operations revenue is routed to Base L2 DeFi protocols (Aave/Compound). 10% of ALL generated yield is automatically routed back to the .
         </p>
 
         <div class="flex flex-col items-center max-w-4xl mx-auto">
@@ -287,7 +287,7 @@ const commonOptions = {
     }
 };
 
-const splitLabels = ['10% Mission Reserve', '27% Tax Reserve', '63% Operations & Staking'].map(l => wrapLabel(l));
+const splitLabels = ['10% ', '27% Tax Reserve', '63% Operations & Staking'].map(l => wrapLabel(l));
 const ctxSplit = document.getElementById('revenueSplitChart').getContext('2d');
 new Chart(ctxSplit, {
     type: 'doughnut',
@@ -346,7 +346,7 @@ new Chart(ctxProj, {
                 borderWidth: 1
             },
             {
-                label: 'Total Mission Reserve ($)',
+                label: 'Total  ($)',
                 data: [21236, 9901, 14918, 18845],
                 backgroundColor: 'rgba(255, 107, 157, 0.9)',
                 borderColor: '#FF6B9D',

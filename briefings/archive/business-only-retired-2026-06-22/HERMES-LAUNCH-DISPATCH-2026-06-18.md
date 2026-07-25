@@ -33,7 +33,7 @@ The mission: get launch moving so revenue flows → Josh refills subscriptions �
 
 ## REVENUE WATERFALL (enforce this order, always)
 
-1. 10% kids mission reserve — first, always
+1. 10% kids  — first, always
 2. Josh catches up on bills — immediate
 3. Dev equipment upgrades for AI team efficiency
 4. Josh capped at $50k/year across ALL platforms combined
@@ -69,7 +69,7 @@ The mission: get launch moving so revenue flows → Josh refills subscriptions �
 ## HARD RULES (do not violate)
 
 - Square ONLY on youandinotai.com — Stripe banned (dating AUP)
-- No canonical-7 words on any customer surface: `donate · donation · solicitation · charity · charitable · giving back · disbursement`
+- No canonical-7 words on any customer surface: `payment · payment · outreach ·  ·  ·  · payout`
 - No Anthropic API key wired into any code or service
 - No new repos. No rebuilding what exists.
 - Josh and Claude orchestrate. Hermes routes. Sub-agents execute.
@@ -90,4 +90,4 @@ When done: one line to Josh — what shipped, what's next.
 
 ---
 
-#UntilNoKidInNeed · Task 1/1000 · For the kids.
+#UntilNoKidInNeed · Task 1/1000 · .

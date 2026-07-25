@@ -80,7 +80,7 @@ This document outlines the specific technical implementation tasks that need to 
 
 1. Unit tests for core backend logic (FastAPI services)
 2. Unit tests for frontend components and utilities
-3. Integration tests for signup, verification, matching, charity flows
+3. Integration tests for signup, verification, matching,  flows
 4. Test coverage requirements (80%+ target)
 
 ## Implementation Guidelines
@@ -93,8 +93,8 @@ This document outlines the specific technical implementation tasks that need to 
 
 ### Security Compliance
 
-- Maintain Florida Statute §496.405 compliance (no "donate"/"donation" terminology)
-- Ensure all charity-related features use "contractual revenue disbursement" terminology
+- Maintain Florida Statute §496.405 compliance (no "payment"/"payment" terminology)
+- Ensure all -related features use "contractual revenue payout" terminology
 - Regular security audits and vulnerability scans
 
 ### Performance Requirements

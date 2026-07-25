@@ -122,11 +122,11 @@ DOCTRINE / RULES CHECK
     the only processor; zero Stripe references anywhere in _deploy/youandinotai/
     (`grep -ri stripe _deploy/youandinotai/` returns no matches)
 [X] Canonical-7 ban — zero hits in any of the 4 touched files
-    (`grep -iE '\b(donate|donation|charity|charitable|solicitation|giving back|disbursement)\b' _deploy/youandinotai/`
-    returns no matches). The 10% per-bucket mission reserve is intentionally
+    (`grep -iE '\b(payment|payment|||outreach||payout)\b' _deploy/youandinotai/`
+    returns no matches). The 10% per-bucket  is intentionally
     NOT mentioned on the customer surface; that's a backend ledger concern
     per CLAUDE.md §"Customer-facing language ban".
-[X] No 60/30/10 references introduced or revived
+[X] No  references introduced or revived
 [X] No mock data — Operator entity FL #L25000158401, contact email
     joshlcoleman@gmail.com, Square account LY5GN09F5AN83 (Square account ID
     not printed on the customer-facing page, only used in handoff doc here),
@@ -202,5 +202,5 @@ criterion "youandinotai.com funnel verified end-to-end" — the funnel is
 now legally complete from landing to checkout.
 
 ===============================================================================
-For The Kids · #UntilNoKidInNeed · Opus external-architect dispatch
+ · #UntilNoKidInNeed · Opus external-architect dispatch
 ===============================================================================

@@ -88,5 +88,5 @@ Send to OpenClaw:
 App: youandinotai.com
 Tagline: Human-verified dating. No bots. No catfish.
 Price: $1 Bot-Shield verification, $14.99/mo founding membership
-Mission: Net proceeds fund children's medical care (for-profit LLC, contractual revenue disbursement, NOT charity/donation)
+Mission: Net proceeds fund children's medical care (for-profit LLC, contractual revenue payout, NOT /payment)
 Founder: Joshua Coleman, electrician from Florida, self-taught, built with Claude AI"

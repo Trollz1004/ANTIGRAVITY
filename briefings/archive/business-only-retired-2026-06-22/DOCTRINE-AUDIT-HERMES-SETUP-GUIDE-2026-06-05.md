@@ -51,22 +51,22 @@ Severity scale: **🔴 CRITICAL** = mutates a FOUNDER DOCTRINE rule, **🟠 HIGH
 ### Conflict #3 · "100-Cent Rule" — mixes LLC and DAO layers
 - **Severity:** 🟠 HIGH (the most material conflict in the file)
 - **Guide §3 (line 92-102):** KIDS 10% / TAX 27% / SOVEREIGNTY 63%, presented as a single **gross-revenue** rule on every dollar.
-- **Live LLC doctrine (CLAUDE.md §"Revenue Model", 2026-04-17, restated 2026-06-01):** 10% per legally-distinct bucket is the **IRS LLC charitable-deduction cap** (10c per $1 maximum corporate charitable deduction). 90% is the LLC operating share, NOT 63%. **The 27% / 63% split does not exist at the LLC layer.**
+- **Live LLC doctrine (CLAUDE.md §"Revenue Model", 2026-04-17, restated 2026-06-01):** 10% per legally-distinct bucket is the **IRS LLC -deduction cap** (10c per $1 maximum corporate  deduction). 90% is the LLC operating share, NOT 63%. **The 27% / 63% split does not exist at the LLC layer.**
 - **Live LLC code (`/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:97-100`):**
   ```python
-  charitable_amount_cents=charitable_amount,        # 10%
-  operating_amount_cents=amount - charitable_amount, # 90%
+  _amount_cents=_amount,        # 10%
+  operating_amount_cents=amount - _amount, # 90%
   ```
   The operating side is 90%, not 63%. The 27% tax / 63% tiers split is **not in the live allocation code**.
 - **Where 10/27/63 DOES exist:** `briefings/DAO-ARCHITECTURE-CANONICAL.md:799` (calibrated 2026-04-19) and `briefings/DAO-LAUNCH-ARCHITECTURE.md:9-15` (2026-06-04) — this is the **DAO token-sale gross split**: 10% kids bucket (stacked per activity), **min 27% tax reserve**, 63% priority tiers (Tier A survival, Tier B growth). It is a **DAO treasury-level** allocation rule, not the LLC operating model.
 - **What the guide conflates:** It takes the DAO PlatformSplitter doctrine (10/27/63, where the 27% is a tax RESERVE lock and the 63% is sovereign-tier funding) and presents it as a single gross-revenue rule at the LLC level. That is **architecturally wrong** — the LLC has no "Tier A1/A2" funding chain. Tier A1/A2 is a **DAO concept** (the docs call it a "$600 machine + $2,500 human survival" model from the sovereignty pool).
-- **ENIGMA 60/30/10 reference (Joshua's message, 2026-06-05):** Joshua wrote "ENIGMA is 60/30/10 per GLOBALNODE." This is the **historical charity-routing split** (`60% ops / 30% growth / 10% kids`) that was **formally killed 2026-04-17** per `REPOSITORY_RECORD.md` §"Current Financial Doctrine" and `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`. The pre-April-17 60/30/10 is `HISTORICAL ONLY`. Joshua's own CLAUDE.md says "Never invent splits. Never resurrect 60/30/10 or charity-routing."
-- **Reconciliation (100-Cent Rule vs ENIGMA 60/30/10):**
+- **ENIGMA  reference (Joshua's message, 2026-06-05):** Joshua wrote "ENIGMA is  per GLOBALNODE." This is the **historical -routing split** (`60% ops / 30% growth / 10% kids`) that was **formally killed 2026-04-17** per `REPOSITORY_RECORD.md` §"Current Financial Doctrine" and `briefings/PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md`. The pre-April-17  is `HISTORICAL ONLY`. Joshua's own CLAUDE.md says "Never invent splits. Never resurrect  or -routing."
+- **Reconciliation (100-Cent Rule vs ENIGMA ):**
   | Layer | Split | Source of truth | Status |
   |---|---|---|---|
-  | **LLC operating** (every merchant receipt) | 10% kids bucket (charitable-deduction cap) + 90% operating | `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py`, `CLAUDE.md` 2026-06-01 | **LIVE** |
+  | **LLC operating** (every merchant receipt) | 10% kids bucket (-deduction cap) + 90% operating | `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py`, `CLAUDE.md` 2026-06-01 | **LIVE** |
   | **DAO token sale** (gross sale proceeds) | 10% kids / min 27% tax reserve / 63% priority tiers (A1+A2 survival, then B) | `DAO-ARCHITECTURE-CANONICAL.md:799`, `DAO-LAUNCH-ARCHITECTURE.md:9-15` | **LIVE** at DAO layer, **not** at LLC layer |
-  | **Historical charity-routing** (60/30/10, 100% charity) | 60% ops / 30% growth / 10% kids | `GospelDonation.sol`, pre-April-17 docs | **DEAD** — never resurrect |
+  | **Historical -routing** (, 100% ) | 60% ops / 30% growth / 10% kids | `Gospelpayment.sol`, pre-April-17 docs | **DEAD** — never resurrect |
   | **Guide's 100-Cent Rule** (10/27/63) | Presented as one gross rule on every dollar | `HERMES-SETUP-GUIDE.md:95-102` | **CONFLATES** the LLC and DAO layers |
 - **Recommendation:** the 100-Cent Rule, as written, is **not the live LLC operating truth**. It is the DAO gross split. The guide needs a layer label. (Do NOT edit — flag for Joshua.)
 
@@ -74,7 +74,7 @@ Severity scale: **🔴 CRITICAL** = mutates a FOUNDER DOCTRINE rule, **🟠 HIGH
 - **Severity:** 🟠 HIGH (cryptic; needs founder clarification)
 - **Guide §3 (line 113):** "$50,000 cumulative ecosystem-wide (after taxes). Hermes tracks every payout. If cap is approached, Hermes creates a blocking Kanban task."
 - **Live doctrine:**
-  - **LLC layer:** Joshua's draw is at his **quarterly discretion** per `REPOSITORY_RECORD.md` §"Current Financial Doctrine": "the reserve is Joshua Coleman's taxable income … and is held until he decides quarterly whether to donate, reinvest, stake, or hold. No agent, surface, or doc may pre-commit that reserve to a beneficiary." There is **no $50k LLC cap**.
+  - **LLC layer:** Joshua's draw is at his **quarterly discretion** per `REPOSITORY_RECORD.md` §"Current Financial Doctrine": "the reserve is Joshua Coleman's taxable income … and is held until he decides quarterly whether to payment, reinvest, stake, or hold. No agent, surface, or doc may pre-commit that reserve to a beneficiary." There is **no $50k LLC cap**.
   - **DAO layer:** `DAO-LAUNCH-ARCHITECTURE.md:14` says "Founder total ecosystem-wide compensation permanently capped at $50,000 (After Taxes). Tier A survival funds are mission-necessary; cap applies to profit/salary beyond basic survival. Any increase requires Token Vote + AI Steward / Safety Council Veto Window." This is a **DAO token-sale governance rule**, not a Joshua draw cap.
 - **What the guide conflates:** It presents the $50k DAO cap as a "Hermes tracks every payout" hard wall. The DAO cap is **governance-voteable** (requires Token Vote + AI Steward Veto Window to raise). Presenting it as an automatic Hermes enforcement creates a **false hard wall** at the LLC layer.
 - **Recommendation:** the cap is real, but at the DAO layer with a governance override path, not at the LLC layer. The guide's "Hermes creates a blocking Kanban task" is correct DAO governance, not a Joshua draw cap. (Do NOT edit — flag for Joshua.)
@@ -177,7 +177,7 @@ Severity scale: **🔴 CRITICAL** = mutates a FOUNDER DOCTRINE rule, **🟠 HIGH
 - **Guide §8 (line 269-271):** "World's first: Competing AI systems from different corporations voting together in a governance structure for children's welfare. Documented in repo. That's not marketing — that's history."
 - **Live doctrine:** FOUNDER DOCTRINE rule 8 ("No fabricated numbers"), rule 9 ("No partnership claims" with Anthropic / Google / OpenAI / xAI / Perplexity), and the canonical-7 customer-facing language ban (FOUNDER DOCTRINE / CLAUDE.md "Hard Constraints"). Also `CLAUDE.md` §"Identity": **"Founder-recognized collaboration on work product only"** — the "AI Steward Council" with 6 named AI systems is a **partnership-claim-shaped** statement.
 - **Live checker:** `briefings/CLAUDE-MEMORY-2026-06-05T1206Z.md` reports the canonical-7 customer-facing grep is at **9 files** (still failing) — the surgical substitution is queued but not landed.
-- **Why it matters:** if "world's first" lands on a customer surface (DAO launch page, video, social post), it risks: (a) rule 9 violation (partnership claim), (b) §496.405 risk if the framing implies charitable governance that requires FL registration, (c) competitor reaction if Anthropic/OpenAI/Google/xAI are named in marketing copy as "voting partners" when they are not.
+- **Why it matters:** if "world's first" lands on a customer surface (DAO launch page, video, social post), it risks: (a) rule 9 violation (partnership claim), (b) §496.405 risk if the framing implies  governance that requires FL registration, (c) competitor reaction if Anthropic/OpenAI/Google/xAI are named in marketing copy as "voting partners" when they are not.
 - **Recommendation:** the "world's first" pitch is **internal-only** in `briefings/`, `hermes/agents/`, AGENTS.md, SOUL.md, HEARTBEAT.md, SKILLS.md, TOOLS.md. It must NOT appear on DAO landing pages, social posts, video descriptions, or sales copy. (Do NOT edit — flag for Joshua.)
 
 ### Conflict #17 · "AntigravityClip" repo reference
@@ -193,19 +193,19 @@ Severity scale: **🔴 CRITICAL** = mutates a FOUNDER DOCTRINE rule, **🟠 HIGH
 
 ---
 
-## 3 · 100-Cent Rule vs ENIGMA 60/30/10 — the reconciliation (per Joshua's review item #2)
+## 3 · 100-Cent Rule vs ENIGMA  — the reconciliation (per Joshua's review item #2)
 
-Joshua's review item: "**DAO split percentages — ENIGMA is 60/30/10 per GLOBALNODE, guide says 10/27/63 (different layer — 100-Cent Rule is GROSS revenue split, ENIGMA is NET after sovereignty pool)**"
+Joshua's review item: "**DAO split percentages — ENIGMA is  per GLOBALNODE, guide says 10/27/63 (different layer — 100-Cent Rule is GROSS , ENIGMA is NET after sovereignty pool)**"
 
-**Joshua's framing is correct on the layer separation.** The 100-Cent Rule is a **gross-revenue** split (every dollar that lands, before LLC cost); ENIGMA 60/30/10 is the **historical charity-routing doctrine** (60% ops / 30% growth / 10% kids) that was **killed 2026-04-17** and is in the **historical archive** only.
+**Joshua's framing is correct on the layer separation.** The 100-Cent Rule is a **gross-revenue** split (every dollar that lands, before LLC cost); ENIGMA  is the **historical -routing doctrine** (60% ops / 30% growth / 10% kids) that was **killed 2026-04-17** and is in the **historical archive** only.
 
 But there is a **third** layer the guide does not name: the **DAO PlatformSplitter**, which is the **DAO token-sale gross split** documented in `DAO-ARCHITECTURE-CANONICAL.md:799` and `DAO-LAUNCH-ARCHITECTURE.md:9-15`. This third layer is **where the 10/27/63 actually lives**.
 
 | Layer | Split | Status | Source of truth |
 |---|---|---|---|
-| **LLC operating** (every merchant receipt) | 10% kids bucket (IRS charitable-deduction cap) + 90% operating | **LIVE — in `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py`** | `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:97-100`, `CLAUDE.md` 2026-06-01 |
+| **LLC operating** (every merchant receipt) | 10% kids bucket (IRS -deduction cap) + 90% operating | **LIVE — in `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py`** | `/mnt/c/antigravity/backend/fastapi-app/app/revenue_allocation.py:97-100`, `CLAUDE.md` 2026-06-01 |
 | **DAO PlatformSplitter** (token sale gross proceeds) | 10% kids (stacked per activity) / min 27% tax reserve / 63% priority tiers (A1 survival + A2 human + Breakeven) | **LIVE at DAO layer only** | `DAO-ARCHITECTURE-CANONICAL.md:799`, `DAO-LAUNCH-ARCHITECTURE.md:9-15` |
-| **ENIGMA 60/30/10** (historical charity-routing) | 60% ops / 30% growth / 10% kids | **DEAD — never resurrect** | `GospelDonation.sol`, pre-April-17 docs, `REPOSITORY_RECORD.md` §"Current Financial Doctrine" |
+| **ENIGMA ** (historical -routing) | 60% ops / 30% growth / 10% kids | **DEAD — never resurrect** | `Gospelpayment.sol`, pre-April-17 docs, `REPOSITORY_RECORD.md` §"Current Financial Doctrine" |
 | **100-Cent Rule (guide's framing)** | 10/27/63, presented as a single gross rule on every dollar at the LLC layer | **CONFLATES the LLC and DAO layers** | `HERMES-SETUP-GUIDE.md:95-102` |
 
 **The 100-Cent Rule is structurally accurate at the DAO layer but mis-labeled at the LLC layer.** The 27% tax reserve and 63% priority tiers (A1/A2/B) are **DAO PlatformSplitter mechanics**, not LLC operating mechanics. The LLC has no "Tier A1 machine ($600) / Tier A2 human ($2,500) / Breakeven ($3,100)" funding chain — that is a **DAO treasury allocation rule** for the sovereignty pool.
@@ -214,7 +214,7 @@ If the guide's "100-Cent Rule" is read as a **single LLC operating rule**, it wo
 
 **Recommendation:** Joshua, your review item is right that they are different layers. The guide needs the label "DAO PlatformSplitter (gross sale proceeds)" on the 100-Cent Rule, not "for every gross dollar that enters the ecosystem" — because "every gross dollar that enters the ecosystem" is LLC-language, and the 10/27/63 doesn't apply at the LLC layer.
 
-**The 60/30/10 (ENIGMA/GLOBALNODE) is dead, period.** It is not a different layer that the 10/27/63 reconciles with. It is a killed doctrine that the 10/27/63 replaced at the DAO layer. The guide's 100-Cent Rule is the **successor** to the 60/30/10 at the DAO PlatformSplitter layer, not a parallel rule.
+**The  (ENIGMA/GLOBALNODE) is dead, period.** It is not a different layer that the 10/27/63 reconciles with. It is a killed doctrine that the 10/27/63 replaced at the DAO layer. The guide's 100-Cent Rule is the **successor** to the  at the DAO PlatformSplitter layer, not a parallel rule.
 
 ---
 
@@ -277,7 +277,7 @@ This audit **does not**:
 This audit **does**:
 - ✅ Read all referenced doctrine + code files
 - ✅ Flag every conflict with severity
-- ✅ Reconcile the 100-Cent Rule (DAO) vs ENIGMA 60/30/10 (dead) vs LLC 10%/90% (live) layer split
+- ✅ Reconcile the 100-Cent Rule (DAO) vs ENIGMA  (dead) vs LLC 10%/90% (live) layer split
 - ✅ Surface the open questions for Joshua
 - ✅ Hold the line
 

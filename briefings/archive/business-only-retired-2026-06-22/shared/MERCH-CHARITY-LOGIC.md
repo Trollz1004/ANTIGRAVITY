@@ -2,7 +2,7 @@
 
 This file was retired on 2026-03-31.
 
-Do not use this document as current merchandising, charity, or payout doctrine.
+Do not use this document as current merchandising, , or payout doctrine.
 
 Reason:
 - older versions hardcoded legacy split assumptions and named-beneficiary handling that are not current approved operating doctrine for LLC-controlled revenue

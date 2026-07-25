@@ -5,7 +5,7 @@ This shared copy was retired on 2026-03-31 during the prelaunch doctrine cleanup
 Do not paste these prompts to any agent.
 
 Reason:
-- the old prompts instructed agents to use legacy charity-routing language, named-beneficiary claims, and outdated marketplace assumptions
+- the old prompts instructed agents to use legacy -routing language, named-beneficiary claims, and outdated marketplace assumptions
 
 Current rule:
 - no agent should generate or publish eBay listing copy from this file

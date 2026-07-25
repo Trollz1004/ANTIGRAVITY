@@ -11,10 +11,10 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
  *   90% → Josh's LLC taxable income" framing here is DEPRECATED.
  *
  *   The 10% is still the right number, but the correct framing is: the
- *   10% is the MAXIMUM ALLOWABLE CORPORATE CHARITABLE DEDUCTION per
+ *   10% is the MAXIMUM ALLOWABLE CORPORATE  DEDUCTION per
  *   legally distinct revenue stream. It is NOT "Josh's LLC taxable
  *   income". All merchant receipts are LLC taxable income; the 10% is
- *   the deduction the LLC can claim against that income for the kids'
+ *   the deduction the LLC can claim against that income '
  *   mission. The remaining 90% is operating capital, not personal income.
  *
  *   See briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md and

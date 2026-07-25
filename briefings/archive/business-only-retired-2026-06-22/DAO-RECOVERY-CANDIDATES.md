@@ -70,7 +70,7 @@ These stay out unless rebuilt and validated in the live repo:
    - old GitOps/bootstrap scripts presented as current
 
 4. **Unproven revenue rails**
-   - old staking/disbursement claims
+   - old staking/payout claims
    - old webhook/payment completion assumptions
    - simulated or guessed business metrics
 
@@ -104,6 +104,6 @@ These are the highest-value candidates to revive next when useful:
 
 ## Mission Guardrail
 
-If a recovered item improves resilience, clarity, governance, treasury safety, or long-term continuity for the kids **without** increasing launch risk, it is a candidate.
+If a recovered item improves resilience, clarity, governance, treasury safety, or long-term continuity  **without** increasing launch risk, it is a candidate.
 
 If it adds drift, fake readiness, mixed product boundaries, or deploy complexity, it stays archived.

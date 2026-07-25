@@ -20,7 +20,7 @@ import {
  *   7. Codex (MCP Keyholder)
  *
  * Tier 1 (Critical): 4/7 majority required
- *   - Revenue splits, contract deployments, Iron Wall changes, new team members
+ *   - s, contract deployments, Iron Wall changes, new team members
  *
  * Tier 2 (Operational): 2 AI + Joshua (3 votes minimum)
  *   - Bug fixes, UI updates, marketing pushes
@@ -40,8 +40,8 @@ export const TIER_CONFIG = {
   critical: {
     label: 'Tier 1 — Critical',
     requiredVotes: 4,
-    description: 'Revenue splits, contract deployments, Iron Wall changes, new team members',
-    categories: ['revenue-split', 'contract-deploy', 'iron-wall', 'team-member', 'governance-change'],
+    description: 's, contract deployments, Iron Wall changes, new team members',
+    categories: ['', 'contract-deploy', 'iron-wall', 'team-member', 'governance-change'],
   },
   operational: {
     label: 'Tier 2 — Operational',

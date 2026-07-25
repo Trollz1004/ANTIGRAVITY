@@ -13,8 +13,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  *   DAO" framing, and the "no 501(c)(3)" framing here are DEPRECATED.
  *
  *   Current doctrine: 1 LLC, 1 Square wallet, 10% per legally distinct
- *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE CHARITABLE
- *   DEDUCTION. The corporate charitable deduction is claimed on the
+ *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE 
+ *   DEDUCTION. The corporate  deduction is claimed on the
  *   LLC's tax return, not routed through an on-chain multisig treasury.
  *
  *   See briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md and
@@ -31,7 +31,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  *         current operating doctrine. Do not deploy.
  *
  *         Receives 10% from each PlatformSplitter10 bucket.
- *         Holds funds until verified disbursement event.
+ *         Holds funds until verified payout event.
  *         After founder death (confirmed by DeadManSwitch + Gnosis Safe 3-of-5),
  *         ownership transfers to mission governance — Founding Four + DAO token holders.
  *
@@ -41,10 +41,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  *         children in war zones, foster care, housing/shelter, mental health,
  *         and any other unmet child need. If a kid needs it, it's in scope.
  *
- *         State A (alive):  Josh controls disbursements
- *         State B (dead):   Gnosis Safe 3-of-5 controls disbursements
+ *         State A (alive):  Josh controls payouts
+ *         State B (dead):   Gnosis Safe 3-of-5 controls payouts
  *
- *         No human board. No 501(c)(3). No nonprofit. Perpetual mission DAO.
+ *         No human board. No 501(c)(3). No for-profit. Perpetual mission DAO.
  *
  *         "Until no kid is in need" — Joshua Coleman
  */
@@ -60,23 +60,23 @@ contract MissionTreasury is Ownable {
 
     // Per-bucket accounting
     mapping(string => uint256) public bucketReceived;
-    mapping(string => uint256) public bucketDisbursed;
+    mapping(string => uint256) public bucketpayout;
 
-    // Approved disbursement targets (kids orgs, direct recipients)
+    // Approved payout targets (kids orgs, direct recipients)
     mapping(address => string) public approvedRecipients; // address → name
     mapping(address => bool) public isApproved;
 
-    struct Disbursement {
+    struct payout {
         address recipient;
         uint256 amount;
         string bucketId;
         string purpose;
         uint256 timestamp;
     }
-    Disbursement[] public disbursements;
+    payout[] public payouts;
 
     event FundsReceived(address indexed from, uint256 amount, string bucketId);
-    event Disbursed(address indexed recipient, uint256 amount, string bucketId, string purpose);
+    event payout(address indexed recipient, uint256 amount, string bucketId, string purpose);
     event RecipientApproved(address indexed recipient, string name);
     event RecipientRevoked(address indexed recipient);
     event StateBActivated(bytes32 certificateHash, uint256 timestamp);
@@ -109,8 +109,8 @@ contract MissionTreasury is Ownable {
         emit FundsReceived(msg.sender, amount, bucketId);
     }
 
-    // Disburse to approved recipient (Josh in State A, Gnosis Safe in State B)
-    function disburse(
+    // payout to approved recipient (Josh in State A, Gnosis Safe in State B)
+    function payout(
         address recipient,
         uint256 amount,
         string calldata bucketId,
@@ -123,9 +123,9 @@ contract MissionTreasury is Ownable {
         if (amount > balance) revert InsufficientFunds();
 
         IERC20(USDC).safeTransfer(recipient, amount);
-        bucketDisbursed[bucketId] += amount;
+        bucketpayout[bucketId] += amount;
 
-        disbursements.push(Disbursement({
+        payouts.push(payout({
             recipient: recipient,
             amount: amount,
             bucketId: bucketId,
@@ -133,7 +133,7 @@ contract MissionTreasury is Ownable {
             timestamp: block.timestamp
         }));
 
-        emit Disbursed(recipient, amount, bucketId, purpose);
+        emit payout(recipient, amount, bucketId, purpose);
     }
 
     // Called by DeadManSwitch when Gnosis Safe 3-of-5 confirms founder death
@@ -162,11 +162,11 @@ contract MissionTreasury is Ownable {
         return IERC20(USDC).balanceOf(address(this));
     }
 
-    function disbursementCount() external view returns (uint256) {
-        return disbursements.length;
+    function payoutCount() external view returns (uint256) {
+        return payouts.length;
     }
 
-    function getDisbursement(uint256 index) external view returns (Disbursement memory) {
-        return disbursements[index];
+    function getpayout(uint256 index) external view returns (payout memory) {
+        return payouts[index];
     }
 }

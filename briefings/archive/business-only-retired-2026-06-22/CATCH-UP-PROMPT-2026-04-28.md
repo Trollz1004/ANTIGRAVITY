@@ -56,7 +56,7 @@ Read your memory files at `~/.claude/projects/c--Antigravity/memory/` (or `C--AN
 
 **Hard constraints reminder:**
 
-- No `donate` / `donation` / `solicitation` in customer-facing copy (FL §496.405). "for the kids" is allowed in mission ribbons.
+- No `payment` / `payment` / `outreach` in customer-facing copy (FL §496.405). "" is allowed in mission ribbons.
 - Three Opus-only surfaces (ai-solutions.store, OpusPawClaw, Mission Control) — never delegate code on these to non-Opus models. If Opus is capped: pause, don't substitute.
 - Don't auto-multiply Claude `.md` sub-agents. Use `ollama launch <agent>` for new agent roles instead.
 - Drift cleanup never executes moves without Joshua's approval of the manifest first.

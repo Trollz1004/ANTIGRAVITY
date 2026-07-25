@@ -18,7 +18,7 @@ Every architectural choice in this doc trades engineering cleverness for *speed-
 
 After v0.1 (target: ~1 working week of build time):
 
-1. Open claude.ai in any tab. Type: *"Spawn 3 agents to research nonprofit funding deadlines for youth-services orgs in Texas, and store findings in memory."*
+1. Open claude.ai in any tab. Type: *"Spawn 3 agents to research for-profit funding deadlines for youth-services orgs in Texas, and store findings in memory."*
 2. Claude picks up local Hermes tools through a registered MCP connector, spawns the agents against Josh's local hermes-agent gateway, and returns task IDs.
 3. The work persists. Close the tab, shut down the laptop, come back tomorrow: *"What did the funding-deadline mission find?"* Claude reads the local SQLite DB, summarizes, lists open tasks.
 4. The existing TanStack GUI (port 3000) shows the same agents/tasks/memory as a human-friendly dashboard.

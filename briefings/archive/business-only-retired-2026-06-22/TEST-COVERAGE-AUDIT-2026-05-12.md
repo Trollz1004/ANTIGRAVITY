@@ -34,7 +34,7 @@ One pocket of the codebase is well-tested (`backend/fastapi-app/`, ~30 pytest fi
 
 Two doctrine/reality mismatches worth a reconcile pass (not blocking this briefing):
 
-1. **Contracts location.** CLAUDE.md says `packages/contracts/src/` with exactly three files (`CharityRouter100.sol`, `DatingRevenueRouter.sol`, `GospelDonation.sol`). Audit found `contracts/src/` with **19 `.sol` files** — including `PlatformSplitter`, governance tokens (AGRAV, LOVE, YANAI), and treasury logic. Either contracts moved or the doctrine wasn't updated when more were added.
+1. **Contracts location.** CLAUDE.md says `packages/contracts/src/` with exactly three files (`Router100.sol`, `DatingRevenueRouter.sol`, `Gospelpayment.sol`). Audit found `contracts/src/` with **19 `.sol` files** — including `PlatformSplitter`, governance tokens (AGRAV, LOVE, YANAI), and treasury logic. Either contracts moved or the doctrine wasn't updated when more were added.
 2. **Canonical Python.** CLAUDE.md's folder map points at `services/youandinotai-api/` as the primary API. The well-tested Python actually lives in `backend/fastapi-app/`.
 
 ---
@@ -43,11 +43,11 @@ Two doctrine/reality mismatches worth a reconcile pass (not blocking this briefi
 
 ### Gap 1: Solidity contracts — 19 files, ZERO tests
 
-- **Location:** `contracts/src/` (CharityRouter100, DatingRevenueRouter, PlatformSplitter, GospelDonation, governance tokens, treasury logic).
+- **Location:** `contracts/src/` (Router100, DatingRevenueRouter, PlatformSplitter, Gospelpayment, governance tokens, treasury logic).
 - **Why it matters:** Money routing math goes live unverified. Post-deploy these are immutable. With Base L2 DAO deploy approaching and the Financial Protection Rule locking tokenomics, this is the single highest-blast-radius gap in the repo.
 - **Concrete test cases:**
-  - Revenue split calculations (10% reserve, 90% platform; edge cases at $0.01, $10K, $100K)
-  - Multi-wallet routing (CharityRouter100, DatingRevenueRouter, PlatformSplitter)
+  -  calculations (10% reserve, 90% platform; edge cases at $0.01, $10K, $100K)
+  - Multi-wallet routing (Router100, DatingRevenueRouter, PlatformSplitter)
   - Governance token transfers (AGRAV, LOVE, YANAI)
   - Treasury operations and authorization checks
   - Reentrancy guards on payable paths
@@ -78,7 +78,7 @@ Two doctrine/reality mismatches worth a reconcile pass (not blocking this briefi
 ### Gap 4: Opus Guardian — 393 lines, not unit-tested, not in CI
 
 - **Location:** `scripts/clawx-control/opus-guardian.py`
-- **Why it matters:** Core security invariant validator (no secrets in source, auth on every endpoint, revenue split is CODE not CONFIG, PII isolation, no raw SQL, input validation, CORS locked). Claimed score 96%, but the validator itself is unverified and not gated in CI. If its secret-pattern detector silently breaks, every guarantee evaporates.
+- **Why it matters:** Core security invariant validator (no secrets in source, auth on every endpoint,  is CODE not CONFIG, PII isolation, no raw SQL, input validation, CORS locked). Claimed score 96%, but the validator itself is unverified and not gated in CI. If its secret-pattern detector silently breaks, every guarantee evaporates.
 - **Concrete test cases:**
   - Secret pattern detection (Stripe, Anthropic, GitHub PAT formats)
   - Doctrine drift detection (deprecated routing markers must NOT appear)
@@ -149,7 +149,7 @@ Two doctrine/reality mismatches worth a reconcile pass (not blocking this briefi
 
 | # | Action | Effort | Signal |
 |---|---|---|---|
-| 1 | Hardhat + tests for `CharityRouter100`, `DatingRevenueRouter`, `PlatformSplitter` | ~4 hr | **CRITICAL** (closes pre-DAO gap) |
+| 1 | Hardhat + tests for `Router100`, `DatingRevenueRouter`, `PlatformSplitter` | ~4 hr | **CRITICAL** (closes pre-DAO gap) |
 | 2 | Wire `opus-guardian.py --check` into CI | 1 hr | HIGH (security doctrine becomes a gate) |
 | 3 | Add `pnpm test` to `ci-validate.yml`; fail on error | 30 min | HIGH (existing JS tests stop being shelfware) |
 | 4 | Flip `SQUARE_WEBHOOK_VERIFY_SIGNATURE` to `true` in CI + replay/timing tests | 2 hr | HIGH (real signature path runs) |

@@ -87,20 +87,18 @@ RULES = [
         ],
     },
     {
-        "id": "charity_copy_drift",
-        "label": "Charity copy drift",
+        "id": "_copy_drift",
+        "label": " copy drift",
         "patterns": [
-            r"charity impact",
-            r"projected charity",
+            r" impact",
+            r"projected ",
             r"every dollar goes to",
         ],
     },
 ]
 
-
 def now_iso() -> str:
     return datetime.now().astimezone().isoformat(timespec="seconds")
-
 
 def write_text(name: str, content: str) -> Path:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -108,13 +106,11 @@ def write_text(name: str, content: str) -> Path:
     path.write_text(content.rstrip() + "\n", encoding="utf-8")
     return path
 
-
 def write_json(name: str, payload: dict) -> Path:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     path = OUTPUT_DIR / name
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return path
-
 
 def should_scan(path: Path, target: dict) -> bool:
     if path.suffix.lower() not in TEXT_SUFFIXES:
@@ -127,7 +123,6 @@ def should_scan(path: Path, target: dict) -> bool:
     if include_files and path.name not in include_files:
         return False
     return True
-
 
 def scan_file(path: Path, target_name: str) -> list[dict]:
     try:
@@ -154,7 +149,6 @@ def scan_file(path: Path, target_name: str) -> list[dict]:
                     break
     return findings
 
-
 def scan_targets() -> list[dict]:
     findings = []
     for target in TARGETS:
@@ -166,7 +160,6 @@ def scan_targets() -> list[dict]:
             if path.is_file() and should_scan(path, target):
                 findings.extend(scan_file(path, target_name))
     return findings
-
 
 def build_markdown(findings: list[dict]) -> str:
     generated_at = now_iso()
@@ -209,7 +202,6 @@ def build_markdown(findings: list[dict]) -> str:
         )
     return "\n".join(lines)
 
-
 def main() -> int:
     findings = scan_targets()
     payload = {
@@ -222,7 +214,6 @@ def main() -> int:
     print(f"FINDINGS={len(findings)}")
     print(f"OUTPUT_DIR={OUTPUT_DIR}")
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

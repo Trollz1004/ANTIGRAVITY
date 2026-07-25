@@ -7,7 +7,7 @@ in the Emergent preview. When Joshua runs the Electron flagship locally, the
 same UI points at his real local endpoints.
 
 Hard rules enforced here:
-  - No "donate" / "donation" / "solicitation" strings anywhere (FL 496.405).
+  - No "payment" / "payment" / "outreach" strings anywhere (FL 496.405).
   - Only Anthropic model surface label allowed is "Opus".
   - No Haiku anywhere.
   - No fabricated live-system numbers — endpoints return clearly-labelled
@@ -49,18 +49,15 @@ class StatusCheck(BaseModel):
     client_name: str
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-
 class StatusCheckCreate(BaseModel):
     client_name: str
-
 
 @api.get("/")
 async def root():
     return {
         "service": "opuspawclaw-mission-control",
-        "message": "hermes-router mirror online — for the kids · #UntilNoKidInNeed",
+        "message": "hermes-router mirror online —  · #UntilNoKidInNeed",
     }
-
 
 @api.post("/status", response_model=StatusCheck)
 async def create_status_check(payload: StatusCheckCreate):
@@ -70,7 +67,6 @@ async def create_status_check(payload: StatusCheckCreate):
     await db.status_checks.insert_one(doc)
     return obj
 
-
 @api.get("/status", response_model=List[StatusCheck])
 async def list_status_checks():
     rows = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
@@ -78,7 +74,6 @@ async def list_status_checks():
         if isinstance(r["timestamp"], str):
             r["timestamp"] = datetime.fromisoformat(r["timestamp"])
     return rows
-
 
 # ---------- Hermes Router mirror ------------------------------------------ #
 # Virtual model alias table — identical to hermes-router service on :11435.
@@ -93,18 +88,15 @@ HERMES_VIRTUAL_MODELS: Dict[str, Dict[str, str]] = {
     "fast":         {"provider": "ollama-local",  "real_model": "gemma3:1b",                              "bridge_provider": "gemini",    "bridge_model": "gemini-2.5-flash"},
 }
 
-
 class ChatMessage(BaseModel):
     role: Literal["system", "user", "assistant"]
     content: str
-
 
 class ChatCompletionsRequest(BaseModel):
     model: str
     messages: List[ChatMessage]
     stream: bool = False
     session_id: Optional[str] = None
-
 
 @api.get("/hermes/healthz")
 async def hermes_healthz():
@@ -117,7 +109,6 @@ async def hermes_healthz():
         "virtual_models": list(HERMES_VIRTUAL_MODELS.keys()),
         "target_real": "http://localhost:11435 (local flagship)",
     }
-
 
 def _bridge_via_emergent(bridge_provider: str, bridge_model: str, session_id: str,
                           system_msg: str, user_messages: List[ChatMessage]) -> str:
@@ -142,7 +133,6 @@ def _bridge_via_emergent(bridge_provider: str, bridge_model: str, session_id: st
         raise RuntimeError("no user message in payload")
 
     return asyncio.run(chat.send_message(UserMessage(text=last_user.content)))  # type: ignore
-
 
 @api.post("/hermes/v1/chat/completions")
 async def hermes_chat_completions(body: ChatCompletionsRequest, response: Response):
@@ -201,10 +191,8 @@ async def hermes_chat_completions(body: ChatCompletionsRequest, response: Respon
         }],
     }
 
-
 # ---------- OpenClaw support mirror --------------------------------------- #
 OPENCLAW_DEPLOY_COMMIT = os.environ.get("OPENCLAW_COMMIT", "mirror-build")
-
 
 @api.get("/openclaw/health")
 async def openclaw_health():
@@ -218,7 +206,6 @@ async def openclaw_health():
         "gateway_port": 18789,
         "support_mode": "date-app-customer-service",
     }
-
 
 # ---------- Launch agents (reuses flagship LaunchPanel contract) --------- #
 @api.get("/agents")
@@ -234,7 +221,6 @@ async def list_agents():
         ]
     }
 
-
 # ---------- System integrity ribbon -------------------------------------- #
 @api.get("/system/status")
 async def system_status():
@@ -248,7 +234,6 @@ async def system_status():
             {"id": "cloud",      "name": "OLLAMA CLOUD",      "status": "red",   "info": "Auth required"},
         ]
     }
-
 
 # ---------- DAO Monitor --------------------------------------------------- #
 @api.get("/dao/stats")
@@ -277,7 +262,6 @@ async def dao_stats():
         ],
     }
 
-
 # ---------- Git panel (safe read-only /app view) -------------------------- #
 def _git(*args: str) -> str:
     try:
@@ -286,7 +270,6 @@ def _git(*args: str) -> str:
         return out.decode(errors="ignore").rstrip("\n")
     except Exception as exc:  # noqa: BLE001 — safe fallback for preview env
         return f"[git unavailable: {exc}]"
-
 
 @api.get("/git/status")
 async def git_status():
@@ -315,7 +298,6 @@ async def git_status():
         "last_commit": last_commit,
     }
 
-
 # ---------- Mission metrics ticker --------------------------------------- #
 @api.get("/mission/metrics")
 async def mission_metrics():
@@ -330,7 +312,6 @@ async def mission_metrics():
         "primary_product": "YouAndINotAI.com",
         "motto": "Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up.",
     }
-
 
 # ---------- wiring -------------------------------------------------------- #
 app.include_router(api)
@@ -356,7 +337,6 @@ app.add_middleware(
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s · %(name)s · %(levelname)s · %(message)s")
 logger = logging.getLogger(__name__)
-
 
 @app.on_event("shutdown")
 async def _shutdown():

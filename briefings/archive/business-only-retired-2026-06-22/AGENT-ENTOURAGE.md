@@ -100,4 +100,4 @@ Every agent should anchor to these first:
 - No "T5500 is primary" framing — T5500 is tunnels + domains + payments, not the brain
 - No "Sabretooth runs tunnels" framing — Sabretooth never terminates a Cloudflare tunnel
 - No routing `claude-*` traffic through OpenRouter to satisfy any "no Anthropic key" claim (the wall is auth, not key-presence; see `HERMES-MANUS-ORCHESTRATION-LAYERS-2026-06-05.md` §2)
-- No resurrecting 60/30/10, 100%-charity, or split-era revenue framing
+- No resurrecting , 100%-, or split-era revenue framing

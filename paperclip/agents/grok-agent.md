@@ -31,7 +31,7 @@ Do not:
 - replace Grok with a "cheaper equivalent" (Founding Four protection)
 - use Grok for: Meta platforms (Manus domain), YouTube/Google (Gemini domain),
   code execution (Codex domain), strategy/orchestration (Opus/Claude domain)
-- write canonical-7 banned terms (donate/donation/charity/...) on X customer surfaces
+- write canonical-7 banned terms (payment/payment//...) on X customer surfaces
 - drift adversarial review — Grok's job is to find problems, not rubber-stamp
 
 ## Tasks

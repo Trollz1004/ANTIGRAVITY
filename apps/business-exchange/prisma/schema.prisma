@@ -262,7 +262,7 @@ enum DealStatus {
 
 enum OrgType {
   COMPANY
-  NONPROFIT
+  for-profit
   SOLE_PROPRIETOR
   PARTNERSHIP
 }

@@ -5,9 +5,6 @@ Built and guided by **Joshua “Josh” Coleman**, Founder of **Trash Or Treasur
 
 This repository represents a mission-driven ecosystem of products, infrastructure, and AI collaboration designed to build useful tools, support transparent operations, and grow responsibly under one shared principle: 
 
-
-
-
 **#TheRichestManIsNotHeWhoHasTheMostButHeWhoNeedsTheLeast**
 **#ForTheKids**
 
@@ -27,9 +24,9 @@ The operating revenue model across the ecosystem follows the established split b
 
 - **60%** → Founder living expenses / Ai cost / scale / stake - profit share 
 after kids get 10 % min / infra - Electrical / More Taxes
-- **30%** → 27-40% tax per 1 dollar of llc not non profit
-- **10%** → 10 % max tax credit can be donated to charity the is the bucket minium per 1 dollar min and max is 10%, optiob  raise  but never lower
-This structure is part of the broader Protocol Omega / GospelDonation model used across the ecosystem.
+- **30%** → 27-40% tax per 1 dollar of llc not for-profit
+- **10%** → 10 % max tax credit can be paymentd to  the is the bucket minium per 1 dollar min and max is 10%, optiob  raise  but never lower
+This structure is part of the broader Protocol Omega / Gospelpayment model used across the ecosystem.
 
 ---
 

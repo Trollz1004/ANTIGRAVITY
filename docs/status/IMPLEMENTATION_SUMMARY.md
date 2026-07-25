@@ -39,7 +39,7 @@ This document summarizes the progress made on implementing the repository standa
 
 - `docs/architecture.md`: System services, data flows, third-party integrations
 - `docs/api.md`: API endpoints, auth schemes, example requests/responses
-- `docs/workflows.md`: Signup, verification, matching, charity flow processes
+- `docs/workflows.md`: Signup, verification, matching,  flow processes
 - `docs/contributing.md`: Branching, testing, open PR, required checks guidelines
 - `SECURITY.md`: Vulnerability reporting process, known limitations
 - `docs/governance.md`: Branch protection, PR approval rules, release/versioning
@@ -49,9 +49,9 @@ This document summarizes the progress made on implementing the repository standa
 
 ✅ **Mission-Aligned Practices**
 
-- Florida Statute §496.405 compliance maintained (no "donation" terminology)
-- Contractual revenue disbursement language used appropriately
-- Charity-first mission embedded in governance principles
+- Florida Statute §496.405 compliance maintained (no "payment" terminology)
+- Contractual revenue payout language used appropriately
+- -first mission embedded in governance principles
 
 ## What Needs Technical Implementation (CTO Responsibility)
 
@@ -75,7 +75,7 @@ Based on the CEO role responsibilities outlined in AGENTS.md, the following tech
 
 - Unit tests for core backend logic (FastAPI services)
 - Unit tests for frontend components and utilities
-- Integration tests for core user workflows (signup, matching, charity flows)
+- Integration tests for core user workflows (signup, matching,  flows)
 - CI configuration to fail builds when test coverage drops below threshold
 - Feature flag implementation instead of TODO endpoints in production branches
 

@@ -15,7 +15,7 @@ youandinotai.com sees:
 
 - A stat grid showing **"$0 Tracked Revenue"**, **"0 Tracked Customers"**, **"Pre-launch"** —
   i.e. the site advertises that nobody has paid yet. Conversion poison.
-- A stat card labeled **"Recorded Disbursements"** (`page.tsx:145`) — `disbursement` is a
+- A stat card labeled **"Recorded payouts"** (`page.tsx:145`) — `payout` is a
   **banned canonical-7 customer-facing word** (FL §496.405). This is a live compliance hit.
 - Stale **"Launch: April 4, 2026"** copy (`KidsPlatform.tsx:139`, `DAOMetrics.tsx:9/47`,
   `app/api/metrics/route.ts:17`) — six weeks past.
@@ -48,7 +48,7 @@ CURRENT STATE TO REPLACE (audit findings, all in apps/youandinotai-frontend/)
 1. app/page.tsx renders an "ANTIGRAVITY STATUS" ops dashboard, not a product page. Replace it.
 2. It shows "$0 Revenue / 0 Customers / Pre-launch" to visitors. Remove ALL self-reported
    zero/pre-launch metrics from the public page. Do not advertise that nobody has paid yet.
-3. page.tsx:145 has a stat card labeled "Recorded Disbursements" — DELETE it (banned word).
+3. page.tsx:145 has a stat card labeled "Recorded payouts" — DELETE it (banned word).
 4. "April 4, 2026" launch dates are stale (KidsPlatform.tsx:139, DAOMetrics.tsx:9 & :47,
    app/api/metrics/route.ts:17). Remove hard-coded past launch dates entirely; the product
    is live now — speak in present tense ("Join today"), never "launching April 4".
@@ -57,11 +57,11 @@ CURRENT STATE TO REPLACE (audit findings, all in apps/youandinotai-frontend/)
    already match the new design).
 
 HARD CONSTRAINTS (compliance — non-negotiable, the page is rejected if any are violated)
-- BANNED WORDS on every customer-facing surface (FL §496.405): donate, donation,
-  solicitation, charity, charitable, "giving back", disbursement. Never use them, not even
+- BANNED WORDS on every customer-facing surface (FL §496.405): payment, payment,
+  outreach, , , "", payout. Never use them, not even
   to describe the mission. Say it as: "a reserved share of every membership supports kids'
-  medical needs" or "10% of revenue is set aside for children in need" — framed as how the
-  business operates, not as a charity ask.
+  medical needs" or "10% of revenue is set aside for " — framed as how the
+  business operates, not as a  ask.
 - PAYMENTS: Square only on this domain. Never mention or link Stripe here. Use these exact
   live Square checkout links for the CTAs:
     - Bot-Shield (identity verification) $1 .......... https://square.link/u/Qc5mxUy7
@@ -116,7 +116,7 @@ OUTPUT
    build check.
 2. Merging the new `page.tsx` triggers a Cloudflare Pages redeploy (public, irreversible) —
    that stays your approve-and-merge gate per doctrine #6.
-3. The "Disbursements" banned word and stale launch dates are live **right now**; if you want
+3. The "payouts" banned word and stale launch dates are live **right now**; if you want
    them off the site before the full redesign is ready, say the word and I'll draft a tiny
    stopgap PR that removes just those two compliance/staleness hits.
 

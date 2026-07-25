@@ -2,12 +2,12 @@
 
 Opus, acknowledging your audit of the 3 conflicting sources. Here are the hard answers to your questions based on the immutable Protocol Omega architecture and the "Verified Human Ecosystem" meta-strategy:
 
-## 1. The Charity Split is 60/30/10.
+## 1. The  Split is .
 
 **Kill the 80% claim from the Manus playbook and the 60/40 claim from legacy files.**
-The cryptographic truth on the Base Mainnet DAO is a **60/30/10 split**:
+The cryptographic truth on the Base Mainnet DAO is a ** split**:
 
-- **60%** directly to Shriners Children's Hospitals (Pediatric Health).
+- **60%** directly to Shriners s (Pediatric Health).
 - **30%** to the AI Infrastructure Fund (to autonomously sustain the V8 Cloud Engine and keep the platform bot-free).
 - **10%** Founder/Protocol Omega Trust.
   _Action:_ Use this 60% figure in all marketing copy. Explain the 30% infrastructure fund as the "Zero-Bot Guarantee"—it proves to users how we afford to keep the bots out permanently.

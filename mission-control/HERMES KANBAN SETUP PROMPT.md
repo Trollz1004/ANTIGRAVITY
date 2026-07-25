@@ -77,7 +77,7 @@ Examples: Joshua, Claude Code, Claude Opus, Manus
 - **REVENUE**: Income-engine, lead generation, marketplace
 - **POSITIONING**: Public copy, landing page, README, DAO launch
 - **INFRASTRUCTURE**: Paperclip, Hermes, Ollama, database
-- **MISSION**: #ForTheKids tracking, impact measurement, donation routing
+- **MISSION**: #ForTheKids tracking, impact measurement, payment routing
 - **FINANCIAL**: Founder cap, bucket allocation, tax planning
 
 ### Effort Estimate
@@ -147,7 +147,7 @@ Examples:
 - Public sale bucket: tracks 10% minimum allocation to kids
 - Staking bucket: tracks 10% minimum allocation to kids (separate)
 - Shows these as distinct rails (never merged)
-- Shows YTD total donated to kids
+- Shows YTD total paymentd to kids
 - Updated weekly
 
 ### PUBLIC COPY AUDIT
@@ -294,7 +294,7 @@ Every Friday, review all cards:
 - Separate tracking for public sale bucket (10% to kids)
 - Separate tracking for staking bucket (10% to kids)
 - Never merged in UI or copy
-- Shows YTD total donated
+- Shows YTD total paymentd
 - Updated weekly
 **Notes:** These are distinct rails. Show them separately.
 
@@ -322,7 +322,7 @@ Every Friday 5pm (or your preferred time):
 **Financial update:**
 - Current revenue (real numbers)
 - Founder cap status ($X of $50k)
-- Kids bucket total donated
+- Kids bucket total paymentd
 - Burn rate vs breakeven
 
 ---
@@ -340,7 +340,7 @@ Hermes Kanban is the source of truth for income-engine progress. Every revenue c
 ## INTEGRATION WITH MISSION TRACKING
 
 Hermes Kanban is also the source of truth for mission progress. Every mission card should track:
-- Kids bucket total donated (updated weekly)
+- Kids bucket total paymentd (updated weekly)
 - Impact metrics (if available, real-or-zero only)
 - Platform stability (uptime, user retention)
 - Founder discipline (cap compliance)

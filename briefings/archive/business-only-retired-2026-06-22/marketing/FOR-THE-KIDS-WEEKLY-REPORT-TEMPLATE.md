@@ -17,8 +17,8 @@
 | Inbound contributions (USD)             |   [$0.00] |   [$0.00] |        [%] |
 | Sold items (count)                      |       [#] |       [#] |        [%] |
 | Gross revenue (USD)                     |   [$0.00] |   [$0.00] |        [%] |
-| Charitable impact (USD deployed)        |   [$0.00] |   [$0.00] |        [%] |
-| Charitable impact (beneficiaries/units) |       [#] |       [#] |        [%] |
+|  impact (USD deployed)        |   [$0.00] |   [$0.00] |        [%] |
+|  impact (beneficiaries/units) |       [#] |       [#] |        [%] |
 
 ## Inbound Contributions
 
@@ -49,7 +49,7 @@
 | Other                   |      [$0.00] |            [%] |
 | **Total gross revenue** |  **[$0.00]** |       **100%** |
 
-## Charitable Impact
+##  Impact
 
 | Program/Recipient   | Funds Deployed (USD) | Impact Unit            | Units Delivered | Status                   |
 | ------------------- | -------------------: | ---------------------- | --------------: | ------------------------ |

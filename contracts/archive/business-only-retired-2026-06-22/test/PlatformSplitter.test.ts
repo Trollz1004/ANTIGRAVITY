@@ -5,12 +5,12 @@
  * ecosystem on Base L2. Pull-over-Push pattern.
  *
  * Split ratios:
- *   10% → missionReserve  (contractual revenue disbursement — youth initiatives)
+ *   10% → missionReserve  (contractual revenue payout — youth initiatives)
  *   27% → taxWallet       (covers ~30% tax on the 90% operating share)
  *   63% → daoTreasury     (operations, sinking fund, staking surplus)
  *
- * Language: "contractual revenue disbursement" per FL §496.405 — no
- * solicitation/donation/tax-deductible language in this file.
+ * Language: "contractual revenue payout" per FL §496.405 — no
+ * outreach/payment/tax-deductible language in this file.
  */
 import { expect } from "chai";
 import { ethers } from "hardhat";
@@ -124,7 +124,7 @@ describe("PlatformSplitter", function () {
       expect(missionBal + taxBal + opsBal).to.equal(total);
     });
 
-    it("mission reserve gets exactly 10% — contractual disbursement floor enforced", async function () {
+    it(" gets exactly 10% — contractual payout floor enforced", async function () {
       const total = ethers.parseUnits("500", 6);
       await mockToken.mint(await splitter.getAddress(), total);
       await splitter.depositToken(await mockToken.getAddress());

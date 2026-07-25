@@ -173,7 +173,7 @@ This document summarizes all UX design deliverables completed for the YouAndINot
 
 ### Legal Compliance
 
-✅ No "donate", "donation", or "solicitation" language per Florida §496.405
+✅ No "payment", "payment", or "outreach" language per Florida §496.405
 ✅ Data privacy compliance with GDPR and CCPA requirements
 ✅ Transparent data handling and user consent mechanisms
 ✅ Regulatory adherence in all user-facing copy and workflows

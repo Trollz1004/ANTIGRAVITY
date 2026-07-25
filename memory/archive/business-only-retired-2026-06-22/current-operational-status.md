@@ -119,9 +119,9 @@ User research Phase 2 fully prepared and operational:
 
 ### Legal Compliance
 
-- **Florida §496.405 Adherence**: No "donate/donation/solicitation" language used
+- **Florida §496.405 Adherence**: No "payment/payment/outreach" language used
 - **Data Privacy Protection**: Granular controls with clear user consent
-- **Contractual Obligations**: Revenue disbursement terminology compliance
+- **Contractual Obligations**: Revenue payout terminology compliance
 - **Ethical Research Practices**: Participant consent and privacy protection
 
 ### Accessibility Standards

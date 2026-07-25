@@ -132,7 +132,7 @@ const _abi = [
         type: "string",
       },
     ],
-    name: "Disbursed",
+    name: "payout",
     type: "event",
   },
   {
@@ -301,7 +301,7 @@ const _abi = [
         type: "string",
       },
     ],
-    name: "bucketDisbursed",
+    name: "bucketpayout",
     outputs: [
       {
         internalType: "uint256",
@@ -367,14 +367,14 @@ const _abi = [
         type: "string",
       },
     ],
-    name: "disburse",
+    name: "payout",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [],
-    name: "disbursementCount",
+    name: "payoutCount",
     outputs: [
       {
         internalType: "uint256",
@@ -393,7 +393,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "disbursements",
+    name: "payouts",
     outputs: [
       {
         internalType: "address",
@@ -432,7 +432,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "getDisbursement",
+    name: "getpayout",
     outputs: [
       {
         components: [
@@ -462,7 +462,7 @@ const _abi = [
             type: "uint256",
           },
         ],
-        internalType: "struct MissionTreasury.Disbursement",
+        internalType: "struct MissionTreasury.payout",
         name: "",
         type: "tuple",
       },

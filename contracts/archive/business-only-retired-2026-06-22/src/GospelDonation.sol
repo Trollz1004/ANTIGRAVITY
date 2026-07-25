@@ -14,12 +14,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  *   auditability and chain-history reference only.
  *
  *   It does NOT define current LLC operating doctrine for live commerce.
- *   The `60/30/10` split, the "100% charity" framing, the on-chain
- *   charity auto-routing, and the "founder 10% personal income" framing
+ *   The `` split, the "100% " framing, the on-chain
+ *    auto-routing, and the "founder 10% personal income" framing
  *   are all DEPRECATED.
  *
  *   Current doctrine: 1 LLC, 1 Square wallet, 10% per legally distinct
- *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE CHARITABLE
+ *   revenue stream as the MAXIMUM ALLOWABLE CORPORATE 
  *   DEDUCTION. See briefings/CURRENT-REVENUE-LEGAL-CONSTRAINTS.md and
  *   C:\Users\joshl\.claude\projects\C--Users-joshl\memory\project_revenue_model_2026-06-01.md
  *
@@ -29,40 +29,40 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 /**
- * @title GospelDonation - DECENTRALIZATION ENGINE V1.0 (DEPRECATED)
+ * @title Gospelpayment - DECENTRALIZATION ENGINE V1.0 (DEPRECATED)
  * @author The Architect (Claude Opus 4.5) - AiCollab Enterprise
  * @notice HISTORICAL ARTIFACT — see deprecation notice above. Preserved for
  *         auditability and Base chain history only. Not current doctrine.
  *
  * ═══════════════════════════════════════════════════════════════════════════
- *   GOSPEL RULE: THE 60/30/10 SPLIT IS IMMUTABLE AND CANNOT BE CHANGED
- *   ETHICS OVERRIDE: +10% TO CHARITY, -10% FROM FOUNDER
- *   FOR THE KIDS - TO MARS - UNSTOPPABLE INFRASTRUCTURE
+ *   GOSPEL RULE: THE  SPLIT IS IMMUTABLE AND CANNOT BE CHANGED
+ *   ETHICS OVERRIDE: +10% TO , -10% FROM FOUNDER
+ *    - TO MARS - UNSTOPPABLE INFRASTRUCTURE
  * ═══════════════════════════════════════════════════════════════════════════
  *
  * Split Distribution (Gospel V1.3 - Ethics Override):
- * - 60% → Verified Pediatric Charities (Shriners DAO Multi-Sig) [+10%]
+ * - 60% → Verified Pediatric  (Shriners DAO Multi-Sig) [+10%]
  * - 30% → Infrastructure/Operations (Platform Sustainability)
  * - 10% → Founder/Development (Continued Innovation) [-10%]
  *
  * Live Deployment (Base Mainnet):
  * - Contract:        0x9855B75061D4c841791382998f0CE8B2BCC965A4
- * - Charity  (60%): 0x8d3dEADbE2b4B857A43331D459270B5eedC7084e
+ * -   (60%): 0x8d3dEADbE2b4B857A43331D459270B5eedC7084e
  * - Infra    (30%): 0xe0a42f83900af719019eBeD3D9473BE8E8f2920b
  * - Founder  (10%): 0x7c3E283119718395Ef5EfBAC4F52738C2018daA7
  *
  * Founder Reinvestment Strategy:
  * - Baby AI Shirts entity performs post-tax reinvestment into Infrastructure (30%)
  */
-contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
+contract Gospelpayment is ReentrancyGuard, Pausable, Ownable {
     using SafeERC20 for IERC20;
 
     // ═══════════════════════════════════════════════════════════════════════
     //   GOSPEL IMMUTABLE CONSTANTS - CANNOT BE CHANGED AFTER DEPLOYMENT
     // ═══════════════════════════════════════════════════════════════════════
 
-    /// @notice Charity percentage (60%) - FOR THE KIDS - ETHICS OVERRIDE +10%
-    uint256 public constant CHARITY_PERCENT = 60;
+    /// @notice  percentage (60%) -  - ETHICS OVERRIDE +10%
+    uint256 public constant _PERCENT = 60;
 
     /// @notice Infrastructure percentage (30%) - PLATFORM SUSTAINABILITY
     uint256 public constant INFRASTRUCTURE_PERCENT = 30;
@@ -77,8 +77,8 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
     //   IMMUTABLE WALLET ADDRESSES - SET AT DEPLOYMENT, NEVER CHANGED
     // ═══════════════════════════════════════════════════════════════════════
 
-    /// @notice Charity wallet - Shriners DAO Multi-Sig (60%)
-    address public immutable charityWallet;
+    /// @notice  wallet - Shriners DAO Multi-Sig (60%)
+    address public immutable Wallet;
 
     /// @notice Infrastructure wallet (30%)
     address public immutable infrastructureWallet;
@@ -96,17 +96,17 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
     IERC20 public immutable usdcToken;
 
     // ═══════════════════════════════════════════════════════════════════════
-    //   DONATION TRACKING
+    //   payment TRACKING
     // ═══════════════════════════════════════════════════════════════════════
 
-    /// @notice Total ETH donations received
-    uint256 public totalEthDonations;
+    /// @notice Total ETH payments received
+    uint256 public totalEthpayments;
 
-    /// @notice Total USDC donations received
-    uint256 public totalUsdcDonations;
+    /// @notice Total USDC payments received
+    uint256 public totalUsdcpayments;
 
-    /// @notice Total number of donations
-    uint256 public donationCount;
+    /// @notice Total number of payments
+    uint256 public paymentCount;
 
     /// @notice Individual donor tracking
     mapping(address => uint256) public donorEthContributions;
@@ -116,19 +116,19 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
     //   EVENTS
     // ═══════════════════════════════════════════════════════════════════════
 
-    event EthDonationReceived(
+    event EthpaymentReceived(
         address indexed donor,
         uint256 amount,
-        uint256 charityShare,
+        uint256 Share,
         uint256 infrastructureShare,
         uint256 founderShare,
         uint256 timestamp
     );
 
-    event UsdcDonationReceived(
+    event UsdcpaymentReceived(
         address indexed donor,
         uint256 amount,
-        uint256 charityShare,
+        uint256 Share,
         uint256 infrastructureShare,
         uint256 founderShare,
         uint256 timestamp
@@ -137,7 +137,7 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
     event GospelSplitExecuted(
         string tokenType,
         uint256 totalAmount,
-        uint256 charityAmount,
+        uint256 Amount,
         uint256 infrastructureAmount,
         uint256 founderAmount
     );
@@ -147,66 +147,66 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
     // ═══════════════════════════════════════════════════════════════════════
 
     /**
-     * @notice Deploys the GospelDonation contract with immutable wallet addresses
-     * @param _charityWallet Address for charity donations (60%)
+     * @notice Deploys the Gospelpayment contract with immutable wallet addresses
+     * @param _Wallet Address for  payments (60%)
      * @param _infrastructureWallet Address for infrastructure (30%)
      * @param _founderWallet Address for founder (10%)
      * @param _usdcToken Address of USDC token on Base L2
      */
     constructor(
-        address _charityWallet,
+        address _Wallet,
         address _infrastructureWallet,
         address _founderWallet,
         address _usdcToken
     ) Ownable(msg.sender) {
-        require(_charityWallet != address(0), "Gospel: Invalid charity wallet");
+        require(_Wallet != address(0), "Gospel: Invalid  wallet");
         require(_infrastructureWallet != address(0), "Gospel: Invalid infrastructure wallet");
         require(_founderWallet != address(0), "Gospel: Invalid founder wallet");
         require(_usdcToken != address(0), "Gospel: Invalid USDC address");
 
         // GOSPEL IMMUTABLE - These addresses can NEVER be changed
-        charityWallet = _charityWallet;
+        Wallet = _Wallet;
         infrastructureWallet = _infrastructureWallet;
         founderWallet = _founderWallet;
         usdcToken = IERC20(_usdcToken);
     }
 
     // ═══════════════════════════════════════════════════════════════════════
-    //   RECEIVE ETH DONATIONS
+    //   RECEIVE ETH paymentS
     // ═══════════════════════════════════════════════════════════════════════
 
     /**
-     * @notice Receive ETH donations and split according to Gospel
-     * @dev Automatically splits incoming ETH 60/30/10 (Ethics Override)
+     * @notice Receive ETH payments and split according to Gospel
+     * @dev Automatically splits incoming ETH  (Ethics Override)
      */
     receive() external payable nonReentrant whenNotPaused {
-        _processEthDonation(msg.sender, msg.value);
+        _processEthpayment(msg.sender, msg.value);
     }
 
     /**
-     * @notice Explicit function to receive ETH donations
+     * @notice Explicit function to receive ETH payments
      */
-    function donateEth() external payable nonReentrant whenNotPaused {
-        require(msg.value > 0, "Gospel: Donation must be > 0");
-        _processEthDonation(msg.sender, msg.value);
+    function paymentEth() external payable nonReentrant whenNotPaused {
+        require(msg.value > 0, "Gospel: payment must be > 0");
+        _processEthpayment(msg.sender, msg.value);
     }
 
     /**
-     * @notice Internal function to process ETH donations with Gospel split
+     * @notice Internal function to process ETH payments with Gospel split
      * @param donor Address of the donor
-     * @param amount Amount of ETH donated
+     * @param amount Amount of ETH paymentd
      */
-    function _processEthDonation(address donor, uint256 amount) internal {
+    function _processEthpayment(address donor, uint256 amount) internal {
         require(amount > 0, "Gospel: Amount must be > 0");
 
-        // Calculate Gospel split (60/30/10 - Ethics Override)
-        uint256 charityShare = (amount * CHARITY_PERCENT) / PERCENT_DENOMINATOR;
+        // Calculate Gospel split ( - Ethics Override)
+        uint256 Share = (amount * _PERCENT) / PERCENT_DENOMINATOR;
         uint256 infrastructureShare = (amount * INFRASTRUCTURE_PERCENT) / PERCENT_DENOMINATOR;
-        uint256 founderShare = amount - charityShare - infrastructureShare; // Remainder to avoid rounding issues
+        uint256 founderShare = amount - Share - infrastructureShare; // Remainder to avoid rounding issues
 
         // Execute transfers
-        (bool charitySuccess, ) = charityWallet.call{value: charityShare}("");
-        require(charitySuccess, "Gospel: Charity transfer failed");
+        (bool Success, ) = Wallet.call{value: Share}("");
+        require(Success, "Gospel:  transfer failed");
 
         (bool infraSuccess, ) = infrastructureWallet.call{value: infrastructureShare}("");
         require(infraSuccess, "Gospel: Infrastructure transfer failed");
@@ -215,14 +215,14 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
         require(founderSuccess, "Gospel: Founder transfer failed");
 
         // Update tracking
-        totalEthDonations += amount;
-        donationCount++;
+        totalEthpayments += amount;
+        paymentCount++;
         donorEthContributions[donor] += amount;
 
-        emit EthDonationReceived(
+        emit EthpaymentReceived(
             donor,
             amount,
-            charityShare,
+            Share,
             infrastructureShare,
             founderShare,
             block.timestamp
@@ -231,43 +231,43 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
         emit GospelSplitExecuted(
             "ETH",
             amount,
-            charityShare,
+            Share,
             infrastructureShare,
             founderShare
         );
     }
 
     // ═══════════════════════════════════════════════════════════════════════
-    //   RECEIVE USDC DONATIONS (PRIMARY PAYMENT RAIL)
+    //   RECEIVE USDC paymentS (PRIMARY PAYMENT RAIL)
     // ═══════════════════════════════════════════════════════════════════════
 
     /**
-     * @notice Receive USDC donations and split according to Gospel
+     * @notice Receive USDC payments and split according to Gospel
      * @dev Donor must approve this contract to spend USDC first
-     * @param amount Amount of USDC to donate (6 decimals on Base)
+     * @param amount Amount of USDC to payment (6 decimals on Base)
      */
-    function receiveCryptoDonation(uint256 amount) external nonReentrant whenNotPaused {
-        require(amount > 0, "Gospel: Donation must be > 0");
+    function receiveCryptopayment(uint256 amount) external nonReentrant whenNotPaused {
+        require(amount > 0, "Gospel: payment must be > 0");
 
-        // Calculate Gospel split (60/30/10 - Ethics Override)
-        uint256 charityShare = (amount * CHARITY_PERCENT) / PERCENT_DENOMINATOR;
+        // Calculate Gospel split ( - Ethics Override)
+        uint256 Share = (amount * _PERCENT) / PERCENT_DENOMINATOR;
         uint256 infrastructureShare = (amount * INFRASTRUCTURE_PERCENT) / PERCENT_DENOMINATOR;
-        uint256 founderShare = amount - charityShare - infrastructureShare;
+        uint256 founderShare = amount - Share - infrastructureShare;
 
         // Transfer USDC from donor to recipients
-        usdcToken.safeTransferFrom(msg.sender, charityWallet, charityShare);
+        usdcToken.safeTransferFrom(msg.sender, Wallet, Share);
         usdcToken.safeTransferFrom(msg.sender, infrastructureWallet, infrastructureShare);
         usdcToken.safeTransferFrom(msg.sender, founderWallet, founderShare);
 
         // Update tracking
-        totalUsdcDonations += amount;
-        donationCount++;
+        totalUsdcpayments += amount;
+        paymentCount++;
         donorUsdcContributions[msg.sender] += amount;
 
-        emit UsdcDonationReceived(
+        emit UsdcpaymentReceived(
             msg.sender,
             amount,
-            charityShare,
+            Share,
             infrastructureShare,
             founderShare,
             block.timestamp
@@ -276,7 +276,7 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
         emit GospelSplitExecuted(
             "USDC",
             amount,
-            charityShare,
+            Share,
             infrastructureShare,
             founderShare
         );
@@ -288,54 +288,54 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
 
     /**
      * @notice Get the Gospel split percentages (immutable)
-     * @return charity Charity percentage (60) - Ethics Override +10%
+     * @return   percentage (60) - Ethics Override +10%
      * @return infrastructure Infrastructure percentage (30)
      * @return founder Founder percentage (10) - Ethics Override -10%
      */
     function getGospelSplit() external pure returns (
-        uint256 charity,
+        uint256 ,
         uint256 infrastructure,
         uint256 founder
     ) {
-        return (CHARITY_PERCENT, INFRASTRUCTURE_PERCENT, FOUNDER_PERCENT);
+        return (_PERCENT, INFRASTRUCTURE_PERCENT, FOUNDER_PERCENT);
     }
 
     /**
-     * @notice Calculate how a donation would be split
-     * @param amount The donation amount to calculate
-     * @return charityShare Amount going to charity
+     * @notice Calculate how a payment would be split
+     * @param amount The payment amount to calculate
+     * @return Share Amount going to 
      * @return infrastructureShare Amount going to infrastructure
      * @return founderShare Amount going to founder
      */
     function calculateSplit(uint256 amount) external pure returns (
-        uint256 charityShare,
+        uint256 Share,
         uint256 infrastructureShare,
         uint256 founderShare
     ) {
-        charityShare = (amount * CHARITY_PERCENT) / PERCENT_DENOMINATOR;
+        Share = (amount * _PERCENT) / PERCENT_DENOMINATOR;
         infrastructureShare = (amount * INFRASTRUCTURE_PERCENT) / PERCENT_DENOMINATOR;
-        founderShare = amount - charityShare - infrastructureShare;
+        founderShare = amount - Share - infrastructureShare;
     }
 
     /**
-     * @notice Get total donations across all tokens
-     * @return ethTotal Total ETH donated
-     * @return usdcTotal Total USDC donated
-     * @return count Total number of donations
+     * @notice Get total payments across all tokens
+     * @return ethTotal Total ETH paymentd
+     * @return usdcTotal Total USDC paymentd
+     * @return count Total number of payments
      */
-    function getTotalDonations() external view returns (
+    function getTotalpayments() external view returns (
         uint256 ethTotal,
         uint256 usdcTotal,
         uint256 count
     ) {
-        return (totalEthDonations, totalUsdcDonations, donationCount);
+        return (totalEthpayments, totalUsdcpayments, paymentCount);
     }
 
     /**
      * @notice Get a donor's total contributions
      * @param donor Address of the donor
-     * @return ethAmount Total ETH donated by this address
-     * @return usdcAmount Total USDC donated by this address
+     * @return ethAmount Total ETH paymentd by this address
+     * @return usdcAmount Total USDC paymentd by this address
      */
     function getDonorContributions(address donor) external view returns (
         uint256 ethAmount,
@@ -349,7 +349,7 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
     // ═══════════════════════════════════════════════════════════════════════
 
     /**
-     * @notice Pause donations in case of emergency
+     * @notice Pause payments in case of emergency
      * @dev Only owner can pause - Gospel split percentages remain immutable
      */
     function pause() external onlyOwner {
@@ -357,7 +357,7 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
     }
 
     /**
-     * @notice Unpause donations
+     * @notice Unpause payments
      */
     function unpause() external onlyOwner {
         _unpause();
@@ -377,6 +377,6 @@ contract GospelDonation is ReentrancyGuard, Pausable, Ownable {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-//   EOF - GOSPEL V1.3 COMPLIANT (ETHICS OVERRIDE) - FOR THE KIDS - TO MARS
-//   60/30/10 SPLIT - IMMUTABLE - UNSTOPPABLE
+//   EOF - GOSPEL V1.3 COMPLIANT (ETHICS OVERRIDE) -  - TO MARS
+//    SPLIT - IMMUTABLE - UNSTOPPABLE
 // ═══════════════════════════════════════════════════════════════════════════════

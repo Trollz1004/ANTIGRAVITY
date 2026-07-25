@@ -1,13 +1,13 @@
 {
   "_format": "hh-sol-artifact-1",
-  "contractName": "CharityRouter100",
-  "sourceName": "src/CharityRouter100.sol",
+  "contractName": "Router100",
+  "sourceName": "src/Router100.sol",
   "abi": [
     {
       "inputs": [
         {
           "internalType": "address",
-          "name": "_charitySafe",
+          "name": "_Safe",
           "type": "address"
         }
       ],
@@ -21,7 +21,7 @@
     },
     {
       "inputs": [],
-      "name": "InvalidCharitySafe",
+      "name": "InvalidSafe",
       "type": "error"
     },
     {
@@ -71,7 +71,7 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "charitySafe",
+          "name": "Safe",
           "type": "address"
         },
         {
@@ -90,7 +90,7 @@
     },
     {
       "inputs": [],
-      "name": "CHARITY_SAFE",
+      "name": "_SAFE",
       "outputs": [
         {
           "internalType": "address",
@@ -143,7 +143,7 @@
     },
     {
       "inputs": [],
-      "name": "getCharityAddress",
+      "name": "getAddress",
       "outputs": [
         {
           "internalType": "address",
