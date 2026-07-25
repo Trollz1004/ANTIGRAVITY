@@ -2,7 +2,7 @@
 
 > Based on Gemini deep research. Cleaned by Claude Code for FL §496.405 compliance.
 > Rule: the 10% reserve is Josh's money. He directs it quarterly. No copy may promise
-> automatic routing, guarantee disbursements, or tie disbursements to individual user actions.
+> automatic routing, guarantee payouts, or tie payouts to individual user actions.
 
 ---
 
@@ -11,7 +11,7 @@
 The $LOVE token powers governance of the YouAndINotAI connection platform.
 Holders shape the future of real-world meetups, community events, and the
 features that make genuine human connection possible. A portion of platform
-revenue is designated as a contractual revenue disbursement supporting youth
+revenue is designated as a contractual revenue payout supporting youth
 initiatives — built into the business model, not bolted on as an afterthought.
 When you hold $LOVE, you're part of a community that actually does something.
 
@@ -20,7 +20,7 @@ When you hold $LOVE, you're part of a community that actually does something.
 The $UKID token governs the AI-Solutions ecosystem — tools, agents, and
 digital products built by the Founding Four. Token holders vote on the product
 roadmap and tool prioritization. The platform operates under a contractual
-revenue disbursement model where a portion of revenue supports youth
+revenue payout model where a portion of revenue supports youth
 education and support programs. $UKID isn't just access to AI — it's a stake
 in a platform designed to outlast its founder.
 
@@ -31,7 +31,7 @@ intake, eBay cross-listing, and responsible recycling infrastructure. Holders
 direct platform priorities: which intake categories to expand, which markets
 to enter, which environmental goals to pursue. Like every platform in the
 ANTIGRAVITY ecosystem, OnlineRecycle operates under a contractual revenue
-disbursement model supporting youth initiatives. Sustainability for the
+payout model supporting youth initiatives. Sustainability for the
 planet. Sustainability for kids.
 
 ## $AGRAV (Antigravity DAO | AiDoesItAll.website)
@@ -58,7 +58,7 @@ It starts small, but it compounds. By prioritizing survival first — covering
 our $3,000 monthly baseline, hardware costs, and the 30% tax reserve — we
 ensure the engine never stops running. The surplus operations capital feeds
 into Base L2 staking pools, where a portion of yield flows back to the
-mission reserve.
+.
 
 This $64,900 is just Task 1 of 1,000. It proves the model. Every new platform
 we launch and every new revenue stream we create adds another permanent flow

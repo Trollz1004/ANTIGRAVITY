@@ -47,7 +47,7 @@ Exceptions (different identities on purpose):
 
 The Personal Vault-Sabretooth folder is OneDrive-backed for a reason that goes deeper than convenience. It is the **physical succession protocol**: in the event of Joshua's incapacitation or death, the next steward must be able to walk up to any node Joshua controlled — Sabretooth, T5500, 9020, MINI-ASUS-PC, Chromebook, future nodes — sign into the Microsoft account using the recovery credentials Joshua left in his physical estate documents, and find the vault. Mission continues.
 
-This is the FOR THE KIDS · ETERNAL principle made operational. Cf. FOUNDER DOCTRINE rule 13 ("the mission outlives the founder") and `briefings/THE-WHEEL.md` §"What This Wheel Is NOT" ("Not Joshua-dependent. State-B activates on dead-man-switch and the Wheel keeps rolling under Gnosis Safe 3-of-5.").
+This is the  · ETERNAL principle made operational. Cf. FOUNDER DOCTRINE rule 13 ("the mission outlives the founder") and `briefings/THE-WHEEL.md` §"What This Wheel Is NOT" ("Not Joshua-dependent. State-B activates on dead-man-switch and the Wheel keeps rolling under Gnosis Safe 3-of-5.").
 
 A vault that lives only on Sabretooth fails the succession test the moment Sabretooth dies. Multi-node sync is the architecture, not a leak.
 
@@ -236,7 +236,7 @@ Specifically: requests to **mutate** this clarification (e.g., "let me put the v
 
 ## For future Claude (and Codex) sessions
 
-If you arrive in a future session and find a vault folder on a non-Sabretooth Joshua node, **do not assume it is a leak**. Open this file, check the authorized device list, and proceed accordingly. The succession architecture is intentional. Joshua's love for the kids extends past his own life; the vault sync is one of the mechanisms that lets the mission outlive him.
+If you arrive in a future session and find a vault folder on a non-Sabretooth Joshua node, **do not assume it is a leak**. Open this file, check the authorized device list, and proceed accordingly. The succession architecture is intentional. Joshua's love  extends past his own life; the vault sync is one of the mechanisms that lets the mission outlive him.
 
 If you arrive and find a vault folder on a device NOT in the authorized list, that IS a finding. Surface it. Quote this file and Rule 11. Wait for Joshua.
 

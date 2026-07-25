@@ -16,11 +16,11 @@ This document specifies copy requirements for all UI elements in the YouAndINotA
 
 ### Language Rules
 
-1. **Never use**: "donate", "donation", "solicitation" (Florida §496.405 compliance)
+1. **Never use**: "payment", "payment", "outreach" (Florida §496.405 compliance)
 2. **Avoid**: Gamification terms ("points", "levels", "achievements")
 3. **Avoid**: Manipulative urgency ("limited time", "hurry")
 4. **Prefer**: Direct, clear language over marketing speak
-5. **Support**: Florida charity registration disclosures where required
+5. **Support**: Florida  registration disclosures where required
 
 ## UI Element Copy Requirements
 
@@ -324,9 +324,9 @@ This document specifies copy requirements for all UI elements in the YouAndINotA
 
 ## Legal & Compliance Copy
 
-### Florida Charity Registration
+### Florida  Registration
 
-- "Charitable Solicitation Notice: YouAndINotAI is registered with the State of Florida."
+- " outreach Notice: YouAndINotAI is registered with the State of Florida."
 - "Registration does not imply endorsement, recommendation, or approval."
 - A detailed statement is available upon request.
 

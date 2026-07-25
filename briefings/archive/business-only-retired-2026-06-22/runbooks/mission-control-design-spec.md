@@ -11,8 +11,8 @@
 
 - **No paid model APIs.** No `openai`, `@anthropic-ai/sdk`, `@google/generative-ai`, no Emergent SDK. Joshua cannot afford metered spend.
 - **Cloudflare only. Square only. Stripe dead.**
-- **Revenue doctrine: 10% hard cap.** Never introduce 60/30/10 or 100% claims.
-- **No `donate` / `donation` / `charity`** in customer-facing copy. Use `contractual revenue disbursement`.
+- **Revenue doctrine: 10% hard cap.** Never introduce  or 100% claims.
+- **No `payment` / `payment` / ``** in customer-facing copy. Use `contractual revenue payout`.
 - 1-folder rule: live at `c:\Antigravity\apps\mission-control\` — no D:\, no separate repo.
 - Secrets in `.env` only — never in chat, never in git.
 
@@ -83,7 +83,7 @@
 
 ### Settings + tagline
 - `Settings` button
-- `for the kids · #UntilNoKidInNeed`
+- ` · #UntilNoKidInNeed`
 
 ## Center column
 
@@ -150,7 +150,7 @@
 ### Panel: Mission band
 - Heart icon
 - Label: `mission` · `#UntilNoKidInNeed`
-- Body: `Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up. For the kids.`
+- Body: `Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up. .`
 - Footer: `Runway · — days · primary · youandinotai.com`
 
 ## Footer
@@ -243,7 +243,7 @@ NO state-management library. Local `useState` + the `usePoll` hook is enough. No
 2. With ALL backend endpoints unreachable, every panel still renders with its title + the consistent `endpoint unreachable — retry` body. Nothing throws.
 3. The TRUST HIERARCHY panel and BUILD AGENT E1 panel render their static content — no fetch.
 4. Sidebar mode buttons highlight the active mode and clicking changes the visible main-canvas area (Mission Control / Mission Ledger / AI Roundtable / Tasks / Code Mode / Create·Banana / Research / Chat). Other modes can be stubs with a `Coming online` placeholder for now — Mission Control is the priority view.
-5. Compliance grep: zero hits for `openai`, `anthropic`, `gemini`, `emergent`, `donate`, `donation`, `charity` in `src/`.
+5. Compliance grep: zero hits for `openai`, `anthropic`, `gemini`, `emergent`, `payment`, `payment`, `` in `src/`.
 6. `pnpm build` produces `dist/` with no errors. Static deploy to `_deploy/mission-control/` works (`cp -r apps/mission-control/dist _deploy/mission-control/`).
 
 ## Out of scope (stub or skip)

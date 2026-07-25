@@ -16,7 +16,7 @@
    - Role: Handles ClawX, YouAndINotAI, messaging, calendar
 4. **Shriners** (`C:\ANTIGRAVITY`)
    - Model: Grok 4.1 Fast Reasoning
-   - Role: OMEGA Protocol Omega, 60% charity routing
+   - Role: OMEGA Protocol Omega, 60%  routing
 
 ---
 

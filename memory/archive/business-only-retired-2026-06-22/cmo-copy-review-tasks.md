@@ -28,7 +28,7 @@ This document outlines specific copy and messaging review tasks for the CMO (2c4
 - Clear consequences communication without fear-mongering
 - Empowering language that builds user confidence
 - Consistent terminology across all safety interactions
-- Compliance with Florida §496.405 (no donate/donation/solicitation language)
+- Compliance with Florida §496.405 (no payment/payment/outreach language)
 - Supportive tone that reassures users of platform protection
 
 ## Task 2: Community Features Copy Review
@@ -107,9 +107,9 @@ This document outlines specific copy and messaging review tasks for the CMO (2c4
 
 ### Florida §496.405 Adherence
 
-- Verify no use of "donate", "donation", or "solicitation" in any UI copy
-- Confirm all charitable giving references use "support" or "contribute" language
-- Review all monetary references for compliance with charitable organization guidelines
+- Verify no use of "payment", "payment", or "outreach" in any UI copy
+- Confirm all  giving references use "support" or "contribute" language
+- Review all monetary references for compliance with  organization guidelines
 - Ensure fundraising activity descriptions comply with regulatory requirements
 
 ### Accessibility Copy Guidelines

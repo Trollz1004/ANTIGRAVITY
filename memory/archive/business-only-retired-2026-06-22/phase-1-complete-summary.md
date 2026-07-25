@@ -70,7 +70,7 @@ This document marks the completion of Phase 1 UX design work for the YouAndINotA
 
 ### Legal Compliance
 
-✅ No "donate", "donation", or "solicitation" language per Florida §496.405
+✅ No "payment", "payment", or "outreach" language per Florida §496.405
 ✅ Data privacy compliance with GDPR and CCPA requirements documented
 ✅ Transparent data handling and user consent mechanisms specified
 ✅ Regulatory adherence in all user-facing copy and workflows

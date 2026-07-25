@@ -96,7 +96,7 @@ export function Sidebar({ activeMode = "mission", onModeChange }) {
         </button>
         <div className="flex items-center gap-2 px-2 text-[9px] uppercase tracking-widest text-[#4a5568]">
           <Rocket size={10} className="text-[#e040fb]" />
-          <span>for the kids · #UntilNoKidInNeed</span>
+          <span> · #UntilNoKidInNeed</span>
         </div>
       </div>
     </aside>

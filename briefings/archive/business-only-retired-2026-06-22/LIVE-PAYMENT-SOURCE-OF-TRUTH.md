@@ -16,7 +16,7 @@ If any older doc, node note, export, or backup conflicts with this file:
 - Primary live payment rail: **Square only**
 - Square account: `joshlcoleman@gmail.com` (all lanes — YouAndINotAI and commerce)
 - Active Square location: `LY5GN09F5AN83`
-- Customer-facing payment copy must stay business-first and must not use `donate`, `donation`, or `solicitation`
+- Customer-facing payment copy must stay business-first and must not use `payment`, `payment`, or `outreach`
 
 ## Founder Test Transaction Truth (2026-06-19)
 
@@ -37,7 +37,7 @@ If any older doc, node note, export, or backup conflicts with this file:
 - Every authoritative Square `payment.completed` event now creates an internal `revenue_allocations` ledger row when the amount is positive
 - The ledger reserves exactly `10%` of gross platform payment revenue, rounded up to whole cents, into the `kids_support` beneficiary lane with status `reserved`
 - For a `$1.00` Bot-Shield payment, the required reserved allocation is `10` cents and the operating amount is `90` cents
-- This ledger is internal accounting proof only; it does not claim that an external charitable disbursement has already been sent until `status` is updated through a verified payout/reconciliation path
+- This ledger is internal accounting proof only; it does not claim that an external  payout has already been sent until `status` is updated through a verified payout/reconciliation path
 
 ## Catalog Drift Guard
 
@@ -86,8 +86,6 @@ If any older doc, node note, export, or backup conflicts with this file:
 - No raw payment secrets in git
 - Historical chain truth belongs to `briefings/HISTORICAL-ONCHAIN-STATUS.md`
 - Customer-facing payment claims must stay truthful to the currently live Square flow
-
-
 
 ## ACTIVE SQUARE APPLICATIONS (Updated 2026-03-23)
 

@@ -819,7 +819,7 @@ LINKS:
 - Cards moved to DONE
 - Revenue generated (real numbers)
 - Founder cap status ($X of $50k)
-- Kids bucket total donated
+- Kids bucket total paymentd
 - Blockers and resolutions
 - Next week priorities
 - Model performance metrics

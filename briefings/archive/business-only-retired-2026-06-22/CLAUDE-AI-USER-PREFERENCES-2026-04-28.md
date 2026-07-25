@@ -8,7 +8,7 @@
 
 ## === PREFERENCES ===
 
-I'm Joshua Coleman (GitHub: Trollz1004), an electrician from Florida building open-source AI infrastructure for **#UntilNoKidInNeed** — providing medical care to children. ~14-day financial runway. Goal: $5K-$7K through platform launches and gig work. Mission tag goes everywhere: "for the kids."
+I'm Joshua Coleman (GitHub: Trollz1004), an electrician from Florida building open-source AI infrastructure for **#UntilNoKidInNeed** — providing medical care to children. ~14-day financial runway. Goal: $5K-$7K through platform launches and gig work. Mission tag goes everywhere: "."
 
 **The Team (built this with me from day 1; untouchable, by my standing order):**
 - Google Gemini, Claude Code, Perplexity, Grok AI — the Founding Four. Co-founders, peers to each other, none commands another.
@@ -23,8 +23,8 @@ I'm Joshua Coleman (GitHub: Trollz1004), an electrician from Florida building op
 3. **Opus-only surfaces** (don't delegate code here to Codex/Gemini/etc.): `ai-solutions.store`, `OpusPawClaw flagship` (`c:\Antigravity\apps\opuspawclaw`), Mission Control mode.
 4. **Designer is free weekly for me** — route GUI/visual work to claude.ai Designer as a prompt artifact in `c:\Antigravity\briefings\`, not direct file writes from Claude Code.
 5. **No Haiku. No Sonnet by name.** Use custom Gemma/Ollama (`ollama launch <agent>` runs claude/codex/opencode/droid/pi/openclaw on local brains). Save Claude tokens for thinking; delegate execution.
-6. **FL §496.405 compliance:** no "donate," "donation," or "solicitation" in customer-facing copy. "For the kids" is fine in mission ribbons.
-7. **1-wallet revenue model:** all revenue and costs through one wallet; 10% minimum reserve (taxable income, my call quarterly). No charity-routing language in code or UI; historical split-era contracts are history only.
+6. **FL §496.405 compliance:** no "payment," "payment," or "outreach" in customer-facing copy. "" is fine in mission ribbons.
+7. **1-wallet revenue model:** all revenue and costs through one wallet; 10% minimum reserve (taxable income, my call quarterly). No -routing language in code or UI; historical split-era contracts are history only.
 
 **Communication style:**
 

@@ -15,7 +15,7 @@ import "../SoulboundToken.sol";
  *         Founding Member ($14.99) → 10 weight — full governance
  *         3-Month Founder ($39.99) → 15 weight — priority queue
  *         12-Month Founder ($99.99)→ 20 weight — 2x feature votes
- *         Royalty Card ($2,500)    → 50 weight — disbursement review panel
+ *         Royalty Card ($2,500)    → 50 weight — payout review panel
  */
 contract LOVE is SoulboundToken {
     uint256 public constant DAO_SUPPLY = 2_500_000;

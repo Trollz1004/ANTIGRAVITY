@@ -76,7 +76,7 @@ A **3-column grid** filling the available space:
 - **Right column (320px):** stacked —
   1. `GitPanel` (existing).
   2. `RunbookViewer` (your new component) below it.
-  3. A "Mission Footer" card with the orange-magenta `#UntilNoKidInNeed` ribbon and a small "for the kids" line.
+  3. A "Mission Footer" card with the orange-magenta `#UntilNoKidInNeed` ribbon and a small "" line.
 
 Each new panel uses the same card chrome as existing panels: `bg-[#1a2332] border border-[#2a3a52] rounded-md` with a header row (`bg-[#111827] border-b border-[#2a3a52] px-3 py-2 flex items-center justify-between`) and body (`p-3`).
 
@@ -108,7 +108,7 @@ A simple HTML runbook loader:
 ### Hard rules — do not violate
 
 - NEVER reference Claude Haiku as a model option anywhere.
-- NEVER use the words "donate", "donation", or "solicitation" in any UI string. The phrase "for the kids" is allowed.
+- NEVER use the words "payment", "payment", or "outreach" in any UI string. The phrase "" is allowed.
 - No mock data. If an endpoint is unreachable, show "endpoint unreachable" + retry. Never fabricate numbers.
 - No third-party tracking, analytics, or external script tags.
 - Only Anthropic-side model name allowed in UI strings is "Opus". Never "Haiku" or "Sonnet" by name.

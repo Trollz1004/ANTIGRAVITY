@@ -24,7 +24,7 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "_charitySafe",
+        name: "_Safe",
         type: "address",
       },
       {
@@ -85,7 +85,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "charityAmount",
+        name: "Amount",
         type: "uint256",
       },
       {
@@ -110,7 +110,7 @@ const _abi = [
       {
         indexed: true,
         internalType: "address",
-        name: "charitySafe",
+        name: "Safe",
         type: "address",
       },
       {
@@ -154,7 +154,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "PCT_CHARITY",
+    name: "PCT_",
     outputs: [
       {
         internalType: "uint256",
@@ -206,7 +206,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "charitySafe",
+    name: "Safe",
     outputs: [
       {
         internalType: "address",
@@ -327,7 +327,7 @@ const _abi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "charityAmt",
+        name: "Amt",
         type: "uint256",
       },
       {
@@ -397,26 +397,26 @@ export class DatingRevenueRouter__factory extends ContractFactory {
   }
 
   override getDeployTransaction(
-    _charitySafe: AddressLike,
+    _Safe: AddressLike,
     _daoTreasury: AddressLike,
     _founderWallet: AddressLike,
     overrides?: NonPayableOverrides & { from?: string }
   ): Promise<ContractDeployTransaction> {
     return super.getDeployTransaction(
-      _charitySafe,
+      _Safe,
       _daoTreasury,
       _founderWallet,
       overrides || {}
     );
   }
   override deploy(
-    _charitySafe: AddressLike,
+    _Safe: AddressLike,
     _daoTreasury: AddressLike,
     _founderWallet: AddressLike,
     overrides?: NonPayableOverrides & { from?: string }
   ) {
     return super.deploy(
-      _charitySafe,
+      _Safe,
       _daoTreasury,
       _founderWallet,
       overrides || {}

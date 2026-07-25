@@ -1,6 +1,6 @@
 # ANTIGRAVITY SESSION BACKUP — 2026-03-18
 
-**Goal:** For the Kids. Eternal.
+**Goal:** . Eternal.
 **Latest Sprint:** THE REVENUE & PRIVACY SPRINT (Gemini + Claude)
 
 ## 📦 SHIPPED SUMMARY
@@ -12,7 +12,7 @@
 ## 🔑 AUTH & PAYMENTS
 - Square is the SOLE payment processor.
 - Links for Bot-Shield ($1), Founding Member ($14.99/mo), and Founder tiers are LIVE.
-- Iron Wall separating ENIGMA (profit) and OMEGA (charity) is enforced.
+- Iron Wall separating ENIGMA (profit) and OMEGA () is enforced.
 
 ## 🚀 LAUNCH READY
 - Frontend is on Cloudflare Pages.

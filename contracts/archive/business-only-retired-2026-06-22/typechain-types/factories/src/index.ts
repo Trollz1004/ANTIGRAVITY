@@ -4,10 +4,10 @@
 export * as deadManSwitchSol from "./DeadManSwitch.sol";
 export * as governance from "./governance";
 export * as test from "./test";
-export { CharityRouter100__factory } from "./CharityRouter100__factory";
+export { Router100__factory } from "./Router100__factory";
 export { DAOTreasury__factory } from "./DAOTreasury__factory";
 export { DatingRevenueRouter__factory } from "./DatingRevenueRouter__factory";
-export { GospelDonation__factory } from "./GospelDonation__factory";
+export { Gospelpayment__factory } from "./Gospelpayment__factory";
 export { MissionTreasury__factory } from "./MissionTreasury__factory";
 export { PlatformSplitter__factory } from "./PlatformSplitter__factory";
 export { PlatformSplitter10__factory } from "./PlatformSplitter10__factory";

@@ -1,6 +1,6 @@
 # CLOUDFLARE API TOKEN ROTATION GUIDE (2026)
 
-> **FOR THE KIDS.** Platform credibility depends on secure, active deployments.
+> **.** Platform credibility depends on secure, active deployments.
 
 ### âš ï¸ STATUS: TOKEN EXPIRED
 The current `CLOUDFLARE_API_TOKEN` is stale. GitHub Actions is flagged for overuse, so we are shifting to **DIRECT DEPLOY** and **NAMED TUNNELS** from Sabretooth.

@@ -31,7 +31,7 @@ The Hermes router at `localhost:11435` routes prompts to any provider except Ant
 First-party Claude PRs may auto-merge on CI-green and delete the head branch. Third-party Claude wrapper PRs require Joshua's manual review. GitHub setting: Repo → Settings → General → Pull Requests → ☑ Allow auto-merge · ☑ Automatically delete head branches.
 
 ### 8. No fabricated numbers
-Every public figure is real or `0` / `$0` / `NOT YET` / `DRAFT`. Never "287K users" filler. Never inflated revenue. Never fabricated charitable totals. Real or fail honestly.
+Every public figure is real or `0` / `$0` / `NOT YET` / `DRAFT`. Never "287K users" filler. Never inflated revenue. Never fabricated  totals. Real or fail honestly.
 
 ### 9. No partnership claims
 No public claim of partnership, endorsement, or affiliation with Anthropic, Google, OpenAI, xAI, or Perplexity. Founder-recognized collaboration on work product only.
@@ -45,7 +45,7 @@ Canonical vault: `C:\Users\joshl\OneDrive\Personal Vault-Sabretooth\`. Master en
 ### 12. Hooks never bypassed
 Pre-commit hooks, signing, branch protection — never overridden unless Joshua personally types the override. `--no-verify` and `--no-gpg-sign` are banned absent explicit founder instruction.
 
-### 13. FOR THE KIDS · wheel of perpetual automation
+### 13.  · wheel of perpetual automation
 The mission outlives the founder. Every decision passes one test: **does this move the platform closer to launch and keep the mission intact?** Greed cannot stop the wheel. The wheel turns until no kid is in need. `#UntilNoKidInNeed`. No exit, no sale, no pivot that strips the mission.
 
 ---

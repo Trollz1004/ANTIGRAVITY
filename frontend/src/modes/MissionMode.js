@@ -92,7 +92,7 @@ export function MissionMode() {
                 #UntilNoKidInNeed
               </div>
               <div className="mono text-[10px] text-[#e8f0ff]/80 leading-relaxed">
-                Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up. For the kids.
+                Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up. .
               </div>
               <div className="mt-3 pt-3 border-t border-[#e040fb]/20 text-[8px] tracking-widest uppercase text-[#6b82a6]">
                 Runway · {mission?.runway_days ?? "—"} days · primary · {mission?.primary_product ?? "youandinotai.com"}

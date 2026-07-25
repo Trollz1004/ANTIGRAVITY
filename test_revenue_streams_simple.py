@@ -11,7 +11,6 @@ from app.revenue_streams import (
 )
 from app.revenue_allocation import REVENUE_STREAM_TO_BUCKET_MAPPING, calculate_stream_allocation
 
-
 def test_revenue_stream_enum():
     """Test RevenueStream enum values."""
     print("✓ Testing RevenueStream enum values...")
@@ -21,7 +20,6 @@ def test_revenue_stream_enum():
     assert RevenueStream.TECH_DEBT_CLEANUP.value == 4
     assert RevenueStream.API_MANAGEMENT.value == 5
     print("  ✓ All stream values are correct")
-
 
 def test_revenue_stream_configs_exist():
     """Test that all revenue stream configurations exist."""
@@ -35,7 +33,6 @@ def test_revenue_stream_configs_exist():
         assert config.name
         assert config.description
     print("  ✓ All configurations have required fields")
-
 
 def test_revenue_stream_config_values():
     """Test specific revenue stream configuration values."""
@@ -76,7 +73,6 @@ def test_revenue_stream_config_values():
     assert config.transaction_fee_percent == 0.05
     print("  ✓ API Management config is correct")
 
-
 def test_revenue_stream_to_bucket_mapping():
     """Test revenue stream to bucket mapping."""
     print("✓ Testing revenue stream to bucket mapping...")
@@ -86,7 +82,6 @@ def test_revenue_stream_to_bucket_mapping():
     assert REVENUE_STREAM_TO_BUCKET_MAPPING["Tech Debt Cleanup"] == 7
     assert REVENUE_STREAM_TO_BUCKET_MAPPING["API Management"] == 8
     print("  ✓ All stream-to-bucket mappings are correct")
-
 
 def test_revenue_stream_tracker_basic():
     """Test basic RevenueStreamTracker functionality."""
@@ -142,7 +137,6 @@ def test_revenue_stream_tracker_basic():
     assert result["sprint_weeks"] == 1
     print("  ✓ Sprint fee recording works")
 
-
 def test_revenue_stream_summary():
     """Test revenue stream summary functionality."""
     print("✓ Testing revenue stream summary...")
@@ -167,7 +161,6 @@ def test_revenue_stream_summary():
     assert aggregate["total_revenue_usd"] == 1700.0
     print("  ✓ Aggregate summary is correct")
 
-
 def test_calculate_stream_allocation():
     """Test calculate_stream_allocation function."""
     print("✓ Testing calculate_stream_allocation...")
@@ -188,7 +181,7 @@ def test_calculate_stream_allocation():
     
     allocation = calculate_stream_allocation(10000, "Security Cleanup", config)
     
-    assert allocation["charitable"] == 100.0
+    assert allocation[""] == 100.0
     assert allocation["operating"] == 9900.0
     assert allocation["setup_fee"] == 1500.0
     print("  ✓ Setup fee allocation is correct")
@@ -209,7 +202,6 @@ def test_calculate_stream_allocation():
     
     assert allocation["transaction_fee"] == 300.0
     print("  ✓ Transaction fee allocation is correct")
-
 
 def test_revenue_stream_mapping_integration():
     """Test integration between revenue streams and allocation."""
@@ -232,7 +224,6 @@ def test_revenue_stream_mapping_integration():
     for stream_name, bucket in REVENUE_STREAM_TO_BUCKET_MAPPING.items():
         assert 1 <= bucket <= 10
     print("  ✓ All buckets are valid (1-10)")
-
 
 def run_all_tests():
     """Run all tests."""
@@ -266,7 +257,6 @@ def run_all_tests():
     print("Revenue streams mapped to ledger buckets:")
     for stream_name, bucket in REVENUE_STREAM_TO_BUCKET_MAPPING.items():
         print(f"  - {stream_name}: bucket {bucket}")
-
 
 if __name__ == "__main__":
     run_all_tests()

@@ -50,7 +50,7 @@ The webhook handler also processes subscription events:
 
 ### 4. Revenue Allocation
 
-For each completed payment, the system reserves a revenue allocation record to track contractual revenue disbursement.
+For each completed payment, the system reserves a revenue allocation record to track contractual revenue payout.
 
 ## Key Security Measures
 

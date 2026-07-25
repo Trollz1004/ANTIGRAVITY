@@ -8,7 +8,7 @@
   - **CodeX CLI**: Installed (v0.117.0).
   - **Gemini / Jules**: Python 3.13 + `google-genai` SDK installed for `jules-cli.py`.
 - **Repositories**: Canonical live repo remains `C:\ANTIGRAVITY` on Sabretooth.
-- **Doctrine Alignment**: Fully updated to the **founder-directed conservative 10% charitable cap** (March 31 doctrine).
+- **Doctrine Alignment**: Fully updated to the **founder-directed conservative 10%  cap** (March 31 doctrine).
 
 ## Knowledge Base
 - The machine is now a verified and trusted endpoint for the Founding Three AI platforms.
@@ -22,7 +22,7 @@
 ## Accomplishments
 
 - canonical memory files rewritten around current repo truth
-- AI sync prompts rewritten or superseded so they no longer push stale `60/30/10` doctrine
+- AI sync prompts rewritten or superseded so they no longer push stale `` doctrine
 - ClawX repo-facing docs corrected to stop overstating governance and legacy split claims
 - MCP protocol metadata normalized away from stale Stripe, node, and multisig assumptions
 - date-app authenticated impact navigation cleaned up
@@ -47,8 +47,8 @@
 - Canonical PaperClip runtime on Sabretooth: `C:\ANTIGRAVITY\paperclip-upstream` + `C:\ANTIGRAVITY\paperclip-runtime`
 - Josh is the sole authority
 - no AI outranks another AI
-- live LLC-controlled revenue uses a founder-directed conservative `10% charitable cap`
-- historical split-era and absolute-charity references are legacy unless canonical docs restore them
+- live LLC-controlled revenue uses a founder-directed conservative `10%  cap`
+- historical split-era and absolute- references are legacy unless canonical docs restore them
 - active control surfaces should not use retired split-separation doctrine as current operating truth
 - Square remains the live payment rail
 - PaperClip now runs from the live repo on Sabretooth and no longer depends on the old mixed-drive `E:` runtime

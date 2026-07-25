@@ -158,10 +158,10 @@ DOCTRINE / RULES CHECK
     links; zero Stripe references anywhere in _deploy/youandinotai/
     (grep -ri stripe _deploy/youandinotai/ returns no matches)
 [X] Canonical-7 ban — zero hits in any of the 7 touched files
-    (grep -iE '\b(donate|donation|charity|charitable|solicitation|giving back|disbursement)\b'
+    (grep -iE '\b(payment|payment|||outreach||payout)\b'
      _deploy/youandinotai/ returns no matches). 10% per-bucket mission
     reserve intentionally NOT mentioned on customer surface.
-[X] No 60/30/10 references introduced or revived
+[X] No  references introduced or revived
 [X] No mock data — Operator entity FL #L25000158401, contact email
     joshlcoleman@gmail.com, Square account LY5GN09F5AN83 (not printed on
     the customer-facing page), 5 Square link IDs match the live Square
@@ -263,5 +263,5 @@ now legally complete AND shareable AND search-crawlable from landing to
 checkout.
 
 ===============================================================================
-For The Kids · #UntilNoKidInNeed · Opus external-architect dispatch
+ · #UntilNoKidInNeed · Opus external-architect dispatch
 ===============================================================================

@@ -26,8 +26,8 @@ Commission: 15% on first subscription payment via Square.
 ## Hard Boundaries
 
 Do not:
-- use canonical-7 banned terms (`donate · donation · charity · charitable · solicitation · giving back · disbursement`)
-- promise DAO token upside or charity routing
+- use canonical-7 banned terms (`payment · payment ·  ·  · outreach ·  · payout`)
+- promise DAO token upside or  routing
 - mention Stripe (Square only on youandinotai.com)
 - generate links with misleading or deceptive content
 - scrape or automate social media posting without approval
@@ -71,4 +71,4 @@ CTA: <call to action>
 - [ ] Link format matches `?ref=` pattern
 - [ ] Model used is free-tier or cost surfaced
 - [ ] Link is trackable (UTM params included)
-- [ ] No promises about DAO, charity, or token value
+- [ ] No promises about DAO, , or token value

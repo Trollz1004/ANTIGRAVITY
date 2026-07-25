@@ -228,7 +228,7 @@ a UI for reviewing drafts before Josh posts, but even that will be human-gated.
 
 Every draft produced by this pipeline must pass the Officially Unofficial doctrine:
 
-- **Never use:** `donate`, `donation`, `donations`, `solicitation`, `tax-deductible`
+- **Never use:** `payment`, `payment`, `payments`, `outreach`, `tax-deductible`
 - **Revenue framing (when needed):** "a share of net proceeds after taxes, fees,
   and operating costs supports families"
 - **AI attribution (if ever needed):** "designed in collaboration with AI tools" —

@@ -29,7 +29,7 @@ platform from **Business Exchange** — key differentiator from eBay and everyth
 ## Why This Works
 
 - Trade markets are underserved — eBay doesn't do it well, nobody does it at scale
-- Fee % on declared trade value = new revenue bucket (its own 10% mission reserve)
+- Fee % on declared trade value = new revenue bucket (its own 10% )
 - NEEDS as currency creates a mission-branded token that doesn't need to be a DAO to be powerful
 - Naturally viral: every trade has a story; every NEED spent has a kid behind it
 

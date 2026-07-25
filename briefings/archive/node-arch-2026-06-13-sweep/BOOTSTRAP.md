@@ -183,7 +183,7 @@ C:\ANTIGRAVITY\
     brain-mcp/    ← MCP server
     mcp-server/   ← memory/vector MCP
   contracts/
-    src/          ← Solidity (CharityRouter100, DatingRevenueRouter, GospelDonation)
+    src/          ← Solidity (Router100, DatingRevenueRouter, Gospelpayment)
   memory/         ← agent memory files, KRAKKEN-SYNC.ps1
   tools/          ← deploy scripts
 ```

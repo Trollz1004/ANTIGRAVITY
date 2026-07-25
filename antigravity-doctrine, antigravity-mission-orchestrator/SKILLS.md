@@ -12,7 +12,7 @@ Use these skill domains when tasks match them. Read the skill file when needed i
 
 - `mission-control` — mission board, Paperweight/Kanban status, routines, adapter health, 100% verified state reports.
 - `payments` — Square/Stripe boundaries, checkout links, payment buttons, subscriptions, webhook verification.
-- `revenue-model` — 1 LLC / 1 wallet / 10% per-bucket mission reserve; replaces legacy 60/30/10 and 100% claims.
+- `revenue-model` — 1 LLC / 1 wallet / 10% per-bucket ; replaces legacy  and 100% claims.
 
 ## Memory / Database Skills
 

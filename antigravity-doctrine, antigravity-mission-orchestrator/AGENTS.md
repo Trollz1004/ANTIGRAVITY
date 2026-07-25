@@ -62,7 +62,7 @@ The Pi environment has these mission-relevant skills available from the system h
 
 - `mission-control` — Paperweight/mission board/status/routines.
 - `payments` — Square/payment rules, checkout, webhooks, price points.
-- `revenue-model` — live 1-wallet / 1-LLC / 10% per-bucket mission reserve model.
+- `revenue-model` — live 1-wallet / 1-LLC / 10% per-bucket  model.
 - `paperclip` — task checkout/update/delegation API workflow.
 - `paperclip-create-agent` — governance-aware hiring/configuration.
 - `paperclip-create-plugin` — plugin scaffolding.
@@ -77,19 +77,19 @@ Repo MCP config currently includes:
 
 ## Revenue and Public-Language Doctrine
 
-- Live LLC model: 1 LLC / 1 wallet / 10% mission reserve per legally distinct revenue bucket.
-- Do not revive old 60/30/10, 100% charity, split-era, named-beneficiary, or DAO-current claims as live doctrine.
+- Live LLC model: 1 LLC / 1 wallet / 10%  per legally distinct revenue bucket.
+- Do not revive old , 100% , split-era, named-beneficiary, or DAO-current claims as live doctrine.
 - Square is the live payment rail for YouAndINotAI/dating surfaces unless a canonical update says otherwise.
 - Stripe may exist for clean non-dating product-sales lanes, but do not route dating products through Stripe.
 - Customer-facing copy must not use FL §496.405 banned terms:
-  - donate
-  - donation
-  - solicitation
-  - charity
-  - charitable
-  - giving back
-  - disbursement
-- Internal-only phrase: `contractual revenue disbursement`.
+  - payment
+  - payment
+  - outreach
+  - 
+  - 
+  - 
+  - payout
+- Internal-only phrase: `contractual revenue payout`.
 - Customer surfaces sell product/service value first. Mission accounting stays internal/backend unless canonical docs allow restrained factual phrasing.
 
 ## Crossfire / OnlineRecycle / eBay Verified Notes

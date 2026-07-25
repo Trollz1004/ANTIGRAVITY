@@ -168,7 +168,7 @@ interface EnhancedVolunteerOpportunity {
   <div className="impact-summary" id={`opportunity-impact-${opportunity.id}`}>
     <span className="sr-only">
       This opportunity supports approximately {opportunity.impactProjection.childrenSupported} children through
-      contractual revenue disbursement.
+      contractual revenue payout.
     </span>
     <div className="impact-badge" aria-hidden="true">
       {/* Visual representation */}
@@ -759,11 +759,11 @@ const VirtualizedDashboard = ({ userData, communityData }) => {
 
 1. **Messaging Integration Points**:
    - Impact projection phrasing that emphasizes community benefit without violating Florida §496.405
-   - Achievement recognition language that celebrates contribution without implying donation
+   - Achievement recognition language that celebrates contribution without implying payment
    - Testimonial gathering framework that focuses on connection rather than contribution amount
 
 2. **Legal Compliance Updates**:
-   - Review of all "contractual revenue disbursement" phrasing
+   - Review of all "contractual revenue payout" phrasing
    - Clear separation of platform benefit descriptions from fundraising language
    - Accessibility statement alignment for marketing materials
    - Privacy notice updates for enhanced tracking features

@@ -66,7 +66,7 @@ Comprehensive design specification integrating all event-related components into
 
 ### Florida §496.405 Compliance
 
-- No use of "donate", "donation", or "solicitation" in any UI copy
+- No use of "payment", "payment", or "outreach" in any UI copy
 - Appropriate language distinguishing between activities
 
 ### Mobile-First Approach

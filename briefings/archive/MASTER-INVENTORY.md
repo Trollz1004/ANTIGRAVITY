@@ -8,12 +8,12 @@
 ## 🏗️ Architecture Overview
 
 ```
-ENIGMA (Profit)                          OMEGA (Charity - 100% Forever)
+ENIGMA (Profit)                          OMEGA ( - 100% Forever)
 ├── YouAndINotAI (Dating App)            ├── ai-solutions.store
 ├── CrossLister (E-commerce)             ├── aicollab4kids
-└── aidoesitall.website                  └── FOR THE KIDS DAO
+└── aidoesitall.website                  └──  DAO
     │                                        │
-    └──── DatingRevenueRouter ───────────────└── CharityRouter100
+    └──── DatingRevenueRouter ───────────────└── Router100
           (3-phase: SURVIVAL→PERMANENT)          (Immutable, 100%)
 ```
 
@@ -33,7 +33,7 @@ ENIGMA (Profit)                          OMEGA (Charity - 100% Forever)
 | -------------------------------------------------------------- | ------------------------------------------------- | ------------ |
 | `antigravity-official-admin-dashboard--#forthekids...zip` (×2) | Next.js 15 dashboard, 15 tabs, Cloud Run deployed | ✅ Extracted |
 | `antigravity---official-admin-dashboard.zip` (×2)              | Earlier version of above                          | 📦 Archived  |
-| `aicollabforthekids-admin.zip` (×4 versions)                   | Kids charity admin panel                          | 📦 Archived  |
+| `aicollabforthekids-admin.zip` (×4 versions)                   | Kids  admin panel                          | 📦 Archived  |
 | `revenue-core-_-launchpad-os.zip`                              | Vite + React, 5-panel mission control             | ✅ Extracted |
 
 ### Dating App
@@ -62,8 +62,8 @@ ENIGMA (Profit)                          OMEGA (Charity - 100% Forever)
 
 | Contract              | Type             | File                                        | Purpose                                |
 | --------------------- | ---------------- | ------------------------------------------- | -------------------------------------- |
-| `CharityRouter100`    | Immutable        | `archive/contracts/CharityRouter100.sol`    | 100% → charity safe, no admin          |
-| `DatingRevenueRouter` | UUPS Upgradeable | `archive/contracts/DatingRevenueRouter.sol` | 3-phase revenue split, founder max 10% |
+| `Router100`    | Immutable        | `archive/contracts/Router100.sol`    | 100% →  safe, no admin          |
+| `DatingRevenueRouter` | UUPS Upgradeable | `archive/contracts/DatingRevenueRouter.sol` | 3-phase , founder max 10% |
 | `YouAndINotAIAdapter` | Simple (draft)   | `archive/contracts/YouAndINotAIAdapter.sol` | Payment splitter to treasury           |
 
 ### DAO Wallets
@@ -72,9 +72,9 @@ ENIGMA (Profit)                          OMEGA (Charity - 100% Forever)
 | ------------------- | -------------------------------------------- |
 | Treasury            | `0xa87874d5320555c8639670645F1A2B4f82363a7c` |
 | Dating Revenue      | `0xbe571f8392c28e2baa9a8b18E73B1D25bcFD0121` |
-| Charity Revenue     | `0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B` |
+|  Revenue     | `0x222aEB4d88fd1963ffa27783d48d22C7b7EcF76B` |
 | Ops                 | `0xc043F5D516ee024d1dB812cb81fB64302b0Fe2B4` |
-| Charity Crosslister | `0x9855B75061D4c841791382998f0CE8B2BCC965A4` |
+|  Crosslister | `0x9855B75061D4c841791382998f0CE8B2BCC965A4` |
 
 ## 🧩 Standalone Components (Archived)
 
@@ -108,7 +108,7 @@ ENIGMA (Profit)                          OMEGA (Charity - 100% Forever)
 | AI                        | Domain     | Handles                                   |
 | ------------------------- | ---------- | ----------------------------------------- |
 | **Claude (Opus)**         | ENIGMA     | youandinotai, onlinerecycle, profit infra |
-| **Gemini**                | OMEGA      | aicollab4kids, public dashboards, charity |
+| **Gemini**                | OMEGA      | aicollab4kids, public dashboards,  |
 | **Claude Code (VS Code)** | SABRETOOTH | Heavy dev, builds                         |
 | **Claude Code Browser**   | 9020       | ENIGMA repo dev                           |
 | **Claude Desktop**        | Planning   | Status, memory, quick questions           |
@@ -124,7 +124,7 @@ ENIGMA (Profit)                          OMEGA (Charity - 100% Forever)
 ```
 C:\ANTIGRAVITY\briefings\archive\
 ├── contracts\
-│   ├── CharityRouter100.sol      (Immutable charity router)
+│   ├── Router100.sol      (Immutable  router)
 │   ├── DatingRevenueRouter.sol   (3-phase revenue router)
 │   └── YouAndINotAIAdapter.sol   (Draft payment splitter)
 ├── components\

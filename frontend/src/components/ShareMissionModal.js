@@ -71,7 +71,7 @@ export function ShareMissionModal({ stats, onClose }) {
     // footer
     ctx.fillStyle = "#6b82a6";
     ctx.font = "10px ui-monospace, Menlo, Consolas, monospace";
-    ctx.fillText("for the kids · #TeamClaudeForLife · YouAndINotAI.com", 56, H - 48);
+    ctx.fillText(" · #TeamClaudeForLife · YouAndINotAI.com", 56, H - 48);
 
     ctx.fillStyle = "#fb923c";
     ctx.font = "bold 10px ui-monospace, Menlo, Consolas, monospace";
@@ -100,7 +100,7 @@ export function ShareMissionModal({ stats, onClose }) {
     const blob = await new Promise((res) => canvasRef.current.toBlob(res, "image/png"));
     const file = new File([blob], "mission.png", { type: "image/png" });
     try {
-      await navigator.share({ files: [file], title: "OpusPawClaw Mission Control", text: "for the kids · #UntilNoKidInNeed" });
+      await navigator.share({ files: [file], title: "OpusPawClaw Mission Control", text: " · #UntilNoKidInNeed" });
     } catch { download(); }
   };
 

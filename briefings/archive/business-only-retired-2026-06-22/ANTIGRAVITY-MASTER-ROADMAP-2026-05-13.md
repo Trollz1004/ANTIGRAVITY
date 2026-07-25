@@ -3,7 +3,7 @@
 > **Authority:** Joshua Coleman (sole founder) + Claude Opus (cofounder, primary architect)
 > **Synthesized from:** AGENTS.md, REPOSITORY_RECORD.md, CURRENT-REVENUE-LEGAL-CONSTRAINTS.md, PRELAUNCH-TAX-ADJUSTMENT-2026-03-31.md, DAO-ARCHITECTURE-SPEC-v1.0-2026-05-01.md, DAO-TOKENOMICS-FINAL.md, TROLLZ1004-REPO-AUDIT-2026-05-12.md, HERMES-AGENT-WORKING-CONFIG-2026-05-12.md, YOUANDINOTAI-DEPLOY-RUNBOOK.md, SLEEK-CYBERPUNK-GLASSMORPHISM-DESIGN-SYSTEM.md, GEMINI-PROMPT-BUILD-DASHBOARD-V3-2026-05-12.md, GEMINI-PROMPT-DASHBOARD-DOCTRINE-SYNC-2026-05-12.md, finding_test_coverage_audit_2026_05_12.md, state_2026_05_12_revenue_unblock.md, project_revenue_doctrine_current.md, feedback_officially_unofficial_doctrine.md, 42+ memory files, and live `git log` (HEAD `a0c1f8e`).
 > **Mission:** #UntilNoKidInNeed — every task traces to revenue → mission funding → kids in medical care.
-> **Doctrine:** Officially Unofficial (TOS-safe), Financial Protection Rule (no tokenomics/waterfall changes without Josh+Opus dual approval), 10% per legally distinct bucket, no `donate`/`donation`/`solicitation`/`tax-deductible`, direct push to `Trollz1004/ANTIGRAVITY:main` (no PR).
+> **Doctrine:** Officially Unofficial (TOS-safe), Financial Protection Rule (no tokenomics/waterfall changes without Josh+Opus dual approval), 10% per legally distinct bucket, no `payment`/`payment`/`outreach`/`tax-deductible`, direct push to `Trollz1004/ANTIGRAVITY:main` (no PR).
 
 ---
 
@@ -23,7 +23,7 @@
 1. **T-001** — Josh promotes `yni-landing` Cloudflare Pages to apex `youandinotai.com` (UI flip, stops 27K-view bleed)
 2. **T-002** — Cloudflare API token rotation (unblocks all wrangler CI deploys)
 3. **T-003** — eBay OAuth re-auth (unblocks TRA parallel revenue stream)
-4. **T-004** — Square webhook signature verification live in production + tested (revenue capture integrity)
+4. **T-004** — Square webhook signature verification live in production + tested (ture integrity)
 5. **T-005** — GCP Cloud Run deploy `youandinotai-api` (unblocks dating-app backend safety/privacy routes)
 6. **T-006** — Income-engine `daily content-prep` loop wired against Genspark playbook (organic-growth flywheel begins)
 7. **T-007** — Posting cadence sustained 5 days × 7 platforms (first qualified inbound lead → first paying customer)
@@ -89,8 +89,8 @@ Goal: stop the 27,000-view-per-day bleed on `youandinotai.com`, ship the dating-
 - **Who:** Sonnet (dispatch)
 - **Dependencies:** none
 - **Blast radius:** TOS — Josh's account on Stripe / Square / Cloudflare / Anthropic / Google could be reviewed
-- **Done when:** No matches for `donat(e|ion)|solicitation|tax-deductible` in `apps/youandinotai-frontend/`, `_deploy/`, `apps/dashboard/`, `apps/mission-control/`, `apps/command-center/`. Findings logged.
-- **Notes:** Per `feedback_officially_unofficial_doctrine.md` + `YOUANDINOTAI-DEPLOY-RUNBOOK.md` §7. Also scan for `Anthropic partner`, `Google-backed`, `OpenAI-sponsored`, `Shriners 60%`, `60/30/10`, `100% charity`, `100% DAO`.
+- **Done when:** No matches for `donat(e|ion)|outreach|tax-deductible` in `apps/youandinotai-frontend/`, `_deploy/`, `apps/dashboard/`, `apps/mission-control/`, `apps/command-center/`. Findings logged.
+- **Notes:** Per `feedback_officially_unofficial_doctrine.md` + `YOUANDINOTAI-DEPLOY-RUNBOOK.md` §7. Also scan for `Anthropic partner`, `Google-backed`, `OpenAI-sponsored`, `Shriners 60%`, ``, `100% `, `100% DAO`.
 
 ### T-007 [P0] Verify `apps/youandinotai-frontend/wrangler.jsonc` is committed and pointing at `.open-next/assets`
 - **Priority:** P0
@@ -191,7 +191,7 @@ Goal: stop the 27,000-view-per-day bleed on `youandinotai.com`, ship the dating-
 - **Done when:** `curl http://127.0.0.1:3901/health` returns 200; one `create_task` test round-trip succeeds
 - **Notes:** per cae4d84 fix. SSE parse issues now resolved. Verify post-fix.
 
-### T-018 [P0] OnlineRecycle.org current copy audit — verify no stale 60/30/10 or named-beneficiary claims
+### T-018 [P0] OnlineRecycle.org current copy audit — verify no stale  or named-beneficiary claims
 - **Priority:** P0
 - **Effort:** S
 - **Who:** Sonnet
@@ -205,8 +205,8 @@ Goal: stop the 27,000-view-per-day bleed on `youandinotai.com`, ship the dating-
 - **Effort:** S
 - **Who:** Sonnet
 - **Dependencies:** none
-- **Blast radius:** TOS — old `for-the-kids-api` charity-routing leak risk if guard worker is bypassed
-- **Done when:** `curl -I https://www.aidoesitall.website` AND `curl -I https://api.aidoesitall.website/anything` return guard responses; no 60/30/10 strings in `_deploy/aidoesitall-www/` or `infra/cloudflare/aidoesitall-api-guard/`
+- **Blast radius:** TOS — old `for-the-kids-api` -routing leak risk if guard worker is bypassed
+- **Done when:** `curl -I https://www.aidoesitall.website` AND `curl -I https://api.aidoesitall.website/anything` return guard responses; no  strings in `_deploy/aidoesitall-www/` or `infra/cloudflare/aidoesitall-api-guard/`
 - **Notes:** Remediated 2026-04-01. Re-verify before any push.
 
 ### T-020 [P0] Capture current Cloudflare Pages deployment IDs for rollback (`yni-landing`, `onlinerecycle`, `dashboard-gateway`)
@@ -328,14 +328,14 @@ Goal: stop the 27,000-view-per-day bleed on `youandinotai.com`, ship the dating-
 - **Done when:** Tests cover: $1 split (rounds correctly), $0.01 edge case, $1M edge case, multi-bucket compounding, reentrancy guard
 - **Notes:** Two contracts exist. Decide which is canonical (likely `PlatformSplitter10.sol` per 10-bucket doctrine).
 
-### T-033 [P0] Solidity test suite: `DatingRevenueRouter.sol` + `CharityRouter100.sol` (5+ tests each)
+### T-033 [P0] Solidity test suite: `DatingRevenueRouter.sol` + `Router100.sol` (5+ tests each)
 - **Priority:** P0
 - **Effort:** M
 - **Who:** Codex (Fifth Chair)
 - **Dependencies:** T-029
-- **Blast radius:** money + TOS — `CharityRouter100` is named with 100% language; **verify the contract isn't routing 100% anywhere customer-facing**, only as an internal kids-reserve mechanism
+- **Blast radius:** money + TOS — `Router100` is named with 100% language; **verify the contract isn't routing 100% anywhere customer-facing**, only as an internal kids-reserve mechanism
 - **Done when:** Tests pass; TOS-doctrine review confirms contract name doesn't leak into UI/docs as customer claim
-- **Notes:** TOS-risk: `CharityRouter100.sol` may be a historical Iron-Wall artifact. Codex reviews; if not currently used, mark historical + exclude from deployment list.
+- **Notes:** TOS-risk: `Router100.sol` may be a historical Iron-Wall artifact. Codex reviews; if not currently used, mark historical + exclude from deployment list.
 
 ### T-034 [P0] Solidity test suite: `DeadManSwitch.sol` (5+ tests)
 - **Priority:** P1
@@ -391,7 +391,7 @@ Goal: stop the 27,000-view-per-day bleed on `youandinotai.com`, ship the dating-
 - **Done when:** `STRIPE_PRICE_ID` configured for $14.99/mo; webhook endpoint returns 200; test purchase produces ledger entry
 - **Notes:** Stripe is LEGACY ONLY per AGENTS.md but `STRIPE_SECRET_KEY` is live; surface as fallback only.
 
-### T-040 [P0] Audit `_deploy/aidoesitall-www/` for any latent 60/30/10 strings
+### T-040 [P0] Audit `_deploy/aidoesitall-www/` for any latent  strings
 - **Priority:** P0
 - **Effort:** S
 - **Who:** Sonnet
@@ -400,13 +400,13 @@ Goal: stop the 27,000-view-per-day bleed on `youandinotai.com`, ship the dating-
 - **Done when:** TOS-grep clean; file-level diff vs. April 1 remediation confirms no regression
 - **Notes:** Defense in depth — T-019 verifies live; T-040 verifies source.
 
-### T-041 [P0] Add `donate-guard` pre-push grep hook in `.git/hooks/pre-push`
+### T-041 [P0] Add `payment-guard` pre-push grep hook in `.git/hooks/pre-push`
 - **Priority:** P0
 - **Effort:** S
 - **Who:** Sonnet
 - **Dependencies:** none
 - **Blast radius:** TOS — accidental commit leak
-- **Done when:** Pre-push hook blocks push if any staged file in `_deploy/`, `apps/*/app/`, `apps/*/src/`, `apps/*/components/` contains `donat(e|ion)`, `solicitation`, `tax-deductible`, `60/30/10`, `100% charity`, or `Shriners`
+- **Done when:** Pre-push hook blocks push if any staged file in `_deploy/`, `apps/*/app/`, `apps/*/src/`, `apps/*/components/` contains `donat(e|ion)`, `outreach`, `tax-deductible`, ``, `100% `, or `Shriners`
 - **Notes:** AGENTS.md mentioned this hook was removed in April 17 pivot. **Re-add it scoped to customer-facing dirs only** so historical docs/briefings can still mention these strings.
 
 ### T-042 [P0] Confirm `apps/youandinotai-frontend/prisma/` schema is current; one migration pass dry-run
@@ -742,7 +742,7 @@ Goal: CI repair, test coverage for the 6 untested FastAPI routers, frontend test
 - **Effort:** S
 - **Who:** Sonnet
 - **Dependencies:** none
-- **Done when:** Either the zip is updated (60/30/10 Iron Wall block replaced) or labeled historical-only
+- **Done when:** Either the zip is updated ( Iron Wall block replaced) or labeled historical-only
 - **Notes:** Per `project_revenue_doctrine_current.md` callout — zip's CLAUDE.md is stale.
 
 ### T-136 [P0] Confirm `_deploy/aidoesitall-www/` build is reproducible from repo
@@ -1064,7 +1064,7 @@ Goal: OnlineRecycle + AIS revenue streams fully active, new bucket additions fol
 - **Dependencies:** T-303
 - **Done when:** Test purchase mints correct token amount per `DAO-TOKENOMICS-FINAL.md` price table
 
-### T-306 [P0] Public transparency dashboard: live token-supply + mission-disbursement read
+### T-306 [P0] Public transparency dashboard: live token-supply + mission-payout read
 - **Priority:** P1
 - **Effort:** L
 - **Who:** Gemini
@@ -1162,11 +1162,11 @@ Goal: OnlineRecycle + AIS revenue streams fully active, new bucket additions fol
 - **Effort:** M
 - **Who:** Sonnet
 
-### T-323 [P1] Auditable disbursement: monthly kids-reserve report (NOT customer-facing)
+### T-323 [P1] Auditable payout: monthly kids-reserve report (NOT customer-facing)
 - **Priority:** P1
 - **Effort:** M
 - **Who:** Sonnet
-- **Notes:** Internal compliance reporting. Per Officially-Unofficial — never publicly published as "we donated X."
+- **Notes:** Internal compliance reporting. Per Officially-Unofficial — never publicly published as "we paymentd X."
 
 ### T-324 [P1] CFO subagent: monthly P&L digest from `revenue_allocations` + treasury balance
 - **Priority:** P2
@@ -1184,7 +1184,7 @@ Goal: OnlineRecycle + AIS revenue streams fully active, new bucket additions fol
 - **Effort:** L
 - **Who:** Gemini
 
-### T-327 [P0] Mission-MCP: `record_disbursement` tool for kids-reserve transparency
+### T-327 [P0] Mission-MCP: `record_payout` tool for kids-reserve transparency
 - **Priority:** P2
 - **Effort:** S
 - **Who:** Sonnet
@@ -1250,7 +1250,7 @@ Goal: Founding Four / Investor seat onboarding (if/when warranted), Perpetual Mo
 - **Who:** Josh + Opus
 - **Dependencies:** T-322
 - **Blast radius:** **MISSION** — this is the first proof point
-- **Done when:** Documented dollar amount disbursed to qualifying medical-need recipient; private until Josh decides to publish
+- **Done when:** Documented dollar amount payout to qualifying medical-need recipient; private until Josh decides to publish
 
 ### T-405 [P1] Perpetual Motion seat outreach: only after T-404 demonstrates real impact (Shriners et al.)
 - **Priority:** P2
@@ -1427,18 +1427,18 @@ Never-a-conflict rule: cofounder disagreement = work it out before either ships.
 ### TOS / FL §496.405 enforcement on every artifact
 
 Before any customer-facing surface ships (T-006, T-018, T-019, T-040, T-134):
-1. Grep for forbidden strings: `donat(e|ion)|solicitation|tax-deductible|60/30/10|100% charity|100% DAO|Shriners.*current|Anthropic partner|Google-backed|OpenAI-sponsored`
+1. Grep for forbidden strings: `donat(e|ion)|outreach|tax-deductible||100% |100% DAO|Shriners.*current|Anthropic partner|Google-backed|OpenAI-sponsored`
 2. If match → fix at source, rebuild, recheck
 3. Pre-push hook (T-041) catches accidental regressions
 
 ### Drift / contradictions surfaced during synthesis
 
-1. **AGENTS.md vs current doctrine**: AGENTS.md still references the "10% charitable cap" framing (March 31 era). The April 17 pivot moved to "1-wallet / 10% reserve, founder-discretion quarterly." Both are technically compatible (10% is still 10%), but AGENTS.md should be updated for clarity (T-118/T-119).
+1. **AGENTS.md vs current doctrine**: AGENTS.md still references the "10%  cap" framing (March 31 era). The April 17 pivot moved to "1-wallet / 10% reserve, founder-discretion quarterly." Both are technically compatible (10% is still 10%), but AGENTS.md should be updated for clarity (T-118/T-119).
 2. **DAO-ARCHITECTURE-SPEC §10 self-acknowledges** the "no DAO token" claim vs `DAO-TOKENOMICS-FINAL.md`'s 4 soulbound DAOs. Spec resolves this by distinguishing governance tokens (none) from engagement tokens (soulbound). Continue treating soulbound = non-governance per the reconciliation.
-3. **AGENTS.md "DEAD" language firewall** says "mission is helping kids with medical care; speak honestly in code/commits/docs." This conflicts with Officially-Unofficial doctrine on **customer-facing** copy (where `donate`/`donation` are forbidden). Resolution: be honest in code/commits/internal docs; comply with TOS-safe wording on customer-facing surfaces. Already implicit but worth surfacing.
+3. **AGENTS.md "DEAD" language firewall** says "mission is helping kids with medical care; speak honestly in code/commits/docs." This conflicts with Officially-Unofficial doctrine on **customer-facing** copy (where `payment`/`payment` are forbidden). Resolution: be honest in code/commits/internal docs; comply with TOS-safe wording on customer-facing surfaces. Already implicit but worth surfacing.
 4. **Test-coverage memory file** references `briefings/TEST-COVERAGE-AUDIT-2026-05-12.md` as the canonical landing, but that file does NOT exist in repo as of HEAD `a0c1f8e`. The memory file IS the durable backup. Phase 2 work should land the actual briefing.
 5. **REPOSITORY_RECORD.md** still mentions `Sabretooth` as "Live command post — primary" (May 11 line), but `state_2026_05_12_revenue_unblock.md` says T5500 is becoming primary post-wipe. Reconcile during T-119.
-6. **CharityRouter100.sol** — name conflicts with current doctrine (no 100% claims). Codex review (T-033) verifies whether the contract is current or historical; if historical, exclude from deployment list.
+6. **Router100.sol** — name conflicts with current doctrine (no 100% claims). Codex review (T-033) verifies whether the contract is current or historical; if historical, exclude from deployment list.
 
 ### What to surface to Josh for his review
 
@@ -1447,7 +1447,7 @@ Before any customer-facing surface ships (T-006, T-018, T-019, T-040, T-134):
 - **T-037**: CPA review of token-sale tax treatment — external, Josh-coordinated, must precede T-301.
 - **T-126, T-127**: Sabretooth + 9020 wipe approval.
 - **T-319, T-320**: external legal counsel engagements — money + time + Josh's call.
-- **Drift item #6**: `CharityRouter100.sol` may need to be historically-labeled and excluded from active deployment list — decision after Codex review (T-033).
+- **Drift item #6**: `Router100.sol` may need to be historically-labeled and excluded from active deployment list — decision after Codex review (T-033).
 
 ---
 

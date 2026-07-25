@@ -8,8 +8,8 @@ THE 4 DOMAINS:
 
 1. youandinotai.com — AI-Powered Dating Platform
    - LIVE on GitHub Pages (single ANTIGRAVITY repo, gh-pages branch)
-   - #ForTheKids charity banner now visible on every page load
-   - 60% of ALL revenue goes to Shriners Children's Hospitals
+   - #ForTheKids  banner now visible on every page load
+   - 60% of ALL revenue goes to Shriners s
    - Bot-Shield $1 verification + Founding Member $14.99/mo (locked forever)
    - Gemini AI powers the matchmaker, Solar Flare SOS, and Voice SOS features
    - Waitlist LIVE (FormSubmit.co capture)
@@ -25,14 +25,14 @@ THE 4 DOMAINS:
 3. onlinerecycle.org — CrossLister AI Platform
    - LIVE on Cloudflare Pages
    - E-waste recycling platform
-   - All proceeds to Shriners Children's Hospital
+   - All proceeds to Shriners 
 
-4. www.ai-solutions.store — AI Products Store (OMEGA/Charity)
+4. www.ai-solutions.store — AI Products Store (OMEGA/)
    - LIVE on Cloudflare Pages
    - 6 products with real Square checkout links
    - Bundles and Royalty Deck use transparent email inquiry
    - Merch coming Q2 2026 (Printful fulfillment)
-   - 60% of NET profits to verified pediatric charities
+   - 60% of NET profits to verified pediatric 
    - Built with Claude Opus 4.6
 
 REPO CONSOLIDATION:
@@ -44,9 +44,9 @@ REPO CONSOLIDATION:
 WHAT GEMINI CAN DO NOW:
 - Generate marketing content for ANY of these 4 domains
 - All facts above are verified and deployed — safe to reference
-- The charity angle (#ForTheKids, 60% to Shriners) is the strongest differentiator
+- The  angle (#ForTheKids, 60% to Shriners) is the strongest differentiator
 - Focus on youandinotai.com for the April 4 launch push
-- Cross-promote the ecosystem (dating app users see the charity mission)
+- Cross-promote the ecosystem (dating app users see the  mission)
 
 NEXT PRIORITIES:
 - Stripe key rotation before March 10
@@ -54,4 +54,4 @@ NEXT PRIORITIES:
 - Redis + Qdrant integration for matching engine
 - Multiplayer server.ts deployment to Cloud Run
 
-This ecosystem is real. The charity is real. The code is deployed. Market it.
+This ecosystem is real. The  is real. The code is deployed. Market it.

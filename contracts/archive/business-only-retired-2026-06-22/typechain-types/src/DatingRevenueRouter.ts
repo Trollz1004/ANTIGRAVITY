@@ -27,11 +27,11 @@ export interface DatingRevenueRouterInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "BASIS_POINTS"
-      | "PCT_CHARITY"
+      | "PCT_"
       | "PCT_DAO"
       | "PCT_FOUNDER"
       | "USDC"
-      | "charitySafe"
+      | "Safe"
       | "daoTreasury"
       | "distributeETH"
       | "distributeToken"
@@ -54,7 +54,7 @@ export interface DatingRevenueRouterInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "PCT_CHARITY",
+    functionFragment: "PCT_",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "PCT_DAO", values?: undefined): string;
@@ -64,7 +64,7 @@ export interface DatingRevenueRouterInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "USDC", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "charitySafe",
+    functionFragment: "Safe",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -117,7 +117,7 @@ export interface DatingRevenueRouterInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "PCT_CHARITY",
+    functionFragment: "PCT_",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "PCT_DAO", data: BytesLike): Result;
@@ -127,7 +127,7 @@ export interface DatingRevenueRouterInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "USDC", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "charitySafe",
+    functionFragment: "Safe",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -177,21 +177,21 @@ export namespace DistributionEvent {
   export type InputTuple = [
     token: AddressLike,
     totalAmount: BigNumberish,
-    charityAmount: BigNumberish,
+    Amount: BigNumberish,
     daoAmount: BigNumberish,
     founderAmount: BigNumberish
   ];
   export type OutputTuple = [
     token: string,
     totalAmount: bigint,
-    charityAmount: bigint,
+    Amount: bigint,
     daoAmount: bigint,
     founderAmount: bigint
   ];
   export interface OutputObject {
     token: string;
     totalAmount: bigint;
-    charityAmount: bigint;
+    Amount: bigint;
     daoAmount: bigint;
     founderAmount: bigint;
   }
@@ -203,19 +203,19 @@ export namespace DistributionEvent {
 
 export namespace RouterDeployedEvent {
   export type InputTuple = [
-    charitySafe: AddressLike,
+    Safe: AddressLike,
     daoTreasury: AddressLike,
     founderWallet: AddressLike,
     deployer: AddressLike
   ];
   export type OutputTuple = [
-    charitySafe: string,
+    Safe: string,
     daoTreasury: string,
     founderWallet: string,
     deployer: string
   ];
   export interface OutputObject {
-    charitySafe: string;
+    Safe: string;
     daoTreasury: string;
     founderWallet: string;
     deployer: string;
@@ -271,7 +271,7 @@ export interface DatingRevenueRouter extends BaseContract {
 
   BASIS_POINTS: TypedContractMethod<[], [bigint], "view">;
 
-  PCT_CHARITY: TypedContractMethod<[], [bigint], "view">;
+  PCT_: TypedContractMethod<[], [bigint], "view">;
 
   PCT_DAO: TypedContractMethod<[], [bigint], "view">;
 
@@ -279,7 +279,7 @@ export interface DatingRevenueRouter extends BaseContract {
 
   USDC: TypedContractMethod<[], [string], "view">;
 
-  charitySafe: TypedContractMethod<[], [string], "view">;
+  Safe: TypedContractMethod<[], [string], "view">;
 
   daoTreasury: TypedContractMethod<[], [string], "view">;
 
@@ -305,7 +305,7 @@ export interface DatingRevenueRouter extends BaseContract {
     [amount: BigNumberish],
     [
       [bigint, bigint, bigint] & {
-        charityAmt: bigint;
+        Amt: bigint;
         daoAmt: bigint;
         founderAmt: bigint;
       }
@@ -325,7 +325,7 @@ export interface DatingRevenueRouter extends BaseContract {
     nameOrSignature: "BASIS_POINTS"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "PCT_CHARITY"
+    nameOrSignature: "PCT_"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "PCT_DAO"
@@ -337,7 +337,7 @@ export interface DatingRevenueRouter extends BaseContract {
     nameOrSignature: "USDC"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "charitySafe"
+    nameOrSignature: "Safe"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "daoTreasury"
@@ -369,7 +369,7 @@ export interface DatingRevenueRouter extends BaseContract {
     [amount: BigNumberish],
     [
       [bigint, bigint, bigint] & {
-        charityAmt: bigint;
+        Amt: bigint;
         daoAmt: bigint;
         founderAmt: bigint;
       }

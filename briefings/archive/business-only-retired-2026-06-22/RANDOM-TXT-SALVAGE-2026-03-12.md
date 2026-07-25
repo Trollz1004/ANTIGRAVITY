@@ -90,7 +90,7 @@ Do not copy forward values from these.
 - "hyper / singularity / apex / quantum" launch fantasies
 - multi-chain / staking / DeFi / NFT / crowdloan plans
 - K8s / Terraform / Helm / Argo / Flux empire scripts
-- customer-facing donation/solicitation wording
+- customer-facing payment/outreach wording
 - old Opus/OpenClaw doctrine as live source of truth
 - any secret/token/key/private-key values
 
@@ -128,7 +128,7 @@ Forbidden RANDOM usage:
 Rules:
 - No mock data
 - No false "live" claims
-- No donation/solicitation language in customer-facing copy
+- No payment/outreach language in customer-facing copy
 - If RANDOM conflicts with the repo, the repo wins
 - If RANDOM is used, label it as inspiration or historical breadcrumb, not truth
 ```

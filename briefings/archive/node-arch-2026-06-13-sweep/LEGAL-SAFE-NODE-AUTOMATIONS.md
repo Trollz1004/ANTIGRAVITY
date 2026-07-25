@@ -79,7 +79,7 @@ What they do:
 
 Automated:
 - safe automation audit
-- public-copy policy scan for banned donation-style wording and stale payment/copy drift
+- public-copy policy scan for banned payment-style wording and stale payment/copy drift
 - e-waste intake live-ok audit
 - node automation matrix refresh
 - OnlineRecycle marketing pack

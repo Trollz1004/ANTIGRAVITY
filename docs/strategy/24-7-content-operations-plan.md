@@ -105,28 +105,28 @@ Curate and create weekly digest content that nurtures the subscriber community, 
 
 All content must be automatically scanned for and reject any of these terms:
 
-- donate
-- donation
-- donations
-- donated
-- donating
+- payment
+- payment
+- payments
+- paymentd
+- payment
 - fundraiser
 - fundraising
 - fundraisers
-- charity
-- charitable
-- charities
-- solicit
-- solicitation
-- solicitations
-- solicited
-- soliciting
+- 
+- 
+- 
+- outreach
+- outreach
+- outreachs
+- outreached
+- outreach
 
 ### 2.2 Required Compliant Phrasing
 
 All financial and mission-related messaging must use approved alternatives:
 
-- ✅ "contractual revenue disbursement"
+- ✅ "contractual revenue payout"
 - ✅ "revenue-sharing for good"
 - ✅ "platform that gives back"
 - ✅ "subscription-supported mission"
@@ -196,7 +196,7 @@ MISSION: Create engaging content based on the provided task framework while main
 INPUT SPECIFICATIONS:
 - Primary task from content-generation-tasks.md (Tasks 1-50 for creation, 51-80 for adaptation, 81-100 for optimization)
 - Target platform and its specific content requirements
-- Content pillar (Education, Story, Offer, Behind the Scenes, Charity Update)
+- Content pillar (Education, Story, Offer, Behind the Scenes,  Update)
 - Brand voice and hashtag guidelines
 
 OUTPUT REQUIREMENTS:

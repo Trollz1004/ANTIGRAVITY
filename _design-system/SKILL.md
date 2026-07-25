@@ -33,7 +33,7 @@ Non-negotiables when designing in this brand:
   (uppercase, widely tracked) — the "Church & State Protocol".
 - **Lucide** icons (thin line, no fill). No emoji in UI.
 - Voice: blunt, builder-to-builder, honest numbers only. Never use
-  *donate/donation/solicitation*; YouAndINotAI uses **Square only**.
+  *payment/payment/outreach*; YouAndINotAI uses **Square only**.
 
 If the user invokes this skill without other guidance, ask what they want to
 build or design, ask a few focused questions (which product/surface? production

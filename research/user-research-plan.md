@@ -34,7 +34,7 @@ This document outlines the user research strategy for YouAndINotAI, focusing on 
 ### User Segmentation
 
 1. **Community Seekers** (40%) - Actively looking for local connections and events
-2. **Volunteer Enthusiasts** (25%) - Interested in volunteering opportunities and giving back
+2. **Volunteer Enthusiasts** (25%) - Interested in volunteering opportunities and 
 3. **Safety-Conscious Users** (20%) - Prioritize privacy and safety in online interactions
 4. **Accessibility Users** (10%) - Depend on assistive technologies for platform use
 5. **New Platform Adopters** (5%) - Recently joined social platforms, need onboarding support

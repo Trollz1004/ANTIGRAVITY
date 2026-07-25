@@ -3,7 +3,7 @@
 ## 🐾 OPENCLAW PROMPT (paste into OpenClaw terminal)
 
 ```
-You are in C:\Users\joshl\.openclaw\workspace. Your 4 live domains: youandinotai.com (dating), dashboard.aidoesitall.website (admin), onlinerecycle.org (crosslister), ai-solutions.store (charity). Redis is on 6379, Qdrant on 6333, Ollama on 11434 with llama2:13b.
+You are in C:\Users\joshl\.openclaw\workspace. Your 4 live domains: youandinotai.com (dating), dashboard.aidoesitall.website (admin), onlinerecycle.org (crosslister), ai-solutions.store (). Redis is on 6379, Qdrant on 6333, Ollama on 11434 with llama2:13b.
 
 Do these tasks in order. Commit after each.
 
@@ -17,7 +17,7 @@ Do these tasks in order. Commit after each.
 
 3. EMAIL TEMPLATES — Use Ollama (http://localhost:11434/api/generate, model llama2:13b) to generate 5 pre-launch drip emails for youandinotai.com waitlist. Save output to memory/email-templates.md. Subjects should be compelling, not spammy. Theme: "Human connection in an AI world."
 
-4. GOSPEL SPLIT DB TRIGGER — Create src/db/gospel-trigger.sql with the PostgreSQL trigger that enforces 60/30/10 (Shriners/V8 Infra/Founder) on every INSERT/UPDATE to a transactions table. Include CREATE TABLE if not exists.
+4. GOSPEL SPLIT DB TRIGGER — Create src/db/gospel-trigger.sql with the PostgreSQL trigger that enforces  (Shriners/V8 Infra/Founder) on every INSERT/UPDATE to a transactions table. Include CREATE TABLE if not exists.
 
 5. DOMAIN HEALTH CHECKER — Create scripts/domain-check.js that curls all 4 domains and logs HTTP status + response time. Save results to memory/domain-health.md.
 
@@ -38,10 +38,10 @@ MISSION: Build and market youandinotai.com. Use sub-agents if available. Execute
    - Founding Member pitch: "$14.99/mo locked forever — only during pre-launch"
    - Waitlist form prominent (FormSubmit.co → joshlcoleman@gmail.com)
    - Mobile-first, fast, no placeholder images
-   - #ForTheKids banner: "60% of all revenue funds Shriners Children's Hospitals"
+   - #ForTheKids banner: "60% of all revenue funds Shriners s"
    - Deploy to gh-pages branch when done
 
-2. SEO + META — Add proper og:title, og:description, og:image, twitter:card meta tags. Title: "YouAndINotAI — Human-Only Dating | No Bots, No Catfish". Description mentions charity angle.
+2. SEO + META — Add proper og:title, og:description, og:image, twitter:card meta tags. Title: "YouAndINotAI — Human-Only Dating | No Bots, No Catfish". Description mentions  angle.
 
 3. SOCIAL CONTENT — Generate 10 Twitter/X posts for @youandinotai launch campaign. Save to briefings/social-posts.md. Themes:
    - "What if your dating app actually verified humans?"
@@ -54,13 +54,13 @@ MISSION: Build and market youandinotai.com. Use sub-agents if available. Execute
 5. REVENUE-CORE DASHBOARD — In revenue-core/, make sure the dashboard shows:
    - All 5 Stripe product links as clickable cards
    - Real waitlist count (or honest "pre-launch" state)
-   - Gospel split visualization (60/30/10 pie chart)
+   - Gospel split visualization ( pie chart)
 
 6. MARKETING EMAIL DRAFT — Write 1 launch announcement email for the waitlist. Subject: "We're almost live — here's your founding member lock." Save to briefings/launch-email.md.
 
 7. Commit everything. Update CLAUDE.md if any deployment info changed.
 
-Gospel split is 60/30/10 from dollar one. ENIGMA entity. No fake data. No placeholders. Ship it.
+Gospel split is  from dollar one. ENIGMA entity. No fake data. No placeholders. Ship it.
 ```
 
 ---

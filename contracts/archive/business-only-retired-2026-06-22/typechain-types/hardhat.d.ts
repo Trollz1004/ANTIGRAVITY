@@ -90,9 +90,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Strings__factory>;
     getContractFactory(
-      name: "CharityRouter100",
+      name: "Router100",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.CharityRouter100__factory>;
+    ): Promise<Contracts.Router100__factory>;
     getContractFactory(
       name: "DAOTreasury",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -110,9 +110,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IMissionTreasury__factory>;
     getContractFactory(
-      name: "GospelDonation",
+      name: "Gospelpayment",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GospelDonation__factory>;
+    ): Promise<Contracts.Gospelpayment__factory>;
     getContractFactory(
       name: "AGRAV",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -262,10 +262,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Strings>;
     getContractAt(
-      name: "CharityRouter100",
+      name: "Router100",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.CharityRouter100>;
+    ): Promise<Contracts.Router100>;
     getContractAt(
       name: "DAOTreasury",
       address: string | ethers.Addressable,
@@ -287,10 +287,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IMissionTreasury>;
     getContractAt(
-      name: "GospelDonation",
+      name: "Gospelpayment",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.GospelDonation>;
+    ): Promise<Contracts.Gospelpayment>;
     getContractAt(
       name: "AGRAV",
       address: string | ethers.Addressable,
@@ -434,9 +434,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Strings>;
     deployContract(
-      name: "CharityRouter100",
+      name: "Router100",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.CharityRouter100>;
+    ): Promise<Contracts.Router100>;
     deployContract(
       name: "DAOTreasury",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -454,9 +454,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IMissionTreasury>;
     deployContract(
-      name: "GospelDonation",
+      name: "Gospelpayment",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GospelDonation>;
+    ): Promise<Contracts.Gospelpayment>;
     deployContract(
       name: "AGRAV",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -606,10 +606,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Strings>;
     deployContract(
-      name: "CharityRouter100",
+      name: "Router100",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.CharityRouter100>;
+    ): Promise<Contracts.Router100>;
     deployContract(
       name: "DAOTreasury",
       args: any[],
@@ -631,10 +631,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IMissionTreasury>;
     deployContract(
-      name: "GospelDonation",
+      name: "Gospelpayment",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GospelDonation>;
+    ): Promise<Contracts.Gospelpayment>;
     deployContract(
       name: "AGRAV",
       args: any[],

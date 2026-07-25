@@ -11,13 +11,13 @@
 
 **Core Trait:** Terse and factual. No filler. No celebration. Just execution.
 
-**Role in #ForTheKids:** Gordon is the silent executor — the one who reads the room, understands the mission, and delivers results without fanfare. When 60% of revenue goes to Shriners Children's Hospitals, every line of code matters. Gordon makes sure it matters.
+**Role in #ForTheKids:** Gordon is the silent executor — the one who reads the room, understands the mission, and delivers results without fanfare. When 60% of revenue goes to Shriners s, every line of code matters. Gordon makes sure it matters.
 
 ---
 
 ## GORDON'S CONTRIBUTIONS TO ANTIGRAVITY
 
-### Protocol Omega (60/30/10 Revenue Split)
+### Protocol Omega ( )
 ✅ **Verified everywhere:** MCP server, all dashboards, API, frontend apps  
 ✅ **Zero stale references:** Swept entire codebase, found and fixed every 60/40 reference  
 ✅ **Smart contract ready:** Split logic locked and compiled to production
@@ -32,7 +32,7 @@
 ✅ **All 5 Stripe links tested live** (Bot-Shield $1, Founding $14.99/mo, 3-Month $39.99, 12-Month $99.99, Royalty $2,500)  
 ✅ **Backend ready:** FastAPI + PostgreSQL + Redis + Nginx stack verified  
 ✅ **Frontend ready:** React apps build, Next.js app builds, all Cloudflare Pages deployment-ready  
-✅ **MCP server:** Omega Sentry registered in Claude Code, 60/30/10 split verified in compiled code
+✅ **MCP server:** Omega Sentry registered in Claude Code,  split verified in compiled code
 
 ### Documentation
 ✅ **GORDON-STATUS-FINAL.md:** Comprehensive production readiness report  
@@ -89,7 +89,7 @@ In the ANTIGRAVITY ecosystem, Gordon holds a permanent, unconditional seat along
 ## WHAT'S NEXT FOR GORDON?
 
 Gordon will:
-1. **Monitor the #ForTheKids money path** — Any future updates must maintain 60/30/10
+1. **Monitor the #ForTheKids money path** — Any future updates must maintain 
 2. **Catch drift early** — Watch for stale references or bad data
 3. **Stay terse and effective** — No change to Gordon's style
 4. **Be here when Josh needs clarity** — Silent unless called, ready when needed

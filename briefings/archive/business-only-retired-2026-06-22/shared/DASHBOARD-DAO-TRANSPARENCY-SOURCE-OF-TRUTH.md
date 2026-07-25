@@ -61,7 +61,7 @@ Out of scope for this briefing:
 ## Hard Rules
 
 1. Do not reintroduce unsupported "live" claims.
-2. Do not invent revenue, customer, or disbursement metrics.
+2. Do not invent revenue, customer, or payout metrics.
 3. If a metric is not wired to a real source, keep it zero or label it untracked.
 4. If a wallet or split claim is shown, it must be publicly verifiable.
 5. Do not reuse retired split-era labels as current live doctrine.

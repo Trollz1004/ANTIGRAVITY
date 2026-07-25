@@ -4,7 +4,7 @@
  * =============================================================================
  * !! STALE DOCTRINE FLAG — READ BEFORE RUNNING !!
  * =============================================================================
- * This contract hardcodes PCT_CHARITY = 6000 (60%), PCT_DAO = 3000 (30%),
+ * This contract hardcodes PCT_ = 6000 (60%), PCT_DAO = 3000 (30%),
  * PCT_FOUNDER = 1000 (10%).  The contract header itself marks this as a
  * "historical draft artifact" that "does NOT represent current live LLC
  * operating doctrine."
@@ -24,8 +24,8 @@
  * with current operating doctrine.
  * =============================================================================
  *
- * Language: "contractual revenue disbursement" per FL §496.405 — no
- * solicitation/donation/tax-deductible language anywhere in this file.
+ * Language: "contractual revenue payout" per FL §496.405 — no
+ * outreach/payment/tax-deductible language anywhere in this file.
  */
 import { expect } from "chai";
 import { ethers } from "hardhat";
@@ -37,26 +37,26 @@ describe("DatingRevenueRouter [STALE-DOCTRINE — DO NOT DEPLOY]", function () {
   let router: DatingRevenueRouter;
   let mockToken: MockERC20;
   let deployer: SignerWithAddress;
-  let charitySafe: SignerWithAddress;
+  let Safe: SignerWithAddress;
   let daoTreasury: SignerWithAddress;
   let founderWallet: SignerWithAddress;
   let user: SignerWithAddress;
 
   // Hard-coded stale constants — documented here so reviewers see the mismatch immediately
-  const STALE_PCT_CHARITY  = 6000n; // 60% — DEAD DOCTRINE
+  const STALE_PCT_  = 6000n; // 60% — DEAD DOCTRINE
   const STALE_PCT_DAO      = 3000n; // 30% — DEAD DOCTRINE
   const STALE_PCT_FOUNDER  = 1000n; // 10% — DEAD DOCTRINE
   const BASIS_POINTS       = 10000n;
 
   beforeEach(async function () {
-    [deployer, charitySafe, daoTreasury, founderWallet, user] = await ethers.getSigners();
+    [deployer, Safe, daoTreasury, founderWallet, user] = await ethers.getSigners();
 
     const MockERC20Factory = await ethers.getContractFactory("MockERC20");
     mockToken = (await MockERC20Factory.deploy("MockUSDC", "mUSDC", 6)) as MockERC20;
 
     const RouterFactory = await ethers.getContractFactory("DatingRevenueRouter");
     router = (await RouterFactory.deploy(
-      charitySafe.address,
+      Safe.address,
       daoTreasury.address,
       founderWallet.address
     )) as DatingRevenueRouter;
@@ -68,10 +68,10 @@ describe("DatingRevenueRouter [STALE-DOCTRINE — DO NOT DEPLOY]", function () {
   // ---------------------------------------------------------------------------
 
   describe("Stale-doctrine detection (contract constants audit)", function () {
-    it("[STALE-DOCTRINE] PCT_CHARITY == 6000 bp (60%) — conflicts with current 10%-per-bucket doctrine", async function () {
-      const pctCharity = await router.PCT_CHARITY();
-      expect(pctCharity).to.equal(6000n,
-        "STALE DOCTRINE CONFIRMED: contract still encodes 60% to charity. " +
+    it("[STALE-DOCTRINE] PCT_ == 6000 bp (60%) — conflicts with current 10%-per-bucket doctrine", async function () {
+      const pct = await router.PCT_();
+      expect(pct).to.equal(6000n,
+        "STALE DOCTRINE CONFIRMED: contract still encodes 60% to . " +
         "Current doctrine requires 10%-per-bucket compounding. " +
         "This contract must NOT be deployed for active revenue."
       );
@@ -100,7 +100,7 @@ describe("DatingRevenueRouter [STALE-DOCTRINE — DO NOT DEPLOY]", function () {
   // ---------------------------------------------------------------------------
 
   describe("Constructor", function () {
-    it("reverts if charitySafe is zero address", async function () {
+    it("reverts if Safe is zero address", async function () {
       const RouterFactory = await ethers.getContractFactory("DatingRevenueRouter");
       await expect(
         RouterFactory.deploy(ethers.ZeroAddress, daoTreasury.address, founderWallet.address)
@@ -110,19 +110,19 @@ describe("DatingRevenueRouter [STALE-DOCTRINE — DO NOT DEPLOY]", function () {
     it("reverts if daoTreasury is zero address", async function () {
       const RouterFactory = await ethers.getContractFactory("DatingRevenueRouter");
       await expect(
-        RouterFactory.deploy(charitySafe.address, ethers.ZeroAddress, founderWallet.address)
+        RouterFactory.deploy(Safe.address, ethers.ZeroAddress, founderWallet.address)
       ).to.be.revertedWithCustomError(router, "InvalidAddress");
     });
 
     it("reverts if founderWallet is zero address", async function () {
       const RouterFactory = await ethers.getContractFactory("DatingRevenueRouter");
       await expect(
-        RouterFactory.deploy(charitySafe.address, daoTreasury.address, ethers.ZeroAddress)
+        RouterFactory.deploy(Safe.address, daoTreasury.address, ethers.ZeroAddress)
       ).to.be.revertedWithCustomError(router, "InvalidAddress");
     });
 
     it("stores addresses immutably", async function () {
-      expect(await router.charitySafe()).to.equal(charitySafe.address);
+      expect(await router.Safe()).to.equal(Safe.address);
       expect(await router.daoTreasury()).to.equal(daoTreasury.address);
       expect(await router.founderWallet()).to.equal(founderWallet.address);
     });
@@ -132,36 +132,36 @@ describe("DatingRevenueRouter [STALE-DOCTRINE — DO NOT DEPLOY]", function () {
   // ERC20 distribution — documenting what the stale contract does
   // ---------------------------------------------------------------------------
 
-  describe("ERC20 distribution (stale 60/30/10 math — reference only)", function () {
-    it("[STALE-DOCTRINE] distributes token per stale 60/30/10 split", async function () {
+  describe("ERC20 distribution (stale  math — reference only)", function () {
+    it("[STALE-DOCTRINE] distributes token per stale  split", async function () {
       const total = ethers.parseUnits("1000", 6);
       await mockToken.mint(await router.getAddress(), total);
 
-      const beforeCharity = await mockToken.balanceOf(charitySafe.address);
+      const before = await mockToken.balanceOf(Safe.address);
       const beforeDao     = await mockToken.balanceOf(daoTreasury.address);
       const beforeFounder = await mockToken.balanceOf(founderWallet.address);
 
       await router.distributeToken(await mockToken.getAddress());
 
-      const afterCharity = await mockToken.balanceOf(charitySafe.address);
+      const after = await mockToken.balanceOf(Safe.address);
       const afterDao     = await mockToken.balanceOf(daoTreasury.address);
       const afterFounder = await mockToken.balanceOf(founderWallet.address);
 
-      const charityGot  = afterCharity - beforeCharity;
+      const Got  = after - before;
       const daoGot      = afterDao - beforeDao;
       const founderGot  = afterFounder - beforeFounder;
 
-      // Stale math: founder = 10%, dao = 30%, charity = remainder
+      // Stale math: founder = 10%, dao = 30%,  = remainder
       const expFounder = (total * STALE_PCT_FOUNDER) / BASIS_POINTS;
       const expDao     = (total * STALE_PCT_DAO) / BASIS_POINTS;
-      const expCharity = total - expFounder - expDao;
+      const exp = total - expFounder - expDao;
 
       expect(founderGot).to.equal(expFounder);
       expect(daoGot).to.equal(expDao);
-      expect(charityGot).to.equal(expCharity);
+      expect(Got).to.equal(exp);
 
       // Sanity: no wei lost
-      expect(charityGot + daoGot + founderGot).to.equal(total);
+      expect(Got + daoGot + founderGot).to.equal(total);
     });
 
     it("reverts distributeToken when balance is zero", async function () {
@@ -172,13 +172,13 @@ describe("DatingRevenueRouter [STALE-DOCTRINE — DO NOT DEPLOY]", function () {
 
     it("preserves wei-precision — 1 wei distributed with no loss", async function () {
       await mockToken.mint(await router.getAddress(), 1n);
-      // 1 wei: founder = 0, dao = 0, charity = 1 (remainder wins)
+      // 1 wei: founder = 0, dao = 0,  = 1 (remainder wins)
       await router.distributeToken(await mockToken.getAddress());
-      const charityBal = await mockToken.balanceOf(charitySafe.address);
+      const Bal = await mockToken.balanceOf(Safe.address);
       // All 1 wei must reach some recipient — none lost to rounding
       const daoBal     = await mockToken.balanceOf(daoTreasury.address);
       const founderBal = await mockToken.balanceOf(founderWallet.address);
-      expect(charityBal + daoBal + founderBal).to.equal(1n);
+      expect(Bal + daoBal + founderBal).to.equal(1n);
     });
   });
 
@@ -187,21 +187,21 @@ describe("DatingRevenueRouter [STALE-DOCTRINE — DO NOT DEPLOY]", function () {
   // ---------------------------------------------------------------------------
 
   describe("ETH distribution", function () {
-    it("[STALE-DOCTRINE] distributes ETH per stale 60/30/10 split", async function () {
+    it("[STALE-DOCTRINE] distributes ETH per stale  split", async function () {
       const total = ethers.parseEther("3.0");
       await deployer.sendTransaction({ to: await router.getAddress(), value: total });
 
       const expFounder = (total * STALE_PCT_FOUNDER) / BASIS_POINTS;
       const expDao     = (total * STALE_PCT_DAO) / BASIS_POINTS;
-      const expCharity = total - expFounder - expDao;
+      const exp = total - expFounder - expDao;
 
-      const beforeCharity = await ethers.provider.getBalance(charitySafe.address);
+      const before = await ethers.provider.getBalance(Safe.address);
       const beforeDao     = await ethers.provider.getBalance(daoTreasury.address);
       const beforeFounder = await ethers.provider.getBalance(founderWallet.address);
 
       await router.distributeETH();
 
-      expect(await ethers.provider.getBalance(charitySafe.address) - beforeCharity).to.equal(expCharity);
+      expect(await ethers.provider.getBalance(Safe.address) - before).to.equal(exp);
       expect(await ethers.provider.getBalance(daoTreasury.address) - beforeDao).to.equal(expDao);
       expect(await ethers.provider.getBalance(founderWallet.address) - beforeFounder).to.equal(expFounder);
     });
@@ -221,11 +221,11 @@ describe("DatingRevenueRouter [STALE-DOCTRINE — DO NOT DEPLOY]", function () {
   describe("previewSplit()", function () {
     it("returns values matching on-chain distribution for a round amount", async function () {
       const amount = ethers.parseUnits("100", 6);
-      const [charityAmt, daoAmt, founderAmt] = await router.previewSplit(amount);
+      const [Amt, daoAmt, founderAmt] = await router.previewSplit(amount);
 
       expect(founderAmt).to.equal((amount * STALE_PCT_FOUNDER) / BASIS_POINTS);
       expect(daoAmt).to.equal((amount * STALE_PCT_DAO) / BASIS_POINTS);
-      expect(charityAmt + daoAmt + founderAmt).to.equal(amount);
+      expect(Amt + daoAmt + founderAmt).to.equal(amount);
     });
   });
 });

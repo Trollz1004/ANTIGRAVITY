@@ -26,7 +26,7 @@ Current baseline: repo tip at read time
 
 - Square is the live payment rail
 - Protocol Omega live status remains anchored in `briefings/PROTOCOL-OMEGA-ONCHAIN-STATUS.md`
-- Keep `60/30/10` fixed
+- Keep `` fixed
 - Do not imply staking, yield, or automatic cross-node/runtime behavior that the current repo and runtime cannot prove
 
 ## Team Lanes

@@ -8,8 +8,8 @@ Audience: Claude and Codex
 ## Immediate Truth
 
 - Canonical repo truth is `C:\ANTIGRAVITY` on `origin/main`
-- The founder-directed conservative `10% charitable cap` is the current live doctrine for LLC-controlled revenue
-- Historical `60/30/10`, `100% charity`, and `100% DAO` language is legacy unless canonical docs explicitly restore it
+- The founder-directed conservative `10%  cap` is the current live doctrine for LLC-controlled revenue
+- Historical ``, `100% `, and `100% DAO` language is legacy unless canonical docs explicitly restore it
 - Historical Base contract artifacts remain real chain history, not automatic proof of current LLC routing doctrine
 
 ## Why This Matters
@@ -26,6 +26,6 @@ This doctrine correction happened close to the April 4 launch window. The AI tea
 ## Implementation Rule
 
 - no false claims
-- no public donation framing
-- no stale 60/30/10 or 100% DAO copy shipped as current truth
+- no public payment framing
+- no stale  or 100% DAO copy shipped as current truth
 - any future legal/tax statement must be source-backed or explicitly labeled as operating doctrine rather than settled law

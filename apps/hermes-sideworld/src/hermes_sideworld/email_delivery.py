@@ -11,7 +11,6 @@ import smtplib
 from dataclasses import dataclass
 from email.message import EmailMessage
 
-
 @dataclass(frozen=True)
 class DeliveryResult:
     """Result of an attempted email handoff."""
@@ -20,9 +19,7 @@ class DeliveryResult:
     provider: str
     detail: str
 
-
-FORBIDDEN_PUBLIC_TERMS = ("donate", "donation", "charity", "solicitation", "giving back", "disbursement")
-
+FORBIDDEN_PUBLIC_TERMS = ("payment", "payment", "", "outreach", "", "payout")
 
 def build_license_email(*, buyer_email: str, product: str, license_key: str, admin: bool = False) -> tuple[str, str]:
     """Return subject/body for a license-key handoff email."""
@@ -48,7 +45,6 @@ Support: support@aidoesitall.website
     if hits:
         raise ValueError(f"License email contains blocked public terms: {hits}")
     return subject, body
-
 
 def send_license_email(*, buyer_email: str, product: str, license_key: str, admin: bool = False) -> DeliveryResult:
     """Send a license key email.

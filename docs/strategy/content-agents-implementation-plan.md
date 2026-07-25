@@ -14,7 +14,7 @@ This document outlines the implementation plan for content generation agents tha
 ### 2. Blog Content Writer
 - Creates long-form educational content
 - Focuses on dating safety, relationship building, platform features
-- Aligns with content pillars: education, story, offer, behind_the_scenes, charity_update
+- Aligns with content pillars: education, story, offer, behind_the_scenes, _update
 
 ### 3. Newsletter Creator
 - Produces weekly digest content
@@ -24,8 +24,8 @@ This document outlines the implementation plan for content generation agents tha
 ## Agent Capabilities
 
 ### Compliance Features
-- Automatic filtering of prohibited terms ("donate", "donation", "solicitation")
-- Automatic substitution with compliant phrasing ("contractual revenue disbursement")
+- Automatic filtering of prohibited terms ("payment", "payment", "outreach")
+- Automatic substitution with compliant phrasing ("contractual revenue payout")
 - Brand voice consistency checker
 - Hashtag policy enforcement per platform
 

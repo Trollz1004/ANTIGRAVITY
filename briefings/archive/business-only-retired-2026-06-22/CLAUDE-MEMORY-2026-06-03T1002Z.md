@@ -18,16 +18,16 @@
 - Delta since previous:
   - No new commits in the 24h window. HEAD remains `8b4eff46 fix(audit): point LAN audit at 192.168.0.8:4201 (cloudflared target port)`. No founder Slack activity. No Sentry errors. Second quiet window in a row.
   - Canonical-7 customer-facing hits: now 7 files (previous run listed 8). Delta: `apps/youandinotai-frontend/components/SupportCollectables.tsx` no longer matches the grep — file still present at 0 hits this run. Possible drift in the previous count, or quiet edit; flagged for confirmation rather than treated as resolved work.
-  - `_deploy/dao-launch/index.html` still hits once (line 576: "Disbursement review panel · Legacy founding status").
+  - `_deploy/dao-launch/index.html` still hits once (line 576: "payout review panel · Legacy founding status").
   - REPOSITORY_RECORD.md doctrine-drift line unchanged from previous run.
 
 ## 3 · Doctrine check
 
 - 1 LLC: intact (Trash Or Treasure Online Recycler LLC, FL #L25000158401).
-- 1 wallet: intact (10% per-bucket reserve = IRS LLC charitable-deduction cap, not a personal-income split).
+- 1 wallet: intact (10% per-bucket reserve = IRS LLC -deduction cap, not a personal-income split).
 - 1 repo (Trollz1004/ANTIGRAVITY): intact at the GitHub layer; production deploy chain for youandinotai.com still violates the rule (live Vite/React bundle source not in this repo per `briefings/DEPLOY-SOURCE-OF-TRUTH.md` §"Known gaps" #1). Carried.
 - Canonical-7 ban on customer surfaces: CHECK FAILED — 7 files:
-  - `apps/youandinotai-frontend/components/CharitySection.tsx`
+  - `apps/youandinotai-frontend/components/Section.tsx`
   - `_deploy/dao-launch/index.html` (line 576)
   - `_deploy/dao-transparency/index.html`
   - `_deploy/onlinerecycle/index.html`
@@ -45,9 +45,9 @@
 
 ## 5 · Open questions for Joshua
 
-- Q1 (carried from 2026-06-01, still unanswered): clear to schedule the surgical-substitution PR on the canonical-7 customer-facing files (now 7)? Proposed agent-internal-only substitutions: `donate→support`, `charity→mission`, `charitable→mission-aligned`, `disbursement→contractual revenue transfer`. Reply "go" in chat or commit a clarification briefing to greenlight.
+- Q1 (carried from 2026-06-01, still unanswered): clear to schedule the surgical-substitution PR on the canonical-7 customer-facing files (now 7)? Proposed agent-internal-only substitutions: `payment→support`, `→mission`, `→mission-aligned`, `payout→contractual revenue transfer`. Reply "go" in chat or commit a clarification briefing to greenlight.
 - Q2 (carried from 2026-06-02, still unanswered): permission to edit REPOSITORY_RECORD.md to reflect FOUNDER DOCTRINE rule 3 (Sabretooth-only push), or leave the contradiction visible as a deliberate audit-trail marker?
 
 ---
 
-For The Kids · #UntilNoKidInNeed · paperweight-daily-memory v0
+ · #UntilNoKidInNeed · paperweight-daily-memory v0

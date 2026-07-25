@@ -22,9 +22,9 @@ This file predates the March 30-31, 2026 doctrine cleanup and must not be used a
 
 The older March 14 sync predates:
 
-- the founder-directed conservative `10% charitable cap`
+- the founder-directed conservative `10%  cap`
 - the public copy hardening sweep
 - the dashboard gateway replacement
-- the prelaunch audit to stop stale `60/30/10`, `100% charity`, and `100% DAO` drift
+- the prelaunch audit to stop stale ``, `100% `, and `100% DAO` drift
 
 If any prompt or agent still references this file alone, redirect it to the current docs above before taking action.

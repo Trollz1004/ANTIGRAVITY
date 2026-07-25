@@ -69,13 +69,13 @@ At this ratio, the 375,000 launch pool per DAO depletes at ~$37,500 in platform 
 ### Revenue from Launch Sale — Kids Reserve per Bucket (Corrected 2026-06-01)
 
 The launch sale generates revenue across MULTIPLE legally distinct buckets.
-Each bucket has its own 10% maximum allowable corporate charitable deduction
-(per the IRS cap on LLC charitable deductions — see `CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`).
+Each bucket has its own 10% maximum allowable corporate  deduction
+(per the IRS cap on LLC  deductions — see `CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`).
 The buckets COMPOUND — it is not 10% total, it is 10% PER BUCKET.
 
 **Important framing (2026-06-01 correction)**: The 10% is the maximum
-corporate charitable deduction the LLC can claim per legally distinct
-revenue stream. It is NOT Joshua's personal income and NOT a "donation"
+corporate  deduction the LLC can claim per legally distinct
+revenue stream. It is NOT Joshua's personal income and NOT a "payment"
 Joshua chooses to make. It is the IRS ceiling. The stacking strategy
 exploits that ceiling by creating as many distinct streams as possible.
 
@@ -198,9 +198,9 @@ financially independent of any single human.
 - [x] Token allocation finalized (this document)
 - [x] 4-DAO model confirmed ($LOVE, $UKID, $GREEN, $AGRAV)
 - [x] 15% launch sale tied to Square product purchases
-- [x] Kids get 10% per-bucket reserve (max allowable corporate charitable deduction)
+- [x] Kids get 10% per-bucket reserve (max allowable corporate  deduction)
 - [x] Revenue model: 1-wallet, 1 LLC, 10% per-bucket reserve
-- [x] Compliant language: customer copy bans "charity/donation/solicitation"; "contractual revenue disbursement" is internal-only
+- [x] Compliant language: customer copy bans "/payment/outreach"; "contractual revenue payout" is internal-only
 - [x] SoulboundToken.sol exists in contracts/src/
 - [x] DAOTreasury.sol exists in contracts/src/
 - [x] PlatformSplitter.sol exists in contracts/src/

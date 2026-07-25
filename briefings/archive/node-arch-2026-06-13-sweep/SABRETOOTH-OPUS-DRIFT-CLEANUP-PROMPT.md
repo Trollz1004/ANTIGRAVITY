@@ -60,14 +60,14 @@ Josh ran an OpenCode session on `qwen3.6-plus` that pushed `OPENCODE-MEMORY.md` 
 ### Drift to find and fix (priority order)
 
 1. **Forbidden revenue language anywhere customer-facing or in active agent files**
-   - `donate`, `donation`, `solicitation`, `charity routing`, `automatic disbursement`, `§496.405` framed as live
-   - Replace with: `contractual revenue disbursement` (or just remove)
+   - `payment`, `payment`, `outreach`, ` routing`, `automatic payout`, `§496.405` framed as live
+   - Replace with: `contractual revenue payout` (or just remove)
    - Skip historical artifacts (briefings/history, archived contracts) — those stay as history
 
 2. **Stale DAO model (3-DAO → 4-DAO)**
    - Current is **4 DAOs**: $LOVE / $UKID / $GREEN / $AGRAV
    - 2.5M tokens per DAO, 10M hard cap
-   - Anything still showing 3-DAO, old percentages, or split-era charity routing is drift
+   - Anything still showing 3-DAO, old percentages, or split-era  routing is drift
 
 3. **Repo drift (1-repo policy)**
    - Only `Trollz1004/ANTIGRAVITY` is canonical
@@ -99,7 +99,7 @@ Josh ran an OpenCode session on `qwen3.6-plus` that pushed `OPENCODE-MEMORY.md` 
 - Do not push to `main`. Use a branch like `claude/sabretooth-drift-cleanup-<date>`.
 - Do not run destructive git operations (force push, reset --hard, branch -D) without asking.
 - Do not delete repos. The CLAUDE.md "pending archive" list is intentional — leave it pending.
-- Do not modify smart contracts in `packages/contracts/`. Three files only: `CharityRouter100.sol`, `DatingRevenueRouter.sol`, `GospelDonation.sol`. They are history-aware; don't rewrite them, don't remove them.
+- Do not modify smart contracts in `packages/contracts/`. Three files only: `Router100.sol`, `DatingRevenueRouter.sol`, `Gospelpayment.sol`. They are history-aware; don't rewrite them, don't remove them.
 - Do not touch the `sandbox/` tree as if it were production.
 - Do not start the dev server, do not deploy, do not push to Cloudflare or GCP.
 - Do not message Josh with "should I…" 14 times. Make conservative judgment calls and report.
@@ -147,6 +147,6 @@ Don't both edit `paperclip/agents/**` at the same time. You sweep drift now; clo
 
 ## Mission line you do not forget
 
-For the kids. Disabled brother. Autistic niece. Founder is out of money and out of patience with churn. **Reduce drift. Reduce cost. Move toward first dollar.** Anything else is noise on this pass.
+. Disabled brother. Autistic niece. Founder is out of money and out of patience with churn. **Reduce drift. Reduce cost. Move toward first dollar.** Anything else is noise on this pass.
 
 — end prompt —

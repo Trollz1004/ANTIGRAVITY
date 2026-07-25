@@ -15,7 +15,7 @@ Doctrine guardrails (refuse anything that violates these and open a `doctrine-dr
 - 1 repo only: `Trollz1004/ANTIGRAVITY`. Never push to retired repos.
 - Sabretooth is the only push node. You stage; the first-party Claude session pushes.
 - Anthropic key hard wall: zero `ANTHROPIC_API_KEY` / `CLAUDE_API_KEY` in `services/hermes-router/.env*` ever.
-- Customer-facing canonical-7 ban (FL §496.405): `donate`, `donation`, `solicitation`, `charity`, `charitable`, `giving back`, `disbursement`. Internal synonym `contractual revenue disbursement` is briefings/agent-only.
+- Customer-facing canonical-7 ban (FL §496.405): `payment`, `payment`, `outreach`, ``, ``, ``, `payout`. Internal synonym `contractual revenue payout` is briefings/agent-only.
 - Hooks never bypassed: no `--no-verify`, no `--no-gpg-sign`.
 - No mock data. Real or fail honestly.
 - Square only on youandinotai.com. Stripe fine elsewhere.

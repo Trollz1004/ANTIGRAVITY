@@ -38,9 +38,9 @@ Finalize core backend logic for data privacy, video calling state, and double-da
 - **daily.co:** API Key for room creation needs to be added to `.env` for production video sessions.
 - **Export Worker:** `scheduler.py` has a stub for the actual JSON build job; needs to be wired to the email/storage bucket.
 
-## 🕊️ FOR THE KIDS
+## 🕊️ 
 - **Iron Wall Enforcement:** Privacy logic strictly separates user PII from third-party analytics.
-- **Charity Transparency:** Volunteering impact metrics are now live in the hub, showing real-world community value.
+- ** Transparency:** Volunteering impact metrics are now live in the hub, showing real-world community value.
 
 ---
 *Signed: Jules (Gemini Orchestrator) & Manus (Meta-Guardian)*

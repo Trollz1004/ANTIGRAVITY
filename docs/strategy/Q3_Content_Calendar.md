@@ -66,6 +66,6 @@
 
 ## Florida Compliance Reminder
 
-- NEVER use "donate", "donation", or "solicitation" in ANY content
-- ALWAYS use "contractual revenue disbursement", "revenue-sharing for good", or "platform that gives back"
-- Reference platform supporting kids as a feature, not a charity pitch
+- NEVER use "payment", "payment", or "outreach" in ANY content
+- ALWAYS use "contractual revenue payout", "revenue-sharing for good", or "platform that gives back"
+- Reference platform supporting kids as a feature, not a  pitch

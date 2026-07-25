@@ -29,5 +29,5 @@ This file exists to prevent drift while Claude Max / Opus access is financially 
 
 - Mission unchanged.
 - DAO split unchanged.
-- `60/30/10` unchanged.
+- `` unchanged.
 - This notice exists only to prevent stale-memory interference.

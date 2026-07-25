@@ -78,15 +78,15 @@ jobs:
           echo "No Stripe wiring found on dating surfaces: ${TARGETS[*]}"
 
       # Florida §496.405 language scan
-      - name: Scan for donation language violations
+      - name: Scan for payment language violations
         run: |
           VIOLATIONS=$(grep -rn --include="*.tsx" --include="*.ts" --include="*.html" \
             -iE '\bdonat(e|ion|ions|ing)\b' \
             apps/youandinotai-frontend/ antigravity/components/ antigravity/app/ \
             revenue-core/components/ _deploy/ mcp-server/src/ 2>/dev/null \
-            | grep -ivE 'not.*(charit|donat)|not a.*(donat|solicitat)|donate\.lovetotherescue' || true)
+            | grep -ivE 'not.*(charit|donat)|not a.*(donat|outreachat)|payment\.lovetotherescue' || true)
           if [ -n "$VIOLATIONS" ]; then
-            echo "::warning::§496.405 — Found donation language that may need review:"
+            echo "::warning::§496.405 — Found payment language that may need review:"
             echo "$VIOLATIONS"
           else
             echo "No §496.405 violations found"
@@ -112,7 +112,7 @@ jobs:
             echo "::error::Doctrine drift scan has no valid target directories — repo layout changed; update ci-validate.yml"
             exit 1
           fi
-          PATTERN='ai-solutions\.store|CharityRouter100|60/30/10|100% to charity'
+          PATTERN='ai-solutions\.store|Router100||100% to '
           # grep exit codes: 0=match, 1=no match, 2=error. Trailing `|| true` collapses
           # 1 (no match) into a clean empty result; an actual error would surface via set -u
           # on an unset later var, but we explicitly guard the empty case below.

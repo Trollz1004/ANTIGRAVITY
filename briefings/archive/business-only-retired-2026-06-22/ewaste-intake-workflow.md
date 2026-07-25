@@ -1,8 +1,8 @@
-# E-Waste Intake Workflow (Charity Impact Ops)
+# E-Waste Intake Workflow ( Impact Ops)
 
 ## Mission
 
-Convert contributed PCs, servers, and laptops into transparent resale outcomes that fund kids-focused charitable impact through contractual revenue disbursement.
+Convert contributed PCs, servers, and laptops into transparent resale outcomes that fund kids-focused  impact through contractual revenue payout.
 
 ## Operating Rule
 
@@ -15,8 +15,8 @@ Every unit must carry one persistent key: `intake_id` (format: `EW-YYYYMMDD-####
 - `data/ewaste-intake/testing-status-template.csv`
 - `data/ewaste-intake/resale-estimate-template.csv`
 - `data/ewaste-intake/ebay-listing-readiness-template.csv`
-- `data/ewaste-intake/charity-impact-ledger-template.csv`
-- `data/ewaste-intake/charity-impact-weekly-summary-template.csv`
+- `data/ewaste-intake/-impact-ledger-template.csv`
+- `data/ewaste-intake/-impact-weekly-summary-template.csv`
 
 ## Stage Workflow
 
@@ -42,19 +42,19 @@ Every unit must carry one persistent key: `intake_id` (format: `EW-YYYYMMDD-####
 
 - Use recent sold comparables on eBay (not active asking prices alone).
 - Estimate sale price, shipping, fees, and refurb cost.
-- Calculate expected net and projected charitable contribution before listing.
+- Calculate expected net and projected  contribution before listing.
 
 5. eBay Listing Readiness QA
 
 - Confirm complete condition disclosure and photo evidence.
 - Confirm test summary and data-wipe statement are included.
-- Confirm charity-impact line and percentage are set.
+- Confirm -impact line and percentage are set.
 - Do not publish when `final_qa_pass` is not `yes`.
 
-6. Post-Sale Charitable Impact Logging
+6. Post-Sale  Impact Logging
 
 - Capture sale, payout, and contribution references for every sold eBay order.
-- Calculate net proceeds and charitable allocation per item.
+- Calculate net proceeds and  allocation per item.
 - Reconcile contribution proof and reviewer signoff before weekly close.
 - Roll up totals in the weekly summary template for reporting.
 
@@ -71,12 +71,12 @@ Every unit must carry one persistent key: `intake_id` (format: `EW-YYYYMMDD-####
 ## Key Formulas
 
 - `expected_net_proceeds_usd = expected_sale_price_usd - expected_shipping_cost_usd - expected_ebay_fees_usd - expected_refurb_cost_usd`
-- `projected_charity_usd = expected_net_proceeds_usd * (charity_share_pct / 100)`
+- `projected__usd = expected_net_proceeds_usd * (_share_pct / 100)`
 
-## Charity-Safe Listing Line (Template)
+## -Safe Listing Line (Template)
 
 Use this in descriptions:
-"This device sale supports #ForTheKids through contractual revenue disbursement. A defined share of net proceeds is allocated to youth programs and logged in our impact ledger."
+"This device sale supports #ForTheKids through contractual revenue payout. A defined share of net proceeds is allocated to youth programs and logged in our impact ledger."
 
 ## Weekly Ops Snapshot (Recommended)
 
@@ -86,5 +86,5 @@ Use this in descriptions:
 - Units listed
 - Units sold
 - Net proceeds
-- Charitable allocation
+-  allocation
 - Average days intake-to-listing

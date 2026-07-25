@@ -4,7 +4,7 @@
 #
 # Format: one file path per line, relative to repo root. Comments start with '#'.
 # A match (grep hit of the forbidden routing markers — ai-solutions.store,
-# CharityRouter100, 60/30/10, 100% to charity — in apps/youandinotai-frontend/
+# Router100, , 100% to  — in apps/youandinotai-frontend/
 # or backend/fastapi-app/app/) is treated as a passing warning IF the file path
 # appears in this list. Any hit in a file NOT in this list fails CI.
 #
@@ -15,7 +15,7 @@
 # When the scan is FIXED on 2026-05-17 (PR — restores the broken drift scan
 # that had been silently passing since `youandinotai-api/app/` was removed
 # from the layout), four pre-existing `ai-solutions.store` references in
-# apps/youandinotai-frontend/ remain. None are explicit donation/charity
+# apps/youandinotai-frontend/ remain. None are explicit payment/
 # routing claims — they are cross-references to the AI-Solutions Store
 # public surface from neighbouring surfaces. The doctrine blocker, as
 # currently written in CLAUDE.md, lists `ai-solutions.store` as a banned

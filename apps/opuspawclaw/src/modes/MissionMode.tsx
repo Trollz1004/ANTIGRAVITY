@@ -96,7 +96,7 @@ export default function MissionMode() {
               <p className="text-[10px] text-[#6b82a6] leading-relaxed">
                 Mission Control dispatches and monitors. Conductor stays in the terminal.
                 <br />
-                <span className="text-[#e040fb] font-bold">for the kids.</span>
+                <span className="text-[#e040fb] font-bold">.</span>
               </p>
               <div className="text-[8px] tracking-widest uppercase text-[#4a5568] font-mono mt-2">
                 pawclaw-elite-v1 · mission mode

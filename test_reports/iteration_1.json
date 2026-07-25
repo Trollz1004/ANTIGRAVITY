@@ -1,5 +1,5 @@
 {
-  "summary": "Full backend + frontend regression of OpusPawClaw Mission Control. 11/11 pytest tests pass (incl. real Emergent-bridged Hermes chat completion). Playwright e2e covered AgeGate -> Mission -> Chat -> all sidebar modes, verified 7 pills, 6 agents, 4 DAO tokens, 10 buckets, Paperclip, GitPanel, and real bridged LLM responses with X-Hermes-Provider / X-Hermes-Real-Model / X-Hermes-Latency-Ms surfaced to UI. Doctrine sweep (no 'Haiku' / 'donate' / 'donation' / 'solicitation') clean across every tested endpoint and across the rendered UI.",
+  "summary": "Full backend + frontend regression of OpusPawClaw Mission Control. 11/11 pytest tests pass (incl. real Emergent-bridged Hermes chat completion). Playwright e2e covered AgeGate -> Mission -> Chat -> all sidebar modes, verified 7 pills, 6 agents, 4 DAO tokens, 10 buckets, Paperclip, GitPanel, and real bridged LLM responses with X-Hermes-Provider / X-Hermes-Real-Model / X-Hermes-Latency-Ms surfaced to UI. Doctrine sweep (no 'Haiku' / 'payment' / 'payment' / 'outreach') clean across every tested endpoint and across the rendered UI.",
   "backend_issues": {
     "critical": [],
     "minor": [
@@ -22,7 +22,7 @@
     "Hermes refresh polling is correctly paused on document.hidden and uses a 4s AbortController as required. Chat-completions widened to 60s to accommodate real bridge latency — good.",
     "All interactive elements have data-testid attributes; accessibility is solid.",
     "No hardcoded URLs — frontend uses REACT_APP_BACKEND_URL; backend uses MONGO_URL/DB_NAME/EMERGENT_LLM_KEY exclusively.",
-    "Doctrine rules (no Haiku/donate/donation/solicitation, only 'Opus' Anthropic label, palette restricted, #UntilNoKidInNeed visible) are all honored in source and runtime responses."
+    "Doctrine rules (no Haiku/payment/payment/outreach, only 'Opus' Anthropic label, palette restricted, #UntilNoKidInNeed visible) are all honored in source and runtime responses."
   ],
   "updated_files": [
     "/app/backend/tests/__init__.py",
