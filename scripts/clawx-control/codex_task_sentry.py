@@ -44,7 +44,7 @@ DEFAULT_QUEUE_FILE = DATA_DIR / "codex-task-queue.json"
 DEFAULT_STATE_FILE = DATA_DIR / "codex-task-sentry-state.json"
 DEFAULT_MARKDOWN_FILE = PROJECT_DIR / "CodeX" / "state" / "runtime" / "TASK-QUEUE-100.md"
 
-DEFAULT_OPENCLAW_URL = os.environ.get("OPENCLAW_URL", "http://127.0.0.1:3200")
+DEFAULT_OPENCLAW_URL = os.environ.get("OPENCLAW_URL", "http://127.0.0.1:3201")
 DEFAULT_OLLAMA_URL = os.environ.get(
     "OLLAMA_URL", os.environ.get("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
 )
