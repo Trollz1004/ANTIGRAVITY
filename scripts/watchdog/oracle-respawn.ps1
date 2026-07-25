@@ -3,7 +3,7 @@
 # Never uses cmd.exe. Logs to logs/oracle-respawn.log
 
 $ErrorActionPreference = 'Continue'
-$Repo = if (Test-Path 'c:\antigravity') { 'c:\antigravity' } else { 'c:\antigravity' }
+$Repo = if (Test-Path 'E:\ANTIGRAVITY') { 'E:\ANTIGRAVITY' } else { 'E:\ANTIGRAVITY' }
 $LogDir = Join-Path $Repo 'logs'
 $LogFile = Join-Path $LogDir 'oracle-respawn.log'
 $IntervalSec = 60

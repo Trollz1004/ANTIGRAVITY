@@ -1,5 +1,5 @@
 $ErrorActionPreference = "Continue"
-$logFile = "c:\antigravity\data\watchdog-log.txt"
+$logFile = "E:\ANTIGRAVITY\data\watchdog-log.txt"
 
 function Write-Log {
     param([string]$Message)

@@ -11,11 +11,11 @@
 #             For boot-level persistence without login, register as a scheduled task using
 #             scripts\register-paperclip-watchdog-task.ps1 (requires Administrator).
 #
-# Log: c:\antigravity\logs\paperclip-watchdog.log
+# Log: E:\ANTIGRAVITY\logs\paperclip-watchdog.log
 
 $ErrorActionPreference = 'Continue'
 
-$LogDir      = 'c:\antigravity\logs'
+$LogDir      = 'E:\ANTIGRAVITY\logs'
 $LogFile     = Join-Path $LogDir 'paperclip-watchdog.log'
 $MaxLogBytes = 10MB
 $CheckIntervalSeconds = 30
@@ -25,26 +25,26 @@ $Services = @(
     [PSCustomObject]@{
         Port         = 8082
         Name         = 'FCC'
-        StartScript  = 'c:\antigravity\scripts\fcc-server-start.sh'
+        StartScript  = 'E:\ANTIGRAVITY\scripts\fcc-server-start.sh'
         Launcher     = 'wsl'
         Distro       = 'Ubuntu-24.04'
     },
     [PSCustomObject]@{
         Port         = 3000
         Name         = 'HermesWorkspace'
-        StartScript  = 'c:\antigravity\scripts\start-hermes-workspace-windows.ps1'
+        StartScript  = 'E:\ANTIGRAVITY\scripts\start-hermes-workspace-windows.ps1'
         Launcher     = 'powershell'
     },
     [PSCustomObject]@{
         Port         = 9119
         Name         = 'HermesDashboard'
-        StartScript  = 'c:\antigravity\scripts\hermes-dashboard-start.cmd'
+        StartScript  = 'E:\ANTIGRAVITY\scripts\hermes-dashboard-start.cmd'
         Launcher     = 'cmd'
     },
     [PSCustomObject]@{
         Port         = 3110
         Name         = 'PaperclipHQ'
-        StartScript  = 'c:\antigravity\scripts\start-paperclip.ps1'
+        StartScript  = 'E:\ANTIGRAVITY\scripts\start-paperclip.ps1'
         Launcher     = 'powershell'
         Optional     = $true
     }

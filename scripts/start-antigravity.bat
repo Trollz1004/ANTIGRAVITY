@@ -65,9 +65,9 @@ echo [3/4] Checking Paperclip HQ (port 3100)...
 powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:3100/api/health' -TimeoutSec 3 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     echo        Starting Paperclip HQ...
-    echo        Dir:  c:\antigravity
+    echo        Dir:  E:\ANTIGRAVITY
     echo        Data: C:\Users\joshl\.paperclip\instances\default
-    start "Paperclip HQ :3100" cmd /k "cd /d c:\antigravity && call C:\Users\joshl\AppData\Roaming\npm\paperclipai.cmd run"
+    start "Paperclip HQ :3100" cmd /k "cd /d E:\ANTIGRAVITY && call C:\Users\joshl\AppData\Roaming\npm\paperclipai.cmd run"
     timeout /t 8 /nobreak >nul
 ) else (
     echo        [OK] Paperclip HQ already running
@@ -107,7 +107,7 @@ echo.
 powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:3000' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     echo        Starting antigravity web on :3000...
-    start "Web :3000" cmd /k "cd /d c:\antigravity\antigravity && pnpm dev"
+    start "Web :3000" cmd /k "cd /d E:\ANTIGRAVITY\antigravity && pnpm dev"
     timeout /t 4 /nobreak >nul
 )
 
@@ -115,7 +115,7 @@ if %ERRORLEVEL% NEQ 0 (
 powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:3001' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     echo        Starting command-center on :3001...
-    start "CmdCenter :3001" cmd /k "cd /d c:\antigravity\apps\command-center && pnpm dev"
+    start "CmdCenter :3001" cmd /k "cd /d E:\ANTIGRAVITY\apps\command-center && pnpm dev"
     timeout /t 4 /nobreak >nul
 )
 
@@ -123,7 +123,7 @@ if %ERRORLEVEL% NEQ 0 (
 powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:5173' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     echo        Starting dashboard on :5173...
-    start "Dashboard :5173" cmd /k "cd /d c:\antigravity\apps\dashboard && pnpm dev"
+    start "Dashboard :5173" cmd /k "cd /d E:\ANTIGRAVITY\apps\dashboard && pnpm dev"
     timeout /t 4 /nobreak >nul
 )
 
@@ -131,7 +131,7 @@ if %ERRORLEVEL% NEQ 0 (
 :: powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'http://127.0.0.1:5174' -TimeoutSec 2 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
 :: if %ERRORLEVEL% NEQ 0 (
 ::     echo        Starting ClawX on :5174...
-::     start "ClawX :5174" cmd /k "cd /d c:\antigravity\ClawX && pnpm dev"
+::     start "ClawX :5174" cmd /k "cd /d E:\ANTIGRAVITY\ClawX && pnpm dev"
 ::     timeout /t 4 /nobreak >nul
 :: )
 

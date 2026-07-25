@@ -9,8 +9,8 @@ $Shortcut = $WScript.CreateShortcut($ShortcutPath)
 
 # Target: PowerShell running the autostart script elevated
 $Shortcut.TargetPath = "powershell.exe"
-$Shortcut.Arguments = "-ExecutionPolicy Bypass -WindowStyle Hidden -Command `"Start-Process powershell -Verb RunAs -ArgumentList '-ExecutionPolicy Bypass -File c:\antigravity\scripts\autostart.ps1'`""
-$Shortcut.WorkingDirectory = "c:\antigravity"
+$Shortcut.Arguments = "-ExecutionPolicy Bypass -WindowStyle Hidden -Command `"Start-Process powershell -Verb RunAs -ArgumentList '-ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\autostart.ps1'`""
+$Shortcut.WorkingDirectory = "E:\ANTIGRAVITY"
 $Shortcut.Description = "Launch ANTIGRAVITY stack: Docker, LiteLLM, Paperclip, Claude Code"
 
 # Use a built-in Windows icon that looks decent (shell32 has many)

@@ -1,4 +1,4 @@
-$dashboardDir = 'c:\antigravity\antigravity'
+$dashboardDir = 'E:\ANTIGRAVITY\antigravity'
 $dashboardUrl = 'http://127.0.0.1:3000'
 $openClawUrl = 'http://127.0.0.1:18789'
 $serverScript = Join-Path $dashboardDir '.next\standalone\server.js'

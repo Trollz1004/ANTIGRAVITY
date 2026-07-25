@@ -1,5 +1,5 @@
 param(
-    [string]$RepoRoot = "c:\antigravity"
+    [string]$RepoRoot = "E:\ANTIGRAVITY"
 )
 
 $ErrorActionPreference = "Stop"

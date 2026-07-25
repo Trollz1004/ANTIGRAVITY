@@ -11,11 +11,11 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
-$LogPath = "c:\antigravity\logs\bootstrap-grok-t5500-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
-$RepoPath = "c:\antigravity"
+$LogPath = "E:\ANTIGRAVITY\logs\bootstrap-grok-t5500-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
+$RepoPath = "E:\ANTIGRAVITY"
 
 # Ensure log directory exists
-New-Item -ItemType Directory -Path "c:\antigravity\logs" -Force | Out-Null
+New-Item -ItemType Directory -Path "E:\ANTIGRAVITY\logs" -Force | Out-Null
 
 function Write-Log {
     param([string]$Message, [string]$Level = "INFO")
@@ -164,7 +164,7 @@ if (-not $SkipDocker) {
 # ============================================================
 # 7. Hermes Preparation (if relevant on this node)
 # ============================================================
-$hermesPath = "c:\antigravity\hermes-config.json"
+$hermesPath = "E:\ANTIGRAVITY\hermes-config.json"
 if (Test-Path $hermesPath) {
     Write-Log "Hermes config found at repo root. Copying reference to user profile..."
     try {

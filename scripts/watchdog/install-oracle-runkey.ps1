@@ -2,7 +2,7 @@
 # Does NOT steal focus - uses launch-oracle-hidden.vbs (window style 0).
 
 $ErrorActionPreference = 'Stop'
-$Repo = if (Test-Path 'c:\antigravity') { 'c:\antigravity' } else { 'c:\antigravity' }
+$Repo = if (Test-Path 'E:\ANTIGRAVITY') { 'E:\ANTIGRAVITY' } else { 'E:\ANTIGRAVITY' }
 $Vbs = Join-Path $Repo 'scripts\watchdog\launch-oracle-hidden.vbs'
 if (-not (Test-Path $Vbs)) { throw "Missing $Vbs" }
 

@@ -4,7 +4,7 @@
 
 $ErrorActionPreference = 'Continue'
 $WorkspaceDir = 'C:\Users\joshl\hermes-workspace'
-$LogDir = 'c:\antigravity\logs'
+$LogDir = 'E:\ANTIGRAVITY\logs'
 $LogFile = Join-Path $LogDir 'hermes-workspace-start.log'
 
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null

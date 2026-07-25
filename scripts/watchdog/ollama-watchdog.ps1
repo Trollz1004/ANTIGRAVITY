@@ -3,7 +3,7 @@
 
 $ErrorActionPreference = 'Continue'
 
-$Repo = 'c:\antigravity'
+$Repo = 'E:\ANTIGRAVITY'
 $LogDir = Join-Path $Repo 'logs'
 $LogFile = Join-Path $LogDir 'ollama-watchdog.log'
 $OllamaExe = Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama.exe'

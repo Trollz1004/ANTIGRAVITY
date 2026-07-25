@@ -71,5 +71,5 @@ Write-Host "  Start-ScheduledTask -TaskName '$TaskName'"
 Write-Host ''
 Write-Host '--- Check status ---' -ForegroundColor Cyan
 Write-Host "  Get-ScheduledTaskInfo -TaskName '$TaskName'"
-Write-Host "  Get-Content c:\antigravity\logs\paperclip-watchdog.log -Tail 50"
+Write-Host "  Get-Content E:\ANTIGRAVITY\logs\paperclip-watchdog.log -Tail 50"
 Write-Host ''

@@ -8,7 +8,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 }
 
 $TaskName = "ANTIGRAVITY-AutoStart"
-$ScriptPath = "c:\antigravity\scripts\autostart.ps1"
+$ScriptPath = "E:\ANTIGRAVITY\scripts\autostart.ps1"
 $User = $env:USERNAME
 
 # Remove old task if it exists
@@ -53,4 +53,4 @@ Write-Host ""
 Write-Host "To check status:"
 Write-Host "  Get-ScheduledTaskInfo -TaskName '$TaskName'"
 Write-Host ""
-Write-Host "Logs will appear at: c:\antigravity\logs\"
+Write-Host "Logs will appear at: E:\ANTIGRAVITY\logs\"

@@ -17,7 +17,7 @@ REM   7. Log + exit
 REM ===========================================================================
 
 setlocal EnableDelayedExpansion
-set REPO=c:\antigravity
+set REPO=E:\ANTIGRAVITY
 set LOG=%REPO%\.bootstrap-log.txt
 set WATCHDOG=%REPO%\scripts\watchdog
 

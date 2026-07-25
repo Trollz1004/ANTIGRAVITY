@@ -5,6 +5,6 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-Set-Location 'c:\antigravity'
+Set-Location 'E:\ANTIGRAVITY'
 
 & claude --allow-dangerously-skip-permissions --dangerously-skip-permissions --permission-mode bypassPermissions @ClaudeArgs

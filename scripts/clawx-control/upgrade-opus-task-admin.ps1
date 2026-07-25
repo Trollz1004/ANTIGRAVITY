@@ -5,8 +5,8 @@ Unregister-ScheduledTask -TaskName "OPUS-CLI-AutoStart" -Confirm:$false -ErrorAc
 
 $action = New-ScheduledTaskAction `
     -Execute "pwsh.exe" `
-    -Argument "-NoExit -ExecutionPolicy Bypass -File c:\antigravity\scripts\opus-autostart.ps1" `
-    -WorkingDirectory "c:\antigravity"
+    -Argument "-NoExit -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\opus-autostart.ps1" `
+    -WorkingDirectory "E:\ANTIGRAVITY"
 
 $triggerBoot = New-ScheduledTaskTrigger -AtStartup
 $triggerLogon = New-ScheduledTaskTrigger -AtLogOn -User "joshl"

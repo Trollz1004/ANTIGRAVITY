@@ -1,14 +1,14 @@
 ﻿# Hermes Router Watchdog — runs forever, completely hidden, no window, no focus steal.
 # Checks Hermes Router (port 11435) every 30 seconds.
-# Restarts via WSL on failure. Logs to c:\antigravity\logs\hermes-watchdog.log
+# Restarts via WSL on failure. Logs to E:\ANTIGRAVITY\logs\hermes-watchdog.log
 
 $ErrorActionPreference = 'Continue'
 
-$LogDir     = 'c:\antigravity\logs'
+$LogDir     = 'E:\ANTIGRAVITY\logs'
 $LogFile    = "$LogDir\hermes-watchdog.log"
 $MaxLogBytes = 10MB
 
-$HermesScript  = 'c:\antigravity\scripts\start-hermes-router.cmd'
+$HermesScript  = 'E:\ANTIGRAVITY\scripts\start-hermes-router.cmd'
 $HermesPort    = 11435
 $CheckInterval = 30   # seconds between health checks
 

@@ -5,7 +5,7 @@
 $ErrorActionPreference = 'SilentlyContinue'
 $pyw = 'C:\Python314\pythonw.exe'
 if (-not (Test-Path $pyw)) { $pyw = (Get-Command python).Source }
-$dir = 'c:\antigravity\apps\paperweight'
+$dir = 'E:\ANTIGRAVITY\apps\paperweight'
 # Loopback bind is correct: the Cloudflare tunnel reaches it on 127.0.0.1:4200.
 $env:PAPERWEIGHT_HOST = '127.0.0.1'
 $env:PAPERWEIGHT_PORT = '4200'

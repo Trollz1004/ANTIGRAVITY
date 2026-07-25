@@ -2,7 +2,7 @@
 # OpenClaw Social Publishing Bootstrap Script
 # Authority: Josh Coleman
 # Date: 2026-03-19
-# Location: c:\antigravity\scripts\Start-OpenClaw-Social.ps1
+# Location: E:\ANTIGRAVITY\scripts\Start-OpenClaw-Social.ps1
 #
 # Purpose: Initialize OpenClaw for API-first local social publishing
 # Usage: Run from Sabretooth as primary orchestrator
@@ -169,7 +169,7 @@ if ($SetupOnly) {
     Write-Status "Setup mode - checking configuration..." "info"
 
     # Check social engine directory
-    $socialEnginePath = "c:\antigravity\scripts\social_engine"
+    $socialEnginePath = "E:\ANTIGRAVITY\scripts\social_engine"
     if (Test-Path $socialEnginePath) {
         $platformCount = (Get-ChildItem "$socialEnginePath\platforms\*_poster.py" -ErrorAction SilentlyContinue).Count
         Write-Status "Social engine found with $platformCount platform modules" "success"
@@ -178,8 +178,8 @@ if ($SetupOnly) {
     }
 
     # Check briefings
-    $briefing1 = "c:\antigravity\briefings\OPENCLAW-SOCIAL-READINESS-2026-03-19.md"
-    $briefing2 = "c:\antigravity\briefings\OPENCLAW-NODE-REACHABILITY-2026-03-19.md"
+    $briefing1 = "E:\ANTIGRAVITY\briefings\OPENCLAW-SOCIAL-READINESS-2026-03-19.md"
+    $briefing2 = "E:\ANTIGRAVITY\briefings\OPENCLAW-NODE-REACHABILITY-2026-03-19.md"
 
     if (Test-Path $briefing1) {
         Write-Status "Social readiness briefing exists" "success"

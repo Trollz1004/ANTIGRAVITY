@@ -166,7 +166,7 @@ if (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
 # ────────────────────────────────────────────────────────────────────────────
 Log-Step "STEP 3 — ANTIGRAVITY repo"
 
-$antigravityPath = "c:\antigravity"
+$antigravityPath = "E:\ANTIGRAVITY"
 $repoUrl         = "https://github.com/Trollz1004/ANTIGRAVITY.git"
 
 if (Test-Path "$antigravityPath\.git") {
@@ -267,7 +267,7 @@ if (Test-Path "$hwPath\package.json") {
 # ────────────────────────────────────────────────────────────────────────────
 Log-Step "STEP 6 — Hermes Agent CLI + preserved YAML config"
 
-$hermesConfigBriefing = "c:\antigravity\briefings\HERMES-AGENT-WORKING-CONFIG-2026-05-12.md"
+$hermesConfigBriefing = "E:\ANTIGRAVITY\briefings\HERMES-AGENT-WORKING-CONFIG-2026-05-12.md"
 
 # Install hermes-agent via pip
 if (Get-Command hermes -ErrorAction SilentlyContinue) {
@@ -471,7 +471,7 @@ $tests['python']       = [bool](Get-Command python       -ErrorAction SilentlyCo
 $tests['gh_cli']       = [bool](Get-Command gh           -ErrorAction SilentlyContinue)
 $tests['claude_cli']   = [bool](Get-Command claude       -ErrorAction SilentlyContinue)
 $tests['codex_cli']    = [bool](Get-Command codex        -ErrorAction SilentlyContinue)
-$tests['antigravity_repo'] = (Test-Path "c:\antigravity\.git")
+$tests['antigravity_repo'] = (Test-Path "E:\ANTIGRAVITY\.git")
 $tests['memory_synced']    = (Test-Path $memoryDest) -and ((Get-ChildItem $memoryDest -File).Count -gt 0)
 
 $pass = 0; $fail = 0

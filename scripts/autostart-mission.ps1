@@ -13,14 +13,14 @@
 #       Hermes Dashboard (:9119) replaces it — tunneled via dashboard.youandinotai.com
 #
 # Idempotent. Re-running is safe — every phase checks before acting.
-# Logs to c:\antigravity\logs\autostart-YYYY-MM-DD.log
+# Logs to E:\ANTIGRAVITY\logs\autostart-YYYY-MM-DD.log
 #
 # Triggered automatically at user login via Startup-folder shortcut.
 # Click bootstrap.cmd at repo root to run on demand.
 
 $ErrorActionPreference = 'Continue'
 
-$Repo   = 'c:\antigravity'
+$Repo   = 'E:\ANTIGRAVITY'
 $LogDir = "$Repo\logs"
 $Log    = "$LogDir\autostart-$(Get-Date -Format 'yyyy-MM-dd').log"
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
@@ -140,7 +140,7 @@ if (Test-Path $mcWatchdogLog) {
 # Cloudflare tunnel ingress (paperclip-antigravity tunnel c7bc9665-...) routes
 # opushashands.youandinotai.com -> http://127.0.0.1:4200. Without this listener
 # the public hub returns 502 Bad Gateway.
-$ohhDir = 'c:\antigravity\_handoff-staging-2026-05-26\_deploy\opushashands'
+$ohhDir = 'E:\ANTIGRAVITY\_handoff-staging-2026-05-26\_deploy\opushashands'
 $ohhLog = "$LogDir\opushashands-server.log"
 $pyExe  = 'C:\Windows\py.exe'
 if (Test-LocalPort 4200) {
@@ -194,17 +194,17 @@ if ($env:ANTIGRAVITY_FULL_AUTOSTART -ne '1') {
 } elseif (Get-Process WindowsTerminal -ErrorAction SilentlyContinue) {
     Log '[8/8] Windows Terminal already open — skipping session windows (prevents cursor-stealing re-spawn)'
 } else {
-    # Open Claude Code at c:\antigravity, minimized
+    # Open Claude Code at E:\ANTIGRAVITY, minimized
     Log '[8/8] opening Claude Code (claude --resume) in Windows Terminal (minimized)'
     Start-Process wt -ArgumentList @(
-        '-d','c:\antigravity',
+        '-d','E:\ANTIGRAVITY',
         'powershell.exe','-NoExit','-Command','claude --resume'
     ) -WindowStyle Minimized -ErrorAction SilentlyContinue
 
     # Open Hermes Agent CLI in WSL, minimized
     Log '      opening Hermes Agent CLI in Windows Terminal at /mnt/c/antigravity (WSL Ubuntu, minimized)'
     Start-Process wt -ArgumentList @(
-        '-d','c:\antigravity',
+        '-d','E:\ANTIGRAVITY',
         'wsl.exe','-d','Ubuntu','--cd','/mnt/c/antigravity','--','/home/josh/.local/bin/hermes'
     ) -WindowStyle Minimized -ErrorAction SilentlyContinue
 }

@@ -3,7 +3,7 @@
 # Node: Sabretooth C:\ Drive
 # ==============================================================================
 
-$RepoRoot = "c:\antigravity"
+$RepoRoot = "E:\ANTIGRAVITY"
 $RepoPromptFile = Join-Path $RepoRoot "GEMINI.md"
 
 Write-Host "=========================" -ForegroundColor Cyan

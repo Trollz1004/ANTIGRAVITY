@@ -1,5 +1,5 @@
 $ErrorActionPreference = 'Continue'
-$RepoRoot = 'c:\antigravity'
+$RepoRoot = 'E:\ANTIGRAVITY'
 $LogDir = Join-Path $RepoRoot 'logs'
 $PaperclipLog = Join-Path $LogDir 'paperclip.log'
 $TunnelLog = Join-Path $LogDir 'paperclip-tunnel.log'
