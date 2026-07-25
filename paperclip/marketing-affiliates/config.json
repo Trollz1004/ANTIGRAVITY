@@ -1,0 +1,40 @@
+{
+  "program": "YouAndINotAI Affiliate Program",
+  "version": "1.0.0",
+  "platform_url": "https://youandinotai.com",
+  "app_url": "https://app.youandinotai.com",
+  "affiliate_id_env": "PAPERCLIP_AFFILIATE_ID",
+  "default_affiliate_id": "paperclip-t5500",
+  "commission": {
+    "type": "percent",
+    "rate": 15,
+    "description": "15% on first subscription payment"
+  },
+  "payment_links": {
+    "bot_shield": "https://square.link/u/Qc5mxUy7",
+    "founding_member": "https://square.link/u/cxwjcn0s"
+  },
+  "cloud_models": {
+    "primary": { "provider": "openrouter", "model": "openrouter/free", "cost": "free" },
+    "fallback": { "provider": "opencode", "model": "deepseek-v4-flash-free", "cost": "free" },
+    "strategy": { "provider": "openrouter", "model": "meta-llama/llama-3.3-70b-instruct:free", "cost": "free" },
+    "review": { "provider": "opencode", "model": "grok-4.5", "cost": "free" },
+    "content": { "provider": "ollama-cloud", "model": "glm-5.1:cloud", "cost": "free" }
+  },
+  "auth_methods": {
+    "opencode_zen": { "type": "OAuth / API key", "setup": "opencode /connect → zen" },
+    "ollama_cloud": { "type": "API key", "setup": "env OLLAMA_API_KEY" },
+    "openrouter": { "type": "API key / OAuth", "setup": "env OPENROUTER_API_KEY" },
+    "xai_grok": { "type": "API key / CLI", "setup": "env XAI_API_KEY or xai auth login" },
+    "openai_gpt_codex": { "type": "API key / OAuth", "setup": "env OPENAI_API_KEY or /connect → openai" },
+    "anthropic_claude": { "type": "API key / OAuth", "setup": "env ANTHROPIC_API_KEY or /connect → anthropic" },
+    "github_copilot": { "type": "OAuth", "setup": "/connect → GitHub Copilot" },
+    "google_gemini": { "type": "API key", "setup": "env GEMINI_API_KEY" }
+  },
+  "campaigns": {
+    "organic_social": { "active": true, "models": ["openrouter/free", "opencode/deepseek-v4-flash-free"] },
+    "paid_search": { "active": false, "models": ["openrouter/meta-llama/llama-3.3-70b-instruct:free"] },
+    "email_marketing": { "active": true, "models": ["ollama-cloud/glm-5.1:cloud"] },
+    "content_seo": { "active": true, "models": ["openrouter/google/gemma-4-31b-it:free"] }
+  }
+}

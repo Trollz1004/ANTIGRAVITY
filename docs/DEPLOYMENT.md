@@ -236,7 +236,7 @@ curl -fsS http://localhost:6333/healthz
 # Expected: {"title":"qdrant - vector search engine","version":"..."}
 
 # OpenClaw
-curl -fsS http://localhost:3200/health || echo "OpenClaw not running (optional)"
+curl -fsS http://localhost:3201/health || echo "OpenClaw not running (optional)"
 ```
 
 ### Smoke Tests
