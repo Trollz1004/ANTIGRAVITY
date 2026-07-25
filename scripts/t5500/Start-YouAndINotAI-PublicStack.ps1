@@ -4,7 +4,7 @@
 
 $ErrorActionPreference = "Stop"
 
-$Root = "C:\ANTIGRAVITY"
+$Root = "E:\ANTIGRAVITY"
 $Backend = Join-Path $Root "backend\fastapi-app"
 $LogDir = Join-Path $Root "logs"
 $Log = Join-Path $LogDir "youandinotai-public-stack.log"

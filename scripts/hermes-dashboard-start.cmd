@@ -16,7 +16,7 @@ if exist "%HERMES_ENV%" (
 
 echo Starting Hermes Dashboard...
 echo URL: http://localhost:9119
-echo Config: C:\ANTIGRAVITY\hermes\hermes-dashboard.yaml
+echo Config: E:\ANTIGRAVITY\hermes\hermes-dashboard.yaml
 echo.
 
 "%HERMES_BIN%" dashboard --port 9119 --host 127.0.0.1 --no-open
