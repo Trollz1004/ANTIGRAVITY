@@ -4,7 +4,7 @@
 
 $ErrorActionPreference = "Stop"
 
-$LogDir = "C:\ANTIGRAVITY\logs"
+$LogDir = "E:\ANTIGRAVITY\logs"
 $Cloudflared = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
 $TunnelTokenPath = "C:\Users\joshl\.cloudflared\t5500-dateapp.token"
 $TunnelOut = Join-Path $LogDir "t5500-dateapp-tunnel.log"

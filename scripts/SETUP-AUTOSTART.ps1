@@ -9,7 +9,7 @@
 
 $ErrorActionPreference = "Stop"
 
-$ProjectRoot = "C:\ANTIGRAVITY"
+$ProjectRoot = "E:\ANTIGRAVITY"
 $ScriptPath = Join-Path $ProjectRoot "scripts\AUTOSTART-DOCKER-BOOT.bat"
 $TaskName = "ANTIGRAVITY-Docker-Stack"
 $TaskPath = "\ANTIGRAVITY\"

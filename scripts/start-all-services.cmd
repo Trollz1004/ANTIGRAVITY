@@ -27,7 +27,7 @@ echo.
 
 :: 3. Start Hermes Dashboard
 echo [3/4] Starting Hermes Dashboard (port 9119)...
-start "Hermes Dashboard" cmd /c "C:\ANTIGRAVITY\scripts\hermes-dashboard-start.cmd"
+start "Hermes Dashboard" cmd /c "E:\ANTIGRAVITY\scripts\hermes-dashboard-start.cmd"
 echo   OK — Dashboard: http://localhost:9119
 echo.
 
