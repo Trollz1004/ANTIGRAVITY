@@ -2,7 +2,7 @@
 
 $ErrorActionPreference = 'Stop'
 
-$LogDir = 'c:\antigravity\logs'
+$LogDir = 'E:\ANTIGRAVITY\logs'
 $LogFile = Join-Path $LogDir 'paperclip-drift-cleanup.log'
 $LegacyPath = 'E:\trollz-sandbox\paperclip-antigravity'
 

@@ -23,5 +23,5 @@ if (Get-NetTCPConnection -LocalPort 8787 -ErrorAction SilentlyContinue) {
 # 4. Relaunch Mission Control API on 0.0.0.0:8787
 Write-Host "`n=== Step 4: Relaunching Mission Control API ===" -ForegroundColor Cyan
 $env:MISSION_CONTROL_BIND = "0.0.0.0:8787"
-Set-Location c:\antigravity\services\mission-control-api
+Set-Location E:\ANTIGRAVITY\services\mission-control-api
 python -m uvicorn mission_control_api.main:app --host 0.0.0.0 --port 8787

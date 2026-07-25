@@ -10,9 +10,9 @@
 #              cloud models + the small nomic-embed-text. For service-loaded
 #              nodes like T5500 that run Docker / brain-mcp / DBs.
 #
-# Usage (local):     powershell -ExecutionPolicy Bypass -File c:\antigravity\scripts\bootstrap-agent-stack.ps1
-# Usage (T5500):     powershell -ExecutionPolicy Bypass -File c:\antigravity\scripts\bootstrap-agent-stack.ps1 -Light
-# Usage (remote):    ssh joshl@<node> "powershell -ExecutionPolicy Bypass -File c:\antigravity\scripts\bootstrap-agent-stack.ps1 [-Light]"
+# Usage (local):     powershell -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\bootstrap-agent-stack.ps1
+# Usage (T5500):     powershell -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\bootstrap-agent-stack.ps1 -Light
+# Usage (remote):    ssh joshl@<node> "powershell -ExecutionPolicy Bypass -File E:\ANTIGRAVITY\scripts\bootstrap-agent-stack.ps1 [-Light]"
 
 param(
     [switch]$Light
@@ -206,7 +206,7 @@ foreach ($m in $cloudModels) {
 
 # ---------- 10. Build local Modelfile if present (CFO PRIME) - full mode only ----------
 Step 'Local Modelfile (./Modelfile -> CFO-PRIME)'
-$mf = 'c:\antigravity\Modelfile'
+$mf = 'E:\ANTIGRAVITY\Modelfile'
 if ($Light) {
     Write-Host '  (light mode - skipped)' -ForegroundColor Yellow
 } elseif (Test-Path $mf) {
@@ -217,7 +217,7 @@ if ($Light) {
         ollama create cfo-prime -f $mf 2>&1 | Select-Object -Last 3 | ForEach-Object { Write-Host "  $_" }
     }
 } else {
-    Write-Host '  no Modelfile at c:\antigravity\Modelfile - skipped'
+    Write-Host '  no Modelfile at E:\ANTIGRAVITY\Modelfile - skipped'
 }
 
 # ---------- 11. Final verification ----------

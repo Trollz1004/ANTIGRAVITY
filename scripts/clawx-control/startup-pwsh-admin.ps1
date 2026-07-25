@@ -20,19 +20,19 @@ $host.UI.RawUI.ForegroundColor = 'White'
 Clear-Host
 
 # Set working directory to ANTIGRAVITY
-[System.Environment]::CurrentDirectory = 'c:\antigravity'
-Set-Location -LiteralPath 'c:\antigravity'
+[System.Environment]::CurrentDirectory = 'E:\ANTIGRAVITY'
+Set-Location -LiteralPath 'E:\ANTIGRAVITY'
 
 function octui {
-    & 'c:\antigravity\scripts\Start-OpenClaw-TUI.ps1' @args
+    & 'E:\ANTIGRAVITY\scripts\Start-OpenClaw-TUI.ps1' @args
 }
 
 function claudelive {
-    & 'c:\antigravity\scripts\Start-Claude-Danger.ps1' @args
+    & 'E:\ANTIGRAVITY\scripts\Start-Claude-Danger.ps1' @args
 }
 
 function gemini {
-    & 'c:\antigravity\scripts\Start-Gemini-Clean.ps1' @args
+    & 'E:\ANTIGRAVITY\scripts\Start-Gemini-Clean.ps1' @args
 }
 
 function gemraw {
@@ -40,8 +40,8 @@ function gemraw {
 }
 
 # Load internal environment vars
-if (Test-Path 'c:\antigravity\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env') {
-    Get-Content 'c:\antigravity\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env' |
+if (Test-Path 'E:\ANTIGRAVITY\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env') {
+    Get-Content 'E:\ANTIGRAVITY\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env' |
         Where-Object { $_ -match '^[A-Za-z_][A-Za-z0-9_]*=' } |
         ForEach-Object {
             $key, $val = $_ -split '=', 2
@@ -52,7 +52,7 @@ if (Test-Path 'c:\antigravity\briefings\MASTER-UNIVERSAL-ENV-TROLLZ1004.env') {
 
 Write-Host ''
 Write-Host 'PowerShell 7.5 Admin terminal loaded.' -ForegroundColor Cyan
-Write-Host "Repo: c:\antigravity" -ForegroundColor Green
+Write-Host "Repo: E:\ANTIGRAVITY" -ForegroundColor Green
 Write-Host 'Current 10% mission-cap policy active.' -ForegroundColor Green
 Write-Host 'OpenClaw TUI helper: octui' -ForegroundColor Cyan
 Write-Host 'Claude dangerous-mode helper: claudelive' -ForegroundColor Cyan

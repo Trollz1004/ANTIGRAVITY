@@ -1,12 +1,12 @@
 <#
   Register ANTIGRAVITY-Oracle tasks on Sabretooth — hidden, no focus steal.
-  powershell -File c:\antigravity\scripts\watchdog\register-oracle-sabretooth.ps1
+  powershell -File E:\ANTIGRAVITY\scripts\watchdog\register-oracle-sabretooth.ps1
 #>
 
 param([switch]$Unregister)
 
 $ErrorActionPreference = 'Stop'
-$Repo = if (Test-Path 'c:\antigravity') { 'c:\antigravity' } else { 'c:\antigravity' }
+$Repo = if (Test-Path 'E:\ANTIGRAVITY') { 'E:\ANTIGRAVITY' } else { 'E:\ANTIGRAVITY' }
 $Bootstrap = Join-Path $Repo 'scripts\watchdog\bootstrap-sabretooth-hidden.ps1'
 $Respawn = Join-Path $Repo 'scripts\watchdog\oracle-respawn.ps1'
 $User = "$env:USERDOMAIN\$env:USERNAME"
