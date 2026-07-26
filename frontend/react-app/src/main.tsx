@@ -16,6 +16,7 @@ import { Matches } from './app/pages/Matches';
 import { Inbox } from './app/pages/Inbox';
 import { ProfileSetup } from './app/pages/ProfileSetup';
 import { Chat } from './app/pages/Chat';
+import { VideoCallPage } from './app/pages/VideoCall';
 import { Events } from './app/pages/Events';
 
 import { CookieConsentBanner } from './components/CookieConsentBanner';
@@ -202,6 +203,24 @@ createRoot(document.getElementById('root')!).render(
                       )}
                     >
                       <Chat />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/app/video/:matchId"
+                  element={
+                    <ErrorBoundary
+                      boundaryName="page:video-call"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <VideoCallPage />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />

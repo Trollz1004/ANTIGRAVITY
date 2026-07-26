@@ -13,25 +13,24 @@ export function VideoCallPage() {
 
   useEffect(() => {
     if (!user?.id || !matchId) return;
+    const token = localStorage.getItem('access_token') || '';
     const key = `video-call-${matchId}-${user.id}`;
     if (localStorage.getItem(`${key}-started`) === '1') return;
     starting.current = true;
     localStorage.setItem(`${key}-started`, '1');
-    fetch(`/api/v1/video/room/${matchId}`, {
+    fetch(`/api/v1/video/rooms/${matchId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('access_token') || ''}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then(async res => {
         if (res.status === 404) {
-          const fallback = await fetch(`/api/v1/matches/${matchId}`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('access_token') || ''}`,
-            },
+          await fetch(`/api/v1/matches/${matchId}`, {
+            headers: { Authorization: `Bearer ${token}` },
           });
-          if (fallback.ok) return fallback.json();
+          return null;
         }
         if (!res.ok) throw new Error(`Video room setup failed: ${res.status}`);
         return res.json();
@@ -84,10 +83,14 @@ export function VideoCallPage() {
       )}
 
       <div className="glass-strong rounded-[2rem] p-3 md:p-4">
-        <VideoChat callId={matchId} initiator onHangUp={() => {
-          if (!starting.current) localStorage.removeItem(`video-call-${matchId}-${user?.id || 'guest'}-started`);
-          navigate('/app/matches');
-        }} />
+        <VideoChat
+          callId={matchId}
+          initiator
+          onHangUp={() => {
+            if (!starting.current) localStorage.removeItem(`video-call-${matchId}-${user?.id || 'guest'}-started`);
+            navigate('/app/matches');
+          }}
+        />
       </div>
 
       <div className="mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#5c594f]">

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Send, Shield, Flame, Loader2 } from 'lucide-react';
+import { ArrowLeft, Send, Shield, Flame, Loader2, Video } from 'lucide-react';
 import { useChat } from '../../lib/useChat';
 import { useAuth } from '../../lib/auth';
 import { api } from '../../lib/api';
@@ -134,6 +134,14 @@ export function Chat() {
             <Shield size={14} className="text-[#ff4f00]" />
             Safety
           </button>
+        )}
+        {matchId && (
+          <Link
+            to={`/app/video/${matchId}`}
+            className="flex h-12 items-center justify-center gap-2 rounded-[1rem] border-[3px] border-[#111111] bg-[#ff4f00] px-4 text-xs font-black uppercase tracking-[0.14em] text-white shadow-[4px_4px_0_0_rgba(17,17,17,1)]"
+          >
+            <Video size={14} /> Video
+          </Link>
         )}
       </div>
 
