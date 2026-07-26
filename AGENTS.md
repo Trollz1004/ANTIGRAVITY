@@ -217,3 +217,24 @@ action. Do not claim done without proof.
 - Do not commit OneDrive vault files.
 - Do not normalize placeholder secrets into active configs as if they are real.
 - Record missing secrets as missing without exposing adjacent values.
+
+## Model Tier Guardrails
+
+Model capability determines what it may touch. Lower tiers execute, never decide
+revenue, doctrine, compliance, payments, or public copy.
+
+- Tier 1 — Deciders (Codex 5.5+ / Opus / Hermes active lead):
+  repo doctrine, payment rules, public copy, launch gates, merge/push flow,
+  production node roles, founder authority, DAO mechanics.
+- Tier 2 — Execution (Codex local, Gemini, OpenCode `ornith:9b`, Grok):
+  approved implementations, tests, docs, marketing within approved boundaries.
+- Tier 3 — Workers (Pi, Cursor, Meta/Llama, weaker Ollama models):
+  single-skill tasks only. No cross-domain reasoning. No autonomous agent
+  creation. No doctrine or compliance authorship.
+- Tier 4 — Support (legacy/routine automation):
+  read-only scans, watchdog alerts, health checks, formatting, logging.
+
+Agents must not exceed their tier. If work requires a higher tier, it MUST be
+reassigned to the proper lane. Context-bloat drift from weaker models running
+long agents is itself a risk: shorter context windows, shorter task scopes,
+frequent handoffs back to Tier 1/2.
