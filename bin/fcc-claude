@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd "E:/ANTIGRAVITY"
 case "${1:-}" in
   opus)   MODEL="openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"; shift ;;
   sonnet) MODEL="openrouter/nvidia/nemotron-3-super-120b-a12b:free"; shift ;;
   haiku)  MODEL="openrouter/nvidia/nemotron-3-nano-30b-a3b:free"; shift ;;
   *)      MODEL="openrouter/nvidia/nemotron-3-super-120b-a12b:free" ;;
  esac
-exec bin/pi --provider openrouter --model "$MODEL" "$@"
+exec pi --provider openrouter --model "$MODEL" "$@"
