@@ -1,1 +1,0 @@
-Read briefings/REPOSITORY_RECORD.md and report current live infrastructure status, CI state, and any open blockers. Include: GCR backend health, Cloudflare Pages deploys, mission-mcp test count, FastAPI coverage gate, and the current branch + last 3 commits.
