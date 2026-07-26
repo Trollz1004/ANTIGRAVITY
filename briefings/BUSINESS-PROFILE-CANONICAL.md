@@ -1,31 +1,25 @@
-# Business Profile Canonical - Current
+# Business Profile Canonical
 
-Status date: 2026-06-22
+Status date: 2026-07-26
 
-Trash Or Treasure Online Recycler LLC operates product surfaces and support
-systems. Current public copy must be business-only and product-first.
+Entity: Trash Or Treasure Online Recycler LLC
+Primary product: YouAndINotAI
+Payment rail: Square checkout links only
+Active public surfaces: business-only
+Current revenue state: $0 with traffic acquisition as the immediate blocker
 
-Allowed public themes:
+Revenue targets:
+- $5,000 initial verification/membership revenue window
+- Square checkout is the operative rail for immediate transactions
 
-- membership
-- verification
-- account access
-- safety
-- support
-- uptime
-- checkout
-- receipts
-- refunds
+Public copy boundaries:
+- allowed: membership, verification, safety, support, uptime, checkout, receipts, refunds
+- not allowed: private owner accounting, future legal-structure promises, community-control claims, payment-routing claims, non-product sales
 
-Disallowed public themes:
+Non-product/charity/cap language:
+- retained only as archive in `briefings/archive/`
+- not emitted in active public copy, dashboard, checkout, support, or agent handoff
 
-- private owner accounting
-- future legal structures
-- community-control promises
-- claims beyond the product price and receipt
-- payment-routing claims
-
-Use this file only with:
-
-- `briefings/BUSINESS-ONLY-PUBLIC-DOCTRINE-2026-06-22.md`
-- `briefings/BUSINESS-ONLY-AUDIT-2026-06-22.md`
+Governance:
+- legal/TOS/payment-rail changes require single-human owner direction
+- DAO/wallet state is documented in `briefings/DAO-STATE-CANONICAL.md`
