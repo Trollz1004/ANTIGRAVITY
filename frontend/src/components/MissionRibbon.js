@@ -51,12 +51,12 @@ export function MissionRibbon() {
       >
         <div className="flex items-center gap-2 min-w-0">
           <Heart size={12} className="text-[#e040fb] animate-heartbeat shrink-0" />
-          <span className="text-[9px] tracking-[0.3em] uppercase text-[#e040fb] font-bold whitespace-nowrap">#UntilNoKidInNeed</span>
+          <span className="text-[9px] tracking-[0.3em] uppercase text-[#e040fb] font-bold whitespace-nowrap">YOUANDINOTAI</span>
         </div>
         <span className="h-3 w-px bg-[#2a3a52]" />
         <Stat label="committed" value={`$${formatUsd(total)}`} tone="cyan" tick={tick} />
-        <Stat label="kids fund" value={`$${formatUsd(kids)}`} tone="magenta" />
-        <Stat label="kids covered (est.)" value={String(estimate)} tone="green" hint={`${threshold} USD per kid threshold`} />
+        
+        
         {alerts.length > 0 && (
           <div data-testid="mission-ribbon-alert" className="flex items-center gap-1.5 ml-auto bg-[#ff1744]/15 border border-[#ff1744]/40 rounded-full px-3 py-0.5 animate-pulse">
             <AlertTriangle size={11} className="text-[#ff1744]" />

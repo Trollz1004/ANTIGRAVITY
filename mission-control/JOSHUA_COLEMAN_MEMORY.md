@@ -143,9 +143,7 @@ start-opus.ps1                 — starts Redis + Ollama on boot
 
 ## THE MISSION
 
-**#ForTheKids**
-- #UNTILNOKIDINNEED
-- #MANUSFORTHEKIDS
+**#ForTheKids**- #MANUSFORTHEKIDS
 - #ALWAYSINTEGRITY
 
 Income-engine revenue flows to:

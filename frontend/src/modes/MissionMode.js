@@ -20,15 +20,15 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
  */
 export function MissionMode() {
   const [dao, setDao] = useState(null);
-  const [mission, setMission] = useState(null);
+  const [business, setMission] = useState(null);
 
   useEffect(() => {
     axios.get(`${API}/dao/stats`, { timeout: 4000 }).then((r) => setDao(r.data)).catch(() => setDao(null));
-    axios.get(`${API}/mission/metrics`, { timeout: 4000 }).then((r) => setMission(r.data)).catch(() => setMission(null));
+    axios.get(`${API}/business/metrics`, { timeout: 4000 }).then((r) => setMission(r.data)).catch(() => setMission(null));
   }, []);
 
   return (
-    <div data-testid="mission-mode" className="h-full overflow-y-auto custom-scrollbar p-4 bg-[#0a0f1a]">
+    <div data-testid="business-mode" className="h-full overflow-y-auto custom-scrollbar p-4 bg-[#0a0f1a]">
       <div className="grid grid-cols-12 gap-4">
         {/* LEFT COLUMN */}
         <div className="col-span-12 lg:col-span-3 flex flex-col gap-4">
@@ -51,7 +51,7 @@ export function MissionMode() {
 
         {/* CENTER COLUMN */}
         <div className="col-span-12 lg:col-span-6 flex flex-col gap-4">
-          <DAOBand dao={dao} mission={mission} />
+          <DAOBand dao={dao} business={business} />
           <HermesRouterPanel />
           <OpenClawSupportPanel />
           <BucketEngine dao={dao} />
@@ -87,15 +87,15 @@ export function MissionMode() {
               <Heart size={80} className="text-[#e040fb]" />
             </div>
             <div className="relative z-10">
-              <div className="text-[8px] tracking-[0.3em] uppercase text-[#ffb300] font-bold mb-1">mission</div>
+              <div className="text-[8px] tracking-[0.3em] uppercase text-[#ffb300] font-bold mb-1">business</div>
               <div className="text-lg font-bold text-[#e8f0ff] leading-tight mb-2">
-                #UntilNoKidInNeed
+                YouAndINotAI
               </div>
               <div className="mono text-[10px] text-[#e8f0ff]/80 leading-relaxed">
-                Gravity keeps us grounded — AI built ANTIGRAVITY to lift us up. .
+                Verified-human dating. Built in Florida.
               </div>
               <div className="mt-3 pt-3 border-t border-[#e040fb]/20 text-[8px] tracking-widest uppercase text-[#6b82a6]">
-                Runway · {mission?.runway_days ?? "—"} days · primary · {mission?.primary_product ?? "youandinotai.com"}
+                Runway · {business?.runway_days ?? "—"} days · primary · {business?.primary_product ?? "youandinotai.com"}
               </div>
             </div>
           </div>
@@ -130,7 +130,7 @@ function SystemRibbon() {
   );
 }
 
-function DAOBand({ dao, mission }) {
+function DAOBand({ dao, business }) {
   return (
     <div className="bg-[#1a2332] border border-[#2a3a52] rounded-md">
       <div className="bg-[#111827] border-b border-[#2a3a52] px-3 py-2 flex items-center justify-between">
@@ -169,11 +169,11 @@ function DAOBand({ dao, mission }) {
           <div className="col-span-full text-[10px] text-[#4a5568] italic">endpoint unreachable — retry</div>
         )}
       </div>
-      {mission && (
+      {business && (
         <div className="px-3 py-2 border-t border-[#2a3a52] flex items-center justify-between text-[9px] tracking-widest uppercase">
-          <span className="text-[#6b82a6]">tag · <span className="text-[#e040fb]">{mission.tag}</span></span>
-          <span className="text-[#6b82a6]">runway · <span className="text-[#ffb300]">{mission.runway_days} days</span></span>
-          <span className="text-[#6b82a6]">product · <span className="text-[#00d4ff]">{mission.primary_product}</span></span>
+          <span className="text-[#6b82a6]">tag · <span className="text-[#e040fb]">{business.tag}</span></span>
+          <span className="text-[#6b82a6]">runway · <span className="text-[#ffb300]">{business.runway_days} days</span></span>
+          <span className="text-[#6b82a6]">product · <span className="text-[#00d4ff]">{business.primary_product}</span></span>
         </div>
       )}
     </div>
