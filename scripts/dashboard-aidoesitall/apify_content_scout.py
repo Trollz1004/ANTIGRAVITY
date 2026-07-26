@@ -44,7 +44,7 @@ _vault_env = os.getenv("ANTIGRAVITY_VAULT_PATH", "")
 _vault_candidates = [
     Path(_vault_env) if _vault_env else None,
     PROJECT_DIR / "briefings" / "MASTER-UNIVERSAL-ENV-TROLLZ1004.env",
-    Path("C:/ANTIGRAVITY/briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env"),
+    Path("E:/ANTIGRAVITY/briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env"),
 ]
 for _vp in _vault_candidates:
     if _vp and _vp.exists():

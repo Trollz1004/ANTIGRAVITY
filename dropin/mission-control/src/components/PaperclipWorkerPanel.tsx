@@ -11,9 +11,9 @@ import { Copy, Check } from 'lucide-react';
 
 const HEALTH_URL = 'https://paperclip-hq.youandinotai.com/api/health';
 const TUNNEL_ID = 'c7bc9665-3923-4977-acd7-2033838cd56e';
-const TUNNEL_CONFIG = 'C:\\ANTIGRAVITY\\infra\\cloudflare\\paperclip-hq.yml';
-const CMD_DEPLOY = 'cd c:\\Antigravity\\infra\\paperclip-worker && wrangler deploy';
-const CMD_TAIL = 'cd c:\\Antigravity\\infra\\paperclip-worker && wrangler tail';
+const TUNNEL_CONFIG = 'E:/ANTIGRAVITY\\infra\\cloudflare\\paperclip-hq.yml';
+const CMD_DEPLOY = 'cd E:/ANTIGRAVITY\\infra\\paperclip-worker && wrangler deploy';
+const CMD_TAIL = 'cd E:/ANTIGRAVITY\\infra\\paperclip-worker && wrangler tail';
 
 type Status = 'loading' | 'ok' | 'down' | 'timeout';
 

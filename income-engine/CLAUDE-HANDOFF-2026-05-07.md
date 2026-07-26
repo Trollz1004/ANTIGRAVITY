@@ -16,7 +16,7 @@
 - D:/OPUSONLY/.pnpm-store: purged (regenerable cache)
 
 ### What Stayed on 9020
-- C:/Antigravity — UNTOUCHED. Forever.
+- E:/ANTIGRAVITY — UNTOUCHED. Forever.
 - D:/OPUSONLY — dashboard app
 - D:/support-claw — YouAndINotAI support bot (Ollama/Gemini fallback)
 - ~/.claude, ~/.openclaw, ~/.ssh, ~/.ollama, ~/.hermes — core configs

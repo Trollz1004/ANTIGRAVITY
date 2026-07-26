@@ -9,7 +9,7 @@ Cross-node visibility = OneDrive sync. No HTTP server, no cloud auth, no
 firewall holes. The file IS the bus.
 
 Run via:
-    python C:\\Antigravity\\scripts\\watchdog\\sentry.py
+    python E:/ANTIGRAVITY\\scripts\\watchdog\\sentry.py
 
 Or via bootstrap-claude-node.cmd at user logon (Windows Task Scheduler).
 """

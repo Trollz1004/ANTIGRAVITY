@@ -76,23 +76,23 @@ const QUICK_COMMANDS = [
   {
     id: 'autostart',
     title: 'Start Ops Stack',
-    command: 'powershell -ExecutionPolicy Bypass -File C:\\ANTIGRAVITY\\scripts\\autostart-mission.ps1',
+    command: 'powershell -ExecutionPolicy Bypass -File E:/ANTIGRAVITY\\scripts\\autostart-mission.ps1',
   },
   {
     id: 'api',
     title: 'Run Ops Control API',
     command:
-      'python -m uvicorn mission_control_api.main:app --host 0.0.0.0 --port 8787 --app-dir C:\\ANTIGRAVITY\\services\\mission-control-api\\src',
+      'python -m uvicorn mission_control_api.main:app --host 0.0.0.0 --port 8787 --app-dir E:/ANTIGRAVITY\\services\\mission-control-api\\src',
   },
   {
     id: 'build',
     title: 'Build Dashboard',
-    command: 'pnpm --dir C:\\ANTIGRAVITY\\apps\\mission-control build',
+    command: 'pnpm --dir E:/ANTIGRAVITY\\apps\\mission-control build',
   },
   {
     id: 'guardian',
     title: 'Run Guardian',
-    command: 'python C:\\ANTIGRAVITY\\scripts\\clawx-control\\opus-guardian.py',
+    command: 'python E:/ANTIGRAVITY\\scripts\\clawx-control\\opus-guardian.py',
   },
 ];
 

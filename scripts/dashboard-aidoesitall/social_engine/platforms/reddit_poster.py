@@ -111,7 +111,7 @@ class RedditPoster(BasePoster):
                     continue
 
             if not title_input:
-                page.screenshot(path="C:/ANTIGRAVITY/data/reddit-debug.png")
+                page.screenshot(path="E:/ANTIGRAVITY/data/reddit-debug.png")
                 return False, "Could not find title field"
 
             title_input.click(force=True)
@@ -158,7 +158,7 @@ class RedditPoster(BasePoster):
                     continue
 
             if not submit_btn:
-                page.screenshot(path="C:/ANTIGRAVITY/data/reddit-debug.png")
+                page.screenshot(path="E:/ANTIGRAVITY/data/reddit-debug.png")
                 return False, "Could not find submit button"
 
             submit_btn.click(force=True)
@@ -170,7 +170,7 @@ class RedditPoster(BasePoster):
         except Exception as e:
             log.error(f"[{self.name}] Browser post failed: {e}")
             try:
-                page.screenshot(path="C:/ANTIGRAVITY/data/reddit-debug.png")
+                page.screenshot(path="E:/ANTIGRAVITY/data/reddit-debug.png")
             except Exception:
                 pass
             return False, str(e)

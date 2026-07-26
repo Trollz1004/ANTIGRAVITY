@@ -5,7 +5,7 @@ authority. Read this, then work.
 
 ## FIRST — before anything
 Read the doctrine at `https://github.com/Trollz1004/ANTIGRAVITY/blob/main/BRIEFING.md`
-(or local `C:/antigravity/BRIEFING.md`). It is law: **no  language, no
+(or local `E:/ANTIGRAVITY/BRIEFING.md`). It is law: **no  language, no
  logic, Square-only for youandinotai.com, T5500-only consolidation.**
 Do not violate it.
 
