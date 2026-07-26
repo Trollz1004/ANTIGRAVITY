@@ -165,7 +165,7 @@ Hermes sends this to Gemini, Grok, Codex, OpenClaw, and any sub-agent the moment
 > 4. `briefings/CLAUDE-DOCTRINE.md` — the cross-node doctrine Opus holds
 > 5. `briefings/BUSINESS-PROFILE-CANONICAL.md` — the single source of truth for revenue, mission, and customer copy
 > 6. `memory/project_revenue_model_2026-06-01.md` — the 10% per-bucket , customer-facing language ban
-> 7. `memory/project_primary_revenue_2026-06-01.md` — primary is youandinotai.com + DAO public sale, NOT e-waste
+> 7. `briefings/DAO-STATE-CANONICAL.md` — current DAO/wallet state: none live, historical artifacts archived
 >
 > **Your job right now:** read your task in `apps/mission-control/` PAPERWEIGHT board under **NEXT** or **NOW**, confirm owner, then execute. Report back to Hermes on the board within 60 seconds of starting. If you block, post to **BLOCKED** with the exact question. If you finish, move to **DONE-24H** with what you did, in one line.
 >
