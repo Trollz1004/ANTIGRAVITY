@@ -20,5 +20,6 @@
 - [ ] QuickBooks: not connected — financial health check incomplete without it
 
 ## LOW
-- [ ] FCC hijack runbook: commit to docs/runbooks/
+- [ ] FCC setup: enable OpenRouter free NVIDIA/Nemotron path in OmniRouter; remove dependency on :8082 proxy
+- [ ] FCC hijack runbook: retire; proxy no longer used
 - [ ] Reboot test: validate ANTIGRAVITY-Bootstrap + power-loss recovery on T5500
