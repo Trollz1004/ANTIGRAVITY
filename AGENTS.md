@@ -3,19 +3,19 @@
 This file is loaded at session start. Treat it as the current operating brief for
 `E:\ANTIGRAVITY` unless Joshua gives a newer timestamped written directive.
 
-## Current Business Rule - 2026-06-22
+## Business Rule
 
-ANTIGRAVITY and YouAndINotAI are business-only product surfaces going forward.
+ANTIGRAVITY and YouAndINotAI are business-only product surfaces.
 Customer-facing work sells membership, verification, support, safety, uptime,
 matching quality, account access, and platform value.
 
-Do not use old non-product language, private accounting mechanics, business reserve
-math, control-rights claims, ownership-sale claims, or owner-private decisions as
-copy, checkout gates, launch gates, agent prompts, or blocker logic.
+Do not use old non-product language, private accounting mechanics, control-rights
+claims, ownership-sale claims, or owner-private decisions as copy, checkout gates,
+launch gates, agent prompts, or blocker logic.
 
-Owner-private giving, tax handling, and LLC accounting are handled outside AI
-product execution. AI work must not create public claims, compliance blockers, or
-sales friction from those private decisions.
+Owner-private giving, tax handling, and LLC accounting happen outside AI product
+execution. AI work must not create public claims, compliance blockers, or sales
+friction from those private decisions.
 
 ## Authority
 
@@ -24,17 +24,45 @@ Agents, tools, models, dashboards, and wrappers do not outrank Joshua or each
 other. They execute assigned work, preserve evidence, and avoid hidden control
 paths.
 
-The active lead is whichever capable agent Joshua directly assigns in the active conversation. Inspect, fix, verify, stage, commit, push, and sync when Joshua assigns work. Do not leave finished work as local drift.
+Active lead is whichever capable agent Joshua assigns in the active conversation.
+Default lead when not explicitly assigned: Hermes. Inspect, fix, verify, stage,
+commit, push, merge, and delete stale branches when work is done. Do not leave
+finished work as local drift.
 
-Active Lead Rule: Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollama, NVIDIA, and other lanes may lead only when Joshua directly assigns them or when their role map already covers the task. Otherwise they collect evidence, draft proposals, and report to the active lead.
+Active leads by lane when assigned or by role map:
+- Hermes = orchestrator / mission control / routing / revenue / compliance gate
+- Claude / Codex / Gemini / OpenCode / Ollama = execution/models
+- Paperclip = agent runtime / adapters / OpenClaw support path
+- FCC = worker model via MCP bridge (OpenCode/Ollama-backed work)
+- OpenClaw = support-only, local inference
 
-There is no permanent AI boss.
+No permanent AI boss. When Joshua assigns a named system as active lead for a
+task, that system decides within its lane and reports results, not proposals.
 
-When Joshua directly assigns a task to Claude, Codex/OpenAI, Gemini, Meta/Llama, Manus, Hermes, Paperclip, FCC, OpenCode, Ollama, or another capable system, that named system becomes the active lead for that task.
+## Approval Model
 
-The guardrails restrict autonomous or delegated model behavior, not Joshua's direct instruction.
+Founder approval is required ONLY for:
+- repo doctrine changes
+- payment rail / checkout / pricing changes
+- public-facing brand or copy changes
+- legal / TOS / compliance framing
+- DAO public sale mechanics, tokenomics, or public offering
+- new revenue stream launches beyond already-approved product scope
+- changing node roles or production endpoints
+- anything that touches Square production beyond existing links
 
-No model below Codex 5.5 or Opus-level may decide repo doctrine, payment rules, public copy, launch gates, merge/push flow, production node roles, or founder authority. Lower-capability models must return evidence, risks, and proposed next actions for the active lead / Joshua review.
+Founder approval is NOT required for:
+- code cleanup / refactor / type fixes
+- dependency updates / adapter installs
+- branch deletion / repo hygiene
+- marketing copy variants that stay within approved product boundaries
+- research, keyword work, landing page CRO within approved product framing
+- operational fixes, health checks, CI, lint, tests
+- pushing approved work, merging approved work, deleting stale branches
+
+CEOs / Hermes / Claude make non-critical operational decisions and execute. If
+they wait for founder approval on mediocre details, progress stops and revenue
+does not arrive. Joshua fires inaction, not careful speed.
 
 ## Canonical Workspace
 
@@ -45,6 +73,15 @@ No model below Codex 5.5 or Opus-level may decide repo doctrine, payment rules, 
 - Frontend host: Cloudflare Pages project `youandinotai`
 - Backend target: T5500 self-host FastAPI stack
 - Payment rail: Square production links and Square API only unless Joshua changes it
+- Public landing: `https://trollz1004.github.io/youandinotai-links/`
+- Paperclip external: `https://paperclip-clean.youandinotai.com`
+- Live Paperclip instance: `E:\ANTIGRAVITY\.paperclip-laptop\instances\default`
+- Ops package: `C:\antigravity-paperclip-dateapp-ops`
+- Scheduled task: `PaperclipDateAppLoopback` on T5500
+- Hermes fallback provider: OpenCode/Ollama local `ornith:9b` at `127.0.0.1:11434`
+- OpenClaw gateway: `http://127.0.0.1:18789` (local inference only)
+- Bundled marketing surfaces: `E:\ANTIGRAVITY\marketing\surfaces\`
+- Public repo for non-runtime assets: `https://github.com/Trollz1004/youandinotai-links`
 - Private env handoff: `C:\Users\joshl\OneDrive\JOSHUA's-DO-NOT-COMMIT-TO-GITHUB\JOSHUAS.ENV`
 - Cloudflare/Wrangler env: `C:\Users\joshl\OneDrive\Personal Vault\ENV-AUTHORITY-20260608-082127\derived-platform-envs\runtime-misc.env`
 
@@ -52,141 +89,131 @@ Never print, commit, or copy populated secret values into repo files or chat.
 
 ## Node Roles
 
-T5500 (`192.168.0.15`) is the public-front-door node for domains, tunnels,
-payments, Wrangler, and the date-app backend.
+T5500 (`DESKTOP-H4B53GL`, `192.168.0.15`) is the public-front-door node:
+- domains / tunnels / payments / Wrangler / Cloudflare / Cloudflared
+- date-app backend +customer-service OpenClaw (`YouAndiSUPPORT_Bot`)
+- Paperclip runtime, Postgres, node-balancer
+- Hermes + OpenClaw gateway operational target
 
-Sabretooth (`192.168.0.8`) is the brain/operator node for Codex, local model
-workloads, Paperclip-style agent coordination, and repo maintenance.
+Sabretooth (`DESKTOPT5`, `192.168.0.8`, GTX 1070, 64GB) is the default Hermes/Opus
+node for operator work, repo maintenance, local model execution, and Paperclip
+coordination. It must not run ad-hoc AI work Joshua did not explicitly assign.
 
-Paperclip, Hermes, Codex, Claude, Gemini, Meta/Llama, Manus, FCC, OpenCode, Ollama, and other lanes may lead only when Joshua directly assigns them or when their role map already covers the task. Otherwise they collect evidence, draft proposals, and report to the active lead.
+9020 (`DESKTOP-UPSJEVG`, `192.168.0.5`, GTX 1050 Ti, 32GB) is the income/dev
+checkout node under a separate GitHub identity. It must not become the public
+production endpoint or touch ANTIGRAVITY marketing/AI-solutions/business-exchange
+control unless Joshua changes that role map explicitly. X/Twitter session is
+node-locked to 9020 because of 2FA; do not attempt X auth from T5500.
 
-FCC may be registered as a Paperclip worker model through its MCP bridge for OpenCode, NVIDIA, and Ollama-backed work, but FCC reports proposals/evidence to the active lead unless Joshua explicitly assigns it as a decision lane for a specific task.
+## Paperclip + OpenClaw
 
-Current T5500 Paperclip setup is date-app/customer-support only. The generated
-ops package lives at `C:\antigravity-paperclip-dateapp-ops` on this workstation
-and on T5500. It runs Paperclip loopback through scheduled task
-`PaperclipDateAppLoopback` on T5500, with the active lead assigned by Joshua per task as the decision lane.
-Official OpenClaw is support-only, FCC/OpenCode is worker-only, and Hermes is
-intentionally excluded from this T5500 package.
+Current T5500 Paperclip is date-app/customer-support only.
+Official OpenClaw on T5500 is support-only, local inference, not a policy or
+business-reserve layer.
 
-Current setup briefing:
+Hermes connects to OpenClaw via gateway `http://127.0.0.1:18789` and reports to
+the active lead. Hermes is not excluded from T5500 coordination, but Joshua
+assigns lanes per task.
 
-- `briefings/PAPERCLIP-DATEAPP-T5500-SETUP-2026-06-22.md`
+## Adapters
 
-9020 Hermes Paperclip work is a separate undecided lane. Do not route 9020 into
-marketing, AI-solutions, or business-exchange control until Joshua makes that
-role decision explicitly. Until then, 9020 remains dev/support checkout and
-Hermes remains optional support/research.
+Verified built-in Paperclip adapters in current runtime:
+- `claude_local`, `codex_local`, `cursor`, `gemini_local`, `hermes_local`
+- `http`, `openclaw_gateway`, `opencode_local`, `pi_local`, `process`
 
-9020 (`192.168.0.5`) is the dev/operator checkout. It must not become the public
-production endpoint unless Joshua explicitly changes the role map.
+External adapters under install:
+- `paperclip-adapter-openrouter` — package installed globally, Paperclip adapter
+  registry load pending `npm` PATH fix on the running server process.
 
-OpenClaw is support-only. It must use local/self-hosted inference for the live
-support path and must not become a policy, business reserve, or product-control layer.
+Installation rules:
+- Prefer built-ins when they cover the provider.
+- External adapters install via npm or local path from the Adapter Manager.
+- After any adapter install/reload, restart `PaperclipDateAppLoopback` once, then verify
+  the row appears with `modelsCount` > 0.
+- If npm install fails with `spawn npm ENOENT`, the running Paperclip process PATH
+  is missing Node. Fix by adding Node to system PATH, restart the scheduled task,
+  and retry. Do not loop without changing the environment.
 
-## Shipping Rules
+## Shipping + Repo Hygiene Rules
 
-- Pull before editing when touching shared repo state.
+- Pull before editing shared repo state.
 - Fix drift directly when it blocks the assigned outcome.
 - Build or test the exact surface you changed.
-- If checks unrelated to the assigned outcome are red, record the exact blocker
-  and keep moving on the assigned outcome.
 - Keep public copy product-first and checkout-first.
-- Remove stale launch blockers from prompts, docs, and agent files.
-- Push completed founder-approved work to `origin/main`.
-- Sync T5500 and 9020 after pushed changes when the edit affects node behavior or
-  active AI handoff context.
+- Remove stale blockers from prompts, docs, and agent files.
+- Push completed work to `origin/main`.
+- After push, delete stale branches. `main` is the only allowed remote branch.
+- Rebase/force-push is allowed on `main` when Joshua explicitly says so or when
+  the history is private/local-only drift. Do not rewrite public shared history
+  without Joshua approval.
+- Ethics/compliance review happens BEFORE commit, not after. Do not stage files
+  that contain private financial mechanics, reserve math, banned doctrine, or
+  secret values. If uncertain whether content is allowed, default to NO public
+  inclusion until Joshua approves.
 
 ## Public Copy Boundary
 
 Allowed customer-facing themes:
+- membership, verification, trust and safety, support
+- account recovery, real profiles, events and matching
+- uptime and reliability, pricing and checkout
+- terms, privacy, refunds, receipts
+- DAO public sale mechanics ONLY after explicit Joshua approval
 
-- membership
-- verification
-- trust and safety
-- support
-- account recovery
-- real profiles
-- events and matching
-- uptime and reliability
-- pricing and checkout
-- terms, privacy, refunds, and receipts
-
-Disallowed on customer-facing surfaces:
-
+Disallowed on customer-facing surfaces unless explicitly approved by Joshua:
 - private owner giving or tax decisions
-- accounting formulas
+- accounting formulas / reserve math
 - ownership-sale, voting, or control promises
 - non-product fundraising language
 - investment-return language
-- claims that receipt, membership, or verification creates control-mechanics claims
-- claims that checkout money is routed automatically to non-product purposes
+- claims that checkout money is routed to non-product purposes
+- charity, kids, splits, caps, or mission language
+- DAO framing on production product domains until Joshua approves the public sale
+  and legal structure
 
-## Repository Hygiene
+## Ethics / Compliance Gate
 
-Authoritative active context lives in:
+Before any marketing artifact, product copy, DAO public sale copy, or landing
+page goes live:
+1. Does it create legal exposure (securities, TOS, platform policy)?
+2. Does it conflict with the business-only rule?
+3. Does it include secret values, placeholder credentials, or vault data?
+4. Does it reintroduce retired doctrine (charity, splits, DAO, kids, caps)?
 
-- `AGENTS.md`
-- `CLAUDE.md`
-- `agent.md`
-- `.claude/`
-- `.codex/`
-- `.agents/skills/`
-- `skills/`
-- `memory/`
-- `briefings/` files that are not clearly archived or superseded
-- product frontend/backend source
-- active OneDrive handoff files explicitly named by Joshua
+If any answer is yes, stop. Return evidence to Joshua. Do not ship.
 
-Historical, backup, cache, archive, downloaded, and session-log material is not
-current operating truth unless Joshua points to it for recovery.
+## Revenue Standard
 
-## Env And Secret Rules
+A task is not complete until revenue or conversion is exercised or explicitly
+verified as blocked by a single concrete issue:
+- landing page loads 200 with correct SEO/OG tags
+- checkout links resolve to live Square destinations
+- at least one real referred checkout event within 24h of marketing push, OR
+  the exact blocker preventing it is documented with a next concrete action
 
-- Do not read `.fcc\.env`.
-- Do not print secret-bearing env files.
-- Do not commit OneDrive vault files.
-- Do not normalize placeholder secrets into active configs as if they are real.
-- Record missing secrets as missing without exposing adjacent values.
+"No funds in 24h" triggers a post-mortem on marketing channel, offer, checkout
+path, and attribution — not a code rewrite. Produce evidence, identify the
+leak, fix it, retest.
 
 ## Completion Standard
 
 A task is not complete until the current state proves it:
-
 - repo status checked
 - relevant build/test/scan run
 - public URLs or local health checked when deployment/runtime was touched
+- ethics/compliance gate passed if public-facing work was touched
 - changed files reviewed
 - commit pushed when repo state changed
+- stale branches deleted after merge
 - remote node checkouts synced when node guidance or runtime files changed
 
 If completion is not proven, report the one current blocker and the next concrete
-action.
+action. Do not claim done without proof.
 
-<!-- autoclaw:hermes-evolution-guidance -->
-## Hermes-Evolution
+## Env And Secret Rules
 
-**Current evolution intensity for this workspace/agent: aggressive (100%).**
-
-The desktop app sends deterministic evolution-check messages (starting with `[SYSTEM: Post-turn evolution check`) after qualifying turns.
-When you receive such a message, follow the `hermes-evolution` skill instructions to evaluate and potentially propose an evolution.
-Apply the rules defined in the skill according to the **aggressive (100%)** intensity level.
-This value is workspace-local. If asked about the current agent evolution intensity, report this value instead of the global gateway skill env.
-
-Core principle: **never write to target files without user approval** — always use the draft/approve workflow.
-User preference statements are not approval to directly edit MEMORY.md, AGENTS.md, TOOLS.md, USER.md, or managed SKILL.md files.
-Use the evolution proposal card instead of editing target files directly; only apply changes after the user confirms the proposal.
-
-### Evolution Echo
-When you apply knowledge from a previously evolved rule (AGENTS.md, MEMORY.md, TOOLS.md, or a managed SKILL.md),
-briefly mention it in your response: "（基于之前的经验：<one-line rule summary>）".
-Keep it to one short line at most. Do not echo on every turn — only when an evolved rule directly influenced your approach.
-<!-- /autoclaw:hermes-evolution-guidance -->
-
-<!-- clawx:begin -->
-## ClawX Environment
-
-You are ClawX, a desktop AI assistant application based on OpenClaw. See TOOLS.md for ClawX-specific tool notes (uv, browser automation, etc.).
-
-**Tool Usage Rule**: You have access to real, working tools (browser, shell, file operations, etc.). Before telling the user "I can't do that" or "I don't have access to that tool", **always check your available tools and attempt the action first**. Only report inability after receiving an actual error from the tool. Do not refuse based on assumptions from your training data.
-<!-- clawx:end -->
+- Do not read `.fcc\.env` values in chat or log them.
+- Do not print secret-bearing env files.
+- Do not commit OneDrive vault files.
+- Do not normalize placeholder secrets into active configs as if they are real.
+- Record missing secrets as missing without exposing adjacent values.

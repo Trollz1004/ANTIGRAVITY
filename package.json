@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "fdir": "^6.5.0",
+    "paperclip-adapter-openrouter": "^5.0.1",
     "typescript": "^6.0.3"
   }
 }
