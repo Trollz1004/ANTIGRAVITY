@@ -1,0 +1,21 @@
+import urllib.request, json
+PCP="pcp_512d3544a84a957156c1fba92782dc5899c6a4ebba770670"
+BASE="http://127.0.0.1:3120"
+COMPANY="95bb6cb0-76aa-498b-b173-641028078d27"
+HDR={"Authorization":"Bearer "+PCP,"Content-Type":"application/json"}
+
+issue={
+  "title":"MCP tool registration + governance inheritance for agents",
+  "description":"## Problem\nLive Paperclip instance has no `mcp`, `plugin`, or `integration` config sections. Agency agents cannot register MCP servers (DB, CRM, observability) through the current API or config schema.\n\n## Requested capability\n- Register MCP servers per agent or per company\n- MCP tools inherit agent-tier governance gates automatically\n- Permissions: tier-limited tool discovery; lower-tier agents cannot see high-trust tools\n- Local development loop for MCP server wiring\n\n## Governance constraints (must be enforced by platform, not prompt)\n- Tool access must respect the same approval model as agents:\n  - Tier 1 agents may use any tool\n  - Tier 2/3/4 agents see only tools within their approved lane\n  - No tool can bypass public copy, payments, doctrine, or compliance gates\n- MCP servers that touch secrets must be audited before install\n- Posting/browser tools must respect human-cadence + cookie-sync rules\n\n## Why now\nAgency stack (designer, ux-master, youtube, poster, IA, strategist) needs real tool access without granting blanket permissions. We want scoped, inheritable governance.\n\n## Owner lane\nHermes / CEO lead. Executing via Paperclip + Hermes runtime.",
+  "state":"queued",
+  "priority":"high",
+  "companyId":COMPANY
+}
+data=json.dumps(issue).encode()
+req=urllib.request.Request(BASE+"/api/companies/"+COMPANY+"/issues",data=data,headers=HDR,method="POST")
+try:
+    with urllib.request.urlopen(req, timeout=8) as r:
+        out=json.load(r)
+        print("created:", out.get("id"), out.get("title"))
+except Exception as e:
+    print("error:", e)
