@@ -1,0 +1,60 @@
+{
+  "$meta": {
+    "version": 1,
+    "updatedAt": "2026-07-21T19:34:09.621Z",
+    "source": "configure"
+  },
+  "database": {
+    "mode": "embedded-postgres",
+    "embeddedPostgresDataDir": "E:\\clean\\.paperclip-laptop\\instances\\default\\db",
+    "embeddedPostgresPort": 54350,
+    "backup": {
+      "enabled": true,
+      "intervalMinutes": 60,
+      "retentionDays": 14,
+      "dir": "E:\\clean\\.paperclip-laptop\\instances\\default\\data\\backups"
+    }
+  },
+  "logging": {
+    "mode": "file",
+    "logDir": "E:\\clean\\.paperclip-laptop\\instances\\default\\logs"
+  },
+  "server": {
+    "deploymentMode": "local_trusted",
+    "exposure": "private",
+    "bind": "loopback",
+    "host": "127.0.0.1",
+    "port": 3120,
+    "allowedHostnames": [
+      "paperclip-clean.youandinotai.com",
+      "paperclip.youandinotai.com"
+    ],
+    "serveUi": true
+  },
+  "telemetry": {
+    "enabled": false
+  },
+  "auth": {
+    "baseUrlMode": "auto",
+    "disableSignUp": false
+  },
+  "storage": {
+    "provider": "local_disk",
+    "localDisk": {
+      "baseDir": "E:\\clean\\.paperclip-laptop\\instances\\default\\data\\storage"
+    },
+    "s3": {
+      "bucket": "paperclip",
+      "region": "us-east-1",
+      "prefix": "",
+      "forcePathStyle": false
+    }
+  },
+  "secrets": {
+    "provider": "local_encrypted",
+    "strictMode": false,
+    "localEncrypted": {
+      "keyFilePath": "E:\\clean\\.paperclip-laptop\\instances\\default\\secrets\\master.key"
+    }
+  }
+}
