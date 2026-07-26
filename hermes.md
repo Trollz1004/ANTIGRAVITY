@@ -207,4 +207,4 @@ Drift found → `doctrine-drift` issue + auto-draft PR.
 
 ---
 
-#UntilNoKidInNeed
+Trash Or Treasure LLC © 2026
