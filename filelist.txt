@@ -1,0 +1,21 @@
+files 59
+.849C9593-D756-4E56-8D6E-42412F2A707B
+.gitignore
+ChromeSetup.exe
+debug.log
+desktop.ini
+gemini 2.5 pro google opencode install after windows clean state.ps1
+install-helper-node-after-windows-clean.ps1
+Personal Vault.lnk
+.claude\settings.local.json
+.vscode\settings.json
+Desktop\Chrome Remote Desktop (1).lnk
+Desktop\Chrome Remote Desktop.lnk
+Desktop\desktop.ini
+Desktop\Discord.lnk
+Desktop\Docker Desktop.lnk
+Desktop\Hermes.lnk
+Desktop\joshuas laptop.env
+Desktop\LM Studio.lnk
+Desktop\Manus.lnk
+Desktop\Microsoft Edge (1).lnk

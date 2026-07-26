@@ -24,6 +24,19 @@
 | supabase-postgres-best-practices | Data | Postgres optimization |
 | ui-ux-pro-max | UX | Advanced UI/UX |
 
+### Workspace Skills (Available at `skills/`)
+
+| Skill Key | Category | Quick Use Case |
+|-----------|----------|----------------|
+| caveman | Meta | Token-efficient communication (40-70% savings) |
+| self-improvement | Meta | Session-end self-evaluation + improvement proposals |
+| proactive-agent | Meta | Take initiative within defined boundaries |
+| agent-reach | Research | Internet search, URL fetch, multi-platform research |
+| agent-browser | Automation | Browser automation, form fill, screenshots, web testing |
+| find-skills | Meta | Discover and install skills from index or external sources |
+| antigravity-doctrine | Doctrine | Core operating rules |
+| antigravity-mission-orchestrator | Management | Task orchestration |
+
 ### Secondary Skills (Available at `skills/`)
 
 | Skill Key | Category | Quick Use Case |
