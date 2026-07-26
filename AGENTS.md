@@ -46,6 +46,7 @@ Founder approval is required ONLY for:
 - payment rail / checkout / pricing changes
 - public-facing brand or copy changes
 - legal / TOS / compliance framing
+- DAO/wallet state reference: `briefings/DAO-STATE-CANONICAL.md`
 - DAO public sale mechanics, tokenomics, or public offering
 - new revenue stream launches beyond already-approved product scope
 - changing node roles or production endpoints
