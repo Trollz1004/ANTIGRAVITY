@@ -50,14 +50,11 @@ C:\Antigravity\
 
 **KEEP at root (canonical, do not move):**
 
-- `DAO and FOUNDER CAP.md` — **THE money law (100-CENT RULE v2.0). Source of truth. Lives at repo root, not briefings.**
-
 **KEEP at `briefings/` root (the canonical few):**
 
 - `CLAUDE-DOCTRINE.md`
 - `REPOSITORY_RECORD.md` — **promote out of `archive/` back to root. This is the status file and it's currently buried.**
 - `CURRENT-REVENUE-LEGAL-CONSTRAINTS.md`
-- `DAO-MONEY-PLAIN-ENGLISH-COMPANION.md` — plain-language mirror that DEFERS to `DAO and FOUNDER CAP.md`; carries the per-year $50k ruling + the exact repo fix
 - `DAO-ARCHITECTURE-CANONICAL.md`
 - `BUSINESS-PROFILE-CANONICAL.md`
 - `AGENT-REGISTRY.yaml`
@@ -74,7 +71,6 @@ C:\Antigravity\
 
 - `DEPLOY-PAPERCLoudflare.md` — corrupted filename, broken artifact
 - Exact-duplicate pairs (e.g. `claude-ai-user-preferences.md` vs `CLAUDE-AI-USER-PREFERENCES-2026-04-28.md` — keep one, delete the other)
-- `DAO-TOKENOMICS-FINAL.md` → **do NOT delete; add a one-line pointer at the top** to `DAO and FOUNDER CAP.md` (the 100-cent rule) so it stops contradicting on money. Token/governance content stays; money question is settled in the root doc.
 
 ---
 
