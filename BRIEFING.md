@@ -42,7 +42,7 @@ giving is REAL, SMART, and PRIVATE — it lives with my accountant and Claude-on
 memory. It does not belong in code or on a page.
 
 **Enforcement:** run the deterministic gate before any deploy —
-`bash C:/antigravity/.agents/harness/canonical-guard/canonical-guard.sh dir <path>`
+`bash E:/ANTIGRAVITY/.agents/harness/canonical-guard/canonical-guard.sh dir <path>`
 Exit 0 = clean. Exit 1 = BLOCKED, do not deploy. This gate is dumb regex on
 purpose; it does not read intent, it reads words. Internal docs like THIS file
 will trip it — that is why internal docs never live in a deploy folder.

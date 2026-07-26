@@ -84,13 +84,13 @@ cp -v "/mnt/c/ANTIGRAVITY-git/<path>" "/mnt/c/Antigravity/<path>"
 # Stage in c:\Antigravity (NOT in C:\ANTIGRAVITY-git)
 cd /mnt/c/Antigravity
 git add <salvaged paths>
-git commit -m "salvage: rescue files from C:\\ANTIGRAVITY-git\\ before deletion
+git commit -m "salvage: rescue files from E:/ANTIGRAVITY-git\\ before deletion
 
 Files: <list>
 
-The C:\\ANTIGRAVITY-git\\ folder violated the 1-folder rule and held
+The E:/ANTIGRAVITY-git\\ folder violated the 1-folder rule and held
 work that hadn't been committed. These files are now in the canonical
-repo at c:\\Antigravity\\ before C:\\ANTIGRAVITY-git\\ is removed.
+repo at E:/ANTIGRAVITY\\ before E:/ANTIGRAVITY-git\\ is removed.
 
 Co-Authored-By: Hermes <noreply@youandinotai.com>"
 git push origin main

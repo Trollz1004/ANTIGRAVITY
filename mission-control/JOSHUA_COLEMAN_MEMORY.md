@@ -78,7 +78,7 @@
 **Fully cleaned. Only these remain:**
 
 ```
-C:/Antigravity                 — the repo
+E:/ANTIGRAVITY                 — the repo
 C:/income-engine               — new project
 D:/OPUSONLY                    — dashboard app
 D:/support-claw                — YouAndINotAI support bot

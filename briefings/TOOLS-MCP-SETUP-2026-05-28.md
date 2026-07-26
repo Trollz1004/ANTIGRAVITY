@@ -45,13 +45,13 @@
   "args": ["-y", "cloudflare-docs@latest"]
 },
 "desktop-commander": {
-  "command": "C:\\Antigravity\\node_modules\\.bin\\desktop-commander.cmd",
-  "args": ["--allowed-paths", "C:\\Antigravity,C:\\Users\\joshl"],
+  "command": "E:/ANTIGRAVITY\\node_modules\\.bin\\desktop-commander.cmd",
+  "args": ["--allowed-paths", "E:/ANTIGRAVITY,C:\\Users\\joshl"],
   "env": {}
 },
 "sqlite-mcp-server": {
   "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-sqlite", "C:\\Antigravity\\memory.db"]
+  "args": ["-y", "@modelcontextprotocol/server-sqlite", "E:/ANTIGRAVITY\\memory.db"]
 }
 ```
 

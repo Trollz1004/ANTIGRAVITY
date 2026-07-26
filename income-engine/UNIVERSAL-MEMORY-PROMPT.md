@@ -48,7 +48,7 @@ I am Joshua Coleman. CEO. Electrician from Florida. Self-taught coder. You are m
 
 ## 9020 NODE STATE (as of 2026-05-07)
 - Fully cleaned. Only these remain:
-  - C:/Antigravity — the repo
+  - E:/ANTIGRAVITY — the repo
   - C:/income-engine — new project (this folder)
   - D:/OPUSONLY — dashboard app
   - D:/support-claw — YouAndINotAI support bot

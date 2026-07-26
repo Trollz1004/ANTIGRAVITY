@@ -22,7 +22,7 @@ MANUS_API_URL = os.getenv('MANUS_API_URL', 'https://api.manus.im')
 T5500_HOST = '192.168.0.15'
 T5500_PORT = 3200
 SABRETOOTH_WS = 'ws://192.168.0.8:3300'
-DB_PATH = 'c:\\antigravity\\data\\mission_control.db'
+DB_PATH = 'E:/ANTIGRAVITY\\data\\mission_control.db'
 
 # Global state
 credit_state = {

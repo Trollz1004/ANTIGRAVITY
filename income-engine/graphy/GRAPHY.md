@@ -43,7 +43,7 @@ income-engine (C:/income-engine)
 ## NODE MAP (9020 only)
 ```
 C:/income-engine   ← THIS REPO
-C:/Antigravity     ← OFF LIMITS (wall)
+E:/ANTIGRAVITY     ← OFF LIMITS (wall)
 D:/OPUSONLY        ← dashboard (separate)
 D:/support-claw    ← support bot (separate)
 ```

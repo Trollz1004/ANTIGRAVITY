@@ -5,7 +5,7 @@
   "binary": "C:\\Users\\joshl\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes.exe",
   "command": "hermes dashboard --port 9119 --host 127.0.0.1 --no-open",
   "config": "C:\\Users\\joshl\\.hermes\\config.yaml",
-  "dashboard_config": "C:\\ANTIGRAVITY\\hermes\\hermes-dashboard.yaml",
+  "dashboard_config": "E:/ANTIGRAVITY\\hermes\\hermes-dashboard.yaml",
   "env": "C:\\Users\\joshl\\AppData\\Local\\hermes\\.env",
   "port": 9119,
   "gateway_port": 8642,

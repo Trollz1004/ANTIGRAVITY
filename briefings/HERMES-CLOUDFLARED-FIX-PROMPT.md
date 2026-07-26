@@ -66,13 +66,13 @@ Get-Process cloudflared -ErrorAction SilentlyContinue | Stop-Process -Force
 T5500 is at 192.168.0.15, user `joshl`, Windows shell. The brain-mcp stack is a Docker-Compose:
 
 ```bash
-ssh joshl@192.168.0.15 "cd C:\\Antigravity\\brain-mcp && docker compose -f docker-compose.t5500.yml ps"
+ssh joshl@192.168.0.15 "cd E:/ANTIGRAVITY\\brain-mcp && docker compose -f docker-compose.t5500.yml ps"
 ```
 
 If the cloudflared container is stopped/crashed, restart it:
 
 ```bash
-ssh joshl@192.168.0.15 "cd C:\\Antigravity\\brain-mcp && docker compose -f docker-compose.t5500.yml up -d"
+ssh joshl@192.168.0.15 "cd E:/ANTIGRAVITY\\brain-mcp && docker compose -f docker-compose.t5500.yml up -d"
 ```
 
 If `${CLOUDFLARE_TUNNEL_TOKEN}` is missing on T5500, ask Joshua: "T5500's `.env` is missing CLOUDFLARE_TUNNEL_TOKEN. Get the brain-mcp tunnel token from Cloudflare Zero Trust → Access → Tunnels → brain-mcp → Connector token. Paste it here." Then write it to T5500's `.env` via SSH.

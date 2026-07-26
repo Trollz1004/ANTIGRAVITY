@@ -23,14 +23,14 @@ NODES = {
         "host": "192.168.0.5",
         "role": "marketing",
         "ssh_alias": "9020",
-        "work_dir": "C:\\Antigravity",
+        "work_dir": "E:/ANTIGRAVITY",
         "capabilities": ["crossfire", "content_gen", "social_posting"]
     },
     "t5500": {
         "host": "192.168.0.15",
         "role": "build",
         "ssh_alias": "t5500",
-        "work_dir": "C:\\ANTIGRAVITY",
+        "work_dir": "E:/ANTIGRAVITY",
         "capabilities": ["build", "deploy", "docker"]
     }
 }

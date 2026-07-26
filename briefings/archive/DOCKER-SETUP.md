@@ -81,7 +81,7 @@ DOCKER_HOST=ssh://joshl@192.168.0.15
 
 **Volume Mount Issues**
 - Windows paths must use forward slashes in docker-compose.yml
-- ✅ FIXED: Changed `C:/ANTIGRAVITY/logs` → `./logs` (relative path)
+- ✅ FIXED: Changed `E:/ANTIGRAVITY/logs` → `./logs` (relative path)
 - Docker Desktop handles mount translation automatically
 
 **Port Already in Use**

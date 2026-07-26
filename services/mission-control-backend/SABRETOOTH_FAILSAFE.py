@@ -18,7 +18,7 @@ import websockets
 SABRETOOTH_HOST = '192.168.0.8'
 SABRETOOTH_WS_PORT = 3300
 OLLAMA_LOCAL = 'http://127.0.0.1:11434'
-DB_PATH = 'c:\\antigravity\\data\\mission_control.db'
+DB_PATH = 'E:/ANTIGRAVITY\\data\\mission_control.db'
 
 # Global state
 fallback_state = {

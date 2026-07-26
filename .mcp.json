@@ -3,7 +3,7 @@
     "brain-mcp": {
       "command": "node",
       "args": [
-        "C:\\Antigravity\\brain-mcp\\dist\\index.js"
+        "E:/ANTIGRAVITY\\brain-mcp\\dist\\index.js"
       ],
       "env": {
         "HOME": "C:\\Users\\joshl"
@@ -16,7 +16,7 @@
     "mission-mcp": {
       "command": "node",
       "args": [
-        "C:\\Antigravity\\services\\mission-mcp\\dist\\server.js"
+        "E:/ANTIGRAVITY\\services\\mission-mcp\\dist\\server.js"
       ],
       "env": {
         "HOME": "C:\\Users\\joshl"
@@ -25,7 +25,7 @@
     "youandinotai-paperclip-memory": {
       "command": "node",
       "args": [
-        "C:\\antigravity-paperclip-dateapp-ops\\mcp\\dateapp-paperclip-memory-server.cjs"
+        "E:/ANTIGRAVITY-paperclip-dateapp-ops\\mcp\\dateapp-paperclip-memory-server.cjs"
       ],
       "env": {}
     }

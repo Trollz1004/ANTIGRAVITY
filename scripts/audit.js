@@ -9,7 +9,7 @@
 //
 // For the LAN-IP version of this audit, see scripts/audit-lan.js.
 
-const { chromium } = require('C:\\Antigravity\\apps\\mission-control\\node_modules\\playwright');
+const { chromium } = require('E:/ANTIGRAVITY\\apps\\mission-control\\node_modules\\playwright');
 
 (async () => {
   const browser = await chromium.launch({ headless: true });

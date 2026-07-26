@@ -30,5 +30,5 @@ ${rows.join(",\n")}
 ON CONFLICT DO NOTHING;
 `;
 
-fs.writeFileSync("C:/ANTIGRAVITY/scripts/migration-journal-seed.sql", ddl);
+fs.writeFileSync("E:/ANTIGRAVITY/scripts/migration-journal-seed.sql", ddl);
 console.log(`Generated seed for ${rows.length} migrations.`);

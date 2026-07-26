@@ -150,7 +150,7 @@ async function localNodeProgress() {
 }
 
 async function sshWindowsNodeProgress(name, host) {
-  const remote = `hermes status | findstr /C:"Model:" /C:"Provider:" /C:"Status:" & git -C C:\\antigravity rev-parse HEAD & git -C C:\\antigravity branch -a --no-color`;
+  const remote = `hermes status | findstr /C:"Model:" /C:"Provider:" /C:"Status:" & git -C E:/ANTIGRAVITY rev-parse HEAD & git -C E:/ANTIGRAVITY branch -a --no-color`;
   const result = await runCommand("ssh", ["-o", "BatchMode=yes", "-o", "ConnectTimeout=5", `joshl@${host}`, remote], { timeout: 30000 });
   const lines = result.out.split(/\r?\n/).filter(Boolean);
   return {

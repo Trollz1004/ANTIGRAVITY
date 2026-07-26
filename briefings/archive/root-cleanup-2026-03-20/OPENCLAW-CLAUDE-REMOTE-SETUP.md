@@ -90,7 +90,7 @@ In **claude.ai → Settings → Integrations → MCP Servers**:
   "mcpServers": {
     "openclaw-remote": {
       "command": "node",
-      "args": ["C:\\ANTIGRAVITY\\mcp-server\\dist\\index.js"],
+      "args": ["E:/ANTIGRAVITY\\mcp-server\\dist\\index.js"],
       "type": "stdio"
     },
     "postgres-remote": {

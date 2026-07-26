@@ -126,7 +126,7 @@ For **T5500 Orchestrator** (port 18789):
     "id": "t5500-orchestrator",
     "name": "T5500 Orchestrator (Grok 4.1)",
     "model": { "primary": "xai/grok-4-1-fast-reasoning" },
-    "workspace": "C:\\ANTIGRAVITY"
+    "workspace": "E:/ANTIGRAVITY"
   },
   "gateway": {
     "port": 18789,
@@ -151,7 +151,7 @@ For **T5500 Deployer** (port 18790):
     "id": "t5500-deployer",
     "name": "T5500 Deployer (Grok 4.1)",
     "model": { "primary": "xai/grok-4-1-fast-reasoning" },
-    "workspace": "C:\\ANTIGRAVITY"
+    "workspace": "E:/ANTIGRAVITY"
   },
   "gateway": {
     "port": 18790,
@@ -163,7 +163,7 @@ For **T5500 Deployer** (port 18790):
     "url": "http://192.168.1.101:18789",
     "reportInterval": 30
   },
-  "workspace": "C:\\ANTIGRAVITY"
+  "workspace": "E:/ANTIGRAVITY"
 }
 ```
 

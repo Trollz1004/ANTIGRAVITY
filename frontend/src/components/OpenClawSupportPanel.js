@@ -5,7 +5,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const SUPPORT_URL = "http://127.0.0.1:18789";
 const CMD_HEALTH = "curl http://127.0.0.1:18789/healthz";
-const CMD_TAIL = "powershell -NoProfile -Command \"Get-Content C:\\ANTIGRAVITY\\logs\\openclaw-support.log -Tail 80 -Wait\"";
+const CMD_TAIL = "powershell -NoProfile -Command \"Get-Content E:/ANTIGRAVITY\\logs\\openclaw-support.log -Tail 80 -Wait\"";
 
 export function OpenClawSupportPanel() {
   const [health, setHealth] = useState({ status: "loading", data: null });

@@ -8,7 +8,7 @@ import { logEvent } from "../events.js";
 // ── Config ────────────────────────────────────────────────────────────────────
 
 export function getFileRoot(): string {
-  return process.env.MISSION_FILE_ROOT ?? "C:\\Antigravity";
+  return process.env.MISSION_FILE_ROOT ?? "E:/ANTIGRAVITY";
 }
 
 // ── Schemas ───────────────────────────────────────────────────────────────────

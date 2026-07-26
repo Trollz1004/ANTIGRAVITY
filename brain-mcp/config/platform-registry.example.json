@@ -8,7 +8,7 @@
       "participationMode": "required",
       "certificationAuthority": true,
       "allowedIps": ["127.0.0.1", "192.168.0.8"],
-      "allowedPathPrefixes": ["C:\\ANTIGRAVITY"],
+      "allowedPathPrefixes": ["E:/ANTIGRAVITY"],
       "blockedPathPrefixes": ["C:\\OPUSONLY", "E:\\ANTIGRAVITY"],
       "tokenHash": "sha256:<replace-me>"
     },
@@ -20,7 +20,7 @@
       "participationMode": "required",
       "certificationAuthority": true,
       "allowedIps": ["127.0.0.1", "192.168.0.8"],
-      "allowedPathPrefixes": ["C:\\ANTIGRAVITY", "E:\\claudes-claw"],
+      "allowedPathPrefixes": ["E:/ANTIGRAVITY", "E:\\claudes-claw"],
       "blockedPathPrefixes": ["C:\\OPUSONLY", "E:\\ANTIGRAVITY"],
       "tokenHash": "sha256:<replace-me>"
     }
@@ -29,7 +29,7 @@
     "CLOUDFLARE_API_TOKEN": [
       {
         "label": "Sabretooth local env",
-        "path": "C:\\ANTIGRAVITY\\.env",
+        "path": "E:/ANTIGRAVITY\\.env",
         "note": "Rotated 2026-03-23"
       },
       {

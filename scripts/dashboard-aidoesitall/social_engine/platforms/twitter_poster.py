@@ -143,7 +143,7 @@ class TwitterPoster(BasePoster):
                 except Exception:
                     # Take screenshot for debugging
                     debug_path = str(page.context.browser.contexts[0].pages[0].url if False else "")
-                    page.screenshot(path="C:/ANTIGRAVITY/data/twitter-debug.png")
+                    page.screenshot(path="E:/ANTIGRAVITY/data/twitter-debug.png")
                     return False, "Could not find compose box — screenshot saved to data/twitter-debug.png"
 
             # Type the text
@@ -184,7 +184,7 @@ class TwitterPoster(BasePoster):
                     continue
 
             if not post_btn:
-                page.screenshot(path="C:/ANTIGRAVITY/data/twitter-debug.png")
+                page.screenshot(path="E:/ANTIGRAVITY/data/twitter-debug.png")
                 return False, "Could not find Post button"
 
             # Dismiss any overlays/notifications first
@@ -214,7 +214,7 @@ class TwitterPoster(BasePoster):
         except Exception as e:
             log.error(f"[{self.name}] Browser post failed: {e}")
             try:
-                page.screenshot(path="C:/ANTIGRAVITY/data/twitter-debug.png")
+                page.screenshot(path="E:/ANTIGRAVITY/data/twitter-debug.png")
             except Exception:
                 pass
             return False, str(e)

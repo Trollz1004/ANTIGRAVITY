@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
-load_dotenv("C:/ANTIGRAVITY/briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env")
+load_dotenv("E:/ANTIGRAVITY/briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env")
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 if not DATABASE_URL:

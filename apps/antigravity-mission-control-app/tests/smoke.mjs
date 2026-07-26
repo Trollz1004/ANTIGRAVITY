@@ -21,7 +21,7 @@ assert.equal(drift.policy, "placeholder-only inventory; never read populated env
 assert(Array.isArray(drift.nextActions));
 
 const prompt = prepareCodexExecutionPrompt({ task: "fix CI without touching secrets" });
-assert.match(prompt.prompt, /c:\\antigravity/);
+assert.match(prompt.prompt, /E:/ANTIGRAVITY/);
 assert.match(prompt.prompt, /Do not use ollama launch codex/);
 
 const handoff = await runTool("draft_handoff", { topic: "safe app smoke test" });
