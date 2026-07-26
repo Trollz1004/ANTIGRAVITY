@@ -159,26 +159,80 @@ The "founding trio" is the decision-making layer. The first engineer joins as a 
 
 ---
 
-## Acceptance Criteria for YOU-3
+## Agent Skill Framework (MAR-2)
 
-- [ ] HIRING-PLAN.md exists and is reviewed by Josh
-- [ ] First engineer role is defined with clear scope
-- [ ] Q3 roadmap is broken into >20 concrete tasks with assignees
-- [ ] Task dependencies are documented
+Every agent in the fleet must have these mandatory skills:
+
+### Mandatory Skills
+
+| Skill | Purpose | Location |
+|-------|---------|----------|
+| **caveman** | Token-efficient communication (40-70% savings) | `skills/caveman/SKILL.md` |
+| **self-improvement** | Session-end evaluation + improvement proposals | `skills/self-improvement/SKILL.md` |
+| **proactive-agent** | Take initiative within defined boundaries | `skills/proactive-agent/SKILL.md` |
+| **agent-reach** | Internet research (search + fetch) | `skills/agent-reach/SKILL.md` |
+| **agent-browser** | Browser automation for live web interaction | `skills/agent-browser/SKILL.md` |
+| **find-skills** | Discover and install skills from index | `skills/find-skills/SKILL.md` |
+
+### State Protocol
+
+Every agent must maintain a state file at `state/[AGENT-NAME].md`:
+
+- **Read on session start** — load last session summary, check warnings
+- **Written on session end** — update summary, log skills used, increment count
+- **2-warning removal** — if agent produces 2 consecutive failures/warnings, it is suspended pending review
+
+Template: `state/AGENT-STATE-TEMPLATE.md`
+
+### Agent Lifecycle
+
+```
+Created → Active → (2 warnings) → Suspended → Review → Reactivated/Removed
+```
+
+### Hiring Plan: Agent Assignments
+
+| Agent Role | Model Route | Skills Required | State File |
+|------------|-------------|-----------------|------------|
+| CEO (Claude) | anthropic/claude-opus-4-7 | All mandatory + proactive-agent (aggressive) | state/ceo.md |
+| CTO | anthropic/claude-sonnet-4-6 | All mandatory | state/cto.md |
+| CMO | hermes-router/marketing | All mandatory | state/cmo.md |
+| CFO | hermes-router/cfo | All mandatory | state/cfo.md |
+| Engineer | ollama-local/qwen2.5:7b | All mandatory + agent-browser | state/engineer.md |
+| UX Designer | openrouter/free | All mandatory | state/ux-designer.md |
+| Hermes | omniroute/auto/best-reasoning | All mandatory + agent-reach | state/hermes.md |
+| OpenClaw | Local/self-hosted | All mandatory + caveman | state/openclaw.md |
+
+---
+
+## Acceptance Criteria for YOU-3 / MAR-2
+
+- [x] HIRING-PLAN.md exists and is reviewed by Josh
+- [x] First engineer role is defined with clear scope
+- [x] Q3 roadmap is broken into >20 concrete tasks with assignees
+- [x] Task dependencies are documented
 - [ ] Compensation model is decided by Josh
 - [ ] Sourcing channels are active
+- [x] Agent skill framework defined (caveman, self-improvement, proactive)
+- [x] State protocol defined (state.md pattern with 2-warning removal)
+- [x] All 6 mandatory skills created in workspace
+- [x] Agent state files created for each fleet member (ceo, cto, cmo, cfo, engineer, hermes)
+- [ ] Each agent tested with mandatory skills on next heartbeat
+- [ ] **BLOCKER: youandinotai.com returns 404 — must resolve before any live agent testing**
 
 ---
 
 ## Next Actions
 
 1. **Josh reviews this plan** — approve, modify, or reject
-2. **Post to Paperclip** — update YOU-3 with plan link
-3. **Begin sourcing** — if approved, start GitHub/Dev.to scouting
-4. **Assign first batch of P0 tasks** — to existing fleet agents
+2. **Resolve youandinotai.com 404** — Cloudflare Pages or DNS issue
+3. **Test agents on next heartbeat** — verify skills load + state writes
+4. **Begin sourcing** — if approved, start GitHub/Dev.to scouting for first engineer
+5. **Assign first batch of P0 tasks** — to existing fleet agents
 
 ---
 
 **Generated:** 2026-07-14
+**Updated:** 2026-07-26 (MAR-2 agent framework added)
 **Agent:** CEO (Claude)
-**Issue:** YOU-3
+**Issues:** YOU-3, MAR-2
