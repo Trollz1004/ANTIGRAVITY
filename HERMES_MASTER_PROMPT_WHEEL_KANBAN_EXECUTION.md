@@ -158,7 +158,6 @@ Zeros are honest.
 The system must honor the existing compliance doctrine:
 - kids share protected,
 - tax reserve protected,
-- founder cap enforced,
 - every revenue event recorded,
 - every split reconciled.
 
