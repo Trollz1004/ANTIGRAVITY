@@ -84,7 +84,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     participationMode: 'required',
     certificationAuthority: true,
     allowedIps: ['127.0.0.1', '192.168.0.8'],
-    allowedPathPrefixes: ['C:\\ANTIGRAVITY'],
+    allowedPathPrefixes: ['E:/ANTIGRAVITY'],
     blockedPathPrefixes: [],
   },
   {
@@ -95,7 +95,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     participationMode: 'required',
     certificationAuthority: true,
     allowedIps: ['127.0.0.1', '192.168.0.8'],
-    allowedPathPrefixes: ['C:\\ANTIGRAVITY', 'E:\\claudes-claw', 'E:\\sandbox-repo'],
+    allowedPathPrefixes: ['E:/ANTIGRAVITY', 'E:\\claudes-claw', 'E:\\sandbox-repo'],
     blockedPathPrefixes: [],
   },
   {
@@ -106,7 +106,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     participationMode: 'voluntary',
     certificationAuthority: true,
     allowedIps: ['127.0.0.1', '192.168.0.8'],
-    allowedPathPrefixes: ['C:\\ANTIGRAVITY'],
+    allowedPathPrefixes: ['E:/ANTIGRAVITY'],
     blockedPathPrefixes: [],
   },
   {
@@ -118,7 +118,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     certificationAuthority: false,
     allowedIps: ['192.168.0.15'],
     allowedPathPrefixes: ['E:\\ANTIGRAVITY-CLAWBOTS'],
-    blockedPathPrefixes: ['C:\\ANTIGRAVITY'],
+    blockedPathPrefixes: ['E:/ANTIGRAVITY'],
   },
   {
     id: 'genspark-9020',
@@ -129,7 +129,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     certificationAuthority: false,
     allowedIps: ['192.168.0.5'],
     allowedPathPrefixes: ['D:\\sandbox-repos', 'D:\\claws'],
-    blockedPathPrefixes: ['C:\\ANTIGRAVITY'],
+    blockedPathPrefixes: ['E:/ANTIGRAVITY'],
   },
   {
     id: 'anythingllm-sabretooth',
@@ -139,7 +139,7 @@ const DEFAULT_PLATFORMS: PlatformDefinition[] = [
     participationMode: 'voluntary',
     certificationAuthority: false,
     allowedIps: ['127.0.0.1', '192.168.0.8'],
-    allowedPathPrefixes: ['C:\\ANTIGRAVITY', 'E:\\sandbox-repo', 'E:\\ANYTHINGLLM'],
+    allowedPathPrefixes: ['E:/ANTIGRAVITY', 'E:\\sandbox-repo', 'E:\\ANYTHINGLLM'],
     blockedPathPrefixes: [],
   },
 ];
@@ -169,7 +169,7 @@ const DEFAULT_SECRET_REFS: Record<string, SecretReference[]> = {
   CLOUDFLARE_API_TOKEN: [
     {
       label: 'Sabretooth local env',
-      path: 'C:\\ANTIGRAVITY\\.env',
+      path: 'E:/ANTIGRAVITY\\.env',
       note: 'Rotated 2026-03-23',
     },
     {

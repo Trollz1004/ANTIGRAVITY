@@ -4,7 +4,7 @@ import requests
 from dotenv import load_dotenv
 
 # Load from master vault
-load_dotenv('C:/ANTIGRAVITY/briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env')
+load_dotenv('E:/ANTIGRAVITY/briefings/MASTER-UNIVERSAL-ENV-TROLLZ1004.env')
 
 api_key = os.getenv('GROK_API_KEY')
 url = "https://api.x.ai/v1/chat/completions"

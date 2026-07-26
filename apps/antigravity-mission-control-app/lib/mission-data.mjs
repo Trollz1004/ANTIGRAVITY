@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const APP_DIR = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 export const REPO_ROOT = path.resolve(APP_DIR, "..", "..");
-export const WINDOWS_ROOT = "c:\\antigravity";
+export const WINDOWS_ROOT = "E:/ANTIGRAVITY";
 export const WSL_ROOT = "/mnt/c/antigravity";
 
 export const SAFE_SOURCE_FILES = Object.freeze({

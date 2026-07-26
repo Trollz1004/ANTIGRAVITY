@@ -3,7 +3,7 @@
 // template-literal fix lands widgets in the rendered DOM.
 
 const path = require('path');
-const { chromium } = require('C:\\Antigravity\\apps\\mission-control\\node_modules\\playwright');
+const { chromium } = require('E:/ANTIGRAVITY\\apps\\mission-control\\node_modules\\playwright');
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -39,7 +39,7 @@ const { chromium } = require('C:\\Antigravity\\apps\\mission-control\\node_modul
   console.log('--- network on reload ---');
   console.log(net.filter(u => !u.includes('fonts.gstatic') && !u.includes('fonts.googleapis')).join('\n'));
 
-  const shotPath = path.join('C:\\Antigravity\\scripts', 'pw-verify.png');
+  const shotPath = path.join('E:/ANTIGRAVITY\\scripts', 'pw-verify.png');
   await page.screenshot({ path: shotPath, fullPage: true });
   console.log('screenshot:', shotPath);
 

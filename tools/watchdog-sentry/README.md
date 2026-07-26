@@ -9,7 +9,7 @@ http://192.168.0.8:11436/health/all
 Suggested kiosk command:
 
 ```powershell
-Start-Process "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--kiosk file:///C:/ANTIGRAVITY/tools/watchdog-sentry/index.html"
+Start-Process "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--kiosk file:///E:/ANTIGRAVITY/tools/watchdog-sentry/index.html"
 ```
 
 This display is local-only and must not be referenced from `_deploy/`.

@@ -3,7 +3,7 @@
 // valid shapes, no console errors, no page errors, all adapter rows have a
 // real state pill (no "?"), and all 7 doctrine strings are in the DOM.
 
-const { chromium } = require('C:\\Antigravity\\apps\\mission-control\\node_modules\\playwright');
+const { chromium } = require('E:/ANTIGRAVITY\\apps\\mission-control\\node_modules\\playwright');
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -74,7 +74,7 @@ const { chromium } = require('C:\\Antigravity\\apps\\mission-control\\node_modul
     && failedReqs.length === 0;
   console.log('OVERALL:', ok ? 'GREEN' : 'RED');
 
-  await page.screenshot({ path: 'C:\\Antigravity\\scripts\\audit-lan.png', fullPage: true });
+  await page.screenshot({ path: 'E:/ANTIGRAVITY\\scripts\\audit-lan.png', fullPage: true });
 
   await browser.close();
   process.exit(ok ? 0 : 1);

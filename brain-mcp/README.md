@@ -79,7 +79,7 @@ If you want a local process-spawned MCP entry, add a local `.mcp.json` entry sim
   "mcpServers": {
     "brain-mcp": {
       "command": "node",
-      "args": ["C:\\ANTIGRAVITY\\brain-mcp\\dist\\index.js"]
+      "args": ["E:/ANTIGRAVITY\\brain-mcp\\dist\\index.js"]
     }
   }
 }

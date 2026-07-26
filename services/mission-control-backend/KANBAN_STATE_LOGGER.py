@@ -20,7 +20,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from threading import Thread
 
 # Configuration
-DB_PATH = 'c:\\antigravity\\data\\mission_control.db'
+DB_PATH = 'E:/ANTIGRAVITY\\data\\mission_control.db'
 T5500_HOST = '192.168.0.15'
 T5500_PORT = 3200
 

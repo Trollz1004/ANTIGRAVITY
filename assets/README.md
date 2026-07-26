@@ -53,14 +53,14 @@ assets/
 ### Regenerate All Assets
 
 ```bash
-cd C:\\Antigravity\\assets
+cd E:/ANTIGRAVITY\\assets
 python generate_all_assets.py
 ```
 
 ### Generate a Single Post (On-Demand)
 
 ```bash
-cd C:\\Antigravity\\scripts
+cd E:/ANTIGRAVITY\\scripts
 python generate_social_post.py \
   --platform instagram-feed \
   --headline "YOUR HEADLINE\nLINE TWO" \

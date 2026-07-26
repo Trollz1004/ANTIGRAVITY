@@ -4,23 +4,23 @@
   "mcpServers": {
     "brain-mcp": {
       "command": "node",
-      "args": ["C:\\ANTIGRAVITY\\brain-mcp\\dist\\index.js"],
+      "args": ["E:/ANTIGRAVITY\\brain-mcp\\dist\\index.js"],
       "env": {
         "HOME": "C:\\Users\\joshl"
       }
     },
     "antigravity-sentry": {
       "command": "node",
-      "args": ["C:\\ANTIGRAVITY\\mcp-server\\dist\\index.js"],
+      "args": ["E:/ANTIGRAVITY\\mcp-server\\dist\\index.js"],
       "env": {
         "HOME": "C:\\Users\\joshl"
       }
     },
     "paperclip": {
-      "command": "C:\\ANTIGRAVITY\\paperclip-mcp\\paperclip-mcp.cmd",
+      "command": "E:/ANTIGRAVITY\\paperclip-mcp\\paperclip-mcp.cmd",
       "args": [],
       "env": {
-        "ANTIGRAVITY_ROOT": "C:\\ANTIGRAVITY",
+        "ANTIGRAVITY_ROOT": "E:/ANTIGRAVITY",
         "LITELLM_BASE_URL": "http://127.0.0.1:4000"
       }
     },
@@ -30,14 +30,14 @@
     },
     "mission-mcp": {
       "command": "node",
-      "args": ["C:\\ANTIGRAVITY\\services\\mission-mcp\\dist\\server.js"],
+      "args": ["E:/ANTIGRAVITY\\services\\mission-mcp\\dist\\server.js"],
       "env": {
         "HOME": "C:\\Users\\joshl"
       }
     },
     "hermes-mcp": {
       "command": "node",
-      "args": ["C:\\ANTIGRAVITY\\apps\\mcp\\hermes-mcp\\dist\\index.js"],
+      "args": ["E:/ANTIGRAVITY\\apps\\mcp\\hermes-mcp\\dist\\index.js"],
       "env": {
         "HOME": "C:\\Users\\joshl",
         "HERMES_ROUTER_URL": "http://localhost:11435",
@@ -46,7 +46,7 @@
     },
     "paperweight-mcp": {
       "command": "node",
-      "args": ["C:\\ANTIGRAVITY\\apps\\mcp\\paperweight-mcp\\dist\\index.js"],
+      "args": ["E:/ANTIGRAVITY\\apps\\mcp\\paperweight-mcp\\dist\\index.js"],
       "env": {
         "HOME": "C:\\Users\\joshl",
         "PAPERWEIGHT_API": "http://localhost:3100/api/paperweight"
@@ -54,7 +54,7 @@
     },
     "dao-mcp": {
       "command": "node",
-      "args": ["C:\\ANTIGRAVITY\\apps\\mcp\\dao-mcp\\dist\\index.js"],
+      "args": ["E:/ANTIGRAVITY\\apps\\mcp\\dao-mcp\\dist\\index.js"],
       "env": {
         "HOME": "C:\\Users\\joshl",
         "DAO_SPEC_VERSION": "v1.0"

@@ -206,7 +206,7 @@ def fix_litellm_models(health_data):
 def main():
     log("====== Litellm Health Monitor Started ======")
     log(f"Monitoring {LITELLM_HEALTH_URL} every {CHECK_INTERVAL}s")
-    log("To configure Discord alerts: create file C:\\Antigravity\\logs\\discord-webhook-url.txt with your webhook URL")
+    log("To configure Discord alerts: create file E:/ANTIGRAVITY\\logs\\discord-webhook-url.txt with your webhook URL")
 
     # Track state to avoid duplicate alerts
     last_unhealthy_count = -1

@@ -22,7 +22,7 @@ router = APIRouter()
 # (specialist adapters are declared in MISSION-CONTROL-ADAPTERS-2026-06-01.md
 # but their real counter files are not yet wired). When the specialists run,
 # they write JSON like {hashtags: 12, posts: 7, replies: 4, ...} here.
-SPECIALIST_STATE_DIR = Path("C:/Antigravity/services/mission-control-api/data/specialists")
+SPECIALIST_STATE_DIR = Path("E:/ANTIGRAVITY/services/mission-control-api/data/specialists")
 
 
 def _read_state(specialist: str) -> dict:

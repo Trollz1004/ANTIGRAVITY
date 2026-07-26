@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "Set up a Codex handoff for Hermes, Slack, and GitHub so I do not have to repeat context across chats.",
-      "expected_output": "Uses c:\\antigravity as source of truth, drafts Slack instead of sending live, preserves memory safely, and avoids raw secrets or chat logs.",
+      "expected_output": "Uses E:/ANTIGRAVITY as source of truth, drafts Slack instead of sending live, preserves memory safely, and avoids raw secrets or chat logs.",
       "files": []
     },
     {

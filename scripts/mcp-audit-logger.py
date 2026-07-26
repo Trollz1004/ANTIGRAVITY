@@ -208,7 +208,7 @@ def main():
         print(f"   Log: {LOG_FILE}")
         if trust_level == "UNKNOWN":
             print(f"\n⚠️  WARNING: Unknown platform '{args.platform}' — all actions will be heavily logged.")
-            print(f"   This platform has NO write access to C:\\ANTIGRAVITY.")
+            print(f"   This platform has NO write access to E:/ANTIGRAVITY.")
 
     if args.action == "exit":
         print(f"📋 Session closed. All actions logged. #ForTheKids")

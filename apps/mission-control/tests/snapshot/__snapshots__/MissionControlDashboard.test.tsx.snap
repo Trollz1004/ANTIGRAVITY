@@ -261,7 +261,7 @@ exports[`MissionControlDashboard > renders correctly 1`] = `
               <code
                 class="mt-2 block overflow-hidden text-ellipsis whitespace-nowrap rounded bg-slate-950 px-2 py-1 text-[11px] text-cyan-200"
               >
-                powershell -ExecutionPolicy Bypass -File C:\\ANTIGRAVITY\\scripts\\autostart-mission.ps1
+                powershell -ExecutionPolicy Bypass -File E:/ANTIGRAVITY\\scripts\\autostart-mission.ps1
               </code>
             </button>
             <button
@@ -305,7 +305,7 @@ exports[`MissionControlDashboard > renders correctly 1`] = `
               <code
                 class="mt-2 block overflow-hidden text-ellipsis whitespace-nowrap rounded bg-slate-950 px-2 py-1 text-[11px] text-cyan-200"
               >
-                python -m uvicorn mission_control_api.main:app --host 0.0.0.0 --port 8787 --app-dir C:\\ANTIGRAVITY\\services\\mission-control-api\\src
+                python -m uvicorn mission_control_api.main:app --host 0.0.0.0 --port 8787 --app-dir E:/ANTIGRAVITY\\services\\mission-control-api\\src
               </code>
             </button>
             <button
@@ -349,7 +349,7 @@ exports[`MissionControlDashboard > renders correctly 1`] = `
               <code
                 class="mt-2 block overflow-hidden text-ellipsis whitespace-nowrap rounded bg-slate-950 px-2 py-1 text-[11px] text-cyan-200"
               >
-                pnpm --dir C:\\ANTIGRAVITY\\apps\\mission-control build
+                pnpm --dir E:/ANTIGRAVITY\\apps\\mission-control build
               </code>
             </button>
             <button
@@ -393,7 +393,7 @@ exports[`MissionControlDashboard > renders correctly 1`] = `
               <code
                 class="mt-2 block overflow-hidden text-ellipsis whitespace-nowrap rounded bg-slate-950 px-2 py-1 text-[11px] text-cyan-200"
               >
-                python C:\\ANTIGRAVITY\\scripts\\clawx-control\\opus-guardian.py
+                python E:/ANTIGRAVITY\\scripts\\clawx-control\\opus-guardian.py
               </code>
             </button>
           </div>
@@ -1192,7 +1192,7 @@ exports[`MissionControlDashboard > renders correctly 1`] = `
                   d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
                 />
               </svg>
-              Runbooks are read from C:\\ANTIGRAVITY\\briefings\\runbooks.
+              Runbooks are read from E:/ANTIGRAVITY\\briefings\\runbooks.
             </div>
           </div>
         </section>

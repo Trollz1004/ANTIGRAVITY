@@ -23,7 +23,7 @@ Node.js: v26.1.0
 Main repo inspected:
 
 ```text
-C:/ANTIGRAVITY
+E:/ANTIGRAVITY
 ```
 
 Remote:
@@ -36,10 +36,10 @@ https://github.com/Trollz1004/ANTIGRAVITY.git
 
 ## 1.5 Canonical repo topology
 
-- **Canonical root for coordination:** `C:/ANTIGRAVITY`
+- **Canonical root for coordination:** `E:/ANTIGRAVITY`
 - **Nested checkouts kept out of the canonical root:**
-  - `C:/ANTIGRAVITY/ANTIGRAVITY`
-  - `C:/ANTIGRAVITY/hermes-workspace`
+  - `E:/ANTIGRAVITY/ANTIGRAVITY`
+  - `E:/ANTIGRAVITY/hermes-workspace`
 - **Dream Online MMO:** may remain isolated as its own repo or branch; do not fold it into the main root unless explicitly requested.
 - **Platform coordination going forward:** T5500-local Hermes + OmniRouter + local Ollama is the default chain, with local Ollama as the final fallback tier.
 - **Legacy policy handcuffs:** not carried into this canonical root or its operating docs.
@@ -48,7 +48,7 @@ https://github.com/Trollz1004/ANTIGRAVITY.git
 
 ## 2. Current repo state warning
 
-The local `C:/ANTIGRAVITY` checkout is **highly divergent** and must not be mutated casually.
+The local `E:/ANTIGRAVITY` checkout is **highly divergent** and must not be mutated casually.
 
 Verified state:
 
