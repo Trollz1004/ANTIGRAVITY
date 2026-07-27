@@ -11,7 +11,7 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$LogDir = 'E:\clean\ops\startup\logs'
+$LogDir = 'E:\ANTIGRAVITY\logs'
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 $log = Join-Path $LogDir ('cleanstack-{0:yyyyMMdd-HHmmss}.log' -f (Get-Date))
 function L($m){ $l = "[{0}] {1}" -f (Get-Date -Format o), $m; Write-Host $l; Add-Content -Path $log -Value $l -Encoding utf8 }
@@ -24,10 +24,22 @@ function Test-PortHealth($port, $path='/api/health'){
   try { $r = Invoke-WebRequest -Uri "http://127.0.0.1:$port$path" -TimeoutSec 4 -UseBasicParsing; return ($r.StatusCode -ge 200 -and $r.StatusCode -lt 500) }
   catch { return $false }
 }
-function Start-Background($exe, $args, $tag){
-  $p = Start-Process -FilePath $exe -ArgumentList $args -WindowStyle Hidden -PassThru
-  L "started $tag (pid $($p.Id))"
-  return $p
+function Start-Background($exe, $Arguments, $tag){
+  if (-not $exe) { L "start $tag skipped: exe missing"; return $null }
+  if ($null -eq $Arguments) { $Arguments = @() }
+  if ($Arguments -isnot [System.Collections.IEnumerable] -or $Arguments -is [string]) {
+    $Arguments = @($Arguments)
+  }
+  $cleanArgs = @($Arguments | Where-Object { $_ -ne $null })
+  if (-not $cleanArgs) { $cleanArgs = @('') }
+  try {
+    $p = Start-Process -FilePath $exe -ArgumentList $cleanArgs -WindowStyle Hidden -PassThru
+    L "started $tag (pid $($p.Id))"
+    return $p
+  } catch {
+    L "start $tag failed: $_"
+    return $null
+  }
 }
 
 function Ensure-Ollama {
@@ -40,12 +52,44 @@ function Ensure-Ollama {
   L 'ollama: did not come up in time'
 }
 
+function Resolve-OmniRouteExe {
+  $cmd = Get-Command omniroute -ErrorAction SilentlyContinue
+  if ($cmd) { return $cmd.Source }
+  $candidates = @(
+    (Join-Path $env:ProgramFiles 'nodejs\node.exe'),
+    (Join-Path ${env:ProgramFiles(x86)} 'nodejs\node.exe'),
+    (Join-Path $env:LOCALAPPDATA 'Programs\nodejs\node.exe')
+  )
+  foreach ($c in $candidates) {
+    if ($c -and (Test-Path $c)) { return $c }
+  }
+  $which = Get-Command node -ErrorAction SilentlyContinue
+  if ($which) { return $which.Source }
+  return (Join-Path ${env:ProgramFiles} 'nodejs\node.exe')
+}
+function Resolve-OmniRouteScript {
+  $script = (Resolve-Path 'omniroute' -ErrorAction SilentlyContinue)
+  if ($script) { return $script.Path }
+  $script = (Get-Command omniroute.cmd -ErrorAction SilentlyContinue).Source
+  if ($script) { return $script }
+  $script = (Get-Command omniroute -ErrorAction SilentlyContinue).Source
+  if ($script) { return $script }
+  $npmRoot = (Join-Path $env:APPDATA 'npm')
+  foreach ($t in @('omniroute.cmd','omniroute.ps1','omniroute.mjs')) {
+    if (Test-Path (Join-Path $npmRoot $t)) { return (Join-Path $npmRoot $t) }
+  }
+  foreach ($t in @('node_modules\omniroute\bin\omniroute.mjs','node_modules\omniroute\dist\omniroute.mjs','node_modules\omniroute\omniroute.mjs')) {
+    if (Test-Path (Join-Path $npmRoot $t)) { return (Join-Path $npmRoot $t) }
+  }
+  return $null
+}
 function Ensure-OmniRoute {
   if (Test-Port 20128) { L 'omniroute: up'; return }
   L 'omniroute: starting'
-  $cmd = Get-Command omniroute -ErrorAction SilentlyContinue
-  if (-not $cmd) { L 'omniroute not on PATH'; return }
-  Start-Background $cmd.Source @() 'omniroute'
+  $exe = Resolve-OmniRouteExe
+  $script = Resolve-OmniRouteScript
+  if (-not $exe -or -not $script) { L "omniroute exe/script missing: exe=$exe script=$script"; return }
+  Start-Background $exe @($script) 'omniroute'
   for ($i=0;$i -lt 15;$i++){ Start-Sleep -Seconds 2; if (Test-Port 20128){ L 'omniroute: ready'; return } }
   L 'omniroute: did not come up in time'
 }
