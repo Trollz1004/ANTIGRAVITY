@@ -1,91 +1,22 @@
-# Keeps the Mission Control GUI + shared memory server alive.
-# Intended to run as a Windows Scheduled Task.
-
-[CmdletBinding()]
+<#
+.SYNOPSIS
+One-shot Mission Control watchdog. Run by Windows Scheduled Task.
+#>
 param(
-    [string]$RepoRoot = 'C:\antigravity',
+    [string]$RepoRoot = 'E:\ANTIGRAVITY',
     [int]$Port = 8787,
-    [int]$IntervalSeconds = 30
+    [int]$MaxRestarts = 2,
+    [int]$IntervalSec = 5
 )
-
 $ErrorActionPreference = 'Continue'
-
-$LogDir = Join-Path $RepoRoot 'logs'
-$LogPath = Join-Path $LogDir 'mission-control-watchdog.log'
-$StartScript = Join-Path $RepoRoot 'scripts\start-mission-control.ps1'
-$RecentRestarts = @()
-
-New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
-
-function Write-WatchdogLog {
-    param([string]$Message)
-    $line = "[{0}] {1}" -f (Get-Date -Format o), $Message
-    Add-Content -LiteralPath $LogPath -Value $line -ErrorAction SilentlyContinue
-    Write-Output $line
+$LogDir = Join-Path $RepoRoot 'logs'; New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
+$log = Join-Path $LogDir 'mission-control-watchdog.log'
+function L($m){ Add-Content -Path $log -Value ("[{0}] {1}" -f (Get-Date -Format 'o'), $m) -Encoding utf8 }
+L '=== mission-control-watchdog one-shot start ==='
+$start = Join-Path $RepoRoot 'scripts\start-mission-control.ps1'
+if (-not (Test-Path $start)) { L "missing start script: $start"; exit 1 }
+for ($i=0; $i -lt $MaxRestarts; $i++) {
+  try { $r = Invoke-WebRequest -Uri "http://127.0.0.1:$Port/" -TimeoutSec 3 -UseBasicParsing -ErrorAction Stop; if ($r.StatusCode -ge 200 -and $r.StatusCode -lt 500) { L 'mission-control healthy'; exit 0 } } catch {}
+  L "restarting mission-control attempt $($i+1)"; Start-Process -FilePath 'powershell.exe' -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-File',$start,'-RepoRoot',$RepoRoot,'-Port',([string]$Port) -WindowStyle Hidden; Start-Sleep -Seconds $IntervalSec
 }
-
-function Test-MissionControlHealthy {
-    try {
-        $health = Invoke-RestMethod -Uri "http://127.0.0.1:$Port/health" -Method Get -TimeoutSec 3
-        if ($health.ok -ne $true -or $health.app -ne 'mission-control-memory-gui') {
-            return $false
-        }
-
-        $memory = Invoke-RestMethod -Uri "http://127.0.0.1:$Port/memory/status" -Method Get -TimeoutSec 3
-        return ($memory.ok -eq $true -and $memory.paperclip_excluded -eq $true)
-    } catch {
-        return $false
-    }
-}
-
-function Restart-MissionControl {
-    $now = Get-Date
-    $script:RecentRestarts = @($script:RecentRestarts | Where-Object { ($now - $_).TotalMinutes -lt 5 })
-    if ($script:RecentRestarts.Count -ge 3) {
-        Write-WatchdogLog 'restart cap reached; sleeping 10 minutes before next attempt'
-        Start-Sleep -Seconds 600
-        $script:RecentRestarts = @()
-        return
-    }
-
-    if (-not (Test-Path -LiteralPath $StartScript)) {
-        Write-WatchdogLog "start script missing: $StartScript"
-        return
-    }
-
-    Write-WatchdogLog "Mission Control unhealthy on port $Port; restarting"
-    $process = Start-Process -FilePath 'powershell.exe' `
-        -ArgumentList @(
-            '-NoProfile',
-            '-NonInteractive',
-            '-ExecutionPolicy',
-            'Bypass',
-            '-WindowStyle',
-            'Hidden',
-            '-File',
-            $StartScript,
-            '-RepoRoot',
-            $RepoRoot,
-            '-Port',
-            [string]$Port,
-            '-ForceRestart',
-            '-Foreground'
-        ) `
-        -WindowStyle Hidden `
-        -PassThru
-
-    $script:RecentRestarts += $now
-    Write-WatchdogLog "restart launcher PID $($process.Id)"
-}
-
-Write-WatchdogLog "Mission Control watchdog started for http://127.0.0.1:$Port/"
-
-while ($true) {
-    if (Test-MissionControlHealthy) {
-        Write-WatchdogLog "Mission Control healthy on port $Port"
-    } else {
-        Restart-MissionControl
-    }
-
-    Start-Sleep -Seconds $IntervalSeconds
-}
+L 'mission-control-watchdog finished with restarts exhausted'; exit 1

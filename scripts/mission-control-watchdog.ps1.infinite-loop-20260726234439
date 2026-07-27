@@ -1,0 +1,29 @@
+<#
+.SYNOPSIS
+One-shot Mission Control watchdog. Run by Windows Scheduled Task.
+#>
+param(
+    [string]$RepoRoot = 'E:\ANTIGRAVITY',
+    [int]$Port = 8787,
+    [int]$MaxRestarts = 2,
+    [int]$IntervalSec = 5
+)
+$ErrorActionPreference = 'Continue'
+$LogDir = Join-Path $RepoRoot 'logs'
+New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
+$log = Join-Path $LogDir 'mission-control-watchdog.log'
+function L($m){ Add-Content -Path $log -Value ("[{0}] {1}" -f (Get-Date -Format 'o'), $m) -Encoding utf8 }
+L '=== mission-control-watchdog one-shot start ==='
+$start = Join-Path $RepoRoot 'scripts\start-mission-control.ps1'
+if (-not (Test-Path $start)) { L "missing start script: $start"; exit 1 }
+for ($i=0; $i -lt $MaxRestarts; $i++) {
+  try {
+    $r = Invoke-WebRequest -Uri "http://127.0.0.1:$Port/" -TimeoutSec 3 -UseBasicParsing -ErrorAction Stop
+    if ($r.StatusCode -ge 200 -and $r.StatusCode -lt 500) { L 'mission-control healthy'; exit 0 }
+  } catch {}
+  L "restarting mission-control attempt $($i+1)"
+  Start-Process -FilePath 'powershell.exe' -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-File',$start,'-RepoRoot',$RepoRoot,'-Port',([string]$Port) -WindowStyle Hidden
+  Start-Sleep -Seconds $IntervalSec
+}
+L 'mission-control-watchdog finished with restarts exhausted'
+exit 1
