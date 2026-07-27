@@ -145,8 +145,8 @@ Every agent on this platform self-improves. Hermes owns the audit loop.
 
 | Node | IP | Hardware | Role |
 |------|----|----------|------|
-| **T5500** | 192.168.0.15 | Dual Xeon, GTX 1050 Ti 4GB GPU, 72GB server RAM | **POWERSTATION** — repo state, customer-service OpenClaw, dev OpenClaw, date app |
-| **Sabretooth** | 192.168.0.8 | 64GB, GTX 1070 (1 GPU) | Default node for Opus + Hermes (def node) — does NOT run ad-hoc AI work Josh didn't ask for |
+| **T5500** | 192.168.0.15 | Dual Xeon, 72GB server RAM | **POWERSTATION** — repo state, customer-service OpenClaw, dev OpenClaw, date app |
+| **Sabretooth** | 192.168.0.8 | 64GB, NVIDIA GeForce GTX 1070 8GB (1 GPU) | Default node for Opus + Hermes (def node) — does NOT run ad-hoc AI work Josh didn't ask for. CUDA 12.6, driver 560.94. |
 | **9020 (DESKTOP-UPSJEVG)** | 192.168.0.5 | i7-4790, 32GB, GTX 1050 Ti (1 GPU) | Income node (separate GitHub account, zero overlap with Antigravity) |
 
 **GPU rule (Josh-confirmed 2026-06-01):** 1 GPU per node. Sabretooth = GTX 1070, T5500 and 9020 = GTX 1050 Ti. No multi-GPU nodes. No stacking.
