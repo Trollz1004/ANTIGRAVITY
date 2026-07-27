@@ -1,4 +1,4 @@
-param([string]$Root = 'C:\antigravity-paperclip-dateapp-ops')
+param([string]$Root = 'E:ANTIGRAVITY')
 $ErrorActionPreference = 'Stop'
 $logDir = Join-Path $Root 'logs'
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
