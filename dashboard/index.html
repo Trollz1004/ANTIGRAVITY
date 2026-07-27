@@ -1,89 +1,83 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>ANTIGRAVITY — Lights</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { background:#050c1f; color:#d8e7ff; font-family:Consolas,Segoe UI,monospace; margin:0; }
-    .wrap { max-width:1140px; margin:0 auto; padding:18px; }
-    h1 { font-size:18px; margin:0 0 12px; letter-spacing:1px; }
-    .toolbar { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; }
-    .btn { background:#0b2b4f; color:#c7ecff; border:1px solid #24496b; padding:8px 10px; cursor:pointer; }
-    .btn:hover { background:#15406d; }
-    .pill { display:inline-block; padding:4px 8px; border:1px solid #24496b; border-radius:999px; font-size:12px; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
-    .card { background:#07101f; border:1px solid #132840; padding:12px; border-radius:12px; }
-    .row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .light { width:22px; height:22px; border-radius:50%; background:#2a2a2a; box-shadow: inset 0 0 2px #000; }
-    .light.green { background:#2ecc71; box-shadow: 0 0 14px #2ecc71; }
-    .light.red { background:#e74c3c; box-shadow: 0 0 14px #e74c3c; animation: flash 1s infinite; }
-    @keyframes flash { 0%,100%{opacity:1;} 50%{opacity:.4;} }
-    .name { font-weight:700; font-size:14px; }
-    .sub { color:#8db0d4; font-size:12px; }
-    .fix { margin-top:8px; }
-    .log { margin-top:8px; max-height:140px; overflow:auto; background:#02070f; border:1px solid #132840; padding:8px; font-size:12px; color:#9ad1ff; white-space:pre-wrap; }
-    .group { color:#7ec8e3; font-size:12px; text-transform:uppercase; letter-spacing:1.5px; margin:4px 0 8px; }
-  </style>
-  </head>
+<meta charset="utf-8" />
+<title>ANTIGRAVITY — Lights</title>
+<style>
+*{box-sizing:border-box}
+body{background:#050c1f;color:#d8e7ff;font-family:Consolas,Segoe UI,monospace;margin:0}
+.wrap{max-width:1220px;margin:0 auto;padding:16px}
+h1{font-size:16px;margin:0 0 10px;letter-spacing:1px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.btn{background:#0b2b4f;color:#c7ecff;border:1px solid #24496b;padding:7px 10px;cursor:pointer}
+.btn:hover{background:#15406d}
+.pill{display:inline-block;padding:4px 8px;border:1px solid #24496b;border-radius:999px;font-size:12px;color:#7ec8e3}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.card{background:#07101f;border:1px solid #132840;padding:12px;border-radius:12px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.light{width:22px;height:22px;border-radius:50%;background:#2a2a2a;box-shadow:inset 0 0 2px #000}
+.light.green{background:#2ecc71;box-shadow:0 0 14px #2ecc71}
+.light.red{background:#e74c3c;box-shadow:0 0 14px #e74c3c;animation:flash 1s infinite}
+@keyframes flash{0%,100%{opacity:1}50%{opacity:.35}}
+.name{font-weight:700;font-size:13px}
+.sub{color:#8db0d4;font-size:12px;margin-top:2px}
+.fix{margin-top:8px}
+.log{margin-top:8px;max-height:130px;overflow:auto;background:#02070f;border:1px solid #132840;padding:8px;font-size:12px;color:#9ad1ff;white-space:pre-wrap}
+.group{color:#7ec8e3;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;margin:2px 0 6px}
+</style>
+</head>
 <body>
-  <div class="wrap">
-    <h1>ANTIGRAVITY — Lights</h1>
-    <div class="toolbar">
-      <button class="btn" onclick="refresh()">Refresh</button>
-      <button class="btn" onclick="fixAll()">Fix All</button>
-      <span class="pill" id="summary">loading...</span>
-      <span class="pill" id="clock"></span>
-    </div>
-    <div id="board" class="grid">loading...</div>
-  </div>
-  <script>
-    const API = '/api/status';
-    const FIX = '/api/fix/';
-    let last = null;
-
-    function light(ok){ return ok ? '<div class="light green"></div>' : '<div class="light red"></div>'; }
-
-    async function refresh() {
-      const r = await fetch(API).then(x=>x.json());
-      last = r;
-      const board = document.getElementById('board');
-      const groups = {};
-      for (const item of r.results) { (groups[item.group] = groups[item.group]||[]).push(item); }
-      board.innerHTML = Object.keys(groups).map(g => `<div><div class="group">${g}</div><div class="grid">` + groups[g].map(item => `
-        <div class="card">
-          <div class="row">
-            <div>
-              <div class="name">${light(item.ok)} ${item.name}</div>
-              <div class="sub">${item.url || (item.port ? ':'+item.port : '')} ${item.status ? '• HTTP '+item.status : ''} ${item.ms ? '• '+item.ms+'ms' : ''}</div>
-            </div>
-          </div>
-          <div class="fix"><button class="btn" onclick="fixOne('${item.id}')">${item.id==='postgres'?'No Auto-Fix':'Easy Button'}</button></div>
-          <div class="log" id="log-${item.id}">—</div>
+<div class="wrap">
+<h1>ANTIGRAVITY — Lights</h1>
+<div class="toolbar">
+  <button class="btn" onclick="refresh()">Refresh</button>
+  <button class="btn" onclick="fixAll()">Fix All Reds</button>
+  <span class="pill" id="summary">loading...</span>
+  <span class="pill" id="clock"></span>
+</div>
+<div id="board" class="grid">loading...</div>
+</div>
+<script>
+const API='/api/status',FIX='/api/fix/'
+let last=null
+function light(ok){return ok?'<div class="light green"></div>':'<div class="light red"></div>'}
+async function refresh(){
+  const r=await fetch(API).then(x=>x.json())
+  last=r
+  const board=document.getElementById('board')
+  const groups={}
+  for(const item of r.results)(groups[item.group]=groups[item.group]||[]).push(item)
+  board.innerHTML=Object.keys(groups).map(g=>`<div><div class="group">${g}</div><div class="grid">`+groups[g].map(item=>`
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="name">${light(item.ok)} ${item.name}</div>
+          <div class="sub">${item.url||(item.port?':'+item.port:'')} ${item.status?'• '+item.status.toUpperCase():''} ${item.ms?'• '+item.ms+'ms':''}</div>
         </div>
-      `).join('') + `</div></div>`).join('');
-      const down = r.results.filter(x=>!x.ok).length;
-      document.getElementById('summary').textContent = r.results.length + ' checks • ' + (down ? down + ' DOWN' : 'ALL UP');
-      document.getElementById('clock').textContent = new Date(r.ts).toLocaleTimeString();
-    }
-
-    async function fixOne(id) {
-      const el = document.getElementById('log-'+id);
-      el.textContent = 'Fixing...';
-      try {
-        const r = await fetch(FIX+encodeURIComponent(id)).then(x=>x.json());
-        el.textContent = JSON.stringify(r, null, 2);
-      } catch (e) { el.textContent = 'fix failed: ' + e.message; }
-      setTimeout(refresh, 1500);
-    }
-
-    async function fixAll() {
-      const ids = last ? last.results.filter(x=>!x.ok && x.id!=='postgres').map(x=>x.id) : [];
-      for (const id of ids) await fixOne(id);
-    }
-
-    refresh();
-    setInterval(refresh, 3000);
-  </script>
+      </div>
+      <div class="fix"><button class="btn" onclick="fixOne('${item.id}')">${item.id==='postgres'||item.id==='postgres-embedded'?'No Auto-Fix':'Easy Button'}</button></div>
+      <div class="log" id="log-${item.id}">—</div>
+    </div>
+  `).join('')+'</div></div>').join('')
+  const down=r.results.filter(x=>!x.ok).length
+  document.getElementById('summary').textContent=r.results.length+' checks • '+(down?down+' DOWN':'ALL UP')
+  document.getElementById('clock').textContent=new Date(r.ts).toLocaleTimeString()
+}
+async function fixOne(id){
+  const el=document.getElementById('log-'+id)
+  el.textContent='Fixing...'
+  try{
+    const r=await fetch(FIX+encodeURIComponent(id)).then(x=>x.json())
+    el.textContent=JSON.stringify(r,null,2)
+  }catch(e){el.textContent='fix failed: '+e.message}
+  setTimeout(refresh,1500)
+}
+async function fixAll(){
+  const ids=last?last.results.filter(x=>!x.ok&&x.id!=='postgres'&&x.id!=='postgres-embedded').map(x=>x.id):[]
+  for(const id of ids)await fixOne(id)
+}
+refresh()
+setInterval(refresh,3000)
+</script>
 </body>
 </html>
