@@ -1,25 +1,24 @@
 # Mission stack unified bootstrap.
 #
-# Brings up the entire Sabretooth cockpit in dependency order:
-#   1. Docker Desktop
-#   2. WSL Hermes Router (:11435) + watchdog
-#   3. Mission Control GUI + memory server (:8787) — verify only (Scheduled Task starts it)
-#   4. Mission Control Watchdog — verify only (Scheduled Task starts it)
-#   5. OpusHasHands hub (:4200)
-#   6. OpenClaw Gateway browser-open (waits for :18789)
-#   7. Claude Code + Hermes TUI windows in Windows Terminal
+# Brings up the entire stack in dependency order, HIDDEN, no cursor movement:
+#   1. Ollama
+#   2. OmniRoute LB
+#   3. Paperclip loopback
+#   4. Auth proxy
+#   5. OpenClaw / MCP gateway
+#   6. Cloudflare tunnel
+#   7. Date app frontend :3200
+#   8. Date app backend :8000
+#   9. Mission Control :8787
+#   10. Red/Green dashboard :5678
 #
-# NOTE: Paperclip HQ (:3100) and its postgres container decommissioned 2026-05-29.
-#       Hermes Dashboard (:9119) replaces it — tunneled via dashboard.youandinotai.com
-#
-# Idempotent. Re-running is safe — every phase checks before acting.
+# All services start hidden. No terminal windows. No cursor movement.
 # Logs to E:\ANTIGRAVITY\logs\autostart-YYYY-MM-DD.log
 #
-# Triggered automatically at user login via Startup-folder shortcut.
-# Click bootstrap.cmd at repo root to run on demand.
+# Triggered automatically at user login via Scheduled Task.
+#
 
 $ErrorActionPreference = 'Continue'
-
 $Repo   = 'E:\ANTIGRAVITY'
 $LogDir = "$Repo\logs"
 $Log    = "$LogDir\autostart-$(Get-Date -Format 'yyyy-MM-dd').log"
@@ -35,7 +34,7 @@ function Test-LocalPort($port) {
     try {
         $client = New-Object System.Net.Sockets.TcpClient
         $async  = $client.BeginConnect('127.0.0.1', $port, $null, $null)
-        $ok     = $async.AsyncWaitHandle.WaitOne(2000, $false)
+        $ok     = $async.AsyncWaitHandle.WaitOne(1500, $false)
         $client.Close()
         return $ok
     } catch { return $false }
@@ -54,165 +53,167 @@ function Wait-ForPort($port, $timeoutSec, $label) {
     return $false
 }
 
+function Start-Hidden($exe, $args, $label) {
+    if (-not $exe) { Log "$label skipped: exe missing"; return }
+    if ($null -eq $args) { $args = @() }
+    if ($args -isnot [System.Collections.IEnumerable] -or $args -is [string]) { $args = @($args) }
+    $clean = @($args | Where-Object { $_ -ne $null })
+    if (-not $clean) { $clean = @('') }
+    try {
+        Start-Process -FilePath $exe -ArgumentList $clean -WindowStyle Hidden -ErrorAction SilentlyContinue | Out-Null
+        Log "$label started"
+    } catch {
+        Log "$label failed: $_"
+    }
+}
+
 Log '=========================================='
 Log '=== mission stack autostart begin ========'
 Log '=========================================='
 
-# ---------- 1. Docker Desktop ----------
-$dockerExe = 'C:\Program Files\Docker\Docker\Docker Desktop.exe'
-$dockerCli = Get-Command docker -ErrorAction SilentlyContinue
-if (Test-Path $dockerExe) {
-    if (-not (Get-Process 'Docker Desktop' -ErrorAction SilentlyContinue)) {
-        Log '[1/8] starting Docker Desktop'
-        Start-Process $dockerExe -WindowStyle Hidden -ErrorAction SilentlyContinue
+# 1. Ollama
+if (Test-LocalPort 11434) {
+    Log '[1/10] Ollama already up on :11434'
+} else {
+    Log '[1/10] starting Ollama'
+    $ollama = "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe"
+    if (Test-Path $ollama) {
+        Start-Hidden $ollama @('serve') 'Ollama'
+        Wait-ForPort 11434 30 'Ollama' | Out-Null
     } else {
-        Log '[1/8] Docker Desktop already running'
+        Log '      ollama.exe not found'
     }
-    if ($dockerCli) {
-        # Wait for docker daemon (up to 90s)
-        $deadline = (Get-Date).AddSeconds(90)
-        while ((Get-Date) -lt $deadline) {
-            $null = & docker info 2>&1
-            if ($LASTEXITCODE -eq 0) { Log '      docker daemon ready'; break }
-            Start-Sleep -Seconds 3
-        }
+}
+
+# 2. OmniRoute LB
+if (Test-LocalPort 20128) {
+    Log '[2/10] OmniRoute already up on :20128'
+} else {
+    Log '[2/10] starting OmniRoute'
+    $omni = Get-Command omniroute -ErrorAction SilentlyContinue
+    if ($omni) {
+        Start-Hidden $omni.Source @() 'OmniRoute'
+        Wait-ForPort 20128 30 'OmniRoute' | Out-Null
     } else {
-        Log '      docker CLI not on PATH — skipping daemon wait (downstream phases will gracefully skip docker-dependent steps)'
+        Log '      omniroute not found on PATH'
+    }
+}
+
+# 3. Paperclip loopback
+if (Test-LocalPort 3120) {
+    Log '[3/10] Paperclip already up on :3120'
+} else {
+    Log '[3/10] starting Paperclip loopback'
+    $loop = "$Repo\ops\paperclip-runtime\run-paperclip-loopback.ps1"
+    if (Test-Path $loop) {
+        Start-Hidden 'powershell.exe' @('-NoProfile','-ExecutionPolicy','Bypass','-File',$loop) 'Paperclip'
+        Wait-ForPort 3120 60 'Paperclip' | Out-Null
+    } else {
+        Log "      loopback script missing: $loop"
+    }
+}
+
+# 4. Auth proxy
+if (Test-LocalPort 3110) {
+    Log '[4/10] Auth proxy already up on :3110'
+} else {
+    Log '[4/10] starting Auth proxy'
+    $proxy = "$Repo\ops\paperclip-runtime\run-paperclip-auth-proxy.ps1"
+    if (Test-Path $proxy) {
+        Start-Hidden 'powershell.exe' @('-NoProfile','-ExecutionPolicy','Bypass','-File',$proxy) 'AuthProxy'
+        Wait-ForPort 3110 30 'AuthProxy' | Out-Null
+    } else {
+        Log "      proxy script missing: $proxy"
+    }
+}
+
+# 5. OpenClaw / MCP gateway
+if (Test-LocalPort 18789) {
+    Log '[5/10] OpenClaw already up on :18789'
+} else {
+    Log '[5/10] starting OpenClaw gateway'
+    $oc = "$env:USERPROFILE\.openclaw\gateway.cmd"
+    if (Test-Path $oc) {
+        Start-Hidden 'cmd.exe' @('/c',$oc) 'OpenClaw'
+        Wait-ForPort 18789 60 'OpenClaw' | Out-Null
+    } else {
+        Log "      openclaw gateway.cmd missing"
+    }
+}
+
+# 6. Cloudflare tunnel
+if (-not (Get-CimInstance Win32_Process -Filter "Name='cloudflared.exe'" -ErrorAction SilentlyContinue)) {
+    Log '[6/10] starting Cloudflare tunnel'
+    $cf = "$Repo\scripts\start-t5500-dateapp-cloudflared.ps1"
+    if (Test-Path $cf) {
+        Start-Hidden 'powershell.exe' @('-NoProfile','-ExecutionPolicy','Bypass','-File',$cf) 'Cloudflared'
+        Start-Sleep -Seconds 5
+    } else {
+        Log "      cloudflared script missing: $cf"
     }
 } else {
-    Log '[1/8] Docker Desktop not installed — skipping'
+    Log '[6/10] Cloudflare tunnel already running'
 }
 
-# ---------- 2. Hermes Router (WSL :11435) ----------
-Log '[2/7] starting Hermes Router check'
-$hermesPid = $null
-try { $hermesPid = (wsl -d Ubuntu -- pgrep -f hermes_router.py 2>$null | Select-Object -First 1) } catch {}
-if ([string]::IsNullOrWhiteSpace($hermesPid)) {
-    Log '[3/8] starting Hermes Router (WSL background)'
-    # Bash command built from [char]38 because PowerShell 5.1 refuses literal
-    # ampersands anywhere in the source file (even comments) due to a parser bug.
-    $a = [char]38
-    $hermesCmd = "nohup bash /mnt/c/antigravity/scripts/start-hermes-router.sh > /tmp/hermes-router.log 2>${a}1 ${a} disown"
-    $hermesArgs = @('-d','Ubuntu','--','bash','-lc',$hermesCmd)
-    Start-Process wsl -ArgumentList $hermesArgs -WindowStyle Hidden -ErrorAction SilentlyContinue
+# 7. Date app frontend :3200
+if (Test-LocalPort 3200) {
+    Log '[7/10] Frontend already up on :3200'
 } else {
-    Log "[3/8] Hermes Router already running (PID $hermesPid)"
+    Log '[7/10] starting Frontend'
+    $fe = "$Repo\scripts\start-dateapp-frontend-3200.ps1"
+    if (Test-Path $fe) {
+        Start-Hidden 'powershell.exe' @('-NoProfile','-ExecutionPolicy','Bypass','-File',$fe,'-RepoRoot',$Repo) 'Frontend'
+        Wait-ForPort 3200 60 'Frontend' | Out-Null
+    } else {
+        Log "      frontend script missing: $fe"
+    }
 }
 
-# Hermes Router watchdog (perpetual)
-$hermesWatchdogScript = "$Repo\scripts\hermes-watchdog.ps1"
-$hermesWatchdogRunning = $false
-Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -ErrorAction SilentlyContinue |
-    Where-Object { $_.CommandLine -match 'hermes-watchdog\.ps1' } |
-    ForEach-Object { $hermesWatchdogRunning = $true }
-if ((-not $hermesWatchdogRunning) -and (Test-Path $hermesWatchdogScript)) {
-    Log '      starting Hermes Router watchdog (hidden)'
-    Start-Process -FilePath 'powershell.exe' `
-        -ArgumentList '-NonInteractive','-WindowStyle','Hidden','-ExecutionPolicy','Bypass','-File',$hermesWatchdogScript `
-        -WindowStyle Hidden -ErrorAction SilentlyContinue
+# 8. Date app backend :8000
+if (Test-LocalPort 8000) {
+    Log '[8/10] Backend already up on :8000'
 } else {
-    Log '      Hermes Router watchdog already running (or script missing)'
+    Log '[8/10] starting Backend'
+    $be = "$Repo\scripts\t5500\Start-YouAndINotAI-Tunnel.ps1"
+    if (Test-Path $be) {
+        Start-Hidden 'powershell.exe' @('-NoProfile','-ExecutionPolicy','Bypass','-File',$be,'-RepoRoot',$Repo) 'Backend'
+        Wait-ForPort 8000 60 'Backend' | Out-Null
+    } else {
+        Log "      backend script missing: $be"
+    }
 }
 
-# ---------- 3. Mission Control GUI + memory server (:8787) ----------
-# Scheduled Task "MissionControlGUI" boots this at startup. Verify only.
+# 9. Mission Control :8787
 if (Test-LocalPort 8787) {
-    Log '[5/8] Mission Control up on :8787'
+    Log '[9/10] Mission Control already up on :8787'
 } else {
-    Log '[5/8] Mission Control not yet on :8787 — Scheduled Task should start it; bootstrapping fallback'
-    Start-Process -FilePath 'powershell.exe' `
-        -ArgumentList '-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-File',"$Repo\scripts\start-mission-control.ps1",'-RepoRoot',$Repo,'-Port','8787' `
-        -WindowStyle Hidden -ErrorAction SilentlyContinue
-    Wait-ForPort 8787 60 'Mission Control' | Out-Null
-}
-
-# ---------- 6. Mission Control Watchdog ----------
-# Scheduled Task "MissionControlWatchdog" boots this. Verify by log presence.
-$mcWatchdogLog = "$LogDir\mission-control-watchdog.log"
-if (Test-Path $mcWatchdogLog) {
-    $lastLine = (Get-Content $mcWatchdogLog -Tail 1 -ErrorAction SilentlyContinue)
-    Log "[6/8] MC Watchdog log present (last: $lastLine)"
-} else {
-    Log '[6/8] MC Watchdog log not present yet — Scheduled Task may still be starting'
-}
-
-# ---------- 6b. OpusHasHands hub (:4200) ----------
-# Cloudflare tunnel ingress (paperclip-antigravity tunnel c7bc9665-...) routes
-# opushashands.youandinotai.com -> http://127.0.0.1:4200. Without this listener
-# the public hub returns 502 Bad Gateway.
-$ohhDir = 'E:\ANTIGRAVITY\_handoff-staging-2026-05-26\_deploy\opushashands'
-$ohhLog = "$LogDir\opushashands-server.log"
-$pyExe  = 'C:\Windows\py.exe'
-if (Test-LocalPort 4200) {
-    Log '[6b/8] OpusHasHands hub already up on :4200'
-} elseif (-not (Test-Path $ohhDir)) {
-    Log "[6b/8] OpusHasHands dir missing: $ohhDir — skipping (run Hermes integration dispatch first)"
-} elseif (-not (Test-Path $pyExe)) {
-    Log "[6b/8] python launcher missing: $pyExe — skipping"
-} else {
-    Log '[6b/8] starting OpusHasHands hub (python http.server :4200, hidden)'
-    Start-Process -FilePath $pyExe `
-        -ArgumentList '-m','http.server','4200','--bind','127.0.0.1' `
-        -WorkingDirectory $ohhDir `
-        -RedirectStandardOutput $ohhLog `
-        -RedirectStandardError "$ohhLog.err" `
-        -WindowStyle Hidden -ErrorAction SilentlyContinue
-    Wait-ForPort 4200 15 'OpusHasHands' | Out-Null
-}
-
-# ---------- 7. OpenClaw Gateway dashboard browser-open ----------
-# OpenClaw Gateway.cmd (separate Startup item) takes ~40s to be ready.
-# Spawn a hidden powershell that polls port 18789 for up to 90s,
-# then opens the canvas URL — survives this script's exit.
-if ($env:ANTIGRAVITY_FULL_AUTOSTART -eq '1') {
-Log '[7/8] scheduling OpenClaw dashboard browser-open (waits for :18789)'
-$openclawBlock = {
-    for ($i = 0; $i -lt 45; $i++) {
-        try {
-            $c = New-Object System.Net.Sockets.TcpClient
-            $a = $c.BeginConnect('127.0.0.1', 18789, $null, $null)
-            $ok = $a.AsyncWaitHandle.WaitOne(1000, $false)
-            $c.Close()
-            if ($ok) { Start-Process 'http://127.0.0.1:18789/__openclaw__/canvas/'; exit }
-        } catch {}
-        Start-Sleep -Seconds 2
+    Log '[9/10] starting Mission Control'
+    $mc = "$Repo\scripts\start-mission-control.ps1"
+    if (Test-Path $mc) {
+        Start-Hidden 'powershell.exe' @('-NoProfile','-ExecutionPolicy','Bypass','-File',$mc,'-RepoRoot',$Repo,'-Port',8787) 'MissionControl'
+        Wait-ForPort 8787 30 'MissionControl' | Out-Null
+    } else {
+        Log "      mission control script missing: $mc"
     }
 }
-$openclawCmd = $openclawBlock.ToString()
-$openclawArgs = @('-NonInteractive','-WindowStyle','Hidden','-Command',$openclawCmd)
-Start-Process powershell.exe -ArgumentList $openclawArgs -WindowStyle Hidden -ErrorAction SilentlyContinue
-} else {
-    Log '[7/8] OpenClaw dashboard browser-open skipped (set ANTIGRAVITY_FULL_AUTOSTART=1 to enable)'
-}
 
-# ---------- 8. Terminal windows ----------
-# GUARDED + MINIMIZED so re-runs (Chrome Remote Desktop reconnects, re-logins) never
-# re-spawn focus-stealing terminals — the "4 windows in a row that move the cursor" bug.
-# Services already run headless via the watchdogs above, so skipping these is harmless.
-if ($env:ANTIGRAVITY_FULL_AUTOSTART -ne '1') {
-    Log '[8/8] terminal session windows skipped (set ANTIGRAVITY_FULL_AUTOSTART=1 to enable)'
-} elseif (Get-Process WindowsTerminal -ErrorAction SilentlyContinue) {
-    Log '[8/8] Windows Terminal already open — skipping session windows (prevents cursor-stealing re-spawn)'
+# 10. Red/Green dashboard :5678
+if (Test-LocalPort 5678) {
+    Log '[10/10] Dashboard already up on :5678'
 } else {
-    # Open Claude Code at E:\ANTIGRAVITY, minimized
-    Log '[8/8] opening Claude Code (claude --resume) in Windows Terminal (minimized)'
-    Start-Process wt -ArgumentList @(
-        '-d','E:\ANTIGRAVITY',
-        'powershell.exe','-NoExit','-Command','claude --resume'
-    ) -WindowStyle Minimized -ErrorAction SilentlyContinue
-
-    # Open Hermes Agent CLI in WSL, minimized
-    Log '      opening Hermes Agent CLI in Windows Terminal at /mnt/c/antigravity (WSL Ubuntu, minimized)'
-    Start-Process wt -ArgumentList @(
-        '-d','E:\ANTIGRAVITY',
-        'wsl.exe','-d','Ubuntu','--cd','/mnt/c/antigravity','--','/home/josh/.local/bin/hermes'
-    ) -WindowStyle Minimized -ErrorAction SilentlyContinue
+    Log '[10/10] starting Dashboard'
+    $dash = "$Repo\scripts\start-dashboard.ps1"
+    if (Test-Path $dash) {
+        Start-Hidden 'powershell.exe' @('-NoProfile','-ExecutionPolicy','Bypass','-File',$dash) 'Dashboard'
+        Wait-ForPort 5678 30 'Dashboard' | Out-Null
+    } else {
+        Log "      dashboard script missing: $dash"
+    }
 }
 
 Log '=========================================='
 Log '=== mission stack autostart complete ====='
 Log '=== Mission Control: http://127.0.0.1:8787/'
-Log '=== Hermes Dashboard: http://127.0.0.1:9119/  (public: https://dashboard.youandinotai.com/)'
-Log '=== OpusHasHands:    http://127.0.0.1:4200/  (public: https://opushashands.youandinotai.com/)'
+Log '=== Dashboard:       http://127.0.0.1:5678/'
 Log '=== OpenClaw:        http://127.0.0.1:18789/'
 Log '=========================================='
