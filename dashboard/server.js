@@ -1,56 +1,105 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const { execSync, spawn } = require('child_process');
+const { spawn, execSync } = require('child_process');
 
 const PORT = 5678;
 const REPO = 'E:\\ANTIGRAVITY';
 
-function checkPort(port, timeoutMs = 800) {
+function checkTcp(port, timeoutMs = 700) {
   return new Promise((resolve) => {
-    const socket = new (require('net').Socket)();
-    const start = Date.now();
-    socket.connect(port, '127.0.0.1', () => { socket.destroy(); resolve(true); });
-    socket.on('error', () => resolve(false));
-    setTimeout(() => { socket.destroy(); resolve(false); }, timeoutMs);
+    try {
+      const socket = new (require('net').Socket)();
+      const start = Date.now();
+      socket.connect(port, '127.0.0.1', () => { socket.destroy(); resolve({ ok: true, ms: Date.now() - start }); });
+      socket.on('error', () => resolve({ ok: false }));
+      socket.setTimeout(timeoutMs);
+      socket.on('timeout', () => { socket.destroy(); resolve({ ok: false }); });
+    } catch { resolve({ ok: false }); }
   });
 }
 
-async function checkHttp(url, timeoutMs = 1200) {
+function checkHttp(url, timeoutMs = 1200) {
   return new Promise((resolve) => {
-    const start = Date.now();
-    const socket = require('net').createConnection(80, '127.0.0.1');
-    let data = '';
-    socket.on('data', chunk => { data += chunk.toString(); if (data.includes('\r\n\r\n')) { socket.end(); resolve({ ok: true, status: 200, ms: Date.now() - start }); } });
-    socket.on('error', () => resolve({ ok: false }));
-    setTimeout(() => { socket.destroy(); resolve({ ok: false }); }, timeoutMs);
+    try {
+      const client = new (require('http').ClientRequest) || null;
+      if (!client) return resolve({ ok: false });
+      const start = Date.now();
+      const req = http.request(url, { method: 'GET', timeout: timeoutMs }, (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => resolve({ ok: res.statusCode < 500, status: res.statusCode, ms: Date.now() - start }));
+      });
+      req.on('error', () => resolve({ ok: false }));
+      req.on('timeout', () => { req.destroy(); resolve({ ok: false }); });
+      req.end();
+    } catch { resolve({ ok: false }); }
   });
 }
 
 const CHECKS = [
-  { id: 'ollama', name: 'Ollama', port: 11434, group: 'Models' },
-  { id: 'omniroute', name: 'OmniRoute', port: 20128, group: 'Gateway' },
-  { id: 'openclaw', name: 'OpenClaw', port: 18789, group: 'Gateway' },
-  { id: 'auth-proxy', name: 'Auth Proxy', port: 3110, group: 'Gateway' },
-  { id: 'backend', name: 'Backend', port: 8000, group: 'Date App' },
-  { id: 'paperclip', name: 'Paperclip', port: 3120, group: 'Services' },
-  { id: 'mission-control', name: 'Mission Control', port: 8787, group: 'Services' },
-  { id: 'dashboard', name: 'Dashboard', port: 5678, group: 'Services' },
-  { id: 'frontend', name: 'Frontend', port: 3200, group: 'Date App' },
-  { id: 'postgres', name: 'Postgres', port: 5432, group: 'Database' }
+  { id: 'ollama', name: 'Ollama', port: 11434, group: 'Models', script: null },
+  { id: 'omniroute', name: 'OmniRoute LB', port: 20128, group: 'Gateway', script: 'scripts/start-omniroute.ps1' },
+  { id: 'openclaw', name: 'OpenClaw', port: 18789, group: 'Gateway', script: null },
+  { id: 'auth-proxy', name: 'Auth Proxy', port: 3110, group: 'Gateway', script: 'ops/paperclip-runtime/run-paperclip-auth-proxy.ps1' },
+  { id: 'backend', name: 'Backend', port: 8000, group: 'Date App', script: 'scripts/t5500/Start-YouAndINotAI-Tunnel.ps1' },
+  { id: 'paperclip', name: 'Paperclip', port: 3120, group: 'Services', script: 'ops/paperclip-runtime/run-paperclip-loopback.ps1' },
+  { id: 'mission-control', name: 'Mission Control', port: 8787, group: 'Services', script: 'scripts/start-mission-control.ps1' },
+  { id: 'frontend', name: 'Frontend', port: 3200, group: 'Date App', script: 'scripts/start-dateapp-frontend-3200.ps1' },
+  { id: 'postgres', name: 'Postgres', port: 5432, group: 'Database', script: null },
+  { id: 'postgres-embedded', name: 'Embedded Postgres', port: 54329, group: 'Database', script: null },
+  { id: 'cloudflare-hermes', name: 'Cloudflare Hermes Tunnel', group: 'Tunnel', url: 'https://paperclip-clean.youandinotai.com', script: 'scripts/start-t5500-dateapp-cloudflared.ps1' },
+  { id: 'cloudflare-louise', name: 'Cloudflare Louise Tunnel', group: 'Tunnel', url: 'https://louise-pee-lucky-scenarios.trycloudflare.com', script: 'scripts/start-t5500-dateapp-cloudflared.ps1' },
+  { id: 'dashboard', name: 'Dashboard', port: 5678, group: 'Services', script: 'scripts/start-dashboard.ps1' }
 ];
 
 async function collect() {
   const results = [];
   for (const c of CHECKS) {
+    let ok = false, status = 'closed', ms = null;
     try {
-      const up = await checkPort(c.port, 700);
-      results.push({ id: c.id, name: c.name, port: c.port, group: c.group, ok: up, status: up ? 'open' : 'closed', ms: up ? Math.floor(Math.random() * 80 + 5) : null });
-    } catch (e) {
-      results.push({ id: c.id, name: c.name, port: c.port, group: c.group, ok: false, status: 'error', ms: null });
+      if (c.port) {
+        const r = await checkTcp(c.port);
+        ok = r.ok; ms = r.ms; status = ok ? 'open' : 'closed';
+      } else if (c.url) {
+        const r = await checkHttp(c.url);
+        ok = r.ok; status = ok ? 'up' : 'down'; ms = r.ms;
+      }
+    } catch {
+      ok = false; status = 'error';
     }
+    results.push({
+      id: c.id,
+      name: c.name,
+      port: c.port || null,
+      url: c.url || (c.port ? 'http://127.0.0.1:' + c.port : null),
+      group: c.group,
+      ok,
+      status,
+      ms,
+      fixable: !!c.script,
+      script: c.script || null
+    });
   }
   return { ts: Date.now(), results, repo: REPO };
+}
+
+function fix(id) {
+  return new Promise((resolve) => {
+    const c = CHECKS.find(x => x.id === id);
+    if (!c || !c.script) return resolve({ id, fixed: false, message: 'No auto-fix script for ' + id });
+    const scriptPath = path.join(REPO, c.script);
+    if (!fs.existsSync(scriptPath)) return resolve({ id, fixed: false, message: 'Script missing: ' + scriptPath });
+    try {
+      const child = spawn('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath], { cwd: REPO, windowsHide: true });
+      let out = '';
+      child.stdout.on('data', d => out += d.toString());
+      child.stderr.on('data', d => out += d.toString());
+      child.on('close', code => resolve({ id, fixed: code === 0, message: out || ('exit ' + code), pid: child.pid }));
+    } catch (e) {
+      resolve({ id, fixed: false, message: e.message });
+    }
+  });
 }
 
 const server = http.createServer(async (req, res) => {
@@ -69,7 +118,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.url.startsWith('/api/fix/')) {
       const id = decodeURIComponent(req.url.replace('/api/fix/', ''));
-      const result = { id, fixed: false, message: 'Easy Button needs backend fix script wiring' };
+      const result = await fix(id);
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(result));
       return;
