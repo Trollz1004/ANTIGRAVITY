@@ -7,9 +7,8 @@ app.use(express.json());
 const PORT = process.env.PORT || 11436;
 const HOST = process.env.HOST || '127.0.0.1';
 const OLLAMA_URL = process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434/v1/chat/completions';
-const FCC_URL = process.env.FCC_CHAT_URL || 'http://127.0.0.1:8082/v1/chat/completions';
-const HERMES_ROUTER_URL = process.env.HERMES_URL || 'http://127.0.0.1:11435/v1/chat/completions';
-const OPENCLAW_URL = process.env.OPENCLAW_URL || 'http://127.0.0.1:9119/v1/chat/completions';
+const OPENROUTER_URL = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1/chat/completions';
+const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || '';
 const OPENAI_URL = process.env.OPENAI_URL || 'https://api.openai.com/v1/chat/completions';
 const GROK_URL = process.env.GROK_URL || 'https://api.x.ai/v1/chat/completions';
 
@@ -24,16 +23,25 @@ const MODELS = [
   { id: 'auto/pro-code', object: 'model', owned_by: 'omni' },
   { id: 'hermes', object: 'model', owned_by: 'omni' },
   { id: 'hermes-local', object: 'model', owned_by: 'hermes' },
+  { id: 'openrouter/free', object: 'model', owned_by: 'openrouter' },
+  { id: 'openrouter/nvidia/nemotron-3-super-120b-a12b:free', object: 'model', owned_by: 'openrouter' },
+  { id: 'openrouter/nvidia/nemotron-3-ultra-550b-a55b:free', object: 'model', owned_by: 'openrouter' },
+  { id: 'openrouter/nvidia/nemotron-3-nano-30b-a3b:free', object: 'model', owned_by: 'openrouter' },
+  { id: 'openrouter/nvidia/nemotron-nano-9b-v2:free', object: 'model', owned_by: 'openrouter' },
   { id: 'cfo', object: 'model', owned_by: 'omni' },
   { id: 'marketing', object: 'model', owned_by: 'omni' },
-  { id: 'fcc', object: 'model', owned_by: 'fcc' },
-  { id: 'opencode', object: 'model', owned_by: 'fcc' },
+  { id: 'fcc', object: 'model', owned_by: 'omni' },
+  { id: 'opencode', object: 'model', owned_by: 'omni' },
   { id: 'openclaw', object: 'model', owned_by: 'openclaw' },
   { id: 'grok', object: 'model', owned_by: 'xai' },
   { id: 'grok-2-1218', object: 'model', owned_by: 'xai' },
   { id: 'grok-3', object: 'model', owned_by: 'xai' },
+  { id: 'grok-3-mini', object: 'model', owned_by: 'xai' },
+  { id: 'grok-3-reasoning', object: 'model', owned_by: 'xai' },
   { id: 'gpt-4o', object: 'model', owned_by: 'openai' },
   { id: 'gpt-4o-mini', object: 'model', owned_by: 'openai' },
+  { id: 'cursor-adapter', object: 'model', owned_by: 'custom' },
+  { id: 'cursor/free-fallback', object: 'model', owned_by: 'custom' },
   { id: 'hermes-router/hermes', object: 'model', owned_by: 'hermes-router' },
 ];
 

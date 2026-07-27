@@ -7,7 +7,7 @@
 ## Node
 - T5500 (DESKTOP-H4B53GL / 192.168.0.15)
 - Repo: https://github.com/Trollz1004/clean (main only)
-- Paperclip data: E:\clean\.paperclip-laptop (port 3120, local_trusted, private)
+- Paperclip data: E:\clean\.paperclip-local (port 3120, local_trusted, private)
 - Launched as NON-admin user (embedded Postgres requires unprivileged UID).
   Launcher: E:\clean\ops\launch-paperclip.cmd run via `runas /trustlevel:0x20000`.
 
