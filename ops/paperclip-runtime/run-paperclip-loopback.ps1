@@ -28,7 +28,7 @@ $env:DATABASE_URL = "postgresql://${user}:${pass}@127.0.0.1:5432/${pcDb}"
 L 'DATABASE_URL set from docker postgres env (redacted)'
 
 $cmd = Join-Path $env:APPDATA 'npm\paperclipai.cmd'
-$config = 'E:\ANTIGRAVITY\.paperclip-laptop\instances\default\config.json'
+$config = 'E:\ANTIGRAVITY\.paperclip-local\instances\default\config.json'
 if(-not (Test-Path $cmd)){ throw "missing $cmd" }
 if(-not (Test-Path $config)){ throw "missing $config" }
 L 'starting paperclipai'

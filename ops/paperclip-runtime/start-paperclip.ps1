@@ -72,7 +72,7 @@ if (-not $env:PORT) {
 }
 
 # Canonical clean instance (single Paperclip — no :3100 duplicate)
-$PaperclipConfig = 'E:\ANTIGRAVITY\.paperclip-laptop\instances\default\config.json'
+$PaperclipConfig = 'E:\ANTIGRAVITY\.paperclip-local\instances\default\config.json'
 
 Log "Starting Paperclip (clean canonical) on port $env:PORT using $PaperclipConfig (env loaded=$loaded)"
 
