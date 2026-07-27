@@ -11,10 +11,16 @@ function checkTcp(port, timeoutMs = 700) {
     try {
       const socket = new (require('net').Socket)();
       const start = Date.now();
-      socket.connect(port, '127.0.0.1', () => { socket.destroy(); resolve({ ok: true, ms: Date.now() - start }); });
-      socket.on('error', () => resolve({ ok: false }));
+      let tried = 0;
+      const hosts = ['127.0.0.1', '192.168.0.15'];
+      function attempt() {
+        if (tried >= hosts.length) { socket.destroy(); resolve({ ok: false }); return; }
+        socket.connect(port, hosts[tried++], () => { socket.destroy(); resolve({ ok: true, ms: Date.now() - start }); });
+      }
+      socket.on('error', attempt);
       socket.setTimeout(timeoutMs);
       socket.on('timeout', () => { socket.destroy(); resolve({ ok: false }); });
+      attempt();
     } catch { resolve({ ok: false }); }
   });
 }
