@@ -105,3 +105,4 @@ apps/antigravity-dashboard/tsconfig*.tsbuildinfo
 ANTIGRAVITY/
 hermes-workspace/
 .paperclip-laptop/
+.paperclip-local/
