@@ -1,5 +1,5 @@
 param([string]$Root = 'E:ANTIGRAVITY')
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Continue'
 $logDir = Join-Path $Root 'logs'
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 $log = Join-Path $logDir ("paperclip-loopback-{0:yyyyMMdd-HHmmss}.log" -f (Get-Date))
