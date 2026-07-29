@@ -10,7 +10,7 @@ $config = Join-Path $Root '.paperclip-local\instances\default\config.json'
 if(-not (Test-Path $cmd)){ L "missing paperclipai cmd: $cmd"; exit 1 }
 if(-not (Test-Path $config)){ L "missing paperclip config: $config"; exit 1 }
 L "starting paperclip loopback config=$config"
-& $cmd run --config $config --instance default --bind loopback *>> $log
+& $cmd run --config $config --instance default *>> $log
 $code=$LASTEXITCODE
 L "exit $code"
 exit $code

@@ -20,8 +20,7 @@ foreach ($c in $candidates) { if (Test-Path $c) { $entry = $c; break } }
 if (-not $entry) { L "missing mission-control entry"; exit 1 }
 $workdir = Split-Path $entry -Parent
 L "starting mission-control from $entry"
-passThru = $Foreground.IsPresent
-$p = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','npx.cmd','tsx',$entry -WorkingDirectory $workdir -PassThru:$($passThru -as [bool])
+$p = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','npx.cmd','tsx',$entry -WorkingDirectory $workdir -PassThru
 L "started mission-control pid $($p.Id)"
 for ($i=0; $i -lt 40; $i++) {
   Start-Sleep -Seconds 2
