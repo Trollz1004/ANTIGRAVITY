@@ -47,11 +47,11 @@ export const PUBLIC_SURFACES = [
 // Keep prices and URLs in sync with PLAN_LINKS / PLAN_AMOUNTS_CENTS there.
 // Env overrides (NEXT_PUBLIC_*) win at build time; hardcoded values are the
 // fallback so the site never breaks on a missing env var.
-const SQUARE_LINK_BOT_SHIELD = process.env.NEXT_PUBLIC_SQUARE_LINK_BOT_SHIELD || 'https://square.link/u/Qc5mxUy7';
-const SQUARE_LINK_FOUNDING = process.env.NEXT_PUBLIC_SQUARE_LINK_FOUNDING || 'https://square.link/u/cxwjcn0s';
-const SQUARE_LINK_3MONTH = process.env.NEXT_PUBLIC_SQUARE_LINK_3MONTH || 'https://square.link/u/oY7qEfRM';
-const SQUARE_LINK_12MONTH = process.env.NEXT_PUBLIC_SQUARE_LINK_12MONTH || 'https://square.link/u/6GHpbvvl';
-const SQUARE_LINK_ROYALTY = process.env.NEXT_PUBLIC_SQUARE_LINK_ROYALTY || 'https://square.link/u/CafhorUS';
+const SQUARE_LINK_BOT_SHIELD = process.env.NEXT_PUBLIC_SQUARE_LINK_BOT_SHIELD || 'https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/bcHu484B9lXIcLED1NCOMIylqGRZY';
+const SQUARE_LINK_FOUNDING = process.env.NEXT_PUBLIC_SQUARE_LINK_FOUNDING || 'https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/1PqO8OO9u4KXHnEF8KKXbxkzzAGZY';
+const SQUARE_LINK_3MONTH = process.env.NEXT_PUBLIC_SQUARE_LINK_3MONTH || 'https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/RZssa4MoM54IEqiH0cMC3ThIGNbZY';
+const SQUARE_LINK_12MONTH = process.env.NEXT_PUBLIC_SQUARE_LINK_12MONTH || 'https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/fKfvKZECYyPgQHvgAiW2kDdYiBCZY';
+const SQUARE_LINK_ROYALTY = process.env.NEXT_PUBLIC_SQUARE_LINK_ROYALTY || 'https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/dDSMLPeCFqlOzk68juBxdKJoC9NZY';
 
 export const MEMBERSHIP_PLANS = [
   {

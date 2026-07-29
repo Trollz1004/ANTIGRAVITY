@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="OmniRouter — single gateway for all AI model traffic. Route through Ollama, OpenRouter, Grok, OpenAI.">
+  <title>OmniRouter — AI Gateway</title>
+  <style>
+    :root { --bg: #0a0a12; --card: #151520; --text: #e9f0ff; --accent: #6366f1; --border: #2a2a3a; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+    header { text-align: center; padding: 3rem 1rem; }
+    h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
+    .subtitle { font-size: 1.2rem; color: #a0a0b0; max-width: 600px; margin: 0 auto; }
+    .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin: 3rem 0; }
+    .plan { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; }
+    .plan .price { font-size: 2rem; font-weight: 700; color: var(--accent); margin: 1rem 0; }
+    .plan .desc { color: #a0a0b0; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .btn { background: var(--accent); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: 600; text-decoration: none; display: inline-block; }
+    .features { margin: 3rem 0; }
+    .feature { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+    .feature:last-child { border-bottom: none; }
+    .feature h3 { color: var(--accent); margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>OmniRouter</h1>
+      <p class="subtitle">Single gateway for all AI model traffic. One API key, every model.</p>
+    </header>
+    <div class="features">
+      <div class="feature">
+        <h3>Multi-Provider Routing</h3>
+        <p>Route through Ollama (local GPU), OpenRouter (free tier), Grok (xAI), OpenAI, and more from a single endpoint.</p>
+      </div>
+      <div class="feature">
+        <h3>One Gateway Policy</h3>
+        <p>All model/API calls must hit /v1/chat/completions and /v1/models on this service. No direct provider access.</p>
+      </div>
+      <div class="feature">
+        <h3>Model Combos</h3>
+        <p>Pre-built agent combos: coder-cascade, ops-safe, market, ops-direct.</p>
+      </div>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <h3>Free Tier</h3>
+        <div class="price">$0</div>
+        <p class="desc">Ollama local + OpenRouter free models.</p>
+        <a href="https://square.link/u/Qc5mxUy7?ref=clean-repo" class="btn">Start Free</a>
+      </div>
+      <div class="plan">
+        <h3>Pro</h3>
+        <div class="price">$19/mo</div>
+        <p class="desc">All providers + priority routing.</p>
+        <a href="https://square.link/u/cxwjcn0s?ref=clean-repo" class="btn">Subscribe</a>
+      </div>
+      <div class="plan">
+        <h3>Business</h3>
+        <div class="price">$49/mo</div>
+        <p class="desc">Team access + custom combos.</p>
+        <a href="https://square.link/u/oY7qEfRM?ref=clean-repo" class="btn">Subscribe</a>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 3rem; color: #606070; font-size: 0.85rem;">
+      <p>Pre-launch — $0 revenue to date. Square-only payments.</p>
+    </div>
+  </div>
+</body>
+</html>

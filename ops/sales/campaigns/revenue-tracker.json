@@ -1,0 +1,56 @@
+{
+  "campaign": "revenue-funnel",
+  "status": "ACTIVE",
+  "target_usd": 10000,
+  "timeframe_hours": 168,
+  "primary_currency": "USD",
+  "square_account_email": "ebaytrashortreasure@gmail.com",
+  "square_location_id": "LY5GN09F5AN83",
+  "revenue_streams": {
+    "security_cleanup": {
+      "name": "Security Cleanup",
+      "setup_fee": 1500,
+      "monthly_recurring": 200,
+      "payment_link_type": "square_direct_checkout",
+      "square_payment_link_id": null,
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/REPLACEME",
+      "landing": "E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html"
+    },
+    "agentic_workflows": {
+      "name": "Agentic Workflows",
+      "setup_fee": 2500,
+      "monthly_recurring": 500,
+      "payment_link_type": "square_direct_checkout",
+      "square_payment_link_id": null,
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/REPLACEME",
+      "landing": "E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html"
+    },
+    "storefront_deployment": {
+      "name": "Storefront Deployment",
+      "setup_fee": 950,
+      "transaction_fee_percent": 3.0,
+      "payment_link_type": "square_direct_checkout",
+      "square_payment_link_id": null,
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/REPLACEME",
+      "landing": "E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html"
+    },
+    "tech_debt_cleanup": {
+      "name": "Tech Debt Cleanup",
+      "sprint_cost": 4000,
+      "payment_link_type": "square_direct_checkout",
+      "square_payment_link_id": null,
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/REPLACEME",
+      "landing": "E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html"
+    },
+    "api_management": {
+      "name": "API Management",
+      "setup_fee": 1200,
+      "transaction_fee_percent": 0.05,
+      "payment_link_type": "square_direct_checkout",
+      "square_payment_link_id": null,
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/REPLACEME",
+      "landing": "E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html"
+    }
+  },
+  "note": "All payment links must use Square direct checkout URLs (long_url), NOT square.link/u/ short links. Short links return 404. Update payment_truth.py and frontend constants.ts accordingly."
+}

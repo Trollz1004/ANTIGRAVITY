@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<!--
+  YOU & I, NOT AI — AFFILIATE PROGRAM (public recruitment page)
+  Build: 2026-07-15 · ANTIGRAVITY "Sleek Cyberpunk Glassmorphism" (locked 2026-05-12)
+  Church & State: Inter (voice) + JetBrains Mono (machine).
+  MAINTAINER — before launch:
+    1. Set CONFIG.APPLY_ENDPOINT (POST JSON) or CONFIG.APPLY_EMAIL. Until then the form is
+       honestly STAGED — it sends nothing and says so. No fake success states.
+    2. Tier thresholds are launch defaults — edit in the TIERS section + your agreement.
+    3. Surface rule: FL 496.405 restricted vocabulary stays at ZERO on this page. Keep it that way.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Affiliate Program — You &amp; I, Not AI</title>
+<meta name="description" content="Send real humans to a dating platform that verifies every profile. Earn up to 50% on paid signups. Paid monthly via Square.">
+<link rel="icon" href="/logo-favicon-32.png">
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,900&family=JetBrains+Mono:wght@300;400;500;600&display=swap");
+:root{
+  --bg:#020617;--surface-1:#0f172a;--surface-2:#1e293b;
+  --glass:rgba(15,23,42,.60);--border:rgba(255,255,255,.10);--border-cyan:rgba(34,211,238,.40);
+  --text:#f8fafc;--body:#cbd5e1;--muted:#94a3b8;--deep:#64748b;
+  --cyan:#22d3ee;--cyan-deep:#06b6d4;--pink:#f472b6;--pink-deep:#ec4899;--rose:#f43f5e;
+  --gold:#e9b949;--success:#10b981;--danger:#f43f5e;
+  --grad:linear-gradient(to right,#22d3ee,#ec4899);
+  --sans:"Inter",ui-sans-serif,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--body);font-family:var(--sans);font-size:1rem;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(55% 38% at 50% -6%,rgba(34,211,238,.10),transparent 60%),
+    radial-gradient(40% 30% at 85% 110%,rgba(236,72,153,.07),transparent 60%);}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05;
+  background-image:linear-gradient(#2563eb 1px,transparent 1px),linear-gradient(90deg,#2563eb 1px,transparent 1px);
+  background-size:56px 56px}
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 24px}
+.mono{font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase}
+a{color:var(--cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
+
+/* nav */
+nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.brand{display:flex;align-items:center;gap:12px;color:var(--text)}
+.brand b{font-weight:900;letter-spacing:.02em;font-size:1.05rem}
+.brand .tag{font-family:var(--mono);font-size:.625rem;color:var(--muted);letter-spacing:.22em;text-transform:uppercase;border:1px solid var(--border);border-radius:999px;padding:4px 10px}
+nav .out{font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+nav .out:hover{color:var(--cyan);text-decoration:none}
+
+/* hero */
+.hero{padding:88px 0 40px;max-width:820px}
+.eyebrow{font-family:var(--mono);font-size:.6875rem;color:var(--cyan);letter-spacing:.3em;text-transform:uppercase}
+h1{font-weight:900;font-style:italic;color:var(--text);font-size:clamp(2.1rem,5.6vw,3.4rem);line-height:1.12;letter-spacing:-.01em;margin:18px 0 20px}
+h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:1.125rem;max-width:640px}
+.cta-row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;border-radius:12px;padding:14px 22px;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--body);transition:all .15s ease;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{filter:brightness(1.25);text-decoration:none}
+.btn.primary{border-color:var(--border-cyan);background:rgba(34,211,238,.12);color:var(--cyan)}
+.btn.gold{border-color:rgba(233,185,73,.45);background:rgba(233,185,73,.08);color:var(--gold)}
+
+/* sections */
+section{padding:56px 0}
+h2{font-weight:900;font-style:italic;color:var(--text);font-size:1.5rem;letter-spacing:-.01em;margin-bottom:8px}
+.sub{color:var(--muted);max-width:620px;margin-bottom:28px}
+.slab{font-family:var(--mono);font-size:.625rem;letter-spacing:.3em;text-transform:uppercase;color:var(--deep);margin-bottom:10px}
+
+/* THE FORGE — signature */
+.forge{background:var(--glass);border:1px solid var(--border);border-radius:20px;padding:34px 30px;backdrop-filter:blur(10px);position:relative;overflow:hidden}
+.forge::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 0%,rgba(34,211,238,.07),transparent 70%);pointer-events:none}
+.ugly{font-family:var(--mono);font-size:.8125rem;color:var(--deep);word-break:break-all;border:1px dashed var(--border);border-radius:10px;padding:12px 14px;background:rgba(0,0,0,.35);transition:opacity .5s ease,transform .5s ease}
+.forged-row{display:flex;align-items:center;gap:18px;margin-top:22px;flex-wrap:wrap}
+.forged{font-family:var(--mono);font-size:clamp(1rem,3.4vw,1.5rem);color:var(--cyan);background:rgba(0,0,0,.45);border:1px solid var(--border-cyan);border-radius:12px;padding:16px 20px;box-shadow:0 0 34px rgba(34,211,238,.14);opacity:0;transform:translateY(8px)}
+.forged .you{color:var(--pink)}
+.stamp{opacity:0;transform:scale(.6) rotate(-14deg);flex:none}
+.forge.play .ugly{opacity:.32;transform:scale(.985)}
+.forge.play .forged{animation:rise .55s .45s ease forwards}
+.forge.play .stamp{animation:stampIn .5s .95s cubic-bezier(.2,1.4,.4,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes stampIn{to{opacity:1;transform:scale(1) rotate(-8deg)}}
+.forge-cap{margin-top:20px;color:var(--muted);font-size:.9375rem;max-width:560px}
+.replay{margin-top:16px}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .forge .ugly{opacity:.32}
+  .forge .forged{opacity:1;transform:none;animation:none}
+  .forge .stamp{opacity:1;transform:scale(1) rotate(-8deg);animation:none}
+  .replay{display:none}
+}
+
+/* tiers */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.tier{background:var(--glass);border:1px solid var(--border);border-radius:18px;padding:26px 24px;backdrop-filter:blur(10px)}
+.tier .name{font-family:var(--mono);font-size:.6875rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+.tier .pct{font-family:var(--mono);font-weight:600;font-size:2.6rem;color:var(--text);margin:8px 0 2px}
+.tier .of{font-family:var(--mono);font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:var(--deep)}
+.tier .rule{margin-top:14px;font-size:.9375rem;color:var(--body)}
+.tier.hot{border-color:var(--border-cyan);box-shadow:0 0 40px rgba(34,211,238,.08)}
+.tier.hot .pct{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tier.gold{border-color:rgba(233,185,73,.4)}
+.tier.gold .pct{color:var(--gold)}
+.tiers-note{font-family:var(--mono);font-size:.6875rem;color:var(--deep);letter-spacing:.08em;margin-top:14px}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.step{border:1px solid var(--border);border-radius:16px;padding:22px;background:rgba(15,23,42,.4)}
+.step .n{font-family:var(--mono);color:var(--pink);font-size:.75rem;letter-spacing:.3em}
+.step h3{color:var(--text);font-weight:700;font-size:1.05rem;margin:10px 0 6px}
+.step p{font-size:.9375rem;color:var(--muted)}
+
+/* product truth */
+.truth{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.truth li{list-style:none;display:flex;gap:12px;align-items:flex-start;background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+.truth svg{flex:none;margin-top:2px}
+.truth b{color:var(--text);font-weight:600}
+
+/* rules */
+.rules{background:var(--glass);border:1px solid var(--border);border-radius:18px;padding:26px 28px}
+.rules ul{margin:14px 0 0 18px}
+.rules li{margin:8px 0;font-size:.9375rem}
+.rules .hard{color:var(--rose)}
+
+/* apply */
+form{background:var(--glass);border:1px solid var(--border);border-radius:20px;padding:30px;backdrop-filter:blur(10px);max-width:640px}
+.field{margin-bottom:18px}
+label{display:block;font-family:var(--mono);font-size:.625rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+input,select,textarea{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--sans);font-size:.9375rem;padding:12px 14px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--border-cyan);box-shadow:0 0 0 3px rgba(34,211,238,.12)}
+textarea{min-height:96px;resize:vertical}
+.form-status{margin-top:14px;font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;color:var(--muted)}
+.form-status.ok{color:var(--success)}
+.form-status.warn{color:var(--gold)}
+
+/* footer */
+footer{border-top:1px solid var(--border);margin-top:64px;padding:34px 0 46px}
+.disclose{font-size:.8125rem;color:var(--muted);max-width:760px}
+.foot-row{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase}
+.foot-row a{color:var(--deep)}
+.foot-row a:hover{color:var(--cyan)}
+.entity{margin-top:16px;font-family:var(--mono);font-size:.625rem;letter-spacing:.12em;color:var(--deep)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <div class="brand">
+    <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#ec4899"/></linearGradient></defs>
+      <path d="M16 3a13 13 0 1 0 13 13" stroke="url(#g)" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="16" cy="16" r="4" fill="url(#g)"/>
+    </svg>
+    <b>YOU &amp; I, NOT AI</b>
+    <span class="tag">Affiliate Program</span>
+  </div>
+  <a class="out" href="https://youandinotai.com">youandinotai.com →</a>
+</nav>
+
+<header class="hero">
+  <div class="eyebrow">Partner program · verified humans only</div>
+  <h1>Get paid to send <span class="grad">real humans</span> to a dating app with none of the bots.</h1>
+  <p>Every profile on You &amp; I, Not AI passes identity and age verification before it can message anyone. No engagement-farm bots, no stock-photo "singles in your area." You point your audience at that. We pay you for every paid signup that comes through your link.</p>
+  <div class="cta-row">
+    <a class="btn primary" href="#apply">Apply for a link</a>
+    <a class="btn" href="#how">How it works</a>
+  </div>
+</header>
+
+<section aria-labelledby="forge-h">
+  <div class="slab">The Forge</div>
+  <h2 id="forge-h">One clean link. Every click attributed to you.</h2>
+  <p class="sub">This is what happens to your tracking URL the moment you're approved:</p>
+  <div class="forge" id="forge">
+    <div class="ugly" id="ugly">youandinotai.com/?ref=launch&amp;utm_source=affiliate&amp;utm_medium=social&amp;utm_campaign=2026-summer-verified-human&amp;a=k3x9q</div>
+    <div class="forged-row">
+      <div class="forged">youandinotai.com/go/<span class="you">Your-Name</span></div>
+      <svg class="stamp" width="76" height="76" viewBox="0 0 76 76" fill="none" role="img" aria-label="Verified human stamp">
+        <circle cx="38" cy="38" r="34" stroke="#e9b949" stroke-width="3" fill="rgba(233,185,73,.07)"/>
+        <circle cx="38" cy="38" r="27" stroke="rgba(233,185,73,.45)" stroke-width="1" stroke-dasharray="3 5"/>
+        <path d="M26 39.5 34 47l16-18" stroke="#e9b949" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <p class="forge-cap">No pixel to install. No spreadsheet reconciliation. Your slug carries a per-affiliate code, so every click and every paid signup lands on your ledger — down to the person.</p>
+    <button class="btn replay" id="replay" type="button">Forge again</button>
+  </div>
+</section>
+
+<section aria-labelledby="tiers-h">
+  <div class="slab">Commission</div>
+  <h2 id="tiers-h">Three tiers. The math is public.</h2>
+  <p class="sub">Commission is a percentage of the first payment from every paid signup you refer, counted monthly.</p>
+  <div class="tiers">
+    <div class="tier">
+      <div class="name">Starter</div>
+      <div class="pct">25%</div>
+      <div class="of">of first payment</div>
+      <p class="rule">0–9 paid signups in a month. Everyone starts here. No audience minimum.</p>
+    </div>
+    <div class="tier hot">
+      <div class="name">Builder</div>
+      <div class="pct">35%</div>
+      <div class="of">of first payment</div>
+      <p class="rule">10–49 paid signups in a month. Most active creators land here fast.</p>
+    </div>
+    <div class="tier gold">
+      <div class="name">Partner</div>
+      <div class="pct">50%</div>
+      <div class="of">of first payment</div>
+      <p class="rule">50+ paid signups in a month. Half. You read that right.</p>
+    </div>
+  </div>
+  <!-- MAINTAINER: launch-default thresholds. Edit here + in the affiliate agreement together. -->
+  <p class="tiers-note">Thresholds shown are launch defaults and are confirmed in your affiliate agreement. Tier is recalculated each calendar month.</p>
+</section>
+
+<section id="how" aria-labelledby="how-h">
+  <div class="slab">Process</div>
+  <h2 id="how-h">How it works</h2>
+  <div class="steps">
+    <div class="step"><div class="n">01</div><h3>Apply</h3><p>Tell us who you are and where your audience lives. Real channels only — we verify affiliates the way we verify daters.</p></div>
+    <div class="step"><div class="n">02</div><h3>Get your forged link</h3><p>One clean <span style="font-family:var(--mono);font-size:.85em">/go/</span> slug, tracked to you personally.</p></div>
+    <div class="step"><div class="n">03</div><h3>Share it where humans are</h3><p>Your content, your voice, our disclosure rules. No spam, ever.</p></div>
+    <div class="step"><div class="n">04</div><h3>Get paid</h3><p>Monthly payout via Square after a 30-day hold, $25 minimum balance. Dashboard shows clicks and signups live.</p></div>
+  </div>
+</section>
+
+<section aria-labelledby="truth-h">
+  <div class="slab">What you're actually promoting</div>
+  <h2 id="truth-h">A dating app that can prove a negative.</h2>
+  <ul class="truth">
+    <li>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="#e9b949" stroke-width="1.5"/><path d="M6 10.5 9 13l5-6" stroke="#e9b949" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span><b>Every profile is ID and age verified</b> by an independent verification provider before it can send a single message. 18+ only.</span>
+    </li>
+    <li>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="#e9b949" stroke-width="1.5"/><path d="M6 10.5 9 13l5-6" stroke="#e9b949" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span><b>BoT or NoT</b> — the swipe game that trains people to spot fakes — is the funnel. Your audience plays, laughs, converts.</span>
+    </li>
+    <li>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="#e9b949" stroke-width="1.5"/><path d="M6 10.5 9 13l5-6" stroke="#e9b949" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span><b>Report and block on every profile and message.</b> A safety desk that actually answers. You're not sending people somewhere you'd be embarrassed by.</span>
+    </li>
+  </ul>
+</section>
+
+<section aria-labelledby="rules-h">
+  <div class="slab">Rules</div>
+  <h2 id="rules-h">The short version of the affiliate terms</h2>
+  <div class="rules">
+    <p>Break these and the link dies, the balance is forfeit, and we don't do second chances on the first two:</p>
+    <ul>
+      <li class="hard"><b>Disclose.</b> FTC 16 CFR Part 255 applies: every placement must clearly state the material connection — "#ad", "affiliate link", or equivalent, visible before the click.</li>
+      <li class="hard"><b>No spam.</b> No unsolicited bulk email or texts (CAN-SPAM / TCPA), no DM blasts, no comment-section carpet bombing.</li>
+      <li>18+ audiences and placements only. No placement alongside explicit content.</li>
+      <li>No bidding on our brand terms in paid search. No cookie stuffing, forced clicks, or incentivized signups.</li>
+      <li>No earnings claims beyond this page, and no impersonating the platform or its staff.</li>
+      <li>Fraudulent or self-referred signups are clawed back and the account is terminated.</li>
+    </ul>
+    <p style="margin-top:14px">Full agreement: <a href="../terms.html">Terms of Service</a> · <a href="../privacy.html">Privacy Policy</a></p>
+  </div>
+</section>
+
+<section id="apply" aria-labelledby="apply-h">
+  <div class="slab">Application</div>
+  <h2 id="apply-h">Apply for a forged link</h2>
+  <p class="sub">Short form. Real answers beat big numbers — we take small honest channels over bought audiences every time.</p>
+  <form id="apply-form" novalidate>
+    <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required></div>
+    <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+    <div class="field"><label for="f-channel">Primary channel / handle</label><input id="f-channel" name="channel" placeholder="e.g. instagram.com/yourhandle" required></div>
+    <div class="field"><label for="f-size">Audience size</label>
+      <select id="f-size" name="audience">
+        <option>Under 1,000</option><option>1,000–10,000</option><option>10,000–100,000</option><option>100,000+</option>
+      </select>
+    </div>
+    <div class="field"><label for="f-plan">How will you promote it?</label><textarea id="f-plan" name="plan" required></textarea></div>
+    <button class="btn primary" type="submit">Submit application</button>
+    <div class="form-status" id="form-status" role="status" aria-live="polite">FORM STATUS: STAGED FOR LAUNCH</div>
+  </form>
+</section>
+
+<footer>
+  <p class="disclose"><b style="color:var(--text)">Affiliate disclosure requirement.</b> Affiliates of You &amp; I, Not AI are compensated for referrals and must conspicuously disclose that material connection in every placement, per FTC 16 CFR Part 255. Commissions are paid on qualifying paid signups only; no earnings are guaranteed. This program is open to applicants 18 or older.</p>
+  <div class="foot-row">
+    <a href="../terms.html">Terms</a>
+    <a href="../privacy.html">Privacy</a>
+    <a href="../community-guidelines.html">Community Guidelines</a>
+    <a href="../safety.html">Dating Safety</a>
+    <a href="../child-safety.html">Child Safety Standards</a>
+  </div>
+  <p class="entity">Operated by Trash Or Treasure Online Recycler LLC · Florida, USA · 18+</p>
+</footer>
+
+</div>
+<script>
+/* MAINTAINER CONFIG — wire ONE of these before launch. Empty = honest staged mode. */
+const CONFIG = { APPLY_ENDPOINT: "", APPLY_EMAIL: "" };
+
+const forge = document.getElementById('forge');
+const replay = document.getElementById('replay');
+function playForge(){ forge.classList.remove('play'); void forge.offsetWidth; forge.classList.add('play'); }
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){ setTimeout(playForge, 400); }
+replay.addEventListener('click', playForge);
+
+const form = document.getElementById('apply-form');
+const status = document.getElementById('form-status');
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  if(!form.reportValidity()) return;
+  const data = Object.fromEntries(new FormData(form).entries());
+  if(CONFIG.APPLY_ENDPOINT){
+    status.className='form-status'; status.textContent='SENDING…';
+    try{
+      const r = await fetch(CONFIG.APPLY_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+      if(r.ok){ status.className='form-status ok'; status.textContent='RECEIVED. WE REPLY BY EMAIL.'; form.reset(); }
+      else{ status.className='form-status warn'; status.textContent='SEND FAILED ('+r.status+'). TRY AGAIN OR CHECK BACK SOON.'; }
+    }catch(err){ status.className='form-status warn'; status.textContent='NETWORK ERROR. NOTHING WAS SENT.'; }
+  } else if(CONFIG.APPLY_EMAIL){
+    location.href='mailto:'+CONFIG.APPLY_EMAIL+'?subject='+encodeURIComponent('Affiliate application — '+data.name)+'&body='+encodeURIComponent(JSON.stringify(data,null,2));
+  } else {
+    status.className='form-status warn';
+    status.textContent='APPLICATIONS OPEN AT LAUNCH — THIS FORM IS STAGED AND NOTHING WAS SENT.';
+  }
+});
+</script>
+</body>
+</html>

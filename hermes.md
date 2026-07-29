@@ -145,13 +145,30 @@ Every agent on this platform self-improves. Hermes owns the audit loop.
 
 | Node | IP | Hardware | Role |
 |------|----|----------|------|
-| **T5500** | 192.168.0.15 | Dual Xeon, 72GB server RAM | **POWERSTATION** — repo state, customer-service OpenClaw, dev OpenClaw, date app |
-| **Sabretooth** | 192.168.0.8 | 64GB, NVIDIA GeForce GTX 1070 8GB (1 GPU) | Default node for Opus + Hermes (def node) — does NOT run ad-hoc AI work Josh didn't ask for. CUDA 12.6, driver 560.94. |
-| **9020 (DESKTOP-UPSJEVG)** | 192.168.0.5 | i7-4790, 32GB, GTX 1050 Ti (1 GPU) | Income node (separate GitHub account, zero overlap with Antigravity) |
+# Solution: Hermes Infrastructure Stability on OmniRoute
+This Sol.md file defines the strict operational boundaries for the Hermes agent.
 
-**GPU rule (Josh-confirmed 2026-06-01):** 1 GPU per node. Sabretooth = GTX 1070, T5500 and 9020 = GTX 1050 Ti. No multi-GPU nodes. No stacking.
+[agent]
+name = "Hermes-Infrastructure-Velocity"
+version = "4.0.0-Canonical"
+framework = "Hermes-Core"
 
-**Migration rule:** All existing repo state lives on T5500 going forward. Sabretooth is the default node, but T5500 is the powerstation and owns the persistent state. This stops Sabretooth's GTX 1070 from doing AI work Josh didn't ask for when T5500's dual Xeon is sitting idle.
+[omnirout.config]
+auth_mode = "OMNIROUTE_KEY_ONLY"
+fail_closed = true
+max_concurrent_nodes = 6
+
+[hardware.node_registry]
+primary_node = "T5500 (192.168.0.15:20128 - GTX 1070)"
+secondary_node = "NONE"
+paperclip_node = "T5500 (paperclip-local)"
+cloud_wrapper = "VS Code CLI (glm-5.2:cloud)"
+
+[safety.electrical_guardrails]
+max_load_threshold_percent = 80
+block_direct_model_fallback = true
+enforce_lap_drift_protection = true
+
 
 ## 7. Hermes Universal Prompt — Spoken to Every Sub-Agent on Spawn
 

@@ -66,10 +66,10 @@ async function collect() {
     try {
       if (c.port) {
         const r = await checkTcp(c.port);
-        ok = r.ok; ms = r.ms; status = ok ? 'open' : 'closed';
+        ok = r.ok; ms = r.ms === null ? -1 : r.ms; status = ok ? 'open' : 'closed';
       } else if (c.url) {
         const r = await checkHttp(c.url);
-        ok = r.ok; status = ok ? 'up' : 'down'; ms = r.ms;
+        ok = r.ok; status = ok ? 'up' : 'down'; ms = r.ms === null ? -1 : r.ms;
       }
     } catch {
       ok = false; status = 'error';
