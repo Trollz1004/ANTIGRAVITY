@@ -2,7 +2,8 @@
   "name": "mission-control-agency-swarm-v5",
   "version": "5.0.0",
   "private": true,
-  "description": "Mission Control: Agency Swarm v5 (Haiku-Sonnet 3.5 Edition) — orchestration dashboard for 148 specialized agents, routed through the Omni Router.",
+  "main": "electron/main.js",
+  "description": "Mission Control: Agency Swarm v5 (Haiku-Sonnet 3.5 Edition) — orchestration dashboard for 148 specialized agents, routed through OmniRoute.",
   "scripts": {
     "install:all": "npm --prefix server install && npm --prefix client install",
     "dev": "concurrently -n SERVER,CLIENT -c cyan,white \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
@@ -10,9 +11,12 @@
     "dev:client": "npm --prefix client run dev",
     "build": "npm --prefix client run build",
     "start": "npm --prefix server run start",
-    "typecheck": "npm --prefix server run typecheck && npm --prefix client run typecheck"
+    "typecheck": "npm --prefix server run typecheck && npm --prefix client run typecheck",
+    "electron": "electron .",
+    "electron:dev": "concurrently -k -n SRV,CLI,EL -c cyan,white,magenta \"npm --prefix server run dev\" \"npm --prefix client run dev\" \"electron .\""
   },
   "devDependencies": {
-    "concurrently": "^9.1.0"
+    "concurrently": "^9.1.0",
+    "electron": "^43.2.0"
   }
 }

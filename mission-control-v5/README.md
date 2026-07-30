@@ -1,7 +1,7 @@
 # MISSION CONTROL: AGENCY SWARM v5
 ### Haiku-Sonnet 3.5 Edition
 
-Production-grade orchestration dashboard for **148 specialized agents** across **15 divisions**, routed through the **Omni Router**.
+Production-grade orchestration dashboard for **148 specialized agents** across **15 divisions**, routed through **OmniRoute**.
 
 ---
 
@@ -9,7 +9,7 @@ Production-grade orchestration dashboard for **148 specialized agents** across *
 
 - **Frontend** — React 18 + TypeScript + Vite. Swiss high-contrast dark design system (near-black `#0a0a0a`, cyan accent, Inter + IBM Plex Mono, 1px borders, zero rounded corners).
 - **Backend** — Node.js + Express + TypeScript (`tsx` runtime). SSE for real-time updates, atomic JSON persistence for board state.
-- **Omni Router** — provider-agnostic model routing layer. Adapters: `anthropic` (direct), `openai_compat` (any OpenAI-compatible endpoint/proxy), `ollama` (local). Priority order is env-driven; first configured healthy provider wins, with automatic failover down the chain.
+- **OmniRoute** — provider-agnostic model routing layer. Adapters: `anthropic` (direct), `openai_compat` (any OpenAI-compatible endpoint/proxy), `ollama` (local). Priority order is env-driven; first configured healthy provider wins, with automatic failover down the chain.
 
 ## Modules
 
