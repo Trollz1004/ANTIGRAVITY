@@ -1,0 +1,8 @@
+ghp_0123456789abcdef0123456789abcdef
+ghp_1234567890abcdefghijklmnopqrstuvwxyz
+ghp_patchsecretcommenttoken1234567890
+ghp_supersecretcommenttoken1234567890
+sk-abcdefghijklmnopqrst
+sk-patchsecretdocumentvalue1234567890
+sk-supersecretdocumentvalue1234567890
+sk-testsuccessfulhandoffsecret
