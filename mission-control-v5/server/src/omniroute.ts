@@ -1,11 +1,11 @@
 /**
- * OMNI ROUTER — provider-agnostic model routing layer.
+ * OMNIROUTE — provider-agnostic model routing layer.
  *
  * Routes every swarm task to the first configured, healthy provider in
  * OMNI_PROVIDER_ORDER. Adapters: anthropic | openai_compat | ollama.
  *
  * Fail-closed by design:
- *  - No provider configured  -> OmniRouterError('NO_PROVIDER'), task goes BLOCKED.
+ *  - No provider configured  -> OmniRouteError('NO_PROVIDER'), task goes BLOCKED.
  *  - All providers fail      -> honest aggregated error, task goes BLOCKED.
  *  - Zero fabricated output. Ever.
  *
@@ -27,7 +27,7 @@ export interface RouteResult {
   ms: number;
 }
 
-export class OmniRouterError extends Error {
+export class OmniRouteError extends Error {
   code: string;
   constructor(code: string, message: string) {
     super(message);
@@ -195,9 +195,9 @@ export function routerLive(): boolean {
 export async function route(req: RouteRequest): Promise<RouteResult> {
   const candidates = providerOrder().filter((p) => p.configured());
   if (candidates.length === 0) {
-    throw new OmniRouterError(
+    throw new OmniRouteError(
       'NO_PROVIDER',
-      'Omni Router has no configured provider. Set ANTHROPIC_API_KEY, OPENAI_COMPAT_BASE_URL, or OLLAMA_BASE_URL in server/.env. This system never fabricates output.',
+      'OmniRoute has no configured provider. Set ANTHROPIC_API_KEY, OPENAI_COMPAT_BASE_URL, or OLLAMA_BASE_URL in server/.env. This system never fabricates output.',
     );
   }
   const failures: string[] = [];
@@ -215,5 +215,5 @@ export async function route(req: RouteRequest): Promise<RouteResult> {
       failures.push(`${provider.id}: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
-  throw new OmniRouterError('ALL_PROVIDERS_FAILED', `All providers failed — ${failures.join(' | ')}`);
+  throw new OmniRouteError('ALL_PROVIDERS_FAILED', `All providers failed — ${failures.join(' | ')}`);
 }

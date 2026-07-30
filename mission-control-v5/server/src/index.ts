@@ -8,7 +8,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import express, { type Request, type Response } from 'express';
 import { AGENTS, CATEGORIES } from './agents.js';
-import { describeProviders, routerLive } from './omni-router.js';
+import { describeProviders, routerLive } from './omniroute.js';
 import { loadState } from './store.js';
 import {
   activeCount,
@@ -194,6 +194,6 @@ app.listen(PORT, () => {
   console.log(`[mission-control] v${VERSION} (${EDITION}) on :${PORT}`);
   console.log(`[mission-control] agents=${AGENTS.length} divisions=${CATEGORIES.length}`);
   console.log(
-    `[omni-router] ${live ? 'LIVE' : 'OFFLINE — no provider configured (fail-closed, tasks will BLOCK honestly)'}`,
+    `[omniroute] ${live ? 'LIVE' : 'OFFLINE — no provider configured (fail-closed, tasks will BLOCK honestly)'}`,
   );
 });
