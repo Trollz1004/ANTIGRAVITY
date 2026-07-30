@@ -8,7 +8,10 @@ import cors from 'cors';
 import 'dotenv/config';
 import express, { type Request, type Response } from 'express';
 import { AGENTS, CATEGORIES } from './agents.js';
+import { registerBrainRoutes } from './brain.js';
 import { describeProviders, routerLive } from './omniroute.js';
+import { PIECES_MCP_URL, pingPieces } from './pieces.js';
+import { registerMcpServer } from './mcpServer.js';
 import { loadState } from './store.js';
 import {
   activeCount,
@@ -98,9 +101,21 @@ app.get('/api/services', async (_req, res) => {
     { name: 'OmniRoute', url: 'http://127.0.0.1:20128/v1/models', timeoutMs: 9000 },
     { name: 'Ollama', url: 'http://127.0.0.1:11434/api/tags', timeoutMs: 2500 },
   ];
-  const results = await Promise.all(
-    services.map((s) => pingService(s.name, s.url, s.timeoutMs)),
-  );
+  const results = await Promise.all([
+    ...services.map((s) => pingService(s.name, s.url, s.timeoutMs)),
+    // Pieces LTM speaks MCP, not plain HTTP — a raw GET would 400. Probe it with
+    // a real initialize roundtrip and fold the result into the services list.
+    pingPieces(9_000).then(async (up) => {
+      const started = Date.now();
+      return {
+        name: 'Pieces LTM',
+        url: PIECES_MCP_URL,
+        status: (up ? 'up' : 'down') as 'up' | 'down',
+        ms: Date.now() - started,
+        detail: up ? 'OK' : 'MCP initialize failed',
+      };
+    }),
+  ]);
   res.json({ services: results });
 });
 
@@ -185,6 +200,14 @@ app.get('/api/events', (req: Request, res: Response) => {
     unsubscribe();
   });
 });
+
+// ── Brain hub (Pieces LTM + per-platform journals) ────────────────────────────
+registerBrainRoutes(app);
+
+// ── Mission Control AS an MCP server (expose to other AI platforms) ──────────
+// Any agent with a streamable-HTTP MCP client can POST to /api/mcp and pull the
+// task + capability set defined by the monorepo. See server/src/mcpServer.ts.
+registerMcpServer(app);
 
 // ── Static client (production build) ─────────────────────────────────────────
 const clientDist = join(__dirname, '..', '..', 'client', 'dist');

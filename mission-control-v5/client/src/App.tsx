@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, subscribeEvents } from './api';
 import AgentLibrary from './components/AgentLibrary';
+import BrainPanel from './components/BrainPanel';
 import BrowserPanel from './components/BrowserPanel';
 import Header, { type Tab } from './components/Header';
 import KanbanBoard from './components/KanbanBoard';
@@ -109,6 +110,7 @@ export default function App() {
           )}
           {tab === 'board' && <KanbanBoard tasks={tasks} />}
           {tab === 'services' && <ServicesPanel />}
+          {tab === 'brain' && <BrainPanel />}
         </main>
         <footer className="footer">
           <span>MISSION CONTROL v{health?.version ?? '5.0.0'} — {health?.edition ?? 'HAIKU-SONNET 3.5 EDITION'}</span>

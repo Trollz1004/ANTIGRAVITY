@@ -65,3 +65,72 @@ export interface Health {
   activeTasks: number;
   time: string;
 }
+
+// ── Brain hub ──────────────────────────────────────────────────────────────────
+export interface BrainPlatform {
+  id: string;
+  label: string;
+  statePath: string;
+  maxChars: number;
+  enabled: boolean;
+  bytes: number;
+  updatedAt: string | null;
+}
+
+export interface BrainJournal {
+  content: string;
+  updatedAt: string | null;
+  bytes: number;
+}
+
+export interface BrainTool {
+  name: string;
+  description: string;
+  inputSchema: unknown;
+}
+
+export interface BrainAskResult {
+  result: unknown;
+  tool: string;
+  ms: number;
+}
+
+export interface BrainPiecesStatus {
+  up: boolean;
+  url: string;
+  session: string | null;
+  tools: number;
+}
+
+export interface BrainState {
+  platforms: BrainPlatform[];
+  piecesUp: boolean;
+}
+
+// ── Brain catalog (monorepo skills + tasks) ───────────────────────────────────
+export interface BrainSkill {
+  id: string;
+  label: string;
+  category: string;
+  description: string;
+  tools: string[];
+  path: string;
+  body: string;
+  kind: 'skill' | 'task';
+}
+
+export interface BrainCatalog {
+  skills: BrainSkill[];
+  categories: { id: string; label: string; count: number }[];
+}
+
+export interface BrainMcpStatus {
+  endpoint: string;
+  url: string;
+  tools: number;
+  toolNames: string[];
+  sessions: number;
+  authEnabled: boolean;
+  protocolVersion: string;
+  serverInfo: { name: string; version: string };
+}

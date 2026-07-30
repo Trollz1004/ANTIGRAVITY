@@ -1,0 +1,9 @@
+[
+  {
+    "id": "free-claude-code",
+    "label": "Free Claude Code",
+    "statePath": "C:/Users/joshl/.fcc/STATE.md",
+    "maxChars": 4000,
+    "enabled": true
+  }
+]

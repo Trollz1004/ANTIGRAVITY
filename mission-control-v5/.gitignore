@@ -2,5 +2,9 @@ node_modules/
 dist/
 .env
 server/data/state.json
+# Brain hub runtime data (journal mirrors + audit) — never commit, may hold user content.
+server/data/brain/
+# Actual platform config (may hold machine-specific paths); commit the .example.json instead.
+server/data/brain-platforms.json
 *.log
 .DS_Store
