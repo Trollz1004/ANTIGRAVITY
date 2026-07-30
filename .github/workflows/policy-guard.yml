@@ -46,7 +46,13 @@ jobs:
           ALLOWLIST=".github/policy-guard-allowlist.txt"
           MATCHES=$(grep -rnoE "$PATTERNS" --include="*.py" --include="*.js" --include="*.ts" --include="*.yaml" --include="*.yml" --include="*.sh" --exclude-dir=".git" --exclude-dir=".github" . 2>/dev/null || true)
           if [ -n "$MATCHES" ] && [ -f "$ALLOWLIST" ]; then
-            VIOLATIONS=$(echo "$MATCHES" | grep -vFf "$ALLOWLIST" || true)
+            # Exact whole-token comparison: strip the file:line: prefix and require the
+            # full matched token to equal an allowlist line. Substring overlap (a real
+            # credential that merely starts with a fixture value) still fails the scan.
+            VIOLATIONS=$(echo "$MATCHES" | while IFS= read -r m; do
+              tok="${m#*:*:}"
+              grep -qxF "$tok" "$ALLOWLIST" || echo "$m"
+            done)
           else
             VIOLATIONS="$MATCHES"
           fi
