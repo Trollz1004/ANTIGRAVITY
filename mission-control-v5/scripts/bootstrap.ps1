@@ -253,23 +253,33 @@ function Start-OpenClaw {
     Write-Log 'gateway.cmd missing — OpenClaw keys unavailable' 'ERR'
   }
   Set-Item -Path 'Env:OPENCLAW_GATEWAY_PORT' -Value '9120'
-  # Repair the config before each start so a bad agents.defaults.memorySearch.store
-  # (the cold-test DEGRADED cause) doesn't keep OpenClaw down. Single shot, no loop.
-  Repair-OpenClawConfig
+  # Validate the config before each start (read-only, non-blocking) so a bad
+  # agents.defaults.memorySearch doesn't keep OpenClaw down. Single shot, no loop.
+  Assert-OpenClawConfig
   Start-HiddenWorker -FilePath 'C:\Program Files\nodejs\node.exe' `
     -Arguments @($module, 'gateway', '--port', '9120') `
     -WorkDir $env:USERPROFILE -LogBase (Join-Path $LogDir 'openclaw') | Out-Null
 }
 
-# Run `openclaw doctor --fix` once. Best-effort: never throws, never blocks. The
-# cold test showed OpenClaw DEGRADED on an invalid memorySearch.store config; this
-# self-heals it on every Deploy and on every Watch restart.
-function Repair-OpenClawConfig {
+# Read-only config health check. We hand-fixed agents.defaults.memorySearch
+# (provider ollama + model nomic-embed-text) and removed the legacy `store` block
+# that caused the cold-test DEGRADED state; `openclaw config validate` confirms
+# "Config valid". Do NOT run `openclaw doctor --fix` from the watchdog: it can
+# hang on slow plugin/network checks (observed >120s with no stdin) and may
+# re-suggest a provider switch that clobbers the working config. This only
+# validates + logs, under a hard 20s timeout — never blocks, never mutates.
+function Assert-OpenClawConfig {
   if (-not (Get-Command openclaw -ErrorAction SilentlyContinue)) { return }
   try {
-    cmd.exe /c 'openclaw doctor --fix' *>> (Join-Path $LogDir 'openclaw-doctor.log')
-    Write-Log 'openclaw doctor --fix ran'
-  } catch { Write-Log "openclaw doctor error: $($_.Exception.Message)" 'ERR' }
+    $job = Start-Job -ScriptBlock { cmd.exe /c 'openclaw config validate' } -ErrorAction Stop
+    if (Wait-Job $job -Timeout 20) {
+      $out = (Receive-Job $job | Out-String).Trim()
+      Write-Log "openclaw config validate: $out"
+    } else {
+      Write-Log 'openclaw config validate exceeded 20s — killed (non-blocking)' 'WARN'
+    }
+    Remove-Job $job -Force -ErrorAction SilentlyContinue
+  } catch { Write-Log "openclaw validate error: $($_.Exception.Message)" 'ERR' }
 }
 
 # Pieces OS hosts the LTM MCP server on :39300. It auto-starts at login via its own
@@ -432,7 +442,7 @@ function Invoke-Deploy {
     -TimeoutSec 60 -Start ${function:Start-OpenClaw} `
     -Heal {
       if (-not (Test-Path 'C:\Users\joshl\AppData\Roaming\npm\node_modules\openclaw\dist\index.js')) { npm i -g openclaw *> $null }
-      Repair-OpenClawConfig
+      Assert-OpenClawConfig
     }
 
   Ensure-Service -Name 'DateAppBackend' -Port 8000 -HealthUrl 'http://127.0.0.1:8000/api/v1/health' `
