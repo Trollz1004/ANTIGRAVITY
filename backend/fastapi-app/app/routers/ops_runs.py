@@ -41,6 +41,23 @@ class OpsRunResponse(BaseModel):
     recorded_at: str
 
 
+class OpsRunPagination(BaseModel):
+    offset: int
+    limit: int
+    total: int
+    has_next: bool
+    has_prev: bool
+    next_offset: Optional[int]
+    prev_offset: Optional[int]
+
+
+class OpsRunListResponse(BaseModel):
+    """Paginated ops-run listing — matches the payload the endpoint returns."""
+
+    runs: list[OpsRunResponse]
+    pagination: OpsRunPagination
+
+
 @router.post(
     "/ops-runs",
     response_model=OpsRunResponse,
@@ -67,7 +84,7 @@ async def create_ops_run(
 
 @router.get(
     "/ops-runs",
-    response_model=list[OpsRunResponse],
+    response_model=OpsRunListResponse,
     summary="List recent ops run events",
 )
 async def list_ops_runs(

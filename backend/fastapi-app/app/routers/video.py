@@ -87,9 +87,14 @@ async def _mark_call_ended(call_id: uuid.UUID) -> None:
         call.status = "ended"
         call.ended_at = datetime.now(timezone.utc)
         if call.started_at:
+            # SQLite returns naive datetimes; treat them as UTC so the
+            # duration math never mixes naive and aware values.
+            started_at = call.started_at
+            if started_at.tzinfo is None:
+                started_at = started_at.replace(tzinfo=timezone.utc)
             call.duration_seconds = max(
                 0,
-                int((call.ended_at - call.started_at).total_seconds()),
+                int((call.ended_at - started_at).total_seconds()),
             )
         await db.commit()
 

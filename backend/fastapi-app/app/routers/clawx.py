@@ -25,7 +25,7 @@ from app.config import get_settings
 from app.error_responses import bad_request, not_found
 from app.models import User
 
-router = APIRouter(prefix="/api/v1/clawx", tags=["clawx"])
+router = APIRouter(prefix="/clawx", tags=["clawx"])
 
 # Module-level client instance (lazy-initialised on first use).
 _clawx_client: ClawxClient | None = None
