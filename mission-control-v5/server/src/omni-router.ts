@@ -116,6 +116,7 @@ const openaiCompat: ProviderAdapter = {
       key ? { authorization: `Bearer ${key}` } : {},
       {
         model,
+        stream: false, // OmniRoute streams SSE by default; force a single JSON completion.
         max_tokens: req.maxTokens ?? 4096,
         messages: [
           { role: 'system', content: req.system },
