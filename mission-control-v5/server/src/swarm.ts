@@ -3,11 +3,11 @@
  *
  * Lifecycle: queued (NEXT) -> running (NOW) -> done (DONE) | error (BLOCKED).
  * Multi-agent tasks fan out to every selected agent; each result carries
- * agent attribution plus the provider/model the Omni Router actually used.
+ * agent attribution plus the provider/model OmniRoute actually used.
  */
 import { randomUUID } from 'node:crypto';
 import { AGENT_INDEX, CATEGORY_INDEX } from './agents.js';
-import { OmniRouterError, route } from './omni-router.js';
+import { OmniRouteError, route } from './omniroute.js';
 import { addTask, allTasks, getTask, persist, removeTask } from './store.js';
 import type { Column, Mode, SwarmTask } from './types.js';
 
@@ -168,7 +168,7 @@ async function execute(task: SwarmTask): Promise<void> {
       } catch (err) {
         result.status = 'error';
         result.error =
-          err instanceof OmniRouterError
+          err instanceof OmniRouteError
             ? `[${err.code}] ${err.message}`
             : err instanceof Error
               ? err.message

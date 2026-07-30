@@ -58,9 +58,9 @@ export default function Header({ tab, onTab, health, runningCount, selectedCount
         <span className="status-item">
           <span
             className={`dot ${routerLive ? 'dot--green' : 'dot--red'}`}
-            title={routerLive ? 'Omni Router live' : 'No provider configured'}
+            title={routerLive ? 'OmniRoute live' : 'No provider configured'}
           />
-          OMNI ROUTER {routerLive ? `LIVE ×${configured}` : 'OFFLINE'}
+          OMNIROUTE {routerLive ? `LIVE ×${configured}` : 'OFFLINE'}
         </span>
         <span className="status-item">
           <span className={`dot ${runningCount > 0 ? 'dot--amber dot--pulse' : 'dot--idle'}`} />

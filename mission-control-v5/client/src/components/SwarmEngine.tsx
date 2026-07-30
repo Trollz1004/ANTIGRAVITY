@@ -105,7 +105,7 @@ export default function SwarmEngine({
 
         {!routerLive && (
           <div className="notice">
-            OMNI ROUTER OFFLINE — no provider configured. Tasks will queue and BLOCK with an
+            OMNIROUTE OFFLINE — no provider configured. Tasks will queue and BLOCK with an
             honest error until a provider key is set in server/.env. Zero simulated output.
           </div>
         )}
