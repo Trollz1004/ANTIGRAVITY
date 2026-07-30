@@ -1,13 +1,22 @@
-"""Marketing automation and AI agent content integration router."""
+"""Marketing automation and AI agent content integration router.
 
+All endpoints read from and write to real database rows
+(:class:`app.models.MarketingContent`). No endpoint fabricates content —
+unknown IDs return 404 and creates/updates persist immediately.
+"""
+
+import uuid
 from datetime import datetime
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import get_current_user
-from app.models import User
+from app.database import get_db
+from app.models import MarketingContent, User
 
 router = APIRouter(prefix="/marketing", tags=["marketing"])
 
@@ -52,7 +61,7 @@ class MarketingPost(BaseModel):
     )
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "campaign_name": "SpringMemberLaunch",
                 "objective": "Invite verified members to try local event planning",
@@ -74,26 +83,54 @@ class MarketingPost(BaseModel):
 
 
 class ContentItem(BaseModel):
-    id: str
+    """Serialized marketing content record sourced from the database."""
+
+    id: uuid.UUID
     title: str
     content: str
     tags: List[str]
     created_at: datetime
     published: bool
+    campaign_name: str
+    objective: str
+    audience: str
+    platforms: List[str]
+    core_message: str
+    post_type: str
+    primary_caption: str
+    call_to_action: Optional[str]
+    hashtag_block: List[str]
+    updated_at: datetime
 
 
-@router.post("/content", response_model=ContentItem)
-async def create_content_item(
-    content: MarketingPost, current_user: User = Depends(get_current_user)
-):
-    """
-    Create a new marketing content item from AI agent.
+def _serialize(record: MarketingContent) -> ContentItem:
+    """Map a ``MarketingContent`` ORM row to its API representation."""
+    return ContentItem(
+        id=record.id,
+        # Original public fields retained for backwards compatibility.
+        title=record.campaign_name,
+        content=record.primary_caption,
+        tags=list(record.hashtag_block or []),
+        created_at=record.created_at,
+        published=record.published,
+        # Full stored record.
+        campaign_name=record.campaign_name,
+        objective=record.objective,
+        audience=record.audience,
+        platforms=list(record.platforms or []),
+        core_message=record.core_message,
+        post_type=record.post_type,
+        primary_caption=record.primary_caption,
+        call_to_action=record.call_to_action,
+        hashtag_block=list(record.hashtag_block or []),
+        updated_at=record.updated_at,
+    )
 
-    This endpoint accepts structured content from AI agents and stores it for publishing.
-    """
-    # Validate that at least one branded hashtag is present
+
+def _validate_branded_hashtag(hashtag_block: List[str]) -> None:
+    """Require at least one branded hashtag in the block."""
     branded_hashtags_present = any(
-        tag in content.hashtag_block
+        tag in hashtag_block
         for tag in [BRANDED_HASHTAGS["primary"]] + BRANDED_HASHTAGS["themes"]
     )
     if not branded_hashtags_present:
@@ -101,12 +138,12 @@ async def create_content_item(
             status_code=400, detail="At least one branded hashtag must be included"
         )
 
-    # Validate platform hashtag counts
-    for platform in content.platforms:
+
+def _validate_platform_limits(platforms: List[str], hashtag_block: List[str]) -> None:
+    """Enforce per-platform hashtag count limits."""
+    for platform in platforms:
         if platform in PLATFORM_HASHTAG_LIMITS:
-            hashtag_count = len(
-                [tag for tag in content.hashtag_block if tag.startswith("#")]
-            )
+            hashtag_count = len([tag for tag in hashtag_block if tag.startswith("#")])
             limit = PLATFORM_HASHTAG_LIMITS[platform]
 
             if isinstance(limit, tuple):
@@ -123,75 +160,117 @@ async def create_content_item(
                         detail=f"Platform {platform} allows maximum {limit} hashtags, got {hashtag_count}",
                     )
 
-    # In a real implementation, this would save to database
-    # For now, we'll just return a mock content item
-    return ContentItem(
-        id="mock-id-123",
-        title=content.campaign_name,
-        content=content.primary_caption,
-        tags=content.hashtag_block,
-        created_at=datetime.now(),
+
+def _validate_post(content: MarketingPost) -> None:
+    _validate_branded_hashtag(content.hashtag_block)
+    _validate_platform_limits(content.platforms, content.hashtag_block)
+
+
+async def _get_or_404(
+    content_id: uuid.UUID, db: AsyncSession
+) -> MarketingContent:
+    """Fetch a stored content item or raise 404 — never fabricate one."""
+    record = await db.get(MarketingContent, content_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Marketing content not found")
+    return record
+
+
+@router.post(
+    "/content", response_model=ContentItem, status_code=status.HTTP_201_CREATED
+)
+async def create_content_item(
+    content: MarketingPost,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Create a new marketing content item from an AI agent.
+
+    The payload is validated and persisted to the database; the response is the
+    stored row.
+    """
+    _validate_post(content)
+
+    record = MarketingContent(
+        campaign_name=content.campaign_name,
+        objective=content.objective,
+        audience=content.audience,
+        platforms=content.platforms,
+        core_message=content.core_message,
+        post_type=content.post_type,
+        primary_caption=content.primary_caption,
+        call_to_action=content.call_to_action,
+        hashtag_block=content.hashtag_block,
         published=False,
+        created_by=current_user.id,
     )
+    db.add(record)
+    await db.commit()
+    await db.refresh(record)
+    return _serialize(record)
 
 
 @router.get("/content", response_model=List[ContentItem])
-async def list_content_items(current_user: User = Depends(get_current_user)):
+async def list_content_items(
+    published: Optional[bool] = Query(
+        None, description="Filter by published state when provided"
+    ),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     """
-    List all marketing content items.
+    List persisted marketing content items, newest first.
     """
-    # In a real implementation, this would fetch from database
-    return []
+    stmt = select(MarketingContent).order_by(MarketingContent.created_at.desc())
+    if published is not None:
+        stmt = stmt.where(MarketingContent.published.is_(published))
+    stmt = stmt.offset(offset).limit(limit)
+    records = (await db.scalars(stmt)).all()
+    return [_serialize(record) for record in records]
 
 
 @router.get("/content/{content_id}", response_model=ContentItem)
 async def get_content_item(
-    content_id: str, current_user: User = Depends(get_current_user)
+    content_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
 ):
     """
-    Get a specific marketing content item.
+    Get a specific persisted marketing content item (404 when it does not exist).
     """
-    # In a real implementation, this would fetch from database
-    # Returning mock content for now
-    return ContentItem(
-        id=content_id,
-        title="Mock Content",
-        content="This is mock content for demonstration purposes.",
-        tags=["#YouAndINotAI"],
-        created_at=datetime.now(),
-        published=False,
-    )
+    record = await _get_or_404(content_id, db)
+    return _serialize(record)
 
 
 @router.put("/content/{content_id}", response_model=ContentItem)
 async def update_content_item(
-    content_id: str,
+    content_id: uuid.UUID,
     content_update: MarketingPost,
     current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
 ):
     """
-    Update a marketing content item (full replace).
+    Fully replace a persisted marketing content item (404 when it does not exist).
     """
-    # Validate content same as in create endpoint
-    branded_hashtags_present = any(
-        tag in content_update.hashtag_block
-        for tag in [BRANDED_HASHTAGS["primary"]] + BRANDED_HASHTAGS["themes"]
-    )
-    if not branded_hashtags_present:
-        raise HTTPException(
-            status_code=400, detail="At least one branded hashtag must be included"
-        )
+    _validate_post(content_update)
 
-    # In a real implementation, this would update in database
-    # Returning mock content for now
-    return ContentItem(
-        id=content_id,
-        title=content_update.campaign_name,
-        content=content_update.primary_caption,
-        tags=content_update.hashtag_block,
-        created_at=datetime.now(),
-        published=False,
-    )
+    record = await _get_or_404(content_id, db)
+    record.campaign_name = content_update.campaign_name
+    record.objective = content_update.objective
+    record.audience = content_update.audience
+    record.platforms = content_update.platforms
+    record.core_message = content_update.core_message
+    record.post_type = content_update.post_type
+    record.primary_caption = content_update.primary_caption
+    record.call_to_action = content_update.call_to_action
+    record.hashtag_block = content_update.hashtag_block
+
+    await db.commit()
+    await db.refresh(record)
+    return _serialize(record)
 
 
 class MarketingPostUpdate(BaseModel):
@@ -208,51 +287,76 @@ class MarketingPostUpdate(BaseModel):
     primary_caption: Optional[str] = Field(None, description="Main caption text")
     call_to_action: Optional[str] = Field(None, description="Call to action phrase")
     hashtag_block: Optional[List[str]] = Field(None, description="Hashtags")
+    published: Optional[bool] = Field(None, description="Published state")
 
 
 @router.patch("/content/{content_id}", response_model=ContentItem)
 async def patch_content_item(
-    content_id: str,
+    content_id: uuid.UUID,
     patch_data: MarketingPostUpdate,
     current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
 ):
     """
-    Partially update a marketing content item.
+    Partially update a persisted marketing content item.
+
     Only fields explicitly provided in the request body are updated;
     omitted fields retain their current values.
     """
-    # Fetch existing item (in production, from DB)
-    existing = ContentItem(
-        id=content_id,
-        title="Mock Content",
-        content="This is mock content for demonstration purposes.",
-        tags=["#YouAndINotAI"],
-        created_at=datetime.now(),
-        published=False,
-    )
+    record = await _get_or_404(content_id, db)
 
-    # Merge: only update fields that were explicitly set in the request
     update_dict = patch_data.model_dump(exclude_unset=True)
 
-    # Merge hashtag_block with branded hashtag validation
     if "hashtag_block" in update_dict:
-        branded_hashtags_present = any(
-            tag in update_dict["hashtag_block"]
-            for tag in [BRANDED_HASHTAGS["primary"]] + BRANDED_HASHTAGS["themes"]
-        )
-        if not branded_hashtags_present:
-            raise HTTPException(
-                status_code=400, detail="At least one branded hashtag must be included"
-            )
+        _validate_branded_hashtag(update_dict["hashtag_block"])
 
-    # Build updated item — only overwrite provided fields
-    updated = ContentItem(
-        id=content_id,
-        title=update_dict.get("campaign_name", existing.title),
-        content=update_dict.get("primary_caption", existing.content),
-        tags=update_dict.get("hashtag_block", existing.tags),
-        created_at=existing.created_at,
-        published=existing.published,
+    platforms = update_dict.get("platforms")
+    if platforms is not None:
+        hashtag_block = update_dict.get("hashtag_block", record.hashtag_block or [])
+        _validate_platform_limits(platforms, hashtag_block)
+
+    _EDITABLE_FIELDS = (
+        "campaign_name",
+        "objective",
+        "audience",
+        "platforms",
+        "core_message",
+        "post_type",
+        "primary_caption",
+        "call_to_action",
+        "hashtag_block",
+        "published",
     )
+    for field_name in _EDITABLE_FIELDS:
+        if field_name in update_dict:
+            setattr(record, field_name, update_dict[field_name])
 
-    return updated
+    await db.commit()
+    await db.refresh(record)
+    return _serialize(record)
+
+
+@router.post("/content/{content_id}/publish", response_model=ContentItem)
+async def publish_content_item(
+    content_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Mark a persisted content item as published."""
+    record = await _get_or_404(content_id, db)
+    record.published = True
+    await db.commit()
+    await db.refresh(record)
+    return _serialize(record)
+
+
+@router.delete("/content/{content_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_content_item(
+    content_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Delete a persisted marketing content item (404 when it does not exist)."""
+    record = await _get_or_404(content_id, db)
+    await db.delete(record)
+    await db.commit()

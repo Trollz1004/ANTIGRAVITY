@@ -1,0 +1,12 @@
+# runtime artefacts — never commit live state
+state/
+logs/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# parallel-mode coverage data
+.coverage.*

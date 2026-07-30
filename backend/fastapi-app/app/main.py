@@ -8,6 +8,7 @@ import uuid
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -423,13 +424,16 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         },
     )
 
+    # exc.errors() can embed non-JSON-serializable objects (e.g. ValueError in
+    # a "ctx" key) — jsonable_encoder makes the payload safe to serialize.
+    safe_errors = jsonable_encoder(exc.errors())
     payload = ErrorResponse(
         code=ErrorCode.VALIDATION_ERROR,
         message="Request validation failed",
-        details={"errors": exc.errors(), "correlation_id": correlation_id},
+        details={"errors": safe_errors, "correlation_id": correlation_id},
     )
     content = payload.model_dump()
-    content["detail"] = exc.errors()
+    content["detail"] = safe_errors
     return JSONResponse(
         status_code=422,
         content=content,

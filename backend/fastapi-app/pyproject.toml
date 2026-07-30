@@ -121,3 +121,14 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 include = ["app*"]
+
+[tool.coverage.run]
+# TestClient/AnyIO run async endpoint code in worker threads and SQLAlchemy's
+# async engine hops greenlets — without these, endpoint executions are
+# invisible to coverage and the reports are fiction.
+concurrency = ["thread", "greenlet"]
+omit = ["app/routers/migrations.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false

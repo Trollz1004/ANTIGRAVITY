@@ -243,22 +243,11 @@ async def test_ensure_call_record_returns_none_when_no_match(mem_session_factory
 
 
 @pytest.mark.asyncio
-@pytest.mark.xfail(
-    reason=(
-        "Bug: _mark_call_ended computes duration via "
-        "`call.ended_at - call.started_at` but SQLite returns started_at as "
-        "timezone-naive while ended_at is set to datetime.now(timezone.utc) "
-        "(tz-aware), causing TypeError: can't subtract offset-naive and "
-        "offset-aware datetimes. Fix: normalize started_at to utc before "
-        "subtracting, or store with explicit tz."
-    ),
-    strict=True,
-)
 async def test_mark_call_ended_sets_status_and_ended_at(mem_session_factory):
     """Active call is marked ended with ended_at and duration_seconds set.
 
-    Marked xfail: duration_seconds computation crashes on tz-naive/tz-aware
-    mismatch when started_at is read back from SQLite. See xfail reason above.
+    Regression test for the tz-naive/tz-aware duration bug — fixed in
+    app/routers/video.py by normalizing started_at to UTC before subtracting.
     """
     from app.routers import video as vid
 
