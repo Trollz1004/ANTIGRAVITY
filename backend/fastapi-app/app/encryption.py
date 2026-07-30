@@ -1,3 +1,4 @@
+import logging
 import os
 from base64 import urlsafe_b64encode
 from datetime import datetime
@@ -15,6 +16,8 @@ ENCRYPTION_KEY = os.environ.get("ENCRYPTION_KEY", Fernet.generate_key().decode()
 # This is mainly for demonstration; Fernet already handles key derivation from its key.
 # However, if we were deriving from a password/passphrase, PBKDF2 is crucial.
 SALT = os.environ.get("ENCRYPTION_SALT", "a_very_random_salt_for_encryption").encode()
+
+logger = logging.getLogger(__name__)
 
 
 def _derive_key(key_material: str) -> bytes:
@@ -47,9 +50,9 @@ def decrypt_data(encrypted_data: str | None) -> str | None:
     try:
         decrypted_bytes = fernet.decrypt(encrypted_data.encode("utf-8"))
         return decrypted_bytes.decode("utf-8")
-    except Exception as e:
+    except Exception:
         # Log the error, but don't re-raise to prevent app crashes on malformed data
-        print(f"Decryption failed: {e}")
+        logger.warning("Decryption failed for stored value", exc_info=True)
         return None
 
 

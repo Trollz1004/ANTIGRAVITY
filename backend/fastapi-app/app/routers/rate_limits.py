@@ -7,13 +7,13 @@ usage statistics, and top endpoints by request count.
 import logging
 import time
 from collections import defaultdict
-from typing import Any
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from app.auth import get_current_user
 from app.config import get_settings
+from app.models import User
 
 logger = logging.getLogger("youandinotai.api.rate_limits")
 router = APIRouter(prefix="/api/v1/rate-limits", tags=["rate-limits"])
@@ -88,7 +88,7 @@ class RateLimitConfig(BaseModel):
 
 @router.get("/status", response_model=RateLimitStatus)
 async def get_rate_limit_status(
-    user: dict[str, Any] = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> RateLimitStatus:
     """Return current rate limit status and usage statistics."""
     _reset_window_if_needed()
@@ -112,7 +112,7 @@ async def get_rate_limit_status(
 
 @router.get("/stats", response_model=RateLimitStatus)
 async def get_rate_limit_stats(
-    user: dict[str, Any] = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> RateLimitStatus:
     """Return rate limit statistics for authenticated dashboard users."""
     _reset_window_if_needed()
@@ -135,7 +135,7 @@ async def get_rate_limit_stats(
 
 @router.get("/config", response_model=RateLimitConfig)
 async def get_rate_limit_config(
-    user: dict[str, Any] = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> RateLimitConfig:
     """Return rate limit configuration."""
     return RateLimitConfig(
@@ -147,7 +147,7 @@ async def get_rate_limit_config(
 
 @router.post("/reset")
 async def reset_rate_limit_stats(
-    user: dict[str, Any] = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> dict[str, str]:
     """Reset rate limit statistics (admin only)."""
     global _request_counts, _requests_this_minute, _total_today, _window_start, _day_start
@@ -156,5 +156,5 @@ async def reset_rate_limit_stats(
     _total_today = 0
     _window_start = time.time()
     _day_start = time.time()
-    logger.info("Rate limit statistics reset by user %s", user.get("sub", "unknown"))
+    logger.info("Rate limit statistics reset by user %s", user.id)
     return {"status": "reset"}

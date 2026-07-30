@@ -447,6 +447,37 @@ async def square_payment_webhook(
     if await webhook_event_exists(db, event_id):
         return WebhookAckResponse(event_id=event_id, processed=True, duplicate=True)
 
+    try:
+        await _process_square_payment_event(
+            db,
+            payload_json=payload_json,
+            event_id=event_id,
+            event_type=event_type,
+            settings=settings,
+        )
+        await db.commit()
+    except IntegrityError:
+        # Duplicate-delivery race: a concurrent worker already recorded this
+        # event id. Acknowledge it as a duplicate instead of returning a 500.
+        await db.rollback()
+        return WebhookAckResponse(event_id=event_id, processed=True, duplicate=True)
+
+    return WebhookAckResponse(event_id=event_id, processed=True, duplicate=False)
+
+
+async def _process_square_payment_event(
+    db: AsyncSession,
+    *,
+    payload_json: dict[str, Any],
+    event_id: str,
+    event_type: str,
+    settings: Any,
+) -> None:
+    """Apply a Square payment webhook payload to the database.
+
+    Split from the HTTP handler so integrity races raised at any flush
+    point resolve to a safe duplicate acknowledgement.
+    """
     # Extract payment object from Square event structure
     data = payload_json.get("data") or {}
     obj = data.get("object") or {}
@@ -656,14 +687,6 @@ async def square_payment_webhook(
                 user.subscription_expires_at = None
 
     await mark_webhook_event_processed(db, event_id)
-
-    try:
-        await db.commit()
-    except IntegrityError:
-        await db.rollback()
-        return WebhookAckResponse(event_id=event_id, processed=True, duplicate=True)
-
-    return WebhookAckResponse(event_id=event_id, processed=True, duplicate=False)
 
 
 # ── Square Booking Webhook (E-Waste / OnlineRecycle.org) ──

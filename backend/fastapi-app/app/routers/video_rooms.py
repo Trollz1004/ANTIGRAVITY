@@ -23,13 +23,13 @@ async def create_video_room(
     # Logic follows the exact requested patterns
     room_name = f"match-{match_id}"
 
-    # If API key is missing, return a mock room for development
+    # A missing Daily.co API key is a server configuration error — never
+    # fabricate a fake room URL that cannot be joined.
     if not settings.daily_api_key:
-        return {
-            "room_url": f"https://youandinotai.daily.co/{room_name}",
-            "room_name": room_name,
-            "is_mock": True,
-        }
+        raise HTTPException(
+            status_code=503,
+            detail="Video provider is not configured (DAILY_API_KEY missing)",
+        )
 
     # Prepare room expiry (1 hour from now)
     expiry = int(time.time()) + 3600

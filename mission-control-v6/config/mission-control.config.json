@@ -1,0 +1,342 @@
+{
+  "_comment": "ANTIGRAVITY Mission Control v6 registry — every service that 'shouldn't be down' gets expected=true, a probe, and a fix playbook. Every notification embeds the easy button + script.",
+  "server": {
+    "host": "127.0.0.1",
+    "port": "${MC_PORT:-8787}",
+    "api_token": "${MC_API_TOKEN:-}",
+    "state_db": "state/mission-control.db",
+    "base_url": "${MC_BASE_URL:-}",
+    "monitor_enabled": true,
+    "startup_grace_s": 45
+  },
+  "notifiers": [
+    { "type": "console" },
+    { "type": "file", "path": "logs/mission-control-alerts.jsonl" },
+    { "type": "webhook", "url": "${MC_WEBHOOK_URL:-}", "enabled": false,
+      "_note": "set MC_WEBHOOK_URL (Discord/Slack/generic) and enabled=true — payload auto-formats for Discord" },
+    { "type": "smtp", "enabled": false, "host": "smtp.gmail.com", "port": 587,
+      "username": "", "password": "", "sender": "", "recipients": ["you@example.com"] },
+    { "type": "windows-toast", "enabled": false,
+      "_note": "desktop toast via BurntToast or msg.exe — handy on the Windows host" }
+  ],
+  "links": [
+    { "id": "hermes-dashboard", "label": "Hermes Dashboard :9119", "url": "http://localhost:${HERMES_DASH_PORT:-9119}" },
+    { "id": "openclaw-ui", "label": "OpenClaw Web UI", "url": "http://localhost:${OPENCLAW_PORT:-18789}" },
+    { "id": "omniroute", "label": "OmniRoute :20128", "url": "http://localhost:20128" },
+    { "id": "hermes-workspace", "label": "Hermes Workspace :3000", "url": "http://localhost:3000" },
+    { "id": "github", "label": "GitHub Repo", "url": "https://github.com/Trollz1004/ANTIGRAVITY" }
+  ],
+  "services": [
+    {
+      "id": "hermes-dashboard",
+      "name": "Hermes Dashboard",
+      "group": "Agents",
+      "kind": "http",
+      "url": "http://127.0.0.1:${HERMES_DASH_PORT:-9119}/",
+      "expected_status": "any",
+      "expected": true,
+      "interval_s": 30,
+      "timeout_s": 3,
+      "fail_threshold": 2,
+      "latency_warn_ms": 1500,
+      "playbook": "start-hermes-dashboard",
+      "auto_fix": true,
+      "link_url": "http://localhost:${HERMES_DASH_PORT:-9119}"
+    },
+    {
+      "id": "hermes-agent",
+      "name": "Hermes Agent",
+      "group": "Agents",
+      "kind": "docker",
+      "container": "hermes-agent",
+      "expected": true,
+      "interval_s": 60,
+      "timeout_s": 10,
+      "playbook": "start-hermes-agent"
+    },
+    {
+      "id": "hermes-router",
+      "name": "Hermes Router",
+      "group": "Agents",
+      "kind": "http",
+      "url": "http://127.0.0.1:${HERMES_ROUTER_PORT:-11435}/healthz",
+      "expected_status": "any",
+      "expected": true,
+      "interval_s": 30,
+      "playbook": "start-hermes-router",
+      "link_url": "http://localhost:${HERMES_ROUTER_PORT:-11435}/healthz"
+    },
+    {
+      "id": "openclaw",
+      "name": "OpenClaw Gateway + Web UI",
+      "group": "Gateway",
+      "kind": "http",
+      "url": "http://127.0.0.1:${OPENCLAW_PORT:-18789}/",
+      "expected_status": "any",
+      "expected": true,
+      "interval_s": 30,
+      "timeout_s": 3,
+      "latency_warn_ms": 2000,
+      "playbook": "start-openclaw",
+      "auto_fix": true,
+      "link_url": "http://localhost:${OPENCLAW_PORT:-18789}"
+    },
+    {
+      "id": "omniroute",
+      "name": "OmniRoute (LLM router)",
+      "group": "Gateway",
+      "kind": "http",
+      "url": "http://127.0.0.1:20128/v1/models",
+      "expected_status": [200, 401, 403],
+      "expected": true,
+      "interval_s": 60,
+      "timeout_s": 9,
+      "latency_warn_ms": 4000,
+      "playbook": "start-omniroute",
+      "link_url": "http://localhost:20128"
+    },
+    {
+      "id": "ollama",
+      "name": "Ollama",
+      "group": "Models",
+      "kind": "http",
+      "url": "http://127.0.0.1:11434/api/tags",
+      "expected": true,
+      "interval_s": 60,
+      "playbook": "start-ollama",
+      "auto_fix": true,
+      "link_url": "http://localhost:11434"
+    },
+    {
+      "id": "backend",
+      "name": "Date-App Backend (FastAPI)",
+      "group": "Date App",
+      "kind": "http",
+      "url": "http://127.0.0.1:${BACKEND_PORT:-8000}/api/v1/health",
+      "expected_status": [200],
+      "expected": true,
+      "interval_s": 20,
+      "timeout_s": 3,
+      "latency_warn_ms": 800,
+      "playbook": "start-backend",
+      "link_url": "http://localhost:${BACKEND_PORT:-8000}/api/v1/health"
+    },
+    {
+      "id": "frontend",
+      "name": "Date-App Frontend",
+      "group": "Date App",
+      "kind": "http",
+      "url": "http://127.0.0.1:${FRONTEND_PORT:-3200}/",
+      "expected_status": "any",
+      "expected": true,
+      "interval_s": 30,
+      "playbook": "start-frontend",
+      "link_url": "http://localhost:${FRONTEND_PORT:-3200}"
+    },
+    {
+      "id": "date-service",
+      "name": "Date Service (compose)",
+      "group": "Date App",
+      "kind": "tcp",
+      "host": "127.0.0.1",
+      "port": 8888,
+      "expected": true,
+      "interval_s": 60,
+      "playbook": "start-docker-stack"
+    },
+    {
+      "id": "redis",
+      "name": "Redis",
+      "group": "Database",
+      "kind": "tcp",
+      "host": "127.0.0.1",
+      "port": 6379,
+      "expected": true,
+      "interval_s": 60,
+      "playbook": "start-datastores"
+    },
+    {
+      "id": "qdrant",
+      "name": "Qdrant",
+      "group": "Database",
+      "kind": "tcp",
+      "host": "127.0.0.1",
+      "port": 6333,
+      "expected": true,
+      "interval_s": 60,
+      "playbook": "start-datastores"
+    },
+    {
+      "id": "postgres",
+      "name": "Postgres (prod compose)",
+      "group": "Database",
+      "kind": "tcp",
+      "host": "127.0.0.1",
+      "port": 5432,
+      "expected": false,
+      "_note": "flip expected to true on hosts running docker-compose.prod.yml",
+      "interval_s": 60,
+      "playbook": "start-postgres"
+    },
+    {
+      "id": "whatsapp-bridge",
+      "name": "WhatsApp Bridge",
+      "group": "Gateway",
+      "kind": "docker",
+      "container": "whatsapp-bridge",
+      "expected": false,
+      "interval_s": 120,
+      "playbook": "start-whatsapp-bridge"
+    },
+    {
+      "id": "paperclip",
+      "name": "Paperclip AI OS",
+      "group": "Services",
+      "kind": "http",
+      "url": "http://127.0.0.1:${PAPERCLIP_PORT:-3100}/",
+      "expected_status": "any",
+      "expected": false,
+      "interval_s": 60,
+      "link_url": "http://localhost:${PAPERCLIP_PORT:-3100}"
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode Server",
+      "group": "Services",
+      "kind": "http",
+      "url": "http://127.0.0.1:4096/",
+      "expected_status": "any",
+      "expected": false,
+      "interval_s": 60,
+      "link_url": "http://localhost:4096"
+    }
+  ],
+  "playbooks": {
+    "start-hermes-dashboard": {
+      "description": "launch the Hermes dashboard web UI (port 9119) — same thing 'cmd hermes dashboard' does",
+      "script": "fix-scripts/fix-hermes-dashboard.cmd",
+      "timeout_s": 30,
+      "cooldown_s": 90,
+      "commands": {
+        "windows": [
+          ["cmd", "/c", "start", "", "cmd", "/c", "hermes", "dashboard", "--port", "9119", "--host", "127.0.0.1", "--no-open"]
+        ],
+        "linux": [
+          ["bash", "-lc", "nohup hermes dashboard --port ${HERMES_DASH_PORT:-9119} --host 127.0.0.1 >\"{repo_root}/logs/hermes-dashboard.log\" 2>&1 &"]
+        ]
+      }
+    },
+    "start-hermes-agent": {
+      "description": "start the hermes-agent docker container via the compose stack",
+      "script": "fix-scripts/fix-docker-stack.cmd",
+      "timeout_s": 240,
+      "commands": {
+        "windows": [["cmd", "/c", "cd /d {repo_root} && docker compose up -d hermes-agent"]],
+        "linux": [["bash", "-lc", "cd \"{repo_root}\" && docker compose up -d hermes-agent"]]
+      }
+    },
+    "start-hermes-router": {
+      "description": "start the Hermes LLM router on 11435",
+      "script": "fix-scripts/fix-hermes-router.cmd",
+      "timeout_s": 30,
+      "commands": {
+        "windows": [["cmd", "/c", "start", "", "{repo_root}\\scripts\\start-hermes-router.cmd"]],
+        "linux": [["bash", "-lc", "nohup bash \"{repo_root}/scripts/start-hermes-router.sh\" >\"{repo_root}/logs/hermes-router.log\" 2>&1 &"]]
+      }
+    },
+    "start-openclaw": {
+      "description": "start the OpenClaw gateway (serves the web UI, port 18789 by default)",
+      "script": "fix-scripts/fix-openclaw.cmd",
+      "timeout_s": 30,
+      "cooldown_s": 90,
+      "commands": {
+        "windows": [
+          ["cmd", "/c", "start", "", "cmd", "/c", "C:\\Users\\joshl\\AppData\\Roaming\\npm\\openclaw.cmd", "gateway"]
+        ],
+        "linux": [
+          ["bash", "-lc", "nohup openclaw gateway >\"{repo_root}/logs/openclaw.log\" 2>&1 &"]
+        ]
+      }
+    },
+    "start-omniroute": {
+      "description": "bring OmniRoute up via docker compose (ports 20128/20129)",
+      "script": "fix-scripts/fix-omniroute.cmd",
+      "timeout_s": 240,
+      "commands": {
+        "windows": [["cmd", "/c", "cd /d {repo_root} && docker compose up -d omni-router"]],
+        "linux": [["bash", "-lc", "cd \"{repo_root}\" && docker compose up -d omni-router"]]
+      }
+    },
+    "start-ollama": {
+      "description": "start the Ollama model server",
+      "script": "fix-scripts/fix-ollama.cmd",
+      "timeout_s": 30,
+      "commands": {
+        "windows": [["cmd", "/c", "start", "", "ollama", "serve"]],
+        "linux": [["bash", "-lc", "nohup ollama serve >\"{repo_root}/logs/ollama.log\" 2>&1 &"]]
+      }
+    },
+    "start-backend": {
+      "description": "start the date-app FastAPI backend with uvicorn on port 8000 (repo venv)",
+      "script": "fix-scripts/fix-backend.cmd",
+      "timeout_s": 45,
+      "commands": {
+        "windows": [
+          ["cmd", "/c", "start", "", "cmd", "/c", "cd /d {repo_root}\\backend\\fastapi-app && .venv\\Scripts\\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port ${BACKEND_PORT:-8000}"]
+        ],
+        "linux": [
+          ["bash", "-lc", "cd \"{repo_root}/backend/fastapi-app\" && nohup .venv/bin/python -m uvicorn app.main:app --host 0.0.0.0 --port ${BACKEND_PORT:-8000} >\"{repo_root}/logs/backend.log\" 2>&1 &"]
+        ]
+      }
+    },
+    "start-frontend": {
+      "description": "start the date-app frontend dev server on port 3200",
+      "script": "fix-scripts/fix-frontend.cmd",
+      "timeout_s": 60,
+      "commands": {
+        "windows": [
+          ["cmd", "/c", "start", "", "{repo_root}\\scripts\\start-dateapp-frontend-3200.ps1"]
+        ],
+        "linux": [
+          ["bash", "-lc", "cd \"{repo_root}/frontend\" && PORT=${FRONTEND_PORT:-3200} nohup npm run start >\"{repo_root}/logs/frontend.log\" 2>&1 &"]
+        ]
+      }
+    },
+    "start-datastores": {
+      "description": "docker compose up redis + qdrant (shared data stores)",
+      "script": "fix-scripts/fix-database.cmd",
+      "timeout_s": 180,
+      "commands": {
+        "windows": [["cmd", "/c", "cd /d {repo_root} && docker compose up -d redis qdrant"]],
+        "linux": [["bash", "-lc", "cd \"{repo_root}\" && docker compose up -d redis qdrant"]]
+      }
+    },
+    "start-postgres": {
+      "description": "start postgres from the prod compose file",
+      "script": "fix-scripts/fix-database.cmd",
+      "timeout_s": 240,
+      "commands": {
+        "windows": [["cmd", "/c", "cd /d {repo_root} && docker compose -f docker-compose.prod.yml up -d postgres"]],
+        "linux": [["bash", "-lc", "cd \"{repo_root}\" && docker compose -f docker-compose.prod.yml up -d postgres"]]
+      }
+    },
+    "start-whatsapp-bridge": {
+      "description": "start the WhatsApp bridge container (openclaw profile)",
+      "timeout_s": 240,
+      "commands": {
+        "windows": [["cmd", "/c", "cd /d {repo_root} && docker compose --profile openclaw up -d whatsapp-bridge"]],
+        "linux": [["bash", "-lc", "cd \"{repo_root}\" && docker compose --profile openclaw up -d whatsapp-bridge"]]
+      }
+    },
+    "start-docker-stack": {
+      "description": "the big red button — run the repo bootstrap to (re)start the whole compose stack",
+      "script": "fix-scripts/fix-docker-stack.cmd",
+      "timeout_s": 600,
+      "cooldown_s": 300,
+      "commands": {
+        "windows": [["cmd", "/c", "start", "", "{repo_root}\\BOOTSTRAP.bat"]],
+        "linux": [["bash", "-lc", "cd \"{repo_root}\" && docker compose up -d"]]
+      }
+    }
+  }
+}

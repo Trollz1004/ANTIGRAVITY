@@ -8,7 +8,7 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Any
+
 
 import aiofiles
 from fastapi import (
@@ -25,6 +25,7 @@ from fastapi.responses import JSONResponse
 
 from app.auth import get_current_user
 from app.config import get_settings
+from app.models import User
 from app.upload_progress import (
     complete_upload,
     create_upload,
@@ -117,7 +118,7 @@ def _parse_content_range(header_value: str | None) -> tuple[int, int, int] | Non
 @router.post("/")
 async def upload_file(
     file: UploadFile = File(...),
-    user: dict[str, Any] = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> JSONResponse:
     """Secure file upload with validation, size limits, and virus scanning."""
     # Check file size (FastAPI doesn't enforce this automatically for streaming)
@@ -190,7 +191,7 @@ async def upload_file(
     logger.info(
         "File uploaded successfully",
         extra={
-            "user_id": user.get("sub"),
+            "user_id": str(user.id),
             "secure_filename": secure_filename,
             "original_filename": file.filename,
             "size_bytes": file_size,
@@ -220,7 +221,7 @@ async def upload_file(
 async def init_chunked_upload(
     filename: str = Query(..., description="Original filename"),
     total_bytes: int = Query(..., description="Total file size in bytes"),
-    user: dict[str, Any] = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> JSONResponse:
     """Initialize a chunked upload session.
 
@@ -262,7 +263,7 @@ async def upload_chunk(
     upload_id: str,
     request: Request,
     content_range: str | None = Header(None, alias="content-range"),
-    user: dict[str, Any] = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> JSONResponse:
     """Upload a single chunk of a file.
 
@@ -332,7 +333,7 @@ async def upload_chunk(
 @router.get("/progress/{upload_id}")
 async def get_upload_progress(
     upload_id: str,
-    user: dict[str, Any] = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> JSONResponse:
     """Get the current progress of an upload."""
     prog = get_progress(upload_id)
@@ -364,7 +365,7 @@ async def get_upload_progress(
 @router.post("/chunked/{upload_id}/finalize")
 async def finalize_chunked_upload(
     upload_id: str,
-    user: dict[str, Any] = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> JSONResponse:
     """Combine all uploaded chunks into the final file and run validation."""
     prog = get_progress(upload_id)
@@ -486,7 +487,7 @@ async def finalize_chunked_upload(
 @router.delete("/chunked/{upload_id}")
 async def cancel_chunked_upload(
     upload_id: str,
-    user: dict[str, Any] = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> JSONResponse:
     """Cancel a chunked upload and clean up all temporary data."""
     prog = get_progress(upload_id)

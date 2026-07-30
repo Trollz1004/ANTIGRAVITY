@@ -600,6 +600,45 @@ class DoubleDateAcceptance(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
+class MarketingContent(Base):
+    """Persisted marketing content item produced by AI agents.
+
+    Every row is a real, auditable record — the marketing API never returns
+    synthesized/mock payloads.
+    """
+
+    __tablename__ = "marketing_content"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    campaign_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    objective: Mapped[str] = mapped_column(String(500), nullable=False)
+    audience: Mapped[str] = mapped_column(String(500), nullable=False)
+    platforms: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    core_message: Mapped[str] = mapped_column(Text, nullable=False)
+    post_type: Mapped[str] = mapped_column(String(50), nullable=False)
+    primary_caption: Mapped[str] = mapped_column(Text, nullable=False)
+    call_to_action: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    hashtag_block: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    published: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    created_by: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
 # RefreshToken model for OPU-47 JWT refresh token rotation
 from app.models_refresh_token import RefreshToken  # noqa: F401, E402
 

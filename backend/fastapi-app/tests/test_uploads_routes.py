@@ -34,11 +34,10 @@ def _make_user(email: str = "upload_user@example.com") -> User:
 
 
 def _override_user(user: User):
-    """Return a dict mock because uploads.py declares user: dict[str, Any]."""
+    """get_current_user returns a User ORM object — the router now uses it as one."""
 
     async def _dep():
-        # The uploads router calls user.get("sub") — it expects a dict, not an ORM object
-        return {"sub": str(user.id), "email": user.email}
+        return user
 
     return _dep
 

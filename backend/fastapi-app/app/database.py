@@ -54,13 +54,28 @@ async def check_db_health() -> bool:
 
 
 async def get_pool_status() -> dict:
-    """Return connection pool statistics for monitoring."""
+    """Return connection pool statistics for monitoring.
+
+    Tolerates pool classes (e.g. SQLite's StaticPool) that do not track
+    size/overflow counters — those report as None instead of failing the
+    health probe.
+    """
+
+    def _probe(pool, name: str):
+        probe = getattr(pool, name, None)
+        if not callable(probe):
+            return None
+        try:
+            return probe()
+        except Exception:
+            return None
+
     pool = engine.pool
     return {
-        "size": pool.size(),
-        "checked_in": pool.checkedin(),
-        "checked_out": pool.checkedout(),
-        "overflow": pool.overflow(),
+        "size": _probe(pool, "size"),
+        "checked_in": _probe(pool, "checkedin"),
+        "checked_out": _probe(pool, "checkedout"),
+        "overflow": _probe(pool, "overflow"),
     }
 
 

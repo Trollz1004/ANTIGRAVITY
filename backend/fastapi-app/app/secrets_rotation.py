@@ -20,7 +20,7 @@ class SecretsRotationManager:
     DEFAULT_ROTATION_INTERVAL_DAYS = 90
     CONFIG_FILE_NAME = "secrets_rotation_config.json"
     AUDIT_LOG_FILE_NAME = "secrets_rotation_audit.log"
-    BASE_DIR = os.path.join("/mnt/c/ANTIGRAVITY", "backend", "fastapi-app", "app")
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     def __init__(self, base_dir: str = None):
         self._base_dir = base_dir or self.BASE_DIR
@@ -203,17 +203,8 @@ class SecretsRotationManager:
                 "This involves attempting to use the new secret without affecting live traffic."
             )
             # In a real scenario, this would involve a test connection or API call using new_secret_value.
-            validation_successful = True  # Assume success for simulation
-            if not validation_successful:
-                logger.error(
-                    f"Validation failed for new secret for '{secret_name}'. Aborting rotation."
-                )
-                self._log_audit(
-                    secret_name,
-                    "Validation Failed",
-                    "New secret validation failed. Aborting.",
-                )
-                return False
+            # Real deployments plug in an actual validation probe here; the
+            # simulation treats generation success as a valid secret.
             self._log_audit(
                 secret_name,
                 "Validate New",
@@ -270,13 +261,13 @@ class SecretsRotationManager:
 
 
 # Example usage (for testing/demonstration, not part of live app logic)
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover — manual demo harness
     logging.basicConfig(
         level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
     )
 
     # Ensure the target directory exists for example files
-    target_dir = os.path.join("/mnt/c/ANTIGRAVITY", "backend", "fastapi-app", "app")
+    target_dir = SecretsRotationManager.BASE_DIR
     os.makedirs(target_dir, exist_ok=True)
 
     # Initialize config.json with some sample secrets for demonstration
