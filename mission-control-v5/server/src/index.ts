@@ -88,14 +88,18 @@ async function pingService(name: string, url: string, timeoutMs = 2500): Promise
 
 app.get('/api/services', async (_req, res) => {
   const openclawPort = Number(process.env.OPENCLAW_PORT ?? 9120) || 9120;
+  // Per-service ping timeout. OmniRoute's /v1/models aggregates models from
+  // backends and answers in ~3s, so it needs a longer window than a fast
+  // fail-closed ECONNREFUSED on an idle port. Others fail fast, keeping the
+  // panel snappy.
   const services = [
-    { name: 'Hermes', url: 'http://127.0.0.1:9119' },
-    { name: 'OpenClaw', url: `http://127.0.0.1:${openclawPort}` },
-    { name: 'OmniRoute', url: 'http://127.0.0.1:20128/v1/models' },
-    { name: 'Ollama', url: 'http://127.0.0.1:11434/api/tags' },
+    { name: 'Hermes', url: 'http://127.0.0.1:9119', timeoutMs: 2500 },
+    { name: 'OpenClaw', url: `http://127.0.0.1:${openclawPort}`, timeoutMs: 2500 },
+    { name: 'OmniRoute', url: 'http://127.0.0.1:20128/v1/models', timeoutMs: 9000 },
+    { name: 'Ollama', url: 'http://127.0.0.1:11434/api/tags', timeoutMs: 2500 },
   ];
   const results = await Promise.all(
-    services.map((s) => pingService(s.name, s.url)),
+    services.map((s) => pingService(s.name, s.url, s.timeoutMs)),
   );
   res.json({ services: results });
 });
