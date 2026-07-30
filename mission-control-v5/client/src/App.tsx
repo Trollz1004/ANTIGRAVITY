@@ -1,0 +1,116 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { api, subscribeEvents } from './api';
+import AgentLibrary from './components/AgentLibrary';
+import Header, { type Tab } from './components/Header';
+import KanbanBoard from './components/KanbanBoard';
+import ServicesPanel from './components/ServicesPanel';
+import SwarmEngine from './components/SwarmEngine';
+import type { AgentDef, CategoryDef, Health, SwarmTask } from './types';
+
+export default function App() {
+  const [tab, setTab] = useState<Tab>('library');
+  const [agents, setAgents] = useState<AgentDef[]>([]);
+  const [categories, setCategories] = useState<CategoryDef[]>([]);
+  const [tasks, setTasks] = useState<SwarmTask[]>([]);
+  const [health, setHealth] = useState<Health | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const refreshTimer = useRef<number | null>(null);
+
+  const refreshTasks = useCallback(() => {
+    // Debounce bursts of SSE events into one fetch.
+    if (refreshTimer.current !== null) return;
+    refreshTimer.current = window.setTimeout(async () => {
+      refreshTimer.current = null;
+      try {
+        const [{ tasks: nextTasks }, nextHealth] = await Promise.all([api.tasks(), api.health()]);
+        setTasks(nextTasks);
+        setHealth(nextHealth);
+      } catch {
+        setHealth(null);
+      }
+    }, 120);
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const [libraryRes, tasksRes, healthRes] = await Promise.all([
+          api.agents(),
+          api.tasks(),
+          api.health(),
+        ]);
+        setAgents(libraryRes.agents);
+        setCategories(libraryRes.categories);
+        setTasks(tasksRes.tasks);
+        setHealth(healthRes);
+      } catch {
+        setHealth(null);
+      }
+    })();
+    const unsubscribe = subscribeEvents(refreshTasks);
+    const poll = window.setInterval(refreshTasks, 30_000);
+    return () => {
+      unsubscribe();
+      window.clearInterval(poll);
+    };
+  }, [refreshTasks]);
+
+  const toggleAgent = useCallback((agentId: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(agentId)) next.delete(agentId);
+      else next.add(agentId);
+      return next;
+    });
+  }, []);
+
+  const deployAgent = useCallback(
+    (agentId: string) => {
+      toggleAgent(agentId);
+    },
+    [toggleAgent],
+  );
+
+  const runningCount = tasks.filter((t) => t.status === 'running' || t.status === 'queued').length;
+
+  return (
+    <div className="app">
+      <Header
+        tab={tab}
+        onTab={setTab}
+        health={health}
+        runningCount={runningCount}
+        selectedCount={selected.size}
+      />
+      <main className="main">
+        {tab === 'library' && (
+          <AgentLibrary
+            agents={agents}
+            categories={categories}
+            selected={selected}
+            onDeploy={deployAgent}
+          />
+        )}
+        {tab === 'swarm' && (
+          <SwarmEngine
+            agents={agents}
+            selected={selected}
+            onToggleAgent={toggleAgent}
+            tasks={tasks}
+            health={health}
+            onGoLibrary={() => setTab('library')}
+          />
+        )}
+        {tab === 'board' && <KanbanBoard tasks={tasks} />}
+        {tab === 'services' && <ServicesPanel />}
+      </main>
+      <footer className="footer">
+        <span>MISSION CONTROL v{health?.version ?? '5.0.0'} — {health?.edition ?? 'HAIKU-SONNET 3.5 EDITION'}</span>
+        <span>
+          OMNI ROUTER: {health?.routerLive ? 'LIVE' : 'OFFLINE'} · TASKS: {tasks.length} · REAL
+          OUTPUT ONLY — NO SIMULATED DATA
+        </span>
+      </footer>
+    </div>
+  );
+}
