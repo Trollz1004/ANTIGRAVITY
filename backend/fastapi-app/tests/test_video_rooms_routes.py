@@ -8,7 +8,7 @@ Risk surface:
   - Invalid match_id (non-UUID) returns 422
   - Room capacity: max_participants = 2 (verified via mock response)
   - Access control: only authenticated users can create rooms
-  - Dev mode (no API key): returns mock room URL without external call
+  - Misconfiguration (no API key): 503, never a fabricated room URL
   - Daily.co API error: 502 propagated
 """
 
@@ -76,25 +76,25 @@ def test_create_room_non_uuid_match_id_returns_422(client):
         app.dependency_overrides.pop(get_current_user, None)
 
 
-# ── Dev mode: no API key returns mock room ────────────────────────────────────
+# ── Misconfiguration: no API key is a 503, never a fake room ─────────────────
 
 
-def test_create_room_dev_mode_returns_mock_room(client):
+def test_create_room_without_api_key_returns_503(client):
+    """A missing Daily.co key must never fabricate a fake joinable room URL."""
     user = _make_user("rooms_dev@example.com")
     app.dependency_overrides[get_current_user] = _override_user(user)
     match_id = uuid.uuid4()
     try:
         with patch("app.routers.video_rooms.settings") as mock_settings:
-            mock_settings.daily_api_key = ""  # no key = dev mode
+            mock_settings.daily_api_key = ""  # provider not configured
 
             resp = client.post(f"/api/v1/video/rooms/{match_id}")
 
-        assert resp.status_code == 200, resp.text
-        data = resp.json()
-        assert "room_url" in data
-        assert "room_name" in data
-        assert data["room_name"] == f"match-{match_id}"
-        assert data.get("is_mock") is True
+        assert resp.status_code == 503, resp.text
+        assert "not configured" in resp.json()["detail"]
+        # No synthetic/mock room fields leak into the response.
+        assert "room_url" not in resp.json()
+        assert "is_mock" not in resp.json()
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
