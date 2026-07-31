@@ -1,6 +1,24 @@
 # CLAUDE.md - ANTIGRAVITY Current Agent Guide
 
-Updated: 2026-06-22
+Updated: 2026-07-31
+
+## MANDATORY: Skills Protocol — low-context sessions, zero excuses
+
+Every agent session here runs in a LOW CONTEXT WINDOW. You cannot hold this
+system in your head, so skills are not optional:
+
+1. **Session start:** read state BEFORE anything else — `AGENTS.md`, the
+   relevant `STATE.md` / `MEMORY.md`, and today's briefing.
+2. **Before EVERY task:** load the matching skill from `E:\ANTIGRAVITY\skills\`.
+   Always-available toolbox (load before tasking, no exceptions):
+   - `agent-browser` — any web or browser work
+   - `find-skills` — locate the right skill for a task
+   - `self-improvement` / skill-creator — write the missing skill, then use it
+   - `caveman` — knows skills.sh and how the skill system works
+   - Hermes hub + Claw hub — cross-agent coordination
+   A task executed without loading a skill is a task done wrong.
+3. **Session end:** write state back (what changed, what's blocked, next step)
+   before the window closes. The next session starts blind without it.
 
 This file is the Claude-facing operational guide for `C:\antigravity`.
 If older exports, memories, downloads, or cached project files conflict with this file,

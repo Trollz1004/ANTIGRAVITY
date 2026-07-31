@@ -1,0 +1,7 @@
+The MissionControlWatchdog scheduled task is neutered while this file exists.
+bootstrap.ps1 exits immediately when it sees this file.
+
+Delete this file to re-enable the self-healing supervisor.
+
+Created 2026-07-31 by Claude while fixing the port-3200 / OmniRoute dashboard
+browser-spam loop, at Josh's request to stop all watchdogs.

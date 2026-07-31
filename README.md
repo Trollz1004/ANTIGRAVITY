@@ -86,7 +86,7 @@ Support is not decoration â€” it is a trust signal and conversion layer.
 - **Edge:** Cloudflare Pages, Cloudflare Workers, Cloudflare Tunnels
 - **Cloud:** Google Cloud Run (API tier)
 - **Commerce:** Square (youandinotai.com only, no exceptions), Stripe (onlinerecycle.org, ai-solutions.store)
-- **AI orchestration:** three top-level agent lanes â€” Claude (`~/.claude`, orchestrator), Hermes (`localhost:11435`, research/routing), OpenClaw (support fleet). Every lane and sub-agent (OpenCode, Ollama workers, etc.) reaches models only through OmniRoute (`:20128`), which picks the best available model â€” no lane calls a provider directly. One shared memory graph (Pieces LTM) across all three lanes. See `AGENT-DOCTRINE.md`.
+- **AI orchestration:** three top-level agent lanes â€” Claude (`~/.claude`, orchestrator), Hermes (dashboard `:9119`, routed via OmniRoute), OpenClaw (support fleet; ClawX owns the gateway on `:18789` â€” never run a second gateway). Every lane and sub-agent reaches models only through OmniRoute (`:20128`, factory port, `http://localhost:20128/v1`) â€” no lane calls a provider directly. Mission Control v5 tasks pick a named executor: **AUTO** (provider order), **ORNITH** (local `ornith:9b`, `gemma4:latest` fallback), or **FCC OPUS** (Claude Opus via the gateway). Stack terminals launch via `mission-control-v5/scripts/launch-stack.cmd` (fcc-serve, hermes-dash, openclaw-tui, fcc-claude) â€” visible tabs, no hidden watchdogs. One shared memory graph (Pieces LTM) across all three lanes. See `AGENT-DOCTRINE.md`.
 - **Data:** PostgreSQL, Cloudflare D1, Qdrant, SQLite, Redis
 
 ---

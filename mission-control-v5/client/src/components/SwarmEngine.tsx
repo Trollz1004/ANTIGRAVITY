@@ -23,11 +23,15 @@ export default function SwarmEngine({
   const [title, setTitle] = useState('');
   const [prompt, setPrompt] = useState('');
   const [mode, setMode] = useState<Mode>('speed');
+  const [executor, setExecutor] = useState('auto');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   const routerLive = health?.routerLive ?? false;
   const selectedAgents = agents.filter((agent) => selected.has(agent.id));
+  const executors = health?.executors ?? [
+    { id: 'auto', label: 'AUTO', description: 'OmniRoute provider order.', chain: [] },
+  ];
 
   const submit = async () => {
     setError('');
@@ -38,6 +42,7 @@ export default function SwarmEngine({
         prompt,
         agentIds: [...selected],
         mode,
+        executor,
       });
       setTitle('');
       setPrompt('');
@@ -88,7 +93,22 @@ export default function SwarmEngine({
           </button>
         </div>
 
-        <div className="label swarm__section-title">03 — TASK</div>
+        <div className="label swarm__section-title">03 — EXECUTOR</div>
+        <div className="mode-toggle">
+          {executors.map((ex) => (
+            <button
+              key={ex.id}
+              className={`mode-toggle__option ${executor === ex.id ? 'mode-toggle__option--active' : ''}`}
+              title={ex.chain.map((l) => `${l.provider}: ${l.model}`).join(' → ') || ex.description}
+              onClick={() => setExecutor(ex.id)}
+            >
+              {ex.label}
+              <small>{ex.description}</small>
+            </button>
+          ))}
+        </div>
+
+        <div className="label swarm__section-title">04 — TASK</div>
         <input
           className="input"
           placeholder="TITLE (OPTIONAL)"
@@ -129,6 +149,9 @@ export default function SwarmEngine({
               <StatusDot status={task.status} />
               <span className="run-card__title">{task.title}</span>
               {modeBadge(task.mode)}
+              {task.executor && task.executor !== 'auto' && (
+                <span className="label">{task.executor.toUpperCase()}</span>
+              )}
               <span className="result__meta">{new Date(task.createdAt).toLocaleTimeString()}</span>
             </div>
             <div className="run-card__body">
