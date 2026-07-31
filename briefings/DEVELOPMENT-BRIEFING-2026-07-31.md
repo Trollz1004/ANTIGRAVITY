@@ -32,9 +32,10 @@ stabilize OpenClaw memory, and hand the stack back to visible, manual control.
   `DateAppStaticServer`, `Hermes_Gateway`, `T5500-DateApp-Cloudflared`) — the
   watchdog is neutered by the kill-switch file regardless.
 - Replacement: `mission-control-v5/scripts/launch-stack.cmd` opens ONE Windows
-  Terminal with visible tabs — `fcc-serve` (OmniRoute :20128), Hermes dashboard
-  :9119, OpenClaw TUI (ClawX-bundled CLI), `fcc-claude`. Auto-runs at logon via
-  Startup entry `ANTIGRAVITY-Stack-Terminal.cmd` (delete it to opt out).
+  Terminal with five visible tabs — `omniroute serve` (:20128), `fcc-server`
+  (:8082), `fcc-claude`, Hermes dashboard :9119, OpenClaw TUI (ClawX-bundled
+  CLI). Auto-runs at logon via Startup entry `ANTIGRAVITY-Stack-Terminal.cmd`
+  (delete it to opt out).
 
 ## 3. Port doctrine (canonical)
 
@@ -77,14 +78,24 @@ Config lives in `server/.env` (`EXEC_*` vars). The gateway now requires auth on
 the direct-ollama provider remains as secondary. Backup:
 `config.yaml.bak-claude-20260731`.
 
-## 7. New commands
+## 7. FCC (Free Claude Code) — restored and routed through OmniRoute
 
-- `fcc-serve` — alias for `omniroute serve` (the old standalone FCC server was
-  absorbed into OmniRoute). On PATH via `%APPDATA%\npm`.
-- `fcc-claude` — Claude Code CLI pointed at the gateway
-  (`ANTHROPIC_BASE_URL=http://localhost:20128`, key from server/.env,
-  default model `cc/claude-opus-4-8`). Reason it "never worked": the command
-  simply didn't exist anywhere until today.
+CORRECTION from earlier in the day: FCC is a separate tool, NOT an omniroute
+alias. It was reinstalled from the cloned repo `E:\ANTIGRAVITY\free-claude-code`
+(github.com/Alishahryar1/free-claude-code) via `uv tool install .`:
+
+- `fcc-server` — the FCC proxy on :8082 (Admin UI http://127.0.0.1:8082/admin).
+  `fcc-serve` (no r) also works — a forgiveness shim in `%APPDATA%\npm`.
+- `fcc-claude` — launches the real Claude Code CLI through the proxy. It reads
+  the same `~/.claude` config/CLAUDE.md as normal Claude Code, so keep those
+  files lean (~40k forces a compaction rewrite no matter the rules).
+- Why it "never worked": the tool wasn't installed at all, AND stale Windows
+  user/machine env vars (`MODEL_OPUS=nvidia_nim`, truncated) crashed the server
+  on boot. Fixed at user scope.
+- Model tiers now route through OmniRoute via FCC's bedrock provider slot
+  (`BEDROCK_BASE_URL=http://localhost:20128`): Opus→`cc/claude-opus-4-8`,
+  Sonnet→`auto/best-coding`, Haiku→`auto/best-fast`. NVIDIA NIM keys stay in
+  `~/.fcc/.env` as the switchable fallback. Backup: `.env.bak-claude-20260731`.
 
 ## 8. Agent doctrine
 
