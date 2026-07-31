@@ -190,9 +190,12 @@ export interface ExecutorInfo {
 
 function executorChains(): Record<string, ExecutorLink[]> {
   return {
+    // Chain sized to the T5500's 8 GB GTX 1070 + no-AVX Xeon: ornith fits VRAM,
+    // cloud gemma4 costs no local resource, gemma2 is the offline last resort.
     ornith: [
       { provider: 'ollama', model: env('EXEC_ORNITH_MODEL') || 'ornith:9b' },
-      { provider: 'ollama', model: env('EXEC_ORNITH_FALLBACK_MODEL') || 'gemma4:latest' },
+      { provider: 'ollama', model: env('EXEC_ORNITH_FALLBACK_MODEL') || 'gemma4:31b-cloud' },
+      { provider: 'ollama', model: env('EXEC_ORNITH_FALLBACK2_MODEL') || 'gemma2:latest' },
     ],
     'fcc-opus': [
       { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_MODEL') || 'cc/claude-opus-4-8' },
