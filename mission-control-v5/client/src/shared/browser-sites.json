@@ -1,4 +1,18 @@
 [
-  { "id": "hermes", "name": "Hermes — Telegram", "url": "https://web.telegram.org/k/#@hermes_T55oobot" },
+  { "id": "hermes-chat", "name": "Hermes — chat (:9119)", "url": "http://127.0.0.1:9119/chat" },
+  { "id": "omniroute", "name": "OmniRoute — dashboard (:20128)", "url": "http://localhost:20128/home" },
+  { "id": "fcc-admin", "name": "FCC — admin (:8082)", "url": "http://127.0.0.1:8082/admin" },
+  { "id": "openclaw", "name": "OpenClaw / ClawX (:18789)", "url": "http://127.0.0.1:18789/" },
+  { "id": "mission-control", "name": "Mission Control (:3151)", "url": "http://localhost:3151/" },
+  { "id": "hermes-tg", "name": "Hermes — Telegram", "url": "https://web.telegram.org/k/#@hermes_T55oobot" },
+  { "id": "telegram", "name": "Telegram — web", "url": "https://web.telegram.org/k/" },
+  { "id": "dateapp-local", "name": "DateApp — local (:3200)", "url": "http://127.0.0.1:3200/" },
+  { "id": "youandinotai", "name": "youandinotai.com — live", "url": "https://youandinotai.com/" },
+  { "id": "ai-solutions", "name": "ai-solutions.store — live", "url": "https://ai-solutions.store/" },
+  { "id": "aidoesitall", "name": "aidoesitall.website", "url": "https://aidoesitall.website/" },
+  { "id": "onlinerecycle", "name": "onlinerecycle.net", "url": "https://onlinerecycle.net/" },
+  { "id": "repo", "name": "GitHub — ANTIGRAVITY", "url": "https://github.com/Trollz1004/ANTIGRAVITY" },
+  { "id": "cloudflare", "name": "Cloudflare — dashboard", "url": "https://dash.cloudflare.com/" },
+  { "id": "claude", "name": "claude.ai", "url": "https://claude.ai/" },
   { "id": "crd", "name": "Chrome Remote Desktop", "url": "https://remotedesktop.google.com/u/1/access/?lfhs=2&pageId=none" }
 ]
