@@ -30,6 +30,7 @@ export interface SwarmTask {
   prompt: string;
   agentIds: string[];
   mode: Mode;
+  executor?: string;
   column: Column;
   status: TaskStatus;
   createdAt: string;
@@ -43,6 +44,13 @@ export interface ProviderInfo {
   configured: boolean;
   speedModel: string | null;
   reasoningModel: string | null;
+}
+
+export interface ExecutorInfo {
+  id: string;
+  label: string;
+  description: string;
+  chain: { provider: string; model: string }[];
 }
 
 export interface ServiceStatus {
@@ -60,6 +68,7 @@ export interface Health {
   version: string;
   routerLive: boolean;
   providers: ProviderInfo[];
+  executors?: ExecutorInfo[];
   agents: number;
   categories: number;
   activeTasks: number;
