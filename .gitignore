@@ -109,3 +109,14 @@ hermes-workspace/
 
 # llama.cpp prebuilt binaries (240MB+ CUDA runtime) — downloaded, not source
 tools/llama.cpp/
+
+# free-claude-code: cloned upstream tool (its own git repo, ~1GB)
+free-claude-code/
+
+# OpenClaw dreaming plugin artifacts (regenerated, 8MB+)
+memory/.dreams/
+memory/dreaming/
+DREAMS.md
+
+# local-only Claude Code state
+.claude/settings.local.json
