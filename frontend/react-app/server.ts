@@ -188,7 +188,12 @@ async function startServer() {
   // Vite middleware for development
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        // Public traffic arrives via the cloudflared tunnel with the real
+        // hostname — Vite's host check 403s anything not listed here.
+        allowedHosts: ['.youandinotai.com', 'localhost', '127.0.0.1'],
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);

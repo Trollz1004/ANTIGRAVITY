@@ -25,7 +25,7 @@ ANTIGRAVITY is a product ecosystem. Public copy should describe live products, o
 | [Business Exchange](https://aidoesitall.website) | **Live** | Marketplace for services, referrals, and business sales. The B2B routing layer for the ecosystem. |
 | DAO Roadmap | **Paused** | Governance and token-sale concepts are offline until attorney review is complete. |
 | [Customer Support](https://dashboard.aidoesitall.website) | **Active** | Direct support surface â€” visible, reachable, not buried. |
-| [OnlineRecycle](https://onlinerecycle.org) | **Live** | Central Florida electronics recycling â€” intake, pickup, secure resale. |
+| [OnlineRecycle](https://onlinerecycle.net) | **Live** | Central Florida electronics recycling â€” intake, pickup, secure resale. |
 | [AI-Solutions Store](https://ai-solutions.store) | **Live** | Storefront for digital products and automation offers. |
 
 A visitor should understand within seconds: this is a real operating ecosystem. The dating app and marketplace are product surfaces. DAO, token, and funding concepts remain offline until attorney review is complete.
@@ -72,7 +72,7 @@ Support is not decoration â€” it is a trust signal and conversion layer.
 | Project | Status | What It Does |
 |---|---|---|
 | [YouAndINotAI.com](https://youandinotai.com/) | Live | Human-first social platform â€” verification, moderation, founder-plan checkout |
-| [OnlineRecycle.org](https://onlinerecycle.org/) | Live | Central Florida electronics recycling â€” intake, pickup, secure resale |
+| [OnlineRecycle.net](https://onlinerecycle.net/) | Live | Central Florida electronics recycling â€” intake, pickup, secure resale |
 | [AI-Solutions.Store](https://ai-solutions.store/) | Live | Storefront for digital products and automation offers |
 | [AIDoesItAll.website](https://www.aidoesitall.website/) | Live | Public gateway routing visitors to active products and trusted business access |
 | [Dashboard](https://dashboard.aidoesitall.website/) | Live | Authenticated operator workspace |
@@ -85,7 +85,7 @@ Support is not decoration â€” it is a trust signal and conversion layer.
 - **Backend:** FastAPI / Python services, Node.js workers
 - **Edge:** Cloudflare Pages, Cloudflare Workers, Cloudflare Tunnels
 - **Cloud:** Google Cloud Run (API tier)
-- **Commerce:** Square (youandinotai.com only, no exceptions), Stripe (onlinerecycle.org, ai-solutions.store)
+- **Commerce:** Square (youandinotai.com only, no exceptions), Stripe (onlinerecycle.net, ai-solutions.store)
 - **AI orchestration:** three top-level agent lanes â€” Claude (`~/.claude`, orchestrator), Hermes (dashboard `:9119`, routed via OmniRoute), OpenClaw (support fleet; ClawX owns the gateway on `:18789` â€” never run a second gateway). Every lane and sub-agent reaches models only through OmniRoute (`:20128`, factory port, `http://localhost:20128/v1`) â€” no lane calls a provider directly. Mission Control v5 tasks pick a named executor: **AUTO** (provider order), **ORNITH** (local `ornith:9b`, `gemma4:latest` fallback), or **FCC OPUS** (Claude Opus via the gateway). Stack terminals launch via `mission-control-v5/scripts/launch-stack.cmd` (fcc-serve, hermes-dash, openclaw-tui, fcc-claude) â€” visible tabs, no hidden watchdogs. One shared memory graph (Pieces LTM) across all three lanes. See `AGENT-DOCTRINE.md`.
 - **Data:** PostgreSQL, Cloudflare D1, Qdrant, SQLite, Redis
 
