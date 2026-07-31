@@ -18,6 +18,10 @@ export interface RouteRequest {
   system: string;
   prompt: string;
   maxTokens?: number;
+  /** Named executor (ornith | fcc-opus | auto). Pins provider+model chains. */
+  executor?: string;
+  /** Explicit model override — set internally by the executor chain. */
+  model?: string;
 }
 
 export interface RouteResult {
@@ -75,7 +79,7 @@ const anthropic: ProviderAdapter = {
       ? env('OMNI_MODEL_SPEED') || 'claude-3-5-haiku-20241022'
       : env('OMNI_MODEL_REASONING') || 'claude-3-5-sonnet-20241022',
   async complete(req) {
-    const model = this.modelFor(req.mode)!;
+    const model = req.model ?? this.modelFor(req.mode)!;
     const data = await postJson(
       'https://api.anthropic.com/v1/messages',
       { 'x-api-key': env('ANTHROPIC_API_KEY'), 'anthropic-version': '2023-06-01' },
@@ -104,13 +108,15 @@ const openaiCompat: ProviderAdapter = {
       ? env('OPENAI_COMPAT_MODEL_SPEED') || null
       : env('OPENAI_COMPAT_MODEL_REASONING') || null,
   async complete(req) {
-    const model = this.modelFor(req.mode);
+    const model = req.model ?? this.modelFor(req.mode);
     if (!model) {
       throw new Error(`OPENAI_COMPAT_MODEL_${req.mode === 'speed' ? 'SPEED' : 'REASONING'} not set.`);
     }
     let base = env('OPENAI_COMPAT_BASE_URL').replace(/\/+$/, '');
     if (!/\/v1$/.test(base)) base = `${base}/v1`;
-    const key = env('OPENAI_COMPAT_API_KEY');
+    // The OmniRoute gateway now requires auth on /v1/* — fall back to the
+    // OMNIROUTE_API_KEY already present in .env so requests stop 401ing.
+    const key = env('OPENAI_COMPAT_API_KEY') || env('OMNIROUTE_API_KEY');
     const data = await postJson(
       `${base}/chat/completions`,
       key ? { authorization: `Bearer ${key}` } : {},
@@ -137,7 +143,7 @@ const ollama: ProviderAdapter = {
   modelFor: (mode) =>
     mode === 'speed' ? env('OLLAMA_MODEL_SPEED') || null : env('OLLAMA_MODEL_REASONING') || null,
   async complete(req) {
-    const model = this.modelFor(req.mode);
+    const model = req.model ?? this.modelFor(req.mode);
     if (!model) {
       throw new Error(`OLLAMA_MODEL_${req.mode === 'speed' ? 'SPEED' : 'REASONING'} not set.`);
     }
@@ -161,6 +167,68 @@ const ADAPTERS: Record<string, ProviderAdapter> = {
   openai_compat: openaiCompat,
   ollama,
 };
+
+// ── Named executors ───────────────────────────────────────────────────────────
+// An executor pins a task to an ordered provider+model chain instead of the
+// generic OMNI_PROVIDER_ORDER. Each link is tried in order; first success wins.
+//  - ornith    : the local Ornith model, falling back to the smallest local
+//                gemma4 (browser-capable) when Ornith is unavailable/OOM.
+//  - fcc-opus  : Claude Opus via the OmniRoute gateway's FCC/Claude-Code
+//                provider, falling back to the gateway's auto Opus route.
+//  - auto      : the classic provider-order behavior (default).
+interface ExecutorLink {
+  provider: keyof typeof ADAPTERS;
+  model: string;
+}
+
+export interface ExecutorInfo {
+  id: string;
+  label: string;
+  description: string;
+  chain: { provider: string; model: string }[];
+}
+
+function executorChains(): Record<string, ExecutorLink[]> {
+  return {
+    ornith: [
+      { provider: 'ollama', model: env('EXEC_ORNITH_MODEL') || 'ornith:9b' },
+      { provider: 'ollama', model: env('EXEC_ORNITH_FALLBACK_MODEL') || 'gemma4:latest' },
+    ],
+    'fcc-opus': [
+      { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_MODEL') || 'cc/claude-opus-4-8' },
+      { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_FALLBACK_MODEL') || 'auto/claude-opus' },
+    ],
+  };
+}
+
+const EXECUTOR_META: Record<string, { label: string; description: string }> = {
+  auto: {
+    label: 'AUTO',
+    description: 'OmniRoute provider order — first configured, healthy provider wins.',
+  },
+  ornith: {
+    label: 'ORNITH',
+    description: 'Local Ornith (ollama), gemma4 smallest as browser-capable local fallback.',
+  },
+  'fcc-opus': {
+    label: 'FCC OPUS',
+    description: 'Claude Opus through the OmniRoute gateway (FCC / Claude Code provider).',
+  },
+};
+
+export function describeExecutors(): ExecutorInfo[] {
+  const chains = executorChains();
+  return Object.keys(EXECUTOR_META).map((id) => ({
+    id,
+    label: EXECUTOR_META[id].label,
+    description: EXECUTOR_META[id].description,
+    chain: (chains[id] ?? []).map((l) => ({ provider: String(l.provider), model: l.model })),
+  }));
+}
+
+export function isExecutor(id: string): boolean {
+  return id === 'auto' || id in executorChains();
+}
 
 function providerOrder(): ProviderAdapter[] {
   const order = (env('OMNI_PROVIDER_ORDER') || 'anthropic,openai_compat,ollama')
@@ -193,6 +261,30 @@ export function routerLive(): boolean {
 }
 
 export async function route(req: RouteRequest): Promise<RouteResult> {
+  // Named-executor path: walk the pinned provider+model chain, fail-closed.
+  const chain = req.executor && req.executor !== 'auto' ? executorChains()[req.executor] : null;
+  if (chain) {
+    const failures: string[] = [];
+    for (const link of chain) {
+      const adapter = ADAPTERS[link.provider];
+      if (!adapter?.configured()) {
+        failures.push(`${link.provider}(${link.model}): not configured`);
+        continue;
+      }
+      const started = Date.now();
+      try {
+        const text = await adapter.complete({ ...req, model: link.model });
+        return { provider: adapter.id, model: link.model, text, ms: Date.now() - started };
+      } catch (err) {
+        failures.push(`${link.provider}(${link.model}): ${err instanceof Error ? err.message : String(err)}`);
+      }
+    }
+    throw new OmniRouteError(
+      'EXECUTOR_FAILED',
+      `Executor "${req.executor}" exhausted its chain — ${failures.join(' | ')}`,
+    );
+  }
+
   const candidates = providerOrder().filter((p) => p.configured());
   if (candidates.length === 0) {
     throw new OmniRouteError(

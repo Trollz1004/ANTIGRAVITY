@@ -34,7 +34,7 @@ export const api = {
       '/api/agents',
     ),
   tasks: () => request<{ tasks: SwarmTask[] }>('/api/tasks'),
-  createTask: (input: { title?: string; prompt: string; agentIds: string[]; mode: Mode }) =>
+  createTask: (input: { title?: string; prompt: string; agentIds: string[]; mode: Mode; executor?: string }) =>
     request<{ task: SwarmTask }>('/api/tasks', { method: 'POST', body: JSON.stringify(input) }),
   moveTask: (id: string, column: Column) =>
     request<{ task: SwarmTask }>(`/api/tasks/${id}`, {

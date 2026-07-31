@@ -80,6 +80,13 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
+
+# ── KILL SWITCH ──────────────────────────────────────────────────────────────
+# The MissionControlWatchdog scheduled task was registered elevated and cannot
+# be disabled from a normal shell. Creating the file WATCHDOG.DISABLED next to
+# this script makes every invocation exit immediately — delete it to re-enable.
+if (Test-Path (Join-Path $PSScriptRoot 'WATCHDOG.DISABLED')) { exit 0 }
+
 $LogDir = Join-Path $RepoRoot 'logs'
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 $LogFile = Join-Path $LogDir 'bootstrap.log'
@@ -208,6 +215,9 @@ function Ensure-Service {
 # ── Service start blocks ─────────────────────────────────────────────────────
 
 function Start-Omniroute {
+  # Never let a leaked PORT (e.g. DateApp's 3200) reach omniroute — it would bind
+  # the wrong port, auto-open its dashboard there, and crash-loop on EADDRINUSE.
+  Remove-Item Env:PORT -ErrorAction SilentlyContinue
   $cmd = (Get-Command omniroute.cmd -ErrorAction SilentlyContinue)
   if (-not $cmd) { $cmd = Get-Command omniroute -ErrorAction SilentlyContinue }
   if (-not $cmd) { Write-Log 'omniroute still not resolved; cannot start' 'ERR'; return }
@@ -223,6 +233,9 @@ function Start-Ollama {
 }
 
 function Start-MissionControlServer {
+  # Never let a leaked PORT reach the server — index.ts reads process.env.PORT
+  # (default 3151); a leaked 3200 makes it serve the dashboard on DateApp's port.
+  Remove-Item Env:PORT -ErrorAction SilentlyContinue
   # Build the client if the production bundle is missing (fresh machine / wiped dist).
   $dist = Join-Path $RepoRoot 'client\dist\index.html'
   if (-not (Test-Path $dist)) {
@@ -366,10 +379,19 @@ function Start-DateAppFrontend {
   }
   # server.ts:14 is `const PORT = Number(process.env.PORT || 8080)` — it defaults
   # to :8080, which Docker/other things squat. Force PORT to the configured :3200.
+  # PORT must be scoped to THIS worker only: leaving it set poisons the Watch
+  # supervisor's own environment, so every later OmniRoute / MC-server restart
+  # inherits PORT=3200, binds the wrong port, and crash-loops (browser spam at :3200).
   if (Test-Port -Port 8080) { Write-Log ":8080 already in use — DateApp frontend will bind :$DateAppFrontendPort instead" }
+  $prevPort = $env:PORT
   $env:PORT = $DateAppFrontendPort
-  Start-HiddenWorker -FilePath 'cmd.exe' -Arguments @('/c','npx','tsx','server.ts') `
-    -WorkDir $dir -LogBase (Join-Path $LogDir 'dateapp-frontend') | Out-Null
+  try {
+    Start-HiddenWorker -FilePath 'cmd.exe' -Arguments @('/c','npx','tsx','server.ts') `
+      -WorkDir $dir -LogBase (Join-Path $LogDir 'dateapp-frontend') | Out-Null
+  } finally {
+    if ($null -ne $prevPort) { $env:PORT = $prevPort }
+    else { Remove-Item Env:PORT -ErrorAction SilentlyContinue }
+  }
 }
 
 # Tunnel liveness = pid file alive OR cloudflared metrics port responds. The old
@@ -420,7 +442,10 @@ function Invoke-Deploy {
   Write-Log '==== deploy begin ===='
 
   # Critical path first: router + dashboard.
-  Ensure-Service -Name 'OmniRoute' -Port 20128 -HealthUrl 'http://127.0.0.1:20128/v1/models' `
+  # Port-only health: /v1/models now requires auth, so an HTTP probe always
+  # "fails" (401 -> restart loop -> omniroute serve re-opens its dashboard in
+  # the browser every cycle). Listening on :20128 = alive.
+  Ensure-Service -Name 'OmniRoute' -Port 20128 -HealthUrl '' `
     -TimeoutSec 120 -Critical $true `
     -Start ${function:Start-Omniroute} `
     -Heal { if (-not (Get-Command omniroute -EA SilentlyContinue)) { npm i -g omniroute *> $null } }
@@ -438,12 +463,11 @@ function Invoke-Deploy {
   Ensure-Service -Name 'Ollama' -Port 11434 -HealthUrl 'http://127.0.0.1:11434/api/tags' `
     -TimeoutSec 60 -Start ${function:Start-Ollama} -Heal {}
 
-  Ensure-Service -Name 'OpenClaw' -Port 9120 -HealthUrl 'http://127.0.0.1:9120/' `
-    -TimeoutSec 60 -Start ${function:Start-OpenClaw} `
-    -Heal {
-      if (-not (Test-Path 'C:\Users\joshl\AppData\Roaming\npm\node_modules\openclaw\dist\index.js')) { npm i -g openclaw *> $null }
-      Assert-OpenClawConfig
-    }
+  # OpenClaw: ClawX auto-starts THE gateway on :18789 at every login. Never
+  # start a second gateway here — dual gateways fight over openclaw.json and
+  # produce the .clobbered backups. Health-check only, no Start block.
+  Ensure-Service -Name 'OpenClaw (ClawX)' -Port 18789 -HealthUrl '' `
+    -TimeoutSec 30 -Start {} -Heal {}
 
   Ensure-Service -Name 'DateAppBackend' -Port 8000 -HealthUrl 'http://127.0.0.1:8000/api/v1/health' `
     -TimeoutSec 120 -Start ${function:Start-DateAppBackend} -Heal {}
@@ -468,10 +492,10 @@ function Invoke-Watch {
   while ($true) {
     # Re-run health checks; restart anything that died. No GUI unless Electron died.
     $checks = @(
-      @{ Name='OmniRoute';           Port=20128; Url='http://127.0.0.1:20128/v1/models'; Start=${function:Start-Omniroute} },
+      @{ Name='OmniRoute';           Port=20128; Url=''; Start=${function:Start-Omniroute} },
       @{ Name='MissionControlServer'; Port=3151; Url='http://localhost:3151/api/health'; Start=${function:Start-MissionControlServer} },
       @{ Name='Ollama';              Port=11434; Url='http://127.0.0.1:11434/api/tags'; Start=${function:Start-Ollama} },
-      @{ Name='OpenClaw';            Port=9120;  Url='http://127.0.0.1:9120/'; Start=${function:Start-OpenClaw} },
+      @{ Name='OpenClaw (ClawX)';    Port=18789; Url=''; Start={} },
       @{ Name='DateAppBackend';      Port=8000;  Url='http://127.0.0.1:8000/api/v1/health'; Start=${function:Start-DateAppBackend} },
       @{ Name='DateAppFrontend';     Port=3200;  Url='http://127.0.0.1:3200/'; Start=${function:Start-DateAppFrontend} },
       @{ Name='Pieces LTM';          Port=39300; Url='';                         Start=${function:Start-Pieces} }

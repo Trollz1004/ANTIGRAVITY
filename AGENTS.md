@@ -3,6 +3,18 @@
 This file is loaded at session start. Treat it as the current operating brief for
 `E:\ANTIGRAVITY` unless Joshua gives a newer timestamped written directive.
 
+## MANDATORY: Skills Protocol — low-context sessions, zero excuses
+
+Sessions here run in LOW CONTEXT WINDOWS. Skills carry the knowledge your
+context can't. Non-negotiable loop:
+
+1. **Read on session start** — this file, relevant `STATE.md`/`MEMORY.md`, latest briefing.
+2. **Load a skill before EVERY task** — from `E:\ANTIGRAVITY\skills\`:
+   `agent-browser` (web), `find-skills` (discovery), `self-improvement`
+   (create missing skills), `caveman` (skills.sh), Hermes hub + Claw hub
+   (cross-agent). No skill loaded on a task = task done wrong.
+3. **Write on session end** — what changed, what's blocked, next step.
+
 ## Business Rule
 
 ANTIGRAVITY and YouAndINotAI are business-only product surfaces.

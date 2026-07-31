@@ -7,7 +7,7 @@
  */
 import { randomUUID } from 'node:crypto';
 import { AGENT_INDEX, CATEGORY_INDEX } from './agents.js';
-import { OmniRouteError, route } from './omniroute.js';
+import { OmniRouteError, isExecutor, route } from './omniroute.js';
 import { addTask, allTasks, getTask, persist, removeTask } from './store.js';
 import type { Column, Mode, SwarmTask } from './types.js';
 
@@ -52,6 +52,7 @@ export interface CreateTaskInput {
   prompt: string;
   agentIds: string[];
   mode: Mode;
+  executor?: string;
 }
 
 export function createTask(input: CreateTaskInput): SwarmTask {
@@ -62,6 +63,8 @@ export function createTask(input: CreateTaskInput): SwarmTask {
   const unknown = agentIds.filter((id) => !AGENT_INDEX.has(id));
   if (unknown.length > 0) throw new Error(`Unknown agent(s): ${unknown.join(', ')}`);
   const mode: Mode = input.mode === 'reasoning' ? 'reasoning' : 'speed';
+  const executor = (input.executor ?? 'auto').trim() || 'auto';
+  if (!isExecutor(executor)) throw new Error(`Unknown executor: ${executor}`);
 
   const now = new Date().toISOString();
   const task: SwarmTask = {
@@ -70,6 +73,7 @@ export function createTask(input: CreateTaskInput): SwarmTask {
     prompt,
     agentIds,
     mode,
+    executor,
     column: 'NEXT',
     status: 'queued',
     createdAt: now,
@@ -156,6 +160,7 @@ async function execute(task: SwarmTask): Promise<void> {
       try {
         const routed = await route({
           mode: task.mode,
+          executor: task.executor,
           system: systemPromptFor(result.agentId),
           prompt: task.prompt,
           maxTokens: MAX_TOKENS,

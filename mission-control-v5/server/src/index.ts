@@ -9,7 +9,7 @@ import 'dotenv/config';
 import express, { type Request, type Response } from 'express';
 import { AGENTS, CATEGORIES } from './agents.js';
 import { registerBrainRoutes } from './brain.js';
-import { describeProviders, routerLive } from './omniroute.js';
+import { describeExecutors, describeProviders, routerLive } from './omniroute.js';
 import { PIECES_MCP_URL, pingPieces } from './pieces.js';
 import { registerMcpServer } from './mcpServer.js';
 import { loadState } from './store.js';
@@ -44,6 +44,7 @@ app.get('/api/health', (_req, res) => {
     version: VERSION,
     routerLive: routerLive(),
     providers: describeProviders(),
+    executors: describeExecutors(),
     agents: AGENTS.length,
     categories: CATEGORIES.length,
     activeTasks: activeCount(),
@@ -145,6 +146,7 @@ app.post('/api/tasks', (req, res) => {
       prompt: req.body?.prompt,
       agentIds: req.body?.agentIds,
       mode: req.body?.mode,
+      executor: req.body?.executor,
     });
     res.status(201).json({ task });
   } catch (err) {

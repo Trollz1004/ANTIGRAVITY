@@ -30,6 +30,8 @@ export interface SwarmTask {
   prompt: string;
   agentIds: string[];
   mode: Mode;
+  /** Named executor: 'auto' (provider order) | 'ornith' | 'fcc-opus'. */
+  executor?: string;
   column: Column;
   status: TaskStatus;
   createdAt: string;
