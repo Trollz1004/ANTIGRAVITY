@@ -115,7 +115,7 @@ private accounting, or owner-planning claims to the checkout flow.
 Customer-facing surfaces include:
 
 - `youandinotai.com`
-- `onlinerecycle.org`
+- `onlinerecycle.net` (the .org lapsed 2026 — do not reference it)
 - `ai-solutions.store`
 - Square catalog/product copy
 - public API responses
