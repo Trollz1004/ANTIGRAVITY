@@ -1,0 +1,49 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mission-control",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"],
+      "cwd": "E:\\ANTIGRAVITY\\mission-control-v5",
+      "port": 3151,
+      "url": "http://localhost:3151"
+    },
+    {
+      "name": "mission-control-client-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev:client"],
+      "cwd": "E:\\ANTIGRAVITY\\mission-control-v5",
+      "port": 5173,
+      "url": "http://localhost:5173"
+    },
+    {
+      "name": "dateapp-frontend",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["tsx", "server.ts"],
+      "cwd": "E:\\ANTIGRAVITY\\frontend\\react-app",
+      "port": 3200,
+      "url": "http://localhost:3200"
+    },
+    {
+      "name": "omniroute",
+      "port": 20128,
+      "url": "http://localhost:20128"
+    },
+    {
+      "name": "hermes-dashboard",
+      "port": 9119,
+      "url": "http://127.0.0.1:9119"
+    },
+    {
+      "name": "fcc-admin",
+      "port": 8082,
+      "url": "http://127.0.0.1:8082"
+    },
+    {
+      "name": "openclaw-clawx",
+      "port": 18789,
+      "url": "http://127.0.0.1:18789"
+    }
+  ]
+}
