@@ -190,6 +190,14 @@ export interface ExecutorInfo {
 
 function executorChains(): Record<string, ExecutorLink[]> {
   return {
+    // Cloud first, local last — every chain ends at Ornith so the box keeps
+    // working when the gateway or the internet is down. There is no "low
+    // quality mode": the good models are the default, local is the safety net.
+    auto: [
+      { provider: 'openai_compat', model: env('EXEC_AUTO_MODEL') || 'auto/best-coding' },
+      { provider: 'openai_compat', model: env('EXEC_AUTO_FALLBACK_MODEL') || 'auto/best-fast' },
+      { provider: 'ollama', model: env('EXEC_LOCAL_FALLBACK_MODEL') || 'ornith:9b' },
+    ],
     // Chain sized to the T5500's 8 GB GTX 1070 + no-AVX Xeon: ornith fits VRAM,
     // cloud gemma4 costs no local resource, gemma2 is the offline last resort.
     ornith: [
@@ -200,6 +208,7 @@ function executorChains(): Record<string, ExecutorLink[]> {
     'fcc-opus': [
       { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_MODEL') || 'cc/claude-opus-4-8' },
       { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_FALLBACK_MODEL') || 'auto/claude-opus' },
+      { provider: 'ollama', model: env('EXEC_LOCAL_FALLBACK_MODEL') || 'ornith:9b' },
     ],
   };
 }
