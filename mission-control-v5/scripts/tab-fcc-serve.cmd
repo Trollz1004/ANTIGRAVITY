@@ -1,5 +1,4 @@
 @echo off
-title fcc-serve (omniroute :20128)
-cd /d E:\ANTIGRAVITY
-echo [fcc-serve] OmniRoute gateway on :20128 — Ctrl+C to stop.
-call fcc-serve
+title fcc-server (Free Claude Code proxy :8082)
+echo [fcc-server] Free Claude Code proxy — Admin UI: http://127.0.0.1:8082/admin
+"C:\Users\joshl\.local\bin\fcc-server.exe"
