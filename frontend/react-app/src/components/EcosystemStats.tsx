@@ -17,9 +17,9 @@ interface EcosystemStatsProps {
 
 const stats = [
   {
-    label: 'Launch Window',
-    value: 'April 4',
-    growth: '2026',
+    label: 'Platform Status',
+    value: 'Live',
+    growth: 'now',
     color: 'text-emerald-500',
   },
   {

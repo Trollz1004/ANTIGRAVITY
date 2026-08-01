@@ -26,7 +26,7 @@ const cards = [
   {
     icon: DollarSign,
     title: 'Clear Founder Pricing',
-    body: 'Bot-Shield, founder plans, and the Royalty Card are all live with fixed public pricing before launch day.',
+    body: 'Bot-Shield, founder plans, and the Royalty Card are all live with fixed public pricing.',
     href: '#pricing',
     cta: 'View Plans',
     color: 'from-green-400 to-lime-600',
@@ -43,7 +43,7 @@ const cards = [
 
 const stats = [
   { icon: ShieldCheck, label: 'Bot-Shield', value: '$1 Human Check' },
-  { icon: Heart, label: 'Launch Date', value: 'April 4, 2026' },
+  { icon: Heart, label: 'Status', value: 'Live now' },
   { icon: Sparkles, label: 'Waitlist', value: 'Live Now' },
 ];
 

@@ -142,7 +142,7 @@ export default function CosmicWall({ onClose }: { onClose: () => void }) {
                     Be one of the first to leave your mark
                   </div>
                   <div className="mt-2 text-pink-400 font-black text-xs tracking-widest">
-                    Launching April 4, 2026
+                    Live now
                   </div>
                 </div>
               </motion.div>
