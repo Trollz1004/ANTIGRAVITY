@@ -1,0 +1,83 @@
+# Retire a stale Cloudflare Worker.
+#
+# WHY THIS EXISTS: wrangler's local auth token expires and cannot be refreshed
+# non-interactively, so nothing on the workstation can push a Cloudflare change.
+# CI already holds CLOUDFLARE_API_TOKEN (secrets are write-only, so they can be
+# USED here but never read back locally). This gives a way to act on Cloudflare
+# without needing `wrangler login` on the machine.
+#
+# SAFETY: manual dispatch only - this never runs on push or on a schedule.
+# Both inputs are required with no defaults, and `confirm` must be the exact
+# string DELETE, so an accidental or empty run cannot remove anything.
+#
+# Archived first: briefings/archived-zombie-2026-08-01/ holds the rendered page
+# of for-the-kids-backend, so retiring it is reversible.
+
+name: Retire Cloudflare Worker
+
+on:
+  workflow_dispatch:
+    inputs:
+      worker_name:
+        description: 'Exact Worker name to retire (e.g. for-the-kids-backend)'
+        required: true
+        type: string
+      confirm:
+        description: 'Type DELETE to confirm'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  retire:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify confirmation
+        run: |
+          if [ "${{ inputs.confirm }}" != "DELETE" ]; then
+            echo "::error::confirm must be exactly DELETE. Got: '${{ inputs.confirm }}'. Nothing was changed."
+            exit 1
+          fi
+          echo "Confirmed. Target: ${{ inputs.worker_name }}"
+
+      - name: Show what is live before deleting
+        run: |
+          NAME="${{ inputs.worker_name }}"
+          URL="https://${NAME}.joshlcoleman.workers.dev/"
+          echo "Probing $URL"
+          CODE=$(curl -s -o /tmp/before.html -w '%{http_code}' --max-time 20 "$URL" || echo 000)
+          echo "HTTP $CODE, $(wc -c < /tmp/before.html) bytes"
+          echo "--- title ---"
+          grep -o -i '<title[^>]*>[^<]*' /tmp/before.html | head -1 || echo '(no title)'
+
+      - name: Delete the Worker
+        env:
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CF_API_TOKEN" ] || [ -z "$CF_ACCOUNT_ID" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN or CLOUDFLARE_ACCOUNT_ID is not set in repo secrets."
+            exit 1
+          fi
+          NAME="${{ inputs.worker_name }}"
+          # force=true also removes the workers.dev route, which is what makes
+          # the page publicly reachable in the first place.
+          RESP=$(curl -s -X DELETE \
+            "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${NAME}?force=true" \
+            -H "Authorization: Bearer ${CF_API_TOKEN}")
+          echo "$RESP" | python3 -c "import json,sys; d=json.load(sys.stdin); print('success:', d.get('success')); [print('  error:', e.get('message')) for e in d.get('errors',[])]"
+          echo "$RESP" | python3 -c "import json,sys; sys.exit(0 if json.load(sys.stdin).get('success') else 1)"
+
+      - name: Verify it is actually gone
+        run: |
+          NAME="${{ inputs.worker_name }}"
+          sleep 10
+          CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://${NAME}.joshlcoleman.workers.dev/" || echo 000)
+          echo "post-delete status: $CODE"
+          if [ "$CODE" = "200" ]; then
+            echo "::error::Still serving 200 - the Worker was NOT removed."
+            exit 1
+          fi
+          echo "Confirmed: no longer serving."
