@@ -100,8 +100,33 @@ rule for those hostnames. `hermes-t5500.yml` has 7 ingress rules but declares a
 different tunnel ID (`68a2e766…`) that has zero active connections — it is a
 dead config file.
 
-Fix in the Cloudflare dashboard: Zero Trust → Networks → Tunnels → `t5500` →
-Public Hostnames, adding each subdomain to its local port.
+**DO NOT "fix" mission-control.youandinotai.com yet. The 530 is protecting you.**
+
+Mission Control on :3151 has **no authentication of any kind**. `server/src/index.ts`
+line 35 is `app.use(cors())` — every origin allowed — and there is no auth
+middleware anywhere. Verified, not assumed: an unauthenticated
+`POST /api/tasks` from outside returned **201 Created** and the task was really
+queued (it was then deleted).
+
+Exposing that hostname would let anyone on the internet queue jobs against your
+LLM providers, spend your tokens, and reach the brain hub and agent controls.
+The broken ingress has been accidentally acting as your only access control.
+
+Order of operations, and it matters:
+
+1. Add auth to Mission Control first — an API key check, or put it behind
+   Cloudflare Access (Zero Trust) so only your identity reaches it.
+2. Only then add the public hostname in the dashboard: Zero Trust → Networks →
+   Tunnels → `t5500` → Public Hostnames.
+
+The tunnel path itself is ready when you are: `hermes-t5500.yml` already has a
+correct rule (`mission-control.youandinotai.com` → `http://127.0.0.1:3151`) and
+its credentials file is present, so it is one DNS route away — which is exactly
+why this warning is here rather than a completed change.
+
+Live origins as of this audit: only :3151 (Mission Control) and :3200 (DateApp).
+hermes :9119, workspace :3000, and paperclip :3120 are all down, so their
+subdomains have nothing to serve regardless.
 
 ---
 
