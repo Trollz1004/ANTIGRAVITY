@@ -120,3 +120,6 @@ DREAMS.md
 
 # local-only Claude Code state
 .claude/settings.local.json
+
+# vendored browser libs (downloaded, not source)
+free/*/vendor/
