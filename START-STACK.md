@@ -11,6 +11,29 @@ tab each time. Watchdogs are off. `mission-control-v5/scripts/WATCHDOG.DISABLED`
 keeps the old scheduled task neutered even if it fires (delete that file only if
 you deliberately want the supervisor back).
 
+## Three commands that keep this thing unbreakable
+
+    stack           is it running?
+    stack-verify    is it running CORRECTLY?
+    backup          snapshot everything that cannot be regenerated
+
+`stack` lists services and how to start what is down. `stack-verify` runs 13
+checks for the failure modes that have actually taken the stack down - leaked
+PORT, a UI redaction saved over a real API key, two gateways on one config, a
+model tag that does not exist, a memory db_path pointing at a deleted file, a
+public URL that 403s while the tunnel looks healthy. `backup` snapshots every
+database through SQLite's backup API (WAL checkpointed - a file copy misses
+recent writes) plus every config with credentials masked, keeping 7 runs in
+the vault. All three are read-only except `backup`, which only writes to the
+vault. Run `stack-verify` after any config change and after any agent has
+touched the machine.
+
+A guard also runs automatically: `.claude/hooks/guard-protected-paths.ps1`
+blocks Edit/Write to env files, live agent configs, SQLite databases, the
+vault, and the stale `C:\antigravity` path - for every agent including Claude.
+It returns exit 2 with the reason, so the agent is told why and what to do
+instead.
+
 ## The one command that tells you where you stand
 
     stack
