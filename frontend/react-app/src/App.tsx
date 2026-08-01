@@ -744,7 +744,7 @@ export default function App() {
         </nav>
 
         <div className="border-b-4 border-[#111111] bg-[#111111] px-3 py-2 text-center text-[10px] font-black uppercase tracking-[0.16em] text-[#f4efe7] md:px-12 md:py-3 md:text-xs md:tracking-[0.2em]">
-          Founder pricing is live. Launch day is April 4, 2026.
+          Founder pricing is live. Bot-Shield verification is live.
         </div>
 
         <section
@@ -806,10 +806,10 @@ export default function App() {
                 </div>
                 <div className="border-4 border-[#111111] bg-white p-4 shadow-[6px_6px_0_0_#111111] md:p-5">
                   <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#ff5a1f] md:text-xs md:tracking-[0.18em]">
-                    Launch
+                    Status
                   </div>
                   <div className="mt-1 text-lg font-black uppercase tracking-tight md:mt-2 md:text-2xl">
-                    April 4, 2026
+                    Live now
                   </div>
                   <p className="mt-1 text-xs font-medium leading-6 text-[#38322b] md:mt-2 md:text-sm md:leading-7">
                     Founder pricing, support, and early-access capture are all
