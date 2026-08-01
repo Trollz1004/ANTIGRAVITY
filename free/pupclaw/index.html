@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./vendor/react.production.min.js"></script>
+<script src="./vendor/react-dom.production.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:#FFF6E9;}
+  body{font-family:'Nunito',sans-serif;color:#4A3222;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  a{color:#2BB3A3;} a:hover{color:#FF7A59;}
+  button{font-family:'Baloo 2',sans-serif;}
+  input{font-family:'Nunito',sans-serif;color:#4A3222;}
+  input::placeholder{color:#C4A88C;}
+  @keyframes hopc-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  @keyframes hopc-wig{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+  @keyframes hopc-pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+  @keyframes hopc-bounce{0%,100%{transform:translateY(0)}30%{transform:translateY(-14px)}}
+  @keyframes hopc-float{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-14px) rotate(8deg)}}
+  @keyframes hopc-think{0%,80%,100%{transform:scale(.7);opacity:.35}40%{transform:scale(1);opacity:1}}
+  @keyframes hopc-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+  @keyframes hopc-twinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+</style>
+</helmet>
+<div style="min-height:100vh;position:relative;overflow:hidden;background:#FFF6E9;" data-screen-label="heathersOPUSpupclaw">
+  <div style="position:absolute;top:40px;left:-20px;width:120px;color:#F3DFC2;animation:hopc-float 7s ease-in-out infinite;pointer-events:none;"><svg viewBox="0 0 40 40" width="100%"><ellipse cx="20" cy="26" rx="9" ry="7.5" fill="currentColor"></ellipse><circle cx="8.5" cy="17" r="4.2" fill="currentColor"></circle><circle cx="16" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="24" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="31.5" cy="17" r="4.2" fill="currentColor"></circle></svg></div>
+  <div style="position:absolute;top:200px;right:-30px;width:150px;color:#F3DFC2;animation:hopc-float 9s ease-in-out infinite;pointer-events:none;"><svg viewBox="0 0 40 40" width="100%"><ellipse cx="20" cy="26" rx="9" ry="7.5" fill="currentColor"></ellipse><circle cx="8.5" cy="17" r="4.2" fill="currentColor"></circle><circle cx="16" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="24" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="31.5" cy="17" r="4.2" fill="currentColor"></circle></svg></div>
+  <div style="position:absolute;bottom:60px;left:8%;width:90px;color:#F6E6CC;animation:hopc-float 8s ease-in-out infinite;pointer-events:none;"><svg viewBox="0 0 40 40" width="100%"><ellipse cx="20" cy="26" rx="9" ry="7.5" fill="currentColor"></ellipse><circle cx="8.5" cy="17" r="4.2" fill="currentColor"></circle><circle cx="16" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="24" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="31.5" cy="17" r="4.2" fill="currentColor"></circle></svg></div>
+
+  <sc-if value="{{ breakDue }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(255,246,233,.97);z-index:60;display:flex;align-items:center;justify-content:center;padding:24px;" data-screen-label="Stretch break">
+      <div style="background:#FFFDF8;border:4px solid #4A3222;border-radius:32px;box-shadow:0 8px 0 #4A3222;padding:40px 48px;text-align:center;max-width:520px;animation:hopc-pop .4s both;">
+        <div style="width:150px;margin:0 auto 8px;animation:hopc-bounce 1.1s ease-in-out infinite;"><svg viewBox="0 0 120 120" width="100%"><ellipse cx="24" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(16 24 58)"></ellipse><ellipse cx="96" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(-16 96 58)"></ellipse><circle cx="60" cy="62" r="42" fill="#F2BE8D" stroke="#4A3222" stroke-width="4"></circle><circle cx="80" cy="45" r="12" fill="#C98A54"></circle><ellipse cx="60" cy="80" rx="22" ry="16" fill="#FFF1DF" stroke="#4A3222" stroke-width="3.5"></ellipse><circle cx="44" cy="54" r="5.5" fill="#4A3222"></circle><circle cx="78" cy="54" r="5.5" fill="#4A3222"></circle><circle cx="46" cy="52" r="1.8" fill="#FFFFFF"></circle><circle cx="80" cy="52" r="1.8" fill="#FFFFFF"></circle><ellipse cx="60" cy="73" rx="7.5" ry="6" fill="#4A3222"></ellipse><path d="M60 79 Q60 87 52 87 M60 79 Q60 87 68 87" fill="none" stroke="#4A3222" stroke-width="3.5" stroke-linecap="round"></path><ellipse cx="60" cy="91" rx="6" ry="7" fill="#F98D8D" stroke="#4A3222" stroke-width="3"></ellipse></svg></div>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:38px;line-height:1.1;">Puppy stretch break!</div>
+        <div style="font-size:19px;font-weight:700;margin:10px 0 24px;color:#7A5F49;">{{ breakBody }}</div>
+        <button onClick="{{ onBreakDone }}" style="background:#2BB3A3;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:24px;padding:14px 38px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">All done stretching!</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isWelcome }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:760px;margin:0 auto;padding:48px 24px 40px;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;" data-screen-label="Welcome and age gate">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:26px;animation:hopc-pop .5s both;">
+        <div style="background:#FF7A59;color:#FFF8EF;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:19px;padding:3px 18px;border-radius:999px;border:3px solid #4A3222;transform:rotate(-2deg);box-shadow:0 3px 0 #4A3222;">Heather's</div>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:52px;line-height:1;letter-spacing:1px;">OPUS <span style="color:#FF7A59">p</span><span style="color:#2BB3A3">u</span><span style="color:#E8A417">p</span><span style="color:#B678E0">c</span><span style="color:#58A6E8">l</span><span style="color:#FF7A59">a</span><span style="color:#2BB3A3">w</span></div>
+        <div style="font-size:15px;font-weight:800;color:#9C7B5E;letter-spacing:.4px;">a safe AI play-pal for little learners</div>
+      </div>
+      <button onClick="{{ onMascotTap }}" style="width:190px;background:none;border:none;cursor:pointer;padding:0;animation:hopc-bob 2.6s ease-in-out infinite;" title="Pet the puppy!"><svg viewBox="0 0 120 120" width="100%"><ellipse cx="24" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(16 24 58)"></ellipse><ellipse cx="96" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(-16 96 58)"></ellipse><circle cx="60" cy="62" r="42" fill="#F2BE8D" stroke="#4A3222" stroke-width="4"></circle><circle cx="80" cy="45" r="12" fill="#C98A54"></circle><ellipse cx="60" cy="80" rx="22" ry="16" fill="#FFF1DF" stroke="#4A3222" stroke-width="3.5"></ellipse><circle cx="44" cy="54" r="5.5" fill="#4A3222"></circle><circle cx="78" cy="54" r="5.5" fill="#4A3222"></circle><circle cx="46" cy="52" r="1.8" fill="#FFFFFF"></circle><circle cx="80" cy="52" r="1.8" fill="#FFFFFF"></circle><ellipse cx="60" cy="73" rx="7.5" ry="6" fill="#4A3222"></ellipse><path d="M60 79 Q60 87 52 87 M60 79 Q60 87 68 87" fill="none" stroke="#4A3222" stroke-width="3.5" stroke-linecap="round"></path><ellipse cx="60" cy="91" rx="6" ry="7" fill="#F98D8D" stroke="#4A3222" stroke-width="3"></ellipse></svg></button>
+      <div style="background:#FFFDF8;border:3px solid #4A3222;border-radius:22px;box-shadow:0 5px 0 rgba(74,50,34,.22);padding:14px 26px;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:23px;margin:14px 0 26px;position:relative;text-align:center;max-width:480px;">
+        <div style="position:absolute;top:-12px;left:50%;width:18px;height:18px;background:#FFFDF8;border-left:3px solid #4A3222;border-top:3px solid #4A3222;transform:translateX(-50%) rotate(45deg);"></div>
+        {{ welcomeBubble }}
+      </div>
+      <sc-if value="{{ stepName }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;gap:12px;width:100%;max-width:480px;animation:hopc-pop .4s both;">
+          <input value="{{ nameInput }}" onChange="{{ onNameChange }}" onKeyDown="{{ onNameKey }}" placeholder="Type your name…" style="flex:1;min-width:0;background:#FFFFFF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 rgba(74,50,34,.22);padding:16px 24px;font-size:22px;font-weight:800;outline:none;"></input>
+          <button onClick="{{ onNameNext }}" style="background:#FF7A59;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:22px;padding:14px 30px;cursor:pointer;white-space:nowrap;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">Woof! Go</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ stepAge }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;max-width:560px;animation:hopc-pop .4s both;">
+          <sc-for list="{{ ageOptions }}" as="ao" hint-placeholder-count="13">
+            <button onClick="{{ ao.onPick }}" style="width:76px;height:76px;border-radius:50%;border:3px solid #4A3222;box-shadow:0 5px 0 #4A3222;background:{{ ao.bg }};color:#FFF8EF;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:{{ ao.fs }};cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="transform:scale(1.08);" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">{{ ao.label }}</button>
+          </sc-for>
+        </div>
+        <button onClick="{{ onBackToName }}" style="margin-top:22px;background:none;border:none;color:#9C7B5E;font-weight:800;font-size:16px;cursor:pointer;text-decoration:underline;font-family:'Nunito',sans-serif;">← back to my name</button>
+      </sc-if>
+      <sc-if value="{{ showGrownLink }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ onOpenGrown }}" style="margin-top:44px;background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 rgba(74,50,34,.22);padding:10px 22px;font-weight:700;font-size:16px;cursor:pointer;color:#7A5F49;display:flex;align-items:center;gap:8px;" style-active="transform:translateY(3px);box-shadow:0 1px 0 rgba(74,50,34,.22);"><svg viewBox="0 0 24 24" width="18" height="18"><rect x="5" y="10" width="14" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="2.4"></rect><path d="M8 10 V7 a4 4 0 0 1 8 0 v3" fill="none" stroke="currentColor" stroke-width="2.4"></path></svg>Grown-Ups &amp; Teachers</button>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1080px;margin:0 auto;padding:28px 24px 48px;position:relative;z-index:1;" data-screen-label="Home">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="background:#FF7A59;color:#FFF8EF;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:14px;padding:2px 12px;border-radius:999px;border:2.5px solid #4A3222;transform:rotate(-2deg);box-shadow:0 2px 0 #4A3222;">Heather's</div>
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:24px;">OPUS <span style="color:#FF7A59">pupclaw</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button onClick="{{ onChangeKid }}" style="background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 3px 0 rgba(74,50,34,.22);padding:8px 16px;font-weight:700;font-size:15px;cursor:pointer;color:#7A5F49;" style-active="transform:translateY(2px);box-shadow:0 1px 0 rgba(74,50,34,.22);">{{ bandChip }}</button>
+          <button onClick="{{ onOpenStickers }}" title="My sticker book" style="background:#FFF1BF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 3px 0 rgba(74,50,34,.22);padding:8px 16px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;cursor:pointer;color:#4A3222;display:flex;align-items:center;gap:7px;" style-active="transform:translateY(2px);box-shadow:0 1px 0 rgba(74,50,34,.22);"><svg viewBox="0 0 40 40" width="18" height="18"><ellipse cx="20" cy="26" rx="9" ry="7.5" fill="currentColor"></ellipse><circle cx="8.5" cy="17" r="4.2" fill="currentColor"></circle><circle cx="16" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="24" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="31.5" cy="17" r="4.2" fill="currentColor"></circle></svg>{{ stickerCount }}</button>
+          <sc-if value="{{ showGrownLink }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onOpenGrown }}" title="Grown-Ups & Teachers" style="width:46px;height:46px;background:#FFFDF8;border:3px solid #4A3222;border-radius:50%;box-shadow:0 3px 0 rgba(74,50,34,.22);cursor:pointer;color:#7A5F49;display:flex;align-items:center;justify-content:center;" style-active="transform:translateY(2px);box-shadow:0 1px 0 rgba(74,50,34,.22);"><svg viewBox="0 0 24 24" width="20" height="20"><rect x="5" y="10" width="14" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="2.4"></rect><path d="M8 10 V7 a4 4 0 0 1 8 0 v3" fill="none" stroke="currentColor" stroke-width="2.4"></path></svg></button>
+          </sc-if>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:18px;margin:10px 0 26px;flex-wrap:wrap;">
+        <button onClick="{{ onMascotTap }}" style="width:120px;flex:none;background:none;border:none;cursor:pointer;padding:0;animation:hopc-bob 2.6s ease-in-out infinite;" title="Pet the puppy!"><svg viewBox="0 0 120 120" width="100%"><ellipse cx="24" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(16 24 58)"></ellipse><ellipse cx="96" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(-16 96 58)"></ellipse><circle cx="60" cy="62" r="42" fill="#F2BE8D" stroke="#4A3222" stroke-width="4"></circle><circle cx="80" cy="45" r="12" fill="#C98A54"></circle><ellipse cx="60" cy="80" rx="22" ry="16" fill="#FFF1DF" stroke="#4A3222" stroke-width="3.5"></ellipse><circle cx="44" cy="54" r="5.5" fill="#4A3222"></circle><circle cx="78" cy="54" r="5.5" fill="#4A3222"></circle><circle cx="46" cy="52" r="1.8" fill="#FFFFFF"></circle><circle cx="80" cy="52" r="1.8" fill="#FFFFFF"></circle><ellipse cx="60" cy="73" rx="7.5" ry="6" fill="#4A3222"></ellipse><path d="M60 79 Q60 87 52 87 M60 79 Q60 87 68 87" fill="none" stroke="#4A3222" stroke-width="3.5" stroke-linecap="round"></path><ellipse cx="60" cy="91" rx="6" ry="7" fill="#F98D8D" stroke="#4A3222" stroke-width="3"></ellipse></svg></button>
+        <div style="flex:1;min-width:240px;">
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:40px;line-height:1.05;text-wrap:pretty;">{{ greeting }}</div>
+          <sc-if value="{{ hasMood }}" hint-placeholder-val="{{ false }}">
+            <div style="display:inline-block;margin-top:8px;background:#FFF1BF;border:3px solid #4A3222;border-radius:16px;padding:6px 14px;font-weight:800;font-size:17px;animation:hopc-pop .3s both;">{{ moodText }}</div>
+          </sc-if>
+        </div>
+      </div>
+      <div style="background:#FFF1BF;border:3.5px solid #4A3222;border-radius:22px;box-shadow:0 5px 0 rgba(74,50,34,.22);padding:16px 22px;margin:0 0 26px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
+        <div style="font-size:42px;line-height:1;">{{ treatArt }}</div>
+        <div style="flex:1;min-width:220px;">
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:19px;color:#9C7B5E;">{{ treatLabel }}</div>
+          <div style="font-weight:800;font-size:18px;line-height:1.45;text-wrap:pretty;">{{ treatText }}</div>
+        </div>
+        <button onClick="{{ onTreatSpeak }}" style="background:#2BB3A3;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 #4A3222;font-weight:800;font-size:17px;padding:9px 22px;cursor:pointer;display:flex;align-items:center;gap:7px;" style-active="transform:translateY(3px);box-shadow:0 1px 0 #4A3222;"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 9v6h4l6 5V4L8 9H4z" fill="currentColor"></path><path d="M17 8c1.6 1 2.6 2.4 2.6 4s-1 3-2.6 4" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"></path></svg>Read to me</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:20px;">
+        <sc-for list="{{ tiles }}" as="tile" hint-placeholder-count="4">
+          <button onClick="{{ tile.onOpen }}" style="text-align:left;background:{{ tile.bg }};border:3.5px solid #4A3222;border-radius:26px;box-shadow:0 6px 0 #4A3222;padding:22px;cursor:pointer;display:flex;flex-direction:column;gap:12px;min-height:170px;animation:hopc-pop .45s both;animation-delay:{{ tile.delay }};" style-hover="transform:translateY(-3px);box-shadow:0 9px 0 #4A3222;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">
+            <div style="width:58px;height:58px;background:#FFFDF8;border:3px solid #4A3222;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#4A3222;">
+              <sc-if value="{{ tile.iconChat }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 36 36" width="32" height="32"><rect x="4" y="6" width="28" height="19" rx="7" fill="none" stroke="currentColor" stroke-width="3"></rect><path d="M12 25 l-1 7 8-7" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path><circle cx="12.5" cy="15.5" r="2" fill="currentColor"></circle><circle cx="18" cy="15.5" r="2" fill="currentColor"></circle><circle cx="23.5" cy="15.5" r="2" fill="currentColor"></circle></svg></sc-if>
+              <sc-if value="{{ tile.iconBook }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 36 36" width="32" height="32"><path d="M18 9 Q12 5 5 7 V27 Q12 25 18 29 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path><path d="M18 9 Q24 5 31 7 V27 Q24 25 18 29 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path></svg></sc-if>
+              <sc-if value="{{ tile.iconGame }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 36 36" width="32" height="32"><rect x="6" y="6" width="24" height="24" rx="7" fill="none" stroke="currentColor" stroke-width="3"></rect><circle cx="13" cy="13" r="2.4" fill="currentColor"></circle><circle cx="23" cy="13" r="2.4" fill="currentColor"></circle><circle cx="18" cy="18" r="2.4" fill="currentColor"></circle><circle cx="13" cy="23" r="2.4" fill="currentColor"></circle><circle cx="23" cy="23" r="2.4" fill="currentColor"></circle></svg></sc-if>
+              <sc-if value="{{ tile.iconArt }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 36 36" width="32" height="32"><path d="M22 6 l8 8 -14 14 -10 2 2 -10 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path><path d="M19 9 l8 8" stroke="currentColor" stroke-width="3"></path></svg></sc-if>
+              <sc-if value="{{ tile.iconMusic }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 36 36" width="32" height="32"><circle cx="11" cy="26" r="4.5" fill="currentColor"></circle><circle cx="25" cy="23" r="4.5" fill="currentColor"></circle><path d="M15.5 26 V9 l14 -3 v17" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path></svg></sc-if>
+              <sc-if value="{{ tile.iconPeek }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 36 36" width="32" height="32"><circle cx="11" cy="18" r="7" fill="none" stroke="currentColor" stroke-width="3"></circle><circle cx="25" cy="18" r="7" fill="none" stroke="currentColor" stroke-width="3"></circle><circle cx="12.5" cy="19" r="2.6" fill="currentColor"></circle><circle cx="26.5" cy="19" r="2.6" fill="currentColor"></circle></svg></sc-if>
+              <sc-if value="{{ tile.iconCap }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 36 36" width="32" height="32"><path d="M18 7 L33 14 18 21 3 14 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path><path d="M10 17 v7 q8 5 16 0 v-7" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path></svg></sc-if>
+              <sc-if value="{{ tile.iconLeaf }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 36 36" width="32" height="32"><path d="M29 7 C13 8 7 16 7 29 C20 29 28 23 29 7 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path><path d="M10 26 Q18 18 26 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path></svg></sc-if>
+              <sc-if value="{{ tile.iconMap }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 36 36" width="32" height="32"><path d="M18 5 v26" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path><path d="M8 9 h16 l4 4 -4 4 H8 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path><path d="M28 19 H12 l-4 4 4 4 h16 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path></svg></sc-if>
+              <sc-if value="{{ tile.iconMoon }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 36 36" width="32" height="32"><path d="M24 5 A13.5 13.5 0 1 0 31 25 A11 11 0 0 1 24 5 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path><circle cx="9" cy="9" r="2" fill="currentColor"></circle></svg></sc-if>
+            </div>
+            <div>
+              <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:25px;color:#4A3222;line-height:1.1;">{{ tile.title }}</div>
+              <div style="font-weight:800;font-size:15px;color:rgba(74,50,34,.75);margin-top:4px;">{{ tile.sub }}</div>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+      <div style="text-align:center;margin-top:34px;font-weight:800;font-size:13px;color:#C4A88C;">made with love for Heather's academy · {{ mascotName }} always plays safe</div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isChat }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:860px;margin:0 auto;padding:22px 20px 30px;display:flex;flex-direction:column;height:100vh;position:relative;z-index:1;" data-screen-label="Chat">
+      <div style="display:flex;align-items:center;gap:14px;flex:none;">
+        <button onClick="{{ backHome }}" style="background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 rgba(74,50,34,.22);padding:10px 20px;font-weight:800;font-size:18px;cursor:pointer;display:flex;align-items:center;gap:6px;" style-active="transform:translateY(3px);box-shadow:0 1px 0 rgba(74,50,34,.22);">← Back</button>
+        <div style="flex:1;">
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;line-height:1;">{{ chatHeading }}</div>
+          <div style="font-weight:800;font-size:14px;color:#9C7B5E;">{{ chatSub }}</div>
+        </div>
+        <div style="width:64px;flex:none;animation:hopc-wig 3s ease-in-out infinite;"><svg viewBox="0 0 120 120" width="100%"><ellipse cx="24" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(16 24 58)"></ellipse><ellipse cx="96" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(-16 96 58)"></ellipse><circle cx="60" cy="62" r="42" fill="#F2BE8D" stroke="#4A3222" stroke-width="4"></circle><circle cx="80" cy="45" r="12" fill="#C98A54"></circle><ellipse cx="60" cy="80" rx="22" ry="16" fill="#FFF1DF" stroke="#4A3222" stroke-width="3.5"></ellipse><circle cx="44" cy="54" r="5.5" fill="#4A3222"></circle><circle cx="78" cy="54" r="5.5" fill="#4A3222"></circle><ellipse cx="60" cy="73" rx="7.5" ry="6" fill="#4A3222"></ellipse><path d="M60 79 Q60 87 52 87 M60 79 Q60 87 68 87" fill="none" stroke="#4A3222" stroke-width="3.5" stroke-linecap="round"></path><ellipse cx="60" cy="91" rx="6" ry="7" fill="#F98D8D" stroke="#4A3222" stroke-width="3"></ellipse></svg></div>
+      </div>
+      <sc-if value="{{ hasBanner }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;margin-top:12px;background:#FFF1BF;border:3px solid #4A3222;border-radius:16px;padding:8px 16px;font-weight:800;font-size:15px;text-align:center;">{{ bannerText }}</div>
+      </sc-if>
+      <div ref="{{ listRef }}" style="flex:1;overflow-y:auto;margin:16px 0 10px;display:flex;flex-direction:column;gap:14px;padding:6px 2px;">
+        <sc-for list="{{ messages }}" as="m" hint-placeholder-count="2">
+          <sc-if value="{{ m.isPup }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;gap:10px;align-items:flex-end;max-width:85%;animation:hopc-pop .3s both;">
+              <div style="width:44px;height:44px;flex:none;background:#F2BE8D;border:3px solid #4A3222;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;"><svg viewBox="10 20 100 90" width="40" height="40"><circle cx="60" cy="62" r="42" fill="#F2BE8D" stroke="#4A3222" stroke-width="4"></circle><circle cx="80" cy="45" r="12" fill="#C98A54"></circle><ellipse cx="60" cy="80" rx="22" ry="16" fill="#FFF1DF" stroke="#4A3222" stroke-width="3.5"></ellipse><circle cx="44" cy="54" r="5.5" fill="#4A3222"></circle><circle cx="78" cy="54" r="5.5" fill="#4A3222"></circle><ellipse cx="60" cy="73" rx="7.5" ry="6" fill="#4A3222"></ellipse><path d="M60 79 Q60 87 52 87 M60 79 Q60 87 68 87" fill="none" stroke="#4A3222" stroke-width="3.5" stroke-linecap="round"></path></svg></div>
+              <div style="background:#FFFDF8;border:3px solid #4A3222;border-radius:20px 20px 20px 6px;box-shadow:0 4px 0 rgba(74,50,34,.18);padding:12px 18px;">
+                <div style="font-weight:800;line-height:1.45;font-size:{{ msgFont }};white-space:pre-wrap;">{{ m.text }}</div>
+                <button onClick="{{ m.onSpeak }}" title="Read it to me!" style="margin-top:6px;background:#2BB3A3;color:#FFF8EF;border:2.5px solid #4A3222;border-radius:999px;box-shadow:0 3px 0 #4A3222;padding:4px 14px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;" style-active="transform:translateY(2px);box-shadow:0 1px 0 #4A3222;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 9v6h4l6 5V4L8 9H4z" fill="currentColor"></path><path d="M17 8c1.6 1 2.6 2.4 2.6 4s-1 3-2.6 4" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"></path></svg>Read to me</button>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ m.isKid }}" hint-placeholder-val="{{ false }}">
+            <div style="align-self:flex-end;max-width:80%;background:#FF7A59;color:#FFF8EF;border:3px solid #4A3222;border-radius:20px 20px 6px 20px;box-shadow:0 4px 0 rgba(74,50,34,.25);padding:12px 18px;font-weight:800;line-height:1.45;font-size:{{ msgFont }};white-space:pre-wrap;animation:hopc-pop .3s both;">{{ m.text }}</div>
+          </sc-if>
+        </sc-for>
+        <sc-if value="{{ thinking }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;align-items:center;background:#FFFDF8;border:3px solid #4A3222;border-radius:20px;padding:14px 20px;width:fit-content;box-shadow:0 4px 0 rgba(74,50,34,.18);">
+            <div style="width:14px;height:14px;border-radius:50%;background:#FF7A59;animation:hopc-think 1.1s infinite;"></div>
+            <div style="width:14px;height:14px;border-radius:50%;background:#FFC93F;animation:hopc-think 1.1s infinite;animation-delay:.18s;"></div>
+            <div style="width:14px;height:14px;border-radius:50%;background:#2BB3A3;animation:hopc-think 1.1s infinite;animation-delay:.36s;"></div>
+            <div style="font-weight:800;font-size:15px;color:#9C7B5E;margin-left:4px;">{{ thinkingLabel }}</div>
+          </div>
+        </sc-if>
+      </div>
+      <div style="flex:none;display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="3">
+          <button onClick="{{ c.onPick }}" style="background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 rgba(74,50,34,.22);padding:9px 18px;font-weight:700;font-size:16px;cursor:pointer;" style-hover="background:#FFF1BF;" style-active="transform:translateY(3px);box-shadow:0 1px 0 rgba(74,50,34,.22);">{{ c.label }}</button>
+        </sc-for>
+      </div>
+      <div style="flex:none;display:flex;gap:12px;">
+        <input value="{{ chatInput }}" onChange="{{ onChatChange }}" onKeyDown="{{ onChatKey }}" placeholder="{{ chatPlaceholder }}" style="flex:1;min-width:0;background:#FFFFFF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 rgba(74,50,34,.22);padding:16px 24px;font-size:20px;font-weight:800;outline:none;"></input>
+        <button onClick="{{ onSend }}" style="background:#FF7A59;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:21px;padding:14px 30px;cursor:pointer;white-space:nowrap;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">Send</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isStory }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:900px;margin:0 auto;padding:22px 20px 48px;position:relative;z-index:1;" data-screen-label="Story time">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <button onClick="{{ backHome }}" style="background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 rgba(74,50,34,.22);padding:10px 20px;font-weight:800;font-size:18px;cursor:pointer;" style-active="transform:translateY(3px);box-shadow:0 1px 0 rgba(74,50,34,.22);">← Back</button>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;">{{ storyHeading }}</div>
+      </div>
+      <sc-if value="{{ storyPick }}" hint-placeholder-val="{{ false }}">
+        <div style="font-weight:800;font-size:19px;color:#7A5F49;margin-bottom:18px;">{{ storyPickTitle }}</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;">
+          <sc-for list="{{ themes }}" as="th" hint-placeholder-count="6">
+            <button onClick="{{ th.onPick }}" style="background:{{ th.bg }};border:3.5px solid #4A3222;border-radius:24px;box-shadow:0 6px 0 #4A3222;padding:22px 14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;" style-hover="transform:translateY(-3px);box-shadow:0 9px 0 #4A3222;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">
+              <div style="font-size:52px;line-height:1;">{{ th.art }}</div>
+              <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:22px;color:#4A3222;">{{ th.label }}</div>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ storyLoading }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:60px 20px;">
+          <div style="width:150px;margin:0 auto;animation:hopc-bounce 1s ease-in-out infinite;"><svg viewBox="0 0 120 120" width="100%"><ellipse cx="24" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(16 24 58)"></ellipse><ellipse cx="96" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(-16 96 58)"></ellipse><circle cx="60" cy="62" r="42" fill="#F2BE8D" stroke="#4A3222" stroke-width="4"></circle><circle cx="80" cy="45" r="12" fill="#C98A54"></circle><ellipse cx="60" cy="80" rx="22" ry="16" fill="#FFF1DF" stroke="#4A3222" stroke-width="3.5"></ellipse><circle cx="44" cy="54" r="5.5" fill="#4A3222"></circle><circle cx="78" cy="54" r="5.5" fill="#4A3222"></circle><ellipse cx="60" cy="73" rx="7.5" ry="6" fill="#4A3222"></ellipse><path d="M60 79 Q60 87 52 87 M60 79 Q60 87 68 87" fill="none" stroke="#4A3222" stroke-width="3.5" stroke-linecap="round"></path><ellipse cx="60" cy="91" rx="6" ry="7" fill="#F98D8D" stroke="#4A3222" stroke-width="3"></ellipse></svg></div>
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;margin-top:14px;">{{ storyLoadingLabel }}</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ storyRead }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#FFFDF8;border:3.5px solid #4A3222;border-radius:28px;box-shadow:0 7px 0 rgba(74,50,34,.22);padding:36px 40px;animation:hopc-pop .4s both;">
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:36px;line-height:1.15;text-wrap:pretty;margin-bottom:18px;">{{ storyTitle }}</div>
+          <sc-for list="{{ storyParas }}" as="p" hint-placeholder-count="3">
+            <div style="font-weight:800;font-size:{{ storyFont }};line-height:1.65;margin-bottom:16px;text-wrap:pretty;">{{ p.text }}</div>
+          </sc-for>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;">
+            <button onClick="{{ onSpeakStory }}" style="background:#2BB3A3;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:20px;padding:12px 26px;cursor:pointer;display:flex;align-items:center;gap:8px;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 9v6h4l6 5V4L8 9H4z" fill="currentColor"></path><path d="M17 8c1.6 1 2.6 2.4 2.6 4s-1 3-2.6 4" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"></path></svg>{{ speakStoryLabel }}</button>
+            <button onClick="{{ onNewStory }}" style="background:#FFC93F;color:#4A3222;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:20px;padding:12px 26px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">Another one!</button>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isGames }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:900px;margin:0 auto;padding:22px 20px 48px;position:relative;z-index:1;" data-screen-label="Games">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <button onClick="{{ gamesBack }}" style="background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 rgba(74,50,34,.22);padding:10px 20px;font-weight:800;font-size:18px;cursor:pointer;" style-active="transform:translateY(3px);box-shadow:0 1px 0 rgba(74,50,34,.22);">← Back</button>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;">{{ gamesHeading }}</div>
+      </div>
+      <sc-if value="{{ gameMenu }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;">
+          <sc-for list="{{ gamesList }}" as="g" hint-placeholder-count="3">
+            <button onClick="{{ g.onOpen }}" style="background:{{ g.bg }};border:3.5px solid #4A3222;border-radius:24px;box-shadow:0 6px 0 #4A3222;padding:24px 16px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;" style-hover="transform:translateY(-3px);box-shadow:0 9px 0 #4A3222;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">
+              <div style="background:#FFFDF8;border:3px solid #4A3222;border-radius:16px;padding:6px 16px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:26px;color:#4A3222;">{{ g.glyph }}</div>
+              <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:23px;color:#4A3222;">{{ g.title }}</div>
+              <div style="font-weight:800;font-size:14px;color:rgba(74,50,34,.75);">{{ g.sub }}</div>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ gamePeek }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ onPeekTap }}" style="width:100%;max-width:560px;margin:10px auto 0;display:flex;flex-direction:column;align-items:center;gap:10px;background:#FFFDF8;border:4px solid #4A3222;border-radius:32px;box-shadow:0 8px 0 #4A3222;padding:48px 24px;cursor:pointer;" style-active="transform:translateY(5px);box-shadow:0 2px 0 #4A3222;">
+          <sc-if value="{{ peekFront }}" hint-placeholder-val="{{ true }}">
+            <div style="font-size:110px;line-height:1;">🙈</div>
+            <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:44px;">Peek-a…</div>
+            <div style="font-weight:800;font-size:18px;color:#9C7B5E;">tap the card!</div>
+          </sc-if>
+          <sc-if value="{{ peekBack }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:120px;line-height:1;animation:hopc-pop .35s both;">{{ peekEmoji }}</div>
+            <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:44px;animation:hopc-pop .35s both;">…BOO! {{ peekName }}!</div>
+            <div style="font-weight:800;font-size:24px;color:#FF7A59;">{{ peekSound }}</div>
+            <div style="font-weight:800;font-size:16px;color:#9C7B5E;">tap again for another friend</div>
+          </sc-if>
+        </button>
+      </sc-if>
+      <sc-if value="{{ gameAbc }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:560px;margin:10px auto 0;background:#FFFDF8;border:4px solid #4A3222;border-radius:32px;box-shadow:0 8px 0 #4A3222;padding:36px 24px;text-align:center;">
+          <div style="display:flex;align-items:center;justify-content:center;gap:24px;">
+            <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:130px;line-height:1;color:#FF7A59;">{{ abcLetter }}</div>
+            <div style="font-size:96px;line-height:1;">{{ abcEmoji }}</div>
+          </div>
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:34px;margin-top:6px;">{{ abcPhrase }}</div>
+          <div style="display:flex;justify-content:center;gap:12px;margin-top:22px;flex-wrap:wrap;">
+            <button onClick="{{ onAbcPrev }}" style="background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 rgba(74,50,34,.25);font-weight:800;font-size:22px;padding:12px 26px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 rgba(74,50,34,.25);">← </button>
+            <button onClick="{{ onAbcSpeak }}" style="background:#2BB3A3;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:22px;padding:12px 30px;cursor:pointer;display:flex;align-items:center;gap:8px;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 9v6h4l6 5V4L8 9H4z" fill="currentColor"></path><path d="M17 8c1.6 1 2.6 2.4 2.6 4s-1 3-2.6 4" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"></path></svg>Say it!</button>
+            <button onClick="{{ onAbcNext }}" style="background:#FF7A59;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:22px;padding:12px 26px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;"> →</button>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ gameCount }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:640px;margin:10px auto 0;background:#FFFDF8;border:4px solid #4A3222;border-radius:32px;box-shadow:0 8px 0 #4A3222;padding:34px 28px;text-align:center;">
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:30px;">{{ countPrompt }}</div>
+          <sc-if value="{{ showPaws }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:20px 0;max-width:460px;margin-left:auto;margin-right:auto;">
+              <sc-for list="{{ countPaws }}" as="pw" hint-placeholder-count="4">
+                <div style="width:56px;color:#FF7A59;animation:hopc-pop .3s both;"><svg viewBox="0 0 40 40" width="100%"><ellipse cx="20" cy="26" rx="9" ry="7.5" fill="currentColor"></ellipse><circle cx="8.5" cy="17" r="4.2" fill="currentColor"></circle><circle cx="16" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="24" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="31.5" cy="17" r="4.2" fill="currentColor"></circle></svg></div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ showMath }}" hint-placeholder-val="{{ false }}">
+            <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:72px;margin:16px 0;color:#2BB3A3;">{{ countMath }}</div>
+          </sc-if>
+          <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+            <sc-for list="{{ countChoices }}" as="ch" hint-placeholder-count="3">
+              <button onClick="{{ ch.onPick }}" style="width:88px;height:88px;border-radius:50%;border:3.5px solid #4A3222;box-shadow:0 6px 0 #4A3222;background:{{ ch.bg }};color:{{ ch.fg }};font-family:'Baloo 2',sans-serif;font-weight:800;font-size:38px;cursor:pointer;" style-hover="transform:scale(1.06);" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">{{ ch.label }}</button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ hasCountFeedback }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:20px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:30px;color:{{ countFeedbackColor }};animation:hopc-pop .3s both;">{{ countFeedback }}</div>
+          </sc-if>
+          <sc-if value="{{ countRight }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onCountNext }}" style="margin-top:14px;background:#FF7A59;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:22px;padding:12px 30px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">Next one!</button>
+          </sc-if>
+          <div style="margin-top:16px;font-weight:800;font-size:15px;color:#9C7B5E;">{{ countStreakLabel }}</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ gameRiddle }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:640px;margin:10px auto 0;background:#FFFDF8;border:4px solid #4A3222;border-radius:32px;box-shadow:0 8px 0 #4A3222;padding:34px 30px;text-align:center;">
+          <sc-if value="{{ riddleLoading }}" hint-placeholder-val="{{ false }}">
+            <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:26px;color:#9C7B5E;">{{ mascotName }} is thinking of a good one…</div>
+          </sc-if>
+          <sc-if value="{{ riddleReady }}" hint-placeholder-val="{{ true }}">
+            <div style="font-weight:800;font-size:24px;line-height:1.6;text-wrap:pretty;">{{ riddleText }}</div>
+            <sc-if value="{{ riddleShown }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:18px;background:#DFF3EF;border:3px solid #4A3222;border-radius:18px;padding:12px 20px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;color:#1D8377;animation:hopc-pop .3s both;">{{ riddleAnswer }}</div>
+            </sc-if>
+            <div style="display:flex;justify-content:center;gap:12px;margin-top:22px;flex-wrap:wrap;">
+              <sc-if value="{{ riddleHidden }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ onRiddleReveal }}" style="background:#2BB3A3;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:21px;padding:12px 28px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">Show the answer!</button>
+              </sc-if>
+              <button onClick="{{ onRiddleNew }}" style="background:#FFC93F;color:#4A3222;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:21px;padding:12px 28px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">Another riddle!</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isDraw }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1000px;margin:0 auto;padding:22px 20px 40px;position:relative;z-index:1;" data-screen-label="Drawing den">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <button onClick="{{ backHome }}" style="background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 rgba(74,50,34,.22);padding:10px 20px;font-weight:800;font-size:18px;cursor:pointer;" style-active="transform:translateY(3px);box-shadow:0 1px 0 rgba(74,50,34,.22);">← Back</button>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;">{{ drawHeading }}</div>
+        <div style="font-weight:800;font-size:15px;color:#9C7B5E;margin-left:auto;">tap the paw to stamp paw prints!</div>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px;background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 rgba(74,50,34,.18);padding:10px 18px;">
+        <sc-for list="{{ drawColors }}" as="dc" hint-placeholder-count="8">
+          <button onClick="{{ dc.onPick }}" title="color" style="width:38px;height:38px;border-radius:50%;background:{{ dc.c }};border:{{ dc.ring }};cursor:pointer;box-shadow:0 2px 0 rgba(74,50,34,.3);" style-hover="transform:scale(1.15);"></button>
+        </sc-for>
+        <div style="width:3px;height:34px;background:#EAD9BF;border-radius:2px;"></div>
+        <sc-for list="{{ drawSizes }}" as="ds" hint-placeholder-count="3">
+          <button onClick="{{ ds.onPick }}" title="brush size" style="width:44px;height:44px;border-radius:50%;background:#FFFDF8;border:{{ ds.ring }};cursor:pointer;display:flex;align-items:center;justify-content:center;">
+            <div style="width:{{ ds.dot }};height:{{ ds.dot }};border-radius:50%;background:#4A3222;"></div>
+          </button>
+        </sc-for>
+        <div style="width:3px;height:34px;background:#EAD9BF;border-radius:2px;"></div>
+        <button onClick="{{ onToggleStamp }}" title="paw stamp" style="width:46px;height:46px;border-radius:50%;background:#FFF1BF;border:{{ stampRing }};cursor:pointer;color:#4A3222;display:flex;align-items:center;justify-content:center;" style-active="transform:scale(.92);"><svg viewBox="0 0 40 40" width="26" height="26"><ellipse cx="20" cy="26" rx="9" ry="7.5" fill="currentColor"></ellipse><circle cx="8.5" cy="17" r="4.2" fill="currentColor"></circle><circle cx="16" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="24" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="31.5" cy="17" r="4.2" fill="currentColor"></circle></svg></button>
+        <button onClick="{{ onEraser }}" title="eraser" style="width:46px;height:46px;border-radius:50%;background:#FFFFFF;border:{{ eraserRing }};cursor:pointer;color:#4A3222;display:flex;align-items:center;justify-content:center;" style-active="transform:scale(.92);"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M15 4 l6 6 -9 9 H8 L3 14 Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"></path><path d="M9 8 l6 6" stroke="currentColor" stroke-width="2.4"></path></svg></button>
+        <button onClick="{{ onClearCanvas }}" style="margin-left:auto;background:#FF7A59;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 #4A3222;font-weight:800;font-size:17px;padding:8px 22px;cursor:pointer;" style-active="transform:translateY(3px);box-shadow:0 1px 0 #4A3222;">Start over</button>
+      </div>
+      <div style="background:#FFFDF8;border:4px solid #4A3222;border-radius:28px;box-shadow:0 8px 0 #4A3222;overflow:hidden;">
+        <canvas ref="{{ canvasRef }}" width="1200" height="760" style="display:block;width:100%;touch-action:none;cursor:crosshair;"></canvas>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isGrown }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1080px;margin:0 auto;padding:26px 24px 48px;position:relative;z-index:1;" data-screen-label="Grown-ups dashboard">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px;">
+        <button onClick="{{ backFromGrown }}" style="background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 rgba(74,50,34,.22);padding:10px 20px;font-weight:800;font-size:18px;cursor:pointer;" style-active="transform:translateY(3px);box-shadow:0 1px 0 rgba(74,50,34,.22);">← Back to the kids' side</button>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:30px;">Grown-Ups &amp; Teachers</div>
+      </div>
+      <sc-if value="{{ gateOpen }}" hint-placeholder-val="{{ true }}">
+        <div style="max-width:480px;margin:40px auto;background:#FFFDF8;border:3.5px solid #4A3222;border-radius:28px;box-shadow:0 7px 0 rgba(74,50,34,.22);padding:34px;text-align:center;animation:{{ gateAnim }};">
+          <div style="width:60px;margin:0 auto 10px;color:#7A5F49;"><svg viewBox="0 0 24 24" width="100%"><rect x="5" y="10" width="14" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M8 10 V7 a4 4 0 0 1 8 0 v3" fill="none" stroke="currentColor" stroke-width="2"></path></svg></div>
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:26px;">Grown-ups only</div>
+          <div style="font-weight:800;font-size:16px;color:#7A5F49;margin:8px 0 20px;">Quick check — what is <span style="color:#FF7A59;font-size:22px;">{{ gateQ }}</span>?</div>
+          <div style="display:flex;gap:10px;justify-content:center;">
+            <input value="{{ gateInput }}" onChange="{{ onGateChange }}" onKeyDown="{{ onGateKey }}" inputMode="numeric" placeholder="?" style="width:110px;text-align:center;background:#FFFFFF;border:3px solid #4A3222;border-radius:18px;box-shadow:0 4px 0 rgba(74,50,34,.2);padding:12px;font-size:24px;font-weight:800;outline:none;"></input>
+            <button onClick="{{ onGateGo }}" style="background:#2BB3A3;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 #4A3222;font-weight:800;font-size:20px;padding:10px 26px;cursor:pointer;" style-active="transform:translateY(3px);box-shadow:0 1px 0 #4A3222;">Unlock</button>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ gatePassed }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;">
+          <div style="background:#FFFDF8;border:3.5px solid #4A3222;border-radius:26px;box-shadow:0 6px 0 rgba(74,50,34,.2);padding:26px;">
+            <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:23px;margin-bottom:12px;">Current explorer</div>
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div style="width:64px;height:64px;background:#F2BE8D;border:3px solid #4A3222;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:30px;">{{ kidInitial }}</div>
+              <div>
+                <div style="font-weight:900;font-size:22px;">{{ kidLine }}</div>
+                <div style="font-weight:800;font-size:15px;color:#7A5F49;">{{ bandLine }}</div>
+              </div>
+            </div>
+            <button onClick="{{ onChangeKid }}" style="margin-top:16px;background:#FFC93F;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 #4A3222;font-weight:800;font-size:17px;padding:9px 22px;cursor:pointer;color:#4A3222;" style-active="transform:translateY(3px);box-shadow:0 1px 0 #4A3222;">Switch kid / change age</button>
+            <div style="margin-top:18px;font-weight:800;font-size:15px;color:#7A5F49;">{{ breakLabel }}</div>
+            <input type="range" min="5" max="60" step="5" value="{{ breakMin }}" onChange="{{ onBreakChange }}" style="width:100%;accent-color:#FF7A59;margin-top:6px;"></input>
+          </div>
+          <div style="background:#FFFDF8;border:3.5px solid #4A3222;border-radius:26px;box-shadow:0 6px 0 rgba(74,50,34,.2);padding:26px;">
+            <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:23px;margin-bottom:14px;">What's switched on</div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <sc-for list="{{ toggles }}" as="tg" hint-placeholder-count="6">
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <button onClick="{{ tg.onFlip }}" style="width:58px;height:32px;flex:none;border-radius:999px;border:3px solid #4A3222;background:{{ tg.bg }};cursor:pointer;position:relative;padding:0;">
+                    <div style="position:absolute;top:1px;left:2px;width:24px;height:24px;border-radius:50%;background:#FFFDF8;border:2.5px solid #4A3222;transform:{{ tg.knob }};transition:transform .18s;"></div>
+                  </button>
+                  <div style="flex:1;">
+                    <div style="font-weight:900;font-size:16px;">{{ tg.label }}</div>
+                    <div style="font-weight:700;font-size:13px;color:#9C7B5E;">{{ tg.desc }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:#FFFDF8;border:3.5px solid #4A3222;border-radius:26px;box-shadow:0 6px 0 rgba(74,50,34,.2);padding:26px;">
+            <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:23px;margin-bottom:4px;">{{ mascotName }}'s voice</div>
+            <div style="font-weight:700;font-size:14px;color:#9C7B5E;margin-bottom:14px;">the read-aloud voice everywhere — tap one to hear it</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{ voicePills }}" as="vp" hint-placeholder-count="5">
+                <button onClick="{{ vp.onPick }}" style="display:flex;align-items:center;gap:12px;text-align:left;background:{{ vp.bg }};border:{{ vp.ring }};border-radius:18px;box-shadow:0 3px 0 rgba(74,50,34,.18);padding:10px 16px;cursor:pointer;" style-active="transform:translateY(2px);box-shadow:0 1px 0 rgba(74,50,34,.18);">
+                  <div style="width:34px;height:34px;flex:none;border-radius:50%;background:{{ vp.dot }};border:2.5px solid #4A3222;display:flex;align-items:center;justify-content:center;color:#FFF8EF;"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 9v6h4l6 5V4L8 9H4z" fill="currentColor"></path><path d="M17 8c1.6 1 2.6 2.4 2.6 4s-1 3-2.6 4" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"></path></svg></div>
+                  <div style="flex:1;">
+                    <div style="font-weight:900;font-size:16px;color:#4A3222;">{{ vp.label }}</div>
+                    <div style="font-weight:700;font-size:13px;color:#9C7B5E;">{{ vp.desc }}</div>
+                  </div>
+                  <div style="font-weight:800;font-size:13px;color:#1D8377;">{{ vp.state }}</div>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:#DFF3EF;border:3.5px solid #4A3222;border-radius:26px;box-shadow:0 6px 0 rgba(74,50,34,.2);padding:26px;">
+            <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:23px;margin-bottom:10px;">How {{ mascotName }} stays safe</div>
+            <div style="font-weight:700;font-size:15px;line-height:1.7;">
+              · Every reply is written for the child's exact age<br></br>
+              · Grown-up topics, violence, brands &amp; links are filtered on the way in <b>and</b> out<br></br>
+              · {{ mascotName }} never asks for last names, addresses or numbers — and gently deflects them<br></br>
+              · Tricky questions get redirected to a trusted grown-up<br></br>
+              · Homework mode coaches with hints — it won't just hand over answers<br></br>
+              · No ads, no sign-ups; everything stays on this device<br></br>
+              · AI can still goof — keep an ear nearby, just like circle time
+            </div>
+          </div>
+          <div style="background:#FFFDF8;border:3.5px solid #4A3222;border-radius:26px;box-shadow:0 6px 0 rgba(74,50,34,.2);padding:26px;grid-column:1/-1;">
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+              <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:23px;flex:1;">Chat log</div>
+              <button onClick="{{ onDownloadLog }}" style="background:#2BB3A3;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 #4A3222;font-weight:800;font-size:16px;padding:8px 20px;cursor:pointer;" style-active="transform:translateY(3px);box-shadow:0 1px 0 #4A3222;">Download</button>
+              <button onClick="{{ onClearLog }}" style="background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 rgba(74,50,34,.22);font-weight:800;font-size:16px;padding:8px 20px;cursor:pointer;color:#7A5F49;" style-active="transform:translateY(3px);box-shadow:0 1px 0 rgba(74,50,34,.22);">Clear log</button>
+              <button onClick="{{ onResetAll }}" style="background:#F98D8D;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 #4A3222;font-weight:800;font-size:16px;padding:8px 20px;cursor:pointer;color:#4A3222;" style-active="transform:translateY(3px);box-shadow:0 1px 0 #4A3222;">{{ resetLabel }}</button>
+            </div>
+            <sc-if value="{{ hasLog }}" hint-placeholder-val="{{ false }}">
+              <div style="max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;">
+                <sc-for list="{{ logItems }}" as="li" hint-placeholder-count="3">
+                  <div style="display:flex;gap:10px;align-items:baseline;background:{{ li.bg }};border:2.5px solid #EAD9BF;border-radius:14px;padding:8px 14px;">
+                    <div style="font-weight:900;font-size:14px;color:{{ li.fg }};flex:none;">{{ li.who }}</div>
+                    <div style="font-weight:700;font-size:15px;flex:1;">{{ li.text }}</div>
+                    <div style="font-weight:700;font-size:12px;color:#B99C7D;flex:none;">{{ li.time }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ noLog }}" hint-placeholder-val="{{ true }}">
+              <div style="font-weight:800;font-size:16px;color:#9C7B5E;">No chats yet — this fills up as kids talk with {{ mascotName }}. Everything said in Chat, Homework and Story requests lands here for your review.</div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isFable }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:900px;margin:0 auto;padding:22px 20px 48px;position:relative;z-index:1;" data-screen-label="Fable Forest">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <button onClick="{{ backHome }}" style="background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 rgba(74,50,34,.22);padding:10px 20px;font-weight:800;font-size:18px;cursor:pointer;" style-active="transform:translateY(3px);box-shadow:0 1px 0 rgba(74,50,34,.22);">← Back</button>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;">Fable Forest</div>
+        <div style="font-weight:800;font-size:15px;color:#9C7B5E;">little tales with big lessons</div>
+      </div>
+      <sc-if value="{{ fableAnimalStep }}" hint-placeholder-val="{{ true }}">
+        <div style="font-weight:800;font-size:19px;color:#7A5F49;margin-bottom:18px;">Pick your fable friend!</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;">
+          <sc-for list="{{ fableAnimals }}" as="fa" hint-placeholder-count="8">
+            <button onClick="{{ fa.onPick }}" style="background:{{ fa.bg }};border:3.5px solid #4A3222;border-radius:24px;box-shadow:0 6px 0 #4A3222;padding:20px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;" style-hover="transform:translateY(-3px);box-shadow:0 9px 0 #4A3222;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">
+              <div style="font-size:50px;line-height:1;">{{ fa.art }}</div>
+              <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:21px;color:#4A3222;">{{ fa.label }}</div>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ fableLessonStep }}" hint-placeholder-val="{{ false }}">
+        <div style="font-weight:800;font-size:19px;color:#7A5F49;margin-bottom:18px;">What should the {{ fableAnimalLabel }} learn?</div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;">
+          <sc-for list="{{ fableLessons }}" as="fl" hint-placeholder-count="6">
+            <button onClick="{{ fl.onPick }}" style="background:#FFFDF8;border:3.5px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;padding:14px 30px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:23px;cursor:pointer;color:#4A3222;" style-hover="background:#FFF1BF;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">{{ fl.label }}</button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ fableLoading }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:60px 20px;">
+          <div style="width:150px;margin:0 auto;animation:hopc-bounce 1s ease-in-out infinite;"><svg viewBox="0 0 120 120" width="100%"><ellipse cx="24" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(16 24 58)"></ellipse><ellipse cx="96" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#4A3222" stroke-width="4" transform="rotate(-16 96 58)"></ellipse><circle cx="60" cy="62" r="42" fill="#F2BE8D" stroke="#4A3222" stroke-width="4"></circle><circle cx="80" cy="45" r="12" fill="#C98A54"></circle><ellipse cx="60" cy="80" rx="22" ry="16" fill="#FFF1DF" stroke="#4A3222" stroke-width="3.5"></ellipse><circle cx="44" cy="54" r="5.5" fill="#4A3222"></circle><circle cx="78" cy="54" r="5.5" fill="#4A3222"></circle><ellipse cx="60" cy="73" rx="7.5" ry="6" fill="#4A3222"></ellipse><path d="M60 79 Q60 87 52 87 M60 79 Q60 87 68 87" fill="none" stroke="#4A3222" stroke-width="3.5" stroke-linecap="round"></path><ellipse cx="60" cy="91" rx="6" ry="7" fill="#F98D8D" stroke="#4A3222" stroke-width="3"></ellipse></svg></div>
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;margin-top:14px;">{{ mascotName }} is digging up a fable…</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ fableRead }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#FFFDF8;border:3.5px solid #4A3222;border-radius:28px;box-shadow:0 7px 0 rgba(74,50,34,.22);padding:36px 40px;animation:hopc-pop .4s both;">
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:36px;line-height:1.15;text-wrap:pretty;margin-bottom:18px;">{{ fableTitle }}</div>
+          <sc-for list="{{ fableParas }}" as="p" hint-placeholder-count="3">
+            <div style="font-weight:800;font-size:{{ storyFont }};line-height:1.65;margin-bottom:16px;text-wrap:pretty;">{{ p.text }}</div>
+          </sc-for>
+          <div style="display:inline-block;background:#FFC93F;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 #4A3222;padding:10px 24px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:20px;margin:6px 0 18px;">{{ fableMoralLine }}</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button onClick="{{ onSpeakFable }}" style="background:#2BB3A3;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:20px;padding:12px 26px;cursor:pointer;display:flex;align-items:center;gap:8px;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 9v6h4l6 5V4L8 9H4z" fill="currentColor"></path><path d="M17 8c1.6 1 2.6 2.4 2.6 4s-1 3-2.6 4" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"></path></svg>Read it to me!</button>
+            <button onClick="{{ onNewFable }}" style="background:#FFC93F;color:#4A3222;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:20px;padding:12px 26px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">Another fable!</button>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isPaths }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:860px;margin:0 auto;padding:22px 20px 48px;position:relative;z-index:1;" data-screen-label="Paths and Paws">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap;">
+        <button onClick="{{ backHome }}" style="background:#FFFDF8;border:3px solid #4A3222;border-radius:999px;box-shadow:0 4px 0 rgba(74,50,34,.22);padding:10px 20px;font-weight:800;font-size:18px;cursor:pointer;" style-active="transform:translateY(3px);box-shadow:0 1px 0 rgba(74,50,34,.22);">← Back</button>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;">Paths &amp; Paws</div>
+        <div style="background:#FFF1BF;border:3px solid #4A3222;border-radius:999px;padding:4px 16px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:16px;">{{ pathsRoundLabel }}</div>
+      </div>
+      <div style="background:#FFFDF8;border:3.5px solid #4A3222;border-radius:28px;box-shadow:0 7px 0 rgba(74,50,34,.22);padding:30px 36px;">
+        <sc-for list="{{ pathsParas }}" as="p" hint-placeholder-count="2">
+          <div style="font-weight:800;font-size:{{ storyFont }};line-height:1.65;margin-bottom:14px;text-wrap:pretty;animation:hopc-pop .35s both;">{{ p.text }}</div>
+        </sc-for>
+        <sc-if value="{{ pathsLoading }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;gap:8px;align-items:center;padding:6px 0;">
+            <div style="width:14px;height:14px;border-radius:50%;background:#FF7A59;animation:hopc-think 1.1s infinite;"></div>
+            <div style="width:14px;height:14px;border-radius:50%;background:#FFC93F;animation:hopc-think 1.1s infinite;animation-delay:.18s;"></div>
+            <div style="width:14px;height:14px;border-radius:50%;background:#2BB3A3;animation:hopc-think 1.1s infinite;animation-delay:.36s;"></div>
+            <div style="font-weight:800;font-size:15px;color:#9C7B5E;margin-left:4px;">the trail is appearing…</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ pathsChoosing }}" hint-placeholder-val="{{ false }}">
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:24px;margin:10px 0 14px;">What should {{ kidName }} do?</div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <sc-for list="{{ pathsChoices }}" as="pc" hint-placeholder-count="2">
+              <button onClick="{{ pc.onPick }}" style="display:flex;align-items:center;gap:16px;text-align:left;background:#FFF3EC;border:3.5px solid #4A3222;border-radius:22px;box-shadow:0 5px 0 #4A3222;padding:16px 22px;cursor:pointer;" style-hover="background:#FFE4D6;transform:translateY(-2px);box-shadow:0 7px 0 #4A3222;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">
+                <div style="width:44px;height:44px;flex:none;background:#FF7A59;color:#FFF8EF;border:3px solid #4A3222;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:22px;">{{ pc.badge }}</div>
+                <div style="font-weight:800;font-size:19px;color:#4A3222;">{{ pc.text }}</div>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ pathsDone }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:8px;">
+            <div style="background:#DFF3EF;border:3px solid #4A3222;border-radius:999px;padding:8px 24px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:22px;color:#1D8377;animation:hopc-pop .35s both;">The End!</div>
+            <button onClick="{{ onSpeakPaths }}" style="background:#2BB3A3;color:#FFF8EF;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:19px;padding:11px 24px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">Read it to me!</button>
+            <button onClick="{{ onPathsAgain }}" style="background:#FFC93F;color:#4A3222;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;font-weight:800;font-size:19px;padding:11px 24px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #4A3222;">New adventure!</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isBed }}" hint-placeholder-val="{{ false }}">
+    <div style="min-height:100vh;background:linear-gradient(180deg,#28244C,#443C72);padding:26px 24px 60px;position:relative;z-index:2;" data-screen-label="Bedtime Den">
+      <div style="position:absolute;top:70px;left:12%;width:10px;height:10px;border-radius:50%;background:#FFE9B3;animation:hopc-twinkle 2.4s infinite;"></div>
+      <div style="position:absolute;top:140px;right:18%;width:7px;height:7px;border-radius:50%;background:#FFE9B3;animation:hopc-twinkle 3.1s infinite;animation-delay:.6s;"></div>
+      <div style="position:absolute;top:250px;left:28%;width:6px;height:6px;border-radius:50%;background:#FFE9B3;animation:hopc-twinkle 2.8s infinite;animation-delay:1.1s;"></div>
+      <div style="position:absolute;top:90px;right:38%;width:8px;height:8px;border-radius:50%;background:#FFE9B3;animation:hopc-twinkle 3.5s infinite;animation-delay:.3s;"></div>
+      <div style="position:absolute;bottom:120px;right:10%;width:9px;height:9px;border-radius:50%;background:#FFE9B3;animation:hopc-twinkle 2.6s infinite;animation-delay:.9s;"></div>
+      <div style="max-width:820px;margin:0 auto;position:relative;">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+          <button onClick="{{ backHome }}" style="background:#FFF6E9;border:3px solid #1E1B3A;border-radius:999px;box-shadow:0 4px 0 #1E1B3A;padding:10px 20px;font-weight:800;font-size:18px;cursor:pointer;color:#4A3222;" style-active="transform:translateY(3px);box-shadow:0 1px 0 #1E1B3A;">← Back</button>
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:30px;color:#FFF6E9;">{{ bedHeading }}</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:170px;margin:0 auto;animation:hopc-bob 4s ease-in-out infinite;"><svg viewBox="0 0 120 120" width="100%"><ellipse cx="24" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#1E1B3A" stroke-width="4" transform="rotate(16 24 58)"></ellipse><ellipse cx="96" cy="58" rx="15" ry="25" fill="#C98A54" stroke="#1E1B3A" stroke-width="4" transform="rotate(-16 96 58)"></ellipse><circle cx="60" cy="62" r="42" fill="#F2BE8D" stroke="#1E1B3A" stroke-width="4"></circle><circle cx="80" cy="45" r="12" fill="#C98A54"></circle><ellipse cx="60" cy="80" rx="22" ry="16" fill="#FFF1DF" stroke="#1E1B3A" stroke-width="3.5"></ellipse><path d="M38 55 q6 5 12 0" fill="none" stroke="#1E1B3A" stroke-width="4" stroke-linecap="round"></path><path d="M70 55 q6 5 12 0" fill="none" stroke="#1E1B3A" stroke-width="4" stroke-linecap="round"></path><ellipse cx="60" cy="73" rx="7.5" ry="6" fill="#1E1B3A"></ellipse><path d="M60 79 Q60 87 52 87 M60 79 Q60 87 68 87" fill="none" stroke="#1E1B3A" stroke-width="3.5" stroke-linecap="round"></path><text x="94" y="24" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="17" fill="#FFE9B3">z z</text></svg></div>
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:26px;color:#D9D3F2;margin:8px 0 20px;">Shhh… {{ mascotName }} is getting sleepy.</div>
+          <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:26px;">
+            <button onClick="{{ onBedStory }}" style="background:#B678E0;color:#FFF8EF;border:3px solid #1E1B3A;border-radius:999px;box-shadow:0 5px 0 #1E1B3A;font-weight:800;font-size:21px;padding:13px 30px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #1E1B3A;">{{ bedStoryLabel }}</button>
+            <button onClick="{{ onToggleChimes }}" style="background:#2BB3A3;color:#FFF8EF;border:3px solid #1E1B3A;border-radius:999px;box-shadow:0 5px 0 #1E1B3A;font-weight:800;font-size:21px;padding:13px 30px;cursor:pointer;" style-active="transform:translateY(4px);box-shadow:0 1px 0 #1E1B3A;">Soft chimes: {{ chimesLabel }}</button>
+          </div>
+        </div>
+        <sc-if value="{{ bedLoading }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:22px;color:#9F96D6;">fetching a sleepy story…</div>
+        </sc-if>
+        <sc-if value="{{ bedRead }}" hint-placeholder-val="{{ false }}">
+          <div style="background:rgba(255,246,233,.08);border:3px solid #9F96D6;border-radius:28px;padding:32px 38px;animation:hopc-pop .5s both;">
+            <sc-for list="{{ bedParas }}" as="p" hint-placeholder-count="3">
+              <div style="font-weight:700;font-size:24px;line-height:1.85;color:#EFEAFF;margin-bottom:12px;text-wrap:pretty;">{{ p.text }}</div>
+            </sc-for>
+            <button onClick="{{ onSpeakBed }}" style="margin-top:6px;background:#FFF6E9;color:#4A3222;border:3px solid #1E1B3A;border-radius:999px;box-shadow:0 4px 0 #1E1B3A;font-weight:800;font-size:18px;padding:10px 24px;cursor:pointer;" style-active="transform:translateY(3px);box-shadow:0 1px 0 #1E1B3A;">Read it softly again</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showStickers }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(74,50,34,.5);z-index:65;display:flex;align-items:center;justify-content:center;padding:24px;" data-screen-label="Sticker book">
+      <div style="background:#FFFDF8;border:4px solid #4A3222;border-radius:32px;box-shadow:0 8px 0 #4A3222;padding:30px;max-width:680px;width:100%;max-height:85vh;overflow-y:auto;animation:hopc-pop .35s both;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:29px;flex:1;">{{ kidName }}'s Sticker Book</div>
+          <div style="background:#FFF1BF;border:3px solid #4A3222;border-radius:999px;padding:4px 16px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:17px;">{{ stickerCount }}</div>
+          <button onClick="{{ onCloseStickers }}" style="width:44px;height:44px;background:#FF7A59;color:#FFF8EF;border:3px solid #4A3222;border-radius:50%;box-shadow:0 3px 0 #4A3222;font-weight:800;font-size:20px;cursor:pointer;" style-active="transform:translateY(2px);box-shadow:0 1px 0 #4A3222;">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:14px;">
+          <sc-for list="{{ stickerCells }}" as="sk" hint-placeholder-count="10">
+            <div style="background:{{ sk.bg }};border:3px solid #4A3222;border-radius:20px;padding:16px 10px;text-align:center;opacity:{{ sk.op }};">
+              <div style="font-size:44px;line-height:1;">{{ sk.art }}</div>
+              <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:17px;margin-top:6px;">{{ sk.name }}</div>
+              <div style="font-weight:700;font-size:12.5px;color:#9C7B5E;margin-top:2px;">{{ sk.hint }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:18px;font-weight:800;font-size:14px;color:#9C7B5E;text-align:center;">play all around the platform to collect them all!</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:70;background:#FFC93F;border:3px solid #4A3222;border-radius:999px;box-shadow:0 5px 0 #4A3222;padding:12px 28px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:20px;color:#4A3222;animation:hopc-pop .35s both;display:flex;align-items:center;gap:10px;white-space:nowrap;">
+      <svg viewBox="0 0 40 40" width="22" height="22"><ellipse cx="20" cy="26" rx="9" ry="7.5" fill="currentColor"></ellipse><circle cx="8.5" cy="17" r="4.2" fill="currentColor"></circle><circle cx="16" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="24" cy="11.5" r="4.2" fill="currentColor"></circle><circle cx="31.5" cy="17" r="4.2" fill="currentColor"></circle></svg>{{ toastText }}
+    </div>
+  </sc-if>
+</div>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="18" fill="#FF7A59"></rect><g fill="#FFF6E9"><ellipse cx="50" cy="62" rx="14" ry="11"></ellipse><circle cx="32" cy="47" r="6.5"></circle><circle cx="44" cy="39" r="6.5"></circle><circle cx="56" cy="39" r="6.5"></circle><circle cx="68" cy="47" r="6.5"></circle></g></svg></template>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;mascotName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Pupclaw&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Puppy&quot;},&quot;voiceRate&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.7,&quot;max&quot;:1.4,&quot;step&quot;:0.05,&quot;unit&quot;:&quot;x&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Puppy&quot;},&quot;kioskMode&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Safety&quot;}}">
+class Component extends DCLogic {
+  state = {
+    screen: 'welcome', wstep: 'name', nameInput: '',
+    profile: null,
+    chatMode: 'chat', messages: [], chatInput: '', thinking: false,
+    storyStage: 'pick', storyTheme: null, storyTitle: '', storyParas: [], speaking: false,
+    game: 'menu', peekOpen: false, peekIdx: 0, abcIdx: 0,
+    countQ: null, countState: 'ask', countStreak: 0,
+    riddle: null, riddleShown: false, riddleLoading: false,
+    drawColor: '#FF7A59', drawSize: 14, stamp: false, eraser: false,
+    gateA: 6, gateB: 4, gateInput: '', gatePassed: false, gateShake: 0,
+    settings: { breakMin: 20, autoRead: true, sounds: true, voice: 'puppy', allowChat: true, allowStory: true, allowGames: true, allowDraw: true },
+    log: [], breakDue: false, mood: '', resetArmed: false,
+    fableStage: 'animal', fableAnimal: null, fableLesson: null, fableTitle: '', fableParas: [], fableMoral: '',
+    pathsStage: 'loading', pathsParas: [], pathsChoices: [], pathsRound: 1, pathsTotal: 3,
+    bedStage: 'idle', bedParas: [], chimes: false,
+    stickers: {}, counts: {}, showStickers: false, toast: ''
+  };
+  _msgId = 1;
+
+  componentDidMount() {
+    try {
+      const p = JSON.parse(localStorage.getItem('hopc_profile') || 'null');
+      const s = JSON.parse(localStorage.getItem('hopc_settings') || 'null');
+      const l = JSON.parse(localStorage.getItem('hopc_log') || '[]');
+      const st = {};
+      if (p && p.name != null && p.age != null) { st.profile = p; st.screen = 'home'; }
+      if (s) st.settings = Object.assign({}, this.state.settings, s);
+      if (Array.isArray(l)) st.log = l;
+      const sk = JSON.parse(localStorage.getItem('hopc_stickers') || '{}'); if (sk && typeof sk === 'object') st.stickers = sk;
+      const ct = JSON.parse(localStorage.getItem('hopc_counts') || '{}'); if (ct && typeof ct === 'object') st.counts = ct;
+      this.setState(st);
+    } catch (e) {}
+    this._sessionStart = Date.now();
+    this._breakTick = setInterval(() => {
+      const s = this.state;
+      if (s.screen === 'welcome' || s.screen === 'grownups' || s.breakDue) return;
+      if ((Date.now() - this._sessionStart) / 60000 >= s.settings.breakMin) this.setState({ breakDue: true });
+    }, 20000);
+    try { if (window.speechSynthesis) { window.speechSynthesis.getVoices(); window.speechSynthesis.onvoiceschanged = () => {}; } } catch (e) {}
+    this._newGate();
+  }
+  componentWillUnmount() { clearInterval(this._breakTick); this._stopSpeak(); if (this._chimeI) clearInterval(this._chimeI); clearTimeout(this._toastT); }
+  componentDidUpdate() {
+    if (this._list && this.state.messages.length !== this._lastMsgCount) {
+      this._lastMsgCount = this.state.messages.length;
+      this._list.scrollTop = this._list.scrollHeight;
+    }
+  }
+
+  mascot() { return this.props.mascotName ?? 'Pupclaw'; }
+  kidName() { return (this.state.profile && this.state.profile.name) || 'friend'; }
+  kidAge() { return this.state.profile ? this.state.profile.age : 6; }
+  band() { const a = this.kidAge(); return a <= 2 ? 'baby' : a <= 5 ? 'little' : a <= 8 ? 'bright' : 'big'; }
+  bandName() { return { baby: 'Baby Paws', little: 'Little Paws', bright: 'Bright Paws', big: 'Big Paws' }[this.band()]; }
+
+  _persist(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  _saveSettings(patch) { const settings = Object.assign({}, this.state.settings, patch); this.setState({ settings }); this._persist('hopc_settings', settings); }
+  _log(who, text) { const log = this.state.log.concat([{ t: Date.now(), who, text }]).slice(-300); this.setState({ log }); this._persist('hopc_log', log); }
+
+  _audio(freqs, dur) {
+    if (!this.state.settings.sounds) return;
+    try {
+      this._ac = this._ac || new (window.AudioContext || window.webkitAudioContext)();
+      const ac = this._ac, t0 = ac.currentTime;
+      freqs.forEach((f, i) => {
+        const o = ac.createOscillator(), g = ac.createGain();
+        o.type = 'sine'; o.frequency.value = f;
+        g.gain.setValueAtTime(0.0001, t0 + i * dur); g.gain.exponentialRampToValueAtTime(0.12, t0 + i * dur + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + (i + 1) * dur);
+        o.connect(g); g.connect(ac.destination); o.start(t0 + i * dur); o.stop(t0 + (i + 1) * dur + 0.05);
+      });
+    } catch (e) {}
+  }
+  _boop() { this._audio([520, 780], 0.09); }
+  _bark() { this._audio([300, 180, 420, 240], 0.07); }
+
+  _voiceDefs = [
+    { id: 'puppy', label: 'Puppy (classic)', desc: 'bright & bouncy', pitch: 1.15, kind: 'any' },
+    { id: 'miss', label: 'Miss Puppy', desc: 'warm female voice', pitch: 1.05, kind: 'female' },
+    { id: 'mister', label: 'Mr. Puppy', desc: 'friendly male voice', pitch: 1.0, kind: 'male' },
+    { id: 'squeaky', label: 'Squeaky Pup', desc: 'tiny & giggly', pitch: 1.8, kind: 'female', rateMul: 1.05 },
+    { id: 'grandpaw', label: 'Grand-Paw', desc: 'slow, deep & cozy', pitch: 0.65, kind: 'male', rateMul: 0.88 }];
+  _pickVoice(kind) {
+    try {
+      const vs = ((window.speechSynthesis && window.speechSynthesis.getVoices()) || []).filter(v => /^en/i.test(v.lang));
+      if (!vs.length) return null;
+      const f = /female|samantha|victoria|karen|zira|susan|allison|ava|serena|tessa|moira|fiona|kathy|shelley|sandy|flo|jenny|aria|michelle|salli|joanna|kendra|kimberly|ivy/i;
+      const mr = /\bmale|david|daniel|alex\b|fred|george|james|guy|mark|richard|arthur|ryan|thomas|oliver|aaron|gordon|reed|christopher|eric|brian|matthew|justin|joey/i;
+      if (kind === 'female') return vs.find(v => f.test(v.name)) || null;
+      if (kind === 'male') return vs.find(v => mr.test(v.name) && !f.test(v.name)) || null;
+      return null;
+    } catch (e) { return null; }
+  }
+  speak(text, opts) {
+    try {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(String(text).replace(/[*_#`]/g, ''));
+      const band = this.band();
+      const vd = this._voiceDefs.find(d => d.id === (this.state.settings.voice || 'puppy')) || this._voiceDefs[0];
+      u.rate = ((opts && opts.rate) ? opts.rate : (this.props.voiceRate ?? 1) * (band === 'baby' || band === 'little' ? 0.88 : 0.98)) * (vd.rateMul || 1);
+      u.pitch = vd.pitch; u.lang = 'en-US';
+      const vv = this._pickVoice(vd.kind); if (vv) u.voice = vv;
+      if (opts && opts.onend) u.onend = opts.onend;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  _stopSpeak() { try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) {} }
+
+  go(screen, extra) { this._stopSpeak(); if (this._chimeI) { clearInterval(this._chimeI); this._chimeI = null; } this.setState(Object.assign({ screen, mood: '', chimes: false }, extra || {})); }
+
+  // ---------- safety ----------
+  _blockRe = /\b(kill|kills|killing|murder|suicide|gun|guns|knife|knives|bomb|shoot|shooting|weapon|blood|gore|sexy?|naked|porn|drugs?|cocaine|weed|vape|vaping|cigarettes?|beer|wine|vodka|alcohol|drunk|gamble|casino|password|credit card|instagram|tiktok|snapchat|whatsapp|facebook|discord|onlyfans|dating|boyfriend|girlfriend)\b/i;
+  _privacyRe = /(\d[\s-]?){7,}|\b\d{1,5}\s+\w+\s+(street|st|ave|avenue|road|rd|drive|dr|lane|ln|blvd)\b|@\w+\.(com|net|org)/i;
+  _checkIn(text) {
+    if (this._privacyRe.test(text)) return { ok: false, reply: "Whoa — let's keep numbers, addresses and emails just for your grown-ups! That's private treasure. I'm paws-itively great at jokes though — want one?" };
+    if (this._blockRe.test(text)) return { ok: false, reply: "Hmm, that's a question for a trusted grown-up — like your teacher or your family. Let's sniff out something fun instead! Want a story, a joke, or an animal fact?" };
+    return { ok: true };
+  }
+  _checkOut(text) {
+    if (this._blockRe.test(text) || this._privacyRe.test(text)) return "Woof! Let's find something even MORE fun to talk about. Want a joke or an amazing animal fact?";
+    return text;
+  }
+  _sysPrompt(mode) {
+    const name = this.kidName(), age = this.kidAge(), m = this.mascot(), band = this.band();
+    const len = { baby: 'Reply in ONE short sing-song line (under 12 words) a caregiver can read aloud to a baby. Simple sounds and rhythm are great.',
+      little: 'Reply in 1-2 very short sentences. Words a 4-year-old knows. Warm and giggly.',
+      bright: 'Reply in 2-4 friendly sentences. Simple, clear words.',
+      big: 'Reply in 3-6 sentences. Clear, encouraging, never babyish.' }[band];
+    const extra = mode === 'homework' ? ' HOMEWORK MODE: coach step by step with hints and guiding questions first; only confirm the final answer after they try. Celebrate effort.' :
+      mode === 'together' ? ' TOGETHER MODE: a caregiver is reading your words aloud to a baby or toddler. Offer tiny songs, animal sounds, tickle rhymes and gentle games they can do together.' : '';
+    return 'You are ' + m + ', a warm, playful cartoon puppy — a safe learning buddy at a preschool academy. You are talking with ' + name + ', age ' + age + '. ' + len + extra +
+      ' STRICT SAFETY RULES: Everything must be perfectly appropriate for age ' + age + '. Never any scary, violent, romantic, or grown-up content; no brands, no websites, no links, no social media. Never ask for or repeat personal details (last names, addresses, phone numbers, schools) — if shared, gently say to keep that private and move on. If asked about anything unsafe, sad, medical, or grown-up, kindly suggest talking to a trusted grown-up like a teacher or family member, then offer a fun safe topic. Always kind and encouraging; light dog puns welcome (paws-itively!). Plain text only — no markdown, no emoji, no lists.';
+  }
+  async _claude(system, messages, maxTokens) {
+    if (!(window.claude && window.claude.complete)) return null;
+    try { const r = await window.claude.complete({ system, messages, max_tokens: maxTokens || 300 }); return typeof r === 'string' ? r.trim() : null; } catch (e) { return null; }
+  }
+  _offlineLine() {
+    const l = ["Woof! My thinking cap is recharging — but the games and the Drawing Den still work great!",
+      "My puppy brain is taking a nap right now. Let's play Peek-a-Boo or draw something instead!",
+      "Ruff day for my antenna ears — try me again soon, or grab a riddle from Brain Games!"];
+    return l[Math.floor(Math.random() * l.length)];
+  }
+
+  // ---------- chat ----------
+  _pushMsg(who, text) { const messages = this.state.messages.concat([{ id: this._msgId++, who, text }]); this.setState({ messages }); return messages; }
+  openChat(mode) {
+    const m = this.mascot(), name = this.kidName(), band = this.band();
+    const greet = mode === 'homework' ? "School stuff? I LOVE school stuff! Tell me what you're working on, " + name + ", and we'll fetch it together — one step at a time."
+      : mode === 'together' ? "Hello little " + name + "! Grown-ups, snuggle up — tap a bubble below and we'll sing and play together."
+      : band === 'little' ? "Woof woof! Hi " + name + "! I'm " + m + "! Ask me anything, or tap a bubble!"
+      : band === 'bright' ? "Hey " + name + "! I'm " + m + ", your puppy pal. What are we curious about today?"
+      : "Hey " + name + "! " + m + " here. Questions, fun facts, silly jokes — I'm all floppy ears.";
+    this.go('chat', { chatMode: mode, messages: [{ id: this._msgId++, who: 'pup', text: greet }], chatInput: '', thinking: false });
+  }
+  async send(textRaw) {
+    const text = String(textRaw == null ? this.state.chatInput : textRaw).trim();
+    if (!text || this.state.thinking) return;
+    this._boop();
+    this.setState({ chatInput: '' });
+    this._pushMsg('kid', text); this._log(this.kidName(), text); this._count('chat', 3, 'chatty');
+    const gate = this._checkIn(text);
+    if (!gate.ok) { setTimeout(() => { this._pushMsg('pup', gate.reply); this._log(this.mascot(), gate.reply); this._maybeRead(gate.reply); }, 450); return; }
+    this.setState({ thinking: true });
+    const hist = this.state.messages.slice(-14);
+    let msgs = hist.map(m => ({ role: m.who === 'kid' ? 'user' : 'assistant', content: m.text }));
+    while (msgs.length && msgs[0].role === 'assistant') msgs.shift();
+    let reply = await this._claude(this._sysPrompt(this.state.chatMode), msgs, this.band() === 'big' ? 400 : 250);
+    reply = reply ? this._checkOut(reply) : this._offlineLine();
+    this.setState({ thinking: false });
+    this._pushMsg('pup', reply); this._log(this.mascot(), reply); this._maybeRead(reply);
+  }
+  _maybeRead(text) { if (this.state.settings.autoRead && (this.band() === 'baby' || this.band() === 'little')) this.speak(text); }
+
+  // ---------- story ----------
+  _themes() {
+    const band = this.band();
+    if (band === 'baby') return [{ label: 'Twinkle Stars', art: '⭐' }, { label: 'Little Duckies', art: '🦆' }, { label: 'Splashy Bathtime', art: '🛁' }, { label: 'Sleepy Moon', art: '🌙' }, { label: 'Puppy Kisses', art: '🐶' }, { label: 'Tickle Bugs', art: '🐞' }];
+    const base = [{ label: 'Puppies', art: '🐶' }, { label: 'Outer Space', art: '🚀' }, { label: 'Under the Sea', art: '🐳' }, { label: 'Dinosaurs', art: '🦕' }, { label: 'Magic & Sparkles', art: '✨' }, { label: 'Jungle Friends', art: '🐵' }, { label: 'Castles', art: '🏰' }, { label: 'Robots', art: '🤖' }];
+    if (band === 'big') base.push({ label: 'Mystery Club', art: '🔍' }, { label: 'Sports Day', art: '⚽' });
+    return base;
+  }
+  async pickTheme(label) {
+    this._boop();
+    this.setState({ storyStage: 'loading', storyTheme: label });
+    this._log(this.kidName(), '[asked for a story: ' + label + ']');
+    const name = this.kidName(), age = this.kidAge(), m = this.mascot(), band = this.band();
+    const len = { baby: 'a 4-line sing-song rhyme with simple sounds, perfect to read aloud to a baby',
+      little: '6-8 very short sentences, words a 4-year-old knows',
+      bright: '10-14 sentences in 3 short paragraphs',
+      big: '3-4 short paragraphs, about 250 words, a little adventurous but never scary' }[band];
+    const prompt = 'Write a happy story for a ' + age + '-year-old. Theme: ' + label + '. The hero is a child named ' + name + ' and their puppy friend ' + m + '. Length: ' + len + '. Joyful simple language, cozy ending, absolutely nothing scary or sad. No emoji. Format exactly:\nTITLE: <the title>\nSTORY: <the story>';
+    let out = await this._claude(this._sysPrompt('chat'), [{ role: 'user', content: prompt }], 1000);
+    let title, body;
+    if (out) { out = this._checkOut(out); const mm = out.match(/TITLE:\s*(.+)\s*\n+\s*STORY:\s*([\s\S]+)/i); if (mm) { title = mm[1].trim(); body = mm[2].trim(); } else { title = label; body = out; } }
+    else { title = name + ' and the ' + label + ' Adventure'; body = this._offlineStory(label); }
+    const storyParas = body.split(/\n{2,}|\n/).map(s => s.trim()).filter(Boolean).map(t => ({ text: t }));
+    this.setState({ storyStage: 'read', storyTitle: title, storyParas });
+    this._award('story');
+    if (this.state.settings.autoRead && (band === 'baby' || band === 'little')) this.speak(title + '. ' + body);
+  }
+  _offlineStory(theme) {
+    const n = this.kidName(), m = this.mascot();
+    return 'One sunny morning, ' + n + ' and ' + m + ' the puppy set off to explore ' + theme + '.\n' +
+      m + ' wagged his tail so fast it made a little breeze. "Woof! Follow me, ' + n + '!"\n' +
+      'They found something wonderful: a tiny door with a shiny paw-shaped handle. Inside was the coziest surprise — a party with all their friends!\n' +
+      'They laughed, danced, and shared warm cookies. Then ' + n + ' gave ' + m + ' a big hug, and they headed home for a nap. The end!';
+  }
+  speakStory() { this._boop(); if (this.state.speaking) { this._stopSpeak(); this.setState({ speaking: false }); return; } this.setState({ speaking: true }); this.speak(this.state.storyTitle + '. ' + this.state.storyParas.map(p => p.text).join(' '), { onend: () => this.setState({ speaking: false }) }); }
+
+  // ---------- games ----------
+  _peekAnimals = [{ e: '🐶', n: 'a Puppy', s: 'Woof woof!' }, { e: '🐱', n: 'a Kitty', s: 'Meow!' }, { e: '🐮', n: 'a Cow', s: 'Moo!' }, { e: '🦆', n: 'a Ducky', s: 'Quack quack!' }, { e: '🐸', n: 'a Frog', s: 'Ribbit!' }, { e: '🐘', n: 'an Elephant', s: 'Ba-rooo!' }, { e: '🦁', n: 'a Lion', s: 'Roarrr!' }, { e: '🐔', n: 'a Chicken', s: 'Cluck cluck!' }, { e: '🐷', n: 'a Piggy', s: 'Oink oink!' }, { e: '🐵', n: 'a Monkey', s: 'Ooh ooh ah ah!' }];
+  _abc = [['A','Apple','🍎'],['B','Bear','🐻'],['C','Cat','🐱'],['D','Duck','🦆'],['E','Egg','🥚'],['F','Fish','🐟'],['G','Grapes','🍇'],['H','Hat','🎩'],['I','Ice cream','🍦'],['J','Juice','🧃'],['K','Kite','🪁'],['L','Lion','🦁'],['M','Moon','🌙'],['N','Nose','👃'],['O','Orange','🍊'],['P','Puppy','🐶'],['Q','Queen','👑'],['R','Rainbow','🌈'],['S','Star','⭐'],['T','Turtle','🐢'],['U','Umbrella','☂️'],['V','Violin','🎻'],['W','Whale','🐳'],['X','boX','📦'],['Y','Yo-yo','🪀'],['Z','Zebra','🦓']];
+  peekTap() {
+    this._bark();
+    if (!this.state.peekOpen) { const peekIdx = Math.floor(Math.random() * this._peekAnimals.length); this.setState({ peekOpen: true, peekIdx }); const a = this._peekAnimals[peekIdx]; this.speak('Boo! ' + a.n + '! ' + a.s); this._count('peek', 5, 'peek'); }
+    else { this.setState({ peekOpen: false }); this._stopSpeak(); }
+  }
+  abcGo(d) { this._boop(); this._stopSpeak(); const n = this._abc.length; this.setState({ abcIdx: (this.state.abcIdx + d + n) % n }, () => this.abcSay()); }
+  abcSay() { const [l, w] = this._abc[this.state.abcIdx]; this.speak(l + '! ' + l + ' is for ' + w + '!'); }
+  _newCount() {
+    const band = this.band(); let q;
+    if (band === 'big') {
+      const mul = Math.random() < 0.6, a = 2 + Math.floor(Math.random() * 8), b = 2 + Math.floor(Math.random() * 8);
+      q = mul ? { math: a + ' × ' + b, ans: a * b } : { math: (a * 3) + ' + ' + (b * 2), ans: a * 3 + b * 2 };
+    } else {
+      const max = band === 'bright' ? 12 : 5, n = 1 + Math.floor(Math.random() * max);
+      q = { paws: n, ans: n };
+    }
+    const ch = new Set([q.ans]);
+    while (ch.size < 3) { const off = (1 + Math.floor(Math.random() * 3)) * (Math.random() < 0.5 ? -1 : 1); if (q.ans + off > 0) ch.add(q.ans + off); }
+    q.choices = Array.from(ch).sort(() => Math.random() - 0.5);
+    this.setState({ countQ: q, countState: 'ask' });
+  }
+  countPick(v) {
+    const q = this.state.countQ; if (!q || this.state.countState === 'right') return;
+    if (v === q.ans) { this._audio([523, 659, 784], 0.11); const stk = this.state.countStreak + 1; this.setState({ countState: 'right', countStreak: stk }); if (stk >= 3) this._award('math'); this.speak(['Paw-some!', 'You got it!', 'Super counting!'][Math.floor(Math.random() * 3)]); }
+    else { this._audio([220, 180], 0.12); this.setState({ countState: 'wrong' }); }
+  }
+  async newRiddle() {
+    this._boop();
+    this.setState({ riddleLoading: true, riddleShown: false });
+    const out = await this._claude(this._sysPrompt('chat'), [{ role: 'user', content: 'Write ONE short, fun riddle for a ' + this.kidAge() + '-year-old about animals, nature, food, or everyday things. Nothing scary. Format exactly:\nRIDDLE: <riddle>\nANSWER: <one or two words>' }], 200);
+    let r;
+    if (out) { const mm = out.match(/RIDDLE:\s*([\s\S]+?)\n+\s*ANSWER:\s*(.+)/i); if (mm) r = { q: mm[1].trim(), a: mm[2].trim() }; }
+    if (!r) { const f = [{ q: 'I have four paws and a waggy tail. I say WOOF! Who am I?', a: 'A puppy!' }, { q: 'I am yellow, I live in the sky, and I make the day bright. What am I?', a: 'The sun!' }, { q: 'I have stripes and I look like a horse in pajamas. Who am I?', a: 'A zebra!' }, { q: 'The more you take from me, the bigger I get. What am I?', a: 'A hole!' }, { q: 'I get wetter and wetter the more I dry. What am I?', a: 'A towel!' }]; r = f[Math.floor(Math.random() * f.length)]; }
+    this.setState({ riddle: r, riddleLoading: false });
+  }
+  _gamesList() {
+    const band = this.band(), out = [];
+    const mk = (id, title, sub, glyph, bg, fn) => ({ title, sub, glyph, bg, onOpen: fn });
+    if (band === 'baby' || band === 'little') out.push(mk('peek', 'Peek-a-Boo!', "who's hiding?", 'Boo!', '#FFD9CE', () => { this._boop(); this.setState({ game: 'peek', peekOpen: false }); }));
+    if (band === 'little' || band === 'bright') out.push(mk('abc', 'ABC Safari', 'letters & friends', 'ABC', '#CDEBE6', () => { this._boop(); this.setState({ game: 'abc' }, () => this.abcSay()); }));
+    out.push(mk('count', band === 'big' ? 'Quick Math' : 'Count the Paws', band === 'big' ? 'times tables & sums' : 'how many paws?', '123', '#FFE9B3', () => { this._boop(); this._newCount(); this.setState({ game: 'count', countStreak: 0 }); }));
+    if (band === 'bright' || band === 'big') out.push(mk('riddle', 'Riddle Time', 'brain ticklers from ' + this.mascot(), '?', '#E6D6F5', () => { this.setState({ game: 'riddle' }); this.newRiddle(); }));
+    return out;
+  }
+
+  // ---------- draw ----------
+  _canvasRef = (node) => {
+    if (!node || node === this._cv) return;
+    this._cv = node;
+    const ctx = node.getContext('2d');
+    ctx.fillStyle = '#FFFDF8'; ctx.fillRect(0, 0, node.width, node.height);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    const pos = (e) => { const r = node.getBoundingClientRect(); return { x: (e.clientX - r.left) * node.width / r.width, y: (e.clientY - r.top) * node.height / r.height }; };
+    let drawing = false, last = null;
+    node.addEventListener('pointerdown', (e) => {
+      e.preventDefault(); node.setPointerCapture(e.pointerId);
+      const p = pos(e), s = this.state;
+      if (s.stamp) { this._stampPaw(ctx, p.x, p.y); this._boop(); this._award('artist'); return; }
+      drawing = true; last = p;
+      ctx.strokeStyle = s.eraser ? '#FFFDF8' : s.drawColor; ctx.lineWidth = s.eraser ? s.drawSize * 3 : s.drawSize;
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + 0.1, p.y + 0.1); ctx.stroke();
+    });
+    node.addEventListener('pointermove', (e) => {
+      if (!drawing) return; const p = pos(e);
+      ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke(); last = p;
+    });
+    const stop = () => { drawing = false; };
+    node.addEventListener('pointerup', stop); node.addEventListener('pointercancel', stop);
+  };
+  _stampPaw(ctx, x, y) {
+    const c = this.state.eraser ? '#FFFDF8' : this.state.drawColor, s = this.state.drawSize * 2.2;
+    ctx.fillStyle = c;
+    ctx.beginPath(); ctx.ellipse(x, y + s * 0.5, s * 0.55, s * 0.45, 0, 0, 7); ctx.fill();
+    [[-0.72, -0.05], [-0.26, -0.38], [0.26, -0.38], [0.72, -0.05]].forEach(([dx, dy]) => { ctx.beginPath(); ctx.arc(x + dx * s, y + dy * s, s * 0.26, 0, 7); ctx.fill(); });
+  }
+  clearCanvas() { this._boop(); if (this._cv) { const ctx = this._cv.getContext('2d'); ctx.fillStyle = '#FFFDF8'; ctx.fillRect(0, 0, this._cv.width, this._cv.height); } }
+
+  // ---------- grown-ups ----------
+  _newGate() { this.setState({ gateA: 3 + Math.floor(Math.random() * 7), gateB: 3 + Math.floor(Math.random() * 7), gateInput: '' }); }
+  tryGate() {
+    if (parseInt(this.state.gateInput, 10) === this.state.gateA * this.state.gateB) { this._boop(); this.setState({ gatePassed: true }); }
+    else { this._audio([220, 180], 0.12); this.setState({ gateShake: this.state.gateShake + 1, gateInput: '' }); this._newGate(); }
+  }
+  resetAll() {
+    if (!this.state.resetArmed) { this.setState({ resetArmed: true }); setTimeout(() => this.setState({ resetArmed: false }), 4000); return; }
+    ['hopc_profile', 'hopc_settings', 'hopc_log', 'hopc_stickers', 'hopc_counts'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+    this.setState({ profile: null, log: [], messages: [], screen: 'welcome', wstep: 'name', nameInput: '', resetArmed: false, gatePassed: false, stickers: {}, counts: {}, toast: '', showStickers: false,
+      settings: { breakMin: 20, autoRead: true, sounds: true, voice: 'puppy', allowChat: true, allowStory: true, allowGames: true, allowDraw: true } });
+  }
+  downloadLog() {
+    const lines = this.state.log.map(l => new Date(l.t).toLocaleString() + '  ' + l.who + ': ' + l.text);
+    const blob = new Blob([lines.join('\n') || 'No chats yet.'], { type: 'text/plain' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'pupclaw-chat-log.txt'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+
+  // ---------- stickers ----------
+  _stickerDefs = [
+    { id: 'chatty', art: '🐶', name: 'Chatty Pup', hint: 'send 3 messages' },
+    { id: 'story', art: '📖', name: 'Story Explorer', hint: 'finish a story' },
+    { id: 'fable', art: '🦉', name: 'Fable Sage', hint: 'hear a fable' },
+    { id: 'trail', art: '🗺️', name: 'Trail Blazer', hint: 'finish an adventure' },
+    { id: 'math', art: '⭐', name: 'Math Whiz', hint: 'get 3 right in a row' },
+    { id: 'riddle', art: '🎈', name: 'Riddle Rascal', hint: 'crack a riddle' },
+    { id: 'artist', art: '🎨', name: 'Artist Paw', hint: 'stamp a paw print' },
+    { id: 'peek', art: '🙈', name: 'Peek Champ', hint: 'play peek-a-boo 5 times' },
+    { id: 'daily', art: '🌞', name: 'Early Bird', hint: 'enjoy a daily treat' },
+    { id: 'bed', art: '🌙', name: 'Bedtime Star', hint: 'hear a sleepy story' }];
+  _award(id) {
+    if (this.state.stickers[id]) return;
+    const stickers = Object.assign({}, this.state.stickers); stickers[id] = Date.now();
+    const def = this._stickerDefs.find(d => d.id === id);
+    this.setState({ stickers, toast: 'New sticker: ' + def.name + '! ' + def.art });
+    this._persist('hopc_stickers', stickers);
+    this._audio([523, 659, 784, 1046], 0.09);
+    clearTimeout(this._toastT); this._toastT = setTimeout(() => this.setState({ toast: '' }), 3800);
+  }
+  _count(k, goal, sticker) {
+    const counts = Object.assign({}, this.state.counts); counts[k] = (counts[k] || 0) + 1;
+    this.setState({ counts }); this._persist('hopc_counts', counts);
+    if (sticker && counts[k] >= goal) this._award(sticker);
+  }
+
+  // ---------- daily treat ----------
+  _treat() {
+    const day = Math.floor(Date.now() / 86400000);
+    const jokes = ['Why did the puppy sit in the shade? Because he didn\'t want to be a hot dog!', 'What do you call a sleeping dinosaur? A dino-SNORE!', 'Why did the banana go to the doctor? It wasn\'t peeling well!', 'What does a cloud wear under its coat? Thunderwear!', 'Why can\'t Elsa have a balloon? Because she will let it go!', 'What do you call a bear with no teeth? A gummy bear!', 'Why did the cookie go to the nurse? It was feeling crummy!', 'What kind of key opens a banana? A mon-key!', 'Why do cows wear bells? Because their horns don\'t work!', 'What is a cat\'s favorite color? Purr-ple!'];
+    const facts = ['A puppy\'s nose print is one of a kind — just like your fingerprint!', 'Octopuses have three hearts. Three!', 'Honey never ever goes bad. Bees are amazing bakers!', 'A group of flamingos is called a flamboyance!', 'Butterflies taste with their FEET!', 'Elephants can\'t jump — but they can swim really well!', 'Your heart is about the size of your fist. Make a fist and check!', 'Sea otters hold hands while they sleep so they don\'t drift apart!', 'Some frogs can freeze in winter and wake up in spring!', 'The sun is so big that a million Earths could fit inside it!'];
+    const twisters = ['Say it fast three times: "A proper copper coffee pot!"', 'Try this one: "She sells seashells by the seashore!"', 'Fast three times: "Red lorry, yellow lorry!"', 'Try it: "Six sticky skeletons!"', 'Say it quick: "Fuzzy Wuzzy was a bear!"', 'Three times fast: "Toy boat, toy boat, toy boat!"', 'Try: "A big black bug bit a big black dog!"', 'Quick quick: "Unique New York!"'];
+    const kind = day % 3;
+    const pool = kind === 0 ? jokes : kind === 1 ? facts : twisters;
+    return { art: kind === 0 ? '🦴' : kind === 1 ? '🌟' : '🌀', label: kind === 0 ? 'Joke of the day' : kind === 1 ? 'Wow fact of the day' : 'Tongue twister of the day', text: pool[day % pool.length] };
+  }
+
+  // ---------- fable forest ----------
+  _fableAnimals = [{ e: '🦊', l: 'Fox' }, { e: '🐢', l: 'Tortoise' }, { e: '🐰', l: 'Bunny' }, { e: '🦉', l: 'Owl' }, { e: '🐭', l: 'Mouse' }, { e: '🦁', l: 'Lion' }, { e: '🐜', l: 'Ant' }, { e: '🐶', l: 'Puppy' }];
+  _fableLessons = ['Sharing', 'Kindness', 'Bravery', 'Honesty', 'Patience', 'Teamwork'];
+  async makeFable(lesson) {
+    this._boop();
+    const a = this.state.fableAnimal || this._fableAnimals[0];
+    this.setState({ fableStage: 'loading', fableLesson: lesson });
+    this._log(this.kidName(), '[asked for a fable: ' + a.l + ' / ' + lesson + ']');
+    const band = this.band(), age = this.kidAge();
+    const len = { baby: 'a 4-line sing-song rhyme', little: '6-8 very short sentences', bright: '10-14 sentences in 3 tiny paragraphs', big: '3 short paragraphs, about 220 words' }[band];
+    let out = await this._claude(this._sysPrompt('chat'), [{ role: 'user', content: 'Write an Aesop-style fable for a ' + age + '-year-old, starring a friendly ' + a.l + '. It should gently teach the lesson of ' + lesson + '. Length: ' + len + '. Joyful, warm, never scary or preachy. No emoji. Format exactly:\nTITLE: <title>\nSTORY: <story>\nMORAL: <one short line>' }], 900);
+    let title, body, moral;
+    if (out) {
+      out = this._checkOut(out);
+      const mm = out.match(/TITLE:\s*(.+)\s*\n+\s*STORY:\s*([\s\S]+?)\n+\s*MORAL:\s*(.+)/i);
+      if (mm) { title = mm[1].trim(); body = mm[2].trim(); moral = mm[3].trim(); }
+      else { title = 'The ' + a.l + ' Learns ' + lesson; body = out; moral = lesson + ' makes every day brighter.'; }
+    } else {
+      title = 'The ' + a.l + ' Learns ' + lesson;
+      body = 'Once there was a little ' + a.l.toLowerCase() + ' who loved to play all alone.\nOne day a new friend asked to join the game, and the ' + a.l.toLowerCase() + ' was not so sure.\nBut they tried a little ' + lesson.toLowerCase() + ' — and the whole meadow felt sunnier, and the games grew twice as fun.\nFrom that day on, the little ' + a.l.toLowerCase() + ' shared every single adventure.';
+      moral = lesson + ' turns little moments into big joy.';
+    }
+    this.setState({ fableStage: 'read', fableTitle: title, fableMoral: moral, fableParas: body.split(/\n{2,}|\n/).map(t => t.trim()).filter(Boolean).map(t => ({ text: t })) });
+    this._award('fable');
+    if (this.state.settings.autoRead && (band === 'baby' || band === 'little')) this.speak(title + '. ' + body + '. The moral of the story: ' + moral);
+  }
+
+  // ---------- paths & paws ----------
+  _pathsOffline = { start: { text: 'NAME and MASCOT found a glowing paw-print trail in the garden. It sparkled like tiny stars, and it led to two different places.', c: ['Follow it to the treehouse', 'Follow it to the pond'] },
+    'Follow it to the treehouse': { text: 'Up in the treehouse sat a picnic of warm cookies — and a shy squirrel who had baked them all by herself.', c: ['Share the cookies together', 'Invite her to play a game'] },
+    'Follow it to the pond': { text: 'By the pond, a fluffy little duck was stuck on a lily pad, flapping its tiny wings.', c: ['Paddle out to help', 'Cheer it on loudly'] },
+    end: 'Everyone laughed and played until the stars came out. MASCOT wagged his tail: "Best adventure ever, NAME!" The end.' };
+  startPaths() {
+    this._boop();
+    const total = this.band() === 'little' ? 2 : this.band() === 'bright' ? 3 : 4;
+    this._pathsLog = '';
+    this.go('paths', { pathsStage: 'loading', pathsParas: [], pathsChoices: [], pathsRound: 1, pathsTotal: total });
+    this._log(this.kidName(), '[started a Paths & Paws adventure]');
+    this._nextPath(null);
+  }
+  async _nextPath(choice) {
+    const total = this.state.pathsTotal;
+    let round = this.state.pathsRound;
+    let paras = this.state.pathsParas;
+    if (choice) {
+      this._boop(); round = round + 1;
+      paras = paras.concat([{ text: '▸ ' + choice }]);
+      this._pathsLog += '\n[' + this.kidName() + ' chose] ' + choice;
+      this.setState({ pathsStage: 'loading', pathsParas: paras, pathsChoices: [], pathsRound: round });
+    }
+    const name = this.kidName(), m = this.mascot();
+    let out = null;
+    if (window.claude && window.claude.complete) {
+      const ask = round === 1 ? 'Begin a cozy choose-your-path adventure starring ' + name + ' and ' + m + ' the puppy. Write 3-5 age-appropriate sentences, then exactly two choices. Format exactly:\nSTORY: <part one>\nCHOICE1: <first choice, under 12 words>\nCHOICE2: <second choice, under 12 words>'
+        : round >= total ? 'Adventure so far:' + this._pathsLog + '\n\n' + name + ' chose: ' + choice + '. Write the happy, cozy ENDING in 3-6 sentences. Format exactly:\nSTORY: <the ending>'
+        : 'Adventure so far:' + this._pathsLog + '\n\n' + name + ' chose: ' + choice + '. Continue with the next part (3-5 sentences), then exactly two new choices. Format exactly:\nSTORY: <next part>\nCHOICE1: <first choice, under 12 words>\nCHOICE2: <second choice, under 12 words>';
+      out = await this._claude(this._sysPrompt('chat'), [{ role: 'user', content: ask }], 600);
+    }
+    let text, c1 = null, c2 = null;
+    if (out) {
+      out = this._checkOut(out);
+      const sm = out.match(/STORY:\s*([\s\S]+?)(?=\n+\s*CHOICE1:|$)/i);
+      text = sm ? sm[1].trim() : out.trim();
+      const m1 = out.match(/CHOICE1:\s*(.+)/i), m2 = out.match(/CHOICE2:\s*(.+)/i);
+      if (m1) c1 = m1[1].trim(); if (m2) c2 = m2[1].trim();
+    } else {
+      if (round === 1) { text = this._pathsOffline.start.text; c1 = this._pathsOffline.start.c[0]; c2 = this._pathsOffline.start.c[1]; }
+      else { const node = this._pathsOffline[choice]; if (node && round < total) { text = node.text; c1 = node.c[0]; c2 = node.c[1]; } else { text = (node ? node.text + ' ' : '') + this._pathsOffline.end; } }
+      text = text.split('NAME').join(name).split('MASCOT').join(m);
+    }
+    this._pathsLog += '\n' + text;
+    paras = paras.concat([{ text }]);
+    if (round >= total || !c1 || !c2) { this.setState({ pathsStage: 'done', pathsParas: paras, pathsChoices: [] }); this._award('trail'); this._maybeRead(text); }
+    else { this.setState({ pathsStage: 'choose', pathsParas: paras, pathsChoices: [c1, c2] }); this._maybeRead(text); }
+  }
+
+  // ---------- bedtime den ----------
+  openBed() { this.go('bedtime', { bedStage: 'idle', bedParas: [] }); }
+  async bedStory() {
+    this._boop();
+    this.setState({ bedStage: 'loading' });
+    const name = this.kidName(), m = this.mascot();
+    this._log(name, '[asked for a bedtime story]');
+    let out = await this._claude(this._sysPrompt('chat'), [{ role: 'user', content: 'Write a very calm, sleepy wind-down story for naptime, 6-8 short dreamy sentences, for age ' + this.kidAge() + '. Star ' + name + ' and ' + m + ' the puppy getting cozy under the stars. Soft, slow, soothing words. No excitement, nothing scary. No emoji. Plain text only.' }], 500);
+    if (out) out = this._checkOut(out);
+    else out = 'The sky put on its soft purple blanket, and the stars blinked hello.\n' + m + ' yawned a squeaky little yawn and curled up like a cinnamon roll.\n' + name + ' snuggled close, warm as a sunbeam.\nThe moon hummed a quiet song, low and slow.\nOne by one, the crickets tucked in their tiny violins.\n"Good night, ' + name + '," whispered ' + m + '. "Sweet dreams, best friend."';
+    this.setState({ bedStage: 'read', bedParas: out.split(/\n{2,}|\n/).map(t => t.trim()).filter(Boolean).map(t => ({ text: t })) });
+    this._award('bed');
+    this.speak(out, { rate: 0.78 });
+  }
+  toggleChimes() {
+    const on = !this.state.chimes;
+    this.setState({ chimes: on });
+    if (on) { this._chime(); this._chimeI = setInterval(() => this._chime(), 3200); }
+    else if (this._chimeI) { clearInterval(this._chimeI); this._chimeI = null; }
+  }
+  _chime() { this._audio([392, 494, 587], 0.5); }
+
+  // ---------- tiles ----------
+  _tiles() {
+    const band = this.band(), s = this.state.settings, out = [], m = this.mascot();
+    const mk = (o) => out.push(o);
+    if (band === 'baby') {
+      if (s.allowChat) mk({ title: 'Sing & Talk', sub: 'grown-up + baby together', bg: '#CDEBE6', iconMusic: true, onOpen: () => this.openChat('together') });
+      if (s.allowGames) mk({ title: 'Peek-a-Boo!', sub: "who's hiding behind the card?", bg: '#FFE9B3', iconPeek: true, onOpen: () => { this.go('games', { game: 'peek', peekOpen: false }); } });
+      if (s.allowStory) mk({ title: 'Sing-Song Rhymes', sub: 'a tiny rhyme to read aloud', bg: '#FFD9CE', iconBook: true, onOpen: () => this.go('story', { storyStage: 'pick' }) });
+      if (s.allowDraw) mk({ title: 'Squiggle Time', sub: 'big happy scribbles', bg: '#E6D6F5', iconArt: true, onOpen: () => this.go('draw') });
+      if (s.allowStory) mk({ title: 'Bedtime Den', sub: 'shhh… sleepy time', bg: '#CFC7EE', iconMoon: true, onOpen: () => this.openBed() });
+    } else {
+      if (s.allowChat) mk({ title: 'Talk to ' + m, sub: band === 'little' ? 'ask me anything!' : 'questions, jokes & fun facts', bg: '#FFD9CE', iconChat: true, onOpen: () => this.openChat('chat') });
+      if (band === 'big' && s.allowChat) mk({ title: 'Homework Helper', sub: 'hints first, never just answers', bg: '#CFE3F7', iconCap: true, onOpen: () => this.openChat('homework') });
+      if (s.allowStory) mk({ title: band === 'little' ? 'Story Time' : band === 'bright' ? 'Story Maker' : 'Story Studio', sub: 'you are the hero!', bg: '#CDEBE6', iconBook: true, onOpen: () => this.go('story', { storyStage: 'pick' }) });
+      if (s.allowStory) mk({ title: 'Fable Forest', sub: 'little tales, big lessons', bg: '#D9EBC9', iconLeaf: true, onOpen: () => this.go('fable', { fableStage: 'animal', fableAnimal: null, fableLesson: null }) });
+      if (s.allowStory) mk({ title: 'Paths & Paws', sub: 'you choose the way!', bg: '#FFDFA6', iconMap: true, onOpen: () => this.startPaths() });
+      if (s.allowGames) mk({ title: band === 'little' ? 'Letters & Numbers' : 'Brain Games', sub: band === 'little' ? 'ABC, 123 and peek-a-boo' : 'counting, riddles & more', bg: '#FFE9B3', iconGame: true, onOpen: () => this.go('games', { game: 'menu' }) });
+      if (s.allowDraw) mk({ title: band === 'big' ? 'Sketch Pad' : 'Drawing Den', sub: 'paint with paws!', bg: '#E6D6F5', iconArt: true, onOpen: () => this.go('draw') });
+      if (s.allowStory) mk({ title: band === 'big' ? 'Cozy Corner' : 'Bedtime Den', sub: 'wind-down stories & soft chimes', bg: '#CFC7EE', iconMoon: true, onOpen: () => this.openBed() });
+    }
+    return out.map((t, i) => Object.assign({ delay: (i * 0.06).toFixed(2) + 's' }, t));
+  }
+  _chips() {
+    const band = this.band(), mode = this.state.chatMode;
+    const list = mode === 'together' ? ['Sing a hello song', 'Animal sounds game', 'A tickle rhyme', 'A goodnight song']
+      : mode === 'homework' ? ['Help me with fractions', 'Check my sentence', 'Quiz me on multiplication', 'Explain photosynthesis simply']
+      : band === 'little' ? ['Tell me a joke!', 'What does a cow say?', 'Why is the sky blue?', 'Sing the ABC song!']
+      : band === 'bright' ? ['Tell me a silly joke!', 'Why do dogs wag their tails?', "What's the biggest animal?", 'Tell me a fun fact!']
+      : ['Tell me an amazing space fact', 'Quiz me on animals!', 'Help me write a poem', "What's the fastest animal?"];
+    return list.map(label => ({ label, onPick: () => this.send(label) }));
+  }
+  petMascot() {
+    this._bark();
+    const m = ['Woof woof!', 'That tickles!', 'Best friend ever!', 'Paws-itively lovely!', 'More pets please!'];
+    this.setState({ mood: m[Math.floor(Math.random() * m.length)] });
+    clearTimeout(this._moodT); this._moodT = setTimeout(() => this.setState({ mood: '' }), 3500);
+  }
+
+  renderVals() {
+    const s = this.state, band = this.band(), m = this.mascot(), name = this.kidName();
+    const palette = ['#FF7A59', '#2BB3A3', '#E8A417', '#B678E0', '#58A6E8'];
+    const ageOptions = [];
+    for (let a = 0; a <= 12; a++) ageOptions.push({ n: a, label: a === 0 ? 'baby' : String(a), fs: a === 0 ? '20px' : '30px', bg: palette[a % 5], onPick: () => {
+      this._boop();
+      const profile = { name: (s.nameInput || '').trim().slice(0, 20) || 'Friend', age: a };
+      this.setState({ profile, screen: 'home', wstep: 'name' }); this._persist('hopc_profile', profile);
+      this._sessionStart = Date.now();
+    } });
+    const q = s.countQ || { paws: 3, ans: 3, choices: [2, 3, 4] };
+    const countChoices = (q.choices || []).map(v => ({ label: String(v), onPick: () => this.countPick(v),
+      bg: s.countState === 'right' && v === q.ans ? '#2BB3A3' : '#FFFDF8', fg: s.countState === 'right' && v === q.ans ? '#FFF8EF' : '#4A3222' }));
+    const tgDefs = [
+      ['allowChat', 'Chat with ' + m, 'talking, questions & homework help'],
+      ['allowStory', 'Story Time', 'AI-made stories starring your kiddo'],
+      ['allowGames', 'Games', 'peek-a-boo, ABC, counting, riddles'],
+      ['allowDraw', 'Drawing Den', 'the doodle canvas'],
+      ['autoRead', 'Read replies aloud', 'auto voice for ages 5 and under'],
+      ['sounds', 'Silly sounds', 'boops and barks on buttons']];
+    const toggles = tgDefs.map(([k, label, desc]) => ({ label, desc, bg: s.settings[k] ? '#2BB3A3' : '#D8C7B4',
+      knob: s.settings[k] ? 'translateX(26px)' : 'translateX(0px)', onFlip: () => { this._boop(); this._saveSettings({ [k]: !s.settings[k] }); } }));
+    const peek = this._peekAnimals[s.peekIdx];
+    const [abcL, abcW, abcE] = this._abc[s.abcIdx];
+    const themeBgs = ['#FFD9CE', '#CDEBE6', '#FFE9B3', '#E6D6F5', '#CFE3F7', '#FFDFA6'];
+    const treat = this._treat();
+    return {
+      mascotName: m,
+      isWelcome: s.screen === 'welcome', isHome: s.screen === 'home', isChat: s.screen === 'chat', isStory: s.screen === 'story',
+      isGames: s.screen === 'games', isDraw: s.screen === 'draw', isGrown: s.screen === 'grownups',
+      breakDue: s.breakDue,
+      breakBody: band === 'baby' || band === 'little' ? 'Wiggle like a puppy! Reach up high, touch your toes, and take three big sniffs of air.' : "You've been exploring a while — stand up, stretch tall, shake it out like a wet puppy, and grab some water!",
+      onBreakDone: () => { this._boop(); this._sessionStart = Date.now(); this.setState({ breakDue: false }); },
+      stepName: s.wstep === 'name', stepAge: s.wstep === 'age',
+      welcomeBubble: s.wstep === 'name' ? "Woof! I'm " + m + "! What's your name?" : 'Hi ' + ((s.nameInput || '').trim() || 'friend') + '! How old are you?',
+      nameInput: s.nameInput,
+      onNameChange: (e) => this.setState({ nameInput: e.target.value }),
+      onNameKey: (e) => { if (e.key === 'Enter') { this._boop(); this.setState({ wstep: 'age' }); } },
+      onNameNext: () => { this._boop(); this.setState({ wstep: 'age' }); },
+      onBackToName: () => this.setState({ wstep: 'name' }),
+      ageOptions,
+      showGrownLink: !(this.props.kioskMode ?? false),
+      onOpenGrown: () => { this.go('grownups', { gatePassed: false, resetArmed: false }); this._newGate(); },
+      kidName: name,
+      greeting: band === 'baby' ? 'Hi ' + name + '! Snuggle up with a grown-up and play!' : band === 'little' ? 'Hi ' + name + '! What should we play?' : band === 'bright' ? 'Hey ' + name + '! Ready for some fun?' : 'Hey ' + name + '! What are we into today?',
+      bandChip: this.bandName() + ' · age ' + (s.profile ? s.profile.age : '?'),
+      tiles: this._tiles(),
+      onMascotTap: () => this.petMascot(),
+      hasMood: !!s.mood, moodText: s.mood,
+      onChangeKid: () => { this._stopSpeak(); this.setState({ screen: 'welcome', wstep: 'name', nameInput: '', gatePassed: false }); },
+      backHome: () => this.go('home'),
+      chatHeading: s.chatMode === 'homework' ? 'Homework Helper' : s.chatMode === 'together' ? 'Sing & Talk Together' : 'Talk to ' + m,
+      chatSub: s.chatMode === 'homework' ? 'hints first — you do the thinking!' : s.chatMode === 'together' ? 'for grown-ups and babies, side by side' : 'your safe puppy pal',
+      hasBanner: s.chatMode === 'together', bannerText: 'Grown-up + baby time: read ' + m + "'s words aloud in your silliest voice!",
+      messages: s.messages.map(mm => ({ id: mm.id, text: mm.text, isPup: mm.who === 'pup', isKid: mm.who === 'kid', onSpeak: () => { this._boop(); this.speak(mm.text); } })),
+      msgFont: band === 'little' || band === 'baby' ? '22px' : band === 'bright' ? '19px' : '17px',
+      thinking: s.thinking, thinkingLabel: m + ' is thinking…',
+      chips: this._chips(),
+      chatInput: s.chatInput,
+      chatPlaceholder: band === 'baby' ? 'Grown-ups can type here…' : 'Ask ' + m + ' anything…',
+      onChatChange: (e) => this.setState({ chatInput: e.target.value }),
+      onChatKey: (e) => { if (e.key === 'Enter') this.send(); },
+      onSend: () => this.send(),
+      listRef: (node) => { this._list = node; },
+      storyHeading: band === 'baby' ? 'Sing-Song Rhymes' : band === 'little' ? 'Story Time' : band === 'bright' ? 'Story Maker' : 'Story Studio',
+      storyPick: s.storyStage === 'pick', storyLoading: s.storyStage === 'loading', storyRead: s.storyStage === 'read',
+      storyPickTitle: band === 'baby' ? 'Grown-ups: pick a rhyme to read to your little one!' : 'Pick a world, ' + name + ' — you are the hero of this story!',
+      themes: this._themes().map((t, i) => ({ label: t.label, art: t.art, bg: themeBgs[i % themeBgs.length], onPick: () => this.pickTheme(t.label) })),
+      storyLoadingLabel: m + ' is fetching your story…',
+      storyTitle: s.storyTitle, storyParas: s.storyParas,
+      storyFont: band === 'baby' || band === 'little' ? '26px' : band === 'bright' ? '22px' : '19px',
+      onSpeakStory: () => this.speakStory(),
+      speakStoryLabel: s.speaking ? 'Stop reading' : 'Read it to me!',
+      onNewStory: () => { this._boop(); this._stopSpeak(); this.setState({ storyStage: 'pick', speaking: false }); },
+      gamesHeading: band === 'big' ? 'Brain Games' : band === 'baby' ? 'Peek-a-Boo!' : 'Games',
+      gamesBack: () => { if (s.game === 'menu' || band === 'baby') this.go('home'); else { this._stopSpeak(); this.setState({ game: 'menu' }); } },
+      gameMenu: s.game === 'menu', gamePeek: s.game === 'peek', gameAbc: s.game === 'abc', gameCount: s.game === 'count', gameRiddle: s.game === 'riddle',
+      gamesList: this._gamesList(),
+      peekFront: !s.peekOpen, peekBack: s.peekOpen, peekEmoji: peek.e, peekName: peek.n.replace(/^an? /, ''), peekSound: peek.s,
+      onPeekTap: () => this.peekTap(),
+      abcLetter: abcL, abcEmoji: abcE, abcPhrase: abcL + ' is for ' + abcW + '!',
+      onAbcPrev: () => this.abcGo(-1), onAbcNext: () => this.abcGo(1), onAbcSpeak: () => { this._boop(); this.abcSay(); },
+      countPrompt: q.math ? 'Quick! Solve it:' : 'How many paws do you see?',
+      showPaws: !q.math, showMath: !!q.math, countMath: q.math || '',
+      countPaws: q.paws ? Array.from({ length: q.paws }, (_, i) => ({ k: i })) : [],
+      countChoices,
+      hasCountFeedback: s.countState !== 'ask',
+      countFeedback: s.countState === 'right' ? ['PAW-SOME!', 'You got it!', 'Super smart!'][s.countStreak % 3] : 'Almost! Count again…',
+      countFeedbackColor: s.countState === 'right' ? '#1D8377' : '#E8735A',
+      countRight: s.countState === 'right',
+      onCountNext: () => { this._boop(); this._newCount(); },
+      countStreakLabel: s.countStreak > 0 ? '★ ' + s.countStreak + ' in a row!' : 'tap the right number!',
+      riddleLoading: s.riddleLoading, riddleReady: !s.riddleLoading && !!s.riddle,
+      riddleText: s.riddle ? s.riddle.q : '', riddleAnswer: s.riddle ? s.riddle.a : '',
+      riddleShown: s.riddleShown, riddleHidden: !s.riddleShown,
+      onRiddleReveal: () => { this._boop(); this.setState({ riddleShown: true }); this._award('riddle'); },
+      onRiddleNew: () => this.newRiddle(),
+      drawHeading: band === 'baby' ? 'Squiggle Time' : band === 'big' ? 'Sketch Pad' : 'Drawing Den',
+      drawColors: ['#4A3222', '#FF7A59', '#F98D8D', '#FFC93F', '#7CC576', '#2BB3A3', '#58A6E8', '#B678E0', '#8B5E3C'].map(c => ({ c,
+        ring: !s.eraser && s.drawColor === c ? '4px solid #4A3222' : '3px solid rgba(74,50,34,.25)',
+        onPick: () => { this._boop(); this.setState({ drawColor: c, eraser: false }); } })),
+      drawSizes: [{ px: 6, dot: '8px' }, { px: 14, dot: '15px' }, { px: 28, dot: '24px' }].map(z => ({ dot: z.dot,
+        ring: s.drawSize === z.px ? '3.5px solid #4A3222' : '3px solid rgba(74,50,34,.25)',
+        onPick: () => { this._boop(); this.setState({ drawSize: z.px }); } })),
+      stampRing: s.stamp ? '3.5px solid #4A3222' : '3px solid rgba(74,50,34,.25)',
+      onToggleStamp: () => { this._boop(); this.setState({ stamp: !s.stamp, eraser: false }); },
+      eraserRing: s.eraser ? '3.5px solid #4A3222' : '3px solid rgba(74,50,34,.25)',
+      onEraser: () => { this._boop(); this.setState({ eraser: !s.eraser, stamp: false }); },
+      onClearCanvas: () => this.clearCanvas(),
+      canvasRef: this._canvasRef,
+      backFromGrown: () => this.go(s.profile ? 'home' : 'welcome'),
+      gateOpen: !s.gatePassed, gatePassed: s.gatePassed,
+      gateQ: s.gateA + ' × ' + s.gateB,
+      gateAnim: s.gateShake ? 'hopc-shake .4s ' + s.gateShake : 'hopc-pop .4s both',
+      gateInput: s.gateInput,
+      onGateChange: (e) => this.setState({ gateInput: e.target.value }),
+      onGateKey: (e) => { if (e.key === 'Enter') this.tryGate(); },
+      onGateGo: () => this.tryGate(),
+      kidInitial: name.charAt(0).toUpperCase(),
+      kidLine: s.profile ? s.profile.name + ', age ' + s.profile.age : 'No explorer yet',
+      bandLine: s.profile ? this.bandName() + ' mode — everything adapts to this age' : 'the age gate will set everything up',
+      breakMin: s.settings.breakMin,
+      breakLabel: 'Stretch-break reminder: every ' + s.settings.breakMin + ' minutes',
+      onBreakChange: (e) => this._saveSettings({ breakMin: parseInt(e.target.value, 10) || 20 }),
+      toggles,
+      logItems: s.log.slice().reverse().slice(0, 100).map(l => ({ who: l.who, text: l.text, time: new Date(l.t).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }),
+        bg: l.who === m ? '#FFFDF8' : '#FFF3EC', fg: l.who === m ? '#2BB3A3' : '#FF7A59' })),
+      hasLog: s.log.length > 0, noLog: s.log.length === 0,
+      onDownloadLog: () => this.downloadLog(),
+      onClearLog: () => { this.setState({ log: [] }); this._persist('hopc_log', []); },
+      onResetAll: () => this.resetAll(),
+      resetLabel: s.resetArmed ? 'Really erase everything?' : 'Start fresh (erase all)',
+      stickerCount: Object.keys(s.stickers).length + ' / ' + this._stickerDefs.length,
+      onOpenStickers: () => { this._boop(); this.setState({ showStickers: true }); },
+      onCloseStickers: () => this.setState({ showStickers: false }),
+      showStickers: s.showStickers,
+      stickerCells: this._stickerDefs.map(d => { const got = !!s.stickers[d.id]; return { art: got ? d.art : '?', name: d.name, hint: got ? 'earned!' : d.hint, bg: got ? '#FFF1BF' : '#F1E7D6', op: got ? '1' : '.6' }; }),
+      hasToast: !!s.toast, toastText: s.toast,
+      treatArt: treat.art, treatLabel: treat.label, treatText: treat.text,
+      onTreatSpeak: () => { this._boop(); this._award('daily'); this.speak(treat.label + '! ' + treat.text); },
+      isFable: s.screen === 'fable',
+      fableAnimalStep: s.fableStage === 'animal', fableLessonStep: s.fableStage === 'lesson',
+      fableLoading: s.fableStage === 'loading', fableRead: s.fableStage === 'read',
+      fableAnimals: this._fableAnimals.map((a, i) => ({ art: a.e, label: a.l, bg: themeBgs[i % 6], onPick: () => { this._boop(); this.setState({ fableAnimal: a, fableStage: 'lesson' }); } })),
+      fableLessons: this._fableLessons.map(l => ({ label: l, onPick: () => this.makeFable(l) })),
+      fableAnimalLabel: s.fableAnimal ? s.fableAnimal.l : 'friend',
+      fableTitle: s.fableTitle, fableParas: s.fableParas,
+      fableMoralLine: 'The moral: ' + s.fableMoral,
+      onSpeakFable: () => { this._boop(); this.speak(s.fableTitle + '. ' + s.fableParas.map(p => p.text).join(' ') + ' The moral of the story: ' + s.fableMoral); },
+      onNewFable: () => { this._boop(); this._stopSpeak(); this.setState({ fableStage: 'animal', fableAnimal: null }); },
+      isPaths: s.screen === 'paths',
+      pathsRoundLabel: s.pathsStage === 'done' ? 'all ' + s.pathsTotal + ' parts!' : 'part ' + s.pathsRound + ' of ' + s.pathsTotal,
+      pathsParas: s.pathsParas,
+      pathsLoading: s.pathsStage === 'loading', pathsChoosing: s.pathsStage === 'choose', pathsDone: s.pathsStage === 'done',
+      pathsChoices: s.pathsChoices.map((c, i) => ({ badge: i === 0 ? 'A' : 'B', text: c, onPick: () => this._nextPath(c) })),
+      onPathsAgain: () => this.startPaths(),
+      onSpeakPaths: () => { this._boop(); this.speak(s.pathsParas.filter(p => p.text.charAt(0) !== '▸').map(p => p.text).join(' ')); },
+      isBed: s.screen === 'bedtime',
+      bedHeading: band === 'big' ? 'Cozy Corner' : 'Bedtime Den',
+      bedLoading: s.bedStage === 'loading', bedRead: s.bedStage === 'read',
+      bedParas: s.bedParas,
+      bedStoryLabel: s.bedStage === 'read' ? 'One more sleepy story' : 'A sleepy story, please',
+      onBedStory: () => this.bedStory(),
+      chimesLabel: s.chimes ? 'on' : 'off',
+      onToggleChimes: () => this.toggleChimes(),
+      onSpeakBed: () => this.speak(s.bedParas.map(p => p.text).join(' '), { rate: 0.78 }),
+      voicePills: this._voiceDefs.map((d, i) => {
+        const sel = (s.settings.voice || 'puppy') === d.id;
+        return { label: d.label, desc: d.desc, bg: sel ? '#FFF1BF' : '#FFFDF8', ring: sel ? '3.5px solid #4A3222' : '3px solid rgba(74,50,34,.25)',
+          dot: ['#FF7A59', '#B678E0', '#2BB3A3', '#FFC93F', '#58A6E8'][i % 5], state: sel ? '✓ picked' : '',
+          onPick: () => { this._boop(); this._saveSettings({ voice: d.id }); setTimeout(() => this.speak('Woof woof! Hi ' + this.kidName() + "! I'm " + this.mascot() + '!'), 150); } };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>
