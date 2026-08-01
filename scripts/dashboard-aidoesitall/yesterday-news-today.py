@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 from urllib.parse import urlencode
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 import xml.etree.ElementTree as ET
 
 # Paths
@@ -169,19 +169,41 @@ class YesterdayNewsBot:
             log.warning("NewsAPI returned no usable articles")
         return items
 
+    # Feed sets. Verified live 2026-07-31 - the original three (Reuters, BBC,
+    # AP) are all dead: Reuters retired public RSS entirely, the BBC URL now
+    # redirects, and the AP hub path 404s. With no NEWSAPI_KEY the bot was
+    # silently producing nothing.
+    #
+    # NEWS_MODE=good     constructive/solutions journalism (default)
+    # NEWS_MODE=world    general world news
+    # NEWS_MODE=both     everything
+    FEED_SETS = {
+        "good": [
+            ("Good News Network", "https://www.goodnewsnetwork.org/feed/"),
+            ("Reasons to be Cheerful", "https://reasonstobecheerful.world/feed/"),
+        ],
+        "world": [
+            ("NPR World", "https://feeds.npr.org/1001/rss.xml"),
+            ("Dow Jones World", "https://feeds.content.dowjones.io/public/rss/RSSWorldNews"),
+        ],
+    }
+
     def _fetch_rss(self, limit: int = 5):
         """Fallback news fetch using public RSS feeds."""
-        feeds = [
-            ("Reuters World", "https://feeds.reuters.com/Reuters/worldNews"),
-            ("BBC World", "http://feeds.bbci.co.uk/news/world/rss.xml"),
-            ("AP Top News", "https://apnews.com/hub/ap-top-news?output=rss"),
-        ]
+        mode = os.getenv("NEWS_MODE", "good").strip().lower()
+        if mode == "both":
+            feeds = self.FEED_SETS["good"] + self.FEED_SETS["world"]
+        else:
+            feeds = self.FEED_SETS.get(mode) or self.FEED_SETS["good"]
+        log.info(f"RSS mode '{mode}': {len(feeds)} feed(s)")
         target_day = self.get_yesterday_date()["iso"]
         items = []
 
         for source_name, feed_url in feeds:
             try:
-                with urlopen(feed_url, timeout=20) as response:
+                # Many feeds reject urllib's default UA outright.
+                req = Request(feed_url, headers={"User-Agent": "Mozilla/5.0 (compatible; ANTIGRAVITY-NewsBot/1.0)"})
+                with urlopen(req, timeout=20) as response:
                     xml_bytes = response.read()
             except Exception as exc:
                 log.warning(f"RSS fetch failed for {source_name}: {exc}")
