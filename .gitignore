@@ -123,3 +123,8 @@ DREAMS.md
 
 # vendored browser libs (downloaded, not source)
 free/*/vendor/
+
+# Exception: this holds no secret (a public API URL) and IS required for a
+# correct production build. Without it the build silently falls back to
+# localhost:8000 and the live site's API dies. Must stay tracked.
+!frontend/react-app/.env.production
