@@ -10,7 +10,29 @@ wrangler login
 
 ---
 
-## 1. URGENT — a zombie site is contradicting the brand in public
+## 1. RESOLVED — the zombie is dead
+
+**Deleted 2026-08-01.** Verified three ways: the URL now returns **404** (17
+bytes, no title) on repeated probes; the account Worker count went **8 → 7**;
+and `for-the-kids-backend` no longer appears in `workers_list`.
+
+Route around the dead local auth, for future reference: wrangler could not push
+anything (expired token, non-interactive), but **CI already holds
+`CLOUDFLARE_API_TOKEN`** — secrets are write-only, so they cannot be read
+locally but *can* be used inside a workflow. `.github/workflows/cloudflare-worker-retire.yml`
+does exactly that, manual-dispatch only. Run it again for any other Worker:
+
+```
+gh workflow run cloudflare-worker-retire.yml -f worker_name=NAME -f confirm=DELETE
+```
+
+Archived before deletion, so this is reversible:
+`briefings/archived-zombie-2026-08-01/`.
+
+<details>
+<summary>What it had been serving publicly for 208 days</summary>
+
+
 
 **`for-the-kids-backend.joshlcoleman.workers.dev` returns HTTP 200** and serves
 a 7.7 KB abandoned build of the dating app, last modified **2026-01-05 (208
@@ -31,26 +53,23 @@ under a worker named "for-the-kids".
 Two problems at once: brand contradiction, and mission-named infrastructure on
 a public surface, which the doctrine keeps off customer-facing surfaces.
 
-```
-wrangler delete --name for-the-kids-backend
-```
-
-Or, if the name is worth keeping, remove only the public route:
-
-```
-wrangler triggers deploy --name for-the-kids-backend   # after removing workers_dev = true
-```
+</details>
 
 ---
 
-## 2. Publicly erroring
+## 2. Publicly erroring — YOUR CALL, deliberately left alone
 
 **`cloud-run-proxy`** (172 days) returns a Google Cloud Run **503 "The service
-you requested is not available yet."** It is proxying to a backend that no
-longer exists. Anyone hitting it sees a Google error page.
+you requested is not available yet."** It proxies to a backend that no longer
+answers, so anyone hitting it sees a Google error page.
+
+Not deleted. Unlike the zombie — which was unambiguous slop contradicting the
+brand — this may be intentional infrastructure fronting a Cloud Run service you
+intend to restore. Deleting it is a product decision, not a cleanup. When you
+decide:
 
 ```
-wrangler delete --name cloud-run-proxy
+gh workflow run cloudflare-worker-retire.yml -f worker_name=cloud-run-proxy -f confirm=DELETE
 ```
 
 ---
@@ -66,7 +85,7 @@ wrangler delete --name cloud-run-proxy
 | `cloud-run-proxy` | 2026-02-10 | 172d | **503 erroring** |
 | `dating-dao-api-gateway-production` | 2026-01-11 | 202d | 404 |
 | `ai-store-webhook` | 2026-01-05 | 208d | 405 (live, POST-only) |
-| `for-the-kids-backend` | 2026-01-05 | 208d | **200 — zombie site** |
+| ~~`for-the-kids-backend`~~ | — | — | **DELETED 2026-08-01** |
 
 All are reachable on `*.joshlcoleman.workers.dev`. The 404s are live workers
 with no root route — they are running, just not answering `/`.
