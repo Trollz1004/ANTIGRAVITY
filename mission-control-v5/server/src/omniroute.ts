@@ -210,21 +210,27 @@ function executorChains(): Record<string, ExecutorLink[]> {
     // Cloud first, local last — every chain ends at Ornith so the box keeps
     // working when the gateway or the internet is down. There is no "low
     // quality mode": the good models are the default, local is the safety net.
-    auto: [
-      { provider: 'openai_compat', model: env('EXEC_AUTO_MODEL') || 'auto/best-coding' },
-      { provider: 'openai_compat', model: env('EXEC_AUTO_FALLBACK_MODEL') || 'auto/best-fast' },
-      { provider: 'ollama', model: env('EXEC_LOCAL_FALLBACK_MODEL') || 'ornith:9b' },
-    ],
     // Chain sized to the T5500's 8 GB GTX 1070 + no-AVX Xeon: ornith fits VRAM,
     // cloud gemma4 costs no local resource, gemma2 is the offline last resort.
+    // SUBSCRIPTION SAFETY: every default here must be a FREE route.
+    // In OmniRoute the `cc/` prefix is the Claude Code provider authenticating
+    // by OAuth AS JOSH, so cc/* spends his Max subscription. `auto/claude-opus`
+    // hits the same family, and `auto/best-*` may select any paid provider.
+    // Mission Control is automation and must never bill the subscription —
+    // real Claude is for Josh at the keyboard, not for background tasks.
+    auto: [
+      { provider: 'openai_compat', model: env('EXEC_AUTO_MODEL') || 'auto/coding:free' },
+      { provider: 'openai_compat', model: env('EXEC_AUTO_FALLBACK_MODEL') || 'auto/best-free' },
+      { provider: 'ollama', model: env('EXEC_LOCAL_FALLBACK_MODEL') || 'ornith:9b' },
+    ],
     ornith: [
       { provider: 'ollama', model: env('EXEC_ORNITH_MODEL') || 'ornith:9b' },
       { provider: 'ollama', model: env('EXEC_ORNITH_FALLBACK_MODEL') || 'gemma4:31b-cloud' },
       { provider: 'ollama', model: env('EXEC_ORNITH_FALLBACK2_MODEL') || 'gemma2:latest' },
     ],
     'fcc-opus': [
-      { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_MODEL') || 'cc/claude-opus-4-8' },
-      { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_FALLBACK_MODEL') || 'auto/claude-opus' },
+      { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_MODEL') || 'auto/coding:free' },
+      { provider: 'openai_compat', model: env('EXEC_FCC_OPUS_FALLBACK_MODEL') || 'auto/best-free' },
       { provider: 'ollama', model: env('EXEC_LOCAL_FALLBACK_MODEL') || 'ornith:9b' },
     ],
   };
@@ -232,16 +238,16 @@ function executorChains(): Record<string, ExecutorLink[]> {
 
 const EXECUTOR_META: Record<string, { label: string; description: string }> = {
   auto: {
-    label: 'AUTO',
-    description: 'OmniRoute provider order — first configured, healthy provider wins.',
+    label: 'AUTO · FREE',
+    description: 'Free cloud routes first, local model as the floor. Never bills the subscription.',
   },
   ornith: {
     label: 'ORNITH',
     description: 'Local Ornith (ollama), gemma4 smallest as browser-capable local fallback.',
   },
   'fcc-opus': {
-    label: 'FCC OPUS',
-    description: 'Claude Opus through the OmniRoute gateway (FCC / Claude Code provider).',
+    label: 'DEEP · FREE',
+    description: 'Free coding-tier routes for heavier reasoning. Was cc/claude-opus, which billed the Max subscription — automation never does that.',
   },
 };
 
