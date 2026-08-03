@@ -1,7 +1,7 @@
 import { useState, type DragEvent } from 'react';
 import { api } from '../api';
 import type { Column, SwarmTask } from '../types';
-import { StatusDot, modeBadge } from './shared';
+import { StatusDot, executorBadge } from './shared';
 
 const COLUMNS: { id: Column; color: string }[] = [
   { id: 'NOW', color: 'var(--amber)' },
@@ -69,9 +69,9 @@ export default function KanbanBoard({ tasks }: Props) {
                 >
                   <div className="kcard__title">{task.title}</div>
                   <div className="kcard__row">
-                    {modeBadge(task.mode)}
+                    {executorBadge(task.executor)}
                     <span className="badge">
-                      {task.agentIds.length} AGENT{task.agentIds.length === 1 ? '' : 'S'}
+                      {task.agentIds.length} ORCHESTRATOR{task.agentIds.length === 1 ? '' : 'S'}
                     </span>
                   </div>
                   <div className="kcard__agents">
