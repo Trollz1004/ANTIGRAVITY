@@ -7,11 +7,24 @@ export interface AgentDef {
   name: string;
   category: string;
   description: string;
+  /** One-line summary of the harness's native arsenal, shown on the library card. */
+  harness?: string;
+  /** Brain-hub journal platform id — read on task start, written on task end. */
+  platformId?: string;
+  /** Executor chain the orchestrator's own reasoning (plan/validate) runs on. */
+  brainExecutor?: string;
 }
 
 export interface CategoryDef {
   id: string;
   label: string;
+}
+
+/** One orchestration phase record — kept on the result for full auditability. */
+export interface PhaseNote {
+  phase: 'plan' | 'work' | 'validate' | 'journal';
+  detail: string;
+  ms?: number;
 }
 
 export interface AgentResult {
@@ -22,6 +35,8 @@ export interface AgentResult {
   output?: string;
   error?: string;
   ms?: number;
+  /** Orchestration trail: plan → work → validate → journal. */
+  phases?: PhaseNote[];
 }
 
 export interface SwarmTask {

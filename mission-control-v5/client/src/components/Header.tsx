@@ -20,7 +20,7 @@ export default function Header({ tab, onTab, health, runningCount, selectedCount
         <div className="header__title">
           MISSION CONTROL <em>// AGENCY SWARM v5</em>
         </div>
-        <div className="header__edition">HAIKU-SONNET 3.5 EDITION</div>
+        <div className="header__edition">ORCHESTRATOR EDITION — 4 HARNESSES · SKILLS ON SUB-AGENTS</div>
       </div>
 
       <nav className="header__nav">
@@ -74,7 +74,7 @@ export default function Header({ tab, onTab, health, runningCount, selectedCount
         </span>
         <span className="status-item">
           <span className="dot dot--accent" />
-          {health ? `${health.agents} AGENTS` : '—'}
+          {health ? `${health.agents} ORCHESTRATORS` : '—'}
         </span>
       </div>
     </header>
