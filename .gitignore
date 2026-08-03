@@ -128,3 +128,6 @@ free/*/vendor/
 # correct production build. Without it the build silently falls back to
 # localhost:8000 and the live site's API dies. Must stay tracked.
 !frontend/react-app/.env.production
+
+# OmniRoute upstream source clone (1.8GB, has its own origin)
+omniroute/
