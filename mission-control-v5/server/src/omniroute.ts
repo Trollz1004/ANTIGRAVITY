@@ -148,9 +148,26 @@ const ollama: ProviderAdapter = {
       throw new Error(`OLLAMA_MODEL_${req.mode === 'speed' ? 'SPEED' : 'REASONING'} not set.`);
     }
     const base = env('OLLAMA_BASE_URL').replace(/\/+$/, '');
+    // OLLAMA_FORCE_CPU=1 sends num_gpu:0, running local models on CPU only.
+    //
+    // Why this exists: on the T5500 every GPU-backed local model dies with
+    //   "CUDA error: the provided PTX was compiled with an unsupported toolchain"
+    // because Ollama 0.32.5's CUDA kernels are newer than driver 560.94 (CUDA
+    // 12.6) can JIT for the GTX 1070. It kills ALL local models, not just
+    // ornith:9b - verified against llama3.2 and qwen2.5 too.
+    //
+    // Every executor chain ends at a local model as its floor, so with GPU
+    // broken there was NO floor: a cloud timeout errored instead of degrading.
+    // CPU-only is slow on this no-AVX Xeon (~70s for a trivial reply, measured)
+    // but it is a working floor instead of a guaranteed failure.
+    //
+    // REMOVE THIS once the NVIDIA driver is updated - it is a stopgap, not the
+    // fix. The fix is aligning driver and Ollama CUDA versions.
+    const forceCpu = env('OLLAMA_FORCE_CPU') === '1';
     const data = await postJson(`${base}/api/chat`, {}, {
       model,
       stream: false,
+      ...(forceCpu ? { options: { num_gpu: 0 } } : {}),
       messages: [
         { role: 'system', content: req.system },
         { role: 'user', content: req.prompt },
