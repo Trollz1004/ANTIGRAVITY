@@ -45,7 +45,7 @@ export default function ServicesPanel() {
           <a
             key={svc.name}
             className={`service-card ${svc.status === 'up' ? 'service-card--up' : 'service-card--down'}`}
-            href={svc.url}
+            href={svc.openUrl ?? svc.url}
             target="_blank"
             rel="noreferrer noopener"
           >
@@ -60,7 +60,7 @@ export default function ServicesPanel() {
                 {svc.status === 'up' ? 'UP' : 'DOWN'}
               </span>
             </div>
-            <div className="service-card__url mono">{svc.url}</div>
+            <div className="service-card__url mono">{svc.openUrl ?? svc.url}</div>
             <div className="service-card__meta">
               <span className="mono">{svc.status === 'up' ? `${svc.ms}ms` : '—'}</span>
               <span className="service-card__detail mono">{svc.detail}</span>

@@ -31,8 +31,14 @@ export interface BrainPlatform {
 
 const DEFAULT_MAX_CHARS = Math.min(4000, Math.max(2000, Number(process.env.BRAIN_JOURNAL_MAX_CHARS ?? 4000) || 4000));
 
+// One journal per orchestrator (see agents.ts). Read on task start, written on
+// task end — the "read state at start, write state at end" doctrine, enforced by
+// the swarm engine rather than left to each harness to remember.
 const DEFAULT_PLATFORMS: BrainPlatform[] = [
   { id: 'free-claude-code', label: 'Free Claude Code', statePath: 'C:/Users/joshl/.fcc/STATE.md', maxChars: DEFAULT_MAX_CHARS, enabled: true },
+  { id: 'hermes', label: 'Hermes', statePath: 'C:/Users/joshl/AppData/Local/hermes/STATE.md', maxChars: DEFAULT_MAX_CHARS, enabled: true },
+  { id: 'openclaw', label: 'OpenClaw', statePath: 'C:/Users/joshl/.openclaw/STATE.md', maxChars: DEFAULT_MAX_CHARS, enabled: true },
+  { id: 'ornith', label: 'Ornith (local)', statePath: 'C:/Users/joshl/.ornith/STATE.md', maxChars: DEFAULT_MAX_CHARS, enabled: true },
 ];
 
 function ensureExample(): void {

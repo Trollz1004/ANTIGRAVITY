@@ -55,13 +55,13 @@ export default function AgentLibrary({ agents, categories, selected, onDeploy }:
         <div className="library__toolbar">
           <input
             className="input library__search"
-            placeholder="SEARCH AGENTS…"
+            placeholder="SEARCH ORCHESTRATORS…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             spellCheck={false}
           />
           <span className="label">
-            {filtered.length}/{agents.length} AGENTS · {categories.length} DIVISIONS
+            {filtered.length}/{agents.length} ORCHESTRATORS · ROLES COME FROM SKILLS
           </span>
         </div>
 
@@ -77,6 +77,7 @@ export default function AgentLibrary({ agents, categories, selected, onDeploy }:
                   <span className="agent-card__name">{agent.name}</span>
                   <span className="agent-card__cat">{catLabel(agent.category)}</span>
                 </div>
+                {agent.harness && <p className="agent-card__harness">{agent.harness}</p>}
                 <p className="agent-card__desc">{agent.description}</p>
                 <div className="agent-card__actions">
                   <button

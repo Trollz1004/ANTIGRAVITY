@@ -1,5 +1,8 @@
 /**
- * MISSION CONTROL: AGENCY SWARM v5 (Haiku-Sonnet 3.5 Edition) — API server.
+ * MISSION CONTROL: AGENCY SWARM v5 (Orchestrator Edition) — API server.
+ *
+ * Four orchestrator harnesses; roles come from the skill catalog and ride on
+ * sub-agents. No model is named in the UI — OmniRoute resolves it at run time.
  */
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -27,7 +30,7 @@ import type { Column } from './types.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT ?? 3151) || 3151;
 const VERSION = '5.0.0';
-const EDITION = 'Haiku-Sonnet 3.5 Edition';
+const EDITION = 'Orchestrator Edition';
 
 loadState();
 
@@ -56,24 +59,70 @@ app.get('/api/health', (_req, res) => {
 interface ServiceStatus {
   name: string;
   url: string;
+  /**
+   * Where the OPEN link goes. This is not always the probed URL: an API
+   * endpoint answers a token-bearing probe but shows a browser only an auth
+   * error, so link the human page and probe the API.
+   */
+  openUrl: string;
+  lanReachable: boolean;
   status: 'up' | 'down';
   ms: number;
   detail: string;
 }
 
-async function pingService(name: string, url: string, timeoutMs = 2500): Promise<ServiceStatus> {
+/**
+ * LAN address of this node. The dashboard gets opened from the laptop, where
+ * 127.0.0.1 means the laptop — a dead link. DHCP assigns this, so it is
+ * overridable rather than hardcoded.
+ */
+const LAN_HOST = (process.env.NODE_LAN_HOST ?? '192.168.0.15').trim();
+
+function lanUrl(url: string): string {
+  return url.replace(/(127\.0\.0\.1|localhost)/, LAN_HOST);
+}
+
+async function pingService(
+  name: string,
+  url: string,
+  timeoutMs = 2500,
+  lanReachable = false,
+  headers: Record<string, string> = {},
+  openOverride?: string,
+): Promise<ServiceStatus> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   const started = Date.now();
+  const openUrl = openOverride ?? (lanReachable ? lanUrl(url) : url);
   try {
-    const res = await fetch(url, { signal: controller.signal });
+    const res = await fetch(url, { signal: controller.signal, headers });
     const ms = Date.now() - started;
+    // 401/403 means the service answered and enforced auth — that is UP, not
+    // down. Judging liveness purely by 2xx reported healthy gateways as dead.
+    const authGated = res.status === 401 || res.status === 403;
+    let detail = res.ok ? 'OK' : authGated ? `auth required (HTTP ${res.status})` : `HTTP ${res.status}`;
+    // Verify by content where the body says something meaningful.
+    if (res.ok) {
+      try {
+        const body: any = await res.json();
+        const count = Array.isArray(body?.data)
+          ? body.data.length
+          : Array.isArray(body?.models)
+            ? body.models.length
+            : null;
+        if (count !== null) detail = `OK · ${count} models`;
+      } catch {
+        /* not JSON — plain OK stands */
+      }
+    }
     return {
       name,
       url,
-      status: res.ok ? 'up' : 'down',
+      openUrl,
+      lanReachable,
+      status: res.ok || authGated ? 'up' : 'down',
       ms,
-      detail: res.ok ? 'OK' : `HTTP ${res.status}`,
+      detail,
     };
   } catch (err) {
     const ms = Date.now() - started;
@@ -81,6 +130,8 @@ async function pingService(name: string, url: string, timeoutMs = 2500): Promise
     return {
       name,
       url,
+      openUrl,
+      lanReachable,
       status: 'down',
       ms,
       detail: aborted ? `timeout (${timeoutMs}ms)` : (err instanceof Error ? err.message : String(err)),
@@ -97,13 +148,35 @@ app.get('/api/services', async (_req, res) => {
   // fail-closed ECONNREFUSED on an idle port. Others fail fast, keeping the
   // panel snappy.
   const services = [
-    { name: 'Hermes', url: 'http://127.0.0.1:9119', timeoutMs: 2500 },
-    { name: 'OpenClaw', url: `http://127.0.0.1:${openclawPort}`, timeoutMs: 2500 },
-    { name: 'OmniRoute', url: 'http://127.0.0.1:20128/v1/models', timeoutMs: 9000 },
-    { name: 'Ollama', url: 'http://127.0.0.1:11434/api/tags', timeoutMs: 2500 },
+    { name: 'Hermes', url: 'http://127.0.0.1:9119', timeoutMs: 2500, lan: false },
+    { name: 'OpenClaw', url: `http://127.0.0.1:${openclawPort}`, timeoutMs: 2500, lan: false },
+    // OmniRoute is probed at the address it advertises as its Local Server and
+    // that every other node actually uses — not loopback. (Its dashboard also
+    // lists 172.17.x / 172.25.x; those are the Docker and WSL bridges, not the
+    // LAN.) DHCP assigns this, so NODE_LAN_HOST overrides it.
+    { name: 'OmniRoute', url: `http://${LAN_HOST}:20128/v1/models`, timeoutMs: 9000, lan: true },
+    { name: 'Ollama', url: 'http://127.0.0.1:11434/api/tags', timeoutMs: 2500, lan: false },
   ];
+  // The gateway requires auth on /v1/*. Probing without the key returns 401 and
+  // reads as DOWN on a perfectly healthy gateway; with it, the card can report
+  // the live model count instead of a status code.
+  // `||`, not `??`: OPENAI_COMPAT_API_KEY is present but empty in .env, and `??`
+  // would hand back that empty string instead of falling through to the real key.
+  const omniKey =
+    (process.env.OPENAI_COMPAT_API_KEY ?? '').trim() || (process.env.OMNIROUTE_API_KEY ?? '').trim();
   const results = await Promise.all([
-    ...services.map((s) => pingService(s.name, s.url, s.timeoutMs)),
+    ...services.map((s) =>
+      pingService(
+        s.name,
+        s.url,
+        s.timeoutMs,
+        s.lan,
+        s.name === 'OmniRoute' && omniKey ? { authorization: `Bearer ${omniKey}` } : {},
+        // /v1/models is an API: a browser cannot send the token and just sees
+        // AUTH_002. Send the click to the gateway UI instead.
+        s.name === 'OmniRoute' ? `http://${LAN_HOST}:20128/dashboard` : undefined,
+      ),
+    ),
     // Pieces LTM speaks MCP, not plain HTTP — a raw GET would 400. Probe it with
     // a real initialize roundtrip and fold the result into the services list.
     pingPieces(9_000).then(async (up) => {
@@ -111,6 +184,8 @@ app.get('/api/services', async (_req, res) => {
       return {
         name: 'Pieces LTM',
         url: PIECES_MCP_URL,
+        openUrl: PIECES_MCP_URL, // loopback-only: Pieces OS binds 127.0.0.1
+        lanReachable: false,
         status: (up ? 'up' : 'down') as 'up' | 'down',
         ms: Date.now() - started,
         detail: up ? 'OK' : 'MCP initialize failed',

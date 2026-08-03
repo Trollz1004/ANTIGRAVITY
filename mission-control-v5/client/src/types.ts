@@ -7,6 +7,15 @@ export interface AgentDef {
   name: string;
   category: string;
   description: string;
+  harness?: string;
+  platformId?: string;
+  brainExecutor?: string;
+}
+
+export interface PhaseNote {
+  phase: 'plan' | 'work' | 'validate' | 'journal';
+  detail: string;
+  ms?: number;
 }
 
 export interface CategoryDef {
@@ -22,6 +31,7 @@ export interface AgentResult {
   output?: string;
   error?: string;
   ms?: number;
+  phases?: PhaseNote[];
 }
 
 export interface SwarmTask {
@@ -56,6 +66,8 @@ export interface ExecutorInfo {
 export interface ServiceStatus {
   name: string;
   url: string;
+  openUrl?: string;
+  lanReachable?: boolean;
   status: 'up' | 'down';
   ms: number;
   detail: string;
