@@ -13,9 +13,19 @@ export interface AgentDef {
 }
 
 export interface PhaseNote {
-  phase: 'plan' | 'work' | 'validate' | 'journal';
+  phase: 'plan' | 'work' | 'validate' | 'journal' | 'deliver';
   detail: string;
   ms?: number;
+}
+
+/** Where a finished task's files actually landed. Null workspace = text only. */
+export interface TaskArtifacts {
+  workspace: string | null;
+  files: string[];
+  skipped: { path: string; why: string }[];
+  committed: boolean;
+  pushed: boolean;
+  note: string;
 }
 
 export interface CategoryDef {
@@ -47,6 +57,7 @@ export interface SwarmTask {
   updatedAt: string;
   results: AgentResult[];
   error?: string;
+  artifacts?: TaskArtifacts;
 }
 
 export interface ProviderInfo {

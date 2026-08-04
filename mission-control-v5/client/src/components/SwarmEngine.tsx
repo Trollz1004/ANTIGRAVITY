@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { api } from '../api';
 import type { AgentDef, Health, Mode, SwarmTask } from '../types';
-import { ResultBlock, StatusDot, executorBadge } from './shared';
+import { ArtifactBar, ResultBlock, StatusDot, executorBadge } from './shared';
 
 interface Props {
   agents: AgentDef[];
@@ -138,6 +138,7 @@ export default function SwarmEngine({
               {executorBadge(task.executor)}
               <span className="result__meta">{new Date(task.createdAt).toLocaleTimeString()}</span>
             </div>
+            <ArtifactBar artifacts={task.artifacts} />
             <div className="run-card__body">
               {task.results.map((result) => (
                 <ResultBlock key={result.agentId} result={result} />
