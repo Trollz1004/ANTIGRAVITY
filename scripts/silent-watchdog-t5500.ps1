@@ -115,10 +115,15 @@ function Start-OmniRoute {
 Log "=== T5500 Silent Watchdog Started ==="
 
 $serviceStates = @{
-    "OmniRoute"       = @{Port=20128; Failures=0; LastCheck=$null; Restart=$true}
-    "Mission Control" = @{Port=3151;  Failures=0; LastCheck=$null; Restart=$true}
-    "DateApp"         = @{Port=3200;  Failures=0; LastCheck=$null; Restart=$false}
-    "DateApp Backend" = @{Port=8000;  Failures=0; LastCheck=$null; Restart=$false}
+    "OmniRoute"       = @{Port=20128; Failures=0; LastCheck=$null; Restart=$true; Service="omni-router"}
+    "Mission Control" = @{Port=3151;  Failures=0; LastCheck=$null; Restart=$true; Service="mission-control"}
+    "DateApp"         = @{Port=3200;  Failures=0; LastCheck=$null; Restart=$true; Service="dateapp-frontend"}
+    "DateApp Backend" = @{Port=8000;  Failures=0; LastCheck=$null; Restart=$false; Service="dateapp-backend"}
+    "Paperclip"       = @{Port=3120;  Failures=0; LastCheck=$null; Restart=$false; Service="paperclip"}
+    "Hermes"          = @{Port=9119;  Failures=0; LastCheck=$null; Restart=$false; Service="hermes"}
+    "OpenClaw"        = @{Port=18789; Failures=0; LastCheck=$null; Restart=$false; Service="openclaw"}
+    "Ollama"          = @{Port=11434; Failures=0; LastCheck=$null; Restart=$false; Service="ollama"}
+    "FCC"             = @{Port=8082;  Failures=0; LastCheck=$null; Restart=$false; Service="fcc"}
 }
 
 $startTime = Get-Date
@@ -144,14 +149,15 @@ while ((Get-Date).Subtract($startTime).TotalSeconds -lt $maxDuration) {
             
             Log "$service (:$port) OFFLINE - Failure count: $($state.Failures)/$FAILURE_THRESHOLD"
             
-            # Restart after threshold
-            if ($state.Failures -ge $FAILURE_THRESHOLD) {
-                Log "⚠ $service threshold reached, attempting restart"
+            # Restart after threshold (only if service is marked for restart)
+            if ($state.Failures -ge $FAILURE_THRESHOLD -and $state.Restart) {
+                Log "⚠ $($service) threshold reached, attempting restart"
                 
                 switch ($service) {
                     "Mission Control" { Start-MissionControl }
                     "OmniRoute"       { Start-OmniRoute }
-                    default           { Log "No restart logic for $service" }
+                    "DateApp"         { Log "DateApp (:3200) restart: manual intervention required" }
+                    default           { Log "No restart logic for $service — monitoring only" }
                 }
                 
                 $state.Failures = 0
