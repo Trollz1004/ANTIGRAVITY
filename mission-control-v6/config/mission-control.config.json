@@ -23,7 +23,11 @@
     { "id": "hermes-dashboard", "label": "Hermes Dashboard :9119", "url": "http://localhost:${HERMES_DASH_PORT:-9119}" },
     { "id": "openclaw-ui", "label": "OpenClaw Web UI", "url": "http://localhost:${OPENCLAW_PORT:-18789}" },
     { "id": "omniroute", "label": "OmniRoute :20128", "url": "http://localhost:20128" },
-    { "id": "hermes-workspace", "label": "Hermes Workspace :3000", "url": "http://localhost:3000" },
+    { "id": "dateapp-ui", "label": "Date App UI :3200", "url": "http://localhost:${FRONTEND_PORT:-3200}" },
+    { "id": "dateapp-preorder", "label": "Pre-order / Elite", "url": "http://localhost:${FRONTEND_PORT:-3200}/app/preorder" },
+    { "id": "dateapp-create", "label": "Create Studio", "url": "http://localhost:${FRONTEND_PORT:-3200}/app/create" },
+    { "id": "affiliate-landing", "label": "Affiliate Landing", "url": "https://trollz1004.github.io/youandinotai-links/?ref=clean-repo" },
+    { "id": "mission-control", "label": "Mission Control :8787", "url": "http://localhost:${MC_PORT:-8787}" },
     { "id": "github", "label": "GitHub Repo", "url": "https://github.com/Trollz1004/ANTIGRAVITY" }
   ],
   "services": [
@@ -45,11 +49,12 @@
     },
     {
       "id": "hermes-agent",
-      "name": "Hermes Agent",
+      "name": "Hermes Agent (docker optional)",
       "group": "Agents",
       "kind": "docker",
       "container": "hermes-agent",
-      "expected": true,
+      "expected": false,
+      "_note": "Native Hermes TUI/desktop is primary on this host; docker agent is optional.",
       "interval_s": 60,
       "timeout_s": 10,
       "playbook": "start-hermes-agent"
@@ -193,21 +198,23 @@
       "name": "Paperclip AI OS",
       "group": "Services",
       "kind": "http",
-      "url": "http://127.0.0.1:${PAPERCLIP_PORT:-3100}/",
+      "url": "http://127.0.0.1:${PAPERCLIP_PORT:-3120}/",
       "expected_status": "any",
       "expected": false,
       "interval_s": 60,
-      "link_url": "http://localhost:${PAPERCLIP_PORT:-3100}"
+      "playbook": "start-paperclip",
+      "link_url": "http://localhost:${PAPERCLIP_PORT:-3120}"
     },
     {
       "id": "opencode",
-      "name": "OpenCode Server",
+      "name": "OpenCode Server (Zen)",
       "group": "Services",
       "kind": "http",
       "url": "http://127.0.0.1:4096/",
       "expected_status": "any",
       "expected": false,
       "interval_s": 60,
+      "playbook": "start-opencode",
       "link_url": "http://localhost:4096"
     }
   ],
@@ -290,16 +297,34 @@
       }
     },
     "start-frontend": {
-      "description": "start the date-app frontend dev server on port 3200",
+      "description": "start Kiss Me date-app frontend (vite preview) on port 3200",
       "script": "fix-scripts/fix-frontend.cmd",
-      "timeout_s": 60,
+      "timeout_s": 90,
       "commands": {
         "windows": [
-          ["cmd", "/c", "start", "", "{repo_root}\\scripts\\start-dateapp-frontend-3200.ps1"]
+          ["cmd", "/c", "{repo_root}\\mission-control-v6\\fix-scripts\\fix-frontend.cmd"]
         ],
         "linux": [
-          ["bash", "-lc", "cd \"{repo_root}/frontend\" && PORT=${FRONTEND_PORT:-3200} nohup npm run start >\"{repo_root}/logs/frontend.log\" 2>&1 &"]
+          ["bash", "-lc", "cd \"{repo_root}/frontend/react-app\" && npm run build && nohup npm run preview -- --host 127.0.0.1 --port ${FRONTEND_PORT:-3200} >\"{repo_root}/logs/frontend.log\" 2>&1 &"]
         ]
+      }
+    },
+    "start-opencode": {
+      "description": "start OpenCode headless server :4096 (Zen via OPENCODE_API_KEY)",
+      "script": "fix-scripts/fix-opencode.cmd",
+      "timeout_s": 45,
+      "commands": {
+        "windows": [["cmd", "/c", "{repo_root}\\mission-control-v6\\fix-scripts\\fix-opencode.cmd"]],
+        "linux": [["bash", "-lc", "nohup opencode serve --port 4096 --hostname 127.0.0.1 >\"{repo_root}/logs/opencode.log\" 2>&1 &"]]
+      }
+    },
+    "start-paperclip": {
+      "description": "start Paperclip date-app loopback (:3120 preferred)",
+      "script": "fix-scripts/fix-paperclip.cmd",
+      "timeout_s": 60,
+      "commands": {
+        "windows": [["cmd", "/c", "{repo_root}\\mission-control-v6\\fix-scripts\\fix-paperclip.cmd"]],
+        "linux": [["bash", "-lc", "echo paperclip-linux-starter-not-configured"]]
       }
     },
     "start-datastores": {
