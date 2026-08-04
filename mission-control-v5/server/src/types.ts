@@ -22,9 +22,19 @@ export interface CategoryDef {
 
 /** One orchestration phase record — kept on the result for full auditability. */
 export interface PhaseNote {
-  phase: 'plan' | 'work' | 'validate' | 'journal';
+  phase: 'plan' | 'work' | 'validate' | 'journal' | 'deliver';
   detail: string;
   ms?: number;
+}
+
+/** Where a finished task's files actually landed. Null workspace = text only. */
+export interface TaskArtifacts {
+  workspace: string | null;
+  files: string[];
+  skipped: { path: string; why: string }[];
+  committed: boolean;
+  pushed: boolean;
+  note: string;
 }
 
 export interface AgentResult {
@@ -53,6 +63,8 @@ export interface SwarmTask {
   updatedAt: string;
   results: AgentResult[];
   error?: string;
+  /** Set once the task finishes: what was written to disk and committed. */
+  artifacts?: TaskArtifacts;
 }
 
 export interface ProviderInfo {

@@ -22,6 +22,7 @@ import { randomUUID } from 'node:crypto';
 import { AGENT_INDEX, CATEGORY_INDEX, ORCHESTRATOR_CONTRACT } from './agents.js';
 import { loadCatalog, getCatalogEntry, type BrainSkill } from './catalog.js';
 import { readJournal, writeJournal } from './brainStore.js';
+import { materializeTask } from './materialize.js';
 import { OmniRouteError, isExecutor, route } from './omniroute.js';
 import { addTask, allTasks, getTask, persist, removeTask } from './store.js';
 import type { AgentResult, Column, Mode, PhaseNote, SwarmTask } from './types.js';
@@ -177,9 +178,34 @@ function workerSystem(subtask: PlannedSubtask, skills: BrainSkill[], orchestrato
     '=== LOADED SKILLS ===',
     loaded,
     '',
+    '=== YOU HAVE NO TOOLS ===',
+    'You cannot run shells, read disk, clone repos, or call any tool. Emitting tool-call',
+    'markup produces literal text, not an action — it is a failed subtask. There is no',
+    'working directory to inspect and no repo to open; everything you need is in this',
+    'brief. Never claim to have run, tested, installed, or verified anything.',
+    '',
+    '=== HOW YOUR WORK IS SAVED ===',
+    'A separate step extracts your files and commits them. It only sees this exact shape:',
+    '',
+    'File: `relative/path/name.ext`',
+    '```lang',
+    '<complete file contents>',
+    '```',
+    '',
+    'Rules that decide whether your work survives:',
+    '  - The path line goes immediately before the fence, nothing between them.',
+    '  - Paths are RELATIVE, always. A leading / or a drive letter is discarded —',
+    '    "/home/user/app/main.py" and "C:\\app\\main.py" are wrong; "app/main.py" is right.',
+    '  - Every file gets its own path line and its own fence. Full contents, never a',
+    '    diff, never "unchanged" or "...". A fence with no path line above it is read',
+    '    as an example and thrown away.',
+    '  - Prose outside the fences is fine and is not saved. Put it there, not inside.',
+    '',
     '=== OUTPUT RULES ===',
     'Produce the finished deliverable itself — no preamble, no plan, no filler.',
     `It must satisfy the acceptance criteria: ${subtask.acceptance}`,
+    'If the deliverable is code, config, or a document, it MUST be emitted as files in',
+    'the shape above — an explanation of a file is not the file.',
     'If a fact is unverified, label it unverified. Never fabricate data, metrics, or results.',
   ].join('\n');
 }
@@ -424,6 +450,7 @@ export function retryTask(id: string): SwarmTask {
   task.status = 'queued';
   task.column = 'NEXT';
   task.error = undefined;
+  task.artifacts = undefined;
   task.results = task.agentIds.map((agentId) => ({ agentId, status: 'pending', phases: [] }));
   task.updatedAt = new Date().toISOString();
   persist();
@@ -484,6 +511,40 @@ async function execute(task: SwarmTask): Promise<void> {
   emit('task:updated', task);
 
   await Promise.all(task.results.map((result) => runOrchestrator(task, result)));
+
+  // ── DELIVER ────────────────────────────────────────────────────────────────
+  // Everything above this line only produces text. This is the step that makes
+  // a task real: files onto disk, committed, pushed. A task that materializes
+  // nothing says so plainly instead of looking finished.
+  try {
+    task.artifacts = await materializeTask({
+      taskId: task.id,
+      title: task.title,
+      outputs: task.results
+        .filter((r) => r.status === 'done' && r.output)
+        .map((r) => ({ agentId: r.agentId, text: r.output! })),
+    });
+  } catch (err) {
+    task.artifacts = {
+      workspace: null,
+      files: [],
+      skipped: [],
+      committed: false,
+      pushed: false,
+      note: `Materializer threw: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+  for (const result of task.results) {
+    if (result.status !== 'done') continue;
+    (result.phases ??= []).push({
+      phase: 'deliver',
+      detail: task.artifacts.files.length
+        ? `${task.artifacts.files.length} file(s) → ${task.artifacts.workspace}${
+            task.artifacts.committed ? ' · committed' : ''
+          }${task.artifacts.pushed ? ' · pushed' : ''}`
+        : task.artifacts.note,
+    });
+  }
 
   const failed = task.results.filter((r) => r.status === 'error');
   if (failed.length === 0) {
