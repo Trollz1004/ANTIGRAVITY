@@ -74,6 +74,12 @@ services/mission-control-api/data/
 infra/paperclip-worker/.wrangler/
 apps/paperweight/data/
 
+# Agent harness configs (NEVER commit — token/key storage)
+.opencode/.env
+.fcc/.env
+.opencode/STATE.md
+.fcc/STATE.md
+
 # Misc generated
 DIRTY_REPO_ALERT*.md
 output/
