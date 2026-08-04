@@ -44,5 +44,11 @@ PLAID_ENV=sandbox
 Prefer long checkout.square.site URLs over short square.link when short 404s.
 Landing preserves `?ref=`.
 
+## Public PayPal QR (Telegram 2026-08-04 — Joshua Coleman)
+Not API secrets. Frontend assets under `frontend/react-app/public/payments/`.
+- Primary: `https://www.paypal.com/qrcodes/managed/f5e4ef25-cf72-45e5-b093-21263d76eeec`
+- Tip Jar: `https://www.paypal.com/qrcodes/managed/e1b0e1e7-ff93-4173-92ac-c2a2c23795ca`
+UI: `/app/pay` → PayPal QR rail. Memberships still prefer Square account-bound checkout.
+
 ## When to Use
 Any pricing, membership, Bot-Shield, founder plan, pre-order, webhook, or ledger work on dating.

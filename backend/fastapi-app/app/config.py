@@ -55,6 +55,13 @@ class Settings(BaseSettings):
     paypal_webhook_id: str = ""
     cashapp_cashtag: str = ""  # e.g. $YouAndINotAI — display / deep-link assist
     cashapp_checkout_base_url: str = ""  # optional hosted Cash App Business checkout
+    # Public PayPal managed QR receive links (not secrets — customer-facing)
+    paypal_qr_primary_url: str = (
+        "https://www.paypal.com/qrcodes/managed/f5e4ef25-cf72-45e5-b093-21263d76eeec"
+    )
+    paypal_qr_tip_jar_url: str = (
+        "https://www.paypal.com/qrcodes/managed/e1b0e1e7-ff93-4173-92ac-c2a2c23795ca"
+    )
     plaid_client_id: str = ""
     plaid_secret: str = ""
     plaid_env: str = "sandbox"  # sandbox | development | production
