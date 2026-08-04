@@ -19,7 +19,7 @@ Write-Host "`n2. Production Files" -ForegroundColor Green
     "backend/server.py",
     "scripts/silent-watchdog-t5500.ps1",
     "graphify-out/graph.html",
-    "omniroute/package.json",
+    "omniroute/config",
     "mission-control-v5/package.json",
     "frontend/react-app/package.json"
 ) | ForEach-Object {
