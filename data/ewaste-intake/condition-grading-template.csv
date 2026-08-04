@@ -1,2 +1,0 @@
-intake_id,grade_date,grader,device_type,cosmetic_score_0_5,screen_score_0_5,keyboard_input_score_0_5,battery_health_score_0_5,thermal_noise_score_0_5,io_ports_score_0_5,overall_score_0_100,grade,recommended_disposition,estimated_refurb_cost_usd,grade_notes
-EW-20260304-0001,2026-03-04,tech2,laptop,4,4,5,4,4,4,85,B,list_now,0.00,"Normal used wear; no urgent repairs"
