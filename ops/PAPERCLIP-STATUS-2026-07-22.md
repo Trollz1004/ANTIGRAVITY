@@ -12,7 +12,7 @@
   Launcher: E:\clean\ops\launch-paperclip.cmd run via `runas /trustlevel:0x20000`.
 
 ## Adapters / Providers (NO Anthropic)
-All coding agents are `opencode_local` → OpenCode → OmniRoute (http://127.0.0.1:20128/api/v1).
+All coding agents are `opencode_local` -> OpenCode -> OmniRoute (http://192.168.0.15:20128/api/v1).
 OmniRoute models exposed: auto/best-coding, auto/best-reasoning, auto/best-fast,
 auto/best-vision, auto/best-chat, auto/best-coding-fast.
 Local Ollama models also available (qwen2.5:7b, llama3.2, gemma4, qwen3.5, etc).
@@ -31,7 +31,7 @@ Running agents:
 - Paperclip E:\clean tree has zero Anthropic references.
 
 ## Dependencies (all up)
-- OmniRoute: 127.0.0.1:20128 (scheduled task ANTIGRAVITY-OmniRouter-11436)
+- OmniRoute: 192.168.0.15:20128 (scheduled task ANTIGRAVITY-OmniRouter-11436)
 - OpenClaw gateway: 127.0.0.1:18789
 - Ollama: 127.0.0.1:11434
 - Cloudflare tunnel: hermes-t5500 (config C:\Users\joshl\.cloudflared\hermes-t5500.yml)
