@@ -328,6 +328,65 @@ async def graphify_info():
         "usage": "Open /graphify in Mission Control UI to view repository graph"
     }
 
+# ---------- Skills preload (agent orchestration) ----------------------------- #
+@api.get("/skills/available")
+async def skills_available():
+    """List available skills from .agents/skills directory"""
+    skills_path = Path(ROOT_DIR).parent / ".agents" / "skills"
+    if not skills_path.exists():
+        return {
+            "available": [],
+            "count": 0,
+            "path": str(skills_path),
+            "status": "skills directory not found"
+        }
+    skills = [d.name for d in skills_path.iterdir() if d.is_dir()]
+    return {
+        "available": sorted(skills),
+        "count": len(skills),
+        "path": str(skills_path),
+        "status": "ready",
+        "mcp_endpoint": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
+        "preload_on_agent_start": ["find-skills", "workspace-memory", "system-connector"]
+    }
+
+@api.get("/skills/state")
+async def skills_state():
+    """Read FCC state from .fcc/STATE.md to track skill usage"""
+    state_path = Path("C:\\Users\\joshl\\.fcc\\STATE.md")
+    if state_path.exists():
+        return {
+            "state_file": str(state_path),
+            "content": state_path.read_text()[:500],  # first 500 chars
+            "status": "FCC CLI state loaded"
+        }
+    return {
+        "state_file": str(state_path),
+        "status": "FCC state not found (FCC-Claude wrapper not yet initialized)"
+    }
+
+@api.get("/mcp/pieces-health")
+async def pieces_health():
+    """Check Pieces LTM MCP endpoint health"""
+    import http.client
+    try:
+        conn = http.client.HTTPConnection("localhost", 39300, timeout=3)
+        conn.request("GET", "/model_context_protocol/2025-03-26/mcp")
+        resp = conn.getresponse()
+        return {
+            "endpoint": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
+            "status": "healthy" if resp.status == 200 else "error",
+            "http_status": resp.status,
+            "message": "Pieces LTM MCP ready for agent skill queries"
+        }
+    except Exception as e:
+        return {
+            "endpoint": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
+            "status": "unreachable",
+            "error": str(e),
+            "message": "Pieces LTM MCP not responding — check Pieces OS service"
+        }
+
 # ---------- Mission metrics ticker --------------------------------------- #
 @api.get("/mission/metrics")
 async def mission_metrics():
