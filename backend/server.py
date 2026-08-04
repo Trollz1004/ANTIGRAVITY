@@ -27,6 +27,7 @@ from typing import Any, Dict, List, Literal, Optional
 
 from dotenv import load_dotenv
 from fastapi import APIRouter, FastAPI, HTTPException, Response
+from fastapi.staticfiles import StaticFiles
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.middleware.cors import CORSMiddleware
@@ -296,6 +297,35 @@ async def git_status():
         "not_added": not_added,
         "deleted": deleted,
         "last_commit": last_commit,
+    }
+
+# ---------- Graphify integration ------------------------------------------- #
+@api.get("/graphify/html")
+async def graphify_html():
+    """Serve graphify.html from graphify-out directory"""
+    graphify_path = Path(ROOT_DIR).parent / "graphify-out" / "graph.html"
+    if graphify_path.exists():
+        try:
+            content = graphify_path.read_text()
+            return Response(content=content, media_type="text/html")
+        except Exception as e:
+            return {"error": f"Could not read graphify: {e}"}
+    return {"error": "graphify-out/graph.html not found", "path": str(graphify_path)}
+
+@api.get("/graphify/info")
+async def graphify_info():
+    """Info about graphify integration"""
+    graphify_path = Path(ROOT_DIR).parent / "graphify-out" / "graph.html"
+    exists = graphify_path.exists()
+    return {
+        "graphify_enabled": exists,
+        "path": str(graphify_path),
+        "endpoints": {
+            "html": "/api/graphify/html",
+            "info": "/api/graphify/info",
+            "dashboard": "/graphify"
+        },
+        "usage": "Open /graphify in Mission Control UI to view repository graph"
     }
 
 # ---------- Mission metrics ticker --------------------------------------- #
