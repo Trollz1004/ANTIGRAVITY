@@ -1,5 +1,5 @@
 import { useState, type JSX } from 'react';
-import type { AgentResult, TaskStatus } from '../types';
+import type { AgentResult, TaskArtifacts, TaskStatus } from '../types';
 
 export function StatusDot({ status }: { status: TaskStatus | AgentResult['status'] }) {
   const cls =
@@ -32,7 +32,43 @@ const PHASE_LABEL: Record<string, string> = {
   work: 'DELEGATE',
   validate: 'VALIDATE',
   journal: 'JOURNAL',
+  deliver: 'DELIVER',
 };
+
+/**
+ * What the task actually produced on disk.
+ *
+ * The single most important thing on a finished card. Orchestrators are fluent
+ * enough to describe work they never did, so "0 files — text only" has to be as
+ * visible as a success; a green DONE with nothing behind it is the failure mode
+ * this whole panel exists to expose.
+ */
+export function ArtifactBar({ artifacts }: { artifacts?: TaskArtifacts }) {
+  if (!artifacts) return null;
+  const empty = artifacts.files.length === 0;
+  return (
+    <div className={`artifacts ${empty ? 'artifacts--empty' : 'artifacts--ok'}`}>
+      <span className="artifacts__count">
+        {empty ? 'NO FILES' : `${artifacts.files.length} FILE${artifacts.files.length === 1 ? '' : 'S'}`}
+      </span>
+      {!empty && (
+        <>
+          {artifacts.committed && <span className="artifacts__tag">committed</span>}
+          {artifacts.pushed && <span className="artifacts__tag">pushed</span>}
+          <code className="artifacts__path" title={artifacts.workspace ?? ''}>
+            {artifacts.workspace}
+          </code>
+        </>
+      )}
+      {empty && <span className="artifacts__note">{artifacts.note}</span>}
+      {artifacts.skipped.length > 0 && (
+        <span className="artifacts__skipped" title={artifacts.skipped.map((s) => `${s.path} — ${s.why}`).join('\n')}>
+          {artifacts.skipped.length} skipped
+        </span>
+      )}
+    </div>
+  );
+}
 
 export function ResultBlock({ result }: { result: AgentResult }) {
   const [open, setOpen] = useState(result.status === 'error');
