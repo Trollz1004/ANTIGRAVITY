@@ -555,3 +555,259 @@ section[id] {
 .glass-strong .text-slate-600 {
   color: var(--app-muted);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Kiss Me–style dark app shell (YouAndINotAI redesign 2026-08)
+   Mobile-first dark glass + gradient CTAs. No charity language.
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --km-bg: #0a0a0f;
+  --km-surface: #14141c;
+  --km-surface-2: #1c1c28;
+  --km-border: rgba(255, 255, 255, 0.08);
+  --km-text: #f4f2ff;
+  --km-muted: #9b97b0;
+  --km-accent: #c4b5fd;
+  --km-accent-2: #67e8f9;
+  --km-pink: #f0abfc;
+  --km-gradient: linear-gradient(90deg, #67e8f9 0%, #a78bfa 45%, #f0abfc 100%);
+}
+
+.km-shell {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(167, 139, 250, 0.18), transparent 55%),
+    radial-gradient(circle at 90% 80%, rgba(103, 232, 249, 0.06), transparent 35%),
+    var(--km-bg);
+  color: var(--km-text);
+  min-height: 100vh;
+}
+
+.km-workspace {
+  background: transparent;
+}
+
+.km-page {
+  animation: fade-in 0.28s ease-out both;
+}
+
+.km-heart-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #a78bfa, #f0abfc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.km-card {
+  border: 1px solid var(--km-border);
+  border-radius: 1.25rem;
+  background: linear-gradient(180deg, rgba(28, 28, 40, 0.95), rgba(20, 20, 28, 0.92));
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.km-card-glow {
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(167, 139, 250, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.km-btn-gradient,
+.km-btn-ghost,
+.km-pill,
+.km-chip,
+.km-nav-item,
+.km-bottom-item,
+.km-fab-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.km-btn-gradient {
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.75rem 1.25rem;
+  color: #0a0a0f;
+  background: var(--km-gradient);
+  box-shadow: 0 8px 24px rgba(167, 139, 250, 0.28);
+}
+
+.km-btn-gradient:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+.km-btn-ghost {
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.7rem 1.1rem;
+  color: var(--km-text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--km-border);
+}
+
+.km-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.km-pill {
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.55rem 0.4rem;
+  font-size: 0.72rem;
+  color: var(--km-text);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--km-border);
+}
+
+.km-chip {
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.72rem;
+  color: #0a0a0f;
+  background: var(--km-gradient);
+}
+
+.km-input {
+  width: 100%;
+  border-radius: 0.9rem;
+  border: 1px solid var(--km-border);
+  background: var(--km-surface-2);
+  color: var(--km-text);
+  padding: 0.7rem 0.9rem;
+  outline: none;
+}
+
+.km-input:focus {
+  border-color: rgba(167, 139, 250, 0.55);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+}
+
+.km-avatar-ring {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  padding: 2px;
+  background: var(--km-gradient);
+  flex-shrink: 0;
+}
+
+.km-avatar-ring > div {
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.km-tabs {
+  display: flex;
+  gap: 1.25rem;
+  border-bottom: 1px solid var(--km-border);
+}
+
+.km-tab {
+  position: relative;
+  padding: 0.65rem 0.15rem;
+  background: transparent;
+  border: none;
+  color: var(--km-muted);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.km-tab-active {
+  color: var(--km-text);
+}
+
+.km-tab-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--km-gradient);
+}
+
+.km-nav-item {
+  width: 100%;
+  border-radius: 0.9rem;
+  padding: 0.75rem 0.9rem;
+  color: var(--km-muted);
+  background: transparent;
+}
+
+.km-nav-item:hover {
+  color: var(--km-text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.km-nav-item-active {
+  color: var(--km-text);
+  background: linear-gradient(90deg, rgba(167, 139, 250, 0.16), rgba(103, 232, 249, 0.08));
+  border: 1px solid rgba(167, 139, 250, 0.25);
+}
+
+.km-bottom-item {
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.2rem;
+  border-radius: 0.85rem;
+  padding: 0.45rem 0.2rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--km-muted);
+  background: transparent;
+}
+
+.km-bottom-item-active {
+  color: var(--km-text);
+}
+
+.km-fab-nav {
+  justify-content: center;
+  width: 3.1rem;
+  height: 3.1rem;
+  margin: 0 auto 0.35rem;
+  border-radius: 999px;
+  color: #0a0a0f;
+  background: var(--km-gradient);
+  box-shadow: 0 8px 22px rgba(167, 139, 250, 0.35);
+  transform: translateY(-0.35rem);
+}
+
+.km-fab-nav-active {
+  box-shadow:
+    0 8px 22px rgba(167, 139, 250, 0.45),
+    0 0 0 3px rgba(240, 171, 252, 0.25);
+}
+
+/* Make authenticated app pages inherit dark shell even if child still uses light classes */
+.km-shell .app-page,
+.km-shell .app-workspace {
+  color: var(--km-text);
+}
+
+.km-shell .app-title {
+  color: var(--km-text);
+}
+
+.km-shell .app-subtitle,
+.km-shell .app-kicker {
+  color: var(--km-muted);
+}
