@@ -389,45 +389,61 @@ async def pieces_health():
 
 @api.get("/harness/routing")
 async def harness_routing():
-    """Agent harness routing configuration"""
+    """Agent harness routing configuration (OmniRoute VS Code token endpoint on LAN)"""
     import http.client
+    
+    vscode_token = "sk-2d68e6e3a0ccb6fa-3d6f95-87e62541"
+    omniroute_base = f"http://192.168.0.15:20128/api/v1/vscode/{vscode_token}"
     
     harnesses = {
         "opencode": {
             "priority": 1,
-            "endpoint": "http://localhost:20128/api/v1",
-            "auth_key": "OPENCODE_API_KEY",
+            "base_url": f"{omniroute_base}/",
+            "models_endpoint": f"{omniroute_base}/models",
+            "chat_endpoint": f"{omniroute_base}/chat/completions",
+            "auth": "Token embedded in URL",
             "fallback": "fcc-claude",
-            "description": "OpenCode harness through OmniRoute gateway"
+            "description": "OpenCode harness through OmniRoute VS Code endpoint (LAN accessible)",
+            "notes": "Uses 192.168.0.15 for laptop/shared access; token auth: sk-2d68...41"
         },
         "fcc-claude": {
             "priority": 2,
-            "endpoint": "http://localhost:8082",
-            "auth_key": "ANTHROPIC_AUTH_TOKEN",
+            "base_url": f"{omniroute_base}/",
+            "models_endpoint": f"{omniroute_base}/models",
+            "chat_endpoint": f"{omniroute_base}/chat/completions",
+            "auth": "Token embedded in URL",
             "fallback": None,
-            "description": "FCC-Claude wrapper CLI"
+            "description": "FCC-Claude wrapper CLI (fallback to OpenCode)",
+            "notes": "Same OmniRoute endpoint for consistency"
         }
     }
     
-    # Check OmniRoute health (primary harness endpoint)
+    # Check OmniRoute health via LAN IP + token endpoint
     omni_status = "unreachable"
+    omni_model_count = 0
     try:
-        conn = http.client.HTTPConnection("localhost", 20128, timeout=2)
-        conn.request("GET", "/api/v1/models")
+        conn = http.client.HTTPConnection("192.168.0.15", 20128, timeout=3)
+        conn.request("GET", f"/api/v1/vscode/{vscode_token}/models")
         resp = conn.getresponse()
         if resp.status == 200:
+            import json
+            data = json.loads(resp.read().decode())
             omni_status = "healthy"
-    except:
-        pass
+            omni_model_count = len(data.get("data", []))
+    except Exception as e:
+        omni_status = f"unreachable: {str(e)}"
     
     return {
         "primary_harness": "opencode",
-        "routing_via": "OmniRoute :20128/api/v1",
+        "routing_via": f"OmniRoute 192.168.0.15:20128/api/v1/vscode/{vscode_token}/ (LAN + token)",
         "omniroute_status": omni_status,
+        "omniroute_models_available": omni_model_count,
         "harnesses": harnesses,
         "skills_dir": str(Path(ROOT_DIR).parent / ".agents" / "skills"),
         "mcp_endpoint": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
-        "workflow": "OpenCode receives task → OmniRoute routes through model catalog → Result posted to Paperclip :3120"
+        "workflow": f"OpenCode task → OmniRoute (192.168.0.15:20128/api/v1/vscode/{vscode_token}/) → model catalog → Result to Paperclip :3120",
+        "laptop_access": "Laptop at 192.168.0.15 reaches all T5500 services via LAN with token auth",
+        "api_keys_location": "C:\\Users\\joshl\\.env (master vault, REDACTED in output)"
     }
 
 # ---------- Mission metrics ticker --------------------------------------- #
