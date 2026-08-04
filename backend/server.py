@@ -387,6 +387,49 @@ async def pieces_health():
             "message": "Pieces LTM MCP not responding — check Pieces OS service"
         }
 
+@api.get("/harness/routing")
+async def harness_routing():
+    """Agent harness routing configuration"""
+    import http.client
+    
+    harnesses = {
+        "opencode": {
+            "priority": 1,
+            "endpoint": "http://localhost:20128/api/v1",
+            "auth_key": "OPENCODE_API_KEY",
+            "fallback": "fcc-claude",
+            "description": "OpenCode harness through OmniRoute gateway"
+        },
+        "fcc-claude": {
+            "priority": 2,
+            "endpoint": "http://localhost:8082",
+            "auth_key": "ANTHROPIC_AUTH_TOKEN",
+            "fallback": None,
+            "description": "FCC-Claude wrapper CLI"
+        }
+    }
+    
+    # Check OmniRoute health (primary harness endpoint)
+    omni_status = "unreachable"
+    try:
+        conn = http.client.HTTPConnection("localhost", 20128, timeout=2)
+        conn.request("GET", "/api/v1/models")
+        resp = conn.getresponse()
+        if resp.status == 200:
+            omni_status = "healthy"
+    except:
+        pass
+    
+    return {
+        "primary_harness": "opencode",
+        "routing_via": "OmniRoute :20128/api/v1",
+        "omniroute_status": omni_status,
+        "harnesses": harnesses,
+        "skills_dir": str(Path(ROOT_DIR).parent / ".agents" / "skills"),
+        "mcp_endpoint": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
+        "workflow": "OpenCode receives task → OmniRoute routes through model catalog → Result posted to Paperclip :3120"
+    }
+
 # ---------- Mission metrics ticker --------------------------------------- #
 @api.get("/mission/metrics")
 async def mission_metrics():
