@@ -1,13 +1,27 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Banknote, CreditCard, Landmark, ShieldCheck, Wallet } from 'lucide-react';
+import { Banknote, CreditCard, Landmark, QrCode, ShieldCheck, Wallet } from 'lucide-react';
 import { api } from '../../lib/api';
 
-type Rail = 'square' | 'paypal' | 'cashapp' | 'plaid';
+type Rail = 'square' | 'paypal' | 'paypal_qr' | 'cashapp' | 'plaid';
+
+/** Public PayPal managed QR links decoded from Telegram screenshots 2026-08-04 */
+export const PAYPAL_QR = {
+  primary: {
+    label: 'Joshua Coleman',
+    href: 'https://www.paypal.com/qrcodes/managed/f5e4ef25-cf72-45e5-b093-21263d76eeec',
+    image: '/payments/paypal-joshua-coleman-qr.jpg',
+  },
+  tipJar: {
+    label: 'Tip Jar',
+    href: 'https://www.paypal.com/qrcodes/managed/e1b0e1e7-ff93-4173-92ac-c2a2c23795ca',
+    image: '/payments/paypal-tip-jar-qr.jpg',
+  },
+} as const;
 
 /**
  * Multi-rail checkout picker.
- * Square = primary (live). PayPal / Cash App / Plaid = configured when env present.
+ * Square = primary (live). PayPal API + QR / Cash App / Plaid.
  * STRIPE IS HARD-BANNED on dating surface.
  */
 export function PayMethods() {
@@ -15,11 +29,17 @@ export function PayMethods() {
   const [tier, setTier] = useState('founding_member');
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
+  const [qrWhich, setQrWhich] = useState<'primary' | 'tipJar'>('primary');
 
   const launch = async () => {
     setBusy(true);
     setMsg('');
     try {
+      if (rail === 'paypal_qr') {
+        window.open(PAYPAL_QR[qrWhich].href, '_blank', 'noopener,noreferrer');
+        setMsg('Opened PayPal QR link. Prefer Square for account-bound memberships.');
+        return;
+      }
       if (rail === 'square') {
         const res = await api.post<{ checkout_url: string }>('/billing/checkout-link', {
           tier,
@@ -28,11 +48,18 @@ export function PayMethods() {
         return;
       }
       if (rail === 'paypal') {
-        const res = await api.post<{ approve_url: string }>('/billing/paypal/create-order', {
-          tier,
-        });
-        window.location.href = res.approve_url;
-        return;
+        try {
+          const res = await api.post<{ approve_url: string }>('/billing/paypal/create-order', {
+            tier,
+          });
+          window.location.href = res.approve_url;
+          return;
+        } catch {
+          // API not configured — fall through to managed QR
+          window.open(PAYPAL_QR.primary.href, '_blank', 'noopener,noreferrer');
+          setMsg('PayPal API not configured — opened Joshua Coleman QR receive link instead.');
+          return;
+        }
       }
       if (rail === 'cashapp') {
         const res = await api.post<{ checkout_url: string }>('/billing/cashapp/checkout', {
@@ -64,9 +91,15 @@ export function PayMethods() {
     },
     {
       id: 'paypal',
-      name: 'PayPal',
+      name: 'PayPal checkout',
       icon: Wallet,
-      note: 'Alternate checkout when PAYPAL_* env set',
+      note: 'API order when env set · else QR receive link',
+    },
+    {
+      id: 'paypal_qr',
+      name: 'PayPal QR',
+      icon: QrCode,
+      note: 'Scan. Pay. Go. · Joshua Coleman + Tip Jar',
     },
     {
       id: 'cashapp',
@@ -81,6 +114,8 @@ export function PayMethods() {
       note: 'Bank identity / account verification (not card charge)',
     },
   ];
+
+  const activeQr = PAYPAL_QR[qrWhich];
 
   return (
     <div className="km-page mx-auto max-w-lg px-4 py-5">
@@ -112,7 +147,43 @@ export function PayMethods() {
         ))}
       </div>
 
-      {rail !== 'plaid' && (
+      {rail === 'paypal_qr' && (
+        <section className="km-card km-card-glow mt-5 p-4">
+          <div className="mb-3 flex gap-2">
+            <button
+              type="button"
+              className={`km-pill flex-1 ${qrWhich === 'primary' ? 'ring-1 ring-[var(--km-accent)]' : ''}`}
+              onClick={() => setQrWhich('primary')}
+            >
+              PayPal
+            </button>
+            <button
+              type="button"
+              className={`km-pill flex-1 ${qrWhich === 'tipJar' ? 'ring-1 ring-[var(--km-accent)]' : ''}`}
+              onClick={() => setQrWhich('tipJar')}
+            >
+              Tip Jar
+            </button>
+          </div>
+          <div className="text-center text-sm font-semibold">{activeQr.label}</div>
+          <img
+            src={activeQr.image}
+            alt={`${activeQr.label} PayPal QR`}
+            className="mx-auto mt-3 max-h-80 w-auto rounded-2xl border border-[var(--km-border)]"
+          />
+          <a
+            href={activeQr.href}
+            target="_blank"
+            rel="noreferrer"
+            className="km-btn-ghost mt-3 w-full justify-center no-underline text-sm"
+          >
+            Open PayPal link
+          </a>
+          <p className="mt-2 text-center text-xs text-[var(--km-muted)]">Scan. Pay. Go.</p>
+        </section>
+      )}
+
+      {rail !== 'plaid' && rail !== 'paypal_qr' && (
         <label className="mt-5 block text-xs text-[var(--km-muted)]">
           Plan tier
           <select
@@ -134,7 +205,13 @@ export function PayMethods() {
         onClick={launch}
         className="km-btn-gradient mt-5 w-full justify-center disabled:opacity-50"
       >
-        {busy ? 'Starting…' : rail === 'plaid' ? 'Start Plaid verify' : `Pay with ${rail}`}
+        {busy
+          ? 'Starting…'
+          : rail === 'plaid'
+            ? 'Start Plaid verify'
+            : rail === 'paypal_qr'
+              ? `Open ${activeQr.label} PayPal`
+              : `Pay with ${rail}`}
       </button>
 
       {msg && (
@@ -148,10 +225,13 @@ export function PayMethods() {
         <div>
           Account-bound sessions for Square stay linked to your login email. Affiliate traffic must
           enter via{' '}
-          <a className="text-[var(--km-accent)] underline" href="https://trollz1004.github.io/youandinotai-links/?ref=clean-repo">
+          <a
+            className="text-[var(--km-accent)] underline"
+            href="https://trollz1004.github.io/youandinotai-links/?ref=clean-repo"
+          >
             the public landing
           </a>
-          .
+          . PayPal QRs are receive links for soft-open / tips; memberships prefer Square.
         </div>
       </div>
 

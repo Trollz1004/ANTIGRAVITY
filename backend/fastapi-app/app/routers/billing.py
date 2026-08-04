@@ -94,9 +94,12 @@ class PlaidLinkTokenResponse(BaseModel):
 class RailsStatusResponse(BaseModel):
     square: bool
     paypal: bool
+    paypal_qr: bool = True
     cashapp: bool
     plaid: bool
     stripe: bool = False  # always false — iron wall
+    paypal_qr_primary: str | None = None
+    paypal_qr_tip_jar: str | None = None
 
 
 def _assert_not_stripe(path_hint: str = "") -> None:
@@ -114,6 +117,7 @@ async def rails_status() -> RailsStatusResponse:
             str(getattr(s, "paypal_client_id", "") or "").strip()
             and str(getattr(s, "paypal_client_secret", "") or "").strip()
         ),
+        paypal_qr=bool(str(getattr(s, "paypal_qr_primary_url", "") or "").strip()),
         cashapp=bool(
             str(getattr(s, "cashapp_checkout_base_url", "") or "").strip()
             or str(getattr(s, "cashapp_cashtag", "") or "").strip()
@@ -124,6 +128,10 @@ async def rails_status() -> RailsStatusResponse:
             and str(getattr(s, "plaid_secret", "") or "").strip()
         ),
         stripe=False,
+        paypal_qr_primary=str(getattr(s, "paypal_qr_primary_url", "") or "").strip()
+        or None,
+        paypal_qr_tip_jar=str(getattr(s, "paypal_qr_tip_jar_url", "") or "").strip()
+        or None,
     )
 
 
