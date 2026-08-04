@@ -440,7 +440,33 @@ async def harness_routing():
         "workflow": "OpenCode task → OmniRoute (192.168.0.15, token auth) → model catalog → Result to Paperclip :3120",
         "laptop_access": "Laptop at 192.168.0.15 reaches all T5500 services via LAN with token auth",
         "api_keys_location": "C:\\Users\\joshl\\.env (master vault, NEVER committed)",
-        "key_rotation": "Update C:\\Users\\joshl\\.env only, restart OmniRoute service"
+        "key_rotation": "Update C:\\Users\\joshl\\.env only, restart OmniRoute service",
+        "cli_wrappers": {
+            "hermes": {
+                "type": "python",
+                "entry": "python C:\\Users\\joshl\\.hermes\\hermes_agent.py",
+                "config": "C:\\Users\\joshl\\.hermes\\config.yaml",
+                "routing": "omniroute (192.168.0.15:20128)",
+                "mcp": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
+                "skills": "C:\\Users\\joshl\\.agents\\skills"
+            },
+            "fcc-claude": {
+                "type": "cli",
+                "entry": "fcc-claude",
+                "config": "C:\\Users\\joshl\\.fcc\\.env",
+                "routing": "omniroute (via FCC proxy)",
+                "mcp": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
+                "skills": "C:\\Users\\joshl\\.agents\\skills"
+            },
+            "opencode": {
+                "type": "json",
+                "config": "C:\\Users\\joshl\\.opencode\\opencode.json",
+                "routing": "omniroute (192.168.0.15:20128)",
+                "models": ["omniroute/auto/best-coding", "omniroute/auto/best-fast", "ollama/ornith:9b"],
+                "mcp": "http://localhost:39300/model_context_protocol/2025-03-26/mcp",
+                "skills": "C:\\Users\\joshl\\.agents\\skills"
+            }
+        }
     }
 
 # ---------- Mission metrics ticker --------------------------------------- #
