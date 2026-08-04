@@ -29,23 +29,29 @@ Get-Content logs\watchdog-silent-$(Get-Date -Format 'yyyyMMdd').log
 
 ## Architecture
 
-### Three Critical Services on T5500
+### All Monitored Services on T5500
 
-| Service | Port | Role | Graphify Link |
-|---------|------|------|---------------|
-| **OmniRoute** | :20128 | Gateway + load balancer + credential store | `/dashboard/graphify` |
-| **Mission Control** | :3151 | Agent orchestrator + execution engine | `/graphify` endpoint |
-| **DateApp Frontend** | :3200 | Production youandinotai.com UI | Via tunnel (cloudflared) |
-| **DateApp Backend** | :8000 | FastAPI services + data layer | Watched (no auto-restart) |
+| Service | Port | Role | Auto-Restart | Monitor Only |
+|---------|------|------|--------------|--------------|
+| **OmniRoute** | :20128 | Gateway + load balancer + credentials | ✓ Yes | - |
+| **Mission Control** | :3151 | Agent orchestrator + execution | ✓ Yes | - |
+| **DateApp Frontend** | :3200 | Production youandinotai.com UI | ✓ Yes | - |
+| **DateApp Backend** | :8000 | FastAPI services + data layer | - | ✓ Log only |
+| **Paperclip** | :3120 | Agent runtime + adapters | - | ✓ Log only |
+| **Hermes** | :9119 | Agent dashboard + chat | - | ✓ Log only |
+| **OpenClaw** | :18789 | ClawX gateway + support | - | ✓ Log only |
+| **Ollama** | :11434 | Local model inference | - | ✓ Log only |
+| **FCC** | :8082 | Claude MCP proxy + admin UI | - | ✓ Log only |
 
 ### Silent Watchdog Loop
 
 Every 30 seconds (pure background):
-1. Test TCP connection to :20128, :3151, :3200, :8000
-2. Log status (disk only, no console)
-3. If any service fails 3 times, attempt restart
-4. Run for 8 hours, then exit (systemd/scheduled task restarts it daily)
-5. **ZERO terminal windows, ZERO popups, cursor never moves**
+1. Test TCP connections to all 9 ports (:20128, :3151, :3200, :8000, :3120, :9119, :18789, :11434, :8082)
+2. **Auto-restart only:** OmniRoute (:20128), Mission Control (:3151), DateApp (:3200)
+3. **Monitor-only (log, no restart):** DateApp Backend, Paperclip, Hermes, OpenClaw, Ollama, FCC
+4. Log status to disk (never stdout)
+5. Run for 8 hours, then exit (scheduled task restarts it on next startup/logon)
+6. **ZERO terminal windows, ZERO popups, cursor never moves**
 
 ---
 
