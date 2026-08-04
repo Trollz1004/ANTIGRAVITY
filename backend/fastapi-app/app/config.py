@@ -48,6 +48,18 @@ class Settings(BaseSettings):
     square_booking_log_dir: str = ""
     square_api_base_url: str = "https://connect.squareup.com"
     square_api_version: str = "2026-01-22"
+    # Alternate rails for dating surface (NO STRIPE — Iron Wall)
+    paypal_client_id: str = ""
+    paypal_client_secret: str = ""
+    paypal_api_base_url: str = "https://api-m.paypal.com"
+    paypal_webhook_id: str = ""
+    cashapp_cashtag: str = ""  # e.g. $YouAndINotAI — display / deep-link assist
+    cashapp_checkout_base_url: str = ""  # optional hosted Cash App Business checkout
+    plaid_client_id: str = ""
+    plaid_secret: str = ""
+    plaid_env: str = "sandbox"  # sandbox | development | production
+    plaid_products: str = "auth,identity"
+    plaid_country_codes: str = "US"
     app_url: str = "https://youandinotai.com"
     email_from_address: str = ""
     email_from_name: str = "YouAndINotAI"

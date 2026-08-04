@@ -1,31 +1,48 @@
 ---
 name: payments
-description: Square vs Stripe per-surface rules, live payment links, webhook verification, revenue allocation flow, and Square location/account details. Use for any payment button, checkout, subscription, webhook, ledger entry, or pricing page work on youandinotai.com or sibling surfaces.
+description: Square primary + PayPal + Cash App Business + Plaid verify for dating surface. Stripe banned on youandinotai. Use for checkout, webhooks, pricing, pre-order rails.
+version: 2.0.0
 ---
 
-# Payments (Square Primary for Dating)
+# Payments (Dating Surface — Multi-Rail, No Stripe)
 
 ## Hard Rules
-- youandinotai.com (dating / social-discovery): Square ONLY. Stripe AUP prohibits dating platforms.
-- Non-dating surfaces (onlinerecycle.org, ai-solutions.store, YouTube, merch, etc.): Stripe is fine.
-- All money flows through normal LLC merchant, bank, ledger, and tax workflows.
-- Live Square account: joshlcoleman@gmail.com , location LY5GN09F5AN83 (Trash Or Treasure / YouAndINotAI).
-- Current links (verify before use):
-  - Bot-Shield $1: https://square.link/u/Qc5mxUy7
-  - Founding Member $14.99/mo: https://square.link/u/cxwjcn0s
-  - 3-Month $39.99: https://square.link/u/oY7qEfRM
-  - 12-Month $99.99: https://square.link/u/6GHpbvvl
-  - Premium Card $2,500: https://square.link/u/CafhorUS
+- youandinotai dating surface: **Square primary**, plus **PayPal**, **Cash App Business**, **Plaid** (verification).
+- **STRIPE IS BANNED** on dating — AUP + founder iron wall. Never import stripe SDK here.
+- All money through LLC merchant / normal tax workflows.
+- Affiliate traffic: `https://trollz1004.github.io/youandinotai-links/?ref=CODE` (never raw square short links for ref tracking).
 
-## Webhooks & Security
-- SQUARE_WEBHOOK_VERIFY_SIGNATURE=true in CI and prod.
-- Always verify signature (HMAC), replay protection, malformed header tests.
-- See /mnt/c/antigravity/backend/fastapi-app for the webhook handler and tests.
+## Env (no secrets in repo)
+```
+SQUARE_ACCESS_TOKEN=
+SQUARE_LOCATION_ID=
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
+PAYPAL_API_BASE_URL=https://api-m.paypal.com
+CASHAPP_CASHTAG=
+CASHAPP_CHECKOUT_BASE_URL=
+PLAID_CLIENT_ID=
+PLAID_SECRET=
+PLAID_ENV=sandbox
+```
+
+## API
+| Method | Path | Rail |
+|--------|------|------|
+| GET | `/billing/rails` | status flags (stripe always false) |
+| POST | `/billing/checkout-link` | Square |
+| POST | `/billing/paypal/create-order` | PayPal |
+| POST | `/billing/cashapp/checkout` | Cash App / Square fallback |
+| POST | `/billing/plaid/link-token` | Plaid verify |
+
+## Frontend
+- `/app/pay` — rail picker
+- `/app/preorder` — launch countdown + Elite affiliate
+- `/app/checkout/:tier` — Square account-bound launch
+
+## Live Square links (verify before use)
+Prefer long checkout.square.site URLs over short square.link when short 404s.
+Landing preserves `?ref=`.
 
 ## When to Use
-- Adding/editing any pricing, membership, Bot-Shield, founder plan, or premium-access UI.
-- Touching payment webhooks, allocation code, or Square catalog copy.
-- Reconciling revenue_allocations ledger vs Square dashboard.
-- Creating a new revenue surface with business-only product positioning.
-
-Never hardcode payment secrets or retired payment-routing logic in customer paths.
+Any pricing, membership, Bot-Shield, founder plan, pre-order, webhook, or ledger work on dating.

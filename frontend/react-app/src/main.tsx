@@ -49,6 +49,11 @@ const LazyVolunteering = lazy(() => import('./app/pages/Volunteering'));
 const LazySupport = lazy(() => import('./app/pages/Support'));
 const LazyVerify = lazy(() => import('./app/pages/Verify'));
 const LazyCheckoutLaunch = lazy(() => import('./app/pages/CheckoutLaunch'));
+const LazyCreateStudio = lazy(() => import('./app/pages/CreateStudio'));
+const LazyAnimatedAvatar = lazy(() => import('./app/pages/AnimatedAvatar'));
+const LazyPreOrder = lazy(() => import('./app/pages/PreOrder'));
+const LazyPayMethods = lazy(() => import('./app/pages/PayMethods'));
+const LazyVideoLobby = lazy(() => import('./app/pages/VideoLobby'));
 
 function PageErrorFallback({
   errorId,
@@ -370,6 +375,96 @@ createRoot(document.getElementById('root')!).render(
                     >
                       <Suspense fallback={<SkeletonLoader />}>
                         <LazyCheckoutLaunch />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/app/create"
+                  element={
+                    <ErrorBoundary
+                      boundaryName="page:create"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyCreateStudio />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/app/avatar"
+                  element={
+                    <ErrorBoundary
+                      boundaryName="page:avatar"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyAnimatedAvatar />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/app/preorder"
+                  element={
+                    <ErrorBoundary
+                      boundaryName="page:preorder"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyPreOrder />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/app/pay"
+                  element={
+                    <ErrorBoundary
+                      boundaryName="page:pay"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyPayMethods />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/app/video-lobby"
+                  element={
+                    <ErrorBoundary
+                      boundaryName="page:video-lobby"
+                      fallback={(errorId, reset) => (
+                        <PageErrorFallback
+                          errorId={errorId}
+                          resetError={reset}
+                        />
+                      )}
+                    >
+                      <Suspense fallback={<SkeletonLoader />}>
+                        <LazyVideoLobby />
                       </Suspense>
                     </ErrorBoundary>
                   }
