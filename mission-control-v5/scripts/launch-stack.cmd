@@ -27,6 +27,7 @@ rem OmniRoute goes first - every other lane routes through it. DateApp is next
 rem because it is the only public-facing product; if the machine reboots and
 rem nothing else comes back, youandinotai.com still should.
 wt -w antigravity ^
+  new-tab --title "ollama" cmd /k "%SCRIPTS%tab-ollama.cmd" ; ^
   new-tab --title "omniroute" cmd /k "%SCRIPTS%tab-omniroute.cmd" ; ^
   new-tab --title "dateapp-3200" cmd /k "%SCRIPTS%tab-dateapp.cmd" ; ^
   new-tab --title "mission-control-3151" cmd /k "%SCRIPTS%tab-mission-control.cmd" ; ^
@@ -37,6 +38,7 @@ wt -w antigravity ^
 
 if errorlevel 1 (
   rem Windows Terminal missing/failed - fall back to plain windows.
+  start "ollama" cmd /k "%SCRIPTS%tab-ollama.cmd"
   start "omniroute" cmd /k "%SCRIPTS%tab-omniroute.cmd"
   start "dateapp-3200" cmd /k "%SCRIPTS%tab-dateapp.cmd"
   start "mission-control-3151" cmd /k "%SCRIPTS%tab-mission-control.cmd"
