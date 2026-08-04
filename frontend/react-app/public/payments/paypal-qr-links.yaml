@@ -1,0 +1,23 @@
+# Public PayPal receive links (from Telegram QR screenshots 2026-08-04)
+# Safe to ship in frontend — these are customer-facing payment QRs, not API secrets.
+
+paypal:
+  display_name: Joshua Coleman
+  brand: PayPal
+  tagline: "Scan. Pay. Go."
+  primary:
+    label: PayPal (Joshua Coleman)
+    qr_image: /payments/paypal-joshua-coleman-qr.jpg
+    source_photo: "Telegram Desktop/photo_2026-08-04_16-28-04.jpg"
+    managed_url: "https://www.paypal.com/qrcodes/managed/f5e4ef25-cf72-45e5-b093-21263d76eeec"
+  tip_jar:
+    label: Tip Jar
+    qr_image: /payments/paypal-tip-jar-qr.jpg
+    source_photo: "Telegram Desktop/photo_2026-08-04_16-28-18.jpg"
+    managed_url: "https://www.paypal.com/qrcodes/managed/e1b0e1e7-ff93-4173-92ac-c2a2c23795ca"
+
+notes:
+  - Dating surface still primary-charges via Square account-bound checkout when possible.
+  - These QRs are alternate receive rails (manual / tip / soft-open pre-order assist).
+  - NO STRIPE.
+  - Do not commit PayPal client secrets here — only public QR URLs.
