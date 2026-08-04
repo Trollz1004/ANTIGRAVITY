@@ -1,6 +1,0 @@
-name: claude
-version: 0.1
-source: local-cli
-description: "Trusted internal orchestrator — MUST be invoked via local CLI or internal binary only. No remote API usage permitted."
-owner: sabretooth
-node_id: sabretooth
