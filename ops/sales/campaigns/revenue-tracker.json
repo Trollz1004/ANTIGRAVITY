@@ -1,56 +1,110 @@
 {
-  "campaign": "revenue-funnel",
+  "campaign": "revenue-10k-swarm",
   "status": "ACTIVE",
   "target_usd": 10000,
-  "timeframe_hours": 168,
+  "collected_usd_verified": 0,
+  "updated_at": "2026-08-05T00:00:00Z",
+  "goal_note": "Cover AI costs a year in advance (GPU/server updates for AI team) + catch up on taxes. Not canceled.",
   "primary_currency": "USD",
   "square_account_email": "ebaytrashortreasure@gmail.com",
   "square_location_id": "LY5GN09F5AN83",
+  "square_merchant_id": "ML3C7FMTQS5KX",
+  "payment_policy": "Square long_url checkout only. Never square.link/u short links (404). No Stripe in public surfaces.",
+  "consumer_plans": {
+    "bot_shield": {
+      "name": "Bot-Shield Verification",
+      "amount_usd": 1,
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/bcHu484B9lXIcLED1NCOMIylqGRZY",
+      "verified_http": 200,
+      "verified_at": "2026-08-05"
+    },
+    "founding_member": {
+      "name": "Founding Member",
+      "amount_usd": 14.99,
+      "cadence": "monthly",
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/1PqO8OO9u4KXHnEF8KKXbxkzzAGZY",
+      "verified_http": 200,
+      "verified_at": "2026-08-05"
+    },
+    "three_month": {
+      "name": "3-Month Membership",
+      "amount_usd": 39.99,
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/RZssa4MoM54IEqiH0cMC3ThIGNbZY",
+      "verified_http": 200,
+      "verified_at": "2026-08-05"
+    },
+    "twelve_month": {
+      "name": "12-Month Membership",
+      "amount_usd": 99.99,
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/fKfvKZECYyPgQHvgAiW2kDdYiBCZY",
+      "verified_http": 200,
+      "verified_at": "2026-08-05"
+    },
+    "royalty_card": {
+      "name": "Royalty Card",
+      "amount_usd": 2500,
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/dDSMLPeCFqlOzk68juBxdKJoC9NZY",
+      "verified_http": 200,
+      "verified_at": "2026-08-05"
+    }
+  },
   "revenue_streams": {
     "security_cleanup": {
       "name": "Security Cleanup",
       "setup_fee": 1500,
       "monthly_recurring": 200,
-      "payment_link_type": "square_direct_checkout",
-      "square_payment_link_id": null,
-      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/REPLACEME",
-      "landing": "E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html"
+      "payment_link_type": "email_then_square",
+      "square_checkout_url": null,
+      "fallback_pay": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/dDSMLPeCFqlOzk68juBxdKJoC9NZY",
+      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html"
     },
     "agentic_workflows": {
       "name": "Agentic Workflows",
       "setup_fee": 2500,
       "monthly_recurring": 500,
       "payment_link_type": "square_direct_checkout",
-      "square_payment_link_id": null,
-      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/REPLACEME",
-      "landing": "E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html"
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/dDSMLPeCFqlOzk68juBxdKJoC9NZY",
+      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html"
     },
     "storefront_deployment": {
       "name": "Storefront Deployment",
       "setup_fee": 950,
       "transaction_fee_percent": 3.0,
-      "payment_link_type": "square_direct_checkout",
-      "square_payment_link_id": null,
-      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/REPLACEME",
-      "landing": "E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html"
+      "payment_link_type": "email_then_square",
+      "square_checkout_url": null,
+      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html"
     },
     "tech_debt_cleanup": {
       "name": "Tech Debt Cleanup",
       "sprint_cost": 4000,
-      "payment_link_type": "square_direct_checkout",
-      "square_payment_link_id": null,
-      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/REPLACEME",
-      "landing": "E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html"
+      "payment_link_type": "email_then_square",
+      "square_checkout_url": null,
+      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html"
     },
     "api_management": {
       "name": "API Management",
       "setup_fee": 1200,
-      "transaction_fee_percent": 0.05,
-      "payment_link_type": "square_direct_checkout",
-      "square_payment_link_id": null,
-      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/REPLACEME",
-      "landing": "E:/ANTIGRAVITY/apps/youandinotai-static/landing-revenue.html"
+      "payment_link_type": "email_then_square",
+      "square_checkout_url": null,
+      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html"
     }
   },
-  "note": "All payment links must use Square direct checkout URLs (long_url), NOT square.link/u/ short links. Short links return 404. Update payment_truth.py and frontend constants.ts accordingly."
+  "public_surfaces": {
+    "canonical_affiliate_landing": "https://trollz1004.github.io/youandinotai-links/?ref=clean-repo",
+    "join_pages": "https://trollz1004.github.io/youandinotai-join/",
+    "b2b": "https://trollz1004.github.io/youandinotai-links/b2b.html?ref=clean-repo",
+    "gist": "https://gist.github.com/Trollz1004/5b471b3a62bbac134977b0f534a8b1d5"
+  },
+  "blockers": [
+    "square.link short URLs all 404 as of 2026-08-05 — fixed on public Pages to long_url",
+    "No Square API token in this session env — cannot mint dedicated B2B payment links yet",
+    "Social publish sessions not available on Sabretooth (X only on 9020; Meta needs real Chrome cookie-sync)",
+    "Zero verified Square transactions recorded in tracker"
+  ],
+  "path_to_10k": [
+    "4x Royalty Card ($2500) = $10,000",
+    "OR 1x Tech Debt ($4000) + 1x Agentic ($2500) + 1x Security ($1500) + 2x API ($1200) ≈ $10,400",
+    "OR ~667 Founding months / mix of prepaid + Royalty"
+  ],
+  "note": "All payment links must use Square direct checkout URLs (long_url), NOT square.link/u/ short links."
 }
