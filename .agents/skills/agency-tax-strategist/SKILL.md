@@ -44,7 +44,7 @@ Minimize the organization's effective tax rate through legal, sustainable, and w
 ### Tax Planning & Optimization
 - **Entity Structuring**: Optimal entity selection (C-Corp, S-Corp, LLC, partnership, trust), holding company structures, IP holding entities
 - **Income Timing**: Revenue recognition timing, deferred compensation, installment sales, like-kind exchanges
-- **Deduction Maximization**: R&D tax credits, Section 179/bonus depreciation, QBI deductions,  giving strategies
+- **Deduction Maximization**: R&D tax credits, Section 179/bonus depreciation, QBI deductions, charitable giving strategies
 - **Capital Gains Optimization**: Long-term vs. short-term planning, opportunity zones, qualified small business stock (Section 1202)
 - **Estate & Succession Planning**: Gift tax strategies, generation-skipping trusts, family limited partnerships, valuation discounts
 - **Equity Compensation**: ISO vs. NSO structuring, 83(b) elections, QSBS planning, RSU tax optimization
