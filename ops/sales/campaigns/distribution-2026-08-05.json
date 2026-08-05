@@ -8,5 +8,25 @@
   "reddit_forhire": {
     "status": "blocked_by_network_security"
   },
-  "collected_usd_verified": 0
+  "collected_usd_verified": 0,
+  "updated_at": "2026-08-05T07:14:30.203313+00:00",
+  "telegram_messages": [
+    {
+      "message_id": "4169",
+      "ok": true
+    },
+    {
+      "message_id": "4170",
+      "ok": true,
+      "note": "share-ready one-liner"
+    }
+  ],
+  "gmail": {
+    "status": "signed_out",
+    "accounts_shown": [
+      "joshlcoleman@gmail.com",
+      "aicollab4kids@gmail.com"
+    ]
+  },
+  "blocker": "Need live authenticated outbound (Gmail sign-in / Reddit session / 9020 X). Pay rails already live."
 }
