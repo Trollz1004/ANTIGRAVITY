@@ -1,0 +1,23 @@
+{
+  "name": "brain-mcp",
+  "version": "0.1.0",
+  "description": "BRAIN MCP sidecar for ANTIGRAVITY shared operational truth and audit visibility",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "start:http": "set BRAIN_TRANSPORT=http&& node dist/index.js",
+    "token:hash": "node dist/hash-token.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "dotenv": "^16.4.7",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "typescript": "^5.7.3"
+  }
+}
+
