@@ -1,0 +1,131 @@
+{
+  "ran_at": "2026-08-05T06:48:31.727844+00:00",
+  "pass": true,
+  "fail_names": [],
+  "checks": [
+    {
+      "name": "checkout:bcHu484B9lXIcLED1NCOMIylqGRZY",
+      "ok": true,
+      "detail": {
+        "http": 200
+      }
+    },
+    {
+      "name": "checkout:1PqO8OO9u4KXHnEF8KKXbxkzzAGZY",
+      "ok": true,
+      "detail": {
+        "http": 200
+      }
+    },
+    {
+      "name": "checkout:RZssa4MoM54IEqiH0cMC3ThIGNbZY",
+      "ok": true,
+      "detail": {
+        "http": 200
+      }
+    },
+    {
+      "name": "checkout:fKfvKZECYyPgQHvgAiW2kDdYiBCZY",
+      "ok": true,
+      "detail": {
+        "http": 200
+      }
+    },
+    {
+      "name": "checkout:dDSMLPeCFqlOzk68juBxdKJoC9NZY",
+      "ok": true,
+      "detail": {
+        "http": 200
+      }
+    },
+    {
+      "name": "short_no_follow:Qc5mxUy7",
+      "ok": true,
+      "detail": {
+        "http": "404"
+      }
+    },
+    {
+      "name": "short_no_follow:cxwjcn0s",
+      "ok": true,
+      "detail": {
+        "http": "404"
+      }
+    },
+    {
+      "name": "short_no_follow:oY7qEfRM",
+      "ok": true,
+      "detail": {
+        "http": "404"
+      }
+    },
+    {
+      "name": "short_no_follow:6GHpbvvl",
+      "ok": true,
+      "detail": {
+        "http": "404"
+      }
+    },
+    {
+      "name": "page:links",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "longs": 5,
+        "bad_shorts": 0,
+        "refs": 6
+      }
+    },
+    {
+      "name": "page:b2b",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "longs": 1,
+        "bad_shorts": 0,
+        "refs": 3
+      }
+    },
+    {
+      "name": "page:join",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "longs": 5,
+        "bad_shorts": 0,
+        "refs": 6
+      }
+    },
+    {
+      "name": "gist",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "longs": 5
+      }
+    },
+    {
+      "name": "repo_artifacts",
+      "ok": true,
+      "detail": {
+        "target": 10000,
+        "collected": 0
+      }
+    },
+    {
+      "name": "git:867f28a",
+      "ok": true,
+      "detail": {
+        "on_origin": true
+      }
+    },
+    {
+      "name": "git:fb0a53c",
+      "ok": true,
+      "detail": {
+        "on_origin": true
+      }
+    }
+  ],
+  "note": "Sales/static rails verification (HTTP + artifacts). Not a pnpm monorepo suite."
+}
