@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# canonical-guard — blocks banned language on CUSTOMER SURFACES only.
+#
+# WHY THIS FILE HOLDS THE LIST:
+# The list used to live in BRIEFING.md. Commit d245c23a ("chore: purge
+# split/charity/cap/non-business language") swept the repo for those words and
+# scrubbed them out of the very document that defined them, leaving empty
+# backticks. The specification destroyed itself. A shell script is not a
+# customer surface and is not a markdown doc, so sanitizer sweeps skip it.
+# THIS FILE IS THE SOURCE OF TRUTH. Do not "clean" it.
+#
+# WHY CUSTOMER SURFACES ONLY:
+# Payment-processor flag bots keyword-match the LIVE deployed site. Even a
+# denial ("this is NOT a charitable solicitation") trips them. So on anything
+# a customer can load, the words must never appear at all.
+# Everywhere else they are FINE and often necessary — a tax-strategist skill
+# must be able to say "charitable deduction". The d245c23a purge got this
+# wrong by sweeping globally, which is what damaged 10 skill files.
+
+set -uo pipefail
+
+# ---- customer surfaces: paths a customer's browser can actually reach ----
+SURFACE_RE='^(frontend/|apps/[^/]*frontend[^/]*/|ops/sales/public-surface/|[^/]*\.html$|.*/public/|.*/marketing/)'
+
+# ---- canonical-7 banned words (recovered from d245c23a^ BRIEFING.md) ----
+BANNED_WORDS='charity|charitable|donate|donation|donations|solicitation|disbursement|tax-deductible|giving back|non-?profit|501\(c\)|proceeds go to|every dollar|funds children'
+
+# ---- revenue-split logic ----
+BANNED_SPLITS='CharityRouter|GospelDonation|100% to charity|donation splitter|split ?contract|60/30/10|revenue ?split|charity ?split'
+
+fail=0
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$staged" ] && exit 0
+
+while IFS= read -r f; do
+  echo "$f" | grep -qE "$SURFACE_RE" || continue
+  [ -f "$f" ] || continue
+
+  hits=$(git show ":$f" 2>/dev/null | grep -nIiE "$BANNED_WORDS|$BANNED_SPLITS" | head -5)
+  if [ -n "$hits" ]; then
+    if [ "$fail" -eq 0 ]; then
+      echo ""
+      echo "ERROR: canonical-guard blocked this commit."
+      echo "Banned language found on a CUSTOMER SURFACE. Payment-processor flag"
+      echo "bots keyword-match the live site; the words must never appear at all."
+      echo ""
+      fail=1
+    fi
+    echo "  $f"
+    echo "$hits" | sed 's/^/      /'
+  fi
+done <<< "$staged"
+
+if [ "$fail" -eq 1 ]; then
+  echo ""
+  echo "Fix: remove the wording. Do not rephrase around it, do not add a denial."
+  echo "Non-surface paths (skills, docs, backend logic) are NOT checked and may"
+  echo "use these words freely."
+  echo ""
+  exit 1
+fi
+
+exit 0

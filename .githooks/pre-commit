@@ -30,6 +30,13 @@ GITHUB_PERSONAL_ACCESS_TOKEN\s*=\s*(?![\"'\'']?\$)(?![\"'\'']?\{)[A-Za-z0-9_]{20
 "
 
 if printf '%s' "${staged_patch}" | perl -0777 -ne "exit((/\b(?:${regex})\b/is) ? 1 : 0)"; then
+  # Secrets clean. Now run the canonical-guard (banned language on customer
+  # surfaces). Kept in a separate file so a markdown sanitizer sweep cannot
+  # eat the word list the way commit d245c23a ate BRIEFING.md's copy.
+  hook_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  if [[ -f "${hook_dir}/pre-commit-canonical" ]]; then
+    exec bash "${hook_dir}/pre-commit-canonical"
+  fi
   exit 0
 fi
 
