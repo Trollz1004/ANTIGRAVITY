@@ -1,0 +1,136 @@
+{
+  "ran_at": "2026-08-05T07:06:33.559133+00:00",
+  "pass": true,
+  "fail_names": [],
+  "checks": [
+    {
+      "name": "checkout_b2b:security",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "id": "X4ghtTkz9utfRVnxLGbuILsmKbPZY"
+      }
+    },
+    {
+      "name": "checkout_b2b:agentic",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "id": "TQJdApmB21hdqYyXYWqpw4ik8pBZY"
+      }
+    },
+    {
+      "name": "checkout_b2b:storefront",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "id": "h7ls5RGZYVr3E7Hoym8O1HemKtHZY"
+      }
+    },
+    {
+      "name": "checkout_b2b:techdebt",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "id": "3eHpKbm65QWwSE3O6MH3sr7YMjUZY"
+      }
+    },
+    {
+      "name": "checkout_b2b:api",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "id": "5vr5Jgwqv6aFph2vP9xNgzYKrSRZY"
+      }
+    },
+    {
+      "name": "checkout_consumer:bot",
+      "ok": true,
+      "detail": {
+        "http": 200
+      }
+    },
+    {
+      "name": "checkout_consumer:founding",
+      "ok": true,
+      "detail": {
+        "http": 200
+      }
+    },
+    {
+      "name": "checkout_consumer:royalty",
+      "ok": true,
+      "detail": {
+        "http": 200
+      }
+    },
+    {
+      "name": "page_b2b",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "longs": 5,
+        "bad_shorts": 0,
+        "all_b2b_ids": true
+      }
+    },
+    {
+      "name": "page_links",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "longs": 5,
+        "bad_shorts": 0,
+        "all_b2b_ids": true
+      }
+    },
+    {
+      "name": "page_join",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "longs": 5,
+        "bad_shorts": 0,
+        "all_b2b_ids": true
+      }
+    },
+    {
+      "name": "script_no_hardcoded_token",
+      "ok": true,
+      "detail": {
+        "has_EAAA": false,
+        "uses_env": true
+      }
+    },
+    {
+      "name": "script_node_syntax",
+      "ok": true,
+      "detail": {
+        "stderr": ""
+      }
+    },
+    {
+      "name": "repo_tracker_b2b",
+      "ok": true,
+      "detail": {
+        "streams_with_urls": 5,
+        "created_results": 5
+      }
+    },
+    {
+      "name": "git:84ec55b",
+      "ok": true,
+      "detail": {
+        "on_origin": true
+      }
+    },
+    {
+      "name": "git:1f6deea",
+      "ok": true,
+      "detail": {
+        "on_origin": true
+      }
+    }
+  ],
+  "note": "B2B mint + page wire + token scrub hard verify (HTTP/artifacts). Not pnpm suite."
+}
