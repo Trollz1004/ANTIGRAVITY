@@ -29,3 +29,14 @@ All distributed checkout links MUST use **Square long_url** (`checkout.square.si
 - Consumer prepaid stacks help but B2B/Royalty closes faster
 
 Last verified: 2026-08-05 — long URLs only on public Pages.
+
+## B2B live checkouts (minted 2026-08-05)
+| Product | Amount | Checkout |
+|---------|--------|----------|
+| Security Cleanup | $1,500 | https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/X4ghtTkz9utfRVnxLGbuILsmKbPZY?ref=clean-repo |
+| Agentic Workflows | $2,500 | https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/TQJdApmB21hdqYyXYWqpw4ik8pBZY?ref=clean-repo |
+| Storefront Deployment | $950 | https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/h7ls5RGZYVr3E7Hoym8O1HemKtHZY?ref=clean-repo |
+| Tech Debt Cleanup | $4,000 | https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/3eHpKbm65QWwSE3O6MH3sr7YMjUZY?ref=clean-repo |
+| API Management | $1,200 | https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/5vr5Jgwqv6aFph2vP9xNgzYKrSRZY?ref=clean-repo |
+
+Landing: https://trollz1004.github.io/youandinotai-links/b2b.html?ref=clean-repo
