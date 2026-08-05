@@ -3,7 +3,7 @@
   "status": "ACTIVE",
   "target_usd": 10000,
   "collected_usd_verified": 0,
-  "updated_at": "2026-08-05T00:00:00Z",
+  "updated_at": "2026-08-05T07:01:15.151821+00:00",
   "goal_note": "Cover AI costs a year in advance (GPU/server updates for AI team) + catch up on taxes. Not canceled.",
   "primary_currency": "USD",
   "square_account_email": "ebaytrashortreasure@gmail.com",
@@ -53,40 +53,55 @@
       "name": "Security Cleanup",
       "setup_fee": 1500,
       "monthly_recurring": 200,
-      "payment_link_type": "email_then_square",
-      "square_checkout_url": null,
+      "payment_link_type": "square_direct_checkout",
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/X4ghtTkz9utfRVnxLGbuILsmKbPZY",
       "fallback_pay": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/dDSMLPeCFqlOzk68juBxdKJoC9NZY",
-      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html"
+      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html",
+      "square_payment_link_id": "GKV5NFLMJDB2PKXI",
+      "verified_http": 200,
+      "verified_at": "2026-08-05"
     },
     "agentic_workflows": {
       "name": "Agentic Workflows",
       "setup_fee": 2500,
       "monthly_recurring": 500,
       "payment_link_type": "square_direct_checkout",
-      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/dDSMLPeCFqlOzk68juBxdKJoC9NZY",
-      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html"
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/TQJdApmB21hdqYyXYWqpw4ik8pBZY",
+      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html",
+      "square_payment_link_id": "MXQH5IL6ZTPJCVWB",
+      "verified_http": 200,
+      "verified_at": "2026-08-05"
     },
     "storefront_deployment": {
       "name": "Storefront Deployment",
       "setup_fee": 950,
       "transaction_fee_percent": 3.0,
-      "payment_link_type": "email_then_square",
-      "square_checkout_url": null,
-      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html"
+      "payment_link_type": "square_direct_checkout",
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/h7ls5RGZYVr3E7Hoym8O1HemKtHZY",
+      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html",
+      "square_payment_link_id": "MUOZ2QD4L3XFREZH",
+      "verified_http": 200,
+      "verified_at": "2026-08-05"
     },
     "tech_debt_cleanup": {
       "name": "Tech Debt Cleanup",
       "sprint_cost": 4000,
-      "payment_link_type": "email_then_square",
-      "square_checkout_url": null,
-      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html"
+      "payment_link_type": "square_direct_checkout",
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/3eHpKbm65QWwSE3O6MH3sr7YMjUZY",
+      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html",
+      "square_payment_link_id": "N4HKSBRUJMHGTNM3",
+      "verified_http": 200,
+      "verified_at": "2026-08-05"
     },
     "api_management": {
       "name": "API Management",
       "setup_fee": 1200,
-      "payment_link_type": "email_then_square",
-      "square_checkout_url": null,
-      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html"
+      "payment_link_type": "square_direct_checkout",
+      "square_checkout_url": "https://checkout.square.site/merchant/ML3C7FMTQS5KX/order/5vr5Jgwqv6aFph2vP9xNgzYKrSRZY",
+      "landing": "https://trollz1004.github.io/youandinotai-links/b2b.html",
+      "square_payment_link_id": "PB75HM7YKMUFWIRE",
+      "verified_http": 200,
+      "verified_at": "2026-08-05"
     }
   },
   "public_surfaces": {
@@ -96,15 +111,14 @@
     "gist": "https://gist.github.com/Trollz1004/5b471b3a62bbac134977b0f534a8b1d5"
   },
   "blockers": [
-    "square.link short URLs all 404 as of 2026-08-05 — fixed on public Pages to long_url",
-    "No Square API token in this session env — cannot mint dedicated B2B payment links yet",
-    "Social publish sessions not available on Sabretooth (X only on 9020; Meta needs real Chrome cookie-sync)",
-    "Zero verified Square transactions recorded in tracker"
+    "Social publish sessions not available on Sabretooth (X=9020; Meta cookie-sync)",
+    "No outbound email stack (AgentMail/Himalaya) on this node",
+    "Zero verified Square paid orders yet (FUNDING_NOT_VERIFIED)"
   ],
   "path_to_10k": [
-    "4x Royalty Card ($2500) = $10,000",
-    "OR 1x Tech Debt ($4000) + 1x Agentic ($2500) + 1x Security ($1500) + 2x API ($1200) ≈ $10,400",
-    "OR ~667 Founding months / mix of prepaid + Royalty"
+    "4x Agentic Workflows ($2500) = $10,000",
+    "OR Tech Debt $4000 + Agentic $2500 + Security $1500 + API $1200 = $9200 (+ storefront/prepaid)",
+    "OR 4x Royalty Card consumer $2500"
   ],
-  "note": "All payment links must use Square direct checkout URLs (long_url), NOT square.link/u/ short links."
+  "note": "B2B SKUs minted 2026-08-05 via Square payment-links API. Public b2b.html uses long_url only."
 }
