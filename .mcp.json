@@ -2,9 +2,14 @@
   "mcpServers": {
     "brain-mcp": {
       "command": "node",
-      "args": [
-        "E:/ANTIGRAVITY\\brain-mcp\\dist\\index.js"
-      ],
+      "args": ["F:\\ANTIGRAVITY\\brain-mcp\\dist\\index.js"],
+      "env": {
+        "HOME": "C:\\Users\\joshl"
+      }
+    },
+    "mission-mcp": {
+      "command": "node",
+      "args": ["F:\\ANTIGRAVITY\\services\\mission-mcp\\dist\\server.js"],
       "env": {
         "HOME": "C:\\Users\\joshl"
       }
@@ -12,22 +17,6 @@
     "playwright": {
       "command": "cmd",
       "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
-    },
-    "mission-mcp": {
-      "command": "node",
-      "args": [
-        "E:/ANTIGRAVITY\\services\\mission-mcp\\dist\\server.js"
-      ],
-      "env": {
-        "HOME": "C:\\Users\\joshl"
-      }
-    },
-    "youandinotai-paperclip-memory": {
-      "command": "node",
-      "args": [
-        "E:/ANTIGRAVITY-paperclip-dateapp-ops\\mcp\\dateapp-paperclip-memory-server.cjs"
-      ],
-      "env": {}
     }
   }
 }
