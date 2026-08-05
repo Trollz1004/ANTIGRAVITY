@@ -2,6 +2,7 @@
 
 | Date | Campaign | Action | Result |
 |------|----------|--------|--------|
+| 2026-08-05 | Revenue 10K Swarm | CRITICAL FIX + relaunch: verified all square.link shorts **404**; all 5 checkout.square.site long URLs **200**. Rewrote public Pages `youandinotai-links` + `youandinotai-join` to long URLs only; added B2B packages page; updated revenue-tracker.json + active-links.md + cold outreach pack. Live verify: links longs=5 shorts=0 refs=6; join longs=5 shorts=0; b2b longs=1. IndexNow submitted. | **RAILS_FIXED / FUNDING_NOT_VERIFIED** — collected_usd_verified=$0. Path to $10k: 4× Royalty ($2500) or B2B mix (TechDebt $4k + Agentic $2.5k + Security $1.5k + API $1.2k). Still need: (1) outbound sends to ICP, (2) social from authenticated sessions (X=9020, Meta cookie-sync), (3) Square API token on this node for dedicated B2B SKU links, (4) first paid order evidence. |
 | 2026-07-21 | Founding Member Launch | Created campaign doc and messaging draft | Campaign initialized |
 | 2026-07-21 | Founding Member Launch | Drafted Product Hunt listing and Twitter/X thread | Ready to publish when TRO-8 done |
 | 2026-07-21 | AI Solutions Store | Drafted product launch campaign doc | All 6 products mapped |
