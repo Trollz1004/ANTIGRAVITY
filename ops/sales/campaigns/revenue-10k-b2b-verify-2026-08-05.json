@@ -1,5 +1,5 @@
 {
-  "ran_at": "2026-08-05T07:06:33.559133+00:00",
+  "ran_at": "2026-08-05T07:07:41.533749+00:00",
   "pass": true,
   "fail_names": [],
   "checks": [
@@ -7,40 +7,35 @@
       "name": "checkout_b2b:security",
       "ok": true,
       "detail": {
-        "http": 200,
-        "id": "X4ghtTkz9utfRVnxLGbuILsmKbPZY"
+        "http": 200
       }
     },
     {
       "name": "checkout_b2b:agentic",
       "ok": true,
       "detail": {
-        "http": 200,
-        "id": "TQJdApmB21hdqYyXYWqpw4ik8pBZY"
+        "http": 200
       }
     },
     {
       "name": "checkout_b2b:storefront",
       "ok": true,
       "detail": {
-        "http": 200,
-        "id": "h7ls5RGZYVr3E7Hoym8O1HemKtHZY"
+        "http": 200
       }
     },
     {
       "name": "checkout_b2b:techdebt",
       "ok": true,
       "detail": {
-        "http": 200,
-        "id": "3eHpKbm65QWwSE3O6MH3sr7YMjUZY"
+        "http": 200
       }
     },
     {
       "name": "checkout_b2b:api",
       "ok": true,
       "detail": {
-        "http": 200,
-        "id": "5vr5Jgwqv6aFph2vP9xNgzYKrSRZY"
+        "http": 200
       }
     },
     {
@@ -113,8 +108,7 @@
       "name": "repo_tracker_b2b",
       "ok": true,
       "detail": {
-        "streams_with_urls": 5,
-        "created_results": 5
+        "created": 5
       }
     },
     {
@@ -130,7 +124,20 @@
       "detail": {
         "on_origin": true
       }
+    },
+    {
+      "name": "git:3a3d9be",
+      "ok": true,
+      "detail": {
+        "on_origin": true
+      }
+    },
+    {
+      "name": "local_b2b_html",
+      "ok": true,
+      "detail": {
+        "exists": true
+      }
     }
-  ],
-  "note": "B2B mint + page wire + token scrub hard verify (HTTP/artifacts). Not pnpm suite."
+  ]
 }
