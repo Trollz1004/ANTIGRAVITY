@@ -2,10 +2,15 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-const SQUARE_TOKEN = 'EAAAl2YFWNK4FRsKmfPfQ1br-mJUNi7RvfUWqJHnnulDtIecKeQoQqTR4ISjyT5i';
-const SQUARE_LOCATION = 'LY5GN09F5AN83';
+// Never hardcode tokens. Load from env only.
+const SQUARE_TOKEN = process.env.SQUARE_ACCESS_TOKEN || process.env.SQUARE_TOKEN;
+const SQUARE_LOCATION = process.env.SQUARE_LOCATION_ID || 'LY5GN09F5AN83';
+if (!SQUARE_TOKEN) {
+  console.error('ERROR: set SQUARE_ACCESS_TOKEN (or SQUARE_TOKEN) in env');
+  process.exit(1);
+}
 
-const logDir = 'E:/ANTIGRAVITY/ops/sales/campaigns';
+const logDir = path.join(__dirname, '..', 'ops', 'sales', 'campaigns');
 fs.mkdirSync(logDir, { recursive: true });
 
 const logFile = path.join(logDir, 'revenue-tracker.json');
